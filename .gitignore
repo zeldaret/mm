@@ -1,0 +1,16 @@
+*.z64
+*.bin
+*.elf
+doc/*
+archive/*
+build/*
+baserom/*
+decomp/*
+S/*
+asm/*
+font_test/*
+ido/*
+__pychahe__/*
+*.pyc
+test.txt
+*.xlsx
