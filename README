@@ -1,0 +1,6 @@
+WIP Majora's Mask decomp, proper docs and README will be made later.
+
+Basic steps (assuming you already have IDO and irixqemu):
+Run extract_rom.py with a USA Majora's Mask ROM named baserom.z64 (will need to get libyaz0 first, I'll set up the dependency file eventually)
+Run disasm.py
+Run Make (edit the makefile with the paths to ido, etc. I'll make it use evironment variables eventually)

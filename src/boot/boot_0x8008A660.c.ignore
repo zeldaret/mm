@@ -1,0 +1,64 @@
+#include <ultra64.h>
+#include <global.h>
+
+void func_8008A660(void) {
+	D_8009D134 = 7;
+	D_8009D135 = *(u32*)0xA4600014;
+	D_8009D138 = *(u32*)0xA4600018;
+	D_8009D136 = *(u32*)0xA460001C;
+	D_8009D137 = *(u32*)0xA4600020;
+	D_8009D1AC = 7;
+	D_8009D1AD = *(u32*)0xA4600024;
+	D_8009D1B0 = *(u32*)0xA4600028;
+	D_8009D1AE = *(u32*)0xA460002C;
+	D_8009D1AF = *(u32*)0xA4600030;
+}
+
+u64 D_80097E50; // this has to be defined in this file for func_8008A6FC to match
+
+void func_8008A6FC(void) {
+	UNK_TYPE sp44;
+	
+	D_8009CF70 = 1;
+	
+	func_8008A5D0(func_8008A5C0() | 0x20000000);
+	func_80092CE0(0x20000800);
+	func_80096820(0x04900000);
+	
+	while (func_8008AEE0(0x1FC007FC, &sp44) != 0);
+	while (func_80095220(0x1FC007FC, sp44 | 8) != 0);
+	
+	*(struct s8008A6FC*)0x80000000 = *((struct s8008A6FC*)__osExceptionPreamble);
+	*(struct s8008A6FC*)0x80000080 = *((struct s8008A6FC*)__osExceptionPreamble);
+	*(struct s8008A6FC*)0x80000100 = *((struct s8008A6FC*)__osExceptionPreamble);
+	*(struct s8008A6FC*)0x80000180 = *((struct s8008A6FC*)__osExceptionPreamble);
+	
+	func_8008A5E0(0x80000000, 400);
+	func_8008F270(0x80000000, 400);
+	func_8008A660();
+	func_8008EDE0();
+	func_80093C00();
+	D_80097E50 = func_800888A8(func_800889A8(D_80097E50, 3), 4);
+	
+	if (D_8000030C == 0) {
+		func_80089630(&D_8000031C, 64);
+	}
+	
+	if (osTvType == 0) {
+		D_80097E58 = 0x02F5B2D2;
+	} else if (osTvType == 2) {
+		D_80097E58 = 0x02E6025C;
+	} else {
+		D_80097E58 = 0x02E6D354;
+	}
+	
+	if((func_80093D90() & 0x1000) != 0) {
+		while(1);
+	}
+	
+	*(u32*)0xA4500008 = 1;
+	*(u32*)0xA4500010 = 16383;
+	*(u32*)0xA4500014 = 15;
+}
+
+void func_8008A9A8(void) {}
