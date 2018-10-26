@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <osint.h>
+#include <viint.h>
 #include <unk.h>
 #include <structs.h>
 

@@ -3,5 +3,5 @@
 #include <assert.h>
 
 __OSViContext* __osViGetCurrentContext(void) {
-	return __osViCurr;
+    return __osViCurr;
 }
