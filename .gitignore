@@ -14,3 +14,4 @@ __pychahe__/*
 *.pyc
 test.txt
 *.xlsx
+src/test.c
