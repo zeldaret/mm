@@ -34,6 +34,7 @@ known_funcs = {
     0x80087830:("func_80087830","UNK_TYPE","UNK_TYPE, UNK_TYPE, UNK_TYPE"),
     0x80087854:("func_80087854","UNK_TYPE","u8*, UNK_TYPE, UNK_PTR"),
     0x800878A4:("func_800878A4","UNK_TYPE","u8*, UNK_TYPE, UNK_TYPE, UNK_TYPE"),
+    0x80087A6C:("func_80087A6C","UNK_RET","UNK_TYPE"),
     0x80087B00:("__osSetCause","void","u32 value"),
     0x80087B10:("osSendMesg","s32","OSMesgQueue* mq, OSMesg msg, s32 flags"),
     0x80087E00:("func_80087E00","void","u32"),
@@ -224,6 +225,7 @@ known_funcs = {
     0x80139188:("func_80139188","UNK_TYPE","UNK_PTR, UNK_PTR"),
     0x80139894:("func_80139894","UNK_RET","UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, f32, f32, f32"),
     0x80174BF0:("func_80174BF0","UNK_RET","UNK_TYPE"),
+    0x80183070:("func_80183070","void","void"),
     0x8018349C:("func_8018349C","UNK_RET","UNK_TYPE, UNK_TYPE"),
 
     # ovl_En_Test
