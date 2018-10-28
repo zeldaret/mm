@@ -56,7 +56,7 @@ typedef struct s800BF9A0_s {
 	/* 000 */ u8 pad0[8];
 	/* 008 */ UNK_TYPE unk8;
 	/* 012 */ UNK_TYPE unk12;
-	/* 016 */ UNK_TYPE unk16;
+	/* 016 */ u32 unk16;
 	/* 020 */ u8 pad1[10];
 	/* 030 */ s8 unk30;
 	/* 031 */ u8 pad2[1];

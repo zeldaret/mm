@@ -96,14 +96,14 @@ known_vars = {
     0x8009E5B0:("__osCurrentTime","UNK_TYPE",False),
 #    0x8009E5B4:("__osCurrentTime","UNK_TYPE",False),
     0x8009E5B8:("__osBaseCounter","UNK_TYPE",False),
-    0x8009E5BC:("__osViIntrCount","UNK_TYPE",False),
+    0x8009E5BC:("__osViIntrCount","UNK_TYPE",False), # actually an array of structs?
     0x8009E5C0:("__osTimerCounter","UNK_TYPE",False),
     0x8009E610:("","struct s80092920",False),
     0x8009E624:("","UNK_TYPE",False),
     0x801ADE80:("","UNK_TYPE",False),
     0x801ADEAC:("","UNK_TYPE",False),
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation
-    0x801AEFD0:("","s800BF9A0_s*",False),
+    0x801AEFD0:("","s800BF9A0_s",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801DCBB0:("","UNK_TYPE",False),
     0x801DCBC4:("","UNK_TYPE",False),
