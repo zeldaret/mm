@@ -1,7 +1,7 @@
 known_files = {
     # TODO the data starts for the overlays are guesses based on the actor init vars location, should check
     ('baserom/boot', 'boot', 0x80080060, ((0x800969C0, 0x800A5ABF),)),
-    ('decomp/code', 'code', 0x800A5AC0, ((0x80186028, 0x80186A6F),(0x801AAC04, 0x801E3F9C),)),
+    ('decomp/code', 'code', 0x800A5AC0, ((0x80186028, 0x80186A6F),(0x801AAAA0, 0x801E3F9C),)),
     ('decomp/ovl_En_Test', 'ovl_En_Test', 0x80862B70, ((0x808637B0, 0x8086386F),)),
     ('decomp/ovl_En_GirlA', 'ovl_En_GirlA', 0x80863870, ((0x80864A30, 0x8086536F),)),
     ('decomp/ovl_En_Part', 'ovl_En_Part', 0x80865370, ((0x808658E0, 0x8086598F),)),

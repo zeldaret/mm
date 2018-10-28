@@ -298,7 +298,5 @@ SECTIONS
         build/asm/code_0x801A7B10.o(.text)
         build/asm/code_0x801AA020.o(.text)
         build/asm/code_0x801AA610.o(.text)
-        build/asm/code_0x801AAAA0.o(.text)
-        build/asm/code_0x801AAAB0.o(.text)
     }
 }
