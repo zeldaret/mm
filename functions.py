@@ -214,7 +214,7 @@ known_funcs = {
     0x800CAF24:("func_800CAF24","UNK_RET","UNK_TYPE"),
     0x800CAF38:("func_800CAF38","UNK_RET","UNK_TYPE"),
     0x800E03A0:("func_800E03A0","s800E03A0*","s32"),
-    0x800E03A0:("func_800E03CC","u8*","void"),
+    0x800E03CC:("func_800E03CC","void","u8*"),
     0x800E11EC:("func_800E11EC","UNK_RET","UNK_TYPE, UNK_PTR"),
     0x800E1374:("func_800E1374","UNK_RET","UNK_TYPE, UNK_PTR, struct s800A5AC0*, UNK_PTR"),
     0x800E2928:("func_800E2928","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_PTR"),
@@ -225,7 +225,7 @@ known_funcs = {
     0x80139894:("func_80139894","UNK_RET","UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, UNK_TYPE, f32, f32, f32"),
     0x80174BF0:("func_80174BF0","UNK_RET","UNK_TYPE"),
     0x8018349C:("func_8018349C","UNK_RET","UNK_TYPE, UNK_TYPE"),
-    
+
     # ovl_En_Test
     #0x80862B70:("func_80862B70","void","void* a0"),
     #0x80862CBC:("func_80862CBC","UNK_RET","UNK_ARGS"),

@@ -58,14 +58,14 @@ floats = {
 
 def read_file(name):
     file_data=[]
-    
+
     try:
         with open(name, 'rb') as f:
             file_data = f.read()
     except IOError:
         print('failed to read file ' + name)
     return file_data
-    
+
 
 def float_reg(num):
     if num == 31:
@@ -119,10 +119,10 @@ def get_signed_imm(inst):
         imm = -2**15 + (imm & 0b00000000000000000111111111111111)
     return imm
 
-    
+
 def is_load(inst):
     return get_op(inst) > 31
-    
+
 
 def get_func_name(addr):
     if addr in known_funcs:
@@ -136,26 +136,26 @@ def get_symbol_name(addr):
         return known_vars[addr][0]
     else:
         return "D_%08X" % addr
-    
-    
+
+
 def write_header(file):
     file.write(".set noat # allow use of $at\n.set noreorder # don't insert nops after branches\n.set gp=64 # allow use of 64bit registers\n\n");
-    
-    
+
+
 # TODO add code_regions?
 class Disassembler:
-    
-    class File:        
+
+    class File:
         def __init__(self, name, data, vaddr):
             self.name = name
             self.data = data
             self.vaddr = vaddr
             self.size = len(data)
-            
+
         def get_inst(self, num):
             offset = num*4
             return struct.unpack('>I', self.data[offset:offset+4])[0]
-    
+
     def __init__(self):
         self.files = list()
         self.objects = set()
@@ -163,10 +163,10 @@ class Disassembler:
         self.labels = set()
         self.vars = set()
         self.data_regions = list()
-        
+
         self.is_data_cache = {}
         self.is_code_cache = {}
-        
+
     def load_defaults(self):
         for file in known_files:
             self.add_file(file[0], file[1], file[2])
@@ -181,36 +181,36 @@ class Disassembler:
         for addr in known_objects:
             self.add_object(addr)
             self.add_function(addr) # assume every object starts with a function
-        
+
         for addr in known_vars:
             self.add_variable(addr)
-        
+
     def add_file(self, path, name, vaddr):
         self.files.append(self.File(name, read_file(path), vaddr))
         self.is_data_cache = {}
         self.is_code_cache = {}
-        
+
     def add_object(self, addr):
         self.objects.add(addr)
-        
+
     def add_function(self, addr):
         self.functions.add(addr)
-        
+
     def add_variable(self, addr):
         self.vars.add(addr)
-        
+
     def add_label(self, addr):
         self.labels.add(addr)
-        
+
     def add_data_region(self, start, end):
         self.data_regions.append((start, end))
         self.is_data_cache = {}
         self.is_code_cache = {}
-        
+
     def is_in_data(self, addr):
         if addr in self.is_data_cache:
             return self.is_data_cache[addr]
-                
+
         start = 0;
         last = len(self.data_regions) - 1
         while start <= last:
@@ -223,14 +223,14 @@ class Disassembler:
                     start = midpoint + 1
             else:
                 last = midpoint - 1
-                
+
         self.is_data_cache[addr] = False
         return False
-        
+
     def is_in_code(self, addr):
         if addr in self.is_code_cache:
             return self.is_code_cache[addr]
-                
+
         start = 0;
         last = len(self.files) - 1
         while start <= last:
@@ -243,22 +243,22 @@ class Disassembler:
                     start = midpoint + 1
             else:
                 last = midpoint - 1
-                
+
         self.is_code_cache[addr] = False
         return False
-        
+
     def is_in_data_or_undef(self, addr):
         # return true if it is in a defined data region
         if self.is_in_data(addr):
             return True
-                
+
         # otherwise return false if it is in a file's bounds
         if self.is_in_code(addr):
             return False
-        
+
         # otherwise it is undefined (return true)
         return True
-        
+
     def make_label(self, imm, cur):
         addr = (imm*4) + cur + 4
         self.add_label(addr)
@@ -274,11 +274,11 @@ class Disassembler:
             return get_symbol_name(addr)
         else:
             return get_func_name(addr)
-         
-    # TODO refactor to remove file_addr  
+
+    # TODO refactor to remove file_addr
     def get_object_name(self, addr, file_addr):
         filename = "";
-    
+
         for file in self.files:
             if file_addr == file.vaddr:
                 filename = file.name
@@ -286,7 +286,7 @@ class Disassembler:
         if filename == "":
             print("Bad file_addr passed to get_object_name: 0x%0X" % addr)
             return
-    
+
         if SPLIT_FILES:
             if addr in known_objects and known_objects[addr] != "": # no name means object boundary is known but not the name
                 return known_objects[addr]
@@ -294,7 +294,7 @@ class Disassembler:
                 return '%s_0x%08X' % (filename, addr)
         else:
             return "%s" % filename
-            
+
     def guess_functions_from_data(self):
         for file in self.files:
             for i in range(0, file.size // 4):
@@ -302,18 +302,18 @@ class Disassembler:
                 addr = file.vaddr + i*4
                 if self.is_in_data(addr) and self.is_in_code(word):
                     self.add_function(word)
-                    
-                    
-    
+
+
+
     def disassemble(self, path):
         # TODO keep sorted
         self.files = sorted(self.files, key = lambda file: file.vaddr)
         self.data_regions = sorted(self.data_regions, key = lambda region: region[0])
-        
+
         self.__first_pass()
         self.guess_functions_from_data()
         self.__second_pass(path)
-        
+
     def __first_pass(self):
         for file in self.files:
             for i in range(0, file.size // 4):
@@ -327,21 +327,21 @@ class Disassembler:
                         if file.get_inst(next_index) == 0: # nop
                             while file.get_inst(next_index) == 0:
                                 next_index += 1
-                            
+
                             new_object_start = file.vaddr + next_index*4 + 15
                             new_object_start -= new_object_start % 16
-                            
+
                             # don't split if it's the start of a data section, it's probably the same object
                             if not self.is_in_data_or_undef(new_object_start):
                                 self.add_object(new_object_start)
-        
+
     def __second_pass(self, path):
         for file in self.files:
             filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr);
-        
+
             with open(filename, 'w') as f:
                 write_header(f)
-        
+
                 for i in range(0, file.size // 4):
                     inst = file.get_inst(i)
                     addr = file.vaddr + i*4
@@ -365,23 +365,23 @@ class Disassembler:
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
                     else:
                         f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, inst))
-                        
+
     def determine_load_ref(self, file, inst_i):
         # TODO better detect when the register gets dirty
         pc = file.vaddr + inst_i*4
         cur_inst = file.get_inst(inst_i)
-    
+
         if get_op(cur_inst) != 15:
             return
 
         prev_was_jump = False
-    
+
         for i in range(1, 7): # TODO find a good limit
             next_inst = file.get_inst(inst_i + i)
 
             if get_op(next_inst) == 15 and get_rt(cur_inst) == get_rt(next_inst):
                 return # return if another lui overwrites reg
-        
+
             if (get_op(next_inst) == 9) and (get_rt(cur_inst) == get_rt(next_inst) == get_rs(next_inst)): # lui + addiu (move pointer)
                 addr = (get_imm(cur_inst) << 16) + get_signed_imm(next_inst)
                 if self.is_in_data_or_undef(addr):
@@ -408,14 +408,14 @@ class Disassembler:
                 return
             if get_op(next_inst) == 2 or get_op(next_inst) == 3:
                 prev_was_jump = True
-        
+
     def disassemble_inst(self, inst, addr, i, file):
         if inst == 0:
             return "nop"
-    
+
         dis = ""
         op_num = get_op(inst)
-    
+
         if op_num == 0:
             func = get_func(inst)
             if func == 1:
@@ -456,7 +456,7 @@ class Disassembler:
                     else: # add, sub, logical, etc.
                         dis += "%s, %s, %s" % (regs[get_rd(inst)], regs[get_rs(inst)], regs[get_rt(inst)])
                     # TODO traps
-                
+
         elif op_num == 1:
             rt = get_rt(inst)
             if rt not in branch1reg:
@@ -464,7 +464,7 @@ class Disassembler:
             else:
                 # TODO traps
                 dis += "%s\t%s, %s" % (branch1reg[rt], regs[get_rs(inst)], self.make_label(get_signed_imm(inst), addr))
-            
+
         elif op_num == 16 or op_num == 17 or op_num == 18:
             z = op_num - 16
             rs = get_rs(inst)
@@ -523,10 +523,10 @@ class Disassembler:
                             dis += "%s, %s" % (float_reg(get_fs(inst)), float_reg(get_ft(inst)))
             else:
                 dis += "coproc_error: %d" % rs
-            
+
         elif op_num not in ops:
             dis += "error: %d" % op_num
-        
+
         else:
             dis += "%s\t" % ops[op_num]
             if op_num == 2 or op_num == 3: # j, jal
@@ -581,26 +581,26 @@ class Disassembler:
                     dis += "0x%02X, %d(%s)" % (get_rt(inst), get_signed_imm(inst), regs[get_rs(inst)])
 
         return dis
-        
+
     def generate_headers(self, path):
         with open(path + "functions.h", 'w', newline='\n') as f:
             f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n");
-            
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
-            
+
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
+
             for addr in sorted(self.functions):
                 if addr in known_funcs:
                     f.write("%s %s(%s); // func_%08X\n" % (known_funcs[addr][1], get_func_name(addr), known_funcs[addr][2], addr));
                 else:
                     f.write("// UNK_RET %s(UNK_ARGS);\n" % get_func_name(addr));
-                
+
             f.write("\n#endif\n");
-            
+
         with open(path + "variables.h", 'w', newline='\n') as f:
             f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n");
-            
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
-            
+
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
+
             for addr in sorted(self.vars):
                 if addr in known_vars:
                     f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), "[]" if known_vars[addr][2] else "", addr));
@@ -610,20 +610,20 @@ class Disassembler:
             f.write("\n// extra variables needed for one reason or another\n\n");
             for (name, var_type) in extra_vars:
                 f.write("extern %s %s;\n" % (var_type, name));
-                
+
             f.write("\n#endif\n");
-            
+
             with open("undef.txt", 'w', newline='\n') as f:
                 for addr in sorted(self.vars):
                     f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
-                    
+
                 # TODO not hard code
                 f.write("func_84001B0C = 0x84001B0C;\nfunc_840010CC = 0x840010CC;\nfunc_84001060 = 0x84001060;\nD_80920340 = 0x80920340;\nD_80922430 = 0x80922430;\n")
 
-                
+
 if __name__ == "__main__":
     dis = Disassembler()
     dis.load_defaults()
     dis.disassemble('./asm/')
     dis.generate_headers('./')
-    
+
