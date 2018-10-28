@@ -194,7 +194,7 @@ known_funcs = {
     0x800A5AC0:("func_800A5AC0","UNK_RET","void*, UNK_TYPE"), # guessing this is void* bc it's a thread entry point
     0x800A5B6C:("func_800A5B6C","UNK_RET","struct s800A5AC0*, UNK_TYPE"),
     0x800A5B98:("func_800A5B98","UNK_RET","struct s800A5AC0*, UNK_TYPE"),
-    0x800A5C28:("func_800A5C28","UNK_RET","struct s800A5AC0*, UNK_TYPE"),
+    0x800A5C28:("func_800A5C28","UNK_RET","struct s800A5AC0*"),
     0x800A5C60:("func_800A5C60","UNK_RET","struct s800A5AC0*, UNK_TYPE"),
     0x800A5CB8:("func_800A5CB8","UNK_RET","struct s800A5AC0*, UNK_TYPE"),
     0x800B3BA4:("func_800B3BA4","UNK_RET","UNK_PTR, UNK_TYPE, UNK_PTR, UNK_TYPE"),

@@ -14,28 +14,25 @@ UNK_RET func_800A5AC0(void* a0, UNK_TYPE a1) {
 }
 
 UNK_RET func_800A5B6C(struct s800A5AC0* a0, UNK_TYPE a1) {
-    func_800E11EC(a1, &a0->unk328);
+    UNK_TYPE* a2 = &a0->unk328;
+    func_800E11EC(a1, a2);
 }
 
 UNK_RET func_800A5B98(struct s800A5AC0* a0, UNK_TYPE a1) {
-    s16 v0;
+    s32 v0;
     s32 v1;
     if (func_800B84D0(a0, a1) != 0) {
-        a0->unk324 = func_800A5C28;
+        a0->unk324 = (void(*)(struct s800A5AC0*, UNK_TYPE))func_800A5C28; //! Is this cast correct?
     } else {
         v0 = a0->unk146 - a0->unk190;
-        if (v0 < 0) {
-            v1 = -v0;
-        } else {
-            v1 = v0;
-        }
+        v1 = (v0 < 0)? -v0 : v0;
         if ((v1 < 10240) || ((a0->unk28 == 1) && (v1 > 22528))) {
             func_800B863C(a0, a1);
         }
     }
 }
 
-UNK_RET func_800A5C28(struct s800A5AC0* a0, UNK_TYPE a1 /* unused */ ) {
+UNK_RET func_800A5C28(struct s800A5AC0* a0) {
     if (func_800B867C(a0) != 0) {
         a0->unk324 = func_800A5B98;
     }
