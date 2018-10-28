@@ -89,6 +89,10 @@ typedef struct s800CAAD0_s {
 	/* 164 */ f32 unk164;
 } s800CAAD0;
 
+typedef struct s800E03A0_s {
+    /* 000 */ u8 pad[32];
+} s800E03A0;
+
 // TODO everything past here should be placed in an appropiate libultra header
 
 typedef long Mtx_t[4][4];

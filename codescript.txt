@@ -202,7 +202,8 @@ SECTIONS
 		build/asm/code_0x800BFB80.o(.text)
 		build/asm/code_0x800CAAD0.o(.text)
 		build/asm/code_0x800CAE10.o(.text)
-		build/asm/code_0x800E03A0.o(.text)
+		build/src/code/code_0x800E03A0.o(.text)
+        . += 0x10; /* XXX pad with NOPs*/
 		build/asm/code_0x800E0410.o(.text)
 		build/asm/code_0x800E8EA0.o(.text)
 		build/asm/code_0x800E9360.o(.text)

@@ -105,6 +105,7 @@ known_vars = {
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation
     0x801AEFD0:("","s800BF9A0_s",False),
     0x801B4610:("","UNK_TYPE",False),
+    0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
     0x801DCBB0:("","UNK_TYPE",False),
     0x801DCBC4:("","UNK_TYPE",False),
     0x801DCBE4:("","UNK_TYPE",False),
