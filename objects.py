@@ -1,4 +1,5 @@
 known_objects = {
+    0x80080180:"",
     0x80087b00:"setcause",
     0x80087b10:"sendmesg",
     0x80087e10:"stopthread",

@@ -2,7 +2,8 @@ SECTIONS
 {
     boot 0x80080060:
     {
-        build/asm/boot_0x80080060.o(.text)
+        build/src/boot_O2_g3/boot_0x80080060.o(.text)
+        build/asm/boot_0x80080180.o(.text)
         build/asm/boot_0x800805E0.o(.text)
         build/asm/boot_0x80080790.o(.text)
         build/asm/boot_0x80080E30.o(.text)

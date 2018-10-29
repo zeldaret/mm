@@ -17,6 +17,7 @@ OPTIMIZATION := -O2 -g3
 build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
+build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
 test.txt: OPTIMIZATION := -O2 -g3
 test.txt: MIPS_VERSION := -mips2
 
@@ -24,7 +25,13 @@ BASEROM_FILES := $(wildcard baserom/*)
 BASEROM_O_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%.o)
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
-C_FILES := $(wildcard src/*) $(wildcard src/libultra/*) $(wildcard src/libultra/os/*) $(wildcard src/libultra/io/*) $(wildcard src/libultra/libc/*) $(wildcard src/code/*)
+C_FILES := $(wildcard src/*) \
+           $(wildcard src/libultra/*) \
+           $(wildcard src/libultra/os/*) \
+           $(wildcard src/libultra/io/*) \
+           $(wildcard src/libultra/libc/*) \
+           $(wildcard src/code/*) \
+           $(wildcard src/boot_O2_g3/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
 O_FILES := $(BASEROM_O_FILES) $(S_O_FILES)
 
@@ -41,6 +48,7 @@ $(shell mkdir -p build/src/libultra/os)
 $(shell mkdir -p build/src/libultra/io)
 $(shell mkdir -p build/src/libultra/libc)
 $(shell mkdir -p build/src/code)
+$(shell mkdir -p build/src/boot_O2_g3)
 
 check: $(ROM) code.bin boot.bin
 	@md5sum -c checksum.md5
