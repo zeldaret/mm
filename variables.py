@@ -1,4 +1,6 @@
 known_vars = {
+    0x00AC4000:("","UNK_TYPE",False), # this seems low
+    0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
     0x00C7A4E0:("","UNK_TYPE",False), # this seems low
     0x80000300:("osTvType","UNK_TYPE",False), # this seems low, but maybe it's set on boot?
@@ -106,6 +108,7 @@ known_vars = {
     0x801AEFD0:("","s800BF9A0_s",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
+    0x801BDB30:("","u8",True),
     0x801DCBB0:("","UNK_TYPE",False),
     0x801DCBC4:("","UNK_TYPE",False),
     0x801DCBE4:("","UNK_TYPE",False),
@@ -114,11 +117,11 @@ known_vars = {
     0x801ED930:("","UNK_TYPE",False),
     0x801ED940:("","UNK_TYPE",False),
     0x80208EA0:("","UNK_TYPE",False),
-    
+
     # En_Test
     0x808637D0:("","f32",False)
     }
-    
+
 # these are extra variables needed for one reason or another, they should probably be deleted if possible
 extra_vars = (
     ("D_800980D0_","UNK_PTR"), # needed to match?

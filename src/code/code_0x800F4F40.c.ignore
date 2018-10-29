@@ -1,0 +1,33 @@
+#include <ultra64.h>
+#include <global.h>
+
+void func_800F4F40(UNK_TYPE a0, UNK_TYPE a1, UNK_TYPE a2) {
+
+}
+
+void func_800F4F54(s800F4F54* a0, u8 a1, UNK_TYPE a2) {
+    u32 arg0 = (u32)a0 + a0->unk92152 * (15 * 1024) + a2 + 19056;
+    u32 arg1 = ((a1 * 128) - 4096) + (u32)&D_00ACC000;
+    func_80080C90(arg0, arg1, 128);
+}
+
+void func_800F4FC0(UNK_TYPE a0, u16 a1) {
+    func_80080C90(a0 + 30720, (a1 * 128 + 20480) + (u32)&D_00AC4000, 128);
+}
+
+void func_800F5004(UNK_TYPE a0) {
+    u8* s0 = D_801BDB30;
+    u32 s1 = a0 + 30848;
+    u32 v1;
+
+    while (1) {
+        v1 = (*s0)*128;
+        if (*s0 == 0) {
+            v1 = 0;
+        }
+        func_80080C90(s1, v1 + (u32)&D_00AC4000, 128);
+        s1 += 128;
+        if (*s0 == 140) break;
+        s0++;
+    }
+}

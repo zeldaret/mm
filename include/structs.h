@@ -93,6 +93,12 @@ typedef struct s800E03A0_s {
     /* 000 */ u8 pad[32];
 } s800E03A0;
 
+// This struct is huge! Global context?
+typedef struct s800F4F54_s {
+    /* 00000 */ u8 pad[92152];
+    /* 92152 */ u8 unk92152;
+} s800F4F54;
+
 // TODO everything past here should be placed in an appropiate libultra header
 
 typedef long Mtx_t[4][4];
