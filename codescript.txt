@@ -58,7 +58,7 @@ SECTIONS
         build/asm/sirawdma.o(.text)
         build/asm/boot_0x8008AE20.o(.text)
         build/asm/boot_0x8008AE70.o(.text)
-        build/asm/boot_0x8008AEE0.o(.text)
+        build/asm/sirawread.o(.text)
         build/src/libultra/os/getthreadid.o(.text)
         build/asm/sptaskyield.o(.text)
         build/asm/boot_0x8008AF70.o(.text)

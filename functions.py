@@ -90,7 +90,7 @@ known_funcs = {
     0x8008ACE0:("__osSpRawStartDma","s32","s32 direction, u32 devAddr, void* dramAddr, u32 size"),
     0x8008AD70:("__osSiRawStartDma","s32","s32 direction, void* dramAddr"),
     0x8008AE70:("func_8008AE70","UNK_RET","UNK_TYPE"),
-    0x8008AEE0:("func_8008AEE0","UNK_TYPE","UNK_TYPE, UNK_PTR"),
+    0x8008AEE0:("__osSiRawReadIo","s32","u32 devAddr, u32* data"),
     0x8008AF30:("osGetThreadId","OSId","OSThread* t"),
     0x8008AF50:("osSpTaskYield","void","void"),
     0x8008B650:("func_8008B650","UNK_RET","UNK_PTR"),

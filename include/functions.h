@@ -277,7 +277,7 @@ s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // 
 s32 __osSiRawStartDma(s32 direction, void* dramAddr); // func_8008AD70
 // UNK_RET func_8008AE20(UNK_ARGS);
 UNK_RET func_8008AE70(UNK_TYPE); // func_8008AE70
-UNK_TYPE func_8008AEE0(UNK_TYPE, UNK_PTR); // func_8008AEE0
+s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_8008AEE0
 OSId osGetThreadId(OSThread* t); // func_8008AF30
 void osSpTaskYield(void); // func_8008AF50
 // UNK_RET func_8008AF70(UNK_ARGS);
