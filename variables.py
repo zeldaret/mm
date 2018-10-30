@@ -3,11 +3,15 @@ known_vars = {
     0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
     0x00C7A4E0:("","UNK_TYPE",False), # this seems low
-    0x80000300:("osTvType","UNK_TYPE",False), # this seems low, but maybe it's set on boot?
-    0x8000030C:("","UNK_TYPE",False), # this seems low
-    0x80000318:("","UNK_TYPE",False), # this seems low
-    0x8000031C:("","UNK_TYPE",False), # this seems low
-    0x80000500:("","UNK_TYPE",False), # this seems low
+    0x80000300:("osTvType","UNK_TYPE",False),
+    0x80000304:("osRomType","UNK_TYPE",False),
+    0x80000308:("osRomBase","UNK_TYPE",False),
+    0x8000030C:("osResetType","UNK_TYPE",False),
+    0x80000310:("osCicId","UNK_TYPE",False),
+    0x80000314:("osVersion","UNK_TYPE",False),
+    0x80000318:("osMemSize","UNK_TYPE",False),
+    0x8000031C:("","UNK_TYPE",False),
+    0x80000500:("","UNK_TYPE",False),
     0x80025D00:("","UNK_TYPE",False),
     0x80096B20:("","u8",False),
     0x80096B24:("","u8*",False),

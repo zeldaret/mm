@@ -3,7 +3,7 @@
 
 UNK_RET func_80080060(void) {
     func_80085320(&D_80099500, &D_80099AF0, &D_80099EF0, 0, -1, &D_80098190);
-    D_80000318 = func_8008D350();
+    osMemSize = func_8008D350();
     func_800818F4();
     osInitialize();
     osUnmapTLBAll();

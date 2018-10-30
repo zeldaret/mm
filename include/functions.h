@@ -268,7 +268,7 @@ u32 __osGetSR(void); // func_8008A5C0
 void __osSetSR(u32 value); // func_8008A5D0
 void osWritebackDCache(void *vaddr, s32 nbytes); // func_8008A5E0
 void func_8008A660(void); // func_8008A660
-void func_8008A6FC(void); // func_8008A6FC
+void osInitialize(void); // func_8008A6FC
 void func_8008A9A8(void); // func_8008A9A8
 // UNK_RET func_8008AA10(UNK_ARGS);
 void guPerspectiveF(float* mf[4], u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AA50
