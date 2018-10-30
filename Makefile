@@ -18,7 +18,7 @@ build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
-test.txt: OPTIMIZATION := -O2 -g3
+test.txt: OPTIMIZATION := -O1 -g3
 test.txt: MIPS_VERSION := -mips2
 
 BASEROM_FILES := $(wildcard baserom/*)
@@ -69,7 +69,7 @@ code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
 	$(LD) -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
 
 test.txt: build/src/test.o
-	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x800BF9A0 $< > test.txt
+	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080180 $< > test.txt
 
 clean:
 	rm $(ROM) $(ELF) code.elf code.bin boot.bin -r build

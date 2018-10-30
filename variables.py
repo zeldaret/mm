@@ -16,7 +16,7 @@ known_vars = {
     0x80096B30:("","f32",False),
     0x80096B34:("","f32",False),
     0x80096B40:("","struct s80092920*",False),
-    0x80096B50:("","UNK_PTR",False),
+    0x80096B50:("","UNK_TYPE",False),
     0x80096C40:("g_s80085320_ListHead","struct s80085320*",False), # TODO rename?
     0x80096C44:("g_s80085320_ListTail","struct s80085320*",False), # TODO rename?
     0x80097590:("","UNK_TYPE",False),
