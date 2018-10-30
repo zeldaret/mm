@@ -23,6 +23,7 @@ known_objects = {
     0x8008A5C0:"getsr",
     0x8008A5D0:"setsr",
     0x8008A5E0:"writebackdcache",
+    0x8008A660:"initialize",
     0x8008AA50:"perspective",
     0x8008AD70:"sirawdma",
     0x8008af30:"getthreadid",

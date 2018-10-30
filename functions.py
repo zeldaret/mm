@@ -83,7 +83,7 @@ known_funcs = {
     0x8008A5D0:("__osSetSR","void","u32 value"),
     0x8008A5E0:("osWritebackDCache","void","void *vaddr, s32 nbytes"),
     0x8008A660:("func_8008A660","void","void"),
-    0x8008A6FC:("func_8008A6FC","void","void"),
+    0x8008A6FC:("osInitialize","void","void"),
     0x8008A9A8:("func_8008A9A8","void","void"),
     0x8008AA50:("guPerspectiveF","void","float* mf[4], u16* perspNorm, float fovy, float aspect, float near, float far, float scale"),
     0x8008AC80:("guPerspective","void","Mtx* m, u16* perspNorm, float fovy, float aspect, float near, float far, float scale"),

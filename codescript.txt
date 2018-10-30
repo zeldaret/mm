@@ -51,7 +51,7 @@ SECTIONS
         build/asm/getsr.o(.text)
         build/asm/setsr.o(.text)
         build/asm/writebackdcache.o(.text)
-        build/asm/boot_0x8008A660.o(.text)
+        build/asm/initialize.o(.text)
         build/asm/boot_0x8008AA10.o(.text)
         build/asm/perspective.o(.text)
         build/asm/boot_0x8008ACE0.o(.text)
