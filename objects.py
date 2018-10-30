@@ -82,7 +82,7 @@ known_objects = {
     0x80094f80:"xlitob",
     0x80095270:"spgetstat",
     0x80095280:"spsetstat",
-    0x80095220:"sirawread",
+    0x80095220:"sirawwrite",
     0x800952A0:"vimgr",
     0x800955B0:"vigetcurrcontext",
     0x800955C0:"writebackdcacheall",

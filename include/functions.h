@@ -419,7 +419,7 @@ UNK_RET func_80094828(UNK_ARGS); // func_80094828
 ldiv_t ldiv(long numer, long denom); // func_80094DF0
 lldiv_t lldiv(long long numer, long long denom); // func_80094E74
 void _Litob(_Pft* px, unsigned char code); // func_80094F80
-s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_80095220
+s32 __osSiRawWriteIo(u32 devAddr, u32* data); // func_80095220
 u32 __osSpGetStatus(void); // func_80095270
 void __osSpSetStatus(u32 data); // func_80095280
 void osCreateViManager(OSPri pri); // func_800952A0

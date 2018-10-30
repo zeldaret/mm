@@ -18,7 +18,7 @@ build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
-test.txt: OPTIMIZATION := -O1 -g3
+test.txt: OPTIMIZATION := -O2 -g3
 test.txt: MIPS_VERSION := -mips2
 
 BASEROM_FILES := $(wildcard baserom/*)

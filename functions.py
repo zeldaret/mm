@@ -164,7 +164,7 @@ known_funcs = {
     0x80094DF0:("ldiv","ldiv_t","long numer, long denom"),
     0x80094E74:("lldiv","lldiv_t","long long numer, long long denom"),
     0x80094F80:("_Litob","void","_Pft* px, unsigned char code"),
-    0x80095220:("__osSiRawReadIo","s32","u32 devAddr, u32* data"),
+    0x80095220:("__osSiRawWriteIo","s32","u32 devAddr, u32* data"),
     0x80095270:("__osSpGetStatus","u32","void"),
     0x80095280:("__osSpSetStatus","void","u32 data"),
     0x800952A0:("osCreateViManager","void","OSPri pri"),
