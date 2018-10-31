@@ -618,7 +618,7 @@ class Disassembler:
                     f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
 
                 # TODO not hard code
-                f.write("func_84001B0C = 0x84001B0C;\nfunc_840010CC = 0x840010CC;\nfunc_84001060 = 0x84001060;\nD_80920340 = 0x80920340;\nD_80922430 = 0x80922430;\n")
+                f.write("func_80920340 = 0x80920340;\nfunc_80922430 = 0x80922430;\nD_80099AD0_ = 0x80099AD0;\n")
 
 
 if __name__ == "__main__":
