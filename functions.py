@@ -111,13 +111,13 @@ known_funcs = {
     0x8008E050:("_Printf","int","void* (*pfn)(void*), void* arg, const unsigned char* fmt, va_list ap"),
     0x8008E698:("func_8008E698","UNK_RET","UNK_ARGS"), # this does not have a name? (maybe not exported idk) (_Putfld?)
     0x8008EDE0:("osUnmapTLBAll","void","void"),
-    0x8008EE30:("osPiStartDma","s32","OSIoMesg* mb, s32 priority, s32 direction, u32 devAddr, void* dramAddr, u32 size, OSMesgQueue* mq"),
+    0x8008EE30:("osEPiStartDma","s32","OSPiHandle* pihandle, OSIoMesg* mb, s32 direction"),
     0x8008F1A0:("strchr","unsigned char*","const unsigned char* s, int c"),
     0x8008F1E0:("strlen","size_t","const unsigned char* s"), # unsigned int == size_t
     0x8008F208:("memcpy","void*","void* s1, const void* s2, size_t n"), # unsigned int == size_t
     0x8008F240:("osCreateMesgQueue","void","OSMesgQueue* mq, OSMesg* msg, s32 msgCount"),
-    0x8008F270:("osInvalICache","void","void *vaddr, s32 nbytes"),
-    0x8008F2F0:("osInvalDCache","void","void *vaddr, s32 nbytes"),
+    0x8008F270:("osInvalICache","void","void* vaddr, s32 nbytes"),
+    0x8008F2F0:("osInvalDCache","void","void* vaddr, s32 nbytes"),
     0x8008F3A0:("__osTimerServicesInit","void","void"),
     0x8008F42C:("__osTimerInterrupt","void","void"),
     0x8008F5A4:("__osSetTimerIntr","void","OSTime tim"),

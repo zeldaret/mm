@@ -333,15 +333,15 @@ UNK_RET func_8008E698(UNK_ARGS); // func_8008E698
 // UNK_RET func_8008ECFC(UNK_ARGS);
 // UNK_RET func_8008ED30(UNK_ARGS);
 void osUnmapTLBAll(void); // func_8008EDE0
-s32 osPiStartDma(OSIoMesg* mb, s32 priority, s32 direction, u32 devAddr, void* dramAddr, u32 size, OSMesgQueue* mq); // func_8008EE30
+s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction); // func_8008EE30
 // UNK_RET func_8008EED0(UNK_ARGS);
 // UNK_RET func_8008F100(UNK_ARGS);
 unsigned char* strchr(const unsigned char* s, int c); // func_8008F1A0
 size_t strlen(const unsigned char* s); // func_8008F1E0
 void* memcpy(void* s1, const void* s2, size_t n); // func_8008F208
 void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msg, s32 msgCount); // func_8008F240
-void osInvalICache(void *vaddr, s32 nbytes); // func_8008F270
-void osInvalDCache(void *vaddr, s32 nbytes); // func_8008F2F0
+void osInvalICache(void* vaddr, s32 nbytes); // func_8008F270
+void osInvalDCache(void* vaddr, s32 nbytes); // func_8008F2F0
 void __osTimerServicesInit(void); // func_8008F3A0
 void __osTimerInterrupt(void); // func_8008F42C
 void __osSetTimerIntr(OSTime tim); // func_8008F5A4
