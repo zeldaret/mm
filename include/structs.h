@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <unk.h>
+#include <os.h>
 
 struct s80085320 {
 /* 00 */    struct s80085320* next;
@@ -19,20 +20,6 @@ struct s8008A6FC {
 /* 04 */    UNK_TYPE unk4;
 /* 08 */    UNK_TYPE unk8;
 /* 12 */    UNK_TYPE unk12;
-};
-
-struct s80092920 {
-/* 00 */    struct s80092920* unk0;
-/* 04 */    u8 unk4;
-/* 05 */    u8 unk5;
-/* 06 */    u8 unk6;
-/* 07 */    u8 unk7;
-/* 08 */    u8 unk8;
-/* 09 */    u8 unk9;
-/* 10 */    u8 unk10; // pad?
-/* 11 */    u8 unk11; // pad?
-/* 12 */    UNK_TYPE unk12;
-/* 16 */    UNK_TYPE unk16;
 };
 
 struct s800A5AC0 {
@@ -92,6 +79,24 @@ typedef struct s800CAAD0_s {
 typedef struct s800E03A0_s {
     /* 000 */ u8 pad[32];
 } s800E03A0;
+
+// Entries in dmadata
+typedef struct {
+    /* 000 */ u32 vromStart;
+    /* 004 */ u32 vromEnd;
+    /* 008 */ u32 romStart;
+    /* 012 */ u32 romEnd;
+} DmadataEntry;
+
+typedef struct s80080A08_s {
+    /* 000 */ UNK_PTR unk0;
+    /* 004 */ UNK_FUN_PTR(unk4);
+    /* 008 */ UNK_TYPE unk8;
+    /* 012 */ u8 pad1[8];
+    /* 020 */ UNK_TYPE unk20;
+    /* 024 */ OSMesgQueue* unk24;
+    /* 028 */ UNK_TYPE unk28;
+} s80080A08;
 
 // This struct is huge! Global context?
 typedef struct s800F4F54_s {

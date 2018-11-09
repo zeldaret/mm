@@ -1,4 +1,6 @@
 known_vars = {
+    0x0001A500:("dmadataRomStart","u32",False), # Start of dmadata
+    0x00020700:("dmadataRomEnd","u32",False), # Byte immediately after end of dmadata
     0x00AC4000:("","UNK_TYPE",False), # this seems low
     0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
@@ -19,8 +21,9 @@ known_vars = {
     0x80096B2C:("","u32",False),
     0x80096B30:("","f32",False),
     0x80096B34:("","f32",False),
-    0x80096B40:("","struct s80092920*",False),
+    0x80096B40:("","OSPiHandle*",False),
     0x80096B50:("","UNK_TYPE",False),
+    0x80096B60:("","UNK_TYPE*",False),
     0x80096C40:("g_s80085320_ListHead","struct s80085320*",False), # TODO rename?
     0x80096C44:("g_s80085320_ListTail","struct s80085320*",False), # TODO rename?
     0x80097590:("","UNK_TYPE",False),
@@ -36,7 +39,7 @@ known_vars = {
     0x80097E5C:("__osShutdown","UNK_TYPE",False),
     0x80097E60:("__OSGlobalIntMask","UNK_TYPE",False),
     0x80097E70:("__osPiDevMgr","UNK_TYPE",False),
-    0x80097E8C:("","struct s80092920*",False),
+    0x80097E8C:("","OSPiHandle*",False),
     0x80097EA0:("__osPiAccessQueueEnabled","UNK_TYPE",False),
     0x80097F10:("","UNK_TYPE",False),
     0x80097F70:("__osTimerList","OSTimer*",False),
@@ -55,6 +58,12 @@ known_vars = {
     0x800981A0:("","UNK_TYPE",False),
     0x800981A8:("","UNK_TYPE",False),
     0x800981B0:("","float",False),
+    0x800981C0:("","UNK_TYPE",False),
+    0x800981C4:("","UNK_TYPE",False),
+    0x800981D4:("","UNK_TYPE",False),
+    0x800981E4:("","UNK_TYPE",False),
+    0x800981F4:("","UNK_TYPE",False),
+    0x80098204:("","UNK_TYPE",False),
     0x80098280:("","UNK_TYPE",False),
     0x80098290:("","UNK_TYPE",False),
     0x800982A4:("","UNK_TYPE",False),
@@ -77,6 +86,13 @@ known_vars = {
     0x8009B228:("","UNK_TYPE",False),
     0x8009B240:("","u32*",False),
     0x8009B290:("","u8",False),
+    0x8009B2A0:("","struct s80085320",False),
+    0x8009B2BC:("","u16",False), # Count of entries in dmadata
+    0x8009B2C0:("","OSMesgQueue",False),
+    0x8009B2D8:("","UNK_TYPE",False),
+    0x8009B358:("","OSThread",False),
+    0x8009B508:("","UNK_TYPE",False),
+    0x8009BA08:("","UNK_TYPE",False),
     0x8009BE30:("","UNK_TYPE",False),
     0x8009BE34:("","UNK_TYPE",False),
     0x8009BE38:("","UNK_TYPE",False),
@@ -104,8 +120,9 @@ known_vars = {
     0x8009E5B8:("__osBaseCounter","UNK_TYPE",False),
     0x8009E5BC:("__osViIntrCount","UNK_TYPE",False), # actually an array of structs?
     0x8009E5C0:("__osTimerCounter","UNK_TYPE",False),
-    0x8009E610:("","struct s80092920",False),
+    0x8009E610:("","OSPiHandle",False),
     0x8009E624:("","UNK_TYPE",False),
+    0x8009F8B0:("dmadata","DmadataEntry",True), # RAM copy of dmadata
     0x801ADE80:("","UNK_TYPE",False),
     0x801ADEAC:("","UNK_TYPE",False),
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation

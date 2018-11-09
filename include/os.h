@@ -104,6 +104,48 @@ typedef struct {
 
 
 typedef struct {
+    /* 0 */ u32 errStatus;
+    /* 4 */ void* dramAddr;
+    /* 8 */ void* C2Addr;
+    /* 12 */ u32 sectorSize;
+    /* 16 */ u32 C1ErrNum;
+    /* 20 */ u32 C1ErrSector[4];
+} __OSBlockInfo;
+
+
+typedef struct {
+    /* 0 */ u32 cmdType;
+    /* 4 */ u16 transferMode;
+    /* 6 */ u16 blockNum;
+    /* 8 */ s32 sectorNum;
+    /* 12 */ u32 devAddr;
+    /* 16 */ u32 bmCtlShadow;
+    /* 20 */ u32 seqCtlShadow;
+    /* 24 */ __OSBlockInfo block[2];
+} __OSTranxInfo;
+
+
+typedef struct OSPiHandle_s {
+    /* 0 */ struct OSPiHandle_s* next;
+    /* 4 */ u8 type;
+    /* 5 */ u8 latency;
+    /* 6 */ u8 pageSize;
+    /* 7 */ u8 relDuration;
+    /* 8 */ u8 pulse;
+    /* 9 */ u8 domain;
+    /* 12 */ u32 baseAddress;
+    /* 16 */ u32 speed;
+    /* 20 */ __OSTranxInfo transferInfo;
+} OSPiHandle;
+
+
+typedef struct {
+    /* 0 */ u8 type;
+    /* 4 */ u32 address;
+} OSPiInfo;
+
+
+typedef struct {
     /* 0 */ u16 type;
     /* 2 */ u8 pri;
     /* 3 */ u8 status;

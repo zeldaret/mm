@@ -43,7 +43,7 @@ UNK_RET func_80080250(void) {
     sp40 = *v0;
     *v0 = 0;
 
-    func_80080C04(&sp72, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, (UNK_TYPE*)&sp48, 0);
+    func_80080C04(&sp72, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp48, 0);
     func_8008019C();
     func_800801EC();
     osRecvMesg(&sp48, 0, 1);

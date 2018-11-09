@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-struct s80092920* func_80092920(void) {
+OSPiHandle* func_80092920(void) {
     u32 v0;
     u32 temp;
     u32 temp2;
@@ -18,10 +18,10 @@ struct s80092920* func_80092920(void) {
     
     D_800980D0_ = 0;
     
-    D_8009E610.unk4 = 0;
-    D_8009E610.unk12 = 0xB0000000;
-    D_8009E610.unk9 = 0;
-    D_8009E610.unk16 = 0;
+    D_8009E610.type = 0;
+    D_8009E610.baseAddress = 0xB0000000;
+    D_8009E610.domain = 0;
+    D_8009E610.speed = 0;
     
     func_80089630(&D_8009E624, 96);
     
@@ -37,11 +37,11 @@ struct s80092920* func_80092920(void) {
     *(vu32*)0xA4600020 = 3;
     *(vu32*)0xA4600018 = 255;
     
-    v0 = *(u32*)(D_8009E610.unk12 | 0xA0000000);
-    D_8009E610.unk6 = (v0 >> 16) & 0xF;
-    D_8009E610.unk7 = (v0 >> 20) & 0xF;
-    D_8009E610.unk8 = v0 >> 8;
-    D_8009E610.unk5 = v0;
+    v0 = *(u32*)(D_8009E610.baseAddress | 0xA0000000);
+    D_8009E610.pageSize = (v0 >> 16) & 0xF;
+    D_8009E610.relDuration = (v0 >> 20) & 0xF;
+    D_8009E610.pulse = v0 >> 8;
+    D_8009E610.latency = v0;
     
     *(vu32*)0xA4600014 = temp;
     *(vu32*)0xA460001C = temp2;
@@ -50,7 +50,7 @@ struct s80092920* func_80092920(void) {
     
     func_ret = func_80091A60();
     
-    D_8009E610.unk0 = D_80097E8C;
+    D_8009E610.next = D_80097E8C;
     D_80097E8C = &D_8009E610;
     
     func_80091AD0(func_ret);

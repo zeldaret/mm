@@ -69,7 +69,7 @@ code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
 	$(LD) -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
 
 test.txt: build/src/test.o
-	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080180 $< > test.txt
+	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
 
 clean:
 	rm $(ROM) $(ELF) code.elf code.bin boot.bin -r build
