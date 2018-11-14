@@ -139,7 +139,14 @@ def get_symbol_name(addr):
 
 
 def write_header(file):
-    file.write(".set noat # allow use of $at\n.set noreorder # don't insert nops after branches\n.set gp=64 # allow use of 64bit registers\n\n");
+    file.write(".set noat # allow use of $at\n"
+               ".set noreorder # don't insert nops after branches\n"
+               ".set gp=64 # allow use of 64bit registers\n"
+               ".macro glabel label\n"
+               "    .global \label\n"
+               "    \label:\n"
+               ".endm\n"
+               "\n");
 
 
 # TODO add code_regions?
@@ -356,10 +363,10 @@ class Disassembler:
                         f.write(".L_%08X:\n" % addr)
                     if addr in self.functions:
                         name = get_func_name(addr)
-                        f.write("\n.global %s\n%s:\n" % (name, name))
+                        f.write("\nglabel %s\n" % name)
                     if addr in self.vars:
                         name = self.make_load(addr)
-                        f.write(".global %s\n%s:\n" % (name, name))
+                        f.write("glabel %s\n" % name)
 
                     if not self.is_in_data_or_undef(addr):
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
