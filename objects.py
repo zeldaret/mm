@@ -26,6 +26,7 @@ known_objects = {
     0x8008A660:"initialize",
     0x8008AA50:"perspective",
     0x8008AD70:"sirawdma",
+    0x8008ACE0:"sprawdma",
     0x8008AEE0:"sirawread",
     0x8008AF30:"getthreadid",
     0x8008AF50:"sptaskyield",
@@ -90,7 +91,8 @@ known_objects = {
     0x800955C0:"writebackdcacheall",
     0x800955F0:"getcurrfaultthread",
     0x800957b0:"startthread",
-    0x80095900:"",
+    0x80095900:"visetyscale",
+    0x80095950:"visetxscale",
     0x80095a60:"llcvt",
     0x80096510:"spsetpc",
     }
