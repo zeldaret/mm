@@ -8,7 +8,7 @@ import png;
 #FILE_NAME = 'baserom/jpn_font_static'
 FILE_NAME = 'decomp/object_boss03'
 
-data = []    
+data = []
 image_data = [];
 
 try:
@@ -17,7 +17,7 @@ try:
 except IOError:
     print('failed to read file ' + FILE_NAME)
     sys.exit(1)
-    
+
 #size = 0x80
 height = 32
 width = 32
@@ -33,7 +33,7 @@ window.geometry('500x500')
 def load_file():
     print('load')
     update_image()
-    
+
 def read_i4_image(data, image_data):
     for i in range(0, len(data)):
         byte = data[i]
@@ -47,7 +47,7 @@ def read_i4_image(data, image_data):
         image_data.append(color2)
         image_data.append(color2)
         image_data.append(255)
-    
+
 def read_i8_image(data, image_data):
     for i in range(0, len(data)):
         byte = data[i]
@@ -55,16 +55,16 @@ def read_i8_image(data, image_data):
         image_data.append(byte)
         image_data.append(byte)
         image_data.append(255)
-    
+
 def read_ia4_image(data, image_data):
     None
-    
+
 def read_ia8_image(data, image_data):
     None
-    
+
 def read_ia16_image(data, image_data):
     None
-    
+
 def read_rbg5a1_image(data, image_data):
     for i in range(0, len(data) // 2):
         byte1 = data[i*2]
@@ -77,23 +77,23 @@ def read_rbg5a1_image(data, image_data):
         image_data.append(green)
         image_data.append(blue)
         image_data.append(alpha)
-    
+
 def read_rbga32_image(data, image_data):
     for i in range(0, len(data)):
         byte = data[i]
         image_data.append(byte)
-    
+
 def read_ci4_image(data, image_data):
     None
-    
+
 def read_ci8_image(data, image_data):
     None
-    
+
 def update_image(*args):
     global image_label
     global image_data
     global data
-    
+
     image_data = []
 
     texture_type = texture_type_combo.get()
@@ -117,15 +117,15 @@ def update_image(*args):
         read_ci8_image(data, image_data)
     else:
         print('other type')
-        
+
     offset = int(offset_spinbox.get())
 
     image = Image.frombytes("RGBA", (width, height), bytes(image_data[offset*4:])).resize((width*scale, height*scale))
     image_tk = ImageTk.PhotoImage(image=image)
     image_label.configure(image=image_tk)
     image_label.image = image_tk # prevent GC?
-        
-    
+
+
 
 load_button = Button(window, text='Load File', command=load_file)
 load_button.pack()
@@ -153,10 +153,10 @@ image_label.pack()
 update_image()
 
 window.mainloop()
-    
+
 #for i in range(0, len(data) // size):
 #    texture_data = data[(i * size):((i + 1) * size)]
-#    
+#
 #    with open('font_test2/' + str(i) + '.png', 'wb') as f:
 #        w = png.Writer(width, height, alpha=True)#, greyscale=True)#
 #        png_data = [];
