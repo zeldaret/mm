@@ -1871,8 +1871,8 @@ extern UNK_TYPE D_80000500; // D_80000500
 extern UNK_TYPE D_80025D00; // D_80025D00
 //extern UNK_TYPE D_800969C0;
 extern u8 D_80096B20; // D_80096B20
-extern u8* D_80096B24; // D_80096B24
-extern u32 D_80096B28; // D_80096B28
+extern volatile u8 D_80096B24; // D_80096B24
+extern u8 D_80096B28; // D_80096B28
 extern u32 D_80096B2C; // D_80096B2C
 extern f32 D_80096B30; // D_80096B30
 extern f32 D_80096B34; // D_80096B34
@@ -1934,7 +1934,7 @@ extern u32* D_80098010; // D_80098010
 //extern UNK_TYPE D_80098060;
 //extern UNK_TYPE D_80098090;
 extern __OSViContext* __osViCurr; // D_800980C0
-extern UNK_TYPE __osViNext; // D_800980C4
+extern __OSViContext* __osViNext; // D_800980C4
 extern UNK_PTR D_800980D0; // D_800980D0
 extern u32* D_800980E0; // D_800980E0
 extern UNK_TYPE D_80098130; // D_80098130
@@ -13626,8 +13626,10 @@ extern f32 D_808637D0; // D_808637D0
 //extern UNK_TYPE D_80BD52F4;
 //extern UNK_TYPE D_80BD52F8;
 //extern UNK_TYPE D_80BD52FC;
-//extern UNK_TYPE D_80BD55F0;
-//extern UNK_TYPE D_80BD561C;
+extern z_ActorInit bgIkanaRayInitVar; // D_80BD55D0
+extern UNK_TYPE D_80BD55F0; // D_80BD55F0
+extern z_ActorCompInitEntry bgIkanaRayCompInit[]; // D_80BD561C
+extern UNK_TYPE D_80BD562C; // D_80BD562C
 //extern UNK_TYPE D_80BD5D10;
 //extern UNK_TYPE D_80BD5D20;
 //extern UNK_TYPE D_80BD5D24;

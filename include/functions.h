@@ -118,7 +118,8 @@ UNK_RET func_8008481C(UNK_TYPE, UNK_TYPE, UNK_PTR, UNK_PTR); // func_8008481C
 // UNK_RET func_8008486C(UNK_ARGS);
 // UNK_RET func_800848A4(UNK_ARGS);
 // UNK_RET func_800848B8(UNK_ARGS);
-// UNK_RET func_80084940(UNK_ARGS);
+void func_80084940(void); // func_80084940
+void func_80084968(void); // func_80084968
 // UNK_RET func_800849A0(UNK_ARGS);
 // UNK_RET func_80084DB0(UNK_ARGS);
 // UNK_RET func_8008501C(UNK_ARGS);
@@ -421,7 +422,7 @@ UNK_RET func_80094828(UNK_ARGS); // func_80094828
 ldiv_t ldiv(long numer, long denom); // func_80094DF0
 lldiv_t lldiv(long long numer, long long denom); // func_80094E74
 void _Litob(_Pft* px, unsigned char code); // func_80094F80
-s32 __osSiRawWriteIo(u32 devAddr, u32* data); // func_80095220
+s32 __osSiRawWriteIo(u32 devAddr, u32 data); // func_80095220
 u32 __osSpGetStatus(void); // func_80095270
 void __osSpSetStatus(u32 data); // func_80095280
 void osCreateViManager(OSPri pri); // func_800952A0
@@ -431,8 +432,8 @@ OSThread* __osGetCurrFaultedThread(void); // func_800955F0
 // UNK_RET func_80095600(UNK_ARGS);
 void guMtxF2L(float* mf[4], Mtx* m); // func_80095740
 void osStartThread(OSThread* t); // func_800957B0
-void func_80095900(f32); // func_80095900
-UNK_RET func_80095950(f32); // func_80095950
+void osViSetYScale(f32); // func_80095900
+void osViSetXScale(f32); // func_80095950
 long long __d_to_ll(double d); // func_80095A60
 long long __f_to_ll(float f); // func_80095A7C
 unsigned long long __d_to_ull(double d); // func_80095A98
@@ -458,7 +459,7 @@ UNK_RET osViModeMpalLan1(UNK_ARGS); // func_80098010
 UNK_RET __osRcpImTable(UNK_ARGS); // func_800991A0
 UNK_RET __libm_qnan_f(UNK_ARGS); // func_80099450
 UNK_RET func_800A5AC0(void*, UNK_TYPE); // func_800A5AC0
-UNK_RET func_800A5B6C(struct s800A5AC0*, UNK_TYPE); // func_800A5B6C
+UNK_RET func_800A5B6C(struct s800A5AC0*, z_GlobalContext*); // func_800A5B6C
 UNK_RET func_800A5B98(struct s800A5AC0*, UNK_TYPE); // func_800A5B98
 UNK_RET func_800A5C28(struct s800A5AC0*); // func_800A5C28
 UNK_RET func_800A5C60(struct s800A5AC0*, UNK_TYPE); // func_800A5C60
@@ -684,7 +685,7 @@ UNK_RET func_800A5CB8(struct s800A5AC0*, UNK_TYPE); // func_800A5CB8
 // UNK_RET func_800B3880(UNK_ARGS);
 // UNK_RET func_800B39A4(UNK_ARGS);
 // UNK_RET func_800B3AD0(UNK_ARGS);
-UNK_RET func_800B3BA4(UNK_PTR, UNK_TYPE, UNK_PTR, UNK_TYPE); // func_800B3BA4
+UNK_RET func_800B3BA4(UNK_PTR, f32, UNK_PTR, UNK_TYPE); // func_800B3BA4
 // UNK_RET func_800B3BC8(UNK_ARGS);
 UNK_TYPE func_800B3FC0(UNK_TYPE); // func_800B3FC0
 // UNK_RET func_800B4024(UNK_ARGS);
@@ -702,7 +703,7 @@ UNK_TYPE func_800B3FC0(UNK_TYPE); // func_800B3FC0
 // UNK_RET func_800B51A4(UNK_ARGS);
 // UNK_RET func_800B5208(UNK_ARGS);
 // UNK_RET func_800B5814(UNK_ARGS);
-// UNK_RET func_800B5BB0(UNK_ARGS);
+UNK_TYPE func_800B5BB0(z_GlobalContext*, UNK_TYPE); // func_800B5BB0
 // UNK_RET func_800B5BF4(UNK_ARGS);
 // UNK_RET func_800B5C34(UNK_ARGS);
 // UNK_RET func_800B5C78(UNK_ARGS);
@@ -888,7 +889,7 @@ UNK_TYPE func_800B867C(struct s800A5AC0*); // func_800B867C
 // UNK_RET func_800BDC5C(UNK_ARGS);
 // UNK_RET func_800BDFB0(UNK_ARGS);
 UNK_RET func_800BDFC0(UNK_TYPE, UNK_TYPE, UNK_TYPE, struct s800A5AC0*); // func_800BDFC0
-// UNK_RET func_800BE03C(UNK_ARGS);
+void func_800BE03C(z_GlobalContext*, UNK_TYPE); // func_800BE03C
 // UNK_RET func_800BE0B8(UNK_ARGS);
 // UNK_RET func_800BE184(UNK_ARGS);
 // UNK_RET func_800BE22C(UNK_ARGS);
@@ -1380,11 +1381,11 @@ void func_800E03CC(u8*); // func_800E03CC
 // UNK_RET func_800E110C(UNK_ARGS);
 // UNK_RET func_800E1148(UNK_ARGS);
 // UNK_RET func_800E115C(UNK_ARGS);
-// UNK_RET func_800E119C(UNK_ARGS);
-UNK_RET func_800E11EC(UNK_TYPE, UNK_PTR); // func_800E11EC
+void func_800E119C(z_GlobalContext*, UNK_PTR); // func_800E119C
+void func_800E11EC(z_GlobalContext*, UNK_PTR); // func_800E11EC
 // UNK_RET func_800E12A4(UNK_ARGS);
-// UNK_RET func_800E130C(UNK_ARGS);
-UNK_RET func_800E1374(UNK_TYPE, UNK_PTR, struct s800A5AC0*, UNK_PTR); // func_800E1374
+void func_800E130C(z_GlobalContext*, UNK_PTR, z_Actor*, UNK_PTR); // func_800E130C
+UNK_RET func_800E1374(UNK_TYPE, UNK_PTR, z_Actor*, UNK_PTR); // func_800E1374
 // UNK_RET func_800E13C0(UNK_ARGS);
 // UNK_RET func_800E1400(UNK_ARGS);
 // UNK_RET func_800E1440(UNK_ARGS);
@@ -1429,7 +1430,7 @@ UNK_RET func_800E1374(UNK_TYPE, UNK_PTR, struct s800A5AC0*, UNK_PTR); // func_80
 // UNK_RET func_800E2450(UNK_ARGS);
 // UNK_RET func_800E2470(UNK_ARGS);
 // UNK_RET func_800E2480(UNK_ARGS);
-// UNK_RET func_800E2558(UNK_ARGS);
+void func_800E2558(z_GlobalContext*, UNK_PTR, UNK_PTR); // func_800E2558
 // UNK_RET func_800E2740(UNK_ARGS);
 UNK_RET func_800E2928(UNK_TYPE, UNK_TYPE, UNK_PTR); // func_800E2928
 // UNK_RET func_800E2B98(UNK_ARGS);
@@ -1511,7 +1512,7 @@ UNK_RET func_800E2928(UNK_TYPE, UNK_TYPE, UNK_PTR); // func_800E2928
 // UNK_RET func_800E7BCC(UNK_ARGS);
 // UNK_RET func_800E7C64(UNK_ARGS);
 // UNK_RET func_800E7DCC(UNK_ARGS);
-UNK_RET func_800E7DF8(struct s800A5AC0*, UNK_PTR); // func_800E7DF8
+void func_800E7DF8(z_Actor*, UNK_PTR); // func_800E7DF8
 // UNK_RET func_800E7E3C(UNK_ARGS);
 // UNK_RET func_800E7E5C(UNK_ARGS);
 // UNK_RET func_800E7ECC(UNK_ARGS);
@@ -1923,7 +1924,7 @@ UNK_RET func_800E7DF8(struct s800A5AC0*, UNK_PTR); // func_800E7DF8
 // UNK_RET func_800FFA4C(UNK_ARGS);
 // UNK_RET func_800FFA60(UNK_ARGS);
 // UNK_RET func_800FFA94(UNK_ARGS);
-UNK_RET func_800FFADC(struct s800A5AC0*, UNK_PTR); // func_800FFADC
+void func_800FFADC(z_Actor*, z_ActorCompInitEntry*); // func_800FFADC
 // UNK_RET func_800FFB54(UNK_ARGS);
 // UNK_RET func_800FFB70(UNK_ARGS);
 // UNK_RET func_800FFB8C(UNK_ARGS);
@@ -1949,7 +1950,7 @@ UNK_RET func_800FFADC(struct s800A5AC0*, UNK_PTR); // func_800FFADC
 // UNK_RET func_8010011C(UNK_ARGS);
 // UNK_RET func_801001B8(UNK_ARGS);
 // UNK_RET func_80100448(UNK_ARGS);
-// UNK_RET func_80100504(UNK_ARGS);
+UNK_TYPE func_80100504(UNK_TYPE); // func_80100504
 // UNK_RET func_80100584(UNK_ARGS);
 // UNK_RET func_801005A0(UNK_ARGS);
 // UNK_RET func_801005C0(UNK_ARGS);
@@ -2537,7 +2538,7 @@ UNK_RET func_800FFADC(struct s800A5AC0*, UNK_PTR); // func_800FFADC
 // UNK_RET func_801311B4(UNK_ARGS);
 // UNK_RET func_80131580(UNK_ARGS);
 // UNK_RET func_80131690(UNK_ARGS);
-// UNK_RET func_80131758(UNK_ARGS);
+void func_80131758(z_GlobalContext*, UNK_TYPE); // func_80131758
 // UNK_RET func_8013178C(UNK_ARGS);
 // UNK_RET func_801317C0(UNK_ARGS);
 // UNK_RET func_8013189C(UNK_ARGS);

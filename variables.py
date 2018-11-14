@@ -16,8 +16,8 @@ known_vars = {
     0x80000500:("","UNK_TYPE",False),
     0x80025D00:("","UNK_TYPE",False),
     0x80096B20:("","u8",False),
-    0x80096B24:("","u8*",False),
-    0x80096B28:("","u32",False),
+    0x80096B24:("","volatile u8",False),
+    0x80096B28:("","u8",False),
     0x80096B2C:("","u32",False),
     0x80096B30:("","f32",False),
     0x80096B34:("","f32",False),
@@ -46,7 +46,7 @@ known_vars = {
     0x80097FC0:("","u32*",False),
     0x80098010:("","u32*",False),
     0x800980C0:("__osViCurr","__OSViContext*",False),
-    0x800980C4:("__osViNext","UNK_TYPE",False), # some struct pointer used in func_80095900
+    0x800980C4:("__osViNext","__OSViContext*",False),
     0x800980D0:("","UNK_PTR",False),
     0x800980E0:("","u32*",False),
     0x80098130:("","UNK_TYPE",False), # ldigs in https:github.com/vocho/openqnx/blob/cc95df3543a1c481d4f8ad387e29f0d1ff0c87fe/trunk/lib/c/stdio/xlitob.c
@@ -140,7 +140,12 @@ known_vars = {
     0x80208EA0:("","UNK_TYPE",False),
 
     # En_Test
-    0x808637D0:("","f32",False)
+    0x808637D0:("","f32",False),
+
+    0x80BD55D0:("bgIkanaRayInitVar","z_ActorInit",False),
+    0x80BD55F0:("","UNK_TYPE",False),
+    0x80BD561C:("bgIkanaRayCompInit","z_ActorCompInitEntry",True),
+    0x80BD562C:("","UNK_TYPE",False)
     }
 
 # these are extra variables needed for one reason or another, they should probably be deleted if possible
