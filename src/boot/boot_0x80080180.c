@@ -16,7 +16,7 @@ UNK_RET func_8008019C(void) {
 
 UNK_RET func_800801EC(void) {
     UNK_TYPE sp28;
-    UNK_PTR sp24 = (UNK_PTR)(0x80000000 + D_80000318);
+    UNK_PTR sp24 = (UNK_PTR)(0x80000000 + osMemSize);
     func_80080150((void*)0x80000400, &D_80000500);
     func_80080150(&D_80025D00, (int*)func_80080060);
     func_80080150(&D_80208EA0, sp24);
@@ -43,7 +43,7 @@ UNK_RET func_80080250(void) {
     sp40 = *v0;
     *v0 = 0;
 
-    func_80080C04(&sp72, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp48, 0);
+    func_80080C04((s80080A08*)&sp72, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp48, 0);
     func_8008019C();
     func_800801EC();
     osRecvMesg(&sp48, 0, 1);

@@ -1,25 +1,27 @@
 #include <ultra64.h>
 #include <global.h>
 
+// TODO this file looks like an actor, it should be cleaned up as such
+
 UNK_RET func_800A5AC0(void* a0, UNK_TYPE a1) {
     struct s800A5AC0* s0 = (struct s800A5AC0*)a0;
     s0->unk278 = ((s0->unk28 >> 8) & 0xFF) | 0x300;
     s0->unk28 = (s0->unk28 & 0xFF) - 9;
-    func_800FFADC(s0, &D_801ADEAC);
+    func_800FFADC((z_Actor*)s0, (z_ActorCompInitEntry*)&D_801ADEAC);
     func_800B3BA4(&s0->unk188, 0, (void*)&func_800B3FC0, 0x41400000);
-    func_800E1374(a1, &s0->unk328, s0, &D_801ADE80);
-    func_800E7DF8(s0, &s0->unk328);
+    func_800E1374(a1, &s0->unk328, (z_Actor*)s0, &D_801ADE80);
+    func_800E7DF8((z_Actor*)s0, &s0->unk328);
     s0->unk182 = 255;
     s0->unk324 = func_800A5B98;
 }
 
-UNK_RET func_800A5B6C(struct s800A5AC0* a0, UNK_TYPE a1) {
+UNK_RET func_800A5B6C(struct s800A5AC0* a0, z_GlobalContext* a1) {
     UNK_TYPE* a2 = &a0->unk328;
     func_800E11EC(a1, a2);
 }
 
 UNK_RET func_800A5B98(struct s800A5AC0* a0, UNK_TYPE a1) {
-    s32 v0;
+    s16 v0;
     s32 v1;
     if (func_800B84D0(a0, a1) != 0) {
         a0->unk324 = (void(*)(struct s800A5AC0*, UNK_TYPE))func_800A5C28; //! Is this cast correct?

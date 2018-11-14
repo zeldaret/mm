@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include <ramrom.h>
+#include <osint.h>
 
 void func_8008A660(void) {
     D_8009D134 = 7;
@@ -16,34 +16,36 @@ void func_8008A660(void) {
 
 u64 D_80097E50; // this has to be defined in this file for func_8008A6FC to match
 
-void func_8008A6FC(void) {
-    UNK_TYPE sp44;
-    
+// TODO regalloc is messed up here
+// TODO When asm-processor supports -O1, use it here
+void osInitialize(void) {
+    u32 pifdata;
+
     D_8009CF70 = 1;
-    
-    func_8008A5D0(func_8008A5C0() | 0x20000000);
-    func_80092CE0(0x20000800);
+
+    __osSetSR(__osGetSR() | 0x20000000);
+    __osSetFpcCsr(0x01000800);
     func_80096820(0x04900000);
-    
-    while (func_8008AEE0(0x1FC007FC, &sp44) != 0);
-    while (func_80095220(0x1FC007FC, sp44 | 8) != 0);
-    
+
+    while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0);
+    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0);
+
     *(struct s8008A6FC*)0x80000000 = *((struct s8008A6FC*)__osExceptionPreamble);
     *(struct s8008A6FC*)0x80000080 = *((struct s8008A6FC*)__osExceptionPreamble);
     *(struct s8008A6FC*)0x80000100 = *((struct s8008A6FC*)__osExceptionPreamble);
     *(struct s8008A6FC*)0x80000180 = *((struct s8008A6FC*)__osExceptionPreamble);
-    
-    func_8008A5E0(0x80000000, 400);
-    func_8008F270(0x80000000, 400);
+
+    osWritebackDCache((void*)0x80000000, 400);
+    osInvalICache((void*)0x80000000, 400);
     func_8008A660();
-    func_8008EDE0();
-    func_80093C00();
-    D_80097E50 = func_800888A8(func_800889A8(D_80097E50, 3), 4);
-    
-    if (D_8000030C == 0) {
-        func_80089630(&D_8000031C, 64);
+    osUnmapTLBAll();
+    osMapTLBRdb();
+    D_80097E50 = (D_80097E50 * 3) / 4;
+
+    if (osResetType == 0) {
+        _blkclr((u8*)&D_8000031C, 64);
     }
-    
+
     if (osTvType == 0) {
         D_80097E58 = 0x02F5B2D2;
     } else if (osTvType == 2) {
@@ -51,11 +53,11 @@ void func_8008A6FC(void) {
     } else {
         D_80097E58 = 0x02E6D354;
     }
-    
-    if((func_80093D90() & 0x1000) != 0) {
+
+    if((__osGetCause() & 0x1000) != 0) {
         while(1);
     }
-    
+
     *(u32*)0xA4500008 = 1;
     *(u32*)0xA4500010 = 16383;
     *(u32*)0xA4500014 = 15;
