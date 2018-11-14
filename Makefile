@@ -5,11 +5,13 @@ MIPS_BINUTILS := mips-linux-gnu-
 AS := $(MIPS_BINUTILS)as
 LD := $(MIPS_BINUTILS)ld
 
-QEMU_IRIX := ~/irixemu/mips-linux-user/qemu-mips
-IRIX_ROOT := ./ido/
+#QEMU_IRIX := ~/irixemu/mips-linux-user/qemu-mips
+QEMU_IRIX := ~/qemu-irix
+IRIX_ROOT := ./ido/62/
 CC := $(QEMU_IRIX) -L $(IRIX_ROOT) $(IRIX_ROOT)/usr/bin/cc
 
 CFLAGS := -G 0 -non_shared -Xfullwarn -Xcpluscomm
+ASFLAGS := -march=vr4300 -32
 
 MIPS_VERSION := -mips2
 OPTIMIZATION := -O2 -g3
@@ -17,21 +19,25 @@ OPTIMIZATION := -O2 -g3
 build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
+build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
 test.txt: OPTIMIZATION := -O2 -g3
 test.txt: MIPS_VERSION := -mips2
+
+test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
 BASEROM_O_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%.o)
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
-C_FILES := $(wildcard src/*) \
-           $(wildcard src/libultra/*) \
+C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/libultra/os/*) \
            $(wildcard src/libultra/io/*) \
            $(wildcard src/libultra/libc/*) \
            $(wildcard src/code/*) \
-           $(wildcard src/boot_O2_g3/*)
+           $(wildcard src/boot_O2_g3/*) \
+           $(wildcard src/boot_O1/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
 O_FILES := $(BASEROM_O_FILES) $(S_O_FILES)
 
@@ -49,6 +55,7 @@ $(shell mkdir -p build/src/libultra/io)
 $(shell mkdir -p build/src/libultra/libc)
 $(shell mkdir -p build/src/code)
 $(shell mkdir -p build/src/boot_O2_g3)
+$(shell mkdir -p build/src/boot_O1)
 
 check: $(ROM) code.bin boot.bin
 	@md5sum -c checksum.md5
@@ -80,8 +87,8 @@ build/baserom/%.o: baserom/%
 	$(MIPS_BINUTILS)objcopy -I binary -O elf32-big $< $@
 
 build/asm/%.o: asm/%.asm
-	$(AS) -march=vr4300 -32 $^ -o $@
+	$(AS) $(ASFLAGS) $^ -o $@
 
 build/src/%.o: src/%.c include/*
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude $< -o $@
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 
