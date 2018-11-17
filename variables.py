@@ -5,7 +5,6 @@ known_vars = {
     0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
     0x00C7A4E0:("","UNK_TYPE",False), # this seems low
-    0x00C7A4E0:("","UNK_TYPE",False), # this seems low
     0x06001100:("","UNK_TYPE",False), # this seems low
     0x06001228:("","UNK_TYPE",False), # this seems low
     0x80000300:("osTvType","UNK_TYPE",False),
