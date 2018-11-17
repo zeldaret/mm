@@ -282,7 +282,7 @@ def get_struct_or_union_string(file_data, fd, symbolic_header, union_sym_num, se
         elif sym.st == 9: # stMember
             name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + sym.iss)
             ret += get_indent()
-            ret += '/* %#X */ %s;\n' % (sym.value // 8, get_type_string(file_data, fd, symbolic_header, sym.index, name, True))
+            ret += '/* 0x%X */ %s;\n' % (sym.value // 8, get_type_string(file_data, fd, symbolic_header, sym.index, name, True))
         elif sym.st == 26 or sym.st == 27: #stStruct, stUnion
             sym_num = fd.isymBase + sym.index
             continue
@@ -382,7 +382,10 @@ def print_symbols(file_data, fd, symbolic_header):
                 elif leaf_sym.st == 2: # stStatic
                     static_name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + leaf_sym.iss)
                     if leaf_sym.sc == 2 or leaf_sym.sc == 3 or leaf_sym.sc == 15: # scData, scBss, scRData
-                        print('static %s;\n' % get_type_string(file_data, fd, symbolic_header, leaf_sym.index, static_name, True))
+                        if leaf_sym.index != 0xFFFFF: # looks like it's an invalid value for .s files
+                            print('static %s;\n' % get_type_string(file_data, fd, symbolic_header, leaf_sym.index, static_name, True))
+                        else:
+                            print('static %s;\n' % static_name)
                     else:
                          print('ERROR unkown sc for stStatic in print_symbols: %d' % leaf_sym.sc)
                     sym_num += 1
