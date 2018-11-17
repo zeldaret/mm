@@ -32,7 +32,7 @@ SECTIONS
         build/asm/getintmask.o(.text)
         build/asm/boot_0x80088110.o(.text)
         build/asm/boot_0x800882A0.o(.text)
-        build/asm/sinf.o(.text)
+        build/src/libultra/gu/sinf.o(.text)
         build/asm/sins.o(.text)
         build/src/libultra/io/sptask.o(.text)
         build/asm/ll.o(.text)

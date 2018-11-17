@@ -42,7 +42,7 @@ known_funcs = {
     0x8008481C:("func_8008481C","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_PTR, UNK_PTR"),
     0x80084940:("func_80084940","void","void"),
     0x80084968:("func_80084968","void","void"),
-    0x80085320:("func_80085320","void"," s80085320*, UNK_PTR, UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_PTR"),
+    0x80085320:("func_80085320","void","s80085320*, UNK_PTR, UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_PTR"),
     0x800853F8:("func_800853F8","UNK_RET","s80085320*"),
     0x80085468:("func_80085468","UNK_TYPE","s80085320*"),
     0x800854E0:("func_800854E0","UNK_TYPE","UNK_ARGS"),
@@ -206,8 +206,8 @@ known_funcs = {
     0x80097eb0:("osViModeNtscHpn1","UNK_RET","UNK_ARGS"),
     0x80097fc0:("osViModeNtscLan1","UNK_RET","UNK_ARGS"),
     0x80098010:("osViModeMpalLan1","UNK_RET","UNK_ARGS"),
-    0x800991a0:("__osRcpImTable","UNK_RET","UNK_ARGS"),
-    0x80099450:("__libm_qnan_f","UNK_RET","UNK_ARGS"),
+    #0x800991a0:("__osRcpImTable","UNK_RET","UNK_ARGS"), TODO this is definitely actually a variable
+    #0x80099450:("__libm_qnan_f","UNK_RET","UNK_ARGS"), TODO this is definitely actually a variable
     0x800A5AC0:("func_800A5AC0","UNK_RET","void*, UNK_TYPE"), # guessing this is void* bc it's a thread entry point
     0x800A5B6C:("func_800A5B6C","UNK_RET","s800A5AC0*, z_GlobalContext*"),
     0x800A5B98:("func_800A5B98","UNK_RET","s800A5AC0*, UNK_TYPE"),

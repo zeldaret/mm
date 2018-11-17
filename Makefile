@@ -7,8 +7,8 @@ LD := $(MIPS_BINUTILS)ld
 
 #QEMU_IRIX := ~/irixemu/mips-linux-user/qemu-mips
 QEMU_IRIX := ~/qemu-irix
-IRIX_ROOT := ./ido/62/
-CC := $(QEMU_IRIX) -L $(IRIX_ROOT) $(IRIX_ROOT)/usr/bin/cc
+IRIX_62_ROOT := ./ido/62/
+IRIX_53_ROOT := ./ido/
 
 CFLAGS := -G 0 -non_shared -Xfullwarn -Xcpluscomm
 ASFLAGS := -march=vr4300 -32
@@ -19,10 +19,16 @@ OPTIMIZATION := -O2 -g3
 build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
+build/src/libultra/gu/%: OPTIMIZATION := -O2
+build/src/libultra/%: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
+build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
-test.txt: OPTIMIZATION := -O2 -g3
-test.txt: MIPS_VERSION := -mips2
+test.txt: OPTIMIZATION := -O2
+test.txt: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
+test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
+
+CC := $(QEMU_IRIX) -L $(IRIX_62_ROOT) $(IRIX_62_ROOT)/usr/bin/cc
 
 test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
@@ -35,6 +41,7 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/libultra/os/*) \
            $(wildcard src/libultra/io/*) \
            $(wildcard src/libultra/libc/*) \
+           $(wildcard src/libultra/gu/*) \
            $(wildcard src/code/*) \
            $(wildcard src/boot_O2_g3/*) \
            $(wildcard src/boot_O1/*)
@@ -53,6 +60,7 @@ $(shell mkdir -p build/src/libultra)
 $(shell mkdir -p build/src/libultra/os)
 $(shell mkdir -p build/src/libultra/io)
 $(shell mkdir -p build/src/libultra/libc)
+$(shell mkdir -p build/src/libultra/gu)
 $(shell mkdir -p build/src/code)
 $(shell mkdir -p build/src/boot_O2_g3)
 $(shell mkdir -p build/src/boot_O1)

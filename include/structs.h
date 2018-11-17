@@ -170,13 +170,6 @@ typedef struct {
 
 // TODO everything past here should be placed in an appropiate libultra header
 
-typedef long Mtx_t[4][4];
-
-typedef union {
-    /* 0x0 */ Mtx_t m;
-    /* 0x0 */ long long force_structure_alignment;
-} Mtx;
-
 
 typedef struct {
     /* 0x0 */ int quot;

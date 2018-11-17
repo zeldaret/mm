@@ -5,6 +5,9 @@ known_vars = {
     0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
     0x00C7A4E0:("","UNK_TYPE",False), # this seems low
+    0x00C7A4E0:("","UNK_TYPE",False), # this seems low
+    0x06001100:("","UNK_TYPE",False), # this seems low
+    0x06001228:("","UNK_TYPE",False), # this seems low
     0x80000300:("osTvType","UNK_TYPE",False),
     0x80000304:("osRomType","UNK_TYPE",False),
     0x80000308:("osRomBase","UNK_TYPE",False),
@@ -67,8 +70,14 @@ known_vars = {
     0x80098280:("","UNK_TYPE",False),
     0x80098290:("","UNK_TYPE",False),
     0x800982A4:("","UNK_TYPE",False),
+    0x80099220:("P","du",True),
+    0x80099248:("rpi","du",False),
+    0x80099250:("pihi","du",False),
+    0x80099258:("pilo","du",False),
+    0x80099260:("zero","fu",False),
     0x80099270:("__osHwIntTable","UNK_TYPE",False),
     0x80099290:("leoDiskStack","UNK_TYPE",False),
+    0x80099450:("__libm_qnan_f", "float",False),
     0x800994D0:("","UNK_TYPE",False),
     0x800994DC:("","UNK_TYPE",False),
     0x80099500:("","s80085320",False),

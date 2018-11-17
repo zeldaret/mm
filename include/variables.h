@@ -4,6 +4,7 @@
 #include <PR/ultratypes.h>
 #include <osint.h>
 #include <viint.h>
+#include <guint.h>
 #include <unk.h>
 #include <structs.h>
 
@@ -2071,10 +2072,11 @@ extern UNK_TYPE D_800982A4; // D_800982A4
 //extern UNK_TYPE D_80099108;
 //extern UNK_TYPE D_8009910C;
 //extern UNK_TYPE D_800991A0;
-//extern UNK_TYPE D_80099220;
-//extern UNK_TYPE D_80099248;
-//extern UNK_TYPE D_80099250;
-//extern UNK_TYPE D_80099258;
+extern du P[]; // D_80099220
+extern du rpi; // D_80099248
+extern du pihi; // D_80099250
+extern du pilo; // D_80099258
+extern fu zero; // D_80099260
 extern UNK_TYPE __osHwIntTable; // D_80099270
 extern UNK_TYPE leoDiskStack; // D_80099290
 //extern UNK_TYPE D_800992C0;
@@ -2085,7 +2087,7 @@ extern UNK_TYPE leoDiskStack; // D_80099290
 //extern UNK_TYPE D_80099428;
 //extern UNK_TYPE D_80099430;
 //extern UNK_TYPE D_80099438;
-//extern UNK_TYPE D_80099450;
+extern float __libm_qnan_f; // D_80099450
 //extern UNK_TYPE D_80099460;
 //extern UNK_TYPE D_800994A8;
 //extern UNK_TYPE D_800994B0;

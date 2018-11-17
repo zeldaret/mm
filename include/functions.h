@@ -4,6 +4,7 @@
 #include <PR/ultratypes.h>
 #include <osint.h>
 #include <viint.h>
+#include <guint.h>
 #include <unk.h>
 #include <structs.h>
 
@@ -43,7 +44,6 @@ void func_80080E00(void); // func_80080E00
 // UNK_RET func_800814D4(UNK_ARGS);
 // UNK_RET func_80081550(UNK_ARGS);
 // UNK_RET func_800815A8(UNK_ARGS);
-// UNK_RET func_800815CC(UNK_ARGS);
 // UNK_RET func_800815CC(UNK_ARGS);
 // UNK_RET func_80081684(UNK_ARGS);
 // UNK_RET func_800816E8(UNK_ARGS);
@@ -290,7 +290,7 @@ void osSpTaskYield(void); // func_8008AF50
 // UNK_RET func_8008B554(UNK_ARGS);
 // UNK_RET func_8008B600(UNK_ARGS);
 UNK_RET func_8008B650(UNK_PTR); // func_8008B650
-u32  __osGetConfig(void ); // func_8008B6B0
+u32  __osGetConfig(void); // func_8008B6B0
 void  __osSetConfig(u32 value); // func_8008B6C0
 // UNK_RET func_8008B6D0(UNK_ARGS);
 // UNK_RET func_8008B974(UNK_ARGS);
@@ -457,8 +457,6 @@ UNK_RET osViModeNtscHpf1(UNK_ARGS); // func_80097540
 UNK_RET osViModeNtscHpn1(UNK_ARGS); // func_80097EB0
 UNK_RET osViModeNtscLan1(UNK_ARGS); // func_80097FC0
 UNK_RET osViModeMpalLan1(UNK_ARGS); // func_80098010
-UNK_RET __osRcpImTable(UNK_ARGS); // func_800991A0
-UNK_RET __libm_qnan_f(UNK_ARGS); // func_80099450
 UNK_RET func_800A5AC0(void*, UNK_TYPE); // func_800A5AC0
 UNK_RET func_800A5B6C(s800A5AC0*, z_GlobalContext*); // func_800A5B6C
 UNK_RET func_800A5B98(s800A5AC0*, UNK_TYPE); // func_800A5B98
