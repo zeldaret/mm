@@ -4,25 +4,25 @@
 #include <PR/ultratypes.h>
 
 typedef struct {
-    /* 0 */ u32 magic;
-    /* 4 */ u32 len;
-    /* 8 */ u32* base;
-    /* 12 */ s32 startCount;
-    /* 16 */ s32 writeOffset;
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 len;
+    /* 0x8 */ u32* base;
+    /* 0xC */ s32 startCount;
+    /* 0x10 */ s32 writeOffset;
 } OSLog;
 
 
 typedef struct {
-    /* 0 */ u32 magic;
-    /* 4 */ u32 timeStamp;
-    /* 8 */ u16 argCount;
-    /* 10 */ u16 eventID;
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 timeStamp;
+    /* 0x8 */ u16 argCount;
+    /* 0xA */ u16 eventID;
 } OSLogItem;
 
 
 typedef struct {
-    /* 0 */ u32 magic;
-    /* 4 */ u32 version;
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 version;
 } OSLogFileHdr;
 
 #endif

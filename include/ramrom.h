@@ -4,10 +4,10 @@
 #include <PR/ultratypes.h>
 
 typedef struct {
-    /* 0 */ long type;
-    /* 4 */ long length;
-    /* 8 */ long magic;
-    /* 12 */ unsigned char userdata[24564];
+    /* 0x0 */ long type;
+    /* 0x4 */ long length;
+    /* 0x8 */ long magic;
+    /* 0xC */ unsigned char userdata[24564];
 } RamRomBuffer;
 
 #endif

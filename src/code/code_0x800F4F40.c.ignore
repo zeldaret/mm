@@ -6,7 +6,7 @@ void func_800F4F40(UNK_TYPE a0, UNK_TYPE a1, UNK_TYPE a2) {
 }
 
 void func_800F4F54(s800F4F54* a0, u8 a1, UNK_TYPE a2) {
-    u32 arg0 = (u32)a0 + a0->unk92152 * (15 * 1024) + a2 + 19056;
+    u32 arg0 = (u32)a0 + a0->unk167F8 * (15 * 1024) + a2 + 19056;
     u32 arg1 = ((a1 * 128) - 4096) + (u32)&D_00ACC000;
     func_80080C90(arg0, arg1, 128);
 }

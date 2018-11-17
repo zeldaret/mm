@@ -557,7 +557,7 @@ class Disassembler:
                 else:
                     dis += "%s, %s, %d" % (regs[get_rt(inst)], regs[get_rs(inst)], get_signed_imm(inst))
             elif op_num == 12 or op_num == 13 or op_num == 14: # andi, ori, xori
-                dis += "%s, %s, 0x%X" % (regs[get_rt(inst)], regs[get_rs(inst)], get_imm(inst))
+                dis += "%s, %s, %#X" % (regs[get_rt(inst)], regs[get_rs(inst)], get_imm(inst))
             elif op_num == 15: # lui
                 self.determine_load_ref(file, i)
                 if addr in loadHighRefs: # lui loading the higher half of a pointer
@@ -569,23 +569,23 @@ class Disassembler:
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
                     dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
                 else:
-                    dis += "%s, %d(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
+                    dis += "%s, %#X(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
             elif op_num == 36 or op_num == 37: # lbu, lhu
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
                     dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
                 else:
-                    dis += "%s, %d(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
+                    dis += "%s, %#X(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
             elif (op_num == 49 or op_num == 50 or op_num == 53 or op_num == 54 or op_num == 57 or op_num == 58 or
                   op_num == 61 or op_num == 62): # load/store between co-processors
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
                     dis += "%s, %%lo(%s)(%s)" % (float_reg(get_rt(inst)), self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
                 else:
-                    dis += "%s, %d(%s)" % (float_reg(get_rt(inst)), get_signed_imm(inst), regs[get_rs(inst)])
+                    dis += "%s, %#X(%s)" % (float_reg(get_rt(inst)), get_signed_imm(inst), regs[get_rs(inst)])
             elif op_num == 47: # cache
                 if addr in loadLowRefs: # cache op with immediate forming lower half of pointer
                     dis += "0x%02X, %%lo(%s)(%s)" % (get_rt(inst), self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
                 else:
-                    dis += "0x%02X, %d(%s)" % (get_rt(inst), get_signed_imm(inst), regs[get_rs(inst)])
+                    dis += "0x%02X, %#X(%s)" % (get_rt(inst), get_signed_imm(inst), regs[get_rs(inst)])
 
         return dis
 

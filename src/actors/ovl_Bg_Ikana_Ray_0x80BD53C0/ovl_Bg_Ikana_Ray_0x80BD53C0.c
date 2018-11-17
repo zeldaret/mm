@@ -2,11 +2,11 @@
 #include <global.h>
 
 typedef struct z_ActorBgIkanaRay_s {
-	/* 000 */ z_Actor baseActor;
-	/* 324 */ UNK_TYPE unk324;
-	/* 328 */ u8 pad5[72];
-	/* 400 */ UNK_TYPE unk400;
-	/* 404 */ void(*unk404)(struct z_ActorBgIkanaRay_s*, z_GlobalContext*);
+	/* 0x000 */ z_Actor baseActor;
+	/* 0x144 */ UNK_TYPE unk144;
+	/* 0x148 */ u8 pad5[0x48];
+	/* 0x190 */ UNK_TYPE unk190;
+	/* 0x194 */ void(*unk404)(struct z_ActorBgIkanaRay_s*, z_GlobalContext*);
 } z_ActorBgIkanaRay;
 
 void z_bg_ikana_ray_init(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt);
@@ -85,16 +85,16 @@ glabel D_80BD562C
 )
 
 void z_bg_ikana_ray_init(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
-	UNK_TYPE* sp36 = &this->unk324;
+	UNK_TYPE* sp24 = &this->unk144;
 	u32 pad;
 
 	func_800FFADC((z_Actor*)this, bgIkanaRayCompInit);
-	func_800E119C(ctxt, sp36);
-	func_800E130C(ctxt, sp36, (z_Actor*)this, &D_80BD55F0);
-	func_800E7DF8((z_Actor*)this, &this->unk324);
-	this->unk400 = func_80100504((UNK_TYPE)&D_06001228); // XXX: D_06001228 is probably a constant
+	func_800E119C(ctxt, sp24);
+	func_800E130C(ctxt, sp24, (z_Actor*)this, &D_80BD55F0);
+	func_800E7DF8((z_Actor*)this, &this->unk144);
+	this->unk190 = func_80100504((UNK_TYPE)&D_06001228); // XXX: D_06001228 is probably a constant
 
-	if (func_800B5BB0(ctxt, this->baseActor.unk28 & 0x7F) != 0) {
+	if (func_800B5BB0(ctxt, this->baseActor.unk1C & 0x7F) != 0) {
 		func_80BD5500(this);
 	} else {
 		func_80BD5498(this);
@@ -102,7 +102,7 @@ void z_bg_ikana_ray_init(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
 }
 
 void z_bg_ikana_ray_fini(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
-	UNK_TYPE* a1 = &this->unk324;
+	UNK_TYPE* a1 = &this->unk144;
 	func_800E11EC(ctxt, a1);
 }
 
@@ -113,7 +113,7 @@ void func_80BD5498(z_ActorBgIkanaRay* this) {
 }
 
 void func_80BD54BC(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
-	if (func_800B5BB0(ctxt, this->baseActor.unk28 & 0x7F) != 0) {
+	if (func_800B5BB0(ctxt, this->baseActor.unk1C & 0x7F) != 0) {
 		func_80BD5500(this);
 	}
 }
@@ -125,7 +125,7 @@ void func_80BD5500(z_ActorBgIkanaRay* this) {
 }
 
 void func_80BD5530(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
-	func_800E2558(ctxt, &ctxt->unk100484, &this->unk324);
+	func_800E2558(ctxt, &ctxt->unk18884, &this->unk144);
 }
 
 void z_bg_ikana_ray_main(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
@@ -133,6 +133,6 @@ void z_bg_ikana_ray_main(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
 }
 
 void z_bg_ikana_ray_draw(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
-	func_80131758(ctxt, this->unk400);
+	func_80131758(ctxt, this->unk190);
 	func_800BE03C(ctxt, (UNK_TYPE)&D_06001100); // XXX: D_06001100 is probably a constant
 }

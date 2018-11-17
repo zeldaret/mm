@@ -7,22 +7,22 @@
 #include <os.h>
 
 typedef struct {
-    /* 0 */ f32 factor;
-    /* 4 */ u16 offset;
-    /* 8 */ u32 scale;
+    /* 0x0 */ f32 factor;
+    /* 0x4 */ u16 offset;
+    /* 0x8 */ u32 scale;
 } __OSViScale;
 
 
 typedef struct {
-    /* 0 */ u16 state;
-    /* 2 */ u16 retraceCount;
-    /* 4 */ void* framep;
-    /* 8 */ OSViMode* modep;
-    /* 12 */ u32 control;
-    /* 16 */ OSMesgQueue* msgq;
-    /* 20 */ OSMesg msg;
-    /* 24 */ __OSViScale x;
-    /* 36 */ __OSViScale y;
+    /* 0x0 */ u16 state;
+    /* 0x2 */ u16 retraceCount;
+    /* 0x4 */ void* framep;
+    /* 0x8 */ OSViMode* modep;
+    /* 0xC */ u32 control;
+    /* 0x10 */ OSMesgQueue* msgq;
+    /* 0x14 */ OSMesg msg;
+    /* 0x18 */ __OSViScale x;
+    /* 0x24 */ __OSViScale y;
 } __OSViContext;
 
 #endif

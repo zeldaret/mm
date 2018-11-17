@@ -15,40 +15,40 @@ UNK_RET func_8008019C(void) {
 }
 
 UNK_RET func_800801EC(void) {
-    UNK_TYPE sp28;
-    UNK_PTR sp24 = (UNK_PTR)(0x80000000 + osMemSize);
+    UNK_TYPE sp1C;
+    UNK_PTR sp18 = (UNK_PTR)(0x80000000 + osMemSize);
     func_80080150((void*)0x80000400, &D_80000500);
     func_80080150(&D_80025D00, (int*)func_80080060);
-    func_80080150(&D_80208EA0, sp24);
+    func_80080150(&D_80208EA0, sp18);
 }
 
 UNK_RET func_80080250(void) {
     UNK_TYPE* v0;
     UNK_PTR v1;
     UNK_PTR t7;
-    UNK_TYPE sp88;
-    UNK_TYPE sp84;
-    UNK_TYPE sp80;
-    UNK_TYPE sp76;
-    UNK_TYPE sp72;
-    OSMesgQueue sp48;
-    OSMesg sp44;
-    UNK_TYPE sp40;
+    UNK_TYPE sp58;
+    UNK_TYPE sp54;
+    UNK_TYPE sp50;
+    UNK_TYPE sp4C;
+    UNK_TYPE sp48;
+    OSMesgQueue sp30;
+    OSMesg sp2C;
+    UNK_TYPE sp28;
 
-    osCreateMesgQueue(&sp48, &sp44, 1);
+    osCreateMesgQueue(&sp30, &sp2C, 1);
 
     v1 = &D_00B3C000;
     t7 = &D_00C7A4E0;
     v0 = &D_80096B50;
-    sp40 = *v0;
+    sp28 = *v0;
     *v0 = 0;
 
-    func_80080C04((s80080A08*)&sp72, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp48, 0);
+    func_80080C04((s80080A08*)&sp48, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp30, 0);
     func_8008019C();
     func_800801EC();
-    osRecvMesg(&sp48, 0, 1);
+    osRecvMesg(&sp30, 0, 1);
 
-    D_80096B50 = sp40;
+    D_80096B50 = sp28;
 
     func_80080150(&D_801E3FA0, &D_80208EA0);
 }

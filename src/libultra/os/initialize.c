@@ -30,10 +30,10 @@ void osInitialize(void) {
     while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0);
     while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0);
 
-    *(struct s8008A6FC*)0x80000000 = *((struct s8008A6FC*)__osExceptionPreamble);
-    *(struct s8008A6FC*)0x80000080 = *((struct s8008A6FC*)__osExceptionPreamble);
-    *(struct s8008A6FC*)0x80000100 = *((struct s8008A6FC*)__osExceptionPreamble);
-    *(struct s8008A6FC*)0x80000180 = *((struct s8008A6FC*)__osExceptionPreamble);
+    *(s8008A6FC*)0x80000000 = *((s8008A6FC*)__osExceptionPreamble);
+    *(s8008A6FC*)0x80000080 = *((s8008A6FC*)__osExceptionPreamble);
+    *(s8008A6FC*)0x80000100 = *((s8008A6FC*)__osExceptionPreamble);
+    *(s8008A6FC*)0x80000180 = *((s8008A6FC*)__osExceptionPreamble);
 
     osWritebackDCache((void*)0x80000000, 400);
     osInvalICache((void*)0x80000000, 400);

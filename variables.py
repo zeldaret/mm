@@ -24,8 +24,8 @@ known_vars = {
     0x80096B40:("","OSPiHandle*",False),
     0x80096B50:("","UNK_TYPE",False),
     0x80096B60:("","UNK_TYPE*",False),
-    0x80096C40:("g_s80085320_ListHead","struct s80085320*",False), # TODO rename?
-    0x80096C44:("g_s80085320_ListTail","struct s80085320*",False), # TODO rename?
+    0x80096C40:("g_s80085320_ListHead","s80085320*",False), # TODO rename?
+    0x80096C44:("g_s80085320_ListTail","s80085320*",False), # TODO rename?
     0x80097590:("","UNK_TYPE",False),
     0x80097E10:("__osThreadTail","OSThread*",False),
     0x80097E18:("__osRunQueue","OSThread*",False),
@@ -71,22 +71,22 @@ known_vars = {
     0x80099290:("leoDiskStack","UNK_TYPE",False),
     0x800994D0:("","UNK_TYPE",False),
     0x800994DC:("","UNK_TYPE",False),
-    0x80099500:("","struct s80085320",False),
+    0x80099500:("","s80085320",False),
     0x80099520:("","OSThread",False),
     0x800996D0:("","UNK_TYPE",False),
-    0x80099AD0:("","struct s80085320",False),
+    0x80099AD0:("","s80085320",False),
     0x80099AF0:("","UNK_TYPE",False),
     0x80099EF0:("","UNK_TYPE",False),
     0x8009A170:("","UNK_TYPE",False),
-    0x8009A670:("","struct s80085320",False),
+    0x8009A670:("","s80085320",False),
     0x8009A690:("","UNK_TYPE",False),
     0x8009A840:("","UNK_TYPE",False),
-    0x8009B140:("","struct s80085320",False),
+    0x8009B140:("","s80085320",False),
     0x8009B160:("","UNK_TYPE",False),
     0x8009B228:("","UNK_TYPE",False),
     0x8009B240:("","u32*",False),
     0x8009B290:("","u8",False),
-    0x8009B2A0:("","struct s80085320",False),
+    0x8009B2A0:("","s80085320",False),
     0x8009B2BC:("","u16",False), # Count of entries in dmadata
     0x8009B2C0:("","OSMesgQueue",False),
     0x8009B2D8:("","UNK_TYPE",False),
@@ -126,7 +126,7 @@ known_vars = {
     0x801ADE80:("","UNK_TYPE",False),
     0x801ADEAC:("","UNK_TYPE",False),
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation
-    0x801AEFD0:("","s800BF9A0_s",False),
+    0x801AEFD0:("","s800BF9A0",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
     0x801BDB30:("","u8",True),

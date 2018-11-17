@@ -3,40 +3,40 @@
 
 s32 func_80080790(void* a0, void* a1, s32 a2) {
     u32 spPad;
-    OSIoMesg sp96;
-    OSMesgQueue sp72;
-    OSMesg sp68;
+    OSIoMesg sp60;
+    OSMesgQueue sp48;
+    OSMesg sp44;
     s32 ret;
     u32 s0 = D_80096B50;
 
     osInvalDCache(a1, a2);
-    osCreateMesgQueue(&sp72, &sp68, 1);
+    osCreateMesgQueue(&sp48, &sp44, 1);
 
     if (s0 != 0) {
         while (s0 < a2) {
-            sp96.hdr.pri = 0;
-            sp96.hdr.retQueue = &sp72;
-            sp96.devAddr = (u32)a0;
-            sp96.dramAddr = a1;
-            sp96.size = s0;
-            ret = osEPiStartDma(D_80096B40, &sp96, 0);
+            sp60.hdr.pri = 0;
+            sp60.hdr.retQueue = &sp48;
+            sp60.devAddr = (u32)a0;
+            sp60.dramAddr = a1;
+            sp60.size = s0;
+            ret = osEPiStartDma(D_80096B40, &sp60, 0);
             if (ret) goto END;
 
-            osRecvMesg(&sp72, NULL, 1);
+            osRecvMesg(&sp48, NULL, 1);
             a2 -= s0;
             a0 = (u8*)a0 + s0;
             a1 = (u8*)a1 + s0;
         }
     }
-    sp96.hdr.pri = 0;
-    sp96.hdr.retQueue = &sp72;
-    sp96.devAddr = (u32)a0;
-    sp96.dramAddr = a1;
-    sp96.size = (u32)a2;
-    ret = osEPiStartDma(D_80096B40, &sp96, 0);
+    sp60.hdr.pri = 0;
+    sp60.hdr.retQueue = &sp48;
+    sp60.devAddr = (u32)a0;
+    sp60.dramAddr = a1;
+    sp60.size = (u32)a2;
+    ret = osEPiStartDma(D_80096B40, &sp60, 0);
     if (ret) goto END;
 
-    osRecvMesg(&sp72, NULL, 1);
+    osRecvMesg(&sp48, NULL, 1);
 
     osInvalDCache(a1, a2);
 
@@ -83,7 +83,6 @@ s32 func_800809BC(u32 a0) {
     DmadataEntry* v0 = func_800808F4(a0);
 
     if (v0 != NULL) {
-		// TODO this uses t7 to shift instead of reusing v0
 		return v0 - dmadata;
     }
 
@@ -97,44 +96,44 @@ UNK_TYPE* func_800809F4(u32 a0) {
 #ifdef NONMATCHING
 
 void func_80080A08(s80080A08* a0) {
-    UNK_TYPE sp52;
-    UNK_TYPE sp48;
-    UNK_TYPE sp44;
-    UNK_TYPE sp40;
-    UNK_TYPE sp36;
-    UNK_TYPE sp32;
-    s32 sp28;
+    UNK_TYPE sp34;
+    UNK_TYPE sp30;
+    UNK_TYPE sp2C;
+    UNK_TYPE sp28;
     UNK_TYPE sp24;
+    UNK_TYPE sp20;
+    s32 sp1C;
+    UNK_TYPE sp18;
 
-    sp52 = (UNK_TYPE)a0->unk0;
-    sp48 = (UNK_TYPE)a0->unk4;
-    sp44 = a0->unk8;
+    sp34 = (UNK_TYPE)a0->unk0;
+    sp30 = (UNK_TYPE)a0->unk4;
+    sp2C = a0->unk8;
 
-    sp28 = func_800809BC(sp52);
+    sp1C = func_800809BC(sp34);
 
-    if ((sp28 >= 0) && (sp28 < D_8009B2BC)) {
-        if (dmadata[sp28].romEnd == 0) {
-            if (dmadata[sp28].vromEnd < (sp44 + sp52)) {
+    if ((sp1C >= 0) && (sp1C < D_8009B2BC)) {
+        if (dmadata[sp1C].romEnd == 0) {
+            if (dmadata[sp1C].vromEnd < (sp2C + sp34)) {
                 func_80083E4C(&D_800981C4, 499);
             }
-            func_80080790((u8*)((dmadata[sp28].romStart + sp52) - dmadata[sp28].vromStart), (u8*)sp48, sp44);
+            func_80080790((u8*)((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart), (u8*)sp30, sp2C);
             return;
         }
 
         // TODO this part is arranged slightly different is ASM
-        sp36 = dmadata[sp28].romEnd - dmadata[sp28].romStart;
-        sp40 = dmadata[sp28].romStart;
+        sp24 = dmadata[sp1C].romEnd - dmadata[sp1C].romStart;
+        sp28 = dmadata[sp1C].romStart;
 
-        if (sp52 != dmadata[sp28].vromStart) {
+        if (sp34 != dmadata[sp1C].vromStart) {
             func_80083E4C(&D_800981D4, 518);
         }
 
-        if (sp44 != (dmadata[sp28].vromEnd - dmadata[sp28].vromStart)) {
+        if (sp2C != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
             func_80083E4C(&D_800981E4, 525);
         }
 
         osSetThreadPri(NULL, 10);
-        func_80081178(sp40, sp48, sp36);
+        func_80081178(sp28, sp30, sp24);
         osSetThreadPri(NULL, 17);
     } else {
         func_80083E4C(&D_800981F4, 558);
@@ -253,18 +252,18 @@ glabel func_80080A08
 #ifdef NONMATCHING
 
 void func_80080B84(void* a0) {
-    s80080A08* sp52;
+    s80080A08* sp34;
 	UNK_TYPE pad;
     s80080A08* s0;
 
     for (;;) {
-        osRecvMesg(&D_8009B2C0, (OSMesg)&sp52, 1);
-        if (sp52 == NULL) return;
-        s0 = sp52;
+        osRecvMesg(&D_8009B2C0, (OSMesg)&sp34, 1);
+        if (sp34 == NULL) return;
+        s0 = sp34;
         func_80080A08(s0);
         // TODO a0 isn't being used for this comparison
-        if (s0->unk24 == NULL) continue;
-        osSendMesg(&D_8009B2C0, (OSMesg)s0->unk28, 0);
+        if (s0->unk18 == NULL) continue;
+        osSendMesg(&D_8009B2C0, (OSMesg)s0->unk1C, 0);
     }
 }
 
@@ -312,7 +311,7 @@ glabel func_80080B84
 
 #ifdef NONMATCHING
 
-s32 func_80080C04(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp48, OSMesgQueue* sp52, UNK_TYPE sp56) {
+s32 func_80080C04(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
     // TODO this isn't correct, it uses a lui, addiu to get the address of D_80096B60, then loads it,
 	// meaning that this is likely just "if (*D_80096B60 >= 2)". However, I can not get it to not
 	// produce the usual lui, lw combo to load from an address :/
@@ -323,9 +322,9 @@ s32 func_80080C04(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_T
     a0->unk0 = a2;
     a0->unk4 = a1;
     a0->unk8 = a3;
-    a0->unk20 = 0;
-    a0->unk24 = sp52;
-    a0->unk28 = sp56;
+    a0->unk14 = 0;
+    a0->unk18 = sp34;
+    a0->unk1C = sp38;
 
     osSendMesg(&D_8009B2C0, (OSMesg)a0, 1);
 
@@ -378,19 +377,19 @@ glabel func_80080C04
 #endif
 
 s32 func_80080C90(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
-	s80080A08 sp72;
-    OSMesgQueue sp48;
-    OSMesg sp44;
+	s80080A08 sp48;
+    OSMesgQueue sp30;
+    OSMesg sp2C;
 	s32 ret;
 
-    osCreateMesgQueue(&sp48, &sp44, 1);
+    osCreateMesgQueue(&sp30, &sp2C, 1);
 
-	ret = func_80080C04(&sp72, (UNK_FUN_ARG)a0, a1, a2, 0, &sp48, 0);
+	ret = func_80080C04(&sp48, (UNK_FUN_ARG)a0, a1, a2, 0, &sp30, 0);
 
 	if (ret == -1) {
 		return ret;
 	} else {
-		osRecvMesg(&sp48, NULL, 1);
+		osRecvMesg(&sp30, NULL, 1);
 	}
 
 	return 0;

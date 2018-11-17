@@ -21,32 +21,32 @@ is_comment = False
 symbol_type_list = [
     'stNil', 'stGlobal', 'stStatic', 'stParam', 'stLocal', 'stLabel', 'stProc', 'stBlock',
     'stEnd', 'stMember', 'stTypedef', 'stFile', 'INVALID', 'INVALID', 'stStaticProc', 'stConstant',
-    'stStaParam', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 
+    'stStaParam', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID', 'INVALID',
     'INVALID', 'INVALID', 'stStruct', 'stUnion', 'stEnum', 'INVALID', 'INVALID', 'INVALID',
     'INVALID', 'INVALID', 'stIndirect']
 storage_class_list = ['scNil', 'scText', 'scData', 'scBss', 'scRegister', 'scAbs', 'scUndefined', 'reserved',
     'scBits', 'scDbx', 'scRegImage', 'scInfo', 'scUserStruct', 'scSData', 'scSBss', 'scRData',
     'scVar', 'scCommon', 'scSCommon', 'scVarRegister', 'scVariant', 'scUndefined', 'scInit']
 basic_type_c_list = ['nil', 'addr', 'signed char', 'unsigned char', 'short', 'unsigned short', 'int', 'unsigned int',
-    'long', 'unsigned long', 'float', 'double', 'struct', 'union', 'enum', 'typedef', 
-    'range', 'set', 'complex', 'double complex', 'indirect', 'fixed decimal', 'float decimal', 'string', 
-    'bit', 'picture', 'void', 'long long', 'unsigned long long', 'INVALID', 'long', 'unsigned long', 
+    'long', 'unsigned long', 'float', 'double', 'struct', 'union', 'enum', 'typedef',
+    'range', 'set', 'complex', 'double complex', 'indirect', 'fixed decimal', 'float decimal', 'string',
+    'bit', 'picture', 'void', 'long long', 'unsigned long long', 'INVALID', 'long', 'unsigned long',
     'long long', 'unsigned long long', 'addr', 'int64', 'unsigned int64']
-    
+
 def increase_indent():
     global indent_level
     indent_level += 1
-    
+
 def decrease_indent():
     global indent_level
     indent_level -= 1
-    
+
 def set_is_comment(set_to):
     global is_comment
     old = is_comment
     is_comment = set_to
     return old
-    
+
 def get_indent():
     global indent_level
     global is_comment
@@ -63,20 +63,20 @@ def read_uint16_be(file_data, offset):
 
 def read_uint8_be(file_data, offset):
     return struct.unpack('>B', file_data[offset:offset+1])[0]
-    
+
 def read_elf_header(file_data, offset):
     Header = collections.namedtuple('ElfHeader',
                                     '''e_magic e_class e_data e_version e_osabi e_abiversion e_pad
                                        e_type e_machine e_version2 e_entry e_phoff e_shoff e_flags
                                        e_ehsize e_phentsize e_phnum e_shentsize e_shnum e_shstrndx''')
     return Header._make(struct.unpack('>I5B7s2H5I6H', file_data[offset:offset+52]))
-    
+
 def read_elf_section_header(file_data, offset):
     Header = collections.namedtuple('SectionHeader',
                                     '''sh_name sh_type sh_flags sh_addr sh_offset sh_size sh_link
                                        sh_info sh_addralign sh_entsize''')
     return Header._make(struct.unpack('>10I', file_data[offset:offset+40]))
-    
+
 def read_symbolic_header(file_data, offset):
     Header = collections.namedtuple('SymbolicHeader',
                                     '''magic vstamp ilineMax cbLine cbLineOffset idnMax cbDnOffset
@@ -105,7 +105,7 @@ def read_procedure_descriptor(file_data, offset):
                                     '''adr isym iline regmask regoffset iopt fregmask fregoffset
                                        frameoffset framereg pcreg lnLow lnHigh cbLineOffset''')
     return Header._make(struct.unpack('>I8i2h2iI', file_data[offset:offset+52]))
-   
+
 def read_symbol(file_data, offset):
     if 'init' not in read_symbol.__dict__:
         read_symbol.cache = {}
@@ -117,7 +117,7 @@ def read_symbol(file_data, offset):
     read_symbol.cache[offset] = read_symbol.header._make((
         word0, word1, (word2 >> 26) & 0x3F, (word2 >> 21) & 0x1F, word2 & 0xFFFFF))
     return read_symbol.cache[offset]
-    
+
 def read_auxiliary_symbol(file_data, offset):
     if 'init' not in read_auxiliary_symbol.__dict__:
         read_auxiliary_symbol.cache = {}
@@ -131,11 +131,11 @@ def read_auxiliary_symbol(file_data, offset):
         return read_auxiliary_symbol.cache[offset]
     word0 = struct.unpack('>I', file_data[offset:offset+4])[0]
     read_auxiliary_symbol.cache[offset] = read_auxiliary_symbol.header._make((
-        read_auxiliary_symbol.type_info._make(((word0 >> 31) & 1, (word0 >> 30) & 1, (word0 >> 24) & 0x3F, (word0 >> 20) & 0xF, (word0 >> 16) & 0xF, (word0 >> 12) & 0xF, (word0 >> 8) & 0xF, (word0 >> 4) & 0xF, word0 & 0xF)), 
-        read_auxiliary_symbol.rel_sym._make(((word0 >> 20) & 0xFFF, word0 & 0xFFFFF)), 
+        read_auxiliary_symbol.type_info._make(((word0 >> 31) & 1, (word0 >> 30) & 1, (word0 >> 24) & 0x3F, (word0 >> 20) & 0xF, (word0 >> 16) & 0xF, (word0 >> 12) & 0xF, (word0 >> 8) & 0xF, (word0 >> 4) & 0xF, word0 & 0xF)),
+        read_auxiliary_symbol.rel_sym._make(((word0 >> 20) & 0xFFF, word0 & 0xFFFFF)),
         word0, word0, word0, word0, word0, word0))
     return read_auxiliary_symbol.cache[offset]
-    
+
 def read_string(file_data, offset):
     current_offset = 0
     current_string = b''
@@ -146,7 +146,7 @@ def read_string(file_data, offset):
         else:
             current_string += char
         current_offset += 1
-        
+
 def get_symbol_name_from_aux(file_data, fd, symbolic_header, aux_num, search_for_typedef):
     aux = read_auxiliary_symbol(file_data, symbolic_header.cbAuxOffset - OFFSET + (fd.iauxBase + aux_num)*4)
     fd_num = aux.rndx.rfd
@@ -168,7 +168,7 @@ def get_symbol_name_from_aux(file_data, fd, symbolic_header, aux_num, search_for
     else:
         ret = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd2.issBase + sym.iss)
     return (ret, next_aux)
-    
+
 def get_type_string(file_data, fd, symbolic_header, aux_num, name, search_for_typedef):
     ret = ''
     aux = read_auxiliary_symbol(file_data, symbolic_header.cbAuxOffset - OFFSET + (fd.iauxBase + aux_num)*4)
@@ -191,9 +191,9 @@ def get_type_string(file_data, fd, symbolic_header, aux_num, name, search_for_ty
         (ret, next_aux) = get_symbol_name_from_aux(file_data, fd, symbolic_header, next_aux, search_for_typedef)
     else:
         ret = basic_type_c_list[aux.ti.bt]
-        
+
     tq_list = (aux.ti.tq0, aux.ti.tq1, aux.ti.tq2, aux.ti.tq3, aux.ti.tq4, aux.ti.tq5)
-    
+
     # TODO this is very naive and probably does not work in a large amount of cases
     last_was_proc = False # if we see a tqProc, assume the next will be a tqPtr
     for tq in tq_list:
@@ -226,7 +226,7 @@ def get_type_string(file_data, fd, symbolic_header, aux_num, name, search_for_ty
     if has_bitfield:
         name += ' : %d' % bitwidth
     return ret + ' ' + name
-        
+
 def get_enum_string(file_data, fd, symbolic_header, enum_sym_num):
     ret = ''
     start_sym = read_symbol(file_data, symbolic_header.cbSymOffset - OFFSET + enum_sym_num*12)
@@ -282,7 +282,7 @@ def get_struct_or_union_string(file_data, fd, symbolic_header, union_sym_num, se
         elif sym.st == 9: # stMember
             name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + sym.iss)
             ret += get_indent()
-            ret += '/* %d */ %s;\n' % (sym.value / 8, get_type_string(file_data, fd, symbolic_header, sym.index, name, True))
+            ret += '/* %#X */ %s;\n' % (sym.value // 8, get_type_string(file_data, fd, symbolic_header, sym.index, name, True))
         elif sym.st == 26 or sym.st == 27: #stStruct, stUnion
             sym_num = fd.isymBase + sym.index
             continue
@@ -294,7 +294,7 @@ def get_struct_or_union_string(file_data, fd, symbolic_header, union_sym_num, se
             break
         sym_num += 1
     return ret
-            
+
 def print_typedef_symbols(file_data, fd, symbolic_header, typedef_sym_num):
     typedef_sym = read_symbol(file_data, symbolic_header.cbSymOffset - OFFSET + typedef_sym_num*12)
     if typedef_sym.st != 10: # stTypedef
@@ -302,7 +302,7 @@ def print_typedef_symbols(file_data, fd, symbolic_header, typedef_sym_num):
         return
     name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + typedef_sym.iss)
     print('typedef %s;' % get_type_string(file_data, fd, symbolic_header, typedef_sym.index, name, False))
-    
+
 def print_procedure(file_data, fd, symbolic_header, proc_sym_num):
     proc_sym = read_symbol(file_data, symbolic_header.cbSymOffset - OFFSET + proc_sym_num*12)
     proc_name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + proc_sym.iss)
@@ -318,7 +318,7 @@ def print_procedure(file_data, fd, symbolic_header, proc_sym_num):
         sym_num += 1
         param_sym = read_symbol(file_data, symbolic_header.cbSymOffset - OFFSET + sym_num*12)
         first = False
-      
+
     print(');')
     comment_old = set_is_comment(True)
     while sym_num < fd.isymBase + fd.csym:
@@ -357,7 +357,7 @@ def print_procedure(file_data, fd, symbolic_header, proc_sym_num):
             print('ERROR unkown st in print_procedure: %d' % sym.st)
     set_is_comment(comment_old)
     return sym_num
-        
+
 def print_symbols(file_data, fd, symbolic_header):
     sym_num = fd.isymBase
     while sym_num < fd.isymBase + fd.csym:
@@ -401,7 +401,7 @@ def main():
     global OFFSET
     if len(sys.argv) < 2:
         return # TODO print usage
-        
+
     filename = sys.argv[1]
 
     try:
@@ -410,7 +410,7 @@ def main():
     except IOError:
         print('failed to read file ' + filename)
         return
-        
+
     elf_header = read_elf_header(file_data, 0)
     section_headers = []
     debug_index = 0xFFFFFFFF
@@ -420,7 +420,7 @@ def main():
         #print('%r' % (section_headers[i],))
         if section_headers[i].sh_type == 0x70000005:
             debug_index = i
-            
+
     if debug_index != 0xFFFFFFFF:
         symbolic_header = read_symbolic_header(file_data, section_headers[debug_index].sh_offset)
         file_descriptors = []
@@ -441,12 +441,12 @@ def main():
             fd = read_file_descriptor(file_data, symbolic_header.cbFdOffset - OFFSET + file_num*72)
             print('%r' % (fd,))
             print('    name:%s' % read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + fd.rss))
-            
+
             print('    procedures:')
             for proc_num in range(fd.ipdFirst, fd.ipdFirst + fd.cpd):
                 pd = read_procedure_descriptor(file_data, symbolic_header.cbPdOffset - OFFSET + proc_num*52)
                 print('        %r' % ((pd,)))
-                
+
             print('    symbols:')
             for sym_num in range(fd.isymBase, fd.isymBase + fd.csym):
                 sym = read_symbol(file_data, symbolic_header.cbSymOffset - OFFSET + sym_num*12)
@@ -477,9 +477,9 @@ def main():
                     type_aux = read_auxiliary_symbol(file_data, symbolic_header.cbAuxOffset - OFFSET + (fd.iauxBase + sym.index+1)*4)
                     print('            %r' % ((aux,)))
                     print('            %r' % ((type_aux,)))
-                  
+
             print('    pretty print:')
             print_symbols(file_data, fd, symbolic_header)
-        
-        
+
+
 main()

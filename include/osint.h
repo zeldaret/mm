@@ -11,14 +11,14 @@
 #include <sptask.h>
 
 typedef struct {
-    /* 0 */ OSMesgQueue* messageQueue;
-    /* 4 */ OSMesg message;
+    /* 0x0 */ OSMesgQueue* messageQueue;
+    /* 0x4 */ OSMesg message;
 } __OSEventState;
 
 
 typedef struct {
-    /* 0 */ OSThread* next;
-    /* 4 */ OSPri priority;
+    /* 0x0 */ OSThread* next;
+    /* 0x4 */ OSPri priority;
 } __OSThreadTail;
 
 #include <variables.h> // TODO all variables should be moved to the file that logically defines them
