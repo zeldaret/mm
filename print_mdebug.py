@@ -381,11 +381,10 @@ def print_symbols(file_data, fd, symbolic_header):
                     print('')
                 elif leaf_sym.st == 2: # stStatic
                     static_name = read_string(file_data, symbolic_header.cbSsOffset - OFFSET + fd.issBase + leaf_sym.iss)
-                    if leaf_sym.sc == 2 or leaf_sym.sc == 3: # scData, scBss
+                    if leaf_sym.sc == 2 or leaf_sym.sc == 3 or leaf_sym.sc == 15: # scData, scBss, scRData
                         print('static %s;\n' % get_type_string(file_data, fd, symbolic_header, leaf_sym.index, static_name, True))
                     else:
-                         # TODO what do 'Load time only' symbols do?
-                         print('// static %s; - Load time only\n' % static_name)
+                         print('ERROR unkown sc for stStatic in print_symbols: %d' % leaf_sym.sc)
                     sym_num += 1
                 else:
                     print('ERROR unkown st in leaf_sym in print_symbols: %d' % leaf_sym.st)
