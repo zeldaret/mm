@@ -82,6 +82,8 @@ known_vars = {
     0x80099500:("","s80085320",False),
     0x80099520:("","OSThread",False),
     0x800996D0:("","UNK_TYPE",False),
+    0x800975E0:("sintable","short",True),
+#    0x80097DDE:("sintable","short",True), # NOTE this is just the end of sintable
     0x80099AD0:("","s80085320",False),
     0x80099AF0:("","UNK_TYPE",False),
     0x80099EF0:("","UNK_TYPE",False),
@@ -134,10 +136,49 @@ known_vars = {
     0x801ADE80:("","UNK_TYPE",False),
     0x801ADEAC:("","UNK_TYPE",False),
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation
+    0x801ADEE0:("D_801ADEE0","UNK_TYPE",False),
+    0x801ADF0C:("D_801ADF0C","UNK_TYPE",False),
+    0x801ADF10:("D_801ADF10","UNK_TYPE",False),
+    0x801ADF14:("D_801ADF14","UNK_TYPE",False),
+    0x801ADF18:("D_801ADF18","UNK_TYPE",False), # z_vector3D
+    0x801ADF24:("D_801ADF24","UNK_TYPE",False), # z_vector3D
+    0x801ADF30:("D_801ADF30","UNK_TYPE",True), # length 5
+    0x801ADF44:("D_801ADF44","UNK_TYPE",True),
+    0x801ADF74:("D_801ADF74","u8",True),
+    0x801AE084:("D_801AE084","u8",True),
+    0x801AE194:("D_801AE194","s32",True), # length 32
+    0x801AE214:("D_801AE214","u8",True), # length 32
     0x801AEFD0:("","s800BF9A0",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
     0x801BDB30:("","u8",True),
+    0x801C2078:("D_801C2078","u8",True),
+    0x801C2079:("D_801C2079","u8",False),
+    0x801C207E:("D_801C207E","u8",False),
+    0x801DBE68:("D_801DBE68","f32",False),
+    0x801DBE6C:("D_801DBE6C","f32",False),
+    0x801DBE70:("D_801DBE70","f32",False),
+    0x801DBE74:("D_801DBE74","f32",False),
+    0x801DBE78:("D_801DBE78","f32",False),
+    0x801DBE7C:("D_801DBE7C","f32",False),
+    0x801DBE80:("D_801DBE80","f32",False),
+    0x801DBE84:("D_801DBE84","f32",False),
+    0x801DBE88:("D_801DBE88","f32",False),
+    0x801DBE8C:("D_801DBE8C","f32",False),
+    0x801DBE90:("D_801DBE90","f32",False),
+    0x801DBE94:("D_801DBE94","f32",False),
+    0x801DBE98:("D_801DBE98","f32",False),
+    0x801DBE9C:("D_801DBE9C","f32",False),
+    0x801DBEA0:("D_801DBEA0","f32",False),
+    0x801DBF10:("D_801DBF10","f32",False),
+    0x801DBF14:("D_801DBF14","f32",False),
+    0x801DBF18:("D_801DBF18","f32",False),
+    0x801DBF1C:("D_801DBF1C","f32",False),
+    0x801DBF20:("D_801DBF20","f32",False),
+    0x801DC068:("D_801DC068","f32",False),
+    0x801DC06C:("D_801DC06C","f32",False),
+    0x801DC070:("D_801DC070","f32",False),
+    0x801DC074:("D_801DC074","f32",False),
     0x801DCBB0:("","UNK_TYPE",False),
     0x801DCBC4:("","UNK_TYPE",False),
     0x801DCBE4:("","UNK_TYPE",False),
@@ -145,6 +186,8 @@ known_vars = {
     0x801E3FA0:("","UNK_TYPE",False),
     0x801ED930:("","UNK_TYPE",False),
     0x801ED940:("","UNK_TYPE",False),
+    0x801EF670:("D_801EF670","u8",False), # save info/link struct?
+    0x801EF677:("D_801EF677","u8",False), # part of save info/link struct?
     0x80208EA0:("","UNK_TYPE",False),
 
     # En_Test

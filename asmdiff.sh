@@ -2,7 +2,7 @@
 
 MIPS_BINUTILS="mips-linux-gnu-"
 
-OBJDUMP="${MIPS_BINUTILS}objdump -D -z -mmips -EB -j .text -j .data"
+OBJDUMP="${MIPS_BINUTILS}objdump -D -z -mmips -EB -j .text -j .data -j .rodata"
 
 FORMATTER="sed '/^0/!s/.*://'"
 

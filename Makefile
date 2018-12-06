@@ -7,8 +7,9 @@ LD := $(MIPS_BINUTILS)ld
 
 #QEMU_IRIX := ~/irixemu/mips-linux-user/qemu-mips
 QEMU_IRIX := ~/qemu-irix
+IRIX_71_ROOT := ./ido/71/
 IRIX_62_ROOT := ./ido/62/
-IRIX_53_ROOT := ./ido/
+IRIX_53_ROOT := ./ido/53_patched/
 
 CFLAGS := -G 0 -non_shared -Xfullwarn -Xcpluscomm
 ASFLAGS := -march=vr4300 -32
@@ -24,11 +25,11 @@ build/src/libultra/%: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/
 build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
-test.txt: OPTIMIZATION := -O2
-test.txt: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
+#test.txt: OPTIMIZATION := -O2
+#test.txt: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
 test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 
-CC := $(QEMU_IRIX) -L $(IRIX_62_ROOT) $(IRIX_62_ROOT)/usr/bin/cc
+CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
 test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --

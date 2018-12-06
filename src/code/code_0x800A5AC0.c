@@ -3,12 +3,14 @@
 
 // TODO this file looks like an actor, it should be cleaned up as such
 
+// This file is most likely En_A_Obj
+
 UNK_RET func_800A5AC0(void* a0, UNK_TYPE a1) {
     s800A5AC0* s0 = (s800A5AC0*)a0;
     s0->unk116 = ((s0->unk1C >> 8) & 0xFF) | 0x300;
     s0->unk1C = (s0->unk1C & 0xFF) - 9;
     func_800FFADC((z_Actor*)s0, (z_ActorCompInitEntry*)&D_801ADEAC);
-    func_800B3BA4(&s0->unkBC, 0, (void*)&func_800B3FC0, 0x41400000);
+    func_800B3BA4(&s0->unkBC, 0, (UNK_PTR)&func_800B3FC0, 12);
     func_800E1374(a1, &s0->unk148, (z_Actor*)s0, &D_801ADE80);
     func_800E7DF8((z_Actor*)s0, &s0->unk148);
     s0->unkB6 = 255;

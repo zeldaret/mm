@@ -95,4 +95,5 @@ known_objects = {
     0x80095950:"visetxscale",
     0x80095a60:"llcvt",
     0x80096510:"spsetpc",
+    0x800A5D00:"z_en_item00"
     }

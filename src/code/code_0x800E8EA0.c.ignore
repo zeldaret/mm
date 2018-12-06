@@ -1,0 +1,44 @@
+#include <ultra64.h>
+#include <global.h>
+
+void func_800E8EA0(z_GlobalContext* a0, z_Actor* a1, u16 a2) {
+    func_80151938(a0, a2);
+    a1->unk116 = a2;
+}
+
+UNK_TYPE func_800E8ED0(UNK_TYPE a0) {
+    return 0;
+}
+
+void func_800E8EE0(UNK_TYPE a0) {
+    return;
+}
+
+UNK_TYPE func_800E8EEC(UNK_TYPE a0) {
+    return 0;
+}
+
+void func_800E8EFC(UNK_TYPE a0) {
+    return;
+}
+
+UNK_TYPE func_800E8F08(s16* a0, s16* a1) {
+    func_800FFEBC(a0 + 1, 0, 6, 6200, 100);
+    func_800FFEBC(a1    , 0, 6, 6200, 100);
+    func_800FFEBC(a0 + 1, 0, 6, 6200, 100);
+    func_800FFEBC(a1    , 0, 6, 6200, 100);
+
+    return 1;
+}
+
+UNK_RET func_800E8FA4(UNK_TYPE a0, UNK_TYPE a1, UNK_TYPE a2, UNK_TYPE a3) {
+
+}
+
+UNK_RET func_800E9138(UNK_ARGS) {
+
+}
+
+UNK_RET func_800E9250(UNK_ARGS) {
+
+}

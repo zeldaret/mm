@@ -1,0 +1,1237 @@
+#include <ultra64.h>
+#include <global.h>
+
+extern float fabsf(float);
+#pragma intrinsic (fabsf)
+
+// D_801DBDF0 is start of .rodata
+
+// This file is most likely En_Item00
+// file name: z_en_item00.c
+
+static const f32 D_801DBDF0 = 0.6;
+
+void func_800A5D00(s800A5D00* a0, z_GlobalContext* a1, f32* a2, f32* a3) {
+    func_800B67FC(a1, a0);
+    func_800B67E0(a0, 0.5);
+
+    a0->unk154 = 0.5;
+    *a2 = 0.0;
+    *a3 = D_801DBDF0;
+    a0->unk30 = 16384;
+}
+
+void func_800A5D70(s800A5D00* a0, z_GlobalContext* a1) {
+    UNK_TYPE pad2;
+    s16 v0;
+    f32 sp3C;
+    f32 sp38;
+    UNK_TYPE sp34;
+    UNK_TYPE sp30;
+    UNK_TYPE pad1;
+
+    sp34 = 0;
+    sp3C = 980;
+    sp38 = 6;
+    v0 = a0->unk1C;
+
+    sp30 = ((v0 & 0x8000) != 0)? 1 : 0;
+
+    a0->unk148 = (v0 & 0x7F00) >> 8;
+
+    a0->unk1C &= 0xFF;
+
+    if (func_800B5D6C(a1, a0->unk148) != 0) {
+        if (a0->unk1C == 6) {
+            sp30 = 0;
+            a0->unk148 = 0;
+            a0->unk1C = 3;
+        } else {
+            func_800B670C(a0);
+            return;
+        }
+    }
+
+    if (a0->unk1C == 21) {
+        a0->unk1C = 3;
+    }
+
+    func_800FFADC((z_Actor*)a0, (z_ActorCompInitEntry*)&D_801ADF0C);
+
+    func_800E1374(a1, &(a0->unk158), ( z_Actor*)a0, &D_801ADEE0);
+
+    a0->unk150 = 1;
+
+    switch (a0->unk1C) {
+    case 0:
+    case 1:
+    case 2:
+    // func_800A5E80
+        func_800B67E0(a0, 0.015);
+        a0->unk154 = D_801DBE68;
+        sp3C = D_801DBE6C;
+        break;
+    case 17:
+    // func_800A5EAC
+        a0->unk150 = 0;
+        func_800B67E0(a0, 0.03);
+        a0->unk154 = D_801DBE70;
+        sp3C = 350;
+        break;
+    case 6:
+    case 7:
+    // func_800A5EDC
+        a0->unk150 = 0;
+        func_800B67E0(a0, 0.02);
+        a0->unk154 = D_801DBE74;
+        sp3C = D_801DBE78;
+
+        if (a0->unk1C == 7) {
+            sp30 = -1;
+        }
+        break;
+    case 3:
+    // func_800A5F24
+        a0->unk18 = (s16)func_801795C0(D_801DBE7C);
+        sp3C = 430;
+        func_800B67E0(a0, 0.02);
+        a0->unk154 = D_801DBE80;
+        break;
+    case 5:
+    case 8:
+    case 9:
+    case 10:
+    // func_800A5F68
+        func_800B67E0(a0, 0.035);
+        a0->unk154 = D_801DBE84;
+        sp3C = 250;
+        break;
+    case 4:
+    case 11:
+    case 12:
+    case 13:
+    case 15:
+    case 23:
+    case 25:
+    // func_800A5F94
+        func_800B67E0(a0, 0.03);
+        a0->unk154 = D_801DBE88;
+        sp3C = 320;
+        break;
+    case 14:
+    // func_800A5FC0
+        func_800B67E0(a0, 0.0449999993); //! 0.045 doesn't match
+        a0->unk154 = D_801DBE8C;
+        sp3C = 320;
+        break;
+    case 19:
+    // func_800A5FEC
+        func_800B67E0(a0, 0.0449999993); //! 0.045 doesn't match
+        a0->unk154 = D_801DBE90;
+        sp3C = D_801DBE94;
+        break;
+    case 20:
+    // func_800A6018
+        func_800B67E0(a0, 0.03);
+        a0->unk154 = D_801DBE98;
+        sp3C = D_801DBE9C;
+        break;
+    case 18:
+    case 26:
+    // func_800A6044
+        sp3C = 500;
+        func_800B67E0(a0, 0.01);
+        a0->unk154 = D_801DBEA0;
+        break;
+    case 22:
+    // func_800A6070
+        a0->unk1E = func_8012F608(&a1->unk17D88, 179);
+        func_800A5D00(a0, a1, &sp3C, &sp38);
+        break;
+    case 27:
+    // func_800A60A8
+        a0->unk1E = func_8012F608(&a1->unk17D88, 160);
+        func_800A5D00(a0, a1, &sp3C, &sp38);
+        break;
+    case 28:
+    // func_800A60E0
+        a0->unk1E = func_8012F608(&a1->unk17D88, 145);
+        func_800A5D00(a0, a1, &sp3C, &sp38);
+        break;
+    case 16:
+    case 21:
+    case 24:
+    default:
+    // func_800A6110
+        break;
+    }
+
+    a0->unk14E = 0;
+
+    func_800B3BA4(&(a0->unkBC), sp3C, (UNK_PTR)func_800B3FC0, sp38);
+
+    a0->unkD0 = 180;
+    a0->unk3C = a0->unk24;
+    a0->unk14A = 0;
+
+    if (sp30 < 0) {
+        a0->unk144 = (UNK_FUN_ARG)func_800A63A8;
+        a0->unk152 = -1;
+        return;
+    }
+
+    if (sp30 == 0) {
+        a0->unk144 = (UNK_FUN_ARG)func_800A640C;
+        a0->unk152 = -1;
+        return;
+    }
+
+    a0->unk152 = 15;
+    a0->unk14C = 35;
+    a0->unk70 = 0.0;
+    a0->unk68 = 0.0;
+    a0->unk74 = 0.0;
+
+    switch (a0->unk1C) {
+    case 0:
+    // func_800A61D4
+        func_80112E80(a1, 132);
+        break;
+    case 1:
+    // func_800A61E8
+        func_80112E80(a1, 133);
+        break;
+    case 2:
+    // func_800A61FC
+        func_80112E80(a1, 135);
+        break;
+    case 20:
+    // func_800A6210
+        func_80112E80(a1, 136);
+        break;
+    case 19:
+    // func_800A6224
+        func_80112E80(a1, 138);
+        break;
+    case 3:
+    // func_800A6238
+        func_80112E80(a1, 131);
+        break;
+    case 18:
+    case 26:
+    // func_800A624C
+        func_80112E80(a1, 112);
+        break;
+    case 4:
+    case 11:
+    // func_800A6260
+        func_80112E80(a1, 143);
+        break;
+    case 5:
+    // func_800A6274
+        func_80112E80(a1, 147);
+        break;
+    case 8:
+    // func_800A6288
+        func_80112E80(a1, 148);
+        break;
+    case 9:
+    // func_800A629C
+        func_80112E80(a1, 149);
+        break;
+    case 10:
+    // func_800A62B0
+        func_80112E80(a1, 150);
+        break;
+    case 14:
+    // func_800A62C4
+        func_80112E80(a1, 122);
+        break;
+    case 15:
+    // func_800A62D8
+        func_80112E80(a1, 121);
+        break;
+    case 17:
+    // func_800A62EC
+        func_80112E80(a1, 120);
+        break;
+    case 12:
+    // func_800A6300
+        sp34 = 40;
+        break;
+    case 23:
+    // func_800A630C
+        sp34 = 42;
+        break;
+    case 6:
+    case 7:
+    case 13:
+    case 16:
+    case 21:
+    case 22:
+    case 24:
+    case 25:
+    default:
+    // func_800A6314
+        break;
+    }
+
+    if ((sp34 != 0) && (func_800B89F8(a0, a1) == 0)) {
+        func_800B8A1C(a0, a1, sp34, 50, 20);
+    }
+
+    a0->unk144 = (UNK_FUN_ARG)func_800A6A40;
+    ((UNK_RET(*)(s800A5D00*, z_GlobalContext*))(a0->unk144))(a0, a1);
+}
+
+UNK_RET func_800A637C(s800A5D00* a0, z_GlobalContext* a1) {
+    UNK_TYPE* a2 = &a0->unk158;
+    func_800E11EC(a1, a2);
+}
+
+UNK_RET func_800A63A8(s800A5D00* a0, z_GlobalContext* a1) {
+    u32 sp1C;
+
+    sp1C = func_8012F608(&a1->unk17D88, 150);
+
+    if (func_8012F668(&a1->unk17D88, sp1C) != 0) {
+        a0->unk1E = sp1C;
+        a0->unk144 = (UNK_FUN_ARG)func_800A640C;
+    }
+}
+
+UNK_RET func_800A640C(s800A5D00* a0, z_GlobalContext* a1) {
+    s16 v1;
+
+    v1 = a0->unk1C;
+    if ((v1 < 3) || (v1 == 3 && (a0->unk152 < 0)) || (v1 == 6) || (v1 == 7)) {
+        a0->unkBE += 960;
+        v1 = a0->unk1C;
+    } else {
+        if ((v1 >= 22) && (v1 != 23) && (v1 < 25)) {
+            if (a0->unk152 == -1) {
+                if (func_800FFEBC(&(a0->unkBC), a0->unk30 - 16384, 2, 3000, 1500) == 0) {
+                    a0->unk152 = -2;
+                }
+            } else {
+                if (func_800FFEBC(&(a0->unkBC), -16384 - a0->unk30, 2, 3000, 1500) == 0) {
+                    a0->unk152 = -1;
+                }
+            }
+
+            func_800FFEBC(&(a0->unk30), 0, 2, 2500, 500);
+            v1 = a0->unk1C;
+        } else {
+            if ((v1 == 27) || (v1 == 28)) {
+                a0->unk152 = -1;
+                a0->unkBE += 960;
+                v1 = a0->unk1C;
+            }
+        }
+    }
+
+    if ((v1 == 6) || (v1 == 7)) {
+        a0->unkC4 = (func_800FED84(a0->unkBE) * 150) + D_801DBF10;
+    }
+
+    func_800FFCD8(&(a0->unk70), 0, 1, 0.5, 0);
+
+    if (a0->unk14C == 0) {
+        v1 = a0->unk1C;
+        if (v1 != 17 && v1 != 6 && v1 != 7) {
+            a0->unk14C = -1;
+        }
+    }
+
+    if (a0->unk152 == 0) {
+        v1 = a0->unk1C;
+        if (v1 != 17 && v1 != 6 && v1 != 7) {
+            func_800B670C(a0);
+        }
+    }
+
+    if (a0->unk74 != 0 && ((a0->unk90) & 0x1) == 0) {
+        a0->unk144 = (UNK_FUN_ARG)func_800A6650;
+    }
+}
+
+UNK_RET func_800A6650(s800A5D00* a0, z_GlobalContext* a1) {
+    UNK_TYPE pad;
+    z_Vector3D sp30;
+
+    if (a0->unk1C < 3) {
+        a0->unkBE += 960;
+    }
+
+    if ((a1->unk18840 & 0x1) != 0) {
+        sp30.x = a0->unk24.x + func_801795C0(10);
+        sp30.y = a0->unk24.y + func_801795C0(10);
+        sp30.z = a0->unk24.z + func_801795C0(10);
+
+        func_800B16B8(a1, &sp30, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+    }
+
+    if ((a0->unk90 & 0x3) != 0) {
+        if (a0->unk68 > -2) {
+            a0->unk144 = (UNK_FUN_ARG)func_800A640C;
+        } else {
+            a0->unk68 *= D_801DBF14;
+            a0->unk90 &= 0xFFFE;
+        }
+    }
+}
+
+UNK_RET func_800A6780(s800A5D00* a0, z_GlobalContext* a1) {
+    s32 v0_2;
+    z_Vector3D sp40;
+    s16 v0;
+    f32 pad;
+    f32 sp34;
+
+    a0->unk152++;
+    v0 = a0->unk1C;
+    if ((v0 == 3) && (a0->unk68 < 0)) {
+
+        a0->unk70 = 0;
+        a0->unk74 = D_801DBF18;
+
+        if (a0->unk68 < -1.5f) {
+            a0->unk68 = -1.5;
+        }
+
+        a0->unk18 += (s16)((a0->unk68 + 3) * 1000);
+
+        sp34 = func_800FED44(a0->unk18);
+        a0->unk24.x += func_800FED44(a0->unk92) * (-3 * sp34);
+
+        sp34 = func_800FED44(a0->unk18);
+        a0->unk24.z += func_800FED84(a0->unk92) * (-3 * sp34);
+        v0 = a0->unk1C;
+    }
+
+    if (v0 < 3) {
+        a0->unkBE += 960;
+    } else if ((v0 >= 22) && (v0 != 23) && (v0 != 25)) {
+        a0->unk30 -= 700;
+        a0->unkBE += 400;
+        a0->unkBC = a0->unk30 - 16384;
+    }
+
+    if (a0->unk68 <= 2) {
+        v0_2 = (u16)(a0->unkC0) + 10000;
+        if (v0_2 < 0xFFFF) {
+            a0->unkC0 += 10000;
+        } else {
+            a0->unkC0 = -1;
+        }
+    }
+
+    if ((a1->unk18840 & 0x1) == 0) {
+        sp40.x = a0->unk24.x + (func_80086FDC() - 0.5f) * 10;
+        sp40.y = a0->unk24.y + (func_80086FDC() - 0.5f) * 10;
+        sp40.z = a0->unk24.z + (func_80086FDC() - 0.5f) * 10;
+
+        func_800B16B8(a1, &sp40, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+    }
+
+    if ((a0->unk90 & 0x3) != 0) {
+        a0->unk144 = (UNK_FUN_ARG)func_800A640C;
+        a0->unkC0 = 0;
+        a0->unk70 = 0;
+    }
+}
+
+UNK_RET func_800A6A40(s800A5D00* a0, z_GlobalContext* a1) {
+    sGlobalContext1CCC* sp2C;
+    s16 v0;
+    f32 f0;
+
+    sp2C = a1->unk1CCC;
+
+    if (a0->unk14A != 0) {
+        if (func_800B89F8(a0, a1) == 0) {
+            func_800B8A1C(a0, a1, a0->unk14A, 50, 80);
+            a0->unk152++;
+        } else {
+            a0->unk14A = 0;
+        }
+    }
+
+    if (a0->unk152 == 0) {
+        func_800B670C(a0);
+        return;
+    }
+
+    a0->unk24 = sp2C->unk24;
+
+    v0 = a0->unk1C;
+    if (v0 < 3) {
+        a0->unkBE += 960;
+    } else if (v0 == 3) {
+        a0->unkBE = 0;
+    }
+
+    a0->unk24.y += 40 + func_800FED84(a0->unk152 * 15000) * (a0->unk152 * D_801DBF1C);
+    if (D_801EF677 == 0) {
+        a0->unk24.y += 20;
+    }
+}
+
+UNK_RET func_800A6B98(s800A5D00* a0, z_GlobalContext* a1) {
+    UNK_TYPE pad;
+    sGlobalContext1CCC* v1;
+    s16 v1_2;
+    s16 v0;
+    UNK_TYPE sp38;
+    UNK_TYPE sp34;
+    UNK_TYPE pad2;
+
+    v1 = a1->unk1CCC;
+    sp38 = v1->unkA74 & 0x1000;
+    sp34 = 0;
+
+    if (a0->unk152 > 0) {
+        a0->unk152--;
+    }
+
+    if ((a0->unk152 > 0) && (a0->unk152 < 41) && (a0->unk14C <= 0)) {
+        a0->unk14E = a0->unk152;
+    }
+
+    ((void(*)(s800A5D00* a0, z_GlobalContext* a1))(a0->unk144))(a0, a1);
+
+    func_800FFCD8(&(a0->unk58), a0->unk154, D_801DBF20, a0->unk154 * D_801DBF20, 0);
+
+    // TODO wrong float register is used
+    a0->unk60 = a0->unk58;
+    a0->unk5C = a0->unk58;
+
+    if (a0->unk74 != 0) {
+        func_800B6A88(a0);
+        func_800B78B8(a1, a0, 20, 15, 15, 29);
+
+        if (a0->unk88 <= -32000) {
+            func_800B670C(a0);
+            return;
+        }
+    }
+
+    //sp28 = &(a0->unk158);
+
+    func_800E7DF8((z_Actor*)a0, &(a0->unk158));
+
+    func_800E2740(a1, &(a1->unk18884), &(a0->unk158));
+
+    v1_2 = a0->unk1C;
+
+    if ((v1_2 == 22) || (v1_2 == 27) || (v1_2 == 28)) {
+        a0->unkC4 = fabsf(func_800FED44(a0->unkBC) * 37);
+    }
+
+    if (a0->unk14C > 0) {
+        return;
+    }
+
+    if (((sp38 == 0) || !(a0->unk98 <= 60) || !(-100 <= a0->unk9C) || !(a0->unk9C <= 100)) &&
+        ((sp38 != 0) || !(a0->unk98 <= 30) || !(-50 <= a0->unk9C) || (a0->unk9C <= 50))){
+            // TODO branch isn't quite right
+        if (func_800B89F8(a0, a1) == 0) {
+            return;
+        }
+    }
+
+    *(volatile int*)0 = 0;
+    *(volatile int*)0 = 0;
+
+    if (a1->unk17000 != 0) {
+        return;
+    }
+
+    switch (a0->unk1C) {
+    case 0:
+    // func_800A6E30
+        a0->unk1A4 = 1;
+        func_80112E80(a1, 132);
+        break;
+    case 1:
+    // func_800A6E4C
+        a0->unk1A4 = 1;
+        func_80112E80(a1, 133);
+        break;
+    case 2:
+    // func_800A6E68
+        a0->unk1A4 = 1;
+        func_80112E80(a1, 135);
+        break;
+    case 20:
+    // func_800A6E84
+        a0->unk1A4 = 1;
+        func_80112E80(a1, 136);
+        break;
+    case 19:
+    // func_800A6EA0
+        a0->unk1A4 = 1;
+        func_80112E80(a1, 138);
+        break;
+    case 13:
+    // func_800A6EBC
+        sp34 = 25;
+        break;
+    case 12:
+    // func_800A6EC8
+        sp34 = 40;
+        break;
+    case 23:
+    // func_800A6ED4
+        sp34 = 42;
+        break;
+    case 3:
+    // func_800A6EE0
+        func_80112E80(a1, 131);
+        break;
+    case 18:
+    case 26:
+    // func_800A6EF4
+        func_80115908(a1, 112);
+        break;
+    case 4:
+    case 11:
+    // func_800A6F08
+        func_80112E80(a1, 143);
+        break;
+    case 5:
+    // func_800A6F1C
+        func_80112E80(a1, 147);
+        break;
+    case 8:
+    // func_800A6F30
+        func_80112E80(a1, 148);
+        break;
+    case 9:
+    // func_800A6F44
+        func_80112E80(a1, 149);
+        break;
+    case 10:
+    // func_800A6F58
+        func_80112E80(a1, 150);
+        break;
+    case 17:
+    // func_800A6F6C
+        sp34 = 60;
+        break;
+    case 6:
+    // func_800A6F78
+        sp34 = 12;
+        break;
+    case 7:
+    // func_800A6F84
+        sp34 = 13;
+        break;
+    case 14:
+    // func_800A6F90
+        func_80112E80(a1, 122);
+        break;
+    case 15:
+    // func_800A6FA4
+        func_80112E80(a1, 121);
+        break;
+    case 22:
+    // func_800A6FB8
+        sp34 = 50;
+        break;
+    case 27:
+    // func_800A6FC4
+        sp34 = 62;
+        break;
+    case 28:
+    // func_800A6FD0
+        sp34 = 63;
+        break;
+    }
+
+    if ((sp34 != 0) && (func_800B89F8(a0, a1) == 0)) {
+        // TODO loads are correct
+        func_800B8A1C(a0, a1, sp34, 50, 20);
+    }
+
+    v0 = a0->unk1C;
+
+    switch (v0) {
+    case 6:
+    case 7:
+    case 17:
+    case 22:
+    case 27:
+    case 28:
+    // func_800A7040
+        if (func_800B89F8(a0, a1) != 0) {
+            func_800B5DB0(a1, a0->unk148);
+            func_800B670C(a0);
+        }
+        return;
+    }
+
+    if ((v0 < 3) || (v0 == 19)) {
+        func_8019F0C8(18435);
+    } else if (sp34 != 0) {
+        if (func_800B89F8(a0, a1) == 0) {
+            return;
+        }
+        func_800B5DB0(a1, a0->unk148);
+        func_800B670C(a0);
+        return;
+    } else {
+        func_8019F0C8(18468);
+    }
+
+    func_800B5DB0(a1, a0->unk148);
+
+    a0->unk152 = 15;
+    a0->unk14C = 35;
+    a0->unkC0 = 0;
+    a0->unk70 = 0;
+    a0->unk68 = 0;
+    a0->unk74 = 0;
+
+    func_800B67E0(a0, a0->unk154);
+
+    a0->unk14A = 0;
+    a0->unk144 = (UNK_FUN_ARG)func_800A6A40;
+}
+
+UNK_RET func_800A7128(s800A5D00* a0, z_GlobalContext* a1) {
+    s16 v0;
+    UNK_TYPE pad;
+    s8 sp31;
+
+    if ((a0->unk14E & a0->unk150) != 0) {
+        return;
+    }
+
+    switch (a0->unk1C) {
+    case 0:
+    case 1:
+    case 2:
+    case 19:
+    case 20:
+    // func_800A7170
+        func_800A72AC(a0, a1);
+        break;
+    case 6:
+    // func_800A7184
+        func_800A75B8(a0, a1);
+        break;
+    case 7:
+    // func_800A7198
+        func_800A74D8(a0, a1);
+        break;
+    case 3:
+    // func_800A71AC
+        v0 = a0->unk152;
+        if (v0 < 0) {
+            if (v0 == -1) {
+                sp31 = func_8012F608(&(a1->unk17D88), 144);
+                if (func_8012F668(&(a1->unk17D88), (s32)sp31) == 0) {
+                    return;
+                }
+                a0->unk1E = sp31;
+                func_800B67FC(a1, a0);
+                a0->unk152 = -2;
+                // TODO the branch statement is slightly too early
+                *(volatile int*)0 = 0;
+                return;
+            } else {
+                func_8018039C(16, 16, 16, 1);
+                func_800EE320(a1, 8);
+            return;
+            }
+        }
+        // fallthrough
+    case 4:
+    case 5:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 17:
+    case 23:
+    case 25:
+    // func_800A7254
+        func_800A73A0(a0, a1);
+        break;
+    case 22:
+    // func_800A7268
+        func_800EE320(a1, 39);
+        break;
+    case 27:
+    // func_800A727C
+        func_800EE320(a1, 27);
+        break;
+    case 28:
+    // func_800A7290
+        func_800EE320(a1, 10);
+        break;
+    }
+}
+
+// TODO everything past here needs work
+
+UNK_RET func_800A72AC(s800A5D00* a0, z_GlobalContext* a1) {
+    s16 v0;
+    UNK_TYPE sp30;
+    u32* v0_2;
+    z_GraphicsContext* a0_2 = a1->unk0;
+    u32* sp24;
+    u32* sp20;
+
+    func_8012C28C(a1->unk0);
+    func_800B8050(a0, a1, 0);
+
+    v0 = a0->unk1C;
+    sp30 = (v0 < 3)? v0 : v0 - 16;
+
+    sp24 = a0_2->unk2B0;
+    a0_2->unk2B0 = sp24 + 2;
+    sp24[0] = 0xDA380003;
+    sp24[1] = func_80181A40(a1->unk0);
+
+    sp20 = a0_2->unk2B0;
+    a0_2->unk2B0 = sp20 + 2;
+    sp20[0] = 0xDB060020;
+    sp20[1] = func_80100504(D_801ADF30[sp30]);
+
+    v0_2 = a0_2->unk2B0;
+    a0_2->unk2B0 = v0_2 + 2;
+    v0_2[0] = 0xDE000000;
+    v0_2[1] = 0x040622C0;
+}
+
+UNK_RET func_800A73A0(s800A5D00* a0, z_GlobalContext* a1) {
+    s16 v1;
+    s32 sp34;
+    u32* sp28;
+    u32* sp24;
+    u32* v0;
+    z_GraphicsContext* s0 = a1->unk0;
+
+    sp34 = a0->unk1C;
+    s0->unk2B0 = func_801660B8(a1, s0->unk2B0, sp34 - 3);
+
+    v1 = a0->unk1C;
+    if (v1 == 23) {
+        sp34 = 6;
+    } else if (v1 == 25) {
+        sp34 = 1;
+    } else if (v1 >= 8) {
+        sp34 -= 3;
+        if (v1 < 10) {
+            sp34 += 1;
+        }
+    }
+
+    a1->unk0->unk2B0 = func_8012C724(s0->unk2B0);
+
+    sp28 = s0->unk2B0;
+    s0->unk2B0 = sp28 + 2;
+    sp28[0] = 0xDB060020;
+    sp28[1] = func_80100504(D_801ADF44[sp34]);
+
+    sp24 = s0->unk2B0;
+    s0->unk2B0 = sp24 + 2;
+    sp24[0] = 0xDA380003;
+    sp24[1] = func_80181A40(s0);
+
+    v0 = s0->unk2B0;
+    s0->unk2B0 = v0 + 2;
+    v0[0] = 0xDE000000;
+    v0[1] = 0x0405F6F0;
+}
+
+UNK_RET func_800A74D8(s800A5D00* a0, z_GlobalContext* a1) {
+    u32* sp24;
+    u32* v0;
+
+    if (func_8012F608(&(a1->unk17D88), 150) != a0->unk1E) {
+        return;
+    }
+
+    func_8012C2DC(a1->unk0);
+    func_8018039C(20, 20, 20, 1);
+
+    sp24 = a1->unk0->unk2C0;
+    a1->unk0->unk2C0 = sp24 + 2;
+    sp24[0] = 0xDA380003;
+    sp24[1] = func_80181A40(a1->unk0);
+
+    v0 = a1->unk0->unk2C0;
+    a1->unk0->unk2C0 = v0 + 2;
+    v0[0] = 0xDE000000;
+    v0[1] = 0x06001290;
+
+    v0 = a1->unk0->unk2C0;
+    a1->unk0->unk2C0 = v0 + 2;
+    v0[0] = 0xDE000000;
+    v0[1] = 0x06001470;
+}
+
+UNK_RET func_800A75B8(s800A5D00* a0, z_GlobalContext* a1) {
+    u32* sp20;
+    u32* v0;
+
+    func_8012C2DC(a1->unk0);
+    func_800B8118(a0, a1, 0);
+
+    sp20 = a1->unk0->unk2C0;
+    a1->unk0->unk2C0 = sp20 + 2;
+    sp20[0] = 0xDA380003;
+    sp20[1] = func_80181A40(a1->unk0);
+
+    v0 = a1->unk0->unk2C0;
+    a1->unk0->unk2C0 = v0 + 2;
+    v0[0] = 0xDE000000;
+    v0[1] = 0x0405AAB0;
+}
+
+s16 func_800A7650(s16 a0) {
+    if ((((a0 == 4) || (a0 == 25) || (a0 == 11)) && (*((u8*)(D_801EF670[D_801C207E]) + 0x70) == 255)) ||
+        (((a0 == 5) || (a0 == 8) || (a0 == 9) || (a0 == 10)) && (*((u8*)(D_801EF670[D_801C2079]) + 0x70) == 255)) ||
+        (((a0 == 14) || (a0 == 15)) && (D_801EF670[0x38] == 0))) {
+        return -1;
+    }
+
+    if (a0 == 3) {
+        if (D_801EF670[0x34] == D_801EF670[0x36]) {
+            return 0;
+        }
+    }
+
+    return a0;
+}
+
+s800A5D00* func_800A7730(z_GlobalContext* a0, z_Vector3D* a1, s16 a2) {
+    UNK_TYPE sp58;
+    s16 sp56;
+    s16 sp54;
+    UNK_TYPE sp50;
+    s16 v0;
+    UNK_TYPE v1;
+    s800A5D00* s3;
+    s16 s0;
+    UNK_TYPE sp44;
+
+    sp58 = a2 & 0x1;
+    sp56 = a2 & 0x8000;
+    sp54 = a2 & 0x7F00;
+    v0 = a2 & 0xFF;
+    s3 = NULL;
+    s0 = a2 & 0x7FFF;
+    sp50 = a2 & 0x0002;
+
+    if (v0 == 21) {
+        sp44 = sp54 | 0x03 | sp56;
+        for (v1 = 0; v1 != 3; v1++) {
+            s3 = func_800A7730(a0, a1, sp44);
+        }
+        return s3;
+    }
+
+    if (v0 == 29) {
+        if (func_800B5D6C(a0, (sp54 >> 8)) == 0) {
+            func_800BAC60(&(a0->unk1CA0), a0, 571, a1->x, a1->y, a1->z, 0, 0, 0, sp54);
+        }
+
+        return s3;
+    }
+
+    if (((v0 == 18) || ((s0 & 0xFF) == 26)) && (sp58 == 0)) {
+        if (18 == (s0 & 0xFF)) {
+            s3 = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 16, a1->x, a1->y + 40, a1->z, 0, 0, 0,
+                               ((((sp54 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+
+            if (func_800B5D6C(a0, (((sp54 >> 8) & 0x7F) << 9)) == 0) {
+                func_800F0568(a0, a1, 40, 10471);
+            }
+
+            return s3;
+        } else {
+            s3 = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 432, a1->x, a1->y + 40, a1->z, 0, 0, 0,
+                           (((sp54 >> 8) & 0x7F) << 9) | 0x7);
+
+            if (sp50 == 0) {
+                if (func_800B5D6C(a0, a2) == 0) {
+                    func_800F0568(a0, a1, 40, 10471);
+                }
+
+                return s3;
+            }
+        }
+    }
+
+    if (sp56 == 0) {
+        s0 = func_800A7650(s0 & 0xFF);
+    }
+
+    if (s0 == -1) {
+        return s3;
+    }
+
+    s3 = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 14, a1->x, a1->y, a1->z, 0, 0, 0, s0 | sp56 | sp54);
+
+    if (s3 == NULL) {
+        return s3;
+    }
+
+    if (sp56 != 0) {
+       return s3;
+    }
+
+    if (sp58 == 0) {
+        s3->unk68 = 8;
+    } else {
+        s3->unk68 = -2;
+    }
+
+    s3->unk70 = 2;
+    s3->unk74 = D_801DC068;
+
+    s3->unk32 = func_801795C0(65536);
+
+    func_800B67E0(s3, 0);
+
+    v0 = s3->unk1C;
+
+    s3->unk144 = (UNK_FUN_ARG)func_800A6780;
+    s3->unk152 = 220;
+
+    if ((v0 != 17) && (v0 != 6) && (v0 != 7)) {
+        s3->unk3 = -1;
+    }
+
+    s3->unk4 |= 0x10;
+
+    return s3;
+}
+
+s800A5D00* func_800A7AD4(z_GlobalContext* a0, z_Vector3D* a1, s16 a2) {
+    s800A5D00* sp4C; // v1
+    UNK_TYPE sp44; // t1
+    s16 sp42; // t6
+    s16 sp40; // t0
+    UNK_TYPE v0;
+
+    sp44 = a2 & 0x1;
+    sp40 = a2 & 0x7F00;
+    sp42 = a2 & 0x8000;
+    v0 = a2 & 0xFF;
+    sp4C = NULL;
+
+    if (v0 == 21) {
+        return NULL;
+    }
+
+    if (((v0 == 18) || (v0 == 26)) && (sp44 == 0)) {
+        if (v0 == 18) {
+            sp4C = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 16, a1->x, a1->y + 40, a1->z, 0, 0, 0,
+                                             (((((sp40 << 8) & 0x7F) >> 9) & 0xFE00) | 0x102));
+        } else {
+            sp4C = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 432, a1->x, a1->y + 40, a1->z, 0, 0, 0,
+                                             (((sp40 << 8) & 0x7F) >> 9) | 0x7);
+        }
+
+        if (func_800B5D6C(a0, a2) != 0) {
+            return sp4C;
+        }
+
+        func_800F0568(a0, a1, 40, 10471);
+
+        return sp4C;
+    }
+
+    v0 = func_800A7650(v0);
+    if (v0 == -1) {
+        return sp4C;
+    }
+
+    sp4C = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 14, a1->x, a1->y, a1->z, 0, 0, 0, v0 | sp42 | sp40);
+
+    if (sp4C == 0) {
+        return sp4C;
+    }
+
+    if (sp42 != 0) {
+        return sp4C;
+    }
+
+    sp4C->unk68 = 0;
+    sp4C->unk70 = 0;
+
+    if (sp44 != 0) {
+        sp4C->unk74 = 0;
+    } else {
+        sp4C->unk74 = D_801DC06C;
+    }
+
+    sp4C->unk32 = func_801795C0(65536);
+    sp4C->unk4 |= 0x10;
+
+    return sp4C;
+}
+
+void func_800A7D28(z_GlobalContext* a0, s800A5D00* a1, z_Vector3D* a2, s16 a3) {
+    UNK_TYPE s7;
+    s16 sp50; // t6
+    UNK_TYPE v0;
+    UNK_TYPE s4;
+    u8 s3;
+    u8 s2;
+    u8 s1;
+    s800A5D00* s0;
+    s16 v0_2;
+
+    s7 = a3;
+    sp50 = s7 & 0x8000;
+    s7 &= 0x1F0;
+
+    if (s7 > 0x100) {
+        return;
+    }
+
+    v0 = s7 + func_80086FDC() * 16;
+    s3 = D_801AE084[v0];
+    s2 = D_801ADF74[v0];
+    s4 = 255;
+
+    if (s2 == 16) {
+        s3 = 1;
+        s2 = 15;
+        v0 = D_801EF670[0x20];
+
+        // TODO switch?
+        if (v0 != 1) {
+            if (v0 != 2) {
+                if (v0 != 4) {
+                    s2 = 0;
+                } else {
+                    s2 = 5;
+                }
+            } else {
+                s2 = 3;
+            }
+        }
+    }
+
+    if ((a1 != NULL) && (a1->unk11E != 0)) {
+        if ((a1->unk11E & 0x1) != 0) {
+            s7 = 16;
+            s2 = 8;
+            s3 = 1;
+        } else if ((a1->unk11E & 0x2) != 0) {
+            s7 = 16;
+            s2 = 3;
+        } else if ((a1->unk11E & 0x20) != 0) {
+            s2 = 20;
+            s3 = 1;
+        }
+    }
+
+    if (s2 = 18) {
+        v0 = *((s16*)D_801EF670 + 0x36 / 2);
+
+        if (v0 < 17) {
+            func_800BAC60(&(a0->unk1CA0), a0, 16, a2->x, a2->y + 40, a2->z, 0, 0, 0, 2);
+            func_800F0568(a0, a2, 40, 10471);
+            return;
+        }
+
+        // TODO wtf even is this
+        if (v0 < 49) {
+            s7 = 16;
+            s2 = 3;
+            s3 = 3;
+            s1 = 3;
+        } else if (v0 < 81) {
+            s7 = 16;
+            s2 = 3;
+            s3 = 1;
+            s1 = 3;
+        } else if ((D_801EF670[0x38] != 0) && (s7 = 208, s2 = 14, s3 = 1, D_801EF670[0x39] == 0)) {
+            s1 = 14;
+        } else if ((v0 != 0) && (s7 = 208, s2 = 14, D_801EF670[0x39] < (v0 >> 1))) {
+            s3 = 1;
+            s1 = 14;
+        } else if (s7 = 160, s2 = 8, s3 = 1, ((u8*)(D_801EF670[0xA0]))[D_801C2078[1]] < 6) {
+            s1 = 8;
+        } else if (s7 = 176, s2 = 4, s3 = 1, ((u8*)(D_801EF670[0xA0]))[D_801C2078[6]] < 6) {
+            s1 = 4;
+        } else if (s7 = 160, s2 = 2, s3 = 1, *((s16*)D_801EF670 + 0x3A / 2) < 11) {
+            s1 = 2;
+        }
+    }
+
+    if (s4 == s1) {
+        return;
+    }
+
+    while (s3 > 0) {
+        s2 = func_800A7650(s2);
+
+        if (sp50 == 0) {
+            if (s4 != s2) {
+                s1 = s2;
+                s0 = (s800A5D00*)func_800BAC60(&(a0->unk1CA0), a0, 14, a2->x, a2->y, a2->z, 0, 0, 0, s2);
+                if ((s0 != NULL) && (s4 != s1)) {
+                    s0->unk68 = 8;
+                    s0->unk70 = 2;
+                    s0->unk74 = D_801DC070;
+
+                    s0->unk32 = func_80086FDC() * D_801DC074;
+
+                    func_800B67E0(s0, 0);
+
+                    s0->unk144 = (UNK_FUN_ARG)func_800A6780;
+                    s0->unk4 |= 0x10;
+                    v0_2 = s0->unk1C;
+
+                    if ((v0_2 == 17) || (v0_2 == 6) || (v0_2 == 7)) {
+                        s0->unk3 = -1;
+                    }
+                    s0->unk152 = 220;
+                }
+            }
+        } else {
+            func_800A7730(a0, a2, s7 | 0x8000);
+        }
+        s3--;
+    }
+}
+
+s32 func_800A8150(UNK_TYPE a0) {
+    if ((a0 < 0) || (a0 > 31)) {
+        return -1;
+    } else {
+        return D_801AE194[a0];
+    }
+}
+
+u8 func_800A817C(UNK_TYPE a0) {
+    if ((a0 < 0) || (a0 > 31)) {
+        return 0;
+    } else {
+        return D_801AE214[a0];
+    }
+}
+
+UNK_TYPE func_800A81A4(z_GlobalContext* ctxt, UNK_TYPE a1, s16 a2) {
+    UNK_TYPE v0;
+    v0 = (func_800A8150(a1) ^ 0x1A) < 1;
+
+    if (v0 == 0) {
+        return v0;
+    }
+
+    return func_800B5D6C(ctxt, a2) < 1;
+}

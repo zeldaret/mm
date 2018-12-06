@@ -3,8 +3,8 @@ import os;
 
 from libyaz0 import decompress
 
-ROM_FILE_NAME = 'baserom.z64'
-FILE_TABLE_OFFSET = 0x1A500 # 0x1C110 for JP1.0, 0x1C050 for JP1.1
+ROM_FILE_NAME = 'Legend of Zelda, The - Majoras Mask (E) (Prototype).z64'
+FILE_TABLE_OFFSET = 0x1A500 # 0x1C110 for JP1.0, 0x1C050 for JP1.1, 0x24F60 for debug
 
 FILE_NAMES = {
     0:'makerom',
@@ -1585,7 +1585,7 @@ except IOError:
 
 dmadata_size = read_uint32_be(FILE_TABLE_OFFSET + 16 * 2 + 4) - read_uint32_be(FILE_TABLE_OFFSET + 16 * 2 + 0)
 file_count = dmadata_size // 0x10
-    
+
 # extract files
 for i in range(0, file_count):
     entryOffset = FILE_TABLE_OFFSET + 16 * i
@@ -1606,19 +1606,19 @@ for i in range(0, file_count):
     else:             # compressed
         compressed = True
         size = physEnd - physStart
-        
+
     if physStart == 0xFFFFFFFF: # file is in table but not on cart?
         continue
-        
+
     if virtStart == 0 and virtEnd == 0: # there are several entries at the end like this...
         continue
-        
+
     print('extracting ' + filename + ' (0x%08X, 0x%08X, 0x%08X)' % (virtStart, virtEnd, size))
-        
+
     write_output_file('baserom/' + filename, physStart, size)
     if compressed:
         #print('decompressing ' + filename)
-            
+
         fileobj = open('baserom/' + filename, 'rb')
         decompressed_data = decompress(fileobj.read())
         fileobj.close()
@@ -1626,4 +1626,4 @@ for i in range(0, file_count):
         writefile = open('decomp/' + filename, 'wb')
         writefile.write(decompressed_data)
         writefile.close()
-            
+

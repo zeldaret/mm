@@ -33,7 +33,7 @@ SECTIONS
         build/asm/boot_0x80088110.o(.text)
         build/asm/boot_0x800882A0.o(.text)
         build/src/libultra/gu/sinf.o(.text)
-        build/asm/sins.o(.text)
+        build/src/libultra/gu/sins.o(.text)
         build/src/libultra/io/sptask.o(.text)
         build/asm/ll.o(.text)
         build/asm/exceptasm.o(.text)
@@ -194,7 +194,7 @@ SECTIONS
     code 0x800A5AC0:
     {
         build/src/code/code_0x800A5AC0.o(.text)
-        build/asm/code_0x800A5D00.o(.text)
+        build/asm/z_en_item00.o(.text)
         build/asm/code_0x800A81F0.o(.text)
         build/asm/code_0x800ACBF0.o(.text)
         build/asm/code_0x800B32D0.o(.text)
