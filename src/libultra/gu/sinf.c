@@ -32,58 +32,58 @@ float __sinf(float x) {
     int n;
     double result;
     int ix; // int x
-	int xpt;
+    int xpt;
 
-	ix = *(int*)&x;
-	xpt = (ix >> 22) & 0x1FF;
+    ix = *(int*)&x;
+    xpt = (ix >> 22) & 0x1FF;
 
-	if (xpt < 255) {
-		dx = x;
-		if (xpt >= 230) {
-			xsq = dx * dx;
+    if (xpt < 255) {
+        dx = x;
+        if (xpt >= 230) {
+            xsq = dx * dx;
 
-			poly = (((((P[4].d * xsq) + P[3].d) * xsq) + P[2].d) * xsq) + P[1].d;
+            poly = (((((P[4].d * xsq) + P[3].d) * xsq) + P[2].d) * xsq) + P[1].d;
 
-			result = ((dx * xsq) * poly) + dx;
+            result = ((dx * xsq) * poly) + dx;
 
-			return result;
-		} else {
-			return x;
-		}
-	}
+            return result;
+        } else {
+            return x;
+        }
+    }
 
-	if (xpt < 310) {
-		dx = x;
+    if (xpt < 310) {
+        dx = x;
 
-		dn = dx * rpi.d;
+        dn = dx * rpi.d;
 
-		if (dn >= 0) {
-			n = dn + 0.5;
-		} else {
-			n = dn - 0.5;
-		}
+        if (dn >= 0) {
+            n = dn + 0.5;
+        } else {
+            n = dn - 0.5;
+        }
 
-		dn = n;
+        dn = n;
 
-		dx -= dn * pihi.d;
-		dx -= dn * pilo.d;
+        dx -= dn * pihi.d;
+        dx -= dn * pilo.d;
 
-		xsq = dx * dx;
+        xsq = dx * dx;
 
-		poly = (((((P[4].d * xsq) + P[3].d) * xsq) + P[2].d) * xsq) + P[1].d;
+        poly = (((((P[4].d * xsq) + P[3].d) * xsq) + P[2].d) * xsq) + P[1].d;
 
-		result = ((dx * xsq) * poly) + dx;
+        result = ((dx * xsq) * poly) + dx;
 
-		if ((n & 0x1) == 0) {
-			return result;
-		} else {
-			return -(float)result;
-		}
-	}
+        if ((n & 0x1) == 0) {
+            return result;
+        } else {
+            return -(float)result;
+        }
+    }
 
-	if (x != x) {
-		return __libm_qnan_f;
-	}
+    if (x != x) {
+        return __libm_qnan_f;
+    }
 
-	return zero.f;
+    return zero.f;
 }
