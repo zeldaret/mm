@@ -5,8 +5,10 @@ known_vars = {
     0x00ACC000:("","UNK_TYPE",False), # this seems low
     0x00B3C000:("","UNK_TYPE",False), # this seems low
     0x00C7A4E0:("","UNK_TYPE",False), # this seems low
+    0x060005D0:("","UNK_TYPE",False), # this seems low
     0x06001100:("","UNK_TYPE",False), # this seems low
     0x06001228:("","UNK_TYPE",False), # this seems low
+    0x06002D30:("","UNK_TYPE",False), # this seems low
     0x80000300:("osTvType","UNK_TYPE",False),
     0x80000304:("osRomType","UNK_TYPE",False),
     0x80000308:("osRomBase","UNK_TYPE",False),
@@ -193,6 +195,8 @@ known_vars = {
     # En_Test
     0x808637D0:("","f32",False),
 
+    0x80ACB650:("bgBgFuKaitenInitVar","z_ActorInit",False),
+    0x80ACB650:("","f32",False),
     0x80BD55D0:("bgIkanaRayInitVar","z_ActorInit",False),
     0x80BD55F0:("","UNK_TYPE",False),
     0x80BD561C:("bgIkanaRayCompInit","z_ActorCompInitEntry",True),

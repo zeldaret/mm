@@ -118,26 +118,31 @@ typedef void(*z_ActorFunc)(struct z_Actor*, void*);
 typedef struct {
     /* 0x000 */ u8 pad0[4];
     /* 0x004 */ UNK_TYPE unk4;
-    /* 0x008 */ u8 pad1[0x14];
+    /* 0x008 */ z_Vector3D unk8; // Pos1?
+    /* 0x014 */ u8 pad1[0x8];
     /* 0x01C */ s16 unk1C;
-    /* 0x01E */ u8 pad2[0x3A];
+    /* 0x01E */ u8 pad2[0x6];
+    /* 0x024 */ z_Vector3D unk24; // Pos2?
+    /* 0x030 */ u8 pad3[0x28];
     /* 0x058 */ z_Vector3D unk58; // scale?
-    /* 0x064 */ u8 pad3[0x2E];
+    /* 0x064 */ u8 pad4[0x2E];
     /* 0x092 */ s16 unk92;
-    /* 0x094 */ u8 pad4[0x22];
+    /* 0x094 */ u8 pad5[0x22];
     /* 0x0B6 */ u8 unkB6;
-    /* 0x0B7 */ u8 pad5[5];
+    /* 0x0B7 */ u8 pad6[5];
     /* 0x0BC */ u16 unkBC; // or char
     /* 0x0BE */ s16 unkBE;
-    /* 0x0C0 */ u8 pad6[0x3C];
+    /* 0x0C0 */ u8 pad7[0x2C];
+    /* 0x0EC */ UNK_TYPE unkEC;
+    /* 0x0F0 */ u8 pad8[0xC];
     /* 0x0FC */ f32 unkFC; // start of z_Vector3D?
     /* 0x100 */ f32 unk100;
     /* 0x104 */ f32 unk104;
-    /* 0x108 */ u8 pad7[0xE];
+    /* 0x108 */ u8 pad9[0xE];
     /* 0x116 */ u16 unk116;
-    /* 0x118 */ u8 pad8[0x24];
+    /* 0x118 */ u8 pad10[0x24];
     /* 0x13C */ z_ActorFunc drawFunc;
-    /* 0x140 */ u8 pad9[4];
+    /* 0x140 */ u8 pad11[4];
     // TODO figure out what size this is
 } z_Actor;
 
@@ -158,17 +163,19 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ z_GraphicsContext* unk0;
-    /* 0x00004 */ u8 pad0[0x1C9C];
+    /* 0x00004 */ u8 pad0[0x87C];
+    /* 0x00880 */ UNK_TYPE unk880;
+    /* 0x00884 */ u8 pad1[0x141C];
     /* 0x01CA0 */ UNK_TYPE unk1CA0;
-    /* 0x01CA4 */ u8 pad1[0x28];
+    /* 0x01CA4 */ u8 pad2[0x28];
     /* 0x01CCC */ sGlobalContext1CCC* unk1CCC;
-    /* 0x01CD0 */ u8 pad2[0x15330];
+    /* 0x01CD0 */ u8 pad3[0x15330];
     /* 0x17000 */ u16 unk17000;
-    /* 0x17002 */ u8 pad3[0xD86];
+    /* 0x17002 */ u8 pad4[0xD86];
     /* 0x17D88 */ UNK_TYPE unk17D88;
-    /* 0x17D8C */ u8 pad4[0xAB4];
+    /* 0x17D8C */ u8 pad5[0xAB4];
     /* 0x18840 */ UNK_TYPE unk18840;
-    /* 0x18844 */ u8 pad5[0x40];
+    /* 0x18844 */ u8 pad6[0x40];
     /* 0x18884 */ UNK_TYPE unk18884;
 } z_GlobalContext;
 

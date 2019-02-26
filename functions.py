@@ -247,11 +247,15 @@ known_funcs = {
     0x800BDFC0:("func_800BDFC0","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_TYPE, s800A5AC0*"),
     0x800BE03C:("func_800BE03C","void","z_GlobalContext*, UNK_TYPE"),
     0x800C6024:("func_800C6024","UNK_TYPE","UNK_TYPE"),
+    0x800C6188:("func_800C6188","UNK_TYPE","z_GlobalContext*, UNK_PTR, z_Actor*, UNK_TYPE"),
     0x800C6248:("func_800C6248","UNK_TYPE","UNK_TYPE, UNK_TYPE"),
+    0x800C64CC:("func_800C64CC","UNK_RET","z_GlobalContext*, UNK_PTR, UNK_TYPE"),
+    0x800C9564:("func_800C9564","UNK_RET","UNK_TYPE, UNK_PTR"),
     0x800CAAD0:("func_800CAAD0","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_TYPE"),
     0x800CAC0C:("func_800CAC0C","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_TYPE"),
     0x800CACA0:("func_800CACA0","UNK_RET","UNK_TYPE, UNK_TYPE, UNK_TYPE"),
     0x800CAD2C:("func_800CAD2C","UNK_TYPE","UNK_TYPE, UNK_TYPE, UNK_TYPE"),
+    0x800CAE10:("func_800CAE10","UNK_RET","z_Actor*, UNK_TYPE"),
     0x800CAE88:("func_800CAE88","UNK_RET","UNK_TYPE"),
     0x800CAF24:("func_800CAF24","UNK_RET","UNK_TYPE"),
     0x800CAF38:("func_800CAF38","UNK_RET","UNK_TYPE"),
@@ -301,6 +305,7 @@ known_funcs = {
     0x80183070:("func_80183070","void","void"),
     0x8018349C:("func_8018349C","UNK_RET","UNK_TYPE, UNK_TYPE"),
     0x8019F0C8:("func_8019F0C8","UNK_RET","UNK_TYPE"),
+    0x8019FAD8:("func_8019FAD8","UNK_RET","UNK_PTR, UNK_TYPE, f32"),
 
     # ovl_En_Test
     #0x80862B70:("func_80862B70","void","void* a0"),
