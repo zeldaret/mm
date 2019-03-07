@@ -221,7 +221,7 @@ SECTIONS
         build/asm/code_0x800F42A0.o(.text)
         build/asm/code_0x800F4F40.o(.text)
         build/asm/code_0x800F5090.o(.text)
-        build/asm/code_0x800FEC90.o(.text)
+        build/src/code/code_0x800FEC90.o(.text)
         build/asm/code_0x801005C0.o(.text)
         build/asm/code_0x80102C60.o(.text)
         build/asm/code_0x80102E40.o(.text)

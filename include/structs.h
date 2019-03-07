@@ -111,6 +111,14 @@ typedef struct {
     /* 0x8 */ f32 z;
 } z_Vector3D;
 
+// Rotation?
+// 3D Vector of s16?
+typedef struct {
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+} z_Vector3Ds16;
+
 struct z_Actor;
 
 typedef void(*z_ActorFunc)(struct z_Actor*, void*);
@@ -183,7 +191,7 @@ typedef struct {
     u32 cont : 1;
     u32 type : 4;
     u32 offset : 11;
-    u32 value : 16;
+    s32 value : 16;
 } z_ActorCompInitEntry;
 
 typedef struct {

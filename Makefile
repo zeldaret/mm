@@ -25,14 +25,16 @@ build/src/libultra/%: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/
 build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
-#test.txt: OPTIMIZATION := -O2
-#test.txt: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
+build/src/code/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
+test.txt: OPTIMIZATION := -O2 -g3
+test.txt: CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
 test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
 BASEROM_O_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%.o)

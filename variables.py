@@ -157,6 +157,7 @@ known_vars = {
     0x801C2078:("D_801C2078","u8",True),
     0x801C2079:("D_801C2079","u8",False),
     0x801C207E:("D_801C207E","u8",False),
+    0x801D1508:("D_801D1508","f32",False),
     0x801DBE68:("D_801DBE68","f32",False),
     0x801DBE6C:("D_801DBE6C","f32",False),
     0x801DBE70:("D_801DBE70","f32",False),
@@ -185,11 +186,14 @@ known_vars = {
     0x801DCBC4:("","UNK_TYPE",False),
     0x801DCBE4:("","UNK_TYPE",False),
     0x801DCBFC:("","UNK_TYPE",False),
+    0x801DDA80:("","f32",False),
+    0x801DDA84:("","f32",False),
     0x801E3FA0:("","UNK_TYPE",False),
     0x801ED930:("","UNK_TYPE",False),
     0x801ED940:("","UNK_TYPE",False),
     0x801EF670:("D_801EF670","u8",False), # save info/link struct?
     0x801EF677:("D_801EF677","u8",False), # part of save info/link struct?
+    0x801F8180:("D_801F8180","UNK_TYPE",True),
     0x80208EA0:("","UNK_TYPE",False),
 
     # En_Test
@@ -209,4 +213,5 @@ extra_vars = (
     ("D_80099AD0_","UNK_TYPE"), # needed to match?
     ("D_8009A670_","UNK_TYPE"), # needed to match?
     ("D_8009B140_","UNK_TYPE"), # needed to match?
+    ("(*D_801BE960[12])(u8*, z_ActorCompInitEntry*)",""), # TODO better function pointer representation
     )

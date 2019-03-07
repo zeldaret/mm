@@ -85,7 +85,7 @@ known_funcs = {
     0x80089420:("__osCleanupThread","UNK_RET","UNK_ARGS"),
     0x80089430:("__osDequeueThread","UNK_RET","OSThread**, OSThread*"),
     0x80089470:("osDestroyThread","void","OSThread* t"),
-    0x80089630:("_blkclr","UNK_RET","u8*, u32"), # multiple names? bzero/_bzero/blkclr/_blkclr
+    0x80089630:("_blkclr","UNK_RET","void*, size_t"), # multiple names? bzero/_bzero/blkclr/_blkclr
     0x80089AA0:("__osSiCreateAccessQueue","void","void"),
     0x80089AF0:("__osSiGetAccess","void","void"),
     0x80089B34:("__osSiRelAccess","void","void"),
@@ -122,7 +122,7 @@ known_funcs = {
     0x8008D2C0:("osGetCount","u32","void"),
     0x8008D350:("func_8008D350","UNK_TYPE","void"),
     0x8008D640:("osSetEventMesg","void","OSEvent e, OSMesgQueue* mq, OSMesg m"),
-    0x8008D700:("sqrtf","UNK_RET","UNK_ARGS"),
+    0x8008D700:("sqrtf","f32","f32"),
     0x8008D730:("osContStartQuery","s32","OSMesgQueue* mq"),
     0x8008D7AC:("osContGetQuery","void","OSContStatus* data"),
     0x8008E050:("_Printf","int","void* (*pfn)(void*), void* arg, const unsigned char* fmt, va_list ap"),
@@ -283,9 +283,10 @@ known_funcs = {
     0x800FED44:("func_800FED44","f32","s16"),
     0x800FED84:("func_800FED84","f32","s16"),
     0x800FFADC:("func_800FFADC","void","z_Actor*, z_ActorCompInitEntry*"), # Compact Instance Initializer
-    0x800FFCD8:("func_800FFCD8","UNK_RET","f32*, f32, f32, f32, f32"),
-    0x800FFEBC:("func_800FFEBC","UNK_TYPE","s16*, s16, UNK_TYPE, UNK_TYPE, UNK_TYPE"),
-    0x80100504:("func_80100504","UNK_TYPE","UNK_TYPE"),
+    0x800FF8D4:("func_800FF8D4","f32","z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2"),
+    0x800FFCD8:("func_800FFCD8","f32","f32*, f32, f32, f32, f32"),
+    0x800FFEBC:("func_800FFEBC","s16","s16*, s16, s16, s16, s16"),
+    0x80100504:("func_80100504","UNK_TYPE","u32"),
     0x80112E80:("func_80112E80","UNK_RET","z_GlobalContext*, UNK_TYPE"),
     0x80115908:("func_80115908","UNK_RET","z_GlobalContext*, UNK_TYPE"),
     0x8012C28C:("func_8012C28C","UNK_RET","z_GraphicsContext*"),
@@ -300,11 +301,15 @@ known_funcs = {
     0x801660B8:("func_801660B8","u32*","z_GlobalContext*, u32*, UNK_TYPE"),
     0x80174BF0:("func_80174BF0","UNK_RET","UNK_TYPE"),
     0x801795C0:("func_801795C0","f32","f32"),
+    0x8017A6D4:("func_8017A6D4","f32","z_Vector3D*"),
+    0x80180100:("func_80180100","UNK_TYPE","f32, f32"),
     0x8018039C:("func_8018039C","UNK_RET","f32, f32, f32, UNK_TYPE"),
     0x80181A40:("func_80181A40","UNK_TYPE","z_GraphicsContext*"),
     0x80183070:("func_80183070","void","void"),
     0x8018349C:("func_8018349C","UNK_RET","UNK_TYPE, UNK_TYPE"),
-    0x8019F0C8:("func_8019F0C8","UNK_RET","UNK_TYPE"),
+    0x8019F0C8:("func_8019F0C8","UNK_RET","u16"),
+    0x8019F128:("func_8019F128","UNK_RET","u16"),
+    0x8019F1C0:("func_8019F1C0","UNK_RET","UNK_TYPE, u16"),
     0x8019FAD8:("func_8019FAD8","UNK_RET","UNK_PTR, UNK_TYPE, f32"),
 
     # ovl_En_Test
