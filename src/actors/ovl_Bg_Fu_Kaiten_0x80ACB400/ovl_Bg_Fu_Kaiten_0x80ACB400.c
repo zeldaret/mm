@@ -107,19 +107,19 @@ void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
 void z_bg_fu_kaiten_draw(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
     z_GraphicsContext* sp24 = ctxt->unk0;
     UNK_TYPE pad;
-    u32* v0;
 
     // XXX: register allocation is wrong here
 
     func_8012C28C(sp24);
 
-    v0 = sp24->unk2B0;
-    sp24->unk2B0 += 2;
-    v0[0] = 0xDA380003;
-    v0[1] = func_80181A40(ctxt->unk0);
+    {
+    Gfx* v0 = sp24->unk2B0++;
+    v0->words.w0 = 0xDA380003;
+    v0->words.w1 = func_80181A40(ctxt->unk0);
+    }
 
-    v0 = sp24->unk2B0;
-    sp24->unk2B0 += 2;
-    v0[1] = (u32)&D_060005D0; // XXX: D_060005D0 is probably a constant
-    v0[0] = 0xDE000000;
+    {
+    Gfx* v0 = sp24->unk2B0++;
+    v0->words.w0 = 0xDE000000; v0->words.w1 = (u32)&D_060005D0; // XXX: D_060005D0 is probably a constant
+    }
 }

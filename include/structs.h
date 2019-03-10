@@ -2,6 +2,7 @@
 #define _STRUCTS_H_
 
 #include <PR/ultratypes.h>
+#include <PR/gbi.h>
 #include <unk.h>
 #include <os.h>
 
@@ -156,9 +157,9 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x2B0];
-    /* 0x2B0 */ u32* unk2B0; // OVERLAY_DISP append address
+    /* 0x2B0 */ Gfx* unk2B0; // OVERLAY_DISP append address
     /* 0x2B4 */ u8 pad1[0xC];
-    /* 0x2C0 */ u32* unk2C0; // POLY_OPA_DISP append address
+    /* 0x2C0 */ Gfx* unk2C0; // POLY_OPA_DISP append address
 } z_GraphicsContext;
 
 // Some structure pointed to by Global Context + 0x1CCC;
