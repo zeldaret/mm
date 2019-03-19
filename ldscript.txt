@@ -409,7 +409,7 @@ SECTIONS
         build/baserom/387_0x00cfd400.o(.data)
         build/baserom/388_0x00cfdf10.o(.data)
         build/baserom/389_0x00cfe150.o(.data)
-        build/baserom/390_0x00cfe4f0.o(.data)
+        build/baserom/ovl_Effect_Ss_Sbn.o(.data)
         build/baserom/ovl_Obj_Ocarinalift.o(.data)
         build/baserom/ovl_En_Time_Tag.o(.data)
         build/baserom/ovl_Bg_Open_Shutter.o(.data)

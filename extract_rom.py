@@ -398,7 +398,7 @@ FILE_NAMES = {
     #387:'[?]',
     #388:'[?]',
     #389:'[?]',
-    #390:'[?]',
+    390:'ovl_Effect_Ss_Sbn',
     391:'ovl_Obj_Ocarinalift',
     392:'ovl_En_Time_Tag',
     393:'ovl_Bg_Open_Shutter',

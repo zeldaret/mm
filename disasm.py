@@ -625,7 +625,22 @@ class Disassembler:
                     f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
 
                 # TODO not hard code
-                f.write("func_80920340 = 0x80920340;\nfunc_80922430 = 0x80922430;\nD_80099AD0_ = 0x80099AD0;\n")
+                f.write('''
+func_8080074C = 0x8080074C;
+func_80801B4C = 0x80801B4C;
+func_80803F30 = 0x80803F30;
+func_80813C98 = 0x80813C98;
+func_80815820 = 0x80815820;
+func_808283D8 = 0x808283D8;
+func_8082895C = 0x8082895C;
+func_80841AC4 = 0x80841AC4;
+func_808460B8 = 0x808460B8;
+func_80846528 = 0x80846528;
+func_808470D4 = 0x808470D4;
+func_80920340 = 0x80920340;
+func_80922430 = 0x80922430;
+D_80099AD0_ = 0x80099AD0;'''
+                )
 
 
 if __name__ == "__main__":
