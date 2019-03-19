@@ -12,9 +12,3 @@ UNK_RET func_80080060(void) {
     osCreateThread(&D_80099520, 1, (void(*)(void*))func_80080514, 0, &D_80099AD0, 12);
     osStartThread(&D_80099520);
 }
-
-void func_80080150(UNK_PTR a0, UNK_PTR a1) {
-    if (a0 < a1) {
-        _blkclr(a0, (u32)a1 - (u32)a0);
-    }
-}
