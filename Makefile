@@ -49,15 +49,15 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/boot_O2_g3/*) \
            $(wildcard src/boot_O1/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
-O_FILES := $(BASEROM_O_FILES) $(S_O_FILES)
+ROM_FILES := $(shell cat makerom_files.txt)
 
 
 ROM := rom.z64
-ELF := build/rom.elf
 
 # make build directories
 $(shell mkdir -p build/asm)
 $(shell mkdir -p build/baserom)
+$(shell mkdir -p build/comp)
 $(shell mkdir -p build/src)
 $(shell mkdir -p build/src/libultra)
 $(shell mkdir -p build/src/libultra/os)
@@ -71,11 +71,8 @@ $(shell mkdir -p build/src/boot_O1)
 check: $(ROM) code.bin boot.bin
 	@md5sum -c checksum.md5
 
-$(ROM): $(ELF)
-	@python3 elf2rom.py
-
-$(ELF): $(O_FILES) ldscript.txt
-	$(LD) -T ldscript.txt --no-check-sections --accept-unknown-input-arch -o $@
+$(ROM): $(ROM_FILES)
+	@python3 makerom.py
 
 boot.bin: code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
@@ -90,16 +87,19 @@ test.txt: build/src/test.o
 	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
 
 clean:
-	rm $(ROM) $(ELF) code.elf code.bin boot.bin -r build
+	rm $(ROM) code.elf code.bin boot.bin -r build
 
 # Recipes
 
-build/baserom/%.o: baserom/%
-	$(MIPS_BINUTILS)objcopy -I binary -O elf32-big $< $@
+build/baserom/%: baserom/%
+	cp $< $@
 
 build/asm/%.o: asm/%.asm
 	$(AS) $(ASFLAGS) $^ -o $@
 
 build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+
+build/comp/%.yaz0: decomp/%
+	python3 yaz0.py -i $< -o $@
 
