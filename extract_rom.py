@@ -1616,15 +1616,14 @@ for i in range(0, file_count):
 
     print('extracting ' + filename + ' (0x%08X, 0x%08X, 0x%08X)' % (virtStart, virtEnd, size))
 
-    write_output_file('baserom/' + filename, physStart, size)
     if compressed:
         #print('decompressing ' + filename)
 
-        fileobj = open('baserom/' + filename, 'rb')
-        decompressed_data = decompress(fileobj.read())
-        fileobj.close()
+        decompressed_data = decompress(romData[physStart:physStart+size])
 
         writefile = open('decomp/' + filename, 'wb')
         writefile.write(decompressed_data)
         writefile.close()
+    else:
+        write_output_file('baserom/' + filename, physStart, size)
 
