@@ -37,7 +37,13 @@ build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
-BASEROM_O_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%.o)
+# Exclude dmadata, it will be generated right before packing the rom
+BASEROM_FILES := $(subst baserom/dmadata ,,$(BASEROM_FILES))
+BASEROM_BUILD_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%)
+
+DECOMP_FILES := $(wildcard decomp/*)
+COMP_FILES := $(DECOMP_FILES:decomp/%=build/comp/%.yaz0)
+
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
 C_FILES := $(wildcard src/libultra/*) \
@@ -88,6 +94,9 @@ test.txt: build/src/test.o
 
 clean:
 	rm $(ROM) code.elf code.bin boot.bin -r build
+
+build/baserom/dmadata: $(COMP_FILES) $(BASEROM_BUILD_FILES)
+	python3 dmadata.py
 
 # Recipes
 
