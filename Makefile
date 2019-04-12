@@ -98,6 +98,12 @@ clean:
 build/baserom/dmadata: $(COMP_FILES) $(BASEROM_BUILD_FILES)
 	python3 dmadata.py
 
+build/baserom/boot: boot.bin
+	cp $< $@
+
+build/comp/code.yaz0: code.bin
+	python3 yaz0.py -i $< -o $@
+
 # Recipes
 
 build/baserom/%: baserom/%
