@@ -36,7 +36,7 @@ z_ActorInit bgBgFuKaitenInitVar = {
 f32 D_80ACB650 = 0.002;
 
 
-// This starts with 3 NOPs, is this another section?
+// Overlay info
 GLOBAL_ASM(
 .data
 glabel D_80ACB654

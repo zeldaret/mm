@@ -172,19 +172,23 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ z_GraphicsContext* unk0;
-    /* 0x00004 */ u8 pad0[0x87C];
+    /* 0x00004 */ u8 pad0[0x70];
+    /* 0x00074 */ UNK_TYPE unk74;
+    /* 0x00078 */ u8 pad1[0x07A0];
+    /* 0x00818 */ UNK_TYPE unk818;
+    /* 0x0081C */ u8 pad2[0x64];
     /* 0x00880 */ UNK_TYPE unk880;
-    /* 0x00884 */ u8 pad1[0x141C];
+    /* 0x00884 */ u8 pad3[0x141C];
     /* 0x01CA0 */ UNK_TYPE unk1CA0;
-    /* 0x01CA4 */ u8 pad2[0x28];
+    /* 0x01CA4 */ u8 pad4[0x28];
     /* 0x01CCC */ sGlobalContext1CCC* unk1CCC;
-    /* 0x01CD0 */ u8 pad3[0x15330];
+    /* 0x01CD0 */ u8 pad5[0x15330];
     /* 0x17000 */ u16 unk17000;
-    /* 0x17002 */ u8 pad4[0xD86];
+    /* 0x17002 */ u8 pad6[0xD86];
     /* 0x17D88 */ UNK_TYPE unk17D88;
-    /* 0x17D8C */ u8 pad5[0xAB4];
+    /* 0x17D8C */ u8 pad7[0xAB4];
     /* 0x18840 */ UNK_TYPE unk18840;
-    /* 0x18844 */ u8 pad6[0x40];
+    /* 0x18844 */ u8 pad8[0x40];
     /* 0x18884 */ UNK_TYPE unk18884;
 } z_GlobalContext;
 
@@ -266,6 +270,45 @@ typedef struct {
     /* 0x15C */ u8 pad16[0x48];
     /* 0x1A4 */ u8 unk1A4;
 } s800A5D00;
+
+typedef struct {
+    /* 0x00 */ z_Vector3D position;
+    /* 0x0C */ z_Vector3D velocity;
+    /* 0x18 */ z_Vector3D acceleration;
+    /* 0x24 */ void(*update)(z_GlobalContext*);
+    /* 0x28 */ void(*draw)(z_GlobalContext*);
+    /* 0x2C */ f32 unk2C; // Probaly a z_Vector3D
+    /* 0x30 */ f32 unk30;
+    /* 0x34 */ f32 unk34;
+    /* 0x38 */ u32 unk38;
+    /* 0x3C */ u32 unk3C;
+    /* 0x42 */ u16 unk40[13];
+    /* 0x5A */ u16 flags; // bit 0: set if this entry is not considered free on a priority tie bit 1: ? bit 2: ?
+    /* 0x5C */ s16 life; // -1 means this entry is free
+    /* 0x5E */ u8 priority; // Lower value means higher priority
+    /* 0x5F */ u8 type;
+} z_LoadedParticleEntry;
+
+typedef struct {
+    /* 0x0 */ u32 unk0;
+    /* 0x4 */ u32(*init)(z_GlobalContext*, u32, z_LoadedParticleEntry*, void*);
+} z_ParticleOverlayInfo;
+
+typedef struct {
+    /* 0x00 */ u32 vromStart;
+    /* 0x04 */ u32 vromEnd;
+    /* 0x08 */ u32 vramStart;
+    /* 0x0C */ u32 vramEnd;
+    /* 0x10 */ u32 loadedRamAddr;
+    /* 0x14 */ z_ParticleOverlayInfo* overlayInfo;
+    /* 0x18 */ u32 unk18; // Always 0x01000000?
+} z_ParticleOverlayTableEntry;
+
+typedef struct {
+    z_LoadedParticleEntry* data_table; // Name from debug assert
+    s32 searchIndex;
+    s32 size;
+} z_EffectTableInfo;
 
 // TODO everything past here should be placed in an appropiate libultra header
 

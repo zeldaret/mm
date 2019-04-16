@@ -55,7 +55,7 @@ z_ActorCompInitEntry  bgIkanaRayCompInit[] = {
 	{0, 9, 0x058, 100}
 };
 
-// Unused?
+// Overlay info
 GLOBAL_ASM(
 .data
 glabel D_80BD562C

@@ -74,7 +74,7 @@ $(shell mkdir -p build/src/code)
 $(shell mkdir -p build/src/boot_O2_g3)
 $(shell mkdir -p build/src/boot_O1)
 
-check: $(ROM) code.bin boot.bin
+check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)

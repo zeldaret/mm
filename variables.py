@@ -150,6 +150,8 @@ known_vars = {
     0x801AE084:("D_801AE084","u8",True),
     0x801AE194:("D_801AE194","s32",True), # length 32
     0x801AE214:("D_801AE214","u8",True), # length 32
+    0x801AE3A0:("EffectSS2Info","z_EffectTableInfo",False),
+    0x801AE4A0:("particleOverlayTable","z_ParticleOverlayTableEntry",True), # length 0x28
     0x801AEFD0:("","s800BF9A0",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
