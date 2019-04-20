@@ -5,7 +5,7 @@ SECTIONS
         build/src/boot_O2_g3/boot_0x80080060.o(.text)
         build/asm/idle.o(.text)
         build/src/boot_O2_g3/boot_0x800805E0.o(.text)
-        build/src/boot_O2_g3/boot_0x80080790.o(.text)
+        build/src/boot_O2_g3/z_std_dma.o(.text)
         build/asm/boot_0x80080E30.o(.text)
         build/asm/boot_0x80081250.o(.text)
         build/src/boot_O2_g3/CIC6105.o(.text)
@@ -325,6 +325,7 @@ SECTIONS
         build/asm/code_0x801A7B10.o(.text)
         build/asm/code_0x801AA020.o(.text)
         build/asm/code_0x801AA610.o(.text)
+        build/asm/code_0x801AAAA0.o(.text)
     }
 
     ovl_title 0x80800000:

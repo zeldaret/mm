@@ -1,6 +1,6 @@
 known_files = {
     ('baserom/boot', 'boot', 0x80080060, ((0x800969C0, 0x800A5ABF),)),
-    ('decomp/code', 'code', 0x800A5AC0, ((0x80186028, 0x80186A6F),(0x801AAAA0, 0x801E3F9C),)),
+    ('decomp/code', 'code', 0x800A5AC0, ((0x80186028, 0x80186A6F),(0x801AAAB0, 0x801E3F9C),)),
     ('decomp/ovl_title', 'ovl_title', 0x80800000, ((0x80800860, 0x8080090C),)),
     ('decomp/ovl_select', 'ovl_select', 0x80800910, ((0x80801C80, 0x80803DEC),)),
     ('decomp/ovl_opening', 'ovl_opening', 0x80803DF0, ((0x80803FC0, 0x8080400C),)),
