@@ -310,6 +310,12 @@ typedef struct {
     s32 size;
 } z_EffectTableInfo;
 
+typedef struct {
+    /* 0x0000 */ u8 pad0[0xD4];
+    /* 0x00D4 */ u16 unkD4;
+    /* 0x00D6 */ u8 pad1[0x14FE];
+} z_StaticContext;
+
 // TODO everything past here should be placed in an appropiate libultra header
 
 

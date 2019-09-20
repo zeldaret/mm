@@ -131,8 +131,8 @@ known_funcs = {
     0x8008EDE0:("osUnmapTLBAll","void","void"),
     0x8008EE30:("osEPiStartDma","s32","OSPiHandle* pihandle, OSIoMesg* mb, s32 direction"),
     0x8008F1A0:("strchr","unsigned char*","const unsigned char* s, int c"),
-    0x8008F1E0:("strlen","size_t","const unsigned char* s"), # unsigned int == size_t
-    0x8008F208:("memcpy","void*","void* s1, const void* s2, size_t n"), # unsigned int == size_t
+    0x8008F1E0:("strlen","size_t","const unsigned char* s"),
+    0x8008F208:("memcpy","void*","void* s1, const void* s2, size_t n"),
     0x8008F240:("osCreateMesgQueue","void","OSMesgQueue* mq, OSMesg* msg, s32 msgCount"),
     0x8008F270:("osInvalICache","void","void* vaddr, s32 nbytes"),
     0x8008F2F0:("osInvalDCache","void","void* vaddr, s32 nbytes"),
@@ -204,10 +204,6 @@ known_funcs = {
     0x80096510:("__osSpSetPc","s32","u32 data"),
     0x80096820:("func_80096820","UNK_RET","UNK_TYPE"),
     0x800968B0:("func_800968B0","u32","const u8*, const u8*"),
-    0x80097540:("osViModeNtscHpf1","UNK_RET","UNK_ARGS"),
-    0x80097eb0:("osViModeNtscHpn1","UNK_RET","UNK_ARGS"),
-    0x80097fc0:("osViModeNtscLan1","UNK_RET","UNK_ARGS"),
-    0x80098010:("osViModeMpalLan1","UNK_RET","UNK_ARGS"),
     #0x800991a0:("__osRcpImTable","UNK_RET","UNK_ARGS"), TODO this is definitely actually a variable
     #0x80099450:("__libm_qnan_f","UNK_RET","UNK_ARGS"), TODO this is definitely actually a variable
     0x800A5AC0:("func_800A5AC0","UNK_RET","void*, UNK_TYPE"), # guessing this is void* bc it's a thread entry point
@@ -322,7 +318,7 @@ known_funcs = {
     0x801660B8:("func_801660B8","u32*","z_GlobalContext*, u32*, UNK_TYPE"),
     0x8016A01C:("func_8016A01C","s32","z_GlobalContext*"),
     0x80172AC8:("func_80172AC8","void*","UNK_PTR, u32"),
-    0x80174BF0:("func_80174BF0","UNK_RET","UNK_TYPE"),
+    0x80174BF0:("func_80174BF0","void","void* a0"),
     0x801795C0:("func_801795C0","f32","f32"),
     0x8017A6D4:("func_8017A6D4","f32","z_Vector3D*"),
     0x80180100:("func_80180100","UNK_TYPE","f32, f32"),

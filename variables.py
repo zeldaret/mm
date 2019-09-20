@@ -160,6 +160,8 @@ known_vars = {
     0x801C2079:("D_801C2079","u8",False),
     0x801C207E:("D_801C207E","u8",False),
     0x801D1508:("D_801D1508","f32",False),
+    0x801D1520:("D_801D1520","u32",False),
+    0x801D1524:("D_801D1524","u32",False),
     0x801DBE68:("D_801DBE68","f32",False),
     0x801DBE6C:("D_801DBE6C","f32",False),
     0x801DBE70:("D_801DBE70","f32",False),
@@ -195,8 +197,13 @@ known_vars = {
     0x801ED940:("","UNK_TYPE",False),
     0x801EF670:("D_801EF670","u8",False), # save info/link struct?
     0x801EF677:("D_801EF677","u8",False), # part of save info/link struct?
+    0x801F3F60:("staticContext","z_StaticContext*",False),
+    0x801F3F60:("D_801F8160","OSMesgQueue",False),
+    0x801F3F60:("D_801F8178","OSMesg",True),
     0x801F8180:("D_801F8180","UNK_TYPE",True),
     0x80208EA0:("","UNK_TYPE",False),
+    0x803824C0:("D_803824C0","UNK_TYPE",False), # heap start
+    0x80780000:("D_80780000","UNK_TYPE",False), # heap end
 
     # En_Test
     0x808637D0:("","f32",False),
