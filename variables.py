@@ -198,8 +198,8 @@ known_vars = {
     0x801EF670:("D_801EF670","u8",False), # save info/link struct?
     0x801EF677:("D_801EF677","u8",False), # part of save info/link struct?
     0x801F3F60:("staticContext","z_StaticContext*",False),
-    0x801F3F60:("D_801F8160","OSMesgQueue",False),
-    0x801F3F60:("D_801F8178","OSMesg",True),
+    0x801F8160:("D_801F8160","OSMesgQueue",False),
+    0x801F8178:("D_801F8178","OSMesg",True),
     0x801F8180:("D_801F8180","UNK_TYPE",True),
     0x80208EA0:("","UNK_TYPE",False),
     0x803824C0:("D_803824C0","UNK_TYPE",False), # heap start
