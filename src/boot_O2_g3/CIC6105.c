@@ -1,9 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
-void func_80081820(void) {}
+void nop_80081820(void) {}
 
-void func_80081828(void) {}
+void nop_80081828(void) {}
 
 void func_80081830(void) {
     func_8008481C(80, 200, &D_80098280, (UNK_PTR)(*(u32*)0xA4040010));

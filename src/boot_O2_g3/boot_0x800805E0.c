@@ -7,27 +7,27 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
     if (a0 != 0) {
         switch (osTvType) {
         case 2:
-            func_8008B650(&D_80098010);
+            osViSetMode(&D_80098010);
             break;
         case 0:
-            func_8008B650(&D_80097590);
+            osViSetMode(&D_80097590);
             break;
         case 1:
             default:
-            func_8008B650(&D_80097FC0);
+            osViSetMode(&D_80097FC0);
             break;
         }
 
 		// TODO v0 is used here instead of a0. Is this a 7.1 optimization?
         if (D_80096B2C != 0) {
-            func_80092100(D_80096B2C);
+            osViSetSpecialFeatures(D_80096B2C);
         }
 
         if (D_80096B34 != 1) {
             osViSetYScale(1);
         }
     } else {
-        func_8008B650(&D_8009B240);
+        osViSetMode(&D_8009B240);
 
         if (D_80096B28 != 0) {
             func_80087E00(D_80096B28);
@@ -35,7 +35,7 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
 
 		// TODO v0 is used here instead of a0. Is this a 7.1 optimization?
         if (D_80096B2C != 0) {
-            func_80092100(D_80096B2C);
+            osViSetSpecialFeatures(D_80096B2C);
         }
 
         if (D_80096B30 != 1) {
@@ -74,24 +74,24 @@ glabel func_800805E0
 /* 000368 0x80080620 1441000A */ bne	$v0, $at, .L_8008064C
 /* 000369 0x80080624 00000000 */ nop
 /* 000370 0x80080628 3C04800A */ lui	$a0, %hi(D_80098010)
-/* 000371 0x8008062C 0C022D94 */ jal	func_8008B650
+/* 000371 0x8008062C 0C022D94 */ jal	osViSetMode
 /* 000372 0x80080630 24848010 */ addiu	$a0, %lo(D_80098010)
 /* 000373 0x80080634 10000007 */ b	.L_80080654
 /* 000374 0x80080638 00000000 */ nop
 .L_8008063C:
-/* 000375 0x8008063C 0C022D94 */ jal	func_8008B650
+/* 000375 0x8008063C 0C022D94 */ jal	osViSetMode
 /* 000376 0x80080640 24847590 */ addiu	$a0, $a0, 30096
 /* 000377 0x80080644 10000003 */ b	.L_80080654
 /* 000378 0x80080648 00000000 */ nop
 .L_8008064C:
-/* 000379 0x8008064C 0C022D94 */ jal	func_8008B650
+/* 000379 0x8008064C 0C022D94 */ jal	osViSetMode
 /* 000380 0x80080650 24847FC0 */ addiu	$a0, $a0, 32704
 .L_80080654:
 /* 000381 0x80080654 3C048009 */ lui	$a0, %hi(D_80096B2C)
 /* 000382 0x80080658 8C846B2C */ lw	$a0, %lo(D_80096B2C)($a0)
 /* 000383 0x8008065C 50800004 */ beqzl	$a0, .L_80080670
 /* 000384 0x80080660 3C013F80 */ lui	$at, 0x3F80
-/* 000385 0x80080664 0C024840 */ jal	func_80092100
+/* 000385 0x80080664 0C024840 */ jal	osViSetSpecialFeatures
 /* 000386 0x80080668 00000000 */ nop
 /* 000387 0x8008066C 3C013F80 */ lui	$at, 0x3F80
 .L_80080670:
@@ -107,7 +107,7 @@ glabel func_800805E0
 /* 000397 0x80080694 10000025 */ b	.L_8008072C
 /* 000398 0x80080698 8FAF0018 */ lw	$t7, 24($sp)
 .L_8008069C:
-/* 000399 0x8008069C 0C022D94 */ jal	func_8008B650
+/* 000399 0x8008069C 0C022D94 */ jal	osViSetMode
 /* 000400 0x800806A0 2484B240 */ addiu	$a0, $a0, -19904
 /* 000401 0x800806A4 3C048009 */ lui	$a0, %hi(D_80096B28)
 /* 000402 0x800806A8 90846B28 */ lbu	$a0, %lo(D_80096B28)($a0)
@@ -120,7 +120,7 @@ glabel func_800805E0
 /* 000408 0x800806C0 8C846B2C */ lw	$a0, %lo(D_80096B2C)($a0)
 /* 000409 0x800806C4 50800004 */ beqzl	$a0, .L_800806D8
 /* 000410 0x800806C8 3C013F80 */ lui	$at, 0x3F80
-/* 000411 0x800806CC 0C024840 */ jal	func_80092100
+/* 000411 0x800806CC 0C024840 */ jal	osViSetSpecialFeatures
 /* 000412 0x800806D0 00000000 */ nop
 /* 000413 0x800806D4 3C013F80 */ lui	$at, 0x3F80
 .L_800806D8:
@@ -160,8 +160,8 @@ glabel func_800805E0
 
 UNK_RET func_80080748(void) {
     if (D_80096B24 != 0) {
-        func_8008AE70(1);
+        osViRepeatLine(1);
     } else {
-        func_8008AE70(0);
+        osViRepeatLine(0);
     }
 }

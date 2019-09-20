@@ -1,17 +1,17 @@
 #include <ultra64.h>
 #include <global.h>
 
-void effect_ss_init(z_GlobalContext* ctxt, s32 numEntries) {
+void EffectSS_Init(z_GlobalContext* ctxt, s32 numEntries) {
     u32 i;
     z_LoadedParticleEntry* iter;
     z_ParticleOverlayTableEntry* iter2;
 
-    EffectSS2Info.data_table = (z_LoadedParticleEntry*)func_80172AC8(&ctxt->unk74, numEntries * sizeof(z_LoadedParticleEntry));
+    EffectSS2Info.data_table = (z_LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->unk74, numEntries * sizeof(z_LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
     for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
-        effect_ss_reset_entry(iter);
+        EffectSS_ResetLoadedParticleEntry(iter);
     }
 
     for (i = 0, iter2 = particleOverlayTable; i != 0x27; i++) {
@@ -19,7 +19,7 @@ void effect_ss_init(z_GlobalContext* ctxt, s32 numEntries) {
     }
 }
 
-void effect_ss_clear(z_GlobalContext* ctxt) {
+void EffectSS_Clear(z_GlobalContext* ctxt) {
     u32 i;
     z_LoadedParticleEntry* iter;
     z_ParticleOverlayTableEntry* iter2;
@@ -31,24 +31,24 @@ void effect_ss_clear(z_GlobalContext* ctxt) {
 
     // This code is completely useless, as data_table was juest to NULL and size to 0
     for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
-        effect_ss_delete(iter);
+        EffectSS_Delete(iter);
     }
 
     // Free memory from loaded particle overlays
     for (i = 0, iter2 = particleOverlayTable; i != 0x27; i++) {
         addr = (void*)iter2->loadedRamAddr;
         if (addr != NULL) {
-            func_80102CE0(addr);
+            zelda_free(addr);
         }
         (iter2++)->loadedRamAddr = 0;
     }
 }
 
-z_LoadedParticleEntry* effect_ss_get_table() {
+z_LoadedParticleEntry* EffectSS_GetTable() {
     return EffectSS2Info.data_table;
 }
 
-void effect_ss_delete(z_LoadedParticleEntry* a0) {
+void EffectSS_Delete(z_LoadedParticleEntry* a0) {
     if (a0->flags & 0x2) {
         func_801A72CC((UNK_PTR)&a0->position);
     }
@@ -57,10 +57,10 @@ void effect_ss_delete(z_LoadedParticleEntry* a0) {
         func_801A72CC((UNK_PTR)&a0->unk2C);
     }
 
-    effect_ss_reset_entry(a0);
+    EffectSS_ResetLoadedParticleEntry(a0);
 }
 
-void effect_ss_reset_entry(z_LoadedParticleEntry* particle) {
+void EffectSS_ResetLoadedParticleEntry(z_LoadedParticleEntry* particle) {
     u32 i;
 
     particle->type = 0x27;
@@ -92,7 +92,7 @@ void effect_ss_reset_entry(z_LoadedParticleEntry* particle) {
 // XXX Some regalloc differences and instruction ordering
 #ifdef NONMATCHING
 
-s32 effect_ss_find_free_space(u32 priority, u32* tableEntry) {
+s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
     s32 ret = 0;
     s32 i;
 
@@ -149,7 +149,7 @@ s32 effect_ss_find_free_space(u32 priority, u32* tableEntry) {
 #else
 
 GLOBAL_ASM(
-glabel effect_ss_find_free_space
+glabel EffectSS_FindFreeSpace
 /* 010769 0x800B0304 27BDFFF8 */ addiu	$sp, $sp, -8
 /* 010770 0x800B0308 AFB00004 */ sw	$s0, 0X4($sp)
 /* 010771 0x800B030C 3C06801B */ lui	$a2, %hi(EffectSS2Info)
@@ -244,10 +244,10 @@ glabel effect_ss_find_free_space
 
 #endif
 
-void func_800B043C(z_GlobalContext* ctxt, z_LoadedParticleEntry* a1) {
+void EffectSS_Copy(z_GlobalContext* ctxt, z_LoadedParticleEntry* a1) {
     u32 index;
     if (func_8016A01C(ctxt) != 1) {
-        if (effect_ss_find_free_space(a1->priority, &index) == 0) {
+        if (EffectSS_FindFreeSpace(a1->priority, &index) == 0) {
             EffectSS2Info.searchIndex = index + 1;
             EffectSS2Info.data_table[index] = *a1;
         }
@@ -256,14 +256,14 @@ void func_800B043C(z_GlobalContext* ctxt, z_LoadedParticleEntry* a1) {
 
 #ifdef NONMATCHING
 
-void effect_ss_load_particle(z_GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
+void EffectSS_LoadParticle(z_GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
     u32 index;
     u32 initRet;
     u32 overlaySize;
     z_ParticleOverlayInfo* overlayInfo;
     z_ParticleOverlayTableEntry* entry = &particleOverlayTable[type];
 
-    if (effect_ss_find_free_space(priority, &index) != 0) {
+    if (EffectSS_FindFreeSpace(priority, &index) != 0) {
         return;
     }
 
@@ -274,13 +274,13 @@ void effect_ss_load_particle(z_GlobalContext* ctxt, u32 type, u32 priority, void
         // XXX this subtraction is done earlier
         overlaySize = entry->vramEnd - entry->vramStart;
         if (entry->loadedRamAddr == 0) {
-            entry->loadedRamAddr = (u32)func_80102C88(overlaySize);
+            entry->loadedRamAddr = (u32)zelda_mallocR(overlaySize);
 
             if (entry->loadedRamAddr == 0) {
                 return;
             }
 
-            func_8008501C(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
+            load_and_relocate_overlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
         // XXX this should use a0, but it doesn't
@@ -292,7 +292,7 @@ void effect_ss_load_particle(z_GlobalContext* ctxt, u32 type, u32 priority, void
     }
 
     if (overlayInfo->init != 0) {
-        effect_ss_delete(&EffectSS2Info.data_table[index]);
+        EffectSS_Delete(&EffectSS2Info.data_table[index]);
 
         EffectSS2Info.data_table[index].type = type;
         EffectSS2Info.data_table[index].priority = priority;
@@ -300,7 +300,7 @@ void effect_ss_load_particle(z_GlobalContext* ctxt, u32 type, u32 priority, void
         initRet = (*overlayInfo->init)(ctxt, index, &EffectSS2Info.data_table[index], initData);
 
         if (initRet == 0) {
-            effect_ss_reset_entry(&EffectSS2Info.data_table[index]);
+            EffectSS_ResetLoadedParticleEntry(&EffectSS2Info.data_table[index]);
         }
     }
 }
@@ -308,7 +308,7 @@ void effect_ss_load_particle(z_GlobalContext* ctxt, u32 type, u32 priority, void
 #else
 
 GLOBAL_ASM(
-glabel effect_ss_load_particle
+glabel EffectSS_LoadParticle
 /* 010885 0x800B04D4 27BDFFC0 */ addiu	$sp, $sp, -64
 /* 010886 0x800B04D8 AFBF001C */ sw	$ra, 0X1C($sp)
 /* 010887 0x800B04DC AFA40040 */ sw	$a0, 0X40($sp)
@@ -316,7 +316,7 @@ glabel effect_ss_load_particle
 /* 010889 0x800B04E4 AFA60048 */ sw	$a2, 0X48($sp)
 /* 010890 0x800B04E8 AFA7004C */ sw	$a3, 0X4C($sp)
 /* 010891 0x800B04EC 8FA40048 */ lw	$a0, 0X48($sp)
-/* 010892 0x800B04F0 0C02C0C1 */ jal	effect_ss_find_free_space
+/* 010892 0x800B04F0 0C02C0C1 */ jal	EffectSS_FindFreeSpace
 /* 010893 0x800B04F4 27A5003C */ addiu	$a1, $sp, 60
 /* 010894 0x800B04F8 1440005C */ bnez	$v0, .L_800B066C
 /* 010895 0x800B04FC 8FAE003C */ lw	$t6, 0X3C($sp)
@@ -340,7 +340,7 @@ glabel effect_ss_load_particle
 /* 010912 0x800B0540 8C6B0010 */ lw	$t3, 0X10($v1)
 /* 010913 0x800B0544 5560000F */ bnezl	$t3, .L_800B0584
 /* 010914 0x800B0548 8C620014 */ lw	$v0, 0X14($v1)
-/* 010915 0x800B054C 0C040B22 */ jal	func_80102C88
+/* 010915 0x800B054C 0C040B22 */ jal	zelda_mallocR
 /* 010916 0x800B0550 AFA30028 */ sw	$v1, 0X28($sp)
 /* 010917 0x800B0554 8FA30028 */ lw	$v1, 0X28($sp)
 /* 010918 0x800B0558 10400044 */ beqz	$v0, .L_800B066C
@@ -350,7 +350,7 @@ glabel effect_ss_load_particle
 /* 010922 0x800B0568 8C660008 */ lw	$a2, 0X8($v1)
 /* 010923 0x800B056C 8C67000C */ lw	$a3, 0XC($v1)
 /* 010924 0x800B0570 AFA30028 */ sw	$v1, 0X28($sp)
-/* 010925 0x800B0574 0C021407 */ jal	func_8008501C
+/* 010925 0x800B0574 0C021407 */ jal	load_and_relocate_overlay
 /* 010926 0x800B0578 AFA20010 */ sw	$v0, 0X10($sp)
 /* 010927 0x800B057C 8FA30028 */ lw	$v1, 0X28($sp)
 /* 010928 0x800B0580 8C620014 */ lw	$v0, 0X14($v1)
@@ -375,7 +375,7 @@ glabel effect_ss_load_particle
 /* 010944 0x800B05C0 01394823 */ subu	$t1, $t1, $t9
 /* 010945 0x800B05C4 00094940 */ sll	$t1, $t1, 5
 /* 010946 0x800B05C8 AFA20030 */ sw	$v0, 0X30($sp)
-/* 010947 0x800B05CC 0C02C084 */ jal	effect_ss_delete
+/* 010947 0x800B05CC 0C02C084 */ jal	EffectSS_Delete
 /* 010948 0x800B05D0 012A2021 */ addu	$a0, $t1, $t2
 /* 010949 0x800B05D4 8FAD003C */ lw	$t5, 0X3C($sp)
 /* 010950 0x800B05D8 24030060 */ li	$v1, 96
@@ -413,7 +413,7 @@ glabel effect_ss_load_particle
 /* 010982 0x800B0658 01E30019 */ multu	$t7, $v1
 /* 010983 0x800B065C 00004812 */ mflo	$t1
 /* 010984 0x800B0660 012A2021 */ addu	$a0, $t1, $t2
-/* 010985 0x800B0664 0C02C09C */ jal	effect_ss_reset_entry
+/* 010985 0x800B0664 0C02C09C */ jal	EffectSS_ResetLoadedParticleEntry
 /* 010986 0x800B0668 00000000 */ nop
 .L_800B066C:
 /* 010987 0x800B066C 8FBF001C */ lw	$ra, 0X1C($sp)
@@ -427,7 +427,7 @@ glabel effect_ss_load_particle
 // XXX regalloc is wrong
 #ifdef NONMATCHING
 
-void effect_ss_update_particle(z_GlobalContext* ctxt, u32 index) {
+void EffectSS_UpdateParticle(z_GlobalContext* ctxt, u32 index) {
     z_LoadedParticleEntry* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
@@ -446,7 +446,7 @@ void effect_ss_update_particle(z_GlobalContext* ctxt, u32 index) {
 #else
 
 GLOBAL_ASM(
-glabel effect_ss_update_particle
+glabel EffectSS_UpdateParticle
 /* 010991 0x800B067C 27BDFFE8 */ addiu	$sp, $sp, -24
 /* 010992 0x800B0680 AFBF0014 */ sw	$ra, 0X14($sp)
 /* 010993 0x800B0684 3C0F801B */ lui	$t7, %hi(EffectSS2Info)
@@ -492,7 +492,7 @@ glabel effect_ss_update_particle
 
 #endif
 
-void effect_ss_update_all_particles(z_GlobalContext* ctxt) {
+void EffectSS_UpdateAllParticles(z_GlobalContext* ctxt) {
     s32 i;
 
     for (i = 0; i < EffectSS2Info.size; i++) {
@@ -500,12 +500,12 @@ void effect_ss_update_all_particles(z_GlobalContext* ctxt) {
             EffectSS2Info.data_table[i].life--;
 
             if (EffectSS2Info.data_table[i].life < 0) {
-                effect_ss_delete(&EffectSS2Info.data_table[i]);
+                EffectSS_Delete(&EffectSS2Info.data_table[i]);
             }
         }
 
         if (EffectSS2Info.data_table[i].life > -1) {
-            effect_ss_update_particle(ctxt, i);
+            EffectSS_UpdateParticle(ctxt, i);
         }
     }
 }
@@ -513,7 +513,7 @@ void effect_ss_update_all_particles(z_GlobalContext* ctxt) {
 // XXX regalloc is wrong
 #ifdef NONMATCHING
 
-void effect_ss_draw_particle(z_GlobalContext* ctxt, s32 index) {
+void EffectSS_DrawParticle(z_GlobalContext* ctxt, s32 index) {
     z_LoadedParticleEntry* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
         (*entry->draw)(ctxt);
@@ -523,7 +523,7 @@ void effect_ss_draw_particle(z_GlobalContext* ctxt, s32 index) {
 #else
 
 GLOBAL_ASM(
-glabel effect_ss_draw_particle
+glabel EffectSS_DrawParticle
 /* 011078 0x800B07D8 27BDFFE8 */ addiu	$sp, $sp, -24
 /* 011079 0x800B07DC AFBF0014 */ sw	$ra, 0X14($sp)
 /* 011080 0x800B07E0 3C0F801B */ lui	$t7, %hi(EffectSS2Info)
@@ -546,13 +546,13 @@ glabel effect_ss_draw_particle
 
 #endif
 
-void effect_ss_draw_all_particles(z_GlobalContext* ctxt) {
+void EffectSS_DrawAllParticles(z_GlobalContext* ctxt) {
     UNK_TYPE s0;
     s32 i;
 
-    s0 = func_80102580(&ctxt->unk818, ctxt->unk0);
-    func_801022F0(s0, ctxt->unk818, 0, ctxt);
-    func_80101BC8(s0, ctxt->unk0);
+    s0 = Lights_CreateMapper(&ctxt->unk818, ctxt->unk0);
+    Lights_MapLights(s0, ctxt->unk818, 0, ctxt);
+    Lights_UploadLights(s0, ctxt->unk0);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
@@ -563,9 +563,9 @@ void effect_ss_draw_all_particles(z_GlobalContext* ctxt) {
                 EffectSS2Info.data_table[i].position.z > 32000 ||
                 EffectSS2Info.data_table[i].position.z < -32000
             ) {
-                effect_ss_delete(&EffectSS2Info.data_table[i]);
+                EffectSS_Delete(&EffectSS2Info.data_table[i]);
             } else {
-                effect_ss_draw_particle(ctxt, i);
+                EffectSS_DrawParticle(ctxt, i);
             }
         }
     }

@@ -5,7 +5,7 @@
 extern float fabsf(float);
 #pragma intrinsic (fabsf)
 
-void* func_800FEC90(void* dst, void* src, size_t n) {
+void* Lib_bcopy(void* dst, void* src, size_t n) {
     _bcopy(src, dst, n);
 
     return dst;
@@ -13,7 +13,7 @@ void* func_800FEC90(void* dst, void* src, size_t n) {
 
 #ifdef NONMATCHING
 
-void* func_800FECC0(u8* a0, u32 a1, u32 a2) {
+void* Lib_memset(u8* a0, u32 a1, u32 a2) {
     u8* v0;
 
     // XXX: realloc is messed up
@@ -33,7 +33,7 @@ void* func_800FECC0(u8* a0, u32 a1, u32 a2) {
 #else
 
 GLOBAL_ASM(
-glabel func_800FECC0
+glabel Lib_memset
 /* 091264 0x800FECC0 27BDFFE8 */ addiu	$sp, $sp, -24
 /* 091265 0x800FECC4 AFBF0014 */ sw	$ra, 0X14($sp)
 /* 091266 0x800FECC8 AFA40018 */ sw	$a0, 0X18($sp)
@@ -76,15 +76,15 @@ glabel func_800FECC0
 
 #endif
 
-f32 func_800FED44(s16 a0) {
+f32 Lib_cos(s16 a0) {
     return coss(a0) * D_801DDA80;
 }
 
-f32 func_800FED84(s16 a0) {
+f32 Lib_sin(s16 a0) {
     return sins(a0) * D_801DDA84;
 }
 
-s32 func_800FEDC4(s32 a0, s32 a1, s32 a2) {
+s32 Lib_StepTowardsGet_i(s32 a0, s32 a1, s32 a2) {
     s32 v1;
 
     if (a1 >= a0) {
@@ -101,17 +101,17 @@ s32 func_800FEDC4(s32 a0, s32 a1, s32 a2) {
     return a1;
 }
 
-UNK_RET func_800FEE08(u32* a0, u32 a1, u32 a2) {
-    *a0 = func_800FEDC4(*a0, a1, a2);
+UNK_RET Lib_StepTowards_i(u32* a0, u32 a1, u32 a2) {
+    *a0 = Lib_StepTowardsGet_i(*a0, a1, a2);
 }
 
-UNK_TYPE func_800FEE34(u32* a0, u32 a1, u32 a2) {
-    func_800FEE08(a0, a1, a2);
+UNK_TYPE Lib_StepTowardsCheck_i(u32* a0, u32 a1, u32 a2) {
+    Lib_StepTowards_i(a0, a1, a2);
 
     return a1 == *a0;
 }
 
-UNK_TYPE func_800FEE70(s16* a0, s16 a1, s16 a2) {
+UNK_TYPE Lib_StepTowardsCheckFramerateScaled_s(s16* a0, s16 a1, s16 a2) {
     f32 f0;
 
     if (a2 != 0) {
@@ -135,7 +135,7 @@ UNK_TYPE func_800FEE70(s16* a0, s16 a1, s16 a2) {
     return 0;
 }
 
-UNK_TYPE func_800FEF2C(s16* a0, s16 a1, s16 a2) {
+UNK_TYPE Lib_StepTowardsCheck_s(s16* a0, s16 a1, s16 a2) {
     if (a2 != 0) {
         if (a1 < *a0) {
             a2 = -a2;
@@ -155,7 +155,7 @@ UNK_TYPE func_800FEF2C(s16* a0, s16 a1, s16 a2) {
     return 0;
 }
 
-UNK_TYPE func_800FEFB4(s8* a0, s8 a1, s8 a2) {
+UNK_TYPE Lib_StepTowardsCheck_c(s8* a0, s8 a1, s8 a2) {
     if (a2 != 0) {
         if (a1 < *a0) {
             a2 = -a2;
@@ -177,7 +177,7 @@ UNK_TYPE func_800FEFB4(s8* a0, s8 a1, s8 a2) {
 
 #ifdef NONMATCHING
 
-UNK_TYPE func_800FF03C(f32* a0, f32 a1, f32 a2) {
+UNK_TYPE Lib_StepTowardsCheck_f(f32* a0, f32 a1, f32 a2) {
     if (a2 != 0) {
         // XXX: regalloc is messed up
         if (a1 < *a0) {
@@ -201,7 +201,7 @@ UNK_TYPE func_800FF03C(f32* a0, f32 a1, f32 a2) {
 #else
 
 GLOBAL_ASM(
-glabel func_800FF03C
+glabel Lib_StepTowardsCheck_f
 /* 091487 0x800FF03C 44857000 */ mtc1	$a1, $f14
 /* 091488 0x800FF040 44866000 */ mtc1	$a2, $f12
 /* 091489 0x800FF044 44802000 */ mtc1	$zero, $f4
@@ -568,7 +568,7 @@ glabel func_800FF3A0
 /* 091735 0x800FF41C 44992000 */ mtc1	$t9, $f4
 /* 091736 0x800FF420 468090A0 */ cvt.s.w	$f2, $f18
 /* 091737 0x800FF424 46802320 */ cvt.s.w	$f12, $f4
-/* 091738 0x800FF428 0C060040 */ jal	func_80180100
+/* 091738 0x800FF428 0C060040 */ jal	atans_flip
 /* 091739 0x800FF42C 46001387 */ neg.s	$f14, $f2
 /* 091740 0x800FF430 8FA5001C */ lw	$a1, 0X1C($sp)
 /* 091741 0x800FF434 10000002 */ b	.L_800FF440
@@ -583,15 +583,15 @@ glabel func_800FF3A0
 
 #endif
 
-s16 func_800FF450(s16 a0, s16 a1) {
-    return (s16)(func_80086FDC() * a1) + a0;
+s16 Lib_rand_s(s16 a0, s16 a1) {
+    return (s16)(randZeroOne() * a1) + a0;
 }
 
-s16 func_800FF4A4(s16 a0, s16 a1, s16 a2) {
-    return (s16)(func_80086FDC() * a2) * a1 + a0;
+s16 Lib_randStride_s(s16 a0, s16 a1, s16 a2) {
+    return (s16)(randZeroOne() * a2) * a1 + a0;
 }
 
-UNK_RET func_800FF50C(z_Vector3D* dst, z_Vector3D* src) {
+UNK_RET Lib_CopyVec3f(z_Vector3D* dst, z_Vector3D* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -601,7 +601,7 @@ UNK_RET func_800FF50C(z_Vector3D* dst, z_Vector3D* src) {
     dst->z = z;
 }
 
-UNK_RET func_800FF52C(z_Vector3Ds16* dst, z_Vector3Ds16* src) {
+UNK_RET Lib_CopyVec3s(z_Vector3Ds16* dst, z_Vector3Ds16* src) {
     s16 x = src->x;
     s16 y = src->y;
     s16 z = src->z;
@@ -611,7 +611,7 @@ UNK_RET func_800FF52C(z_Vector3Ds16* dst, z_Vector3Ds16* src) {
     dst->z = z;
 }
 
-UNK_RET func_800FF54C(z_Vector3D* dst, z_Vector3Ds16* src) {
+UNK_RET Lib_ToVec3f(z_Vector3D* dst, z_Vector3Ds16* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -621,7 +621,7 @@ UNK_RET func_800FF54C(z_Vector3D* dst, z_Vector3Ds16* src) {
     dst->z = z;
 }
 
-UNK_RET func_800FF584(z_Vector3Ds16* dst, z_Vector3D* src) {
+UNK_RET Lib_ToVec3s(z_Vector3Ds16* dst, z_Vector3D* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -631,56 +631,56 @@ UNK_RET func_800FF584(z_Vector3Ds16* dst, z_Vector3D* src) {
     dst->z = z;
 }
 
-UNK_RET func_800FF5BC(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
+UNK_RET Lib_AddVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
     a2->x = a0->x + a1->x;
     a2->y = a0->y + a1->y;
     a2->z = a0->z + a1->z;
 }
 
-UNK_RET func_800FF5F4(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
+UNK_RET Lib_SubVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
     a2->x = a0->x - a1->x;
     a2->y = a0->y - a1->y;
     a2->z = a0->z - a1->z;
 }
 
-UNK_RET func_800FF62C(z_Vector3D* a0, z_Vector3Ds16* a1, z_Vector3Ds16* a2) {
+UNK_RET Lib_SubVec3sToVec3f(z_Vector3D* a0, z_Vector3Ds16* a1, z_Vector3Ds16* a2) {
     a0->x = a1->x - a2->x;
     a0->y = a1->y - a2->y;
     a0->z = a1->z - a2->z;
 }
 
-UNK_RET func_800FF688(z_Vector3D* a0, f32 a1) {
+UNK_RET Lib_ScaleInPlaceVec3f(z_Vector3D* a0, f32 a1) {
     a0->x *= a1;
     a0->y *= a1;
     a0->z *= a1;
 }
 
-UNK_RET func_800FF6C4(z_Vector3D* a0, f32 a1, z_Vector3D* a2) {
+UNK_RET Lib_ScaleVec3f(z_Vector3D* a0, f32 a1, z_Vector3D* a2) {
     a2->x = a0->x * a1;
     a2->y = a0->y * a1;
     a2->z = a0->z * a1;
 }
 
-UNK_RET func_800FF6F8(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
+UNK_RET Lib_LerpVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
     a3->x = (a1->x - a0->x) * a2 + a0->x;
     a3->y = (a1->y - a0->y) * a2 + a0->y;
     a3->z = (a1->z - a0->z) * a2 + a0->z;
 }
 
-UNK_RET func_800FF750(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
+UNK_RET Lib_AddScaledVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
     a3->x = a1->x * a2 + a0->x;
     a3->y = a1->y * a2 + a0->y;
     a3->z = a1->z * a2 + a0->z;
 }
 
-UNK_RET func_800FF79C(z_Vector3D* a0, f32 a1, z_Vector3D* a2) {
-    a2->x = func_801795C0(a1) + a0->x;
-    a2->y = func_801795C0(a1) + a0->y;
-    a2->z = func_801795C0(a1) + a0->z;
+UNK_RET Lib_ModifyRandScaled(z_Vector3D* a0, f32 a1, z_Vector3D* a2) {
+    a2->x = randPlusMinusPoint5Scaled(a1) + a0->x;
+    a2->y = randPlusMinusPoint5Scaled(a1) + a0->y;
+    a2->z = randPlusMinusPoint5Scaled(a1) + a0->z;
 }
 
-void func_800FF810(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
-    f32 f0 = func_800FF8D4(a0, a1, a3);
+void Lib_ScaledNormalizedDifferenceVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
+    f32 f0 = Lib_DistanceAndDifferenceVec3f(a0, a1, a3);
     f32 f2;
 
     if (f0 == 0) {
@@ -694,24 +694,24 @@ void func_800FF810(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3) {
     a3->z *= f2;
 }
 
-f32 func_800FF884(z_Vector3D* a0, z_Vector3D* a1) {
+f32 Lib_DistanceVec3f(z_Vector3D* a0, z_Vector3D* a1) {
     z_Vector3D sp1C;
-    func_800FF5F4(a1, a0, &sp1C);
+    Lib_SubVec3f(a1, a0, &sp1C);
     return sqrtf((sp1C.x * sp1C.x) + (sp1C.y * sp1C.y) + (sp1C.z * sp1C.z));
 }
 
-f32 func_800FF8D4(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
-    func_800FF5F4(a1, a0, a2);
+f32 Lib_DistanceAndDifferenceVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2) {
+    Lib_SubVec3f(a1, a0, a2);
     return sqrtf((a2->x * a2->x) + (a2->y * a2->y) + (a2->z * a2->z));
 }
 
-f32 func_800FF92C(z_Vector3D* a0, z_Vector3D* a1) {
+f32 Lib_DistanceXZVec3f(z_Vector3D* a0, z_Vector3D* a1) {
     f32 dx = a1->x - a0->x;
     f32 dz = a1->z - a0->z;
     return sqrtf((dx * dx) + (dz * dz));
 }
 
-f32 func_800FF960(z_Vector3D* a0, z_Vector3D* a1, f32* a2, f32* a3) {
+f32 Lib_DistanceAndDifferenceXZVec3f(z_Vector3D* a0, z_Vector3D* a1, f32* a2, f32* a3) {
     *a2 = a1->x - a0->x;
     *a3 = a1->z - a0->z;
     return sqrtf((*a2 * *a2) + (*a3 * *a3));
@@ -719,10 +719,10 @@ f32 func_800FF960(z_Vector3D* a0, z_Vector3D* a1, f32* a2, f32* a3) {
 
 #ifdef NONMATCHING
 
-UNK_RET func_800FF9A4(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
+UNK_RET Lib_PushAwayXZVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
     f32 sp24;
     f32 sp20;
-    f32 f0 = func_800FF960(a1, a0, &sp24, &sp20);
+    f32 f0 = Lib_DistanceAndDifferenceXZVec3f(a1, a0, &sp24, &sp20);
     f32 f2 = f0 - a2;
 
     if ((f0 >= a2) && (f2 != 0)) {
@@ -738,7 +738,7 @@ UNK_RET func_800FF9A4(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
 #else
 
 GLOBAL_ASM(
-glabel func_800FF9A4
+glabel Lib_PushAwayXZVec3f
 /* 092089 0x800FF9A4 27BDFFD8 */ addiu	$sp, $sp, -40
 /* 092090 0x800FF9A8 AFA5002C */ sw	$a1, 0X2C($sp)
 /* 092091 0x800FF9AC 00802825 */ move	$a1, $a0
@@ -748,7 +748,7 @@ glabel func_800FF9A4
 /* 092095 0x800FF9BC 8FA4002C */ lw	$a0, 0X2C($sp)
 /* 092096 0x800FF9C0 27A60024 */ addiu	$a2, $sp, 36
 /* 092097 0x800FF9C4 27A70020 */ addiu	$a3, $sp, 32
-/* 092098 0x800FF9C8 0C03FE58 */ jal	func_800FF960
+/* 092098 0x800FF9C8 0C03FE58 */ jal	Lib_DistanceAndDifferenceXZVec3f
 /* 092099 0x800FF9CC AFA50028 */ sw	$a1, 0X28($sp)
 /* 092100 0x800FF9D0 C7A20030 */ lwc1	$f2, 0X30($sp)
 /* 092101 0x800FF9D4 44807000 */ mtc1	$zero, $f14
@@ -787,59 +787,59 @@ glabel func_800FF9A4
 
 #endif
 
-f32 func_800FFA4C(z_Vector3D* a0, z_Vector3D* a1) {
+f32 Lib_DistanceYVec3f(z_Vector3D* a0, z_Vector3D* a1) {
     return a1->y - a0->y;
 }
 
-UNK_TYPE func_800FFA60(z_Vector3D* a0, z_Vector3D* a1) {
+UNK_TYPE Lib_YawVec3f(z_Vector3D* a0, z_Vector3D* a1) {
     f32 f14 = a1->x - a0->x;
     f32 f12 = a1->z - a0->z;
-    return func_80180100(f12, f14);
+    return atans_flip(f12, f14);
 }
 
-UNK_TYPE func_800FFA94(z_Vector3D* a0, z_Vector3D* a1) {
-    return func_80180100(func_800FF92C(a0, a1), a0->y - a1->y);
+UNK_TYPE Lib_PitchVec3f(z_Vector3D* a0, z_Vector3D* a1) {
+    return atans_flip(Lib_DistanceXZVec3f(a0, a1), a0->y - a1->y);
 }
 
-void func_800FFADC(z_Actor* a0, z_ActorCompInitEntry* a1) {
+void Lib_ApplyActorInitVars(z_Actor* a0, z_ActorCompInitEntry* a1) {
     do {
         D_801BE960[a1->type]((u8*)a0, a1);
     } while ((a1++)->cont);
 }
 
-UNK_RET func_800FFB54(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorCompInitEntry* a1) {
     *(u8*)(a0 + a1->offset) = (u8)(a1->value);
 }
 
-UNK_RET func_800FFB70(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorCompInitEntry* a1) {
     *(u8*)(a0 + a1->offset) = (u8)(a1->value);
 }
 
-UNK_RET func_800FFB8C(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarShort1(u8* a0, z_ActorCompInitEntry* a1) {
     *(u16*)(a0 + a1->offset) = (u16)(a1->value);
 }
 
-UNK_RET func_800FFBA8(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarShort2(u8* a0, z_ActorCompInitEntry* a1) {
     *(u16*)(a0 + a1->offset) = (u16)(a1->value);
 }
 
-UNK_RET func_800FFBC4(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarWord1(u8* a0, z_ActorCompInitEntry* a1) {
     *(u32*)(a0 + a1->offset) = (u32)(a1->value);
 }
 
-UNK_RET func_800FFBE0(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarWord2(u8* a0, z_ActorCompInitEntry* a1) {
     *(u32*)(a0 + a1->offset) = (u32)(a1->value);
 }
 
-UNK_RET func_800FFBFC(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarFloat(u8* a0, z_ActorCompInitEntry* a1) {
     *(f32*)(a0 + a1->offset) = (f32)(a1->value);
 }
 
-UNK_RET func_800FFC20(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarFloat1000th(u8* a0, z_ActorCompInitEntry* a1) {
     *(f32*)(a0 + a1->offset) = (f32)(a1->value) / 1000;
 }
 
-UNK_RET func_800FFC50(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorCompInitEntry* a1) {
     z_Vector3D* v0 = (z_Vector3D*)(a0 + a1->offset);
     f32 f0 = (f32)(a1->value);
 
@@ -848,7 +848,7 @@ UNK_RET func_800FFC50(u8* a0, z_ActorCompInitEntry* a1) {
     v0->x = f0;
 }
 
-UNK_RET func_800FFC7C(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorCompInitEntry* a1) {
     z_Vector3D* v0 = (z_Vector3D*)(a0 + a1->offset);
     f32 f0 = (f32)(a1->value) / 1000;
 
@@ -857,7 +857,7 @@ UNK_RET func_800FFC7C(u8* a0, z_ActorCompInitEntry* a1) {
     v0->x = f0;
 }
 
-UNK_RET func_800FFCB4(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3s(u8* a0, z_ActorCompInitEntry* a1) {
     z_Vector3Ds16* v0 = (z_Vector3Ds16*)(a0 + a1->offset);
     s16 v1 = (s16)(a1->value);
 
@@ -906,7 +906,7 @@ f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4) {
     return fabsf(a1 - *a0);
 }
 
-UNK_RET func_800FFDF8(f32* a0, f32 a1, f32 a2, f32 a3) {
+UNK_RET Lib_ScaleMax_f(f32* a0, f32 a1, f32 a2, f32 a3) {
     f32 f2;
 
     if (*a0 != a1) {
@@ -922,7 +922,7 @@ UNK_RET func_800FFDF8(f32* a0, f32 a1, f32 a2, f32 a3) {
     }
 }
 
-void func_800FFE68(f32* a0, f32 a1, f32 a2) {
+void Lib_Scale_f(f32* a0, f32 a1, f32 a2) {
   f32 f0 = *a0 * a1;
 
   if (a2 < f0) {
@@ -936,14 +936,14 @@ void func_800FFE68(f32* a0, f32 a1, f32 a2) {
 
 #ifdef NONMATCHING
 
-s16 func_800FFEBC(s16* a0, s16 a1, s16 a2, s16 a3, s16 a4) {
+s16 Lib_ScaleMaxMin_s(s16* a0, s16 a1, s16 a2, s16 a3, s16 a4) {
 
 }
 
 #else
 
 GLOBAL_ASM(
-glabel func_800FFEBC
+glabel Lib_ScaleMaxMin_s
 /* 092415 0x800FFEBC AFA50004 */ sw	$a1, 0X4($sp)
 /* 092416 0x800FFEC0 AFA60008 */ sw	$a2, 0X8($sp)
 /* 092417 0x800FFEC4 00063400 */ sll	$a2, $a2, 16
@@ -1028,7 +1028,7 @@ glabel func_800FFEBC
 
 #endif
 
-void func_800FFFD8(s16* a0, s16 a1, s16 a2, s16 a3) {
+void Lib_ScaleMax_s(s16* a0, s16 a1, s16 a2, s16 a3) {
     s16 v0 = a1 - *a0;
     v0 /= a2;
 
@@ -1045,7 +1045,7 @@ void func_800FFFD8(s16* a0, s16 a1, s16 a2, s16 a3) {
     *a0 += v0;
 }
 
-UNK_RET func_8010007C(u8* a0, u8* a1) {
+UNK_RET Lib_CopyColor(u8* a0, u8* a1) {
     a0[0] = a1[0];
     a0[1] = a1[1];
     a0[2] = a1[2];
@@ -1064,12 +1064,12 @@ UNK_RET func_801000F4(UNK_TYPE a0, u16 a1) {
     func_8019F1C0(a0, a1);
 }
 
-void func_8010011C(z_Vector3D* a0, s16 a1, z_Vector3D* a2, z_Vector3D* a3) {
+void Lib_TranslateAndRotateYVec3f(z_Vector3D* a0, s16 a1, z_Vector3D* a2, z_Vector3D* a3) {
     f32 sp1C;
     f32 f0;
 
-    sp1C = func_800FED44(a1);
-    f0 = func_800FED84(a1);
+    sp1C = Lib_cos(a1);
+    f0 = Lib_sin(a1);
     a3->x = a0->x + (a2->x * sp1C + a2->z * f0);
     a3->y = a0->y + a2->y;
     a3->z = a0->z + (a2->z * sp1C - a2->x * f0);
@@ -1077,7 +1077,7 @@ void func_8010011C(z_Vector3D* a0, s16 a1, z_Vector3D* a2, z_Vector3D* a3) {
 
 #ifdef NONMATCHING
 
-void func_801001B8(u8* a0, u8* a1, f32 a2, u8* a3) {
+void Lib_LerpRGB(u8* a0, u8* a1, f32 a2, u8* a3) {
     // XXX regalloc is slightly off
     a3[0] = (f32)a0[0] + ((f32)a1[0] - (f32)a0[0]) * a2;
     a3[1] = (f32)a0[1] + ((f32)a1[1] - (f32)a0[1]) * a2;
@@ -1087,7 +1087,7 @@ void func_801001B8(u8* a0, u8* a1, f32 a2, u8* a3) {
 #else
 
 GLOBAL_ASM(
-glabel func_801001B8
+glabel Lib_LerpRGB
 /* 092606 0x801001B8 44866000 */ mtc1	$a2, $f12
 /* 092607 0x801001BC 00000000 */ nop
 /* 092608 0x801001C0 908E0000 */ lbu	$t6, 0X0($a0)
@@ -1271,13 +1271,13 @@ glabel func_801001B8
 
 #endif
 
-f32 func_80100448(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
+f32 Lib_PushAwayVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
     z_Vector3D sp24;
     f32 f2;
     f32 f0;
 
-    func_800FF5F4(a1, a0, &sp24);
-    f0 = func_8017A6D4(&sp24);
+    Lib_SubVec3f(a1, a0, &sp24);
+    f0 = Math3D_Length(&sp24);
     if (a2 < f0) {
         f2 = a2 / f0;
         f0 = f0 - a2;
@@ -1285,20 +1285,20 @@ f32 func_80100448(z_Vector3D* a0, z_Vector3D* a1, f32 a2) {
         a0->y = a0->y + f2 * sp24.y;
         a0->z = a0->z + f2 * sp24.z;
     } else {
-        func_800FF50C(a0, a1);
+        Lib_CopyVec3f(a0, a1);
         f0 = 0;
     }
 
     return f0;
 }
 
-void func_801004FC(void) {}
+void Lib_Nop801004FC(void) {}
 
-UNK_TYPE func_80100504(u32 a0) {
+UNK_TYPE Lib_PtrSegToPhys(u32 a0) {
     return(D_801F8180[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
-UNK_TYPE func_8010053C(u32 a0) {
+UNK_TYPE Lib_PtrSegToPhysNull(u32 a0) {
     if ((a0 >> 28) == 0) {
         return a0;
     }
@@ -1306,7 +1306,7 @@ UNK_TYPE func_8010053C(u32 a0) {
     return(D_801F8180[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
-UNK_TYPE func_80100584(UNK_TYPE a0) {
+UNK_TYPE Lib_PtrSegToK0(UNK_TYPE a0) {
     if (a0 == 0) {
         return 0;
     } else {
@@ -1314,7 +1314,7 @@ UNK_TYPE func_80100584(UNK_TYPE a0) {
     }
 }
 
-UNK_TYPE func_801005A0(UNK_TYPE a0) {
+UNK_TYPE Lib_PtrSegToK0Null(UNK_TYPE a0) {
     if (a0 == 0) {
         return 0;
     } else {

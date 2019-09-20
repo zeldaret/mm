@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-s32 func_80080790(void* a0, void* a1, s32 a2) {
+s32 Dmamgr_DoDmaTransfer(void* a0, void* a1, s32 a2) {
     u32 spPad;
     OSIoMesg sp60;
     OSMesgQueue sp48;
@@ -44,11 +44,11 @@ END:
     return ret;
 }
 
-void func_800808D4(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
+void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
     osEPiStartDma(pihandle, mb, direction);
 }
 
-DmadataEntry* func_800808F4(u32 a0) {
+DmadataEntry* Dmamgr_FindDmaEntry(u32 a0) {
     DmadataEntry* curr;
 
     for (curr = dmadata; curr->vromEnd != 0; curr++) {
@@ -61,8 +61,8 @@ DmadataEntry* func_800808F4(u32 a0) {
     return NULL;
 }
 
-s32 func_80080950(u32 a0) {
-    DmadataEntry* v0 = func_800808F4(a0);
+s32 Dmamgr_TranslateVromToRom(u32 a0) {
+    DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
         if (v0->romEnd == 0) {
@@ -79,8 +79,8 @@ s32 func_80080950(u32 a0) {
     return -1;
 }
 
-s32 func_800809BC(u32 a0) {
-    DmadataEntry* v0 = func_800808F4(a0);
+s32 Dmamgr_FindDmaIndex(u32 a0) {
+    DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
 		return v0 - dmadata;
@@ -95,7 +95,7 @@ UNK_TYPE* func_800809F4(u32 a0) {
 
 #ifdef NONMATCHING
 
-void func_80080A08(s80080A08* a0) {
+void Dmamgr_HandleRequest(s80080A08* a0) {
     UNK_TYPE sp34;
     UNK_TYPE sp30;
     UNK_TYPE sp2C;
@@ -109,14 +109,14 @@ void func_80080A08(s80080A08* a0) {
     sp30 = (UNK_TYPE)a0->unk4;
     sp2C = a0->unk8;
 
-    sp1C = func_800809BC(sp34);
+    sp1C = Dmamgr_FindDmaIndex(sp34);
 
     if ((sp1C >= 0) && (sp1C < D_8009B2BC)) {
         if (dmadata[sp1C].romEnd == 0) {
             if (dmadata[sp1C].vromEnd < (sp2C + sp34)) {
                 func_80083E4C(&D_800981C4, 499);
             }
-            func_80080790((u8*)((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart), (u8*)sp30, sp2C);
+            Dmamgr_DoDmaTransfer((u8*)((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart), (u8*)sp30, sp2C);
             return;
         }
 
@@ -133,7 +133,7 @@ void func_80080A08(s80080A08* a0) {
         }
 
         osSetThreadPri(NULL, 10);
-        func_80081178(sp28, sp30, sp24);
+        Yaz0_LoadAndDecompressFile(sp28, sp30, sp24);
         osSetThreadPri(NULL, 17);
     } else {
         func_80083E4C(&D_800981F4, 558);
@@ -143,7 +143,7 @@ void func_80080A08(s80080A08* a0) {
 #else
 
 GLOBAL_ASM(
-glabel func_80080A08
+glabel Dmamgr_HandleRequest
 /* 000618 0x80080A08 27BDFFC8 */ addiu	$sp, $sp, -56
 /* 000619 0x80080A0C AFBF0014 */ sw	$ra, 20($sp)
 /* 000620 0x80080A10 00802825 */ move	$a1, $a0
@@ -152,7 +152,7 @@ glabel func_80080A08
 /* 000623 0x80080A1C AFAE0030 */ sw	$t6, 48($sp)
 /* 000624 0x80080A20 8CAF0008 */ lw	$t7, 8($a1)
 /* 000625 0x80080A24 AFA40034 */ sw	$a0, 52($sp)
-/* 000626 0x80080A28 0C02026F */ jal	func_800809BC
+/* 000626 0x80080A28 0C02026F */ jal	Dmamgr_FindDmaIndex
 /* 000627 0x80080A2C AFAF002C */ sw	$t7, 44($sp)
 /* 000628 0x80080A30 8FA70034 */ lw	$a3, 52($sp)
 /* 000629 0x80080A34 0440004B */ bltz	$v0, .L_80080B64
@@ -191,7 +191,7 @@ glabel func_80080A08
 /* 000661 0x80080AB4 8FA50030 */ lw	$a1, 48($sp)
 /* 000662 0x80080AB8 01E7C021 */ addu	$t8, $t7, $a3
 /* 000663 0x80080ABC 8FA6002C */ lw	$a2, 44($sp)
-/* 000664 0x80080AC0 0C0201E4 */ jal	func_80080790
+/* 000664 0x80080AC0 0C0201E4 */ jal	Dmamgr_DoDmaTransfer
 /* 000665 0x80080AC4 03192023 */ subu	$a0, $t8, $t9
 /* 000666 0x80080AC8 1000002B */ b	.L_80080B78
 /* 000667 0x80080ACC 8FBF0014 */ lw	$ra, 20($sp)
@@ -228,7 +228,7 @@ glabel func_80080A08
 /* 000695 0x80080B3C 2405000A */ li	$a1, 10
 /* 000696 0x80080B40 8FA40028 */ lw	$a0, 40($sp)
 /* 000697 0x80080B44 8FA50030 */ lw	$a1, 48($sp)
-/* 000698 0x80080B48 0C02045E */ jal	func_80081178
+/* 000698 0x80080B48 0C02045E */ jal	Yaz0_LoadAndDecompressFile
 /* 000699 0x80080B4C 8FA60024 */ lw	$a2, 36($sp)
 /* 000700 0x80080B50 00002025 */ move	$a0, $zero
 /* 000701 0x80080B54 0C023F00 */ jal	osSetThreadPri
@@ -251,7 +251,7 @@ glabel func_80080A08
 
 #ifdef NONMATCHING
 
-void func_80080B84(void* a0) {
+void Dmamgr_ThreadEntry(void* a0) {
     s80080A08* sp34;
 	UNK_TYPE pad;
     s80080A08* s0;
@@ -260,7 +260,7 @@ void func_80080B84(void* a0) {
         osRecvMesg(&D_8009B2C0, (OSMesg)&sp34, 1);
         if (sp34 == NULL) return;
         s0 = sp34;
-        func_80080A08(s0);
+        Dmamgr_HandleRequest(s0);
         // TODO a0 isn't being used for this comparison
         if (s0->unk18 == NULL) continue;
         osSendMesg(&D_8009B2C0, (OSMesg)s0->unk1C, 0);
@@ -270,7 +270,7 @@ void func_80080B84(void* a0) {
 #else
 
 GLOBAL_ASM(
-glabel func_80080B84
+glabel Dmamgr_ThreadEntry
 /* 000713 0x80080B84 27BDFFC8 */ addiu	$sp, $sp, -56
 /* 000714 0x80080B88 AFBF0024 */ sw	$ra, 36($sp)
 /* 000715 0x80080B8C AFB20020 */ sw	$s2, 32($sp)
@@ -288,7 +288,7 @@ glabel func_80080B84
 /* 000726 0x80080BB8 8FA40034 */ lw	$a0, 52($sp)
 /* 000727 0x80080BBC 5080000C */ beqzl	$a0, .L_80080BF0
 /* 000728 0x80080BC0 8FBF0024 */ lw	$ra, 36($sp)
-/* 000729 0x80080BC4 0C020282 */ jal	func_80080A08
+/* 000729 0x80080BC4 0C020282 */ jal	Dmamgr_HandleRequest
 /* 000730 0x80080BC8 00808025 */ move	$s0, $a0
 /* 000731 0x80080BCC 8E040018 */ lw	$a0, 24($s0)
 /* 000732 0x80080BD0 5080FFF6 */ beqzl	$a0, .L_80080BAC
@@ -311,7 +311,7 @@ glabel func_80080B84
 
 #ifdef NONMATCHING
 
-s32 func_80080C04(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
+s32 Dmamgr_SendRequest(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
     // TODO this isn't correct, it uses a lui, addiu to get the address of D_80096B60, then loads it,
 	// meaning that this is likely just "if (*D_80096B60 >= 2)". However, I can not get it to not
 	// produce the usual lui, lw combo to load from an address :/
@@ -334,7 +334,7 @@ s32 func_80080C04(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_T
 #else
 
 GLOBAL_ASM(
-glabel func_80080C04
+glabel Dmamgr_SendRequest
 /* 000745 0x80080C04 27BDFFE0 */ addiu	$sp, $sp, -32
 /* 000746 0x80080C08 AFB00018 */ sw	$s0, 24($sp)
 /* 000747 0x80080C0C 00808025 */ move	$s0, $a0
@@ -376,7 +376,7 @@ glabel func_80080C04
 
 #endif
 
-s32 func_80080C90(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
+s32 Dmamgr_SendRequestAndWait(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
 	s80080A08 sp48;
     OSMesgQueue sp30;
     OSMesg sp2C;
@@ -384,7 +384,7 @@ s32 func_80080C90(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
 
     osCreateMesgQueue(&sp30, &sp2C, 1);
 
-	ret = func_80080C04(&sp48, (UNK_FUN_ARG)a0, a1, a2, 0, &sp30, 0);
+	ret = Dmamgr_SendRequest(&sp48, (UNK_FUN_ARG)a0, a1, a2, 0, &sp30, 0);
 
 	if (ret == -1) {
 		return ret;
@@ -397,11 +397,11 @@ s32 func_80080C90(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
 
 #ifdef NONMATCHING
 
-void func_80080D0C() {
+void Dmamgr_Start() {
 	DmadataEntry* v0;
 	u32 v1;
 	// TODO register load ordering is wrong
-	func_80080790(&dmadataRomStart, dmadata, (u8*)&dmadataRomEnd - (u8*)&dmadataRomStart);
+	Dmamgr_DoDmaTransfer(&dmadataRomStart, dmadata, (u8*)&dmadataRomEnd - (u8*)&dmadataRomStart);
 
 	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
 
@@ -409,9 +409,9 @@ void func_80080D0C() {
 
 	osCreateMesgQueue(&D_8009B2C0, (OSMesg)&D_8009B2D8, 32);
 
-	func_80085320(&D_8009B2A0, &D_8009B508, &D_8009BA08, 0, 256, &D_80098204);
+	thread_info_init(&D_8009B2A0, &D_8009B508, &D_8009BA08, 0, 256, &D_80098204);
 
-	osCreateThread(&D_8009B358, 18, func_80080B84, NULL, &D_8009BA08, 17);
+	osCreateThread(&D_8009B358, 18, Dmamgr_ThreadEntry, NULL, &D_8009BA08, 17);
 
 	osStartThread(&D_8009B358);
 }
@@ -419,7 +419,7 @@ void func_80080D0C() {
 #else
 
 GLOBAL_ASM(
-glabel func_80080D0C
+glabel Dmamgr_Start
 /* 000811 0x80080D0C 27BDFFE0 */ addiu	$sp, $sp, -32
 /* 000812 0x80080D10 AFBF001C */ sw	$ra, 28($sp)
 /* 000813 0x80080D14 3C040002 */ lui	$a0, %hi(dmadataRomStart)
@@ -428,7 +428,7 @@ glabel func_80080D0C
 /* 000816 0x80080D20 2484A500 */ addiu	$a0, %lo(dmadataRomStart)
 /* 000817 0x80080D24 3C05800A */ lui	$a1, %hi(dmadata)
 /* 000818 0x80080D28 24A5F8B0 */ addiu	$a1, %lo(dmadata)
-/* 000819 0x80080D2C 0C0201E4 */ jal	func_80080790
+/* 000819 0x80080D2C 0C0201E4 */ jal	Dmamgr_DoDmaTransfer
 /* 000820 0x80080D30 01C43023 */ subu	$a2, $t6, $a0
 /* 000821 0x80080D34 3C04800A */ lui	$a0, %hi(dmadata)
 /* 000822 0x80080D38 2484F8B0 */ addiu	$a0, %lo(dmadata)
@@ -462,15 +462,15 @@ glabel func_80080D0C
 /* 000848 0x80080DA0 24A5B508 */ addiu	$a1, %lo(D_8009B508)
 /* 000849 0x80080DA4 2484B2A0 */ addiu	$a0, $a0, -19808
 /* 000850 0x80080DA8 AFA80014 */ sw	$t0, 20($sp)
-/* 000851 0x80080DAC 0C0214C8 */ jal	func_80085320
+/* 000851 0x80080DAC 0C0214C8 */ jal	thread_info_init
 /* 000852 0x80080DB0 00003825 */ move	$a3, $zero
 /* 000853 0x80080DB4 3C09800A */ lui	$t1, %hi(D_8009BA08)
 /* 000854 0x80080DB8 2529BA08 */ addiu	$t1, %lo(D_8009BA08)
 /* 000855 0x80080DBC 3C04800A */ lui	$a0, %hi(D_8009B358)
-/* 000856 0x80080DC0 3C068008 */ lui	$a2, %hi(func_80080B84)
+/* 000856 0x80080DC0 3C068008 */ lui	$a2, %hi(Dmamgr_ThreadEntry)
 /* 000857 0x80080DC4 240A0011 */ li	$t2, 17
 /* 000858 0x80080DC8 AFAA0014 */ sw	$t2, 20($sp)
-/* 000859 0x80080DCC 24C60B84 */ addiu	$a2, %lo(func_80080B84)
+/* 000859 0x80080DCC 24C60B84 */ addiu	$a2, %lo(Dmamgr_ThreadEntry)
 /* 000860 0x80080DD0 2484B358 */ addiu	$a0, %lo(D_8009B358)
 /* 000861 0x80080DD4 AFA90010 */ sw	$t1, 16($sp)
 /* 000862 0x80080DD8 24050012 */ li	$a1, 18
@@ -487,6 +487,6 @@ glabel func_80080D0C
 
 #endif
 
-void func_80080E00() {
+void Dmamgr_Stop() {
     osSendMesg(&D_8009B2C0, NULL, 1);
 }
