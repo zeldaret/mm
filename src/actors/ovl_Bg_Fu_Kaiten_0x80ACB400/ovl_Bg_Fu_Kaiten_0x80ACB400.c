@@ -18,7 +18,7 @@ void z_bg_fu_kaiten_fini(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
 UNK_RET func_80ACB4B4(z_ActorBgFuKaiten* this);
 UNK_RET func_80ACB50C(z_ActorBgFuKaiten* this);
 void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
-void z_bg_fu_kaiten_draw(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
+void func_80ACB5A0(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
 
 z_ActorInit bgBgFuKaitenInitVar = {
     0x01AE,
@@ -30,7 +30,7 @@ z_ActorInit bgBgFuKaitenInitVar = {
     (z_ActorFunc)z_bg_fu_kaiten_init,
     (z_ActorFunc)z_bg_fu_kaiten_fini,
     (z_ActorFunc)z_bg_fu_kaiten_main,
-    (z_ActorFunc)z_bg_fu_kaiten_draw
+    (z_ActorFunc)func_80ACB5A0
 };
 
 f32 D_80ACB650 = 0.002;
@@ -104,7 +104,9 @@ void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
     func_80ACB50C(this);
 }
 
-void z_bg_fu_kaiten_draw(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
+#ifdef NON_MATCHING
+
+void func_80ACB5A0(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
     z_GraphicsContext* sp24 = ctxt->unk0;
     UNK_TYPE pad;
 
@@ -123,3 +125,9 @@ void z_bg_fu_kaiten_draw(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
     v0->words.w0 = 0xDE000000; v0->words.w1 = (u32)&D_060005D0; // XXX: D_060005D0 is probably a constant
     }
 }
+
+#else
+
+GLOBAL_ASM("./asm/nonmatching/ovl_Bg_Fu_Kaiten_0x80ACB400/func_80ACB5A0.asm")
+
+#endif
