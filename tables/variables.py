@@ -1,4 +1,5 @@
-known_vars = {
+# Follows the format of Address:(Name, Type, Is Array)
+{
     0x0001A500:("dmadataRomStart","u32",False), # Start of dmadata
     0x00020700:("dmadataRomEnd","u32",False), # Byte immediately after end of dmadata
     0x00AC4000:("","UNK_TYPE",False), # this seems low
@@ -215,12 +216,3 @@ known_vars = {
     0x80BD561C:("bgIkanaRayCompInit","z_ActorCompInitEntry",True),
     0x80BD562C:("","UNK_TYPE",False)
     }
-
-# these are extra variables needed for one reason or another, they should probably be deleted if possible
-extra_vars = (
-    ("D_800980D0_","UNK_PTR"), # needed to match?
-    ("D_80099AD0_","UNK_TYPE"), # needed to match?
-    ("D_8009A670_","UNK_TYPE"), # needed to match?
-    ("D_8009B140_","UNK_TYPE"), # needed to match?
-    ("(*D_801BE960[12])(u8*, z_ActorCompInitEntry*)",""), # TODO better function pointer representation
-    )

@@ -1,0 +1,6 @@
+ovl_Bg_Fu_Kaiten_0x80ACB400
+boot_0x800805E0
+boot_0x800968B0
+z_std_dma
+z_effect_soft_sprite
+z_lib

@@ -105,7 +105,7 @@ build/comp/code.yaz0: code.bin
 	python3 yaz0.py -i $< -o $@
 
 disasm:
-#	python3 disasm.py
+	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py
 	@while read -r file; do \
 		python3 ./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt

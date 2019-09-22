@@ -1,4 +1,4 @@
-known_objects = {
+{
     0x80080150:"idle",
     0x80080790:"z_std_dma",
     0x80081250:"",

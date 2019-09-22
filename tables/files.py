@@ -1,4 +1,5 @@
-known_files = {
+# Follows the format of (File Location, Name, Start Address, .data/.rodata Segments (Start, End Inclusive))
+{
     ('baserom/boot', 'boot', 0x80080060, ((0x800969C0, 0x800A5ABF),)),
     ('decomp/code', 'code', 0x800A5AC0, ((0x80186028, 0x80186A6F),(0x801AAAB0, 0x801E3F9C),)),
     ('decomp/ovl_title', 'ovl_title', 0x80800000, ((0x80800860, 0x8080090C),)),

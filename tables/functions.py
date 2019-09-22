@@ -1,4 +1,5 @@
-known_funcs = {
+# Follows the format of Entry Point Address:(Name, Return, Args)
+{
     0x80080060:("start","UNK_RET","void"),
     0x80080150:("Init_ClearMemory","void","UNK_PTR, UNK_PTR"),
     0x80080180:("Idle_InitFramebuffer","void","UNK_TYPE*, UNK_TYPE, UNK_TYPE"),

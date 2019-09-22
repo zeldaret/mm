@@ -1,16 +1,20 @@
-import os
-import struct
+import argparse, os, struct, ast
 
-SPLIT_FILES = True
-GENERATE_HEADERS = True
+SPLIT_FILES = True # TODO this should be a flag somewhere
 
 loadHighRefs = {}
 loadLowRefs = {}
 
-from objects import *
-from functions import *
-from variables import *
-from files import *
+#from tables.objects import *
+#from tables.functions import *
+#from tables.variables import *
+#from tables.files import *
+
+known_files = {}
+known_funcs = dict()
+known_objects = dict()
+known_vars = dict()
+extra_vars = {}
 
 regs = {
     0:"$zero", 1:"$at", 2:"$v0", 3:"$v1", 4:"$a0", 5:"$a1", 6:"$a2", 7:"$a3",
@@ -171,6 +175,8 @@ class Disassembler:
         self.vars = set()
         self.data_regions = list()
 
+        self.has_done_first_pass = False
+
         self.is_data_cache = {}
         self.is_code_cache = {}
 
@@ -310,18 +316,18 @@ class Disassembler:
                 if self.is_in_data(addr) and self.is_in_code(word):
                     self.add_function(word)
 
-
-
     def disassemble(self, path):
+        self.first_pass()
+        self.second_pass(path)
+
+    def first_pass(self):
+        if self.has_done_first_pass == True:
+            return
+
         # TODO keep sorted
         self.files = sorted(self.files, key = lambda file: file.vaddr)
         self.data_regions = sorted(self.data_regions, key = lambda region: region[0])
 
-        self.__first_pass()
-        self.guess_functions_from_data()
-        self.__second_pass(path)
-
-    def __first_pass(self):
         for file in self.files:
             for i in range(0, file.size // 4):
                 inst = file.get_inst(i)
@@ -341,8 +347,10 @@ class Disassembler:
                             # don't split if it's the start of a data section, it's probably the same object
                             if not self.is_in_data_or_undef(new_object_start):
                                 self.add_object(new_object_start)
+        self.guess_functions_from_data()
+        self.has_done_first_pass = True
 
-    def __second_pass(self, path):
+    def second_pass(self, path):
         for file in self.files:
             filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr);
 
@@ -590,7 +598,8 @@ class Disassembler:
         return dis
 
     def generate_headers(self, path):
-        with open(path + "functions.h", 'w', newline='\n') as f:
+        self.first_pass() # find functions and variables
+        with open(path + "/functions.h", 'w', newline='\n') as f:
             f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n");
 
             f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
@@ -603,7 +612,7 @@ class Disassembler:
 
             f.write("\n#endif\n");
 
-        with open(path + "variables.h", 'w', newline='\n') as f:
+        with open(path + "/variables.h", 'w', newline='\n') as f:
             f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n");
 
             f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n\n');
@@ -620,19 +629,58 @@ class Disassembler:
 
             f.write("\n#endif\n");
 
-            with open("undef.txt", 'w', newline='\n') as f:
-                for addr in sorted(self.vars):
-                    f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
+    def generate_undefined(self, path):
+        self.first_pass() # find functions and variables
+        with open(path + "/undef.txt", 'w', newline='\n') as f:
+            for addr in sorted(self.vars):
+                f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
 
-                # TODO not hard code
-                f.write('''
+            # TODO not hard code
+            f.write('''
 D_80099AD0_ = 0x80099AD0;'''
-                )
+            )
 
-
+# TODO -a --analyze flag? Only when its set will new symbols be added, otherwise use only the supplied ones
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-e', '--export-headers', help='export functions and variables into .h files', metavar='path')
+    parser.add_argument('-u', '--undefined', help='create linker script for undefined symbols', metavar='path')
+    parser.add_argument('-d', '--disassemble', help='disassemble supplied code files', metavar='path')
+    parser.add_argument('-l', '--files', help='list of files to disassemble', metavar='filename')
+    parser.add_argument('-f', '--functions', help='predefined functions', metavar='filename')
+    parser.add_argument('-o', '--objects', help='predefined code objects', metavar='filename')
+    parser.add_argument('-v', '--variables', help='predefined variables', metavar='filename')
+    args = parser.parse_args()
+
+    if args.files != None:
+        with open(args.files, 'r') as f:
+            known_files = ast.literal_eval(f.read())
+    if args.functions != None:
+        with open(args.functions, 'r') as f:
+            known_funcs = ast.literal_eval(f.read())
+    if args.objects != None:
+        with open(args.objects, 'r') as f:
+            known_objects = ast.literal_eval(f.read())
+    if args.variables != None:
+        with open(args.variables, 'r') as f:
+            known_vars = ast.literal_eval(f.read())
+            # these are extra variables needed for one reason or another, they should probably be deleted if possible
+            extra_vars = (
+                ("D_800980D0_","UNK_PTR"), # needed to match?
+                ("D_80099AD0_","UNK_TYPE"), # needed to match?
+                ("D_8009A670_","UNK_TYPE"), # needed to match?
+                ("D_8009B140_","UNK_TYPE"), # needed to match?
+                ("(*D_801BE960[12])(u8*, z_ActorCompInitEntry*)",""), # TODO better function pointer representation
+            )
     dis = Disassembler()
-    dis.load_defaults()
-    dis.disassemble('./asm/')
-    dis.generate_headers('./')
+    dis.load_defaults() # TODO file loading code should go in here
+    if args.disassemble != None:
+        os.makedirs(args.disassemble, exist_ok=True)
+        dis.disassemble(args.disassemble)
+    if args.export_headers != None:
+        os.makedirs(args.export_headers, exist_ok=True)
+        dis.generate_headers(args.export_headers)
+    if args.undefined != None:
+        os.makedirs(args.undefined, exist_ok=True)
+        dis.generate_undefined(args.undefined)
 
