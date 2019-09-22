@@ -1,18 +1,18 @@
-import os
-import struct
-import sys
-
-OUT = 'build/baserom/dmadata'
-
-from dmadata_table import *
+import os, struct, sys, ast, argparse
 
 def align_up(base, align_to):
     return ((base + align_to - 1) // align_to) * align_to
 
 if __name__ == "__main__":
-    with open(OUT, 'wb') as dmadata:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('files', help='file list')
+    parser.add_argument('out', help='output file')
+    args = parser.parse_args()
+
+    with open(args.out, 'wb') as dmadata, open(args.files, 'r') as files:
         curr_vrom = 0
         curr_phys = 0
+        dmadata_table = ast.literal_eval(files.read())
         for base_file, comp_file, alignment, size_if_missing in dmadata_table:
             try:
                 uncompressed = comp_file == ''

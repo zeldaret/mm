@@ -96,7 +96,7 @@ clean:
 	rm $(ROM) code.elf code.bin boot.bin -r build
 
 build/baserom/dmadata: $(COMP_FILES) $(BASEROM_BUILD_FILES)
-	python3 dmadata.py
+	python3 ./tools/dmadata.py ./tables/dmadata_table.py $@
 
 build/baserom/boot: boot.bin
 	cp $< $@

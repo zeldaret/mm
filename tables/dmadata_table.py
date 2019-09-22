@@ -1,4 +1,5 @@
-dmadata_table = [
+# Follows the format of (File Path (blank if it's a null entry), Compressed File Path (if compressed), Alignment, Size (for a null entry))
+[
     ('build/baserom/makerom', '', 0x10, 0),
     ('build/baserom/boot', '', 0x10, 0),
     ('dmadata', '', 0x10, 0),
