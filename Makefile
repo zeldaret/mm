@@ -33,8 +33,8 @@ test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
 test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/code/%: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
@@ -55,7 +55,7 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/boot_O2_g3/*) \
            $(wildcard src/boot_O1/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
-ROM_FILES := $(shell cat makerom_files.txt)
+ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 
 
 ROM := rom.z64
@@ -78,7 +78,7 @@ check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)
-	@python3 makerom.py
+	@python3 ./tools/makerom.py ./tables/makerom_files.txt $@
 
 boot.bin: code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
@@ -102,7 +102,7 @@ build/baserom/boot: boot.bin
 	cp $< $@
 
 build/comp/code.yaz0: code.bin
-	python3 yaz0.py -i $< -o $@
+	python3 ./tools/yaz0.py $< $@
 
 disasm:
 	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py
@@ -122,5 +122,5 @@ build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 
 build/comp/%.yaz0: decomp/%
-	python3 yaz0.py -i $< -o $@
+	python3 ./tools/yaz0.py $< $@
 

@@ -1,6 +1,4 @@
-import os
-import sys
-import getopt
+import os, sys, argparse
 
 def read_file(name):
     file_data=[]
@@ -162,30 +160,20 @@ def yaz0_compress(input):
 
 
 def main(argv):
-    inputfile = ''
-    outputfile = ''
-    decompress = False
-    try:
-        opts, args = getopt.getopt(argv, 'i:o:d')
-    except getopt.GetoptError:
-        print('getopt Error') # todo errors
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-i':
-            inputfile = arg
-        elif opt == '-o':
-            outputfile = arg
-        elif opt == '-d':
-            decompress = True
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input', help='input file')
+    parser.add_argument('output', help='output file')
+    parser.add_argument('-d', '--decompress', help='decompress file, otherwise compress it', action='store_true', default=False)
+    args = parser.parse_args()
 
-    input_data = read_file(inputfile)
+    input_data = read_file(args.input)
 
-    if decompress:
+    if args.decompress:
         output_data = yaz0_decompress(input_data)
     else:
         output_data = yaz0_compress(input_data)
 
-    write_file(outputfile, output_data)
+    write_file(args.output, output_data)
 
 
 if __name__ == "__main__":
