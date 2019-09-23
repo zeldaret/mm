@@ -32,7 +32,7 @@ test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
-test.txt: CC := python3 preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+test.txt: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
