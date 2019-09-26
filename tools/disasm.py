@@ -308,13 +308,19 @@ class Disassembler:
         else:
             return "%s" % filename
 
-    def guess_functions_from_data(self):
+    def guess_functions_and_variables_from_data(self):
         for file in self.files:
             for i in range(0, file.size // 4):
                 word = file.get_inst(i)
                 addr = file.vaddr + i*4
-                if self.is_in_data(addr) and self.is_in_code(word):
-                    self.add_function(word)
+                if self.is_in_data(addr):
+                    if self.is_in_code(word) and (word % 4) == 0:
+                        None
+                        # TODO functions are disabled for now due to behaving poorly with switches. This should be a flag.
+                        #self.add_function(word)
+                    elif self.is_in_data(word):
+                        self.add_variable(word)
+
 
     def disassemble(self, path):
         self.first_pass()
@@ -347,7 +353,7 @@ class Disassembler:
                             # don't split if it's the start of a data section, it's probably the same object
                             if not self.is_in_data_or_undef(new_object_start):
                                 self.add_object(new_object_start)
-        self.guess_functions_from_data()
+        self.guess_functions_and_variables_from_data()
         self.has_done_first_pass = True
 
     def second_pass(self, path):
@@ -378,6 +384,10 @@ class Disassembler:
 
                     if not self.is_in_data_or_undef(addr):
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
+                    elif inst in self.functions:
+                        f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_func_name(inst)))
+                    elif self.is_in_data(inst):
+                        f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_symbol_name(inst)))
                     else:
                         f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, inst))
 
