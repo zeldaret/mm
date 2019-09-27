@@ -85,6 +85,7 @@
     ('decomp/ovl_En_Horse_Game_Check', 'ovl_En_Horse_Game_Check', 0x808F8AA0, ((0x808F9B00, 0x808F9DFF),)),
     ('decomp/ovl_En_Rr', 'ovl_En_Rr', 0x808F9E00, ((0x808FC130, 0x808FC54F),)),
     ('decomp/ovl_En_Fr', 'ovl_En_Fr', 0x808FC550, ((0x808FC670, 0x808FC6BF),)),
+    ('decomp/ovl_En_Fishing', 'ovl_En_Fishing', 0x808FC6C0, ((0x8090CCB0, 0x809101AF),)),
     ('decomp/ovl_Obj_Oshihiki', 'ovl_Obj_Oshihiki', 0x80917290, ((0x80918830, 0x80918B3F),)),
     ('decomp/ovl_Eff_Dust', 'ovl_Eff_Dust', 0x80918B40, ((0x80919D90, 0x80919F2F),)),
     ('decomp/ovl_Bg_Umajump', 'ovl_Bg_Umajump', 0x80919F30, ((0x8091A7F0, 0x8091A89F),)),
