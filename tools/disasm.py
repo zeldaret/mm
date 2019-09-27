@@ -210,6 +210,9 @@ class Disassembler:
         self.functions.add(addr)
 
     def add_variable(self, addr):
+        # TODO special case this value that is mis-identified as an address and causes problems by being in the middle of a pointer
+        if addr == 0x80AAB3AE:
+            return
         self.vars.add(addr)
 
     def add_label(self, addr):
@@ -382,8 +385,14 @@ class Disassembler:
                     if not self.is_in_data_or_undef(addr):
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
                     elif inst in self.functions:
+                        if addr in self.vars:
+                            name = self.make_load(addr)
+                            f.write("glabel %s\n" % name)
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_func_name(inst)))
                     elif inst in self.vars:
+                        if addr in self.vars:
+                            name = self.make_load(addr)
+                            f.write("glabel %s\n" % name)
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, self.make_load(inst)))
                     else:
                         # TODO this should be moved into a print_data_range function or something
@@ -397,7 +406,7 @@ class Disassembler:
                                 f.write("/* %06d 0x%08X */ .byte\t0x%02X\n" % (i, addr, (data_stream >> 24) & 0xFF))
                                 data_stream <<= 8
                                 print_head += 1
-                            elif print_head + 2 in self.vars or print_head % 4 != 0:
+                            elif print_head + 2 in self.vars or print_head + 3 in self.vars or print_head % 4 != 0:
                                 f.write("/* %06d 0x%08X */ .short\t0x%04X\n" % (i, addr, (data_stream >> 16) & 0xFFFF))
                                 data_stream <<= 16
                                 print_head += 2
@@ -424,6 +433,12 @@ class Disassembler:
 
             if (get_op(next_inst) == 9) and (get_rt(cur_inst) == get_rt(next_inst) == get_rs(next_inst)): # lui + addiu (move pointer)
                 addr = (get_imm(cur_inst) << 16) + get_signed_imm(next_inst)
+
+                # TODO workaround to avoid classifying loading constants as loading pointers
+                # This unfortunately causes it to not detect object addresses
+                if addr >= 0x2000000 and addr < 0x80000000:
+                    return
+
                 if self.is_in_data_or_undef(addr):
                     self.add_variable(addr)
                 else:
@@ -658,7 +673,8 @@ class Disassembler:
         self.first_pass() # find functions and variables
         with open(path + "/undef.txt", 'w', newline='\n') as f:
             for addr in sorted(self.vars):
-                f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
+                if not self.is_in_data(addr):
+                    f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
 
             # TODO not hard code
             f.write('''
