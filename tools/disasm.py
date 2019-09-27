@@ -378,18 +378,33 @@ class Disassembler:
                     if addr in self.functions:
                         name = get_func_name(addr)
                         f.write("\nglabel %s\n" % name)
-                    if addr in self.vars:
-                        name = self.make_load(addr)
-                        f.write("glabel %s\n" % name)
 
                     if not self.is_in_data_or_undef(addr):
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
                     elif inst in self.functions:
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_func_name(inst)))
-                    elif self.is_in_data(inst):
-                        f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_symbol_name(inst)))
+                    elif inst in self.vars:
+                        f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, self.make_load(inst)))
                     else:
-                        f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, inst))
+                        # TODO this should be moved into a print_data_range function or something
+                        print_head = addr
+                        data_stream = inst
+                        while print_head < addr + 4:
+                            if print_head in self.vars:
+                                name = self.make_load(print_head)
+                                f.write("glabel %s\n" % name)
+                            if print_head + 1 in self.vars or print_head % 2 != 0:
+                                f.write("/* %06d 0x%08X */ .byte\t0x%02X\n" % (i, addr, (data_stream >> 24) & 0xFF))
+                                data_stream <<= 8
+                                print_head += 1
+                            elif print_head + 2 in self.vars or print_head % 4 != 0:
+                                f.write("/* %06d 0x%08X */ .short\t0x%04X\n" % (i, addr, (data_stream >> 16) & 0xFFFF))
+                                data_stream <<= 16
+                                print_head += 2
+                            else:
+                                f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, data_stream & 0xFFFFFFFF))
+                                data_stream <<= 32
+                                print_head += 4
 
     def determine_load_ref(self, file, inst_i):
         # TODO better detect when the register gets dirty
