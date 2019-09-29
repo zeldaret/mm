@@ -29,8 +29,8 @@
     0x80096B40:("","OSPiHandle*",False),
     0x80096B50:("","UNK_TYPE",False),
     0x80096B60:("","UNK_TYPE*",False),
-    0x80096C40:("g_s80085320_ListHead","s80085320*",False), # TODO rename?
-    0x80096C44:("g_s80085320_ListTail","s80085320*",False), # TODO rename?
+    0x80096C40:("g_s80085320_ListHead","z_ThreadInfo*",False), # TODO rename?
+    0x80096C44:("g_s80085320_ListTail","z_ThreadInfo*",False), # TODO rename?
     0x80097590:("","UNK_TYPE",False),
     0x80097E10:("__osThreadTail","OSThread*",False),
     0x80097E18:("__osRunQueue","OSThread*",False),
@@ -82,24 +82,24 @@
     0x80099450:("__libm_qnan_f", "float",False),
     0x800994D0:("","UNK_TYPE",False),
     0x800994DC:("","UNK_TYPE",False),
-    0x80099500:("","s80085320",False),
+    0x80099500:("","z_ThreadInfo",False),
     0x80099520:("","OSThread",False),
     0x800996D0:("","UNK_TYPE",False),
     0x800975E0:("sintable","short",True),
 #    0x80097DDE:("sintable","short",True), # NOTE this is just the end of sintable
-    0x80099AD0:("","s80085320",False),
+    0x80099AD0:("","z_ThreadInfo",False),
     0x80099AF0:("","UNK_TYPE",False),
     0x80099EF0:("","UNK_TYPE",False),
     0x8009A170:("","UNK_TYPE",False),
-    0x8009A670:("","s80085320",False),
+    0x8009A670:("","z_ThreadInfo",False),
     0x8009A690:("","UNK_TYPE",False),
     0x8009A840:("","UNK_TYPE",False),
-    0x8009B140:("","s80085320",False),
+    0x8009B140:("","z_ThreadInfo",False),
     0x8009B160:("","UNK_TYPE",False),
     0x8009B228:("","UNK_TYPE",False),
     0x8009B240:("","u32*",False),
     0x8009B290:("","u8",False),
-    0x8009B2A0:("","s80085320",False),
+    0x8009B2A0:("","z_ThreadInfo",False),
     0x8009B2BC:("","u16",False), # Count of entries in dmadata
     0x8009B2C0:("","OSMesgQueue",False),
     0x8009B2D8:("","UNK_TYPE",False),
@@ -135,7 +135,7 @@
     0x8009E5C0:("__osTimerCounter","UNK_TYPE",False),
     0x8009E610:("","OSPiHandle",False),
     0x8009E624:("","UNK_TYPE",False),
-    0x8009F8B0:("dmadata","DmadataEntry",True), # RAM copy of dmadata
+    0x8009F8B0:("dmadata","z_DmadataEntry",True), # RAM copy of dmadata
     0x801ADE80:("","UNK_TYPE",False),
     0x801ADEAC:("","UNK_TYPE",False),
     0x801ADEB0:("D_801ADEB0","int",True), # TODO better array representation
@@ -153,7 +153,7 @@
     0x801AE214:("D_801AE214","u8",True), # length 32
     0x801AE3A0:("EffectSS2Info","z_EffectTableInfo",False),
     0x801AE4A0:("particleOverlayTable","z_ParticleOverlayTableEntry",True), # length 0x28
-    0x801AEFD0:("","s800BF9A0",False),
+    0x801AEFD0:("","z_ActorOverlayTableEntry",False),
     0x801B4610:("","UNK_TYPE",False),
     0x801B9F20:("","s800E03A0",False), # actually an array of size 23?
     0x801BDB30:("","u8",True),
@@ -209,9 +209,9 @@
     # En_Test
     0x808637D0:("","f32",False),
 
-    0x80ACB650:("bgBgFuKaitenInitVar","z_ActorInit",False),
+    0x80ACB650:("bgBgFuKaitenInitVar","z_ActorInitData",False),
     0x80ACB650:("","f32",False),
-    0x80BD55D0:("bgIkanaRayInitVar","z_ActorInit",False),
+    0x80BD55D0:("bgIkanaRayInitVar","z_ActorInitData",False),
     0x80BD55F0:("","UNK_TYPE",False),
     0x80BD561C:("bgIkanaRayCompInit","z_ActorCompInitEntry",True),
     0x80BD562C:("","UNK_TYPE",False)

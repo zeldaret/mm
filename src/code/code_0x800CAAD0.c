@@ -15,8 +15,8 @@ UNK_RET func_800CAAD0(UNK_TYPE a0, UNK_TYPE a1, UNK_TYPE a2) {
 
     v1 = (s800CAAD0*)(a0 + a1 * 100);
 
-    func_80139894(&spD0, v1->unk68, v1->unk6C, v1->unk70, v1->unk72, v1->unk74,
-                  v1->unk76, v1->unk7C, v1->unk80, v1->unk84);
+    func_80139894(&spD0, v1->unk68, v1->unk6C, v1->unk70, v1->unk74, v1->unk76,
+                  v1->unk78, v1->unk7C, v1->unk80, v1->unk84);
 
     if (func_80139188(&spD0, &sp90) == 2) return;
 

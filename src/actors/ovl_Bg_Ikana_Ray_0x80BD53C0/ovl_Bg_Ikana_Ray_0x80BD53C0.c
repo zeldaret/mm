@@ -18,17 +18,17 @@ void func_80BD54BC(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt);
 void func_80BD5500(z_ActorBgIkanaRay* this);
 void func_80BD5530(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt);
 
-z_ActorInit bgIkanaRayInitVar = {
+z_ActorInitData bgIkanaRayInitVar = {
 	0x0256,
 	6,
 	0,
 	0,
 	0x0203,
 	sizeof(z_ActorBgIkanaRay),
-	(z_ActorFunc)z_bg_ikana_ray_init,
-	(z_ActorFunc)z_bg_ikana_ray_fini,
-	(z_ActorFunc)z_bg_ikana_ray_main,
-	(z_ActorFunc)z_bg_ikana_ray_draw
+	(actor_func)z_bg_ikana_ray_init,
+	(actor_func)z_bg_ikana_ray_fini,
+	(actor_func)z_bg_ikana_ray_main,
+	(actor_func)z_bg_ikana_ray_draw
 };
 
 GLOBAL_ASM(
@@ -119,7 +119,7 @@ void func_80BD54BC(z_ActorBgIkanaRay* this, z_GlobalContext* ctxt) {
 }
 
 void func_80BD5500(z_ActorBgIkanaRay* this) {
-	this->baseActor.drawFunc = (z_ActorFunc)z_bg_ikana_ray_draw;
+	this->baseActor.drawFunc = (actor_func)z_bg_ikana_ray_draw;
 	this->baseActor.unk4 &= 0xFFFFFFEF;
 	this->unk404 = func_80BD5530;
 }

@@ -6,7 +6,7 @@ void EffectSS_Init(z_GlobalContext* ctxt, s32 numEntries) {
     z_LoadedParticleEntry* iter;
     z_ParticleOverlayTableEntry* iter2;
 
-    EffectSS2Info.data_table = (z_LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->unk74, numEntries * sizeof(z_LoadedParticleEntry));
+    EffectSS2Info.data_table = (z_LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->commonVars.heap, numEntries * sizeof(z_LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -81,11 +81,11 @@ void EffectSS_ResetLoadedParticleEntry(z_LoadedParticleEntry* particle) {
     particle->priority = 128;
     particle->draw = NULL;
     particle->update = NULL;
-    particle->unk38 = 0;
+    particle->displayList = 0;
     particle->unk3C = 0;
 
     for (i = 0; i != 13; i++) {
-        particle->unk40[i] = 0;
+        particle->regs[i] = 0;
     }
 }
 
@@ -282,9 +282,9 @@ void EffectSS_DrawAllParticles(z_GlobalContext* ctxt) {
     UNK_TYPE s0;
     s32 i;
 
-    s0 = Lights_CreateMapper(&ctxt->unk818, ctxt->unk0);
-    Lights_MapLights(s0, ctxt->unk818, 0, ctxt);
-    Lights_UploadLights(s0, ctxt->unk0);
+    s0 = Lights_CreateMapper(&ctxt->lightsContext, ctxt->commonVars.graphicsContext);
+    Lights_MapLights(s0, ctxt->lightsContext.lightsHead, 0, ctxt);
+    Lights_UploadLights(s0, ctxt->commonVars.graphicsContext);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {

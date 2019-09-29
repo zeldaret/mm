@@ -20,17 +20,17 @@ UNK_RET func_80ACB50C(z_ActorBgFuKaiten* this);
 void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
 void func_80ACB5A0(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
 
-z_ActorInit bgBgFuKaitenInitVar = {
+z_ActorInitData bgBgFuKaitenInitVar = {
     0x01AE,
     1,
     0,
     0x30,
     0x01A0,
     sizeof(z_ActorBgFuKaiten),
-    (z_ActorFunc)z_bg_fu_kaiten_init,
-    (z_ActorFunc)z_bg_fu_kaiten_fini,
-    (z_ActorFunc)z_bg_fu_kaiten_main,
-    (z_ActorFunc)func_80ACB5A0
+    (actor_func)z_bg_fu_kaiten_init,
+    (actor_func)z_bg_fu_kaiten_fini,
+    (actor_func)z_bg_fu_kaiten_main,
+    (actor_func)func_80ACB5A0
 };
 
 f32 D_80ACB650 = 0.002;

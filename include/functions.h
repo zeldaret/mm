@@ -7,6 +7,9 @@
 #include <guint.h>
 #include <unk.h>
 #include <structs.h>
+#include <structs_bitfields.h>
+#include <stdlib.h>
+#include <xstdio.h>
 
 UNK_RET start(void); // func_80080060
 void Init_ClearMemory(UNK_PTR, UNK_PTR); // func_80080150
@@ -21,13 +24,13 @@ UNK_RET func_800805E0(UNK_TYPE); // func_800805E0
 UNK_RET func_80080748(void); // func_80080748
 s32 Dmamgr_DoDmaTransfer(void*, void*, s32); // func_80080790
 void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction); // func_800808D4
-DmadataEntry* Dmamgr_FindDmaEntry(u32); // func_800808F4
+z_DmadataEntry* Dmamgr_FindDmaEntry(u32); // func_800808F4
 s32 Dmamgr_TranslateVromToRom(u32); // func_80080950
 s32 Dmamgr_FindDmaIndex(u32); // func_800809BC
 UNK_TYPE* func_800809F4(u32); // func_800809F4
-void Dmamgr_HandleRequest(s80080A08*); // func_80080A08
+void Dmamgr_HandleRequest(z_DmaRequest*); // func_80080A08
 void Dmamgr_ThreadEntry(void*); // func_80080B84
-s32 Dmamgr_SendRequest(s80080A08*, UNK_FUN_ARG, UNK_PTR, UNK_TYPE, UNK_TYPE, OSMesgQueue*, UNK_TYPE); // func_80080C04
+s32 Dmamgr_SendRequest(z_DmaRequest*, UNK_FUN_ARG, UNK_PTR, UNK_TYPE, UNK_TYPE, OSMesgQueue*, UNK_TYPE); // func_80080C04
 s32 Dmamgr_SendRequestAndWait(UNK_TYPE, UNK_PTR, UNK_TYPE); // func_80080C90
 void Dmamgr_Start(void); // func_80080D0C
 void Dmamgr_Stop(void); // func_80080E00
@@ -46,7 +49,7 @@ UNK_RET Irqmgr_HandlePrenmi3(UNK_ARGS); // func_80081550
 UNK_RET Irqmgr_CheckThreadStatus(UNK_ARGS); // func_800815A8
 UNK_RET Irqmgr_HandleFrame(UNK_ARGS); // func_800815CC
 UNK_RET Irqmgr_ThreadEntry(UNK_ARGS); // func_80081684
-UNK_RET Irqmgr_Start(UNK_PTR, s80085320*, UNK_TYPE, UNK_TYPE); // func_80081754
+UNK_RET Irqmgr_Start(UNK_PTR, z_ThreadInfo*, UNK_TYPE, UNK_TYPE); // func_80081754
 void nop_80081820(void); // func_80081820
 void nop_80081828(void); // func_80081828
 void func_80081830(void); // func_80081830
@@ -139,11 +142,11 @@ UNK_RET func_80085204(UNK_ARGS); // func_80085204
 UNK_RET func_8008520C(UNK_ARGS); // func_8008520C
 UNK_RET func_8008522C(UNK_ARGS); // func_8008522C
 UNK_RET func_8008524C(UNK_ARGS); // func_8008524C
-void thread_info_init(s80085320*, UNK_PTR, UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_PTR); // func_80085320
-UNK_RET func_800853F8(s80085320*); // func_800853F8
-UNK_TYPE get_thread_stack_status(s80085320*); // func_80085468
+void thread_info_init(z_ThreadInfo*, UNK_PTR, UNK_PTR, UNK_TYPE, UNK_TYPE, UNK_PTR); // func_80085320
+UNK_RET func_800853F8(z_ThreadInfo*); // func_800853F8
+UNK_TYPE get_thread_stack_status(z_ThreadInfo*); // func_80085468
 UNK_TYPE check_all_thread_status(UNK_ARGS); // func_800854E0
-UNK_RET check_thread_status(s80085320*); // func_80085538
+UNK_RET check_thread_status(z_ThreadInfo*); // func_80085538
 UNK_RET func_80085570(UNK_ARGS); // func_80085570
 UNK_RET func_800859BC(UNK_ARGS); // func_800859BC
 UNK_RET func_80085A08(UNK_ARGS); // func_80085A08
@@ -493,11 +496,11 @@ UNK_RET func_80096880(UNK_ARGS); // func_80096880
 u32 func_800968B0(const u8*, const u8*); // func_800968B0
 UNK_RET func_80096930(UNK_ARGS); // func_80096930
 UNK_RET EnAObj_Init(void*, UNK_TYPE); // func_800A5AC0
-UNK_RET EnAObj_Fini(s800A5AC0*, z_GlobalContext*); // func_800A5B6C
-UNK_RET EnAObj_Update1(s800A5AC0*, UNK_TYPE); // func_800A5B98
-UNK_RET EnAObj_Update2(s800A5AC0*); // func_800A5C28
-UNK_RET EnAObj_Main(s800A5AC0*, UNK_TYPE); // func_800A5C60
-UNK_RET EnAObj_Draw(s800A5AC0*, UNK_TYPE); // func_800A5CB8
+UNK_RET EnAObj_Fini(z_ActorEnAObj*, z_GlobalContext*); // func_800A5B6C
+UNK_RET EnAObj_Update1(z_ActorEnAObj*, UNK_TYPE); // func_800A5B98
+UNK_RET EnAObj_Update2(z_ActorEnAObj*); // func_800A5C28
+UNK_RET EnAObj_Main(z_ActorEnAObj*, UNK_TYPE); // func_800A5C60
+UNK_RET EnAObj_Draw(z_ActorEnAObj*, UNK_TYPE); // func_800A5CB8
 UNK_RET EnItem00_UpdateForNewObjectId(UNK_ARGS); // func_800A5D00
 UNK_RET EnItem00_Init(UNK_ARGS); // func_800A5D70
 UNK_RET EnItem00_Fini(UNK_ARGS); // func_800A637C
@@ -605,7 +608,7 @@ UNK_RET func_800B13D8(UNK_ARGS); // func_800B13D8
 UNK_RET func_800B14D4(UNK_ARGS); // func_800B14D4
 UNK_RET func_800B1598(UNK_ARGS); // func_800B1598
 UNK_RET func_800B165C(UNK_ARGS); // func_800B165C
-UNK_RET func_800B16B8(z_GlobalContext*, z_Vector3D*, UNK_PTR, UNK_PTR, UNK_PTR, UNK_PTR); // func_800B16B8
+UNK_RET func_800B16B8(z_GlobalContext*, z_Vector3f*, UNK_PTR, UNK_PTR, UNK_PTR, UNK_PTR); // func_800B16B8
 UNK_RET EffectSS_LoadSparkle(UNK_ARGS); // func_800B16F4
 UNK_RET func_800B1830(UNK_ARGS); // func_800B1830
 UNK_RET EffectSS_LoadBomb2(UNK_ARGS); // func_800B1908
@@ -714,7 +717,7 @@ UNK_RET func_800B6608(UNK_ARGS); // func_800B6608
 UNK_RET func_800B6680(UNK_ARGS); // func_800B6680
 UNK_RET Actor_MarkForDeath(z_Actor*); // func_800B670C
 UNK_RET func_800B672C(UNK_ARGS); // func_800B672C
-UNK_RET func_800B675C(s800A5AC0*, UNK_TYPE); // func_800B675C
+UNK_RET func_800B675C(z_ActorEnAObj*, UNK_TYPE); // func_800B675C
 UNK_RET func_800B67A0(UNK_ARGS); // func_800B67A0
 UNK_RET func_800B67C0(UNK_ARGS); // func_800B67C0
 UNK_RET Actor_SetScale(z_Actor*, f32); // func_800B67E0
@@ -778,12 +781,12 @@ UNK_RET func_800B8248(UNK_ARGS); // func_800B8248
 UNK_RET func_800B82EC(UNK_ARGS); // func_800B82EC
 UNK_RET func_800B83BC(UNK_ARGS); // func_800B83BC
 UNK_RET func_800B83F8(UNK_ARGS); // func_800B83F8
-UNK_TYPE func_800B84D0(s800A5AC0*, UNK_TYPE); // func_800B84D0
+UNK_TYPE func_800B84D0(z_ActorEnAObj*, UNK_TYPE); // func_800B84D0
 UNK_RET func_800B8500(UNK_ARGS); // func_800B8500
 UNK_RET func_800B85E0(UNK_ARGS); // func_800B85E0
 UNK_RET func_800B8614(UNK_ARGS); // func_800B8614
-UNK_RET func_800B863C(s800A5AC0*, UNK_TYPE); // func_800B863C
-UNK_TYPE func_800B867C(s800A5AC0*); // func_800B867C
+UNK_RET func_800B863C(z_ActorEnAObj*, UNK_TYPE); // func_800B863C
+UNK_TYPE func_800B867C(z_ActorEnAObj*); // func_800B867C
 UNK_RET func_800B86C8(UNK_ARGS); // func_800B86C8
 UNK_RET func_800B8708(UNK_ARGS); // func_800B8708
 UNK_RET func_800B8718(UNK_ARGS); // func_800B8718
@@ -888,7 +891,7 @@ UNK_RET func_800BDB6C(UNK_ARGS); // func_800BDB6C
 UNK_RET func_800BDC5C(UNK_ARGS); // func_800BDC5C
 UNK_RET func_800BDCF4(UNK_ARGS); // func_800BDCF4
 UNK_RET func_800BDFB0(UNK_ARGS); // func_800BDFB0
-UNK_RET func_800BDFC0(UNK_TYPE, UNK_TYPE, UNK_TYPE, s800A5AC0*); // func_800BDFC0
+UNK_RET func_800BDFC0(UNK_TYPE, UNK_TYPE, UNK_TYPE, z_ActorEnAObj*); // func_800BDFC0
 void func_800BE03C(z_GlobalContext*, UNK_TYPE); // func_800BE03C
 UNK_RET func_800BE0B8(UNK_ARGS); // func_800BE0B8
 UNK_RET func_800BE184(UNK_ARGS); // func_800BE184
@@ -1620,7 +1623,7 @@ UNK_RET func_800F01C8(UNK_ARGS); // func_800F01C8
 UNK_RET func_800F0390(UNK_ARGS); // func_800F0390
 UNK_RET func_800F03C0(UNK_ARGS); // func_800F03C0
 UNK_RET func_800F048C(UNK_ARGS); // func_800F048C
-UNK_RET func_800F0568(z_GlobalContext*, z_Vector3D*, UNK_TYPE, UNK_TYPE); // func_800F0568
+UNK_RET func_800F0568(z_GlobalContext*, z_Vector3f*, UNK_TYPE, UNK_TYPE); // func_800F0568
 UNK_RET func_800F0590(UNK_ARGS); // func_800F0590
 UNK_RET func_800F05C0(UNK_ARGS); // func_800F05C0
 UNK_RET func_800F07C0(UNK_ARGS); // func_800F07C0
@@ -1812,27 +1815,27 @@ UNK_RET func_800FF2F8(UNK_ARGS); // func_800FF2F8
 UNK_RET func_800FF3A0(UNK_ARGS); // func_800FF3A0
 s16 Lib_rand_s(s16 a0, s16 a1); // func_800FF450
 s16 Lib_randStride_s(s16 a0, s16 a1, s16 a2); // func_800FF4A4
-UNK_RET Lib_CopyVec3f(z_Vector3D* dst, z_Vector3D* src); // func_800FF50C
-UNK_RET Lib_CopyVec3s(z_Vector3Ds16* dst, z_Vector3Ds16* src); // func_800FF52C
-UNK_RET Lib_ToVec3f(z_Vector3D* dst, z_Vector3Ds16* src); // func_800FF54C
-UNK_RET Lib_ToVec3s(z_Vector3Ds16* dst, z_Vector3D* src); // func_800FF584
-UNK_RET Lib_AddVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2); // func_800FF5BC
-UNK_RET Lib_SubVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2); // func_800FF5F4
-UNK_RET Lib_SubVec3sToVec3f(z_Vector3D* a0, z_Vector3Ds16* a1, z_Vector3Ds16* a2); // func_800FF62C
-UNK_RET Lib_ScaleInPlaceVec3f(z_Vector3D* a0, f32 a1); // func_800FF688
-UNK_RET Lib_ScaleVec3f(z_Vector3D* a0, f32 a1, z_Vector3D* a2); // func_800FF6C4
-UNK_RET Lib_LerpVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3); // func_800FF6F8
-UNK_RET Lib_AddScaledVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3); // func_800FF750
-UNK_RET Lib_ModifyRandScaled(z_Vector3D* a0, f32 a1, z_Vector3D* a2); // func_800FF79C
-UNK_RET Lib_ScaledNormalizedDifferenceVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2, z_Vector3D* a3); // func_800FF810
-f32 Lib_DistanceVec3f(z_Vector3D* a0, z_Vector3D* a1); // func_800FF884
-f32 Lib_DistanceAndDifferenceVec3f(z_Vector3D* a0, z_Vector3D* a1, z_Vector3D* a2); // func_800FF8D4
-f32 Lib_DistanceXZVec3f(z_Vector3D* a0, z_Vector3D* a1); // func_800FF92C
-f32 Lib_DistanceAndDifferenceXZVec3f(z_Vector3D* a0, z_Vector3D* a1, f32* a2, f32* a3); // func_800FF960
-UNK_RET Lib_PushAwayXZVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2); // func_800FF9A4
-f32 Lib_DistanceYVec3f(z_Vector3D* a0, z_Vector3D* a1); // func_800FFA4C
-UNK_TYPE Lib_YawVec3f(z_Vector3D* a0, z_Vector3D* a1); // func_800FFA60
-UNK_TYPE Lib_PitchVec3f(z_Vector3D* a0, z_Vector3D* a1); // func_800FFA94
+UNK_RET Lib_CopyVec3f(z_Vector3f* dst, z_Vector3f* src); // func_800FF50C
+UNK_RET Lib_CopyVec3s(z_Vector3s* dst, z_Vector3s* src); // func_800FF52C
+UNK_RET Lib_ToVec3f(z_Vector3f* dst, z_Vector3s* src); // func_800FF54C
+UNK_RET Lib_ToVec3s(z_Vector3s* dst, z_Vector3f* src); // func_800FF584
+UNK_RET Lib_AddVec3f(z_Vector3f* a0, z_Vector3f* a1, z_Vector3f* a2); // func_800FF5BC
+UNK_RET Lib_SubVec3f(z_Vector3f* a0, z_Vector3f* a1, z_Vector3f* a2); // func_800FF5F4
+UNK_RET Lib_SubVec3sToVec3f(z_Vector3f* a0, z_Vector3s* a1, z_Vector3s* a2); // func_800FF62C
+UNK_RET Lib_ScaleInPlaceVec3f(z_Vector3f* a0, f32 a1); // func_800FF688
+UNK_RET Lib_ScaleVec3f(z_Vector3f* a0, f32 a1, z_Vector3f* a2); // func_800FF6C4
+UNK_RET Lib_LerpVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2, z_Vector3f* a3); // func_800FF6F8
+UNK_RET Lib_AddScaledVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2, z_Vector3f* a3); // func_800FF750
+UNK_RET Lib_ModifyRandScaled(z_Vector3f* a0, f32 a1, z_Vector3f* a2); // func_800FF79C
+UNK_RET Lib_ScaledNormalizedDifferenceVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2, z_Vector3f* a3); // func_800FF810
+f32 Lib_DistanceVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FF884
+f32 Lib_DistanceAndDifferenceVec3f(z_Vector3f* a0, z_Vector3f* a1, z_Vector3f* a2); // func_800FF8D4
+f32 Lib_DistanceXZVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FF92C
+f32 Lib_DistanceAndDifferenceXZVec3f(z_Vector3f* a0, z_Vector3f* a1, f32* a2, f32* a3); // func_800FF960
+UNK_RET Lib_PushAwayXZVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2); // func_800FF9A4
+f32 Lib_DistanceYVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA4C
+UNK_TYPE Lib_YawVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA60
+UNK_TYPE Lib_PitchVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA94
 void Lib_ApplyActorInitVars(z_Actor*, z_ActorCompInitEntry*); // func_800FFADC
 UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorCompInitEntry* a1); // func_800FFB54
 UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorCompInitEntry* a1); // func_800FFB70
@@ -1854,9 +1857,9 @@ UNK_RET Lib_CopyColor(u8* a0, u8* a1); // func_8010007C
 UNK_RET func_801000A4(u16 a0); // func_801000A4
 UNK_RET func_801000CC(u16 a0); // func_801000CC
 UNK_RET func_801000F4(UNK_TYPE a0, u16 a1); // func_801000F4
-UNK_RET Lib_TranslateAndRotateYVec3f(z_Vector3D* a0, s16 a1, z_Vector3D* a2, z_Vector3D* a3); // func_8010011C
+UNK_RET Lib_TranslateAndRotateYVec3f(z_Vector3f* a0, s16 a1, z_Vector3f* a2, z_Vector3f* a3); // func_8010011C
 UNK_RET Lib_LerpRGB(u8* a0, u8* a1, f32 a2, u8* a3); // func_801001B8
-f32 Lib_PushAwayVec3f(z_Vector3D* a0, z_Vector3D* a1, f32 a2); // func_80100448
+f32 Lib_PushAwayVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2); // func_80100448
 UNK_RET Lib_Nop801004FC(void); // func_801004FC
 UNK_TYPE Lib_PtrSegToPhys(u32 a0); // func_80100504
 UNK_TYPE Lib_PtrSegToPhysNull(u32 a0); // func_8010053C
@@ -1882,13 +1885,13 @@ UNK_RET Lights_MapperGetNextFreeSlot(UNK_ARGS); // func_80101D0C
 UNK_RET Lights_MapPositionalWithReference(UNK_ARGS); // func_80101D3C
 UNK_RET Lights_MapPositional(UNK_ARGS); // func_801020A0
 UNK_RET Lights_MapDirectional(UNK_ARGS); // func_80102284
-UNK_RET Lights_MapLights(UNK_TYPE, UNK_TYPE, UNK_TYPE, z_GlobalContext*); // func_801022F0
+UNK_RET Lights_MapLights(UNK_TYPE, z_Light*, UNK_TYPE, z_GlobalContext*); // func_801022F0
 UNK_RET Lights_FindFreeSlot(UNK_ARGS); // func_801023D8
 UNK_RET Lights_Free(UNK_ARGS); // func_80102464
 UNK_RET Lights_Init(UNK_ARGS); // func_801024AC
 UNK_RET Lights_SetAmbientColor(UNK_ARGS); // func_80102518
 UNK_RET func_80102544(UNK_ARGS); // func_80102544
-UNK_TYPE Lights_CreateMapper(UNK_PTR, z_GraphicsContext*); // func_80102580
+UNK_TYPE Lights_CreateMapper(z_LightingContext*, z_GraphicsContext*); // func_80102580
 UNK_RET Lights_ClearHead(UNK_ARGS); // func_801025B8
 UNK_RET Lights_RemoveAll(UNK_ARGS); // func_801025C8
 UNK_RET Lights_Insert(UNK_ARGS); // func_80102624
@@ -3250,7 +3253,7 @@ UNK_RET Math3D_XZLength(UNK_ARGS); // func_8017A610
 UNK_RET Math3D_XZDistanceSquared(UNK_ARGS); // func_8017A634
 UNK_RET Math3D_XZDistance(UNK_ARGS); // func_8017A678
 UNK_RET Math3D_LengthSquared(UNK_ARGS); // func_8017A6A8
-f32 Math3D_Length(z_Vector3D*); // func_8017A6D4
+f32 Math3D_Length(z_Vector3f*); // func_8017A6D4
 UNK_RET Math3D_DistanceSquared(UNK_ARGS); // func_8017A6F8
 UNK_RET Math3D_Distance(UNK_ARGS); // func_8017A720
 UNK_RET Math3D_DistanceS(UNK_ARGS); // func_8017A740

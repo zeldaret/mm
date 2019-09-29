@@ -43,7 +43,7 @@ UNK_RET func_80080250(void) {
     sp28 = *v0;
     *v0 = 0;
 
-    func_80080C04((s80080A08*)&sp48, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp30, 0);
+    func_80080C04((z_DmaRequest*)&sp48, (UNK_FUN_ARG)func_800A5AC0, v1, (u32)t7 - (u32)v1, 0, &sp30, 0);
     func_8008019C();
     func_800801EC();
     osRecvMesg(&sp30, 0, 1);

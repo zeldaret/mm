@@ -48,8 +48,8 @@ void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pihandle, OSIoMesg* mb, s32 directi
     osEPiStartDma(pihandle, mb, direction);
 }
 
-DmadataEntry* Dmamgr_FindDmaEntry(u32 a0) {
-    DmadataEntry* curr;
+z_DmadataEntry* Dmamgr_FindDmaEntry(u32 a0) {
+    z_DmadataEntry* curr;
 
     for (curr = dmadata; curr->vromEnd != 0; curr++) {
         if (a0 < curr->vromStart) continue;
@@ -62,7 +62,7 @@ DmadataEntry* Dmamgr_FindDmaEntry(u32 a0) {
 }
 
 s32 Dmamgr_TranslateVromToRom(u32 a0) {
-    DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
+    z_DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
         if (v0->romEnd == 0) {
@@ -80,7 +80,7 @@ s32 Dmamgr_TranslateVromToRom(u32 a0) {
 }
 
 s32 Dmamgr_FindDmaIndex(u32 a0) {
-    DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
+    z_DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
 		return v0 - dmadata;
@@ -95,7 +95,7 @@ UNK_TYPE* func_800809F4(u32 a0) {
 
 #ifdef NONMATCHING
 
-void Dmamgr_HandleRequest(s80080A08* a0) {
+void Dmamgr_HandleRequest(z_DmaRequest* a0) {
     UNK_TYPE sp34;
     UNK_TYPE sp30;
     UNK_TYPE sp2C;
@@ -149,9 +149,9 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_HandleRequest.asm")
 #ifdef NONMATCHING
 
 void Dmamgr_ThreadEntry(void* a0) {
-    s80080A08* sp34;
+    z_DmaRequest* sp34;
 	UNK_TYPE pad;
-    s80080A08* s0;
+    z_DmaRequest* s0;
 
     for (;;) {
         osRecvMesg(&D_8009B2C0, (OSMesg)&sp34, 1);
@@ -172,7 +172,7 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_ThreadEntry.asm")
 
 #ifdef NONMATCHING
 
-s32 Dmamgr_SendRequest(s80080A08* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
+s32 Dmamgr_SendRequest(z_DmaRequest* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
     // TODO this isn't correct, it uses a lui, addiu to get the address of D_80096B60, then loads it,
 	// meaning that this is likely just "if (*D_80096B60 >= 2)". However, I can not get it to not
 	// produce the usual lui, lw combo to load from an address :/
@@ -199,7 +199,7 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_SendRequest.asm")
 #endif
 
 s32 Dmamgr_SendRequestAndWait(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
-	s80080A08 sp48;
+	z_DmaRequest sp48;
     OSMesgQueue sp30;
     OSMesg sp2C;
 	s32 ret;
@@ -220,7 +220,7 @@ s32 Dmamgr_SendRequestAndWait(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
 #ifdef NONMATCHING
 
 void Dmamgr_Start() {
-	DmadataEntry* v0;
+	z_DmadataEntry* v0;
 	u32 v1;
 	// TODO register load ordering is wrong
 	Dmamgr_DoDmaTransfer(&dmadataRomStart, dmadata, (u8*)&dmadataRomEnd - (u8*)&dmadataRomStart);
