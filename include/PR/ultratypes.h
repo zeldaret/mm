@@ -22,6 +22,11 @@ typedef volatile long long          vs64;
 typedef float  f32;
 typedef double f64;
 
-#define NULL ((void*)0)
+typedef long int Mtx_t[4][4];
+typedef union
+{
+    Mtx_t m;
+    long long int forc_structure_alignment;
+} Mtx;
 
 #endif
