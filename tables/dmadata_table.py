@@ -2,7 +2,7 @@
 [
     ('build/baserom/makerom', '', 0x10, 0),
     ('build/baserom/boot', '', 0x10, 0),
-    ('dmadata', '', 0x10, 0),
+    ('build/baserom/dmadata', '', 0x10, 0),
     ('build/baserom/Audiobank', '', 0x10, 0),
     ('build/baserom/Audioseq', '', 0x10, 0),
     ('build/baserom/Audiotable', '', 0x10, 0),

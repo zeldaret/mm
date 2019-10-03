@@ -18,7 +18,7 @@ if __name__ == "__main__":
                 uncompressed = comp_file == ''
                 missing = base_file == '' and comp_file == ''
                 blank = missing and size_if_missing == 0
-                is_dmadata = base_file == 'dmadata'
+                is_dmadata = base_file.endswith('dmadata')
 
                 alignment = max(alignment, 0x10)
 

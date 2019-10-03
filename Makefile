@@ -78,7 +78,7 @@ check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)
-	@python3 ./tools/makerom.py ./tables/makerom_files.txt $@
+	@python3 ./tools/makerom.py ./tables/dmadata_table.py $@
 
 boot.bin: code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
