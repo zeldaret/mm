@@ -48,6 +48,7 @@ if __name__ == "__main__":
         for base_file, comp_file, _, _ in dmadata_table:
             if base_file.endswith('dmadata'):
                 dma_file_name = base_file
+                break
         else:
             print('Could not find dmadata')
             sys.exit(1)
@@ -55,7 +56,7 @@ if __name__ == "__main__":
         has_compressed_files = False
         with open(dma_file_name, 'rb') as dma_file:
             dma_data = dma_file.read()
-            for i in range(0xC, len(dma_data), 0x10)
+            for i in range(0xC, len(dma_data), 0x10):
                 if read_uint32_be(dma_data, i) != 0:
                     has_compressed_files = True
                     break
