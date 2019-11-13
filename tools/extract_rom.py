@@ -1581,7 +1581,7 @@ if __name__ == '__main__':
         with open(args.input, 'rb') as f:
             romData = f.read()
     except IOError:
-        print('failed to read file ' + ROM_FILE_NAME)
+        print('failed to read file ' + args.input)
         sys.exit(1)
 
     dmadata_size = read_uint32_be(FILE_TABLE_OFFSET + 16 * 2 + 4) - read_uint32_be(FILE_TABLE_OFFSET + 16 * 2 + 0)
