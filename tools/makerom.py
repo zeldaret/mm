@@ -46,7 +46,22 @@ if __name__ == "__main__":
 
         dmadata_table = ast.literal_eval(f.read())
         for base_file, comp_file, _, _ in dmadata_table:
-            file_name = base_file if comp_file == '' else comp_file
+            if base_file.endswith('dmadata'):
+                dma_file_name = base_file
+        else:
+            print('Could not find dmadata')
+            sys.exit(1)
+
+        has_compressed_files = False
+        with open(dma_file_name, 'rb') as dma_file:
+            dma_data = dma_file.read()
+            for i in range(0xC, len(dma_data), 0x10)
+                if read_uint32_be(dma_data, i) != 0:
+                    has_compressed_files = True
+                    break
+
+        for base_file, comp_file, _, _ in dmadata_table:
+            file_name = base_file if not has_compressed_files or comp_file == '' else comp_file
             if file_name != '':
                 try:
                     with open(file_name, 'rb') as current_file:
@@ -57,7 +72,9 @@ if __name__ == "__main__":
                     print('Could not open file ' + file_name)
                     sys.exit(1)
 
-        while total_size < 0x2000000:
+        required_rom_size = 1 << (len(outputBuffer) - 1).bit_length()
+
+        while total_size < required_rom_size:
             outputBuffer.append(total_size % 256)
             total_size += 1
 
