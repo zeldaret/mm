@@ -41,8 +41,9 @@ BASEROM_FILES := $(wildcard baserom/*)
 BASEROM_FILES := $(subst baserom/dmadata ,,$(BASEROM_FILES))
 BASEROM_BUILD_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%)
 
-DECOMP_FILES := $(wildcard decomp/*)
-COMP_FILES := $(DECOMP_FILES:decomp/%=build/comp/%.yaz0)
+BASE_DECOMP_FILES := $(wildcard decomp/*)
+DECOMP_FILES := $(BASE_DECOMP_FILES:decomp/%=build/decomp/%)
+COMP_FILES := $(DECOMP_FILES:decomp/%=comp/%.yaz0)
 
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
@@ -64,6 +65,7 @@ ROM := rom.z64
 $(shell mkdir -p build/asm)
 $(shell mkdir -p build/baserom)
 $(shell mkdir -p build/comp)
+$(shell mkdir -p build/decomp)
 $(shell mkdir -p build/src)
 $(shell mkdir -p build/src/libultra)
 $(shell mkdir -p build/src/libultra/os)
@@ -86,6 +88,9 @@ boot.bin: code.elf
 code.bin: code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section code=$@ $<
 
+ovl_title.bin: code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
+
 code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
 	$(LD) -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
 
@@ -95,14 +100,18 @@ test.txt: build/src/test.o
 clean:
 	rm $(ROM) code.elf code.bin boot.bin -r build
 
-build/baserom/dmadata: $(COMP_FILES) $(BASEROM_BUILD_FILES)
+build/baserom/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 	python3 ./tools/dmadata.py ./tables/dmadata_table.py $@
 
 build/baserom/boot: boot.bin
 	cp $< $@
 
-build/comp/code.yaz0: code.bin
-	python3 ./tools/yaz0.py $< $@
+build/decomp/code: code.bin
+	cp $< $@
+
+build/decomp/ovl_title: ovl_title.bin
+	cp $< $@
+
 
 disasm:
 	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py
@@ -121,6 +130,9 @@ build/asm/%.o: asm/%.asm
 build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 
-build/comp/%.yaz0: decomp/%
+build/decomp/%: decomp/%
+	cp $< $@
+
+build/comp/%.yaz0: build/decomp/%
 	python3 ./tools/yaz0.py $< $@
 
