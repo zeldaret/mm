@@ -259,7 +259,7 @@ GLOBAL_ASM("./asm/nonmatching/z_actor/func_800B8898.asm")
 
 GLOBAL_ASM("./asm/nonmatching/z_actor/func_800B8934.asm")
 
-UNK_TYPE Actor_HasParent(z_Actor* actor, z_GlobalContext* ctxt) {
+UNK_TYPE Actor_HasParent(Actor* actor, GlobalContext* ctxt) {
     if (actor->parent != NULL) {
         return 1;
     } else {

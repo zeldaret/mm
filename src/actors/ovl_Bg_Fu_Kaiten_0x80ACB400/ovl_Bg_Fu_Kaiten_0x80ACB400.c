@@ -2,7 +2,7 @@
 #include <global.h>
 
 typedef struct z_ActorBgFuKaiten_s {
-    /* 0x000 */ z_Actor baseActor;
+    /* 0x000 */ Actor baseActor;
     /* 0x144 */ UNK_TYPE unk144;
     /* 0x148 */ u8 pad0[0x18];
     /* 0x160 */ f32 unk160;
@@ -13,14 +13,14 @@ typedef struct z_ActorBgFuKaiten_s {
     /* 0x16E */ u8 pad1[0x2];
 } z_ActorBgFuKaiten;
 
-void z_bg_fu_kaiten_init(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
-void z_bg_fu_kaiten_fini(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
+void z_bg_fu_kaiten_init(z_ActorBgFuKaiten* this, GlobalContext* ctxt);
+void z_bg_fu_kaiten_fini(z_ActorBgFuKaiten* this, GlobalContext* ctxt);
 UNK_RET func_80ACB4B4(z_ActorBgFuKaiten* this);
 UNK_RET func_80ACB50C(z_ActorBgFuKaiten* this);
-void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
-void func_80ACB5A0(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt);
+void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, GlobalContext* ctxt);
+void func_80ACB5A0(z_ActorBgFuKaiten* this, GlobalContext* ctxt);
 
-z_ActorInitData bgBgFuKaitenInitVar = {
+ActorInitData bgBgFuKaitenInitVar = {
     0x01AE,
     1,
     0,
@@ -61,15 +61,15 @@ glabel D_80ACB654
 /* 000167 0x80ACB69C */ .word    0x00000040
 )
 
-void z_bg_fu_kaiten_init(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
+void z_bg_fu_kaiten_init(z_ActorBgFuKaiten* this, GlobalContext* ctxt) {
     UNK_TYPE pad0;
     UNK_TYPE pad1;
     UNK_TYPE sp24 = 0;
 
-    func_800B67E0((z_Actor*)this, 1.0);
-    func_800CAE10((z_Actor*)this, 3);
+    func_800B67E0((Actor*)this, 1.0);
+    func_800CAE10((Actor*)this, 3);
     func_800C9564((UNK_TYPE)&D_06002D30, &sp24); // XXX: D_06002D30 is probably a constant
-    this->unk144 = func_800C6188(ctxt, &ctxt->unk880, (z_Actor*)this, sp24);
+    this->unk144 = func_800C6188(ctxt, &ctxt->unk880, (Actor*)this, sp24);
 
     this->unk164 = 0.0;
     this->unk168 = 0;
@@ -77,7 +77,7 @@ void z_bg_fu_kaiten_init(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
     this->unk16C = 0;
 }
 
-void z_bg_fu_kaiten_fini(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
+void z_bg_fu_kaiten_fini(z_ActorBgFuKaiten* this, GlobalContext* ctxt) {
     func_800C64CC(ctxt, &ctxt->unk880, this->unk144);
 }
 
@@ -99,15 +99,15 @@ UNK_RET func_80ACB50C(z_ActorBgFuKaiten* this) {
     this->baseActor.unk24.y -= this->unk164 * func_800FED44(this->unk16C);
 }
 
-void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
+void z_bg_fu_kaiten_main(z_ActorBgFuKaiten* this, GlobalContext* ctxt) {
     func_80ACB4B4(this);
     func_80ACB50C(this);
 }
 
 #ifdef NON_MATCHING
 
-void func_80ACB5A0(z_ActorBgFuKaiten* this, z_GlobalContext* ctxt) {
-    z_GraphicsContext* sp24 = ctxt->unk0;
+void func_80ACB5A0(z_ActorBgFuKaiten* this, GlobalContext* ctxt) {
+    GraphicsContext* sp24 = ctxt->unk0;
     UNK_TYPE pad;
 
     // XXX: register allocation is wrong here

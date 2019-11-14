@@ -3,7 +3,7 @@
 
 UNK_RET func_800BF9A0(UNK_TYPE a0, UNK_TYPE a1) {
     s32 i;
-    z_ActorOverlayTableEntry* s0;
+    ActorOverlayTableEntry* s0;
     UNK_TYPE v1;
 
     func_8008439C(-2, 0);
@@ -19,7 +19,7 @@ UNK_RET func_800BF9A0(UNK_TYPE a0, UNK_TYPE a1) {
 
 UNK_TYPE func_800BFA78(UNK_TYPE a0, UNK_TYPE a1) {
     s32 i;
-    z_ActorOverlayTableEntry* v0 = &D_801AEFD0;
+    ActorOverlayTableEntry* v0 = &D_801AEFD0;
     UNK_TYPE t1;
     UNK_TYPE a2;
     UNK_TYPE a0_2 = a0;

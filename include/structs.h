@@ -154,7 +154,7 @@ typedef struct {
 
 typedef struct {
 /* 0x00 */ u8 unk0[32];
-} z_ActorDamageChart;
+} ActorDamageChart;
 
 typedef struct {
 /* 0x00 */ s32 unk0;
@@ -175,20 +175,20 @@ typedef struct {
 /* 0x36 */ s16 unk36;
 /* 0x38 */ s16 unk38;
 /* 0x3A */ s16 unk3A;
-} z_ActorEnTest20C;
+} ActorEnTest20C;
 
 typedef struct {
 /* 0x0 */ u32 cont : 1;
 /* 0x0 */ u32 type : 4;
 /* 0x0 */ u32 offset : 11;
 /* 0x2 */ s32 value : 16;
-} z_ActorInitVar;
+} ActorInitVar;
 
 typedef struct {
 /* 0x0 */ u32 unk0;
 /* 0x4 */ u8 unk4;
 /* 0x5 */ u8 unk5;
-} z_ColBumpInit;
+} ColBumpInit;
 
 typedef struct {
 /* 0x0 */ u8 unk0;
@@ -197,26 +197,26 @@ typedef struct {
 /* 0x3 */ u8 unk3;
 /* 0x4 */ u8 unk4;
 /* 0x5 */ u8 type;
-} z_ColCommonInit;
+} ColCommonInit;
 
 typedef struct {
 /* 0x0 */ u32 collidesWith;
 /* 0x4 */ u8 unk4;
 /* 0x5 */ u8 unk5;
-} z_ColTouch;
+} ColTouch;
 
 typedef struct {
 /* 0x0 */ u32 unk0;
 /* 0x4 */ u8 unk4;
 /* 0x5 */ u8 unk5;
-} z_ColTouchInit;
+} ColTouchInit;
 
 typedef struct {
 /* 0x0 */ u8 red;
 /* 0x1 */ u8 green;
 /* 0x2 */ u8 blue;
 /* 0x3 */ u8 alpha;
-} z_Color;
+} Color;
 
 typedef struct {
 /* 0x00 */ u8 cutsceneCount;
@@ -228,19 +228,19 @@ typedef struct {
 /* 0x10 */ u16 currentFrame;
 /* 0x12 */ UNK_TYPE1 pad12[22];
 /* 0x28 */ UNK_TYPE4 unk28[10];
-} z_CutsceneContext;
+} CutsceneContext;
 
 typedef struct {
 /* 0x0 */ u32 data;
 /* 0x4 */ UNK_TYPE1 pad4[4];
-} z_CutsceneEntry;
+} CutsceneEntry;
 
 typedef struct {
 /* 0x0 */ u32 size;
 /* 0x4 */ void* unk4;
 /* 0x8 */ Gfx* append;
 /* 0xC */ void* appendEnd;
-} z_DisplayList;
+} DisplayList;
 
 typedef struct {
 /* 0x00 */ u32 vromStart;
@@ -250,14 +250,14 @@ typedef struct {
 /* 0x14 */ UNK_TYPE4 unk14;
 /* 0x18 */ OSMesgQueue* callback;
 /* 0x1C */ void* callbackMesg;
-} z_DmaRequest;
+} DmaRequest;
 
 typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
 /* 0x8 */ u32 romStart;
 /* 0xC */ u32 romEnd;
-} z_DmadataEntry;
+} DmadataEntry;
 
 typedef struct {
 /* 0x0 */ s16 x;
@@ -270,7 +270,7 @@ typedef struct {
 /* 0xD */ s8 g;
 /* 0xE */ s8 b;
 /* 0xF */ s8 a;
-} z_F3DVertexColor;
+} F3DVertexColor;
 
 typedef struct {
 /* 0x0 */ s16 x;
@@ -283,14 +283,14 @@ typedef struct {
 /* 0xD */ s8 normalY;
 /* 0xE */ s8 normalZ;
 /* 0xF */ s8 a;
-} z_F3DVertexNormal;
+} F3DVertexNormal;
 
 typedef struct {
 /* 0x0 */ UNK_TYPE4 size;
 /* 0x4 */ void* heapStart;
 /* 0x8 */ void* heapAppendStart;
 /* 0xC */ void* heapAppendEnd;
-} z_GameStateHeap;
+} GameStateHeap;
 
 typedef struct {
 /* 0x00 */ u32 ramLocation;
@@ -305,12 +305,12 @@ typedef struct {
 /* 0x24 */ UNK_TYPE4 unk24;
 /* 0x28 */ UNK_TYPE4 unk28;
 /* 0x2C */ u32 size;
-} z_GameStateMetaInfo;
+} GameStateMetaInfo;
 
 typedef struct {
 /* 0x00 */ s32 unk0;
 /* 0x04 */ UNK_TYPE1 pad4[64];
-} z_GlobalContext17d98;
+} GlobalContext17d98;
 
 typedef struct {
 /* 0x000 */ UNK_TYPE1 pad0[104];
@@ -346,13 +346,13 @@ typedef struct {
 /* 0x156 */ UNK_TYPE1 pad156[16];
 /* 0x166 */ s16 unk166;
 /* 0x168 */ UNK_TYPE1 pad168[16];
-} z_GlobalContext220;
+} GlobalContext220;
 
 // Font textures are loaded into here
 typedef struct {
 /* 0x0000 */ u8 unk0[128][120][2];
 /* 0x7800 */ u8 unk7800[128][93];
-} z_GlobalContext4A70;
+} GlobalContext4A70;
 
 typedef struct {
 /* 0x000 */ Gfx* polyOpaBuffer;
@@ -365,15 +365,15 @@ typedef struct {
 /* 0x05C */ OSMesgQueue unk5C;
 /* 0x074 */ UNK_TYPE1 pad74[300];
 /* 0x1A0 */ Gfx* unk1A0;
-/* 0x1A4 */ z_DisplayList unk1A4;
+/* 0x1A4 */ DisplayList unk1A4;
 /* 0x1B4 */ Gfx* unk1B4;
-/* 0x1B8 */ z_DisplayList unk1B8;
+/* 0x1B8 */ DisplayList unk1B8;
 /* 0x1C8 */ UNK_TYPE1 pad1C8[172];
 /* 0x274 */ OSViMode* unk274;
 /* 0x278 */ UNK_TYPE1 pad278[32];
-/* 0x298 */ z_DisplayList overlay;
-/* 0x2A8 */ z_DisplayList polyOpa;
-/* 0x2B8 */ z_DisplayList polyXlu;
+/* 0x298 */ DisplayList overlay;
+/* 0x2A8 */ DisplayList polyOpa;
+/* 0x2B8 */ DisplayList polyXlu;
 /* 0x2C8 */ s32 displaylistCounter;
 /* 0x2CC */ void* framebuffer;
 /* 0x2D0 */ UNK_TYPE1 pad2D0[11];
@@ -382,26 +382,26 @@ typedef struct {
 /* 0x2E4 */ f32 unk2E4;
 /* 0x2E8 */ f32 unk2E8;
 /* 0x2EC */ UNK_TYPE1 pad2EC[4];
-} z_GraphicsContext;
+} GraphicsContext;
 
 typedef struct {
 /* 0x0 */ u16 buttons;
 /* 0x2 */ s8 xAxis;
 /* 0x3 */ s8 yAxis;
 /* 0x4 */ s16 unk4;
-} z_InputInfo;
+} InputInfo;
 
 typedef struct {
-/* 0x00 */ z_InputInfo current;
-/* 0x06 */ z_InputInfo last;
-/* 0x0C */ z_InputInfo pressEdge;
-/* 0x12 */ z_InputInfo releaseEdge;
-} z_InputStruct;
+/* 0x00 */ InputInfo current;
+/* 0x06 */ InputInfo last;
+/* 0x0C */ InputInfo pressEdge;
+/* 0x12 */ InputInfo releaseEdge;
+} InputStruct;
 
 typedef struct {
 /* 0x0 */ u8 type;
 /* 0x2 */ u16 params[6];
-} z_LightInfo;
+} LightInfo;
 
 typedef struct {
 /* 0x0 */ s8 dirX;
@@ -411,7 +411,7 @@ typedef struct {
 /* 0x4 */ u8 green;
 /* 0x5 */ u8 blue;
 /* 0x6 */ u16 pad[3];
-} z_LightInfoDirectionalParams;
+} LightInfoDirectionalParams;
 
 typedef struct {
 /* 0x0 */ s16 posX;
@@ -422,7 +422,7 @@ typedef struct {
 /* 0x8 */ u8 blue;
 /* 0x9 */ u8 unk9; // func_80102880 sets this only for type 2, func_80102A64 draws something if this is set
 /* 0xA */ s16 radius;
-} z_LightInfoPositionalParams;
+} LightInfoPositionalParams;
 
 typedef struct {
 /* 0x00 */ u8 enablePosLights;
@@ -430,7 +430,7 @@ typedef struct {
 /* 0x02 */ UNK_TYPE1 pad2[6];
 /* 0x08 */ Ambient ambient;
 /* 0x10 */ Light lights[7];
-} z_LightMapper;
+} LightMapper;
 
 typedef struct {
 /* 0x00 */ f32 x[4];
@@ -442,7 +442,7 @@ typedef struct {
 typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
-} z_ObjectFileTableEntry;
+} ObjectFileTableEntry;
 
 typedef struct {
 /* 0x00 */ u32 textSize;
@@ -450,60 +450,60 @@ typedef struct {
 /* 0x08 */ u32 rodataSize;
 /* 0x0C */ u32 bssSize;
 /* 0x10 */ u32 amountOfRelocations;
-} z_OverlayBlockSizes;
+} OverlayBlockSizes;
 
 typedef struct {
 /* 0x0 */ u8 red;
 /* 0x1 */ u8 green;
 /* 0x2 */ u8 blue;
-} z_RGB;
+} RGB;
 
 typedef struct {
 /* 0x00 */ s16 intPart[16];
 /* 0x20 */ u16 fracPart[16];
-} z_RSPMatrix;
+} RSPMatrix;
 
 typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
-} z_RoomFileLocation;
+} RoomFileLocation;
 
 typedef struct {
 /* 0x00 */ u8 zelda[6]; // Will always be "ZELDA3" for a valid save
 /* 0x06 */ UNK_TYPE1 pad6[34];
-} z_SaveContext_struct1;
+} SaveContext_struct1;
 
 typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[34];
-} z_SaveContext_struct2;
+} SaveContext_struct2;
 
 typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[136];
-} z_SaveContext_struct3;
+} SaveContext_struct3;
 
 typedef struct {
 /* 0x0 */ UNK_TYPE1 pad0[16];
-} z_SceneActorInit;
+} SceneActorInit;
 
 typedef struct {
 /* 0x0 */ u8 command;
 /* 0x1 */ u8 unk1;
 /* 0x2 */ UNK_TYPE1 pad2[2];
 /* 0x4 */ u32 unk4;
-} z_SceneHeaderEntry;
+} SceneHeaderEntry;
 
 typedef struct {
 /* 0x00 */ s16 scenes[27];
-} z_SceneIdList;
+} SceneIdList;
 
 typedef struct {
 /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded
 /* 0x02 */ UNK_TYPE1 pad2[2];
 /* 0x04 */ void* vramAddr;
-/* 0x08 */ z_DmaRequest unk8;
+/* 0x08 */ DmaRequest unk8;
 /* 0x28 */ OSMesgQueue unk28;
 /* 0x40 */ UNK_TYPE1 pad40[4];
-} z_SceneObject;
+} SceneObject;
 
 typedef struct {
 /* 0x0 */ u32 romStart;
@@ -513,7 +513,7 @@ typedef struct {
 /* 0xC */ UNK_TYPE1 padC[1];
 /* 0xD */ u8 unkD;
 /* 0xE */ UNK_TYPE1 padE[2];
-} z_SceneTableEntry;
+} SceneTableEntry;
 
 typedef struct {
 /* 0x0000 */ u8 unk0;
@@ -533,7 +533,7 @@ typedef struct {
 /* 0x0A7A */ s16 unkA7A;
 /* 0x0A7C */ s16 unkA7C;
 /* 0x0A7E */ UNK_TYPE1 padA7E[2902];
-} z_StaticContext;
+} StaticContext;
 
 typedef struct {
 /* 0x0 */ s8 unk0;
@@ -546,31 +546,31 @@ typedef struct {
 /* 0xA */ s16 z;
 /* 0xC */ s16 yRot;
 /* 0xE */ u16 variable;
-} z_TransitionActorInit;
+} TransitionActorInit;
 
 typedef struct {
 /* 0x0 */ f32 x;
 /* 0x4 */ f32 y;
 /* 0x8 */ f32 z;
-} z_Vector3f;
+} Vector3f;
 
 typedef struct {
 /* 0x0 */ s16 x;
 /* 0x2 */ s16 y;
 /* 0x4 */ s16 z;
-} z_Vector3s;
+} Vector3s;
 
 typedef struct {
 /* 0x000 */ u32 magic; // always 0x56494557, "VIEW"
-/* 0x004 */ z_GraphicsContext* graphics;
+/* 0x004 */ GraphicsContext* graphics;
 /* 0x008 */ UNK_TYPE1 pad8[16];
 /* 0x018 */ f32 unk18;
 /* 0x01C */ f32 unk1C;
 /* 0x020 */ f32 unk20;
 /* 0x024 */ f32 unk24;
-/* 0x028 */ z_Vector3f unk28;
-/* 0x034 */ z_Vector3f unk34;
-/* 0x040 */ z_Vector3f unk40;
+/* 0x028 */ Vector3f unk28;
+/* 0x034 */ Vector3f unk34;
+/* 0x040 */ Vector3f unk40;
 /* 0x04C */ UNK_TYPE1 pad4C[220];
 /* 0x128 */ f32 unk128;
 /* 0x12C */ f32 unk12C;
@@ -586,7 +586,7 @@ typedef struct {
 /* 0x154 */ f32 unk154;
 /* 0x158 */ f32 unk158;
 /* 0x15C */ UNK_TYPE1 pad15C[12];
-} z_View;
+} View;
 
 typedef struct {
 /* 0x00 */ void* bufferEnd;
@@ -594,125 +594,125 @@ typedef struct {
 /* 0x08 */ u32 amountLeftToRead;
 /* 0x0C */ u32 loadNextChunkBoundary;
 /* 0x10 */ u32 destBufferEnd;
-} z_Yaz0DecompState;
+} Yaz0DecompState;
 
-typedef void(*light_map_directional_func)(z_LightMapper* mapper, void* params, z_Vector3f* pos);
+typedef void(*light_map_directional_func)(LightMapper* mapper, void* params, Vector3f* pos);
 
-typedef void(*light_map_positional_func)(z_LightMapper* mapper, void* params);
+typedef void(*light_map_positional_func)(LightMapper* mapper, void* params);
 
 typedef struct {
-/* 0x00 */ z_Vector3f unk0;
-/* 0x0C */ z_Vector3f unkC;
+/* 0x00 */ Vector3f unk0;
+/* 0x0C */ Vector3f unkC;
 /* 0x18 */ s16 unk18;
 /* 0x1A */ s16 unk1A;
 } s80874650;
 
 // Related to collision?
 typedef struct {
-/* 0x00 */ z_ActorDamageChart* damageChart;
-/* 0x04 */ z_Vector3f displacement;
+/* 0x00 */ ActorDamageChart* damageChart;
+/* 0x04 */ Vector3f displacement;
 /* 0x10 */ s16 unk10;
 /* 0x12 */ s16 unk12;
 /* 0x14 */ s16 unk14;
 /* 0x16 */ u8 unk16;
 /* 0x17 */ u8 unk17;
-} z_ActorA0;
+} ActorA0;
 
 typedef struct {
-/* 0x00 */ z_Vector3s rotation;
+/* 0x00 */ Vector3s rotation;
 /* 0x08 */ f32 yDisplacement;
-/* 0x0C */ func_ptr postDrawFunc; // TODO params (z_Actor*, UNK*, z_GlobalContext*)
+/* 0x0C */ func_ptr postDrawFunc; // TODO params (Actor*, UNK*, GlobalContext*)
 /* 0x10 */ f32 unk10;
 /* 0x14 */ s8 unk14;
-} z_ActorBC;
+} ActorBC;
 
 typedef struct {
 /* 0x00 */ u8 unk0;
-/* 0x04 */ z_ColTouchInit unk4;
-/* 0x0C */ z_ColBumpInit unkC;
+/* 0x04 */ ColTouchInit unk4;
+/* 0x0C */ ColBumpInit unkC;
 /* 0x14 */ u8 unk14;
 /* 0x15 */ u8 unk15;
 /* 0x16 */ u8 unk16;
-} z_ColBodyInfoInit;
+} ColBodyInfoInit;
 
 typedef struct {
 /* 0x0 */ u32 collidesWith;
 /* 0x4 */ u8 unk4;
 /* 0x5 */ u8 unk5;
-/* 0x6 */ z_Vector3s unk6;
-} z_ColBump;
+/* 0x6 */ Vector3s unk6;
+} ColBump;
 
 typedef struct {
 /* 0x0 */ s16 radius;
 /* 0x2 */ s16 height;
 /* 0x4 */ s16 yOffset;
-/* 0x6 */ z_Vector3s loc;
-} z_ColCylinderParams;
+/* 0x6 */ Vector3s loc;
+} ColCylinderParams;
 
 typedef struct {
-/* 0x00 */ z_Vector3f pointA;
-/* 0x0C */ z_Vector3f pointB;
-/* 0x18 */ z_Vector3f pointC;
-/* 0x24 */ z_Vector3f pointD;
-/* 0x30 */ z_Vector3s unk30;
-/* 0x36 */ z_Vector3s unk36;
+/* 0x00 */ Vector3f pointA;
+/* 0x0C */ Vector3f pointB;
+/* 0x18 */ Vector3f pointC;
+/* 0x24 */ Vector3f pointD;
+/* 0x30 */ Vector3s unk30;
+/* 0x36 */ Vector3s unk36;
 /* 0x3C */ f32 unk3C;
-} z_ColQuadParams;
+} ColQuadParams;
 
 typedef struct {
-/* 0x0 */ z_Vector3s loc;
+/* 0x0 */ Vector3s loc;
 /* 0x6 */ s16 radius;
-} z_ColSphereCollisionInfo;
+} ColSphereCollisionInfo;
 
 typedef struct {
-/* 0x00 */ z_Vector3s unk0;
+/* 0x00 */ Vector3s unk0;
 /* 0x06 */ s16 unk6;
-/* 0x08 */ z_ColSphereCollisionInfo colInfo;
+/* 0x08 */ ColSphereCollisionInfo colInfo;
 /* 0x10 */ f32 unk10;
 /* 0x14 */ u8 unk14;
 /* 0x15 */ UNK_TYPE1 pad15[3];
-} z_ColSphereParams;
+} ColSphereParams;
 
 typedef struct {
 /* 0x0 */ u8 unk0;
-/* 0x1 */ z_ColSphereCollisionInfo unk1;
+/* 0x1 */ ColSphereCollisionInfo unk1;
 /* 0xA */ s16 unkA;
-} z_ColSphereParamsInit;
+} ColSphereParamsInit;
 
 typedef struct {
-/* 0x00 */ z_Vector3f pointA;
-/* 0x0C */ z_Vector3f pointB;
-/* 0x18 */ z_Vector3f pointC;
-/* 0x24 */ z_Vector3f unitNormal;
+/* 0x00 */ Vector3f pointA;
+/* 0x0C */ Vector3f pointB;
+/* 0x18 */ Vector3f pointC;
+/* 0x24 */ Vector3f unitNormal;
 /* 0x30 */ f32 unk30;
-} z_ColTriParams;
+} ColTriParams;
 
 typedef struct {
-/* 0x00 */ z_Vector3f unk0;
-/* 0x0C */ z_Vector3f unkC;
-/* 0x18 */ z_Vector3f unk18;
-} z_ColTriParamsInit;
+/* 0x00 */ Vector3f unk0;
+/* 0x0C */ Vector3f unkC;
+/* 0x18 */ Vector3f unk18;
+} ColTriParamsInit;
 
 typedef struct {
-/* 0x00 */ z_Vector3f position;
-/* 0x0C */ z_Vector3f velocity;
-/* 0x18 */ z_Vector3f acceleration;
-/* 0x24 */ z_Color color1;
-/* 0x28 */ z_Color color2;
+/* 0x00 */ Vector3f position;
+/* 0x0C */ Vector3f velocity;
+/* 0x18 */ Vector3f acceleration;
+/* 0x24 */ Color color1;
+/* 0x28 */ Color color2;
 /* 0x2C */ s16 scale;
 /* 0x2E */ s16 scaleChangePerFrame;
 /* 0x30 */ s16 life;
 /* 0x32 */ u16 flags; // bit0: ? bit1: ? bit2: randomize colors
 /* 0x34 */ u8 type; // type0: start small, get big, fade away type1: start big, fade away
-} z_EffectDustInit;
+} EffectDustInit;
 
 typedef union {
-/* 0x0 */ z_F3DVertexColor color;
-/* 0x0 */ z_F3DVertexNormal normal;
-} z_F3DVertex;
+/* 0x0 */ F3DVertexColor color;
+/* 0x0 */ F3DVertexNormal normal;
+} F3DVertex;
 
 typedef struct {
-/* 0x000 */ z_View unk0;
+/* 0x000 */ View unk0;
 /* 0x168 */ UNK_TYPE1 pad168[194];
 /* 0x22A */ s16 unk22A;
 /* 0x22C */ s16 unk22C;
@@ -739,42 +739,42 @@ typedef struct {
 /* 0x256 */ UNK_TYPE1 pad256[26];
 /* 0x270 */ s16 unk270;
 /* 0x272 */ UNK_TYPE1 pad272[214];
-} z_GlobalContext169E8;
+} GlobalContext169E8;
 
 typedef struct {
-/* 0x00000 */ z_View unk0;
-/* 0x00168 */ z_GlobalContext4A70 unk168;
+/* 0x00000 */ View unk0;
+/* 0x00168 */ GlobalContext4A70 unk168;
 /* 0x0A7E8 */ UNK_TYPE1 padA7E8[30960];
-} z_GlobalContext4908;
+} GlobalContext4908;
 
 typedef struct {
 /* 0x0 */ u8 type;
-/* 0x2 */ z_LightInfoDirectionalParams params;
-} z_LightInfoDirectional;
+/* 0x2 */ LightInfoDirectionalParams params;
+} LightInfoDirectional;
 
 typedef struct {
 /* 0x0 */ u8 type;
-/* 0x2 */ z_LightInfoPositionalParams params;
-} z_LightInfoPositional;
+/* 0x2 */ LightInfoPositionalParams params;
+} LightInfoPositional;
 
 typedef struct {
-/* 0x00 */ z_Vector3f a;
-/* 0x0C */ z_Vector3f b;
-} z_LineSegment;
+/* 0x00 */ Vector3f a;
+/* 0x0C */ Vector3f b;
+} LineSegment;
 
 typedef struct {
 /* 0x0000 */ UNK_TYPE1 pad0[12];
 /* 0x000C */ u16 time;
 /* 0x000E */ UNK_TYPE1 padE[22];
-/* 0x0024 */ z_SaveContext_struct1 unk24;
-/* 0x004C */ z_SaveContext_struct2 unk4C;
+/* 0x0024 */ SaveContext_struct1 unk24;
+/* 0x004C */ SaveContext_struct2 unk4C;
 /* 0x006E */ UNK_TYPE1 pad6E[2];
-/* 0x0070 */ z_SaveContext_struct3 unk70;
+/* 0x0070 */ SaveContext_struct3 unk70;
 /* 0x00F8 */ UNK_TYPE1 padF8[3684];
 /* 0x0F5C */ u32 mapsVisited;
 /* 0x0F60 */ UNK_TYPE1 padF60[170];
 /* 0x100A */ u16 checksum;
-} z_SaveContext;
+} SaveContext;
 
 typedef struct {
 /* 0x000 */ void* objectVramStart;
@@ -783,43 +783,43 @@ typedef struct {
 /* 0x009 */ u8 unk9;
 /* 0x00A */ u8 unkA;
 /* 0x00B */ u8 keepObjectId;
-/* 0x00C */ z_SceneObject objects[35];
-} z_SceneContext;
+/* 0x00C */ SceneObject objects[35];
+} SceneContext;
 
 typedef struct {
-/* 0x00 */ z_ColCommonInit base;
-/* 0x08 */ z_ColBodyInfoInit body;
-/* 0x20 */ z_ColCylinderParams info;
-} z_ColCylinderInit;
+/* 0x00 */ ColCommonInit base;
+/* 0x08 */ ColBodyInfoInit body;
+/* 0x20 */ ColCylinderParams info;
+} ColCylinderInit;
 
 typedef struct {
-/* 0x00 */ z_ColCommonInit base;
-/* 0x08 */ z_ColBodyInfoInit body;
-/* 0x20 */ z_ColQuadParams params;
-} z_ColQuadInit;
+/* 0x00 */ ColCommonInit base;
+/* 0x08 */ ColBodyInfoInit body;
+/* 0x20 */ ColQuadParams params;
+} ColQuadInit;
 
 typedef struct {
-/* 0x00 */ z_ColBodyInfoInit body;
-/* 0x18 */ z_ColSphereParamsInit params;
-} z_ColSphereGroupElementInit;
+/* 0x00 */ ColBodyInfoInit body;
+/* 0x18 */ ColSphereParamsInit params;
+} ColSphereGroupElementInit;
 
 typedef struct {
-/* 0x0 */ z_ColCommonInit base;
+/* 0x0 */ ColCommonInit base;
 /* 0x6 */ UNK_TYPE1 pad6[2];
 /* 0x8 */ u32 count;
-/* 0xC */ z_ColSphereGroupElementInit* init;
-} z_ColSphereGroupInit;
+/* 0xC */ ColSphereGroupElementInit* init;
+} ColSphereGroupInit;
 
 typedef struct {
-/* 0x00 */ z_ColCommonInit base;
-/* 0x08 */ z_ColBodyInfoInit body;
-/* 0x20 */ z_ColSphereParamsInit info;
-} z_ColSphereInit;
+/* 0x00 */ ColCommonInit base;
+/* 0x08 */ ColBodyInfoInit body;
+/* 0x20 */ ColSphereParamsInit info;
+} ColSphereInit;
 
 typedef struct {
-/* 0x00 */ z_ColBodyInfoInit body;
-/* 0x18 */ z_ColTriParamsInit params;
-} z_ColTriInit;
+/* 0x00 */ ColBodyInfoInit body;
+/* 0x18 */ ColTriParamsInit params;
+} ColTriInit;
 
 typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[4];
@@ -837,13 +837,13 @@ typedef struct {
 /* 0x22 */ u16 unk22;
 /* 0x24 */ u16 unk24;
 /* 0x26 */ UNK_TYPE1 pad26[2];
-/* 0x28 */ z_LightInfoDirectional unk28;
-/* 0x36 */ z_LightInfoDirectional unk36;
+/* 0x28 */ LightInfoDirectional unk28;
+/* 0x36 */ LightInfoDirectional unk36;
 /* 0x44 */ UNK_TYPE1 pad44[72];
-/* 0x8C */ z_Vector3s unk8C;
-/* 0x92 */ z_Vector3s unk92;
-/* 0x98 */ z_Vector3s unk98;
-/* 0x9E */ z_Vector3s unk9E;
+/* 0x8C */ Vector3s unk8C;
+/* 0x92 */ Vector3s unk92;
+/* 0x98 */ Vector3s unk98;
+/* 0x9E */ Vector3s unk9E;
 /* 0xA4 */ s16 unkA4;
 /* 0xA6 */ s16 unkA6;
 /* 0xA8 */ UNK_TYPE1 padA8[12];
@@ -855,37 +855,37 @@ typedef struct {
 /* 0xC1 */ u8 unkC1;
 /* 0xC2 */ u8 unkC2;
 /* 0xC3 */ UNK_TYPE1 padC3[1];
-/* 0xC4 */ z_RGB unkC4;
+/* 0xC4 */ RGB unkC4;
 /* 0xC7 */ s8 unkC7;
 /* 0xC8 */ s8 unkC8;
 /* 0xC9 */ s8 unkC9;
-/* 0xCA */ z_RGB unkCA;
+/* 0xCA */ RGB unkCA;
 /* 0xCD */ s8 unkCD;
 /* 0xCE */ s8 unkCE;
 /* 0xCF */ s8 unkCF;
-/* 0xD0 */ z_RGB unkD0;
-/* 0xD3 */ z_RGB unkD3;
+/* 0xD0 */ RGB unkD0;
+/* 0xD3 */ RGB unkD3;
 /* 0xD6 */ s16 unkD6;
 /* 0xD8 */ s16 unkD8;
 /* 0xDA */ UNK_TYPE1 padDA[2];
 /* 0xDC */ f32 unkDC;
 /* 0xE0 */ u8 unkE0;
 /* 0xE1 */ UNK_TYPE1 padE1[17];
-} z_KankyoContext;
+} KankyoContext;
 
 typedef struct {
-/* 0x0 */ z_ColCommonInit base;
+/* 0x0 */ ColCommonInit base;
 /* 0x8 */ u32 count;
-/* 0xC */ z_ColTriInit* elemInit;
-} z_ColTriGroupInit;
+/* 0xC */ ColTriInit* elemInit;
+} ColTriGroupInit;
 
-typedef struct z_ActorBgMbarChair z_ActorBgMbarChair;
+typedef struct ActorBgMbarChair ActorBgMbarChair;
 
-typedef struct z_ActorEnBji01 z_ActorEnBji01;
+typedef struct ActorEnBji01 ActorEnBji01;
 
-typedef struct z_ActorEnTest z_ActorEnTest;
+typedef struct ActorEnTest ActorEnTest;
 
-typedef struct z_ActorInitData z_ActorInitData;
+typedef struct ActorInitData ActorInitData;
 
 typedef struct {
 /* 0x00 */ u32 vromStart;
@@ -893,101 +893,101 @@ typedef struct {
 /* 0x08 */ u32 vramStart;
 /* 0x0C */ u32 vramEnd;
 /* 0x10 */ u32 ramAddr;
-/* 0x14 */ z_ActorInitData* initValues;
+/* 0x14 */ ActorInitData* initValues;
 /* 0x18 */ s8* name;
 /* 0x1C */ s16 flags; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
 /* 0x1E */ s8 clients;
 /* 0x1F */ UNK_TYPE1 pad1F[1];
-} z_ActorOverlayTableEntry;
+} ActorOverlayTableEntry;
 
-typedef struct z_ActorPlayer z_ActorPlayer;
+typedef struct ActorPlayer ActorPlayer;
 
-typedef struct z_ActorTypeList z_ActorTypeList;
+typedef struct ActorTypeList ActorTypeList;
 
-typedef struct z_ActorContext z_ActorContext;
+typedef struct ActorContext ActorContext;
 
-typedef struct z_ColCommon z_ColCommon;
+typedef struct ColCommon ColCommon;
 
 typedef struct {
 /* 0x000 */ s16 ATgroupLength;
 /* 0x002 */ u16 flags; // bit 0: collision bodies can't be added or removed, only swapped out
-/* 0x004 */ z_ColCommon* ATgroup[50];
+/* 0x004 */ ColCommon* ATgroup[50];
 /* 0x0CC */ s32 ACgroupLength;
-/* 0x0D0 */ z_ColCommon* ACgroup[60];
+/* 0x0D0 */ ColCommon* ACgroup[60];
 /* 0x1C0 */ s32 OTgroupLength;
-/* 0x1C4 */ z_ColCommon* OTgroup[50];
+/* 0x1C4 */ ColCommon* OTgroup[50];
 /* 0x28C */ s32 group4Length;
-/* 0x290 */ z_ColCommon* group4[3];
-} z_CollisionContext;
+/* 0x290 */ ColCommon* group4[3];
+} CollisionContext;
 
-typedef struct z_ColBodyInfo z_ColBodyInfo;
+typedef struct ColBodyInfo ColBodyInfo;
 
-struct z_ColBodyInfo {
-/* 0x00 */ z_ColTouch toucher;
-/* 0x08 */ z_ColBump bumper;
+struct ColBodyInfo {
+/* 0x00 */ ColTouch toucher;
+/* 0x08 */ ColBump bumper;
 /* 0x14 */ u8 unk14;
 /* 0x15 */ u8 unk15; // bit 0: can be toucher in AT-AC collision
 /* 0x16 */ u8 unk16; // bit 0: can be bumper in AT-AC collision
 /* 0x17 */ u8 unk17;
-/* 0x18 */ z_ColCommon* unk18;
-/* 0x1C */ z_ColCommon* unk1C;
-/* 0x20 */ z_ColBodyInfo* unk20;
-/* 0x24 */ z_ColBodyInfo* unk24;
+/* 0x18 */ ColCommon* unk18;
+/* 0x1C */ ColCommon* unk1C;
+/* 0x20 */ ColBodyInfo* unk20;
+/* 0x24 */ ColBodyInfo* unk24;
 };
 
 typedef struct {
-/* 0x00 */ z_ColBodyInfo body;
-/* 0x28 */ z_ColSphereParams params;
-} z_ColSphereGroupElement;
+/* 0x00 */ ColBodyInfo body;
+/* 0x28 */ ColSphereParams params;
+} ColSphereGroupElement;
 
 typedef struct {
-/* 0x00 */ z_ColBodyInfo body;
-/* 0x28 */ z_ColTriParams params;
-} z_ColTri;
+/* 0x00 */ ColBodyInfo body;
+/* 0x28 */ ColTriParams params;
+} ColTri;
 
-typedef struct z_ColCylinder z_ColCylinder;
+typedef struct ColCylinder ColCylinder;
 
-typedef struct z_ColQuad z_ColQuad;
+typedef struct ColQuad ColQuad;
 
-typedef struct z_ColSphere z_ColSphere;
+typedef struct ColSphere ColSphere;
 
-typedef struct z_ColSphereGroup z_ColSphereGroup;
+typedef struct ColSphereGroup ColSphereGroup;
 
-typedef struct z_ColTriGroup z_ColTriGroup;
+typedef struct ColTriGroup ColTriGroup;
 
-typedef struct z_ActorEnBom z_ActorEnBom;
+typedef struct ActorEnBom ActorEnBom;
 
-typedef struct z_ActorEnFirefly z_ActorEnFirefly;
+typedef struct ActorEnFirefly ActorEnFirefly;
 
-typedef struct z_ActorObjBell z_ActorObjBell;
+typedef struct ActorObjBell ActorObjBell;
 
-typedef struct z_ContextCommon z_ContextCommon;
+typedef struct ContextCommon ContextCommon;
 
-typedef struct z_OpeningContext z_OpeningContext;
+typedef struct OpeningContext OpeningContext;
 
-typedef struct z_TitleContext z_TitleContext;
+typedef struct TitleContext TitleContext;
 
-typedef struct z_EffectTableInfo z_EffectTableInfo;
+typedef struct EffectTableInfo EffectTableInfo;
 
-typedef struct z_GameAllocNode z_GameAllocNode;
+typedef struct GameAllocNode GameAllocNode;
 
-struct z_GameAllocNode {
-/* 0x00 */ z_GameAllocNode* unk0;
-/* 0x04 */ z_GameAllocNode* unk4;
+struct GameAllocNode {
+/* 0x00 */ GameAllocNode* unk0;
+/* 0x04 */ GameAllocNode* unk4;
 /* 0x08 */ u32 size;
 /* 0x0C */ UNK_TYPE1 padC[4];
-/* 0x10 */ z_GameAllocNode* unk10;
+/* 0x10 */ GameAllocNode* unk10;
 };
 
-struct z_ContextCommon {
-/* 0x00 */ z_GraphicsContext* graphicsContext;
+struct ContextCommon {
+/* 0x00 */ GraphicsContext* graphicsContext;
 /* 0x04 */ func_ptr update;
 /* 0x08 */ func_ptr fini;
 /* 0x0C */ func_ptr nextGameStateInit;
 /* 0x10 */ u32 nextGameStateSize;
-/* 0x14 */ z_InputStruct controllers[4];
-/* 0x74 */ z_GameStateHeap heap;
-/* 0x84 */ z_GameAllocNode gamealloc;
+/* 0x14 */ InputStruct controllers[4];
+/* 0x74 */ GameStateHeap heap;
+/* 0x84 */ GameAllocNode gamealloc;
 /* 0x98 */ UNK_TYPE1 pad98[3];
 /* 0x9B */ u8 shouldContinue; // If 0, switch to next game state
 /* 0x9C */ s32 frameCount;
@@ -996,16 +996,16 @@ struct z_ContextCommon {
 /* 0xA3 */ UNK_TYPE1 padA3[1];
 };
 
-struct z_OpeningContext {
-/* 0x000 */ z_ContextCommon common;
+struct OpeningContext {
+/* 0x000 */ ContextCommon common;
 /* 0x0A4 */ UNK_TYPE1 padA4[4];
-/* 0x0A8 */ z_View unkA8;
+/* 0x0A8 */ View unkA8;
 };
 
-struct z_TitleContext {
-/* 0x000 */ z_ContextCommon common;
+struct TitleContext {
+/* 0x000 */ ContextCommon common;
 /* 0x0A4 */ u8* nintendo_logo_data;
-/* 0x0A8 */ z_View unkA8;
+/* 0x0A8 */ View unkA8;
 /* 0x210 */ UNK_TYPE1 pad210[40];
 /* 0x238 */ s16 unk238;
 /* 0x23A */ s16 logoCoverAlpha;
@@ -1017,22 +1017,22 @@ struct z_TitleContext {
 /* 0x245 */ UNK_TYPE1 pad245[3];
 };
 
-typedef struct z_GlobalContext z_GlobalContext;
+typedef struct GlobalContext GlobalContext;
 
-typedef void(*collision_func)(z_GlobalContext*, z_CollisionContext*, z_ColCommon*, z_ColCommon*);
+typedef void(*collision_func)(GlobalContext*, CollisionContext*, ColCommon*, ColCommon*);
 
-typedef void(*cutscene_update_func)(z_GlobalContext* ctxt, z_CutsceneContext* cCtxt);
+typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
 
-typedef void(*global_context_func)(z_GlobalContext*);
+typedef void(*global_context_func)(GlobalContext*);
 
-typedef void(*scene_header_func)(z_GlobalContext* ctxt, z_SceneHeaderEntry* entry);
+typedef void(*scene_header_func)(GlobalContext* ctxt, SceneHeaderEntry* entry);
 
-typedef struct z_Heap z_Heap;
+typedef struct Heap Heap;
 
-typedef struct z_HeapNode z_HeapNode;
+typedef struct HeapNode HeapNode;
 
-struct z_Heap {
-/* 0x00 */ z_HeapNode* head;
+struct Heap {
+/* 0x00 */ HeapNode* head;
 /* 0x04 */ u32 base;
 /* 0x08 */ OSMesgQueue lock;
 /* 0x20 */ UNK_TYPE1 pad20[1];
@@ -1040,22 +1040,22 @@ struct z_Heap {
 /* 0x22 */ UNK_TYPE1 pad22[2];
 };
 
-struct z_HeapNode {
+struct HeapNode {
 /* 0x0 */ s16 magic; // Should always be 0x7373
 /* 0x2 */ s16 free;
 /* 0x4 */ u32 size;
-/* 0x8 */ z_HeapNode* next;
-/* 0xC */ z_HeapNode* prev;
+/* 0x8 */ HeapNode* next;
+/* 0xC */ HeapNode* prev;
 };
 
-typedef struct z_Irqmgr z_Irqmgr;
+typedef struct Irqmgr Irqmgr;
 
-typedef struct z_AudioThreadStruct z_AudioThreadStruct;
+typedef struct AudioThreadStruct AudioThreadStruct;
 
 typedef struct z_Light z_Light;
 
 struct z_Light {
-/* 0x0 */ z_LightInfo* info;
+/* 0x0 */ LightInfo* info;
 /* 0x4 */ z_Light* prev;
 /* 0x8 */ z_Light* next;
 };
@@ -1068,30 +1068,30 @@ typedef struct {
 /* 0x7 */ UNK_TYPE1 pad7[3];
 /* 0xA */ s16 unkA;
 /* 0xC */ s16 unkC;
-} z_LightingContext;
+} LightingContext;
 
 typedef struct {
 /* 0x000 */ int numOccupied;
 /* 0x004 */ int nextFree;
 /* 0x008 */ z_Light lights[32];
-} z_LightsList;
+} LightsList;
 
-typedef struct z_LoadedParticleEntry z_LoadedParticleEntry;
+typedef struct LoadedParticleEntry LoadedParticleEntry;
 
-typedef void(*effect_func)(z_GlobalContext* ctxt, u32 index, z_LoadedParticleEntry* particle);
+typedef void(*effect_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle);
 
-typedef void(*effect_init_func)(z_GlobalContext* ctxt, u32 index, z_LoadedParticleEntry* particle, void* init);
+typedef void(*effect_init_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle, void* init);
 
-struct z_EffectTableInfo {
-/* 0x0 */ z_LoadedParticleEntry* data_table; // Name from debug assert
+struct EffectTableInfo {
+/* 0x0 */ LoadedParticleEntry* data_table; // Name from debug assert
 /* 0x4 */ s32 searchIndex;
 /* 0x8 */ s32 size;
 };
 
-struct z_LoadedParticleEntry {
-/* 0x00 */ z_Vector3f position;
-/* 0x0C */ z_Vector3f velocity;
-/* 0x18 */ z_Vector3f acceleration;
+struct LoadedParticleEntry {
+/* 0x00 */ Vector3f position;
+/* 0x0C */ Vector3f velocity;
+/* 0x18 */ Vector3f acceleration;
 /* 0x24 */ effect_func update;
 /* 0x28 */ global_context_func draw;
 /* 0x2C */ f32 unk2C;
@@ -1109,7 +1109,7 @@ struct z_LoadedParticleEntry {
 typedef struct {
 /* 0x0 */ UNK_TYPE4 unk0;
 /* 0x4 */ effect_init_func init;
-} z_ParticleOverlayInfo;
+} ParticleOverlayInfo;
 
 typedef struct {
 /* 0x00 */ u32 vromStart;
@@ -1117,13 +1117,13 @@ typedef struct {
 /* 0x08 */ u32 vramStart;
 /* 0x0C */ u32 vramEnd;
 /* 0x10 */ u32 loadedRamAddr;
-/* 0x14 */ z_ParticleOverlayInfo* overlayInfo;
+/* 0x14 */ ParticleOverlayInfo* overlayInfo;
 /* 0x18 */ u32 unk18; // Always 0x01000000?
-} z_ParticleOverlayTableEntry;
+} ParticleOverlayTableEntry;
 
-typedef struct z_OSMesgQueueListNode z_OSMesgQueueListNode;
+typedef struct OSMesgQueueListNode OSMesgQueueListNode;
 
-struct z_Irqmgr {
+struct Irqmgr {
 /* 0x000 */ s16 verticalRetraceMesg;
 /* 0x002 */ UNK_TYPE1 pad2[30];
 /* 0x020 */ s16 prenmi1Msg;
@@ -1133,7 +1133,7 @@ struct z_Irqmgr {
 /* 0x060 */ OSMesgQueue irqQueue;
 /* 0x078 */ UNK_TYPE4 irqBuffer[8];
 /* 0x098 */ OSThread thread;
-/* 0x248 */ z_OSMesgQueueListNode* callbacks;
+/* 0x248 */ OSMesgQueueListNode* callbacks;
 /* 0x24C */ s8 prenmiStage;
 /* 0x24D */ UNK_TYPE1 pad24D[3];
 /* 0x250 */ OSTime lastPrenmiTime;
@@ -1141,8 +1141,8 @@ struct z_Irqmgr {
 /* 0x278 */ OSTime lastFrameTime;
 };
 
-struct z_OSMesgQueueListNode {
-/* 0x0 */ z_OSMesgQueueListNode* next;
+struct OSMesgQueueListNode {
+/* 0x0 */ OSMesgQueueListNode* next;
 /* 0x4 */ OSMesgQueue* queue;
 };
 
@@ -1156,8 +1156,8 @@ typedef struct {
 /* 0x04C */ OSMesgQueue siEventCallbackQueue;
 /* 0x064 */ OSMesgQueue unk64;
 /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
-/* 0x094 */ z_OSMesgQueueListNode irqmgrCallbackQueueNode;
-/* 0x09C */ z_Irqmgr* irqmgr;
+/* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
+/* 0x09C */ Irqmgr* irqmgr;
 /* 0x0A0 */ OSThread thread;
 /* 0x250 */ UNK_TYPE1 pad250[96];
 /* 0x2B0 */ OSContPad controllerState1[4];
@@ -1167,7 +1167,7 @@ typedef struct {
 /* 0x47D */ u8 unk47D;
 /* 0x47E */ u8 unk47E;
 /* 0x47F */ UNK_TYPE1 pad47F[1];
-} z_PadmgrThreadStruct;
+} PadmgrThreadStruct;
 
 typedef struct {
 /* 0x000 */ OSMesgQueue unk0;
@@ -1187,12 +1187,12 @@ typedef struct {
 /* 0x324 */ UNK_TYPE4 unk324;
 /* 0x328 */ UNK_TYPE1 pad328[7];
 /* 0x32F */ s8 unk32F;
-/* 0x330 */ z_OSMesgQueueListNode unk330;
-} z_SchedThreadStruct;
+/* 0x330 */ OSMesgQueueListNode unk330;
+} SchedThreadStruct;
 
-struct z_AudioThreadStruct {
-/* 0x000 */ z_Irqmgr* irqmgr;
-/* 0x004 */ z_SchedThreadStruct* unk4;
+struct AudioThreadStruct {
+/* 0x000 */ Irqmgr* irqmgr;
+/* 0x004 */ SchedThreadStruct* unk4;
 /* 0x008 */ UNK_TYPE1 pad8[88];
 /* 0x060 */ UNK_TYPE4 unk60;
 /* 0x064 */ OSMesgQueue unk64;
@@ -1205,11 +1205,11 @@ struct z_AudioThreadStruct {
 /* 0x130 */ OSThread unk130;
 };
 
-typedef struct z_ThreadInfo z_ThreadInfo;
+typedef struct ThreadInfo ThreadInfo;
 
-struct z_ThreadInfo {
-/* 0x00 */ z_ThreadInfo* next;
-/* 0x04 */ z_ThreadInfo* prev;
+struct ThreadInfo {
+/* 0x00 */ ThreadInfo* next;
+/* 0x04 */ ThreadInfo* prev;
 /* 0x08 */ s32* stackBegin;
 /* 0x0C */ s32* stackEnd;
 /* 0x10 */ s32 initStackValue;
@@ -1217,39 +1217,39 @@ struct z_ThreadInfo {
 /* 0x18 */ s8* name;
 };
 
-typedef struct z_Actor z_Actor;
+typedef struct Actor Actor;
 
-typedef void(*actor_func)(z_Actor* this, z_GlobalContext* ctxt);
+typedef void(*actor_func)(Actor* this, GlobalContext* ctxt);
 
-typedef void(*actor_init_var_func)(z_Actor*, z_ActorInitVar*);
+typedef void(*actor_init_var_func)(Actor*, ActorInitVar*);
 
-struct z_Actor {
+struct Actor {
 /* 0x000 */ s16 id;
 /* 0x002 */ UNK_TYPE1 type;
 /* 0x003 */ s8 room;
 /* 0x004 */ UNK_TYPE4 flags; // bit 22: disable positional lights if bit 28 is not set; bit 28: enable positional lights on actor
-/* 0x008 */ z_Vector3f initPos;
-/* 0x014 */ z_Vector3s initRot;
+/* 0x008 */ Vector3f initPos;
+/* 0x014 */ Vector3s initRot;
 /* 0x01A */ UNK_TYPE1 pad1A[2];
 /* 0x01C */ s16 variable;
 /* 0x01E */ s8 objectIndex;
 /* 0x01F */ UNK_TYPE1 pad1F[1];
 /* 0x020 */ s16 unk20;
 /* 0x022 */ UNK_TYPE1 pad22[2];
-/* 0x024 */ z_Vector3f pos;
-/* 0x030 */ z_Vector3s speedRot;
+/* 0x024 */ Vector3f pos;
+/* 0x030 */ Vector3s speedRot;
 /* 0x036 */ UNK_TYPE1 pad36[2];
 /* 0x038 */ s8 unk38;
 /* 0x039 */ u8 unk39;
 /* 0x03A */ UNK_TYPE1 pad3A[2];
-/* 0x03C */ z_Vector3f unk3C;
-/* 0x048 */ z_Vector3s unk48;
+/* 0x03C */ Vector3f unk3C;
+/* 0x048 */ Vector3s unk48;
 /* 0x04E */ UNK_TYPE1 pad4E[2];
 /* 0x050 */ u16 unk50;
 /* 0x052 */ UNK_TYPE1 pad52[2];
 /* 0x054 */ f32 unk54;
-/* 0x058 */ z_Vector3f scale;
-/* 0x064 */ z_Vector3f velocity;
+/* 0x058 */ Vector3f scale;
+/* 0x064 */ Vector3f velocity;
 /* 0x070 */ f32 speed;
 /* 0x074 */ f32 gravity;
 /* 0x078 */ f32 minYVelocity;
@@ -1261,18 +1261,18 @@ struct z_Actor {
 /* 0x094 */ UNK_TYPE1 pad94[4];
 /* 0x098 */ f32 unk98;
 /* 0x09C */ f32 unk9C;
-/* 0x0A0 */ z_ActorA0 unkA0;
+/* 0x0A0 */ ActorA0 unkA0;
 /* 0x0B8 */ UNK_TYPE1 padB8[1];
 /* 0x0B9 */ u8 unkB9;
 /* 0x0BA */ UNK_TYPE1 padBA[2];
-/* 0x0BC */ z_ActorBC unkBC;
+/* 0x0BC */ ActorBC unkBC;
 /* 0x0D4 */ UNK_TYPE1 padD4[24];
-/* 0x0EC */ z_Vector3f unkEC;
+/* 0x0EC */ Vector3f unkEC;
 /* 0x0F8 */ f32 unkF8;
 /* 0x0FC */ f32 unkFC;
 /* 0x100 */ f32 unk100;
 /* 0x104 */ f32 unk104;
-/* 0x108 */ z_Vector3f unk108;
+/* 0x108 */ Vector3f unk108;
 /* 0x114 */ u8 unk114;
 /* 0x115 */ UNK_TYPE1 pad115[1];
 /* 0x116 */ s16 textId;
@@ -1282,36 +1282,36 @@ struct z_Actor {
 /* 0x11D */ u8 unk11D;
 /* 0x11E */ UNK_TYPE1 pad11E[1];
 /* 0x11F */ u8 naviMsgId;
-/* 0x120 */ z_Actor* parent;
-/* 0x124 */ z_Actor* child;
-/* 0x128 */ z_Actor* prev;
-/* 0x12C */ z_Actor* next;
+/* 0x120 */ Actor* parent;
+/* 0x124 */ Actor* child;
+/* 0x128 */ Actor* prev;
+/* 0x12C */ Actor* next;
 /* 0x130 */ actor_func init;
 /* 0x134 */ actor_func fini;
 /* 0x138 */ actor_func main;
 /* 0x13C */ actor_func draw;
-/* 0x140 */ z_ActorOverlayTableEntry* tableEntry;
+/* 0x140 */ ActorOverlayTableEntry* tableEntry;
 };
 
 typedef struct {
-/* 0x000 */ z_Actor base;
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[100];
 /* 0x1A8 */ u32 displayListAddr;
 /* 0x1AC */ actor_func updateFunc;
-} z_ActorBgIknvObj;
+} ActorBgIknvObj;
 
-struct z_ActorBgMbarChair {
-/* 0x000 */ z_Actor base;
+struct ActorBgMbarChair {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[24];
 };
 
-struct z_ActorEnBji01 {
-/* 0x000 */ z_Actor base;
+struct ActorEnBji01 {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[368];
 };
 
-struct z_ActorEnTest {
-/* 0x000 */ z_Actor base;
+struct ActorEnTest {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[16];
 /* 0x154 */ f32 unk154;
 /* 0x158 */ UNK_TYPE1 pad158[176];
@@ -1319,10 +1319,10 @@ struct z_ActorEnTest {
 /* 0x209 */ UNK_TYPE1 pad209[1];
 /* 0x20A */ u8 unk20A;
 /* 0x20B */ UNK_TYPE1 pad20B[1];
-/* 0x20C */ z_ActorEnTest20C unk20C[20];
+/* 0x20C */ ActorEnTest20C unk20C[20];
 };
 
-struct z_ActorInitData {
+struct ActorInitData {
 /* 0x00 */ s16 id;
 /* 0x02 */ u8 type;
 /* 0x03 */ UNK_TYPE1 pad3[1];
@@ -1336,22 +1336,22 @@ struct z_ActorInitData {
 /* 0x1C */ actor_func draw;
 };
 
-struct z_ActorPlayer {
-/* 0x000 */ z_Actor base;
+struct ActorPlayer {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[3124];
 };
 
-struct z_ActorTypeList {
+struct ActorTypeList {
 /* 0x0 */ s32 length;
-/* 0x4 */ z_Actor* head;
+/* 0x4 */ Actor* head;
 /* 0x8 */ UNK_TYPE1 pad8[4];
 };
 
-struct z_ColCommon {
-/* 0x00 */ z_Actor* actor;
-/* 0x04 */ z_Actor* unk4;
-/* 0x08 */ z_Actor* unk8;
-/* 0x0C */ z_Actor* unkC;
+struct ColCommon {
+/* 0x00 */ Actor* actor;
+/* 0x04 */ Actor* unk4;
+/* 0x08 */ Actor* unk8;
+/* 0x0C */ Actor* unkC;
 /* 0x10 */ u8 unk10;
 /* 0x11 */ u8 unk11;
 /* 0x12 */ u8 unk12;
@@ -1361,41 +1361,41 @@ struct z_ColCommon {
 /* 0x16 */ UNK_TYPE1 pad16[2];
 };
 
-struct z_ColCylinder {
-/* 0x00 */ z_ColCommon base;
-/* 0x18 */ z_ColBodyInfo body;
-/* 0x40 */ z_ColCylinderParams params;
+struct ColCylinder {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColCylinderParams params;
 };
 
-struct z_ColQuad {
-/* 0x00 */ z_ColCommon base;
-/* 0x18 */ z_ColBodyInfo body;
-/* 0x40 */ z_ColQuadParams params;
+struct ColQuad {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColQuadParams params;
 };
 
-struct z_ColSphere {
-/* 0x00 */ z_ColCommon base;
-/* 0x18 */ z_ColBodyInfo body;
-/* 0x40 */ z_ColSphereParams params;
+struct ColSphere {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColSphereParams params;
 };
 
-struct z_ColSphereGroup {
-/* 0x00 */ z_ColCommon base;
+struct ColSphereGroup {
+/* 0x00 */ ColCommon base;
 /* 0x18 */ u32 count;
-/* 0x1C */ z_ColSphereGroupElement* spheres;
+/* 0x1C */ ColSphereGroupElement* spheres;
 };
 
-struct z_ColTriGroup {
-/* 0x00 */ z_ColCommon base;
+struct ColTriGroup {
+/* 0x00 */ ColCommon base;
 /* 0x18 */ u32 count;
-/* 0x1C */ z_ColTri* tris;
+/* 0x1C */ ColTri* tris;
 };
 
 typedef struct {
-/* 0x000 */ z_Actor base;
-/* 0x144 */ z_ColQuad unk144;
-/* 0x1C4 */ z_ColQuad unk1C4;
-/* 0x244 */ z_Vector3f unk244;
+/* 0x000 */ Actor base;
+/* 0x144 */ ColQuad unk144;
+/* 0x1C4 */ ColQuad unk1C4;
+/* 0x244 */ Vector3f unk244;
 /* 0x250 */ f32 unk250;
 /* 0x254 */ f32 unk254;
 /* 0x258 */ actor_func update;
@@ -1403,9 +1403,9 @@ typedef struct {
 /* 0x25E */ u16 unk25E;
 /* 0x260 */ u8 unk260;
 /* 0x261 */ UNK_TYPE1 pad261[3];
-} z_ActorArrowFire;
+} ActorArrowFire;
 
-struct z_ActorContext {
+struct ActorContext {
 /* 0x000 */ UNK_TYPE1 pad0[2];
 /* 0x002 */ u8 unk2;
 /* 0x003 */ UNK_TYPE1 pad3[1];
@@ -1414,13 +1414,13 @@ struct z_ActorContext {
 /* 0x00C */ s16 unkC;
 /* 0x00E */ u8 totalLoadedActors;
 /* 0x00F */ u8 unkF;
-/* 0x010 */ z_ActorTypeList actorTypeLists[12];
-/* 0x0A0 */ z_Actor* unkA0;
+/* 0x010 */ ActorTypeList actorTypeLists[12];
+/* 0x0A0 */ Actor* unkA0;
 /* 0x0A4 */ UNK_TYPE1 padA4[180];
-/* 0x158 */ z_Actor* unk158;
+/* 0x158 */ Actor* unk158;
 /* 0x15C */ UNK_TYPE1 pad15C[80];
-/* 0x1AC */ z_Actor* unk1AC;
-/* 0x1B0 */ z_Actor* unk1B0;
+/* 0x1AC */ Actor* unk1AC;
+/* 0x1B0 */ Actor* unk1B0;
 /* 0x1B4 */ UNK_TYPE1 pad1B4[24];
 /* 0x1CC */ u32 unk1CC;
 /* 0x1D0 */ u32 clearedRooms;
@@ -1433,17 +1433,17 @@ struct z_ActorContext {
 };
 
 typedef struct {
-/* 0x000 */ z_Actor base;
+/* 0x000 */ Actor base;
 /* 0x144 */ actor_func update;
-/* 0x148 */ z_ColCylinder collision;
+/* 0x148 */ ColCylinder collision;
 /* 0x194 */ UNK_TYPE1 pad194[20];
-} z_ActorEnAObj;
+} ActorEnAObj;
 
-struct z_ActorEnBom {
-/* 0x000 */ z_Actor base;
-/* 0x144 */ z_ColCylinder unk144;
-/* 0x190 */ z_ColSphereGroup unk190;
-/* 0x1B0 */ z_ColSphereGroupElement unk1B0[1];
+struct ActorEnBom {
+/* 0x000 */ Actor base;
+/* 0x144 */ ColCylinder unk144;
+/* 0x190 */ ColSphereGroup unk190;
+/* 0x1B0 */ ColSphereGroupElement unk1B0[1];
 /* 0x1F0 */ s16 unk1F0;
 /* 0x1F2 */ UNK_TYPE1 pad1F2[6];
 /* 0x1F8 */ u8 unk1F8;
@@ -1454,8 +1454,8 @@ struct z_ActorEnBom {
 /* 0x200 */ func_ptr unk200;
 };
 
-struct z_ActorEnFirefly {
-/* 0x000 */ z_Actor base;
+struct ActorEnFirefly {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[28];
 /* 0x160 */ f32 unk160;
 /* 0x164 */ UNK_TYPE1 pad164[36];
@@ -1471,11 +1471,11 @@ struct z_ActorEnFirefly {
 /* 0x2EC */ f32 unk2EC;
 /* 0x2F0 */ f32 unk2F0;
 /* 0x2F4 */ UNK_TYPE1 pad2F4[40];
-/* 0x31C */ z_ColSphere collision;
+/* 0x31C */ ColSphere collision;
 };
 
 typedef struct {
-/* 0x000 */ z_Actor base;
+/* 0x000 */ Actor base;
 /* 0x144 */ actor_func update;
 /* 0x148 */ s16 unk148;
 /* 0x14A */ UNK_TYPE1 pad14A[2];
@@ -1484,15 +1484,15 @@ typedef struct {
 /* 0x150 */ s16 unk150;
 /* 0x152 */ s16 unk152;
 /* 0x154 */ f32 unk154;
-/* 0x158 */ z_ColCylinder collision;
+/* 0x158 */ ColCylinder collision;
 /* 0x1A4 */ UNK_TYPE1 pad1A4[4];
-} z_ActorEnItem00;
+} ActorEnItem00;
 
-struct z_ActorObjBell {
-/* 0x000 */ z_Actor base;
+struct ActorObjBell {
+/* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[24];
-/* 0x15C */ z_ColSphere unk15C;
-/* 0x1B4 */ z_ColSphere unk1B4;
+/* 0x15C */ ColSphere unk15C;
+/* 0x1B4 */ ColSphere unk1B4;
 /* 0x20C */ UNK_TYPE1 pad20C[2];
 /* 0x20E */ s16 unk20E;
 /* 0x210 */ UNK_TYPE1 pad210[4];
@@ -1500,35 +1500,35 @@ struct z_ActorObjBell {
 /* 0x216 */ UNK_TYPE1 pad216[18];
 };
 
-struct z_GlobalContext {
-/* 0x00000 */ z_ContextCommon commonVars;
+struct GlobalContext {
+/* 0x00000 */ ContextCommon commonVars;
 /* 0x000A4 */ s16 currentScene;
 /* 0x000A6 */ u8 unkA6;
 /* 0x000A7 */ UNK_TYPE1 padA7[9];
 /* 0x000B0 */ void* currentSceneVram;
 /* 0x000B4 */ UNK_TYPE1 padB4[4];
-/* 0x000B8 */ z_View unkB8;
-/* 0x00220 */ z_GlobalContext220 unk220[4];
+/* 0x000B8 */ View unkB8;
+/* 0x00220 */ GlobalContext220 unk220[4];
 /* 0x00800 */ UNK_TYPE1 pad800[24];
-/* 0x00818 */ z_LightingContext lightsContext;
+/* 0x00818 */ LightingContext lightsContext;
 /* 0x00826 */ UNK_TYPE1 pad826[2];
 /* 0x00828 */ u32 unk828;
 /* 0x0082C */ UNK_TYPE1 pad82C[5236];
-/* 0x01CA0 */ z_ActorContext actorContext;
-/* 0x01F24 */ z_CutsceneContext cutsceneContext;
-/* 0x01F74 */ z_CutsceneEntry* cutsceneList;
+/* 0x01CA0 */ ActorContext actorContext;
+/* 0x01F24 */ CutsceneContext cutsceneContext;
+/* 0x01F74 */ CutsceneEntry* cutsceneList;
 /* 0x01F78 */ UNK_TYPE1 pad1F78[10640];
-/* 0x04908 */ z_GlobalContext4908 unk4908;
+/* 0x04908 */ GlobalContext4908 unk4908;
 /* 0x169E0 */ UNK_TYPE1 pad169E0[8];
-/* 0x169E8 */ z_GlobalContext169E8 unk169E8;
+/* 0x169E8 */ GlobalContext169E8 unk169E8;
 /* 0x16D30 */ UNK_TYPE1 pad16D30[492];
 /* 0x16F1C */ u16 unk16F1C;
 /* 0x16F1E */ UNK_TYPE1 pad16F1E[226];
 /* 0x17000 */ u16 unk17000;
 /* 0x17002 */ UNK_TYPE1 pad17002[2];
-/* 0x17004 */ z_KankyoContext kankyoContext;
+/* 0x17004 */ KankyoContext kankyoContext;
 /* 0x170F6 */ UNK_TYPE1 pad170F6[3218];
-/* 0x17D88 */ z_SceneContext sceneContext;
+/* 0x17D88 */ SceneContext sceneContext;
 /* 0x186E0 */ s8 currentRoom;
 /* 0x186E1 */ UNK_TYPE1 pad186E1[5];
 /* 0x186E6 */ u8 enablePosLights;
@@ -1537,16 +1537,16 @@ struct z_GlobalContext {
 /* 0x186EC */ UNK_TYPE1 pad186EC[116];
 /* 0x18760 */ u8 transitionActorCount;
 /* 0x18761 */ UNK_TYPE1 pad18761[3];
-/* 0x18764 */ z_TransitionActorInit* transitionActorList;
+/* 0x18764 */ TransitionActorInit* transitionActorList;
 /* 0x18768 */ UNK_TYPE1 pad18768[72];
 /* 0x187B0 */ z_Matrix unk187B0;
 /* 0x187F0 */ UNK_TYPE1 pad187F0[86];
 /* 0x18846 */ u16 sceneNumActorsToLoad;
 /* 0x18848 */ u8 numRooms;
 /* 0x18849 */ UNK_TYPE1 pad18849[3];
-/* 0x1884C */ z_RoomFileLocation* roomAddrs;
+/* 0x1884C */ RoomFileLocation* roomAddrs;
 /* 0x18850 */ UNK_TYPE1 pad18850[4];
-/* 0x18854 */ z_SceneActorInit* sceneActorList;
+/* 0x18854 */ SceneActorInit* sceneActorList;
 /* 0x18858 */ UNK_TYPE1 pad18858[4];
 /* 0x1885C */ u8* entranceList;
 /* 0x18860 */ void* exitList;
@@ -1556,9 +1556,9 @@ struct z_GlobalContext {
 /* 0x18870 */ UNK_TYPE1 pad18870[4];
 /* 0x18874 */ u8 unk18874;
 /* 0x18875 */ UNK_TYPE1 pad18875[15];
-/* 0x18884 */ z_CollisionContext collisionContext;
+/* 0x18884 */ CollisionContext collisionContext;
 /* 0x18B20 */ UNK_TYPE1 pad18B20[820];
-/* 0x18E54 */ z_SceneTableEntry* currentSceneTableEntry;
+/* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
 /* 0x18E58 */ UNK_TYPE1 pad18E58[1024];
 };
 

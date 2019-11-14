@@ -1,12 +1,12 @@
 #include <ultra64.h>
 #include <global.h>
 
-void EffectSS_Init(z_GlobalContext* ctxt, s32 numEntries) {
+void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     u32 i;
-    z_LoadedParticleEntry* iter;
-    z_ParticleOverlayTableEntry* iter2;
+    LoadedParticleEntry* iter;
+    ParticleOverlayTableEntry* iter2;
 
-    EffectSS2Info.data_table = (z_LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->commonVars.heap, numEntries * sizeof(z_LoadedParticleEntry));
+    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->commonVars.heap, numEntries * sizeof(LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -19,10 +19,10 @@ void EffectSS_Init(z_GlobalContext* ctxt, s32 numEntries) {
     }
 }
 
-void EffectSS_Clear(z_GlobalContext* ctxt) {
+void EffectSS_Clear(GlobalContext* ctxt) {
     u32 i;
-    z_LoadedParticleEntry* iter;
-    z_ParticleOverlayTableEntry* iter2;
+    LoadedParticleEntry* iter;
+    ParticleOverlayTableEntry* iter2;
     void* addr;
 
     EffectSS2Info.data_table = NULL;
@@ -44,11 +44,11 @@ void EffectSS_Clear(z_GlobalContext* ctxt) {
     }
 }
 
-z_LoadedParticleEntry* EffectSS_GetTable() {
+LoadedParticleEntry* EffectSS_GetTable() {
     return EffectSS2Info.data_table;
 }
 
-void EffectSS_Delete(z_LoadedParticleEntry* a0) {
+void EffectSS_Delete(LoadedParticleEntry* a0) {
     if (a0->flags & 0x2) {
         func_801A72CC((UNK_PTR)&a0->position);
     }
@@ -60,7 +60,7 @@ void EffectSS_Delete(z_LoadedParticleEntry* a0) {
     EffectSS_ResetLoadedParticleEntry(a0);
 }
 
-void EffectSS_ResetLoadedParticleEntry(z_LoadedParticleEntry* particle) {
+void EffectSS_ResetLoadedParticleEntry(LoadedParticleEntry* particle) {
     u32 i;
 
     particle->type = 0x27;
@@ -152,7 +152,7 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
 
 #endif
 
-void EffectSS_Copy(z_GlobalContext* ctxt, z_LoadedParticleEntry* a1) {
+void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* a1) {
     u32 index;
     if (func_8016A01C(ctxt) != 1) {
         if (EffectSS_FindFreeSpace(a1->priority, &index) == 0) {
@@ -164,12 +164,12 @@ void EffectSS_Copy(z_GlobalContext* ctxt, z_LoadedParticleEntry* a1) {
 
 #ifdef NONMATCHING
 
-void EffectSS_LoadParticle(z_GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
+void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
     u32 index;
     u32 initRet;
     u32 overlaySize;
-    z_ParticleOverlayInfo* overlayInfo;
-    z_ParticleOverlayTableEntry* entry = &particleOverlayTable[type];
+    ParticleOverlayInfo* overlayInfo;
+    ParticleOverlayTableEntry* entry = &particleOverlayTable[type];
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
         return;
@@ -193,7 +193,7 @@ void EffectSS_LoadParticle(z_GlobalContext* ctxt, u32 type, u32 priority, void* 
 
         // XXX this should use a0, but it doesn't
         if (entry->overlayInfo != NULL) {
-            overlayInfo = (z_ParticleOverlayInfo*)(-(entry->vramStart - entry->loadedRamAddr) + (u32)entry->overlayInfo);
+            overlayInfo = (ParticleOverlayInfo*)(-(entry->vramStart - entry->loadedRamAddr) + (u32)entry->overlayInfo);
         } else {
             overlayInfo = NULL;
         }
@@ -222,8 +222,8 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_LoadParticle.asm")
 // XXX regalloc is wrong
 #ifdef NONMATCHING
 
-void EffectSS_UpdateParticle(z_GlobalContext* ctxt, u32 index) {
-    z_LoadedParticleEntry* particle = &EffectSS2Info.data_table[index];
+void EffectSS_UpdateParticle(GlobalContext* ctxt, u32 index) {
+    LoadedParticleEntry* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
         particle->velocity.x += particle->acceleration.x;
@@ -244,7 +244,7 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_UpdateParticle.asm")
 
 #endif
 
-void EffectSS_UpdateAllParticles(z_GlobalContext* ctxt) {
+void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
     s32 i;
 
     for (i = 0; i < EffectSS2Info.size; i++) {
@@ -265,8 +265,8 @@ void EffectSS_UpdateAllParticles(z_GlobalContext* ctxt) {
 // XXX regalloc is wrong
 #ifdef NONMATCHING
 
-void EffectSS_DrawParticle(z_GlobalContext* ctxt, s32 index) {
-    z_LoadedParticleEntry* entry = &EffectSS2Info.data_table[index];
+void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
+    LoadedParticleEntry* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
         (*entry->draw)(ctxt);
     }
@@ -278,7 +278,7 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_DrawParticle.asm")
 
 #endif
 
-void EffectSS_DrawAllParticles(z_GlobalContext* ctxt) {
+void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
     UNK_TYPE s0;
     s32 i;
 

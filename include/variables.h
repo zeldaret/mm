@@ -558,8 +558,8 @@ extern UNK_TYPE* D_80096B60; // D_80096B60
 //extern UNK_TYPE D_80096BE4;
 //extern UNK_TYPE D_80096C20;
 //extern UNK_TYPE D_80096C30;
-extern z_ThreadInfo* g_s80085320_ListHead; // D_80096C40
-extern z_ThreadInfo* g_s80085320_ListTail; // D_80096C44
+extern ThreadInfo* g_s80085320_ListHead; // D_80096C40
+extern ThreadInfo* g_s80085320_ListTail; // D_80096C44
 //extern UNK_TYPE D_80096C50;
 //extern UNK_TYPE D_80096CD0;
 //extern UNK_TYPE D_80096CF0;
@@ -790,22 +790,22 @@ extern float __libm_qnan_f; // D_80099450
 //extern UNK_TYPE D_800994C8;
 extern UNK_TYPE D_800994D0; // D_800994D0
 extern UNK_TYPE D_800994DC; // D_800994DC
-extern z_ThreadInfo D_80099500; // D_80099500
+extern ThreadInfo D_80099500; // D_80099500
 extern OSThread D_80099520; // D_80099520
 extern UNK_TYPE D_800996D0; // D_800996D0
-extern z_ThreadInfo D_80099AD0; // D_80099AD0
+extern ThreadInfo D_80099AD0; // D_80099AD0
 extern UNK_TYPE D_80099AF0; // D_80099AF0
 extern UNK_TYPE D_80099EF0; // D_80099EF0
 extern UNK_TYPE D_8009A170; // D_8009A170
-extern z_ThreadInfo D_8009A670; // D_8009A670
+extern ThreadInfo D_8009A670; // D_8009A670
 extern UNK_TYPE D_8009A690; // D_8009A690
 extern UNK_TYPE D_8009A840; // D_8009A840
-extern z_ThreadInfo D_8009B140; // D_8009B140
+extern ThreadInfo D_8009B140; // D_8009B140
 extern UNK_TYPE D_8009B160; // D_8009B160
 extern UNK_TYPE D_8009B228; // D_8009B228
 extern u32* D_8009B240; // D_8009B240
 extern u8 D_8009B290; // D_8009B290
-extern z_ThreadInfo D_8009B2A0; // D_8009B2A0
+extern ThreadInfo D_8009B2A0; // D_8009B2A0
 extern u16 D_8009B2BC; // D_8009B2BC
 extern OSMesgQueue D_8009B2C0; // D_8009B2C0
 extern UNK_TYPE D_8009B2D8; // D_8009B2D8
@@ -883,7 +883,7 @@ extern UNK_TYPE D_8009E624; // D_8009E624
 //extern UNK_TYPE D_8009F870;
 //extern UNK_TYPE D_8009F888;
 //extern UNK_TYPE D_8009F8A0;
-extern z_DmadataEntry dmadata[]; // D_8009F8B0
+extern DmadataEntry dmadata[]; // D_8009F8B0
 //extern UNK_TYPE D_800A0004;
 //extern UNK_TYPE D_80186028;
 //extern UNK_TYPE D_801AAAB0;
@@ -923,7 +923,7 @@ extern u8 D_801AE214[]; // D_801AE214
 //extern UNK_TYPE D_801AE34C;
 //extern UNK_TYPE D_801AE374;
 //extern UNK_TYPE D_801AE388;
-extern z_EffectTableInfo EffectSS2Info; // D_801AE3A0
+extern EffectTableInfo EffectSS2Info; // D_801AE3A0
 //extern UNK_TYPE D_801AE3A4;
 //extern UNK_TYPE D_801AE3B0;
 //extern UNK_TYPE D_801AE3B4;
@@ -949,7 +949,7 @@ extern z_EffectTableInfo EffectSS2Info; // D_801AE3A0
 //extern UNK_TYPE D_801AE489;
 //extern UNK_TYPE D_801AE48C;
 //extern UNK_TYPE D_801AE490;
-extern z_ParticleOverlayTableEntry particleOverlayTable[]; // D_801AE4A0
+extern ParticleOverlayTableEntry particleOverlayTable[]; // D_801AE4A0
 //extern UNK_TYPE D_801AE4B0;
 //extern UNK_TYPE D_801AE4BC;
 //extern UNK_TYPE D_801AE8F0;
@@ -979,7 +979,7 @@ extern z_ParticleOverlayTableEntry particleOverlayTable[]; // D_801AE4A0
 //extern UNK_TYPE D_801AEFB8;
 //extern UNK_TYPE D_801AEFBC;
 //extern UNK_TYPE D_801AEFC0;
-extern z_ActorOverlayTableEntry D_801AEFD0; // D_801AEFD0
+extern ActorOverlayTableEntry D_801AEFD0; // D_801AEFD0
 //extern UNK_TYPE D_801AEFE0;
 //extern UNK_TYPE D_801AEFE4;
 //extern UNK_TYPE D_801AEFEE;
@@ -4693,7 +4693,7 @@ extern u8 D_801EF677; // D_801EF677
 //extern UNK_TYPE D_801F3F3A;
 //extern UNK_TYPE D_801F3F3B;
 //extern UNK_TYPE D_801F3F3C;
-extern z_StaticContext* staticContext; // D_801F3F60
+extern StaticContext* staticContext; // D_801F3F60
 //extern UNK_TYPE D_801F3F70;
 //extern UNK_TYPE D_801F3F80;
 //extern UNK_TYPE D_801F3F83;
@@ -16024,9 +16024,9 @@ extern f32 D_80ACB650; // D_80ACB650
 //extern UNK_TYPE D_80BD52F4;
 //extern UNK_TYPE D_80BD52F8;
 //extern UNK_TYPE D_80BD52FC;
-extern z_ActorInitData bgIkanaRayInitVar; // D_80BD55D0
+extern ActorInitData bgIkanaRayInitVar; // D_80BD55D0
 extern UNK_TYPE D_80BD55F0; // D_80BD55F0
-extern z_ActorInitVar bgIkanaRayCompInit[]; // D_80BD561C
+extern ActorInitVar bgIkanaRayCompInit[]; // D_80BD561C
 extern UNK_TYPE D_80BD562C; // D_80BD562C
 //extern UNK_TYPE D_80BD5CF0;
 //extern UNK_TYPE D_80BD5D10;
@@ -16838,6 +16838,6 @@ extern UNK_PTR D_800980D0_;
 extern UNK_TYPE D_80099AD0_;
 extern UNK_TYPE D_8009A670_;
 extern UNK_TYPE D_8009B140_;
-extern  (*D_801BE960[12])(u8*, z_ActorInitVar*);
+extern  (*D_801BE960[12])(u8*, ActorInitVar*);
 
 #endif

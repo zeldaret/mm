@@ -1,9 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
-void func_80085320(z_ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp10, UNK_PTR sp14) {
+void func_80085320(ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp10, UNK_PTR sp14) {
     UNK_TYPE* i;
-    z_ThreadInfo* v0;
+    ThreadInfo* v0;
 
     if (a0 == NULL) {
         g_s80085320_ListHead = NULL;
@@ -42,7 +42,7 @@ void func_80085320(z_ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TY
     }
 }
 
-UNK_RET func_800853F8(z_ThreadInfo* a0) {
+UNK_RET func_800853F8(ThreadInfo* a0) {
     if (a0->prev == NULL) {
         if (g_s80085320_ListHead == a0) {
             g_s80085320_ListHead = a0->next;
@@ -58,7 +58,7 @@ UNK_RET func_800853F8(z_ThreadInfo* a0) {
     }
 }
 
-UNK_TYPE func_80085468(z_ThreadInfo* a0) {
+UNK_TYPE func_80085468(ThreadInfo* a0) {
     UNK_TYPE* v1 = a0->unk8;
     UNK_TYPE* a1 = a0->unkC;
     UNK_TYPE* v0 = v1;
@@ -83,7 +83,7 @@ UNK_TYPE func_80085468(z_ThreadInfo* a0) {
 }
 
 UNK_TYPE func_800854E0(UNK_ARGS) {
-    z_ThreadInfo* s0 = g_s80085320_ListHead;
+    ThreadInfo* s0 = g_s80085320_ListHead;
     UNK_TYPE ret = 0;
     while (s0 != NULL) {
         if (func_80085468(s0) != 0) {
@@ -95,7 +95,7 @@ UNK_TYPE func_800854E0(UNK_ARGS) {
     return ret;
 }
 
-UNK_RET func_80085538(z_ThreadInfo* a0) {
+UNK_RET func_80085538(ThreadInfo* a0) {
     if (a0 == NULL) {
         func_800854E0();
     } else {
