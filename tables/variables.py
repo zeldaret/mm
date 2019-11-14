@@ -213,6 +213,6 @@
     0x80ACB650:("","f32",False),
     0x80BD55D0:("bgIkanaRayInitVar","z_ActorInitData",False),
     0x80BD55F0:("","UNK_TYPE",False),
-    0x80BD561C:("bgIkanaRayCompInit","z_ActorCompInitEntry",True),
+    0x80BD561C:("bgIkanaRayCompInit","z_ActorInitVar",True),
     0x80BD562C:("","UNK_TYPE",False)
     }

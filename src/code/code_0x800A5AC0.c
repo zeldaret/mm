@@ -9,7 +9,7 @@ UNK_RET EnAObj_Init(void* a0, UNK_TYPE a1) {
     z_ActorEnAObj* s0 = (z_ActorEnAObj*)a0;
     s0->base.textId = ((s0->base.variable >> 8) & 0xFF) | 0x300;
     s0->base.variable = (s0->base.variable & 0xFF) - 9;
-    Lib_ApplyActorInitVars((z_Actor*)s0, (z_ActorCompInitEntry*)&D_801ADEAC);
+    Lib_ApplyActorInitVars((z_Actor*)s0, (z_ActorInitVar*)&D_801ADEAC);
     func_800B3BA4(&s0->base.unkBC, 0, (UNK_PTR)&func_800B3FC0, 12);
     Collision_InitCylinder(a1, &s0->collision, (z_Actor*)s0, &D_801ADE80);
     Collision_CylinderMoveToActor((z_Actor*)s0, &s0->collision);

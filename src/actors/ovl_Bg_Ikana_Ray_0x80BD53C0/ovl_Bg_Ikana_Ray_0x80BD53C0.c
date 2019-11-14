@@ -48,7 +48,7 @@ glabel D_80BD55F0
 )
 
 // TODO macro
-z_ActorCompInitEntry  bgIkanaRayCompInit[] = {
+z_ActorInitVar  bgIkanaRayCompInit[] = {
 	{1, 6, 0x0FC, 4000},
 	{1, 6, 0x100, 1000},
 	{1, 6, 0x104, 1000},

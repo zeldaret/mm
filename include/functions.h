@@ -7,7 +7,6 @@
 #include <guint.h>
 #include <unk.h>
 #include <structs.h>
-#include <structs_bitfields.h>
 #include <stdlib.h>
 #include <xstdio.h>
 
@@ -1836,18 +1835,18 @@ UNK_RET Lib_PushAwayXZVec3f(z_Vector3f* a0, z_Vector3f* a1, f32 a2); // func_800
 f32 Lib_DistanceYVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA4C
 UNK_TYPE Lib_YawVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA60
 UNK_TYPE Lib_PitchVec3f(z_Vector3f* a0, z_Vector3f* a1); // func_800FFA94
-void Lib_ApplyActorInitVars(z_Actor*, z_ActorCompInitEntry*); // func_800FFADC
-UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorCompInitEntry* a1); // func_800FFB54
-UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorCompInitEntry* a1); // func_800FFB70
-UNK_RET Lib_ApplyActorInitVarShort1(u8* a0, z_ActorCompInitEntry* a1); // func_800FFB8C
-UNK_RET Lib_ApplyActorInitVarShort2(u8* a0, z_ActorCompInitEntry* a1); // func_800FFBA8
-UNK_RET Lib_ApplyActorInitVarWord1(u8* a0, z_ActorCompInitEntry* a1); // func_800FFBC4
-UNK_RET Lib_ApplyActorInitVarWord2(u8* a0, z_ActorCompInitEntry* a1); // func_800FFBE0
-UNK_RET Lib_ApplyActorInitVarFloat(u8* a0, z_ActorCompInitEntry* a1); // func_800FFBFC
-UNK_RET Lib_ApplyActorInitVarFloat1000th(u8* a0, z_ActorCompInitEntry* a1); // func_800FFC20
-UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorCompInitEntry* a1); // func_800FFC50
-UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorCompInitEntry* a1); // func_800FFC7C
-UNK_RET Lib_ApplyActorInitVarVector3s(u8* a0, z_ActorCompInitEntry* a1); // func_800FFCB4
+void Lib_ApplyActorInitVars(z_Actor*, z_ActorInitVar*); // func_800FFADC
+UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorInitVar* a1); // func_800FFB54
+UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorInitVar* a1); // func_800FFB70
+UNK_RET Lib_ApplyActorInitVarShort1(u8* a0, z_ActorInitVar* a1); // func_800FFB8C
+UNK_RET Lib_ApplyActorInitVarShort2(u8* a0, z_ActorInitVar* a1); // func_800FFBA8
+UNK_RET Lib_ApplyActorInitVarWord1(u8* a0, z_ActorInitVar* a1); // func_800FFBC4
+UNK_RET Lib_ApplyActorInitVarWord2(u8* a0, z_ActorInitVar* a1); // func_800FFBE0
+UNK_RET Lib_ApplyActorInitVarFloat(u8* a0, z_ActorInitVar* a1); // func_800FFBFC
+UNK_RET Lib_ApplyActorInitVarFloat1000th(u8* a0, z_ActorInitVar* a1); // func_800FFC20
+UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorInitVar* a1); // func_800FFC50
+UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorInitVar* a1); // func_800FFC7C
+UNK_RET Lib_ApplyActorInitVarVector3s(u8* a0, z_ActorInitVar* a1); // func_800FFCB4
 f32 func_800FFCD8(f32*, f32, f32, f32, f32); // func_800FFCD8
 UNK_RET Lib_ScaleMax_f(f32* a0, f32 a1, f32 a2, f32 a3); // func_800FFDF8
 UNK_RET Lib_Scale_f(f32* a0, f32 a1, f32 a2); // func_800FFE68

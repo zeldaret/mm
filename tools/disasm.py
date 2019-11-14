@@ -642,7 +642,7 @@ class Disassembler:
         with open(path + "/functions.h", 'w', newline='\n') as f:
             f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n");
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <structs_bitfields.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
 
             for addr in sorted(self.functions):
                 if addr in known_funcs:
@@ -655,7 +655,7 @@ class Disassembler:
         with open(path + "/variables.h", 'w', newline='\n') as f:
             f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n");
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <structs_bitfields.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
 
             for addr in sorted(self.vars):
                 if addr in known_vars:

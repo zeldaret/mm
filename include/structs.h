@@ -178,8 +178,10 @@ typedef struct {
 } z_ActorEnTest20C;
 
 typedef struct {
-/* 0x0 */ u16 info; // bitfield: 0-10: offset, 11-14: type, 15: more
-/* 0x2 */ s16 value;
+/* 0x0 */ u32 cont : 1;
+/* 0x0 */ u32 type : 4;
+/* 0x0 */ u32 offset : 11;
+/* 0x2 */ s32 value : 16;
 } z_ActorInitVar;
 
 typedef struct {

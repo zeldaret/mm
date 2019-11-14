@@ -419,45 +419,45 @@ UNK_TYPE Lib_PitchVec3f(z_Vector3f* a0, z_Vector3f* a1) {
     return atans_flip(Lib_DistanceXZVec3f(a0, a1), a0->y - a1->y);
 }
 
-void Lib_ApplyActorInitVars(z_Actor* a0, z_ActorCompInitEntry* a1) {
+void Lib_ApplyActorInitVars(z_Actor* a0, z_ActorInitVar* a1) {
     do {
         D_801BE960[a1->type]((u8*)a0, a1);
     } while ((a1++)->cont);
 }
 
-UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarByte1(u8* a0, z_ActorInitVar* a1) {
     *(u8*)(a0 + a1->offset) = (u8)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarByte2(u8* a0, z_ActorInitVar* a1) {
     *(u8*)(a0 + a1->offset) = (u8)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarShort1(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarShort1(u8* a0, z_ActorInitVar* a1) {
     *(u16*)(a0 + a1->offset) = (u16)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarShort2(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarShort2(u8* a0, z_ActorInitVar* a1) {
     *(u16*)(a0 + a1->offset) = (u16)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarWord1(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarWord1(u8* a0, z_ActorInitVar* a1) {
     *(u32*)(a0 + a1->offset) = (u32)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarWord2(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarWord2(u8* a0, z_ActorInitVar* a1) {
     *(u32*)(a0 + a1->offset) = (u32)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarFloat(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarFloat(u8* a0, z_ActorInitVar* a1) {
     *(f32*)(a0 + a1->offset) = (f32)(a1->value);
 }
 
-UNK_RET Lib_ApplyActorInitVarFloat1000th(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarFloat1000th(u8* a0, z_ActorInitVar* a1) {
     *(f32*)(a0 + a1->offset) = (f32)(a1->value) / 1000;
 }
 
-UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorInitVar* a1) {
     z_Vector3f* v0 = (z_Vector3f*)(a0 + a1->offset);
     f32 f0 = (f32)(a1->value);
 
@@ -466,7 +466,7 @@ UNK_RET Lib_ApplyActorInitVarVector3f(u8* a0, z_ActorCompInitEntry* a1) {
     v0->x = f0;
 }
 
-UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorInitVar* a1) {
     z_Vector3f* v0 = (z_Vector3f*)(a0 + a1->offset);
     f32 f0 = (f32)(a1->value) / 1000;
 
@@ -475,7 +475,7 @@ UNK_RET Lib_ApplyActorInitVarVector3f1000th(u8* a0, z_ActorCompInitEntry* a1) {
     v0->x = f0;
 }
 
-UNK_RET Lib_ApplyActorInitVarVector3s(u8* a0, z_ActorCompInitEntry* a1) {
+UNK_RET Lib_ApplyActorInitVarVector3s(u8* a0, z_ActorInitVar* a1) {
     z_Vector3s* v0 = (z_Vector3s*)(a0 + a1->offset);
     s16 v1 = (s16)(a1->value);
 

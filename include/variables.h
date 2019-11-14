@@ -7,7 +7,6 @@
 #include <guint.h>
 #include <unk.h>
 #include <structs.h>
-#include <structs_bitfields.h>
 #include <stdlib.h>
 #include <xstdio.h>
 
@@ -16027,7 +16026,7 @@ extern f32 D_80ACB650; // D_80ACB650
 //extern UNK_TYPE D_80BD52FC;
 extern z_ActorInitData bgIkanaRayInitVar; // D_80BD55D0
 extern UNK_TYPE D_80BD55F0; // D_80BD55F0
-extern z_ActorCompInitEntry bgIkanaRayCompInit[]; // D_80BD561C
+extern z_ActorInitVar bgIkanaRayCompInit[]; // D_80BD561C
 extern UNK_TYPE D_80BD562C; // D_80BD562C
 //extern UNK_TYPE D_80BD5CF0;
 //extern UNK_TYPE D_80BD5D10;
@@ -16839,6 +16838,6 @@ extern UNK_PTR D_800980D0_;
 extern UNK_TYPE D_80099AD0_;
 extern UNK_TYPE D_8009A670_;
 extern UNK_TYPE D_8009B140_;
-extern  (*D_801BE960[12])(u8*, z_ActorCompInitEntry*);
+extern  (*D_801BE960[12])(u8*, z_ActorInitVar*);
 
 #endif
