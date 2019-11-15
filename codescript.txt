@@ -192,6 +192,7 @@ SECTIONS
         build/src/boot_O2_g3/boot_0x800968B0.o(.text)
         build/asm/boot_0x800968F0.o(.text)
         build/asm/boot_0x80096930.o(.text)
+        boot_bss_start = .;
     }
     . += 0xC5C0;
 
@@ -327,6 +328,7 @@ SECTIONS
         build/asm/code_0x801AA020.o(.text)
         build/asm/code_0x801AA610.o(.text)
         build/asm/code_0x801AAAA0.o(.text)
+        code_bss_start = .;
     }
 
     ovl_title 0x80800000:

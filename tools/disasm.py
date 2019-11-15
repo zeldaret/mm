@@ -150,7 +150,7 @@ def write_header(file):
                "    .global \label\n"
                "    \label:\n"
                ".endm\n"
-               "\n");
+               "\n")
 
 
 # TODO add code_regions?
@@ -174,11 +174,13 @@ class Disassembler:
         self.labels = set()
         self.vars = set()
         self.data_regions = list()
+        self.bss_regions = list()
 
         self.has_done_first_pass = False
 
         self.is_data_cache = {}
         self.is_code_cache = {}
+        self.is_bss_cache = {}
 
     def load_defaults(self):
         for file in known_files:
@@ -186,7 +188,9 @@ class Disassembler:
             self.add_object(file[2]) # assume every file starts with a object and function
             self.add_function(file[2])
             for region in file[3]:
-                self.add_data_region(region[0], region[1])
+                self.add_data_region(region[0], region[1], file[1])
+            for region in file[4]:
+                self.add_bss_region(region[0], region[1], file[1])
 
         for addr in known_funcs:
             self.add_function(addr)
@@ -198,10 +202,14 @@ class Disassembler:
         for addr in known_vars:
             self.add_variable(addr)
 
-    def add_file(self, path, name, vaddr):
-        self.files.append(self.File(name, read_file(path), vaddr))
+    def reset_cache(self):
         self.is_data_cache = {}
         self.is_code_cache = {}
+        self.is_bss_cache = {}
+
+    def add_file(self, path, name, vaddr):
+        self.files.append(self.File(name, read_file(path + '/' + name), vaddr))
+        self.reset_cache()
 
     def add_object(self, addr):
         self.objects.add(addr)
@@ -218,23 +226,26 @@ class Disassembler:
     def add_label(self, addr):
         self.labels.add(addr)
 
-    def add_data_region(self, start, end):
-        self.data_regions.append((start, end))
-        self.is_data_cache = {}
-        self.is_code_cache = {}
+    def add_data_region(self, start, end, file_name):
+        self.data_regions.append((start, end, file_name))
+        self.reset_cache()
+
+    def add_bss_region(self, start, end, file_name):
+        self.bss_regions.append((start, end, file_name))
+        self.reset_cache()
 
     def is_in_data(self, addr):
         if addr in self.is_data_cache:
             return self.is_data_cache[addr]
 
-        start = 0;
+        start = 0
         last = len(self.data_regions) - 1
         while start <= last:
             midpoint = (start + last) // 2
             if addr >= self.data_regions[midpoint][0]:
                 if addr <= self.data_regions[midpoint][1]:
                     self.is_data_cache[addr] = True
-                    return True;
+                    return True
                 else:
                     start = midpoint + 1
             else:
@@ -247,14 +258,14 @@ class Disassembler:
         if addr in self.is_code_cache:
             return self.is_code_cache[addr]
 
-        start = 0;
+        start = 0
         last = len(self.files) - 1
         while start <= last:
             midpoint = (start + last) // 2
             if addr >= self.files[midpoint].vaddr:
                 if addr < (self.files[midpoint].vaddr + self.files[midpoint].size):
                     self.is_code_cache[addr] = not self.is_in_data(addr)
-                    return self.is_code_cache[addr];
+                    return self.is_code_cache[addr]
                 else:
                     start = midpoint + 1
             else:
@@ -262,6 +273,26 @@ class Disassembler:
 
         self.is_code_cache[addr] = False
         return False
+
+    def is_in_bss(self, addr):
+        if addr in self.is_bss_cache:
+            return self.is_bss_cache[addr]
+
+        start = 0
+        last = len(self.bss_regions) - 1
+        while start <= last:
+            midpoint = (start + last) // 2
+            if addr >= self.bss_regions[midpoint][0]:
+                if addr <= self.bss_regions[midpoint][1]:
+                    self.is_bss_cache[addr] = True
+                    return True, self.bss_regions[midpoint]
+                else:
+                    start = midpoint + 1
+            else:
+                last = midpoint - 1
+
+        self.is_bss_cache[addr] = False
+        return False, None
 
     def is_in_data_or_undef(self, addr):
         # return true if it is in a defined data region
@@ -293,7 +324,7 @@ class Disassembler:
 
     # TODO refactor to remove file_addr
     def get_object_name(self, addr, file_addr):
-        filename = "";
+        filename = ""
 
         for file in self.files:
             if file_addr == file.vaddr:
@@ -336,6 +367,7 @@ class Disassembler:
         # TODO keep sorted
         self.files = sorted(self.files, key = lambda file: file.vaddr)
         self.data_regions = sorted(self.data_regions, key = lambda region: region[0])
+        self.bss_regions = sorted(self.bss_regions, key = lambda region: region[0])
 
         for file in self.files:
             for i in range(0, file.size // 4):
@@ -361,7 +393,7 @@ class Disassembler:
 
     def second_pass(self, path):
         for file in self.files:
-            filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr);
+            filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr)
 
             with open(filename, 'w') as f:
                 write_header(f)
@@ -371,8 +403,8 @@ class Disassembler:
                     addr = file.vaddr + i*4
 
                     if addr in self.objects and SPLIT_FILES:
-                        f.close();
-                        filename = path + '/%s.asm' % self.get_object_name(addr, file.vaddr);
+                        f.close()
+                        filename = path + '/%s.asm' % self.get_object_name(addr, file.vaddr)
                         f = open(filename, 'w')
                         write_header(f)
 
@@ -585,7 +617,7 @@ class Disassembler:
         else:
             dis += "%s\t" % ops[op_num]
             if op_num == 2 or op_num == 3: # j, jal
-                dis += "%s" % self.make_func(inst & 0x3FFFFFF, addr);
+                dis += "%s" % self.make_func(inst & 0x3FFFFFF, addr)
             elif op_num == 4 or op_num == 5 or op_num == 20 or op_num == 21: # beq, bne, beql, bnel
                 if op_num == 4 and get_rs(inst) == get_rt(inst) == 0: # beq with both zero regs is a branch always (b %label)
                     dis = "b\t%s" % self.make_label(get_signed_imm(inst), addr)
@@ -640,41 +672,44 @@ class Disassembler:
     def generate_headers(self, path):
         self.first_pass() # find functions and variables
         with open(path + "/functions.h", 'w', newline='\n') as f:
-            f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n");
+            f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n")
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n')
 
             for addr in sorted(self.functions):
                 if addr in known_funcs:
-                    f.write("%s %s(%s); // func_%08X\n" % (known_funcs[addr][1], get_func_name(addr), known_funcs[addr][2], addr));
+                    f.write("%s %s(%s); // func_%08X\n" % (known_funcs[addr][1], get_func_name(addr), known_funcs[addr][2], addr))
                 else:
-                    f.write("// UNK_RET %s(UNK_ARGS);\n" % get_func_name(addr));
+                    f.write("// UNK_RET %s(UNK_ARGS);\n" % get_func_name(addr))
 
-            f.write("\n#endif\n");
+            f.write("\n#endif\n")
 
         with open(path + "/variables.h", 'w', newline='\n') as f:
-            f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n");
+            f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n")
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n');
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n')
 
             for addr in sorted(self.vars):
                 if addr in known_vars:
-                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), "[]" if known_vars[addr][2] else "", addr));
+                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), "[]" if known_vars[addr][2] else "", addr))
                 else:
-                    f.write("//extern UNK_TYPE %s;\n" % self.make_load(addr));
+                    f.write("//extern UNK_TYPE %s;\n" % self.make_load(addr))
 
-            f.write("\n// extra variables needed for one reason or another\n\n");
+            f.write("\n// extra variables needed for one reason or another\n\n")
             for (name, var_type) in extra_vars:
-                f.write("extern %s %s;\n" % (var_type, name));
+                f.write("extern %s %s;\n" % (var_type, name))
 
-            f.write("\n#endif\n");
+            f.write("\n#endif\n")
 
     def generate_undefined(self, path):
         self.first_pass() # find functions and variables
         with open(path + "/undef.txt", 'w', newline='\n') as f:
             for addr in sorted(self.vars):
-                if not self.is_in_data(addr):
-                    f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr));
+                is_in_bss, region = self.is_in_bss(addr)
+                if is_in_bss:
+                    f.write("%s = %s_bss_start + 0x%08X;\n" % (self.make_load(addr), region[2], addr - region[0]))
+                elif not self.is_in_data(addr):
+                    f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr))
 
             # TODO not hard code
             f.write('''
@@ -711,7 +746,7 @@ if __name__ == "__main__":
                 ("D_80099AD0_","UNK_TYPE"), # needed to match?
                 ("D_8009A670_","UNK_TYPE"), # needed to match?
                 ("D_8009B140_","UNK_TYPE"), # needed to match?
-                ("(*D_801BE960[12])(u8*, z_ActorCompInitEntry*)",""), # TODO better function pointer representation
+                ("(*D_801BE960[12])(u8*, ActorInitVar*)",""), # TODO better function pointer representation
             )
     dis = Disassembler()
     dis.load_defaults() # TODO file loading code should go in here
