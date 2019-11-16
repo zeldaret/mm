@@ -1,3 +1,3 @@
 2a0a8acb61538235bc1094d297fb6556  rom.z64
-4e8afbb44e6a4b9bc00eaa318bb1650c  code.bin
-b0145fad4be13d63d5d7aa75062db400  boot.bin
+4e8afbb44e6a4b9bc00eaa318bb1650c  build/code.bin
+b0145fad4be13d63d5d7aa75062db400  build/boot.bin

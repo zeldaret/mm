@@ -468,7 +468,7 @@ class Disassembler:
 
                 # TODO workaround to avoid classifying loading constants as loading pointers
                 # This unfortunately causes it to not detect object addresses
-                if addr >= 0x2000000 and addr < 0x80000000:
+                if addr < 0x80000000:
                     return
 
                 if self.is_in_data_or_undef(addr):
@@ -481,6 +481,12 @@ class Disassembler:
 
             elif is_load(next_inst) and (get_rt(cur_inst) == get_rs(next_inst)): # lui + load (load pointer)
                 addr = (get_imm(cur_inst) << 16) + get_signed_imm(next_inst)
+
+                # TODO workaround to avoid classifying loading constants as loading pointers
+                # This unfortunately causes it to not detect object addresses
+                if addr < 0x80000000:
+                    return
+
                 if self.is_in_data_or_undef(addr):
                     self.add_variable(addr)
                 else:
@@ -687,9 +693,12 @@ class Disassembler:
         with open(path + "/variables.h", 'w', newline='\n') as f:
             f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n")
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n')
+            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n#include <dmadata.h>\n\n')
 
             for addr in sorted(self.vars):
+                if addr < 0x02000000:
+                    continue # Don't print out symbols of dmadata files' vrom addresses. These will be defined in another file.
+
                 if addr in known_vars:
                     f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), "[]" if known_vars[addr][2] else "", addr))
                 else:

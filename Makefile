@@ -40,10 +40,12 @@ BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
 BASEROM_FILES := $(subst baserom/dmadata ,,$(BASEROM_FILES))
 BASEROM_BUILD_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%)
+BASEROM_PRE_DMADATA_FILES := $(BASEROM_BUILD_FILES:build/baserom/%=build/baserom_pre_dmadata/%)
 
 BASE_DECOMP_FILES := $(wildcard decomp/*)
 DECOMP_FILES := $(BASE_DECOMP_FILES:decomp/%=build/decomp/%)
-COMP_FILES := $(DECOMP_FILES:decomp/%=comp/%.yaz0)
+DECOMP_PRE_DMADATA_FILES := $(DECOMP_FILES:build/decomp/%=build/decomp_pre_dmadata/%)
+COMP_FILES := $(DECOMP_FILES:build/decomp/%=build/comp/%.yaz0)
 
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
@@ -64,8 +66,10 @@ ROM := rom.z64
 # make build directories
 $(shell mkdir -p build/asm)
 $(shell mkdir -p build/baserom)
+$(shell mkdir -p build/baserom_pre_dmadata)
 $(shell mkdir -p build/comp)
 $(shell mkdir -p build/decomp)
+$(shell mkdir -p build/decomp_pre_dmadata)
 $(shell mkdir -p build/src)
 $(shell mkdir -p build/src/libultra)
 $(shell mkdir -p build/src/libultra/os)
@@ -82,34 +86,67 @@ check: $(ROM)
 $(ROM): $(ROM_FILES)
 	@python3 ./tools/makerom.py ./tables/dmadata_table.py $@
 
-boot.bin: code.elf
+build/boot_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
 
-code.bin: code.elf
+build/code_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS)objcopy --dump-section code=$@ $<
 
-ovl_title.bin: code.elf
+build/ovl_title_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
 
-code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
-	$(LD) -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
+build/boot.bin: build/code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
+
+build/code.bin: build/code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section code=$@ $<
+
+build/ovl_title.bin: build/code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
+
+build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
+	$(LD) -r -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
+
+build/code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt dmadata_script.txt
+	$(LD) -T codescript.txt -T undef.txt -T dmadata_script.txt --no-check-sections --accept-unknown-input-arch -o $@
+
+dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMADATA_FILES)
+# TODO is there a better way to avoid this shuffling?
+	mv build/baserom build/baserom_temp
+	mv build/decomp build/decomp_temp
+	mv build/baserom_pre_dmadata build/baserom
+	mv build/decomp_pre_dmadata build/decomp
+	python3 ./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l dmadata_script.txt
+	mv build/baserom build/baserom_pre_dmadata
+	mv build/decomp build/decomp_pre_dmadata
+	mv build/baserom_temp build/baserom
+	mv build/decomp_temp build/decomp
 
 test.txt: build/src/test.o
 	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
 
 clean:
-	rm $(ROM) code.elf code.bin boot.bin -r build
+	rm $(ROM) -r build
 
 build/baserom/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 	python3 ./tools/dmadata.py ./tables/dmadata_table.py $@
 
-build/baserom/boot: boot.bin
+build/baserom/boot: build/boot.bin
 	cp $< $@
 
-build/decomp/code: code.bin
+build/decomp/code: build/code.bin
 	cp $< $@
 
-build/decomp/ovl_title: ovl_title.bin
+build/decomp/ovl_title: build/ovl_title.bin
+	cp $< $@
+
+build/baserom_pre_dmadata/boot: build/boot_pre_dmadata.bin
+	cp $< $@
+
+build/decomp_pre_dmadata/code: build/code_pre_dmadata.bin
+	cp $< $@
+
+build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
 	cp $< $@
 
 
@@ -121,7 +158,10 @@ disasm:
 
 # Recipes
 
-build/baserom/%: baserom/%
+build/baserom/%: build/baserom_pre_dmadata/%
+	cp $< $@
+
+build/baserom_pre_dmadata/%: baserom/%
 	cp $< $@
 
 build/asm/%.o: asm/%.asm
@@ -130,7 +170,10 @@ build/asm/%.o: asm/%.asm
 build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 
-build/decomp/%: decomp/%
+build/decomp/%: build/decomp_pre_dmadata/%
+	cp $< $@
+
+build/decomp_pre_dmadata/%: decomp/%
 	cp $< $@
 
 build/comp/%.yaz0: build/decomp/%

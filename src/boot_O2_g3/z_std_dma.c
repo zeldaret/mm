@@ -223,7 +223,7 @@ void Dmamgr_Start() {
 	DmadataEntry* v0;
 	u32 v1;
 	// TODO register load ordering is wrong
-	Dmamgr_DoDmaTransfer(&dmadataRomStart, dmadata, (u8*)&dmadataRomEnd - (u8*)&dmadataRomStart);
+	Dmamgr_DoDmaTransfer(&dmadata_vrom_start, dmadata, (u8*)&dmadata_vrom_end - (u8*)&dmadata_vrom_start);
 
 	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
 

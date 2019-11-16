@@ -1,0 +1,4605 @@
+makerom_vrom_start = 0x00000000;
+makerom_vrom_end = 0x00001060;
+
+boot_vrom_start = 0x00001060;
+boot_vrom_end = 0x0001A500;
+
+dmadata_vrom_start = 0x0001A500;
+dmadata_vrom_end = 0x00020700;
+
+Audiobank_vrom_start = 0x00020700;
+Audiobank_vrom_end = 0x00046AF0;
+
+Audioseq_vrom_start = 0x00046AF0;
+Audioseq_vrom_end = 0x00097F70;
+
+Audiotable_vrom_start = 0x00097F70;
+Audiotable_vrom_end = 0x005E06E0;
+
+jpn_font_static_vrom_start = 0x005E06E0;
+jpn_font_static_vrom_end = 0x0065C9E0;
+
+link_animetion_vrom_start = 0x0065D000;
+link_animetion_vrom_end = 0x00956DA0;
+
+icon_item_field_static_vrom_start = 0x009F5000;
+icon_item_field_static_vrom_end = 0x00A09AF0;
+
+icon_item_dungeon_static_vrom_start = 0x00A0A000;
+icon_item_dungeon_static_vrom_end = 0x00A0EB80;
+
+icon_item_gameover_static_vrom_start = 0x00A0F000;
+icon_item_gameover_static_vrom_end = 0x00A12300;
+
+_013_0x00963540_vrom_start = 0x00A13000;
+_013_0x00963540_vrom_end = 0x00A1BA00;
+
+_014_0x00967260_vrom_start = 0x00A1C000;
+_014_0x00967260_vrom_end = 0x00A1C2E0;
+
+map_i_static_vrom_start = 0x00A1D000;
+map_i_static_vrom_end = 0x00A1E310;
+
+map_grand_static_vrom_start = 0x00A1E310;
+map_grand_static_vrom_end = 0x00A27660;
+
+item_name_static_vrom_start = 0x00A27660;
+item_name_static_vrom_end = 0x00A352F0;
+
+map_name_static_vrom_start = 0x00A352F0;
+map_name_static_vrom_end = 0x00A36C10;
+
+_019_0x00980f60_vrom_start = 0x00A36C10;
+_019_0x00980f60_vrom_end = 0x00A7BEE0;
+
+_020_0x009c6230_vrom_start = 0x00A7BEE0;
+_020_0x009c6230_vrom_end = 0x00A807A0;
+
+_022_0x009caaf0_vrom_start = 0x00A8C000;
+_022_0x009caaf0_vrom_end = 0x00A92A10;
+
+_023_0x009d1500_vrom_start = 0x00A92A10;
+_023_0x009d1500_vrom_end = 0x00A990E0;
+
+_024_0x009d3760_vrom_start = 0x00A9A000;
+_024_0x009d3760_vrom_end = 0x00ABFC00;
+
+do_action_static_vrom_start = 0x00AC0000;
+do_action_static_vrom_end = 0x00AC3F00;
+
+message_static_vrom_start = 0x00AC4000;
+message_static_vrom_end = 0x00AC9180;
+
+message_texture_static_vrom_start = 0x00ACA000;
+message_texture_static_vrom_end = 0x00ACB200;
+
+nes_font_static_vrom_start = 0x00ACC000;
+nes_font_static_vrom_end = 0x00AD0E00;
+
+en_message_data_static_vrom_start = 0x00AD1000;
+en_message_data_static_vrom_end = 0x00B3A9F0;
+
+staff_message_data_static_vrom_start = 0x00B3B000;
+staff_message_data_static_vrom_end = 0x00B3BE60;
+
+code_vrom_start = 0x00B3C000;
+code_vrom_end = 0x00C7A4E0;
+
+ovl_title_vrom_start = 0x00C7A4E0;
+ovl_title_vrom_end = 0x00C7ADF0;
+
+ovl_select_vrom_start = 0x00C7ADF0;
+ovl_select_vrom_end = 0x00C7E2D0;
+
+ovl_opening_vrom_start = 0x00C7E2D0;
+ovl_opening_vrom_end = 0x00C7E4F0;
+
+ovl_file_choose_vrom_start = 0x00C7E4F0;
+ovl_file_choose_vrom_end = 0x00C8F360;
+
+ovl_daytelop_vrom_start = 0x00C8F360;
+ovl_daytelop_vrom_end = 0x00C90550;
+
+ovl_kaleido_scope_vrom_start = 0x00C90550;
+ovl_kaleido_scope_vrom_end = 0x00CA7F00;
+
+ovl_Player_Actor_vrom_start = 0x00CA7F00;
+ovl_Player_Actor_vrom_end = 0x00CDCF60;
+
+ovl_En_Test_vrom_start = 0x00CDCF60;
+ovl_En_Test_vrom_end = 0x00CDDC60;
+
+ovl_En_GirlA_vrom_start = 0x00CDDC60;
+ovl_En_GirlA_vrom_end = 0x00CDF760;
+
+ovl_En_Part_vrom_start = 0x00CDF760;
+ovl_En_Part_vrom_end = 0x00CDFD80;
+
+ovl_En_Light_vrom_start = 0x00CDFD80;
+ovl_En_Light_vrom_end = 0x00CE0BF0;
+
+ovl_En_Door_vrom_start = 0x00CE0BF0;
+ovl_En_Door_vrom_end = 0x00CE1FB0;
+
+ovl_En_Box_vrom_start = 0x00CE1FB0;
+ovl_En_Box_vrom_end = 0x00CE4170;
+
+ovl_En_Pametfrog_vrom_start = 0x00CE4170;
+ovl_En_Pametfrog_vrom_end = 0x00CE8200;
+
+ovl_En_Okuta_vrom_start = 0x00CE8200;
+ovl_En_Okuta_vrom_end = 0x00CEB190;
+
+ovl_En_Bom_vrom_start = 0x00CEB190;
+ovl_En_Bom_vrom_end = 0x00CEEA30;
+
+ovl_En_Wallmas_vrom_start = 0x00CEEA30;
+ovl_En_Wallmas_vrom_end = 0x00CF0890;
+
+ovl_En_Dodongo_vrom_start = 0x00CF0890;
+ovl_En_Dodongo_vrom_end = 0x00CF3910;
+
+ovl_En_Firefly_vrom_start = 0x00CF3910;
+ovl_En_Firefly_vrom_end = 0x00CF5950;
+
+ovl_En_Horse_vrom_start = 0x00CF5950;
+ovl_En_Horse_vrom_end = 0x00D04460;
+
+ovl_En_Arrow_vrom_start = 0x00D04460;
+ovl_En_Arrow_vrom_end = 0x00D06730;
+
+ovl_En_Elf_vrom_start = 0x00D06730;
+ovl_En_Elf_vrom_end = 0x00D0B280;
+
+ovl_En_Niw_vrom_start = 0x00D0B280;
+ovl_En_Niw_vrom_end = 0x00D0DA10;
+
+ovl_En_Tite_vrom_start = 0x00D0DA10;
+ovl_En_Tite_vrom_end = 0x00D11150;
+
+ovl_En_Peehat_vrom_start = 0x00D11150;
+ovl_En_Peehat_vrom_end = 0x00D13B80;
+
+ovl_En_Holl_vrom_start = 0x00D13B80;
+ovl_En_Holl_vrom_end = 0x00D14900;
+
+ovl_En_Dinofos_vrom_start = 0x00D14900;
+ovl_En_Dinofos_vrom_end = 0x00D18B00;
+
+ovl_En_Hata_vrom_start = 0x00D18B00;
+ovl_En_Hata_vrom_end = 0x00D18FB0;
+
+ovl_En_Zl1_vrom_start = 0x00D18FB0;
+ovl_En_Zl1_vrom_end = 0x00D19040;
+
+ovl_En_Viewer_vrom_start = 0x00D19040;
+ovl_En_Viewer_vrom_end = 0x00D196F0;
+
+ovl_En_Bubble_vrom_start = 0x00D196F0;
+ovl_En_Bubble_vrom_end = 0x00D1AB00;
+
+ovl_Door_Shutter_vrom_start = 0x00D1AB00;
+ovl_Door_Shutter_vrom_end = 0x00D1C6E0;
+
+ovl_En_Boom_vrom_start = 0x00D1C6E0;
+ovl_En_Boom_vrom_end = 0x00D1D3C0;
+
+ovl_En_Torch2_vrom_start = 0x00D1D3C0;
+ovl_En_Torch2_vrom_end = 0x00D1D880;
+
+ovl_En_Minifrog_vrom_start = 0x00D1D880;
+ovl_En_Minifrog_vrom_end = 0x00D1F260;
+
+ovl_En_St_vrom_start = 0x00D1F260;
+ovl_En_St_vrom_end = 0x00D21B40;
+
+ovl_Obj_Wturn_vrom_start = 0x00D21B40;
+ovl_Obj_Wturn_vrom_end = 0x00D22040;
+
+ovl_En_River_Sound_vrom_start = 0x00D22040;
+ovl_En_River_Sound_vrom_end = 0x00D222B0;
+
+ovl_En_Ossan_vrom_start = 0x00D222B0;
+ovl_En_Ossan_vrom_end = 0x00D26B30;
+
+ovl_En_Famos_vrom_start = 0x00D26B30;
+ovl_En_Famos_vrom_end = 0x00D28AD0;
+
+ovl_En_Bombf_vrom_start = 0x00D28AD0;
+ovl_En_Bombf_vrom_end = 0x00D29EE0;
+
+ovl_En_Am_vrom_start = 0x00D29EE0;
+ovl_En_Am_vrom_end = 0x00D2B540;
+
+ovl_En_Dekubaba_vrom_start = 0x00D2B540;
+ovl_En_Dekubaba_vrom_end = 0x00D2F440;
+
+ovl_En_M_Fire1_vrom_start = 0x00D2F440;
+ovl_En_M_Fire1_vrom_end = 0x00D2F5D0;
+
+ovl_En_M_Thunder_vrom_start = 0x00D2F5D0;
+ovl_En_M_Thunder_vrom_end = 0x00D31570;
+
+ovl_Bg_Breakwall_vrom_start = 0x00D31570;
+ovl_Bg_Breakwall_vrom_end = 0x00D326A0;
+
+ovl_Door_Warp1_vrom_start = 0x00D326A0;
+ovl_Door_Warp1_vrom_end = 0x00D36210;
+
+ovl_Obj_Syokudai_vrom_start = 0x00D36210;
+ovl_Obj_Syokudai_vrom_end = 0x00D36FE0;
+
+ovl_Item_B_Heart_vrom_start = 0x00D36FE0;
+ovl_Item_B_Heart_vrom_end = 0x00D373D0;
+
+ovl_En_Dekunuts_vrom_start = 0x00D373D0;
+ovl_En_Dekunuts_vrom_end = 0x00D39410;
+
+ovl_En_Bbfall_vrom_start = 0x00D39410;
+ovl_En_Bbfall_vrom_end = 0x00D3B220;
+
+ovl_Arms_Hook_vrom_start = 0x00D3B220;
+ovl_Arms_Hook_vrom_end = 0x00D3BF30;
+
+ovl_En_Bb_vrom_start = 0x00D3BF30;
+ovl_En_Bb_vrom_end = 0x00D3DC40;
+
+ovl_Bg_Keikoku_Spr_vrom_start = 0x00D3DC40;
+ovl_Bg_Keikoku_Spr_vrom_end = 0x00D3DDF0;
+
+ovl_En_Wood02_vrom_start = 0x00D3DDF0;
+ovl_En_Wood02_vrom_end = 0x00D3F160;
+
+ovl_En_Death_vrom_start = 0x00D3F160;
+ovl_En_Death_vrom_end = 0x00D44290;
+
+ovl_En_Minideath_vrom_start = 0x00D44290;
+ovl_En_Minideath_vrom_end = 0x00D46430;
+
+ovl_En_Vm_vrom_start = 0x00D46430;
+ovl_En_Vm_vrom_end = 0x00D47910;
+
+ovl_Demo_Effect_vrom_start = 0x00D47910;
+ovl_Demo_Effect_vrom_end = 0x00D48620;
+
+ovl_Demo_Kankyo_vrom_start = 0x00D48620;
+ovl_Demo_Kankyo_vrom_end = 0x00D4A850;
+
+ovl_En_Floormas_vrom_start = 0x00D4A850;
+ovl_En_Floormas_vrom_end = 0x00D4DFF0;
+
+ovl_En_Rd_vrom_start = 0x00D4DFF0;
+ovl_En_Rd_vrom_end = 0x00D51720;
+
+ovl_Bg_F40_Flift_vrom_start = 0x00D51720;
+ovl_Bg_F40_Flift_vrom_end = 0x00D51AA0;
+
+ovl_Bg_Heavy_Block_vrom_start = 0x00D51AA0;
+ovl_Bg_Heavy_Block_vrom_end = 0x00D52B10;
+
+ovl_En_Sw_vrom_start = 0x00D52B10;
+ovl_En_Sw_vrom_end = 0x00D56050;
+
+ovl_Object_Kankyo_vrom_start = 0x00D56050;
+ovl_Object_Kankyo_vrom_end = 0x00D58780;
+
+ovl_En_Horse_Link_Child_vrom_start = 0x00D58780;
+ovl_En_Horse_Link_Child_vrom_end = 0x00D5A360;
+
+ovl_Door_Ana_vrom_start = 0x00D5A360;
+ovl_Door_Ana_vrom_end = 0x00D5A9F0;
+
+ovl_En_Encount1_vrom_start = 0x00D5A9F0;
+ovl_En_Encount1_vrom_end = 0x00D5B000;
+
+ovl_Demo_Tre_Lgt_vrom_start = 0x00D5B000;
+ovl_Demo_Tre_Lgt_vrom_end = 0x00D5B720;
+
+ovl_En_Encount2_vrom_start = 0x00D5B720;
+ovl_En_Encount2_vrom_end = 0x00D5C1A0;
+
+ovl_En_Fire_Rock_vrom_start = 0x00D5C1A0;
+ovl_En_Fire_Rock_vrom_end = 0x00D5C230;
+
+ovl_Bg_Ctower_Rot_vrom_start = 0x00D5C230;
+ovl_Bg_Ctower_Rot_vrom_end = 0x00D5C7C0;
+
+ovl_Mir_Ray_vrom_start = 0x00D5C7C0;
+ovl_Mir_Ray_vrom_end = 0x00D5E0B0;
+
+ovl_En_Sb_vrom_start = 0x00D5E0B0;
+ovl_En_Sb_vrom_end = 0x00D5F180;
+
+ovl_En_Bigslime_vrom_start = 0x00D5F180;
+ovl_En_Bigslime_vrom_end = 0x00D6B3C0;
+
+ovl_En_Karebaba_vrom_start = 0x00D6B3C0;
+ovl_En_Karebaba_vrom_end = 0x00D6D270;
+
+ovl_En_In_vrom_start = 0x00D6D270;
+ovl_En_In_vrom_end = 0x00D71670;
+
+ovl_En_Bom_Chu_vrom_start = 0x00D71670;
+ovl_En_Bom_Chu_vrom_end = 0x00D72C60;
+
+ovl_En_Horse_Game_Check_vrom_start = 0x00D72C60;
+ovl_En_Horse_Game_Check_vrom_end = 0x00D73FC0;
+
+ovl_En_Rr_vrom_start = 0x00D73FC0;
+ovl_En_Rr_vrom_end = 0x00D76710;
+
+ovl_En_Fr_vrom_start = 0x00D76710;
+ovl_En_Fr_vrom_end = 0x00D76880;
+
+ovl_En_Fishing_vrom_start = 0x00D76880;
+ovl_En_Fishing_vrom_end = 0x00D8A370;
+
+ovl_Obj_Oshihiki_vrom_start = 0x00D8A370;
+ovl_Obj_Oshihiki_vrom_end = 0x00D8BC20;
+
+ovl_Eff_Dust_vrom_start = 0x00D8BC20;
+ovl_Eff_Dust_vrom_end = 0x00D8D010;
+
+ovl_Bg_Umajump_vrom_start = 0x00D8D010;
+ovl_Bg_Umajump_vrom_end = 0x00D8D980;
+
+ovl_En_Insect_vrom_start = 0x00D8D980;
+ovl_En_Insect_vrom_end = 0x00D8F180;
+
+ovl_En_Butte_vrom_start = 0x00D8F180;
+ovl_En_Butte_vrom_end = 0x00D90710;
+
+ovl_En_Fish_vrom_start = 0x00D90710;
+ovl_En_Fish_vrom_end = 0x00D92FD0;
+
+ovl_Item_Etcetera_vrom_start = 0x00D92FD0;
+ovl_Item_Etcetera_vrom_end = 0x00D93420;
+
+ovl_Arrow_Fire_vrom_start = 0x00D93420;
+ovl_Arrow_Fire_vrom_end = 0x00D95500;
+
+ovl_Arrow_Ice_vrom_start = 0x00D95500;
+ovl_Arrow_Ice_vrom_end = 0x00D973C0;
+
+ovl_Arrow_Light_vrom_start = 0x00D973C0;
+ovl_Arrow_Light_vrom_end = 0x00D99260;
+
+ovl_Obj_Kibako_vrom_start = 0x00D99260;
+ovl_Obj_Kibako_vrom_end = 0x00D9A670;
+
+ovl_Obj_Tsubo_vrom_start = 0x00D9A670;
+ovl_Obj_Tsubo_vrom_end = 0x00D9C9C0;
+
+ovl_En_Ik_vrom_start = 0x00D9C9C0;
+ovl_En_Ik_vrom_end = 0x00D9F5E0;
+
+ovl_Demo_Shd_vrom_start = 0x00D9F5E0;
+ovl_Demo_Shd_vrom_end = 0x00D9F670;
+
+ovl_En_Dns_vrom_start = 0x00D9F670;
+ovl_En_Dns_vrom_end = 0x00DA1040;
+
+ovl_Elf_Msg_vrom_start = 0x00DA1040;
+ovl_Elf_Msg_vrom_end = 0x00DA15C0;
+
+ovl_En_Honotrap_vrom_start = 0x00DA15C0;
+ovl_En_Honotrap_vrom_end = 0x00DA3890;
+
+ovl_En_Tubo_Trap_vrom_start = 0x00DA3890;
+ovl_En_Tubo_Trap_vrom_end = 0x00DA4610;
+
+ovl_Obj_Ice_Poly_vrom_start = 0x00DA4610;
+ovl_Obj_Ice_Poly_vrom_end = 0x00DA5540;
+
+ovl_En_Fz_vrom_start = 0x00DA5540;
+ovl_En_Fz_vrom_end = 0x00DA7A90;
+
+ovl_En_Kusa_vrom_start = 0x00DA7A90;
+ovl_En_Kusa_vrom_end = 0x00DA9B80;
+
+ovl_Obj_Bean_vrom_start = 0x00DA9B80;
+ovl_Obj_Bean_vrom_end = 0x00DAC240;
+
+ovl_Obj_Bombiwa_vrom_start = 0x00DAC240;
+ovl_Obj_Bombiwa_vrom_end = 0x00DADA60;
+
+ovl_Obj_Switch_vrom_start = 0x00DADA60;
+ovl_Obj_Switch_vrom_end = 0x00DB0240;
+
+ovl_Obj_Lift_vrom_start = 0x00DB0240;
+ovl_Obj_Lift_vrom_end = 0x00DB0D20;
+
+ovl_Obj_Hsblock_vrom_start = 0x00DB0D20;
+ovl_Obj_Hsblock_vrom_end = 0x00DB12A0;
+
+ovl_En_Okarina_Tag_vrom_start = 0x00DB12A0;
+ovl_En_Okarina_Tag_vrom_end = 0x00DB1720;
+
+ovl_En_Goroiwa_vrom_start = 0x00DB1720;
+ovl_En_Goroiwa_vrom_end = 0x00DB6330;
+
+ovl_En_Daiku_vrom_start = 0x00DB6330;
+ovl_En_Daiku_vrom_end = 0x00DB7060;
+
+ovl_En_Nwc_vrom_start = 0x00DB7060;
+ovl_En_Nwc_vrom_end = 0x00DB8370;
+
+ovl_Item_Inbox_vrom_start = 0x00DB8370;
+ovl_Item_Inbox_vrom_end = 0x00DB84D0;
+
+ovl_En_Ge1_vrom_start = 0x00DB84D0;
+ovl_En_Ge1_vrom_end = 0x00DB9520;
+
+ovl_Obj_Blockstop_vrom_start = 0x00DB9520;
+ovl_Obj_Blockstop_vrom_end = 0x00DB9750;
+
+ovl_En_Sda_vrom_start = 0x00DB9750;
+ovl_En_Sda_vrom_end = 0x00DBAD20;
+
+ovl_En_Clear_Tag_vrom_start = 0x00DBAD20;
+ovl_En_Clear_Tag_vrom_end = 0x00DC0CA0;
+
+ovl_En_Gm_vrom_start = 0x00DC0CA0;
+ovl_En_Gm_vrom_end = 0x00DC53E0;
+
+ovl_En_Ms_vrom_start = 0x00DC53E0;
+ovl_En_Ms_vrom_end = 0x00DC5A10;
+
+ovl_En_Hs_vrom_start = 0x00DC5A10;
+ovl_En_Hs_vrom_end = 0x00DC6850;
+
+ovl_Bg_Ingate_vrom_start = 0x00DC6850;
+ovl_Bg_Ingate_vrom_end = 0x00DC7720;
+
+ovl_En_Kanban_vrom_start = 0x00DC7720;
+ovl_En_Kanban_vrom_end = 0x00DCAE80;
+
+ovl_En_Attack_Niw_vrom_start = 0x00DCAE80;
+ovl_En_Attack_Niw_vrom_end = 0x00DCC0A0;
+
+ovl_En_Mk_vrom_start = 0x00DCC0A0;
+ovl_En_Mk_vrom_end = 0x00DCD2D0;
+
+ovl_En_Owl_vrom_start = 0x00DCD2D0;
+ovl_En_Owl_vrom_end = 0x00DD04A0;
+
+ovl_En_Ishi_vrom_start = 0x00DD04A0;
+ovl_En_Ishi_vrom_end = 0x00DD28D0;
+
+ovl_Obj_Hana_vrom_start = 0x00DD28D0;
+ovl_Obj_Hana_vrom_end = 0x00DD29B0;
+
+ovl_Obj_Lightswitch_vrom_start = 0x00DD29B0;
+ovl_Obj_Lightswitch_vrom_end = 0x00DD3AB0;
+
+ovl_Obj_Mure2_vrom_start = 0x00DD3AB0;
+ovl_Obj_Mure2_vrom_end = 0x00DD44A0;
+
+ovl_En_Fu_vrom_start = 0x00DD44A0;
+ovl_En_Fu_vrom_end = 0x00DD8410;
+
+ovl_En_Stream_vrom_start = 0x00DD8410;
+ovl_En_Stream_vrom_end = 0x00DD8970;
+
+ovl_En_Mm_vrom_start = 0x00DD8970;
+ovl_En_Mm_vrom_end = 0x00DD91D0;
+
+ovl_En_Weather_Tag_vrom_start = 0x00DD91D0;
+ovl_En_Weather_Tag_vrom_end = 0x00DDA790;
+
+ovl_En_Ani_vrom_start = 0x00DDA790;
+ovl_En_Ani_vrom_end = 0x00DDB570;
+
+ovl_En_Js_vrom_start = 0x00DDB570;
+ovl_En_Js_vrom_end = 0x00DDDE60;
+
+ovl_En_Okarina_Effect_vrom_start = 0x00DDDE60;
+ovl_En_Okarina_Effect_vrom_end = 0x00DDE0D0;
+
+ovl_En_Mag_vrom_start = 0x00DDE0D0;
+ovl_En_Mag_vrom_end = 0x00DE1A00;
+
+ovl_Elf_Msg2_vrom_start = 0x00DE1A00;
+ovl_Elf_Msg2_vrom_end = 0x00DE1F20;
+
+ovl_Bg_F40_Swlift_vrom_start = 0x00DE1F20;
+ovl_Bg_F40_Swlift_vrom_end = 0x00DE2390;
+
+ovl_En_Kakasi_vrom_start = 0x00DE2390;
+ovl_En_Kakasi_vrom_end = 0x00DE5100;
+
+ovl_Obj_Makeoshihiki_vrom_start = 0x00DE5100;
+ovl_Obj_Makeoshihiki_vrom_end = 0x00DE5430;
+
+ovl_Oceff_Spot_vrom_start = 0x00DE5430;
+ovl_Oceff_Spot_vrom_end = 0x00DE6300;
+
+ovl_En_Torch_vrom_start = 0x00DE6300;
+ovl_En_Torch_vrom_end = 0x00DE63F0;
+
+ovl_Shot_Sun_vrom_start = 0x00DE63F0;
+ovl_Shot_Sun_vrom_end = 0x00DE6A00;
+
+ovl_Obj_Roomtimer_vrom_start = 0x00DE6A00;
+ovl_Obj_Roomtimer_vrom_end = 0x00DE6CA0;
+
+ovl_En_Ssh_vrom_start = 0x00DE6CA0;
+ovl_En_Ssh_vrom_end = 0x00DE9260;
+
+ovl_Oceff_Wipe_vrom_start = 0x00DE9260;
+ovl_Oceff_Wipe_vrom_end = 0x00DE9FB0;
+
+ovl_Effect_Ss_Dust_vrom_start = 0x00DE9FB0;
+ovl_Effect_Ss_Dust_vrom_end = 0x00DEA7A0;
+
+ovl_Effect_Ss_Kirakira_vrom_start = 0x00DEA7A0;
+ovl_Effect_Ss_Kirakira_vrom_end = 0x00DEAE10;
+
+ovl_Effect_Ss_Bomb2_vrom_start = 0x00DEAE10;
+ovl_Effect_Ss_Bomb2_vrom_end = 0x00DEB670;
+
+ovl_Effect_Ss_Blast_vrom_start = 0x00DEB670;
+ovl_Effect_Ss_Blast_vrom_end = 0x00DEB9D0;
+
+ovl_Effect_Ss_G_Spk_vrom_start = 0x00DEB9D0;
+ovl_Effect_Ss_G_Spk_vrom_end = 0x00DEBF50;
+
+ovl_Effect_Ss_D_Fire_vrom_start = 0x00DEBF50;
+ovl_Effect_Ss_D_Fire_vrom_end = 0x00DEC360;
+
+ovl_Effect_Ss_Bubble_vrom_start = 0x00DEC360;
+ovl_Effect_Ss_Bubble_vrom_end = 0x00DEC8D0;
+
+ovl_Effect_Ss_G_Ripple_vrom_start = 0x00DEC8D0;
+ovl_Effect_Ss_G_Ripple_vrom_end = 0x00DECDF0;
+
+ovl_Effect_Ss_G_Splash_vrom_start = 0x00DECDF0;
+ovl_Effect_Ss_G_Splash_vrom_end = 0x00DED210;
+
+ovl_Effect_Ss_G_Fire_vrom_start = 0x00DED210;
+ovl_Effect_Ss_G_Fire_vrom_end = 0x00DED420;
+
+ovl_Effect_Ss_Lightning_vrom_start = 0x00DED420;
+ovl_Effect_Ss_Lightning_vrom_end = 0x00DEDB00;
+
+ovl_Effect_Ss_Dt_Bubble_vrom_start = 0x00DEDB00;
+ovl_Effect_Ss_Dt_Bubble_vrom_end = 0x00DEE010;
+
+ovl_Effect_Ss_Hahen_vrom_start = 0x00DEE010;
+ovl_Effect_Ss_Hahen_vrom_end = 0x00DEE5B0;
+
+ovl_Effect_Ss_Stick_vrom_start = 0x00DEE5B0;
+ovl_Effect_Ss_Stick_vrom_end = 0x00DEE870;
+
+ovl_Effect_Ss_Sibuki_vrom_start = 0x00DEE870;
+ovl_Effect_Ss_Sibuki_vrom_end = 0x00DEEED0;
+
+ovl_Effect_Ss_Stone1_vrom_start = 0x00DEEED0;
+ovl_Effect_Ss_Stone1_vrom_end = 0x00DEF230;
+
+ovl_Effect_Ss_Hitmark_vrom_start = 0x00DEF230;
+ovl_Effect_Ss_Hitmark_vrom_end = 0x00DEF730;
+
+ovl_Effect_Ss_Fhg_Flash_vrom_start = 0x00DEF730;
+ovl_Effect_Ss_Fhg_Flash_vrom_end = 0x00DF01B0;
+
+ovl_Effect_Ss_K_Fire_vrom_start = 0x00DF01B0;
+ovl_Effect_Ss_K_Fire_vrom_end = 0x00DF05F0;
+
+ovl_Effect_Ss_Solder_Srch_Ball_vrom_start = 0x00DF05F0;
+ovl_Effect_Ss_Solder_Srch_Ball_vrom_end = 0x00DF0A40;
+
+ovl_Effect_Ss_Kakera_vrom_start = 0x00DF0A40;
+ovl_Effect_Ss_Kakera_vrom_end = 0x00DF1A70;
+
+ovl_Effect_Ss_Ice_Piece_vrom_start = 0x00DF1A70;
+ovl_Effect_Ss_Ice_Piece_vrom_end = 0x00DF1E70;
+
+ovl_Effect_Ss_En_Ice_vrom_start = 0x00DF1E70;
+ovl_Effect_Ss_En_Ice_vrom_end = 0x00DF2620;
+
+ovl_Effect_Ss_Fire_Tail_vrom_start = 0x00DF2620;
+ovl_Effect_Ss_Fire_Tail_vrom_end = 0x00DF2D00;
+
+ovl_Effect_Ss_En_Fire_vrom_start = 0x00DF2D00;
+ovl_Effect_Ss_En_Fire_vrom_end = 0x00DF3370;
+
+ovl_Effect_Ss_Extra_vrom_start = 0x00DF3370;
+ovl_Effect_Ss_Extra_vrom_end = 0x00DF36E0;
+
+ovl_Effect_Ss_Dead_Db_vrom_start = 0x00DF36E0;
+ovl_Effect_Ss_Dead_Db_vrom_end = 0x00DF3AF0;
+
+ovl_Effect_Ss_Dead_Dd_vrom_start = 0x00DF3AF0;
+ovl_Effect_Ss_Dead_Dd_vrom_end = 0x00DF4080;
+
+ovl_Effect_Ss_Dead_Ds_vrom_start = 0x00DF4080;
+ovl_Effect_Ss_Dead_Ds_vrom_end = 0x00DF4500;
+
+ovl_Oceff_Storm_vrom_start = 0x00DF4500;
+ovl_Oceff_Storm_vrom_end = 0x00DF62C0;
+
+ovl_Obj_Demo_vrom_start = 0x00DF62C0;
+ovl_Obj_Demo_vrom_end = 0x00DF6690;
+
+ovl_En_Minislime_vrom_start = 0x00DF6690;
+ovl_En_Minislime_vrom_end = 0x00DF89E0;
+
+ovl_En_Nutsball_vrom_start = 0x00DF89E0;
+ovl_En_Nutsball_vrom_end = 0x00DF9010;
+
+ovl_Oceff_Wipe2_vrom_start = 0x00DF9010;
+ovl_Oceff_Wipe2_vrom_end = 0x00DFA770;
+
+ovl_Oceff_Wipe3_vrom_start = 0x00DFA770;
+ovl_Oceff_Wipe3_vrom_end = 0x00DFBEC0;
+
+ovl_En_Dg_vrom_start = 0x00DFBEC0;
+ovl_En_Dg_vrom_end = 0x00DFF7A0;
+
+ovl_En_Si_vrom_start = 0x00DFF7A0;
+ovl_En_Si_vrom_end = 0x00DFFBC0;
+
+ovl_Obj_Comb_vrom_start = 0x00DFFBC0;
+ovl_Obj_Comb_vrom_end = 0x00E01340;
+
+ovl_Obj_Kibako2_vrom_start = 0x00E01340;
+ovl_Obj_Kibako2_vrom_end = 0x00E01CE0;
+
+ovl_En_Hs2_vrom_start = 0x00E01CE0;
+ovl_En_Hs2_vrom_end = 0x00E01DC0;
+
+ovl_Obj_Mure3_vrom_start = 0x00E01DC0;
+ovl_Obj_Mure3_vrom_end = 0x00E02580;
+
+ovl_En_Tg_vrom_start = 0x00E02580;
+ovl_En_Tg_vrom_end = 0x00E03090;
+
+ovl_En_Wf_vrom_start = 0x00E03090;
+ovl_En_Wf_vrom_end = 0x00E07530;
+
+ovl_En_Skb_vrom_start = 0x00E07530;
+ovl_En_Skb_vrom_end = 0x00E0A810;
+
+ovl_En_Gs_vrom_start = 0x00E0A810;
+ovl_En_Gs_vrom_end = 0x00E0D6A0;
+
+ovl_Obj_Sound_vrom_start = 0x00E0D6A0;
+ovl_Obj_Sound_vrom_end = 0x00E0D8B0;
+
+ovl_En_Crow_vrom_start = 0x00E0D8B0;
+ovl_En_Crow_vrom_end = 0x00E0F010;
+
+ovl_En_Cow_vrom_start = 0x00E0F010;
+ovl_En_Cow_vrom_end = 0x00E10500;
+
+ovl_Oceff_Wipe4_vrom_start = 0x00E10500;
+ovl_Oceff_Wipe4_vrom_end = 0x00E11500;
+
+ovl_En_Zo_vrom_start = 0x00E11500;
+ovl_En_Zo_vrom_end = 0x00E124A0;
+
+ovl_Effect_Ss_Ice_Smoke_vrom_start = 0x00E124A0;
+ovl_Effect_Ss_Ice_Smoke_vrom_end = 0x00E127B0;
+
+ovl_Obj_Makekinsuta_vrom_start = 0x00E127B0;
+ovl_Obj_Makekinsuta_vrom_end = 0x00E12C20;
+
+ovl_En_Ge3_vrom_start = 0x00E12C20;
+ovl_En_Ge3_vrom_end = 0x00E13C90;
+
+ovl_Obj_Hamishi_vrom_start = 0x00E13C90;
+ovl_Obj_Hamishi_vrom_end = 0x00E14920;
+
+ovl_En_Zl4_vrom_start = 0x00E14920;
+ovl_En_Zl4_vrom_end = 0x00E14DA0;
+
+ovl_En_Mm2_vrom_start = 0x00E14DA0;
+ovl_En_Mm2_vrom_end = 0x00E158D0;
+
+ovl_Door_Spiral_vrom_start = 0x00E158D0;
+ovl_Door_Spiral_vrom_end = 0x00E16150;
+
+ovl_Obj_Pzlblock_vrom_start = 0x00E16150;
+ovl_Obj_Pzlblock_vrom_end = 0x00E16F30;
+
+ovl_Obj_Toge_vrom_start = 0x00E16F30;
+ovl_Obj_Toge_vrom_end = 0x00E17B70;
+
+ovl_Obj_Armos_vrom_start = 0x00E17B70;
+ovl_Obj_Armos_vrom_end = 0x00E18A80;
+
+ovl_Obj_Boyo_vrom_start = 0x00E18A80;
+ovl_Obj_Boyo_vrom_end = 0x00E18FF0;
+
+ovl_En_Grasshopper_vrom_start = 0x00E18FF0;
+ovl_En_Grasshopper_vrom_end = 0x00E1BE80;
+
+ovl_Obj_Grass_vrom_start = 0x00E1BE80;
+ovl_Obj_Grass_vrom_end = 0x00E1DB10;
+
+ovl_Obj_Grass_Carry_vrom_start = 0x00E1DB10;
+ovl_Obj_Grass_Carry_vrom_end = 0x00E1EA90;
+
+ovl_Obj_Grass_Unit_vrom_start = 0x00E1EA90;
+ovl_Obj_Grass_Unit_vrom_end = 0x00E1F160;
+
+ovl_Bg_Fire_Wall_vrom_start = 0x00E1F160;
+ovl_Bg_Fire_Wall_vrom_end = 0x00E1FA40;
+
+ovl_En_Bu_vrom_start = 0x00E1FA40;
+ovl_En_Bu_vrom_end = 0x00E1FBF0;
+
+ovl_En_Encount3_vrom_start = 0x00E1FBF0;
+ovl_En_Encount3_vrom_end = 0x00E20590;
+
+ovl_En_Jso_vrom_start = 0x00E20590;
+ovl_En_Jso_vrom_end = 0x00E24200;
+
+ovl_Obj_Chikuwa_vrom_start = 0x00E24200;
+ovl_Obj_Chikuwa_vrom_end = 0x00E24DA0;
+
+ovl_En_Knight_vrom_start = 0x00E24DA0;
+ovl_En_Knight_vrom_end = 0x00E31C80;
+
+ovl_En_Warp_tag_vrom_start = 0x00E31C80;
+ovl_En_Warp_tag_vrom_end = 0x00E325D0;
+
+ovl_En_Aob_01_vrom_start = 0x00E325D0;
+ovl_En_Aob_01_vrom_end = 0x00E352A0;
+
+ovl_En_Boj_01_vrom_start = 0x00E352A0;
+ovl_En_Boj_01_vrom_end = 0x00E35330;
+
+ovl_En_Boj_02_vrom_start = 0x00E35330;
+ovl_En_Boj_02_vrom_end = 0x00E353C0;
+
+ovl_En_Boj_03_vrom_start = 0x00E353C0;
+ovl_En_Boj_03_vrom_end = 0x00E35450;
+
+ovl_En_Encount4_vrom_start = 0x00E35450;
+ovl_En_Encount4_vrom_end = 0x00E35CB0;
+
+ovl_En_Bom_Bowl_Man_vrom_start = 0x00E35CB0;
+ovl_En_Bom_Bowl_Man_vrom_end = 0x00E379E0;
+
+ovl_En_Syateki_Man_vrom_start = 0x00E379E0;
+ovl_En_Syateki_Man_vrom_end = 0x00E3AF80;
+
+ovl_Bg_Icicle_vrom_start = 0x00E3AF80;
+ovl_Bg_Icicle_vrom_end = 0x00E3B910;
+
+ovl_En_Syateki_Crow_vrom_start = 0x00E3B910;
+ovl_En_Syateki_Crow_vrom_end = 0x00E3C720;
+
+ovl_En_Boj_04_vrom_start = 0x00E3C720;
+ovl_En_Boj_04_vrom_end = 0x00E3C7B0;
+
+ovl_En_Cne_01_vrom_start = 0x00E3C7B0;
+ovl_En_Cne_01_vrom_end = 0x00E3D580;
+
+ovl_En_Bba_01_vrom_start = 0x00E3D580;
+ovl_En_Bba_01_vrom_end = 0x00E3E300;
+
+ovl_En_Bji_01_vrom_start = 0x00E3E300;
+ovl_En_Bji_01_vrom_end = 0x00E3F3E0;
+
+ovl_Bg_Spdweb_vrom_start = 0x00E3F3E0;
+ovl_Bg_Spdweb_vrom_end = 0x00E40870;
+
+ovl_En_Mt_tag_vrom_start = 0x00E40870;
+ovl_En_Mt_tag_vrom_end = 0x00E41A50;
+
+ovl_Boss_01_vrom_start = 0x00E41A50;
+ovl_Boss_01_vrom_end = 0x00E49F30;
+
+ovl_Boss_02_vrom_start = 0x00E49F30;
+ovl_Boss_02_vrom_end = 0x00E50180;
+
+ovl_Boss_03_vrom_start = 0x00E50180;
+ovl_Boss_03_vrom_end = 0x00E57260;
+
+ovl_Boss_04_vrom_start = 0x00E57260;
+ovl_Boss_04_vrom_end = 0x00E596F0;
+
+ovl_Boss_05_vrom_start = 0x00E596F0;
+ovl_Boss_05_vrom_end = 0x00E5D320;
+
+ovl_Boss_06_vrom_start = 0x00E5D320;
+ovl_Boss_06_vrom_end = 0x00E5F570;
+
+ovl_Boss_07_vrom_start = 0x00E5F570;
+ovl_Boss_07_vrom_end = 0x00E74630;
+
+ovl_Bg_Dy_Yoseizo_vrom_start = 0x00E74630;
+ovl_Bg_Dy_Yoseizo_vrom_end = 0x00E76510;
+
+ovl_En_Boj_05_vrom_start = 0x00E76510;
+ovl_En_Boj_05_vrom_end = 0x00E765A0;
+
+ovl_En_Sob1_vrom_start = 0x00E765A0;
+ovl_En_Sob1_vrom_end = 0x00E7AD60;
+
+ovl_En_Go_vrom_start = 0x00E7AD60;
+ovl_En_Go_vrom_end = 0x00E80AD0;
+
+ovl_En_Raf_vrom_start = 0x00E80AD0;
+ovl_En_Raf_vrom_end = 0x00E834D0;
+
+ovl_Obj_Funen_vrom_start = 0x00E834D0;
+ovl_Obj_Funen_vrom_end = 0x00E836A0;
+
+ovl_Obj_Raillift_vrom_start = 0x00E836A0;
+ovl_Obj_Raillift_vrom_end = 0x00E84290;
+
+ovl_Bg_Numa_Hana_vrom_start = 0x00E84290;
+ovl_Bg_Numa_Hana_vrom_end = 0x00E85160;
+
+ovl_Obj_Flowerpot_vrom_start = 0x00E85160;
+ovl_Obj_Flowerpot_vrom_end = 0x00E875C0;
+
+ovl_Obj_Spinyroll_vrom_start = 0x00E875C0;
+ovl_Obj_Spinyroll_vrom_end = 0x00E88F80;
+
+ovl_Dm_Hina_vrom_start = 0x00E88F80;
+ovl_Dm_Hina_vrom_end = 0x00E899C0;
+
+ovl_En_Syateki_Wf_vrom_start = 0x00E899C0;
+ovl_En_Syateki_Wf_vrom_end = 0x00E8ACC0;
+
+ovl_Obj_Skateblock_vrom_start = 0x00E8ACC0;
+ovl_Obj_Skateblock_vrom_end = 0x00E8C8B0;
+
+ovl_Effect_En_Ice_Block_vrom_start = 0x00E8C8B0;
+ovl_Effect_En_Ice_Block_vrom_end = 0x00E8CC00;
+
+ovl_Obj_Iceblock_vrom_start = 0x00E8CC00;
+ovl_Obj_Iceblock_vrom_end = 0x00E91090;
+
+ovl_En_Bigpamet_vrom_start = 0x00E91090;
+ovl_En_Bigpamet_vrom_end = 0x00E935F0;
+
+ovl_Bg_Dblue_Movebg_vrom_start = 0x00E935F0;
+ovl_Bg_Dblue_Movebg_vrom_end = 0x00E95760;
+
+ovl_En_Syateki_Dekunuts_vrom_start = 0x00E95760;
+ovl_En_Syateki_Dekunuts_vrom_end = 0x00E96870;
+
+ovl_Elf_Msg3_vrom_start = 0x00E96870;
+ovl_Elf_Msg3_vrom_end = 0x00E96DE0;
+
+ovl_En_Fg_vrom_start = 0x00E96DE0;
+ovl_En_Fg_vrom_end = 0x00E98300;
+
+ovl_Dm_Ravine_vrom_start = 0x00E98300;
+ovl_Dm_Ravine_vrom_end = 0x00E984C0;
+
+ovl_Dm_Sa_vrom_start = 0x00E984C0;
+ovl_Dm_Sa_vrom_end = 0x00E98900;
+
+ovl_En_Slime_vrom_start = 0x00E98900;
+ovl_En_Slime_vrom_end = 0x00E9BD60;
+
+ovl_En_Pr_vrom_start = 0x00E9BD60;
+ovl_En_Pr_vrom_end = 0x00E9D650;
+
+ovl_Obj_Toudai_vrom_start = 0x00E9D650;
+ovl_Obj_Toudai_vrom_end = 0x00E9E250;
+
+ovl_Obj_Entotu_vrom_start = 0x00E9E250;
+ovl_Obj_Entotu_vrom_end = 0x00E9F060;
+
+ovl_Obj_Bell_vrom_start = 0x00E9F060;
+ovl_Obj_Bell_vrom_end = 0x00E9FB40;
+
+ovl_En_Syateki_Okuta_vrom_start = 0x00E9FB40;
+ovl_En_Syateki_Okuta_vrom_end = 0x00EA1A20;
+
+ovl_Obj_Shutter_vrom_start = 0x00EA1A20;
+ovl_Obj_Shutter_vrom_end = 0x00EA1CE0;
+
+ovl_Dm_Zl_vrom_start = 0x00EA1CE0;
+ovl_Dm_Zl_vrom_end = 0x00EA24F0;
+
+ovl_En_Ru_vrom_start = 0x00EA24F0;
+ovl_En_Ru_vrom_end = 0x00EA3200;
+
+ovl_En_Elfgrp_vrom_start = 0x00EA3200;
+ovl_En_Elfgrp_vrom_end = 0x00EA47B0;
+
+ovl_Dm_Tsg_vrom_start = 0x00EA47B0;
+ovl_Dm_Tsg_vrom_end = 0x00EA4BD0;
+
+ovl_En_Baguo_vrom_start = 0x00EA4BD0;
+ovl_En_Baguo_vrom_end = 0x00EA6030;
+
+ovl_Obj_Vspinyroll_vrom_start = 0x00EA6030;
+ovl_Obj_Vspinyroll_vrom_end = 0x00EA71D0;
+
+ovl_Obj_Smork_vrom_start = 0x00EA71D0;
+ovl_Obj_Smork_vrom_end = 0x00EA7EE0;
+
+ovl_En_Test2_vrom_start = 0x00EA7EE0;
+ovl_En_Test2_vrom_end = 0x00EA8330;
+
+ovl_En_Test3_vrom_start = 0x00EA8330;
+ovl_En_Test3_vrom_end = 0x00EAB870;
+
+ovl_En_Test4_vrom_start = 0x00EAB870;
+ovl_En_Test4_vrom_end = 0x00EACFD0;
+
+ovl_En_Bat_vrom_start = 0x00EACFD0;
+ovl_En_Bat_vrom_end = 0x00EAE760;
+
+ovl_En_Sekihi_vrom_start = 0x00EAE760;
+ovl_En_Sekihi_vrom_end = 0x00EAEE40;
+
+ovl_En_Wiz_vrom_start = 0x00EAEE40;
+ovl_En_Wiz_vrom_end = 0x00EB2AC0;
+
+ovl_En_Wiz_Brock_vrom_start = 0x00EB2AC0;
+ovl_En_Wiz_Brock_vrom_end = 0x00EB3180;
+
+ovl_En_Wiz_Fire_vrom_start = 0x00EB3180;
+ovl_En_Wiz_Fire_vrom_end = 0x00EB5F70;
+
+ovl_Eff_Change_vrom_start = 0x00EB5F70;
+ovl_Eff_Change_vrom_end = 0x00EB6490;
+
+ovl_Dm_Statue_vrom_start = 0x00EB6490;
+ovl_Dm_Statue_vrom_end = 0x00EB6570;
+
+ovl_Obj_Fireshield_vrom_start = 0x00EB6570;
+ovl_Obj_Fireshield_vrom_end = 0x00EB74D0;
+
+ovl_Bg_Ladder_vrom_start = 0x00EB74D0;
+ovl_Bg_Ladder_vrom_end = 0x00EB79B0;
+
+ovl_En_Mkk_vrom_start = 0x00EB79B0;
+ovl_En_Mkk_vrom_end = 0x00EB9520;
+
+ovl_Demo_Getitem_vrom_start = 0x00EB9520;
+ovl_Demo_Getitem_vrom_end = 0x00EB98B0;
+
+ovl_En_Dnb_vrom_start = 0x00EB98B0;
+ovl_En_Dnb_vrom_end = 0x00EBA820;
+
+ovl_En_Dnh_vrom_start = 0x00EBA820;
+ovl_En_Dnh_vrom_end = 0x00EBAFD0;
+
+ovl_En_Dnk_vrom_start = 0x00EBAFD0;
+ovl_En_Dnk_vrom_end = 0x00EBC010;
+
+ovl_En_Dnq_vrom_start = 0x00EBC010;
+ovl_En_Dnq_vrom_end = 0x00EBD2B0;
+
+ovl_Bg_Keikoku_Saku_vrom_start = 0x00EBD2B0;
+ovl_Bg_Keikoku_Saku_vrom_end = 0x00EBD6C0;
+
+ovl_Obj_Hugebombiwa_vrom_start = 0x00EBD6C0;
+ovl_Obj_Hugebombiwa_vrom_end = 0x00EBFBA0;
+
+ovl_En_Firefly2_vrom_start = 0x00EBFBA0;
+ovl_En_Firefly2_vrom_end = 0x00EBFC30;
+
+ovl_En_Rat_vrom_start = 0x00EBFC30;
+ovl_En_Rat_vrom_end = 0x00EC2280;
+
+ovl_En_Water_Effect_vrom_start = 0x00EC2280;
+ovl_En_Water_Effect_vrom_end = 0x00EC4C40;
+
+ovl_En_Kusa2_vrom_start = 0x00EC4C40;
+ovl_En_Kusa2_vrom_end = 0x00EC8CA0;
+
+ovl_Bg_Spout_Fire_vrom_start = 0x00EC8CA0;
+ovl_Bg_Spout_Fire_vrom_end = 0x00EC9430;
+
+ovl_En_Dy_Extra_vrom_start = 0x00EC9430;
+ovl_En_Dy_Extra_vrom_end = 0x00EC9990;
+
+ovl_En_Bal_vrom_start = 0x00EC9990;
+ovl_En_Bal_vrom_end = 0x00ECC620;
+
+ovl_En_Ginko_Man_vrom_start = 0x00ECC620;
+ovl_En_Ginko_Man_vrom_end = 0x00ECE300;
+
+ovl_En_Warp_Uzu_vrom_start = 0x00ECE300;
+ovl_En_Warp_Uzu_vrom_end = 0x00ECE6F0;
+
+ovl_Obj_Driftice_vrom_start = 0x00ECE6F0;
+ovl_Obj_Driftice_vrom_end = 0x00ECFA30;
+
+ovl_En_Look_Nuts_vrom_start = 0x00ECFA30;
+ovl_En_Look_Nuts_vrom_end = 0x00ED0920;
+
+ovl_En_Mushi2_vrom_start = 0x00ED0920;
+ovl_En_Mushi2_vrom_end = 0x00ED4110;
+
+ovl_En_Fall_vrom_start = 0x00ED4110;
+ovl_En_Fall_vrom_end = 0x00ED6B10;
+
+ovl_En_Mm3_vrom_start = 0x00ED6B10;
+ovl_En_Mm3_vrom_end = 0x00ED8160;
+
+ovl_Bg_Crace_Movebg_vrom_start = 0x00ED8160;
+ovl_Bg_Crace_Movebg_vrom_end = 0x00ED8C20;
+
+ovl_En_Dno_vrom_start = 0x00ED8C20;
+ovl_En_Dno_vrom_end = 0x00EDB9F0;
+
+ovl_En_Pr2_vrom_start = 0x00EDB9F0;
+ovl_En_Pr2_vrom_end = 0x00EDD810;
+
+ovl_En_Prz_vrom_start = 0x00EDD810;
+ovl_En_Prz_vrom_end = 0x00EDEE10;
+
+ovl_En_Jso2_vrom_start = 0x00EDEE10;
+ovl_En_Jso2_vrom_end = 0x00EE36C0;
+
+ovl_Obj_Etcetera_vrom_start = 0x00EE36C0;
+ovl_Obj_Etcetera_vrom_end = 0x00EE43E0;
+
+ovl_En_Egol_vrom_start = 0x00EE43E0;
+ovl_En_Egol_vrom_end = 0x00EE8C20;
+
+ovl_Obj_Mine_vrom_start = 0x00EE8C20;
+ovl_Obj_Mine_vrom_end = 0x00EEC420;
+
+ovl_Obj_Purify_vrom_start = 0x00EEC420;
+ovl_Obj_Purify_vrom_end = 0x00EECD70;
+
+ovl_En_Tru_vrom_start = 0x00EECD70;
+ovl_En_Tru_vrom_end = 0x00EF2EC0;
+
+ovl_En_Trt_vrom_start = 0x00EF2EC0;
+ovl_En_Trt_vrom_end = 0x00EF7B00;
+
+ovl_En_Test5_vrom_start = 0x00EF7B00;
+ovl_En_Test5_vrom_end = 0x00EF7E80;
+
+ovl_En_Test6_vrom_start = 0x00EF7E80;
+ovl_En_Test6_vrom_end = 0x00EFC060;
+
+ovl_En_Az_vrom_start = 0x00EFC060;
+ovl_En_Az_vrom_end = 0x00F014B0;
+
+ovl_En_Estone_vrom_start = 0x00F014B0;
+ovl_En_Estone_vrom_end = 0x00F022E0;
+
+ovl_Bg_Hakugin_Post_vrom_start = 0x00F022E0;
+ovl_Bg_Hakugin_Post_vrom_end = 0x00F053D0;
+
+ovl_Dm_Opstage_vrom_start = 0x00F053D0;
+ovl_Dm_Opstage_vrom_end = 0x00F05830;
+
+ovl_Dm_Stk_vrom_start = 0x00F05830;
+ovl_Dm_Stk_vrom_end = 0x00F0B000;
+
+ovl_Dm_Char00_vrom_start = 0x00F0B000;
+ovl_Dm_Char00_vrom_end = 0x00F0DC60;
+
+ovl_Dm_Char01_vrom_start = 0x00F0DC60;
+ovl_Dm_Char01_vrom_end = 0x00F108A0;
+
+ovl_Dm_Char02_vrom_start = 0x00F108A0;
+ovl_Dm_Char02_vrom_end = 0x00F10F10;
+
+ovl_Dm_Char03_vrom_start = 0x00F10F10;
+ovl_Dm_Char03_vrom_end = 0x00F116B0;
+
+ovl_Dm_Char04_vrom_start = 0x00F116B0;
+ovl_Dm_Char04_vrom_end = 0x00F12010;
+
+ovl_Dm_Char05_vrom_start = 0x00F12010;
+ovl_Dm_Char05_vrom_end = 0x00F140F0;
+
+ovl_Dm_Char06_vrom_start = 0x00F140F0;
+ovl_Dm_Char06_vrom_end = 0x00F14430;
+
+ovl_Dm_Char07_vrom_start = 0x00F14430;
+ovl_Dm_Char07_vrom_end = 0x00F14AC0;
+
+ovl_Dm_Char08_vrom_start = 0x00F14AC0;
+ovl_Dm_Char08_vrom_end = 0x00F17880;
+
+ovl_Dm_Char09_vrom_start = 0x00F17880;
+ovl_Dm_Char09_vrom_end = 0x00F18200;
+
+ovl_Obj_Tokeidai_vrom_start = 0x00F18200;
+ovl_Obj_Tokeidai_vrom_end = 0x00F1A780;
+
+ovl_En_Mnk_vrom_start = 0x00F1A780;
+ovl_En_Mnk_vrom_end = 0x00F20210;
+
+ovl_En_Egblock_vrom_start = 0x00F20210;
+ovl_En_Egblock_vrom_end = 0x00F20B50;
+
+ovl_En_Guard_Nuts_vrom_start = 0x00F20B50;
+ovl_En_Guard_Nuts_vrom_end = 0x00F21A30;
+
+ovl_Bg_Hakugin_Bombwall_vrom_start = 0x00F21A30;
+ovl_Bg_Hakugin_Bombwall_vrom_end = 0x00F22C40;
+
+ovl_Obj_Tokei_Tobira_vrom_start = 0x00F22C40;
+ovl_Obj_Tokei_Tobira_vrom_end = 0x00F232A0;
+
+ovl_Bg_Hakugin_Elvpole_vrom_start = 0x00F232A0;
+ovl_Bg_Hakugin_Elvpole_vrom_end = 0x00F23710;
+
+ovl_En_Ma4_vrom_start = 0x00F23710;
+ovl_En_Ma4_vrom_end = 0x00F262A0;
+
+ovl_En_Twig_vrom_start = 0x00F262A0;
+ovl_En_Twig_vrom_end = 0x00F26CA0;
+
+ovl_En_Po_Fusen_vrom_start = 0x00F26CA0;
+ovl_En_Po_Fusen_vrom_end = 0x00F27900;
+
+ovl_En_Door_Etc_vrom_start = 0x00F27900;
+ovl_En_Door_Etc_vrom_end = 0x00F28120;
+
+ovl_En_Bigokuta_vrom_start = 0x00F28120;
+ovl_En_Bigokuta_vrom_end = 0x00F2A320;
+
+ovl_Bg_Icefloe_vrom_start = 0x00F2A320;
+ovl_Bg_Icefloe_vrom_end = 0x00F2AA90;
+
+_385_0x00cfc450_vrom_start = 0x00F2AA90;
+_385_0x00cfc450_vrom_end = 0x00F2B1D0;
+
+_386_0x00cfc970_vrom_start = 0x00F2B1D0;
+_386_0x00cfc970_vrom_end = 0x00F2C160;
+
+_387_0x00cfd400_vrom_start = 0x00F2C160;
+_387_0x00cfd400_vrom_end = 0x00F2DE50;
+
+_388_0x00cfdf10_vrom_start = 0x00F2DE50;
+_388_0x00cfdf10_vrom_end = 0x00F2E110;
+
+_389_0x00cfe150_vrom_start = 0x00F2E110;
+_389_0x00cfe150_vrom_end = 0x00F2E570;
+
+ovl_Effect_Ss_Sbn_vrom_start = 0x00F2E570;
+ovl_Effect_Ss_Sbn_vrom_end = 0x00F2EEE0;
+
+ovl_Obj_Ocarinalift_vrom_start = 0x00F2EEE0;
+ovl_Obj_Ocarinalift_vrom_end = 0x00F2F8C0;
+
+ovl_En_Time_Tag_vrom_start = 0x00F2F8C0;
+ovl_En_Time_Tag_vrom_end = 0x00F30530;
+
+ovl_Bg_Open_Shutter_vrom_start = 0x00F30530;
+ovl_Bg_Open_Shutter_vrom_end = 0x00F30C00;
+
+ovl_Bg_Open_Spot_vrom_start = 0x00F30C00;
+ovl_Bg_Open_Spot_vrom_end = 0x00F30E20;
+
+ovl_Bg_Fu_Kaiten_vrom_start = 0x00F30E20;
+ovl_Bg_Fu_Kaiten_vrom_end = 0x00F310C0;
+
+ovl_Obj_Aqua_vrom_start = 0x00F310C0;
+ovl_Obj_Aqua_vrom_end = 0x00F31E90;
+
+ovl_En_Elforg_vrom_start = 0x00F31E90;
+ovl_En_Elforg_vrom_end = 0x00F336F0;
+
+ovl_En_Elfbub_vrom_start = 0x00F336F0;
+ovl_En_Elfbub_vrom_end = 0x00F33D50;
+
+ovl_En_Fu_Mato_vrom_start = 0x00F33D50;
+ovl_En_Fu_Mato_vrom_end = 0x00F351A0;
+
+ovl_En_Fu_Kago_vrom_start = 0x00F351A0;
+ovl_En_Fu_Kago_vrom_end = 0x00F36250;
+
+ovl_En_Osn_vrom_start = 0x00F36250;
+ovl_En_Osn_vrom_end = 0x00F38590;
+
+ovl_Bg_Ctower_Gear_vrom_start = 0x00F38590;
+ovl_Bg_Ctower_Gear_vrom_end = 0x00F38DA0;
+
+ovl_En_Trt2_vrom_start = 0x00F38DA0;
+ovl_En_Trt2_vrom_end = 0x00F3B5D0;
+
+ovl_Obj_Tokei_Step_vrom_start = 0x00F3B5D0;
+ovl_Obj_Tokei_Step_vrom_end = 0x00F3C180;
+
+ovl_Bg_Lotus_vrom_start = 0x00F3C180;
+ovl_Bg_Lotus_vrom_end = 0x00F3C7F0;
+
+ovl_En_Kame_vrom_start = 0x00F3C7F0;
+ovl_En_Kame_vrom_end = 0x00F3EC60;
+
+ovl_Obj_Takaraya_Wall_vrom_start = 0x00F3EC60;
+ovl_Obj_Takaraya_Wall_vrom_end = 0x00F3FE70;
+
+ovl_Bg_Fu_Mizu_vrom_start = 0x00F3FE70;
+ovl_Bg_Fu_Mizu_vrom_end = 0x00F40150;
+
+ovl_En_Sellnuts_vrom_start = 0x00F40150;
+ovl_En_Sellnuts_vrom_end = 0x00F435B0;
+
+ovl_Bg_Dkjail_Ivy_vrom_start = 0x00F435B0;
+ovl_Bg_Dkjail_Ivy_vrom_end = 0x00F43DF0;
+
+ovl_Obj_Visiblock_vrom_start = 0x00F43DF0;
+ovl_Obj_Visiblock_vrom_end = 0x00F43F10;
+
+ovl_En_Takaraya_vrom_start = 0x00F43F10;
+ovl_En_Takaraya_vrom_end = 0x00F45020;
+
+ovl_En_Tsn_vrom_start = 0x00F45020;
+ovl_En_Tsn_vrom_end = 0x00F469D0;
+
+ovl_En_Ds2n_vrom_start = 0x00F469D0;
+ovl_En_Ds2n_vrom_end = 0x00F46EF0;
+
+ovl_En_Fsn_vrom_start = 0x00F46EF0;
+ovl_En_Fsn_vrom_end = 0x00F4B4B0;
+
+ovl_En_Shn_vrom_start = 0x00F4B4B0;
+ovl_En_Shn_vrom_end = 0x00F4C720;
+
+ovl_En_Stop_heishi_vrom_start = 0x00F4C720;
+ovl_En_Stop_heishi_vrom_end = 0x00F4DEF0;
+
+ovl_Obj_Bigicicle_vrom_start = 0x00F4DEF0;
+ovl_Obj_Bigicicle_vrom_end = 0x00F4EDA0;
+
+ovl_En_Lift_Nuts_vrom_start = 0x00F4EDA0;
+ovl_En_Lift_Nuts_vrom_end = 0x00F517E0;
+
+ovl_En_Tk_vrom_start = 0x00F517E0;
+ovl_En_Tk_vrom_end = 0x00F553D0;
+
+ovl_Bg_Market_Step_vrom_start = 0x00F553D0;
+ovl_Bg_Market_Step_vrom_end = 0x00F554E0;
+
+ovl_Obj_Lupygamelift_vrom_start = 0x00F554E0;
+ovl_Obj_Lupygamelift_vrom_end = 0x00F55B90;
+
+ovl_En_Test7_vrom_start = 0x00F55B90;
+ovl_En_Test7_vrom_end = 0x00F58C20;
+
+ovl_Obj_Lightblock_vrom_start = 0x00F58C20;
+ovl_Obj_Lightblock_vrom_end = 0x00F59280;
+
+ovl_Mir_Ray2_vrom_start = 0x00F59280;
+ovl_Mir_Ray2_vrom_end = 0x00F59700;
+
+ovl_En_Wdhand_vrom_start = 0x00F59700;
+ovl_En_Wdhand_vrom_end = 0x00F5BA70;
+
+ovl_En_Gamelupy_vrom_start = 0x00F5BA70;
+ovl_En_Gamelupy_vrom_end = 0x00F5C0F0;
+
+ovl_Bg_Danpei_Movebg_vrom_start = 0x00F5C0F0;
+ovl_Bg_Danpei_Movebg_vrom_end = 0x00F5C950;
+
+ovl_En_Snowwd_vrom_start = 0x00F5C950;
+ovl_En_Snowwd_vrom_end = 0x00F5CE50;
+
+ovl_En_Pm_vrom_start = 0x00F5CE50;
+ovl_En_Pm_vrom_end = 0x00F61C70;
+
+ovl_En_Gakufu_vrom_start = 0x00F61C70;
+ovl_En_Gakufu_vrom_end = 0x00F62690;
+
+ovl_Elf_Msg4_vrom_start = 0x00F62690;
+ovl_Elf_Msg4_vrom_end = 0x00F62CA0;
+
+ovl_Elf_Msg5_vrom_start = 0x00F62CA0;
+ovl_Elf_Msg5_vrom_end = 0x00F62F50;
+
+ovl_En_Col_Man_vrom_start = 0x00F62F50;
+ovl_En_Col_Man_vrom_end = 0x00F63BB0;
+
+ovl_En_Talk_Gibud_vrom_start = 0x00F63BB0;
+ovl_En_Talk_Gibud_vrom_end = 0x00F66CA0;
+
+ovl_En_Giant_vrom_start = 0x00F66CA0;
+ovl_En_Giant_vrom_end = 0x00F67FE0;
+
+ovl_Obj_Snowball_vrom_start = 0x00F67FE0;
+ovl_Obj_Snowball_vrom_end = 0x00F6A5A0;
+
+ovl_Boss_Hakugin_vrom_start = 0x00F6A5A0;
+ovl_Boss_Hakugin_vrom_end = 0x00F748F0;
+
+ovl_En_Gb2_vrom_start = 0x00F748F0;
+ovl_En_Gb2_vrom_end = 0x00F77170;
+
+ovl_En_Onpuman_vrom_start = 0x00F77170;
+ovl_En_Onpuman_vrom_end = 0x00F77740;
+
+ovl_Bg_Tobira01_vrom_start = 0x00F77740;
+ovl_Bg_Tobira01_vrom_end = 0x00F77B80;
+
+ovl_En_Tag_Obj_vrom_start = 0x00F77B80;
+ovl_En_Tag_Obj_vrom_end = 0x00F77C90;
+
+ovl_Obj_Dhouse_vrom_start = 0x00F77C90;
+ovl_Obj_Dhouse_vrom_end = 0x00F79490;
+
+ovl_Obj_Hakaisi_vrom_start = 0x00F79490;
+ovl_Obj_Hakaisi_vrom_end = 0x00F7AAA0;
+
+ovl_Bg_Hakugin_Switch_vrom_start = 0x00F7AAA0;
+ovl_Bg_Hakugin_Switch_vrom_end = 0x00F7BE00;
+
+ovl_En_Snowman_vrom_start = 0x00F7BE00;
+ovl_En_Snowman_vrom_end = 0x00F7F260;
+
+ovl_TG_Sw_vrom_start = 0x00F7F260;
+ovl_TG_Sw_vrom_end = 0x00F7F6B0;
+
+ovl_En_Po_Sisters_vrom_start = 0x00F7F6B0;
+ovl_En_Po_Sisters_vrom_end = 0x00F831B0;
+
+ovl_En_Pp_vrom_start = 0x00F831B0;
+ovl_En_Pp_vrom_end = 0x00F86E00;
+
+ovl_En_Hakurock_vrom_start = 0x00F86E00;
+ovl_En_Hakurock_vrom_end = 0x00F87F00;
+
+ovl_En_Hanabi_vrom_start = 0x00F87F00;
+ovl_En_Hanabi_vrom_end = 0x00F89050;
+
+ovl_Obj_Dowsing_vrom_start = 0x00F89050;
+ovl_Obj_Dowsing_vrom_end = 0x00F891D0;
+
+ovl_Obj_Wind_vrom_start = 0x00F891D0;
+ovl_Obj_Wind_vrom_end = 0x00F89930;
+
+ovl_En_Racedog_vrom_start = 0x00F89930;
+ovl_En_Racedog_vrom_end = 0x00F8B5A0;
+
+ovl_En_Kendo_Js_vrom_start = 0x00F8B5A0;
+ovl_En_Kendo_Js_vrom_end = 0x00F8D380;
+
+ovl_Bg_Botihasira_vrom_start = 0x00F8D380;
+ovl_Bg_Botihasira_vrom_end = 0x00F8D670;
+
+ovl_En_Fish2_vrom_start = 0x00F8D670;
+ovl_En_Fish2_vrom_end = 0x00F90B30;
+
+ovl_En_Pst_vrom_start = 0x00F90B30;
+ovl_En_Pst_vrom_end = 0x00F919F0;
+
+ovl_En_Poh_vrom_start = 0x00F919F0;
+ovl_En_Poh_vrom_end = 0x00F94E10;
+
+ovl_Obj_Spidertent_vrom_start = 0x00F94E10;
+ovl_Obj_Spidertent_vrom_end = 0x00F96890;
+
+ovl_En_Zoraegg_vrom_start = 0x00F96890;
+ovl_En_Zoraegg_vrom_end = 0x00F99030;
+
+ovl_En_Kbt_vrom_start = 0x00F99030;
+ovl_En_Kbt_vrom_end = 0x00F9A270;
+
+ovl_En_Gg_vrom_start = 0x00F9A270;
+ovl_En_Gg_vrom_end = 0x00F9C380;
+
+ovl_En_Maruta_vrom_start = 0x00F9C380;
+ovl_En_Maruta_vrom_end = 0x00F9E120;
+
+ovl_Obj_Snowball2_vrom_start = 0x00F9E120;
+ovl_Obj_Snowball2_vrom_end = 0x00F9FF50;
+
+ovl_En_Gg2_vrom_start = 0x00F9FF50;
+ovl_En_Gg2_vrom_end = 0x00FA1560;
+
+ovl_Obj_Ghaka_vrom_start = 0x00FA1560;
+ovl_Obj_Ghaka_vrom_end = 0x00FA1D20;
+
+ovl_En_Dnp_vrom_start = 0x00FA1D20;
+ovl_En_Dnp_vrom_end = 0x00FA32F0;
+
+ovl_En_Dai_vrom_start = 0x00FA32F0;
+ovl_En_Dai_vrom_end = 0x00FA5380;
+
+ovl_Bg_Goron_Oyu_vrom_start = 0x00FA5380;
+ovl_Bg_Goron_Oyu_vrom_end = 0x00FA5B00;
+
+ovl_En_Kgy_vrom_start = 0x00FA5B00;
+ovl_En_Kgy_vrom_end = 0x00FA8CB0;
+
+ovl_En_Invadepoh_vrom_start = 0x00FA8CB0;
+ovl_En_Invadepoh_vrom_end = 0x00FB55A0;
+
+ovl_En_Gk_vrom_start = 0x00FB55A0;
+ovl_En_Gk_vrom_end = 0x00FB89D0;
+
+ovl_En_An_vrom_start = 0x00FB89D0;
+ovl_En_An_vrom_end = 0x00FBF8B0;
+
+ovl_En_Bee_vrom_start = 0x00FBF8B0;
+ovl_En_Bee_vrom_end = 0x00FC0470;
+
+ovl_En_Ot_vrom_start = 0x00FC0470;
+ovl_En_Ot_vrom_end = 0x00FC3A10;
+
+ovl_En_Dragon_vrom_start = 0x00FC3A10;
+ovl_En_Dragon_vrom_end = 0x00FC5C50;
+
+ovl_Obj_Dora_vrom_start = 0x00FC5C50;
+ovl_Obj_Dora_vrom_end = 0x00FC6760;
+
+ovl_En_Bigpo_vrom_start = 0x00FC6760;
+ovl_En_Bigpo_vrom_end = 0x00FCA640;
+
+ovl_Obj_Kendo_Kanban_vrom_start = 0x00FCA640;
+ovl_Obj_Kendo_Kanban_vrom_end = 0x00FCBBA0;
+
+ovl_Obj_Hariko_vrom_start = 0x00FCBBA0;
+ovl_Obj_Hariko_vrom_end = 0x00FCBEB0;
+
+ovl_En_Sth_vrom_start = 0x00FCBEB0;
+ovl_En_Sth_vrom_end = 0x00FD27E0;
+
+ovl_Bg_Sinkai_Kabe_vrom_start = 0x00FD27E0;
+ovl_Bg_Sinkai_Kabe_vrom_end = 0x00FD2D60;
+
+ovl_Bg_Haka_Curtain_vrom_start = 0x00FD2D60;
+ovl_Bg_Haka_Curtain_vrom_end = 0x00FD31A0;
+
+ovl_Bg_Kin2_Bombwall_vrom_start = 0x00FD31A0;
+ovl_Bg_Kin2_Bombwall_vrom_end = 0x00FD39A0;
+
+ovl_Bg_Kin2_Fence_vrom_start = 0x00FD39A0;
+ovl_Bg_Kin2_Fence_vrom_end = 0x00FD4120;
+
+ovl_Bg_Kin2_Picture_vrom_start = 0x00FD4120;
+ovl_Bg_Kin2_Picture_vrom_end = 0x00FD4CB0;
+
+ovl_Bg_Kin2_Shelf_vrom_start = 0x00FD4CB0;
+ovl_Bg_Kin2_Shelf_vrom_end = 0x00FD5A40;
+
+ovl_En_Rail_Skb_vrom_start = 0x00FD5A40;
+ovl_En_Rail_Skb_vrom_end = 0x00FD8C10;
+
+ovl_En_Jg_vrom_start = 0x00FD8C10;
+ovl_En_Jg_vrom_end = 0x00FDB1B0;
+
+ovl_En_Tru_Mt_vrom_start = 0x00FDB1B0;
+ovl_En_Tru_Mt_vrom_end = 0x00FDC8F0;
+
+ovl_Obj_Um_vrom_start = 0x00FDC8F0;
+ovl_Obj_Um_vrom_end = 0x00FE1A10;
+
+ovl_En_Neo_Reeba_vrom_start = 0x00FE1A10;
+ovl_En_Neo_Reeba_vrom_end = 0x00FE3AB0;
+
+ovl_Bg_Mbar_Chair_vrom_start = 0x00FE3AB0;
+ovl_Bg_Mbar_Chair_vrom_end = 0x00FE3BE0;
+
+ovl_Bg_Ikana_Block_vrom_start = 0x00FE3BE0;
+ovl_Bg_Ikana_Block_vrom_end = 0x00FE48B0;
+
+ovl_Bg_Ikana_Mirror_vrom_start = 0x00FE48B0;
+ovl_Bg_Ikana_Mirror_vrom_end = 0x00FE5460;
+
+ovl_Bg_Ikana_Rotaryroom_vrom_start = 0x00FE5460;
+ovl_Bg_Ikana_Rotaryroom_vrom_end = 0x00FE7530;
+
+ovl_Bg_Dblue_Balance_vrom_start = 0x00FE7530;
+ovl_Bg_Dblue_Balance_vrom_end = 0x00FE8DF0;
+
+ovl_Bg_Dblue_Waterfall_vrom_start = 0x00FE8DF0;
+ovl_Bg_Dblue_Waterfall_vrom_end = 0x00FEA700;
+
+ovl_En_Kaizoku_vrom_start = 0x00FEA700;
+ovl_En_Kaizoku_vrom_end = 0x00FF0440;
+
+ovl_En_Ge2_vrom_start = 0x00FF0440;
+ovl_En_Ge2_vrom_end = 0x00FF21A0;
+
+ovl_En_Ma_Yts_vrom_start = 0x00FF21A0;
+ovl_En_Ma_Yts_vrom_end = 0x00FF3690;
+
+ovl_En_Ma_Yto_vrom_start = 0x00FF3690;
+ovl_En_Ma_Yto_vrom_end = 0x00FF6E30;
+
+ovl_Obj_Tokei_Turret_vrom_start = 0x00FF6E30;
+ovl_Obj_Tokei_Turret_vrom_end = 0x00FF7090;
+
+ovl_Bg_Dblue_Elevator_vrom_start = 0x00FF7090;
+ovl_Bg_Dblue_Elevator_vrom_end = 0x00FF7C80;
+
+ovl_Obj_Warpstone_vrom_start = 0x00FF7C80;
+ovl_Obj_Warpstone_vrom_end = 0x00FF8480;
+
+ovl_En_Zog_vrom_start = 0x00FF8480;
+ovl_En_Zog_vrom_end = 0x00FFAF80;
+
+ovl_Obj_Rotlift_vrom_start = 0x00FFAF80;
+ovl_Obj_Rotlift_vrom_end = 0x00FFB340;
+
+ovl_Obj_Jg_Gakki_vrom_start = 0x00FFB340;
+ovl_Obj_Jg_Gakki_vrom_end = 0x00FFB570;
+
+ovl_Bg_Inibs_Movebg_vrom_start = 0x00FFB570;
+ovl_Bg_Inibs_Movebg_vrom_end = 0x00FFB730;
+
+ovl_En_Zot_vrom_start = 0x00FFB730;
+ovl_En_Zot_vrom_end = 0x00FFF210;
+
+ovl_Obj_Tree_vrom_start = 0x00FFF210;
+ovl_Obj_Tree_vrom_end = 0x00FFF7B0;
+
+ovl_Obj_Y2lift_vrom_start = 0x00FFF7B0;
+ovl_Obj_Y2lift_vrom_end = 0x00FFFAE0;
+
+ovl_Obj_Y2shutter_vrom_start = 0x00FFFAE0;
+ovl_Obj_Y2shutter_vrom_end = 0x010000B0;
+
+ovl_Obj_Boat_vrom_start = 0x010000B0;
+ovl_Obj_Boat_vrom_end = 0x01000840;
+
+ovl_Obj_Taru_vrom_start = 0x01000840;
+ovl_Obj_Taru_vrom_end = 0x010015B0;
+
+ovl_Obj_Hunsui_vrom_start = 0x010015B0;
+ovl_Obj_Hunsui_vrom_end = 0x01003030;
+
+ovl_En_Jc_Mato_vrom_start = 0x01003030;
+ovl_En_Jc_Mato_vrom_end = 0x01003410;
+
+ovl_Mir_Ray3_vrom_start = 0x01003410;
+ovl_Mir_Ray3_vrom_end = 0x010046C0;
+
+ovl_En_Zob_vrom_start = 0x010046C0;
+ovl_En_Zob_vrom_end = 0x010066F0;
+
+ovl_Elf_Msg6_vrom_start = 0x010066F0;
+ovl_Elf_Msg6_vrom_end = 0x01007570;
+
+ovl_Obj_Nozoki_vrom_start = 0x01007570;
+ovl_Obj_Nozoki_vrom_end = 0x01008800;
+
+ovl_En_Toto_vrom_start = 0x01008800;
+ovl_En_Toto_vrom_end = 0x0100A540;
+
+ovl_En_Railgibud_vrom_start = 0x0100A540;
+ovl_En_Railgibud_vrom_end = 0x0100D960;
+
+ovl_En_Baba_vrom_start = 0x0100D960;
+ovl_En_Baba_vrom_end = 0x0100F810;
+
+ovl_En_Suttari_vrom_start = 0x0100F810;
+ovl_En_Suttari_vrom_end = 0x010140B0;
+
+ovl_En_Zod_vrom_start = 0x010140B0;
+ovl_En_Zod_vrom_end = 0x01015A20;
+
+ovl_En_Kujiya_vrom_start = 0x01015A20;
+ovl_En_Kujiya_vrom_end = 0x01016810;
+
+ovl_En_Geg_vrom_start = 0x01016810;
+ovl_En_Geg_vrom_end = 0x01019840;
+
+ovl_Obj_Kinoko_vrom_start = 0x01019840;
+ovl_Obj_Kinoko_vrom_end = 0x01019C30;
+
+ovl_Obj_Yasi_vrom_start = 0x01019C30;
+ovl_Obj_Yasi_vrom_end = 0x01019F40;
+
+ovl_En_Tanron1_vrom_start = 0x01019F40;
+ovl_En_Tanron1_vrom_end = 0x0101B910;
+
+ovl_En_Tanron2_vrom_start = 0x0101B910;
+ovl_En_Tanron2_vrom_end = 0x0101D590;
+
+ovl_En_Tanron3_vrom_start = 0x0101D590;
+ovl_En_Tanron3_vrom_end = 0x0101E8D0;
+
+ovl_Obj_Chan_vrom_start = 0x0101E8D0;
+ovl_Obj_Chan_vrom_end = 0x0101FC80;
+
+ovl_En_Zos_vrom_start = 0x0101FC80;
+ovl_En_Zos_vrom_end = 0x01021A60;
+
+ovl_En_S_Goro_vrom_start = 0x01021A60;
+ovl_En_S_Goro_vrom_end = 0x01024D90;
+
+ovl_En_Nb_vrom_start = 0x01024D90;
+ovl_En_Nb_vrom_end = 0x010268E0;
+
+ovl_En_Ja_vrom_start = 0x010268E0;
+ovl_En_Ja_vrom_end = 0x01028960;
+
+ovl_Bg_F40_Block_vrom_start = 0x01028960;
+ovl_Bg_F40_Block_vrom_end = 0x01029790;
+
+ovl_Bg_F40_Switch_vrom_start = 0x01029790;
+ovl_Bg_F40_Switch_vrom_end = 0x01029F00;
+
+ovl_En_Po_Composer_vrom_start = 0x01029F00;
+ovl_En_Po_Composer_vrom_end = 0x0102BBC0;
+
+ovl_En_Guruguru_vrom_start = 0x0102BBC0;
+ovl_En_Guruguru_vrom_end = 0x0102CAA0;
+
+ovl_Oceff_Wipe5_vrom_start = 0x0102CAA0;
+ovl_Oceff_Wipe5_vrom_end = 0x0102E230;
+
+ovl_En_Stone_heishi_vrom_start = 0x0102E230;
+ovl_En_Stone_heishi_vrom_end = 0x0102F560;
+
+ovl_Oceff_Wipe6_vrom_start = 0x0102F560;
+ovl_Oceff_Wipe6_vrom_end = 0x0102FBB0;
+
+ovl_En_Scopenuts_vrom_start = 0x0102FBB0;
+ovl_En_Scopenuts_vrom_end = 0x01031FC0;
+
+ovl_En_Scopecrow_vrom_start = 0x01031FC0;
+ovl_En_Scopecrow_vrom_end = 0x01032C70;
+
+ovl_Oceff_Wipe7_vrom_start = 0x01032C70;
+ovl_Oceff_Wipe7_vrom_end = 0x01033AD0;
+
+ovl_Eff_Kamejima_Wave_vrom_start = 0x01033AD0;
+ovl_Eff_Kamejima_Wave_vrom_end = 0x01034170;
+
+ovl_En_Hg_vrom_start = 0x01034170;
+ovl_En_Hg_vrom_end = 0x01035250;
+
+ovl_En_Hgo_vrom_start = 0x01035250;
+ovl_En_Hgo_vrom_end = 0x01036180;
+
+ovl_En_Zov_vrom_start = 0x01036180;
+ovl_En_Zov_vrom_end = 0x010379D0;
+
+ovl_En_Ah_vrom_start = 0x010379D0;
+ovl_En_Ah_vrom_end = 0x01039030;
+
+ovl_Obj_Hgdoor_vrom_start = 0x01039030;
+ovl_Obj_Hgdoor_vrom_end = 0x010396C0;
+
+ovl_Bg_Ikana_Bombwall_vrom_start = 0x010396C0;
+ovl_Bg_Ikana_Bombwall_vrom_end = 0x0103A360;
+
+ovl_Bg_Ikana_Ray_vrom_start = 0x0103A360;
+ovl_Bg_Ikana_Ray_vrom_end = 0x0103A630;
+
+ovl_Bg_Ikana_Shutter_vrom_start = 0x0103A630;
+ovl_Bg_Ikana_Shutter_vrom_end = 0x0103ADA0;
+
+ovl_Bg_Haka_Bombwall_vrom_start = 0x0103ADA0;
+ovl_Bg_Haka_Bombwall_vrom_end = 0x0103B520;
+
+ovl_Bg_Haka_Tomb_vrom_start = 0x0103B520;
+ovl_Bg_Haka_Tomb_vrom_end = 0x0103B8B0;
+
+ovl_En_Sc_Ruppe_vrom_start = 0x0103B8B0;
+ovl_En_Sc_Ruppe_vrom_end = 0x0103BEB0;
+
+ovl_Bg_Iknv_Doukutu_vrom_start = 0x0103BEB0;
+ovl_Bg_Iknv_Doukutu_vrom_end = 0x0103CA50;
+
+ovl_Bg_Iknv_Obj_vrom_start = 0x0103CA50;
+ovl_Bg_Iknv_Obj_vrom_end = 0x0103D250;
+
+ovl_En_Pamera_vrom_start = 0x0103D250;
+ovl_En_Pamera_vrom_end = 0x0103F9D0;
+
+ovl_Obj_HsStump_vrom_start = 0x0103F9D0;
+ovl_Obj_HsStump_vrom_end = 0x0103FFE0;
+
+ovl_En_Hidden_Nuts_vrom_start = 0x0103FFE0;
+ovl_En_Hidden_Nuts_vrom_end = 0x01041210;
+
+ovl_En_Zow_vrom_start = 0x01041210;
+ovl_En_Zow_vrom_end = 0x01042F80;
+
+ovl_En_Talk_vrom_start = 0x01042F80;
+ovl_En_Talk_vrom_end = 0x01043140;
+
+ovl_En_Al_vrom_start = 0x01043140;
+ovl_En_Al_vrom_end = 0x01045480;
+
+ovl_En_Tab_vrom_start = 0x01045480;
+ovl_En_Tab_vrom_end = 0x01046C20;
+
+ovl_En_Nimotsu_vrom_start = 0x01046C20;
+ovl_En_Nimotsu_vrom_end = 0x01046FD0;
+
+ovl_En_Hit_Tag_vrom_start = 0x01046FD0;
+ovl_En_Hit_Tag_vrom_end = 0x01047200;
+
+ovl_En_Ruppecrow_vrom_start = 0x01047200;
+ovl_En_Ruppecrow_vrom_end = 0x01048B20;
+
+ovl_En_Tanron4_vrom_start = 0x01048B20;
+ovl_En_Tanron4_vrom_end = 0x010498D0;
+
+ovl_En_Tanron5_vrom_start = 0x010498D0;
+ovl_En_Tanron5_vrom_end = 0x0104AFE0;
+
+ovl_En_Tanron6_vrom_start = 0x0104AFE0;
+ovl_En_Tanron6_vrom_end = 0x0104B170;
+
+ovl_En_Daiku2_vrom_start = 0x0104B170;
+ovl_En_Daiku2_vrom_end = 0x0104CAA0;
+
+ovl_En_Muto_vrom_start = 0x0104CAA0;
+ovl_En_Muto_vrom_end = 0x0104D490;
+
+ovl_En_Baisen_vrom_start = 0x0104D490;
+ovl_En_Baisen_vrom_end = 0x0104DEC0;
+
+ovl_En_Heishi_vrom_start = 0x0104DEC0;
+ovl_En_Heishi_vrom_end = 0x0104E4B0;
+
+ovl_En_Demo_heishi_vrom_start = 0x0104E4B0;
+ovl_En_Demo_heishi_vrom_end = 0x0104EAC0;
+
+ovl_En_Dt_vrom_start = 0x0104EAC0;
+ovl_En_Dt_vrom_end = 0x010504C0;
+
+ovl_En_Cha_vrom_start = 0x010504C0;
+ovl_En_Cha_vrom_end = 0x010508E0;
+
+ovl_Obj_Dinner_vrom_start = 0x010508E0;
+ovl_Obj_Dinner_vrom_end = 0x01050A60;
+
+ovl_Eff_Lastday_vrom_start = 0x01050A60;
+ovl_Eff_Lastday_vrom_end = 0x010511E0;
+
+ovl_Bg_Ikana_Dharma_vrom_start = 0x010511E0;
+ovl_Bg_Ikana_Dharma_vrom_end = 0x01051B70;
+
+ovl_En_Akindonuts_vrom_start = 0x01051B70;
+ovl_En_Akindonuts_vrom_end = 0x01055D20;
+
+ovl_Eff_Stk_vrom_start = 0x01055D20;
+ovl_Eff_Stk_vrom_end = 0x010560E0;
+
+ovl_En_Ig_vrom_start = 0x010560E0;
+ovl_En_Ig_vrom_end = 0x010588B0;
+
+ovl_En_Rg_vrom_start = 0x010588B0;
+ovl_En_Rg_vrom_end = 0x0105ABA0;
+
+ovl_En_Osk_vrom_start = 0x0105ABA0;
+ovl_En_Osk_vrom_end = 0x0105C460;
+
+ovl_En_Sth2_vrom_start = 0x0105C460;
+ovl_En_Sth2_vrom_end = 0x0105F080;
+
+ovl_En_Yb_vrom_start = 0x0105F080;
+ovl_En_Yb_vrom_end = 0x01060400;
+
+ovl_En_Rz_vrom_start = 0x01060400;
+ovl_En_Rz_vrom_end = 0x01061F20;
+
+ovl_En_Scopecoin_vrom_start = 0x01061F20;
+ovl_En_Scopecoin_vrom_end = 0x01062260;
+
+ovl_En_Bjt_vrom_start = 0x01062260;
+ovl_En_Bjt_vrom_end = 0x010630F0;
+
+ovl_En_Bomjima_vrom_start = 0x010630F0;
+ovl_En_Bomjima_vrom_end = 0x01065E20;
+
+ovl_En_Bomjimb_vrom_start = 0x01065E20;
+ovl_En_Bomjimb_vrom_end = 0x010684B0;
+
+ovl_En_Bombers_vrom_start = 0x010684B0;
+ovl_En_Bombers_vrom_end = 0x010698B0;
+
+ovl_En_Bombers2_vrom_start = 0x010698B0;
+ovl_En_Bombers2_vrom_end = 0x0106A9F0;
+
+ovl_En_Bombal_vrom_start = 0x0106A9F0;
+ovl_En_Bombal_vrom_end = 0x0106B490;
+
+ovl_Obj_Moon_Stone_vrom_start = 0x0106B490;
+ovl_Obj_Moon_Stone_vrom_end = 0x0106BA20;
+
+ovl_Obj_Mu_Pict_vrom_start = 0x0106BA20;
+ovl_Obj_Mu_Pict_vrom_end = 0x0106C090;
+
+ovl_Bg_Ikninside_vrom_start = 0x0106C090;
+ovl_Bg_Ikninside_vrom_end = 0x0106C6C0;
+
+ovl_Eff_Zoraband_vrom_start = 0x0106C6C0;
+ovl_Eff_Zoraband_vrom_end = 0x0106CAA0;
+
+ovl_Obj_Kepn_Koya_vrom_start = 0x0106CAA0;
+ovl_Obj_Kepn_Koya_vrom_end = 0x0106CC00;
+
+ovl_Obj_Usiyane_vrom_start = 0x0106CC00;
+ovl_Obj_Usiyane_vrom_end = 0x0106D6E0;
+
+ovl_En_Nnh_vrom_start = 0x0106D6E0;
+ovl_En_Nnh_vrom_end = 0x0106DA00;
+
+ovl_Obj_Kzsaku_vrom_start = 0x0106DA00;
+ovl_Obj_Kzsaku_vrom_end = 0x0106DDC0;
+
+ovl_Obj_Milk_Bin_vrom_start = 0x0106DDC0;
+ovl_Obj_Milk_Bin_vrom_end = 0x0106E050;
+
+ovl_En_Kitan_vrom_start = 0x0106E050;
+ovl_En_Kitan_vrom_end = 0x0106EE50;
+
+ovl_Bg_Astr_Bombwall_vrom_start = 0x0106EE50;
+ovl_Bg_Astr_Bombwall_vrom_end = 0x0106F6C0;
+
+ovl_Bg_Iknin_Susceil_vrom_start = 0x0106F6C0;
+ovl_Bg_Iknin_Susceil_vrom_end = 0x01070210;
+
+ovl_En_Bsb_vrom_start = 0x01070210;
+ovl_En_Bsb_vrom_end = 0x01074F50;
+
+ovl_En_Recepgirl_vrom_start = 0x01074F50;
+ovl_En_Recepgirl_vrom_end = 0x010756F0;
+
+ovl_En_Thiefbird_vrom_start = 0x010756F0;
+ovl_En_Thiefbird_vrom_end = 0x010788A0;
+
+ovl_En_Jgame_Tsn_vrom_start = 0x010788A0;
+ovl_En_Jgame_Tsn_vrom_end = 0x0107A260;
+
+ovl_Obj_Jgame_Light_vrom_start = 0x0107A260;
+ovl_Obj_Jgame_Light_vrom_end = 0x0107B150;
+
+ovl_Obj_Yado_vrom_start = 0x0107B150;
+ovl_Obj_Yado_vrom_end = 0x0107B3E0;
+
+ovl_Demo_Syoten_vrom_start = 0x0107B3E0;
+ovl_Demo_Syoten_vrom_end = 0x0107C970;
+
+ovl_Demo_Moonend_vrom_start = 0x0107C970;
+ovl_Demo_Moonend_vrom_end = 0x0107D080;
+
+ovl_Bg_Lbfshot_vrom_start = 0x0107D080;
+ovl_Bg_Lbfshot_vrom_end = 0x0107D1A0;
+
+ovl_Bg_Last_Bwall_vrom_start = 0x0107D1A0;
+ovl_Bg_Last_Bwall_vrom_end = 0x0107DAF0;
+
+ovl_En_And_vrom_start = 0x0107DAF0;
+ovl_En_And_vrom_end = 0x0107E200;
+
+ovl_En_Invadepoh_Demo_vrom_start = 0x0107E200;
+ovl_En_Invadepoh_Demo_vrom_end = 0x0107FCA0;
+
+ovl_Obj_Danpeilift_vrom_start = 0x0107FCA0;
+ovl_Obj_Danpeilift_vrom_end = 0x01080520;
+
+ovl_En_Fall2_vrom_start = 0x01080520;
+ovl_En_Fall2_vrom_end = 0x01080C70;
+
+ovl_Dm_Al_vrom_start = 0x01080C70;
+ovl_Dm_Al_vrom_end = 0x010812F0;
+
+ovl_Dm_An_vrom_start = 0x010812F0;
+ovl_Dm_An_vrom_end = 0x010822F0;
+
+ovl_Dm_Ah_vrom_start = 0x010822F0;
+ovl_Dm_Ah_vrom_end = 0x01082DB0;
+
+ovl_Dm_Nb_vrom_start = 0x01082DB0;
+ovl_Dm_Nb_vrom_end = 0x01083170;
+
+ovl_En_Drs_vrom_start = 0x01083170;
+ovl_En_Drs_vrom_end = 0x01083570;
+
+ovl_En_Ending_Hero_vrom_start = 0x01083570;
+ovl_En_Ending_Hero_vrom_end = 0x010838C0;
+
+ovl_Dm_Bal_vrom_start = 0x010838C0;
+ovl_Dm_Bal_vrom_end = 0x010842B0;
+
+ovl_En_Paper_vrom_start = 0x010842B0;
+ovl_En_Paper_vrom_end = 0x01084BD0;
+
+ovl_En_Hint_Skb_vrom_start = 0x01084BD0;
+ovl_En_Hint_Skb_vrom_end = 0x01087230;
+
+ovl_Dm_Tag_vrom_start = 0x01087230;
+ovl_Dm_Tag_vrom_end = 0x01087C20;
+
+ovl_En_Bh_vrom_start = 0x01087C20;
+ovl_En_Bh_vrom_end = 0x01088110;
+
+ovl_En_Ending_Hero2_vrom_start = 0x01088110;
+ovl_En_Ending_Hero2_vrom_end = 0x01088340;
+
+ovl_En_Ending_Hero3_vrom_start = 0x01088340;
+ovl_En_Ending_Hero3_vrom_end = 0x01088570;
+
+ovl_En_Ending_Hero4_vrom_start = 0x01088570;
+ovl_En_Ending_Hero4_vrom_end = 0x010887A0;
+
+ovl_En_Ending_Hero5_vrom_start = 0x010887A0;
+ovl_En_Ending_Hero5_vrom_end = 0x01088B70;
+
+ovl_En_Ending_Hero6_vrom_start = 0x01088B70;
+ovl_En_Ending_Hero6_vrom_end = 0x01089240;
+
+ovl_Dm_Gm_vrom_start = 0x01089240;
+ovl_Dm_Gm_vrom_end = 0x0108A240;
+
+ovl_Obj_Swprize_vrom_start = 0x0108A240;
+ovl_Obj_Swprize_vrom_end = 0x0108A780;
+
+ovl_En_Invisible_Ruppe_vrom_start = 0x0108A780;
+ovl_En_Invisible_Ruppe_vrom_end = 0x0108AAA0;
+
+ovl_Obj_Ending_vrom_start = 0x0108AAA0;
+ovl_Obj_Ending_vrom_end = 0x0108AC20;
+
+ovl_En_Rsn_vrom_start = 0x0108AC20;
+ovl_En_Rsn_vrom_end = 0x0108AF80;
+
+gameplay_keep_vrom_start = 0x0108B000;
+gameplay_keep_vrom_end = 0x0111D5E0;
+
+gameplay_field_keep_vrom_start = 0x0111E000;
+gameplay_field_keep_vrom_end = 0x01127290;
+
+gameplay_dangeon_keep_vrom_start = 0x01128000;
+gameplay_dangeon_keep_vrom_end = 0x0114B280;
+
+object_link_boy_vrom_start = 0x0114D000;
+object_link_boy_vrom_end = 0x0115A890;
+
+object_link_child_vrom_start = 0x0115B000;
+object_link_child_vrom_end = 0x01179250;
+
+object_link_goron_vrom_start = 0x0117A000;
+object_link_goron_vrom_end = 0x01191A90;
+
+object_link_zora_vrom_start = 0x01192000;
+object_link_zora_vrom_end = 0x011A4C40;
+
+object_link_nuts_vrom_start = 0x011A5000;
+object_link_nuts_vrom_end = 0x011B0A30;
+
+object_mask_ki_tan_vrom_start = 0x011B1000;
+object_mask_ki_tan_vrom_end = 0x011B1AD0;
+
+object_mask_rabit_vrom_start = 0x011B2000;
+object_mask_rabit_vrom_end = 0x011B33A0;
+
+object_mask_skj_vrom_start = 0x011B4000;
+object_mask_skj_vrom_end = 0x011B56E0;
+
+object_mask_truth_vrom_start = 0x011B6000;
+object_mask_truth_vrom_end = 0x011B72A0;
+
+object_mask_gibudo_vrom_start = 0x011B8000;
+object_mask_gibudo_vrom_end = 0x011B8DA0;
+
+object_mask_json_vrom_start = 0x011B9000;
+object_mask_json_vrom_end = 0x011BA360;
+
+object_mask_kerfay_vrom_start = 0x011BB000;
+object_mask_kerfay_vrom_end = 0x011BC5C0;
+
+object_mask_bigelf_vrom_start = 0x011BD000;
+object_mask_bigelf_vrom_end = 0x011C04B0;
+
+object_mask_kyojin_vrom_start = 0x011C1000;
+object_mask_kyojin_vrom_end = 0x011C1CA0;
+
+object_mask_romerny_vrom_start = 0x011C2000;
+object_mask_romerny_vrom_end = 0x011C3A10;
+
+object_mask_posthat_vrom_start = 0x011C4000;
+object_mask_posthat_vrom_end = 0x011C4B50;
+
+object_mask_zacho_vrom_start = 0x011C5000;
+object_mask_zacho_vrom_end = 0x011C6690;
+
+object_mask_stone_vrom_start = 0x011C7000;
+object_mask_stone_vrom_end = 0x011C8040;
+
+object_mask_bree_vrom_start = 0x011C9000;
+object_mask_bree_vrom_end = 0x011CADA0;
+
+object_mask_gero_vrom_start = 0x011CB000;
+object_mask_gero_vrom_end = 0x011CDE90;
+
+object_mask_yofukasi_vrom_start = 0x011CE000;
+object_mask_yofukasi_vrom_end = 0x011CFAA0;
+
+object_mask_meoto_vrom_start = 0x011D0000;
+object_mask_meoto_vrom_end = 0x011D1CE0;
+
+object_mask_dancer_vrom_start = 0x011D2000;
+object_mask_dancer_vrom_end = 0x011D3B50;
+
+object_mask_bakuretu_vrom_start = 0x011D4000;
+object_mask_bakuretu_vrom_end = 0x011D5200;
+
+object_mask_bu_san_vrom_start = 0x011D6000;
+object_mask_bu_san_vrom_end = 0x011D73F0;
+
+object_mask_goron_vrom_start = 0x011D8000;
+object_mask_goron_vrom_end = 0x011D97B0;
+
+object_mask_zora_vrom_start = 0x011DA000;
+object_mask_zora_vrom_end = 0x011DB090;
+
+object_mask_nuts_vrom_start = 0x011DC000;
+object_mask_nuts_vrom_end = 0x011DE0E0;
+
+object_mask_boy_vrom_start = 0x011DF000;
+object_mask_boy_vrom_end = 0x011E10D0;
+
+object_box_vrom_start = 0x011E2000;
+object_box_vrom_end = 0x011EA120;
+
+object_okuta_vrom_start = 0x011EB000;
+object_okuta_vrom_end = 0x011EF680;
+
+object_wallmaster_vrom_start = 0x011F0000;
+object_wallmaster_vrom_end = 0x011FA070;
+
+object_dy_obj_vrom_start = 0x011FB000;
+object_dy_obj_vrom_end = 0x012178C0;
+
+object_firefly_vrom_start = 0x01218000;
+object_firefly_vrom_end = 0x012198C0;
+
+object_dodongo_vrom_start = 0x0121A000;
+object_dodongo_vrom_end = 0x01223940;
+
+object_niw_vrom_start = 0x01224000;
+object_niw_vrom_end = 0x01226540;
+
+object_tite_vrom_start = 0x01227000;
+object_tite_vrom_end = 0x0122AA30;
+
+object_ph_vrom_start = 0x0122B000;
+object_ph_vrom_end = 0x0122CC90;
+
+object_dinofos_vrom_start = 0x0122D000;
+object_dinofos_vrom_end = 0x0123A640;
+
+object_zl1_vrom_start = 0x0123B000;
+object_zl1_vrom_end = 0x0124F3C0;
+
+object_bubble_vrom_start = 0x01250000;
+object_bubble_vrom_end = 0x012510C0;
+
+object_test3_vrom_start = 0x01252000;
+object_test3_vrom_end = 0x01261800;
+
+object_famos_vrom_start = 0x01262000;
+object_famos_vrom_end = 0x01265E40;
+
+object_st_vrom_start = 0x01266000;
+object_st_vrom_end = 0x0126BBB0;
+
+object_thiefbird_vrom_start = 0x0126C000;
+object_thiefbird_vrom_end = 0x012723E0;
+
+object_bombf_vrom_start = 0x01273000;
+object_bombf_vrom_end = 0x01274A00;
+
+object_am_vrom_start = 0x01275000;
+object_am_vrom_end = 0x0127AD30;
+
+object_dekubaba_vrom_start = 0x0127B000;
+object_dekubaba_vrom_end = 0x0127E9C0;
+
+object_warp1_vrom_start = 0x0127F000;
+object_warp1_vrom_end = 0x01287C00;
+
+object_b_heart_vrom_start = 0x01288000;
+object_b_heart_vrom_end = 0x01288640;
+
+object_dekunuts_vrom_start = 0x01289000;
+object_dekunuts_vrom_end = 0x0128C790;
+
+object_bb_vrom_start = 0x0128D000;
+object_bb_vrom_end = 0x0128EA40;
+
+object_death_vrom_start = 0x0128F000;
+object_death_vrom_end = 0x0129BBD0;
+
+object_hata_vrom_start = 0x0129C000;
+object_hata_vrom_end = 0x0129EFE0;
+
+object_wood02_vrom_start = 0x0129F000;
+object_wood02_vrom_end = 0x012A87C0;
+
+object_trap_vrom_start = 0x012A9000;
+object_trap_vrom_end = 0x012AB3E0;
+
+object_vm_vrom_start = 0x012AC000;
+object_vm_vrom_end = 0x012AFF70;
+
+object_efc_star_field_vrom_start = 0x012B0000;
+object_efc_star_field_vrom_end = 0x012B17D0;
+
+object_rd_vrom_start = 0x012B2000;
+object_rd_vrom_end = 0x012C4180;
+
+object_yukimura_obj_vrom_start = 0x012C5000;
+object_yukimura_obj_vrom_end = 0x012C70A0;
+
+object_horse_link_child_vrom_start = 0x012C8000;
+object_horse_link_child_vrom_end = 0x012D64F0;
+
+object_syokudai_vrom_start = 0x012D7000;
+object_syokudai_vrom_end = 0x012DAC90;
+
+object_efc_tw_vrom_start = 0x012DB000;
+object_efc_tw_vrom_end = 0x012DC2F0;
+
+object_gi_key_vrom_start = 0x012DD000;
+object_gi_key_vrom_end = 0x012DDA20;
+
+object_mir_ray_vrom_start = 0x012DE000;
+object_mir_ray_vrom_end = 0x012DED60;
+
+object_ctower_rot_vrom_start = 0x012DF000;
+object_ctower_rot_vrom_end = 0x012F75C0;
+
+object_bdoor_vrom_start = 0x012F8000;
+object_bdoor_vrom_end = 0x012FFBA0;
+
+object_sb_vrom_start = 0x01300000;
+object_sb_vrom_end = 0x01302CA0;
+
+object_gi_melody_vrom_start = 0x01303000;
+object_gi_melody_vrom_end = 0x01303D20;
+
+object_gi_heart_vrom_start = 0x01304000;
+object_gi_heart_vrom_end = 0x013041F0;
+
+object_gi_compass_vrom_start = 0x01305000;
+object_gi_compass_vrom_end = 0x01305D10;
+
+object_gi_bosskey_vrom_start = 0x01306000;
+object_gi_bosskey_vrom_end = 0x01307010;
+
+object_gi_nuts_vrom_start = 0x01308000;
+object_gi_nuts_vrom_end = 0x013091C0;
+
+object_gi_hearts_vrom_start = 0x0130A000;
+object_gi_hearts_vrom_end = 0x0130B7B0;
+
+object_gi_arrowcase_vrom_start = 0x0130C000;
+object_gi_arrowcase_vrom_end = 0x0130CCB0;
+
+object_gi_bombpouch_vrom_start = 0x0130D000;
+object_gi_bombpouch_vrom_end = 0x0130DE60;
+
+object_in_vrom_start = 0x0130E000;
+object_in_vrom_end = 0x0132AFB0;
+
+object_os_anime_vrom_start = 0x0132B000;
+object_os_anime_vrom_end = 0x0132DC90;
+
+object_gi_bottle_vrom_start = 0x0132E000;
+object_gi_bottle_vrom_end = 0x0132E8F0;
+
+object_gi_stick_vrom_start = 0x0132F000;
+object_gi_stick_vrom_end = 0x0132F6C0;
+
+object_gi_map_vrom_start = 0x01330000;
+object_gi_map_vrom_end = 0x01331160;
+
+object_oF1d_map_vrom_start = 0x01332000;
+object_oF1d_map_vrom_end = 0x01346D90;
+
+object_ru2_vrom_start = 0x01347000;
+object_ru2_vrom_end = 0x013568D0;
+
+object_gi_magicpot_vrom_start = 0x01357000;
+object_gi_magicpot_vrom_end = 0x013581D0;
+
+object_gi_bomb_1_vrom_start = 0x01359000;
+object_gi_bomb_1_vrom_end = 0x01359CB0;
+
+object_ma2_vrom_start = 0x0135A000;
+object_ma2_vrom_end = 0x01370730;
+
+object_gi_purse_vrom_start = 0x01371000;
+object_gi_purse_vrom_end = 0x01372B70;
+
+object_rr_vrom_start = 0x01373000;
+object_rr_vrom_end = 0x01373E00;
+
+object_gi_arrow_vrom_start = 0x01374000;
+object_gi_arrow_vrom_end = 0x01375B10;
+
+object_gi_bomb_2_vrom_start = 0x01376000;
+object_gi_bomb_2_vrom_end = 0x013766A0;
+
+object_gi_shield_2_vrom_start = 0x01377000;
+object_gi_shield_2_vrom_end = 0x01378EC0;
+
+object_gi_hookshot_vrom_start = 0x01379000;
+object_gi_hookshot_vrom_end = 0x0137A450;
+
+object_gi_ocarina_vrom_start = 0x0137B000;
+object_gi_ocarina_vrom_end = 0x0137BBB0;
+
+object_gi_milk_vrom_start = 0x0137C000;
+object_gi_milk_vrom_end = 0x0137D470;
+
+object_ma1_vrom_start = 0x0137E000;
+object_ma1_vrom_end = 0x01399780;
+
+object_ny_vrom_start = 0x0139A000;
+object_ny_vrom_end = 0x0139C330;
+
+object_fr_vrom_start = 0x0139D000;
+object_fr_vrom_end = 0x013A8550;
+
+object_gi_bow_vrom_start = 0x013A9000;
+object_gi_bow_vrom_end = 0x013AA2F0;
+
+object_gi_glasses_vrom_start = 0x013AB000;
+object_gi_glasses_vrom_end = 0x013AC180;
+
+object_gi_liquid_vrom_start = 0x013AD000;
+object_gi_liquid_vrom_end = 0x013AE8D0;
+
+object_ani_vrom_start = 0x013AF000;
+object_ani_vrom_end = 0x013BA8C0;
+
+object_gi_shield_3_vrom_start = 0x013BB000;
+object_gi_shield_3_vrom_end = 0x013BCC00;
+
+object_gi_bean_vrom_start = 0x013BD000;
+object_gi_bean_vrom_end = 0x013BD8C0;
+
+object_gi_fish_vrom_start = 0x013BE000;
+object_gi_fish_vrom_end = 0x013BE950;
+
+object_gi_longsword_vrom_start = 0x013BF000;
+object_gi_longsword_vrom_end = 0x013BF8C0;
+
+object_zo_vrom_start = 0x013C0000;
+object_zo_vrom_end = 0x013D1440;
+
+object_umajump_vrom_start = 0x013D2000;
+object_umajump_vrom_end = 0x013D3590;
+
+object_mastergolon_vrom_start = 0x013D4000;
+object_mastergolon_vrom_end = 0x013D4110;
+
+object_masterzoora_vrom_start = 0x013D5000;
+object_masterzoora_vrom_end = 0x013D57A0;
+
+object_aob_vrom_start = 0x013D6000;
+object_aob_vrom_end = 0x013DD770;
+
+object_ik_vrom_start = 0x013DE000;
+object_ik_vrom_end = 0x013F16B0;
+
+object_ahg_vrom_start = 0x013F2000;
+object_ahg_vrom_end = 0x013F79B0;
+
+object_cne_vrom_start = 0x013F8000;
+object_cne_vrom_end = 0x013FA9D0;
+
+object_bji_vrom_start = 0x013FB000;
+object_bji_vrom_end = 0x01400B70;
+
+object_bba_vrom_start = 0x01401000;
+object_bba_vrom_end = 0x0140B0A0;
+
+object_an1_vrom_start = 0x0140C000;
+object_an1_vrom_end = 0x0141FE30;
+
+object_boj_vrom_start = 0x01420000;
+object_boj_vrom_end = 0x014337C0;
+
+object_fz_vrom_start = 0x01434000;
+object_fz_vrom_end = 0x014374D0;
+
+object_bob_vrom_start = 0x01438000;
+object_bob_vrom_end = 0x0143CF20;
+
+object_ge1_vrom_start = 0x0143D000;
+object_ge1_vrom_end = 0x014491E0;
+
+object_yabusame_point_vrom_start = 0x0144A000;
+object_yabusame_point_vrom_end = 0x0144AE50;
+
+object_d_hsblock_vrom_start = 0x0144B000;
+object_d_hsblock_vrom_end = 0x0144C760;
+
+object_d_lift_vrom_start = 0x0144D000;
+object_d_lift_vrom_end = 0x0144F330;
+
+object_mamenoki_vrom_start = 0x01450000;
+object_mamenoki_vrom_end = 0x014526A0;
+
+object_goroiwa_vrom_start = 0x01453000;
+object_goroiwa_vrom_end = 0x0145D5A0;
+
+object_toryo_vrom_start = 0x0145E000;
+object_toryo_vrom_end = 0x01465160;
+
+object_daiku_vrom_start = 0x01466000;
+object_daiku_vrom_end = 0x01473340;
+
+object_nwc_vrom_start = 0x01474000;
+object_nwc_vrom_end = 0x01475CA0;
+
+object_gm_vrom_start = 0x01476000;
+object_gm_vrom_end = 0x01476010;
+
+object_ms_vrom_start = 0x01477000;
+object_ms_vrom_end = 0x0147ADD0;
+
+object_hs_vrom_start = 0x0147B000;
+object_hs_vrom_end = 0x01481270;
+
+object_lightswitch_vrom_start = 0x01482000;
+object_lightswitch_vrom_end = 0x01484420;
+
+object_kusa_vrom_start = 0x01485000;
+object_kusa_vrom_end = 0x01485380;
+
+object_tsubo_vrom_start = 0x01486000;
+object_tsubo_vrom_end = 0x014879F0;
+
+object_kanban_vrom_start = 0x01488000;
+object_kanban_vrom_end = 0x014897B0;
+
+object_owl_vrom_start = 0x0148A000;
+object_owl_vrom_end = 0x0149A5D0;
+
+object_mk_vrom_start = 0x0149B000;
+object_mk_vrom_end = 0x014A1CB0;
+
+object_fu_vrom_start = 0x014A2000;
+object_fu_vrom_end = 0x014A8CA0;
+
+object_gi_ki_tan_mask_vrom_start = 0x014A9000;
+object_gi_ki_tan_mask_vrom_end = 0x014A9DF0;
+
+object_gi_mask18_vrom_start = 0x014AA000;
+object_gi_mask18_vrom_end = 0x014AB8C0;
+
+object_gi_rabit_mask_vrom_start = 0x014AC000;
+object_gi_rabit_mask_vrom_end = 0x014ACF00;
+
+object_gi_truth_mask_vrom_start = 0x014AD000;
+object_gi_truth_mask_vrom_end = 0x014AE860;
+
+object_stream_vrom_start = 0x014AF000;
+object_stream_vrom_end = 0x014AFA80;
+
+object_mm_vrom_start = 0x014B0000;
+object_mm_vrom_end = 0x014BDA60;
+
+object_js_vrom_start = 0x014BE000;
+object_js_vrom_end = 0x014C4A20;
+
+object_cs_vrom_start = 0x014C5000;
+object_cs_vrom_end = 0x014D5B80;
+
+object_gi_soldout_vrom_start = 0x014D6000;
+object_gi_soldout_vrom_end = 0x014D64D0;
+
+object_mag_vrom_start = 0x014D7000;
+object_mag_vrom_end = 0x014F6E50;
+
+object_gi_golonmask_vrom_start = 0x014F7000;
+object_gi_golonmask_vrom_end = 0x014F8D20;
+
+object_gi_zoramask_vrom_start = 0x014F9000;
+object_gi_zoramask_vrom_end = 0x014FA760;
+
+object_ka_vrom_start = 0x014FB000;
+object_ka_vrom_end = 0x015031C0;
+
+object_zg_vrom_start = 0x01504000;
+object_zg_vrom_end = 0x01505200;
+
+object_gi_m_arrow_vrom_start = 0x01506000;
+object_gi_m_arrow_vrom_end = 0x01506E80;
+
+object_ds2_vrom_start = 0x01507000;
+object_ds2_vrom_end = 0x0150B270;
+
+object_fish_vrom_start = 0x0150C000;
+object_fish_vrom_end = 0x015215F0;
+
+object_gi_sutaru_vrom_start = 0x01522000;
+object_gi_sutaru_vrom_end = 0x01522650;
+
+object_ssh_vrom_start = 0x01523000;
+object_ssh_vrom_end = 0x01529D90;
+
+object_bigslime_vrom_start = 0x0152A000;
+object_bigslime_vrom_end = 0x0153D400;
+
+object_bg_vrom_start = 0x0153E000;
+object_bg_vrom_end = 0x0154FB70;
+
+object_bombiwa_vrom_start = 0x01550000;
+object_bombiwa_vrom_end = 0x01556A70;
+
+object_hintnuts_vrom_start = 0x01557000;
+object_hintnuts_vrom_end = 0x0155A140;
+
+object_rs_vrom_start = 0x0155B000;
+object_rs_vrom_end = 0x01564230;
+
+object_gla_vrom_start = 0x01565000;
+object_gla_vrom_end = 0x0156F360;
+
+object_geldb_vrom_start = 0x01570000;
+object_geldb_vrom_end = 0x0157B100;
+
+object_dog_vrom_start = 0x0157C000;
+object_dog_vrom_end = 0x01584100;
+
+object_kibako2_vrom_start = 0x01585000;
+object_kibako2_vrom_end = 0x015861C0;
+
+object_dns_vrom_start = 0x01587000;
+object_dns_vrom_end = 0x0158A500;
+
+object_dnk_vrom_start = 0x0158B000;
+object_dnk_vrom_end = 0x0158DB80;
+
+object_gi_insect_vrom_start = 0x0158E000;
+object_gi_insect_vrom_end = 0x0158EBF0;
+
+object_gi_ghost_vrom_start = 0x0158F000;
+object_gi_ghost_vrom_end = 0x0158FDB0;
+
+object_gi_soul_vrom_start = 0x01590000;
+object_gi_soul_vrom_end = 0x01590FB0;
+
+object_f40_obj_vrom_start = 0x01591000;
+object_f40_obj_vrom_end = 0x01595670;
+
+object_gi_rupy_vrom_start = 0x01596000;
+object_gi_rupy_vrom_end = 0x01596840;
+
+object_po_composer_vrom_start = 0x01597000;
+object_po_composer_vrom_end = 0x015A0940;
+
+object_mu_vrom_start = 0x015A1000;
+object_mu_vrom_end = 0x015ACAE0;
+
+object_wf_vrom_start = 0x015AD000;
+object_wf_vrom_end = 0x015B73E0;
+
+object_skb_vrom_start = 0x015B8000;
+object_skb_vrom_end = 0x015BEDA0;
+
+object_gs_vrom_start = 0x015BF000;
+object_gs_vrom_end = 0x015BFA80;
+
+object_ps_vrom_start = 0x015C0000;
+object_ps_vrom_end = 0x015C7910;
+
+object_omoya_obj_vrom_start = 0x015C8000;
+object_omoya_obj_vrom_end = 0x015C9B00;
+
+object_crow_vrom_start = 0x015CA000;
+object_crow_vrom_end = 0x015CB0D0;
+
+object_cow_vrom_start = 0x015CC000;
+object_cow_vrom_end = 0x015D0EB0;
+
+object_gi_sword_1_vrom_start = 0x015D1000;
+object_gi_sword_1_vrom_end = 0x015D2220;
+
+object_zl4_vrom_start = 0x015D3000;
+object_zl4_vrom_end = 0x015F7F60;
+
+object_grasshopper_vrom_start = 0x015F8000;
+object_grasshopper_vrom_end = 0x015FD260;
+
+object_boyo_vrom_start = 0x015FE000;
+object_boyo_vrom_end = 0x015FEE90;
+
+object_fwall_vrom_start = 0x015FF000;
+object_fwall_vrom_end = 0x01604CA0;
+
+object_jso_vrom_start = 0x01605000;
+object_jso_vrom_end = 0x01610600;
+
+object_knight_vrom_start = 0x01611000;
+object_knight_vrom_end = 0x01633CC0;
+
+object_icicle_vrom_start = 0x01634000;
+object_icicle_vrom_end = 0x016352C0;
+
+object_spdweb_vrom_start = 0x01636000;
+object_spdweb_vrom_end = 0x016386B0;
+
+object_boss01_vrom_start = 0x01639000;
+object_boss01_vrom_end = 0x0165B560;
+
+object_boss02_vrom_start = 0x0165C000;
+object_boss02_vrom_end = 0x0166F9A0;
+
+object_boss03_vrom_start = 0x01670000;
+object_boss03_vrom_end = 0x0167DAC0;
+
+object_boss04_vrom_start = 0x0167E000;
+object_boss04_vrom_end = 0x01682600;
+
+object_boss05_vrom_start = 0x01683000;
+object_boss05_vrom_end = 0x0168A920;
+
+object_boss07_vrom_start = 0x0168B000;
+object_boss07_vrom_end = 0x016D1B30;
+
+object_raf_vrom_start = 0x016D2000;
+object_raf_vrom_end = 0x016D5440;
+
+object_funen_vrom_start = 0x016D6000;
+object_funen_vrom_end = 0x016D65C0;
+
+object_raillift_vrom_start = 0x016D7000;
+object_raillift_vrom_end = 0x016DEEB0;
+
+object_numa_obj_vrom_start = 0x016DF000;
+object_numa_obj_vrom_end = 0x016F31B0;
+
+object_flowerpot_vrom_start = 0x016F4000;
+object_flowerpot_vrom_end = 0x016F5640;
+
+object_spinyroll_vrom_start = 0x016F6000;
+object_spinyroll_vrom_end = 0x016F6FB0;
+
+object_ice_block_vrom_start = 0x016F7000;
+object_ice_block_vrom_end = 0x016F8AE0;
+
+object_keikoku_demo_vrom_start = 0x016F9000;
+object_keikoku_demo_vrom_end = 0x01706330;
+
+object_slime_vrom_start = 0x01707000;
+object_slime_vrom_end = 0x01708C70;
+
+object_pr_vrom_start = 0x01709000;
+object_pr_vrom_end = 0x0170D350;
+
+object_f52_obj_vrom_start = 0x0170E000;
+object_f52_obj_vrom_end = 0x0170FBE0;
+
+object_f53_obj_vrom_start = 0x01710000;
+object_f53_obj_vrom_end = 0x01713A70;
+
+object_kibako_vrom_start = 0x01714000;
+object_kibako_vrom_end = 0x01715B00;
+
+object_sek_vrom_start = 0x01716000;
+object_sek_vrom_end = 0x0171AA70;
+
+object_gmo_vrom_start = 0x0171B000;
+object_gmo_vrom_end = 0x0171D0F0;
+
+object_bat_vrom_start = 0x0171E000;
+object_bat_vrom_end = 0x0171ECA0;
+
+object_sekihil_vrom_start = 0x0171F000;
+object_sekihil_vrom_end = 0x01722430;
+
+object_sekihig_vrom_start = 0x01723000;
+object_sekihig_vrom_end = 0x01726410;
+
+object_sekihin_vrom_start = 0x01727000;
+object_sekihin_vrom_end = 0x0172A410;
+
+object_sekihiz_vrom_start = 0x0172B000;
+object_sekihiz_vrom_end = 0x0172C040;
+
+object_wiz_vrom_start = 0x0172D000;
+object_wiz_vrom_end = 0x01738330;
+
+object_ladder_vrom_start = 0x01739000;
+object_ladder_vrom_end = 0x0173A0A0;
+
+object_mkk_vrom_start = 0x0173B000;
+object_mkk_vrom_end = 0x0173B510;
+
+object_keikoku_obj_vrom_start = 0x0173C000;
+object_keikoku_obj_vrom_end = 0x01741220;
+
+object_sichitai_obj_vrom_start = 0x01742000;
+object_sichitai_obj_vrom_end = 0x01744910;
+
+object_dekucity_ana_obj_vrom_start = 0x01745000;
+object_dekucity_ana_obj_vrom_end = 0x01746100;
+
+object_rat_vrom_start = 0x01747000;
+object_rat_vrom_end = 0x01748870;
+
+object_water_effect_vrom_start = 0x01749000;
+object_water_effect_vrom_end = 0x0174D410;
+
+object_dblue_object_vrom_start = 0x0174E000;
+object_dblue_object_vrom_end = 0x01766E60;
+
+object_bal_vrom_start = 0x01767000;
+object_bal_vrom_end = 0x017745C0;
+
+object_warp_uzu_vrom_start = 0x01775000;
+object_warp_uzu_vrom_end = 0x01777450;
+
+object_driftice_vrom_start = 0x01778000;
+object_driftice_vrom_end = 0x01779AE0;
+
+object_fall_vrom_start = 0x0177A000;
+object_fall_vrom_end = 0x01784B40;
+
+object_hanareyama_obj_vrom_start = 0x01785000;
+object_hanareyama_obj_vrom_end = 0x01789DC0;
+
+object_crace_object_vrom_start = 0x0178A000;
+object_crace_object_vrom_end = 0x0178AE30;
+
+object_dnq_vrom_start = 0x0178B000;
+object_dnq_vrom_end = 0x0179A520;
+
+object_obj_tokeidai_vrom_start = 0x0179B000;
+object_obj_tokeidai_vrom_end = 0x017ACC80;
+
+object_eg_vrom_start = 0x017AD000;
+object_eg_vrom_end = 0x017C01F0;
+
+object_tru_vrom_start = 0x017C1000;
+object_tru_vrom_end = 0x017DC5E0;
+
+object_trt_vrom_start = 0x017DD000;
+object_trt_vrom_end = 0x017ECF00;
+
+object_hakugin_obj_vrom_start = 0x017ED000;
+object_hakugin_obj_vrom_end = 0x017FD440;
+
+object_horse_game_check_vrom_start = 0x017FE000;
+object_horse_game_check_vrom_end = 0x01801950;
+
+object_stk_vrom_start = 0x01802000;
+object_stk_vrom_end = 0x0181F3E0;
+
+object_mnk_vrom_start = 0x01820000;
+object_mnk_vrom_end = 0x0183D530;
+
+object_gi_bottle_red_vrom_start = 0x0183E000;
+object_gi_bottle_red_vrom_end = 0x0183EFD0;
+
+object_tokei_tobira_vrom_start = 0x0183F000;
+object_tokei_tobira_vrom_end = 0x018405C0;
+
+object_az_vrom_start = 0x01841000;
+object_az_vrom_end = 0x0185BDD0;
+
+object_twig_vrom_start = 0x0185C000;
+object_twig_vrom_end = 0x0185E0D0;
+
+object_dekucity_obj_vrom_start = 0x0185F000;
+object_dekucity_obj_vrom_end = 0x018636C0;
+
+object_po_fusen_vrom_start = 0x01864000;
+object_po_fusen_vrom_end = 0x01866500;
+
+object_racetsubo_vrom_start = 0x01867000;
+object_racetsubo_vrom_end = 0x018688A0;
+
+object_ha_vrom_start = 0x01869000;
+object_ha_vrom_end = 0x0187E0F0;
+
+object_bigokuta_vrom_start = 0x0187F000;
+object_bigokuta_vrom_end = 0x01885BD0;
+
+object_open_obj_vrom_start = 0x01886000;
+object_open_obj_vrom_end = 0x01897470;
+
+object_fu_kaiten_vrom_start = 0x01898000;
+object_fu_kaiten_vrom_end = 0x0189B830;
+
+object_fu_mato_vrom_start = 0x0189C000;
+object_fu_mato_vrom_end = 0x0189F250;
+
+object_mtoride_vrom_start = 0x018A0000;
+object_mtoride_vrom_end = 0x018B10C0;
+
+object_osn_vrom_start = 0x018B2000;
+object_osn_vrom_end = 0x018D2560;
+
+object_tokei_step_vrom_start = 0x018D3000;
+object_tokei_step_vrom_end = 0x018D39A0;
+
+object_lotus_vrom_start = 0x018D4000;
+object_lotus_vrom_end = 0x018D4A50;
+
+object_tl_vrom_start = 0x018D5000;
+object_tl_vrom_end = 0x018DD250;
+
+object_dkjail_obj_vrom_start = 0x018DE000;
+object_dkjail_obj_vrom_end = 0x018DF1E0;
+
+object_visiblock_vrom_start = 0x018E0000;
+object_visiblock_vrom_end = 0x018E0B00;
+
+object_tsn_vrom_start = 0x018E1000;
+object_tsn_vrom_end = 0x018EA310;
+
+object_ds2n_vrom_start = 0x018EB000;
+object_ds2n_vrom_end = 0x018F3180;
+
+object_fsn_vrom_start = 0x018F4000;
+object_fsn_vrom_end = 0x01908320;
+
+object_shn_vrom_start = 0x01909000;
+object_shn_vrom_end = 0x0191A220;
+
+object_bigicicle_vrom_start = 0x0191B000;
+object_bigicicle_vrom_end = 0x0191DD70;
+
+object_gi_bottle_15_vrom_start = 0x0191E000;
+object_gi_bottle_15_vrom_end = 0x01920000;
+
+object_tk_vrom_start = 0x01920000;
+object_tk_vrom_end = 0x0192BA00;
+
+object_market_obj_vrom_start = 0x0192C000;
+object_market_obj_vrom_end = 0x0194CDD0;
+
+object_gi_reserve00_vrom_start = 0x0194D000;
+object_gi_reserve00_vrom_end = 0x0194EC70;
+
+object_gi_reserve01_vrom_start = 0x0194F000;
+object_gi_reserve01_vrom_end = 0x01950610;
+
+object_lightblock_vrom_start = 0x01951000;
+object_lightblock_vrom_end = 0x01951BB0;
+
+object_takaraya_objects_vrom_start = 0x01952000;
+object_takaraya_objects_vrom_end = 0x01952E50;
+
+object_wdhand_vrom_start = 0x01953000;
+object_wdhand_vrom_end = 0x01954E30;
+
+object_sdn_vrom_start = 0x01955000;
+object_sdn_vrom_end = 0x01962C90;
+
+object_snowwd_vrom_start = 0x01963000;
+object_snowwd_vrom_end = 0x01965AA0;
+
+object_giant_vrom_start = 0x01966000;
+object_giant_vrom_end = 0x0197D960;
+
+object_comb_vrom_start = 0x0197E000;
+object_comb_vrom_end = 0x0197F0D0;
+
+object_hana_vrom_start = 0x01980000;
+object_hana_vrom_end = 0x01980750;
+
+object_boss_hakugin_vrom_start = 0x01981000;
+object_boss_hakugin_vrom_end = 0x01996440;
+
+object_meganeana_obj_vrom_start = 0x01997000;
+object_meganeana_obj_vrom_end = 0x019985D0;
+
+object_gi_nutsmask_vrom_start = 0x01999000;
+object_gi_nutsmask_vrom_end = 0x0199AC30;
+
+object_stk2_vrom_start = 0x0199B000;
+object_stk2_vrom_end = 0x019D5910;
+
+object_spot11_obj_vrom_start = 0x019D6000;
+object_spot11_obj_vrom_end = 0x019D7EF0;
+
+object_danpei_object_vrom_start = 0x019D8000;
+object_danpei_object_vrom_end = 0x019DBE10;
+
+object_dhouse_vrom_start = 0x019DC000;
+object_dhouse_vrom_end = 0x019E42C0;
+
+object_hakaisi_vrom_start = 0x019E5000;
+object_hakaisi_vrom_end = 0x019E7FF0;
+
+object_po_vrom_start = 0x019E8000;
+object_po_vrom_end = 0x019ED0E0;
+
+object_snowman_vrom_start = 0x019EE000;
+object_snowman_vrom_end = 0x019F5730;
+
+object_po_sisters_vrom_start = 0x019F6000;
+object_po_sisters_vrom_end = 0x019FC5D0;
+
+object_pp_vrom_start = 0x019FD000;
+object_pp_vrom_end = 0x01A0FB00;
+
+object_goronswitch_vrom_start = 0x01A10000;
+object_goronswitch_vrom_end = 0x01A129B0;
+
+object_delf_vrom_start = 0x01A13000;
+object_delf_vrom_end = 0x01A28130;
+
+object_botihasira_vrom_start = 0x01A29000;
+object_botihasira_vrom_end = 0x01A2AC10;
+
+object_gi_bigbomb_vrom_start = 0x01A2B000;
+object_gi_bigbomb_vrom_end = 0x01A2C930;
+
+object_pst_vrom_start = 0x01A2D000;
+object_pst_vrom_end = 0x01A2EA90;
+
+object_bsmask_vrom_start = 0x01A2F000;
+object_bsmask_vrom_end = 0x01A3BB90;
+
+object_spidertent_vrom_start = 0x01A3C000;
+object_spidertent_vrom_end = 0x01A3E3C0;
+
+object_zoraegg_vrom_start = 0x01A3F000;
+object_zoraegg_vrom_end = 0x01A449B0;
+
+object_kbt_vrom_start = 0x01A45000;
+object_kbt_vrom_end = 0x01A540E0;
+
+object_gg_vrom_start = 0x01A55000;
+object_gg_vrom_end = 0x01A650E0;
+
+object_maruta_vrom_start = 0x01A66000;
+object_maruta_vrom_end = 0x01A68FE0;
+
+object_ghaka_vrom_start = 0x01A69000;
+object_ghaka_vrom_end = 0x01A6CD00;
+
+object_oyu_vrom_start = 0x01A6D000;
+object_oyu_vrom_end = 0x01A6D9C0;
+
+object_dnp_vrom_start = 0x01A6E000;
+object_dnp_vrom_end = 0x01A80440;
+
+object_dai_vrom_start = 0x01A81000;
+object_dai_vrom_end = 0x01A940E0;
+
+object_kgy_vrom_start = 0x01A95000;
+object_kgy_vrom_end = 0x01AA5BA0;
+
+object_fb_vrom_start = 0x01AA6000;
+object_fb_vrom_end = 0x01AACEB0;
+
+object_taisou_vrom_start = 0x01AAD000;
+object_taisou_vrom_end = 0x01AB4780;
+
+object_gk_vrom_start = 0x01AB5000;
+object_gk_vrom_end = 0x01AC6720;
+
+object_haka_obj_vrom_start = 0x01AC7000;
+object_haka_obj_vrom_end = 0x01ACE840;
+
+object_dnt_vrom_start = 0x01ACF000;
+object_dnt_vrom_end = 0x01ADA2D0;
+
+object_yukiyama_vrom_start = 0x01ADB000;
+object_yukiyama_vrom_end = 0x01AE1870;
+
+object_icefloe_vrom_start = 0x01AE2000;
+object_icefloe_vrom_end = 0x01AE2CC0;
+
+object_gi_gold_dust_vrom_start = 0x01AE3000;
+object_gi_gold_dust_vrom_end = 0x01AE4140;
+
+object_gi_bottle_16_vrom_start = 0x01AE5000;
+object_gi_bottle_16_vrom_end = 0x01AE6320;
+
+object_gi_bottle_22_vrom_start = 0x01AE7000;
+object_gi_bottle_22_vrom_end = 0x01AE8AC0;
+
+object_bee_vrom_start = 0x01AE9000;
+object_bee_vrom_end = 0x01AEA3A0;
+
+object_ot_vrom_start = 0x01AEB000;
+object_ot_vrom_end = 0x01AEFB40;
+
+object_utubo_vrom_start = 0x01AF0000;
+object_utubo_vrom_end = 0x01AF4AD0;
+
+object_dora_vrom_start = 0x01AF5000;
+object_dora_vrom_end = 0x01AFA210;
+
+object_gi_loach_vrom_start = 0x01AFB000;
+object_gi_loach_vrom_end = 0x01AFC440;
+
+object_gi_seahorse_vrom_start = 0x01AFD000;
+object_gi_seahorse_vrom_end = 0x01AFE7D0;
+
+object_bigpo_vrom_start = 0x01AFF000;
+object_bigpo_vrom_end = 0x01B04C20;
+
+object_hariko_vrom_start = 0x01B05000;
+object_hariko_vrom_end = 0x01B05420;
+
+object_dno_vrom_start = 0x01B06000;
+object_dno_vrom_end = 0x01B14210;
+
+object_sinkai_kabe_vrom_start = 0x01B15000;
+object_sinkai_kabe_vrom_end = 0x01B15080;
+
+object_kin2_obj_vrom_start = 0x01B16000;
+object_kin2_obj_vrom_end = 0x01B1E3C0;
+
+object_ishi_vrom_start = 0x01B1F000;
+object_ishi_vrom_end = 0x01B1FA60;
+
+object_hakugin_demo_vrom_start = 0x01B20000;
+object_hakugin_demo_vrom_end = 0x01B23390;
+
+object_jg_vrom_start = 0x01B24000;
+object_jg_vrom_end = 0x01B3F220;
+
+object_gi_sword_2_vrom_start = 0x01B40000;
+object_gi_sword_2_vrom_end = 0x01B41560;
+
+object_gi_sword_3_vrom_start = 0x01B42000;
+object_gi_sword_3_vrom_end = 0x01B432A0;
+
+object_gi_sword_4_vrom_start = 0x01B44000;
+object_gi_sword_4_vrom_end = 0x01B45460;
+
+object_um_vrom_start = 0x01B46000;
+object_um_vrom_end = 0x01B5FE20;
+
+object_rb_vrom_start = 0x01B60000;
+object_rb_vrom_end = 0x01B61EF0;
+
+object_mbar_obj_vrom_start = 0x01B62000;
+object_mbar_obj_vrom_end = 0x01B639E0;
+
+object_ikana_obj_vrom_start = 0x01B64000;
+object_ikana_obj_vrom_end = 0x01B79BA0;
+
+object_kz_vrom_start = 0x01B7A000;
+object_kz_vrom_end = 0x01B89900;
+
+object_tokei_turret_vrom_start = 0x01B8A000;
+object_tokei_turret_vrom_end = 0x01B8D140;
+
+object_zog_vrom_start = 0x01B8E000;
+object_zog_vrom_end = 0x01BB7180;
+
+object_rotlift_vrom_start = 0x01BB8000;
+object_rotlift_vrom_end = 0x01BBCE20;
+
+object_posthouse_obj_vrom_start = 0x01BBD000;
+object_posthouse_obj_vrom_end = 0x01BBF980;
+
+object_gi_mask09_vrom_start = 0x01BC0000;
+object_gi_mask09_vrom_end = 0x01BC1760;
+
+object_gi_mask14_vrom_start = 0x01BC2000;
+object_gi_mask14_vrom_end = 0x01BC3F80;
+
+object_gi_mask15_vrom_start = 0x01BC4000;
+object_gi_mask15_vrom_end = 0x01BC5B60;
+
+object_inibs_object_vrom_start = 0x01BC6000;
+object_inibs_object_vrom_end = 0x01BD4EE0;
+
+object_tree_vrom_start = 0x01BD5000;
+object_tree_vrom_end = 0x01BD6B60;
+
+object_kaizoku_obj_vrom_start = 0x01BD7000;
+object_kaizoku_obj_vrom_end = 0x01BE28A0;
+
+object_gi_reserve_b_00_vrom_start = 0x01BE3000;
+object_gi_reserve_b_00_vrom_end = 0x01BE4030;
+
+object_gi_reserve_c_00_vrom_start = 0x01BE5000;
+object_gi_reserve_c_00_vrom_end = 0x01BE60E0;
+
+object_zob_vrom_start = 0x01BE7000;
+object_zob_vrom_end = 0x01BF8160;
+
+object_milkbar_vrom_start = 0x01BF9000;
+object_milkbar_vrom_end = 0x01C0A8B0;
+
+object_dmask_vrom_start = 0x01C0B000;
+object_dmask_vrom_end = 0x01C0F2C0;
+
+object_gi_reserve_c_01_vrom_start = 0x01C10000;
+object_gi_reserve_c_01_vrom_end = 0x01C10F00;
+
+object_zod_vrom_start = 0x01C11000;
+object_zod_vrom_end = 0x01C1E9C0;
+
+object_kumo30_vrom_start = 0x01C1F000;
+object_kumo30_vrom_end = 0x01C22370;
+
+object_obj_yasi_vrom_start = 0x01C23000;
+object_obj_yasi_vrom_end = 0x01C24460;
+
+object_tanron1_vrom_start = 0x01C25000;
+object_tanron1_vrom_end = 0x01C25010;
+
+object_tanron2_vrom_start = 0x01C26000;
+object_tanron2_vrom_end = 0x01C272A0;
+
+object_tanron3_vrom_start = 0x01C28000;
+object_tanron3_vrom_end = 0x01C292A0;
+
+object_gi_magicmushroom_vrom_start = 0x01C2A000;
+object_gi_magicmushroom_vrom_end = 0x01C2ADE0;
+
+object_obj_chan_vrom_start = 0x01C2B000;
+object_obj_chan_vrom_end = 0x01C2E4F0;
+
+object_gi_mask10_vrom_start = 0x01C2F000;
+object_gi_mask10_vrom_end = 0x01C30CC0;
+
+object_zos_vrom_start = 0x01C31000;
+object_zos_vrom_end = 0x01C47990;
+
+object_an2_vrom_start = 0x01C48000;
+object_an2_vrom_end = 0x01C4C2E0;
+
+object_an3_vrom_start = 0x01C4D000;
+object_an3_vrom_end = 0x01C4FA60;
+
+object_f40_switch_vrom_start = 0x01C50000;
+object_f40_switch_vrom_end = 0x01C50DF0;
+
+object_lodmoon_vrom_start = 0x01C51000;
+object_lodmoon_vrom_end = 0x01C54E20;
+
+object_tro_vrom_start = 0x01C55000;
+object_tro_vrom_end = 0x01C57960;
+
+object_gi_mask12_vrom_start = 0x01C58000;
+object_gi_mask12_vrom_end = 0x01C58F00;
+
+object_gi_mask23_vrom_start = 0x01C59000;
+object_gi_mask23_vrom_end = 0x01C5A510;
+
+object_gi_bottle_21_vrom_start = 0x01C5B000;
+object_gi_bottle_21_vrom_end = 0x01C5CCA0;
+
+object_gi_camera_vrom_start = 0x01C5D000;
+object_gi_camera_vrom_end = 0x01C5E860;
+
+object_kamejima_vrom_start = 0x01C5F000;
+object_kamejima_vrom_end = 0x01C73EA0;
+
+object_nb_vrom_start = 0x01C74000;
+object_nb_vrom_end = 0x01C7CC50;
+
+object_harfgibud_vrom_start = 0x01C7D000;
+object_harfgibud_vrom_end = 0x01C93600;
+
+object_zov_vrom_start = 0x01C94000;
+object_zov_vrom_end = 0x01CAA270;
+
+object_ah_vrom_start = 0x01CAB000;
+object_ah_vrom_end = 0x01CB4E80;
+
+object_hgdoor_vrom_start = 0x01CB5000;
+object_hgdoor_vrom_end = 0x01CB6D40;
+
+object_dor01_vrom_start = 0x01CB7000;
+object_dor01_vrom_end = 0x01CB8650;
+
+object_dor02_vrom_start = 0x01CB9000;
+object_dor02_vrom_end = 0x01CBA610;
+
+object_dor03_vrom_start = 0x01CBB000;
+object_dor03_vrom_end = 0x01CBC4D0;
+
+object_dor04_vrom_start = 0x01CBD000;
+object_dor04_vrom_end = 0x01CBE660;
+
+object_last_obj_vrom_start = 0x01CBF000;
+object_last_obj_vrom_end = 0x01CC3B20;
+
+object_redead_obj_vrom_start = 0x01CC4000;
+object_redead_obj_vrom_end = 0x01CC4BB0;
+
+object_ikninside_obj_vrom_start = 0x01CC5000;
+object_ikninside_obj_vrom_end = 0x01CD2E80;
+
+object_iknv_obj_vrom_start = 0x01CD3000;
+object_iknv_obj_vrom_end = 0x01CE6190;
+
+object_pamera_vrom_start = 0x01CE7000;
+object_pamera_vrom_end = 0x01CF5180;
+
+object_hsstump_vrom_start = 0x01CF6000;
+object_hsstump_vrom_end = 0x01CF71E0;
+
+object_zm_vrom_start = 0x01CF8000;
+object_zm_vrom_end = 0x01D04890;
+
+object_al_vrom_start = 0x01D05000;
+object_al_vrom_end = 0x01D12BF0;
+
+object_tab_vrom_start = 0x01D13000;
+object_tab_vrom_end = 0x01D1B6C0;
+
+object_secom_obj_vrom_start = 0x01D1C000;
+object_secom_obj_vrom_end = 0x01D1ECF0;
+
+object_dt_vrom_start = 0x01D1F000;
+object_dt_vrom_end = 0x01D2A510;
+
+object_gi_mask03_vrom_start = 0x01D2B000;
+object_gi_mask03_vrom_end = 0x01D2CEB0;
+
+object_cha_vrom_start = 0x01D2D000;
+object_cha_vrom_end = 0x01D2EE10;
+
+object_obj_dinner_vrom_start = 0x01D2F000;
+object_obj_dinner_vrom_end = 0x01D31640;
+
+object_gi_reserve_b_01_vrom_start = 0x01D32000;
+object_gi_reserve_b_01_vrom_end = 0x01D336E0;
+
+object_lastday_vrom_start = 0x01D34000;
+object_lastday_vrom_end = 0x01D36A10;
+
+object_bai_vrom_start = 0x01D37000;
+object_bai_vrom_end = 0x01D3F1B0;
+
+object_ikn_demo_vrom_start = 0x01D40000;
+object_ikn_demo_vrom_end = 0x01D4DCC0;
+
+object_gi_fieldmap_vrom_start = 0x01D4E000;
+object_gi_fieldmap_vrom_end = 0x01D4F820;
+
+object_big_fwall_vrom_start = 0x01D50000;
+object_big_fwall_vrom_end = 0x01D50AC0;
+
+object_hunsui_vrom_start = 0x01D51000;
+object_hunsui_vrom_end = 0x01D52940;
+
+object_uch_vrom_start = 0x01D53000;
+object_uch_vrom_end = 0x01D57E60;
+
+object_tanron4_vrom_start = 0x01D58000;
+object_tanron4_vrom_end = 0x01D58E80;
+
+object_tanron5_vrom_start = 0x01D59000;
+object_tanron5_vrom_end = 0x01D5A2A0;
+
+object_in2_vrom_start = 0x01D5B000;
+object_in2_vrom_end = 0x01D67050;
+
+object_yb_vrom_start = 0x01D68000;
+object_yb_vrom_end = 0x01D6DF60;
+
+object_rz_vrom_start = 0x01D6E000;
+object_rz_vrom_end = 0x01D7B8F0;
+
+object_bjt_vrom_start = 0x01D7C000;
+object_bjt_vrom_end = 0x01D7E3A0;
+
+object_taru_vrom_start = 0x01D7F000;
+object_taru_vrom_end = 0x01D80CE0;
+
+object_moonston_vrom_start = 0x01D81000;
+object_moonston_vrom_end = 0x01D82230;
+
+object_gi_schedule_vrom_start = 0x01D83000;
+object_gi_schedule_vrom_end = 0x01D848C0;
+
+object_gi_stonemask_vrom_start = 0x01D85000;
+object_gi_stonemask_vrom_end = 0x01D86350;
+
+object_zoraband_vrom_start = 0x01D87000;
+object_zoraband_vrom_end = 0x01D87F40;
+
+object_kepn_koya_vrom_start = 0x01D88000;
+object_kepn_koya_vrom_end = 0x01D90090;
+
+object_obj_usiyane_vrom_start = 0x01D91000;
+object_obj_usiyane_vrom_end = 0x01D932E0;
+
+object_gi_mask05_vrom_start = 0x01D94000;
+object_gi_mask05_vrom_end = 0x01D95AC0;
+
+object_gi_mask11_vrom_start = 0x01D96000;
+object_gi_mask11_vrom_end = 0x01D97E90;
+
+object_gi_mask20_vrom_start = 0x01D98000;
+object_gi_mask20_vrom_end = 0x01D99840;
+
+object_nnh_vrom_start = 0x01D9A000;
+object_nnh_vrom_end = 0x01D9CEA0;
+
+object_kzsaku_vrom_start = 0x01D9D000;
+object_kzsaku_vrom_end = 0x01D9E150;
+
+object_obj_milk_bin_vrom_start = 0x01D9F000;
+object_obj_milk_bin_vrom_end = 0x01DA0A00;
+
+object_random_obj_vrom_start = 0x01DA1000;
+object_random_obj_vrom_end = 0x01DA22F0;
+
+object_kujiya_vrom_start = 0x01DA3000;
+object_kujiya_vrom_end = 0x01DA91B0;
+
+object_kitan_vrom_start = 0x01DAA000;
+object_kitan_vrom_end = 0x01DB1FC0;
+
+object_gi_mask06_vrom_start = 0x01DB2000;
+object_gi_mask06_vrom_end = 0x01DB38E0;
+
+object_gi_mask16_vrom_start = 0x01DB4000;
+object_gi_mask16_vrom_end = 0x01DB5FD0;
+
+object_astr_obj_vrom_start = 0x01DB6000;
+object_astr_obj_vrom_end = 0x01DB84D0;
+
+object_bsb_vrom_start = 0x01DB9000;
+object_bsb_vrom_end = 0x01DC63E0;
+
+object_fall2_vrom_start = 0x01DC7000;
+object_fall2_vrom_end = 0x01DCF8A0;
+
+object_sth_vrom_start = 0x01DD0000;
+object_sth_vrom_end = 0x01DD3210;
+
+object_gi_mssa_vrom_start = 0x01DD4000;
+object_gi_mssa_vrom_end = 0x01DD5470;
+
+object_smtower_vrom_start = 0x01DD6000;
+object_smtower_vrom_end = 0x01DD7790;
+
+object_gi_mask21_vrom_start = 0x01DD8000;
+object_gi_mask21_vrom_end = 0x01DD93B0;
+
+object_yado_obj_vrom_start = 0x01DDA000;
+object_yado_obj_vrom_end = 0x01DDB2F0;
+
+object_syoten_vrom_start = 0x01DDC000;
+object_syoten_vrom_end = 0x01DE0DA0;
+
+object_moonend_vrom_start = 0x01DE1000;
+object_moonend_vrom_end = 0x01DF3A00;
+
+object_ob_vrom_start = 0x01DF4000;
+object_ob_vrom_end = 0x01E0BEB0;
+
+object_gi_bottle_04_vrom_start = 0x01E0C000;
+object_gi_bottle_04_vrom_end = 0x01E0D260;
+
+object_and_vrom_start = 0x01E0E000;
+object_and_vrom_end = 0x01E202E0;
+
+object_obj_danpeilift_vrom_start = 0x01E21000;
+object_obj_danpeilift_vrom_end = 0x01E21BD0;
+
+object_drs_vrom_start = 0x01E22000;
+object_drs_vrom_end = 0x01E27A90;
+
+object_msmo_vrom_start = 0x01E28000;
+object_msmo_vrom_end = 0x01E296A0;
+
+object_an4_vrom_start = 0x01E2A000;
+object_an4_vrom_end = 0x01E328D0;
+
+object_wdor01_vrom_start = 0x01E33000;
+object_wdor01_vrom_end = 0x01E346B0;
+
+object_wdor02_vrom_start = 0x01E35000;
+object_wdor02_vrom_end = 0x01E366B0;
+
+object_wdor03_vrom_start = 0x01E37000;
+object_wdor03_vrom_end = 0x01E386B0;
+
+object_wdor04_vrom_start = 0x01E39000;
+object_wdor04_vrom_end = 0x01E3A670;
+
+object_wdor05_vrom_start = 0x01E3B000;
+object_wdor05_vrom_end = 0x01E3C670;
+
+object_stk3_vrom_start = 0x01E3D000;
+object_stk3_vrom_end = 0x01E42F60;
+
+object_kinsta1_obj_vrom_start = 0x01E43000;
+object_kinsta1_obj_vrom_end = 0x01E442F0;
+
+object_kinsta2_obj_vrom_start = 0x01E45000;
+object_kinsta2_obj_vrom_end = 0x01E464F0;
+
+object_bh_vrom_start = 0x01E47000;
+object_bh_vrom_end = 0x01E48E70;
+
+object_gi_mask17_vrom_start = 0x01E49000;
+object_gi_mask17_vrom_end = 0x01E4AC50;
+
+object_gi_mask22_vrom_start = 0x01E4B000;
+object_gi_mask22_vrom_end = 0x01E4C6E0;
+
+object_lbfshot_vrom_start = 0x01E4D000;
+object_lbfshot_vrom_end = 0x01E4E510;
+
+object_fusen_vrom_start = 0x01E4F000;
+object_fusen_vrom_end = 0x01E51450;
+
+object_ending_obj_vrom_start = 0x01E52000;
+object_ending_obj_vrom_end = 0x01E5A7E0;
+
+object_gi_mask13_vrom_start = 0x01E5B000;
+object_gi_mask13_vrom_end = 0x01E5C600;
+
+_1114_0x01607b40_vrom_start = 0x01E5D000;
+_1114_0x01607b40_vrom_end = 0x01E61D00;
+
+_1115_0x0160b1d0_vrom_start = 0x01E62000;
+_1115_0x0160b1d0_vrom_end = 0x01E63D00;
+
+_1116_0x0160c540_vrom_start = 0x01E64000;
+_1116_0x0160c540_vrom_end = 0x01E68800;
+
+_1117_0x0160ed50_vrom_start = 0x01E69000;
+_1117_0x0160ed50_vrom_end = 0x01E6E200;
+
+_1118_0x01611e20_vrom_start = 0x01E6F000;
+_1118_0x01611e20_vrom_end = 0x01E75800;
+
+_1119_0x01615e00_vrom_start = 0x01E76000;
+_1119_0x01615e00_vrom_end = 0x01E7B460;
+
+_1120_0x01619170_vrom_start = 0x01E7C000;
+_1120_0x01619170_vrom_end = 0x01E7C010;
+
+_1121_0x01619190_vrom_start = 0x01E7D000;
+_1121_0x01619190_vrom_end = 0x01E85000;
+
+nintendo_rogo_static_vrom_start = 0x01E85000;
+nintendo_rogo_static_vrom_end = 0x01E87DC0;
+
+title_static_vrom_start = 0x01E88000;
+title_static_vrom_end = 0x01EB9730;
+
+_1124_0x0163f490_vrom_start = 0x01EBA000;
+_1124_0x0163f490_vrom_end = 0x01EBB280;
+
+_1125_0x0163fc10_vrom_start = 0x01EBC000;
+_1125_0x0163fc10_vrom_end = 0x01EBC680;
+
+_1126_0x0163ffc0_vrom_start = 0x01EBD000;
+_1126_0x0163ffc0_vrom_end = 0x01EC8B20;
+
+_1127_0x01643d50_vrom_start = 0x01EC9000;
+_1127_0x01643d50_vrom_end = 0x01EC9F30;
+
+_1128_0x01644c80_vrom_start = 0x01ECA000;
+_1128_0x01644c80_vrom_end = 0x01ED3B00;
+
+_1129_0x01646b60_vrom_start = 0x01ED4000;
+_1129_0x01646b60_vrom_end = 0x01EDDB00;
+
+_1130_0x01649020_vrom_start = 0x01EDE000;
+_1130_0x01649020_vrom_end = 0x01EE7B00;
+
+_1131_0x0164ad90_vrom_start = 0x01EE8000;
+_1131_0x0164ad90_vrom_end = 0x01EF1B00;
+
+vr_fine_static_vrom_start = 0x01EF2000;
+vr_fine_static_vrom_end = 0x01EFE000;
+
+vr_cloud_static_vrom_start = 0x01EFE000;
+vr_cloud_static_vrom_end = 0x01F0A000;
+
+vr_pal_static_vrom_start = 0x01F0A000;
+vr_pal_static_vrom_end = 0x01F0A200;
+
+elf_message_field_vrom_start = 0x01F0B000;
+elf_message_field_vrom_end = 0x01F0B070;
+
+elf_message_ydan_vrom_start = 0x01F0C000;
+elf_message_ydan_vrom_end = 0x01F0C010;
+
+Z2_20SICHITAI2_vrom_start = 0x01F0D000;
+Z2_20SICHITAI2_vrom_end = 0x01F1D630;
+
+Z2_20SICHITAI2_room_00_vrom_start = 0x01F1E000;
+Z2_20SICHITAI2_room_00_vrom_end = 0x01F39240;
+
+Z2_20SICHITAI2_room_01_vrom_start = 0x01F3A000;
+Z2_20SICHITAI2_room_01_vrom_end = 0x01F4C620;
+
+Z2_20SICHITAI2_room_02_vrom_start = 0x01F4D000;
+Z2_20SICHITAI2_room_02_vrom_end = 0x01F5A0A0;
+
+Z2_WITCH_SHOP_vrom_start = 0x01F5B000;
+Z2_WITCH_SHOP_vrom_end = 0x01F65BC0;
+
+Z2_WITCH_SHOP_room_00_vrom_start = 0x01F66000;
+Z2_WITCH_SHOP_room_00_vrom_end = 0x01F6FA60;
+
+Z2_LAST_BS_vrom_start = 0x01F70000;
+Z2_LAST_BS_vrom_end = 0x01F77880;
+
+Z2_LAST_BS_room_00_vrom_start = 0x01F78000;
+Z2_LAST_BS_room_00_vrom_end = 0x01F80A60;
+
+Z2_HAKASHITA_vrom_start = 0x01F81000;
+Z2_HAKASHITA_vrom_end = 0x01F8D680;
+
+Z2_HAKASHITA_room_00_vrom_start = 0x01F8E000;
+Z2_HAKASHITA_room_00_vrom_end = 0x01F96040;
+
+Z2_HAKASHITA_room_01_vrom_start = 0x01F97000;
+Z2_HAKASHITA_room_01_vrom_end = 0x01F9E630;
+
+Z2_HAKASHITA_room_02_vrom_start = 0x01F9F000;
+Z2_HAKASHITA_room_02_vrom_end = 0x01FA5FE0;
+
+Z2_HAKASHITA_room_03_vrom_start = 0x01FA6000;
+Z2_HAKASHITA_room_03_vrom_end = 0x01FAA670;
+
+Z2_HAKASHITA_room_04_vrom_start = 0x01FAB000;
+Z2_HAKASHITA_room_04_vrom_end = 0x01FB09C0;
+
+Z2_AYASHIISHOP_vrom_start = 0x01FB1000;
+Z2_AYASHIISHOP_vrom_end = 0x01FB44A0;
+
+Z2_AYASHIISHOP_room_00_vrom_start = 0x01FB5000;
+Z2_AYASHIISHOP_room_00_vrom_end = 0x01FC6A80;
+
+Z2_AYASHIISHOP_room_01_vrom_start = 0x01FC7000;
+Z2_AYASHIISHOP_room_01_vrom_end = 0x01FCC520;
+
+Z2_OMOYA_vrom_start = 0x01FCD000;
+Z2_OMOYA_vrom_end = 0x01FD8810;
+
+Z2_OMOYA_room_00_vrom_start = 0x01FD9000;
+Z2_OMOYA_room_00_vrom_end = 0x01FE25E0;
+
+Z2_OMOYA_room_01_vrom_start = 0x01FE3000;
+Z2_OMOYA_room_01_vrom_end = 0x01FF3050;
+
+Z2_OMOYA_room_02_vrom_start = 0x01FF4000;
+Z2_OMOYA_room_02_vrom_end = 0x01FFDFB0;
+
+Z2_BOWLING_vrom_start = 0x01FFE000;
+Z2_BOWLING_vrom_end = 0x020020A0;
+
+Z2_BOWLING_room_00_vrom_start = 0x02003000;
+Z2_BOWLING_room_00_vrom_end = 0x02007D50;
+
+Z2_SONCHONOIE_vrom_start = 0x02008000;
+Z2_SONCHONOIE_vrom_end = 0x0200F500;
+
+Z2_SONCHONOIE_room_00_vrom_start = 0x02010000;
+Z2_SONCHONOIE_room_00_vrom_end = 0x020195D0;
+
+Z2_SONCHONOIE_room_01_vrom_start = 0x0201A000;
+Z2_SONCHONOIE_room_01_vrom_end = 0x02020F80;
+
+Z2_SONCHONOIE_room_02_vrom_start = 0x02021000;
+Z2_SONCHONOIE_room_02_vrom_end = 0x0202B170;
+
+Z2_SONCHONOIE_room_03_vrom_start = 0x0202C000;
+Z2_SONCHONOIE_room_03_vrom_end = 0x02035D70;
+
+Z2_IKANA_vrom_start = 0x02036000;
+Z2_IKANA_vrom_end = 0x02054380;
+
+Z2_IKANA_room_00_vrom_start = 0x02055000;
+Z2_IKANA_room_00_vrom_end = 0x0207E770;
+
+Z2_IKANA_room_01_vrom_start = 0x0207F000;
+Z2_IKANA_room_01_vrom_end = 0x0207F490;
+
+Z2_IKANA_room_02_vrom_start = 0x02080000;
+Z2_IKANA_room_02_vrom_end = 0x02083B30;
+
+Z2_IKANA_room_03_vrom_start = 0x02084000;
+Z2_IKANA_room_03_vrom_end = 0x02086D60;
+
+Z2_IKANA_room_04_vrom_start = 0x02087000;
+Z2_IKANA_room_04_vrom_end = 0x0208F870;
+
+Z2_KAIZOKU_vrom_start = 0x02090000;
+Z2_KAIZOKU_vrom_end = 0x020A1D20;
+
+Z2_KAIZOKU_room_00_vrom_start = 0x020A2000;
+Z2_KAIZOKU_room_00_vrom_end = 0x020B5F40;
+
+Z2_MILK_BAR_vrom_start = 0x020B6000;
+Z2_MILK_BAR_vrom_end = 0x020C33D0;
+
+Z2_MILK_BAR_room_00_vrom_start = 0x020C4000;
+Z2_MILK_BAR_room_00_vrom_end = 0x020CEF80;
+
+Z2_INISIE_N_vrom_start = 0x020CF000;
+Z2_INISIE_N_vrom_end = 0x020E1630;
+
+Z2_INISIE_N_room_00_vrom_start = 0x020E2000;
+Z2_INISIE_N_room_00_vrom_end = 0x020F0A40;
+
+Z2_INISIE_N_room_01_vrom_start = 0x020F1000;
+Z2_INISIE_N_room_01_vrom_end = 0x020FB500;
+
+Z2_INISIE_N_room_02_vrom_start = 0x020FC000;
+Z2_INISIE_N_room_02_vrom_end = 0x021036F0;
+
+Z2_INISIE_N_room_03_vrom_start = 0x02104000;
+Z2_INISIE_N_room_03_vrom_end = 0x0210E840;
+
+Z2_INISIE_N_room_04_vrom_start = 0x0210F000;
+Z2_INISIE_N_room_04_vrom_end = 0x02116530;
+
+Z2_INISIE_N_room_05_vrom_start = 0x02117000;
+Z2_INISIE_N_room_05_vrom_end = 0x021171B0;
+
+Z2_INISIE_N_room_06_vrom_start = 0x02118000;
+Z2_INISIE_N_room_06_vrom_end = 0x021181B0;
+
+Z2_INISIE_N_room_07_vrom_start = 0x02119000;
+Z2_INISIE_N_room_07_vrom_end = 0x0211CB10;
+
+Z2_INISIE_N_room_08_vrom_start = 0x0211D000;
+Z2_INISIE_N_room_08_vrom_end = 0x02121C50;
+
+Z2_INISIE_N_room_09_vrom_start = 0x02122000;
+Z2_INISIE_N_room_09_vrom_end = 0x0212A290;
+
+Z2_INISIE_N_room_10_vrom_start = 0x0212B000;
+Z2_INISIE_N_room_10_vrom_end = 0x0212FA30;
+
+Z2_INISIE_N_room_11_vrom_start = 0x02130000;
+Z2_INISIE_N_room_11_vrom_end = 0x021301D0;
+
+Z2_TAKARAYA_vrom_start = 0x02131000;
+Z2_TAKARAYA_vrom_end = 0x0213A880;
+
+Z2_TAKARAYA_room_00_vrom_start = 0x0213B000;
+Z2_TAKARAYA_room_00_vrom_end = 0x02142E80;
+
+Z2_INISIE_R_vrom_start = 0x02143000;
+Z2_INISIE_R_vrom_end = 0x02155080;
+
+Z2_INISIE_R_room_00_vrom_start = 0x02156000;
+Z2_INISIE_R_room_00_vrom_end = 0x02163470;
+
+Z2_INISIE_R_room_01_vrom_start = 0x02164000;
+Z2_INISIE_R_room_01_vrom_end = 0x0216D650;
+
+Z2_INISIE_R_room_02_vrom_start = 0x0216E000;
+Z2_INISIE_R_room_02_vrom_end = 0x02176410;
+
+Z2_INISIE_R_room_03_vrom_start = 0x02177000;
+Z2_INISIE_R_room_03_vrom_end = 0x02181E70;
+
+Z2_INISIE_R_room_04_vrom_start = 0x02182000;
+Z2_INISIE_R_room_04_vrom_end = 0x021886A0;
+
+Z2_INISIE_R_room_05_vrom_start = 0x02189000;
+Z2_INISIE_R_room_05_vrom_end = 0x02189260;
+
+Z2_INISIE_R_room_06_vrom_start = 0x0218A000;
+Z2_INISIE_R_room_06_vrom_end = 0x0218A240;
+
+Z2_INISIE_R_room_07_vrom_start = 0x0218B000;
+Z2_INISIE_R_room_07_vrom_end = 0x0218B1D0;
+
+Z2_INISIE_R_room_08_vrom_start = 0x0218C000;
+Z2_INISIE_R_room_08_vrom_end = 0x02190430;
+
+Z2_INISIE_R_room_09_vrom_start = 0x02191000;
+Z2_INISIE_R_room_09_vrom_end = 0x021911D0;
+
+Z2_INISIE_R_room_10_vrom_start = 0x02192000;
+Z2_INISIE_R_room_10_vrom_end = 0x021977D0;
+
+Z2_INISIE_R_room_11_vrom_start = 0x02198000;
+Z2_INISIE_R_room_11_vrom_end = 0x0219C300;
+
+Z2_OKUJOU_vrom_start = 0x0219D000;
+Z2_OKUJOU_vrom_end = 0x021B7FA0;
+
+Z2_OKUJOU_room_00_vrom_start = 0x021B8000;
+Z2_OKUJOU_room_00_vrom_end = 0x021BAF80;
+
+Z2_OPENINGDAN_vrom_start = 0x021BB000;
+Z2_OPENINGDAN_vrom_end = 0x021C5E60;
+
+Z2_OPENINGDAN_room_00_vrom_start = 0x021C6000;
+Z2_OPENINGDAN_room_00_vrom_end = 0x021D18D0;
+
+Z2_OPENINGDAN_room_01_vrom_start = 0x021D2000;
+Z2_OPENINGDAN_room_01_vrom_end = 0x021D86B0;
+
+Z2_MITURIN_vrom_start = 0x021D9000;
+Z2_MITURIN_vrom_end = 0x021F0390;
+
+Z2_MITURIN_room_00_vrom_start = 0x021F1000;
+Z2_MITURIN_room_00_vrom_end = 0x021FAC50;
+
+Z2_MITURIN_room_01_vrom_start = 0x021FB000;
+Z2_MITURIN_room_01_vrom_end = 0x02203870;
+
+Z2_MITURIN_room_02_vrom_start = 0x02204000;
+Z2_MITURIN_room_02_vrom_end = 0x0220ACE0;
+
+Z2_MITURIN_room_03_vrom_start = 0x0220B000;
+Z2_MITURIN_room_03_vrom_end = 0x02214DC0;
+
+Z2_MITURIN_room_04_vrom_start = 0x02215000;
+Z2_MITURIN_room_04_vrom_end = 0x02217450;
+
+Z2_MITURIN_room_05_vrom_start = 0x02218000;
+Z2_MITURIN_room_05_vrom_end = 0x0221E040;
+
+Z2_MITURIN_room_06_vrom_start = 0x0221F000;
+Z2_MITURIN_room_06_vrom_end = 0x02222010;
+
+Z2_MITURIN_room_07_vrom_start = 0x02223000;
+Z2_MITURIN_room_07_vrom_end = 0x02226760;
+
+Z2_MITURIN_room_08_vrom_start = 0x02227000;
+Z2_MITURIN_room_08_vrom_end = 0x0222D730;
+
+Z2_MITURIN_room_09_vrom_start = 0x0222E000;
+Z2_MITURIN_room_09_vrom_end = 0x02238DE0;
+
+Z2_MITURIN_room_10_vrom_start = 0x02239000;
+Z2_MITURIN_room_10_vrom_end = 0x0223DEB0;
+
+Z2_MITURIN_room_11_vrom_start = 0x0223E000;
+Z2_MITURIN_room_11_vrom_end = 0x02244DA0;
+
+Z2_MITURIN_room_12_vrom_start = 0x02245000;
+Z2_MITURIN_room_12_vrom_end = 0x02248C90;
+
+Z2_13HUBUKINOMITI_vrom_start = 0x02249000;
+Z2_13HUBUKINOMITI_vrom_end = 0x02250DF0;
+
+Z2_13HUBUKINOMITI_room_00_vrom_start = 0x02251000;
+Z2_13HUBUKINOMITI_room_00_vrom_end = 0x02255520;
+
+Z2_CASTLE_vrom_start = 0x02256000;
+Z2_CASTLE_vrom_end = 0x02265870;
+
+Z2_CASTLE_room_00_vrom_start = 0x02266000;
+Z2_CASTLE_room_00_vrom_end = 0x0227E040;
+
+Z2_CASTLE_room_01_vrom_start = 0x0227F000;
+Z2_CASTLE_room_01_vrom_end = 0x02285260;
+
+Z2_CASTLE_room_02_vrom_start = 0x02286000;
+Z2_CASTLE_room_02_vrom_end = 0x0228B740;
+
+Z2_CASTLE_room_03_vrom_start = 0x0228C000;
+Z2_CASTLE_room_03_vrom_end = 0x02291570;
+
+Z2_CASTLE_room_04_vrom_start = 0x02292000;
+Z2_CASTLE_room_04_vrom_end = 0x0229A6E0;
+
+Z2_CASTLE_room_05_vrom_start = 0x0229B000;
+Z2_CASTLE_room_05_vrom_end = 0x0229F070;
+
+Z2_CASTLE_room_06_vrom_start = 0x022A0000;
+Z2_CASTLE_room_06_vrom_end = 0x022A25C0;
+
+Z2_CASTLE_room_07_vrom_start = 0x022A3000;
+Z2_CASTLE_room_07_vrom_end = 0x022A5670;
+
+Z2_CASTLE_room_08_vrom_start = 0x022A6000;
+Z2_CASTLE_room_08_vrom_end = 0x022A6F10;
+
+Z2_CASTLE_room_09_vrom_start = 0x022A7000;
+Z2_CASTLE_room_09_vrom_end = 0x022A7F10;
+
+Z2_DEKUTES_vrom_start = 0x022A8000;
+Z2_DEKUTES_vrom_end = 0x022B0E90;
+
+Z2_DEKUTES_room_00_vrom_start = 0x022B1000;
+Z2_DEKUTES_room_00_vrom_end = 0x022B5360;
+
+Z2_MITURIN_BS_vrom_start = 0x022B6000;
+Z2_MITURIN_BS_vrom_end = 0x022B91B0;
+
+Z2_MITURIN_BS_room_00_vrom_start = 0x022BA000;
+Z2_MITURIN_BS_room_00_vrom_end = 0x022BBCB0;
+
+Z2_SYATEKI_MIZU_vrom_start = 0x022BC000;
+Z2_SYATEKI_MIZU_vrom_end = 0x022C56C0;
+
+Z2_SYATEKI_MIZU_room_00_vrom_start = 0x022C6000;
+Z2_SYATEKI_MIZU_room_00_vrom_end = 0x022CC150;
+
+Z2_HAKUGIN_vrom_start = 0x022CD000;
+Z2_HAKUGIN_vrom_end = 0x022E89D0;
+
+Z2_HAKUGIN_room_00_vrom_start = 0x022E9000;
+Z2_HAKUGIN_room_00_vrom_end = 0x022F1430;
+
+Z2_HAKUGIN_room_01_vrom_start = 0x022F2000;
+Z2_HAKUGIN_room_01_vrom_end = 0x022F8D10;
+
+Z2_HAKUGIN_room_02_vrom_start = 0x022F9000;
+Z2_HAKUGIN_room_02_vrom_end = 0x023054A0;
+
+Z2_HAKUGIN_room_03_vrom_start = 0x02306000;
+Z2_HAKUGIN_room_03_vrom_end = 0x0230B850;
+
+Z2_HAKUGIN_room_04_vrom_start = 0x0230C000;
+Z2_HAKUGIN_room_04_vrom_end = 0x0232D7A0;
+
+Z2_HAKUGIN_room_05_vrom_start = 0x0232E000;
+Z2_HAKUGIN_room_05_vrom_end = 0x023356A0;
+
+Z2_HAKUGIN_room_06_vrom_start = 0x02336000;
+Z2_HAKUGIN_room_06_vrom_end = 0x02339A50;
+
+Z2_HAKUGIN_room_07_vrom_start = 0x0233A000;
+Z2_HAKUGIN_room_07_vrom_end = 0x02340AB0;
+
+Z2_HAKUGIN_room_08_vrom_start = 0x02341000;
+Z2_HAKUGIN_room_08_vrom_end = 0x02345FD0;
+
+Z2_HAKUGIN_room_09_vrom_start = 0x02346000;
+Z2_HAKUGIN_room_09_vrom_end = 0x0234E440;
+
+Z2_HAKUGIN_room_10_vrom_start = 0x0234F000;
+Z2_HAKUGIN_room_10_vrom_end = 0x02352480;
+
+Z2_HAKUGIN_room_11_vrom_start = 0x02353000;
+Z2_HAKUGIN_room_11_vrom_end = 0x02355F30;
+
+Z2_HAKUGIN_room_12_vrom_start = 0x02356000;
+Z2_HAKUGIN_room_12_vrom_end = 0x0235AD10;
+
+Z2_HAKUGIN_room_13_vrom_start = 0x0235B000;
+Z2_HAKUGIN_room_13_vrom_end = 0x0235F300;
+
+Z2_ROMANYMAE_vrom_start = 0x02360000;
+Z2_ROMANYMAE_vrom_end = 0x023636B0;
+
+Z2_ROMANYMAE_room_00_vrom_start = 0x02364000;
+Z2_ROMANYMAE_room_00_vrom_end = 0x02367360;
+
+Z2_PIRATE_vrom_start = 0x02368000;
+Z2_PIRATE_vrom_end = 0x0237C650;
+
+Z2_PIRATE_room_00_vrom_start = 0x0237D000;
+Z2_PIRATE_room_00_vrom_end = 0x0237FFC0;
+
+Z2_PIRATE_room_01_vrom_start = 0x02380000;
+Z2_PIRATE_room_01_vrom_end = 0x02384E00;
+
+Z2_PIRATE_room_02_vrom_start = 0x02385000;
+Z2_PIRATE_room_02_vrom_end = 0x0238A480;
+
+Z2_PIRATE_room_03_vrom_start = 0x0238B000;
+Z2_PIRATE_room_03_vrom_end = 0x023A2960;
+
+Z2_PIRATE_room_04_vrom_start = 0x023A3000;
+Z2_PIRATE_room_04_vrom_end = 0x023A6160;
+
+Z2_PIRATE_room_05_vrom_start = 0x023A7000;
+Z2_PIRATE_room_05_vrom_end = 0x023B6B20;
+
+Z2_PIRATE_room_06_vrom_start = 0x023B7000;
+Z2_PIRATE_room_06_vrom_end = 0x023BAD00;
+
+Z2_PIRATE_room_07_vrom_start = 0x023BB000;
+Z2_PIRATE_room_07_vrom_end = 0x023CCA00;
+
+Z2_PIRATE_room_08_vrom_start = 0x023CD000;
+Z2_PIRATE_room_08_vrom_end = 0x023D07E0;
+
+Z2_PIRATE_room_09_vrom_start = 0x023D1000;
+Z2_PIRATE_room_09_vrom_end = 0x023DAD30;
+
+Z2_PIRATE_room_10_vrom_start = 0x023DB000;
+Z2_PIRATE_room_10_vrom_end = 0x023E5C60;
+
+Z2_PIRATE_room_11_vrom_start = 0x023E6000;
+Z2_PIRATE_room_11_vrom_end = 0x023EFC70;
+
+Z2_PIRATE_room_12_vrom_start = 0x023F0000;
+Z2_PIRATE_room_12_vrom_end = 0x023FD630;
+
+Z2_PIRATE_room_13_vrom_start = 0x023FE000;
+Z2_PIRATE_room_13_vrom_end = 0x024021F0;
+
+Z2_PIRATE_room_14_vrom_start = 0x02403000;
+Z2_PIRATE_room_14_vrom_end = 0x02404540;
+
+Z2_SYATEKI_MORI_vrom_start = 0x02405000;
+Z2_SYATEKI_MORI_vrom_end = 0x02416CD0;
+
+Z2_SYATEKI_MORI_room_00_vrom_start = 0x02417000;
+Z2_SYATEKI_MORI_room_00_vrom_end = 0x0241D050;
+
+Z2_SINKAI_vrom_start = 0x0241E000;
+Z2_SINKAI_vrom_end = 0x02427EA0;
+
+Z2_SINKAI_room_00_vrom_start = 0x02428000;
+Z2_SINKAI_room_00_vrom_end = 0x0242FC50;
+
+Z2_YOUSEI_IZUMI_vrom_start = 0x02430000;
+Z2_YOUSEI_IZUMI_vrom_end = 0x024533C0;
+
+Z2_YOUSEI_IZUMI_room_00_vrom_start = 0x02454000;
+Z2_YOUSEI_IZUMI_room_00_vrom_end = 0x024590E0;
+
+Z2_YOUSEI_IZUMI_room_01_vrom_start = 0x0245A000;
+Z2_YOUSEI_IZUMI_room_01_vrom_end = 0x0245F060;
+
+Z2_YOUSEI_IZUMI_room_02_vrom_start = 0x02460000;
+Z2_YOUSEI_IZUMI_room_02_vrom_end = 0x02465080;
+
+Z2_YOUSEI_IZUMI_room_03_vrom_start = 0x02466000;
+Z2_YOUSEI_IZUMI_room_03_vrom_end = 0x0246B060;
+
+Z2_YOUSEI_IZUMI_room_04_vrom_start = 0x0246C000;
+Z2_YOUSEI_IZUMI_room_04_vrom_end = 0x02471090;
+
+Z2_KINSTA1_vrom_start = 0x02472000;
+Z2_KINSTA1_vrom_end = 0x0247CC60;
+
+Z2_KINSTA1_room_00_vrom_start = 0x0247D000;
+Z2_KINSTA1_room_00_vrom_end = 0x0247F220;
+
+Z2_KINSTA1_room_01_vrom_start = 0x02480000;
+Z2_KINSTA1_room_01_vrom_end = 0x0248A100;
+
+Z2_KINSTA1_room_02_vrom_start = 0x0248B000;
+Z2_KINSTA1_room_02_vrom_end = 0x02490620;
+
+Z2_KINSTA1_room_03_vrom_start = 0x02491000;
+Z2_KINSTA1_room_03_vrom_end = 0x024956D0;
+
+Z2_KINSTA1_room_04_vrom_start = 0x02496000;
+Z2_KINSTA1_room_04_vrom_end = 0x0249F050;
+
+Z2_KINSTA1_room_05_vrom_start = 0x024A0000;
+Z2_KINSTA1_room_05_vrom_end = 0x024A1F30;
+
+Z2_KINDAN2_vrom_start = 0x024A2000;
+Z2_KINDAN2_vrom_end = 0x024B1E40;
+
+Z2_KINDAN2_room_00_vrom_start = 0x024B2000;
+Z2_KINDAN2_room_00_vrom_end = 0x024B8A40;
+
+Z2_KINDAN2_room_01_vrom_start = 0x024B9000;
+Z2_KINDAN2_room_01_vrom_end = 0x024C5310;
+
+Z2_KINDAN2_room_02_vrom_start = 0x024C6000;
+Z2_KINDAN2_room_02_vrom_end = 0x024D0340;
+
+Z2_KINDAN2_room_03_vrom_start = 0x024D1000;
+Z2_KINDAN2_room_03_vrom_end = 0x024DA420;
+
+Z2_KINDAN2_room_04_vrom_start = 0x024DB000;
+Z2_KINDAN2_room_04_vrom_end = 0x024DFAC0;
+
+Z2_KINDAN2_room_05_vrom_start = 0x024E0000;
+Z2_KINDAN2_room_05_vrom_end = 0x024E7DF0;
+
+Z2_TENMON_DAI_vrom_start = 0x024E8000;
+Z2_TENMON_DAI_vrom_end = 0x024F0780;
+
+Z2_TENMON_DAI_room_00_vrom_start = 0x024F1000;
+Z2_TENMON_DAI_room_00_vrom_end = 0x02503320;
+
+Z2_TENMON_DAI_room_01_vrom_start = 0x02504000;
+Z2_TENMON_DAI_room_01_vrom_end = 0x0251CAB0;
+
+Z2_LAST_DEKU_vrom_start = 0x0251D000;
+Z2_LAST_DEKU_vrom_end = 0x02520F90;
+
+Z2_LAST_DEKU_room_00_vrom_start = 0x02521000;
+Z2_LAST_DEKU_room_00_vrom_end = 0x0252EB00;
+
+Z2_LAST_DEKU_room_01_vrom_start = 0x0252F000;
+Z2_LAST_DEKU_room_01_vrom_end = 0x025337A0;
+
+Z2_22DEKUCITY_vrom_start = 0x02534000;
+Z2_22DEKUCITY_vrom_end = 0x02541220;
+
+Z2_22DEKUCITY_room_00_vrom_start = 0x02542000;
+Z2_22DEKUCITY_room_00_vrom_end = 0x02553A50;
+
+Z2_22DEKUCITY_room_01_vrom_start = 0x02554000;
+Z2_22DEKUCITY_room_01_vrom_end = 0x02562950;
+
+Z2_22DEKUCITY_room_02_vrom_start = 0x02563000;
+Z2_22DEKUCITY_room_02_vrom_end = 0x025754F0;
+
+Z2_KAJIYA_vrom_start = 0x02576000;
+Z2_KAJIYA_vrom_end = 0x0257D9D0;
+
+Z2_KAJIYA_room_00_vrom_start = 0x0257E000;
+Z2_KAJIYA_room_00_vrom_end = 0x0258B920;
+
+Z2_00KEIKOKU_vrom_start = 0x0258C000;
+Z2_00KEIKOKU_vrom_end = 0x025C4580;
+
+Z2_00KEIKOKU_room_00_vrom_start = 0x025C5000;
+Z2_00KEIKOKU_room_00_vrom_end = 0x025ED860;
+
+Z2_POSTHOUSE_vrom_start = 0x025EE000;
+Z2_POSTHOUSE_vrom_end = 0x025F77B0;
+
+Z2_POSTHOUSE_room_00_vrom_start = 0x025F8000;
+Z2_POSTHOUSE_room_00_vrom_end = 0x02600910;
+
+Z2_LABO_vrom_start = 0x02601000;
+Z2_LABO_vrom_end = 0x0260EC40;
+
+Z2_LABO_room_00_vrom_start = 0x0260F000;
+Z2_LABO_room_00_vrom_end = 0x026176A0;
+
+Z2_DANPEI2TEST_vrom_start = 0x02618000;
+Z2_DANPEI2TEST_vrom_end = 0x0261DC50;
+
+Z2_DANPEI2TEST_room_00_vrom_start = 0x0261E000;
+Z2_DANPEI2TEST_room_00_vrom_end = 0x02634C60;
+
+Z2_DANPEI2TEST_room_01_vrom_start = 0x02635000;
+Z2_DANPEI2TEST_room_01_vrom_end = 0x0263ACB0;
+
+Z2_16GORON_HOUSE_vrom_start = 0x0263B000;
+Z2_16GORON_HOUSE_vrom_end = 0x026481C0;
+
+Z2_16GORON_HOUSE_room_00_vrom_start = 0x02649000;
+Z2_16GORON_HOUSE_room_00_vrom_end = 0x026555D0;
+
+Z2_16GORON_HOUSE_room_01_vrom_start = 0x02656000;
+Z2_16GORON_HOUSE_room_01_vrom_end = 0x0265D370;
+
+Z2_33ZORACITY_vrom_start = 0x0265E000;
+Z2_33ZORACITY_vrom_end = 0x0266C770;
+
+Z2_33ZORACITY_room_00_vrom_start = 0x0266D000;
+Z2_33ZORACITY_room_00_vrom_end = 0x02677050;
+
+Z2_8ITEMSHOP_vrom_start = 0x02678000;
+Z2_8ITEMSHOP_vrom_end = 0x02682270;
+
+Z2_8ITEMSHOP_room_00_vrom_start = 0x02683000;
+Z2_8ITEMSHOP_room_00_vrom_end = 0x0268FA30;
+
+Z2_F01_vrom_start = 0x02690000;
+Z2_F01_vrom_end = 0x026AC460;
+
+Z2_F01_room_00_vrom_start = 0x026AD000;
+Z2_F01_room_00_vrom_end = 0x026BA2C0;
+
+Z2_INISIE_BS_vrom_start = 0x026BB000;
+Z2_INISIE_BS_vrom_end = 0x026BDC10;
+
+Z2_INISIE_BS_room_00_vrom_start = 0x026BE000;
+Z2_INISIE_BS_room_00_vrom_end = 0x026BE1B0;
+
+Z2_30GYOSON_vrom_start = 0x026BF000;
+Z2_30GYOSON_vrom_end = 0x026DDDD0;
+
+Z2_30GYOSON_room_00_vrom_start = 0x026DE000;
+Z2_30GYOSON_room_00_vrom_end = 0x026FB300;
+
+Z2_31MISAKI_vrom_start = 0x026FC000;
+Z2_31MISAKI_vrom_end = 0x02714F90;
+
+Z2_31MISAKI_room_00_vrom_start = 0x02715000;
+Z2_31MISAKI_room_00_vrom_end = 0x0272C470;
+
+Z2_TAKARAKUJI_vrom_start = 0x0272D000;
+Z2_TAKARAKUJI_vrom_end = 0x0272F610;
+
+Z2_TAKARAKUJI_room_00_vrom_start = 0x02730000;
+Z2_TAKARAKUJI_room_00_vrom_end = 0x02732E50;
+
+Z2_TORIDE_vrom_start = 0x02733000;
+Z2_TORIDE_vrom_end = 0x0273F050;
+
+Z2_TORIDE_room_00_vrom_start = 0x02740000;
+Z2_TORIDE_room_00_vrom_end = 0x0274D200;
+
+Z2_FISHERMAN_vrom_start = 0x0274E000;
+Z2_FISHERMAN_vrom_end = 0x02757150;
+
+Z2_FISHERMAN_room_00_vrom_start = 0x02758000;
+Z2_FISHERMAN_room_00_vrom_end = 0x02760540;
+
+Z2_GORONSHOP_vrom_start = 0x02761000;
+Z2_GORONSHOP_vrom_end = 0x0276D330;
+
+Z2_GORONSHOP_room_00_vrom_start = 0x0276E000;
+Z2_GORONSHOP_room_00_vrom_end = 0x027775A0;
+
+Z2_DEKU_KING_vrom_start = 0x02778000;
+Z2_DEKU_KING_vrom_end = 0x02789BC0;
+
+Z2_DEKU_KING_room_00_vrom_start = 0x0278A000;
+Z2_DEKU_KING_room_00_vrom_end = 0x027934E0;
+
+Z2_LAST_GORON_vrom_start = 0x02794000;
+Z2_LAST_GORON_vrom_end = 0x0279D5C0;
+
+Z2_LAST_GORON_room_00_vrom_start = 0x0279E000;
+Z2_LAST_GORON_room_00_vrom_end = 0x027B3E90;
+
+Z2_LAST_GORON_room_01_vrom_start = 0x027B4000;
+Z2_LAST_GORON_room_01_vrom_end = 0x027B84C0;
+
+Z2_24KEMONOMITI_vrom_start = 0x027B9000;
+Z2_24KEMONOMITI_vrom_end = 0x027C0B50;
+
+Z2_24KEMONOMITI_room_00_vrom_start = 0x027C1000;
+Z2_24KEMONOMITI_room_00_vrom_end = 0x027C71E0;
+
+Z2_F01_B_vrom_start = 0x027C8000;
+Z2_F01_B_vrom_end = 0x027D3920;
+
+Z2_F01_B_room_00_vrom_start = 0x027D4000;
+Z2_F01_B_room_00_vrom_end = 0x027DB280;
+
+Z2_F01C_vrom_start = 0x027DC000;
+Z2_F01C_vrom_end = 0x027EA2B0;
+
+Z2_F01C_room_00_vrom_start = 0x027EB000;
+Z2_F01C_room_00_vrom_end = 0x027F0A30;
+
+Z2_BOTI_vrom_start = 0x027F1000;
+Z2_BOTI_vrom_end = 0x027FF1D0;
+
+Z2_BOTI_room_00_vrom_start = 0x02800000;
+Z2_BOTI_room_00_vrom_end = 0x0280C1E0;
+
+Z2_BOTI_room_01_vrom_start = 0x0280D000;
+Z2_BOTI_room_01_vrom_end = 0x02815B20;
+
+Z2_HAKUGIN_BS_vrom_start = 0x02816000;
+Z2_HAKUGIN_BS_vrom_end = 0x0281DFB0;
+
+Z2_HAKUGIN_BS_room_00_vrom_start = 0x0281E000;
+Z2_HAKUGIN_BS_room_00_vrom_end = 0x02824250;
+
+Z2_20SICHITAI_vrom_start = 0x02825000;
+Z2_20SICHITAI_vrom_end = 0x02836560;
+
+Z2_20SICHITAI_room_00_vrom_start = 0x02837000;
+Z2_20SICHITAI_room_00_vrom_end = 0x02854B90;
+
+Z2_20SICHITAI_room_01_vrom_start = 0x02855000;
+Z2_20SICHITAI_room_01_vrom_end = 0x02869500;
+
+Z2_20SICHITAI_room_02_vrom_start = 0x0286A000;
+Z2_20SICHITAI_room_02_vrom_end = 0x028784E0;
+
+Z2_21MITURINMAE_vrom_start = 0x02879000;
+Z2_21MITURINMAE_vrom_end = 0x02883FF0;
+
+Z2_21MITURINMAE_room_00_vrom_start = 0x02884000;
+Z2_21MITURINMAE_room_00_vrom_end = 0x02893C40;
+
+Z2_LAST_ZORA_vrom_start = 0x02894000;
+Z2_LAST_ZORA_vrom_end = 0x028A8820;
+
+Z2_LAST_ZORA_room_00_vrom_start = 0x028A9000;
+Z2_LAST_ZORA_room_00_vrom_end = 0x028B7760;
+
+Z2_11GORONNOSATO2_vrom_start = 0x028B8000;
+Z2_11GORONNOSATO2_vrom_end = 0x028BE700;
+
+Z2_11GORONNOSATO2_room_00_vrom_start = 0x028BF000;
+Z2_11GORONNOSATO2_room_00_vrom_end = 0x028D56F0;
+
+Z2_11GORONNOSATO2_room_01_vrom_start = 0x028D6000;
+Z2_11GORONNOSATO2_room_01_vrom_end = 0x028D86A0;
+
+Z2_SEA_vrom_start = 0x028D9000;
+Z2_SEA_vrom_end = 0x028F5740;
+
+Z2_SEA_room_00_vrom_start = 0x028F6000;
+Z2_SEA_room_00_vrom_end = 0x02904A60;
+
+Z2_SEA_room_01_vrom_start = 0x02905000;
+Z2_SEA_room_01_vrom_end = 0x0290D3A0;
+
+Z2_SEA_room_02_vrom_start = 0x0290E000;
+Z2_SEA_room_02_vrom_end = 0x029100C0;
+
+Z2_SEA_room_03_vrom_start = 0x02911000;
+Z2_SEA_room_03_vrom_end = 0x02913440;
+
+Z2_SEA_room_04_vrom_start = 0x02914000;
+Z2_SEA_room_04_vrom_end = 0x0291CB90;
+
+Z2_SEA_room_05_vrom_start = 0x0291D000;
+Z2_SEA_room_05_vrom_end = 0x029222F0;
+
+Z2_SEA_room_06_vrom_start = 0x02923000;
+Z2_SEA_room_06_vrom_end = 0x0292ED90;
+
+Z2_SEA_room_07_vrom_start = 0x0292F000;
+Z2_SEA_room_07_vrom_end = 0x029340C0;
+
+Z2_SEA_room_08_vrom_start = 0x02935000;
+Z2_SEA_room_08_vrom_end = 0x0293F400;
+
+Z2_SEA_room_09_vrom_start = 0x02940000;
+Z2_SEA_room_09_vrom_end = 0x02944AF0;
+
+Z2_SEA_room_10_vrom_start = 0x02945000;
+Z2_SEA_room_10_vrom_end = 0x0294DB20;
+
+Z2_SEA_room_11_vrom_start = 0x0294E000;
+Z2_SEA_room_11_vrom_end = 0x02958AF0;
+
+Z2_SEA_room_12_vrom_start = 0x02959000;
+Z2_SEA_room_12_vrom_end = 0x02961570;
+
+Z2_SEA_room_13_vrom_start = 0x02962000;
+Z2_SEA_room_13_vrom_end = 0x02965790;
+
+Z2_SEA_room_14_vrom_start = 0x02966000;
+Z2_SEA_room_14_vrom_end = 0x02967B40;
+
+Z2_SEA_room_15_vrom_start = 0x02968000;
+Z2_SEA_room_15_vrom_end = 0x02969970;
+
+Z2_35TAKI_vrom_start = 0x0296A000;
+Z2_35TAKI_vrom_end = 0x02982800;
+
+Z2_35TAKI_room_00_vrom_start = 0x02983000;
+Z2_35TAKI_room_00_vrom_end = 0x0299BD10;
+
+Z2_REDEAD_vrom_start = 0x0299C000;
+Z2_REDEAD_vrom_end = 0x029A9030;
+
+Z2_REDEAD_room_00_vrom_start = 0x029AA000;
+Z2_REDEAD_room_00_vrom_end = 0x029AF2F0;
+
+Z2_REDEAD_room_01_vrom_start = 0x029B0000;
+Z2_REDEAD_room_01_vrom_end = 0x029B8B90;
+
+Z2_REDEAD_room_02_vrom_start = 0x029B9000;
+Z2_REDEAD_room_02_vrom_end = 0x029C1080;
+
+Z2_REDEAD_room_03_vrom_start = 0x029C2000;
+Z2_REDEAD_room_03_vrom_end = 0x029C9930;
+
+Z2_REDEAD_room_04_vrom_start = 0x029CA000;
+Z2_REDEAD_room_04_vrom_end = 0x029D1440;
+
+Z2_REDEAD_room_05_vrom_start = 0x029D2000;
+Z2_REDEAD_room_05_vrom_end = 0x029DB3A0;
+
+Z2_REDEAD_room_06_vrom_start = 0x029DC000;
+Z2_REDEAD_room_06_vrom_end = 0x029E2EA0;
+
+Z2_REDEAD_room_07_vrom_start = 0x029E3000;
+Z2_REDEAD_room_07_vrom_end = 0x029E90C0;
+
+Z2_REDEAD_room_08_vrom_start = 0x029EA000;
+Z2_REDEAD_room_08_vrom_end = 0x029EC660;
+
+Z2_REDEAD_room_09_vrom_start = 0x029ED000;
+Z2_REDEAD_room_09_vrom_end = 0x029EF830;
+
+Z2_REDEAD_room_10_vrom_start = 0x029F0000;
+Z2_REDEAD_room_10_vrom_end = 0x029F2A00;
+
+Z2_REDEAD_room_11_vrom_start = 0x029F3000;
+Z2_REDEAD_room_11_vrom_end = 0x029FC780;
+
+Z2_REDEAD_room_12_vrom_start = 0x029FD000;
+Z2_REDEAD_room_12_vrom_end = 0x029FDF90;
+
+Z2_REDEAD_room_13_vrom_start = 0x029FE000;
+Z2_REDEAD_room_13_vrom_end = 0x029FF890;
+
+Z2_BANDROOM_vrom_start = 0x02A00000;
+Z2_BANDROOM_vrom_end = 0x02A0B8B0;
+
+Z2_BANDROOM_room_00_vrom_start = 0x02A0C000;
+Z2_BANDROOM_room_00_vrom_end = 0x02A1DFD0;
+
+Z2_BANDROOM_room_01_vrom_start = 0x02A1E000;
+Z2_BANDROOM_room_01_vrom_end = 0x02A29720;
+
+Z2_BANDROOM_room_02_vrom_start = 0x02A2A000;
+Z2_BANDROOM_room_02_vrom_end = 0x02A385B0;
+
+Z2_BANDROOM_room_03_vrom_start = 0x02A39000;
+Z2_BANDROOM_room_03_vrom_end = 0x02A43770;
+
+Z2_BANDROOM_room_04_vrom_start = 0x02A44000;
+Z2_BANDROOM_room_04_vrom_end = 0x02A4D650;
+
+Z2_11GORONNOSATO_vrom_start = 0x02A4E000;
+Z2_11GORONNOSATO_vrom_end = 0x02A53700;
+
+Z2_11GORONNOSATO_room_00_vrom_start = 0x02A54000;
+Z2_11GORONNOSATO_room_00_vrom_end = 0x02A67C60;
+
+Z2_11GORONNOSATO_room_01_vrom_start = 0x02A68000;
+Z2_11GORONNOSATO_room_01_vrom_end = 0x02A6AA60;
+
+Z2_GORON_HAKA_vrom_start = 0x02A6B000;
+Z2_GORON_HAKA_vrom_end = 0x02A73790;
+
+Z2_GORON_HAKA_room_00_vrom_start = 0x02A74000;
+Z2_GORON_HAKA_room_00_vrom_end = 0x02A7BDB0;
+
+Z2_SECOM_vrom_start = 0x02A7C000;
+Z2_SECOM_vrom_end = 0x02A82A10;
+
+Z2_SECOM_room_00_vrom_start = 0x02A83000;
+Z2_SECOM_room_00_vrom_end = 0x02A862F0;
+
+Z2_SECOM_room_01_vrom_start = 0x02A87000;
+Z2_SECOM_room_01_vrom_end = 0x02A969B0;
+
+Z2_10YUKIYAMANOMURA_vrom_start = 0x02A97000;
+Z2_10YUKIYAMANOMURA_vrom_end = 0x02AA5650;
+
+Z2_10YUKIYAMANOMURA_room_00_vrom_start = 0x02AA6000;
+Z2_10YUKIYAMANOMURA_room_00_vrom_end = 0x02AB16C0;
+
+Z2_TOUGITES_vrom_start = 0x02AB2000;
+Z2_TOUGITES_vrom_end = 0x02AB87C0;
+
+Z2_TOUGITES_room_00_vrom_start = 0x02AB9000;
+Z2_TOUGITES_room_00_vrom_end = 0x02ABD5D0;
+
+Z2_DANPEI_vrom_start = 0x02ABE000;
+Z2_DANPEI_vrom_end = 0x02ACEB00;
+
+Z2_DANPEI_room_00_vrom_start = 0x02ACF000;
+Z2_DANPEI_room_00_vrom_end = 0x02AD9BC0;
+
+Z2_DANPEI_room_01_vrom_start = 0x02ADA000;
+Z2_DANPEI_room_01_vrom_end = 0x02AE2280;
+
+Z2_DANPEI_room_02_vrom_start = 0x02AE3000;
+Z2_DANPEI_room_02_vrom_end = 0x02AEF8D0;
+
+Z2_DANPEI_room_03_vrom_start = 0x02AF0000;
+Z2_DANPEI_room_03_vrom_end = 0x02AF9F10;
+
+Z2_DANPEI_room_04_vrom_start = 0x02AFA000;
+Z2_DANPEI_room_04_vrom_end = 0x02AFF4B0;
+
+Z2_DANPEI_room_05_vrom_start = 0x02B00000;
+Z2_DANPEI_room_05_vrom_end = 0x02B09E70;
+
+Z2_DANPEI_room_06_vrom_start = 0x02B0A000;
+Z2_DANPEI_room_06_vrom_end = 0x02B15250;
+
+Z2_DANPEI_room_07_vrom_start = 0x02B16000;
+Z2_DANPEI_room_07_vrom_end = 0x02B23B10;
+
+Z2_DANPEI_room_08_vrom_start = 0x02B24000;
+Z2_DANPEI_room_08_vrom_end = 0x02B2A410;
+
+Z2_IKANAMAE_vrom_start = 0x02B2B000;
+Z2_IKANAMAE_vrom_end = 0x02B33090;
+
+Z2_IKANAMAE_room_00_vrom_start = 0x02B34000;
+Z2_IKANAMAE_room_00_vrom_end = 0x02B38BD0;
+
+Z2_DOUJOU_vrom_start = 0x02B39000;
+Z2_DOUJOU_vrom_end = 0x02B40530;
+
+Z2_DOUJOU_room_00_vrom_start = 0x02B41000;
+Z2_DOUJOU_room_00_vrom_end = 0x02B474E0;
+
+Z2_MUSICHOUSE_vrom_start = 0x02B48000;
+Z2_MUSICHOUSE_vrom_end = 0x02B61800;
+
+Z2_MUSICHOUSE_room_00_vrom_start = 0x02B62000;
+Z2_MUSICHOUSE_room_00_vrom_end = 0x02B6EA60;
+
+Z2_IKNINSIDE_vrom_start = 0x02B6F000;
+Z2_IKNINSIDE_vrom_end = 0x02B7A010;
+
+Z2_IKNINSIDE_room_00_vrom_start = 0x02B7B000;
+Z2_IKNINSIDE_room_00_vrom_end = 0x02B7D9E0;
+
+Z2_IKNINSIDE_room_01_vrom_start = 0x02B7E000;
+Z2_IKNINSIDE_room_01_vrom_end = 0x02B85840;
+
+Z2_MAP_SHOP_vrom_start = 0x02B86000;
+Z2_MAP_SHOP_vrom_end = 0x02B8D020;
+
+Z2_MAP_SHOP_room_00_vrom_start = 0x02B8E000;
+Z2_MAP_SHOP_room_00_vrom_end = 0x02B93860;
+
+Z2_F40_vrom_start = 0x02B94000;
+Z2_F40_vrom_end = 0x02BA8300;
+
+Z2_F40_room_00_vrom_start = 0x02BA9000;
+Z2_F40_room_00_vrom_end = 0x02BB4E70;
+
+Z2_F41_vrom_start = 0x02BB5000;
+Z2_F41_vrom_end = 0x02BC8AF0;
+
+Z2_F41_room_00_vrom_start = 0x02BC9000;
+Z2_F41_room_00_vrom_end = 0x02BD4960;
+
+Z2_10YUKIYAMANOMURA2_vrom_start = 0x02BD5000;
+Z2_10YUKIYAMANOMURA2_vrom_end = 0x02BDC060;
+
+Z2_10YUKIYAMANOMURA2_room_00_vrom_start = 0x02BDD000;
+Z2_10YUKIYAMANOMURA2_room_00_vrom_end = 0x02BFB490;
+
+Z2_10YUKIYAMANOMURA2_room_01_vrom_start = 0x02BFC000;
+Z2_10YUKIYAMANOMURA2_room_01_vrom_end = 0x02BFDE30;
+
+Z2_14YUKIDAMANOMITI_vrom_start = 0x02BFE000;
+Z2_14YUKIDAMANOMITI_vrom_end = 0x02C03CF0;
+
+Z2_14YUKIDAMANOMITI_room_00_vrom_start = 0x02C04000;
+Z2_14YUKIDAMANOMITI_room_00_vrom_end = 0x02C085B0;
+
+Z2_12HAKUGINMAE_vrom_start = 0x02C09000;
+Z2_12HAKUGINMAE_vrom_end = 0x02C10560;
+
+Z2_12HAKUGINMAE_room_00_vrom_start = 0x02C11000;
+Z2_12HAKUGINMAE_room_00_vrom_end = 0x02C180B0;
+
+Z2_17SETUGEN_vrom_start = 0x02C19000;
+Z2_17SETUGEN_vrom_end = 0x02C22BB0;
+
+Z2_17SETUGEN_room_00_vrom_start = 0x02C23000;
+Z2_17SETUGEN_room_00_vrom_end = 0x02C2A6F0;
+
+_1455_0x01d35b80_vrom_start = 0x02C2B000;
+_1455_0x01d35b80_vrom_end = 0x02C33AD0;
+
+Z2_17SETUGEN2_room_00_vrom_start = 0x02C34000;
+Z2_17SETUGEN2_room_00_vrom_end = 0x02C3B1E0;
+
+Z2_SEA_BS_vrom_start = 0x02C3C000;
+Z2_SEA_BS_vrom_end = 0x02C412F0;
+
+Z2_SEA_BS_room_00_vrom_start = 0x02C42000;
+Z2_SEA_BS_room_00_vrom_end = 0x02C478D0;
+
+Z2_RANDOM_vrom_start = 0x02C48000;
+Z2_RANDOM_vrom_end = 0x02C530E0;
+
+Z2_RANDOM_room_00_vrom_start = 0x02C54000;
+Z2_RANDOM_room_00_vrom_end = 0x02C56B20;
+
+Z2_RANDOM_room_01_vrom_start = 0x02C57000;
+Z2_RANDOM_room_01_vrom_end = 0x02C60750;
+
+Z2_RANDOM_room_02_vrom_start = 0x02C61000;
+Z2_RANDOM_room_02_vrom_end = 0x02C681D0;
+
+Z2_RANDOM_room_03_vrom_start = 0x02C69000;
+Z2_RANDOM_room_03_vrom_end = 0x02C702F0;
+
+Z2_RANDOM_room_04_vrom_start = 0x02C71000;
+Z2_RANDOM_room_04_vrom_end = 0x02C745C0;
+
+Z2_RANDOM_room_05_vrom_start = 0x02C75000;
+Z2_RANDOM_room_05_vrom_end = 0x02C78C00;
+
+Z2_YADOYA_vrom_start = 0x02C79000;
+Z2_YADOYA_vrom_end = 0x02C88480;
+
+Z2_YADOYA_room_00_vrom_start = 0x02C89000;
+Z2_YADOYA_room_00_vrom_end = 0x02CA14C0;
+
+Z2_YADOYA_room_01_vrom_start = 0x02CA2000;
+Z2_YADOYA_room_01_vrom_end = 0x02CAA330;
+
+Z2_YADOYA_room_02_vrom_start = 0x02CAB000;
+Z2_YADOYA_room_02_vrom_end = 0x02CB0EE0;
+
+Z2_YADOYA_room_03_vrom_start = 0x02CB1000;
+Z2_YADOYA_room_03_vrom_end = 0x02CB60C0;
+
+Z2_YADOYA_room_04_vrom_start = 0x02CB7000;
+Z2_YADOYA_room_04_vrom_end = 0x02CBE530;
+
+Z2_KONPEKI_ENT_vrom_start = 0x02CBF000;
+Z2_KONPEKI_ENT_vrom_end = 0x02CC6220;
+
+Z2_KONPEKI_ENT_room_00_vrom_start = 0x02CC7000;
+Z2_KONPEKI_ENT_room_00_vrom_end = 0x02CCD3A0;
+
+Z2_INSIDETOWER_vrom_start = 0x02CCE000;
+Z2_INSIDETOWER_vrom_end = 0x02CD5F40;
+
+Z2_INSIDETOWER_room_00_vrom_start = 0x02CD6000;
+Z2_INSIDETOWER_room_00_vrom_end = 0x02CE5A10;
+
+Z2_INSIDETOWER_room_01_vrom_start = 0x02CE6000;
+Z2_INSIDETOWER_room_01_vrom_end = 0x02CE61B0;
+
+Z2_26SARUNOMORI_vrom_start = 0x02CE7000;
+Z2_26SARUNOMORI_vrom_end = 0x02CF34E0;
+
+Z2_26SARUNOMORI_room_00_vrom_start = 0x02CF4000;
+Z2_26SARUNOMORI_room_00_vrom_end = 0x02CF75F0;
+
+Z2_26SARUNOMORI_room_01_vrom_start = 0x02CF8000;
+Z2_26SARUNOMORI_room_01_vrom_end = 0x02CFB5E0;
+
+Z2_26SARUNOMORI_room_02_vrom_start = 0x02CFC000;
+Z2_26SARUNOMORI_room_02_vrom_end = 0x02D00260;
+
+Z2_26SARUNOMORI_room_03_vrom_start = 0x02D01000;
+Z2_26SARUNOMORI_room_03_vrom_end = 0x02D03770;
+
+Z2_26SARUNOMORI_room_04_vrom_start = 0x02D04000;
+Z2_26SARUNOMORI_room_04_vrom_end = 0x02D07450;
+
+Z2_26SARUNOMORI_room_05_vrom_start = 0x02D08000;
+Z2_26SARUNOMORI_room_05_vrom_end = 0x02D0A770;
+
+Z2_26SARUNOMORI_room_06_vrom_start = 0x02D0B000;
+Z2_26SARUNOMORI_room_06_vrom_end = 0x02D0F030;
+
+Z2_26SARUNOMORI_room_07_vrom_start = 0x02D10000;
+Z2_26SARUNOMORI_room_07_vrom_end = 0x02D12770;
+
+Z2_26SARUNOMORI_room_08_vrom_start = 0x02D13000;
+Z2_26SARUNOMORI_room_08_vrom_end = 0x02D16530;
+
+Z2_LOST_WOODS_vrom_start = 0x02D17000;
+Z2_LOST_WOODS_vrom_end = 0x02D269D0;
+
+Z2_LOST_WOODS_room_00_vrom_start = 0x02D27000;
+Z2_LOST_WOODS_room_00_vrom_end = 0x02D2F0F0;
+
+Z2_LOST_WOODS_room_01_vrom_start = 0x02D30000;
+Z2_LOST_WOODS_room_01_vrom_end = 0x02D39D20;
+
+Z2_LOST_WOODS_room_02_vrom_start = 0x02D3A000;
+Z2_LOST_WOODS_room_02_vrom_end = 0x02D3BDC0;
+
+Z2_LAST_LINK_vrom_start = 0x02D3C000;
+Z2_LAST_LINK_vrom_end = 0x02D43310;
+
+Z2_LAST_LINK_room_00_vrom_start = 0x02D44000;
+Z2_LAST_LINK_room_00_vrom_end = 0x02D471C0;
+
+Z2_LAST_LINK_room_01_vrom_start = 0x02D48000;
+Z2_LAST_LINK_room_01_vrom_end = 0x02D4A600;
+
+Z2_LAST_LINK_room_02_vrom_start = 0x02D4B000;
+Z2_LAST_LINK_room_02_vrom_end = 0x02D4DEF0;
+
+Z2_LAST_LINK_room_03_vrom_start = 0x02D4E000;
+Z2_LAST_LINK_room_03_vrom_end = 0x02D51B50;
+
+Z2_LAST_LINK_room_04_vrom_start = 0x02D52000;
+Z2_LAST_LINK_room_04_vrom_end = 0x02D53990;
+
+Z2_LAST_LINK_room_05_vrom_start = 0x02D54000;
+Z2_LAST_LINK_room_05_vrom_end = 0x02D57F30;
+
+Z2_LAST_LINK_room_06_vrom_start = 0x02D58000;
+Z2_LAST_LINK_room_06_vrom_end = 0x02D58B40;
+
+Z2_LAST_LINK_room_07_vrom_start = 0x02D59000;
+Z2_LAST_LINK_room_07_vrom_end = 0x02D59B40;
+
+Z2_SOUGEN_vrom_start = 0x02D5A000;
+Z2_SOUGEN_vrom_end = 0x02D64FD0;
+
+Z2_SOUGEN_room_00_vrom_start = 0x02D65000;
+Z2_SOUGEN_room_00_vrom_end = 0x02D6CAE0;
+
+Z2_BOMYA_vrom_start = 0x02D6D000;
+Z2_BOMYA_vrom_end = 0x02D79970;
+
+Z2_BOMYA_room_00_vrom_start = 0x02D7A000;
+Z2_BOMYA_room_00_vrom_end = 0x02D81EE0;
+
+Z2_KYOJINNOMA_vrom_start = 0x02D82000;
+Z2_KYOJINNOMA_vrom_end = 0x02D90DB0;
+
+Z2_KYOJINNOMA_room_00_vrom_start = 0x02D91000;
+Z2_KYOJINNOMA_room_00_vrom_end = 0x02D92A30;
+
+Z2_KOEPONARACE_vrom_start = 0x02D93000;
+Z2_KOEPONARACE_vrom_end = 0x02D9D490;
+
+Z2_KOEPONARACE_room_00_vrom_start = 0x02D9E000;
+Z2_KOEPONARACE_room_00_vrom_end = 0x02DA6440;
+
+Z2_GORONRACE_vrom_start = 0x02DA7000;
+Z2_GORONRACE_vrom_end = 0x02DB6690;
+
+Z2_GORONRACE_room_00_vrom_start = 0x02DB7000;
+Z2_GORONRACE_room_00_vrom_end = 0x02DC4B70;
+
+Z2_TOWN_vrom_start = 0x02DC5000;
+Z2_TOWN_vrom_end = 0x02DE3770;
+
+Z2_TOWN_room_00_vrom_start = 0x02DE4000;
+Z2_TOWN_room_00_vrom_end = 0x02DFB6A0;
+
+Z2_ICHIBA_vrom_start = 0x02DFC000;
+Z2_ICHIBA_vrom_end = 0x02E11E40;
+
+Z2_ICHIBA_room_00_vrom_start = 0x02E12000;
+Z2_ICHIBA_room_00_vrom_end = 0x02E1CB00;
+
+Z2_BACKTOWN_vrom_start = 0x02E1D000;
+Z2_BACKTOWN_vrom_end = 0x02E2DEE0;
+
+Z2_BACKTOWN_room_00_vrom_start = 0x02E2E000;
+Z2_BACKTOWN_room_00_vrom_end = 0x02E38180;
+
+Z2_CLOCKTOWER_vrom_start = 0x02E39000;
+Z2_CLOCKTOWER_vrom_end = 0x02E5B660;
+
+Z2_CLOCKTOWER_room_00_vrom_start = 0x02E5C000;
+Z2_CLOCKTOWER_room_00_vrom_end = 0x02E6F8B0;
+
+Z2_ALLEY_vrom_start = 0x02E70000;
+Z2_ALLEY_vrom_end = 0x02E7D860;
+
+Z2_ALLEY_room_00_vrom_start = 0x02E7E000;
+Z2_ALLEY_room_00_vrom_end = 0x02E86CF0;
+
+SPOT00_vrom_start = 0x02E87000;
+SPOT00_vrom_end = 0x02E93770;
+
+SPOT00_room_00_vrom_start = 0x02E94000;
+SPOT00_room_00_vrom_end = 0x02E94910;
+
+KAKUSIANA_vrom_start = 0x02E95000;
+KAKUSIANA_vrom_end = 0x02EA4CD0;
+
+KAKUSIANA_room_00_vrom_start = 0x02EA5000;
+KAKUSIANA_room_00_vrom_end = 0x02EA8A90;
+
+KAKUSIANA_room_01_vrom_start = 0x02EA9000;
+KAKUSIANA_room_01_vrom_end = 0x02EAF930;
+
+KAKUSIANA_room_02_vrom_start = 0x02EB0000;
+KAKUSIANA_room_02_vrom_end = 0x02EB21A0;
+
+KAKUSIANA_room_03_vrom_start = 0x02EB3000;
+KAKUSIANA_room_03_vrom_end = 0x02EB52A0;
+
+KAKUSIANA_room_04_vrom_start = 0x02EB6000;
+KAKUSIANA_room_04_vrom_end = 0x02EB79A0;
+
+KAKUSIANA_room_05_vrom_start = 0x02EB8000;
+KAKUSIANA_room_05_vrom_end = 0x02EB96F0;
+
+KAKUSIANA_room_06_vrom_start = 0x02EBA000;
+KAKUSIANA_room_06_vrom_end = 0x02EBC330;
+
+KAKUSIANA_room_07_vrom_start = 0x02EBD000;
+KAKUSIANA_room_07_vrom_end = 0x02EBFA80;
+
+KAKUSIANA_room_08_vrom_start = 0x02EC0000;
+KAKUSIANA_room_08_vrom_end = 0x02EC3160;
+
+KAKUSIANA_room_09_vrom_start = 0x02EC4000;
+KAKUSIANA_room_09_vrom_end = 0x02EC6210;
+
+KAKUSIANA_room_10_vrom_start = 0x02EC7000;
+KAKUSIANA_room_10_vrom_end = 0x02EC83A0;
+
+KAKUSIANA_room_11_vrom_start = 0x02EC9000;
+KAKUSIANA_room_11_vrom_end = 0x02ECB5F0;
+
+KAKUSIANA_room_12_vrom_start = 0x02ECC000;
+KAKUSIANA_room_12_vrom_end = 0x02ED24E0;
+
+KAKUSIANA_room_13_vrom_start = 0x02ED3000;
+KAKUSIANA_room_13_vrom_end = 0x02ED6760;
+
+KAKUSIANA_room_14_vrom_start = 0x02ED7000;
+KAKUSIANA_room_14_vrom_end = 0x02ED92D0;
+
+bump_texture_static_vrom_start = 0x02EDA000;
+bump_texture_static_vrom_end = 0x02EDA400;
+

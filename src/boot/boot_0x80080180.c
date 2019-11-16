@@ -37,8 +37,8 @@ UNK_RET func_80080250(void) {
 
     osCreateMesgQueue(&sp30, &sp2C, 1);
 
-    v1 = &D_00B3C000;
-    t7 = &D_00C7A4E0;
+    v1 = &code_vrom_start;
+    t7 = &code_vrom_end;
     v0 = &D_80096B50;
     sp28 = *v0;
     *v0 = 0;

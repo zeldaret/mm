@@ -7,12 +7,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('files', help='file list')
     parser.add_argument('out', help='output file')
+    parser.add_argument('-l', '--linkscript', help='output linker script for file VROM addresses', metavar='filename')
+    parser.add_argument('-u', '--uncompressed', help='build dmadata from only uncompressed files', action='store_true', default=False)
     args = parser.parse_args()
 
     with open(args.out, 'wb') as dmadata, open(args.files, 'r') as files:
         curr_vrom = 0
         curr_phys = 0
         dmadata_table = ast.literal_eval(files.read())
+        linker_info = list()
         for base_file, comp_file, alignment, size_if_missing in dmadata_table:
             try:
                 uncompressed = comp_file == ''
@@ -30,7 +33,7 @@ if __name__ == "__main__":
                     phys_size = vrom_size
                 else:
                     vrom_size = os.path.getsize(base_file)
-                    if uncompressed:
+                    if uncompressed or args.uncompressed:
                         phys_size = vrom_size
                     else:
                         phys_size = os.path.getsize(comp_file)
@@ -59,6 +62,17 @@ if __name__ == "__main__":
                 dmadata.write(vrom_end.to_bytes(4, 'big'))
                 dmadata.write(phys_start.to_bytes(4, 'big'))
                 dmadata.write(phys_end.to_bytes(4, 'big'))
+
+                if base_file != '':
+                     linker_info.append((os.path.basename(base_file), vrom_start, vrom_end))
             except:
                 print('Error when processing entry ' + base_file)
                 sys.exit(1)
+
+        if args.linkscript:
+            with open(args.linkscript, 'w') as file:
+                for name, vrom_start, vrom_end in linker_info:
+                    formatted_name = '_' + name if name[0].isdigit() else name
+                    file.write('{}_vrom_start = 0x{:08X};\n'.format(formatted_name, vrom_start))
+                    file.write('{}_vrom_end = 0x{:08X};\n'.format(formatted_name, vrom_end))
+                    file.write('\n')
