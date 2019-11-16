@@ -714,6 +714,9 @@ class Disassembler:
         self.first_pass() # find functions and variables
         with open(path + "/undef.txt", 'w', newline='\n') as f:
             for addr in sorted(self.vars):
+                if addr < 0x02000000:
+                    continue # Don't print out symbols of dmadata files' vrom addresses. These will be defined in another file.
+
                 is_in_bss, region = self.is_in_bss(addr)
                 if is_in_bss:
                     f.write("%s = %s_bss_start + 0x%08X;\n" % (self.make_load(addr), region[2], addr - region[0]))
