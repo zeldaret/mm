@@ -197,7 +197,8 @@ class Disassembler:
 
         for addr in known_objects:
             self.add_object(addr)
-            self.add_function(addr) # assume every object starts with a function
+            if self.is_in_code(addr):
+                self.add_function(addr) # assume every object starts with a function
 
         for addr in known_vars:
             self.add_variable(addr)
@@ -209,6 +210,7 @@ class Disassembler:
 
     def add_file(self, path, name, vaddr):
         self.files.append(self.File(name, read_file(path + '/' + name), vaddr))
+        self.files = sorted(self.files, key = lambda file: file.vaddr)
         self.reset_cache()
 
     def add_object(self, addr):
@@ -228,10 +230,12 @@ class Disassembler:
 
     def add_data_region(self, start, end, file_name):
         self.data_regions.append((start, end, file_name))
+        self.data_regions = sorted(self.data_regions, key = lambda region: region[0])
         self.reset_cache()
 
     def add_bss_region(self, start, end, file_name):
         self.bss_regions.append((start, end, file_name))
+        self.bss_regions = sorted(self.bss_regions, key = lambda region: region[0])
         self.reset_cache()
 
     def is_in_data(self, addr):
@@ -363,11 +367,6 @@ class Disassembler:
     def first_pass(self):
         if self.has_done_first_pass == True:
             return
-
-        # TODO keep sorted
-        self.files = sorted(self.files, key = lambda file: file.vaddr)
-        self.data_regions = sorted(self.data_regions, key = lambda region: region[0])
-        self.bss_regions = sorted(self.bss_regions, key = lambda region: region[0])
 
         for file in self.files:
             for i in range(0, file.size // 4):
