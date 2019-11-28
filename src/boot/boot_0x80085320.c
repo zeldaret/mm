@@ -6,7 +6,7 @@ void func_80085320(ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TYPE
     ThreadInfo* v0;
 
     if (a0 == NULL) {
-        g_s80085320_ListHead = NULL;
+        ThreadInfoListHead = NULL;
         return;
     }
 
@@ -16,23 +16,23 @@ void func_80085320(ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TYPE
     a0->unk14 = sp10;
     a0->unk18 = sp14;
 
-    v0 = g_s80085320_ListHead;
+    v0 = ThreadInfoListHead;
     while (v0 != NULL) {
         if (v0 == a0) return;
         v0 = v0->next;
     }
 
-    a0->prev = g_s80085320_ListTail;
+    a0->prev = ThreadInfoListTail;
     a0->next = NULL;
 
-    if (g_s80085320_ListTail != NULL) {
-        g_s80085320_ListTail->next = a0;
+    if (ThreadInfoListTail != NULL) {
+        ThreadInfoListTail->next = a0;
     }
 
-    g_s80085320_ListTail = a0;
+    ThreadInfoListTail = a0;
 
-    if (g_s80085320_ListHead == NULL) {
-        g_s80085320_ListHead = a0;
+    if (ThreadInfoListHead == NULL) {
+        ThreadInfoListHead = a0;
     }
 
     if (a0->unk14 != -1) {
@@ -44,16 +44,16 @@ void func_80085320(ThreadInfo* a0, UNK_PTR a1, UNK_PTR a2, UNK_TYPE a3, UNK_TYPE
 
 UNK_RET func_800853F8(ThreadInfo* a0) {
     if (a0->prev == NULL) {
-        if (g_s80085320_ListHead == a0) {
-            g_s80085320_ListHead = a0->next;
+        if (ThreadInfoListHead == a0) {
+            ThreadInfoListHead = a0->next;
         }
     } else {
         a0->prev->next = a0->next;
     }
 
     if (a0->next == NULL) {
-        if (g_s80085320_ListTail == a0) {
-            g_s80085320_ListTail = a0->prev;
+        if (ThreadInfoListTail == a0) {
+            ThreadInfoListTail = a0->prev;
         }
     }
 }
@@ -83,7 +83,7 @@ UNK_TYPE func_80085468(ThreadInfo* a0) {
 }
 
 UNK_TYPE func_800854E0(UNK_ARGS) {
-    ThreadInfo* s0 = g_s80085320_ListHead;
+    ThreadInfo* s0 = ThreadInfoListHead;
     UNK_TYPE ret = 0;
     while (s0 != NULL) {
         if (func_80085468(s0) != 0) {

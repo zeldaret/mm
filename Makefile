@@ -104,19 +104,19 @@ build/code.bin: build/code.elf
 build/ovl_title.bin: build/code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
 
-build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt
-	$(LD) -r -T codescript.txt -T undef.txt --no-check-sections --accept-unknown-input-arch -o $@
+build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
+	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
 
-build/code.elf: $(S_O_FILES) $(C_O_FILES) codescript.txt undef.txt dmadata_script.txt
-	$(LD) -T codescript.txt -T undef.txt -T dmadata_script.txt --no-check-sections --accept-unknown-input-arch -o $@
+build/code.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
+	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -o $@
 
-dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMADATA_FILES)
+linker_scripts/dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMADATA_FILES)
 # TODO is there a better way to avoid this shuffling?
 	mv build/baserom build/baserom_temp
 	mv build/decomp build/decomp_temp
 	mv build/baserom_pre_dmadata build/baserom
 	mv build/decomp_pre_dmadata build/decomp
-	python3 ./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l dmadata_script.txt
+	python3 ./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l linker_scripts/dmadata_script.txt
 	mv build/baserom build/baserom_pre_dmadata
 	mv build/decomp build/decomp_pre_dmadata
 	mv build/baserom_temp build/baserom
@@ -151,7 +151,7 @@ build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
 
 
 disasm:
-	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py
+	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/object_addr_variables.py -v ./tables/pre_boot_variables.py
 	@while read -r file; do \
 		python3 ./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt

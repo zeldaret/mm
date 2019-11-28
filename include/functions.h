@@ -26,7 +26,7 @@ void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pihandle, OSIoMesg* mb, s32 directi
 DmadataEntry* Dmamgr_FindDmaEntry(u32); // func_800808F4
 s32 Dmamgr_TranslateVromToRom(u32); // func_80080950
 s32 Dmamgr_FindDmaIndex(u32); // func_800809BC
-UNK_TYPE* func_800809F4(u32); // func_800809F4
+char* func_800809F4(u32); // func_800809F4
 void Dmamgr_HandleRequest(DmaRequest*); // func_80080A08
 void Dmamgr_ThreadEntry(void*); // func_80080B84
 s32 Dmamgr_SendRequest(DmaRequest*, UNK_FUN_ARG, UNK_PTR, UNK_TYPE, UNK_TYPE, OSMesgQueue*, UNK_TYPE); // func_80080C04
@@ -6735,10 +6735,6 @@ UNK_RET func_808FC5BC(UNK_ARGS); // func_808FC5BC
 // UNK_RET func_809038A4(UNK_ARGS);
 // UNK_RET func_80903C60(UNK_ARGS);
 // UNK_RET func_80903E20(UNK_ARGS);
-// UNK_RET func_80908554(UNK_ARGS);
-// UNK_RET func_80908674(UNK_ARGS);
-// UNK_RET func_809086B4(UNK_ARGS);
-// UNK_RET func_80908734(UNK_ARGS);
 // UNK_RET func_809089B8(UNK_ARGS);
 // UNK_RET func_80908A64(UNK_ARGS);
 // UNK_RET func_80908B4C(UNK_ARGS);
@@ -6746,10 +6742,6 @@ UNK_RET func_808FC5BC(UNK_ARGS); // func_808FC5BC
 // UNK_RET func_80909234(UNK_ARGS);
 // UNK_RET func_80909AD0(UNK_ARGS);
 // UNK_RET func_80909CC0(UNK_ARGS);
-// UNK_RET func_8090AB6C(UNK_ARGS);
-// UNK_RET func_8090C884(UNK_ARGS);
-// UNK_RET func_8090C8BC(UNK_ARGS);
-// UNK_RET func_8090C96C(UNK_ARGS);
 UNK_RET func_80917290(UNK_ARGS); // func_80917290
 UNK_RET func_809172E4(UNK_ARGS); // func_809172E4
 UNK_RET func_8091734C(UNK_ARGS); // func_8091734C

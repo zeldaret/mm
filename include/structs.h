@@ -6,152 +6,6 @@
 #include <unk.h>
 #include <os.h>
 
-enum EffectSSType {
-    EFFECT_SS2_TYPE_DUST = 0x0,
-    EFFECT_SS2_TYPE_SPARKLE = 0x1,
-    EFFECT_SS2_TYPE_DELETED_2 = 0x2,
-    EFFECT_SS2_TYPE_BOMB2 = 0x3,
-    EFFECT_SS2_TYPE_BLAST = 0x4,
-    EFFECT_SS2_TYPE_G_SPARK = 0x5,
-    EFFECT_SS2_TYPE_DODONGO_FIRE = 0x6,
-    EFFECT_SS2_TYPE_BUBBLE = 0x7,
-    EFFECT_SS2_TYPE_DELETED_8 = 0x8,
-    EFFECT_SS2_TYPE_G_RIPPLE = 0x9,
-    EFFECT_SS2_TYPE_G_SPLASH = 0xA,
-    EFFECT_SS2_TYPE_DELETED_B = 0xB,
-    EFFECT_SS2_TYPE_G_FIRE = 0xC,
-    EFFECT_SS2_TYPE_LIGHTNING = 0xD,
-    EFFECT_SS2_TYPE_BIG_OCTO_BUBBLE = 0xE,
-    EFFECT_SS2_TYPE_FRAGMENT = 0xF,
-    EFFECT_SS2_TYPE_STICK = 0x10,
-    EFFECT_SS2_TYPE_SPLASH = 0x11,
-    EFFECT_SS2_TYPE_DELETED_12 = 0x12,
-    EFFECT_SS2_TYPE_DELETED_13 = 0x13,
-    EFFECT_SS2_TYPE_STONE1 = 0x14,
-    EFFECT_SS2_TYPE_HIT_MARK = 0x15,
-    EFFECT_SS2_TYPE_PHANTOM_GANON_FLASH = 0x16,
-    EFFECT_SS2_TYPE_KAKARIKO_FIRE = 0x17,
-    EFFECT_SS2_TYPE_SOLDIER_SEARCH_BALL = 0x18,
-    EFFECT_SS2_TYPE_SHARD = 0x19,
-    EFFECT_SS2_TYPE_ICE_PIECE = 0x1A,
-    EFFECT_SS2_TYPE_ENEMY_ICE = 0x1B,
-    EFFECT_SS2_TYPE_FIRE_TAIL = 0x1C,
-    EFFECT_SS2_TYPE_ENEMY_FIRE = 0x1D,
-    EFFECT_SS2_TYPE_EXTRA = 0x1E,
-    EFFECT_SS2_TYPE_DELETED_1F = 0x1F,
-    EFFECT_SS2_TYPE_DEAD_DEKU_BABA = 0x20,
-    EFFECT_SS2_TYPE_DEAD_DODONGO = 0x21,
-    EFFECT_SS2_TYPE_DEAD_DEKU_SCRUB = 0x22,
-    EFFECT_SS2_TYPE_DELETED_23 = 0x23,
-    EFFECT_SS2_TYPE_ICE_SMOKE = 0x24,
-    EFFECT_SS2_TYPE_ICE_BLOCK = 0x25,
-    EFFECT_SS2_TYPE_SBN = 0x26,
-    EFFECT_SS2_TYPE_LAST_LABEL = 0x27
-};
-
-enum IRQ_MSG_TYPE {
-    IRQ_VERTICAL_RETRACE_MSG = 0x1,
-    IRQ_PRENMI_2_MSG = 0x3,
-    IRQ_PRENMI_1_MSG = 0x4
-};
-
-enum IRQ_TYPE {
-    IRQ_VERTICAL_RETRACE = 0x29A,
-    IRQ_SP = 0x29B,
-    IRQ_DP = 0x29C,
-    IRQ_PRENMI_1 = 0x29D,
-    IRQ_PRENMI_2 = 0x29F,
-    IRQ_PRENMI_3 = 0x2A0,
-    IRQ_PRENMI_4 = 0x2A1
-};
-
-enum THREAD_STACK_STATUS {
-    THREAD_STACK_STATUS_GOOD = 0x0,
-    THREAD_STACK_STATUS_WARNING = 0x1,
-    THREAD_STACK_STATUS_FULL = 0x2
-};
-
-typedef struct {
-/* 0x0 */ unsigned int inst1;
-/* 0x4 */ unsigned int inst2;
-/* 0x8 */ unsigned int inst3;
-/* 0xC */ unsigned int inst4;
-} __osExceptionVector;
-
-typedef void(*func_ptr)(void);
-
-typedef void(*osCreateThread_func)(void*);
-
-typedef struct {
-/* 0x000 */ OSThread unk0;
-/* 0x1B0 */ UNK_TYPE1 pad1B0[1536];
-/* 0x7B0 */ OSMesgQueue unk7B0;
-/* 0x7C8 */ UNK_TYPE4 unk7C8;
-/* 0x7CC */ u8 unk7CC;
-/* 0x7CD */ u8 unk7CD;
-/* 0x7CE */ u8 unk7CE;
-/* 0x7CF */ u8 unk7CF;
-/* 0x7D0 */ UNK_TYPE4 unk7D0;
-/* 0x7D4 */ func_ptr unk7D4;
-/* 0x7D8 */ UNK_TYPE4 unk7D8;
-/* 0x7DC */ UNK_TYPE1 pad7DC[108];
-} s80083BC4;
-
-typedef struct {
-/* 0x00 */ UNK_TYPE4 unk0;
-/* 0x04 */ UNK_TYPE4 unk4;
-/* 0x08 */ UNK_TYPE4 unk8;
-/* 0x0C */ UNK_TYPE1 padC[92];
-/* 0x68 */ f32 unk68;
-/* 0x6C */ f32 unk6C;
-/* 0x70 */ f32 unk70;
-/* 0x74 */ u16 unk74;
-/* 0x76 */ u16 unk76;
-/* 0x78 */ u16 unk78;
-/* 0x7A */ UNK_TYPE1 pad7A[2];
-/* 0x7C */ f32 unk7C;
-/* 0x80 */ f32 unk80;
-/* 0x84 */ f32 unk84;
-/* 0x88 */ f32 unk88;
-/* 0x8C */ f32 unk8C;
-/* 0x90 */ f32 unk90;
-/* 0x94 */ u16 unk94;
-/* 0x96 */ u16 unk96;
-/* 0x98 */ u16 unk98;
-/* 0x9A */ UNK_TYPE1 pad9A[2];
-/* 0x9C */ f32 unk9C;
-/* 0xA0 */ f32 unkA0;
-/* 0xA4 */ f32 unkA4;
-} s800CAAD0;
-
-typedef struct {
-/* 0x00 */ UNK_TYPE1 pad0[32];
-} s800E03A0;
-
-typedef struct {
-/* 0x000 */ OSThread unk0;
-/* 0x1B0 */ s8 argCount;
-/* 0x1B1 */ s8 unk1B1;
-/* 0x1B2 */ UNK_TYPE1 pad1B2[2];
-/* 0x1B4 */ UNK_TYPE1 func;
-/* 0x1B5 */ UNK_TYPE1 pad1B5[3];
-/* 0x1B8 */ s32 arg0;
-/* 0x1BC */ s32 arg1;
-} s8018571C;
-
-typedef struct {
-/* 0x00 */ int unk0;
-/* 0x04 */ void* unk4;
-/* 0x08 */ int unk8;
-/* 0x0C */ int unkC;
-/* 0x10 */ int unk10;
-/* 0x14 */ OSMesgQueue unk14;
-} s80185D40;
-
-typedef struct {
-/* 0x00 */ UNK_TYPE1 pad0[20];
-} s801FE7C0;
-
 typedef struct {
 /* 0x00 */ u8 unk0[32];
 } ActorDamageChart;
@@ -259,6 +113,49 @@ typedef struct {
 /* 0xC */ u32 romEnd;
 } DmadataEntry;
 
+enum EffectSSType {
+    EFFECT_SS2_TYPE_DUST = 0x0,
+    EFFECT_SS2_TYPE_SPARKLE = 0x1,
+    EFFECT_SS2_TYPE_DELETED_2 = 0x2,
+    EFFECT_SS2_TYPE_BOMB2 = 0x3,
+    EFFECT_SS2_TYPE_BLAST = 0x4,
+    EFFECT_SS2_TYPE_G_SPARK = 0x5,
+    EFFECT_SS2_TYPE_DODONGO_FIRE = 0x6,
+    EFFECT_SS2_TYPE_BUBBLE = 0x7,
+    EFFECT_SS2_TYPE_DELETED_8 = 0x8,
+    EFFECT_SS2_TYPE_G_RIPPLE = 0x9,
+    EFFECT_SS2_TYPE_G_SPLASH = 0xA,
+    EFFECT_SS2_TYPE_DELETED_B = 0xB,
+    EFFECT_SS2_TYPE_G_FIRE = 0xC,
+    EFFECT_SS2_TYPE_LIGHTNING = 0xD,
+    EFFECT_SS2_TYPE_BIG_OCTO_BUBBLE = 0xE,
+    EFFECT_SS2_TYPE_FRAGMENT = 0xF,
+    EFFECT_SS2_TYPE_STICK = 0x10,
+    EFFECT_SS2_TYPE_SPLASH = 0x11,
+    EFFECT_SS2_TYPE_DELETED_12 = 0x12,
+    EFFECT_SS2_TYPE_DELETED_13 = 0x13,
+    EFFECT_SS2_TYPE_STONE1 = 0x14,
+    EFFECT_SS2_TYPE_HIT_MARK = 0x15,
+    EFFECT_SS2_TYPE_PHANTOM_GANON_FLASH = 0x16,
+    EFFECT_SS2_TYPE_KAKARIKO_FIRE = 0x17,
+    EFFECT_SS2_TYPE_SOLDIER_SEARCH_BALL = 0x18,
+    EFFECT_SS2_TYPE_SHARD = 0x19,
+    EFFECT_SS2_TYPE_ICE_PIECE = 0x1A,
+    EFFECT_SS2_TYPE_ENEMY_ICE = 0x1B,
+    EFFECT_SS2_TYPE_FIRE_TAIL = 0x1C,
+    EFFECT_SS2_TYPE_ENEMY_FIRE = 0x1D,
+    EFFECT_SS2_TYPE_EXTRA = 0x1E,
+    EFFECT_SS2_TYPE_DELETED_1F = 0x1F,
+    EFFECT_SS2_TYPE_DEAD_DEKU_BABA = 0x20,
+    EFFECT_SS2_TYPE_DEAD_DODONGO = 0x21,
+    EFFECT_SS2_TYPE_DEAD_DEKU_SCRUB = 0x22,
+    EFFECT_SS2_TYPE_DELETED_23 = 0x23,
+    EFFECT_SS2_TYPE_ICE_SMOKE = 0x24,
+    EFFECT_SS2_TYPE_ICE_BLOCK = 0x25,
+    EFFECT_SS2_TYPE_SBN = 0x26,
+    EFFECT_SS2_TYPE_LAST_LABEL = 0x27
+};
+
 typedef struct {
 /* 0x0 */ s16 x;
 /* 0x2 */ s16 y;
@@ -291,21 +188,6 @@ typedef struct {
 /* 0x8 */ void* heapAppendStart;
 /* 0xC */ void* heapAppendEnd;
 } GameStateHeap;
-
-typedef struct {
-/* 0x00 */ u32 ramLocation;
-/* 0x04 */ u32 vromStart;
-/* 0x08 */ u32 vromEnd;
-/* 0x0C */ u32 vramStart;
-/* 0x10 */ u32 vramEnd;
-/* 0x14 */ UNK_TYPE4 unk14;
-/* 0x18 */ func_ptr init;
-/* 0x1C */ func_ptr fini;
-/* 0x20 */ UNK_TYPE4 unk20;
-/* 0x24 */ UNK_TYPE4 unk24;
-/* 0x28 */ UNK_TYPE4 unk28;
-/* 0x2C */ u32 size;
-} GameStateMetaInfo;
 
 typedef struct {
 /* 0x00 */ s32 unk0;
@@ -384,6 +266,22 @@ typedef struct {
 /* 0x2EC */ UNK_TYPE1 pad2EC[4];
 } GraphicsContext;
 
+enum IRQ_MSG_TYPE {
+    IRQ_VERTICAL_RETRACE_MSG = 0x1,
+    IRQ_PRENMI_2_MSG = 0x3,
+    IRQ_PRENMI_1_MSG = 0x4
+};
+
+enum IRQ_TYPE {
+    IRQ_VERTICAL_RETRACE = 0x29A,
+    IRQ_SP = 0x29B,
+    IRQ_DP = 0x29C,
+    IRQ_PRENMI_1 = 0x29D,
+    IRQ_PRENMI_2 = 0x29F,
+    IRQ_PRENMI_3 = 0x2A0,
+    IRQ_PRENMI_4 = 0x2A1
+};
+
 typedef struct {
 /* 0x0 */ u16 buttons;
 /* 0x2 */ s8 xAxis;
@@ -431,13 +329,6 @@ typedef struct {
 /* 0x08 */ Ambient ambient;
 /* 0x10 */ Light lights[7];
 } LightMapper;
-
-typedef struct {
-/* 0x00 */ f32 x[4];
-/* 0x10 */ f32 y[4];
-/* 0x20 */ f32 z[4];
-/* 0x30 */ f32 w[4];
-} z_Matrix;
 
 typedef struct {
 /* 0x0 */ u32 vromStart;
@@ -535,6 +426,12 @@ typedef struct {
 /* 0x0A7E */ UNK_TYPE1 padA7E[2902];
 } StaticContext;
 
+enum THREAD_STACK_STATUS {
+    THREAD_STACK_STATUS_GOOD = 0x0,
+    THREAD_STACK_STATUS_WARNING = 0x1,
+    THREAD_STACK_STATUS_FULL = 0x2
+};
+
 typedef struct {
 /* 0x0 */ s8 unk0;
 /* 0x1 */ UNK_TYPE1 pad1[1];
@@ -596,9 +493,113 @@ typedef struct {
 /* 0x10 */ u32 destBufferEnd;
 } Yaz0DecompState;
 
+typedef struct {
+/* 0x0 */ unsigned int inst1;
+/* 0x4 */ unsigned int inst2;
+/* 0x8 */ unsigned int inst3;
+/* 0xC */ unsigned int inst4;
+} __osExceptionVector;
+
+typedef unsigned long(*func)(void);
+
+typedef void(*func_ptr)(void);
+
 typedef void(*light_map_directional_func)(LightMapper* mapper, void* params, Vector3f* pos);
 
-typedef void(*light_map_positional_func)(LightMapper* mapper, void* params);
+typedef void(*osCreateThread_func)(void*);
+
+typedef struct {
+/* 0x000 */ OSThread unk0;
+/* 0x1B0 */ UNK_TYPE1 pad1B0[1536];
+/* 0x7B0 */ OSMesgQueue unk7B0;
+/* 0x7C8 */ UNK_TYPE4 unk7C8;
+/* 0x7CC */ u8 unk7CC;
+/* 0x7CD */ u8 unk7CD;
+/* 0x7CE */ u8 unk7CE;
+/* 0x7CF */ u8 unk7CF;
+/* 0x7D0 */ UNK_TYPE4 unk7D0;
+/* 0x7D4 */ func_ptr unk7D4;
+/* 0x7D8 */ UNK_TYPE4 unk7D8;
+/* 0x7DC */ UNK_TYPE1 pad7DC[108];
+} s80083BC4;
+
+typedef struct {
+/* 0x00 */ UNK_TYPE4 unk0;
+/* 0x04 */ UNK_TYPE4 unk4;
+/* 0x08 */ UNK_TYPE4 unk8;
+/* 0x0C */ UNK_TYPE1 padC[92];
+/* 0x68 */ f32 unk68;
+/* 0x6C */ f32 unk6C;
+/* 0x70 */ f32 unk70;
+/* 0x74 */ u16 unk74;
+/* 0x76 */ u16 unk76;
+/* 0x78 */ u16 unk78;
+/* 0x7A */ UNK_TYPE1 pad7A[2];
+/* 0x7C */ f32 unk7C;
+/* 0x80 */ f32 unk80;
+/* 0x84 */ f32 unk84;
+/* 0x88 */ f32 unk88;
+/* 0x8C */ f32 unk8C;
+/* 0x90 */ f32 unk90;
+/* 0x94 */ u16 unk94;
+/* 0x96 */ u16 unk96;
+/* 0x98 */ u16 unk98;
+/* 0x9A */ UNK_TYPE1 pad9A[2];
+/* 0x9C */ f32 unk9C;
+/* 0xA0 */ f32 unkA0;
+/* 0xA4 */ f32 unkA4;
+} s800CAAD0;
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[32];
+} s800E03A0;
+
+typedef struct {
+/* 0x000 */ OSThread unk0;
+/* 0x1B0 */ s8 argCount;
+/* 0x1B1 */ s8 unk1B1;
+/* 0x1B2 */ UNK_TYPE1 pad1B2[2];
+/* 0x1B4 */ UNK_TYPE1 func;
+/* 0x1B5 */ UNK_TYPE1 pad1B5[3];
+/* 0x1B8 */ s32 arg0;
+/* 0x1BC */ s32 arg1;
+} s8018571C;
+
+typedef struct {
+/* 0x00 */ int unk0;
+/* 0x04 */ void* unk4;
+/* 0x08 */ int unk8;
+/* 0x0C */ int unkC;
+/* 0x10 */ int unk10;
+/* 0x14 */ OSMesgQueue unk14;
+} s80185D40;
+
+typedef struct {
+/* 0x00 */ u32 unk0;
+/* 0x04 */ u8 unk4;
+/* 0x05 */ u8 unk5;
+/* 0x06 */ u8 unk6;
+/* 0x07 */ UNK_TYPE1 pad7[2];
+/* 0x09 */ u8 unk9;
+/* 0x0A */ UNK_TYPE1 padA[2];
+/* 0x0C */ u32 unkC;
+/* 0x10 */ u16 unk10;
+/* 0x12 */ u16 unk12;
+/* 0x14 */ u16 unk14;
+/* 0x16 */ UNK_TYPE1 pad16[2];
+/* 0x18 */ u32 unk18;
+/* 0x1C */ u32 unk1C;
+/* 0x20 */ u32 unk20;
+/* 0x24 */ u32 unk24;
+/* 0x28 */ u32 unk28;
+/* 0x2C */ u32 unk2C;
+/* 0x30 */ u32 unk30;
+/* 0x34 */ u32 unk34;
+} s8018CFAC;
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[20];
+} s801FE7C0;
 
 typedef struct {
 /* 0x00 */ Vector3f unk0;
@@ -606,6 +607,13 @@ typedef struct {
 /* 0x18 */ s16 unk18;
 /* 0x1A */ s16 unk1A;
 } s80874650;
+
+typedef struct {
+/* 0x00 */ f32 x[4];
+/* 0x10 */ f32 y[4];
+/* 0x20 */ f32 z[4];
+/* 0x30 */ f32 w[4];
+} z_Matrix;
 
 // Related to collision?
 typedef struct {
@@ -621,7 +629,7 @@ typedef struct {
 typedef struct {
 /* 0x00 */ Vector3s rotation;
 /* 0x08 */ f32 yDisplacement;
-/* 0x0C */ func_ptr postDrawFunc; // TODO params (Actor*, UNK*, GlobalContext*)
+/* 0x0C */ func_ptr postDrawFunc; // TODO params (z_Actor*, UNK*, z_GlobalContext*)
 /* 0x10 */ f32 unk10;
 /* 0x14 */ s8 unk14;
 } ActorBC;
@@ -710,6 +718,21 @@ typedef union {
 /* 0x0 */ F3DVertexColor color;
 /* 0x0 */ F3DVertexNormal normal;
 } F3DVertex;
+
+typedef struct {
+/* 0x00 */ u32 ramLocation;
+/* 0x04 */ u32 vromStart;
+/* 0x08 */ u32 vromEnd;
+/* 0x0C */ u32 vramStart;
+/* 0x10 */ u32 vramEnd;
+/* 0x14 */ UNK_TYPE4 unk14;
+/* 0x18 */ func_ptr init;
+/* 0x1C */ func_ptr fini;
+/* 0x20 */ UNK_TYPE4 unk20;
+/* 0x24 */ UNK_TYPE4 unk24;
+/* 0x28 */ UNK_TYPE4 unk28;
+/* 0x2C */ u32 size;
+} GameStateMetaInfo;
 
 typedef struct {
 /* 0x000 */ View unk0;
@@ -1023,7 +1046,23 @@ typedef void(*collision_func)(GlobalContext*, CollisionContext*, ColCommon*, Col
 
 typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
 
+typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
+
 typedef void(*global_context_func)(GlobalContext*);
+
+typedef void(*light_map_positional_func)(LightMapper* mapper, void* params, GlobalContext* ctxt);
+
+typedef struct {
+/* 0x00 */ draw_func unk0;
+/* 0x04 */ u32 unk4;
+/* 0x08 */ u32 unk8;
+/* 0x0C */ u32 unkC;
+/* 0x10 */ u32 unk10;
+/* 0x14 */ u32 unk14;
+/* 0x18 */ u32 unk18;
+/* 0x1C */ u32 unk1C;
+/* 0x20 */ u32 unk20;
+} s801BB170;
 
 typedef void(*scene_header_func)(GlobalContext* ctxt, SceneHeaderEntry* entry);
 
@@ -1052,41 +1091,21 @@ typedef struct Irqmgr Irqmgr;
 
 typedef struct AudioThreadStruct AudioThreadStruct;
 
-typedef struct z_Light z_Light;
+typedef struct LightingContext LightingContext;
 
-struct z_Light {
-/* 0x0 */ LightInfo* info;
-/* 0x4 */ z_Light* prev;
-/* 0x8 */ z_Light* next;
-};
-
-typedef struct {
-/* 0x0 */ z_Light* lightsHead;
-/* 0x4 */ u8 ambientRed;
-/* 0x5 */ u8 ambientGreen;
-/* 0x6 */ u8 ambientBlue;
-/* 0x7 */ UNK_TYPE1 pad7[3];
-/* 0xA */ s16 unkA;
-/* 0xC */ s16 unkC;
-} LightingContext;
-
-typedef struct {
-/* 0x000 */ int numOccupied;
-/* 0x004 */ int nextFree;
-/* 0x008 */ z_Light lights[32];
-} LightsList;
+typedef struct LightsList LightsList;
 
 typedef struct LoadedParticleEntry LoadedParticleEntry;
-
-typedef void(*effect_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle);
-
-typedef void(*effect_init_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle, void* init);
 
 struct EffectTableInfo {
 /* 0x0 */ LoadedParticleEntry* data_table; // Name from debug assert
 /* 0x4 */ s32 searchIndex;
 /* 0x8 */ s32 size;
 };
+
+typedef void(*effect_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle);
+
+typedef void(*effect_init_func)(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle, void* init);
 
 struct LoadedParticleEntry {
 /* 0x00 */ Vector3f position;
@@ -1217,11 +1236,87 @@ struct ThreadInfo {
 /* 0x18 */ s8* name;
 };
 
+typedef struct z_Light z_Light;
+
+struct LightingContext {
+/* 0x0 */ z_Light* lightsHead;
+/* 0x4 */ u8 ambientRed;
+/* 0x5 */ u8 ambientGreen;
+/* 0x6 */ u8 ambientBlue;
+/* 0x7 */ u8 unk7;
+/* 0x8 */ u8 unk8;
+/* 0x9 */ u8 unk9;
+/* 0xA */ s16 unkA;
+/* 0xC */ s16 unkC;
+};
+
+struct z_Light {
+/* 0x0 */ LightInfo* info;
+/* 0x4 */ z_Light* prev;
+/* 0x8 */ z_Light* next;
+};
+
+struct LightsList {
+/* 0x000 */ int numOccupied;
+/* 0x004 */ int nextFree;
+/* 0x008 */ z_Light lights[32];
+};
+
 typedef struct Actor Actor;
+
+struct ActorTypeList {
+/* 0x0 */ s32 length;
+/* 0x4 */ Actor* head;
+/* 0x8 */ UNK_TYPE1 pad8[4];
+};
+
+struct ColCommon {
+/* 0x00 */ Actor* actor;
+/* 0x04 */ Actor* unk4;
+/* 0x08 */ Actor* unk8;
+/* 0x0C */ Actor* unkC;
+/* 0x10 */ u8 unk10;
+/* 0x11 */ u8 unk11;
+/* 0x12 */ u8 unk12;
+/* 0x13 */ u8 unk13;
+/* 0x14 */ u8 unk14;
+/* 0x15 */ u8 type;
+/* 0x16 */ UNK_TYPE1 pad16[2];
+};
+
+struct ColCylinder {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColCylinderParams params;
+};
+
+struct ColQuad {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColQuadParams params;
+};
+
+struct ColSphere {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ ColBodyInfo body;
+/* 0x40 */ ColSphereParams params;
+};
+
+struct ColSphereGroup {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ u32 count;
+/* 0x1C */ ColSphereGroupElement* spheres;
+};
+
+struct ColTriGroup {
+/* 0x00 */ ColCommon base;
+/* 0x18 */ u32 count;
+/* 0x1C */ ColTri* tris;
+};
 
 typedef void(*actor_func)(Actor* this, GlobalContext* ctxt);
 
-typedef void(*actor_init_var_func)(Actor*, ActorInitVar*);
+typedef void(*actor_init_var_func)(u8*, ActorInitVar*);
 
 struct Actor {
 /* 0x000 */ s16 id;
@@ -1295,104 +1390,6 @@ struct Actor {
 
 typedef struct {
 /* 0x000 */ Actor base;
-/* 0x144 */ UNK_TYPE1 pad144[100];
-/* 0x1A8 */ u32 displayListAddr;
-/* 0x1AC */ actor_func updateFunc;
-} ActorBgIknvObj;
-
-struct ActorBgMbarChair {
-/* 0x000 */ Actor base;
-/* 0x144 */ UNK_TYPE1 pad144[24];
-};
-
-struct ActorEnBji01 {
-/* 0x000 */ Actor base;
-/* 0x144 */ UNK_TYPE1 pad144[368];
-};
-
-struct ActorEnTest {
-/* 0x000 */ Actor base;
-/* 0x144 */ UNK_TYPE1 pad144[16];
-/* 0x154 */ f32 unk154;
-/* 0x158 */ UNK_TYPE1 pad158[176];
-/* 0x208 */ u8 unk208;
-/* 0x209 */ UNK_TYPE1 pad209[1];
-/* 0x20A */ u8 unk20A;
-/* 0x20B */ UNK_TYPE1 pad20B[1];
-/* 0x20C */ ActorEnTest20C unk20C[20];
-};
-
-struct ActorInitData {
-/* 0x00 */ s16 id;
-/* 0x02 */ u8 type;
-/* 0x03 */ UNK_TYPE1 pad3[1];
-/* 0x04 */ s32 flags;
-/* 0x08 */ s16 objectDependency;
-/* 0x0A */ UNK_TYPE1 padA[2];
-/* 0x0C */ u32 instanceSize;
-/* 0x10 */ actor_func init;
-/* 0x14 */ actor_func fini;
-/* 0x18 */ actor_func main;
-/* 0x1C */ actor_func draw;
-};
-
-struct ActorPlayer {
-/* 0x000 */ Actor base;
-/* 0x144 */ UNK_TYPE1 pad144[3124];
-};
-
-struct ActorTypeList {
-/* 0x0 */ s32 length;
-/* 0x4 */ Actor* head;
-/* 0x8 */ UNK_TYPE1 pad8[4];
-};
-
-struct ColCommon {
-/* 0x00 */ Actor* actor;
-/* 0x04 */ Actor* unk4;
-/* 0x08 */ Actor* unk8;
-/* 0x0C */ Actor* unkC;
-/* 0x10 */ u8 unk10;
-/* 0x11 */ u8 unk11;
-/* 0x12 */ u8 unk12;
-/* 0x13 */ u8 unk13;
-/* 0x14 */ u8 unk14;
-/* 0x15 */ u8 type;
-/* 0x16 */ UNK_TYPE1 pad16[2];
-};
-
-struct ColCylinder {
-/* 0x00 */ ColCommon base;
-/* 0x18 */ ColBodyInfo body;
-/* 0x40 */ ColCylinderParams params;
-};
-
-struct ColQuad {
-/* 0x00 */ ColCommon base;
-/* 0x18 */ ColBodyInfo body;
-/* 0x40 */ ColQuadParams params;
-};
-
-struct ColSphere {
-/* 0x00 */ ColCommon base;
-/* 0x18 */ ColBodyInfo body;
-/* 0x40 */ ColSphereParams params;
-};
-
-struct ColSphereGroup {
-/* 0x00 */ ColCommon base;
-/* 0x18 */ u32 count;
-/* 0x1C */ ColSphereGroupElement* spheres;
-};
-
-struct ColTriGroup {
-/* 0x00 */ ColCommon base;
-/* 0x18 */ u32 count;
-/* 0x1C */ ColTri* tris;
-};
-
-typedef struct {
-/* 0x000 */ Actor base;
 /* 0x144 */ ColQuad unk144;
 /* 0x1C4 */ ColQuad unk1C4;
 /* 0x244 */ Vector3f unk244;
@@ -1404,6 +1401,18 @@ typedef struct {
 /* 0x260 */ u8 unk260;
 /* 0x261 */ UNK_TYPE1 pad261[3];
 } ActorArrowFire;
+
+typedef struct {
+/* 0x000 */ Actor base;
+/* 0x144 */ UNK_TYPE1 pad144[100];
+/* 0x1A8 */ u32 displayListAddr;
+/* 0x1AC */ actor_func updateFunc;
+} ActorBgIknvObj;
+
+struct ActorBgMbarChair {
+/* 0x000 */ Actor base;
+/* 0x144 */ UNK_TYPE1 pad144[24];
+};
 
 struct ActorContext {
 /* 0x000 */ UNK_TYPE1 pad0[2];
@@ -1438,6 +1447,11 @@ typedef struct {
 /* 0x148 */ ColCylinder collision;
 /* 0x194 */ UNK_TYPE1 pad194[20];
 } ActorEnAObj;
+
+struct ActorEnBji01 {
+/* 0x000 */ Actor base;
+/* 0x144 */ UNK_TYPE1 pad144[368];
+};
 
 struct ActorEnBom {
 /* 0x000 */ Actor base;
@@ -1488,6 +1502,32 @@ typedef struct {
 /* 0x1A4 */ UNK_TYPE1 pad1A4[4];
 } ActorEnItem00;
 
+struct ActorEnTest {
+/* 0x000 */ Actor base;
+/* 0x144 */ UNK_TYPE1 pad144[16];
+/* 0x154 */ f32 unk154;
+/* 0x158 */ UNK_TYPE1 pad158[176];
+/* 0x208 */ u8 unk208;
+/* 0x209 */ UNK_TYPE1 pad209[1];
+/* 0x20A */ u8 unk20A;
+/* 0x20B */ UNK_TYPE1 pad20B[1];
+/* 0x20C */ ActorEnTest20C unk20C[20];
+};
+
+struct ActorInitData {
+/* 0x00 */ s16 id;
+/* 0x02 */ u8 type;
+/* 0x03 */ UNK_TYPE1 pad3[1];
+/* 0x04 */ s32 flags;
+/* 0x08 */ s16 objectDependency;
+/* 0x0A */ UNK_TYPE1 padA[2];
+/* 0x0C */ u32 instanceSize;
+/* 0x10 */ actor_func init;
+/* 0x14 */ actor_func fini;
+/* 0x18 */ actor_func main;
+/* 0x1C */ actor_func draw;
+};
+
 struct ActorObjBell {
 /* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[24];
@@ -1498,6 +1538,11 @@ struct ActorObjBell {
 /* 0x210 */ UNK_TYPE1 pad210[4];
 /* 0x214 */ s16 unk214;
 /* 0x216 */ UNK_TYPE1 pad216[18];
+};
+
+struct ActorPlayer {
+/* 0x000 */ Actor base;
+/* 0x144 */ UNK_TYPE1 pad144[3124];
 };
 
 struct GlobalContext {
@@ -1511,7 +1556,6 @@ struct GlobalContext {
 /* 0x00220 */ GlobalContext220 unk220[4];
 /* 0x00800 */ UNK_TYPE1 pad800[24];
 /* 0x00818 */ LightingContext lightsContext;
-/* 0x00826 */ UNK_TYPE1 pad826[2];
 /* 0x00828 */ u32 unk828;
 /* 0x0082C */ UNK_TYPE1 pad82C[5236];
 /* 0x01CA0 */ ActorContext actorContext;
@@ -1527,7 +1571,7 @@ struct GlobalContext {
 /* 0x17000 */ u16 unk17000;
 /* 0x17002 */ UNK_TYPE1 pad17002[2];
 /* 0x17004 */ KankyoContext kankyoContext;
-/* 0x170F6 */ UNK_TYPE1 pad170F6[3218];
+/* 0x170F8 */ UNK_TYPE1 pad170F8[3216];
 /* 0x17D88 */ SceneContext sceneContext;
 /* 0x186E0 */ s8 currentRoom;
 /* 0x186E1 */ UNK_TYPE1 pad186E1[5];

@@ -7,7 +7,7 @@ s32 Dmamgr_DoDmaTransfer(void* a0, void* a1, s32 a2) {
     OSMesgQueue sp48;
     OSMesg sp44;
     s32 ret;
-    u32 s0 = D_80096B50;
+    u32 s0 = dmamgrChunkSize;
 
     osInvalDCache(a1, a2);
     osCreateMesgQueue(&sp48, &sp44, 1);
@@ -89,8 +89,9 @@ s32 Dmamgr_FindDmaIndex(u32 a0) {
     return -1;
 }
 
-UNK_TYPE* func_800809F4(u32 a0) {
-    return &D_800981C0;
+// TODO this should be a string
+char* func_800809F4(u32 a0) {
+    return &D_800981C0[0];
 }
 
 #ifdef NONMATCHING
@@ -111,10 +112,10 @@ void Dmamgr_HandleRequest(DmaRequest* a0) {
 
     sp1C = Dmamgr_FindDmaIndex(sp34);
 
-    if ((sp1C >= 0) && (sp1C < D_8009B2BC)) {
+    if ((sp1C >= 0) && (sp1C < numDmaEntries)) {
         if (dmadata[sp1C].romEnd == 0) {
             if (dmadata[sp1C].vromEnd < (sp2C + sp34)) {
-                func_80083E4C(&D_800981C4, 499);
+                func_80083E4C(&dmamgrString800981C4, 499);
             }
             Dmamgr_DoDmaTransfer((u8*)((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart), (u8*)sp30, sp2C);
             return;
@@ -125,18 +126,18 @@ void Dmamgr_HandleRequest(DmaRequest* a0) {
         sp28 = dmadata[sp1C].romStart;
 
         if (sp34 != dmadata[sp1C].vromStart) {
-            func_80083E4C(&D_800981D4, 518);
+            func_80083E4C(&dmamgrString800981D4, 518);
         }
 
         if (sp2C != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
-            func_80083E4C(&D_800981E4, 525);
+            func_80083E4C(&dmamgrString800981E4, 525);
         }
 
         osSetThreadPri(NULL, 10);
         Yaz0_LoadAndDecompressFile(sp28, sp30, sp24);
         osSetThreadPri(NULL, 17);
     } else {
-        func_80083E4C(&D_800981F4, 558);
+        func_80083E4C(&dmamgrString800981F4, 558);
     }
 }
 
@@ -154,13 +155,13 @@ void Dmamgr_ThreadEntry(void* a0) {
     DmaRequest* s0;
 
     for (;;) {
-        osRecvMesg(&D_8009B2C0, (OSMesg)&sp34, 1);
+        osRecvMesg(&dmamgrMsq, (OSMesg)&sp34, 1);
         if (sp34 == NULL) return;
         s0 = sp34;
         Dmamgr_HandleRequest(s0);
         // TODO a0 isn't being used for this comparison
         if (s0->unk18 == NULL) continue;
-        osSendMesg(&D_8009B2C0, (OSMesg)s0->unk1C, 0);
+        osSendMesg(&dmamgrMsq, (OSMesg)s0->unk1C, 0);
     }
 }
 
@@ -173,10 +174,10 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_ThreadEntry.asm")
 #ifdef NONMATCHING
 
 s32 Dmamgr_SendRequest(DmaRequest* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
-    // TODO this isn't correct, it uses a lui, addiu to get the address of D_80096B60, then loads it,
-	// meaning that this is likely just "if (*D_80096B60 >= 2)". However, I can not get it to not
+    // TODO this isn't correct, it uses a lui, addiu to get the address of prenmiStage, then loads it,
+	// meaning that this is likely just "if (*prenmiStage >= 2)". However, I can not get it to not
 	// produce the usual lui, lw combo to load from an address :/
-    if (*D_80096B60 >= 2) {
+    if (*prenmiStage >= 2) {
         return -2;
     }
 
@@ -187,7 +188,7 @@ s32 Dmamgr_SendRequest(DmaRequest* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3,
     a0->unk18 = sp34;
     a0->unk1C = sp38;
 
-    osSendMesg(&D_8009B2C0, (OSMesg)a0, 1);
+    osSendMesg(&dmamgrMsq, (OSMesg)a0, 1);
 
     return 0;
 }
@@ -227,15 +228,15 @@ void Dmamgr_Start() {
 
 	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
 
-	D_8009B2BC = (u16)v1;
+	numDmaEntries = (u16)v1;
 
-	osCreateMesgQueue(&D_8009B2C0, (OSMesg)&D_8009B2D8, 32);
+	osCreateMesgQueue(&dmamgrMsq, (OSMesg)&dmamgrMsqMessages, 32);
 
-	thread_info_init(&D_8009B2A0, &D_8009B508, &D_8009BA08, 0, 256, &D_80098204);
+	thread_info_init(&dmamgrThreadInfo, &dmamgrStack, &D_8009BA08, 0, 256, &dmamgrThreadName);
 
-	osCreateThread(&D_8009B358, 18, Dmamgr_ThreadEntry, NULL, &D_8009BA08, 17);
+	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &D_8009BA08, 17);
 
-	osStartThread(&D_8009B358);
+	osStartThread(&dmamgrOSThread);
 }
 
 #else
@@ -245,5 +246,5 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_Start.asm")
 #endif
 
 void Dmamgr_Stop() {
-    osSendMesg(&D_8009B2C0, NULL, 1);
+    osSendMesg(&dmamgrMsq, NULL, 1);
 }

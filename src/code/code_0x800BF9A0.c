@@ -10,7 +10,7 @@ UNK_RET func_800BF9A0(UNK_TYPE a0, UNK_TYPE a1) {
     func_800847CC(&D_801DCBB0, D_801B4610);
     func_800847CC(&D_801DCBC4);
 
-    for (i = 0, s0 = &D_801AEFD0; i < D_801B4610; i++, s0++) {
+    for (i = 0, s0 = &actorOverlayTable[0]; i < D_801B4610; i++, s0++) {
         v1 = s0->vramEnd - s0->vramStart;
         if (s0->ramAddr == 0) continue;
         func_800847CC(&D_801DCBE4, i, s0->ramAddr, s0->ramAddr + v1, s0->clients, &D_801DCBFC);
@@ -19,7 +19,7 @@ UNK_RET func_800BF9A0(UNK_TYPE a0, UNK_TYPE a1) {
 
 UNK_TYPE func_800BFA78(UNK_TYPE a0, UNK_TYPE a1) {
     s32 i;
-    ActorOverlayTableEntry* v0 = &D_801AEFD0;
+    ActorOverlayTableEntry* v0 = &actorOverlayTable[0];
     UNK_TYPE t1;
     UNK_TYPE a2;
     UNK_TYPE a0_2 = a0;

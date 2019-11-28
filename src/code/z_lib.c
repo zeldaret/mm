@@ -421,7 +421,7 @@ UNK_TYPE Lib_PitchVec3f(Vector3f* a0, Vector3f* a1) {
 
 void Lib_ApplyActorInitVars(Actor* a0, ActorInitVar* a1) {
     do {
-        D_801BE960[a1->type]((u8*)a0, a1);
+        actorInitVarFuncs[a1->type]((u8*)a0, a1);
     } while ((a1++)->cont);
 }
 
@@ -650,7 +650,7 @@ f32 Lib_PushAwayVec3f(Vector3f* a0, Vector3f* a1, f32 a2) {
 void Lib_Nop801004FC(void) {}
 
 UNK_TYPE Lib_PtrSegToPhys(u32 a0) {
-    return(D_801F8180[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
+    return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
 UNK_TYPE Lib_PtrSegToPhysNull(u32 a0) {
@@ -658,7 +658,7 @@ UNK_TYPE Lib_PtrSegToPhysNull(u32 a0) {
         return a0;
     }
 
-    return(D_801F8180[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
+    return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
 UNK_TYPE Lib_PtrSegToK0(UNK_TYPE a0) {

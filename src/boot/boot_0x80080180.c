@@ -39,7 +39,7 @@ UNK_RET func_80080250(void) {
 
     v1 = &code_vrom_start;
     t7 = &code_vrom_end;
-    v0 = &D_80096B50;
+    v0 = &dmamgrChunkSize;
     sp28 = *v0;
     *v0 = 0;
 
@@ -48,14 +48,14 @@ UNK_RET func_80080250(void) {
     func_800801EC();
     osRecvMesg(&sp30, 0, 1);
 
-    D_80096B50 = sp28;
+    dmamgrChunkSize = sp28;
 
     func_80080150(&D_801E3FA0, &D_80208EA0);
 }
 
 UNK_RET func_80080300(UNK_TYPE a0) {
-    func_80085320(&D_8009A670, &D_8009A170, &D_8009A670_, 0, 256, &D_800981A0);
-    func_80081754(&D_80099EF0, &D_8009A670, 18, 1);
+    func_80085320(&irqmgrThreadInfo, &irqmgrStack, &irqmgrStack[1280], 0, 256, &irqmgrThreadName);
+    func_80081754(&irqmgrContext, &irqmgrThreadInfo, 18, 1);
     func_80080D0C();
     func_80080250();
     func_80174BF0(a0);
@@ -66,9 +66,9 @@ void func_8008038C(void) {
     u32 i;
     osCreateViManager(254);
 
-    D_80096B2C = 66;
-    D_80096B30 = 1.0;
-    D_80096B34 = 1.0;
+    viEnabledSpecialFeatures = 66;
+    screenXScale = 1.0;
+    screenYScale = 1.0;
 
     switch (osTvType) {
         case 1:
@@ -76,19 +76,19 @@ void func_8008038C(void) {
         for (i = 0; i < 20; i++) {
             D_800980E0[i] = D_8009B240[i];
         }
-        D_80096B34 = D_800981B0;
+        screenYScale = D_800981B0;
         break;
         case 2:
         D_8009B290 = 30;
         for (i = 0; i < 20; i++) {
-            D_80098010[i] = D_8009B240[i];
+            osViModeMpalLan1[i] = D_8009B240[i];
         }
-        D_80096B34 = D_800981B0;
+        screenYScale = D_800981B0;
         break;
         case 0:
         D_8009B290 = 44;
         for (i = 0; i < 20; i++) {
-            D_80097FC0[i] = D_8009B240[i];
+            osViModeNtscLan1[i] = D_8009B240[i];
         }
         break;
     }
@@ -99,9 +99,9 @@ void func_8008038C(void) {
 void func_80080514(UNK_TYPE a0) {
     func_8008038C();
     osCreatePiManager(150, (OSMesgQueue*)&D_8009B228, (OSMesg*)&D_8009B160, 50);
-    func_80085320(&D_8009B140, &D_8009A840, &D_8009B140_, 0, 1024, &D_800981A8);
-    osCreateThread((OSThread*)&D_8009A690, 3, (void (*)(void*))func_80080300, (void*)a0, (void*)&D_8009B140, 12);
-    osStartThread((OSThread*)&D_8009A690);
+    func_80085320(&mainThreadInfo, &mainStack, &mainStack[2304], 0, 1024, &mainThreadName);
+    osCreateThread((OSThread*)&mainOSThread, 3, (void (*)(void*))func_80080300, (void*)a0, (void*)&mainThreadInfo, 12);
+    osStartThread((OSThread*)&mainOSThread);
     osSetThreadPri(NULL, 0);
 
     while(1);

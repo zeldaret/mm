@@ -16,7 +16,7 @@
     0x800808F4:("Dmamgr_FindDmaEntry","DmadataEntry*","u32"),
     0x80080950:("Dmamgr_TranslateVromToRom","s32","u32"),
     0x800809BC:("Dmamgr_FindDmaIndex","s32","u32"),
-    0x800809F4:("func_800809F4","UNK_TYPE*","u32"),
+    0x800809F4:("func_800809F4","char*","u32"),
     0x80080A08:("Dmamgr_HandleRequest","void","DmaRequest*"),
     0x80080B84:("Dmamgr_ThreadEntry","void","void*"),
     0x80080C04:("Dmamgr_SendRequest","s32","DmaRequest*, UNK_FUN_ARG, UNK_PTR, UNK_TYPE, UNK_TYPE, OSMesgQueue*, UNK_TYPE"),

@@ -7,23 +7,23 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
     if (a0 != 0) {
         switch (osTvType) {
         case 2:
-            osViSetMode(&D_80098010);
+            osViSetMode(&osViModeMpalLan1);
             break;
         case 0:
             osViSetMode(&D_80097590);
             break;
         case 1:
             default:
-            osViSetMode(&D_80097FC0);
+            osViSetMode(&osViModeNtscLan1);
             break;
         }
 
 		// TODO v0 is used here instead of a0. Is this a 7.1 optimization?
-        if (D_80096B2C != 0) {
-            osViSetSpecialFeatures(D_80096B2C);
+        if (viEnabledSpecialFeatures != 0) {
+            osViSetSpecialFeatures(viEnabledSpecialFeatures);
         }
 
-        if (D_80096B34 != 1) {
+        if (screenYScale != 1) {
             osViSetYScale(1);
         }
     } else {
@@ -34,16 +34,16 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
         }
 
 		// TODO v0 is used here instead of a0. Is this a 7.1 optimization?
-        if (D_80096B2C != 0) {
-            osViSetSpecialFeatures(D_80096B2C);
+        if (viEnabledSpecialFeatures != 0) {
+            osViSetSpecialFeatures(viEnabledSpecialFeatures);
         }
 
-        if (D_80096B30 != 1) {
-            osViSetXScale(D_80096B30);
+        if (screenXScale != 1) {
+            osViSetXScale(screenXScale);
         }
 
-        if (D_80096B34 != 1) {
-            osViSetYScale(D_80096B34);
+        if (screenYScale != 1) {
+            osViSetYScale(screenYScale);
         }
     }
 

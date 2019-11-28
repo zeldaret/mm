@@ -9,9 +9,9 @@ UNK_RET EnAObj_Init(void* a0, UNK_TYPE a1) {
     ActorEnAObj* s0 = (ActorEnAObj*)a0;
     s0->base.textId = ((s0->base.variable >> 8) & 0xFF) | 0x300;
     s0->base.variable = (s0->base.variable & 0xFF) - 9;
-    Lib_ApplyActorInitVars((Actor*)s0, (ActorInitVar*)&D_801ADEAC);
+    Lib_ApplyActorInitVars((Actor*)s0, (ActorInitVar*)&enAObjInitVar);
     func_800B3BA4(&s0->base.unkBC, 0, (UNK_PTR)&func_800B3FC0, 12);
-    Collision_InitCylinder(a1, &s0->collision, (Actor*)s0, &D_801ADE80);
+    Collision_InitCylinder(a1, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
     Collision_CylinderMoveToActor((Actor*)s0, &s0->collision);
     s0->base.unkA0.unk16 = 255;
     s0->update = (actor_func)EnAObj_Update1;

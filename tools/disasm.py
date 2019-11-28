@@ -14,7 +14,6 @@ known_files = {}
 known_funcs = dict()
 known_objects = dict()
 known_vars = dict()
-extra_vars = {}
 
 regs = {
     0:"$zero", 1:"$at", 2:"$v0", 3:"$v1", 4:"$a0", 5:"$a1", 6:"$a2", 7:"$a3",
@@ -178,6 +177,8 @@ class Disassembler:
 
         self.has_done_first_pass = False
 
+        self.auto_analysis = False
+
         self.is_data_cache = {}
         self.is_code_cache = {}
         self.is_bss_cache = {}
@@ -237,6 +238,9 @@ class Disassembler:
         self.bss_regions.append((start, end, file_name))
         self.bss_regions = sorted(self.bss_regions, key = lambda region: region[0])
         self.reset_cache()
+
+    def set_auto_analysis(self, setting):
+        self.auto_analysis = setting
 
     def is_in_data(self, addr):
         if addr in self.is_data_cache:
@@ -467,13 +471,17 @@ class Disassembler:
 
                 # TODO workaround to avoid classifying loading constants as loading pointers
                 # This unfortunately causes it to not detect object addresses
-                if addr < 0x80000000:
+                if addr <= 0x80000000:
                     return
 
-                if self.is_in_data_or_undef(addr):
-                    self.add_variable(addr)
-                else:
-                    self.add_function(addr)
+                if self.auto_analysis:
+                    if self.is_in_data_or_undef(addr):
+                        self.add_variable(addr)
+                    else:
+                        self.add_function(addr)
+                elif addr not in self.functions and addr not in self.vars:
+                    return
+
                 loadHighRefs[pc] = addr
                 loadLowRefs[pc + 4*i] = addr
                 return
@@ -483,14 +491,18 @@ class Disassembler:
 
                 # TODO workaround to avoid classifying loading constants as loading pointers
                 # This unfortunately causes it to not detect object addresses
-                if addr < 0x80000000:
+                if addr <= 0x80000000:
                     return
 
-                if self.is_in_data_or_undef(addr):
-                    self.add_variable(addr)
-                else:
-                    print("Warning: Pointer load location is in code 0x%08X" % addr)
-                    self.add_variable(addr)
+                if self.auto_analysis:
+                    if self.is_in_data_or_undef(addr):
+                        self.add_variable(addr)
+                    else:
+                        print("Warning: Pointer load location is in code 0x%08X" % addr)
+                        self.add_variable(addr)
+                elif addr not in self.functions and addr not in self.vars:
+                    return
+
                 loadHighRefs[pc] = addr
                 loadLowRefs[pc + 4*i] = addr
                 return
@@ -677,9 +689,21 @@ class Disassembler:
     def generate_headers(self, path):
         self.first_pass() # find functions and variables
         with open(path + "/functions.h", 'w', newline='\n') as f:
-            f.write("#ifndef _FUNCTIONS_H_\n#define _FUNCTIONS_H_\n\n")
+            f.write("#ifndef _FUNCTIONS_H_\n"
+                    "#define _FUNCTIONS_H_\n"
+                    "\n"
+                    )
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n\n')
+            f.write("#include <PR/ultratypes.h>\n"
+                    "#include <osint.h>\n"
+                    "#include <viint.h>\n"
+                    "#include <guint.h>\n"
+                    "#include <unk.h>\n"
+                    "#include <structs.h>\n"
+                    "#include <stdlib.h>\n"
+                    "#include <xstdio.h>\n"
+                    "\n"
+                    )
 
             for addr in sorted(self.functions):
                 if addr in known_funcs:
@@ -690,22 +714,32 @@ class Disassembler:
             f.write("\n#endif\n")
 
         with open(path + "/variables.h", 'w', newline='\n') as f:
-            f.write("#ifndef _VARIABLES_H_\n#define _VARIABLES_H_\n\n")
+            f.write("#ifndef _VARIABLES_H_\n"
+                    "#define _VARIABLES_H_\n"
+                    "\n"
+                    )
 
-            f.write('#include <PR/ultratypes.h>\n#include <osint.h>\n#include <viint.h>\n#include <guint.h>\n#include <unk.h>\n#include <structs.h>\n#include <stdlib.h>\n#include <xstdio.h>\n#include <dmadata.h>\n\n')
+            f.write("#include <PR/ultratypes.h>\n"
+                    "#include <osint.h>\n"
+                    "#include <viint.h>\n"
+                    "#include <guint.h>\n"
+                    "#include <unk.h>\n"
+                    "#include <structs.h>\n"
+                    "#include <stdlib.h>\n"
+                    "#include <xstdio.h>\n"
+                    "#include <dmadata.h>\n"
+                    "#include <segment.h>\n"
+                    "\n"
+                    )
 
             for addr in sorted(self.vars):
-                if addr < 0x02000000:
+                if addr < 0x80000000:
                     continue # Don't print out symbols of dmadata files' vrom addresses. These will be defined in another file.
 
                 if addr in known_vars:
-                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), "[]" if known_vars[addr][2] else "", addr))
+                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), known_vars[addr][2], addr))
                 else:
                     f.write("//extern UNK_TYPE %s;\n" % self.make_load(addr))
-
-            f.write("\n// extra variables needed for one reason or another\n\n")
-            for (name, var_type) in extra_vars:
-                f.write("extern %s %s;\n" % (var_type, name))
 
             f.write("\n#endif\n")
 
@@ -713,7 +747,7 @@ class Disassembler:
         self.first_pass() # find functions and variables
         with open(path + "/undef.txt", 'w', newline='\n') as f:
             for addr in sorted(self.vars):
-                if addr < 0x02000000:
+                if addr < 0x80000000:
                     continue # Don't print out symbols of dmadata files' vrom addresses. These will be defined in another file.
 
                 is_in_bss, region = self.is_in_bss(addr)
@@ -722,45 +756,38 @@ class Disassembler:
                 elif not self.is_in_data(addr):
                     f.write("%s = 0x%08X;\n" % (self.make_load(addr), addr))
 
-            # TODO not hard code
-            f.write('''
-D_80099AD0_ = 0x80099AD0;'''
-            )
-
 # TODO -a --analyze flag? Only when its set will new symbols be added, otherwise use only the supplied ones
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-e', '--export-headers', help='export functions and variables into .h files', metavar='path')
     parser.add_argument('-u', '--undefined', help='create linker script for undefined symbols', metavar='path')
     parser.add_argument('-d', '--disassemble', help='disassemble supplied code files', metavar='path')
-    parser.add_argument('-l', '--files', help='list of files to disassemble', metavar='filename')
-    parser.add_argument('-f', '--functions', help='predefined functions', metavar='filename')
-    parser.add_argument('-o', '--objects', help='predefined code objects', metavar='filename')
-    parser.add_argument('-v', '--variables', help='predefined variables', metavar='filename')
+    parser.add_argument('-l', '--files', help='list of files to disassemble', metavar='filename', action='append')
+    parser.add_argument('-f', '--functions', help='predefined functions', metavar='filename', action='append')
+    parser.add_argument('-o', '--objects', help='predefined code objects', metavar='filename', action='append')
+    parser.add_argument('-v', '--variables', help='predefined variables', metavar='filename', action='append')
+    parser.add_argument('-a', '--auto-analysis', help='automatically find pointers and functions', action='store_true', default=False)
     args = parser.parse_args()
 
-    if args.files != None:
-        with open(args.files, 'r') as f:
+    for files_file in args.files:
+        with open(files_file, 'r') as f:
             known_files = ast.literal_eval(f.read())
-    if args.functions != None:
-        with open(args.functions, 'r') as f:
+    for function_file in args.functions:
+        with open(function_file, 'r') as f:
             known_funcs = ast.literal_eval(f.read())
-    if args.objects != None:
-        with open(args.objects, 'r') as f:
+    for object_file in args.objects:
+        with open(object_file, 'r') as f:
             known_objects = ast.literal_eval(f.read())
-    if args.variables != None:
-        with open(args.variables, 'r') as f:
-            known_vars = ast.literal_eval(f.read())
-            # these are extra variables needed for one reason or another, they should probably be deleted if possible
-            extra_vars = (
-                ("D_800980D0_","UNK_PTR"), # needed to match?
-                ("D_80099AD0_","UNK_TYPE"), # needed to match?
-                ("D_8009A670_","UNK_TYPE"), # needed to match?
-                ("D_8009B140_","UNK_TYPE"), # needed to match?
-                ("(*D_801BE960[12])(u8*, ActorInitVar*)",""), # TODO better function pointer representation
-            )
+    for var_file in args.variables:
+        with open(var_file, 'r') as f:
+            known_vars.update(ast.literal_eval(f.read()))
+
     dis = Disassembler()
     dis.load_defaults() # TODO file loading code should go in here
+
+    if args.auto_analysis:
+        dis.set_auto_analysis(True)
+
     if args.disassemble != None:
         os.makedirs(args.disassemble, exist_ok=True)
         dis.disassemble(args.disassemble)
