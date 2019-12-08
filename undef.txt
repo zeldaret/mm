@@ -889,7 +889,6 @@ D_80936CDA = ovl_En_Kusa_bss_start + 0x0000020A;
 D_80936CDC = ovl_En_Kusa_bss_start + 0x0000020C;
 D_80936CDE = ovl_En_Kusa_bss_start + 0x0000020E;
 D_80936CE0 = ovl_En_Kusa_bss_start + 0x00000210;
-func_809AAD9C = ovl_Obj_Grass_bss_start + 0x0000001C;
 D_809BEFD0 = ovl_En_Knight_bss_start + 0x00000000;
 D_809BEFD4 = ovl_En_Knight_bss_start + 0x00000004;
 D_809BEFD8 = ovl_En_Knight_bss_start + 0x00000008;

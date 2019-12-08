@@ -391,7 +391,8 @@ class Disassembler:
                             # don't split if it's the start of a data section, it's probably the same object
                             if not self.is_in_data_or_undef(new_object_start):
                                 self.add_object(new_object_start)
-        self.guess_functions_and_variables_from_data()
+        if self.auto_analysis:
+            self.guess_functions_and_variables_from_data()
         self.has_done_first_pass = True
 
     def second_pass(self, path):
@@ -734,8 +735,8 @@ class Disassembler:
                     )
 
             for addr in sorted(self.vars):
-                if addr < 0x80000000:
-                    continue # Don't print out symbols of dmadata files' vrom addresses. These will be defined in another file.
+                if addr < 0x800969C0:
+                    continue # Don't print out symbols before the start of boot. These will be defined in other files.
 
                 if addr in known_vars:
                     f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), known_vars[addr][2], addr))

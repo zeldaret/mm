@@ -213,7 +213,7 @@
     ('decomp/', 'ovl_Obj_Armos', 0x809A4E00, ((0x809A5B90, 0x809A5D0F),),()),
     ('decomp/', 'ovl_Obj_Boyo', 0x809A5D10, ((0x809A6150, 0x809A627F),),()),
     ('decomp/', 'ovl_En_Grasshopper', 0x809A6280, ((0x809A8C80, 0x809A910F),),()),
-    ('decomp/', 'ovl_Obj_Grass', 0x809A9110, ((0x809AA9F0, 0x809AAD7F),),((0x809AAD80,0x809AAE5F),)),
+    ('decomp/', 'ovl_Obj_Grass', 0x809A9110, ((0x809AA9F0, 0x809AAD9F),),((0x809AADA0,0x809AAE5F),)),
     ('decomp/', 'ovl_Obj_Grass_Carry', 0x809AAE60, ((0x809ABBB0, 0x809ABDDF),),()),
     ('decomp/', 'ovl_Obj_Grass_Unit', 0x809ABDE0, ((0x809AC340, 0x809AC4AF),),()),
     ('decomp/', 'ovl_Bg_Fire_Wall', 0x809AC4B0, ((0x809ACC40, 0x809ACD8F),),()),

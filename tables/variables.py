@@ -1,4 +1,4 @@
-# Follows the format of Address:(Name, Type, Array Info)
+# Follows the format of Entry Point Address:(Name, Return, Args)
 {
     0x800969C0:("D_800969C0","UNK_TYPE1",""),
     0x80096B20:("D_80096B20","u8",""),
