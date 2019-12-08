@@ -7,13 +7,13 @@ UNK_RET func_800BF9A0(UNK_TYPE a0, UNK_TYPE a1) {
     UNK_TYPE v1;
 
     func_8008439C(-2, 0);
-    func_800847CC(&D_801DCBB0, D_801B4610);
-    func_800847CC(&D_801DCBC4);
+    func_800847CC(D_801DCBB0, D_801B4610);
+    func_800847CC(D_801DCBC4);
 
     for (i = 0, s0 = &actorOverlayTable[0]; i < D_801B4610; i++, s0++) {
         v1 = s0->vramEnd - s0->vramStart;
         if (s0->ramAddr == 0) continue;
-        func_800847CC(&D_801DCBE4, i, s0->ramAddr, s0->ramAddr + v1, s0->clients, &D_801DCBFC);
+        func_800847CC(D_801DCBE4, i, s0->ramAddr, s0->ramAddr + v1, s0->clients, &D_801DCBFC);
     }
 }
 
@@ -41,8 +41,8 @@ UNK_TYPE func_800BFA78(UNK_TYPE a0, UNK_TYPE a1) {
 
 UNK_RET func_800BFAE8(UNK_ARGS) {
     D_801B4610 = 690;
-    func_800819F0(&D_801ED930, func_800BF9A0, 0, 0);
-    func_80081BCC(&D_801ED940, func_800BFA78, 0);
+    func_800819F0(&D_801ED930, (u32)func_800BF9A0, 0, 0);
+    func_80081BCC(&D_801ED940, (u32)func_800BFA78, 0);
 }
 
 UNK_RET func_800BFB40(UNK_ARGS) {

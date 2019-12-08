@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-UNK_TYPE func_8008D350(void) {
+u32 func_8008D350(void) {
     u32* spC;
     u32 sp8;
     u32 sp4;

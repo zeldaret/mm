@@ -729,6 +729,7 @@ class Disassembler:
                     "#include <xstdio.h>\n"
                     "#include <dmadata.h>\n"
                     "#include <segment.h>\n"
+                    "#include <pre_boot_variables.h>\n"
                     "\n"
                     )
 

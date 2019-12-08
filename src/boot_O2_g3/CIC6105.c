@@ -12,7 +12,7 @@ void func_80081830(void) {
 }
 
 void func_8008189C(void) {
-    func_800819F0(&D_8009BE38, (void(*)(UNK_TYPE, UNK_TYPE))func_80081830, 0, 0);
+    func_800819F0(&D_8009BE38, (u32)(void(*)(UNK_TYPE, UNK_TYPE))func_80081830, 0, 0);
 }
 
 void func_800818D0(void) {

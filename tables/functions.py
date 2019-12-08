@@ -480,7 +480,7 @@
     0x80096510:("__osSpSetPc","s32","u32 data"),
     0x80096540:("func_80096540","UNK_RET","UNK_ARGS"),
     0x800967A0:("func_800967A0","UNK_RET","UNK_ARGS"),
-    0x80096820:("func_80096820","UNK_RET","UNK_TYPE"),
+    0x80096820:("__osSetWatchLo","UNK_RET","UNK_TYPE"),
     0x80096880:("func_80096880","UNK_RET","UNK_ARGS"),
     0x800968B0:("func_800968B0","u32","const u8*, const u8*"),
     0x80096930:("func_80096930","UNK_RET","UNK_ARGS"),

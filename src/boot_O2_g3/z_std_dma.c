@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-s32 Dmamgr_DoDmaTransfer(void* a0, void* a1, s32 a2) {
+s32 Dmamgr_DoDmaTransfer(u32 a0, void* a1, u32 a2) {
     u32 spPad;
     OSIoMesg sp60;
     OSMesgQueue sp48;
@@ -24,7 +24,7 @@ s32 Dmamgr_DoDmaTransfer(void* a0, void* a1, s32 a2) {
 
             osRecvMesg(&sp48, NULL, 1);
             a2 -= s0;
-            a0 = (u8*)a0 + s0;
+            a0 = a0 + s0;
             a1 = (u8*)a1 + s0;
         }
     }
@@ -61,7 +61,7 @@ DmadataEntry* Dmamgr_FindDmaEntry(u32 a0) {
     return NULL;
 }
 
-s32 Dmamgr_TranslateVromToRom(u32 a0) {
+u32 Dmamgr_TranslateVromToRom(u32 a0) {
     DmadataEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
@@ -199,7 +199,7 @@ GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_SendRequest.asm")
 
 #endif
 
-s32 Dmamgr_SendRequestAndWait(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
+s32 Dmamgr_SendRequestAndWait(u32 a0, u32 a1, u32 a2) {
 	DmaRequest sp48;
     OSMesgQueue sp30;
     OSMesg sp2C;
@@ -207,7 +207,7 @@ s32 Dmamgr_SendRequestAndWait(UNK_TYPE a0, UNK_PTR a1, UNK_TYPE a2) {
 
     osCreateMesgQueue(&sp30, &sp2C, 1);
 
-	ret = Dmamgr_SendRequest(&sp48, (UNK_FUN_ARG)a0, a1, a2, 0, &sp30, 0);
+	ret = Dmamgr_SendRequest(&sp48, a0, a1, a2, 0, &sp30, 0);
 
 	if (ret == -1) {
 		return ret;

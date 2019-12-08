@@ -61,11 +61,11 @@ s32 Lib_StepTowardsGet_i(s32 a0, s32 a1, s32 a2) {
     return a1;
 }
 
-UNK_RET Lib_StepTowards_i(u32* a0, u32 a1, u32 a2) {
+void Lib_StepTowards_i(s32* a0, s32 a1, s32 a2) {
     *a0 = Lib_StepTowardsGet_i(*a0, a1, a2);
 }
 
-UNK_TYPE Lib_StepTowardsCheck_i(u32* a0, u32 a1, u32 a2) {
+UNK_TYPE Lib_StepTowardsCheck_i(s32* a0, s32 a1, s32 a2) {
     Lib_StepTowards_i(a0, a1, a2);
 
     return a1 == *a0;
@@ -524,7 +524,7 @@ f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4) {
     return fabsf(a1 - *a0);
 }
 
-UNK_RET Lib_ScaleMax_f(f32* a0, f32 a1, f32 a2, f32 a3) {
+void Lib_ScaleMax_f(f32* a0, f32 a1, f32 a2, f32 a3) {
     f32 f2;
 
     if (*a0 != a1) {
@@ -581,11 +581,11 @@ void Lib_ScaleMax_s(s16* a0, s16 a1, s16 a2, s16 a3) {
     *a0 += v0;
 }
 
-UNK_RET Lib_CopyColor(u8* a0, u8* a1) {
-    a0[0] = a1[0];
-    a0[1] = a1[1];
-    a0[2] = a1[2];
-    a0[3] = a1[3];
+UNK_RET Lib_CopyColor(Color* a0, Color* a1) {
+    a0->red = a1->red;
+    a0->green = a1->green;
+    a0->blue = a1->blue;
+    a0->alpha = a1->alpha;
 }
 
 UNK_RET func_801000A4(u16 a0) {
@@ -613,11 +613,11 @@ void Lib_TranslateAndRotateYVec3f(Vector3f* a0, s16 a1, Vector3f* a2, Vector3f* 
 
 #ifdef NONMATCHING
 
-void Lib_LerpRGB(u8* a0, u8* a1, f32 a2, u8* a3) {
+void Lib_LerpRGB(RGB* a0, RGB* a1, f32 a2, RGB* a3) {
     // XXX regalloc is slightly off
-    a3[0] = (f32)a0[0] + ((f32)a1[0] - (f32)a0[0]) * a2;
-    a3[1] = (f32)a0[1] + ((f32)a1[1] - (f32)a0[1]) * a2;
-    a3[2] = (f32)a0[2] + ((f32)a1[2] - (f32)a0[2]) * a2;
+    a3->red = (f32)a0->red + ((f32)a1->red - (f32)a0->red) * a2;
+    a3->green = (f32)a0->green + ((f32)a1->green - (f32)a0->green) * a2;
+    a3->blue = (f32)a0->blue + ((f32)a1->blue - (f32)a0->blue) * a2;
 }
 
 #else
@@ -649,11 +649,11 @@ f32 Lib_PushAwayVec3f(Vector3f* a0, Vector3f* a1, f32 a2) {
 
 void Lib_Nop801004FC(void) {}
 
-UNK_TYPE Lib_PtrSegToPhys(u32 a0) {
+u32 Lib_PtrSegToPhys(u32 a0) {
     return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
-UNK_TYPE Lib_PtrSegToPhysNull(u32 a0) {
+u32 Lib_PtrSegToPhysNull(u32 a0) {
     if ((a0 >> 28) == 0) {
         return a0;
     }
@@ -661,7 +661,7 @@ UNK_TYPE Lib_PtrSegToPhysNull(u32 a0) {
     return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
-UNK_TYPE Lib_PtrSegToK0(UNK_TYPE a0) {
+u32 Lib_PtrSegToK0(u32 a0) {
     if (a0 == 0) {
         return 0;
     } else {
@@ -669,7 +669,7 @@ UNK_TYPE Lib_PtrSegToK0(UNK_TYPE a0) {
     }
 }
 
-UNK_TYPE Lib_PtrSegToK0Null(UNK_TYPE a0) {
+u32 Lib_PtrSegToK0Null(u32 a0) {
     if (a0 == 0) {
         return 0;
     } else {

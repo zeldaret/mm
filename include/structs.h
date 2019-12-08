@@ -113,7 +113,7 @@ typedef struct {
 /* 0xC */ u32 romEnd;
 } DmadataEntry;
 
-enum EffectSSType {
+typedef enum EffectSSType {
     EFFECT_SS2_TYPE_DUST = 0x0,
     EFFECT_SS2_TYPE_SPARKLE = 0x1,
     EFFECT_SS2_TYPE_DELETED_2 = 0x2,
@@ -154,7 +154,7 @@ enum EffectSSType {
     EFFECT_SS2_TYPE_ICE_BLOCK = 0x25,
     EFFECT_SS2_TYPE_SBN = 0x26,
     EFFECT_SS2_TYPE_LAST_LABEL = 0x27
-};
+} EffectSSType;
 
 typedef struct {
 /* 0x0 */ s16 x;
@@ -266,13 +266,13 @@ typedef struct {
 /* 0x2EC */ UNK_TYPE1 pad2EC[4];
 } GraphicsContext;
 
-enum IRQ_MSG_TYPE {
+typedef enum IRQ_MSG_TYPE {
     IRQ_VERTICAL_RETRACE_MSG = 0x1,
     IRQ_PRENMI_2_MSG = 0x3,
     IRQ_PRENMI_1_MSG = 0x4
-};
+} IRQ_MSG_TYPE;
 
-enum IRQ_TYPE {
+typedef enum IRQ_TYPE {
     IRQ_VERTICAL_RETRACE = 0x29A,
     IRQ_SP = 0x29B,
     IRQ_DP = 0x29C,
@@ -280,7 +280,7 @@ enum IRQ_TYPE {
     IRQ_PRENMI_2 = 0x29F,
     IRQ_PRENMI_3 = 0x2A0,
     IRQ_PRENMI_4 = 0x2A1
-};
+} IRQ_TYPE;
 
 typedef struct {
 /* 0x0 */ u16 buttons;
@@ -426,11 +426,11 @@ typedef struct {
 /* 0x0A7E */ UNK_TYPE1 padA7E[2902];
 } StaticContext;
 
-enum THREAD_STACK_STATUS {
+typedef enum ThreadStackStatus {
     THREAD_STACK_STATUS_GOOD = 0x0,
     THREAD_STACK_STATUS_WARNING = 0x1,
     THREAD_STACK_STATUS_FULL = 0x2
-};
+} ThreadStackStatus;
 
 typedef struct {
 /* 0x0 */ s8 unk0;
@@ -499,6 +499,8 @@ typedef struct {
 /* 0x8 */ unsigned int inst3;
 /* 0xC */ unsigned int inst4;
 } __osExceptionVector;
+
+typedef void(*actor_init_var_func)(u8*, ActorInitVar*);
 
 typedef unsigned long(*func)(void);
 
@@ -1229,8 +1231,8 @@ typedef struct ThreadInfo ThreadInfo;
 struct ThreadInfo {
 /* 0x00 */ ThreadInfo* next;
 /* 0x04 */ ThreadInfo* prev;
-/* 0x08 */ s32* stackBegin;
-/* 0x0C */ s32* stackEnd;
+/* 0x08 */ u8* stackBegin;
+/* 0x0C */ u8* stackEnd;
 /* 0x10 */ s32 initStackValue;
 /* 0x14 */ s32 stackWarningThreshold;
 /* 0x18 */ s8* name;
@@ -1316,11 +1318,9 @@ struct ColTriGroup {
 
 typedef void(*actor_func)(Actor* this, GlobalContext* ctxt);
 
-typedef void(*actor_init_var_func)(u8*, ActorInitVar*);
-
 struct Actor {
 /* 0x000 */ s16 id;
-/* 0x002 */ UNK_TYPE1 type;
+/* 0x002 */ u8 type;
 /* 0x003 */ s8 room;
 /* 0x004 */ UNK_TYPE4 flags; // bit 22: disable positional lights if bit 28 is not set; bit 28: enable positional lights on actor
 /* 0x008 */ Vector3f initPos;

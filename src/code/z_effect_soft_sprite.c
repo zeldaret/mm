@@ -279,7 +279,7 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_DrawParticle.asm")
 #endif
 
 void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
-    UNK_TYPE s0;
+    LightMapper* s0;
     s32 i;
 
     s0 = Lights_CreateMapper(&ctxt->lightsContext, ctxt->commonVars.graphicsContext);

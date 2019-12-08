@@ -25,7 +25,7 @@ void osInitialize(void) {
 
     __osSetSR(__osGetSR() | 0x20000000);
     __osSetFpcCsr(0x01000800);
-    func_80096820(0x04900000);
+    __osSetWatchLo(0x04900000);
 
     while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0);
     while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0);
