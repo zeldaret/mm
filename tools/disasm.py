@@ -379,7 +379,7 @@ class Disassembler:
                 if not self.is_in_data_or_undef(addr):
                     self.disassemble_inst(inst, addr, i, file)
 
-                    if inst == 0x03E00008: # jr $ra
+                    if inst == 0x03E00008 and self.auto_analysis: # jr $ra
                         next_index = i+2
                         if file.get_inst(next_index) == 0: # nop
                             while file.get_inst(next_index) == 0:

@@ -69,7 +69,7 @@ SECTIONS
         build/asm/visetmode.o(.text)
         build/asm/getconfig.o(.text)
         build/asm/setconfig.o(.text)
-        build/asm/boot_0x8008B6D0.o(.text)
+        build/asm/lookat.o(.text)
         build/asm/boot_0x8008B9F0.o(.text)
         build/src/libultra/os/stoptimer.o(.text)
         build/asm/probetlb.o(.text)

@@ -484,6 +484,7 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
+// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -662,8 +663,8 @@ void EffectSS_LoadIceSmoke(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm
 void EffectSS_LoadIceBlock(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5); // func_800B326C
 void func_800B32D0(ContextCommon* ctxt); // func_800B32D0
 void func_800B3644(void); // func_800B3644
-void allocate_and_relocate_GameStateMetaInfo_overlay(GameStateMetaInfo* param_1); // func_800B3880
-void free_GameStateMetaInfo_overlay(GameStateMetaInfo* param_1); // func_800B39A4
+void DLF_LoadGameState(GameStateMetaInfo* gameState); // func_800B3880
+void DLF_FreeGameState(GameStateMetaInfo* gameState); // func_800B39A4
 void Actor_PrintLists(ActorContext* actCtxt); // func_800B3AD0
 void func_800B3BA4(ActorBC* iParm1, f32 uParm2, func_ptr* uParm3, f32 uParm4); // func_800B3BA4
 void func_800B3BC8(Actor* iParm1, UNK_TYPE4 uParm2, GlobalContext* ctxt, UNK_PTR puParm4, Color* param_5); // func_800B3BC8
@@ -3731,6 +3732,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
+// UNK_RET func_8019AE40(UNK_ARGS);
+// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
