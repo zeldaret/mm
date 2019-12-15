@@ -581,7 +581,7 @@ void Lib_ScaleMax_s(s16* a0, s16 a1, s16 a2, s16 a3) {
     *a0 += v0;
 }
 
-UNK_RET Lib_CopyColor(Color* a0, Color* a1) {
+UNK_RET Lib_CopyColor(ColorRGBA8* a0, ColorRGBA8* a1) {
     a0->red = a1->red;
     a0->green = a1->green;
     a0->blue = a1->blue;
@@ -589,7 +589,7 @@ UNK_RET Lib_CopyColor(Color* a0, Color* a1) {
 }
 
 UNK_RET func_801000A4(u16 a0) {
-    func_8019F0C8(a0);
+    play_sound(a0);
 }
 
 UNK_RET func_801000CC(u16 a0) {
@@ -649,16 +649,16 @@ f32 Lib_PushAwayVec3f(Vector3f* a0, Vector3f* a1, f32 a2) {
 
 void Lib_Nop801004FC(void) {}
 
-u32 Lib_PtrSegToPhys(u32 a0) {
-    return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
+u32 Lib_PtrSegToVirt(u32 a0) {
+    return(gRspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
-u32 Lib_PtrSegToPhysNull(u32 a0) {
+u32 Lib_PtrSegToVirtNull(u32 a0) {
     if ((a0 >> 28) == 0) {
         return a0;
     }
 
-    return(rspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
+    return(gRspSegmentPhysAddrs[(a0 << 4) >> 28] + (a0 & 0xFFFFFF)) + 0x80000000;
 }
 
 u32 Lib_PtrSegToK0(u32 a0) {

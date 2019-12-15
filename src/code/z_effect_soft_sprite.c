@@ -19,7 +19,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     }
 }
 
-void EffectSS_Clear(GlobalContext* ctxt) {
+void EffectSS_Fini(GlobalContext* ctxt) {
     u32 i;
     LoadedParticleEntry* iter;
     ParticleOverlayTableEntry* iter2;
@@ -70,9 +70,9 @@ void EffectSS_ResetLoadedParticleEntry(LoadedParticleEntry* particle) {
     particle->velocity.z = 0;
     particle->velocity.y = 0;
     particle->velocity.x = 0;
-    particle->unk34 = 0;
-    particle->unk30 = 0;
-    particle->unk2C = 0;
+    particle->unk2C.z = 0;
+    particle->unk2C.y = 0;
+    particle->unk2C.x = 0;
     particle->position.z = 0;
     particle->position.y = 0;
     particle->position.x = 0;
