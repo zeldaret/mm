@@ -3070,14 +3070,14 @@ typedef union {
 			     _SHIFTL(dz, 0, 16))
 
 #define	gDPSetPrimColor(pkt, m, l, r, g, b, a)				\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 =	(_SHIFTL(G_SETPRIMCOLOR, 24, 8) | 		\
 			 _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8));		\
 	_g->words.w1 =  (_SHIFTL(r, 24, 8) | _SHIFTL(g, 16, 8) | 	\
 			 _SHIFTL(b, 8, 8) | _SHIFTL(a, 0, 8));		\
-}
+})
 
 #define	gsDPSetPrimColor(m, l, r, g, b, a)				\
 {									\

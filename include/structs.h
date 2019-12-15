@@ -1401,7 +1401,7 @@ struct GameAllocNode {
 };
 
 struct ContextCommon {
-/* 0x00 */ GraphicsContext* graphicsContext;
+/* 0x00 */ GraphicsContext* gCtxt;
 /* 0x04 */ func_ptr update;
 /* 0x08 */ func_ptr fini;
 /* 0x0C */ func_ptr nextGameStateInit;
@@ -1909,7 +1909,7 @@ struct ActorPostDrawParams {
 };
 
 struct GlobalContext {
-/* 0x00000 */ ContextCommon commonVars;
+/* 0x00000 */ ContextCommon common;
 /* 0x000A4 */ s16 currentScene;
 /* 0x000A6 */ u8 unkA6;
 /* 0x000A7 */ UNK_TYPE1 padA7[9];

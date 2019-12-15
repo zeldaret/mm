@@ -1616,7 +1616,7 @@ void func_800EFAB8(GlobalContext* ctxt, s16 index); // func_800EFAB8
 void func_800EFBFC(GlobalContext* ctxt, s16 index); // func_800EFBFC
 void func_800EFD44(GlobalContext* ctxt, s16 index); // func_800EFD44
 void EffFootmark_Init(GlobalContext* ctxt); // func_800EFE60
-void EffFootmark_Add(GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, char id, Vector3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay); // func_800EFF04
+void EffFootmark_Add(GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, u8 id, Vector3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay); // func_800EFF04
 void EffFootmark_Update(GlobalContext* ctxt); // func_800F00BC
 void EffFootmark_Draw(GlobalContext* ctxt); // func_800F01C8
 void func_800F0390(GlobalContext* ctxt); // func_800F0390

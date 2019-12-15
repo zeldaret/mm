@@ -6,7 +6,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     LoadedParticleEntry* iter;
     ParticleOverlayTableEntry* iter2;
 
-    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->commonVars.heap, numEntries * sizeof(LoadedParticleEntry));
+    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->common.heap, numEntries * sizeof(LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -282,9 +282,9 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
     LightMapper* s0;
     s32 i;
 
-    s0 = Lights_CreateMapper(&ctxt->lightsContext, ctxt->commonVars.graphicsContext);
+    s0 = Lights_CreateMapper(&ctxt->lightsContext, ctxt->common.gCtxt);
     Lights_MapLights(s0, ctxt->lightsContext.lightsHead, 0, ctxt);
-    Lights_UploadLights(s0, ctxt->commonVars.graphicsContext);
+    Lights_UploadLights(s0, ctxt->common.gCtxt);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
