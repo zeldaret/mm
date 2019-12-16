@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import struct, os, sys, argparse
 
 from libyaz0 import decompress

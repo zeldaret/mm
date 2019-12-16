@@ -1,1 +1,1 @@
-libyaz0
+libyaz0==0.5

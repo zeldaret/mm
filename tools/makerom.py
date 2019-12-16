@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os, struct, sys, ast, argparse
 
 def read_uint32_be(data, offset):

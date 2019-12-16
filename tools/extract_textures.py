@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import struct;
 from tkinter import *;
 from tkinter.ttk import *

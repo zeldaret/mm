@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse, os, struct, ast
 
 SPLIT_FILES = True # TODO this should be a flag somewhere

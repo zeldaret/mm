@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os, struct, sys, ast, argparse
 
 def align_up(base, align_to):

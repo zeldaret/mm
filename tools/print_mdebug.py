@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Resources:
 http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf

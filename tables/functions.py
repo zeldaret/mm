@@ -1605,7 +1605,7 @@
     0x800EFBFC:("func_800EFBFC","void","GlobalContext* ctxt, s16 index"),
     0x800EFD44:("func_800EFD44","void","GlobalContext* ctxt, s16 index"),
     0x800EFE60:("EffFootmark_Init","void","GlobalContext* ctxt"),
-    0x800EFF04:("EffFootmark_Add","void","GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, char id, Vector3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay"),
+    0x800EFF04:("EffFootmark_Add","void","GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, u8 id, Vector3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay"),
     0x800F00BC:("EffFootmark_Update","void","GlobalContext* ctxt"),
     0x800F01C8:("EffFootmark_Draw","void","GlobalContext* ctxt"),
     0x800F0390:("func_800F0390","void","GlobalContext* ctxt"),

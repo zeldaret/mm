@@ -1,15 +1,10 @@
 # TODO think about how to split this up
 
-MIPS_BINUTILS := mips-linux-gnu-
-
 AS := $(MIPS_BINUTILS)as
 LD := $(MIPS_BINUTILS)ld
 
-#QEMU_IRIX := ~/irixemu/mips-linux-user/qemu-mips
-QEMU_IRIX := ~/qemu-irix
-IRIX_71_ROOT := ./ido/71/
-IRIX_62_ROOT := ./ido/62/
-IRIX_53_ROOT := ./ido/53_patched/
+IRIX_71_ROOT := ./tools/ido7.1_compiler/
+IRIX_53_ROOT := ./tools/ido5.3_compiler/
 
 CFLAGS := -G 0 -non_shared -Xfullwarn -Xcpluscomm
 ASFLAGS := -march=vr4300 -32
@@ -32,9 +27,9 @@ test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
-test.txt: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/code/%: CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+test.txt: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
@@ -84,7 +79,7 @@ check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)
-	@python3 ./tools/makerom.py ./tables/dmadata_table.py $@
+	@./tools/makerom.py ./tables/dmadata_table.py $@
 
 build/boot_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
@@ -116,7 +111,7 @@ linker_scripts/dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMA
 	mv build/decomp build/decomp_temp
 	mv build/baserom_pre_dmadata build/baserom
 	mv build/decomp_pre_dmadata build/decomp
-	python3 ./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l linker_scripts/dmadata_script.txt
+	./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l linker_scripts/dmadata_script.txt
 	mv build/baserom build/baserom_pre_dmadata
 	mv build/decomp build/decomp_pre_dmadata
 	mv build/baserom_temp build/baserom
@@ -129,7 +124,7 @@ clean:
 	rm $(ROM) -r build
 
 build/baserom/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
-	python3 ./tools/dmadata.py ./tables/dmadata_table.py $@
+	./tools/dmadata.py ./tables/dmadata_table.py $@
 
 build/baserom/boot: build/boot.bin
 	cp $< $@
@@ -151,9 +146,9 @@ build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
 
 
 disasm:
-	@python3 ./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/object_addr_variables.py -v ./tables/pre_boot_variables.py
+	@./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/object_addr_variables.py -v ./tables/pre_boot_variables.py
 	@while read -r file; do \
-		python3 ./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
+		./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt
 
 # Recipes
@@ -177,5 +172,5 @@ build/decomp_pre_dmadata/%: decomp/%
 	cp $< $@
 
 build/comp/%.yaz0: build/decomp/%
-	python3 ./tools/yaz0.py $< $@
+	./tools/yaz0.py $< $@
 

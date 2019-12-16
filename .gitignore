@@ -16,3 +16,5 @@ test.txt
 *.xlsx
 src/test.c
 *.dump
+tools/ido5.3_compiler/*
+tools/ido7.1_compiler/*
