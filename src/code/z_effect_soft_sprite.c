@@ -219,10 +219,7 @@ GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_LoadParticle.asm")
 
 #endif
 
-// XXX regalloc is wrong
-#ifdef NONMATCHING
-
-void EffectSS_UpdateParticle(GlobalContext* ctxt, u32 index) {
+void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
     LoadedParticleEntry* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
@@ -234,15 +231,9 @@ void EffectSS_UpdateParticle(GlobalContext* ctxt, u32 index) {
         particle->position.y += particle->velocity.y;
         particle->position.z += particle->velocity.z;
 
-        (*particle->update)(ctxt);
+        (*particle->update)(ctxt, index, particle);
     }
 }
-
-#else
-
-GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_UpdateParticle.asm")
-
-#endif
 
 void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
     s32 i;
@@ -262,21 +253,12 @@ void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
     }
 }
 
-// XXX regalloc is wrong
-#ifdef NONMATCHING
-
 void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
     LoadedParticleEntry* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
-        (*entry->draw)(ctxt);
+        (*entry->draw)(ctxt, index, entry);
     }
 }
-
-#else
-
-GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_DrawParticle.asm")
-
-#endif
 
 void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
     LightMapper* s0;

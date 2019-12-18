@@ -213,7 +213,7 @@ SECTIONS
         build/src/code/z_actor.o(.text)
         build/asm/code_0x800BF9A0.o(.text)
         build/asm/z_bgcheck.o(.text)
-        build/asm/code_0x800CAAD0.o(.text)
+        build/src/code/code_0x800CAAD0.o(.text)
         build/asm/code_0x800CAE10.o(.text)
         build/asm/z_camera.o(.text)
         build/src/code/code_0x800E03A0.o(.text)

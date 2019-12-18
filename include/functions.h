@@ -766,8 +766,8 @@ void func_800B748C(void); // func_800B748C
 void func_800B750C(void); // func_800B750C
 void func_800B75A0(void); // func_800B75A0
 void func_800B761C(void); // func_800B761C
-void func_800B7678(void); // func_800B7678
-void func_800B78B8(GlobalContext* ctxt, Actor* iParm2, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6); // func_800B78B8
+UNK_TYPE4 func_800B7678(GlobalContext* ctxt, Actor* param_2, int param_3, unsigned int param_4); // func_800B7678
+void func_800B78B8(GlobalContext* ctxt, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6); // func_800B78B8
 void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B7E04
 s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gCtxt); // func_800B7FE0
 void func_800B8018(void); // func_800B8018
@@ -1020,7 +1020,7 @@ void BgCheck_VerticesListAlloc(GlobalContext* ctxt, BgVertex** vertices, u32 num
 void BgCheck_WaterboxListInit(BgWaterboxList* waterboxList); // func_800C5F8C
 void BgCheck_WaterboxListAlloc(GlobalContext* ctxt, BgWaterboxList* waterboxList, u32 numWaterboxes); // func_800C5F9C
 void BgCheck_ActorMeshUpdateParams(GlobalContext* ctxt, ActorMesh* mesh); // func_800C5FD8
-s32 BcCheck_IsActorMeshIndexValid(s32 index); // func_800C6024
+s32 BgCheck_IsActorMeshIndexValid(s32 index); // func_800C6024
 void BgCheck_DynaInit(GlobalContext* ctxt, BgDynaCollision* param_2); // func_800C6044
 void BgCheck_DynaAlloc(GlobalContext* ctxt, BgDynaCollision* dyna); // func_800C6098
 s32 BgCheck_AddActorMesh(GlobalContext* ctxt, BgDynaCollision* dyna, BgActor* actor, BgMeshHeader* header); // func_800C6188
@@ -1052,7 +1052,7 @@ void func_800C90AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800C921C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800C921C
 void func_800C9380(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8); // func_800C9380
 void BgCheck_RelocateMeshHeaderPointers(BgMeshHeader* header); // func_800C94E0
-void BgCheck_RelocateMeshHeader(u32 meshSegPtr, BgMeshHeader** param_2); // func_800C9564
+void BgCheck_RelocateMeshHeader(BgMeshHeader* meshSegPtr, BgMeshHeader** param_2); // func_800C9564
 void BgCheck_RelocateAllMeshHeaders(BgCheckContext* bgCtxt, GlobalContext* ctxt); // func_800C9598
 void func_800C9640(void); // func_800C9640
 u32 BgCheck_GetPolygonAttributes(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index, s32 attributeIndex); // func_800C9694
@@ -1101,25 +1101,25 @@ void func_800CA6D8(void); // func_800CA6D8
 void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800CA6F0
 void func_800CA9D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA9D0
 void func_800CAA14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800CAA14
-void func_800CAAD0(int iParm1, int iParm2, int iParm3); // func_800CAAD0
-void func_800CAC0C(void); // func_800CAC0C
-void func_800CACA0(void); // func_800CACA0
-void func_800CAD2C(void); // func_800CAD2C
-void BcCheck_BgActorInit(BgActor* actor, UNK_TYPE4 param_2); // func_800CAE10
-void func_800CAE34(void); // func_800CAE34
-void func_800CAE7C(void); // func_800CAE7C
-void func_800CAE88(void); // func_800CAE88
-void func_800CAE9C(void); // func_800CAE9C
+void BgCheck2_UpdateActorPosition(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAAD0
+void BgCheck2_UpdateActorYRotation(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAC0C
+void BgCheck2_AttachToMesh(BgCheckContext* bgCtxt, Actor* actor, s32 index); // func_800CACA0
+u32 BgCheck2_UpdateActorAttachedToMesh(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAD2C
+void BcCheck3_BgActorInit(BgActor* actor, UNK_TYPE4 param_2); // func_800CAE10
+void BgCheck3_LoadMesh(GlobalContext* ctxt, BgActor* actor, BgMeshHeader* meshHeader); // func_800CAE34
+void func_800CAE7C(BgActor* actor); // func_800CAE7C
+void func_800CAE88(BgActor* actor); // func_800CAE88
+void func_800CAE9C(BgActor* actor); // func_800CAE9C
 void func_800CAEB0(void); // func_800CAEB0
-void func_800CAEE0(void); // func_800CAEE0
+void func_800CAEE0(BgActor* actor); // func_800CAEE0
 void func_800CAEF4(void); // func_800CAEF4
-void func_800CAF24(void); // func_800CAF24
-void func_800CAF38(void); // func_800CAF38
-void func_800CAF4C(void); // func_800CAF4C
-void func_800CAF70(void); // func_800CAF70
-void func_800CAF94(void); // func_800CAF94
-void func_800CAFB8(void); // func_800CAFB8
-void func_800CAFDC(void); // func_800CAFDC
+void func_800CAF24(BgActor* actor); // func_800CAF24
+void func_800CAF38(BgActor* actor); // func_800CAF38
+s32 func_800CAF4C(BgActor* actor); // func_800CAF4C
+s32 func_800CAF70(BgActor* actor); // func_800CAF70
+s32 func_800CAF94(BgActor* actor); // func_800CAF94
+s32 func_800CAFB8(BgActor* actor); // func_800CAFB8
+s32 func_800CAFDC(BgActor* actor); // func_800CAFDC
 void func_800CB000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800CB000
 void func_800CB210(void); // func_800CB210
 void func_800CB240(void); // func_800CB240
@@ -1803,8 +1803,8 @@ f32 Lib_sin(s16 angle); // func_800FED84
 s32 Lib_StepTowardsGet_i(s32 start, s32 value, s32 step); // func_800FEDC4
 void Lib_StepTowards_i(s32* start, s32 value, s32 step); // func_800FEE08
 s32 Lib_StepTowardsCheck_i(s32* start, s32 value, s32 step); // func_800FEE34
-s32 Lib_StepTowardsCheckFramerateScaled_s(s16* start, s16 taret, s16 step); // func_800FEE70
-s32 Lib_StepTowardsCheck_s(s16* start, s16 taret, s16 step); // func_800FEF2C
+s32 Lib_StepTowardsCheckFramerateScaled_s(s16* start, s16 target, s16 step); // func_800FEE70
+s32 Lib_StepTowardsCheck_s(s16* start, s16 target, s16 step); // func_800FEF2C
 s32 Lib_StepTowardsCheck_c(s8* start, s8 target, s8 step); // func_800FEFB4
 s32 Lib_StepTowardsCheck_f(f32* start, f32 target, f32 step); // func_800FF03C
 void func_800FF0D0(void); // func_800FF0D0
@@ -1836,18 +1836,18 @@ f32 Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproac
 f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b); // func_800FFA4C
 s32 Lib_YawVec3f(Vector3f* from, Vector3f* to); // func_800FFA60
 s32 Lib_PitchVec3f(Vector3f* from, Vector3f* to); // func_800FFA94
-void Lib_ApplyActorInitVars(Actor* uParm1, ActorInitVar* puParm2); // func_800FFADC
-void Lib_ApplyActorInitVarByte1(u8* iParm1, ActorInitVar* puParm2); // func_800FFB54
-void Lib_ApplyActorInitVarByte2(u8* iParm1, ActorInitVar* puParm2); // func_800FFB70
-void Lib_ApplyActorInitVarShort1(u8* iParm1, ActorInitVar* puParm2); // func_800FFB8C
-void Lib_ApplyActorInitVarShort2(u8* iParm1, ActorInitVar* puParm2); // func_800FFBA8
-void Lib_ApplyActorInitVarWord1(u8* iParm1, ActorInitVar* puParm2); // func_800FFBC4
-void Lib_ApplyActorInitVarWord2(u8* iParm1, ActorInitVar* puParm2); // func_800FFBE0
-void Lib_ApplyActorInitVarFloat(u8* iParm1, ActorInitVar* puParm2); // func_800FFBFC
-void Lib_ApplyActorInitVarFloat1000th(u8* iParm1, ActorInitVar* puParm2); // func_800FFC20
-void Lib_ApplyActorInitVarVector3f(u8* iParm1, ActorInitVar* puParm2); // func_800FFC50
-void Lib_ApplyActorInitVarVector3f1000th(u8* iParm1, ActorInitVar* puParm2); // func_800FFC7C
-void Lib_ApplyActorInitVarVector3s(u8* iParm1, ActorInitVar* puParm2); // func_800FFCB4
+void Lib_ApplyActorInitVars(Actor* actor, ActorInitVar* init); // func_800FFADC
+void Lib_ApplyActorInitVarByte1(u8* actor, ActorInitVar* init); // func_800FFB54
+void Lib_ApplyActorInitVarByte2(u8* actor, ActorInitVar* init); // func_800FFB70
+void Lib_ApplyActorInitVarShort1(u8* actor, ActorInitVar* init); // func_800FFB8C
+void Lib_ApplyActorInitVarShort2(u8* actor, ActorInitVar* init); // func_800FFBA8
+void Lib_ApplyActorInitVarWord1(u8* actor, ActorInitVar* init); // func_800FFBC4
+void Lib_ApplyActorInitVarWord2(u8* actor, ActorInitVar* init); // func_800FFBE0
+void Lib_ApplyActorInitVarFloat(u8* actor, ActorInitVar* init); // func_800FFBFC
+void Lib_ApplyActorInitVarFloat1000th(u8* actor, ActorInitVar* init); // func_800FFC20
+void Lib_ApplyActorInitVarVector3f(u8* actor, ActorInitVar* init); // func_800FFC50
+void Lib_ApplyActorInitVarVector3f1000th(u8* actor, ActorInitVar* init); // func_800FFC7C
+void Lib_ApplyActorInitVarVector3s(u8* actor, ActorInitVar* init); // func_800FFCB4
 f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4); // func_800FFCD8
 void Lib_ScaleMax_f(f32* start, f32 target, f32 scale, f32 maxStep); // func_800FFDF8
 void Lib_Scale_f(f32* start, f32 scale, f32 maxStep); // func_800FFE68
@@ -2613,7 +2613,7 @@ void Matrix_Multiply(z_Matrix* l, z_Matrix* r, z_Matrix* dst); // func_80138D38
 void Matrix_GetIdentity(z_Matrix** puParm1); // func_80139094
 void Matrix_MakeIdentity(z_Matrix* matrix); // func_801390A8
 void Matrix_Copy(z_Matrix* src, z_Matrix* dst); // func_80139100
-void func_80139188(void); // func_80139188
+s32 invert_matrix(z_Matrix* matrix, z_Matrix* invert); // func_80139188
 void Matrix_MakeScale(z_Matrix* matrix, f32 x, f32 y, f32 z); // func_80139428
 void Matrix_MakeRotationZYX(z_Matrix* matrix, s16 xRotation, s16 yRotation, s16 zRotation); // func_8013948C
 void Matrix_MakeRotationYXZ(z_Matrix* matrix, s16 xRotation, s16 yRotation, s16 zRotation); // func_8013961C

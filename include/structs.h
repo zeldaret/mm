@@ -1581,7 +1581,7 @@ struct LoadedParticleEntry {
 /* 0x0C */ Vector3f velocity;
 /* 0x18 */ Vector3f acceleration;
 /* 0x24 */ effect_func update;
-/* 0x28 */ global_context_func draw;
+/* 0x28 */ effect_func draw;
 /* 0x2C */ Vector3f unk2C;
 /* 0x38 */ u32 displayList;
 /* 0x3C */ UNK_TYPE4 unk3C;
@@ -2001,7 +2001,9 @@ struct Actor {
 /* 0x070 */ f32 speed;
 /* 0x074 */ f32 gravity;
 /* 0x078 */ f32 minYVelocity;
-/* 0x07C */ UNK_TYPE1 pad7C[12];
+/* 0x07C */ UNK_TYPE1 pad7C[9];
+/* 0x085 */ u8 meshAttachedTo;
+/* 0x086 */ UNK_TYPE1 pad86[2];
 /* 0x088 */ f32 unk88;
 /* 0x08C */ f32 unk8C;
 /* 0x090 */ u16 unk90;
@@ -2146,7 +2148,9 @@ struct ActorPlayer {
 /* 0x000 */ Actor base;
 /* 0x144 */ UNK_TYPE1 pad144[3];
 /* 0x147 */ s8 unk147;
-/* 0x148 */ UNK_TYPE1 pad148[2454];
+/* 0x148 */ UNK_TYPE1 pad148[2444];
+/* 0xAD4 */ s16 unkAD4;
+/* 0xAD6 */ UNK_TYPE1 padAD6[8];
 /* 0xADE */ u8 unkADE;
 /* 0xADF */ UNK_TYPE1 padADF[4];
 /* 0xAE3 */ s8 unkAE3;
@@ -2159,8 +2163,11 @@ struct ActorPlayer {
 
 struct BgActor {
 /* 0x000 */ Actor base;
-/* 0x144 */ s32 unk144;
-/* 0x148 */ UNK_TYPE1 pad148[20];
+/* 0x144 */ s32 bgActorId;
+/* 0x148 */ UNK_TYPE1 pad148[12];
+/* 0x154 */ u32 unk154;
+/* 0x158 */ u8 bgFlags;
+/* 0x159 */ UNK_TYPE1 pad159[3];
 };
 
 struct ActorBgIknvObj {
