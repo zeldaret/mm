@@ -1518,15 +1518,15 @@ void func_800E8690(void); // func_800E8690
 void func_800E86C0(void); // func_800E86C0
 void func_800E86E0(void); // func_800E86E0
 void func_800E8784(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800E8784
-void func_800E8EA0(void); // func_800E8EA0
-void func_800E8ED0(void); // func_800E8ED0
-void func_800E8EE0(void); // func_800E8EE0
-void func_800E8EEC(void); // func_800E8EEC
-void func_800E8EFC(void); // func_800E8EFC
-void func_800E8F08(void); // func_800E8F08
-void func_800E8FA4(void); // func_800E8FA4
-void func_800E9138(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800E9138
-void func_800E9250(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800E9250
+void func_800E8EA0(GlobalContext* ctxt, Actor* actor, u16 param_3); // func_800E8EA0
+s32 nop_800E8ED0(UNK_TYPE4 param_1); // func_800E8ED0
+void nop_800E8EE0(UNK_TYPE4 param_1); // func_800E8EE0
+s32 nop_800E8EEC(UNK_TYPE4 param_1); // func_800E8EEC
+void nop_800E8EFC(UNK_TYPE4 param_1); // func_800E8EFC
+s32 func_800E8F08(Vector3s* param_1, Vector3s* param_2); // func_800E8F08
+s32 func_800E8FA4(Actor* actor, Vector3f* param_2, Vector3s* param_3, Vector3s* param_4); // func_800E8FA4
+s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s* param_4, f32 param_5); // func_800E9138
+s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s* param_4, Vector3f param_5); // func_800E9250
 void func_800E9360(void); // func_800E9360
 void static_context_init(void); // func_800E93E0
 void func_800E9470(void); // func_800E9470
@@ -1834,8 +1834,8 @@ f32 Lib_DistanceXZVec3f(Vector3f* a, Vector3f* b); // func_800FF92C
 f32 Lib_DistanceAndDifferenceXZVec3f(Vector3f* a, Vector3f* b, f32* xDiff, f32* zDiff); // func_800FF960
 f32 Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach); // func_800FF9A4
 f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b); // func_800FFA4C
-s32 Lib_YawVec3f(Vector3f* from, Vector3f* to); // func_800FFA60
-s32 Lib_PitchVec3f(Vector3f* from, Vector3f* to); // func_800FFA94
+s16 Lib_YawVec3f(Vector3f* from, Vector3f* to); // func_800FFA60
+s16 Lib_PitchVec3f(Vector3f* from, Vector3f* to); // func_800FFA94
 void Lib_ApplyActorInitVars(Actor* actor, ActorInitVar* init); // func_800FFADC
 void Lib_ApplyActorInitVarByte1(u8* actor, ActorInitVar* init); // func_800FFB54
 void Lib_ApplyActorInitVarByte2(u8* actor, ActorInitVar* init); // func_800FFB70
@@ -2833,7 +2833,7 @@ void func_80150A84(void); // func_80150A84
 void func_80150D08(GlobalContext* ctxt, unsigned int uParm2); // func_80150D08
 void func_801514B0(void); // func_801514B0
 void func_801518B0(GlobalContext* ctxt, u32 uParm2, UNK_TYPE4 uParm3); // func_801518B0
-void func_80151938(void); // func_80151938
+void func_80151938(GlobalContext* ctxt, u16 param_2); // func_80151938
 void func_80151A68(void); // func_80151A68
 void func_80151BB4(s32 iParm1, u32 uParm2); // func_80151BB4
 void func_80151C9C(void); // func_80151C9C
@@ -3328,9 +3328,9 @@ void func_8017FAA8(void); // func_8017FAA8
 void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_8017FB1C
 void func_8017FD44(void); // func_8017FD44
 s16 atans_first_8th(f32 opposite, f32 adjacent); // func_8017FEB0
-s32 atans(f32 opposite, f32 adjacent); // func_8017FEE4
+s16 atans(f32 opposite, f32 adjacent); // func_8017FEE4
 f32 atan(f32 opposite, f32 adjacent); // func_801800CC
-s32 atans_flip(f32 adjacent, f32 opposite); // func_80180100
+s16 atans_flip(f32 adjacent, f32 opposite); // func_80180100
 void atan_flip(f32 adjacent, f32 opposite); // func_8018012C
 void SysMatrix_StateAlloc(ContextCommon* ctxt); // func_80180160
 void SysMatrix_StatePush(void); // func_8018019C

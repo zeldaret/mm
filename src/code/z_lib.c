@@ -409,13 +409,13 @@ f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b) {
     return b->y - a->y;
 }
 
-s32 Lib_YawVec3f(Vector3f* from, Vector3f* to) {
+s16 Lib_YawVec3f(Vector3f* from, Vector3f* to) {
     f32 f14 = to->x - from->x;
     f32 f12 = to->z - from->z;
     return atans_flip(f12, f14);
 }
 
-s32 Lib_PitchVec3f(Vector3f* from, Vector3f* to) {
+s16 Lib_PitchVec3f(Vector3f* from, Vector3f* to) {
     return atans_flip(Lib_DistanceXZVec3f(from, to), from->y - to->y);
 }
 

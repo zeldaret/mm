@@ -706,33 +706,6 @@ typedef struct {
 } s80083BC4;
 
 typedef struct {
-/* 0x00 */ UNK_TYPE4 unk0;
-/* 0x04 */ UNK_TYPE4 unk4;
-/* 0x08 */ UNK_TYPE4 unk8;
-/* 0x0C */ UNK_TYPE1 padC[92];
-/* 0x68 */ f32 unk68;
-/* 0x6C */ f32 unk6C;
-/* 0x70 */ f32 unk70;
-/* 0x74 */ u16 unk74;
-/* 0x76 */ u16 unk76;
-/* 0x78 */ u16 unk78;
-/* 0x7A */ UNK_TYPE1 pad7A[2];
-/* 0x7C */ f32 unk7C;
-/* 0x80 */ f32 unk80;
-/* 0x84 */ f32 unk84;
-/* 0x88 */ f32 unk88;
-/* 0x8C */ f32 unk8C;
-/* 0x90 */ f32 unk90;
-/* 0x94 */ u16 unk94;
-/* 0x96 */ u16 unk96;
-/* 0x98 */ u16 unk98;
-/* 0x9A */ UNK_TYPE1 pad9A[2];
-/* 0x9C */ f32 unk9C;
-/* 0xA0 */ f32 unkA0;
-/* 0xA4 */ f32 unkA4;
-} s800CAAD0;
-
-typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[32];
 } s800E03A0;
 
