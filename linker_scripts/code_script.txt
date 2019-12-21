@@ -243,7 +243,7 @@ SECTIONS
         build/asm/z_kankyo.o(.text)
         build/src/code/z_lib.o(.text)
         build/asm/z_lifemeter.o(.text)
-        build/asm/z_lights.o(.text)
+        build/src/code/z_lights.o(.text)
         build/asm/code_0x80102C60.o(.text)
         build/asm/z_map_disp.o(.text)
         build/asm/z_map_data.o(.text)

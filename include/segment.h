@@ -3,6 +3,8 @@
 
 #include <PR/ultratypes.h>
 
+extern UNK_TYPE D_04029CB0; // D_04029CB0
+extern UNK_TYPE D_04029CF0; // D_04029CF0
 extern UNK_TYPE D_060005D0; // D_060005D0
 extern UNK_TYPE D_06001100; // D_06001100
 extern UNK_TYPE D_06001228; // D_06001228

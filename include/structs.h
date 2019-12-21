@@ -432,8 +432,7 @@ typedef struct {
 /* 0x00 */ u8 enablePosLights;
 /* 0x01 */ u8 numLights;
 /* 0x02 */ UNK_TYPE1 pad2[6];
-/* 0x08 */ Ambient ambient;
-/* 0x10 */ Light lights[7];
+/* 0x08 */ Lights7 lights;
 } LightMapper;
 
 typedef struct {

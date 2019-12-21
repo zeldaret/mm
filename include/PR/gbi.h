@@ -1259,6 +1259,16 @@ typedef struct {
   char 		pad3;
 } Light_t;
 
+// Added for Zelda decomp
+typedef struct {
+  unsigned char	col[3];		/* diffuse light value (rgba) */
+  char 		pad1;
+  unsigned char	colc[3];	/* copy of diffuse light value (rgba) */
+  char 		pad2;
+  signed short	pos[3];
+  char 		unkE;
+} LightPos_t;
+
 typedef struct {
   unsigned char	col[3];		/* ambient light value (rgba) */
   char 		pad1;
@@ -1272,6 +1282,7 @@ typedef struct {
 
 typedef union {
     Light_t	l;
+    LightPos_t	lPos;
     long long int	force_structure_alignment[2];
 } Light;
 
@@ -1629,13 +1640,13 @@ typedef union {
 }
 
 #define	gDma1p(pkt, c, s, l, p)						\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = (_SHIFTL((c), 24, 8) | _SHIFTL((p), 16, 8) |	\
 			_SHIFTL((l), 0, 16));				\
 	_g->words.w1 = (unsigned int)(s);				\
-}
+})
 
 #define	gsDma1p(c, s, l, p)						\
 {									\
@@ -1645,12 +1656,12 @@ typedef union {
 }
 
 #define	gDma2p(pkt, c, adrs, len, idx, ofs)				\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 	_g->words.w0 = (_SHIFTL((c),24,8)|_SHIFTL(((len)-1)/8,19,5)|	\
 			_SHIFTL((ofs)/8,8,8)|_SHIFTL((idx),0,8));	\
 	_g->words.w1 = (unsigned int)(adrs);				\
-}
+})
 #define	gsDma2p(c, adrs, len, idx, ofs)					\
 {									\
 	(_SHIFTL((c),24,8)|_SHIFTL(((len)-1)/8,19,5)|			\
@@ -1663,7 +1674,7 @@ typedef union {
 
 #ifdef	F3DEX_GBI_2
 # define	gSPMatrix(pkt, m, p)	\
-		_DW(gDma2p((pkt),G_MTX,(m),sizeof(Mtx),(p)^G_MTX_PUSH,0))
+		gDma2p((pkt),G_MTX,(m),sizeof(Mtx),(p)^G_MTX_PUSH,0)
 # define	gsSPMatrix(m, p)	\
 		gsDma2p(     G_MTX,(m),sizeof(Mtx),(p)^G_MTX_PUSH,0)
 #else	/* F3DEX_GBI_2 */
@@ -1727,7 +1738,7 @@ typedef union {
 		gsDma1p(      G_MOVEMEM, (v), sizeof(Vp), G_MV_VIEWPORT)
 #endif	/* F3DEX_GBI_2 */
 
-#define	gSPDisplayList(pkt,dl)	_DW(gDma1p(pkt,G_DL,dl,0,G_DL_PUSH))
+#define	gSPDisplayList(pkt,dl)	gDma1p(pkt,G_DL,dl,0,G_DL_PUSH)
 #define	gsSPDisplayList(   dl)	gsDma1p(   G_DL,dl,0,G_DL_PUSH)
 
 #define	gSPBranchList(pkt,dl)	gDma1p(pkt,G_DL,dl,0,G_DL_NOPUSH)
@@ -2790,12 +2801,12 @@ typedef union {
 
 #ifdef	F3DEX_GBI_2
 #define	gSPSetOtherMode(pkt, cmd, sft, len, data)			\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 	_g->words.w0 = (_SHIFTL(cmd,24,8)|_SHIFTL(32-(sft)-(len),8,8)|	\
 			_SHIFTL((len)-1,0,8));				\
 	_g->words.w1 = (unsigned int)(data);				\
-}
+})
 
 #define	gsSPSetOtherMode(cmd, sft, len, data)				\
 {									\
