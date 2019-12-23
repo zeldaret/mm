@@ -29,7 +29,7 @@ void EffectSS_Fini(GlobalContext* ctxt) {
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = 0;
 
-    // This code is completely useless, as data_table was juest to NULL and size to 0
+    // This code is completely useless, as data_table was just set to NULL and size to 0
     for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
         EffectSS_Delete(iter);
     }
