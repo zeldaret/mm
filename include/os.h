@@ -91,6 +91,9 @@ typedef u32 OSIntMask;
 
 typedef u32 OSPageMask;
 
+#define OS_MESG_NOBLOCK         0
+#define OS_MESG_BLOCK           1
+
 typedef void* OSMesg;
 
 typedef struct {

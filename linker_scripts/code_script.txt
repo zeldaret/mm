@@ -258,7 +258,7 @@ SECTIONS
         build/asm/z_prenmi.o(.text)
         build/asm/code_0x8012A080.o(.text)
         build/asm/z_rcp.o(.text)
-        build/asm/z_room.o(.text)
+        build/src/code/z_room.o(.text)
         build/asm/code_0x8012EC80.o(.text)
         build/asm/z_scene.o(.text)
         build/asm/z_scene_proc.o(.text)

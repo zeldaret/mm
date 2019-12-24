@@ -190,28 +190,6 @@ typedef struct {
 } DisplayList;
 
 typedef struct {
-/* 0x0 */ u8 type;
-/* 0x1 */ u8 count;
-/* 0x2 */ UNK_TYPE1 pad2[2];
-/* 0x4 */ u32 paramsStart;
-/* 0x8 */ UNK_TYPE1 pad8[4];
-} DisplayMeshHeader;
-
-typedef struct {
-/* 0x0 */ u32 opaqueDl;
-/* 0x4 */ u32 translucentDl;
-} DisplayMeshType0Params;
-
-// Size TODO
-typedef struct {
-/* 0x0 */ UNK_TYPE1 pad0[16];
-} DisplayMeshType1Params;
-
-typedef struct {
-/* 0x0 */ UNK_TYPE1 pad0[16];
-} DisplayMeshType2Params;
-
-typedef struct {
 /* 0x00 */ u32 vromStart;
 /* 0x04 */ u32 vramStart;
 /* 0x08 */ u32 size;
@@ -436,19 +414,6 @@ typedef struct {
 } LightMapper;
 
 typedef struct {
-/* 0x00 */ s8 index;
-/* 0x01 */ UNK_TYPE1 pad1[2];
-/* 0x03 */ u8 unk3;
-/* 0x04 */ s8 unk4;
-/* 0x05 */ UNK_TYPE1 pad5[1];
-/* 0x06 */ u8 enablePosLights;
-/* 0x07 */ UNK_TYPE1 pad7[1];
-/* 0x08 */ DisplayMeshHeader* meshHeader;
-/* 0x0C */ void* vramAddr;
-/* 0x10 */ UNK_TYPE1 pad10[4];
-} LoadedRoom;
-
-typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
 } ObjectFileTableEntry;
@@ -477,26 +442,29 @@ typedef struct {
 } RSPMatrix;
 
 typedef struct {
-/* 0x00 */ LoadedRoom currRoom;
-/* 0x14 */ LoadedRoom prevRoom;
-/* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
-/* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
-/* 0x31 */ s8 unk31;
-/* 0x32 */ UNK_TYPE1 pad32[2];
-/* 0x34 */ u32 activeRoomVram;
-/* 0x38 */ DmaRequest dmaReq;
-/* 0x58 */ OSMesgQueue roomDmaCallback;
-/* 0x70 */ OSMesg roomDmaCallbackMsg[1];
-/* 0x74 */ UNK_TYPE1 pad74[4];
-/* 0x78 */ s8 unk78;
-/* 0x79 */ UNK_TYPE1 pad79[1];
-/* 0x7A */ UNK_TYPE2 unk7A[3];
-} RoomContext;
-
-typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
 } RoomFileLocation;
+
+typedef struct {
+/* 0x0 */ u32 opaqueDl;
+/* 0x4 */ u32 translucentDl;
+} RoomMeshType0Params;
+
+// Fields TODO
+typedef struct {
+/* 0x0 */ u8 type;
+/* 0x1 */ u8 format; // 1 = single, 2 = multi
+} RoomMeshType1;
+
+// Size TODO
+typedef struct {
+/* 0x0 */ UNK_TYPE1 pad0[16];
+} RoomMeshType1Params;
+
+typedef struct {
+/* 0x0 */ UNK_TYPE1 pad0[16];
+} RoomMeshType2Params;
 
 // Extra information in the save context that is not saved
 typedef struct {
@@ -961,6 +929,22 @@ typedef struct {
 /* 0x0C */ Vector3s rot;
 } PosRot;
 
+typedef struct {
+/* 0x0 */ u8 type;
+/* 0x1 */ u8 count;
+/* 0x2 */ UNK_TYPE1 pad2[2];
+/* 0x4 */ RoomMeshType0Params* paramsStart;
+/* 0x8 */ RoomMeshType0Params* paramsEnd;
+} RoomMeshType0;
+
+typedef struct {
+/* 0x0 */ u8 type;
+/* 0x1 */ u8 count;
+/* 0x2 */ UNK_TYPE1 pad2[2];
+/* 0x4 */ RoomMeshType2Params* paramsStart;
+/* 0x8 */ RoomMeshType2Params* paramsEnd;
+} RoomMeshType2;
+
 // Permanent save context, kept in regular save files
 typedef struct {
 /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
@@ -1162,7 +1146,7 @@ typedef struct {
 /* 0xC0 */ UNK_TYPE1 padC0[1];
 /* 0xC1 */ u8 unkC1;
 /* 0xC2 */ u8 unkC2;
-/* 0xC3 */ UNK_TYPE1 padC3[1];
+/* 0xC3 */ u8 unkC3;
 /* 0xC4 */ RGB unkC4;
 /* 0xC7 */ s8 unkC7;
 /* 0xC8 */ s8 unkC8;
@@ -1191,6 +1175,12 @@ typedef struct {
 /* 0x11F23 */ UNK_TYPE1 pad11F23[437];
 } MessageContext;
 
+typedef union {
+/* 0x0 */ RoomMeshType0 type0;
+/* 0x0 */ RoomMeshType1 type1;
+/* 0x0 */ RoomMeshType2 type2;
+} RoomMesh;
+
 // Full save context
 typedef struct {
 /* 0x0000 */ SaveContextPerm perm;
@@ -1203,6 +1193,36 @@ typedef struct {
 /* 0x8 */ u32 count;
 /* 0xC */ ColTriInit* elemInit;
 } ColTriGroupInit;
+
+typedef struct {
+/* 0x00 */ s8 index;
+/* 0x01 */ UNK_TYPE1 pad1[2];
+/* 0x03 */ u8 unk3;
+/* 0x04 */ s8 unk4;
+/* 0x05 */ UNK_TYPE1 pad5[1];
+/* 0x06 */ u8 enablePosLights;
+/* 0x07 */ UNK_TYPE1 pad7[1];
+/* 0x08 */ RoomMesh* mesh;
+/* 0x0C */ void* vramAddr;
+/* 0x10 */ UNK_TYPE1 pad10[4];
+} Room;
+
+typedef struct {
+/* 0x00 */ Room currRoom;
+/* 0x14 */ Room prevRoom;
+/* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
+/* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
+/* 0x31 */ s8 unk31;
+/* 0x32 */ UNK_TYPE1 pad32[2];
+/* 0x34 */ u32 activeRoomVram;
+/* 0x38 */ DmaRequest dmaReq;
+/* 0x58 */ OSMesgQueue roomDmaCallback;
+/* 0x70 */ OSMesg roomDmaCallbackMsg[1];
+/* 0x74 */ UNK_TYPE1 pad74[4];
+/* 0x78 */ s8 unk78;
+/* 0x79 */ s8 unk79;
+/* 0x7A */ UNK_TYPE2 unk7A[3];
+} RoomContext;
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
@@ -1518,7 +1538,7 @@ typedef void(*global_context_func)(GlobalContext*);
 
 typedef void(*light_map_positional_func)(LightMapper* mapper, void* params, GlobalContext* ctxt);
 
-typedef void(*room_draw_func)(GlobalContext* ctxt, LoadedRoom* room, u32 flags);
+typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 
 typedef struct {
 /* 0x00 */ draw_func unk0;

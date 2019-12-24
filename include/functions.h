@@ -164,7 +164,7 @@ void func_800860B8(void); // func_800860B8
 void func_800860D8(void); // func_800860D8
 void func_80086110(void); // func_80086110
 void func_80086258(void); // func_80086258
-void func_80086280(void); // func_80086280
+void func_80086280(char* param_1, u32 param_2); // func_80086280
 void func_800862B4(void); // func_800862B4
 void* StartHeap_AllocMin1(u32 size); // func_800862E0
 void StartHeap_FreeNull(void* pvParm1); // func_80086310
@@ -2012,7 +2012,7 @@ void func_8010A194(void); // func_8010A194
 void func_8010A208(void); // func_8010A208
 void func_8010A238(void); // func_8010A238
 void func_8010A2AC(void); // func_8010A2AC
-void func_8010A2DC(void); // func_8010A2DC
+void func_8010A2DC(GlobalContext* ctxt); // func_8010A2DC
 void func_8010A33C(GlobalContext* ctxt, s16 param_2); // func_8010A33C
 void func_8010A410(void); // func_8010A410
 void func_8010A430(void); // func_8010A430
@@ -2373,19 +2373,19 @@ void func_8012CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_8012CF0C(GraphicsContext* gCtxt, int iParm2, int iParm3, unsigned int uParm4, u8 param_5, u8 param_6); // func_8012CF0C
 void func_8012D374(void); // func_8012D374
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3); // func_8012D40C
-void Room_nop8012D510(GlobalContext* ctxt, LoadedRoom* room, UNK_PTR param_3, UNK_TYPE1 param_4); // func_8012D510
-void Room_DrawType3Mesh(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012D528
-void Room_DrawType0Mesh(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012D53C
-void Room_DrawType2Mesh(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012D750
-void func_8012DEE8(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012DEE8
-void func_8012E254(void); // func_8012E254
-void func_8012E32C(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012E32C
-void Room_DrawType1Mesh(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012E6A8
+void Room_nop8012D510(GlobalContext* ctxt, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4); // func_8012D510
+void Room_DrawType3Mesh(GlobalContext* ctxt, Room* room, u32 flags); // func_8012D528
+void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags); // func_8012D53C
+void Room_DrawType2Mesh(GlobalContext* ctxt, Room* room, u32 flags); // func_8012D750
+void func_8012DEE8(GlobalContext* ctxt, Room* room, u32 flags); // func_8012DEE8
+u32 func_8012E254(int param_1, GlobalContext* ctxt); // func_8012E254
+void func_8012E32C(GlobalContext* ctxt, Room* room, u32 flags); // func_8012E32C
+void Room_DrawType1Mesh(GlobalContext* ctxt, Room* room, u32 flags); // func_8012E6A8
 void Room_Init(GlobalContext* ctxt, RoomContext* roomCtxt); // func_8012E710
 u32 Room_AllocateAndLoad(GlobalContext* ctxt, RoomContext* roomCtxt); // func_8012E750
-unsigned int Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 index); // func_8012E96C
+s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 index); // func_8012E96C
 s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt); // func_8012EAA8
-void Room_DrawRoomMesh(GlobalContext* ctxt, LoadedRoom* room, u32 flags); // func_8012EBA8
+void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags); // func_8012EBA8
 void func_8012EBF8(GlobalContext* ctxt, RoomContext* roomCtxt); // func_8012EBF8
 unsigned int func_8012EC80(GlobalContext* ctxt); // func_8012EC80
 void func_8012ED34(s16 param_1); // func_8012ED34
@@ -3891,7 +3891,7 @@ void func_801A3AC0(void); // func_801A3AC0
 void func_801A3AEC(void); // func_801A3AEC
 void func_801A3B48(void); // func_801A3B48
 void func_801A3B90(void); // func_801A3B90
-void func_801A3CD8(void); // func_801A3CD8
+void func_801A3CD8(s8 param_1); // func_801A3CD8
 void func_801A3CF4(void); // func_801A3CF4
 void func_801A3D98(void); // func_801A3D98
 void func_801A3E38(void); // func_801A3E38
