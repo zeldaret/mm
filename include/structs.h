@@ -304,8 +304,8 @@ typedef struct {
 
 // Font textures are loaded into here
 typedef struct {
-/* 0x0000 */ u8 unk0[128][120][2];
-/* 0x7800 */ u8 unk7800[128][93];
+/* 0x0000 */ u8 unk0[2][120][128];
+/* 0x7800 */ u8 unk7800[93][128];
 } Font;
 
 typedef struct {
@@ -1168,7 +1168,9 @@ typedef struct {
 typedef struct {
 /* 0x00000 */ View view;
 /* 0x00168 */ Font font;
-/* 0x0A7E8 */ UNK_TYPE1 padA7E8[30492];
+/* 0x0A7E8 */ UNK_TYPE1 padA7E8[30472];
+/* 0x11EF0 */ u8 unk11EF0;
+/* 0x11EF1 */ UNK_TYPE1 pad11EF1[19];
 /* 0x11F04 */ u16 unk11F04;
 /* 0x11F06 */ UNK_TYPE1 pad11F06[28];
 /* 0x11F22 */ u8 unk11F22;
@@ -1942,7 +1944,7 @@ struct GlobalContext {
 /* 0x187FC */ z_Matrix unk187FC;
 /* 0x1883C */ UNK_TYPE1 pad1883C[8];
 /* 0x18844 */ u8 unk18844;
-/* 0x18845 */ UNK_TYPE1 pad18845[1];
+/* 0x18845 */ u8 unk18845;
 /* 0x18846 */ u16 sceneNumActorsToLoad;
 /* 0x18848 */ u8 numRooms;
 /* 0x18849 */ UNK_TYPE1 pad18849[3];

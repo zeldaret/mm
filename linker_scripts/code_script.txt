@@ -239,7 +239,7 @@ SECTIONS
         build/asm/z_horse.o(.text)
         build/asm/z_jpeg.o(.text)
         build/asm/code_0x800F4A10.o(.text)
-        build/asm/z_kanfont.o(.text)
+        build/src/code/z_kanfont.o(.text)
         build/asm/z_kankyo.o(.text)
         build/src/code/z_lib.o(.text)
         build/asm/z_lifemeter.o(.text)

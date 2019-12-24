@@ -825,7 +825,7 @@ void func_800B90F4(void); // func_800B90F4
 void func_800B9120(ActorContext* actCtxt); // func_800B9120
 void Actor_Init(GlobalContext* ctxt, ActorContext* actCtxt, UNK_TYPE4 uParm3); // func_800B9170
 void func_800B9334(GlobalContext* ctxt, ActorContext* actCtxt); // func_800B9334
-void func_800B948C(void); // func_800B948C
+Actor* func_800B948C(GlobalContext* ctxt); // func_800B948C
 void func_800B9780(GlobalContext* ctxt, ActorContext* actCtxt); // func_800B9780
 void Actor_DrawActor(GlobalContext* ctxt, Actor* actor); // func_800B9A04
 void func_800B9D1C(Actor* actor); // func_800B9D1C
@@ -1711,9 +1711,9 @@ void func_800F4A10(GlobalContext* ctxt); // func_800F4A10
 void func_800F4C0C(GlobalContext* ctxt); // func_800F4C0C
 void func_800F4E20(GlobalContext* ctxt); // func_800F4E20
 void func_800F4F28(GlobalContext* ctxt); // func_800F4F28
-void Kanfont_Nop800F4F40(void); // func_800F4F40
-void Kanfont_LoadAsciiChar(GlobalContext* ctxt, s8 character, s32 iParm3); // func_800F4F54
-void Kanfont_LoadMessageBoxEnd(Font* font, u32 type); // func_800F4FC0
+void Kanfont_Nop800F4F40(GlobalContext* ctxt, UNK_TYPE4 param_2, UNK_TYPE4 param_3); // func_800F4F40
+void Kanfont_LoadAsciiChar(GlobalContext* ctxt, u8 character, s32 iParm3); // func_800F4F54
+void Kanfont_LoadMessageBoxEnd(Font* font, u16 type); // func_800F4FC0
 void Kanfont_LoadOrderedFont(Font* font); // func_800F5004
 void func_800F5090(void); // func_800F5090
 void func_800F50D4(void); // func_800F50D4
