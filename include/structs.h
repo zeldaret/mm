@@ -1226,6 +1226,8 @@ typedef struct {
 /* 0x7A */ UNK_TYPE2 unk7A[3];
 } RoomContext;
 
+typedef struct ActorBgFuKaiten ActorBgFuKaiten;
+
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
 typedef struct ActorEnBji01 ActorEnBji01;
@@ -2162,6 +2164,17 @@ struct BgActor {
 /* 0x154 */ u32 unk154;
 /* 0x158 */ u8 bgFlags;
 /* 0x159 */ UNK_TYPE1 pad159[3];
+};
+
+struct ActorBgFuKaiten {
+/* 0x000 */ BgActor bg;
+/* 0x15C */ UNK_TYPE1 pad15C[4];
+/* 0x160 */ f32 elevation;
+/* 0x164 */ f32 bouceHeight;
+/* 0x168 */ s16 rotationSpeed;
+/* 0x16A */ s16 bounceSpeed;
+/* 0x16C */ s16 bounce;
+/* 0x16E */ UNK_TYPE1 pad16E[2];
 };
 
 struct ActorBgIknvObj {

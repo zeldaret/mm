@@ -21,6 +21,7 @@ build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
 build/src/code/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
+build/src/actors/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 test.txt: OPTIMIZATION := -O2 -g3
 test.txt: CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
@@ -30,6 +31,7 @@ CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 test.txt: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/actors/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
@@ -51,29 +53,33 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/libultra/gu/*) \
            $(wildcard src/code/*) \
            $(wildcard src/boot_O2_g3/*) \
-           $(wildcard src/boot_O1/*)
+           $(wildcard src/boot_O1/*) \
+           $(wildcard src/actors/Bg_Fu_Kaiten/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 
 
 ROM := rom.z64
 
+BUILD_DIR := ./build
+
 # make build directories
-$(shell mkdir -p build/asm)
-$(shell mkdir -p build/baserom)
-$(shell mkdir -p build/baserom_pre_dmadata)
-$(shell mkdir -p build/comp)
-$(shell mkdir -p build/decomp)
-$(shell mkdir -p build/decomp_pre_dmadata)
-$(shell mkdir -p build/src)
-$(shell mkdir -p build/src/libultra)
-$(shell mkdir -p build/src/libultra/os)
-$(shell mkdir -p build/src/libultra/io)
-$(shell mkdir -p build/src/libultra/libc)
-$(shell mkdir -p build/src/libultra/gu)
-$(shell mkdir -p build/src/code)
-$(shell mkdir -p build/src/boot_O2_g3)
-$(shell mkdir -p build/src/boot_O1)
+$(shell mkdir -p $(BUILD_DIR)/asm)
+$(shell mkdir -p $(BUILD_DIR)/baserom)
+$(shell mkdir -p $(BUILD_DIR)/baserom_pre_dmadata)
+$(shell mkdir -p $(BUILD_DIR)/comp)
+$(shell mkdir -p $(BUILD_DIR)/decomp)
+$(shell mkdir -p $(BUILD_DIR)/decomp_pre_dmadata)
+$(shell mkdir -p $(BUILD_DIR)/src)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra/os)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra/io)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra/libc)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra/gu)
+$(shell mkdir -p $(BUILD_DIR)/src/code)
+$(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3)
+$(shell mkdir -p $(BUILD_DIR)/src/boot_O1)
+$(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Fu_Kaiten)
 
 check: $(ROM)
 	@md5sum -c checksum.md5
@@ -90,6 +96,9 @@ build/code_pre_dmadata.bin: build/code_pre_dmadata.elf
 build/ovl_title_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
 
+build/ovl_Bg_Fu_Kaiten_pre_dmadata.bin: build/code_pre_dmadata.elf
+	$(MIPS_BINUTILS)objcopy --dump-section ovl_Bg_Fu_Kaiten=$@ $<
+
 build/boot.bin: build/code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
 
@@ -98,6 +107,9 @@ build/code.bin: build/code.elf
 
 build/ovl_title.bin: build/code.elf
 	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
+
+build/ovl_Bg_Fu_Kaiten.bin: build/code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section ovl_Bg_Fu_Kaiten=$@ $<
 
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
 	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
@@ -135,6 +147,9 @@ build/decomp/code: build/code.bin
 build/decomp/ovl_title: build/ovl_title.bin
 	cp $< $@
 
+build/decomp/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten.bin
+	cp $< $@
+
 build/baserom_pre_dmadata/boot: build/boot_pre_dmadata.bin
 	cp $< $@
 
@@ -144,9 +159,16 @@ build/decomp_pre_dmadata/code: build/code_pre_dmadata.bin
 build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
 	cp $< $@
 
+build/decomp_pre_dmadata/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten_pre_dmadata.bin
+	cp $< $@
+
+build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o: src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.c include/*
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+	./tools/overlay.py build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o build/src/actors/Bg_Fu_Kaiten/overlay.s
+	$(AS) $(ASFLAGS )build/src/actors/Bg_Fu_Kaiten/overlay.s -o build/src/actors/Bg_Fu_Kaiten/overlay.o
 
 disasm:
-	@./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/object_addr_variables.py -v ./tables/pre_boot_variables.py
+	@./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/pre_boot_variables.py
 	@while read -r file; do \
 		./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt

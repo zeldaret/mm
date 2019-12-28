@@ -10942,6 +10942,7 @@ extern UNK_TYPE1 D_80ACB3B0; // D_80ACB3B0
 extern OverlayBlockSizes bgOpenSpotOverlayInfo; // D_80ACB3C0
 extern u32 bgOpenSpotOverlayRelocations[7]; // D_80ACB3D4
 extern u32 bgOpenSpotOverlayInfoOffset; // D_80ACB3FC
+extern ActorInitData bgFuKaitenInitData; // D_80ACB630
 extern f32 D_80ACB650; // D_80ACB650
 extern OverlayBlockSizes bgFuKaitenOverlayInfo; // D_80ACB660
 extern u32 bgFuKaitenOverlayRelocations[8]; // D_80ACB674
@@ -13835,7 +13836,7 @@ extern UNK_TYPE4 D_80BD52FC; // D_80BD52FC
 extern OverlayBlockSizes bgIkanaBombwallOverlayInfo; // D_80BD5300
 extern u32 bgIkanaBombwallOverlayRelocations[39]; // D_80BD5314
 extern u32 bgIkanaBombwallOverlayInfoOffset; // D_80BD53BC
-extern ActorInitData bgIkanaRayInitVar; // D_80BD55D0
+extern ActorInitData bgIkanaRayInitData; // D_80BD55D0
 extern UNK_TYPE1 D_80BD55F0; // D_80BD55F0
 extern ActorInitVar bgIkanaRayCompInit[4]; // D_80BD561C
 extern UNK_TYPE1 D_80BD562C; // D_80BD562C

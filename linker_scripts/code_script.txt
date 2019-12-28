@@ -1,5 +1,8 @@
 SECTIONS
 {
+    /* Objects with .gptab.data sections error if they are not referenced, for some reason */
+    /DISCARD/ : { *(.gptab.data) }
+
     boot 0x80080060:
     {
         build/src/boot_O2_g3/boot_0x80080060.o(.text)
@@ -2694,8 +2697,10 @@ SECTIONS
 
     ovl_Bg_Fu_Kaiten :
     {
-        build/asm/ovl_Bg_Fu_Kaiten_0x80ACB400.o(.text)
-        build/asm/ovl_Bg_Fu_Kaiten_data.o(.text)
+        build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.text)
+        build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.data)
+        build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.rodata)
+        build/src/actors/Bg_Fu_Kaiten/overlay.o(.ovl)
     }
 
     ovl_Obj_Aqua :
