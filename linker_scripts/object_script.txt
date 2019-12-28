@@ -1,7 +1,8 @@
 D_04029CB0 = 0x04029CB0;
 D_04029CF0 = 0x04029CF0;
-D_06001100 = 0x06001100;
-D_06001228 = 0x06001228;
+
+object_ikana_obj_001100 = 0x06001100;
+object_ikana_obj_001228 = 0x06001228;
 
 object_fu_kaiten_0005D0 = 0x060005D0;
 object_fu_kaiten_002D30 = 0x06002D30;

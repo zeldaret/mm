@@ -54,7 +54,8 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/code/*) \
            $(wildcard src/boot_O2_g3/*) \
            $(wildcard src/boot_O1/*) \
-           $(wildcard src/actors/Bg_Fu_Kaiten/*)
+           $(wildcard src/actors/Bg_Fu_Kaiten/*) \
+           $(wildcard src/actors/Bg_Ikana_Ray/*)
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 
@@ -80,6 +81,7 @@ $(shell mkdir -p $(BUILD_DIR)/src/code)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O1)
 $(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Fu_Kaiten)
+$(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Ikana_Ray)
 
 check: $(ROM)
 	@md5sum -c checksum.md5
@@ -87,29 +89,11 @@ check: $(ROM)
 $(ROM): $(ROM_FILES)
 	@./tools/makerom.py ./tables/dmadata_table.py $@
 
-build/boot_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
+build/%_pre_dmadata.bin: build/code_pre_dmadata.elf
+	$(MIPS_BINUTILS)objcopy --dump-section $*=$@ $<
 
-build/code_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS)objcopy --dump-section code=$@ $<
-
-build/ovl_title_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
-
-build/ovl_Bg_Fu_Kaiten_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS)objcopy --dump-section ovl_Bg_Fu_Kaiten=$@ $<
-
-build/boot.bin: build/code.elf
-	$(MIPS_BINUTILS)objcopy --dump-section boot=$@ $<
-
-build/code.bin: build/code.elf
-	$(MIPS_BINUTILS)objcopy --dump-section code=$@ $<
-
-build/ovl_title.bin: build/code.elf
-	$(MIPS_BINUTILS)objcopy --dump-section ovl_title=$@ $<
-
-build/ovl_Bg_Fu_Kaiten.bin: build/code.elf
-	$(MIPS_BINUTILS)objcopy --dump-section ovl_Bg_Fu_Kaiten=$@ $<
+build/%.bin: build/code.elf
+	$(MIPS_BINUTILS)objcopy --dump-section $*=$@ $<
 
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
 	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
@@ -150,6 +134,9 @@ build/decomp/ovl_title: build/ovl_title.bin
 build/decomp/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten.bin
 	cp $< $@
 
+build/decomp/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray.bin
+	cp $< $@
+
 build/baserom_pre_dmadata/boot: build/boot_pre_dmadata.bin
 	cp $< $@
 
@@ -162,10 +149,9 @@ build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
 build/decomp_pre_dmadata/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten_pre_dmadata.bin
 	cp $< $@
 
-build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o: src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.c include/*
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
-	./tools/overlay.py build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o build/src/actors/Bg_Fu_Kaiten/overlay.s
-	$(AS) $(ASFLAGS )build/src/actors/Bg_Fu_Kaiten/overlay.s -o build/src/actors/Bg_Fu_Kaiten/overlay.o
+build/decomp_pre_dmadata/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray_pre_dmadata.bin
+	cp $< $@
+
 
 disasm:
 	@./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/pre_boot_variables.py
@@ -183,6 +169,11 @@ build/baserom_pre_dmadata/%: baserom/%
 
 build/asm/%.o: asm/%.asm
 	$(AS) $(ASFLAGS) $^ -o $@
+
+build/src/actors/%.o: src/actors/%.c include/*
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+	./tools/overlay.py $@ build/src/actors/$*_overlay.s
+	$(AS) $(ASFLAGS) build/src/actors/$*_overlay.s -o build/src/actors/$*_overlay.o
 
 build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<

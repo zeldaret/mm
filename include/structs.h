@@ -2059,7 +2059,7 @@ typedef struct {
 
 typedef struct {
 /* 0x000 */ Actor base;
-/* 0x144 */ ColCylinder cylinder;
+/* 0x144 */ ColCylinder collision;
 /* 0x190 */ AnimatedTexture* animatedTextures;
 /* 0x194 */ actor_func update;
 } ActorBgIkanaRay;

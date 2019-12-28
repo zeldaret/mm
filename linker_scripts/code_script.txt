@@ -2700,7 +2700,7 @@ SECTIONS
         build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.text)
         build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.data)
         build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten.o(.rodata)
-        build/src/actors/Bg_Fu_Kaiten/overlay.o(.ovl)
+        build/src/actors/Bg_Fu_Kaiten/z_bg_fu_kaiten_overlay.o(.ovl)
     }
 
     ovl_Obj_Aqua :
@@ -3703,8 +3703,10 @@ SECTIONS
 
     ovl_Bg_Ikana_Ray :
     {
-        build/asm/ovl_Bg_Ikana_Ray_0x80BD53C0.o(.text)
-        build/asm/ovl_Bg_Ikana_Ray_data.o(.text)
+        build/src/actors/Bg_Ikana_Ray/z_bg_ikana_ray.o(.text)
+        build/src/actors/Bg_Ikana_Ray/z_bg_ikana_ray.o(.data)
+        build/src/actors/Bg_Ikana_Ray/z_bg_ikana_ray.o(.rodata)
+        build/src/actors/Bg_Ikana_Ray/z_bg_ikana_ray_overlay.o(.ovl)
     }
 
     ovl_Bg_Ikana_Shutter :
