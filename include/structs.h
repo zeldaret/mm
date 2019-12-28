@@ -46,6 +46,12 @@ typedef struct {
 } ActorMeshPolyLists;
 
 typedef struct {
+/* 0x0 */ s8 segment;
+/* 0x2 */ s16 type;
+/* 0x4 */ u32 params;
+} AnimatedTexture;
+
+typedef struct {
 /* 0x0 */ u16 floorHead;
 /* 0x2 */ u16 wallHead;
 /* 0x4 */ u16 ceilingHead;
@@ -1944,7 +1950,8 @@ struct GlobalContext {
 /* 0x187B0 */ z_Matrix unk187B0;
 /* 0x187F0 */ UNK_TYPE1 pad187F0[12];
 /* 0x187FC */ z_Matrix unk187FC;
-/* 0x1883C */ UNK_TYPE1 pad1883C[8];
+/* 0x1883C */ UNK_TYPE1 pad1883C[4];
+/* 0x18840 */ u32 unk18840;
 /* 0x18844 */ u8 unk18844;
 /* 0x18845 */ u8 unk18845;
 /* 0x18846 */ u16 sceneNumActorsToLoad;
@@ -1958,7 +1965,7 @@ struct GlobalContext {
 /* 0x18860 */ void* exitList;
 /* 0x18864 */ void* pathList;
 /* 0x18868 */ UNK_TYPE1 pad18868[4];
-/* 0x1886C */ void* textureAnimations;
+/* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
 /* 0x18870 */ UNK_TYPE1 pad18870[4];
 /* 0x18874 */ u8 unk18874;
 /* 0x18875 */ s8 unk18875;
@@ -2049,6 +2056,13 @@ typedef struct {
 /* 0x260 */ u8 unk260;
 /* 0x261 */ UNK_TYPE1 pad261[3];
 } ActorArrowFire;
+
+typedef struct {
+/* 0x000 */ Actor base;
+/* 0x144 */ ColCylinder cylinder;
+/* 0x190 */ AnimatedTexture* animatedTextures;
+/* 0x194 */ actor_func update;
+} ActorBgIkanaRay;
 
 struct ActorBgMbarChair {
 /* 0x000 */ Actor base;

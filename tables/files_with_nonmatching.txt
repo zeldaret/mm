@@ -8,3 +8,4 @@ z_actor
 z_DLF
 z_lights
 z_room
+z_scene_proc

@@ -484,7 +484,6 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
-// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -890,7 +889,7 @@ void func_800BDC5C(void); // func_800BDC5C
 void func_800BDCF4(void); // func_800BDCF4
 void func_800BDFB0(void); // func_800BDFB0
 void func_800BDFC0(GlobalContext* ctxt, UNK_TYPE4 uParm2); // func_800BDFC0
-void func_800BE03C(void); // func_800BE03C
+void func_800BE03C(GlobalContext* ctxt, Gfx* dl); // func_800BE03C
 void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800BE0B8
 void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800BE184
 void func_800BE22C(void); // func_800BE22C
@@ -2440,42 +2439,42 @@ void func_801306A4(GlobalContext* ctxt); // func_801306A4
 s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneHeaderEntry* header); // func_801306E8
 u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset); // func_80130768
 void func_80130784(void); // func_80130784
-void func_801307C0(void); // func_801307C0
-void func_801307F4(void); // func_801307F4
+void func_801307C0(GlobalContext* ctxt); // func_801307C0
+void func_801307F4(GlobalContext* ctxt); // func_801307F4
 void func_80130834(void); // func_80130834
-void func_801308A0(void); // func_801308A0
+void SceneProc_DrawType0Texture(GlobalContext* ctxt, unsigned int param_2, UNK_TYPE4 param_3); // func_801308A0
 void func_80130940(void); // func_80130940
-void func_801309F4(void); // func_801309F4
-void func_80130A94(void); // func_80130A94
-void func_80130C5C(void); // func_80130C5C
+void SceneProc_DrawType1Texture(void); // func_801309F4
+void func_80130A94(GlobalContext* ctxt, unsigned int param_2, u8* param_3, u8* param_4); // func_80130A94
+void SceneProc_DrawType2Texture(void); // func_80130C5C
 void func_80130D0C(void); // func_80130D0C
-void func_80130D3C(void); // func_80130D3C
+void SceneProc_DrawType3Texture(void); // func_80130D3C
 void func_80130F58(void); // func_80130F58
 void func_8013115C(void); // func_8013115C
-void func_801311B4(void); // func_801311B4
-void func_80131580(void); // func_80131580
-void func_80131690(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80131690
-void func_80131758(void); // func_80131758
-void func_8013178C(void); // func_8013178C
-void func_801317C0(void); // func_801317C0
+void SceneProc_DrawType4Texture(void); // func_801311B4
+void SceneProc_DrawType5Texture(void); // func_80131580
+void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 param_3, u32 step, u32 flags); // func_80131690
+void SceneProc_DrawAllSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_80131758
+void SceneProc_DrawOpaqueSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_8013178C
+void SceneProc_DrawTranslucentSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_801317C0
 void func_801317F4(void); // func_801317F4
 void func_8013182C(void); // func_8013182C
 void func_80131864(void); // func_80131864
-void func_8013189C(void); // func_8013189C
-void func_801318C8(void); // func_801318C8
-void func_801318F4(void); // func_801318F4
+void SceneProc_DrawAllAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_8013189C
+void SceneProc_DrawOpaqueAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_801318C8
+void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_801318F4
 void func_80131920(void); // func_80131920
 void func_8013194C(void); // func_8013194C
 void func_80131978(void); // func_80131978
-void func_801319A4(void); // func_801319A4
-void func_801319CC(void); // func_801319CC
-void func_80131CDC(void); // func_80131CDC
-void func_80131DE4(void); // func_80131DE4
+void func_801319A4(GlobalContext* ctxt); // func_801319A4
+void func_801319CC(GlobalContext* ctxt); // func_801319CC
+void func_80131CDC(GlobalContext* ctxt); // func_80131CDC
+void func_80131DE4(GlobalContext* ctxt); // func_80131DE4
 void func_80131DF0(void); // func_80131DF0
 void func_80131E58(s32* param_1, s32 param_2, u32 param_3); // func_80131E58
-void func_80131EC0(void); // func_80131EC0
-void func_80131F90(void); // func_80131F90
-void func_80131FC0(void); // func_80131FC0
+void func_80131EC0(GlobalContext* ctxt); // func_80131EC0
+void func_80131F90(GlobalContext* ctxt); // func_80131F90
+void func_80131FC0(GlobalContext* ctxt); // func_80131FC0
 EntranceRecord* SceneTable_LookupEntrance(u32 entrance); // func_801322C0
 s32 SceneTable_LookupEntranceScene(u32 entrance); // func_8013230C
 s32 SceneTable_LookupEntranceAbsoluteScene(u32 entrance); // func_80132338
@@ -3736,8 +3735,6 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
-// UNK_RET func_8019AE40(UNK_ARGS);
-// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
@@ -15720,14 +15717,14 @@ void func_80BD5118(void); // func_80BD5118
 void func_80BD5134(void); // func_80BD5134
 void func_80BD51DC(void); // func_80BD51DC
 void func_80BD5200(void); // func_80BD5200
-void func_80BD53C0(void); // func_80BD53C0
-void func_80BD546C(void); // func_80BD546C
-void func_80BD5498(void); // func_80BD5498
-void func_80BD54BC(void); // func_80BD54BC
-void func_80BD5500(void); // func_80BD5500
-void func_80BD5530(void); // func_80BD5530
-void func_80BD556C(void); // func_80BD556C
-void func_80BD5590(void); // func_80BD5590
+void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD53C0
+void BgIkanaRay_Fini(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD546C
+void BgIkanaRay_SetDeactivated(ActorBgIkanaRay* this); // func_80BD5498
+void BgIkanaRay_UpdateCheckForActivation(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD54BC
+void BgIkanaRay_SetActivated(ActorBgIkanaRay* this); // func_80BD5500
+void BgIkanaRay_UpdateActivated(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5530
+void BgIkanaRay_Main(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD556C
+void BgIkanaRay_Draw(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5590
 void func_80BD5690(void); // func_80BD5690
 void func_80BD5728(void); // func_80BD5728
 void func_80BD57F4(void); // func_80BD57F4

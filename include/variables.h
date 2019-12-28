@@ -1023,9 +1023,9 @@ extern UNK_TYPE1 D_801C2660; // D_801C2660
 extern scene_header_func sceneHeaderFuncTable[31]; // D_801C26A8
 extern UNK_TYPE1 D_801C2730; // D_801C2730
 extern ObjectFileTableEntry objectFileTable[643]; // D_801C2740
-extern UNK_TYPE1 D_801C3B60; // D_801C3B60
-extern UNK_PTR D_801C3BB8; // D_801C3BB8
-extern UNK_PTR D_801C3BD8; // D_801C3BD8
+extern Gfx D_801C3B60[11]; // D_801C3B60
+extern global_context_func D_801C3BB8[8]; // D_801C3BB8
+extern UNK_PTR gSceneProcDrawFuncs; // D_801C3BD8
 extern UNK_TYPE1 D_801C3C50; // D_801C3C50
 extern UNK_TYPE1 D_801C3C80; // D_801C3C80
 extern UNK_TYPE1 D_801C3C88; // D_801C3C88
@@ -2710,8 +2710,8 @@ extern UNK_TYPE1 D_801F5A2C; // D_801F5A2C
 extern GlobalContext* D_801F5A90; // D_801F5A90
 extern UNK_TYPE1 D_801F5A96; // D_801F5A96
 extern UNK_TYPE2 D_801F5A98; // D_801F5A98
-extern UNK_TYPE1 D_801F5AA0; // D_801F5AA0
-extern UNK_TYPE1 D_801F5AA4; // D_801F5AA4
+extern u32 gSceneProcStep; // D_801F5AA0
+extern u32 gSceneProcFlags; // D_801F5AA4
 extern UNK_TYPE1 D_801F5AA8; // D_801F5AA8
 extern UNK_TYPE1 D_801F5AB0; // D_801F5AB0
 extern UNK_TYPE1 D_801F5AB4; // D_801F5AB4
@@ -13837,9 +13837,8 @@ extern OverlayBlockSizes bgIkanaBombwallOverlayInfo; // D_80BD5300
 extern u32 bgIkanaBombwallOverlayRelocations[39]; // D_80BD5314
 extern u32 bgIkanaBombwallOverlayInfoOffset; // D_80BD53BC
 extern ActorInitData bgIkanaRayInitData; // D_80BD55D0
-extern UNK_TYPE1 D_80BD55F0; // D_80BD55F0
+extern ColCylinderInit bgIkanaRayCylinderInit; // D_80BD55F0
 extern ActorInitVar bgIkanaRayCompInit[4]; // D_80BD561C
-extern UNK_TYPE1 D_80BD562C; // D_80BD562C
 extern OverlayBlockSizes bgIkanaRayOverlayInfo; // D_80BD5630
 extern u32 bgIkanaRayOverlayRelocations[17]; // D_80BD5644
 extern u32 bgIkanaRayOverlayInfoOffset; // D_80BD568C

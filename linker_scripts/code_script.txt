@@ -264,7 +264,7 @@ SECTIONS
         build/src/code/z_room.o(.text)
         build/asm/code_0x8012EC80.o(.text)
         build/asm/z_scene.o(.text)
-        build/asm/z_scene_proc.o(.text)
+        build/src/code/z_scene_proc.o(.text)
         build/asm/z_scene_table.o(.text)
         build/asm/code_0x801323D0.o(.text)
         build/asm/z_skelanime.o(.text)
