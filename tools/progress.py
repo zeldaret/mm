@@ -38,7 +38,7 @@ if __name__ == "__main__":
                 size = int(line_split[2], 16)
                 obj_file = line_split[3]
 
-                if (section == ".text" and not current_section + '_data' in obj_file and not current_section + '_todata' in obj_file):
+                if (section == ".text" and not current_section + '_data' in obj_file and not current_section + '_rodata' in obj_file):
                     if (obj_file.startswith("build/src")):
                         src_amounts[current_section] += size
                         formatted_name = obj_file[len('build/'):] # remove build/ prefix
