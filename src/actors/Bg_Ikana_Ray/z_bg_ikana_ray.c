@@ -40,7 +40,7 @@ void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt) {
     Collision_InitCylinderWithData(ctxt, collision, (Actor*)this, &bgIkanaRayCylinderInit);
     Collision_CylinderMoveToActor((Actor*)this, &this->collision);
 
-    this->animatedTextures = (AnimatedTexture*)Lib_PtrSegToVirt((u32)object_ikana_obj_001228);
+    this->animatedTextures = (AnimatedTexture*)Lib_PtrSegToVirt(object_ikana_obj_001228);
 
     if (Actor_GetSwitchFlag(ctxt, this->base.variable & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);

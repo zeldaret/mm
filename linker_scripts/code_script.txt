@@ -374,7 +374,7 @@ SECTIONS
         build/asm/code_rodata_z_player_lib.o(.text)
         build/asm/code_rodata_0x8012A080.o(.text)
         build/asm/code_rodata_z_room.o(.text)
-        build/asm/code_rodata_z_scene_proc.o(.text)
+        build/src/code/z_scene_proc.o(.rodata)
         build/asm/code_rodata_z_scene_table.o(.text)
         build/asm/code_rodata_z_skin.o(.text)
         build/asm/code_rodata_0x80138BA0.o(.text)

@@ -2732,12 +2732,12 @@ _DW({									\
 #endif	/* F3DEX_GBI_2 */
 
 #define gSPEndDisplayList(pkt)						\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = _SHIFTL(G_ENDDL, 24, 8);				\
 	_g->words.w1 = 0;						\
-}
+})
 
 #define gsSPEndDisplayList()						\
 {									\
@@ -3035,12 +3035,12 @@ _DW({									\
 #define	gsDPSetCombineMode(a, b)	gsDPSetCombineLERP(a, b)
 
 #define	gDPSetColor(pkt, c, d)						\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = _SHIFTL(c, 24, 8);				\
 	_g->words.w1 = (unsigned int)(d);				\
-}
+})
 
 #define	gsDPSetColor(c, d)						\
 {									\
@@ -4325,12 +4325,12 @@ _DW({									\
 }
 
 #define gDPNoParam(pkt, cmd)						\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = _SHIFTL(cmd, 24, 8);				\
 	_g->words.w1 = 0;						\
-}
+})
 
 #define gsDPNoParam(cmd)						\
 {									\

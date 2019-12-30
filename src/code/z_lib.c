@@ -649,30 +649,30 @@ f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach)
 
 void Lib_Nop801004FC(void) {}
 
-u32 Lib_PtrSegToVirt(u32 ptr) {
-    return(gRspSegmentPhysAddrs[(ptr << 4) >> 28] + (ptr & 0xFFFFFF)) + 0x80000000;
+u32 Lib_PtrSegToVirt(void* ptr) {
+    return(gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000;
 }
 
-u32 Lib_PtrSegToVirtNull(u32 ptr) {
-    if ((ptr >> 28) == 0) {
-        return ptr;
+u32 Lib_PtrSegToVirtNull(void* ptr) {
+    if (((u32)ptr >> 28) == 0) {
+        return (u32)ptr;
     }
 
-    return(gRspSegmentPhysAddrs[(ptr << 4) >> 28] + (ptr & 0xFFFFFF)) + 0x80000000;
+    return(gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000;
 }
 
-u32 Lib_PtrSegToK0(u32 ptr) {
-    if (ptr == 0) {
+u32 Lib_PtrSegToK0(void* ptr) {
+    if (ptr == NULL) {
         return 0;
     } else {
-        return ptr + 0x80000000;
+        return (u32)ptr + 0x80000000;
     }
 }
 
-u32 Lib_PtrSegToK0Null(u32 ptr) {
-    if (ptr == 0) {
+u32 Lib_PtrSegToK0Null(void* ptr) {
+    if (ptr == NULL) {
         return 0;
     } else {
-        return ptr + 0x80000000;
+        return (u32)ptr + 0x80000000;
     }
 }

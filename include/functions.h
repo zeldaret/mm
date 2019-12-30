@@ -484,6 +484,7 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
+// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -1860,10 +1861,10 @@ void Lib_TranslateAndRotateYVec3f(Vector3f* translation, s16 rotation, Vector3f*
 void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst); // func_801001B8
 f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach); // func_80100448
 void Lib_Nop801004FC(void); // func_801004FC
-u32 Lib_PtrSegToVirt(u32 ptr); // func_80100504
-u32 Lib_PtrSegToVirtNull(u32 ptr); // func_8010053C
-u32 Lib_PtrSegToK0(u32 ptr); // func_80100584
-u32 Lib_PtrSegToK0Null(u32 ptr); // func_801005A0
+u32 Lib_PtrSegToVirt(void* ptr); // func_80100504
+u32 Lib_PtrSegToVirtNull(void* ptr); // func_8010053C
+u32 Lib_PtrSegToK0(void* ptr); // func_80100584
+u32 Lib_PtrSegToK0Null(void* ptr); // func_801005A0
 void LifeMeter_Init(GlobalContext* ctxt); // func_801005C0
 void LifeMeter_UpdateColors(GlobalContext* ctxt); // func_8010069C
 UNK_TYPE4 func_80100A80(GlobalContext* ctxt); // func_80100A80
@@ -2439,42 +2440,42 @@ void func_801306A4(GlobalContext* ctxt); // func_801306A4
 s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneHeaderEntry* header); // func_801306E8
 u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset); // func_80130768
 void func_80130784(void); // func_80130784
-void func_801307C0(GlobalContext* ctxt); // func_801307C0
-void func_801307F4(GlobalContext* ctxt); // func_801307F4
-void func_80130834(void); // func_80130834
-void SceneProc_DrawType0Texture(GlobalContext* ctxt, unsigned int param_2, UNK_TYPE4 param_3); // func_801308A0
-void func_80130940(void); // func_80130940
-void SceneProc_DrawType1Texture(void); // func_801309F4
-void func_80130A94(GlobalContext* ctxt, unsigned int param_2, u8* param_3, u8* param_4); // func_80130A94
-void SceneProc_DrawType2Texture(void); // func_80130C5C
-void func_80130D0C(void); // func_80130D0C
-void SceneProc_DrawType3Texture(void); // func_80130D3C
-void func_80130F58(void); // func_80130F58
-void func_8013115C(void); // func_8013115C
-void SceneProc_DrawType4Texture(void); // func_801311B4
-void SceneProc_DrawType5Texture(void); // func_80131580
-void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 param_3, u32 step, u32 flags); // func_80131690
+void SceneProc_DrawCurrentSceneAnimatedTextures(GlobalContext* ctxt); // func_801307C0
+void SceneProc_DrawSceneConfig0(GlobalContext* ctxt); // func_801307F4
+Gfx* SceneProc_SetTile1Layer(GlobalContext* ctxt, ScrollingTextureParams* params); // func_80130834
+void SceneProc_DrawType0Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params); // func_801308A0
+Gfx* SceneProc_SetTile2Layers(GlobalContext* ctxt, ScrollingTextureParams* params); // func_80130940
+void SceneProc_DrawType1Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params); // func_801309F4
+void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTexturePrimColor* primColor, RGBA8* envColor); // func_80130A94
+void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params); // func_80130C5C
+s32 SceneProc_Lerp(s32 a, s32 b, f32 t); // func_80130D0C
+void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params); // func_80130D3C
+f32 SceneProc_Interpolate(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame); // func_80130F58
+u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame); // func_8013115C
+void SceneProc_DrawType4Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params); // func_801311B4
+void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTextureParams* params); // func_80131580
+void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 flashingAlpha, u32 step, u32 flags); // func_80131690
 void SceneProc_DrawAllSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_80131758
 void SceneProc_DrawOpaqueSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_8013178C
 void SceneProc_DrawTranslucentSceneAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures); // func_801317C0
-void func_801317F4(void); // func_801317F4
-void func_8013182C(void); // func_8013182C
-void func_80131864(void); // func_80131864
+void SceneProc_DrawAllSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha); // func_801317F4
+void SceneProc_DrawOpaqueSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha); // func_8013182C
+void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha); // func_80131864
 void SceneProc_DrawAllAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_8013189C
 void SceneProc_DrawOpaqueAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_801318C8
 void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, u32 step); // func_801318F4
-void func_80131920(void); // func_80131920
-void func_8013194C(void); // func_8013194C
-void func_80131978(void); // func_80131978
-void func_801319A4(GlobalContext* ctxt); // func_801319A4
-void func_801319CC(GlobalContext* ctxt); // func_801319CC
-void func_80131CDC(GlobalContext* ctxt); // func_80131CDC
-void func_80131DE4(GlobalContext* ctxt); // func_80131DE4
-void func_80131DF0(void); // func_80131DF0
-void func_80131E58(s32* param_1, s32 param_2, u32 param_3); // func_80131E58
-void func_80131EC0(GlobalContext* ctxt); // func_80131EC0
-void func_80131F90(GlobalContext* ctxt); // func_80131F90
-void func_80131FC0(GlobalContext* ctxt); // func_80131FC0
+void SceneProc_DrawAllAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step); // func_80131920
+void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step); // func_8013194C
+void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step); // func_80131978
+void SceneProc_DrawSceneConfig1(GlobalContext* ctxt); // func_801319A4
+void SceneProc_DrawSceneConfig3(GlobalContext* ctxt); // func_801319CC
+void SceneProc_DrawSceneConfig4(GlobalContext* ctxt); // func_80131CDC
+void SceneProc_DrawSceneConfig2(GlobalContext* ctxt); // func_80131DE4
+void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags); // func_80131DF0
+void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags); // func_80131E58
+void SceneProc_DrawSceneConfig5(GlobalContext* ctxt); // func_80131EC0
+void SceneProc_DrawSceneConfig7(GlobalContext* ctxt); // func_80131F90
+void SceneProc_DrawSceneConfig6(GlobalContext* ctxt); // func_80131FC0
 EntranceRecord* SceneTable_LookupEntrance(u32 entrance); // func_801322C0
 s32 SceneTable_LookupEntranceScene(u32 entrance); // func_8013230C
 s32 SceneTable_LookupEntranceAbsoluteScene(u32 entrance); // func_80132338
@@ -3735,6 +3736,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
+// UNK_RET func_8019AE40(UNK_ARGS);
+// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8

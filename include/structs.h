@@ -48,7 +48,7 @@ typedef struct {
 typedef struct {
 /* 0x0 */ s8 segment;
 /* 0x2 */ s16 type;
-/* 0x4 */ u32 params;
+/* 0x4 */ void* params;
 } AnimatedTexture;
 
 typedef struct {
@@ -189,6 +189,12 @@ typedef struct {
 } CycleSceneFlags;
 
 typedef struct {
+/* 0x0 */ u16 cycleLength;
+/* 0x4 */ Gfx** textureDls;
+/* 0x8 */ u8* textureDlOffsets;
+} CyclingTextureParams;
+
+typedef struct {
 /* 0x0 */ u32 size;
 /* 0x4 */ void* unk4;
 /* 0x8 */ Gfx* append;
@@ -307,6 +313,14 @@ typedef struct {
 /* 0x6 */ u8 unk6;
 /* 0x7 */ u8 unk7;
 } FireObjLightParams;
+
+typedef struct {
+/* 0x0 */ u8 red;
+/* 0x1 */ u8 green;
+/* 0x2 */ u8 blue;
+/* 0x3 */ u8 alpha;
+/* 0x4 */ u8 lodFrac;
+} FlashingTexturePrimColor;
 
 // Font textures are loaded into here
 typedef struct {
@@ -443,6 +457,13 @@ typedef struct {
 } RGB;
 
 typedef struct {
+/* 0x0 */ u8 red;
+/* 0x1 */ u8 green;
+/* 0x2 */ u8 blue;
+/* 0x3 */ u8 alpha;
+} RGBA8;
+
+typedef struct {
 /* 0x00 */ s16 intPart[16];
 /* 0x20 */ u16 fracPart[16];
 } RSPMatrix;
@@ -538,11 +559,18 @@ typedef struct {
 /* 0x0 */ u32 romStart;
 /* 0x4 */ u32 romEnd;
 /* 0x8 */ UNK_TYPE1 pad8[3];
-/* 0xB */ u8 unkB;
+/* 0xB */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
 /* 0xC */ UNK_TYPE1 padC[1];
 /* 0xD */ u8 unkD;
 /* 0xE */ UNK_TYPE1 padE[2];
 } SceneTableEntry;
+
+typedef struct {
+/* 0x0 */ s8 xStep;
+/* 0x1 */ s8 yStep;
+/* 0x2 */ u8 width;
+/* 0x3 */ u8 height;
+} ScrollingTextureParams;
 
 typedef struct {
 /* 0x0 */ s8 letterboxTarget;
@@ -891,6 +919,14 @@ typedef union {
 /* 0x0 */ F3DVertexColor color;
 /* 0x0 */ F3DVertexNormal normal;
 } F3DVertex;
+
+typedef struct {
+/* 0x0 */ u16 cycleLength;
+/* 0x2 */ u16 numKeyFrames;
+/* 0x4 */ FlashingTexturePrimColor* primColors;
+/* 0x8 */ RGBA8* envColors;
+/* 0xC */ u16* keyFrames;
+} FlashingTextureParams;
 
 typedef struct {
 /* 0x00 */ u32 ramLocation;
@@ -1564,6 +1600,8 @@ typedef struct {
 
 typedef void(*scene_header_func)(GlobalContext* ctxt, SceneHeaderEntry* entry);
 
+typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* params);
+
 typedef struct LightsList LightsList;
 
 typedef struct LoadedParticleEntry LoadedParticleEntry;
@@ -1913,7 +1951,7 @@ struct ActorPostDrawParams {
 struct GlobalContext {
 /* 0x00000 */ ContextCommon common;
 /* 0x000A4 */ s16 currentScene;
-/* 0x000A6 */ u8 unkA6;
+/* 0x000A6 */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
 /* 0x000A7 */ UNK_TYPE1 padA7[9];
 /* 0x000B0 */ void* currentSceneVram;
 /* 0x000B4 */ UNK_TYPE1 padB4[4];
