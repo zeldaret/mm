@@ -3,7 +3,7 @@
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_PrintLists.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SetPostDrawParams.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SetDrawParams.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_PostDraw.asm")
 
@@ -99,13 +99,13 @@ GLOBAL_ASM("asm/nonmatching/z_actor//func_800B6680.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_MarkForDeath.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B672C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_InitCurrPosition.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B675C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SetHeight.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B67A0.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SetRotationFromDrawRotation.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B67C0.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_InitDrawRotation.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SetScale.asm")
 
@@ -137,13 +137,13 @@ GLOBAL_ASM("asm/nonmatching/z_actor//func_800B6C58.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_YawBetweenActors.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B6D00.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_YawBetweenActorsTop.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_YawToPoint.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_PitchBetweenActors.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B6D7C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_PitchBetweenActorsTop.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_PitchToPoint.asm")
 
@@ -155,7 +155,7 @@ GLOBAL_ASM("asm/nonmatching/z_actor//Actor_XZDistanceBetweenActors.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_XZDistanceToPoint.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B6E6C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_CalcOffsetOrientedToDrawRotation.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_YDistance.asm")
 
@@ -187,17 +187,17 @@ GLOBAL_ASM("asm/nonmatching/z_actor//func_800B72E0.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//func_800B72F8.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B7320.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsLinkFacingActor.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B7378.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsActorFacedByActor.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B73E0.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsActorFacingLink.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B742C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsActorFacingActor.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B748C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsActorFacingLinkAndWithinRange.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B750C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_IsActorFacingActorAndWithinRange.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//func_800B75A0.asm")
 
@@ -327,9 +327,9 @@ GLOBAL_ASM("asm/nonmatching/z_actor//Actor_Init.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//func_800B9334.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B948C.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_UpdateActor.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//func_800B9780.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_UpdateAll.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_DrawActor.asm")
 
@@ -337,7 +337,7 @@ GLOBAL_ASM("asm/nonmatching/z_actor//func_800B9D1C.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_DrawAllSetup.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//Actor_RecordDrawnActor.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_RecordUndrawnActor.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//func_800B9E84.asm")
 
@@ -363,13 +363,13 @@ GLOBAL_ASM("asm/nonmatching/z_actor//Actor_RemoveFromTypeList.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_FreeOverlay.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SpawnNoParentDefaultUnk38Unk20.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_Spawn.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_LoadOverlay.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//Actor_Spawn.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SpawnWithParentAndCutscene.asm")
 
-GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SpawnDefaultUnk38.asm")
+GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SpawnWithParent.asm")
 
 GLOBAL_ASM("asm/nonmatching/z_actor//Actor_SpawnTransitionActors.asm")
 

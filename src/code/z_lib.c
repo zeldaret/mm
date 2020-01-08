@@ -75,7 +75,7 @@ s32 Lib_StepTowardsCheckFramerateScaled_s(s16* start, s16 target, s16 step) {
     f32 f0;
 
     if (step != 0) {
-        f0 = D_801D1508;
+        f0 = gFramerateDivisorHalf;
 
         if ((s16)(*start - target) > 0) {
             step = -step;

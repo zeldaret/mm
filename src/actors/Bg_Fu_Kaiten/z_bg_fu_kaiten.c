@@ -37,7 +37,7 @@ void BgFuKaiten_Fini(ActorBgFuKaiten* this, GlobalContext* ctxt) {
 
 void BgFuKaiten_UpdateRotation(ActorBgFuKaiten* this) {
     f32 f0;
-    this->bg.base.postDrawParams.rotation.y += this->rotationSpeed;
+    this->bg.base.drawParams.rot.y += this->rotationSpeed;
     if (this->rotationSpeed > 0)
     {
         f0 = this->rotationSpeed * .002f;
@@ -47,9 +47,9 @@ void BgFuKaiten_UpdateRotation(ActorBgFuKaiten* this) {
 
 void BgFuKaiten_UpdateHeight(ActorBgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
-    this->bg.base.unk24.pos.y = this->bg.base.initPosRot.pos.y + this->elevation + this->bouceHeight;
+    this->bg.base.currPosRot.pos.y = this->bg.base.initPosRot.pos.y + this->elevation + this->bouceHeight;
 
-    this->bg.base.unk24.pos.y -= this->bouceHeight * Lib_cos(this->bounce);
+    this->bg.base.currPosRot.pos.y -= this->bouceHeight * Lib_cos(this->bounce);
 }
 
 void BgFuKaiten_Main(ActorBgFuKaiten* this, GlobalContext* ctxt) {

@@ -1,22 +1,22 @@
 #include <ultra64.h>
 #include <global.h>
 
-void nop_80081820(void) {}
+void CIC6105_Nop80081820(void) {}
 
-void nop_80081828(void) {}
+void CIC6105_Nop80081828(void) {}
 
-void func_80081830(void) {
-    func_8008481C(80, 200, &D_80098280, (UNK_PTR)(*(u32*)0xA4040010));
-    func_8008481C(40, 184, &D_80098290, &D_800994D0);
-    func_8008481C(56, 192, &D_800982A4, &D_800994DC);
+void CIC6105_PrintRomInfo(void) {
+    FaultDraw_DrawText(80, 200, &D_80098280, (UNK_PTR)(*(u32*)0xA4040010));
+    FaultDraw_DrawText(40, 184, &D_80098290, &D_800994D0);
+    FaultDraw_DrawText(56, 192, &D_800982A4, &D_800994DC);
 }
 
-void func_8008189C(void) {
-    func_800819F0(&D_8009BE38, (u32)(void(*)(UNK_TYPE, UNK_TYPE))func_80081830, 0, 0);
+void CIC6105_AddRomInfoFaultPage(void) {
+    Fault_AddClient(&romInfoFaultClient, (fault_client_func*)CIC6105_PrintRomInfo, 0, 0);
 }
 
-void func_800818D0(void) {
-    func_80081AD4(&D_8009BE38);
+void CIC6105_RemoveRomInfoFaultPage(void) {
+    Fault_RemoveClient(&romInfoFaultClient);
 }
 
 void func_800818F4(void) {

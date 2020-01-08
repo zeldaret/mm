@@ -31,8 +31,8 @@ s32 func_800E8FA4(Actor* actor, Vector3f* param_2, Vector3s* param_3, Vector3s* 
     s16 targetYaw;
     s16 yawDiffFromTarget;
 
-    targetPitch = Lib_PitchVec3f(&actor->unk3C.pos,param_2);
-    targetYaw = Lib_YawVec3f(&actor->unk3C.pos,param_2) - actor->unk24.rot.y;
+    targetPitch = Lib_PitchVec3f(&actor->topPosRot.pos,param_2);
+    targetYaw = Lib_YawVec3f(&actor->topPosRot.pos,param_2) - actor->currPosRot.rot.y;
 
     Lib_ScaleMaxMin_s(&param_3->x, targetPitch, 6, 2000, 1);
     param_3->x = (param_3->x < -6000)? -6000 : ((6000 < param_3->x)? 6000 : param_3->x);
@@ -58,11 +58,11 @@ s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s
     Vector3f local_14;
 
     player = (ctxt->actorContext).actorTypeLists[2].head;
-    actor->unk3C.pos = actor->unk24.pos;
-    actor->unk3C.pos.y += param_5;
+    actor->topPosRot.pos = actor->currPosRot.pos;
+    actor->topPosRot.pos.y += param_5;
 
     if (((ctxt->cutsceneContext).state == 0) && (D_801D0D50 == 0)) {
-        sVar3 = actor->unk92 - actor->postDrawParams.rotation.y;
+        sVar3 = actor->yawToLink - actor->drawParams.rot.y;
         // TODO is this shifting because of a missing cast?
         if (0x42ff < (sVar3 < 0? ((-sVar3 << 0x10) >> 0x10) : ((sVar3 << 0x10) >> 0x10))) {
             func_800E8F08(param_3,param_4);
@@ -73,7 +73,7 @@ s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s
     if (((ctxt->cutsceneContext).state != 0) || (D_801D0D50 != 0)) {
         local_14 = ctxt->view.eye;
     } else {
-        local_14 = player->unk3C.pos;
+        local_14 = player->topPosRot.pos;
     }
 
     func_800E8FA4(actor,&local_14,param_3,param_4);
@@ -86,10 +86,10 @@ s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s
     Vector3f local_14;
 
     player = (ctxt->actorContext).actorTypeLists[2].head;
-    actor->unk3C.pos = param_5;
+    actor->topPosRot.pos = param_5;
 
     if (((ctxt->cutsceneContext).state == 0) && (D_801D0D50 == 0)) {
-        sVar3 = actor->unk92 - actor->postDrawParams.rotation.y;
+        sVar3 = actor->yawToLink - actor->drawParams.rot.y;
         // TODO is this shifting because of a missing cast?
         if (0x42ff < (sVar3 < 0? ((-sVar3 << 0x10) >> 0x10) : ((sVar3 << 0x10) >> 0x10))) {
             func_800E8F08(param_3,param_4);
@@ -100,7 +100,7 @@ s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s
     if (((ctxt->cutsceneContext).state != 0) || (D_801D0D50 != 0)) {
         local_14 = ctxt->view.eye;
     } else {
-        local_14 = player->unk3C.pos;
+        local_14 = player->topPosRot.pos;
     }
 
     func_800E8FA4(actor,&local_14,param_3,param_4);

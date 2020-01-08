@@ -25,7 +25,7 @@ void BgCheck2_UpdateActorPosition(BgCheckContext* bgCtxt, s32 index, Actor* acto
         bgCtxt->dyna.actorMeshes[index].prevParams.pos.y,
         bgCtxt->dyna.actorMeshes[index].prevParams.pos.z);
 
-    if (invert_matrix(&prevMatrix, &prevMatrixInv) == 2) return;
+    if (Matrix_Invert(&prevMatrix, &prevMatrixInv) == 2) return;
 
     Matrix_MakeTranslationRotationYXZScale(&currMatrix,
         bgCtxt->dyna.actorMeshes[index].currParams.scale.x,
@@ -38,10 +38,10 @@ void BgCheck2_UpdateActorPosition(BgCheckContext* bgCtxt, s32 index, Actor* acto
         bgCtxt->dyna.actorMeshes[index].currParams.pos.y,
         bgCtxt->dyna.actorMeshes[index].currParams.pos.z);
 
-    Matrix_MultiplyByVectorXYZ(&prevMatrixInv, &actor->unk24.pos, &posWithInv);
+    Matrix_MultiplyByVectorXYZ(&prevMatrixInv, &actor->currPosRot.pos, &posWithInv);
     Matrix_MultiplyByVectorXYZ(&currMatrix, &posWithInv, &newPos);
 
-    actor->unk24.pos = newPos;
+    actor->currPosRot.pos = newPos;
 }
 
 void BgCheck2_UpdateActorYRotation(BgCheckContext* bgCtxt, s32 index, Actor* actor) {
@@ -55,8 +55,8 @@ void BgCheck2_UpdateActorYRotation(BgCheckContext* bgCtxt, s32 index, Actor* act
         ((ActorPlayer*)actor)->unkAD4 += angleChange;
     }
 
-    actor->postDrawParams.rotation.y += angleChange;
-    actor->unk24.rot.y += angleChange;
+    actor->drawParams.rot.y += angleChange;
+    actor->currPosRot.rot.y += angleChange;
 }
 
 void BgCheck2_AttachToMesh(BgCheckContext* bgCtxt, Actor* actor, s32 index) {

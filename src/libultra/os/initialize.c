@@ -47,11 +47,11 @@ void osInitialize(void) {
     }
 
     if (osTvType == 0) {
-        D_80097E58 = 0x02F5B2D2;
+        osViClock = 0x02F5B2D2;
     } else if (osTvType == 2) {
-        D_80097E58 = 0x02E6025C;
+        osViClock = 0x02E6025C;
     } else {
-        D_80097E58 = 0x02E6D354;
+        osViClock = 0x02E6D354;
     }
 
     if((__osGetCause() & 0x1000) != 0) {
