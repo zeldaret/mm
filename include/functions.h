@@ -48,9 +48,9 @@ void CIC6105_PrintRomInfo(void); // func_80081830
 void CIC6105_AddRomInfoFaultPage(void); // func_8008189C
 void CIC6105_RemoveRomInfoFaultPage(void); // func_800818D0
 void func_800818F4(void); // func_800818F4
-void Fault_Nop80081920(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_80081920
+void Fault_Nop80081920(UNK_TYPE4 param_1, ...); // func_80081920
 void Fault_Log(char* str, ...); // func_8008193C
-void Fault_Nop80081958(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_80081958
+void Fault_Nop80081958(UNK_TYPE4 param_1, ...); // func_80081958
 void Fault_WaitMilliseconds2(u32 ms); // func_80081980
 void Fault_AddClient(FaultClient* client, fault_client_func* func, void* arg1, void* arg2); // func_800819F0
 void Fault_RemoveClient(FaultClient* client); // func_80081AD4
