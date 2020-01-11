@@ -48,7 +48,7 @@ SECTIONS
         build/asm/bzero.o(.text)
         build/asm/boot_0x800896D0.o(.text)
         build/asm/siacs.o(.text)
-        build/asm/controller.o(.text)
+        build/src/libultra/io/controller.o(.text)
         build/src/libultra/os/createthread.o(.text)
         build/asm/contreaddata.o(.text)
         build/asm/boot_0x8008A170.o(.text)

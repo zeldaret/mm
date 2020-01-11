@@ -1,0 +1,10 @@
+#include <PR/ultratypes.h>
+#include <PR/gbi.h>
+#include <io/controller.h>
+#include <osint.h>
+#include <viint.h>
+#include <guint.h>
+#include <os.h>
+#include <stdlib.h>
+#include <xstdio.h>
+#include <unk.h>

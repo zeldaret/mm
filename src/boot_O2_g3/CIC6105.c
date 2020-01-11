@@ -6,9 +6,9 @@ void CIC6105_Nop80081820(void) {}
 void CIC6105_Nop80081828(void) {}
 
 void CIC6105_PrintRomInfo(void) {
-    FaultDraw_DrawText(80, 200, &D_80098280, (UNK_PTR)(*(u32*)0xA4040010));
-    FaultDraw_DrawText(40, 184, &D_80098290, &D_800994D0);
-    FaultDraw_DrawText(56, 192, &D_800982A4, &D_800994DC);
+    FaultDraw_DrawText(80, 200, D_80098280, (UNK_PTR)(*(u32*)0xA4040010));
+    FaultDraw_DrawText(40, 184, D_80098290, &D_800994D0);
+    FaultDraw_DrawText(56, 192, D_800982A4, &D_800994DC);
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {

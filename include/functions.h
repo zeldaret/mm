@@ -1,14 +1,7 @@
 #ifndef _FUNCTIONS_H_
 #define _FUNCTIONS_H_
 
-#include <PR/ultratypes.h>
-#include <osint.h>
-#include <viint.h>
-#include <guint.h>
-#include <unk.h>
 #include <structs.h>
-#include <stdlib.h>
-#include <xstdio.h>
 
 void start(void); // func_80080060
 void Idle_ClearMemory(void* begin, void* end); // func_80080150
@@ -245,7 +238,7 @@ void func_80087854(void); // func_80087854
 int sprintf(char* s, char* fmt, ...); // func_800878A4
 void func_80087900(void); // func_80087900
 void func_80087934(void); // func_80087934
-void wait_cycles(void); // func_80087960
+void wait_cycles(OSTime uParm1); // func_80087960
 void func_800879CC(void); // func_800879CC
 void func_80087A1C(void); // func_80087A1C
 void func_80087A6C(u32 param_1); // func_80087A6C
@@ -267,11 +260,11 @@ void osSpTaskLoad(OSTask* intp); // func_8008868C
 void osSpTaskStartGo(OSTask* tp); // func_800887F4
 void __ull_rshift(void); // func_80088840
 void __ull_rem(void); // func_8008886C
-u64 __ull_div(void); // func_800888A8
+u64 __ull_div(u64 param_1, u64 param_2); // func_800888A8
 void __ll_lshift(void); // func_800888E4
 void __ll_rem(void); // func_80088910
 void __ll_div(void); // func_8008894C
-u64 __ll_mul(void); // func_800889A8
+u64 __ll_mul(u64 param_1, u64 param_2); // func_800889A8
 void __ull_divremi(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800889D8
 void __ll_mod(void); // func_80088A38
 void __ll_rshift(void); // func_80088AD4
@@ -295,7 +288,7 @@ void func_80089944(void); // func_80089944
 void __osSiCreateAccessQueue(void); // func_80089AA0
 void __osSiGetAccess(void); // func_80089AF0
 void __osSiRelAccess(void); // func_80089B34
-void osContInit(void); // func_80089B60
+s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data); // func_80089B60
 void __osContGetInitData(u8* pattern, OSContStatus* data); // func_80089CBC
 void __osPackRequestData(u8 cmd); // func_80089D68
 void osCreateThread(OSThread* t, OSId id, osCreateThread_func* entry, void* arg, void* sp, OSPri p); // func_80089E40
@@ -374,7 +367,7 @@ void osInvalICache(void* vaddr, s32 nbytes); // func_8008F270
 void osInvalDCache(void* vaddr, s32 nbytes); // func_8008F2F0
 void __osTimerServicesInit(void); // func_8008F3A0
 void __osTimerInterrupt(void); // func_8008F42C
-void __osSetTimerIntr(void); // func_8008F5A4
+void __osSetTimerIntr(OSTime tim); // func_8008F5A4
 void __osInsertTimer(OSTimer* t); // func_8008F644
 void func_8008F7D0(void); // func_8008F7D0
 int __osSpDeviceBusy(void); // func_8008FA00
@@ -450,12 +443,12 @@ void func_80093CC0(void); // func_80093CC0
 u32 __osGetCause(void); // func_80093D90
 void func_80093DA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80093DA0
 void func_80093FF0(void); // func_80093FF0
-s32 osSetTimer(OSTimer* t, OSTime interval, OSMesgQueue* mq, OSMesg msg); // func_80094150
+s32 osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg); // func_80094150
 void _Ldtob(void); // func_800942E0
 void func_80094770(void); // func_80094770
 void func_80094828(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_80094828
 ldiv_t ldiv(s32 __numer, s32 __denom); // func_80094DF0
-lldiv_t* lldiv(lldiv_t* __return_storage_ptr__, s64 __numer, s64 __denom); // func_80094E74
+lldiv_t* lldiv(s64 __numer, s64 __denom); // func_80094E74
 void _Litob(void); // func_80094F80
 s32 __osSiRawWriteIo(u32 devAddr, u32 data); // func_80095220
 u32 __osSpGetStatus(void); // func_80095270

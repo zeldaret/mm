@@ -1,11 +1,7 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
-#include <PR/ultratypes.h>
-#include <PR/gbi.h>
-#include <unk.h>
-#include <os.h>
-#include <stdlib.h>
+#include <all_types.h>
 
 typedef struct {
 /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority

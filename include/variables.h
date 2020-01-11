@@ -1,14 +1,7 @@
 #ifndef _VARIABLES_H_
 #define _VARIABLES_H_
 
-#include <PR/ultratypes.h>
-#include <osint.h>
-#include <viint.h>
-#include <guint.h>
-#include <unk.h>
 #include <structs.h>
-#include <stdlib.h>
-#include <xstdio.h>
 #include <dmadata.h>
 #include <segment.h>
 #include <pre_boot_variables.h>
@@ -308,12 +301,12 @@ extern OSTask tmp_task; // D_8009CD70
 extern UNK_TYPE1 D_8009CDB0; // D_8009CDB0
 extern UNK_TYPE1 D_8009CEB0; // D_8009CEB0
 extern UNK_TYPE1 __osSiAccessQueue; // D_8009CEB8
-extern UNK_TYPE4 __osContPifRam; // D_8009CED0
-extern UNK_TYPE4 D_8009CF0C; // D_8009CF0C
+extern OSPifRam __osContPifRam; // D_8009CED0
+extern UNK_TYPE1 D_8009CF0C; // D_8009CF0C
 extern u8 __osContLastCmd; // D_8009CF10
 extern u8 __osMaxControllers; // D_8009CF11
-extern UNK_TYPE1 D_8009CF38; // D_8009CF38
-extern UNK_TYPE1 D_8009CF50; // D_8009CF50
+extern OSMesgQueue D_8009CF38; // D_8009CF38
+extern OSMesg D_8009CF50[1]; // D_8009CF50
 extern UNK_TYPE1 D_8009CF60; // D_8009CF60
 extern UNK_TYPE4 D_8009CF70; // D_8009CF70
 extern UNK_TYPE1 __osThreadSave; // D_8009CF80

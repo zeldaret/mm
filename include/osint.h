@@ -21,8 +21,7 @@ typedef struct {
     /* 0x4 */ OSPri priority;
 } __OSThreadTail;
 
-#include <variables.h> // TODO all variables should be moved to the file that logically defines them
-                       // maybe put externs here?
-#include <functions.h>
+#include <global.h> // TODO this is just so libultra files can see function and variable declarations.
+                    // Once all data sections have been split up, it should be removed.
 
 #endif

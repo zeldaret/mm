@@ -1,6 +1,8 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
+#include <PR/ultratypes.h>
+
 typedef struct {
     /* 0x00 */ u32 ramarray[15];
     /* 0x3C */ u32 pifstatus;

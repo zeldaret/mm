@@ -696,14 +696,7 @@ class Disassembler:
                     "\n"
                     )
 
-            f.write("#include <PR/ultratypes.h>\n"
-                    "#include <osint.h>\n"
-                    "#include <viint.h>\n"
-                    "#include <guint.h>\n"
-                    "#include <unk.h>\n"
-                    "#include <structs.h>\n"
-                    "#include <stdlib.h>\n"
-                    "#include <xstdio.h>\n"
+            f.write("#include <structs.h>\n"
                     "\n"
                     )
 
@@ -721,14 +714,7 @@ class Disassembler:
                     "\n"
                     )
 
-            f.write("#include <PR/ultratypes.h>\n"
-                    "#include <osint.h>\n"
-                    "#include <viint.h>\n"
-                    "#include <guint.h>\n"
-                    "#include <unk.h>\n"
-                    "#include <structs.h>\n"
-                    "#include <stdlib.h>\n"
-                    "#include <xstdio.h>\n"
+            f.write("#include <structs.h>\n"
                     "#include <dmadata.h>\n"
                     "#include <segment.h>\n"
                     "#include <pre_boot_variables.h>\n"
