@@ -382,13 +382,6 @@ typedef struct {
 } InputInfo;
 
 typedef struct {
-/* 0x00 */ InputInfo current;
-/* 0x06 */ InputInfo last;
-/* 0x0C */ InputInfo pressEdge;
-/* 0x12 */ InputInfo releaseEdge;
-} InputStruct;
-
-typedef struct {
 /* 0x0 */ u8 type;
 /* 0x2 */ u16 params[6];
 } LightInfo;
@@ -707,8 +700,6 @@ typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
 
-typedef void(*fault_update_input_func)(InputStruct* input);
-
 typedef unsigned long(*func)(void);
 
 typedef void(*func_ptr)(void);
@@ -934,27 +925,27 @@ typedef union {
 } F3DVertex;
 
 typedef struct {
-/* 0x00 */ void* framebuffer;
-/* 0x04 */ u16 width;
-/* 0x06 */ u16 height;
-/* 0x08 */ u16 minY;
-/* 0x0A */ u16 maxY;
-/* 0x0C */ u16 minX;
-/* 0x0E */ u16 maxX;
-/* 0x10 */ u16 foregroundColor;
-/* 0x12 */ u16 backgroundColor;
+/* 0x00 */ void* fb;
+/* 0x04 */ u16 w;
+/* 0x06 */ u16 h;
+/* 0x08 */ u16 yStart;
+/* 0x0A */ u16 yEnd;
+/* 0x0C */ u16 xStart;
+/* 0x0E */ u16 xEnd;
+/* 0x10 */ u16 foreColor;
+/* 0x12 */ u16 backColor;
 /* 0x14 */ u16 cursorX;
 /* 0x16 */ u16 cursorY;
 /* 0x18 */ u32* font;
-/* 0x1C */ u8 charWidth;
-/* 0x1D */ u8 charHeight;
-/* 0x1E */ s8 charXPad;
-/* 0x1F */ s8 charYPad;
-/* 0x20 */ u16 foregroundColors[10];
-/* 0x34 */ u8 nextCharSetsForeground;
-/* 0x35 */ u8 copyToLog;
-/* 0x38 */ func_ptr pageEndFunc;
-} FaultDrawContext;
+/* 0x1C */ u8 charW;
+/* 0x1D */ u8 charH;
+/* 0x1E */ s8 charWPad;
+/* 0x1F */ s8 charHPad;
+/* 0x20 */ u16 printColors[10];
+/* 0x34 */ u8 escCode;
+/* 0x35 */ u8 osSyncPrintfEnabled;
+/* 0x38 */ func_ptr inputCallback;
+} FaultDrawer;
 
 typedef struct {
 /* 0x0 */ u16 cycleLength;
@@ -986,6 +977,13 @@ typedef struct {
 /* 0x04 */ Vector3f unk4;
 /* 0x10 */ Vector3f unk10;
 } GlobalContext1F78;
+
+typedef struct {
+/* 0x00 */ InputInfo current;
+/* 0x06 */ InputInfo last;
+/* 0x0C */ InputInfo pressEdge;
+/* 0x12 */ InputInfo releaseEdge;
+} Input;
 
 typedef struct {
 /* 0x0 */ u8 type;
@@ -1088,6 +1086,8 @@ typedef struct {
 /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
 /* 0x164 */ UNK_TYPE1 pad164[4];
 } View;
+
+typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
 /* 0x00 */ Vector3s min;
@@ -1467,12 +1467,12 @@ typedef struct EffFootmark EffFootmark;
 
 typedef struct EffectTableInfo EffectTableInfo;
 
-typedef struct FaultAddressConverterClient FaultAddressConverterClient;
+typedef struct FaultAddrConvClient FaultAddrConvClient;
 
-struct FaultAddressConverterClient {
-/* 0x0 */ FaultAddressConverterClient* next;
-/* 0x4 */ fault_address_converter_func func;
-/* 0x8 */ void* arg;
+struct FaultAddrConvClient {
+/* 0x0 */ FaultAddrConvClient* next;
+/* 0x4 */ fault_address_converter_func callback;
+/* 0x8 */ void* param;
 };
 
 typedef struct FaultClient FaultClient;
@@ -1480,26 +1480,26 @@ typedef struct FaultClient FaultClient;
 struct FaultClient {
 /* 0x0 */ FaultClient* next;
 /* 0x4 */ fault_client_func callback;
-/* 0x8 */ void* arg1;
-/* 0xC */ void* arg2;
+/* 0x8 */ void* param0;
+/* 0xC */ void* param1;
 };
 
 typedef struct {
 /* 0x000 */ OSThread thread;
 /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
-/* 0x7B0 */ OSMesgQueue faultEventQueue;
-/* 0x7C8 */ OSMesg faultEventMesg[1];
-/* 0x7CC */ u8 unk7CC;
-/* 0x7CD */ u8 faultType; // 1 - CPU Break; 2 - Fault; 3 - Unknown
+/* 0x7B0 */ OSMesgQueue queue;
+/* 0x7C8 */ OSMesg msg[1];
+/* 0x7CC */ u8 exitDebugger;
+/* 0x7CD */ u8 msgId; // 1 - CPU Break; 2 - Fault; 3 - Unknown
 /* 0x7CE */ u8 faultHandlerEnabled;
 /* 0x7CF */ u8 faultActive;
 /* 0x7D0 */ OSThread* faultedThread;
-/* 0x7D4 */ fault_update_input_func inputUpdateFunc;
-/* 0x7D8 */ FaultClient* clientList;
-/* 0x7DC */ FaultAddressConverterClient* addrConvList;
+/* 0x7D4 */ fault_update_input_func padCallback;
+/* 0x7D8 */ FaultClient* clients;
+/* 0x7DC */ FaultAddrConvClient* addrConvClients;
 /* 0x7E0 */ UNK_TYPE1 pad7E0[4];
-/* 0x7E4 */ InputStruct input[4];
-/* 0x844 */ void* framebuffer;
+/* 0x7E4 */ Input padInput[4];
+/* 0x844 */ void* fb;
 } FaultContext;
 
 typedef struct FireObj FireObj;
@@ -1522,7 +1522,7 @@ struct ContextCommon {
 /* 0x08 */ func_ptr fini;
 /* 0x0C */ func_ptr nextGameStateInit;
 /* 0x10 */ u32 nextGameStateSize;
-/* 0x14 */ InputStruct controllers[4];
+/* 0x14 */ Input controllers[4];
 /* 0x74 */ GameStateHeap heap;
 /* 0x84 */ GameAllocNode gamealloc;
 /* 0x98 */ UNK_TYPE1 pad98[3];
@@ -1696,7 +1696,7 @@ typedef struct {
 /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
 /* 0x09C */ Irqmgr* irqmgr;
 /* 0x0A0 */ OSThread thread;
-/* 0x250 */ InputStruct input[4];
+/* 0x250 */ Input input[4];
 /* 0x2B0 */ OSContPad controllerState1[4];
 /* 0x2C8 */ u8 maxNumControllers;
 /* 0x2C9 */ UNK_TYPE1 pad2C9[435];

@@ -51,64 +51,64 @@ void func_800818F4(void); // func_800818F4
 void Fault_Nop80081920(UNK_TYPE4 param_1, ...); // func_80081920
 void Fault_Log(char* str, ...); // func_8008193C
 void Fault_Nop80081958(UNK_TYPE4 param_1, ...); // func_80081958
-void Fault_WaitMilliseconds2(u32 ms); // func_80081980
-void Fault_AddClient(FaultClient* client, fault_client_func* func, void* arg1, void* arg2); // func_800819F0
+void Fault_SleepImpl(u32 duration); // func_80081980
+void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1); // func_800819F0
 void Fault_RemoveClient(FaultClient* client); // func_80081AD4
-void Fault_AddressConverterAddClient(FaultAddressConverterClient* client, fault_address_converter_func* func, void* arg); // func_80081BCC
-void Fault_AddressConverterRemoveClient(FaultAddressConverterClient* client); // func_80081CA4
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param); // func_80081BCC
+void Fault_RemoveAddrConvClient(FaultAddrConvClient* client); // func_80081CA4
 void* Fault_ConvertAddress(void* addr); // func_80081D9C
-void Fault_WaitMilliseconds(u32 ms); // func_80081E2C
-void Fault_UpdateInputFunc(InputStruct* input); // func_80081E68
-void Fault_InputUpdate(void); // func_80081EA4
-s32 Fault_WaitForInput(void); // func_80081EF0
-void Fault_PageEnd(void); // func_8008203C
-void Fault_DrawRectangle(s32 x, s32 y, s32 width, s32 height, u16 color); // func_80082078
-void Fault_DrawBlackPage(void); // func_800820D8
-void Fault_DrawRedPage(void); // func_8008212C
-void Fault_DrawTextCaret(u16 color); // func_80082180
-void Fault_PrintFloatToScreen(u32 regNum, f32* f); // func_800821D4
-void Fault_LogFloat(u32 regNum, f32* f); // func_80082280
-void Fault_PrintFpcCsrToScreen(u32 fpcCsr); // func_80082330
-void Fault_LogFpcCsr(u32 fpcCsr); // func_800823D4
-void Fault_PrintCpuRegistersToScreen(OSThread* thread); // func_8008246C
-void Fault_LogCpuRegisters(OSThread* thread); // func_800827BC
+void Fault_Sleep(u32 duration); // func_80081E2C
+void Fault_PadCallback(Input* input); // func_80081E68
+void Fault_UpdatePadImpl(void); // func_80081EA4
+s32 Fault_WaitForInputImpl(void); // func_80081EF0
+void Fault_WaitForInput(void); // func_8008203C
+void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color); // func_80082078
+void Fault_FillScreenBlack(void); // func_800820D8
+void Fault_FillScreenRed(void); // func_8008212C
+void Fault_DrawCornerRec(u16 color); // func_80082180
+void Fault_PrintFReg(s32 idx, f32* value); // func_800821D4
+void Fault_LogFReg(s32 idx, f32* value); // func_80082280
+void Fault_PrintFPCR(u32 value); // func_80082330
+void Fault_LogFPCR(u32 value); // func_800823D4
+void Fault_PrintThreadContext(OSThread* t); // func_8008246C
+void Fault_LogThreadContext(OSThread* t); // func_800827BC
 OSThread* Fault_FindFaultedThread(void); // func_80082AB8
 void Fault_Wait5Seconds(void); // func_80082B40
 void Fault_WaitForButtonCombo(void); // func_80082BD0
-void Fault_PrintMemDumPage(char* title, void* start, u32 param_3); // func_80082C6C
-void Fault_MemDump(void* startPc, void* start1, void* start2, void* start3); // func_80082DD8
+void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3); // func_80082C6C
+void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1); // func_80082DD8
 void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra); // func_80082FD0
-void Fault_PrintStackTraceToScreen(OSThread* thread, u32 flags); // func_80083144
-void Fault_LogStackTrace(OSThread* thread, u32 flags); // func_800832D4
-void Fault_SetNextInstBreak(OSThread* thread); // func_80083450
-void Fault_ResetFramebuffer(void); // func_800834CC
-void Fault_PrintClients(void); // func_8008358C
+void Fault_DrawStackTrace(OSThread* t, u32 flags); // func_80083144
+void Fault_LogStackTrace(OSThread* t, u32 flags); // func_800832D4
+void Fault_ResumeThread(OSThread* t); // func_80083450
+void Fault_CommitFB(void); // func_800834CC
+void Fault_ProcessClients(void); // func_8008358C
 void Fault_SetOptionsFromController3(void); // func_80083670
 void Fault_SetOptions(void); // func_800837E4
 void Fault_ThreadEntry(void* arg); // func_80083828
-void Fault_SetFramebuffer(void* framebuffer, u16 width, u16 height); // func_80083B70
+void Fault_SetFB(void* fb, u16 w, u16 h); // func_80083B70
 void Fault_Start(void); // func_80083BC4
-void Fault_HungUpThreadPrint(char* arg1, char* arg2); // func_80083CF8
-void Fault_HungUpThead(char* arg1, char* arg2); // func_80083DF4
-void Fault_AssertFail(char* file, s32 lineNum); // func_80083E4C
-void FaultDraw_SetCopyToLog(u8 copy); // func_80083EB0
-void FaultDraw_DrawRectangle(s32 leftX, s32 upperY, s32 rightX, s32 lowerY, u16 color); // func_80083EC4
-void FaultDraw_DrawChar(u8 c); // func_80083FE4
-s32 FaultDraw_FindColorIndex(u16 color); // func_80084160
-void FaultDraw_UpdatePrintColors(void); // func_80084210
-void FaultDraw_SetForgroundColor(u16 color); // func_800842BC
-void FaultDraw_SetBackgroundColor(u16 color); // func_80084308
-void FaultDraw_SetForegroundColorWithAlpha(u16 color); // func_80084354
-void FaultDraw_SetCharPadding(s8 x, s8 y); // func_8008439C
-void FaultDraw_SetCursor(s32 x, int y); // func_800843D4
-void FaultDraw_Reset(void); // func_800844D8
-FaultDrawContext* FaultDraw_PrintfFunc(FaultDrawContext* arg, char* fmt, size_t n); // func_80084568
-void FaultDraw_PrintfImpl(char* str, char* args); // func_8008477C
-void FaultDraw_Printf(char* uParm1, ...); // func_800847CC
-void FaultDraw_DrawText(s32 x, s32 y, char* str, ...); // func_8008481C
-void FaultDraw_SetFramebuffer(void* framebuffer, u16 width, u16 height); // func_8008486C
-void FaultDraw_SetPageEndFunc(func_ptr* func); // func_800848A4
-void FaultDraw_Init(void); // func_800848B8
+void Fault_HangupFaultClient(char* arg0, char* arg1); // func_80083CF8
+void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1); // func_80083DF4
+void Fault_AddHungupAndCrash(char* filename, u32 line); // func_80083E4C
+void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled); // func_80083EB0
+void FaultDrawer_DrawRecImpl(s32 xstart, s32 ystart, s32 xend, s32 yend, u16 color); // func_80083EC4
+void FaultDrawer_DrawChar(char c); // func_80083FE4
+s32 FaultDrawer_ColorToPrintColor(u16 color); // func_80084160
+void FaultDrawer_UpdatePrintColor(void); // func_80084210
+void FaultDrawer_SetForeColor(u16 color); // func_800842BC
+void FaultDrawer_SetBackColor(u16 color); // func_80084308
+void FaultDrawer_SetFontColor(u16 color); // func_80084354
+void FaultDrawer_SetCharPad(s8 padW, s8 padH); // func_8008439C
+void FaultDrawer_SetCursor(s32 x, s32 y); // func_800843D4
+void FaultDrawer_FillScreen(void); // func_800844D8
+FaultDrawer* FaultDrawer_FormatStringFunc(FaultDrawer* arg, char* str, s32 count); // func_80084568
+void FaultDrawer_VPrintf(char* str, char* args); // func_8008477C
+void FaultDrawer_Printf(char* fmt, ...); // func_800847CC
+void FaultDrawer_DrawText(s32 x, s32 y, char* fmt, ...); // func_8008481C
+void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h); // func_8008486C
+void FaultDrawer_SetInputCallback(func_ptr func); // func_800848A4
+void FaultDrawer_Init(void); // func_800848B8
 void func_80084940(void); // func_80084940
 void func_80084968(void); // func_80084968
 void func_800849A0(void); // func_800849A0
@@ -291,7 +291,7 @@ void __osSiRelAccess(void); // func_80089B34
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data); // func_80089B60
 void __osContGetInitData(u8* pattern, OSContStatus* data); // func_80089CBC
 void __osPackRequestData(u8 cmd); // func_80089D68
-void osCreateThread(OSThread* t, OSId id, osCreateThread_func* entry, void* arg, void* sp, OSPri p); // func_80089E40
+void osCreateThread(OSThread* t, OSId id, osCreateThread_func entry, void* arg, void* sp, OSPri p); // func_80089E40
 void osContStartReadData(void); // func_80089F90
 void osContGetReadData(void); // func_8008A014
 void __osPackReadData(void); // func_8008A0A0
@@ -352,7 +352,7 @@ s32 osContStartQuery(OSMesgQueue* mq); // func_8008D730
 void osContGetQuery(OSContStatus* data); // func_8008D7AC
 void guLookAtHiliteF(f32* mf, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008D7D0
 void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008DF90
-int _Printf(printf_func* pfn, void* arg, char* fmt, char* ap); // func_8008E050
+int _Printf(printf_func pfn, void* arg, char* fmt, char* ap); // func_8008E050
 void func_8008E698(void); // func_8008E698
 void func_8008ED30(void); // func_8008ED30
 void osUnmapTLBAll(void); // func_8008EDE0
@@ -477,6 +477,7 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
+// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -658,7 +659,7 @@ void func_800B3644(void); // func_800B3644
 void DLF_LoadGameState(GameStateMetaInfo* gameState); // func_800B3880
 void DLF_FreeGameState(GameStateMetaInfo* gameState); // func_800B39A4
 void Actor_PrintLists(ActorContext* actCtxt); // func_800B3AD0
-void Actor_SetDrawParams(ActorDrawParams* iParm1, f32 yDisplacement, actor_post_draw_func* func, f32 scale); // func_800B3BA4
+void Actor_SetDrawParams(ActorDrawParams* iParm1, f32 yDisplacement, actor_post_draw_func func, f32 scale); // func_800B3BA4
 void Actor_PostDraw(Actor* actor, LightMapper* mapper, GlobalContext* ctxt, u32 displayList, ColorRGBA8* color); // func_800B3BC8
 void func_800B3FC0(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B3FC0
 void func_800B4024(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B4024
@@ -2172,7 +2173,7 @@ s32 func_801224E0(s32 param_1, s16 param_2, s16 param_3); // func_801224E0
 void func_80122524(void); // func_80122524
 void func_801225CC(void); // func_801225CC
 void func_80122660(void); // func_80122660
-UNK_TYPE4 func_80122670(int* param_1, InputStruct* input); // func_80122670
+UNK_TYPE4 func_80122670(int* param_1, Input* input); // func_80122670
 void func_801226E0(void); // func_801226E0
 void func_80122744(void); // func_80122744
 void func_80122760(void); // func_80122760
@@ -3019,7 +3020,7 @@ void func_8016E40C(void); // func_8016E40C
 void func_8016EA90(void); // func_8016EA90
 void func_8016F1A8(void); // func_8016F1A8
 void func_8016F4EC(void); // func_8016F4EC
-void func_8016F5A8(GlobalContext* ctxt, s8* pcParm2, InputStruct* iParm3); // func_8016F5A8
+void func_8016F5A8(GlobalContext* ctxt, s8* pcParm2, Input* iParm3); // func_8016F5A8
 void func_8016FC78(void); // func_8016FC78
 void func_8016FC98(void); // func_8016FC98
 void func_8016FCF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8016FCF0
@@ -3101,7 +3102,7 @@ void Game_Update(ContextCommon* ctxt); // func_8017377C
 void Game_IncrementFrameCount(ContextCommon* ctxt); // func_801737E4
 void Game_InitHeap(ContextCommon* ctxt, u32 size); // func_80173810
 void Game_ResizeHeap(ContextCommon* ctxt, u32 size); // func_80173880
-void Game_StateInit(ContextCommon* ctxt, func_ptr* gameStateInit, GraphicsContext* gCtxt); // func_80173950
+void Game_StateInit(ContextCommon* ctxt, func_ptr gameStateInit, GraphicsContext* gCtxt); // func_80173950
 void Game_StateFini(ContextCommon* ctxt); // func_80173A50
 UNK_TYPE4 Game_GetNextStateInit(ContextCommon* ctxt); // func_80173B00
 u32 Game_GetNextStateSize(ContextCommon* ctxt); // func_80173B0C
@@ -3150,15 +3151,15 @@ void func_80175434(void); // func_80175434
 void func_8017544C(void); // func_8017544C
 void func_80175474(void); // func_80175474
 void func_801754C0(void); // func_801754C0
-void Padmgr_CalcStickEdges(InputStruct* input); // func_801754E0
+void Padmgr_CalcStickEdges(Input* input); // func_801754E0
 void Padmgr_ParseState(void); // func_801757A4
 void func_801759BC(void); // func_801759BC
 void func_80175AE0(void); // func_80175AE0
 void Padmgr_Update(void); // func_80175C80
 void Padmgr_Stop(void); // func_80175E3C
-void func_80175E68(InputStruct* input, int param_2); // func_80175E68
-void Padmgr_GetInput(InputStruct* input, int param_2); // func_80175F98
-void Padmgr_GetInput2(InputStruct* input, int param_2); // func_80175FD4
+void func_80175E68(Input* input, int param_2); // func_80175E68
+void Padmgr_GetInput(Input* input, int param_2); // func_80175F98
+void Padmgr_GetInput2(Input* input, int param_2); // func_80175FD4
 void Padmgr_ThreadEntry(PadmgrThreadStruct* padmgr); // func_80176010
 void Padmgr_Start(OSMesgQueue* siEventCallbackQueue, Irqmgr* irqmgr, OSId threadId, OSPri threadPri, void* stack); // func_80176194
 void func_80176280(void); // func_80176280
@@ -3728,6 +3729,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
+// UNK_RET func_8019AE40(UNK_ARGS);
+// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
@@ -6884,7 +6887,7 @@ void func_809200F8(void); // func_809200F8
 void func_80920140(void); // func_80920140
 void func_80920164(void); // func_80920164
 void func_809201BC(void); // func_809201BC
-void FireArrow_SetUpdateFunc(ActorArrowFire* this, actor_func* update); // func_80920340
+void FireArrow_SetUpdateFunc(ActorArrowFire* this, actor_func update); // func_80920340
 void ArrowFire_Init(ActorArrowFire* this, GlobalContext* ctxt); // func_8092034C
 void ArrowFire_Fini(ActorArrowFire* this, GlobalContext* ctxt); // func_809203F8
 void FireArrow_Update1(ActorArrowFire* pzParm1); // func_80920440

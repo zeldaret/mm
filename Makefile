@@ -20,16 +20,19 @@ build/src/libultra/%: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/
 build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
 build/src/boot_O2_g3/%: OPTIMIZATION := -O2 -g3
+build/src/boot_O2_g3_trapuv/%: OPTIMIZATION := -O2 -g3
 build/src/code/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/actors/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
+build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 test.txt: OPTIMIZATION := -O2 -g3
 test.txt: CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
-test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
+test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul -trapuv
 
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 
 test.txt: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/boot_O2_g3/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3_trapuv/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/code/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/actors/%: CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
@@ -53,6 +56,7 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/libultra/gu/*) \
            $(wildcard src/code/*) \
            $(wildcard src/boot_O2_g3/*) \
+           $(wildcard src/boot_O2_g3_trapuv/*) \
            $(wildcard src/boot_O1/*) \
            $(wildcard src/actors/Bg_Fu_Kaiten/*) \
            $(wildcard src/actors/Bg_Ikana_Ray/*)
@@ -79,6 +83,7 @@ $(shell mkdir -p $(BUILD_DIR)/src/libultra/libc)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra/gu)
 $(shell mkdir -p $(BUILD_DIR)/src/code)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3)
+$(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3_trapuv)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O1)
 $(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Fu_Kaiten)
 $(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Ikana_Ray)

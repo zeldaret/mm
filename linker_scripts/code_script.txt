@@ -13,7 +13,7 @@ SECTIONS
         build/asm/boot_0x80081250.o(.text)
         build/src/boot_O2_g3/CIC6105.o(.text)
         build/src/boot_O2_g3/boot_0x80081920.o(.text)
-        build/asm/boot_0x80081980.o(.text)
+        build/src/boot_O2_g3_trapuv/fault.o(.text)
         build/asm/boot_0x80083EB0.o(.text)
         build/asm/loadfragment.o(.text)
         build/asm/loadfragment2.o(.text)

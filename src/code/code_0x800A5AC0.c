@@ -8,7 +8,7 @@ void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt) {
     s0->base.textId = ((s0->base.variable >> 8) & 0xFF) | 0x300;
     s0->base.variable = (s0->base.variable & 0xFF) - 9;
     Lib_ApplyActorInitVars((Actor*)s0, (ActorInitVar*)&enAObjInitVar);
-    Actor_SetDrawParams(&s0->base.drawParams, 0, (actor_post_draw_func*)func_800B3FC0, 12);
+    Actor_SetDrawParams(&s0->base.drawParams, 0, (actor_post_draw_func)func_800B3FC0, 12);
     Collision_InitCylinder(ctxt, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
     Collision_CylinderMoveToActor((Actor*)s0, &s0->collision);
     s0->base.unkA0.unk16 = 255;
