@@ -925,7 +925,7 @@ typedef union {
 } F3DVertex;
 
 typedef struct {
-/* 0x00 */ void* fb;
+/* 0x00 */ u16* fb;
 /* 0x04 */ u16 w;
 /* 0x06 */ u16 h;
 /* 0x08 */ u16 yStart;

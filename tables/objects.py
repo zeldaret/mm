@@ -8,7 +8,7 @@
     0x80081820:"CIC6105",
     0x80081920:"",
     0x80081980:"fault",
-    0x80083EB0:"",
+    0x80083EB0:"fault_drawer",
     0x80084940:"loadfragment",
     0x80084DB0:"loadfragment2",
     0x80085130:"",

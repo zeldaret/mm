@@ -810,12 +810,10 @@ void Fault_ThreadEntry(void* arg) {
             if (msg == (OSMesg)1) {
                 faultCtxt->msgId = 1;
                 Fault_Log(D_80098A88);
-            }
-            else if (msg == (OSMesg)2) {
+            } else if (msg == (OSMesg)2) {
                 faultCtxt->msgId = 2;
                 Fault_Log(D_80098AC0);
-            }
-            else if (msg == (OSMesg)3) {
+            } else if (msg == (OSMesg)3) {
                 Fault_SetOptions();
                 faultedThread = NULL;
                 continue;
