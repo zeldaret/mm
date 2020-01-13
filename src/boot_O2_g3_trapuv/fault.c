@@ -896,8 +896,8 @@ void Fault_Start(void){
     faultCtxt->faultActive = 0;
     faultContextStruct.faultHandlerEnabled = 1;
     osCreateMesgQueue(&faultCtxt->queue, faultCtxt->msg, 1);
-    thread_info_init(&faultThreadInfo, faultStack, &faultStack[1536], 0, 0x100, faultThreadName);
-    osCreateThread(&faultCtxt->thread, 2, (osCreateThread_func)Fault_ThreadEntry, 0, &faultThreadInfo, 0x7f);
+    StackCheck_Init(&faultStackEntry, (u32)faultStack, (u32)&faultStack[1536], 0, 0x100, faultThreadName);
+    osCreateThread(&faultCtxt->thread, 2, (osCreateThread_func)Fault_ThreadEntry, 0, &faultStack[1536], 0x7f);
     osStartThread(&faultCtxt->thread);
 }
 

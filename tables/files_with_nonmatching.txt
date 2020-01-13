@@ -1,10 +1,13 @@
 boot_0x800805E0
 boot_0x800968B0
-z_std_dma
-z_effect_soft_sprite
-z_lib
+fault
+fault_drawer
+stackcheck
 z_actor
 z_DLF
+z_effect_soft_sprite
+z_lib
 z_lights
 z_room
 z_scene_proc
+z_std_dma

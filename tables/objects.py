@@ -12,7 +12,7 @@
     0x80084940:"loadfragment",
     0x80084DB0:"loadfragment2",
     0x80085130:"",
-    0x80085320:"",
+    0x80085320:"stackcheck",
     0x80085570:"",
     0x80086110:"mtxuty-cvt",
     0x80086280:"",

@@ -629,12 +629,6 @@ typedef struct {
 /* 0x10 */ ColorRGBA8 unk10;
 } TargetContextEntry;
 
-typedef enum ThreadStackStatus {
-    THREAD_STACK_STATUS_GOOD = 0x0,
-    THREAD_STACK_STATUS_WARNING = 0x1,
-    THREAD_STACK_STATUS_FULL = 0x2
-} ThreadStackStatus;
-
 typedef struct {
 /* 0x0 */ u32 texture;
 /* 0x4 */ s16 unk4;
@@ -1754,6 +1748,18 @@ typedef struct {
 /* 0x18 */ u32 unk18; // Always 0x01000000?
 } ParticleOverlayTableEntry;
 
+typedef struct StackEntry StackEntry;
+
+struct StackEntry {
+/* 0x00 */ StackEntry* next;
+/* 0x04 */ StackEntry* prev;
+/* 0x08 */ u32 head;
+/* 0x0C */ u32 tail;
+/* 0x10 */ s32 initValue;
+/* 0x14 */ s32 minSpace;
+/* 0x18 */ char* name;
+};
+
 typedef struct TargetContext TargetContext;
 
 typedef struct ActorContext ActorContext;
@@ -1818,18 +1824,6 @@ struct ParticleOverlayInfo {
 typedef struct Camera Camera;
 
 typedef s32(*camera_update_func)(Camera* camera);
-
-typedef struct ThreadInfo ThreadInfo;
-
-struct ThreadInfo {
-/* 0x00 */ ThreadInfo* next;
-/* 0x04 */ ThreadInfo* prev;
-/* 0x08 */ u8* stackBegin;
-/* 0x0C */ u8* stackEnd;
-/* 0x10 */ s32 initStackValue;
-/* 0x14 */ s32 stackWarningThreshold;
-/* 0x18 */ s8* name;
-};
 
 typedef struct s800B948C s800B948C;
 

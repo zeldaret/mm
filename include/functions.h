@@ -134,11 +134,11 @@ void func_80085204(void); // func_80085204
 void func_8008520C(void); // func_8008520C
 void func_8008522C(void); // func_8008522C
 void func_8008524C(void); // func_8008524C
-void thread_info_init(ThreadInfo* info, u8* stackBegin, u8* stackEnd, s32 initStackValue, s32 stackWarningThreshold, char* threadName); // func_80085320
-void func_800853F8(void); // func_800853F8
-ThreadStackStatus get_thread_stack_status(ThreadInfo* threadInfo); // func_80085468
-ThreadStackStatus check_all_thread_status(void); // func_800854E0
-ThreadStackStatus check_thread_status(ThreadInfo* threadInfo); // func_80085538
+void StackCheck_Init(StackEntry* entry, u32 stackTop, u32 stackBottom, u32 initValue, s32 minSpace, char* name); // func_80085320
+void StackCheck_Cleanup(StackEntry* entry); // func_800853F8
+s32 StackCheck_GetState(StackEntry* entry); // func_80085468
+u32 StackCheck_CheckAll(void); // func_800854E0
+u32 StackCheck_Check(StackEntry* entry); // func_80085538
 void func_80085570(void); // func_80085570
 void func_800859BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800859BC
 void func_80085A08(void); // func_80085A08
