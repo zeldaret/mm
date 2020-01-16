@@ -18,7 +18,7 @@ if __name__ == '__main__':
         writing = False
         lines = f.readlines()
         for line in lines:
-            if line.startswith('glabel'):
+            if line.startswith('glabel') and not line.startswith('glabel .L'):
                 if current_file != None:
                     current_file.close()
                 func_name = line.split()[1]

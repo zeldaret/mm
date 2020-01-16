@@ -620,5 +620,4 @@
     ('decomp/', 'ovl_En_Invisible_Ruppe', 0x80C258A0, ((0x80C25B30, 0x80C25BBF),),()),
     ('decomp/', 'ovl_Obj_Ending', 0x80C25BC0, ((0x80C25CC0, 0x80C25D3F),),()),
     ('decomp/', 'ovl_En_Rsn', 0x80C25D40, ((0x80C25FF0, 0x80C2609F),),()),
-
 }

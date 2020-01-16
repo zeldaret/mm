@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-import argparse, os, struct, ast
+import argparse, os, struct, ast, bisect
 
 SPLIT_FILES = True # TODO this should be a flag somewhere
 
 loadHighRefs = {}
 loadLowRefs = {}
-
-#from tables.objects import *
-#from tables.functions import *
-#from tables.variables import *
-#from tables.files import *
 
 known_files = {}
 known_funcs = dict()
@@ -76,6 +71,12 @@ def float_reg(num):
         return "$31"
     return "$f%d" % num
 
+
+def format_ref(name, offset):
+    if offset == 0:
+        return "{}".format(name)
+    else:
+        return "{} + 0x{:X}".format(name, offset)
 
 def get_op(inst):
     return (inst & 0b11111100000000000000000000000000) >> 26
@@ -173,6 +174,8 @@ class Disassembler:
         self.functions = set()
         self.labels = set()
         self.vars = set()
+        self.vars_sorted = list()
+        self.vars_length = dict()
         self.data_regions = list()
         self.bss_regions = list()
 
@@ -203,7 +206,7 @@ class Disassembler:
                 self.add_function(addr) # assume every object starts with a function
 
         for addr in known_vars:
-            self.add_variable(addr)
+            self.add_variable(addr, known_vars[addr][3])
 
     def reset_cache(self):
         self.is_data_cache = {}
@@ -221,11 +224,13 @@ class Disassembler:
     def add_function(self, addr):
         self.functions.add(addr)
 
-    def add_variable(self, addr):
+    def add_variable(self, addr, size):
         # TODO special case this value that is mis-identified as an address and causes problems by being in the middle of a pointer
         if addr == 0x80AAB3AE:
             return
         self.vars.add(addr)
+        bisect.insort(self.vars_sorted, addr)
+        self.vars_length[addr] = size
 
     def add_label(self, addr):
         self.labels.add(addr)
@@ -315,6 +320,20 @@ class Disassembler:
         # otherwise it is undefined (return true)
         return True
 
+    def is_start_of_variable(self, addr):
+        return addr in self.vars
+
+    def get_variable_offset(self, addr):
+        if len(self.vars_sorted) == 0:
+            return None
+        if self.is_start_of_variable(addr):
+            return (addr, 0)
+        nearest = self.vars_sorted[bisect.bisect_left(self.vars_sorted, addr)-1]
+        offset = addr - nearest
+        if offset < self.vars_length[nearest]:
+            return (nearest, offset)
+        return None
+
     def make_label(self, imm, cur):
         addr = (imm*4) + cur + 4
         self.add_label(addr)
@@ -362,7 +381,7 @@ class Disassembler:
                         # TODO functions are disabled for now due to behaving poorly with switches. This should be a flag.
                         #self.add_function(word)
                     elif self.is_in_data(word):
-                        self.add_variable(word)
+                        self.add_variable(word, 1)
 
 
     def disassemble(self, path):
@@ -392,6 +411,17 @@ class Disassembler:
                             # don't split if it's the start of a data section, it's probably the same object
                             if not self.is_in_data_or_undef(new_object_start):
                                 self.add_object(new_object_start)
+                if addr in self.vars:
+                    name = self.make_load(addr)
+                    if name.startswith("__switch"):
+                        addr_i = i
+                        case_addr = file.get_inst(addr_i)
+                        while self.is_in_code(case_addr):
+                            self.add_label(case_addr)
+                            addr_i += 1
+                            if addr_i >= (file.size // 4):
+                                break
+                            case_addr = file.get_inst(addr_i)
         if self.auto_analysis:
             self.guess_functions_and_variables_from_data()
         self.has_done_first_pass = True
@@ -414,7 +444,7 @@ class Disassembler:
                         write_header(f)
 
                     if addr in self.labels:
-                        f.write(".L_%08X:\n" % addr)
+                        f.write("glabel .L_%08X\n" % addr)
                     if addr in self.functions:
                         name = get_func_name(addr)
                         f.write("\nglabel %s\n" % name)
@@ -422,28 +452,41 @@ class Disassembler:
                     if not self.is_in_data_or_undef(addr):
                         f.write("/* %06d 0x%08X %08X */ %s\n" % (i, addr, inst, self.disassemble_inst(inst, addr, i, file)))
                     elif inst in self.functions:
-                        if addr in self.vars:
+                        if self.is_start_of_variable(addr):
                             name = self.make_load(addr)
                             f.write("glabel %s\n" % name)
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_func_name(inst)))
-                    elif inst in self.vars:
-                        if addr in self.vars:
+                    elif inst in self.labels:
+                        if self.is_start_of_variable(addr):
+                            name = self.make_load(addr)
+                            f.write("glabel %s\n" % name)
+                        f.write("/* %06d 0x%08X */ .word\t.L_%08X\n" % (i, addr, inst))
+                    elif self.is_start_of_variable(inst):
+                        if self.is_start_of_variable(addr):
                             name = self.make_load(addr)
                             f.write("glabel %s\n" % name)
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, self.make_load(inst)))
+                    elif inst >= 0x801F0568 and inst < 0x801F0684:
+                        # XXX special case gSaveContext.weekEventReg because there are pointers to fields of it in other parts of dara
+                        # TODO think of a better way to do this
+                        if self.is_start_of_variable(addr):
+                            name = self.make_load(addr)
+                            f.write("glabel %s\n" % name)
+                        var = self.get_variable_offset(inst)
+                        f.write("/* %06d 0x%08X */ .word\t(%s + 0x%08X)\n" % (i, addr, self.make_load(var[0]), var[1]))
                     else:
                         # TODO this should be moved into a print_data_range function or something
                         print_head = addr
                         data_stream = inst
                         while print_head < addr + 4:
-                            if print_head in self.vars:
+                            if self.is_start_of_variable(print_head):
                                 name = self.make_load(print_head)
                                 f.write("glabel %s\n" % name)
-                            if print_head + 1 in self.vars or print_head % 2 != 0:
+                            if self.is_start_of_variable(print_head+1) or print_head % 2 != 0:
                                 f.write("/* %06d 0x%08X */ .byte\t0x%02X\n" % (i, addr, (data_stream >> 24) & 0xFF))
                                 data_stream <<= 8
                                 print_head += 1
-                            elif print_head + 2 in self.vars or print_head + 3 in self.vars or print_head % 4 != 0:
+                            elif self.is_start_of_variable(print_head+2) or self.is_start_of_variable(print_head+3) or print_head % 4 != 0:
                                 f.write("/* %06d 0x%08X */ .short\t0x%04X\n" % (i, addr, (data_stream >> 16) & 0xFFFF))
                                 data_stream <<= 16
                                 print_head += 2
@@ -452,68 +495,239 @@ class Disassembler:
                                 data_stream <<= 32
                                 print_head += 4
 
-    def determine_load_ref(self, file, inst_i):
+    def determine_load_ref_impl(self, file, inst_i, start_i, depth, from_branch=False, visited=set()):
+        candidates = []
+
+        if not from_branch:
+            visited.clear()
+
+        # debug_i = 5217
+        debug_i = 0xFFFFFFFF
+
+        if inst_i == debug_i:
+            print("{} {} {}".format(inst_i, start_i, from_branch))
+
+        if depth <= 0:
+            return candidates
         # TODO better detect when the register gets dirty
-        pc = file.vaddr + inst_i*4
         cur_inst = file.get_inst(inst_i)
 
+        addr_high = get_imm(cur_inst)
+        if (addr_high > 0x80C2) or (addr_high < 0x8000):
+            return candidates
+
         if get_op(cur_inst) != 15:
-            return
+            return candidates
+
+        # set state based on previous instruction
+        # TODO cleanup
+        if start_i == 0 or from_branch:
+            prev_was_jump = False
+            prev_was_ret = False
+            prev_was_branch = False
+            prev_was_branch_f = False
+            prev_was_branch_f_likely = False
+            prev_was_branch_likely = False
+            prev_was_branch_always = False
+            prev_target = 0
+        else:
+            prev_inst = file.get_inst(start_i - 1)
+            prev_op = get_op(prev_inst)
+            prev_was_jump = (prev_op == 2 or prev_op == 3)
+            prev_was_ret = (prev_op == 0 and get_func(prev_inst) == 8)
+            prev_was_branch = (prev_op == 4 or prev_op == 5 or prev_op == 6 or prev_op == 7) or \
+                              (prev_op == 1 and (get_rt(prev_inst) == 0 or get_rt(prev_inst) == 1))
+            prev_was_branch_f = ((prev_op == 16) or (prev_op == 17) or (prev_op == 18)) and (get_rs(prev_inst) == 8) and ((prev_inst & (1 << 17)) == 0)
+            prev_was_branch_f_likely = ((prev_op == 16) or (prev_op == 17) or (prev_op == 18)) and (get_rs(prev_inst) == 8) and ((prev_inst & (1 << 17)) != 0)
+            prev_was_branch_always = prev_op == 4 and get_rs(prev_inst) == get_rt(prev_inst) == 0
+            prev_was_branch_likely = (prev_op == 20 or prev_op == 21 or prev_op == 22 or prev_op == 23) or \
+                                     (prev_op == 1 and (get_rt(prev_inst) == 2 or get_rt(prev_inst) == 3))
+            prev_target = get_signed_imm(prev_inst) * 4 + (file.vaddr + (start_i-1)*4) + 4
+
+            if prev_was_branch or prev_was_branch_f or prev_was_branch_likely or prev_was_branch_f_likely:
+                if inst_i == debug_i:
+                    print("branch start")
+                branch_candidates = self.determine_load_ref_impl(file, inst_i, (prev_target - file.vaddr) // 4, depth, True, visited)
+                candidates += branch_candidates
+                if inst_i == debug_i:
+                    print("branch end, found {}".format(branch_candidates))
+
+
+        continue_branch = not (prev_was_branch_likely or prev_was_branch_f_likely)
 
         prev_was_jump = False
+        prev_was_ret = False
+        prev_was_branch = False
+        prev_was_branch_f = False
+        prev_was_branch_f_likely = False
+        prev_was_branch_likely = False
+        prev_was_branch_always = False
+        prev_target = 0
 
-        for i in range(1, 7): # TODO find a good limit
-            next_inst = file.get_inst(inst_i + i)
+        inst_read_addr = start_i if from_branch else start_i + 1
 
-            if get_op(next_inst) == 15 and get_rt(cur_inst) == get_rt(next_inst):
-                return # return if another lui overwrites reg
+        for i in range(1, depth + 1):
+            if not continue_branch:
+                break
 
-            if (get_op(next_inst) == 9) and (get_rt(cur_inst) == get_rt(next_inst) == get_rs(next_inst)): # lui + addiu (move pointer)
+            if inst_read_addr in visited:
+                break
+
+            if inst_i == debug_i:
+                print(" {}".format(inst_read_addr))
+
+            if self.is_in_data(file.vaddr + inst_read_addr*4):
+                break
+
+            next_inst = file.get_inst(inst_read_addr)
+            next_op = get_op(next_inst)
+            next_func = get_func(next_inst)
+
+            # TODO consolidate
+            if (next_op == 9) and (get_rt(cur_inst) == get_rs(next_inst)): # lui + addiu (move pointer)
                 addr = (get_imm(cur_inst) << 16) + get_signed_imm(next_inst)
 
                 # TODO workaround to avoid classifying loading constants as loading pointers
                 # This unfortunately causes it to not detect object addresses
-                if addr <= 0x80000000:
-                    return
+                if addr > 0x80000000:
+                    var = self.get_variable_offset(addr)
 
-                if self.auto_analysis:
-                    if self.is_in_data_or_undef(addr):
-                        self.add_variable(addr)
+                    if var == None:
+                        if self.auto_analysis:
+                            if self.is_in_data_or_undef(addr):
+                                self.add_variable(addr, 1)
+                                var = (addr, 0)
+                            else:
+                                self.add_function(addr)
+                                var = (addr, 0)
+                        elif addr in self.functions:
+                            var = (addr, 0)
+
+                    if var != None:
+                        candidates.append((file.vaddr + inst_read_addr*4, var[0], var[1]))
+
+                if get_rt(cur_inst) == get_rt(next_inst):
+                    if prev_was_branch_likely or prev_was_branch_f_likely:
+                        prev_was_branch_likely = False
+                        prev_was_branch_f_likely = False
                     else:
-                        self.add_function(addr)
-                elif addr not in self.functions and addr not in self.vars:
-                    return
-
-                loadHighRefs[pc] = addr
-                loadLowRefs[pc + 4*i] = addr
-                return
+                        prev_was_branch = False
+                        prev_was_branch_f = False
+                        prev_was_branch_always = False
+                        continue_branch = False
 
             elif is_load(next_inst) and (get_rt(cur_inst) == get_rs(next_inst)): # lui + load (load pointer)
                 addr = (get_imm(cur_inst) << 16) + get_signed_imm(next_inst)
 
                 # TODO workaround to avoid classifying loading constants as loading pointers
                 # This unfortunately causes it to not detect object addresses
-                if addr <= 0x80000000:
-                    return
+                if addr > 0x80000000:
+                    var = self.get_variable_offset(addr)
 
-                if self.auto_analysis:
-                    if self.is_in_data_or_undef(addr):
-                        self.add_variable(addr)
+                    if var == None:
+                        if self.auto_analysis:
+                            if self.is_in_data_or_undef(addr):
+                                self.add_variable(addr, 1)
+                                var = (addr, 0)
+                            else:
+                                print("Warning: Pointer load location is in code 0x%08X @ 0x%08X, base=0x%08X" % (addr, file.vaddr + inst_read_addr*4, file.vaddr + inst_i*4))
+                                self.add_function(addr)
+                                var = (addr, 0)
+                        elif addr in self.functions:
+                            var = (addr, 0)
+
+                    if var != None:
+                        candidates.append((file.vaddr + inst_read_addr*4, var[0], var[1]))
+
+                if get_rt(cur_inst) == get_rt(next_inst):
+                    if prev_was_branch_likely or prev_was_branch_f_likely:
+                        prev_was_branch_likely = False
+                        prev_was_branch_f_likely = False
                     else:
-                        print("Warning: Pointer load location is in code 0x%08X" % addr)
-                        self.add_variable(addr)
-                elif addr not in self.functions and addr not in self.vars:
-                    return
+                        prev_was_branch = False
+                        prev_was_branch_f = False
+                        prev_was_branch_always = False
+                        continue_branch = False
 
-                loadHighRefs[pc] = addr
-                loadLowRefs[pc + 4*i] = addr
-                return
+            elif ((next_op >= 32) and (next_op < 48)) and (get_rt(cur_inst) == get_rt(next_inst)): # load that overwrites the reg () exclude fp loads
+                if prev_was_branch_likely or prev_was_branch_f_likely:
+                    prev_was_branch_likely = False
+                    prev_was_branch_f_likely = False
+                else:
+                    prev_was_branch = False
+                    prev_was_branch_f = False
+                    prev_was_branch_always = False
+                    continue_branch = False
+
+            elif ((next_op == 8) or (next_op == 9) or (next_op == 15)) and \
+                 (get_rt(cur_inst) == get_rt(next_inst)):
+                if prev_was_branch_likely or prev_was_branch_f_likely:
+                    prev_was_branch_likely = False
+                    prev_was_branch_f_likely = False
+                else:
+                    prev_was_branch = False
+                    prev_was_branch_f = False
+                    prev_was_branch_always = False
+                    continue_branch = False
+
+            # TODO more funcs?
+            elif next_op == 0 and \
+                 ((next_func == 0) or (next_func == 2) or (next_func == 3) or \
+                  (next_func == 24) or (next_func == 25) or (next_func == 26) or (next_func == 27) or \
+                  (next_func == 32) or (next_func == 33) or (next_func == 34) or (next_func == 35) or \
+                  (next_func == 36) or (next_func == 37) or (next_func == 38) or (next_func == 39) or \
+                  (next_func == 42) or (next_func == 43)) and \
+                 (get_rt(cur_inst) == get_rd(next_inst) and \
+                 (get_rt(cur_inst) != get_rt(next_inst)) and (get_rt(cur_inst) != get_rs(next_inst))):
+                if prev_was_branch_likely or prev_was_branch_f_likely:
+                    prev_was_branch_likely = False
+                    prev_was_branch_f_likely = False
+                else:
+                    prev_was_branch = False
+                    prev_was_branch_f = False
+                    prev_was_branch_always = False
+                    continue_branch = False
+
+            visited.add(inst_read_addr)
+
+            if prev_was_branch or prev_was_branch_f or prev_was_branch_likely or prev_was_branch_f_likely:
+                if inst_i == debug_i:
+                    print("branch start")
+                branch_candidates = self.determine_load_ref_impl(file, inst_i, (prev_target - file.vaddr) // 4, depth-i, True, visited)
+                candidates += branch_candidates
+                if inst_i == debug_i:
+                    print("branch end, found {}".format(branch_candidates))
 
             # if this is a jump, mark to return after we evaluate the following instruction
-            if prev_was_jump:
-                return
-            if get_op(next_inst) == 2 or get_op(next_inst) == 3:
-                prev_was_jump = True
+            if prev_was_jump or prev_was_ret:
+                continue_branch = False
+
+            if prev_was_branch_always:
+                continue_branch = False
+
+            prev_was_jump = (next_op == 2 or next_op == 3)
+            prev_was_ret = (next_op == 0 and get_func(next_inst) == 8)
+            prev_was_branch = (next_op == 4 or next_op == 5 or next_op == 6 or next_op == 7) or \
+                              (next_op == 1 and (get_rt(next_inst) == 0 or get_rt(next_inst) == 1))
+            prev_was_branch_f = ((next_op == 16) or (next_op == 17) or (next_op == 18)) and (get_rs(next_inst) == 8) and ((next_inst & (1 << 17)) == 0)
+            prev_was_branch_f_likely = ((next_op == 16) or (next_op == 17) or (next_op == 18)) and (get_rs(next_inst) == 8) and ((next_inst & (1 << 17)) != 0)
+            prev_was_branch_always = next_op == 4 and get_rs(next_inst) == get_rt(next_inst) == 0
+            prev_was_branch_likely = (next_op == 20 or next_op == 21 or next_op == 22 or next_op == 23) or \
+                                     (next_op == 1 and (get_rt(next_inst) == 2 or get_rt(next_inst) == 3))
+            prev_target = get_signed_imm(next_inst)*4 + (file.vaddr + inst_read_addr*4) + 4
+
+            inst_read_addr += 1
+
+        return candidates
+
+    def determine_load_ref(self, file, inst_i):
+        candidates = self.determine_load_ref_impl(file, inst_i, inst_i, 200)
+        if len(candidates) > 0:
+            first = candidates[0] # TODO multiple candidates
+            loadHighRefs[file.vaddr + inst_i*4] = (first[1], first[2])
+            loadLowRefs[first[0]] = (first[1], first[2])
+            for condidate in candidates[1:]:
+                loadLowRefs[condidate[0]] = (condidate[1], condidate[2])
 
     def disassemble_inst(self, inst, addr, i, file):
         if inst == 0:
@@ -652,37 +866,44 @@ class Disassembler:
                 if op_num == 9 and get_rs(inst) == 0: # addiu with reg 0 is load immediate (li)
                     dis = "li\t%s, %d" % (regs[get_rt(inst)], get_signed_imm(inst))
                 elif op_num == 9 and addr in loadLowRefs: # addiu loading the lower half of a pointer
-                    dis += "%s, %%lo(%s)" % (regs[get_rt(inst)], self.make_load(loadLowRefs[addr]))
+                    ref = loadLowRefs[addr]
+                    dis += "%s, %s, %%lo(%s)" % (regs[get_rt(inst)], regs[get_rs(inst)], format_ref(self.make_load(ref[0]), ref[1]))
                 else:
                     dis += "%s, %s, %d" % (regs[get_rt(inst)], regs[get_rs(inst)], get_signed_imm(inst))
             elif op_num == 12 or op_num == 13 or op_num == 14: # andi, ori, xori
                 dis += "%s, %s, %#X" % (regs[get_rt(inst)], regs[get_rs(inst)], get_imm(inst))
             elif op_num == 15: # lui
-                self.determine_load_ref(file, i)
+                if not self.has_done_first_pass:
+                    self.determine_load_ref(file, i)
                 if addr in loadHighRefs: # lui loading the higher half of a pointer
-                    dis += "%s, %%hi(%s)" % (regs[get_rt(inst)], self.make_load(loadHighRefs[addr]))
+                    ref = loadHighRefs[addr]
+                    dis += "%s, %%hi(%s)" % (regs[get_rt(inst)], format_ref(self.make_load(ref[0]), ref[1]))
                 else:
                     dis += "%s, 0x%04X" % (regs[get_rt(inst)], get_imm(inst))
             elif (op_num == 32 or op_num == 33 or op_num == 34 or op_num == 35 or op_num == 38 or op_num == 40 or op_num == 41 or
                  op_num == 42 or op_num == 42 or op_num == 43 or op_num == 46 or op_num == 55 or op_num == 63): # load/stores
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
-                    dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
+                    ref = loadLowRefs[addr]
+                    dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], format_ref(self.make_load(ref[0]), ref[1]), regs[get_rs(inst)])
                 else:
                     dis += "%s, %#X(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
             elif op_num == 36 or op_num == 37: # lbu, lhu
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
-                    dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
+                    ref = loadLowRefs[addr]
+                    dis += "%s, %%lo(%s)(%s)" % (regs[get_rt(inst)], format_ref(self.make_load(ref[0]), ref[1]), regs[get_rs(inst)])
                 else:
                     dis += "%s, %#X(%s)" % (regs[get_rt(inst)], get_signed_imm(inst), regs[get_rs(inst)])
             elif (op_num == 49 or op_num == 50 or op_num == 53 or op_num == 54 or op_num == 57 or op_num == 58 or
                   op_num == 61 or op_num == 62): # load/store between co-processors
                 if addr in loadLowRefs: # loading with immediate forming lower half of pointer
-                    dis += "%s, %%lo(%s)(%s)" % (float_reg(get_rt(inst)), self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
+                    ref = loadLowRefs[addr]
+                    dis += "%s, %%lo(%s)(%s)" % (float_reg(get_rt(inst)), format_ref(self.make_load(ref[0]), ref[1]), regs[get_rs(inst)])
                 else:
                     dis += "%s, %#X(%s)" % (float_reg(get_rt(inst)), get_signed_imm(inst), regs[get_rs(inst)])
             elif op_num == 47: # cache
                 if addr in loadLowRefs: # cache op with immediate forming lower half of pointer
-                    dis += "0x%02X, %%lo(%s)(%s)" % (get_rt(inst), self.make_load(loadLowRefs[addr]), regs[get_rs(inst)])
+                    ref = loadLowRefs[addr]
+                    dis += "0x%02X, %%lo(%s)(%s)" % (get_rt(inst), format_ref(self.make_load(ref[0]), ref[1]), regs[get_rs(inst)])
                 else:
                     dis += "0x%02X, %#X(%s)" % (get_rt(inst), get_signed_imm(inst), regs[get_rs(inst)])
 
@@ -725,10 +946,13 @@ class Disassembler:
                 if addr < 0x800969C0:
                     continue # Don't print out symbols before the start of boot. These will be defined in other files.
 
+                name = self.make_load(addr)
+                if name.startswith("__switch"):
+                    continue
                 if addr in known_vars:
-                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], self.make_load(addr), known_vars[addr][2], addr))
+                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], name, known_vars[addr][2], addr))
                 else:
-                    f.write("//extern UNK_TYPE %s;\n" % self.make_load(addr))
+                    f.write("//extern UNK_TYPE %s;\n" % name)
 
             f.write("\n#endif\n")
 

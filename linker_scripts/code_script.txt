@@ -826,6 +826,7 @@ SECTIONS
     }
 
     . += 0x1070; /* TODO we are skipping a file that we don't currently disassemble */
+    func_808D78D0 = 0x808D78D0;
 
     ovl_En_Sw :
     {

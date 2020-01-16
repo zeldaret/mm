@@ -270,6 +270,15 @@ void __ll_mod(void); // func_80088A38
 void __ll_rshift(void); // func_80088AD4
 void __osExceptionPreamble(void); // func_80088B00
 void __osException(void); // func_80088B10
+void func_80088D48(void); // func_80088D48
+void func_80088D54(void); // func_80088D54
+void func_80088D60(void); // func_80088D60
+void func_80088D80(void); // func_80088D80
+void func_80088DC4(void); // func_80088DC4
+void func_80088F2C(void); // func_80088F2C
+void func_80088F88(void); // func_80088F88
+void func_80088FA8(void); // func_80088FA8
+void func_80088FE0(void); // func_80088FE0
 void send_mesg(void); // func_8008905C
 void handle_CpU(void); // func_80089110
 void __osEnqueueAndYield(OSThread** param_1); // func_80089144
@@ -6169,6 +6178,7 @@ void func_808CCBE4(void); // func_808CCBE4
 void func_808CCCF0(void); // func_808CCCF0
 void func_808CCDE4(void); // func_808CCDE4
 void func_808CCEE4(void); // func_808CCEE4
+UNK_TYPE4 func_808CD020(UNK_TYPE4 param_1, int param_2, UNK_PTR param_3, UNK_TYPE4 param_4, short* param_5, int param_6); // func_808CD020
 void func_808CD08C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808CD08C
 void func_808CD238(void); // func_808CD238
 void func_808CD740(void); // func_808CD740
@@ -6307,6 +6317,26 @@ void func_808D75F0(void); // func_808D75F0
 void func_808D7714(void); // func_808D7714
 void func_808D77B8(void); // func_808D77B8
 void func_808D77DC(void); // func_808D77DC
+UNK_TYPE4 func_808D78D0(Actor* param_1); // func_808D78D0
+unsigned int func_808D7928(Actor* param_1); // func_808D7928
+void func_808D7954(Actor* param_1); // func_808D7954
+void func_808D7A04(void); // func_808D7A04
+int func_808D7A14(int param_1); // func_808D7A14
+void func_808D7A40(UNK_PTR param_1, UNK_PTR param_2); // func_808D7A40
+void func_808D7A68(int param_1, GlobalContext* param_2); // func_808D7A68
+void func_808D7C64(int param_1, GlobalContext* param_2); // func_808D7C64
+void func_808D7DC4(int param_1, GlobalContext* param_2); // func_808D7DC4
+void func_808D7E14(unsigned int param_1, GlobalContext* param_2); // func_808D7E14
+void func_808D7F0C(unsigned int param_1, GlobalContext* param_2); // func_808D7F0C
+void func_808D7F2C(int param_1); // func_808D7F2C
+void func_808D7FFC(int param_1); // func_808D7FFC
+void func_808D8014(int param_1, GlobalContext* param_2); // func_808D8014
+void func_808D8074(int param_1, unsigned int param_2); // func_808D8074
+void func_808D814C(int param_1, int param_2); // func_808D814C
+void func_808D82CC(int param_1); // func_808D82CC
+void func_808D84F4(unsigned int param_1); // func_808D84F4
+void func_808D8678(unsigned int param_1, GlobalContext* param_2); // func_808D8678
+void func_808D8720(int param_1); // func_808D8720
 void func_808D8940(void); // func_808D8940
 void func_808D8B58(void); // func_808D8B58
 void func_808D8D60(void); // func_808D8D60
@@ -6455,6 +6485,7 @@ void func_808E45A0(void); // func_808E45A0
 void func_808E4654(void); // func_808E4654
 void func_808E4740(void); // func_808E4740
 void func_808E47E8(void); // func_808E47E8
+void func_808E491C(int param_1); // func_808E491C
 void func_808E4984(void); // func_808E4984
 void func_808E4AC8(void); // func_808E4AC8
 void func_808E4C18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808E4C18
