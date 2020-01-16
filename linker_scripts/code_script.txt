@@ -198,6 +198,31 @@ SECTIONS
 
         build/asm/boot_data.o(.text)
 
+        build/asm/boot_rodata_0x80080060.o(.text)
+        build/asm/boot_rodata_idle.o(.text)
+        build/asm/boot_rodata_z_std_dma.o(.text)
+        build/asm/boot_rodata_0x80080E30.o(.text)
+        build/asm/boot_rodata_0x80081250.o(.text)
+        build/asm/boot_rodata_CIC6105.o(.text)
+        build/asm/boot_rodata_fault.o(.text)
+        build/asm/boot_rodata_fault_drawer.o(.text)
+        build/asm/boot_rodata_0x80085570.o(.text)
+        build/asm/boot_rodata_0x80086280.o(.text)
+        build/asm/boot_rodata_0x80086760.o(.text)
+        build/asm/boot_rodata___osMalloc.o(.text)
+        build/asm/boot_rodata_setintmask.o(.text)
+        build/asm/boot_rodata_sinf.o(.text)
+        build/asm/boot_rodata_exceptasm.o(.text)
+        build/asm/boot_rodata_perspective.o(.text)
+        build/asm/boot_rodata_0x8008C260.o(.text)
+        build/asm/boot_rodata_lookathil.o(.text)
+        build/asm/boot_rodata_xprintf.o(.text)
+        build/asm/boot_rodata_cosf.o(.text)
+        build/asm/boot_rodata___libm_qnan_f.o(.text)
+        build/asm/boot_rodata_xldtob.o(.text)
+        build/asm/boot_rodata_llcvt.o(.text)
+        build/asm/boot_rodata_build_date.o(.text)
+
         boot_bss_start = .;
     }
     . += 0xC5C0;
