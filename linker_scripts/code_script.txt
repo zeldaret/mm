@@ -198,12 +198,12 @@ SECTIONS
 
         build/asm/boot_data.o(.text)
 
-        build/asm/boot_rodata_0x80080060.o(.text)
+        build/src/boot_O2_g3/boot_0x80080060.o(.rodata)
         build/asm/boot_rodata_idle.o(.text)
         build/asm/boot_rodata_z_std_dma.o(.text)
         build/asm/boot_rodata_0x80080E30.o(.text)
         build/asm/boot_rodata_0x80081250.o(.text)
-        build/asm/boot_rodata_CIC6105.o(.text)
+        build/src/boot_O2_g3/CIC6105.o(.rodata)
         build/asm/boot_rodata_fault.o(.text)
         build/asm/boot_rodata_fault_drawer.o(.text)
         build/asm/boot_rodata_0x80085570.o(.text)
@@ -211,7 +211,7 @@ SECTIONS
         build/asm/boot_rodata_0x80086760.o(.text)
         build/asm/boot_rodata___osMalloc.o(.text)
         build/asm/boot_rodata_setintmask.o(.text)
-        build/asm/boot_rodata_sinf.o(.text)
+        build/src/libultra/gu/sinf.o(.rodata)
         build/asm/boot_rodata_exceptasm.o(.text)
         build/asm/boot_rodata_perspective.o(.text)
         build/asm/boot_rodata_0x8008C260.o(.text)

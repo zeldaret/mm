@@ -211,7 +211,7 @@
     0x800992F0:"boot_rodata_lookathil",
     0x80099300:"boot_rodata_xprintf",
     0x80099400:"boot_rodata_cosf",
-    0x80099450:"boot_rodata___libm_qnan_f", # XXX this not be from a file with any functions
+    0x80099450:"boot_rodata___libm_qnan_f", # XXX this might not be from a file with any functions
     0x80099460:"boot_rodata_xldtob",
     0x800994C0:"boot_rodata_llcvt",
     0x800994D0:"boot_rodata_build_date",

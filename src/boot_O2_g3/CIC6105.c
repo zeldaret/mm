@@ -6,9 +6,9 @@ void CIC6105_Nop80081820(void) {}
 void CIC6105_Nop80081828(void) {}
 
 void CIC6105_PrintRomInfo(void) {
-    FaultDrawer_DrawText(80, 200, D_80098280, (UNK_PTR)(*(u32*)0xA4040010));
-    FaultDrawer_DrawText(40, 184, D_80098290, &D_800994D0);
-    FaultDrawer_DrawText(56, 192, D_800982A4, &D_800994DC);
+    FaultDrawer_DrawText(80, 200, "SP_STATUS %08x", (UNK_PTR)(*(u32*)0xA4040010));
+    FaultDrawer_DrawText(40, 184, "ROM_F [Creator:%s]", &D_800994D0);
+    FaultDrawer_DrawText(56, 192, "[Date:%s]", &D_800994DC);
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
