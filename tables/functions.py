@@ -9,7 +9,7 @@
     0x80080300:("Idle_MainThreadEntry","void","void* arg"),
     0x8008038C:("func_8008038C","void","void"),
     0x80080514:("Idle_ThreadEntry","void","void* arg"),
-    0x800805E0:("func_800805E0","void","void"),
+    0x800805E0:("func_800805E0","void","s32 param_1"),
     0x80080748:("func_80080748","void","void"),
     0x80080790:("Dmamgr_DoDmaTransfer","s32","u32 src, void* dst, u32 size"),
     0x800808D4:("Dmamgr_osEPiStartDmaWrapper","void","OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3"),

@@ -12,7 +12,7 @@ void Idle_InitCodeAndMemory(void); // func_80080250
 void Idle_MainThreadEntry(void* arg); // func_80080300
 void func_8008038C(void); // func_8008038C
 void Idle_ThreadEntry(void* arg); // func_80080514
-void func_800805E0(void); // func_800805E0
+void func_800805E0(s32 param_1); // func_800805E0
 void func_80080748(void); // func_80080748
 s32 Dmamgr_DoDmaTransfer(u32 src, void* dst, u32 size); // func_80080790
 void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3); // func_800808D4

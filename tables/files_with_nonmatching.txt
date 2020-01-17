@@ -2,6 +2,7 @@ boot_0x800805E0
 boot_0x800968B0
 fault
 fault_drawer
+idle
 stackcheck
 z_actor
 z_DLF

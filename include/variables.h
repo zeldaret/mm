@@ -4,6 +4,7 @@
 #include <structs.h>
 #include <dmadata.h>
 #include <segment.h>
+#include <section.h>
 #include <pre_boot_variables.h>
 
 extern UNK_TYPE1 D_800969C0; // D_800969C0
@@ -92,7 +93,7 @@ extern char dmamgrString800981D4[]; // D_800981D4
 extern char dmamgrString800981E4[]; // D_800981E4
 extern char dmamgrString800981F4[]; // D_800981F4
 extern char dmamgrThreadName[]; // D_80098204
-extern UNK_TYPE1 D_80098210; // D_80098210
+extern char D_80098210[]; // D_80098210
 extern char yaz0String80098220[]; // D_80098220
 extern char yaz0String8009823C[]; // D_8009823C
 extern char D_80098280[]; // D_80098280
@@ -230,46 +231,46 @@ extern char D_80099078[]; // D_80099078
 extern char D_8009907C[]; // D_8009907C
 extern char D_80099080[]; // D_80099080
 extern char D_800990B0[]; // D_800990B0
-extern f32 D_800990C0; // D_800990C0
-extern UNK_TYPE4 D_800990E4; // D_800990E4
-extern UNK_TYPE4 D_800990E8; // D_800990E8
-extern UNK_TYPE4 D_800990EC; // D_800990EC
-extern UNK_TYPE4 D_800990F0; // D_800990F0
-extern UNK_TYPE4 D_800990F4; // D_800990F4
-extern UNK_TYPE4 D_800990F8; // D_800990F8
-extern UNK_TYPE4 D_800990FC; // D_800990FC
-extern UNK_TYPE4 D_80099100; // D_80099100
-extern UNK_TYPE4 D_80099104; // D_80099104
-extern UNK_TYPE4 D_80099108; // D_80099108
-extern UNK_TYPE4 D_8009910C; // D_8009910C
-extern UNK_TYPE1 D_800991A0; // D_800991A0
+extern f32 D_800990C0[9]; // D_800990C0
+extern f32 D_800990E4; // D_800990E4
+extern f32 D_800990E8; // D_800990E8
+extern f32 D_800990EC; // D_800990EC
+extern f32 D_800990F0; // D_800990F0
+extern f32 D_800990F4; // D_800990F4
+extern f32 D_800990F8; // D_800990F8
+extern f32 D_800990FC; // D_800990FC
+extern f32 D_80099100; // D_80099100
+extern f32 D_80099104; // D_80099104
+extern f32 D_80099108; // D_80099108
+extern f32 D_8009910C; // D_8009910C
+extern u16 D_800991A0[64]; // D_800991A0
 extern du P[5]; // D_80099220
 extern du rpi; // D_80099248
 extern du pihi; // D_80099250
 extern du pilo; // D_80099258
 extern fu zero; // D_80099260
-extern UNK_TYPE1 __osHwIntTable; // D_80099270
-extern UNK_PTR leoDiskStack; // D_80099290
+extern UNK_TYPE1 D_80099270; // D_80099270
+extern UNK_PTR __osIntTable; // D_80099290
 extern f64 D_800992C0; // D_800992C0
 extern f64 D_800992F0; // D_800992F0
 extern f64 D_800992F8; // D_800992F8
-extern UNK_TYPE1 D_80099300; // D_80099300
+extern char D_80099300[]; // D_80099300
 extern char D_80099304[]; // D_80099304
 extern UNK_TYPE1 D_8009930C; // D_8009930C
-extern UNK_TYPE1 D_80099400; // D_80099400
+extern f32 D_80099400; // D_80099400
 extern f64 D_80099428; // D_80099428
 extern f64 D_80099430; // D_80099430
 extern f64 D_80099438; // D_80099438
 extern UNK_TYPE4 D_80099440; // D_80099440
 extern f32 __libm_qnan_f; // D_80099450
-extern UNK_TYPE8 D_80099460; // D_80099460
-extern UNK_TYPE1 D_800994A8; // D_800994A8
-extern UNK_TYPE1 D_800994AC; // D_800994AC
-extern UNK_TYPE1 D_800994B0; // D_800994B0
+extern f64 D_80099460[9]; // D_80099460
+extern char D_800994A8[]; // D_800994A8
+extern char D_800994AC[]; // D_800994AC
+extern char D_800994B0[]; // D_800994B0
 extern UNK_TYPE1 D_800994B1; // D_800994B1
-extern UNK_TYPE8 D_800994B8; // D_800994B8
-extern UNK_TYPE1 D_800994C0; // D_800994C0
-extern UNK_TYPE1 D_800994C8; // D_800994C8
+extern f64 D_800994B8; // D_800994B8
+extern f64 D_800994C0; // D_800994C0
+extern f64 D_800994C8; // D_800994C8
 extern char D_800994D0[]; // D_800994D0
 extern char D_800994DC[]; // D_800994DC
 extern StackEntry bootStackEntry; // D_80099500
@@ -283,7 +284,7 @@ extern StackEntry irqmgrStackEntry; // D_8009A670
 extern OSThread mainOSThread; // D_8009A690
 extern u8 mainStack[2304]; // D_8009A840
 extern StackEntry mainStackEntry; // D_8009B140
-extern UNK_TYPE4 D_8009B160[50]; // D_8009B160
+extern OSMesg D_8009B160[50]; // D_8009B160
 extern OSMesgQueue D_8009B228; // D_8009B228
 extern OSViMode D_8009B240; // D_8009B240
 extern u8 D_8009B290; // D_8009B290

@@ -174,6 +174,7 @@ class Disassembler:
         self.functions = set()
         self.labels = set()
         self.vars = set()
+        self.switch_cases = set()
         self.vars_sorted = list()
         self.vars_length = dict()
         self.data_regions = list()
@@ -417,7 +418,7 @@ class Disassembler:
                         addr_i = i
                         case_addr = file.get_inst(addr_i)
                         while self.is_in_code(case_addr):
-                            self.add_label(case_addr)
+                            self.switch_cases.add(case_addr)
                             addr_i += 1
                             if addr_i >= (file.size // 4):
                                 break
@@ -443,7 +444,9 @@ class Disassembler:
                         f = open(filename, 'w')
                         write_header(f)
 
-                    if addr in self.labels:
+                    if addr in self.labels and addr not in self.switch_cases:
+                        f.write(".L_%08X:\n" % addr)
+                    if addr in self.switch_cases:
                         f.write("glabel .L_%08X\n" % addr)
                     if addr in self.functions:
                         name = get_func_name(addr)
@@ -456,7 +459,7 @@ class Disassembler:
                             name = self.make_load(addr)
                             f.write("glabel %s\n" % name)
                         f.write("/* %06d 0x%08X */ .word\t%s\n" % (i, addr, get_func_name(inst)))
-                    elif inst in self.labels:
+                    elif inst in self.switch_cases:
                         if self.is_start_of_variable(addr):
                             name = self.make_load(addr)
                             f.write("glabel %s\n" % name)
@@ -938,6 +941,7 @@ class Disassembler:
             f.write("#include <structs.h>\n"
                     "#include <dmadata.h>\n"
                     "#include <segment.h>\n"
+                    "#include <section.h>\n"
                     "#include <pre_boot_variables.h>\n"
                     "\n"
                     )

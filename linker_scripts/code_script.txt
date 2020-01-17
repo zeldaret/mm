@@ -5,8 +5,9 @@ SECTIONS
 
     boot 0x80080060:
     {
+        boot_text_start = .;
         build/src/boot_O2_g3/boot_0x80080060.o(.text)
-        build/asm/idle.o(.text)
+        build/src/boot_O2_g3/idle.o(.text)
         build/src/boot_O2_g3/boot_0x800805E0.o(.text)
         build/src/boot_O2_g3/z_std_dma.o(.text)
         build/asm/boot_0x80080E30.o(.text)
@@ -195,11 +196,15 @@ SECTIONS
         build/src/boot_O2_g3/boot_0x800968B0.o(.text)
         build/asm/boot_0x800968F0.o(.text)
         build/asm/boot_0x80096930.o(.text)
+        boot_text_end = .;
 
+        boot_data_start = .;
         build/asm/boot_data.o(.text)
+        boot_data_end = .;
 
+        boot_rodata_start = .;
         build/src/boot_O2_g3/boot_0x80080060.o(.rodata)
-        build/asm/boot_rodata_idle.o(.text)
+        build/src/boot_O2_g3/idle.o(.rodata)
         build/asm/boot_rodata_z_std_dma.o(.text)
         build/asm/boot_rodata_0x80080E30.o(.text)
         build/asm/boot_rodata_0x80081250.o(.text)
@@ -222,13 +227,16 @@ SECTIONS
         build/asm/boot_rodata_xldtob.o(.text)
         build/asm/boot_rodata_llcvt.o(.text)
         build/asm/boot_rodata_build_date.o(.text)
-
-        boot_bss_start = .;
+        boot_rodata_end = .;
     }
+
+    boot_bss_start = .;
     . += 0xC5C0;
+    boot_bss_end = .;
 
     code :
     {
+        code_text_start = .;
         build/src/code/code_0x800A5AC0.o(.text)
         build/asm/z_en_item00.o(.text)
         build/asm/z_eff_blure.o(.text)
@@ -364,9 +372,13 @@ SECTIONS
         build/asm/code_0x801AA020.o(.text)
         build/asm/code_0x801AA610.o(.text)
         build/asm/code_0x801AAAA0.o(.text)
+        code_text_end = .;
 
+        code_data_start = .;
         build/asm/code_data.o(.text)
+        code_data_end = .;
 
+        code_rodata_start = .;
         build/asm/code_rodata_z_en_item00.o(.text)
         build/asm/code_rodata_z_eff_blure.o(.text)
         build/asm/code_rodata_z_eff_shield_particle.o(.text)
@@ -444,9 +456,12 @@ SECTIONS
         build/asm/code_rodata_0x801A5BD0.o(.text)
         build/asm/code_rodata_0x801A7B10.o(.text)
         build/asm/code_rodata_0x801AA610.o(.text)
-
-        code_bss_start = .;
+        code_rodata_end = .;
     }
+
+    code_bss_start = .;
+    . += 0x24F00;
+    code_bss_end = .;
 
     ovl_title 0x80800000:
     {
