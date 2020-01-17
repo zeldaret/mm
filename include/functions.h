@@ -313,7 +313,7 @@ void func_8008A660(void); // func_8008A660
 void osInitialize(void); // func_8008A6FC
 void func_8008A9A8(void); // func_8008A9A8
 void* osViGetNextFramebuffer(void); // func_8008AA10
-void guPerspectiveF(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8008AA50
+void guPerspectiveF(float mf[4][4], u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AA50
 void guPerspective(Mtx* m, u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AC80
 s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008ACE0
 s32 __osSiRawStartDma(s32 direction, void* dramAddr); // func_8008AD70
@@ -327,11 +327,11 @@ void func_8008B044(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_8008B3C0(void); // func_8008B3C0
 void func_8008B490(void); // func_8008B490
 void func_8008B554(void); // func_8008B554
-void guMtxIdentF(f32* mf); // func_8008B600
+void guMtxIdentF(float mf[4][4]); // func_8008B600
 void osViSetMode(OSViMode* modep); // func_8008B650
 void __osGetConfig(void); // func_8008B6B0
 void __osSetConfig(void); // func_8008B6C0
-void guLookAtF(float* mf, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp); // func_8008B6D0
+void guLookAtF(float mf[4][4], float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp); // func_8008B6D0
 void guLookAt(Mtx* m, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp); // func_8008B974
 void func_8008B9F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8008B9F0
 void func_8008BD24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8008BD24
@@ -359,7 +359,7 @@ f32 sqrtf(f32 __x); // func_8008D700
 void func_8008D710(void); // func_8008D710
 s32 osContStartQuery(OSMesgQueue* mq); // func_8008D730
 void osContGetQuery(OSContStatus* data); // func_8008D7AC
-void guLookAtHiliteF(f32* mf, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008D7D0
+void guLookAtHiliteF(float mf[4][4], UNK_PTR l, int* h, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp, float xl1, float yl1, float zl1, float xl2, float yl2, float zl2, int twidth, int theight); // func_8008D7D0
 void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008DF90
 int _Printf(printf_func pfn, void* arg, char* fmt, char* ap); // func_8008E050
 void func_8008E698(void); // func_8008E698
@@ -393,7 +393,7 @@ void func_800900C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void osSpTaskYielded(void); // func_800902A0
 s32 memcmp(void* __s1, void* __s2, size_t __n); // func_80090300
 OSTime osGetTime(void); // func_80090420
-void guRotateF(float* mf, float a, float x, float y, float z); // func_800904B0
+void guRotateF(float mf[4][4], float a, float x, float y, float z); // func_800904B0
 void guRotate(Mtx* m, float a, float x, float y, float z); // func_80090634
 void __osSetGlobalIntMask(void); // func_80090680
 void func_800906D0(void); // func_800906D0
@@ -468,7 +468,7 @@ __OSViContext* __osViGetCurrentContext(void); // func_800955B0
 void osWritebackDCacheAll(void); // func_800955C0
 OSThread* __osGetCurrFaultedThread(void); // func_800955F0
 void func_80095600(void); // func_80095600
-void guMtxF2L(void); // func_80095740
+void guMtxF2L(float mf[4][4], Mtx* m); // func_80095740
 void osStartThread(OSThread* param_1); // func_800957B0
 void osViSetYScale(f32 param_1); // func_80095900
 void osViSetXScale(f32 xscale); // func_80095950
@@ -486,7 +486,6 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
-// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -3738,8 +3737,6 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
-// UNK_RET func_8019AE40(UNK_ARGS);
-// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
