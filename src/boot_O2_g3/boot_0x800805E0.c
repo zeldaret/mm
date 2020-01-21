@@ -10,7 +10,7 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
             osViSetMode(&osViModeMpalLan1);
             break;
         case 0:
-            osViSetMode(&D_80097590);
+            osViSetMode(&osViModePalLan1);
             break;
         case 1:
             default:

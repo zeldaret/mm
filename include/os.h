@@ -161,6 +161,7 @@ typedef struct {
     /* 0x8 */ void* dramAddr;
     /* 0xC */ u32 devAddr;
     /* 0x10 */ u32 size;
+    /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg;
 
 
@@ -170,7 +171,8 @@ typedef struct {
     /* 0x8 */ OSMesgQueue* cmdQueue;
     /* 0xC */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*dma)(... /* ECOFF does not store param types */);
+    /* 0x14 */ s32 (*dma)(void);
+    /* 0x14 */ s32 (*unk18)(void);
 } OSDevMgr;
 
 
@@ -244,12 +246,15 @@ typedef struct {
     /* 0x4 */ OSMesgQueue* queue;
     /* 0x8 */ int channel;
     /* 0xC */ u8 id[32];
-    /* 0x2C */ u8 backup_id[32];
     /* 0x4C */ u8 label[32];
-    /* 0x6C */ int pack_size;
-    /* 0x70 */ int version;
-    /* 0x74 */ int dir_size;
-    /* 0x78 */ int inode_start_page;
+    /* 0x6C */ int version;
+    /* 0x70 */ int dir_size;
+    /* 0x74 */ int inode_table;
+    /* 0x78 */ int minode_table;
+    /* 0x7C */ int dir_table;
+    /* 0x80 */ int inode_start_page;
+    /* 0x84 */ u8 banks;
+    /* 0x88 */ u8 activebank;
 } OSPfs;
 
 

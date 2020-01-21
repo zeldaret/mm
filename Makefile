@@ -15,7 +15,10 @@ OPTIMIZATION := -O2 -g3
 build/src/libultra/os/%: OPTIMIZATION := -O1
 build/src/libultra/io/%: OPTIMIZATION := -O2
 build/src/libultra/libc/%: OPTIMIZATION := -O2
+build/src/libultra/libc/ll%: OPTIMIZATION := -O1
+build/src/libultra/libc/ll%: MIPS_VERSION := -mips3 -32
 build/src/libultra/gu/%: OPTIMIZATION := -O2
+build/src/libultra/rmon/%: OPTIMIZATION := -O2
 build/src/libultra/%: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
 build/src/libultra/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O1/%: OPTIMIZATION := -O1
@@ -25,8 +28,8 @@ build/src/boot_O2_g3_trapuv/%: OPTIMIZATION := -O2 -g3
 build/src/code/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/actors/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
-test.txt: OPTIMIZATION := -O2
-test.txt: CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
+test.txt: OPTIMIZATION := -O1
+test.txt: CC := $(QEMU_IRIX) -L $(IRIX_53_ROOT) $(IRIX_53_ROOT)/usr/bin/cc
 test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 
 CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
@@ -56,6 +59,7 @@ C_FILES := $(wildcard src/libultra/*) \
            $(wildcard src/libultra/io/*) \
            $(wildcard src/libultra/libc/*) \
            $(wildcard src/libultra/gu/*) \
+           $(wildcard src/libultra/rmon/*) \
            $(wildcard src/code/*) \
            $(wildcard src/boot_O2/*) \
            $(wildcard src/boot_O2_g3/*) \
@@ -84,6 +88,7 @@ $(shell mkdir -p $(BUILD_DIR)/src/libultra/os)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra/io)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra/libc)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra/gu)
+$(shell mkdir -p $(BUILD_DIR)/src/libultra/rmon)
 $(shell mkdir -p $(BUILD_DIR)/src/code)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O2)
 $(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3)
@@ -186,6 +191,14 @@ build/src/actors/%.o: src/actors/%.c include/*
 
 build/src/%.o: src/%.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+
+build/src/libultra/libc/ll.o: src/libultra/libc/ll.c include/*
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+	./tools/set_o32abi_bit.py $@
+
+build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c include/*
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
+	./tools/set_o32abi_bit.py $@
 
 build/decomp/%: build/decomp_pre_dmadata/%
 	cp $< $@

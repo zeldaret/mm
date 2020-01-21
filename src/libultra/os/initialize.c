@@ -2,16 +2,16 @@
 #include <osint.h>
 
 void func_8008A660(void) {
-    D_8009D134 = 7;
-    D_8009D135 = *(u32*)0xA4600014;
-    D_8009D138 = *(u32*)0xA4600018;
-    D_8009D136 = *(u32*)0xA460001C;
-    D_8009D137 = *(u32*)0xA4600020;
-    D_8009D1AC = 7;
-    D_8009D1AD = *(u32*)0xA4600024;
-    D_8009D1B0 = *(u32*)0xA4600028;
-    D_8009D1AE = *(u32*)0xA460002C;
-    D_8009D1AF = *(u32*)0xA4600030;
+    D_8009D130.type = 7;
+    D_8009D130.latency = *(u32*)0xA4600014;
+    D_8009D130.pageSize = *(u32*)0xA4600018;
+    D_8009D130.relDuration = *(u32*)0xA460001C;
+    D_8009D130.pulse = *(u32*)0xA4600020;
+    D_8009D1A8.type = 7;
+    D_8009D1A8.latency = *(u32*)0xA4600024;
+    D_8009D1A8.pageSize = *(u32*)0xA4600028;
+    D_8009D1A8.relDuration = *(u32*)0xA460002C;
+    D_8009D1A8.pulse = *(u32*)0xA4600030;
 }
 
 u64 D_80097E50; // this has to be defined in this file for func_8008A6FC to match

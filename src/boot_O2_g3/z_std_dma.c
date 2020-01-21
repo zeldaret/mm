@@ -2,7 +2,6 @@
 #include <global.h>
 
 s32 Dmamgr_DoDmaTransfer(u32 a0, void* a1, u32 a2) {
-    u32 spPad;
     OSIoMesg sp60;
     OSMesgQueue sp48;
     OSMesg sp44;

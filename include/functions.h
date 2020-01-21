@@ -234,7 +234,7 @@ void* __osRealloc(Heap* heap, void* oldPtr, u32 newSize); // func_800875E4
 void __osAnalyzeArena(Heap* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated); // func_80087714
 s32 __osCheckArena(Heap* heap); // func_800877C4
 void* proutSprintf(void* s, char* buf, size_t n); // func_80087830
-void func_80087854(void); // func_80087854
+int vsprintf(char* dst, char* fmt, va_list args); // func_80087854
 int sprintf(char* s, char* fmt, ...); // func_800878A4
 void func_80087900(void); // func_80087900
 void func_80087934(void); // func_80087934
@@ -254,20 +254,20 @@ OSIntMask osGetIntMask(void); // func_800880B0
 void func_80088110(void); // func_80088110
 void func_800882A0(void); // func_800882A0
 f32 __sinf(f32 __x); // func_80088350
-s32 sins(u16 angle); // func_80088510
+short sins(unsigned short x); // func_80088510
 OSTask* _VirtualToPhysicalTask(OSTask* intp); // func_80088580
 void osSpTaskLoad(OSTask* intp); // func_8008868C
 void osSpTaskStartGo(OSTask* tp); // func_800887F4
-void __ull_rshift(void); // func_80088840
-void __ull_rem(void); // func_8008886C
-u64 __ull_div(u64 param_1, u64 param_2); // func_800888A8
-void __ll_lshift(void); // func_800888E4
-void __ll_rem(void); // func_80088910
-void __ll_div(void); // func_8008894C
-u64 __ll_mul(u64 param_1, u64 param_2); // func_800889A8
-void __ull_divremi(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800889D8
-void __ll_mod(void); // func_80088A38
-void __ll_rshift(void); // func_80088AD4
+long long __ull_rshift(unsigned long long left, unsigned long long right); // func_80088840
+unsigned long long __ull_rem(unsigned long long left, unsigned long long right); // func_8008886C
+unsigned long long __ull_div(unsigned long long left, unsigned long long right); // func_800888A8
+long long __ll_lshift(long long left, long long right); // func_800888E4
+long long __ll_rem(long long left, unsigned long long right); // func_80088910
+long long __ll_div(long long left, long long right); // func_8008894C
+long long __ll_mul(long long left, long long right); // func_800889A8
+void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend, unsigned short divisor); // func_800889D8
+long long __ll_mod(long long left, long long right); // func_80088A38
+long long __ll_rshift(long long left, long long right); // func_80088AD4
 void __osExceptionPreamble(void); // func_80088B00
 void __osException(void); // func_80088B10
 void func_80088D48(void); // func_80088D48
@@ -301,8 +301,8 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data); // func_800
 void __osContGetInitData(u8* pattern, OSContStatus* data); // func_80089CBC
 void __osPackRequestData(u8 cmd); // func_80089D68
 void osCreateThread(OSThread* t, OSId id, osCreateThread_func entry, void* arg, void* sp, OSPri p); // func_80089E40
-void osContStartReadData(void); // func_80089F90
-void osContGetReadData(void); // func_8008A014
+s32 osContStartReadData(OSMesgQueue* mq); // func_80089F90
+void osContGetReadData(OSContPad* data); // func_8008A014
 void __osPackReadData(void); // func_8008A0A0
 void func_8008A170(void); // func_8008A170
 u32 osVirtualToPhysical(void* vaddr); // func_8008A540
@@ -322,8 +322,8 @@ void osViRepeatLine(u8 active); // func_8008AE70
 s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_8008AEE0
 OSId osGetThreadId(OSThread* t); // func_8008AF30
 void osSpTaskYield(void); // func_8008AF50
-void func_8008AF70(void); // func_8008AF70
-void func_8008B044(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8008B044
+s32 __osPfsRWInode(OSPfs* param_1, __OSInode* param_2, u8 param_3, u8 param_4); // func_8008AF70
+s32 osPfsReadWriteFile(OSPfs* pfs, s32 file_no, u8 flag, int offset, int size_in_bytes, u8* data_buffer); // func_8008B044
 void func_8008B3C0(void); // func_8008B3C0
 void func_8008B490(void); // func_8008B490
 void func_8008B554(void); // func_8008B554
@@ -341,8 +341,9 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
 void __osPiCreateAccessQueue(void); // func_8008C190
 void __osPiGetAccess(void); // func_8008C1E0
 void __osPiRelAccess(void); // func_8008C224
-void func_8008C260(s32 param_1); // func_8008C260
-void func_8008C670(void); // func_8008C670
+void __osDevMgrMain(void* arg); // func_8008C260
+void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4 param_17, UNK_TYPE4 param_18); // func_8008C640
+s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008C670
 void func_8008C740(void); // func_8008C740
 void func_8008C7B4(void); // func_8008C7B4
 void func_8008C8B0(void); // func_8008C8B0
@@ -350,9 +351,9 @@ void func_8008CC00(void); // func_8008CC00
 void func_8008CD64(void); // func_8008CD64
 void func_8008CF10(void); // func_8008CF10
 void func_8008CFE4(void); // func_8008CFE4
-void osGetCount(void); // func_8008D2C0
+u32 osGetCount(void); // func_8008D2C0
 void func_8008D2E0(void); // func_8008D2E0
-u32 calculate_mem_size(void); // func_8008D350
+u32 osGetMemSize(void); // func_8008D350
 void func_8008D470(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8008D470
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m); // func_8008D640
 f32 sqrtf(f32 __x); // func_8008D700
@@ -361,8 +362,8 @@ s32 osContStartQuery(OSMesgQueue* mq); // func_8008D730
 void osContGetQuery(OSContStatus* data); // func_8008D7AC
 void guLookAtHiliteF(float mf[4][4], UNK_PTR l, int* h, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp, float xl1, float yl1, float zl1, float xl2, float yl2, float zl2, int twidth, int theight); // func_8008D7D0
 void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008DF90
-int _Printf(printf_func pfn, void* arg, char* fmt, char* ap); // func_8008E050
-void func_8008E698(void); // func_8008E698
+int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap); // func_8008E050
+void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac); // func_8008E698
 void func_8008ED30(void); // func_8008ED30
 void osUnmapTLBAll(void); // func_8008EDE0
 s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction); // func_8008EE30
@@ -377,7 +378,7 @@ void osInvalDCache(void* vaddr, s32 nbytes); // func_8008F2F0
 void __osTimerServicesInit(void); // func_8008F3A0
 void __osTimerInterrupt(void); // func_8008F42C
 void __osSetTimerIntr(OSTime tim); // func_8008F5A4
-void __osInsertTimer(OSTimer* t); // func_8008F644
+OSTime __osInsertTimer(OSTimer* t); // func_8008F644
 void func_8008F7D0(void); // func_8008F7D0
 int __osSpDeviceBusy(void); // func_8008FA00
 int __osSiDeviceBusy(void); // func_8008FA30
@@ -387,10 +388,10 @@ void osSetThreadPri(OSThread* t, OSPri pri); // func_8008FC00
 OSPri osGetThreadPri(OSThread* t); // func_8008FCE0
 void func_8008FD00(void); // func_8008FD00
 void osViSwapBuffer(void* frameBufPtr); // func_8008FE60
-void func_8008FEB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_8008FEB0
-void func_80090058(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80090058
+void guPositionF(float mf[4][4], float r, float p, float h, float s, float x, float y, float z); // func_8008FEB0
+void guPosition(Mtx* m, float r, float p, float h, float s, float x, float y, float z); // func_80090058
 void func_800900C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800900C0
-void osSpTaskYielded(void); // func_800902A0
+OSYieldResult osSpTaskYielded(OSTask* task); // func_800902A0
 s32 memcmp(void* __s1, void* __s2, size_t __n); // func_80090300
 OSTime osGetTime(void); // func_80090420
 void guRotateF(float mf[4][4], float a, float x, float y, float z); // func_800904B0
@@ -400,42 +401,42 @@ void func_800906D0(void); // func_800906D0
 void func_80090810(void); // func_80090810
 void func_80090900(void); // func_80090900
 s32 osAiSetFrequency(u32 frequency); // func_80090AF0
-void func_80090C40(void); // func_80090C40
+s32 __osContRamRead(OSMesgQueue* mq, int channel, u16 address, u8* buffer); // func_80090C40
 void func_80090E70(void); // func_80090E70
-void func_800910A0(void); // func_800910A0
-void func_80091170(void); // func_80091170
+u8 __osContAddressCrc(u16 addr); // func_800910A0
+u8 __osContDataCrc(u8* data); // func_80091170
 OSThread* __osGetActiveQueue(void); // func_80091210
 void guNormalize(float* x, float* y, float* z); // func_80091220
 void __osSetCompare(u32 value); // func_80091280
 u32 __osGetCompare(void); // func_80091290
 u32 osDpGetStatus(void); // func_800912A0
-void osDpSetStatus(u32 status); // func_800912B0
+void osDpSetStatus(u32 data); // func_800912B0
 void _bcopy(void* __src, void* __dest, size_t __n); // func_800912C0
 void __osResetGlobalIntMask(void); // func_800915D0
 void func_80091630(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80091630
 void func_80091808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80091808
-void guOrthoF(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800918A0
-void guOrtho(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800919F4
+void guOrthoF(float mf[4][4], float l, float r, float b, float t, float n, float f, float scale); // func_800918A0
+void guOrtho(Mtx* m, float l, float r, float b, float t, float n, float f, float scale); // func_800919F4
 OSIntMask __osDisableInt(void); // func_80091A60
 void __osRestoreInt(OSIntMask im); // func_80091AD0
 void __osViInit(void); // func_80091AF0
 void __osViSwapContext(void); // func_80091C10
-void osPiGetCmdQueue(void); // func_80091F10
+OSMesgQueue* osPiGetCmdQueue(void); // func_80091F10
 f32 __cosf(f32 __x); // func_80091F40
 void func_800920B0(void); // func_800920B0
 void osViSetSpecialFeatures(u32 func); // func_80092100
-s32 coss(u16 angle); // func_80092260
-void osSetTime(void); // func_80092290
+short coss(unsigned short x); // func_80092260
+void osSetTime(OSTime ticks); // func_80092290
 void func_800922C0(void); // func_800922C0
-void osViSetEvent(OSMesgQueue* param_1, OSMesg param_2, u32 retraceCount); // func_800923E0
+void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount); // func_800923E0
 void func_80092440(void); // func_80092440
 void func_800925CC(void); // func_800925CC
 void func_80092680(void); // func_80092680
 void func_80092730(void); // func_80092730
-OSPiHandle* func_80092920(void); // func_80092920
+OSPiHandle* osCartRomInit(void); // func_80092920
 void func_80092A80(void); // func_80092A80
-void func_80092C00(void); // func_80092C00
-void osContSetCh(void); // func_80092C80
+s32 __osPfsSelectBank(OSPfs* pfs, UNK_TYPE4 param_2); // func_80092C00
+s32 osContSetCh(u8 ch); // func_80092C80
 u32 __osSetFpcCsr(u32 value); // func_80092CE0
 u32 __osGetFpcCsr(void); // func_80092CF0
 void func_80092D00(void); // func_80092D00
@@ -444,21 +445,21 @@ void func_800930E8(void); // func_800930E8
 void func_800931F0(void); // func_800931F0
 void func_80093728(void); // func_80093728
 void func_80093A00(void); // func_80093A00
-void osAiGetLength(void); // func_80093BA0
+u32 osAiGetLength(void); // func_80093BA0
 void func_80093BB0(void); // func_80093BB0
 void osMapTLBRdb(void); // func_80093C00
 void osYieldThread(void); // func_80093C60
 void func_80093CC0(void); // func_80093CC0
 u32 __osGetCause(void); // func_80093D90
-void func_80093DA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80093DA0
+s32 __osContRamWrite(OSMesgQueue* mq, int channel, u16 address, u8* buffer, int force); // func_80093DA0
 void func_80093FF0(void); // func_80093FF0
-s32 osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg); // func_80094150
-void _Ldtob(void); // func_800942E0
-void func_80094770(void); // func_80094770
-void func_80094828(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_80094828
-ldiv_t ldiv(s32 __numer, s32 __denom); // func_80094DF0
-lldiv_t* lldiv(s64 __numer, s64 __denom); // func_80094E74
-void _Litob(void); // func_80094F80
+int osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg); // func_80094150
+void _Ldtob(_Pft* px, unsigned char code); // func_800942E0
+void _Ldunscale(void); // func_80094770
+void _Genld(_Pft* px, unsigned char code, unsigned char* p, short nsig, short xexp); // func_80094828
+ldiv_t ldiv(long numer, long denom); // func_80094DF0
+lldiv_t lldiv(long long numer, long long denom); // func_80094E74
+void _Litob(_Pft* px, unsigned char code); // func_80094F80
 s32 __osSiRawWriteIo(u32 devAddr, u32 data); // func_80095220
 u32 __osSpGetStatus(void); // func_80095270
 void __osSpSetStatus(u32 value); // func_80095280
@@ -470,22 +471,23 @@ OSThread* __osGetCurrFaultedThread(void); // func_800955F0
 void func_80095600(void); // func_80095600
 void guMtxF2L(float mf[4][4], Mtx* m); // func_80095740
 void osStartThread(OSThread* param_1); // func_800957B0
-void osViSetYScale(f32 param_1); // func_80095900
-void osViSetXScale(f32 xscale); // func_80095950
-void __d_to_ll(void); // func_80095A60
-void __f_to_ll(void); // func_80095A7C
-void __d_to_ull(void); // func_80095A98
-void __f_to_ull(void); // func_80095B38
-void __ll_to_d(void); // func_80095BD4
-void __ll_to_f(void); // func_80095BEC
-void __ull_to_d(void); // func_80095C04
-void __ull_to_f(void); // func_80095C38
+void osViSetYScale(f32 value); // func_80095900
+void osViSetXScale(f32 value); // func_80095950
+long long __d_to_ll(double d); // func_80095A60
+long long __f_to_ll(float f); // func_80095A7C
+unsigned long long __d_to_ull(double d); // func_80095A98
+unsigned long long __f_to_ull(float f); // func_80095B38
+double __ll_to_d(long long l); // func_80095BD4
+float __ll_to_f(long long l); // func_80095BEC
+double __ull_to_d(unsigned long long l); // func_80095C04
+float __ull_to_f(unsigned long long l); // func_80095C38
 void func_80095C70(void); // func_80095C70
 void func_80096360(void); // func_80096360
 void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
+// UNK_RET func_80096770(UNK_ARGS);
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -3737,6 +3739,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
+// UNK_RET func_8019AE40(UNK_ARGS);
+// UNK_RET func_8019AEC0(UNK_ARGS);
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
