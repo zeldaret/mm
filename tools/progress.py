@@ -13,6 +13,11 @@ def read_all_lines(file_name):
     return lines
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--file', help='File to print progress off. If excluded, defaults to all files.')
+    args = parser.parse_args()
+
     map_lines = read_all_lines('build/mm.map')
 
     current_section = ''
@@ -63,10 +68,16 @@ if __name__ == "__main__":
 
     src = 0
     asm = 0
-    for section in src_amounts:
-        src += src_amounts[section]
-    for section in asm_amounts:
-        asm += asm_amounts[section]
+    if args.file == None:
+        for section in src_amounts:
+            src += src_amounts[section]
+        for section in asm_amounts:
+            asm += asm_amounts[section]
+    else:
+        if args.file not in src_amounts or args.file not in asm_amounts:
+            sys.exit('{} not found in map file'.format(args.file))
+        src += src_amounts[args.file]
+        asm += asm_amounts[args.file]
 
     total = src + asm
     src_percent = 100 * src / total
