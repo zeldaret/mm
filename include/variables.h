@@ -16,7 +16,7 @@ extern f32 screenXScale; // D_80096B30
 extern f32 screenYScale; // D_80096B34
 extern OSPiHandle* D_80096B40; // D_80096B40
 extern UNK_TYPE4 dmamgrChunkSize; // D_80096B50
-extern u32 prenmiStage; // D_80096B60
+extern vs32 prenmiStage; // D_80096B60
 extern OSTime lastPrenmiTime; // D_80096B68
 extern u64 lastFrameDuration; // D_80096B70
 extern s32 frameCount; // D_80096B78

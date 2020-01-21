@@ -93,11 +93,10 @@ char* func_800809F4(u32 a0) {
     return &D_800981C0[0];
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void Dmamgr_HandleRequest(DmaRequest* a0) {
-    UNK_TYPE sp34;
-    UNK_TYPE sp30;
+    u32 sp34;
+    u32 sp30;
     UNK_TYPE sp2C;
     UNK_TYPE sp28;
     UNK_TYPE sp24;
@@ -105,18 +104,18 @@ void Dmamgr_HandleRequest(DmaRequest* a0) {
     s32 sp1C;
     UNK_TYPE sp18;
 
-    sp34 = (UNK_TYPE)a0->unk0;
-    sp30 = (UNK_TYPE)a0->unk4;
-    sp2C = a0->unk8;
+    sp34 = a0->vromStart;
+    sp30 = a0->vramStart;
+    sp2C = a0->size;
 
     sp1C = Dmamgr_FindDmaIndex(sp34);
 
     if ((sp1C >= 0) && (sp1C < numDmaEntries)) {
         if (dmadata[sp1C].romEnd == 0) {
             if (dmadata[sp1C].vromEnd < (sp2C + sp34)) {
-                func_80083E4C(&dmamgrString800981C4, 499);
+                Fault_AddHungupAndCrash(dmamgrString800981C4, 499);
             }
-            Dmamgr_DoDmaTransfer((u8*)((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart), (u8*)sp30, sp2C);
+            Dmamgr_DoDmaTransfer((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart, (u8*)sp30, sp2C);
             return;
         }
 
@@ -125,78 +124,55 @@ void Dmamgr_HandleRequest(DmaRequest* a0) {
         sp28 = dmadata[sp1C].romStart;
 
         if (sp34 != dmadata[sp1C].vromStart) {
-            func_80083E4C(&dmamgrString800981D4, 518);
+            Fault_AddHungupAndCrash(dmamgrString800981D4, 518);
         }
 
         if (sp2C != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
-            func_80083E4C(&dmamgrString800981E4, 525);
+            Fault_AddHungupAndCrash(dmamgrString800981E4, 525);
         }
 
         osSetThreadPri(NULL, 10);
         Yaz0_LoadAndDecompressFile(sp28, sp30, sp24);
         osSetThreadPri(NULL, 17);
     } else {
-        func_80083E4C(&dmamgrString800981F4, 558);
+        Fault_AddHungupAndCrash(dmamgrString800981F4, 558);
     }
 }
-
 #else
-
 GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_HandleRequest.asm")
-
 #endif
 
-#ifdef NONMATCHING
-
 void Dmamgr_ThreadEntry(void* a0) {
-    DmaRequest* sp34;
-	UNK_TYPE pad;
+    OSMesg sp34;
+	u32 pad;
     DmaRequest* s0;
 
     for (;;) {
-        osRecvMesg(&dmamgrMsq, (OSMesg)&sp34, 1);
+        osRecvMesg(&dmamgrMsq, &sp34, 1);
         if (sp34 == NULL) return;
-        s0 = sp34;
+        s0 = (DmaRequest*)sp34;
         Dmamgr_HandleRequest(s0);
-        // TODO a0 isn't being used for this comparison
-        if (s0->unk18 == NULL) continue;
-        osSendMesg(&dmamgrMsq, (OSMesg)s0->unk1C, 0);
+        if (s0->callback == NULL) continue;
+        osSendMesg(s0->callback, s0->callbackMesg, 0);
     }
 }
 
-#else
-
-GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_ThreadEntry.asm")
-
-#endif
-
-#ifdef NONMATCHING
-
-s32 Dmamgr_SendRequest(DmaRequest* a0, UNK_FUN_PTR(a1), UNK_PTR a2, UNK_TYPE a3, UNK_TYPE sp30, OSMesgQueue* sp34, UNK_TYPE sp38) {
-    // TODO this isn't correct, it uses a lui, addiu to get the address of prenmiStage, then loads it,
-	// meaning that this is likely just "if (*prenmiStage >= 2)". However, I can not get it to not
-	// produce the usual lui, lw combo to load from an address :/
-    if (*prenmiStage >= 2) {
+s32 Dmamgr_SendRequest(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
+    if (prenmiStage >= 2) {
         return -2;
     }
 
-    a0->unk0 = a2;
-    a0->unk4 = a1;
-    a0->unk8 = a3;
-    a0->unk14 = 0;
-    a0->unk18 = sp34;
-    a0->unk1C = sp38;
+    request->vromStart = vromStart;
+    request->vramStart = vramStart;
+    request->size = size;
+    request->unk14 = 0;
+    request->callback = callback;
+    request->callbackMesg = callbackMesg;
 
-    osSendMesg(&dmamgrMsq, (OSMesg)a0, 1);
+    osSendMesg(&dmamgrMsq, request, 1);
 
     return 0;
 }
-
-#else
-
-GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_SendRequest.asm")
-
-#endif
 
 s32 Dmamgr_SendRequestAndWait(u32 a0, u32 a1, u32 a2) {
 	DmaRequest sp48;
@@ -217,31 +193,27 @@ s32 Dmamgr_SendRequestAndWait(u32 a0, u32 a1, u32 a2) {
 	return 0;
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
+// TODO missing a useless move initializing v0, and some reorderings
 void Dmamgr_Start() {
 	DmadataEntry* v0;
 	u32 v1;
-	// TODO register load ordering is wrong
-	Dmamgr_DoDmaTransfer(&dmadata_vrom_start, dmadata, (u8*)&dmadata_vrom_end - (u8*)&dmadata_vrom_start);
+	Dmamgr_DoDmaTransfer((u32)&dmadata_vrom_start, dmadata, (u32)&dmadata_vrom_end - (u32)&dmadata_vrom_start);
 
 	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
 
-	numDmaEntries = (u16)v1;
+	numDmaEntries = v1;
 
-	osCreateMesgQueue(&dmamgrMsq, (OSMesg)&dmamgrMsqMessages, 32);
+	osCreateMesgQueue(&dmamgrMsq, dmamgrMsqMessages, 32);
 
-	thread_info_init(&dmamgrThreadInfo, &dmamgrStack, &D_8009BA08, 0, 256, &dmamgrThreadName);
+	StackCheck_Init(&dmamgrStackEntry, (u32)&dmamgrStack, (u32)&dmamgrStack[1280], 0, 256, dmamgrThreadName);
 
-	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &D_8009BA08, 17);
+	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &dmamgrStack[1280], 17);
 
 	osStartThread(&dmamgrOSThread);
 }
-
 #else
-
 GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_Start.asm")
-
 #endif
 
 void Dmamgr_Stop() {
