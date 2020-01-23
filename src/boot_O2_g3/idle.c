@@ -63,7 +63,7 @@ GLOBAL_ASM("./asm/nonmatching/idle/Idle_InitCodeAndMemory.asm")
 
 void Idle_MainThreadEntry(void* arg) {
     StackCheck_Init(&irqmgrStackEntry, (u32)&irqmgrStack, (u32)&irqmgrStack[1280], 0, 256, "irqmgr");
-    Irqmgr_Start(&irqmgrContext, &irqmgrStackEntry, 18, 1);
+    IrqMgr_Start(&irqmgrContext, &irqmgrStackEntry, 18, 1);
     Dmamgr_Start();
     Idle_InitCodeAndMemory();
     main(arg);

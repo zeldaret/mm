@@ -1636,7 +1636,7 @@ struct HeapNode {
 /* 0xC */ HeapNode* prev;
 };
 
-typedef struct Irqmgr Irqmgr;
+typedef struct IrqMgr IrqMgr;
 
 typedef struct AudioThreadStruct AudioThreadStruct;
 
@@ -1654,8 +1654,8 @@ struct EffectTableInfo {
 
 typedef struct OSMesgQueueListNode OSMesgQueueListNode;
 
-struct Irqmgr {
-/* 0x000 */ s16 verticalRetraceMesg;
+struct IrqMgr {
+/* 0x000 */ s16 verticalRetraceMesg; // Is this a struct of size 0x20? (same below)
 /* 0x002 */ UNK_TYPE1 pad2[30];
 /* 0x020 */ s16 prenmi1Msg;
 /* 0x022 */ UNK_TYPE1 pad22[30];
@@ -1665,10 +1665,10 @@ struct Irqmgr {
 /* 0x078 */ UNK_TYPE4 irqBuffer[8];
 /* 0x098 */ OSThread thread;
 /* 0x248 */ OSMesgQueueListNode* callbacks;
-/* 0x24C */ s8 prenmiStage;
+/* 0x24C */ u8 prenmiStage;
 /* 0x24D */ UNK_TYPE1 pad24D[3];
 /* 0x250 */ OSTime lastPrenmiTime;
-/* 0x258 */ OSTimer unk258;
+/* 0x258 */ OSTimer prenmiTimer;
 /* 0x278 */ OSTime lastFrameTime;
 };
 
@@ -1688,7 +1688,7 @@ typedef struct {
 /* 0x064 */ OSMesgQueue lock;
 /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
 /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
-/* 0x09C */ Irqmgr* irqmgr;
+/* 0x09C */ IrqMgr* irqmgr;
 /* 0x0A0 */ OSThread thread;
 /* 0x250 */ Input input[4];
 /* 0x2B0 */ OSContPad controllerState1[4];
@@ -1722,7 +1722,7 @@ typedef struct {
 } SchedThreadStruct;
 
 struct AudioThreadStruct {
-/* 0x000 */ Irqmgr* irqmgr;
+/* 0x000 */ IrqMgr* irqmgr;
 /* 0x004 */ SchedThreadStruct* sched;
 /* 0x008 */ UNK_TYPE1 pad8[88];
 /* 0x060 */ UNK_TYPE4 unk60;

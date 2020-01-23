@@ -16,10 +16,10 @@ extern f32 screenXScale; // D_80096B30
 extern f32 screenYScale; // D_80096B34
 extern OSPiHandle* D_80096B40; // D_80096B40
 extern UNK_TYPE4 dmamgrChunkSize; // D_80096B50
-extern vs32 prenmiStage; // D_80096B60
-extern OSTime lastPrenmiTime; // D_80096B68
-extern u64 lastFrameDuration; // D_80096B70
-extern s32 frameCount; // D_80096B78
+extern vs32 gPrenmiStage; // D_80096B60
+extern volatile OSTime sLastPrenmiTime; // D_80096B68
+extern vu64 gLastFrameDuration; // D_80096B70
+extern s32 sFrameCount; // D_80096B78
 extern char* D_80096B80[18]; // D_80096B80
 extern char* D_80096BC8[6]; // D_80096BC8
 extern FaultDrawer* faultDrawContext; // D_80096BE0
@@ -277,7 +277,7 @@ extern OSThread idleOSThread; // D_80099520
 extern u8 idleStack[1024]; // D_800996D0
 extern StackEntry idleStackEntry; // D_80099AD0
 extern u8 bootStack[1024]; // D_80099AF0
-extern Irqmgr irqmgrContext; // D_80099EF0
+extern IrqMgr irqmgrContext; // D_80099EF0
 extern u8 irqmgrStack[1280]; // D_8009A170
 extern StackEntry irqmgrStackEntry; // D_8009A670
 extern OSThread mainOSThread; // D_8009A690

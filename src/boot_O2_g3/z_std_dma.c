@@ -158,7 +158,7 @@ void Dmamgr_ThreadEntry(void* a0) {
 }
 
 s32 Dmamgr_SendRequest(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
-    if (prenmiStage >= 2) {
+    if (gPrenmiStage >= 2) {
         return -2;
     }
 

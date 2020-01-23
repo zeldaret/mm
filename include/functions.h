@@ -30,18 +30,18 @@ u8* Yaz0_LoadFirstChunk(void); // func_80080E30
 u8* Yaz0_LoadNextChunk(void* currDecompPos); // func_80080ED0
 s32 Yaz0_Decompress(u8* src, u8* dest); // func_80080FF0
 void Yaz0_LoadAndDecompressFile(u32 romStart, u32 vramStart, u32 size); // func_80081178
-void Irqmgr_AddCallback(Irqmgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3); // func_80081250
-void Irqmgr_RemoveCallback(Irqmgr* irqmgr, OSMesgQueueListNode* puParm2); // func_800812DC
-void Irqmgr_NotifyAllCallbacks(Irqmgr* irqmgr, s16* msg); // func_80081368
-void Irqmgr_NotifyAllCallbacksWithCapacity(Irqmgr* irqmgr, OSMesg msg); // func_800813B8
-void Irqmgr_HandlePrenmi1(Irqmgr* irqmgr); // func_8008141C
-void Irqmgr_CheckThreadStatus2(void); // func_800814B4
-void Irqmgr_HandlePrenmi2(Irqmgr* irqmgr); // func_800814D4
-void Irqmgr_HandlePrenmi3(Irqmgr* irqmgr); // func_80081550
-void Irqmgr_CheckThreadStatus(Irqmgr* irqmgr); // func_800815A8
-void Irqmgr_HandleFrame(Irqmgr* irqmgr); // func_800815CC
-void Irqmgr_ThreadEntry(Irqmgr* irqmgr); // func_80081684
-void Irqmgr_Start(Irqmgr* irqmgr, void* stack, OSPri pri, u8 retraceCount); // func_80081754
+void IrqMgr_AddCallback(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3); // func_80081250
+void IrqMgr_RemoveCallback(IrqMgr* irqmgr, OSMesgQueueListNode* remove); // func_800812DC
+void IrqMgr_NotifyAllCallbacks(IrqMgr* irqmgr, OSMesg msg); // func_80081368
+void IrqMgr_NotifyAllCallbacksWithCapacity(IrqMgr* irqmgr, OSMesg msg); // func_800813B8
+void IrqMgr_HandlePrenmi1(IrqMgr* irqmgr); // func_8008141C
+void IrqMgr_CheckThreadStatusImpl(void); // func_800814B4
+void IrqMgr_HandlePrenmi2(IrqMgr* irqmgr); // func_800814D4
+void IrqMgr_HandlePrenmi3(IrqMgr* irqmgr); // func_80081550
+void IrqMgr_CheckThreadStatus(IrqMgr* irqmgr); // func_800815A8
+void IrqMgr_HandleFrame(IrqMgr* irqmgr); // func_800815CC
+void IrqMgr_ThreadEntry(IrqMgr* irqmgr); // func_80081684
+void IrqMgr_Start(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount); // func_80081754
 void CIC6105_Nop80081820(void); // func_80081820
 void CIC6105_Nop80081828(void); // func_80081828
 void CIC6105_PrintRomInfo(void); // func_80081830
@@ -487,7 +487,7 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
-// UNK_RET func_80096770(UNK_ARGS);
+void FUN_80096770(int param_1, UNK_PTR param_2, UNK_PTR param_3); // func_80096770
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
@@ -3095,7 +3095,7 @@ void func_80172C68(AudioThreadStruct* audio); // func_80172C68
 void Audio_Stop(void); // func_80172EAC
 void Audio_ThreadEntry(AudioThreadStruct* audio); // func_80172ED0
 void Audio_WaitForInit(AudioThreadStruct* param_1); // func_80173048
-void Audio_Start(AudioThreadStruct* audio, s32* audioThreadStackEnd, OSPri pri, OSId id, SchedThreadStruct* sched, Irqmgr* irq); // func_80173074
+void Audio_Start(AudioThreadStruct* audio, s32* audioThreadStackEnd, OSPri pri, OSId id, SchedThreadStruct* sched, IrqMgr* irq); // func_80173074
 void func_80173130(void); // func_80173130
 void Initial_Init2(ContextCommon* ctxt); // func_801732DC
 void Initial_Fini(void); // func_8017332C
@@ -3171,7 +3171,7 @@ void func_80175E68(Input* input, int param_2); // func_80175E68
 void Padmgr_GetInput(Input* input, int param_2); // func_80175F98
 void Padmgr_GetInput2(Input* input, int param_2); // func_80175FD4
 void Padmgr_ThreadEntry(PadmgrThreadStruct* padmgr); // func_80176010
-void Padmgr_Start(OSMesgQueue* siEventCallbackQueue, Irqmgr* irqmgr, OSId threadId, OSPri threadPri, void* stack); // func_80176194
+void Padmgr_Start(OSMesgQueue* siEventCallbackQueue, IrqMgr* irqmgr, OSId threadId, OSPri threadPri, void* stack); // func_80176194
 void func_80176280(void); // func_80176280
 void func_80176314(void); // func_80176314
 void Sched_Nop80176364(SchedThreadStruct* sched); // func_80176364
@@ -3195,7 +3195,7 @@ void func_80177060(SchedThreadStruct* sched); // func_80177060
 void func_80177084(SchedThreadStruct* sched); // func_80177084
 void Sched_ThreadEntry(SchedThreadStruct* sched); // func_8017715C
 void func_80177280(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_80177280
-void Sched_Start(SchedThreadStruct* sched, void* stack, OSPri pri, UNK_TYPE4 param_4, UNK_TYPE4 param_5, Irqmgr* irqmgrStruct); // func_801772A0
+void Sched_Start(SchedThreadStruct* sched, void* stack, OSPri pri, UNK_TYPE4 param_4, UNK_TYPE4 param_5, IrqMgr* irqmgrStruct); // func_801772A0
 void func_80177390(void); // func_80177390
 void func_801773A0(void); // func_801773A0
 void func_801773C4(void); // func_801773C4
@@ -3739,8 +3739,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
-// UNK_RET func_8019AE40(UNK_ARGS);
-// UNK_RET func_8019AEC0(UNK_ARGS);
+void FUN_8019ae40(int param_1, int param_2, unsigned int param_3, int param_4); // func_8019AE40
+void FUN_8019aec0(UNK_PTR param_1, UNK_PTR param_2); // func_8019AEC0
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
