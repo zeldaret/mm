@@ -1,6 +1,6 @@
 # Legend of Zelda: Majora's Mask (U) 1.0
 
-This is a disassembly of Legend of Zelda: Majora's Mask (U) 1.0
+This is a decompilation of Legend of Zelda: Majora's Mask (U) 1.0
 
 It builds the following ROM:
 * rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
