@@ -12,3 +12,4 @@ z_lights
 z_room
 z_scene_proc
 z_std_dma
+z_scene
