@@ -1,7 +1,7 @@
 # TODO think about how to split this up
 
-AS := $(MIPS_BINUTILS)as
-LD := $(MIPS_BINUTILS)ld
+AS := $(MIPS_BINUTILS_PREFIX)as
+LD := $(MIPS_BINUTILS_PREFIX)ld
 
 IRIX_71_ROOT := ./tools/ido7.1_compiler/
 IRIX_53_ROOT := ./tools/ido5.3_compiler/
@@ -104,10 +104,10 @@ $(ROM): $(ROM_FILES)
 	@./tools/makerom.py ./tables/dmadata_table.py $@
 
 build/%_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS)objcopy --dump-section $*=$@ $<
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
 
 build/%.bin: build/code.elf
-	$(MIPS_BINUTILS)objcopy --dump-section $*=$@ $<
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
 
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
 	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
@@ -128,7 +128,7 @@ linker_scripts/dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMA
 	mv build/decomp_temp build/decomp
 
 test.txt: build/src/test.o
-	$(MIPS_BINUTILS)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
+	$(MIPS_BINUTILS_PREFIX)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
 
 clean:
 	rm $(ROM) -r build

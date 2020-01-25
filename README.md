@@ -13,19 +13,31 @@ If you're running Windows 10, [install WSL](https://docs.microsoft.com/en-us/win
 
 ## Step 2:
 
-Using sudo apt-get, install the following packages:
+Install the following packages:
 
 ```
 make
 git
 binutils-mips-linux-gnu
 python3
+pip3
 ```
 
-## Step 2:
-Download build_tools.zip from the Releases section and extract it to the tools folder.
+For your convience, you can copy the following:
+
+```
+sudo apt-get update
+sudo apt-get install make
+sudo apt-get install git
+sudo apt-get install binutils-mips-linux-gnu
+sudo apt-get install python3
+sudo apt-get install python3-pip
+```
 
 ## Step 3:
+Download build_tools.zip from the Releases section and extract it to the tools folder. This contains the compilers the decompilation uses, as well as a modified version of Qemu to emulate them on a modern Linux system. The compilers must go into the tools folder. Qemu may be placed wherever you like.
+
+## Step 4:
 
 Open up your .bashrc file (~/.bashrc), scroll to the bottom, and add the following, replacing `/path/to/qemu-mips` with the location the qemu-mips you extracted from the build tools:
 
@@ -36,25 +48,25 @@ export MIPS_BINUTILS_PREFIX=mips-linux-gnu-
 
 Save and close/reopen your terminal window.
 
-## Step 4:
-Make a fork of the main repository https://github.com/Rozelette/Majora-Unmasked.git and clone your fork.
-
 ## Step 5:
+Make a fork of the main repository https://github.com/n64decomp/majora.git and clone your fork.
 
-Navigate to the Majora-Unmasked folder you just cloned. Type the following commands:
+## Step 6:
+
+Navigate to the folder you just cloned. Type the following commands:
 
 ```
 git submodule update --init --recursive
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
-## Step 6:
+## Step 7:
 
 You will need to acquire a copy of the ROM. The md5 of this ROM should be `2a0a8acb61538235bc1094d297fb6556`.
 
 Once this has been done, type, replacing `<ROM>` with the name of your ROM:
 ```
-./tools/extract_baserom.py <ROM>
+./tools/extract_rom.py <ROM>
 ```
 
 This will extract all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder.
@@ -66,7 +78,7 @@ make disasm
 
 This will create the build folders as well as a newly created asm folder containing the disassemblies of nearly all the files containing code.
 
-## Step 7:
+## Step 8:
 
 Type the following:
 ```
