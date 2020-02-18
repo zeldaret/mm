@@ -111,7 +111,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
             roomCtxt->currRoom.vramAddr = (void*)(roomCtxt->activeRoomVram);
             gRspSegmentPhysAddrs[3] = roomCtxt->activeRoomVram + 0x80000000;
 
-            Scene_ProcessHeader(ctxt, (SceneHeaderEntry*)roomCtxt->currRoom.vramAddr);
+            Scene_ProcessHeader(ctxt, (SceneCmd*)roomCtxt->currRoom.vramAddr);
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorContext.actorTypeLists[2].head);
             Actor_SpawnTransitionActors(ctxt, &ctxt->actorContext);
 

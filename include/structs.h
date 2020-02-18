@@ -168,6 +168,11 @@ typedef struct {
 /* 0x7 */ u8 unk7;
 } CutsceneEntry;
 
+typedef struct{
+    /* 0x00 */ u8 spawn;
+    /* 0x01 */ u8 room;
+} EntranceEntry;
+
 typedef struct {
 /* 0x00 */ u32 chestFlags;
 /* 0x04 */ u32 switchFlags[2];
@@ -476,7 +481,11 @@ typedef struct {
 
 // Extra information in the save context that is not saved
 typedef struct {
-/* 0x000 */ UNK_TYPE1 pad0[640];
+/* 0x000 */ UNK_TYPE1 pad0[0x10];
+/* 0x010 */ s32 unk010;
+/* 0x012 */ UNK_TYPE1 unk011[0x2E];
+/* 0x042 */ s16 unk042;
+/* 0x044 */ UNK_TYPE1 unk044[0x23C];
 /* 0x280 */ u16 unk280;
 /* 0x282 */ u16 unk282;
 /* 0x284 */ UNK_TYPE1 pad284[64];
@@ -516,21 +525,29 @@ typedef struct {
 } SaveContext_struct2;
 
 typedef struct {
-/* 0x0 */ UNK_TYPE1 pad0[16];
-} SceneActorInit;
-
-typedef struct {
 /* 0x0 */ u32 entranceCount;
 /* 0x4 */ EntranceRecord** entrances;
 /* 0x8 */ char* name;
 } SceneEntranceTableEnty;
 
+/**
+ * Scene Commands
+ */
+
 typedef struct {
-/* 0x0 */ u8 command;
-/* 0x1 */ u8 unk1;
-/* 0x2 */ UNK_TYPE1 pad2[2];
-/* 0x4 */ u32 unk4;
-} SceneHeaderEntry;
+	/* 0x0 */ u8 command;
+	/* 0x1 */ u8 unk1;
+	/* 0x2 */ UNK_TYPE1 pad2[2];
+	/* 0x4 */ u32 unk4;
+} SCmdBase;
+
+typedef union
+{
+    SCmdBase             base;
+} SceneCmd;
+/**
+ * End Scene Commands
+ */
 
 typedef struct {
 /* 0x00 */ s16 scenes[27];
@@ -540,7 +557,7 @@ typedef struct {
 /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded
 /* 0x02 */ UNK_TYPE1 pad2[2];
 /* 0x04 */ void* vramAddr;
-/* 0x08 */ DmaRequest unk8;
+/* 0x08 */ DmaRequest dmaReq;
 /* 0x28 */ OSMesgQueue unk28;
 /* 0x40 */ UNK_TYPE1 pad40[4];
 } SceneObject;
@@ -665,6 +682,13 @@ typedef struct {
 /* 0x2 */ s16 y;
 /* 0x4 */ s16 z;
 } Vector3s;
+
+typedef struct {
+/* 0x00 */ s16 id;
+/* 0x02 */ Vector3s pos;
+/* 0x08 */ Vector3s rot;
+/* 0x0E */ s16 params;
+} ActorEntry;
 
 typedef struct {
 /* 0x0 */ s32 topY;
@@ -1024,7 +1048,8 @@ typedef struct {
 /* 0x000E */ UNK_TYPE1 padE[10];
 /* 0x0018 */ u32 day;
 /* 0x001C */ u32 daysElapsed;
-/* 0x0020 */ UNK_TYPE1 pad20[3];
+/* 0x0020 */ u8 unk20;
+/* 0x0021 */ UNK_TYPE1 pad21[2];
 /* 0x0023 */ u8 owlSave;
 /* 0x0024 */ SaveContext_struct1 unk24;
 /* 0x004C */ SaveContext_struct2 unk4C;
@@ -1093,7 +1118,7 @@ typedef struct {
 /* 0x16 */ UNK_TYPE1 pad16[2];
 /* 0x18 */ BgPolygon* polygons;
 /* 0x1C */ BgPolygonAttributes* attributes;
-/* 0x20 */ UNK_TYPE1 pad20[4];
+/* 0x20 */ UNK_PTR cameraData;
 /* 0x24 */ u16 numWaterBoxes;
 /* 0x26 */ UNK_TYPE1 pad26[2];
 /* 0x28 */ BgWaterBox* waterboxes;
@@ -1235,7 +1260,9 @@ typedef struct {
 /* 0xDA */ UNK_TYPE1 padDA[2];
 /* 0xDC */ f32 unkDC;
 /* 0xE0 */ u8 unkE0;
-/* 0xE1 */ UNK_TYPE1 padE1[17];
+/* 0xE1 */ UNK_TYPE1 unkE1;
+/* 0xE2 */ s8 unkE2;
+/* 0xE3 */ UNK_TYPE1 padE2[15];
 } KankyoContext;
 
 typedef struct {
@@ -1251,7 +1278,9 @@ typedef struct {
 /* 0x11F22 */ u8 unk11F22;
 /* 0x11F23 */ UNK_TYPE1 pad11F23[253];
 /* 0x12020 */ u8 unk12020;
-/* 0x12021 */ UNK_TYPE1 pad12021[73];
+/* 0x12021 */ UNK_TYPE1 pad12021[35];
+/* 0x12044 */ s16 unk12044;
+/* 0x12046 */ UNK_TYPE1 pad12046[36];
 /* 0x1206A */ s16 unk1206A;
 /* 0x1206C */ UNK_TYPE1 pad1206C[108];
 } MessageContext;
@@ -1277,7 +1306,8 @@ typedef struct {
 
 typedef struct {
 /* 0x00 */ s8 index;
-/* 0x01 */ UNK_TYPE1 pad1[2];
+/* 0x01 */ UNK_TYPE1 unk1;
+/* 0x02 */ s8 unk2;
 /* 0x03 */ u8 unk3;
 /* 0x04 */ s8 unk4;
 /* 0x05 */ u8 unk5;
@@ -1796,7 +1826,7 @@ typedef struct {
 /* 0x20 */ u32 unk20;
 } s801BB170;
 
-typedef void(*scene_header_func)(GlobalContext* ctxt, SceneHeaderEntry* entry);
+typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
 
 typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* params);
 
@@ -2154,13 +2184,13 @@ struct GlobalContext {
 /* 0x18848 */ u8 numRooms;
 /* 0x18849 */ UNK_TYPE1 pad18849[3];
 /* 0x1884C */ RoomFileLocation* roomAddrs;
-/* 0x18850 */ UNK_TYPE1 pad18850[4];
-/* 0x18854 */ SceneActorInit* sceneActorList;
-/* 0x18858 */ UNK_TYPE1 pad18858[4];
-/* 0x1885C */ u8* entranceList;
+/* 0x18850 */ ActorEntry* linkActorEntry;
+/* 0x18854 */ ActorEntry* sceneActorList;
+/* 0x18858 */ UNK_PTR unk18858;
+/* 0x1885C */ EntranceEntry* entranceList;
 /* 0x18860 */ void* exitList;
 /* 0x18864 */ void* pathList;
-/* 0x18868 */ UNK_TYPE1 pad18868[4];
+/* 0x18868 */ UNK_PTR unk18868;
 /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
 /* 0x18870 */ UNK_TYPE1 pad18870[4];
 /* 0x18874 */ u8 unk18874;
@@ -2169,7 +2199,9 @@ struct GlobalContext {
 /* 0x1887C */ s8 unk1887C;
 /* 0x1887D */ UNK_TYPE1 pad1887D[7];
 /* 0x18884 */ CollisionContext collisionContext;
-/* 0x18B20 */ UNK_TYPE1 pad18B20[42];
+/* 0x18B20 */ UNK_TYPE1 pad18B20[0x28];
+/* 0x18B48 */ u8 curSpawn;
+/* 0x18B49 */ UNK_TYPE1 unk18B49;
 /* 0x18B4A */ u8 unk18B4A;
 /* 0x18B4B */ UNK_TYPE1 pad18B4B[777];
 /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;

@@ -2407,40 +2407,40 @@ s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, short id); // func_8012F
 s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index); // func_8012F668
 void Scene_DmaAllObjects(SceneContext* sceneCtxt); // func_8012F698
 u32 func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
-void Scene_HeaderCommand00(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012F79C
-void Scene_HeaderCommand01(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012F90C
-void Scene_HeaderCommand02(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012F954
-void Scene_HeaderCommand03(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012F984
-void Scene_HeaderCommand04(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FA24
-void Scene_HeaderCommand06(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FA68
-void Scene_HeaderCommand07(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FA98
-void Scene_HeaderCommand08(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FB60
-void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FBE8
-void Scene_HeaderCommand0B(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FC18
-void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FDA4
-void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FE2C
-void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FE5C
+void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry); // func_8012F79C
+void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry); // func_8012F90C
+void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry); // func_8012F954
+void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry); // func_8012F984
+void Scene_HeaderCommand04(GlobalContext* ctxt, SceneCmd* entry); // func_8012FA24
+void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry); // func_8012FA68
+void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry); // func_8012FA98
+void Scene_HeaderCommand08(GlobalContext* ctxt, SceneCmd* entry); // func_8012FB60
+void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry); // func_8012FBE8
+void Scene_HeaderCommand0B(GlobalContext* ctxt, SceneCmd* entry); // func_8012FC18
+void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry); // func_8012FDA4
+void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry); // func_8012FE2C
+void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry); // func_8012FE5C
 void func_8012FEBC(void); // func_8012FEBC
-void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FECC
+void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry); // func_8012FECC
 void func_8012FF10(GlobalContext* ctxt, int iParm2); // func_8012FF10
-void Scene_HeaderCommand11(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FF8C
-void Scene_HeaderCommand12(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8012FFF0
-void Scene_HeaderCommand10(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130018
-void Scene_HeaderCommand05(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8013033C
-void Scene_HeaderCommand13(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_801303A0
-void Scene_HeaderCommand09(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_801303D0
-void Scene_HeaderCommand15(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_801303E0
-void Scene_HeaderCommand16(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_8013043C
-void Scene_HeaderCommand18(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130454
-void Scene_HeaderCommand17(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_801304CC
-void Scene_HeaderCommand1B(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130500
-void Scene_HeaderCommand1C(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130540
-void Scene_HeaderCommand1D(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130578
-void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130588
-void Scene_HeaderCommand19(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_801305B0
-void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneHeaderEntry* entry); // func_80130674
+void Scene_HeaderCommand11(GlobalContext* ctxt, SceneCmd* entry); // func_8012FF8C
+void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry); // func_8012FFF0
+void Scene_HeaderCommand10(GlobalContext* ctxt, SceneCmd* entry); // func_80130018
+void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry); // func_8013033C
+void Scene_HeaderCommand13(GlobalContext* ctxt, SceneCmd* entry); // func_801303A0
+void Scene_HeaderCommand09(GlobalContext* ctxt, SceneCmd* entry); // func_801303D0
+void Scene_HeaderCommand15(GlobalContext* ctxt, SceneCmd* entry); // func_801303E0
+void Scene_HeaderCommand16(GlobalContext* ctxt, SceneCmd* entry); // func_8013043C
+void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry); // func_80130454
+void Scene_HeaderCommand17(GlobalContext* ctxt, SceneCmd* entry); // func_801304CC
+void Scene_HeaderCommand1B(GlobalContext* ctxt, SceneCmd* entry); // func_80130500
+void Scene_HeaderCommand1C(GlobalContext* ctxt, SceneCmd* entry); // func_80130540
+void Scene_HeaderCommand1D(GlobalContext* ctxt, SceneCmd* entry); // func_80130578
+void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneCmd* entry); // func_80130588
+void Scene_HeaderCommand19(GlobalContext* ctxt, SceneCmd* entry); // func_801305B0
+void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry); // func_80130674
 void func_801306A4(GlobalContext* ctxt); // func_801306A4
-s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneHeaderEntry* header); // func_801306E8
+s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header); // func_801306E8
 u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset); // func_80130768
 void func_80130784(void); // func_80130784
 void SceneProc_DrawCurrentSceneAnimatedTextures(GlobalContext* ctxt); // func_801307C0

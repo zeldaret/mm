@@ -1556,7 +1556,7 @@ extern UNK_TYPE1 D_801C2410; // D_801C2410
 extern UNK_TYPE1 D_801C2650; // D_801C2650
 extern UNK_TYPE1 D_801C2660; // D_801C2660
 extern scene_header_func sceneHeaderFuncTable[31]; // D_801C26A8
-extern UNK_TYPE1 D_801C2730; // D_801C2730
+extern s16 D_801C2730[0x08]; // D_801C2730
 extern ObjectFileTableEntry objectFileTable[643]; // D_801C2740
 extern Gfx gSceneProcDefaultDl[11]; // D_801C3B60
 extern global_context_func gSceneProcSceneDrawFuncs[8]; // D_801C3BB8
