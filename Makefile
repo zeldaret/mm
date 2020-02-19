@@ -168,7 +168,7 @@ build/decomp_pre_dmadata/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray_pre_dmadata.bi
 
 
 disasm:
-	@./tools/disasm.py -d ./asm -e ./include -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/pre_boot_variables.py
+	@./tools/disasm.py -d ./asm -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/pre_boot_variables.py
 	@while read -r file; do \
 		./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt
