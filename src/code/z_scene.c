@@ -12,9 +12,9 @@ GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_FindSceneObjectIndex.asm")
 s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index) {
     if (iParm1->objects[index].id > 0) {
         return 1;
-	} else {
+    } else {
         return 0;
-	}
+    }
 }
 
 GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_DmaAllObjects.asm")
@@ -25,34 +25,33 @@ GLOBAL_ASM("./asm/nonmatching/z_scene/func_8012F73C.asm")
 #ifdef NONMATCHING
 // Regalloc differences only
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
-    
     ActorEntry* linkEntry;
     s32 loadReturn;
     void* objectVramAddr;
     s16 temp16;
-    
-    linkEntry = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4) + (ctxt->entranceList[ctxt->curSpawn].spawn & 0xFF);    
+
+    linkEntry = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4) + (ctxt->entranceList[ctxt->curSpawn].spawn & 0xFF);
     ctxt->linkActorEntry = linkEntry;
 
-    if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C || 
+    if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk010 == 0x02 && gSaveContext.extra.unk042 == 0x0CFF)
     ) {
         Scene_LoadObject(&ctxt->sceneContext, 0x192);
         return;
     }
-    
+
     loadReturn = Scene_LoadObject(&ctxt->sceneContext, 0x11);
-    
+
     temp16 = (&ctxt->sceneContext)->unk8;
     objectVramAddr = ctxt->sceneContext.objects[temp16].vramAddr;
     ctxt->sceneContext.unk8 = loadReturn & 0xFF;
     ctxt->sceneContext.unk9 = loadReturn & 0xFF;
-        
+
     temp16 = D_801C2730[gSaveContext.perm.unk20];
     actorOverlayTable[0].initValues->objectDependency = temp16;
-    
+
     Scene_LoadObject(&ctxt->sceneContext, temp16);
-    
+
     ctxt->sceneContext.objects[(&ctxt->sceneContext)->unk8].vramAddr = objectVramAddr;
 }
 #else
@@ -73,7 +72,7 @@ void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x02: Cutscene Camera List
 void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->unk18858 = (UNK_PTR)Lib_PtrSegToVirt((void*)entry->base.unk4);
-}    
+}
 
 // Scene Command 0x03: Collision Header
 void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
@@ -93,7 +92,7 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
     if (temp_s0->waterboxes != 0) {
         temp_s0->waterboxes = (BgWaterBox*)Lib_PtrSegToVirt(temp_s0->waterboxes);
     }
-	
+
     BgCheck_Init(&ctxt->bgCheckContext, ctxt, temp_s0);
 }
 
@@ -109,14 +108,14 @@ void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 // Scene Command 0x07: Special Files
-void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {    
+void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->base.unk4 != 0) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, entry->base.unk4);
         gRspSegmentPhysAddrs[5] = (u32)(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr) + 0x80000000;
     }
-    
+
     if (entry->base.unk1 != 0) {
-		// TODO:
+        // TODO:
         // OOT has D_801C2650's equivalent as a list of navi messages that store SceneTableEntry structs.
         // This needs to be something like (SceneTableEntry*)(&D_801C2650[entry->unk1])
         // Currently D_801C2650 is not typed so that can't be completed at this moment.
@@ -167,7 +166,7 @@ GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_HeaderCommand13.asm")
 
 // Scene Command 0x09: Undefined
 void Scene_HeaderCommand09(GlobalContext* ctxt, SceneCmd* entry) {
-	
+
 }
 
 GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_HeaderCommand15.asm")
@@ -188,7 +187,7 @@ GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_HeaderCommand1C.asm")
 
 // Scene Command 0x1D: Undefined
 void Scene_HeaderCommand1D(GlobalContext* ctxt, SceneCmd* entry) {
-	
+
 }
 
 GLOBAL_ASM("./asm/nonmatching/z_scene/Scene_HeaderCommand1E.asm")
