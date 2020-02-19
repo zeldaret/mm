@@ -101,7 +101,7 @@ check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)
-	@./tools/makerom.py ./tables/dmadata_table.py $@
+	@./tools/makerom.py ./tables/dmadata_table.txt $@
 
 build/%_pre_dmadata.bin: build/code_pre_dmadata.elf
 	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
@@ -121,7 +121,7 @@ linker_scripts/dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMA
 	mv build/decomp build/decomp_temp
 	mv build/baserom_pre_dmadata build/baserom
 	mv build/decomp_pre_dmadata build/decomp
-	./tools/dmadata.py ./tables/dmadata_table.py /dev/null -u -l linker_scripts/dmadata_script.txt
+	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt
 	mv build/baserom build/baserom_pre_dmadata
 	mv build/decomp build/decomp_pre_dmadata
 	mv build/baserom_temp build/baserom
@@ -134,7 +134,7 @@ clean:
 	rm $(ROM) -r build
 
 build/baserom/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
-	./tools/dmadata.py ./tables/dmadata_table.py $@
+	./tools/dmadata.py ./tables/dmadata_table.txt $@
 
 build/baserom/boot: build/boot.bin
 	cp $< $@
@@ -168,7 +168,7 @@ build/decomp_pre_dmadata/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray_pre_dmadata.bi
 
 
 disasm:
-	@./tools/disasm.py -d ./asm -u . -l ./tables/files.py -f ./tables/functions.py -o ./tables/objects.py -v ./tables/variables.py -v ./tables/vrom_variables.py -v ./tables/pre_boot_variables.py
+	@./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
 	@while read -r file; do \
 		./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
 	done < ./tables/files_with_nonmatching.txt
