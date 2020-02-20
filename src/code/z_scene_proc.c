@@ -64,7 +64,7 @@ void SceneProc_DrawType1Texture(GlobalContext* ctxt, u32 segment, ScrollingTextu
     }
 }
 
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 // Slight ordering differences at the beginning
 void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTexturePrimColor* primColor, RGBA8* envColor) {
     GraphicsContext* gCtxt;
@@ -104,7 +104,7 @@ void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTex
     gSPEndDisplayList(dl++);
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/z_scene_proc/SceneProc_DrawFlashingTexture.asm")
+GLOBAL_ASM("./asm/non_matchings/z_scene_proc/SceneProc_DrawFlashingTexture.asm")
 #endif
 
 void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
@@ -128,7 +128,7 @@ s32 SceneProc_Lerp(s32 a, s32 b, f32 t) {
     return (s32)((b - a) * t) + a;
 }
 
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 // Slight ordering and regalloc differences around t = ...
 void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     FlashingTextureParams* params2 = params;
@@ -188,10 +188,10 @@ void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
     SceneProc_DrawFlashingTexture(ctxt, segment, &primColorIn, envColorPtrIn);
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/z_scene_proc/SceneProc_DrawType3Texture.asm")
+GLOBAL_ASM("./asm/non_matchings/z_scene_proc/SceneProc_DrawType3Texture.asm")
 #endif
 
-GLOBAL_ASM("./asm/nonmatching/z_scene_proc/SceneProc_Interpolate.asm")
+GLOBAL_ASM("./asm/non_matchings/z_scene_proc/SceneProc_Interpolate.asm")
 
 u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame) {
     s32 ret = SceneProc_Interpolate(numKeyFrames, keyFrames, values, frame);
@@ -201,7 +201,7 @@ u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f
                          ret;
 }
 
-GLOBAL_ASM("./asm/nonmatching/z_scene_proc/SceneProc_DrawType4Texture.asm")
+GLOBAL_ASM("./asm/non_matchings/z_scene_proc/SceneProc_DrawType4Texture.asm")
 
 void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTextureParams* params) {
     u8* offsets;
@@ -296,7 +296,7 @@ void SceneProc_DrawSceneConfig1(GlobalContext* ctxt) {
   SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
 }
 
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 // This function still needs a lot of work
 void SceneProc_DrawSceneConfig3(GlobalContext* ctxt) {
     GraphicsContext* gCtxt = ctxt->common.gCtxt;
@@ -332,7 +332,7 @@ void SceneProc_DrawSceneConfig3(GlobalContext* ctxt) {
     gDPSetEnvColor(gCtxt->polyOpa.append++, 0x80, 0x80, 0x80, 0x80);
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/z_scene_proc/SceneProc_DrawSceneConfig3.asm")
+GLOBAL_ASM("./asm/non_matchings/z_scene_proc/SceneProc_DrawSceneConfig3.asm")
 #endif
 
 void SceneProc_DrawSceneConfig4(GlobalContext* ctxt) {

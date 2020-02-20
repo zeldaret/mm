@@ -55,7 +55,7 @@ void Lights_MapperInit(LightMapper* mapper, u8 red, u8 green, u8 blue) {
 }
 
 // XXX regalloc
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
     Light* l;
     s32 i;
@@ -74,7 +74,7 @@ void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
     gSPLight(gCtxt->polyXlu.append++, &mapper->lights.a, i);
 }
 #else
-GLOBAL_ASM("asm/nonmatching/z_lights/Lights_UploadLights.asm")
+GLOBAL_ASM("asm/non_matchings/z_lights/Lights_UploadLights.asm")
 #endif
 
 Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
@@ -85,7 +85,7 @@ Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
 }
 
 // XXX regalloc, some reorderings
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vector3f* pos) {
     f32 xDiff;
     f32 yDiff;
@@ -130,11 +130,11 @@ void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalP
     }
 }
 #else
-GLOBAL_ASM("asm/nonmatching/z_lights/Lights_MapPositionalWithReference.asm")
+GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositionalWithReference.asm")
 #endif
 
 // This function matches, but uses .rodata. We don't have a good way to match partial .rodata for a file yet.
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt) {
     Light* light;
     f32 radiusF = params->radius;
@@ -176,7 +176,7 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
     }
 }
 #else
-GLOBAL_ASM("asm/nonmatching/z_lights/Lights_MapPositional.asm")
+GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositional.asm")
 #endif
 
 void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt) {
@@ -361,7 +361,7 @@ LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 gre
 }
 
 // XXX regalloc
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 void func_80102880(GlobalContext* ctxt) {
     z_Light* light = ctxt->lightsContext.lightsHead;
     LightInfoPositionalParams* params;
@@ -397,11 +397,11 @@ void func_80102880(GlobalContext* ctxt) {
     }
 }
 #else
-GLOBAL_ASM("asm/nonmatching/z_lights/func_80102880.asm")
+GLOBAL_ASM("asm/non_matchings/z_lights/func_80102880.asm")
 #endif
 
 // XXX regalloc
-#ifdef NONMATCHING
+#ifdef NON_MATCHING
 void func_80102A64(GlobalContext* ctxt) {
     Gfx* dl;
     LightInfoPositionalParams* params;
@@ -444,5 +444,5 @@ void func_80102A64(GlobalContext* ctxt) {
     }
 }
 #else
-GLOBAL_ASM("asm/nonmatching/z_lights/func_80102A64.asm")
+GLOBAL_ASM("asm/non_matchings/z_lights/func_80102A64.asm")
 #endif

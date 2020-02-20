@@ -11,8 +11,7 @@ void* Lib_bcopy(void* dest, void* src, size_t n) {
     return dest;
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void* Lib_memset(u8* a0, u32 a1, u32 a2) {
     u8* v0;
 
@@ -29,11 +28,8 @@ void* Lib_memset(u8* a0, u32 a1, u32 a2) {
 
     return a0;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/Lib_memset.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_memset.asm")
 #endif
 
 f32 Lib_cos(s16 angle) {
@@ -135,8 +131,7 @@ s32 Lib_StepTowardsCheck_c(s8* start, s8 target, s8 step) {
     return 0;
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 s32 Lib_StepTowardsCheck_f(f32* start, f32 target, f32 step) {
     if (step != 0) {
         // XXX: regalloc is messed up
@@ -157,15 +152,11 @@ s32 Lib_StepTowardsCheck_f(f32* start, f32 target, f32 step) {
 
     return 0;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/Lib_StepTowardsCheck_f.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_StepTowardsCheck_f.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 s32 func_800FF0D0(s16* a0, s16 a1, s16 a2) {
     s32 v0 = *a0;
 
@@ -180,71 +171,49 @@ s32 func_800FF0D0(s16* a0, s16 a1, s16 a2) {
 
     return 0;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF0D0.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF0D0.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void func_800FF138() {
 
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF138.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF138.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void func_800FF1FC(void) {
 
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF1FC.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF1FC.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void func_800FF2A8(void) {
 
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF2A8.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF2A8.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void func_800FF2F8(void) {
 
 }
 
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF2F8.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF2F8.asm")
 #endif
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void func_800FF3A0(void) {
 
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/func_800FF3A0.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF3A0.asm")
 #endif
 
 s16 Lib_rand_s(s16 base, s16 range) {
@@ -381,8 +350,7 @@ f32 Lib_DistanceAndDifferenceXZVec3f(Vector3f* a, Vector3f* b, f32* xDiff, f32* 
     return sqrtf((*xDiff * *xDiff) + (*zDiff * *zDiff));
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach) {
     f32 sp24;
     f32 sp20;
@@ -398,11 +366,8 @@ void Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproa
     start->x = pusher->x + sp24 * f2;
     start->z = pusher->z + sp20 * f2;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/Lib_PushAwayXZVec3f.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_PushAwayXZVec3f.asm")
 #endif
 
 f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b) {
@@ -552,16 +517,12 @@ void Lib_Scale_f(f32* start, f32 scale, f32 maxStep) {
   *start = *start - f0;
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 s32 Lib_ScaleMaxMin_s(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep) {
 
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/Lib_ScaleMaxMin_s.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_ScaleMaxMin_s.asm")
 #endif
 
 void Lib_ScaleMax_s(s16* start, s16 target, s16 scale, s16 maxStep) {
@@ -611,19 +572,15 @@ void Lib_TranslateAndRotateYVec3f(Vector3f* translation, s16 rotation, Vector3f*
     dst->z = translation->z + (src->z * sp1C - src->x * f0);
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst) {
     // XXX regalloc is slightly off
     dst->red = (f32)a->red + ((f32)b->red - (f32)a->red) * t;
     dst->green = (f32)a->green + ((f32)b->green - (f32)a->green) * t;
     dst->blue = (f32)a->blue + ((f32)b->blue - (f32)a->blue) * t;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_lib/Lib_LerpRGB.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_LerpRGB.asm")
 #endif
 
 f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach) {

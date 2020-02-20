@@ -90,8 +90,7 @@ void EffectSS_ResetLoadedParticleEntry(LoadedParticleEntry* particle) {
 }
 
 // XXX Some regalloc differences and instruction ordering
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
     s32 ret = 0;
     s32 i;
@@ -145,11 +144,8 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
 
     return ret;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
 #endif
 
 void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* a1) {
@@ -162,8 +158,7 @@ void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* a1) {
     }
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
     u32 index;
     u32 initRet;
@@ -212,11 +207,8 @@ void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* in
         }
     }
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/EffectSS_LoadParticle.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_effect_soft_sprite/EffectSS_LoadParticle.asm")
 #endif
 
 void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
@@ -285,8 +277,7 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
     }
 }
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 s16 func_800B096C(s16 a0, s16 a1, s32 a2) {
     s16 ret;
 
@@ -299,11 +290,8 @@ s16 func_800B096C(s16 a0, s16 a1, s32 a2) {
 
     return ret;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/z_effect_soft_sprite/func_800B096C.asm")
-
+GLOBAL_ASM("./asm/non_matchings/z_effect_soft_sprite/func_800B096C.asm")
 #endif
 
 s16 func_800B09D0(s16 a0, s16 a1, f32 a2) {

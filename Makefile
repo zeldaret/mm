@@ -170,7 +170,7 @@ build/decomp_pre_dmadata/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray_pre_dmadata.bi
 disasm:
 	@./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
 	@while read -r file; do \
-		./tools/split_asm.py ./asm/$$file.asm ./asm/nonmatching/$$file; \
+		./tools/split_asm.py ./asm/$$file.asm ./asm/non_matchings/$$file; \
 	done < ./tables/files_with_nonmatching.txt
 
 # Recipes

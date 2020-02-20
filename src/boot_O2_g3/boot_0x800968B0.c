@@ -1,8 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 u32 func_800968B0(const u8* a0, const u8* a1) {
     u8 v0;
     u8 v1;
@@ -16,9 +15,6 @@ u32 func_800968B0(const u8* a0, const u8* a1) {
     } while (v0 != 0);
     return 0;
 }
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/boot_0x800968B0/func_800968B0.asm")
-
+GLOBAL_ASM("./asm/non_matchings/boot_0x800968B0/func_800968B0.asm")
 #endif

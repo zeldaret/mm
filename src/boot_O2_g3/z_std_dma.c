@@ -139,7 +139,7 @@ void Dmamgr_HandleRequest(DmaRequest* a0) {
     }
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_HandleRequest.asm")
+GLOBAL_ASM("./asm/non_matchings/z_std_dma/Dmamgr_HandleRequest.asm")
 #endif
 
 void Dmamgr_ThreadEntry(void* a0) {
@@ -213,7 +213,7 @@ void Dmamgr_Start() {
 	osStartThread(&dmamgrOSThread);
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/z_std_dma/Dmamgr_Start.asm")
+GLOBAL_ASM("./asm/non_matchings/z_std_dma/Dmamgr_Start.asm")
 #endif
 
 void Dmamgr_Stop() {

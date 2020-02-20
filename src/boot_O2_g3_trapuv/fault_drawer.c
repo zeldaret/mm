@@ -24,10 +24,10 @@ void FaultDrawer_DrawRecImpl(s32 xstart, s32 ystart, s32 xend, s32 yend, u16 col
     }
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/fault_drawer/FaultDrawer_DrawRecImpl.asm")
+GLOBAL_ASM("./asm/non_matchings/fault_drawer/FaultDrawer_DrawRecImpl.asm")
 #endif
 
-GLOBAL_ASM("./asm/nonmatching/fault_drawer/FaultDrawer_DrawChar.asm")
+GLOBAL_ASM("./asm/non_matchings/fault_drawer/FaultDrawer_DrawChar.asm")
 
 s32 FaultDrawer_ColorToPrintColor(u16 color) {
     s32 i;
@@ -90,15 +90,15 @@ void FaultDrawer_FillScreen() {
     FaultDrawer_SetCursor(faultDrawContext->xStart, faultDrawContext->yStart);
 }
 
-GLOBAL_ASM("./asm/nonmatching/fault_drawer/FaultDrawer_FormatStringFunc.asm")
+GLOBAL_ASM("./asm/non_matchings/fault_drawer/FaultDrawer_FormatStringFunc.asm")
 
 void FaultDrawer_VPrintf(char* str, char* args) { //va_list
     _Printf((printf_func)FaultDrawer_FormatStringFunc, faultDrawContext, str, args);
 }
 
-GLOBAL_ASM("./asm/nonmatching/fault_drawer/FaultDrawer_Printf.asm")
+GLOBAL_ASM("./asm/non_matchings/fault_drawer/FaultDrawer_Printf.asm")
 
-GLOBAL_ASM("./asm/nonmatching/fault_drawer/FaultDrawer_DrawText.asm")
+GLOBAL_ASM("./asm/non_matchings/fault_drawer/FaultDrawer_DrawText.asm")
 
 void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     faultDrawContext->fb = (u16*)fb;

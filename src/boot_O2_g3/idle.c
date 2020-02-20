@@ -16,7 +16,7 @@ void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value) {
     }
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/idle/Idle_InitFramebuffer.asm")
+GLOBAL_ASM("./asm/non_matchings/idle/Idle_InitFramebuffer.asm")
 #endif
 
 void Idle_InitScreen(void) {
@@ -58,7 +58,7 @@ void Idle_InitCodeAndMemory(void) {
     Idle_ClearMemory(&code_bss_start, &code_bss_end);
 }
 #else
-GLOBAL_ASM("./asm/nonmatching/idle/Idle_InitCodeAndMemory.asm")
+GLOBAL_ASM("./asm/non_matchings/idle/Idle_InitCodeAndMemory.asm")
 #endif
 
 void Idle_MainThreadEntry(void* arg) {

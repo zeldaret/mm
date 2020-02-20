@@ -1,8 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-#ifdef NONMATCHING
-
+#ifdef NON_MATCHING
 UNK_RET func_800805E0(UNK_TYPE a0) {
     if (a0 != 0) {
         switch (osTvType) {
@@ -49,12 +48,8 @@ UNK_RET func_800805E0(UNK_TYPE a0) {
 
     D_80096B24 = a0;
 }
-
-
 #else
-
-GLOBAL_ASM("./asm/nonmatching/boot_0x800805E0/func_800805E0.asm")
-
+GLOBAL_ASM("./asm/non_matchings/boot_0x800805E0/func_800805E0.asm")
 #endif
 
 UNK_RET func_80080748(void) {
