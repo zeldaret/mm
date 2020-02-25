@@ -1556,7 +1556,7 @@ extern UNK_TYPE1 D_801C2410; // D_801C2410
 extern UNK_TYPE1 D_801C2650; // D_801C2650
 extern UNK_TYPE1 D_801C2660; // D_801C2660
 extern scene_header_func sceneHeaderFuncTable[31]; // D_801C26A8
-extern s16 D_801C2730[0x08]; // D_801C2730
+extern s16 D_801C2730[8]; // D_801C2730
 extern ObjectFileTableEntry objectFileTable[643]; // D_801C2740
 extern Gfx gSceneProcDefaultDl[11]; // D_801C3B60
 extern global_context_func gSceneProcSceneDrawFuncs[8]; // D_801C3BB8
@@ -11716,7 +11716,7 @@ extern UNK_TYPE4 D_80A167E8; // D_80A167E8
 extern UNK_TYPE4 D_80A167EC; // D_80A167EC
 extern UNK_TYPE4 D_80A167F0; // D_80A167F0
 extern UNK_TYPE4 D_80A167F4; // D_80A167F4
-extern UNK_TYPE1 D_80A167F8; // D_80A167F8
+extern UNK_TYPE4 D_80A167F8; // D_80A167F8
 extern UNK_TYPE4 D_80A167FC; // D_80A167FC
 extern OverlayBlockSizes enGoOverlayInfo; // D_80A16830
 extern u32 enGoOverlayRelocations[315]; // D_80A16844

@@ -111,12 +111,12 @@ void FaultDrawer_SetInputCallback(func_ptr func); // func_800848A4
 void FaultDrawer_Init(void); // func_800848B8
 void func_80084940(void); // func_80084940
 void func_80084968(void); // func_80084968
-void func_800849A0(void); // func_800849A0
-void func_80084C0C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80084C0C
-void func_80084CD0(void); // func_80084CD0
-void handle_overlay_relocations(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_80084DB0
-s32 load_and_relocate_overlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr); // func_8008501C
-void* load_game_state_overlay(u32 vromStart, u32 vromEnd, u32 vramStart, u32 vramEnd); // func_800850C8
+void Load_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_800849A0
+unsigned int Load_LoadOverlay(u32 vRomStart, int vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes); // func_80084C0C
+void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart); // func_80084CD0
+void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_80084DB0
+s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr); // func_8008501C
+void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd); // func_800850C8
 void func_80085130(void); // func_80085130
 void func_80085150(void); // func_80085150
 void func_80085158(s32 param_1); // func_80085158
@@ -487,7 +487,7 @@ void func_80096410(void); // func_80096410
 void func_800964D0(void); // func_800964D0
 s32 __osSpSetPc(u32 data); // func_80096510
 void func_80096540(void); // func_80096540
-void FUN_80096770(int param_1, UNK_PTR param_2, UNK_PTR param_3); // func_80096770
+void func_80096770(int param_1, UNK_PTR param_2, UNK_PTR param_3); // func_80096770
 void func_800967A0(void); // func_800967A0
 u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
