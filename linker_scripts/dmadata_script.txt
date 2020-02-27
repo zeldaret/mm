@@ -274,8 +274,8 @@ ovl_En_Rd_vrom_end = 0x00D51720;
 ovl_Bg_F40_Flift_vrom_start = 0x00D51720;
 ovl_Bg_F40_Flift_vrom_end = 0x00D51AA0;
 
-ovl_Bg_Heavy_Block_vrom_start = 0x00D51AA0;
-ovl_Bg_Heavy_Block_vrom_end = 0x00D52B10;
+ovl_Obj_Mure_vrom_start = 0x00D51AA0;
+ovl_Obj_Mure_vrom_end = 0x00D52B10;
 
 ovl_En_Sw_vrom_start = 0x00D52B10;
 ovl_En_Sw_vrom_end = 0x00D56050;

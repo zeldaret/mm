@@ -279,8 +279,8 @@ extern u32 ovl_En_Rd_vrom_end;
 extern u32 ovl_Bg_F40_Flift_vrom_start;
 extern u32 ovl_Bg_F40_Flift_vrom_end;
 
-extern u32 ovl_Bg_Heavy_Block_vrom_start;
-extern u32 ovl_Bg_Heavy_Block_vrom_end;
+extern u32 ovl_Obj_Mure_vrom_start;
+extern u32 ovl_Obj_Mure_vrom_end;
 
 extern u32 ovl_En_Sw_vrom_start;
 extern u32 ovl_En_Sw_vrom_end;

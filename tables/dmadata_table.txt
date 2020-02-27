@@ -95,7 +95,7 @@
     ('build/decomp/ovl_En_Floormas', 'build/comp/ovl_En_Floormas.yaz0', 0x10, 0),
     ('build/decomp/ovl_En_Rd', 'build/comp/ovl_En_Rd.yaz0', 0x10, 0),
     ('build/decomp/ovl_Bg_F40_Flift', 'build/comp/ovl_Bg_F40_Flift.yaz0', 0x10, 0),
-    ('build/decomp/ovl_Bg_Heavy_Block', 'build/comp/ovl_Bg_Heavy_Block.yaz0', 0x10, 0),
+    ('build/decomp/ovl_Obj_Mure', 'build/comp/ovl_Obj_Mure.yaz0', 0x10, 0),
     ('build/decomp/ovl_En_Sw', 'build/comp/ovl_En_Sw.yaz0', 0x10, 0),
     ('build/decomp/ovl_Object_Kankyo', 'build/comp/ovl_Object_Kankyo.yaz0', 0x10, 0),
     ('build/decomp/ovl_En_Horse_Link_Child', 'build/comp/ovl_En_Horse_Link_Child.yaz0', 0x10, 0),

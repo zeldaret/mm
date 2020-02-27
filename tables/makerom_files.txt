@@ -90,7 +90,7 @@ build/comp/ovl_Demo_Kankyo.yaz0
 build/comp/ovl_En_Floormas.yaz0
 build/comp/ovl_En_Rd.yaz0
 build/comp/ovl_Bg_F40_Flift.yaz0
-build/comp/ovl_Bg_Heavy_Block.yaz0
+build/comp/ovl_Obj_Mure.yaz0
 build/comp/ovl_En_Sw.yaz0
 build/comp/ovl_Object_Kankyo.yaz0
 build/comp/ovl_En_Horse_Link_Child.yaz0
