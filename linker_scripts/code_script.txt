@@ -1,6 +1,6 @@
 SECTIONS
 {
-    /* Objects with .gptab.data sections error if they are not referenced, for some reason */
+    /* Objects with .gptab.* sections error if they are not referenced, for some reason */
     /DISCARD/ : { *(.gptab.data) }
     /DISCARD/ : { *(.gptab.bss) }
 
@@ -556,8 +556,8 @@ SECTIONS
         build/asm/ovl_file_choose_0x8080BC20.o(.text)
         build/asm/ovl_file_choose_data.o(.text)
         ovl_file_choose_bss_start = .;
-        . += 0x30;
     }
+    . += 0x30;
 
     ovl_daytelop :
     {
@@ -572,16 +572,16 @@ SECTIONS
         build/asm/ovl_kaleido_scope_0x8081FF80.o(.text)
         build/asm/ovl_kaleido_scope_data.o(.text)
         ovl_kaleido_scope_bss_start = .;
-        . += 0x40;
     }
+    . += 0x40;
 
     ovl_Player_Actor :
     {
         build/asm/ovl_Player_Actor_0x8082DA90.o(.text)
         build/asm/ovl_Player_Actor_data.o(.text)
         ovl_Player_Actor_bss_start = .;
-        . += 0x80;
     }
+    . += 0x80;
 
     ovl_En_Test :
     {
@@ -612,8 +612,8 @@ SECTIONS
         build/asm/ovl_En_Door_0x80866800.o(.text)
         build/asm/ovl_En_Door_data.o(.text)
         ovl_En_Door_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Box :
     {
@@ -638,8 +638,8 @@ SECTIONS
         build/asm/ovl_En_Bom_0x80870DB0.o(.text)
         build/asm/ovl_En_Bom_data.o(.text)
         ovl_En_Bom_bss_start = .;
-        . += 0x1C0;
     }
+    . += 0x1C0;
 
     ovl_En_Wallmas :
     {
@@ -724,8 +724,8 @@ SECTIONS
         build/asm/ovl_En_Viewer_0x8089EE20.o(.text)
         build/asm/ovl_En_Viewer_data.o(.text)
         ovl_En_Viewer_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Bubble :
     {
@@ -828,16 +828,16 @@ SECTIONS
         build/asm/ovl_Door_Warp1_0x808B8490.o(.text)
         build/asm/ovl_Door_Warp1_data.o(.text)
         ovl_Door_Warp1_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Obj_Syokudai :
     {
         build/asm/ovl_Obj_Syokudai_0x808BC010.o(.text)
         build/asm/ovl_Obj_Syokudai_data.o(.text)
         ovl_Obj_Syokudai_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Item_B_Heart :
     {
@@ -880,8 +880,8 @@ SECTIONS
         build/asm/ovl_En_Wood02_0x808C3C00.o(.text)
         build/asm/ovl_En_Wood02_data.o(.text)
         ovl_En_Wood02_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Death :
     {
@@ -894,8 +894,8 @@ SECTIONS
         build/asm/ovl_En_Minideath_0x808CA0B0.o(.text)
         build/asm/ovl_En_Minideath_data.o(.text)
         ovl_En_Minideath_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Vm :
     {
@@ -950,8 +950,8 @@ SECTIONS
         build/asm/ovl_Object_Kankyo_0x808DBE80.o(.text)
         build/asm/ovl_Object_Kankyo_data.o(.text)
         ovl_Object_Kankyo_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Horse_Link_Child :
     {
@@ -1054,8 +1054,8 @@ SECTIONS
         build/asm/ovl_En_Fishing_0x808FC6C0.o(.text)
         build/asm/ovl_En_Fishing_data.o(.text)
         ovl_En_Fishing_bss_start = .;
-        . += 0x70E0;
     }
+    . += 0x70E0;
 
     ovl_Obj_Oshihiki :
     {
@@ -1104,24 +1104,24 @@ SECTIONS
         build/asm/ovl_Arrow_Fire_0x80920340.o(.text)
         build/asm/ovl_Arrow_Fire_data.o(.text)
         ovl_Arrow_Fire_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Arrow_Ice :
     {
         build/asm/ovl_Arrow_Ice_0x80922430.o(.text)
         build/asm/ovl_Arrow_Ice_data.o(.text)
         ovl_Arrow_Ice_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Arrow_Light :
     {
         build/asm/ovl_Arrow_Light_0x80924300.o(.text)
         build/asm/ovl_Arrow_Light_data.o(.text)
         ovl_Arrow_Light_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Obj_Kibako :
     {
@@ -1188,8 +1188,8 @@ SECTIONS
         build/asm/ovl_En_Kusa_0x809349E0.o(.text)
         build/asm/ovl_En_Kusa_data.o(.text)
         ovl_En_Kusa_bss_start = .;
-        . += 0x220;
     }
+    . += 0x220;
 
     ovl_Obj_Bean :
     {
@@ -1208,8 +1208,8 @@ SECTIONS
         build/asm/ovl_Obj_Switch_0x8093ABD0.o(.text)
         build/asm/ovl_Obj_Switch_data.o(.text)
         ovl_Obj_Switch_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Obj_Lift :
     {
@@ -1270,8 +1270,8 @@ SECTIONS
         build/asm/ovl_En_Sda_0x809468D0.o(.text)
         build/asm/ovl_En_Sda_data.o(.text)
         ovl_En_Sda_bss_start = .;
-        . += 0xC0;
     }
+    . += 0xC0;
 
     ovl_En_Clear_Tag :
     {
@@ -1410,8 +1410,8 @@ SECTIONS
         build/asm/ovl_Bg_F40_Swlift_0x8096F160.o(.text)
         build/asm/ovl_Bg_F40_Swlift_data.o(.text)
         ovl_Bg_F40_Swlift_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Kakasi :
     {
@@ -1460,8 +1460,8 @@ SECTIONS
         build/asm/ovl_Oceff_Wipe_0x809764B0.o(.text)
         build/asm/ovl_Oceff_Wipe_data.o(.text)
         ovl_Oceff_Wipe_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Effect_Ss_Dust :
     {
@@ -1666,16 +1666,16 @@ SECTIONS
         build/asm/ovl_Oceff_Wipe2_0x80986270.o(.text)
         build/asm/ovl_Oceff_Wipe2_data.o(.text)
         ovl_Oceff_Wipe2_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Oceff_Wipe3 :
     {
         build/asm/ovl_Oceff_Wipe3_0x809879E0.o(.text)
         build/asm/ovl_Oceff_Wipe3_data.o(.text)
         ovl_Oceff_Wipe3_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Dg :
     {
@@ -1760,8 +1760,8 @@ SECTIONS
         build/asm/ovl_Oceff_Wipe4_0x8099D780.o(.text)
         build/asm/ovl_Oceff_Wipe4_data.o(.text)
         ovl_Oceff_Wipe4_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Zo :
     {
@@ -1846,8 +1846,8 @@ SECTIONS
         build/asm/ovl_Obj_Grass_0x809A9110.o(.text)
         build/asm/ovl_Obj_Grass_data.o(.text)
         ovl_Obj_Grass_bss_start = .;
-        . += 0xC0;
     }
+    . += 0xC0;
 
     ovl_Obj_Grass_Carry :
     {
@@ -1896,8 +1896,8 @@ SECTIONS
         build/asm/ovl_En_Knight_0x809B20F0.o(.text)
         build/asm/ovl_En_Knight_data.o(.text)
         ovl_En_Knight_bss_start = .;
-        . += 0x1790;
     }
+    . += 0x1790;
 
     ovl_En_Warp_tag :
     {
@@ -2000,56 +2000,56 @@ SECTIONS
         build/asm/ovl_Boss_01_0x809D0530.o(.text)
         build/asm/ovl_Boss_01_data.o(.text)
         ovl_Boss_01_bss_start = .;
-        . += 0x17C0;
     }
+    . += 0x17C0;
 
     ovl_Boss_02 :
     {
         build/asm/ovl_Boss_02_0x809DA1D0.o(.text)
         build/asm/ovl_Boss_02_data.o(.text)
         ovl_Boss_02_bss_start = .;
-        . += 0x2340;
     }
+    . += 0x2340;
 
     ovl_Boss_03 :
     {
         build/asm/ovl_Boss_03_0x809E2760.o(.text)
         build/asm/ovl_Boss_03_data.o(.text)
         ovl_Boss_03_bss_start = .;
-        . += 0x2800;
     }
+    . += 0x2800;
 
     ovl_Boss_04 :
     {
         build/asm/ovl_Boss_04_0x809EC040.o(.text)
         build/asm/ovl_Boss_04_data.o(.text)
         ovl_Boss_04_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Boss_05 :
     {
         build/asm/ovl_Boss_05_0x809EE4E0.o(.text)
         build/asm/ovl_Boss_05_data.o(.text)
         ovl_Boss_05_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Boss_06 :
     {
         build/asm/ovl_Boss_06_0x809F2120.o(.text)
         build/asm/ovl_Boss_06_data.o(.text)
         ovl_Boss_06_bss_start = .;
-        . += 0x610;
     }
+    . += 0x610;
 
     ovl_Boss_07 :
     {
         build/asm/ovl_Boss_07_0x809F4980.o(.text)
         build/asm/ovl_Boss_07_data.o(.text)
         ovl_Boss_07_bss_start = .;
-        . += 0xE60;
     }
+    . += 0xE60;
 
     ovl_Bg_Dy_Yoseizo :
     {
@@ -2104,8 +2104,8 @@ SECTIONS
         build/asm/ovl_Obj_Flowerpot_0x80A1B3D0.o(.text)
         build/asm/ovl_Obj_Flowerpot_data.o(.text)
         ovl_Obj_Flowerpot_bss_start = .;
-        . += 0x220;
     }
+    . += 0x220;
 
     ovl_Obj_Spinyroll :
     {
@@ -2154,8 +2154,8 @@ SECTIONS
         build/asm/ovl_Bg_Dblue_Movebg_0x80A29A80.o(.text)
         build/asm/ovl_Bg_Dblue_Movebg_data.o(.text)
         ovl_Bg_Dblue_Movebg_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Syateki_Dekunuts :
     {
@@ -2192,8 +2192,8 @@ SECTIONS
         build/asm/ovl_En_Slime_0x80A2EDA0.o(.text)
         build/asm/ovl_En_Slime_data.o(.text)
         ovl_En_Slime_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Pr :
     {
@@ -2284,24 +2284,24 @@ SECTIONS
         build/asm/ovl_En_Test3_0x80A3E7E0.o(.text)
         build/asm/ovl_En_Test3_data.o(.text)
         ovl_En_Test3_bss_start = .;
-        . += 0x50;
     }
+    . += 0x50;
 
     ovl_En_Test4 :
     {
         build/asm/ovl_En_Test4_0x80A41D70.o(.text)
         build/asm/ovl_En_Test4_data.o(.text)
         ovl_En_Test4_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Bat :
     {
         build/asm/ovl_En_Bat_0x80A434E0.o(.text)
         build/asm/ovl_En_Bat_data.o(.text)
         ovl_En_Bat_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Sekihi :
     {
@@ -2422,8 +2422,8 @@ SECTIONS
         build/asm/ovl_En_Kusa2_0x80A5B160.o(.text)
         build/asm/ovl_En_Kusa2_data.o(.text)
         ovl_En_Kusa2_bss_start = .;
-        . += 0x1960;
     }
+    . += 0x1960;
 
     ovl_Bg_Spout_Fire :
     {
@@ -2478,8 +2478,8 @@ SECTIONS
         build/asm/ovl_En_Fall_0x80A6BF90.o(.text)
         build/asm/ovl_En_Fall_data.o(.text)
         ovl_En_Fall_bss_start = .;
-        . += 0x710;
     }
+    . += 0x710;
 
     ovl_En_Mm3 :
     {
@@ -2492,8 +2492,8 @@ SECTIONS
         build/asm/ovl_Bg_Crace_Movebg_0x80A706F0.o(.text)
         build/asm/ovl_Bg_Crace_Movebg_data.o(.text)
         ovl_Bg_Crace_Movebg_bss_start = .;
-        . += 0x20;
     }
+    . += 0x20;
 
     ovl_En_Dno :
     {
@@ -2536,8 +2536,8 @@ SECTIONS
         build/asm/ovl_Obj_Mine_0x80A811D0.o(.text)
         build/asm/ovl_Obj_Mine_data.o(.text)
         ovl_Obj_Mine_bss_start = .;
-        . += 0x300;
     }
+    . += 0x300;
 
     ovl_Obj_Purify :
     {
@@ -2568,16 +2568,16 @@ SECTIONS
         build/asm/ovl_En_Test6_0x80A90730.o(.text)
         build/asm/ovl_En_Test6_data.o(.text)
         ovl_En_Test6_bss_start = .;
-        . += 0x120;
     }
+    . += 0x120;
 
     ovl_En_Az :
     {
         build/asm/ovl_En_Az_0x80A94A30.o(.text)
         build/asm/ovl_En_Az_data.o(.text)
         ovl_En_Az_bss_start = .;
-        . += 0x20;
     }
+    . += 0x20;
 
     ovl_En_Estone :
     {
@@ -2590,8 +2590,8 @@ SECTIONS
         build/asm/ovl_Bg_Hakugin_Post_0x80A9ACD0.o(.text)
         build/asm/ovl_Bg_Hakugin_Post_data.o(.text)
         ovl_Bg_Hakugin_Post_bss_start = .;
-        . += 0x1B90;
     }
+    . += 0x1B90;
 
     ovl_Dm_Opstage :
     {
@@ -2616,8 +2616,8 @@ SECTIONS
         build/asm/ovl_Dm_Char01_0x80AA81E0.o(.text)
         build/asm/ovl_Dm_Char01_data.o(.text)
         ovl_Dm_Char01_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Dm_Char02 :
     {
@@ -2720,8 +2720,8 @@ SECTIONS
         build/asm/ovl_En_Twig_0x80AC0830.o(.text)
         build/asm/ovl_En_Twig_data.o(.text)
         ovl_En_Twig_bss_start = .;
-        . += 0x40;
     }
+    . += 0x40;
 
     ovl_En_Po_Fusen :
     {
@@ -2746,8 +2746,8 @@ SECTIONS
         build/asm/ovl_Bg_Icefloe_0x80AC48F0.o(.text)
         build/asm/ovl_Bg_Icefloe_data.o(.text)
         ovl_Bg_Icefloe_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     f385_0x00cfc450 :
     {
@@ -2888,8 +2888,8 @@ SECTIONS
         build/asm/ovl_Obj_Takaraya_Wall_0x80AD9240.o(.text)
         build/asm/ovl_Obj_Takaraya_Wall_data.o(.text)
         ovl_Obj_Takaraya_Wall_bss_start = .;
-        . += 0x6A0;
     }
+    . += 0x6A0;
 
     ovl_Bg_Fu_Mizu :
     {
@@ -2968,8 +2968,8 @@ SECTIONS
         build/asm/ovl_En_Tk_0x80AEC460.o(.text)
         build/asm/ovl_En_Tk_data.o(.text)
         ovl_En_Tk_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Bg_Market_Step :
     {
@@ -2988,8 +2988,8 @@ SECTIONS
         build/asm/ovl_En_Test7_0x80AF0820.o(.text)
         build/asm/ovl_En_Test7_data.o(.text)
         ovl_En_Test7_bss_start = .;
-        . += 0x60;
     }
+    . += 0x60;
 
     ovl_Obj_Lightblock :
     {
@@ -3122,8 +3122,8 @@ SECTIONS
         build/asm/ovl_Bg_Hakugin_Switch_0x80B15790.o(.text)
         build/asm/ovl_Bg_Hakugin_Switch_data.o(.text)
         ovl_Bg_Hakugin_Switch_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Snowman :
     {
@@ -3286,8 +3286,8 @@ SECTIONS
         build/asm/ovl_En_Invadepoh_0x80B439B0.o(.text)
         build/asm/ovl_En_Invadepoh_data.o(.text)
         ovl_En_Invadepoh_bss_start = .;
-        . += 0x170;
     }
+    . += 0x170;
 
     ovl_En_Gk :
     {
@@ -3312,8 +3312,8 @@ SECTIONS
         build/asm/ovl_En_Ot_0x80B5B2E0.o(.text)
         build/asm/ovl_En_Ot_data.o(.text)
         ovl_En_Ot_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Dragon :
     {
@@ -3446,8 +3446,8 @@ SECTIONS
         build/asm/ovl_Bg_Dblue_Balance_0x80B823B0.o(.text)
         build/asm/ovl_Bg_Dblue_Balance_data.o(.text)
         ovl_Bg_Dblue_Balance_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Bg_Dblue_Waterfall :
     {
@@ -3502,8 +3502,8 @@ SECTIONS
         build/asm/ovl_En_Zog_0x80B93310.o(.text)
         build/asm/ovl_En_Zog_data.o(.text)
         ovl_En_Zog_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Obj_Rotlift :
     {
@@ -3564,8 +3564,8 @@ SECTIONS
         build/asm/ovl_Obj_Hunsui_0x80B9C450.o(.text)
         build/asm/ovl_Obj_Hunsui_data.o(.text)
         ovl_Obj_Hunsui_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Jc_Mato :
     {
@@ -3596,8 +3596,8 @@ SECTIONS
         build/asm/ovl_Obj_Nozoki_0x80BA2420.o(.text)
         build/asm/ovl_Obj_Nozoki_data.o(.text)
         ovl_Obj_Nozoki_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Toto :
     {
@@ -3664,8 +3664,8 @@ SECTIONS
         build/asm/ovl_En_Tanron2_0x80BB67D0.o(.text)
         build/asm/ovl_En_Tanron2_data.o(.text)
         ovl_En_Tanron2_bss_start = .;
-        . += 0x150;
     }
+    . += 0x150;
 
     ovl_En_Tanron3 :
     {
@@ -3678,8 +3678,8 @@ SECTIONS
         build/asm/ovl_Obj_Chan_0x80BB98E0.o(.text)
         build/asm/ovl_Obj_Chan_data.o(.text)
         ovl_Obj_Chan_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Zos :
     {
@@ -3716,8 +3716,8 @@ SECTIONS
         build/asm/ovl_Bg_F40_Switch_0x80BC47B0.o(.text)
         build/asm/ovl_Bg_F40_Switch_data.o(.text)
         ovl_Bg_F40_Switch_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Po_Composer :
     {
@@ -3736,8 +3736,8 @@ SECTIONS
         build/asm/ovl_Oceff_Wipe5_0x80BC7AD0.o(.text)
         build/asm/ovl_Oceff_Wipe5_data.o(.text)
         ovl_Oceff_Wipe5_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Stone_heishi :
     {
@@ -3768,16 +3768,16 @@ SECTIONS
         build/asm/ovl_Oceff_Wipe7_0x80BCDCB0.o(.text)
         build/asm/ovl_Oceff_Wipe7_data.o(.text)
         ovl_Oceff_Wipe7_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Eff_Kamejima_Wave :
     {
         build/asm/ovl_Eff_Kamejima_Wave_0x80BCEB20.o(.text)
         build/asm/ovl_Eff_Kamejima_Wave_data.o(.text)
         ovl_Eff_Kamejima_Wave_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Hg :
     {
@@ -3996,8 +3996,8 @@ SECTIONS
         build/asm/ovl_Bg_Ikana_Dharma_0x80BEC240.o(.text)
         build/asm/ovl_Bg_Ikana_Dharma_data.o(.text)
         ovl_Bg_Ikana_Dharma_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Akindonuts :
     {
@@ -4022,8 +4022,8 @@ SECTIONS
         build/asm/ovl_En_Rg_0x80BF3920.o(.text)
         build/asm/ovl_En_Rg_data.o(.text)
         ovl_En_Rg_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Osk :
     {
@@ -4180,8 +4180,8 @@ SECTIONS
         build/asm/ovl_En_Thiefbird_0x80C10770.o(.text)
         build/asm/ovl_En_Thiefbird_data.o(.text)
         ovl_En_Thiefbird_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_En_Jgame_Tsn :
     {
@@ -4200,8 +4200,8 @@ SECTIONS
         build/asm/ovl_Obj_Yado_0x80C161E0.o(.text)
         build/asm/ovl_Obj_Yado_data.o(.text)
         ovl_Obj_Yado_bss_start = .;
-        . += 0x10;
     }
+    . += 0x10;
 
     ovl_Demo_Syoten :
     {
@@ -4238,8 +4238,8 @@ SECTIONS
         build/asm/ovl_En_Invadepoh_Demo_0x80C192A0.o(.text)
         build/asm/ovl_En_Invadepoh_Demo_data.o(.text)
         ovl_En_Invadepoh_Demo_bss_start = .;
-        . += 0x80;
     }
+    . += 0x80;
 
     ovl_Obj_Danpeilift :
     {

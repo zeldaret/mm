@@ -45,12 +45,16 @@ BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
 BASEROM_FILES := $(subst baserom/dmadata ,,$(BASEROM_FILES))
 BASEROM_BUILD_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%)
-BASEROM_PRE_DMADATA_FILES := $(BASEROM_BUILD_FILES:build/baserom/%=build/baserom_pre_dmadata/%)
 
 BASE_DECOMP_FILES := $(wildcard decomp/*)
 DECOMP_FILES := $(BASE_DECOMP_FILES:decomp/%=build/decomp/%)
-DECOMP_PRE_DMADATA_FILES := $(DECOMP_FILES:build/decomp/%=build/decomp_pre_dmadata/%)
 COMP_FILES := $(DECOMP_FILES:build/decomp/%=build/comp/%.yaz0)
+
+DMADATA_FILES := $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
+# Exclude code files, they will be extracted from the file instead
+DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
+DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
 
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
@@ -78,10 +82,8 @@ BUILD_DIR := ./build
 # make build directories
 $(shell mkdir -p $(BUILD_DIR)/asm)
 $(shell mkdir -p $(BUILD_DIR)/baserom)
-$(shell mkdir -p $(BUILD_DIR)/baserom_pre_dmadata)
 $(shell mkdir -p $(BUILD_DIR)/comp)
 $(shell mkdir -p $(BUILD_DIR)/decomp)
-$(shell mkdir -p $(BUILD_DIR)/decomp_pre_dmadata)
 $(shell mkdir -p $(BUILD_DIR)/src)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra)
 $(shell mkdir -p $(BUILD_DIR)/src/libultra/os)
@@ -103,29 +105,14 @@ check: $(ROM)
 $(ROM): $(ROM_FILES)
 	@./tools/makerom.py ./tables/dmadata_table.txt $@
 
-build/%_pre_dmadata.bin: build/code_pre_dmadata.elf
-	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
-
-build/%.bin: build/code.elf
-	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
-
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
 	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
 
 build/code.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
 	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -o $@
 
-linker_scripts/dmadata_script.txt: $(DECOMP_PRE_DMADATA_FILES) $(BASEROM_PRE_DMADATA_FILES)
-# TODO is there a better way to avoid this shuffling?
-	mv build/baserom build/baserom_temp
-	mv build/decomp build/decomp_temp
-	mv build/baserom_pre_dmadata build/baserom
-	mv build/decomp_pre_dmadata build/decomp
-	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt
-	mv build/baserom build/baserom_pre_dmadata
-	mv build/decomp build/decomp_pre_dmadata
-	mv build/baserom_temp build/baserom
-	mv build/decomp_temp build/decomp
+linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
+	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
 
 test.txt: build/src/test.o
 	$(MIPS_BINUTILS_PREFIX)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
@@ -142,29 +129,8 @@ build/baserom/boot: build/boot.bin
 build/decomp/code: build/code.bin
 	cp $< $@
 
-build/decomp/ovl_title: build/ovl_title.bin
-	cp $< $@
-
-build/decomp/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten.bin
-	cp $< $@
-
-build/decomp/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray.bin
-	cp $< $@
-
-build/baserom_pre_dmadata/boot: build/boot_pre_dmadata.bin
-	cp $< $@
-
-build/decomp_pre_dmadata/code: build/code_pre_dmadata.bin
-	cp $< $@
-
-build/decomp_pre_dmadata/ovl_title: build/ovl_title_pre_dmadata.bin
-	cp $< $@
-
-build/decomp_pre_dmadata/ovl_Bg_Fu_Kaiten: build/ovl_Bg_Fu_Kaiten_pre_dmadata.bin
-	cp $< $@
-
-build/decomp_pre_dmadata/ovl_Bg_Ikana_Ray: build/ovl_Bg_Ikana_Ray_pre_dmadata.bin
-	cp $< $@
+build/decomp/ovl_%: build/code.elf
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section ovl_$*=$@ $<
 
 
 disasm:
@@ -175,10 +141,10 @@ disasm:
 
 # Recipes
 
-build/baserom/%: build/baserom_pre_dmadata/%
-	cp $< $@
+build/%.bin: build/code.elf
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
 
-build/baserom_pre_dmadata/%: baserom/%
+build/baserom/%: baserom/%
 	cp $< $@
 
 build/asm/%.o: asm/%.asm
@@ -200,10 +166,7 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c include/*
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 	./tools/set_o32abi_bit.py $@
 
-build/decomp/%: build/decomp_pre_dmadata/%
-	cp $< $@
-
-build/decomp_pre_dmadata/%: decomp/%
+build/decomp/%: decomp/%
 	cp $< $@
 
 build/comp/%.yaz0: build/decomp/%

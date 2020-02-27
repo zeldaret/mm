@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os, struct, sys, ast, argparse
 
+from elftools.elf.elffile import ELFFile
+
 def align_up(base, align_to):
     return ((base + align_to - 1) // align_to) * align_to
 
@@ -10,7 +12,14 @@ if __name__ == "__main__":
     parser.add_argument('out', help='output file')
     parser.add_argument('-l', '--linkscript', help='output linker script for file VROM addresses', metavar='filename')
     parser.add_argument('-u', '--uncompressed', help='build dmadata from only uncompressed files', action='store_true', default=False)
+    parser.add_argument('-e', '--elf', help='Override files with sections of an ELF, if it contains them')
     args = parser.parse_args()
+
+    raw_elffile = None
+    elffile = None
+    if args.elf is not None:
+       raw_elffile = open(args.elf, 'rb')
+       elffile = ELFFile(raw_elffile)
 
     with open(args.out, 'wb') as dmadata, open(args.files, 'r') as files:
         curr_vrom = 0
@@ -19,10 +28,12 @@ if __name__ == "__main__":
         linker_info = list()
         for base_file, comp_file, alignment, size_if_missing in dmadata_table:
             try:
+                file_name = base_file.split('/')[-1]
                 uncompressed = comp_file == ''
                 missing = base_file == '' and comp_file == ''
                 blank = missing and size_if_missing == 0
                 is_dmadata = base_file.endswith('dmadata')
+                is_in_elf = file_name != '' and (elffile is not None) and (elffile.get_section_by_name(file_name) is not None)
 
                 alignment = max(alignment, 0x10)
 
@@ -31,6 +42,9 @@ if __name__ == "__main__":
                     phys_size = 0
                 elif is_dmadata:
                     vrom_size = len(dmadata_table) * 0x10
+                    phys_size = vrom_size
+                elif is_in_elf:
+                    vrom_size = elffile.get_section_by_name(file_name)['sh_size']
                     phys_size = vrom_size
                 else:
                     vrom_size = os.path.getsize(base_file)
