@@ -933,8 +933,11 @@ SECTIONS
         build/asm/ovl_Bg_F40_Flift_data.o(.text)
     }
 
-    . += 0x1070; /* TODO we are skipping a file that we don't currently disassemble */
-    func_808D78D0 = 0x808D78D0;
+    ovl_Obj_Mure :
+    {
+        build/asm/ovl_Obj_Mure_0x808D78D0.o(.text)
+        build/asm/ovl_Obj_Mure_data.o(.text)
+    }
 
     ovl_En_Sw :
     {

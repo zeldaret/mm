@@ -103,8 +103,7 @@ FILE_NAMES = {
     92:'ovl_En_Floormas',
     93:'ovl_En_Rd',
     94:'ovl_Bg_F40_Flift',
-    95:'ovl_Bg_Heavy_Block',
-    # ovl_Obj_Mure? In JP
+    95:'ovl_Obj_Mure',
     96:'ovl_En_Sw',
     97:'ovl_Object_Kankyo',
     98:'ovl_En_Horse_Link_Child',

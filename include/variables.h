@@ -7359,6 +7359,9 @@ extern u32 bgF40FliftOverlayRelocations[22]; // D_808D7874
 extern u32 bgF40FliftOverlayInfoOffset; // D_808D78CC
 extern UNK_TYPE1 D_808D8760; // D_808D8760
 extern UNK_TYPE1 D_808D8780; // D_808D8780
+extern OverlayBlockSizes objMureOverlayInfo; // D_808D8800
+extern u32 objMureOverlayRelocations[71]; // D_808D8814
+extern u32 objMureOverlayInfoOffset; // D_808D893C
 extern UNK_TYPE1 D_808DB9C0; // D_808DB9C0
 extern UNK_TYPE1 D_808DB9E0; // D_808DB9E0
 extern UNK_PTR D_808DBA0C; // D_808DBA0C

@@ -536,6 +536,7 @@
     0x808D3880:"ovl_En_Floormas_data",
     0x808D70C0:"ovl_En_Rd_data",
     0x808D7810:"ovl_Bg_F40_Flift_data",
+    0x808D8760:"ovl_Obj_Mure_data",
     0x808DB9C0:"ovl_En_Sw_data",
     0x808DE320:"ovl_Object_Kankyo_data",
     0x808DFEA0:"ovl_En_Horse_Link_Child_data",
