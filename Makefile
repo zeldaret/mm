@@ -130,7 +130,7 @@ build/decomp/code: build/code.bin
 	cp $< $@
 
 build/decomp/ovl_%: build/code.elf
-	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section ovl_$*=$@ $<
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section ovl_$*=$@ $< /dev/null
 
 
 disasm:
@@ -142,7 +142,7 @@ disasm:
 # Recipes
 
 build/%.bin: build/code.elf
-	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $<
+	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section $*=$@ $< /dev/null
 
 build/baserom/%: baserom/%
 	cp $< $@
