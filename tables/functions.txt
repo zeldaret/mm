@@ -426,7 +426,7 @@
     0x80092290:("osSetTime","void","OSTime ticks"),
     0x800922C0:("func_800922C0","void","void"),
     0x800923E0:("osViSetEvent","void","OSMesgQueue* mq, OSMesg m, u32 retraceCount"),
-    0x80092440:("func_80092440","void","void"),
+    0x80092440:("osPfsIsPlug","s32","OSMesgQueue* queue, u8* pattern"),
     0x800925CC:("func_800925CC","void","void"),
     0x80092680:("func_80092680","void","void"),
     0x80092730:("func_80092730","void","void"),

@@ -429,7 +429,7 @@ short coss(unsigned short x); // func_80092260
 void osSetTime(OSTime ticks); // func_80092290
 void func_800922C0(void); // func_800922C0
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount); // func_800923E0
-void func_80092440(void); // func_80092440
+s32 osPfsIsPlug(OSMesgQueue* queue, u8* pattern); // func_80092440
 void func_800925CC(void); // func_800925CC
 void func_80092680(void); // func_80092680
 void func_80092730(void); // func_80092730

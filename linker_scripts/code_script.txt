@@ -26,6 +26,7 @@ SECTIONS
         build/asm/boot_0x80086280.o(.text)
         build/asm/boot_0x800862E0.o(.text)
         build/asm/boot_0x80086760.o(.text)
+        build/asm/boot_0x80086DD0.o(.text)
         build/asm/boot_0x80086FA0.o(.text)
         build/asm/__osMalloc.o(.text)
         build/src/libultra/rmon/sprintf.o(.text)
@@ -150,7 +151,7 @@ SECTIONS
         build/src/libultra/os/settime.o(.text)
         build/asm/boot_0x800922C0.o(.text)
         build/src/libultra/gu/visetevent.o(.text)
-        build/asm/boot_0x80092440.o(.text)
+        build/asm/pfsisplug.o(.text)
         build/asm/boot_0x80092730.o(.text)
         build/asm/cartrominit.o(.text)
         build/asm/boot_0x80092A80.o(.text)
@@ -271,7 +272,34 @@ SECTIONS
     }
 
     boot_bss_start = .;
-    . += 0xC5C0;
+    . += 0x1C60; /* 0x80080060 */
+    . += 0x140; /* idle */
+    . += 0x770; /* z_std_dma */
+    . += 0x420; /* 0x80080E30 */
+    . += 0x20; /* CIC6105 */
+    . += 0xE80; /* fault */
+    . += 0x40; /* fault_drawer */
+    . += 0x10; /* 0x80086760 */
+    . += 0x30; /* 0x80086DD0 */
+    . += 0x10; /* 0x80086FA0 */
+    . += 0x10; /* __osMalloc */
+    . += 0x40; /* sptask */
+    . += 0x100; /* 0x800896D0 */
+    . += 0x20; /* siacs */
+    . += 0x90; /* controller */
+    . += 0x10; /* 0x8008A170 */
+    . += 0x10; /* initialize */
+    . += 0x2A0; /* ??? */
+    . += 0x11D0; /* pimgr */
+    . += 0x20; /* piacs */
+    . += 0x100; /* devmgr */
+    . += 0x80; /* seteventmesg */
+    . += 0x40; /* timerintr */
+    . += 0x40; /* pfsisplug */
+    . += 0x80; /* cartrominit */
+    . += 0x1220; /* vimgr */
+    . += 0x6200; /* dmadata */
+    . += 0x10;
     boot_bss_end = .;
 
     code :

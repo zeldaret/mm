@@ -323,7 +323,7 @@ extern OSMesgQueue D_8009CF38; // D_8009CF38
 extern OSMesg D_8009CF50[1]; // D_8009CF50
 extern UNK_TYPE1 D_8009CF60; // D_8009CF60
 extern UNK_TYPE4 D_8009CF70; // D_8009CF70
-extern UNK_TYPE1 __osThreadSave; // D_8009CF80
+extern OSThread __osThreadSave; // D_8009CF80
 extern OSPiHandle D_8009D130; // D_8009D130
 extern OSPiHandle D_8009D1A8; // D_8009D1A8
 extern OSThread D_8009D220; // D_8009D220

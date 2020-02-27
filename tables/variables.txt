@@ -320,7 +320,7 @@
     0x8009CF50:("D_8009CF50","OSMesg","[1]",0x4),
     0x8009CF60:("D_8009CF60","UNK_TYPE1","",0x1),
     0x8009CF70:("D_8009CF70","UNK_TYPE4","",0x4),
-    0x8009CF80:("__osThreadSave","UNK_TYPE1","",0x1),
+    0x8009CF80:("__osThreadSave","OSThread","",0x1b0),
     0x8009D130:("D_8009D130","OSPiHandle","",0x74),
     0x8009D1A8:("D_8009D1A8","OSPiHandle","",0x74),
     0x8009D220:("D_8009D220","OSThread","",0x1b0),
