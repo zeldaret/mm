@@ -32,9 +32,8 @@
 #define FLAGS_HASH 8
 #define FLAGS_ZERO 16
 
-// TODO .data section should be included after boot .data is split
-//char spaces[] = "                                ";
-//char zeroes[] = "00000000000000000000000000000000";
+char spaces[] = "                                ";
+char zeroes[] = "00000000000000000000000000000000";
 
 int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
     _Pft x;

@@ -6,6 +6,8 @@ u32 __osBaseCounter;
 u32 __osViIntrCount;
 u32 __osTimerCounter;
 
+extern OSTimer* __osTimerList = &D_8009E590;
+
 void __osTimerServicesInit(void) {
     __osCurrentTime = 0;
     __osBaseCounter = 0;

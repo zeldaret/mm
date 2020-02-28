@@ -1,6 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
+UNK_TYPE4 D_80097E40 = 0;
+
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSMesg dummy;
     s32 ret = 0;

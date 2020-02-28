@@ -1,6 +1,13 @@
 #include <ultra64.h>
 #include <global.h>
 
+u8 D_80096B20 = 1;
+vu8 D_80096B24 = 1;
+u8 D_80096B28 = 0;
+u32 viEnabledSpecialFeatures = 0x42;
+f32 screenXScale = 1.0f;
+f32 screenYScale = 1.0f;
+
 void Idle_ClearMemory(void* begin, void* end){
     if (begin < end) {
         bzero(begin, (s32)(int)end - (int)begin);

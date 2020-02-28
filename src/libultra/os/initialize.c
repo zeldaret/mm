@@ -1,6 +1,11 @@
 #include <ramrom.h>
 #include <osint.h>
 
+u64 osClockRate = 0x0000000003B9ACA0;
+s32 osViClock = 0x02E6D354;
+UNK_TYPE4 __osShutdown = 0;
+UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
+
 void func_8008A660(void) {
     D_8009D130.type = 7;
     D_8009D130.latency = *(u32*)0xA4600014;

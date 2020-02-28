@@ -1,6 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
+StackEntry* sStackInfoListStart = NULL;
+StackEntry* sStackInfoListEnd = NULL;
+
 void StackCheck_Init(StackEntry* entry, u32 stackTop, u32 stackBottom, u32 initValue, s32 minSpace, char* name) {
     StackEntry* iter;
     u32* addr;

@@ -2,8 +2,7 @@
 #include <global.h>
 
 void guRotateF(float m[4][4], float a, float x, float y, float z) {
-// TODO move in .data section
-//    static float dtor;
+    static float D_80097F90 = 0.017453292; // TODO this is PI / 180.0, we should define pi somewhere
     float sine;
     float cosine;
     float ab;

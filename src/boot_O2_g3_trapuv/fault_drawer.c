@@ -1,6 +1,26 @@
 #include <ultra64.h>
 #include <global.h>
 
+FaultDrawer* faultDrawContext = &faultDrawContextStruct;
+FaultDrawer faultDrawContextInit = {
+    (u16*)0x803DA800, // fb - TODO map out buffers in this region and avoid hard-coded pointer
+    320, 240, // w, h
+    16, 223, // yStart, yEnd
+    22, 297,// xStart, xEnd
+    0xFFFF, 0x0000, // foreColor, backColor
+    22, 16, // cursorX, cursorY
+    (u32*)&faultDrawFont, // font
+    8, 8, 0, 0, // charW, charH, charWPad, charHPad
+    { // printColors
+        0x0001, 0xF801, 0x07C1, 0xFFC1,
+        0x003F, 0xF83F, 0x07FF, 0xFFFF,
+        0x7BDF, 0xB5AD
+    },
+    0, // escCode
+    0, // osSyncPrintfEnabled
+    NULL, // inputCallback
+};
+
 void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
     faultDrawContext->osSyncPrintfEnabled = enabled;
 }

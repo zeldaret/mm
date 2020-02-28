@@ -1,6 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
+UNK_TYPE4 dmamgrChunkSize = 0x2000;
+
 s32 Dmamgr_DoDmaTransfer(u32 a0, void* a1, u32 a2) {
     OSIoMesg sp60;
     OSMesgQueue sp48;

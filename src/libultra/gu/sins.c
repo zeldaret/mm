@@ -1,7 +1,6 @@
 #include <guint.h>
-// TODO we can't include this because then sintable is placed in .data, which we strip out
-//#include "sintable.h"
-extern short sintable[1024];
+
+#include "sintable.h"
 
 short sins(unsigned short x) {
     short val;

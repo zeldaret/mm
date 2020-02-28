@@ -6,11 +6,10 @@
 #define	OS_CPU_COUNTER		(OS_CLOCK_RATE*3/4)
 #define OS_USEC_TO_CYCLES(n)	(((u64)(n)*(OS_CPU_COUNTER/15625LL))/(1000000LL/15625LL))
 
-// TODO .data section
-//vs32 gPrenmiStage;
-//volatile OSTime sLastPrenmiTime;
-//vu64 gLastFrameDuration;
-//s32 sFrameCount;
+vs32 gPrenmiStage = 0;
+volatile OSTime sLastPrenmiTime = 0;
+vu64 gLastFrameDuration = 0;
+s32 sFrameCount = 0;
 
 void IrqMgr_AddCallback(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3) {
     u32 saveMask;
