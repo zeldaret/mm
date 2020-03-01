@@ -1113,9 +1113,9 @@ void BgCheck3_LoadMesh(GlobalContext* ctxt, BgActor* actor, BgMeshHeader* meshHe
 void BgCheck3_ResetFlags(BgActor* actor); // func_800CAE7C
 void func_800CAE88(BgActor* actor); // func_800CAE88
 void func_800CAE9C(BgActor* actor); // func_800CAE9C
-void func_800CAEB0(void); // func_800CAEB0
+void func_800CAEB0(BgCheckContext* bgCtxt, s32 index); // func_800CAEB0
 void func_800CAEE0(BgActor* actor); // func_800CAEE0
-void func_800CAEF4(void); // func_800CAEF4
+void func_800CAEF4(BgCheckContext* bgCtxt, s32 index); // func_800CAEF4
 void func_800CAF24(BgActor* actor); // func_800CAF24
 void func_800CAF38(BgActor* actor); // func_800CAF38
 s32 func_800CAF4C(BgActor* actor); // func_800CAF4C
