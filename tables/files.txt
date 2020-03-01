@@ -66,7 +66,7 @@
     ('decomp/', 'ovl_En_Floormas', 0x808D0680, ((0x808D3880, 0x808D3E1F),),()),
     ('decomp/', 'ovl_En_Rd', 0x808D3E20, ((0x808D70C0, 0x808D754F),),()),
     ('decomp/', 'ovl_Bg_F40_Flift', 0x808D7550, ((0x808D7810, 0x808D78CF),),()),
-    ('decomp/', 'ovl_Obj_Mure', 0x808D78D0, ((0x808D8760, 0x808D893F),),()), # TODO figure this one out
+    ('decomp/', 'ovl_Obj_Mure', 0x808D78D0, ((0x808D8760, 0x808D893F),),()),
     ('decomp/', 'ovl_En_Sw', 0x808D8940, ((0x808DB9C0, 0x808DBE7F),),()),
     ('decomp/', 'ovl_Object_Kankyo', 0x808DBE80, ((0x808DE320, 0x808DE5AF),),((0x808DE5B0,0x808DE5BF),)),
     ('decomp/', 'ovl_En_Horse_Link_Child', 0x808DE5C0, ((0x808DFEA0, 0x808E019F),),()),

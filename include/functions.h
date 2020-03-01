@@ -112,7 +112,7 @@ void FaultDrawer_Init(void); // func_800848B8
 void func_80084940(void); // func_80084940
 void func_80084968(void); // func_80084968
 void Load_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_800849A0
-unsigned int Load_LoadOverlay(u32 vRomStart, int vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes); // func_80084C0C
+s32 Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes); // func_80084C0C
 void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart); // func_80084CD0
 void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_80084DB0
 s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr); // func_8008501C

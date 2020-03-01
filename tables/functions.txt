@@ -109,7 +109,7 @@
     0x80084940:("func_80084940","void","void"),
     0x80084968:("func_80084968","void","void"),
     0x800849A0:("Load_Relocate","void","u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart"),
-    0x80084C0C:("Load_LoadOverlay","unsigned int","u32 vRomStart, int vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes"),
+    0x80084C0C:("Load_LoadOverlay","s32","u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes"),
     0x80084CD0:("Load_AllocateAndLoad","void*","u32 vRomStart, u32 vRomEnd, u32 vRamStart"),
     0x80084DB0:("Load2_Relocate","void","u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart"),
     0x8008501C:("Load2_LoadOverlay","s32","u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr"),

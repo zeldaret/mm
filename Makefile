@@ -28,7 +28,7 @@ build/src/boot_O2_g3_trapuv/%: OPTIMIZATION := -O2 -g3
 build/src/code/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/actors/%: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
-test.txt: OPTIMIZATION := -O2 -g3
+test.txt: OPTIMIZATION := -O2
 test.txt: CC := $(QEMU_IRIX) -L $(IRIX_71_ROOT) $(IRIX_71_ROOT)/usr/bin/cc
 test.txt: CFLAGS := $(CFLAGS) -Wab,-r4300_mul
 

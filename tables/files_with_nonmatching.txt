@@ -3,6 +3,8 @@ boot_0x800968B0
 fault
 fault_drawer
 idle
+loadfragment
+loadfragment2
 stackcheck
 z_actor
 z_DLF
