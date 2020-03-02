@@ -106,10 +106,10 @@ $(ROM): $(ROM_FILES)
 	@./tools/makerom.py ./tables/dmadata_table.txt $@
 
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
-	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -o $@
+	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
 
 build/code.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
-	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -o $@
+	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
 
 linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
 	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
