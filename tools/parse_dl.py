@@ -157,6 +157,67 @@ class Parser:
         def get_last_addr(self):
             return self.addr + 0x40
 
+    class MeshHeader:
+        def __init__(self, addr, file_data, offset):
+            self.addr = addr
+            self.minx = read_uint16_be(file_data, offset+0)
+            self.miny = read_uint16_be(file_data, offset+2)
+            self.minz = read_uint16_be(file_data, offset+4)
+            self.maxx = read_uint16_be(file_data, offset+6)
+            self.maxy = read_uint16_be(file_data, offset+8)
+            self.maxz = read_uint16_be(file_data, offset+10)
+            self.num_vertices = read_uint16_be(file_data, offset+12)
+            self.vertices = read_uint32_be(file_data, offset+16)
+            self.num_polygons = read_uint16_be(file_data, offset+20)
+            self.polygons = read_uint32_be(file_data, offset+24)
+            self.polygon_attrs = read_uint32_be(file_data, offset+28)
+            self.cameras = read_uint32_be(file_data, offset+32)
+            self.num_waterboxes = read_uint16_be(file_data, offset+36)
+            self.waterboxes = read_uint32_be(file_data, offset+40)
+
+        def get_last_addr(self):
+            return self.addr + 0x2C
+
+    class MeshVertList:
+        def __init__(self, addr, length):
+            self.addr = addr
+            self.length = length
+
+        def get_last_addr(self):
+            return self.addr + self.length * 0x6
+
+    class MeshPolyList:
+        def __init__(self, addr, length):
+            self.addr = addr
+            self.length = length
+
+        def get_last_addr(self):
+            return self.addr + self.length * 0x10
+
+    class MeshPolyAttrList:
+        def __init__(self, addr, length):
+            self.addr = addr
+            self.length = length
+
+        def get_last_addr(self):
+            return self.addr + self.length * 0x2
+
+    class MeshCameraList:
+        def __init__(self, addr, length):
+            self.addr = addr
+            self.length = length
+
+        def get_last_addr(self):
+            return self.addr + self.length * 0x8
+
+    class MeshWaterboxList:
+        def __init__(self, addr, length):
+            self.addr = addr
+            self.length = length
+
+        def get_last_addr(self):
+            return self.addr + self.length * 0x10
+
     def __init__(self, base_addr):
         self.base_addr = base_addr
         # TODO keep sorted, is_in_* functions can return early
@@ -164,6 +225,14 @@ class Parser:
         self.textures = [] # TODO check overlapping
         self.dls = [] # TODO check overlapping
         self.matrices = [] # TODO check overlapping
+        self.mesh_headers = [] # TODO check overlapping
+        self.mesh_verts = [] # TODO check overlapping
+        self.mesh_polys = [] # TODO check overlapping
+        self.mesh_attrs = [] # TODO check overlapping
+        self.mesh_cameras = [] # TODO check overlapping
+        self.mesh_waterboxes = [] # TODO check overlapping
+        self.pointers = []
+        self.zeros = set()
 
     def add_vertex_list(self, addr, length):
         #print('adding 0x{:08X} with length {}'.format(addr, length))
@@ -191,6 +260,24 @@ class Parser:
     def add_matrix(self, addr):
         self.matrices.append(self.Matrix(addr))
 
+    def add_mesh_header(self, addr, file_data, offset):
+        self.mesh_headers.append(self.MeshHeader(addr, file_data, offset))
+
+    def add_mesh_verts(self, addr, length):
+        self.mesh_verts.append(self.MeshVertList(addr, length))
+
+    def add_mesh_polys(self, addr, length):
+        self.mesh_polys.append(self.MeshPolyList(addr, length))
+
+    def add_mesh_attrs(self, addr, length):
+        self.mesh_attrs.append(self.MeshPolyAttrList(addr, length))
+
+    def add_mesh_cameras(self, addr, length):
+        self.mesh_cameras.append(self.MeshCameraList(addr, length))
+
+    def add_mesh_waterboxes(self, addr, length):
+        self.mesh_waterboxes.append(self.MeshWaterboxList(addr, length))
+
     def is_in_vertex_list(self, addr):
         for list in self.vertex_lists:
             if (addr >= list.addr) and (addr < list.get_last_addr()):
@@ -217,6 +304,54 @@ class Parser:
                 return True
         return False
 
+    def is_in_mesh_header(self, addr):
+        for header in self.mesh_headers:
+            if (addr >= header.addr) and (addr < header.get_last_addr()):
+                return True
+        return False
+
+    def is_in_mesh_verts(self, addr):
+        for verts in self.mesh_verts:
+            if (addr >= verts.addr) and (addr < verts.get_last_addr()):
+                return True
+        return False
+
+    def is_in_mesh_polys(self, addr):
+        for polys in self.mesh_polys:
+            if (addr >= polys.addr) and (addr < polys.get_last_addr()):
+                return True
+        return False
+
+    def is_in_mesh_attrs(self, addr):
+        for attrs in self.mesh_attrs:
+            if (addr >= attrs.addr) and (addr < attrs.get_last_addr()):
+                return True
+        return False
+
+    def is_in_mesh_cameras(self, addr):
+        for cameras in self.mesh_cameras:
+            if (addr >= cameras.addr) and (addr < cameras.get_last_addr()):
+                return True
+        return False
+
+    def is_in_mesh_waterboxes(self, addr):
+        for waterboxes in self.mesh_waterboxes:
+            if (addr >= waterboxes.addr) and (addr < waterboxes.get_last_addr()):
+                return True
+        return False
+
+    def is_unknown(self, addr):
+        return not self.is_in_vertex_list(addr) and \
+               not self.is_in_texture(addr) and \
+               not self.is_in_dl(addr) and \
+               not self.is_in_matrix(addr) and \
+               not self.is_in_mesh_header(addr) and \
+               not self.is_in_mesh_verts(addr) and \
+               not self.is_in_mesh_polys(addr) and \
+               not self.is_in_mesh_attrs(addr) and \
+               not self.is_in_mesh_cameras(addr) and \
+               not self.is_in_mesh_waterboxes(addr)
+
     def get_vertex_list(self, addr):
         for list in self.vertex_lists:
             if (addr >= list.addr) and (addr < list.get_last_addr()):
@@ -241,6 +376,42 @@ class Parser:
         for matrix in self.matrices:
             if (addr >= matrix.addr) and (addr < matrix.get_last_addr()):
                 return matrix
+        return None
+
+    def get_mesh_header(self, addr):
+        for header in self.mesh_headers:
+            if (addr >= header.addr) and (addr < header.get_last_addr()):
+                return header
+        return None
+
+    def get_mesh_verts(self, addr):
+        for verts in self.mesh_verts:
+            if (addr >= verts.addr) and (addr < verts.get_last_addr()):
+                return verts
+        return None
+
+    def get_mesh_polys(self, addr):
+        for polys in self.mesh_polys:
+            if (addr >= polys.addr) and (addr < polys.get_last_addr()):
+                return polys
+        return None
+
+    def get_mesh_attrs(self, addr):
+        for attrs in self.mesh_attrs:
+            if (addr >= attrs.addr) and (addr < attrs.get_last_addr()):
+                return attrs
+        return None
+
+    def get_mesh_cameras(self, addr):
+        for cameras in self.mesh_cameras:
+            if (addr >= cameras.addr) and (addr < cameras.get_last_addr()):
+                return cameras
+        return None
+
+    def get_mesh_waterboxes(self, addr):
+        for waterboxes in self.mesh_waterboxes:
+            if (addr >= waterboxes.addr) and (addr < waterboxes.get_last_addr()):
+                return waterboxes
         return None
 
     def parse_cmd(self, w0, w1):
@@ -943,6 +1114,40 @@ class Parser:
         if is_in_dl:
             self.add_dl(self.base_addr, (dl_end_addr - self.base_addr) // 8)
 
+    def find_mesh_headers(self, file_data):
+        i = 0
+        num_pointers = len(self.pointers)
+        while i < num_pointers:
+            if i + 2 < num_pointers:
+                base = self.pointers[i] # vertices pointer
+                # test for polygons and attributes
+                if base > 3 and self.pointers[i+1] == base + 2 and self.pointers[i+2] == base + 3:
+                    # test for cameras and waterboxes, which may be null
+                    if (i + 4 < num_pointers and self.pointers[i+3] == base + 4 and self.pointers[i+4] == base + 6) or \
+                       (i + 3 < num_pointers and ((self.pointers[i+3] == base + 4 and base + 6 in self.zeros) or (self.pointers[i+3] == base + 6 and base + 4 in self.zeros))) or \
+                       (base + 4 in self.zeros and base + 6 in self.zeros):
+                        self.add_mesh_header(self.base_addr + (base - 4) * 4, file_data, (base - 4) * 4)
+
+                        header = self.mesh_headers[-1]
+
+                        self.add_mesh_verts(header.vertices, header.num_vertices)
+                        self.add_mesh_polys(header.polygons, header.num_polygons)
+                        self.add_mesh_attrs(header.polygon_attrs, (header.polygons - header.polygon_attrs) // 8) # TODO how is the length determined? This is just a guess
+                        if header.cameras != 0:
+                            self.add_mesh_cameras(header.cameras, (header.polygon_attrs - header.cameras) // 8) # TODO how is the length determined? This is just a guess
+                            # TODO parse camera parameters, as it can have pointers we need to follow
+                        if header.num_waterboxes != 0:
+                            self.add_mesh_waterboxes(header.waterboxes, header.num_waterboxes)
+
+                        pointers_to_consume = 3
+                        if base + 4 not in self.zeros:
+                            pointers_to_consume += 1
+                        if base + 6 not in self.zeros:
+                            pointers_to_consume += 1
+                        i += pointers_to_consume # TODO remove pointers from list for future passes looking for different object types?
+                        #print('Adding mesh at 0x{:08X}'.format(self.base_addr + (base - 4) * 4))
+            i += 1
+
     def extract_models(self, dir, file_data):
         if len(self.dls) == 0:
             return
@@ -1007,22 +1212,41 @@ class Parser:
 
         self.find_dls(file_info)
 
+        for i in range(len(file_data) // 4):
+            if self.is_unknown(self.base_addr + i * 4):
+                word = read_uint32_be(file_data, i * 4)
+                offset = word - self.base_addr
+                if offset >= 0 and offset < 0x1000000:
+                    self.pointers.append(i)
+                elif word == 0:
+                    self.zeros.add(i)
+
+        self.find_mesh_headers(file_data)
+
         return file_info
 
     def print_info(self, file_data, file_info):
         num_in_dls = 0
         for dl in self.dls:
             num_in_dls += dl.length
-        print('DLs:{}({}) Vertex Lists:{} Textures:{}'.format(len(self.dls), num_in_dls, len(self.vertex_lists), len(self.textures)))
+        print('DLs:{}({}) Vertex Lists:{} Textures:{} Mesh Headers:{}'.format(len(self.dls), num_in_dls, len(self.vertex_lists), len(self.textures), len(self.mesh_headers)))
         start_addr = self.base_addr
+
+        # for pointer in self.pointers:
+            # print('0x{:08X}'.format(self.base_addr + pointer*4))
+
+        # print('-----')
+
+        # for zero in self.zeros:
+            # print('0x{:08X}'.format(self.base_addr + zero*4))
 
 #        for texture in self.textures:
 #            print('0x{:08X} {}'.format(texture[0], texture[1]))
 
         # TODO assert that vertex lists and textures start on the address
         i = 0
-        while(i < len(file_info)):
-            addr = start_addr + i*8
+        while(i < len(file_info) * 2):
+            addr = start_addr + i*4
             if self.is_in_vertex_list(addr):
                 list = self.get_vertex_list(addr)
                 print('0x{:08X}: Vertex[{}]'.format(addr, list.length))
@@ -1031,27 +1255,74 @@ class Parser:
 #                    y = read_uint16_be(file_data, list.addr - self.base_addr + vertex * 0x10 + 2)
 #                    z = read_uint16_be(file_data, list.addr - self.base_addr + vertex * 0x10 + 4)
 #                    print('{} {} {}'.format(x, y, z))
-                i += list.length * 2
+                i += list.length * 4
                 continue
             elif self.is_in_texture(addr):
                 length = self.get_texture(addr)[1]
                 print('0x{:08X}: Texture(0x{:X} bytes)'.format(addr, length))
-                i += (length + 7) // 8 # +7 to align up to double word
+                i += (length + 3) // 4 # +3 to align up to word
                 continue
             elif self.is_in_dl(addr):
                 length = self.get_dl(addr).length
                 print('0x{:08X}: Dl[{}]'.format(addr, length))
                 for dl_cmd in range(length):
-                    print('    {}'.format(file_info[i+dl_cmd][2]))
-                i += length
+                    print('    {}'.format(file_info[i // 2 + dl_cmd][2]))
+                i += length * 2
                 continue
             elif self.is_in_matrix(addr):
                 print('0x{:08X}: Matrix'.format(addr))
-                i += 8
+                i += 16
                 continue
-            else:
-                print('0x{:08X}: {}, {}, {}'.format(addr, file_info[i][0], file_info[i][1], file_info[i][2]))
+            elif self.is_in_mesh_header(addr):
+                print('0x{:08X}: Mesh Header'.format(addr))
+                header = self.get_mesh_header(addr)
+                print('    min:            {{{}, {}, {}}}'.format(header.minx, header.miny, header.minz))
+                print('    max:            {{{}, {}, {}}}'.format(header.maxx, header.maxy, header.maxz))
+                print('    num_vertices:   {}'.format(header.num_vertices))
+                print('    vertices:       0x{:08X}'.format(header.vertices))
+                print('    num_polygons:   {}'.format(header.num_polygons))
+                print('    polygons:       0x{:08X}'.format(header.polygons))
+                print('    polygon_attrs:  0x{:08X}'.format(header.polygon_attrs))
+                print('    cameras:        0x{:08X}'.format(header.cameras))
+                print('    num_waterboxes: {}'.format(header.num_waterboxes))
+                print('    waterboxes:     0x{:08X}'.format(header.waterboxes))
+                i += 11
+                continue
+            elif self.is_in_mesh_verts(addr):
+                length = self.get_mesh_verts(addr).length
+                print('0x{:08X}: MeshVerts[{}]'.format(addr, length))
+                i += (length*6 + 3) // 4 # +3 to align up to word
+                continue
+            elif self.is_in_mesh_polys(addr):
+                length = self.get_mesh_polys(addr).length
+                print('0x{:08X}: MeshPolys[{}]'.format(addr, length))
+                i += length*4
+                continue
+            elif self.is_in_mesh_attrs(addr):
+                length = self.get_mesh_attrs(addr).length
+                print('0x{:08X}: MeshPolyAttrs[{}]'.format(addr, length))
+                i += length*2
+                continue
+            elif self.is_in_mesh_cameras(addr):
+                length = self.get_mesh_cameras(addr).length
+                print('0x{:08X}: Cameras[{}]'.format(addr, length))
+                i += length*2
+                continue
+            elif self.is_in_mesh_waterboxes(addr):
+                length = self.get_mesh_waterboxes(addr).length
+                print('0x{:08X}: Waterboxes[{}]'.format(addr, length))
+                i += length*4
+                continue
+            elif (i % 2) == 1:
+                print('pad 0x00000000') # TODO assert that it is actually 0
                 i += 1
+            else:
+                if (i % 4) == 2 and file_info[i // 2] == (True, False, 'gsDPNoOp()'):
+                    print('pad 0x00000000')
+                    print('pad 0x00000000')
+                else:
+                    print('0x{:08X}: {}, {}, {}'.format(addr, file_info[i // 2][0], file_info[i // 2][1], file_info[i // 2][2]))
+                i += 2
                 continue
 
         #self.extract_models('test/', file_data)
@@ -1063,7 +1334,7 @@ if __name__ == "__main__":
 
     file_data = read_file(args.input)
 
-    parser = Parser(0x04000000) # TODO take in base addr
+    parser = Parser(0x06000000) # TODO take in base addr
     file_info = parser.parse(file_data)
     parser.print_info(file_data, file_info)
 
