@@ -70,7 +70,7 @@ GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800BFDEC.asm")
 
 GLOBAL_ASM("./asm/non_matchings/z_bgcheck/BgCheck_PolygonGetMinY.asm")
 
-GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800C003C.asm")
+GLOBAL_ASM("./asm/non_matchings/z_bgcheck/BgCheck_PolygonGetNormal.asm")
 
 GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800C0094.asm")
 
@@ -92,7 +92,7 @@ GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800C074C.asm")
 
 GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800C07F0.asm")
 
-GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800C0AF0.asm")
+GLOBAL_ASM("./asm/non_matchings/z_bgcheck/BgCheck_PolygonCollidesWithSphere.asm")
 
 GLOBAL_ASM("./asm/non_matchings/z_bgcheck/BgCheck_ScenePolygonListsInsertSorted.asm")
 
