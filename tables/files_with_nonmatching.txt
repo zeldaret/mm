@@ -7,6 +7,7 @@ loadfragment
 loadfragment2
 stackcheck
 z_actor
+z_bgcheck
 z_DLF
 z_effect_soft_sprite
 z_lib
