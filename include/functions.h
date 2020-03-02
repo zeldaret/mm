@@ -556,7 +556,7 @@ void func_800AE5A0(GlobalContext* ctxt); // func_800AE5A0
 void func_800AE5E4(void); // func_800AE5E4
 void func_800AE778(GlobalContext* ctxt, ColorRGBA8* color, short param_3, short param_4); // func_800AE778
 void func_800AE8EC(GlobalContext* ctxt); // func_800AE8EC
-void func_800AE930(BgCheckContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, int param_6, int param_7); // func_800AE930
+void func_800AE930(BgCheckContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, BgPolygon* param_6, int param_7); // func_800AE930
 void func_800AEF44(void); // func_800AEF44
 void func_800AEF70(void); // func_800AEF70
 void func_800AEFA0(void); // func_800AEFA0
@@ -911,31 +911,31 @@ void func_800BF9A0(s32 a0, s32 a1); // func_800BF9A0
 s32 func_800BFA78(s32 param_1, s32 param_2); // func_800BFA78
 void func_800BFAE8(void); // func_800BFAE8
 void func_800BFB40(void); // func_800BFB40
-void BgCheck_PolygonLinkedListNodeInit(BgPolygonLinkedListNode* node, s16* next, s16 polyIndex); // func_800BFB80
-void BgCheck_PolygonLinkedListResetHead(s16* head); // func_800BFB9C
-void BgCheck_ScenePolygonListsNodeInsert(BgScenePolygonLists* list, u16* head, s32 polyIndex); // func_800BFBAC
-void BgCheck_PolygonLinkedListNodeInsert(BgPolygonLinkedList* list, s16* head, s32 polyIndex); // func_800BFC04
+void BgCheck_PolygonLinkedListNodeInit(BgPolygonLinkedListNode* node, s16* polyIndex, u16 next); // func_800BFB80
+void BgCheck_PolygonLinkedListResetHead(u16* head); // func_800BFB9C
+void BgCheck_ScenePolygonListsNodeInsert(BgScenePolygonLists* list, u16* head, s16* polyIndex); // func_800BFBAC
+void BgCheck_PolygonLinkedListNodeInsert(BgPolygonLinkedList* list, u16* head, s16* polyIndex); // func_800BFC04
 void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* list); // func_800BFC5C
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes); // func_800BFC70
 void BgCheck_PolygonLinkedListReset(BgPolygonLinkedList* list); // func_800BFCC0
-s16 BgCheck_AllocPolygonLinkedListNode(BgPolygonLinkedList* attributes); // func_800BFCCC
+u16 BgCheck_AllocPolygonLinkedListNode(BgPolygonLinkedList* list); // func_800BFCCC
 void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vector3f* vector); // func_800BFCFC
 void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vector3f* vector); // func_800BFD40
-void func_800BFD84(void); // func_800BFD84
-void func_800BFDEC(void); // func_800BFDEC
+float func_800BFD84(BgPolygon* polygon, float param_2, float param_3); // func_800BFD84
+int func_800BFDEC(BgPolygon* param_1, BgPolygon* param_2, unsigned int* param_3, unsigned int* param_4); // func_800BFDEC
 s32 BgCheck_PolygonGetMinY(BgPolygon* polygons, BgVertex* vertices); // func_800BFFC4
-void func_800C003C(void); // func_800C003C
-void func_800C0094(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C0094
-void func_800C01B8(void); // func_800C01B8
+void BgCheck_PolygonGetNormal(BgPolygon* polygon, f32* normalX, f32* normalY, f32* normalZ); // func_800C003C
+void func_800C0094(BgPolygon* param_1, f32 xOffset, f32 yOffset, f32 zOffset, z_Matrix* matrix); // func_800C0094
+f32 func_800C01B8(BgPolygon* param_1, Vector3f* param_2); // func_800C01B8
 void BgCheck_CreateColTriParamsFromPolygon(BgPolygon* polygon, BgVertex* vertices, ColTriParams* tri); // func_800C0220
 void func_800C02C0(BgPolygon* poly, s32 index, BgCheckContext* bgCtxt, ColTriParams* tri); // func_800C02C0
-void func_800C0340(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0340
-void func_800C0474(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0474
+void func_800C0340(BgPolygon* param_1, BgVertex* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0340
+UNK_TYPE4 func_800C0474(BgPolygon* param_1, BgVertex* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0474
 void func_800C0668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C0668
 void func_800C06A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C06A8
 void func_800C074C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C074C
 void func_800C07F0(void); // func_800C07F0
-void func_800C0AF0(void); // func_800C0AF0
+void BgCheck_PolygonCollidesWithSphere(BgPolygon* polygon, BgVertex* verticies, Vector3f* pos, f32 readius); // func_800C0AF0
 void BgCheck_ScenePolygonListsInsertSorted(BgCheckContext* bgCtxt, u16* head, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0BC0
 void BgCheck_ScenePolygonListsInsert(BgMeshSubdivision* subdivision, BgCheckContext* bgCtxt, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0DE0
 void func_800C0E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C0E74

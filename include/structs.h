@@ -822,13 +822,13 @@ typedef struct {
 /* 0x4 */ u16 vertB; // upper 3 bits contain flags
 /* 0x6 */ u16 vertC;
 /* 0x8 */ Vector3s normal;
-/* 0xE */ UNK_TYPE1 padE[0x2];
+/* 0xE */ s16 unkE;
 } BgPolygon;
 
 typedef struct {
 /* 0x0 */ BgPolygonLinkedListNode* nodes;
 /* 0x4 */ u32 nextFreeNode;
-/* 0x8 */ u32 maxNodes;
+/* 0x8 */ s32 maxNodes;
 } BgPolygonLinkedList;
 
 typedef struct {
