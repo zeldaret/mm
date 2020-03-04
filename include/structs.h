@@ -2208,7 +2208,7 @@ struct Actor {
 /* 0x008 */ PosRot initPosRot;
 /* 0x01C */ s16 variable;
 /* 0x01E */ s8 objectIndex;
-/* 0x01F */ UNK_TYPE1 pad1F[0x1];
+/* 0x01F */ UNK_TYPE1 unk1F;
 /* 0x020 */ s16 unk20;
 /* 0x022 */ UNK_TYPE1 pad22[0x2];
 /* 0x024 */ PosRot currPosRot;

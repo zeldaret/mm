@@ -698,7 +698,7 @@ u32 Actor_GetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CC4
 void Actor_SetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CDC
 void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CF8
 u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D18
-void Actor_SetRoomClearedTemp(GlobalContext* ctxt, unsigned int roomNumber); // func_800B5D30
+void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D30
 void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D4C
 u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, u32 index); // func_800B5D6C
 u32 Actor_SetCollectibleFlag(GlobalContext* ctxt, u32 index); // func_800B5DB0
@@ -735,12 +735,12 @@ void Actor_SetVelocityXYRotationReverse(Actor* actor); // func_800B6B50
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor); // func_800B6BD8
 void func_800B6C04(Actor* actor, float fParm2); // func_800B6C04
 void func_800B6C58(Actor* actor, UNK_TYPE4 param_2); // func_800B6C58
-s32 Actor_YawBetweenActors(Actor* from, Actor* to); // func_800B6CD4
+s16 Actor_YawBetweenActors(Actor* from, Actor* to); // func_800B6CD4
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to); // func_800B6D00
-s32 Actor_YawToPoint(Actor* actor, Vector3f* point); // func_800B6D2C
-s32 Actor_PitchBetweenActors(Actor* from, Actor* to); // func_800B6D50
-s32 Actor_PitchBetweenActorsTop(Actor* from, Actor* to); // func_800B6D7C
-s32 Actor_PitchToPoint(Actor* actor, Vector3f* point); // func_800B6DA8
+s16 Actor_YawToPoint(Actor* actor, Vector3f* point); // func_800B6D2C
+s16 Actor_PitchBetweenActors(Actor* from, Actor* to); // func_800B6D50
+s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to); // func_800B6D7C
+s16 Actor_PitchToPoint(Actor* actor, Vector3f* point); // func_800B6DA8
 f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6DCC
 f32 Actor_DistanceToPoint(Actor* actor, Vector3f* point); // func_800B6DF8
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6E1C

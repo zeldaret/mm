@@ -33,7 +33,17 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B4F78.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5040.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TargetContextInit.asm")
+void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt) {
+    targetCtxt->unk90 = NULL;
+    targetCtxt->unk8C = NULL;
+    targetCtxt->unk3C = NULL;
+    targetCtxt->unk38 = NULL;
+    targetCtxt->unk4B = 0;
+    targetCtxt->unk4C = 0;
+    targetCtxt->unk40 = 0;
+    func_800B5040(targetCtxt, actor, actor->type, ctxt);
+    func_800B4F78(targetCtxt, actor->type, ctxt);
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5208.asm")
 
@@ -45,31 +55,56 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetSwitchFlag.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_UnsetSwitchFlag.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetChestFlag.asm")
+u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag) {
+    return ctxt->actorContext.chestFlags & (1 << flag);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetChestFlag.asm")
+void Actor_SetChestFlag(GlobalContext* ctxt, u32 flag) {
+    ctxt->actorContext.chestFlags |= (1 << flag);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetAllChestFlag.asm")
+void Actor_SetAllChestFlag(GlobalContext* ctxt, u32 flag) {
+    ctxt->actorContext.chestFlags = flag;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetAllChestFlag.asm")
+u32 Actor_GetAllChestFlag(GlobalContext* ctxt) {
+    return ctxt->actorContext.chestFlags;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetRoomCleared.asm")
+u32 Actor_GetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
+    return ctxt->actorContext.clearedRooms & (1 << roomNumber);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetRoomCleared.asm")
+void Actor_SetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
+    ctxt->actorContext.clearedRooms |= (1 << roomNumber);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_UnsetRoomCleared.asm")
+void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
+    ctxt->actorContext.clearedRooms &= ~(1 << roomNumber);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetRoomClearedTemp.asm")
+u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
+    return ctxt->actorContext.clearedRoomsTemp & (1 << roomNumber);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetRoomClearedTemp.asm")
+void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
+    ctxt->actorContext.clearedRoomsTemp |= (1 << roomNumber);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_UnsetRoomClearedTemp.asm")
+void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
+    ctxt->actorContext.clearedRoomsTemp &= ~(1 << roomNumber);
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetCollectibleFlag.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetCollectibleFlag.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardContextInit.asm")
+void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
+    titleCtxt->fadeOutDelay = 0;
+    titleCtxt->fadeInDelay = 0;
+    titleCtxt->color = 0;
+    titleCtxt->alpha = 0;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardCreate.asm")
 
@@ -97,29 +132,112 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6608.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6680.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_MarkForDeath.asm")
+void Actor_MarkForDeath(Actor* actor) {
+    actor->draw = NULL;
+    actor->main = NULL;
+    actor->flags &= ~0x1;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InitCurrPosition.asm")
+void Actor_InitCurrPosition(Actor* actor) {
+    actor->currPosRot = actor->initPosRot;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetHeight.asm")
+void Actor_SetHeight(Actor* actor, f32 height) {
+    actor->topPosRot.pos.x = actor->currPosRot.pos.x;
+    actor->topPosRot.pos.y = actor->currPosRot.pos.y + height;
+    actor->topPosRot.pos.z = actor->currPosRot.pos.z;
+    actor->topPosRot.rot.x = actor->currPosRot.rot.x;
+    actor->topPosRot.rot.y = actor->currPosRot.rot.y;
+    actor->topPosRot.rot.z = actor->currPosRot.rot.z;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetRotationFromDrawRotation.asm")
+void Actor_SetRotationFromDrawRotation(Actor* actor) {
+    actor->currPosRot.rot = actor->drawParams.rot;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InitDrawRotation.asm")
+void Actor_InitDrawRotation(Actor* actor) {
+    actor->drawParams.rot = actor->currPosRot.rot;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetScale.asm")
+void Actor_SetScale(Actor* actor, f32 scale) {
+    actor->scale.z = scale;
+    actor->scale.y = scale;
+    actor->scale.x = scale;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetObjectSegment.asm")
+void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
+    gRspSegmentPhysAddrs[6] = (u32) ctxt->sceneContext.objects[actor->objectIndex].vramAddr + 0x80000000;
+}
 
+#ifdef NON_MATCHING
+void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
+    Actor_InitCurrPosition(actor);
+    Actor_InitDrawRotation(actor);
+    Actor_SetHeight(actor, 0);
+    Lib_CopyVec3f(&actor->lastPos, &actor->currPosRot.pos);
+    Actor_SetScale(actor, 0.01);
+
+    actor->unk1F = 3;
+
+    actor->minYVelocity = -20.0f;
+
+    actor->naviMsgId = 255;
+
+    actor->sqrdDistToLink = D_801DCA54;
+
+    actor->unkFC = 1000.0f;
+    actor->unk100 = 350.0f;
+    actor->unk104 = 700.0f;
+    actor->meshAttachedTo = 0x32;
+
+    func_800E7494(&actor->unkA0);
+    Actor_SetDrawParams(&actor->drawParams, 0, 0, 0);
+    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objectIndex) != 0) {
+        Actor_SetObjectSegment(ctxt, actor);
+        actor->init(actor, ctxt);
+        actor->init = NULL;
+    }
+}
+#else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InitToDefaultValues.asm")
+#endif
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_FiniActor.asm")
+void Actor_FiniActor(Actor* actor, GlobalContext* ctxt) {
+    if (actor->init == NULL) {
+        if (actor->fini != NULL) {
+            actor->fini(actor, ctxt);
+            actor->fini = NULL;
+        }
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetMovementScale.asm")
+void Actor_SetMovementScale(s32 scale) {
+    actorMovementScale = scale * 0.5f;
+}
 
+#ifdef NON_MATCHING
+void Actor_ApplyMovement(Actor* actor) {
+    actor->currPosRot.pos.x = actor->currPosRot.pos.x + ((actor->velocity.x * actorMovementScale) + actor->unkA0.displacement.x);
+    actor->currPosRot.pos.y = actor->currPosRot.pos.y + ((actor->velocity.y * actorMovementScale) + actor->unkA0.displacement.y);
+    actor->currPosRot.pos.z = actor->currPosRot.pos.z + ((actor->velocity.z * actorMovementScale) + actor->unkA0.displacement.z);
+}
+#else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_ApplyMovement.asm")
+#endif
 
+#ifdef NON_MATCHING
+void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
+    actor->velocity.x = actor->speed * Lib_sin(actor->currPosRot.rot.x);
+    actor->velocity.y = actor->velocity.y + actor->gravity;
+    actor->velocity.z = actor->speed * Lib_cos(actor->currPosRot.rot.x);
+
+    if (actor->velocity.y < actor->minYVelocity) {
+        actor->velocity.y = actor->minYVelocity;
+    }
+}
+#else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityYRotationAndGravity.asm")
+#endif
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityAndMoveYRotationAndGravity.asm")
 
@@ -135,29 +253,64 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C04.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C58.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_YawBetweenActors.asm")
+s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
+    return Lib_YawVec3f(&from->currPosRot.pos, &to->currPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_YawBetweenActorsTop.asm")
+s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to) {
+    return Lib_YawVec3f(&from->topPosRot.pos, &to->topPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_YawToPoint.asm")
+s16 Actor_YawToPoint(Actor* actor, Vector3f* point) {
+    return Lib_YawVec3f(&actor->currPosRot.pos, point);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PitchBetweenActors.asm")
+s16 Actor_PitchBetweenActors(Actor* from, Actor* to) {
+    return Lib_PitchVec3f(&from->currPosRot.pos, &to->currPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PitchBetweenActorsTop.asm")
+s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to) {
+    return Lib_PitchVec3f(&from->topPosRot.pos, &to->topPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PitchToPoint.asm")
+s16 Actor_PitchToPoint(Actor* actor, Vector3f* point) {
+    return Lib_PitchVec3f(&actor->currPosRot.pos, point);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_DistanceBetweenActors.asm")
+f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2) {
+    return Lib_DistanceVec3f(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_DistanceToPoint.asm")
+f32 Actor_DistanceToPoint(Actor* actor, Vector3f* point) {
+    return Lib_DistanceVec3f(&actor->currPosRot.pos, point);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_XZDistanceBetweenActors.asm")
+f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2) {
+    return Lib_DistanceXZVec3f(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_XZDistanceToPoint.asm")
+f32 Actor_XZDistanceToPoint(Actor* actor, Vector3f* point) {
+    return Lib_DistanceXZVec3f(&actor->currPosRot.pos, point);
+}
 
+#ifdef NON_MATCHING
+void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vector3f* offset, Vector3f* point) {
+    f32 cos_rot_x;
+    f32 sin_rot_x;
+
+    cos_rot_x = Lib_cos(actor->drawParams.rot.x);
+    sin_rot_x = Lib_sin(actor->drawParams.rot.x);
+    offset->x = (point->x - actor->currPosRot.pos.x * cos_rot_x) - (point->z - actor->currPosRot.pos.z * sin_rot_x);
+    offset->z = (point->z - actor->currPosRot.pos.z * cos_rot_x) + (point->x - actor->currPosRot.pos.x * sin_rot_x);
+    offset->y = point->y - actor->currPosRot.pos.y;
+}
+#else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_CalcOffsetOrientedToDrawRotation.asm")
+#endif
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_YDistance.asm")
+f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
+    return actor2->currPosRot.pos.y - actor1->currPosRot.pos.y;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6F20.asm")
 
@@ -335,7 +488,10 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_DrawActor.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B9D1C.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_DrawAllSetup.asm")
+void Actor_DrawAllSetup(GlobalContext* ctxt) {
+    ctxt->actorContext.undrawnActorCount = 0;
+    ctxt->actorContext.unkB = 0;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_RecordUndrawnActor.asm")
 
