@@ -1347,7 +1347,7 @@ typedef struct {
 /* 0x10 */ u32 ramAddr;
 /* 0x14 */ ActorInitData* initValues;
 /* 0x18 */ s8* name;
-/* 0x1C */ s16 flags; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
+/* 0x1C */ u16 flags; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
 /* 0x1E */ s8 clients;
 /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlayTableEntry;
@@ -2110,7 +2110,7 @@ struct ActorDrawParams {
 /* 0x08 */ f32 yDisplacement;
 /* 0x0C */ actor_post_draw_func postDrawFunc;
 /* 0x10 */ f32 scale;
-/* 0x14 */ s8 alphaScale; // -1 means always draw full opacity if visible
+/* 0x14 */ u8 alphaScale; // 255 means always draw full opacity if visible
 };
 
 struct ActorInitData {

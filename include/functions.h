@@ -687,9 +687,9 @@ void func_800B5040(TargetContext* targetContext, Actor* actor, u8 type, GlobalCo
 void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt); // func_800B51A4
 void func_800B5208(TargetContext* targetCtxt, GlobalContext* ctxt); // func_800B5208
 void func_800B5814(TargetContext* targetContext, ActorPlayer* player, Actor* param_3, GlobalContext* ctxt); // func_800B5814
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, u32 flag); // func_800B5BB0
-void Actor_SetSwitchFlag(GlobalContext* ctxt, u32 flag); // func_800B5BF4
-void Actor_UnsetSwitchFlag(GlobalContext* ctxt, u32 flag); // func_800B5C34
+u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5BB0
+void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5BF4
+void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5C34
 u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag); // func_800B5C78
 void Actor_SetChestFlag(GlobalContext* ctxt, u32 flag); // func_800B5C90
 void Actor_SetAllChestFlag(GlobalContext* ctxt, u32 flags); // func_800B5CAC
@@ -700,10 +700,10 @@ void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5C
 u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D18
 void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D30
 void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D4C
-u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, u32 index); // func_800B5D6C
-u32 Actor_SetCollectibleFlag(GlobalContext* ctxt, u32 index); // func_800B5DB0
+u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, s32 index); // func_800B5D6C
+void Actor_SetCollectibleFlag(GlobalContext* ctxt, s32 index); // func_800B5DB0
 void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5DF0
-void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, UNK_TYPE4 param_3, UNK_TYPE2 param_4, UNK_TYPE2 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7); // func_800B5E0C
+void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7); // func_800B5E0C
 void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_800B5E50
 void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5E68
 void Actor_TitleCardDraw(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5F24
@@ -849,7 +849,7 @@ void Actor_FreeOverlay(ActorOverlayTableEntry* entry); // func_800BABFC
 void Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10); // func_800BAC60
 ActorInitData* Actor_LoadOverlay(ActorContext* actCtxt, s16 index); // func_800BACD4
 Actor* Actor_SpawnWithParentAndCutscene(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent); // func_800BAE14
-void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 variable); // func_800BB0C0
+void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable); // func_800BB0C0
 void Actor_SpawnTransitionActors(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BB140
 void func_800BB2D0(ActorContext* aCtxt, unsigned short* param_2, GlobalContext* ctxt); // func_800BB2D0
 Actor* func_800BB498(ActorContext* actCtxt, Actor* actor, GlobalContext* ctxt); // func_800BB498

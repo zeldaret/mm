@@ -1,9 +1,16 @@
 #include <ultra64.h>
 #include <global.h>
 
+#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1)) //From OOT
+
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PrintLists.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetDrawParams.asm")
+void Actor_SetDrawParams(ActorDrawParams* iParm1, f32 yDisplacement, actor_post_draw_func func, f32 scale) {
+    iParm1->yDisplacement = yDisplacement;
+    iParm1->postDrawFunc = func;
+    iParm1->scale = scale;
+    iParm1->alphaScale = 255;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PostDraw.asm")
 
@@ -49,11 +56,24 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5208.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5814.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetSwitchFlag.asm")
+u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
+    if (flag >= 0 && flag < 0x80) {
+        return ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
+    }
+    return 0;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetSwitchFlag.asm")
+void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag){
+    if (flag >= 0 && flag < 0x80) {
+        ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_UnsetSwitchFlag.asm")
+void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag) {
+    if (flag >= 0 && flag < 0x80) {
+        ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] &= ~(1 << (flag & 0x1F));
+    }
+}
 
 u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag) {
     return ctxt->actorContext.chestFlags & (1 << flag);
@@ -95,9 +115,18 @@ void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
     ctxt->actorContext.clearedRoomsTemp &= ~(1 << roomNumber);
 }
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_GetCollectibleFlag.asm")
+u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, s32 index) {
+    if (index > 0 && index < 0x80) {
+        return ctxt->actorContext.collectibleFlags[(index & -0x20) >> 5] & (1 << (index & 0x1F));
+    }
+    return 0;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetCollectibleFlag.asm")
+void Actor_SetCollectibleFlag(GlobalContext* ctxt, s32 index) {
+    if (index > 0 && index < 0x80) {
+        ctxt->actorContext.collectibleFlags[(index & -0x20) >> 5] |= 1 << (index & 0x1F);
+    }
+}
 
 void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
     titleCtxt->fadeOutDelay = 0;
@@ -106,11 +135,29 @@ void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt
     titleCtxt->alpha = 0;
 }
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardCreate.asm")
+void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7) {
+    titleCtxt->texture = texture;
+    titleCtxt->unk4 = param_4;
+    titleCtxt->unk6 = param_5;
+    titleCtxt->unk8 = param_6;
+    titleCtxt->unk9 = param_7;
+    titleCtxt->fadeOutDelay = 80;
+    titleCtxt->fadeInDelay = 0;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_Nop800B5E50.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardUpdate.asm")
+void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
+    if (DECR(titleCtxt->fadeInDelay) == 0) {
+        if (DECR(titleCtxt->fadeOutDelay) == 0) {
+            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 0, 30);
+            Lib_StepTowardsCheck_s(&titleCtxt->color, 0, 70);
+        } else {
+            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 255, 10);
+            Lib_StepTowardsCheck_s(&titleCtxt->color, 255, 20);
+        }
+    }
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardDraw.asm")
 
@@ -176,21 +223,19 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     Actor_SetHeight(actor, 0);
     Lib_CopyVec3f(&actor->lastPos, &actor->currPosRot.pos);
     Actor_SetScale(actor, 0.01);
-
     actor->unk1F = 3;
-
     actor->minYVelocity = -20.0f;
-
-    actor->naviMsgId = 255;
+    
+    actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
-
+    func_800E7494(&actor->unkA0);
     actor->unkFC = 1000.0f;
     actor->unk100 = 350.0f;
     actor->unk104 = 700.0f;
-    actor->meshAttachedTo = 0x32;
 
-    func_800E7494(&actor->unkA0);
+    actor->naviMsgId = 255;
+
     Actor_SetDrawParams(&actor->drawParams, 0, 0, 0);
     if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objectIndex) != 0) {
         Actor_SetObjectSegment(ctxt, actor);
@@ -217,9 +262,9 @@ void Actor_SetMovementScale(s32 scale) {
 
 #ifdef NON_MATCHING
 void Actor_ApplyMovement(Actor* actor) {
-    actor->currPosRot.pos.x = actor->currPosRot.pos.x + ((actor->velocity.x * actorMovementScale) + actor->unkA0.displacement.x);
-    actor->currPosRot.pos.y = actor->currPosRot.pos.y + ((actor->velocity.y * actorMovementScale) + actor->unkA0.displacement.y);
-    actor->currPosRot.pos.z = actor->currPosRot.pos.z + ((actor->velocity.z * actorMovementScale) + actor->unkA0.displacement.z);
+    actor->currPosRot.pos.x += ((actor->velocity.x * actorMovementScale) + actor->unkA0.displacement.x);
+    actor->currPosRot.pos.y += ((actor->velocity.y * actorMovementScale) + actor->unkA0.displacement.y);
+    actor->currPosRot.pos.z += ((actor->velocity.z * actorMovementScale) + actor->unkA0.displacement.z);
 }
 #else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_ApplyMovement.asm")
@@ -239,15 +284,34 @@ void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityYRotationAndGravity.asm")
 #endif
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityAndMoveYRotationAndGravity.asm")
+void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
+    Actor_SetVelocityYRotationAndGravity(actor);
+    Actor_ApplyMovement(actor);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityXYRotation.asm")
+void Actor_SetVelocityXYRotation(Actor* actor) {
+    f32 velX =  Lib_cos(actor->currPosRot.rot.x) * actor->speed;
+    actor->velocity.x = Lib_sin(actor->currPosRot.rot.y) * velX;
+    actor->velocity.y = Lib_sin(actor->currPosRot.rot.x) * actor->speed;
+    actor->velocity.z = Lib_cos(actor->currPosRot.rot.y) * velX;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityAndMoveXYRotation.asm")
+void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
+    Actor_SetVelocityXYRotation(actor);
+    Actor_ApplyMovement(actor);
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityXYRotationReverse.asm")
+void Actor_SetVelocityXYRotationReverse(Actor* actor) {
+    f32 velX =  Lib_cos(-actor->currPosRot.rot.x) * actor->speed;
+    actor->velocity.x = Lib_sin(actor->currPosRot.rot.y) * velX;
+    actor->velocity.y = Lib_sin(-actor->currPosRot.rot.x) * actor->speed;
+    actor->velocity.z = Lib_cos(actor->currPosRot.rot.y) * velX;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_SetVelocityAndMoveXYRotationReverse.asm")
+void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
+    Actor_SetVelocityXYRotationReverse(actor);
+    Actor_ApplyMovement(actor);
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C04.asm")
 
@@ -301,8 +365,8 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vector3f* offset, Vect
     cos_rot_x = Lib_cos(actor->drawParams.rot.x);
     sin_rot_x = Lib_sin(actor->drawParams.rot.x);
     offset->x = (point->x - actor->currPosRot.pos.x * cos_rot_x) - (point->z - actor->currPosRot.pos.z * sin_rot_x);
-    offset->z = (point->z - actor->currPosRot.pos.z * cos_rot_x) + (point->x - actor->currPosRot.pos.x * sin_rot_x);
     offset->y = point->y - actor->currPosRot.pos.y;
+    offset->z = (point->z - actor->currPosRot.pos.z * cos_rot_x) + (point->x - actor->currPosRot.pos.x * sin_rot_x);
 }
 #else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_CalcOffsetOrientedToDrawRotation.asm")
@@ -517,7 +581,25 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InsertIntoTypeList.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_RemoveFromTypeList.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_FreeOverlay.asm")
+void Actor_FreeOverlay(ActorOverlayTableEntry* entry) {
+    u32 ramAddr;
+
+    if (entry->clients == 0) {
+        ramAddr = entry->ramAddr;
+        if (ramAddr != 0) {
+            //Bit 1 - always loaded
+            if ((entry->flags & 2) == 0) {
+                //Bit 0 - don't alloc memory
+                if ((entry->flags & 1) != 0) {
+                    entry->ramAddr = 0;
+                } else {
+                    zelda_free(ramAddr);
+                    entry->ramAddr = 0;
+                }
+            }
+        }
+    }
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_Spawn.asm")
 
@@ -640,4 +722,3 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800BE63C.asm")
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BE680.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BF7CC.asm")
-
