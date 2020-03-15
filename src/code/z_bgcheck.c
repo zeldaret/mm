@@ -32,7 +32,7 @@ void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* lis
 }
 
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes) {
-    list->nodes = (BgPolygonLinkedListNode*)GameStateHeap_AllocFromEndAligned(&ctxt->common.heap, numNodes << 2, 0xfffffffe);
+    list->nodes = (BgPolygonLinkedListNode*)GameStateHeap_AllocFromEndAligned(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
     list->maxNodes = numNodes;
     list->nextFreeNode = 0;
 }
@@ -52,13 +52,13 @@ u16 BgCheck_AllocPolygonLinkedListNode(BgPolygonLinkedList* list) {
     return index;
 }
 
-void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vector3f* vector) {
+void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vec3f* vector) {
     vector->x = vertex->pos.x;
     vector->y = vertex->pos.y;
     vector->z = vertex->pos.z;
 }
 
-void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vector3f* vector) {
+void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector) {
     vertex->pos.x = vector->x;
     vertex->pos.y = vector->y;
     vertex->pos.z = vector->z;

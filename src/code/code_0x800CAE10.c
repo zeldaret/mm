@@ -1,98 +1,98 @@
 #include <ultra64.h>
 #include <global.h>
 
-void BcCheck3_BgActorInit(BgActor* actor, UNK_TYPE4 param_2) {
-    actor->bgActorId = -1;
+void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
+    actor->dynaPolyId = -1;
     actor->unk148 = 0;
     actor->unk14C = 0;
     actor->unk154 = param_2;
-    actor->bgFlags = 0;
+    actor->dynaFlags = 0;
 }
 
-void BgCheck3_LoadMesh(GlobalContext* ctxt, BgActor* actor, BgMeshHeader* meshHeader) {
+void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, BgMeshHeader* meshHeader) {
     BgMeshHeader* header;
 
     header = NULL;
     BgCheck_RelocateMeshHeader(meshHeader, &header);
-    actor->bgActorId = BgCheck_AddActorMesh(ctxt, &ctxt->bgCheckContext.dyna, actor, header);
+    actor->dynaPolyId = BgCheck_AddActorMesh(ctxt, &ctxt->colCtx.dyna, actor, header);
 }
 
-void BgCheck3_ResetFlags(BgActor* actor) {
-    actor->bgFlags = 0;
+void BgCheck3_ResetFlags(DynaPolyActor* actor) {
+    actor->dynaFlags = 0;
 }
 
-void func_800CAE88(BgActor* actor) {
-    actor->bgFlags |= 1;
+void func_800CAE88(DynaPolyActor* actor) {
+    actor->dynaFlags |= 1;
 }
 
-void func_800CAE9C(BgActor* actor) {
-    actor->bgFlags |= 2;
+void func_800CAE9C(DynaPolyActor* actor) {
+    actor->dynaFlags |= 2;
 }
 
-void func_800CAEB0(BgCheckContext* bgCtxt, s32 index) {
-    BgActor* actor;
+void func_800CAEB0(CollisionContext* bgCtxt, s32 index) {
+    DynaPolyActor* actor;
 
     actor = BgCheck_GetActorOfMesh(bgCtxt, index);
-    if (actor != (BgActor *)0x0) {
+    if (actor != (DynaPolyActor *)0x0) {
         func_800CAE9C(actor);
     }
 }
 
-void func_800CAEE0(BgActor* actor) {
-    actor->bgFlags |= 4;
+void func_800CAEE0(DynaPolyActor* actor) {
+    actor->dynaFlags |= 4;
 }
 
-void func_800CAEF4(BgCheckContext* bgCtxt, s32 index) {
-    BgActor* actor;
+void func_800CAEF4(CollisionContext* bgCtxt, s32 index) {
+    DynaPolyActor* actor;
 
     actor = BgCheck_GetActorOfMesh(bgCtxt, index);
-    if (actor != (BgActor *)0x0) {
+    if (actor != (DynaPolyActor *)0x0) {
         func_800CAEE0(actor);
     }
 }
 
-void func_800CAF24(BgActor* actor) {
-    actor->bgFlags |= 8;
+void func_800CAF24(DynaPolyActor* actor) {
+    actor->dynaFlags |= 8;
 }
 
-void func_800CAF38(BgActor* actor) {
-    actor->bgFlags |= 0x10;
+void func_800CAF38(DynaPolyActor* actor) {
+    actor->dynaFlags |= 0x10;
 }
 
-s32 func_800CAF4C(BgActor* actor) {
-    if (actor->bgFlags & 1) {
+s32 func_800CAF4C(DynaPolyActor* actor) {
+    if (actor->dynaFlags & 1) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAF70(BgActor* actor) {
-    if (actor->bgFlags & 2) {
+s32 func_800CAF70(DynaPolyActor* actor) {
+    if (actor->dynaFlags & 2) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAF94(BgActor* actor) {
-    if (actor->bgFlags & 4) {
+s32 func_800CAF94(DynaPolyActor* actor) {
+    if (actor->dynaFlags & 4) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAFB8(BgActor* actor) {
-    if (actor->bgFlags & 8) {
+s32 func_800CAFB8(DynaPolyActor* actor) {
+    if (actor->dynaFlags & 8) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAFDC(BgActor* actor) {
-    if (actor->bgFlags & 0x10) {
+s32 func_800CAFDC(DynaPolyActor* actor) {
+    if (actor->dynaFlags & 0x10) {
         return 1;
     } else {
         return 0;

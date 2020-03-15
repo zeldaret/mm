@@ -5,9 +5,9 @@
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PrintLists.asm")
 
-void Actor_SetDrawParams(ActorDrawParams* iParm1, f32 yDisplacement, actor_post_draw_func func, f32 scale) {
+void Actor_SetDrawParams(ActorShape* iParm1, f32 yDisplacement, actor_shadow_draw_func func, f32 scale) {
     iParm1->yDisplacement = yDisplacement;
-    iParm1->postDrawFunc = func;
+    iParm1->shadowDrawFunc = func;
     iParm1->scale = scale;
     iParm1->alphaScale = 255;
 }
@@ -58,73 +58,73 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5814.asm")
 
 u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        return ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
+        return ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
 
 void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag){
     if (flag >= 0 && flag < 0x80) {
-        ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
+        ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
 void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        ctxt->actorContext.switchFlags[(flag & -0x20) >> 5] &= ~(1 << (flag & 0x1F));
+        ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
 
 u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag) {
-    return ctxt->actorContext.chestFlags & (1 << flag);
+    return ctxt->actorCtx.chestFlags & (1 << flag);
 }
 
 void Actor_SetChestFlag(GlobalContext* ctxt, u32 flag) {
-    ctxt->actorContext.chestFlags |= (1 << flag);
+    ctxt->actorCtx.chestFlags |= (1 << flag);
 }
 
 void Actor_SetAllChestFlag(GlobalContext* ctxt, u32 flag) {
-    ctxt->actorContext.chestFlags = flag;
+    ctxt->actorCtx.chestFlags = flag;
 }
 
 u32 Actor_GetAllChestFlag(GlobalContext* ctxt) {
-    return ctxt->actorContext.chestFlags;
+    return ctxt->actorCtx.chestFlags;
 }
 
 u32 Actor_GetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
-    return ctxt->actorContext.clearedRooms & (1 << roomNumber);
+    return ctxt->actorCtx.clearedRooms & (1 << roomNumber);
 }
 
 void Actor_SetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
-    ctxt->actorContext.clearedRooms |= (1 << roomNumber);
+    ctxt->actorCtx.clearedRooms |= (1 << roomNumber);
 }
 
 void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber) {
-    ctxt->actorContext.clearedRooms &= ~(1 << roomNumber);
+    ctxt->actorCtx.clearedRooms &= ~(1 << roomNumber);
 }
 
 u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
-    return ctxt->actorContext.clearedRoomsTemp & (1 << roomNumber);
+    return ctxt->actorCtx.clearedRoomsTemp & (1 << roomNumber);
 }
 
 void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
-    ctxt->actorContext.clearedRoomsTemp |= (1 << roomNumber);
+    ctxt->actorCtx.clearedRoomsTemp |= (1 << roomNumber);
 }
 
 void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber) {
-    ctxt->actorContext.clearedRoomsTemp &= ~(1 << roomNumber);
+    ctxt->actorCtx.clearedRoomsTemp &= ~(1 << roomNumber);
 }
 
 u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, s32 index) {
     if (index > 0 && index < 0x80) {
-        return ctxt->actorContext.collectibleFlags[(index & -0x20) >> 5] & (1 << (index & 0x1F));
+        return ctxt->actorCtx.collectibleFlags[(index & -0x20) >> 5] & (1 << (index & 0x1F));
     }
     return 0;
 }
 
 void Actor_SetCollectibleFlag(GlobalContext* ctxt, s32 index) {
     if (index > 0 && index < 0x80) {
-        ctxt->actorContext.collectibleFlags[(index & -0x20) >> 5] |= 1 << (index & 0x1F);
+        ctxt->actorCtx.collectibleFlags[(index & -0x20) >> 5] |= 1 << (index & 0x1F);
     }
 }
 
@@ -181,7 +181,7 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6680.asm")
 
 void Actor_MarkForDeath(Actor* actor) {
     actor->draw = NULL;
-    actor->main = NULL;
+    actor->update = NULL;
     actor->flags &= ~0x1;
 }
 
@@ -199,11 +199,11 @@ void Actor_SetHeight(Actor* actor, f32 height) {
 }
 
 void Actor_SetRotationFromDrawRotation(Actor* actor) {
-    actor->currPosRot.rot = actor->drawParams.rot;
+    actor->currPosRot.rot = actor->shape.rot;
 }
 
 void Actor_InitDrawRotation(Actor* actor) {
-    actor->drawParams.rot = actor->currPosRot.rot;
+    actor->shape.rot = actor->currPosRot.rot;
 }
 
 void Actor_SetScale(Actor* actor, f32 scale) {
@@ -213,7 +213,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
-    gRspSegmentPhysAddrs[6] = (u32) ctxt->sceneContext.objects[actor->objectIndex].vramAddr + 0x80000000;
+    gRspSegmentPhysAddrs[6] = (u32) ctxt->sceneContext.objects[actor->objBankIndex].vramAddr + 0x80000000;
 }
 
 #ifdef NON_MATCHING
@@ -221,11 +221,11 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     Actor_InitCurrPosition(actor);
     Actor_InitDrawRotation(actor);
     Actor_SetHeight(actor, 0);
-    Lib_CopyVec3f(&actor->lastPos, &actor->currPosRot.pos);
+    Math_Vec3f_Copy(&actor->lastPos, &actor->currPosRot.pos);
     Actor_SetScale(actor, 0.01);
     actor->unk1F = 3;
     actor->minYVelocity = -20.0f;
-    
+
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
@@ -236,8 +236,8 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
 
     actor->naviMsgId = 255;
 
-    Actor_SetDrawParams(&actor->drawParams, 0, 0, 0);
-    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objectIndex) != 0) {
+    Actor_Setshape(&actor->shape, 0, 0, 0);
+    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objBankIndex) != 0) {
         Actor_SetObjectSegment(ctxt, actor);
         actor->init(actor, ctxt);
         actor->init = NULL;
@@ -249,9 +249,9 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InitToDefaultValues.asm")
 
 void Actor_FiniActor(Actor* actor, GlobalContext* ctxt) {
     if (actor->init == NULL) {
-        if (actor->fini != NULL) {
-            actor->fini(actor, ctxt);
-            actor->fini = NULL;
+        if (actor->destroy != NULL) {
+            actor->destroy(actor, ctxt);
+            actor->destroy = NULL;
         }
     }
 }
@@ -272,9 +272,9 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_ApplyMovement.asm")
 
 #ifdef NON_MATCHING
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
-    actor->velocity.x = actor->speed * Lib_sin(actor->currPosRot.rot.x);
+    actor->velocity.x = actor->speedXZ * Math_Sins(actor->currPosRot.rot.x);
     actor->velocity.y = actor->velocity.y + actor->gravity;
-    actor->velocity.z = actor->speed * Lib_cos(actor->currPosRot.rot.x);
+    actor->velocity.z = actor->speedXZ * Math_Coss(actor->currPosRot.rot.x);
 
     if (actor->velocity.y < actor->minYVelocity) {
         actor->velocity.y = actor->minYVelocity;
@@ -290,10 +290,10 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Lib_cos(actor->currPosRot.rot.x) * actor->speed;
-    actor->velocity.x = Lib_sin(actor->currPosRot.rot.y) * velX;
-    actor->velocity.y = Lib_sin(actor->currPosRot.rot.x) * actor->speed;
-    actor->velocity.z = Lib_cos(actor->currPosRot.rot.y) * velX;
+    f32 velX =  Math_Coss(actor->currPosRot.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_Sins(actor->currPosRot.rot.y) * velX;
+    actor->velocity.y = Math_Sins(actor->currPosRot.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_Coss(actor->currPosRot.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
@@ -302,10 +302,10 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Lib_cos(-actor->currPosRot.rot.x) * actor->speed;
-    actor->velocity.x = Lib_sin(actor->currPosRot.rot.y) * velX;
-    actor->velocity.y = Lib_sin(-actor->currPosRot.rot.x) * actor->speed;
-    actor->velocity.z = Lib_cos(actor->currPosRot.rot.y) * velX;
+    f32 velX =  Math_Coss(-actor->currPosRot.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_Sins(actor->currPosRot.rot.y) * velX;
+    actor->velocity.y = Math_Sins(-actor->currPosRot.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_Coss(actor->currPosRot.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
@@ -318,52 +318,52 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C04.asm")
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C58.asm")
 
 s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
-    return Lib_YawVec3f(&from->currPosRot.pos, &to->currPosRot.pos);
+    return Math_Vec3f_Yaw(&from->currPosRot.pos, &to->currPosRot.pos);
 }
 
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to) {
-    return Lib_YawVec3f(&from->topPosRot.pos, &to->topPosRot.pos);
+    return Math_Vec3f_Yaw(&from->topPosRot.pos, &to->topPosRot.pos);
 }
 
-s16 Actor_YawToPoint(Actor* actor, Vector3f* point) {
-    return Lib_YawVec3f(&actor->currPosRot.pos, point);
+s16 Actor_YawToPoint(Actor* actor, Vec3f* point) {
+    return Math_Vec3f_Yaw(&actor->currPosRot.pos, point);
 }
 
 s16 Actor_PitchBetweenActors(Actor* from, Actor* to) {
-    return Lib_PitchVec3f(&from->currPosRot.pos, &to->currPosRot.pos);
+    return Math_Vec3f_Pitch(&from->currPosRot.pos, &to->currPosRot.pos);
 }
 
 s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to) {
-    return Lib_PitchVec3f(&from->topPosRot.pos, &to->topPosRot.pos);
+    return Math_Vec3f_Pitch(&from->topPosRot.pos, &to->topPosRot.pos);
 }
 
-s16 Actor_PitchToPoint(Actor* actor, Vector3f* point) {
-    return Lib_PitchVec3f(&actor->currPosRot.pos, point);
+s16 Actor_PitchToPoint(Actor* actor, Vec3f* point) {
+    return Math_Vec3f_Pitch(&actor->currPosRot.pos, point);
 }
 
 f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Lib_DistanceVec3f(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+    return Math_Vec3f_DistXYZ(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
 }
 
-f32 Actor_DistanceToPoint(Actor* actor, Vector3f* point) {
-    return Lib_DistanceVec3f(&actor->currPosRot.pos, point);
+f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point) {
+    return Math_Vec3f_DistXYZ(&actor->currPosRot.pos, point);
 }
 
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Lib_DistanceXZVec3f(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+    return Math_Vec3f_DistXZ(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
 }
 
-f32 Actor_XZDistanceToPoint(Actor* actor, Vector3f* point) {
-    return Lib_DistanceXZVec3f(&actor->currPosRot.pos, point);
+f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
+    return Math_Vec3f_DistXZ(&actor->currPosRot.pos, point);
 }
 
 #ifdef NON_MATCHING
-void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vector3f* offset, Vector3f* point) {
+void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos_rot_x;
     f32 sin_rot_x;
 
-    cos_rot_x = Lib_cos(actor->drawParams.rot.x);
-    sin_rot_x = Lib_sin(actor->drawParams.rot.x);
+    cos_rot_x = Math_Coss(actor->shape.rot.x);
+    sin_rot_x = Math_Sins(actor->shape.rot.x);
     offset->x = (point->x - actor->currPosRot.pos.x * cos_rot_x) - (point->z - actor->currPosRot.pos.z * sin_rot_x);
     offset->y = point->y - actor->currPosRot.pos.y;
     offset->z = (point->z - actor->currPosRot.pos.z * cos_rot_x) + (point->x - actor->currPosRot.pos.x * sin_rot_x);
@@ -553,8 +553,8 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_DrawActor.asm")
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B9D1C.asm")
 
 void Actor_DrawAllSetup(GlobalContext* ctxt) {
-    ctxt->actorContext.undrawnActorCount = 0;
-    ctxt->actorContext.unkB = 0;
+    ctxt->actorCtx.undrawnActorCount = 0;
+    ctxt->actorCtx.unkB = 0;
 }
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_RecordUndrawnActor.asm")
@@ -581,20 +581,20 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_InsertIntoTypeList.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_RemoveFromTypeList.asm")
 
-void Actor_FreeOverlay(ActorOverlayTableEntry* entry) {
-    u32 ramAddr;
+void Actor_FreeOverlay(ActorOverlay* entry) {
+    void* ramAddr;
 
-    if (entry->clients == 0) {
-        ramAddr = entry->ramAddr;
-        if (ramAddr != 0) {
+    if (entry->nbLoaded == 0) {
+        ramAddr = entry->loadedRamAddr;
+        if (ramAddr != NULL) {
             //Bit 1 - always loaded
-            if ((entry->flags & 2) == 0) {
+            if ((entry->allocType & 2) == 0) {
                 //Bit 0 - don't alloc memory
-                if ((entry->flags & 1) != 0) {
-                    entry->ramAddr = 0;
+                if ((entry->allocType & 1) != 0) {
+                    entry->loadedRamAddr = NULL;
                 } else {
                     zelda_free(ramAddr);
-                    entry->ramAddr = 0;
+                    entry->loadedRamAddr = NULL;
                 }
             }
         }

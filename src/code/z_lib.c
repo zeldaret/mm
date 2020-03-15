@@ -12,7 +12,7 @@ void* Lib_bcopy(void* dest, void* src, size_t n) {
 }
 
 #ifdef NON_MATCHING
-void* Lib_memset(u8* a0, u32 a1, u32 a2) {
+void* Lib_MemSet(u8* a0, u32 a1, u32 a2) {
     u8* v0;
 
     // XXX: realloc is messed up
@@ -29,14 +29,14 @@ void* Lib_memset(u8* a0, u32 a1, u32 a2) {
     return a0;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_memset.asm")
+GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_MemSet.asm")
 #endif
 
-f32 Lib_cos(s16 angle) {
+f32 Math_Coss(s16 angle) {
     return coss(angle) * D_801DDA80;
 }
 
-f32 Lib_sin(s16 angle) {
+f32 Math_Sins(s16 angle) {
     return sins(angle) * D_801DDA84;
 }
 
@@ -216,15 +216,15 @@ void func_800FF3A0(void) {
 GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF3A0.asm")
 #endif
 
-s16 Lib_rand_s(s16 base, s16 range) {
+s16 Math_Rand_S16Offset(s16 base, s16 range) {
     return (s16)(randZeroOne() * range) + base;
 }
 
-s16 Lib_randestride_s(s16 base, s16 stride, s16 range) {
+s16 Math_Rand_S16OffsetStride(s16 base, s16 stride, s16 range) {
     return (s16)(randZeroOne() * range) * stride + base;
 }
 
-void Lib_CopyVec3f(Vector3f* dest, Vector3f* src) {
+void Math_Vec3f_Copy(Vec3f* dest, Vec3f* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -234,7 +234,7 @@ void Lib_CopyVec3f(Vector3f* dest, Vector3f* src) {
     dest->z = z;
 }
 
-void Lib_CopyVec3s(Vector3s* dest, Vector3s* src) {
+void Math_Vec3s_Copy(Vec3s* dest, Vec3s* src) {
     s16 x = src->x;
     s16 y = src->y;
     s16 z = src->z;
@@ -244,7 +244,7 @@ void Lib_CopyVec3s(Vector3s* dest, Vector3s* src) {
     dest->z = z;
 }
 
-void Lib_ToVec3f(Vector3f* dest, Vector3s* src) {
+void Math_Vec3s_ToVec3f(Vec3f* dest, Vec3s* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -254,7 +254,7 @@ void Lib_ToVec3f(Vector3f* dest, Vector3s* src) {
     dest->z = z;
 }
 
-void Lib_ToVec3s(Vector3s* dest, Vector3f* src) {
+void Math_Vec3f_ToVec3s(Vec3s* dest, Vec3f* src) {
     f32 x = src->x;
     f32 y = src->y;
     f32 z = src->z;
@@ -264,56 +264,56 @@ void Lib_ToVec3s(Vector3s* dest, Vector3f* src) {
     dest->z = z;
 }
 
-void Lib_AddVec3f(Vector3f* l, Vector3f* r, Vector3f* dest) {
+void Math_Vec3f_Sum(Vec3f* l, Vec3f* r, Vec3f* dest) {
     dest->x = l->x + r->x;
     dest->y = l->y + r->y;
     dest->z = l->z + r->z;
 }
 
-void Lib_SubVec3f(Vector3f* l, Vector3f* r, Vector3f* dest) {
+void Math_Vec3f_Diff(Vec3f* l, Vec3f* r, Vec3f* dest) {
     dest->x = l->x - r->x;
     dest->y = l->y - r->y;
     dest->z = l->z - r->z;
 }
 
-void Lib_SubVec3sToVec3f(Vector3f* dest, Vector3s* l, Vector3s* r) {
+void Math_Vec3s_DiffToVec3f(Vec3f* dest, Vec3s* l, Vec3s* r) {
     dest->x = l->x - r->x;
     dest->y = l->y - r->y;
     dest->z = l->z - r->z;
 }
 
-void Lib_ScaleInPlaceVec3f(Vector3f* vec, f32 scale) {
+void Math_Vec3f_Scale(Vec3f* vec, f32 scale) {
     vec->x *= scale;
     vec->y *= scale;
     vec->z *= scale;
 }
 
-void Lib_ScaleVec3f(Vector3f* vec, f32 scale, Vector3f* dest) {
+void Math_Vec3f_ScaleAndStore(Vec3f* vec, f32 scale, Vec3f* dest) {
     dest->x = vec->x * scale;
     dest->y = vec->y * scale;
     dest->z = vec->z * scale;
 }
 
-void Lib_LerpVec3f(Vector3f* a, Vector3f* b, f32 t, Vector3f* dest) {
+void Math_Vec3f_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dest) {
     dest->x = (b->x - a->x) * t + a->x;
     dest->y = (b->y - a->y) * t + a->y;
     dest->z = (b->z - a->z) * t + a->z;
 }
 
-void Lib_AddScaledVec3f(Vector3f* a, Vector3f* b, f32 scale, Vector3f* dest) {
+void Math_Vec3f_SumScaled(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {
     dest->x = b->x * scale + a->x;
     dest->y = b->y * scale + a->y;
     dest->z = b->z * scale + a->z;
 }
 
-void Lib_ModifyRandScaled(Vector3f* orig, f32 scale, Vector3f* dest) {
+void Math_Vec3f_ModifyRand(Vec3f* orig, f32 scale, Vec3f* dest) {
     dest->x = randPlusMinusPoint5Scaled(scale) + orig->x;
     dest->y = randPlusMinusPoint5Scaled(scale) + orig->y;
     dest->z = randPlusMinusPoint5Scaled(scale) + orig->z;
 }
 
-void Lib_ScaledNormalizedDifferenceVec3f(Vector3f* a, Vector3f* b, f32 scale, Vector3f* dest) {
-    f32 f0 = Lib_DistanceAndDifferenceVec3f(a, b, dest);
+void Math_Vec3f_DistXYZAndStoreNormalizedDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {
+    f32 f0 = Math_Vec3f_DistXYZAndStoreDiff(a, b, dest);
     f32 f2;
 
     if (f0 == 0) {
@@ -327,34 +327,34 @@ void Lib_ScaledNormalizedDifferenceVec3f(Vector3f* a, Vector3f* b, f32 scale, Ve
     dest->z *= f2;
 }
 
-f32 Lib_DistanceVec3f(Vector3f* a, Vector3f* b) {
-    Vector3f sp1C;
-    Lib_SubVec3f(b, a, &sp1C);
+f32 Math_Vec3f_DistXYZ(Vec3f* a, Vec3f* b) {
+    Vec3f sp1C;
+    Math_Vec3f_Diff(b, a, &sp1C);
     return sqrtf((sp1C.x * sp1C.x) + (sp1C.y * sp1C.y) + (sp1C.z * sp1C.z));
 }
 
-f32 Lib_DistanceAndDifferenceVec3f(Vector3f* a, Vector3f* b, Vector3f* difference) {
-    Lib_SubVec3f(b, a, difference);
+f32 Math_Vec3f_DistXYZAndStoreDiff(Vec3f* a, Vec3f* b, Vec3f* difference) {
+    Math_Vec3f_Diff(b, a, difference);
     return sqrtf((difference->x * difference->x) + (difference->y * difference->y) + (difference->z * difference->z));
 }
 
-f32 Lib_DistanceXZVec3f(Vector3f* a, Vector3f* b) {
+f32 Math_Vec3f_DistXZ(Vec3f* a, Vec3f* b) {
     f32 dx = b->x - a->x;
     f32 dz = b->z - a->z;
     return sqrtf((dx * dx) + (dz * dz));
 }
 
-f32 Lib_DistanceAndDifferenceXZVec3f(Vector3f* a, Vector3f* b, f32* xDiff, f32* zDiff) {
+f32 Math_Vec3f_DistXZAndStore(Vec3f* a, Vec3f* b, f32* xDiff, f32* zDiff) {
     *xDiff = b->x - a->x;
     *zDiff = b->z - a->z;
     return sqrtf((*xDiff * *xDiff) + (*zDiff * *zDiff));
 }
 
 #ifdef NON_MATCHING
-void Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach) {
+void Math_Vec3f_PushAwayXZ(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     f32 sp24;
     f32 sp20;
-    f32 f0 = Lib_DistanceAndDifferenceXZVec3f(pusher, start, &sp24, &sp20);
+    f32 f0 = Math_Vec3f_DistXZAndStore(pusher, start, &sp24, &sp20);
     f32 f2 = f0 - distanceToApproach;
 
     if ((f0 >= distanceToApproach) && (f2 != 0)) {
@@ -367,63 +367,63 @@ void Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproa
     start->z = pusher->z + sp20 * f2;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_PushAwayXZVec3f.asm")
+GLOBAL_ASM("./asm/non_matchings/z_lib/Math_Vec3f_PushAwayXZ.asm")
 #endif
 
-f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b) {
+f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b) {
     return b->y - a->y;
 }
 
-s16 Lib_YawVec3f(Vector3f* from, Vector3f* to) {
+s16 Math_Vec3f_Yaw(Vec3f* from, Vec3f* to) {
     f32 f14 = to->x - from->x;
     f32 f12 = to->z - from->z;
     return atans_flip(f12, f14);
 }
 
-s16 Lib_PitchVec3f(Vector3f* from, Vector3f* to) {
-    return atans_flip(Lib_DistanceXZVec3f(from, to), from->y - to->y);
+s16 Math_Vec3f_Pitch(Vec3f* from, Vec3f* to) {
+    return atans_flip(Math_Vec3f_DistXZ(from, to), from->y - to->y);
 }
 
-void Lib_ApplyActorInitVars(Actor* actor, ActorInitVar* init) {
+void Actor_ProcessInitChain(Actor* actor, ActorInitVar* init) {
     do {
         actorInitVarFuncs[init->type]((u8*)actor, init);
     } while ((init++)->cont);
 }
 
-void Lib_ApplyActorInitVarByte1(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u8(u8* actor, ActorInitVar* init) {
     *(u8*)(actor + init->offset) = (u8)(init->value);
 }
 
-void Lib_ApplyActorInitVarByte2(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s8(u8* actor, ActorInitVar* init) {
     *(u8*)(actor + init->offset) = (u8)(init->value);
 }
 
-void Lib_ApplyActorInitVarShort1(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u16(u8* actor, ActorInitVar* init) {
     *(u16*)(actor + init->offset) = (u16)(init->value);
 }
 
-void Lib_ApplyActorInitVarShort2(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s16(u8* actor, ActorInitVar* init) {
     *(u16*)(actor + init->offset) = (u16)(init->value);
 }
 
-void Lib_ApplyActorInitVarWord1(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u32(u8* actor, ActorInitVar* init) {
     *(u32*)(actor + init->offset) = (u32)(init->value);
 }
 
-void Lib_ApplyActorInitVarWord2(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s32(u8* actor, ActorInitVar* init) {
     *(u32*)(actor + init->offset) = (u32)(init->value);
 }
 
-void Lib_ApplyActorInitVarFloat(u8* actor, ActorInitVar* init) {
+void IChain_Apply_f32(u8* actor, ActorInitVar* init) {
     *(f32*)(actor + init->offset) = (f32)(init->value);
 }
 
-void Lib_ApplyActorInitVarFloat1000th(u8* actor, ActorInitVar* init) {
+void IChain_Apply_f32div1000(u8* actor, ActorInitVar* init) {
     *(f32*)(actor + init->offset) = (f32)(init->value) / 1000;
 }
 
-void Lib_ApplyActorInitVarVector3f(u8* actor, ActorInitVar* init) {
-    Vector3f* v0 = (Vector3f*)(actor + init->offset);
+void IChain_Apply_Vec3f(u8* actor, ActorInitVar* init) {
+    Vec3f* v0 = (Vec3f*)(actor + init->offset);
     f32 f0 = (f32)(init->value);
 
     v0->z = f0;
@@ -431,8 +431,8 @@ void Lib_ApplyActorInitVarVector3f(u8* actor, ActorInitVar* init) {
     v0->x = f0;
 }
 
-void Lib_ApplyActorInitVarVector3f1000th(u8* actor, ActorInitVar* init) {
-    Vector3f* v0 = (Vector3f*)(actor + init->offset);
+void IChain_Apply_Vec3fdiv1000(u8* actor, ActorInitVar* init) {
+    Vec3f* v0 = (Vec3f*)(actor + init->offset);
     f32 f0 = (f32)(init->value) / 1000;
 
     v0->z = f0;
@@ -440,8 +440,8 @@ void Lib_ApplyActorInitVarVector3f1000th(u8* actor, ActorInitVar* init) {
     v0->x = f0;
 }
 
-void Lib_ApplyActorInitVarVector3s(u8* actor, ActorInitVar* init) {
-    Vector3s* v0 = (Vector3s*)(actor + init->offset);
+void IChain_Apply_Vec3s(u8* actor, ActorInitVar* init) {
+    Vec3s* v0 = (Vec3s*)(actor + init->offset);
     s16 v1 = (s16)(init->value);
 
     v0->z = v1;
@@ -449,7 +449,7 @@ void Lib_ApplyActorInitVarVector3s(u8* actor, ActorInitVar* init) {
     v0->x = v1;
 }
 
-f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4) {
+f32 Math_SmoothScaleMaxMinF(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4) {
     f32 f0;
 
     if (*a0 != a1) {
@@ -489,7 +489,7 @@ f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4) {
     return fabsf(a1 - *a0);
 }
 
-void Lib_ScaleMax_f(f32* start, f32 target, f32 scale, f32 maxStep) {
+void Math_SmoothScaleMaxF(f32* start, f32 target, f32 scale, f32 maxStep) {
     f32 f2;
 
     if (*start != target) {
@@ -505,7 +505,7 @@ void Lib_ScaleMax_f(f32* start, f32 target, f32 scale, f32 maxStep) {
     }
 }
 
-void Lib_Scale_f(f32* start, f32 scale, f32 maxStep) {
+void Math_SmoothDownscaleMaxF(f32* start, f32 scale, f32 maxStep) {
   f32 f0 = *start * scale;
 
   if (maxStep < f0) {
@@ -518,14 +518,14 @@ void Lib_Scale_f(f32* start, f32 scale, f32 maxStep) {
 }
 
 #ifdef NON_MATCHING
-s32 Lib_ScaleMaxMin_s(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep) {
+s32 Math_SmoothScaleMaxMinS(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep) {
 
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_ScaleMaxMin_s.asm")
+GLOBAL_ASM("./asm/non_matchings/z_lib/Math_SmoothScaleMaxMinS.asm")
 #endif
 
-void Lib_ScaleMax_s(s16* start, s16 target, s16 scale, s16 maxStep) {
+void Math_SmoothScaleMaxS(s16* start, s16 target, s16 scale, s16 maxStep) {
     s16 v0 = target - *start;
     v0 /= scale;
 
@@ -542,7 +542,7 @@ void Lib_ScaleMax_s(s16* start, s16 target, s16 scale, s16 maxStep) {
     *start += v0;
 }
 
-void Lib_CopyColor(ColorRGBA8* dst, ColorRGBA8* src) {
+void Color_RGBA8_Copy(ColorRGBA8* dst, ColorRGBA8* src) {
     dst->red = src->red;
     dst->green = src->green;
     dst->blue = src->blue;
@@ -561,12 +561,12 @@ void func_801000F4(s32 a0, u16 a1) {
     func_8019F1C0(a0, a1);
 }
 
-void Lib_TranslateAndRotateYVec3f(Vector3f* translation, s16 rotation, Vector3f* src, Vector3f* dst) {
+void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, Vec3f* dst) {
     f32 sp1C;
     f32 f0;
 
-    sp1C = Lib_cos(rotation);
-    f0 = Lib_sin(rotation);
+    sp1C = Math_Coss(rotation);
+    f0 = Math_Sins(rotation);
     dst->x = translation->x + (src->x * sp1C + src->z * f0);
     dst->y = translation->y + src->y;
     dst->z = translation->z + (src->z * sp1C - src->x * f0);
@@ -583,12 +583,12 @@ void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst) {
 GLOBAL_ASM("./asm/non_matchings/z_lib/Lib_LerpRGB.asm")
 #endif
 
-f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach) {
-    Vector3f sp24;
+f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
+    Vec3f sp24;
     f32 f2;
     f32 f0;
 
-    Lib_SubVec3f(pusher, start, &sp24);
+    Math_Vec3f_Diff(pusher, start, &sp24);
     f0 = Math3D_Length(&sp24);
     if (distanceToApproach < f0) {
         f2 = distanceToApproach / f0;
@@ -597,7 +597,7 @@ f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach)
         start->y = start->y + f2 * sp24.y;
         start->z = start->z + f2 * sp24.z;
     } else {
-        Lib_CopyVec3f(start, pusher);
+        Math_Vec3f_Copy(start, pusher);
         f0 = 0;
     }
 

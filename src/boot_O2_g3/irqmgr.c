@@ -6,12 +6,12 @@
 #define	OS_CPU_COUNTER		(OS_CLOCK_RATE*3/4)
 #define OS_USEC_TO_CYCLES(n)	(((u64)(n)*(OS_CPU_COUNTER/15625LL))/(1000000LL/15625LL))
 
-vs32 gPrenmiStage = 0;
-volatile OSTime sLastPrenmiTime = 0;
-vu64 gLastFrameDuration = 0;
-s32 sFrameCount = 0;
+vs32 gIrqMgrResetStatus = 0;
+volatile OSTime sIrqMgrResetTime = 0;
+volatile OSTime sIrqMgrRetraceTime = 0;
+s32 sIrqMgrRetraceCount = 0;
 
-void IrqMgr_AddCallback(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3) {
+void IrqMgr_AddClient(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3) {
     u32 saveMask;
 
     saveMask = osSetIntMask(1);
@@ -23,14 +23,14 @@ void IrqMgr_AddCallback(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueu
     osSetIntMask(saveMask);
 
     if (irqmgr->prenmiStage > 0) {
-        osSendMesg(param_2->queue, &irqmgr->prenmi1Msg, 0);
+        osSendMesg(param_2->queue, &irqmgr->prenmiMsg.type, 0);
     }
     if (irqmgr->prenmiStage > 1) {
-        osSendMesg(param_2->queue, &irqmgr->prenmi2Msg, 0);
+        osSendMesg(param_2->queue, &irqmgr->nmiMsg.type, 0);
     }
 }
 
-void IrqMgr_RemoveCallback(IrqMgr* irqmgr, OSMesgQueueListNode* remove) {
+void IrqMgr_RemoveClient(IrqMgr* irqmgr, OSMesgQueueListNode* remove) {
     OSMesgQueueListNode* iter;
     OSMesgQueueListNode* last;
     u32 saveMask;
@@ -56,7 +56,7 @@ void IrqMgr_RemoveCallback(IrqMgr* irqmgr, OSMesgQueueListNode* remove) {
     osSetIntMask(saveMask);
 }
 
-void IrqMgr_NotifyAllCallbacks(IrqMgr* irqmgr, OSMesg msg) {
+void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg) {
     OSMesgQueueListNode* iter = irqmgr->callbacks;
 
     while (iter != NULL) {
@@ -65,7 +65,7 @@ void IrqMgr_NotifyAllCallbacks(IrqMgr* irqmgr, OSMesg msg) {
     }
 }
 
-void IrqMgr_NotifyAllCallbacksWithCapacity(IrqMgr* irqmgr, OSMesg msg) {
+void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg) {
     OSMesgQueueListNode* iter = irqmgr->callbacks;
 
     while (iter != NULL) {
@@ -76,53 +76,53 @@ void IrqMgr_NotifyAllCallbacksWithCapacity(IrqMgr* irqmgr, OSMesg msg) {
     }
 }
 
-void IrqMgr_HandlePrenmi1(IrqMgr* irqmgr) {
-    gPrenmiStage = 1;
+void IrqMgr_HandlePreNMI(IrqMgr* irqmgr) {
+    gIrqMgrResetStatus = 1;
     irqmgr->prenmiStage = 1;
 
-    sLastPrenmiTime = irqmgr->lastPrenmiTime = osGetTime();
+    sIrqMgrResetTime = irqmgr->lastPrenmiTime = osGetTime();
 
     // Wait .45 seconds then generate a stage 2 prenmi interrupt
     osSetTimer(&irqmgr->prenmiTimer, OS_USEC_TO_CYCLES(450000), 0, &irqmgr->irqQueue, (OSMesg)0x29F);
 
-    IrqMgr_NotifyAllCallbacksWithCapacity(irqmgr, &irqmgr->prenmi1Msg);
+    IrqMgr_JamMesgForClient(irqmgr, &irqmgr->prenmiMsg.type);
 }
 
-void IrqMgr_CheckThreadStatusImpl(void) {
+void IrqMgr_CheckStack(void) {
     StackCheck_Check(NULL);
 }
 
-void IrqMgr_HandlePrenmi2(IrqMgr* irqmgr) {
-    gPrenmiStage = 2;
+void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr) {
+    gIrqMgrResetStatus = 2;
     irqmgr->prenmiStage = 2;
 
     // Wait .03 seconds then generate a stage 3 prenmi interrupt
     osSetTimer(&irqmgr->prenmiTimer, OS_USEC_TO_CYCLES(30000), 0, &irqmgr->irqQueue, (OSMesg)0x2A0);
 
-    IrqMgr_NotifyAllCallbacks(irqmgr, &irqmgr->prenmi2Msg);
+    IrqMgr_SendMesgForClient(irqmgr, &irqmgr->nmiMsg.type);
 }
 
-void IrqMgr_HandlePrenmi3(IrqMgr* irqmgr) {
+void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr) {
     // Wait .52 seconds. After this we will have waited an entire second
     osSetTimer(&irqmgr->prenmiTimer, OS_USEC_TO_CYCLES(520000), 0, &irqmgr->irqQueue, (OSMesg)0x2A1);
 
-    func_8008D710();
+    osAfterPreNMI();
 }
 
-void IrqMgr_CheckThreadStatus(IrqMgr* irqmgr) {
-    IrqMgr_CheckThreadStatusImpl();
+void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr) {
+    IrqMgr_CheckStack();
 }
-void IrqMgr_HandleFrame(IrqMgr* irqmgr) {
-    if (gLastFrameDuration == 0) {
+void IrqMgr_HandleRetrace(IrqMgr* irqmgr) {
+    if (sIrqMgrRetraceTime == 0) {
         if (irqmgr->lastFrameTime == 0) {
             irqmgr->lastFrameTime = osGetTime();
         } else {
-            gLastFrameDuration = osGetTime() - irqmgr->lastFrameTime;
+            sIrqMgrRetraceTime = osGetTime() - irqmgr->lastFrameTime;
         }
     }
 
-    sFrameCount += 1;
-    IrqMgr_NotifyAllCallbacks(irqmgr,irqmgr);
+    sIrqMgrRetraceCount += 1;
+    IrqMgr_SendMesgForClient(irqmgr,irqmgr);
 }
 
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
@@ -137,29 +137,29 @@ void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
         osRecvMesg(&irqmgr->irqQueue, (OSMesg*)&interrupt, 1);
         switch (interrupt) {
         case 0x29A:
-            IrqMgr_HandleFrame(irqmgr);
+            IrqMgr_HandleRetrace(irqmgr);
             break;
         case 0x29D:
-            IrqMgr_HandlePrenmi1(irqmgr);
+            IrqMgr_HandlePreNMI(irqmgr);
             break;
         case 0x29F:
-            IrqMgr_HandlePrenmi2(irqmgr);
+            IrqMgr_HandlePRENMI450(irqmgr);
             break;
         case 0x2A0:
-            IrqMgr_HandlePrenmi3(irqmgr);
+            IrqMgr_HandlePRENMI480(irqmgr);
             break;
         case 0x2A1:
-            IrqMgr_CheckThreadStatus(irqmgr);
+            IrqMgr_HandlePRENMI500(irqmgr);
             break;
         }
     }
 }
 
-void IrqMgr_Start(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
+void IrqMgr_Create(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     irqmgr->callbacks = NULL;
-    irqmgr->verticalRetraceMesg = 1;
-    irqmgr->prenmi1Msg = 4;
-    irqmgr->prenmi2Msg = 3;
+    irqmgr->verticalRetraceMesg.type = 1;
+    irqmgr->prenmiMsg.type = 4;
+    irqmgr->nmiMsg.type = 3;
     irqmgr->prenmiStage = 0;
     irqmgr->lastPrenmiTime = 0;
 

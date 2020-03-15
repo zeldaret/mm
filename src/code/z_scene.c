@@ -65,8 +65,8 @@ void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
     temp_a2 = ctxt;
     temp_a2->sceneNumActorsToLoad = (u16) entry->base.unk1;
     ctxt = temp_a2;
-    ctxt->sceneActorList = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4);
-    ctxt->actorContext.unkC = (u16)0;
+    ctxt->setupActorList = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4);
+    ctxt->actorCtx.unkC = (u16)0;
 }
 
 // Scene Command 0x02: Cutscene Camera List
@@ -93,18 +93,18 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
         temp_s0->waterboxes = (BgWaterBox*)Lib_PtrSegToVirt(temp_s0->waterboxes);
     }
 
-    BgCheck_Init(&ctxt->bgCheckContext, ctxt, temp_s0);
+    BgCheck_Init(&ctxt->colCtx, ctxt, temp_s0);
 }
 
 // Scene Command 0x04: Room List
 void Scene_HeaderCommand04(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->numRooms = (u8) entry->base.unk1;
-    ctxt->roomAddrs = (RoomFileLocation*)Lib_PtrSegToVirt((void*)entry->base.unk4);
+    ctxt->roomList = (RoomFileLocation*)Lib_PtrSegToVirt((void*)entry->base.unk4);
 }
 
 // Scene Command 0x06: Entrance List
 void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->entranceList = (EntranceEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4);
+    ctxt->setupEntranceList = (EntranceEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4);
 }
 
 // Scene Command 0x07: Special Files
@@ -130,7 +130,7 @@ void Scene_HeaderCommand08(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->roomContext.currRoom.unk3 = entry->base.unk1;
     ctxt->roomContext.currRoom.unk2 = entry->base.unk4 & 0xFF;
     ctxt->roomContext.currRoom.unk5 = (entry->base.unk4 >> 8) & 1;
-    ctxt->msgContext.unk12044 = (entry->base.unk4 >> 0xa) & 1;
+    ctxt->msgCtx.unk12044 = (entry->base.unk4 >> 0xa) & 1;
     ctxt->roomContext.currRoom.enablePosLights = (entry->base.unk4 >> 0xb) & 1;
     ctxt->kankyoContext.unkE2 = (entry->base.unk4 >> 0xc) & 1;
 }
@@ -177,7 +177,7 @@ GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_HeaderCommand18.asm")
 
 // Scene Command 0x17: Cutscene Data
 void Scene_HeaderCommand17(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->cutsceneContext.cutsceneCount = (u8)entry->base.unk1;
+    ctxt->csCtx.cutsceneCount = (u8)entry->base.unk1;
     ctxt->cutsceneList = (CutsceneEntry*)Lib_PtrSegToVirt((void*)entry->base.unk4);
 }
 

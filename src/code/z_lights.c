@@ -60,18 +60,18 @@ void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
     Light* l;
     s32 i;
 
-    gSPNumLights(gCtxt->polyOpa.append++, mapper->numLights);
-    gSPNumLights(gCtxt->polyXlu.append++, mapper->numLights);
+    gSPNumLights(gCtxt->polyOpa.p++, mapper->numLights);
+    gSPNumLights(gCtxt->polyXlu.p++, mapper->numLights);
 
     l = &mapper->lights.l[0];
 
     for (i = 0; i < mapper->numLights;) {
-        gSPLight(gCtxt->polyOpa.append++, l, ++i);
-        gSPLight(gCtxt->polyXlu.append++, l++, i);
+        gSPLight(gCtxt->polyOpa.p++, l, ++i);
+        gSPLight(gCtxt->polyXlu.p++, l++, i);
     }
 
-    gSPLight(gCtxt->polyOpa.append++, &mapper->lights.a, ++i);
-    gSPLight(gCtxt->polyXlu.append++, &mapper->lights.a, i);
+    gSPLight(gCtxt->polyOpa.p++, &mapper->lights.a, ++i);
+    gSPLight(gCtxt->polyXlu.p++, &mapper->lights.a, i);
 }
 #else
 GLOBAL_ASM("asm/non_matchings/z_lights/Lights_UploadLights.asm")
@@ -86,7 +86,7 @@ Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
 
 // XXX regalloc, some reorderings
 #ifdef NON_MATCHING
-void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vector3f* pos) {
+void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vec3f* pos) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -138,8 +138,8 @@ GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositionalWithReference.asm")
 void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt) {
     Light* light;
     f32 radiusF = params->radius;
-    Vector3f posF;
-    Vector3f adjustedPos;
+    Vec3f posF;
+    Vec3f adjustedPos;
     u32 pad;
     if (radiusF > 0) {
         posF.x = params->posX;
@@ -196,7 +196,7 @@ void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* para
     }
 }
 
-void Lights_MapLights(LightMapper* mapper, z_Light* lights, Vector3f* refPos, GlobalContext* ctxt) {
+void Lights_MapLights(LightMapper* mapper, z_Light* lights, Vec3f* refPos, GlobalContext* ctxt) {
     if (lights != NULL) {
         if ((refPos == NULL) && (mapper->enablePosLights == 1)) {
             do {
@@ -318,8 +318,8 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
     s32 i;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.appendEnd - sizeof(LightMapper));
-    gCtxt->polyOpa.appendEnd = (void*)mapper;
+    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = mapper->lights.a.l.colc[0] = ambientRed;
     mapper->lights.a.l.col[1] = mapper->lights.a.l.colc[1] = ambientGreen;
@@ -345,8 +345,8 @@ LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 gre
     LightMapper* mapper;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.appendEnd - sizeof(LightMapper));
-    gCtxt->polyOpa.appendEnd = (void*)mapper;
+    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = red;
     mapper->lights.a.l.colc[0] = red;
@@ -365,8 +365,8 @@ LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 gre
 void func_80102880(GlobalContext* ctxt) {
     z_Light* light = ctxt->lightsContext.lightsHead;
     LightInfoPositionalParams* params;
-    Vector3f local_14;
-    Vector3f local_20;
+    Vec3f local_14;
+    Vec3f local_20;
     f32 local_24;
     f32 fVar4;
     s32 s2;
@@ -411,7 +411,7 @@ void func_80102A64(GlobalContext* ctxt) {
 
     if (light != NULL) {
         gCtxt = ctxt->common.gCtxt;
-        dl = func_8012C7FC(gCtxt->polyXlu.append);
+        dl = func_8012C7FC(gCtxt->polyXlu.p);
 
         gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080); //! This doesn't resolve to any of the macros in gdi.h
 
@@ -440,7 +440,7 @@ void func_80102A64(GlobalContext* ctxt) {
             light = light->next;
         } while (light != NULL);
 
-        gCtxt->polyXlu.append = dl;
+        gCtxt->polyXlu.p = dl;
     }
 }
 #else

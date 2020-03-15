@@ -1,17 +1,16 @@
 #include <ultra64.h>
 #include <global.h>
 
-ActorInitData bgIkanaRayInitData = {
+ActorInit bgIkanaRayInitData = {
     0x0256,
     6,
     0,
     0,
     0x0203,
-    0, 0,
     sizeof(ActorBgIkanaRay),
     (actor_func)BgIkanaRay_Init,
-    (actor_func)BgIkanaRay_Fini,
-    (actor_func)BgIkanaRay_Main,
+    (actor_func)BgIkanaRay_Destroy,
+    (actor_func)BgIkanaRay_Update,
     (actor_func)BgIkanaRay_Draw
 };
 
@@ -34,7 +33,7 @@ void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt) {
     ColCylinder* collision = &this->collision;
     u32 pad;
 
-    Lib_ApplyActorInitVars((Actor*)this, bgIkanaRayCompInit);
+    Actor_ProcessInitChain((Actor*)this, bgIkanaRayCompInit);
 
     Collision_InitCylinderDefault(ctxt, collision);
     Collision_InitCylinderWithData(ctxt, collision, (Actor*)this, &bgIkanaRayCylinderInit);
@@ -42,14 +41,14 @@ void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt) {
 
     this->animatedTextures = (AnimatedTexture*)Lib_PtrSegToVirt(object_ikana_obj_001228);
 
-    if (Actor_GetSwitchFlag(ctxt, this->base.variable & 0x7F) != 0) {
+    if (Actor_GetSwitchFlag(ctxt, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     } else {
         BgIkanaRay_SetDeactivated(this);
     }
 }
 
-void BgIkanaRay_Fini(ActorBgIkanaRay* this, GlobalContext* ctxt) {
+void BgIkanaRay_Destroy(ActorBgIkanaRay* this, GlobalContext* ctxt) {
     ColCylinder* collision = &this->collision;
     Collision_FiniCylinder(ctxt, collision);
 }
@@ -61,7 +60,7 @@ void BgIkanaRay_SetDeactivated(ActorBgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(ActorBgIkanaRay* this, GlobalContext* ctxt) {
-    if (Actor_GetSwitchFlag(ctxt, this->base.variable & 0x7F) != 0) {
+    if (Actor_GetSwitchFlag(ctxt, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     }
 }
@@ -73,10 +72,10 @@ void BgIkanaRay_SetActivated(ActorBgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateActivated(ActorBgIkanaRay* this, GlobalContext* ctxt) {
-    Collision_AddAT(ctxt, &ctxt->collisionContext, &this->collision.base);
+    Collision_AddAT(ctxt, &ctxt->colCheckCtx, &this->collision.base);
 }
 
-void BgIkanaRay_Main(ActorBgIkanaRay* this, GlobalContext* ctxt) {
+void BgIkanaRay_Update(ActorBgIkanaRay* this, GlobalContext* ctxt) {
     this->update((Actor*)this, ctxt);
 }
 

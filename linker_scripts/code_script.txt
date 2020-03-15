@@ -10,9 +10,9 @@ SECTIONS
     boot : AT(RomLocation)
     {
         boot_text_start = .;
-        build/src/boot_O2_g3/boot_0x80080060.o(.text)
+        build/src/boot_O2_g3/boot_main.o(.text)
         build/src/boot_O2_g3/idle.o(.text)
-        build/src/boot_O2_g3/boot_0x800805E0.o(.text)
+        build/src/boot_O2_g3/viconfig.o(.text)
         build/src/boot_O2_g3/z_std_dma.o(.text)
         build/asm/boot_0x80080E30.o(.text)
         build/src/boot_O2_g3/irqmgr.o(.text)
@@ -70,7 +70,7 @@ SECTIONS
         build/src/libultra/io/sprawdma.o(.text)
         build/src/libultra/io/sirawdma.o(.text)
         build/asm/boot_0x8008AE20.o(.text)
-        build/src/libultra/io/virepeatline.o(.text)
+        build/src/libultra/io/viblack.o(.text)
         build/src/libultra/io/sirawread.o(.text)
         build/src/libultra/os/getthreadid.o(.text)
         build/src/libultra/io/sptaskyield.o(.text)
@@ -248,7 +248,7 @@ SECTIONS
         boot_data_end = .;
 
         boot_rodata_start = .;
-        build/src/boot_O2_g3/boot_0x80080060.o(.rodata)
+        build/src/boot_O2_g3/boot_main.o(.rodata)
         build/src/boot_O2_g3/idle.o(.rodata)
         build/asm/boot_rodata_z_std_dma.o(.text)
         build/asm/boot_rodata_0x80080E30.o(.text)
@@ -279,7 +279,7 @@ SECTIONS
     RomLocation += SegmentSize;
 
     boot_bss_start = .;
-    . += 0x1C60; /* 0x80080060 */
+    . += 0x1C60; /* boot_main */
     . += 0x140; /* idle */
     . += 0x770; /* z_std_dma */
     . += 0x420; /* 0x80080E30 */

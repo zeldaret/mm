@@ -1,7 +1,7 @@
 {
-    0x80080060:"",
+    0x80080060:"boot_main",
     0x80080150:"idle",
-    0x800805E0:"",
+    0x800805E0:"viconfig",
     0x80080790:"z_std_dma",
     0x80080E30:"",
     0x80081250:"irqmgr",
@@ -59,7 +59,7 @@
     0x8008AD70:"sirawdma",
     0x8008ACE0:"sprawdma",
     0x8008AE20:"",
-    0x8008AE70:"virepeatline",
+    0x8008AE70:"viblack",
     0x8008AEE0:"sirawread",
     0x8008AF30:"getthreadid",
     0x8008AF50:"sptaskyield",

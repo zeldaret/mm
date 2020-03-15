@@ -1,4 +1,3 @@
-boot_0x800805E0
 boot_0x800968B0
 fault
 fault_drawer
@@ -6,6 +5,7 @@ idle
 loadfragment
 loadfragment2
 stackcheck
+viconfig
 z_actor
 z_bgcheck
 z_DLF

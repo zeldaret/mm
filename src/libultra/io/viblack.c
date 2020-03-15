@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-void osViRepeatLine(u8 active) {
+void osViBlack(u8 active) {
     register u32 saveMask;
 
     saveMask = __osDisableInt();

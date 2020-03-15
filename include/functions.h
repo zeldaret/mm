@@ -3,45 +3,45 @@
 
 #include <structs.h>
 
-void start(void); // func_80080060
+void bootproc(void); // func_80080060
 void Idle_ClearMemory(void* begin, void* end); // func_80080150
 void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value); // func_80080180
 void Idle_InitScreen(void); // func_8008019C
 void Idle_InitMemory(void); // func_800801EC
 void Idle_InitCodeAndMemory(void); // func_80080250
-void Idle_MainThreadEntry(void* arg); // func_80080300
+void Main_ThreadEntry(void* arg); // func_80080300
 void func_8008038C(void); // func_8008038C
 void Idle_ThreadEntry(void* arg); // func_80080514
-void func_800805E0(s32 param_1); // func_800805E0
-void func_80080748(void); // func_80080748
-s32 Dmamgr_DoDmaTransfer(u32 src, void* dst, u32 size); // func_80080790
-void Dmamgr_osEPiStartDmaWrapper(OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3); // func_800808D4
-DmadataEntry* Dmamgr_FindDmaEntry(u32 vromAddr); // func_800808F4
+void ViConfig_UpdateVi(u32 arg0); // func_800805E0
+void ViConfig_UpdateBlack(void); // func_80080748
+s32 DmaMgr_DMARomToRam(u32 src, void* dst, u32 size); // func_80080790
+void DmaMgr_DmaCallback0(OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3); // func_800808D4
+DmaEntry* Dmamgr_FindDmaEntry(u32 vromAddr); // func_800808F4
 u32 Dmamgr_TranslateVromToRom(u32 vromAddr); // func_80080950
 s32 Dmamgr_FindDmaIndex(u32 vromAddr); // func_800809BC
 char* func_800809F4(u32 param_1); // func_800809F4
-void Dmamgr_HandleRequest(DmaRequest* request); // func_80080A08
+void DmaMgr_ProcessMsg(DmaRequest* request); // func_80080A08
 void Dmamgr_ThreadEntry(void* arg); // func_80080B84
-s32 Dmamgr_SendRequest(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg); // func_80080C04
-s32 Dmamgr_SendRequestAndWait(u32 vramStart, u32 vromStart, u32 size); // func_80080C90
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg); // func_80080C04
+s32 DmaMgr_SendRequest0(u32 vramStart, u32 vromStart, u32 size); // func_80080C90
 void Dmamgr_Start(void); // func_80080D0C
 void Dmamgr_Stop(void); // func_80080E00
 u8* Yaz0_LoadFirstChunk(void); // func_80080E30
 u8* Yaz0_LoadNextChunk(void* currDecompPos); // func_80080ED0
 s32 Yaz0_Decompress(u8* src, u8* dest); // func_80080FF0
 void Yaz0_LoadAndDecompressFile(u32 romStart, u32 vramStart, u32 size); // func_80081178
-void IrqMgr_AddCallback(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3); // func_80081250
-void IrqMgr_RemoveCallback(IrqMgr* irqmgr, OSMesgQueueListNode* remove); // func_800812DC
-void IrqMgr_NotifyAllCallbacks(IrqMgr* irqmgr, OSMesg msg); // func_80081368
-void IrqMgr_NotifyAllCallbacksWithCapacity(IrqMgr* irqmgr, OSMesg msg); // func_800813B8
-void IrqMgr_HandlePrenmi1(IrqMgr* irqmgr); // func_8008141C
-void IrqMgr_CheckThreadStatusImpl(void); // func_800814B4
-void IrqMgr_HandlePrenmi2(IrqMgr* irqmgr); // func_800814D4
-void IrqMgr_HandlePrenmi3(IrqMgr* irqmgr); // func_80081550
-void IrqMgr_CheckThreadStatus(IrqMgr* irqmgr); // func_800815A8
-void IrqMgr_HandleFrame(IrqMgr* irqmgr); // func_800815CC
+void IrqMgr_AddClient(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3); // func_80081250
+void IrqMgr_RemoveClient(IrqMgr* irqmgr, OSMesgQueueListNode* remove); // func_800812DC
+void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg); // func_80081368
+void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg); // func_800813B8
+void IrqMgr_HandlePreNMI(IrqMgr* irqmgr); // func_8008141C
+void IrqMgr_CheckStack(void); // func_800814B4
+void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr); // func_800814D4
+void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr); // func_80081550
+void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr); // func_800815A8
+void IrqMgr_HandleRetrace(IrqMgr* irqmgr); // func_800815CC
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr); // func_80081684
-void IrqMgr_Start(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount); // func_80081754
+void IrqMgr_Create(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount); // func_80081754
 void CIC6105_Nop80081820(void); // func_80081820
 void CIC6105_Nop80081828(void); // func_80081828
 void CIC6105_PrintRomInfo(void); // func_80081830
@@ -111,10 +111,10 @@ void FaultDrawer_SetInputCallback(func_ptr func); // func_800848A4
 void FaultDrawer_Init(void); // func_800848B8
 void func_80084940(void); // func_80084940
 void func_80084968(void); // func_80084968
-void Load_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_800849A0
+void Load_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart); // func_800849A0
 s32 Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes); // func_80084C0C
 void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart); // func_80084CD0
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart); // func_80084DB0
+void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart); // func_80084DB0
 s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr); // func_8008501C
 void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd); // func_800850C8
 void func_80085130(void); // func_80085130
@@ -134,7 +134,7 @@ void func_80085204(void); // func_80085204
 void func_8008520C(void); // func_8008520C
 void func_8008522C(void); // func_8008522C
 void func_8008524C(void); // func_8008524C
-void StackCheck_Init(StackEntry* entry, u32 stackTop, u32 stackBottom, u32 initValue, s32 minSpace, char* name); // func_80085320
+void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name); // func_80085320
 void StackCheck_Cleanup(StackEntry* entry); // func_800853F8
 s32 StackCheck_GetState(StackEntry* entry); // func_80085468
 u32 StackCheck_CheckAll(void); // func_800854E0
@@ -219,20 +219,20 @@ void func_80087088(UNK_PTR param_1, UNK_TYPE4 param_2); // func_80087088
 void func_80087090(s32* param_1); // func_80087090
 f32 func_800870B8(u32* param_1); // func_800870B8
 f32 func_80087104(u32* param_1); // func_80087104
-void arena_lock_init(Heap* heap); // func_80087160
-void arena_lock(Heap* heap); // func_8008718C
-void arena_unlock(Heap* heap); // func_800871B4
-HeapNode* heap_get_tail(Heap* param_1); // func_800871DC
-void __osMallocInit(Heap* heap, u32 heapBase, u32 heapSize); // func_8008720C
-void __osMallocAddBlock(Heap* heap, u32 start, u32 size); // func_8008725C
-void __osMallocCleanup(Heap* heap); // func_800872FC
-u32 __osMallocIsInitalized(Heap* heap); // func_8008731C
-void* __osMalloc(Heap* heap, u32 size); // func_80087324
-void* __osMallocR(Heap* heap, u32 size); // func_80087408
-void __osFree(Heap* heap, void* ptr); // func_800874EC
-void* __osRealloc(Heap* heap, void* oldPtr, u32 newSize); // func_800875E4
-void __osAnalyzeArena(Heap* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated); // func_80087714
-s32 __osCheckArena(Heap* heap); // func_800877C4
+void arena_lock_init(Arena* heap); // func_80087160
+void arena_lock(Arena* heap); // func_8008718C
+void arena_unlock(Arena* heap); // func_800871B4
+ArenaNode* heap_get_tail(Arena* param_1); // func_800871DC
+void __osMallocInit(Arena* heap, u32 heapBase, u32 heapSize); // func_8008720C
+void __osMallocAddBlock(Arena* heap, u32 start, u32 size); // func_8008725C
+void __osMallocCleanup(Arena* heap); // func_800872FC
+u32 __osMallocIsInitalized(Arena* heap); // func_8008731C
+void* __osMalloc(Arena* heap, u32 size); // func_80087324
+void* __osMallocR(Arena* heap, u32 size); // func_80087408
+void __osFree(Arena* heap, void* ptr); // func_800874EC
+void* __osRealloc(Arena* heap, void* oldPtr, u32 newSize); // func_800875E4
+void __osAnalyzeArena(Arena* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated); // func_80087714
+s32 __osCheckArena(Arena* heap); // func_800877C4
 void* proutSprintf(void* s, char* buf, size_t n); // func_80087830
 int vsprintf(char* dst, char* fmt, va_list args); // func_80087854
 int sprintf(char* s, char* fmt, ...); // func_800878A4
@@ -318,7 +318,7 @@ void guPerspective(Mtx* m, u16* perspNorm, float fovy, float aspect, float near,
 s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008ACE0
 s32 __osSiRawStartDma(s32 direction, void* dramAddr); // func_8008AD70
 void func_8008AE20(void); // func_8008AE20
-void osViRepeatLine(u8 active); // func_8008AE70
+void osViBlack(u8 active); // func_8008AE70
 s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_8008AEE0
 OSId osGetThreadId(OSThread* t); // func_8008AF30
 void osSpTaskYield(void); // func_8008AF50
@@ -357,7 +357,7 @@ u32 osGetMemSize(void); // func_8008D350
 void func_8008D470(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8008D470
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m); // func_8008D640
 f32 sqrtf(f32 __x); // func_8008D700
-void func_8008D710(void); // func_8008D710
+s32 osAfterPreNMI(void); // func_8008D710
 s32 osContStartQuery(OSMesgQueue* mq); // func_8008D730
 void osContGetQuery(OSContStatus* data); // func_8008D7AC
 void guLookAtHiliteF(float mf[4][4], UNK_PTR l, int* h, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp, float xl1, float yl1, float zl1, float xl2, float yl2, float zl2, int twidth, int theight); // func_8008D7D0
@@ -497,20 +497,20 @@ void func_800968B0(void); // func_800968B0
 char* func_800968f0(char* param_1, char* param_2); // func_800968F0
 void func_80096930(void); // func_80096930
 void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5AC0
-void EnAObj_Fini(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5B6C
+void EnAObj_Destroy(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5B6C
 void EnAObj_Update1(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5B98
 void EnAObj_Update2(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5C28
-void EnAObj_Main(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5C60
+void EnAObj_Update(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5C60
 void EnAObj_Draw(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5CB8
 void EnItem00_UpdateForNewObjectId(ActorEnItem00* this, GlobalContext* ctxt, f32* puParm3, f32* pfParm4); // func_800A5D00
 void EnItem00_Init(ActorEnItem00* this, GlobalContext* ctxt); // func_800A5D70
-void EnItem00_Fini(ActorEnItem00* this, GlobalContext* ctxt); // func_800A637C
+void EnItem00_Destroy(ActorEnItem00* this, GlobalContext* ctxt); // func_800A637C
 void func_800A63A8(ActorEnItem00* this, GlobalContext* ctxt); // func_800A63A8
 void func_800A640C(ActorEnItem00* this); // func_800A640C
 void func_800A6650(void); // func_800A6650
 void func_800A6780(void); // func_800A6780
-void EnItem00_Update(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6A40
-void EnItem00_Main(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6B98
+void EnItem00_Update1(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6A40
+void EnItem00_Update(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6B98
 void EnItem00_Draw(ActorEnItem00* this, GlobalContext* ctxt); // func_800A7128
 void EnItem00_DrawRupee(ActorEnItem00* this, GlobalContext* ctxt); // func_800A72AC
 void EnItem00_DrawSprite(ActorEnItem00* actor, GlobalContext* ctxt); // func_800A73A0
@@ -556,7 +556,7 @@ void func_800AE5A0(GlobalContext* ctxt); // func_800AE5A0
 void func_800AE5E4(void); // func_800AE5E4
 void func_800AE778(GlobalContext* ctxt, ColorRGBA8* color, short param_3, short param_4); // func_800AE778
 void func_800AE8EC(GlobalContext* ctxt); // func_800AE8EC
-void func_800AE930(BgCheckContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, BgPolygon* param_6, int param_7); // func_800AE930
+void func_800AE930(CollisionContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, BgPolygon* param_6, int param_7); // func_800AE930
 void func_800AEF44(void); // func_800AEF44
 void func_800AEF70(void); // func_800AEF70
 void func_800AEFA0(void); // func_800AEFA0
@@ -574,10 +574,10 @@ void func_800AFC60(GlobalContext* ctxt); // func_800AFC60
 void func_800AFDCC(GlobalContext* ctxt, int param_2); // func_800AFDCC
 void func_800AFF24(void); // func_800AFF24
 void EffectSS_Init(GlobalContext* ctxt, s32 numEntries); // func_800B0050
-void EffectSS_Fini(GlobalContext* ctxt); // func_800B0140
+void EffectSS_Clear(GlobalContext* ctxt); // func_800B0140
 LoadedParticleEntry* EffectSS_GetTable(void); // func_800B0200
 void EffectSS_Delete(LoadedParticleEntry* param_1); // func_800B0210
-void EffectSS_ResetLoadedParticleEntry(LoadedParticleEntry* particle); // func_800B0270
+void EffectSS_ResetEntry(LoadedParticleEntry* particle); // func_800B0270
 s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry); // func_800B0304
 void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* particle); // func_800B043C
 void EffectSS_LoadParticle(UNK_TYPE4 param_1, EffectSSType type, u32 priority, void* particleInitData); // func_800B04D4
@@ -589,7 +589,7 @@ s32 func_800B096C(s16 param_1, s16 param_2, s32 param_3); // func_800B096C
 s16 func_800B09D0(s16 a0, s16 a1, f32 a2); // func_800B09D0
 u8 func_800B0A24(u8 a0, u8 a1, f32 a2); // func_800B0A24
 void func_800B0B10(GlobalContext* ctxt, LoadedParticleEntry* particle, u32 uParm3); // func_800B0B10
-void EffectSS_LoadDust(GlobalContext* ctxt, u16 flags, Vector3f* position, Vector3f* velocity, Vector3f* acceleration, ColorRGBA8* color1, ColorRGBA8* color2, s16 scale, s16 scaleChangePerFrame, s16 life, u8 type); // func_800B0D2C
+void EffectSS_SpawnDust(GlobalContext* ctxt, u16 flags, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, ColorRGBA8* color1, ColorRGBA8* color2, s16 scale, s16 scaleChangePerFrame, s16 life, u8 type); // func_800B0D2C
 void func_800B0DE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B0DE0
 void func_800B0E48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B0E48
 void func_800B0EB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B0EB0
@@ -610,66 +610,66 @@ void func_800B14D4(void); // func_800B14D4
 void func_800B1598(void); // func_800B1598
 void func_800B165C(void); // func_800B165C
 void func_800B16B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B16B8
-void EffectSS_LoadSparkle(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, int param_8); // func_800B16F4
+void EffectSS_SpawnSparkle(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, int param_8); // func_800B16F4
 void func_800B1830(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B1830
-void EffectSS_LoadBomb2(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4); // func_800B1908
-void func_800B1970(UNK_TYPE4 param_1, Vector3f* param_2, Vector3f* param_3, Vector3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B1970
-void EffectSS_LoadBlast(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, ColorRGBA8* param_5, ColorRGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); // func_800B19E0
+void EffectSS_SpawnBomb2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4); // func_800B1908
+void func_800B1970(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B1970
+void EffectSS_SpawnBlast(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, ColorRGBA8* param_5, ColorRGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); // func_800B19E0
 void func_800B1A70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B1A70
 void func_800B1AC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_800B1AC4
 void func_800B1B10(void); // func_800B1B10
-void EffectSS_LoadGSpark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vector3f* pzParm3, Vector3f* pzParm4, Vector3f* param_5, ColorRGBA8* param_6, ColorRGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B1B4C
+void EffectSS_SpawnGSpark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, ColorRGBA8* param_6, ColorRGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B1B4C
 void func_800B1BDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B1BDC
 void func_800B1C70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B1C70
 void func_800B1CC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B1CC4
 void func_800B1DC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800B1DC8
-void EffectSS_LoadDodongoFire(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B1E0C
-void EffectSS_LoadBubble(UNK_TYPE4 uParm1, Vector3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B1E94
-void EffectSS_LoadGRipple(UNK_TYPE4 uParm1, Vector3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5); // func_800B1EF4
-void EffectSS_LoadGSplash(UNK_TYPE4 uParm1, Vector3f* pzParm2, UNK_PTR puParm3, UNK_PTR puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6); // func_800B1F4C
-void EffectSS_LoadGFire(UNK_TYPE4 uParm1, Vector3f* pzParm2); // func_800B1FE0
-void EffectSS_LoadLightning(UNK_TYPE4 uParm1, Vector3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2018
-void func_800B2090(UNK_TYPE4 param_1, Vector3f* param_2, Vector3f* param_3, Vector3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2090
-void EffectSS_LoadBigOctoBubble2(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B210C
-void EffectSS_LoadFragment(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B219C
+void EffectSS_SpawnDodongoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B1E0C
+void EffectSS_SpawnBubble(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B1E94
+void EffectSS_SpawnGRipple(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5); // func_800B1EF4
+void EffectSS_SpawnGSplash(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_PTR puParm3, UNK_PTR puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6); // func_800B1F4C
+void EffectSS_SpawnGFire(UNK_TYPE4 uParm1, Vec3f* pzParm2); // func_800B1FE0
+void EffectSS_SpawnLightning(UNK_TYPE4 uParm1, Vec3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2018
+void func_800B2090(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2090
+void EffectSS_SpawnBigOctoBubble2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B210C
+void EffectSS_SpawnFragment(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B219C
 void func_800B221C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B221C
 void func_800B2364(void); // func_800B2364
-void EffectSS_LoadStick(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3); // func_800B23D8
-void EffectSS_LoadSplash(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B242C
+void EffectSS_SpawnStick(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3); // func_800B23D8
+void EffectSS_SpawnSplash(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B242C
 void func_800B249C(void); // func_800B249C
-void EffectSS_LoadStone1(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE4 uParm3); // func_800B25D8
-void EffectSS_LoadHitMark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vector3f* pzParm4); // func_800B262C
+void EffectSS_SpawnStone1(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE4 uParm3); // func_800B25D8
+void EffectSS_SpawnHitMark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vec3f* pzParm4); // func_800B262C
 void func_800B2684(void); // func_800B2684
 void func_800B26A8(void); // func_800B26A8
-void EffectSS_LoadPhantomGanonFlash(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vector3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5); // func_800B26D4
-void EffectSS_LoadKakarikoFire(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6); // func_800B2738
-void EffectSS_LoadSoldierSearchBall(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_800B27A0
-void EffectSS_LoadShard(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE2 param_14, UNK_TYPE2 param_15, UNK_TYPE4 param_16); // func_800B2810
-void EffectSS_LoadIcePiece(UNK_TYPE4 uParm1, Vector3f* pzParm2, UNK_TYPE4 uParm3, Vector3f* pzParm4, Vector3f* param_5, UNK_TYPE4 param_6); // func_800B28C8
+void EffectSS_SpawnPhantomGanonFlash(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5); // func_800B26D4
+void EffectSS_SpawnKakarikoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6); // func_800B2738
+void EffectSS_SpawnSoldierSearchBall(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_800B27A0
+void EffectSS_SpawnShard(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE2 param_14, UNK_TYPE2 param_15, UNK_TYPE4 param_16); // func_800B2810
+void EffectSS_SpawnIcePiece(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6); // func_800B28C8
 void func_800B2930(void); // func_800B2930
-void EffectSS_LoadEnemyIce(UNK_TYPE4 uParm1, Actor* pzParm2, Vector3f* pzParm3, ColorRGBA8* pzParm4, ColorRGBA8* param_5, UNK_TYPE4 param_6); // func_800B2AC4
+void EffectSS_SpawnEnemyIce(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, ColorRGBA8* pzParm4, ColorRGBA8* param_5, UNK_TYPE4 param_6); // func_800B2AC4
 void func_800B2B44(void); // func_800B2B44
 void func_800B2B7C(void); // func_800B2B7C
 void func_800B2BC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800B2BC0
-void EffectSS_LoadFireTail(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vector3f* pzParm3, UNK_TYPE4 uParm4, Vector3f* param_5, UNK_TYPE2 param_6, ColorRGBA8* param_7, ColorRGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11); // func_800B2C48
+void EffectSS_SpawnFireTail(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, ColorRGBA8* param_7, ColorRGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11); // func_800B2C48
 void func_800B2CE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); // func_800B2CE0
 void func_800B2DA4(void); // func_800B2DA4
-void EffectSS_LoadEnemyFire(UNK_TYPE4 uParm1, Actor* pzParm2, Vector3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2DF4
+void EffectSS_SpawnEnemyFire(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2DF4
 void func_800B2E6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2E6C
-void EffectSS_LoadExtra(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B2F18
-void EffectSS_LoadDeadDekuBaba(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B2F80
+void EffectSS_SpawnExtra(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B2F18
+void EffectSS_SpawnDeadDekuBaba(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B2F80
 void func_800B3030(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7); // func_800B3030
-void EffectSS_LoadDeadDodongo(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B3088
-void EffectSS_LoadDeadDekuScrub(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B3144
+void EffectSS_SpawnDeadDodongo(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B3088
+void EffectSS_SpawnDeadDekuScrub(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B3144
 void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); // func_800B31BC
-void EffectSS_LoadIceSmoke(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5); // func_800B320C
-void EffectSS_LoadIceBlock(UNK_TYPE4 uParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, UNK_TYPE2 param_5); // func_800B326C
-void func_800B32D0(ContextCommon* ctxt); // func_800B32D0
+void EffectSS_SpawnIceSmoke(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5); // func_800B320C
+void EffectSS_SpawnIceBlock(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5); // func_800B326C
+void func_800B32D0(GameState* ctxt); // func_800B32D0
 void func_800B3644(void); // func_800B3644
-void DLF_LoadGameState(GameStateMetaInfo* gameState); // func_800B3880
-void DLF_FreeGameState(GameStateMetaInfo* gameState); // func_800B39A4
+void DLF_LoadGameState(GameStateOverlay* gameState); // func_800B3880
+void DLF_FreeGameState(GameStateOverlay* gameState); // func_800B39A4
 void Actor_PrintLists(ActorContext* actCtxt); // func_800B3AD0
-void Actor_SetDrawParams(ActorDrawParams* iParm1, f32 yDisplacement, actor_post_draw_func func, f32 scale); // func_800B3BA4
+void Actor_SetDrawParams(ActorShape* iParm1, f32 yDisplacement, actor_shadow_draw_func func, f32 scale); // func_800B3BA4
 void Actor_PostDraw(Actor* actor, LightMapper* mapper, GlobalContext* ctxt, u32 displayList, ColorRGBA8* color); // func_800B3BC8
 void func_800B3FC0(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B3FC0
 void func_800B4024(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B4024
@@ -680,7 +680,7 @@ void func_800B42F8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // f
 void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B4A98
 void func_800B4AEC(GlobalContext* ctxt, Actor* actor, f32 param_3); // func_800B4AEC
 void func_800B4B50(Actor* iParm1, int iParm2, GlobalContext* pzParm3); // func_800B4B50
-void func_800B4EDC(GlobalContext* ctxt, Vector3f* pzParm2, Vector3f* pzParm3, f32* pfParm4); // func_800B4EDC
+void func_800B4EDC(GlobalContext* ctxt, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4); // func_800B4EDC
 void func_800B4F40(TargetContext* targetContext, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800B4F40
 void func_800B4F78(TargetContext* targetContext, u8 type, GlobalContext* ctxt); // func_800B4F78
 void func_800B5040(TargetContext* targetContext, Actor* actor, u8 type, GlobalContext* ctxt); // func_800B5040
@@ -711,8 +711,8 @@ UNK_TYPE4 func_800B6434(GlobalContext* ctxt, TitleCardContext* titleCtxt); // fu
 UNK_TYPE4 func_800B645C(void); // func_800B645C
 void func_800B6468(GlobalContext* ctxt); // func_800B6468
 void func_800B6474(GlobalContext* ctxt); // func_800B6474
-UNK_TYPE4 func_800B648C(GlobalContext* ctxt, UNK_TYPE1 param_2, UNK_TYPE1 param_3, float param_4, Vector3f* param_5); // func_800B648C
-f32 func_800B64FC(GlobalContext* ctxt, f32 fParm2, Vector3f* pzParm3, u32* puParm4); // func_800B64FC
+UNK_TYPE4 func_800B648C(GlobalContext* ctxt, UNK_TYPE1 param_2, UNK_TYPE1 param_3, float param_4, Vec3f* param_5); // func_800B648C
+f32 func_800B64FC(GlobalContext* ctxt, f32 fParm2, Vec3f* pzParm3, u32* puParm4); // func_800B64FC
 void* func_800B6584(GlobalContext* ctxt, s16 sParm2, void* pvParm3, u32 uParm4); // func_800B6584
 UNK_TYPE4 func_800B6608(int iParm1, short sParm2); // func_800B6608
 void func_800B6680(void); // func_800B6680
@@ -737,15 +737,15 @@ void func_800B6C04(Actor* actor, float fParm2); // func_800B6C04
 void func_800B6C58(Actor* actor, UNK_TYPE4 param_2); // func_800B6C58
 s16 Actor_YawBetweenActors(Actor* from, Actor* to); // func_800B6CD4
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to); // func_800B6D00
-s16 Actor_YawToPoint(Actor* actor, Vector3f* point); // func_800B6D2C
+s16 Actor_YawToPoint(Actor* actor, Vec3f* point); // func_800B6D2C
 s16 Actor_PitchBetweenActors(Actor* from, Actor* to); // func_800B6D50
 s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to); // func_800B6D7C
-s16 Actor_PitchToPoint(Actor* actor, Vector3f* point); // func_800B6DA8
+s16 Actor_PitchToPoint(Actor* actor, Vec3f* point); // func_800B6DA8
 f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6DCC
-f32 Actor_DistanceToPoint(Actor* actor, Vector3f* point); // func_800B6DF8
+f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point); // func_800B6DF8
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6E1C
-f32 Actor_XZDistanceToPoint(Actor* actor, Vector3f* point); // func_800B6E48
-void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vector3f* offset, Vector3f* point); // func_800B6E6C
+f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point); // func_800B6E48
+void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point); // func_800B6E6C
 f32 Actor_YDistance(Actor* actor1, Actor* actor2); // func_800B6F0C
 void func_800B6F20(GlobalContext* ctxt, int param_2, float param_3, short param_4); // func_800B6F20
 float func_800B6FC8(ActorPlayer* player); // func_800B6FC8
@@ -767,7 +767,7 @@ s32 Actor_IsActorFacingLink(Actor* actor, s16 angle); // func_800B73E0
 s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance); // func_800B742C
 s32 Actor_IsActorFacingLinkAndWithinRange(Actor* actor, f32 range, s16 tolerance); // func_800B748C
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance); // func_800B750C
-void func_800B75A0(BgPolygon* param_1, Vector3f* param_2, s16* param_3); // func_800B75A0
+void func_800B75A0(BgPolygon* param_1, Vec3f* param_2, s16* param_3); // func_800B75A0
 UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, unsigned int param_3); // func_800B761C
 UNK_TYPE4 func_800B7678(GlobalContext* ctxt, Actor* param_2, int param_3, unsigned int param_4); // func_800B7678
 void func_800B78B8(GlobalContext* ctxt, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6); // func_800B78B8
@@ -837,7 +837,7 @@ s32 Actor_RecordUndrawnActor(GlobalContext* ctxt, Actor* actor); // func_800B9E4
 void func_800B9E84(void); // func_800B9E84
 void func_800B9EF4(GlobalContext* ctxt, int numActors, Actor** actors); // func_800B9EF4
 s32 func_800BA2D8(GlobalContext* ctxt, Actor* actor); // func_800BA2D8
-s32 func_800BA2FC(GlobalContext* ctxt, Actor* actor, Vector3f* param_3, f32 param_4); // func_800BA2FC
+s32 func_800BA2FC(GlobalContext* ctxt, Actor* actor, Vec3f* param_3, f32 param_4); // func_800BA2FC
 void Actor_DrawAll(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA42C
 void func_800BA6FC(void); // func_800BA6FC
 void func_800BA798(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA798
@@ -845,9 +845,9 @@ void func_800BA8B8(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BA8B8
 void func_800BA9B4(void); // func_800BA9B4
 void Actor_InsertIntoTypeList(ActorContext* actCtxt, Actor* actor, u8 type); // func_800BAAB4
 Actor* Actor_RemoveFromTypeList(GlobalContext* ctxt, ActorContext* actCtxt, Actor* actor); // func_800BAB24
-void Actor_FreeOverlay(ActorOverlayTableEntry* entry); // func_800BABFC
+void Actor_FreeOverlay(ActorOverlay* entry); // func_800BABFC
 void Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10); // func_800BAC60
-ActorInitData* Actor_LoadOverlay(ActorContext* actCtxt, s16 index); // func_800BACD4
+ActorInit* Actor_LoadOverlay(ActorContext* actCtxt, s16 index); // func_800BACD4
 Actor* Actor_SpawnWithParentAndCutscene(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent); // func_800BAE14
 void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable); // func_800BB0C0
 void Actor_SpawnTransitionActors(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BB140
@@ -878,8 +878,8 @@ void func_800BC848(void); // func_800BC848
 void func_800BC8B8(void); // func_800BC8B8
 void func_800BCB50(void); // func_800BCB50
 void func_800BCB70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800BCB70
-void func_800BCBF4(Vector3f* uParm1, GlobalContext* ctxt); // func_800BCBF4
-void func_800BCC68(Vector3f* param_1, GlobalContext* ctxt); // func_800BCC68
+void func_800BCBF4(Vec3f* uParm1, GlobalContext* ctxt); // func_800BCBF4
+void func_800BCC68(Vec3f* param_1, GlobalContext* ctxt); // func_800BCC68
 void func_800BCCDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800BCCDC
 void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800BD2B4
 void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9); // func_800BD384
@@ -919,25 +919,25 @@ void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* lis
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes); // func_800BFC70
 void BgCheck_PolygonLinkedListReset(BgPolygonLinkedList* list); // func_800BFCC0
 u16 BgCheck_AllocPolygonLinkedListNode(BgPolygonLinkedList* list); // func_800BFCCC
-void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vector3f* vector); // func_800BFCFC
-void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vector3f* vector); // func_800BFD40
+void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vec3f* vector); // func_800BFCFC
+void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector); // func_800BFD40
 float func_800BFD84(BgPolygon* polygon, float param_2, float param_3); // func_800BFD84
 int func_800BFDEC(BgPolygon* param_1, BgPolygon* param_2, unsigned int* param_3, unsigned int* param_4); // func_800BFDEC
 s32 BgCheck_PolygonGetMinY(BgPolygon* polygons, BgVertex* vertices); // func_800BFFC4
 void BgCheck_PolygonGetNormal(BgPolygon* polygon, f32* normalX, f32* normalY, f32* normalZ); // func_800C003C
 void func_800C0094(BgPolygon* param_1, f32 xOffset, f32 yOffset, f32 zOffset, z_Matrix* matrix); // func_800C0094
-f32 func_800C01B8(BgPolygon* param_1, Vector3f* param_2); // func_800C01B8
+f32 func_800C01B8(BgPolygon* param_1, Vec3f* param_2); // func_800C01B8
 void BgCheck_CreateColTriParamsFromPolygon(BgPolygon* polygon, BgVertex* vertices, ColTriParams* tri); // func_800C0220
-void func_800C02C0(BgPolygon* poly, s32 index, BgCheckContext* bgCtxt, ColTriParams* tri); // func_800C02C0
+void func_800C02C0(BgPolygon* poly, s32 index, CollisionContext* bgCtxt, ColTriParams* tri); // func_800C02C0
 void func_800C0340(BgPolygon* param_1, BgVertex* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0340
 UNK_TYPE4 func_800C0474(BgPolygon* param_1, BgVertex* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C0474
 void func_800C0668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C0668
 void func_800C06A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C06A8
 void func_800C074C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C074C
 void func_800C07F0(void); // func_800C07F0
-void BgCheck_PolygonCollidesWithSphere(BgPolygon* polygon, BgVertex* verticies, Vector3f* pos, f32 readius); // func_800C0AF0
-void BgCheck_ScenePolygonListsInsertSorted(BgCheckContext* bgCtxt, u16* head, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0BC0
-void BgCheck_ScenePolygonListsInsert(BgMeshSubdivision* subdivision, BgCheckContext* bgCtxt, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0DE0
+void BgCheck_PolygonCollidesWithSphere(BgPolygon* polygon, BgVertex* verticies, Vec3f* pos, f32 readius); // func_800C0AF0
+void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* bgCtxt, u16* head, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0BC0
+void BgCheck_ScenePolygonListsInsert(BgMeshSubdivision* subdivision, CollisionContext* bgCtxt, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C0DE0
 void func_800C0E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C0E74
 void func_800C10FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_800C10FC
 void func_800C1238(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_800C1238
@@ -950,27 +950,27 @@ void func_800C2310(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800C2460(void); // func_800C2460
 void func_800C2514(void); // func_800C2514
 void func_800C25E0(void); // func_800C25E0
-void BgCheck_GetPolyMinSubdivisions(BgCheckContext* bgCtxt, Vector3f* min, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision); // func_800C26C0
-void BgCheck_GetPolyMaxSubdivisions(BgCheckContext* bgCtxt, Vector3f* max, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision); // func_800C2864
-void BgCheck_GetPolyMinMaxSubdivisions(BgCheckContext* bgCtxt, BgVertex* vertices, BgPolygon* polygons, s32* minX, s32* minY, s32* minZ, s32* maxX, s32* maxY, s32* maxZ, s16 index); // func_800C2A30
-UNK_TYPE4 func_800C2BE0(Vector3f* param_1, Vector3f* param_2, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C2BE0
-u32 BgCheck_SplitScenePolygonsIntoSubdivisions(BgCheckContext* bgCtxt, GlobalContext* ctxt, BgMeshSubdivision* subdivisions); // func_800C3334
+void BgCheck_GetPolyMinSubdivisions(CollisionContext* bgCtxt, Vec3f* min, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision); // func_800C26C0
+void BgCheck_GetPolyMaxSubdivisions(CollisionContext* bgCtxt, Vec3f* max, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision); // func_800C2864
+void BgCheck_GetPolyMinMaxSubdivisions(CollisionContext* bgCtxt, BgVertex* vertices, BgPolygon* polygons, s32* minX, s32* minY, s32* minZ, s32* maxX, s32* maxY, s32* maxZ, s16 index); // func_800C2A30
+UNK_TYPE4 func_800C2BE0(Vec3f* param_1, Vec3f* param_2, BgPolygon* polygons, BgVertex* vertices, s16 index); // func_800C2BE0
+u32 BgCheck_SplitScenePolygonsIntoSubdivisions(CollisionContext* bgCtxt, GlobalContext* ctxt, BgMeshSubdivision* subdivisions); // func_800C3334
 s32 BgCheck_GetIsDefaultSpecialScene(GlobalContext* ctxt); // func_800C3734
 s32 BgCheck_GetSpecialSceneMaxMemory(s32 sceneId, u32* maxMemory); // func_800C3778
 void BgCheck_CalcSubdivisionSize(f32 min, s32 subdivisions, f32* max, f32* subdivisionSize, f32* inverseSubdivisionSize); // func_800C37BC
 s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* ctxt, u32* maxNodes, u32* maxPolygons, u32* maxVertices); // func_800C3844
-void BgCheck_Init(BgCheckContext* bgCtxt, GlobalContext* ctxt, BgMeshHeader* mesh); // func_800C389C
-void func_800C3C00(BgCheckContext* bgCtxt, unsigned int param_2); // func_800C3C00
-void func_800C3C14(BgCheckContext* bgCtxt, unsigned int param_2); // func_800C3C14
-BgMeshHeader* BgCheck_GetActorMeshHeader(BgCheckContext* bgCtxt, s32 index); // func_800C3C2C
+void BgCheck_Init(CollisionContext* bgCtxt, GlobalContext* ctxt, BgMeshHeader* mesh); // func_800C389C
+void func_800C3C00(CollisionContext* bgCtxt, unsigned int param_2); // func_800C3C00
+void func_800C3C14(CollisionContext* bgCtxt, unsigned int param_2); // func_800C3C14
+BgMeshHeader* BgCheck_GetActorMeshHeader(CollisionContext* bgCtxt, s32 index); // func_800C3C2C
 void func_800C3C94(void); // func_800C3C94
-float func_800C3D50(UNK_TYPE4 param_1, BgCheckContext* bgCtxt, unsigned int param_3, UNK_PTR param_4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, unsigned int param_9, unsigned int param_10); // func_800C3D50
+float func_800C3D50(UNK_TYPE4 param_1, CollisionContext* bgCtxt, unsigned int param_3, UNK_PTR param_4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, unsigned int param_9, unsigned int param_10); // func_800C3D50
 void func_800C3F40(void); // func_800C3F40
 void func_800C3FA0(void); // func_800C3FA0
 void func_800C4000(void); // func_800C4000
 void func_800C4058(void); // func_800C4058
 void func_800C40B4(void); // func_800C40B4
-void func_800C411C(BgCheckContext* param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800C411C
+void func_800C411C(CollisionContext* param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800C411C
 void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C4188
 void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C41E4
 void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C4240
@@ -980,7 +980,7 @@ void func_800C43CC(void); // func_800C43CC
 void func_800C4488(void); // func_800C4488
 void func_800C44F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C44F0
 void func_800C455C(void); // func_800C455C
-s32 func_800C45C4(BgCheckContext* bgCtxt, unsigned int param_2, Vector3f* param_3, Vector3f* param_4, Vector3f* param_5, float param_6, int* param_7, int* param_8, BgActor* param_9, float param_10, u8 param_11); // func_800C45C4
+s32 func_800C45C4(CollisionContext* bgCtxt, unsigned int param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, float param_6, int* param_7, int* param_8, DynaPolyActor* param_9, float param_10, u8 param_11); // func_800C45C4
 void func_800C4C74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800C4C74
 void func_800C4CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800C4CD8
 void func_800C4D3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_800C4D3C
@@ -1007,14 +1007,14 @@ void BgCheck_ScenePolygonListsAlloc(GlobalContext* ctxt, BgScenePolygonLists* li
 int func_800C5B80(unsigned short* param_1); // func_800C5B80
 u16 BgCheck_ScenePolygonListsReserveNode(BgScenePolygonLists* lists); // func_800C5BBC
 void BgCheck_ActorMeshParamsInit(ActorMeshParams* params); // func_800C5BD0
-void BgCheck_SetActorMeshParams(ActorMeshParams* params, Vector3f* scale, Vector3s* rotation, Vector3f* position); // func_800C5C0C
+void BgCheck_SetActorMeshParams(ActorMeshParams* params, Vec3f* scale, Vec3s* rotation, Vec3f* position); // func_800C5C0C
 s32 BgCheck_AreActorMeshParamsEqual(ActorMeshParams* param_1, ActorMeshParams* param_2); // func_800C5C5C
 void BgCheck_ActorMeshPolyListsHeadsInit(ActorMeshPolyLists* lists); // func_800C5D30
 void BgCheck_ActorMeshPolyListsInit(ActorMeshPolyLists* lists); // func_800C5D70
 void BgCheck_ActorMeshVerticesIndexInit(s16* index); // func_800C5D90
 void BgCheck_ActorMeshWaterboxesIndexInit(s16* index); // func_800C5D9C
 void BgCheck_ActorMeshInit(GlobalContext* ctxt, ActorMesh* mesh); // func_800C5DA8
-void BgCheck_ActorMeshInitFromActor(ActorMesh* actorMesh, BgActor* actor, BgMeshHeader* header); // func_800C5E10
+void BgCheck_ActorMeshInitFromActor(ActorMesh* actorMesh, DynaPolyActor* actor, BgMeshHeader* header); // func_800C5E10
 s32 BgCheck_HasActorMeshChanged(ActorMesh* mesh); // func_800C5EC8
 void BgCheck_PolygonsInit(BgPolygon** polygons); // func_800C5EF0
 void BgCheck_PolygonsAlloc(GlobalContext* ctxt, BgPolygon* polygons, u32 numPolygons); // func_800C5EFC
@@ -1024,24 +1024,24 @@ void BgCheck_WaterboxListInit(BgWaterboxList* waterboxList); // func_800C5F8C
 void BgCheck_WaterboxListAlloc(GlobalContext* ctxt, BgWaterboxList* waterboxList, u32 numWaterboxes); // func_800C5F9C
 void BgCheck_ActorMeshUpdateParams(GlobalContext* ctxt, ActorMesh* mesh); // func_800C5FD8
 s32 BgCheck_IsActorMeshIndexValid(s32 index); // func_800C6024
-void BgCheck_DynaInit(GlobalContext* ctxt, BgDynaCollision* param_2); // func_800C6044
-void BgCheck_DynaAlloc(GlobalContext* ctxt, BgDynaCollision* dyna); // func_800C6098
-s32 BgCheck_AddActorMesh(GlobalContext* ctxt, BgDynaCollision* dyna, BgActor* actor, BgMeshHeader* header); // func_800C6188
-BgActor* BgCheck_GetActorOfMesh(BgCheckContext* bgCtxt, s32 index); // func_800C6248
-void func_800C62BC(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C62BC
-void func_800C6314(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C6314
-void func_800C636C(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C636C
-void func_800C63C4(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C63C4
-void func_800C641C(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C641C
-void func_800C6474(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C6474
-void BgCheck_RemoveActorMesh(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index); // func_800C64CC
+void BgCheck_DynaInit(GlobalContext* ctxt, DynaCollisionContext* param_2); // func_800C6044
+void BgCheck_DynaAlloc(GlobalContext* ctxt, DynaCollisionContext* dyna); // func_800C6098
+s32 BgCheck_AddActorMesh(GlobalContext* ctxt, DynaCollisionContext* dyna, DynaPolyActor* actor, BgMeshHeader* header); // func_800C6188
+DynaPolyActor* BgCheck_GetActorOfMesh(CollisionContext* bgCtxt, s32 index); // func_800C6248
+void func_800C62BC(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C62BC
+void func_800C6314(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C6314
+void func_800C636C(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C636C
+void func_800C63C4(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C63C4
+void func_800C641C(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C641C
+void func_800C6474(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C6474
+void BgCheck_RemoveActorMesh(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index); // func_800C64CC
 void func_800C6554(void); // func_800C6554
-void BgCheck_CalcWaterboxDimensions(Vector3f* minPos, Vector3f* maxXPos, Vector3f* maxZPos, Vector3s* minPosOut, s16* xLength, s16* zLength); // func_800C656C
-void BgCheck_AddActorMeshToLists(GlobalContext* ctxt, BgDynaCollision* dyna, s32 index, s32* currVertices, s32* currPolygons, s32* currWaterboxes); // func_800C6838
-void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* ctxt, BgDynaCollision* dyna, Actor* actor); // func_800C734C
-void BgCheck_Update(GlobalContext* ctxt, BgDynaCollision* dyna); // func_800C73E4
+void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength); // func_800C656C
+void BgCheck_AddActorMeshToLists(GlobalContext* ctxt, DynaCollisionContext* dyna, s32 index, s32* currVertices, s32* currPolygons, s32* currWaterboxes); // func_800C6838
+void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* ctxt, DynaCollisionContext* dyna, Actor* actor); // func_800C734C
+void BgCheck_Update(GlobalContext* ctxt, DynaCollisionContext* dyna); // func_800C73E4
 void func_800C756C(s32 param_1, s32* param_2, s32* param_3, s32* param_4); // func_800C756C
-void BgCheck_UpdateAllActorMeshes(GlobalContext* ctxt, BgDynaCollision* dyna); // func_800C765C
+void BgCheck_UpdateAllActorMeshes(GlobalContext* ctxt, DynaCollisionContext* dyna); // func_800C765C
 void func_800C76EC(void); // func_800C76EC
 void func_800C7974(void); // func_800C7974
 void func_800C7E40(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_800C7E40
@@ -1056,42 +1056,42 @@ void func_800C921C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800C9380(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8); // func_800C9380
 void BgCheck_RelocateMeshHeaderPointers(BgMeshHeader* header); // func_800C94E0
 void BgCheck_RelocateMeshHeader(BgMeshHeader* meshSegPtr, BgMeshHeader** param_2); // func_800C9564
-void BgCheck_RelocateAllMeshHeaders(BgCheckContext* bgCtxt, GlobalContext* ctxt); // func_800C9598
+void BgCheck_RelocateAllMeshHeaders(CollisionContext* bgCtxt, GlobalContext* ctxt); // func_800C9598
 void func_800C9640(void); // func_800C9640
-u32 BgCheck_GetPolygonAttributes(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index, s32 attributeIndex); // func_800C9694
-u32 func_800C9704(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9704
+u32 BgCheck_GetPolygonAttributes(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index, s32 attributeIndex); // func_800C9694
+u32 func_800C9704(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9704
 void func_800C9728(void); // func_800C9728
-UNK_TYPE4 func_800C9770(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9770
+UNK_TYPE4 func_800C9770(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9770
 void func_800C97F8(void); // func_800C97F8
-UNK_TYPE4 func_800C9844(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9844
+UNK_TYPE4 func_800C9844(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9844
 void func_800C98CC(void); // func_800C98CC
-UNK_TYPE4 func_800C9924(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9924
-u32 func_800C99AC(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99AC
-u32 func_800C99D4(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99D4
-u32 func_800C99FC(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99FC
-u32 func_800C9A24(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A24
-u32 func_800C9A4C(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A4C
-u32 func_800C9A7C(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A7C
-u32 func_800C9AB0(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9AB0
-u32 func_800C9AE4(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9AE4
-u32 func_800C9B18(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B18
-u32 func_800C9B40(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B40
-u32 func_800C9B68(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B68
-u32 func_800C9B90(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B90
-u32 func_800C9BB8(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9BB8
-u32 func_800C9BDC(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9BDC
-u32 func_800C9C24(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index, UNK_TYPE4 param_4); // func_800C9C24
-u32 func_800C9C74(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C74
-u32 func_800C9C9C(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C9C
-u32 func_800C9CC4(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9CC4
+UNK_TYPE4 func_800C9924(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9924
+u32 func_800C99AC(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99AC
+u32 func_800C99D4(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99D4
+u32 func_800C99FC(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C99FC
+u32 func_800C9A24(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A24
+u32 func_800C9A4C(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A4C
+u32 func_800C9A7C(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9A7C
+u32 func_800C9AB0(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9AB0
+u32 func_800C9AE4(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9AE4
+u32 func_800C9B18(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B18
+u32 func_800C9B40(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B40
+u32 func_800C9B68(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B68
+u32 func_800C9B90(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9B90
+u32 func_800C9BB8(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9BB8
+u32 func_800C9BDC(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9BDC
+u32 func_800C9C24(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index, UNK_TYPE4 param_4); // func_800C9C24
+u32 func_800C9C74(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C74
+u32 func_800C9C9C(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C9C
+u32 func_800C9CC4(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9CC4
 void func_800C9CEC(void); // func_800C9CEC
 void func_800C9D14(void); // func_800C9D14
 void func_800C9D50(void); // func_800C9D50
 void func_800C9D8C(void); // func_800C9D8C
 void func_800C9DDC(void); // func_800C9DDC
-u32 func_800C9E18(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E18
-u32 func_800C9E40(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E40
-u32 func_800C9E88(BgCheckContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E88
+u32 func_800C9E18(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E18
+u32 func_800C9E40(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E40
+u32 func_800C9E88(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E88
 void func_800C9EBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800C9EBC
 void func_800CA1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA1AC
 void func_800CA1E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA1E8
@@ -1104,33 +1104,33 @@ void func_800CA6D8(void); // func_800CA6D8
 void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800CA6F0
 void func_800CA9D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA9D0
 void func_800CAA14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800CAA14
-void BgCheck2_UpdateActorPosition(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAAD0
-void BgCheck2_UpdateActorYRotation(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAC0C
-void BgCheck2_AttachToMesh(BgCheckContext* bgCtxt, Actor* actor, s32 index); // func_800CACA0
-u32 BgCheck2_UpdateActorAttachedToMesh(BgCheckContext* bgCtxt, s32 index, Actor* actor); // func_800CAD2C
-void BcCheck3_BgActorInit(BgActor* actor, UNK_TYPE4 param_2); // func_800CAE10
-void BgCheck3_LoadMesh(GlobalContext* ctxt, BgActor* actor, BgMeshHeader* meshHeader); // func_800CAE34
-void BgCheck3_ResetFlags(BgActor* actor); // func_800CAE7C
-void func_800CAE88(BgActor* actor); // func_800CAE88
-void func_800CAE9C(BgActor* actor); // func_800CAE9C
-void func_800CAEB0(BgCheckContext* bgCtxt, s32 index); // func_800CAEB0
-void func_800CAEE0(BgActor* actor); // func_800CAEE0
-void func_800CAEF4(BgCheckContext* bgCtxt, s32 index); // func_800CAEF4
-void func_800CAF24(BgActor* actor); // func_800CAF24
-void func_800CAF38(BgActor* actor); // func_800CAF38
-s32 func_800CAF4C(BgActor* actor); // func_800CAF4C
-s32 func_800CAF70(BgActor* actor); // func_800CAF70
-s32 func_800CAF94(BgActor* actor); // func_800CAF94
-s32 func_800CAFB8(BgActor* actor); // func_800CAFB8
-s32 func_800CAFDC(BgActor* actor); // func_800CAFDC
+void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* actor); // func_800CAAD0
+void BgCheck2_UpdateActorYRotation(CollisionContext* bgCtxt, s32 index, Actor* actor); // func_800CAC0C
+void BgCheck2_AttachToMesh(CollisionContext* bgCtxt, Actor* actor, s32 index); // func_800CACA0
+u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* bgCtxt, s32 index, Actor* actor); // func_800CAD2C
+void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2); // func_800CAE10
+void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, BgMeshHeader* meshHeader); // func_800CAE34
+void BgCheck3_ResetFlags(DynaPolyActor* actor); // func_800CAE7C
+void func_800CAE88(DynaPolyActor* actor); // func_800CAE88
+void func_800CAE9C(DynaPolyActor* actor); // func_800CAE9C
+void func_800CAEB0(CollisionContext* bgCtxt, s32 index); // func_800CAEB0
+void func_800CAEE0(DynaPolyActor* actor); // func_800CAEE0
+void func_800CAEF4(CollisionContext* bgCtxt, s32 index); // func_800CAEF4
+void func_800CAF24(DynaPolyActor* actor); // func_800CAF24
+void func_800CAF38(DynaPolyActor* actor); // func_800CAF38
+s32 func_800CAF4C(DynaPolyActor* actor); // func_800CAF4C
+s32 func_800CAF70(DynaPolyActor* actor); // func_800CAF70
+s32 func_800CAF94(DynaPolyActor* actor); // func_800CAF94
+s32 func_800CAFB8(DynaPolyActor* actor); // func_800CAFB8
+s32 func_800CAFDC(DynaPolyActor* actor); // func_800CAFDC
 void func_800CB000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800CB000
 f32 Camera_fabsf(f32 f); // func_800CB210
-f32 Camera_LengthVec3f(Vector3f* v); // func_800CB240
+f32 Camera_LengthVec3f(Vec3f* v); // func_800CB240
 void func_800CB270(void); // func_800CB270
 f32 Camera_Lerpf(f32 b, f32 a, f32 t, f32 minDist); // func_800CB330
 s16 Camera_Lerps(s16 b, s16 a, f32 t, s16 minDist); // func_800CB398
 void func_800CB42C(void); // func_800CB42C
-void Camera_LerpVec3f(Vector3f* b, Vector3f* a, f32 tXZ, f32 tY, f32 minDist); // func_800CB4C0
+void Camera_LerpVec3f(Vec3f* b, Vec3f* a, f32 tXZ, f32 tY, f32 minDist); // func_800CB4C0
 void func_800CB544(Camera* camera); // func_800CB544
 void func_800CB584(void); // func_800CB584
 void func_800CB5DC(void); // func_800CB5DC
@@ -1266,9 +1266,9 @@ s32 Camera_ModeSPEC6(Camera* camera); // func_800DD0FC
 s32 Camera_ModeSPEC7(Camera* camera); // func_800DD11C
 s32 Camera_ModeSPEC8(Camera* camera); // func_800DD13C
 s32 Camera_ModeSPEC9(Camera* camera); // func_800DD5B8
-Camera* Camera_Alloc(View* view, BgCheckContext* bg, GlobalContext* ctxt); // func_800DDD58
+Camera* Camera_Alloc(View* view, CollisionContext* bg, GlobalContext* ctxt); // func_800DDD58
 void Camera_Free(Camera* camera); // func_800DDDA8
-void Camera_Init(Camera* camera, View* view, BgCheckContext* bg, GlobalContext* ctxt); // func_800DDDD0
+void Camera_Init(Camera* camera, View* view, CollisionContext* bg, GlobalContext* ctxt); // func_800DDDD0
 void func_800DDFE0(void); // func_800DDFE0
 void func_800DE0EC(Camera* camera, Actor* actor); // func_800DE0EC
 s32 func_800DE308(Camera* camera, UNK_TYPE2 uParm2); // func_800DE308
@@ -1277,7 +1277,7 @@ void func_800DE62C(void); // func_800DE62C
 void func_800DE840(void); // func_800DE840
 void func_800DE890(void); // func_800DE890
 UNK_TYPE4 func_800DE954(Camera* camera); // func_800DE954
-Vector3s* Camera_Update(Vector3s* param_1, Camera* camera); // func_800DE9B0
+Vec3s* Camera_Update(Vec3s* param_1, Camera* camera); // func_800DE9B0
 void func_800DF498(void); // func_800DF498
 unsigned int Camera_SetMode(Camera* camera, s16 mode, char param_3); // func_800DF4D0
 void func_800DF840(void); // func_800DF840
@@ -1411,18 +1411,18 @@ UNK_TYPE4 func_800E23B0(void); // func_800E23B0
 void func_800E23C4(void); // func_800E23C4
 void func_800E2408(void); // func_800E2408
 s32 func_800E2434(GlobalContext* ctxt, int param_2); // func_800E2434
-void Collision_Init(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E2450
-void Collision_Fini(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E2470
-void Collision_Reset(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E2480
-void Collision_EnableEditMode(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E2528
-void Collision_EnableAppendMode(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E2540
-s32 Collision_AddAT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape); // func_800E2558
-s32 Collision_AddIndexAT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape, s32 index); // func_800E2634
-s32 Collision_AddAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape); // func_800E2740
-s32 collision_AddIndexAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape, s32 index); // func_800E281C
-s32 Collision_AddOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape); // func_800E2928
-s32 Collision_AddIndexOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape, s32 index); // func_800E2A04
-s32 Collision_AddGroup4(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* shape); // func_800E2B10
+void Collision_Init(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2450
+void Collision_Fini(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2470
+void Collision_Reset(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2480
+void Collision_EnableEditMode(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2528
+void Collision_EnableAppendMode(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2540
+s32 Collision_AddAT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape); // func_800E2558
+s32 Collision_AddIndexAT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape, s32 index); // func_800E2634
+s32 Collision_AddAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape); // func_800E2740
+s32 collision_AddIndexAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape, s32 index); // func_800E281C
+s32 Collision_AddOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape); // func_800E2928
+s32 Collision_AddIndexOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape, s32 index); // func_800E2A04
+s32 Collision_AddGroup4(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape); // func_800E2B10
 s32 Collision_CantBeToucherAC(ColBodyInfo* iParm1); // func_800E2B98
 s32 Collision_CantBeBumperAC(ColBodyInfo* iParm1); // func_800E2BBC
 s32 Collision_ToucherIsExcluded(ColBodyInfo* toucher, ColBodyInfo* bumper); // func_800E2BE0
@@ -1434,58 +1434,58 @@ void func_800E2F30(void); // func_800E2F30
 void func_800E2F54(void); // func_800E2F54
 void func_800E2F78(void); // func_800E2F78
 void func_800E30C8(void); // func_800E30C8
-void func_800E3168(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody, Vector3f* param_6); // func_800E3168
+void func_800E3168(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody, Vec3f* param_6); // func_800E3168
 void func_800E3304(ColCommon* toucher, ColCommon* bumper); // func_800E3304
-s32 Collision_HandleCollisionATWithAC(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vector3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vector3f* bumperLoc, Vector3f* param_8); // func_800E3324
-void Collision_TriCalcAvgPoint(ColTri* tri, Vector3f* avg); // func_800E35C8
-void collision_quad_cal_avg_point(ColQuadParams* quad, Vector3f* avg); // func_800E362C
-void Collision_SphereGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E36AC
-void Collision_SphereGroupWithCylinderAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E38F8
-void Collision_SphereGroupWithTriGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColTriGroup* bumpee); // func_800E3B18
-void Collision_SphereGroupWithQuadAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColQuad* bumpee); // func_800E3CC0
-void Collision_SphereGroupWithSphereAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E3E6C
-void Collision_CylinderWithSphereGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E4058
-void Collision_CylinderWithCylinderAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E4298
-void Collision_CylinderWithTriGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColTriGroup* bumpee); // func_800E44C0
-void Collision_CylinderWithQuadAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColQuad* bumpee); // func_800E4628
-void Collision_CylinderWithSphereAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E47B8
-void Collision_TriGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColTriGroup* toucher, ColSphereGroup* bumpee); // func_800E494C
-void Collision_TriGroupWithCylinderAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColTriGroup* toucher, ColCylinder* bumpee); // func_800E4B08
-void Collision_TriGroupWithTriGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColTriGroup* toucher, ColTriGroup* bumpee); // func_800E4C70
-void Collision_TriGroupWithQuad(GlobalContext* ctxt, CollisionContext* colCtxt, ColTriGroup* toucher, ColQuad* bumpee); // func_800E4E24
-void Collision_TriGroupWithSphereAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColTriGroup* toucher, ColSphere* bumpee); // func_800E4FE4
-void Collision_QuadWithSphereGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColQuad* toucher, ColSphereGroup* bumpee); // func_800E5154
-void Collision_QuadWithCylinderAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColQuad* toucher, ColCylinder* bumpee); // func_800E531C
-void Collision_QuadWithTriGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColQuad* toucher, ColTriGroup* bumpee); // func_800E54DC
-void Collision_QuadWithQuadAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColQuad* toucher, ColQuad* bumpee); // func_800E56B8
-void Collision_QuadWithSphereAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColQuad* toucher, ColSphere* bumpee); // func_800E5874
-void Collision_SphereWithSphereGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E59A4
-void Collision_SphereWithCylinderAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E5B94
-void Collision_SphereWithTriGroupAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColTriGroup* bumpee); // func_800E5D10
-void Collision_SphereWithQuadAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColQuad* bumpee); // func_800E5E54
-void Collision_SphereWithSphereAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E5F6C
-void func_800E60C0(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* spheres); // func_800E60C0
+s32 Collision_HandleCollisionATWithAC(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vec3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vec3f* bumperLoc, Vec3f* param_8); // func_800E3324
+void Collision_TriCalcAvgPoint(ColTri* tri, Vec3f* avg); // func_800E35C8
+void collision_quad_cal_avg_point(ColQuadParams* quad, Vec3f* avg); // func_800E362C
+void Collision_SphereGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E36AC
+void Collision_SphereGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E38F8
+void Collision_SphereGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColTriGroup* bumpee); // func_800E3B18
+void Collision_SphereGroupWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColQuad* bumpee); // func_800E3CC0
+void Collision_SphereGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E3E6C
+void Collision_CylinderWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E4058
+void Collision_CylinderWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E4298
+void Collision_CylinderWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColTriGroup* bumpee); // func_800E44C0
+void Collision_CylinderWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColQuad* bumpee); // func_800E4628
+void Collision_CylinderWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E47B8
+void Collision_TriGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColSphereGroup* bumpee); // func_800E494C
+void Collision_TriGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColCylinder* bumpee); // func_800E4B08
+void Collision_TriGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColTriGroup* bumpee); // func_800E4C70
+void Collision_TriGroupWithQuad(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColQuad* bumpee); // func_800E4E24
+void Collision_TriGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColSphere* bumpee); // func_800E4FE4
+void Collision_QuadWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColSphereGroup* bumpee); // func_800E5154
+void Collision_QuadWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColCylinder* bumpee); // func_800E531C
+void Collision_QuadWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColTriGroup* bumpee); // func_800E54DC
+void Collision_QuadWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColQuad* bumpee); // func_800E56B8
+void Collision_QuadWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColSphere* bumpee); // func_800E5874
+void Collision_SphereWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E59A4
+void Collision_SphereWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E5B94
+void Collision_SphereWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColTriGroup* bumpee); // func_800E5D10
+void Collision_SphereWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColQuad* bumpee); // func_800E5E54
+void Collision_SphereWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E5F6C
+void func_800E60C0(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* spheres); // func_800E60C0
 void func_800E61A0(void); // func_800E61A0
 void func_800E6238(void); // func_800E6238
 void func_800E6320(void); // func_800E6320
-void func_800E63B8(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* sphere); // func_800E63B8
-void func_800E6450(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E6450
-void Collision_CollideWithAC(GlobalContext* ctxt, CollisionContext* colCtxt, ColCommon* colObj); // func_800E6524
-void Collision_DoATWithAC(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E6654
+void func_800E63B8(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* sphere); // func_800E63B8
+void func_800E6450(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E6450
+void Collision_CollideWithAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* colObj); // func_800E6524
+void Collision_DoATWithAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E6654
 void func_800E6724(void); // func_800E6724
-void Collision_HandleCollisionOTWithOT(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vector3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vector3f* bumperLoc, f32 param_8); // func_800E6760
-void Collision_SphereGroupWithSphereGroupOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E6A9C
-void Collision_SphereGroupWithCylinderOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E6C84
-void Collision_SphereGroupWithSphereOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E6DF4
-void Collision_CylinderWithSphereGroupOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E6F64
-void Collision_CylinderWithCylinderOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E6F90
-void Collision_CylinderWithSphereOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E7060
-void Collision_SphereWithSphereGroupOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E7130
-void Collision_SphereWithCylinderOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E715C
-void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E7188
+void Collision_HandleCollisionOTWithOT(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vec3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vec3f* bumperLoc, f32 param_8); // func_800E6760
+void Collision_SphereGroupWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E6A9C
+void Collision_SphereGroupWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E6C84
+void Collision_SphereGroupWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E6DF4
+void Collision_CylinderWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E6F64
+void Collision_CylinderWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E6F90
+void Collision_CylinderWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E7060
+void Collision_SphereWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E7130
+void Collision_SphereWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E715C
+void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E7188
 UNK_TYPE4 func_800E7264(ColCommon* iParm1); // func_800E7264
 UNK_TYPE4 func_800E7288(ColCommon* piParm1, ColCommon* piParm2); // func_800E7288
-void Collision_DoOTWithOT(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E7308
+void Collision_DoOTWithOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E7308
 void func_800E7494(ActorA0* param_1); // func_800E7494
 void func_800E74DC(ActorA0* param_1); // func_800E74DC
 void func_800E7508(s32 param_1, UNK_PTR param_2); // func_800E7508
@@ -1498,7 +1498,7 @@ void func_800E7894(void); // func_800E7894
 void func_800E78B4(void); // func_800E78B4
 void func_800E7948(void); // func_800E7948
 void func_800E7968(void); // func_800E7968
-void func_800E7988(GlobalContext* ctxt, CollisionContext* colCtxt); // func_800E7988
+void func_800E7988(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E7988
 void func_800E7A48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800E7A48
 void func_800E7B54(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800E7B54
 void func_800E7BCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800E7BCC
@@ -1506,9 +1506,9 @@ void func_800E7C64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800E7DA8(void); // func_800E7DA8
 void func_800E7DCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800E7DCC
 void Collision_CylinderMoveToActor(Actor* actor, ColCylinder* cylinder); // func_800E7DF8
-void Collision_CylinderSetLoc(ColCylinder* cylinder, Vector3s* loc); // func_800E7E3C
-void Collision_QuadSetCoords(ColQuad* iParm1, Vector3f* pzParm2, Vector3f* pzParm3, Vector3f* pzParm4, Vector3f* param_5); // func_800E7E5C
-void Collision_TriGroupSetCoordsAtIndex(ColTriGroup* tris, s32 index, Vector3f* pzParm3, Vector3f* pzParm4, Vector3f* param_5); // func_800E7ECC
+void Collision_CylinderSetLoc(ColCylinder* cylinder, Vec3s* loc); // func_800E7E3C
+void Collision_QuadSetCoords(ColQuad* iParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5); // func_800E7E5C
+void Collision_TriGroupSetCoordsAtIndex(ColTriGroup* tris, s32 index, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5); // func_800E7ECC
 void Collision_InitTriParamsAtIndex(GlobalContext* ctxt, ColTriGroup* tris, s32 index, ColTriParamsInit* init); // func_800E7F8C
 void func_800E7FDC(void); // func_800E7FDC
 void func_800E8160(void); // func_800E8160
@@ -1526,10 +1526,10 @@ s32 nop_800E8ED0(UNK_TYPE4 param_1); // func_800E8ED0
 void nop_800E8EE0(UNK_TYPE4 param_1); // func_800E8EE0
 s32 nop_800E8EEC(UNK_TYPE4 param_1); // func_800E8EEC
 void nop_800E8EFC(UNK_TYPE4 param_1); // func_800E8EFC
-s32 func_800E8F08(Vector3s* param_1, Vector3s* param_2); // func_800E8F08
-s32 func_800E8FA4(Actor* actor, Vector3f* param_2, Vector3s* param_3, Vector3s* param_4); // func_800E8FA4
-s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s* param_4, f32 param_5); // func_800E9138
-s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vector3s* param_3, Vector3s* param_4, Vector3f param_5); // func_800E9250
+s32 func_800E8F08(Vec3s* param_1, Vec3s* param_2); // func_800E8F08
+s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4); // func_800E8FA4
+s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5); // func_800E9138
+s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5); // func_800E9250
 void func_800E9360(void); // func_800E9360
 void static_context_init(void); // func_800E93E0
 void func_800E9470(void); // func_800E9470
@@ -1619,12 +1619,12 @@ void func_800EFAB8(GlobalContext* ctxt, s16 index); // func_800EFAB8
 void func_800EFBFC(GlobalContext* ctxt, s16 index); // func_800EFBFC
 void func_800EFD44(GlobalContext* ctxt, s16 index); // func_800EFD44
 void EffFootmark_Init(GlobalContext* ctxt); // func_800EFE60
-void EffFootmark_Add(GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, u8 id, Vector3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay); // func_800EFF04
+void EffFootmark_Add(GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay); // func_800EFF04
 void EffFootmark_Update(GlobalContext* ctxt); // func_800F00BC
 void EffFootmark_Draw(GlobalContext* ctxt); // func_800F01C8
 void func_800F0390(GlobalContext* ctxt); // func_800F0390
 void func_800F03C0(GlobalContext* ctxt); // func_800F03C0
-void func_800F048C(GlobalContext* ctxt, Vector3f* param_2, u8 param_3, u16 param_4, u8 param_5); // func_800F048C
+void func_800F048C(GlobalContext* ctxt, Vec3f* param_2, u8 param_3, u16 param_4, u8 param_5); // func_800F048C
 void func_800F0568(void); // func_800F0568
 void func_800F0590(void); // func_800F0590
 void func_800F05C0(void); // func_800F05C0
@@ -1684,11 +1684,11 @@ void func_800F29A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800F2CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800F2CD8
 void FireObj_InitWithParams(GlobalContext* ctxt, FireObj* fire, FireObjInitParams* init); // func_800F2D30
 void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState); // func_800F2E48
-void FireObj_SetPosition(FireObj* fire, Vector3f* pos); // func_800F2EAC
+void FireObj_SetPosition(FireObj* fire, Vec3f* pos); // func_800F2EAC
 void FireObj_StepSize(FireObj* fire); // func_800F2ECC
 void FireObj_UpdateStateTransitions(GlobalContext* ctxt, FireObj* fire); // func_800F2FFC
 void FireObj_Draw(GlobalContext* ctxt, FireObj* fire); // func_800F31EC
-void FireObj_InitLight(GlobalContext* ctxt, FireObjLight* light, u8* param_3, Vector3f* pos); // func_800F33F4
+void FireObj_InitLight(GlobalContext* ctxt, FireObjLight* light, u8* param_3, Vec3f* pos); // func_800F33F4
 void FireObj_FiniLight(GlobalContext* ctxt, FireObjLight* light); // func_800F34C4
 void FireObj_UpdateLight(GlobalContext* ctxt, FireObjLight* light, FireObj* fire); // func_800F34EC
 void FireObj_Init(GlobalContext* ctxt, FireObj* fire, FireObjInitParams* init, Actor* actor); // func_800F36CC
@@ -1762,7 +1762,7 @@ void func_800FC3DC(void); // func_800FC3DC
 void func_800FC444(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6); // func_800FC444
 void func_800FC64C(void); // func_800FC64C
 void func_800FD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800FD2B4
-void func_800FD538(RGB* param_1, RGB* param_2, f32 param_3, Vector3s* param_4); // func_800FD538
+void func_800FD538(RGB* param_1, RGB* param_2, f32 param_3, Vec3s* param_4); // func_800FD538
 void func_800FD59C(GlobalContext* ctxt, RGB* pzParm2, f32 fParm3); // func_800FD59C
 void func_800FD5E0(GlobalContext* ctxt, RGB* pzParm2, f32 fParm3); // func_800FD5E0
 void func_800FD654(GlobalContext* ctxt, RGB* pzParm2, f32 fParm3); // func_800FD654
@@ -1800,9 +1800,9 @@ void func_800FEAB0(void); // func_800FEAB0
 void func_800FEAC0(void); // func_800FEAC0
 void func_800FEAF4(void); // func_800FEAF4
 void* Lib_bcopy(void* dst, void* src, size_t n); // func_800FEC90
-s32* Lib_memset(s32* buffer, s32 value, u32 size); // func_800FECC0
-f32 Lib_cos(s16 angle); // func_800FED44
-f32 Lib_sin(s16 angle); // func_800FED84
+s32* Lib_MemSet(s32* buffer, s32 value, u32 size); // func_800FECC0
+f32 Math_Coss(s16 angle); // func_800FED44
+f32 Math_Sins(s16 angle); // func_800FED84
 s32 Lib_StepTowardsGet_i(s32 start, s32 value, s32 step); // func_800FEDC4
 void Lib_StepTowards_i(s32* start, s32 value, s32 step); // func_800FEE08
 s32 Lib_StepTowardsCheck_i(s32* start, s32 value, s32 step); // func_800FEE34
@@ -1816,53 +1816,53 @@ void func_800FF1FC(void); // func_800FF1FC
 void func_800FF2A8(void); // func_800FF2A8
 void func_800FF2F8(void); // func_800FF2F8
 void func_800FF3A0(void); // func_800FF3A0
-s16 Lib_rand_s(s16 base, s16 range); // func_800FF450
-s16 Lib_randStride_s(s16 base, s16 stride, s16 range); // func_800FF4A4
-void Lib_CopyVec3f(Vector3f* dest, Vector3f* src); // func_800FF50C
-void Lib_CopyVec3s(Vector3s* dest, Vector3s* src); // func_800FF52C
-void Lib_ToVec3f(Vector3f* dest, Vector3s* src); // func_800FF54C
-void Lib_ToVec3s(Vector3s* dest, Vector3f* src); // func_800FF584
-void Lib_AddVec3f(Vector3f* l, Vector3f* r, Vector3f* dest); // func_800FF5BC
-void Lib_SubVec3f(Vector3f* l, Vector3f* r, Vector3f* dest); // func_800FF5F4
-void Lib_SubVec3sToVec3f(Vector3f* dest, Vector3s* l, Vector3s* r); // func_800FF62C
-void Lib_ScaleInPlaceVec3f(Vector3f* vec, f32 scale); // func_800FF688
-void Lib_ScaleVec3f(Vector3f* vec, f32 scale, Vector3f* dest); // func_800FF6C4
-void Lib_LerpVec3f(Vector3f* a, Vector3f* b, f32 t, Vector3f* dest); // func_800FF6F8
-void Lib_AddScaledVec3f(Vector3f* a, Vector3f* b, f32 scale, Vector3f* dest); // func_800FF750
-void Lib_ModifyRandScaled(Vector3f* orig, f32 scale, Vector3f* dest); // func_800FF79C
-void Lib_ScaledNormalizedDifferenceVec3f(Vector3f* a, Vector3f* b, f32 scale, Vector3f* dest); // func_800FF810
-f32 Lib_DistanceVec3f(Vector3f* a, Vector3f* b); // func_800FF884
-f32 Lib_DistanceAndDifferenceVec3f(Vector3f* a, Vector3f* b, Vector3f* difference); // func_800FF8D4
-f32 Lib_DistanceXZVec3f(Vector3f* a, Vector3f* b); // func_800FF92C
-f32 Lib_DistanceAndDifferenceXZVec3f(Vector3f* a, Vector3f* b, f32* xDiff, f32* zDiff); // func_800FF960
-f32 Lib_PushAwayXZVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach); // func_800FF9A4
-f32 Lib_DistanceYVec3f(Vector3f* a, Vector3f* b); // func_800FFA4C
-s16 Lib_YawVec3f(Vector3f* from, Vector3f* to); // func_800FFA60
-s16 Lib_PitchVec3f(Vector3f* from, Vector3f* to); // func_800FFA94
-void Lib_ApplyActorInitVars(Actor* actor, ActorInitVar* init); // func_800FFADC
-void Lib_ApplyActorInitVarByte1(u8* actor, ActorInitVar* init); // func_800FFB54
-void Lib_ApplyActorInitVarByte2(u8* actor, ActorInitVar* init); // func_800FFB70
-void Lib_ApplyActorInitVarShort1(u8* actor, ActorInitVar* init); // func_800FFB8C
-void Lib_ApplyActorInitVarShort2(u8* actor, ActorInitVar* init); // func_800FFBA8
-void Lib_ApplyActorInitVarWord1(u8* actor, ActorInitVar* init); // func_800FFBC4
-void Lib_ApplyActorInitVarWord2(u8* actor, ActorInitVar* init); // func_800FFBE0
-void Lib_ApplyActorInitVarFloat(u8* actor, ActorInitVar* init); // func_800FFBFC
-void Lib_ApplyActorInitVarFloat1000th(u8* actor, ActorInitVar* init); // func_800FFC20
-void Lib_ApplyActorInitVarVector3f(u8* actor, ActorInitVar* init); // func_800FFC50
-void Lib_ApplyActorInitVarVector3f1000th(u8* actor, ActorInitVar* init); // func_800FFC7C
-void Lib_ApplyActorInitVarVector3s(u8* actor, ActorInitVar* init); // func_800FFCB4
-f32 func_800FFCD8(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4); // func_800FFCD8
-void Lib_ScaleMax_f(f32* start, f32 target, f32 scale, f32 maxStep); // func_800FFDF8
-void Lib_Scale_f(f32* start, f32 scale, f32 maxStep); // func_800FFE68
-s32 Lib_ScaleMaxMin_s(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep); // func_800FFEBC
-void Lib_ScaleMax_s(s16* start, s16 target, s16 scale, s16 maxStep); // func_800FFFD8
-void Lib_CopyColor(ColorRGBA8* dst, ColorRGBA8* src); // func_8010007C
+s16 Math_Rand_S16Offset(s16 base, s16 range); // func_800FF450
+s16 Math_Rand_S16OffsetStride(s16 base, s16 stride, s16 range); // func_800FF4A4
+void Math_Vec3f_Copy(Vec3f* dest, Vec3f* src); // func_800FF50C
+void Math_Vec3s_Copy(Vec3s* dest, Vec3s* src); // func_800FF52C
+void Math_Vec3s_ToVec3f(Vec3f* dest, Vec3s* src); // func_800FF54C
+void Math_Vec3f_ToVec3s(Vec3s* dest, Vec3f* src); // func_800FF584
+void Math_Vec3f_Sum(Vec3f* l, Vec3f* r, Vec3f* dest); // func_800FF5BC
+void Math_Vec3f_Diff(Vec3f* l, Vec3f* r, Vec3f* dest); // func_800FF5F4
+void Math_Vec3s_DiffToVec3f(Vec3f* dest, Vec3s* l, Vec3s* r); // func_800FF62C
+void Math_Vec3f_Scale(Vec3f* vec, f32 scale); // func_800FF688
+void Math_Vec3f_ScaleAndStore(Vec3f* vec, f32 scale, Vec3f* dest); // func_800FF6C4
+void Math_Vec3f_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dest); // func_800FF6F8
+void Math_Vec3f_SumScaled(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest); // func_800FF750
+void Math_Vec3f_ModifyRand(Vec3f* orig, f32 scale, Vec3f* dest); // func_800FF79C
+void Math_Vec3f_DistXYZAndStoreNormalizedDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest); // func_800FF810
+f32 Math_Vec3f_DistXYZ(Vec3f* a, Vec3f* b); // func_800FF884
+f32 Math_Vec3f_DistXYZAndStoreDiff(Vec3f* a, Vec3f* b, Vec3f* difference); // func_800FF8D4
+f32 Math_Vec3f_DistXZ(Vec3f* a, Vec3f* b); // func_800FF92C
+f32 Math_Vec3f_DistXZAndStore(Vec3f* a, Vec3f* b, f32* xDiff, f32* zDiff); // func_800FF960
+f32 Math_Vec3f_PushAwayXZ(Vec3f* start, Vec3f* pusher, f32 distanceToApproach); // func_800FF9A4
+f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b); // func_800FFA4C
+s16 Math_Vec3f_Yaw(Vec3f* from, Vec3f* to); // func_800FFA60
+s16 Math_Vec3f_Pitch(Vec3f* from, Vec3f* to); // func_800FFA94
+void Actor_ProcessInitChain(Actor* actor, ActorInitVar* init); // func_800FFADC
+void IChain_Apply_u8(u8* actor, ActorInitVar* init); // func_800FFB54
+void IChain_Apply_s8(u8* actor, ActorInitVar* init); // func_800FFB70
+void IChain_Apply_u16(u8* actor, ActorInitVar* init); // func_800FFB8C
+void IChain_Apply_s16(u8* actor, ActorInitVar* init); // func_800FFBA8
+void IChain_Apply_u32(u8* actor, ActorInitVar* init); // func_800FFBC4
+void IChain_Apply_s32(u8* actor, ActorInitVar* init); // func_800FFBE0
+void IChain_Apply_f32(u8* actor, ActorInitVar* init); // func_800FFBFC
+void IChain_Apply_f32div1000(u8* actor, ActorInitVar* init); // func_800FFC20
+void IChain_Apply_Vec3f(u8* actor, ActorInitVar* init); // func_800FFC50
+void IChain_Apply_Vec3fdiv1000(u8* actor, ActorInitVar* init); // func_800FFC7C
+void IChain_Apply_Vec3s(u8* actor, ActorInitVar* init); // func_800FFCB4
+f32 Math_SmoothScaleMaxMinF(f32* a0, f32 a1, f32 a2, f32 a3, f32 a4); // func_800FFCD8
+void Math_SmoothScaleMaxF(f32* start, f32 target, f32 scale, f32 maxStep); // func_800FFDF8
+void Math_SmoothDownscaleMaxF(f32* start, f32 scale, f32 maxStep); // func_800FFE68
+s32 Math_SmoothScaleMaxMinS(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep); // func_800FFEBC
+void Math_SmoothScaleMaxS(s16* start, s16 target, s16 scale, s16 maxStep); // func_800FFFD8
+void Color_RGBA8_Copy(ColorRGBA8* dst, ColorRGBA8* src); // func_8010007C
 void func_801000A4(u16 param_1); // func_801000A4
 void func_801000CC(u16 param_1); // func_801000CC
 void func_801000F4(UNK_TYPE4 param_1, u16 param_2); // func_801000F4
-void Lib_TranslateAndRotateYVec3f(Vector3f* translation, s16 rotation, Vector3f* src, Vector3f* dst); // func_8010011C
+void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, Vec3f* dst); // func_8010011C
 void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst); // func_801001B8
-f32 Lib_PushAwayVec3f(Vector3f* start, Vector3f* pusher, f32 distanceToApproach); // func_80100448
+f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach); // func_80100448
 void Lib_Nop801004FC(void); // func_801004FC
 u32 Lib_PtrSegToVirt(void* ptr); // func_80100504
 u32 Lib_PtrSegToVirtNull(void* ptr); // func_8010053C
@@ -1885,10 +1885,10 @@ void Lights_InitDirectional(LightInfoDirectional* info, s8 dirX, s8 dirY, s8 dir
 void Lights_MapperInit(LightMapper* mapper, u8 red, u8 green, u8 blue); // func_80101B8C
 void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt); // func_80101BC8
 Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper); // func_80101D0C
-void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vector3f* pos); // func_80101D3C
+void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vec3f* pos); // func_80101D3C
 void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt); // func_801020A0
 void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt); // func_80102284
-void Lights_MapLights(LightMapper* mapper, z_Light* lights, Vector3f* refPos, GlobalContext* ctxt); // func_801022F0
+void Lights_MapLights(LightMapper* mapper, z_Light* lights, Vec3f* refPos, GlobalContext* ctxt); // func_801022F0
 z_Light* Lights_FindFreeSlot(void); // func_801023D8
 void Lights_Free(z_Light* light); // func_80102464
 void Lights_Init(GlobalContext* ctxt, LightingContext* lCtxt); // func_801024AC
@@ -2077,9 +2077,9 @@ void Nmi_Init(void); // func_8010C0C0
 void Nmi_SetPrenmiStart(void); // func_8010C164
 s32 Nmi_GetPrenmiHasStarted(void); // func_8010C19C
 void func_8010C1B0(void); // func_8010C1B0
-f32 CamMath_Distance(Vector3f* a, Vector3f* b); // func_8010C230
-f32 CamMath_DistanceAndDiff(Vector3f* a, Vector3f* b, Vector3f* diff); // func_8010C274
-f32 CamMath_DistanceXZ(Vector3f* a, Vector3f* b); // func_8010C2D0
+f32 CamMath_Distance(Vec3f* a, Vec3f* b); // func_8010C230
+f32 CamMath_DistanceAndDiff(Vec3f* a, Vec3f* b, Vec3f* diff); // func_8010C274
+f32 CamMath_DistanceXZ(Vec3f* a, Vec3f* b); // func_8010C2D0
 f32 func_8010C304(f32 a, f32 b); // func_8010C304
 f32 func_8010C36C(f32 a, f32 b); // func_8010C36C
 void func_8010C3D4(void); // func_8010C3D4
@@ -2284,12 +2284,12 @@ void func_801284A0(void); // func_801284A0
 void func_80128640(void); // func_80128640
 void func_80128B74(void); // func_80128B74
 void func_80128BD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80128BD0
-void Prenmi_Stop(PrenmiContext* ctxt); // func_80129EF0
-void Prenmi_Update(PrenmiContext* ctxt); // func_80129F04
-void Prenmi_Draw(PrenmiContext* ctxt); // func_80129F4C
-void Prenmi_Main(PrenmiContext* ctxt); // func_80129FF8
-void Prenmi_Fini(PrenmiContext* ctxt); // func_8012A02C
-void Prenmi_Init(PrenmiContext* ctxt); // func_8012A038
+void Prenmi_Stop(PreNMIContext* ctxt); // func_80129EF0
+void Prenmi_Update(PreNMIContext* ctxt); // func_80129F04
+void Prenmi_Draw(PreNMIContext* ctxt); // func_80129F4C
+void Prenmi_Main(PreNMIContext* ctxt); // func_80129FF8
+void Prenmi_Fini(PreNMIContext* ctxt); // func_8012A02C
+void Prenmi_Init(PreNMIContext* ctxt); // func_8012A038
 void func_8012A080(void); // func_8012A080
 void func_8012A0AC(void); // func_8012A0AC
 void func_8012A2B8(void); // func_8012A2B8
@@ -2610,8 +2610,8 @@ void func_8013859C(void); // func_8013859C
 void func_80138700(void); // func_80138700
 void func_801387D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5); // func_801387D4
 void func_801388E4(void); // func_801388E4
-void Matrix_MultiplyByVectorXYZW(z_Matrix* matrix, Vector3f* vector, Vector3f* resultXYZ, f32* resultW); // func_80138BA0
-void Matrix_MultiplyByVectorXYZ(z_Matrix* matrix, Vector3f* vector, Vector3f* result); // func_80138C88
+void Matrix_MultiplyByVectorXYZW(z_Matrix* matrix, Vec3f* vector, Vec3f* resultXYZ, f32* resultW); // func_80138BA0
+void Matrix_MultiplyByVectorXYZ(z_Matrix* matrix, Vec3f* vector, Vec3f* result); // func_80138C88
 void Matrix_Multiply(z_Matrix* l, z_Matrix* r, z_Matrix* dst); // func_80138D38
 void Matrix_GetIdentity(z_Matrix** puParm1); // func_80139094
 void Matrix_MakeIdentity(z_Matrix* matrix); // func_801390A8
@@ -2624,8 +2624,8 @@ void Matrix_MakeTranslation(z_Matrix* matrix, f32 x, f32 y, f32 z); // func_8013
 void Matrix_MakeTranslationRotationZYXScale(z_Matrix* matrix, f32 xScale, f32 yScale, f32 zScale, s16 xRotation, s16 yRotation, s16 zRotation, f32 xTranslation, f32 yTranslation, f32 zTranslation); // func_80139810
 void Matrix_MakeTranslationRotationYXZScale(z_Matrix* matrix, f32 xScale, f32 yScale, f32 zScale, s16 xRotation, s16 yRotation, s16 zRotation, f32 xTranslation, f32 yTranslation, f32 zTranslation); // func_80139894
 void Matrix_MakeTranslationRotationZYX(z_Matrix* matrix, s16 xRotation, s16 yRotation, s16 zRotation, f32 xTranslation, f32 yTranslation, f32 zTranslation); // func_80139918
-void Matrix_ToVec3s(Vector3f* vec3f, Vector3s* vec3s); // func_80139978
-void Matrix_ToVec3f(Vector3s* vec3s, Vector3f* vec3f); // func_801399BC
+void Matrix_ToVec3s(Vec3f* vec3f, Vec3s* vec3s); // func_80139978
+void Matrix_ToVec3f(Vec3s* vec3s, Vec3f* vec3f); // func_801399BC
 void Matrix_ToRSPMatrix(z_Matrix* src, RSPMatrix* dst); // func_80139A00
 RSPMatrix* Matrix_AppendToPloyOpaDisp(GraphicsContext* gCtxt, z_Matrix* matrix); // func_80139C18
 void Matrix_MakeRotationAroundUnitVector(z_Matrix* matrix, s16 rotation, f32 x, f32 y, f32 z); // func_80139C60
@@ -2704,8 +2704,8 @@ void func_8013EE38(void); // func_8013EE38
 void func_8013EE48(void); // func_8013EE48
 void View_MapViewportToGfxVp(Vp* gfxVp, Viewport* viewport); // func_8013EE60
 void View_InitView(View* view, GraphicsContext* gCtxt); // func_8013EEF4
-void View_SetViewOrientation(View* view, Vector3f* eye, Vector3f* focalPoint, Vector3f* upDir); // func_8013EF9C
-void func_8013F050(View* view, Vector3f* param_2, Vector3f* param_3, Vector3f* param_4); // func_8013F050
+void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* focalPoint, Vec3f* upDir); // func_8013EF9C
+void func_8013F050(View* view, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4); // func_8013F050
 void func_8013F0A0(View* view, UNK_TYPE4 param_2); // func_8013F0A0
 void func_8013F0C0(View* view, UNK_PTR param_2); // func_8013F0C0
 void func_8013F0D0(View* view, f32 uParm2, f32 uParm3, f32 uParm4); // func_8013F0D0
@@ -2765,7 +2765,7 @@ void func_80142440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80143148(void); // func_80143148
 void func_801431E8(void); // func_801431E8
 void func_80143324(void); // func_80143324
-void func_801434E4(ContextCommon* ctxt, int iParm2, short sParm3); // func_801434E4
+void func_801434E4(GameState* ctxt, int iParm2, short sParm3); // func_801434E4
 void func_801435A0(void); // func_801435A0
 void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7); // func_80143624
 void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80143668
@@ -2784,13 +2784,13 @@ void func_80144A94(void); // func_80144A94
 void func_80144E78(void); // func_80144E78
 void func_8014546C(void); // func_8014546C
 void func_80145698(void); // func_80145698
-void func_801457CC(ContextCommon* ctxt, SramContext* param_2); // func_801457CC
+void func_801457CC(GameState* ctxt, SramContext* param_2); // func_801457CC
 void func_80146580(int param_1, SramContext* param_2, int param_3); // func_80146580
 void func_80146628(void); // func_80146628
 void func_80146AA0(void); // func_80146AA0
 void func_80146DF8(void); // func_80146DF8
 void func_80146E40(void); // func_80146E40
-void Sram_Alloc(ContextCommon* ctxt, SramContext* iParm2); // func_80146E70
+void Sram_Alloc(GameState* ctxt, SramContext* iParm2); // func_80146E70
 void func_80146EBC(SramContext* param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3); // func_80146EBC
 void func_80146EE8(void); // func_80146EE8
 void func_80146F5C(void); // func_80146F5C
@@ -3097,44 +3097,44 @@ void Audio_ThreadEntry(AudioThreadStruct* audio); // func_80172ED0
 void Audio_WaitForInit(AudioThreadStruct* param_1); // func_80173048
 void Audio_Start(AudioThreadStruct* audio, s32* audioThreadStackEnd, OSPri pri, OSId id, SchedThreadStruct* sched, IrqMgr* irq); // func_80173074
 void func_80173130(void); // func_80173130
-void Initial_Init2(ContextCommon* ctxt); // func_801732DC
+void Initial_Init2(GameState* ctxt); // func_801732DC
 void Initial_Fini(void); // func_8017332C
-void Initial_Init(ContextCommon* ctxt); // func_80173338
+void Initial_Init(GameState* ctxt); // func_80173338
 void Game_UpdateFramerateVariables(s32 divisor); // func_80173360
-void Game_SetFramerateDivisor(ContextCommon* iParm1, u32 divisor); // func_801733A8
+void Game_SetFramerateDivisor(GameState* iParm1, u32 divisor); // func_801733A8
 void func_801733DC(void); // func_801733DC
-void Game_Nop80173534(ContextCommon* ctxt); // func_80173534
-void func_80173540(ContextCommon* ctxt, GraphicsContext* gCtxt); // func_80173540
+void Game_Nop80173534(GameState* ctxt); // func_80173534
+void func_80173540(GameState* ctxt, GraphicsContext* gCtxt); // func_80173540
 void Game_ResetSegments(GraphicsContext* gCtxt); // func_80173644
 void func_801736DC(GraphicsContext* gCtxt); // func_801736DC
-void Game_UpdateInput(ContextCommon* ctxt); // func_80173754
-void Game_Update(ContextCommon* ctxt); // func_8017377C
-void Game_IncrementFrameCount(ContextCommon* ctxt); // func_801737E4
-void Game_InitHeap(ContextCommon* ctxt, u32 size); // func_80173810
-void Game_ResizeHeap(ContextCommon* ctxt, u32 size); // func_80173880
-void Game_StateInit(ContextCommon* ctxt, func_ptr gameStateInit, GraphicsContext* gCtxt); // func_80173950
-void Game_StateFini(ContextCommon* ctxt); // func_80173A50
-UNK_TYPE4 Game_GetNextStateInit(ContextCommon* ctxt); // func_80173B00
-u32 Game_GetNextStateSize(ContextCommon* ctxt); // func_80173B0C
-u32 Game_GetShouldContinue(ContextCommon* ctxt); // func_80173B18
-void Game_GetHeapFreeSize(ContextCommon* ctxt); // func_80173B24
-int func_80173B48(ContextCommon* ctxt); // func_80173B48
-GameAllocNode* func_80173BF0(GameAllocNode* heap); // func_80173BF0
-void* Gamealloc_Alloc(GameAllocNode* heap, u32 size); // func_80173C10
-void Gamealloc_Free(GameAllocNode* heap, void* ptr); // func_80173C7C
-void Gamealloc_FreeAll(GameAllocNode* heap); // func_80173CC8
-void Gamealloc_Init(GameAllocNode* iParm1); // func_80173D18
+void Game_UpdateInput(GameState* ctxt); // func_80173754
+void Game_Update(GameState* ctxt); // func_8017377C
+void Game_IncrementFrameCount(GameState* ctxt); // func_801737E4
+void Game_InitHeap(GameState* ctxt, u32 size); // func_80173810
+void Game_ResizeHeap(GameState* ctxt, u32 size); // func_80173880
+void Game_StateInit(GameState* ctxt, func_ptr gameStateInit, GraphicsContext* gCtxt); // func_80173950
+void Game_StateFini(GameState* ctxt); // func_80173A50
+UNK_TYPE4 Game_GetNextStateInit(GameState* ctxt); // func_80173B00
+u32 Game_GetNextStateSize(GameState* ctxt); // func_80173B0C
+u32 Game_GetShouldContinue(GameState* ctxt); // func_80173B18
+void Game_GetHeapFreeSize(GameState* ctxt); // func_80173B24
+int func_80173B48(GameState* ctxt); // func_80173B48
+GameAlloc* func_80173BF0(GameAlloc* heap); // func_80173BF0
+void* Gamealloc_Alloc(GameAlloc* heap, u32 size); // func_80173C10
+void Gamealloc_Free(GameAlloc* heap, void* ptr); // func_80173C7C
+void Gamealloc_FreeAll(GameAlloc* heap); // func_80173CC8
+void Gamealloc_Init(GameAlloc* iParm1); // func_80173D18
 void Graph_FaultDrawFunc(void); // func_80173D30
-void Graph_DlAlloc(DisplayList* dl, void* memoryBlock, u32 size); // func_80173DAC
+void Graph_DlAlloc(DispBuf* dl, void* memoryBlock, u32 size); // func_80173DAC
 void Graph_RenderSetup(GraphicsContext* gCtxt); // func_80173DCC
-GameStateMetaInfo* Graph_GetNextGameStateMetaInfo(ContextCommon* ctxt); // func_80173F98
+GameStateOverlay* Graph_GetNextGameStateMetaInfo(GameState* ctxt); // func_80173F98
 void* Graph_FaultAddrConvFunc(void* addr); // func_80174060
 void Graph_ContextInit(GraphicsContext* gCtxt); // func_801740D0
 void Graph_Fini(void); // func_80174174
-void Graph_Render(GraphicsContext* gCtxt, ContextCommon* ctxt); // func_801741A8
-void Graph_FrameSetup(ContextCommon* ctxt); // func_801744AC
-void Graph_RenderFrame(GraphicsContext* gCtxt, ContextCommon* ctxt); // func_801744F8
-void Graph_DoFrame(GraphicsContext* gCtxt, ContextCommon* ctxt); // func_80174868
+void Graph_Render(GraphicsContext* gCtxt, GameState* ctxt); // func_801741A8
+void Graph_FrameSetup(GameState* ctxt); // func_801744AC
+void Graph_RenderFrame(GraphicsContext* gCtxt, GameState* ctxt); // func_801744F8
+void Graph_DoFrame(GraphicsContext* gCtxt, GameState* ctxt); // func_80174868
 void Graph_ThreadEntry(void* arg); // func_801748A0
 void func_80174A40(void); // func_80174A40
 void func_80174A4C(void); // func_80174A4C
@@ -3236,48 +3236,48 @@ f32 sin_rad(f32 rad); // func_801794EC
 f32 cos_rad(f32 rad); // func_80179540
 f32 randZeroOneScaled(f32 scale); // func_80179594
 f32 randPlusMinusPoint5Scaled(f32 scale); // func_801795C0
-f32 Math3D_Normalize(Vector3f* vec); // func_801795F0
+f32 Math3D_Normalize(Vec3f* vec); // func_801795F0
 UNK_TYPE4 func_80179678(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_80179678
-UNK_TYPE4 func_80179798(Vector3f* param_1, Vector3f* param_2, Vector3f* param_3, Vector3f* param_4, Vector3f* param_5, Vector3f* param_6); // func_80179798
+UNK_TYPE4 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6); // func_80179798
 void func_80179A44(void); // func_80179A44
 void func_80179B34(float fParm1, float fParm2, float fParm5, float fParm6, float param_5, float param_6, float param_7, float* param_8, float* param_9); // func_80179B34
-UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vector3f* param_9); // func_80179B94
+UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vec3f* param_9); // func_80179B94
 void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_80179D74
-void Math3D_ScaleAndAdd(Vector3f* a, Vector3f* b, f32 scale, Vector3f* dst); // func_80179DF0
-void Math3D_Lerp(Vector3f* a, Vector3f* b, f32 t, Vector3f* dst); // func_80179E3C
-s32 Math3D_Parallel(Vector3f* a, Vector3f* b); // func_80179E88
-s32 Math3D_AngleBetweenVectors(Vector3f* a, Vector3f* b, f32* angle); // func_80179EAC
-void func_80179F64(Vector3f* param_1, Vector3f* param_2, Vector3f* param_3); // func_80179F64
+void Math3D_ScaleAndAdd(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dst); // func_80179DF0
+void Math3D_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dst); // func_80179E3C
+s32 Math3D_Parallel(Vec3f* a, Vec3f* b); // func_80179E88
+s32 Math3D_AngleBetweenVectors(Vec3f* a, Vec3f* b, f32* angle); // func_80179EAC
+void func_80179F64(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3); // func_80179F64
 s32 Math3D_XZBoundCheck(f32 xMin, f32 xMax, f32 zMin, f32 zMax, f32 x, f32 z); // func_8017A038
 void func_8017A09C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8017A09C
 void func_8017A1D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8017A1D0
 void func_8017A304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8017A304
-UNK_TYPE4 func_8017A438(Vector3f* pfParm1, Vector3f* pfParm2, Vector3f* pfParm3, Vector3f* pfParm4, f32 param_5); // func_8017A438
+UNK_TYPE4 func_8017A438(Vec3f* pfParm1, Vec3f* pfParm2, Vec3f* pfParm3, Vec3f* pfParm4, f32 param_5); // func_8017A438
 f32 Math3D_XZLengthSquared(f32 x, f32 z); // func_8017A5F8
 f32 Math3D_XZLength(f32 x, f32 z); // func_8017A610
 f32 Math3D_XZDistanceSquared(f32 x1, f32 x2, f32 z1, f32 z2); // func_8017A634
 f32 Math3D_XZDistance(f32 x1, f32 x2, f32 z1, f32 z2); // func_8017A678
-f32 Math3D_LengthSquared(Vector3f* vec); // func_8017A6A8
-f32 Math3D_Length(Vector3f* vec); // func_8017A6D4
-f32 Math3D_DistanceSquared(Vector3f* a, Vector3f* b); // func_8017A6F8
-f32 Math3D_Distance(Vector3f* a, Vector3f* b); // func_8017A720
-f32 Math3D_DistanceS(Vector3s* s, Vector3f* f); // func_8017A740
+f32 Math3D_LengthSquared(Vec3f* vec); // func_8017A6A8
+f32 Math3D_Length(Vec3f* vec); // func_8017A6D4
+f32 Math3D_DistanceSquared(Vec3f* a, Vec3f* b); // func_8017A6F8
+f32 Math3D_Distance(Vec3f* a, Vec3f* b); // func_8017A720
+f32 Math3D_DistanceS(Vec3s* s, Vec3f* f); // func_8017A740
 f32 func_8017A7B8(f32* param_1, f32* param_2, f32 param_3, f32 param_4); // func_8017A7B8
 f32 func_8017A7F8(f32* param_1, f32* param_2, f32 param_3, f32 param_4); // func_8017A7F8
 f32 func_8017A838(f32* param_1, f32* param_2, f32 param_3, f32 param_4); // func_8017A838
-void Math3D_CrossProduct(Vector3f* a, Vector3f* b, Vector3f* res); // func_8017A878
-void Math3D_NormalVector(Vector3f* a, Vector3f* b, Vector3f* c, Vector3f* res); // func_8017A8EC
-unsigned int func_8017A954(Vector3f* param_1, Vector3f* param_2, Vector3f* param_3); // func_8017A954
-unsigned int func_8017AA0C(Vector3f* param_1, Vector3f* param_2, Vector3f* param_3); // func_8017AA0C
-unsigned int func_8017ABBC(Vector3f* param_1, Vector3f* param_2, Vector3f* param_3); // func_8017ABBC
+void Math3D_CrossProduct(Vec3f* a, Vec3f* b, Vec3f* res); // func_8017A878
+void Math3D_NormalVector(Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* res); // func_8017A8EC
+unsigned int func_8017A954(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3); // func_8017A954
+unsigned int func_8017AA0C(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3); // func_8017AA0C
+unsigned int func_8017ABBC(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3); // func_8017ABBC
 void func_8017AD38(void); // func_8017AD38
 void func_8017B68C(void); // func_8017B68C
 void func_8017B7F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017B7F8
-void Math3D_UnitNormalVector(Vector3f* a, Vector3f* b, Vector3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7); // func_8017B884
-f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vector3f* position); // func_8017B998
+void Math3D_UnitNormalVector(Vec3f* a, Vec3f* b, Vec3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7); // func_8017B884
+f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position); // func_8017B998
 void func_8017B9D8(void); // func_8017B9D8
-f32 Math3D_NormalizedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vector3f* position); // func_8017BA14
-f32 Math3D_NormalizedSignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vector3f* position); // func_8017BA4C
+f32 Math3D_NormalizedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position); // func_8017BA14
+f32 Math3D_NormalizedSignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position); // func_8017BA4C
 void func_8017BAD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_8017BAD0
 void func_8017BD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8017BD98
 void func_8017BDE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017BDE0
@@ -3303,19 +3303,19 @@ void func_8017D1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_8017D220(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017D220
 void func_8017D2FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_8017D2FC
 void func_8017D404(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_8017D404
-void Math3D_TriSetCoords(ColTriParams* tri, Vector3f* pointA, Vector3f* pointB, Vector3f* pointC); // func_8017D568
-u32 Math3D_IsPointInSphere(ColSphereCollisionInfo* sphere, Vector3f* point); // func_8017D618
+void Math3D_TriSetCoords(ColTriParams* tri, Vec3f* pointA, Vec3f* pointB, Vec3f* pointC); // func_8017D568
+u32 Math3D_IsPointInSphere(ColSphereCollisionInfo* sphere, Vec3f* point); // func_8017D618
 void func_8017D668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_8017D668
 void func_8017D7C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8017D7C0
 void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017D814
 void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017D91C
 void func_8017DA24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017DA24
 s32 Math3D_ColSphereLineSeg(ColSphereCollisionInfo* sphere, LineSegment* line); // func_8017DB2C
-void func_8017DD34(ColSphereCollisionInfo* sphere, ColTriParams* tri, Vector3f* pfParm3); // func_8017DD34
-s32 Math3D_ColSphereTri(ColSphereCollisionInfo* sphere, ColTriParams* tri, Vector3f* uParm3); // func_8017DE74
+void func_8017DD34(ColSphereCollisionInfo* sphere, ColTriParams* tri, Vec3f* pfParm3); // func_8017DD34
+s32 Math3D_ColSphereTri(ColSphereCollisionInfo* sphere, ColTriParams* tri, Vec3f* uParm3); // func_8017DE74
 void func_8017E294(void); // func_8017E294
 void func_8017E350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8017E350
-s32 Math3D_ColCylinderTri(ColCylinderParams* cylinder, ColTriParams* tri, Vector3f* pzParm3); // func_8017ED20
+s32 Math3D_ColCylinderTri(ColCylinderParams* cylinder, ColTriParams* tri, Vec3f* pzParm3); // func_8017ED20
 void func_8017F1A0(void); // func_8017F1A0
 s32 Math3D_ColSphereSphere(ColSphereCollisionInfo* sphere1, ColSphereCollisionInfo* sphere2); // func_8017F1C0
 s32 Math3D_ColSphereSphereIntersect(ColSphereCollisionInfo* sphere1, ColSphereCollisionInfo* sphere2, f32* intersectAmount); // func_8017F1E0
@@ -3324,7 +3324,7 @@ s32 Math3D_ColSphereCylinderDistance(ColSphereCollisionInfo* sphere, ColCylinder
 s32 Math3D_ColSphereCylinderDistanceAndAmount(ColSphereCollisionInfo* sphere, ColCylinderParams* cylinder, f32* dist, f32* intersectAmount); // func_8017F2EC
 s32 Math3D_ColCylinderCylinderAmount(ColCylinderParams* cylinder1, ColCylinderParams* cylinder2, f32* intersectAmount); // func_8017F45C
 s32 Math3D_ColCylinderCylinderAmountAndDistance(ColCylinderParams* cylinder1, ColCylinderParams* cylinder2, f32* intersectAmount, f32* dist); // func_8017F47C
-s32 Math3d_ColTriTri(ColTriParams* tri1, ColTriParams* tri2, Vector3f* uParm3); // func_8017F64C
+s32 Math3d_ColTriTri(ColTriParams* tri1, ColTriParams* tri2, Vec3f* uParm3); // func_8017F64C
 void func_8017F9C0(void); // func_8017F9C0
 void func_8017FA34(void); // func_8017FA34
 void func_8017FAA8(void); // func_8017FAA8
@@ -3335,7 +3335,7 @@ s16 atans(f32 opposite, f32 adjacent); // func_8017FEE4
 f32 atan(f32 opposite, f32 adjacent); // func_801800CC
 s16 atans_flip(f32 adjacent, f32 opposite); // func_80180100
 void atan_flip(f32 adjacent, f32 opposite); // func_8018012C
-void SysMatrix_StateAlloc(ContextCommon* ctxt); // func_80180160
+void SysMatrix_StateAlloc(GameState* ctxt); // func_80180160
 void SysMatrix_StatePush(void); // func_8018019C
 void SysMatrix_StatePop(void); // func_801801CC
 void SysMatrix_CopyCurrentState(z_Matrix* matrix); // func_801801E8
@@ -3353,27 +3353,27 @@ void SysMatrix_InsertYRotation_f(f32 rotation, s32 appendToState); // func_80180
 void SysMatrix_InsertZRotation_s(s16 rotation, s32 appendToState); // func_80180CF8
 void SysMatrix_InsertZRotation_f(f32 rotation, s32 appendToState); // func_80180E90
 void SysMatrix_InsertRotation(s16 xRotation, s16 yRotation, s16 zRotation, s32 appendToState); // func_8018103C
-void SysMatrix_RotateAndTranslateState(Vector3f* translation, Vector3s* rotation); // func_801812FC
-void SysMatrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vector3s* rotation); // func_80181650
+void SysMatrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rotation); // func_801812FC
+void SysMatrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation); // func_80181650
 RSPMatrix* SysMatrix_ToRSPMatrix(z_Matrix* src, RSPMatrix* dst); // func_801817FC
 RSPMatrix* SysMatrix_GetStateAsRSPMatrix(RSPMatrix* matrix); // func_80181A18
 RSPMatrix* SysMatrix_AppendStateToPolyOpaDisp(GraphicsContext* gCtxt); // func_80181A40
 void SysMatrix_AppendToPolyOpaDisp(z_Matrix* ctxt, GraphicsContext* gCtxt); // func_80181A6C
-void SysMatrix_MultiplyVector3fByState(Vector3f* src, Vector3f* dst); // func_80181A98
-void SysMatrix_GetStateTranslation(Vector3f* dst); // func_80181B50
-void SysMatrix_GetStateTranslationAndScaledX(f32 scale, Vector3f* dst); // func_80181B78
-void SysMatrix_GetStateTranslationAndScaledY(f32 scale, Vector3f* dst); // func_80181BC4
-void SysMatrix_GetStateTranslationAndScaledZ(f32 scale, Vector3f* dst); // func_80181C10
-void SysMatrix_MultiplyVector3fXZByCurrentState(Vector3f* src, Vector3f* dst); // func_80181C5C
+void SysMatrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dst); // func_80181A98
+void SysMatrix_GetStateTranslation(Vec3f* dst); // func_80181B50
+void SysMatrix_GetStateTranslationAndScaledX(f32 scale, Vec3f* dst); // func_80181B78
+void SysMatrix_GetStateTranslationAndScaledY(f32 scale, Vec3f* dst); // func_80181BC4
+void SysMatrix_GetStateTranslationAndScaledZ(f32 scale, Vec3f* dst); // func_80181C10
+void SysMatrix_MultiplyVector3fXZByCurrentState(Vec3f* src, Vec3f* dst); // func_80181C5C
 void SysMatrix_Copy(z_Matrix* dst, z_Matrix* src); // func_80181CDC
 void SysMatrix_FromRSPMatrix(RSPMatrix* src, z_Matrix* dst); // func_80181D64
-void SysMatrix_MultiplyVector3fByMatrix(Vector3f* src, Vector3f* dst, z_Matrix* matrix); // func_80181FB8
+void SysMatrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dst, z_Matrix* matrix); // func_80181FB8
 void SysMatrix_TransposeXYZ(z_Matrix* matrix); // func_80182068
 void SysMatrix_NormalizeXYZ(z_Matrix* matrix); // func_801820A0
-void func_8018219C(z_Matrix* pfParm1, Vector3s* psParm2, s32 iParm3); // func_8018219C
+void func_8018219C(z_Matrix* pfParm1, Vec3s* psParm2, s32 iParm3); // func_8018219C
 void func_801822C4(void); // func_801822C4
-void SysMatrix_InsertRotationAroundUnitVector_f(f32 rotation, Vector3f* vector, s32 appendToState); // func_801823EC
-void SysMatrix_InsertRotationAroundUnitVector_s(s16 rotation, Vector3f* vector, s32 appendToState); // func_8018284C
+void SysMatrix_InsertRotationAroundUnitVector_f(f32 rotation, Vec3f* vector, s32 appendToState); // func_801823EC
+void SysMatrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32 appendToState); // func_8018284C
 void func_80182C90(void); // func_80182C90
 void func_80182CA0(void); // func_80182CA0
 void func_80182CBC(void); // func_80182CBC
@@ -3817,7 +3817,7 @@ void func_8019F830(void); // func_8019F830
 void func_8019F88C(void); // func_8019F88C
 void func_8019F900(void); // func_8019F900
 void func_8019FA18(void); // func_8019FA18
-void func_8019FAD8(Vector3f* param_1, u16 param_2, f32 param_3); // func_8019FAD8
+void func_8019FAD8(Vec3f* param_1, u16 param_2, f32 param_3); // func_8019FAD8
 void func_8019FB0C(void); // func_8019FB0C
 void func_8019FC20(void); // func_8019FC20
 void func_8019FCB8(void); // func_8019FCB8
@@ -3959,7 +3959,7 @@ void func_801A6D0C(void); // func_801A6D0C
 void func_801A7084(void); // func_801A7084
 void func_801A7168(void); // func_801A7168
 void func_801A7284(void); // func_801A7284
-void func_801A72CC(Vector3f* uParm1); // func_801A72CC
+void func_801A72CC(Vec3f* uParm1); // func_801A72CC
 void func_801A7328(void); // func_801A7328
 void func_801A7484(void); // func_801A7484
 void func_801A75E8(void); // func_801A75E8
@@ -4003,7 +4003,7 @@ void Title_UpdateCounters(TitleContext* ctxt); // func_80800000
 void Title_RenderView(TitleContext* ctxt, f32 eyeX, f32 eyeY, f32 eyeZ); // func_8080009C
 void Title_Render(TitleContext* ctxt); // func_80800134
 void Title_Update(TitleContext* ctxt); // func_8080066C
-void Title_Fini(TitleContext* ctxt); // func_8080071C
+void Title_Destroy(TitleContext* ctxt); // func_8080071C
 void Title_Init(TitleContext* ctxt); // func_8080074C
 void func_80800910(void); // func_80800910
 void func_80800930(void); // func_80800930
@@ -4021,7 +4021,7 @@ void func_80801B4C(void); // func_80801B4C
 void Opening_SetupForTitleCutscene(OpeningContext* ctxt); // func_80803DF0
 void func_80803EA0(OpeningContext* ctxt); // func_80803EA0
 void Opening_Update(OpeningContext* ctxt); // func_80803EC0
-void Opening_Fini(OpeningContext* ctxt); // func_80803F0C
+void Opening_Destroy(OpeningContext* ctxt); // func_80803F0C
 void Opening_Init(OpeningContext* ctxt); // func_80803F30
 void func_80804010(void); // func_80804010
 void func_808041A0(void); // func_808041A0
@@ -4105,12 +4105,12 @@ void func_80812ED0(void); // func_80812ED0
 void FileChoose_UpdateAndDrawSkybox(FileChooseContext* ctxt); // func_8081313C
 void FileChoose_Update(FileChooseContext* ctxt); // func_80813268
 void func_80813908(FileChooseContext* ctxt); // func_80813908
-void FileChoose_Fini(FileChooseContext* ctxt); // func_80813C74
+void FileChoose_Destroy(FileChooseContext* ctxt); // func_80813C74
 void FileChoose_Init(FileChooseContext* ctxt); // func_80813C98
 void Daytelop_UpdateState(DaytelopContext* ctxt); // func_80814EB0
 void Daytelop_Render(DaytelopContext* ctxt); // func_80814FE8
 void Daytelop_Update(DaytelopContext* ctxt); // func_808156B4
-void Daytelop_Fini(DaytelopContext* ctxt); // func_8081574C
+void Daytelop_Destroy(DaytelopContext* ctxt); // func_8081574C
 void Daytelop_nop80815770(DaytelopContext* ctxt); // func_80815770
 void Daytelop_LoadGraphics(DaytelopContext* ctxt); // func_8081577C
 void Daytelop_Init(DaytelopContext* ctxt); // func_80815820
@@ -4810,14 +4810,14 @@ void func_80862CBC(void); // func_80862CBC
 void func_80862EDC(void); // func_80862EDC
 void func_80863048(void); // func_80863048
 void EnTest_Init(ActorEnTest* this, GlobalContext* ctxt); // func_80863188
-void EnTest_Fini(ActorEnTest* this, GlobalContext* ctxt); // func_80863310
-void EnTest_Main(ActorEnTest* this, GlobalContext* ctxt); // func_8086333C
+void EnTest_Destroy(ActorEnTest* this, GlobalContext* ctxt); // func_80863310
+void EnTest_Update(ActorEnTest* this, GlobalContext* ctxt); // func_8086333C
 void func_808634B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808634B8
 void EnTest_Draw(ActorEnTest* this, GlobalContext* ctxt); // func_808636A8
 void func_80863870(void); // func_80863870
 void func_8086387C(void); // func_8086387C
-void func_80863920(void); // func_80863920
-void func_80863940(void); // func_80863940
+void EnGirlA_Init(void); // func_80863920
+void EnGirlA_Destroy(void); // func_80863940
 void func_80863950(void); // func_80863950
 void func_808639B0(void); // func_808639B0
 void func_80863A10(void); // func_80863A10
@@ -4855,22 +4855,22 @@ void func_80864744(void); // func_80864744
 void func_80864760(void); // func_80864760
 void func_80864774(void); // func_80864774
 void func_808648F8(void); // func_808648F8
-void func_808649A4(void); // func_808649A4
+void EnGirlA_Update(void); // func_808649A4
 void func_808649C8(void); // func_808649C8
-void func_80865370(void); // func_80865370
-void func_80865380(void); // func_80865380
+void EnPart_Init(void); // func_80865370
+void EnPart_Destroy(void); // func_80865380
 void func_80865390(void); // func_80865390
 void func_808654C4(void); // func_808654C4
-void func_808657A0(void); // func_808657A0
-void func_808657E8(void); // func_808657E8
-void func_80865990(void); // func_80865990
-void func_80865BBC(void); // func_80865BBC
+void EnPart_Update(void); // func_808657A0
+void EnPart_Draw(void); // func_808657E8
+void EnLight_Init(void); // func_80865990
+void EnLight_Destroy(void); // func_80865BBC
 void func_80865BF8(void); // func_80865BF8
-void func_80865C74(void); // func_80865C74
+void EnLight_Update(void); // func_80865C74
 void func_80865F38(void); // func_80865F38
-void func_80866398(void); // func_80866398
-void func_80866800(void); // func_80866800
-void func_808669E0(void); // func_808669E0
+void EnLight_Draw(void); // func_80866398
+void EnDoor_Init(void); // func_80866800
+void EnDoor_Destroy(void); // func_808669E0
 void func_80866A5C(void); // func_80866A5C
 void func_80866B20(void); // func_80866B20
 void func_80866F94(void); // func_80866F94
@@ -4878,9 +4878,9 @@ void func_8086704C(void); // func_8086704C
 void func_80867080(void); // func_80867080
 void func_808670F0(void); // func_808670F0
 void func_80867144(void); // func_80867144
-void func_8086732C(void); // func_8086732C
+void EnDoor_Update(void); // func_8086732C
 void func_80867350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80867350
-void func_808674B0(void); // func_808674B0
+void EnDoor_Draw(void); // func_808674B0
 void func_80867BD0(void); // func_80867BD0
 void func_80867BDC(void); // func_80867BDC
 void func_80867C14(void); // func_80867C14
@@ -4888,8 +4888,8 @@ void func_80867C8C(void); // func_80867C8C
 void func_80867FBC(void); // func_80867FBC
 void func_80867FE4(void); // func_80867FE4
 void func_8086800C(void); // func_8086800C
-void func_808680AC(void); // func_808680AC
-void func_808685FC(void); // func_808685FC
+void EnBox_Init(void); // func_808680AC
+void EnBox_Destroy(void); // func_808685FC
 void func_80868630(void); // func_80868630
 void func_80868734(void); // func_80868734
 void func_808687E8(void); // func_808687E8
@@ -4901,14 +4901,14 @@ void func_80868B74(void); // func_80868B74
 void func_80868CC8(void); // func_80868CC8
 void func_80869020(void); // func_80869020
 void func_808692E0(void); // func_808692E0
-void func_808694A0(void); // func_808694A0
+void EnBox_Update(void); // func_808694A0
 void func_80869600(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80869600
 void func_80869850(void); // func_80869850
 void func_80869874(void); // func_80869874
 void func_808698B4(void); // func_808698B4
-void func_808698F4(void); // func_808698F4
-void func_80869D90(void); // func_80869D90
-void func_80869F90(void); // func_80869F90
+void EnBox_Draw(void); // func_808698F4
+void EnPametfrog_Init(void); // func_80869D90
+void EnPametfrog_Destroy(void); // func_80869F90
 void func_80869FBC(void); // func_80869FBC
 void func_8086A024(void); // func_8086A024
 void func_8086A068(void); // func_8086A068
@@ -4974,11 +4974,11 @@ void func_8086D084(void); // func_8086D084
 void func_8086D140(void); // func_8086D140
 void func_8086D1E8(void); // func_8086D1E8
 void func_8086D230(void); // func_8086D230
-void func_8086D4C0(void); // func_8086D4C0
+void EnPametfrog_Update(void); // func_8086D4C0
 void func_8086D730(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8086D730
-void func_8086D898(void); // func_8086D898
-void func_8086DE20(void); // func_8086DE20
-void func_8086E058(void); // func_8086E058
+void EnPametfrog_Draw(void); // func_8086D898
+void EnOkuta_Init(void); // func_8086DE20
+void EnOkuta_Destroy(void); // func_8086E058
 void func_8086E084(void); // func_8086E084
 void func_8086E0F0(void); // func_8086E0F0
 void func_8086E168(void); // func_8086E168
@@ -5009,24 +5009,24 @@ void func_8086F57C(void); // func_8086F57C
 void func_8086F694(void); // func_8086F694
 void func_8086F8FC(void); // func_8086F8FC
 void func_8086FCA4(void); // func_8086FCA4
-void func_8086FDE0(void); // func_8086FDE0
+void EnOkuta_Update(void); // func_8086FDE0
 void func_808700C0(void); // func_808700C0
 void func_80870254(void); // func_80870254
 void func_808704DC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808704DC
 void func_808705C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808705C8
-void func_808706E0(void); // func_808706E0
+void EnOkuta_Draw(void); // func_808706E0
 void EnBom_Init(ActorEnBom* this, GlobalContext* ctxt); // func_80870DB0
-void EnBom_Fini(ActorEnBom* this, GlobalContext* ctxt); // func_80870FF8
+void EnBom_Destroy(ActorEnBom* this, GlobalContext* ctxt); // func_80870FF8
 void func_80871058(void); // func_80871058
 void func_808714D4(void); // func_808714D4
 void func_808715B8(void); // func_808715B8
-void EnBom_Main(ActorEnBom* this, GlobalContext* ctxt); // func_808719A8
+void EnBom_Update(ActorEnBom* this, GlobalContext* ctxt); // func_808719A8
 void EnBom_Draw(ActorEnBom* this, GlobalContext* ctxt); // func_808722F4
-void func_80872648(GlobalContext* ctxt, Vector3f* pzParm2); // func_80872648
+void func_80872648(GlobalContext* ctxt, Vec3f* pzParm2); // func_80872648
 void func_808726DC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808726DC
 void func_80872BC0(void); // func_80872BC0
-void func_80874810(void); // func_80874810
-void func_80874A28(void); // func_80874A28
+void EnWallmas_Init(void); // func_80874810
+void EnWallmas_Destroy(void); // func_80874A28
 void func_80874A88(void); // func_80874A88
 void func_80874B04(void); // func_80874B04
 void func_80874B88(void); // func_80874B88
@@ -5057,13 +5057,13 @@ void func_8087596C(void); // func_8087596C
 void func_808759B8(void); // func_808759B8
 void func_80875A0C(void); // func_80875A0C
 void func_80875A74(void); // func_80875A74
-void func_80875CF4(void); // func_80875CF4
+void EnWallmas_Update(void); // func_80875CF4
 void func_80875F04(void); // func_80875F04
 void func_808760A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808760A4
 void func_80876118(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80876118
-void func_80876268(void); // func_80876268
-void func_80876670(void); // func_80876670
-void func_808768D0(void); // func_808768D0
+void EnWallmas_Draw(void); // func_80876268
+void EnDodongo_Init(void); // func_80876670
+void EnDodongo_Destroy(void); // func_808768D0
 void func_80876930(void); // func_80876930
 void func_80876B08(void); // func_80876B08
 void func_80876BD0(void); // func_80876BD0
@@ -5091,12 +5091,12 @@ void func_808786C8(void); // func_808786C8
 void func_80878724(void); // func_80878724
 void func_808787B0(void); // func_808787B0
 void func_80878910(void); // func_80878910
-void func_80878C4C(void); // func_80878C4C
+void EnDodongo_Update(void); // func_80878C4C
 void func_80878E44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80878E44
 void func_80878EB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80878EB4
-void func_80879008(void); // func_80879008
+void EnDodongo_Draw(void); // func_80879008
 void EnFirefly_Init(ActorEnFirefly* this, UNK_TYPE4 ctxt); // func_808796F0
-void EnFirefly_Fini(ActorEnFirefly* this, GlobalContext* ctxt); // func_80879898
+void EnFirefly_Destroy(ActorEnFirefly* this, GlobalContext* ctxt); // func_80879898
 void func_808798C4(ActorEnFirefly* this, GlobalContext* ctxt); // func_808798C4
 void func_80879930(ActorEnFirefly* this); // func_80879930
 void func_80879950(void); // func_80879950
@@ -5121,7 +5121,7 @@ void func_8087A920(void); // func_8087A920
 void func_8087A9E0(void); // func_8087A9E0
 void func_8087AA1C(void); // func_8087AA1C
 void func_8087AAF4(ActorEnFirefly* this, GlobalContext* ctxt); // func_8087AAF4
-void EnFirefly_Main(ActorEnFirefly* this, GlobalContext* ctxt); // func_8087AC0C
+void EnFirefly_Update(ActorEnFirefly* this, GlobalContext* ctxt); // func_8087AC0C
 void func_8087AF48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_8087AF48
 void func_8087AF98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8087AF98
 void EnFirefly_Draw(ActorEnFirefly* this, GlobalContext* ctxt); // func_8087B320
@@ -5144,9 +5144,9 @@ void func_8087C9D4(void); // func_8087C9D4
 void func_8087C9EC(void); // func_8087C9EC
 void func_8087C9F8(void); // func_8087C9F8
 void func_8087CA04(void); // func_8087CA04
-void func_8087CA14(void); // func_8087CA14
+void EnHorse_Init(void); // func_8087CA14
 void func_8087D540(void); // func_8087D540
-void func_8087D69C(void); // func_8087D69C
+void EnHorse_Destroy(void); // func_8087D69C
 void func_8087D70C(void); // func_8087D70C
 void func_8087D75C(void); // func_8087D75C
 void func_8087D814(void); // func_8087D814
@@ -5273,7 +5273,7 @@ void func_80886FA8(void); // func_80886FA8
 void func_808870A4(void); // func_808870A4
 void func_808871A0(void); // func_808871A0
 void func_80887270(void); // func_80887270
-void func_808872A4(void); // func_808872A4
+void EnHorse_Update(void); // func_808872A4
 void func_80887D20(void); // func_80887D20
 void func_80887D60(void); // func_80887D60
 void func_80887E64(void); // func_80887E64
@@ -5281,9 +5281,9 @@ void func_80887EBC(void); // func_80887EBC
 void func_80887F58(void); // func_80887F58
 void func_80888C48(void); // func_80888C48
 void func_80888D18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80888D18
-void func_80888D78(void); // func_80888D78
-void func_8088A240(void); // func_8088A240
-void func_8088A464(void); // func_8088A464
+void EnHorse_Draw(void); // func_80888D78
+void EnArrow_Init(void); // func_8088A240
+void EnArrow_Destroy(void); // func_8088A464
 void func_8088A514(void); // func_8088A514
 void func_8088A594(void); // func_8088A594
 void func_8088A7D8(void); // func_8088A7D8
@@ -5292,9 +5292,9 @@ void func_8088AA98(void); // func_8088AA98
 void func_8088ACE0(void); // func_8088ACE0
 void func_8088B630(void); // func_8088B630
 void func_8088B6B0(void); // func_8088B6B0
-void func_8088B720(void); // func_8088B720
+void EnArrow_Update(void); // func_8088B720
 void func_8088B88C(void); // func_8088B88C
-void func_8088BA34(void); // func_8088BA34
+void EnArrow_Draw(void); // func_8088BA34
 void func_8088C510(void); // func_8088C510
 void func_8088C51C(void); // func_8088C51C
 void func_8088C804(void); // func_8088C804
@@ -5304,8 +5304,8 @@ void func_8088C9CC(void); // func_8088C9CC
 void func_8088CBAC(void); // func_8088CBAC
 void func_8088CC48(void); // func_8088CC48
 void func_8088CD3C(void); // func_8088CD3C
-void func_8088CDAC(void); // func_8088CDAC
-void func_8088D39C(void); // func_8088D39C
+void EnElf_Init(void); // func_8088CDAC
+void EnElf_Destroy(void); // func_8088D39C
 void func_8088D3EC(void); // func_8088D3EC
 void func_8088D470(void); // func_8088D470
 void func_8088D504(void); // func_8088D504
@@ -5337,12 +5337,12 @@ void func_8088FD04(void); // func_8088FD04
 void func_8088FDCC(void); // func_8088FDCC
 void func_8088FE64(void); // func_8088FE64
 void func_8089010C(void); // func_8089010C
-void func_80890438(void); // func_80890438
+void EnElf_Update(void); // func_80890438
 void func_80890494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80890494
-void func_808905B8(void); // func_808905B8
+void EnElf_Draw(void); // func_808905B8
 void func_808908D0(void); // func_808908D0
-void func_80891060(void); // func_80891060
-void func_808912E8(void); // func_808912E8
+void EnNiw_Init(void); // func_80891060
+void EnNiw_Destroy(void); // func_808912E8
 void func_80891320(void); // func_80891320
 void func_808916B0(void); // func_808916B0
 void func_808917F8(void); // func_808917F8
@@ -5359,14 +5359,14 @@ void func_80892414(void); // func_80892414
 void func_808924B0(void); // func_808924B0
 void func_808925F8(void); // func_808925F8
 void func_8089262C(void); // func_8089262C
-void func_808927CC(void); // func_808927CC
+void EnNiw_Update(void); // func_808927CC
 void func_80892E70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80892E70
-void func_80892FA0(void); // func_80892FA0
+void EnNiw_Draw(void); // func_80892FA0
 void func_80893008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80893008
 void func_808930FC(void); // func_808930FC
 void func_808932B0(void); // func_808932B0
-void func_808937F0(void); // func_808937F0
-void func_808939EC(void); // func_808939EC
+void EnTite_Init(void); // func_808937F0
+void EnTite_Destroy(void); // func_808939EC
 void func_80893A18(void); // func_80893A18
 void func_80893A34(void); // func_80893A34
 void func_80893A9C(void); // func_80893A9C
@@ -5412,12 +5412,12 @@ void func_80895DE8(void); // func_80895DE8
 void func_80895E28(void); // func_80895E28
 void func_80895FF8(void); // func_80895FF8
 void func_808963B4(void); // func_808963B4
-void func_808964E8(void); // func_808964E8
+void EnTite_Update(void); // func_808964E8
 UNK_TYPE4 func_80896750(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_PTR param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, s32 param_6); // func_80896750
 void func_80896788(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80896788
-void func_8089695C(void); // func_8089695C
-void func_80896F30(void); // func_80896F30
-void func_808970F4(void); // func_808970F4
+void EnTite_Draw(void); // func_8089695C
+void EnPeehat_Init(void); // func_80896F30
+void EnPeehat_Destroy(void); // func_808970F4
 void func_80897170(void); // func_80897170
 void func_808971DC(void); // func_808971DC
 void func_80897258(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80897258
@@ -5445,24 +5445,24 @@ void func_80898594(void); // func_80898594
 void func_80898654(void); // func_80898654
 void func_808986A4(void); // func_808986A4
 void func_8089874C(void); // func_8089874C
-void func_80898A28(void); // func_80898A28
+void EnPeehat_Update(void); // func_80898A28
 void func_80898E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80898E74
 void func_80899024(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80899024
-void func_80899218(void); // func_80899218
+void EnPeehat_Draw(void); // func_80899218
 void func_80899960(void); // func_80899960
 void func_808999B0(void); // func_808999B0
-void func_80899A20(void); // func_80899A20
-void func_80899A78(void); // func_80899A78
+void EnHoll_Init(void); // func_80899A20
+void EnHoll_Destroy(void); // func_80899A78
 void func_80899ACC(void); // func_80899ACC
 void func_80899B88(void); // func_80899B88
 void func_80899F30(void); // func_80899F30
 void func_8089A0C0(void); // func_8089A0C0
 void func_8089A238(void); // func_8089A238
 void func_8089A330(void); // func_8089A330
-void func_8089A3A0(void); // func_8089A3A0
-void func_8089A3FC(void); // func_8089A3FC
-void func_8089A6E0(void); // func_8089A6E0
-void func_8089A8B0(void); // func_8089A8B0
+void EnHoll_Update(void); // func_8089A3A0
+void EnHoll_Draw(void); // func_8089A3FC
+void EnDinofos_Init(void); // func_8089A6E0
+void EnDinofos_Destroy(void); // func_8089A8B0
 void func_8089A900(void); // func_8089A900
 void func_8089A968(void); // func_8089A968
 void func_8089A9B0(void); // func_8089A9B0
@@ -5517,29 +5517,29 @@ void func_8089D2E0(void); // func_8089D2E0
 void func_8089D318(void); // func_8089D318
 void func_8089D42C(void); // func_8089D42C
 void func_8089D60C(void); // func_8089D60C
-void func_8089D960(void); // func_8089D960
+void EnDinofos_Update(void); // func_8089D960
 void func_8089DC4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8089DC4C
 void func_8089DC84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8089DC84
-void func_8089DF54(void); // func_8089DF54
-void func_8089E8E0(void); // func_8089E8E0
-void func_8089E9DC(void); // func_8089E9DC
-void func_8089EA10(void); // func_8089EA10
+void EnDinofos_Draw(void); // func_8089DF54
+void EnHata_Init(void); // func_8089E8E0
+void EnHata_Destroy(void); // func_8089E9DC
+void EnHata_Update(void); // func_8089EA10
 void func_8089EC68(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8089EC68
-void func_8089ECBC(void); // func_8089ECBC
+void EnHata_Draw(void); // func_8089ECBC
 void EnZl1_Init(void); // func_8089ED90
-void EnZl1_Fini(void); // func_8089EDA0
-void EnZl1_Main(void); // func_8089EDB0
+void EnZl1_Destroy(void); // func_8089EDA0
+void EnZl1_Update(void); // func_8089EDB0
 void EnZl1_Draw(void); // func_8089EDC0
 void func_8089EE20(void); // func_8089EE20
-void func_8089EE2C(void); // func_8089EE2C
-void func_8089EFF0(void); // func_8089EFF0
+void EnViewer_Init(void); // func_8089EE2C
+void EnViewer_Destroy(void); // func_8089EFF0
 void func_8089F014(void); // func_8089F014
 void func_8089F0A0(void); // func_8089F0A0
 void func_8089F17C(void); // func_8089F17C
 void func_8089F218(void); // func_8089F218
 void func_8089F2C4(void); // func_8089F2C4
-void func_8089F380(void); // func_8089F380
-void func_8089F3C8(void); // func_8089F3C8
+void EnViewer_Update(void); // func_8089F380
+void EnViewer_Draw(void); // func_8089F3C8
 void func_8089F4E0(void); // func_8089F4E0
 void func_8089F59C(void); // func_8089F59C
 void func_8089F5D0(void); // func_8089F5D0
@@ -5553,19 +5553,19 @@ void func_8089FA54(void); // func_8089FA54
 void func_8089FF30(void); // func_8089FF30
 void func_8089FFCC(void); // func_8089FFCC
 void func_808A005C(void); // func_808A005C
-void func_808A0170(void); // func_808A0170
-void func_808A0270(void); // func_808A0270
+void EnBubble_Init(void); // func_808A0170
+void EnBubble_Destroy(void); // func_808A0270
 void func_808A029C(void); // func_808A029C
 void func_808A0350(void); // func_808A0350
 void func_808A03A0(void); // func_808A03A0
 void func_808A03E8(void); // func_808A03E8
-void func_808A0458(void); // func_808A0458
-void func_808A04D4(void); // func_808A04D4
+void EnBubble_Update(void); // func_808A0458
+void EnBubble_Draw(void); // func_808A04D4
 void func_808A08F0(void); // func_808A08F0
 void func_808A0900(void); // func_808A0900
 void func_808A0974(void); // func_808A0974
-void func_808A0B10(void); // func_808A0B10
-void func_808A0CD0(void); // func_808A0CD0
+void DoorShutter_Init(void); // func_808A0B10
+void DoorShutter_Destroy(void); // func_808A0CD0
 void func_808A0D0C(void); // func_808A0D0C
 void func_808A0D90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808A0D90
 void func_808A0E28(void); // func_808A0E28
@@ -5583,24 +5583,24 @@ void func_808A1884(void); // func_808A1884
 void func_808A1A70(void); // func_808A1A70
 void func_808A1B48(void); // func_808A1B48
 void func_808A1C50(void); // func_808A1C50
-void func_808A1CC4(void); // func_808A1CC4
+void DoorShutter_Update(void); // func_808A1CC4
 void func_808A1D68(void); // func_808A1D68
 void func_808A1E14(void); // func_808A1E14
 void func_808A24D0(void); // func_808A24D0
 void func_808A24DC(void); // func_808A24DC
-void func_808A2700(void); // func_808A2700
-void func_808A2868(void); // func_808A2868
+void EnBoom_Init(void); // func_808A2700
+void EnBoom_Destroy(void); // func_808A2868
 void func_808A2918(void); // func_808A2918
-void func_808A2D94(void); // func_808A2D94
-void func_808A2E6C(void); // func_808A2E6C
-void func_808A31B0(void); // func_808A31B0
-void func_808A323C(void); // func_808A323C
-void func_808A32B0(void); // func_808A32B0
+void EnBoom_Update(void); // func_808A2D94
+void EnBoom_Draw(void); // func_808A2E6C
+void EnTorch2_Init(void); // func_808A31B0
+void EnTorch2_Destroy(void); // func_808A323C
+void EnTorch2_Update(void); // func_808A32B0
 void func_808A3428(void); // func_808A3428
 void func_808A3458(void); // func_808A3458
-void func_808A34B8(void); // func_808A34B8
-void func_808A3670(void); // func_808A3670
-void func_808A38E4(void); // func_808A38E4
+void EnTorch2_Draw(void); // func_808A34B8
+void EnMinifrog_Init(void); // func_808A3670
+void EnMinifrog_Destroy(void); // func_808A38E4
 void func_808A3930(void); // func_808A3930
 void func_808A3980(void); // func_808A3980
 void func_808A39EC(void); // func_808A39EC
@@ -5622,11 +5622,11 @@ void func_808A45A8(void); // func_808A45A8
 void func_808A4634(void); // func_808A4634
 void func_808A46E8(void); // func_808A46E8
 void func_808A4914(void); // func_808A4914
-void func_808A4A30(void); // func_808A4A30
+void EnMinifrog_Update(void); // func_808A4A30
 void func_808A4AC8(s32 param_1); // func_808A4AC8
 void func_808A4AF8(void); // func_808A4AF8
 void func_808A4B3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808A4B3C
-void func_808A4C14(void); // func_808A4C14
+void EnMinifrog_Draw(void); // func_808A4C14
 void func_808A5050(void); // func_808A5050
 void func_808A52A8(void); // func_808A52A8
 void func_808A54B0(void); // func_808A54B0
@@ -5653,12 +5653,12 @@ void func_808A6D70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_808A6D84(void); // func_808A6D84
 void func_808A6E24(void); // func_808A6E24
 void func_808A701C(void); // func_808A701C
-void func_808A7138(void); // func_808A7138
-void func_808A71D0(void); // func_808A71D0
-void func_808A7230(void); // func_808A7230
+void EnSt_Init(void); // func_808A7138
+void EnSt_Destroy(void); // func_808A71D0
+void EnSt_Update(void); // func_808A7230
 void func_808A73E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_808A73E8
 void func_808A7478(void); // func_808A7478
-void func_808A7930(void); // func_808A7930
+void ObjWturn_Init(void); // func_808A7930
 void func_808A7954(void); // func_808A7954
 void func_808A7968(void); // func_808A7968
 void func_808A7A24(void); // func_808A7A24
@@ -5667,17 +5667,17 @@ void func_808A7AAC(void); // func_808A7AAC
 void func_808A7BA0(void); // func_808A7BA0
 void func_808A7C04(void); // func_808A7C04
 void func_808A7C78(void); // func_808A7C78
-void func_808A7D74(void); // func_808A7D74
-void func_808A7E30(void); // func_808A7E30
-void func_808A7EB8(void); // func_808A7EB8
-void func_808A7FD0(void); // func_808A7FD0
+void ObjWturn_Update(void); // func_808A7D74
+void EnRiverSound_Init(void); // func_808A7E30
+void EnRiverSound_Update(void); // func_808A7EB8
+void EnRiverSound_Draw(void); // func_808A7FD0
 void func_808A80A0(void); // func_808A80A0
 void func_808A80AC(void); // func_808A80AC
 void func_808A812C(void); // func_808A812C
 void func_808A8218(void); // func_808A8218
 void func_808A82F4(void); // func_808A82F4
-void func_808A83BC(void); // func_808A83BC
-void func_808A8470(void); // func_808A8470
+void EnOssan_Init(void); // func_808A83BC
+void EnOssan_Destroy(void); // func_808A8470
 void func_808A849C(void); // func_808A849C
 void func_808A8500(void); // func_808A8500
 void func_808A85FC(void); // func_808A85FC
@@ -5729,7 +5729,7 @@ void func_808AAFB0(void); // func_808AAFB0
 void func_808AB0B0(void); // func_808AB0B0
 void func_808AB16C(void); // func_808AB16C
 void func_808AB404(void); // func_808AB404
-void func_808AB458(void); // func_808AB458
+void EnOssan_Update(void); // func_808AB458
 void func_808AB52C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6); // func_808AB52C
 void func_808AB78C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_808AB78C
 void func_808AB928(void); // func_808AB928
@@ -5739,8 +5739,8 @@ void func_808ABD60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_808ABE18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808ABE18
 void func_808ABE58(void); // func_808ABE58
 void func_808ABF30(void); // func_808ABF30
-void func_808AC920(void); // func_808AC920
-void func_808ACB08(void); // func_808ACB08
+void EnFamos_Init(void); // func_808AC920
+void EnFamos_Destroy(void); // func_808ACB08
 void func_808ACB58(void); // func_808ACB58
 void func_808ACD2C(void); // func_808ACD2C
 void func_808ACF1C(void); // func_808ACF1C
@@ -5775,24 +5775,24 @@ void func_808ADE74(void); // func_808ADE74
 void func_808ADFA4(void); // func_808ADFA4
 void func_808ADFF0(void); // func_808ADFF0
 void func_808AE030(void); // func_808AE030
-void func_808AE0EC(void); // func_808AE0EC
+void EnFamos_Update(void); // func_808AE0EC
 void func_808AE304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808AE304
 void func_808AE3A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808AE3A8
 void func_808AE3FC(void); // func_808AE3FC
-void func_808AE530(void); // func_808AE530
+void EnFamos_Draw(void); // func_808AE530
 void func_808AE8C0(void); // func_808AE8C0
-void func_808AE8CC(void); // func_808AE8CC
-void func_808AEA78(void); // func_808AEA78
+void EnBombf_Init(void); // func_808AE8CC
+void EnBombf_Destroy(void); // func_808AEA78
 void func_808AEAB8(void); // func_808AEAB8
 void func_808AEAE0(void); // func_808AEAE0
 void func_808AEE3C(void); // func_808AEE3C
 void func_808AEF68(void); // func_808AEF68
 void func_808AEFD4(void); // func_808AEFD4
-void func_808AF120(void); // func_808AF120
+void EnBombf_Update(void); // func_808AF120
 void func_808AF86C(void); // func_808AF86C
-void func_808AF8F8(void); // func_808AF8F8
-void func_808AFCD0(void); // func_808AFCD0
-void func_808AFDF8(void); // func_808AFDF8
+void EnBombf_Draw(void); // func_808AF8F8
+void EnAm_Init(void); // func_808AFCD0
+void EnAm_Destroy(void); // func_808AFDF8
 void func_808AFE38(void); // func_808AFE38
 void func_808AFF9C(void); // func_808AFF9C
 void func_808B0040(void); // func_808B0040
@@ -5816,11 +5816,11 @@ void func_808B0894(void); // func_808B0894
 void func_808B0AD0(void); // func_808B0AD0
 void func_808B0B4C(void); // func_808B0B4C
 void func_808B0B9C(void); // func_808B0B9C
-void func_808B0CC8(void); // func_808B0CC8
+void EnAm_Update(void); // func_808B0CC8
 void func_808B0EA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808B0EA4
-void func_808B0F98(void); // func_808B0F98
-void func_808B1330(void); // func_808B1330
-void func_808B1504(void); // func_808B1504
+void EnAm_Draw(void); // func_808B0F98
+void EnDekubaba_Init(void); // func_808B1330
+void EnDekubaba_Destroy(void); // func_808B1504
 void func_808B1530(void); // func_808B1530
 void func_808B15B8(void); // func_808B15B8
 void func_808B16BC(void); // func_808B16BC
@@ -5857,19 +5857,19 @@ void func_808B3DA8(void); // func_808B3DA8
 void func_808B3E40(void); // func_808B3E40
 void func_808B3EE8(void); // func_808B3EE8
 void func_808B3F50(void); // func_808B3F50
-void func_808B42FC(void); // func_808B42FC
+void EnDekubaba_Update(void); // func_808B42FC
 void func_808B4548(void); // func_808B4548
 void func_808B465C(void); // func_808B465C
 void func_808B48FC(void); // func_808B48FC
 void func_808B49C8(void); // func_808B49C8
 void func_808B4ABC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808B4ABC
-void func_808B4AF8(void); // func_808B4AF8
-void func_808B5230(void); // func_808B5230
-void func_808B5294(void); // func_808B5294
-void func_808B52C0(void); // func_808B52C0
+void EnDekubaba_Draw(void); // func_808B4AF8
+void EnMFire1_Init(void); // func_808B5230
+void EnMFire1_Destroy(void); // func_808B5294
+void EnMFire1_Update(void); // func_808B52C0
 void func_808B53C0(void); // func_808B53C0
-void func_808B545C(void); // func_808B545C
-void func_808B5820(void); // func_808B5820
+void EnMThunder_Init(void); // func_808B545C
+void EnMThunder_Destroy(void); // func_808B5820
 void func_808B5890(void); // func_808B5890
 void func_808B58CC(void); // func_808B58CC
 void func_808B5984(void); // func_808B5984
@@ -5877,9 +5877,9 @@ void func_808B5EEC(void); // func_808B5EEC
 void func_808B5F68(void); // func_808B5F68
 void func_808B60D4(void); // func_808B60D4
 void func_808B6310(void); // func_808B6310
-void func_808B63E8(void); // func_808B63E8
+void EnMThunder_Update(void); // func_808B63E8
 void func_808B65BC(void); // func_808B65BC
-void func_808B677C(void); // func_808B677C
+void EnMThunder_Draw(void); // func_808B677C
 void func_808B7360(void); // func_808B7360
 void func_808B736C(void); // func_808B736C
 void func_808B7380(void); // func_808B7380
@@ -5890,7 +5890,7 @@ void func_808B7460(void); // func_808B7460
 void func_808B74A8(void); // func_808B74A8
 void func_808B74D8(void); // func_808B74D8
 void func_808B751C(void); // func_808B751C
-void func_808B75B0(void); // func_808B75B0
+void BgBreakwall_Init(void); // func_808B75B0
 void func_808B767C(void); // func_808B767C
 void func_808B76CC(void); // func_808B76CC
 void func_808B77D0(void); // func_808B77D0
@@ -5900,7 +5900,7 @@ void func_808B78A4(void); // func_808B78A4
 void func_808B78DC(void); // func_808B78DC
 void func_808B7914(void); // func_808B7914
 void func_808B7A10(void); // func_808B7A10
-void func_808B7A6C(void); // func_808B7A6C
+void BgBreakwall_Update(void); // func_808B7A6C
 void func_808B7A90(void); // func_808B7A90
 void func_808B7B54(void); // func_808B7B54
 void func_808B7D34(void); // func_808B7D34
@@ -5909,9 +5909,9 @@ void func_808B8490(void); // func_808B8490
 void func_808B849C(void); // func_808B849C
 void func_808B8568(void); // func_808B8568
 void func_808B866C(void); // func_808B866C
-void func_808B86D8(void); // func_808B86D8
+void DoorWarp1_Init(void); // func_808B86D8
 void func_808B8774(void); // func_808B8774
-void func_808B8878(void); // func_808B8878
+void DoorWarp1_Destroy(void); // func_808B8878
 void func_808B8924(void); // func_808B8924
 void func_808B8A7C(void); // func_808B8A7C
 void func_808B8C48(void); // func_808B8C48
@@ -5940,24 +5940,24 @@ void func_808BA10C(void); // func_808BA10C
 void func_808BA550(void); // func_808BA550
 void func_808BAAF4(void); // func_808BAAF4
 void func_808BABF4(void); // func_808BABF4
-void func_808BAC04(void); // func_808BAC04
+void DoorWarp1_Update(void); // func_808BAC04
 void func_808BACCC(void); // func_808BACCC
 void func_808BAE9C(void); // func_808BAE9C
 void func_808BB4C4(void); // func_808BB4C4
 void func_808BB4F4(void); // func_808BB4F4
-void func_808BB84C(void); // func_808BB84C
+void DoorWarp1_Draw(void); // func_808BB84C
 void func_808BB8D4(void); // func_808BB8D4
-void func_808BC010(void); // func_808BC010
-void func_808BC270(void); // func_808BC270
-void func_808BC2C4(void); // func_808BC2C4
-void func_808BC9D4(void); // func_808BC9D4
-void func_808BCDF0(void); // func_808BCDF0
-void func_808BCEA8(void); // func_808BCEA8
-void func_808BCEB8(void); // func_808BCEB8
+void ObjSyokudai_Init(void); // func_808BC010
+void ObjSyokudai_Destroy(void); // func_808BC270
+void ObjSyokudai_Update(void); // func_808BC2C4
+void ObjSyokudai_Draw(void); // func_808BC9D4
+void ItemBHeart_Init(void); // func_808BCDF0
+void ItemBHeart_Destroy(void); // func_808BCEA8
+void ItemBHeart_Update(void); // func_808BCEB8
 void func_808BCF54(void); // func_808BCF54
-void func_808BCFC4(void); // func_808BCFC4
-void func_808BD1E0(void); // func_808BD1E0
-void func_808BD31C(void); // func_808BD31C
+void ItemBHeart_Draw(void); // func_808BCFC4
+void EnDekunuts_Init(void); // func_808BD1E0
+void EnDekunuts_Destroy(void); // func_808BD31C
 void func_808BD348(void); // func_808BD348
 void func_808BD3B4(void); // func_808BD3B4
 void func_808BD428(void); // func_808BD428
@@ -5986,12 +5986,12 @@ void func_808BE4D4(void); // func_808BE4D4
 void func_808BE680(void); // func_808BE680
 void func_808BE6C4(void); // func_808BE6C4
 void func_808BE73C(void); // func_808BE73C
-void func_808BEA48(void); // func_808BEA48
+void EnDekunuts_Update(void); // func_808BEA48
 void func_808BEBD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_808BEBD0
 void func_808BED30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808BED30
-void func_808BEE38(void); // func_808BEE38
-void func_808BF220(void); // func_808BF220
-void func_808BF318(void); // func_808BF318
+void EnDekunuts_Draw(void); // func_808BEE38
+void EnBbfall_Init(void); // func_808BF220
+void EnBbfall_Destroy(void); // func_808BF318
 void func_808BF344(void); // func_808BF344
 void func_808BF3B8(void); // func_808BF3B8
 void func_808BF438(void); // func_808BF438
@@ -6016,13 +6016,13 @@ void func_808C00A0(void); // func_808C00A0
 void func_808C013C(void); // func_808C013C
 void func_808C0178(void); // func_808C0178
 void func_808C01E0(void); // func_808C01E0
-void func_808C03EC(void); // func_808C03EC
+void EnBbfall_Update(void); // func_808C03EC
 void func_808C07D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808C07D4
 void func_808C080C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808C080C
-void func_808C0A04(void); // func_808C0A04
+void EnBbfall_Draw(void); // func_808C0A04
 void func_808C1030(void); // func_808C1030
-void func_808C103C(void); // func_808C103C
-void func_808C10B0(void); // func_808C10B0
+void ArmsHook_Init(void); // func_808C103C
+void ArmsHook_Destroy(void); // func_808C10B0
 void func_808C10F8(void); // func_808C10F8
 void func_808C1154(void); // func_808C1154
 void func_808C1168(void); // func_808C1168
@@ -6030,10 +6030,10 @@ void func_808C1198(void); // func_808C1198
 void func_808C11C0(void); // func_808C11C0
 void func_808C125C(void); // func_808C125C
 void func_808C12A4(void); // func_808C12A4
-void func_808C18D8(void); // func_808C18D8
-void func_808C1918(void); // func_808C1918
-void func_808C1D40(void); // func_808C1D40
-void func_808C1E68(void); // func_808C1E68
+void ArmsHook_Update(void); // func_808C18D8
+void ArmsHook_Draw(void); // func_808C1918
+void EnBb_Init(void); // func_808C1D40
+void EnBb_Destroy(void); // func_808C1E68
 void func_808C1E94(void); // func_808C1E94
 void func_808C1F00(void); // func_808C1F00
 void func_808C1F74(void); // func_808C1F74
@@ -6055,23 +6055,23 @@ void func_808C2CB4(void); // func_808C2CB4
 void func_808C2CF0(void); // func_808C2CF0
 void func_808C2D78(void); // func_808C2D78
 void func_808C2E34(void); // func_808C2E34
-void func_808C30A0(void); // func_808C30A0
+void EnBb_Update(void); // func_808C30A0
 void func_808C32EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808C32EC
 void func_808C3324(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808C3324
-void func_808C351C(void); // func_808C351C
-void func_808C3A50(void); // func_808C3A50
-void func_808C3A78(void); // func_808C3A78
-void func_808C3A88(void); // func_808C3A88
-void func_808C3A98(void); // func_808C3A98
+void EnBb_Draw(void); // func_808C351C
+void BgKeikokuSpr_Init(void); // func_808C3A50
+void BgKeikokuSpr_Destroy(void); // func_808C3A78
+void BgKeikokuSpr_Update(void); // func_808C3A88
+void BgKeikokuSpr_Draw(void); // func_808C3A98
 void func_808C3C00(void); // func_808C3C00
 void func_808C3D28(void); // func_808C3D28
-void func_808C3F30(void); // func_808C3F30
-void func_808C4414(void); // func_808C4414
+void EnWood02_Init(void); // func_808C3F30
+void EnWood02_Destroy(void); // func_808C4414
 void func_808C4458(void); // func_808C4458
-void func_808C4584(void); // func_808C4584
-void func_808C4A3C(void); // func_808C4A3C
-void func_808C4F80(void); // func_808C4F80
-void func_808C52A0(void); // func_808C52A0
+void EnWood02_Update(void); // func_808C4584
+void EnWood02_Draw(void); // func_808C4A3C
+void EnDeath_Init(void); // func_808C4F80
+void EnDeath_Destroy(void); // func_808C52A0
 void func_808C5310(void); // func_808C5310
 void func_808C5394(void); // func_808C5394
 void func_808C5428(void); // func_808C5428
@@ -6119,7 +6119,7 @@ void func_808C7DB8(void); // func_808C7DB8
 void func_808C7DCC(void); // func_808C7DCC
 void func_808C7E24(void); // func_808C7E24
 void func_808C7EDC(void); // func_808C7EDC
-void func_808C8170(void); // func_808C8170
+void EnDeath_Update(void); // func_808C8170
 void func_808C84A4(void); // func_808C84A4
 void func_808C8690(void); // func_808C8690
 void func_808C882C(void); // func_808C882C
@@ -6127,9 +6127,9 @@ void func_808C8D18(void); // func_808C8D18
 void func_808C9160(void); // func_808C9160
 void func_808C9220(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_808C9220
 void func_808C9340(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808C9340
-void func_808C96C8(void); // func_808C96C8
-void func_808CA0B0(void); // func_808CA0B0
-void func_808CA23C(void); // func_808CA23C
+void EnDeath_Draw(void); // func_808C96C8
+void EnMinideath_Init(void); // func_808CA0B0
+void EnMinideath_Destroy(void); // func_808CA23C
 void func_808CA268(void); // func_808CA268
 void func_808CA308(void); // func_808CA308
 void func_808CA34C(void); // func_808CA34C
@@ -6162,9 +6162,9 @@ void func_808CB7B8(void); // func_808CB7B8
 void func_808CB7CC(void); // func_808CB7CC
 void func_808CB810(void); // func_808CB810
 void func_808CB8F4(void); // func_808CB8F4
-void func_808CBB18(void); // func_808CBB18
-void func_808CC260(void); // func_808CC260
-void func_808CC3E0(void); // func_808CC3E0
+void EnMinideath_Update(void); // func_808CBB18
+void EnVm_Init(void); // func_808CC260
+void EnVm_Destroy(void); // func_808CC3E0
 void func_808CC420(void); // func_808CC420
 void func_808CC490(void); // func_808CC490
 void func_808CC5C4(void); // func_808CC5C4
@@ -6178,12 +6178,12 @@ void func_808CCB50(void); // func_808CCB50
 void func_808CCBE4(void); // func_808CCBE4
 void func_808CCCF0(void); // func_808CCCF0
 void func_808CCDE4(void); // func_808CCDE4
-void func_808CCEE4(void); // func_808CCEE4
+void EnVm_Update(void); // func_808CCEE4
 UNK_TYPE4 func_808CD020(UNK_TYPE4 param_1, int param_2, UNK_PTR param_3, UNK_TYPE4 param_4, short* param_5, int param_6); // func_808CD020
 void func_808CD08C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808CD08C
-void func_808CD238(void); // func_808CD238
-void func_808CD740(void); // func_808CD740
-void func_808CD8E8(void); // func_808CD8E8
+void EnVm_Draw(void); // func_808CD238
+void DemoEffect_Init(void); // func_808CD740
+void DemoEffect_Destroy(void); // func_808CD8E8
 void func_808CD940(void); // func_808CD940
 void func_808CD998(void); // func_808CD998
 void func_808CDAD0(void); // func_808CDAD0
@@ -6191,7 +6191,7 @@ void func_808CDBDC(void); // func_808CDBDC
 void func_808CDCEC(void); // func_808CDCEC
 void func_808CDD70(void); // func_808CDD70
 void func_808CDDE0(void); // func_808CDDE0
-void func_808CDE54(void); // func_808CDE54
+void DemoEffect_Update(void); // func_808CDE54
 void func_808CDE78(void); // func_808CDE78
 void func_808CDFF8(void); // func_808CDFF8
 void func_808CE078(void); // func_808CE078
@@ -6199,14 +6199,14 @@ void func_808CE450(void); // func_808CE450
 void func_808CE45C(void); // func_808CE45C
 void func_808CF06C(void); // func_808CF06C
 void func_808CF0CC(void); // func_808CF0CC
-void func_808CF808(void); // func_808CF808
-void func_808CF928(void); // func_808CF928
-void func_808CF94C(void); // func_808CF94C
+void DemoKankyo_Init(void); // func_808CF808
+void DemoKankyo_Destroy(void); // func_808CF928
+void DemoKankyo_Update(void); // func_808CF94C
 void func_808CF970(void); // func_808CF970
 void func_808CFE04(void); // func_808CFE04
-void func_808D035C(void); // func_808D035C
-void func_808D0680(void); // func_808D0680
-void func_808D08A4(void); // func_808D08A4
+void DemoKankyo_Draw(void); // func_808D035C
+void EnFloormas_Init(void); // func_808D0680
+void EnFloormas_Destroy(void); // func_808D08A4
 void func_808D08D0(void); // func_808D08D0
 void func_808D0908(void); // func_808D0908
 void func_808D0930(void); // func_808D0930
@@ -6258,13 +6258,13 @@ void func_808D2D30(void); // func_808D2D30
 void func_808D2D6C(void); // func_808D2D6C
 void func_808D2DC0(void); // func_808D2DC0
 void func_808D2E34(void); // func_808D2E34
-void func_808D316C(void); // func_808D316C
+void EnFloormas_Update(void); // func_808D316C
 void func_808D3488(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808D3488
 void func_808D34C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_808D34C4
-void func_808D3630(void); // func_808D3630
+void EnFloormas_Draw(void); // func_808D3630
 void func_808D3754(void); // func_808D3754
-void func_808D3E20(void); // func_808D3E20
-void func_808D414C(void); // func_808D414C
+void EnRd_Init(void); // func_808D3E20
+void EnRd_Destroy(void); // func_808D414C
 void func_808D4190(void); // func_808D4190
 void func_808D41FC(void); // func_808D41FC
 void func_808D4260(void); // func_808D4260
@@ -6308,20 +6308,20 @@ void func_808D66A0(void); // func_808D66A0
 void func_808D6814(void); // func_808D6814
 void func_808D6A94(void); // func_808D6A94
 void func_808D6B64(void); // func_808D6B64
-void func_808D6C10(void); // func_808D6C10
+void EnRd_Update(void); // func_808D6C10
 UNK_TYPE4 func_808D6DA0(UNK_TYPE4 param_1, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, s32 param_5, s32 param_6); // func_808D6DA0
 void func_808D6DFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808D6DFC
-void func_808D6ED8(void); // func_808D6ED8
-void func_808D7550(void); // func_808D7550
-void func_808D75BC(void); // func_808D75BC
+void EnRd_Draw(void); // func_808D6ED8
+void BgF40Flift_Init(void); // func_808D7550
+void BgF40Flift_Destroy(void); // func_808D75BC
 void func_808D75F0(void); // func_808D75F0
 void func_808D7714(void); // func_808D7714
-void func_808D77B8(void); // func_808D77B8
-void func_808D77DC(void); // func_808D77DC
+void BgF40Flift_Update(void); // func_808D77B8
+void BgF40Flift_Draw(void); // func_808D77DC
 UNK_TYPE4 func_808D78D0(Actor* param_1); // func_808D78D0
 unsigned int func_808D7928(Actor* param_1); // func_808D7928
-void func_808D7954(Actor* param_1); // func_808D7954
-void func_808D7A04(void); // func_808D7A04
+void ObjMure_Init(Actor* param_1); // func_808D7954
+void ObjMure_Destroy(void); // func_808D7A04
 int func_808D7A14(int param_1); // func_808D7A14
 void func_808D7A40(UNK_PTR param_1, UNK_PTR param_2); // func_808D7A40
 void func_808D7A68(int param_1, GlobalContext* param_2); // func_808D7A68
@@ -6337,7 +6337,7 @@ void func_808D814C(int param_1, int param_2); // func_808D814C
 void func_808D82CC(int param_1); // func_808D82CC
 void func_808D84F4(unsigned int param_1); // func_808D84F4
 void func_808D8678(unsigned int param_1, GlobalContext* param_2); // func_808D8678
-void func_808D8720(int param_1); // func_808D8720
+void ObjMure_Update(int param_1); // func_808D8720
 void func_808D8940(void); // func_808D8940
 void func_808D8B58(void); // func_808D8B58
 void func_808D8D60(void); // func_808D8D60
@@ -6371,25 +6371,25 @@ void func_808DAEB4(void); // func_808DAEB4
 void func_808DB100(void); // func_808DB100
 void func_808DB25C(void); // func_808DB25C
 void func_808DB2E0(void); // func_808DB2E0
-void func_808DB454(void); // func_808DB454
-void func_808DB70C(void); // func_808DB70C
-void func_808DB738(void); // func_808DB738
+void EnSw_Init(void); // func_808DB454
+void EnSw_Destroy(void); // func_808DB70C
+void EnSw_Update(void); // func_808DB738
 void func_808DB7F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808DB7F4
-void func_808DB8DC(void); // func_808DB8DC
+void EnSw_Draw(void); // func_808DB8DC
 void func_808DBE80(void); // func_808DBE80
 void func_808DBE8C(void); // func_808DBE8C
 void func_808DBEB0(void); // func_808DBEB0
 void func_808DBFB0(void); // func_808DBFB0
 void func_808DC038(void); // func_808DC038
-void func_808DC0BC(void); // func_808DC0BC
-void func_808DC168(void); // func_808DC168
+void ObjectKankyo_Init(void); // func_808DC0BC
+void ObjectKankyo_Destroy(void); // func_808DC168
 void func_808DC18C(void); // func_808DC18C
 void func_808DC454(void); // func_808DC454
 void func_808DCB7C(void); // func_808DCB7C
 void func_808DCBF8(void); // func_808DCBF8
 void func_808DCDB4(void); // func_808DCDB4
-void func_808DD340(void); // func_808DD340
-void func_808DD364(void); // func_808DD364
+void ObjectKankyo_Update(void); // func_808DD340
+void ObjectKankyo_Draw(void); // func_808DD364
 void func_808DD3C8(void); // func_808DD3C8
 void func_808DD970(void); // func_808DD970
 void func_808DDE74(void); // func_808DDE74
@@ -6397,8 +6397,8 @@ void func_808DDE9C(void); // func_808DDE9C
 void func_808DE5C0(void); // func_808DE5C0
 void func_808DE660(void); // func_808DE660
 void func_808DE728(void); // func_808DE728
-void func_808DE7F0(void); // func_808DE7F0
-void func_808DE958(void); // func_808DE958
+void EnHorseLinkChild_Init(void); // func_808DE7F0
+void EnHorseLinkChild_Destroy(void); // func_808DE958
 void func_808DE9A8(void); // func_808DE9A8
 void func_808DEA0C(void); // func_808DEA0C
 void func_808DEA54(void); // func_808DEA54
@@ -6412,67 +6412,67 @@ void func_808DF560(void); // func_808DF560
 void func_808DF620(void); // func_808DF620
 void func_808DF788(void); // func_808DF788
 void func_808DF838(void); // func_808DF838
-void func_808DFB14(void); // func_808DFB14
+void EnHorseLinkChild_Update(void); // func_808DFB14
 void func_808DFC3C(void); // func_808DFC3C
 void func_808DFDC8(void); // func_808DFDC8
-void func_808DFE3C(void); // func_808DFE3C
+void EnHorseLinkChild_Draw(void); // func_808DFE3C
 void func_808E01A0(void); // func_808E01A0
-void func_808E01AC(void); // func_808E01AC
-void func_808E0264(void); // func_808E0264
+void DoorAna_Init(void); // func_808E01AC
+void DoorAna_Destroy(void); // func_808E0264
 void func_808E02A4(void); // func_808E02A4
 void func_808E03B8(void); // func_808E03B8
 void func_808E05C4(void); // func_808E05C4
-void func_808E06B0(void); // func_808E06B0
-void func_808E0704(void); // func_808E0704
-void func_808E0830(void); // func_808E0830
+void DoorAna_Update(void); // func_808E06B0
+void DoorAna_Draw(void); // func_808E0704
+void EnEncount1_Init(void); // func_808E0830
 void func_808E0954(void); // func_808E0954
-void func_808E0DA8(void); // func_808E0DA8
-void func_808E0E40(void); // func_808E0E40
-void func_808E0EBC(void); // func_808E0EBC
+void EnEncount1_Update(void); // func_808E0DA8
+void DemoTreLgt_Init(void); // func_808E0E40
+void DemoTreLgt_Destroy(void); // func_808E0EBC
 void func_808E0EE8(void); // func_808E0EE8
 void func_808E0EF4(void); // func_808E0EF4
 void func_808E0F4C(void); // func_808E0F4C
 void func_808E0FE0(void); // func_808E0FE0
-void func_808E1270(void); // func_808E1270
+void DemoTreLgt_Update(void); // func_808E1270
 void func_808E12A4(void); // func_808E12A4
-void func_808E13FC(void); // func_808E13FC
-void func_808E1560(void); // func_808E1560
-void func_808E16B4(void); // func_808E16B4
+void DemoTreLgt_Draw(void); // func_808E13FC
+void EnEncount2_Init(void); // func_808E1560
+void EnEncount2_Destroy(void); // func_808E16B4
 void func_808E16FC(void); // func_808E16FC
 void func_808E1714(void); // func_808E1714
 void func_808E17C4(void); // func_808E17C4
 void func_808E18A8(void); // func_808E18A8
-void func_808E18F8(void); // func_808E18F8
-void func_808E19C4(void); // func_808E19C4
+void EnEncount2_Update(void); // func_808E18F8
+void EnEncount2_Draw(void); // func_808E19C4
 void func_808E1A24(void); // func_808E1A24
 void func_808E1B4C(void); // func_808E1B4C
 void func_808E1C9C(void); // func_808E1C9C
-void func_808E1FE0(void); // func_808E1FE0
-void func_808E1FF0(void); // func_808E1FF0
-void func_808E2000(void); // func_808E2000
-void func_808E2010(void); // func_808E2010
-void func_808E2070(void); // func_808E2070
-void func_808E21C8(void); // func_808E21C8
+void EnFireRock_Init(void); // func_808E1FE0
+void EnFireRock_Destroy(void); // func_808E1FF0
+void EnFireRock_Update(void); // func_808E2000
+void EnFireRock_Draw(void); // func_808E2010
+void BgCtowerRot_Init(void); // func_808E2070
+void BgCtowerRot_Destroy(void); // func_808E21C8
 void func_808E21FC(void); // func_808E21FC
 void func_808E22DC(void); // func_808E22DC
 void func_808E22EC(void); // func_808E22EC
 void func_808E23D0(void); // func_808E23D0
 void func_808E2444(void); // func_808E2444
-void func_808E24B4(void); // func_808E24B4
-void func_808E24D8(void); // func_808E24D8
+void BgCtowerRot_Update(void); // func_808E24B4
+void BgCtowerRot_Draw(void); // func_808E24D8
 void func_808E2600(void); // func_808E2600
 void func_808E26C8(void); // func_808E26C8
-void func_808E286C(void); // func_808E286C
-void func_808E2B04(void); // func_808E2B04
-void func_808E2B7C(void); // func_808E2B7C
+void MirRay_Init(void); // func_808E286C
+void MirRay_Destroy(void); // func_808E2B04
+void MirRay_Update(void); // func_808E2B7C
 void func_808E2C68(void); // func_808E2C68
 void func_808E2E1C(void); // func_808E2E1C
 void func_808E2FF8(void); // func_808E2FF8
 void func_808E30FC(void); // func_808E30FC
-void func_808E36A4(void); // func_808E36A4
+void MirRay_Draw(void); // func_808E36A4
 void func_808E3984(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_808E3984
-void func_808E3EF0(void); // func_808E3EF0
-void func_808E3FF0(void); // func_808E3FF0
+void EnSb_Init(void); // func_808E3EF0
+void EnSb_Destroy(void); // func_808E3FF0
 void func_808E401C(void); // func_808E401C
 void func_808E40CC(void); // func_808E40CC
 void func_808E4144(void); // func_808E4144
@@ -6488,11 +6488,11 @@ void func_808E4740(void); // func_808E4740
 void func_808E47E8(void); // func_808E47E8
 void func_808E491C(int param_1); // func_808E491C
 void func_808E4984(void); // func_808E4984
-void func_808E4AC8(void); // func_808E4AC8
+void EnSb_Update(void); // func_808E4AC8
 void func_808E4C18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808E4C18
-void func_808E4CB0(void); // func_808E4CB0
-void func_808E4FC0(void); // func_808E4FC0
-void func_808E530C(void); // func_808E530C
+void EnSb_Draw(void); // func_808E4CB0
+void EnBigslime_Init(void); // func_808E4FC0
+void EnBigslime_Destroy(void); // func_808E530C
 void func_808E5388(void); // func_808E5388
 void func_808E5430(void); // func_808E5430
 void func_808E5484(void); // func_808E5484
@@ -6587,15 +6587,15 @@ void func_808EBBE4(void); // func_808EBBE4
 void func_808EBED0(void); // func_808EBED0
 void func_808EC158(void); // func_808EC158
 void func_808EC354(void); // func_808EC354
-void func_808EC4E4(void); // func_808EC4E4
+void EnBigslime_Update(void); // func_808EC4E4
 void func_808EC708(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_808EC708
 void func_808EC990(void); // func_808EC990
 void func_808ECD14(void); // func_808ECD14
 void func_808ED07C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808ED07C
-void func_808ED138(void); // func_808ED138
+void EnBigslime_Draw(void); // func_808ED138
 void func_808ED3F4(void); // func_808ED3F4
-void func_808F1200(void); // func_808F1200
-void func_808F1334(void); // func_808F1334
+void EnKarebaba_Init(void); // func_808F1200
+void EnKarebaba_Destroy(void); // func_808F1334
 void func_808F1374(void); // func_808F1374
 void func_808F13FC(void); // func_808F13FC
 void func_808F152C(void); // func_808F152C
@@ -6621,9 +6621,9 @@ void func_808F238C(void); // func_808F238C
 void func_808F241C(void); // func_808F241C
 void func_808F24F8(void); // func_808F24F8
 void func_808F254C(void); // func_808F254C
-void func_808F25A4(void); // func_808F25A4
+void EnKarebaba_Update(void); // func_808F25A4
 void func_808F280C(void); // func_808F280C
-void func_808F28F8(void); // func_808F28F8
+void EnKarebaba_Draw(void); // func_808F28F8
 void func_808F30B0(void); // func_808F30B0
 void func_808F3178(void); // func_808F3178
 void func_808F322C(void); // func_808F322C
@@ -6661,15 +6661,15 @@ void func_808F5A34(void); // func_808F5A34
 void func_808F5A94(void); // func_808F5A94
 void func_808F5B58(void); // func_808F5B58
 void func_808F5C98(void); // func_808F5C98
-void func_808F5DA4(void); // func_808F5DA4
-void func_808F621C(void); // func_808F621C
-void func_808F6248(void); // func_808F6248
+void EnIn_Init(void); // func_808F5DA4
+void EnIn_Destroy(void); // func_808F621C
+void EnIn_Update(void); // func_808F6248
 void func_808F6334(void); // func_808F6334
 void func_808F64A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_808F64A0
 void func_808F67F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808F67F8
-void func_808F69B4(void); // func_808F69B4
-void func_808F74B0(void); // func_808F74B0
-void func_808F7580(void); // func_808F7580
+void EnIn_Draw(void); // func_808F69B4
+void EnBomChu_Init(void); // func_808F74B0
+void EnBomChu_Destroy(void); // func_808F7580
 void func_808F75D0(void); // func_808F75D0
 void func_808F77E4(void); // func_808F77E4
 void func_808F7868(void); // func_808F7868
@@ -6681,8 +6681,8 @@ void func_808F7FA0(void); // func_808F7FA0
 void func_808F7FD0(void); // func_808F7FD0
 void func_808F8080(void); // func_808F8080
 void func_808F818C(void); // func_808F818C
-void func_808F83B8(void); // func_808F83B8
-void func_808F8714(void); // func_808F8714
+void EnBomChu_Update(void); // func_808F83B8
+void EnBomChu_Draw(void); // func_808F8714
 void D_808F890C(void); // func_808F890C
 void func_808F8AA0(void); // func_808F8AA0
 void func_808F8C24(void); // func_808F8C24
@@ -6703,12 +6703,12 @@ void func_808F999C(void); // func_808F999C
 void func_808F99B0(void); // func_808F99B0
 void func_808F99C4(void); // func_808F99C4
 void func_808F99D8(void); // func_808F99D8
-void func_808F99EC(void); // func_808F99EC
-void func_808F9A4C(void); // func_808F9A4C
-void func_808F9A88(void); // func_808F9A88
-void func_808F9AC4(void); // func_808F9AC4
-void func_808F9E00(void); // func_808F9E00
-void func_808F9FDC(void); // func_808F9FDC
+void EnHorseGameCheck_Init(void); // func_808F99EC
+void EnHorseGameCheck_Destroy(void); // func_808F9A4C
+void EnHorseGameCheck_Update(void); // func_808F9A88
+void EnHorseGameCheck_Draw(void); // func_808F9AC4
+void EnRr_Init(void); // func_808F9E00
+void EnRr_Destroy(void); // func_808F9FDC
 void func_808FA01C(void); // func_808FA01C
 void func_808FA11C(void); // func_808FA11C
 void func_808FA19C(void); // func_808FA19C
@@ -6735,11 +6735,11 @@ void func_808FB42C(void); // func_808FB42C
 void func_808FB680(void); // func_808FB680
 void func_808FB710(void); // func_808FB710
 void func_808FB794(void); // func_808FB794
-void func_808FB888(void); // func_808FB888
-void func_808FBD54(void); // func_808FBD54
-void func_808FC550(void); // func_808FC550
-void func_808FC5AC(void); // func_808FC5AC
-void func_808FC5BC(void); // func_808FC5BC
+void EnRr_Update(void); // func_808FB888
+void EnRr_Draw(void); // func_808FBD54
+void EnFr_Init(void); // func_808FC550
+void EnFr_Destroy(void); // func_808FC5AC
+void EnFr_Update(void); // func_808FC5BC
 void func_808FC6C0(int param_1, int param_2, float* param_3, float param_4); // func_808FC6C0
 void func_808FC770(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3); // func_808FC770
 f32 func_808FC790(void); // func_808FC790
@@ -6750,8 +6750,8 @@ void func_808FCC0C(int param_1, UNK_PTR param_2, UNK_PTR param_3, float param_4)
 void func_808FCDBC(int param_1, UNK_PTR param_2, UNK_PTR param_3, UNK_TYPE4 param_4, u8 param_5); // func_808FCDBC
 void func_808FCF60(int param_1, UNK_PTR param_2, f32* param_3); // func_808FCF60
 void func_808FD054(void); // func_808FD054
-void func_808FD368(Actor* param_1, GlobalContext* param_2); // func_808FD368
-void func_808FDC64(int param_1, GlobalContext* param_2); // func_808FDC64
+void EnFishing_Init(Actor* param_1, GlobalContext* param_2); // func_808FD368
+void EnFishing_Destroy(int param_1, GlobalContext* param_2); // func_808FDC64
 void func_808FDCDC(float* param_1, GlobalContext* param_2); // func_808FDCDC
 void func_808FE3F8(f32* param_1, GraphicsContext** param_2); // func_808FE3F8
 void func_808FEE1C(GraphicsContext** param_1); // func_808FEE1C
@@ -6769,12 +6769,12 @@ void func_809036BC(int param_1, int param_2); // func_809036BC
 void func_809038A4(int param_1, unsigned short* param_2); // func_809038A4
 void func_80903C60(Actor* param_1, char param_2); // func_80903C60
 void func_80903E20(Actor* param_1, GlobalContext* param_2); // func_80903E20
-void func_80903FE0(Actor* param_1, GlobalContext* param_2); // func_80903FE0
+void EnFishing_Update(Actor* param_1, GlobalContext* param_2); // func_80903FE0
 UNK_TYPE4 func_80908554(UNK_TYPE4 param_1, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, int param_5, int param_6); // func_80908554
 void func_80908674(UNK_TYPE4 param_1, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, int param_5); // func_80908674
 UNK_TYPE4 func_809086B4(UNK_TYPE4 param_1, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, int param_5, int param_6); // func_809086B4
 void func_80908734(UNK_TYPE4 param_1, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, int param_5); // func_80908734
-void func_80908774(int param_1, GraphicsContext** param_2); // func_80908774
+void EnFishing_Draw(int param_1, GraphicsContext** param_2); // func_80908774
 void func_809089B8(float* param_1, float* param_2); // func_809089B8
 void func_80908A64(float* param_1, float* param_2, u8 param_3); // func_80908A64
 void func_80908B4C(GlobalContext* param_1); // func_80908B4C
@@ -6795,8 +6795,8 @@ void func_80917538(void); // func_80917538
 void func_80917604(void); // func_80917604
 void func_8091763C(void); // func_8091763C
 void func_8091768C(void); // func_8091768C
-void func_809176D0(void); // func_809176D0
-void func_8091780C(void); // func_8091780C
+void ObjOshihiki_Init(void); // func_809176D0
+void ObjOshihiki_Destroy(void); // func_8091780C
 void func_80917840(void); // func_80917840
 void func_809179A0(void); // func_809179A0
 void func_80917AEC(void); // func_80917AEC
@@ -6812,33 +6812,33 @@ void func_80918314(void); // func_80918314
 void func_8091834C(void); // func_8091834C
 void func_8091851C(void); // func_8091851C
 void func_80918574(void); // func_80918574
-void func_80918678(void); // func_80918678
-void func_80918700(void); // func_80918700
+void ObjOshihiki_Update(void); // func_80918678
+void ObjOshihiki_Draw(void); // func_80918700
 void func_80918B40(void); // func_80918B40
-void func_80918BB8(void); // func_80918BB8
-void func_80918D54(void); // func_80918D54
+void EffDust_Init(void); // func_80918BB8
+void EffDust_Destroy(void); // func_80918D54
 void func_80918D64(void); // func_80918D64
 void func_80918FE4(void); // func_80918FE4
 void func_80919230(void); // func_80919230
-void func_80919744(void); // func_80919744
+void EffDust_Update(void); // func_80919744
 void func_80919768(void); // func_80919768
 void func_809199FC(void); // func_809199FC
-void func_80919D68(void); // func_80919D68
+void EffDust_Draw(void); // func_80919D68
 void func_80919F30(void); // func_80919F30
 void func_80919FC8(void); // func_80919FC8
 void func_8091A044(void); // func_8091A044
 void func_8091A0B8(void); // func_8091A0B8
-void func_8091A124(void); // func_8091A124
-void func_8091A2D8(void); // func_8091A2D8
-void func_8091A30C(void); // func_8091A30C
+void BgUmajump_Init(void); // func_8091A124
+void BgUmajump_Destroy(void); // func_8091A2D8
+void BgUmajump_Update(void); // func_8091A30C
 void func_8091A5A0(void); // func_8091A5A0
 void func_8091A7B0(void); // func_8091A7B0
 void func_8091A8A0(void); // func_8091A8A0
 void func_8091A8C4(void); // func_8091A8C4
 void func_8091A8F4(void); // func_8091A8F4
 void func_8091A9E4(void); // func_8091A9E4
-void func_8091AA78(void); // func_8091AA78
-void func_8091AC4C(void); // func_8091AC4C
+void EnInsect_Init(void); // func_8091AA78
+void EnInsect_Destroy(void); // func_8091AC4C
 void func_8091AC78(void); // func_8091AC78
 void func_8091ACC4(void); // func_8091ACC4
 void func_8091AE10(void); // func_8091AE10
@@ -6853,14 +6853,14 @@ void func_8091B618(void); // func_8091B618
 void func_8091B670(void); // func_8091B670
 void func_8091B928(void); // func_8091B928
 void func_8091B984(void); // func_8091B984
-void func_8091BAB4(void); // func_8091BAB4
-void func_8091BD04(void); // func_8091BD04
+void EnInsect_Update(void); // func_8091BAB4
+void EnInsect_Draw(void); // func_8091BD04
 void func_8091C0A0(void); // func_8091C0A0
 void func_8091C124(void); // func_8091C124
 void func_8091C140(void); // func_8091C140
 void func_8091C178(void); // func_8091C178
-void func_8091C33C(void); // func_8091C33C
-void func_8091C4F8(void); // func_8091C4F8
+void EnButte_Init(void); // func_8091C33C
+void EnButte_Destroy(void); // func_8091C4F8
 void func_8091C524(void); // func_8091C524
 void func_8091C5EC(void); // func_8091C5EC
 void func_8091C6B4(void); // func_8091C6B4
@@ -6872,8 +6872,8 @@ void func_8091CF64(void); // func_8091CF64
 void func_8091CFB4(void); // func_8091CFB4
 void func_8091D070(void); // func_8091D070
 void func_8091D090(void); // func_8091D090
-void func_8091D0C0(void); // func_8091D0C0
-void func_8091D240(void); // func_8091D240
+void EnButte_Update(void); // func_8091D0C0
+void EnButte_Draw(void); // func_8091D240
 void func_8091D630(void); // func_8091D630
 void func_8091D660(void); // func_8091D660
 void func_8091D6C4(void); // func_8091D6C4
@@ -6883,8 +6883,8 @@ void func_8091D840(void); // func_8091D840
 void func_8091D904(void); // func_8091D904
 void func_8091D944(void); // func_8091D944
 void func_8091DA14(void); // func_8091DA14
-void func_8091DA4C(void); // func_8091DA4C
-void func_8091DD1C(void); // func_8091DD1C
+void EnFish_Init(void); // func_8091DA4C
+void EnFish_Destroy(void); // func_8091DD1C
 void func_8091DD48(void); // func_8091DD48
 void func_8091DDF4(void); // func_8091DDF4
 void func_8091DEE4(void); // func_8091DEE4
@@ -6907,53 +6907,53 @@ void func_8091F344(void); // func_8091F344
 void func_8091F3BC(void); // func_8091F3BC
 void func_8091F5A4(void); // func_8091F5A4
 void func_8091F830(void); // func_8091F830
-void func_8091F940(void); // func_8091F940
+void EnFish_Update(void); // func_8091F940
 void func_8091F994(void); // func_8091F994
-void func_8091F9A4(void); // func_8091F9A4
+void EnFish_Draw(void); // func_8091F9A4
 void func_8091FEF0(void); // func_8091FEF0
-void func_8091FEFC(void); // func_8091FEFC
-void func_80920034(void); // func_80920034
+void ItemEtcetera_Init(void); // func_8091FEFC
+void ItemEtcetera_Destroy(void); // func_80920034
 void func_80920044(void); // func_80920044
 void func_8092009C(void); // func_8092009C
 void func_809200F8(void); // func_809200F8
-void func_80920140(void); // func_80920140
+void ItemEtcetera_Update(void); // func_80920140
 void func_80920164(void); // func_80920164
 void func_809201BC(void); // func_809201BC
 void FireArrow_SetUpdateFunc(ActorArrowFire* this, actor_func update); // func_80920340
 void ArrowFire_Init(ActorArrowFire* this, GlobalContext* ctxt); // func_8092034C
-void ArrowFire_Fini(ActorArrowFire* this, GlobalContext* ctxt); // func_809203F8
+void ArrowFire_Destroy(ActorArrowFire* this, GlobalContext* ctxt); // func_809203F8
 void FireArrow_Update1(ActorArrowFire* pzParm1); // func_80920440
-void FireArrow_Lerp(Vector3f* a, Vector3f* b, f32 t); // func_80920534
+void FireArrow_Lerp(Vec3f* a, Vec3f* b, f32 t); // func_80920534
 void FireArrow_Update3(ActorArrowFire* this, GlobalContext* ctxt); // func_8092058C
 void FireArrow_Update2(ActorArrowFire* param_1); // func_809207A0
-void ArrowFire_Main(ActorArrowFire* this, GlobalContext* ctxt); // func_809208F4
+void ArrowFire_Update(ActorArrowFire* this, GlobalContext* ctxt); // func_809208F4
 void func_80920948(ActorArrowFire* this); // func_80920948
 void ArrowFire_Draw(ActorArrowFire* this, GlobalContext* ctxt); // func_80920A24
 void func_80922430(void); // func_80922430
-void func_8092243C(void); // func_8092243C
-void func_809224B8(void); // func_809224B8
+void ArrowIce_Init(void); // func_8092243C
+void ArrowIce_Destroy(void); // func_809224B8
 void func_809224DC(void); // func_809224DC
 void func_809225D0(void); // func_809225D0
 void func_80922628(void); // func_80922628
 void func_809227F4(void); // func_809227F4
-void func_80922948(void); // func_80922948
-void func_8092299C(void); // func_8092299C
+void ArrowIce_Update(void); // func_80922948
+void ArrowIce_Draw(void); // func_8092299C
 void func_80924300(void); // func_80924300
-void func_8092430C(void); // func_8092430C
-void func_80924388(void); // func_80924388
+void ArrowLight_Init(void); // func_8092430C
+void ArrowLight_Destroy(void); // func_80924388
 void func_809243AC(void); // func_809243AC
 void func_809244A0(void); // func_809244A0
 void func_809244F8(void); // func_809244F8
 void func_809246C4(void); // func_809246C4
-void func_80924818(void); // func_80924818
-void func_8092486C(void); // func_8092486C
+void ArrowLight_Update(void); // func_80924818
+void ArrowLight_Draw(void); // func_8092486C
 void func_809261B0(void); // func_809261B0
 void func_80926224(void); // func_80926224
 void func_809262BC(void); // func_809262BC
 void func_80926318(void); // func_80926318
 void func_80926394(void); // func_80926394
-void func_809263C8(void); // func_809263C8
-void func_809264E0(void); // func_809264E0
+void ObjKibako_Init(void); // func_809263C8
+void ObjKibako_Destroy(void); // func_809264E0
 void func_8092650C(void); // func_8092650C
 void func_809267EC(void); // func_809267EC
 void func_80926B40(void); // func_80926B40
@@ -6964,7 +6964,7 @@ void func_80926EF4(void); // func_80926EF4
 void func_80926F08(void); // func_80926F08
 void func_8092703C(void); // func_8092703C
 void func_809270F8(void); // func_809270F8
-void func_80927304(void); // func_80927304
+void ObjKibako_Update(void); // func_80927304
 void func_80927334(void); // func_80927334
 void func_809275C0(void); // func_809275C0
 void func_8092762C(void); // func_8092762C
@@ -6974,8 +6974,8 @@ void func_8092776C(void); // func_8092776C
 void func_80927818(void); // func_80927818
 void func_80927864(void); // func_80927864
 void func_8092788C(void); // func_8092788C
-void func_809278C0(void); // func_809278C0
-void func_80927A4C(void); // func_80927A4C
+void ObjTsubo_Init(void); // func_809278C0
+void ObjTsubo_Destroy(void); // func_80927A4C
 void func_80927A78(void); // func_80927A78
 void func_80927D2C(void); // func_80927D2C
 void func_80927FCC(void); // func_80927FCC
@@ -6992,10 +6992,10 @@ void func_80928E74(void); // func_80928E74
 void func_80928F18(void); // func_80928F18
 void func_809291DC(void); // func_809291DC
 void func_8092926C(void); // func_8092926C
-void func_8092932C(void); // func_8092932C
+void ObjTsubo_Update(void); // func_8092932C
 void func_809294B0(void); // func_809294B0
-void func_80929910(void); // func_80929910
-void func_80929A98(void); // func_80929A98
+void EnIk_Init(void); // func_80929910
+void EnIk_Destroy(void); // func_80929A98
 void func_80929AF8(void); // func_80929AF8
 void func_80929B6C(void); // func_80929B6C
 void func_80929BEC(void); // func_80929BEC
@@ -7030,15 +7030,15 @@ void func_8092B03C(void); // func_8092B03C
 void func_8092B098(void); // func_8092B098
 void func_8092B1B4(void); // func_8092B1B4
 void func_8092B46C(void); // func_8092B46C
-void func_8092B5FC(void); // func_8092B5FC
+void EnIk_Update(void); // func_8092B5FC
 void func_8092B900(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_8092B900
 void func_8092B93C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8092B93C
 void func_8092BC6C(void); // func_8092BC6C
-void func_8092BE14(void); // func_8092BE14
-void func_8092C530(void); // func_8092C530
-void func_8092C540(void); // func_8092C540
-void func_8092C550(void); // func_8092C550
-void func_8092C560(void); // func_8092C560
+void EnIk_Draw(void); // func_8092BE14
+void DemoShd_Init(void); // func_8092C530
+void DemoShd_Destroy(void); // func_8092C540
+void DemoShd_Update(void); // func_8092C550
+void DemoShd_Draw(void); // func_8092C560
 void func_8092C5C0(void); // func_8092C5C0
 void func_8092C63C(void); // func_8092C63C
 void func_8092C6FC(void); // func_8092C6FC
@@ -7059,28 +7059,28 @@ void func_8092D320(void); // func_8092D320
 void func_8092D330(void); // func_8092D330
 void func_8092D4D8(s32 param_1, UNK_TYPE4 param_2); // func_8092D4D8
 void func_8092D5E8(void); // func_8092D5E8
-void func_8092D6C0(Actor* param_1, UNK_TYPE4 param_2); // func_8092D6C0
-void func_8092D820(void); // func_8092D820
-void func_8092D84C(void); // func_8092D84C
+void EnDns_Init(Actor* param_1, UNK_TYPE4 param_2); // func_8092D6C0
+void EnDns_Destroy(void); // func_8092D820
+void EnDns_Update(void); // func_8092D84C
 void func_8092D954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8092D954
 void func_8092DA68(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_8092DA68
 void func_8092DA94(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8092DA94
-void func_8092DBE0(void); // func_8092DBE0
+void EnDns_Draw(void); // func_8092DBE0
 void func_8092DF90(void); // func_8092DF90
 void func_8092DF9C(void); // func_8092DF9C
-void func_8092E0D4(void); // func_8092E0D4
-void func_8092E1C0(void); // func_8092E1C0
+void ElfMsg_Init(void); // func_8092E0D4
+void ElfMsg_Destroy(void); // func_8092E1C0
 void func_8092E1D0(void); // func_8092E1D0
 void func_8092E1FC(void); // func_8092E1FC
 void func_8092E284(void); // func_8092E284
-void func_8092E38C(void); // func_8092E38C
+void ElfMsg_Update(void); // func_8092E38C
 void func_8092E510(void); // func_8092E510
 void func_8092E5A4(void); // func_8092E5A4
 void func_8092E638(void); // func_8092E638
 void func_8092E840(void); // func_8092E840
 void func_8092E988(void); // func_8092E988
-void func_8092EA98(void); // func_8092EA98
-void func_8092EB6C(void); // func_8092EB6C
+void EnHonotrap_Init(void); // func_8092EA98
+void EnHonotrap_Destroy(void); // func_8092EB6C
 void func_8092EBC0(void); // func_8092EBC0
 void func_8092EBDC(void); // func_8092EBDC
 void func_8092EC9C(void); // func_8092EC9C
@@ -7109,14 +7109,14 @@ void func_8092F7A8(void); // func_8092F7A8
 void func_8092F7BC(void); // func_8092F7BC
 void func_8092F854(void); // func_8092F854
 void func_8092F878(void); // func_8092F878
-void func_8092FD6C(void); // func_8092FD6C
+void EnHonotrap_Update(void); // func_8092FD6C
 void func_8092FE44(void); // func_8092FE44
 void func_8092FEFC(void); // func_8092FEFC
-void func_8092FF70(void); // func_8092FF70
+void EnHonotrap_Draw(void); // func_8092FF70
 void func_80930030(void); // func_80930030
 void func_80930190(void); // func_80930190
-void func_809307E0(void); // func_809307E0
-void func_80930870(void); // func_80930870
+void EnTuboTrap_Init(void); // func_809307E0
+void EnTuboTrap_Destroy(void); // func_80930870
 void func_8093089C(void); // func_8093089C
 void func_809308F4(void); // func_809308F4
 void func_80930B60(void); // func_80930B60
@@ -7124,18 +7124,18 @@ void func_80930DDC(void); // func_80930DDC
 void func_80931004(void); // func_80931004
 void func_80931138(void); // func_80931138
 void func_809311C4(void); // func_809311C4
-void func_80931290(void); // func_80931290
-void func_809313D8(void); // func_809313D8
-void func_80931560(void); // func_80931560
-void func_809317A4(void); // func_809317A4
+void EnTuboTrap_Update(void); // func_80931290
+void EnTuboTrap_Draw(void); // func_809313D8
+void ObjIcePoly_Init(void); // func_80931560
+void ObjIcePoly_Destroy(void); // func_809317A4
 void func_80931828(void); // func_80931828
 void func_80931A38(void); // func_80931A38
 void func_80931E58(void); // func_80931E58
 void func_80931EEC(void); // func_80931EEC
-void func_80932198(void); // func_80932198
-void func_809321BC(void); // func_809321BC
-void func_80932490(void); // func_80932490
-void func_809326F4(void); // func_809326F4
+void ObjIcePoly_Update(void); // func_80932198
+void ObjIcePoly_Draw(void); // func_809321BC
+void EnFz_Init(void); // func_80932490
+void EnFz_Destroy(void); // func_809326F4
 void func_80932784(void); // func_80932784
 void func_809328A4(void); // func_809328A4
 void func_809328F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809328F4
@@ -7167,8 +7167,8 @@ void func_809338E0(void); // func_809338E0
 void func_80933AF4(void); // func_80933AF4
 void func_80933B38(void); // func_80933B38
 void func_80933B48(void); // func_80933B48
-void func_80933BFC(void); // func_80933BFC
-void func_80933D98(void); // func_80933D98
+void EnFz_Update(void); // func_80933BFC
+void EnFz_Draw(void); // func_80933D98
 void func_80934018(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80934018
 void func_809340BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE1 param_8); // func_809340BC
 void func_80934178(void); // func_80934178
@@ -7184,8 +7184,8 @@ void func_809351A0(void); // func_809351A0
 void func_809354F8(void); // func_809354F8
 void func_809355A4(void); // func_809355A4
 void func_8093561C(void); // func_8093561C
-void func_80935674(void); // func_80935674
-void func_80935898(void); // func_80935898
+void EnKusa_Init(void); // func_80935674
+void EnKusa_Destroy(void); // func_80935898
 void func_809358C4(void); // func_809358C4
 void func_809358D8(void); // func_809358D8
 void func_80935988(void); // func_80935988
@@ -7201,7 +7201,7 @@ void func_809361B4(void); // func_809361B4
 void func_80936220(void); // func_80936220
 void func_80936290(void); // func_80936290
 void func_809362D8(void); // func_809362D8
-void func_80936370(void); // func_80936370
+void EnKusa_Update(void); // func_80936370
 void func_80936414(void); // func_80936414
 void func_809365CC(void); // func_809365CC
 void func_80936CF0(void); // func_80936CF0
@@ -7218,8 +7218,8 @@ void func_80937468(void); // func_80937468
 void func_809374F8(void); // func_809374F8
 void func_809375C8(void); // func_809375C8
 void func_809375F4(void); // func_809375F4
-void func_80937864(void); // func_80937864
-void func_80937B0C(void); // func_80937B0C
+void ObjBean_Init(void); // func_80937864
+void ObjBean_Destroy(void); // func_80937B0C
 void func_80937B54(void); // func_80937B54
 void func_80937C10(void); // func_80937C10
 void func_80937C24(void); // func_80937C24
@@ -7264,15 +7264,15 @@ void func_80938A5C(void); // func_80938A5C
 void func_80938AA4(void); // func_80938AA4
 void func_80938AD8(void); // func_80938AD8
 void func_80938C1C(void); // func_80938C1C
-void func_80938C8C(void); // func_80938C8C
+void ObjBean_Update(void); // func_80938C8C
 void func_80938E00(void); // func_80938E00
 void func_80938F50(void); // func_80938F50
 void func_809393B0(void); // func_809393B0
 void func_80939470(void); // func_80939470
 void func_8093951C(void); // func_8093951C
 void func_80939594(void); // func_80939594
-void func_809395FC(void); // func_809395FC
-void func_80939768(void); // func_80939768
+void ObjBombiwa_Init(void); // func_809395FC
+void ObjBombiwa_Destroy(void); // func_80939768
 void func_80939794(void); // func_80939794
 void func_80939994(void); // func_80939994
 void func_80939C50(void); // func_80939C50
@@ -7280,7 +7280,7 @@ void func_80939EE0(void); // func_80939EE0
 void func_80939EF4(void); // func_80939EF4
 void func_8093A080(void); // func_8093A080
 void func_8093A1F0(void); // func_8093A1F0
-void func_8093A3F4(void); // func_8093A3F4
+void ObjBombiwa_Update(void); // func_8093A3F4
 void func_8093A418(void); // func_8093A418
 void func_8093A608(void); // func_8093A608
 void func_8093ABD0(void); // func_8093ABD0
@@ -7293,8 +7293,8 @@ void func_8093AEC4(void); // func_8093AEC4
 void func_8093AEF0(void); // func_8093AEF0
 void func_8093AF1C(void); // func_8093AF1C
 void func_8093AF54(void); // func_8093AF54
-void func_8093B084(void); // func_8093B084
-void func_8093B59C(void); // func_8093B59C
+void ObjSwitch_Init(void); // func_8093B084
+void ObjSwitch_Destroy(void); // func_8093B59C
 void func_8093B648(void); // func_8093B648
 void func_8093B668(void); // func_8093B668
 void func_8093B6F4(void); // func_8093B6F4
@@ -7332,17 +7332,17 @@ void func_8093C460(void); // func_8093C460
 void func_8093C488(void); // func_8093C488
 void func_8093C584(void); // func_8093C584
 void func_8093C598(void); // func_8093C598
-void func_8093C5FC(void); // func_8093C5FC
+void ObjSwitch_Update(void); // func_8093C5FC
 void func_8093C778(void); // func_8093C778
 void func_8093C888(void); // func_8093C888
 void func_8093C8B8(void); // func_8093C8B8
 void func_8093C99C(void); // func_8093C99C
 void func_8093CA80(void); // func_8093CA80
 void func_8093CAC4(void); // func_8093CAC4
-void func_8093CC24(void); // func_8093CC24
+void ObjSwitch_Draw(void); // func_8093CC24
 void func_8093D3C0(void); // func_8093D3C0
-void func_8093D628(void); // func_8093D628
-void func_8093D72C(void); // func_8093D72C
+void ObjLift_Init(void); // func_8093D628
+void ObjLift_Destroy(void); // func_8093D72C
 void func_8093D760(void); // func_8093D760
 void func_8093D7A0(void); // func_8093D7A0
 void func_8093D88C(void); // func_8093D88C
@@ -7351,25 +7351,25 @@ void func_8093D9C0(void); // func_8093D9C0
 void func_8093DA48(void); // func_8093DA48
 void func_8093DB70(void); // func_8093DB70
 void func_8093DB90(void); // func_8093DB90
-void func_8093DC2C(void); // func_8093DC2C
-void func_8093DC60(void); // func_8093DC60
+void ObjLift_Update(void); // func_8093DC2C
+void ObjLift_Draw(void); // func_8093DC60
 void func_8093DC90(void); // func_8093DC90
 void func_8093DEA0(void); // func_8093DEA0
 void func_8093DEAC(void); // func_8093DEAC
-void func_8093DF30(void); // func_8093DF30
-void func_8093E008(void); // func_8093E008
+void ObjHsblock_Init(void); // func_8093DF30
+void ObjHsblock_Destroy(void); // func_8093E008
 void func_8093E03C(void); // func_8093E03C
 void func_8093E05C(void); // func_8093E05C
 void func_8093E0A0(void); // func_8093E0A0
 void func_8093E0E8(void); // func_8093E0E8
 void func_8093E10C(void); // func_8093E10C
-void func_8093E1B4(void); // func_8093E1B4
-void func_8093E200(void); // func_8093E200
-void func_8093E420(void); // func_8093E420
-void func_8093E430(void); // func_8093E430
+void ObjHsblock_Update(void); // func_8093E1B4
+void ObjHsblock_Draw(void); // func_8093E200
+void EnOkarinaTag_Destroy(void); // func_8093E420
+void EnOkarinaTag_Init(void); // func_8093E430
 void func_8093E518(void); // func_8093E518
 void func_8093E68C(void); // func_8093E68C
-void func_8093E7E4(void); // func_8093E7E4
+void EnOkarinaTag_Update(void); // func_8093E7E4
 void func_8093E8A0(void); // func_8093E8A0
 void func_8093E91C(void); // func_8093E91C
 void func_8093E938(void); // func_8093E938
@@ -7402,8 +7402,8 @@ void func_80940A1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80940E38(void); // func_80940E38
 void func_80941060(void); // func_80941060
 void func_80941274(void); // func_80941274
-void func_809412AC(void); // func_809412AC
-void func_8094152C(void); // func_8094152C
+void EnGoroiwa_Init(void); // func_809412AC
+void EnGoroiwa_Destroy(void); // func_8094152C
 void func_8094156C(void); // func_8094156C
 void func_809419D0(void); // func_809419D0
 void func_80941A10(void); // func_80941A10
@@ -7419,23 +7419,23 @@ void func_809421E0(void); // func_809421E0
 void func_8094220C(void); // func_8094220C
 void func_809425CC(void); // func_809425CC
 void func_80942604(void); // func_80942604
-void func_80942668(void); // func_80942668
+void EnGoroiwa_Update(void); // func_80942668
 void func_80942B1C(void); // func_80942B1C
-void func_80942D34(void); // func_80942D34
-void func_809434B0(void); // func_809434B0
-void func_80943710(void); // func_80943710
+void EnGoroiwa_Draw(void); // func_80942D34
+void EnDaiku_Init(void); // func_809434B0
+void EnDaiku_Destroy(void); // func_80943710
 void func_8094373C(void); // func_8094373C
 void func_809437C8(void); // func_809437C8
 void func_80943820(void); // func_80943820
 void func_809438F8(void); // func_809438F8
 void func_80943BC0(void); // func_80943BC0
 void func_80943BDC(void); // func_80943BDC
-void func_80943CA4(void); // func_80943CA4
+void EnDaiku_Update(void); // func_80943CA4
 void func_80943E18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80943E18
 void func_80943E60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80943E60
-void func_80943EE4(void); // func_80943EE4
-void func_809441E0(void); // func_809441E0
-void func_80944310(void); // func_80944310
+void EnDaiku_Draw(void); // func_80943EE4
+void EnNwc_Init(void); // func_809441E0
+void EnNwc_Destroy(void); // func_80944310
 void func_80944320(void); // func_80944320
 void func_80944554(void); // func_80944554
 void func_80944590(void); // func_80944590
@@ -7450,17 +7450,17 @@ void func_80944E44(void); // func_80944E44
 void func_80944EFC(void); // func_80944EFC
 void func_80944FA8(void); // func_80944FA8
 void func_8094506C(void); // func_8094506C
-void func_809450C0(void); // func_809450C0
-void func_809451D8(void); // func_809451D8
+void EnNwc_Update(void); // func_809450C0
+void EnNwc_Draw(void); // func_809451D8
 void func_8094529C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8094529C
 void func_80945310(void); // func_80945310
-void func_809454F0(void); // func_809454F0
-void func_80945524(void); // func_80945524
+void ItemInbox_Init(void); // func_809454F0
+void ItemInbox_Destroy(void); // func_80945524
 void func_80945534(void); // func_80945534
-void func_8094557C(void); // func_8094557C
-void func_809455A0(void); // func_809455A0
-void func_80945650(void); // func_80945650
-void func_809457C0(void); // func_809457C0
+void ItemInbox_Update(void); // func_8094557C
+void ItemInbox_Draw(void); // func_809455A0
+void EnGe1_Init(void); // func_80945650
+void EnGe1_Destroy(void); // func_809457C0
 void func_809457EC(void); // func_809457EC
 void func_80945924(void); // func_80945924
 void func_80945A00(void); // func_80945A00
@@ -7469,19 +7469,19 @@ void func_80945B60(void); // func_80945B60
 void func_80945C50(void); // func_80945C50
 void func_80945CAC(void); // func_80945CAC
 void func_80945CE4(void); // func_80945CE4
-void func_8094607C(void); // func_8094607C
+void EnGe1_Update(void); // func_8094607C
 void func_80946190(void); // func_80946190
 void func_80946238(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80946238
 void func_80946368(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80946368
-void func_80946400(void); // func_80946400
-void func_809466A0(void); // func_809466A0
+void EnGe1_Draw(void); // func_80946400
+void ObjBlockstop_Init(void); // func_809466A0
 void func_809466F0(void); // func_809466F0
 void func_809467E8(void); // func_809467E8
-void func_8094685C(void); // func_8094685C
-void func_809468D0(void); // func_809468D0
-void func_809468E0(void); // func_809468E0
-void func_809468F0(void); // func_809468F0
-void func_8094692C(void); // func_8094692C
+void ObjBlockstop_Update(void); // func_8094685C
+void EnSda_Init(void); // func_809468D0
+void EnSda_Destroy(void); // func_809468E0
+void EnSda_Update(void); // func_809468F0
+void EnSda_Draw(void); // func_8094692C
 void func_809469C0(void); // func_809469C0
 void func_8094702C(void); // func_8094702C
 void func_80947668(void); // func_80947668
@@ -7493,11 +7493,11 @@ void func_809485A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80948788(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_80948788
 void func_8094899C(void); // func_8094899C
 void func_80948A54(void); // func_80948A54
-void func_80948BB4(void); // func_80948BB4
-void func_80948BC4(void); // func_80948BC4
+void EnClearTag_Destroy(void); // func_80948BB4
+void EnClearTag_Init(void); // func_80948BC4
 void func_80949288(void); // func_80949288
-void func_80949570(void); // func_80949570
-void func_809495D8(void); // func_809495D8
+void EnClearTag_Update(void); // func_80949570
+void EnClearTag_Draw(void); // func_809495D8
 void func_809495F8(void); // func_809495F8
 void func_80949BD4(void); // func_80949BD4
 void func_8094DEE0(void); // func_8094DEE0
@@ -7544,24 +7544,24 @@ void func_80950C24(void); // func_80950C24
 void func_80950CDC(void); // func_80950CDC
 void func_80950DB8(void); // func_80950DB8
 void func_80950F2C(void); // func_80950F2C
-void func_809510E4(void); // func_809510E4
-void func_80951224(void); // func_80951224
-void func_80951264(void); // func_80951264
+void EnGm_Init(void); // func_809510E4
+void EnGm_Destroy(void); // func_80951224
+void EnGm_Update(void); // func_80951264
 void func_809513AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809513AC
 void func_809514BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809514BC
 void func_80951594(void); // func_80951594
-void func_80951748(void); // func_80951748
-void func_80952620(void); // func_80952620
-void func_80952708(void); // func_80952708
+void EnGm_Draw(void); // func_80951748
+void EnMs_Init(void); // func_80952620
+void EnMs_Destroy(void); // func_80952708
 void func_80952734(void); // func_80952734
 void func_809527F8(void); // func_809527F8
 void func_809529AC(void); // func_809529AC
 void func_80952A1C(void); // func_80952A1C
-void func_80952A8C(void); // func_80952A8C
-void func_80952B24(void); // func_80952B24
+void EnMs_Update(void); // func_80952A8C
+void EnMs_Draw(void); // func_80952B24
 void func_80952C50(void); // func_80952C50
-void func_80952CC8(void); // func_80952CC8
-void func_80952DD0(void); // func_80952DD0
+void EnHs_Init(void); // func_80952CC8
+void EnHs_Destroy(void); // func_80952DD0
 void func_80952DFC(void); // func_80952DFC
 void func_80952E50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80952E50
 void func_80952F00(void); // func_80952F00
@@ -7573,10 +7573,10 @@ void func_809532D0(void); // func_809532D0
 void func_80953354(void); // func_80953354
 void func_809533A0(void); // func_809533A0
 void func_8095345C(void); // func_8095345C
-void func_8095359C(void); // func_8095359C
+void EnHs_Update(void); // func_8095359C
 void func_8095376C(void); // func_8095376C
 void func_80953848(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80953848
-void func_80953888(void); // func_80953888
+void EnHs_Draw(void); // func_80953888
 void func_80953A90(void); // func_80953A90
 void func_80953B40(void); // func_80953B40
 void func_80953BEC(void); // func_80953BEC
@@ -7590,29 +7590,29 @@ void func_809541B8(void); // func_809541B8
 void func_809542A0(void); // func_809542A0
 void func_80954340(void); // func_80954340
 void func_809543D4(void); // func_809543D4
-void func_809545A0(void); // func_809545A0
-void func_809547A8(void); // func_809547A8
-void func_809547E4(void); // func_809547E4
-void func_80954808(void); // func_80954808
+void BgIngate_Init(void); // func_809545A0
+void BgIngate_Destroy(void); // func_809547A8
+void BgIngate_Update(void); // func_809547E4
+void BgIngate_Draw(void); // func_80954808
 void func_80954960(void); // func_80954960
-void func_80954A1C(void); // func_80954A1C
-void func_80954BB0(void); // func_80954BB0
+void EnKanban_Init(void); // func_80954A1C
+void EnKanban_Destroy(void); // func_80954BB0
 void func_80954BE8(void); // func_80954BE8
-void func_80954CA0(void); // func_80954CA0
-void func_80956954(void); // func_80956954
-void func_809580C0(void); // func_809580C0
-void func_809581F4(void); // func_809581F4
+void EnKanban_Update(void); // func_80954CA0
+void EnKanban_Draw(void); // func_80956954
+void EnAttackNiw_Init(void); // func_809580C0
+void EnAttackNiw_Destroy(void); // func_809581F4
 void func_80958228(void); // func_80958228
 void func_809585B0(void); // func_809585B0
 void func_80958634(void); // func_80958634
 void func_80958974(void); // func_80958974
 void func_80958BE4(void); // func_80958BE4
-void func_80958CA8(void); // func_80958CA8
+void EnAttackNiw_Update(void); // func_80958CA8
 void func_80958F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80958F6C
-void func_8095909C(void); // func_8095909C
+void EnAttackNiw_Draw(void); // func_8095909C
 void func_809592E0(void); // func_809592E0
-void func_80959390(void); // func_80959390
-void func_809594F8(void); // func_809594F8
+void EnMk_Init(void); // func_80959390
+void EnMk_Destroy(void); // func_809594F8
 void func_80959524(void); // func_80959524
 void func_8095954C(void); // func_8095954C
 void func_809595D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_809595D0
@@ -7624,13 +7624,13 @@ void func_80959A24(void); // func_80959A24
 void func_80959C94(void); // func_80959C94
 void func_80959D28(void); // func_80959D28
 void func_80959E18(void); // func_80959E18
-void func_8095A028(void); // func_8095A028
+void EnMk_Update(void); // func_8095A028
 void func_8095A150(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8095A150
 void func_8095A198(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8095A198
-void func_8095A1D8(void); // func_8095A1D8
+void EnMk_Draw(void); // func_8095A1D8
 void func_8095A510(void); // func_8095A510
-void func_8095A560(void); // func_8095A560
-void func_8095A8DC(void); // func_8095A8DC
+void EnOwl_Init(void); // func_8095A560
+void EnOwl_Destroy(void); // func_8095A8DC
 void func_8095A920(void); // func_8095A920
 void func_8095A978(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8095A978
 void func_8095A9FC(void); // func_8095A9FC
@@ -7675,11 +7675,11 @@ void func_8095C408(void); // func_8095C408
 void func_8095C484(void); // func_8095C484
 void func_8095C510(void); // func_8095C510
 void func_8095C568(void); // func_8095C568
-void func_8095C654(void); // func_8095C654
+void EnOwl_Update(void); // func_8095C654
 void func_8095CCF4(void); // func_8095CCF4
 void func_8095CE18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8095CE18
 void func_8095CF44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8095CF44
-void func_8095CFC8(void); // func_8095CFC8
+void EnOwl_Draw(void); // func_8095CFC8
 void func_8095D074(void); // func_8095D074
 void func_8095D24C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8095D24C
 void func_8095D6E0(void); // func_8095D6E0
@@ -7694,8 +7694,8 @@ void func_8095E14C(void); // func_8095E14C
 void func_8095E180(void); // func_8095E180
 void func_8095E204(void); // func_8095E204
 void func_8095E2B0(void); // func_8095E2B0
-void func_8095E328(void); // func_8095E328
-void func_8095E580(void); // func_8095E580
+void EnIshi_Init(void); // func_8095E328
+void EnIshi_Destroy(void); // func_8095E580
 void func_8095E5AC(void); // func_8095E5AC
 void func_8095E5C0(void); // func_8095E5C0
 void func_8095E64C(void); // func_8095E64C
@@ -7709,20 +7709,20 @@ void func_8095F060(void); // func_8095F060
 void func_8095F0A4(void); // func_8095F0A4
 void func_8095F180(void); // func_8095F180
 void func_8095F194(void); // func_8095F194
-void func_8095F1EC(void); // func_8095F1EC
+void EnIshi_Update(void); // func_8095F1EC
 void func_8095F210(void); // func_8095F210
 void func_8095F36C(void); // func_8095F36C
 void func_8095F61C(void); // func_8095F61C
 void func_8095F654(void); // func_8095F654
-void func_8095FB10(void); // func_8095FB10
-void func_8095FB38(void); // func_8095FB38
-void func_8095FB48(void); // func_8095FB48
-void func_8095FB58(void); // func_8095FB58
+void ObjHana_Init(void); // func_8095FB10
+void ObjHana_Destroy(void); // func_8095FB38
+void ObjHana_Update(void); // func_8095FB48
+void ObjHana_Draw(void); // func_8095FB58
 void func_8095FBF0(void); // func_8095FBF0
 void func_8095FC94(void); // func_8095FC94
 void func_8095FCEC(void); // func_8095FCEC
-void func_8095FEEC(void); // func_8095FEEC
-void func_8095FFCC(void); // func_8095FFCC
+void ObjLightswitch_Init(void); // func_8095FEEC
+void ObjLightswitch_Destroy(void); // func_8095FFCC
 void func_8095FFF8(void); // func_8095FFF8
 void func_80960014(void); // func_80960014
 void func_80960088(void); // func_80960088
@@ -7735,10 +7735,10 @@ void func_8096034C(void); // func_8096034C
 void func_80960370(void); // func_80960370
 void func_80960424(void); // func_80960424
 void func_80960440(void); // func_80960440
-void func_80960494(void); // func_80960494
+void ObjLightswitch_Update(void); // func_80960494
 void func_809605F4(void); // func_809605F4
 void func_80960880(void); // func_80960880
-void func_80960B0C(void); // func_80960B0C
+void ObjLightswitch_Draw(void); // func_80960B0C
 void func_80960CF0(void); // func_80960CF0
 void func_80960E0C(void); // func_80960E0C
 void func_80960F0C(void); // func_80960F0C
@@ -7746,18 +7746,18 @@ void func_80961018(void); // func_80961018
 void func_8096104C(void); // func_8096104C
 void func_809611BC(void); // func_809611BC
 void func_809612BC(void); // func_809612BC
-void func_80961350(void); // func_80961350
+void ObjMure2_Init(void); // func_80961350
 void func_809613B0(void); // func_809613B0
 void func_809613C4(void); // func_809613C4
 void func_809613E8(void); // func_809613E8
 void func_809613FC(void); // func_809613FC
 void func_8096147C(void); // func_8096147C
 void func_80961490(void); // func_80961490
-void func_80961520(void); // func_80961520
+void ObjMure2_Update(void); // func_80961520
 void func_809616E0(void); // func_809616E0
 void func_809619D0(void); // func_809619D0
-void func_80961AD0(void); // func_80961AD0
-void func_80961CC4(void); // func_80961CC4
+void EnFu_Init(void); // func_80961AD0
+void EnFu_Destroy(void); // func_80961CC4
 void func_80961D10(void); // func_80961D10
 void func_80961D7C(void); // func_80961D7C
 void func_80961E88(void); // func_80961E88
@@ -7802,33 +7802,33 @@ void func_8096413C(void); // func_8096413C
 void func_80964190(void); // func_80964190
 void func_8096426C(void); // func_8096426C
 void func_809642E0(void); // func_809642E0
-void func_80964350(void); // func_80964350
+void EnFu_Update(void); // func_80964350
 void func_809643FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_809643FC
 void func_8096450C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8096450C
-void func_80964570(void); // func_80964570
+void EnFu_Draw(void); // func_80964570
 void func_80964694(void); // func_80964694
 void func_809647EC(void); // func_809647EC
 void func_80964950(void); // func_80964950
 void func_80965650(void); // func_80965650
-void func_8096565C(void); // func_8096565C
-void func_809656C4(void); // func_809656C4
+void EnStream_Init(void); // func_8096565C
+void EnStream_Destroy(void); // func_809656C4
 void func_809656D4(void); // func_809656D4
 void func_809657F4(void); // func_809657F4
 void func_8096597C(void); // func_8096597C
-void func_809659D0(void); // func_809659D0
-void func_80965A04(void); // func_80965A04
+void EnStream_Update(void); // func_809659D0
+void EnStream_Draw(void); // func_80965A04
 void func_80965BB0(void); // func_80965BB0
 void func_80965BBC(void); // func_80965BBC
-void func_80965C0C(void); // func_80965C0C
-void func_80965D10(void); // func_80965D10
+void EnMm_Init(void); // func_80965C0C
+void EnMm_Destroy(void); // func_80965D10
 void func_80965D3C(void); // func_80965D3C
 void func_80965DB4(void); // func_80965DB4
 void func_8096611C(void); // func_8096611C
-void func_809661BC(void); // func_809661BC
-void func_80966238(void); // func_80966238
+void EnMm_Update(void); // func_809661BC
+void EnMm_Draw(void); // func_80966238
 void func_80966410(void); // func_80966410
-void func_8096641C(void); // func_8096641C
-void func_8096642C(void); // func_8096642C
+void EnWeatherTag_Destroy(void); // func_8096641C
+void EnWeatherTag_Init(void); // func_8096642C
 void func_80966608(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE2 param_7, UNK_TYPE1 param_8); // func_80966608
 void func_80966758(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE2 param_7); // func_80966758
 void func_8096689C(void); // func_8096689C
@@ -7851,13 +7851,13 @@ void func_80967250(void); // func_80967250
 void func_809672DC(void); // func_809672DC
 void func_809674C8(void); // func_809674C8
 void func_80967608(void); // func_80967608
-void func_809676A4(void); // func_809676A4
-void func_80967784(void); // func_80967784
+void EnWeatherTag_Update(void); // func_809676A4
+void EnWeatherTag_Draw(void); // func_80967784
 void func_809679D0(void); // func_809679D0
 void func_80967A48(void); // func_80967A48
 void func_80967AB4(void); // func_80967AB4
-void func_80967B1C(void); // func_80967B1C
-void func_80967CE0(void); // func_80967CE0
+void EnAni_Init(void); // func_80967B1C
+void EnAni_Destroy(void); // func_80967CE0
 void func_80967D20(void); // func_80967D20
 void func_80967DA0(void); // func_80967DA0
 void func_80967DCC(void); // func_80967DCC
@@ -7867,12 +7867,12 @@ void func_80967F20(void); // func_80967F20
 void func_80967FA4(void); // func_80967FA4
 void func_809680B0(void); // func_809680B0
 void func_80968164(void); // func_80968164
-void func_809682A8(void); // func_809682A8
+void EnAni_Update(void); // func_809682A8
 void func_80968504(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80968504
 void func_8096854C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8096854C
-void func_8096858C(void); // func_8096858C
-void func_809687B0(void); // func_809687B0
-void func_809689D4(void); // func_809689D4
+void EnAni_Draw(void); // func_8096858C
+void EnJs_Init(void); // func_809687B0
+void EnJs_Destroy(void); // func_809689D4
 void func_80968A5C(void); // func_80968A5C
 void func_80968B18(void); // func_80968B18
 void func_80968B8C(void); // func_80968B8C
@@ -7904,42 +7904,42 @@ void func_8096A1E8(void); // func_8096A1E8
 void func_8096A2C0(void); // func_8096A2C0
 void func_8096A38C(void); // func_8096A38C
 void func_8096A6F4(void); // func_8096A6F4
-void func_8096A8A4(void); // func_8096A8A4
+void EnJs_Update(void); // func_8096A8A4
 void func_8096A9F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8096A9F4
-void func_8096AB20(void); // func_8096AB20
+void EnJs_Draw(void); // func_8096AB20
 void func_8096B0A0(void); // func_8096B0A0
-void func_8096B0AC(void); // func_8096B0AC
-void func_8096B0BC(void); // func_8096B0BC
+void EnOkarinaEffect_Destroy(void); // func_8096B0AC
+void EnOkarinaEffect_Init(void); // func_8096B0BC
 void func_8096B104(void); // func_8096B104
 void func_8096B174(void); // func_8096B174
 void func_8096B1FC(void); // func_8096B1FC
-void func_8096B260(void); // func_8096B260
-void func_8096B310(void); // func_8096B310
-void func_8096B5F4(void); // func_8096B5F4
+void EnOkarinaEffect_Update(void); // func_8096B260
+void EnMag_Init(void); // func_8096B310
+void EnMag_Destroy(void); // func_8096B5F4
 void func_8096B604(void); // func_8096B604
-void func_8096B94C(void); // func_8096B94C
+void EnMag_Update(void); // func_8096B94C
 void func_8096C998(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_8096C998
 void func_8096CBB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_8096CBB0
 void func_8096CDC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13); // func_8096CDC8
 void func_8096D230(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8096D230
 void func_8096D60C(void); // func_8096D60C
 void func_8096D74C(void); // func_8096D74C
-void func_8096E868(void); // func_8096E868
+void EnMag_Draw(void); // func_8096E868
 void func_8096EC40(void); // func_8096EC40
 void func_8096EC4C(void); // func_8096EC4C
-void func_8096ED84(void); // func_8096ED84
-void func_8096EE40(void); // func_8096EE40
+void ElfMsg2_Init(void); // func_8096ED84
+void ElfMsg2_Destroy(void); // func_8096EE40
 void func_8096EE50(void); // func_8096EE50
 void func_8096EE64(void); // func_8096EE64
 void func_8096EF98(void); // func_8096EF98
 void func_8096EFD0(void); // func_8096EFD0
-void func_8096F04C(void); // func_8096F04C
-void func_8096F160(void); // func_8096F160
-void func_8096F22C(void); // func_8096F22C
-void func_8096F260(void); // func_8096F260
-void func_8096F4DC(void); // func_8096F4DC
-void func_8096F5E0(void); // func_8096F5E0
-void func_8096F60C(void); // func_8096F60C
+void ElfMsg2_Update(void); // func_8096F04C
+void BgF40Swlift_Init(void); // func_8096F160
+void BgF40Swlift_Destroy(void); // func_8096F22C
+void BgF40Swlift_Update(void); // func_8096F260
+void BgF40Swlift_Draw(void); // func_8096F4DC
+void EnKakasi_Destroy(void); // func_8096F5E0
+void EnKakasi_Init(void); // func_8096F60C
 void func_8096F800(void); // func_8096F800
 void func_8096F88C(void); // func_8096F88C
 void func_8096F8D8(void); // func_8096F8D8
@@ -7972,35 +7972,35 @@ void func_8097193C(void); // func_8097193C
 void func_80971A38(void); // func_80971A38
 void func_80971A64(void); // func_80971A64
 void func_80971AD4(void); // func_80971AD4
-void func_80971B48(void); // func_80971B48
+void EnKakasi_Update(void); // func_80971B48
 void func_80971CE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80971CE0
-void func_80971D20(void); // func_80971D20
+void EnKakasi_Draw(void); // func_80971D20
 void func_80972350(void); // func_80972350
 void func_809723C4(void); // func_809723C4
-void func_80972454(void); // func_80972454
-void func_80972548(void); // func_80972548
+void ObjMakeoshihiki_Init(void); // func_80972454
+void ObjMakeoshihiki_Update(void); // func_80972548
 void func_80972680(void); // func_80972680
-void func_8097268C(void); // func_8097268C
-void func_809727EC(void); // func_809727EC
+void OceffSpot_Init(void); // func_8097268C
+void OceffSpot_Destroy(void); // func_809727EC
 void func_80972844(void); // func_80972844
 void func_809728F8(void); // func_809728F8
 void func_80972934(void); // func_80972934
-void func_80972998(void); // func_80972998
-void func_80972C54(void); // func_80972C54
-void func_80973550(Actor* param_1, s32 param_2); // func_80973550
-void func_80973640(void); // func_80973640
-void func_809736FC(void); // func_809736FC
+void OceffSpot_Update(void); // func_80972998
+void OceffSpot_Draw(void); // func_80972C54
+void EnTorch_Init(Actor* param_1, s32 param_2); // func_80973550
+void ShotSun_Init(void); // func_80973640
+void ShotSun_Destroy(void); // func_809736FC
 void func_80973740(void); // func_80973740
 void func_80973804(void); // func_80973804
 void func_809738D0(void); // func_809738D0
 void func_80973960(void); // func_80973960
-void func_80973B5C(void); // func_80973B5C
-void func_80973C50(void); // func_80973C50
-void func_80973CA4(void); // func_80973CA4
+void ShotSun_Update(void); // func_80973B5C
+void ObjRoomtimer_Init(void); // func_80973C50
+void ObjRoomtimer_Destroy(void); // func_80973CA4
 void func_80973CD8(void); // func_80973CD8
 void func_80973D3C(void); // func_80973D3C
 void func_80973DE0(void); // func_80973DE0
-void func_80973E60(void); // func_80973E60
+void ObjRoomtimer_Update(void); // func_80973E60
 void func_80973EF0(void); // func_80973EF0
 void func_80973EFC(void); // func_80973EFC
 void func_80973F84(void); // func_80973F84
@@ -8033,8 +8033,8 @@ void func_8097502C(void); // func_8097502C
 void func_80975070(void); // func_80975070
 void func_80975128(void); // func_80975128
 void func_80975300(void); // func_80975300
-void func_809753C8(void); // func_809753C8
-void func_80975540(void); // func_80975540
+void EnSsh_Init(void); // func_809753C8
+void EnSsh_Destroy(void); // func_80975540
 void func_809755C0(void); // func_809755C0
 void func_8097561C(void); // func_8097561C
 void func_809756D0(void); // func_809756D0
@@ -8044,14 +8044,14 @@ void func_80975998(void); // func_80975998
 void func_80975A98(void); // func_80975A98
 void func_80975B6C(void); // func_80975B6C
 void func_80975C14(void); // func_80975C14
-void func_80975C9C(void); // func_80975C9C
+void EnSsh_Update(void); // func_80975C9C
 void func_80975DBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80975DBC
 void func_80975EB8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80975EB8
-void func_80975F38(void); // func_80975F38
-void func_809764B0(void); // func_809764B0
-void func_8097650C(void); // func_8097650C
-void func_80976540(void); // func_80976540
-void func_809765A0(void); // func_809765A0
+void EnSsh_Draw(void); // func_80975F38
+void OceffWipe_Init(void); // func_809764B0
+void OceffWipe_Destroy(void); // func_8097650C
+void OceffWipe_Update(void); // func_80976540
+void OceffWipe_Draw(void); // func_809765A0
 u32 EffectDust_Init(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle, EffectDustInit* init); // func_80977210
 void EffectDust_Draw(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle); // func_80977394
 void EffectDust_Update0(GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle); // func_809776BC
@@ -8168,20 +8168,20 @@ void func_809813C8(void); // func_809813C8
 void func_80981698(void); // func_80981698
 void func_80981760(void); // func_80981760
 void func_8098176C(void); // func_8098176C
-void func_809817E4(void); // func_809817E4
-void func_80981904(void); // func_80981904
+void OceffStorm_Init(void); // func_809817E4
+void OceffStorm_Destroy(void); // func_80981904
 void func_80981928(void); // func_80981928
 void func_80981B48(void); // func_80981B48
-void func_80981B68(void); // func_80981B68
+void OceffStorm_Update(void); // func_80981B68
 void func_80981BB8(void); // func_80981BB8
-void func_80981D68(void); // func_80981D68
-void func_80983520(void); // func_80983520
+void OceffStorm_Draw(void); // func_80981D68
+void ObjDemo_Init(void); // func_80983520
 void func_80983634(void); // func_80983634
 void func_80983678(void); // func_80983678
 void func_80983704(void); // func_80983704
-void func_80983824(void); // func_80983824
-void func_809838F0(void); // func_809838F0
-void func_80983970(void); // func_80983970
+void ObjDemo_Update(void); // func_80983824
+void EnMinislime_Init(void); // func_809838F0
+void EnMinislime_Destroy(void); // func_80983970
 void func_8098399C(void); // func_8098399C
 void func_80983B38(void); // func_80983B38
 void func_80983DBC(void); // func_80983DBC
@@ -8216,20 +8216,20 @@ void func_809851E8(void); // func_809851E8
 void func_809852DC(void); // func_809852DC
 void func_8098537C(void); // func_8098537C
 void func_80985480(void); // func_80985480
-void func_80985538(void); // func_80985538
-void func_80985C40(void); // func_80985C40
-void func_80985D10(void); // func_80985D10
+void EnMinislime_Update(void); // func_80985538
+void EnNutsball_Init(void); // func_80985C40
+void EnNutsball_Destroy(void); // func_80985D10
 void func_80985D3C(void); // func_80985D3C
-void func_80985D68(void); // func_80985D68
-void func_80986120(void); // func_80986120
-void func_80986270(void); // func_80986270
-void func_809862CC(void); // func_809862CC
-void func_80986300(void); // func_80986300
-void func_80986360(void); // func_80986360
-void func_809879E0(void); // func_809879E0
-void func_80987A3C(void); // func_80987A3C
-void func_80987A70(void); // func_80987A70
-void func_80987AD0(void); // func_80987AD0
+void EnNutsball_Update(void); // func_80985D68
+void EnNutsball_Draw(void); // func_80986120
+void OceffWipe2_Init(void); // func_80986270
+void OceffWipe2_Destroy(void); // func_809862CC
+void OceffWipe2_Update(void); // func_80986300
+void OceffWipe2_Draw(void); // func_80986360
+void OceffWipe3_Init(void); // func_809879E0
+void OceffWipe3_Destroy(void); // func_80987A3C
+void OceffWipe3_Update(void); // func_80987A70
+void OceffWipe3_Draw(void); // func_80987AD0
 void func_80989140(void); // func_80989140
 void func_80989204(void); // func_80989204
 void func_8098933C(void); // func_8098933C
@@ -8273,20 +8273,20 @@ void func_8098BA64(void); // func_8098BA64
 void func_8098BB10(void); // func_8098BB10
 void func_8098BBEC(void); // func_8098BBEC
 void func_8098BC54(void); // func_8098BC54
-void func_8098BCA8(void); // func_8098BCA8
-void func_8098BE18(void); // func_8098BE18
-void func_8098BE44(void); // func_8098BE44
+void EnDg_Init(void); // func_8098BCA8
+void EnDg_Destroy(void); // func_8098BE18
+void EnDg_Update(void); // func_8098BE44
 void func_8098BFB8(void); // func_8098BFB8
 void func_8098BFD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8098BFD4
-void func_8098C06C(void); // func_8098C06C
+void EnDg_Draw(void); // func_8098C06C
 void func_8098CA20(void); // func_8098CA20
 void func_8098CAD0(void); // func_8098CAD0
 void func_8098CB70(void); // func_8098CB70
 void func_8098CBDC(void); // func_8098CBDC
-void func_8098CC18(void); // func_8098CC18
-void func_8098CC98(void); // func_8098CC98
-void func_8098CCC4(void); // func_8098CCC4
-void func_8098CD0C(void); // func_8098CD0C
+void EnSi_Init(void); // func_8098CC18
+void EnSi_Destroy(void); // func_8098CC98
+void EnSi_Update(void); // func_8098CCC4
+void EnSi_Draw(void); // func_8098CD0C
 void func_8098CE40(void); // func_8098CE40
 void func_8098CEAC(void); // func_8098CEAC
 void func_8098D19C(void); // func_8098D19C
@@ -8296,62 +8296,62 @@ void func_8098D870(void); // func_8098D870
 void func_8098D8C8(void); // func_8098D8C8
 void func_8098D99C(void); // func_8098D99C
 void func_8098DA74(void); // func_8098DA74
-void func_8098DAE0(void); // func_8098DAE0
-void func_8098DC18(void); // func_8098DC18
+void ObjComb_Init(void); // func_8098DAE0
+void ObjComb_Destroy(void); // func_8098DC18
 void func_8098DC44(void); // func_8098DC44
 void func_8098DC60(void); // func_8098DC60
 void func_8098DE58(void); // func_8098DE58
 void func_8098DEA0(void); // func_8098DEA0
 void func_8098E098(void); // func_8098E098
 void func_8098E0B8(void); // func_8098E0B8
-void func_8098E15C(void); // func_8098E15C
-void func_8098E2F8(void); // func_8098E2F8
+void ObjComb_Update(void); // func_8098E15C
+void ObjComb_Draw(void); // func_8098E2F8
 void func_8098E5C0(void); // func_8098E5C0
 void func_8098E62C(void); // func_8098E62C
 void func_8098E8A8(void); // func_8098E8A8
 void func_8098E900(void); // func_8098E900
 void func_8098E9C4(void); // func_8098E9C4
-void func_8098EA08(void); // func_8098EA08
-void func_8098EB30(void); // func_8098EB30
+void ObjKibako2_Init(void); // func_8098EA08
+void ObjKibako2_Destroy(void); // func_8098EB30
 void func_8098EB78(void); // func_8098EB78
 void func_8098EC68(void); // func_8098EC68
 void func_8098ED20(void); // func_8098ED20
-void func_8098ED4C(void); // func_8098ED4C
-void func_8098EE0C(void); // func_8098EE0C
-void func_8098EF60(void); // func_8098EF60
-void func_8098EF9C(void); // func_8098EF9C
+void ObjKibako2_Update(void); // func_8098ED4C
+void ObjKibako2_Draw(void); // func_8098EE0C
+void EnHs2_Init(void); // func_8098EF60
+void EnHs2_Destroy(void); // func_8098EF9C
 void func_8098EFAC(void); // func_8098EFAC
-void func_8098EFBC(void); // func_8098EFBC
-void func_8098EFE0(void); // func_8098EFE0
+void EnHs2_Update(void); // func_8098EFBC
+void EnHs2_Draw(void); // func_8098EFE0
 void func_8098F040(void); // func_8098F040
 void func_8098F110(void); // func_8098F110
 void func_8098F220(void); // func_8098F220
 void func_8098F364(void); // func_8098F364
 void func_8098F438(void); // func_8098F438
-void func_8098F528(void); // func_8098F528
-void func_8098F588(void); // func_8098F588
+void ObjMure3_Init(void); // func_8098F528
+void ObjMure3_Destroy(void); // func_8098F588
 void func_8098F598(void); // func_8098F598
 void func_8098F5AC(void); // func_8098F5AC
 void func_8098F5D0(void); // func_8098F5D0
 void func_8098F5E4(void); // func_8098F5E4
 void func_8098F66C(void); // func_8098F66C
 void func_8098F680(void); // func_8098F680
-void func_8098F6FC(void); // func_8098F6FC
+void ObjMure3_Update(void); // func_8098F6FC
 void func_8098F800(void); // func_8098F800
 void func_8098F8A8(void); // func_8098F8A8
 void func_8098F928(void); // func_8098F928
-void func_8098F954(void); // func_8098F954
-void func_8098FA44(void); // func_8098FA44
+void EnTg_Init(void); // func_8098F954
+void EnTg_Destroy(void); // func_8098FA44
 void func_8098FA70(void); // func_8098FA70
-void func_8098FB28(void); // func_8098FB28
+void EnTg_Update(void); // func_8098FB28
 UNK_TYPE4 func_8098FBB4(void); // func_8098FBB4
 void func_8098FBD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8098FBD0
-void func_8098FC2C(void); // func_8098FC2C
+void EnTg_Draw(void); // func_8098FC2C
 void func_8098FD50(void); // func_8098FD50
 void func_8098FEA8(void); // func_8098FEA8
 void func_8099000C(void); // func_8099000C
-void func_80990310(void); // func_80990310
-void func_80990784(void); // func_80990784
+void EnWf_Init(void); // func_80990310
+void EnWf_Destroy(void); // func_80990784
 void func_809907D4(void); // func_809907D4
 void func_80990854(void); // func_80990854
 void func_809908E0(void); // func_809908E0
@@ -8402,18 +8402,18 @@ void func_80993524(void); // func_80993524
 void func_8099357C(void); // func_8099357C
 void func_80993738(void); // func_80993738
 void func_8099386C(void); // func_8099386C
-void func_80993BC0(void); // func_80993BC0
+void EnWf_Update(void); // func_80993BC0
 void func_80993E50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80993E50
 void func_80993E94(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80993E94
-void func_80993F68(void); // func_80993F68
+void EnWf_Draw(void); // func_80993F68
 void func_8099408C(void); // func_8099408C
 void func_809947B0(void); // func_809947B0
 void func_8099495C(void); // func_8099495C
 void func_809949C4(void); // func_809949C4
 void func_80994A30(void); // func_80994A30
 void func_80994A9C(void); // func_80994A9C
-void func_80994B08(void); // func_80994B08
-void func_80994D18(void); // func_80994D18
+void EnSkb_Init(void); // func_80994B08
+void EnSkb_Destroy(void); // func_80994D18
 void func_80994DA8(void); // func_80994DA8
 void func_80994E2C(void); // func_80994E2C
 void func_80994E94(void); // func_80994E94
@@ -8457,14 +8457,14 @@ void func_8099672C(void); // func_8099672C
 void func_80996AD0(void); // func_80996AD0
 void func_80996BEC(void); // func_80996BEC
 void func_80996D68(void); // func_80996D68
-void func_80996E5C(void); // func_80996E5C
+void EnSkb_Update(void); // func_80996E5C
 void func_80996F78(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80996F78
 void func_809970D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809970D0
-void func_80997278(void); // func_80997278
+void EnSkb_Draw(void); // func_80997278
 void func_80997A90(void); // func_80997A90
 void func_80997AFC(void); // func_80997AFC
-void func_80997B30(void); // func_80997B30
-void func_80997CE0(void); // func_80997CE0
+void EnGs_Init(void); // func_80997B30
+void EnGs_Destroy(void); // func_80997CE0
 void func_80997D14(void); // func_80997D14
 void func_80997D38(void); // func_80997D38
 void func_80997DEC(void); // func_80997DEC
@@ -8490,14 +8490,14 @@ void func_80999A8C(void); // func_80999A8C
 void func_80999AC0(void); // func_80999AC0
 void func_80999B34(void); // func_80999B34
 void func_80999BC8(void); // func_80999BC8
-void func_80999E38(void); // func_80999E38
-void func_8099A094(void); // func_8099A094
-void func_8099A920(void); // func_8099A920
-void func_8099A96C(void); // func_8099A96C
-void func_8099A9A4(void); // func_8099A9A4
+void EnGs_Update(void); // func_80999E38
+void EnGs_Draw(void); // func_8099A094
+void ObjSound_Init(void); // func_8099A920
+void ObjSound_Destroy(void); // func_8099A96C
+void ObjSound_Update(void); // func_8099A9A4
 void func_8099AA84(void); // func_8099AA84
-void func_8099AB30(void); // func_8099AB30
-void func_8099AC2C(void); // func_8099AC2C
+void EnCrow_Init(void); // func_8099AB30
+void EnCrow_Destroy(void); // func_8099AC2C
 void func_8099AC58(void); // func_8099AC58
 void func_8099AC8C(void); // func_8099AC8C
 void func_8099B098(void); // func_8099B098
@@ -8512,15 +8512,15 @@ void func_8099B838(void); // func_8099B838
 void func_8099B8EC(void); // func_8099B8EC
 void func_8099B9E8(void); // func_8099B9E8
 void func_8099BAB4(void); // func_8099BAB4
-void func_8099BB84(void); // func_8099BB84
+void EnCrow_Update(void); // func_8099BB84
 void func_8099BE48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8099BE48
 void func_8099BF20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8099BF20
-void func_8099BFA4(void); // func_8099BFA4
+void EnCrow_Draw(void); // func_8099BFA4
 void func_8099C290(void); // func_8099C290
 void func_8099C328(void); // func_8099C328
 void func_8099C41C(void); // func_8099C41C
-void func_8099C498(void); // func_8099C498
-void func_8099C834(void); // func_8099C834
+void EnCow_Init(void); // func_8099C498
+void EnCow_Destroy(void); // func_8099C834
 void func_8099C880(void); // func_8099C880
 void func_8099CAA8(void); // func_8099CAA8
 void func_8099CB20(void); // func_8099CB20
@@ -8530,16 +8530,16 @@ void func_8099CC68(void); // func_8099CC68
 void func_8099CCF8(void); // func_8099CCF8
 void func_8099CDA0(void); // func_8099CDA0
 void func_8099CFAC(void); // func_8099CFAC
-void func_8099D144(void); // func_8099D144
+void EnCow_Update(void); // func_8099D144
 void func_8099D3C0(void); // func_8099D3C0
 void func_8099D4AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8099D4AC
 void func_8099D4FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8099D4FC
-void func_8099D53C(void); // func_8099D53C
+void EnCow_Draw(void); // func_8099D53C
 void func_8099D59C(void); // func_8099D59C
-void func_8099D780(void); // func_8099D780
-void func_8099D7DC(void); // func_8099D7DC
-void func_8099D810(void); // func_8099D810
-void func_8099D870(void); // func_8099D870
+void OceffWipe4_Init(void); // func_8099D780
+void OceffWipe4_Destroy(void); // func_8099D7DC
+void OceffWipe4_Update(void); // func_8099D810
+void OceffWipe4_Draw(void); // func_8099D870
 void func_8099E790(void); // func_8099E790
 void func_8099E858(void); // func_8099E858
 void func_8099E96C(void); // func_8099E96C
@@ -8549,23 +8549,23 @@ void func_8099EBD8(void); // func_8099EBD8
 void func_8099EC50(void); // func_8099EC50
 void func_8099ED4C(void); // func_8099ED4C
 void func_8099EE24(void); // func_8099EE24
-void func_8099EE34(void); // func_8099EE34
-void func_8099EF40(void); // func_8099EF40
-void func_8099EF6C(void); // func_8099EF6C
+void EnZo_Init(void); // func_8099EE34
+void EnZo_Destroy(void); // func_8099EF40
+void EnZo_Update(void); // func_8099EF6C
 void func_8099EFF4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8099EFF4
 void func_8099F15C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8099F15C
-void func_8099F268(void); // func_8099F268
+void EnZo_Draw(void); // func_8099F268
 void func_8099F730(void); // func_8099F730
 void func_8099F7F4(void); // func_8099F7F4
 void func_8099F980(void); // func_8099F980
 void func_8099FA40(void); // func_8099FA40
-void func_8099FAB0(void); // func_8099FAB0
-void func_8099FB20(void); // func_8099FB20
+void ObjMakekinsuta_Init(void); // func_8099FAB0
+void ObjMakekinsuta_Destroy(void); // func_8099FB20
 void func_8099FB64(void); // func_8099FB64
-void func_8099FCC0(void); // func_8099FCC0
+void ObjMakekinsuta_Update(void); // func_8099FCC0
 void func_8099FD7C(void); // func_8099FD7C
-void func_8099FEB0(void); // func_8099FEB0
-void func_809A0044(void); // func_809A0044
+void EnGe3_Init(void); // func_8099FEB0
+void EnGe3_Destroy(void); // func_809A0044
 void func_809A0070(void); // func_809A0070
 void func_809A00F8(void); // func_809A00F8
 void func_809A020C(void); // func_809A020C
@@ -8576,106 +8576,106 @@ void func_809A03FC(void); // func_809A03FC
 void func_809A04D0(void); // func_809A04D0
 void func_809A0820(void); // func_809A0820
 void func_809A08A4(void); // func_809A08A4
-void func_809A0920(void); // func_809A0920
+void EnGe3_Update(void); // func_809A0920
 void func_809A096C(void); // func_809A096C
 void func_809A0A14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809A0A14
 void func_809A0C60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809A0C60
-void func_809A0CBC(void); // func_809A0CBC
+void EnGe3_Draw(void); // func_809A0CBC
 void func_809A0F20(void); // func_809A0F20
 void func_809A0F78(void); // func_809A0F78
 void func_809A10F4(void); // func_809A10F4
 void func_809A13A0(void); // func_809A13A0
 void func_809A1408(void); // func_809A1408
-void func_809A1480(void); // func_809A1480
-void func_809A15A0(void); // func_809A15A0
-void func_809A15CC(void); // func_809A15CC
-void func_809A17BC(void); // func_809A17BC
+void ObjHamishi_Init(void); // func_809A1480
+void ObjHamishi_Destroy(void); // func_809A15A0
+void ObjHamishi_Update(void); // func_809A15CC
+void ObjHamishi_Draw(void); // func_809A17BC
 void func_809A1BB0(void); // func_809A1BB0
-void func_809A1C4C(void); // func_809A1C4C
-void func_809A1CFC(void); // func_809A1CFC
+void EnZl4_Init(void); // func_809A1C4C
+void EnZl4_Destroy(void); // func_809A1CFC
 void func_809A1D0C(void); // func_809A1D0C
-void func_809A1D1C(void); // func_809A1D1C
+void EnZl4_Update(void); // func_809A1D1C
 void func_809A1D60(void); // func_809A1D60
 void func_809A1DA4(void); // func_809A1DA4
 void func_809A1DBC(void); // func_809A1DBC
 void func_809A1DD0(void); // func_809A1DD0
 void func_809A1E28(void); // func_809A1E28
-void func_809A1E60(void); // func_809A1E60
-void func_809A2030(void); // func_809A2030
-void func_809A2070(void); // func_809A2070
+void EnZl4_Draw(void); // func_809A1E60
+void EnMm2_Init(void); // func_809A2030
+void EnMm2_Destroy(void); // func_809A2070
 void func_809A2080(void); // func_809A2080
 void func_809A20FC(void); // func_809A20FC
-void func_809A2194(void); // func_809A2194
-void func_809A21B8(void); // func_809A21B8
+void EnMm2_Update(void); // func_809A2194
+void EnMm2_Draw(void); // func_809A21B8
 void func_809A2B60(void); // func_809A2B60
 void func_809A2B70(void); // func_809A2B70
 void func_809A2BF8(void); // func_809A2BF8
-void func_809A2C78(void); // func_809A2C78
-void func_809A2D80(void); // func_809A2D80
+void DoorSpiral_Init(void); // func_809A2C78
+void DoorSpiral_Destroy(void); // func_809A2D80
 void func_809A2DB0(void); // func_809A2DB0
 void func_809A2E08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809A2E08
 void func_809A2EA0(void); // func_809A2EA0
 void func_809A2FF8(void); // func_809A2FF8
 void func_809A3098(void); // func_809A3098
-void func_809A30E0(void); // func_809A30E0
-void func_809A3134(void); // func_809A3134
+void DoorSpiral_Update(void); // func_809A30E0
+void DoorSpiral_Draw(void); // func_809A3134
 void func_809A33E0(void); // func_809A33E0
 void func_809A3448(void); // func_809A3448
 void func_809A34E0(void); // func_809A34E0
 void func_809A35EC(void); // func_809A35EC
 void func_809A376C(void); // func_809A376C
-void func_809A3818(void); // func_809A3818
-void func_809A3A14(void); // func_809A3A14
+void ObjPzlblock_Init(void); // func_809A3818
+void ObjPzlblock_Destroy(void); // func_809A3A14
 void func_809A3A48(void); // func_809A3A48
 void func_809A3A74(void); // func_809A3A74
 void func_809A3BA4(void); // func_809A3BA4
 void func_809A3BC0(void); // func_809A3BC0
 void func_809A3D1C(void); // func_809A3D1C
 void func_809A3D38(void); // func_809A3D38
-void func_809A3D7C(void); // func_809A3D7C
+void ObjPzlblock_Update(void); // func_809A3D7C
 void func_809A3E58(void); // func_809A3E58
 void func_809A3F0C(void); // func_809A3F0C
 void func_809A41C0(void); // func_809A41C0
 void func_809A42A0(void); // func_809A42A0
 void func_809A43A8(void); // func_809A43A8
 void func_809A43EC(void); // func_809A43EC
-void func_809A448C(void); // func_809A448C
-void func_809A4718(void); // func_809A4718
+void ObjToge_Init(void); // func_809A448C
+void ObjToge_Destroy(void); // func_809A4718
 void func_809A4744(void); // func_809A4744
 void func_809A477C(void); // func_809A477C
 void func_809A4804(void); // func_809A4804
 void func_809A481C(void); // func_809A481C
 void func_809A488C(void); // func_809A488C
 void func_809A48AC(void); // func_809A48AC
-void func_809A4ACC(void); // func_809A4ACC
-void func_809A4C50(void); // func_809A4C50
+void ObjToge_Update(void); // func_809A4ACC
+void ObjToge_Draw(void); // func_809A4C50
 void func_809A4E00(void); // func_809A4E00
 void func_809A4E68(void); // func_809A4E68
 void func_809A4F00(void); // func_809A4F00
 void func_809A500C(void); // func_809A500C
 void func_809A518C(void); // func_809A518C
-void func_809A5238(void); // func_809A5238
-void func_809A5480(void); // func_809A5480
+void ObjArmos_Init(void); // func_809A5238
+void ObjArmos_Destroy(void); // func_809A5480
 void func_809A54B4(void); // func_809A54B4
 void func_809A54E0(void); // func_809A54E0
 void func_809A5610(void); // func_809A5610
 void func_809A562C(void); // func_809A562C
 void func_809A57D8(void); // func_809A57D8
 void func_809A57F4(void); // func_809A57F4
-void func_809A5838(void); // func_809A5838
+void ObjArmos_Update(void); // func_809A5838
 void func_809A5960(void); // func_809A5960
 void func_809A5A3C(void); // func_809A5A3C
-void func_809A5B50(void); // func_809A5B50
-void func_809A5D10(void); // func_809A5D10
-void func_809A5D94(void); // func_809A5D94
+void ObjArmos_Draw(void); // func_809A5B50
+void ObjBoyo_Init(void); // func_809A5D10
+void ObjBoyo_Destroy(void); // func_809A5D94
 void func_809A5DC0(void); // func_809A5DC0
 void func_809A5DE0(void); // func_809A5DE0
 void func_809A5E14(void); // func_809A5E14
 void func_809A5E24(void); // func_809A5E24
-void func_809A5E98(void); // func_809A5E98
-void func_809A610C(void); // func_809A610C
-void func_809A6280(void); // func_809A6280
-void func_809A64E0(void); // func_809A64E0
+void ObjBoyo_Update(void); // func_809A5E98
+void ObjBoyo_Draw(void); // func_809A610C
+void EnGrasshopper_Init(void); // func_809A6280
+void EnGrasshopper_Destroy(void); // func_809A64E0
 void func_809A6524(void); // func_809A6524
 void func_809A65D8(void); // func_809A65D8
 void func_809A6628(void); // func_809A6628
@@ -8700,9 +8700,9 @@ void func_809A7BBC(void); // func_809A7BBC
 void func_809A7C98(void); // func_809A7C98
 void func_809A7CE0(void); // func_809A7CE0
 void func_809A8044(void); // func_809A8044
-void func_809A8224(void); // func_809A8224
+void EnGrasshopper_Update(void); // func_809A8224
 void func_809A847C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809A847C
-void func_809A8640(void); // func_809A8640
+void EnGrasshopper_Draw(void); // func_809A8640
 void func_809A8870(void); // func_809A8870
 void func_809A8924(void); // func_809A8924
 void func_809A8A64(void); // func_809A8A64
@@ -8710,24 +8710,24 @@ void func_809A9110(void); // func_809A9110
 void func_809A91FC(void); // func_809A91FC
 void func_809A92D0(void); // func_809A92D0
 void func_809A9314(void); // func_809A9314
-void func_809A961C(void); // func_809A961C
-void func_809A96FC(void); // func_809A96FC
+void ObjGrass_Init(void); // func_809A961C
+void ObjGrass_Destroy(void); // func_809A96FC
 void func_809A9790(void); // func_809A9790
 void func_809A983C(void); // func_809A983C
 void func_809A9DB8(void); // func_809A9DB8
-void func_809AA238(void); // func_809AA238
+void ObjGrass_Update(void); // func_809AA238
 void func_809AA278(void); // func_809AA278
 void func_809AA54C(void); // func_809AA54C
 void func_809AA798(void); // func_809AA798
-void func_809AA9A8(void); // func_809AA9A8
+void ObjGrass_Draw(void); // func_809AA9A8
 void func_809AAE60(void); // func_809AAE60
 void func_809AAE94(void); // func_809AAE94
 void func_809AAF18(void); // func_809AAF18
 void func_809AAF58(void); // func_809AAF58
 void func_809AAF9C(void); // func_809AAF9C
 void func_809AAFE8(void); // func_809AAFE8
-void func_809AB2F0(void); // func_809AB2F0
-void func_809AB360(void); // func_809AB360
+void ObjGrassCarry_Init(void); // func_809AB2F0
+void ObjGrassCarry_Destroy(void); // func_809AB360
 void func_809AB3C4(void); // func_809AB3C4
 void func_809AB3D8(void); // func_809AB3D8
 void func_809AB428(void); // func_809AB428
@@ -8738,15 +8738,15 @@ void func_809AB5FC(void); // func_809AB5FC
 void func_809AB610(void); // func_809AB610
 void func_809AB6FC(void); // func_809AB6FC
 void func_809AB77C(void); // func_809AB77C
-void func_809ABB1C(void); // func_809ABB1C
+void ObjGrassCarry_Update(void); // func_809ABB1C
 void func_809ABB7C(void); // func_809ABB7C
 void func_809ABDE0(void); // func_809ABDE0
 void func_809ABE54(void); // func_809ABE54
 void func_809ABEC4(void); // func_809ABEC4
 void func_809ABF38(void); // func_809ABF38
-void func_809ABFA8(void); // func_809ABFA8
-void func_809AC4B0(void); // func_809AC4B0
-void func_809AC594(void); // func_809AC594
+void ObjGrassUnit_Init(void); // func_809ABFA8
+void BgFireWall_Init(void); // func_809AC4B0
+void BgFireWall_Destroy(void); // func_809AC594
 void func_809AC5C0(void); // func_809AC5C0
 void func_809AC638(void); // func_809AC638
 void func_809AC68C(void); // func_809AC68C
@@ -8754,23 +8754,23 @@ void func_809AC6C0(void); // func_809AC6C0
 void func_809AC760(void); // func_809AC760
 void func_809AC7F8(void); // func_809AC7F8
 void func_809AC970(void); // func_809AC970
-void func_809AC9B8(void); // func_809AC9B8
+void BgFireWall_Update(void); // func_809AC9B8
 void func_809ACB28(void); // func_809ACB28
-void func_809ACD90(void); // func_809ACD90
-void func_809ACDA8(void); // func_809ACDA8
+void EnBu_Init(void); // func_809ACD90
+void EnBu_Destroy(void); // func_809ACDA8
 void func_809ACDB8(void); // func_809ACDB8
-void func_809ACDC8(void); // func_809ACDC8
-void func_809ACE00(void); // func_809ACE00
-void func_809ACF40(void); // func_809ACF40
-void func_809AD048(void); // func_809AD048
+void EnBu_Update(void); // func_809ACDC8
+void EnBu_Draw(void); // func_809ACE00
+void EnEncount3_Init(void); // func_809ACF40
+void EnEncount3_Destroy(void); // func_809AD048
 void func_809AD058(void); // func_809AD058
 void func_809AD084(void); // func_809AD084
 void func_809AD194(void); // func_809AD194
 void func_809AD1EC(void); // func_809AD1EC
-void func_809AD230(void); // func_809AD230
-void func_809AD614(void); // func_809AD614
-void func_809AD8E0(void); // func_809AD8E0
-void func_809ADB24(void); // func_809ADB24
+void EnEncount3_Update(void); // func_809AD230
+void EnEncount3_Draw(void); // func_809AD614
+void EnJso_Init(void); // func_809AD8E0
+void EnJso_Destroy(void); // func_809ADB24
 void func_809ADBC8(void); // func_809ADBC8
 void func_809ADC7C(void); // func_809ADC7C
 void func_809ADCB8(void); // func_809ADCB8
@@ -8805,23 +8805,23 @@ void func_809AFAF4(void); // func_809AFAF4
 void func_809AFC10(void); // func_809AFC10
 void func_809AFE38(void); // func_809AFE38
 void func_809B0034(void); // func_809B0034
-void func_809B02CC(void); // func_809B02CC
+void EnJso_Update(void); // func_809B02CC
 void func_809B0734(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809B0734
 void func_809B0820(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809B0820
 void func_809B0B70(void); // func_809B0B70
 void func_809B0BB0(void); // func_809B0BB0
 void func_809B1550(void); // func_809B1550
-void func_809B162C(void); // func_809B162C
-void func_809B179C(void); // func_809B179C
+void ObjChikuwa_Init(void); // func_809B162C
+void ObjChikuwa_Destroy(void); // func_809B179C
 void func_809B17D0(void); // func_809B17D0
 void func_809B1AA0(void); // func_809B1AA0
-void func_809B1BE8(void); // func_809B1BE8
-void func_809B1D90(void); // func_809B1D90
+void ObjChikuwa_Update(void); // func_809B1BE8
+void ObjChikuwa_Draw(void); // func_809B1D90
 void func_809B20F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_809B20F0
 void func_809B21F4(void); // func_809B21F4
 void func_809B22CC(void); // func_809B22CC
-void func_809B2510(void); // func_809B2510
-void func_809B2DC0(void); // func_809B2DC0
+void EnKnight_Init(void); // func_809B2510
+void EnKnight_Destroy(void); // func_809B2DC0
 void func_809B2DD0(void); // func_809B2DD0
 void func_809B2F54(void); // func_809B2F54
 void func_809B316C(void); // func_809B316C
@@ -8897,7 +8897,7 @@ void func_809BA058(void); // func_809BA058
 void func_809BA0CC(void); // func_809BA0CC
 void func_809BA940(void); // func_809BA940
 void func_809BA978(void); // func_809BA978
-void func_809BB0BC(void); // func_809BB0BC
+void EnKnight_Update(void); // func_809BB0BC
 void func_809BC2C4(void); // func_809BC2C4
 void func_809BC67C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809BC67C
 void func_809BC720(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809BC720
@@ -8906,21 +8906,21 @@ void func_809BCA80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_809BCAD8(void); // func_809BCAD8
 void func_809BCB54(void); // func_809BCB54
 void func_809BCB78(void); // func_809BCB78
-void func_809BCC2C(void); // func_809BCC2C
+void EnKnight_Draw(void); // func_809BCC2C
 void func_809BD1AC(void); // func_809BD1AC
 void func_809BD260(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_809BD260
 void func_809BD29C(void); // func_809BD29C
 void func_809BD490(void); // func_809BD490
 void func_809BD858(void); // func_809BD858
-void func_809C0760(void); // func_809C0760
-void func_809C0824(void); // func_809C0824
+void EnWarptag_Init(void); // func_809C0760
+void EnWarptag_Destroy(void); // func_809C0824
 void func_809C085C(void); // func_809C085C
 void func_809C08E0(void); // func_809C08E0
 void func_809C09A0(void); // func_809C09A0
 void func_809C0A20(void); // func_809C0A20
 void func_809C0AB4(void); // func_809C0AB4
 void func_809C0E30(void); // func_809C0E30
-void func_809C0F18(void); // func_809C0F18
+void EnWarptag_Update(void); // func_809C0F18
 void func_809C0F3C(void); // func_809C0F3C
 void func_809C10B0(void); // func_809C10B0
 void func_809C1124(void); // func_809C1124
@@ -8953,35 +8953,35 @@ void func_809C2D0C(void); // func_809C2D0C
 void func_809C2EC4(void); // func_809C2EC4
 void func_809C2F34(void); // func_809C2F34
 void func_809C2FA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE1 param_11); // func_809C2FA0
-void func_809C3190(void); // func_809C3190
-void func_809C3350(void); // func_809C3350
-void func_809C339C(void); // func_809C339C
+void EnAob01_Init(void); // func_809C3190
+void EnAob01_Destroy(void); // func_809C3350
+void EnAob01_Update(void); // func_809C339C
 void func_809C33D8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809C33D8
 void func_809C35B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809C35B4
 void func_809C35F4(void); // func_809C35F4
-void func_809C3608(void); // func_809C3608
-void func_809C3D80(void); // func_809C3D80
-void func_809C3D90(void); // func_809C3D90
-void func_809C3DA0(void); // func_809C3DA0
-void func_809C3DB0(void); // func_809C3DB0
-void func_809C3E10(void); // func_809C3E10
-void func_809C3E20(void); // func_809C3E20
-void func_809C3E30(void); // func_809C3E30
-void func_809C3E40(void); // func_809C3E40
-void func_809C3EA0(void); // func_809C3EA0
-void func_809C3EB0(void); // func_809C3EB0
-void func_809C3EC0(void); // func_809C3EC0
-void func_809C3ED0(void); // func_809C3ED0
-void func_809C3F30(void); // func_809C3F30
-void func_809C3FC8(void); // func_809C3FC8
+void EnAob01_Draw(void); // func_809C3608
+void EnBoj01_Init(void); // func_809C3D80
+void EnBoj01_Destroy(void); // func_809C3D90
+void EnBoj01_Update(void); // func_809C3DA0
+void EnBoj01_Draw(void); // func_809C3DB0
+void EnBoj02_Init(void); // func_809C3E10
+void EnBoj02_Destroy(void); // func_809C3E20
+void EnBoj02_Update(void); // func_809C3E30
+void EnBoj02_Draw(void); // func_809C3E40
+void EnBoj03_Init(void); // func_809C3EA0
+void EnBoj03_Destroy(void); // func_809C3EB0
+void EnBoj03_Update(void); // func_809C3EC0
+void EnBoj03_Draw(void); // func_809C3ED0
+void EnEncount4_Init(void); // func_809C3F30
+void EnEncount4_Destroy(void); // func_809C3FC8
 void func_809C3FD8(void); // func_809C3FD8
 void func_809C4078(void); // func_809C4078
 void func_809C42A8(void); // func_809C42A8
 void func_809C4598(void); // func_809C4598
 void func_809C464C(void); // func_809C464C
-void func_809C467C(void); // func_809C467C
-void func_809C4790(void); // func_809C4790
-void func_809C492C(void); // func_809C492C
+void EnEncount4_Update(void); // func_809C467C
+void EnBomBowlMan_Init(void); // func_809C4790
+void EnBomBowlMan_Destroy(void); // func_809C492C
 void func_809C493C(void); // func_809C493C
 void func_809C49CC(void); // func_809C49CC
 void func_809C4B50(void); // func_809C4B50
@@ -9002,12 +9002,12 @@ void func_809C5AA4(void); // func_809C5AA4
 void func_809C5B1C(void); // func_809C5B1C
 void func_809C5BA0(void); // func_809C5BA0
 void func_809C5BF4(void); // func_809C5BF4
-void func_809C5E14(void); // func_809C5E14
+void EnBomBowlMan_Update(void); // func_809C5E14
 void func_809C5F44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809C5F44
-void func_809C5FC4(void); // func_809C5FC4
+void EnBomBowlMan_Draw(void); // func_809C5FC4
 void func_809C64C0(void); // func_809C64C0
-void func_809C6578(void); // func_809C6578
-void func_809C66FC(void); // func_809C66FC
+void EnSyatekiMan_Init(void); // func_809C6578
+void EnSyatekiMan_Destroy(void); // func_809C66FC
 void func_809C6720(void); // func_809C6720
 void func_809C6810(void); // func_809C6810
 void func_809C6848(void); // func_809C6848
@@ -9033,12 +9033,12 @@ void func_809C8808(void); // func_809C8808
 void func_809C898C(void); // func_809C898C
 void func_809C8BF0(void); // func_809C8BF0
 void func_809C8DE8(void); // func_809C8DE8
-void func_809C8E44(void); // func_809C8E44
+void EnSyatekiMan_Update(void); // func_809C8E44
 void func_809C8EE4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_809C8EE4
 void func_809C8FAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809C8FAC
-void func_809C9008(void); // func_809C9008
-void func_809C9A60(void); // func_809C9A60
-void func_809C9B54(void); // func_809C9B54
+void EnSyatekiMan_Draw(void); // func_809C9008
+void BgIcicle_Init(void); // func_809C9A60
+void BgIcicle_Destroy(void); // func_809C9B54
 void func_809C9B9C(void); // func_809C9B9C
 void func_809C9D7C(void); // func_809C9D7C
 void func_809C9D8C(void); // func_809C9D8C
@@ -9046,10 +9046,10 @@ void func_809C9DC4(void); // func_809C9DC4
 void func_809C9F28(void); // func_809C9F28
 void func_809CA06C(void); // func_809CA06C
 void func_809CA0BC(void); // func_809CA0BC
-void func_809CA1F8(void); // func_809CA1F8
-void func_809CA27C(void); // func_809CA27C
-void func_809CA3F0(void); // func_809CA3F0
-void func_809CA5A8(void); // func_809CA5A8
+void BgIcicle_Update(void); // func_809CA1F8
+void BgIcicle_Draw(void); // func_809CA27C
+void EnSyatekiCrow_Init(void); // func_809CA3F0
+void EnSyatekiCrow_Destroy(void); // func_809CA5A8
 void func_809CA5D4(void); // func_809CA5D4
 void func_809CA67C(void); // func_809CA67C
 void func_809CA71C(void); // func_809CA71C
@@ -9058,14 +9058,14 @@ void func_809CA8E4(void); // func_809CA8E4
 void func_809CAAF8(void); // func_809CAAF8
 void func_809CABC0(void); // func_809CABC0
 void func_809CACD0(void); // func_809CACD0
-void func_809CADE8(void); // func_809CADE8
+void EnSyatekiCrow_Update(void); // func_809CADE8
 void func_809CAE5C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809CAE5C
 void func_809CAF2C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809CAF2C
-void func_809CAFEC(void); // func_809CAFEC
-void func_809CB200(void); // func_809CB200
-void func_809CB210(void); // func_809CB210
-void func_809CB220(void); // func_809CB220
-void func_809CB230(void); // func_809CB230
+void EnSyatekiCrow_Draw(void); // func_809CAFEC
+void EnBoj04_Init(void); // func_809CB200
+void EnBoj04_Destroy(void); // func_809CB210
+void EnBoj04_Update(void); // func_809CB220
+void EnBoj04_Draw(void); // func_809CB230
 void func_809CB290(void); // func_809CB290
 void func_809CB404(void); // func_809CB404
 void func_809CB4A0(void); // func_809CB4A0
@@ -9073,13 +9073,13 @@ void func_809CB520(void); // func_809CB520
 void func_809CB5A0(void); // func_809CB5A0
 void func_809CB5D8(void); // func_809CB5D8
 void func_809CB5FC(void); // func_809CB5FC
-void func_809CB72C(void); // func_809CB72C
-void func_809CB86C(void); // func_809CB86C
-void func_809CB898(void); // func_809CB898
+void EnCne01_Init(void); // func_809CB72C
+void EnCne01_Destroy(void); // func_809CB86C
+void EnCne01_Update(void); // func_809CB898
 void func_809CB920(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809CB920
 void func_809CBBC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809CBBC8
 void func_809CBCA0(void); // func_809CBCA0
-void func_809CBCB4(void); // func_809CBCB4
+void EnCne01_Draw(void); // func_809CBCB4
 void func_809CC060(void); // func_809CC060
 void func_809CC1D4(void); // func_809CC1D4
 void func_809CC270(void); // func_809CC270
@@ -9087,13 +9087,13 @@ void func_809CC2F0(void); // func_809CC2F0
 void func_809CC370(void); // func_809CC370
 void func_809CC3A8(void); // func_809CC3A8
 void func_809CC3CC(void); // func_809CC3CC
-void func_809CC4FC(void); // func_809CC4FC
-void func_809CC63C(void); // func_809CC63C
-void func_809CC668(void); // func_809CC668
+void EnBba01_Init(void); // func_809CC4FC
+void EnBba01_Destroy(void); // func_809CC63C
+void EnBba01_Update(void); // func_809CC668
 void func_809CC6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809CC6F0
 void func_809CC984(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809CC984
 void func_809CCA5C(void); // func_809CCA5C
-void func_809CCA70(void); // func_809CCA70
+void EnBba01_Draw(void); // func_809CCA70
 void func_809CCDE0(void); // func_809CCDE0
 void func_809CCE98(ActorEnBji01* this, GlobalContext* ctxt); // func_809CCE98
 void func_809CCEE8(void); // func_809CCEE8
@@ -9104,14 +9104,14 @@ void func_809CD6B0(void); // func_809CD6B0
 void func_809CD6C0(void); // func_809CD6C0
 void func_809CD70C(void); // func_809CD70C
 void func_809CD77C(void); // func_809CD77C
-void func_809CD7AC(ActorEnBji01* this, GlobalContext* ctxt); // func_809CD7AC
-void func_809CD914(void); // func_809CD914
-void func_809CD940(void); // func_809CD940
+void EnBji01_Init(ActorEnBji01* this, GlobalContext* ctxt); // func_809CD7AC
+void EnBji01_Destroy(void); // func_809CD914
+void EnBji01_Update(void); // func_809CD940
 void func_809CDA4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809CDA4C
 void func_809CDB04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809CDB04
-void func_809CDB88(void); // func_809CDB88
-void func_809CDEC0(void); // func_809CDEC0
-void func_809CE020(void); // func_809CE020
+void EnBji01_Draw(void); // func_809CDB88
+void BgSpdweb_Init(void); // func_809CDEC0
+void BgSpdweb_Destroy(void); // func_809CE020
 void func_809CE068(void); // func_809CE068
 void func_809CE15C(void); // func_809CE15C
 void func_809CE1D0(void); // func_809CE1D0
@@ -9121,8 +9121,8 @@ void func_809CE830(void); // func_809CE830
 void func_809CEBC0(void); // func_809CEBC0
 void func_809CEE74(void); // func_809CEE74
 void func_809CEEAC(void); // func_809CEEAC
-void func_809CEF0C(void); // func_809CEF0C
-void func_809CEF30(void); // func_809CEF30
+void BgSpdweb_Update(void); // func_809CEF0C
+void BgSpdweb_Draw(void); // func_809CEF30
 void func_809CF350(void); // func_809CF350
 void func_809CF394(void); // func_809CF394
 void func_809CF444(void); // func_809CF444
@@ -9139,9 +9139,9 @@ void func_809CFC38(void); // func_809CFC38
 void func_809CFD98(void); // func_809CFD98
 void func_809CFE28(void); // func_809CFE28
 void func_809CFF94(void); // func_809CFF94
-void func_809D0090(void); // func_809D0090
-void func_809D0138(void); // func_809D0138
-void func_809D0168(void); // func_809D0168
+void EnMttag_Init(void); // func_809D0090
+void EnMttag_Destroy(void); // func_809D0138
+void EnMttag_Update(void); // func_809D0168
 void func_809D0530(void); // func_809D0530
 void func_809D0550(void); // func_809D0550
 void func_809D0678(void); // func_809D0678
@@ -9149,8 +9149,8 @@ void func_809D082C(void); // func_809D082C
 void func_809D089C(void); // func_809D089C
 void func_809D092C(void); // func_809D092C
 void func_809D0AA4(void); // func_809D0AA4
-void func_809D0CE8(void); // func_809D0CE8
-void func_809D118C(void); // func_809D118C
+void Boss01_Init(void); // func_809D0CE8
+void Boss01_Destroy(void); // func_809D118C
 void func_809D119C(void); // func_809D119C
 void func_809D1258(void); // func_809D1258
 void func_809D12B4(void); // func_809D12B4
@@ -9196,11 +9196,11 @@ void func_809D441C(void); // func_809D441C
 void func_809D4464(void); // func_809D4464
 void func_809D44C0(void); // func_809D44C0
 void func_809D4668(void); // func_809D4668
-void func_809D46E4(void); // func_809D46E4
+void Boss01_Update(void); // func_809D46E4
 void func_809D519C(void); // func_809D519C
 void func_809D5584(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809D5584
 void func_809D55CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809D55CC
-void func_809D5988(void); // func_809D5988
+void Boss01_Draw(void); // func_809D5988
 void func_809D5B0C(void); // func_809D5B0C
 void func_809D5BC4(void); // func_809D5BC4
 void func_809D5FB4(void); // func_809D5FB4
@@ -9227,17 +9227,17 @@ void func_809DA264(void); // func_809DA264
 void func_809DA344(void); // func_809DA344
 void func_809DA460(void); // func_809DA460
 void func_809DA50C(void); // func_809DA50C
-void func_809DA5AC(void); // func_809DA5AC
-void func_809DAA64(void); // func_809DAA64
+void Boss02_Init(void); // func_809DA5AC
+void Boss02_Destroy(void); // func_809DAA64
 void func_809DAA74(void); // func_809DAA74
 void func_809DAA98(void); // func_809DAA98
 void func_809DAAA8(void); // func_809DAAA8
 void func_809DAB78(void); // func_809DAB78
 void func_809DBFB4(void); // func_809DBFB4
 void func_809DC218(void); // func_809DC218
-void func_809DC320(void); // func_809DC320
+void Boss02_Update(void); // func_809DC320
 void func_809DC78C(void); // func_809DC78C
-void func_809DCA00(void); // func_809DCA00
+void Boss02_Draw(void); // func_809DCA00
 void func_809DD0A8(void); // func_809DD0A8
 void func_809DD0CC(void); // func_809DD0CC
 void func_809DD2F8(void); // func_809DD2F8
@@ -9253,8 +9253,8 @@ void func_809E2C1C(void); // func_809E2C1C
 void func_809E2C3C(void); // func_809E2C3C
 void func_809E2D64(void); // func_809E2D64
 void func_809E2DA0(void); // func_809E2DA0
-void func_809E2F7C(void); // func_809E2F7C
-void func_809E343C(void); // func_809E343C
+void Boss03_Init(void); // func_809E2F7C
+void Boss03_Destroy(void); // func_809E343C
 void func_809E344C(void); // func_809E344C
 void func_809E34B8(void); // func_809E34B8
 void func_809E38EC(void); // func_809E38EC
@@ -9280,18 +9280,18 @@ void func_809E6A38(void); // func_809E6A38
 void func_809E6B70(void); // func_809E6B70
 void func_809E6BC0(void); // func_809E6BC0
 void func_809E6CB4(void); // func_809E6CB4
-void func_809E70EC(void); // func_809E70EC
+void Boss03_Update(void); // func_809E70EC
 void func_809E7920(void); // func_809E7920
 void func_809E79C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809E79C4
 void func_809E7AA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809E7AA8
-void func_809E7C0C(void); // func_809E7C0C
+void Boss03_Draw(void); // func_809E7C0C
 void func_809E7D00(void); // func_809E7D00
 void func_809E81E4(void); // func_809E81E4
 void func_809E8810(void); // func_809E8810
 void func_809E8BEC(void); // func_809E8BEC
 void func_809EC040(void); // func_809EC040
-void func_809EC0D0(void); // func_809EC0D0
-void func_809EC534(void); // func_809EC534
+void Boss04_Init(void); // func_809EC0D0
+void Boss04_Destroy(void); // func_809EC534
 void func_809EC544(void); // func_809EC544
 void func_809EC568(void); // func_809EC568
 void func_809EC618(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13); // func_809EC618
@@ -9310,14 +9310,14 @@ void func_809ED224(void); // func_809ED224
 void func_809ED2A0(void); // func_809ED2A0
 void func_809ED45C(void); // func_809ED45C
 void func_809ED50C(void); // func_809ED50C
-void func_809ED8BC(void); // func_809ED8BC
+void Boss04_Update(void); // func_809ED8BC
 void func_809EDCCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809EDCCC
 void func_809EDECC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809EDECC
-void func_809EDF58(void); // func_809EDF58
+void Boss04_Draw(void); // func_809EDF58
 void func_809EE4E0(void); // func_809EE4E0
 void func_809EE668(void); // func_809EE668
-void func_809EE6F8(void); // func_809EE6F8
-void func_809EEC70(void); // func_809EEC70
+void Boss05_Init(void); // func_809EE6F8
+void Boss05_Destroy(void); // func_809EEC70
 void func_809EECBC(void); // func_809EECBC
 void func_809EEDD0(void); // func_809EEDD0
 void func_809EEDE8(void); // func_809EEDE8
@@ -9344,7 +9344,7 @@ void func_809F0A0C(void); // func_809F0A0C
 void func_809F0A64(void); // func_809F0A64
 void func_809F0ABC(void); // func_809F0ABC
 void func_809F0B0C(void); // func_809F0B0C
-void func_809F0CCC(void); // func_809F0CCC
+void Boss05_Update(void); // func_809F0CCC
 void func_809F1050(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809F1050
 void func_809F1170(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809F1170
 void func_809F1284(void); // func_809F1284
@@ -9355,11 +9355,11 @@ void func_809F1430(void); // func_809F1430
 void func_809F1464(void); // func_809F1464
 void func_809F14AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809F14AC
 void func_809F1550(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_809F1550
-void func_809F159C(void); // func_809F159C
+void Boss05_Draw(void); // func_809F159C
 void func_809F2120(void); // func_809F2120
 void func_809F2140(void); // func_809F2140
-void func_809F2268(void); // func_809F2268
-void func_809F23BC(void); // func_809F23BC
+void Boss06_Init(void); // func_809F2268
+void Boss06_Destroy(void); // func_809F23BC
 void func_809F23CC(void); // func_809F23CC
 void func_809F24A8(void); // func_809F24A8
 void func_809F24C8(void); // func_809F24C8
@@ -9369,8 +9369,8 @@ void func_809F2E14(void); // func_809F2E14
 void func_809F2E34(void); // func_809F2E34
 void func_809F2ED0(void); // func_809F2ED0
 void func_809F2EE8(void); // func_809F2EE8
-void func_809F2F0C(void); // func_809F2F0C
-void func_809F334C(void); // func_809F334C
+void Boss06_Update(void); // func_809F2F0C
+void Boss06_Draw(void); // func_809F334C
 void func_809F4980(void); // func_809F4980
 void func_809F49A0(void); // func_809F49A0
 void func_809F49C0(void); // func_809F49C0
@@ -9386,8 +9386,8 @@ void func_809F51E8(void); // func_809F51E8
 void func_809F52CC(void); // func_809F52CC
 void func_809F536C(void); // func_809F536C
 void func_809F5494(void); // func_809F5494
-void func_809F552C(void); // func_809F552C
-void func_809F5DA0(void); // func_809F5DA0
+void Boss07_Init(void); // func_809F552C
+void Boss07_Destroy(void); // func_809F5DA0
 void func_809F5E14(void); // func_809F5E14
 void func_809F5E88(void); // func_809F5E88
 void func_809F64F4(void); // func_809F64F4
@@ -9420,7 +9420,7 @@ void func_809F94AC(void); // func_809F94AC
 void func_809F99C4(void); // func_809F99C4
 void func_809F9CEC(void); // func_809F9CEC
 void func_809F9E94(void); // func_809F9E94
-void func_809FA1B4(void); // func_809FA1B4
+void Boss07_Update(void); // func_809FA1B4
 void func_809FAA44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14); // func_809FAA44
 void func_809FB114(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809FB114
 void func_809FB504(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_809FB504
@@ -9429,7 +9429,7 @@ void func_809FB728(void); // func_809FB728
 void func_809FB7D4(void); // func_809FB7D4
 void func_809FBB9C(void); // func_809FBB9C
 void func_809FBF94(void); // func_809FBF94
-void func_809FC1C8(void); // func_809FC1C8
+void Boss07_Draw(void); // func_809FC1C8
 void func_809FC4C0(void); // func_809FC4C0
 void func_809FC8B0(void); // func_809FC8B0
 void func_809FC960(void); // func_809FC960
@@ -9507,8 +9507,8 @@ void func_80A06F48(void); // func_80A06F48
 void func_80A07604(void); // func_80A07604
 void func_80A07638(void); // func_80A07638
 void func_80A07740(void); // func_80A07740
-void func_80A0A8A0(void); // func_80A0A8A0
-void func_80A0A95C(void); // func_80A0A95C
+void BgDyYoseizo_Init(void); // func_80A0A8A0
+void BgDyYoseizo_Destroy(void); // func_80A0A95C
 void func_80A0A96C(void); // func_80A0A96C
 void func_80A0A9E4(void); // func_80A0A9E4
 void func_80A0AA40(void); // func_80A0AA40
@@ -9525,16 +9525,16 @@ void func_80A0B75C(void); // func_80A0B75C
 void func_80A0B834(void); // func_80A0B834
 void func_80A0B8CC(void); // func_80A0B8CC
 void func_80A0BB08(void); // func_80A0BB08
-void func_80A0BC84(void); // func_80A0BC84
+void BgDyYoseizo_Update(void); // func_80A0BC84
 void func_80A0BCD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A0BCD8
 void func_80A0BD40(void); // func_80A0BD40
 void func_80A0BE60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_80A0BE60
 void func_80A0BF70(void); // func_80A0BF70
 void func_80A0C270(void); // func_80A0C270
-void func_80A0C780(void); // func_80A0C780
-void func_80A0C790(void); // func_80A0C790
-void func_80A0C7A0(void); // func_80A0C7A0
-void func_80A0C7B0(void); // func_80A0C7B0
+void EnBoj05_Init(void); // func_80A0C780
+void EnBoj05_Destroy(void); // func_80A0C790
+void EnBoj05_Update(void); // func_80A0C7A0
+void EnBoj05_Draw(void); // func_80A0C7B0
 void func_80A0C810(void); // func_80A0C810
 void func_80A0C8AC(void); // func_80A0C8AC
 void func_80A0C8B8(void); // func_80A0C8B8
@@ -9544,8 +9544,8 @@ void func_80A0CC88(void); // func_80A0CC88
 void func_80A0CCEC(void); // func_80A0CCEC
 void func_80A0CD48(void); // func_80A0CD48
 void func_80A0CE10(void); // func_80A0CE10
-void func_80A0CED4(void); // func_80A0CED4
-void func_80A0D008(void); // func_80A0D008
+void EnSob1_Init(void); // func_80A0CED4
+void EnSob1_Destroy(void); // func_80A0D008
 void func_80A0D034(void); // func_80A0D034
 void func_80A0D0B8(void); // func_80A0D0B8
 void func_80A0D188(void); // func_80A0D188
@@ -9600,7 +9600,7 @@ void func_80A0F470(void); // func_80A0F470
 void func_80A0F554(void); // func_80A0F554
 void func_80A0F638(void); // func_80A0F638
 void func_80A0F6B0(void); // func_80A0F6B0
-void func_80A0FA0C(void); // func_80A0FA0C
+void EnSob1_Update(void); // func_80A0FA0C
 void func_80A0FADC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6); // func_80A0FADC
 void func_80A0FD4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_80A0FD4C
 void func_80A0FEE8(void); // func_80A0FEE8
@@ -9675,17 +9675,17 @@ void func_80A14FC8(void); // func_80A14FC8
 void func_80A153FC(void); // func_80A153FC
 void func_80A15684(void); // func_80A15684
 void func_80A157C4(void); // func_80A157C4
-void func_80A1590C(void); // func_80A1590C
-void func_80A15960(void); // func_80A15960
-void func_80A159B0(void); // func_80A159B0
+void EnGo_Init(void); // func_80A1590C
+void EnGo_Destroy(void); // func_80A15960
+void EnGo_Update(void); // func_80A159B0
 void func_80A15B80(void); // func_80A15B80
 void func_80A15D04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A15D04
 void func_80A15E38(void); // func_80A15E38
 void func_80A15FEC(void); // func_80A15FEC
 void func_80A16D40(void); // func_80A16D40
 void func_80A16D6C(void); // func_80A16D6C
-void func_80A16D90(void); // func_80A16D90
-void func_80A17018(void); // func_80A17018
+void EnRaf_Init(void); // func_80A16D90
+void EnRaf_Destroy(void); // func_80A17018
 void func_80A17060(void); // func_80A17060
 void func_80A1712C(void); // func_80A1712C
 void func_80A171D8(void); // func_80A171D8
@@ -9703,32 +9703,32 @@ void func_80A17DDC(void); // func_80A17DDC
 void func_80A17E1C(void); // func_80A17E1C
 void func_80A18080(void); // func_80A18080
 void func_80A180B4(void); // func_80A180B4
-void func_80A181B4(void); // func_80A181B4
+void EnRaf_Update(void); // func_80A181B4
 void func_80A1859C(void); // func_80A1859C
-void func_80A18A08(void); // func_80A18A08
+void EnRaf_Draw(void); // func_80A18A08
 void func_80A18A90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80A18A90
 void func_80A18B8C(void); // func_80A18B8C
 void func_80A18DA0(void); // func_80A18DA0
-void func_80A19740(void); // func_80A19740
-void func_80A19778(void); // func_80A19778
+void ObjFunen_Init(void); // func_80A19740
+void ObjFunen_Draw(void); // func_80A19778
 void func_80A19910(void); // func_80A19910
-void func_80A1994C(void); // func_80A1994C
-void func_80A19B64(void); // func_80A19B64
+void ObjRaillift_Init(void); // func_80A1994C
+void ObjRaillift_Destroy(void); // func_80A19B64
 void func_80A19B98(void); // func_80A19B98
 void func_80A19BA8(void); // func_80A19BA8
 void func_80A19E84(void); // func_80A19E84
 void func_80A19EE0(void); // func_80A19EE0
 void func_80A19F18(void); // func_80A19F18
 void func_80A19F78(void); // func_80A19F78
-void func_80A19FE0(void); // func_80A19FE0
-void func_80A1A220(void); // func_80A1A220
+void ObjRaillift_Update(void); // func_80A19FE0
+void ObjRaillift_Draw(void); // func_80A1A220
 void func_80A1A330(void); // func_80A1A330
 void func_80A1A360(void); // func_80A1A360
 void func_80A1A500(void); // func_80A1A500
 void func_80A1A56C(void); // func_80A1A56C
 void func_80A1A750(void); // func_80A1A750
-void func_80A1A7CC(void); // func_80A1A7CC
-void func_80A1A9AC(void); // func_80A1A9AC
+void BgNumaHana_Init(void); // func_80A1A7CC
+void BgNumaHana_Destroy(void); // func_80A1A9AC
 void func_80A1AA14(void); // func_80A1AA14
 void func_80A1AA28(void); // func_80A1AA28
 void func_80A1AA38(void); // func_80A1AA38
@@ -9741,8 +9741,8 @@ void func_80A1ACCC(void); // func_80A1ACCC
 void func_80A1ACE0(void); // func_80A1ACE0
 void func_80A1AE08(void); // func_80A1AE08
 void func_80A1AE1C(void); // func_80A1AE1C
-void func_80A1AE6C(void); // func_80A1AE6C
-void func_80A1AF68(void); // func_80A1AF68
+void BgNumaHana_Update(void); // func_80A1AE6C
+void BgNumaHana_Draw(void); // func_80A1AF68
 void func_80A1B3D0(void); // func_80A1B3D0
 void func_80A1B840(void); // func_80A1B840
 void func_80A1B914(void); // func_80A1B914
@@ -9756,16 +9756,16 @@ void func_80A1C328(void); // func_80A1C328
 void func_80A1C554(void); // func_80A1C554
 void func_80A1C5E8(void); // func_80A1C5E8
 void func_80A1C62C(void); // func_80A1C62C
-void func_80A1C664(void); // func_80A1C664
-void func_80A1C7EC(void); // func_80A1C7EC
+void ObjFlowerpot_Init(void); // func_80A1C664
+void ObjFlowerpot_Destroy(void); // func_80A1C7EC
 void func_80A1C818(void); // func_80A1C818
 void func_80A1C838(void); // func_80A1C838
 void func_80A1CBF8(void); // func_80A1CBF8
 void func_80A1CC0C(void); // func_80A1CC0C
 void func_80A1CD10(void); // func_80A1CD10
 void func_80A1CEF4(void); // func_80A1CEF4
-void func_80A1D14C(void); // func_80A1D14C
-void func_80A1D1CC(void); // func_80A1D1CC
+void ObjFlowerpot_Update(void); // func_80A1D14C
+void ObjFlowerpot_Draw(void); // func_80A1D1CC
 void func_80A1DA50(void); // func_80A1DA50
 void func_80A1DAAC(void); // func_80A1DAAC
 void func_80A1DB2C(void); // func_80A1DB2C
@@ -9785,8 +9785,8 @@ void func_80A1E3D8(void); // func_80A1E3D8
 void func_80A1E648(void); // func_80A1E648
 void func_80A1E694(void); // func_80A1E694
 void func_80A1E6D4(void); // func_80A1E6D4
-void func_80A1E728(void); // func_80A1E728
-void func_80A1E97C(void); // func_80A1E97C
+void ObjSpinyroll_Init(void); // func_80A1E728
+void ObjSpinyroll_Destroy(void); // func_80A1E97C
 void func_80A1E9C4(void); // func_80A1E9C4
 void func_80A1E9E0(void); // func_80A1E9E0
 void func_80A1EA10(void); // func_80A1EA10
@@ -9799,20 +9799,20 @@ void func_80A1EC24(void); // func_80A1EC24
 void func_80A1EC38(void); // func_80A1EC38
 void func_80A1ECC0(void); // func_80A1ECC0
 void func_80A1ECD4(void); // func_80A1ECD4
-void func_80A1ED70(void); // func_80A1ED70
-void func_80A1EE1C(void); // func_80A1EE1C
-void func_80A1F410(void); // func_80A1F410
-void func_80A1F460(void); // func_80A1F460
+void ObjSpinyroll_Update(void); // func_80A1ED70
+void ObjSpinyroll_Draw(void); // func_80A1EE1C
+void DmHina_Init(void); // func_80A1F410
+void DmHina_Destroy(void); // func_80A1F460
 void func_80A1F470(void); // func_80A1F470
 void func_80A1F56C(void); // func_80A1F56C
 void func_80A1F5AC(void); // func_80A1F5AC
 void func_80A1F63C(void); // func_80A1F63C
 void func_80A1F75C(void); // func_80A1F75C
-void func_80A1F970(void); // func_80A1F970
+void DmHina_Update(void); // func_80A1F970
 void func_80A1F9AC(void); // func_80A1F9AC
-void func_80A1FC50(void); // func_80A1FC50
-void func_80A1FE50(void); // func_80A1FE50
-void func_80A200A0(void); // func_80A200A0
+void DmHina_Draw(void); // func_80A1FC50
+void EnSyatekiWf_Init(void); // func_80A1FE50
+void EnSyatekiWf_Destroy(void); // func_80A200A0
 void func_80A200E0(void); // func_80A200E0
 void func_80A201CC(void); // func_80A201CC
 void func_80A20284(void); // func_80A20284
@@ -9828,10 +9828,10 @@ void func_80A2079C(void); // func_80A2079C
 void func_80A20800(void); // func_80A20800
 void func_80A20858(void); // func_80A20858
 void func_80A208F8(void); // func_80A208F8
-void func_80A20A50(void); // func_80A20A50
+void EnSyatekiWf_Update(void); // func_80A20A50
 void func_80A20CF4(void); // func_80A20CF4
 void func_80A20D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A20D10
-void func_80A20DA4(void); // func_80A20DA4
+void EnSyatekiWf_Draw(void); // func_80A20DA4
 void func_80A21150(void); // func_80A21150
 void func_80A211F4(void); // func_80A211F4
 void func_80A212F0(void); // func_80A212F0
@@ -9848,8 +9848,8 @@ void func_80A21D1C(void); // func_80A21D1C
 void func_80A21E9C(void); // func_80A21E9C
 void func_80A21F68(void); // func_80A21F68
 void func_80A21F74(void); // func_80A21F74
-void func_80A22230(void); // func_80A22230
-void func_80A222D4(void); // func_80A222D4
+void ObjSkateblock_Init(void); // func_80A22230
+void ObjSkateblock_Destroy(void); // func_80A222D4
 void func_80A22308(void); // func_80A22308
 void func_80A22334(void); // func_80A22334
 void func_80A2244C(void); // func_80A2244C
@@ -9860,8 +9860,8 @@ void func_80A22728(void); // func_80A22728
 void func_80A2273C(void); // func_80A2273C
 void func_80A227A4(void); // func_80A227A4
 void func_80A227C0(void); // func_80A227C0
-void func_80A22880(void); // func_80A22880
-void func_80A228D8(void); // func_80A228D8
+void ObjSkateblock_Update(void); // func_80A22880
+void ObjSkateblock_Draw(void); // func_80A228D8
 void func_80A22D40(void); // func_80A22D40
 void func_80A22DB8(void); // func_80A22DB8
 void func_80A22E94(void); // func_80A22E94
@@ -9898,8 +9898,8 @@ void func_80A252DC(void); // func_80A252DC
 void func_80A25404(void); // func_80A25404
 void func_80A2541C(void); // func_80A2541C
 void func_80A25440(void); // func_80A25440
-void func_80A25598(void); // func_80A25598
-void func_80A25758(void); // func_80A25758
+void ObjIceblock_Init(void); // func_80A25598
+void ObjIceblock_Destroy(void); // func_80A25758
 void func_80A257A0(void); // func_80A257A0
 void func_80A257B4(void); // func_80A257B4
 void func_80A25824(void); // func_80A25824
@@ -9926,13 +9926,13 @@ void func_80A26574(void); // func_80A26574
 void func_80A265C0(void); // func_80A265C0
 void func_80A266C4(void); // func_80A266C4
 void func_80A266E0(void); // func_80A266E0
-void func_80A26850(void); // func_80A26850
+void ObjIceblock_Update(void); // func_80A26850
 void func_80A26B64(void); // func_80A26B64
 void func_80A26B74(void); // func_80A26B74
 void func_80A26BF8(void); // func_80A26BF8
-void func_80A26DD8(void); // func_80A26DD8
-void func_80A27520(void); // func_80A27520
-void func_80A27660(void); // func_80A27660
+void ObjIceblock_Draw(void); // func_80A26DD8
+void EnBigpamet_Init(void); // func_80A27520
+void EnBigpamet_Destroy(void); // func_80A27660
 void func_80A2768C(void); // func_80A2768C
 void func_80A276F4(void); // func_80A276F4
 void func_80A2778C(void); // func_80A2778C
@@ -9971,17 +9971,17 @@ void func_80A28ED4(void); // func_80A28ED4
 void func_80A28EE8(void); // func_80A28EE8
 void func_80A29028(void); // func_80A29028
 void func_80A29094(void); // func_80A29094
-void func_80A29150(void); // func_80A29150
+void EnBigpamet_Update(void); // func_80A29150
 void func_80A292A8(void); // func_80A292A8
 void func_80A293E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A293E4
 void func_80A29494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A29494
-void func_80A294D8(void); // func_80A294D8
+void EnBigpamet_Draw(void); // func_80A294D8
 void func_80A29580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A29580
 void func_80A29628(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A29628
 void func_80A2966C(void); // func_80A2966C
 void func_80A29A80(void); // func_80A29A80
-void func_80A29C18(void); // func_80A29C18
-void func_80A2A0D0(void); // func_80A2A0D0
+void BgDblueMovebg_Init(void); // func_80A29C18
+void BgDblueMovebg_Destroy(void); // func_80A2A0D0
 void func_80A2A128(void); // func_80A2A128
 void func_80A2A1E0(void); // func_80A2A1E0
 void func_80A2A32C(void); // func_80A2A32C
@@ -9994,12 +9994,12 @@ void func_80A2AAB8(void); // func_80A2AAB8
 void func_80A2ABD0(void); // func_80A2ABD0
 void func_80A2AED0(void); // func_80A2AED0
 void func_80A2B1A0(void); // func_80A2B1A0
-void func_80A2B210(void); // func_80A2B210
+void BgDblueMovebg_Update(void); // func_80A2B210
 void func_80A2B274(void); // func_80A2B274
 void func_80A2B308(void); // func_80A2B308
-void func_80A2B390(void); // func_80A2B390
-void func_80A2BC00(void); // func_80A2BC00
-void func_80A2BE28(void); // func_80A2BE28
+void BgDblueMovebg_Draw(void); // func_80A2B390
+void EnSyatekiDekunuts_Init(void); // func_80A2BC00
+void EnSyatekiDekunuts_Destroy(void); // func_80A2BE28
 void func_80A2BE54(void); // func_80A2BE54
 void func_80A2BF18(void); // func_80A2BF18
 void func_80A2BFC4(void); // func_80A2BFC4
@@ -10017,16 +10017,16 @@ void func_80A2C478(void); // func_80A2C478
 void func_80A2C48C(void); // func_80A2C48C
 void func_80A2C4D0(void); // func_80A2C4D0
 void func_80A2C5DC(void); // func_80A2C5DC
-void func_80A2C78C(void); // func_80A2C78C
+void EnSyatekiDekunuts_Update(void); // func_80A2C78C
 void func_80A2C8A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A2C8A0
-void func_80A2C8E8(void); // func_80A2C8E8
+void EnSyatekiDekunuts_Draw(void); // func_80A2C8E8
 void func_80A2CD10(void); // func_80A2CD10
 void func_80A2CD1C(void); // func_80A2CD1C
-void func_80A2CE54(void); // func_80A2CE54
-void func_80A2CF40(void); // func_80A2CF40
+void ElfMsg3_Init(void); // func_80A2CE54
+void ElfMsg3_Destroy(void); // func_80A2CF40
 void func_80A2CF50(void); // func_80A2CF50
 void func_80A2CF7C(void); // func_80A2CF7C
-void func_80A2D0FC(void); // func_80A2D0FC
+void ElfMsg3_Update(void); // func_80A2D0FC
 void func_80A2D280(void); // func_80A2D280
 void func_80A2D348(void); // func_80A2D348
 void func_80A2D3D4(void); // func_80A2D3D4
@@ -10036,33 +10036,33 @@ void func_80A2D4B8(void); // func_80A2D4B8
 void func_80A2D778(void); // func_80A2D778
 void func_80A2D9CC(void); // func_80A2D9CC
 void func_80A2D9DC(void); // func_80A2D9DC
-void func_80A2DAF4(void); // func_80A2DAF4
-void func_80A2DBE8(void); // func_80A2DBE8
-void func_80A2DC14(void); // func_80A2DC14
+void EnFg_Init(void); // func_80A2DAF4
+void EnFg_Destroy(void); // func_80A2DBE8
+void EnFg_Update(void); // func_80A2DC14
 void func_80A2DCE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A2DCE0
 void func_80A2DD34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A2DD34
-void func_80A2DE34(void); // func_80A2DE34
+void EnFg_Draw(void); // func_80A2DE34
 void func_80A2DFC4(void); // func_80A2DFC4
 void func_80A2E0A0(void); // func_80A2E0A0
 void func_80A2E268(void); // func_80A2E268
-void func_80A2E7A0(void); // func_80A2E7A0
-void func_80A2E828(void); // func_80A2E828
+void DmRavine_Init(void); // func_80A2E7A0
+void DmRavine_Destroy(void); // func_80A2E828
 void func_80A2E838(void); // func_80A2E838
-void func_80A2E848(void); // func_80A2E848
-void func_80A2E8F4(void); // func_80A2E8F4
+void DmRavine_Update(void); // func_80A2E848
+void DmRavine_Draw(void); // func_80A2E8F4
 void func_80A2E960(void); // func_80A2E960
-void func_80A2E9FC(void); // func_80A2E9FC
-void func_80A2EAAC(void); // func_80A2EAAC
+void DmSa_Init(void); // func_80A2E9FC
+void DmSa_Destroy(void); // func_80A2EAAC
 void func_80A2EABC(void); // func_80A2EABC
-void func_80A2EACC(void); // func_80A2EACC
+void DmSa_Update(void); // func_80A2EACC
 void func_80A2EB10(void); // func_80A2EB10
 void func_80A2EB2C(void); // func_80A2EB2C
 void func_80A2EB44(void); // func_80A2EB44
 void func_80A2EB58(void); // func_80A2EB58
 void func_80A2EBB0(void); // func_80A2EBB0
-void func_80A2EBE8(void); // func_80A2EBE8
-void func_80A2EDA0(void); // func_80A2EDA0
-void func_80A2EF80(void); // func_80A2EF80
+void DmSa_Draw(void); // func_80A2EBE8
+void EnSlime_Init(void); // func_80A2EDA0
+void EnSlime_Destroy(void); // func_80A2EF80
 void func_80A2EFAC(void); // func_80A2EFAC
 void func_80A2F028(void); // func_80A2F028
 void func_80A2F0A8(void); // func_80A2F0A8
@@ -10100,10 +10100,10 @@ void func_80A30C2C(void); // func_80A30C2C
 void func_80A30C68(void); // func_80A30C68
 void func_80A30CEC(void); // func_80A30CEC
 void func_80A30F98(void); // func_80A30F98
-void func_80A311E8(void); // func_80A311E8
-void func_80A3148C(void); // func_80A3148C
-void func_80A32210(void); // func_80A32210
-void func_80A32400(void); // func_80A32400
+void EnSlime_Update(void); // func_80A311E8
+void EnSlime_Draw(void); // func_80A3148C
+void EnPr_Init(void); // func_80A32210
+void EnPr_Destroy(void); // func_80A32400
 void func_80A3242C(void); // func_80A3242C
 void func_80A324E0(void); // func_80A324E0
 void func_80A325E4(void); // func_80A325E4
@@ -10122,25 +10122,25 @@ void func_80A32E60(void); // func_80A32E60
 void func_80A32EA4(void); // func_80A32EA4
 void func_80A32F48(void); // func_80A32F48
 void func_80A33098(void); // func_80A33098
-void func_80A331C4(void); // func_80A331C4
+void EnPr_Update(void); // func_80A331C4
 void func_80A3357C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A3357C
 void func_80A335B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A335B4
-void func_80A336C0(void); // func_80A336C0
+void EnPr_Draw(void); // func_80A336C0
 void func_80A33B00(void); // func_80A33B00
 void func_80A33BB4(void); // func_80A33BB4
 void func_80A342F4(void); // func_80A342F4
-void func_80A34438(void); // func_80A34438
-void func_80A3446C(void); // func_80A3446C
-void func_80A3447C(void); // func_80A3447C
-void func_80A34538(void); // func_80A34538
+void ObjToudai_Init(void); // func_80A34438
+void ObjToudai_Destroy(void); // func_80A3446C
+void ObjToudai_Update(void); // func_80A3447C
+void ObjToudai_Draw(void); // func_80A34538
 void func_80A34700(void); // func_80A34700
 void func_80A349C0(void); // func_80A349C0
 void func_80A34A44(void); // func_80A34A44
 void func_80A34B28(void); // func_80A34B28
-void func_80A3532C(void); // func_80A3532C
-void func_80A35378(void); // func_80A35378
-void func_80A35388(void); // func_80A35388
-void func_80A353AC(void); // func_80A353AC
+void ObjEntotu_Init(void); // func_80A3532C
+void ObjEntotu_Destroy(void); // func_80A35378
+void ObjEntotu_Update(void); // func_80A35388
+void ObjEntotu_Draw(void); // func_80A353AC
 s32 func_80A35510(ActorObjBell* this, s32 iParm2); // func_80A35510
 UNK_TYPE4 func_80A356D8(ActorObjBell* this); // func_80A356D8
 UNK_TYPE4 func_80A357A8(ActorObjBell* this, GlobalContext* ctxt); // func_80A357A8
@@ -10149,11 +10149,11 @@ void func_80A359B4(ActorObjBell* this, GlobalContext* ctxt); // func_80A359B4
 void func_80A35B18(ActorObjBell* this, GlobalContext* ctxt); // func_80A35B18
 void func_80A35BD4(ActorObjBell* this, GlobalContext* ctxt); // func_80A35BD4
 void ObjBell_Init(ActorObjBell* this, GlobalContext* ctxt); // func_80A35C98
-void ObjBell_Fini(ActorObjBell* this, GlobalContext* ctxt); // func_80A35D38
-void ObjBell_Main(ActorObjBell* this, GlobalContext* ctxt); // func_80A35D90
+void ObjBell_Destroy(ActorObjBell* this, GlobalContext* ctxt); // func_80A35D38
+void ObjBell_Update(ActorObjBell* this, GlobalContext* ctxt); // func_80A35D90
 void ObjBell_Draw(ActorObjBell* this, GlobalContext* ctxt); // func_80A35DDC
-void func_80A35FF0(void); // func_80A35FF0
-void func_80A3611C(void); // func_80A3611C
+void EnSyatekiOkuta_Init(void); // func_80A35FF0
+void EnSyatekiOkuta_Destroy(void); // func_80A3611C
 void func_80A36148(void); // func_80A36148
 void func_80A361B0(void); // func_80A361B0
 void func_80A361F4(void); // func_80A361F4
@@ -10172,40 +10172,40 @@ void func_80A365EC(void); // func_80A365EC
 void func_80A368E0(void); // func_80A368E0
 void func_80A36A90(void); // func_80A36A90
 void func_80A36AF8(void); // func_80A36AF8
-void func_80A36B9C(void); // func_80A36B9C
+void EnSyatekiOkuta_Update(void); // func_80A36B9C
 void func_80A36CB0(void); // func_80A36CB0
 void func_80A370EC(void); // func_80A370EC
 void func_80A37294(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A37294
-void func_80A3735C(void); // func_80A3735C
-void func_80A37ED0(void); // func_80A37ED0
-void func_80A37EE0(void); // func_80A37EE0
-void func_80A37EF0(void); // func_80A37EF0
-void func_80A3803C(void); // func_80A3803C
+void EnSyatekiOkuta_Draw(void); // func_80A3735C
+void ObjShutter_Init(void); // func_80A37ED0
+void ObjShutter_Destroy(void); // func_80A37EE0
+void ObjShutter_Update(void); // func_80A37EF0
+void ObjShutter_Draw(void); // func_80A3803C
 void func_80A38190(void); // func_80A38190
-void func_80A3822C(void); // func_80A3822C
-void func_80A382EC(void); // func_80A382EC
+void DmZl_Init(void); // func_80A3822C
+void DmZl_Destroy(void); // func_80A382EC
 void func_80A382FC(void); // func_80A382FC
 void func_80A3830C(void); // func_80A3830C
 void func_80A38468(void); // func_80A38468
-void func_80A385D4(void); // func_80A385D4
+void DmZl_Update(void); // func_80A385D4
 void func_80A3862C(void); // func_80A3862C
 void func_80A38648(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A38648
-void func_80A3869C(void); // func_80A3869C
+void DmZl_Draw(void); // func_80A3869C
 void func_80A389A0(void); // func_80A389A0
 void func_80A38A68(void); // func_80A38A68
 void func_80A38B7C(void); // func_80A38B7C
 void func_80A38BF0(void); // func_80A38BF0
 void func_80A38C70(void); // func_80A38C70
 void func_80A38DF4(void); // func_80A38DF4
-void func_80A38E04(void); // func_80A38E04
-void func_80A38F10(void); // func_80A38F10
-void func_80A38F3C(void); // func_80A38F3C
+void EnRu_Init(void); // func_80A38E04
+void EnRu_Destroy(void); // func_80A38F10
+void EnRu_Update(void); // func_80A38F3C
 void func_80A38FB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A38FB4
 void func_80A390F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A390F8
-void func_80A39204(void); // func_80A39204
+void EnRu_Draw(void); // func_80A39204
 void func_80A396B0(void); // func_80A396B0
-void func_80A3970C(void); // func_80A3970C
-void func_80A39BC0(void); // func_80A39BC0
+void EnElfgrp_Init(void); // func_80A3970C
+void EnElfgrp_Destroy(void); // func_80A39BC0
 void func_80A39BD0(void); // func_80A39BD0
 void func_80A39C1C(void); // func_80A39C1C
 void func_80A39CD4(void); // func_80A39CD4
@@ -10227,13 +10227,13 @@ void func_80A3A6F4(void); // func_80A3A6F4
 void func_80A3A77C(void); // func_80A3A77C
 void func_80A3A7FC(void); // func_80A3A7FC
 void func_80A3A8F8(void); // func_80A3A8F8
-void func_80A3AA70(void); // func_80A3AA70
-void func_80A3AC60(void); // func_80A3AC60
-void func_80A3AD38(void); // func_80A3AD38
-void func_80A3AD48(void); // func_80A3AD48
-void func_80A3AEC8(void); // func_80A3AEC8
-void func_80A3B080(void); // func_80A3B080
-void func_80A3B1F4(void); // func_80A3B1F4
+void EnElfgrp_Update(void); // func_80A3AA70
+void DmTsg_Init(void); // func_80A3AC60
+void DmTsg_Destroy(void); // func_80A3AD38
+void DmTsg_Update(void); // func_80A3AD48
+void DmTsg_Draw(void); // func_80A3AEC8
+void EnBaguo_Init(void); // func_80A3B080
+void EnBaguo_Destroy(void); // func_80A3B1F4
 void func_80A3B220(void); // func_80A3B220
 void func_80A3B2CC(void); // func_80A3B2CC
 void func_80A3B3E0(void); // func_80A3B3E0
@@ -10242,7 +10242,7 @@ void func_80A3B794(void); // func_80A3B794
 void func_80A3B7B8(void); // func_80A3B7B8
 void func_80A3B8F8(void); // func_80A3B8F8
 void func_80A3B958(void); // func_80A3B958
-void func_80A3BC88(void); // func_80A3BC88
+void EnBaguo_Update(void); // func_80A3BC88
 void func_80A3BE24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A3BE24
 void func_80A3BE60(void); // func_80A3BE60
 void func_80A3BF0C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80A3BF0C
@@ -10260,8 +10260,8 @@ void func_80A3CB94(void); // func_80A3CB94
 void func_80A3CBF0(void); // func_80A3CBF0
 void func_80A3CC30(void); // func_80A3CC30
 void func_80A3CC84(void); // func_80A3CC84
-void func_80A3CCB4(void); // func_80A3CCB4
-void func_80A3CE7C(void); // func_80A3CE7C
+void ObjVspinyroll_Init(void); // func_80A3CCB4
+void ObjVspinyroll_Destroy(void); // func_80A3CE7C
 void func_80A3CEC4(void); // func_80A3CEC4
 void func_80A3CEE0(void); // func_80A3CEE0
 void func_80A3CF10(void); // func_80A3CF10
@@ -10272,18 +10272,18 @@ void func_80A3D024(void); // func_80A3D024
 void func_80A3D038(void); // func_80A3D038
 void func_80A3D0E8(void); // func_80A3D0E8
 void func_80A3D0FC(void); // func_80A3D0FC
-void func_80A3D184(void); // func_80A3D184
-void func_80A3D210(void); // func_80A3D210
+void ObjVspinyroll_Update(void); // func_80A3D184
+void ObjVspinyroll_Draw(void); // func_80A3D210
 void func_80A3D2C0(void); // func_80A3D2C0
 void func_80A3D680(void); // func_80A3D680
 void func_80A3D940(void); // func_80A3D940
 void func_80A3D9C4(void); // func_80A3D9C4
-void func_80A3E1C8(void); // func_80A3E1C8
-void func_80A3E214(void); // func_80A3E214
-void func_80A3E224(void); // func_80A3E224
-void func_80A3E248(void); // func_80A3E248
-void func_80A3E390(void); // func_80A3E390
-void func_80A3E3E4(void); // func_80A3E3E4
+void ObjSmork_Init(void); // func_80A3E1C8
+void ObjSmork_Destroy(void); // func_80A3E214
+void ObjSmork_Update(void); // func_80A3E224
+void ObjSmork_Draw(void); // func_80A3E248
+void EnTest2_Init(void); // func_80A3E390
+void EnTest2_Update(void); // func_80A3E3E4
 void func_80A3E4EC(void); // func_80A3E4EC
 void func_80A3E524(void); // func_80A3E524
 void func_80A3E7E0(void); // func_80A3E7E0
@@ -10303,8 +10303,8 @@ void func_80A3EC30(void); // func_80A3EC30
 void func_80A3EC44(void); // func_80A3EC44
 void func_80A3ECEC(void); // func_80A3ECEC
 void func_80A3ED24(void); // func_80A3ED24
-void func_80A3ED94(void); // func_80A3ED94
-void func_80A3EFE4(void); // func_80A3EFE4
+void EnTest3_Init(void); // func_80A3ED94
+void EnTest3_Destroy(void); // func_80A3EFE4
 void func_80A3F080(void); // func_80A3F080
 void func_80A3F09C(void); // func_80A3F09C
 void func_80A3F0B0(void); // func_80A3F0B0
@@ -10335,7 +10335,7 @@ void func_80A4084C(void); // func_80A4084C
 void func_80A40908(void); // func_80A40908
 void func_80A409D4(void); // func_80A409D4
 void func_80A40A6C(void); // func_80A40A6C
-void func_80A40A90(void); // func_80A40A90
+void EnTest3_Update(void); // func_80A40A90
 void func_80A40CF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A40CF0
 void func_80A40F34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A40F34
 void func_80A4129C(void); // func_80A4129C
@@ -10344,15 +10344,15 @@ void func_80A41FA4(ActorEnTest4* this, GlobalContext* ctxt); // func_80A41FA4
 void func_80A42198(ActorEnTest4* this); // func_80A42198
 void func_80A425E4(ActorEnTest4* this, GlobalContext* ctxt); // func_80A425E4
 void EnTest4_Init(ActorEnTest4* this, GlobalContext* ctxt); // func_80A427E8
-void EnTest4_Fini(ActorEnTest4* this, GlobalContext* ctxt); // func_80A42AA8
+void EnTest4_Destroy(ActorEnTest4* this, GlobalContext* ctxt); // func_80A42AA8
 void func_80A42AB8(ActorEnTest4* this, GlobalContext* ctxt); // func_80A42AB8
 void func_80A42F20(ActorEnTest4* this, GlobalContext* ctxt); // func_80A42F20
 void func_80A430C8(ActorEnTest4* this, GlobalContext* ctxt); // func_80A430C8
 void func_80A431C8(ActorEnTest4* this, GlobalContext* ctxt); // func_80A431C8
 void func_80A4323C(ActorEnTest4* this, GlobalContext* ctxt); // func_80A4323C
-void EnTest4_Main(ActorEnTest4* this, GlobalContext* ctxt); // func_80A43274
-void func_80A434E0(void); // func_80A434E0
-void func_80A437A0(void); // func_80A437A0
+void EnTest4_Update(ActorEnTest4* this, GlobalContext* ctxt); // func_80A43274
+void EnBat_Init(void); // func_80A434E0
+void EnBat_Destroy(void); // func_80A437A0
 void func_80A437CC(void); // func_80A437CC
 void func_80A43810(void); // func_80A43810
 void func_80A43870(void); // func_80A43870
@@ -10366,18 +10366,18 @@ void func_80A44114(void); // func_80A44114
 void func_80A44294(void); // func_80A44294
 void func_80A4431C(void); // func_80A4431C
 void func_80A443D8(void); // func_80A443D8
-void func_80A444B8(void); // func_80A444B8
-void func_80A44818(void); // func_80A44818
-void func_80A44C80(void); // func_80A44C80
-void func_80A44DB4(void); // func_80A44DB4
+void EnBat_Update(void); // func_80A444B8
+void EnBat_Draw(void); // func_80A44818
+void EnSekihi_Init(void); // func_80A44C80
+void EnSekihi_Destroy(void); // func_80A44DB4
 void func_80A44DE8(void); // func_80A44DE8
 void func_80A44F40(void); // func_80A44F40
 void func_80A450B0(void); // func_80A450B0
 void func_80A45130(void); // func_80A45130
-void func_80A45140(void); // func_80A45140
+void EnSekihi_Update(void); // func_80A45140
 void func_80A45164(void); // func_80A45164
-void func_80A45360(void); // func_80A45360
-void func_80A45568(void); // func_80A45568
+void EnWiz_Init(void); // func_80A45360
+void EnWiz_Destroy(void); // func_80A45568
 void func_80A455C4(void); // func_80A455C4
 void func_80A456A0(void); // func_80A456A0
 void func_80A45CD8(void); // func_80A45CD8
@@ -10400,42 +10400,42 @@ void func_80A473B8(void); // func_80A473B8
 void func_80A4767C(void); // func_80A4767C
 void func_80A476C8(void); // func_80A476C8
 void func_80A477E8(void); // func_80A477E8
-void func_80A47C6C(void); // func_80A47C6C
+void EnWiz_Update(void); // func_80A47C6C
 void func_80A47FCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A47FCC
 void func_80A48138(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A48138
-void func_80A483B4(void); // func_80A483B4
-void func_80A48FE0(void); // func_80A48FE0
-void func_80A490B0(void); // func_80A490B0
+void EnWiz_Draw(void); // func_80A483B4
+void EnWizBrock_Init(void); // func_80A48FE0
+void EnWizBrock_Destroy(void); // func_80A490B0
 void func_80A490E4(void); // func_80A490E4
 void func_80A490FC(void); // func_80A490FC
-void func_80A492E4(void); // func_80A492E4
-void func_80A49308(void); // func_80A49308
-void func_80A496A0(void); // func_80A496A0
-void func_80A497D4(void); // func_80A497D4
+void EnWizBrock_Update(void); // func_80A492E4
+void EnWizBrock_Draw(void); // func_80A49308
+void EnWizFire_Init(void); // func_80A496A0
+void EnWizFire_Destroy(void); // func_80A497D4
 void func_80A4984C(void); // func_80A4984C
 void func_80A49A44(void); // func_80A49A44
 void func_80A49F38(void); // func_80A49F38
 void func_80A49FD8(void); // func_80A49FD8
 void func_80A4A11C(void); // func_80A4A11C
 void func_80A4A608(void); // func_80A4A608
-void func_80A4A698(void); // func_80A4A698
+void EnWizFire_Update(void); // func_80A4A698
 void func_80A4B0C8(void); // func_80A4B0C8
 void func_80A4B33C(void); // func_80A4B33C
-void func_80A4B804(void); // func_80A4B804
+void EnWizFire_Draw(void); // func_80A4B804
 void func_80A4BAB4(void); // func_80A4BAB4
 void func_80A4BC74(void); // func_80A4BC74
 void func_80A4BDDC(void); // func_80A4BDDC
 void func_80A4BF78(void); // func_80A4BF78
-void func_80A4C490(void); // func_80A4C490
-void func_80A4C54C(void); // func_80A4C54C
+void EffChange_Init(void); // func_80A4C490
+void EffChange_Destroy(void); // func_80A4C54C
 void func_80A4C578(void); // func_80A4C578
 void func_80A4C5CC(void); // func_80A4C5CC
-void func_80A4C78C(void); // func_80A4C78C
+void EffChange_Update(void); // func_80A4C78C
 void func_80A4C7B0(void); // func_80A4C7B0
-void func_80A4C9B0(void); // func_80A4C9B0
-void func_80A4C9D4(void); // func_80A4C9D4
-void func_80A4C9E4(void); // func_80A4C9E4
-void func_80A4C9F4(void); // func_80A4C9F4
+void DmStatue_Init(void); // func_80A4C9B0
+void DmStatue_Destroy(void); // func_80A4C9D4
+void DmStatue_Update(void); // func_80A4C9E4
+void DmStatue_Draw(void); // func_80A4C9F4
 void func_80A4CA90(void); // func_80A4CA90
 void func_80A4CABC(void); // func_80A4CABC
 void func_80A4CB7C(void); // func_80A4CB7C
@@ -10446,20 +10446,20 @@ void func_80A4CD34(void); // func_80A4CD34
 void func_80A4CE28(void); // func_80A4CE28
 void func_80A4D174(void); // func_80A4D174
 void func_80A4D1CC(void); // func_80A4D1CC
-void func_80A4D1EC(void); // func_80A4D1EC
-void func_80A4D370(void); // func_80A4D370
-void func_80A4D39C(void); // func_80A4D39C
-void func_80A4D6A4(void); // func_80A4D6A4
-void func_80A4D9F0(void); // func_80A4D9F0
-void func_80A4DB54(void); // func_80A4DB54
+void ObjFireshield_Init(void); // func_80A4D1EC
+void ObjFireshield_Destroy(void); // func_80A4D370
+void ObjFireshield_Update(void); // func_80A4D39C
+void ObjFireshield_Draw(void); // func_80A4D6A4
+void BgLadder_Init(void); // func_80A4D9F0
+void BgLadder_Destroy(void); // func_80A4DB54
 void func_80A4DB88(void); // func_80A4DB88
 void func_80A4DBD8(void); // func_80A4DBD8
 void func_80A4DC48(void); // func_80A4DC48
 void func_80A4DCCC(void); // func_80A4DCCC
-void func_80A4DCDC(void); // func_80A4DCDC
-void func_80A4DD00(void); // func_80A4DD00
-void func_80A4DED0(void); // func_80A4DED0
-void func_80A4E0A0(void); // func_80A4E0A0
+void BgLadder_Update(void); // func_80A4DCDC
+void BgLadder_Draw(void); // func_80A4DD00
+void EnMkk_Init(void); // func_80A4DED0
+void EnMkk_Destroy(void); // func_80A4E0A0
 void func_80A4E0CC(void); // func_80A4E0CC
 void func_80A4E100(void); // func_80A4E100
 void func_80A4E190(void); // func_80A4E190
@@ -10473,30 +10473,30 @@ void func_80A4E67C(void); // func_80A4E67C
 void func_80A4E72C(void); // func_80A4E72C
 void func_80A4E84C(void); // func_80A4E84C
 void func_80A4EBBC(void); // func_80A4EBBC
-void func_80A4EC14(void); // func_80A4EC14
+void EnMkk_Update(void); // func_80A4EC14
 void func_80A4EDF0(void); // func_80A4EDF0
 void func_80A4EE48(void); // func_80A4EE48
 void func_80A4EEF4(void); // func_80A4EEF4
 void func_80A4EF74(void); // func_80A4EF74
 void func_80A4F16C(void); // func_80A4F16C
-void func_80A4F190(void); // func_80A4F190
+void EnMkk_Draw(void); // func_80A4F190
 void func_80A4F4C8(void); // func_80A4F4C8
-void func_80A4FA40(void); // func_80A4FA40
-void func_80A4FB00(void); // func_80A4FB00
+void DemoGetitem_Init(void); // func_80A4FA40
+void DemoGetitem_Destroy(void); // func_80A4FB00
 void func_80A4FB10(void); // func_80A4FB10
 void func_80A4FB68(void); // func_80A4FB68
-void func_80A4FCCC(void); // func_80A4FCCC
+void DemoGetitem_Update(void); // func_80A4FCCC
 void func_80A4FCF0(void); // func_80A4FCF0
 void func_80A4FDD0(void); // func_80A4FDD0
 void func_80A4FEBC(void); // func_80A4FEBC
 void func_80A4FFE8(void); // func_80A4FFE8
 void func_80A500F8(void); // func_80A500F8
-void func_80A502A0(void); // func_80A502A0
-void func_80A5034C(void); // func_80A5034C
-void func_80A50380(void); // func_80A50380
+void EnDnb_Init(void); // func_80A502A0
+void EnDnb_Destroy(void); // func_80A5034C
+void EnDnb_Update(void); // func_80A50380
 void func_80A50510(void); // func_80A50510
 void func_80A5063C(void); // func_80A5063C
-void func_80A50768(void); // func_80A50768
+void EnDnb_Draw(void); // func_80A50768
 void func_80A507C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_80A507C0
 void func_80A5086C(void); // func_80A5086C
 void func_80A50950(void); // func_80A50950
@@ -10506,19 +10506,19 @@ UNK_TYPE4 func_80A50E40(s32 param_1, UNK_TYPE4 param_2); // func_80A50E40
 void func_80A50EC0(void); // func_80A50EC0
 void func_80A50F38(void); // func_80A50F38
 void func_80A50F9C(void); // func_80A50F9C
-void func_80A50FAC(s32 param_1, UNK_TYPE4 param_2); // func_80A50FAC
-void func_80A510D0(void); // func_80A510D0
-void func_80A510E0(void); // func_80A510E0
+void EnDnh_Init(s32 param_1, UNK_TYPE4 param_2); // func_80A50FAC
+void EnDnh_Destroy(void); // func_80A510D0
+void EnDnh_Update(void); // func_80A510E0
 void func_80A51168(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A51168
-void func_80A511B4(void); // func_80A511B4
+void EnDnh_Draw(void); // func_80A511B4
 void func_80A514F0(void); // func_80A514F0
 void func_80A515C4(void); // func_80A515C4
 void func_80A51648(void); // func_80A51648
 void func_80A51890(void); // func_80A51890
 void func_80A518DC(void); // func_80A518DC
-void func_80A518EC(void); // func_80A518EC
-void func_80A519A8(void); // func_80A519A8
-void func_80A519D4(void); // func_80A519D4
+void EnDnk_Init(void); // func_80A518EC
+void EnDnk_Destroy(void); // func_80A519A8
+void EnDnk_Update(void); // func_80A519D4
 UNK_TYPE4 func_80A51A78(UNK_TYPE4 param_1, s32 param_2, UNK_PTR param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, s32 param_6); // func_80A51A78
 void func_80A51AA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A51AA4
 void func_80A51CB8(void); // func_80A51CB8
@@ -10542,25 +10542,25 @@ void func_80A52D44(void); // func_80A52D44
 void func_80A52DC8(s32 param_1, s32 param_2); // func_80A52DC8
 void func_80A52FB8(void); // func_80A52FB8
 void func_80A53038(void); // func_80A53038
-void func_80A5313C(void); // func_80A5313C
-void func_80A53258(void); // func_80A53258
-void func_80A53284(void); // func_80A53284
-void func_80A533A4(void); // func_80A533A4
-void func_80A537D0(void); // func_80A537D0
-void func_80A53868(void); // func_80A53868
+void EnDnq_Init(void); // func_80A5313C
+void EnDnq_Destroy(void); // func_80A53258
+void EnDnq_Update(void); // func_80A53284
+void EnDnq_Draw(void); // func_80A533A4
+void BgKeikokuSaku_Init(void); // func_80A537D0
+void BgKeikokuSaku_Destroy(void); // func_80A53868
 void func_80A5389C(void); // func_80A5389C
 void func_80A538E0(void); // func_80A538E0
 void func_80A53994(void); // func_80A53994
-void func_80A539B8(void); // func_80A539B8
-void func_80A53ABC(void); // func_80A53ABC
+void BgKeikokuSaku_Update(void); // func_80A539B8
+void BgKeikokuSaku_Draw(void); // func_80A53ABC
 void func_80A53BE0(void); // func_80A53BE0
 void func_80A53E60(void); // func_80A53E60
 void func_80A541F4(void); // func_80A541F4
 void func_80A54600(void); // func_80A54600
 void func_80A54980(void); // func_80A54980
 void func_80A54A0C(void); // func_80A54A0C
-void func_80A54AC0(void); // func_80A54AC0
-void func_80A54BC4(void); // func_80A54BC4
+void ObjHugebombiwa_Init(void); // func_80A54AC0
+void ObjHugebombiwa_Destroy(void); // func_80A54BC4
 void func_80A54BF0(void); // func_80A54BF0
 void func_80A54C04(void); // func_80A54C04
 void func_80A54CD8(void); // func_80A54CD8
@@ -10569,15 +10569,15 @@ void func_80A54E10(void); // func_80A54E10
 void func_80A55064(void); // func_80A55064
 void func_80A55310(void); // func_80A55310
 void func_80A55564(void); // func_80A55564
-void func_80A557FC(void); // func_80A557FC
-void func_80A55820(void); // func_80A55820
+void ObjHugebombiwa_Update(void); // func_80A557FC
+void ObjHugebombiwa_Draw(void); // func_80A55820
 void func_80A55B34(void); // func_80A55B34
-void func_80A560C0(void); // func_80A560C0
-void func_80A560D0(void); // func_80A560D0
-void func_80A560E0(void); // func_80A560E0
-void func_80A560F0(void); // func_80A560F0
-void func_80A56150(void); // func_80A56150
-void func_80A56370(void); // func_80A56370
+void EnFirefly2_Init(void); // func_80A560C0
+void EnFirefly2_Destroy(void); // func_80A560D0
+void EnFirefly2_Update(void); // func_80A560E0
+void EnFirefly2_Draw(void); // func_80A560F0
+void EnRat_Init(void); // func_80A56150
+void EnRat_Destroy(void); // func_80A56370
 void func_80A563CC(void); // func_80A563CC
 void func_80A56444(void); // func_80A56444
 void func_80A5665C(void); // func_80A5665C
@@ -10601,16 +10601,16 @@ void func_80A57918(void); // func_80A57918
 void func_80A57984(void); // func_80A57984
 void func_80A57A08(void); // func_80A57A08
 void func_80A57A9C(void); // func_80A57A9C
-void func_80A57AE0(void); // func_80A57AE0
+void EnRat_Update(void); // func_80A57AE0
 void func_80A57F10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A57F10
 void func_80A57F4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A57F4C
-void func_80A58354(void); // func_80A58354
+void EnRat_Draw(void); // func_80A58354
 void func_80A587A0(void); // func_80A587A0
 void func_80A58908(void); // func_80A58908
-void func_80A58A94(void); // func_80A58A94
-void func_80A58CE8(void); // func_80A58CE8
-void func_80A58CF8(void); // func_80A58CF8
-void func_80A59420(void); // func_80A59420
+void EnWaterEffect_Init(void); // func_80A58A94
+void EnWaterEffect_Destroy(void); // func_80A58CE8
+void EnWaterEffect_Update(void); // func_80A58CF8
+void EnWaterEffect_Draw(void); // func_80A59420
 void func_80A599E8(void); // func_80A599E8
 void func_80A59C04(void); // func_80A59C04
 void func_80A5A184(void); // func_80A5A184
@@ -10648,8 +10648,8 @@ void func_80A5CCD4(void); // func_80A5CCD4
 void func_80A5CD0C(void); // func_80A5CD0C
 void func_80A5CF44(void); // func_80A5CF44
 void func_80A5D178(void); // func_80A5D178
-void func_80A5D3EC(void); // func_80A5D3EC
-void func_80A5D5A0(void); // func_80A5D5A0
+void EnKusa2_Init(void); // func_80A5D3EC
+void EnKusa2_Destroy(void); // func_80A5D5A0
 void func_80A5D5E0(void); // func_80A5D5E0
 void func_80A5D5F4(void); // func_80A5D5F4
 void func_80A5D618(void); // func_80A5D618
@@ -10671,30 +10671,30 @@ void func_80A5E210(void); // func_80A5E210
 void func_80A5E418(void); // func_80A5E418
 void func_80A5E4BC(void); // func_80A5E4BC
 void func_80A5E604(void); // func_80A5E604
-void func_80A5E6A4(void); // func_80A5E6A4
+void EnKusa2_Update(void); // func_80A5E6A4
 void func_80A5E6F0(void); // func_80A5E6F0
 void func_80A5E80C(void); // func_80A5E80C
-void func_80A5E8C0(void); // func_80A5E8C0
+void EnKusa2_Draw(void); // func_80A5E8C0
 void func_80A5E9B4(void); // func_80A5E9B4
 void func_80A5EA48(void); // func_80A5EA48
-void func_80A60B20(void); // func_80A60B20
-void func_80A60BF8(void); // func_80A60BF8
+void BgSpoutFire_Init(void); // func_80A60B20
+void BgSpoutFire_Destroy(void); // func_80A60BF8
 void func_80A60C24(void); // func_80A60C24
 void func_80A60C94(void); // func_80A60C94
 void func_80A60CDC(void); // func_80A60CDC
 void func_80A60D10(void); // func_80A60D10
 void func_80A60DA0(void); // func_80A60DA0
 void func_80A60E08(void); // func_80A60E08
-void func_80A60F68(void); // func_80A60F68
+void BgSpoutFire_Update(void); // func_80A60F68
 void func_80A61040(void); // func_80A61040
-void func_80A612B0(void); // func_80A612B0
-void func_80A612C0(void); // func_80A612C0
+void EnDyExtra_Destroy(void); // func_80A612B0
+void EnDyExtra_Init(void); // func_80A612C0
 void func_80A61334(void); // func_80A61334
 void func_80A613C8(void); // func_80A613C8
-void func_80A61470(void); // func_80A61470
-void func_80A614C4(void); // func_80A614C4
-void func_80A61810(void); // func_80A61810
-void func_80A619EC(void); // func_80A619EC
+void EnDyExtra_Update(void); // func_80A61470
+void EnDyExtra_Draw(void); // func_80A614C4
+void EnBal_Init(void); // func_80A61810
+void EnBal_Destroy(void); // func_80A619EC
 void func_80A61A18(void); // func_80A61A18
 void func_80A61A44(void); // func_80A61A44
 void func_80A61A6C(void); // func_80A61A6C
@@ -10728,12 +10728,12 @@ void func_80A635F0(void); // func_80A635F0
 void func_80A636AC(void); // func_80A636AC
 void func_80A637FC(void); // func_80A637FC
 void func_80A63884(void); // func_80A63884
-void func_80A63914(void); // func_80A63914
+void EnBal_Update(void); // func_80A63914
 void func_80A63A10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A63A10
 void func_80A63B94(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A63B94
-void func_80A63BEC(void); // func_80A63BEC
-void func_80A644A0(void); // func_80A644A0
-void func_80A64544(void); // func_80A64544
+void EnBal_Draw(void); // func_80A63BEC
+void EnGinkoMan_Init(void); // func_80A644A0
+void EnGinkoMan_Destroy(void); // func_80A64544
 void func_80A64554(void); // func_80A64554
 void func_80A645A4(void); // func_80A645A4
 void func_80A646F4(void); // func_80A646F4
@@ -10749,18 +10749,18 @@ void func_80A65800(void); // func_80A65800
 void func_80A65844(void); // func_80A65844
 void func_80A65988(void); // func_80A65988
 void func_80A65A5C(void); // func_80A65A5C
-void func_80A65ADC(void); // func_80A65ADC
+void EnGinkoMan_Update(void); // func_80A65ADC
 void func_80A65B44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A65B44
 void func_80A65C18(void); // func_80A65C18
-void func_80A65C30(void); // func_80A65C30
-void func_80A66180(void); // func_80A66180
-void func_80A661DC(void); // func_80A661DC
+void EnGinkoMan_Draw(void); // func_80A65C30
+void EnWarpUzu_Init(void); // func_80A66180
+void EnWarpUzu_Destroy(void); // func_80A661DC
 void func_80A66208(void); // func_80A66208
 void func_80A66278(void); // func_80A66278
 void func_80A66384(void); // func_80A66384
 void func_80A663E8(void); // func_80A663E8
-void func_80A663F8(void); // func_80A663F8
-void func_80A66468(void); // func_80A66468
+void EnWarpUzu_Update(void); // func_80A663F8
+void EnWarpUzu_Draw(void); // func_80A66468
 void func_80A66570(void); // func_80A66570
 void func_80A665AC(void); // func_80A665AC
 void func_80A665EC(void); // func_80A665EC
@@ -10768,8 +10768,8 @@ void func_80A667F0(void); // func_80A667F0
 void func_80A66930(void); // func_80A66930
 void func_80A66C4C(void); // func_80A66C4C
 void func_80A66E30(void); // func_80A66E30
-void func_80A66F94(void); // func_80A66F94
-void func_80A67174(void); // func_80A67174
+void ObjDriftice_Init(void); // func_80A66F94
+void ObjDriftice_Destroy(void); // func_80A67174
 void func_80A671A8(void); // func_80A671A8
 void func_80A671BC(void); // func_80A671BC
 void func_80A671CC(void); // func_80A671CC
@@ -10778,10 +10778,10 @@ void func_80A6743C(void); // func_80A6743C
 void func_80A67450(void); // func_80A67450
 void func_80A674A8(void); // func_80A674A8
 void func_80A674C4(void); // func_80A674C4
-void func_80A674FC(void); // func_80A674FC
-void func_80A675C4(void); // func_80A675C4
-void func_80A678B0(void); // func_80A678B0
-void func_80A67A08(void); // func_80A67A08
+void ObjDriftice_Update(void); // func_80A674FC
+void ObjDriftice_Draw(void); // func_80A675C4
+void EnLookNuts_Init(void); // func_80A678B0
+void EnLookNuts_Destroy(void); // func_80A67A08
 void func_80A67A34(void); // func_80A67A34
 void func_80A67AA8(void); // func_80A67AA8
 void func_80A67C48(void); // func_80A67C48
@@ -10790,8 +10790,8 @@ void func_80A67F30(void); // func_80A67F30
 void func_80A67FC4(void); // func_80A67FC4
 void func_80A68080(void); // func_80A68080
 void func_80A680FC(void); // func_80A680FC
-void func_80A681C4(void); // func_80A681C4
-void func_80A68540(void); // func_80A68540
+void EnLookNuts_Update(void); // func_80A681C4
+void EnLookNuts_Draw(void); // func_80A68540
 void func_80A687A0(void); // func_80A687A0
 void func_80A68808(void); // func_80A68808
 void func_80A68860(void); // func_80A68860
@@ -10826,8 +10826,8 @@ void func_80A6A024(void); // func_80A6A024
 void func_80A6A058(void); // func_80A6A058
 void func_80A6A094(void); // func_80A6A094
 void func_80A6A0D8(void); // func_80A6A0D8
-void func_80A6A0F0(void); // func_80A6A0F0
-void func_80A6A2C8(void); // func_80A6A2C8
+void EnMushi2_Init(void); // func_80A6A0F0
+void EnMushi2_Destroy(void); // func_80A6A2C8
 void func_80A6A300(void); // func_80A6A300
 void func_80A6A36C(void); // func_80A6A36C
 void func_80A6A508(void); // func_80A6A508
@@ -10842,12 +10842,12 @@ void func_80A6AE14(void); // func_80A6AE14
 void func_80A6AE7C(void); // func_80A6AE7C
 void func_80A6B078(void); // func_80A6B078
 void func_80A6B0D8(void); // func_80A6B0D8
-void func_80A6B3F8(void); // func_80A6B3F8
-void func_80A6B8D0(void); // func_80A6B8D0
+void EnMushi2_Update(void); // func_80A6B3F8
+void EnMushi2_Draw(void); // func_80A6B8D0
 void func_80A6BF90(void); // func_80A6BF90
 void func_80A6C1DC(void); // func_80A6C1DC
-void func_80A6C22C(void); // func_80A6C22C
-void func_80A6C39C(void); // func_80A6C39C
+void EnFall_Init(void); // func_80A6C22C
+void EnFall_Destroy(void); // func_80A6C39C
 void func_80A6C3AC(void); // func_80A6C3AC
 void func_80A6C3FC(void); // func_80A6C3FC
 void func_80A6C7C0(void); // func_80A6C7C0
@@ -10859,7 +10859,7 @@ void func_80A6CD74(void); // func_80A6CD74
 void func_80A6CECC(void); // func_80A6CECC
 void func_80A6CF60(void); // func_80A6CF60
 void func_80A6CF70(void); // func_80A6CF70
-void func_80A6D0DC(void); // func_80A6D0DC
+void EnFall_Update(void); // func_80A6D0DC
 void func_80A6D100(void); // func_80A6D100
 void func_80A6D220(void); // func_80A6D220
 void func_80A6D444(void); // func_80A6D444
@@ -10875,8 +10875,8 @@ void func_80A6DD3C(void); // func_80A6DD3C
 void func_80A6E07C(void); // func_80A6E07C
 void func_80A6E214(void); // func_80A6E214
 void func_80A6E37C(void); // func_80A6E37C
-void func_80A6F0A0(void); // func_80A6F0A0
-void func_80A6F1EC(void); // func_80A6F1EC
+void EnMm3_Init(void); // func_80A6F0A0
+void EnMm3_Destroy(void); // func_80A6F1EC
 void func_80A6F22C(void); // func_80A6F22C
 void func_80A6F270(void); // func_80A6F270
 void func_80A6F2C8(void); // func_80A6F2C8
@@ -10892,11 +10892,11 @@ void func_80A6FED8(void); // func_80A6FED8
 void func_80A6FEEC(void); // func_80A6FEEC
 void func_80A6FFAC(void); // func_80A6FFAC
 void func_80A70084(void); // func_80A70084
-void func_80A70134(void); // func_80A70134
+void EnMm3_Update(void); // func_80A70134
 void func_80A701E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A701E0
 void func_80A702B0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A702B0
-void func_80A702F0(void); // func_80A702F0
-void func_80A706F0(void); // func_80A706F0
+void EnMm3_Draw(void); // func_80A702F0
+void BgCraceMovebg_Init(void); // func_80A706F0
 void func_80A7090C(void); // func_80A7090C
 void func_80A70970(void); // func_80A70970
 void func_80A7099C(void); // func_80A7099C
@@ -10904,8 +10904,8 @@ void func_80A709E4(void); // func_80A709E4
 void func_80A70A08(void); // func_80A70A08
 void func_80A70A84(void); // func_80A70A84
 void func_80A70A9C(void); // func_80A70A9C
-void func_80A70AAC(void); // func_80A70AAC
-void func_80A70B60(void); // func_80A70B60
+void BgCraceMovebg_Destroy(void); // func_80A70AAC
+void BgCraceMovebg_Update(void); // func_80A70B60
 void func_80A70C04(void); // func_80A70C04
 void func_80A70D74(void); // func_80A70D74
 void func_80A70DA8(void); // func_80A70DA8
@@ -10915,15 +10915,15 @@ void func_80A70F14(void); // func_80A70F14
 void func_80A70F2C(void); // func_80A70F2C
 void func_80A70FF4(void); // func_80A70FF4
 void func_80A71040(void); // func_80A71040
-void func_80A71050(void); // func_80A71050
+void BgCraceMovebg_Draw(void); // func_80A71050
 void func_80A711D0(void); // func_80A711D0
 void func_80A71424(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_80A71424
 void func_80A714B4(void); // func_80A714B4
 void func_80A7153C(void); // func_80A7153C
 void func_80A715DC(void); // func_80A715DC
 void func_80A71788(void); // func_80A71788
-void func_80A717F4(void); // func_80A717F4
-void func_80A71ABC(void); // func_80A71ABC
+void EnDno_Init(void); // func_80A717F4
+void EnDno_Destroy(void); // func_80A71ABC
 void func_80A71B04(void); // func_80A71B04
 void func_80A71B58(void); // func_80A71B58
 void func_80A71B68(void); // func_80A71B68
@@ -10948,12 +10948,12 @@ void func_80A730A0(void); // func_80A730A0
 void func_80A73244(void); // func_80A73244
 void func_80A732C8(void); // func_80A732C8
 void func_80A73408(void); // func_80A73408
-void func_80A73508(void); // func_80A73508
-void func_80A735C8(void); // func_80A735C8
+void EnDno_Update(void); // func_80A73508
+void EnDno_Draw(void); // func_80A735C8
 void func_80A7361C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A7361C
 void func_80A73654(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A73654
-void func_80A73FA0(void); // func_80A73FA0
-void func_80A7422C(void); // func_80A7422C
+void EnPr2_Init(void); // func_80A73FA0
+void EnPr2_Destroy(void); // func_80A7422C
 void func_80A7429C(void); // func_80A7429C
 void func_80A7436C(void); // func_80A7436C
 void func_80A74510(void); // func_80A74510
@@ -10966,13 +10966,13 @@ void func_80A74E90(void); // func_80A74E90
 void func_80A751B4(void); // func_80A751B4
 void func_80A75310(void); // func_80A75310
 void func_80A755D8(void); // func_80A755D8
-void func_80A756A8(void); // func_80A756A8
+void EnPr2_Update(void); // func_80A756A8
 void func_80A758E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A758E8
 void func_80A75950(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A75950
 void func_80A759D8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A759D8
-void func_80A75A40(void); // func_80A75A40
-void func_80A75DC0(void); // func_80A75DC0
-void func_80A75F08(void); // func_80A75F08
+void EnPr2_Draw(void); // func_80A75A40
+void EnPrz_Init(void); // func_80A75DC0
+void EnPrz_Destroy(void); // func_80A75F08
 void func_80A75F18(void); // func_80A75F18
 void func_80A75FA4(void); // func_80A75FA4
 void func_80A76070(void); // func_80A76070
@@ -10985,12 +10985,12 @@ void func_80A76748(void); // func_80A76748
 void func_80A767A8(void); // func_80A767A8
 void func_80A76A1C(void); // func_80A76A1C
 void func_80A76B14(void); // func_80A76B14
-void func_80A76D48(void); // func_80A76D48
+void EnPrz_Update(void); // func_80A76D48
 void func_80A76F70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A76F70
 void func_80A76FCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A76FCC
-void func_80A77040(void); // func_80A77040
-void func_80A773C0(void); // func_80A773C0
-void func_80A77664(void); // func_80A77664
+void EnPrz_Draw(void); // func_80A77040
+void EnJso2_Init(void); // func_80A773C0
+void EnJso2_Destroy(void); // func_80A77664
 void func_80A776E0(void); // func_80A776E0
 void func_80A77790(void); // func_80A77790
 void func_80A77880(void); // func_80A77880
@@ -11030,27 +11030,27 @@ void func_80A7A0D0(void); // func_80A7A0D0
 void func_80A7A124(void); // func_80A7A124
 void func_80A7A2EC(void); // func_80A7A2EC
 void func_80A7A360(void); // func_80A7A360
-void func_80A7A61C(void); // func_80A7A61C
+void EnJso2_Update(void); // func_80A7A61C
 void func_80A7AA48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A7AA48
 void func_80A7AA9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A7AA9C
-void func_80A7AFA8(void); // func_80A7AFA8
-void func_80A7BC70(void); // func_80A7BC70
-void func_80A7BD80(void); // func_80A7BD80
+void EnJso2_Draw(void); // func_80A7AFA8
+void ObjEtcetera_Init(void); // func_80A7BC70
+void ObjEtcetera_Destroy(void); // func_80A7BD80
 void func_80A7BDC8(void); // func_80A7BDC8
 void func_80A7BE8C(void); // func_80A7BE8C
 void func_80A7BF08(void); // func_80A7BF08
 void func_80A7C168(void); // func_80A7C168
 void func_80A7C1F0(void); // func_80A7C1F0
 void func_80A7C308(void); // func_80A7C308
-void func_80A7C5EC(void); // func_80A7C5EC
+void ObjEtcetera_Update(void); // func_80A7C5EC
 void func_80A7C690(void); // func_80A7C690
 void func_80A7C718(void); // func_80A7C718
 void func_80A7C990(void); // func_80A7C990
 void func_80A7CA18(void); // func_80A7CA18
 void func_80A7CBC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80A7CBC4
 void func_80A7CD08(void); // func_80A7CD08
-void func_80A7CD60(void); // func_80A7CD60
-void func_80A7D0F0(void); // func_80A7D0F0
+void EnEgol_Init(void); // func_80A7CD60
+void EnEgol_Destroy(void); // func_80A7D0F0
 void func_80A7D140(void); // func_80A7D140
 void func_80A7D168(void); // func_80A7D168
 void func_80A7D1E4(void); // func_80A7D1E4
@@ -11080,10 +11080,10 @@ void func_80A7EBDC(void); // func_80A7EBDC
 void func_80A7EC84(void); // func_80A7EC84
 void func_80A7ED14(void); // func_80A7ED14
 void func_80A7EFB8(void); // func_80A7EFB8
-void func_80A7F354(void); // func_80A7F354
+void EnEgol_Update(void); // func_80A7F354
 void func_80A7F8E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A7F8E8
 void func_80A7FAFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A7FAFC
-void func_80A7FFB8(void); // func_80A7FFB8
+void EnEgol_Draw(void); // func_80A7FFB8
 void func_80A80508(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80A80508
 void func_80A80750(void); // func_80A80750
 void func_80A80904(void); // func_80A80904
@@ -11112,8 +11112,8 @@ void func_80A81E7C(void); // func_80A81E7C
 void func_80A81FFC(void); // func_80A81FFC
 void func_80A828A8(void); // func_80A828A8
 void func_80A82C28(void); // func_80A82C28
-void func_80A82C5C(void); // func_80A82C5C
-void func_80A82F58(void); // func_80A82F58
+void ObjMine_Init(void); // func_80A82C5C
+void ObjMine_Destroy(void); // func_80A82F58
 void func_80A82F84(void); // func_80A82F84
 void func_80A82F98(void); // func_80A82F98
 void func_80A82FA8(void); // func_80A82FA8
@@ -11128,16 +11128,16 @@ void func_80A83B14(void); // func_80A83B14
 void func_80A83B28(void); // func_80A83B28
 void func_80A83CEC(void); // func_80A83CEC
 void func_80A83D00(void); // func_80A83D00
-void func_80A83D8C(void); // func_80A83D8C
+void ObjMine_Update(void); // func_80A83D8C
 void func_80A83E7C(void); // func_80A83E7C
-void func_80A83EA0(void); // func_80A83EA0
+void ObjMine_Draw(void); // func_80A83EA0
 void func_80A83FBC(void); // func_80A83FBC
 void func_80A84088(void); // func_80A84088
 void func_80A84338(void); // func_80A84338
 void func_80A84CD0(void); // func_80A84CD0
 void func_80A84CF8(void); // func_80A84CF8
-void func_80A84D68(void); // func_80A84D68
-void func_80A84E68(void); // func_80A84E68
+void ObjPurify_Init(void); // func_80A84D68
+void ObjPurify_Destroy(void); // func_80A84E68
 void func_80A84EAC(void); // func_80A84EAC
 void func_80A84EC0(void); // func_80A84EC0
 void func_80A84FA0(void); // func_80A84FA0
@@ -11150,7 +11150,7 @@ void func_80A850B0(void); // func_80A850B0
 void func_80A850E8(void); // func_80A850E8
 void func_80A8515C(void); // func_80A8515C
 void func_80A85194(void); // func_80A85194
-void func_80A851A4(void); // func_80A851A4
+void ObjPurify_Update(void); // func_80A851A4
 void func_80A851C8(void); // func_80A851C8
 void func_80A85304(void); // func_80A85304
 void func_80A85620(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A85620
@@ -11181,13 +11181,13 @@ void func_80A87B48(void); // func_80A87B48
 void func_80A87DC0(void); // func_80A87DC0
 void func_80A87FD0(void); // func_80A87FD0
 void func_80A881E0(void); // func_80A881E0
-void func_80A88334(void); // func_80A88334
-void func_80A884BC(void); // func_80A884BC
-void func_80A884E8(void); // func_80A884E8
+void EnTru_Init(void); // func_80A88334
+void EnTru_Destroy(void); // func_80A884BC
+void EnTru_Update(void); // func_80A884E8
 void func_80A885B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A885B8
 void func_80A88698(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A88698
 void func_80A886D4(void); // func_80A886D4
-void func_80A887E4(void); // func_80A887E4
+void EnTru_Draw(void); // func_80A887E4
 void func_80A8B770(void); // func_80A8B770
 void func_80A8B80C(void); // func_80A8B80C
 void func_80A8B88C(void); // func_80A8B88C
@@ -11261,20 +11261,20 @@ void func_80A8EFA4(void); // func_80A8EFA4
 void func_80A8EFF8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6); // func_80A8EFF8
 void func_80A8F268(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_80A8F268
 void func_80A8F404(void); // func_80A8F404
-void func_80A8F7AC(void); // func_80A8F7AC
-void func_80A8F7E8(void); // func_80A8F7E8
-void func_80A8F828(void); // func_80A8F828
+void EnTrt_Init(void); // func_80A8F7AC
+void EnTrt_Destroy(void); // func_80A8F7E8
+void EnTrt_Update(void); // func_80A8F828
 void func_80A8F8C4(void); // func_80A8F8C4
 void func_80A8FA00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A8FA00
 void func_80A8FB34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80A8FB34
 void func_80A8FBB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A8FBB4
 void func_80A8FC64(void); // func_80A8FC64
-void func_80A8FCE0(void); // func_80A8FCE0
+void EnTrt_Draw(void); // func_80A8FCE0
 void func_80A903B0(void); // func_80A903B0
-void func_80A903BC(void); // func_80A903BC
-void func_80A90468(void); // func_80A90468
+void EnTest5_Init(void); // func_80A903BC
+void EnTest5_Destroy(void); // func_80A90468
 void func_80A90478(void); // func_80A90478
-void func_80A905A4(void); // func_80A905A4
+void EnTest5_Update(void); // func_80A905A4
 void func_80A90730(void); // func_80A90730
 void func_80A90C08(void); // func_80A90C08
 void func_80A90C34(void); // func_80A90C34
@@ -11283,8 +11283,8 @@ void func_80A90D20(void); // func_80A90D20
 void func_80A90D34(void); // func_80A90D34
 void func_80A90FC0(void); // func_80A90FC0
 void func_80A91324(void); // func_80A91324
-void func_80A91330(void); // func_80A91330
-void func_80A9149C(void); // func_80A9149C
+void EnTest6_Init(void); // func_80A91330
+void EnTest6_Destroy(void); // func_80A9149C
 void func_80A9156C(void); // func_80A9156C
 void func_80A91690(void); // func_80A91690
 void func_80A916F0(void); // func_80A916F0
@@ -11292,20 +11292,20 @@ void func_80A91760(void); // func_80A91760
 void func_80A920C8(void); // func_80A920C8
 void func_80A92118(void); // func_80A92118
 void func_80A92188(void); // func_80A92188
-void func_80A9292C(void); // func_80A9292C
+void EnTest6_Update(void); // func_80A9292C
 void func_80A92950(void); // func_80A92950
 void func_80A93298(void); // func_80A93298
 void func_80A9369C(void); // func_80A9369C
 void func_80A939E8(void); // func_80A939E8
-void func_80A93DE8(void); // func_80A93DE8
+void EnTest6_Draw(void); // func_80A93DE8
 void func_80A94A30(void); // func_80A94A30
 void func_80A94A64(void); // func_80A94A64
 void func_80A94A90(void); // func_80A94A90
 void func_80A94AB8(void); // func_80A94AB8
 void func_80A94B20(void); // func_80A94B20
 void func_80A94B98(void); // func_80A94B98
-void func_80A94C2C(void); // func_80A94C2C
-void func_80A95464(void); // func_80A95464
+void EnAz_Init(void); // func_80A94C2C
+void EnAz_Destroy(void); // func_80A95464
 void func_80A954AC(void); // func_80A954AC
 void func_80A95534(void); // func_80A95534
 void func_80A9565C(void); // func_80A9565C
@@ -11338,19 +11338,19 @@ void func_80A97EAC(void); // func_80A97EAC
 void func_80A97F9C(void); // func_80A97F9C
 void func_80A982E0(void); // func_80A982E0
 void func_80A98414(void); // func_80A98414
-void func_80A984CC(void); // func_80A984CC
-void func_80A98734(void); // func_80A98734
+void EnAz_Update(void); // func_80A984CC
+void EnAz_Draw(void); // func_80A98734
 void func_80A98DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80A98DA4
 void func_80A98E48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A98E48
 void func_80A98EFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80A98EFC
 void func_80A98F94(void); // func_80A98F94
 void func_80A99000(void); // func_80A99000
-void func_80A99EA0(void); // func_80A99EA0
-void func_80A9A1B0(void); // func_80A9A1B0
+void EnEstone_Init(void); // func_80A99EA0
+void EnEstone_Destroy(void); // func_80A9A1B0
 void func_80A9A1DC(void); // func_80A9A1DC
 void func_80A9A4B0(void); // func_80A9A4B0
-void func_80A9A4E0(void); // func_80A9A4E0
-void func_80A9A600(void); // func_80A9A600
+void EnEstone_Update(void); // func_80A9A4E0
+void EnEstone_Draw(void); // func_80A9A600
 void func_80A9A774(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80A9A774
 void func_80A9A870(void); // func_80A9A870
 void func_80A9A9C0(void); // func_80A9A9C0
@@ -11375,8 +11375,8 @@ void func_80A9C18C(void); // func_80A9C18C
 void func_80A9C228(void); // func_80A9C228
 void func_80A9C634(void); // func_80A9C634
 void func_80A9C854(void); // func_80A9C854
-void func_80A9C96C(void); // func_80A9C96C
-void func_80A9CA44(void); // func_80A9CA44
+void BgHakuginPost_Init(void); // func_80A9C96C
+void BgHakuginPost_Destroy(void); // func_80A9CA44
 void func_80A9CA94(void); // func_80A9CA94
 void func_80A9CAA8(void); // func_80A9CAA8
 void func_80A9CC84(void); // func_80A9CC84
@@ -11393,14 +11393,14 @@ void func_80A9D2C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80A9D360(void); // func_80A9D360
 void func_80A9D3E4(void); // func_80A9D3E4
 void func_80A9D434(void); // func_80A9D434
-void func_80A9D498(void); // func_80A9D498
+void BgHakuginPost_Update(void); // func_80A9D498
 void func_80A9D61C(void); // func_80A9D61C
 void func_80A9F950(void); // func_80A9F950
-void func_80A9F95C(void); // func_80A9F95C
-void func_80A9FA1C(void); // func_80A9FA1C
+void DmOpstage_Init(void); // func_80A9F95C
+void DmOpstage_Destroy(void); // func_80A9FA1C
 void func_80A9FA58(void); // func_80A9FA58
-void func_80A9FB54(void); // func_80A9FB54
-void func_80A9FBB8(void); // func_80A9FBB8
+void DmOpstage_Update(void); // func_80A9FB54
+void DmOpstage_Draw(void); // func_80A9FBB8
 void func_80A9FDB0(void); // func_80A9FDB0
 void func_80A9FE3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_80A9FE3C
 void func_80A9FED8(void); // func_80A9FED8
@@ -11420,8 +11420,8 @@ void func_80AA0B08(void); // func_80AA0B08
 void func_80AA0DA8(void); // func_80AA0DA8
 void func_80AA0E1C(void); // func_80AA0E1C
 void func_80AA0E90(void); // func_80AA0E90
-void func_80AA1234(void); // func_80AA1234
-void func_80AA16E4(void); // func_80AA16E4
+void DmStk_Init(void); // func_80AA1234
+void DmStk_Destroy(void); // func_80AA16E4
 void func_80AA16F4(void); // func_80AA16F4
 void func_80AA1704(void); // func_80AA1704
 void func_80AA1714(void); // func_80AA1714
@@ -11439,11 +11439,11 @@ void func_80AA1D1C(void); // func_80AA1D1C
 void func_80AA26CC(void); // func_80AA26CC
 void func_80AA2720(void); // func_80AA2720
 void func_80AA27EC(void); // func_80AA27EC
-void func_80AA2884(void); // func_80AA2884
+void DmStk_Update(void); // func_80AA2884
 void func_80AA2B14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AA2B14
 void func_80AA2BC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AA2BC0
 void func_80AA33A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AA33A4
-void func_80AA33CC(void); // func_80AA33CC
+void DmStk_Draw(void); // func_80AA33CC
 void func_80AA5580(void); // func_80AA5580
 void func_80AA561C(void); // func_80AA561C
 void func_80AA5720(void); // func_80AA5720
@@ -11462,16 +11462,16 @@ void func_80AA5D6C(void); // func_80AA5D6C
 void func_80AA5DC8(void); // func_80AA5DC8
 void func_80AA5E2C(void); // func_80AA5E2C
 void func_80AA5EBC(void); // func_80AA5EBC
-void func_80AA6178(void); // func_80AA6178
-void func_80AA62EC(void); // func_80AA62EC
+void DmChar00_Init(void); // func_80AA6178
+void DmChar00_Destroy(void); // func_80AA62EC
 void func_80AA62FC(void); // func_80AA62FC
 void func_80AA67F8(void); // func_80AA67F8
 void func_80AA695C(void); // func_80AA695C
-void func_80AA6A04(void); // func_80AA6A04
+void DmChar00_Update(void); // func_80AA6A04
 void func_80AA6A6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AA6A6C
-void func_80AA6B34(void); // func_80AA6B34
-void func_80AA81E0(void); // func_80AA81E0
-void func_80AA8660(void); // func_80AA8660
+void DmChar00_Draw(void); // func_80AA6B34
+void DmChar01_Init(void); // func_80AA81E0
+void DmChar01_Destroy(void); // func_80AA8660
 void func_80AA8698(void); // func_80AA8698
 void func_80AA884C(void); // func_80AA884C
 void func_80AA88A8(void); // func_80AA88A8
@@ -11483,48 +11483,48 @@ void func_80AA8F2C(void); // func_80AA8F2C
 void func_80AA9020(void); // func_80AA9020
 void func_80AA90AC(void); // func_80AA90AC
 void func_80AA90F4(void); // func_80AA90F4
-void func_80AA9140(void); // func_80AA9140
-void func_80AA922C(void); // func_80AA922C
+void DmChar01_Update(void); // func_80AA9140
+void DmChar01_Draw(void); // func_80AA922C
 void func_80AAAE30(void); // func_80AAAE30
 void func_80AAAECC(void); // func_80AAAECC
 void func_80AAAF2C(void); // func_80AAAF2C
-void func_80AAAF78(void); // func_80AAAF78
-void func_80AAB03C(void); // func_80AAB03C
+void DmChar02_Init(void); // func_80AAAF78
+void DmChar02_Destroy(void); // func_80AAB03C
 void func_80AAB04C(void); // func_80AAB04C
-void func_80AAB19C(void); // func_80AAB19C
+void DmChar02_Update(void); // func_80AAB19C
 void func_80AAB23C(void); // func_80AAB23C
 void func_80AAB258(void); // func_80AAB258
 void func_80AAB270(void); // func_80AAB270
-void func_80AAB284(void); // func_80AAB284
+void DmChar02_Draw(void); // func_80AAB284
 void func_80AAB4A0(void); // func_80AAB4A0
-void func_80AAB53C(void); // func_80AAB53C
-void func_80AAB5E8(void); // func_80AAB5E8
+void DmChar03_Init(void); // func_80AAB53C
+void DmChar03_Destroy(void); // func_80AAB5E8
 void func_80AAB5F8(void); // func_80AAB5F8
 void func_80AAB644(void); // func_80AAB644
 void func_80AAB700(void); // func_80AAB700
 void func_80AAB710(void); // func_80AAB710
 void func_80AAB838(void); // func_80AAB838
-void func_80AAB8DC(void); // func_80AAB8DC
+void DmChar03_Update(void); // func_80AAB8DC
 void func_80AAB974(void); // func_80AAB974
 void func_80AAB990(void); // func_80AAB990
 void func_80AAB9A8(void); // func_80AAB9A8
-void func_80AAB9BC(void); // func_80AAB9BC
+void DmChar03_Draw(void); // func_80AAB9BC
 void func_80AABA84(void); // func_80AABA84
 void func_80AABC40(void); // func_80AABC40
-void func_80AABCDC(void); // func_80AABCDC
-void func_80AABE24(void); // func_80AABE24
+void DmChar04_Init(void); // func_80AABCDC
+void DmChar04_Destroy(void); // func_80AABE24
 void func_80AABE34(void); // func_80AABE34
-void func_80AABF28(void); // func_80AABF28
+void DmChar04_Update(void); // func_80AABF28
 void func_80AABF74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AABF74
-void func_80AAC03C(void); // func_80AAC03C
+void DmChar04_Draw(void); // func_80AAC03C
 void func_80AAC5A0(void); // func_80AAC5A0
 void func_80AAC63C(void); // func_80AAC63C
 void func_80AAC6E4(void); // func_80AAC6E4
 void func_80AAC770(void); // func_80AAC770
 void func_80AAC7FC(void); // func_80AAC7FC
 void func_80AAC888(void); // func_80AAC888
-void func_80AAC8A0(void); // func_80AAC8A0
-void func_80AAC980(void); // func_80AAC980
+void DmChar05_Init(void); // func_80AAC8A0
+void DmChar05_Destroy(void); // func_80AAC980
 void func_80AAC990(void); // func_80AAC990
 void func_80AAC9DC(void); // func_80AAC9DC
 void func_80AACA98(void); // func_80AACA98
@@ -11542,14 +11542,14 @@ void func_80AACF04(void); // func_80AACF04
 void func_80AAD3F8(void); // func_80AAD3F8
 void func_80AAD450(void); // func_80AAD450
 void func_80AAD4A8(void); // func_80AAD4A8
-void func_80AAD78C(void); // func_80AAD78C
+void DmChar05_Update(void); // func_80AAD78C
 void func_80AAD964(void); // func_80AAD964
 void func_80AAD980(void); // func_80AAD980
 void func_80AAD998(void); // func_80AAD998
 void func_80AADA90(void); // func_80AADA90
 void func_80AADB4C(void); // func_80AADB4C
 void func_80AADC00(void); // func_80AADC00
-void func_80AADCE8(void); // func_80AADCE8
+void DmChar05_Draw(void); // func_80AADCE8
 void func_80AADD9C(void); // func_80AADD9C
 void func_80AADE78(void); // func_80AADE78
 void func_80AADF54(void); // func_80AADF54
@@ -11557,21 +11557,21 @@ void func_80AAE030(void); // func_80AAE030
 void func_80AAE114(void); // func_80AAE114
 void func_80AAE1E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11); // func_80AAE1E4
 void func_80AAE680(void); // func_80AAE680
-void func_80AAE68C(void); // func_80AAE68C
-void func_80AAE6E0(void); // func_80AAE6E0
+void DmChar06_Init(void); // func_80AAE68C
+void DmChar06_Destroy(void); // func_80AAE6E0
 void func_80AAE6F0(void); // func_80AAE6F0
-void func_80AAE854(void); // func_80AAE854
-void func_80AAE878(void); // func_80AAE878
+void DmChar06_Update(void); // func_80AAE854
+void DmChar06_Draw(void); // func_80AAE878
 void func_80AAE9C0(void); // func_80AAE9C0
-void func_80AAE9CC(void); // func_80AAE9CC
-void func_80AAEA84(void); // func_80AAEA84
+void DmChar07_Init(void); // func_80AAE9CC
+void DmChar07_Destroy(void); // func_80AAEA84
 void func_80AAEABC(void); // func_80AAEABC
-void func_80AAEACC(void); // func_80AAEACC
-void func_80AAEAF0(void); // func_80AAEAF0
+void DmChar07_Update(void); // func_80AAEACC
+void DmChar07_Draw(void); // func_80AAEAF0
 void func_80AAF050(void); // func_80AAF050
 void func_80AAF15C(void); // func_80AAF15C
-void func_80AAF1F8(void); // func_80AAF1F8
-void func_80AAF5D8(void); // func_80AAF5D8
+void DmChar08_Init(void); // func_80AAF1F8
+void DmChar08_Destroy(void); // func_80AAF5D8
 void func_80AAF610(void); // func_80AAF610
 void func_80AAF79C(void); // func_80AAF79C
 void func_80AAF884(void); // func_80AAF884
@@ -11590,30 +11590,30 @@ void func_80AB023C(void); // func_80AB023C
 void func_80AB032C(void); // func_80AB032C
 void func_80AB096C(void); // func_80AB096C
 void func_80AB0A10(void); // func_80AB0A10
-void func_80AB0CC8(void); // func_80AB0CC8
+void DmChar08_Update(void); // func_80AB0CC8
 void func_80AB0E3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AB0E3C
 void func_80AB0E7C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AB0E7C
 void func_80AB0F90(void); // func_80AB0F90
-void func_80AB1124(void); // func_80AB1124
+void DmChar08_Draw(void); // func_80AB1124
 void func_80AB1E10(void); // func_80AB1E10
-void func_80AB1EAC(void); // func_80AB1EAC
-void func_80AB1F90(void); // func_80AB1F90
+void DmChar09_Init(void); // func_80AB1EAC
+void DmChar09_Destroy(void); // func_80AB1F90
 void func_80AB1FA0(void); // func_80AB1FA0
 void func_80AB1FDC(void); // func_80AB1FDC
 void func_80AB2258(void); // func_80AB2258
 void func_80AB2268(void); // func_80AB2268
 void func_80AB24BC(void); // func_80AB24BC
-void func_80AB2544(void); // func_80AB2544
+void DmChar09_Update(void); // func_80AB2544
 void func_80AB25D8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AB25D8
-void func_80AB261C(void); // func_80AB261C
+void DmChar09_Draw(void); // func_80AB261C
 void func_80AB2790(void); // func_80AB2790
 void func_80AB27B4(void); // func_80AB27B4
 void func_80AB2834(void); // func_80AB2834
 void func_80AB28C8(void); // func_80AB28C8
 void func_80AB29F8(void); // func_80AB29F8
 void func_80AB2BBC(void); // func_80AB2BBC
-void func_80AB2DEC(void); // func_80AB2DEC
-void func_80AB3000(void); // func_80AB3000
+void ObjTokeidai_Init(void); // func_80AB2DEC
+void ObjTokeidai_Destroy(void); // func_80AB3000
 void func_80AB3010(void); // func_80AB3010
 void func_80AB319C(void); // func_80AB319C
 void func_80AB3240(void); // func_80AB3240
@@ -11640,8 +11640,8 @@ void func_80AB3ED0(void); // func_80AB3ED0
 void func_80AB4040(void); // func_80AB4040
 void func_80AB4080(void); // func_80AB4080
 void func_80AB4160(void); // func_80AB4160
-void func_80AB4278(void); // func_80AB4278
-void func_80AB429C(void); // func_80AB429C
+void ObjTokeidai_Update(void); // func_80AB4278
+void ObjTokeidai_Draw(void); // func_80AB429C
 void func_80AB4394(void); // func_80AB4394
 void func_80AB4664(void); // func_80AB4664
 void func_80AB4894(void); // func_80AB4894
@@ -11656,7 +11656,7 @@ void func_80AB50D4(void); // func_80AB50D4
 void func_80AB5148(void); // func_80AB5148
 void func_80AB51C8(void); // func_80AB51C8
 void func_80AB52E8(void); // func_80AB52E8
-void func_80AB53DC(void); // func_80AB53DC
+void EnMnk_Init(void); // func_80AB53DC
 void func_80AB57E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11); // func_80AB57E0
 void func_80AB57F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11); // func_80AB57F4
 void func_80AB5830(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11); // func_80AB5830
@@ -11668,7 +11668,7 @@ void func_80AB58F8(void); // func_80AB58F8
 void func_80AB5958(void); // func_80AB5958
 void func_80AB596C(void); // func_80AB596C
 void func_80AB5994(void); // func_80AB5994
-void func_80AB59E8(void); // func_80AB59E8
+void EnMnk_Destroy(void); // func_80AB59E8
 void func_80AB5A64(void); // func_80AB5A64
 void func_80AB5B38(void); // func_80AB5B38
 void func_80AB5B84(void); // func_80AB5B84
@@ -11731,7 +11731,7 @@ void func_80AB8FD8(void); // func_80AB8FD8
 void func_80AB9084(void); // func_80AB9084
 void func_80AB92CC(void); // func_80AB92CC
 void func_80AB94E4(void); // func_80AB94E4
-void func_80AB94F4(void); // func_80AB94F4
+void EnMnk_Update(void); // func_80AB94F4
 void func_80AB96A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AB96A0
 void func_80AB96E8(void); // func_80AB96E8
 void func_80AB9708(void); // func_80AB9708
@@ -11739,21 +11739,21 @@ void func_80AB973C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80AB977C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AB977C
 void func_80AB97B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AB97B4
 void func_80AB99D4(void); // func_80AB99D4
-void func_80AB9B48(void); // func_80AB9B48
+void EnMnk_Draw(void); // func_80AB9B48
 void func_80AB9BAC(void); // func_80AB9BAC
 void func_80AB9C4C(void); // func_80AB9C4C
-void func_80ABA7A0(void); // func_80ABA7A0
-void func_80ABA868(void); // func_80ABA868
+void EnEgblock_Init(void); // func_80ABA7A0
+void EnEgblock_Destroy(void); // func_80ABA868
 void func_80ABA8A4(void); // func_80ABA8A4
 void func_80ABA988(void); // func_80ABA988
 void func_80ABA9B8(void); // func_80ABA9B8
-void func_80ABA9C8(void); // func_80ABA9C8
-void func_80ABAA14(void); // func_80ABAA14
+void EnEgblock_Update(void); // func_80ABA9C8
+void EnEgblock_Draw(void); // func_80ABAA14
 void func_80ABAAF4(void); // func_80ABAAF4
 void func_80ABACB4(void); // func_80ABACB4
 void func_80ABAE64(void); // func_80ABAE64
-void func_80ABB0E0(void); // func_80ABB0E0
-void func_80ABB1E4(void); // func_80ABB1E4
+void EnGuardNuts_Init(void); // func_80ABB0E0
+void EnGuardNuts_Destroy(void); // func_80ABB1E4
 void func_80ABB210(void); // func_80ABB210
 void func_80ABB29C(void); // func_80ABB29C
 void func_80ABB2D4(void); // func_80ABB2D4
@@ -11762,38 +11762,38 @@ void func_80ABB590(void); // func_80ABB590
 void func_80ABB854(void); // func_80ABB854
 void func_80ABB91C(void); // func_80ABB91C
 void func_80ABB990(void); // func_80ABB990
-void func_80ABBACC(void); // func_80ABBACC
+void EnGuardNuts_Update(void); // func_80ABBACC
 void func_80ABBC60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80ABBC60
-void func_80ABBCB8(void); // func_80ABBCB8
+void EnGuardNuts_Draw(void); // func_80ABBCB8
 void func_80ABBFC0(void); // func_80ABBFC0
 void func_80ABC2E0(void); // func_80ABC2E0
 void func_80ABC58C(void); // func_80ABC58C
 void func_80ABC7FC(void); // func_80ABC7FC
-void func_80ABCA00(void); // func_80ABCA00
-void func_80ABCB14(void); // func_80ABCB14
+void BgHakuginBombwall_Init(void); // func_80ABCA00
+void BgHakuginBombwall_Destroy(void); // func_80ABCB14
 void func_80ABCB5C(void); // func_80ABCB5C
 void func_80ABCC00(void); // func_80ABCC00
 void func_80ABCCE4(void); // func_80ABCCE4
 void func_80ABCD98(void); // func_80ABCD98
 void func_80ABCE60(void); // func_80ABCE60
-void func_80ABCEE8(void); // func_80ABCEE8
-void func_80ABCF0C(void); // func_80ABCF0C
-void func_80ABD1D0(void); // func_80ABD1D0
-void func_80ABD37C(void); // func_80ABD37C
+void BgHakuginBombwall_Update(void); // func_80ABCEE8
+void BgHakuginBombwall_Draw(void); // func_80ABCF0C
+void ObjTokeiTobira_Init(void); // func_80ABD1D0
+void ObjTokeiTobira_Destroy(void); // func_80ABD37C
 void func_80ABD3B0(void); // func_80ABD3B0
-void func_80ABD424(void); // func_80ABD424
-void func_80ABD6F0(void); // func_80ABD6F0
-void func_80ABD830(void); // func_80ABD830
-void func_80ABD8F8(void); // func_80ABD8F8
+void ObjTokeiTobira_Update(void); // func_80ABD424
+void ObjTokeiTobira_Draw(void); // func_80ABD6F0
+void BgHakuginElvpole_Init(void); // func_80ABD830
+void BgHakuginElvpole_Destroy(void); // func_80ABD8F8
 void func_80ABD92C(void); // func_80ABD92C
-void func_80ABDB98(void); // func_80ABDB98
-void func_80ABDBBC(void); // func_80ABDBBC
+void BgHakuginElvpole_Update(void); // func_80ABDB98
+void BgHakuginElvpole_Draw(void); // func_80ABDBBC
 void func_80ABDCA0(void); // func_80ABDCA0
 void func_80ABDD2C(void); // func_80ABDD2C
 void func_80ABDD9C(void); // func_80ABDD9C
 void func_80ABDE60(void); // func_80ABDE60
-void func_80ABDF70(void); // func_80ABDF70
-void func_80ABE188(void); // func_80ABE188
+void EnMa4_Init(void); // func_80ABDF70
+void EnMa4_Destroy(void); // func_80ABE188
 void func_80ABE1C4(void); // func_80ABE1C4
 void func_80ABE4A4(void); // func_80ABE4A4
 void func_80ABE560(void); // func_80ABE560
@@ -11821,22 +11821,22 @@ void func_80ABF774(void); // func_80ABF774
 void func_80ABF7C8(void); // func_80ABF7C8
 void func_80ABFCAC(void); // func_80ABFCAC
 void func_80ABFCD4(void); // func_80ABFCD4
-void func_80ABFD18(void); // func_80ABFD18
+void EnMa4_Update(void); // func_80ABFD18
 void func_80ABFD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80ABFD9C
 void func_80ABFE48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80ABFE48
-void func_80ABFEF4(void); // func_80ABFEF4
-void func_80AC0830(void); // func_80AC0830
-void func_80AC0A20(void); // func_80AC0A20
+void EnMa4_Draw(void); // func_80ABFEF4
+void EnTwig_Init(void); // func_80AC0830
+void EnTwig_Destroy(void); // func_80AC0A20
 void func_80AC0A54(void); // func_80AC0A54
 void func_80AC0A6C(void); // func_80AC0A6C
 void func_80AC0A7C(void); // func_80AC0A7C
 void func_80AC0AC8(void); // func_80AC0AC8
 void func_80AC0CC4(void); // func_80AC0CC4
 void func_80AC0D2C(void); // func_80AC0D2C
-void func_80AC100C(void); // func_80AC100C
-void func_80AC1030(void); // func_80AC1030
-void func_80AC1270(void); // func_80AC1270
-void func_80AC1424(void); // func_80AC1424
+void EnTwig_Update(void); // func_80AC100C
+void EnTwig_Draw(void); // func_80AC1030
+void EnPoFusen_Init(void); // func_80AC1270
+void EnPoFusen_Destroy(void); // func_80AC1424
 void func_80AC1450(void); // func_80AC1450
 void func_80AC14A4(void); // func_80AC14A4
 void func_80AC1574(void); // func_80AC1574
@@ -11845,23 +11845,23 @@ void func_80AC18EC(void); // func_80AC18EC
 void func_80AC192C(void); // func_80AC192C
 void func_80AC19B0(void); // func_80AC19B0
 void func_80AC19DC(void); // func_80AC19DC
-void func_80AC1A1C(void); // func_80AC1A1C
+void EnPoFusen_Update(void); // func_80AC1A1C
 void func_80AC1A68(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AC1A68
 void func_80AC1CE8(void); // func_80AC1CE8
 void func_80AC1D00(void); // func_80AC1D00
-void func_80AC1D14(void); // func_80AC1D14
-void func_80AC1ED0(void); // func_80AC1ED0
-void func_80AC2018(void); // func_80AC2018
+void EnPoFusen_Draw(void); // func_80AC1D14
+void EnDoorEtc_Init(void); // func_80AC1ED0
+void EnDoorEtc_Destroy(void); // func_80AC2018
 void func_80AC2044(void); // func_80AC2044
 void func_80AC20A8(void); // func_80AC20A8
 void func_80AC2118(void); // func_80AC2118
 void func_80AC2154(void); // func_80AC2154
 void func_80AC21A0(void); // func_80AC21A0
 void func_80AC2354(void); // func_80AC2354
-void func_80AC2430(void); // func_80AC2430
+void EnDoorEtc_Update(void); // func_80AC2430
 void func_80AC24A8(void); // func_80AC24A8
-void func_80AC26F0(void); // func_80AC26F0
-void func_80AC2874(void); // func_80AC2874
+void EnBigokuta_Init(void); // func_80AC26F0
+void EnBigokuta_Destroy(void); // func_80AC2874
 void func_80AC28B4(void); // func_80AC28B4
 void func_80AC299C(void); // func_80AC299C
 void func_80AC2A1C(void); // func_80AC2A1C
@@ -11886,20 +11886,20 @@ void func_80AC35E8(void); // func_80AC35E8
 void func_80AC3650(void); // func_80AC3650
 void func_80AC3930(void); // func_80AC3930
 void func_80AC39A0(void); // func_80AC39A0
-void func_80AC3B2C(void); // func_80AC3B2C
+void EnBigokuta_Update(void); // func_80AC3B2C
 void func_80AC3D48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80AC3D48
 void func_80AC4204(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AC4204
-void func_80AC42F8(void); // func_80AC42F8
-void func_80AC48F0(void); // func_80AC48F0
-void func_80AC4A04(void); // func_80AC4A04
+void EnBigokuta_Draw(void); // func_80AC42F8
+void BgIcefloe_Init(void); // func_80AC48F0
+void BgIcefloe_Destroy(void); // func_80AC4A04
 void func_80AC4A80(void); // func_80AC4A80
 void func_80AC4AE8(void); // func_80AC4AE8
 void func_80AC4C18(void); // func_80AC4C18
 void func_80AC4C34(void); // func_80AC4C34
 void func_80AC4CF0(void); // func_80AC4CF0
 void func_80AC4D2C(void); // func_80AC4D2C
-void func_80AC4E98(void); // func_80AC4E98
-void func_80AC4ED8(void); // func_80AC4ED8
+void BgIcefloe_Update(void); // func_80AC4E98
+void BgIcefloe_Draw(void); // func_80AC4ED8
 void func_80AC5070(void); // func_80AC5070
 void func_80AC50A8(void); // func_80AC50A8
 void func_80AC5148(void); // func_80AC5148
@@ -11949,8 +11949,8 @@ void func_80AC8ECC(void); // func_80AC8ECC
 void func_80AC9164(void); // func_80AC9164
 void func_80AC933C(void); // func_80AC933C
 void func_80AC94C0(void); // func_80AC94C0
-void func_80AC94FC(void); // func_80AC94FC
-void func_80AC964C(void); // func_80AC964C
+void ObjOcarinalift_Init(void); // func_80AC94FC
+void ObjOcarinalift_Destroy(void); // func_80AC964C
 void func_80AC9680(void); // func_80AC9680
 void func_80AC96A4(void); // func_80AC96A4
 void func_80AC96B4(void); // func_80AC96B4
@@ -11965,10 +11965,10 @@ void func_80AC9B48(void); // func_80AC9B48
 void func_80AC9B5C(void); // func_80AC9B5C
 void func_80AC9C20(void); // func_80AC9C20
 void func_80AC9C48(void); // func_80AC9C48
-void func_80AC9CAC(void); // func_80AC9CAC
-void func_80AC9D10(void); // func_80AC9D10
-void func_80AC9EA0(void); // func_80AC9EA0
-void func_80AC9FC4(void); // func_80AC9FC4
+void ObjOcarinalift_Update(void); // func_80AC9CAC
+void ObjOcarinalift_Draw(void); // func_80AC9D10
+void EnTimeTag_Init(void); // func_80AC9EA0
+void EnTimeTag_Destroy(void); // func_80AC9FC4
 void func_80AC9FD4(void); // func_80AC9FD4
 void func_80AC9FE4(void); // func_80AC9FE4
 void func_80ACA0A8(void); // func_80ACA0A8
@@ -11984,44 +11984,44 @@ void func_80ACA714(void); // func_80ACA714
 void func_80ACA724(void); // func_80ACA724
 void func_80ACA7C4(void); // func_80ACA7C4
 void func_80ACA840(void); // func_80ACA840
-void func_80ACA9AC(void); // func_80ACA9AC
+void EnTimeTag_Update(void); // func_80ACA9AC
 void func_80ACAB10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80ACAB10
 void func_80ACABA8(void); // func_80ACABA8
-void func_80ACACC8(void); // func_80ACACC8
-void func_80ACAD28(void); // func_80ACAD28
+void BgOpenShutter_Init(void); // func_80ACACC8
+void BgOpenShutter_Destroy(void); // func_80ACAD28
 void func_80ACAD88(void); // func_80ACAD88
 void func_80ACAE5C(void); // func_80ACAE5C
 void func_80ACAEF0(void); // func_80ACAEF0
-void func_80ACB004(void); // func_80ACB004
-void func_80ACB0E8(void); // func_80ACB0E8
-void func_80ACB1E0(void); // func_80ACB1E0
-void func_80ACB220(void); // func_80ACB220
-void func_80ACB230(void); // func_80ACB230
+void BgOpenShutter_Update(void); // func_80ACB004
+void BgOpenShutter_Draw(void); // func_80ACB0E8
+void BgOpenSpot_Init(void); // func_80ACB1E0
+void BgOpenSpot_Destroy(void); // func_80ACB220
+void BgOpenSpot_Update(void); // func_80ACB230
 void func_80ACB2B0(void); // func_80ACB2B0
 void BgFuKaiten_Init(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB400
-void BgFuKaiten_Fini(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB480
+void BgFuKaiten_Destroy(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB480
 void BgFuKaiten_UpdateRotation(ActorBgFuKaiten* this); // func_80ACB4B4
 void BgFuKaiten_UpdateHeight(ActorBgFuKaiten* this); // func_80ACB50C
-void BgFuKaiten_Main(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB570
+void BgFuKaiten_Update(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB570
 void BgFuKaiten_Draw(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB5A0
 void func_80ACB6A0(void); // func_80ACB6A0
 void func_80ACB7F4(void); // func_80ACB7F4
 void func_80ACB940(void); // func_80ACB940
 void func_80ACBA10(void); // func_80ACBA10
 void func_80ACBA60(void); // func_80ACBA60
-void func_80ACBAD8(void); // func_80ACBAD8
-void func_80ACBC44(void); // func_80ACBC44
+void ObjAqua_Init(void); // func_80ACBAD8
+void ObjAqua_Destroy(void); // func_80ACBC44
 void func_80ACBC70(void); // func_80ACBC70
 void func_80ACBC8C(void); // func_80ACBC8C
 void func_80ACBD34(void); // func_80ACBD34
 void func_80ACBD48(void); // func_80ACBD48
 void func_80ACBDCC(void); // func_80ACBDCC
 void func_80ACBDFC(void); // func_80ACBDFC
-void func_80ACBEE0(void); // func_80ACBEE0
-void func_80ACC048(void); // func_80ACC048
+void ObjAqua_Update(void); // func_80ACBEE0
+void ObjAqua_Draw(void); // func_80ACC048
 void func_80ACC470(void); // func_80ACC470
-void func_80ACC50C(void); // func_80ACC50C
-void func_80ACC7A4(void); // func_80ACC7A4
+void EnElforg_Init(void); // func_80ACC50C
+void EnElforg_Destroy(void); // func_80ACC7A4
 void func_80ACC7E4(void); // func_80ACC7E4
 void func_80ACC8D4(void); // func_80ACC8D4
 void func_80ACC934(void); // func_80ACC934
@@ -12041,17 +12041,17 @@ void func_80ACD59C(void); // func_80ACD59C
 void func_80ACD610(void); // func_80ACD610
 void func_80ACD6A8(void); // func_80ACD6A8
 void func_80ACD6EC(void); // func_80ACD6EC
-void func_80ACD798(void); // func_80ACD798
+void EnElforg_Update(void); // func_80ACD798
 void func_80ACD878(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80ACD878
-void func_80ACD8C0(void); // func_80ACD8C0
-void func_80ACDCD0(void); // func_80ACDCD0
-void func_80ACDE34(void); // func_80ACDE34
+void EnElforg_Draw(void); // func_80ACD8C0
+void EnElfbub_Init(void); // func_80ACDCD0
+void EnElfbub_Destroy(void); // func_80ACDE34
 void func_80ACDE60(void); // func_80ACDE60
 void func_80ACE030(void); // func_80ACE030
-void func_80ACE0E8(void); // func_80ACE0E8
-void func_80ACE130(void); // func_80ACE130
-void func_80ACE330(void); // func_80ACE330
-void func_80ACE46C(void); // func_80ACE46C
+void EnElfbub_Update(void); // func_80ACE0E8
+void EnElfbub_Draw(void); // func_80ACE130
+void EnFuMato_Init(void); // func_80ACE330
+void EnFuMato_Destroy(void); // func_80ACE46C
 void func_80ACE4B4(void); // func_80ACE4B4
 void func_80ACE4C8(void); // func_80ACE4C8
 void func_80ACE508(void); // func_80ACE508
@@ -12064,12 +12064,12 @@ void func_80ACECFC(void); // func_80ACECFC
 void func_80ACEFC4(void); // func_80ACEFC4
 void func_80ACEFD8(void); // func_80ACEFD8
 void func_80ACF04C(void); // func_80ACF04C
-void func_80ACF19C(void); // func_80ACF19C
+void EnFuMato_Update(void); // func_80ACF19C
 void func_80ACF1F4(void); // func_80ACF1F4
 void func_80ACF3F4(void); // func_80ACF3F4
-void func_80ACF504(void); // func_80ACF504
-void func_80ACF780(void); // func_80ACF780
-void func_80ACF884(void); // func_80ACF884
+void EnFuMato_Draw(void); // func_80ACF504
+void EnFuKago_Init(void); // func_80ACF780
+void EnFuKago_Destroy(void); // func_80ACF884
 void func_80ACF8B8(void); // func_80ACF8B8
 void func_80ACF994(void); // func_80ACF994
 void func_80ACF9A8(void); // func_80ACF9A8
@@ -12080,9 +12080,9 @@ void func_80ACFDAC(void); // func_80ACFDAC
 void func_80AD0028(void); // func_80AD0028
 void func_80AD0274(void); // func_80AD0274
 void func_80AD0288(void); // func_80AD0288
-void func_80AD02FC(void); // func_80AD02FC
+void EnFuKago_Update(void); // func_80AD02FC
 void func_80AD0340(void); // func_80AD0340
-void func_80AD04A4(void); // func_80AD04A4
+void EnFuKago_Draw(void); // func_80AD04A4
 void func_80AD0830(void); // func_80AD0830
 void func_80AD08B0(void); // func_80AD08B0
 void func_80AD0998(void); // func_80AD0998
@@ -12098,18 +12098,18 @@ void func_80AD1634(void); // func_80AD1634
 void func_80AD16A8(void); // func_80AD16A8
 void func_80AD19A0(void); // func_80AD19A0
 void func_80AD1A4C(void); // func_80AD1A4C
-void func_80AD1A5C(void); // func_80AD1A5C
-void func_80AD1C88(void); // func_80AD1C88
-void func_80AD1CC8(void); // func_80AD1CC8
+void EnOsn_Init(void); // func_80AD1A5C
+void EnOsn_Destroy(void); // func_80AD1C88
+void EnOsn_Update(void); // func_80AD1CC8
 void func_80AD1DA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AD1DA8
 void func_80AD1E28(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AD1E28
-void func_80AD1F88(void); // func_80AD1F88
+void EnOsn_Draw(void); // func_80AD1F88
 void func_80AD2B70(void); // func_80AD2B70
-void func_80AD2E84(void); // func_80AD2E84
-void func_80AD2F8C(void); // func_80AD2F8C
-void func_80AD2FD8(void); // func_80AD2FD8
+void BgCtowerGear_Init(void); // func_80AD2E84
+void BgCtowerGear_Destroy(void); // func_80AD2F8C
+void BgCtowerGear_Update(void); // func_80AD2FD8
 void func_80AD3054(void); // func_80AD3054
-void func_80AD3124(void); // func_80AD3124
+void BgCtowerGear_Draw(void); // func_80AD3124
 void func_80AD3164(void); // func_80AD3164
 void func_80AD3380(void); // func_80AD3380
 void func_80AD341C(void); // func_80AD341C
@@ -12149,9 +12149,9 @@ void func_80AD4C4C(void); // func_80AD4C4C
 void func_80AD4CCC(void); // func_80AD4CCC
 void func_80AD4DB4(void); // func_80AD4DB4
 void func_80AD4FE4(void); // func_80AD4FE4
-void func_80AD508C(void); // func_80AD508C
-void func_80AD5110(void); // func_80AD5110
-void func_80AD5150(void); // func_80AD5150
+void EnTrt2_Init(void); // func_80AD508C
+void EnTrt2_Destroy(void); // func_80AD5110
+void EnTrt2_Update(void); // func_80AD5150
 void func_80AD5234(void); // func_80AD5234
 void func_80AD5394(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AD5394
 void func_80AD54C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AD54C8
@@ -12165,8 +12165,8 @@ void func_80AD5DFC(void); // func_80AD5DFC
 void func_80AD5EB8(void); // func_80AD5EB8
 void func_80AD5F70(void); // func_80AD5F70
 void func_80AD5FB0(void); // func_80AD5FB0
-void func_80AD61EC(void); // func_80AD61EC
-void func_80AD6314(void); // func_80AD6314
+void ObjTokeiStep_Init(void); // func_80AD61EC
+void ObjTokeiStep_Destroy(void); // func_80AD6314
 void func_80AD6348(void); // func_80AD6348
 void func_80AD635C(void); // func_80AD635C
 void func_80AD63D4(void); // func_80AD63D4
@@ -12175,19 +12175,19 @@ void func_80AD63F8(void); // func_80AD63F8
 void func_80AD642C(void); // func_80AD642C
 void func_80AD6480(void); // func_80AD6480
 void func_80AD64A4(void); // func_80AD64A4
-void func_80AD64B4(void); // func_80AD64B4
-void func_80AD64D8(void); // func_80AD64D8
+void ObjTokeiStep_Update(void); // func_80AD64B4
+void ObjTokeiStep_Draw(void); // func_80AD64D8
 void func_80AD6508(void); // func_80AD6508
-void func_80AD6760(void); // func_80AD6760
-void func_80AD67FC(void); // func_80AD67FC
+void BgLotus_Init(void); // func_80AD6760
+void BgLotus_Destroy(void); // func_80AD67FC
 void func_80AD6830(void); // func_80AD6830
 void func_80AD68DC(void); // func_80AD68DC
 void func_80AD6A88(void); // func_80AD6A88
 void func_80AD6B68(void); // func_80AD6B68
-void func_80AD6C5C(void); // func_80AD6C5C
-void func_80AD6CBC(void); // func_80AD6CBC
-void func_80AD6DD0(void); // func_80AD6DD0
-void func_80AD6F08(void); // func_80AD6F08
+void BgLotus_Update(void); // func_80AD6C5C
+void BgLotus_Draw(void); // func_80AD6CBC
+void EnKame_Init(void); // func_80AD6DD0
+void EnKame_Destroy(void); // func_80AD6F08
 void func_80AD6F34(void); // func_80AD6F34
 void func_80AD6F9C(void); // func_80AD6F9C
 void func_80AD7018(void); // func_80AD7018
@@ -12220,26 +12220,26 @@ void func_80AD825C(void); // func_80AD825C
 void func_80AD8364(void); // func_80AD8364
 void func_80AD8388(void); // func_80AD8388
 void func_80AD84C0(void); // func_80AD84C0
-void func_80AD881C(void); // func_80AD881C
+void EnKame_Update(void); // func_80AD881C
 void func_80AD8A48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AD8A48
 void func_80AD8AF8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AD8AF8
-void func_80AD8BC0(void); // func_80AD8BC0
+void EnKame_Draw(void); // func_80AD8BC0
 void func_80AD8CEC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AD8CEC
 void func_80AD8D64(void); // func_80AD8D64
 void func_80AD9240(void); // func_80AD9240
 void func_80AD92FC(void); // func_80AD92FC
 void func_80AD9358(void); // func_80AD9358
 void func_80AD9488(void); // func_80AD9488
-void func_80AD97DC(void); // func_80AD97DC
-void func_80AD9A6C(void); // func_80AD9A6C
+void ObjTakarayaWall_Init(void); // func_80AD97DC
+void ObjTakarayaWall_Destroy(void); // func_80AD9A6C
 void func_80AD9B04(void); // func_80AD9B04
-void func_80AD9F90(void); // func_80AD9F90
-void func_80AD9FF8(void); // func_80AD9FF8
-void func_80ADAAF0(void); // func_80ADAAF0
-void func_80ADAB70(void); // func_80ADAB70
+void ObjTakarayaWall_Update(void); // func_80AD9F90
+void ObjTakarayaWall_Draw(void); // func_80AD9FF8
+void BgFuMizu_Init(void); // func_80ADAAF0
+void BgFuMizu_Destroy(void); // func_80ADAB70
 void func_80ADABA4(void); // func_80ADABA4
-void func_80ADABF8(void); // func_80ADABF8
-void func_80ADACDC(void); // func_80ADACDC
+void BgFuMizu_Update(void); // func_80ADABF8
+void BgFuMizu_Draw(void); // func_80ADACDC
 void func_80ADADD0(void); // func_80ADADD0
 void func_80ADAE64(void); // func_80ADAE64
 void func_80ADAFC0(void); // func_80ADAFC0
@@ -12271,29 +12271,29 @@ void func_80ADCC04(void); // func_80ADCC04
 void func_80ADCD3C(void); // func_80ADCD3C
 void func_80ADCE4C(void); // func_80ADCE4C
 void func_80ADCFE8(void); // func_80ADCFE8
-void func_80ADD0A8(void); // func_80ADD0A8
-void func_80ADD3D4(void); // func_80ADD3D4
-void func_80ADD400(void); // func_80ADD400
+void EnSellnuts_Init(void); // func_80ADD0A8
+void EnSellnuts_Destroy(void); // func_80ADD3D4
+void EnSellnuts_Update(void); // func_80ADD400
 void func_80ADD4E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80ADD4E0
 void func_80ADD7B4(void); // func_80ADD7B4
 void func_80ADD7CC(void); // func_80ADD7CC
-void func_80ADD8A4(void); // func_80ADD8A4
+void EnSellnuts_Draw(void); // func_80ADD8A4
 void func_80ADE230(void); // func_80ADE230
-void func_80ADE5A4(void); // func_80ADE5A4
-void func_80ADE664(void); // func_80ADE664
+void BgDkjailIvy_Init(void); // func_80ADE5A4
+void BgDkjailIvy_Destroy(void); // func_80ADE664
 void func_80ADE6AC(void); // func_80ADE6AC
 void func_80ADE6C0(void); // func_80ADE6C0
 void func_80ADE734(void); // func_80ADE734
 void func_80ADE748(void); // func_80ADE748
 void func_80ADE7E0(void); // func_80ADE7E0
 void func_80ADE7F4(void); // func_80ADE7F4
-void func_80ADE850(void); // func_80ADE850
-void func_80ADE874(void); // func_80ADE874
-void func_80ADEA70(void); // func_80ADEA70
-void func_80ADEAC0(void); // func_80ADEAC0
-void func_80ADEAF4(void); // func_80ADEAF4
-void func_80ADEB90(void); // func_80ADEB90
-void func_80ADED34(void); // func_80ADED34
+void BgDkjailIvy_Update(void); // func_80ADE850
+void BgDkjailIvy_Draw(void); // func_80ADE874
+void ObjVisiblock_Init(void); // func_80ADEA70
+void ObjVisiblock_Destroy(void); // func_80ADEAC0
+void ObjVisiblock_Draw(void); // func_80ADEAF4
+void EnTakaraya_Init(void); // func_80ADEB90
+void EnTakaraya_Destroy(void); // func_80ADED34
 void func_80ADED8C(void); // func_80ADED8C
 void func_80ADEDF8(void); // func_80ADEDF8
 void func_80ADEE4C(void); // func_80ADEE4C
@@ -12310,14 +12310,14 @@ void func_80ADF6DC(void); // func_80ADF6DC
 void func_80ADF730(void); // func_80ADF730
 void func_80ADF7B8(void); // func_80ADF7B8
 void func_80ADF7CC(void); // func_80ADF7CC
-void func_80ADF8DC(void); // func_80ADF8DC
+void EnTakaraya_Update(void); // func_80ADF8DC
 void func_80ADF94C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80ADF94C
 void func_80ADF984(void); // func_80ADF984
-void func_80ADF9E0(void); // func_80ADF9E0
+void EnTakaraya_Draw(void); // func_80ADF9E0
 void func_80ADFCA0(void); // func_80ADFCA0
 void func_80ADFCEC(void); // func_80ADFCEC
-void func_80ADFE3C(void); // func_80ADFE3C
-void func_80ADFF58(void); // func_80ADFF58
+void EnTsn_Init(void); // func_80ADFE3C
+void EnTsn_Destroy(void); // func_80ADFF58
 void func_80ADFF84(UNK_TYPE4 param_1, s32 param_2); // func_80ADFF84
 void func_80AE0010(void); // func_80AE0010
 void func_80AE0304(void); // func_80AE0304
@@ -12330,20 +12330,20 @@ void func_80AE0704(void); // func_80AE0704
 void func_80AE0C88(void); // func_80AE0C88
 void func_80AE0D10(void); // func_80AE0D10
 void func_80AE0D78(void); // func_80AE0D78
-void func_80AE0DDC(void); // func_80AE0DDC
+void EnTsn_Update(void); // func_80AE0DDC
 void func_80AE0F84(void); // func_80AE0F84
 void func_80AE0FA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AE0FA8
 void func_80AE1024(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AE1024
-void func_80AE1080(void); // func_80AE1080
+void EnTsn_Draw(void); // func_80AE1080
 void func_80AE1650(void); // func_80AE1650
 void func_80AE16A0(void); // func_80AE16A0
 void func_80AE16D8(void); // func_80AE16D8
-void func_80AE1760(void); // func_80AE1760
-void func_80AE17D0(void); // func_80AE17D0
-void func_80AE17F4(void); // func_80AE17F4
+void EnDs2n_Init(void); // func_80AE1760
+void EnDs2n_Destroy(void); // func_80AE17D0
+void EnDs2n_Update(void); // func_80AE17F4
 void func_80AE1874(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AE1874
 void func_80AE18B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AE18B4
-void func_80AE19B8(void); // func_80AE19B8
+void EnDs2n_Draw(void); // func_80AE19B8
 void func_80AE1B70(void); // func_80AE1B70
 void func_80AE1BF0(void); // func_80AE1BF0
 void func_80AE1C54(void); // func_80AE1C54
@@ -12398,15 +12398,15 @@ void func_80AE4B70(void); // func_80AE4B70
 void func_80AE4BF4(void); // func_80AE4BF4
 void func_80AE4CD8(void); // func_80AE4CD8
 void func_80AE4D28(void); // func_80AE4D28
-void func_80AE4DB0(void); // func_80AE4DB0
-void func_80AE4F10(void); // func_80AE4F10
-void func_80AE4F3C(void); // func_80AE4F3C
+void EnFsn_Init(void); // func_80AE4DB0
+void EnFsn_Destroy(void); // func_80AE4F10
+void EnFsn_Update(void); // func_80AE4F3C
 void func_80AE502C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6); // func_80AE502C
 void func_80AE52A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_80AE52A4
 void func_80AE5440(void); // func_80AE5440
 void func_80AE57E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AE57E8
 void func_80AE5910(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AE5910
-void func_80AE5990(void); // func_80AE5990
+void EnFsn_Draw(void); // func_80AE5990
 void func_80AE6130(void); // func_80AE6130
 void func_80AE615C(void); // func_80AE615C
 void func_80AE61C0(void); // func_80AE61C0
@@ -12420,16 +12420,16 @@ void func_80AE6880(void); // func_80AE6880
 void func_80AE68F0(void); // func_80AE68F0
 void func_80AE69E8(void); // func_80AE69E8
 void func_80AE6A64(void); // func_80AE6A64
-void func_80AE6B30(void); // func_80AE6B30
-void func_80AE6C4C(void); // func_80AE6C4C
-void func_80AE6C5C(void); // func_80AE6C5C
+void EnShn_Init(void); // func_80AE6B30
+void EnShn_Destroy(void); // func_80AE6C4C
+void EnShn_Update(void); // func_80AE6C5C
 void func_80AE6CF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AE6CF0
 void func_80AE6D40(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AE6D40
 void func_80AE6D90(void); // func_80AE6D90
-void func_80AE6E8C(void); // func_80AE6E8C
+void EnShn_Draw(void); // func_80AE6E8C
 void D_80AE7258(void); // func_80AE7258
-void func_80AE73A0(void); // func_80AE73A0
-void func_80AE74E0(void); // func_80AE74E0
+void EnStopheishi_Init(void); // func_80AE73A0
+void EnStopheishi_Destroy(void); // func_80AE74E0
 void func_80AE750C(void); // func_80AE750C
 void func_80AE75C8(void); // func_80AE75C8
 void func_80AE7718(void); // func_80AE7718
@@ -12439,28 +12439,28 @@ void func_80AE7E9C(void); // func_80AE7E9C
 void func_80AE7F34(void); // func_80AE7F34
 void func_80AE854C(void); // func_80AE854C
 void func_80AE85C4(void); // func_80AE85C4
-void func_80AE8680(void); // func_80AE8680
+void EnStopheishi_Update(void); // func_80AE8680
 void func_80AE87A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AE87A4
 void func_80AE87EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AE87EC
-void func_80AE882C(void); // func_80AE882C
-void func_80AE8B70(void); // func_80AE8B70
-void func_80AE8DA4(void); // func_80AE8DA4
+void EnStopheishi_Draw(void); // func_80AE882C
+void ObjBigicicle_Init(void); // func_80AE8B70
+void ObjBigicicle_Destroy(void); // func_80AE8DA4
 void func_80AE8DE4(void); // func_80AE8DE4
 void func_80AE8FD4(void); // func_80AE8FD4
 void func_80AE9090(void); // func_80AE9090
 void func_80AE9180(void); // func_80AE9180
 void func_80AE9258(void); // func_80AE9258
 void func_80AE939C(void); // func_80AE939C
-void func_80AE9574(void); // func_80AE9574
-void func_80AE9780(void); // func_80AE9780
+void ObjBigicicle_Update(void); // func_80AE9574
+void ObjBigicicle_Draw(void); // func_80AE9780
 void func_80AE9A20(void); // func_80AE9A20
 void func_80AE9A80(void); // func_80AE9A80
 void func_80AE9AC4(void); // func_80AE9AC4
 void func_80AE9B4C(void); // func_80AE9B4C
 void func_80AE9B8C(void); // func_80AE9B8C
 void func_80AE9BCC(void); // func_80AE9BCC
-void func_80AE9CA8(void); // func_80AE9CA8
-void func_80AE9EEC(void); // func_80AE9EEC
+void EnLiftNuts_Init(void); // func_80AE9CA8
+void EnLiftNuts_Destroy(void); // func_80AE9EEC
 void func_80AE9F28(void); // func_80AE9F28
 void func_80AE9F70(void); // func_80AE9F70
 void func_80AE9FC8(void); // func_80AE9FC8
@@ -12496,15 +12496,15 @@ void func_80AEB934(void); // func_80AEB934
 void func_80AEB974(void); // func_80AEB974
 void func_80AEB9E0(void); // func_80AEB9E0
 void func_80AEBB30(void); // func_80AEBB30
-void func_80AEBB74(void); // func_80AEBB74
+void EnLiftNuts_Update(void); // func_80AEBB74
 void func_80AEBC18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AEBC18
 void func_80AEBC90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AEBC90
-void func_80AEBCD0(void); // func_80AEBCD0
+void EnLiftNuts_Draw(void); // func_80AEBCD0
 void func_80AEC460(void); // func_80AEC460
 void func_80AEC524(void); // func_80AEC524
 void func_80AEC658(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AEC658
-void func_80AEC750(void); // func_80AEC750
-void func_80AECA10(void); // func_80AECA10
+void EnTk_Init(void); // func_80AEC750
+void EnTk_Destroy(void); // func_80AECA10
 void func_80AECA3C(void); // func_80AECA3C
 void func_80AECA90(void); // func_80AECA90
 void func_80AECB0C(void); // func_80AECB0C
@@ -12552,22 +12552,22 @@ void func_80AEF220(void); // func_80AEF220
 void func_80AEF278(void); // func_80AEF278
 void func_80AEF2C8(void); // func_80AEF2C8
 void func_80AEF2D8(void); // func_80AEF2D8
-void func_80AEF3E8(void); // func_80AEF3E8
+void EnTk_Update(void); // func_80AEF3E8
 void func_80AEF5F4(void); // func_80AEF5F4
 void func_80AEF65C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AEF65C
 void func_80AEF6A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AEF6A4
-void func_80AEF734(void); // func_80AEF734
-void func_80AF0060(void); // func_80AF0060
-void func_80AF0088(void); // func_80AF0088
-void func_80AF0170(void); // func_80AF0170
-void func_80AF0360(void); // func_80AF0360
+void EnTk_Draw(void); // func_80AEF734
+void BgMarketStep_Init(void); // func_80AF0060
+void BgMarketStep_Draw(void); // func_80AF0088
+void ObjLupygamelift_Init(void); // func_80AF0170
+void ObjLupygamelift_Destroy(void); // func_80AF0360
 void func_80AF0394(void); // func_80AF0394
 void func_80AF04BC(void); // func_80AF04BC
 void func_80AF04D8(void); // func_80AF04D8
 void func_80AF0514(void); // func_80AF0514
 void func_80AF0530(void); // func_80AF0530
-void func_80AF06CC(void); // func_80AF06CC
-void func_80AF06F0(void); // func_80AF06F0
+void ObjLupygamelift_Update(void); // func_80AF06CC
+void ObjLupygamelift_Draw(void); // func_80AF06F0
 void func_80AF0820(void); // func_80AF0820
 void func_80AF082C(void); // func_80AF082C
 void func_80AF0838(void); // func_80AF0838
@@ -12578,8 +12578,8 @@ void func_80AF10D8(void); // func_80AF10D8
 void func_80AF118C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80AF118C
 void func_80AF14FC(void); // func_80AF14FC
 void func_80AF1730(void); // func_80AF1730
-void func_80AF175C(void); // func_80AF175C
-void func_80AF1960(void); // func_80AF1960
+void EnTest7_Init(void); // func_80AF175C
+void EnTest7_Destroy(void); // func_80AF1960
 void func_80AF19A8(void); // func_80AF19A8
 void func_80AF1A2C(void); // func_80AF1A2C
 void func_80AF1B68(void); // func_80AF1B68
@@ -12603,28 +12603,28 @@ void func_80AF2DB4(void); // func_80AF2DB4
 void func_80AF2EC8(void); // func_80AF2EC8
 void func_80AF2F98(void); // func_80AF2F98
 void func_80AF30F4(void); // func_80AF30F4
-void func_80AF3144(void); // func_80AF3144
+void EnTest7_Update(void); // func_80AF3144
 void func_80AF31D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AF31D0
-void func_80AF3248(void); // func_80AF3248
+void EnTest7_Draw(void); // func_80AF3248
 void func_80AF3910(void); // func_80AF3910
-void func_80AF397C(void); // func_80AF397C
-void func_80AF3A80(void); // func_80AF3A80
+void ObjLightblock_Init(void); // func_80AF397C
+void ObjLightblock_Destroy(void); // func_80AF3A80
 void func_80AF3AC8(void); // func_80AF3AC8
 void func_80AF3ADC(void); // func_80AF3ADC
 void func_80AF3B8C(void); // func_80AF3B8C
 void func_80AF3BA0(void); // func_80AF3BA0
 void func_80AF3C18(void); // func_80AF3C18
 void func_80AF3C34(void); // func_80AF3C34
-void func_80AF3CC0(void); // func_80AF3CC0
-void func_80AF3CE4(void); // func_80AF3CE4
+void ObjLightblock_Update(void); // func_80AF3CC0
+void ObjLightblock_Draw(void); // func_80AF3CE4
 void func_80AF3F70(void); // func_80AF3F70
 void func_80AF3FE0(void); // func_80AF3FE0
-void func_80AF40B4(void); // func_80AF40B4
-void func_80AF4200(void); // func_80AF4200
-void func_80AF4248(void); // func_80AF4248
-void func_80AF4320(void); // func_80AF4320
-void func_80AF43F0(void); // func_80AF43F0
-void func_80AF45DC(void); // func_80AF45DC
+void MirRay2_Init(void); // func_80AF40B4
+void MirRay2_Destroy(void); // func_80AF4200
+void MirRay2_Update(void); // func_80AF4248
+void MirRay2_Draw(void); // func_80AF4320
+void EnWdhand_Init(void); // func_80AF43F0
+void EnWdhand_Destroy(void); // func_80AF45DC
 void func_80AF4608(void); // func_80AF4608
 void func_80AF4670(void); // func_80AF4670
 void func_80AF46F0(void); // func_80AF46F0
@@ -12644,11 +12644,11 @@ void func_80AF5650(void); // func_80AF5650
 void func_80AF56A0(void); // func_80AF56A0
 void func_80AF5820(void); // func_80AF5820
 void func_80AF5E3C(void); // func_80AF5E3C
-void func_80AF5F2C(void); // func_80AF5F2C
+void EnWdhand_Update(void); // func_80AF5F2C
 void func_80AF5FE4(void); // func_80AF5FE4
-void func_80AF6094(void); // func_80AF6094
-void func_80AF6760(void); // func_80AF6760
-void func_80AF6828(void); // func_80AF6828
+void EnWdhand_Draw(void); // func_80AF6094
+void EnGamelupy_Init(void); // func_80AF6760
+void EnGamelupy_Destroy(void); // func_80AF6828
 void func_80AF6854(void); // func_80AF6854
 void func_80AF6944(void); // func_80AF6944
 void func_80AF6958(void); // func_80AF6958
@@ -12657,13 +12657,13 @@ void func_80AF69A8(void); // func_80AF69A8
 void func_80AF6A38(void); // func_80AF6A38
 void func_80AF6A78(void); // func_80AF6A78
 void func_80AF6B40(void); // func_80AF6B40
-void func_80AF6B84(void); // func_80AF6B84
-void func_80AF6BF8(void); // func_80AF6BF8
+void EnGamelupy_Update(void); // func_80AF6B84
+void EnGamelupy_Draw(void); // func_80AF6BF8
 void func_80AF6DE0(void); // func_80AF6DE0
-void func_80AF6E2C(void); // func_80AF6E2C
+void BgDanpeiMovebg_Init(void); // func_80AF6E2C
 void func_80AF6EA8(void); // func_80AF6EA8
-void func_80AF6FF0(void); // func_80AF6FF0
-void func_80AF7024(void); // func_80AF7024
+void BgDanpeiMovebg_Destroy(void); // func_80AF6FF0
+void BgDanpeiMovebg_Update(void); // func_80AF7024
 void func_80AF705C(void); // func_80AF705C
 void func_80AF70FC(void); // func_80AF70FC
 void func_80AF71FC(void); // func_80AF71FC
@@ -12671,11 +12671,11 @@ void func_80AF72F8(void); // func_80AF72F8
 void func_80AF7354(void); // func_80AF7354
 void func_80AF746C(void); // func_80AF746C
 void func_80AF74CC(void); // func_80AF74CC
-void func_80AF7640(void); // func_80AF7640
-void func_80AF76C4(void); // func_80AF76C4
+void EnSnowwd_Init(void); // func_80AF7640
+void EnSnowwd_Destroy(void); // func_80AF76C4
 void func_80AF76F0(void); // func_80AF76F0
-void func_80AF798C(void); // func_80AF798C
-void func_80AF79B0(void); // func_80AF79B0
+void EnSnowwd_Update(void); // func_80AF798C
+void EnSnowwd_Draw(void); // func_80AF79B0
 void func_80AF7B40(void); // func_80AF7B40
 void func_80AF7BAC(void); // func_80AF7BAC
 void func_80AF7CB0(void); // func_80AF7CB0
@@ -12719,16 +12719,16 @@ void func_80AFA438(void); // func_80AFA438
 void func_80AFA4D0(void); // func_80AFA4D0
 void func_80AFA5FC(void); // func_80AFA5FC
 void func_80AFA724(void); // func_80AFA724
-void func_80AFA7A8(void); // func_80AFA7A8
-void func_80AFA8B0(void); // func_80AFA8B0
-void func_80AFA8F0(void); // func_80AFA8F0
+void EnPm_Init(void); // func_80AFA7A8
+void EnPm_Destroy(void); // func_80AFA8B0
+void EnPm_Update(void); // func_80AFA8F0
 void func_80AFAA04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80AFAA04
 void func_80AFAA44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80AFAA44
 void func_80AFABAC(void); // func_80AFABAC
-void func_80AFACAC(void); // func_80AFACAC
+void EnPm_Draw(void); // func_80AFACAC
 void func_80AFC960(void); // func_80AFC960
-void func_80AFCA94(void); // func_80AFCA94
-void func_80AFCB64(void); // func_80AFCB64
+void EnGakufu_Init(void); // func_80AFCA94
+void EnGakufu_Destroy(void); // func_80AFCB64
 void func_80AFCB94(void); // func_80AFCB94
 void func_80AFCBD4(void); // func_80AFCBD4
 void func_80AFCC14(void); // func_80AFCC14
@@ -12736,23 +12736,23 @@ void func_80AFCC24(void); // func_80AFCC24
 void func_80AFCC58(void); // func_80AFCC58
 void func_80AFCD44(void); // func_80AFCD44
 void func_80AFCDC8(void); // func_80AFCDC8
-void func_80AFCE70(void); // func_80AFCE70
-void func_80AFCE94(void); // func_80AFCE94
+void EnGakufu_Update(void); // func_80AFCE70
+void EnGakufu_Draw(void); // func_80AFCE94
 void func_80AFD380(void); // func_80AFD380
-void func_80AFD4B8(void); // func_80AFD4B8
-void func_80AFD5A4(void); // func_80AFD5A4
+void ElfMsg4_Init(void); // func_80AFD4B8
+void ElfMsg4_Destroy(void); // func_80AFD5A4
 void func_80AFD5B4(void); // func_80AFD5B4
 void func_80AFD5E0(void); // func_80AFD5E0
 void func_80AFD668(void); // func_80AFD668
 void func_80AFD770(void); // func_80AFD770
-void func_80AFD7DC(void); // func_80AFD7DC
+void ElfMsg4_Update(void); // func_80AFD7DC
 void func_80AFD990(void); // func_80AFD990
-void func_80AFDAC8(void); // func_80AFDAC8
-void func_80AFDB28(void); // func_80AFDB28
+void ElfMsg5_Init(void); // func_80AFDAC8
+void ElfMsg5_Destroy(void); // func_80AFDB28
 void func_80AFDB38(void); // func_80AFDB38
-void func_80AFDB48(void); // func_80AFDB48
-void func_80AFDC40(void); // func_80AFDC40
-void func_80AFDD34(void); // func_80AFDD34
+void ElfMsg5_Update(void); // func_80AFDB48
+void EnColMan_Init(void); // func_80AFDC40
+void EnColMan_Destroy(void); // func_80AFDD34
 void func_80AFDD60(void); // func_80AFDD60
 void func_80AFDE00(void); // func_80AFDE00
 void func_80AFDF00(void); // func_80AFDF00
@@ -12760,13 +12760,13 @@ void func_80AFDF60(void); // func_80AFDF60
 void func_80AFDFB4(void); // func_80AFDFB4
 void func_80AFE234(void); // func_80AFE234
 void func_80AFE25C(void); // func_80AFE25C
-void func_80AFE370(void); // func_80AFE370
+void EnColMan_Update(void); // func_80AFE370
 void func_80AFE414(void); // func_80AFE414
 void func_80AFE4AC(void); // func_80AFE4AC
 void func_80AFE584(void); // func_80AFE584
 void func_80AFE650(void); // func_80AFE650
-void func_80AFE8A0(void); // func_80AFE8A0
-void func_80AFEB0C(void); // func_80AFEB0C
+void EnTalkGibud_Init(void); // func_80AFE8A0
+void EnTalkGibud_Destroy(void); // func_80AFEB0C
 void func_80AFEB38(void); // func_80AFEB38
 void func_80AFEB7C(void); // func_80AFEB7C
 void func_80AFEC08(void); // func_80AFEC08
@@ -12811,14 +12811,14 @@ void func_80B0094C(void); // func_80B0094C
 void func_80B00B8C(void); // func_80B00B8C
 void func_80B00C94(void); // func_80B00C94
 void func_80B00D9C(void); // func_80B00D9C
-void func_80B00E48(void); // func_80B00E48
+void EnTalkGibud_Update(void); // func_80B00E48
 UNK_TYPE4 func_80B00F08(UNK_TYPE4 param_1, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, s32 param_5, s32 param_6); // func_80B00F08
 void func_80B00F64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B00F64
-void func_80B01040(void); // func_80B01040
+void EnTalkGibud_Draw(void); // func_80B01040
 void func_80B01990(void); // func_80B01990
 void func_80B01A74(void); // func_80B01A74
-void func_80B01B30(void); // func_80B01B30
-void func_80B01E74(void); // func_80B01E74
+void EnGiant_Init(void); // func_80B01B30
+void EnGiant_Destroy(void); // func_80B01E74
 void func_80B01E84(void); // func_80B01E84
 void func_80B01EE8(void); // func_80B01EE8
 void func_80B020A0(void); // func_80B020A0
@@ -12828,10 +12828,10 @@ void func_80B02354(void); // func_80B02354
 void func_80B023D0(void); // func_80B023D0
 void func_80B024AC(void); // func_80B024AC
 void func_80B024D8(void); // func_80B024D8
-void func_80B025CC(void); // func_80B025CC
+void EnGiant_Update(void); // func_80B025CC
 void func_80B02688(void); // func_80B02688
 void func_80B026C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B026C4
-void func_80B026FC(void); // func_80B026FC
+void EnGiant_Draw(void); // func_80B026FC
 void func_80B02CD0(void); // func_80B02CD0
 void func_80B02D58(void); // func_80B02D58
 void func_80B02DB0(void); // func_80B02DB0
@@ -12842,8 +12842,8 @@ void func_80B03688(void); // func_80B03688
 void func_80B03A80(void); // func_80B03A80
 void func_80B03E2C(void); // func_80B03E2C
 void func_80B03FF8(void); // func_80B03FF8
-void func_80B04084(void); // func_80B04084
-void func_80B0430C(void); // func_80B0430C
+void ObjSnowball_Init(void); // func_80B04084
+void ObjSnowball_Destroy(void); // func_80B0430C
 void func_80B04338(void); // func_80B04338
 void func_80B04350(void); // func_80B04350
 void func_80B04540(void); // func_80B04540
@@ -12854,11 +12854,11 @@ void func_80B046E4(void); // func_80B046E4
 void func_80B047C0(void); // func_80B047C0
 void func_80B04B48(void); // func_80B04B48
 void func_80B04B60(void); // func_80B04B60
-void func_80B04B70(void); // func_80B04B70
-void func_80B04D04(void); // func_80B04D04
+void ObjSnowball_Update(void); // func_80B04B70
+void ObjSnowball_Draw(void); // func_80B04D04
 void func_80B04D34(void); // func_80B04D34
-void func_80B05290(void); // func_80B05290
-void func_80B05690(void); // func_80B05690
+void BossHakugin_Init(void); // func_80B05290
+void BossHakugin_Destroy(void); // func_80B05690
 void func_80B0573C(void); // func_80B0573C
 void func_80B057A4(void); // func_80B057A4
 void func_80B058C0(void); // func_80B058C0
@@ -12919,7 +12919,7 @@ void func_80B0B34C(void); // func_80B0B34C
 void func_80B0B3F4(void); // func_80B0B3F4
 void func_80B0B548(void); // func_80B0B548
 void func_80B0B660(void); // func_80B0B660
-void func_80B0BAE0(void); // func_80B0BAE0
+void BossHakugin_Update(void); // func_80B0BAE0
 void func_80B0C000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B0C000
 void func_80B0C1BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B0C1BC
 void func_80B0C398(void); // func_80B0C398
@@ -12928,7 +12928,7 @@ void func_80B0C7B0(void); // func_80B0C7B0
 void func_80B0CAF0(void); // func_80B0CAF0
 void func_80B0CCD8(void); // func_80B0CCD8
 void func_80B0CF24(void); // func_80B0CF24
-void func_80B0D0D4(void); // func_80B0D0D4
+void BossHakugin_Draw(void); // func_80B0D0D4
 void func_80B0D2B8(void); // func_80B0D2B8
 void func_80B0D69C(void); // func_80B0D69C
 void func_80B0D750(void); // func_80B0D750
@@ -12968,30 +12968,30 @@ void func_80B110F8(void); // func_80B110F8
 void func_80B111AC(void); // func_80B111AC
 void func_80B11268(void); // func_80B11268
 void func_80B11344(void); // func_80B11344
-void func_80B1137C(void); // func_80B1137C
-void func_80B116E4(void); // func_80B116E4
-void func_80B11710(void); // func_80B11710
+void EnGb2_Init(void); // func_80B1137C
+void EnGb2_Destroy(void); // func_80B116E4
+void EnGb2_Update(void); // func_80B11710
 void func_80B1179C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B1179C
 void func_80B117FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B117FC
-void func_80B11858(void); // func_80B11858
-void func_80B11E60(void); // func_80B11E60
-void func_80B11F18(void); // func_80B11F18
+void EnGb2_Draw(void); // func_80B11858
+void EnOnpuman_Init(void); // func_80B11E60
+void EnOnpuman_Destroy(void); // func_80B11F18
 void func_80B11F44(void); // func_80B11F44
 void func_80B11F78(void); // func_80B11F78
 void func_80B1202C(void); // func_80B1202C
 void func_80B1217C(void); // func_80B1217C
 void func_80B121D8(void); // func_80B121D8
-void func_80B122D8(void); // func_80B122D8
+void EnOnpuman_Update(void); // func_80B122D8
 void func_80B12430(void); // func_80B12430
-void func_80B1268C(void); // func_80B1268C
-void func_80B12710(void); // func_80B12710
-void func_80B12744(void); // func_80B12744
-void func_80B12768(void); // func_80B12768
-void func_80B12870(void); // func_80B12870
-void func_80B12880(void); // func_80B12880
-void func_80B12890(void); // func_80B12890
-void func_80B12980(void); // func_80B12980
-void func_80B12A1C(void); // func_80B12A1C
+void BgTobira01_Init(void); // func_80B1268C
+void BgTobira01_Destroy(void); // func_80B12710
+void BgTobira01_Update(void); // func_80B12744
+void BgTobira01_Draw(void); // func_80B12768
+void EnTagObj_Init(void); // func_80B12870
+void EnTagObj_Destroy(void); // func_80B12880
+void EnTagObj_Update(void); // func_80B12890
+void ObjDhouse_Init(void); // func_80B12980
+void ObjDhouse_Destroy(void); // func_80B12A1C
 void func_80B12A50(void); // func_80B12A50
 void func_80B12A88(void); // func_80B12A88
 void func_80B12B38(void); // func_80B12B38
@@ -13006,12 +13006,12 @@ void func_80B1392C(void); // func_80B1392C
 void func_80B13940(void); // func_80B13940
 void func_80B139D8(void); // func_80B139D8
 void func_80B139F4(void); // func_80B139F4
-void func_80B13BB4(void); // func_80B13BB4
-void func_80B13BD8(void); // func_80B13BD8
+void ObjDhouse_Update(void); // func_80B13BB4
+void ObjDhouse_Draw(void); // func_80B13BD8
 void func_80B13C08(void); // func_80B13C08
 void func_80B13E40(void); // func_80B13E40
-void func_80B14180(void); // func_80B14180
-void func_80B1440C(void); // func_80B1440C
+void ObjHakaisi_Init(void); // func_80B14180
+void ObjHakaisi_Destroy(void); // func_80B1440C
 void func_80B1444C(void); // func_80B1444C
 void func_80B14460(void); // func_80B14460
 void func_80B14510(void); // func_80B14510
@@ -13026,8 +13026,8 @@ void func_80B14A24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80B14B6C(void); // func_80B14B6C
 void func_80B14CF8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7); // func_80B14CF8
 void func_80B14F4C(void); // func_80B14F4C
-void func_80B1503C(void); // func_80B1503C
-void func_80B15060(void); // func_80B15060
+void ObjHakaisi_Update(void); // func_80B1503C
+void ObjHakaisi_Draw(void); // func_80B15060
 void func_80B151E0(void); // func_80B151E0
 void func_80B15254(void); // func_80B15254
 void func_80B15264(void); // func_80B15264
@@ -13036,8 +13036,8 @@ void func_80B1544C(void); // func_80B1544C
 void func_80B154A0(void); // func_80B154A0
 void func_80B15790(void); // func_80B15790
 void func_80B157C4(void); // func_80B157C4
-void func_80B157F8(void); // func_80B157F8
-void func_80B15A04(void); // func_80B15A04
+void BgHakuginSwitch_Init(void); // func_80B157F8
+void BgHakuginSwitch_Destroy(void); // func_80B15A04
 void func_80B15A4C(void); // func_80B15A4C
 void func_80B15A68(void); // func_80B15A68
 void func_80B15B1C(void); // func_80B15B1C
@@ -13058,10 +13058,10 @@ void func_80B16494(void); // func_80B16494
 void func_80B16520(void); // func_80B16520
 void func_80B165A0(void); // func_80B165A0
 void func_80B165E0(void); // func_80B165E0
-void func_80B16628(void); // func_80B16628
-void func_80B16808(void); // func_80B16808
-void func_80B16B00(void); // func_80B16B00
-void func_80B16F94(void); // func_80B16F94
+void BgHakuginSwitch_Update(void); // func_80B16628
+void BgHakuginSwitch_Draw(void); // func_80B16808
+void EnSnowman_Init(void); // func_80B16B00
+void EnSnowman_Destroy(void); // func_80B16F94
 void func_80B16FC0(void); // func_80B16FC0
 void func_80B17144(void); // func_80B17144
 void func_80B173D0(void); // func_80B173D0
@@ -13093,20 +13093,20 @@ void func_80B18B30(void); // func_80B18B30
 void func_80B18BB4(void); // func_80B18BB4
 void func_80B18C7C(void); // func_80B18C7C
 void func_80B18F50(void); // func_80B18F50
-void func_80B1918C(void); // func_80B1918C
+void EnSnowman_Update(void); // func_80B1918C
 void func_80B19474(void); // func_80B19474
 void func_80B19718(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B19718
-void func_80B198B0(void); // func_80B198B0
+void EnSnowman_Draw(void); // func_80B198B0
 void func_80B19948(void); // func_80B19948
 void func_80B19998(void); // func_80B19998
 void func_80B19F60(void); // func_80B19F60
 void func_80B1A008(void); // func_80B1A008
-void func_80B1A15C(void); // func_80B1A15C
-void func_80B1A17C(void); // func_80B1A17C
-void func_80B1A18C(void); // func_80B1A18C
-void func_80B1A1B0(void); // func_80B1A1B0
-void func_80B1A3B0(void); // func_80B1A3B0
-void func_80B1A600(void); // func_80B1A600
+void TGSw_Init(void); // func_80B1A15C
+void TGSw_Destroy(void); // func_80B1A17C
+void TGSw_Update(void); // func_80B1A18C
+void TGSw_Draw(void); // func_80B1A1B0
+void EnPoSisters_Init(void); // func_80B1A3B0
+void EnPoSisters_Destroy(void); // func_80B1A600
 void func_80B1A648(void); // func_80B1A648
 void func_80B1A768(void); // func_80B1A768
 void func_80B1A894(void); // func_80B1A894
@@ -13145,13 +13145,13 @@ void func_80B1C0A4(void); // func_80B1C0A4
 void func_80B1C2E8(void); // func_80B1C2E8
 void func_80B1C340(void); // func_80B1C340
 void func_80B1C408(void); // func_80B1C408
-void func_80B1C61C(void); // func_80B1C61C
+void EnPoSisters_Update(void); // func_80B1C61C
 void func_80B1C974(void); // func_80B1C974
 void func_80B1CB44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80B1CB44
 void func_80B1CD34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B1CD34
-void func_80B1D484(void); // func_80B1D484
-void func_80B1DEB0(void); // func_80B1DEB0
-void func_80B1E234(void); // func_80B1E234
+void EnPoSisters_Draw(void); // func_80B1D484
+void EnPp_Init(void); // func_80B1DEB0
+void EnPp_Destroy(void); // func_80B1E234
 void func_80B1E29C(void); // func_80B1E29C
 void func_80B1E3D4(void); // func_80B1E3D4
 void func_80B1E5A8(void); // func_80B1E5A8
@@ -13180,12 +13180,12 @@ void func_80B20030(void); // func_80B20030
 void func_80B202B8(void); // func_80B202B8
 void func_80B203BC(void); // func_80B203BC
 void func_80B20668(void); // func_80B20668
-void func_80B20B40(void); // func_80B20B40
+void EnPp_Update(void); // func_80B20B40
 void func_80B20E6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B20E6C
 void func_80B20F70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B20F70
-void func_80B21344(void); // func_80B21344
-void func_80B21B00(void); // func_80B21B00
-void func_80B21BB4(void); // func_80B21BB4
+void EnPp_Draw(void); // func_80B21344
+void EnHakurock_Init(void); // func_80B21B00
+void EnHakurock_Destroy(void); // func_80B21BB4
 void func_80B21BE0(void); // func_80B21BE0
 void func_80B21EA4(void); // func_80B21EA4
 void func_80B21FFC(void); // func_80B21FFC
@@ -13198,7 +13198,7 @@ void func_80B224C0(void); // func_80B224C0
 void func_80B22500(void); // func_80B22500
 void func_80B226AC(void); // func_80B226AC
 void func_80B22750(void); // func_80B22750
-void func_80B2278C(void); // func_80B2278C
+void EnHakurock_Update(void); // func_80B2278C
 void func_80B228F4(void); // func_80B228F4
 void func_80B229A4(void); // func_80B229A4
 void func_80B22C00(void); // func_80B22C00
@@ -13207,8 +13207,8 @@ void func_80B22C80(void); // func_80B22C80
 void func_80B22E0C(void); // func_80B22E0C
 void func_80B22F34(void); // func_80B22F34
 void func_80B22FA8(void); // func_80B22FA8
-void func_80B23318(void); // func_80B23318
-void func_80B23450(void); // func_80B23450
+void EnHanabi_Init(void); // func_80B23318
+void EnHanabi_Destroy(void); // func_80B23450
 void func_80B234C8(void); // func_80B234C8
 void func_80B235CC(void); // func_80B235CC
 void func_80B236C8(void); // func_80B236C8
@@ -13216,23 +13216,23 @@ void func_80B23894(void); // func_80B23894
 void func_80B238D4(void); // func_80B238D4
 void func_80B23910(void); // func_80B23910
 void func_80B23934(void); // func_80B23934
-void func_80B239FC(void); // func_80B239FC
+void EnHanabi_Update(void); // func_80B239FC
 void func_80B23A38(void); // func_80B23A38
 void func_80B23D50(void); // func_80B23D50
 void func_80B23DD0(void); // func_80B23DD0
-void func_80B23E10(void); // func_80B23E10
-void func_80B23E30(void); // func_80B23E30
-void func_80B23E40(void); // func_80B23E40
-void func_80B23ED0(void); // func_80B23ED0
-void func_80B23F50(void); // func_80B23F50
-void func_80B23F60(void); // func_80B23F60
-void func_80B243C0(void); // func_80B243C0
+void ObjDowsing_Init(void); // func_80B23E10
+void ObjDowsing_Destroy(void); // func_80B23E30
+void ObjDowsing_Update(void); // func_80B23E40
+void ObjWind_Init(void); // func_80B23ED0
+void ObjWind_Destroy(void); // func_80B23F50
+void ObjWind_Update(void); // func_80B23F60
+void ObjWind_Draw(void); // func_80B243C0
 void func_80B24630(void); // func_80B24630
 void func_80B246F4(void); // func_80B246F4
 void func_80B2478C(void); // func_80B2478C
 void func_80B248B8(void); // func_80B248B8
-void func_80B24930(void); // func_80B24930
-void func_80B24BE8(void); // func_80B24BE8
+void EnRacedog_Init(void); // func_80B24930
+void EnRacedog_Destroy(void); // func_80B24BE8
 void func_80B24C14(void); // func_80B24C14
 void func_80B24CB4(void); // func_80B24CB4
 void func_80B24E14(void); // func_80B24E14
@@ -13244,14 +13244,14 @@ void func_80B25448(void); // func_80B25448
 void func_80B25490(void); // func_80B25490
 void func_80B255AC(void); // func_80B255AC
 void func_80B256BC(void); // func_80B256BC
-void func_80B25708(void); // func_80B25708
+void EnRacedog_Update(void); // func_80B25708
 void func_80B2583C(void); // func_80B2583C
 void func_80B258D8(void); // func_80B258D8
 void func_80B25A74(void); // func_80B25A74
 void func_80B25A90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B25A90
-void func_80B25B14(void); // func_80B25B14
-void func_80B262A0(void); // func_80B262A0
-void func_80B264FC(void); // func_80B264FC
+void EnRacedog_Draw(void); // func_80B25B14
+void EnKendoJs_Init(void); // func_80B262A0
+void EnKendoJs_Destroy(void); // func_80B264FC
 void func_80B26538(void); // func_80B26538
 void func_80B2654C(void); // func_80B2654C
 void func_80B26758(void); // func_80B26758
@@ -13279,19 +13279,19 @@ void func_80B278C4(void); // func_80B278C4
 void func_80B279AC(void); // func_80B279AC
 void func_80B279F0(void); // func_80B279F0
 void func_80B27A90(void); // func_80B27A90
-void func_80B27ACC(void); // func_80B27ACC
+void EnKendoJs_Update(void); // func_80B27ACC
 void func_80B27B54(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B27B54
 void func_80B27B8C(void); // func_80B27B8C
-void func_80B27BA4(void); // func_80B27BA4
-void func_80B28080(void); // func_80B28080
-void func_80B28124(void); // func_80B28124
+void EnKendoJs_Draw(void); // func_80B27BA4
+void BgBotihasira_Init(void); // func_80B28080
+void BgBotihasira_Destroy(void); // func_80B28124
 void func_80B2815C(void); // func_80B2815C
-void func_80B2816C(void); // func_80B2816C
-void func_80B28240(void); // func_80B28240
+void BgBotihasira_Update(void); // func_80B2816C
+void BgBotihasira_Draw(void); // func_80B28240
 void func_80B28370(void); // func_80B28370
 void func_80B28478(void); // func_80B28478
-void func_80B28538(void); // func_80B28538
-void func_80B287B8(void); // func_80B287B8
+void EnFish2_Init(void); // func_80B28538
+void EnFish2_Destroy(void); // func_80B287B8
 void func_80B287F4(void); // func_80B287F4
 void func_80B288E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B288E8
 void func_80B2899C(void); // func_80B2899C
@@ -13315,10 +13315,10 @@ void func_80B2A094(void); // func_80B2A094
 void func_80B2A23C(void); // func_80B2A23C
 void func_80B2A448(void); // func_80B2A448
 void func_80B2A498(void); // func_80B2A498
-void func_80B2A738(void); // func_80B2A738
+void EnFish2_Update(void); // func_80B2A738
 void func_80B2ABF4(void); // func_80B2ABF4
 void func_80B2AC20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B2AC20
-void func_80B2AD34(void); // func_80B2AD34
+void EnFish2_Draw(void); // func_80B2AD34
 void func_80B2ADB0(void); // func_80B2ADB0
 void func_80B2AF80(void); // func_80B2AF80
 void func_80B2B180(void); // func_80B2B180
@@ -13333,13 +13333,13 @@ void func_80B2BD30(void); // func_80B2BD30
 void func_80B2BD88(void); // func_80B2BD88
 void func_80B2BD98(void); // func_80B2BD98
 void func_80B2BE54(void); // func_80B2BE54
-void func_80B2BF3C(void); // func_80B2BF3C
-void func_80B2C04C(void); // func_80B2C04C
-void func_80B2C078(void); // func_80B2C078
+void EnPst_Init(void); // func_80B2BF3C
+void EnPst_Destroy(void); // func_80B2C04C
+void EnPst_Update(void); // func_80B2C078
 void func_80B2C11C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B2C11C
-void func_80B2C18C(void); // func_80B2C18C
-void func_80B2C6F0(void); // func_80B2C6F0
-void func_80B2C8B8(void); // func_80B2C8B8
+void EnPst_Draw(void); // func_80B2C18C
+void EnPoh_Init(void); // func_80B2C6F0
+void EnPoh_Destroy(void); // func_80B2C8B8
 void func_80B2C910(void); // func_80B2C910
 void func_80B2C9B8(void); // func_80B2C9B8
 void func_80B2CA4C(void); // func_80B2CA4C
@@ -13379,10 +13379,10 @@ void func_80B2E438(void); // func_80B2E438
 void func_80B2E55C(void); // func_80B2E55C
 void func_80B2E6C0(void); // func_80B2E6C0
 void func_80B2E8E0(void); // func_80B2E8E0
-void func_80B2EACC(void); // func_80B2EACC
+void EnPoh_Update(void); // func_80B2EACC
 void func_80B2ED14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80B2ED14
 void func_80B2EDD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B2EDD0
-void func_80B2F0A4(void); // func_80B2F0A4
+void EnPoh_Draw(void); // func_80B2F0A4
 void func_80B2F328(void); // func_80B2F328
 void func_80B2F37C(void); // func_80B2F37C
 void func_80B2FB10(void); // func_80B2FB10
@@ -13391,19 +13391,19 @@ void func_80B2FC98(void); // func_80B2FC98
 void func_80B300F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B300F4
 void func_80B30410(void); // func_80B30410
 void func_80B30480(void); // func_80B30480
-void func_80B3057C(void); // func_80B3057C
-void func_80B30798(void); // func_80B30798
+void ObjSpidertent_Init(void); // func_80B3057C
+void ObjSpidertent_Destroy(void); // func_80B30798
 void func_80B307E0(void); // func_80B307E0
 void func_80B30808(void); // func_80B30808
 void func_80B30A2C(void); // func_80B30A2C
 void func_80B30A4C(void); // func_80B30A4C
 void func_80B30AD4(void); // func_80B30AD4
 void func_80B30AF8(void); // func_80B30AF8
-void func_80B30ED4(void); // func_80B30ED4
-void func_80B30EF8(void); // func_80B30EF8
+void ObjSpidertent_Update(void); // func_80B30ED4
+void ObjSpidertent_Draw(void); // func_80B30EF8
 void func_80B31590(void); // func_80B31590
-void func_80B3161C(void); // func_80B3161C
-void func_80B31998(void); // func_80B31998
+void EnZoraegg_Init(void); // func_80B3161C
+void EnZoraegg_Destroy(void); // func_80B31998
 void func_80B319A8(void); // func_80B319A8
 void func_80B319D0(void); // func_80B319D0
 void func_80B31A34(void); // func_80B31A34
@@ -13431,16 +13431,16 @@ void func_80B32B70(void); // func_80B32B70
 void func_80B32BB8(void); // func_80B32BB8
 void func_80B32C34(void); // func_80B32C34
 void func_80B32D08(void); // func_80B32D08
-void func_80B32E74(void); // func_80B32E74
+void EnZoraegg_Update(void); // func_80B32E74
 void func_80B32F04(void); // func_80B32F04
 void func_80B331C8(void); // func_80B331C8
 void func_80B3336C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B3336C
 void func_80B333DC(void); // func_80B333DC
 void func_80B33480(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B33480
 void func_80B33818(void); // func_80B33818
-void func_80B338C0(void); // func_80B338C0
-void func_80B33D30(void); // func_80B33D30
-void func_80B33E54(void); // func_80B33E54
+void EnZoraegg_Draw(void); // func_80B338C0
+void EnKbt_Init(void); // func_80B33D30
+void EnKbt_Destroy(void); // func_80B33E54
 void func_80B33E64(void); // func_80B33E64
 void func_80B33E8C(void); // func_80B33E8C
 void func_80B33EF0(void); // func_80B33EF0
@@ -13450,10 +13450,10 @@ void func_80B3415C(void); // func_80B3415C
 void func_80B34314(void); // func_80B34314
 void func_80B34574(void); // func_80B34574
 void func_80B34598(void); // func_80B34598
-void func_80B349A4(void); // func_80B349A4
+void EnKbt_Update(void); // func_80B349A4
 UNK_TYPE4 func_80B349C8(UNK_TYPE4 param_1, s32 param_2, UNK_PTR param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, s32 param_6); // func_80B349C8
 void func_80B34A00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B34A00
-void func_80B34A40(void); // func_80B34A40
+void EnKbt_Draw(void); // func_80B34A40
 void func_80B34F70(void); // func_80B34F70
 void func_80B34FB4(void); // func_80B34FB4
 void func_80B35108(void); // func_80B35108
@@ -13474,14 +13474,14 @@ void func_80B35C84(void); // func_80B35C84
 void func_80B3610C(void); // func_80B3610C
 void func_80B363E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B363E8
 void func_80B364D4(void); // func_80B364D4
-void func_80B364F8(void); // func_80B364F8
-void func_80B36660(void); // func_80B36660
-void func_80B36670(void); // func_80B36670
+void EnGg_Init(void); // func_80B364F8
+void EnGg_Destroy(void); // func_80B36660
+void EnGg_Update(void); // func_80B36670
 void func_80B368B0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B368B0
 void func_80B368F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B368F0
-void func_80B36A34(void); // func_80B36A34
-void func_80B37080(void); // func_80B37080
-void func_80B37280(void); // func_80B37280
+void EnGg_Draw(void); // func_80B36A34
+void EnMaruta_Init(void); // func_80B37080
+void EnMaruta_Destroy(void); // func_80B37280
 void func_80B372B8(void); // func_80B372B8
 void func_80B372CC(void); // func_80B372CC
 void func_80B37364(void); // func_80B37364
@@ -13507,8 +13507,8 @@ void func_80B38028(void); // func_80B38028
 void func_80B38060(void); // func_80B38060
 void func_80B3828C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_80B3828C
 void func_80B382E4(void); // func_80B382E4
-void func_80B38454(void); // func_80B38454
-void func_80B38498(void); // func_80B38498
+void EnMaruta_Update(void); // func_80B38454
+void EnMaruta_Draw(void); // func_80B38498
 void func_80B38E20(void); // func_80B38E20
 void func_80B38E88(void); // func_80B38E88
 void func_80B38EFC(void); // func_80B38EFC
@@ -13521,8 +13521,8 @@ void func_80B39834(void); // func_80B39834
 void func_80B39908(void); // func_80B39908
 void func_80B39B28(void); // func_80B39B28
 void func_80B39B5C(void); // func_80B39B5C
-void func_80B39B94(void); // func_80B39B94
-void func_80B39C4C(void); // func_80B39C4C
+void ObjSnowball2_Init(void); // func_80B39B94
+void ObjSnowball2_Destroy(void); // func_80B39C4C
 void func_80B39C78(void); // func_80B39C78
 void func_80B39C9C(void); // func_80B39C9C
 void func_80B39F60(void); // func_80B39F60
@@ -13531,8 +13531,8 @@ void func_80B3A0D8(void); // func_80B3A0D8
 void func_80B3A13C(void); // func_80B3A13C
 void func_80B3A498(void); // func_80B3A498
 void func_80B3A500(void); // func_80B3A500
-void func_80B3A7C8(void); // func_80B3A7C8
-void func_80B3A888(void); // func_80B3A888
+void ObjSnowball2_Update(void); // func_80B3A7C8
+void ObjSnowball2_Draw(void); // func_80B3A888
 void func_80B3AC50(void); // func_80B3AC50
 void func_80B3AC94(void); // func_80B3AC94
 void func_80B3ADD8(void); // func_80B3ADD8
@@ -13548,12 +13548,12 @@ void func_80B3B5D4(void); // func_80B3B5D4
 void func_80B3B648(void); // func_80B3B648
 void func_80B3B7E4(void); // func_80B3B7E4
 void func_80B3B8A4(void); // func_80B3B8A4
-void func_80B3B958(void); // func_80B3B958
-void func_80B3BBE0(void); // func_80B3BBE0
-void func_80B3BBF0(void); // func_80B3BBF0
+void EnGg2_Init(void); // func_80B3B958
+void EnGg2_Destroy(void); // func_80B3BBE0
+void EnGg2_Update(void); // func_80B3BBF0
 void func_80B3BD44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B3BD44
 void func_80B3BDC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B3BDC0
-void func_80B3BE00(void); // func_80B3BE00
+void EnGg2_Draw(void); // func_80B3BE00
 void func_80B3C260(void); // func_80B3C260
 void func_80B3C29C(void); // func_80B3C29C
 void func_80B3C2B0(void); // func_80B3C2B0
@@ -13561,10 +13561,10 @@ void func_80B3C2C4(void); // func_80B3C2C4
 void func_80B3C39C(void); // func_80B3C39C
 void func_80B3C4E0(void); // func_80B3C4E0
 void func_80B3C624(void); // func_80B3C624
-void func_80B3C6F8(void); // func_80B3C6F8
-void func_80B3C7D8(void); // func_80B3C7D8
-void func_80B3C80C(void); // func_80B3C80C
-void func_80B3C858(void); // func_80B3C858
+void ObjGhaka_Init(void); // func_80B3C6F8
+void ObjGhaka_Destroy(void); // func_80B3C7D8
+void ObjGhaka_Update(void); // func_80B3C80C
+void ObjGhaka_Draw(void); // func_80B3C858
 void func_80B3CA20(void); // func_80B3CA20
 void func_80B3CC38(void); // func_80B3CC38
 void func_80B3CC80(void); // func_80B3CC80
@@ -13579,13 +13579,13 @@ void func_80B3D338(void); // func_80B3D338
 void func_80B3D3F8(void); // func_80B3D3F8
 void func_80B3D47C(void); // func_80B3D47C
 void func_80B3D558(void); // func_80B3D558
-void func_80B3D5B8(void); // func_80B3D5B8
-void func_80B3D7B8(void); // func_80B3D7B8
-void func_80B3D7E4(void); // func_80B3D7E4
+void EnDnp_Init(void); // func_80B3D5B8
+void EnDnp_Destroy(void); // func_80B3D7B8
+void EnDnp_Update(void); // func_80B3D7E4
 void func_80B3D974(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B3D974
 void func_80B3DA88(void); // func_80B3DA88
 void func_80B3DAA0(void); // func_80B3DAA0
-void func_80B3DB98(void); // func_80B3DB98
+void EnDnp_Draw(void); // func_80B3DB98
 void func_80B3DFF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13); // func_80B3DFF0
 void func_80B3E168(void); // func_80B3E168
 void func_80B3E460(void); // func_80B3E460
@@ -13604,15 +13604,15 @@ void func_80B3EEDC(void); // func_80B3EEDC
 void func_80B3EF90(void); // func_80B3EF90
 void func_80B3F00C(void); // func_80B3F00C
 void func_80B3F044(void); // func_80B3F044
-void func_80B3F318(void); // func_80B3F318
-void func_80B3F494(void); // func_80B3F494
-void func_80B3F4A4(void); // func_80B3F4A4
+void EnDai_Init(void); // func_80B3F318
+void EnDai_Destroy(void); // func_80B3F494
+void EnDai_Update(void); // func_80B3F4A4
 void func_80B3F598(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B3F598
 void func_80B3F614(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B3F614
 void func_80B3F6EC(void); // func_80B3F6EC
 void func_80B3F78C(void); // func_80B3F78C
 void func_80B3F920(void); // func_80B3F920
-void func_80B3FB84(void); // func_80B3FB84
+void EnDai_Draw(void); // func_80B3FB84
 void func_80B40080(void); // func_80B40080
 void func_80B4009C(void); // func_80B4009C
 void func_80B400C8(void); // func_80B400C8
@@ -13621,12 +13621,12 @@ void func_80B40160(void); // func_80B40160
 void func_80B401F8(void); // func_80B401F8
 void func_80B40308(void); // func_80B40308
 void func_80B40394(void); // func_80B40394
-void func_80B4056C(void); // func_80B4056C
-void func_80B40628(void); // func_80B40628
-void func_80B4065C(void); // func_80B4065C
-void func_80B40698(void); // func_80B40698
-void func_80B40800(void); // func_80B40800
-void func_80B40B04(void); // func_80B40B04
+void BgGoronOyu_Init(void); // func_80B4056C
+void BgGoronOyu_Destroy(void); // func_80B40628
+void BgGoronOyu_Update(void); // func_80B4065C
+void BgGoronOyu_Draw(void); // func_80B40698
+void EnKgy_Init(void); // func_80B40800
+void EnKgy_Destroy(void); // func_80B40B04
 void func_80B40B38(void); // func_80B40B38
 void func_80B40BC0(void); // func_80B40BC0
 void func_80B40BFC(void); // func_80B40BFC
@@ -13669,11 +13669,11 @@ void func_80B427C8(void); // func_80B427C8
 void func_80B4296C(void); // func_80B4296C
 void func_80B42A8C(void); // func_80B42A8C
 void func_80B42D28(void); // func_80B42D28
-void func_80B42EE0(void); // func_80B42EE0
+void EnKgy_Update(void); // func_80B42EE0
 void func_80B42FA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B42FA0
 void func_80B43008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B43008
 void func_80B43074(void); // func_80B43074
-void func_80B431D0(void); // func_80B431D0
+void EnKgy_Draw(void); // func_80B431D0
 void func_80B439B0(void); // func_80B439B0
 void func_80B43A24(void); // func_80B43A24
 void func_80B43A74(void); // func_80B43A74
@@ -13748,7 +13748,7 @@ void func_80B46644(void); // func_80B46644
 void func_80B468B4(void); // func_80B468B4
 void func_80B469C4(void); // func_80B469C4
 void func_80B46A80(void); // func_80B46A80
-void func_80B46B74(void); // func_80B46B74
+void EnInvadepoh_Init(void); // func_80B46B74
 void func_80B46BB0(void); // func_80B46BB0
 void func_80B46BC0(void); // func_80B46BC0
 void func_80B46C08(void); // func_80B46C08
@@ -13759,7 +13759,7 @@ void func_80B46C94(void); // func_80B46C94
 void func_80B46CC0(void); // func_80B46CC0
 void func_80B46CF4(void); // func_80B46CF4
 void func_80B46D28(void); // func_80B46D28
-void func_80B46D6C(void); // func_80B46D6C
+void EnInvadepoh_Destroy(void); // func_80B46D6C
 void func_80B46DA8(void); // func_80B46DA8
 void func_80B46DC8(void); // func_80B46DC8
 void func_80B46E20(void); // func_80B46E20
@@ -13780,7 +13780,7 @@ void func_80B47278(void); // func_80B47278
 void func_80B47298(void); // func_80B47298
 void func_80B47304(void); // func_80B47304
 void func_80B47324(void); // func_80B47324
-void func_80B47334(void); // func_80B47334
+void EnInvadepoh_Update(void); // func_80B47334
 void func_80B47380(void); // func_80B47380
 void func_80B473E4(void); // func_80B473E4
 void func_80B47478(void); // func_80B47478
@@ -13950,13 +13950,13 @@ void func_80B52430(void); // func_80B52430
 void func_80B5253C(void); // func_80B5253C
 void func_80B525E0(void); // func_80B525E0
 void func_80B52654(void); // func_80B52654
-void func_80B526FC(void); // func_80B526FC
-void func_80B529B8(void); // func_80B529B8
-void func_80B529E4(void); // func_80B529E4
+void EnGk_Init(void); // func_80B526FC
+void EnGk_Destroy(void); // func_80B529B8
+void EnGk_Update(void); // func_80B529E4
 void func_80B52AD4(void); // func_80B52AD4
 void func_80B52AF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B52AF0
 void func_80B52D8C(void); // func_80B52D8C
-void func_80B52F74(void); // func_80B52F74
+void EnGk_Draw(void); // func_80B52F74
 void func_80B53840(void); // func_80B53840
 void func_80B539CC(void); // func_80B539CC
 void func_80B53A7C(void); // func_80B53A7C
@@ -14012,24 +14012,24 @@ void func_80B577F0(void); // func_80B577F0
 void func_80B578F8(void); // func_80B578F8
 void func_80B57A44(void); // func_80B57A44
 void func_80B57B48(void); // func_80B57B48
-void func_80B57C9C(void); // func_80B57C9C
-void func_80B57D70(void); // func_80B57D70
-void func_80B57D9C(void); // func_80B57D9C
+void EnAn_Init(void); // func_80B57C9C
+void EnAn_Destroy(void); // func_80B57D70
+void EnAn_Update(void); // func_80B57D9C
 void func_80B57EE8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B57EE8
 void func_80B57FC4(void); // func_80B57FC4
 void func_80B580C0(void); // func_80B580C0
-void func_80B5A720(void); // func_80B5A720
-void func_80B5A828(void); // func_80B5A828
+void EnBee_Init(void); // func_80B5A720
+void EnBee_Destroy(void); // func_80B5A828
 void func_80B5A854(void); // func_80B5A854
 void func_80B5A9E8(void); // func_80B5A9E8
 void func_80B5ABC4(void); // func_80B5ABC4
 void func_80B5AC3C(void); // func_80B5AC3C
 void func_80B5AF80(void); // func_80B5AF80
-void func_80B5B060(void); // func_80B5B060
-void func_80B5B194(void); // func_80B5B194
+void EnBee_Update(void); // func_80B5B060
+void EnBee_Draw(void); // func_80B5B194
 void func_80B5B2E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B5B2E0
-void func_80B5B3E4(void); // func_80B5B3E4
-void func_80B5BA64(void); // func_80B5BA64
+void EnOt_Init(void); // func_80B5B3E4
+void EnOt_Destroy(void); // func_80B5BA64
 void func_80B5BAAC(void); // func_80B5BAAC
 void func_80B5BB38(void); // func_80B5BB38
 void func_80B5BDA8(void); // func_80B5BDA8
@@ -14070,16 +14070,16 @@ void func_80B5D37C(void); // func_80B5D37C
 void func_80B5D470(void); // func_80B5D470
 void func_80B5D648(void); // func_80B5D648
 void func_80B5D750(void); // func_80B5D750
-void func_80B5D8AC(void); // func_80B5D8AC
+void EnOt_Update(void); // func_80B5D8AC
 void func_80B5DAEC(void); // func_80B5DAEC
 void func_80B5DB6C(void); // func_80B5DB6C
-void func_80B5DD20(void); // func_80B5DD20
+void EnOt_Draw(void); // func_80B5DD20
 void func_80B5DECC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B5DECC
 void func_80B5DF58(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B5DF58
 void func_80B5E078(void); // func_80B5E078
 void func_80B5E1D8(void); // func_80B5E1D8
-void func_80B5E890(void); // func_80B5E890
-void func_80B5EA74(void); // func_80B5EA74
+void EnDragon_Init(void); // func_80B5E890
+void EnDragon_Destroy(void); // func_80B5EA74
 void func_80B5EAA0(void); // func_80B5EAA0
 void func_80B5EB40(void); // func_80B5EB40
 void func_80B5ED90(void); // func_80B5ED90
@@ -14095,22 +14095,22 @@ void func_80B5F8D8(void); // func_80B5F8D8
 void func_80B5FCC0(void); // func_80B5FCC0
 void func_80B5FD68(void); // func_80B5FD68
 void func_80B60138(void); // func_80B60138
-void func_80B6031C(void); // func_80B6031C
+void EnDragon_Update(void); // func_80B6031C
 void func_80B6043C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B6043C
 void func_80B60494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B60494
-void func_80B60564(void); // func_80B60564
-void func_80B60AD0(void); // func_80B60AD0
-void func_80B60C70(void); // func_80B60C70
+void EnDragon_Draw(void); // func_80B60564
+void ObjDora_Init(void); // func_80B60AD0
+void ObjDora_Destroy(void); // func_80B60C70
 void func_80B60C9C(void); // func_80B60C9C
 void func_80B60CB0(void); // func_80B60CB0
 void func_80B60CC0(void); // func_80B60CC0
 void func_80B60D34(void); // func_80B60D34
 void func_80B60E54(void); // func_80B60E54
 void func_80B60EE8(void); // func_80B60EE8
-void func_80B6107C(void); // func_80B6107C
-void func_80B610B8(void); // func_80B610B8
-void func_80B615E0(void); // func_80B615E0
-void func_80B6186C(void); // func_80B6186C
+void ObjDora_Update(void); // func_80B6107C
+void ObjDora_Draw(void); // func_80B610B8
+void EnBigpo_Init(void); // func_80B615E0
+void EnBigpo_Destroy(void); // func_80B6186C
 void func_80B61914(void); // func_80B61914
 void func_80B619B4(void); // func_80B619B4
 void func_80B619FC(void); // func_80B619FC
@@ -14169,7 +14169,7 @@ void func_80B63AC4(void); // func_80B63AC4
 void func_80B63C28(void); // func_80B63C28
 void func_80B63D0C(void); // func_80B63D0C
 void func_80B63D88(void); // func_80B63D88
-void func_80B63ED4(void); // func_80B63ED4
+void EnBigpo_Update(void); // func_80B63ED4
 void func_80B64190(void); // func_80B64190
 void func_80B641E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B641E8
 void func_80B64240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B64240
@@ -14178,8 +14178,8 @@ void func_80B6467C(void); // func_80B6467C
 void func_80B64880(void); // func_80B64880
 void func_80B64B08(void); // func_80B64B08
 void func_80B64DFC(void); // func_80B64DFC
-void func_80B654C0(void); // func_80B654C0
-void func_80B65840(void); // func_80B65840
+void ObjKendoKanban_Init(void); // func_80B654C0
+void ObjKendoKanban_Destroy(void); // func_80B65840
 void func_80B65880(void); // func_80B65880
 void func_80B65894(void); // func_80B65894
 void func_80B658A4(void); // func_80B658A4
@@ -14189,19 +14189,19 @@ void func_80B65D68(void); // func_80B65D68
 void func_80B65DA8(void); // func_80B65DA8
 void func_80B6618C(void); // func_80B6618C
 void func_80B66304(void); // func_80B66304
-void func_80B66418(void); // func_80B66418
-void func_80B66454(void); // func_80B66454
-void func_80B66A20(void); // func_80B66A20
-void func_80B66A6C(void); // func_80B66A6C
+void ObjKendoKanban_Update(void); // func_80B66418
+void ObjKendoKanban_Draw(void); // func_80B66454
+void ObjHariko_Init(void); // func_80B66A20
+void ObjHariko_Destroy(void); // func_80B66A6C
 void func_80B66A7C(void); // func_80B66A7C
 void func_80B66A90(void); // func_80B66A90
 void func_80B66AA0(void); // func_80B66AA0
 void func_80B66AC4(void); // func_80B66AC4
 void func_80B66B78(void); // func_80B66B78
-void func_80B66BAC(void); // func_80B66BAC
-void func_80B66BDC(void); // func_80B66BDC
-void func_80B66D30(void); // func_80B66D30
-void func_80B67010(void); // func_80B67010
+void ObjHariko_Update(void); // func_80B66BAC
+void ObjHariko_Draw(void); // func_80B66BDC
+void EnSth_Init(void); // func_80B66D30
+void EnSth_Destroy(void); // func_80B67010
 void func_80B6703C(void); // func_80B6703C
 void func_80B670A4(void); // func_80B670A4
 void func_80B67148(void); // func_80B67148
@@ -14221,17 +14221,17 @@ void func_80B67B50(void); // func_80B67B50
 void func_80B67C1C(void); // func_80B67C1C
 void func_80B67DA0(void); // func_80B67DA0
 void func_80B67E20(void); // func_80B67E20
-void func_80B67E78(void); // func_80B67E78
+void EnSth_Update(void); // func_80B67E78
 void func_80B680A8(void); // func_80B680A8
 void func_80B681E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B681E8
 void func_80B68310(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B68310
 void func_80B6849C(void); // func_80B6849C
-void func_80B6D660(void); // func_80B6D660
-void func_80B6D9EC(void); // func_80B6D9EC
+void BgSinkaiKabe_Init(void); // func_80B6D660
+void BgSinkaiKabe_Destroy(void); // func_80B6D9EC
 void func_80B6DA20(void); // func_80B6DA20
-void func_80B6DB20(void); // func_80B6DB20
-void func_80B6DBE0(void); // func_80B6DBE0
-void func_80B6DC64(void); // func_80B6DC64
+void BgSinkaiKabe_Update(void); // func_80B6DB20
+void BgHakaCurtain_Init(void); // func_80B6DBE0
+void BgHakaCurtain_Destroy(void); // func_80B6DC64
 void func_80B6DC98(void); // func_80B6DC98
 void func_80B6DCAC(void); // func_80B6DCAC
 void func_80B6DCEC(void); // func_80B6DCEC
@@ -14242,24 +14242,24 @@ void func_80B6DD80(void); // func_80B6DD80
 void func_80B6DD9C(void); // func_80B6DD9C
 void func_80B6DE80(void); // func_80B6DE80
 void func_80B6DEA8(void); // func_80B6DEA8
-void func_80B6DEB8(void); // func_80B6DEB8
-void func_80B6DF44(void); // func_80B6DF44
+void BgHakaCurtain_Update(void); // func_80B6DEB8
+void BgHakaCurtain_Draw(void); // func_80B6DF44
 void func_80B6E020(void); // func_80B6E020
 void func_80B6E090(void); // func_80B6E090
-void func_80B6E3AC(void); // func_80B6E3AC
-void func_80B6E470(void); // func_80B6E470
+void BgKin2Bombwall_Init(void); // func_80B6E3AC
+void BgKin2Bombwall_Destroy(void); // func_80B6E470
 void func_80B6E4B8(void); // func_80B6E4B8
 void func_80B6E4CC(void); // func_80B6E4CC
 void func_80B6E544(void); // func_80B6E544
 void func_80B6E558(void); // func_80B6E558
 void func_80B6E5F8(void); // func_80B6E5F8
 void func_80B6E614(void); // func_80B6E614
-void func_80B6E664(void); // func_80B6E664
-void func_80B6E688(void); // func_80B6E688
+void BgKin2Bombwall_Update(void); // func_80B6E664
+void BgKin2Bombwall_Draw(void); // func_80B6E688
 void func_80B6E820(void); // func_80B6E820
 void func_80B6E890(void); // func_80B6E890
-void func_80B6E980(void); // func_80B6E980
-void func_80B6EA94(void); // func_80B6EA94
+void BgKin2Fence_Init(void); // func_80B6E980
+void BgKin2Fence_Destroy(void); // func_80B6EA94
 void func_80B6EADC(void); // func_80B6EADC
 void func_80B6EAF4(void); // func_80B6EAF4
 void func_80B6EBF4(void); // func_80B6EBF4
@@ -14270,13 +14270,13 @@ void func_80B6ECC4(void); // func_80B6ECC4
 void func_80B6ECD8(void); // func_80B6ECD8
 void func_80B6ED30(void); // func_80B6ED30
 void func_80B6ED58(void); // func_80B6ED58
-void func_80B6ED68(void); // func_80B6ED68
-void func_80B6ED8C(void); // func_80B6ED8C
+void BgKin2Fence_Update(void); // func_80B6ED68
+void BgKin2Fence_Draw(void); // func_80B6ED8C
 void func_80B6EFA0(void); // func_80B6EFA0
 void func_80B6EFEC(void); // func_80B6EFEC
 void func_80B6F098(void); // func_80B6F098
-void func_80B6F2DC(void); // func_80B6F2DC
-void func_80B6F478(void); // func_80B6F478
+void BgKin2Picture_Init(void); // func_80B6F2DC
+void BgKin2Picture_Destroy(void); // func_80B6F478
 void func_80B6F4C0(void); // func_80B6F4C0
 void func_80B6F4D4(void); // func_80B6F4D4
 void func_80B6F5A4(void); // func_80B6F5A4
@@ -14287,30 +14287,30 @@ void func_80B6F708(void); // func_80B6F708
 void func_80B6F72C(void); // func_80B6F72C
 void func_80B6F8F8(void); // func_80B6F8F8
 void func_80B6F90C(void); // func_80B6F90C
-void func_80B6F91C(void); // func_80B6F91C
-void func_80B6F940(void); // func_80B6F940
+void BgKin2Picture_Update(void); // func_80B6F91C
+void BgKin2Picture_Draw(void); // func_80B6F940
 void func_80B6FB30(void); // func_80B6FB30
 void func_80B6FCA4(void); // func_80B6FCA4
 void func_80B6FE08(void); // func_80B6FE08
 void func_80B6FE48(void); // func_80B6FE48
 void func_80B6FEBC(void); // func_80B6FEBC
 void func_80B6FF28(void); // func_80B6FF28
-void func_80B6FF90(void); // func_80B6FF90
-void func_80B70074(void); // func_80B70074
+void BgKin2Shelf_Init(void); // func_80B6FF90
+void BgKin2Shelf_Destroy(void); // func_80B70074
 void func_80B700A8(void); // func_80B700A8
 void func_80B700C0(void); // func_80B700C0
 void func_80B70214(void); // func_80B70214
 void func_80B70230(void); // func_80B70230
 void func_80B70498(void); // func_80B70498
 void func_80B704B4(void); // func_80B704B4
-void func_80B706C4(void); // func_80B706C4
-void func_80B706E8(void); // func_80B706E8
+void BgKin2Shelf_Update(void); // func_80B706C4
+void BgKin2Shelf_Draw(void); // func_80B706E8
 void func_80B708C0(void); // func_80B708C0
 void func_80B70AB4(void); // func_80B70AB4
 void func_80B70B04(void); // func_80B70B04
 void func_80B70D24(void); // func_80B70D24
-void func_80B70DEC(void); // func_80B70DEC
-void func_80B70F74(void); // func_80B70F74
+void EnRailSkb_Init(void); // func_80B70DEC
+void EnRailSkb_Destroy(void); // func_80B70F74
 void func_80B70FA0(void); // func_80B70FA0
 void func_80B70FF8(void); // func_80B70FF8
 void func_80B710AC(void); // func_80B710AC
@@ -14353,10 +14353,10 @@ void func_80B72830(void); // func_80B72830
 void func_80B7285C(void); // func_80B7285C
 void func_80B72880(void); // func_80B72880
 void func_80B72970(void); // func_80B72970
-void func_80B72DBC(void); // func_80B72DBC
+void EnRailSkb_Update(void); // func_80B72DBC
 void func_80B72E88(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B72E88
 void func_80B7302C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B7302C
-void func_80B731EC(void); // func_80B731EC
+void EnRailSkb_Draw(void); // func_80B731EC
 void func_80B73A90(void); // func_80B73A90
 void func_80B73AE4(void); // func_80B73AE4
 void func_80B73B98(void); // func_80B73B98
@@ -14381,12 +14381,12 @@ void func_80B74E5C(void); // func_80B74E5C
 void func_80B750A0(void); // func_80B750A0
 void func_80B7517C(void); // func_80B7517C
 void func_80B751F8(void); // func_80B751F8
-void func_80B753A0(void); // func_80B753A0
-void func_80B75564(void); // func_80B75564
-void func_80B75590(void); // func_80B75590
+void EnJg_Init(void); // func_80B753A0
+void EnJg_Destroy(void); // func_80B75564
+void EnJg_Update(void); // func_80B75590
 void func_80B75658(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B75658
 void func_80B75708(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B75708
-void func_80B757AC(void); // func_80B757AC
+void EnJg_Draw(void); // func_80B757AC
 void func_80B76030(void); // func_80B76030
 void func_80B76110(void); // func_80B76110
 void func_80B76188(void); // func_80B76188
@@ -14403,14 +14403,14 @@ void func_80B76980(void); // func_80B76980
 void func_80B76A64(void); // func_80B76A64
 void func_80B76BB8(void); // func_80B76BB8
 void func_80B76C38(void); // func_80B76C38
-void func_80B76C84(void); // func_80B76C84
-void func_80B76E1C(void); // func_80B76E1C
-void func_80B76E48(void); // func_80B76E48
+void EnTruMt_Init(void); // func_80B76C84
+void EnTruMt_Destroy(void); // func_80B76E1C
+void EnTruMt_Update(void); // func_80B76E48
 void func_80B76ED4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B76ED4
 void func_80B77008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80B77008
 void func_80B77078(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B77078
 void func_80B77354(void); // func_80B77354
-void func_80B773D0(void); // func_80B773D0
+void EnTruMt_Draw(void); // func_80B773D0
 void func_80B77770(void); // func_80B77770
 void func_80B77FA4(void); // func_80B77FA4
 void func_80B781DC(void); // func_80B781DC
@@ -14425,8 +14425,8 @@ void func_80B78E38(void); // func_80B78E38
 void func_80B78E88(void); // func_80B78E88
 void func_80B78EBC(void); // func_80B78EBC
 void func_80B78EFC(void); // func_80B78EFC
-void func_80B78F24(void); // func_80B78F24
-void func_80B7949C(void); // func_80B7949C
+void ObjUm_Init(void); // func_80B78F24
+void ObjUm_Destroy(void); // func_80B7949C
 void func_80B79524(void); // func_80B79524
 void func_80B79560(void); // func_80B79560
 void func_80B795A0(void); // func_80B795A0
@@ -14459,14 +14459,14 @@ void func_80B7AEFC(void); // func_80B7AEFC
 void func_80B7AF30(void); // func_80B7AF30
 void func_80B7B154(void); // func_80B7B154
 void func_80B7B18C(void); // func_80B7B18C
-void func_80B7B368(void); // func_80B7B368
+void ObjUm_Update(void); // func_80B7B368
 void func_80B7B598(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B7B598
 void func_80B7B93C(void); // func_80B7B93C
 void func_80B7BABC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B7BABC
 void func_80B7BEA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B7BEA4
-void func_80B7C03C(void); // func_80B7C03C
-void func_80B7C890(void); // func_80B7C890
-void func_80B7CA08(void); // func_80B7CA08
+void ObjUm_Draw(void); // func_80B7C03C
+void EnNeoReeba_Init(void); // func_80B7C890
+void EnNeoReeba_Destroy(void); // func_80B7CA08
 void func_80B7CA34(void); // func_80B7CA34
 void func_80B7CA70(void); // func_80B7CA70
 void func_80B7CB3C(void); // func_80B7CB3C
@@ -14495,12 +14495,12 @@ void func_80B7DD7C(void); // func_80B7DD7C
 void func_80B7DF34(void); // func_80B7DF34
 void func_80B7E0BC(void); // func_80B7E0BC
 void func_80B7E260(void); // func_80B7E260
-void func_80B7E2C4(void); // func_80B7E2C4
+void EnNeoReeba_Update(void); // func_80B7E2C4
 void func_80B7E378(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B7E378
-void func_80B7E424(void); // func_80B7E424
+void EnNeoReeba_Draw(void); // func_80B7E424
 void BgMbarChair_Init(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E930
-void BgMbarChair_Fini(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E980
-void BgMbarChair_Main(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E9B4
+void BgMbarChair_Destroy(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E980
+void BgMbarChair_Update(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E9B4
 void BgMbarChair_Draw(ActorBgMbarChair* this, GlobalContext* ctxt); // func_80B7E9C4
 void func_80B7EA60(void); // func_80B7EA60
 void func_80B7EB30(void); // func_80B7EB30
@@ -14512,8 +14512,8 @@ void func_80B7ED54(void); // func_80B7ED54
 void func_80B7EDC4(void); // func_80B7EDC4
 void func_80B7EE70(void); // func_80B7EE70
 void func_80B7EEB4(void); // func_80B7EEB4
-void func_80B7EF38(void); // func_80B7EF38
-void func_80B7EFD8(void); // func_80B7EFD8
+void BgIkanaBlock_Init(void); // func_80B7EF38
+void BgIkanaBlock_Destroy(void); // func_80B7EFD8
 void func_80B7F00C(void); // func_80B7F00C
 void func_80B7F034(void); // func_80B7F034
 void func_80B7F0A4(void); // func_80B7F0A4
@@ -14522,17 +14522,17 @@ void func_80B7F1A8(void); // func_80B7F1A8
 void func_80B7F290(void); // func_80B7F290
 void func_80B7F360(void); // func_80B7F360
 void func_80B7F398(void); // func_80B7F398
-void func_80B7F474(void); // func_80B7F474
+void BgIkanaBlock_Update(void); // func_80B7F474
 void func_80B7F564(void); // func_80B7F564
 void func_80B7F730(void); // func_80B7F730
-void func_80B7F850(void); // func_80B7F850
-void func_80B7FA00(void); // func_80B7FA00
+void BgIkanaMirror_Init(void); // func_80B7F850
+void BgIkanaMirror_Destroy(void); // func_80B7FA00
 void func_80B7FA84(void); // func_80B7FA84
 void func_80B7FA9C(void); // func_80B7FA9C
 void func_80B7FB84(void); // func_80B7FB84
 void func_80B7FBA4(void); // func_80B7FBA4
-void func_80B7FCB8(void); // func_80B7FCB8
-void func_80B7FCDC(void); // func_80B7FCDC
+void BgIkanaMirror_Update(void); // func_80B7FCB8
+void BgIkanaMirror_Draw(void); // func_80B7FCDC
 void func_80B802E0(void); // func_80B802E0
 void func_80B80358(void); // func_80B80358
 void func_80B80440(void); // func_80B80440
@@ -14546,8 +14546,8 @@ void func_80B81234(void); // func_80B81234
 void func_80B814B8(void); // func_80B814B8
 void func_80B81570(void); // func_80B81570
 void func_80B816A4(void); // func_80B816A4
-void func_80B816F8(void); // func_80B816F8
-void func_80B8186C(void); // func_80B8186C
+void BgIkanaRotaryroom_Init(void); // func_80B816F8
+void BgIkanaRotaryroom_Destroy(void); // func_80B8186C
 void func_80B818B4(void); // func_80B818B4
 void func_80B818C8(void); // func_80B818C8
 void func_80B81978(void); // func_80B81978
@@ -14560,8 +14560,8 @@ void func_80B81B84(void); // func_80B81B84
 void func_80B81BA0(void); // func_80B81BA0
 void func_80B81DAC(void); // func_80B81DAC
 void func_80B81DC8(void); // func_80B81DC8
-void func_80B81EA8(void); // func_80B81EA8
-void func_80B82030(void); // func_80B82030
+void BgIkanaRotaryroom_Update(void); // func_80B81EA8
+void BgIkanaRotaryroom_Draw(void); // func_80B82030
 void func_80B823B0(void); // func_80B823B0
 void func_80B82454(void); // func_80B82454
 void func_80B8259C(void); // func_80B8259C
@@ -14569,18 +14569,18 @@ void func_80B8264C(void); // func_80B8264C
 void func_80B828E4(void); // func_80B828E4
 void func_80B8296C(void); // func_80B8296C
 void func_80B82B00(void); // func_80B82B00
-void func_80B82B60(void); // func_80B82B60
-void func_80B82D10(void); // func_80B82D10
+void BgDblueBalance_Init(void); // func_80B82B60
+void BgDblueBalance_Destroy(void); // func_80B82D10
 void func_80B82DC4(void); // func_80B82DC4
 void func_80B82DE0(void); // func_80B82DE0
-void func_80B832C8(void); // func_80B832C8
+void BgDblueBalance_Update(void); // func_80B832C8
 void func_80B8330C(void); // func_80B8330C
 void func_80B83344(void); // func_80B83344
 void func_80B8335C(void); // func_80B8335C
 void func_80B833A8(void); // func_80B833A8
 void func_80B833C4(void); // func_80B833C4
 void func_80B83518(void); // func_80B83518
-void func_80B835E4(void); // func_80B835E4
+void BgDblueBalance_Draw(void); // func_80B835E4
 void func_80B83758(void); // func_80B83758
 void func_80B83C80(void); // func_80B83C80
 void func_80B83D04(void); // func_80B83D04
@@ -14592,8 +14592,8 @@ void func_80B841A0(void); // func_80B841A0
 void func_80B84348(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_80B84348
 void func_80B84568(void); // func_80B84568
 void func_80B84610(void); // func_80B84610
-void func_80B84778(void); // func_80B84778
-void func_80B84820(void); // func_80B84820
+void BgDblueWaterfall_Init(void); // func_80B84778
+void BgDblueWaterfall_Destroy(void); // func_80B84820
 void func_80B8484C(void); // func_80B8484C
 void func_80B84928(void); // func_80B84928
 void func_80B84AD4(void); // func_80B84AD4
@@ -14602,10 +14602,10 @@ void func_80B84B9C(void); // func_80B84B9C
 void func_80B84BCC(void); // func_80B84BCC
 void func_80B84EF0(void); // func_80B84EF0
 void func_80B84F20(void); // func_80B84F20
-void func_80B85028(void); // func_80B85028
-void func_80B8504C(void); // func_80B8504C
-void func_80B85590(void); // func_80B85590
-void func_80B85800(void); // func_80B85800
+void BgDblueWaterfall_Update(void); // func_80B85028
+void BgDblueWaterfall_Draw(void); // func_80B8504C
+void EnKaizoku_Init(void); // func_80B85590
+void EnKaizoku_Destroy(void); // func_80B85800
 void func_80B85858(void); // func_80B85858
 void func_80B85900(void); // func_80B85900
 void func_80B85A00(void); // func_80B85A00
@@ -14647,13 +14647,13 @@ void func_80B894C0(void); // func_80B894C0
 void func_80B8960C(void); // func_80B8960C
 void func_80B8971C(void); // func_80B8971C
 void func_80B89A08(void); // func_80B89A08
-void func_80B8A0A0(void); // func_80B8A0A0
+void EnKaizoku_Update(void); // func_80B8A0A0
 void func_80B8A318(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B8A318
 void func_80B8A468(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B8A468
 void func_80B8A6B0(void); // func_80B8A6B0
 void func_80B8A718(void); // func_80B8A718
-void func_80B8B2D0(void); // func_80B8B2D0
-void func_80B8B504(void); // func_80B8B504
+void EnGe2_Init(void); // func_80B8B2D0
+void EnGe2_Destroy(void); // func_80B8B504
 void func_80B8B514(void); // func_80B8B514
 void func_80B8B5AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80B8B5AC
 void func_80B8B6B4(void); // func_80B8B6B4
@@ -14677,18 +14677,18 @@ void func_80B8C45C(void); // func_80B8C45C
 void func_80B8C59C(void); // func_80B8C59C
 void func_80B8C644(void); // func_80B8C644
 void func_80B8C9B8(void); // func_80B8C9B8
-void func_80B8CAA8(void); // func_80B8CAA8
+void EnGe2_Update(void); // func_80B8CAA8
 void func_80B8CC0C(void); // func_80B8CC0C
 void func_80B8CCB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B8CCB4
 void func_80B8CCFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B8CCFC
-void func_80B8CD3C(void); // func_80B8CD3C
+void EnGe2_Draw(void); // func_80B8CD3C
 void func_80B8D030(void); // func_80B8D030
 void func_80B8D0BC(void); // func_80B8D0BC
 void func_80B8D12C(void); // func_80B8D12C
 void func_80B8D1E8(void); // func_80B8D1E8
 void func_80B8D2D8(void); // func_80B8D2D8
-void func_80B8D3F8(void); // func_80B8D3F8
-void func_80B8D66C(void); // func_80B8D66C
+void EnMaYts_Init(void); // func_80B8D3F8
+void EnMaYts_Destroy(void); // func_80B8D66C
 void func_80B8D698(void); // func_80B8D698
 void func_80B8D6AC(void); // func_80B8D6AC
 void func_80B8D6BC(void); // func_80B8D6BC
@@ -14699,18 +14699,18 @@ void func_80B8D9E4(void); // func_80B8D9E4
 void func_80B8DA28(void); // func_80B8DA28
 void func_80B8DBB8(void); // func_80B8DBB8
 void func_80B8DD88(void); // func_80B8DD88
-void func_80B8DDC0(void); // func_80B8DDC0
+void EnMaYts_Update(void); // func_80B8DDC0
 void func_80B8DE44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B8DE44
 void func_80B8DF18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B8DF18
-void func_80B8DF9C(void); // func_80B8DF9C
+void EnMaYts_Draw(void); // func_80B8DF9C
 void func_80B8E0BC(void); // func_80B8E0BC
-void func_80B8E520(void); // func_80B8E520
+void EnMaYto_Init(void); // func_80B8E520
 void func_80B8E6E0(void); // func_80B8E6E0
 void func_80B8E84C(void); // func_80B8E84C
 void func_80B8E938(void); // func_80B8E938
 void func_80B8EA38(void); // func_80B8EA38
 void func_80B8EABC(void); // func_80B8EABC
-void func_80B8EBB0(void); // func_80B8EBB0
+void EnMaYto_Destroy(void); // func_80B8EBB0
 void func_80B8EBDC(void); // func_80B8EBDC
 void func_80B8EBF0(void); // func_80B8EBF0
 void func_80B8EC30(void); // func_80B8EC30
@@ -14761,41 +14761,41 @@ void func_80B90EF0(void); // func_80B90EF0
 void func_80B90F84(void); // func_80B90F84
 void func_80B91014(void); // func_80B91014
 void func_80B9109C(void); // func_80B9109C
-void func_80B9110C(void); // func_80B9110C
+void EnMaYto_Update(void); // func_80B9110C
 void func_80B91154(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B91154
 void func_80B91250(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B91250
-void func_80B91288(void); // func_80B91288
-void func_80B91CC0(void); // func_80B91CC0
-void func_80B91D80(void); // func_80B91D80
-void func_80B91DB4(void); // func_80B91DB4
-void func_80B91DC4(void); // func_80B91DC4
+void EnMaYto_Draw(void); // func_80B91288
+void ObjTokeiTurret_Init(void); // func_80B91CC0
+void ObjTokeiTurret_Destroy(void); // func_80B91D80
+void ObjTokeiTurret_Update(void); // func_80B91DB4
+void ObjTokeiTurret_Draw(void); // func_80B91DC4
 void func_80B91F20(void); // func_80B91F20
 void func_80B91F74(void); // func_80B91F74
 void func_80B922C0(void); // func_80B922C0
 void func_80B922FC(void); // func_80B922FC
-void func_80B923A4(void); // func_80B923A4
-void func_80B924A8(void); // func_80B924A8
+void BgDblueElevator_Init(void); // func_80B923A4
+void BgDblueElevator_Destroy(void); // func_80B924A8
 void func_80B924DC(void); // func_80B924DC
 void func_80B924F8(void); // func_80B924F8
 void func_80B9257C(void); // func_80B9257C
 void func_80B925B8(void); // func_80B925B8
 void func_80B92644(void); // func_80B92644
 void func_80B92660(void); // func_80B92660
-void func_80B928E0(void); // func_80B928E0
-void func_80B92904(void); // func_80B92904
+void BgDblueElevator_Update(void); // func_80B928E0
+void BgDblueElevator_Draw(void); // func_80B92904
 void func_80B92B10(void); // func_80B92B10
-void func_80B92B1C(void); // func_80B92B1C
-void func_80B92BD4(void); // func_80B92BD4
+void ObjWarpstone_Init(void); // func_80B92B1C
+void ObjWarpstone_Destroy(void); // func_80B92BD4
 void func_80B92C00(void); // func_80B92C00
 void func_80B92C48(void); // func_80B92C48
 void func_80B92CD0(void); // func_80B92CD0
 void func_80B92DC4(void); // func_80B92DC4
-void func_80B92DDC(void); // func_80B92DDC
-void func_80B92F40(void); // func_80B92F40
+void ObjWarpstone_Update(void); // func_80B92DDC
+void ObjWarpstone_Draw(void); // func_80B92F40
 void func_80B93310(void); // func_80B93310
 void func_80B93468(void); // func_80B93468
-void func_80B93538(void); // func_80B93538
-void func_80B93994(void); // func_80B93994
+void EnZog_Init(void); // func_80B93538
+void EnZog_Destroy(void); // func_80B93994
 void func_80B939C0(void); // func_80B939C0
 void func_80B93A48(void); // func_80B93A48
 void func_80B93B44(void); // func_80B93B44
@@ -14819,25 +14819,25 @@ void func_80B94D0C(void); // func_80B94D0C
 void func_80B94E34(void); // func_80B94E34
 void func_80B95128(void); // func_80B95128
 void func_80B95240(void); // func_80B95240
-void func_80B95260(void); // func_80B95260
+void EnZog_Update(void); // func_80B95260
 void func_80B954C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B954C4
 void func_80B95598(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B95598
-void func_80B95668(void); // func_80B95668
+void EnZog_Draw(void); // func_80B95668
 void func_80B95E20(void); // func_80B95E20
-void func_80B95F10(void); // func_80B95F10
-void func_80B96054(void); // func_80B96054
-void func_80B96088(void); // func_80B96088
-void func_80B960E0(void); // func_80B960E0
-void func_80B961E0(void); // func_80B961E0
-void func_80B96320(void); // func_80B96320
-void func_80B9634C(void); // func_80B9634C
-void func_80B96378(void); // func_80B96378
-void func_80B96410(void); // func_80B96410
-void func_80B9649C(void); // func_80B9649C
-void func_80B964D0(void); // func_80B964D0
+void ObjRotlift_Init(void); // func_80B95F10
+void ObjRotlift_Destroy(void); // func_80B96054
+void ObjRotlift_Update(void); // func_80B96088
+void ObjRotlift_Draw(void); // func_80B960E0
+void ObjJgGakki_Init(void); // func_80B961E0
+void ObjJgGakki_Destroy(void); // func_80B96320
+void ObjJgGakki_Update(void); // func_80B9634C
+void ObjJgGakki_Draw(void); // func_80B96378
+void BgInibsMovebg_Init(void); // func_80B96410
+void BgInibsMovebg_Destroy(void); // func_80B9649C
+void BgInibsMovebg_Draw(void); // func_80B964D0
 void func_80B965D0(void); // func_80B965D0
-void func_80B966BC(void); // func_80B966BC
-void func_80B96B90(void); // func_80B96B90
+void EnZot_Init(void); // func_80B966BC
+void EnZot_Destroy(void); // func_80B96B90
 void func_80B96BEC(void); // func_80B96BEC
 void func_80B96CE4(void); // func_80B96CE4
 void func_80B96D4C(void); // func_80B96D4C
@@ -14884,56 +14884,56 @@ void func_80B99160(void); // func_80B99160
 void func_80B991E4(void); // func_80B991E4
 void func_80B992C0(void); // func_80B992C0
 void func_80B99384(void); // func_80B99384
-void func_80B99394(void); // func_80B99394
+void EnZot_Update(void); // func_80B99394
 void func_80B99580(void); // func_80B99580
 void func_80B995A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80B995A4
 void func_80B99758(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80B99758
-void func_80B99798(void); // func_80B99798
-void func_80B9A0B0(void); // func_80B9A0B0
-void func_80B9A1BC(void); // func_80B9A1BC
+void EnZot_Draw(void); // func_80B99798
+void ObjTree_Init(void); // func_80B9A0B0
+void ObjTree_Destroy(void); // func_80B9A1BC
 void func_80B9A20C(void); // func_80B9A20C
 void func_80B9A220(void); // func_80B9A220
 void func_80B9A230(void); // func_80B9A230
 void func_80B9A27C(void); // func_80B9A27C
 void func_80B9A348(void); // func_80B9A348
-void func_80B9A3E8(void); // func_80B9A3E8
-void func_80B9A424(void); // func_80B9A424
-void func_80B9A650(void); // func_80B9A650
-void func_80B9A6A0(void); // func_80B9A6A0
-void func_80B9A6D4(void); // func_80B9A6D4
-void func_80B9A8E8(void); // func_80B9A8E8
-void func_80B9A980(void); // func_80B9A980
-void func_80B9A9EC(void); // func_80B9A9EC
+void ObjTree_Update(void); // func_80B9A3E8
+void ObjTree_Draw(void); // func_80B9A424
+void ObjY2lift_Init(void); // func_80B9A650
+void ObjY2lift_Destroy(void); // func_80B9A6A0
+void ObjY2lift_Update(void); // func_80B9A6D4
+void ObjY2lift_Draw(void); // func_80B9A8E8
+void ObjY2shutter_Init(void); // func_80B9A980
+void ObjY2shutter_Destroy(void); // func_80B9A9EC
 void func_80B9AA20(void); // func_80B9AA20
-void func_80B9AA54(void); // func_80B9AA54
-void func_80B9AE00(void); // func_80B9AE00
+void ObjY2shutter_Update(void); // func_80B9AA54
+void ObjY2shutter_Draw(void); // func_80B9AE00
 void func_80B9AF50(void); // func_80B9AF50
-void func_80B9AFE0(void); // func_80B9AFE0
-void func_80B9B0F0(void); // func_80B9B0F0
+void ObjBoat_Init(void); // func_80B9AFE0
+void ObjBoat_Destroy(void); // func_80B9B0F0
 void func_80B9B124(void); // func_80B9B124
-void func_80B9B1B8(void); // func_80B9B1B8
+void ObjBoat_Update(void); // func_80B9B1B8
 void func_80B9B428(void); // func_80B9B428
-void func_80B9B628(void); // func_80B9B628
+void ObjBoat_Draw(void); // func_80B9B628
 void func_80B9B6E0(void); // func_80B9B6E0
 void func_80B9B74C(void); // func_80B9B74C
 void func_80B9B9C8(void); // func_80B9B9C8
 void func_80B9BC64(void); // func_80B9BC64
 void func_80B9BCBC(void); // func_80B9BCBC
 void func_80B9BD84(void); // func_80B9BD84
-void func_80B9BDC8(void); // func_80B9BDC8
-void func_80B9BF28(void); // func_80B9BF28
+void ObjTaru_Init(void); // func_80B9BDC8
+void ObjTaru_Destroy(void); // func_80B9BF28
 void func_80B9BF7C(void); // func_80B9BF7C
 void func_80B9C07C(void); // func_80B9C07C
 void func_80B9C174(void); // func_80B9C174
 void func_80B9C1A0(void); // func_80B9C1A0
-void func_80B9C208(void); // func_80B9C208
-void func_80B9C2D8(void); // func_80B9C2D8
+void ObjTaru_Update(void); // func_80B9C208
+void ObjTaru_Draw(void); // func_80B9C2D8
 void func_80B9C450(void); // func_80B9C450
 void func_80B9C5E8(void); // func_80B9C5E8
-void func_80B9CA04(void); // func_80B9CA04
+void ObjHunsui_Init(void); // func_80B9CA04
 void func_80B9CAEC(void); // func_80B9CAEC
-void func_80B9CD88(void); // func_80B9CD88
-void func_80B9CDBC(void); // func_80B9CDBC
+void ObjHunsui_Destroy(void); // func_80B9CD88
+void ObjHunsui_Update(void); // func_80B9CDBC
 void func_80B9CE64(void); // func_80B9CE64
 void func_80B9D094(void); // func_80B9D094
 void func_80B9D0FC(void); // func_80B9D0FC
@@ -14944,25 +14944,25 @@ void func_80B9D334(void); // func_80B9D334
 void func_80B9D4D0(void); // func_80B9D4D0
 void func_80B9D508(void); // func_80B9D508
 void func_80B9D714(void); // func_80B9D714
-void func_80B9D9C4(void); // func_80B9D9C4
+void ObjHunsui_Draw(void); // func_80B9D9C4
 void func_80B9DA60(void); // func_80B9DA60
 void func_80B9DEE0(void); // func_80B9DEE0
 void func_80B9DFC8(void); // func_80B9DFC8
 void func_80B9DFDC(void); // func_80B9DFDC
-void func_80B9E030(void); // func_80B9E030
-void func_80B9E0D0(void); // func_80B9E0D0
-void func_80B9E0FC(void); // func_80B9E0FC
-void func_80B9E14C(void); // func_80B9E14C
-void func_80B9E2C0(void); // func_80B9E2C0
-void func_80B9E3D8(void); // func_80B9E3D8
-void func_80B9E418(void); // func_80B9E418
+void EnJcMato_Init(void); // func_80B9E030
+void EnJcMato_Destroy(void); // func_80B9E0D0
+void EnJcMato_Update(void); // func_80B9E0FC
+void EnJcMato_Draw(void); // func_80B9E14C
+void MirRay3_Init(void); // func_80B9E2C0
+void MirRay3_Destroy(void); // func_80B9E3D8
+void MirRay3_Update(void); // func_80B9E418
 void func_80B9E544(void); // func_80B9E544
 void func_80B9E5F4(void); // func_80B9E5F4
 void func_80B9E7D0(void); // func_80B9E7D0
 void func_80B9E8D4(void); // func_80B9E8D4
-void func_80B9EF70(void); // func_80B9EF70
-void func_80B9F570(void); // func_80B9F570
-void func_80B9F7B8(void); // func_80B9F7B8
+void MirRay3_Draw(void); // func_80B9EF70
+void EnZob_Init(void); // func_80B9F570
+void EnZob_Destroy(void); // func_80B9F7B8
 void func_80B9F7E4(void); // func_80B9F7E4
 void func_80B9F86C(void); // func_80B9F86C
 void func_80B9FA3C(void); // func_80B9FA3C
@@ -14989,15 +14989,15 @@ void func_80BA0AD8(void); // func_80BA0AD8
 void func_80BA0BB4(void); // func_80BA0BB4
 void func_80BA0C14(void); // func_80BA0C14
 void func_80BA0CF4(void); // func_80BA0CF4
-void func_80BA0D64(void); // func_80BA0D64
+void EnZob_Update(void); // func_80BA0D64
 void func_80BA0F64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BA0F64
 void func_80BA0FAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BA0FAC
-void func_80BA0FEC(void); // func_80BA0FEC
+void EnZob_Draw(void); // func_80BA0FEC
 void func_80BA15A0(void); // func_80BA15A0
 void func_80BA165C(void); // func_80BA165C
 void func_80BA16F4(void); // func_80BA16F4
-void func_80BA1854(void); // func_80BA1854
-void func_80BA1BF0(void); // func_80BA1BF0
+void ElfMsg6_Init(void); // func_80BA1854
+void ElfMsg6_Destroy(void); // func_80BA1BF0
 void func_80BA1C00(void); // func_80BA1C00
 void func_80BA1C88(void); // func_80BA1C88
 void func_80BA1CF8(void); // func_80BA1CF8
@@ -15007,10 +15007,10 @@ void func_80BA2038(void); // func_80BA2038
 void func_80BA2048(void); // func_80BA2048
 void func_80BA215C(void); // func_80BA215C
 void func_80BA21C4(void); // func_80BA21C4
-void func_80BA22B0(void); // func_80BA22B0
+void ElfMsg6_Update(void); // func_80BA22B0
 void func_80BA2420(void); // func_80BA2420
-void func_80BA242C(void); // func_80BA242C
-void func_80BA24DC(void); // func_80BA24DC
+void ObjNozoki_Init(void); // func_80BA242C
+void ObjNozoki_Destroy(void); // func_80BA24DC
 void func_80BA2514(void); // func_80BA2514
 void func_80BA26A8(void); // func_80BA26A8
 void func_80BA2708(void); // func_80BA2708
@@ -15026,11 +15026,11 @@ void func_80BA3044(void); // func_80BA3044
 void func_80BA311C(void); // func_80BA311C
 void func_80BA3230(void); // func_80BA3230
 void func_80BA3344(void); // func_80BA3344
-void func_80BA3410(void); // func_80BA3410
+void ObjNozoki_Update(void); // func_80BA3410
 void func_80BA3434(void); // func_80BA3434
 void func_80BA36C0(void); // func_80BA36C0
-void func_80BA36FC(void); // func_80BA36FC
-void func_80BA3810(void); // func_80BA3810
+void EnToto_Init(void); // func_80BA36FC
+void EnToto_Destroy(void); // func_80BA3810
 void func_80BA383C(void); // func_80BA383C
 void func_80BA3930(void); // func_80BA3930
 void func_80BA397C(void); // func_80BA397C
@@ -15067,11 +15067,11 @@ void func_80BA4B24(void); // func_80BA4B24
 void func_80BA4C0C(void); // func_80BA4C0C
 void func_80BA4C44(void); // func_80BA4C44
 void func_80BA4CB4(void); // func_80BA4CB4
-void func_80BA4E2C(void); // func_80BA4E2C
-void func_80BA4EFC(void); // func_80BA4EFC
+void EnToto_Update(void); // func_80BA4E2C
+void EnToto_Draw(void); // func_80BA4EFC
 void func_80BA5400(void); // func_80BA5400
-void func_80BA5620(void); // func_80BA5620
-void func_80BA577C(void); // func_80BA577C
+void EnRailgibud_Init(void); // func_80BA5620
+void EnRailgibud_Destroy(void); // func_80BA577C
 void func_80BA57A8(void); // func_80BA57A8
 void func_80BA57F8(void); // func_80BA57F8
 void func_80BA59F0(void); // func_80BA59F0
@@ -15106,11 +15106,11 @@ void func_80BA7388(void); // func_80BA7388
 void func_80BA7434(void); // func_80BA7434
 void func_80BA7578(void); // func_80BA7578
 void func_80BA76C4(void); // func_80BA76C4
-void func_80BA77A0(void); // func_80BA77A0
+void EnRailgibud_Update(void); // func_80BA77A0
 void func_80BA7878(void); // func_80BA7878
 UNK_TYPE4 func_80BA789C(UNK_TYPE4 param_1, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, s32 param_5, s32 param_6); // func_80BA789C
 void func_80BA78F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BA78F8
-void func_80BA79D4(void); // func_80BA79D4
+void EnRailgibud_Draw(void); // func_80BA79D4
 void func_80BA7B6C(void); // func_80BA7B6C
 void func_80BA7C78(void); // func_80BA7C78
 void func_80BA7CF0(void); // func_80BA7CF0
@@ -15140,13 +15140,13 @@ void func_80BA9CD4(void); // func_80BA9CD4
 void func_80BA9E00(void); // func_80BA9E00
 void func_80BA9E10(void); // func_80BA9E10
 void func_80BA9E48(void); // func_80BA9E48
-void func_80BA9E6C(void); // func_80BA9E6C
-void func_80BA9F24(void); // func_80BA9F24
-void func_80BA9F50(void); // func_80BA9F50
+void EnBaba_Init(void); // func_80BA9E6C
+void EnBaba_Destroy(void); // func_80BA9F24
+void EnBaba_Update(void); // func_80BA9F50
 void func_80BA9FB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BA9FB0
 void func_80BAA198(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BAA198
 void func_80BAA20C(void); // func_80BAA20C
-void func_80BAA220(void); // func_80BAA220
+void EnBaba_Draw(void); // func_80BAA220
 void func_80BAA6D0(void); // func_80BAA6D0
 void func_80BAA848(void); // func_80BAA848
 void func_80BAA88C(void); // func_80BAA88C
@@ -15194,15 +15194,15 @@ void func_80BADDB4(void); // func_80BADDB4
 void func_80BADE14(void); // func_80BADE14
 void func_80BADE8C(void); // func_80BADE8C
 void func_80BADF3C(void); // func_80BADF3C
-void func_80BADFD0(void); // func_80BADFD0
-void func_80BAE0A0(void); // func_80BAE0A0
-void func_80BAE108(void); // func_80BAE108
+void EnSuttari_Init(void); // func_80BADFD0
+void EnSuttari_Destroy(void); // func_80BAE0A0
+void EnSuttari_Update(void); // func_80BAE108
 void func_80BAE250(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BAE250
 void func_80BAE3C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BAE3C4
 void func_80BAE524(void); // func_80BAE524
-void func_80BAE538(void); // func_80BAE538
-void func_80BAEF70(void); // func_80BAEF70
-void func_80BAF1C0(void); // func_80BAF1C0
+void EnSuttari_Draw(void); // func_80BAE538
+void EnZod_Init(void); // func_80BAEF70
+void EnZod_Destroy(void); // func_80BAF1C0
 void func_80BAF1EC(void); // func_80BAF1EC
 void func_80BAF2B4(void); // func_80BAF2B4
 void func_80BAF338(void); // func_80BAF338
@@ -15219,13 +15219,13 @@ void func_80BAFD00(void); // func_80BAFD00
 void func_80BAFDB4(void); // func_80BAFDB4
 void func_80BAFE34(void); // func_80BAFE34
 void func_80BAFF14(void); // func_80BAFF14
-void func_80BAFF84(void); // func_80BAFF84
+void EnZod_Update(void); // func_80BAFF84
 void func_80BB0128(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BB0128
 void func_80BB0170(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BB0170
 void func_80BB01B0(void); // func_80BB01B0
-void func_80BB03E8(void); // func_80BB03E8
-void func_80BB08E0(void); // func_80BB08E0
-void func_80BB0998(void); // func_80BB0998
+void EnZod_Draw(void); // func_80BB03E8
+void EnKujiya_Init(void); // func_80BB08E0
+void EnKujiya_Destroy(void); // func_80BB0998
 void func_80BB09A8(void); // func_80BB09A8
 void func_80BB09BC(void); // func_80BB09BC
 void func_80BB0B28(void); // func_80BB0B28
@@ -15243,8 +15243,8 @@ void func_80BB1168(void); // func_80BB1168
 void func_80BB1180(void); // func_80BB1180
 void func_80BB1250(void); // func_80BB1250
 void func_80BB1268(void); // func_80BB1268
-void func_80BB1338(void); // func_80BB1338
-void func_80BB135C(void); // func_80BB135C
+void EnKujiya_Update(void); // func_80BB1338
+void EnKujiya_Draw(void); // func_80BB135C
 void func_80BB16D0(void); // func_80BB16D0
 void func_80BB178C(void); // func_80BB178C
 void func_80BB18FC(void); // func_80BB18FC
@@ -15272,33 +15272,33 @@ void func_80BB31B8(void); // func_80BB31B8
 void func_80BB32AC(void); // func_80BB32AC
 void func_80BB3318(void); // func_80BB3318
 void func_80BB347C(void); // func_80BB347C
-void func_80BB34BC(void); // func_80BB34BC
-void func_80BB3650(void); // func_80BB3650
-void func_80BB36A0(void); // func_80BB36A0
+void EnGeg_Init(void); // func_80BB34BC
+void EnGeg_Destroy(void); // func_80BB3650
+void EnGeg_Update(void); // func_80BB36A0
 void func_80BB3728(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BB3728
 void func_80BB3860(void); // func_80BB3860
 void func_80BB387C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BB387C
 void func_80BB39F8(void); // func_80BB39F8
 void func_80BB3BE0(void); // func_80BB3BE0
 void func_80BB3CB4(void); // func_80BB3CB4
-void func_80BB3E0C(void); // func_80BB3E0C
-void func_80BB4700(void); // func_80BB4700
-void func_80BB4720(void); // func_80BB4720
-void func_80BB4730(void); // func_80BB4730
-void func_80BB48E4(void); // func_80BB48E4
-void func_80BB4AF0(void); // func_80BB4AF0
-void func_80BB4B6C(void); // func_80BB4B6C
-void func_80BB4BA0(void); // func_80BB4BA0
-void func_80BB4CB0(void); // func_80BB4CB0
-void func_80BB4E00(void); // func_80BB4E00
-void func_80BB4E40(void); // func_80BB4E40
+void EnGeg_Draw(void); // func_80BB3E0C
+void ObjKinoko_Init(void); // func_80BB4700
+void ObjKinoko_Destroy(void); // func_80BB4720
+void ObjKinoko_Update(void); // func_80BB4730
+void ObjKinoko_Draw(void); // func_80BB48E4
+void ObjYasi_Init(void); // func_80BB4AF0
+void ObjYasi_Destroy(void); // func_80BB4B6C
+void ObjYasi_Update(void); // func_80BB4BA0
+void ObjYasi_Draw(void); // func_80BB4CB0
+void EnTanron1_Init(void); // func_80BB4E00
+void EnTanron1_Destroy(void); // func_80BB4E40
 void func_80BB4E50(void); // func_80BB4E50
-void func_80BB4F28(void); // func_80BB4F28
-void func_80BB52F8(void); // func_80BB52F8
+void EnTanron1_Update(void); // func_80BB4F28
+void EnTanron1_Draw(void); // func_80BB52F8
 void func_80BB5318(void); // func_80BB5318
 void func_80BB5AAC(void); // func_80BB5AAC
-void func_80BB67D0(void); // func_80BB67D0
-void func_80BB69B0(void); // func_80BB69B0
+void EnTanron2_Init(void); // func_80BB67D0
+void EnTanron2_Destroy(void); // func_80BB69B0
 void func_80BB69C0(void); // func_80BB69C0
 void func_80BB69FC(void); // func_80BB69FC
 void func_80BB6B80(void); // func_80BB6B80
@@ -15309,23 +15309,23 @@ void func_80BB71C8(void); // func_80BB71C8
 void func_80BB7398(void); // func_80BB7398
 void func_80BB7408(void); // func_80BB7408
 void func_80BB7578(void); // func_80BB7578
-void func_80BB7800(void); // func_80BB7800
+void EnTanron2_Update(void); // func_80BB7800
 void func_80BB7B90(void); // func_80BB7B90
-void func_80BB7C14(void); // func_80BB7C14
+void EnTanron2_Draw(void); // func_80BB7C14
 void func_80BB85A0(void); // func_80BB85A0
-void func_80BB86BC(void); // func_80BB86BC
-void func_80BB87B0(void); // func_80BB87B0
+void EnTanron3_Init(void); // func_80BB86BC
+void EnTanron3_Destroy(void); // func_80BB87B0
 void func_80BB87D4(void); // func_80BB87D4
 void func_80BB897C(void); // func_80BB897C
 void func_80BB8A48(void); // func_80BB8A48
 void func_80BB91D4(void); // func_80BB91D4
 void func_80BB9288(void); // func_80BB9288
 void func_80BB9308(void); // func_80BB9308
-void func_80BB93EC(void); // func_80BB93EC
+void EnTanron3_Update(void); // func_80BB93EC
 void func_80BB95FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BB95FC
-void func_80BB9670(void); // func_80BB9670
-void func_80BB98E0(void); // func_80BB98E0
-void func_80BB99F0(void); // func_80BB99F0
+void EnTanron3_Draw(void); // func_80BB9670
+void ObjChan_Init(void); // func_80BB98E0
+void ObjChan_Destroy(void); // func_80BB99F0
 void func_80BB9A1C(void); // func_80BB9A1C
 void func_80BB9B40(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_80BB9B40
 void func_80BB9C08(void); // func_80BB9C08
@@ -15333,12 +15333,12 @@ void func_80BB9F24(void); // func_80BB9F24
 void func_80BBA2FC(void); // func_80BBA2FC
 void func_80BBA314(void); // func_80BBA314
 void func_80BBA488(void); // func_80BBA488
-void func_80BBA738(void); // func_80BBA738
-void func_80BBA78C(void); // func_80BBA78C
+void ObjChan_Update(void); // func_80BBA738
+void ObjChan_Draw(void); // func_80BBA78C
 void func_80BBA894(void); // func_80BBA894
 void func_80BBA930(void); // func_80BBA930
-void func_80BBACA0(void); // func_80BBACA0
-void func_80BBAE60(void); // func_80BBAE60
+void EnZos_Init(void); // func_80BBACA0
+void EnZos_Destroy(void); // func_80BBAE60
 void func_80BBAE84(void); // func_80BBAE84
 void func_80BBAF5C(void); // func_80BBAF5C
 void func_80BBAFFC(void); // func_80BBAFFC
@@ -15362,10 +15362,10 @@ void func_80BBC22C(void); // func_80BBC22C
 void func_80BBC24C(void); // func_80BBC24C
 void func_80BBC298(void); // func_80BBC298
 void func_80BBC37C(void); // func_80BBC37C
-void func_80BBC3F0(void); // func_80BBC3F0
+void EnZos_Update(void); // func_80BBC3F0
 void func_80BBC4E4(void); // func_80BBC4E4
 void func_80BBC500(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BBC500
-void func_80BBC540(void); // func_80BBC540
+void EnZos_Draw(void); // func_80BBC540
 void func_80BBCA80(void); // func_80BBCA80
 void func_80BBD348(void); // func_80BBD348
 void func_80BBD8F0(void); // func_80BBD8F0
@@ -15394,15 +15394,15 @@ void func_80BBEEB4(void); // func_80BBEEB4
 void func_80BBEF34(void); // func_80BBEF34
 void func_80BBEFA0(void); // func_80BBEFA0
 void func_80BBF01C(void); // func_80BBF01C
-void func_80BBF09C(void); // func_80BBF09C
-void func_80BBF198(void); // func_80BBF198
-void func_80BBF1C4(void); // func_80BBF1C4
+void EnSGoro_Init(void); // func_80BBF09C
+void EnSGoro_Destroy(void); // func_80BBF198
+void EnSGoro_Update(void); // func_80BBF1C4
 void func_80BBF298(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BBF298
 void func_80BBF3D0(void); // func_80BBF3D0
 void func_80BBF3EC(void); // func_80BBF3EC
 void func_80BBF5F0(void); // func_80BBF5F0
 void func_80BBF6BC(void); // func_80BBF6BC
-void func_80BBF7BC(void); // func_80BBF7BC
+void EnSGoro_Draw(void); // func_80BBF7BC
 void func_80BBFDB0(void); // func_80BBFDB0
 void func_80BBFE60(void); // func_80BBFE60
 void func_80BBFE8C(void); // func_80BBFE8C
@@ -15427,13 +15427,13 @@ void func_80BC0D08(void); // func_80BC0D08
 void func_80BC0D1C(void); // func_80BC0D1C
 void func_80BC0D84(void); // func_80BC0D84
 void func_80BC0EAC(void); // func_80BC0EAC
-void func_80BC0F60(void); // func_80BC0F60
-void func_80BC1080(void); // func_80BC1080
-void func_80BC10C0(void); // func_80BC10C0
+void EnNb_Init(void); // func_80BC0F60
+void EnNb_Destroy(void); // func_80BC1080
+void EnNb_Update(void); // func_80BC10C0
 void func_80BC1174(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80BC1174
 void func_80BC11B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BC11B4
 void func_80BC1278(void); // func_80BC1278
-void func_80BC1374(void); // func_80BC1374
+void EnNb_Draw(void); // func_80BC1374
 void func_80BC1900(void); // func_80BC1900
 void func_80BC192C(void); // func_80BC192C
 void func_80BC1984(void); // func_80BC1984
@@ -15452,13 +15452,13 @@ void func_80BC2150(void); // func_80BC2150
 void func_80BC21A8(void); // func_80BC21A8
 void func_80BC2274(void); // func_80BC2274
 void func_80BC22F4(void); // func_80BC22F4
-void func_80BC2388(void); // func_80BC2388
-void func_80BC2498(void); // func_80BC2498
-void func_80BC24C4(void); // func_80BC24C4
+void EnJa_Init(void); // func_80BC2388
+void EnJa_Destroy(void); // func_80BC2498
+void EnJa_Update(void); // func_80BC24C4
 void func_80BC25E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80BC25E0
 void func_80BC2620(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BC2620
 void func_80BC2B30(void); // func_80BC2B30
-void func_80BC2CE4(void); // func_80BC2CE4
+void EnJa_Draw(void); // func_80BC2CE4
 void func_80BC2EA4(void); // func_80BC2EA4
 void func_80BC3154(void); // func_80BC3154
 void func_80BC32D8(void); // func_80BC32D8
@@ -15470,8 +15470,8 @@ void func_80BC3B00(void); // func_80BC3B00
 void func_80BC3CA4(void); // func_80BC3CA4
 void func_80BC3D08(void); // func_80BC3D08
 void func_80BC4038(void); // func_80BC4038
-void func_80BC4058(void); // func_80BC4058
-void func_80BC4178(void); // func_80BC4178
+void BgF40Block_Init(void); // func_80BC4058
+void BgF40Block_Destroy(void); // func_80BC4178
 void func_80BC41AC(void); // func_80BC41AC
 void func_80BC4228(Actor* param_1, UNK_TYPE4 param_2); // func_80BC4228
 void func_80BC4344(void); // func_80BC4344
@@ -15481,20 +15481,20 @@ void func_80BC4448(void); // func_80BC4448
 void func_80BC44F4(void); // func_80BC44F4
 void func_80BC4530(void); // func_80BC4530
 void func_80BC457C(void); // func_80BC457C
-void func_80BC458C(void); // func_80BC458C
-void func_80BC45CC(void); // func_80BC45CC
+void BgF40Block_Update(void); // func_80BC458C
+void BgF40Block_Draw(void); // func_80BC45CC
 void func_80BC47B0(void); // func_80BC47B0
-void func_80BC4A3C(void); // func_80BC4A3C
-void func_80BC4AEC(void); // func_80BC4AEC
+void BgF40Switch_Init(void); // func_80BC4A3C
+void BgF40Switch_Destroy(void); // func_80BC4AEC
 void func_80BC4B20(void); // func_80BC4B20
 void func_80BC4B94(void); // func_80BC4B94
 void func_80BC4BB8(void); // func_80BC4BB8
 void func_80BC4C68(void); // func_80BC4C68
 void func_80BC4D30(void); // func_80BC4D30
-void func_80BC4D54(void); // func_80BC4D54
-void func_80BC4D90(void); // func_80BC4D90
-void func_80BC4F30(void); // func_80BC4F30
-void func_80BC51F8(void); // func_80BC51F8
+void BgF40Switch_Update(void); // func_80BC4D54
+void BgF40Switch_Draw(void); // func_80BC4D90
+void EnPoComposer_Init(void); // func_80BC4F30
+void EnPoComposer_Destroy(void); // func_80BC51F8
 void func_80BC5250(void); // func_80BC5250
 void func_80BC5294(void); // func_80BC5294
 void func_80BC52D4(void); // func_80BC52D4
@@ -15523,12 +15523,12 @@ void func_80BC5CC8(void); // func_80BC5CC8
 void func_80BC5D34(void); // func_80BC5D34
 void func_80BC5DEC(void); // func_80BC5DEC
 void func_80BC5FE8(void); // func_80BC5FE8
-void func_80BC6048(void); // func_80BC6048
+void EnPoComposer_Update(void); // func_80BC6048
 void func_80BC60BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80BC60BC
 void func_80BC617C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BC617C
-void func_80BC61D0(void); // func_80BC61D0
-void func_80BC6BF0(void); // func_80BC6BF0
-void func_80BC6D28(void); // func_80BC6D28
+void EnPoComposer_Draw(void); // func_80BC61D0
+void EnGuruguru_Init(void); // func_80BC6BF0
+void EnGuruguru_Destroy(void); // func_80BC6D28
 void func_80BC6D64(void); // func_80BC6D64
 void func_80BC6E00(void); // func_80BC6E00
 void func_80BC6E10(void); // func_80BC6E10
@@ -15538,15 +15538,15 @@ void func_80BC7068(void); // func_80BC7068
 void func_80BC73F4(void); // func_80BC73F4
 void func_80BC7440(void); // func_80BC7440
 void func_80BC7520(void); // func_80BC7520
-void func_80BC7590(void); // func_80BC7590
+void EnGuruguru_Update(void); // func_80BC7590
 void func_80BC77EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BC77EC
-void func_80BC7834(void); // func_80BC7834
-void func_80BC7AD0(void); // func_80BC7AD0
-void func_80BC7B28(void); // func_80BC7B28
-void func_80BC7B5C(void); // func_80BC7B5C
-void func_80BC7BBC(void); // func_80BC7BBC
-void func_80BC9270(void); // func_80BC9270
-void func_80BC9330(void); // func_80BC9330
+void EnGuruguru_Draw(void); // func_80BC7834
+void OceffWipe5_Init(void); // func_80BC7AD0
+void OceffWipe5_Destroy(void); // func_80BC7B28
+void OceffWipe5_Update(void); // func_80BC7B5C
+void OceffWipe5_Draw(void); // func_80BC7BBC
+void EnStoneheishi_Init(void); // func_80BC9270
+void EnStoneheishi_Destroy(void); // func_80BC9330
 void func_80BC935C(void); // func_80BC935C
 void func_80BC941C(void); // func_80BC941C
 void func_80BC94B0(void); // func_80BC94B0
@@ -15560,14 +15560,14 @@ void func_80BC9A2C(void); // func_80BC9A2C
 void func_80BC9C88(void); // func_80BC9C88
 void func_80BC9D28(void); // func_80BC9D28
 void func_80BC9E50(void); // func_80BC9E50
-void func_80BC9EE4(void); // func_80BC9EE4
+void EnStoneheishi_Update(void); // func_80BC9EE4
 void func_80BCA0AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BCA0AC
 void func_80BCA104(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BCA104
-void func_80BCA2AC(void); // func_80BCA2AC
-void func_80BCA5A0(void); // func_80BCA5A0
-void func_80BCA5F8(void); // func_80BCA5F8
-void func_80BCA62C(void); // func_80BCA62C
-void func_80BCA68C(void); // func_80BCA68C
+void EnStoneheishi_Draw(void); // func_80BCA2AC
+void OceffWipe6_Init(void); // func_80BCA5A0
+void OceffWipe6_Destroy(void); // func_80BCA5F8
+void OceffWipe6_Update(void); // func_80BCA62C
+void OceffWipe6_Draw(void); // func_80BCA68C
 void func_80BCABF0(void); // func_80BCABF0
 void func_80BCAC40(void); // func_80BCAC40
 void func_80BCAD64(void); // func_80BCAD64
@@ -15590,13 +15590,13 @@ void func_80BCBFFC(void); // func_80BCBFFC
 void func_80BCC288(void); // func_80BCC288
 void func_80BCC2AC(void); // func_80BCC2AC
 void func_80BCC448(void); // func_80BCC448
-void func_80BCC508(void); // func_80BCC508
-void func_80BCC77C(void); // func_80BCC77C
-void func_80BCC7A8(void); // func_80BCC7A8
+void EnScopenuts_Init(void); // func_80BCC508
+void EnScopenuts_Destroy(void); // func_80BCC77C
+void EnScopenuts_Update(void); // func_80BCC7A8
 UNK_TYPE4 func_80BCC828(UNK_TYPE4 param_1, s32 param_2, UNK_PTR param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, s32 param_6); // func_80BCC828
 void func_80BCC9CC(void); // func_80BCC9CC
 void func_80BCC9E4(void); // func_80BCC9E4
-void func_80BCCAAC(void); // func_80BCCAAC
+void EnScopenuts_Draw(void); // func_80BCCAAC
 void func_80BCD000(void); // func_80BCD000
 void func_80BCD09C(void); // func_80BCD09C
 void func_80BCD1AC(void); // func_80BCD1AC
@@ -15605,25 +15605,25 @@ void func_80BCD334(void); // func_80BCD334
 void func_80BCD4D0(void); // func_80BCD4D0
 void func_80BCD590(void); // func_80BCD590
 void func_80BCD640(void); // func_80BCD640
-void func_80BCD7A0(void); // func_80BCD7A0
-void func_80BCDA8C(void); // func_80BCDA8C
-void func_80BCDAB8(void); // func_80BCDAB8
-void func_80BCDB00(void); // func_80BCDB00
-void func_80BCDCB0(void); // func_80BCDCB0
-void func_80BCDD08(void); // func_80BCDD08
-void func_80BCDD3C(void); // func_80BCDD3C
-void func_80BCDD9C(void); // func_80BCDD9C
-void func_80BCEB20(void); // func_80BCEB20
-void func_80BCEBB0(void); // func_80BCEBB0
+void EnScopecrow_Init(void); // func_80BCD7A0
+void EnScopecrow_Destroy(void); // func_80BCDA8C
+void EnScopecrow_Update(void); // func_80BCDAB8
+void EnScopecrow_Draw(void); // func_80BCDB00
+void OceffWipe7_Init(void); // func_80BCDCB0
+void OceffWipe7_Destroy(void); // func_80BCDD08
+void OceffWipe7_Update(void); // func_80BCDD3C
+void OceffWipe7_Draw(void); // func_80BCDD9C
+void EffKamejimaWave_Init(void); // func_80BCEB20
+void EffKamejimaWave_Destroy(void); // func_80BCEBB0
 void func_80BCEBC0(void); // func_80BCEBC0
 void func_80BCEC6C(void); // func_80BCEC6C
 void func_80BCED34(void); // func_80BCED34
 void func_80BCEDE0(void); // func_80BCEDE0
-void func_80BCEE98(void); // func_80BCEE98
+void EffKamejimaWave_Update(void); // func_80BCEE98
 void func_80BCEEBC(void); // func_80BCEEBC
 void func_80BCEF0C(void); // func_80BCEF0C
-void func_80BCF1D0(void); // func_80BCF1D0
-void func_80BCF328(void); // func_80BCF328
+void EnHg_Init(void); // func_80BCF1D0
+void EnHg_Destroy(void); // func_80BCF328
 void func_80BCF354(void); // func_80BCF354
 void func_80BCF398(void); // func_80BCF398
 void func_80BCF468(void); // func_80BCF468
@@ -15640,12 +15640,12 @@ void func_80BCF8A0(void); // func_80BCF8A0
 void func_80BCF93C(void); // func_80BCF93C
 void func_80BCF95C(void); // func_80BCF95C
 void func_80BCFC0C(void); // func_80BCFC0C
-void func_80BCFDC4(void); // func_80BCFDC4
+void EnHg_Update(void); // func_80BCFDC4
 void func_80BCFE54(void); // func_80BCFE54
 void func_80BCFE70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BCFE70
-void func_80BCFEC4(void); // func_80BCFEC4
-void func_80BD02B0(void); // func_80BD02B0
-void func_80BD03C0(void); // func_80BD03C0
+void EnHg_Draw(void); // func_80BCFEC4
+void EnHgo_Init(void); // func_80BD02B0
+void EnHgo_Destroy(void); // func_80BD03C0
 void func_80BD03EC(void); // func_80BD03EC
 void func_80BD0410(void); // func_80BD0410
 void func_80BD0420(void); // func_80BD0420
@@ -15657,12 +15657,12 @@ void func_80BD0660(void); // func_80BD0660
 void func_80BD06FC(void); // func_80BD06FC
 void func_80BD0898(void); // func_80BD0898
 void func_80BD0B8C(void); // func_80BD0B8C
-void func_80BD0C30(void); // func_80BD0C30
+void EnHgo_Update(void); // func_80BD0C30
 void func_80BD0CF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BD0CF0
 void func_80BD0D38(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BD0D38
-void func_80BD0D7C(void); // func_80BD0D7C
-void func_80BD11E0(void); // func_80BD11E0
-void func_80BD13B0(void); // func_80BD13B0
+void EnHgo_Draw(void); // func_80BD0D7C
+void EnZov_Init(void); // func_80BD11E0
+void EnZov_Destroy(void); // func_80BD13B0
 void func_80BD13DC(void); // func_80BD13DC
 void func_80BD1440(void); // func_80BD1440
 void func_80BD1470(void); // func_80BD1470
@@ -15681,10 +15681,10 @@ void func_80BD1D94(void); // func_80BD1D94
 void func_80BD1DB8(void); // func_80BD1DB8
 void func_80BD1F1C(void); // func_80BD1F1C
 void func_80BD1FC8(void); // func_80BD1FC8
-void func_80BD20B4(void); // func_80BD20B4
+void EnZov_Update(void); // func_80BD20B4
 UNK_TYPE4 func_80BD2380(UNK_TYPE4 param_1, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, s16* param_5, s32 param_6); // func_80BD2380
 void func_80BD2404(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BD2404
-void func_80BD24B4(void); // func_80BD24B4
+void EnZov_Draw(void); // func_80BD24B4
 void func_80BD2A30(void); // func_80BD2A30
 void func_80BD2AE0(void); // func_80BD2AE0
 void func_80BD2B0C(void); // func_80BD2B0C
@@ -15707,16 +15707,16 @@ void func_80BD35BC(void); // func_80BD35BC
 void func_80BD3658(void); // func_80BD3658
 void func_80BD36B8(void); // func_80BD36B8
 void func_80BD3768(void); // func_80BD3768
-void func_80BD3854(void); // func_80BD3854
-void func_80BD396C(void); // func_80BD396C
-void func_80BD3998(void); // func_80BD3998
+void EnAh_Init(void); // func_80BD3854
+void EnAh_Destroy(void); // func_80BD396C
+void EnAh_Update(void); // func_80BD3998
 void func_80BD3AA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BD3AA8
 void func_80BD3AF8(void); // func_80BD3AF8
-void func_80BD3CAC(void); // func_80BD3CAC
+void EnAh_Draw(void); // func_80BD3CAC
 void func_80BD4090(void); // func_80BD4090
 void func_80BD40D0(void); // func_80BD40D0
-void func_80BD4108(void); // func_80BD4108
-void func_80BD41B4(void); // func_80BD41B4
+void ObjHgdoor_Init(void); // func_80BD4108
+void ObjHgdoor_Destroy(void); // func_80BD41B4
 void func_80BD41E8(void); // func_80BD41E8
 void func_80BD41FC(void); // func_80BD41FC
 void func_80BD42AC(void); // func_80BD42AC
@@ -15727,12 +15727,12 @@ void func_80BD4460(void); // func_80BD4460
 void func_80BD4478(void); // func_80BD4478
 void func_80BD44D0(void); // func_80BD44D0
 void func_80BD4500(void); // func_80BD4500
-void func_80BD4540(void); // func_80BD4540
-void func_80BD4570(void); // func_80BD4570
+void ObjHgdoor_Update(void); // func_80BD4540
+void ObjHgdoor_Draw(void); // func_80BD4570
 void func_80BD4720(void); // func_80BD4720
 void func_80BD4A14(void); // func_80BD4A14
-void func_80BD4CF4(void); // func_80BD4CF4
-void func_80BD4DFC(void); // func_80BD4DFC
+void BgIkanaBombwall_Init(void); // func_80BD4CF4
+void BgIkanaBombwall_Destroy(void); // func_80BD4DFC
 void func_80BD4E44(void); // func_80BD4E44
 void func_80BD4EAC(void); // func_80BD4EAC
 void func_80BD4F18(void); // func_80BD4F18
@@ -15743,19 +15743,19 @@ void func_80BD4FF8(void); // func_80BD4FF8
 void func_80BD503C(void); // func_80BD503C
 void func_80BD5118(void); // func_80BD5118
 void func_80BD5134(void); // func_80BD5134
-void func_80BD51DC(void); // func_80BD51DC
-void func_80BD5200(void); // func_80BD5200
+void BgIkanaBombwall_Update(void); // func_80BD51DC
+void BgIkanaBombwall_Draw(void); // func_80BD5200
 void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD53C0
-void BgIkanaRay_Fini(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD546C
+void BgIkanaRay_Destroy(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD546C
 void BgIkanaRay_SetDeactivated(ActorBgIkanaRay* this); // func_80BD5498
 void BgIkanaRay_UpdateCheckForActivation(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD54BC
 void BgIkanaRay_SetActivated(ActorBgIkanaRay* this); // func_80BD5500
 void BgIkanaRay_UpdateActivated(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5530
-void BgIkanaRay_Main(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD556C
+void BgIkanaRay_Update(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD556C
 void BgIkanaRay_Draw(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5590
 void func_80BD5690(void); // func_80BD5690
-void func_80BD5728(void); // func_80BD5728
-void func_80BD57F4(void); // func_80BD57F4
+void BgIkanaShutter_Init(void); // func_80BD5728
+void BgIkanaShutter_Destroy(void); // func_80BD57F4
 void func_80BD5828(void); // func_80BD5828
 void func_80BD5844(void); // func_80BD5844
 void func_80BD5878(void); // func_80BD5878
@@ -15774,22 +15774,22 @@ void func_80BD5BC4(void); // func_80BD5BC4
 void func_80BD5BD8(void); // func_80BD5BD8
 void func_80BD5C64(void); // func_80BD5C64
 void func_80BD5C8C(void); // func_80BD5C8C
-void func_80BD5C9C(void); // func_80BD5C9C
-void func_80BD5CC0(void); // func_80BD5CC0
+void BgIkanaShutter_Update(void); // func_80BD5C9C
+void BgIkanaShutter_Draw(void); // func_80BD5CC0
 void func_80BD5E00(void); // func_80BD5E00
 void func_80BD5E6C(void); // func_80BD5E6C
-void func_80BD6160(void); // func_80BD6160
-void func_80BD6218(void); // func_80BD6218
+void BgHakaBombwall_Init(void); // func_80BD6160
+void BgHakaBombwall_Destroy(void); // func_80BD6218
 void func_80BD6260(void); // func_80BD6260
 void func_80BD6274(void); // func_80BD6274
 void func_80BD62D0(void); // func_80BD62D0
 void func_80BD6314(void); // func_80BD6314
 void func_80BD63B4(void); // func_80BD63B4
 void func_80BD63D0(void); // func_80BD63D0
-void func_80BD6420(void); // func_80BD6420
-void func_80BD6444(void); // func_80BD6444
-void func_80BD6580(void); // func_80BD6580
-void func_80BD65F0(void); // func_80BD65F0
+void BgHakaBombwall_Update(void); // func_80BD6420
+void BgHakaBombwall_Draw(void); // func_80BD6444
+void BgHakaTomb_Init(void); // func_80BD6580
+void BgHakaTomb_Destroy(void); // func_80BD65F0
 void func_80BD6624(void); // func_80BD6624
 void func_80BD6638(void); // func_80BD6638
 void func_80BD66AC(void); // func_80BD66AC
@@ -15797,32 +15797,32 @@ void func_80BD6754(void); // func_80BD6754
 void func_80BD6768(void); // func_80BD6768
 void func_80BD67A8(void); // func_80BD67A8
 void func_80BD67BC(void); // func_80BD67BC
-void func_80BD67CC(void); // func_80BD67CC
-void func_80BD6844(void); // func_80BD6844
+void BgHakaTomb_Update(void); // func_80BD67CC
+void BgHakaTomb_Draw(void); // func_80BD6844
 void func_80BD6910(void); // func_80BD6910
 void func_80BD697C(void); // func_80BD697C
 void func_80BD6A8C(void); // func_80BD6A8C
 void func_80BD6B18(void); // func_80BD6B18
-void func_80BD6BE8(void); // func_80BD6BE8
-void func_80BD6CB0(void); // func_80BD6CB0
-void func_80BD6CDC(void); // func_80BD6CDC
-void func_80BD6D18(void); // func_80BD6D18
-void func_80BD6F10(void); // func_80BD6F10
-void func_80BD7120(void); // func_80BD7120
+void EnScRuppe_Init(void); // func_80BD6BE8
+void EnScRuppe_Destroy(void); // func_80BD6CB0
+void EnScRuppe_Update(void); // func_80BD6CDC
+void EnScRuppe_Draw(void); // func_80BD6D18
+void BgIknvDoukutu_Init(void); // func_80BD6F10
+void BgIknvDoukutu_Destroy(void); // func_80BD7120
 void func_80BD716C(void); // func_80BD716C
 void func_80BD71BC(void); // func_80BD71BC
 void func_80BD7250(void); // func_80BD7250
 void func_80BD72BC(void); // func_80BD72BC
 void func_80BD7360(void); // func_80BD7360
 void func_80BD73D0(void); // func_80BD73D0
-void func_80BD73E0(void); // func_80BD73E0
-void func_80BD7404(void); // func_80BD7404
+void BgIknvDoukutu_Update(void); // func_80BD73E0
+void BgIknvDoukutu_Draw(void); // func_80BD7404
 void func_80BD7538(void); // func_80BD7538
 void func_80BD7768(void); // func_80BD7768
 void func_80BD7820(void); // func_80BD7820
 void func_80BD78C4(void); // func_80BD78C4
 void BgIknvObj_Init(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD7AB0
-void BgIknvObj_Fini(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD7C7C
+void BgIknvObj_Destroy(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD7C7C
 UNK_TYPE4 func_80BD7CEC(ActorBgIknvObj* this); // func_80BD7CEC
 void BgIknvObj_UpdateType0(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD7D6C
 void func_80BD7E0C(void); // func_80BD7E0C
@@ -15833,13 +15833,13 @@ void func_80BD8040(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD8040
 void BgIknvObj_UpdateType2(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD8098
 void BgIknvObj_UpdateType1(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD80FC
 void BgIknvObj_UpdateDefault(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD810C
-void BgIknvObj_Main(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD811C
+void BgIknvObj_Update(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD811C
 void BgIknvObj_Draw(ActorBgIknvObj* this, GlobalContext* ctxt); // func_80BD8140
-void func_80BD82B0(void); // func_80BD82B0
+void EnPamera_Init(void); // func_80BD82B0
 void func_80BD84F0(void); // func_80BD84F0
 void func_80BD8588(void); // func_80BD8588
 void func_80BD8658(void); // func_80BD8658
-void func_80BD86D4(void); // func_80BD86D4
+void EnPamera_Destroy(void); // func_80BD86D4
 void func_80BD8700(void); // func_80BD8700
 void func_80BD8758(void); // func_80BD8758
 void func_80BD8908(void); // func_80BD8908
@@ -15864,10 +15864,10 @@ void func_80BD9384(void); // func_80BD9384
 void func_80BD93CC(void); // func_80BD93CC
 void func_80BD93F4(void); // func_80BD93F4
 void func_80BD94E0(void); // func_80BD94E0
-void func_80BD95A4(void); // func_80BD95A4
+void EnPamera_Update(void); // func_80BD95A4
 void func_80BD9648(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BD9648
 void func_80BD9690(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BD9690
-void func_80BD96D0(void); // func_80BD96D0
+void EnPamera_Draw(void); // func_80BD96D0
 void func_80BD9840(void); // func_80BD9840
 void func_80BD9904(void); // func_80BD9904
 void func_80BD9928(void); // func_80BD9928
@@ -15893,16 +15893,16 @@ void func_80BDA1C8(void); // func_80BDA1C8
 void func_80BDA288(void); // func_80BDA288
 void func_80BDA2E0(void); // func_80BDA2E0
 void func_80BDA344(void); // func_80BDA344
-void func_80BDAA30(void); // func_80BDAA30
+void ObjHsStump_Init(void); // func_80BDAA30
 void func_80BDAB00(void); // func_80BDAB00
 void func_80BDAB18(void); // func_80BDAB18
 void func_80BDAB6C(void); // func_80BDAB6C
 void func_80BDABCC(void); // func_80BDABCC
-void func_80BDAECC(void); // func_80BDAECC
-void func_80BDAF00(void); // func_80BDAF00
-void func_80BDAF24(void); // func_80BDAF24
-void func_80BDB040(void); // func_80BDB040
-void func_80BDB188(void); // func_80BDB188
+void ObjHsStump_Destroy(void); // func_80BDAECC
+void ObjHsStump_Update(void); // func_80BDAF00
+void ObjHsStump_Draw(void); // func_80BDAF24
+void EnHiddenNuts_Init(void); // func_80BDB040
+void EnHiddenNuts_Destroy(void); // func_80BDB188
 void func_80BDB1B4(void); // func_80BDB1B4
 void func_80BDB268(void); // func_80BDB268
 void func_80BDB2B8(void); // func_80BDB2B8
@@ -15917,8 +15917,8 @@ void func_80BDBA28(void); // func_80BDBA28
 void func_80BDBB48(void); // func_80BDBB48
 void func_80BDBE70(void); // func_80BDBE70
 void func_80BDBED4(void); // func_80BDBED4
-void func_80BDBF7C(void); // func_80BDBF7C
-void func_80BDC064(void); // func_80BDC064
+void EnHiddenNuts_Update(void); // func_80BDBF7C
+void EnHiddenNuts_Draw(void); // func_80BDC064
 void func_80BDC270(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5); // func_80BDC270
 void func_80BDC2D8(void); // func_80BDC2D8
 void func_80BDC3C0(void); // func_80BDC3C0
@@ -15930,8 +15930,8 @@ void func_80BDC9DC(void); // func_80BDC9DC
 void func_80BDCB84(void); // func_80BDCB84
 void func_80BDCD38(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5); // func_80BDCD38
 void func_80BDCDA8(void); // func_80BDCDA8
-void func_80BDCF28(void); // func_80BDCF28
-void func_80BDD020(void); // func_80BDD020
+void EnZow_Init(void); // func_80BDCF28
+void EnZow_Destroy(void); // func_80BDD020
 void func_80BDD04C(void); // func_80BDD04C
 void func_80BDD154(void); // func_80BDD154
 void func_80BDD1E0(void); // func_80BDD1E0
@@ -15941,16 +15941,16 @@ void func_80BDD570(void); // func_80BDD570
 void func_80BDD634(void); // func_80BDD634
 void func_80BDD6BC(void); // func_80BDD6BC
 void func_80BDD79C(void); // func_80BDD79C
-void func_80BDD830(void); // func_80BDD830
+void EnZow_Update(void); // func_80BDD830
 void func_80BDDA7C(void); // func_80BDDA7C
 void func_80BDDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BDDAA0
 void func_80BDDAE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BDDAE0
-void func_80BDDB04(void); // func_80BDDB04
-void func_80BDDFE0(void); // func_80BDDFE0
-void func_80BDE048(void); // func_80BDE048
+void EnZow_Draw(void); // func_80BDDB04
+void EnTalk_Init(void); // func_80BDDFE0
+void EnTalk_Destroy(void); // func_80BDE048
 void func_80BDE058(void); // func_80BDE058
 void func_80BDE090(void); // func_80BDE090
-void func_80BDE11C(void); // func_80BDE11C
+void EnTalk_Update(void); // func_80BDE11C
 void func_80BDE1A0(void); // func_80BDE1A0
 void func_80BDE250(void); // func_80BDE250
 void func_80BDE27C(void); // func_80BDE27C
@@ -15979,13 +15979,13 @@ void func_80BDF568(void); // func_80BDF568
 void func_80BDF578(void); // func_80BDF578
 void func_80BDF5E8(void); // func_80BDF5E8
 void func_80BDF6C4(void); // func_80BDF6C4
-void func_80BDF75C(void); // func_80BDF75C
-void func_80BDF840(void); // func_80BDF840
-void func_80BDF86C(void); // func_80BDF86C
+void EnAl_Init(void); // func_80BDF75C
+void EnAl_Destroy(void); // func_80BDF840
+void EnAl_Update(void); // func_80BDF86C
 void func_80BDF914(void); // func_80BDF914
 void func_80BDF950(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BDF950
 void func_80BDFA34(void); // func_80BDFA34
-void func_80BDFB30(void); // func_80BDFB30
+void EnAl_Draw(void); // func_80BDFB30
 void func_80BE04E0(void); // func_80BE04E0
 void func_80BE0590(void); // func_80BE0590
 void func_80BE05BC(void); // func_80BE05BC
@@ -16007,22 +16007,22 @@ void func_80BE10BC(void); // func_80BE10BC
 void func_80BE1224(void); // func_80BE1224
 void func_80BE127C(void); // func_80BE127C
 void func_80BE1348(void); // func_80BE1348
-void func_80BE1424(void); // func_80BE1424
-void func_80BE1524(void); // func_80BE1524
-void func_80BE1550(void); // func_80BE1550
+void EnTab_Init(void); // func_80BE1424
+void EnTab_Destroy(void); // func_80BE1524
+void EnTab_Update(void); // func_80BE1550
 void func_80BE1648(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80BE1648
 void func_80BE16B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BE16B4
 void func_80BE1704(void); // func_80BE1704
-void func_80BE1810(void); // func_80BE1810
+void EnTab_Draw(void); // func_80BE1810
 void func_80BE1C80(void); // func_80BE1C80
-void func_80BE1CEC(void); // func_80BE1CEC
-void func_80BE1D5C(void); // func_80BE1D5C
-void func_80BE1D88(void); // func_80BE1D88
-void func_80BE1E9C(void); // func_80BE1E9C
-void func_80BE2030(void); // func_80BE2030
-void func_80BE20BC(void); // func_80BE20BC
+void EnNimotsu_Init(void); // func_80BE1CEC
+void EnNimotsu_Destroy(void); // func_80BE1D5C
+void EnNimotsu_Update(void); // func_80BE1D88
+void EnNimotsu_Draw(void); // func_80BE1E9C
+void EnHitTag_Init(void); // func_80BE2030
+void EnHitTag_Destroy(void); // func_80BE20BC
 void func_80BE20E8(void); // func_80BE20E8
-void func_80BE21A0(void); // func_80BE21A0
+void EnHitTag_Update(void); // func_80BE21A0
 void func_80BE2260(void); // func_80BE2260
 void func_80BE2330(void); // func_80BE2330
 void func_80BE24CC(void); // func_80BE24CC
@@ -16041,35 +16041,35 @@ void func_80BE32DC(void); // func_80BE32DC
 void func_80BE3354(void); // func_80BE3354
 void func_80BE348C(void); // func_80BE348C
 void func_80BE35A4(void); // func_80BE35A4
-void func_80BE3754(void); // func_80BE3754
-void func_80BE3894(void); // func_80BE3894
-void func_80BE38C0(void); // func_80BE38C0
-void func_80BE393C(void); // func_80BE393C
-void func_80BE3B80(void); // func_80BE3B80
-void func_80BE3DB0(void); // func_80BE3DB0
+void EnRuppecrow_Init(void); // func_80BE3754
+void EnRuppecrow_Destroy(void); // func_80BE3894
+void EnRuppecrow_Update(void); // func_80BE38C0
+void EnRuppecrow_Draw(void); // func_80BE393C
+void EnTanron4_Init(void); // func_80BE3B80
+void EnTanron4_Destroy(void); // func_80BE3DB0
 void func_80BE3DC0(void); // func_80BE3DC0
 void func_80BE3DFC(void); // func_80BE3DFC
 void func_80BE4268(void); // func_80BE4268
 void func_80BE42A4(void); // func_80BE42A4
-void func_80BE4734(void); // func_80BE4734
-void func_80BE4804(void); // func_80BE4804
+void EnTanron4_Update(void); // func_80BE4734
+void EnTanron4_Draw(void); // func_80BE4804
 void func_80BE4930(void); // func_80BE4930
 void func_80BE4A2C(void); // func_80BE4A2C
-void func_80BE4B1C(void); // func_80BE4B1C
-void func_80BE4F24(void); // func_80BE4F24
-void func_80BE4F54(void); // func_80BE4F54
+void EnTanron5_Init(void); // func_80BE4B1C
+void EnTanron5_Destroy(void); // func_80BE4F24
+void EnTanron5_Update(void); // func_80BE4F54
 void func_80BE5818(void); // func_80BE5818
-void func_80BE5B58(void); // func_80BE5B58
+void EnTanron5_Draw(void); // func_80BE5B58
 void func_80BE5C10(void); // func_80BE5C10
-void func_80BE6040(void); // func_80BE6040
-void func_80BE60AC(void); // func_80BE60AC
+void EnTanron6_Init(void); // func_80BE6040
+void EnTanron6_Destroy(void); // func_80BE60AC
 void func_80BE60BC(void); // func_80BE60BC
 void func_80BE60D0(void); // func_80BE60D0
-void func_80BE60E0(void); // func_80BE60E0
-void func_80BE6140(void); // func_80BE6140
+void EnTanron6_Update(void); // func_80BE60E0
+void EnTanron6_Draw(void); // func_80BE6140
 void func_80BE61D0(void); // func_80BE61D0
-void func_80BE6228(void); // func_80BE6228
-void func_80BE63DC(void); // func_80BE63DC
+void EnDaiku2_Init(void); // func_80BE6228
+void EnDaiku2_Destroy(void); // func_80BE63DC
 void func_80BE6408(void); // func_80BE6408
 void func_80BE64C0(void); // func_80BE64C0
 void func_80BE65B4(void); // func_80BE65B4
@@ -16082,25 +16082,25 @@ void func_80BE6EB0(void); // func_80BE6EB0
 void func_80BE6EF0(void); // func_80BE6EF0
 void func_80BE71A0(void); // func_80BE71A0
 void func_80BE71D8(void); // func_80BE71D8
-void func_80BE72A8(void); // func_80BE72A8
+void EnDaiku2_Update(void); // func_80BE72A8
 void func_80BE738C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BE738C
-void func_80BE7474(void); // func_80BE7474
+void EnDaiku2_Draw(void); // func_80BE7474
 void func_80BE7504(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80BE7504
 void func_80BE7600(void); // func_80BE7600
 void func_80BE7718(void); // func_80BE7718
-void func_80BE7B00(void); // func_80BE7B00
-void func_80BE7C68(void); // func_80BE7C68
+void EnMuto_Init(void); // func_80BE7B00
+void EnMuto_Destroy(void); // func_80BE7C68
 void func_80BE7C94(void); // func_80BE7C94
 void func_80BE7D20(void); // func_80BE7D20
 void func_80BE7DB4(void); // func_80BE7DB4
 void func_80BE7DEC(void); // func_80BE7DEC
 void func_80BE7F88(void); // func_80BE7F88
 void func_80BE7FEC(void); // func_80BE7FEC
-void func_80BE81A4(void); // func_80BE81A4
+void EnMuto_Update(void); // func_80BE81A4
 void func_80BE8328(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BE8328
-void func_80BE8390(void); // func_80BE8390
-void func_80BE84F0(void); // func_80BE84F0
-void func_80BE8664(void); // func_80BE8664
+void EnMuto_Draw(void); // func_80BE8390
+void EnBaisen_Init(void); // func_80BE84F0
+void EnBaisen_Destroy(void); // func_80BE8664
 void func_80BE8690(void); // func_80BE8690
 void func_80BE871C(void); // func_80BE871C
 void func_80BE87B0(void); // func_80BE87B0
@@ -16109,31 +16109,31 @@ void func_80BE887C(void); // func_80BE887C
 void func_80BE895C(void); // func_80BE895C
 void func_80BE89D8(void); // func_80BE89D8
 void func_80BE8AAC(void); // func_80BE8AAC
-void func_80BE8BE0(void); // func_80BE8BE0
+void EnBaisen_Update(void); // func_80BE8BE0
 void func_80BE8D3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BE8D3C
-void func_80BE8D94(void); // func_80BE8D94
-void func_80BE8F20(void); // func_80BE8F20
-void func_80BE9090(void); // func_80BE9090
+void EnBaisen_Draw(void); // func_80BE8D94
+void EnHeishi_Init(void); // func_80BE8F20
+void EnHeishi_Destroy(void); // func_80BE9090
 void func_80BE90BC(void); // func_80BE90BC
 void func_80BE9148(void); // func_80BE9148
 void func_80BE91DC(void); // func_80BE91DC
 void func_80BE9214(void); // func_80BE9214
-void func_80BE9224(void); // func_80BE9224
+void EnHeishi_Update(void); // func_80BE9224
 void func_80BE9380(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BE9380
-void func_80BE93D8(void); // func_80BE93D8
-void func_80BE9510(void); // func_80BE9510
-void func_80BE95C0(void); // func_80BE95C0
+void EnHeishi_Draw(void); // func_80BE93D8
+void EnDemoheishi_Init(void); // func_80BE9510
+void EnDemoheishi_Destroy(void); // func_80BE95C0
 void func_80BE95EC(void); // func_80BE95EC
 void func_80BE9678(void); // func_80BE9678
 void func_80BE970C(void); // func_80BE970C
 void func_80BE975C(void); // func_80BE975C
 void func_80BE97F0(void); // func_80BE97F0
 void func_80BE980C(void); // func_80BE980C
-void func_80BE9864(void); // func_80BE9864
+void EnDemoheishi_Update(void); // func_80BE9864
 void func_80BE9974(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BE9974
-void func_80BE99CC(void); // func_80BE99CC
-void func_80BE9B20(void); // func_80BE9B20
-void func_80BE9C48(void); // func_80BE9C48
+void EnDemoheishi_Draw(void); // func_80BE99CC
+void EnDt_Init(void); // func_80BE9B20
+void EnDt_Destroy(void); // func_80BE9C48
 void func_80BE9C74(void); // func_80BE9C74
 void func_80BE9CE8(void); // func_80BE9CE8
 void func_80BE9D9C(void); // func_80BE9D9C
@@ -16151,39 +16151,39 @@ void func_80BEAC84(void); // func_80BEAC84
 void func_80BEAD2C(void); // func_80BEAD2C
 void func_80BEADB8(void); // func_80BEADB8
 void func_80BEADD4(void); // func_80BEADD4
-void func_80BEAE94(void); // func_80BEAE94
+void EnDt_Update(void); // func_80BEAE94
 void func_80BEB06C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BEB06C
-void func_80BEB0A8(void); // func_80BEB0A8
-void func_80BEB520(void); // func_80BEB520
-void func_80BEB5B0(void); // func_80BEB5B0
+void EnDt_Draw(void); // func_80BEB0A8
+void EnCha_Init(void); // func_80BEB520
+void EnCha_Destroy(void); // func_80BEB5B0
 void func_80BEB5DC(void); // func_80BEB5DC
 void func_80BEB654(void); // func_80BEB654
-void func_80BEB76C(void); // func_80BEB76C
-void func_80BEB7F4(void); // func_80BEB7F4
-void func_80BEB940(void); // func_80BEB940
-void func_80BEB9BC(void); // func_80BEB9BC
-void func_80BEB9CC(void); // func_80BEB9CC
-void func_80BEB9DC(void); // func_80BEB9DC
-void func_80BEBAC0(void); // func_80BEBAC0
-void func_80BEBCFC(void); // func_80BEBCFC
+void EnCha_Update(void); // func_80BEB76C
+void EnCha_Draw(void); // func_80BEB7F4
+void ObjDinner_Init(void); // func_80BEB940
+void ObjDinner_Destroy(void); // func_80BEB9BC
+void ObjDinner_Update(void); // func_80BEB9CC
+void ObjDinner_Draw(void); // func_80BEB9DC
+void EffLastday_Init(void); // func_80BEBAC0
+void EffLastday_Destroy(void); // func_80BEBCFC
 void func_80BEBD0C(void); // func_80BEBD0C
 void func_80BEBDF8(void); // func_80BEBDF8
 void func_80BEBEB8(void); // func_80BEBEB8
 void func_80BEBF78(void); // func_80BEBF78
-void func_80BEC080(void); // func_80BEC080
+void EffLastday_Update(void); // func_80BEC080
 void func_80BEC0A4(void); // func_80BEC0A4
-void func_80BEC0DC(void); // func_80BEC0DC
+void EffLastday_Draw(void); // func_80BEC0DC
 void func_80BEC240(void); // func_80BEC240
-void func_80BEC3F4(void); // func_80BEC3F4
-void func_80BEC560(void); // func_80BEC560
+void BgIkanaDharma_Init(void); // func_80BEC3F4
+void BgIkanaDharma_Destroy(void); // func_80BEC560
 void func_80BEC5C4(void); // func_80BEC5C4
 void func_80BEC5E0(void); // func_80BEC5E0
 void func_80BEC758(void); // func_80BEC758
 void func_80BEC790(void); // func_80BEC790
 void func_80BEC7EC(void); // func_80BEC7EC
 void func_80BEC808(void); // func_80BEC808
-void func_80BEC8C0(void); // func_80BEC8C0
-void func_80BECA80(void); // func_80BECA80
+void BgIkanaDharma_Update(void); // func_80BEC8C0
+void BgIkanaDharma_Draw(void); // func_80BECA80
 void func_80BECBE0(void); // func_80BECBE0
 void func_80BECC7C(void); // func_80BECC7C
 void func_80BECD10(void); // func_80BECD10
@@ -16222,18 +16222,18 @@ void func_80BEF83C(void); // func_80BEF83C
 void func_80BEF9F0(void); // func_80BEF9F0
 void func_80BEFAF0(void); // func_80BEFAF0
 void func_80BEFD74(void); // func_80BEFD74
-void func_80BEFD98(void); // func_80BEFD98
-void func_80BEFF08(void); // func_80BEFF08
-void func_80BEFF34(void); // func_80BEFF34
+void EnAkindonuts_Init(void); // func_80BEFD98
+void EnAkindonuts_Destroy(void); // func_80BEFF08
+void EnAkindonuts_Update(void); // func_80BEFF34
 UNK_TYPE4 func_80BEFFB4(UNK_TYPE4 param_1, s32 param_2, UNK_PTR param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, s32 param_6); // func_80BEFFB4
 void func_80BF0178(void); // func_80BF0178
 void func_80BF0190(void); // func_80BF0190
-void func_80BF0258(void); // func_80BF0258
-void func_80BF0D90(void); // func_80BF0D90
-void func_80BF0DD0(void); // func_80BF0DD0
+void EnAkindonuts_Draw(void); // func_80BF0258
+void EffStk_Init(void); // func_80BF0D90
+void EffStk_Destroy(void); // func_80BF0DD0
 void func_80BF0DE0(void); // func_80BF0DE0
-void func_80BF0EEC(void); // func_80BF0EEC
-void func_80BF0F10(void); // func_80BF0F10
+void EffStk_Update(void); // func_80BF0EEC
+void EffStk_Draw(void); // func_80BF0F10
 void func_80BF1150(void); // func_80BF1150
 void func_80BF1200(void); // func_80BF1200
 void func_80BF1258(void); // func_80BF1258
@@ -16265,13 +16265,13 @@ void func_80BF293C(void); // func_80BF293C
 void func_80BF2A50(void); // func_80BF2A50
 void func_80BF2AF8(void); // func_80BF2AF8
 void func_80BF2BD4(void); // func_80BF2BD4
-void func_80BF2CC0(void); // func_80BF2CC0
-void func_80BF2DC4(void); // func_80BF2DC4
-void func_80BF2E04(void); // func_80BF2E04
+void EnIg_Init(void); // func_80BF2CC0
+void EnIg_Destroy(void); // func_80BF2DC4
+void EnIg_Update(void); // func_80BF2E04
 void func_80BF2EDC(void); // func_80BF2EDC
 void func_80BF2EFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BF2EFC
 void func_80BF302C(void); // func_80BF302C
-void func_80BF312C(void); // func_80BF312C
+void EnIg_Draw(void); // func_80BF312C
 void func_80BF3920(void); // func_80BF3920
 void func_80BF3C64(void); // func_80BF3C64
 void func_80BF3DA0(void); // func_80BF3DA0
@@ -16297,14 +16297,14 @@ void func_80BF4D64(void); // func_80BF4D64
 void func_80BF4DA8(void); // func_80BF4DA8
 void func_80BF4EBC(void); // func_80BF4EBC
 void func_80BF4FC4(void); // func_80BF4FC4
-void func_80BF5188(void); // func_80BF5188
-void func_80BF5340(void); // func_80BF5340
-void func_80BF5390(void); // func_80BF5390
+void EnRg_Init(void); // func_80BF5188
+void EnRg_Destroy(void); // func_80BF5340
+void EnRg_Update(void); // func_80BF5390
 void func_80BF547C(void); // func_80BF547C
 void func_80BF5588(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80BF5588
-void func_80BF5670(void); // func_80BF5670
-void func_80BF5C20(void); // func_80BF5C20
-void func_80BF5DF0(void); // func_80BF5DF0
+void EnRg_Draw(void); // func_80BF5670
+void EnOsk_Init(void); // func_80BF5C20
+void EnOsk_Destroy(void); // func_80BF5DF0
 void func_80BF5E00(void); // func_80BF5E00
 void func_80BF5E68(void); // func_80BF5E68
 void func_80BF5EBC(void); // func_80BF5EBC
@@ -16318,19 +16318,19 @@ void func_80BF656C(void); // func_80BF656C
 void func_80BF67A8(void); // func_80BF67A8
 void func_80BF68E0(void); // func_80BF68E0
 void func_80BF6A20(void); // func_80BF6A20
-void func_80BF6C30(void); // func_80BF6C30
+void EnOsk_Update(void); // func_80BF6C30
 void func_80BF6C54(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BF6C54
-void func_80BF6C94(void); // func_80BF6C94
-void func_80BF74E0(void); // func_80BF74E0
-void func_80BF7590(void); // func_80BF7590
+void EnOsk_Draw(void); // func_80BF6C94
+void EnSth2_Init(void); // func_80BF74E0
+void EnSth2_Destroy(void); // func_80BF7590
 void func_80BF75A0(void); // func_80BF75A0
-void func_80BF75CC(void); // func_80BF75CC
+void EnSth2_Update(void); // func_80BF75CC
 void func_80BF7688(void); // func_80BF7688
 void func_80BF76AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BF76AC
 void func_80BF77AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BF77AC
 void func_80BF7814(void); // func_80BF7814
-void func_80BFA100(void); // func_80BFA100
-void func_80BFA2D0(void); // func_80BFA2D0
+void EnYb_Init(void); // func_80BFA100
+void EnYb_Destroy(void); // func_80BFA2D0
 void func_80BFA2FC(void); // func_80BFA2FC
 void func_80BFA350(void); // func_80BFA350
 void func_80BFA444(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BFA444
@@ -16347,11 +16347,11 @@ void func_80BFAB4C(void); // func_80BFAB4C
 void func_80BFABF0(void); // func_80BFABF0
 void func_80BFAC88(void); // func_80BFAC88
 void func_80BFAE80(void); // func_80BFAE80
-void func_80BFAEFC(void); // func_80BFAEFC
+void EnYb_Update(void); // func_80BFAEFC
 void func_80BFB074(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BFB074
 void func_80BFB0E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BFB0E0
-void func_80BFB14C(void); // func_80BFB14C
-void func_80BFB480(void); // func_80BFB480
+void EnYb_Draw(void); // func_80BFB14C
+void EnRz_Init(void); // func_80BFB480
 void func_80BFB780(void); // func_80BFB780
 void func_80BFB864(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BFB864
 void func_80BFB9E4(void); // func_80BFB9E4
@@ -16363,7 +16363,7 @@ void func_80BFBCEC(void); // func_80BFBCEC
 void func_80BFBD54(void); // func_80BFBD54
 void func_80BFBDA0(void); // func_80BFBDA0
 void func_80BFBDFC(void); // func_80BFBDFC
-void func_80BFBE44(void); // func_80BFBE44
+void EnRz_Destroy(void); // func_80BFBE44
 void func_80BFBE70(void); // func_80BFBE70
 void func_80BFBFAC(void); // func_80BFBFAC
 void func_80BFC058(void); // func_80BFC058
@@ -16380,15 +16380,15 @@ void func_80BFC728(void); // func_80BFC728
 void func_80BFC7E0(void); // func_80BFC7E0
 void func_80BFC8AC(void); // func_80BFC8AC
 void func_80BFC8F8(void); // func_80BFC8F8
-void func_80BFC9E4(void); // func_80BFC9E4
+void EnRz_Update(void); // func_80BFC9E4
 void func_80BFCAD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80BFCAD0
-void func_80BFCB3C(void); // func_80BFCB3C
+void EnRz_Draw(void); // func_80BFCB3C
 void func_80BFCFA0(void); // func_80BFCFA0
 void func_80BFCFB8(void); // func_80BFCFB8
-void func_80BFD010(void); // func_80BFD010
-void func_80BFD148(void); // func_80BFD148
-void func_80BFD158(void); // func_80BFD158
-void func_80BFD17C(void); // func_80BFD17C
+void EnScopecoin_Init(void); // func_80BFD010
+void EnScopecoin_Destroy(void); // func_80BFD148
+void EnScopecoin_Update(void); // func_80BFD158
+void EnScopecoin_Draw(void); // func_80BFD17C
 void func_80BFD2E0(void); // func_80BFD2E0
 void func_80BFD30C(void); // func_80BFD30C
 void func_80BFD3A4(void); // func_80BFD3A4
@@ -16400,12 +16400,12 @@ void func_80BFD8F0(void); // func_80BFD8F0
 void func_80BFD984(void); // func_80BFD984
 void func_80BFDA48(void); // func_80BFDA48
 void func_80BFDAE8(void); // func_80BFDAE8
-void func_80BFDC98(void); // func_80BFDC98
-void func_80BFDD80(void); // func_80BFDD80
-void func_80BFDD90(void); // func_80BFDD90
-void func_80BFDE38(void); // func_80BFDE38
-void func_80BFE170(void); // func_80BFE170
-void func_80BFE300(void); // func_80BFE300
+void EnBjt_Init(void); // func_80BFDC98
+void EnBjt_Destroy(void); // func_80BFDD80
+void EnBjt_Update(void); // func_80BFDD90
+void EnBjt_Draw(void); // func_80BFDE38
+void EnBomjima_Init(void); // func_80BFE170
+void EnBomjima_Destroy(void); // func_80BFE300
 void func_80BFE32C(void); // func_80BFE32C
 void func_80BFE494(void); // func_80BFE494
 void func_80BFE524(void); // func_80BFE524
@@ -16435,11 +16435,11 @@ void func_80C0011C(void); // func_80C0011C
 void func_80C00168(void); // func_80C00168
 void func_80C00234(void); // func_80C00234
 void func_80C00284(void); // func_80C00284
-void func_80C00644(void); // func_80C00644
+void EnBomjima_Update(void); // func_80C00644
 void func_80C007F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C007F4
-void func_80C008B4(void); // func_80C008B4
-void func_80C00EA0(void); // func_80C00EA0
-void func_80C01110(void); // func_80C01110
+void EnBomjima_Draw(void); // func_80C008B4
+void EnBomjimb_Init(void); // func_80C00EA0
+void EnBomjimb_Destroy(void); // func_80C01110
 void func_80C0113C(void); // func_80C0113C
 void func_80C011CC(void); // func_80C011CC
 void func_80C012E0(void); // func_80C012E0
@@ -16467,11 +16467,11 @@ void func_80C02A14(void); // func_80C02A14
 void func_80C02BCC(void); // func_80C02BCC
 void func_80C02CA4(void); // func_80C02CA4
 void func_80C02DAC(void); // func_80C02DAC
-void func_80C02DC4(void); // func_80C02DC4
+void EnBomjimb_Update(void); // func_80C02DC4
 void func_80C02FA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C02FA8
-void func_80C03034(void); // func_80C03034
-void func_80C03530(void); // func_80C03530
-void func_80C037F8(void); // func_80C037F8
+void EnBomjimb_Draw(void); // func_80C03034
+void EnBombers_Init(void); // func_80C03530
+void EnBombers_Destroy(void); // func_80C037F8
 void func_80C03824(void); // func_80C03824
 void func_80C038B4(void); // func_80C038B4
 void func_80C039A8(void); // func_80C039A8
@@ -16482,11 +16482,11 @@ void func_80C03FAC(void); // func_80C03FAC
 void func_80C042F8(void); // func_80C042F8
 void func_80C04354(void); // func_80C04354
 void func_80C043C8(void); // func_80C043C8
-void func_80C0443C(void); // func_80C0443C
+void EnBombers_Update(void); // func_80C0443C
 void func_80C045B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C045B4
-void func_80C04614(void); // func_80C04614
-void func_80C04930(void); // func_80C04930
-void func_80C04A80(void); // func_80C04A80
+void EnBombers_Draw(void); // func_80C04614
+void EnBombers2_Init(void); // func_80C04930
+void EnBombers2_Destroy(void); // func_80C04A80
 void func_80C04AAC(void); // func_80C04AAC
 void func_80C04B40(void); // func_80C04B40
 void func_80C04BA0(void); // func_80C04BA0
@@ -16494,22 +16494,22 @@ void func_80C04D00(void); // func_80C04D00
 void func_80C04D8C(void); // func_80C04D8C
 void func_80C050B8(void); // func_80C050B8
 void func_80C0520C(void); // func_80C0520C
-void func_80C053F8(void); // func_80C053F8
+void EnBombers2_Update(void); // func_80C053F8
 void func_80C056D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C056D4
-void func_80C05758(void); // func_80C05758
-void func_80C05A70(void); // func_80C05A70
-void func_80C05AF8(void); // func_80C05AF8
+void EnBombers2_Draw(void); // func_80C05758
+void EnBombal_Init(void); // func_80C05A70
+void EnBombal_Destroy(void); // func_80C05AF8
 void func_80C05B24(void); // func_80C05B24
 void func_80C05B3C(void); // func_80C05B3C
 void func_80C05C44(void); // func_80C05C44
 void func_80C05DE8(void); // func_80C05DE8
-void func_80C05E7C(void); // func_80C05E7C
-void func_80C05F30(void); // func_80C05F30
+void EnBombal_Update(void); // func_80C05E7C
+void EnBombal_Draw(void); // func_80C05F30
 void func_80C05F90(void); // func_80C05F90
 void func_80C060B8(void); // func_80C060B8
 void func_80C06208(void); // func_80C06208
-void func_80C06510(void); // func_80C06510
-void func_80C0661C(void); // func_80C0661C
+void ObjMoonStone_Init(void); // func_80C06510
+void ObjMoonStone_Destroy(void); // func_80C0661C
 void func_80C0662C(void); // func_80C0662C
 void func_80C06640(void); // func_80C06640
 void func_80C066F8(void); // func_80C066F8
@@ -16518,10 +16518,10 @@ void func_80C0673C(void); // func_80C0673C
 void func_80C06768(void); // func_80C06768
 void func_80C0685C(void); // func_80C0685C
 void func_80C06870(void); // func_80C06870
-void func_80C068D0(void); // func_80C068D0
-void func_80C06910(void); // func_80C06910
-void func_80C06AA0(void); // func_80C06AA0
-void func_80C06B4C(void); // func_80C06B4C
+void ObjMoonStone_Update(void); // func_80C068D0
+void ObjMoonStone_Draw(void); // func_80C06910
+void ObjMuPict_Init(void); // func_80C06AA0
+void ObjMuPict_Destroy(void); // func_80C06B4C
 void func_80C06B5C(void); // func_80C06B5C
 void func_80C06B70(void); // func_80C06B70
 void func_80C06C54(void); // func_80C06C54
@@ -16531,24 +16531,24 @@ void func_80C06CD8(void); // func_80C06CD8
 void func_80C06D90(void); // func_80C06D90
 void func_80C06DC8(void); // func_80C06DC8
 void func_80C06E88(void); // func_80C06E88
-void func_80C06FAC(void); // func_80C06FAC
-void func_80C06FD0(void); // func_80C06FD0
-void func_80C07110(void); // func_80C07110
-void func_80C071D8(void); // func_80C071D8
+void ObjMuPict_Update(void); // func_80C06FAC
+void ObjMuPict_Draw(void); // func_80C06FD0
+void BgIkninside_Init(void); // func_80C07110
+void BgIkninside_Destroy(void); // func_80C071D8
 void func_80C07220(void); // func_80C07220
 void func_80C07230(void); // func_80C07230
 void func_80C072D0(void); // func_80C072D0
-void func_80C075C4(void); // func_80C075C4
-void func_80C075E8(void); // func_80C075E8
-void func_80C07740(void); // func_80C07740
-void func_80C07780(void); // func_80C07780
+void BgIkninside_Update(void); // func_80C075C4
+void BgIkninside_Draw(void); // func_80C075E8
+void EffZoraband_Init(void); // func_80C07740
+void EffZoraband_Destroy(void); // func_80C07780
 void func_80C07790(void); // func_80C07790
-void func_80C07898(void); // func_80C07898
-void func_80C078BC(void); // func_80C078BC
-void func_80C07B20(void); // func_80C07B20
-void func_80C07BA0(void); // func_80C07BA0
-void func_80C07BD4(void); // func_80C07BD4
-void func_80C07BE4(void); // func_80C07BE4
+void EffZoraband_Update(void); // func_80C07898
+void EffZoraband_Draw(void); // func_80C078BC
+void ObjKepnKoya_Init(void); // func_80C07B20
+void ObjKepnKoya_Destroy(void); // func_80C07BA0
+void ObjKepnKoya_Update(void); // func_80C07BD4
+void ObjKepnKoya_Draw(void); // func_80C07BE4
 void func_80C07C80(void); // func_80C07C80
 void func_80C07CD0(void); // func_80C07CD0
 void func_80C07DC4(void); // func_80C07DC4
@@ -16557,34 +16557,34 @@ void func_80C07F30(void); // func_80C07F30
 void func_80C081C8(void); // func_80C081C8
 void func_80C082CC(void); // func_80C082CC
 void func_80C082E0(void); // func_80C082E0
-void func_80C0836C(void); // func_80C0836C
-void func_80C08428(void); // func_80C08428
-void func_80C0845C(void); // func_80C0845C
-void func_80C08480(void); // func_80C08480
-void func_80C08760(void); // func_80C08760
-void func_80C087FC(void); // func_80C087FC
+void ObjUsiyane_Init(void); // func_80C0836C
+void ObjUsiyane_Destroy(void); // func_80C08428
+void ObjUsiyane_Update(void); // func_80C0845C
+void ObjUsiyane_Draw(void); // func_80C08480
+void EnNnh_Init(void); // func_80C08760
+void EnNnh_Destroy(void); // func_80C087FC
 void func_80C08828(void); // func_80C08828
 void func_80C0883C(void); // func_80C0883C
 void func_80C088A4(void); // func_80C088A4
 void func_80C088B8(void); // func_80C088B8
-void func_80C088EC(void); // func_80C088EC
-void func_80C08950(void); // func_80C08950
-void func_80C08A80(void); // func_80C08A80
-void func_80C08B2C(void); // func_80C08B2C
+void EnNnh_Update(void); // func_80C088EC
+void EnNnh_Draw(void); // func_80C08950
+void ObjKzsaku_Init(void); // func_80C08A80
+void ObjKzsaku_Destroy(void); // func_80C08B2C
 void func_80C08B60(void); // func_80C08B60
 void func_80C08B7C(void); // func_80C08B7C
 void func_80C08BBC(void); // func_80C08BBC
 void func_80C08BD0(void); // func_80C08BD0
 void func_80C08C84(void); // func_80C08C84
 void func_80C08CB0(void); // func_80C08CB0
-void func_80C08D20(void); // func_80C08D20
-void func_80C08D44(void); // func_80C08D44
-void func_80C08E40(void); // func_80C08E40
-void func_80C08EC8(void); // func_80C08EC8
-void func_80C08EF4(void); // func_80C08EF4
-void func_80C08FEC(void); // func_80C08FEC
-void func_80C090D0(void); // func_80C090D0
-void func_80C09210(void); // func_80C09210
+void ObjKzsaku_Update(void); // func_80C08D20
+void ObjKzsaku_Draw(void); // func_80C08D44
+void ObjMilkBin_Init(void); // func_80C08E40
+void ObjMilkBin_Destroy(void); // func_80C08EC8
+void ObjMilkBin_Update(void); // func_80C08EF4
+void ObjMilkBin_Draw(void); // func_80C08FEC
+void EnKitan_Init(void); // func_80C090D0
+void EnKitan_Destroy(void); // func_80C09210
 void func_80C0923C(void); // func_80C0923C
 void func_80C09390(void); // func_80C09390
 void func_80C09418(void); // func_80C09418
@@ -16596,13 +16596,13 @@ void func_80C09708(void); // func_80C09708
 void func_80C09990(void); // func_80C09990
 void func_80C09AA4(void); // func_80C09AA4
 void func_80C09B50(void); // func_80C09B50
-void func_80C09BC8(void); // func_80C09BC8
+void EnKitan_Update(void); // func_80C09BC8
 void func_80C09C74(void); // func_80C09C74
 void func_80C09C90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C09C90
 void func_80C09CD0(void); // func_80C09CD0
 void func_80C09ED0(void); // func_80C09ED0
-void func_80C09FEC(void); // func_80C09FEC
-void func_80C0A0EC(void); // func_80C0A0EC
+void BgAstrBombwall_Init(void); // func_80C09FEC
+void BgAstrBombwall_Destroy(void); // func_80C0A0EC
 void func_80C0A120(void); // func_80C0A120
 void func_80C0A378(void); // func_80C0A378
 void func_80C0A38C(void); // func_80C0A38C
@@ -16610,15 +16610,15 @@ void func_80C0A400(void); // func_80C0A400
 void func_80C0A418(void); // func_80C0A418
 void func_80C0A458(void); // func_80C0A458
 void func_80C0A4BC(void); // func_80C0A4BC
-void func_80C0A4CC(void); // func_80C0A4CC
-void func_80C0A4F0(void); // func_80C0A4F0
+void BgAstrBombwall_Update(void); // func_80C0A4CC
+void BgAstrBombwall_Draw(void); // func_80C0A4F0
 void func_80C0A740(void); // func_80C0A740
 void func_80C0A804(void); // func_80C0A804
 void func_80C0A838(void); // func_80C0A838
 void func_80C0A86C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C0A86C
 void func_80C0A95C(void); // func_80C0A95C
-void func_80C0AA70(void); // func_80C0AA70
-void func_80C0AAE0(void); // func_80C0AAE0
+void BgIkninSusceil_Init(void); // func_80C0AA70
+void BgIkninSusceil_Destroy(void); // func_80C0AAE0
 void func_80C0AB14(void); // func_80C0AB14
 void func_80C0AB44(void); // func_80C0AB44
 void func_80C0AB88(void); // func_80C0AB88
@@ -16631,12 +16631,12 @@ void func_80C0AD44(void); // func_80C0AD44
 void func_80C0AD64(void); // func_80C0AD64
 void func_80C0AE3C(void); // func_80C0AE3C
 void func_80C0AE5C(void); // func_80C0AE5C
-void func_80C0AF18(void); // func_80C0AF18
-void func_80C0B080(void); // func_80C0B080
+void BgIkninSusceil_Update(void); // func_80C0AF18
+void BgIkninSusceil_Draw(void); // func_80C0B080
 void func_80C0B290(void); // func_80C0B290
 void func_80C0B31C(void); // func_80C0B31C
-void func_80C0B62C(void); // func_80C0B62C
-void func_80C0B820(void); // func_80C0B820
+void EnBsb_Init(void); // func_80C0B62C
+void EnBsb_Destroy(void); // func_80C0B820
 void func_80C0B888(void); // func_80C0B888
 void func_80C0B970(void); // func_80C0B970
 void func_80C0BA58(void); // func_80C0BA58
@@ -16681,27 +16681,27 @@ void func_80C0E480(void); // func_80C0E480
 void func_80C0E4FC(void); // func_80C0E4FC
 void func_80C0E618(void); // func_80C0E618
 void func_80C0E9CC(void); // func_80C0E9CC
-void func_80C0EB8C(void); // func_80C0EB8C
+void EnBsb_Update(void); // func_80C0EB8C
 void func_80C0EEA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C0EEA0
 void func_80C0F078(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C0F078
 void func_80C0F170(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C0F170
-void func_80C0F308(void); // func_80C0F308
+void EnBsb_Draw(void); // func_80C0F308
 void func_80C0F544(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_80C0F544
 void func_80C0F640(void); // func_80C0F640
 void func_80C0F758(void); // func_80C0F758
-void func_80C0FFD0(void); // func_80C0FFD0
-void func_80C100CC(void); // func_80C100CC
+void EnRecepgirl_Init(void); // func_80C0FFD0
+void EnRecepgirl_Destroy(void); // func_80C100CC
 void func_80C100DC(void); // func_80C100DC
 void func_80C10148(void); // func_80C10148
 void func_80C1019C(void); // func_80C1019C
 void func_80C10290(void); // func_80C10290
 void func_80C102D4(void); // func_80C102D4
-void func_80C104E8(void); // func_80C104E8
+void EnRecepgirl_Update(void); // func_80C104E8
 void func_80C10558(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C10558
 void func_80C10590(void); // func_80C10590
-void func_80C105EC(void); // func_80C105EC
-void func_80C10770(void); // func_80C10770
-void func_80C10958(void); // func_80C10958
+void EnRecepgirl_Draw(void); // func_80C105EC
+void EnThiefbird_Init(void); // func_80C10770
+void EnThiefbird_Destroy(void); // func_80C10958
 void func_80C10984(void); // func_80C10984
 void func_80C10B0C(void); // func_80C10B0C
 void func_80C10DE8(void); // func_80C10DE8
@@ -16729,14 +16729,14 @@ void func_80C12744(void); // func_80C12744
 void func_80C127F4(void); // func_80C127F4
 void func_80C12B1C(void); // func_80C12B1C
 void func_80C12D00(void); // func_80C12D00
-void func_80C12ED4(void); // func_80C12ED4
+void EnThiefbird_Update(void); // func_80C12ED4
 void func_80C130EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C130EC
 void func_80C1315C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C1315C
 void func_80C13354(void); // func_80C13354
-void func_80C134D0(void); // func_80C134D0
-void func_80C13930(void); // func_80C13930
+void EnThiefbird_Draw(void); // func_80C134D0
+void EnJgameTsn_Init(void); // func_80C13930
 void func_80C13A2C(void); // func_80C13A2C
-void func_80C13B38(void); // func_80C13B38
+void EnJgameTsn_Destroy(void); // func_80C13B38
 void func_80C13B74(void); // func_80C13B74
 void func_80C13BB8(void); // func_80C13BB8
 void func_80C13E6C(void); // func_80C13E6C
@@ -16763,23 +16763,23 @@ void func_80C149B0(void); // func_80C149B0
 void func_80C14BCC(void); // func_80C14BCC
 void func_80C14D14(void); // func_80C14D14
 void func_80C14D58(void); // func_80C14D58
-void func_80C14E08(void); // func_80C14E08
+void EnJgameTsn_Update(void); // func_80C14E08
 void func_80C14E64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80C14E64
 void func_80C14EE4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C14EE4
-void func_80C14F1C(void); // func_80C14F1C
-void func_80C152F0(void); // func_80C152F0
-void func_80C1542C(void); // func_80C1542C
+void EnJgameTsn_Draw(void); // func_80C14F1C
+void ObjJgameLight_Init(void); // func_80C152F0
+void ObjJgameLight_Destroy(void); // func_80C1542C
 void func_80C15474(void); // func_80C15474
 void func_80C156C4(void); // func_80C156C4
 void func_80C15718(void); // func_80C15718
-void func_80C157D4(void); // func_80C157D4
-void func_80C15828(void); // func_80C15828
-void func_80C161E0(void); // func_80C161E0
-void func_80C16234(void); // func_80C16234
-void func_80C16244(void); // func_80C16244
-void func_80C1625C(void); // func_80C1625C
-void func_80C16480(void); // func_80C16480
-void func_80C16724(void); // func_80C16724
+void ObjJgameLight_Update(void); // func_80C157D4
+void ObjJgameLight_Draw(void); // func_80C15828
+void ObjYado_Init(void); // func_80C161E0
+void ObjYado_Destroy(void); // func_80C16234
+void ObjYado_Update(void); // func_80C16244
+void ObjYado_Draw(void); // func_80C1625C
+void DemoSyoten_Init(void); // func_80C16480
+void DemoSyoten_Destroy(void); // func_80C16724
 void func_80C16760(void); // func_80C16760
 void func_80C16818(void); // func_80C16818
 void func_80C168D0(void); // func_80C168D0
@@ -16790,28 +16790,28 @@ void func_80C16BD4(void); // func_80C16BD4
 void func_80C16DD4(void); // func_80C16DD4
 void func_80C16EAC(void); // func_80C16EAC
 void func_80C17008(void); // func_80C17008
-void func_80C170D4(void); // func_80C170D4
+void DemoSyoten_Update(void); // func_80C170D4
 void func_80C170F8(void); // func_80C170F8
 void func_80C173B4(void); // func_80C173B4
 void func_80C17468(void); // func_80C17468
-void func_80C17528(void); // func_80C17528
+void DemoSyoten_Draw(void); // func_80C17528
 void func_80C17690(void); // func_80C17690
-void func_80C17A10(void); // func_80C17A10
-void func_80C17B10(void); // func_80C17B10
+void DemoMoonend_Init(void); // func_80C17A10
+void DemoMoonend_Destroy(void); // func_80C17B10
 void func_80C17B50(void); // func_80C17B50
 void func_80C17B60(void); // func_80C17B60
 void func_80C17C48(void); // func_80C17C48
-void func_80C17E4C(void); // func_80C17E4C
+void DemoMoonend_Update(void); // func_80C17E4C
 void func_80C17E70(void); // func_80C17E70
 void func_80C17EE0(void); // func_80C17EE0
-void func_80C17F1C(void); // func_80C17F1C
+void DemoMoonend_Draw(void); // func_80C17F1C
 void func_80C17FCC(void); // func_80C17FCC
-void func_80C18120(void); // func_80C18120
-void func_80C1817C(void); // func_80C1817C
-void func_80C181B0(void); // func_80C181B0
+void BgLbfshot_Init(void); // func_80C18120
+void BgLbfshot_Destroy(void); // func_80C1817C
+void BgLbfshot_Draw(void); // func_80C181B0
 void func_80C18240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C18240
-void func_80C1838C(void); // func_80C1838C
-void func_80C184B8(void); // func_80C184B8
+void BgLastBwall_Init(void); // func_80C1838C
+void BgLastBwall_Destroy(void); // func_80C184B8
 void func_80C184EC(void); // func_80C184EC
 void func_80C187E4(void); // func_80C187E4
 void func_80C187F8(void); // func_80C187F8
@@ -16819,16 +16819,16 @@ void func_80C1886C(void); // func_80C1886C
 void func_80C18884(void); // func_80C18884
 void func_80C188C4(void); // func_80C188C4
 void func_80C18928(void); // func_80C18928
-void func_80C18938(void); // func_80C18938
-void func_80C1895C(void); // func_80C1895C
+void BgLastBwall_Update(void); // func_80C18938
+void BgLastBwall_Draw(void); // func_80C1895C
 void func_80C18B90(void); // func_80C18B90
 void func_80C18BD8(void); // func_80C18BD8
 void func_80C18C50(void); // func_80C18C50
-void func_80C18DC8(void); // func_80C18DC8
-void func_80C18E84(void); // func_80C18E84
-void func_80C18E94(void); // func_80C18E94
+void EnAnd_Init(void); // func_80C18DC8
+void EnAnd_Destroy(void); // func_80C18E84
+void EnAnd_Update(void); // func_80C18E94
 void func_80C18ED0(void); // func_80C18ED0
-void func_80C19084(void); // func_80C19084
+void EnAnd_Draw(void); // func_80C19084
 void func_80C192A0(void); // func_80C192A0
 void func_80C192B0(void); // func_80C192B0
 void func_80C19334(void); // func_80C19334
@@ -16861,37 +16861,37 @@ void func_80C1A650(void); // func_80C1A650
 void func_80C1A670(void); // func_80C1A670
 void func_80C1A6C8(void); // func_80C1A6C8
 void func_80C1A854(void); // func_80C1A854
-void func_80C1A8A4(void); // func_80C1A8A4
-void func_80C1A98C(void); // func_80C1A98C
-void func_80C1A9C0(void); // func_80C1A9C0
-void func_80C1A9E4(void); // func_80C1A9E4
+void EnInvadepohDemo_Init(void); // func_80C1A8A4
+void EnInvadepohDemo_Destroy(void); // func_80C1A98C
+void EnInvadepohDemo_Update(void); // func_80C1A9C0
+void EnInvadepohDemo_Draw(void); // func_80C1A9E4
 void func_80C1ADC0(void); // func_80C1ADC0
-void func_80C1ADFC(void); // func_80C1ADFC
-void func_80C1AF50(void); // func_80C1AF50
+void ObjDanpeilift_Init(void); // func_80C1ADFC
+void ObjDanpeilift_Destroy(void); // func_80C1AF50
 void func_80C1AF84(void); // func_80C1AF84
 void func_80C1AF94(void); // func_80C1AF94
 void func_80C1B210(void); // func_80C1B210
 void func_80C1B26C(void); // func_80C1B26C
-void func_80C1B2A4(void); // func_80C1B2A4
-void func_80C1B4E4(void); // func_80C1B4E4
-void func_80C1B640(void); // func_80C1B640
-void func_80C1B6F8(void); // func_80C1B6F8
+void ObjDanpeilift_Update(void); // func_80C1B2A4
+void ObjDanpeilift_Draw(void); // func_80C1B4E4
+void EnFall2_Init(void); // func_80C1B640
+void EnFall2_Destroy(void); // func_80C1B6F8
 void func_80C1B724(void); // func_80C1B724
 void func_80C1B8A4(void); // func_80C1B8A4
 void func_80C1B8B4(void); // func_80C1B8B4
 void func_80C1B8F0(void); // func_80C1B8F0
 void func_80C1B9D4(void); // func_80C1B9D4
-void func_80C1BAC8(void); // func_80C1BAC8
-void func_80C1BAEC(void); // func_80C1BAEC
+void EnFall2_Update(void); // func_80C1BAC8
+void EnFall2_Draw(void); // func_80C1BAEC
 void func_80C1BD90(void); // func_80C1BD90
 void func_80C1BDD8(void); // func_80C1BDD8
-void func_80C1BF08(void); // func_80C1BF08
-void func_80C1BFB8(void); // func_80C1BFB8
-void func_80C1BFC8(void); // func_80C1BFC8
+void DmAl_Init(void); // func_80C1BF08
+void DmAl_Destroy(void); // func_80C1BFB8
+void DmAl_Update(void); // func_80C1BFC8
 void func_80C1C028(void); // func_80C1C028
 void func_80C1C064(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C1C064
 void func_80C1C11C(void); // func_80C1C11C
-void func_80C1C130(void); // func_80C1C130
+void DmAl_Draw(void); // func_80C1C130
 void func_80C1C410(void); // func_80C1C410
 void func_80C1C4D8(void); // func_80C1C4D8
 void func_80C1C5B4(void); // func_80C1C5B4
@@ -16901,9 +16901,9 @@ void func_80C1C8E8(void); // func_80C1C8E8
 void func_80C1C958(void); // func_80C1C958
 void func_80C1CAB0(void); // func_80C1CAB0
 void func_80C1CC80(void); // func_80C1CC80
-void func_80C1CC90(void); // func_80C1CC90
-void func_80C1CCE4(void); // func_80C1CCE4
-void func_80C1CCF4(void); // func_80C1CCF4
+void DmAn_Init(void); // func_80C1CC90
+void DmAn_Destroy(void); // func_80C1CCE4
+void DmAn_Update(void); // func_80C1CCF4
 void func_80C1CD80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C1CD80
 void func_80C1CEFC(void); // func_80C1CEFC
 void func_80C1D0B0(void); // func_80C1D0B0
@@ -16914,47 +16914,47 @@ void func_80C1D6E0(void); // func_80C1D6E0
 void func_80C1D78C(void); // func_80C1D78C
 void func_80C1D7FC(void); // func_80C1D7FC
 void func_80C1D92C(void); // func_80C1D92C
-void func_80C1D93C(void); // func_80C1D93C
-void func_80C1DA48(void); // func_80C1DA48
-void func_80C1DA58(void); // func_80C1DA58
+void DmAh_Init(void); // func_80C1D93C
+void DmAh_Destroy(void); // func_80C1DA48
+void DmAh_Update(void); // func_80C1DA58
 void func_80C1DAD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C1DAD4
 void func_80C1DB24(void); // func_80C1DB24
-void func_80C1DCD8(void); // func_80C1DCD8
+void DmAh_Draw(void); // func_80C1DCD8
 void func_80C1DED0(void); // func_80C1DED0
 void func_80C1DF18(void); // func_80C1DF18
-void func_80C1E048(void); // func_80C1E048
-void func_80C1E0F8(void); // func_80C1E0F8
-void func_80C1E108(void); // func_80C1E108
+void DmNb_Init(void); // func_80C1E048
+void DmNb_Destroy(void); // func_80C1E0F8
+void DmNb_Update(void); // func_80C1E108
 void func_80C1E168(void); // func_80C1E168
-void func_80C1E17C(void); // func_80C1E17C
+void DmNb_Draw(void); // func_80C1E17C
 void func_80C1E290(void); // func_80C1E290
 void func_80C1E2D4(void); // func_80C1E2D4
 void func_80C1E3DC(void); // func_80C1E3DC
-void func_80C1E3EC(void); // func_80C1E3EC
-void func_80C1E424(void); // func_80C1E424
-void func_80C1E450(void); // func_80C1E450
+void EnDrs_Init(void); // func_80C1E3EC
+void EnDrs_Destroy(void); // func_80C1E424
+void EnDrs_Update(void); // func_80C1E450
 void func_80C1E4B0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C1E4B0
 void func_80C1E568(void); // func_80C1E568
-void func_80C1E690(void); // func_80C1E690
-void func_80C1E738(void); // func_80C1E738
+void EnEndingHero_Init(void); // func_80C1E690
+void EnEndingHero_Destroy(void); // func_80C1E738
 void func_80C1E748(void); // func_80C1E748
 void func_80C1E764(void); // func_80C1E764
-void func_80C1E790(void); // func_80C1E790
-void func_80C1E84C(void); // func_80C1E84C
-void func_80C1E9E0(void); // func_80C1E9E0
-void func_80C1EAB4(void); // func_80C1EAB4
+void EnEndingHero_Update(void); // func_80C1E790
+void EnEndingHero_Draw(void); // func_80C1E84C
+void DmBal_Init(void); // func_80C1E9E0
+void DmBal_Destroy(void); // func_80C1EAB4
 void func_80C1EAC4(void); // func_80C1EAC4
 void func_80C1EAD8(void); // func_80C1EAD8
 void func_80C1EAE8(void); // func_80C1EAE8
 void func_80C1EC60(void); // func_80C1EC60
 void func_80C1ED0C(void); // func_80C1ED0C
 void func_80C1ED64(void); // func_80C1ED64
-void func_80C1EDE4(void); // func_80C1EDE4
+void DmBal_Update(void); // func_80C1EDE4
 void func_80C1EF80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80C1EF80
 void func_80C1F060(void); // func_80C1F060
-void func_80C1F078(void); // func_80C1F078
-void func_80C1F3D0(void); // func_80C1F3D0
-void func_80C1F45C(void); // func_80C1F45C
+void DmBal_Draw(void); // func_80C1F078
+void EnPaper_Init(void); // func_80C1F3D0
+void EnPaper_Destroy(void); // func_80C1F45C
 void func_80C1F46C(void); // func_80C1F46C
 void func_80C1F480(void); // func_80C1F480
 void func_80C1F4E8(void); // func_80C1F4E8
@@ -16962,10 +16962,10 @@ void func_80C1F4FC(void); // func_80C1F4FC
 void func_80C1F55C(void); // func_80C1F55C
 void func_80C1F6E0(void); // func_80C1F6E0
 void func_80C1F87C(void); // func_80C1F87C
-void func_80C1F97C(void); // func_80C1F97C
-void func_80C1F9D0(void); // func_80C1F9D0
-void func_80C1FCF0(void); // func_80C1FCF0
-void func_80C1FDE0(void); // func_80C1FDE0
+void EnPaper_Update(void); // func_80C1F97C
+void EnPaper_Draw(void); // func_80C1F9D0
+void EnHintSkb_Init(void); // func_80C1FCF0
+void EnHintSkb_Destroy(void); // func_80C1FDE0
 void func_80C1FE0C(void); // func_80C1FE0C
 void func_80C1FE20(void); // func_80C1FE20
 void func_80C1FE30(void); // func_80C1FE30
@@ -16998,10 +16998,10 @@ void func_80C21320(void); // func_80C21320
 void func_80C21414(void); // func_80C21414
 void func_80C21468(void); // func_80C21468
 void func_80C215E4(void); // func_80C215E4
-void func_80C21790(void); // func_80C21790
+void EnHintSkb_Update(void); // func_80C21790
 void func_80C21858(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80C21858
 void func_80C219D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C219D4
-void func_80C21B9C(void); // func_80C21B9C
+void EnHintSkb_Draw(void); // func_80C21B9C
 void func_80C22350(void); // func_80C22350
 void func_80C22400(void); // func_80C22400
 void func_80C2247C(void); // func_80C2247C
@@ -17012,47 +17012,47 @@ void func_80C2291C(void); // func_80C2291C
 void func_80C229AC(void); // func_80C229AC
 void func_80C229EC(void); // func_80C229EC
 void func_80C229FC(void); // func_80C229FC
-void func_80C22A40(void); // func_80C22A40
-void func_80C22B30(void); // func_80C22B30
-void func_80C22B40(void); // func_80C22B40
-void func_80C22D40(void); // func_80C22D40
-void func_80C22DDC(void); // func_80C22DDC
+void DmTag_Init(void); // func_80C22A40
+void DmTag_Destroy(void); // func_80C22B30
+void DmTag_Update(void); // func_80C22B40
+void EnBh_Init(void); // func_80C22D40
+void EnBh_Destroy(void); // func_80C22DDC
 void func_80C22DEC(void); // func_80C22DEC
-void func_80C230DC(void); // func_80C230DC
-void func_80C23154(void); // func_80C23154
-void func_80C23230(void); // func_80C23230
-void func_80C232D8(void); // func_80C232D8
+void EnBh_Update(void); // func_80C230DC
+void EnBh_Draw(void); // func_80C23154
+void EnEndingHero2_Init(void); // func_80C23230
+void EnEndingHero2_Destroy(void); // func_80C232D8
 void func_80C232E8(void); // func_80C232E8
 void func_80C23304(void); // func_80C23304
-void func_80C23330(void); // func_80C23330
-void func_80C23398(void); // func_80C23398
-void func_80C23460(void); // func_80C23460
-void func_80C23508(void); // func_80C23508
+void EnEndingHero2_Update(void); // func_80C23330
+void EnEndingHero2_Draw(void); // func_80C23398
+void EnEndingHero3_Init(void); // func_80C23460
+void EnEndingHero3_Destroy(void); // func_80C23508
 void func_80C23518(void); // func_80C23518
 void func_80C23534(void); // func_80C23534
-void func_80C23560(void); // func_80C23560
-void func_80C235C8(void); // func_80C235C8
-void func_80C23690(void); // func_80C23690
-void func_80C23738(void); // func_80C23738
+void EnEndingHero3_Update(void); // func_80C23560
+void EnEndingHero3_Draw(void); // func_80C235C8
+void EnEndingHero4_Init(void); // func_80C23690
+void EnEndingHero4_Destroy(void); // func_80C23738
 void func_80C23748(void); // func_80C23748
 void func_80C23764(void); // func_80C23764
-void func_80C23790(void); // func_80C23790
-void func_80C237F8(void); // func_80C237F8
-void func_80C238C0(void); // func_80C238C0
-void func_80C23970(void); // func_80C23970
+void EnEndingHero4_Update(void); // func_80C23790
+void EnEndingHero4_Draw(void); // func_80C237F8
+void EnEndingHero5_Init(void); // func_80C238C0
+void EnEndingHero5_Destroy(void); // func_80C23970
 void func_80C23980(void); // func_80C23980
 void func_80C2399C(void); // func_80C2399C
-void func_80C239C8(void); // func_80C239C8
+void EnEndingHero5_Update(void); // func_80C239C8
 void func_80C23A30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C23A30
-void func_80C23A7C(void); // func_80C23A7C
-void func_80C23C90(void); // func_80C23C90
-void func_80C23D50(void); // func_80C23D50
+void EnEndingHero5_Draw(void); // func_80C23A7C
+void EnEndingHero6_Init(void); // func_80C23C90
+void EnEndingHero6_Destroy(void); // func_80C23D50
 void func_80C23D60(void); // func_80C23D60
 void func_80C23DDC(void); // func_80C23DDC
 void func_80C23E18(void); // func_80C23E18
-void func_80C23E44(void); // func_80C23E44
+void EnEndingHero6_Update(void); // func_80C23E44
 void func_80C23F14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C23F14
-void func_80C23F6C(void); // func_80C23F6C
+void EnEndingHero6_Draw(void); // func_80C23F6C
 void func_80C24360(void); // func_80C24360
 void func_80C24428(void); // func_80C24428
 void func_80C24504(void); // func_80C24504
@@ -17062,16 +17062,16 @@ void func_80C24838(void); // func_80C24838
 void func_80C248A8(void); // func_80C248A8
 void func_80C24A00(void); // func_80C24A00
 void func_80C24BD0(void); // func_80C24BD0
-void func_80C24BE0(void); // func_80C24BE0
-void func_80C24C34(void); // func_80C24C34
-void func_80C24C44(void); // func_80C24C44
+void DmGm_Init(void); // func_80C24BE0
+void DmGm_Destroy(void); // func_80C24C34
+void DmGm_Update(void); // func_80C24C44
 void func_80C24CD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C24CD0
 void func_80C24E4C(void); // func_80C24E4C
 void func_80C25000(void); // func_80C25000
 void func_80C25360(void); // func_80C25360
 void func_80C253D0(void); // func_80C253D0
-void func_80C255DC(void); // func_80C255DC
-void func_80C25630(void); // func_80C25630
+void ObjSwprize_Init(void); // func_80C255DC
+void ObjSwprize_Destroy(void); // func_80C25630
 void func_80C25640(void); // func_80C25640
 void func_80C25654(void); // func_80C25654
 void func_80C25698(void); // func_80C25698
@@ -17080,23 +17080,23 @@ void func_80C25710(void); // func_80C25710
 void func_80C2572C(void); // func_80C2572C
 void func_80C25780(void); // func_80C25780
 void func_80C25794(void); // func_80C25794
-void func_80C257A4(void); // func_80C257A4
+void ObjSwprize_Update(void); // func_80C257A4
 void func_80C258A0(void); // func_80C258A0
 void func_80C2590C(void); // func_80C2590C
 void func_80C259E8(void); // func_80C259E8
-void func_80C25A0C(void); // func_80C25A0C
-void func_80C25ABC(void); // func_80C25ABC
-void func_80C25AE8(void); // func_80C25AE8
-void func_80C25BC0(void); // func_80C25BC0
-void func_80C25C34(void); // func_80C25C34
-void func_80C25C44(void); // func_80C25C44
+void EnInvisibleRuppe_Init(void); // func_80C25A0C
+void EnInvisibleRuppe_Destroy(void); // func_80C25ABC
+void EnInvisibleRuppe_Update(void); // func_80C25AE8
+void ObjEnding_Init(void); // func_80C25BC0
+void ObjEnding_Update(void); // func_80C25C34
+void ObjEnding_Draw(void); // func_80C25C44
 void func_80C25D40(void); // func_80C25D40
 void func_80C25D84(void); // func_80C25D84
-void func_80C25D94(void); // func_80C25D94
-void func_80C25E14(void); // func_80C25E14
-void func_80C25E38(void); // func_80C25E38
+void EnRsn_Init(void); // func_80C25D94
+void EnRsn_Destroy(void); // func_80C25E14
+void EnRsn_Update(void); // func_80C25E38
 void func_80C25EB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80C25EB0
 void func_80C25EF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C25EF0
-void func_80C25F4C(void); // func_80C25F4C
+void EnRsn_Draw(void); // func_80C25F4C
 
 #endif

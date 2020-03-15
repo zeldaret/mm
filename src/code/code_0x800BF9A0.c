@@ -3,7 +3,7 @@
 
 void func_800BF9A0(s32 a0, s32 a1) {
     s32 i;
-    ActorOverlayTableEntry* s0;
+    ActorOverlay* s0;
     s32 v1;
 
     func_8008439C(-2, 0);
@@ -11,27 +11,27 @@ void func_800BF9A0(s32 a0, s32 a1) {
     func_800847CC(D_801DCBC4);
 
     for (i = 0, s0 = &actorOverlayTable[0]; i < D_801B4610; i++, s0++) {
-        v1 = s0->vramEnd - s0->vramStart;
-        if (s0->ramAddr == 0) continue;
-        func_800847CC(D_801DCBE4, i, s0->ramAddr, s0->ramAddr + v1, s0->clients, &D_801DCBFC);
+        v1 = (u32)s0->vramEnd - (u32)s0->vramStart;
+        if (s0->loadedRamAddr == NULL) continue;
+        func_800847CC(D_801DCBE4, i, s0->loadedRamAddr, (u32)s0->loadedRamAddr + v1, s0->nbLoaded, &D_801DCBFC);
     }
 }
 
 s32 func_800BFA78(s32 a0, s32 a1) {
     s32 i;
-    ActorOverlayTableEntry* v0 = &actorOverlayTable[0];
+    ActorOverlay* v0 = &actorOverlayTable[0];
     s32 t1;
     s32 a2;
     s32 a0_2 = a0;
 
     for (i = 0; i < D_801B4610; i++, v0++) {
-        t1 = v0->vramStart - v0->ramAddr;
-        a2 = v0->vramEnd - v0->vramStart;
+        t1 = (u32)v0->vramStart - (u32)v0->loadedRamAddr;
+        a2 = (u32)v0->vramEnd - (u32)v0->vramStart;
 
-        if (v0->ramAddr == 0) continue;
-        if (a0_2 < v0->ramAddr) continue;
+        if (v0->loadedRamAddr == NULL) continue;
+        if (a0_2 < (u32)v0->loadedRamAddr) continue;
 
-        if (a0_2 < (v0->ramAddr + a2)) {
+        if (a0_2 < ((u32)v0->loadedRamAddr + a2)) {
             return a0_2 + t1;
         }
     }

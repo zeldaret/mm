@@ -2,11 +2,11 @@
 #include <global.h>
 
 u8 D_80096B20 = 1;
-vu8 D_80096B24 = 1;
-u8 D_80096B28 = 0;
-u32 viEnabledSpecialFeatures = 0x42;
-f32 screenXScale = 1.0f;
-f32 screenYScale = 1.0f;
+vu8 gViConfigUseDefault = 1;
+u8 gViConfigAdditionalScanLines = 0;
+u32 gViConfigFeatures = 0x42;
+f32 gViConfigXScale = 1.0f;
+f32 gViConfigYScale = 1.0f;
 
 void Idle_ClearMemory(void* begin, void* end){
     if (begin < end) {
@@ -28,9 +28,9 @@ GLOBAL_ASM("./asm/non_matchings/idle/Idle_InitFramebuffer.asm")
 
 void Idle_InitScreen(void) {
     Idle_InitFramebuffer((u32*)&D_80000500, 0x25800, 0x00010001);
-    func_800805E0(0);
+    ViConfig_UpdateVi(0);
     osViSwapBuffer(&D_80000500);
-    osViRepeatLine(0);
+    osViBlack(0);
 }
 
 void Idle_InitMemory(void) {
@@ -43,7 +43,7 @@ void Idle_InitMemory(void) {
 }
 
 #ifdef NON_MATCHING
-// regalloc around Dmamgr_SendRequest
+// regalloc around DmaMgr_SendRequestImpl
 void Idle_InitCodeAndMemory(void) {
     DmaRequest dmaReq;
     OSMesgQueue queue;
@@ -52,15 +52,15 @@ void Idle_InitCodeAndMemory(void) {
 
     osCreateMesgQueue(&queue, &mesg, 1);
 
-    oldSize = dmamgrChunkSize;
-    dmamgrChunkSize = 0;
+    oldSize = sDmaMgrDmaBuffSize;
+    sDmaMgrDmaBuffSize = 0;
 
-    Dmamgr_SendRequest(&dmaReq, (u32)&code_text_start, (u32)&code_vrom_start, (u32)&code_vrom_end - (u32)&code_vrom_start, 0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)&code_vrom_start, (u32)&code_vrom_end - (u32)&code_vrom_start, 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, 0, 1);
 
-    dmamgrChunkSize = oldSize;
+    sDmaMgrDmaBuffSize = oldSize;
 
     Idle_ClearMemory(&code_bss_start, &code_bss_end);
 }
@@ -68,9 +68,9 @@ void Idle_InitCodeAndMemory(void) {
 GLOBAL_ASM("./asm/non_matchings/idle/Idle_InitCodeAndMemory.asm")
 #endif
 
-void Idle_MainThreadEntry(void* arg) {
+void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&irqmgrStackEntry, (u32)&irqmgrStack, (u32)&irqmgrStack[1280], 0, 256, "irqmgr");
-    IrqMgr_Start(&irqmgrContext, &irqmgrStackEntry, 18, 1);
+    IrqMgr_Create(&irqmgrContext, &irqmgrStackEntry, 18, 1);
     Dmamgr_Start();
     Idle_InitCodeAndMemory();
     main(arg);
@@ -80,9 +80,9 @@ void Idle_MainThreadEntry(void* arg) {
 void func_8008038C(void) {
     osCreateViManager(254);
 
-    viEnabledSpecialFeatures = 66;
-    screenXScale = 1.0;
-    screenYScale = 1.0;
+    gViConfigFeatures = 66;
+    gViConfigXScale = 1.0;
+    gViConfigYScale = 1.0;
 
     switch (osTvType) {
     case 1:
@@ -96,7 +96,7 @@ void func_8008038C(void) {
     case 0:
         D_8009B290 = 44;
         D_8009B240 = D_800980E0;
-        screenYScale = 0.833f;
+        gViConfigYScale = 0.833f;
         break;
     }
 
@@ -107,7 +107,7 @@ void Idle_ThreadEntry(void* arg) {
     func_8008038C();
     osCreatePiManager(150, &D_8009B228, D_8009B160, 50);
     StackCheck_Init(&mainStackEntry, (u32)&mainStack, (u32)&mainStack[2304], 0, 1024, "main");
-    osCreateThread(&mainOSThread, 3, (osCreateThread_func)Idle_MainThreadEntry, arg, &mainStack[2304], 12);
+    osCreateThread(&mainOSThread, 3, (osCreateThread_func)Main_ThreadEntry, arg, &mainStack[2304], 12);
     osStartThread(&mainOSThread);
     osSetThreadPri(NULL, 0);
 

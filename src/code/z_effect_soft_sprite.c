@@ -4,14 +4,14 @@
 void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     u32 i;
     LoadedParticleEntry* iter;
-    ParticleOverlayTableEntry* iter2;
+    ParticleOverlay* iter2;
 
-    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->common.heap, numEntries * sizeof(LoadedParticleEntry));
+    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->state.heap, numEntries * sizeof(LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
     for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
-        EffectSS_ResetLoadedParticleEntry(iter);
+        EffectSS_ResetEntry(iter);
     }
 
     for (i = 0, iter2 = particleOverlayTable; i != 0x27; i++) {
@@ -19,10 +19,10 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     }
 }
 
-void EffectSS_Fini(GlobalContext* ctxt) {
+void EffectSS_Clear(GlobalContext* ctxt) {
     u32 i;
     LoadedParticleEntry* iter;
-    ParticleOverlayTableEntry* iter2;
+    ParticleOverlay* iter2;
     void* addr;
 
     EffectSS2Info.data_table = NULL;
@@ -57,10 +57,10 @@ void EffectSS_Delete(LoadedParticleEntry* a0) {
         func_801A72CC((UNK_PTR)&a0->unk2C);
     }
 
-    EffectSS_ResetLoadedParticleEntry(a0);
+    EffectSS_ResetEntry(a0);
 }
 
-void EffectSS_ResetLoadedParticleEntry(LoadedParticleEntry* particle) {
+void EffectSS_ResetEntry(LoadedParticleEntry* particle) {
     u32 i;
 
     particle->type = 0x27;
@@ -164,7 +164,7 @@ void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* in
     u32 initRet;
     u32 overlaySize;
     ParticleOverlayInfo* overlayInfo;
-    ParticleOverlayTableEntry* entry = &particleOverlayTable[type];
+    ParticleOverlay* entry = &particleOverlayTable[type];
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
         return;
@@ -203,7 +203,7 @@ void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* in
         initRet = (*overlayInfo->init)(ctxt, index, &EffectSS2Info.data_table[index], initData);
 
         if (initRet == 0) {
-            EffectSS_ResetLoadedParticleEntry(&EffectSS2Info.data_table[index]);
+            EffectSS_ResetEntry(&EffectSS2Info.data_table[index]);
         }
     }
 }
@@ -256,9 +256,9 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
     LightMapper* s0;
     s32 i;
 
-    s0 = Lights_CreateMapper(&ctxt->lightsContext, ctxt->common.gCtxt);
-    Lights_MapLights(s0, ctxt->lightsContext.lightsHead, 0, ctxt);
-    Lights_UploadLights(s0, ctxt->common.gCtxt);
+    s0 = Lights_CreateMapper(&ctxt->lightCtx, ctxt->state.gfxCtx);
+    Lights_MapLights(s0, ctxt->lightCtx.lightsHead, 0, ctxt);
+    Lights_UploadLights(s0, ctxt->state.gfxCtx);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {

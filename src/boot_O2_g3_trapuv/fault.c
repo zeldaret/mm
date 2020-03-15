@@ -884,7 +884,7 @@ void Fault_SetFB(void* fb, u16 w, u16 h) {
 
 void Fault_Start(void){
     faultCtxt = &faultContextStruct;
-    bzero(faultCtxt, sizeof(FaultContext));
+    bzero(faultCtxt, sizeof(FaultThreadStruct));
     FaultDrawer_Init();
     FaultDrawer_SetInputCallback(Fault_WaitForInput);
     faultCtxt->exitDebugger = 0;

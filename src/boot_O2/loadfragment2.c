@@ -72,7 +72,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
 
     if(1);
 
-    Dmamgr_SendRequestAndWait(allocatedVRamAddr, vRomStart, size);
+    DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     end = (void*)(allocatedVRamAddr + size);
     overlayInfo = (OverlayBlockSizes*)((int)end - *(int*)((int)end + -4));
