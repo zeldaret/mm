@@ -525,11 +525,11 @@ void func_800A817C(void); // func_800A817C
 void func_800A81A4(void); // func_800A81A4
 void func_800A81F0(void); // func_800A81F0
 void func_800A8514(void); // func_800A8514
-void func_800A8558(void); // func_800A8558
-void func_800A8610(void); // func_800A8610
-void func_800A8720(void); // func_800A8720
-void func_800A8854(void); // func_800A8854
-void func_800A8860(void); // func_800A8860
+void EffectBlure_Initcommon(EffBlureParams* params); // func_800A8558
+void EffectBlure_Init1(EffBlureParams* params, EffBlureInit1* init); // func_800A8610
+void EffectBlure_Init2(EffBlureParams* params, EffBlureInit2* init); // func_800A8720
+void EffectBlure_Destroy(EffBlureParams* params); // func_800A8854
+s32 EffectBlure_Update(EffBlureParams* params); // func_800A8860
 void func_800A8C78(void); // func_800A8C78
 void func_800A8DE8(void); // func_800A8DE8
 void func_800A92FC(void); // func_800A92FC
@@ -540,16 +540,16 @@ void func_800AA460(void); // func_800AA460
 void func_800AA498(void); // func_800AA498
 void func_800AA700(void); // func_800AA700
 void func_800AABE0(void); // func_800AABE0
-void func_800AB0EC(void); // func_800AB0EC
-void func_800AB5D0(void); // func_800AB5D0
-void func_800AB808(void); // func_800AB808
-void func_800AB894(void); // func_800AB894
-void func_800AB9F8(void); // func_800AB9F8
-void func_800AC718(void); // func_800AC718
-void func_800ACBF0(void); // func_800ACBF0
-void func_800ACFCC(void); // func_800ACFCC
-void func_800ACFD8(void); // func_800ACFD8
-void func_800AD09C(void); // func_800AD09C
+void EffectBlure_Draw(EffBlureParams* params, GraphicsContext* gCtxt); // func_800AB0EC
+void EffectShieldParticle_Init(EffShieldParticleParams* params, EffShieldParticleInit* init); // func_800AB5D0
+void EffectShieldParticle_Destroy(EffShieldParticleParams* params); // func_800AB808
+s32 EffectShieldParticle_Update(EffShieldParticleParams* params); // func_800AB894
+void EffectShieldParticle_CalculateColors(EffShieldParticleParams* params, ColorRGBA8* primColor, ColorRGBA8* envColor); // func_800AB9F8
+void EffectShieldParticle_Draw(EffShieldParticleParams* params, GraphicsContext* gCtxt); // func_800AC718
+void EffectSpark_Init(EffSparkParams* params, EffSparkParams* init); // func_800ACBF0
+void EffectSpark_Destroy(EffSparkParams* params); // func_800ACFCC
+s32 EffectSpark_Update(EffSparkParams* params); // func_800ACFD8
+void EffectSpark_Draw(EffSparkParams* params, GraphicsContext* gCtxt); // func_800AD09C
 void func_800AE2A0(void); // func_800AE2A0
 void func_800AE434(GlobalContext* ctxt, ColorRGBA8* color, short sParm3, short sParm4); // func_800AE434
 void func_800AE5A0(GlobalContext* ctxt); // func_800AE5A0
@@ -558,21 +558,21 @@ void func_800AE778(GlobalContext* ctxt, ColorRGBA8* color, short param_3, short 
 void func_800AE8EC(GlobalContext* ctxt); // func_800AE8EC
 void func_800AE930(CollisionContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, BgPolygon* param_6, int param_7); // func_800AE930
 void func_800AEF44(void); // func_800AEF44
-void func_800AEF70(void); // func_800AEF70
-void func_800AEFA0(void); // func_800AEFA0
-void func_800AF044(void); // func_800AF044
-void func_800AF050(void); // func_800AF050
-void func_800AF284(void); // func_800AF284
-void func_800AF310(void); // func_800AF310
-void func_800AF710(void); // func_800AF710
-void func_800AF720(void); // func_800AF720
-void func_800AF87C(void); // func_800AF87C
-void func_800AF890(GlobalContext* ctxt); // func_800AF890
-void func_800AF960(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_800AF960
-void func_800AFB24(void); // func_800AFB24
-void func_800AFC60(GlobalContext* ctxt); // func_800AFC60
-void func_800AFDCC(GlobalContext* ctxt, int param_2); // func_800AFDCC
-void func_800AFF24(void); // func_800AFF24
+void EffectTireMark_InitParticle(EffTireMarkParticle* particle); // func_800AEF70
+void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init); // func_800AEFA0
+void EffectTireMark_Destroy(EffTireMarkParams* params); // func_800AF044
+s32 EffectTireMark_Update(EffTireMarkParams* params); // func_800AF050
+void EffectTireMark_InitVertices(F3DVertexColor* vertices, EffTireMarkParticle* particle, s32 index, s32 alpha); // func_800AF284
+void EffectTireMark_Draw(EffTireMarkParams* params, GraphicsContext* gCtxt); // func_800AF310
+GlobalContext* Effect_GetContext(void); // func_800AF710
+void* Effect_GetParams(s32 index); // func_800AF720
+void Effect_InitCommon(UNK_PTR param_1); // func_800AF87C
+void Effect_Init(GlobalContext* ctxt); // func_800AF890
+void Effect_Create(GlobalContext* ctxt, s32* index, s32 type, UNK_TYPE1 param_4, UNK_TYPE1 param_5, void* initParams); // func_800AF960
+void Effect_DrawAll(GraphicsContext* gCtxt); // func_800AFB24
+void Effect_UpdateAll(GlobalContext* ctxt); // func_800AFC60
+void Effect_Destroy(GlobalContext* ctxt, s32 index); // func_800AFDCC
+void Effect_DestroyAll(void); // func_800AFF24
 void EffectSS_Init(GlobalContext* ctxt, s32 numEntries); // func_800B0050
 void EffectSS_Clear(GlobalContext* ctxt); // func_800B0140
 LoadedParticleEntry* EffectSS_GetTable(void); // func_800B0200
@@ -1515,11 +1515,11 @@ void func_800E8160(void); // func_800E8160
 void func_800E823C(void); // func_800E823C
 void func_800E8318(void); // func_800E8318
 void func_800E8478(void); // func_800E8478
-void func_800E85D4(void); // func_800E85D4
+void func_800E85D4(UNK_TYPE4 param_1, Vec3f* param_2); // func_800E85D4
 void func_800E8668(void); // func_800E8668
 void func_800E8690(void); // func_800E8690
 void func_800E86C0(void); // func_800E86C0
-void func_800E86E0(void); // func_800E86E0
+void func_800E86E0(UNK_TYPE4 param_1, Vec3f* param_2, UNK_TYPE4 param_3); // func_800E86E0
 void func_800E8784(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800E8784
 void func_800E8EA0(GlobalContext* ctxt, Actor* actor, u16 param_3); // func_800E8EA0
 s32 nop_800E8ED0(UNK_TYPE4 param_1); // func_800E8ED0
@@ -2324,13 +2324,20 @@ void func_8012BBE8(void); // func_8012BBE8
 void func_8012BC50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BC50
 void func_8012BD8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BD8C
 void func_8012BF08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BF08
-void func_8012BF3C(void); // func_8012BF3C
+Gfx* func_8012BF3C(Gfx* param_1, s32 param_2); // func_8012BF3C
 void func_8012BF78(void); // func_8012BF78
 void func_8012BF98(void); // func_8012BF98
 void func_8012BFC4(void); // func_8012BFC4
+UNK_PTR func_8012BFEC(UNK_PTR param_1); // func_8012BFEC
 void func_8012C014(void); // func_8012C014
+void func_8012C058(int param_1); // func_8012C058
 void func_8012C080(void); // func_8012C080
+void func_8012C0A8(int param_1); // func_8012C0A8
+void func_8012C0D0(int param_1); // func_8012C0D0
+void func_8012C0F8(int param_1); // func_8012C0F8
+void func_8012C120(int param_1); // func_8012C120
 void func_8012C148(void); // func_8012C148
+void func_8012C170(int param_1); // func_8012C170
 void func_8012C198(void); // func_8012C198
 void func_8012C1C0(void); // func_8012C1C0
 void func_8012C1EC(void); // func_8012C1EC
@@ -2341,30 +2348,48 @@ void func_8012C28C(GraphicsContext* gCtxt); // func_8012C28C
 void func_8012C2B4(void); // func_8012C2B4
 void func_8012C2DC(GraphicsContext* gCtxt); // func_8012C2DC
 void func_8012C304(void); // func_8012C304
+void func_8012C32C(int param_1); // func_8012C32C
+void func_8012C354(int param_1); // func_8012C354
+void func_8012C37C(int param_1); // func_8012C37C
 void func_8012C3A4(void); // func_8012C3A4
 void func_8012C3CC(void); // func_8012C3CC
 void func_8012C3F4(void); // func_8012C3F4
+void func_8012C420(int param_1); // func_8012C420
 void func_8012C448(GraphicsContext* gCtxt); // func_8012C448
 void func_8012C470(void); // func_8012C470
+UNK_PTR func_8012C498(UNK_PTR param_1); // func_8012C498
 void func_8012C4C0(void); // func_8012C4C0
-void func_8012C560(void); // func_8012C560
+void func_8012C4E8(int param_1); // func_8012C4E8
+void func_8012C510(int param_1); // func_8012C510
+void func_8012C538(int param_1); // func_8012C538
+void func_8012C560(GraphicsContext* gCtxt); // func_8012C560
 void func_8012C588(void); // func_8012C588
 void func_8012C5B0(void); // func_8012C5B0
+void func_8012C5D8(int param_1); // func_8012C5D8
 void func_8012C600(void); // func_8012C600
 void func_8012C628(GraphicsContext* gCtxt); // func_8012C628
 void func_8012C654(void); // func_8012C654
 void func_8012C680(void); // func_8012C680
 void func_8012C6AC(void); // func_8012C6AC
+void func_8012C6D4(int param_1); // func_8012C6D4
 void func_8012C6FC(void); // func_8012C6FC
 void func_8012C724(void); // func_8012C724
+UNK_PTR func_8012C74C(UNK_PTR param_1); // func_8012C74C
+UNK_PTR func_8012C774(UNK_PTR param_1); // func_8012C774
+UNK_PTR func_8012C7B8(UNK_PTR param_1); // func_8012C7B8
 Gfx* func_8012C7FC(Gfx* puParm1); // func_8012C7FC
+UNK_PTR func_8012C840(UNK_PTR param_1); // func_8012C840
 void func_8012C868(void); // func_8012C868
 void func_8012C8AC(GraphicsContext* gCtxt); // func_8012C8AC
 void func_8012C8D4(void); // func_8012C8D4
+void func_8012C8FC(int param_1); // func_8012C8FC
+void func_8012C924(int param_1); // func_8012C924
 void func_8012C94C(void); // func_8012C94C
 void func_8012C974(void); // func_8012C974
 void func_8012C9BC(void); // func_8012C9BC
+void func_8012C9E4(int param_1); // func_8012C9E4
 void func_8012CA0C(void); // func_8012CA0C
+void func_8012CA38(int param_1); // func_8012CA38
 void func_8012CA60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8012CA60
 void func_8012CB04(void); // func_8012CB04
 void func_8012CB28(void); // func_8012CB28
@@ -2732,7 +2757,7 @@ s32 func_8013FD74(View* view); // func_8013FD74
 s32 func_80140024(View* view); // func_80140024
 s32 func_801400CC(View* view, Gfx** param_2); // func_801400CC
 void func_80140260(void); // func_80140260
-void func_8014026C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE1 param_9, UNK_TYPE4 param_10, UNK_TYPE2 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13); // func_8014026C
+void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8, UNK_TYPE4 param_9, int param_10, short param_11, unsigned int param_12, UNK_TYPE4 param_13); // func_8014026C
 void func_80140730(void); // func_80140730
 void func_80140810(void); // func_80140810
 void func_80140898(void); // func_80140898
@@ -3739,8 +3764,8 @@ void func_8019AB40(void); // func_8019AB40
 void func_8019AC10(void); // func_8019AC10
 void func_8019ACEC(void); // func_8019ACEC
 void func_8019ADBC(void); // func_8019ADBC
-void FUN_8019ae40(int param_1, int param_2, unsigned int param_3, int param_4); // func_8019AE40
-void FUN_8019aec0(UNK_PTR param_1, UNK_PTR param_2); // func_8019AEC0
+void func_8019AE40(int param_1, int param_2, unsigned int param_3, int param_4); // func_8019AE40
+void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2); // func_8019AEC0
 void func_8019AF00(void); // func_8019AF00
 void func_8019AF58(void); // func_8019AF58
 void func_8019AFE8(void); // func_8019AFE8
@@ -4055,9 +4080,8 @@ void func_8080742C(void); // func_8080742C
 void func_808074B4(void); // func_808074B4
 void func_808077AC(void); // func_808077AC
 void func_80807940(void); // func_80807940
+void func_80807A78(int param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_80807A78
 void func_80807C58(void); // func_80807C58
-void func_80808000(void); // func_80808000
-void func_80808080(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80808080
 void func_80808214(void); // func_80808214
 void func_80808D30(void); // func_80808D30
 void func_80808F1C(void); // func_80808F1C

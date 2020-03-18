@@ -206,6 +206,49 @@ typedef struct {
 /* 0x1C */ OSMesg notifyMsg; // Completion notification message
 } DmaRequest; // size = 0x20
 
+typedef struct {
+/* 0x000 */ UNK_TYPE1 pad0[0x184];
+/* 0x184 */ ColorRGBA8 unk184;
+/* 0x188 */ ColorRGBA8 unk188;
+/* 0x18C */ ColorRGBA8 unk18C;
+/* 0x190 */ ColorRGBA8 unk190;
+/* 0x194 */ UNK_TYPE1 pad194[0xC];
+} EffBlureInit1; // size = 0x1A0
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x8];
+/* 0x08 */ ColorRGBA8 unk8;
+/* 0x0C */ ColorRGBA8 unkC;
+/* 0x10 */ ColorRGBA8 unk10;
+/* 0x14 */ ColorRGBA8 unk14;
+/* 0x18 */ UNK_TYPE1 pad18[0xC];
+} EffBlureInit2; // size = 0x24
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x18];
+} EffBlureParticle; // size = 0x18
+
+typedef struct {
+/* 0x0 */ u8 active;
+/* 0x1 */ UNK_TYPE1 pad1[0x3];
+} EffCommon; // size = 0x4
+
+typedef struct {
+/* 0x00 */ f32 startSpeed;
+/* 0x04 */ f32 endXChange;
+/* 0x08 */ f32 endX;
+/* 0x0C */ f32 startXChange;
+/* 0x10 */ f32 startX;
+/* 0x14 */ s16 rotationY;
+/* 0x16 */ s16 rotationZ;
+} EffShieldParticleParticle; // size = 0x18
+
+typedef struct {
+/* 0x0 */ s16 unk0;
+/* 0x2 */ s16 maxLife;
+/* 0x4 */ ColorRGBA8 color;
+} EffTireMarkInit; // size = 0x8
+
 typedef enum EffectSSType {
     EFFECT_SS2_TYPE_DUST = 0x0,
     EFFECT_SS2_TYPE_SPARKLE = 0x1,
@@ -892,6 +935,14 @@ typedef struct {
 
 typedef void(*actor_init_var_func)(u8*, ActorInitVar*);
 
+typedef void(*eff_destroy_func)(void* params);
+
+typedef void(*eff_draw_func)(void* params, GraphicsContext* gCtxt);
+
+typedef void(*eff_init_func)(void* params, void* init);
+
+typedef s32(*eff_update_func)(void* params);
+
 typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
@@ -1109,6 +1160,64 @@ typedef struct {
 /* 0x0C */ Vec3f unkC;
 /* 0x18 */ Vec3f unk18;
 } ColTriParamsInit; // size = 0x24
+
+typedef struct {
+/* 0x000 */ EffBlureParticle particles[16];
+/* 0x180 */ UNK_TYPE1 pad180[0x4];
+/* 0x184 */ f32 unk184;
+/* 0x188 */ u16 unk188;
+/* 0x18A */ UNK_TYPE1 pad18A[0x4];
+/* 0x18E */ ColorRGBA8 unk18E;
+/* 0x192 */ ColorRGBA8 unk192;
+/* 0x196 */ ColorRGBA8 unk196;
+/* 0x19A */ ColorRGBA8 unk19A;
+/* 0x19E */ u8 unk19E;
+/* 0x19F */ u8 unk19F;
+/* 0x1A0 */ u8 unk1A0;
+/* 0x1A1 */ u8 unk1A1;
+/* 0x1A2 */ UNK_TYPE1 pad1A2[0xA];
+} EffBlureParams; // size = 0x1AC
+
+typedef struct {
+/* 0x00 */ u32 paramsSize;
+/* 0x04 */ eff_init_func init;
+/* 0x08 */ eff_destroy_func destroy;
+/* 0x0C */ eff_update_func update;
+/* 0x10 */ eff_draw_func draw;
+} EffInfo; // size = 0x14
+
+typedef struct {
+/* 0x00 */ u8 numParticles;
+/* 0x02 */ Vec3s position;
+/* 0x08 */ ColorRGBA8 primColorStart;
+/* 0x0C */ ColorRGBA8 envColorStart;
+/* 0x10 */ ColorRGBA8 primColorMid;
+/* 0x14 */ ColorRGBA8 envColorMid;
+/* 0x18 */ ColorRGBA8 primColorEnd;
+/* 0x1C */ ColorRGBA8 envColorEnd;
+/* 0x20 */ f32 acceleration;
+/* 0x24 */ f32 maxInitialSpeed;
+/* 0x28 */ f32 lengthCutoff;
+/* 0x2C */ u8 duration;
+/* 0x2E */ LightInfoPositionalParams lightParams;
+/* 0x3C */ s32 hasLight;
+} EffShieldParticleInit; // size = 0x40
+
+typedef struct {
+/* 0x00 */ Vec3f velocity;
+/* 0x0C */ Vec3f position;
+/* 0x18 */ Vec3s unk18;
+/* 0x1E */ Vec3s unk1E;
+} EffSparkParticle; // size = 0x24
+
+typedef struct {
+/* 0x00 */ UNK_TYPE2 active;
+/* 0x02 */ Vec3s position1;
+/* 0x08 */ Vec3s position2;
+/* 0x0E */ s16 life;
+/* 0x10 */ UNK_TYPE1 pad10[0x4];
+/* 0x14 */ UNK_TYPE4 unk14;
+} EffTireMarkParticle; // size = 0x18
 
 typedef struct {
 /* 0x00 */ Vec3f position;
@@ -1341,6 +1450,34 @@ typedef struct {
 /* 0x00 */ ColBodyInfoInit body;
 /* 0x18 */ ColTriParamsInit params;
 } ColTriInit; // size = 0x3C
+
+typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffBlureParams params;
+} EffBlure; // size = 0x1B0
+
+typedef struct {
+/* 0x000 */ Vec3s position;
+/* 0x008 */ s32 numParticles; // Will be calculated as particleFactor1 * particleFactor2 + 2
+/* 0x00C */ EffSparkParticle particles[32];
+/* 0x48C */ f32 velocity;
+/* 0x490 */ f32 gravity;
+/* 0x494 */ u32 particleFactor1;
+/* 0x498 */ u32 particleFactor2;
+/* 0x49C */ ColorRGBA8 colorStart[4];
+/* 0x4AC */ ColorRGBA8 colorEnd[4];
+/* 0x4BC */ s32 age;
+/* 0x4C0 */ s32 duration;
+} EffSparkParams; // size = 0x4C4
+
+typedef struct {
+/* 0x000 */ EffTireMarkParticle particles[64];
+/* 0x600 */ s16 unk600;
+/* 0x602 */ s16 numParticles;
+/* 0x604 */ s16 maxLife;
+/* 0x606 */ ColorRGBA8 color;
+/* 0x60A */ UNK_TYPE1 pad60A[0x2];
+} EffTireMarkParams; // size = 0x60C
 
 typedef struct {
 /* 0x000 */ View view;
@@ -1611,6 +1748,16 @@ typedef struct {
 } ColTriGroupInit; // size = 0x10
 
 typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffSparkParams params;
+} EffSpark; // size = 0x4C8
+
+typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffTireMarkParams params;
+} EffTireMark; // size = 0x610
+
+typedef struct {
 /* 0x00 */ s8 num;
 /* 0x01 */ u8 unk1;
 /* 0x02 */ u8 unk2;
@@ -1796,6 +1943,12 @@ struct CollisionContext {
 typedef struct ActorBgIknvObj ActorBgIknvObj;
 
 typedef struct EffFootmark EffFootmark;
+
+typedef struct EffShieldParticle EffShieldParticle;
+
+typedef struct EffShieldParticleParams EffShieldParticleParams;
+
+typedef struct EffTables EffTables;
 
 typedef struct EffectTableInfo EffectTableInfo;
 
@@ -2158,6 +2311,28 @@ typedef struct s800B948C s800B948C;
 
 typedef struct z_Light z_Light;
 
+struct EffShieldParticleParams {
+/* 0x000 */ EffShieldParticleParticle particles[16];
+/* 0x180 */ u8 numParticles;
+/* 0x181 */ UNK_TYPE1 pad181[0x1];
+/* 0x182 */ Vec3s position;
+/* 0x188 */ ColorRGBA8 primColorStart;
+/* 0x18C */ ColorRGBA8 envColorStart;
+/* 0x190 */ ColorRGBA8 primColorMid;
+/* 0x194 */ ColorRGBA8 envColorMid;
+/* 0x198 */ ColorRGBA8 primColorEnd;
+/* 0x19C */ ColorRGBA8 envColorEnd;
+/* 0x1A0 */ f32 acceleration;
+/* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
+/* 0x1A8 */ f32 maxInitialSpeed;
+/* 0x1AC */ f32 lengthCutoff;
+/* 0x1B0 */ u8 duration;
+/* 0x1B1 */ u8 age;
+/* 0x1B2 */ LightInfo lightInfo;
+/* 0x1C0 */ z_Light* light;
+/* 0x1C4 */ s32 hasLight;
+}; // size = 0x1C8
+
 struct FireObjLight {
 /* 0x00 */ z_Light* light;
 /* 0x04 */ LightInfoPositional lightInfo;
@@ -2181,6 +2356,19 @@ struct z_Light {
 /* 0x4 */ z_Light* prev;
 /* 0x8 */ z_Light* next;
 }; // size = 0xC
+
+struct EffShieldParticle {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffShieldParticleParams params;
+}; // size = 0x1CC
+
+struct EffTables {
+/* 0x0000 */ GlobalContext* ctxt;
+/* 0x0004 */ EffSpark sparks[3];
+/* 0x0E5C */ EffBlure blures[25];
+/* 0x388C */ EffShieldParticle shieldParticles[3];
+/* 0x3DF0 */ EffTireMark tireMarks[15];
+}; // size = 0x98E0
 
 struct LightsList {
 /* 0x000 */ int numOccupied;
