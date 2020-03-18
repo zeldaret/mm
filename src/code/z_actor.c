@@ -1,7 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
-#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1)) //From OOT
+//From OOT
+#define ABS(x) ((x) < 0 ? -(x) : (x))
+#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PrintLists.asm")
 
@@ -406,15 +408,51 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B72F8.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsLinkFacingActor.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsActorFacedByActor.asm")
+s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
+    s16 angle;
+    s16 dist;
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsActorFacingLink.asm")
+    angle = Actor_YawBetweenActors(actor, other) + 0x8000;
+    dist = angle - other->shape.rot.y;
+    if (ABS(dist) < tolerance) {
+        return 1;
+    }
+    return 0;
+}
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsActorFacingActor.asm")
+s32 Actor_IsActorFacingLink(Actor* actor, s16 angle) {
+    s16 dist;
+
+    dist = actor->rotTowardsLinkY - actor->shape.rot.y;
+    if (ABS(dist) < angle) {
+        return 1;
+    }
+    return 0;
+}
+
+s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
+    s16 dist;
+
+    dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
+    if (ABS(dist) < tolerance) {
+        return 1;
+    }
+    return 0;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsActorFacingLinkAndWithinRange.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsActorFacingActorAndWithinRange.asm")
+s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance) {
+    s16 dist;
+
+    if (Actor_DistanceBetweenActors(actor, other) < range) {
+        dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
+        if (ABS(dist) < tolerance) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B75A0.asm")
 
