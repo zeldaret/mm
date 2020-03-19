@@ -846,7 +846,7 @@ void func_800BA9B4(void); // func_800BA9B4
 void Actor_InsertIntoTypeList(ActorContext* actCtxt, Actor* actor, u8 type); // func_800BAAB4
 Actor* Actor_RemoveFromTypeList(GlobalContext* ctxt, ActorContext* actCtxt, Actor* actor); // func_800BAB24
 void Actor_FreeOverlay(ActorOverlay* entry); // func_800BABFC
-void Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10); // func_800BAC60
+Actor* Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10); // func_800BAC60
 ActorInit* Actor_LoadOverlay(ActorContext* actCtxt, s16 index); // func_800BACD4
 Actor* Actor_SpawnWithParentAndCutscene(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent); // func_800BAE14
 void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable); // func_800BB0C0
@@ -1545,43 +1545,43 @@ void func_800E9CFC(void); // func_800E9CFC
 void func_800E9DBC(void); // func_800E9DBC
 void func_800E9E94(void); // func_800E9E94
 void func_800E9F78(GraphicsContext* gCtxt); // func_800E9F78
-void Demo_Init(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA060
-void func_800EA0D4(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA0D4
-void func_800EA0EC(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA0EC
-void Demo_StepCutscene1(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA110
-void Demo_StepCutscene2(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA15C
-void Demo_Nop800EA210(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA210
-s32 func_800EA220(GlobalContext* ctxt, CutsceneContext* cCtxt, f32 fParm3); // func_800EA220
-void func_800EA258(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA258
-void func_800EA2B8(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EA2B8
-void func_800EA324(GlobalContext* ctxt, CutsceneContext* cCtxt, UNK_PTR puParm3); // func_800EA324
-void func_800EABAC(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EABAC
-void func_800EAC08(GlobalContext* ctxt, CutsceneContext* cCtxt, unsigned short* puParm3); // func_800EAC08
-void func_800EAC44(GlobalContext* ctxt, CutsceneContext* cCtxt, unsigned short* puParm3); // func_800EAC44
-void func_800EAC94(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EAC94
-void func_800EAD14(GlobalContext* ctxt, CutsceneContext* cCtxt, int iParm3); // func_800EAD14
-void func_800EAD48(GlobalContext* ctxt, CutsceneContext* cCtxt, int iParm3); // func_800EAD48
-void func_800EAD7C(GlobalContext* ctxt, CutsceneContext* cCtxt, int iParm3); // func_800EAD7C
-void func_800EADB0(GlobalContext* ctxt, CutsceneContext* cCtxt, UNK_PTR puParm3); // func_800EADB0
-void func_800EAECC(GlobalContext* ctxt, CutsceneContext* cCtxt, int iParm3); // func_800EAECC
-void func_800EAF20(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EAF20
-void func_800EAFE0(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EAFE0
-void func_800EB1DC(GlobalContext* ctxt, CutsceneContext* cCtxt, int iParm3); // func_800EB1DC
-void func_800EB364(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EB364
-void func_800EB4B4(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EB4B4
-void func_800EB6F8(GlobalContext* ctxt, CutsceneContext* cCtxt, UNK_PTR puParm3); // func_800EB6F8
-void func_800EBB68(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EBB68
-void func_800EBCD0(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EBCD0
-void func_800EBD60(GlobalContext* ctxt, CutsceneContext* cCtxt, short* psParm3); // func_800EBD60
-s32 func_800EC678(GlobalContext* ctxt, void* pvParm2); // func_800EC678
-void func_800EC6D4(void); // func_800EC6D4
-void func_800EC924(GlobalContext* ctxt, CutsceneContext* cCtxt, unsigned short* puParm3); // func_800EC924
-void func_800ECD7C(CutsceneContext* cCtxt, void** param_2, short param_3); // func_800ECD7C
-void Demo_ProcessData(GlobalContext* ctxt, CutsceneContext* cCtxt, u16* data, unsigned short* commandReadHead); // func_800ECE40
-void func_800ED980(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800ED980
-void func_800ED9C4(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800ED9C4
-void func_800EDA04(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EDA04
-void func_800EDA84(GlobalContext* ctxt, CutsceneContext* cCtxt); // func_800EDA84
+void Cutscene_Init(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA060
+void func_800EA0D4(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA0D4
+void func_800EA0EC(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA0EC
+void Cutscene_StepCutscene1(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA110
+void Cutscene_StepCutscene2(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA15C
+void Cutscene_Nop800EA210(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA210
+s32 func_800EA220(GlobalContext* ctxt, CutsceneContext* csCtx, f32 target); // func_800EA220
+void func_800EA258(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA258
+void func_800EA2B8(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EA2B8
+void func_800EA324(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EA324
+void func_800EABAC(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdEnvLighting* cmd); // func_800EABAC
+void func_800EAC08(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdMusicChange* cmd); // func_800EAC08
+void func_800EAC44(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdMusicChange* cmd); // func_800EAC44
+void func_800EAC94(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdMusicFade* cmd); // func_800EAC94
+void func_800EAD14(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EAD14
+void func_800EAD48(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EAD48
+void func_800EAD7C(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EAD7C
+void func_800EADB0(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EADB0
+void func_800EAECC(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EAECC
+void func_800EAF20(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdUnk190* cmd); // func_800EAF20
+void func_800EAFE0(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdUnk9B* cmd); // func_800EAFE0
+void func_800EB1DC(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdDayTime* cmd); // func_800EB1DC
+void func_800EB364(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EB364
+void func_800EB4B4(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EB4B4
+void func_800EB6F8(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EB6F8
+void func_800EBB68(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EBB68
+void func_800EBCD0(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EBCD0
+void func_800EBD60(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdBase* cmd); // func_800EBD60
+s32 func_800EC678(GlobalContext* ctxt, CsCmdUnk5A* cmd); // func_800EC678
+u32 func_800EC6D4(void); // func_800EC6D4
+void func_800EC924(GlobalContext* ctxt, CutsceneContext* csCtx, CsCmdTextbox* cmd); // func_800EC924
+void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index); // func_800ECD7C
+void Cutscene_ProcessCommands(GlobalContext* ctxt, CutsceneContext* csCtx, u8* cutscenePtr, unsigned short* commandReadHead); // func_800ECE40
+void func_800ED980(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800ED980
+void func_800ED9C4(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800ED9C4
+void func_800EDA04(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EDA04
+void func_800EDA84(GlobalContext* ctxt, CutsceneContext* csCtx); // func_800EDA84
 void func_800EDBE0(GlobalContext* ctxt); // func_800EDBE0
 void nop_800EDDB0(GlobalContext* ctxt); // func_800EDDB0
 void func_800EDDBC(void); // func_800EDDBC
@@ -1645,7 +1645,7 @@ void func_800F10AC(void); // func_800F10AC
 void func_800F112C(void); // func_800F112C
 void func_800F1250(void); // func_800F1250
 void func_800F12D0(GlobalContext* ctxt); // func_800F12D0
-void func_800F1304(void); // func_800F1304
+void func_800F1304(GlobalContext* ctxt, short param_2); // func_800F1304
 void func_800F1374(int param_1, short param_2); // func_800F1374
 void func_800F13E8(void); // func_800F13E8
 s16 func_800F1460(s16 param_1); // func_800F1460
@@ -1750,7 +1750,7 @@ void func_800FAAB4(void); // func_800FAAB4
 void func_800FAC20(void); // func_800FAC20
 void func_800FAF74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5); // func_800FAF74
 void func_800FB010(void); // func_800FB010
-void func_800FB320(void); // func_800FB320
+void func_800FB320(GlobalContext* ctxt, u8 param_2); // func_800FB320
 void func_800FB388(void); // func_800FB388
 void func_800FB758(void); // func_800FB758
 void func_800FB9B4(void); // func_800FB9B4
@@ -1772,7 +1772,7 @@ void reset_days_elapsed(void); // func_800FD730
 u32 get_current_day(void); // func_800FD740
 void func_800FD750(void); // func_800FD750
 void func_800FD768(void); // func_800FD768
-void func_800FD78C(void); // func_800FD78C
+void func_800FD78C(GlobalContext* ctxt); // func_800FD78C
 void func_800FD858(GlobalContext* ctxt); // func_800FD858
 void func_800FD928(int param_1); // func_800FD928
 void func_800FD980(void); // func_800FD980
@@ -2112,7 +2112,7 @@ void func_8010EB50(void); // func_8010EB50
 void func_8010EBA0(void); // func_8010EBA0
 void func_8010EC54(void); // func_8010EC54
 void func_8010EE74(void); // func_8010EE74
-void func_8010EF68(u16 param_1); // func_8010EF68
+void Interface_ChangeAlpha(u16 param_1); // func_8010EF68
 void func_8010EF9C(void); // func_8010EF9C
 void func_8010F0D4(void); // func_8010F0D4
 void func_8010F1A8(void); // func_8010F1A8
@@ -2720,7 +2720,7 @@ void func_8013E8F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_8013E950(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE2 param_13); // func_8013E950
 void func_8013EC10(void); // func_8013EC10
 void func_8013EC44(void); // func_8013EC44
-void func_8013ECE0(void); // func_8013ECE0
+void func_8013ECE0(f32 param_1, u8 param_2, u8 param_3, u8 param_4); // func_8013ECE0
 void func_8013ED9C(void); // func_8013ED9C
 void func_8013EDD0(void); // func_8013EDD0
 void func_8013EE04(void); // func_8013EE04
@@ -2862,7 +2862,7 @@ void func_80150D08(GlobalContext* ctxt, unsigned int uParm2); // func_80150D08
 void func_801514B0(void); // func_801514B0
 void func_801518B0(GlobalContext* ctxt, u32 uParm2, UNK_TYPE4 uParm3); // func_801518B0
 void func_80151938(GlobalContext* ctxt, u16 param_2); // func_80151938
-void func_80151A68(void); // func_80151A68
+void func_80151A68(GlobalContext* ctxt, u16 param_2); // func_80151A68
 void func_80151BB4(s32 iParm1, u32 uParm2); // func_80151BB4
 void func_80151C9C(void); // func_80151C9C
 void func_80151DA4(void); // func_80151DA4
@@ -3886,7 +3886,7 @@ void func_801A1F00(void); // func_801A1F00
 void func_801A1F88(void); // func_801A1F88
 void func_801A1FB4(void); // func_801A1FB4
 void func_801A2090(void); // func_801A2090
-void func_801A246C(void); // func_801A246C
+void func_801A246C(u8 param_1, u8 param_2); // func_801A246C
 void func_801A2544(void); // func_801A2544
 void func_801A257C(void); // func_801A257C
 void func_801A25E4(void); // func_801A25E4

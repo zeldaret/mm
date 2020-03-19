@@ -150,20 +150,94 @@ typedef struct {
 } ColorRGBA8; // size = 0x4
 
 typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x2];
+/* 0x02 */ u16 startFrame;
+/* 0x04 */ u16 endFrame;
+/* 0x06 */ UNK_TYPE1 pad6[0x2A];
+} CsCmdActorAction; // size = 0x30
+
+typedef struct {
+/* 0x0 */ u16 base;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdBase; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 hour;
+/* 0x7 */ u8 minute;
+} CsCmdDayTime; // size = 0x8
+
+typedef struct {
+/* 0x0 */ u16 setting;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdEnvLighting; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 sequence;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdMusicChange; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 type;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdMusicFade; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 base;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u16 type;
+/* 0x8 */ u16 textId1;
+/* 0xA */ u16 textId2;
+} CsCmdTextbox; // size = 0xC
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 unk6;
+/* 0x7 */ u8 unk7;
+/* 0x8 */ u8 unk8;
+/* 0x9 */ UNK_TYPE1 pad9[0x3];
+} CsCmdUnk190; // size = 0xC
+
+typedef struct {
+/* 0x0 */ UNK_TYPE4 unk0;
+/* 0x4 */ UNK_TYPE4 unk4;
+} CsCmdUnk5A; // size = 0x8
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 unk6;
+/* 0x7 */ u8 unk7;
+/* 0x8 */ u8 unk8;
+/* 0x9 */ UNK_TYPE1 pad9[0x3];
+} CsCmdUnk9B; // size = 0xC
+
+typedef struct {
 /* 0x00 */ u8 cutsceneCount;
 /* 0x01 */ UNK_TYPE1 pad1[0x3];
-/* 0x04 */ u16* currentCutsceneData;
+/* 0x04 */ u8* segment;
 /* 0x08 */ u8 state;
 /* 0x09 */ UNK_TYPE1 pad9[0x3];
 /* 0x0C */ f32 unkC;
-/* 0x10 */ u16 currentFrame;
-/* 0x12 */ UNK_TYPE1 pad12[0x16];
-/* 0x28 */ UNK_TYPE4 unk28[10];
+/* 0x10 */ u16 frames;
+/* 0x12 */ u16 unk12;
+/* 0x14 */ UNK_TYPE1 pad14[0x14];
+/* 0x28 */ CsCmdActorAction* actorActions[10];
 } CutsceneContext; // size = 0x50
 
 typedef struct {
 /* 0x0 */ u32 data;
-/* 0x4 */ UNK_TYPE1 pad4[0x2];
+/* 0x4 */ s16 unk4;
 /* 0x6 */ u8 unk6;
 /* 0x7 */ u8 unk7;
 } CutsceneEntry; // size = 0x8
@@ -745,7 +819,9 @@ typedef struct {
 /* 0x277 */ UNK_TYPE1 pad277[0x9];
 /* 0x280 */ u16 unk280;
 /* 0x282 */ u16 unk282;
-/* 0x284 */ UNK_TYPE1 pad284[0x40];
+/* 0x284 */ UNK_TYPE1 pad284[0x28];
+/* 0x2AC */ u8 cutsceneTrigger;
+/* 0x2AD */ UNK_TYPE1 pad2AD[0x17];
 /* 0x2C4 */ f32 unk2C4;
 /* 0x2C8 */ CycleSceneFlags cycleSceneFlags[0x78];
 } SaveContextExtra; // size = 0xC28
@@ -836,7 +912,8 @@ typedef struct {
 typedef struct {
 /* 0x0 */ u32 romStart;
 /* 0x4 */ u32 romEnd;
-/* 0x8 */ UNK_TYPE1 pad8[0x3];
+/* 0x8 */ u16 unk8;
+/* 0xA */ UNK_TYPE1 padA[0x1];
 /* 0xB */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
 /* 0xC */ UNK_TYPE1 padC[0x1];
 /* 0xD */ u8 unkD;
@@ -2687,7 +2764,8 @@ struct GlobalContext {
 /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
 /* 0x18874 */ u8 unk18874;
 /* 0x18875 */ s8 unk18875;
-/* 0x18876 */ UNK_TYPE1 pad18876[0x6];
+/* 0x18876 */ UNK_TYPE1 pad18876[0x4];
+/* 0x1887A */ u16 unk1887A;
 /* 0x1887C */ s8 unk1887C;
 /* 0x1887D */ UNK_TYPE1 pad1887D[0x7];
 /* 0x18884 */ CollisionCheckContext colCheckCtx;
@@ -2909,7 +2987,9 @@ struct ActorPlayer {
 /* 0xA6C */ u32 unkA6C;
 /* 0xA70 */ u32 unkA70;
 /* 0xA74 */ u32 unkA74;
-/* 0xA78 */ UNK_TYPE1 padA78[0x10];
+/* 0xA78 */ UNK_TYPE1 padA78[0x8];
+/* 0xA80 */ Actor* unkA80;
+/* 0xA84 */ UNK_TYPE1 padA84[0x4];
 /* 0xA88 */ Actor* unkA88;
 /* 0xA8C */ f32 unkA8C;
 /* 0xA90 */ UNK_TYPE1 padA90[0x44];

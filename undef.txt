@@ -373,7 +373,6 @@ D_801F6D0C = code_bss_start + 0x00012D6C;
 D_801F6D10 = code_bss_start + 0x00012D70;
 D_801F6D18 = code_bss_start + 0x00012D78;
 D_801F6D30 = code_bss_start + 0x00012D90;
-D_801F6D33 = code_bss_start + 0x00012D93;
 D_801F6D38 = code_bss_start + 0x00012D98;
 D_801F6D4C = code_bss_start + 0x00012DAC;
 D_801F6D50 = code_bss_start + 0x00012DB0;
