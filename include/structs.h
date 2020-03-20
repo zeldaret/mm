@@ -304,7 +304,9 @@ typedef struct {
 
 typedef struct {
 /* 0x0 */ u8 active;
-/* 0x1 */ UNK_TYPE1 pad1[0x3];
+/* 0x1 */ u8 unk1;
+/* 0x2 */ u8 unk2;
+/* 0x3 */ UNK_TYPE1 pad3[0x1];
 } EffCommon; // size = 0x4
 
 typedef struct {
