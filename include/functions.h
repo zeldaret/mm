@@ -566,13 +566,13 @@ void EffectTireMark_InitVertices(F3DVertexColor* vertices, EffTireMarkParticle* 
 void EffectTireMark_Draw(EffTireMarkParams* params, GraphicsContext* gCtxt); // func_800AF310
 GlobalContext* Effect_GetContext(void); // func_800AF710
 void* Effect_GetParams(s32 index); // func_800AF720
-void Effect_InitCommon(UNK_PTR param_1); // func_800AF87C
+void Effect_InitCommon(EffCommon* common); // func_800AF87C
 void Effect_Init(GlobalContext* ctxt); // func_800AF890
-void Effect_Create(GlobalContext* ctxt, s32* index, s32 type, UNK_TYPE1 param_4, UNK_TYPE1 param_5, void* initParams); // func_800AF960
+void Effect_Add(GlobalContext* ctxt, s32* index, s32 type, u8 param_4, u8 param_5, void* initParams); // func_800AF960
 void Effect_DrawAll(GraphicsContext* gCtxt); // func_800AFB24
 void Effect_UpdateAll(GlobalContext* ctxt); // func_800AFC60
 void Effect_Destroy(GlobalContext* ctxt, s32 index); // func_800AFDCC
-void Effect_DestroyAll(void); // func_800AFF24
+void Effect_DestroyAll(GlobalContext* ctxt); // func_800AFF24
 void EffectSS_Init(GlobalContext* ctxt, s32 numEntries); // func_800B0050
 void EffectSS_Clear(GlobalContext* ctxt); // func_800B0140
 LoadedParticleEntry* EffectSS_GetTable(void); // func_800B0200
