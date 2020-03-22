@@ -1,4 +1,5 @@
 boot_0x800968B0
+code_0x800AF710
 fault
 fault_drawer
 idle
