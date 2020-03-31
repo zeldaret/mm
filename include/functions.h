@@ -317,7 +317,7 @@ void guPerspectiveF(float mf[4][4], u16* perspNorm, float fovy, float aspect, fl
 void guPerspective(Mtx* m, u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AC80
 s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008ACE0
 s32 __osSiRawStartDma(s32 direction, void* dramAddr); // func_8008AD70
-void func_8008AE20(void); // func_8008AE20
+s32 osEPiLinkHandle(OSPiHandle* EPiHandle); // func_8008AE20
 void osViBlack(u8 active); // func_8008AE70
 s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_8008AEE0
 OSId osGetThreadId(OSThread* t); // func_8008AF30
@@ -423,7 +423,7 @@ void __osViInit(void); // func_80091AF0
 void __osViSwapContext(void); // func_80091C10
 OSMesgQueue* osPiGetCmdQueue(void); // func_80091F10
 f32 __cosf(f32 __x); // func_80091F40
-void func_800920B0(void); // func_800920B0
+s32 func_800920B0(OSPiHandle* pihandle, u32 devAddr, u32* data); // func_800920B0
 void osViSetSpecialFeatures(u32 func); // func_80092100
 short coss(unsigned short x); // func_80092260
 void osSetTime(OSTime ticks); // func_80092290
@@ -446,7 +446,7 @@ void func_800931F0(void); // func_800931F0
 void func_80093728(void); // func_80093728
 void func_80093A00(void); // func_80093A00
 u32 osAiGetLength(void); // func_80093BA0
-void func_80093BB0(void); // func_80093BB0
+s32 func_80093BB0(OSPiHandle* pihandle, u32 devAddr, u32 data); // func_80093BB0
 void osMapTLBRdb(void); // func_80093C00
 void osYieldThread(void); // func_80093C60
 void func_80093CC0(void); // func_80093CC0
@@ -3468,19 +3468,21 @@ void func_80185EC4(void); // func_80185EC4
 void func_80185F04(void); // func_80185F04
 void func_80185F64(void); // func_80185F64
 s32 func_80185F90(u32 param_1); // func_80185F90
-void func_80186A70(void); // func_80186A70
-void func_80186B78(void); // func_80186B78
-void func_80186CAC(void); // func_80186CAC
-void func_80186D60(void); // func_80186D60
-void func_80186E64(void); // func_80186E64
-void func_80186EC8(void); // func_80186EC8
-void func_80187018(void); // func_80187018
-void func_80187080(void); // func_80187080
-void func_80187124(void); // func_80187124
-void func_80187284(void); // func_80187284
-void func_801872FC(void); // func_801872FC
-void func_801873BC(void); // func_801873BC
-void func_8018752C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8018752C
+u32 osFlashGetAddr(u32 page_num); // func_80186A70
+OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u32 start); // func_80186AB8
+void osFlashChange(u32 flash_num); // func_80186B38
+OSPiHandle* osFlashInit(void); // func_80186B78
+void osFlashReadStatus(u8* flash_status); // func_80186CAC
+void osFlashReadId(u32 *flash_type, u32 *flash_maker); // func_80186D60
+void osFlashClearStatus(void); // func_80186E64
+s32 osFlashAllErase(void); // func_80186EC8
+void osFlashAllEraseThrough(void); // func_80187018
+s32 osFlashCheckEraseEnd(void); // func_80187080
+s32 osFlashSectorErase(u32 page_num); // func_80187124
+void osFlashSectorEraseThrough(u32 page_num); // func_80187284
+s32 osFlashWriteBuffer(OSIoMesg *mb, s32 priority, void *dramAddr, OSMesgQueue *mq); // func_801872FC
+s32 osFlashWriteArray(u32 page_num); // func_801873BC
+s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u32 n_pages, OSMesgQueue *mq); // func_8018752C
 void func_801877D0(void); // func_801877D0
 void func_80187B64(void); // func_80187B64
 void func_80187BEC(void); // func_80187BEC

@@ -349,7 +349,7 @@ extern OSIoMesg viRetraceMsg; // D_8009F870
 extern OSIoMesg viCounterMsg; // D_8009F888
 extern u16 vimgrRetrace; // D_8009F8A0
 extern DmaEntry dmadata[1568]; // D_8009F8B0
-extern UNK_TYPE1 D_80186028; // D_80186028
+extern u16 D_80186028[1316]; // D_80186028
 extern UNK_TYPE1 D_801AAAB0; // D_801AAAB0
 extern UNK_TYPE1 D_801AD370; // D_801AD370
 extern ActorInit enAObjInitData; // D_801ADE60
@@ -4260,8 +4260,8 @@ extern UNK_TYPE1 D_801FD040; // D_801FD040
 extern OSIoMesg D_801FD050; // D_801FD050
 extern OSMesgQueue D_801FD068; // D_801FD068
 extern OSPiHandle D_801FD080; // D_801FD080
-extern UNK_TYPE1 D_801FD0F4; // D_801FD0F4
-extern UNK_TYPE1 D_801FD0F8; // D_801FD0F8
+extern OSMesg D_801FD0F4; // D_801FD0F4
+extern u32 D_801FD0F8; // D_801FD0F8
 extern UNK_TYPE1 D_801FD120; // D_801FD120
 extern UNK_TYPE1 D_801FD140; // D_801FD140
 extern UNK_TYPE1 D_801FD158; // D_801FD158
