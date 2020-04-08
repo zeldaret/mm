@@ -1931,14 +1931,14 @@ void func_8010439C(void); // func_8010439C
 void func_801045AC(void); // func_801045AC
 void func_80104AE8(void); // func_80104AE8
 void func_80104C80(void); // func_80104C80
-void func_80104CF4(void); // func_80104CF4
+void func_80104CF4(GlobalContext* ctxt); // func_80104CF4
 void func_80104F34(void); // func_80104F34
 void func_80105294(void); // func_80105294
 void func_80105318(void); // func_80105318
 void func_80105328(void); // func_80105328
 void func_8010534C(void); // func_8010534C
-void func_8010549C(void); // func_8010549C
-void func_8010565C(void); // func_8010565C
+void func_8010549C(GlobalContext* ctxt, u32 segmentAddress); // func_8010549C
+void func_8010565C(GlobalContext* ctxt, u8 num, u32 segmentAddress); // func_8010565C
 void func_80105818(GlobalContext* ctxt, unsigned int uParm2, TransitionActorInit* puParm3); // func_80105818
 void func_80105A40(void); // func_80105A40
 void func_80105B34(void); // func_80105B34
@@ -2425,10 +2425,10 @@ void func_8012F0EC(void); // func_8012F0EC
 void func_8012F1BC(void); // func_8012F1BC
 void func_8012F22C(void); // func_8012F22C
 void func_8012F278(void); // func_8012F278
-s32 Scene_LoadObject(SceneContext* sceneCtxt, short id); // func_8012F2E0
+s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id); // func_8012F2E0
 void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt); // func_8012F3D0
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt); // func_8012F4FC
-s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, short id); // func_8012F608
+s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 id); // func_8012F608
 s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index); // func_8012F668
 void Scene_DmaAllObjects(SceneContext* sceneCtxt); // func_8012F698
 u32 func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
@@ -2445,9 +2445,9 @@ void Scene_HeaderCommand0B(GlobalContext* ctxt, SceneCmd* entry); // func_8012FC
 void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry); // func_8012FDA4
 void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry); // func_8012FE2C
 void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry); // func_8012FE5C
-void func_8012FEBC(void); // func_8012FEBC
+void func_8012FEBC(GlobalContext* ctxt, u8* nbTransitionActors); // func_8012FEBC
 void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry); // func_8012FECC
-void func_8012FF10(GlobalContext* ctxt, int iParm2); // func_8012FF10
+s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex); // func_8012FF10
 void Scene_HeaderCommand11(GlobalContext* ctxt, SceneCmd* entry); // func_8012FF8C
 void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry); // func_8012FFF0
 void Scene_HeaderCommand10(GlobalContext* ctxt, SceneCmd* entry); // func_80130018
@@ -3008,7 +3008,7 @@ void Play_Update(GlobalContext* ctxt); // func_80168F64
 void func_801690CC(void); // func_801690CC
 void func_80169100(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80169100
 void func_801691F0(void); // func_801691F0
-void* Play_LoadScene(GlobalContext* ctxt, SceneTableEntry* entry); // func_80169220
+void* Play_LoadScene(GlobalContext* ctxt, ObjectFileTableEntry* entry); // func_80169220
 void func_8016927C(GlobalContext* ctxt, short sParm2); // func_8016927C
 void func_801692C4(GlobalContext* ctxt, UNK_TYPE1 uParm2); // func_801692C4
 void Play_SceneInit(GlobalContext* ctxt, int sceneIndex, UNK_TYPE1 param_3); // func_801693D4
@@ -3927,7 +3927,7 @@ void func_801A3EC0(void); // func_801A3EC0
 void func_801A3F54(void); // func_801A3F54
 void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801A3F6C
 void func_801A3FB4(void); // func_801A3FB4
-void func_801A400C(void); // func_801A400C
+/*Audio_SetBGM*/ void func_801A400C(u32 bgmID); // func_801A400C
 void func_801A4058(void); // func_801A4058
 void func_801A41C8(void); // func_801A41C8
 void func_801A41F8(void); // func_801A41F8
@@ -3999,7 +3999,8 @@ void func_801A7D04(void); // func_801A7D04
 void func_801A7D84(void); // func_801A7D84
 void func_801A89A8(void); // func_801A89A8
 void func_801A89D0(void); // func_801A89D0
-void func_801A8A50(void); // func_801A8A50
+// may not be s32 in param or return
+s32 func_801A8A50(s32 param1); // func_801A8A50
 void func_801A8ABC(void); // func_801A8ABC
 void func_801A8BD0(void); // func_801A8BD0
 void func_801A8D5C(void); // func_801A8D5C

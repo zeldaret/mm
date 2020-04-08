@@ -148,5 +148,5 @@ void func_8012EBF8(GlobalContext* ctxt, RoomContext* roomCtxt){
         func_8010A33C(ctxt, roomCtxt->currRoom.num);
         func_8010A2DC(ctxt);
     }
-    func_801A3CD8(ctxt->roomContext.currRoom.unk4);
+    func_801A3CD8(ctxt->roomContext.currRoom.echo);
 }

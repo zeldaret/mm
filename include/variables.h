@@ -1542,8 +1542,8 @@ extern UNK_TYPE1 D_801C23C8; // D_801C23C8
 extern UNK_TYPE1 D_801C23E0; // D_801C23E0
 extern UNK_TYPE1 D_801C23F8; // D_801C23F8
 extern UNK_TYPE1 D_801C2410; // D_801C2410
-extern UNK_TYPE1 D_801C2650; // D_801C2650
-extern UNK_TYPE1 D_801C2660; // D_801C2660
+extern ObjectFileTableEntry D_801C2650[2]; // D_801C2650
+extern ObjectFileTableEntry D_801C2660[9]; // D_801C2660
 extern scene_header_func sceneHeaderFuncTable[31]; // D_801C26A8
 extern s16 D_801C2730[8]; // D_801C2730
 extern ObjectFileTableEntry objectFileTable[643]; // D_801C2740
