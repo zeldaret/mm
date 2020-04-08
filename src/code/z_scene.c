@@ -32,16 +32,16 @@ GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_DmaAllObjects.asm")
 GLOBAL_ASM("./asm/non_matchings/z_scene/func_8012F73C.asm")
 
 // Scene Command 0x00: Link Spawn List
-#ifdef NON_MATCHING
-// Regalloc differences only
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
-    s32 unused;
+    GlobalContext* global;
     s32 loadReturn;
     void* objectVramAddr;
     s16 temp16;
-
-    ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->spawnList.segment) + ctxt->setupEntranceList[ctxt->curSpawn].spawn;
-
+    u8 unk20;
+    
+    ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt((void*)entry->spawnList.segment) +
+                    ctxt->setupEntranceList[ctxt->curSpawn].spawn;
+  
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
     ) {
@@ -50,24 +50,22 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     }
 
     loadReturn = Scene_LoadObject(&ctxt->sceneContext, 0x11);
-
-    objectVramAddr = ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr;
-    ctxt->sceneContext.objectCount = loadReturn & 0xFF;
-    ctxt->sceneContext.unk9 = loadReturn & 0xFF;
     
-    // More matching, but has code ordering issues in addition to one instance of regalloc
-    //temp16 = gSaveContext.perm.unk20;
-    //temp16 = D_801C2730[temp16];
+    global = ctxt;
+    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
     
-    temp16 = D_801C2730[gSaveContext.perm.unk20];
+    ctxt->sceneContext.objectCount = loadReturn;
+    ctxt->sceneContext.unk9 = loadReturn;
+    
+    unk20 = gSaveContext.perm.unk20;
+    temp16 = D_801C2730[unk20];
+    
     actorOverlayTable[0].initInfo->objectId = temp16;
+    
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
     ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
 }
-#else
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_HeaderCommand00.asm")
-#endif
 
 // Scene Command 0x01: Actor List
 void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
@@ -187,7 +185,7 @@ s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
         return DmaMgr_SendRequest0((s32)ctxt->roomContext.unk74, vromStart, fileSize);
     }
     
-    // UB: Undefined behaviour to not have a return statement here, but it breaks matching.
+    // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
 // Scene Command 0x11: Skybox Settings
@@ -231,7 +229,7 @@ void Scene_HeaderCommand09(GlobalContext* ctxt, SceneCmd* entry) {
 void Scene_HeaderCommand15(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->unk814 = entry->soundSettings.musicSeq;
     ctxt->unk815 = entry->soundSettings.nighttimeSFX;
-    if(gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
         func_801A400C(entry->soundSettings.bgmId);
     } 
 }
