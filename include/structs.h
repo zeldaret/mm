@@ -502,24 +502,209 @@ typedef struct {
 } RoomMeshType2Params; // size = 0x10
 
 typedef struct {
-/* 0x0 */ u8 command;
-/* 0x1 */ u8 unk1;
-/* 0x2 */ UNK_TYPE1 pad2[0x2];
-/* 0x4 */ u32 unk4;
-} SCmdBase; // size = 0x8
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 data2;
+} SCmdBase;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdSpawnList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdActorList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdCsCameraList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdColHeader;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdRoomList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x02 */ UNK_TYPE1 pad2[2];
+/* 0x04 */ s8  unk4;
+/* 0x05 */ s8  unk5;
+/* 0x06 */ s8  unk6;
+/* 0x07 */ u8  unk7;
+} SCmdWindSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdEntranceList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  cUpElfMsgNum;
+/* 0x04 */ u32 keepObjectId;
+} SCmdSpecialFiles;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  gpFlag1;
+/* 0x04 */ u32 gpFlag2;
+} SCmdRoomBehavior;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdMesh;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdObjectList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdLightList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdPathList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdTransiActorList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdLightSettingList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x02 */ UNK_TYPE1 pad2[2];
+/* 0x04 */ u8  hour;
+/* 0x05 */ u8  min;
+/* 0x06 */ u8  unk6;
+} SCmdTimeSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x02 */ UNK_TYPE1 pad2[2];
+/* 0x04 */ u8  skyboxId;
+/* 0x05 */ u8  unk5;
+/* 0x06 */ u8  unk6;
+} SCmdSkyboxSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x02 */ UNK_TYPE1 pad2[2];
+/* 0x04 */ u8  unk4;
+/* 0x05 */ u8  unk5;
+} SCmdSkyboxDisables;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 data2;
+} SCmdEndMarker;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdExitList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  bgmId;
+/* 0x02 */ UNK_TYPE1 pad2[4];
+/* 0x06 */ u8  nighttimeSFX;
+/* 0x07 */ u8  musicSeq;
+} SCmdSoundSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x02 */ UNK_TYPE1 pad2[5];
+/* 0x07 */ u8  echo;
+} SCmdEchoSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdCutsceneData;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  data1;
+/* 0x04 */ u32 segment;
+} SCmdAltHeaders;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  cameraMovement;
+/* 0x04 */ u32 area;
+} SCmdMiscSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdCutsceneActorList;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ UNK_TYPE1 pad1[2];
+/* 0x04 */ u32 segment;
+} SCmdMinimapSettings;
+
+typedef struct {
+/* 0x00 */ u8  code;
+/* 0x01 */ u8  num;
+/* 0x04 */ u32 segment;
+} SCmdMinimapChests;
 
 // Extra information in the save context that is not saved
 typedef struct {
-/* 0x000 */ UNK_TYPE1 pad0[0x10];
+/* 0x000 */ UNK_TYPE1 pad0[0xB];
+/* 0x00C */ s32 sceneSetupIndex;
 /* 0x010 */ s32 unk10;
 /* 0x014 */ UNK_TYPE1 pad14[0x2E];
 /* 0x042 */ s16 unk42;
-/* 0x044 */ UNK_TYPE1 pad44[0x23C];
+/* 0x044 */ UNK_TYPE1 pad44[0x232];
+/* 0x276 */ u8 unk276;
+/* 0x277 */ UNK_TYPE1 pad277[0x9];
 /* 0x280 */ u16 unk280;
 /* 0x282 */ u16 unk282;
 /* 0x284 */ UNK_TYPE1 pad284[0x40];
 /* 0x2C4 */ f32 unk2C4;
-/* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
+/* 0x2C8 */ CycleSceneFlags cycleSceneFlags[0x78];
 } SaveContextExtra; // size = 0xC28
 
 typedef struct {
@@ -553,8 +738,37 @@ typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[0x22];
 } SaveContext_struct2; // size = 0x22
 
+
 typedef union {
-/* 0x0 */ SCmdBase base;
+    SCmdBase              base;
+    SCmdSpawnList         spawnList;
+    SCmdActorList         actorList;
+    SCmdCsCameraList      csCameraList;
+    SCmdRoomList          roomList;
+    SCmdEntranceList      entranceList;
+    SCmdObjectList        objectList;
+    SCmdLightList         lightList;
+    SCmdPathList          pathList;
+    SCmdTransiActorList   transiActorList;
+    SCmdLightSettingList  lightSettingList;
+    SCmdExitList          exitList;
+    SCmdColHeader         colHeader;
+    SCmdMesh              mesh;
+    SCmdSpecialFiles      specialFiles;
+    SCmdCutsceneData      cutsceneData;
+    SCmdRoomBehavior      roomBehavior;
+    SCmdWindSettings      windSettings;
+    SCmdTimeSettings      timeSettings;
+    SCmdSkyboxSettings    skyboxSettings;
+    SCmdSkyboxDisables    skyboxDisables;
+    SCmdEndMarker         endMarker;
+    SCmdSoundSettings     soundSettings;
+    SCmdEchoSettings      echoSettings;
+    SCmdMiscSettings      miscSettings;
+    SCmdAltHeaders        altHeaders;
+    SCmdCutsceneActorList cutsceneActorList;
+    SCmdMinimapSettings   minimapSettings;
+    SCmdMinimapChests     minimapChests;
 } SceneCmd; // size = 0x8
 
 typedef struct {
@@ -1042,7 +1256,7 @@ typedef struct {
 typedef struct {
 /* 0x000 */ void* objectVramStart;
 /* 0x004 */ void* objectVramEnd;
-/* 0x008 */ u8 unk8;
+/* 0x008 */ u8 objectCount;
 /* 0x009 */ u8 unk9;
 /* 0x00A */ u8 unkA;
 /* 0x00B */ u8 keepObjectId;
@@ -1193,8 +1407,8 @@ typedef struct {
 /* 0x12 */ UNK_TYPE1 unk12;
 /* 0x13 */ UNK_TYPE1 unk13;
 /* 0x14 */ UNK_TYPE1 unk14;
-/* 0x15 */ UNK_TYPE1 unk15;
-/* 0x16 */ UNK_TYPE1 unk16;
+/* 0x15 */ u8 unk15;
+/* 0x16 */ u8 unk16;
 /* 0x17 */ u8 unk17;
 /* 0x18 */ u8 unk18;
 /* 0x19 */ UNK_TYPE1 unk19;
@@ -1294,12 +1508,9 @@ typedef struct {
 /* 0xA9 */ UNK_TYPE1 unkA9;
 /* 0xAA */ UNK_TYPE1 unkAA;
 /* 0xAB */ UNK_TYPE1 unkAB;
-/* 0xAC */ UNK_TYPE1 unkAC;
-/* 0xAD */ UNK_TYPE1 unkAD;
-/* 0xAE */ UNK_TYPE1 unkAE;
-/* 0xAF */ UNK_TYPE1 unkAF;
-/* 0xB0 */ UNK_TYPE1 unkB0;
-/* 0xB1 */ UNK_TYPE1 unkB1;
+/* 0xAC */ s16 unkAC;
+/* 0xAE */ s16 unkAE;
+/* 0xB0 */ s16 unkB0;
 /* 0xB2 */ UNK_TYPE1 unkB2;
 /* 0xB3 */ UNK_TYPE1 unkB3;
 /* 0xB4 */ f32 unkB4;
@@ -1404,7 +1615,7 @@ typedef struct {
 /* 0x01 */ u8 unk1;
 /* 0x02 */ u8 unk2;
 /* 0x03 */ u8 unk3;
-/* 0x04 */ s8 unk4;
+/* 0x04 */ s8 echo;
 /* 0x05 */ u8 unk5;
 /* 0x06 */ u8 enablePosLights;
 /* 0x07 */ UNK_TYPE1 pad7[0x1];
@@ -1424,7 +1635,7 @@ typedef struct {
 /* 0x38 */ DmaRequest dmaRequest;
 /* 0x58 */ OSMesgQueue loadQueue;
 /* 0x70 */ OSMesg loadMsg[1];
-/* 0x74 */ UNK_TYPE1 pad74[0x4];
+/* 0x74 */ void* unk74;
 /* 0x78 */ s8 unk78;
 /* 0x79 */ s8 unk79;
 /* 0x7A */ UNK_TYPE2 unk7A[3];
@@ -2238,7 +2449,9 @@ struct GlobalContext {
 /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
 /* 0x000B8 */ View view;
 /* 0x00220 */ CameraContext cameraCtx;
-/* 0x00814 */ UNK_TYPE1 pad814[0x4];
+/* 0x00814 */ u8 unk814;
+/* 0x00815 */ u8 unk815;
+/* 0x00816 */ UNK_TYPE1 pad816[0x2];
 /* 0x00818 */ LightingContext lightCtx;
 /* 0x00828 */ u32 unk828;
 /* 0x0082C */ UNK_TYPE1 pad82C[0x4];
