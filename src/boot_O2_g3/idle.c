@@ -69,7 +69,7 @@ GLOBAL_ASM("./asm/non_matchings/idle/Idle_InitCodeAndMemory.asm")
 #endif
 
 void Main_ThreadEntry(void* arg) {
-    StackCheck_Init(&irqmgrStackEntry, (u32)&irqmgrStack, (u32)&irqmgrStack[1280], 0, 256, "irqmgr");
+    StackCheck_Init(&irqmgrStackEntry, &irqmgrStack, &irqmgrStack[1280], 0, 256, "irqmgr");
     IrqMgr_Create(&irqmgrContext, &irqmgrStackEntry, 18, 1);
     Dmamgr_Start();
     Idle_InitCodeAndMemory();
@@ -106,7 +106,7 @@ void func_8008038C(void) {
 void Idle_ThreadEntry(void* arg) {
     func_8008038C();
     osCreatePiManager(150, &D_8009B228, D_8009B160, 50);
-    StackCheck_Init(&mainStackEntry, (u32)&mainStack, (u32)&mainStack[2304], 0, 1024, "main");
+    StackCheck_Init(&mainStackEntry, &mainStack, &mainStack[2304], 0, 1024, "main");
     osCreateThread(&mainOSThread, 3, (osCreateThread_func)Main_ThreadEntry, arg, &mainStack[2304], 12);
     osStartThread(&mainOSThread);
     osSetThreadPri(NULL, 0);
