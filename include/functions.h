@@ -3927,7 +3927,8 @@ void func_801A3EC0(void); // func_801A3EC0
 void func_801A3F54(void); // func_801A3F54
 void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801A3F6C
 void func_801A3FB4(void); // func_801A3FB4
-/*Audio_SetBGM*/ void func_801A400C(u32 bgmID); // func_801A400C
+void func_801A3FFC(UNK_TYPE1 param_1); // func_801A3FFC
+void audio_setBGM(u32 bgmID); // func_801A400C
 void func_801A4058(void); // func_801A4058
 void func_801A41C8(void); // func_801A41C8
 void func_801A41F8(void); // func_801A41F8
@@ -3999,7 +4000,6 @@ void func_801A7D04(void); // func_801A7D04
 void func_801A7D84(void); // func_801A7D84
 void func_801A89A8(void); // func_801A89A8
 void func_801A89D0(void); // func_801A89D0
-// may not be s32 in param or return
 s32 func_801A8A50(s32 param1); // func_801A8A50
 void func_801A8ABC(void); // func_801A8ABC
 void func_801A8BD0(void); // func_801A8BD0
