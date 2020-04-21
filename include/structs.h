@@ -1474,31 +1474,31 @@ typedef struct {
 
 typedef struct {
 /* 0x000 */ u32 magic;
-/* 0x004 */ GraphicsContext* graphics;
+/* 0x004 */ GraphicsContext* gfxCtx;
 /* 0x008 */ Viewport viewport;
-/* 0x018 */ f32 fov;
-/* 0x01C */ f32 nearClippingPlane;
-/* 0x020 */ f32 farClippingPlane;
+/* 0x018 */ f32 fovy;
+/* 0x01C */ f32 zNear;
+/* 0x020 */ f32 zFar;
 /* 0x024 */ f32 scale;
 /* 0x028 */ Vec3f eye;
 /* 0x034 */ Vec3f focalPoint;
 /* 0x040 */ Vec3f upDir;
 /* 0x04C */ UNK_TYPE1 pad4C[0x4];
-/* 0x050 */ Vp gfxVp;
-/* 0x060 */ RSPMatrix unk60;
-/* 0x0A0 */ RSPMatrix unkA0;
+/* 0x050 */ Vp vp;
+/* 0x060 */ Mtx projection;
+/* 0x0A0 */ Mtx viewing;
 /* 0x0E0 */ Mtx unkE0;
-/* 0x120 */ Mtx* viewMatrix;
-/* 0x124 */ Mtx* unk124;
+/* 0x120 */ Mtx* projectionPtr;
+/* 0x124 */ Mtx* viewingPtr;
 /* 0x128 */ Vec3f quakeRot;
 /* 0x134 */ Vec3f quakeScale;
 /* 0x140 */ f32 quakeSpeed;
 /* 0x144 */ Vec3f currQuakeRot;
 /* 0x150 */ Vec3f currQuakeScale;
-/* 0x15C */ u16 perspNorm;
+/* 0x15C */ u16 normal;
 /* 0x15E */ UNK_TYPE1 pad15E[0x2];
 /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-/* 0x164 */ UNK_TYPE1 pad164[0x4];
+/* 0x164 */ UNK_TYPE4 unk164;
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
