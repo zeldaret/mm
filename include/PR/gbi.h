@@ -4199,7 +4199,7 @@ _DW({									\
 #endif /* _HW_VERSION_1 */
 
 #define gDPSetScissor(pkt, mode, ulx, uly, lrx, lry)			\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)pkt;						\
 									\
 	_g->words.w0 = _SHIFTL(G_SETSCISSOR, 24, 8) |			\
@@ -4208,7 +4208,7 @@ _DW({									\
 	_g->words.w1 = _SHIFTL(mode, 24, 2) |				\
 		       _SHIFTL((int)((float)(lrx)*4.0F), 12, 12) |	\
                        _SHIFTL((int)((float)(lry)*4.0F), 0, 12);	\
-}
+})
 
 
 #define gDPSetScissorFrac(pkt, mode, ulx, uly, lrx, lry)		\

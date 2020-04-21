@@ -610,7 +610,7 @@ void func_800B14D4(void); // func_800B14D4
 void func_800B1598(void); // func_800B1598
 void func_800B165C(void); // func_800B165C
 void func_800B16B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B16B8
-void EffectSS_SpawnSparkle(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, int param_8); // func_800B16F4
+void EffectSS_SpawnSparkle(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4* param_5, UNK_TYPE4* param_6, UNK_TYPE2 param_7, int param_8); // func_800B16F4
 void func_800B1830(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B1830
 void EffectSS_SpawnBomb2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4); // func_800B1908
 void func_800B1970(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B1970
@@ -626,7 +626,7 @@ void func_800B1DC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void EffectSS_SpawnDodongoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B1E0C
 void EffectSS_SpawnBubble(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B1E94
 void EffectSS_SpawnGRipple(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5); // func_800B1EF4
-void EffectSS_SpawnGSplash(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_PTR puParm3, UNK_PTR puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6); // func_800B1F4C
+void EffectSS_SpawnGSplash(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4* puParm3, UNK_TYPE4* puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6); // func_800B1F4C
 void EffectSS_SpawnGFire(UNK_TYPE4 uParm1, Vec3f* pzParm2); // func_800B1FE0
 void EffectSS_SpawnLightning(UNK_TYPE4 uParm1, Vec3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2018
 void func_800B2090(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2090
@@ -657,9 +657,9 @@ void func_800B2DA4(void); // func_800B2DA4
 void EffectSS_SpawnEnemyFire(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2DF4
 void func_800B2E6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2E6C
 void EffectSS_SpawnExtra(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B2F18
-void EffectSS_SpawnDeadDekuBaba(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B2F80
+void EffectSS_SpawnDeadDekuBaba(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B2F80
 void func_800B3030(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7); // func_800B3030
-void EffectSS_SpawnDeadDodongo(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_PTR param_5, UNK_PTR param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B3088
+void EffectSS_SpawnDeadDodongo(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B3088
 void EffectSS_SpawnDeadDekuScrub(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B3144
 void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); // func_800B31BC
 void EffectSS_SpawnIceSmoke(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5); // func_800B320C
@@ -2727,36 +2727,36 @@ void func_8013EE04(void); // func_8013EE04
 void func_8013EE24(void); // func_8013EE24
 void func_8013EE38(void); // func_8013EE38
 void func_8013EE48(void); // func_8013EE48
-void View_MapViewportToGfxVp(Vp* gfxVp, Viewport* viewport); // func_8013EE60
-void View_InitView(View* view, GraphicsContext* gCtxt); // func_8013EEF4
+void View_ViewportToVp(Vp* dest, Viewport* src); // func_8013EE60
+void View_Init(View* view, GraphicsContext* gCtxt); // func_8013EEF4
 void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* focalPoint, Vec3f* upDir); // func_8013EF9C
-void func_8013F050(View* view, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4); // func_8013F050
-void func_8013F0A0(View* view, UNK_TYPE4 param_2); // func_8013F0A0
-void func_8013F0C0(View* view, UNK_PTR param_2); // func_8013F0C0
-void func_8013F0D0(View* view, f32 uParm2, f32 uParm3, f32 uParm4); // func_8013F0D0
-void func_8013F100(View* view, UNK_PTR param_2, UNK_PTR param_3, UNK_PTR param_4); // func_8013F100
-void func_8013F120(View* view, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_8013F120
-void func_8013F15C(View* view, UNK_PTR param_2, UNK_PTR param_3, UNK_PTR param_4); // func_8013F15C
-void func_8013F17C(View* view, Viewport* viewport); // func_8013F17C
+void func_8013F050(View* view, Vec3f* eye, Vec3f* focalPoint, Vec3f* upDir); // func_8013F050
+void View_SetScale(View* view, f32 scale); // func_8013F0A0
+void View_GetScale(View* view, f32* scale); // func_8013F0C0
+void func_8013F0D0(View* view, f32 fovy, f32 zNear, f32 zFar); // func_8013F0D0
+void func_8013F100(View* view, f32* fovy, f32* zNear, f32* zFar); // func_8013F100
+void func_8013F120(View* view, f32 fovy, f32 zNear, f32 zFar); // func_8013F120
+void func_8013F15C(View* view, f32* fovy, f32* zNear, f32* zFar); // func_8013F15C
+void View_SetViewport(View* view, Viewport* viewport); // func_8013F17C
 void View_GetViewport(View* view, Viewport* viewport); // func_8013F1B0
-void View_WriteScissor(Gfx** gfx, s32 leftX, s32 upperY, s32 rightX, s32 lowerY); // func_8013F1D8
-void View_WriteBlackFillColorAndScissor(View* view, Gfx** gfx); // func_8013F28C
+void View_WriteScissor(Gfx** gfx, s32 ulx, s32 uly, s32 lrx, s32 lry); // func_8013F1D8
+void View_SyncAndWriteScissor(View* view, Gfx** gfx); // func_8013F28C
 void View_SetScissorForLetterbox(View* view); // func_8013F2F8
 s32 View_SetQuakeRotation(View* view, f32 x, f32 y, f32 z); // func_8013F3F8
 s32 View_SetQuakeScale(View* view, f32 x, f32 y, f32 z); // func_8013F420
 s32 View_SetQuakeSpeed(View* view, f32 speed); // func_8013F448
 s32 View_InitCameraQuake(View* view); // func_8013F45C
 s32 View_ClearQuake(View* view); // func_8013F4C0
-s32 View_SetQuake(View* view, f32 rotX, f32 rotY, f32 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, f32 speed); // func_8013F4F4
+s32 View_SetQuake(View* view, Vec3f rot, Vec3f scale, f32 speed); // func_8013F4F4
 s32 View_StepQuake(View* view, RSPMatrix* matrix); // func_8013F54C
-void View_RenderView(View* view, u32 uParm2); // func_8013F6FC
+void View_RenderView(View* view, s32 uParm2); // func_8013F6FC
 s32 View_RenderToPerspectiveMatrix(View* view); // func_8013F748
 s32 View_RenderToOrthographicMatrix(View* view); // func_8013FA1C
 s32 func_8013FBC8(View* view); // func_8013FBC8
 s32 func_8013FD74(View* view); // func_8013FD74
 s32 func_80140024(View* view); // func_80140024
-s32 func_801400CC(View* view, Gfx** param_2); // func_801400CC
-void func_80140260(void); // func_80140260
+s32 func_801400CC(View* view, Gfx** gfxp); // func_801400CC
+void func_80140260(OSViMode* vimode); // func_80140260
 void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8, UNK_TYPE4 param_9, int param_10, short param_11, unsigned int param_12, UNK_TYPE4 param_13); // func_8014026C
 void func_80140730(void); // func_80140730
 void func_80140810(void); // func_80140810
