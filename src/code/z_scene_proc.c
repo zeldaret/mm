@@ -13,11 +13,11 @@ void SceneProc_DrawSceneConfig0(GlobalContext* ctxt) {
 }
 
 Gfx* SceneProc_SetTile1Layer(GlobalContext* ctxt, ScrollingTextureParams* params) {
-    return Rcp_GenerateSetTileSizeDl((ctxt->state).gfxCtx,
-                                     params->xStep * gSceneProcStep,
-                                     -(params->yStep * gSceneProcStep),
-                                     params->width,
-                                     params->height);
+    return Gfx_TexScroll((ctxt->state).gfxCtx,
+                         params->xStep * gSceneProcStep,
+                         -(params->yStep * gSceneProcStep),
+                         params->width,
+                         params->height);
 }
 
 void SceneProc_DrawType0Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params) {
@@ -36,17 +36,17 @@ void SceneProc_DrawType0Texture(GlobalContext* ctxt, u32 segment, ScrollingTextu
 }
 
 Gfx* SceneProc_SetTile2Layers(GlobalContext* ctxt, ScrollingTextureParams* params) {
-    return Rcp_GenerateSetTileSize2Dl((ctxt->state).gfxCtx,
-                                      0,
-                                      params[0].xStep * gSceneProcStep,
-                                      -(params[0].yStep * gSceneProcStep),
-                                      params[0].width,
-                                      params[0].height,
-                                      1,
-                                      params[1].xStep * gSceneProcStep,
-                                      -(params[1].yStep * gSceneProcStep),
-                                      params[1].width,
-                                      params[1].height);
+    return Gfx_TwoTexScroll((ctxt->state).gfxCtx,
+                            0,
+                            params[0].xStep * gSceneProcStep,
+                            -(params[0].yStep * gSceneProcStep),
+                            params[0].width,
+                            params[0].height,
+                            1,
+                            params[1].xStep * gSceneProcStep,
+                            -(params[1].yStep * gSceneProcStep),
+                            params[1].width,
+                            params[1].height);
 }
 
 void SceneProc_DrawType1Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params) {
@@ -307,23 +307,23 @@ void SceneProc_DrawSceneConfig3(GlobalContext* ctxt) {
     gSPSegment(gfxCtx->polyXlu.p++, 8,
                Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x3f, 0x100, 0x10));
     gSPSegment(gfxCtx->polyXlu.p++, 9,
-               Rcp_GenerateSetTileSize2Dl(ctxt->state.gfxCtx,
-                                          0, 0x7F - (frames & 0x7F), frames & 0x7F, 0x20, 0x20,
-                                          1, frames & 0x7F, frames & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
+                                0, 0x7F - (frames & 0x7F), frames & 0x7F, 0x20, 0x20,
+                                1, frames & 0x7F, frames & 0x7F, 0x20, 0x20));
     gSPSegment(gfxCtx->polyOpa.p++, 10,
-               Rcp_GenerateSetTileSize2Dl(ctxt->state.gfxCtx,
-                                          0, 0, 0, 0x20, 0x20,
-                                          1, 0, 0x7F - (frames & 0x7F), 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
+                                0, 0, 0, 0x20, 0x20,
+                                1, 0, 0x7F - (frames & 0x7F), 0x20, 0x20));
     gSPSegment(gfxCtx->polyOpa.p++, 11,
                Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x7F, 0x20, 0x20));
     gSPSegment(gfxCtx->polyXlu.p++, 12,
-               Rcp_GenerateSetTileSize2Dl(ctxt->state.gfxCtx,
-                                          0, 0, frames * 0x32 & 0x7Ff, 8, 0x200,
-                                          1, 0, frames * 0x3c & 0x7Ff, 8, 0x200));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
+                                0, 0, frames * 0x32 & 0x7Ff, 8, 0x200,
+                                1, 0, frames * 0x3c & 0x7Ff, 8, 0x200));
     gSPSegment(gfxCtx->polyOpa.p++, 13,
-               Rcp_GenerateSetTileSize2Dl(ctxt->state.gfxCtx,
-                                          0, 0, 0, 0x20, 0x40,
-                                          1, 0, frames & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
+                                0, 0, 0, 0x20, 0x40,
+                                1, 0, frames & 0x7F, 0x20, 0x20));
 
     gDPPipeSync(gfxCtx->polyXlu.p++);
     gDPSetEnvColor(gfxCtx->polyXlu.p++, 0x80, 0x80, 0x80, 0x80);
@@ -344,9 +344,9 @@ void SceneProc_DrawSceneConfig4(GlobalContext* ctxt) {
     frames2 = frames * 1;
 
     gSPSegment(gfxCtx->polyXlu.p++, 8,
-               Rcp_GenerateSetTileSize2Dl(ctxt->state.gfxCtx,
-                                          0, 0x7F - (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20,
-                                          1, (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
+                                0, 0x7F - (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20,
+                                1, (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20));
 
     gDPPipeSync(gfxCtx->polyOpa.p++);
     gDPSetEnvColor(gfxCtx->polyOpa.p++, 0x80, 0x80, 0x80, 0x80);

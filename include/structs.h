@@ -489,7 +489,8 @@ typedef struct {
 /* 0x1B8 */ DispBuf unk1B8;
 /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
 /* 0x274 */ OSViMode* unk274;
-/* 0x278 */ UNK_TYPE1 pad278[0x20];
+/* 0x278 */ void* zbuffer;
+/* 0x27C */ UNK_TYPE1 pad27C[0x1C];
 /* 0x298 */ DispBuf overlay;
 /* 0x2A8 */ DispBuf polyOpa;
 /* 0x2B8 */ DispBuf polyXlu;
