@@ -132,6 +132,38 @@ def generate_output(self, path):
                 '\n'
                 )
 
+def parse_geometry_mode_flags(flags):
+    flag_strs = []
+    if flags & 0x00000001 == 0x00000001:
+        flag_strs.append('G_ZBUFFER')
+    if flags & 0x00000004 == 0x00000004:
+        flag_strs.append('G_SHADE')
+    if flags & 0x00000600 == 0x00000600:
+        flag_strs.append('G_CULL_BOTH')
+    elif flags & 0x00000600 == 0x00000200:
+        flag_strs.append('G_CULL_FRONT')
+    elif flags & 0x00000600 == 0x00000400:
+        flag_strs.append('G_CULL_BACK')
+    if flags & 0x00010000 == 0x00010000:
+        flag_strs.append('G_FOG')
+    if flags & 0x00020000 == 0x00020000:
+        flag_strs.append('G_LIGHTING')
+    if flags & 0x00040000 == 0x00040000:
+        flag_strs.append('G_TEXTURE_GEN')
+    if flags & 0x00080000 == 0x00080000:
+        flag_strs.append('G_TEXTURE_GEN_LINEAR')
+    if flags & 0x00200000 == 0x00200000:
+        flag_strs.append('G_SHADING_SMOOTH')
+
+    result = ''
+    for flag_str in flag_strs:
+        if result == '':
+            result = flag_str
+        else:
+            result += ' | ' + flag_str
+
+    return result
+
 class Parser:
 
     class VertexList:
@@ -548,7 +580,14 @@ class Parser:
                 scaleT = (w1 & 0x0000FFFF)
                 if on != 0 and on != 1:
                     return invalid
-                return (True, False, 'gsSPTexture(0x{:04X}, 0x{:04X}, {}, {}, {})'.format(scaleS, scaleT, level, tile, on))
+                onStr = 'G_OFF' if on == 0 else 'G_ON'
+                if tile == 0:
+                    tileStr = 'G_TX_RENDERTILE'
+                elif tile == 7:
+                    tileStr = 'G_TX_LOADTILE'
+                else:
+                    tileStr = str(tile)
+                return (True, False, 'gsSPTexture(0x{:04X}, 0x{:04X}, {}, {}, {})'.format(scaleS, scaleT, level, tileStr, onStr))
             else:
                 return invalid
 
@@ -560,7 +599,19 @@ class Parser:
                 return invalid
 
         if cmd == 0xD9: # G_GEOMETRYMODE
-            return (True, False, 'gsDPNoOp() # TODO G_GEOMETRYMODE')
+            if w1 & 0xFF000000 == 0:
+                clear_str = parse_geometry_mode_flags(~w0)
+                set_str = parse_geometry_mode_flags(w1)
+                if (w0 == 0xD9FFFFFF):
+                    return (True, False, 'gsSPSetGeometryMode({})'.format(set_str))
+                elif (w1 == 0):
+                    return (True, False, 'gsSPClearGeometryMode({})'.format(clear_str))
+                elif (w0 == 0xD9000000):
+                    return (True, False, 'gsSPLoadGeometryMode({})'.format(set_str))
+                else:
+                    return (True, False, 'gsSPGeometryMode({}, {})'.format(clear_str, set_str))
+            else:
+                return invalid
 
         if cmd == 0xDA: # G_MTX
             if (w0 & 0xFFFFFF00) == 0xDA380000:
@@ -966,7 +1017,7 @@ class Parser:
                 green = (w1 & 0x00FF0000) >> 16
                 blue = (w1 & 0x0000FF00) >> 8
                 alpha = (w1 & 0x000000FF)
-                return (True, False, 'gsDPBlendColor({}, {}, {}, {})'.format(red, green, blue, alpha))
+                return (True, False, 'gsDPSetBlendColor({}, {}, {}, {})'.format(red, green, blue, alpha))
             else:
                 return invalid
 

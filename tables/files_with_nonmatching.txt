@@ -18,3 +18,4 @@ z_scene_proc
 z_std_dma
 z_scene
 z_view
+z_rcp

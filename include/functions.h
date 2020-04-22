@@ -2321,85 +2321,85 @@ void func_8012AF18(void); // func_8012AF18
 void func_8012AF38(void); // func_8012AF38
 void func_8012AF9C(void); // func_8012AF9C
 void func_8012BBE8(void); // func_8012BBE8
-void func_8012BC50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BC50
-void func_8012BD8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BD8C
-void func_8012BF08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8012BF08
-Gfx* func_8012BF3C(Gfx* param_1, s32 param_2); // func_8012BF3C
-void func_8012BF78(void); // func_8012BF78
-void func_8012BF98(void); // func_8012BF98
-void func_8012BFC4(void); // func_8012BFC4
-UNK_PTR func_8012BFEC(UNK_PTR param_1); // func_8012BFEC
-void func_8012C014(void); // func_8012C014
-void func_8012C058(int param_1); // func_8012C058
-void func_8012C080(void); // func_8012C080
-void func_8012C0A8(int param_1); // func_8012C0A8
-void func_8012C0D0(int param_1); // func_8012C0D0
-void func_8012C0F8(int param_1); // func_8012C0F8
-void func_8012C120(int param_1); // func_8012C120
-void func_8012C148(void); // func_8012C148
-void func_8012C170(int param_1); // func_8012C170
-void func_8012C198(void); // func_8012C198
-void func_8012C1C0(void); // func_8012C1C0
-void func_8012C1EC(void); // func_8012C1EC
-void func_8012C214(void); // func_8012C214
-void func_8012C240(void); // func_8012C240
+Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BC50
+Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BD8C
+Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BF08
+Gfx* Gfx_CallSetupDLImpl(Gfx* gfx, u32 i); // func_8012BF3C
+Gfx* Gfx_CallSetupDL(Gfx* gfx, u32 i); // func_8012BF78
+void Gfx_CallSetupDLAtPtr(Gfx** gfxp, u32 i); // func_8012BF98
+Gfx* func_8012BFC4(Gfx* gfx); // func_8012BFC4
+Gfx* func_8012BFEC(Gfx* gfx); // func_8012BFEC
+Gfx* func_8012C014(Gfx* gfx); // func_8012C014
+void func_8012C058(GraphicsContext* gCtxt); // func_8012C058
+void func_8012C080(GraphicsContext* gCtxt); // func_8012C080
+void func_8012C0A8(GraphicsContext* gCtxt); // func_8012C0A8
+void func_8012C0D0(GraphicsContext* gCtxt); // func_8012C0D0
+void func_8012C0F8(GraphicsContext* gCtxt); // func_8012C0F8
+void func_8012C120(GraphicsContext* gCtxt); // func_8012C120
+void func_8012C148(GraphicsContext* gCtxt); // func_8012C148
+void func_8012C170(GraphicsContext* gCtxt); // func_8012C170
+Gfx* func_8012C198(Gfx* gfx); // func_8012C198
+void func_8012C1C0(GraphicsContext* gCtxt); // func_8012C1C0
+Gfx* func_8012C1EC(Gfx* gfx); // func_8012C1EC
+void func_8012C214(GraphicsContext* gCtxt); // func_8012C214
+void func_8012C240(GraphicsContext* gCtxt); // func_8012C240
 void func_8012C268(GlobalContext* ctxt); // func_8012C268
 void func_8012C28C(GraphicsContext* gCtxt); // func_8012C28C
-void func_8012C2B4(void); // func_8012C2B4
+Gfx* func_8012C2B4(Gfx* gfx); // func_8012C2B4
 void func_8012C2DC(GraphicsContext* gCtxt); // func_8012C2DC
-void func_8012C304(void); // func_8012C304
-void func_8012C32C(int param_1); // func_8012C32C
-void func_8012C354(int param_1); // func_8012C354
-void func_8012C37C(int param_1); // func_8012C37C
-void func_8012C3A4(void); // func_8012C3A4
-void func_8012C3CC(void); // func_8012C3CC
-void func_8012C3F4(void); // func_8012C3F4
-void func_8012C420(int param_1); // func_8012C420
+Gfx* func_8012C304(Gfx* gfx); // func_8012C304
+void func_8012C32C(GraphicsContext* gCtxt); // func_8012C32C
+void func_8012C354(GraphicsContext* gCtxt); // func_8012C354
+void func_8012C37C(GraphicsContext* gCtxt); // func_8012C37C
+Gfx* func_8012C3A4(Gfx* gfx); // func_8012C3A4
+Gfx* func_8012C3CC(Gfx* gfx); // func_8012C3CC
+void func_8012C3F4(GraphicsContext* gCtxt); // func_8012C3F4
+void func_8012C420(GraphicsContext* gCtxt); // func_8012C420
 void func_8012C448(GraphicsContext* gCtxt); // func_8012C448
-void func_8012C470(void); // func_8012C470
-UNK_PTR func_8012C498(UNK_PTR param_1); // func_8012C498
-void func_8012C4C0(void); // func_8012C4C0
-void func_8012C4E8(int param_1); // func_8012C4E8
-void func_8012C510(int param_1); // func_8012C510
-void func_8012C538(int param_1); // func_8012C538
+void func_8012C470(GraphicsContext* gCtxt); // func_8012C470
+Gfx* func_8012C498(Gfx* gfx); // func_8012C498
+void func_8012C4C0(GraphicsContext* gCtxt); // func_8012C4C0
+void func_8012C4E8(GraphicsContext* gCtxt); // func_8012C4E8
+void func_8012C510(GraphicsContext* gCtxt); // func_8012C510
+void func_8012C538(GraphicsContext* gCtxt); // func_8012C538
 void func_8012C560(GraphicsContext* gCtxt); // func_8012C560
-void func_8012C588(void); // func_8012C588
-void func_8012C5B0(void); // func_8012C5B0
-void func_8012C5D8(int param_1); // func_8012C5D8
-void func_8012C600(void); // func_8012C600
+void func_8012C588(GraphicsContext* gCtxt); // func_8012C588
+void func_8012C5B0(GraphicsContext* gCtxt); // func_8012C5B0
+void func_8012C5D8(GraphicsContext* gCtxt); // func_8012C5D8
+Gfx* func_8012C600(Gfx* gfx); // func_8012C600
 void func_8012C628(GraphicsContext* gCtxt); // func_8012C628
-void func_8012C654(void); // func_8012C654
-void func_8012C680(void); // func_8012C680
-void func_8012C6AC(void); // func_8012C6AC
-void func_8012C6D4(int param_1); // func_8012C6D4
-void func_8012C6FC(void); // func_8012C6FC
-void func_8012C724(void); // func_8012C724
-UNK_PTR func_8012C74C(UNK_PTR param_1); // func_8012C74C
-UNK_PTR func_8012C774(UNK_PTR param_1); // func_8012C774
-UNK_PTR func_8012C7B8(UNK_PTR param_1); // func_8012C7B8
-Gfx* func_8012C7FC(Gfx* puParm1); // func_8012C7FC
-UNK_PTR func_8012C840(UNK_PTR param_1); // func_8012C840
-void func_8012C868(void); // func_8012C868
+void func_8012C654(GraphicsContext* gCtxt); // func_8012C654
+void func_8012C680(Gfx** gfxp); // func_8012C680
+void func_8012C6AC(GraphicsContext* gCtxt); // func_8012C6AC
+void func_8012C6D4(GraphicsContext* gCtxt); // func_8012C6D4
+void func_8012C6FC(GraphicsContext* gCtxt); // func_8012C6FC
+Gfx* func_8012C724(Gfx* gfx); // func_8012C724
+Gfx* func_8012C74C(Gfx* gfx); // func_8012C74C
+Gfx* func_8012C774(Gfx* gfx); // func_8012C774
+Gfx* func_8012C7B8(Gfx* gfx); // func_8012C7B8
+Gfx* func_8012C7FC(Gfx* gfx); // func_8012C7FC
+Gfx* func_8012C840(Gfx* gfx); // func_8012C840
+Gfx* func_8012C868(Gfx* gfx); // func_8012C868
 void func_8012C8AC(GraphicsContext* gCtxt); // func_8012C8AC
-void func_8012C8D4(void); // func_8012C8D4
-void func_8012C8FC(int param_1); // func_8012C8FC
-void func_8012C924(int param_1); // func_8012C924
-void func_8012C94C(void); // func_8012C94C
-void func_8012C974(void); // func_8012C974
-void func_8012C9BC(void); // func_8012C9BC
-void func_8012C9E4(int param_1); // func_8012C9E4
-void func_8012CA0C(void); // func_8012CA0C
-void func_8012CA38(int param_1); // func_8012CA38
-void func_8012CA60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8012CA60
-void func_8012CB04(void); // func_8012CB04
-void func_8012CB28(void); // func_8012CB28
-Gfx* Rcp_GenerateSetTileSizeDl(GraphicsContext* gCtxt, u32 upperS, u32 upperT, u32 lengthS, u32 lengthT); // func_8012CB4C
-Gfx* Rcp_GenerateSetTileSize2Dl(GraphicsContext* gCtxt, u32 tile1, u32 upperS1, u32 upperT1, u32 lengthS1, u32 lengthT1, u32 tile2, u32 upperS2, u32 upperT2, u32 lengthS2, u32 lengthT2); // func_8012CBD0
-void func_8012CCF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15); // func_8012CCF0
-void func_8012CE50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8012CE50
-void func_8012CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8012CEA8
-void func_8012CF0C(GraphicsContext* gCtxt, int iParm2, int iParm3, unsigned int uParm4, u8 param_5, u8 param_6); // func_8012CF0C
-void func_8012D374(void); // func_8012D374
+void func_8012C8D4(GraphicsContext* gCtxt); // func_8012C8D4
+void func_8012C8FC(GraphicsContext* gCtxt); // func_8012C8FC
+void func_8012C924(GraphicsContext* gCtxt); // func_8012C924
+void func_8012C94C(GraphicsContext* gCtxt); // func_8012C94C
+void func_8012C974(GraphicsContext* gCtxt); // func_8012C974
+void func_8012C9BC(GraphicsContext* gCtxt); // func_8012C9BC
+void func_8012C9E4(GraphicsContext* gCtxt); // func_8012C9E4
+void func_8012CA0C(Gfx** gfxp); // func_8012CA0C
+void func_8012CA38(GraphicsContext* gCtxt); // func_8012CA38
+Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height); // func_8012CA60
+void func_8012CB04(Gfx** gfxp, u32 x, u32 y); // func_8012CB04
+Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y); // func_8012CB28
+Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height); // func_8012CB4C
+Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2); // func_8012CBD0
+Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a); // func_8012CCF0
+Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a); // func_8012CE50
+Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a); // func_8012CEA8
+void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u8 b); // func_8012CF0C
+void func_8012D374(GraphicsContext* gCtxt, u8 r, u8 g, u8 b); // func_8012D374
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3); // func_8012D40C
 void Room_nop8012D510(GlobalContext* ctxt, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4); // func_8012D510
 void Room_DrawType3Mesh(GlobalContext* ctxt, Room* room, u32 flags); // func_8012D528
@@ -3149,21 +3149,21 @@ void* Gamealloc_Alloc(GameAlloc* heap, u32 size); // func_80173C10
 void Gamealloc_Free(GameAlloc* heap, void* ptr); // func_80173C7C
 void Gamealloc_FreeAll(GameAlloc* heap); // func_80173CC8
 void Gamealloc_Init(GameAlloc* iParm1); // func_80173D18
-void Graph_FaultDrawFunc(void); // func_80173D30
+void Graph_FaultClient(void); // func_80173D30
 void Graph_DlAlloc(DispBuf* dl, void* memoryBlock, u32 size); // func_80173DAC
-void Graph_RenderSetup(GraphicsContext* gCtxt); // func_80173DCC
-GameStateOverlay* Graph_GetNextGameStateMetaInfo(GameState* ctxt); // func_80173F98
+void Graph_InitTHGA(GraphicsContext* gCtxt); // func_80173DCC
+GameStateOverlay* Graph_GetNextGameState(GameState* ctxt); // func_80173F98
 void* Graph_FaultAddrConvFunc(void* addr); // func_80174060
-void Graph_ContextInit(GraphicsContext* gCtxt); // func_801740D0
-void Graph_Fini(void); // func_80174174
+void Graph_Init(GraphicsContext* gCtxt); // func_801740D0
+void Graph_Destroy(void); // func_80174174
 void Graph_Render(GraphicsContext* gCtxt, GameState* ctxt); // func_801741A8
 void Graph_FrameSetup(GameState* ctxt); // func_801744AC
 void Graph_RenderFrame(GraphicsContext* gCtxt, GameState* ctxt); // func_801744F8
 void Graph_DoFrame(GraphicsContext* gCtxt, GameState* ctxt); // func_80174868
 void Graph_ThreadEntry(void* arg); // func_801748A0
-void func_80174A40(void); // func_80174A40
-void func_80174A4C(void); // func_80174A4C
-void func_80174A64(void); // func_80174A64
+Gfx* Graph_GfxPlusOne(Gfx* gfx); // func_80174A40
+Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst); // func_80174A4C
+void* Graph_DlistAlloc(Gfx** gfx, u32 size); // func_80174A64
 void func_80174AA0(void); // func_80174AA0
 void func_80174AB4(void); // func_80174AB4
 void func_80174B20(void); // func_80174B20
@@ -3236,7 +3236,7 @@ void func_80178818(void); // func_80178818
 void func_80178978(void); // func_80178978
 void func_801789D4(void); // func_801789D4
 u32* get_framebuffer(s32 index); // func_801789EC
-void func_80178A14(void); // func_80178A14
+u16* get_zbuffer(void); // func_80178A14
 UNK_TYPE4 func_80178A24(void); // func_80178A24
 void func_80178A34(void); // func_80178A34
 s32 func_80178A94(s32 param_1, s32 param_2); // func_80178A94
