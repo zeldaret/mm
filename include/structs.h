@@ -579,6 +579,12 @@ typedef struct {
 } PermanentSceneFlags; // size = 0x1C
 
 typedef struct {
+/* 0x0 */ s16 unk0;
+/* 0x2 */ s16 unk2;
+/* 0x4 */ s16 unk4;
+} QuakeRequest14; // size = 0x6
+
+typedef struct {
 /* 0x0 */ u8 red;
 /* 0x1 */ u8 green;
 /* 0x2 */ u8 blue;
@@ -1474,6 +1480,23 @@ typedef struct {
 } SceneContext; // size = 0x958
 
 typedef struct {
+/* 0x00 */ Vec3f focalPointChange;
+/* 0x0C */ Vec3f eyeChange;
+/* 0x18 */ s16 rotZ;
+/* 0x1A */ s16 zoom;
+/* 0x1C */ UNK_TYPE1 pad1C[0x2];
+} ShakeInfo; // size = 0x1E
+
+typedef struct {
+/* 0x00 */ Vec3f focalPointChange;
+/* 0x0C */ Vec3f eyeChange;
+/* 0x18 */ s16 unk18;
+/* 0x1A */ s16 unk1A;
+/* 0x1C */ f32 unk1C;
+/* 0x20 */ f32 unk20;
+} UnkQuakeCalcStruct; // size = 0x24
+
+typedef struct {
 /* 0x000 */ u32 magic;
 /* 0x004 */ GraphicsContext* gfxCtx;
 /* 0x008 */ Viewport viewport;
@@ -2134,7 +2157,7 @@ struct GameState {
 /* 0x9C */ u32 frames;
 /* 0xA0 */ UNK_TYPE1 padA0[0x2];
 /* 0xA2 */ u8 framerateDivisor; // game speed?
-/* 0xA3 */ UNK_TYPE1 padA3[0x1];
+/* 0xA3 */ UNK_TYPE1 unkA3;
 }; // size = 0xA4
 
 struct OpeningContext {
@@ -2233,6 +2256,13 @@ typedef struct LightingContext LightingContext;
 
 typedef struct GlobalContext GlobalContext;
 
+typedef struct {
+/* 0x0 */ GlobalContext* ctxt;
+/* 0x4 */ s32 type; // bitfield, highest set bit determines type
+/* 0x8 */ s16 countdown;
+/* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
+} Quake2Context; // size = 0xC
+
 typedef s32(*collision_add_func)(GlobalContext*, ColCommon*);
 
 typedef void(*collision_func)(GlobalContext*, CollisionCheckContext*, ColCommon*, ColCommon*);
@@ -2265,7 +2295,26 @@ typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* para
 
 typedef struct Camera Camera;
 
+typedef struct {
+/* 0x00 */ s16 randIdx;
+/* 0x02 */ s16 countdownMax;
+/* 0x04 */ Camera* cam;
+/* 0x08 */ u32 callbackIdx;
+/* 0x0C */ s16 y;
+/* 0x0E */ s16 x;
+/* 0x10 */ s16 zoom;
+/* 0x12 */ s16 rotZ;
+/* 0x14 */ QuakeRequest14 unk14;
+/* 0x1A */ s16 speed;
+/* 0x1C */ s16 unk1C;
+/* 0x1E */ s16 countdown;
+/* 0x20 */ s16 camPtrIdx;
+/* 0x22 */ UNK_TYPE1 pad22[0x2];
+} QuakeRequest; // size = 0x24
+
 typedef s32(*camera_update_func)(Camera* camera);
+
+typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
 
 typedef struct LightsList LightsList;
 

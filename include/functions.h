@@ -778,7 +778,7 @@ void func_800B8050(Actor* actor, GlobalContext* ctxt, s32 iParm3); // func_800B8
 void func_800B8118(void); // func_800B8118
 void func_800B81E0(void); // func_800B81E0
 UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2); // func_800B8214
-f32* func_800B8248(PosRot* param_1, Actor* param_2); // func_800B8248
+f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2); // func_800B8248
 void func_800B82EC(void); // func_800B82EC
 void func_800B83BC(void); // func_800B83BC
 void func_800B83F8(void); // func_800B83F8
@@ -1087,7 +1087,7 @@ u32 func_800C9CC4(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // f
 void func_800C9CEC(void); // func_800C9CEC
 void func_800C9D14(void); // func_800C9D14
 void func_800C9D50(void); // func_800C9D50
-void func_800C9D8C(void); // func_800C9D8C
+unsigned int func_800C9D8C(CollisionContext* param_1, BgPolygon* param_2, s32 param_3); // func_800C9D8C
 void func_800C9DDC(void); // func_800C9DDC
 u32 func_800C9E18(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E18
 u32 func_800C9E40(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E40
@@ -2284,43 +2284,43 @@ void func_801284A0(void); // func_801284A0
 void func_80128640(void); // func_80128640
 void func_80128B74(void); // func_80128B74
 void func_80128BD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80128BD0
-void Prenmi_Stop(PreNMIContext* ctxt); // func_80129EF0
-void Prenmi_Update(PreNMIContext* ctxt); // func_80129F04
-void Prenmi_Draw(PreNMIContext* ctxt); // func_80129F4C
-void Prenmi_Main(PreNMIContext* ctxt); // func_80129FF8
-void Prenmi_Fini(PreNMIContext* ctxt); // func_8012A02C
-void Prenmi_Init(PreNMIContext* ctxt); // func_8012A038
-void func_8012A080(void); // func_8012A080
-void func_8012A0AC(void); // func_8012A0AC
-void func_8012A2B8(void); // func_8012A2B8
-void func_8012A340(void); // func_8012A340
-void func_8012A3B4(void); // func_8012A3B4
-void func_8012A438(void); // func_8012A438
-void func_8012A4D0(void); // func_8012A4D0
-void func_8012A540(void); // func_8012A540
-void func_8012A5D8(void); // func_8012A5D8
-void func_8012A638(void); // func_8012A638
-void func_8012A6F0(void); // func_8012A6F0
-void func_8012A718(void); // func_8012A718
-void func_8012A774(void); // func_8012A774
-void func_8012A8A8(void); // func_8012A8A8
-void func_8012A8F0(void); // func_8012A8F0
-void func_8012A940(void); // func_8012A940
-void func_8012A978(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_8012A978
-void func_8012A9E0(void); // func_8012A9E0
-void func_8012AA48(void); // func_8012AA48
-void func_8012AA9C(void); // func_8012AA9C
-void func_8012AAC0(void); // func_8012AAC0
-void func_8012AB08(void); // func_8012AB08
-void func_8012AE68(GlobalContext* ctxt); // func_8012AE68
-void func_8012AEAC(void); // func_8012AEAC
-int func_8012aed4(void); // func_8012AED4
-void func_8012AEE4(void); // func_8012AEE4
-void func_8012AEF4(void); // func_8012AEF4
-void func_8012AF18(void); // func_8012AF18
-void func_8012AF38(void); // func_8012AF38
-void func_8012AF9C(void); // func_8012AF9C
-void func_8012BBE8(void); // func_8012BBE8
+void PreNMI_Stop(PreNMIContext* prenmiCtx); // func_80129EF0
+void PreNMI_Update(PreNMIContext* prenmiCtx); // func_80129F04
+void PreNMI_Draw(PreNMIContext* prenmiCtx); // func_80129F4C
+void PreNMI_Main(PreNMIContext* prenmiCtx); // func_80129FF8
+void PreNMI_Destroy(PreNMIContext* prenmiCtx); // func_8012A02C
+void PreNMI_Init(PreNMIContext* prenmiCtx); // func_8012A038
+f32 Quake_Random(void); // func_8012A080
+void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x); // func_8012A0AC
+s16 Quake_Callback1(QuakeRequest* req, ShakeInfo* shake); // func_8012A2B8
+s16 Quake_Callback5(QuakeRequest* req, ShakeInfo* shake); // func_8012A340
+s16 Quake_Callback6(QuakeRequest* req, ShakeInfo* shake); // func_8012A3B4
+s16 Quake_Callback3(QuakeRequest* req, ShakeInfo* shake); // func_8012A438
+s16 Quake_Callback2(QuakeRequest* req, ShakeInfo* shake); // func_8012A4D0
+s16 Quake_Callback4(QuakeRequest* req, ShakeInfo* shake); // func_8012A540
+s16 Quake_GetFreeIndex(void); // func_8012A5D8
+QuakeRequest* Quake_AddImpl(Camera* cam, u32 callbackIdx); // func_8012A638
+void Quake_Remove(QuakeRequest* req); // func_8012A6F0
+QuakeRequest* Quake_GetRequest(s16 idx); // func_8012A718
+QuakeRequest* Quake_SetValue(s16 idx, s16 valueType, s16 value); // func_8012A774
+u32 Quake_SetSpeed(s16 idx, s16 value); // func_8012A8A8
+u32 Quake_SetCountdown(s16 idx, s16 value); // func_8012A8F0
+s16 Quake_GetCountdown(s16 idx); // func_8012A940
+u32 Quake_SetQuakeValues(s16 idx, s16 y, s16 x, s16 zoom, s16 rotZ); // func_8012A978
+u32 Quake_SetUnkValues(s16 idx, s16 arg1); // func_8012A9E0
+void Quake_Init(void); // func_8012AA48
+s16 Quake_Add(Camera* cam, u32 callbackIdx); // func_8012AA9C
+u32 Quake_RemoveFromIdx(s16 idx); // func_8012AAC0
+s16 Quake_Calc(Camera* camera, UnkQuakeCalcStruct* camData); // func_8012AB08
+void Quake2_Init(GlobalContext* ctxt); // func_8012AE68
+void Quake2_SetCountdown(s16 countdown); // func_8012AEAC
+int Quake2_GetCountdown(void); // func_8012AED4
+s16 Quake2_GetType(void); // func_8012AEE4
+void Quake2_SetType(s16 type); // func_8012AEF4
+void Quake2_ClearType(s16 type); // func_8012AF18
+u32 Quake2_GetFloorQuake(ActorPlayer* player); // func_8012AF38
+void Quake2_Update(void); // func_8012AF9C
+void Quake_NumActiveQuakes(void); // func_8012BBE8
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BC50
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BD8C
 Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f); // func_8012BF08
