@@ -371,7 +371,7 @@ SECTIONS
         build/asm/code_0x801224E0.o(.text)
         build/asm/code_0x80122660.o(.text)
         build/asm/z_player_lib.o(.text)
-        build/asm/z_prenmi.o(.text)
+        build/src/code/z_prenmi.o(.text)
         build/asm/code_0x8012A080.o(.text)
         build/src/code/z_rcp.o(.text)
         . += 0x10;

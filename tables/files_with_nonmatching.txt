@@ -19,3 +19,4 @@ z_std_dma
 z_scene
 z_view
 z_rcp
+z_prenmi
