@@ -1757,12 +1757,12 @@ typedef struct {
 /* 0xA9 */ UNK_TYPE1 unkA9;
 /* 0xAA */ UNK_TYPE1 unkAA;
 /* 0xAB */ UNK_TYPE1 unkAB;
-/* 0xAC */ s16 windWest;
-/* 0xAE */ s16 windVertical;
-/* 0xB0 */ s16 windSouth;
+/* 0xAC */ s16 unkAC;
+/* 0xAE */ s16 unkAE;
+/* 0xB0 */ s16 unkB0;
 /* 0xB2 */ UNK_TYPE1 unkB2;
 /* 0xB3 */ UNK_TYPE1 unkB3;
-/* 0xB4 */ f32 windClothIntensity;
+/* 0xB4 */ f32 unkB4;
 /* 0xB8 */ u8 environmentSettingsCount;
 /* 0xB9 */ UNK_TYPE1 unkB9;
 /* 0xBA */ UNK_TYPE1 unkBA;
