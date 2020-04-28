@@ -207,7 +207,7 @@ def get_type_string(file_data, fd, symbolic_header, aux_num, name, search_for_ty
             ret += '*'
         elif tq == 2: # tqProc
             last_was_proc = True
-            name = '(*%s)(... /* ECOFF does not store param types */)' % name
+            name = '(*%s)(/* ECOFF does not store param types */)' % name
         elif tq == 3: # tqArray
             next_aux += 2 # todo what does this skip over? (Apparantly the type of the index, so always int for C)
             array_low_aux = read_auxiliary_symbol(file_data, symbolic_header.cbAuxOffset - OFFSET + (fd.iauxBase + next_aux)*4)
