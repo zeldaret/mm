@@ -357,20 +357,20 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
     return Math_Vec3f_DistXZ(&actor->currPosRot.pos, point);
 }
 
-#ifdef NON_MATCHING
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
-    f32 cos_rot_x;
-    f32 sin_rot_x;
-
-    cos_rot_x = Math_Coss(actor->shape.rot.x);
-    sin_rot_x = Math_Sins(actor->shape.rot.x);
-    offset->x = (point->x - actor->currPosRot.pos.x * cos_rot_x) - (point->z - actor->currPosRot.pos.z * sin_rot_x);
+    f32 cos_rot_y;
+    f32 sin_rot_y;
+    f32 imm_x;
+    f32 imm_z;
+    
+    cos_rot_y = Math_Coss(actor->shape.rot.y);
+    sin_rot_y = Math_Sins(actor->shape.rot.y);
+    imm_x = point->x - actor->currPosRot.pos.x;
+    imm_z = point->z - actor->currPosRot.pos.z;
+    offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
+    offset->z = ((imm_z * cos_rot_y) + (imm_x * sin_rot_y));
     offset->y = point->y - actor->currPosRot.pos.y;
-    offset->z = (point->z - actor->currPosRot.pos.z * cos_rot_x) + (point->x - actor->currPosRot.pos.x * sin_rot_x);
 }
-#else
-GLOBAL_ASM("asm/non_matchings/z_actor//Actor_CalcOffsetOrientedToDrawRotation.asm")
-#endif
 
 f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
     return actor2->currPosRot.pos.y - actor1->currPosRot.pos.y;
