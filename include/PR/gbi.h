@@ -2769,7 +2769,7 @@ _DW({									\
 #define	gSPClearGeometryMode(pkt, word)	gSPGeometryMode((pkt),(word),0)
 #define	gsSPClearGeometryMode(word)	gsSPGeometryMode((word),0)
 #define	gSPLoadGeometryMode(pkt, word)	gSPGeometryMode((pkt),-1,(word))
-#define	gsSPLoadGeometryMode(pkt, word)	gsSPGeometryMode(-1,(word))
+#define	gsSPLoadGeometryMode(word)	gsSPGeometryMode(-1,(word))
 
 #else	/* F3DEX_GBI_2 */
 #define	gSPSetGeometryMode(pkt, word)					\
@@ -2922,13 +2922,13 @@ _DW({									\
 			 (c0) | (c1))
 
 #define	gSetImage(pkt, cmd, fmt, siz, width, i)				\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = _SHIFTL(cmd, 24, 8) | _SHIFTL(fmt, 21, 3) |	\
 		       _SHIFTL(siz, 19, 2) | _SHIFTL((width)-1, 0, 12);	\
 	_g->words.w1 = (unsigned int)(i);				\
-}
+})
 
 #define	gsSetImage(cmd, fmt, siz, width, i)				\
 {									\
@@ -4199,7 +4199,7 @@ _DW({									\
 #endif /* _HW_VERSION_1 */
 
 #define gDPSetScissor(pkt, mode, ulx, uly, lrx, lry)			\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)pkt;						\
 									\
 	_g->words.w0 = _SHIFTL(G_SETSCISSOR, 24, 8) |			\
@@ -4208,11 +4208,11 @@ _DW({									\
 	_g->words.w1 = _SHIFTL(mode, 24, 2) |				\
 		       _SHIFTL((int)((float)(lrx)*4.0F), 12, 12) |	\
                        _SHIFTL((int)((float)(lry)*4.0F), 0, 12);	\
-}
+})
 
 
 #define gDPSetScissorFrac(pkt, mode, ulx, uly, lrx, lry)		\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)pkt;						\
 									\
 	_g->words.w0 = _SHIFTL(G_SETSCISSOR, 24, 8) |			\
@@ -4221,7 +4221,7 @@ _DW({									\
 	_g->words.w1 = _SHIFTL(mode, 24, 2) |				\
 		       _SHIFTL((int)((lrx)), 12, 12) | 			\
                        _SHIFTL((int)((lry)), 0, 12);			\
-}
+})
 
 #define gsDPSetScissor(mode, ulx, uly, lrx, lry)			\
 {									\
@@ -4245,13 +4245,13 @@ _DW({									\
 
 /* Fraction never used in fill */
 #define	gDPFillRectangle(pkt, ulx, uly, lrx, lry)			\
-{									\
+_DW({									\
 	Gfx *_g = (Gfx *)(pkt);						\
 									\
 	_g->words.w0 = (_SHIFTL(G_FILLRECT, 24, 8) | 			\
 			_SHIFTL((lrx), 14, 10) | _SHIFTL((lry), 2, 10));\
 	_g->words.w1 = (_SHIFTL((ulx), 14, 10) | _SHIFTL((uly), 2, 10));\
-}
+})
 
 #define	gsDPFillRectangle(ulx, uly, lrx, lry)				\
 {									\

@@ -1,4 +1,5 @@
 boot_0x800968B0
+code_0x800AF710
 fault
 fault_drawer
 idle
@@ -16,3 +17,6 @@ z_room
 z_scene_proc
 z_std_dma
 z_scene
+z_view
+z_rcp
+z_prenmi

@@ -150,20 +150,94 @@ typedef struct {
 } ColorRGBA8; // size = 0x4
 
 typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x2];
+/* 0x02 */ u16 startFrame;
+/* 0x04 */ u16 endFrame;
+/* 0x06 */ UNK_TYPE1 pad6[0x2A];
+} CsCmdActorAction; // size = 0x30
+
+typedef struct {
+/* 0x0 */ u16 base;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdBase; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 hour;
+/* 0x7 */ u8 minute;
+} CsCmdDayTime; // size = 0x8
+
+typedef struct {
+/* 0x0 */ u16 setting;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdEnvLighting; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 sequence;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdMusicChange; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 type;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+} CsCmdMusicFade; // size = 0x6
+
+typedef struct {
+/* 0x0 */ u16 base;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u16 type;
+/* 0x8 */ u16 textId1;
+/* 0xA */ u16 textId2;
+} CsCmdTextbox; // size = 0xC
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 unk6;
+/* 0x7 */ u8 unk7;
+/* 0x8 */ u8 unk8;
+/* 0x9 */ UNK_TYPE1 pad9[0x3];
+} CsCmdUnk190; // size = 0xC
+
+typedef struct {
+/* 0x0 */ UNK_TYPE4 unk0;
+/* 0x4 */ UNK_TYPE4 unk4;
+} CsCmdUnk5A; // size = 0x8
+
+typedef struct {
+/* 0x0 */ u16 unk0;
+/* 0x2 */ u16 startFrame;
+/* 0x4 */ u16 endFrame;
+/* 0x6 */ u8 unk6;
+/* 0x7 */ u8 unk7;
+/* 0x8 */ u8 unk8;
+/* 0x9 */ UNK_TYPE1 pad9[0x3];
+} CsCmdUnk9B; // size = 0xC
+
+typedef struct {
 /* 0x00 */ u8 cutsceneCount;
 /* 0x01 */ UNK_TYPE1 pad1[0x3];
-/* 0x04 */ u16* currentCutsceneData;
+/* 0x04 */ u8* segment;
 /* 0x08 */ u8 state;
 /* 0x09 */ UNK_TYPE1 pad9[0x3];
 /* 0x0C */ f32 unkC;
-/* 0x10 */ u16 currentFrame;
-/* 0x12 */ UNK_TYPE1 pad12[0x16];
-/* 0x28 */ UNK_TYPE4 unk28[10];
+/* 0x10 */ u16 frames;
+/* 0x12 */ u16 unk12;
+/* 0x14 */ UNK_TYPE1 pad14[0x14];
+/* 0x28 */ CsCmdActorAction* actorActions[10];
 } CutsceneContext; // size = 0x50
 
 typedef struct {
 /* 0x0 */ u32 data;
-/* 0x4 */ UNK_TYPE1 pad4[0x2];
+/* 0x4 */ s16 unk4;
 /* 0x6 */ u8 unk6;
 /* 0x7 */ u8 unk7;
 } CutsceneEntry; // size = 0x8
@@ -205,6 +279,51 @@ typedef struct {
 /* 0x18 */ OSMesgQueue* notifyQueue; // Message queue for the notification message
 /* 0x1C */ OSMesg notifyMsg; // Completion notification message
 } DmaRequest; // size = 0x20
+
+typedef struct {
+/* 0x000 */ UNK_TYPE1 pad0[0x184];
+/* 0x184 */ ColorRGBA8 unk184;
+/* 0x188 */ ColorRGBA8 unk188;
+/* 0x18C */ ColorRGBA8 unk18C;
+/* 0x190 */ ColorRGBA8 unk190;
+/* 0x194 */ UNK_TYPE1 pad194[0xC];
+} EffBlureInit1; // size = 0x1A0
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x8];
+/* 0x08 */ ColorRGBA8 unk8;
+/* 0x0C */ ColorRGBA8 unkC;
+/* 0x10 */ ColorRGBA8 unk10;
+/* 0x14 */ ColorRGBA8 unk14;
+/* 0x18 */ UNK_TYPE1 pad18[0xC];
+} EffBlureInit2; // size = 0x24
+
+typedef struct {
+/* 0x00 */ UNK_TYPE1 pad0[0x18];
+} EffBlureParticle; // size = 0x18
+
+typedef struct {
+/* 0x0 */ u8 active;
+/* 0x1 */ u8 unk1;
+/* 0x2 */ u8 unk2;
+/* 0x3 */ UNK_TYPE1 pad3[0x1];
+} EffCommon; // size = 0x4
+
+typedef struct {
+/* 0x00 */ f32 startSpeed;
+/* 0x04 */ f32 endXChange;
+/* 0x08 */ f32 endX;
+/* 0x0C */ f32 startXChange;
+/* 0x10 */ f32 startX;
+/* 0x14 */ s16 rotationY;
+/* 0x16 */ s16 rotationZ;
+} EffShieldParticleParticle; // size = 0x18
+
+typedef struct {
+/* 0x0 */ s16 unk0;
+/* 0x2 */ s16 maxLife;
+/* 0x4 */ ColorRGBA8 color;
+} EffTireMarkInit; // size = 0x8
 
 typedef enum EffectSSType {
     EFFECT_SS2_TYPE_DUST = 0x0,
@@ -370,7 +489,8 @@ typedef struct {
 /* 0x1B8 */ DispBuf unk1B8;
 /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
 /* 0x274 */ OSViMode* unk274;
-/* 0x278 */ UNK_TYPE1 pad278[0x20];
+/* 0x278 */ void* zbuffer;
+/* 0x27C */ UNK_TYPE1 pad27C[0x1C];
 /* 0x298 */ DispBuf overlay;
 /* 0x2A8 */ DispBuf polyOpa;
 /* 0x2B8 */ DispBuf polyXlu;
@@ -457,6 +577,12 @@ typedef struct {
 typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[0x1C];
 } PermanentSceneFlags; // size = 0x1C
+
+typedef struct {
+/* 0x0 */ s16 unk0;
+/* 0x2 */ s16 unk2;
+/* 0x4 */ s16 unk4;
+} QuakeRequest14; // size = 0x6
 
 typedef struct {
 /* 0x0 */ u8 red;
@@ -699,7 +825,7 @@ typedef struct {
 
 // Extra information in the save context that is not saved
 typedef struct {
-/* 0x000 */ UNK_TYPE1 pad0[0xB];
+/* 0x000 */ UNK_TYPE1 pad0[0xC];
 /* 0x00C */ s32 sceneSetupIndex;
 /* 0x010 */ s32 unk10;
 /* 0x014 */ UNK_TYPE1 pad14[0x2E];
@@ -709,9 +835,11 @@ typedef struct {
 /* 0x277 */ UNK_TYPE1 pad277[0x9];
 /* 0x280 */ u16 unk280;
 /* 0x282 */ u16 unk282;
-/* 0x284 */ UNK_TYPE1 pad284[0x40];
+/* 0x284 */ UNK_TYPE1 pad284[0x28];
+/* 0x2AC */ u8 cutsceneTrigger;
+/* 0x2AD */ UNK_TYPE1 pad2AD[0x17];
 /* 0x2C4 */ f32 unk2C4;
-/* 0x2C8 */ CycleSceneFlags cycleSceneFlags[0x78];
+/* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
 } SaveContextExtra; // size = 0xC28
 
 typedef struct {
@@ -744,7 +872,6 @@ typedef struct {
 typedef struct {
 /* 0x00 */ UNK_TYPE1 pad0[0x22];
 } SaveContext_struct2; // size = 0x22
-
 
 typedef union {
 /* Command: N/A  */ SCmdBase              base;
@@ -803,7 +930,8 @@ typedef struct {
 typedef struct {
 /* 0x0 */ u32 romStart;
 /* 0x4 */ u32 romEnd;
-/* 0x8 */ UNK_TYPE1 pad8[0x3];
+/* 0x8 */ u16 unk8;
+/* 0xA */ UNK_TYPE1 padA[0x1];
 /* 0xB */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
 /* 0xC */ UNK_TYPE1 padC[0x1];
 /* 0xD */ u8 unkD;
@@ -901,6 +1029,14 @@ typedef struct {
 } __osExceptionVector; // size = 0x10
 
 typedef void(*actor_init_var_func)(u8*, ActorInitVar*);
+
+typedef void(*eff_destroy_func)(void* params);
+
+typedef void(*eff_draw_func)(void* params, GraphicsContext* gCtxt);
+
+typedef void(*eff_init_func)(void* params, void* init);
+
+typedef s32(*eff_update_func)(void* params);
 
 typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
@@ -1121,6 +1257,64 @@ typedef struct {
 } ColTriParamsInit; // size = 0x24
 
 typedef struct {
+/* 0x000 */ EffBlureParticle particles[16];
+/* 0x180 */ UNK_TYPE1 pad180[0x4];
+/* 0x184 */ f32 unk184;
+/* 0x188 */ u16 unk188;
+/* 0x18A */ UNK_TYPE1 pad18A[0x4];
+/* 0x18E */ ColorRGBA8 unk18E;
+/* 0x192 */ ColorRGBA8 unk192;
+/* 0x196 */ ColorRGBA8 unk196;
+/* 0x19A */ ColorRGBA8 unk19A;
+/* 0x19E */ u8 unk19E;
+/* 0x19F */ u8 unk19F;
+/* 0x1A0 */ u8 unk1A0;
+/* 0x1A1 */ u8 unk1A1;
+/* 0x1A2 */ UNK_TYPE1 pad1A2[0xA];
+} EffBlureParams; // size = 0x1AC
+
+typedef struct {
+/* 0x00 */ u32 paramsSize;
+/* 0x04 */ eff_init_func init;
+/* 0x08 */ eff_destroy_func destroy;
+/* 0x0C */ eff_update_func update;
+/* 0x10 */ eff_draw_func draw;
+} EffInfo; // size = 0x14
+
+typedef struct {
+/* 0x00 */ u8 numParticles;
+/* 0x02 */ Vec3s position;
+/* 0x08 */ ColorRGBA8 primColorStart;
+/* 0x0C */ ColorRGBA8 envColorStart;
+/* 0x10 */ ColorRGBA8 primColorMid;
+/* 0x14 */ ColorRGBA8 envColorMid;
+/* 0x18 */ ColorRGBA8 primColorEnd;
+/* 0x1C */ ColorRGBA8 envColorEnd;
+/* 0x20 */ f32 acceleration;
+/* 0x24 */ f32 maxInitialSpeed;
+/* 0x28 */ f32 lengthCutoff;
+/* 0x2C */ u8 duration;
+/* 0x2E */ LightInfoPositionalParams lightParams;
+/* 0x3C */ s32 hasLight;
+} EffShieldParticleInit; // size = 0x40
+
+typedef struct {
+/* 0x00 */ Vec3f velocity;
+/* 0x0C */ Vec3f position;
+/* 0x18 */ Vec3s unk18;
+/* 0x1E */ Vec3s unk1E;
+} EffSparkParticle; // size = 0x24
+
+typedef struct {
+/* 0x00 */ UNK_TYPE2 active;
+/* 0x02 */ Vec3s position1;
+/* 0x08 */ Vec3s position2;
+/* 0x0E */ s16 life;
+/* 0x10 */ UNK_TYPE1 pad10[0x4];
+/* 0x14 */ UNK_TYPE4 unk14;
+} EffTireMarkParticle; // size = 0x18
+
+typedef struct {
 /* 0x00 */ Vec3f position;
 /* 0x0C */ Vec3f velocity;
 /* 0x18 */ Vec3f acceleration;
@@ -1134,8 +1328,8 @@ typedef struct {
 } EffectDustInit; // size = 0x35
 
 typedef union {
-/* 0x0 */ F3DVertexColor color;
-/* 0x0 */ F3DVertexNormal normal;
+    F3DVertexColor color;
+    F3DVertexNormal normal;
 } F3DVertex; // size = 0x10
 
 typedef struct {
@@ -1274,32 +1468,49 @@ typedef struct {
 } SceneContext; // size = 0x958
 
 typedef struct {
+/* 0x00 */ Vec3f focalPointChange;
+/* 0x0C */ Vec3f eyeChange;
+/* 0x18 */ s16 rotZ;
+/* 0x1A */ s16 zoom;
+/* 0x1C */ UNK_TYPE1 pad1C[0x2];
+} ShakeInfo; // size = 0x1E
+
+typedef struct {
+/* 0x00 */ Vec3f focalPointChange;
+/* 0x0C */ Vec3f eyeChange;
+/* 0x18 */ s16 unk18;
+/* 0x1A */ s16 unk1A;
+/* 0x1C */ f32 unk1C;
+/* 0x20 */ f32 unk20;
+} UnkQuakeCalcStruct; // size = 0x24
+
+typedef struct {
 /* 0x000 */ u32 magic;
-/* 0x004 */ GraphicsContext* graphics;
+/* 0x004 */ GraphicsContext* gfxCtx;
 /* 0x008 */ Viewport viewport;
-/* 0x018 */ f32 fov;
-/* 0x01C */ f32 nearClippingPlane;
-/* 0x020 */ f32 farClippingPlane;
+/* 0x018 */ f32 fovy;
+/* 0x01C */ f32 zNear;
+/* 0x020 */ f32 zFar;
 /* 0x024 */ f32 scale;
 /* 0x028 */ Vec3f eye;
 /* 0x034 */ Vec3f focalPoint;
 /* 0x040 */ Vec3f upDir;
 /* 0x04C */ UNK_TYPE1 pad4C[0x4];
-/* 0x050 */ Vp gfxVp;
-/* 0x060 */ RSPMatrix unk60;
-/* 0x0A0 */ RSPMatrix unkA0;
+/* 0x050 */ Vp vp;
+/* 0x060 */ Mtx projection;
+/* 0x0A0 */ Mtx viewing;
 /* 0x0E0 */ Mtx unkE0;
-/* 0x120 */ Mtx* viewMatrix;
-/* 0x124 */ Mtx* unk124;
+/* 0x120 */ Mtx* projectionPtr;
+/* 0x124 */ Mtx* viewingPtr;
 /* 0x128 */ Vec3f quakeRot;
 /* 0x134 */ Vec3f quakeScale;
 /* 0x140 */ f32 quakeSpeed;
 /* 0x144 */ Vec3f currQuakeRot;
 /* 0x150 */ Vec3f currQuakeScale;
-/* 0x15C */ u16 perspNorm;
+/* 0x15C */ u16 normal;
 /* 0x15E */ UNK_TYPE1 pad15E[0x2];
 /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-/* 0x164 */ UNK_TYPE1 pad164[0x4];
+/* 0x164 */ UNK_TYPE4 unk164;
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
@@ -1351,6 +1562,34 @@ typedef struct {
 /* 0x00 */ ColBodyInfoInit body;
 /* 0x18 */ ColTriParamsInit params;
 } ColTriInit; // size = 0x3C
+
+typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffBlureParams params;
+} EffBlure; // size = 0x1B0
+
+typedef struct {
+/* 0x000 */ Vec3s position;
+/* 0x008 */ s32 numParticles; // Will be calculated as particleFactor1 * particleFactor2 + 2
+/* 0x00C */ EffSparkParticle particles[32];
+/* 0x48C */ f32 velocity;
+/* 0x490 */ f32 gravity;
+/* 0x494 */ u32 particleFactor1;
+/* 0x498 */ u32 particleFactor2;
+/* 0x49C */ ColorRGBA8 colorStart[4];
+/* 0x4AC */ ColorRGBA8 colorEnd[4];
+/* 0x4BC */ s32 age;
+/* 0x4C0 */ s32 duration;
+} EffSparkParams; // size = 0x4C4
+
+typedef struct {
+/* 0x000 */ EffTireMarkParticle particles[64];
+/* 0x600 */ s16 unk600;
+/* 0x602 */ s16 numParticles;
+/* 0x604 */ s16 maxLife;
+/* 0x606 */ ColorRGBA8 color;
+/* 0x60A */ UNK_TYPE1 pad60A[0x2];
+} EffTireMarkParams; // size = 0x60C
 
 typedef struct {
 /* 0x000 */ View view;
@@ -1589,9 +1828,9 @@ typedef struct {
 } MessageContext; // size = 0x120D8
 
 typedef union {
-/* 0x0 */ RoomMeshType0 type0;
-/* 0x0 */ RoomMeshType1 type1;
-/* 0x0 */ RoomMeshType2 type2;
+    RoomMeshType0 type0;
+    RoomMeshType1 type1;
+    RoomMeshType2 type2;
 } RoomMesh; // size = 0xC
 
 // Full save context
@@ -1619,6 +1858,16 @@ typedef struct {
 /* 0x8 */ u32 count;
 /* 0xC */ ColTriInit* elemInit;
 } ColTriGroupInit; // size = 0x10
+
+typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffSparkParams params;
+} EffSpark; // size = 0x4C8
+
+typedef struct {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffTireMarkParams params;
+} EffTireMark; // size = 0x610
 
 typedef struct {
 /* 0x00 */ s8 num;
@@ -1807,6 +2056,12 @@ typedef struct ActorBgIknvObj ActorBgIknvObj;
 
 typedef struct EffFootmark EffFootmark;
 
+typedef struct EffShieldParticle EffShieldParticle;
+
+typedef struct EffShieldParticleParams EffShieldParticleParams;
+
+typedef struct EffTables EffTables;
+
 typedef struct EffectTableInfo EffectTableInfo;
 
 typedef struct FaultAddrConvClient FaultAddrConvClient;
@@ -1890,7 +2145,7 @@ struct GameState {
 /* 0x9C */ u32 frames;
 /* 0xA0 */ UNK_TYPE1 padA0[0x2];
 /* 0xA2 */ u8 framerateDivisor; // game speed?
-/* 0xA3 */ UNK_TYPE1 padA3[0x1];
+/* 0xA3 */ UNK_TYPE1 unkA3;
 }; // size = 0xA4
 
 struct OpeningContext {
@@ -1989,6 +2244,13 @@ typedef struct LightingContext LightingContext;
 
 typedef struct GlobalContext GlobalContext;
 
+typedef struct {
+/* 0x0 */ GlobalContext* ctxt;
+/* 0x4 */ s32 type; // bitfield, highest set bit determines type
+/* 0x8 */ s16 countdown;
+/* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
+} Quake2Context; // size = 0xC
+
 typedef s32(*collision_add_func)(GlobalContext*, ColCommon*);
 
 typedef void(*collision_func)(GlobalContext*, CollisionCheckContext*, ColCommon*, ColCommon*);
@@ -2021,7 +2283,26 @@ typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* para
 
 typedef struct Camera Camera;
 
+typedef struct {
+/* 0x00 */ s16 randIdx;
+/* 0x02 */ s16 countdownMax;
+/* 0x04 */ Camera* cam;
+/* 0x08 */ u32 callbackIdx;
+/* 0x0C */ s16 y;
+/* 0x0E */ s16 x;
+/* 0x10 */ s16 zoom;
+/* 0x12 */ s16 rotZ;
+/* 0x14 */ QuakeRequest14 unk14;
+/* 0x1A */ s16 speed;
+/* 0x1C */ s16 unk1C;
+/* 0x1E */ s16 countdown;
+/* 0x20 */ s16 camPtrIdx;
+/* 0x22 */ UNK_TYPE1 pad22[0x2];
+} QuakeRequest; // size = 0x24
+
 typedef s32(*camera_update_func)(Camera* camera);
+
+typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
 
 typedef struct LightsList LightsList;
 
@@ -2168,6 +2449,28 @@ typedef struct s800B948C s800B948C;
 
 typedef struct z_Light z_Light;
 
+struct EffShieldParticleParams {
+/* 0x000 */ EffShieldParticleParticle particles[16];
+/* 0x180 */ u8 numParticles;
+/* 0x181 */ UNK_TYPE1 pad181[0x1];
+/* 0x182 */ Vec3s position;
+/* 0x188 */ ColorRGBA8 primColorStart;
+/* 0x18C */ ColorRGBA8 envColorStart;
+/* 0x190 */ ColorRGBA8 primColorMid;
+/* 0x194 */ ColorRGBA8 envColorMid;
+/* 0x198 */ ColorRGBA8 primColorEnd;
+/* 0x19C */ ColorRGBA8 envColorEnd;
+/* 0x1A0 */ f32 acceleration;
+/* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
+/* 0x1A8 */ f32 maxInitialSpeed;
+/* 0x1AC */ f32 lengthCutoff;
+/* 0x1B0 */ u8 duration;
+/* 0x1B1 */ u8 age;
+/* 0x1B2 */ LightInfo lightInfo;
+/* 0x1C0 */ z_Light* light;
+/* 0x1C4 */ s32 hasLight;
+}; // size = 0x1C8
+
 struct FireObjLight {
 /* 0x00 */ z_Light* light;
 /* 0x04 */ LightInfoPositional lightInfo;
@@ -2191,6 +2494,19 @@ struct z_Light {
 /* 0x4 */ z_Light* prev;
 /* 0x8 */ z_Light* next;
 }; // size = 0xC
+
+struct EffShieldParticle {
+/* 0x000 */ EffCommon base;
+/* 0x004 */ EffShieldParticleParams params;
+}; // size = 0x1CC
+
+struct EffTables {
+/* 0x0000 */ GlobalContext* ctxt;
+/* 0x0004 */ EffSpark sparks[3];
+/* 0x0E5C */ EffBlure blures[25];
+/* 0x388C */ EffShieldParticle shieldParticles[3];
+/* 0x3DF0 */ EffTireMark tireMarks[15];
+}; // size = 0x98E0
 
 struct LightsList {
 /* 0x000 */ int numOccupied;
@@ -2509,7 +2825,8 @@ struct GlobalContext {
 /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
 /* 0x18874 */ u8 unk18874;
 /* 0x18875 */ s8 unk18875;
-/* 0x18876 */ UNK_TYPE1 pad18876[0x6];
+/* 0x18876 */ UNK_TYPE1 pad18876[0x4];
+/* 0x1887A */ u16 unk1887A;
 /* 0x1887C */ s8 unk1887C;
 /* 0x1887D */ UNK_TYPE1 pad1887D[0x7];
 /* 0x18884 */ CollisionCheckContext colCheckCtx;
@@ -2731,7 +3048,9 @@ struct ActorPlayer {
 /* 0xA6C */ u32 unkA6C;
 /* 0xA70 */ u32 unkA70;
 /* 0xA74 */ u32 unkA74;
-/* 0xA78 */ UNK_TYPE1 padA78[0x10];
+/* 0xA78 */ UNK_TYPE1 padA78[0x8];
+/* 0xA80 */ Actor* unkA80;
+/* 0xA84 */ UNK_TYPE1 padA84[0x4];
 /* 0xA88 */ Actor* unkA88;
 /* 0xA8C */ f32 unkA8C;
 /* 0xA90 */ UNK_TYPE1 padA90[0x44];

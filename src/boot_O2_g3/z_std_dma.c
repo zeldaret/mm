@@ -165,7 +165,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, u32 vramStart, u32 vromStart, u3
     }
 
     request->vromStart = vromStart;
-    request->dramAddr = vramStart;
+    request->dramAddr = (void*)vramStart;
     request->size = size;
     request->unk14 = 0;
     request->notifyQueue = callback;
@@ -208,7 +208,7 @@ void Dmamgr_Start() {
 
 	osCreateMesgQueue(&dmamgrMsq, dmamgrMsqMessages, 32);
 
-	StackCheck_Init(&dmamgrStackEntry, (u32)&dmamgrStack, (u32)&dmamgrStack[1280], 0, 256, dmamgrThreadName);
+	StackCheck_Init(&dmamgrStackEntry, &dmamgrStack, &dmamgrStack[1280], 0, 256, dmamgrThreadName);
 
 	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &dmamgrStack[1280], 17);
 
