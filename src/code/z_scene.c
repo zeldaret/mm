@@ -232,7 +232,7 @@ void Scene_HeaderCommand15(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->unk814 = entry->soundSettings.musicSeq;
     ctxt->unk815 = entry->soundSettings.nighttimeSFX;
     if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
-        func_801A400C(entry->soundSettings.bgmId);
+        audio_setBGM(entry->soundSettings.bgmId);
     } 
 }
 
