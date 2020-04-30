@@ -9,13 +9,11 @@ GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_ReloadUnloadedObjects.asm")
 
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 objectId) {
     s32 i;
-        
     for(i = 0; i < sceneCtxt->objectCount; i++) {
         if((sceneCtxt->objects[i].id < 0 ? -sceneCtxt->objects[i].id : sceneCtxt->objects[i].id) == objectId) {
             return i;
         }
     }
-        
     return -1;
 }
 
@@ -38,10 +36,8 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     void* objectVramAddr;
     s16 temp16;
     u8 unk20;
-    
     ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
                     ctxt->setupEntranceList[ctxt->curSpawn].spawn;
-  
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
     ) {
@@ -50,18 +46,13 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     }
 
     loadReturn = Scene_LoadObject(&ctxt->sceneContext, 0x11);
-    
     global = ctxt;
     objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
-    
     ctxt->sceneContext.objectCount = loadReturn;
     ctxt->sceneContext.unk9 = loadReturn;
-    
     unk20 = gSaveContext.perm.unk20;
     temp16 = D_801C2730[unk20];
-    
     actorOverlayTable[0].initInfo->objectId = temp16;
-    
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
     ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
@@ -211,7 +202,6 @@ void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry) {
     s8 temp1 = entry->windSettings.west;
     s8 temp2 = entry->windSettings.vertical; 
     s8 temp3 = entry->windSettings.south;
-    
     ctxt->kankyoContext.windWest = temp1;
     ctxt->kankyoContext.windVertical = temp2;
     ctxt->kankyoContext.windSouth = temp3;
@@ -233,7 +223,7 @@ void Scene_HeaderCommand15(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->unk815 = entry->soundSettings.nighttimeSFX;
     if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
         audio_setBGM(entry->soundSettings.bgmId);
-    } 
+    }
 }
 
 // Scene Command 0x16: Echo Setting
@@ -245,11 +235,9 @@ void Scene_HeaderCommand16(GlobalContext* ctxt, SceneCmd* entry) {
 void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
-    
     if (gSaveContext.extra.sceneSetupIndex) {
         altHeaderList = (SceneCmd**)Lib_PtrSegToVirt(entry->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.extra.sceneSetupIndex - 1];
-        
         if (altHeader != NULL) {
            Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_PtrSegToVirt(altHeader));
            (entry + 1)->base.code = 0x14;
