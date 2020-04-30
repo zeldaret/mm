@@ -3,6 +3,7 @@
 AS := $(MIPS_BINUTILS_PREFIX)as
 LD := $(MIPS_BINUTILS_PREFIX)ld
 
+QEMU_IRIX    ?= ./tools/qemu-mips
 IRIX_71_ROOT := ./tools/ido7.1_compiler/
 IRIX_53_ROOT := ./tools/ido5.3_compiler/
 
@@ -95,7 +96,7 @@ test.txt: build/src/test.o
 	$(MIPS_BINUTILS_PREFIX)objdump -d -z --adjust-vma=0x80080790 $< > test.txt
 
 clean:
-	rm $(ROM) -r build
+	rm -f $(ROM) -r build
 
 build/baserom/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@

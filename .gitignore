@@ -19,3 +19,4 @@ src/test.c
 tools/ido5.3_compiler/*
 tools/ido7.1_compiler/*
 expected/*
+tools/qemu-mips
