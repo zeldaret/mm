@@ -1937,8 +1937,8 @@ void func_80105294(void); // func_80105294
 void func_80105318(void); // func_80105318
 void func_80105328(void); // func_80105328
 void func_8010534C(void); // func_8010534C
-void func_8010549C(GlobalContext* ctxt, u32 segmentAddress); // func_8010549C
-void func_8010565C(GlobalContext* ctxt, u8 num, u32 segmentAddress); // func_8010565C
+void func_8010549C(GlobalContext* ctxt, void* segmentAddress); // func_8010549C
+void func_8010565C(GlobalContext* ctxt, u8 num, void* segmentAddress); // func_8010565C
 void func_80105818(GlobalContext* ctxt, unsigned int uParm2, TransitionActorInit* puParm3); // func_80105818
 void func_80105A40(void); // func_80105A40
 void func_80105B34(void); // func_80105B34
