@@ -4,3 +4,6 @@
 [submodule "tools/asm-differ"]
 	path = tools/asm-differ
 	url = https://github.com/simonlindholm/asm-differ.git
+[submodule "tools/ZAP2"]
+	path = tools/ZAP2
+	url = https://github.com/NEstelami/ZAP2.git
