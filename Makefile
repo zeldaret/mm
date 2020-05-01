@@ -56,21 +56,11 @@ DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
 DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
 DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
 
+SRC_DIRS := $(shell find src -type d)
+
 S_FILES := $(wildcard asm/*)
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
-C_FILES := $(wildcard src/libultra/*) \
-           $(wildcard src/libultra/os/*) \
-           $(wildcard src/libultra/io/*) \
-           $(wildcard src/libultra/libc/*) \
-           $(wildcard src/libultra/gu/*) \
-           $(wildcard src/libultra/rmon/*) \
-           $(wildcard src/code/*) \
-           $(wildcard src/boot_O2/*) \
-           $(wildcard src/boot_O2_g3/*) \
-           $(wildcard src/boot_O2_g3_trapuv/*) \
-           $(wildcard src/boot_O1/*) \
-           $(wildcard src/actors/Bg_Fu_Kaiten/*) \
-           $(wildcard src/actors/Bg_Ikana_Ray/*)
+C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 
@@ -84,20 +74,7 @@ $(shell mkdir -p $(BUILD_DIR)/asm)
 $(shell mkdir -p $(BUILD_DIR)/baserom)
 $(shell mkdir -p $(BUILD_DIR)/comp)
 $(shell mkdir -p $(BUILD_DIR)/decomp)
-$(shell mkdir -p $(BUILD_DIR)/src)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra/os)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra/io)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra/libc)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra/gu)
-$(shell mkdir -p $(BUILD_DIR)/src/libultra/rmon)
-$(shell mkdir -p $(BUILD_DIR)/src/code)
-$(shell mkdir -p $(BUILD_DIR)/src/boot_O2)
-$(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3)
-$(shell mkdir -p $(BUILD_DIR)/src/boot_O2_g3_trapuv)
-$(shell mkdir -p $(BUILD_DIR)/src/boot_O1)
-$(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Fu_Kaiten)
-$(shell mkdir -p $(BUILD_DIR)/src/actors/Bg_Ikana_Ray)
+$(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir)))
 
 check: $(ROM)
 	@md5sum -c checksum.md5
