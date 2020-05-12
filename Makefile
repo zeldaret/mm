@@ -1,5 +1,12 @@
 # TODO think about how to split this up
 
+#### Tools ####
+ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
+  MIPS_BINUTILS_PREFIX := mips-linux-gnu-
+else
+  MIPS_BINUTILS_PREFIX := mips64-elf-
+endif
+
 AS := $(MIPS_BINUTILS_PREFIX)as
 LD := $(MIPS_BINUTILS_PREFIX)ld
 
