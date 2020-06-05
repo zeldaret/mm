@@ -86,7 +86,7 @@ s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 ind
         roomCtxt->unk31 = 1;
 
         size = ctxt->roomAddrs[index].vromEnd - ctxt->roomAddrs[index].vromStart;
-        roomCtxt->activeRoomVram = ((s32)roomCtxt->roomMemPages[roomCtxt->activeMemPage] - (size + 8) * roomCtxt->activeMemPage + 8) & 0xfffffff0;
+        roomCtxt->activeRoomVram = (void*)((s32)roomCtxt->roomMemPages[roomCtxt->activeMemPage] - (size + 8) * roomCtxt->activeMemPage + 8) & 0xfffffff0;
 
         osCreateMesgQueue(&roomCtxt->loadQueue, roomCtxt->loadMsg, 1);
         DmaMgr_SendRequestImpl(&roomCtxt->dmaRequest, roomCtxt->activeRoomVram, ctxt->roomAddrs[index].vromStart, size,
@@ -108,8 +108,10 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
         if (!osRecvMesg(&roomCtxt->loadQueue, NULL, OS_MESG_NOBLOCK))
         {
             roomCtxt->unk31 = 0;
-            roomCtxt->currRoom.segment = (void*)(roomCtxt->activeRoomVram);
-            gRspSegmentPhysAddrs[3] = roomCtxt->activeRoomVram + 0x80000000;
+            roomCtxt->currRoom.segment = roomCtxt->activeRoomVram;
+            // TODO: PHYSICAL_TO_VIRTUAL macro
+            // TODO: Segment number enum
+            gRspSegmentPhysAddrs[3] = (void*)((u32)roomCtxt->activeRoomVram + 0x80000000);
 
             Scene_ProcessHeader(ctxt, (SceneCmd*)roomCtxt->currRoom.segment);
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
@@ -133,7 +135,9 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
 
 void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        gRspSegmentPhysAddrs[3] = (u32)room->segment + 0x80000000;
+        // TODO: PHYSICAL_TO_VIRTUAL macro
+        // TODO: Segment number enum
+        gRspSegmentPhysAddrs[3] = (void*)((u32)room->segment + 0x80000000);
         roomDrawFuncs[room->mesh->type0.type](ctxt, room, flags);
     }
     return;

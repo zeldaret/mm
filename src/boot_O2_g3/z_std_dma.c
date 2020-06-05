@@ -159,13 +159,13 @@ void Dmamgr_ThreadEntry(void* a0) {
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
     }
 
     request->vromStart = vromStart;
-    request->dramAddr = (void*)vramStart;
+    request->dramAddr = vramStart;
     request->size = size;
     request->unk14 = 0;
     request->notifyQueue = callback;
@@ -176,7 +176,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, u32 vramStart, u32 vromStart, u3
     return 0;
 }
 
-s32 DmaMgr_SendRequest0(u32 a0, u32 a1, u32 a2) {
+s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
 	DmaRequest sp48;
     OSMesgQueue sp30;
     OSMesg sp2C;
@@ -184,7 +184,7 @@ s32 DmaMgr_SendRequest0(u32 a0, u32 a1, u32 a2) {
 
     osCreateMesgQueue(&sp30, &sp2C, 1);
 
-	ret = DmaMgr_SendRequestImpl(&sp48, a0, a1, a2, 0, &sp30, 0);
+	ret = DmaMgr_SendRequestImpl(&sp48, vramStart, vromStart, size, 0, &sp30, 0);
 
 	if (ret == -1) {
 		return ret;

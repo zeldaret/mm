@@ -606,30 +606,37 @@ f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
 
 void Lib_Nop801004FC(void) {}
 
-u32 Lib_PtrSegToVirt(void* ptr) {
-    return(gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000;
+void* Lib_PtrSegToVirt(void* ptr) {
+    // TODO: PHYSICAL_TO_VIRTUAL macro
+    // UB to cast the pointer to u32
+    return (void*)(((u32)gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000);
 }
 
-u32 Lib_PtrSegToVirtNull(void* ptr) {
+void* Lib_PtrSegToVirtNull(void* ptr) {
+    // UB to cast the pointer to u32 in order to bitshift.
     if (((u32)ptr >> 28) == 0) {
-        return (u32)ptr;
+        return ptr;
     }
 
-    return(gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000;
+    // TODO: PHYSICAL_TO_VIRTUAL macro
+    // UB to cast the pointer to u32
+    return (void*)(((u32)gRspSegmentPhysAddrs[((u32)ptr << 4) >> 28] + ((u32)ptr & 0xFFFFFF)) + 0x80000000);
 }
 
-u32 Lib_PtrSegToK0(void* ptr) {
+void* Lib_PtrSegToK0(void* ptr) {
     if (ptr == NULL) {
-        return 0;
+        return NULL;
     } else {
-        return (u32)ptr + 0x80000000;
+        // TODO: PHYSICAL_TO_VIRTUAL macro
+        return (void*)((u32)ptr + 0x80000000);
     }
 }
 
-u32 Lib_PtrSegToK0Null(void* ptr) {
+void* Lib_PtrSegToK0Null(void* ptr) {
     if (ptr == NULL) {
-        return 0;
+        return NULL;
     } else {
-        return (u32)ptr + 0x80000000;
+        // TODO: PHYSICAL_TO_VIRTUAL macro
+        return (void*)((u32)ptr + 0x80000000);
     }
 }

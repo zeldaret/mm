@@ -2,14 +2,13 @@
 #include <global.h>
 
 /* 
-TODO: There are a few issues left with this file, but rely on larger structural project changes.
+TODO:
+There are a few issues left with this file, but many rely on larger structural project changes.
 I am avoiding these in the mean time in order to not break the Ghidra project structures.
-We need a header file for just z_scene. Including OBJECT_EXCHANGE_BANK_MAX and relevant structs, Scene, and Object enums.
-We need a macro header file for ALIGN16, PHYSICAL_TO_VIRTUAL and other global macros.
-We need to convert a lot of u32 struct members to void* to avoid UB.
-u32 -> void*: gRspSegmentPhysAddrs, Lib_PtrSegToVirt, DmaMgr_SendRequest0, DmaMgr_SendRequestImpl
+We need a header file for just z_scene. Including relevant structs, Scene, and Object enums.
+The .data, .bss, and .rodata sections are not migrated to this file yet.
 
-Additionally, the .data, .bss, and .rodata sections are not migrated to this file yet.
+Additionally we need a macro header file for ALIGN16, PHYSICAL_TO_VIRTUAL, OBJECT_EXCHANGE_BANK_MAX and other global macros.
 */
 
 s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
@@ -21,9 +20,7 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     if (sceneCtxt) {}
     
     if (size) {
-        // TODO: UB to convert vramAddr to u32
-        DmaMgr_SendRequest0((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr,
-                            objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].vramAddr, objectFileTable[id].vromStart, size);
     }
         
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
@@ -71,7 +68,7 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
     // TODO: PHYSICAL_TO_VIRTUAL macro
     // TODO: Segment number enum
-    gRspSegmentPhysAddrs[4] = (u32)sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr + 0x80000000;
+    gRspSegmentPhysAddrs[4] = (void*)((u32)sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr + 0x80000000);
 }
 
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
@@ -92,8 +89,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    // TODO: UB to cast pointer to u32
-                    DmaMgr_SendRequestImpl(&status->dmaReq, (u32)status->vramAddr, objectFile->vromStart,
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart,
                                             size, 0, &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
@@ -135,8 +131,7 @@ void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
             continue;
         }
         
-        // TODO: UB to cast void* to u32
-        DmaMgr_SendRequest0((u32)sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
     }
 }
 
@@ -242,9 +237,9 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, 
                                                            entry->specialFiles.keepObjectId);
         // TODO: PHYSICAL_TO_VIRTUAL macro
-        // TODO: Segment number enum
-        gRspSegmentPhysAddrs[5] = (u32)(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr)
-                                    + 0x80000000;
+        // TODO: Segment number enum 
+        gRspSegmentPhysAddrs[5] = (void*)((u32)(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr)
+                                    + 0x80000000);
     }
 
     if (entry->specialFiles.cUpElfMsgNum != 0) {
@@ -358,8 +353,7 @@ s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
     
     if (fileSize) {
         ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
-        // TODO: UB to cast pointer to u32
-        return DmaMgr_SendRequest0((u32)ctxt->roomContext.unk74, vromStart, fileSize);
+        return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
     }
     
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.

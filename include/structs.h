@@ -1893,7 +1893,7 @@ typedef struct {
 /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
 /* 0x31 */ s8 unk31;
 /* 0x32 */ UNK_TYPE1 pad32[0x2];
-/* 0x34 */ u32 activeRoomVram;
+/* 0x34 */ void* activeRoomVram;
 /* 0x38 */ DmaRequest dmaRequest;
 /* 0x58 */ OSMesgQueue loadQueue;
 /* 0x70 */ OSMesg loadMsg[1];

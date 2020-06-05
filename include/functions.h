@@ -22,8 +22,8 @@ s32 Dmamgr_FindDmaIndex(u32 vromAddr); // func_800809BC
 char* func_800809F4(u32 param_1); // func_800809F4
 void DmaMgr_ProcessMsg(DmaRequest* request); // func_80080A08
 void Dmamgr_ThreadEntry(void* arg); // func_80080B84
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, u32 vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg); // func_80080C04
-s32 DmaMgr_SendRequest0(u32 vramStart, u32 vromStart, u32 size); // func_80080C90
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg); // func_80080C04
+s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size); // func_80080C90
 void Dmamgr_Start(void); // func_80080D0C
 void Dmamgr_Stop(void); // func_80080E00
 u8* Yaz0_LoadFirstChunk(void); // func_80080E30
@@ -1864,10 +1864,10 @@ void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, 
 void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst); // func_801001B8
 f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach); // func_80100448
 void Lib_Nop801004FC(void); // func_801004FC
-u32 Lib_PtrSegToVirt(void* ptr); // func_80100504
-u32 Lib_PtrSegToVirtNull(void* ptr); // func_8010053C
-u32 Lib_PtrSegToK0(void* ptr); // func_80100584
-u32 Lib_PtrSegToK0Null(void* ptr); // func_801005A0
+void* Lib_PtrSegToVirt(void* ptr); // func_80100504
+void* Lib_PtrSegToVirtNull(void* ptr); // func_8010053C
+void* Lib_PtrSegToK0(void* ptr); // func_80100584
+void* Lib_PtrSegToK0Null(void* ptr); // func_801005A0
 void LifeMeter_Init(GlobalContext* ctxt); // func_801005C0
 void LifeMeter_UpdateColors(GlobalContext* ctxt); // func_8010069C
 UNK_TYPE4 func_80100A80(GlobalContext* ctxt); // func_80100A80
