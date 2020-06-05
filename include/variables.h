@@ -4109,7 +4109,7 @@ extern UNK_TYPE1 D_801F80F8; // D_801F80F8
 extern u64 lastRenderFrameTimestamp; // D_801F8150
 extern OSMesgQueue siEventCallbackQueue; // D_801F8160
 extern OSMesg siEventCallbackBuffer[1]; // D_801F8178
-extern u32 gRspSegmentPhysAddrs[16]; // D_801F8180
+extern u32 gRspSegmentPhysAddrs[NUM_SEGMENTS]; // D_801F8180
 extern SchedThreadStruct schedContext; // D_801F81C0
 extern OSMesgQueueListNode mainIrqmgrCallbackNode; // D_801F84F8
 extern OSMesgQueue mainIrqmgrCallbackQueue; // D_801F8500

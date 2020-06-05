@@ -65,7 +65,7 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
-    // TODO: Segment number enum
+    // TODO: Segment number enum?
     gRspSegmentPhysAddrs[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr);
 }
 
@@ -159,7 +159,6 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     s16 temp16;
     u8 unk20;
     
-    // TODO: UB to cast a u32 to pointer
     ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
                     ctxt->setupEntranceList[ctxt->curSpawn].spawn;
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
@@ -180,7 +179,6 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     actorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
-    // TODO: UB to cast pointer to u32
     ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
 }
 
@@ -234,7 +232,7 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->specialFiles.keepObjectId != 0) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, 
                                                            entry->specialFiles.keepObjectId);
-        // TODO: Segment number enum 
+        // TODO: Segment number enum?
         gRspSegmentPhysAddrs[5] = 
             PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
     }
@@ -298,7 +296,6 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
         
         // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
         if (i < 0x22) {
-            // TODO: UB to cast pointer to u32
             firstObject[i + 1].vramAddr = nextPtr;
         }
         i++;
