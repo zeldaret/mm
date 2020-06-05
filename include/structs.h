@@ -1468,7 +1468,7 @@ typedef struct {
 /* 0x009 */ u8 spawnedObjectCount;
 /* 0x00A */ u8 mainKeepIndex;
 /* 0x00B */ u8 keepObjectId;
-/* 0x00C */ SceneObject objects[35];
+/* 0x00C */ SceneObject objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
 } SceneContext; // size = 0x958
 
 typedef struct {

@@ -215,9 +215,8 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
-    // TODO: PHYSICAL_TO_VIRTUAL macro
     // TODO: Segment number enum
-    gRspSegmentPhysAddrs[6] = (void*)((u32)ctxt->sceneContext.objects[actor->objBankIndex].vramAddr + 0x80000000);
+    gRspSegmentPhysAddrs[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].vramAddr);
 }
 
 #ifdef NON_MATCHING

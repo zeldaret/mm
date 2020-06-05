@@ -5,10 +5,9 @@
 TODO:
 There are a few issues left with this file, but many rely on larger structural project changes.
 I am avoiding these in the mean time in order to not break the Ghidra project structures.
-We need a header file for just z_scene. Including relevant structs, Scene, and Object enums.
+We need a header file for just z_scene. Including relevant structs, scene, and object enums.
+Needs definition for OBJECT_EXCHANGE_BANK_MAX
 The .data, .bss, and .rodata sections are not migrated to this file yet.
-
-Additionally we need a macro header file for ALIGN16, PHYSICAL_TO_VIRTUAL, OBJECT_EXCHANGE_BANK_MAX and other global macros.
 */
 
 s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
@@ -26,8 +25,8 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
     if (sceneCtxt->objectCount < 0x22) {
         sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr = 
-            // TODO: ALIGN16 macro here
-            (void*)((((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size) + 0xF) & ~0xF);
+            // UB to cast pointer to u32
+            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size);
     }
     
     sceneCtxt->objectCount++;
@@ -66,9 +65,8 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
-    // TODO: PHYSICAL_TO_VIRTUAL macro
     // TODO: Segment number enum
-    gRspSegmentPhysAddrs[4] = (void*)((u32)sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr + 0x80000000);
+    gRspSegmentPhysAddrs[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr);
 }
 
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
@@ -148,7 +146,7 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     // TODO: UB to cast void to u32
     addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
     // TODO: This is ALIGN16 macro from OOT. Seems to be aligning an address to DMA
-    addr = (addr + 0xF) & ~0xF;
+    addr = ALIGN16(addr);
     // UB to cast u32 to pointer
     return (void*)addr;
 }
@@ -236,10 +234,9 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->specialFiles.keepObjectId != 0) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, 
                                                            entry->specialFiles.keepObjectId);
-        // TODO: PHYSICAL_TO_VIRTUAL macro
         // TODO: Segment number enum 
-        gRspSegmentPhysAddrs[5] = (void*)((u32)(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr)
-                                    + 0x80000000);
+        gRspSegmentPhysAddrs[5] = 
+            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
     }
 
     if (entry->specialFiles.cUpElfMsgNum != 0) {

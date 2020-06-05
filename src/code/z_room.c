@@ -109,9 +109,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
         {
             roomCtxt->unk31 = 0;
             roomCtxt->currRoom.segment = roomCtxt->activeRoomVram;
-            // TODO: PHYSICAL_TO_VIRTUAL macro
             // TODO: Segment number enum
-            gRspSegmentPhysAddrs[3] = (void*)((u32)roomCtxt->activeRoomVram + 0x80000000);
+            gRspSegmentPhysAddrs[3] = PHYSICAL_TO_VIRTUAL(roomCtxt->activeRoomVram);
 
             Scene_ProcessHeader(ctxt, (SceneCmd*)roomCtxt->currRoom.segment);
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
@@ -135,9 +134,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
 
 void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        // TODO: PHYSICAL_TO_VIRTUAL macro
         // TODO: Segment number enum
-        gRspSegmentPhysAddrs[3] = (void*)((u32)room->segment + 0x80000000);
+        gRspSegmentPhysAddrs[3] = PHYSICAL_TO_VIRTUAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](ctxt, room, flags);
     }
     return;
