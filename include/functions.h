@@ -839,7 +839,7 @@ void func_800B9EF4(GlobalContext* ctxt, int numActors, Actor** actors); // func_
 s32 func_800BA2D8(GlobalContext* ctxt, Actor* actor); // func_800BA2D8
 s32 func_800BA2FC(GlobalContext* ctxt, Actor* actor, Vec3f* param_3, f32 param_4); // func_800BA2FC
 void Actor_DrawAll(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA42C
-void func_800BA6FC(void); // func_800BA6FC
+void func_800BA6FC(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA6FC
 void func_800BA798(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA798
 void func_800BA8B8(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BA8B8
 void func_800BA9B4(void); // func_800BA9B4
@@ -2431,7 +2431,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt); // func_8012F4FC
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 id); // func_8012F608
 s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index); // func_8012F668
 void Scene_DmaAllObjects(SceneContext* sceneCtxt); // func_8012F698
-u32 func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
+void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry); // func_8012F79C
 void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry); // func_8012F90C
 void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry); // func_8012F954
@@ -2467,7 +2467,7 @@ void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry); // func_801306
 void func_801306A4(GlobalContext* ctxt); // func_801306A4
 s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header); // func_801306E8
 u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset); // func_80130768
-void func_80130784(void); // func_80130784
+void func_80130784(u32 spawnIndex); // func_80130784
 void SceneProc_DrawCurrentSceneAnimatedTextures(GlobalContext* ctxt); // func_801307C0
 void SceneProc_DrawSceneConfig0(GlobalContext* ctxt); // func_801307F4
 Gfx* SceneProc_SetTile1Layer(GlobalContext* ctxt, ScrollingTextureParams* params); // func_80130834
@@ -2508,7 +2508,7 @@ EntranceRecord* SceneTable_LookupEntrance(u32 entrance); // func_801322C0
 s32 SceneTable_LookupEntranceScene(u32 entrance); // func_8013230C
 s32 SceneTable_LookupEntranceAbsoluteScene(u32 entrance); // func_80132338
 void func_80132374(void); // func_80132374
-void func_801323A0(void); // func_801323A0
+s16 func_801323A0(u32 entrance); // func_801323A0
 void func_801323D0(void); // func_801323D0
 void func_80132428(void); // func_80132428
 void func_80132494(void); // func_80132494

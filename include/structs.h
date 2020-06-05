@@ -837,7 +837,11 @@ typedef struct {
 /* 0x282 */ u16 unk282;
 /* 0x284 */ UNK_TYPE1 pad284[0x28];
 /* 0x2AC */ u8 cutsceneTrigger;
-/* 0x2AD */ UNK_TYPE1 pad2AD[0x17];
+/* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
+/* 0x2B2 */ u16 environmentTime;
+/* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
+/* 0x2B8 */ s16 unk2b8;
+/* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
 /* 0x2C4 */ f32 unk2C4;
 /* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
 } SaveContextExtra; // size = 0xC28
@@ -915,7 +919,7 @@ typedef struct {
 } SceneEntranceTableEnty; // size = 0xC
 
 typedef struct {
-/* 0x00 */ s16 scenes[27];
+/* 0x00 */ u16 scenes[27];
 } SceneIdList; // size = 0x36
 
 typedef struct {
@@ -923,8 +927,8 @@ typedef struct {
 /* 0x02 */ UNK_TYPE1 pad2[0x2];
 /* 0x04 */ void* vramAddr;
 /* 0x08 */ DmaRequest dmaReq;
-/* 0x28 */ OSMesgQueue unk28;
-/* 0x40 */ UNK_TYPE1 pad40[0x4];
+/* 0x28 */ OSMesgQueue loadQueue;
+/* 0x40 */ OSMesg loadMsg;
 } SceneObject; // size = 0x44
 
 typedef struct {
@@ -1433,7 +1437,7 @@ typedef struct {
 typedef struct {
 /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
 /* 0x0004 */ UNK_TYPE1 pad4[0x4];
-/* 0x0008 */ u32 cutscene;
+/* 0x0008 */ s32 cutscene;
 /* 0x000C */ u16 time;
 /* 0x000E */ UNK_TYPE1 padE[0xA];
 /* 0x0018 */ u32 day;
@@ -1461,8 +1465,8 @@ typedef struct {
 /* 0x000 */ void* objectVramStart;
 /* 0x004 */ void* objectVramEnd;
 /* 0x008 */ u8 objectCount;
-/* 0x009 */ u8 unk9;
-/* 0x00A */ u8 unkA;
+/* 0x009 */ u8 spawnedObjectCount;
+/* 0x00A */ u8 mainKeepIndex;
 /* 0x00B */ u8 keepObjectId;
 /* 0x00C */ SceneObject objects[35];
 } SceneContext; // size = 0x958
@@ -1646,8 +1650,7 @@ typedef struct {
 typedef struct {
 /* 0x00 */ UNK_TYPE1 unk0;
 /* 0x01 */ UNK_TYPE1 unk1;
-/* 0x02 */ UNK_TYPE1 unk2;
-/* 0x03 */ UNK_TYPE1 unk3;
+/* 0x02 */ u16 unk2;
 /* 0x04 */ f32 unk4;
 /* 0x08 */ f32 unk8;
 /* 0x0C */ f32 unkC;
@@ -2828,7 +2831,9 @@ struct GlobalContext {
 /* 0x18876 */ UNK_TYPE1 pad18876[0x4];
 /* 0x1887A */ u16 unk1887A;
 /* 0x1887C */ s8 unk1887C;
-/* 0x1887D */ UNK_TYPE1 pad1887D[0x7];
+/* 0x1887D */ UNK_TYPE1 pad1887D[0x2];
+/* 0x1887F */ u8 unk1887F;
+/* 0x18880 */ UNK_TYPE1 pad18880[0x4];
 /* 0x18884 */ CollisionCheckContext colCheckCtx;
 /* 0x18B20 */ UNK_TYPE1 pad18B20[0x28];
 /* 0x18B48 */ u8 curSpawn;

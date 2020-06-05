@@ -1,11 +1,108 @@
 #include <ultra64.h>
 #include <global.h>
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_LoadObject.asm")
+/* 
+TODO: There are a few issues left with this file, but rely on larger structural project changes.
+I am avoiding these in the mean time in order to not break the Ghidra project structures.
+We need a header file for just z_scene. Including OBJECT_EXCHANGE_BANK_MAX and relevant structs, Scene, and Object enums.
+We need a macro header file for ALIGN16, PHYSICAL_TO_VIRTUAL and other global macros.
+We need to convert a lot of u32 struct members to void* to avoid UB.
+u32 -> void*: gRspSegmentPhysAddrs, Lib_PtrSegToVirt, DmaMgr_SendRequest0, DmaMgr_SendRequestImpl
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_Init.asm")
+Additionally, the .data, .bss, and .rodata sections are not migrated to this file yet.
+*/
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_ReloadUnloadedObjects.asm")
+s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
+    u32 size;
+    
+    sceneCtxt->objects[sceneCtxt->objectCount].id = id;
+    size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+    
+    if (sceneCtxt) {}
+    
+    if (size) {
+        // TODO: UB to convert vramAddr to u32
+        DmaMgr_SendRequest0((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr,
+                            objectFileTable[id].vromStart, size);
+    }
+        
+    // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
+    if (sceneCtxt->objectCount < 0x22) {
+        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr = 
+            // TODO: ALIGN16 macro here
+            (void*)((((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size) + 0xF) & ~0xF);
+    }
+    
+    sceneCtxt->objectCount++;
+    sceneCtxt->spawnedObjectCount = sceneCtxt->objectCount;
+    
+    return sceneCtxt->objectCount - 1;
+}
+
+void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
+    GlobalContext* global = ctxt; // Needs to be a new variable to match (possibly a sub struct?)
+    u32 unused;
+    u32 spaceSize;
+    s32 i;
+    
+    // TODO: Needs scene enums!
+    if (global->sceneNum == 0x6F || global->sceneNum == 0x6C || global->sceneNum == 0x6E || global->sceneNum == 0x6D) {
+        spaceSize = 1566720;
+    } else if (global->sceneNum == 0x15) {
+        spaceSize = 1617920;
+    } else if (global->sceneNum == 0x2D) {
+        spaceSize = 1505280;
+    } else {
+        spaceSize = 1413120;
+    }
+    
+    sceneCtxt->objectCount = 0;
+    sceneCtxt->spawnedObjectCount = 0;
+    sceneCtxt->mainKeepIndex = 0;
+    sceneCtxt->keepObjectId = 0;
+    
+    // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT 
+    for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
+    
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
+    // UB to cast sceneCtxt->objectVramStart to s32
+    sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
+    // TODO: Second argument here is an object enum
+    sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
+    // TODO: PHYSICAL_TO_VIRTUAL macro
+    // TODO: Segment number enum
+    gRspSegmentPhysAddrs[4] = (u32)sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr + 0x80000000;
+}
+
+void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
+    s32 i;
+    SceneObject* status;
+    ObjectFileTableEntry* objectFile;
+    u32 size;
+    
+    status = &sceneCtxt->objects[0];
+    for (i = 0; i < sceneCtxt->objectCount; i++) {
+        if (status->id < 0) {
+            s32 id = -status->id;
+            if (status->dmaReq.vromStart == 0) {
+                objectFile = &objectFileTable[id];
+                size = objectFile->vromEnd - objectFile->vromStart;
+                
+                if (size == 0) {
+                    status->id = 0;
+                } else {
+                    osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
+                    // TODO: UB to cast pointer to u32
+                    DmaMgr_SendRequestImpl(&status->dmaReq, (u32)status->vramAddr, objectFile->vromStart,
+                                            size, 0, &status->loadQueue, NULL);
+                }
+            } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
+                status->id = id;
+            }
+        }
+        status++;
+    }
+}
 
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 objectId) {
     s32 i;
@@ -25,42 +122,78 @@ s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index) {
     }
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_DmaAllObjects.asm")
+void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
+    s32 i;
+    s32 id;
+    u32 vromSize;
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/func_8012F73C.asm")
+    for (i = 0; i < sceneCtxt->objectCount; i++) {
+        id = sceneCtxt->objects[i].id;
+        vromSize = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+        
+        if (vromSize == 0) {
+            continue;
+        }
+        
+        // TODO: UB to cast void* to u32
+        DmaMgr_SendRequest0((u32)sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
+    }
+}
+
+void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
+    u32 addr;
+    u32 vromSize;
+    ObjectFileTableEntry* fileTableEntry;
+    
+    sceneCtxt->objects[iParm2].id = -id;
+    sceneCtxt->objects[iParm2].dmaReq.vromStart = 0;
+    
+    fileTableEntry = &objectFileTable[id];
+    vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
+    // TODO: UB to cast void to u32
+    addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
+    // TODO: This is ALIGN16 macro from OOT. Seems to be aligning an address to DMA
+    addr = (addr + 0xF) & ~0xF;
+    // UB to cast u32 to pointer
+    return (void*)addr;
+}
 
 // Scene Command 0x00: Link Spawn List
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
-    GlobalContext* global;
-    s32 loadReturn;
+    GlobalContext* global = ctxt; // Needs to be a new variable to match (possibly a sub struct?)
+    s32 loadedCount;
     void* objectVramAddr;
     s16 temp16;
     u8 unk20;
+    
+    // TODO: UB to cast a u32 to pointer
     ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
                     ctxt->setupEntranceList[ctxt->curSpawn].spawn;
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
     ) {
+        // TODO: 0x192 is an object enum
         Scene_LoadObject(&ctxt->sceneContext, 0x192);
         return;
     }
 
-    loadReturn = Scene_LoadObject(&ctxt->sceneContext, 0x11);
-    global = ctxt;
+    // TODO: 0x11 is an object enum
+    loadedCount = Scene_LoadObject(&ctxt->sceneContext, 0x11);
     objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
-    ctxt->sceneContext.objectCount = loadReturn;
-    ctxt->sceneContext.unk9 = loadReturn;
+    ctxt->sceneContext.objectCount = loadedCount;
+    ctxt->sceneContext.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
     temp16 = D_801C2730[unk20];
     actorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
+    // TODO: UB to cast pointer to u32
     ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
 }
 
 // Scene Command 0x01: Actor List
 void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->sceneNumActorsToLoad = (u16) entry->actorList.num;
+    ctxt->sceneNumActorsToLoad = (u16)entry->actorList.num;
     ctxt->setupActorList = (ActorEntry*)Lib_PtrSegToVirt(entry->actorList.segment);
     ctxt->actorCtx.unkC = (u16)0;
 }
@@ -108,6 +241,8 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->specialFiles.keepObjectId != 0) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, 
                                                            entry->specialFiles.keepObjectId);
+        // TODO: PHYSICAL_TO_VIRTUAL macro
+        // TODO: Segment number enum
         gRspSegmentPhysAddrs[5] = (u32)(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr)
                                     + 0x80000000;
     }
@@ -132,7 +267,55 @@ void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->roomContext.currRoom.mesh = (RoomMesh*)Lib_PtrSegToVirt(entry->mesh.segment);
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_HeaderCommand0B.asm")
+// Scene Command 0x0B: Object List
+void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
+    s32 i, j, k;
+    SceneObject* firstObject;
+    SceneObject* status;
+    SceneObject* status2;
+    s16* objectEntry;
+    void* nextPtr;
+    
+    objectEntry = (s16*)Lib_PtrSegToVirt(entry->objectList.segment);
+    k = 0;
+    i = ctxt->sceneContext.spawnedObjectCount;
+    status = &ctxt->sceneContext.objects[i];
+    firstObject = ctxt->sceneContext.objects;
+
+    while (i < ctxt->sceneContext.objectCount) {
+        if (status->id != *objectEntry) {
+            status2 = &ctxt->sceneContext.objects[i];
+            for (j = i; j < ctxt->sceneContext.objectCount; j++) {
+                status2->id = 0;
+                status2++;
+            }
+            ctxt->sceneContext.objectCount = i;
+            func_800BA6FC(ctxt, &ctxt->actorCtx);
+            
+            continue;
+        }
+        
+        i++;
+        k++;
+        objectEntry++;
+        status++;
+    }
+
+    while (k < entry->objectList.num) {
+        nextPtr = func_8012F73C(&ctxt->sceneContext, i, *objectEntry);
+        
+        // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
+        if (i < 0x22) {
+            // TODO: UB to cast pointer to u32
+            firstObject[i + 1].vramAddr = nextPtr;
+        }
+        i++;
+        k++;
+        objectEntry++;
+    }
+    
+    ctxt->sceneContext.objectCount = i;
+}
 
 // Scene Command 0x0C: Light List
 void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
@@ -170,12 +353,13 @@ void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
-    s32 vromStart = D_801C2660[fileIndex].vromStart;
-    s32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
+    u32 vromStart = D_801C2660[fileIndex].vromStart;
+    u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
     
     if (fileSize) {
         ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
-        return DmaMgr_SendRequest0((s32)ctxt->roomContext.unk74, vromStart, fileSize);
+        // TODO: UB to cast pointer to u32
+        return DmaMgr_SendRequest0((u32)ctxt->roomContext.unk74, vromStart, fileSize);
     }
     
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
@@ -195,7 +379,53 @@ void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->kankyoContext.unk16 = entry->skyboxDisables.unk5;
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_HeaderCommand10.asm")
+// Scene Command 0x10: Time Settings
+void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
+    u32 dayTime;
+    
+    if (entry->timeSettings.hour != 0xFF && entry->timeSettings.min != 0xFF) {
+        gSaveContext.extra.environmentTime = gSaveContext.perm.time = 
+            (u16)(((entry->timeSettings.hour + (entry->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
+    }
+    
+    if (entry->timeSettings.unk6 != 0xFF) {
+        ctxt->kankyoContext.unk2 = entry->timeSettings.unk6;
+    } else {
+        ctxt->kankyoContext.unk2 = 0;
+    }
+    
+    if (gSaveContext.perm.inv.items[0] == 0xFF) {
+        if (ctxt->kankyoContext.unk2 != 0) {
+            ctxt->kankyoContext.unk2 = 5;
+        }
+    }
+    
+    if (gSaveContext.extra.unk2b8 == 0) {
+        // TODO: Needs REG macro
+        gStaticContext->data[0x0F] = ctxt->kankyoContext.unk2;
+    }
+    
+    dayTime = gSaveContext.perm.time;
+    ctxt->kankyoContext.unk4 = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
+    dayTime = gSaveContext.perm.time;
+    ctxt->kankyoContext.unk8 = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
+    dayTime = gSaveContext.perm.time;
+    ctxt->kankyoContext.unkC = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
+    
+    if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
+        gSaveContext.extra.environmentTime = gSaveContext.perm.time;
+        
+        if (gSaveContext.extra.environmentTime >= 0x2AAA && gSaveContext.extra.environmentTime < 0x4555) {
+            gSaveContext.extra.environmentTime = 0x3555;
+        } else if (gSaveContext.extra.environmentTime >= 0x4555 && gSaveContext.extra.environmentTime < 0x5555) {
+            gSaveContext.extra.environmentTime = 0x5555;
+        } else if (gSaveContext.extra.environmentTime >= 0xAAAA && gSaveContext.extra.environmentTime < 0xB555) {
+            gSaveContext.extra.environmentTime = 0xB555;
+        } else if (gSaveContext.extra.environmentTime >= 0xC000 && gSaveContext.extra.environmentTime < 0xCAAA) {
+            gSaveContext.extra.environmentTime = 0xCAAA;
+        }
+    }
+}
 
 // Scene Command 0x05: Wind Settings
 void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry) {
@@ -273,19 +503,71 @@ void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneCmd* entry) {
     func_8010565C(ctxt, entry->minimapChests.num, entry->minimapChests.segment);
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_HeaderCommand19.asm")
+// Scene Command 0x19: Misc. Settings (Camera & World Map Area)
+void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
+    s16 j;
+    s16 i;
+    
+    j = 0;
+    i = 0;
+    while (1) {
+        if (scenesPerMapArea[i].scenes[j] == 0xFFFF) {
+            i++;
+            j=0;
+            
+            // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
+            if (i == 0x0B) {
+                break;
+            }
+        }
+        
+        if (ctxt->sceneNum == scenesPerMapArea[i].scenes[j]) {
+            break;
+        }
+        
+        j++;
+    }
+   
+    // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
+    if (i < 0x0B) {
+        // This bitwise OR could be a macro, but all sane looking versions break matching.
+        gSaveContext.perm.mapsVisited = (gBitFlags[i] | gSaveContext.perm.mapsVisited) | gSaveContext.perm.mapsVisited;
+    }
+}
 
 // Scene Command 0x1A: Texture Animations
 void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->sceneTextureAnimations = (AnimatedTexture*)Lib_PtrSegToVirt(entry->textureAnimations.segment);
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/func_801306A4.asm")
+void func_801306A4(GlobalContext *ctxt) {
+    ctxt->unk1887F = func_801323A0(ctxt->unk1887A) & 0x7F;
+}
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/Scene_ProcessHeader.asm")
+s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header) {
+    u32 cmdCode;
+
+    while (1) {
+        cmdCode = header->base.code;
+        
+        if (cmdCode == 0x14) {
+            break;
+        }
+
+        if (cmdCode < 0x1F) {
+            sceneHeaderFuncTable[cmdCode](ctxt, header);
+        }
+
+        header++;
+    }
+
+    return 0;
+}
 
 u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset) {
     return (((sceneIndex << 9) | (spawnIndex << 4)) | offset) & 0xFFFF;
 }
 
-GLOBAL_ASM("./asm/non_matchings/z_scene/func_80130784.asm")
+void func_80130784(u32 spawnIndex) {
+    Scene_CreateEntrance(gSaveContext.perm.entranceIndex >> 9, spawnIndex, 0);
+}
