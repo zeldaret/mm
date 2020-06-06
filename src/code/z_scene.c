@@ -145,7 +145,6 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
     // TODO: UB to cast void to u32
     addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
-    // TODO: This is ALIGN16 macro from OOT. Seems to be aligning an address to DMA
     addr = ALIGN16(addr);
     // UB to cast u32 to pointer
     return (void*)addr;
