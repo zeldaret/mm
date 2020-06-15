@@ -405,7 +405,10 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800B7298.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B72E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//func_800B72F8.asm")
+void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2) {
+    dpactor->unk150 = a2;
+    dpactor->unk148 += a1;
+}
 
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_IsLinkFacingActor.asm")
 
