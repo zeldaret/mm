@@ -496,11 +496,13 @@ typedef struct {
 /* 0x2B8 */ DispBuf polyXlu;
 /* 0x2C8 */ s32 displaylistCounter;
 /* 0x2CC */ void* framebuffer;
-/* 0x2D0 */ UNK_TYPE1 pad2D0[0xB];
+/* 0x2D0 */ int pad2D0;
+/* 0x2D4 */ u32 viConfigFeatures;
+/* 0x2D8 */ UNK_TYPE1 gap2D8[0x3];
 /* 0x2DB */ u8 framebufferCounter;
 /* 0x2DC */ UNK_TYPE1 pad2DC[0x8];
-/* 0x2E4 */ f32 unk2E4;
-/* 0x2E8 */ f32 unk2E8;
+/* 0x2E4 */ f32 viConfigXScale;
+/* 0x2E8 */ f32 viConfigYScale;
 /* 0x2EC */ UNK_TYPE1 pad2EC[0x4];
 } GraphicsContext; // size = 0x2F0
 
@@ -2134,11 +2136,12 @@ struct GameAlloc {
 /* 0x10 */ GameAllocNode* head;
 }; // size = 0x14
 
+typedef void (*GameStateFunc)(struct GameState* gameState);
 struct GameState {
 /* 0x00 */ GraphicsContext* gfxCtx;
-/* 0x04 */ func_ptr main;
-/* 0x08 */ func_ptr destroy;
-/* 0x0C */ func_ptr nextGameStateInit;
+/* 0x04 */ GameStateFunc main;
+/* 0x08 */ GameStateFunc destroy;
+/* 0x0C */ GameStateFunc nextGameStateInit;
 /* 0x10 */ u32 nextGameStateSize;
 /* 0x14 */ Input input[4];
 /* 0x74 */ GameStateHeap heap;
@@ -3100,5 +3103,27 @@ struct ActorBgIknvObj {
 /* 0x1AC */ actor_func updateFunc;
 }; // size = 0x1B0
 
+typedef struct {
+    /* 0x00 */ u32 type;
+    /* 0x04 */ u32 setScissor;
+    /* 0x08 */ ColorRGBA8 color;
+    /* 0x0C */ ColorRGBA8 envColor;
+} struct_801F8010; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ u32 useRgba;
+    /* 0x04 */ u32 setScissor;
+    /* 0x08 */ ColorRGBA8 primColor;
+    /* 0x08 */ ColorRGBA8 envColor;
+} struct_801F8020; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ u32 unk_00;
+    /* 0x04 */ u32 setScissor;
+    /* 0x08 */ ColorRGBA8 primColor;
+    /* 0x0C */ ColorRGBA8 envColor;
+    /* 0x10 */ u16* tlut;
+    /* 0x14 */ Gfx* monoDl;
+} VisMono; // size = 0x18
 
 #endif

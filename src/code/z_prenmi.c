@@ -43,8 +43,8 @@ void PreNMI_Main(PreNMIContext* prenmiCtx) {
 void PreNMI_Destroy(PreNMIContext* prenmiCtx) {}
 
 void PreNMI_Init(PreNMIContext* prenmiCtx) {
-    prenmiCtx->state.main = (func_ptr)PreNMI_Main;
-    prenmiCtx->state.destroy = (func_ptr)PreNMI_Destroy;
+    prenmiCtx->state.main = (GameStateFunc)PreNMI_Main;
+    prenmiCtx->state.destroy = (GameStateFunc)PreNMI_Destroy;
     prenmiCtx->timer = 30;
     prenmiCtx->unkA8 = 10;
 

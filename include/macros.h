@@ -1,6 +1,8 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
+#include "convert.h"
+
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
@@ -12,4 +14,11 @@
 
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
-#endif
+// Currently most often called ctxt in MM, TODO: Refactor names when its used
+#define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
+
+#define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
+            (curState)->nextGameStateInit = (GameStateFunc)newInit; \
+            (curState)->nextGameStateSize = sizeof(newStruct); 
+
+#endif // _MACROS_H_

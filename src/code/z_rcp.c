@@ -1307,7 +1307,7 @@ GLOBAL_ASM("asm/non_matchings/z_rcp/func_8012CF0C.asm")
 #endif
 
 void func_8012D374(GraphicsContext* gCtxt, u8 r, u8 g, u8 b) {
-    if ((gStaticContext->data[0xbe] < 2) && (D_801F6D10 < 2)) {
+    if ((R_PAUSE_MENU_MODE < 2) && (D_801F6D10 < 2)) {
         func_8012CF0C(gCtxt, 1, 1, r, g, b);
     }
     else {

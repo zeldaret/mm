@@ -2319,12 +2319,12 @@ extern UNK_TYPE2 D_801D14E0; // D_801D14E0
 extern UNK_TYPE2 D_801D14E4; // D_801D14E4
 extern UNK_TYPE2 D_801D14E8; // D_801D14E8
 extern UNK_TYPE4 D_801D14F0; // D_801D14F0
-extern UNK_TYPE4 gFramerateDivisor; // D_801D1500
+extern s32 gFramerateDivisor; // D_801D1500
 extern f32 gFramerateDivisorF; // D_801D1504
 extern f32 gFramerateDivisorHalf; // D_801D1508
 extern f32 gFramerateDivisorThird; // D_801D150C
-extern UNK_TYPE4 D_801D1510; // D_801D1510
-extern UNK_TYPE4 D_801D1514; // D_801D1514
+extern u32 D_801D1510; // D_801D1510
+extern u32 D_801D1514[3]; // D_801D1514
 extern s32 gScreenWidth; // D_801D1520
 extern s32 gScreenHeight; // D_801D1524
 extern UNK_TYPE4 startHeapSize; // D_801D1528
@@ -4098,9 +4098,9 @@ extern StackEntry slowlyStackEntry; // D_801F6FC8
 extern u8 slowlyStack[4096]; // D_801F6FE8
 extern UNK_TYPE1 D_801F7FE8; // D_801F7FE8
 extern UNK_TYPE1 D_801F7FF0; // D_801F7FF0
-extern UNK_TYPE1 D_801F8010; // D_801F8010
-extern UNK_TYPE1 D_801F8020; // D_801F8020
-extern UNK_TYPE1 D_801F8030; // D_801F8030
+extern struct_801F8010 D_801F8010; // D_801F8010
+extern struct_801F8020 D_801F8020; // D_801F8020
+extern VisMono sMonoColors; // sMonoColors
 extern UNK_TYPE1 D_801F8048; // D_801F8048
 extern FaultAddrConvClient grapgFaultAddrConvClient; // D_801F80D0
 extern FaultClient graphFaultClient; // D_801F80E0
@@ -4138,8 +4138,8 @@ extern UNK_TYPE1 D_801FBAD0; // D_801FBAD0
 extern UNK_TYPE1 D_801FBAD4; // D_801FBAD4
 extern UNK_TYPE1 D_801FBAE0; // D_801FBAE0
 extern UNK_TYPE1 D_801FBAE8; // D_801FBAE8
-extern u64 D_801FBAF0; // D_801FBAF0
-extern u64 lastRenderFrameDuration; // D_801FBAF8
+extern volatile OSTime D_801FBAF0; // D_801FBAF0
+extern volatile OSTime lastRenderFrameDuration; // D_801FBAF8
 extern UNK_TYPE1 D_801FBB00; // D_801FBB00
 extern UNK_TYPE1 D_801FBB04; // D_801FBB04
 extern UNK_TYPE1 D_801FBB08; // D_801FBB08

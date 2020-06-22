@@ -1530,7 +1530,7 @@ s32 func_800E8F08(Vec3s* param_1, Vec3s* param_2); // func_800E8F08
 s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4); // func_800E8FA4
 s32 func_800E9138(GlobalContext* ctxt, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5); // func_800E9138
 s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5); // func_800E9250
-void func_800E9360(void); // func_800E9360
+u8 func_800E9360(void); // func_800E9360
 void static_context_init(void); // func_800E93E0
 void func_800E9470(void); // func_800E9470
 void func_800E9488(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE1 param_10, UNK_TYPE1 param_11, UNK_TYPE1 param_12, UNK_TYPE1 param_13, UNK_TYPE2 param_14, UNK_TYPE4 param_15); // func_800E9488
@@ -2760,13 +2760,13 @@ void func_80140260(OSViMode* vimode); // func_80140260
 void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8, UNK_TYPE4 param_9, int param_10, short param_11, unsigned int param_12, UNK_TYPE4 param_13); // func_8014026C
 void func_80140730(void); // func_80140730
 void func_80140810(void); // func_80140810
-void func_80140898(void); // func_80140898
-void func_80140900(void); // func_80140900
+void func_80140898(void* arg0); // func_80140898
+void func_80140900(void* arg0); // func_80140900
 void func_8014090C(void); // func_8014090C
 void func_80140970(void); // func_80140970
-void func_80140CE0(void); // func_80140CE0
-void func_80140D04(void); // func_80140D04
-void func_80140D10(void); // func_80140D10
+void func_80140CE0(void* arg0); // func_80140CE0
+void func_80140D04(void* arg0); // func_80140D04
+void func_80140D10(void* arg0, Gfx** gfx, u32 arg2); // func_80140D10
 void func_80140E80(void* param_1); // func_80140E80
 void func_80140EA0(void); // func_80140EA0
 void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80140EAC
@@ -2777,15 +2777,15 @@ void func_80141200(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8014151C
 void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80141678
 void func_80141778(void); // func_80141778
-void func_801418B0(void); // func_801418B0
-void func_80141900(void); // func_80141900
+void func_801418B0(void* arg0); // func_801418B0
+void func_80141900(void* arg0); // func_80141900
 void func_80141924(void); // func_80141924
 void func_80141C34(void); // func_80141C34
-void func_80141E60(void); // func_80141E60
+void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2); // VisMono_Draw
 void func_8014204C(void); // func_8014204C
-void func_801420C0(void); // func_801420C0
-void func_801420F4(void); // func_801420F4
-void func_80142100(void); // func_80142100
+void func_801420C0(void* arg0); // func_801420C0
+void func_801420F4(void* arg0); // func_801420F4
+void func_80142100(void* arg0, Gfx** gfx, u32 arg2); // func_80142100
 void func_80142440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9); // func_80142440
 void func_80143148(void); // func_80143148
 void func_801431E8(void); // func_801431E8
@@ -3121,15 +3121,15 @@ void Audio_Stop(void); // func_80172EAC
 void Audio_ThreadEntry(AudioThreadStruct* audio); // func_80172ED0
 void Audio_WaitForInit(AudioThreadStruct* param_1); // func_80173048
 void Audio_Start(AudioThreadStruct* audio, s32* audioThreadStackEnd, OSPri pri, OSId id, SchedThreadStruct* sched, IrqMgr* irq); // func_80173074
-void func_80173130(void); // func_80173130
-void Initial_Init2(GameState* ctxt); // func_801732DC
-void Initial_Fini(void); // func_8017332C
-void Initial_Init(GameState* ctxt); // func_80173338
+void TitleSetup_GameStateResetContext(void); // func_80173130
+void TitleSetup_InitImpl(GameState* gameState); // func_801732DC
+void TitleSetup_Destroy(GameState* gameState); // func_8017332C
+void TitleSetup_Init(GameState* gameState); // func_80173338
 void Game_UpdateFramerateVariables(s32 divisor); // func_80173360
-void Game_SetFramerateDivisor(GameState* iParm1, u32 divisor); // func_801733A8
-void func_801733DC(void); // func_801733DC
+void Game_SetFramerateDivisor(GameState* gameState, s32 divisor); // func_801733A8
+void GameState_SetFBFilter(Gfx** gfx, u32 arg1); // func_801733DC
 void Game_Nop80173534(GameState* ctxt); // func_80173534
-void func_80173540(GameState* ctxt, GraphicsContext* gCtxt); // func_80173540
+void GameState_Draw(GameState* ctxt, GraphicsContext* gCtxt); // func_80173540
 void Game_ResetSegments(GraphicsContext* gCtxt); // func_80173644
 void func_801736DC(GraphicsContext* gCtxt); // func_801736DC
 void Game_UpdateInput(GameState* ctxt); // func_80173754
@@ -3137,13 +3137,13 @@ void Game_Update(GameState* ctxt); // func_8017377C
 void Game_IncrementFrameCount(GameState* ctxt); // func_801737E4
 void Game_InitHeap(GameState* ctxt, u32 size); // func_80173810
 void Game_ResizeHeap(GameState* ctxt, u32 size); // func_80173880
-void Game_StateInit(GameState* ctxt, func_ptr gameStateInit, GraphicsContext* gCtxt); // func_80173950
+void Game_StateInit(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gCtxt); // func_80173950
 void Game_StateFini(GameState* ctxt); // func_80173A50
-UNK_TYPE4 Game_GetNextStateInit(GameState* ctxt); // func_80173B00
+GameStateFunc Game_GetNextStateInit(GameState* ctxt); // func_80173B00
 u32 Game_GetNextStateSize(GameState* ctxt); // func_80173B0C
 u32 Game_GetShouldContinue(GameState* ctxt); // func_80173B18
-void Game_GetHeapFreeSize(GameState* ctxt); // func_80173B24
-int func_80173B48(GameState* ctxt); // func_80173B48
+s32 Game_GetHeapFreeSize(GameState* ctxt); // func_80173B24
+s32 func_80173B48(GameState* ctxt); // func_80173B48
 GameAlloc* func_80173BF0(GameAlloc* heap); // func_80173BF0
 void* Gamealloc_Alloc(GameAlloc* heap, u32 size); // func_80173C10
 void Gamealloc_Free(GameAlloc* heap, void* ptr); // func_80173C7C
@@ -3222,12 +3222,12 @@ void Sched_ThreadEntry(SchedThreadStruct* sched); // func_8017715C
 void func_80177280(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_80177280
 void Sched_Start(SchedThreadStruct* sched, void* stack, OSPri pri, UNK_TYPE4 param_4, UNK_TYPE4 param_5, IrqMgr* irqmgrStruct); // func_801772A0
 void func_80177390(void); // func_80177390
-void func_801773A0(void); // func_801773A0
-void func_801773C4(void); // func_801773C4
-void func_801773D0(void); // func_801773D0
+void func_801773A0(void* arg0); // func_801773A0
+void func_801773C4(void* arg0); // func_801773C4
+void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gCtx); // func_801773D0
 void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_80177A84
 void func_80177AC8(void); // func_80177AC8
-void func_80177E58(void); // func_80177E58
+void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext *gCtx, GameState *ctx); // func_80177E58
 void func_801780F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_801780F0
 void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_801781EC
 void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_8017842C
@@ -3455,7 +3455,7 @@ void func_801857A0(void); // func_801857A0
 void func_801857C0(void); // func_801857C0
 char* func_801857D0(void); // func_801857D0
 void func_80185864(void); // func_80185864
-void func_80185908(void); // func_80185908
+u32 func_80185908(void); // func_80185908
 void func_80185968(void); // func_80185968
 void func_801859F0(void); // func_801859F0
 void func_80185A2C(void); // func_80185A2C
