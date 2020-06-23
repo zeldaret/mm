@@ -760,7 +760,7 @@ void func_800B722C(void); // func_800B722C
 UNK_TYPE4 func_800B724C(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3); // func_800B724C
 unsigned int func_800B7298(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3); // func_800B7298
 void func_800B72E0(s32 param_1); // func_800B72E0
-void func_800B72F8(void); // func_800B72F8
+void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2); // func_800B72F8
 s32 Actor_IsLinkFacingActor(Actor* actor, s16 tolerance, GlobalContext* ctxt); // func_800B7320
 s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance); // func_800B7378
 s32 Actor_IsActorFacingLink(Actor* actor, s16 angle); // func_800B73E0

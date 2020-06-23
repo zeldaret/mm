@@ -3079,7 +3079,8 @@ struct DynaPolyActor {
 /* 0x144 */ s32 dynaPolyId;
 /* 0x148 */ f32 unk148;
 /* 0x14C */ f32 unk14C;
-/* 0x150 */ UNK_TYPE4 unk150;
+/* 0x150 */ s16 unk150;
+/* 0x152 */ s16 unk152;
 /* 0x154 */ u32 unk154;
 /* 0x158 */ u8 dynaFlags;
 /* 0x159 */ UNK_TYPE1 pad159[0x3];
