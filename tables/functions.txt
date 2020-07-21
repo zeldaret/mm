@@ -490,7 +490,7 @@
     0x80096820:("__osSetWatchLo","void","u32 value"),
     0x80096830:("func_80096830","f32","f32 param_1, f32 param_2"),
     0x80096880:("func_80096880","void*","void* param_1, u8 param_2, s32 param_3"),
-    0x800968B0:("func_800968B0","void","void"),
+    0x800968B0:("func_800968B0","s32","char*", "char*"),
     0x800968F0:("func_800968f0","char*","char* param_1, char* param_2"),
     0x80096930:("func_80096930","void","void"),
     0x800A5AC0:("EnAObj_Init","void","ActorEnAObj* this, GlobalContext* ctxt"),
