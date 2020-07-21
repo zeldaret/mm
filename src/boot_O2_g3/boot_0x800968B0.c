@@ -11,7 +11,7 @@ s32 func_800968B0(const char* str1, const char* str2) {
         v0 = *str1++;
         v1 = *str2++;
         if (v0 != v1) {
-	  return v0 - v1;
+          return v0 - v1;
         }
     } while (v0);
     return 0;
