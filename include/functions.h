@@ -493,7 +493,7 @@ u32 __osGetWatchLo(void); // func_80096810
 void __osSetWatchLo(u32 value); // func_80096820
 f32 func_80096830(f32 param_1, f32 param_2); // func_80096830
 void* func_80096880(void* param_1, u8 param_2, s32 param_3); // func_80096880
-u32 func_800968B0(const u8* a0, const u8* a1); // func_800968B0
+s32 func_800968B0(const char* str1, const char* str2); // func_800968B0
 char* func_800968f0(char* param_1, char* param_2); // func_800968F0
 void func_80096930(void); // func_80096930
 void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5AC0

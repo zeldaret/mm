@@ -1,12 +1,15 @@
 #include <ultra64.h>
 #include <global.h>
 
-u32 func_800968B0(const u8* a0, const u8* a1) {
-    u8 v0;
-    u8 v1;
+/*
+ * Compare strings (strcmp).
+ */
+s32 func_800968B0(const char* str1, const char* str2) {
+    char v0;
+    char v1;
     do {
-        v0 = *a0++;
-        v1 = *a1++;
+        v0 = *str1++;
+        v1 = *str2++;
         if (v0 != v1) {
 	  return v0 - v1;
         }
