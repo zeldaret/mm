@@ -879,7 +879,7 @@
     0x800BCCDC:("func_800BCCDC","void","UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5"),
     0x800BD2B4:("func_800BD2B4","void","UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6"),
     0x800BD384:("func_800BD384","void","UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9"),
-    0x800BD6D8:("func_800BD6D8","void","void"),
+    0x800BD6B8:("func_800BD6B8","void","void"),
     0x800BD6E4:("func_800BD6E4","void","UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5"),
     0x800BD888:("func_800BD888","void","void"),
     0x800BD9A0:("func_800BD9A0","void","void"),

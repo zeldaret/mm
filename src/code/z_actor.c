@@ -715,7 +715,7 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD2B4.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD384.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD6D8.asm")
+GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD6B8.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD6E4.asm")
 
