@@ -116,7 +116,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
             Actor_SpawnTransitionActors(ctxt, &ctxt->actorCtx);
 
-            if (((ctxt->sceneNum != 0x13) || (roomCtxt->currRoom.num != 1)) && (ctxt->sceneNum != 0x56)) {
+            if (((ctxt->sceneNum != SCENE_IKANA) || (roomCtxt->currRoom.num != 1)) && (ctxt->sceneNum != SCENE_IKNINSIDE)) {
                 ctxt->kankyoContext.unkC3 = 0xff;
                 ctxt->kankyoContext.unkE0 = 0;
             }

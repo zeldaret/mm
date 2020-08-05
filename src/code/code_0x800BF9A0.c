@@ -40,7 +40,7 @@ s32 func_800BFA78(s32 a0, s32 a1) {
 }
 
 void func_800BFAE8(void) {
-    D_801B4610 = 690;
+    D_801B4610 = ACTOR_ID_MAX;
     func_800819F0(&D_801ED930, (u32)func_800BF9A0, 0, 0);
     func_80081BCC(&D_801ED940, (u32)func_800BFA78, 0);
 }

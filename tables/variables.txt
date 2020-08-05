@@ -435,7 +435,7 @@
     0x801AEFB8:("D_801AEFB8","UNK_TYPE1","",0x1),
     0x801AEFBC:("D_801AEFBC","UNK_TYPE1","",0x1),
     0x801AEFC0:("D_801AEFC0","UNK_TYPE1","",0x1),
-    0x801AEFD0:("actorOverlayTable","ActorOverlay","[690]",0x5640),
+    0x801AEFD0:("actorOverlayTable","ActorOverlay","[ACTOR_ID_MAX]",0x5640),
     0x801B4610:("D_801B4610","UNK_TYPE4","",0x4),
     0x801B4620:("D_801B4620","u32","[32]",0x80),
     0x801B46A0:("D_801B46A0","u16","[16]",0x20),
