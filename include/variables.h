@@ -438,7 +438,7 @@ extern UNK_TYPE1 D_801AEFA8; // D_801AEFA8
 extern UNK_TYPE1 D_801AEFB8; // D_801AEFB8
 extern UNK_TYPE1 D_801AEFBC; // D_801AEFBC
 extern UNK_TYPE1 D_801AEFC0; // D_801AEFC0
-extern ActorOverlay actorOverlayTable[690]; // D_801AEFD0
+extern ActorOverlay actorOverlayTable[ACTOR_ID_MAX]; // D_801AEFD0
 extern UNK_TYPE4 D_801B4610; // D_801B4610
 extern u32 D_801B4620[32]; // D_801B4620
 extern u16 D_801B46A0[16]; // D_801B46A0

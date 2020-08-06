@@ -2,7 +2,7 @@
 #include <global.h>
 
 ActorInit bgFuKaitenInitData = {
-    0x01AE,
+    ACTOR_BG_FU_KAITEN,
     1,
     0,
     0x30,

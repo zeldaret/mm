@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-/* 
+/*
 TODO:
 There are a few issues left with this file, but many rely on larger structural project changes.
 I am avoiding these in the mean time in order to not break the Ghidra project structures.
@@ -12,26 +12,26 @@ The .data, .bss, and .rodata sections are not migrated to this file yet.
 
 s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     u32 size;
-    
+
     sceneCtxt->objects[sceneCtxt->objectCount].id = id;
     size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
-    
+
     if (sceneCtxt) {}
-    
+
     if (size) {
         DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].vramAddr, objectFileTable[id].vromStart, size);
     }
-        
+
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
     if (sceneCtxt->objectCount < 0x22) {
-        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr = 
+        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr =
             // UB to cast pointer to u32
             (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size);
     }
-    
+
     sceneCtxt->objectCount++;
     sceneCtxt->spawnedObjectCount = sceneCtxt->objectCount;
-    
+
     return sceneCtxt->objectCount - 1;
 }
 
@@ -40,26 +40,25 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     u32 unused;
     u32 spaceSize;
     s32 i;
-    
-    // TODO: Needs scene enums!
-    if (global->sceneNum == 0x6F || global->sceneNum == 0x6C || global->sceneNum == 0x6E || global->sceneNum == 0x6D) {
+
+    if (global->sceneNum == SCENE_CLOCKTOWER || global->sceneNum == SCENE_TOWN || global->sceneNum == SCENE_BACKTOWN || global->sceneNum == SCENE_ICHIBA) {
         spaceSize = 1566720;
-    } else if (global->sceneNum == 0x15) {
+    } else if (global->sceneNum == SCENE_MILK_BAR) {
         spaceSize = 1617920;
-    } else if (global->sceneNum == 0x2D) {
+    } else if (global->sceneNum == SCENE_00KEIKOKU) {
         spaceSize = 1505280;
     } else {
         spaceSize = 1413120;
     }
-    
+
     sceneCtxt->objectCount = 0;
     sceneCtxt->spawnedObjectCount = 0;
     sceneCtxt->mainKeepIndex = 0;
     sceneCtxt->keepObjectId = 0;
-    
-    // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT 
+
+    // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
-    
+
     sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
@@ -74,7 +73,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
     SceneObject* status;
     ObjectFileTableEntry* objectFile;
     u32 size;
-    
+
     status = &sceneCtxt->objects[0];
     for (i = 0; i < sceneCtxt->objectCount; i++) {
         if (status->id < 0) {
@@ -82,7 +81,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
             if (status->dmaReq.vromStart == 0) {
                 objectFile = &objectFileTable[id];
                 size = objectFile->vromEnd - objectFile->vromStart;
-                
+
                 if (size == 0) {
                     status->id = 0;
                 } else {
@@ -124,11 +123,11 @@ void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
     for (i = 0; i < sceneCtxt->objectCount; i++) {
         id = sceneCtxt->objects[i].id;
         vromSize = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
-        
+
         if (vromSize == 0) {
             continue;
         }
-        
+
         DmaMgr_SendRequest0(sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
     }
 }
@@ -137,10 +136,10 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     u32 addr;
     u32 vromSize;
     ObjectFileTableEntry* fileTableEntry;
-    
+
     sceneCtxt->objects[iParm2].id = -id;
     sceneCtxt->objects[iParm2].dmaReq.vromStart = 0;
-    
+
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
     // TODO: UB to cast void to u32
@@ -157,7 +156,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     void* objectVramAddr;
     s16 temp16;
     u8 unk20;
-    
+
     ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
                     ctxt->setupEntranceList[ctxt->curSpawn].spawn;
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
@@ -229,10 +228,10 @@ void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x07: Special Files
 void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->specialFiles.keepObjectId != 0) {
-        ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, 
+        ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
                                                            entry->specialFiles.keepObjectId);
         // TODO: Segment number enum?
-        gRspSegmentPhysAddrs[5] = 
+        gRspSegmentPhysAddrs[5] =
             PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
     }
 
@@ -264,7 +263,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
     SceneObject* status2;
     s16* objectEntry;
     void* nextPtr;
-    
+
     objectEntry = (s16*)Lib_PtrSegToVirt(entry->objectList.segment);
     k = 0;
     i = ctxt->sceneContext.spawnedObjectCount;
@@ -280,10 +279,10 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
             }
             ctxt->sceneContext.objectCount = i;
             func_800BA6FC(ctxt, &ctxt->actorCtx);
-            
+
             continue;
         }
-        
+
         i++;
         k++;
         objectEntry++;
@@ -292,7 +291,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
 
     while (k < entry->objectList.num) {
         nextPtr = func_8012F73C(&ctxt->sceneContext, i, *objectEntry);
-        
+
         // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
         if (i < 0x22) {
             firstObject[i + 1].vramAddr = nextPtr;
@@ -301,7 +300,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
         k++;
         objectEntry++;
     }
-    
+
     ctxt->sceneContext.objectCount = i;
 }
 
@@ -343,12 +342,12 @@ void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry) {
 s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
     u32 vromStart = D_801C2660[fileIndex].vromStart;
     u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
-    
+
     if (fileSize) {
         ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
         return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
     }
-    
+
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
@@ -369,39 +368,39 @@ void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x10: Time Settings
 void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
     u32 dayTime;
-    
+
     if (entry->timeSettings.hour != 0xFF && entry->timeSettings.min != 0xFF) {
-        gSaveContext.extra.environmentTime = gSaveContext.perm.time = 
+        gSaveContext.extra.environmentTime = gSaveContext.perm.time =
             (u16)(((entry->timeSettings.hour + (entry->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
-    
+
     if (entry->timeSettings.unk6 != 0xFF) {
         ctxt->kankyoContext.unk2 = entry->timeSettings.unk6;
     } else {
         ctxt->kankyoContext.unk2 = 0;
     }
-    
+
     if (gSaveContext.perm.inv.items[0] == 0xFF) {
         if (ctxt->kankyoContext.unk2 != 0) {
             ctxt->kankyoContext.unk2 = 5;
         }
     }
-    
+
     if (gSaveContext.extra.unk2b8 == 0) {
         // TODO: Needs REG macro
         gStaticContext->data[0x0F] = ctxt->kankyoContext.unk2;
     }
-    
+
     dayTime = gSaveContext.perm.time;
     ctxt->kankyoContext.unk4 = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
     ctxt->kankyoContext.unk8 = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
     ctxt->kankyoContext.unkC = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
-    
+
     if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
         gSaveContext.extra.environmentTime = gSaveContext.perm.time;
-        
+
         if (gSaveContext.extra.environmentTime >= 0x2AAA && gSaveContext.extra.environmentTime < 0x4555) {
             gSaveContext.extra.environmentTime = 0x3555;
         } else if (gSaveContext.extra.environmentTime >= 0x4555 && gSaveContext.extra.environmentTime < 0x5555) {
@@ -417,7 +416,7 @@ void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
 // Scene Command 0x05: Wind Settings
 void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry) {
     s8 temp1 = entry->windSettings.west;
-    s8 temp2 = entry->windSettings.vertical; 
+    s8 temp2 = entry->windSettings.vertical;
     s8 temp3 = entry->windSettings.south;
     ctxt->kankyoContext.windWest = temp1;
     ctxt->kankyoContext.windVertical = temp2;
@@ -494,27 +493,27 @@ void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneCmd* entry) {
 void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
     s16 j;
     s16 i;
-    
+
     j = 0;
     i = 0;
     while (1) {
         if (scenesPerMapArea[i].scenes[j] == 0xFFFF) {
             i++;
             j=0;
-            
+
             // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
             if (i == 0x0B) {
                 break;
             }
         }
-        
+
         if (ctxt->sceneNum == scenesPerMapArea[i].scenes[j]) {
             break;
         }
-        
+
         j++;
     }
-   
+
     // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
     if (i < 0x0B) {
         // This bitwise OR could be a macro, but all sane looking versions break matching.
@@ -536,7 +535,7 @@ s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header) {
 
     while (1) {
         cmdCode = header->base.code;
-        
+
         if (cmdCode == 0x14) {
             break;
         }

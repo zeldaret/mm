@@ -2,7 +2,7 @@
 #include <global.h>
 
 ActorInit bgIkanaRayInitData = {
-    0x0256,
+    ACTOR_BG_IKANA_RAY,
     6,
     0,
     0,
