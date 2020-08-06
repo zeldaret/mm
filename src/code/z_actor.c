@@ -165,8 +165,6 @@ GLOBAL_ASM("asm/non_matchings/z_actor//Actor_TitleCardDraw.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6434.asm")
 
-GLOBAL_ASM("asm/non_matchings/z_actor//func_800B645C.asm")
-
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6468.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6474.asm")
@@ -365,7 +363,7 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     f32 sin_rot_y;
     f32 imm_x;
     f32 imm_z;
-    
+
     cos_rot_y = Math_Coss(actor->shape.rot.y);
     sin_rot_y = Math_Sins(actor->shape.rot.y);
     imm_x = point->x - actor->currPosRot.pos.x;
@@ -716,6 +714,8 @@ GLOBAL_ASM("asm/non_matchings/z_actor//func_800BCCDC.asm")
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD2B4.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD384.asm")
+
+GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD6B8.asm")
 
 GLOBAL_ASM("asm/non_matchings/z_actor//func_800BD6E4.asm")
 
