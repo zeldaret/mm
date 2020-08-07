@@ -162,13 +162,11 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
     ) {
-        // TODO: 0x192 is an object enum
-        Scene_LoadObject(&ctxt->sceneContext, 0x192);
+        Scene_LoadObject(&ctxt->sceneContext, OBJECT_STK);
         return;
     }
 
-    // TODO: 0x11 is an object enum
-    loadedCount = Scene_LoadObject(&ctxt->sceneContext, 0x11);
+    loadedCount = Scene_LoadObject(&ctxt->sceneContext, OBJECT_LINK_CHILD);
     objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
     ctxt->sceneContext.objectCount = loadedCount;
     ctxt->sceneContext.spawnedObjectCount = loadedCount;
