@@ -66,7 +66,9 @@ DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
 
 SRC_DIRS := $(shell find src -type d)
 
-S_FILES := $(wildcard asm/*)
+# Because we may not have disassembled the code files yet, there might not be any assembly files.
+# Instead, generate a list of assembly files based on what's listed in the linker script.
+S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
 S_O_FILES = $(S_FILES:asm/%.asm=build/asm/%.o)
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 C_O_FILES = $(C_FILES:src/%.c=build/src/%.o)
@@ -84,11 +86,15 @@ $(shell mkdir -p $(BUILD_DIR)/comp)
 $(shell mkdir -p $(BUILD_DIR)/decomp)
 $(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir)))
 
+.PHONY: check
+# disasm is not a file so we must tell make not to check it when evaluating timestamps
+.INTERMEDIATE: disasm
+
 check: $(ROM)
 	@md5sum -c checksum.md5
 
 $(ROM): $(ROM_FILES)
-	@./tools/makerom.py ./tables/dmadata_table.txt $@
+	./tools/makerom.py ./tables/dmadata_table.txt $@
 
 build/code_pre_dmadata.elf: $(S_O_FILES) $(C_O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
 	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
@@ -117,9 +123,10 @@ build/decomp/code: build/code.bin
 build/decomp/ovl_%: build/code.elf
 	$(MIPS_BINUTILS_PREFIX)objcopy --dump-section ovl_$*=$@ $< /dev/null
 
+$(S_FILES): disasm
 
-disasm:
-	@./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
+disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt tables/files_with_nonmatching.txt
+	./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
 	@while read -r file; do \
 		./tools/split_asm.py ./asm/$$file.asm ./asm/non_matchings/$$file; \
 	done < ./tables/files_with_nonmatching.txt
@@ -135,12 +142,12 @@ build/baserom/%: baserom/%
 build/asm/%.o: asm/%.asm
 	$(AS) $(ASFLAGS) $^ -o $@
 
-build/src/actors/%.o: src/actors/%.c include/*
+build/src/actors/%.o: src/actors/%.c include/* disasm
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 	./tools/overlay.py $@ build/src/actors/$*_overlay.s
 	$(AS) $(ASFLAGS) build/src/actors/$*_overlay.s -o build/src/actors/$*_overlay.o
 
-build/src/%.o: src/%.c include/*
+build/src/%.o: src/%.c include/* disasm
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTIMIZATION) -Iinclude -o $@ $<
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c include/*
