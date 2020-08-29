@@ -912,54 +912,6 @@ class Disassembler:
 
         return dis
 
-    def generate_headers(self, path):
-        self.first_pass() # find functions and variables
-        with open(path + "/functions.h", 'w', newline='\n') as f:
-            f.write("#ifndef _FUNCTIONS_H_\n"
-                    "#define _FUNCTIONS_H_\n"
-                    "\n"
-                    )
-
-            f.write("#include <structs.h>\n"
-                    "\n"
-                    )
-
-            for addr in sorted(self.functions):
-                if addr in known_funcs:
-                    f.write("%s %s(%s); // func_%08X\n" % (known_funcs[addr][1], get_func_name(addr), known_funcs[addr][2], addr))
-                else:
-                    f.write("// UNK_RET %s(UNK_ARGS);\n" % get_func_name(addr))
-
-            f.write("\n#endif\n")
-
-        with open(path + "/variables.h", 'w', newline='\n') as f:
-            f.write("#ifndef _VARIABLES_H_\n"
-                    "#define _VARIABLES_H_\n"
-                    "\n"
-                    )
-
-            f.write("#include <structs.h>\n"
-                    "#include <dmadata.h>\n"
-                    "#include <segment.h>\n"
-                    "#include <section.h>\n"
-                    "#include <pre_boot_variables.h>\n"
-                    "\n"
-                    )
-
-            for addr in sorted(self.vars):
-                if addr < 0x800969C0:
-                    continue # Don't print out symbols before the start of boot. These will be defined in other files.
-
-                name = self.make_load(addr)
-                if name.startswith("__switch"):
-                    continue
-                if addr in known_vars:
-                    f.write("extern %s %s%s; // D_%08X\n" % (known_vars[addr][1], name, known_vars[addr][2], addr))
-                else:
-                    f.write("//extern UNK_TYPE %s;\n" % name)
-
-            f.write("\n#endif\n")
-
     def generate_undefined(self, path):
         self.first_pass() # find functions and variables
         with open(path + "/undef.txt", 'w', newline='\n') as f:
@@ -976,7 +928,6 @@ class Disassembler:
 # TODO -a --analyze flag? Only when its set will new symbols be added, otherwise use only the supplied ones
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--export-headers', help='export functions and variables into .h files', metavar='path')
     parser.add_argument('-u', '--undefined', help='create linker script for undefined symbols', metavar='path')
     parser.add_argument('-d', '--disassemble', help='disassemble supplied code files', metavar='path')
     parser.add_argument('-l', '--files', help='list of files to disassemble', metavar='filename', action='append')
@@ -1008,9 +959,6 @@ if __name__ == "__main__":
     if args.disassemble != None:
         os.makedirs(args.disassemble, exist_ok=True)
         dis.disassemble(args.disassemble)
-    if args.export_headers != None:
-        os.makedirs(args.export_headers, exist_ok=True)
-        dis.generate_headers(args.export_headers)
     if args.undefined != None:
         os.makedirs(args.undefined, exist_ok=True)
         dis.generate_undefined(args.undefined)
