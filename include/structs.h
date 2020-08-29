@@ -1452,7 +1452,10 @@ typedef struct {
 /* 0x006E */ UNK_TYPE1 pad6E[0x2];
 /* 0x0070 */ SaveContextInventory inv;
 /* 0x00F8 */ PermanentSceneFlags sceneFlags[120];
-/* 0x0E18 */ UNK_TYPE1 padE18[0xE0];
+/* 0x0E18 */ UNK_TYPE1 padE18[0x60];
+/* 0x0E78 */ u32 pictoFlags0;
+/* 0x0E7C */ u32 pictoFlags1;
+/* 0x0E80 */ UNK_TYPE1 padE80[0x78];
 /* 0x0EF8 */ u8 weekEventReg[100];
 /* 0x0F5C */ u32 mapsVisited;
 /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];

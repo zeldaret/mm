@@ -385,7 +385,7 @@ SECTIONS
         build/asm/z_skin.o(.text)
         build/asm/z_skin_awb.o(.text)
         build/asm/code_0x80138BA0.o(.text)
-        build/asm/code_0x8013A240.o(.text)
+        build/src/code/z_snap.o(.text)
         build/asm/z_sub_s.o(.text)
         build/asm/code_0x8013EC10.o(.text)
         build/src/code/z_view.o(.text)
