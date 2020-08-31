@@ -1,5 +1,5 @@
 #include <ultra64.h>
-#include <global.h>
+#include <global_overlay.h>
 
 ActorInit bgIkanaRayInitData = {
     ACTOR_BG_IKANA_RAY,
@@ -22,7 +22,7 @@ ColCylinderInit bgIkanaRayCylinderInit = {
 };
 
 // TODO macro
-ActorInitVar  bgIkanaRayCompInit[] = {
+InitChainEntry  bgIkanaRayCompInit[] = {
     {1, 6, 0x0FC, 4000},
     {1, 6, 0x100, 1000},
     {1, 6, 0x104, 1000},

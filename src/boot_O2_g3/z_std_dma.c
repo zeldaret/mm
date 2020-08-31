@@ -164,7 +164,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
         return -2;
     }
 
-    request->vromStart = vromStart;
+    request->vromAddr = vromStart;
     request->dramAddr = vramStart;
     request->size = size;
     request->unk14 = 0;

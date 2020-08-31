@@ -384,45 +384,45 @@ s16 Math_Vec3f_Pitch(Vec3f* from, Vec3f* to) {
     return atans_flip(Math_Vec3f_DistXZ(from, to), from->y - to->y);
 }
 
-void Actor_ProcessInitChain(Actor* actor, ActorInitVar* init) {
+void Actor_ProcessInitChain(Actor* actor, InitChainEntry* init) {
     do {
         actorInitVarFuncs[init->type]((u8*)actor, init);
     } while ((init++)->cont);
 }
 
-void IChain_Apply_u8(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u8(u8* actor, InitChainEntry* init) {
     *(u8*)(actor + init->offset) = (u8)(init->value);
 }
 
-void IChain_Apply_s8(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s8(u8* actor, InitChainEntry* init) {
     *(u8*)(actor + init->offset) = (u8)(init->value);
 }
 
-void IChain_Apply_u16(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u16(u8* actor, InitChainEntry* init) {
     *(u16*)(actor + init->offset) = (u16)(init->value);
 }
 
-void IChain_Apply_s16(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s16(u8* actor, InitChainEntry* init) {
     *(u16*)(actor + init->offset) = (u16)(init->value);
 }
 
-void IChain_Apply_u32(u8* actor, ActorInitVar* init) {
+void IChain_Apply_u32(u8* actor, InitChainEntry* init) {
     *(u32*)(actor + init->offset) = (u32)(init->value);
 }
 
-void IChain_Apply_s32(u8* actor, ActorInitVar* init) {
+void IChain_Apply_s32(u8* actor, InitChainEntry* init) {
     *(u32*)(actor + init->offset) = (u32)(init->value);
 }
 
-void IChain_Apply_f32(u8* actor, ActorInitVar* init) {
+void IChain_Apply_f32(u8* actor, InitChainEntry* init) {
     *(f32*)(actor + init->offset) = (f32)(init->value);
 }
 
-void IChain_Apply_f32div1000(u8* actor, ActorInitVar* init) {
+void IChain_Apply_f32div1000(u8* actor, InitChainEntry* init) {
     *(f32*)(actor + init->offset) = (f32)(init->value) / 1000;
 }
 
-void IChain_Apply_Vec3f(u8* actor, ActorInitVar* init) {
+void IChain_Apply_Vec3f(u8* actor, InitChainEntry* init) {
     Vec3f* v0 = (Vec3f*)(actor + init->offset);
     f32 f0 = (f32)(init->value);
 
@@ -431,7 +431,7 @@ void IChain_Apply_Vec3f(u8* actor, ActorInitVar* init) {
     v0->x = f0;
 }
 
-void IChain_Apply_Vec3fdiv1000(u8* actor, ActorInitVar* init) {
+void IChain_Apply_Vec3fdiv1000(u8* actor, InitChainEntry* init) {
     Vec3f* v0 = (Vec3f*)(actor + init->offset);
     f32 f0 = (f32)(init->value) / 1000;
 
@@ -440,7 +440,7 @@ void IChain_Apply_Vec3fdiv1000(u8* actor, ActorInitVar* init) {
     v0->x = f0;
 }
 
-void IChain_Apply_Vec3s(u8* actor, ActorInitVar* init) {
+void IChain_Apply_Vec3s(u8* actor, InitChainEntry* init) {
     Vec3s* v0 = (Vec3s*)(actor + init->offset);
     s16 v1 = (s16)(init->value);
 

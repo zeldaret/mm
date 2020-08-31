@@ -78,7 +78,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
     for (i = 0; i < sceneCtxt->objectCount; i++) {
         if (status->id < 0) {
             s32 id = -status->id;
-            if (status->dmaReq.vromStart == 0) {
+            if (status->dmaReq.vromAddr == 0) {
                 objectFile = &objectFileTable[id];
                 size = objectFile->vromEnd - objectFile->vromStart;
 
@@ -138,7 +138,7 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     ObjectFileTableEntry* fileTableEntry;
 
     sceneCtxt->objects[iParm2].id = -id;
-    sceneCtxt->objects[iParm2].dmaReq.vromStart = 0;
+    sceneCtxt->objects[iParm2].dmaReq.vromAddr = 0;
 
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
