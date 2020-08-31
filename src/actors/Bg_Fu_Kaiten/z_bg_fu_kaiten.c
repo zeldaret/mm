@@ -1,5 +1,5 @@
 #include <ultra64.h>
-#include <global.h>
+#include <global_overlay.h>
 
 ActorInit bgFuKaitenInitData = {
     ACTOR_BG_FU_KAITEN,
