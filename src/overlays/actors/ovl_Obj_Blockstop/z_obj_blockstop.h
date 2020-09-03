@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_BLOCKSTOP_H_
-#define _Z_OBJ_BLOCKSTOP_H_
+#ifndef Z_OBJ_BLOCKSTOP_H
+#define Z_OBJ_BLOCKSTOP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjBlockstop {
 
 extern const ActorInit Obj_Blockstop_InitVars;
 
-#endif
+#endif // Z_OBJ_BLOCKSTOP_H

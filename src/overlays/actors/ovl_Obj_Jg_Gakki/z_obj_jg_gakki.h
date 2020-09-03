@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_JG_GAKKI_H_
-#define _Z_OBJ_JG_GAKKI_H_
+#ifndef Z_OBJ_JG_GAKKI_H
+#define Z_OBJ_JG_GAKKI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjJgGakki {
 
 extern const ActorInit Obj_Jg_Gakki_InitVars;
 
-#endif
+#endif // Z_OBJ_JG_GAKKI_H

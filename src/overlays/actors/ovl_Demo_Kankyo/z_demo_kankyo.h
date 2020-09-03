@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_KANKYO_H_
-#define _Z_DEMO_KANKYO_H_
+#ifndef Z_DEMO_KANKYO_H
+#define Z_DEMO_KANKYO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoKankyo {
 
 extern const ActorInit Demo_Kankyo_InitVars;
 
-#endif
+#endif // Z_DEMO_KANKYO_H

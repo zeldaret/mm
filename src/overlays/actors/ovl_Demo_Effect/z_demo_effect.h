@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_EFFECT_H_
-#define _Z_DEMO_EFFECT_H_
+#ifndef Z_DEMO_EFFECT_H
+#define Z_DEMO_EFFECT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoEffect {
 
 extern const ActorInit Demo_Effect_InitVars;
 
-#endif
+#endif // Z_DEMO_EFFECT_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_SINKAI_KABE_H_
-#define _Z_BG_SINKAI_KABE_H_
+#ifndef Z_BG_SINKAI_KABE_H
+#define Z_BG_SINKAI_KABE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgSinkaiKabe {
 
 extern const ActorInit Bg_Sinkai_Kabe_InitVars;
 
-#endif
+#endif // Z_BG_SINKAI_KABE_H

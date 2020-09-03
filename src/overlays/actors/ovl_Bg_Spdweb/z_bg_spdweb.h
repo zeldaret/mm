@@ -1,5 +1,5 @@
-#ifndef _Z_BG_SPDWEB_H_
-#define _Z_BG_SPDWEB_H_
+#ifndef Z_BG_SPDWEB_H
+#define Z_BG_SPDWEB_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgSpdweb {
 
 extern const ActorInit Bg_Spdweb_InitVars;
 
-#endif
+#endif // Z_BG_SPDWEB_H

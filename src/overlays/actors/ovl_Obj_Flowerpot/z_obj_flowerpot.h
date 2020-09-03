@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_FLOWERPOT_H_
-#define _Z_OBJ_FLOWERPOT_H_
+#ifndef Z_OBJ_FLOWERPOT_H
+#define Z_OBJ_FLOWERPOT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjFlowerpot {
 
 extern const ActorInit Obj_Flowerpot_InitVars;
 
-#endif
+#endif // Z_OBJ_FLOWERPOT_H

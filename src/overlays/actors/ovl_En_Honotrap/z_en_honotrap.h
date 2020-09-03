@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HONOTRAP_H_
-#define _Z_EN_HONOTRAP_H_
+#ifndef Z_EN_HONOTRAP_H
+#define Z_EN_HONOTRAP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHonotrap {
 
 extern const ActorInit En_Honotrap_InitVars;
 
-#endif
+#endif // Z_EN_HONOTRAP_H

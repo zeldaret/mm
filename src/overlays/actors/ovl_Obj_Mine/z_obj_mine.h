@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_MINE_H_
-#define _Z_OBJ_MINE_H_
+#ifndef Z_OBJ_MINE_H
+#define Z_OBJ_MINE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjMine {
 
 extern const ActorInit Obj_Mine_InitVars;
 
-#endif
+#endif // Z_OBJ_MINE_H

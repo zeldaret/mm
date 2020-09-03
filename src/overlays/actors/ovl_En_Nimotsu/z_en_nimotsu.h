@@ -1,5 +1,5 @@
-#ifndef _Z_EN_NIMOTSU_H_
-#define _Z_EN_NIMOTSU_H_
+#ifndef Z_EN_NIMOTSU_H
+#define Z_EN_NIMOTSU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnNimotsu {
 
 extern const ActorInit En_Nimotsu_InitVars;
 
-#endif
+#endif // Z_EN_NIMOTSU_H

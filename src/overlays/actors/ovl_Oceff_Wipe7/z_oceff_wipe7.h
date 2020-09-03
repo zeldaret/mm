@@ -1,5 +1,5 @@
-#ifndef _Z_OCEFF_WIPE7_H_
-#define _Z_OCEFF_WIPE7_H_
+#ifndef Z_OCEFF_WIPE7_H
+#define Z_OCEFF_WIPE7_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct OceffWipe7 {
 
 extern const ActorInit Oceff_Wipe7_InitVars;
 
-#endif
+#endif // Z_OCEFF_WIPE7_H

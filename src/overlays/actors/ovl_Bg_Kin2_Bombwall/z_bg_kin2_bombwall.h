@@ -1,5 +1,5 @@
-#ifndef _Z_BG_KIN2_BOMBWALL_H_
-#define _Z_BG_KIN2_BOMBWALL_H_
+#ifndef Z_BG_KIN2_BOMBWALL_H
+#define Z_BG_KIN2_BOMBWALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgKin2Bombwall {
 
 extern const ActorInit Bg_Kin2_Bombwall_InitVars;
 
-#endif
+#endif // Z_BG_KIN2_BOMBWALL_H

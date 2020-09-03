@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DEATH_H_
-#define _Z_EN_DEATH_H_
+#ifndef Z_EN_DEATH_H
+#define Z_EN_DEATH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDeath {
 
 extern const ActorInit En_Death_InitVars;
 
-#endif
+#endif // Z_EN_DEATH_H

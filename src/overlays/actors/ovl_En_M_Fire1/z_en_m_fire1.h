@@ -1,5 +1,5 @@
-#ifndef _Z_EN_M_FIRE1_H_
-#define _Z_EN_M_FIRE1_H_
+#ifndef Z_EN_M_FIRE1_H
+#define Z_EN_M_FIRE1_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnMFire1 {
 
 extern const ActorInit En_M_Fire1_InitVars;
 
-#endif
+#endif // Z_EN_M_FIRE1_H

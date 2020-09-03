@@ -1,5 +1,5 @@
-#ifndef _Z_OCEFF_SPOT_H_
-#define _Z_OCEFF_SPOT_H_
+#ifndef Z_OCEFF_SPOT_H
+#define Z_OCEFF_SPOT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct OceffSpot {
 
 extern const ActorInit Oceff_Spot_InitVars;
 
-#endif
+#endif // Z_OCEFF_SPOT_H

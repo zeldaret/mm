@@ -1,5 +1,5 @@
-#ifndef _Z_DM_TAG_H_
-#define _Z_DM_TAG_H_
+#ifndef Z_DM_TAG_H
+#define Z_DM_TAG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmTag {
 
 extern const ActorInit Dm_Tag_InitVars;
 
-#endif
+#endif // Z_DM_TAG_H

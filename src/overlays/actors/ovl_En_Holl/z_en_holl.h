@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HOLL_H_
-#define _Z_EN_HOLL_H_
+#ifndef Z_EN_HOLL_H
+#define Z_EN_HOLL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHoll {
 
 extern const ActorInit En_Holl_InitVars;
 
-#endif
+#endif // Z_EN_HOLL_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_KENDO_KANBAN_H_
-#define _Z_OBJ_KENDO_KANBAN_H_
+#ifndef Z_OBJ_KENDO_KANBAN_H
+#define Z_OBJ_KENDO_KANBAN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjKendoKanban {
 
 extern const ActorInit Obj_Kendo_Kanban_InitVars;
 
-#endif
+#endif // Z_OBJ_KENDO_KANBAN_H

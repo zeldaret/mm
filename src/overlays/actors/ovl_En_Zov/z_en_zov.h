@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ZOV_H_
-#define _Z_EN_ZOV_H_
+#ifndef Z_EN_ZOV_H
+#define Z_EN_ZOV_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnZov {
 
 extern const ActorInit En_Zov_InitVars;
 
-#endif
+#endif // Z_EN_ZOV_H

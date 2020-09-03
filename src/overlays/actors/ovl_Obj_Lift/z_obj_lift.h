@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_LIFT_H_
-#define _Z_OBJ_LIFT_H_
+#ifndef Z_OBJ_LIFT_H
+#define Z_OBJ_LIFT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjLift {
 
 extern const ActorInit Obj_Lift_InitVars;
 
-#endif
+#endif // Z_OBJ_LIFT_H

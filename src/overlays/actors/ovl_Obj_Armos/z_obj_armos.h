@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ARMOS_H_
-#define _Z_OBJ_ARMOS_H_
+#ifndef Z_OBJ_ARMOS_H
+#define Z_OBJ_ARMOS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjArmos {
 
 extern const ActorInit Obj_Armos_InitVars;
 
-#endif
+#endif // Z_OBJ_ARMOS_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_SPOUT_FIRE_H_
-#define _Z_BG_SPOUT_FIRE_H_
+#ifndef Z_BG_SPOUT_FIRE_H
+#define Z_BG_SPOUT_FIRE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgSpoutFire {
 
 extern const ActorInit Bg_Spout_Fire_InitVars;
 
-#endif
+#endif // Z_BG_SPOUT_FIRE_H

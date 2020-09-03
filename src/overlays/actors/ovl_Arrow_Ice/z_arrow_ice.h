@@ -1,5 +1,5 @@
-#ifndef _Z_ARROW_ICE_H_
-#define _Z_ARROW_ICE_H_
+#ifndef Z_ARROW_ICE_H
+#define Z_ARROW_ICE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ArrowIce {
 
 extern const ActorInit Arrow_Ice_InitVars;
 
-#endif
+#endif // Z_ARROW_ICE_H

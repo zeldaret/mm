@@ -1,5 +1,5 @@
-#ifndef _Z_DOOR_WARP1_H_
-#define _Z_DOOR_WARP1_H_
+#ifndef Z_DOOR_WARP1_H
+#define Z_DOOR_WARP1_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DoorWarp1 {
 
 extern const ActorInit Door_Warp1_InitVars;
 
-#endif
+#endif // Z_DOOR_WARP1_H

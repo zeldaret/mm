@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_MU_PICT_H_
-#define _Z_OBJ_MU_PICT_H_
+#ifndef Z_OBJ_MU_PICT_H
+#define Z_OBJ_MU_PICT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjMuPict {
 
 extern const ActorInit Obj_Mu_Pict_InitVars;
 
-#endif
+#endif // Z_OBJ_MU_PICT_H

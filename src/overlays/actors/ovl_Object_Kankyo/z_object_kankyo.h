@@ -1,5 +1,5 @@
-#ifndef _Z_OBJECT_KANKYO_H_
-#define _Z_OBJECT_KANKYO_H_
+#ifndef Z_OBJECT_KANKYO_H
+#define Z_OBJECT_KANKYO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjectKankyo {
 
 extern const ActorInit Object_Kankyo_InitVars;
 
-#endif
+#endif // Z_OBJECT_KANKYO_H

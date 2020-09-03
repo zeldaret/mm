@@ -1,5 +1,5 @@
-#ifndef _Z_EN_VIEWER_H_
-#define _Z_EN_VIEWER_H_
+#ifndef Z_EN_VIEWER_H
+#define Z_EN_VIEWER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnViewer {
 
 extern const ActorInit En_Viewer_InitVars;
 
-#endif
+#endif // Z_EN_VIEWER_H

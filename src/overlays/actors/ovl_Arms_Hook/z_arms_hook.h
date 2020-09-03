@@ -1,5 +1,5 @@
-#ifndef _Z_ARMS_HOOK_H_
-#define _Z_ARMS_HOOK_H_
+#ifndef Z_ARMS_HOOK_H
+#define Z_ARMS_HOOK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ArmsHook {
 
 extern const ActorInit Arms_Hook_InitVars;
 
-#endif
+#endif // Z_ARMS_HOOK_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_HSBLOCK_H_
-#define _Z_OBJ_HSBLOCK_H_
+#ifndef Z_OBJ_HSBLOCK_H
+#define Z_OBJ_HSBLOCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjHsblock {
 
 extern const ActorInit Obj_Hsblock_InitVars;
 
-#endif
+#endif // Z_OBJ_HSBLOCK_H

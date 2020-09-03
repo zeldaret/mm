@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_GHAKA_H_
-#define _Z_OBJ_GHAKA_H_
+#ifndef Z_OBJ_GHAKA_H
+#define Z_OBJ_GHAKA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjGhaka {
 
 extern const ActorInit Obj_Ghaka_InitVars;
 
-#endif
+#endif // Z_OBJ_GHAKA_H

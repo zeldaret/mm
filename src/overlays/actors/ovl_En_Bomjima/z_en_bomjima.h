@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BOMJIMA_H_
-#define _Z_EN_BOMJIMA_H_
+#ifndef Z_EN_BOMJIMA_H
+#define Z_EN_BOMJIMA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBomjima {
 
 extern const ActorInit En_Bomjima_InitVars;
 
-#endif
+#endif // Z_EN_BOMJIMA_H

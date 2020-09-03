@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GAKUFU_H_
-#define _Z_EN_GAKUFU_H_
+#ifndef Z_EN_GAKUFU_H
+#define Z_EN_GAKUFU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGakufu {
 
 extern const ActorInit En_Gakufu_InitVars;
 
-#endif
+#endif // Z_EN_GAKUFU_H

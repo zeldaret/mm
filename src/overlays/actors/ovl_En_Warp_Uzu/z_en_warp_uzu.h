@@ -1,5 +1,5 @@
-#ifndef _Z_EN_WARP_UZU_H_
-#define _Z_EN_WARP_UZU_H_
+#ifndef Z_EN_WARP_UZU_H
+#define Z_EN_WARP_UZU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnWarpUzu {
 
 extern const ActorInit En_Warp_Uzu_InitVars;
 
-#endif
+#endif // Z_EN_WARP_UZU_H

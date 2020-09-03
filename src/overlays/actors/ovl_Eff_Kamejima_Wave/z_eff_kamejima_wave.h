@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_KAMEJIMA_WAVE_H_
-#define _Z_EFF_KAMEJIMA_WAVE_H_
+#ifndef Z_EFF_KAMEJIMA_WAVE_H
+#define Z_EFF_KAMEJIMA_WAVE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffKamejimaWave {
 
 extern const ActorInit Eff_Kamejima_Wave_InitVars;
 
-#endif
+#endif // Z_EFF_KAMEJIMA_WAVE_H

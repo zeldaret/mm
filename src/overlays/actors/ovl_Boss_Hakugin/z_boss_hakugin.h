@@ -1,5 +1,5 @@
-#ifndef _Z_BOSS_HAKUGIN_H_
-#define _Z_BOSS_HAKUGIN_H_
+#ifndef Z_BOSS_HAKUGIN_H
+#define Z_BOSS_HAKUGIN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BossHakugin {
 
 extern const ActorInit Boss_Hakugin_InitVars;
 
-#endif
+#endif // Z_BOSS_HAKUGIN_H

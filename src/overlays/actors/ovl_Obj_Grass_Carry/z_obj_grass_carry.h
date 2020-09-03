@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_GRASS_CARRY_H_
-#define _Z_OBJ_GRASS_CARRY_H_
+#ifndef Z_OBJ_GRASS_CARRY_H
+#define Z_OBJ_GRASS_CARRY_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjGrassCarry {
 
 extern const ActorInit Obj_Grass_Carry_InitVars;
 
-#endif
+#endif // Z_OBJ_GRASS_CARRY_H

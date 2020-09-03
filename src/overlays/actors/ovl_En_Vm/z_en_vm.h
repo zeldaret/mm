@@ -1,5 +1,5 @@
-#ifndef _Z_EN_VM_H_
-#define _Z_EN_VM_H_
+#ifndef Z_EN_VM_H
+#define Z_EN_VM_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnVm {
 
 extern const ActorInit En_Vm_InitVars;
 
-#endif
+#endif // Z_EN_VM_H

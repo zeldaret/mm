@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_MOONEND_H_
-#define _Z_DEMO_MOONEND_H_
+#ifndef Z_DEMO_MOONEND_H
+#define Z_DEMO_MOONEND_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoMoonend {
 
 extern const ActorInit Demo_Moonend_InitVars;
 
-#endif
+#endif // Z_DEMO_MOONEND_H

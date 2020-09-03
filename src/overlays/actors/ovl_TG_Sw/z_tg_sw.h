@@ -1,5 +1,5 @@
-#ifndef _Z_TG_SW_H_
-#define _Z_TG_SW_H_
+#ifndef Z_TG_SW_H
+#define Z_TG_SW_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct TGSw {
 
 extern const ActorInit TG_Sw_InitVars;
 
-#endif
+#endif // Z_TG_SW_H

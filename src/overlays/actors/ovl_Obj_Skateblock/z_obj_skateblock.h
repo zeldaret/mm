@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SKATEBLOCK_H_
-#define _Z_OBJ_SKATEBLOCK_H_
+#ifndef Z_OBJ_SKATEBLOCK_H
+#define Z_OBJ_SKATEBLOCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjSkateblock {
 
 extern const ActorInit Obj_Skateblock_InitVars;
 
-#endif
+#endif // Z_OBJ_SKATEBLOCK_H

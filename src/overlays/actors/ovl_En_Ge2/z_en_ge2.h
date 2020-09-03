@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GE2_H_
-#define _Z_EN_GE2_H_
+#ifndef Z_EN_GE2_H
+#define Z_EN_GE2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGe2 {
 
 extern const ActorInit En_Ge2_InitVars;
 
-#endif
+#endif // Z_EN_GE2_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GIANT_H_
-#define _Z_EN_GIANT_H_
+#ifndef Z_EN_GIANT_H
+#define Z_EN_GIANT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGiant {
 
 extern const ActorInit En_Giant_InitVars;
 
-#endif
+#endif // Z_EN_GIANT_H

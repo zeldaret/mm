@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PAMERA_H_
-#define _Z_EN_PAMERA_H_
+#ifndef Z_EN_PAMERA_H
+#define Z_EN_PAMERA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPamera {
 
 extern const ActorInit En_Pamera_InitVars;
 
-#endif
+#endif // Z_EN_PAMERA_H

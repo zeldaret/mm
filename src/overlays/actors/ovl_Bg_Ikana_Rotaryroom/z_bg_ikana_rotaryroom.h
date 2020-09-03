@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKANA_ROTARYROOM_H_
-#define _Z_BG_IKANA_ROTARYROOM_H_
+#ifndef Z_BG_IKANA_ROTARYROOM_H
+#define Z_BG_IKANA_ROTARYROOM_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIkanaRotaryroom {
 
 extern const ActorInit Bg_Ikana_Rotaryroom_InitVars;
 
-#endif
+#endif // Z_BG_IKANA_ROTARYROOM_H

@@ -1,5 +1,5 @@
-#ifndef _Z_DM_TSG_H_
-#define _Z_DM_TSG_H_
+#ifndef Z_DM_TSG_H
+#define Z_DM_TSG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmTsg {
 
 extern const ActorInit Dm_Tsg_InitVars;
 
-#endif
+#endif // Z_DM_TSG_H

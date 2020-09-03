@@ -1,5 +1,5 @@
-#ifndef _Z_ARROW_FIRE_H_
-#define _Z_ARROW_FIRE_H_
+#ifndef Z_ARROW_FIRE_H
+#define Z_ARROW_FIRE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ArrowFire {
 
 extern const ActorInit Arrow_Fire_InitVars;
 
-#endif
+#endif // Z_ARROW_FIRE_H

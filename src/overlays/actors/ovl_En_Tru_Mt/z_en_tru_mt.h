@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TRU_MT_H_
-#define _Z_EN_TRU_MT_H_
+#ifndef Z_EN_TRU_MT_H
+#define Z_EN_TRU_MT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTruMt {
 
 extern const ActorInit En_Tru_Mt_InitVars;
 
-#endif
+#endif // Z_EN_TRU_MT_H

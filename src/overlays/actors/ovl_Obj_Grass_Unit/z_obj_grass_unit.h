@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_GRASS_UNIT_H_
-#define _Z_OBJ_GRASS_UNIT_H_
+#ifndef Z_OBJ_GRASS_UNIT_H
+#define Z_OBJ_GRASS_UNIT_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct ObjGrassUnit {
 
 extern const ActorInit Obj_Grass_Unit_InitVars;
 
-#endif
+#endif // Z_OBJ_GRASS_UNIT_H

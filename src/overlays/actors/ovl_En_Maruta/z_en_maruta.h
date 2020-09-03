@@ -1,5 +1,5 @@
-#ifndef _Z_EN_MARUTA_H_
-#define _Z_EN_MARUTA_H_
+#ifndef Z_EN_MARUTA_H
+#define Z_EN_MARUTA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnMaruta {
 
 extern const ActorInit En_Maruta_InitVars;
 
-#endif
+#endif // Z_EN_MARUTA_H

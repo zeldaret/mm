@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ENDING_HERO2_H_
-#define _Z_EN_ENDING_HERO2_H_
+#ifndef Z_EN_ENDING_HERO2_H
+#define Z_EN_ENDING_HERO2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnEndingHero2 {
 
 extern const ActorInit En_Ending_Hero2_InitVars;
 
-#endif
+#endif // Z_EN_ENDING_HERO2_H

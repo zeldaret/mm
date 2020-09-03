@@ -1,5 +1,5 @@
-#ifndef _Z_EN_OWL_H_
-#define _Z_EN_OWL_H_
+#ifndef Z_EN_OWL_H
+#define Z_EN_OWL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnOwl {
 
 extern const ActorInit En_Owl_InitVars;
 
-#endif
+#endif // Z_EN_OWL_H

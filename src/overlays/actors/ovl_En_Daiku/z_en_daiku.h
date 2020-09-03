@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DAIKU_H_
-#define _Z_EN_DAIKU_H_
+#ifndef Z_EN_DAIKU_H
+#define Z_EN_DAIKU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDaiku {
 
 extern const ActorInit En_Daiku_InitVars;
 
-#endif
+#endif // Z_EN_DAIKU_H

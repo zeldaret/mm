@@ -1,5 +1,5 @@
-#ifndef _Z_EN_FIRE_ROCK_H_
-#define _Z_EN_FIRE_ROCK_H_
+#ifndef Z_EN_FIRE_ROCK_H
+#define Z_EN_FIRE_ROCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnFireRock {
 
 extern const ActorInit En_Fire_Rock_InitVars;
 
-#endif
+#endif // Z_EN_FIRE_ROCK_H

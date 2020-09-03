@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ISHI_H_
-#define _Z_EN_ISHI_H_
+#ifndef Z_EN_ISHI_H
+#define Z_EN_ISHI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnIshi {
 
 extern const ActorInit En_Ishi_InitVars;
 
-#endif
+#endif // Z_EN_ISHI_H

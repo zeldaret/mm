@@ -1,5 +1,5 @@
-#ifndef _Z_DOOR_SPIRAL_H_
-#define _Z_DOOR_SPIRAL_H_
+#ifndef Z_DOOR_SPIRAL_H
+#define Z_DOOR_SPIRAL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DoorSpiral {
 
 extern const ActorInit Door_Spiral_InitVars;
 
-#endif
+#endif // Z_DOOR_SPIRAL_H

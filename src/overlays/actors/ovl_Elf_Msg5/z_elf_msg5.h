@@ -1,5 +1,5 @@
-#ifndef _Z_ELF_MSG5_H_
-#define _Z_ELF_MSG5_H_
+#ifndef Z_ELF_MSG5_H
+#define Z_ELF_MSG5_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ElfMsg5 {
 
 extern const ActorInit Elf_Msg5_InitVars;
 
-#endif
+#endif // Z_ELF_MSG5_H

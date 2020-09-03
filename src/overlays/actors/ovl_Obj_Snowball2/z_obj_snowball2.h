@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SNOWBALL2_H_
-#define _Z_OBJ_SNOWBALL2_H_
+#ifndef Z_OBJ_SNOWBALL2_H
+#define Z_OBJ_SNOWBALL2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjSnowball2 {
 
 extern const ActorInit Obj_Snowball2_InitVars;
 
-#endif
+#endif // Z_OBJ_SNOWBALL2_H

@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_TRE_LGT_H_
-#define _Z_DEMO_TRE_LGT_H_
+#ifndef Z_DEMO_TRE_LGT_H
+#define Z_DEMO_TRE_LGT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoTreLgt {
 
 extern const ActorInit Demo_Tre_Lgt_InitVars;
 
-#endif
+#endif // Z_DEMO_TRE_LGT_H

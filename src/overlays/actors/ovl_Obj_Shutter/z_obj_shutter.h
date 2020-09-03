@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SHUTTER_H_
-#define _Z_OBJ_SHUTTER_H_
+#ifndef Z_OBJ_SHUTTER_H
+#define Z_OBJ_SHUTTER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjShutter {
 
 extern const ActorInit Obj_Shutter_InitVars;
 
-#endif
+#endif // Z_OBJ_SHUTTER_H

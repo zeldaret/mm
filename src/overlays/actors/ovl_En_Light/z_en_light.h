@@ -1,5 +1,5 @@
-#ifndef _Z_EN_LIGHT_H_
-#define _Z_EN_LIGHT_H_
+#ifndef Z_EN_LIGHT_H
+#define Z_EN_LIGHT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnLight {
 
 extern const ActorInit En_Light_InitVars;
 
-#endif
+#endif // Z_EN_LIGHT_H

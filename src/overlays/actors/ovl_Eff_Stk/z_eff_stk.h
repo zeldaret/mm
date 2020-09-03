@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_STK_H_
-#define _Z_EFF_STK_H_
+#ifndef Z_EFF_STK_H
+#define Z_EFF_STK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffStk {
 
 extern const ActorInit Eff_Stk_InitVars;
 
-#endif
+#endif // Z_EFF_STK_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_ZORABAND_H_
-#define _Z_EFF_ZORABAND_H_
+#ifndef Z_EFF_ZORABAND_H
+#define Z_EFF_ZORABAND_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffZoraband {
 
 extern const ActorInit Eff_Zoraband_InitVars;
 
-#endif
+#endif // Z_EFF_ZORABAND_H

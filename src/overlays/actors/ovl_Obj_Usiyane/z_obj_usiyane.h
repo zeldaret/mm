@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_USIYANE_H_
-#define _Z_OBJ_USIYANE_H_
+#ifndef Z_OBJ_USIYANE_H
+#define Z_OBJ_USIYANE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjUsiyane {
 
 extern const ActorInit Obj_Usiyane_InitVars;
 
-#endif
+#endif // Z_OBJ_USIYANE_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_OT_H_
-#define _Z_EN_OT_H_
+#ifndef Z_EN_OT_H
+#define Z_EN_OT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnOt {
 
 extern const ActorInit En_Ot_InitVars;
 
-#endif
+#endif // Z_EN_OT_H

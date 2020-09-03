@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_COMB_H_
-#define _Z_OBJ_COMB_H_
+#ifndef Z_OBJ_COMB_H
+#define Z_OBJ_COMB_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjComb {
 
 extern const ActorInit Obj_Comb_InitVars;
 
-#endif
+#endif // Z_OBJ_COMB_H

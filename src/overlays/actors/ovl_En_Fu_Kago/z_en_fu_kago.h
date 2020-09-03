@@ -1,5 +1,5 @@
-#ifndef _Z_EN_FU_KAGO_H_
-#define _Z_EN_FU_KAGO_H_
+#ifndef Z_EN_FU_KAGO_H
+#define Z_EN_FU_KAGO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnFuKago {
 
 extern const ActorInit En_Fu_Kago_InitVars;
 
-#endif
+#endif // Z_EN_FU_KAGO_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_DORA_H_
-#define _Z_OBJ_DORA_H_
+#ifndef Z_OBJ_DORA_H
+#define Z_OBJ_DORA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjDora {
 
 extern const ActorInit Obj_Dora_InitVars;
 
-#endif
+#endif // Z_OBJ_DORA_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TOGE_H_
-#define _Z_OBJ_TOGE_H_
+#ifndef Z_OBJ_TOGE_H
+#define Z_OBJ_TOGE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjToge {
 
 extern const ActorInit Obj_Toge_InitVars;
 
-#endif
+#endif // Z_OBJ_TOGE_H

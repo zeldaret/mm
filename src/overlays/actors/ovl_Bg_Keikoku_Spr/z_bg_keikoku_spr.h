@@ -1,5 +1,5 @@
-#ifndef _Z_BG_KEIKOKU_SPR_H_
-#define _Z_BG_KEIKOKU_SPR_H_
+#ifndef Z_BG_KEIKOKU_SPR_H
+#define Z_BG_KEIKOKU_SPR_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct BgKeikokuSpr {
 
 extern const ActorInit Bg_Keikoku_Spr_InitVars;
 
-#endif
+#endif // Z_BG_KEIKOKU_SPR_H

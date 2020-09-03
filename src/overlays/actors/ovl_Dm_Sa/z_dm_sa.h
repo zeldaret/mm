@@ -1,5 +1,5 @@
-#ifndef _Z_DM_SA_H_
-#define _Z_DM_SA_H_
+#ifndef Z_DM_SA_H
+#define Z_DM_SA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmSa {
 
 extern const ActorInit Dm_Sa_InitVars;
 
-#endif
+#endif // Z_DM_SA_H

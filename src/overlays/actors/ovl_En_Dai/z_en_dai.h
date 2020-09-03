@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DAI_H_
-#define _Z_EN_DAI_H_
+#ifndef Z_EN_DAI_H
+#define Z_EN_DAI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDai {
 
 extern const ActorInit En_Dai_InitVars;
 
-#endif
+#endif // Z_EN_DAI_H

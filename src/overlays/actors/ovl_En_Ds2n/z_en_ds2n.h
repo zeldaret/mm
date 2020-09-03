@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DS2N_H_
-#define _Z_EN_DS2N_H_
+#ifndef Z_EN_DS2N_H
+#define Z_EN_DS2N_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDs2n {
 
 extern const ActorInit En_Ds2n_InitVars;
 
-#endif
+#endif // Z_EN_DS2N_H

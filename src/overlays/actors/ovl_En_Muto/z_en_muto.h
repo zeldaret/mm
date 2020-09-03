@@ -1,5 +1,5 @@
-#ifndef _Z_EN_MUTO_H_
-#define _Z_EN_MUTO_H_
+#ifndef Z_EN_MUTO_H
+#define Z_EN_MUTO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnMuto {
 
 extern const ActorInit En_Muto_InitVars;
 
-#endif
+#endif // Z_EN_MUTO_H

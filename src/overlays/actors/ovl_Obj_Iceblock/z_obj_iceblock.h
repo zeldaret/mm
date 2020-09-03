@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ICEBLOCK_H_
-#define _Z_OBJ_ICEBLOCK_H_
+#ifndef Z_OBJ_ICEBLOCK_H
+#define Z_OBJ_ICEBLOCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjIceblock {
 
 extern const ActorInit Obj_Iceblock_InitVars;
 
-#endif
+#endif // Z_OBJ_ICEBLOCK_H

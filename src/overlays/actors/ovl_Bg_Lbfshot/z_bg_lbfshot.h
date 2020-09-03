@@ -1,5 +1,5 @@
-#ifndef _Z_BG_LBFSHOT_H_
-#define _Z_BG_LBFSHOT_H_
+#ifndef Z_BG_LBFSHOT_H
+#define Z_BG_LBFSHOT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgLbfshot {
 
 extern const ActorInit Bg_Lbfshot_InitVars;
 
-#endif
+#endif // Z_BG_LBFSHOT_H

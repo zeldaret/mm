@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SYATEKI_DEKUNUTS_H_
-#define _Z_EN_SYATEKI_DEKUNUTS_H_
+#ifndef Z_EN_SYATEKI_DEKUNUTS_H
+#define Z_EN_SYATEKI_DEKUNUTS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSyatekiDekunuts {
 
 extern const ActorInit En_Syateki_Dekunuts_InitVars;
 
-#endif
+#endif // Z_EN_SYATEKI_DEKUNUTS_H

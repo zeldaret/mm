@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TORCH_H_
-#define _Z_EN_TORCH_H_
+#ifndef Z_EN_TORCH_H
+#define Z_EN_TORCH_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct EnTorch {
 
 extern const ActorInit En_Torch_InitVars;
 
-#endif
+#endif // Z_EN_TORCH_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_JG_H_
-#define _Z_EN_JG_H_
+#ifndef Z_EN_JG_H
+#define Z_EN_JG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnJg {
 
 extern const ActorInit En_Jg_InitVars;
 
-#endif
+#endif // Z_EN_JG_H

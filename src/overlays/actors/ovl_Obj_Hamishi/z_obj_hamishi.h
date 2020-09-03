@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_HAMISHI_H_
-#define _Z_OBJ_HAMISHI_H_
+#ifndef Z_OBJ_HAMISHI_H
+#define Z_OBJ_HAMISHI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjHamishi {
 
 extern const ActorInit Obj_Hamishi_InitVars;
 
-#endif
+#endif // Z_OBJ_HAMISHI_H

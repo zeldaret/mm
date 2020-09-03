@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BAL_H_
-#define _Z_EN_BAL_H_
+#ifndef Z_EN_BAL_H
+#define Z_EN_BAL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBal {
 
 extern const ActorInit En_Bal_InitVars;
 
-#endif
+#endif // Z_EN_BAL_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_PURIFY_H_
-#define _Z_OBJ_PURIFY_H_
+#ifndef Z_OBJ_PURIFY_H
+#define Z_OBJ_PURIFY_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjPurify {
 
 extern const ActorInit Obj_Purify_InitVars;
 
-#endif
+#endif // Z_OBJ_PURIFY_H

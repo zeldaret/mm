@@ -1,5 +1,5 @@
-#ifndef _Z_EN_JSO_H_
-#define _Z_EN_JSO_H_
+#ifndef Z_EN_JSO_H
+#define Z_EN_JSO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnJso {
 
 extern const ActorInit En_Jso_InitVars;
 
-#endif
+#endif // Z_EN_JSO_H

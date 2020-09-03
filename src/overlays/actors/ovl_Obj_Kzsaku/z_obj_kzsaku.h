@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_KZSAKU_H_
-#define _Z_OBJ_KZSAKU_H_
+#ifndef Z_OBJ_KZSAKU_H
+#define Z_OBJ_KZSAKU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjKzsaku {
 
 extern const ActorInit Obj_Kzsaku_InitVars;
 
-#endif
+#endif // Z_OBJ_KZSAKU_H

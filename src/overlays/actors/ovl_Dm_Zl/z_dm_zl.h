@@ -1,5 +1,5 @@
-#ifndef _Z_DM_ZL_H_
-#define _Z_DM_ZL_H_
+#ifndef Z_DM_ZL_H
+#define Z_DM_ZL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmZl {
 
 extern const ActorInit Dm_Zl_InitVars;
 
-#endif
+#endif // Z_DM_ZL_H

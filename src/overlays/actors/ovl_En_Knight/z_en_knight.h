@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KNIGHT_H_
-#define _Z_EN_KNIGHT_H_
+#ifndef Z_EN_KNIGHT_H
+#define Z_EN_KNIGHT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKnight {
 
 extern const ActorInit En_Knight_InitVars;
 
-#endif
+#endif // Z_EN_KNIGHT_H

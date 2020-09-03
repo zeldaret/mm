@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKANA_RAY_H_
-#define _Z_BG_IKANA_RAY_H_
+#ifndef Z_BG_IKANA_RAY_H
+#define Z_BG_IKANA_RAY_H
 
 #include <global.h>
 
@@ -14,4 +14,4 @@ typedef struct BgIkanaRay {
 
 extern const ActorInit Bg_Ikana_Ray_InitVars;
 
-#endif
+#endif // Z_BG_IKANA_RAY_H

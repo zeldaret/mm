@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DNK_H_
-#define _Z_EN_DNK_H_
+#ifndef Z_EN_DNK_H
+#define Z_EN_DNK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDnk {
 
 extern const ActorInit En_Dnk_InitVars;
 
-#endif
+#endif // Z_EN_DNK_H

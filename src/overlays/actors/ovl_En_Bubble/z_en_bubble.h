@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BUBBLE_H_
-#define _Z_EN_BUBBLE_H_
+#ifndef Z_EN_BUBBLE_H
+#define Z_EN_BUBBLE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBubble {
 
 extern const ActorInit En_Bubble_InitVars;
 
-#endif
+#endif // Z_EN_BUBBLE_H

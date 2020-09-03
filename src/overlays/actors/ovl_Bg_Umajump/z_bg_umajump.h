@@ -1,5 +1,5 @@
-#ifndef _Z_BG_UMAJUMP_H_
-#define _Z_BG_UMAJUMP_H_
+#ifndef Z_BG_UMAJUMP_H
+#define Z_BG_UMAJUMP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgUmajump {
 
 extern const ActorInit Bg_Umajump_InitVars;
 
-#endif
+#endif // Z_BG_UMAJUMP_H

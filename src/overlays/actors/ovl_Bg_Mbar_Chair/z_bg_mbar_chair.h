@@ -1,5 +1,5 @@
-#ifndef _Z_BG_MBAR_CHAIR_H_
-#define _Z_BG_MBAR_CHAIR_H_
+#ifndef Z_BG_MBAR_CHAIR_H
+#define Z_BG_MBAR_CHAIR_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgMbarChair {
 
 extern const ActorInit Bg_Mbar_Chair_InitVars;
 
-#endif
+#endif // Z_BG_MBAR_CHAIR_H

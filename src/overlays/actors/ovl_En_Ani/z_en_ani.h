@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ANI_H_
-#define _Z_EN_ANI_H_
+#ifndef Z_EN_ANI_H
+#define Z_EN_ANI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnAni {
 
 extern const ActorInit En_Ani_InitVars;
 
-#endif
+#endif // Z_EN_ANI_H

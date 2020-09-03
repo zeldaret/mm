@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_HSSTUMP_H_
-#define _Z_OBJ_HSSTUMP_H_
+#ifndef Z_OBJ_HSSTUMP_H
+#define Z_OBJ_HSSTUMP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjHsStump {
 
 extern const ActorInit Obj_HsStump_InitVars;
 
-#endif
+#endif // Z_OBJ_HSSTUMP_H

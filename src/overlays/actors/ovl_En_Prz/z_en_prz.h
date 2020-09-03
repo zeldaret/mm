@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PRZ_H_
-#define _Z_EN_PRZ_H_
+#ifndef Z_EN_PRZ_H
+#define Z_EN_PRZ_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPrz {
 
 extern const ActorInit En_Prz_InitVars;
 
-#endif
+#endif // Z_EN_PRZ_H

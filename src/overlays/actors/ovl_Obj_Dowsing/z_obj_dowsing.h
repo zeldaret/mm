@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_DOWSING_H_
-#define _Z_OBJ_DOWSING_H_
+#ifndef Z_OBJ_DOWSING_H
+#define Z_OBJ_DOWSING_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct ObjDowsing {
 
 extern const ActorInit Obj_Dowsing_InitVars;
 
-#endif
+#endif // Z_OBJ_DOWSING_H

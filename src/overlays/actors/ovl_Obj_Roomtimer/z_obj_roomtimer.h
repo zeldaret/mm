@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ROOMTIMER_H_
-#define _Z_OBJ_ROOMTIMER_H_
+#ifndef Z_OBJ_ROOMTIMER_H
+#define Z_OBJ_ROOMTIMER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjRoomtimer {
 
 extern const ActorInit Obj_Roomtimer_InitVars;
 
-#endif
+#endif // Z_OBJ_ROOMTIMER_H

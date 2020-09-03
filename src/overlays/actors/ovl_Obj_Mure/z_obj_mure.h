@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_MURE_H_
-#define _Z_OBJ_MURE_H_
+#ifndef Z_OBJ_MURE_H
+#define Z_OBJ_MURE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjMure {
 
 extern const ActorInit Obj_Mure_InitVars;
 
-#endif
+#endif // Z_OBJ_MURE_H

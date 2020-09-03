@@ -1,5 +1,5 @@
-#ifndef _Z_EN_INVADEPOH_H_
-#define _Z_EN_INVADEPOH_H_
+#ifndef Z_EN_INVADEPOH_H
+#define Z_EN_INVADEPOH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnInvadepoh {
 
 extern const ActorInit En_Invadepoh_InitVars;
 
-#endif
+#endif // Z_EN_INVADEPOH_H

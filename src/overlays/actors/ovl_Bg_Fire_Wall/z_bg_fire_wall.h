@@ -1,5 +1,5 @@
-#ifndef _Z_BG_FIRE_WALL_H_
-#define _Z_BG_FIRE_WALL_H_
+#ifndef Z_BG_FIRE_WALL_H
+#define Z_BG_FIRE_WALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgFireWall {
 
 extern const ActorInit Bg_Fire_Wall_InitVars;
 
-#endif
+#endif // Z_BG_FIRE_WALL_H

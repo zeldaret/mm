@@ -1,5 +1,5 @@
-#ifndef _Z_BG_HAKA_BOMBWALL_H_
-#define _Z_BG_HAKA_BOMBWALL_H_
+#ifndef Z_BG_HAKA_BOMBWALL_H
+#define Z_BG_HAKA_BOMBWALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgHakaBombwall {
 
 extern const ActorInit Bg_Haka_Bombwall_InitVars;
 
-#endif
+#endif // Z_BG_HAKA_BOMBWALL_H

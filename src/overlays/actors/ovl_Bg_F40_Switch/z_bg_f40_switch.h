@@ -1,5 +1,5 @@
-#ifndef _Z_BG_F40_SWITCH_H_
-#define _Z_BG_F40_SWITCH_H_
+#ifndef Z_BG_F40_SWITCH_H
+#define Z_BG_F40_SWITCH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgF40Switch {
 
 extern const ActorInit Bg_F40_Switch_InitVars;
 
-#endif
+#endif // Z_BG_F40_SWITCH_H

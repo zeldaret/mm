@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PR2_H_
-#define _Z_EN_PR2_H_
+#ifndef Z_EN_PR2_H
+#define Z_EN_PR2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPr2 {
 
 extern const ActorInit En_Pr2_InitVars;
 
-#endif
+#endif // Z_EN_PR2_H

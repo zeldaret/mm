@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BOMBAL_H_
-#define _Z_EN_BOMBAL_H_
+#ifndef Z_EN_BOMBAL_H
+#define Z_EN_BOMBAL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBombal {
 
 extern const ActorInit En_Bombal_InitVars;
 
-#endif
+#endif // Z_EN_BOMBAL_H

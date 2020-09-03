@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HIDDEN_NUTS_H_
-#define _Z_EN_HIDDEN_NUTS_H_
+#ifndef Z_EN_HIDDEN_NUTS_H
+#define Z_EN_HIDDEN_NUTS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHiddenNuts {
 
 extern const ActorInit En_Hidden_Nuts_InitVars;
 
-#endif
+#endif // Z_EN_HIDDEN_NUTS_H

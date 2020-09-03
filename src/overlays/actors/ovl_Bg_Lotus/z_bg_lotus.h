@@ -1,5 +1,5 @@
-#ifndef _Z_BG_LOTUS_H_
-#define _Z_BG_LOTUS_H_
+#ifndef Z_BG_LOTUS_H
+#define Z_BG_LOTUS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgLotus {
 
 extern const ActorInit Bg_Lotus_InitVars;
 
-#endif
+#endif // Z_BG_LOTUS_H

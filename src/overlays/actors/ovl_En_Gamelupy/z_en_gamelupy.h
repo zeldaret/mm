@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GAMELUPY_H_
-#define _Z_EN_GAMELUPY_H_
+#ifndef Z_EN_GAMELUPY_H
+#define Z_EN_GAMELUPY_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGamelupy {
 
 extern const ActorInit En_Gamelupy_InitVars;
 
-#endif
+#endif // Z_EN_GAMELUPY_H

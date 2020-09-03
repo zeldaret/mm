@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_GETITEM_H_
-#define _Z_DEMO_GETITEM_H_
+#ifndef Z_DEMO_GETITEM_H
+#define Z_DEMO_GETITEM_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoGetitem {
 
 extern const ActorInit Demo_Getitem_InitVars;
 
-#endif
+#endif // Z_DEMO_GETITEM_H

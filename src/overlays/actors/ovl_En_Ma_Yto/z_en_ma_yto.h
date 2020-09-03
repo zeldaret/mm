@@ -1,5 +1,5 @@
-#ifndef _Z_EN_MA_YTO_H_
-#define _Z_EN_MA_YTO_H_
+#ifndef Z_EN_MA_YTO_H
+#define Z_EN_MA_YTO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnMaYto {
 
 extern const ActorInit En_Ma_Yto_InitVars;
 
-#endif
+#endif // Z_EN_MA_YTO_H

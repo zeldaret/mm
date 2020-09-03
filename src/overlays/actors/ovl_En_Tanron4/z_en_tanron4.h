@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TANRON4_H_
-#define _Z_EN_TANRON4_H_
+#ifndef Z_EN_TANRON4_H
+#define Z_EN_TANRON4_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTanron4 {
 
 extern const ActorInit En_Tanron4_InitVars;
 
-#endif
+#endif // Z_EN_TANRON4_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKANA_SHUTTER_H_
-#define _Z_BG_IKANA_SHUTTER_H_
+#ifndef Z_BG_IKANA_SHUTTER_H
+#define Z_BG_IKANA_SHUTTER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIkanaShutter {
 
 extern const ActorInit Bg_Ikana_Shutter_InitVars;
 
-#endif
+#endif // Z_BG_IKANA_SHUTTER_H

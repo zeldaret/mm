@@ -1,5 +1,5 @@
-#ifndef _Z_EN_COW_H_
-#define _Z_EN_COW_H_
+#ifndef Z_EN_COW_H
+#define Z_EN_COW_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnCow {
 
 extern const ActorInit En_Cow_InitVars;
 
-#endif
+#endif // Z_EN_COW_H

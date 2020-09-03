@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TOKEI_TOBIRA_H_
-#define _Z_OBJ_TOKEI_TOBIRA_H_
+#ifndef Z_OBJ_TOKEI_TOBIRA_H
+#define Z_OBJ_TOKEI_TOBIRA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjTokeiTobira {
 
 extern const ActorInit Obj_Tokei_Tobira_InitVars;
 
-#endif
+#endif // Z_OBJ_TOKEI_TOBIRA_H

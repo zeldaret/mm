@@ -1,5 +1,5 @@
-#ifndef _Z_EN_RECEPGIRL_H_
-#define _Z_EN_RECEPGIRL_H_
+#ifndef Z_EN_RECEPGIRL_H
+#define Z_EN_RECEPGIRL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnRecepgirl {
 
 extern const ActorInit En_Recepgirl_InitVars;
 
-#endif
+#endif // Z_EN_RECEPGIRL_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_BOYO_H_
-#define _Z_OBJ_BOYO_H_
+#ifndef Z_OBJ_BOYO_H
+#define Z_OBJ_BOYO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjBoyo {
 
 extern const ActorInit Obj_Boyo_InitVars;
 
-#endif
+#endif // Z_OBJ_BOYO_H

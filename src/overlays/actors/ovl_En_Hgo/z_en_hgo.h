@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HGO_H_
-#define _Z_EN_HGO_H_
+#ifndef Z_EN_HGO_H
+#define Z_EN_HGO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHgo {
 
 extern const ActorInit En_Hgo_InitVars;
 
-#endif
+#endif // Z_EN_HGO_H

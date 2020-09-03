@@ -1,5 +1,5 @@
-#ifndef _Z_ITEM_INBOX_H_
-#define _Z_ITEM_INBOX_H_
+#ifndef Z_ITEM_INBOX_H
+#define Z_ITEM_INBOX_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ItemInbox {
 
 extern const ActorInit Item_Inbox_InitVars;
 
-#endif
+#endif // Z_ITEM_INBOX_H

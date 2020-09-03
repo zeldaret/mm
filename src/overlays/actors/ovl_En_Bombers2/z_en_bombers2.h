@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BOMBERS2_H_
-#define _Z_EN_BOMBERS2_H_
+#ifndef Z_EN_BOMBERS2_H
+#define Z_EN_BOMBERS2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBombers2 {
 
 extern const ActorInit En_Bombers2_InitVars;
 
-#endif
+#endif // Z_EN_BOMBERS2_H

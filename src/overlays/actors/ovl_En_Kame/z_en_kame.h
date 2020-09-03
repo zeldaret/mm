@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KAME_H_
-#define _Z_EN_KAME_H_
+#ifndef Z_EN_KAME_H
+#define Z_EN_KAME_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKame {
 
 extern const ActorInit En_Kame_InitVars;
 
-#endif
+#endif // Z_EN_KAME_H

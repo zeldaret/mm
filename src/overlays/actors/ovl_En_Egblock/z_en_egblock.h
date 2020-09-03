@@ -1,5 +1,5 @@
-#ifndef _Z_EN_EGBLOCK_H_
-#define _Z_EN_EGBLOCK_H_
+#ifndef Z_EN_EGBLOCK_H
+#define Z_EN_EGBLOCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnEgblock {
 
 extern const ActorInit En_Egblock_InitVars;
 
-#endif
+#endif // Z_EN_EGBLOCK_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TEST3_H_
-#define _Z_EN_TEST3_H_
+#ifndef Z_EN_TEST3_H
+#define Z_EN_TEST3_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTest3 {
 
 extern const ActorInit En_Test3_InitVars;
 
-#endif
+#endif // Z_EN_TEST3_H

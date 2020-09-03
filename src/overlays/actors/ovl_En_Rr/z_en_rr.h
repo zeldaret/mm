@@ -1,5 +1,5 @@
-#ifndef _Z_EN_RR_H_
-#define _Z_EN_RR_H_
+#ifndef Z_EN_RR_H
+#define Z_EN_RR_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnRr {
 
 extern const ActorInit En_Rr_InitVars;
 
-#endif
+#endif // Z_EN_RR_H

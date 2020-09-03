@@ -1,5 +1,5 @@
-#ifndef _Z_EN_INVISIBLE_RUPPE_H_
-#define _Z_EN_INVISIBLE_RUPPE_H_
+#ifndef Z_EN_INVISIBLE_RUPPE_H
+#define Z_EN_INVISIBLE_RUPPE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnInvisibleRuppe {
 
 extern const ActorInit En_Invisible_Ruppe_InitVars;
 
-#endif
+#endif // Z_EN_INVISIBLE_RUPPE_H

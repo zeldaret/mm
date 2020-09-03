@@ -1,5 +1,5 @@
-#ifndef _Z_BG_INGATE_H_
-#define _Z_BG_INGATE_H_
+#ifndef Z_BG_INGATE_H
+#define Z_BG_INGATE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIngate {
 
 extern const ActorInit Bg_Ingate_InitVars;
 
-#endif
+#endif // Z_BG_INGATE_H

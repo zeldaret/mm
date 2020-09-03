@@ -1,5 +1,5 @@
-#ifndef _Z_ARROW_LIGHT_H_
-#define _Z_ARROW_LIGHT_H_
+#ifndef Z_ARROW_LIGHT_H
+#define Z_ARROW_LIGHT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ArrowLight {
 
 extern const ActorInit Arrow_Light_InitVars;
 
-#endif
+#endif // Z_ARROW_LIGHT_H

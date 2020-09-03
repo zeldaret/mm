@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_HGDOOR_H_
-#define _Z_OBJ_HGDOOR_H_
+#ifndef Z_OBJ_HGDOOR_H
+#define Z_OBJ_HGDOOR_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjHgdoor {
 
 extern const ActorInit Obj_Hgdoor_InitVars;
 
-#endif
+#endif // Z_OBJ_HGDOOR_H

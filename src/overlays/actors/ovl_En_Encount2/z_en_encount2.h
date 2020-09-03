@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ENCOUNT2_H_
-#define _Z_EN_ENCOUNT2_H_
+#ifndef Z_EN_ENCOUNT2_H
+#define Z_EN_ENCOUNT2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnEncount2 {
 
 extern const ActorInit En_Encount2_InitVars;
 
-#endif
+#endif // Z_EN_ENCOUNT2_H

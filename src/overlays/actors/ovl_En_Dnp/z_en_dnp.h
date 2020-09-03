@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DNP_H_
-#define _Z_EN_DNP_H_
+#ifndef Z_EN_DNP_H
+#define Z_EN_DNP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDnp {
 
 extern const ActorInit En_Dnp_InitVars;
 
-#endif
+#endif // Z_EN_DNP_H

@@ -1,5 +1,5 @@
-#ifndef _Z_ITEM_ETCETERA_H_
-#define _Z_ITEM_ETCETERA_H_
+#ifndef Z_ITEM_ETCETERA_H
+#define Z_ITEM_ETCETERA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ItemEtcetera {
 
 extern const ActorInit Item_Etcetera_InitVars;
 
-#endif
+#endif // Z_ITEM_ETCETERA_H

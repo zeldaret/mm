@@ -1,5 +1,5 @@
-#ifndef _Z_EN_RUPPECROW_H_
-#define _Z_EN_RUPPECROW_H_
+#ifndef Z_EN_RUPPECROW_H
+#define Z_EN_RUPPECROW_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnRuppecrow {
 
 extern const ActorInit En_Ruppecrow_InitVars;
 
-#endif
+#endif // Z_EN_RUPPECROW_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_JGAME_LIGHT_H_
-#define _Z_OBJ_JGAME_LIGHT_H_
+#ifndef Z_OBJ_JGAME_LIGHT_H
+#define Z_OBJ_JGAME_LIGHT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjJgameLight {
 
 extern const ActorInit Obj_Jgame_Light_InitVars;
 
-#endif
+#endif // Z_OBJ_JGAME_LIGHT_H

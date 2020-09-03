@@ -1,5 +1,5 @@
-#ifndef _Z_SHOT_SUN_H_
-#define _Z_SHOT_SUN_H_
+#ifndef Z_SHOT_SUN_H
+#define Z_SHOT_SUN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ShotSun {
 
 extern const ActorInit Shot_Sun_InitVars;
 
-#endif
+#endif // Z_SHOT_SUN_H

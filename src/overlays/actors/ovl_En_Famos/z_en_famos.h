@@ -1,5 +1,5 @@
-#ifndef _Z_EN_FAMOS_H_
-#define _Z_EN_FAMOS_H_
+#ifndef Z_EN_FAMOS_H
+#define Z_EN_FAMOS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnFamos {
 
 extern const ActorInit En_Famos_InitVars;
 
-#endif
+#endif // Z_EN_FAMOS_H

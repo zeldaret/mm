@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KANBAN_H_
-#define _Z_EN_KANBAN_H_
+#ifndef Z_EN_KANBAN_H
+#define Z_EN_KANBAN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKanban {
 
 extern const ActorInit En_Kanban_InitVars;
 
-#endif
+#endif // Z_EN_KANBAN_H

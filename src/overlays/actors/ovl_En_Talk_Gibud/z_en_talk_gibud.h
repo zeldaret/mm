@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TALK_GIBUD_H_
-#define _Z_EN_TALK_GIBUD_H_
+#ifndef Z_EN_TALK_GIBUD_H
+#define Z_EN_TALK_GIBUD_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTalkGibud {
 
 extern const ActorInit En_Talk_Gibud_InitVars;
 
-#endif
+#endif // Z_EN_TALK_GIBUD_H

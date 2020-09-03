@@ -1,5 +1,5 @@
-#ifndef _Z_DM_AH_H_
-#define _Z_DM_AH_H_
+#ifndef Z_DM_AH_H
+#define Z_DM_AH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmAh {
 
 extern const ActorInit Dm_Ah_InitVars;
 
-#endif
+#endif // Z_DM_AH_H

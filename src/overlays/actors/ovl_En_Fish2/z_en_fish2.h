@@ -1,5 +1,5 @@
-#ifndef _Z_EN_FISH2_H_
-#define _Z_EN_FISH2_H_
+#ifndef Z_EN_FISH2_H
+#define Z_EN_FISH2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnFish2 {
 
 extern const ActorInit En_Fish2_InitVars;
 
-#endif
+#endif // Z_EN_FISH2_H

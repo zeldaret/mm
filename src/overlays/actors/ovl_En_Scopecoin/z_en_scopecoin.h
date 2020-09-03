@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SCOPECOIN_H_
-#define _Z_EN_SCOPECOIN_H_
+#ifndef Z_EN_SCOPECOIN_H
+#define Z_EN_SCOPECOIN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnScopecoin {
 
 extern const ActorInit En_Scopecoin_InitVars;
 
-#endif
+#endif // Z_EN_SCOPECOIN_H

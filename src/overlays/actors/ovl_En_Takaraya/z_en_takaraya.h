@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TAKARAYA_H_
-#define _Z_EN_TAKARAYA_H_
+#ifndef Z_EN_TAKARAYA_H
+#define Z_EN_TAKARAYA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTakaraya {
 
 extern const ActorInit En_Takaraya_InitVars;
 
-#endif
+#endif // Z_EN_TAKARAYA_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKNIN_SUSCEIL_H_
-#define _Z_BG_IKNIN_SUSCEIL_H_
+#ifndef Z_BG_IKNIN_SUSCEIL_H
+#define Z_BG_IKNIN_SUSCEIL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIkninSusceil {
 
 extern const ActorInit Bg_Iknin_Susceil_InitVars;
 
-#endif
+#endif // Z_BG_IKNIN_SUSCEIL_H

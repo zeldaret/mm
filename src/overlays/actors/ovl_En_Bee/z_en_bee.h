@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BEE_H_
-#define _Z_EN_BEE_H_
+#ifndef Z_EN_BEE_H
+#define Z_EN_BEE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBee {
 
 extern const ActorInit En_Bee_InitVars;
 
-#endif
+#endif // Z_EN_BEE_H

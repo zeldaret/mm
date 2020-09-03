@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_DANPEILIFT_H_
-#define _Z_OBJ_DANPEILIFT_H_
+#ifndef Z_OBJ_DANPEILIFT_H
+#define Z_OBJ_DANPEILIFT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjDanpeilift {
 
 extern const ActorInit Obj_Danpeilift_InitVars;
 
-#endif
+#endif // Z_OBJ_DANPEILIFT_H

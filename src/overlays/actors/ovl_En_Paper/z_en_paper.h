@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PAPER_H_
-#define _Z_EN_PAPER_H_
+#ifndef Z_EN_PAPER_H
+#define Z_EN_PAPER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPaper {
 
 extern const ActorInit En_Paper_InitVars;
 
-#endif
+#endif // Z_EN_PAPER_H

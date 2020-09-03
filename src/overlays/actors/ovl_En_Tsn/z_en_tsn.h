@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TSN_H_
-#define _Z_EN_TSN_H_
+#ifndef Z_EN_TSN_H
+#define Z_EN_TSN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTsn {
 
 extern const ActorInit En_Tsn_InitVars;
 
-#endif
+#endif // Z_EN_TSN_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TIME_TAG_H_
-#define _Z_EN_TIME_TAG_H_
+#ifndef Z_EN_TIME_TAG_H
+#define Z_EN_TIME_TAG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTimeTag {
 
 extern const ActorInit En_Time_Tag_InitVars;
 
-#endif
+#endif // Z_EN_TIME_TAG_H

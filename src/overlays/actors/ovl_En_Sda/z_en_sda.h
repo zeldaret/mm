@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SDA_H_
-#define _Z_EN_SDA_H_
+#ifndef Z_EN_SDA_H
+#define Z_EN_SDA_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct EnSda {
 
 extern const ActorInit En_Sda_InitVars;
 
-#endif
+#endif // Z_EN_SDA_H

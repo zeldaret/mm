@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SEKIHI_H_
-#define _Z_EN_SEKIHI_H_
+#ifndef Z_EN_SEKIHI_H
+#define Z_EN_SEKIHI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSekihi {
 
 extern const ActorInit En_Sekihi_InitVars;
 
-#endif
+#endif // Z_EN_SEKIHI_H

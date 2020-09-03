@@ -1,5 +1,5 @@
-#ifndef _Z_EN_AND_H_
-#define _Z_EN_AND_H_
+#ifndef Z_EN_AND_H
+#define Z_EN_AND_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnAnd {
 
 extern const ActorInit En_And_InitVars;
 
-#endif
+#endif // Z_EN_AND_H

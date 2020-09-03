@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BUTTE_H_
-#define _Z_EN_BUTTE_H_
+#ifndef Z_EN_BUTTE_H
+#define Z_EN_BUTTE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnButte {
 
 extern const ActorInit En_Butte_InitVars;
 
-#endif
+#endif // Z_EN_BUTTE_H

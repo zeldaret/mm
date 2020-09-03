@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TSUBO_H_
-#define _Z_OBJ_TSUBO_H_
+#ifndef Z_OBJ_TSUBO_H
+#define Z_OBJ_TSUBO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjTsubo {
 
 extern const ActorInit Obj_Tsubo_InitVars;
 
-#endif
+#endif // Z_OBJ_TSUBO_H

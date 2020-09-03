@@ -1,5 +1,5 @@
-#ifndef _Z_EN_COL_MAN_H_
-#define _Z_EN_COL_MAN_H_
+#ifndef Z_EN_COL_MAN_H
+#define Z_EN_COL_MAN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnColMan {
 
 extern const ActorInit En_Col_Man_InitVars;
 
-#endif
+#endif // Z_EN_COL_MAN_H

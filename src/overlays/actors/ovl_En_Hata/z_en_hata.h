@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HATA_H_
-#define _Z_EN_HATA_H_
+#ifndef Z_EN_HATA_H
+#define Z_EN_HATA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHata {
 
 extern const ActorInit En_Hata_InitVars;
 
-#endif
+#endif // Z_EN_HATA_H

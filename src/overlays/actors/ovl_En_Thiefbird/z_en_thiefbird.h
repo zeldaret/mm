@@ -1,5 +1,5 @@
-#ifndef _Z_EN_THIEFBIRD_H_
-#define _Z_EN_THIEFBIRD_H_
+#ifndef Z_EN_THIEFBIRD_H
+#define Z_EN_THIEFBIRD_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnThiefbird {
 
 extern const ActorInit En_Thiefbird_InitVars;
 
-#endif
+#endif // Z_EN_THIEFBIRD_H

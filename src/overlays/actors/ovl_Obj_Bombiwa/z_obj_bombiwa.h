@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_BOMBIWA_H_
-#define _Z_OBJ_BOMBIWA_H_
+#ifndef Z_OBJ_BOMBIWA_H
+#define Z_OBJ_BOMBIWA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjBombiwa {
 
 extern const ActorInit Obj_Bombiwa_InitVars;
 
-#endif
+#endif // Z_OBJ_BOMBIWA_H

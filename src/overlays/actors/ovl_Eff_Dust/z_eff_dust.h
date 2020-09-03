@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_DUST_H_
-#define _Z_EFF_DUST_H_
+#ifndef Z_EFF_DUST_H
+#define Z_EFF_DUST_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffDust {
 
 extern const ActorInit Eff_Dust_InitVars;
 
-#endif
+#endif // Z_EFF_DUST_H

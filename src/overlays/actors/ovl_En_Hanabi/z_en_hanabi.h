@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HANABI_H_
-#define _Z_EN_HANABI_H_
+#ifndef Z_EN_HANABI_H
+#define Z_EN_HANABI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHanabi {
 
 extern const ActorInit En_Hanabi_InitVars;
 
-#endif
+#endif // Z_EN_HANABI_H

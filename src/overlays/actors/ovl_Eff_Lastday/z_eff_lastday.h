@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_LASTDAY_H_
-#define _Z_EFF_LASTDAY_H_
+#ifndef Z_EFF_LASTDAY_H
+#define Z_EFF_LASTDAY_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffLastday {
 
 extern const ActorInit Eff_Lastday_InitVars;
 
-#endif
+#endif // Z_EFF_LASTDAY_H

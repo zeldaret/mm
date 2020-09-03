@@ -1,5 +1,5 @@
-#ifndef _Z_BOSS_03_H_
-#define _Z_BOSS_03_H_
+#ifndef Z_BOSS_03_H
+#define Z_BOSS_03_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct Boss03 {
 
 extern const ActorInit Boss_03_InitVars;
 
-#endif
+#endif // Z_BOSS_03_H

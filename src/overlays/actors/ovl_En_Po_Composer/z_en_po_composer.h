@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PO_COMPOSER_H_
-#define _Z_EN_PO_COMPOSER_H_
+#ifndef Z_EN_PO_COMPOSER_H
+#define Z_EN_PO_COMPOSER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPoComposer {
 
 extern const ActorInit En_Po_Composer_InitVars;
 
-#endif
+#endif // Z_EN_PO_COMPOSER_H

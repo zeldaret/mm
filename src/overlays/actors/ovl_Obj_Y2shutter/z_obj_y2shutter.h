@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_Y2SHUTTER_H_
-#define _Z_OBJ_Y2SHUTTER_H_
+#ifndef Z_OBJ_Y2SHUTTER_H
+#define Z_OBJ_Y2SHUTTER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjY2shutter {
 
 extern const ActorInit Obj_Y2shutter_InitVars;
 
-#endif
+#endif // Z_OBJ_Y2SHUTTER_H

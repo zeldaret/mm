@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_BOAT_H_
-#define _Z_OBJ_BOAT_H_
+#ifndef Z_OBJ_BOAT_H
+#define Z_OBJ_BOAT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjBoat {
 
 extern const ActorInit Obj_Boat_InitVars;
 
-#endif
+#endif // Z_OBJ_BOAT_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ETCETERA_H_
-#define _Z_OBJ_ETCETERA_H_
+#ifndef Z_OBJ_ETCETERA_H
+#define Z_OBJ_ETCETERA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjEtcetera {
 
 extern const ActorInit Obj_Etcetera_InitVars;
 
-#endif
+#endif // Z_OBJ_ETCETERA_H

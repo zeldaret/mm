@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PST_H_
-#define _Z_EN_PST_H_
+#ifndef Z_EN_PST_H
+#define Z_EN_PST_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPst {
 
 extern const ActorInit En_Pst_InitVars;
 
-#endif
+#endif // Z_EN_PST_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DOOR_ETC_H_
-#define _Z_EN_DOOR_ETC_H_
+#ifndef Z_EN_DOOR_ETC_H
+#define Z_EN_DOOR_ETC_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDoorEtc {
 
 extern const ActorInit En_Door_Etc_InitVars;
 
-#endif
+#endif // Z_EN_DOOR_ETC_H

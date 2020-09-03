@@ -1,5 +1,5 @@
-#ifndef _Z_BG_FU_KAITEN_H_
-#define _Z_BG_FU_KAITEN_H_
+#ifndef Z_BG_FU_KAITEN_H
+#define Z_BG_FU_KAITEN_H
 
 #include <global.h>
 
@@ -18,4 +18,4 @@ typedef struct BgFuKaiten {
 
 extern const ActorInit Bg_Fu_Kaiten_InitVars;
 
-#endif
+#endif // Z_BG_FU_KAITEN_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TOUDAI_H_
-#define _Z_OBJ_TOUDAI_H_
+#ifndef Z_OBJ_TOUDAI_H
+#define Z_OBJ_TOUDAI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjToudai {
 
 extern const ActorInit Obj_Toudai_InitVars;
 
-#endif
+#endif // Z_OBJ_TOUDAI_H

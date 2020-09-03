@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KUJIYA_H_
-#define _Z_EN_KUJIYA_H_
+#ifndef Z_EN_KUJIYA_H
+#define Z_EN_KUJIYA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKujiya {
 
 extern const ActorInit En_Kujiya_InitVars;
 
-#endif
+#endif // Z_EN_KUJIYA_H

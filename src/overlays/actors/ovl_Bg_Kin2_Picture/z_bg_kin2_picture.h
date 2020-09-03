@@ -1,5 +1,5 @@
-#ifndef _Z_BG_KIN2_PICTURE_H_
-#define _Z_BG_KIN2_PICTURE_H_
+#ifndef Z_BG_KIN2_PICTURE_H
+#define Z_BG_KIN2_PICTURE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgKin2Picture {
 
 extern const ActorInit Bg_Kin2_Picture_InitVars;
 
-#endif
+#endif // Z_BG_KIN2_PICTURE_H

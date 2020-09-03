@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_KINOKO_H_
-#define _Z_OBJ_KINOKO_H_
+#ifndef Z_OBJ_KINOKO_H
+#define Z_OBJ_KINOKO_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct ObjKinoko {
 
 extern const ActorInit Obj_Kinoko_InitVars;
 
-#endif
+#endif // Z_OBJ_KINOKO_H

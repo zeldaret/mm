@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_BEAN_H_
-#define _Z_OBJ_BEAN_H_
+#ifndef Z_OBJ_BEAN_H
+#define Z_OBJ_BEAN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjBean {
 
 extern const ActorInit Obj_Bean_InitVars;
 
-#endif
+#endif // Z_OBJ_BEAN_H

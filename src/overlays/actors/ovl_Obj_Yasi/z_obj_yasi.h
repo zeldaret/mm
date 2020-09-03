@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_YASI_H_
-#define _Z_OBJ_YASI_H_
+#ifndef Z_OBJ_YASI_H
+#define Z_OBJ_YASI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjYasi {
 
 extern const ActorInit Obj_Yasi_InitVars;
 
-#endif
+#endif // Z_OBJ_YASI_H

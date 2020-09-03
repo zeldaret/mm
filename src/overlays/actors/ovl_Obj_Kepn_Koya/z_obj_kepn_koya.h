@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_KEPN_KOYA_H_
-#define _Z_OBJ_KEPN_KOYA_H_
+#ifndef Z_OBJ_KEPN_KOYA_H
+#define Z_OBJ_KEPN_KOYA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjKepnKoya {
 
 extern const ActorInit Obj_Kepn_Koya_InitVars;
 
-#endif
+#endif // Z_OBJ_KEPN_KOYA_H

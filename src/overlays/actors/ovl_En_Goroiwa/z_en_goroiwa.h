@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GOROIWA_H_
-#define _Z_EN_GOROIWA_H_
+#ifndef Z_EN_GOROIWA_H
+#define Z_EN_GOROIWA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGoroiwa {
 
 extern const ActorInit En_Goroiwa_InitVars;
 
-#endif
+#endif // Z_EN_GOROIWA_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_ICEFLOE_H_
-#define _Z_BG_ICEFLOE_H_
+#ifndef Z_BG_ICEFLOE_H
+#define Z_BG_ICEFLOE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIcefloe {
 
 extern const ActorInit Bg_Icefloe_InitVars;
 
-#endif
+#endif // Z_BG_ICEFLOE_H

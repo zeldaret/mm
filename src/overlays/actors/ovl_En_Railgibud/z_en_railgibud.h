@@ -1,5 +1,5 @@
-#ifndef _Z_EN_RAILGIBUD_H_
-#define _Z_EN_RAILGIBUD_H_
+#ifndef Z_EN_RAILGIBUD_H
+#define Z_EN_RAILGIBUD_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnRailgibud {
 
 extern const ActorInit En_Railgibud_InitVars;
 
-#endif
+#endif // Z_EN_RAILGIBUD_H

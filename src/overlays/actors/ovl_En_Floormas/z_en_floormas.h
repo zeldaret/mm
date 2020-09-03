@@ -1,5 +1,5 @@
-#ifndef _Z_EN_FLOORMAS_H_
-#define _Z_EN_FLOORMAS_H_
+#ifndef Z_EN_FLOORMAS_H
+#define Z_EN_FLOORMAS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnFloormas {
 
 extern const ActorInit En_Floormas_InitVars;
 
-#endif
+#endif // Z_EN_FLOORMAS_H

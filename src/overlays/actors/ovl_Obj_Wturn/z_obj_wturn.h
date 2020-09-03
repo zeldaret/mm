@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_WTURN_H_
-#define _Z_OBJ_WTURN_H_
+#ifndef Z_OBJ_WTURN_H
+#define Z_OBJ_WTURN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjWturn {
 
 extern const ActorInit Obj_Wturn_InitVars;
 
-#endif
+#endif // Z_OBJ_WTURN_H

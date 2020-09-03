@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_DRIFTICE_H_
-#define _Z_OBJ_DRIFTICE_H_
+#ifndef Z_OBJ_DRIFTICE_H
+#define Z_OBJ_DRIFTICE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjDriftice {
 
 extern const ActorInit Obj_Driftice_InitVars;
 
-#endif
+#endif // Z_OBJ_DRIFTICE_H

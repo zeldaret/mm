@@ -1,5 +1,5 @@
-#ifndef _Z_EN_GURUGURU_H_
-#define _Z_EN_GURUGURU_H_
+#ifndef Z_EN_GURUGURU_H
+#define Z_EN_GURUGURU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnGuruguru {
 
 extern const ActorInit En_Guruguru_InitVars;
 
-#endif
+#endif // Z_EN_GURUGURU_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_LAST_BWALL_H_
-#define _Z_BG_LAST_BWALL_H_
+#ifndef Z_BG_LAST_BWALL_H
+#define Z_BG_LAST_BWALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgLastBwall {
 
 extern const ActorInit Bg_Last_Bwall_InitVars;
 
-#endif
+#endif // Z_BG_LAST_BWALL_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TAKARAYA_WALL_H_
-#define _Z_OBJ_TAKARAYA_WALL_H_
+#ifndef Z_OBJ_TAKARAYA_WALL_H
+#define Z_OBJ_TAKARAYA_WALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjTakarayaWall {
 
 extern const ActorInit Obj_Takaraya_Wall_InitVars;
 
-#endif
+#endif // Z_OBJ_TAKARAYA_WALL_H

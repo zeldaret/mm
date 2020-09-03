@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_MAKEOSHIHIKI_H_
-#define _Z_OBJ_MAKEOSHIHIKI_H_
+#ifndef Z_OBJ_MAKEOSHIHIKI_H
+#define Z_OBJ_MAKEOSHIHIKI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjMakeoshihiki {
 
 extern const ActorInit Obj_Makeoshihiki_InitVars;
 
-#endif
+#endif // Z_OBJ_MAKEOSHIHIKI_H

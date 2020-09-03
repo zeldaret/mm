@@ -1,5 +1,5 @@
-#ifndef _Z_BG_HAKA_CURTAIN_H_
-#define _Z_BG_HAKA_CURTAIN_H_
+#ifndef Z_BG_HAKA_CURTAIN_H
+#define Z_BG_HAKA_CURTAIN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgHakaCurtain {
 
 extern const ActorInit Bg_Haka_Curtain_InitVars;
 
-#endif
+#endif // Z_BG_HAKA_CURTAIN_H

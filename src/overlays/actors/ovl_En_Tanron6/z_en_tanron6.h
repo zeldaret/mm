@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TANRON6_H_
-#define _Z_EN_TANRON6_H_
+#ifndef Z_EN_TANRON6_H
+#define Z_EN_TANRON6_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTanron6 {
 
 extern const ActorInit En_Tanron6_InitVars;
 
-#endif
+#endif // Z_EN_TANRON6_H

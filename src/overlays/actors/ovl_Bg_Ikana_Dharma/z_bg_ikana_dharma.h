@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKANA_DHARMA_H_
-#define _Z_BG_IKANA_DHARMA_H_
+#ifndef Z_BG_IKANA_DHARMA_H
+#define Z_BG_IKANA_DHARMA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIkanaDharma {
 
 extern const ActorInit Bg_Ikana_Dharma_InitVars;
 
-#endif
+#endif // Z_BG_IKANA_DHARMA_H

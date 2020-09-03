@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_WARPSTONE_H_
-#define _Z_OBJ_WARPSTONE_H_
+#ifndef Z_OBJ_WARPSTONE_H
+#define Z_OBJ_WARPSTONE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjWarpstone {
 
 extern const ActorInit Obj_Warpstone_InitVars;
 
-#endif
+#endif // Z_OBJ_WARPSTONE_H

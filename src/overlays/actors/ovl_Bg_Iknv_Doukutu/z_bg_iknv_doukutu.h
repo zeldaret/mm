@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKNV_DOUKUTU_H_
-#define _Z_BG_IKNV_DOUKUTU_H_
+#ifndef Z_BG_IKNV_DOUKUTU_H
+#define Z_BG_IKNV_DOUKUTU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIknvDoukutu {
 
 extern const ActorInit Bg_Iknv_Doukutu_InitVars;
 
-#endif
+#endif // Z_BG_IKNV_DOUKUTU_H

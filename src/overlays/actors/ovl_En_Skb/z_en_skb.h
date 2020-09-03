@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SKB_H_
-#define _Z_EN_SKB_H_
+#ifndef Z_EN_SKB_H
+#define Z_EN_SKB_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSkb {
 
 extern const ActorInit En_Skb_InitVars;
 
-#endif
+#endif // Z_EN_SKB_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SPIDERTENT_H_
-#define _Z_OBJ_SPIDERTENT_H_
+#ifndef Z_OBJ_SPIDERTENT_H
+#define Z_OBJ_SPIDERTENT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjSpidertent {
 
 extern const ActorInit Obj_Spidertent_InitVars;
 
-#endif
+#endif // Z_OBJ_SPIDERTENT_H

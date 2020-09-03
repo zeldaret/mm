@@ -1,5 +1,5 @@
-#ifndef _Z_EN_WATER_EFFECT_H_
-#define _Z_EN_WATER_EFFECT_H_
+#ifndef Z_EN_WATER_EFFECT_H
+#define Z_EN_WATER_EFFECT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnWaterEffect {
 
 extern const ActorInit En_Water_Effect_InitVars;
 
-#endif
+#endif // Z_EN_WATER_EFFECT_H

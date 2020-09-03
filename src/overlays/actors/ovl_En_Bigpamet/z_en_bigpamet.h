@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BIGPAMET_H_
-#define _Z_EN_BIGPAMET_H_
+#ifndef Z_EN_BIGPAMET_H
+#define Z_EN_BIGPAMET_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBigpamet {
 
 extern const ActorInit En_Bigpamet_InitVars;
 
-#endif
+#endif // Z_EN_BIGPAMET_H

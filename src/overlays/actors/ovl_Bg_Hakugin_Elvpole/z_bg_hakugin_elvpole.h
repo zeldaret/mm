@@ -1,5 +1,5 @@
-#ifndef _Z_BG_HAKUGIN_ELVPOLE_H_
-#define _Z_BG_HAKUGIN_ELVPOLE_H_
+#ifndef Z_BG_HAKUGIN_ELVPOLE_H
+#define Z_BG_HAKUGIN_ELVPOLE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgHakuginElvpole {
 
 extern const ActorInit Bg_Hakugin_Elvpole_InitVars;
 
-#endif
+#endif // Z_BG_HAKUGIN_ELVPOLE_H

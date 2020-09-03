@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DNO_H_
-#define _Z_EN_DNO_H_
+#ifndef Z_EN_DNO_H
+#define Z_EN_DNO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDno {
 
 extern const ActorInit En_Dno_InitVars;
 
-#endif
+#endif // Z_EN_DNO_H

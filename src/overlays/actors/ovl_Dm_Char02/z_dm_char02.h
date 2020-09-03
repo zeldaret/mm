@@ -1,5 +1,5 @@
-#ifndef _Z_DM_CHAR02_H_
-#define _Z_DM_CHAR02_H_
+#ifndef Z_DM_CHAR02_H
+#define Z_DM_CHAR02_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmChar02 {
 
 extern const ActorInit Dm_Char02_InitVars;
 
-#endif
+#endif // Z_DM_CHAR02_H

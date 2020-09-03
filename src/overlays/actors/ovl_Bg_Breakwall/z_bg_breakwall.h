@@ -1,5 +1,5 @@
-#ifndef _Z_BG_BREAKWALL_H_
-#define _Z_BG_BREAKWALL_H_
+#ifndef Z_BG_BREAKWALL_H
+#define Z_BG_BREAKWALL_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgBreakwall {
 
 extern const ActorInit Bg_Breakwall_InitVars;
 
-#endif
+#endif // Z_BG_BREAKWALL_H

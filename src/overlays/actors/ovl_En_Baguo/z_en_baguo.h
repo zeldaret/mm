@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BAGUO_H_
-#define _Z_EN_BAGUO_H_
+#ifndef Z_EN_BAGUO_H
+#define Z_EN_BAGUO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBaguo {
 
 extern const ActorInit En_Baguo_InitVars;
 
-#endif
+#endif // Z_EN_BAGUO_H

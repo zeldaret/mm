@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_FUNEN_H_
-#define _Z_OBJ_FUNEN_H_
+#ifndef Z_OBJ_FUNEN_H
+#define Z_OBJ_FUNEN_H
 
 #include <global.h>
 
@@ -11,4 +11,4 @@ typedef struct ObjFunen {
 
 extern const ActorInit Obj_Funen_InitVars;
 
-#endif
+#endif // Z_OBJ_FUNEN_H

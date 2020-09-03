@@ -1,5 +1,5 @@
-#ifndef _Z_BG_GORON_OYU_H_
-#define _Z_BG_GORON_OYU_H_
+#ifndef Z_BG_GORON_OYU_H
+#define Z_BG_GORON_OYU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgGoronOyu {
 
 extern const ActorInit Bg_Goron_Oyu_InitVars;
 
-#endif
+#endif // Z_BG_GORON_OYU_H

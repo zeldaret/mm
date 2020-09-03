@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SWITCH_H_
-#define _Z_OBJ_SWITCH_H_
+#ifndef Z_OBJ_SWITCH_H
+#define Z_OBJ_SWITCH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjSwitch {
 
 extern const ActorInit Obj_Switch_InitVars;
 
-#endif
+#endif // Z_OBJ_SWITCH_H

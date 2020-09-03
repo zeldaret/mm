@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KUSA_H_
-#define _Z_EN_KUSA_H_
+#ifndef Z_EN_KUSA_H
+#define Z_EN_KUSA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKusa {
 
 extern const ActorInit En_Kusa_InitVars;
 
-#endif
+#endif // Z_EN_KUSA_H

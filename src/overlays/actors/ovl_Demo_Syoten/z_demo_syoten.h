@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_SYOTEN_H_
-#define _Z_DEMO_SYOTEN_H_
+#ifndef Z_DEMO_SYOTEN_H
+#define Z_DEMO_SYOTEN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoSyoten {
 
 extern const ActorInit Demo_Syoten_InitVars;
 
-#endif
+#endif // Z_DEMO_SYOTEN_H

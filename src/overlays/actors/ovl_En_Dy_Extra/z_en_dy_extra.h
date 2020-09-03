@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DY_EXTRA_H_
-#define _Z_EN_DY_EXTRA_H_
+#ifndef Z_EN_DY_EXTRA_H
+#define Z_EN_DY_EXTRA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDyExtra {
 
 extern const ActorInit En_Dy_Extra_InitVars;
 
-#endif
+#endif // Z_EN_DY_EXTRA_H

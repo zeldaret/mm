@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ELF_H_
-#define _Z_EN_ELF_H_
+#ifndef Z_EN_ELF_H
+#define Z_EN_ELF_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnElf {
 
 extern const ActorInit En_Elf_InitVars;
 
-#endif
+#endif // Z_EN_ELF_H

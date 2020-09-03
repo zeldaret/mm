@@ -1,5 +1,5 @@
-#ifndef _Z_DOOR_SHUTTER_H_
-#define _Z_DOOR_SHUTTER_H_
+#ifndef Z_DOOR_SHUTTER_H
+#define Z_DOOR_SHUTTER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DoorShutter {
 
 extern const ActorInit Door_Shutter_InitVars;
 
-#endif
+#endif // Z_DOOR_SHUTTER_H

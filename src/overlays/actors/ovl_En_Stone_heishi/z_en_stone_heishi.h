@@ -1,5 +1,5 @@
-#ifndef _Z_EN_STONE_HEISHI_H_
-#define _Z_EN_STONE_HEISHI_H_
+#ifndef Z_EN_STONE_HEISHI_H
+#define Z_EN_STONE_HEISHI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnStoneheishi {
 
 extern const ActorInit En_Stone_heishi_InitVars;
 
-#endif
+#endif // Z_EN_STONE_HEISHI_H

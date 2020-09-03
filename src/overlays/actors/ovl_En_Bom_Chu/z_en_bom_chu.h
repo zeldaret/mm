@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BOM_CHU_H_
-#define _Z_EN_BOM_CHU_H_
+#ifndef Z_EN_BOM_CHU_H
+#define Z_EN_BOM_CHU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBomChu {
 
 extern const ActorInit En_Bom_Chu_InitVars;
 
-#endif
+#endif // Z_EN_BOM_CHU_H

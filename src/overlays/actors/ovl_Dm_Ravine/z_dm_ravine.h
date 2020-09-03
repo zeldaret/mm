@@ -1,5 +1,5 @@
-#ifndef _Z_DM_RAVINE_H_
-#define _Z_DM_RAVINE_H_
+#ifndef Z_DM_RAVINE_H
+#define Z_DM_RAVINE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmRavine {
 
 extern const ActorInit Dm_Ravine_InitVars;
 
-#endif
+#endif // Z_DM_RAVINE_H

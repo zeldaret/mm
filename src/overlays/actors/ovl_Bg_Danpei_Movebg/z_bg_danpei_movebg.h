@@ -1,5 +1,5 @@
-#ifndef _Z_BG_DANPEI_MOVEBG_H_
-#define _Z_BG_DANPEI_MOVEBG_H_
+#ifndef Z_BG_DANPEI_MOVEBG_H
+#define Z_BG_DANPEI_MOVEBG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgDanpeiMovebg {
 
 extern const ActorInit Bg_Danpei_Movebg_InitVars;
 
-#endif
+#endif // Z_BG_DANPEI_MOVEBG_H

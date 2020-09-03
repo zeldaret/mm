@@ -1,5 +1,5 @@
-#ifndef _Z_BG_IKANA_MIRROR_H_
-#define _Z_BG_IKANA_MIRROR_H_
+#ifndef Z_BG_IKANA_MIRROR_H
+#define Z_BG_IKANA_MIRROR_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgIkanaMirror {
 
 extern const ActorInit Bg_Ikana_Mirror_InitVars;
 
-#endif
+#endif // Z_BG_IKANA_MIRROR_H

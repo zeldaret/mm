@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_KIBAKO_H_
-#define _Z_OBJ_KIBAKO_H_
+#ifndef Z_OBJ_KIBAKO_H
+#define Z_OBJ_KIBAKO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjKibako {
 
 extern const ActorInit Obj_Kibako_InitVars;
 
-#endif
+#endif // Z_OBJ_KIBAKO_H

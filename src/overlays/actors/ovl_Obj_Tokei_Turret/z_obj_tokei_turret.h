@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_TOKEI_TURRET_H_
-#define _Z_OBJ_TOKEI_TURRET_H_
+#ifndef Z_OBJ_TOKEI_TURRET_H
+#define Z_OBJ_TOKEI_TURRET_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjTokeiTurret {
 
 extern const ActorInit Obj_Tokei_Turret_InitVars;
 
-#endif
+#endif // Z_OBJ_TOKEI_TURRET_H

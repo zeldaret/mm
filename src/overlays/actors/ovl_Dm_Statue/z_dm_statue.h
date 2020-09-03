@@ -1,5 +1,5 @@
-#ifndef _Z_DM_STATUE_H_
-#define _Z_DM_STATUE_H_
+#ifndef Z_DM_STATUE_H
+#define Z_DM_STATUE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DmStatue {
 
 extern const ActorInit Dm_Statue_InitVars;
 
-#endif
+#endif // Z_DM_STATUE_H

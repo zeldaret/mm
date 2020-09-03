@@ -2574,7 +2574,7 @@ for actor, overlay in zip(actor_names, overlay_names):
     #print(overlay + " " + str(actor_init))
 
     with open(folder_name + actor_header_file, 'w') as f:
-        header_guard = "_Z_" + actor[6:] + "_H_"
+        header_guard = "Z_" + actor[6:] + "_H"
         instance_size_extra = actor_init.instance_size - 0x144
 
         f.write("#ifndef " + header_guard + "\n")
@@ -2590,7 +2590,7 @@ for actor, overlay in zip(actor_names, overlay_names):
         f.write("} " + struct_name + "; // size = 0x{:X}\n\n".format(actor_init.instance_size))
 
         f.write("extern const ActorInit " + (overlay[4:] + "_InitVars") + ";\n\n")
-        f.write("#endif\n")
+        f.write("#endif // " + header_guard + "\n")
 
     with open(folder_name + actor_code_file, 'w') as f:
         init_name = make_func_name(struct_name, actor_init.init, "Init")

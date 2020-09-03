@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DRAGON_H_
-#define _Z_EN_DRAGON_H_
+#ifndef Z_EN_DRAGON_H
+#define Z_EN_DRAGON_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDragon {
 
 extern const ActorInit En_Dragon_InitVars;
 
-#endif
+#endif // Z_EN_DRAGON_H

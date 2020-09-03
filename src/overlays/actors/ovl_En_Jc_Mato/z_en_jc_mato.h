@@ -1,5 +1,5 @@
-#ifndef _Z_EN_JC_MATO_H_
-#define _Z_EN_JC_MATO_H_
+#ifndef Z_EN_JC_MATO_H
+#define Z_EN_JC_MATO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnJcMato {
 
 extern const ActorInit En_Jc_Mato_InitVars;
 
-#endif
+#endif // Z_EN_JC_MATO_H

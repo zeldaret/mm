@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SUTTARI_H_
-#define _Z_EN_SUTTARI_H_
+#ifndef Z_EN_SUTTARI_H
+#define Z_EN_SUTTARI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSuttari {
 
 extern const ActorInit En_Suttari_InitVars;
 
-#endif
+#endif // Z_EN_SUTTARI_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_NOZOKI_H_
-#define _Z_OBJ_NOZOKI_H_
+#ifndef Z_OBJ_NOZOKI_H
+#define Z_OBJ_NOZOKI_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjNozoki {
 
 extern const ActorInit Obj_Nozoki_InitVars;
 
-#endif
+#endif // Z_OBJ_NOZOKI_H

@@ -1,5 +1,5 @@
-#ifndef _Z_BG_CTOWER_GEAR_H_
-#define _Z_BG_CTOWER_GEAR_H_
+#ifndef Z_BG_CTOWER_GEAR_H
+#define Z_BG_CTOWER_GEAR_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgCtowerGear {
 
 extern const ActorInit Bg_Ctower_Gear_InitVars;
 
-#endif
+#endif // Z_BG_CTOWER_GEAR_H

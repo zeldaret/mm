@@ -1,5 +1,5 @@
-#ifndef _Z_EN_NEO_REEBA_H_
-#define _Z_EN_NEO_REEBA_H_
+#ifndef Z_EN_NEO_REEBA_H
+#define Z_EN_NEO_REEBA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnNeoReeba {
 
 extern const ActorInit En_Neo_Reeba_InitVars;
 
-#endif
+#endif // Z_EN_NEO_REEBA_H

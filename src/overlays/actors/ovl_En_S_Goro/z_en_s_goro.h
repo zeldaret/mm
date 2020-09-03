@@ -1,5 +1,5 @@
-#ifndef _Z_EN_S_GORO_H_
-#define _Z_EN_S_GORO_H_
+#ifndef Z_EN_S_GORO_H
+#define Z_EN_S_GORO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSGoro {
 
 extern const ActorInit En_S_Goro_InitVars;
 
-#endif
+#endif // Z_EN_S_GORO_H

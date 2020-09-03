@@ -1,5 +1,5 @@
-#ifndef _Z_EN_HIT_TAG_H_
-#define _Z_EN_HIT_TAG_H_
+#ifndef Z_EN_HIT_TAG_H
+#define Z_EN_HIT_TAG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnHitTag {
 
 extern const ActorInit En_Hit_Tag_InitVars;
 
-#endif
+#endif // Z_EN_HIT_TAG_H

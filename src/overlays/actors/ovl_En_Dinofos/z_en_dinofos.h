@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DINOFOS_H_
-#define _Z_EN_DINOFOS_H_
+#ifndef Z_EN_DINOFOS_H
+#define Z_EN_DINOFOS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDinofos {
 
 extern const ActorInit En_Dinofos_InitVars;
 
-#endif
+#endif // Z_EN_DINOFOS_H

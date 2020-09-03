@@ -1,5 +1,5 @@
-#ifndef _Z_BG_FU_MIZU_H_
-#define _Z_BG_FU_MIZU_H_
+#ifndef Z_BG_FU_MIZU_H
+#define Z_BG_FU_MIZU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgFuMizu {
 
 extern const ActorInit Bg_Fu_Mizu_InitVars;
 
-#endif
+#endif // Z_BG_FU_MIZU_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_NIW_H_
-#define _Z_EN_NIW_H_
+#ifndef Z_EN_NIW_H
+#define Z_EN_NIW_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnNiw {
 
 extern const ActorInit En_Niw_InitVars;
 
-#endif
+#endif // Z_EN_NIW_H

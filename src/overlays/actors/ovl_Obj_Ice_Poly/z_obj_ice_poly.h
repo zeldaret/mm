@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ICE_POLY_H_
-#define _Z_OBJ_ICE_POLY_H_
+#ifndef Z_OBJ_ICE_POLY_H
+#define Z_OBJ_ICE_POLY_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjIcePoly {
 
 extern const ActorInit Obj_Ice_Poly_InitVars;
 
-#endif
+#endif // Z_OBJ_ICE_POLY_H

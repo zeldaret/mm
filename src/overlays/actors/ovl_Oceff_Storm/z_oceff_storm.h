@@ -1,5 +1,5 @@
-#ifndef _Z_OCEFF_STORM_H_
-#define _Z_OCEFF_STORM_H_
+#ifndef Z_OCEFF_STORM_H
+#define Z_OCEFF_STORM_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct OceffStorm {
 
 extern const ActorInit Oceff_Storm_InitVars;
 
-#endif
+#endif // Z_OCEFF_STORM_H

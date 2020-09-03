@@ -1,5 +1,5 @@
-#ifndef _Z_DOOR_ANA_H_
-#define _Z_DOOR_ANA_H_
+#ifndef Z_DOOR_ANA_H
+#define Z_DOOR_ANA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DoorAna {
 
 extern const ActorInit Door_Ana_InitVars;
 
-#endif
+#endif // Z_DOOR_ANA_H

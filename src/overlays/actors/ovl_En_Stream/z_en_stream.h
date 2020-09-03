@@ -1,5 +1,5 @@
-#ifndef _Z_EN_STREAM_H_
-#define _Z_EN_STREAM_H_
+#ifndef Z_EN_STREAM_H
+#define Z_EN_STREAM_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnStream {
 
 extern const ActorInit En_Stream_InitVars;
 
-#endif
+#endif // Z_EN_STREAM_H

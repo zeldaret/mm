@@ -1,5 +1,5 @@
-#ifndef _Z_BG_KEIKOKU_SAKU_H_
-#define _Z_BG_KEIKOKU_SAKU_H_
+#ifndef Z_BG_KEIKOKU_SAKU_H
+#define Z_BG_KEIKOKU_SAKU_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgKeikokuSaku {
 
 extern const ActorInit Bg_Keikoku_Saku_InitVars;
 
-#endif
+#endif // Z_BG_KEIKOKU_SAKU_H

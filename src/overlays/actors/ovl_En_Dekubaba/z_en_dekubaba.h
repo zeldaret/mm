@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DEKUBABA_H_
-#define _Z_EN_DEKUBABA_H_
+#ifndef Z_EN_DEKUBABA_H
+#define Z_EN_DEKUBABA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDekubaba {
 
 extern const ActorInit En_Dekubaba_InitVars;
 
-#endif
+#endif // Z_EN_DEKUBABA_H

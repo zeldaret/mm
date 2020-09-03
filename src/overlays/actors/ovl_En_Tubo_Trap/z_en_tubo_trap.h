@@ -1,5 +1,5 @@
-#ifndef _Z_EN_TUBO_TRAP_H_
-#define _Z_EN_TUBO_TRAP_H_
+#ifndef Z_EN_TUBO_TRAP_H
+#define Z_EN_TUBO_TRAP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnTuboTrap {
 
 extern const ActorInit En_Tubo_Trap_InitVars;
 
-#endif
+#endif // Z_EN_TUBO_TRAP_H

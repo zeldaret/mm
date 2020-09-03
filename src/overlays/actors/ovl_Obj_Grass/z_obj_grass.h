@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_GRASS_H_
-#define _Z_OBJ_GRASS_H_
+#ifndef Z_OBJ_GRASS_H
+#define Z_OBJ_GRASS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjGrass {
 
 extern const ActorInit Obj_Grass_InitVars;
 
-#endif
+#endif // Z_OBJ_GRASS_H

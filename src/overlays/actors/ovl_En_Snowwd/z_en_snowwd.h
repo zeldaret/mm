@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SNOWWD_H_
-#define _Z_EN_SNOWWD_H_
+#ifndef Z_EN_SNOWWD_H
+#define Z_EN_SNOWWD_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSnowwd {
 
 extern const ActorInit En_Snowwd_InitVars;
 
-#endif
+#endif // Z_EN_SNOWWD_H

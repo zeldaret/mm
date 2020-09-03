@@ -1,5 +1,5 @@
-#ifndef _Z_EN_WIZ_BROCK_H_
-#define _Z_EN_WIZ_BROCK_H_
+#ifndef Z_EN_WIZ_BROCK_H
+#define Z_EN_WIZ_BROCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnWizBrock {
 
 extern const ActorInit En_Wiz_Brock_InitVars;
 
-#endif
+#endif // Z_EN_WIZ_BROCK_H

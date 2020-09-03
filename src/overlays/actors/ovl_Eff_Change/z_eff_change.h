@@ -1,5 +1,5 @@
-#ifndef _Z_EFF_CHANGE_H_
-#define _Z_EFF_CHANGE_H_
+#ifndef Z_EFF_CHANGE_H
+#define Z_EFF_CHANGE_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EffChange {
 
 extern const ActorInit Eff_Change_InitVars;
 
-#endif
+#endif // Z_EFF_CHANGE_H

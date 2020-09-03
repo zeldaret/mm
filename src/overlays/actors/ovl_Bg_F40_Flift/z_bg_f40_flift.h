@@ -1,5 +1,5 @@
-#ifndef _Z_BG_F40_FLIFT_H_
-#define _Z_BG_F40_FLIFT_H_
+#ifndef Z_BG_F40_FLIFT_H
+#define Z_BG_F40_FLIFT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgF40Flift {
 
 extern const ActorInit Bg_F40_Flift_InitVars;
 
-#endif
+#endif // Z_BG_F40_FLIFT_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SCOPENUTS_H_
-#define _Z_EN_SCOPENUTS_H_
+#ifndef Z_EN_SCOPENUTS_H
+#define Z_EN_SCOPENUTS_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnScopenuts {
 
 extern const ActorInit En_Scopenuts_InitVars;
 
-#endif
+#endif // Z_EN_SCOPENUTS_H

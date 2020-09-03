@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_DINNER_H_
-#define _Z_OBJ_DINNER_H_
+#ifndef Z_OBJ_DINNER_H
+#define Z_OBJ_DINNER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjDinner {
 
 extern const ActorInit Obj_Dinner_InitVars;
 
-#endif
+#endif // Z_OBJ_DINNER_H

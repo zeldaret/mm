@@ -1,5 +1,5 @@
-#ifndef _Z_MIR_RAY2_H_
-#define _Z_MIR_RAY2_H_
+#ifndef Z_MIR_RAY2_H
+#define Z_MIR_RAY2_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct MirRay2 {
 
 extern const ActorInit Mir_Ray2_InitVars;
 
-#endif
+#endif // Z_MIR_RAY2_H

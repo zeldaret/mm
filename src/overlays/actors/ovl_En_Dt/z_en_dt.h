@@ -1,5 +1,5 @@
-#ifndef _Z_EN_DT_H_
-#define _Z_EN_DT_H_
+#ifndef Z_EN_DT_H
+#define Z_EN_DT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnDt {
 
 extern const ActorInit En_Dt_InitVars;
 
-#endif
+#endif // Z_EN_DT_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_MAKEKINSUTA_H_
-#define _Z_OBJ_MAKEKINSUTA_H_
+#ifndef Z_OBJ_MAKEKINSUTA_H
+#define Z_OBJ_MAKEKINSUTA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjMakekinsuta {
 
 extern const ActorInit Obj_Makekinsuta_InitVars;
 
-#endif
+#endif // Z_OBJ_MAKEKINSUTA_H

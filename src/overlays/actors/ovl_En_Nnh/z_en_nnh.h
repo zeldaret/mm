@@ -1,5 +1,5 @@
-#ifndef _Z_EN_NNH_H_
-#define _Z_EN_NNH_H_
+#ifndef Z_EN_NNH_H
+#define Z_EN_NNH_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnNnh {
 
 extern const ActorInit En_Nnh_InitVars;
 
-#endif
+#endif // Z_EN_NNH_H

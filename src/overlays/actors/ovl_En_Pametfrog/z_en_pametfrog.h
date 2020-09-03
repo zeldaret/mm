@@ -1,5 +1,5 @@
-#ifndef _Z_EN_PAMETFROG_H_
-#define _Z_EN_PAMETFROG_H_
+#ifndef Z_EN_PAMETFROG_H
+#define Z_EN_PAMETFROG_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnPametfrog {
 
 extern const ActorInit En_Pametfrog_InitVars;
 
-#endif
+#endif // Z_EN_PAMETFROG_H

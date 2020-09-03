@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_PZLBLOCK_H_
-#define _Z_OBJ_PZLBLOCK_H_
+#ifndef Z_OBJ_PZLBLOCK_H
+#define Z_OBJ_PZLBLOCK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjPzlblock {
 
 extern const ActorInit Obj_Pzlblock_InitVars;
 
-#endif
+#endif // Z_OBJ_PZLBLOCK_H

@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_CHIKUWA_H_
-#define _Z_OBJ_CHIKUWA_H_
+#ifndef Z_OBJ_CHIKUWA_H
+#define Z_OBJ_CHIKUWA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjChikuwa {
 
 extern const ActorInit Obj_Chikuwa_InitVars;
 
-#endif
+#endif // Z_OBJ_CHIKUWA_H

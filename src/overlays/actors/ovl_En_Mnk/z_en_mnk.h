@@ -1,5 +1,5 @@
-#ifndef _Z_EN_MNK_H_
-#define _Z_EN_MNK_H_
+#ifndef Z_EN_MNK_H
+#define Z_EN_MNK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnMnk {
 
 extern const ActorInit En_Mnk_InitVars;
 
-#endif
+#endif // Z_EN_MNK_H

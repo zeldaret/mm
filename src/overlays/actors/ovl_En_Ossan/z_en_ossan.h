@@ -1,5 +1,5 @@
-#ifndef _Z_EN_OSSAN_H_
-#define _Z_EN_OSSAN_H_
+#ifndef Z_EN_OSSAN_H
+#define Z_EN_OSSAN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnOssan {
 
 extern const ActorInit En_Ossan_InitVars;
 
-#endif
+#endif // Z_EN_OSSAN_H

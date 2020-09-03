@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ATTACK_NIW_H_
-#define _Z_EN_ATTACK_NIW_H_
+#ifndef Z_EN_ATTACK_NIW_H
+#define Z_EN_ATTACK_NIW_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnAttackNiw {
 
 extern const ActorInit En_Attack_Niw_InitVars;
 
-#endif
+#endif // Z_EN_ATTACK_NIW_H

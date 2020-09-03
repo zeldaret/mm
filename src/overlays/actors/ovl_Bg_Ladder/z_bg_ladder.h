@@ -1,5 +1,5 @@
-#ifndef _Z_BG_LADDER_H_
-#define _Z_BG_LADDER_H_
+#ifndef Z_BG_LADDER_H
+#define Z_BG_LADDER_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct BgLadder {
 
 extern const ActorInit Bg_Ladder_InitVars;
 
-#endif
+#endif // Z_BG_LADDER_H

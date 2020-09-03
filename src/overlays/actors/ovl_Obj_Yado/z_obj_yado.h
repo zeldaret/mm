@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_YADO_H_
-#define _Z_OBJ_YADO_H_
+#ifndef Z_OBJ_YADO_H
+#define Z_OBJ_YADO_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjYado {
 
 extern const ActorInit Obj_Yado_InitVars;
 
-#endif
+#endif // Z_OBJ_YADO_H

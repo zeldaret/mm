@@ -1,5 +1,5 @@
-#ifndef _Z_EN_ELFGRP_H_
-#define _Z_EN_ELFGRP_H_
+#ifndef Z_EN_ELFGRP_H
+#define Z_EN_ELFGRP_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnElfgrp {
 
 extern const ActorInit En_Elfgrp_InitVars;
 
-#endif
+#endif // Z_EN_ELFGRP_H

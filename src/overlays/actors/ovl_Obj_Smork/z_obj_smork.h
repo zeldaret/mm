@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_SMORK_H_
-#define _Z_OBJ_SMORK_H_
+#ifndef Z_OBJ_SMORK_H
+#define Z_OBJ_SMORK_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjSmork {
 
 extern const ActorInit Obj_Smork_InitVars;
 
-#endif
+#endif // Z_OBJ_SMORK_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_BAISEN_H_
-#define _Z_EN_BAISEN_H_
+#ifndef Z_EN_BAISEN_H
+#define Z_EN_BAISEN_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnBaisen {
 
 extern const ActorInit En_Baisen_InitVars;
 
-#endif
+#endif // Z_EN_BAISEN_H

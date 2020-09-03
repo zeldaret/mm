@@ -1,5 +1,5 @@
-#ifndef _Z_EN_SYATEKI_OKUTA_H_
-#define _Z_EN_SYATEKI_OKUTA_H_
+#ifndef Z_EN_SYATEKI_OKUTA_H
+#define Z_EN_SYATEKI_OKUTA_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnSyatekiOkuta {
 
 extern const ActorInit En_Syateki_Okuta_InitVars;
 
-#endif
+#endif // Z_EN_SYATEKI_OKUTA_H

@@ -1,5 +1,5 @@
-#ifndef _Z_EN_WOOD02_H_
-#define _Z_EN_WOOD02_H_
+#ifndef Z_EN_WOOD02_H
+#define Z_EN_WOOD02_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnWood02 {
 
 extern const ActorInit En_Wood02_InitVars;
 
-#endif
+#endif // Z_EN_WOOD02_H

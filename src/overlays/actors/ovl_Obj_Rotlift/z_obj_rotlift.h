@@ -1,5 +1,5 @@
-#ifndef _Z_OBJ_ROTLIFT_H_
-#define _Z_OBJ_ROTLIFT_H_
+#ifndef Z_OBJ_ROTLIFT_H
+#define Z_OBJ_ROTLIFT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ObjRotlift {
 
 extern const ActorInit Obj_Rotlift_InitVars;
 
-#endif
+#endif // Z_OBJ_ROTLIFT_H

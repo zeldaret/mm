@@ -1,5 +1,5 @@
-#ifndef _Z_ITEM_B_HEART_H_
-#define _Z_ITEM_B_HEART_H_
+#ifndef Z_ITEM_B_HEART_H
+#define Z_ITEM_B_HEART_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct ItemBHeart {
 
 extern const ActorInit Item_B_Heart_InitVars;
 
-#endif
+#endif // Z_ITEM_B_HEART_H

@@ -1,5 +1,5 @@
-#ifndef _Z_DEMO_SHD_H_
-#define _Z_DEMO_SHD_H_
+#ifndef Z_DEMO_SHD_H
+#define Z_DEMO_SHD_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct DemoShd {
 
 extern const ActorInit Demo_Shd_InitVars;
 
-#endif
+#endif // Z_DEMO_SHD_H

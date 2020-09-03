@@ -1,5 +1,5 @@
-#ifndef _Z_EN_KBT_H_
-#define _Z_EN_KBT_H_
+#ifndef Z_EN_KBT_H
+#define Z_EN_KBT_H
 
 #include <global.h>
 
@@ -12,4 +12,4 @@ typedef struct EnKbt {
 
 extern const ActorInit En_Kbt_InitVars;
 
-#endif
+#endif // Z_EN_KBT_H
