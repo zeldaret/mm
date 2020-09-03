@@ -1,0 +1,15 @@
+#ifndef _Z_EN_BOJ_03_H_
+#define _Z_EN_BOJ_03_H_
+
+#include <global.h>
+
+struct EnBoj03;
+
+typedef struct EnBoj03 {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x4D8];
+} EnBoj03; // size = 0x61C
+
+extern const ActorInit En_Boj_03_InitVars;
+
+#endif

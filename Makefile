@@ -177,10 +177,10 @@ build/baserom/%: baserom/%
 build/asm/%.o: asm/%.asm
 	$(AS) $(ASFLAGS) $^ -o $@
 
-build/src/actors/%.o: src/actors/%.c include/* $(S_FILES)
+build/src/overlays/%.o: src/overlays/%.c include/* $(S_FILES)
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	./tools/overlay.py $@ build/src/actors/$*_overlay.s
-	$(AS) $(ASFLAGS) build/src/actors/$*_overlay.s -o build/src/actors/$*_overlay.o
+	./tools/overlay.py $@ build/src/overlays/$*_overlay.s
+	$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
 
 build/src/%.o: src/%.c include/* $(S_FILES)
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<

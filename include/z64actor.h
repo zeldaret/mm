@@ -11,7 +11,7 @@ struct GlobalContext;
 struct LightMapper;
 struct BgPolygon;
 
-typedef void(*actor_func)(struct Actor* this, struct GlobalContext* ctxt);
+typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* ctxt);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -61,14 +61,13 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
-    /* 0x03 */ u8 room;
     /* 0x04 */ u32 flags;
     /* 0x08 */ s16 objectId;
     /* 0x0C */ u32 instanceSize;
-    /* 0x10 */ actor_func init;
-    /* 0x14 */ actor_func destroy;
-    /* 0x18 */ actor_func update;
-    /* 0x1C */ actor_func draw;
+    /* 0x10 */ ActorFunc init;
+    /* 0x14 */ ActorFunc destroy;
+    /* 0x18 */ ActorFunc update;
+    /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
 
 typedef struct {
@@ -152,10 +151,10 @@ typedef struct Actor {
     /* 0x124 */ struct Actor* child;
     /* 0x128 */ struct Actor* prev;
     /* 0x12C */ struct Actor* next;
-    /* 0x130 */ actor_func init;
-    /* 0x134 */ actor_func destroy;
-    /* 0x138 */ actor_func update;
-    /* 0x13C */ actor_func draw;
+    /* 0x130 */ ActorFunc init;
+    /* 0x134 */ ActorFunc destroy;
+    /* 0x138 */ ActorFunc update;
+    /* 0x13C */ ActorFunc draw;
     /* 0x140 */ ActorOverlay* overlayEntry;
 } Actor; // size = 0x144
 
@@ -212,7 +211,7 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ actor_func update;
+    /* 0x144 */ ActorFunc update;
     /* 0x148 */ s16 collectibleFlagId;
     /* 0x14A */ s16 unk14A;
     /* 0x14C */ s16 unk14C;
@@ -226,10 +225,25 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ actor_func update;
+    /* 0x144 */ ActorFunc update;
     /* 0x148 */ ColCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
 } ActorEnAObj; // size = 0x1A8
+
+typedef enum {
+    /* 0x00 */ ACTORTYPE_SWITCH,
+    /* 0x01 */ ACTORTYPE_BG,
+    /* 0x02 */ ACTORTYPE_PLAYER,
+    /* 0x03 */ ACTORTYPE_EXPLOSIVES,
+    /* 0x04 */ ACTORTYPE_NPC,
+    /* 0x05 */ ACTORTYPE_ENEMY,
+    /* 0x06 */ ACTORTYPE_PROP,
+    /* 0x07 */ ACTORTYPE_ITEMACTION,
+    /* 0x08 */ ACTORTYPE_MISC,
+    /* 0x09 */ ACTORTYPE_BOSS,
+    /* 0x0A */ ACTORTYPE_DOOR,
+    /* 0x0B */ ACTORTYPE_CHEST
+} ActorType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

@@ -1,0 +1,15 @@
+#ifndef _Z_EN_OSK_H_
+#define _Z_EN_OSK_H_
+
+#include <global.h>
+
+struct EnOsk;
+
+typedef struct EnOsk {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x120];
+} EnOsk; // size = 0x264
+
+extern const ActorInit En_Osk_InitVars;
+
+#endif

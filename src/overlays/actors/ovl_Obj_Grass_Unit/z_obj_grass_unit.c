@@ -1,0 +1,31 @@
+#include "z_obj_grass_unit.h"
+
+#define FLAGS 0x00000000
+
+#define THIS ((ObjGrassUnit*)thisx)
+
+void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
+
+/*
+const ActorInit Obj_Grass_Unit_InitVars = {
+    ACTOR_OBJ_GRASS_UNIT,
+    ACTORTYPE_BG,
+    FLAGS,
+    GAMEPLAY_FIELD_KEEP,
+    sizeof(ObjGrassUnit),
+    (ActorFunc)ObjGrassUnit_Init,
+    (ActorFunc)func_800BDFB0,
+    (ActorFunc)func_800BDFB0,
+    (ActorFunc)NULL
+};
+*/
+
+GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABDE0.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABE54.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABEC4.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABF38.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/ObjGrassUnit_Init.asm")

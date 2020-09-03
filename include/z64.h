@@ -992,8 +992,6 @@ typedef struct {
     /* 0x44 */ BgScenePolygonLists scenePolyLists;
 } StaticCollisionContext; // size = 0x50
 
-typedef struct ActorBgFuKaiten ActorBgFuKaiten;
-
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
 typedef struct ActorEnBji01 ActorEnBji01;
@@ -1671,19 +1669,12 @@ typedef struct {
     /* 0x244 */ Vec3f unk244;
     /* 0x250 */ f32 unk250;
     /* 0x254 */ f32 unk254;
-    /* 0x258 */ actor_func update;
+    /* 0x258 */ ActorFunc update;
     /* 0x25C */ s16 unk25C;
     /* 0x25E */ u16 unk25E;
     /* 0x260 */ u8 unk260;
     /* 0x261 */ UNK_TYPE1 pad261[0x3];
 } ActorArrowFire; // size = 0x264
-
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ColCylinder collision;
-    /* 0x190 */ AnimatedTexture* animatedTextures;
-    /* 0x194 */ actor_func update;
-} ActorBgIkanaRay; // size = 0x198
 
 struct ActorBgMbarChair {
     /* 0x000 */ Actor base;
@@ -1751,7 +1742,7 @@ typedef struct {
     /* 0x14A */ u16 unk14A;
     /* 0x14C */ u8 unk14C;
     /* 0x14D */ UNK_TYPE1 pad14D[0x3];
-    /* 0x150 */ actor_func unk150;
+    /* 0x150 */ ActorFunc unk150;
 } ActorEnTest4; // size = 0x154
 
 struct ActorObjBell {
@@ -1765,22 +1756,12 @@ struct ActorObjBell {
     /* 0x214 */ s16 unk214;
     /* 0x216 */ UNK_TYPE1 pad216[0x12];
 }; // size = 0x228
-struct ActorBgFuKaiten {
-    /* 0x000 */ DynaPolyActor bg;
-    /* 0x15C */ UNK_TYPE1 pad15C[0x4];
-    /* 0x160 */ f32 elevation;
-    /* 0x164 */ f32 bouceHeight;
-    /* 0x168 */ s16 rotationSpeed;
-    /* 0x16A */ s16 bounceSpeed;
-    /* 0x16C */ s16 bounce;
-    /* 0x16E */ UNK_TYPE1 pad16E[0x2];
-}; // size = 0x170
 
 struct ActorBgIknvObj {
     /* 0x000 */ DynaPolyActor bg;
     /* 0x15C */ ColCylinder collision;
     /* 0x1A8 */ u32 displayListAddr;
-    /* 0x1AC */ actor_func updateFunc;
+    /* 0x1AC */ ActorFunc updateFunc;
 }; // size = 0x1B0
 
 typedef struct {

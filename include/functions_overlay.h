@@ -2922,7 +2922,7 @@ void func_809200F8(void); // func_809200F8
 void ItemEtcetera_Update(void); // func_80920140
 void func_80920164(void); // func_80920164
 void func_809201BC(void); // func_809201BC
-void FireArrow_SetUpdateFunc(ActorArrowFire* this, actor_func update); // func_80920340
+void FireArrow_SetUpdateFunc(ActorArrowFire* this, ActorFunc update); // func_80920340
 void ArrowFire_Init(ActorArrowFire* this, GlobalContext* ctxt); // func_8092034C
 void ArrowFire_Destroy(ActorArrowFire* this, GlobalContext* ctxt); // func_809203F8
 void FireArrow_Update1(ActorArrowFire* pzParm1); // func_80920440
@@ -8001,12 +8001,12 @@ void BgOpenSpot_Init(void); // func_80ACB1E0
 void BgOpenSpot_Destroy(void); // func_80ACB220
 void BgOpenSpot_Update(void); // func_80ACB230
 void func_80ACB2B0(void); // func_80ACB2B0
-void BgFuKaiten_Init(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB400
-void BgFuKaiten_Destroy(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB480
-void BgFuKaiten_UpdateRotation(ActorBgFuKaiten* this); // func_80ACB4B4
-void BgFuKaiten_UpdateHeight(ActorBgFuKaiten* this); // func_80ACB50C
-void BgFuKaiten_Update(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB570
-void BgFuKaiten_Draw(ActorBgFuKaiten* this, GlobalContext* ctxt); // func_80ACB5A0
+void BgFuKaiten_Init(Actor* this, GlobalContext* ctxt); // func_80ACB400
+void BgFuKaiten_Destroy(Actor* this, GlobalContext* ctxt); // func_80ACB480
+void BgFuKaiten_UpdateRotation(Actor* this); // func_80ACB4B4
+void BgFuKaiten_UpdateHeight(Actor* this); // func_80ACB50C
+void BgFuKaiten_Update(Actor* this, GlobalContext* ctxt); // func_80ACB570
+void BgFuKaiten_Draw(Actor* this, GlobalContext* ctxt); // func_80ACB5A0
 void func_80ACB6A0(void); // func_80ACB6A0
 void func_80ACB7F4(void); // func_80ACB7F4
 void func_80ACB940(void); // func_80ACB940
@@ -11748,14 +11748,14 @@ void func_80BD5118(void); // func_80BD5118
 void func_80BD5134(void); // func_80BD5134
 void BgIkanaBombwall_Update(void); // func_80BD51DC
 void BgIkanaBombwall_Draw(void); // func_80BD5200
-void BgIkanaRay_Init(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD53C0
-void BgIkanaRay_Destroy(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD546C
-void BgIkanaRay_SetDeactivated(ActorBgIkanaRay* this); // func_80BD5498
-void BgIkanaRay_UpdateCheckForActivation(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD54BC
-void BgIkanaRay_SetActivated(ActorBgIkanaRay* this); // func_80BD5500
-void BgIkanaRay_UpdateActivated(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5530
-void BgIkanaRay_Update(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD556C
-void BgIkanaRay_Draw(ActorBgIkanaRay* this, GlobalContext* ctxt); // func_80BD5590
+void BgIkanaRay_Init(Actor* this, GlobalContext* ctxt); // func_80BD53C0
+void BgIkanaRay_Destroy(Actor* this, GlobalContext* ctxt); // func_80BD546C
+void BgIkanaRay_SetDeactivated(Actor* this); // func_80BD5498
+void BgIkanaRay_UpdateCheckForActivation(Actor* this, GlobalContext* ctxt); // func_80BD54BC
+void BgIkanaRay_SetActivated(Actor* this); // func_80BD5500
+void BgIkanaRay_UpdateActivated(Actor* this, GlobalContext* ctxt); // func_80BD5530
+void BgIkanaRay_Update(Actor* this, GlobalContext* ctxt); // func_80BD556C
+void BgIkanaRay_Draw(Actor* this, GlobalContext* ctxt); // func_80BD5590
 void func_80BD5690(void); // func_80BD5690
 void BgIkanaShutter_Init(void); // func_80BD5728
 void BgIkanaShutter_Destroy(void); // func_80BD57F4

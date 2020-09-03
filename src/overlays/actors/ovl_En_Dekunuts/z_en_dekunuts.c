@@ -1,0 +1,92 @@
+#include "z_en_dekunuts.h"
+
+#define FLAGS 0x00000005
+
+#define THIS ((EnDekunuts*)thisx)
+
+void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx);
+void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+/*
+const ActorInit En_Dekunuts_InitVars = {
+    ACTOR_EN_DEKUNUTS,
+    ACTORTYPE_ENEMY,
+    FLAGS,
+    OBJECT_DEKUNUTS,
+    sizeof(EnDekunuts),
+    (ActorFunc)EnDekunuts_Init,
+    (ActorFunc)EnDekunuts_Destroy,
+    (ActorFunc)EnDekunuts_Update,
+    (ActorFunc)EnDekunuts_Draw
+};
+*/
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/EnDekunuts_Init.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/EnDekunuts_Destroy.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD348.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD3B4.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD428.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD49C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD78C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD7D4.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD870.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BD8D8.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDA08.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDA4C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDC9C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDCF0.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDD54.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDE7C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDEF8.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDF60.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BDFB8.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE1CC.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE22C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE294.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE358.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE3A8.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE3FC.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE484.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE4D4.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE680.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE6C4.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BE73C.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/EnDekunuts_Update.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BEBD0.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/func_808BED30.asm")
+
+GLOBAL_ASM("asm/non_matchings/ovl_En_Dekunuts_0x808BD1E0/EnDekunuts_Draw.asm")
