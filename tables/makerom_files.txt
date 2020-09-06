@@ -1,6 +1,6 @@
 build/baserom/makerom
 build/baserom/boot
-build/baserom/dmadata
+build/dmadata
 build/baserom/Audiobank
 build/baserom/Audioseq
 build/baserom/Audiotable
