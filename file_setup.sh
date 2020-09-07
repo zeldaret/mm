@@ -15,8 +15,4 @@ echo "$1" >> tables/files_with_nonmatching.txt
 sed -i "s/asm\/$1.o/src\/${2//\//\\\/}\/$1.o/g" linker_scripts/code_script.txt
 
 # Build with new file
-make build/code.elf
-
-# Copy newly-built .o file to expected/ for use by the diff script
-mkdir -p "expected/build/src/$2/"
-cp "build/src/$2/$1.o" "expected/build/src/$2/$1.o"
+make diff-init
