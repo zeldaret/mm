@@ -34,6 +34,32 @@
 #define D_CBUTTONS	CONT_D
 
 typedef struct {
+    /* 0x00 */ union {
+        u16 button;
+        struct {
+            u16 a   : 1;
+            u16 b   : 1;
+            u16 z   : 1;
+            u16 s   : 1;
+            u16 du  : 1;
+            u16 dd  : 1;
+            u16 dl  : 1;
+            u16 dr  : 1;
+            u16 illegal_h : 1;
+            u16 illegal_l : 1;
+            u16 l   : 1;
+            u16 r   : 1;
+            u16 cu  : 1;
+            u16 cd  : 1;
+            u16 cl  : 1;
+            u16 cr  : 1;
+        };
+    };
+    /* 0x02 */ s8  x;
+    /* 0x03 */ s8  y;
+} PadInput; // size = 0x4
+
+typedef struct {
     /* 0x00 */ u32 ramarray[15];
     /* 0x3C */ u32 pifstatus;
 } OSPifRam;

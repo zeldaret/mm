@@ -203,7 +203,7 @@ s32 Fault_WaitForInputImpl() {
         while (1) {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-            kDown = curInput->pressEdge.buttons;
+            kDown = curInput->press.in.button;
             if (kDown == 0x20) {
                 faultCtxt->faultActive = !faultCtxt->faultActive;
             }
@@ -463,8 +463,8 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (~(input->pressEdge.buttons | ~0x80) != 0);
-    } while (~(input->current.buttons | ~0x231) != 0);
+        } while (~(input->press.in.button | ~0x80) != 0);
+    } while (~(input->cur.in.button | ~0x231) != 0);
 }
 
 void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3) {
@@ -530,46 +530,46 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
 
-            if (~(input->pressEdge.buttons | ~0x20) == 0) {
+            if (~(input->press.in.button | ~0x20) == 0) {
                 faultCtxt->faultActive = 0;
             }
         }
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (input->pressEdge.buttons == 0);
+        } while (input->press.in.button == 0);
 
-        if (~(input->pressEdge.buttons | ~0x1000) == 0) {
+        if (~(input->press.in.button | ~0x1000) == 0) {
             return;
         }
 
         off = 0x10;
-        if (~(input->current.buttons | ~0x8000) == 0) {
+        if (~(input->current.button | ~0x8000) == 0) {
             off = 0x100;
         }
-        if (~(input->current.buttons | ~0x4000) == 0) {
+        if (~(input->current.button | ~0x4000) == 0) {
             off <<= 8;
         }
-        if (~(input->pressEdge.buttons | ~0x800) == 0) {
+        if (~(input->press.in.button | ~0x800) == 0) {
             addr -= off;
         }
-        if (~(input->pressEdge.buttons | ~0x400) == 0) {
+        if (~(input->press.in.button | ~0x400) == 0) {
             addr += off;
         }
-        if (~(input->pressEdge.buttons | ~0x8) == 0) {
+        if (~(input->press.in.button | ~0x8) == 0) {
             addr = pc;
         }
-        if (~(input->pressEdge.buttons | ~0x4) == 0) {
+        if (~(input->press.in.button | ~0x4) == 0) {
             addr = sp;
         }
-        if (~(input->pressEdge.buttons | ~0x2) == 0) {
+        if (~(input->press.in.button | ~0x2) == 0) {
             addr = unk0;
         }
-        if (~(input->pressEdge.buttons | ~0x1) == 0) {
+        if (~(input->press.in.button | ~0x1) == 0) {
             addr = unk1;
         }
 
-    } while (~(input->pressEdge.buttons | ~0x20) != 0);
+    } while (~(input->press.in.button | ~0x20) != 0);
 
     faultCtxt->faultActive = 1;
 }
@@ -764,7 +764,7 @@ void Fault_SetOptionsFromController3(void) {
 
     input3 = &faultCtxt->padInput[3];
 
-    if (~(input3->pressEdge.buttons | ~0x80) == 0) {
+    if (~(input3->press.in.button | ~0x80) == 0) {
         faultCustomOptions = faultCustomOptions == 0;
     }
 

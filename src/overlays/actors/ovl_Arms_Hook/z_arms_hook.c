@@ -256,7 +256,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 func_8019F1C0(&this->actor.projectedPos, 0x1813);
             }
         } else {
-            if ((globalCtx->state.input[0].pressEdge.buttons &
+            if ((globalCtx->state.input[0].press.in.button &
                  (A_BUTTON | B_BUTTON | R_TRIG | U_CBUTTONS | L_CBUTTONS | R_CBUTTONS | D_CBUTTONS))) {
                 s32 pad;
                 this->timer = 1;

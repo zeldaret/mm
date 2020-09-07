@@ -284,14 +284,6 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x0 */ u16 buttons;
-    /* 0x2 */ s8 xAxis;
-    /* 0x3 */ s8 yAxis;
-    /* 0x4 */ s8 status;
-    /* 0x5 */ UNK_TYPE1 pad5[0x1];
-} InputInfo; // size = 0x6
-
-typedef struct {
     /* 0x0 */ u32 vromStart;
     /* 0x4 */ u32 vromEnd;
 } ObjectFileTableEntry; // size = 0x8
@@ -629,10 +621,21 @@ typedef struct {
 } GlobalContext1F78; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ InputInfo current;
-    /* 0x06 */ InputInfo last;
-    /* 0x0C */ InputInfo pressEdge;
-    /* 0x12 */ InputInfo releaseEdge;
+    PadInput in;
+    union {
+        u16 status;
+        struct {
+            u8 errno;
+            u8 statusLo;
+        };
+    };
+} PadState;
+
+typedef struct {
+    /* 0x00 */ PadState cur;
+    /* 0x06 */ PadState prev;
+    /* 0x0C */ PadState press; // X/Y store delta from last frame
+    /* 0x12 */ PadState rel; // X/Y store adjusted
 } Input; // size = 0x18
 
 typedef struct {
