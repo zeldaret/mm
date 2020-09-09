@@ -42,8 +42,8 @@ if __name__ == '__main__':
     if args.c_base != None:
         os.makedirs(os.path.dirname(args.c_base), exist_ok=True)
         with open(args.c_base, 'w') as f:
-            f.write('#include <ultra64.h>\n#include <global.h>\n\n')
+            f.write('#include <ultra64.h>\n#include <global.h>\n')
 
             for name in file_names:
-                f.write('GLOBAL_ASM("{}")\n\n'.format(name))
+                f.write('\nGLOBAL_ASM("{}")\n'.format(name))
 
