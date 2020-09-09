@@ -7,3 +7,6 @@
 [submodule "tools/ZAP2"]
 	path = tools/ZAP2
 	url = https://github.com/NEstelami/ZAP2.git
+[submodule "tools/decomp-permuter"]
+	path = tools/decomp-permuter
+	url = https://github.com/simonlindholm/decomp-permuter
