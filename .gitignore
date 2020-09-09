@@ -1,22 +1,42 @@
+# Cache files
+__pycache__/
+.pyc
+.DS_Store
+
+# Text editor remnants
+.vscode/
+.vs/
+.idea/
+CMakeLists.txt
+cmake-build-debug
+venv/
+
+# Project-specific ignores
 *.z64
 *.bin
 *.elf
-doc/*
-archive/*
-build/*
-baserom/*
-decomp/*
-S/*
-asm/*
-font_test/*
-ido/*
-__pychahe__/*
-*.pyc
-test.txt
-*.xlsx
-src/test.c
-*.dump
-tools/ido5.3_compiler/*
-tools/ido7.1_compiler/*
-expected/*
+archive/
+build/
+baserom/
+decomp/
+asm/
+expected/
+nonmatchings/
+
+# Tool artifacts
+tools/ido5.3_compiler/
+tools/ido7.1_compiler/
 tools/qemu-mips
+
+# Assets
+*.rgba32.png
+*.rgb5a1.png
+*.i4.png
+*.i8.png
+*.ia4.png
+*.ia8.png
+*.ci4.png
+*.ci8.png
+
+# Per-user configuration
+.python-version
