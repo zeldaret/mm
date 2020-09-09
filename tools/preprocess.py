@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-asm_processor = ['python3', os.path.join(dir_path, "asm-processor/asm-processor.py")]
+asm_processor = ['python3', os.path.join(dir_path, "asm-processor/asm_processor.py")]
 prelude = os.path.join(dir_path, "prelude.inc")
 
 all_args = sys.argv[1:]
