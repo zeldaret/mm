@@ -29,7 +29,7 @@ if __name__ == "__main__":
         for base_file, comp_file, alignment, size_if_missing in dmadata_table:
             try:
                 file_name = base_file.split('/')[-1]
-                uncompressed = comp_file == ''
+                uncompressed = comp_file == '' or args.uncompressed
                 missing = base_file == '' and comp_file == ''
                 blank = missing and size_if_missing == 0
                 is_dmadata = base_file.endswith('dmadata')
@@ -48,7 +48,7 @@ if __name__ == "__main__":
                     phys_size = vrom_size
                 else:
                     vrom_size = os.path.getsize(base_file)
-                    if uncompressed or args.uncompressed:
+                    if uncompressed:
                         phys_size = vrom_size
                     else:
                         phys_size = os.path.getsize(comp_file)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
                     phys_end = 0xFFFFFFFF
                 else:
                     phys_start = align_up(curr_phys, 0x10)
-                    phys_end = 0 if uncompressed else phys_start + phys_size
+                    phys_end = 0 if uncompressed or is_dmadata else phys_start + phys_size
 
                 curr_vrom = align_up(curr_vrom, alignment) + vrom_size
                 curr_phys = align_up(curr_phys, 0x10) + phys_size
@@ -79,7 +79,8 @@ if __name__ == "__main__":
                 dmadata.write(phys_end.to_bytes(4, 'big'))
 
                 if base_file != '':
-                     linker_info.append((os.path.basename(base_file), vrom_start, vrom_end))
+                    file_name = 'dmadata' if is_dmadata else base_file
+                    linker_info.append((os.path.basename(file_name), vrom_start, vrom_end))
             except:
                 print('Error when processing entry ' + base_file)
                 sys.exit(1)

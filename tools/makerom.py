@@ -38,6 +38,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('files', help='file list')
     parser.add_argument('out', help='output file')
+    parser.add_argument('-c', '--compress', help='decompress file, otherwise compress it', action='store_true', default=False)
     args = parser.parse_args()
 
     outputBuffer = bytearray()
@@ -47,23 +48,20 @@ if __name__ == "__main__":
 
         dmadata_table = ast.literal_eval(f.read())
         for base_file, comp_file, _, _ in dmadata_table:
-            if base_file.endswith('dmadata'):
-                dma_file_name = base_file
-                break
+            if args.compress:
+                if comp_file.endswith('dmadata'):
+                    dma_file_name = comp_file
+                    break
+            else:
+                if base_file.endswith('dmadata'):
+                    dma_file_name = base_file
+                    break
         else:
             print('Could not find dmadata')
             sys.exit(1)
 
-        has_compressed_files = False
-        with open(dma_file_name, 'rb') as dma_file:
-            dma_data = dma_file.read()
-            for i in range(0xC, len(dma_data), 0x10):
-                if read_uint32_be(dma_data, i) != 0:
-                    has_compressed_files = True
-                    break
-
         for base_file, comp_file, _, _ in dmadata_table:
-            file_name = base_file if not has_compressed_files or comp_file == '' else comp_file
+            file_name = comp_file if args.compress and comp_file != '' else base_file
             if file_name != '':
                 try:
                     with open(file_name, 'rb') as current_file:
