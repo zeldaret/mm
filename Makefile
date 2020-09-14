@@ -163,6 +163,8 @@ diff-init: all
 	rm -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
+	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
+	cp $(ROM) expected/$(ROM)
 
 init: setup all diff-init
 

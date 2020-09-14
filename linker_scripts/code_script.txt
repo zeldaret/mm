@@ -309,7 +309,7 @@ SECTIONS
     . += 0x10;
     boot_bss_end = .;
 
-    RomLocation = 0xB3C000;
+    RomLocation = 0xA8BB20;
     . = 0x800A5AC0;
     SegmentStart = .;
     code : AT(RomLocation)
