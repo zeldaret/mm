@@ -158,6 +158,7 @@ clean:
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
+	make -C tools
 
 diff-init: all
 	rm -rf expected/
@@ -199,5 +200,5 @@ build/decomp/%: decomp/%
 	cp $< $@
 
 build/comp/%.yaz0: build/decomp/%
-	./tools/yaz0.py $< $@
+	./tools/yaz0 $< $@
 
