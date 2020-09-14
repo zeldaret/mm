@@ -98,5 +98,5 @@ if __name__ == "__main__":
     if (rupees > 0):
         print('You have {}/{} masks and {}/{} rupee(s).\n'.format(masks, num_masks, rupees, max_rupees));
     else:
-        print('You have {}/{} masks .\n'.format(masks, num_masks));
+        print('You have {}/{} masks.\n'.format(masks, num_masks));
 
