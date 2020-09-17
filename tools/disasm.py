@@ -143,7 +143,7 @@ def get_symbol_name(addr):
         return "D_%08X" % addr
 
 
-def write_header(file):
+def write_header(file, is_data):
     file.write(".set noat # allow use of $at\n"
                ".set noreorder # don't insert nops after branches\n"
                ".set gp=64 # allow use of 64bit registers\n"
@@ -152,6 +152,12 @@ def write_header(file):
                "    \label:\n"
                ".endm\n"
                "\n")
+
+    if is_data:
+        if "_rodata" in file.name:
+            file.write(".section .rodata\n\n")
+        else:
+            file.write(".section .data\n\n")
 
 
 # TODO add code_regions?
@@ -338,7 +344,7 @@ class Disassembler:
     def make_label(self, imm, cur):
         addr = (imm*4) + cur + 4
         self.add_label(addr)
-        return ".L_%08X" % addr
+        return ".L%08X" % addr
 
     def make_func(self, imm, cur):
         addr = (imm*4) + (cur & 0xF0000000)
@@ -414,7 +420,7 @@ class Disassembler:
                                 self.add_object(new_object_start)
                 if addr in self.vars:
                     name = self.make_load(addr)
-                    if name.startswith("__switch"):
+                    if name.startswith("jtbl_"):
                         addr_i = i
                         case_addr = file.get_inst(addr_i)
                         while self.is_in_code(case_addr):
@@ -432,7 +438,7 @@ class Disassembler:
             filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr)
 
             with open(filename, 'w') as f:
-                write_header(f)
+                write_header(f, self.is_in_data_or_undef(file.vaddr))
 
                 for i in range(0, file.size // 4):
                     inst = file.get_inst(i)
@@ -442,12 +448,13 @@ class Disassembler:
                         f.close()
                         filename = path + '/%s.asm' % self.get_object_name(addr, file.vaddr)
                         f = open(filename, 'w')
-                        write_header(f)
+                        write_header(f, self.is_in_data_or_undef(addr))
 
                     if addr in self.labels and addr not in self.switch_cases:
-                        f.write(".L_%08X:\n" % addr)
+                        f.write(".L%08X:\n" % addr)
                     if addr in self.switch_cases:
-                        f.write("glabel .L_%08X\n" % addr)
+                        f.write("glabel L%08X\n" % addr)
+                        f.write(".L%08X:\n" % addr)
                     if addr in self.functions:
                         name = get_func_name(addr)
                         f.write("\nglabel %s\n" % name)
@@ -463,7 +470,7 @@ class Disassembler:
                         if self.is_start_of_variable(addr):
                             name = self.make_load(addr)
                             f.write("glabel %s\n" % name)
-                        f.write("/* %06d 0x%08X */ .word\t.L_%08X\n" % (i, addr, inst))
+                        f.write("/* %06d 0x%08X */ .word\tL%08X\n" % (i, addr, inst))
                     elif self.is_start_of_variable(inst):
                         if self.is_start_of_variable(addr):
                             name = self.make_load(addr)
@@ -867,12 +874,12 @@ class Disassembler:
                 dis += "%s, %s" % (regs[get_rs(inst)], self.make_label(get_signed_imm(inst), addr))
             elif op_num == 8 or op_num == 9 or op_num == 10 or op_num == 11 or op_num == 24 or op_num == 25: # addi, addiu, slti, sltiu, daddi, daddiu
                 if op_num == 9 and get_rs(inst) == 0: # addiu with reg 0 is load immediate (li)
-                    dis = "li\t%s, %d" % (regs[get_rt(inst)], get_signed_imm(inst))
+                    dis = "li\t%s, %#X" % (regs[get_rt(inst)], get_signed_imm(inst))
                 elif op_num == 9 and addr in loadLowRefs: # addiu loading the lower half of a pointer
                     ref = loadLowRefs[addr]
                     dis += "%s, %s, %%lo(%s)" % (regs[get_rt(inst)], regs[get_rs(inst)], format_ref(self.make_load(ref[0]), ref[1]))
                 else:
-                    dis += "%s, %s, %d" % (regs[get_rt(inst)], regs[get_rs(inst)], get_signed_imm(inst))
+                    dis += "%s, %s, %#X" % (regs[get_rt(inst)], regs[get_rs(inst)], get_signed_imm(inst))
             elif op_num == 12 or op_num == 13 or op_num == 14: # andi, ori, xori
                 dis += "%s, %s, %#X" % (regs[get_rt(inst)], regs[get_rs(inst)], get_imm(inst))
             elif op_num == 15: # lui
