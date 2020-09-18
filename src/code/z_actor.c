@@ -261,7 +261,6 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
-#define NON_MATCHING
 #ifdef NON_MATCHING
 void Actor_ApplyMovement(Actor* actor) {
     actor->currPosRot.pos.x += ((actor->velocity.x * actorMovementScale) + actor->colChkInfo.displacement.x);

@@ -13,7 +13,6 @@ void func_80136414(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetion
                               f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
 
 // .data
-u32 D_801F5AB4 = 0;
 static AnimationEntryCallback sAnimationLoadDone[] = {
     func_80135C3C, func_80135C6C, func_80135CDC,
     func_80135D38, func_80135DB8, func_80135E3C,
@@ -21,6 +20,7 @@ static AnimationEntryCallback sAnimationLoadDone[] = {
 
 // .bss
 u32 D_801F5AB0;
+u32 D_801F5AB4;
 
 // SkelAnime_LodDrawLimb
 void func_801330E0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
@@ -189,6 +189,7 @@ void func_80133710(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     Vec3s rot;
     RSPMatrix* mtx;
     GraphicsContext* gfxCtx;
+    s32 pad2;
 
     mtx = (RSPMatrix*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(RSPMatrix) * dListCount));
 
@@ -421,7 +422,6 @@ void func_80133F28(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
     pos.z = limbDrawTable[0].z;
-
     rot = limbDrawTable[1];
 
     dList[0] = limbEntry->displayLists[0];
@@ -472,7 +472,6 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     limbIndex++;
 
     rot = limbDrawTable[limbIndex];
-
     pos.x = limbEntry->translation.x;
     pos.y = limbEntry->translation.y;
     pos.z = limbEntry->translation.z;
@@ -545,7 +544,6 @@ void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
     pos.z = limbDrawTable[0].z;
-
     rot = limbDrawTable[1];
 
     dList[0] = limbEntry->displayLists[0];
@@ -630,7 +628,6 @@ Gfx* func_80134774(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     limbIndex++;
 
     rot = limbDrawTable[limbIndex];
-
     pos.x = limbEntry->translation.x;
     pos.y = limbEntry->translation.y;
     pos.z = limbEntry->translation.z;
@@ -669,7 +666,7 @@ Gfx* func_80134774(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
 Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
                      OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx) {
     SkelLimbEntry* limbEntry;
-    char pad[4];
+    s32 pad;
     Gfx* dList;
     Vec3f pos;
     Vec3s rot;
@@ -685,7 +682,6 @@ Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
     pos.z = limbDrawTable[0].z;
-
     rot = limbDrawTable[1];
 
     dList = limbEntry->displayLists[0];
@@ -734,6 +730,7 @@ Gfx* func_80134B54(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     pos.z = limbEntry->translation.z;
 
     dList1 = dList2 = limbEntry->displayLists[0];
+
     if ((overrideLimbDraw == NULL) || (overrideLimbDraw(globalCtx, limbIndex, &dList1, &pos, &rot, actor, &gfx) == 0)) {
         SysMatrix_RotateAndTranslateState(&pos, &rot);
         if (dList1 != NULL) {
@@ -748,9 +745,11 @@ Gfx* func_80134B54(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
             }
         }
     }
+
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, limbIndex, &dList2, &rot, actor, &gfx);
     }
+
     if (limbEntry->firstChildIndex != LIMB_DONE) {
         gfx = func_80134B54(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                     postLimbDraw, actor, mtx, gfx);
@@ -784,7 +783,9 @@ Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     mtx = (RSPMatrix*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(RSPMatrix) * dListCount));
 
     gSPSegment(gfx++, 0xD, mtx);
+
     SysMatrix_StatePush();
+
     limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
@@ -809,9 +810,11 @@ Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
             }
         }
     }
+
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, 1, &dList2, &rot, actor, &gfx);
     }
+
     if (limbEntry->firstChildIndex != LIMB_DONE) {
         gfx = func_80134B54(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                     postLimbDraw, actor, &mtx, gfx);
@@ -893,6 +896,7 @@ AnimationEntry* func_8013591C(AnimationContext* animationCtx, AnimationType type
     if (index >= ANIMATION_ENTRY_MAX) {
         return NULL;
     }
+
     animationCtx->animationCount = index + 1;
     entry = &animationCtx->entries[index];
     entry->type = type;
@@ -922,6 +926,7 @@ void func_80135954(GlobalContext* globalCtx, LinkAnimetionEntry* linkAnimetionSe
 // SkelAnime_LoadAnimationType1
 void func_80135A28(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src) {
     AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE1);
+
     if (entry != NULL) {
         entry->types.type1.unk_00 = D_801F5AB0;
         entry->types.type1.vecCount = vecCount;
@@ -933,6 +938,7 @@ void func_80135A28(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
 // SkelAnime_LoadAnimationType2
 void func_80135A90(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4) {
     AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE2);
+    
     if (entry != NULL) {
         entry->types.type2.unk_00 = D_801F5AB0;
         entry->types.type2.limbCount = limbCount;
@@ -945,6 +951,7 @@ void func_80135A90(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* 
 // SkelAnime_LoadAnimationType3
 void func_80135B00(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
     AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE3);
+    
     if (entry != NULL) {
         entry->types.type3.unk_00 = D_801F5AB0;
         entry->types.type3.vecCount = vecCount;
@@ -957,6 +964,7 @@ void func_80135B00(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
 // SkelAnime_LoadAnimationType4 
 void func_80135B70(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
     AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE4);
+    
     if (entry != NULL) {
         entry->types.type4.unk_00 = D_801F5AB0;
         entry->types.type4.vecCount = vecCount;
@@ -969,6 +977,7 @@ void func_80135B70(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
 // SkelAnime_LoadAnimationType5
 void func_80135BE0(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 arg3) {
     AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE5);
+    
     if (entry != NULL) {
         entry->types.type5.actor = actor;
         entry->types.type5.skelAnime = skelAnime;
@@ -1078,15 +1087,14 @@ void func_80135F88(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeade
     if (flags & 1) {
         limbCount += headerCount;
     }
+
     if (flags & 4) {
         limbCount += headerCount;
     }
 
     skelAnime->limbCount = limbCount;
     skelAnime->dListCount = skeletonHeader->dListCount;
-
     skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
-
     allocSize = sizeof(Vec3s) * limbCount;
 
     if (flags & 8) {
@@ -1122,7 +1130,6 @@ s32 func_80136104(GlobalContext* globalCtx, SkelAnime* skelAnime) {
     f32 updateRate = (s32)globalCtx->state.framerateDivisor * 0.5f;
 
     skelAnime->transCurrentFrame -= skelAnime->transitionStep * updateRate;
-
     if (skelAnime->transCurrentFrame <= 0.0f) {
         func_801360A8(skelAnime);
     }
@@ -1168,7 +1175,9 @@ s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime) {
         func_801361BC(globalCtx, skelAnime);
         return 1;
     }
+
     skelAnime->animCurrentFrame += skelAnime->animPlaybackSpeed * updateRate;
+
     if (((skelAnime->animCurrentFrame - skelAnime->animFrameCount) * skelAnime->animPlaybackSpeed) > 0.0f) {
         skelAnime->animCurrentFrame = skelAnime->animFrameCount;
     } else {
@@ -1536,12 +1545,12 @@ s32 func_8013713C(SkelAnime* skelAnime) {
     f32 updateRate = gFramerateDivisorThird;
 
     if (skelAnime->animCurrentFrame == skelAnime->animFrameCount) {
-
         func_80134600(skelAnime->animCurrentSeg, (s32)skelAnime->animCurrentFrame, skelAnime->limbCount,
                                skelAnime->limbDrawTbl);
         func_80136F04(skelAnime);
         return 1;
     }
+
     skelAnime->animCurrentFrame += skelAnime->animPlaybackSpeed * updateRate;
     if (((skelAnime->animCurrentFrame - skelAnime->animFrameCount) * skelAnime->animPlaybackSpeed) > 0.0f) {
         skelAnime->animCurrentFrame = skelAnime->animFrameCount;
@@ -1659,6 +1668,7 @@ void func_80137650(SkelAnime* skelAnime) {
 
 void func_80137674(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* index) {
     s32 i;
+
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
         if (*index++) {
             *dst = *src;
@@ -1668,6 +1678,7 @@ void func_80137674(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* index) {
 
 void func_801376DC(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* arg3) {
     s32 i;
+    
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
         if (*arg3++ < 1U) {
             *dst = *src;
