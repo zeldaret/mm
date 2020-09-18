@@ -3,27 +3,33 @@
 
 s32 func_80136288(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime);
-void func_8013792C(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
-void func_80137540(SkelAnime* skelAnime, AnimationHeader* animationSeg);
 s32 func_8013702C(SkelAnime* skelAnime);
 s32 func_801370B0(SkelAnime* skelAnime);
 s32 func_8013713C(SkelAnime* skelAnime);
+void SkelAnime_ChangeAnimDefaultRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg);
 void func_80137748(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
-void func_80136414(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
+void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
                               f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
+void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
+void SkelAnime_LinkAnimetionLoaded(GlobalContext* globalCtx, AnimationEntryType0* entry);
+void SkelAnime_AnimationType1Loaded(GlobalContext* globalCtx, AnimationEntryType1* entry);
+void SkelAnime_AnimationType2Loaded(GlobalContext* globalCtx, AnimationEntryType2* entry);
+void SkelAnime_AnimationType3Loaded(GlobalContext* globalCtx, AnimationEntryType3* entry);
+void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType4* entry);
+void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType5* entry);
 
-// .data
 static AnimationEntryCallback sAnimationLoadDone[] = {
-    func_80135C3C, func_80135C6C, func_80135CDC,
-    func_80135D38, func_80135DB8, func_80135E3C,
+    SkelAnime_LinkAnimetionLoaded, SkelAnime_AnimationType1Loaded, SkelAnime_AnimationType2Loaded,
+    SkelAnime_AnimationType3Loaded, SkelAnime_AnimationType4Loaded, SkelAnime_AnimationType5Loaded,
 };
 
-// .bss
 u32 D_801F5AB0;
 u32 D_801F5AB4;
 
-// SkelAnime_LodDrawLimb
-void func_801330E0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the limb at `limbIndex` with a level of detail display lists index by `dListIndex`
+ */
+void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                            OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex) {
     SkelLimbEntry* limbEntry;
     Gfx* dList;
@@ -61,20 +67,22 @@ void func_801330E0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_801330E0(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                               postLimbDraw, actor, dListIndex);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        func_801330E0(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimb(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
                               postLimbDraw, actor, dListIndex);
     }
 }
 
-// SkelAnime_LodDraw
-void func_801332F0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the Skeleton described by `skeleton` with a level of detail display list indexed by `dListIndex`
+ */
+void SkelAnime_LodDraw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
                        OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex) {
     SkelLimbEntry* limbEntry;
     s32 pad;
@@ -113,12 +121,13 @@ void func_801332F0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
             gfxCtx->polyOpa.p = polyTemp + 2;
         }
     }
+
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, 1, &dList, &rot, actor);
     }
 
     if (limbEntry->firstChildIndex != 0xFF) {
-        func_801330E0(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                               postLimbDraw, actor, dListIndex);
     }
 
@@ -126,8 +135,11 @@ void func_801332F0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
 
 }
 
-// SkelAnime_LodDrawLimbSV
-void func_801334A0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the limb at `limbIndex` with a level of detail display lists index by `dListIndex`, Limb matrices come
+ * from a dynamic allocation from the graph arena.
+ */
+void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                              OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex,
                              RSPMatrix** mtx) {
     SkelLimbEntry* limbEntry;
@@ -163,24 +175,30 @@ void func_801334A0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
             (*mtx)++;
         }
     }
+
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, limbIndex, &dList[1], &dList[0], &rot, actor);
     }
+
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_801334A0(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimbSV(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                 postLimbDraw, actor, dListIndex, mtx);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        func_801334A0(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimbSV(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                 postLimbDraw, actor, dListIndex, mtx);
     }
 }
 
-// SkelAnime_LodDrawSV
-void func_80133710(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+/*
+ * Draws the Skeleton described by `skeleton` with a level of detail display list indexed by `dListIndex`
+ * Matricies for the limbs are dynamically allocted from the graph arena.  The dynamic allocation occurs
+ * because the Skeleton is too large to be supported by the normal matrix stack.
+ */
+void SkelAnime_LodDrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
                          OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex) {
     SkelLimbEntry* limbEntry;
     s32 pad;
@@ -230,16 +248,19 @@ void func_80133710(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, 1, &dList[1], &dList[0], &rot, actor);
     }
+
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_801334A0(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_LodDrawLimbSV(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                 postLimbDraw, actor, dListIndex, &mtx);
     }
 
     SysMatrix_StatePop();
 }
 
-// SkelAnime_DrawLimb
-void func_80133948(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the limb of the Skeleton `skeleton` at `limbIndex`
+ */
+void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                         OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
     SkelLimbEntry* limbEntry;
     Gfx* dList;
@@ -275,21 +296,20 @@ void func_80133948(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_80133948(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                            postLimbDraw, actor);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        func_80133948(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw, postLimbDraw,
+        SkelAnime_DrawLimb(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw, postLimbDraw,
                            actor);
     }
 
 }
 
-// SkelAnime_Draw
-void func_80133B3C(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+void SkelAnime_Draw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
                     OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
     SkelLimbEntry* rootLimb;
     s32 pad;
@@ -332,15 +352,14 @@ void func_80133B3C(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     }
 
     if (rootLimb->firstChildIndex != LIMB_DONE) {
-        func_80133948(globalCtx, rootLimb->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimb(globalCtx, rootLimb->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                            postLimbDraw, actor);
     }
 
     SysMatrix_StatePop();
 }
 
-// SkelAnime_DrawLimbSV
-void func_80133CDC(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                           OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor,
                           RSPMatrix** limbMatricies) {
     SkelLimbEntry* limbEntry;
@@ -381,20 +400,19 @@ void func_80133CDC(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_80133CDC(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimbSV(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                              postLimbDraw, actor, limbMatricies);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        func_80133CDC(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimbSV(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
                              postLimbDraw, actor, limbMatricies);
     }
 }
 
-// SkelAnime_DrawSV
-void func_80133F28(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+void SkelAnime_DrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
                       OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
     SkelLimbEntry* limbEntry;
     s32 pad;
@@ -449,7 +467,7 @@ void func_80133F28(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        func_80133CDC(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimbSV(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                              postLimbDraw, actor, &mtx);
     }
 
@@ -580,8 +598,12 @@ void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     SysMatrix_StatePop();
 }
 
-// SkelAnime_AnimateFrame
-void func_80134600(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst) {
+/*
+ * Copies the rotation values from the rotation value table, indexed by the rotation index table
+ * When a rotation index is >= the animation limit, the output rotation value is copied from the frame's
+ * rotation value list, otherwise it is copied from the initial rotation value list
+ */
+void SkelAnime_AnimateFrame(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst) {
     AnimationHeader* animationHeader = Lib_PtrSegToVirt(animationSeg);
     AnimationRotationIndex* index = Lib_PtrSegToVirt(animationHeader->rotationIndexSeg);
     AnimationRotationValue* rotationValueTable = Lib_PtrSegToVirt(animationHeader->rotationValueSeg);
@@ -590,7 +612,7 @@ void func_80134600(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCoun
     u16 limit = animationHeader->limit;
 
     for (i = 0; i < limbCount; i++) {
-        // Debug prints here, this needed to prevent loop unrolling
+        // Debug prints here, this is needed to prevent loop unrolling
         if (0) {
             if (0){};
         }
@@ -601,21 +623,22 @@ void func_80134600(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCoun
     }
 }
 
-// SkelAnime_GetTotalFrames
-s16 func_80134724(GenericAnimationHeader *animationSeg) {
+s16 SkelAnime_GetTotalFrames(GenericAnimationHeader *animationSeg) {
     GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
     return animation->frameCount;
 }
 
-// SkelAnime_GetFrameCount
-s16 func_80134748(GenericAnimationHeader* animationSeg) {
+s16 SkelAnime_GetFrameCount(GenericAnimationHeader* animationSeg) {
     GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
     // Loads an unsigned half for some reason.
     return (u16)animation->frameCount - 1;
 }
 
-// SkelAnime_Draw2Limb
-Gfx* func_80134774(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the Skeleton `skeleton`'s limb at index `limbIndex`.  Appends all generated graphics commands to
+ * `gfx`.  Returns a pointer to the next gfx to be appended to.
+ */
+Gfx* SkelAnime_Draw2Limb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                          OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx) {
     SkelLimbEntry* limbEntry;
     Gfx* dList;
@@ -648,22 +671,25 @@ Gfx* func_80134774(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        gfx = func_80134774(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_Draw2Limb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                   postLimbDraw, actor, gfx);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        gfx = func_80134774(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_Draw2Limb(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                   postLimbDraw, actor, gfx);
     }
 
     return gfx;
 }
 
-// SkelAnime_Draw2
-Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the Skeleton `skeleton`  Appends all generated graphics to `gfx`, and returns a pointer to the
+ * next gfx to be appended to.
+ */
+Gfx* SkelAnime_Draw2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
                      OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx) {
     SkelLimbEntry* limbEntry;
     s32 pad;
@@ -700,7 +726,7 @@ Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        gfx = func_80134774(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_Draw2Limb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                   postLimbDraw, actor, gfx);
     }
 
@@ -709,8 +735,11 @@ Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     return gfx;
 }
 
-// SkelAnime_DrawLimbSV2
-Gfx* func_80134B54(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+/*
+ * Draws the Skeleton `skeleton`  Appends all generated graphics to `gfx`, and returns a pointer to the
+ * next gfx to be appended to.  Allocates matricies for display lists on the graph heap.
+ */
+Gfx* SkelAnime_DrawLimbSV2(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
                            OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, RSPMatrix** mtx,
                            Gfx* gfx) {
     SkelLimbEntry* limbEntry;
@@ -751,22 +780,21 @@ Gfx* func_80134B54(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        gfx = func_80134B54(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_DrawLimbSV2(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                     postLimbDraw, actor, mtx, gfx);
     }
 
     SysMatrix_StatePop();
 
     if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        gfx = func_80134B54(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_DrawLimbSV2(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                     postLimbDraw, actor, mtx, gfx);
     }
 
     return gfx;
 }
 
-// SkelAnime_DrawSV2
-Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
                        OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx) {
     SkelLimbEntry* limbEntry;
     s32 pad;
@@ -816,7 +844,7 @@ Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     }
 
     if (limbEntry->firstChildIndex != LIMB_DONE) {
-        gfx = func_80134B54(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        gfx = SkelAnime_DrawLimbSV2(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                                     postLimbDraw, actor, &mtx, gfx);
     }
 
@@ -825,7 +853,7 @@ Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
     return gfx;
 }
 
-// Unused
+// Not called anywhere in MM, and is unrolled loop hell
 GLOBAL_ASM("asm/non_matchings/z_skelanime/func_80134FFC.asm")
 
 s16 func_801353D4(GenericAnimationHeader* animationSeg) {
@@ -834,22 +862,27 @@ s16 func_801353D4(GenericAnimationHeader* animationSeg) {
     return animation->unk_02;
 }
 
-// SkelAnime_GetTotalFrames2
-s16 func_801353F8(GenericAnimationHeader* animationSeg) {
+/*
+ * Appears to be unused anywhere in the game.  Appears to be a clone of
+ * SkelAnime_GetTotalFrames
+ */
+s16 SkelAnime_GetTotalFrames2(GenericAnimationHeader* animationSeg) {
     GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
 
     return animation->frameCount;
 }
 
-// SkelAnime_GetFrameCount2
-s16 func_8013541C(GenericAnimationHeader* animationSeg) {
+/*
+ * Appears to be unused anywhere in the game.  Appears to be a clone of
+ * SkelAnime_GetFrameCount
+ */
+s16 SkelAnime_GetFrameCount2(GenericAnimationHeader* animationSeg) {
     GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
 
     return animation->frameCount - 1;
 }
 
-// SkelAnime_InterpolateVec3s
-void func_80135448(s32 limbCount, Vec3s* dst, Vec3s* vec2, Vec3s* vec3, f32 unkf) {
+void SkelAnime_InterpolateVec3s(s32 limbCount, Vec3s* dst, Vec3s* vec2, Vec3s* vec3, f32 unkf) {
     s32 i;
     s16 dist;
     s16 temp2;
@@ -875,8 +908,7 @@ void func_80135448(s32 limbCount, Vec3s* dst, Vec3s* vec2, Vec3s* vec3, f32 unkf
     }
 }
 
-// SkelAnime_AnimationCtxReset
-void func_801358C8(AnimationContext* animationCtx) {
+void SkelAnime_AnimationCtxReset(AnimationContext* animationCtx) {
     animationCtx->animationCount = 0;
 }
 
@@ -888,8 +920,7 @@ void func_801358F4(GlobalContext *globalCtx) {
     D_801F5AB4 |= D_801F5AB0;
 }
 
-// SkelAnime_NextEntry
-AnimationEntry* func_8013591C(AnimationContext* animationCtx, AnimationType type) {
+AnimationEntry* SkelAnime_NextEntry(AnimationContext* animationCtx, AnimationType type) {
     AnimationEntry* entry;
     s16 index = animationCtx->animationCount;
 
@@ -903,14 +934,17 @@ AnimationEntry* func_8013591C(AnimationContext* animationCtx, AnimationType type
     return entry;
 }
 
-// SkelAnime_LoadLinkAnimetion
-void func_80135954(GlobalContext* globalCtx, LinkAnimetionEntry* linkAnimetionSeg, s32 frame,
+/*
+ * The next 6 functions are coordinate with the AnimationType enum
+ */
+
+void SkelAnime_LoadLinkAnimetion(GlobalContext* globalCtx, LinkAnimetionEntry* linkAnimetionSeg, s32 frame,
                                  s32 limbCount, void* ram) {
     AnimationEntry* entry;
     LinkAnimetionEntry* linkAnimetionEntry;
     s32 pad;
 
-    entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_LINKANIMETION);
+    entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_LINKANIMETION);
 
     if (entry != NULL) {
         linkAnimetionEntry = Lib_PtrSegToVirt(linkAnimetionSeg);
@@ -923,9 +957,8 @@ void func_80135954(GlobalContext* globalCtx, LinkAnimetionEntry* linkAnimetionSe
     }
 }
 
-// SkelAnime_LoadAnimationType1
-void func_80135A28(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src) {
-    AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE1);
+void SkelAnime_LoadAnimationType1(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src) {
+    AnimationEntry* entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_TYPE1);
 
     if (entry != NULL) {
         entry->types.type1.unk_00 = D_801F5AB0;
@@ -935,9 +968,8 @@ void func_80135A28(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
     }
 }
 
-// SkelAnime_LoadAnimationType2
-void func_80135A90(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4) {
-    AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE2);
+void SkelAnime_LoadAnimationType2(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4) {
+    AnimationEntry* entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_TYPE2);
     
     if (entry != NULL) {
         entry->types.type2.unk_00 = D_801F5AB0;
@@ -948,9 +980,8 @@ void func_80135A90(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* 
     }
 }
 
-// SkelAnime_LoadAnimationType3
-void func_80135B00(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
-    AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE3);
+void SkelAnime_LoadAnimationType3(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
+    AnimationEntry* entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_TYPE3);
     
     if (entry != NULL) {
         entry->types.type3.unk_00 = D_801F5AB0;
@@ -961,9 +992,8 @@ void func_80135B00(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
     }
 }
 
-// SkelAnime_LoadAnimationType4 
-void func_80135B70(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
-    AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE4);
+void SkelAnime_LoadAnimationType4(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index) {
+    AnimationEntry* entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_TYPE4);
     
     if (entry != NULL) {
         entry->types.type4.unk_00 = D_801F5AB0;
@@ -974,9 +1004,8 @@ void func_80135B70(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* sr
     }
 }
 
-// SkelAnime_LoadAnimationType5
-void func_80135BE0(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 arg3) {
-    AnimationEntry* entry = func_8013591C(&globalCtx->animationCtx, ANIMATION_TYPE5);
+void SkelAnime_LoadAnimationType5(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 arg3) {
+    AnimationEntry* entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_TYPE5);
     
     if (entry != NULL) {
         entry->types.type5.actor = actor;
@@ -985,13 +1014,13 @@ void func_80135BE0(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime,
     }
 }
 
-// SkelAnime_LinkAnimetionLoaded
-void func_80135C3C(GlobalContext* globalCtx, AnimationEntryType0* entry) {
+/* The next functions are callbacks to loading animations */
+
+void SkelAnime_LinkAnimetionLoaded(GlobalContext* globalCtx, AnimationEntryType0* entry) {
     osRecvMesg(&entry->msgQueue, NULL, OS_MESG_BLOCK);
 }
 
-// SkelAnime_AnimationType1Loaded
-void func_80135C6C(GlobalContext* globalCtx, AnimationEntryType1* entry) {
+void SkelAnime_AnimationType1Loaded(GlobalContext* globalCtx, AnimationEntryType1* entry) {
     s32 i;
     Vec3s* dst;
     Vec3s* src;
@@ -1006,15 +1035,13 @@ void func_80135C6C(GlobalContext* globalCtx, AnimationEntryType1* entry) {
     }
 }
 
-// SkelAnime_AnimationType2Loaded
-void func_80135CDC(GlobalContext* globalCtx, AnimationEntryType2* entry) {
+void SkelAnime_AnimationType2Loaded(GlobalContext* globalCtx, AnimationEntryType2* entry) {
     if ((entry->unk_00 & D_801F5AB4) == 0) {
-        func_80135448(entry->limbCount, entry->unk_04, entry->unk_04, entry->unk_08, entry->unk_0C);
+        SkelAnime_InterpolateVec3s(entry->limbCount, entry->unk_04, entry->unk_04, entry->unk_08, entry->unk_0C);
     }
 }
 
-// SkelAnime_AnimationType3Loaded
-void func_80135D38(GlobalContext* globalCtx, AnimationEntryType3* entry) {
+void SkelAnime_AnimationType3Loaded(GlobalContext* globalCtx, AnimationEntryType3* entry) {
     s32 i;
     Vec3s* dst;
     Vec3s* src;
@@ -1030,8 +1057,7 @@ void func_80135D38(GlobalContext* globalCtx, AnimationEntryType3* entry) {
     }
 }
 
-// SkelAnime_AnimationType4Loaded
-void func_80135DB8(GlobalContext* globalCtx, AnimationEntryType4* entry) {
+void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType4* entry) {
     s32 i;
     Vec3s* dst;
     Vec3s* src;
@@ -1047,8 +1073,7 @@ void func_80135DB8(GlobalContext* globalCtx, AnimationEntryType4* entry) {
     }
 }
 
-// SkelAnime_AnimationType5Loaded
-void func_80135E3C(GlobalContext* globalCtx, AnimationEntryType5* entry) {
+void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType5* entry) {
     s32 pad;
     Actor* actor = entry->actor;
     Vec3f pos;
@@ -1070,8 +1095,7 @@ void func_80135EE8(GlobalContext* globalCtx, AnimationContext* animationCtx) {
     D_801F5AB4 = 0;
 }
 
-// SkelAnime_InitLinkAnimetion
-void func_80135F88(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                                  LinkAnimetionEntry* linkAnimetionEntrySeg, s32 flags, Vec3s* limbDrawTbl,
                                  Vec3s* transitionDrawTbl, s32 limbBufCount) {
     SkeletonHeader* skeletonHeader;
@@ -1109,7 +1133,7 @@ void func_80135F88(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeade
         skelAnime->transitionDrawTbl = (Vec3s*)ALIGN16((u32)transitionDrawTbl);
     }
 
-    func_80136414(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f, 0.0f, 0, 0.0f);
+    SkelAnime_ChangeLinkAnim(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f, 0.0f, 0, 0.0f);
 }
 
 void func_801360A8(SkelAnime* skelAnime) {
@@ -1134,14 +1158,13 @@ s32 func_80136104(GlobalContext* globalCtx, SkelAnime* skelAnime) {
         func_801360A8(skelAnime);
     }
 
-    func_80135A90(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl,
+    SkelAnime_LoadAnimationType2(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl,
                                  1.0f - (skelAnime->transCurrentFrame / prevUnk28));
     return 0;
 }
 
 void func_801361BC(GlobalContext* globalCtx, SkelAnime* skelAnime) {
-
-    func_80135954(globalCtx, skelAnime->linkAnimetionSeg, skelAnime->animCurrentFrame,
+    SkelAnime_LoadLinkAnimetion(globalCtx, skelAnime->linkAnimetionSeg, skelAnime->animCurrentFrame,
                                 skelAnime->limbCount, skelAnime->limbDrawTbl);
     if (skelAnime->transCurrentFrame != 0) {
         f32 updateRate = (s32)globalCtx->state.framerateDivisor * 0.5f;
@@ -1149,7 +1172,7 @@ void func_801361BC(GlobalContext* globalCtx, SkelAnime* skelAnime) {
         if (skelAnime->transCurrentFrame <= 0.0f) {
             skelAnime->transCurrentFrame = 0.0f;
         } else {
-            func_80135A90(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl,
+            SkelAnime_LoadAnimationType2(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl,
                                  skelAnime->transitionDrawTbl, skelAnime->transCurrentFrame);
         }
     }
@@ -1191,32 +1214,30 @@ s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime) {
     return 0;
 }
 
-// SkelAnime_SetTransition
-void func_801363F0(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 transitionRate) {
+void SkelAnime_SetTransition(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 transitionRate) {
     skelAnime->transCurrentFrame = 1.0f;
     skelAnime->transitionStep = 1.0f / transitionRate;
 }
 
-// SkelAnime_ChangeLinkAnim
-void func_80136414(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
+void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
                               f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate) {
     skelAnime->mode = animationMode;
     if ((transitionRate != 0.0f) &&
         ((linkAnimetionEntrySeg != skelAnime->linkAnimetionSeg) || (frame != skelAnime->animCurrentFrame))) {
         if (transitionRate < 0) {
             func_801360A8(skelAnime);
-            func_8013792C(skelAnime, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
+            SkelAnime_CopyVec3s(skelAnime, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
             transitionRate = -transitionRate;
         } else {
             skelAnime->animUpdate = func_80136104;
-            func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
+            SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
                                         skelAnime->transitionDrawTbl);
         }
         skelAnime->transCurrentFrame = 1.0f;
         skelAnime->transitionStep = 1.0f / transitionRate;
     } else {
         func_801360A8(skelAnime);
-        func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
+        SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
                                     skelAnime->limbDrawTbl);
         skelAnime->transCurrentFrame = 0.0f;
     }
@@ -1226,60 +1247,56 @@ void func_80136414(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetion
     skelAnime->initialFrame = frame;
     skelAnime->animCurrentFrame = frame;
     skelAnime->animFrameCount = frameCount;
-    skelAnime->totalFrames = func_80134724(linkAnimetionEntrySeg);
+    skelAnime->totalFrames = SkelAnime_GetTotalFrames(linkAnimetionEntrySeg);
     skelAnime->animPlaybackSpeed = playbackSpeed;
 }
 
-// SkelAnime_ChangeLinkAnimDefaultStop
-void func_8013658C(GlobalContext* globalCtx, SkelAnime* skelAnime,
+void SkelAnime_ChangeLinkAnimDefaultStop(GlobalContext* globalCtx, SkelAnime* skelAnime,
                                          LinkAnimetionEntry* linkAnimetionEntrySeg) {
-    func_80136414(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f,
-                             func_80134748(&linkAnimetionEntrySeg->genericHeader), 2, 0.0f);
+    SkelAnime_ChangeLinkAnim(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f,
+                             SkelAnime_GetFrameCount(&linkAnimetionEntrySeg->genericHeader), 2, 0.0f);
 }
 
-// SkelAnime_ChangeLinkAnimPlaybackStop
-void func_801365EC(GlobalContext* globalCtx, SkelAnime* skelAnime,
+void SkelAnime_ChangeLinkAnimPlaybackStop(GlobalContext* globalCtx, SkelAnime* skelAnime,
                                           LinkAnimetionEntry* linkAnimetionEntrySeg, f32 playbackSpeed) {
-    func_80136414(globalCtx, skelAnime, linkAnimetionEntrySeg, playbackSpeed, 0.0f,
-                             func_80134748(&linkAnimetionEntrySeg->genericHeader), 2, 0.0f);
+    SkelAnime_ChangeLinkAnim(globalCtx, skelAnime, linkAnimetionEntrySeg, playbackSpeed, 0.0f,
+                             SkelAnime_GetFrameCount(&linkAnimetionEntrySeg->genericHeader), 2, 0.0f);
 }
 
-// SkelAnime_ChangeLinkAnimDefaultRepeat
-void func_80136650(GlobalContext* globalCtx, SkelAnime* skelAnime,
+void SkelAnime_ChangeLinkAnimDefaultRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime,
                                            LinkAnimetionEntry* linkAnimetionEntrySeg) {
-    func_80136414(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f,
-                             func_80134748(&linkAnimetionEntrySeg->genericHeader), 0, 0.0f);
+    SkelAnime_ChangeLinkAnim(globalCtx, skelAnime, linkAnimetionEntrySeg, 1.0f, 0.0f,
+                             SkelAnime_GetFrameCount(&linkAnimetionEntrySeg->genericHeader), 0, 0.0f);
 }
 
-// SkelAnime_ChangeLinkAnimPlaybackRepeat
-void func_801366AC(GlobalContext* globalCtx, SkelAnime* skelAnime,
+void SkelAnime_ChangeLinkAnimPlaybackRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime,
                                             LinkAnimetionEntry* linkAnimetionEntrySeg, f32 playbackSpeed) {
-    func_80136414(globalCtx, skelAnime, linkAnimetionEntrySeg, playbackSpeed, 0.0f,
-                             func_80134748(&linkAnimetionEntrySeg->genericHeader), 0, 0.0f);
+    SkelAnime_ChangeLinkAnim(globalCtx, skelAnime, linkAnimetionEntrySeg, playbackSpeed, 0.0f,
+                             SkelAnime_GetFrameCount(&linkAnimetionEntrySeg->genericHeader), 0, 0.0f);
 }
 
 void func_8013670C(GlobalContext* globalCtx, SkelAnime* skelAnime) {
-    func_80135A28(globalCtx, skelAnime->limbCount, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
+    SkelAnime_LoadAnimationType1(globalCtx, skelAnime->limbCount, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
 }
 
 void func_8013673C(GlobalContext* globalCtx, SkelAnime* skelAnime) {
-    func_80135A28(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl);
+    SkelAnime_LoadAnimationType1(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl);
 }
 
 void func_8013676C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
                    f32 frame) {
-    func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
                                 skelAnime->transitionDrawTbl);
 }
 
 void func_801367B0(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
                    f32 frame) {
-    func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)frame, skelAnime->limbCount,
                                 skelAnime->limbDrawTbl);
 }
 
 void func_801367F4(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 frame) {
-    func_80135A90(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl,
+    SkelAnime_LoadAnimationType2(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->transitionDrawTbl,
                                  frame);
 }
 
@@ -1287,14 +1304,14 @@ void func_8013682C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetion
                    f32 transitionFrame, LinkAnimetionEntry* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate,
                    Vec3s* limbDrawTbl) {
     Vec3s* alignedLimbDrawTbl;
-    func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)transitionFrame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)transitionFrame, skelAnime->limbCount,
                                 skelAnime->limbDrawTbl);
 
     alignedLimbDrawTbl = (Vec3s*)ALIGN16((u32)limbDrawTbl);
 
-    func_80135954(globalCtx, linkAnimetionEntrySeg2, (s32)frame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg2, (s32)frame, skelAnime->limbCount,
                                 alignedLimbDrawTbl);
-    func_80135A90(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, alignedLimbDrawTbl,
+    SkelAnime_LoadAnimationType2(globalCtx, skelAnime->limbCount, skelAnime->limbDrawTbl, alignedLimbDrawTbl,
                                  transitionRate);
 }
 
@@ -1303,19 +1320,18 @@ void func_801368CC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetion
                    Vec3s* limbDrawTbl) {
     Vec3s* alignedLimbDrawTbl;
 
-    func_80135954(globalCtx, linkAnimetionEntrySeg, (s32)transitionFrame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg, (s32)transitionFrame, skelAnime->limbCount,
                                 skelAnime->transitionDrawTbl);
 
     alignedLimbDrawTbl = (Vec3s*)ALIGN16((u32)limbDrawTbl);
 
-    func_80135954(globalCtx, linkAnimetionEntrySeg2, (s32)frame, skelAnime->limbCount,
+    SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimetionEntrySeg2, (s32)frame, skelAnime->limbCount,
                                 alignedLimbDrawTbl);
-    func_80135A90(globalCtx, skelAnime->limbCount, skelAnime->transitionDrawTbl, alignedLimbDrawTbl,
+    SkelAnime_LoadAnimationType2(globalCtx, skelAnime->limbCount, skelAnime->transitionDrawTbl, alignedLimbDrawTbl,
                                  transitionRate);
 }
 
-// SkelAnime_SetModeStop
-void func_8013696C(SkelAnime* skelAnime) {
+void SkelAnime_SetModeStop(SkelAnime* skelAnime) {
     skelAnime->mode = 2;
     func_801360A8(skelAnime);
 }
@@ -1350,8 +1366,7 @@ s32 func_80136A48(SkelAnime* skelAnime, f32 arg1) {
     return func_80136990(skelAnime, arg1, updateRate);
 }
 
-// SkelAnime_Init
-void func_80136A7C(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                     AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount) {
     SkeletonHeader* skeletonHeader;
 
@@ -1369,12 +1384,11 @@ void func_80136A7C(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeade
     }
 
     if (animationSeg != NULL) {
-        func_80137540(skelAnime, animationSeg);
+        SkelAnime_ChangeAnimDefaultRepeat(skelAnime, animationSeg);
     }
 }
 
-// SkelAnime_InitSV
-void func_80136B30(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                       AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount) {
     SkeletonHeader* skeletonHeader;
 
@@ -1395,12 +1409,11 @@ void func_80136B30(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeade
     }
 
     if (animationSeg != NULL) {
-        func_80137540(skelAnime, animationSeg);
+        SkelAnime_ChangeAnimDefaultRepeat(skelAnime, animationSeg);
     }
 }
 
-// SkelAnime_InitSkin
-void func_80136BEC(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                         AnimationHeader* animationSeg) {
     SkeletonHeader* skeletonHeader;
 
@@ -1416,7 +1429,7 @@ void func_80136BEC(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeade
     if (1){};
 
     if (animationSeg != NULL) {
-        func_80137540(skelAnime, animationSeg);
+        SkelAnime_ChangeAnimDefaultRepeat(skelAnime, animationSeg);
     }
 }
 
@@ -1430,8 +1443,7 @@ void func_80136C84(SkelAnime* skelAnime) {
     }
 }
 
-// SkelAnime_FrameUpdateMatrix
-s32 func_80136CD0(SkelAnime* skelAnime) {
+s32 SkelAnime_FrameUpdateMatrix(SkelAnime* skelAnime) {
     return skelAnime->animUpdate(skelAnime);
 }
 
@@ -1444,7 +1456,7 @@ s32 func_80136CF4(SkelAnime* skelAnime) {
         func_80136C84(skelAnime);
         skelAnime->transCurrentFrame = 0.0f;
     }
-    func_80135448(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
+    SkelAnime_InterpolateVec3s(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
                                skelAnime->transitionDrawTbl, 1.0f - (skelAnime->transCurrentFrame / prevUnk28));
     return 0;
 }
@@ -1474,7 +1486,7 @@ s32 func_80136D98(SkelAnime* skelAnime) {
     } else {
         phi_f2 = 0.0f;
     }
-    func_80135448(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
+    SkelAnime_InterpolateVec3s(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
                                skelAnime->transitionDrawTbl, 1.0f - phi_f2);
     return 0;
 }
@@ -1486,7 +1498,7 @@ void func_80136F04(SkelAnime* skelAnime) {
     f32 temp_f10;
     f32 temp_f2;
 
-    func_80134600(skelAnime->animCurrentSeg, skelAnime->animCurrentFrame, skelAnime->limbCount,
+    SkelAnime_AnimateFrame(skelAnime->animCurrentSeg, skelAnime->animCurrentFrame, skelAnime->limbCount,
                            skelAnime->limbDrawTbl);
     if (skelAnime->mode & 0x1) {
         t = (s32)skelAnime->animCurrentFrame;
@@ -1496,8 +1508,8 @@ void func_80136F04(SkelAnime* skelAnime) {
         if (t >= (s32)skelAnime->totalFrames) {
             t = 0;
         }
-        func_80134600(skelAnime->animCurrentSeg, t, skelAnime->limbCount, sp38);
-        func_80135448(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl, sp38, temp_f2);
+        SkelAnime_AnimateFrame(skelAnime->animCurrentSeg, t, skelAnime->limbCount, sp38);
+        SkelAnime_InterpolateVec3s(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl, sp38, temp_f2);
     }
     if (skelAnime->transCurrentFrame != 0) {
         f32 updateRate = gFramerateDivisorThird;
@@ -1506,7 +1518,7 @@ void func_80136F04(SkelAnime* skelAnime) {
             skelAnime->transCurrentFrame = 0.0f;
             return;
         }
-        func_80135448(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
+        SkelAnime_InterpolateVec3s(skelAnime->limbCount, skelAnime->limbDrawTbl, skelAnime->limbDrawTbl,
                                    skelAnime->transitionDrawTbl, skelAnime->transCurrentFrame);
     }
 }
@@ -1545,7 +1557,7 @@ s32 func_8013713C(SkelAnime* skelAnime) {
     f32 updateRate = gFramerateDivisorThird;
 
     if (skelAnime->animCurrentFrame == skelAnime->animFrameCount) {
-        func_80134600(skelAnime->animCurrentSeg, (s32)skelAnime->animCurrentFrame, skelAnime->limbCount,
+        SkelAnime_AnimateFrame(skelAnime->animCurrentSeg, (s32)skelAnime->animCurrentFrame, skelAnime->limbCount,
                                skelAnime->limbDrawTbl);
         func_80136F04(skelAnime);
         return 1;
@@ -1567,15 +1579,14 @@ s32 func_8013713C(SkelAnime* skelAnime) {
     return 0;
 }
 
-// SkelAnime_ChangeAnimImpl
-void func_8013722C(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
+void SkelAnime_ChangeAnimImpl(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
                               f32 frameCount, u8 animationType, f32 transitionRate, s8 unk2) {
     skelAnime->mode = animationType;
     if ((transitionRate != 0.0f) &&
         ((animationSeg != skelAnime->animCurrentSeg) || (frame != skelAnime->animCurrentFrame))) {
         if (transitionRate < 0) {
             func_80136C84(skelAnime);
-            func_8013792C(skelAnime, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
+            SkelAnime_CopyVec3s(skelAnime, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
             transitionRate = -transitionRate;
         } else {
             if (unk2 != 0) {
@@ -1584,20 +1595,20 @@ void func_8013722C(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 play
             } else {
                 skelAnime->animUpdate = func_80136CF4;
             }
-            func_80134600(animationSeg, frame, skelAnime->limbCount, skelAnime->transitionDrawTbl);
+            SkelAnime_AnimateFrame(animationSeg, frame, skelAnime->limbCount, skelAnime->transitionDrawTbl);
         }
         skelAnime->transCurrentFrame = 1.0f;
         skelAnime->transitionStep = 1.0f / transitionRate;
     } else {
         func_80136C84(skelAnime);
-        func_80134600(animationSeg, frame, skelAnime->limbCount, skelAnime->limbDrawTbl);
+        SkelAnime_AnimateFrame(animationSeg, frame, skelAnime->limbCount, skelAnime->limbDrawTbl);
         skelAnime->transCurrentFrame = 0.0f;
     }
 
     skelAnime->animCurrentSeg = animationSeg;
     skelAnime->initialFrame = frame;
     skelAnime->animFrameCount = frameCount;
-    skelAnime->totalFrames = func_80134724(&animationSeg->genericHeader);
+    skelAnime->totalFrames = SkelAnime_GetTotalFrames(&animationSeg->genericHeader);
     if (skelAnime->mode >= 4) {
         skelAnime->animCurrentFrame = 0.0f;
     } else {
@@ -1609,56 +1620,47 @@ void func_8013722C(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 play
     skelAnime->animPlaybackSpeed = playbackSpeed;
 }
 
-// SkelAnime_ChangeAnim
-void func_801373E8(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
+void SkelAnime_ChangeAnim(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
                           f32 frameCount, u8 mode, f32 transitionRate) {
-    func_8013722C(skelAnime, animationSeg, playbackSpeed, frame, frameCount, mode, transitionRate, 0);
+    SkelAnime_ChangeAnimImpl(skelAnime, animationSeg, playbackSpeed, frame, frameCount, mode, transitionRate, 0);
 }
 
-// SkelAnime_ChangeAnimDefaultStop
-void func_80137430(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
-    func_801373E8(skelAnime, animationSeg, 1.0f, 0.0f, func_80134748(&animationSeg->genericHeader), 2,
+void SkelAnime_ChangeAnimDefaultStop(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->genericHeader), 2,
                          0.0f);
 }
 
-// SkelAnime_ChangeAnimTransitionStop
-void func_80137488(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
-    func_801373E8(skelAnime, animationSeg, 1.0f, 0, func_80134748(&animationSeg->genericHeader), 2,
+void SkelAnime_ChangeAnimTransitionStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0, SkelAnime_GetFrameCount(&animationSeg->genericHeader), 2,
                          transitionRate);
 }
 
-// SkelAnime_ChangeAnimPlaybackStop
-void func_801374E4(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
-    func_801373E8(skelAnime, animationSeg, playbackSpeed, 0.0f,
-                         func_80134748(&animationSeg->genericHeader), 2, 0.0f);
+void SkelAnime_ChangeAnimPlaybackStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f,
+                         SkelAnime_GetFrameCount(&animationSeg->genericHeader), 2, 0.0f);
 }
 
-// SkelAnime_ChangeAnimDefaultRepeat
-void func_80137540(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
-    func_801373E8(skelAnime, animationSeg, 1.0f, 0.0f, func_80134748(&animationSeg->genericHeader), 0,
+void SkelAnime_ChangeAnimDefaultRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->genericHeader), 0,
                          0.0f);
 }
 
-// SkelAnime_ChangeAnimTransitionRepeat
-void func_80137594(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
-    func_801373E8(skelAnime, animationSeg, 1.0f, 0.0f, 0.0f, 0, transitionRate);
+void SkelAnime_ChangeAnimTransitionRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, 0.0f, 0, transitionRate);
 }
 
-// SkelAnime_ChangeAnimPlaybackRepeat
-void func_801375CC(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
-    func_801373E8(skelAnime, animationSeg, playbackSpeed, 0.0f,
-                         func_80134748(&animationSeg->genericHeader), 0, 0.0f);
+void SkelAnime_ChangeAnimPlaybackRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f,
+                         SkelAnime_GetFrameCount(&animationSeg->genericHeader), 0, 0.0f);
 }
 
-// SkelAnime_AnimSetStop
-void func_80137624(SkelAnime* skelAnime) {
+void SkelAnime_AnimSetStop(SkelAnime* skelAnime) {
     skelAnime->mode = 2;
     skelAnime->animFrameCount = skelAnime->totalFrames;
     func_80136C84(skelAnime);
 }
 
-// SkelAnime_AnimReverse
-void func_80137650(SkelAnime* skelAnime) {
+void SkelAnime_AnimReverse(SkelAnime* skelAnime) {
     f32 initialFrame = skelAnime->initialFrame;
 
     skelAnime->initialFrame = skelAnime->animFrameCount;
@@ -1731,8 +1733,7 @@ s32 func_801378B8(SkelAnime* skelAnime, f32 arg1) {
     return func_80136990(skelAnime, arg1, 1.0f);
 }
 
-// SkelAnime_Free
-void func_801378E0(SkelAnime* skelAnime, GlobalContext* globalCtx) {
+void SkelAnime_Free(SkelAnime* skelAnime, GlobalContext* globalCtx) {
     if (skelAnime->limbDrawTbl != NULL) {
         zelda_free(skelAnime->limbDrawTbl);
     }
@@ -1742,7 +1743,6 @@ void func_801378E0(SkelAnime* skelAnime, GlobalContext* globalCtx) {
     }
 }
 
-// SkelAnime_CopyVec3s
-void func_8013792C(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src) {
+void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src) {
     _bcopy(src, dst, sizeof(Vec3s) * skelAnime->limbCount);
 }
