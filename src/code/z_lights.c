@@ -317,9 +317,7 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
     LightMapper* mapper;
     s32 i;
 
-    // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
-    gCtxt->polyOpa.d = (void*)mapper;
+    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper) * 1);
 
     mapper->lights.a.l.col[0] = mapper->lights.a.l.colc[0] = ambientRed;
     mapper->lights.a.l.col[1] = mapper->lights.a.l.colc[1] = ambientGreen;
@@ -344,9 +342,7 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
 LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 green, u8 blue) {
     LightMapper* mapper;
 
-    // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
-    gCtxt->polyOpa.d = (void*)mapper;
+    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper) * 1);
 
     mapper->lights.a.l.col[0] = red;
     mapper->lights.a.l.colc[0] = red;

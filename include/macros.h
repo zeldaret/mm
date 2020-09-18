@@ -21,4 +21,20 @@
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
             (curState)->nextGameStateSize = sizeof(newStruct); 
 
+extern GraphicsContext* oGfxCtx;
+
+#define OPEN_DISPS(gfxCtx, file, line) \
+    {                                  \
+        GraphicsContext* oGfxCtx;      \
+        Gfx* dispRefs[4];              \
+        oGfxCtx = gfxCtx;              \
+
+#define CLOSE_DISPS(gfxCtx, file, line)                 \
+    }                                                   \
+    (void)0
+
+#define GRAPH_ALLOC(gfxCtx, size)         \
+    ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
+
+
 #endif // _MACROS_H_

@@ -869,7 +869,7 @@
     0x801BA3A8:("D_801BA3A8","UNK_PTR","",0x4),
     0x801BA3BC:("collisionFuncTableATwithAC","collision_func","[25]",0x64),
     0x801BA420:("collisionFuncTableOTwithOT","collision_func","[25]",0x64),
-    0x801BA484:("D_801BA484","ActorA0","",0x1c),
+    0x801BA484:("D_801BA484","CollisionCheckInfo","",0x1c),
     0x801BA4A0:("D_801BA4A0","UNK_PTR","",0x4),
     0x801BA4B4:("D_801BA4B4","UNK_TYPE1","",0x1),
     0x801BA4C8:("D_801BA4C8","EffShieldParticleInit","",0x40),

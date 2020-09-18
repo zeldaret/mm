@@ -1128,11 +1128,7 @@ Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y) {
 Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height) {
     Gfx* displayList;
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 4;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 4);
 
     x %= 2048;
     y %= 2048;
@@ -1148,11 +1144,7 @@ Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 wi
                       u32 y2, s32 width2, s32 height2) {
     Gfx* displayList;
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
 
     x1 %= 2048;
     y1 %= 2048;
@@ -1172,11 +1164,7 @@ Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1
                               u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a) {
     Gfx* displayList;
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
 
     x1 %= 2048;
     y1 %= 2048;
@@ -1196,11 +1184,7 @@ Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1
 Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a) {
     Gfx* displayList;
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetEnvColor(displayList, r, g, b, a);
     gSPEndDisplayList(displayList + 1);
@@ -1211,11 +1195,7 @@ Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a) {
 Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a) {
     Gfx* displayList;
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetPrimColor(displayList, 0, lodfrac, r, g, b, a);
     gSPEndDisplayList(displayList + 1);

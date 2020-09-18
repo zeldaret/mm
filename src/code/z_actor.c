@@ -230,7 +230,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
-    func_800E7494(&actor->unkA0);
+    func_800E7494(&actor->colChkInfo);
     actor->unkFC = 1000.0f;
     actor->unk100 = 350.0f;
     actor->unk104 = 700.0f;
@@ -261,11 +261,12 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
+#define NON_MATCHING
 #ifdef NON_MATCHING
 void Actor_ApplyMovement(Actor* actor) {
-    actor->currPosRot.pos.x += ((actor->velocity.x * actorMovementScale) + actor->unkA0.displacement.x);
-    actor->currPosRot.pos.y += ((actor->velocity.y * actorMovementScale) + actor->unkA0.displacement.y);
-    actor->currPosRot.pos.z += ((actor->velocity.z * actorMovementScale) + actor->unkA0.displacement.z);
+    actor->currPosRot.pos.x += ((actor->velocity.x * actorMovementScale) + actor->colChkInfo.displacement.x);
+    actor->currPosRot.pos.y += ((actor->velocity.y * actorMovementScale) + actor->colChkInfo.displacement.y);
+    actor->currPosRot.pos.z += ((actor->velocity.z * actorMovementScale) + actor->colChkInfo.displacement.z);
 }
 #else
 GLOBAL_ASM("asm/non_matchings/z_actor//Actor_ApplyMovement.asm")

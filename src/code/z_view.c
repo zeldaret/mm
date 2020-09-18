@@ -288,15 +288,10 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     Vp* vp;
     Mtx* projection;
     Mtx* viewing;
-    GraphicsContext* gfxCtx;
+    GraphicsContext* gfxCtx = view->gfxCtx;
 
-    gfxCtx = view->gfxCtx;
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp) * 1);
 
-    {
-        Vp* _vp = (Vp*)gfxCtx->polyOpa.d - 1;
-        vp = _vp;
-        gfxCtx->polyOpa.d = (Gfx*)_vp;
-    }
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
 
@@ -305,11 +300,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     gSPViewport(gfxCtx->polyOpa.p++, vp);
     gSPViewport(gfxCtx->polyXlu.p++, vp);
 
-    {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        projection = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
-    }
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+
     view->projectionPtr = projection;
 
     width = view->viewport.rightX - view->viewport.leftX;
@@ -327,11 +319,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     gSPPerspNormalize(gfxCtx->polyXlu.p++, view->normal);
     gSPMatrix(gfxCtx->polyXlu.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        viewing = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
-    }
+    viewing = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+
     view->viewingPtr = viewing;
 
     if (view->eye.x == view->focalPoint.x && view->eye.y == view->focalPoint.y && view->eye.z == view->focalPoint.z) {
@@ -361,11 +350,8 @@ s32 View_RenderToOrthographicMatrix(View* view) {
 
     gfxCtx = view->gfxCtx;
 
-    {
-        Vp* _vp = (Vp*)gfxCtx->polyOpa.d - 1;
-        vp = _vp;
-        gfxCtx->polyOpa.d = (Gfx*)_vp;
-    }
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp) * 1);
+
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
 
@@ -375,11 +361,8 @@ s32 View_RenderToOrthographicMatrix(View* view) {
     gSPViewport(gfxCtx->polyXlu.p++, vp);
     gSPViewport(gfxCtx->overlay.p++, vp);
 
-    {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        projection = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
-    }
+    proejction = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+
     view->projectionPtr = projection;
 
     guOrtho(projection, -0.5f ,0.5f, screenWidth * -0.5f, screenWidth * 0.5f,

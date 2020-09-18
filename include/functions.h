@@ -1486,11 +1486,11 @@ void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* co
 UNK_TYPE4 func_800E7264(ColCommon* iParm1); // func_800E7264
 UNK_TYPE4 func_800E7288(ColCommon* piParm1, ColCommon* piParm2); // func_800E7288
 void Collision_DoOTWithOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E7308
-void func_800E7494(ActorA0* param_1); // func_800E7494
-void func_800E74DC(ActorA0* param_1); // func_800E74DC
+void func_800E7494(CollisionCheckInfo* param_1); // func_800E7494
+void func_800E74DC(CollisionCheckInfo* param_1); // func_800E74DC
 void func_800E7508(s32 param_1, UNK_PTR param_2); // func_800E7508
-void func_800E7530(ActorA0* param_1, ActorDamageChart* param_2, UNK_PTR param_3); // func_800E7530
-void func_800E755C(ActorA0* puParm1, ActorDamageChart* uParm2, UNK_PTR puParm3); // func_800E755C
+void func_800E7530(CollisionCheckInfo* param_1, ActorDamageChart* param_2, UNK_PTR param_3); // func_800E7530
+void func_800E755C(CollisionCheckInfo* puParm1, ActorDamageChart* uParm2, UNK_PTR puParm3); // func_800E755C
 void func_800E7590(void); // func_800E7590
 void func_800E75C8(void); // func_800E75C8
 void func_800E77EC(void); // func_800E77EC
@@ -2529,95 +2529,126 @@ void func_80132E9C(void); // func_80132E9C
 void func_80132FDC(void); // func_80132FDC
 void func_80133000(void); // func_80133000
 void func_80133038(void); // func_80133038
-void func_801330E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_801330E0
-void func_801332F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_801332F0
-void func_801334A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_801334A0
-void func_80133710(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80133710
-void func_80133948(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80133948
-void func_80133B3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80133B3C
-void func_80133CDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80133CDC
-void func_80133F28(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80133F28
-void func_80134148(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_80134148
-void func_801343C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_801343C0
-void func_80134600(void); // func_80134600
-void func_80134724(void); // func_80134724
-void func_80134748(void); // func_80134748
-void func_80134774(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80134774
-void func_80134990(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80134990
-void func_80134B54(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_80134B54
-void func_80134DBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_80134DBC
-void func_80134FFC(void); // func_80134FFC
-void func_801353D4(void); // func_801353D4
-void func_801353F8(void); // func_801353F8
-void func_8013541C(void); // func_8013541C
-void func_80135448(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80135448
-void func_801358C8(UNK_PTR param_1); // func_801358C8
-void func_801358D4(void); // func_801358D4
-void func_801358F4(void); // func_801358F4
-void func_8013591C(void); // func_8013591C
-void func_80135954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80135954
-void func_80135A28(void); // func_80135A28
-void func_80135A90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80135A90
-void func_80135B00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80135B00
-void func_80135B70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80135B70
-void func_80135BE0(void); // func_80135BE0
-void func_80135C3C(void); // func_80135C3C
-void func_80135C6C(void); // func_80135C6C
-void func_80135CDC(void); // func_80135CDC
-void func_80135D38(void); // func_80135D38
-void func_80135DB8(void); // func_80135DB8
-void func_80135E3C(void); // func_80135E3C
-void func_80135EE8(void); // func_80135EE8
-void func_80135F88(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80135F88
-void func_801360A8(void); // func_801360A8
-void func_801360E0(void); // func_801360E0
-void func_80136104(void); // func_80136104
-void func_801361BC(void); // func_801361BC
-void func_80136288(void); // func_80136288
-void func_8013631C(void); // func_8013631C
-void func_801363F0(void); // func_801363F0
-void func_80136414(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE1 param_7, UNK_TYPE4 param_8); // func_80136414
-void func_8013658C(void); // func_8013658C
-void func_801365EC(void); // func_801365EC
-void func_80136650(void); // func_80136650
-void func_801366AC(void); // func_801366AC
-void func_8013670C(void); // func_8013670C
-void func_8013673C(void); // func_8013673C
-void func_8013676C(void); // func_8013676C
-void func_801367B0(void); // func_801367B0
-void func_801367F4(void); // func_801367F4
-void func_8013682C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_8013682C
-void func_801368CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_801368CC
-void func_8013696C(void); // func_8013696C
-void func_80136990(void); // func_80136990
-void func_80136A48(void); // func_80136A48
-void func_80136A7C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80136A7C
-void func_80136B30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80136B30
-void func_80136BEC(void); // func_80136BEC
-void func_80136C84(void); // func_80136C84
-void func_80136CD0(void); // func_80136CD0
-void func_80136CF4(void); // func_80136CF4
-void func_80136D98(void); // func_80136D98
-void func_80136F04(void); // func_80136F04
-void func_8013702C(void); // func_8013702C
-void func_801370B0(void); // func_801370B0
-void func_8013713C(void); // func_8013713C
-void func_8013722C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8); // func_8013722C
-void func_801373E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7); // func_801373E8
-void func_80137430(void); // func_80137430
-void func_80137488(void); // func_80137488
-void func_801374E4(void); // func_801374E4
-void func_80137540(void); // func_80137540
-void func_80137594(void); // func_80137594
-void func_801375CC(void); // func_801375CC
-void func_80137624(void); // func_80137624
-void func_80137650(void); // func_80137650
-void func_80137674(void); // func_80137674
-void func_801376DC(void); // func_801376DC
-void func_80137748(void); // func_80137748
-void func_801378B8(void); // func_801378B8
-void func_801378E0(void); // func_801378E0
-void func_8013792C(void); // func_8013792C
+void func_801330E0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                           OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
+void func_801332F0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+                       OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
+void func_801334A0(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                             OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex,
+                             RSPMatrix** mtx);
+void func_80133710(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+                         OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex);
+void func_80133948(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                        OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void func_80133B3C(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+                    OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void func_80133CDC(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                          OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor,
+                          RSPMatrix** limbMatricies);
+void func_80133F28(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+                      OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, 
+                      OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor,
+                      RSPMatrix** mtx);
+void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+                      OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
+void func_80134600(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
+s16 func_80134724(GenericAnimationHeader *animationSeg);
+s16 func_80134748(GenericAnimationHeader* animationSeg);
+Gfx* func_80134774(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                         OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* func_80134990(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
+                     OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* func_80134B54(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
+                           OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, RSPMatrix** mtx,
+                           Gfx* gfx);
+Gfx* func_80134DBC(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
+                       OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+s32 func_80134FFC(s32 arg0, s32 arg1, Vec3s* dst);
+s16 func_801353D4(GenericAnimationHeader* animationSeg);
+s16 func_801353F8(GenericAnimationHeader* animationSeg);
+s16 func_8013541C(GenericAnimationHeader* animationSeg);
+void func_80135448(s32 limbCount, Vec3s* dst, Vec3s* vec2, Vec3s* vec3, f32 unkf);
+void func_801358C8(AnimationContext* animationCtx);
+void func_801358D4(GlobalContext *globalCtx);
+void func_801358F4(GlobalContext *globalCtx);
+AnimationEntry* func_8013591C(AnimationContext* animationCtx, AnimationType type);
+void func_80135954(GlobalContext* globalCtx, LinkAnimetionEntry* linkAnimetionSeg, s32 frame,
+                                 s32 limbCount, void* ram);
+void func_80135A28(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src);
+void func_80135A90(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4);
+void func_80135B00(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index);
+void func_80135B70(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index);
+void func_80135BE0(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 arg3);
+void func_80135C3C(GlobalContext* globalCtx, AnimationEntryType0* entry);
+void func_80135C6C(GlobalContext* globalCtx, AnimationEntryType1* entry);
+void func_80135CDC(GlobalContext* globalCtx, AnimationEntryType2* entry);
+void func_80135D38(GlobalContext* globalCtx, AnimationEntryType3* entry);
+void func_80135DB8(GlobalContext* globalCtx, AnimationEntryType4* entry);
+void func_80135E3C(GlobalContext* globalCtx, AnimationEntryType5* entry);
+void func_80135EE8(GlobalContext* globalCtx, AnimationContext* animationCtx);
+void func_80135F88(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+                                 LinkAnimetionEntry* linkAnimetionEntrySeg, s32 flags, Vec3s* limbDrawTbl,
+                                 Vec3s* transitionDrawTbl, s32 limbBufCount);
+void func_801360A8(SkelAnime* skelAnime);
+s32 func_801360E0(GlobalContext* globalCtx, SkelAnime* skelAnime);
+s32 func_80136104(GlobalContext* globalCtx, SkelAnime* skelAnime);
+void func_801361BC(GlobalContext* globalCtx, SkelAnime* skelAnime);
+s32 func_80136288(GlobalContext* globalCtx, SkelAnime* skelAnime);
+s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime);
+void func_801363F0(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 transitionRate);
+void func_80136414(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
+                              f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
+void func_8013658C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg);
+void func_801365EC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg, f32 playbackSpeed);
+void func_80136650(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg);
+void func_801366AC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg, f32 playbackSpeed);
+void func_8013670C(GlobalContext* globalCtx, SkelAnime* skelAnime);
+void func_8013673C(GlobalContext* globalCtx, SkelAnime* skelAnime);
+void func_8013676C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg, f32 frame);
+void func_801367B0(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg, f32 frame);
+void func_801367F4(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 frame);
+void func_8013682C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
+                   f32 transitionFrame, LinkAnimetionEntry* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate,
+                   Vec3s* limbDrawTbl);
+void func_801368CC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimetionEntry* linkAnimetionEntrySeg,
+                   f32 transitionFrame, LinkAnimetionEntry* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate,
+                   Vec3s* limbDrawTbl);
+void func_8013696C(SkelAnime* skelAnime);
+s32 func_80136990(SkelAnime* skelAnime, f32 arg1, f32 updateRate);
+s32 func_80136A48(SkelAnime* skelAnime, f32 arg1);
+void func_80136A7C(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+                    AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void func_80136B30(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+                      AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void func_80136BEC(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+                        AnimationHeader* animationSeg);
+void func_80136C84(SkelAnime* skelAnime);
+s32 func_80136CD0(SkelAnime* skelAnime);
+s32 func_80136CF4(SkelAnime* skelAnime);
+s32 func_80136D98(SkelAnime* skelAnime);
+void func_80136F04(SkelAnime* skelAnime);
+s32 func_8013702C(SkelAnime* skelAnime);
+s32 func_801370B0(SkelAnime* skelAnime);
+s32 func_8013713C(SkelAnime* skelAnime);
+void func_8013722C(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
+                              f32 frameCount, u8 animationType, f32 transitionRate, s8 unk2);
+void func_801373E8(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
+                          f32 frameCount, u8 mode, f32 transitionRate);
+void func_80137430(SkelAnime* skelAnime, AnimationHeader* animationSeg);
+void func_80137488(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate);
+void func_801374E4(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed);
+void func_80137540(SkelAnime* skelAnime, AnimationHeader* animationSeg);
+void func_80137594(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate);
+void func_801375CC(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed);
+void func_80137624(SkelAnime* skelAnime);
+void func_80137650(SkelAnime* skelAnime);
+void func_80137674(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* index);
+void func_801376DC(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* arg3);
+void func_80137748(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
+s32 func_801378B8(SkelAnime* skelAnime, f32 arg1);
+void func_801378E0(SkelAnime* skelAnime, GlobalContext* globalCtx);
+void func_8013792C(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 void func_80137970(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80137970
 void func_80137B34(void); // func_80137B34
 void func_80137EBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80137EBC

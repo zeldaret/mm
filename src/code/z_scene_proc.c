@@ -70,11 +70,7 @@ void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTex
     GraphicsContext* gfxCtx;
     Gfx* dl;
 
-    {
-        Gfx* _g = (Gfx*)ctxt->state.gfxCtx->polyOpa.d - 4;
-        dl = _g;
-        ctxt->state.gfxCtx->polyOpa.d = _g;
-    }
+    dl = GRAPH_ALLOC(ctxt->state.gfxCtx, sizeof(Gfx) * 4);
 
     gfxCtx = ctxt->state.gfxCtx;
     if (gSceneProcFlags & 1) {
@@ -422,15 +418,10 @@ void SceneProc_DrawSceneConfig7(GlobalContext* ctxt) {
 
 void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
     s32 i;
-    Gfx* dlHead;
-    u32 pad1;
-    u32 pad2;
-    GraphicsContext* gfxCtx;
-    u32 pad3;
-    u32 pad4;
-    u32 pad5;
-    u32 pad6;
     Gfx* dl;
+    Gfx* dlHead;
+    s32 pad;
+    GraphicsContext* gfxCtx;
 
     if (Actor_GetSwitchFlag(ctxt,0x33) &&
         Actor_GetSwitchFlag(ctxt,0x34) &&
@@ -441,11 +432,7 @@ void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
         func_800C3C14(&ctxt->colCtx, 1);
     }
 
-    {
-        dl = (Gfx*)ctxt->state.gfxCtx->polyOpa.d - 18;
-        //dl = _g;
-        ctxt->state.gfxCtx->polyOpa.d = dl;
-    }
+    dl = GRAPH_ALLOC(ctxt->state.gfxCtx, sizeof(Gfx) * 18);
 
     SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
 

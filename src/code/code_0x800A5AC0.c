@@ -11,7 +11,7 @@ void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt) {
     Actor_SetDrawParams(&s0->base.shape, 0, (actor_shadow_draw_func)func_800B3FC0, 12);
     Collision_InitCylinder(ctxt, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
     Collision_CylinderMoveToActor((Actor*)s0, &s0->collision);
-    s0->base.unkA0.mass = 255;
+    s0->base.colChkInfo.mass = 255;
     s0->update = (ActorFunc)EnAObj_Update1;
 }
 

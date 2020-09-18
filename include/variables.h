@@ -872,7 +872,7 @@ extern UNK_TYPE1 D_801BA38D; // D_801BA38D
 extern UNK_PTR D_801BA3A8; // D_801BA3A8
 extern collision_func collisionFuncTableATwithAC[25]; // D_801BA3BC
 extern collision_func collisionFuncTableOTwithOT[25]; // D_801BA420
-extern ActorA0 D_801BA484; // D_801BA484
+extern CollisionCheckInfo D_801BA484; // D_801BA484
 extern UNK_PTR D_801BA4A0; // D_801BA4A0
 extern UNK_TYPE1 D_801BA4B4; // D_801BA4B4
 extern EffShieldParticleInit D_801BA4C8; // D_801BA4C8
@@ -4043,8 +4043,8 @@ extern Quake2Context sQuake2Context; // D_801F5A90
 extern s32 gSceneProcStep; // D_801F5AA0
 extern u32 gSceneProcFlags; // D_801F5AA4
 extern f32 gSceneProcFlashingAlpha; // D_801F5AA8
-extern UNK_TYPE1 D_801F5AB0; // D_801F5AB0
-extern UNK_TYPE1 D_801F5AB4; // D_801F5AB4
+extern u32 D_801F5AB0; // D_801F5AB0
+extern u32 D_801F5AB4; // D_801F5AB4
 extern UNK_TYPE1 D_801F5AC0; // D_801F5AC0
 extern UNK_TYPE1 D_801F69D0; // D_801F69D0
 extern UNK_TYPE1 D_801F6A10; // D_801F6A10
