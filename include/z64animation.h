@@ -31,7 +31,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ Skeleton* skeletonSeg; // Segment address of SkelLimbIndex.
     /* 0x004 */ u8 limbCount;       // Number of limbs in the model.
-    /* 0x005 */ char unk_05[3];     // unknown, maybe padding?
+    /* 0x005 */ char unk05[3];     // unknown, maybe padding?
     /* 0x008 */ u8 dListCount;      // Number of display lists in the model.
 } SkeletonHeader;  // Size = 0xC
 
@@ -45,7 +45,7 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ s16 frameCount;
-    /* 0x002 */ s16 unk_02;
+    /* 0x002 */ s16 unk02;
 } GenericAnimationHeader; // size = 0x4
 
 typedef struct {
@@ -71,22 +71,22 @@ typedef struct {
 } AnimationEntryType0; // size = 0x3C
 
 typedef struct {
-    /* 0x000 */ u8 unk_00;
+    /* 0x000 */ u8 unk00;
     /* 0x001 */ u8 vecCount;
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
 } AnimationEntryType1; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ u8 unk_00;
+    /* 0x000 */ u8 unk00;
     /* 0x001 */ u8 limbCount;
-    /* 0x004 */ Vec3s* unk_04;
-    /* 0x008 */ Vec3s* unk_08;
-    /* 0x00C */ f32 unk_0C;
+    /* 0x004 */ Vec3s* unk04;
+    /* 0x008 */ Vec3s* unk08;
+    /* 0x00C */ f32 unk0C;
 } AnimationEntryType2; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 unk_00;
+    /* 0x000 */ u8 unk00;
     /* 0x001 */ u8 vecCount;
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
@@ -94,9 +94,9 @@ typedef struct {
 } AnimationEntryType3; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 unk_00;
+    /* 0x000 */ u8 unk00;
     /* 0x001 */ u8 vecCount;
-    /* 0x002 */ char unk_02[0x2];
+    /* 0x002 */ char unk02[0x2];
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
     /* 0x00C */ u8* index;
@@ -105,7 +105,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ struct Actor* actor;
     /* 0x004 */ SkelAnime* skelAnime;
-    /* 0x008 */ f32 unk_08;
+    /* 0x008 */ f32 unk08;
 } AnimationEntryType5; // size = 0xC
 
 typedef struct {
@@ -124,13 +124,13 @@ typedef union {
 
 typedef struct {
     /* 0x000 */ u8 type;
-    /* 0x001 */ u8 unk_01;
+    /* 0x001 */ u8 unk01;
     /* 0x004 */ AnimationEntryType types;
 } AnimationEntry; // size = 0x40
 
 typedef struct AnimationContext {
     /* 0x000 */ s16 animationCount;
-    /* 0x002 */ char unk_02[2];
+    /* 0x002 */ char unk02[2];
     /* 0x004 */ AnimationEntry entries[ANIMATION_ENTRY_MAX];
 } AnimationContext; // size = 0xC84
 
@@ -147,7 +147,7 @@ struct SkelAnime {
      */
     /* 0x01 */ u8 mode;
     /* 0x02 */ u8 dListCount;
-    /* 0x03 */ s8 unk_03;
+    /* 0x03 */ s8 unk03;
     /* 0x04 */ Skeleton* skeleton;
     /* 0x08 */
     union {
@@ -169,7 +169,7 @@ struct SkelAnime {
     /* 0x35 */ u8 flags;
     /* 0x36 */ s16 prevFrameRot;
     /* 0x38 */ Vec3s prevFramePos;
-    /* 0x3E */ Vec3s unk_3E;
+    /* 0x3E */ Vec3s unk3E;
 }; // size = 0x44
 
 typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
@@ -198,11 +198,11 @@ extern u32 link_animetion_segment;
 
 // fcurve_skelanime structs
 typedef struct {
-    /* 0x0000 */ u16 unk_00; // appears to be flags
-    /* 0x0002 */ s16 unk_02;
-    /* 0x0004 */ s16 unk_04;
-    /* 0x0006 */ s16 unk_06;
-    /* 0x0008 */ f32 unk_08;
+    /* 0x0000 */ u16 unk00; // appears to be flags
+    /* 0x0002 */ s16 unk02;
+    /* 0x0004 */ s16 unk04;
+    /* 0x0006 */ s16 unk06;
+    /* 0x0008 */ f32 unk08;
 } TransformData; // size = 0xC
 
 
@@ -210,8 +210,8 @@ typedef struct {
     /* 0x0000 */ u8* refIndex;
     /* 0x0004 */ TransformData *transformData;
     /* 0x0008 */ s16* copyValues;
-    /* 0x000C */ s16 unk_0C;
-    /* 0x000E */ s16 unk_10;
+    /* 0x000C */ s16 unk0C;
+    /* 0x000E */ s16 unk10;
 } TransformUpdateIndex; // size 0x10
 
 typedef struct {
@@ -235,7 +235,7 @@ typedef struct {
     /* 0x0000 */ u8 limbCount;
     /* 0x0004 */ SkelCurveLimb** limbList;
     /* 0x0008 */ TransformUpdateIndex *transUpdIdx;
-    /* 0x000C */ f32 unk_0C; // seems to be unused
+    /* 0x000C */ f32 unk0C; // seems to be unused
     /* 0x0010 */ f32 animFinalFrame;
     /* 0x0014 */ f32 animSpeed;
     /* 0x0018 */ f32 animCurFrame;
