@@ -169,10 +169,10 @@ void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* 
             SysMatrix_GetStateAsRSPMatrix(*mtx);
             gSPMatrix(gfxCtx->polyOpa.p++, *mtx, G_MTX_LOAD);
             gSPDisplayList(gfxCtx->polyOpa.p++, dList[1]);
-            (*mtx)++;
+            mtx[0]++;
         } else if (dList[0] != NULL) {
             SysMatrix_GetStateAsRSPMatrix(*mtx);
-            (*mtx)++;
+            mtx[0]++;
         }
     }
 
@@ -388,10 +388,10 @@ void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* ske
             SysMatrix_GetStateAsRSPMatrix(*limbMatricies);
             gSPMatrix(gfxCtx->polyOpa.p++, *limbMatricies, G_MTX_LOAD);
             gSPDisplayList(gfxCtx->polyOpa.p++, dList[1]);
-            (*limbMatricies)++;
+            limbMatricies[0]++;
         } else if (dList[0] != NULL) {
             SysMatrix_GetStateAsRSPMatrix(*limbMatricies);
-            (*limbMatricies)++;
+            limbMatricies[0]++;
         }
     }
 
@@ -507,11 +507,11 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
             gSPMatrix(polyTemp, SysMatrix_GetStateAsRSPMatrix(*mtx), G_MTX_LOAD);
             gSPDisplayList(polyTemp + 1, dList[1]);
             gfxCtx->polyOpa.p = polyTemp + 2;
-            (*mtx)++;
+            mtx[0]++;
         } else {
             if (dList[0] != NULL) {
                 SysMatrix_GetStateAsRSPMatrix(*mtx);
-                (*mtx)++;
+                mtx[0]++;
             }
         }
         SysMatrix_StatePop();
@@ -662,7 +662,7 @@ Gfx* SkelAnime_Draw2Limb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skel
         if (dList != NULL) {
             gSPMatrix(gfx, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_LOAD);
             gSPDisplayList(gfx + 1, dList);
-            gfx = gfx + 2;
+            gfx += 2;
         }
     }
 
@@ -717,7 +717,7 @@ Gfx* SkelAnime_Draw2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDr
         if (dList != NULL) {
             gSPMatrix(gfx, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_LOAD);
             gSPDisplayList(gfx + 1, dList);
-            gfx = gfx + 2;
+            gfx += 2;
         }
     }
 
@@ -765,12 +765,12 @@ Gfx* SkelAnime_DrawLimbSV2(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
         if (dList1 != NULL) {
             gSPMatrix(gfx, SysMatrix_GetStateAsRSPMatrix(*mtx), G_MTX_LOAD);
             gSPDisplayList(gfx + 1, dList1);
-            gfx = gfx + 2;
-            (*mtx)++;
+            gfx += 2;
+            mtx[0]++;
         } else {
             if (dList2 != NULL) {
                 SysMatrix_GetStateAsRSPMatrix(*mtx);
-                (*mtx)++;
+                mtx[0]++;
             }
         }
     }
@@ -829,7 +829,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
         if (dList1 != NULL) {
             gSPMatrix(gfx, SysMatrix_GetStateAsRSPMatrix(mtx), G_MTX_LOAD);
             gSPDisplayList(gfx + 1, dList1);
-            gfx = gfx + 2;
+            gfx += 2;
             mtx++;
         } else {
             if (dList2 != NULL) {
@@ -1050,7 +1050,7 @@ void SkelAnime_AnimationType3Loaded(GlobalContext* globalCtx, AnimationEntryType
 
     if ((rawEntry->raw[0] & D_801F5AB4) == 0) {
         for (dst = entry->dst, src = entry->src, index = entry->index, i = 0; i < rawEntry->raw[1]; i++, dst++, src++) {
-            if (*index++) {
+            if (*(index++)) {
                 *dst = *src;
             }
         }
@@ -1066,7 +1066,7 @@ void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType
 
     if ((rawEntry->raw[0] & D_801F5AB4) == 0) {
         for (dst = entry->dst, src = entry->src, index = entry->index, i = 0; i < rawEntry->raw[1]; i++, dst++, src++) {
-            if (*index++ < 1U) {
+            if (*(index++) < 1U) {
                 *dst = *src;
             }
         }
@@ -1672,7 +1672,7 @@ void func_80137674(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* index) {
     s32 i;
 
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
-        if (*index++) {
+        if (*(index++)) {
             *dst = *src;
         }
     }
@@ -1682,7 +1682,7 @@ void func_801376DC(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* arg3) {
     s32 i;
     
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
-        if (*arg3++ < 1U) {
+        if (*(arg3++) < 1U) {
             *dst = *src;
         }
     }

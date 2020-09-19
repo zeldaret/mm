@@ -44,9 +44,9 @@ typedef struct {
 } AnimationRotationIndex; // size = 0x06
 
 typedef struct {
-    s16 frameCount;
-    s16 unk_02;
-} GenericAnimationHeader;
+    /* 0x000 */ s16 frameCount;
+    /* 0x002 */ s16 unk_02;
+} GenericAnimationHeader; // size = 0x4
 
 typedef struct {
     /* 0x000 */ GenericAnimationHeader genericHeader;
@@ -68,14 +68,14 @@ typedef struct {
     /* 0x000 */ DmaRequest req;
     /* 0x020 */ OSMesgQueue msgQueue;
     /* 0x038 */ OSMesg msg;
-} AnimationEntryType0;
+} AnimationEntryType0; // size = 0x3C
 
 typedef struct {
     /* 0x000 */ u8 unk_00;
     /* 0x001 */ u8 vecCount;
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
-} AnimationEntryType1;
+} AnimationEntryType1; // size = 0xC
 
 typedef struct {
     /* 0x000 */ u8 unk_00;
@@ -83,7 +83,7 @@ typedef struct {
     /* 0x004 */ Vec3s* unk_04;
     /* 0x008 */ Vec3s* unk_08;
     /* 0x00C */ f32 unk_0C;
-} AnimationEntryType2;
+} AnimationEntryType2; // size = 0x10
 
 typedef struct {
     /* 0x000 */ u8 unk_00;
@@ -91,7 +91,7 @@ typedef struct {
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
     /* 0x00C */ u8* index;
-} AnimationEntryType3;
+} AnimationEntryType3; // size = 0x10
 
 typedef struct {
     /* 0x000 */ u8 unk_00;
@@ -100,17 +100,17 @@ typedef struct {
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
     /* 0x00C */ u8* index;
-} AnimationEntryType4;
+} AnimationEntryType4; // size = 0x10
 
 typedef struct {
     /* 0x000 */ struct Actor* actor;
     /* 0x004 */ SkelAnime* skelAnime;
     /* 0x008 */ f32 unk_08;
-} AnimationEntryType5;
+} AnimationEntryType5; // size = 0xC
 
 typedef struct {
     /* 0x000 */ u8 raw[0x3C];
-} AnimationEntryRaw;
+} AnimationEntryRaw; // size = 0x3C
 
 typedef union {
     AnimationEntryRaw raw;
@@ -120,7 +120,7 @@ typedef union {
     AnimationEntryType3 type3;
     AnimationEntryType4 type4;
     AnimationEntryType5 type5;
-} AnimationEntryType;
+} AnimationEntryType; // size = 0x3C
 
 typedef struct {
     /* 0x000 */ u8 type;
@@ -129,22 +129,22 @@ typedef struct {
 } AnimationEntry; // size = 0x40
 
 typedef struct AnimationContext {
-    s16 animationCount;
-    char unk_02[2];
-    AnimationEntry entries[ANIMATION_ENTRY_MAX];
-} AnimationContext;
+    /* 0x000 */ s16 animationCount;
+    /* 0x002 */ char unk_02[2];
+    /* 0x004 */ AnimationEntry entries[ANIMATION_ENTRY_MAX];
+} AnimationContext; // size = 0xC84
 
 typedef struct {
-    GenericAnimationHeader genericHeader;
-    u32 animationSegAddress;
-} LinkAnimetionEntry;
+    /* 0x000 */ GenericAnimationHeader genericHeader;
+    /* 0x004 */ u32 animationSegAddress;
+} LinkAnimetionEntry; // size = 0x8
 
 struct SkelAnime {
     /* 0x00 */ u8 limbCount; // joint_Num
     /* modes 0 and 1 repeat the animation indefinitely
      * modes 2 and 3 play the animaton once then stop
      * modes >= 4 play the animation once, and always start at frame 0.
-    */
+     */
     /* 0x01 */ u8 mode;
     /* 0x02 */ u8 dListCount;
     /* 0x03 */ s8 unk_03;
