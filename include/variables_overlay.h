@@ -4688,7 +4688,7 @@ extern UNK_TYPE4 D_8095F82C; // D_8095F82C
 extern OverlayRelocationSection enIshiOverlayInfo; // D_8095F830
 extern u32 enIshiOverlayRelocations[178]; // D_8095F844
 extern u32 enIshiOverlayInfoOffset; // D_8095FB0C
-extern UNK_TYPE1 D_8095FB90; // D_8095FB90
+extern UNK_TYPE1 Obj_Hana_InitVars; // Obj_Hana_InitVars
 extern UNK_TYPE1 D_8095FBB0; // D_8095FBB0
 extern OverlayRelocationSection objHanaOverlayInfo; // D_8095FBC0
 extern u32 objHanaOverlayRelocations[6]; // D_8095FBD4
