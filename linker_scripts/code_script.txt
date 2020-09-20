@@ -2239,8 +2239,9 @@ SECTIONS
     ovl_En_Torch : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Torch/z_en_torch.o(.text)
-        build/asm/ovl_En_Torch_data.o(.data)
-        build/asm/ovl_En_Torch_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Torch/z_en_torch.o(.data)
+        build/src/overlays/actors/ovl_En_Torch/z_en_torch.o(.rodata)
+        build/src/overlays/actors/ovl_En_Torch/z_en_torch_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

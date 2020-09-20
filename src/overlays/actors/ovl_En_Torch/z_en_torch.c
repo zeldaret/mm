@@ -6,7 +6,6 @@
 
 void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Torch_InitVars = {
     ACTOR_EN_TORCH,
     ACTORTYPE_ITEMACTION,
@@ -18,6 +17,15 @@ const ActorInit En_Torch_InitVars = {
     (ActorFunc)NULL,
     (ActorFunc)NULL
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch_0x80973550/EnTorch_Init.asm")
+static u8 sChestContents[] = { 0x02, 0x04, 0x05, 0x06, 0x36, 0x3A, 0x14, 0x14 };
+
+void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTorch* this = THIS;
+    s8 returnData = gSaveContext.extra.unk87;
+
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.currPosRot.pos.x, this->actor.currPosRot.pos.y,
+                this->actor.currPosRot.pos.z, 0, this->actor.shape.rot.y, 0,
+                (sChestContents[(returnData >> 0x5) & 0x7] << 0x5) | 0x5000 | (returnData & 0x1F));
+    Actor_MarkForDeath(&this->actor);
+}
