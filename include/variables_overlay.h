@@ -3987,7 +3987,7 @@ extern UNK_TYPE4 D_8092C250; // D_8092C250
 extern OverlayRelocationSection enIkOverlayInfo; // D_8092C260
 extern u32 enIkOverlayRelocations[171]; // D_8092C274
 extern u32 enIkOverlayInfoOffset; // D_8092C52C
-extern UNK_TYPE1 D_8092C570; // D_8092C570
+extern UNK_TYPE1 Demo_Shd_InitVars; // Demo_Shd_InitVars
 extern OverlayRelocationSection demoShdOverlayInfo; // D_8092C590
 extern u32 demoShdOverlayRelocations[4]; // D_8092C5A4
 extern u32 demoShdOverlayInfoOffset; // D_8092C5BC
@@ -6122,7 +6122,7 @@ extern UNK_TYPE4 D_809C3A5C; // D_809C3A5C
 extern OverlayRelocationSection enAob01OverlayInfo; // D_809C3A60
 extern u32 enAob01OverlayRelocations[193]; // D_809C3A74
 extern u32 enAob01OverlayInfoOffset; // D_809C3D7C
-extern UNK_TYPE1 D_809C3DC0; // D_809C3DC0
+extern UNK_TYPE1 En_Boj_01_InitVars; // En_Boj_01_InitVars
 extern OverlayRelocationSection enBoj01OverlayInfo; // D_809C3DE0
 extern u32 enBoj01OverlayRelocations[4]; // D_809C3DF4
 extern u32 enBoj01OverlayInfoOffset; // D_809C3E0C

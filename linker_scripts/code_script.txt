@@ -1713,8 +1713,9 @@ SECTIONS
     ovl_Demo_Shd : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Demo_Shd/z_demo_shd.o(.text)
-        build/asm/ovl_Demo_Shd_data.o(.data)
-        build/asm/ovl_Demo_Shd_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Demo_Shd/z_demo_shd.o(.data)
+        build/src/overlays/actors/ovl_Demo_Shd/z_demo_shd.o(.rodata)
+        build/src/overlays/actors/ovl_Demo_Shd/z_demo_shd_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -3079,8 +3080,9 @@ SECTIONS
     ovl_En_Boj_01 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Boj_01/z_en_boj_01.o(.text)
-        build/asm/ovl_En_Boj_01_data.o(.data)
-        build/asm/ovl_En_Boj_01_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Boj_01/z_en_boj_01.o(.data)
+        build/src/overlays/actors/ovl_En_Boj_01/z_en_boj_01.o(.rodata)
+        build/src/overlays/actors/ovl_En_Boj_01/z_en_boj_01_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
