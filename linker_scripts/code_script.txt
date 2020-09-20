@@ -4970,8 +4970,9 @@ SECTIONS
     ovl_Bg_Market_Step : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Market_Step/z_bg_market_step.o(.text)
-        build/asm/ovl_Bg_Market_Step_data.o(.data)
-        build/asm/ovl_Bg_Market_Step_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Market_Step/z_bg_market_step.o(.data)
+        build/src/overlays/actors/ovl_Bg_Market_Step/z_bg_market_step.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Market_Step/z_bg_market_step_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

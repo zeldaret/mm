@@ -14806,7 +14806,7 @@
     0x80AEFBF4:("enTkOverlayRelocations","u32","[277]",0x454),
     0x80AF004C:("enTkOverlayInfoOffset","u32","",0x4),
     0x80AF0050:("D_80AF0050","UNK_TYPE1","",0x1),
-    0x80AF00F0:("D_80AF00F0","UNK_TYPE1","",0x1),
+    0x80AF00F0:("Bg_Market_Step_InitVars","UNK_TYPE1","",0x1),
     0x80AF0110:("D_80AF0110","UNK_TYPE1","",0x1),
     0x80AF0120:("D_80AF0120","UNK_TYPE1","",0x1),
     0x80AF0128:("D_80AF0128","UNK_TYPE1","",0x1),

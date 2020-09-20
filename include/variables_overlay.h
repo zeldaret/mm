@@ -9920,7 +9920,7 @@ extern OverlayRelocationSection enTkOverlayInfo; // D_80AEFBE0
 extern u32 enTkOverlayRelocations[277]; // D_80AEFBF4
 extern u32 enTkOverlayInfoOffset; // D_80AF004C
 extern UNK_TYPE1 D_80AF0050; // D_80AF0050
-extern UNK_TYPE1 D_80AF00F0; // D_80AF00F0
+extern UNK_TYPE1 Bg_Market_Step_InitVars; // Bg_Market_Step_InitVars
 extern UNK_TYPE1 D_80AF0110; // D_80AF0110
 extern UNK_TYPE1 D_80AF0120; // D_80AF0120
 extern UNK_TYPE1 D_80AF0128; // D_80AF0128
