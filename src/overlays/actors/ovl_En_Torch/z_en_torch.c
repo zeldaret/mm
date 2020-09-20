@@ -6,9 +6,17 @@
 
 void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx);
 
-const ActorInit En_Torch_InitVars = { ACTOR_EN_TORCH,  ACTORTYPE_ITEMACTION, FLAGS,
-                                      GAMEPLAY_KEEP,   sizeof(EnTorch),      (ActorFunc)EnTorch_Init,
-                                      (ActorFunc)NULL, (ActorFunc)NULL,      (ActorFunc)NULL };
+const ActorInit En_Torch_InitVars = {
+    ACTOR_EN_TORCH,          
+    ACTORTYPE_ITEMACTION, 
+    FLAGS,           
+    GAMEPLAY_KEEP,   
+    sizeof(EnTorch),
+    (ActorFunc)EnTorch_Init, 
+    (ActorFunc)NULL,      
+    (ActorFunc)NULL, 
+    (ActorFunc)NULL
+};
 
 static u8 sChestContents[] = { 0x02, 0x04, 0x05, 0x06, 0x36, 0x3A, 0x14, 0x14 };
 
