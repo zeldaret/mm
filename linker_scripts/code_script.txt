@@ -5671,8 +5671,9 @@ SECTIONS
     ovl_Bg_Haka_Curtain : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Haka_Curtain/z_bg_haka_curtain.o(.text)
-        build/asm/ovl_Bg_Haka_Curtain_data.o(.data)
-        build/asm/ovl_Bg_Haka_Curtain_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Haka_Curtain/z_bg_haka_curtain.o(.data)
+        build/src/overlays/actors/ovl_Bg_Haka_Curtain/z_bg_haka_curtain.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Haka_Curtain/z_bg_haka_curtain_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

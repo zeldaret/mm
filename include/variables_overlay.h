@@ -11618,8 +11618,8 @@ extern UNK_TYPE4 D_80B6DB88; // D_80B6DB88
 extern OverlayRelocationSection bgSinkaiKabeOverlayInfo; // D_80B6DB90
 extern u32 bgSinkaiKabeOverlayRelocations[13]; // D_80B6DBA4
 extern u32 bgSinkaiKabeOverlayInfoOffset; // D_80B6DBDC
-extern UNK_TYPE1 D_80B6DF80; // D_80B6DF80
-extern UNK_TYPE1 D_80B6DFA0; // D_80B6DFA0
+extern UNK_TYPE1 Bg_Haka_Curtain_InitVars; // Bg_Haka_Curtain_InitVars
+extern UNK_TYPE1 sInitChain; // sInitChain
 extern OverlayRelocationSection bgHakaCurtainOverlayInfo; // D_80B6DFB0
 extern u32 bgHakaCurtainOverlayRelocations[22]; // D_80B6DFC4
 extern u32 bgHakaCurtainOverlayInfoOffset; // D_80B6E01C
