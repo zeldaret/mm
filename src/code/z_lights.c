@@ -317,7 +317,7 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
     LightMapper* mapper;
     s32 i;
 
-    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper) * 1);
+    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper));
 
     mapper->lights.a.l.col[0] = mapper->lights.a.l.colc[0] = ambientRed;
     mapper->lights.a.l.col[1] = mapper->lights.a.l.colc[1] = ambientGreen;
@@ -342,7 +342,7 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
 LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 green, u8 blue) {
     LightMapper* mapper;
 
-    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper) * 1);
+    mapper = GRAPH_ALLOC(gCtxt, sizeof(LightMapper));
 
     mapper->lights.a.l.col[0] = red;
     mapper->lights.a.l.colc[0] = red;

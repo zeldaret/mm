@@ -290,7 +290,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     Mtx* viewing;
     GraphicsContext* gfxCtx = view->gfxCtx;
 
-    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp) * 1);
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp));
 
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
@@ -300,7 +300,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     gSPViewport(gfxCtx->polyOpa.p++, vp);
     gSPViewport(gfxCtx->polyXlu.p++, vp);
 
-    projection = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
     view->projectionPtr = projection;
 
@@ -319,7 +319,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     gSPPerspNormalize(gfxCtx->polyXlu.p++, view->normal);
     gSPMatrix(gfxCtx->polyXlu.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    viewing = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+    viewing = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
     view->viewingPtr = viewing;
 
@@ -350,7 +350,7 @@ s32 View_RenderToOrthographicMatrix(View* view) {
 
     gfxCtx = view->gfxCtx;
 
-    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp) * 1);
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(Vp));
 
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
@@ -361,7 +361,7 @@ s32 View_RenderToOrthographicMatrix(View* view) {
     gSPViewport(gfxCtx->polyXlu.p++, vp);
     gSPViewport(gfxCtx->overlay.p++, vp);
 
-    proejction = GRAPH_ALLOC(gfxCtx, sizeof(Mtx) * 1);
+    proejction = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
     view->projectionPtr = projection;
 

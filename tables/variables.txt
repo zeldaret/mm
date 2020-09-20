@@ -9399,7 +9399,7 @@
     0x8095F830:("enIshiOverlayInfo","OverlayRelocationSection","",0x14),
     0x8095F844:("enIshiOverlayRelocations","u32","[178]",0x2c8),
     0x8095FB0C:("enIshiOverlayInfoOffset","u32","",0x4),
-    0x8095FB90:("D_8095FB90","UNK_TYPE1","",0x1),
+    0x8095FB90:("Obj_Hana_InitVars","UNK_TYPE1","",0x1),
     0x8095FBB0:("D_8095FBB0","UNK_TYPE1","",0x1),
     0x8095FBC0:("objHanaOverlayInfo","OverlayRelocationSection","",0x14),
     0x8095FBD4:("objHanaOverlayRelocations","u32","[6]",0x18),
