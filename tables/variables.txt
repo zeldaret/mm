@@ -6624,7 +6624,7 @@
     0x8089ED40:("enHataOverlayInfo","OverlayRelocationSection","",0x14),
     0x8089ED54:("enHataOverlayRelocations","u32","[12]",0x30),
     0x8089ED8C:("enHataOverlayInfoOffset","u32","",0x4),
-    0x8089EDD0:("enZl1ActorInitData","ActorInit","",0x20),
+    0x8089EDD0:("En_Zl1_InitVars","ActorInit","",0x20),
     0x8089EDF0:("enZl1OverlayInfo","OverlayRelocationSection","",0x14),
     0x8089EE04:("enZl1OverlayRelocations","u32","[4]",0x10),
     0x8089EE1C:("enZl1OverlayInfoOffset","u32","",0x4),

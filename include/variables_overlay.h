@@ -1968,7 +1968,7 @@ extern UNK_TYPE4 D_8089ED38; // D_8089ED38
 extern OverlayRelocationSection enHataOverlayInfo; // D_8089ED40
 extern u32 enHataOverlayRelocations[12]; // D_8089ED54
 extern u32 enHataOverlayInfoOffset; // D_8089ED8C
-extern ActorInit enZl1ActorInitData; // D_8089EDD0
+extern ActorInit En_Zl1_InitVars; // D_8089EDD0
 extern OverlayRelocationSection enZl1OverlayInfo; // D_8089EDF0
 extern u32 enZl1OverlayRelocations[4]; // D_8089EE04
 extern u32 enZl1OverlayInfoOffset; // D_8089EE1C
