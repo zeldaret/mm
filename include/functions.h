@@ -1883,33 +1883,33 @@ UNK_TYPE4 func_80100AF0(GlobalContext* ctxt); // func_80100AF0
 void LifeMeter_Draw(GlobalContext* ctxt); // func_80100B8C
 void LifeMeter_UpdateSizeAndBeep(GlobalContext* ctxt); // func_80101844
 s32 LifeMeter_IsCritical(void); // func_80101930
-void Lights_InitPositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius, u32 type); // func_801019A0
-void Lights_InitType0PositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius); // func_801019FC
-void Lights_InitType2PositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius); // func_80101A60
-void Lights_SetPositionalLightColorAndRadius(LightInfo* info, u8 red, u8 green, u8 blue, s16 radius); // func_80101AC8
+void Lights_PointSetInfo(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius, u32 type); // func_801019A0
+void Lights_PointNoGlowSetInfo(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius); // func_801019FC
+void Lights_PointGlowSetInfo(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius); // func_80101A60
+void Lights_PointSetColorAndRadius(LightInfo* info, u8 red, u8 green, u8 blue, s16 radius); // func_80101AC8
 void Lights_SetPositionalLightPosition(LightInfo* info, s16 posX, s16 posY, s16 posZ); // func_80101AFC
-void Lights_InitDirectional(LightInfo* info, s8 dirX, s8 dirY, s8 dirZ, u8 red, u8 green, u8 blue); // func_80101B34
-void Lights_MapperInit(Lights* mapper, u8 red, u8 green, u8 blue); // func_80101B8C
-void Lights_UploadLights(Lights* mapper, GraphicsContext* gCtxt); // func_80101BC8
-Light* Lights_MapperGetNextFreeSlot(Lights* mapper); // func_80101D0C
-void Lights_MapPositionalWithReference(Lights* mapper, LightParams* params, Vec3f* pos); // func_80101D3C
-void Lights_MapPositional(Lights* mapper, LightParams* params, GlobalContext* ctxt); // func_801020A0
-void Lights_MapDirectional(Lights* mapper, LightParams* params, GlobalContext* ctxt); // func_80102284
-void Lights_MapLights(Lights* mapper, LightNode* lights, Vec3f* refPos, GlobalContext* ctxt); // func_801022F0
-LightNode* Lights_FindFreeSlot(void); // func_801023D8
-void Lights_Free(LightNode* light); // func_80102464
-void Lights_Init(GlobalContext* ctxt, LightContext* lCtxt); // func_801024AC
-void Lights_SetAmbientColor(LightContext* lCtxt, u8 red, u8 green, u8 blue); // func_80102518
+void Lights_DirectionalSetInfo(LightInfo* info, s8 dirX, s8 dirY, s8 dirZ, u8 red, u8 green, u8 blue); // func_80101B34
+void Lights_Reset(Lights* mapper, u8 red, u8 green, u8 blue); // func_80101B8C
+void Lights_Draw(Lights* mapper, GraphicsContext* gCtxt); // func_80101BC8
+Light* Lights_FindSlot(Lights* mapper); // func_80101D0C
+void Lights_BindDirection(Lights* mapper, LightParams* params, Vec3f* pos); // func_80101D3C
+void Lights_BindPoint(Lights* mapper, LightParams* params, GlobalContext* ctxt); // func_801020A0
+void Lights_BindDirectional(Lights* mapper, LightParams* params, GlobalContext* ctxt); // func_80102284
+void Lights_BindAll(Lights* mapper, LightNode* lights, Vec3f* refPos, GlobalContext* ctxt); // func_801022F0
+LightNode* Lights_FindBufSlot(void); // func_801023D8
+void Lights_FreeNode(LightNode* light); // func_80102464
+void LightContext_Init(GlobalContext* ctxt, LightContext* lCtxt); // func_801024AC
+void LightContext_SetAmbientColor(LightContext* lCtxt, u8 red, u8 green, u8 blue); // func_80102518
 void func_80102544(LightContext* lCtxt, u8 a1, u8 a2, u8 a3, s16 sp12, s16 sp16); // func_80102544
-Lights* Lights_CreateMapper(LightContext* lCtxt, GraphicsContext* gCtxt); // func_80102580
-void Lights_ClearHead(GlobalContext* ctxt, LightContext* lCtxt); // func_801025B8
-void Lights_RemoveAll(GlobalContext* ctxt, LightContext* lCtxt); // func_801025C8
-LightNode* Lights_Insert(GlobalContext* ctxt, LightContext* lCtxt, LightInfo* info); // func_80102624
-void Lights_Remove(GlobalContext* ctxt, LightContext* lCtxt, LightNode* light); // func_80102684
-Lights* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ); // func_801026E8
-Lights* Lights_MapperAllocateAndInit(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue); // func_80102834
-void func_80102880(GlobalContext* ctxt); // func_80102880
-void func_80102A64(GlobalContext* ctxt); // func_80102A64
+Lights* LightContext_NewLights(LightContext* lCtxt, GraphicsContext* gCtxt); // func_80102580
+void LightContext_InitList(GlobalContext* ctxt, LightContext* lCtxt); // func_801025B8
+void LightContext_DestroyList(GlobalContext* ctxt, LightContext* lCtxt); // func_801025C8
+LightNode* LightContext_InsertLight(GlobalContext* ctxt, LightContext* lCtxt, LightInfo* info); // func_80102624
+void LightContext_RemoveLight(GlobalContext* ctxt, LightContext* lCtxt, LightNode* light); // func_80102684
+Lights* Lights_NewAndDraw(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ); // Lights_NewAndDraw
+Lights* Lights_New(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue); // func_80102834
+void Lights_GlowCheck(GlobalContext* ctxt); // Lights_GlowCheck
+void Lights_DrawGlow(GlobalContext* ctxt); // Lights_DrawGlow
 void* zelda_malloc(u32 size); // func_80102C60
 void* zelda_mallocR(u32 size); // func_80102C88
 void* zelda_realloc(void* oldPtr, u32 newSize); // func_80102CB0

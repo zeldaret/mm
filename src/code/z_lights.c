@@ -1,9 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
 
-LightsBindFunc1 bindPositionalFuncs[] = { Lights_MapPositional, Lights_MapDirectional, Lights_MapPositional };
-LightsBindFunc2 bindDirectionalFuncs[] = { Lights_MapPositionalWithReference, Lights_MapDirectional, Lights_MapPositionalWithReference };
-
 #define LIGHTS_BUFFER_SIZE 32
 
 typedef struct {
@@ -15,53 +12,57 @@ typedef struct {
 LightsBuffer sLightsBuffer;
 
 
-void Lights_InitPositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius, u32 type) {
+void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 red, u8 green, u8 blue, s16 radius, u32 type) {
     info->type = type;
-    info->params.point.x = posX;
-    info->params.point.y = posY;
-    info->params.point.z = posZ;
-    Lights_SetPositionalLightColorAndRadius(info, red, green, blue, radius);
+    info->params.point.x = x;
+    info->params.point.y = y;
+    info->params.point.z = z;
+    Lights_PointSetColorAndRadius(info, red, green, blue, radius);
 }
 
-void Lights_InitType0PositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius) {
-    Lights_InitPositionalLight(info, posX, posY, posZ, red, green, blue, radius, LIGHT_POINT_NOGLOW);
+void Lights_PointNoGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 red, u8 green, u8 blue, s16 radius) {
+    Lights_PointSetInfo(info, x, y, z, red, green, blue, radius, LIGHT_POINT_NOGLOW);
 }
 
-void Lights_InitType2PositionalLight(LightInfo* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius) {
-    Lights_InitPositionalLight(info, posX, posY, posZ, red, green, blue, radius, LIGHT_POINT_GLOW);
+void Lights_PointGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 red, u8 green, u8 blue, s16 radius) {
+    Lights_PointSetInfo(info, x, y, z, red, green, blue, radius, LIGHT_POINT_GLOW);
 }
 
-void Lights_SetPositionalLightColorAndRadius(LightInfo* info, u8 red, u8 green, u8 blue, s16 radius) {
+void Lights_PointSetColorAndRadius(LightInfo* info, u8 red, u8 green, u8 blue, s16 radius) {
     info->params.point.color[0] = red;
     info->params.point.color[1] = green;
     info->params.point.color[2] = blue;
     info->params.point.radius = radius;
 }
 
-void Lights_SetPositionalLightPosition(LightInfo* info, s16 posX, s16 posY, s16 posZ) {
-    info->params.point.x = posX;
-    info->params.point.y = posY;
-    info->params.point.z = posZ;
+void Lights_SetPositionalLightPosition(LightInfo* info, s16 x, s16 y, s16 z) {
+    info->params.point.x = x;
+    info->params.point.y = y;
+    info->params.point.z = z;
 }
 
-void Lights_InitDirectional(LightInfo* info, s8 dirX, s8 dirY, s8 dirZ, u8 red, u8 green, u8 blue) {
-    info->type = 1;
-    info->params.dir.x = dirX;
-    info->params.dir.y = dirY;
-    info->params.dir.z = dirZ;
+void Lights_DirectionalSetInfo(LightInfo* info, s8 x, s8 y, s8 z, u8 red, u8 green, u8 blue) {
+    info->type = LIGHT_DIRECTIONAL;
+    info->params.dir.x = x;
+    info->params.dir.y = y;
+    info->params.dir.z = z;
     info->params.dir.color[0] = red;
     info->params.dir.color[1] = green;
     info->params.dir.color[2] = blue;
 }
 
-void Lights_MapperInit(Lights* lights, u8 red, u8 green, u8 blue) {
+// unused
+void Lights_Reset(Lights* lights, u8 red, u8 green, u8 blue) {
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = red;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = green;
     lights->l.a.l.col[2] = lights->l.a.l.colc[2] = blue;
     lights->numLights = 0;
 }
 
-void Lights_UploadLights(Lights* lights, GraphicsContext* gfxCtx) {
+/*
+ * Draws every light in the provided Lights group
+ */
+void Lights_Draw(Lights* lights, GraphicsContext* gfxCtx) {
     Light* light;
     s32 i;
     GraphicsContext* oGfxCtx = gfxCtx;
@@ -76,18 +77,19 @@ void Lights_UploadLights(Lights* lights, GraphicsContext* gfxCtx) {
         gSPLight(oGfxCtx->polyXlu.p++, light++, i);
     }
 
+    // Ambient light is total lights + 1
     gSPLight(oGfxCtx->polyOpa.p++, &lights->l.a, ++i);
     gSPLight(oGfxCtx->polyXlu.p++, &lights->l.a, i);
 }
 
-Light* Lights_MapperGetNextFreeSlot(Lights* lights) {
+Light* Lights_FindSlot(Lights* lights) {
     if (lights->numLights >= 7) {
         return NULL;
     }
     return &lights->l.l[lights->numLights++];
 }
 
-void Lights_MapPositionalWithReference(Lights* lights, LightParams* params, Vec3f* pos) {
+void Lights_BindDirection(Lights* lights, LightParams* params, Vec3f* pos) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -108,7 +110,7 @@ void Lights_MapPositionalWithReference(Lights* lights, LightParams* params, Vec3
     dist = SQ(xDiff) + SQ(yDiff) + SQ(zDiff);
 
     if (dist < SQ(scale)) {
-        light = Lights_MapperGetNextFreeSlot(lights);
+        light = Lights_FindSlot(lights);
         if (light != NULL) {
             dist = sqrtf(dist);
             scale = dist / scale;
@@ -132,31 +134,31 @@ void Lights_MapPositionalWithReference(Lights* lights, LightParams* params, Vec3
     }
 }
 
-void Lights_MapPositional(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
+void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
     Light* light;
-    f32 radiusF = params->point.radius;
-    Vec3f posF;
+    f32 radius = params->point.radius;
+    Vec3f pos;
     Vec3f adjustedPos;
     s32 pad;
 
-    if (radiusF > 0.0f) {
-        posF.x = params->point.x;
-        posF.y = params->point.y;
-        posF.z = params->point.z;
-        Matrix_MultiplyByVectorXYZ(&globalCtx->unk187B0,&posF,&adjustedPos);
-        if ((adjustedPos.z > -radiusF) &&
-            (600.0f + radiusF > adjustedPos.z) &&
-            (400.0f > fabsf(adjustedPos.x) - radiusF) &&
-            (400.0f > fabsf(adjustedPos.y) - radiusF)) {
-            light = Lights_MapperGetNextFreeSlot(lights);
+    if (radius > 0.0f) {
+        pos.x = params->point.x;
+        pos.y = params->point.y;
+        pos.z = params->point.z;
+        Matrix_MultiplyByVectorXYZ(&globalCtx->unk187B0, &pos, &adjustedPos);
+        if ((adjustedPos.z > -radius) &&
+            (600.0f + radius > adjustedPos.z) &&
+            (400.0f > fabsf(adjustedPos.x) - radius) &&
+            (400.0f > fabsf(adjustedPos.y) - radius)) {
+            light = Lights_FindSlot(lights);
             if (light == NULL)
                 return;
 
-            radiusF = 4500000.0f / SQ(radiusF);
-            if (radiusF > 255.0f) {
-                radiusF = 255.0f;
-            } else if (radiusF < 20.0f) {
-                radiusF = 20.0f;
+            radius = 4500000.0f / SQ(radius);
+            if (radius > 255.0f) {
+                radius = 255.0f;
+            } else if (radius < 20.0f) {
+                radius = 20.0f;
             }
 
             light->lPos.col[0] = params->point.color[0];
@@ -172,13 +174,13 @@ void Lights_MapPositional(Lights* lights, LightParams* params, GlobalContext* gl
 
             light->lPos.pad1 = 0x8;
             light->lPos.pad2 = 0xFF;
-            light->lPos.pad3 = (s8)radiusF;
+            light->lPos.pad3 = (s8)radius;
         }
     }
 }
 
-void Lights_MapDirectional(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
-    Light* light = Lights_MapperGetNextFreeSlot(lights);
+void Lights_BindDirectional(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
+    Light* light = Lights_FindSlot(lights);
 
     if (light != NULL) {
         light->lDir.col[0] = params->dir.color[0];
@@ -187,6 +189,7 @@ void Lights_MapDirectional(Lights* lights, LightParams* params, GlobalContext* g
         light->lDir.colc[1] = light->lDir.col[1];
         light->lDir.col[2] = params->dir.color[2];
         light->lDir.colc[2] = light->lDir.col[2];
+        
         light->lDir.dir[0] = params->dir.x;
         light->lDir.dir[1] = params->dir.y;
         light->lDir.dir[2] = params->dir.z;
@@ -194,7 +197,19 @@ void Lights_MapDirectional(Lights* lights, LightParams* params, GlobalContext* g
     }
 }
 
-void Lights_MapLights(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx) {
+/*
+ * For every light in a provided list, try to find a free slot in the provided Lights group and bind
+ * a light to it. Then apply color and positional/directional info for each light
+ * based on the parameters supplied by the node.
+ *
+ * Note: Lights in a given list can only be binded to however many free slots are
+ * available in the Lights group. This is at most 7 slots for a new group, but could be less.
+ */
+
+LightsBindFunc1 bindPositionalFuncs[] = { Lights_BindPoint, Lights_BindDirectional, Lights_BindPoint };
+LightsBindFunc2 bindDirectionalFuncs[] = { Lights_BindDirection, Lights_BindDirectional, Lights_BindDirection };
+
+void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx) {
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == true)) {
             do {
@@ -210,29 +225,29 @@ void Lights_MapLights(Lights* lights, LightNode* listHead, Vec3f* refPos, Global
     }
 }
 
-LightNode* Lights_FindFreeSlot(void) {
-    LightNode* ret;
+LightNode* Lights_FindBufSlot(void) {
+    LightNode* light;
 
     if (sLightsBuffer.numOccupied >= LIGHTS_BUFFER_SIZE) {
         return NULL;
     }
 
-    ret = &sLightsBuffer.buf[sLightsBuffer.searchIndex];
-    while (ret->info != NULL) {
+    light = &sLightsBuffer.buf[sLightsBuffer.searchIndex];
+    while (light->info != NULL) {
         sLightsBuffer.searchIndex++;
         if (sLightsBuffer.searchIndex < 0x20) {
-            ret++;
+            light++;
         } else {
             sLightsBuffer.searchIndex = 0;
-            ret = &sLightsBuffer.buf[0];
+            light = &sLightsBuffer.buf[0];
         }
     }
 
     sLightsBuffer.numOccupied++;
-    return ret;
+    return light;
 }
 
-void Lights_Free(LightNode* light) {
+void Lights_FreeNode(LightNode* light) {
     if (light != NULL) {
         sLightsBuffer.numOccupied--;
         light->info = NULL;
@@ -240,14 +255,14 @@ void Lights_Free(LightNode* light) {
     }
 }
 
-void Lights_Init(GlobalContext* globalCtx, LightContext* lightCtx) {
-    Lights_ClearHead(globalCtx, lightCtx);
-    Lights_SetAmbientColor(lightCtx, 80, 80, 80);
+void LightContext_Init(GlobalContext* globalCtx, LightContext* lightCtx) {
+    LightContext_InitList(globalCtx, lightCtx);
+    LightContext_SetAmbientColor(lightCtx, 80, 80, 80);
     func_80102544(lightCtx, 0, 0, 0, 0x3E4, 0x3200);
     bzero(&sLightsBuffer, sizeof(LightsBuffer));
 }
 
-void Lights_SetAmbientColor(LightContext* lightCtx, u8 red, u8 green, u8 blue) {
+void LightContext_SetAmbientColor(LightContext* lightCtx, u8 red, u8 green, u8 blue) {
     lightCtx->ambient.red = red;
     lightCtx->ambient.green = green;
     lightCtx->ambient.blue = blue;
@@ -261,23 +276,29 @@ void func_80102544(LightContext* lightCtx, u8 a1, u8 a2, u8 a3, s16 numLights, s
     lightCtx->unk0C = arg5;
 }
 
-Lights* Lights_CreateMapper(LightContext* lightCtx, GraphicsContext* gfxCtx) {
-   return Lights_MapperAllocateAndInit(gfxCtx, lightCtx->ambient.red, lightCtx->ambient.green, lightCtx->ambient.blue);
+Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx) {
+    return Lights_New(gfxCtx, lightCtx->ambient.red, lightCtx->ambient.green, lightCtx->ambient.blue);
 }
 
-void Lights_ClearHead(GlobalContext* globalCtx, LightContext* lightCtx) {
+void LightContext_InitList(GlobalContext* globalCtx, LightContext* lightCtx) {
     lightCtx->listHead = NULL;
 }
 
-void Lights_RemoveAll(GlobalContext* globalCtx, LightContext* lightCtx) {
+void LightContext_DestroyList(GlobalContext* globalCtx, LightContext* lightCtx) {
     while (lightCtx->listHead != NULL) {
-        Lights_Remove(globalCtx, lightCtx, lightCtx->listHead);
+        LightContext_RemoveLight(globalCtx, lightCtx, lightCtx->listHead);
         lightCtx->listHead = lightCtx->listHead->next;
     }
 }
 
-LightNode* Lights_Insert(GlobalContext* globalCtx, LightContext* lightCtx, LightInfo* info) {
-    LightNode* light = Lights_FindFreeSlot();
+/*
+ * Insert a new light into the list pointed to by LightContext
+ *
+ * Note: Due to the limited number of slots in a Lights group, inserting too many lights in the
+ * list may result in older entries not being bound to a Light when calling Lights_BindAll
+ */
+LightNode* LightContext_InsertLight(GlobalContext* globalCtx, LightContext* lightCtx, LightInfo* info) {
+    LightNode* light = Lights_FindBufSlot();
 
     if (light != NULL) {
         light->info = info;
@@ -294,7 +315,7 @@ LightNode* Lights_Insert(GlobalContext* globalCtx, LightContext* lightCtx, Light
     return light;
 }
 
-void Lights_Remove(GlobalContext* globalCtx, LightContext* lightCtx, LightNode* light) {
+void LightContext_RemoveLight(GlobalContext* globalCtx, LightContext* lightCtx, LightNode* light) {
     if (light != NULL) {
         if (light->prev != NULL) {
             light->prev->next = light->next;
@@ -306,16 +327,14 @@ void Lights_Remove(GlobalContext* globalCtx, LightContext* lightCtx, LightNode* 
             light->next->prev = light->prev;
         }
 
-        Lights_Free(light);
+        Lights_FreeNode(light);
     }
 }
 
 // Unused
-Lights* func_801026E8(GraphicsContext* gfxCtx, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ) {
-    Lights* lights;
+Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 x, s8 y, s8 z) {
+    Lights* lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
     s32 i;
-
-    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientRed;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientGreen;
@@ -327,20 +346,18 @@ Lights* func_801026E8(GraphicsContext* gfxCtx, u8 ambientRed, u8 ambientGreen, u
         lights->l.l[i].lDir.col[0] = lights->l.l[i].lDir.colc[0] = red;
         lights->l.l[i].lDir.col[1] = lights->l.l[i].lDir.colc[1] = green;
         lights->l.l[i].lDir.col[2] = lights->l.l[i].lDir.colc[2] = blue;
-        lights->l.l[i].lDir.dir[0] = dirX;
-        lights->l.l[i].lDir.dir[1] = dirY;
-        lights->l.l[i].lDir.dir[2] = dirZ;
+        lights->l.l[i].lDir.dir[0] = x;
+        lights->l.l[i].lDir.dir[1] = y;
+        lights->l.l[i].lDir.dir[2] = z;
     }
 
-    Lights_UploadLights(lights, gfxCtx);
+    Lights_Draw(lights, gfxCtx);
 
     return lights;
 }
 
-Lights* Lights_MapperAllocateAndInit(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue) {
-    Lights* lights;
-
-    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
+Lights* Lights_New(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue) {
+    Lights* lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = red;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = green;
@@ -351,7 +368,7 @@ Lights* Lights_MapperAllocateAndInit(GraphicsContext* gfxCtx, u8 red, u8 green, 
     return lights;
 }
 
-void func_80102880(GlobalContext* globalCtx) {
+void Lights_GlowCheck(GlobalContext* globalCtx) {
     LightNode* light = globalCtx->lightCtx.listHead;
     LightPoint* point;
     Vec3f pos;
@@ -368,7 +385,7 @@ void func_80102880(GlobalContext* globalCtx) {
             pos.y = point->y;
             pos.z = point->z;
             func_800B4EDC(globalCtx, &pos, &multDest, &wDest);
-            point->drawGlow = 0;
+            point->drawGlow = false;
 
             if ((multDest.z > 1.0f) &&
                 (fabsf(multDest.x * wDest) < 1.0f) &&
@@ -379,7 +396,7 @@ void func_80102880(GlobalContext* globalCtx) {
                 if (0) {};
 
                 if (wZ < func_80178A94(multDest.x * wDest * 160.0f + 160.0f, ((multDest.y * wDest) * -120.0f) + 120.0f)) {
-                    point->drawGlow = 1;
+                    point->drawGlow = true;
                 }
             }
         }
@@ -388,7 +405,7 @@ void func_80102880(GlobalContext* globalCtx) {
     }
 }
 
-void func_80102A64(GlobalContext* globalCtx) {
+void Lights_DrawGlow(GlobalContext* globalCtx) {
     LightPoint* point;
     f32 scale;
     LightNode* light = globalCtx->lightCtx.listHead;
@@ -401,14 +418,13 @@ void func_80102A64(GlobalContext* globalCtx) {
         if (0){};
 
         gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080); //! This doesn't resolve to any of the macros in gdi.h
-
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
                                 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
-
         gSPDisplayList(dl++, &D_04029CB0);
 
         do {
             point = &light->info->params.point;
+
             if ((light->info->type == LIGHT_POINT_GLOW) && point->drawGlow) {
                 scale = SQ((f32)point->radius) * 0.000002f;
 
@@ -418,7 +434,6 @@ void func_80102A64(GlobalContext* globalCtx) {
                 SysMatrix_InsertScale(scale, scale, scale, MTXMODE_APPLY);
 
                 gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
                 gSPDisplayList(dl++, &D_04029CF0);
             }
 
