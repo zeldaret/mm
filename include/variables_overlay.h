@@ -2848,7 +2848,7 @@ extern UNK_TYPE4 D_808E1F58; // D_808E1F58
 extern OverlayRelocationSection enEncount2OverlayInfo; // D_808E1F60
 extern u32 enEncount2OverlayRelocations[25]; // D_808E1F74
 extern u32 enEncount2OverlayInfoOffset; // D_808E1FDC
-extern UNK_TYPE1 D_808E2020; // D_808E2020
+extern UNK_TYPE1 En_Fire_Rock_InitVars; // En_Fire_Rock_InitVars
 extern OverlayRelocationSection enFireRockOverlayInfo; // D_808E2040
 extern u32 enFireRockOverlayRelocations[4]; // D_808E2054
 extern u32 enFireRockOverlayInfoOffset; // D_808E206C
@@ -6126,11 +6126,11 @@ extern UNK_TYPE1 En_Boj_01_InitVars; // En_Boj_01_InitVars
 extern OverlayRelocationSection enBoj01OverlayInfo; // D_809C3DE0
 extern u32 enBoj01OverlayRelocations[4]; // D_809C3DF4
 extern u32 enBoj01OverlayInfoOffset; // D_809C3E0C
-extern UNK_TYPE1 D_809C3E50; // D_809C3E50
+extern UNK_TYPE1 En_Boj_02_InitVars; // En_Boj_02_InitVars
 extern OverlayRelocationSection enBoj02OverlayInfo; // D_809C3E70
 extern u32 enBoj02OverlayRelocations[4]; // D_809C3E84
 extern u32 enBoj02OverlayInfoOffset; // D_809C3E9C
-extern UNK_TYPE1 D_809C3EE0; // D_809C3EE0
+extern UNK_TYPE1 En_Boj_03_InitVars; // En_Boj_03_InitVars
 extern OverlayRelocationSection enBoj03OverlayInfo; // D_809C3F00
 extern u32 enBoj03OverlayRelocations[4]; // D_809C3F14
 extern u32 enBoj03OverlayInfoOffset; // D_809C3F2C
@@ -6214,7 +6214,7 @@ extern UNK_TYPE4 D_809CB0FC; // D_809CB0FC
 extern OverlayRelocationSection enSyatekiCrowOverlayInfo; // D_809CB100
 extern u32 enSyatekiCrowOverlayRelocations[56]; // D_809CB114
 extern u32 enSyatekiCrowOverlayInfoOffset; // D_809CB1FC
-extern UNK_TYPE1 D_809CB240; // D_809CB240
+extern UNK_TYPE1 En_Boj_04_InitVars; // En_Boj_04_InitVars
 extern OverlayRelocationSection enBoj04OverlayInfo; // D_809CB260
 extern u32 enBoj04OverlayRelocations[4]; // D_809CB274
 extern u32 enBoj04OverlayInfoOffset; // D_809CB28C
@@ -6991,7 +6991,7 @@ extern UNK_TYPE4 D_80A0C560; // D_80A0C560
 extern OverlayRelocationSection bgDyYoseizoOverlayInfo; // D_80A0C570
 extern u32 bgDyYoseizoOverlayRelocations[123]; // D_80A0C584
 extern u32 bgDyYoseizoOverlayInfoOffset; // D_80A0C77C
-extern UNK_TYPE1 D_80A0C7C0; // D_80A0C7C0
+extern UNK_TYPE1 En_Boj_05_InitVars; // En_Boj_05_InitVars
 extern OverlayRelocationSection enBoj05OverlayInfo; // D_80A0C7E0
 extern u32 enBoj05OverlayRelocations[4]; // D_80A0C7F4
 extern u32 enBoj05OverlayInfoOffset; // D_80A0C80C
@@ -8168,7 +8168,7 @@ extern UNK_TYPE4 D_80A55E40; // D_80A55E40
 extern OverlayRelocationSection objHugebombiwaOverlayInfo; // D_80A55E50
 extern u32 objHugebombiwaOverlayRelocations[147]; // D_80A55E64
 extern u32 objHugebombiwaOverlayInfoOffset; // D_80A560BC
-extern UNK_TYPE1 D_80A56100; // D_80A56100
+extern UNK_TYPE1 En_Firefly2_InitVars; // En_Firefly2_InitVars
 extern OverlayRelocationSection enFirefly2OverlayInfo; // D_80A56120
 extern u32 enFirefly2OverlayRelocations[4]; // D_80A56134
 extern u32 enFirefly2OverlayInfoOffset; // D_80A5614C
