@@ -1087,8 +1087,9 @@ void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType
 void func_80135EE8(GlobalContext* globalCtx, AnimationContext* animationCtx) {
     AnimationEntry* entry = animationCtx->entries;
 
-    for (; animationCtx->animationCount != 0; entry++, animationCtx->animationCount--) {
+    while (animationCtx->animationCount != 0) {
         sAnimationLoadDone[entry->type](globalCtx, &entry->types);
+        entry++, animationCtx->animationCount--;
     }
 
     D_801F5AB0 = 1;
