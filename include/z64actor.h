@@ -8,7 +8,7 @@
 
 struct Actor;
 struct GlobalContext;
-struct LightMapper;
+struct Lights;
 struct BgPolygon;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* ctxt);
@@ -83,7 +83,7 @@ typedef struct {
     /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
-typedef void(*actor_shadow_draw_func)(struct Actor* actor, struct LightMapper* mapper, struct GlobalContext* ctxt);
+typedef void(*actor_shadow_draw_func)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* ctxt);
 
 typedef struct {
     /* 0x00 */ Vec3s rot;

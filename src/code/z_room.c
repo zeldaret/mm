@@ -30,11 +30,11 @@ void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
     mesh = &room->mesh->type0;
     meshParams = (RoomMeshType0Params*)Lib_PtrSegToVirt(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
-        if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
+        if ((flags & 1) && (meshParams->opaqueDl != 0)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
         }
 
-        if ((flags & 2) && (meshParams->translucentDl != NULL)) {
+        if ((flags & 2) && (meshParams->translucentDl != 0)) {
             gSPDisplayList(gfxCtx->polyXlu.p++, meshParams->translucentDl);
         }
 

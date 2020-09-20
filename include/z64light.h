@@ -5,70 +5,60 @@
 #include <PR/gbi.h>
 
 typedef struct {
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+    /* 0x6 */ u8 color[3];
+    /* 0x9 */ u8 drawGlow;
+    /* 0xA */ s16 radius;
+} LightPoint; // size = 0xC
+
+typedef struct {
+    /* 0x0 */ s8 x;
+    /* 0x1 */ s8 y;
+    /* 0x2 */ s8 z;
+    /* 0x3 */ u8 color[3];
+} LightDirectional; // size = 0x6
+
+typedef union {
+    LightPoint point;
+    LightDirectional dir;
+} LightParams; // size = 0xC
+
+typedef struct {
     /* 0x0 */ u8 type;
-    /* 0x2 */ u16 params[6];
+    /* 0x2 */ LightParams params;
 } LightInfo; // size = 0xE
 
-typedef struct z_Light_t {
-    /* 0x0 */ LightInfo* info;
-    /* 0x4 */ struct z_Light_t* prev;
-    /* 0x8 */ struct z_Light_t* next;
-} z_Light; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ z_Light* lightsHead;
-    /* 0x4 */ u8 ambientRed;
-    /* 0x5 */ u8 ambientGreen;
-    /* 0x6 */ u8 ambientBlue;
-    /* 0x7 */ u8 unk7;
-    /* 0x8 */ u8 unk8;
-    /* 0x9 */ u8 unk9;
-    /* 0xA */ s16 unkA;
-    /* 0xC */ s16 unkC;
-} LightingContext; // size = 0x10
-
-typedef struct {
-    /* 0x000 */ s32 numOccupied;
-    /* 0x004 */ s32 nextFree;
-    /* 0x008 */ z_Light lights[32];
-} LightsList; // size = 0x188
-
-typedef struct {
-    /* 0x0 */ s8 dirX;
-    /* 0x1 */ s8 dirY;
-    /* 0x2 */ s8 dirZ;
-    /* 0x3 */ u8 red;
-    /* 0x4 */ u8 green;
-    /* 0x5 */ u8 blue;
-    /* 0x6 */ u16 pad[3];
-} LightInfoDirectionalParams; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 posX;
-    /* 0x2 */ s16 posY;
-    /* 0x4 */ s16 posZ;
-    /* 0x6 */ u8 red;
-    /* 0x7 */ u8 green;
-    /* 0x8 */ u8 blue;
-    /* 0x9 */ u8 unk9; // func_80102880 sets this only for type 2, func_80102A64 draws something if this is set
-    /* 0xA */ s16 radius;
-} LightInfoPositionalParams; // size = 0xC
-
-typedef struct {
+typedef struct Lights{
     /* 0x00 */ u8 enablePosLights;
     /* 0x01 */ u8 numLights;
-    /* 0x02 */ UNK_TYPE1 pad2[6];
-    /* 0x08 */ Lights7 lights;
-} LightMapper; // size = 0x80
+    /* 0x08 */ Lightsn l;
+} Lights; // size = 0x80
+
+typedef struct LightNode {
+    /* 0x0 */ LightInfo* info;
+    /* 0x4 */ struct LightNode* prev;
+    /* 0x8 */ struct LightNode* next;
+} LightNode; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x2 */ LightInfoDirectionalParams params;
-} LightInfoDirectional; // size = 0xE
+    /* 0x0 */ LightNode* listHead;
+    /* 0x4 */ RGB ambient;
+    /* 0x7 */ u8 unk07;
+    /* 0x8 */ u8 unk08;
+    /* 0x9 */ u8 unk09;
+    /* 0xA */ s16 unk0A;
+    /* 0xC */ s16 unk0C;
+} LightContext; // size = 0x10
 
-typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x2 */ LightInfoPositionalParams params;
-} LightInfoPositional; // size = 0xE
+typedef enum {
+    /* 0x00 */ LIGHT_POINT_NOGLOW,
+    /* 0x01 */ LIGHT_DIRECTIONAL,
+    /* 0x02 */ LIGHT_POINT_GLOW
+} LightType;
+
+typedef void (*LightsBindFunc1)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
+typedef void (*LightsBindFunc2)(Lights* lights, LightParams* params, Vec3f* vec);
 
 #endif

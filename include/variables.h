@@ -1023,8 +1023,8 @@ extern UNK_TYPE2 D_801BEA1E; // D_801BEA1E
 extern UNK_TYPE2 D_801BEA20; // D_801BEA20
 extern UNK_TYPE1 D_801BEA30; // D_801BEA30
 extern UNK_TYPE1 D_801BEA70; // D_801BEA70
-extern light_map_positional_func lightPositionalMapFuncs[3]; // D_801BEAB0
-extern light_map_directional_func lightDirectionalMapFuncs[3]; // D_801BEABC
+//extern light_map_positional_func lightPositionalMapFuncs[3]; // D_801BEAB0
+//extern light_map_directional_func lightDirectionalMapFuncs[3]; // D_801BEABC
 extern UNK_TYPE4 D_801BEAD4; // D_801BEAD4
 extern UNK_TYPE4 D_801BEAD8; // D_801BEAD8
 extern UNK_TYPE1 D_801BEAE0; // D_801BEAE0
@@ -4013,7 +4013,7 @@ extern UNK_TYPE1 D_801F4F60; // D_801F4F60
 extern UNK_TYPE1 D_801F4F66; // D_801F4F66
 extern UNK_TYPE1 D_801F4F68; // D_801F4F68
 extern UNK_TYPE1 D_801F4F6A; // D_801F4F6A
-extern LightsList lightsList; // D_801F4F70
+//extern LightsBuffer sLightsBuffer; // D_801F4F70
 extern Arena mainHeap; // D_801F5100
 extern UNK_TYPE1 D_801F5130; // D_801F5130
 extern UNK_TYPE1 D_801F5270; // D_801F5270

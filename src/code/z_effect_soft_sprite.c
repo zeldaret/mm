@@ -253,11 +253,11 @@ void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
 }
 
 void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
-    LightMapper* s0;
+    Lights* s0;
     s32 i;
 
     s0 = Lights_CreateMapper(&ctxt->lightCtx, ctxt->state.gfxCtx);
-    Lights_MapLights(s0, ctxt->lightCtx.lightsHead, 0, ctxt);
+    Lights_MapLights(s0, ctxt->lightCtx.listHead, 0, ctxt);
     Lights_UploadLights(s0, ctxt->state.gfxCtx);
 
     for (i = 0; i < EffectSS2Info.size; i++) {

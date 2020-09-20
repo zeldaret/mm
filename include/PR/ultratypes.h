@@ -1,6 +1,13 @@
 #ifndef _ULTRATYPES_H_
 #define _ULTRATYPES_H_
 
+#ifndef NULL
+#define NULL    (void *)0
+#endif
+
+#define TRUE 1
+#define FALSE 0
+
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned long      u32;

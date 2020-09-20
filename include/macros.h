@@ -14,6 +14,17 @@
 
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
+#define SQ(x) ((x)*(x))
+#define ABS(x) ((x) >= 0 ? (x) : -(x))
+#define ABS2(x) ((x) < 0 ? -(x) : (x))
+#define	ULTRA_ABS(x) ((x) > 0) ? (x) : -(x)
+#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
+#define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
+#define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
+#define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
+
+#define RGBA8(r, g, b, a) (((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | ((a & 0xFF) << 0))
+
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 
@@ -21,4 +32,7 @@
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
             (curState)->nextGameStateSize = sizeof(newStruct); 
 
+#define GRAPH_ALLOC(gfxCtx, size)         \
+    ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
+    
 #endif // _MACROS_H_
