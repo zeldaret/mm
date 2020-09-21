@@ -2229,7 +2229,7 @@ u32 func_8012403C(GlobalContext* ctxt); // func_8012403C
 void func_8012404C(GlobalContext* ctxt); // func_8012404C
 void func_8012405C(void); // func_8012405C
 void func_80124088(void); // func_80124088
-void func_801240C8(void); // func_801240C8
+s32 func_801240C8(ActorPlayer* player); // func_801240C8
 void func_801240DC(void); // func_801240DC
 void func_80124110(void); // func_80124110
 void func_80124148(void); // func_80124148

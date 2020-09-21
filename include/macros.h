@@ -20,5 +20,7 @@
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
             (curState)->nextGameStateSize = sizeof(newStruct); 
+        
+#define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORTYPE_PLAYER].first)
 
 #endif // _MACROS_H_
