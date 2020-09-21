@@ -23,4 +23,7 @@
         
 #define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORTYPE_PLAYER].first)
 
+#define SQ(x) ((x)*(x))
+#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
+
 #endif // _MACROS_H_

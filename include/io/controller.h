@@ -3,6 +3,21 @@
 
 #include <PR/ultratypes.h>
 
+#define A_BUTTON	CONT_A
+#define B_BUTTON	CONT_B
+#define L_TRIG		CONT_L
+#define R_TRIG		CONT_R
+#define Z_TRIG		CONT_G
+#define START_BUTTON	CONT_START
+#define U_JPAD		CONT_UP
+#define L_JPAD		CONT_LEFT
+#define R_JPAD		CONT_RIGHT
+#define D_JPAD		CONT_DOWN
+#define U_CBUTTONS	CONT_E
+#define L_CBUTTONS	CONT_C
+#define R_CBUTTONS	CONT_F
+#define D_CBUTTONS	CONT_D
+
 typedef struct {
     /* 0x00 */ u32 ramarray[15];
     /* 0x3C */ u32 pifstatus;
