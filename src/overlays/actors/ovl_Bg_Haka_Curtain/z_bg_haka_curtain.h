@@ -8,9 +8,7 @@ struct BgHakaCurtain;
 typedef void (*BgHakaCurtainActionFunc)(struct BgHakaCurtain*, GlobalContext*);
 
 typedef struct BgHakaCurtain {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ s32 dynaCollisionIndex;
-    /* 0x148 */ char unk_148[0x14];
+    /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgHakaCurtainActionFunc actionFunc;
 } BgHakaCurtain; // size = 0x160
 
