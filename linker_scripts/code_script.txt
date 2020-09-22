@@ -6792,8 +6792,9 @@ SECTIONS
     ovl_Obj_Dinner : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Dinner/z_obj_dinner.o(.text)
-        build/asm/ovl_Obj_Dinner_data.o(.data)
-        build/asm/ovl_Obj_Dinner_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Dinner/z_obj_dinner.o(.data)
+        build/src/overlays/actors/ovl_Obj_Dinner/z_obj_dinner.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Dinner/z_obj_dinner_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
