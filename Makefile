@@ -49,6 +49,7 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mu
 #### Files ####
 
 # ROM image
+MM_BASEROM ?= baserom.z64
 ROM_NAME := rom
 ROM := $(ROM_NAME).z64
 UNCOMPRESSED_ROM := $(ROM_NAME)_uncompressed.z64
@@ -104,7 +105,9 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 # disasm is not a file so we must tell make not to check it when evaluating timestamps
 .INTERMEDIATE: disasm
 
-all: $(ROM) $(UNCOMPRESSED_ROM)
+all:
+	make $(UNCOMPRESSED_ROM)
+	make $(ROM)
 
 $(ROM): $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
@@ -159,6 +162,7 @@ setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
 	make -C tools
+	./tools/extract_rom.py $(MM_BASEROM)
 
 diff-init: all
 	rm -rf expected/
@@ -167,7 +171,10 @@ diff-init: all
 	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
 	cp $(ROM) expected/$(ROM)
 
-init: setup all diff-init
+init:
+	make setup
+	make all
+	make diff-init
 
 # Recipes
 
