@@ -2861,7 +2861,7 @@ void func_8014D7B4(void); // func_8014D7B4
 void func_80150A84(void); // func_80150A84
 void func_80150D08(GlobalContext* ctxt, unsigned int uParm2); // func_80150D08
 void func_801514B0(void); // func_801514B0
-void func_801518B0(GlobalContext* ctxt, u32 uParm2, UNK_TYPE4 uParm3); // func_801518B0
+void func_801518B0(GlobalContext* ctxt, u32 uParm2, Actor* uParm3); // func_801518B0
 void func_80151938(GlobalContext* ctxt, u16 param_2); // func_80151938
 void func_80151A68(GlobalContext* ctxt, u16 param_2); // func_80151A68
 void func_80151BB4(s32 iParm1, u32 uParm2); // func_80151BB4
