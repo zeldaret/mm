@@ -50,10 +50,10 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mu
 
 # ROM image
 MM_BASEROM ?= baserom.z64
-ROM_NAME := rom
-ROM := $(ROM_NAME).z64
-UNCOMPRESSED_ROM := $(ROM_NAME)_uncompressed.z64
-ELF := $(ROM_NAME).elf
+MM_ROM_NAME ?= rom
+ROM := $(MM_ROM_NAME).z64
+UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
+ELF := $(MM_ROM_NAME).elf
 
 BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
