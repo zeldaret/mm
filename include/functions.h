@@ -3,6 +3,13 @@
 
 #include <z64.h>
 
+float fabsf(float f);
+#pragma intrinsic(fabsf)
+float sqrtf(float f);
+#pragma intrinsic(sqrtf)
+double sqrt(double d);
+#pragma intrinsic(sqrt)
+
 void bootproc(void); // func_80080060
 void Idle_ClearMemory(void* begin, void* end); // func_80080150
 void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value); // func_80080180
@@ -816,14 +823,14 @@ void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800B8E58(void); // func_800B8E58
 void func_800B8EC8(Actor* iParm1, u32 uParm2); // func_800B8EC8
 void func_800B8EF4(void); // func_800B8EF4
-void func_800B8F98(void); // func_800B8F98
+void func_800B8F98(Actor* actor, u16 sfxId); // func_800B8F98
 void func_800B8FC0(void); // func_800B8FC0
 void func_800B8FE8(void); // func_800B8FE8
 void func_800B9010(Actor* actor, UNK_TYPE2 uParm2); // func_800B9010
 void func_800B9038(void); // func_800B9038
 void func_800B9084(void); // func_800B9084
 void func_800B9098(Actor* actor); // func_800B9098
-void func_800B90AC(void); // func_800B90AC
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4); // func_800B90AC
 void func_800B90F4(void); // func_800B90F4
 void func_800B9120(ActorContext* actCtxt); // func_800B9120
 void Actor_Init(GlobalContext* ctxt, ActorContext* actCtxt, UNK_TYPE4 uParm3); // func_800B9170
@@ -992,7 +999,7 @@ void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C5464
 void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C54AC
 void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C5538
-void func_800C55C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C55C4
+s32 func_800C55C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C55C4
 void func_800C5650(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_800C5650
 void func_800C56E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_800C56E0
 s32 func_800C576C(CollisionContext* bgCtxt, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_PTR param_5, s32 param_6, s32 param_7, s32 param_8, s32 param_9, UNK_PTR param_10); // func_800C576C
@@ -1516,7 +1523,7 @@ void func_800E823C(void); // func_800E823C
 void func_800E8318(void); // func_800E8318
 void func_800E8478(void); // func_800E8478
 void func_800E85D4(UNK_TYPE4 param_1, Vec3f* param_2); // func_800E85D4
-void func_800E8668(void); // func_800E8668
+void func_800E8668(GlobalContext* globalCtx, Vec3f* arg2); // func_800E8668
 void func_800E8690(void); // func_800E8690
 void func_800E86C0(void); // func_800E86C0
 void func_800E86E0(UNK_TYPE4 param_1, Vec3f* param_2, UNK_TYPE4 param_3); // func_800E86E0
@@ -3360,7 +3367,7 @@ s16 atans_first_8th(f32 opposite, f32 adjacent); // func_8017FEB0
 s16 atans(f32 opposite, f32 adjacent); // func_8017FEE4
 f32 atan(f32 opposite, f32 adjacent); // func_801800CC
 s16 atans_flip(f32 adjacent, f32 opposite); // func_80180100
-void atan_flip(f32 adjacent, f32 opposite); // func_8018012C
+s16 atan_flip(f32 adjacent, f32 opposite); // func_8018012C
 void SysMatrix_StateAlloc(GameState* ctxt); // func_80180160
 void SysMatrix_StatePush(void); // func_8018019C
 void SysMatrix_StatePop(void); // func_801801CC

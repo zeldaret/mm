@@ -16,7 +16,7 @@ typedef struct ArmsHook {
     /* 0x1F8 */ Actor* grabbed;
     /* 0x1FC */ Vec3f unk_1FC;
     /* 0x208 */ char unk208[0x2];
-    /* 0x20A */ u16 timer;
+    /* 0x20A */ s16 timer;
     /* 0x20C */ ArmsHookActionFunc actionFunc;
 } ArmsHook; // size = 0x210
 

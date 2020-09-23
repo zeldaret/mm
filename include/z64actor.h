@@ -132,7 +132,7 @@ typedef struct Actor {
     /* 0x0A0 */ ActorA0 unkA0;
     /* 0x0BC */ ActorShape shape;
     /* 0x0D4 */ UNK_TYPE1 padD4[0x18];
-    /* 0x0EC */ Vec3f unkEC;
+    /* 0x0EC */ Vec3f projectedPos;
     /* 0x0F8 */ f32 unkF8;
     /* 0x0FC */ f32 unkFC;
     /* 0x100 */ f32 unk100;
