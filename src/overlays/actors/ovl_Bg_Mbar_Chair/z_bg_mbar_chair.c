@@ -9,7 +9,6 @@ void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Mbar_Chair_InitVars = {
     ACTOR_BG_MBAR_CHAIR,
     ACTORTYPE_BG,
@@ -21,12 +20,34 @@ const ActorInit Bg_Mbar_Chair_InitVars = {
     (ActorFunc)BgMbarChair_Update,
     (ActorFunc)BgMbarChair_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Mbar_Chair_0x80B7E930/BgMbarChair_Init.asm")
+static InitChainEntry bgMbarChairInitVars[] = {
+    ICHAIN_F32(unkFC, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk100, 60, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk104, 80, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Mbar_Chair_0x80B7E930/BgMbarChair_Destroy.asm")
+extern BgMeshHeader D_060019B4;
+extern UNK_TYPE D_06000288;
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Mbar_Chair_0x80B7E930/BgMbarChair_Update.asm")
+void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgMbarChair* this = THIS;
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Mbar_Chair_0x80B7E930/BgMbarChair_Draw.asm")
+    Actor_ProcessInitChain(&this->dyna.actor, bgMbarChairInitVars);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
+}
+
+void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgMbarChair* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+}
+
+void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, &D_06000288);
+}
