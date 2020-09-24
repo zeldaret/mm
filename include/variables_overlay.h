@@ -4867,7 +4867,7 @@ extern UNK_TYPE4 D_8097349C; // D_8097349C
 extern OverlayRelocationSection oceffSpotOverlayInfo; // D_809734A0
 extern u32 oceffSpotOverlayRelocations[37]; // D_809734B4
 extern u32 oceffSpotOverlayInfoOffset; // D_8097354C
-extern UNK_TYPE1 D_809735E0; // D_809735E0
+extern UNK_TYPE1 En_Torch_InitVars; // En_Torch_InitVars
 extern UNK_TYPE1 D_80973600; // D_80973600
 extern OverlayRelocationSection enTorchOverlayInfo; // D_80973610
 extern u32 enTorchOverlayRelocations[3]; // D_80973624
@@ -11797,7 +11797,7 @@ extern UNK_TYPE4 D_80B7E664; // D_80B7E664
 extern OverlayRelocationSection enNeoReebaOverlayInfo; // D_80B7E670
 extern u32 enNeoReebaOverlayRelocations[170]; // D_80B7E684
 extern u32 enNeoReebaOverlayInfoOffset; // D_80B7E92C
-extern ActorInit bgMbarChairInitData; // D_80B7EA00
+extern ActorInit Bg_Mbar_Chair_InitVars; // D_80B7EA00
 extern InitChainEntry bgMbarChairInitVars[4]; // D_80B7EA20
 extern OverlayRelocationSection bgMbarChairOverlayInfo; // D_80B7EA30
 extern u32 bgMbarChairOverlayRelocations[6]; // D_80B7EA44
