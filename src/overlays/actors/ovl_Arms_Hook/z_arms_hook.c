@@ -129,8 +129,8 @@ void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
     f32 sp5C;
     f32 sp58;
     f32 velocity;
-    s32 pad1;
-
+    Vec3s *new_var;
+    
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
         func_808C1198(this);
         Actor_MarkForDeath(&this->actor);
@@ -155,6 +155,7 @@ void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
             func_8019F1C0(&this->actor.projectedPos, 0x1814);
             return;
         }
+        dummy_label_450417: ;
     }
     
     if (DECR(this->timer) == 0) {
@@ -219,6 +220,7 @@ void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
                 if (func_808C1168(this, player)) {
                     Math_Vec3f_Diff(&this->actor.currPosRot.pos, &player->base.currPosRot.pos, &player->base.velocity);
                     player->base.velocity.y -= 20.0f;
+                    dummy_label_86198: ; 
                     return;
                 }
             }
@@ -232,15 +234,17 @@ void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
         sp60.y = this->unk_1EC.y - (this->unk_1E0.y - this->unk_1EC.y);
         sp60.z = this->unk_1EC.z - (this->unk_1E0.z - this->unk_1EC.z);
         if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk_1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0) {
-            if (func_800B90AC(globalCtx, &this->actor, poly, dynaPolyID, &sp78) != 0 || func_800C576C(&globalCtx->colCtx, &sp60, &this->unk_1EC, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0) {
-                sp5C = poly->normal.x * (1 / SHT_MAX);
-                sp58 = poly->normal.z * (1 / SHT_MAX);
+            if (func_800B90AC(globalCtx, &this->actor, poly, dynaPolyID, &sp78) == 0 || func_800C576C(&globalCtx->colCtx, &sp60, &this->unk_1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0) {
+                new_var = &poly->normal;
+                sp5C = new_var->x * (1 / SHT_MAX);
+                sp58 = new_var->z * (1 / SHT_MAX);
                 Math_Vec3f_Copy(&this->actor.currPosRot.pos, &sp78);
                 this->actor.currPosRot.pos.x += 10.0f * sp5C;
                 this->actor.currPosRot.pos.z += 10.0f * sp58;
-                this->timer = 0;
-                if (func_80041FE8(&globalCtx->colCtx, poly, dynaPolyID) != 0) {
+                this->timer = 1;
+                if (func_800C9CEC(&globalCtx->colCtx, poly, dynaPolyID)) {
                     if (dynaPolyID != 0x32) {
+                        dummy_label_425159: ; 
                         dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, dynaPolyID);
                         if (dynaPolyActor != NULL) {
                             func_808C125C(this, &dynaPolyActor->actor);
@@ -254,7 +258,9 @@ void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
                 func_8019F1C0(&this->actor.projectedPos, 0x1813);
                 return;
             }
+            else if (!grabbed){}
         }
+
         if ((globalCtx->state.input[0].pressEdge.buttons & 0xC01F)) {
             this->timer = 1;
         }
