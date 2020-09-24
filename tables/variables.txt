@@ -9593,7 +9593,7 @@
     0x809734A0:("oceffSpotOverlayInfo","OverlayRelocationSection","",0x14),
     0x809734B4:("oceffSpotOverlayRelocations","u32","[37]",0x94),
     0x8097354C:("oceffSpotOverlayInfoOffset","u32","",0x4),
-    0x809735E0:("D_809735E0","UNK_TYPE1","",0x1),
+    0x809735E0:("En_Torch_InitVars","UNK_TYPE1","",0x1),
     0x80973600:("D_80973600","UNK_TYPE1","",0x1),
     0x80973610:("enTorchOverlayInfo","OverlayRelocationSection","",0x14),
     0x80973624:("enTorchOverlayRelocations","u32","[3]",0xc),
