@@ -11797,7 +11797,7 @@ extern UNK_TYPE4 D_80B7E664; // D_80B7E664
 extern OverlayRelocationSection enNeoReebaOverlayInfo; // D_80B7E670
 extern u32 enNeoReebaOverlayRelocations[170]; // D_80B7E684
 extern u32 enNeoReebaOverlayInfoOffset; // D_80B7E92C
-extern ActorInit bgMbarChairInitData; // D_80B7EA00
+extern ActorInit Bg_Mbar_Chair_InitVars; // D_80B7EA00
 extern InitChainEntry bgMbarChairInitVars[4]; // D_80B7EA20
 extern OverlayRelocationSection bgMbarChairOverlayInfo; // D_80B7EA30
 extern u32 bgMbarChairOverlayRelocations[6]; // D_80B7EA44

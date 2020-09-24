@@ -16783,7 +16783,7 @@
     0x80B7E670:("enNeoReebaOverlayInfo","OverlayRelocationSection","",0x14),
     0x80B7E684:("enNeoReebaOverlayRelocations","u32","[170]",0x2a8),
     0x80B7E92C:("enNeoReebaOverlayInfoOffset","u32","",0x4),
-    0x80B7EA00:("bgMbarChairInitData","ActorInit","",0x20),
+    0x80B7EA00:("Bg_Mbar_Chair_InitVars","ActorInit","",0x20),
     0x80B7EA20:("bgMbarChairInitVars","ActorInitVar","[4]",0x10),
     0x80B7EA30:("bgMbarChairOverlayInfo","OverlayRelocationSection","",0x14),
     0x80B7EA44:("bgMbarChairOverlayRelocations","u32","[6]",0x18),
