@@ -18105,7 +18105,7 @@
     0x80BEB8C0:("enChaOverlayInfo","OverlayRelocationSection","",0x14),
     0x80BEB8D4:("enChaOverlayRelocations","u32","[23]",0x5c),
     0x80BEB93C:("enChaOverlayInfoOffset","u32","",0x4),
-    0x80BEBA70:("D_80BEBA70","UNK_TYPE1","",0x1),
+    0x80BEBA70:("Obj_Dinner_InitVars","UNK_TYPE1","",0x1),
     0x80BEBA90:("objDinnerOverlayInfo","OverlayRelocationSection","",0x14),
     0x80BEBAA4:("objDinnerOverlayRelocations","u32","[4]",0x10),
     0x80BEBABC:("objDinnerOverlayInfoOffset","u32","",0x4),

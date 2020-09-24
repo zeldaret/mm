@@ -653,7 +653,9 @@ typedef struct {
     /* 0x0004 */ UNK_TYPE1 pad4[0x4];
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0xA];
+    /* 0x000E */ UNK_TYPE1 padE[0x2];
+    /* 0x0010 */ u32 isNight;
+    /* 0x0014 */ u32 unk14;
     /* 0x0018 */ u32 day;
     /* 0x001C */ u32 daysElapsed;
     /* 0x0020 */ u8 unk20;

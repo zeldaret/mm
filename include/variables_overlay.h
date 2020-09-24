@@ -13039,7 +13039,7 @@ extern UNK_TYPE4 D_80BEB8BC; // D_80BEB8BC
 extern OverlayRelocationSection enChaOverlayInfo; // D_80BEB8C0
 extern u32 enChaOverlayRelocations[23]; // D_80BEB8D4
 extern u32 enChaOverlayInfoOffset; // D_80BEB93C
-extern UNK_TYPE1 D_80BEBA70; // D_80BEBA70
+extern UNK_TYPE1 Obj_Dinner_InitVars; // Obj_Dinner_InitVars
 extern OverlayRelocationSection objDinnerOverlayInfo; // D_80BEBA90
 extern u32 objDinnerOverlayRelocations[4]; // D_80BEBAA4
 extern u32 objDinnerOverlayInfoOffset; // D_80BEBABC
