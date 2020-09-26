@@ -177,7 +177,8 @@ typedef struct {
     /* 0x148 */ UNK_TYPE1 pad148[0x2];
     /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 unk14B;
-    /* 0x14C */ UNK_TYPE1 pad14C[0x7];
+    /* 0x14C */ UNK_TYPE1 pad14C[0x5];
+    /* 0x151 */ u8 unk151;
     /* 0x153 */ u8 unk153;
     /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
     /* 0x34C */ Actor* heldActor;

@@ -10,7 +10,8 @@ typedef void (*ArmsHookActionFunc)(struct ArmsHook*, GlobalContext*);
 typedef struct ArmsHook {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColQuad collider;
-    /* 0x1C4 */ char unk_1C4[0x1C];
+    /* 0x1C4 */ s32 unk_1C4;
+    /* 0x1C8 */ char unk_1C8[0x18];
     /* 0x1E0 */ Vec3f unk_1E0;
     /* 0x1EC */ Vec3f unk_1EC;
     /* 0x1F8 */ Actor* grabbed;

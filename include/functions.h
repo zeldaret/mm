@@ -2194,8 +2194,8 @@ UNK_TYPE4 func_80122670(int* param_1, Input* input); // func_80122670
 void func_801226E0(void); // func_801226E0
 void func_80122744(void); // func_80122744
 void func_80122760(void); // func_80122760
-void func_80122868(void); // func_80122868
-void func_801229A0(void); // func_801229A0
+void func_80122868(GlobalContext* globalCtx, ActorPlayer* player); // func_80122868
+void func_801229A0(GlobalContext* globalCtx, ActorPlayer* player); // func_801229A0
 void func_801229EC(void); // func_801229EC
 void func_801229FC(void); // func_801229FC
 void func_80122BA4(void); // func_80122BA4
@@ -2268,7 +2268,7 @@ void func_80125CE0(void); // func_80125CE0
 void func_80125D4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80125D4C
 void func_801262C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801262C8
 void func_801263FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801263FC
-void func_80126440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80126440
+void func_80126440(GlobalContext* globalCtx, ColCommon* param_2, s32* param_3, Vec3f* param_4, Vec3f* param_5); // func_80126440
 void func_801265C8(void); // func_801265C8
 void func_8012669C(void); // func_8012669C
 void func_80126808(void); // func_80126808
