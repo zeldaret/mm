@@ -26,12 +26,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-extern Gfx* D_0601F050;
-extern Gfx* D_06018DA0;
-extern Gfx* D_0601EF10;
-extern Gfx* D_06018C60;
-Gfx* D_80AF0120[] = { &D_0601F050, &D_06018DA0 };
-Gfx* D_80AF0128[] = { &D_0601EF10, &D_06018C60 };
+extern Gfx D_0601F050[];
+extern Gfx D_06018DA0[];
+extern Gfx D_0601EF10[];
+extern Gfx D_06018C60[];
+Gfx* D_80AF0120[] = { D_0601F050, D_06018DA0 };
+Gfx* D_80AF0128[] = { D_0601EF10, D_06018C60 };
 
 void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMarketStep* this = THIS;
