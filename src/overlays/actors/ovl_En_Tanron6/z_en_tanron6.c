@@ -12,7 +12,7 @@ void EnTanron6_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, GlobalContext* globalCtx);
 
-const ActorInit EnTanron6_InitVars = {
+const ActorInit En_Tanron6_InitVars = {
     ACTOR_EN_TANRON6,
     ACTORTYPE_ENEMY,
     FLAGS,
