@@ -26,7 +26,11 @@ const ActorInit En_Nnh_InitVars = {
     (ActorFunc)EnNnh_Draw
 };
 
-ColCylinderInit D_80C08A00[] = {0x0D000939, 0x10010000, 0x01000000, 0x00000000, 0x00000000, 0xF7CFFFFF, 0x00000000, 0x00010100, 0x00140032, 0x00000000, 0x00000000, 0x00000000};
+ColCylinderInit D_80C08A00 = {
+    { 0xD, 00, 0, 0, 0, 0 },
+    { 0, { 0x00000000, 0, 0 }, { 0, 0, 0 }, 25, 0, 1 },
+    { 90, 420, 65116}
+};
 extern Gfx D_06001510[];
 
 void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
