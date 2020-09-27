@@ -18033,7 +18033,7 @@
     0x80BE5F10:("enTanron5OverlayInfo","OverlayRelocationSection","",0x14),
     0x80BE5F24:("enTanron5OverlayRelocations","u32","[67]",0x10c),
     0x80BE603C:("enTanron5OverlayInfoOffset","u32","",0x4),
-    0x80BE6150:("En_Tanron6_InitVars","UNK_TYPE1","",0x1),
+    0x80BE6150:("EnTanron_InitVars","UNK_TYPE1","",0x1),
     0x80BE6170:("D_80BE6170","UNK_TYPE1","",0x1),
     0x80BE6190:("enTanron6OverlayInfo","OverlayRelocationSection","",0x14),
     0x80BE61A4:("enTanron6OverlayRelocations","u32","[9]",0x24),

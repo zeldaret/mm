@@ -9,10 +9,10 @@ void EnTanron6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTanron6_SetupDoNothing(EnTanron6* this);
+void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, GlobalContext* globalCtx);
 
-const ActorInit En_Tanron6_InitVars = {
+const ActorInit EnTanron_InitVars = {
     ACTOR_EN_TANRON6,
     ACTORTYPE_ENEMY,
     FLAGS,
@@ -36,13 +36,13 @@ void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.unkA0.health = 1;
     this->actor.unkA0.damageChart = &D_80BE6170;
     this->actor.unk1F = 6;
-    EnTanron6_SetupDoNothing(this);
+    EnTanron6_DoNothing(this);
 }
 
 void EnTanron6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EnTanron6_SetupDoNothing(EnTanron6* this) {
+void EnTanron6_DoNothing(EnTanron6* this) {
     this->actionFunc = func_80BE60D0;
 }
 
