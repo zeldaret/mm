@@ -12967,7 +12967,7 @@ extern UNK_TYPE4 D_80BE5F04; // D_80BE5F04
 extern OverlayRelocationSection enTanron5OverlayInfo; // D_80BE5F10
 extern u32 enTanron5OverlayRelocations[67]; // D_80BE5F24
 extern u32 enTanron5OverlayInfoOffset; // D_80BE603C
-extern UNK_TYPE1 EnTanron_InitVars; // EnTanron_InitVars
+extern UNK_TYPE1 EnTanron6_InitVars; // EnTanron6_InitVars
 extern UNK_TYPE1 D_80BE6170; // D_80BE6170
 extern OverlayRelocationSection enTanron6OverlayInfo; // D_80BE6190
 extern u32 enTanron6OverlayRelocations[9]; // D_80BE61A4

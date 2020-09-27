@@ -13,6 +13,6 @@ typedef struct EnTanron6 {
     /* 0x200 */ EnTanron6ActionFunc actionFunc;
 } EnTanron6; // size = 0x204
 
-extern const ActorInit EnTanron_InitVars;
+extern const ActorInit EnTanron6_InitVars;
 
 #endif // Z_EN_TANRON6_H
