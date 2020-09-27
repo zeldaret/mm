@@ -10,7 +10,7 @@ void EnNnh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
-const ActorInit D_80C089E0 = {
+const ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
     ACTORTYPE_PROP,
     FLAGS,
