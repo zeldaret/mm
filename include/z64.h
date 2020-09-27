@@ -325,7 +325,9 @@ typedef struct {
     /* 0x010 */ s32 unk10;
     /* 0x014 */ UNK_TYPE1 pad14[0x2E];
     /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x232];
+    /* 0x044 */ UNK_TYPE1 pad44[0x43];
+    /* 0x087 */ s8 unk87;
+    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
     /* 0x276 */ u8 unk276;
     /* 0x277 */ UNK_TYPE1 pad277[0x9];
     /* 0x280 */ u16 unk280;
@@ -651,7 +653,9 @@ typedef struct {
     /* 0x0004 */ UNK_TYPE1 pad4[0x4];
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0xA];
+    /* 0x000E */ UNK_TYPE1 padE[0x2];
+    /* 0x0010 */ u32 isNight;
+    /* 0x0014 */ u32 unk14;
     /* 0x0018 */ u32 day;
     /* 0x001C */ u32 daysElapsed;
     /* 0x0020 */ u8 unk20;
