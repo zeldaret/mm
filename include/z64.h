@@ -1480,7 +1480,7 @@ struct Camera {
     /* 0x168 */ UNK_TYPE1 pad168[0x10];
 }; // size = 0x178
 
-struct CameraContext {
+struct CameraContext { //Unused: leaving this here as reference for unk5F2.
     /* 0x000 */ Camera activeCameras[4];
     /* 0x5E0 */ Camera* activeCameraPtrs[4];
     /* 0x5F0 */ s16 activeCamera;
@@ -1599,7 +1599,10 @@ struct GlobalContext {
     /* 0x000B0 */ SceneCmd* currentSceneVram;
     /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
     /* 0x000B8 */ View view;
-    /* 0x00220 */ CameraContext cameraCtx;
+    /* 0x00220 */ Camera activeCameras[4];
+    /* 0x00800 */ Camera* cameraPtrs[4];
+    /* 0x00810 */ s16 activeCamera;
+    /* 0x00812 */ s16 unk5F2; //TODO: Name this, was part of CameraContext.
     /* 0x00814 */ u8 unk814;
     /* 0x00815 */ u8 unk815;
     /* 0x00816 */ UNK_TYPE1 pad816[0x2];
