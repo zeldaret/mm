@@ -106,8 +106,8 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .INTERMEDIATE: disasm
 
 all:
-	make $(UNCOMPRESSED_ROM)
-	make $(ROM)
+	$(MAKE) $(UNCOMPRESSED_ROM)
+	$(MAKE) $(ROM)
 
 $(ROM): $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
@@ -161,7 +161,7 @@ clean:
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
-	make -C tools
+	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
 
 diff-init: all
@@ -172,9 +172,9 @@ diff-init: all
 	cp $(ROM) expected/$(ROM)
 
 init:
-	make setup
-	make all
-	make diff-init
+	$(MAKE) setup
+	$(MAKE) all
+	$(MAKE) diff-init
 
 # Recipes
 
