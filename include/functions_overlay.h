@@ -12066,7 +12066,7 @@ void EnTanron5_Draw(void); // func_80BE5B58
 void func_80BE5C10(void); // func_80BE5C10
 void EnTanron6_Init(void); // func_80BE6040
 void EnTanron6_Destroy(void); // func_80BE60AC
-void func_80BE60BC(void); // func_80BE60BC
+void EnTanron6_DoNothing(void); // EnTanron6_DoNothing
 void func_80BE60D0(void); // func_80BE60D0
 void EnTanron6_Update(void); // func_80BE60E0
 void EnTanron6_Draw(void); // func_80BE6140

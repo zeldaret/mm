@@ -16059,7 +16059,7 @@
     0x80BE5C10:("func_80BE5C10",),
     0x80BE6040:("EnTanron6_Init",),
     0x80BE60AC:("EnTanron6_Destroy",),
-    0x80BE60BC:("func_80BE60BC",),
+    0x80BE60BC:("EnTanron6_DoNothing",),
     0x80BE60D0:("func_80BE60D0",),
     0x80BE60E0:("EnTanron6_Update",),
     0x80BE6140:("EnTanron6_Draw",),
