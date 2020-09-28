@@ -50,7 +50,7 @@ void ArmsHook_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collision_InitQuadDefault(globalCtx, &this->collider);
     Collision_InitQuadWithData(globalCtx, &this->collider, &this->actor, &D_808C1BC0);
     ArmsHook_SetupAction(this, ArmsHook_Wait);
-    this->unk_1E0 = this->actor.currPosRot.pos;
+    this->unk1E0 = this->actor.currPosRot.pos;
 }
 
 void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -110,7 +110,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
 void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
     actor->flags |= 0x2000;
     this->grabbed = actor;
-    Math_Vec3f_Diff(&actor->currPosRot.pos, &this->actor.currPosRot.pos, &this->unk_1FC);
+    Math_Vec3f_Diff(&actor->currPosRot.pos, &this->actor.currPosRot.pos, &this->unk1FC);
 }
 
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
@@ -157,8 +157,8 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             } else {
                 if (this->actor.child != NULL) {
                     f32 sp94 = Actor_DistanceBetweenActors(this, grabbed);
-                    f32 sp90 = sqrtf(SQ(this->unk_1FC.x) + SQ(this->unk_1FC.y) + SQ(this->unk_1FC.z));
-                    Math_Vec3f_Diff(&grabbed->currPosRot.pos, &this->unk_1FC, &this->actor.currPosRot.pos);
+                    f32 sp90 = sqrtf(SQ(this->unk1FC.x) + SQ(this->unk1FC.y) + SQ(this->unk1FC.z));
+                    Math_Vec3f_Diff(&grabbed->currPosRot.pos, &this->unk1FC, &this->actor.currPosRot.pos);
                     if (50.0f < (sp94 - sp90)) {
                         ArmsHook_DetachHookFromActor(this);
                         grabbed = NULL;
@@ -200,7 +200,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         if (this->actor.child == NULL) {
             Math_Vec3f_Sum(&player->unk368, &newPos, &this->actor.currPosRot.pos);
             if (grabbed != NULL) {
-                Math_Vec3f_Sum(&this->actor.currPosRot.pos, &this->unk_1FC, &grabbed->currPosRot.pos);
+                Math_Vec3f_Sum(&this->actor.currPosRot.pos, &this->unk1FC, &grabbed->currPosRot.pos);
             }
         } else {
             Math_Vec3f_Diff(&bodyDistDiffVec, &newPos, &player->base.velocity);
@@ -226,14 +226,14 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
 
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.currPosRot.pos, &this->actor.lastPos, &prevFrameDiff);
-        Math_Vec3f_Sum(&this->unk_1E0, &prevFrameDiff, &this->unk_1E0);
+        Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
         this->actor.shape.rot.x = atans_flip(this->actor.speedXZ, -this->actor.velocity.y);
-        sp60.x = this->unk_1EC.x - (this->unk_1E0.x - this->unk_1EC.x);
-        sp60.y = this->unk_1EC.y - (this->unk_1E0.y - this->unk_1EC.y);
-        sp60.z = this->unk_1EC.z - (this->unk_1E0.z - this->unk_1EC.z);
-        if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk_1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0 &&
+        sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
+        sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
+        sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
+        if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0 &&
             (func_800B90AC(globalCtx, &this->actor, poly, dynaPolyID, &sp78) == 0 ||
-             func_800C576C(&globalCtx->colCtx, &sp60, &this->unk_1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0)) {
+             func_800C576C(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0)) {
             f32 sp5C = poly->normal.x * (1 / SHT_MAX);
             f32 sp58 = poly->normal.z * (1 / SHT_MAX);
 
@@ -269,7 +269,7 @@ void ArmsHook_Update(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    this->unk_1EC = this->unk_1E0;
+    this->unk1EC = this->unk1E0;
 }
 
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -289,16 +289,16 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             f32 f0;
 
             if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk_1E0);
+                SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
-                this->unk_1C4 = 0;
+                this->unk1C4 = 0;
             } else {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk_1E0);
+                SysMatrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
             }
-            func_80126440(globalCtx, &this->collider.base, &this->unk_1C4, &sp5C, &sp50);
+            func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
             func_8012C28C(globalCtx->state.gfxCtx);
             func_80122868(globalCtx, player);
 
