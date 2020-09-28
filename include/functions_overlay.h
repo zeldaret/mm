@@ -2032,7 +2032,7 @@ void ArmsHook_AttachToPlayer(void); // ArmsHook_AttachToPlayer
 void ArmsHook_DetachHookFromActor(void); // ArmsHook_DetachHookFromActor
 void ArmsHook_CheckForCancel(void); // ArmsHook_CheckForCancel
 void ArmsHook_AttachHookToActor(void); // ArmsHook_AttachHookToActor
-void func_808C12A4(void); // func_808C12A4
+void ArmsHook_Shoot(void); // ArmsHook_Shoot
 void ArmsHook_Update(void); // func_808C18D8
 void ArmsHook_Draw(void); // func_808C1918
 void EnBb_Init(void); // func_808C1D40

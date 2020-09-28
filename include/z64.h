@@ -1787,4 +1787,9 @@ typedef struct {
     /* 0x14 */ Gfx* monoDl;
 } VisMono; // size = 0x18
 
+typedef enum {
+    MTXMODE_NEW,  // generates a new matrix
+    MTXMODE_APPLY // applies transformation to the current matrix
+} MatrixMode;
+
 #endif

@@ -173,7 +173,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ Actor base;
     /* 0x144 */ UNK_TYPE1 pad144[0x3];
-    /* 0x147 */ s8 unk147;
+    /* 0x147 */ s8 itemActionParam;
     /* 0x148 */ UNK_TYPE1 pad148[0x2];
     /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 unk14B;
