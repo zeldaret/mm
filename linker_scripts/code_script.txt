@@ -1205,7 +1205,7 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o(.text)
         build/asm/ovl_Arms_Hook_data.o(.data)
-        build/asm/ovl_Arms_Hook_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o(.rodata)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

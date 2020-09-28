@@ -6057,7 +6057,7 @@
     0x808C1198:("ArmsHook_DetachHookFromActor",),
     0x808C11C0:("ArmsHook_CheckForCancel",),
     0x808C125C:("ArmsHook_AttachHookToActor",),
-    0x808C12A4:("ArmsHook_Shoot",),
+    0x808C12A4:("func_808C12A4",),
     0x808C18D8:("ArmsHook_Update",),
     0x808C1918:("ArmsHook_Draw",),
     0x808C1D40:("EnBb_Init",),

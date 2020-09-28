@@ -10,7 +10,7 @@ void ArmsHook_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx);
-void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx);
+void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx);
 
 /*
 const ActorInit Arms_Hook_InitVars = {
@@ -62,7 +62,7 @@ void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
-        ArmsHook_SetupAction(this, ArmsHook_Shoot);
+        ArmsHook_SetupAction(this, func_808C12A4);
         func_800B6C04(&this->actor, 20.0f);
         this->actor.parent = &PLAYER->base;
         this->timer = 26; 
@@ -111,7 +111,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
     Math_Vec3f_Diff(&actor->currPosRot.pos, &this->actor.currPosRot.pos, &this->unk_1FC);
 }
 
-void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
+void func_808C12A4(ArmsHook* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
@@ -283,7 +283,7 @@ void ArmsHook_Draw(Actor *thisx, GlobalContext *globalCtx) {
             GraphicsContext *sp44 = globalCtx->state.gfxCtx;
             f32 f0;
 
-            if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
+            if ((func_808C12A4 != this->actionFunc) || (this->timer <= 0)) {
                 SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk_1E0);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
                 SysMatrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
