@@ -2412,7 +2412,7 @@ extern UNK_TYPE4 D_808C0E40; // D_808C0E40
 extern OverlayRelocationSection enBbfallOverlayInfo; // D_808C0E50
 extern u32 enBbfallOverlayRelocations[114]; // D_808C0E64
 extern u32 enBbfallOverlayInfoOffset; // D_808C102C
-extern UNK_TYPE1 Arms_Hook_InitVars; // Arms_Hook_InitVars
+extern ActorInit Arms_Hook_InitVars; // Arms_Hook_InitVars
 extern UNK_TYPE1 D_808C1BC0; // D_808C1BC0
 extern UNK_TYPE1 D_808C1C10; // D_808C1C10
 extern UNK_TYPE1 D_808C1C1C; // D_808C1C1C
