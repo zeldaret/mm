@@ -9,7 +9,6 @@ void EnBoj04_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBoj04_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBoj04_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Boj_04_InitVars = {
     ACTOR_EN_BOJ_04,
     ACTORTYPE_NPC,
@@ -21,12 +20,12 @@ const ActorInit En_Boj_04_InitVars = {
     (ActorFunc)EnBoj04_Update,
     (ActorFunc)EnBoj04_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Boj_04_0x809CB200/EnBoj04_Init.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Boj_04_0x809CB200/EnBoj04_Destroy.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Boj_04_0x809CB200/EnBoj04_Update.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Boj_04_0x809CB200/EnBoj04_Draw.asm")
+void EnBoj04_Init(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnBoj04_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnBoj04_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnBoj04_Draw(Actor* thisx, GlobalContext* globalCtx) {
+}

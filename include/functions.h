@@ -914,10 +914,10 @@ void func_800BE5CC(void); // func_800BE5CC
 void func_800BE63C(void); // func_800BE63C
 void func_800BE680(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8); // func_800BE680
 void func_800BF7CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800BF7CC
-void func_800BF9A0(s32 a0, s32 a1); // func_800BF9A0
-s32 func_800BFA78(s32 param_1, s32 param_2); // func_800BFA78
-void func_800BFAE8(void); // func_800BFAE8
-void func_800BFB40(void); // func_800BFB40
+void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
+void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
+void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
+void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
 void BgCheck_PolygonLinkedListNodeInit(BgPolygonLinkedListNode* node, s16* polyIndex, u16 next); // func_800BFB80
 void BgCheck_PolygonLinkedListResetHead(u16* head); // func_800BFB9C
 void BgCheck_ScenePolygonListsNodeInsert(BgScenePolygonLists* list, u16* head, s16* polyIndex); // func_800BFBAC
@@ -1598,7 +1598,7 @@ void func_800EDF24(void); // func_800EDF24
 void func_800EDF78(Actor* actor, GlobalContext* ctxt, int iParm3); // func_800EDF78
 void func_800EE0CC(Actor* actor, GlobalContext* ctxt, int iParm3); // func_800EE0CC
 void func_800EE1D8(void); // func_800EE1D8
-void func_800EE200(void); // func_800EE200
+u32 func_800EE200(GlobalContext* ctxt, u32 uParm2); // func_800EE200
 u32 func_800EE29C(GlobalContext* ctxt, u32 uParm2); // func_800EE29C
 u32 func_800EE2F4(GlobalContext* ctxt); // func_800EE2F4
 void func_800EE320(GlobalContext* ctxt, s16 index); // func_800EE320
