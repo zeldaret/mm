@@ -105,7 +105,7 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-s32 func_8013A530(GlobalContext* ctxt, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
     Vec3f screenSpace;
     s16 x;
     s16 y;
@@ -116,7 +116,7 @@ s32 func_8013A530(GlobalContext* ctxt, Actor* actor, s32 flag, Vec3f* pos, Vec3s
     s32 ret = 0;
     UNK_TYPE unk2;
 
-    camera = ctxt->cameraCtx.activeCameraPtrs[ctxt->cameraCtx.activeCamera];
+    camera = ACTIVE_CAM;
 
     distance = CamMath_Distance(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
@@ -131,7 +131,7 @@ s32 func_8013A530(GlobalContext* ctxt, Actor* actor, s32 flag, Vec3f* pos, Vec3s
         ret |= 0x3e;
     }
 
-    func_800B4EDC(ctxt, pos, &screenSpace, &distance);
+    func_800B4EDC(globalCtx, pos, &screenSpace, &distance);
     x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
     if ((x < 0) || (0x96 < x) || (y < 0) || (0x69 < y)) {
@@ -139,14 +139,14 @@ s32 func_8013A530(GlobalContext* ctxt, Actor* actor, s32 flag, Vec3f* pos, Vec3s
         ret |= 0x3d;
     }
 
-    if (func_800C576C(&ctxt->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
+    if (func_800C576C(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
         func_8013A41C(0x3c);
         ret |= 0x3c;
     }
 
     actors[0] = actor;
-    actors[1] = ctxt->actorCtx.actorList[2].first; // TODO PLAYER macro
-    if (func_800E7DCC(ctxt, &ctxt->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
+    actors[1] = globalCtx->actorCtx.actorList[2].first; // TODO PLAYER macro
+    if (func_800E7DCC(globalCtx, &globalCtx->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;
     }
