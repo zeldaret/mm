@@ -28,8 +28,9 @@ if __name__ == '__main__':
         out.write('.section .ovl\n');
 
         relocs = []
-        for section in elffile.iter_sections():
-            if isinstance(section, RelocationSection):
+        for section_name in ['.rel.text', '.rel.data', '.rel.rodata']:
+            section = elffile.get_section_by_name(section_name)
+            if section is not None:
                 symtab = elffile.get_section(section['sh_link'])
                 for reloc in section.iter_relocations():
                     symbol = symtab.get_symbol(reloc['r_info_sym'])

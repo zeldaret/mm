@@ -2,7 +2,7 @@
 #define _VARIABLES_H_
 
 #include <z64.h>
-#include <dmadata.h>
+#include <segment_symbols.h>
 #include <segment.h>
 #include <section.h>
 #include <pre_boot_variables.h>
@@ -352,11 +352,11 @@ extern DmaEntry dmadata[1568]; // D_8009F8B0
 extern UNK_TYPE1 D_80186028; // D_80186028
 extern UNK_TYPE1 D_801AAAB0; // D_801AAAB0
 extern UNK_TYPE1 D_801AD370; // D_801AD370
-extern ActorInit enAObjInitData; // D_801ADE60
+extern ActorInit En_A_Obj_InitVars; // En_A_Obj_InitVars
 extern ColCylinderInit enAObjCylinderInit; // D_801ADE80
 extern InitChainEntry enAObjInitVar; // D_801ADEAC
 extern u32 enAObjDisplayLists[2]; // D_801ADEB0
-extern ActorInit enItem00InitData; // D_801ADEC0
+extern ActorInit En_Item00_InitVars; // En_Item00_InitVars
 extern ColCylinderInit enItem00CylinderInit; // D_801ADEE0
 extern InitChainEntry enItem00InitVars[1]; // D_801ADF0C
 extern UNK_TYPE1 D_801ADF10; // D_801ADF10
@@ -438,8 +438,8 @@ extern UNK_TYPE1 D_801AEFA8; // D_801AEFA8
 extern UNK_TYPE1 D_801AEFB8; // D_801AEFB8
 extern UNK_TYPE1 D_801AEFBC; // D_801AEFBC
 extern UNK_TYPE1 D_801AEFC0; // D_801AEFC0
-extern ActorOverlay actorOverlayTable[ACTOR_ID_MAX]; // D_801AEFD0
-extern UNK_TYPE4 D_801B4610; // D_801B4610
+extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX]; // D_801AEFD0
+extern s32 gMaxActorId; // gMaxActorId
 extern u32 D_801B4620[32]; // D_801B4620
 extern u16 D_801B46A0[16]; // D_801B46A0
 extern u8 D_801B46C0[16]; // D_801B46C0
@@ -2253,7 +2253,7 @@ extern UNK_TYPE1 D_801D08D8; // D_801D08D8
 extern UNK_TYPE1 D_801D08E4; // D_801D08E4
 extern UNK_TYPE1 D_801D08E8; // D_801D08E8
 extern UNK_TYPE1 D_801D0900; // D_801D0900
-extern ActorInit D_801D0B50; // D_801D0B50
+extern ActorInit Player_InitVars; // Player_InitVars
 extern UNK_TYPE1 D_801D0B70; // D_801D0B70
 extern UNK_TYPE1 D_801D0B8C; // D_801D0B8C
 extern UNK_TYPE4 D_801D0BA8; // D_801D0BA8

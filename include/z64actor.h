@@ -70,6 +70,12 @@ typedef struct {
     /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
 
+typedef enum {
+    ALLOCTYPE_NORMAL,
+    ALLOCTYPE_ABSOLUTE,
+    ALLOCTYPE_PERMANENT
+} AllocType;
+
 typedef struct {
     /* 0x00 */ u32 vromStart;
     /* 0x04 */ u32 vromEnd;
