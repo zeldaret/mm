@@ -1025,8 +1025,6 @@ typedef struct {
     /* 0x22 */ u8 flag;
 } Arena; // size = 0x24
 
-typedef struct CameraContext CameraContext;
-
 typedef struct ActorEnBom ActorEnBom;
 
 typedef struct ActorEnFirefly ActorEnFirefly;
@@ -1480,13 +1478,6 @@ struct Camera {
     /* 0x168 */ UNK_TYPE1 pad168[0x10];
 }; // size = 0x178
 
-struct CameraContext {
-    /* 0x000 */ Camera activeCameras[4];
-    /* 0x5E0 */ Camera* activeCameraPtrs[4];
-    /* 0x5F0 */ s16 activeCamera;
-    /* 0x5F2 */ s16 unk5F2;
-}; // size = 0x5F4
-
 typedef struct {
     /* 0x00 */ z_Matrix displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1599,7 +1590,10 @@ struct GlobalContext {
     /* 0x000B0 */ SceneCmd* currentSceneVram;
     /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
     /* 0x000B8 */ View view;
-    /* 0x00220 */ CameraContext cameraCtx;
+    /* 0x00220 */ Camera activeCameras[4];
+    /* 0x00800 */ Camera* cameraPtrs[4];
+    /* 0x00810 */ s16 activeCamera;
+    /* 0x00812 */ s16 unk812;
     /* 0x00814 */ u8 unk814;
     /* 0x00815 */ u8 unk815;
     /* 0x00816 */ UNK_TYPE1 pad816[0x2];
