@@ -7,7 +7,6 @@
 void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Market_Step_InitVars = {
     ACTOR_BG_MARKET_STEP,
     ACTORTYPE_BG,
@@ -19,8 +18,29 @@ const ActorInit Bg_Market_Step_InitVars = {
     (ActorFunc)func_800BDFB0,
     (ActorFunc)BgMarketStep_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Market_Step_0x80AF0060/BgMarketStep_Init.asm")
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(unkFC, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk100, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk104, 1, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
+};
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Market_Step_0x80AF0060/BgMarketStep_Draw.asm")
+extern Gfx D_0601F050[];
+extern Gfx D_06018DA0[];
+extern Gfx D_0601EF10[];
+extern Gfx D_06018C60[];
+Gfx* D_80AF0120[] = { D_0601F050, D_06018DA0 };
+Gfx* D_80AF0128[] = { D_0601EF10, D_06018C60 };
+
+void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgMarketStep* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+}
+void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 index = thisx->params & 1;
+
+    func_800BDFC0(globalCtx, D_80AF0120[index]);
+    func_800BDFC0(globalCtx, D_80AF0128[index]);
+}
