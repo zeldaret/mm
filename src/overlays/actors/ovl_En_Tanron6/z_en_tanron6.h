@@ -5,9 +5,12 @@
 
 struct EnTanron6;
 
+typedef void (*EnTanron6ActionFunc)(struct EnTanron6*, GlobalContext*);
+
 typedef struct EnTanron6 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC0];
+    /* 0x144 */ char unk_144[0xBC];
+    /* 0x200 */ EnTanron6ActionFunc actionFunc;
 } EnTanron6; // size = 0x204
 
 extern const ActorInit En_Tanron6_InitVars;
