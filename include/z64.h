@@ -17,6 +17,7 @@
 #include <ichain.h>
 
 #include <z64actor.h>
+#include <z64animation.h>
 #include <z64collision_check.h>
 #include <z64cutscene.h>
 #include <z64dma.h>
@@ -1615,7 +1616,8 @@ struct GlobalContext {
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
-    /* 0x170F8 */ UNK_TYPE1 pad170F8[0xC90];
+    /* 0x170F8 */ UNK_TYPE1 pad170F8[0xC];
+    /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ SceneContext sceneContext;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;

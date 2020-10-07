@@ -503,7 +503,7 @@ SECTIONS
         build/asm/code_data_z_scene_proc.o(.data)
         build/asm/code_data_z_scene_table.o(.data)
         build/asm/code_data_0x801323D0.o(.data)
-        build/asm/code_data_z_skelanime.o(.data)
+        build/src/code/z_skelanime.o(.data)
         build/asm/code_data_0x80138BA0.o(.data)
         build/asm/code_data_z_sub_s.o(.data)
         build/asm/code_data_z_vimode.o(.data)
