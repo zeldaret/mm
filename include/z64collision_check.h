@@ -7,6 +7,31 @@
 
 struct Actor;
 
+typedef enum {
+    COLTYPE_UNK0,
+    COLTYPE_UNK1,
+    COLTYPE_UNK2,
+    COLTYPE_UNK3,
+    COLTYPE_UNK4,
+    COLTYPE_UNK5,
+    COLTYPE_UNK6,
+    COLTYPE_UNK7,
+    COLTYPE_UNK8,
+    COLTYPE_METAL_SHIELD,
+    COLTYPE_UNK10,
+    COLTYPE_WOODEN_SHIELD,
+    COLTYPE_UNK12,
+    COLTYPE_UNK13
+} ColliderType;
+
+typedef enum {
+    COLSHAPE_JNTSPH,
+    COLSHAPE_CYLINDER,
+    COLSHAPE_TRIS,
+    COLSHAPE_QUAD,
+    COLSHAPE_INVALID
+} ColliderShape;
+
 typedef struct {
     /* 0x0 */ u32 unk0;
     /* 0x4 */ u8 unk4;
@@ -120,7 +145,6 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ColCommonInit base;
-    /* 0x6 */ UNK_TYPE1 pad6[0x2];
     /* 0x8 */ u32 count;
     /* 0xC */ ColSphereGroupElementInit* init;
 } ColSphereGroupInit; // size = 0x10
