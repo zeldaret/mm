@@ -1,7 +1,5 @@
 #include <ultra64.h>
 #include <global.h>
-extern float fabsf(float);
-#pragma intrinsic (fabsf)
 
 void EffFootmark_Init(GlobalContext* ctxt) {
     EffFootmark* footmark;
