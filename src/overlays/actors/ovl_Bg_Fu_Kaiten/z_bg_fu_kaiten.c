@@ -47,7 +47,7 @@ void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
     if (this->rotationSpeed > 0)
     {
         f0 = this->rotationSpeed * .002f;
-        func_8019FAD8(&this->bg.actor.unkEC, 8310, f0);
+        func_8019FAD8(&this->bg.actor.projectedPos, 8310, f0);
     }
 }
 

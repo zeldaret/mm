@@ -3,6 +3,13 @@
 
 #include <z64.h>
 
+float fabsf(float f);
+#pragma intrinsic(fabsf)
+float sqrtf(float f);
+#pragma intrinsic(sqrtf)
+double sqrt(double d);
+#pragma intrinsic(sqrt)
+
 void bootproc(void); // func_80080060
 void Idle_ClearMemory(void* begin, void* end); // func_80080150
 void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value); // func_80080180
@@ -816,14 +823,14 @@ void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800B8E58(void); // func_800B8E58
 void func_800B8EC8(Actor* iParm1, u32 uParm2); // func_800B8EC8
 void func_800B8EF4(void); // func_800B8EF4
-void func_800B8F98(void); // func_800B8F98
+void func_800B8F98(Actor* actor, u16 sfxId); // func_800B8F98
 void func_800B8FC0(void); // func_800B8FC0
 void func_800B8FE8(void); // func_800B8FE8
 void func_800B9010(Actor* actor, UNK_TYPE2 uParm2); // func_800B9010
 void func_800B9038(void); // func_800B9038
 void func_800B9084(void); // func_800B9084
 void func_800B9098(Actor* actor); // func_800B9098
-void func_800B90AC(void); // func_800B90AC
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4); // func_800B90AC
 void func_800B90F4(void); // func_800B90F4
 void func_800B9120(ActorContext* actCtxt); // func_800B9120
 void Actor_Init(GlobalContext* ctxt, ActorContext* actCtxt, UNK_TYPE4 uParm3); // func_800B9170
@@ -992,10 +999,10 @@ void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800C5464
 void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C54AC
 void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C5538
-void func_800C55C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C55C4
+s32 func_800C55C4(CollisionContext*, Vec3f*, Vec3f*, Vec3f*, BgPolygon**, u32, u32, u32, u32, u32*); // func_800C55C4
 void func_800C5650(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); // func_800C5650
 void func_800C56E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); // func_800C56E0
-s32 func_800C576C(CollisionContext* bgCtxt, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_PTR param_5, s32 param_6, s32 param_7, s32 param_8, s32 param_9, UNK_PTR param_10); // func_800C576C
+s32 func_800C576C(CollisionContext*, Vec3f*, Vec3f*, Vec3f*, BgPolygon**, u32, u32, u32, u32, u32*); // func_800C576C
 void func_800C57F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C57F8
 void func_800C583C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); // func_800C583C
 void func_800C58C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); // func_800C58C8
@@ -1084,7 +1091,7 @@ u32 func_800C9C24(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index, UNK_T
 u32 func_800C9C74(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C74
 u32 func_800C9C9C(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9C9C
 u32 func_800C9CC4(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9CC4
-void func_800C9CEC(void); // func_800C9CEC
+u32 func_800C9CEC(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9CEC
 void func_800C9D14(void); // func_800C9D14
 void func_800C9D50(void); // func_800C9D50
 unsigned int func_800C9D8C(CollisionContext* param_1, BgPolygon* param_2, s32 param_3); // func_800C9D8C
@@ -1516,7 +1523,7 @@ void func_800E823C(void); // func_800E823C
 void func_800E8318(void); // func_800E8318
 void func_800E8478(void); // func_800E8478
 void func_800E85D4(UNK_TYPE4 param_1, Vec3f* param_2); // func_800E85D4
-void func_800E8668(void); // func_800E8668
+void func_800E8668(GlobalContext* globalCtx, Vec3f* arg2); // func_800E8668
 void func_800E8690(void); // func_800E8690
 void func_800E86C0(void); // func_800E86C0
 void func_800E86E0(UNK_TYPE4 param_1, Vec3f* param_2, UNK_TYPE4 param_3); // func_800E86E0
@@ -2187,8 +2194,8 @@ UNK_TYPE4 func_80122670(int* param_1, Input* input); // func_80122670
 void func_801226E0(void); // func_801226E0
 void func_80122744(void); // func_80122744
 void func_80122760(void); // func_80122760
-void func_80122868(void); // func_80122868
-void func_801229A0(void); // func_801229A0
+void func_80122868(GlobalContext* globalCtx, ActorPlayer* player); // func_80122868
+void func_801229A0(GlobalContext* globalCtx, ActorPlayer* player); // func_801229A0
 void func_801229EC(void); // func_801229EC
 void func_801229FC(void); // func_801229FC
 void func_80122BA4(void); // func_80122BA4
@@ -2229,7 +2236,7 @@ u32 func_8012403C(GlobalContext* ctxt); // func_8012403C
 void func_8012404C(GlobalContext* ctxt); // func_8012404C
 void func_8012405C(void); // func_8012405C
 void func_80124088(void); // func_80124088
-void func_801240C8(void); // func_801240C8
+s32 func_801240C8(ActorPlayer* player); // func_801240C8
 void func_801240DC(void); // func_801240DC
 void func_80124110(void); // func_80124110
 void func_80124148(void); // func_80124148
@@ -2261,7 +2268,7 @@ void func_80125CE0(void); // func_80125CE0
 void func_80125D4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_80125D4C
 void func_801262C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801262C8
 void func_801263FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_801263FC
-void func_80126440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80126440
+void func_80126440(GlobalContext* globalCtx, ColCommon* param_2, s32* param_3, Vec3f* param_4, Vec3f* param_5); // func_80126440
 void func_801265C8(void); // func_801265C8
 void func_8012669C(void); // func_8012669C
 void func_80126808(void); // func_80126808
@@ -3391,7 +3398,7 @@ s16 atans_first_8th(f32 opposite, f32 adjacent); // func_8017FEB0
 s16 atans(f32 opposite, f32 adjacent); // func_8017FEE4
 f32 atan(f32 opposite, f32 adjacent); // func_801800CC
 s16 atans_flip(f32 adjacent, f32 opposite); // func_80180100
-void atan_flip(f32 adjacent, f32 opposite); // func_8018012C
+s16 atan_flip(f32 adjacent, f32 opposite); // func_8018012C
 void SysMatrix_StateAlloc(GameState* ctxt); // func_80180160
 void SysMatrix_StatePush(void); // func_8018019C
 void SysMatrix_StatePop(void); // func_801801CC
