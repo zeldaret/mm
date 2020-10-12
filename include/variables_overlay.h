@@ -8332,8 +8332,8 @@ extern OverlayRelocationSection bgSpoutFireOverlayInfo; // D_80A611E0
 extern u32 bgSpoutFireOverlayRelocations[43]; // D_80A611F4
 extern u32 bgSpoutFireOverlayInfoOffset; // D_80A612AC
 extern ActorInit En_Dy_Extra_InitVars; // En_Dy_Extra_InitVars
-extern UNK_TYPE1 primColors; // primColors
-extern UNK_TYPE1 envColors; // envColors
+extern UNK_TYPE1 D_80A61740; // D_80A61740
+extern UNK_TYPE1 D_80A61754; // D_80A61754
 extern UNK_TYPE1 D_80A61768; // D_80A61768
 extern UNK_TYPE4 D_80A61790; // D_80A61790
 extern UNK_TYPE4 D_80A61794; // D_80A61794

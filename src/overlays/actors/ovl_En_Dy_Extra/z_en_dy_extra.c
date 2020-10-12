@@ -76,8 +76,8 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static ColorRGBA8 primColors[] = { { 255, 255, 170, 255 }, { 255, 255, 170, 255 } };
-    static ColorRGBA8 envColors[] = { { 255, 100, 255, 255 }, { 100, 255, 255, 255 } };
+    static ColorRGBA8 D_80A61740[] = { { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 }, {170, 255, 255, 255},{ 255, 255, 170, 255 }};
+    static ColorRGBA8 D_80A61754[] = { { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, {100, 255, 0, 255}, {0, 100, 255, 255}, {255, 230, 0, 255} };
     static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01,
                                0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00 };
     EnDyExtra* this = THIS;
@@ -108,10 +108,10 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(oGfxCtx->polyXlu.p++);
         gSPMatrix(oGfxCtx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(oGfxCtx->polyXlu.p++, 0, 0x80, primColors[this->type].red, primColors[this->type].green,
-                        primColors[this->type].blue, 255);
-        gDPSetEnvColor(oGfxCtx->polyXlu.p++, envColors[this->type].red, envColors[this->type].green,
-                       envColors[this->type].blue, 128);
+        gDPSetPrimColor(oGfxCtx->polyXlu.p++, 0, 0x80, D_80A61740[this->type].red, D_80A61740[this->type].green,
+                        D_80A61740[this->type].blue, 255);
+        gDPSetEnvColor(oGfxCtx->polyXlu.p++, D_80A61754[this->type].red, D_80A61754[this->type].green,
+                       D_80A61754[this->type].blue, 128);
         gSPDisplayList(oGfxCtx->polyXlu.p++, D_0600DEF0);
 
         CLOSE_DISPS(gfxCtx);
