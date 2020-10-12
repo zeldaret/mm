@@ -26,6 +26,14 @@ const ActorInit En_Ending_Hero_InitVars = {
 
 extern SkeletonHeader D_0600B0CC;
 extern AnimationHeader D_06000BE0;
+extern UNK_PTR D_06007350[];
+extern UNK_PTR D_06009590[];
+extern UNK_PTR D_06009F90[];
+extern UNK_PTR D_0600A790[];
+extern UNK_PTR D_0600AB90[];
+extern UNK_PTR D_06007750[];
+extern UNK_PTR D_0600A390[];
+extern UNK_PTR D_0600A490[];
 
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
@@ -67,10 +75,9 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-UNK_PTR D_80C1E970[] = { 0x06007350, 0x06009590, 0x06009F90, 0x0600A790, 0x0600AB90 };
-UNK_PTR D_80C1E984[] = { 0x06007750, 0x0600A390, 0x0600A490 };
-
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static UNK_PTR D_80C1E970[] = { D_06007350, D_06009590, D_06009F90, D_0600A790, D_0600AB90 };
+    static UNK_PTR D_80C1E984[] = { D_06007750, D_0600A390, D_0600A490 };
     EnEndingHero* this = THIS;
     s32 index = 0;
 
