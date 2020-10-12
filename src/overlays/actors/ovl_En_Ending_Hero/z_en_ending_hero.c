@@ -9,6 +9,8 @@ void EnEndingHero_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1E748(EnEndingHero* this);
+
 /*
 const ActorInit En_Ending_Hero_InitVars = {
     ACTOR_EN_ENDING_HERO,
@@ -23,7 +25,20 @@ const ActorInit En_Ending_Hero_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Ending_Hero_0x80C1E690/EnEndingHero_Init.asm")
+extern SkeletonHeader D_0600B0CC;
+extern AnimationHeader D_06000BE0;
+
+void EnEndingHero_Init(Actor *thisx, GlobalContext *globalCtx) {
+    EnEndingHero* this = THIS;
+
+    this->actor.unkA0.mass = 0xFF;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actor.unk1F = 6;
+    this->actor.gravity = -3.0f;
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->limbDrawTable, this->transitionDrawTable, 15);
+    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    func_80C1E748(this);
+}
 
 GLOBAL_ASM("asm/non_matchings/ovl_En_Ending_Hero_0x80C1E690/EnEndingHero_Destroy.asm")
 
