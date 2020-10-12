@@ -23,8 +23,4 @@ typedef struct {
     /* 0x3 */ u8 alpha;
 } RGBA8; // size = 0x4
 
-typedef struct {
-    u8 r, g, b, a;
-} Color_RGBA8_n;
-
 #endif
