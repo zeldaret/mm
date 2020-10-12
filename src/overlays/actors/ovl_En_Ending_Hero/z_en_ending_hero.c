@@ -75,9 +75,10 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
+static UNK_PTR D_80C1E970[] = { D_06007350, D_06009590, D_06009F90, D_0600A790, D_0600AB90 };
+static UNK_PTR D_80C1E984[] = { D_06007750, D_0600A390, D_0600A490 };
+
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80C1E970[] = { D_06007350, D_06009590, D_06009F90, D_0600A790, D_0600AB90 };
-    static UNK_PTR D_80C1E984[] = { D_06007750, D_0600A390, D_0600A490 };
     EnEndingHero* this = THIS;
     s32 index = 0;
 
