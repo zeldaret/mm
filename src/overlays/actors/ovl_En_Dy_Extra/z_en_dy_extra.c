@@ -46,9 +46,11 @@ void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
+
     if (this->actor.currPosRot.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
+
     if (this->unk14C == 0 && this->unk14A != 0) {
         this->unk14C = 0x32;
         this->actionFunc = func_80A613C8;
@@ -57,11 +59,14 @@ void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
 
 void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
+
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
+
     this->unk150 -= 0.02f;
+    
     if (this->actor.currPosRot.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
