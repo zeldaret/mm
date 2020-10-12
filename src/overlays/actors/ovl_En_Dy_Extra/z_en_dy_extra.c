@@ -54,6 +54,7 @@ void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80A613C8;
     }
 }
+
 void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
@@ -76,8 +77,14 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static ColorRGBA8 D_80A61740[] = { { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 }, {170, 255, 255, 255},{ 255, 255, 170, 255 }};
-    static ColorRGBA8 D_80A61754[] = { { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, {100, 255, 0, 255}, {0, 100, 255, 255}, {255, 230, 0, 255} };
+    static ColorRGBA8 D_80A61740[] = { { 255, 255, 170, 255 },
+                                       { 255, 170, 255, 255 },
+                                       { 255, 255, 170, 255 },
+                                       { 170, 255, 255, 255 },
+                                       { 255, 255, 170, 255 } };
+    static ColorRGBA8 D_80A61754[] = {
+        { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
+    };
     static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01,
                                0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00 };
     EnDyExtra* this = THIS;
