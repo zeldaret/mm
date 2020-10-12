@@ -30,7 +30,7 @@ extern Gfx D_0600DEF0[];
 void EnDyExtra_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EnDyExtra_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     this->type = this->actor.params;
@@ -41,10 +41,10 @@ void EnDyExtra_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.gravity = -0.2f;
     this->unk150 = 1.0f;
     this->unk14C = 0x3C;
-    this->actionFunc = func_80A61334;  
+    this->actionFunc = func_80A61334;
 }
 
-void func_80A61334(EnDyExtra *this, GlobalContext *globalCtx) {
+void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
     if (this->actor.currPosRot.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
@@ -54,7 +54,7 @@ void func_80A61334(EnDyExtra *this, GlobalContext *globalCtx) {
         this->actionFunc = func_80A613C8;
     }
 }
-void func_80A613C8(EnDyExtra *this, GlobalContext *globalCtx){
+void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
         Actor_MarkForDeath(&this->actor);
@@ -66,7 +66,7 @@ void func_80A613C8(EnDyExtra *this, GlobalContext *globalCtx){
     }
 }
 
-void EnDyExtra_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
@@ -78,15 +78,15 @@ void EnDyExtra_Update(Actor *thisx, GlobalContext *globalCtx) {
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static ColorRGBA8 primColors[] = { { 255, 255, 170, 255 }, { 255, 255, 170, 255 } };
     static ColorRGBA8 envColors[] = { { 255, 100, 255, 255 }, { 100, 255, 255, 255 } };
-    static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02,
-                               0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02 };
+    static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01,
+                               0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00 };
     EnDyExtra* this = THIS;
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Vtx* vertices = Lib_PtrSegToVirt(D_0600DD40);
     s32 i;
     u8 unk[3];
-    
+
     unk[0] = 0.0f;
     unk[1] = (s8)(this->unk150 * 240.0f);
     unk[2] = (s8)(this->unk150 * 255.0f);
@@ -103,17 +103,17 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(oGfxCtx->polyXlu.p++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
+                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
                                     globalCtx->state.frames, globalCtx->state.frames * -8, 0x10, 0x10));
         gDPPipeSync(oGfxCtx->polyXlu.p++);
         gSPMatrix(oGfxCtx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
-                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(oGfxCtx->polyXlu.p++, 0, 0x80, primColors[this->type].red, primColors[this->type].green,
                         primColors[this->type].blue, 255);
-        gDPSetEnvColor(oGfxCtx->polyXlu.p++, envColors[this->type].red, envColors[this->type].green, envColors[this->type].blue,
-                    128);
+        gDPSetEnvColor(oGfxCtx->polyXlu.p++, envColors[this->type].red, envColors[this->type].green,
+                       envColors[this->type].blue, 128);
         gSPDisplayList(oGfxCtx->polyXlu.p++, D_0600DEF0);
 
-        CLOSE_DISPS(gfxCtx);  
-    }  
+        CLOSE_DISPS(gfxCtx);
+    }
 }
