@@ -5,9 +5,15 @@
 
 struct EnEndingHero2;
 
+typedef void (*EnEndingHero2ActionFunc)(struct BgHakaCurtain*, GlobalContext*);
+
 typedef struct EnEndingHero2 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x13C];
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s limbDrawTable[20];
+    /* 0x200 */ Vec3s transitionDrawTable[20];
+    /* 0x278 */ EnEndingHero2ActionFunc actionFunc;
+    /* 0x27C */ u16 unk27C;
 } EnEndingHero2; // size = 0x280
 
 extern const ActorInit En_Ending_Hero2_InitVars;

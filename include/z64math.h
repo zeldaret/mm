@@ -3,6 +3,8 @@
 
 #include <ultra64.h>
 
+#define SHT_MAX 32767.0f
+
 typedef struct {
     /* 0x0 */ f32 x;
     /* 0x4 */ f32 y;
