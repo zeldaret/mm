@@ -23,13 +23,12 @@
 
 extern GraphicsContext* oGfxCtx;
 
-#define OPEN_DISPS(gfxCtx, file, line) \
+#define OPEN_DISPS(gfxCtx) \
     {                                  \
         GraphicsContext* oGfxCtx;      \
-        Gfx* dispRefs[4];              \
         oGfxCtx = gfxCtx;              \
 
-#define CLOSE_DISPS(gfxCtx, file, line)                 \
+#define CLOSE_DISPS(gfxCtx)                 \
     }                                                   \
     (void)0
 
