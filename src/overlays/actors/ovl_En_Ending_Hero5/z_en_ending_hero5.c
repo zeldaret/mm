@@ -33,20 +33,21 @@ extern Gfx D_06006E80[];
 extern Gfx D_06006D70[];
 extern Gfx D_0600A390[];
 
-void EnEndingHero5_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnEndingHero5_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero5* this = THIS;
 
     this->actor.unkA0.mass = 0xFF;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.unk1F = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->limbDrawTable, this->transitionDrawTable, 17);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->limbDrawTable,
+                     this->transitionDrawTable, 17);
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     this->unk25C = this->actor.params;
     func_80C23980(this);
 }
 
-void EnEndingHero5_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnEndingHero5_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80C23980(EnEndingHero5* this) {
@@ -58,7 +59,7 @@ void func_80C2399C(EnEndingHero5* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
-void EnEndingHero5_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnEndingHero5_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero5* this = THIS;
 
     this->actionFunc(this, globalCtx);
@@ -66,9 +67,9 @@ void EnEndingHero5_Update(Actor *thisx, GlobalContext *globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-Gfx* D_80C23BF0[] = {D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390};
+Gfx* D_80C23BF0[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390 };
 
-void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx){
+void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnEndingHero5* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -80,33 +81,33 @@ void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnEndingHero5_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero5* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    switch(this->unk25C){
-    case 0:
-        gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0x0A, 0x46, 0xFF);
-        break;
-    case 1:
-        gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0xC8, 0xFF, 0xFF);
-        break;
-    case 2:
-        gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0x00, 0xE6, 0x46, 0xFF);
-        break;
-    case 3:
-        gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xC8, 0x00, 0x96, 0xFF);
-        break;
-    case 4:
-        gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xF5, 0x9B, 0x00, 0xFF);
-        break;
+    switch (this->unk25C) {
+        case 0:
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0x0A, 0x46, 0xFF);
+            break;
+        case 1:
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0xC8, 0xFF, 0xFF);
+            break;
+        case 2:
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0x00, 0xE6, 0x46, 0xFF);
+            break;
+        case 3:
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xC8, 0x00, 0x96, 0xFF);
+            break;
+        case 4:
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xF5, 0x9B, 0x00, 0xFF);
+            break;
     }
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL, func_80C23A30,
-                    this);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+                     func_80C23A30, this);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
