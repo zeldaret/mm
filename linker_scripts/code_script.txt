@@ -8666,8 +8666,9 @@ SECTIONS
     ovl_En_Ending_Hero4 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ending_Hero4/z_en_ending_hero4.o(.text)
-        build/asm/ovl_En_Ending_Hero4_data.o(.data)
-        build/asm/ovl_En_Ending_Hero4_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero4/z_en_ending_hero4.o(.data)
+        build/src/overlays/actors/ovl_En_Ending_Hero4/z_en_ending_hero4.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero4/z_en_ending_hero4_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
