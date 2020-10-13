@@ -90,24 +90,24 @@ void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk25C) {
         case 0:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0x0A, 0x46, 0xFF);
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 170, 10, 70, 255);
             break;
         case 1:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xAA, 0xC8, 0xFF, 0xFF);
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 170, 200, 255, 255);
             break;
         case 2:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0x00, 0xE6, 0x46, 0xFF);
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0, 230, 70, 255);
             break;
         case 3:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xC8, 0x00, 0x96, 0xFF);
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 200, 0, 150, 255);
             break;
         case 4:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0xF5, 0x9B, 0x00, 0xFF);
+            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 245, 155, 0, 255);
             break;
     }
 
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     func_80C23A30, this);
+                     func_80C23A30, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
