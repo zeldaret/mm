@@ -1,10 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma intrinsic (sqrtf)
-extern float fabsf(float);
-#pragma intrinsic (fabsf)
-
 void Lights_InitPositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius, u32 type) {
     info->type = type;
     info->params.posX = posX;

@@ -1312,8 +1312,9 @@ SECTIONS
     ovl_Arms_Hook : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o(.text)
-        build/asm/ovl_Arms_Hook_data.o(.data)
-        build/asm/ovl_Arms_Hook_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o(.data)
+        build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.o(.rodata)
+        build/src/overlays/actors/ovl_Arms_Hook/z_arms_hook_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -4628,8 +4629,9 @@ SECTIONS
     ovl_En_Dy_Extra : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.o(.text)
-        build/asm/ovl_En_Dy_Extra_data.o(.data)
-        build/asm/ovl_En_Dy_Extra_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.o(.data)
+        build/src/overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.o(.rodata)
+        build/src/overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8640,8 +8642,9 @@ SECTIONS
     ovl_En_Ending_Hero2 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ending_Hero2/z_en_ending_hero2.o(.text)
-        build/asm/ovl_En_Ending_Hero2_data.o(.data)
-        build/asm/ovl_En_Ending_Hero2_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero2/z_en_ending_hero2.o(.data)
+        build/src/overlays/actors/ovl_En_Ending_Hero2/z_en_ending_hero2.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero2/z_en_ending_hero2_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8653,8 +8656,9 @@ SECTIONS
     ovl_En_Ending_Hero3 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ending_Hero3/z_en_ending_hero3.o(.text)
-        build/asm/ovl_En_Ending_Hero3_data.o(.data)
-        build/asm/ovl_En_Ending_Hero3_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero3/z_en_ending_hero3.o(.data)
+        build/src/overlays/actors/ovl_En_Ending_Hero3/z_en_ending_hero3.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ending_Hero3/z_en_ending_hero3_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
