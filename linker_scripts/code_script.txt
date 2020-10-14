@@ -339,7 +339,7 @@ SECTIONS
         build/asm/z_camera.o(.text)
         build/src/code/code_0x800E03A0.o(.text)
         . += 0x10;
-        build/asm/z_collision_check.o(.text)
+        build/src/code/z_collision_check.o(.text)
         build/src/code/code_0x800E8EA0.o(.text)
         build/asm/code_0x800E9360.o(.text)
         build/asm/z_debug.o(.text)
@@ -8762,8 +8762,9 @@ SECTIONS
     ovl_En_Rsn : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Rsn/z_en_rsn.o(.text)
-        build/asm/ovl_En_Rsn_data.o(.data)
-        build/asm/ovl_En_Rsn_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Rsn/z_en_rsn.o(.data)
+        build/src/overlays/actors/ovl_En_Rsn/z_en_rsn.o(.rodata)
+        build/src/overlays/actors/ovl_En_Rsn/z_en_rsn_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

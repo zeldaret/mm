@@ -13098,8 +13098,8 @@ void func_80C25D84(void); // func_80C25D84
 void EnRsn_Init(void); // func_80C25D94
 void EnRsn_Destroy(void); // func_80C25E14
 void EnRsn_Update(void); // func_80C25E38
-void func_80C25EB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_80C25EB0
-void func_80C25EF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80C25EF0
+void EnRsn_OverrideLimbDraw(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // EnRsn_OverrideLimbDraw
+void EnRsn_PostLimbDraw(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // EnRsn_PostLimbDraw
 void EnRsn_Draw(void); // func_80C25F4C
 
 #endif

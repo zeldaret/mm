@@ -591,3 +591,4 @@ ovl_En_Invisible_Ruppe_0x80C258A0
 ovl_Obj_Ending_0x80C25BC0
 ovl_En_Rsn_0x80C25D40
 z_skelanime
+z_collision_check
