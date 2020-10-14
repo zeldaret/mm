@@ -49,10 +49,11 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mu
 #### Files ####
 
 # ROM image
-ROM_NAME := rom
-ROM := $(ROM_NAME).z64
-UNCOMPRESSED_ROM := $(ROM_NAME)_uncompressed.z64
-ELF := $(ROM_NAME).elf
+MM_BASEROM ?= baserom.z64
+MM_ROM_NAME ?= rom
+ROM := $(MM_ROM_NAME).z64
+UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
+ELF := $(MM_ROM_NAME).elf
 
 BASEROM_FILES := $(wildcard baserom/*)
 # Exclude dmadata, it will be generated right before packing the rom
@@ -104,7 +105,9 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 # disasm is not a file so we must tell make not to check it when evaluating timestamps
 .INTERMEDIATE: disasm
 
-all: $(ROM) $(UNCOMPRESSED_ROM)
+all:
+	$(MAKE) $(UNCOMPRESSED_ROM)
+	$(MAKE) $(ROM)
 
 $(ROM): $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
@@ -158,7 +161,8 @@ clean:
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
-	make -C tools
+	$(MAKE) -C tools
+	./tools/extract_rom.py $(MM_BASEROM)
 
 diff-init: all
 	rm -rf expected/
@@ -167,7 +171,10 @@ diff-init: all
 	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
 	cp $(ROM) expected/$(ROM)
 
-init: setup all diff-init
+init:
+	$(MAKE) setup
+	$(MAKE) all
+	$(MAKE) diff-init
 
 # Recipes
 

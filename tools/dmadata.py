@@ -89,6 +89,6 @@ if __name__ == "__main__":
             with open(args.linkscript, 'w') as file:
                 for name, vrom_start, vrom_end in linker_info:
                     formatted_name = '_' + name if name[0].isdigit() else name
-                    file.write('{}_vrom_start = 0x{:08X};\n'.format(formatted_name, vrom_start))
-                    file.write('{}_vrom_end = 0x{:08X};\n'.format(formatted_name, vrom_end))
+                    file.write('_{}SegmentRomStart = 0x{:08X};\n'.format(formatted_name, vrom_start))
+                    file.write('_{}SegmentRomEnd = 0x{:08X};\n'.format(formatted_name, vrom_end))
                     file.write('\n')

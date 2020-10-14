@@ -16,7 +16,7 @@ src_dir = root_dir + "src/"
 
 def find_build_command_line(c_file):
     rel_c_file = os.path.relpath(c_file, root_dir)
-    make_cmd = ["make", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
+    make_cmd = ["make", "rom.z64", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
     debug_output = (
         subprocess.check_output(make_cmd, cwd=root_dir).decode("utf-8").split("\n")
     )

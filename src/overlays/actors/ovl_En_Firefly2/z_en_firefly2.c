@@ -9,7 +9,6 @@ void EnFirefly2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFirefly2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFirefly2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Firefly2_InitVars = {
     ACTOR_EN_FIREFLY2,
     ACTORTYPE_ENEMY,
@@ -21,12 +20,12 @@ const ActorInit En_Firefly2_InitVars = {
     (ActorFunc)EnFirefly2_Update,
     (ActorFunc)EnFirefly2_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Firefly2_0x80A560C0/EnFirefly2_Init.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Firefly2_0x80A560C0/EnFirefly2_Destroy.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Firefly2_0x80A560C0/EnFirefly2_Update.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Firefly2_0x80A560C0/EnFirefly2_Draw.asm")
+void EnFirefly2_Init(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnFirefly2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnFirefly2_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnFirefly2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+}

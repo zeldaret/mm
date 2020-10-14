@@ -1,10 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma intrinsic (sqrtf)
-extern float fabsf(float);
-#pragma intrinsic (fabsf)
-
 void* Lib_bcopy(void* dest, void* src, size_t n) {
     _bcopy(src, dest, n);
 
