@@ -172,7 +172,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->sceneContext.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
     temp16 = D_801C2730[unk20];
-    actorOverlayTable[0].initInfo->objectId = temp16;
+    gActorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
     ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;

@@ -17,6 +17,7 @@
 #include <ichain.h>
 
 #include <z64actor.h>
+#include <z64animation.h>
 #include <z64collision_check.h>
 #include <z64cutscene.h>
 #include <z64dma.h>
@@ -325,7 +326,9 @@ typedef struct {
     /* 0x010 */ s32 unk10;
     /* 0x014 */ UNK_TYPE1 pad14[0x2E];
     /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x232];
+    /* 0x044 */ UNK_TYPE1 pad44[0x43];
+    /* 0x087 */ s8 unk87;
+    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
     /* 0x276 */ u8 unk276;
     /* 0x277 */ UNK_TYPE1 pad277[0x9];
     /* 0x280 */ u16 unk280;
@@ -651,7 +654,9 @@ typedef struct {
     /* 0x0004 */ UNK_TYPE1 pad4[0x4];
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0xA];
+    /* 0x000E */ UNK_TYPE1 padE[0x2];
+    /* 0x0010 */ u32 isNight;
+    /* 0x0014 */ u32 unk14;
     /* 0x0018 */ u32 day;
     /* 0x001C */ u32 daysElapsed;
     /* 0x0020 */ u8 unk20;
@@ -1020,8 +1025,6 @@ typedef struct {
     /* 0x21 */ u8 isInit;
     /* 0x22 */ u8 flag;
 } Arena; // size = 0x24
-
-typedef struct CameraContext CameraContext;
 
 typedef struct ActorEnBom ActorEnBom;
 
@@ -1481,13 +1484,6 @@ struct Camera {
     /* 0x168 */ UNK_TYPE1 pad168[0x10];
 }; // size = 0x178
 
-struct CameraContext {
-    /* 0x000 */ Camera activeCameras[4];
-    /* 0x5E0 */ Camera* activeCameraPtrs[4];
-    /* 0x5F0 */ s16 activeCamera;
-    /* 0x5F2 */ s16 unk5F2;
-}; // size = 0x5F4
-
 typedef struct {
     /* 0x00 */ z_Matrix displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1600,7 +1596,10 @@ struct GlobalContext {
     /* 0x000B0 */ SceneCmd* currentSceneVram;
     /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
     /* 0x000B8 */ View view;
-    /* 0x00220 */ CameraContext cameraCtx;
+    /* 0x00220 */ Camera activeCameras[4];
+    /* 0x00800 */ Camera* cameraPtrs[4];
+    /* 0x00810 */ s16 activeCamera;
+    /* 0x00812 */ s16 unk812;
     /* 0x00814 */ u8 unk814;
     /* 0x00815 */ u8 unk815;
     /* 0x00816 */ UNK_TYPE1 pad816[0x2];
@@ -1622,7 +1621,8 @@ struct GlobalContext {
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
-    /* 0x170F8 */ UNK_TYPE1 pad170F8[0xC90];
+    /* 0x170F8 */ UNK_TYPE1 pad170F8[0xC];
+    /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ SceneContext sceneContext;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;

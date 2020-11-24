@@ -70,6 +70,12 @@ typedef struct {
     /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
 
+typedef enum {
+    ALLOCTYPE_NORMAL,
+    ALLOCTYPE_ABSOLUTE,
+    ALLOCTYPE_PERMANENT
+} AllocType;
+
 typedef struct {
     /* 0x00 */ u32 vromStart;
     /* 0x04 */ u32 vromEnd;
@@ -132,7 +138,7 @@ typedef struct Actor {
     /* 0x0A0 */ ActorA0 unkA0;
     /* 0x0BC */ ActorShape shape;
     /* 0x0D4 */ UNK_TYPE1 padD4[0x18];
-    /* 0x0EC */ Vec3f unkEC;
+    /* 0x0EC */ Vec3f projectedPos;
     /* 0x0F8 */ f32 unkF8;
     /* 0x0FC */ f32 unkFC;
     /* 0x100 */ f32 unk100;
@@ -173,14 +179,19 @@ typedef struct {
 typedef struct {
     /* 0x000 */ Actor base;
     /* 0x144 */ UNK_TYPE1 pad144[0x3];
-    /* 0x147 */ s8 unk147;
-    /* 0x148 */ UNK_TYPE1 pad148[0x3];
+    /* 0x147 */ s8 itemActionParam;
+    /* 0x148 */ UNK_TYPE1 pad148[0x2];
+    /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 unk14B;
-    /* 0x14C */ UNK_TYPE1 pad14C[0x7];
+    /* 0x14C */ UNK_TYPE1 pad14C[0x5];
+    /* 0x151 */ u8 unk151;
+    /* 0x152 */ UNK_TYPE1 unk152;
     /* 0x153 */ u8 unk153;
     /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
-    /* 0x34C */ Actor* unk34C;
-    /* 0x350 */ UNK_TYPE1 pad350[0x44];
+    /* 0x34C */ Actor* heldActor;
+    /* 0x350 */ UNK_TYPE1 pad350[0x18];
+    /* 0x368 */ Vec3f unk368;
+    /* 0x374 */ UNK_TYPE1 pad374[0x20];
     /* 0x394 */ u8 unk394;
     /* 0x395 */ UNK_TYPE1 pad395[0x37];
     /* 0x3CC */ s16 unk3CC;
@@ -188,7 +199,7 @@ typedef struct {
     /* 0x3CF */ UNK_TYPE1 pad3CF[0x361];
     /* 0x730 */ Actor* unk730;
     /* 0x734 */ UNK_TYPE1 pad734[0x338];
-    /* 0xA6C */ u32 unkA6C;
+    /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 unkA70;
     /* 0xA74 */ u32 unkA74;
     /* 0xA78 */ UNK_TYPE1 padA78[0x8];
