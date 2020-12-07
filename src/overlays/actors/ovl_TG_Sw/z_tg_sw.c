@@ -4,12 +4,14 @@
 
 #define THIS ((TGSw*)thisx)
 
+// Prototypes
 void TGSw_Init(Actor* thisx, GlobalContext* globalCtx);
 void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void TGSw_Update(Actor* thisx, GlobalContext* globalCtx);
 void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx);
+
 const ActorInit TG_Sw_InitVars = {
     ACTOR_TG_SW,
     ACTORTYPE_PROP,
@@ -21,16 +23,102 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Update,
     (ActorFunc)TGSw_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/func_80B19F60.asm")
+static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
+    f32 scaledAbsoluteRotZ;
+    f32 scaledAbsoluteRotY;
+    u8 unk1F4;
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/func_80B1A008.asm")
+    // Maybe actorCtx Debug Flag?
+    if (!!globalCtx->actorCtx.unk1F5) {
+        scaledAbsoluteRotY = ABS_ALT(this->actor.currPosRot.rot.y) * 4.0f;
+        scaledAbsoluteRotZ = ABS_ALT(this->actor.currPosRot.rot.z) * 4.0f;
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/TGSw_Init.asm")
+        if (!(scaledAbsoluteRotZ < this->actor.xzDistanceFromLink) &&
+            !(scaledAbsoluteRotY < this->actor.yDistanceFromLink)) {
+            unk1F4 = globalCtx->actorCtx.unk1F4;
+            if (unk1F4 == 2 || !unk1F4) {
+                this->actionFunc = &TGSw_ActionExecuteOneShot;
+            }
+        }
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/TGSw_Destroy.asm")
+static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx) {
+    void* actorIterator;
+    struct Actor* actorEntry;
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/TGSw_Update.asm")
+    actorIterator = NULL;
+    do {
+        actorEntry = func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORTYPE_ENEMY, ACTOR_EN_SW);
+        if (actorIterator = (void*)!actorEntry) {
+            break;
+        }
 
-GLOBAL_ASM("asm/non_matchings/ovl_TG_Sw_0x80B19F60/TGSw_Draw.asm")
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorEntry->params & 0xFC) >> 2) & 0xFF)) {
+            // Prevents register swap
+            if (1) {}
+            actorEntry->parent = (struct Actor*)this;
+            actorEntry->speedXZ = ABS_ALT(this->actor.currPosRot.rot.x);
+            break;
+        }
+    } while (actorIterator = actorEntry->next);
+
+    actorIterator = NULL;
+    do {
+        actorEntry = func_ActorCategoryIterateById(globalCtx, actorIterator, ACTORTYPE_NPC, ACTOR_EN_SW);
+        if (actorIterator = (void*)!actorEntry) {
+            break;
+        }
+
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorEntry->params & 0xFC) >> 2) & 0xFF)) {
+            actorEntry->parent = (struct Actor*)this;
+            actorEntry->speedXZ = ABS_ALT(this->actor.currPosRot.rot.x);
+            break;
+        }
+    } while (actorIterator = actorEntry->next);
+
+    Actor_MarkForDeath((Actor*)this);
+}
+
+void TGSw_Init(Actor* thisx, GlobalContext* globalCtx) {
+    TGSw* this = THIS;
+    this->actor.cutscene = this->actor.currPosRot.rot.z;
+    this->actionFunc = &TGSw_ActionDecider;
+}
+
+void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ;
+}
+
+void TGSw_Update(Actor* thisx, GlobalContext* globalCtx) {
+    TGSw* this = THIS;
+    this->actionFunc(this, globalCtx);
+}
+
+void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad0;
+    s32 absoluteRotZ;
+    s32 absoluteRotY;
+    f32 factoredRotZ;
+    TGSw* this = THIS;
+
+    if (!!sREG(0)) {
+        absoluteRotZ = ABS_ALT(this->actor.currPosRot.rot.z);
+        factoredRotZ = absoluteRotZ * 0.2f;
+        // if needs to use the factored Rot as a var, "true" doesnt work
+        if (factoredRotZ)
+        {
+            ;
+        }
+        absoluteRotY = ABS_ALT(this->actor.currPosRot.rot.y);
+        
+        DebugDisplay_AddObject(this->actor.currPosRot.pos.x, this->actor.currPosRot.pos.y, this->actor.currPosRot.pos.z,
+                               0, this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
+                               globalCtx->state.gfxCtx);
+        DebugDisplay_AddObject(this->actor.currPosRot.pos.x, this->actor.currPosRot.pos.y, this->actor.currPosRot.pos.z,
+                               0, 0, 0, 0.1f, absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6,
+                               globalCtx->state.gfxCtx);
+        this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + 0x1000);
+    }
+}

@@ -389,7 +389,6 @@ ovl_Obj_Dhouse_0x80B12980
 ovl_Obj_Hakaisi_0x80B14180
 ovl_Bg_Hakugin_Switch_0x80B15790
 ovl_En_Snowman_0x80B16B00
-ovl_TG_Sw_0x80B19F60
 ovl_En_Po_Sisters_0x80B1A3B0
 ovl_En_Pp_0x80B1DEB0
 ovl_En_Hakurock_0x80B21B00
