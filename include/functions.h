@@ -1540,8 +1540,8 @@ s32 func_800E9250(GlobalContext* ctxt, Actor* actor, Vec3s* param_3, Vec3s* para
 u8 func_800E9360(void); // func_800E9360
 void static_context_init(void); // func_800E93E0
 void func_800E9470(void); // func_800E9470
-void func_800E9488(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE1 param_10, UNK_TYPE1 param_11, UNK_TYPE1 param_12, UNK_TYPE1 param_13, UNK_TYPE2 param_14, UNK_TYPE4 param_15); // func_800E9488
-void func_800E9564(void); // func_800E9564
+void DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx); // func_800E9488
+void DebugDisplay_DrawObjects(GlobalContext* globalCtx); // func_800E9564
 void func_800E95F4(void); // func_800E95F4
 void func_800E97D8(void); // func_800E97D8
 void func_800E992C(void); // func_800E992C
@@ -2737,7 +2737,7 @@ void func_8013D768(void); // func_8013D768
 void func_8013D83C(void); // func_8013D83C
 void func_8013D8DC(void); // func_8013D8DC
 void func_8013D924(void); // func_8013D924
-void func_8013D960(void); // func_8013D960
+Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* actorListStart, s32 actorCategory, s32 actorId); // func_8013D960
 void func_8013D9C8(void); // func_8013D9C8
 void func_8013DB90(void); // func_8013DB90
 void func_8013DC40(void); // func_8013DC40

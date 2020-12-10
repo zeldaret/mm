@@ -9102,12 +9102,6 @@ void func_80B19718(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void EnSnowman_Draw(void); // func_80B198B0
 void func_80B19948(void); // func_80B19948
 void func_80B19998(void); // func_80B19998
-void func_80B19F60(void); // func_80B19F60
-void func_80B1A008(void); // func_80B1A008
-void TGSw_Init(void); // func_80B1A15C
-void TGSw_Destroy(void); // func_80B1A17C
-void TGSw_Update(void); // func_80B1A18C
-void TGSw_Draw(void); // func_80B1A1B0
 void EnPoSisters_Init(void); // func_80B1A3B0
 void EnPoSisters_Destroy(void); // func_80B1A600
 void func_80B1A648(void); // func_80B1A648

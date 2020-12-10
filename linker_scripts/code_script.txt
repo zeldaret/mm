@@ -6108,8 +6108,9 @@ SECTIONS
     ovl_TG_Sw : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_TG_Sw/z_tg_sw.o(.text)
-        build/asm/ovl_TG_Sw_data.o(.data)
-        build/asm/ovl_TG_Sw_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_TG_Sw/z_tg_sw.o(.data)
+        build/src/overlays/actors/ovl_TG_Sw/z_tg_sw.o(.rodata)
+        build/src/overlays/actors/ovl_TG_Sw/z_tg_sw_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

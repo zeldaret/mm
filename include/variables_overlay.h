@@ -10509,10 +10509,6 @@ extern OverlayRelocationSection enSnowmanOverlayInfo; // D_80B19BA0
 extern u32 enSnowmanOverlayRelocations[233]; // D_80B19BB4
 extern u32 enSnowmanOverlayInfoOffset; // D_80B19F5C
 extern ActorInit TG_Sw_InitVars; // TG_Sw_InitVars
-extern UNK_TYPE4 D_80B1A340; // D_80B1A340
-extern UNK_TYPE4 D_80B1A344; // D_80B1A344
-extern UNK_TYPE4 D_80B1A348; // D_80B1A348
-extern UNK_TYPE4 D_80B1A34C; // D_80B1A34C
 extern OverlayRelocationSection tGSwOverlayInfo; // D_80B1A350
 extern u32 tGSwOverlayRelocations[16]; // D_80B1A364
 extern u32 tGSwOverlayInfoOffset; // D_80B1A3AC
