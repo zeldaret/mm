@@ -4,11 +4,26 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 # TODO we do not support static recomp, so force this to 1
-ORIG_COMPILER = 1
+ORIG_COMPILER ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
+  CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
+endif
+
+ifeq ($(OS),Windows_NT)
+    DETECTED_OS=windows
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        DETECTED_OS=linux
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        DETECTED_OS=macos
+        MAKE=gmake
+        CPPFLAGS += -xc++
+    endif
 endif
 
 #### Tools ####
@@ -18,8 +33,8 @@ else
   MIPS_BINUTILS_PREFIX := mips64-elf-
 endif
 
-CC        := tools/ido_recomp/linux/7.1/cc
-CC_OLD    := tools/ido_recomp/linux/5.3/cc
+CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
+CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
 QEMU_IRIX ?= ./tools/qemu-mips
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
