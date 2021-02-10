@@ -23,17 +23,17 @@ const ActorInit En_Hs2_InitVars = {
     (ActorFunc)EnHs2_Draw
 };
 
-void EnHs2_Init(Actor* thisx, GlobalContext* globalCtx){
+void EnHs2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHs2* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = func_8098EFAC;
 }
 
-void EnHs2_Destroy(Actor* thisx, GlobalContext* globalCtx){
+void EnHs2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_8098EFAC(EnHs2* this, GlobalContext* globalCtx){
+void func_8098EFAC(EnHs2* this, GlobalContext* globalCtx) {
 }
 
 void EnHs2_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -42,5 +42,5 @@ void EnHs2_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-void EnHs2_Draw(Actor* thisx, GlobalContext* globalCtx){
+void EnHs2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 }
