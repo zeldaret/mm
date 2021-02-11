@@ -8344,7 +8344,7 @@
     0x8098EE0C:("ObjKibako2_Draw",),
     0x8098EF60:("EnHs2_Init",),
     0x8098EF9C:("EnHs2_Destroy",),
-    0x8098EFAC:("func_8098EFAC",),
+    0x8098EFAC:("EnHs2_DoNothing",),
     0x8098EFBC:("EnHs2_Update",),
     0x8098EFE0:("EnHs2_Draw",),
     0x8098F040:("func_8098F040",),
