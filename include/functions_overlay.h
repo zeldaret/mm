@@ -4323,7 +4323,7 @@ void ObjKibako2_Update(void); // func_8098ED4C
 void ObjKibako2_Draw(void); // func_8098EE0C
 void EnHs2_Init(void); // func_8098EF60
 void EnHs2_Destroy(void); // func_8098EF9C
-void func_8098EFAC(void); // func_8098EFAC
+void EnHs2_DoNothing(void); // func_8098EFAC
 void EnHs2_Update(void); // func_8098EFBC
 void EnHs2_Draw(void); // func_8098EFE0
 void func_8098F040(void); // func_8098F040

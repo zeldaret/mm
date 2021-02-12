@@ -9,7 +9,8 @@ void EnHs2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHs2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHs2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void EnHs2_DoNothing(EnHs2* this, GlobalContext* globalCtx);
+
 const ActorInit En_Hs2_InitVars = {
     ACTOR_EN_HS2,
     ACTORTYPE_NPC,
@@ -21,14 +22,25 @@ const ActorInit En_Hs2_InitVars = {
     (ActorFunc)EnHs2_Update,
     (ActorFunc)EnHs2_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Hs2_0x8098EF60/EnHs2_Init.asm")
+void EnHs2_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnHs2* this = THIS;
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Hs2_0x8098EF60/EnHs2_Destroy.asm")
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = EnHs2_DoNothing;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Hs2_0x8098EF60/func_8098EFAC.asm")
+void EnHs2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Hs2_0x8098EF60/EnHs2_Update.asm")
+void EnHs2_DoNothing(EnHs2* this, GlobalContext* globalCtx) {
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Hs2_0x8098EF60/EnHs2_Draw.asm")
+void EnHs2_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnHs2* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
+
+void EnHs2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+}
