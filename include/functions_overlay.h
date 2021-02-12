@@ -2023,16 +2023,16 @@ void EnBbfall_Update(void); // func_808C03EC
 void func_808C07D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); // func_808C07D4
 void func_808C080C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_808C080C
 void EnBbfall_Draw(void); // func_808C0A04
-void func_808C1030(void); // func_808C1030
+void ArmsHook_SetupAction(void); // ArmsHook_SetupAction
 void ArmsHook_Init(void); // func_808C103C
 void ArmsHook_Destroy(void); // func_808C10B0
-void func_808C10F8(void); // func_808C10F8
+void ArmsHook_Wait(void); // ArmsHook_Wait
 void func_808C1154(void); // func_808C1154
-void func_808C1168(void); // func_808C1168
-void func_808C1198(void); // func_808C1198
-void func_808C11C0(void); // func_808C11C0
-void func_808C125C(void); // func_808C125C
-void func_808C12A4(void); // func_808C12A4
+void ArmsHook_AttachToPlayer(void); // ArmsHook_AttachToPlayer
+void ArmsHook_DetachHookFromActor(void); // ArmsHook_DetachHookFromActor
+void ArmsHook_CheckForCancel(void); // ArmsHook_CheckForCancel
+void ArmsHook_AttachHookToActor(void); // ArmsHook_AttachHookToActor
+void ArmsHook_Shoot(void); // ArmsHook_Shoot
 void ArmsHook_Update(void); // func_808C18D8
 void ArmsHook_Draw(void); // func_808C1918
 void EnBb_Init(void); // func_808C1D40
@@ -12066,7 +12066,7 @@ void EnTanron5_Draw(void); // func_80BE5B58
 void func_80BE5C10(void); // func_80BE5C10
 void EnTanron6_Init(void); // func_80BE6040
 void EnTanron6_Destroy(void); // func_80BE60AC
-void func_80BE60BC(void); // func_80BE60BC
+void EnTanron6_DoNothing(void); // EnTanron6_DoNothing
 void func_80BE60D0(void); // func_80BE60D0
 void EnTanron6_Update(void); // func_80BE60E0
 void EnTanron6_Draw(void); // func_80BE6140

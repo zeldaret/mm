@@ -200,7 +200,7 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
 void Dmamgr_Start() {
 	DmaEntry* v0;
 	u32 v1;
-	DmaMgr_DMARomToRam((u32)&dmadata_vrom_start, dmadata, (u32)&dmadata_vrom_end - (u32)&dmadata_vrom_start);
+	DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
 
 	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
 

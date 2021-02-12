@@ -9,7 +9,6 @@ void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Zl1_InitVars = {
     ACTOR_EN_ZL1,
     ACTORTYPE_NPC,
@@ -21,12 +20,12 @@ const ActorInit En_Zl1_InitVars = {
     (ActorFunc)EnZl1_Update,
     (ActorFunc)EnZl1_Draw
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zl1_0x8089ED90/EnZl1_Init.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zl1_0x8089ED90/EnZl1_Destroy.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zl1_0x8089ED90/EnZl1_Update.asm")
-
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zl1_0x8089ED90/EnZl1_Draw.asm")
+void EnZl1_Init(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx) {
+}

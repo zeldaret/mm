@@ -7,31 +7,6 @@
 
 struct Actor;
 
-typedef enum {
-    COLTYPE_UNK0,
-    COLTYPE_UNK1,
-    COLTYPE_UNK2,
-    COLTYPE_UNK3,
-    COLTYPE_UNK4,
-    COLTYPE_UNK5,
-    COLTYPE_UNK6,
-    COLTYPE_UNK7,
-    COLTYPE_UNK8,
-    COLTYPE_METAL_SHIELD,
-    COLTYPE_UNK10,
-    COLTYPE_WOODEN_SHIELD,
-    COLTYPE_UNK12,
-    COLTYPE_UNK13
-} ColliderType;
-
-typedef enum {
-    COLSHAPE_JNTSPH,
-    COLSHAPE_CYLINDER,
-    COLSHAPE_TRIS,
-    COLSHAPE_QUAD,
-    COLSHAPE_INVALID
-} ColliderShape;
-
 typedef struct {
     /* 0x0 */ u32 unk0;
     /* 0x4 */ u8 unk4;
@@ -93,6 +68,13 @@ typedef struct {
 } ColQuadParams; // size = 0x40
 
 typedef struct {
+    /* 0x00 */ Vec3f pointA;
+    /* 0x0C */ Vec3f pointB;
+    /* 0x18 */ Vec3f pointC;
+    /* 0x24 */ Vec3f pointD;
+} ColQuadParamsInit; // size = 0x30
+
+typedef struct {
     /* 0x0 */ Vec3s loc;
     /* 0x6 */ s16 radius;
 } ColSphereCollisionInfo; // size = 0x8
@@ -135,8 +117,8 @@ typedef struct {
 typedef struct {
     /* 0x00 */ ColCommonInit base;
     /* 0x08 */ ColBodyInfoInit body;
-    /* 0x20 */ ColQuadParams params;
-} ColQuadInit; // size = 0x60
+    /* 0x20 */ ColQuadParamsInit params;
+} ColQuadInit; // size = 0x50
 
 typedef struct {
     /* 0x00 */ ColBodyInfoInit body;
@@ -145,6 +127,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ColCommonInit base;
+    /* 0x6 */ UNK_TYPE1 pad6[0x2];
     /* 0x8 */ u32 count;
     /* 0xC */ ColSphereGroupElementInit* init;
 } ColSphereGroupInit; // size = 0x10
