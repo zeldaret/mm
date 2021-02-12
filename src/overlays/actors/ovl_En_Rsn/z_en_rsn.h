@@ -5,9 +5,15 @@
 
 struct EnRsn;
 
+typedef void (*EnRsnActionFunc)(struct BgHakaCurtain*, GlobalContext*);
+
 typedef struct EnRsn {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xA0];
+    /* 0x144 */ char unk144[0x4C];
+    /* 0x190 */ SkelAnime skelAnime;
+    /* 0x1D4 */ EnRsnActionFunc actionFunc;
+    /* 0x1D8 */ Vec3s unk1D8;
+    /* 0x1DE */ Vec3s unk1DE;
 } EnRsn; // size = 0x1E4
 
 extern const ActorInit En_Rsn_InitVars;
