@@ -8236,8 +8236,9 @@ SECTIONS
     ovl_En_Nnh : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Nnh/z_en_nnh.o(.text)
-        build/asm/ovl_En_Nnh_data.o(.data)
-        build/asm/ovl_En_Nnh_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Nnh/z_en_nnh.o(.data)
+        build/src/overlays/actors/ovl_En_Nnh/z_en_nnh.o(.rodata)
+        build/src/overlays/actors/ovl_En_Nnh/z_en_nnh_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
