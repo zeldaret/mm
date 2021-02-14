@@ -7932,7 +7932,7 @@
     0x8096A8A4:("EnJs_Update",),
     0x8096A9F4:("func_8096A9F4",),
     0x8096AB20:("EnJs_Draw",),
-    0x8096B0A0:("func_8096B0A0",),
+    0x8096B0A0:("EnOkarinaEffect_SetupAction",),
     0x8096B0AC:("EnOkarinaEffect_Destroy",),
     0x8096B0BC:("EnOkarinaEffect_Init",),
     0x8096B104:("func_8096B104",),

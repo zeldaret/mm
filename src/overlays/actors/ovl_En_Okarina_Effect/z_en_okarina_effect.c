@@ -24,7 +24,7 @@ const ActorInit En_Okarina_Effect_InitVars = {
     (ActorFunc)NULL
 };
 
-void func_8096B0A0(EnOkarinaEffect* this, EnOkarinaEffectActionFunc* actionFunc) {
+void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc* actionFunc) {
     this->actionFunc = actionFunc;
 }
 
@@ -37,7 +37,7 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (globalCtx->kankyoContext.unkF2[1]) {
         Actor_MarkForDeath(&this->actor);
     }
-    func_8096B0A0(&this->actor, func_8096B104);
+    EnOkarinaEffect_SetupAction(&this->actor, func_8096B104);
 }
 
 void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
@@ -46,14 +46,14 @@ void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     D_801F4E70 = 501.0f;
     globalCtx->kankyoContext.unkE3 = 2;
     func_800FD78C(globalCtx);
-    func_8096B0A0(this, func_8096B174);
+    EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
 
 void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     DECR(this->unk144);
     if (!globalCtx->unk16D30.unk1EC && !globalCtx->unk17000 && !globalCtx->msgCtx.unk11F10 &&
         !func_8016A01C(globalCtx) && this->unk144 == 0) {
-        func_8096B0A0(this, func_8096B1FC);
+        EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }
 
