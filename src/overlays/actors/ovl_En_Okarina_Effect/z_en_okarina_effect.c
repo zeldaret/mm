@@ -8,7 +8,10 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx);
+void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx);
+void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx);
+
 const ActorInit En_Okarina_Effect_InitVars = {
     ACTOR_EN_OKARINA_EFFECT,
     ACTORTYPE_ITEMACTION,
@@ -20,18 +23,55 @@ const ActorInit En_Okarina_Effect_InitVars = {
     (ActorFunc)EnOkarinaEffect_Update,
     (ActorFunc)NULL
 };
-*/
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/func_8096B0A0.asm")
+void func_8096B0A0(EnOkarinaEffect* this, EnOkarinaEffectActionFunc* actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/EnOkarinaEffect_Destroy.asm")
+void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/EnOkarinaEffect_Init.asm")
+void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnOkarinaEffect* this = THIS;
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/func_8096B104.asm")
+    if (globalCtx->kankyoContext.unkF2[1]) {
+        Actor_MarkForDeath(&this->actor);
+    }
+    func_8096B0A0(&this->actor, func_8096B104);
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/func_8096B174.asm")
+void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+    this->unk144 = 0x50;
+    globalCtx->kankyoContext.unkF2[4] = 0x3C;
+    D_801F4E70 = 501.0f;
+    globalCtx->kankyoContext.unkE3 = 2;
+    func_800FD78C(globalCtx);
+    func_8096B0A0(this, func_8096B174);
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/func_8096B1FC.asm")
+void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+    DECR(this->unk144);
+    if (!globalCtx->unk16D30.unk1EC && !globalCtx->unk17000 && !globalCtx->msgCtx.unk11F10 &&
+        !func_8016A01C(globalCtx) && this->unk144 == 0) {
+        func_8096B0A0(this, func_8096B1FC);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Effect_0x8096B0A0/EnOkarinaEffect_Update.asm")
+void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+    if (globalCtx->kankyoContext.unkF2[4]) {
+        if ((globalCtx->state.frames & 3) == 0) {
+            --globalCtx->kankyoContext.unkF2[4];
+            if (globalCtx->kankyoContext.unkF2[4] == 8) {
+                func_800FD858(globalCtx);
+            }
+        }
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnOkarinaEffect* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
