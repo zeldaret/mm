@@ -23,12 +23,48 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5690.asm")
+static InitChainEntry D_80BD5D10[] = {
+    ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk100, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk104, 600, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/BgIkanaShutter_Init.asm")
+extern BgMeshHeader D_06000F28;
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/BgIkanaShutter_Destroy.asm")
+s32 func_80BD5690(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
+    Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
+    Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
+    Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
+}
 
+void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgIkanaShutter* this = THIS;
+
+    Actor_ProcessInitChain(&this->dyna.actor, D_80BD5D10);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    if (!((this->dyna.actor.params >> 8) & 1)) {
+        if (func_80BD5690(this, globalCtx)) {
+            func_80BD599C(this);
+            return;
+        }
+        func_80BD5828(this);
+        return;
+    }
+    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+        func_80BD5C64(this);
+        return;
+    }
+    func_80BD5AE8(this);
+}
+
+void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgIkanaShutter* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+}
 GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5828.asm")
 
 GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5844.asm")
