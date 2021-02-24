@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     parser.add_argument('input', help='input file')
     parser.add_argument('output', help='output file path')
-    parser.add_argument('-c', '--c-base', help='create base c file that has #pragma GLOBAL_ASM for each function', metavar='file')
+    parser.add_argument('-c', '--c-base', help='create base c file that has GLOBAL_ASM for each function', metavar='file')
     args = parser.parse_args()
 
     os.makedirs(args.output, exist_ok=True)
