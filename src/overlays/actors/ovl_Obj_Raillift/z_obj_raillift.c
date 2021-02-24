@@ -23,28 +23,28 @@ const ActorInit Obj_Raillift_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19910.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19B98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19B98.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19BA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19BA8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19E84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19E84.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19EE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19EE0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19F18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19F18.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19F78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A19F78.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A1A330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A1A330.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A1A360.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Raillift_0x80A19910/func_80A1A360.asm")

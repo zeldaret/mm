@@ -23,30 +23,30 @@ const ActorInit Obj_Lift_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D3C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D3C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D760.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D7A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D7A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D88C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D88C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D8B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D8B4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D9C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093D9C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DA48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DA48.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DB70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DB70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DB90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DB90.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/ObjLift_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DC90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lift_0x8093D3C0/func_8093DC90.asm")

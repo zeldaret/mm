@@ -214,7 +214,7 @@ void Effect_DrawAll(GraphicsContext* gCtxt) {
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/code_0x800AF710/Effect_DrawAll.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code_0x800AF710/Effect_DrawAll.asm")
 #endif
 
 #ifdef NON_MATCHING
@@ -255,7 +255,7 @@ void Effect_UpdateAll(GlobalContext* ctxt) {
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/code_0x800AF710/Effect_UpdateAll.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code_0x800AF710/Effect_UpdateAll.asm")
 #endif
 
 void Effect_Destroy(GlobalContext* ctxt, s32 index) {

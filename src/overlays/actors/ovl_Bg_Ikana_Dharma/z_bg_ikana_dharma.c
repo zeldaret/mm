@@ -23,24 +23,24 @@ const ActorInit Bg_Ikana_Dharma_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC240.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC240.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC758.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC758.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC790.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC790.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC7EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC7EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC808.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC808.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Draw.asm")

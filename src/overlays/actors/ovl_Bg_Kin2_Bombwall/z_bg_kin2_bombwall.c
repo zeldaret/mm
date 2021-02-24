@@ -23,26 +23,26 @@ const ActorInit Bg_Kin2_Bombwall_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E020.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E020.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E090.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E090.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E4B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E4B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E4CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E4CC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E544.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E544.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E558.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E558.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E5F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E5F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E614.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/func_80B6E614.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Kin2_Bombwall_0x80B6E020/BgKin2Bombwall_Draw.asm")

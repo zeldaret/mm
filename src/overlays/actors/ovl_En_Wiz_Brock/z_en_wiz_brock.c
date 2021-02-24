@@ -23,14 +23,14 @@ const ActorInit En_Wiz_Brock_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/func_80A490E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/func_80A490E4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/func_80A490FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/func_80A490FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Draw.asm")

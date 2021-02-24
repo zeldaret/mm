@@ -23,116 +23,116 @@ const ActorInit Obj_Switch_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093ABD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093ABD0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AC6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AC6C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093ADA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093ADA8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE1C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE74.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AE88.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AEC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AEC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AEF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AEF0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AF1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AF1C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AF54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093AF54.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B648.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B648.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B668.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B668.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B6F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B6F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B710.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B710.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B92C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B92C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B940.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B940.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B9C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B9C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B9E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093B9E4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BB5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BB5C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BB70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BB70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BBD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BBD0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BCC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BCC8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BCDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BCDC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BD34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BD34.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BD4C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BD4C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BDAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BDAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BDC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BDC0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BE10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BE10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BE2C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BE2C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BEF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BEF0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF04.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF50.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093BF70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C0A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C0A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C0B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C0B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C138.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C138.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C15C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C15C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C23C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C23C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C250.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C250.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C2B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C2B4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C2D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C2D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C3C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C3C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C3DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C3DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C460.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C460.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C488.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C488.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C584.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C584.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C598.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C598.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C778.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C778.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C888.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C888.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C8B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C8B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C99C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093C99C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093CA80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093CA80.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093CAC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/func_8093CAC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Switch_0x8093ABD0/ObjSwitch_Draw.asm")

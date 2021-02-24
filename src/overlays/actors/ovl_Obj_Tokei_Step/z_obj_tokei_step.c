@@ -23,42 +23,42 @@ const ActorInit Obj_Tokei_Step_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5BB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5BB0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5BE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5BE8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5C70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5C70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5DFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5DFC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5EB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5EB8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5F70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5F70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5FB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD5FB0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6348.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6348.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD635C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD635C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63E8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD63F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD642C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD642C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6480.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6480.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD64A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD64A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/ObjTokeiStep_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6508.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6508.asm")

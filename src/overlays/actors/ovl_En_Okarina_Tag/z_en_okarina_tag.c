@@ -22,12 +22,12 @@ const ActorInit En_Okarina_Tag_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/func_8093E518.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/func_8093E518.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/func_8093E68C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/func_8093E68C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Update.asm")

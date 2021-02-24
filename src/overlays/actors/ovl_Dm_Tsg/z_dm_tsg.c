@@ -23,10 +23,10 @@ const ActorInit Dm_Tsg_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Draw.asm")

@@ -58,7 +58,7 @@ if __name__ == "__main__":
         for file in src_files[section]:
             file_lines = read_all_lines(file)
             for line in file_lines:
-                if line.startswith('GLOBAL_ASM'):
+                if line.startswith('#pragma GLOBAL_ASM'):
                     line_split =  list(filter(None, line.split('\"')))
                     asm_lines = read_all_lines(line_split[1])
                     for asm_line in asm_lines:

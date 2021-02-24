@@ -23,28 +23,28 @@ const ActorInit En_Baisen_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8690.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8690.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE871C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE871C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE87B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE87B0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE87FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE87FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE887C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE887C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE895C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE895C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE89D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE89D8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8AAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8AAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8D3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/func_80BE8D3C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Baisen_0x80BE84F0/EnBaisen_Draw.asm")

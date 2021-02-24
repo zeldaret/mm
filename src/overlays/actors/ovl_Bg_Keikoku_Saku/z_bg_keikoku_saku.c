@@ -23,16 +23,16 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A5389C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A5389C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A538E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A538E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A53994.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A53994.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Draw.asm")

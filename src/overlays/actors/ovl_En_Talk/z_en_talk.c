@@ -22,12 +22,12 @@ const ActorInit En_Talk_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/func_80BDE058.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/func_80BDE058.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/func_80BDE090.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/func_80BDE090.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Talk_0x80BDDFE0/EnTalk_Update.asm")

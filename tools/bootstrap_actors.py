@@ -2639,4 +2639,4 @@ for actor, overlay in zip(actor_names, overlay_names):
                     func_names.append(file_name)
 
         for name in func_names:
-            f.write("\nGLOBAL_ASM(\"{}\")\n".format(name))
+            f.write("\n#pragma GLOBAL_ASM(\"{}\")\n".format(name))

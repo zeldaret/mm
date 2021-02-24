@@ -23,12 +23,12 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/func_80ABD92C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/func_80ABD92C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Draw.asm")

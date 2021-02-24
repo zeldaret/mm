@@ -23,44 +23,44 @@ const ActorInit En_Syateki_Wf_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A200E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A200E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A201CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A201CC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20284.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20284.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2030C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2030C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20320.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20320.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20378.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20378.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A203DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A203DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20670.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20670.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A206DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A206DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20710.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20710.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2075C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2075C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2079C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A2079C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20800.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20800.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20858.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20858.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A208F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A208F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20CF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20CF4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20D10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/func_80A20D10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Draw.asm")

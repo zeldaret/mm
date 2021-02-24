@@ -23,38 +23,38 @@ const ActorInit Object_Kankyo_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBE80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBE80.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBE8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBE8C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBEB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBEB0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBFB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DBFB0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC038.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC038.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC18C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC18C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC454.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DC454.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCB7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCB7C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCBF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCBF8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCDB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DCDB4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/ObjectKankyo_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DD3C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DD3C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DD970.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DD970.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DDE74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DDE74.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DDE9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Object_Kankyo_0x808DBE80/func_808DDE9C.asm")

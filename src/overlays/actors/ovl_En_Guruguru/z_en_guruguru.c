@@ -23,30 +23,30 @@ const ActorInit En_Guruguru_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6D64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6D64.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6E00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6E00.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6E10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6E10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6F14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC6F14.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC701C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC701C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7068.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7068.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC73F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC73F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7440.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7440.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7520.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC7520.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC77EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/func_80BC77EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Guruguru_0x80BC6BF0/EnGuruguru_Draw.asm")

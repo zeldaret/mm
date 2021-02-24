@@ -23,20 +23,20 @@ const ActorInit Obj_Tree_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A20C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A20C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A220.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A220.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A230.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A230.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A27C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A27C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A348.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/func_80B9A348.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Draw.asm")

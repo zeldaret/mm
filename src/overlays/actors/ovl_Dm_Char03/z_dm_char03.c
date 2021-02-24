@@ -23,30 +23,30 @@ const ActorInit Dm_Char03_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB4A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB4A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB5F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB5F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB644.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB644.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB700.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB700.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB710.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB710.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB838.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB838.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB974.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB974.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB990.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB990.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB9A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AAB9A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/DmChar03_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AABA84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Char03_0x80AAB4A0/func_80AABA84.asm")

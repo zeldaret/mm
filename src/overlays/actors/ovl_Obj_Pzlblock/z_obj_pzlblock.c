@@ -22,34 +22,34 @@ const ActorInit Obj_Pzlblock_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A33E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A33E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3448.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3448.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A34E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A34E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A35EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A35EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A376C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A376C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3A48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3A48.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3A74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3A74.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3BA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3BA4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3BC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3BC0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3D1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3D1C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3D38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3D38.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/ObjPzlblock_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3E58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3E58.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3F0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Pzlblock_0x809A33E0/func_809A3F0C.asm")

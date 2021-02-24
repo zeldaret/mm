@@ -49,7 +49,7 @@ void ViConfig_UpdateVi(u32 arg0) {
     gViConfigUseDefault = arg0;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/viconfig/ViConfig_UpdateVi.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/viconfig/ViConfig_UpdateVi.asm")
 #endif
 
 void ViConfig_UpdateBlack(void) {

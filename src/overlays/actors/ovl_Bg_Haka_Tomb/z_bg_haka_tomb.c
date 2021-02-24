@@ -23,24 +23,24 @@ const ActorInit Bg_Haka_Tomb_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6624.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6624.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6638.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6638.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD66AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD66AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6754.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6754.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6768.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6768.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67BC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Draw.asm")

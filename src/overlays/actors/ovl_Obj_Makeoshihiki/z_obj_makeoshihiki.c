@@ -21,10 +21,10 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/func_80972350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/func_80972350.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/func_809723C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/func_809723C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Update.asm")

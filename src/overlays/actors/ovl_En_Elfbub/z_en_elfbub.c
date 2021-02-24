@@ -23,14 +23,14 @@ const ActorInit En_Elfbub_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/func_80ACDE60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/func_80ACDE60.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/func_80ACE030.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/func_80ACE030.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Draw.asm")
