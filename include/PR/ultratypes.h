@@ -1,32 +1,43 @@
 #ifndef _ULTRATYPES_H_
 #define _ULTRATYPES_H_
 
-typedef unsigned char      u8;
-typedef unsigned short     u16;
-typedef unsigned long      u32;
-typedef unsigned long long u64;
-typedef signed char        s8;
-typedef short              s16;
-typedef long               s32;
-typedef long long          s64;
+typedef signed char            s8;
+typedef unsigned char          u8;
+typedef signed short int       s16;
+typedef unsigned short int     u16;
+typedef signed int             s32;
+typedef unsigned int           u32;
+typedef signed long long int   s64;
+typedef unsigned long long int u64;
 
-typedef volatile unsigned char      vu8;
-typedef volatile unsigned short     vu16;
-typedef volatile unsigned long      vu32;
-typedef volatile unsigned long long vu64;
-typedef volatile signed char        vs8;
-typedef volatile short              vs16;
-typedef volatile long               vs32;
-typedef volatile long long          vs64;
+typedef volatile u8  vu8;
+typedef volatile u16 vu16;
+typedef volatile u32 vu32;
+typedef volatile u64 vu64;
+typedef volatile s8  vs8;
+typedef volatile s16 vs16;
+typedef volatile s32 vs32;
+typedef volatile s64 vs64;
 
 typedef float  f32;
 typedef double f64;
 
+
 typedef long int Mtx_t[4][4];
-typedef union
-{
+typedef union {
     Mtx_t m;
     long long int forc_structure_alignment;
 } Mtx;
+
+typedef float MtxF_t[4][4];
+typedef union {
+    MtxF_t mf;
+    struct {
+        float xx, xy, xz, xw,
+              yx, yy, yz, yw,
+              zx, zy, zz, zw,
+              wx, wy, wz, ww;
+    };
+} MtxF;
 
 #endif
