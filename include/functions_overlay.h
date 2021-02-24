@@ -3910,7 +3910,7 @@ void func_8096A6F4(void); // func_8096A6F4
 void EnJs_Update(void); // func_8096A8A4
 void func_8096A9F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_8096A9F4
 void EnJs_Draw(void); // func_8096AB20
-void func_8096B0A0(void); // func_8096B0A0
+void EnOkarinaEffect_SetupAction(void); // func_8096B0A0
 void EnOkarinaEffect_Destroy(void); // func_8096B0AC
 void EnOkarinaEffect_Init(void); // func_8096B0BC
 void func_8096B104(void); // func_8096B104
