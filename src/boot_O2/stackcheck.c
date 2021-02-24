@@ -97,7 +97,7 @@ s32 StackCheck_GetState(StackEntry* entry) {
     return 0;
 }
 #else
-GLOBAL_ASM("asm/non_matchings/stackcheck/StackCheck_GetState.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/stackcheck/StackCheck_GetState.asm")
 #endif
 
 u32 StackCheck_CheckAll() {

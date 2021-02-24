@@ -22,16 +22,16 @@ const ActorInit Elf_Msg3_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CD10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CD10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CD1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CD1C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CF50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CF50.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CF7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/func_80A2CF7C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg3_0x80A2CD10/ElfMsg3_Update.asm")

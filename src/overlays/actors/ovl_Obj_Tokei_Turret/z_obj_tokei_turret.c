@@ -23,10 +23,10 @@ const ActorInit Obj_Tokei_Turret_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Draw.asm")

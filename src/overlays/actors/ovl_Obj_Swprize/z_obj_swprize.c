@@ -22,28 +22,28 @@ const ActorInit Obj_Swprize_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25360.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25360.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C253D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C253D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25640.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25654.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25654.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25698.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25698.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C256AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C256AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25710.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25710.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C2572C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C2572C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25780.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25780.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25794.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/func_80C25794.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Update.asm")

@@ -22,8 +22,8 @@ const ActorInit Bg_Lbfshot_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Draw.asm")

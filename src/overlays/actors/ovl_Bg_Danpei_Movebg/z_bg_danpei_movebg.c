@@ -22,26 +22,26 @@ const ActorInit Bg_Danpei_Movebg_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6DE0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6EA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6EA8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF705C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF705C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF70FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF70FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF71FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF71FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF72F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF72F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF7354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF7354.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF746C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF746C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF74CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF74CC.asm")

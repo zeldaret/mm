@@ -23,20 +23,20 @@ const ActorInit Obj_Hariko_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66A7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66A7C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66A90.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66AA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66AA0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66AC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66AC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66B78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/func_80B66B78.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Draw.asm")

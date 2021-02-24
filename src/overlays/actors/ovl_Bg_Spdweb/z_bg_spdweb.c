@@ -23,28 +23,28 @@ const ActorInit Bg_Spdweb_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE068.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE068.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE15C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE15C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE1D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE1D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE234.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE234.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE4C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE4C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE830.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CE830.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEBC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEBC0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEE74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEE74.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEEAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/func_809CEEAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Draw.asm")

@@ -23,16 +23,16 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD2B70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD2B70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3054.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3054.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3164.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3164.asm")

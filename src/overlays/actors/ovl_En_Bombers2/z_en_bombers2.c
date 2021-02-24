@@ -23,26 +23,26 @@ const ActorInit En_Bombers2_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04AAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04AAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04B40.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04B40.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04BA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04BA0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04D00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04D00.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04D8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C04D8C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C050B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C050B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C0520C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C0520C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C056D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/func_80C056D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bombers2_0x80C04930/EnBombers2_Draw.asm")

@@ -22,28 +22,28 @@ const ActorInit Dm_Tag_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22350.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22400.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22400.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C2247C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C2247C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C224D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C224D8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C227E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C227E8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C22880.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C2291C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C2291C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/func_80C229FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Tag_0x80C22350/DmTag_Update.asm")

@@ -23,14 +23,14 @@ const ActorInit Bg_F40_Flift_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/func_808D75F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/func_808D75F0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/func_808D7714.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/func_808D7714.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Flift_0x808D7550/BgF40Flift_Draw.asm")

@@ -23,28 +23,28 @@ const ActorInit En_M_Thunder_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B53C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B53C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5890.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5890.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B58CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B58CC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5984.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5984.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5EEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5EEC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5F68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B5F68.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B60D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B60D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B6310.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B6310.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B65BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/func_808B65BC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Thunder_0x808B53C0/EnMThunder_Draw.asm")

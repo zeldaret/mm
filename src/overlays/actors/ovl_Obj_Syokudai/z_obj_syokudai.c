@@ -23,10 +23,10 @@ const ActorInit Obj_Syokudai_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Draw.asm")

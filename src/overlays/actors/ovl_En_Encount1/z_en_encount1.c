@@ -21,8 +21,8 @@ const ActorInit En_Encount1_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/EnEncount1_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/EnEncount1_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/func_808E0954.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/func_808E0954.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/EnEncount1_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Encount1_0x808E0830/EnEncount1_Update.asm")

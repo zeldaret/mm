@@ -23,26 +23,26 @@ const ActorInit Bg_Last_Bwall_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18240.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18240.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C184EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C184EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C187E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C187E4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C187F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C187F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C1886C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C1886C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18884.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18884.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C188C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C188C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18928.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/func_80C18928.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Last_Bwall_0x80C18240/BgLastBwall_Draw.asm")

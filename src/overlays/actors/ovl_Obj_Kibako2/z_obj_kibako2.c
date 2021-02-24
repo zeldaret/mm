@@ -23,26 +23,26 @@ const ActorInit Obj_Kibako2_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E5C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E5C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E62C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E62C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E8A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E8A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E900.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E900.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E9C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098E9C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098EB78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098EB78.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098EC68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098EC68.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098ED20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/func_8098ED20.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kibako2_0x8098E5C0/ObjKibako2_Draw.asm")

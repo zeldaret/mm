@@ -23,24 +23,24 @@ const ActorInit Obj_Ghaka_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C260.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C260.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C29C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C29C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C2B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C2B0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C2C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C2C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C39C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C39C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C4E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C4E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Draw.asm")

@@ -23,20 +23,20 @@ const ActorInit Obj_Lupygamelift_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0394.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0394.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04BC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04D8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0514.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0514.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0530.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0530.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Draw.asm")

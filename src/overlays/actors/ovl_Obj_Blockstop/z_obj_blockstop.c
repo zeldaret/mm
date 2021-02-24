@@ -21,10 +21,10 @@ const ActorInit Obj_Blockstop_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/func_809466F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/func_809466F0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/func_809467E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/func_809467E8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Update.asm")

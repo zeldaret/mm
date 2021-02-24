@@ -23,32 +23,32 @@ const ActorInit En_Zo_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E790.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E790.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E858.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E858.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E96C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E96C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E9E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099E9E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EA60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EA60.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EBD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EBD8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EC50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EC50.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099ED4C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099ED4C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EE24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EE24.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EFF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099EFF4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099F15C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/func_8099F15C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Zo_0x8099E790/EnZo_Draw.asm")

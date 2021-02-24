@@ -23,32 +23,32 @@ const ActorInit En_Fu_Kago_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF8B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF8B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF994.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF994.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACFA78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACFA78.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACFDAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80ACFDAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0028.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0028.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0274.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0274.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0288.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0288.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0340.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/func_80AD0340.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Draw.asm")

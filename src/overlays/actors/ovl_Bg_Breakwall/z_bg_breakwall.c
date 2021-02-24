@@ -21,52 +21,52 @@ const ActorInit Bg_Breakwall_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7360.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7360.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B736C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B736C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7380.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7380.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B73C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B73C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B73FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B73FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7410.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7410.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7460.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7460.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B74A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B74A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B74D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B74D8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B751C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B751C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/BgBreakwall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/BgBreakwall_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B767C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B767C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B76CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B76CC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B77D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B77D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B77E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B77E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B782C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B782C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B78A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B78A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B78DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B78DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7914.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7914.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7A10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7A10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/BgBreakwall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/BgBreakwall_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7A90.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7B54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7B54.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7D34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7D34.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7FE4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Breakwall_0x808B7360/func_808B7FE4.asm")

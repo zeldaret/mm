@@ -23,32 +23,32 @@ const ActorInit Boss_06_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2120.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2120.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2140.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2140.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F23CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F23CC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F24A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F24A8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F24C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F24C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2B64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2B64.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2C44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2C44.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2E14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2E14.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2E34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2E34.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2ED0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2ED0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2EE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/func_809F2EE8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Boss_06_0x809F2120/Boss06_Draw.asm")

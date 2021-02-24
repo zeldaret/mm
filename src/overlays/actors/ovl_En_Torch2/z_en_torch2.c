@@ -23,14 +23,14 @@ const ActorInit En_Torch2_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/func_808A3428.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/func_808A3428.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/func_808A3458.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/func_808A3458.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Torch2_0x808A31B0/EnTorch2_Draw.asm")

@@ -23,20 +23,20 @@ const ActorInit Obj_Takaraya_Wall_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9240.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9240.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD92FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD92FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9358.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9358.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9488.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9488.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9B04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9B04.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Draw.asm")

@@ -23,12 +23,12 @@ const ActorInit Bg_Fu_Mizu_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/func_80ADABA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/func_80ADABA4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Fu_Mizu_0x80ADAAF0/BgFuMizu_Draw.asm")

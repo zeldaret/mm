@@ -21,12 +21,12 @@ const ActorInit Obj_Demo_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/ObjDemo_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/ObjDemo_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983634.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983634.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983678.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983678.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983704.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/func_80983704.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/ObjDemo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Demo_0x80983520/ObjDemo_Update.asm")

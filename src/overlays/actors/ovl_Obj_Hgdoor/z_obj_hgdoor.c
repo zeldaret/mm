@@ -23,34 +23,34 @@ const ActorInit Obj_Hgdoor_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4090.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4090.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD40D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD40D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD41E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD41E8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD41FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD41FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD42AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD42AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD42C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD42C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD433C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD433C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4358.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4358.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4460.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4460.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4478.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4478.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD44D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD44D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4500.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/func_80BD4500.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hgdoor_0x80BD4090/ObjHgdoor_Draw.asm")

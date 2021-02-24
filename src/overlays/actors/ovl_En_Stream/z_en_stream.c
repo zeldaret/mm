@@ -23,18 +23,18 @@ const ActorInit En_Stream_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_80965650.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_80965650.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_809656D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_809656D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_809657F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_809657F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_8096597C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/func_8096597C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stream_0x80965650/EnStream_Draw.asm")
