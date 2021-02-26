@@ -12,7 +12,7 @@ void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Az_InitVars = {
     ACTOR_EN_AZ,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AZ,
     sizeof(EnAz),

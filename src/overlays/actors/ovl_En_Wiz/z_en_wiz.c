@@ -12,7 +12,7 @@ void EnWiz_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_WIZ,
     sizeof(EnWiz),

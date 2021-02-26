@@ -12,7 +12,7 @@ void ObjTokeiTobira_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_TOKEI_TOBIRA,
     sizeof(ObjTokeiTobira),

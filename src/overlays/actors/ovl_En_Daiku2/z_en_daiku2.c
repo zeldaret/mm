@@ -12,7 +12,7 @@ void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DAIKU,
     sizeof(EnDaiku2),

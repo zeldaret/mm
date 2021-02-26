@@ -12,7 +12,7 @@ void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_SPIDERTENT,
     sizeof(ObjSpidertent),

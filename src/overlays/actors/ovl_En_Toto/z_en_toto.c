@@ -12,7 +12,7 @@ void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Toto_InitVars = {
     ACTOR_EN_TOTO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_ZM,
     sizeof(EnToto),

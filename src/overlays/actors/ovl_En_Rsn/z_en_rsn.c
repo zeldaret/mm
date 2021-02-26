@@ -22,7 +22,7 @@ typedef struct {
 
 const ActorInit En_Rsn_InitVars = {
     ACTOR_EN_RSN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_RS,
     sizeof(EnRsn),
@@ -68,7 +68,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.topPosRot.pos);
+    func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
 
 s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -87,7 +87,7 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp18 = D_80C26028;
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.topPosRot);
+        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus);
     }
 }
 

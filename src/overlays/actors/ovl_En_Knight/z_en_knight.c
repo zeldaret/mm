@@ -12,7 +12,7 @@ void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Knight_InitVars = {
     ACTOR_EN_KNIGHT,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_KNIGHT,
     sizeof(EnKnight),

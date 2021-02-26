@@ -12,7 +12,7 @@ void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MA1,
     sizeof(EnMaYts),

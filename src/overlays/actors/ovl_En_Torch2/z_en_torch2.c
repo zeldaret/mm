@@ -12,7 +12,7 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTorch2),

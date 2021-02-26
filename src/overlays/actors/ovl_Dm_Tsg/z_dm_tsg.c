@@ -12,7 +12,7 @@ void DmTsg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Tsg_InitVars = {
     ACTOR_DM_TSG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_OPEN_OBJ,
     sizeof(DmTsg),

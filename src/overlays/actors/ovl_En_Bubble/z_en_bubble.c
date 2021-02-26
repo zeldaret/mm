@@ -12,7 +12,7 @@ void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BUBBLE,
     sizeof(EnBubble),

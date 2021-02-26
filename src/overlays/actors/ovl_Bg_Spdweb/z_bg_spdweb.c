@@ -12,7 +12,7 @@ void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_SPDWEB,
     sizeof(BgSpdweb),

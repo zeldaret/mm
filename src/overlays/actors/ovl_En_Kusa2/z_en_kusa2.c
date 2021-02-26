@@ -12,7 +12,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(EnKusa2),

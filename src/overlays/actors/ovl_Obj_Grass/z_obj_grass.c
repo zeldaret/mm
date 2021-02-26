@@ -12,7 +12,7 @@ void ObjGrass_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Grass_InitVars = {
     ACTOR_OBJ_GRASS,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrass),

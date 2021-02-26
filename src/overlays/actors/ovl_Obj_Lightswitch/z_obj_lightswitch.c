@@ -12,7 +12,7 @@ void ObjLightswitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     OBJECT_LIGHTSWITCH,
     sizeof(ObjLightswitch),

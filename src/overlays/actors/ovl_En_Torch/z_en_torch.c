@@ -8,7 +8,7 @@ void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Torch_InitVars = {
     ACTOR_EN_TORCH,    
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTorch),
@@ -24,8 +24,8 @@ void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch* this = THIS;
     s8 returnData = gSaveContext.extra.unk87;
 
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.currPosRot.pos.x,
-                this->actor.currPosRot.pos.y, this->actor.currPosRot.pos.z, 0, this->actor.shape.rot.y, 0,
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.world.pos.x,
+                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                 (sChestContents[(returnData >> 0x5) & 0x7] << 0x5) | 0x5000 | (returnData & 0x1F));
     Actor_MarkForDeath(&this->actor);
 }

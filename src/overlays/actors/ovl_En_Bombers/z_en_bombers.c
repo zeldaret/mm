@@ -12,7 +12,7 @@ void EnBombers_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bombers_InitVars = {
     ACTOR_EN_BOMBERS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_CS,
     sizeof(EnBombers),

@@ -12,7 +12,7 @@ void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_JG,
     sizeof(ObjJgGakki),

@@ -11,7 +11,7 @@ void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Zl1_InitVars = {
     ACTOR_EN_ZL1,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_ZL1,
     sizeof(EnZl1),

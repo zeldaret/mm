@@ -11,7 +11,7 @@ void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjPurify),

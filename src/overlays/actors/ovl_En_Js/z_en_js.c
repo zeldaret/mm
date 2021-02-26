@@ -12,7 +12,7 @@ void EnJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OB,
     sizeof(EnJs),

@@ -12,7 +12,7 @@ void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_CROW,
     sizeof(EnSyatekiCrow),

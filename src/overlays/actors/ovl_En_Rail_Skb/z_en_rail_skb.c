@@ -12,7 +12,7 @@ void EnRailSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_SKB,
     sizeof(EnRailSkb),

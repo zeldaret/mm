@@ -12,7 +12,7 @@ void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnSuttari),

@@ -12,7 +12,7 @@ void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DHOUSE,
     sizeof(ObjDhouse),

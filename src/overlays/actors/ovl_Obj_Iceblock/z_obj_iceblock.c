@@ -12,7 +12,7 @@ void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_ICE_BLOCK,
     sizeof(ObjIceblock),

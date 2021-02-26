@@ -12,7 +12,7 @@ void EnHiddenNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HINTNUTS,
     sizeof(EnHiddenNuts),

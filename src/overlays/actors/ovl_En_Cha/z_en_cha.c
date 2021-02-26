@@ -12,7 +12,7 @@ void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Cha_InitVars = {
     ACTOR_EN_CHA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_CHA,
     sizeof(EnCha),

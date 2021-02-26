@@ -12,7 +12,7 @@ void EnDt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dt_InitVars = {
     ACTOR_EN_DT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DT,
     sizeof(EnDt),

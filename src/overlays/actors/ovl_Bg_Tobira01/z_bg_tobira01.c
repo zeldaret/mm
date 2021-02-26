@@ -12,7 +12,7 @@ void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_SPOT11_OBJ,
     sizeof(BgTobira01),

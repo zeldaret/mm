@@ -12,7 +12,7 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HARFGIBUD,
     sizeof(EnHg),

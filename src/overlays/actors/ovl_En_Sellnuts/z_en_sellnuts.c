@@ -12,7 +12,7 @@ void EnSellnuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sellnuts_InitVars = {
     ACTOR_EN_SELLNUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNT,
     sizeof(EnSellnuts),

@@ -11,7 +11,7 @@ void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMttag),

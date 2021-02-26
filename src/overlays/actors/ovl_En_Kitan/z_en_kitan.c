@@ -11,7 +11,7 @@ void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_KITAN,
     sizeof(EnKitan),

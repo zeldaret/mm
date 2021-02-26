@@ -11,7 +11,7 @@ void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Fu_Kaiten_InitVars = {
     ACTOR_BG_FU_KAITEN,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FU_KAITEN,
     sizeof(BgFuKaiten),
@@ -53,9 +53,9 @@ void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
 
 void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
-    this->bg.actor.currPosRot.pos.y = this->bg.actor.initPosRot.pos.y + this->elevation + this->bouceHeight;
+    this->bg.actor.world.pos.y = this->bg.actor.home.pos.y + this->elevation + this->bouceHeight;
 
-    this->bg.actor.currPosRot.pos.y -= this->bouceHeight * Math_Coss(this->bounce);
+    this->bg.actor.world.pos.y -= this->bouceHeight * Math_Coss(this->bounce);
 }
 
 void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {

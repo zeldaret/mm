@@ -12,7 +12,7 @@ void ObjChikuwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_D_LIFT,
     sizeof(ObjChikuwa),

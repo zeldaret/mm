@@ -12,7 +12,7 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Raillift_InitVars = {
     ACTOR_OBJ_RAILLIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjRaillift),

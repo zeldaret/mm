@@ -12,7 +12,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_WATER_EFFECT,
     sizeof(EnWaterEffect),

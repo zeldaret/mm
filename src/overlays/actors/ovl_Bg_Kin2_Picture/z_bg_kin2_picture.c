@@ -12,7 +12,7 @@ void BgKin2Picture_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Picture),

@@ -10,7 +10,7 @@ void ObjWturn_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjWturn),

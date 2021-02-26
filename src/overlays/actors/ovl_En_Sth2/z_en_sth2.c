@@ -11,7 +11,7 @@ void EnSth2_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSth2),

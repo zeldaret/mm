@@ -12,7 +12,7 @@ void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_ROTLIFT,
     sizeof(ObjRotlift),

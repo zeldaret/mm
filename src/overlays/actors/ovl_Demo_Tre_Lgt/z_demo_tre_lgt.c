@@ -12,7 +12,7 @@ void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Tre_Lgt_InitVars = {
     ACTOR_DEMO_TRE_LGT,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BOX,
     sizeof(DemoTreLgt),

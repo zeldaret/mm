@@ -12,7 +12,7 @@ void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNT,
     sizeof(EnScopenuts),

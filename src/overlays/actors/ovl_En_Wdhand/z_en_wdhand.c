@@ -12,7 +12,7 @@ void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_WDHAND,
     sizeof(EnWdhand),

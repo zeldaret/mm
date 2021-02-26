@@ -11,7 +11,7 @@ void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(BgIkanaBlock),

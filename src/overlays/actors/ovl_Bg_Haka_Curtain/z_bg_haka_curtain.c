@@ -21,7 +21,7 @@ void func_80B6DE80(BgHakaCurtain* this);
 
 const ActorInit Bg_Haka_Curtain_InitVars = {
     ACTOR_BG_HAKA_CURTAIN,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaCurtain),
@@ -32,9 +32,9 @@ const ActorInit Bg_Haka_Curtain_InitVars = {
 };
 
 static InitChainEntry D_80B6DFA0[] = {
-    ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 700, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 600, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -96,13 +96,13 @@ void func_80B6DD80(BgHakaCurtain* this) {
 }
 
 void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
-    if (this->dyna.actor.currPosRot.pos.y < this->dyna.actor.initPosRot.pos.y + 150.0f - 30.0f) {
+    if (this->dyna.actor.world.pos.y < this->dyna.actor.home.pos.y + 150.0f - 30.0f) {
         Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 1.6f, 0.12f);
     } else {
         Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 0.8f, 0.05f);
     }
-    this->dyna.actor.currPosRot.pos.y += this->dyna.actor.velocity.y;
-    if (this->dyna.actor.initPosRot.pos.y + 150.0f < this->dyna.actor.currPosRot.pos.y) {
+    this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
+    if (this->dyna.actor.home.pos.y + 150.0f < this->dyna.actor.world.pos.y) {
         func_80B6DE80(this);
         return;
     }
@@ -111,7 +111,7 @@ void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
 
 void func_80B6DE80(BgHakaCurtain* this) {
     this->actionFunc = func_80B6DEA8;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y + 150.0f;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 150.0f;
 }
 
 void func_80B6DEA8(BgHakaCurtain* this, GlobalContext* globalCtx) {

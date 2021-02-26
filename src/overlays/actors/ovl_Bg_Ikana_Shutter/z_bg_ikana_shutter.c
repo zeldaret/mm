@@ -12,7 +12,7 @@ void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaShutter),

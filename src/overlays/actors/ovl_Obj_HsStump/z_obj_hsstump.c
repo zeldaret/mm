@@ -12,7 +12,7 @@ void ObjHsStump_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_HsStump_InitVars = {
     ACTOR_OBJ_HSSTUMP,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HSSTUMP,
     sizeof(ObjHsStump),

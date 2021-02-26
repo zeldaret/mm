@@ -12,7 +12,7 @@ void DmHina_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BSMASK,
     sizeof(DmHina),

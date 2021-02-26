@@ -12,7 +12,7 @@ void ObjGhaka_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_GHAKA,
     sizeof(ObjGhaka),

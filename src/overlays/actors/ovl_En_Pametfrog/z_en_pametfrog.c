@@ -12,7 +12,7 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Pametfrog_InitVars = {
     ACTOR_EN_PAMETFROG,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnPametfrog),

@@ -1502,7 +1502,7 @@ extern ActorInit En_Firefly_InitVars; // En_Firefly_InitVars
 extern ColSphereInit enFireflyCollisionInit; // D_8087B470
 extern UNK_TYPE1 D_8087B498; // D_8087B498
 extern UNK_TYPE1 D_8087B49C; // D_8087B49C
-extern ActorDamageChart enFireflyDamageChart; // D_8087B4A4
+extern DamageTable enFireflyDamageTable; // D_8087B4A4
 extern InitChainEntry enFireflyInitVars[4]; // D_8087B4C4
 extern UNK_TYPE1 D_8087B4D4; // D_8087B4D4
 extern UNK_TYPE1 D_8087B4D8; // D_8087B4D8
@@ -7639,7 +7639,7 @@ extern ActorInit Obj_Bell_InitVars; // Obj_Bell_InitVars
 extern UNK_TYPE1 D_80A35E90; // D_80A35E90
 extern UNK_TYPE1 D_80A35EBC; // D_80A35EBC
 extern UNK_TYPE1 D_80A35EE8; // D_80A35EE8
-extern ActorDamageChart D_80A35EF4; // D_80A35EF4
+extern DamageTable D_80A35EF4; // D_80A35EF4
 extern f32 D_80A35F20; // D_80A35F20
 extern f32 D_80A35F24; // D_80A35F24
 extern f32 D_80A35F28; // D_80A35F28

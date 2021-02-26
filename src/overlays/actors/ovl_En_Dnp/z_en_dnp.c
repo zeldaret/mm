@@ -12,7 +12,7 @@ void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNP,
     sizeof(EnDnp),

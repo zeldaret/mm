@@ -11,7 +11,7 @@ void EffChange_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EffChange),

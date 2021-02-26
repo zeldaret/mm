@@ -12,7 +12,7 @@ void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnGinkoMan),

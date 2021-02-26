@@ -12,7 +12,7 @@ void ObjLupygamelift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Lupygamelift_InitVars = {
     ACTOR_OBJ_LUPYGAMELIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjLupygamelift),

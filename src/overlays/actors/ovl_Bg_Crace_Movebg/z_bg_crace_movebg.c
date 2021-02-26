@@ -12,7 +12,7 @@ void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_CRACE_OBJECT,
     sizeof(BgCraceMovebg),

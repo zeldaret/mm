@@ -11,7 +11,7 @@ void EnRiverSound_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_River_Sound_InitVars = {
     ACTOR_EN_RIVER_SOUND,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnRiverSound),

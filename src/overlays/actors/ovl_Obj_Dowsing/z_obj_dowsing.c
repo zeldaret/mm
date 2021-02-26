@@ -11,7 +11,7 @@ void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjDowsing),

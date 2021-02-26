@@ -12,7 +12,7 @@ void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_AM,
     sizeof(ObjArmos),

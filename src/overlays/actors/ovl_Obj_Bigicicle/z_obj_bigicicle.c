@@ -12,7 +12,7 @@ void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BIGICICLE,
     sizeof(ObjBigicicle),

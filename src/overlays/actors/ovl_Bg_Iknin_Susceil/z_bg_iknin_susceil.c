@@ -12,7 +12,7 @@ void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Iknin_Susceil_InitVars = {
     ACTOR_BG_IKNIN_SUSCEIL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_IKNINSIDE_OBJ,
     sizeof(BgIkninSusceil),

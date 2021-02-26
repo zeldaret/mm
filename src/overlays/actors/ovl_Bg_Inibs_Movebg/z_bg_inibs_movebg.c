@@ -11,7 +11,7 @@ void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Inibs_Movebg_InitVars = {
     ACTOR_BG_INIBS_MOVEBG,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_INIBS_OBJECT,
     sizeof(BgInibsMovebg),

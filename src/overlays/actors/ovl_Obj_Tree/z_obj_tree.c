@@ -12,7 +12,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_TREE,
     sizeof(ObjTree),

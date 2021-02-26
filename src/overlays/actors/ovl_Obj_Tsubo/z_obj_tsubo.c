@@ -11,7 +11,7 @@ void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjTsubo),

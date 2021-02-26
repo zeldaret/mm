@@ -12,7 +12,7 @@ void ObjToudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Toudai_InitVars = {
     ACTOR_OBJ_TOUDAI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjToudai),

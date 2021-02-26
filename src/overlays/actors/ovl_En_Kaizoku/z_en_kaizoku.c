@@ -11,7 +11,7 @@ void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kaizoku_InitVars = {
     ACTOR_EN_KAIZOKU,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_KZ,
     sizeof(EnKaizoku),

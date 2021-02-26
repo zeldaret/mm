@@ -11,7 +11,7 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest5),

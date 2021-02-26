@@ -12,7 +12,7 @@ void BgF40Switch_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_F40_Switch_InitVars = {
     ACTOR_BG_F40_SWITCH,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     OBJECT_F40_SWITCH,
     sizeof(BgF40Switch),

@@ -12,7 +12,7 @@ void EnGe3_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_GELDB,
     sizeof(EnGe3),

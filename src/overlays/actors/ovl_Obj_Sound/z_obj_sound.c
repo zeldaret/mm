@@ -11,7 +11,7 @@ void ObjSound_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Sound_InitVars = {
     ACTOR_OBJ_SOUND,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjSound),

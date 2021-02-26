@@ -12,7 +12,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_GIANT,
     sizeof(EnGiant),

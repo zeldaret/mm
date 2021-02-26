@@ -12,7 +12,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowLight),

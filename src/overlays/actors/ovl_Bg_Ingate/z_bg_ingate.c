@@ -12,7 +12,7 @@ void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_SICHITAI_OBJ,
     sizeof(BgIngate),

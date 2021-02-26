@@ -12,7 +12,7 @@ void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNK,
     sizeof(EnLookNuts),

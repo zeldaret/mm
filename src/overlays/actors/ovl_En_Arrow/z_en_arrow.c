@@ -12,7 +12,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnArrow),

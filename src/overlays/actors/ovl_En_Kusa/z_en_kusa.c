@@ -11,7 +11,7 @@ void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kusa_InitVars = {
     ACTOR_EN_KUSA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnKusa),

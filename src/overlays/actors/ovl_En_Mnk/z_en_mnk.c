@@ -12,7 +12,7 @@ void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MNK,
     sizeof(EnMnk),

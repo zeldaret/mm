@@ -12,7 +12,7 @@ void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_SYOTEN,
     sizeof(DemoSyoten),

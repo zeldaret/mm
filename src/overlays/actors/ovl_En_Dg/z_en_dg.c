@@ -12,7 +12,7 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DOG,
     sizeof(EnDg),

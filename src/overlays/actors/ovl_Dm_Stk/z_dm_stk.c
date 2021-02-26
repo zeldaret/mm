@@ -12,7 +12,7 @@ void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_STK,
     sizeof(DmStk),

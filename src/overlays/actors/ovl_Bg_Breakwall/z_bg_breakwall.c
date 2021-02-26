@@ -10,7 +10,7 @@ void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(BgBreakwall),

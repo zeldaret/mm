@@ -11,7 +11,7 @@ void EnJso_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Jso_InitVars = {
     ACTOR_EN_JSO,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_JSO,
     sizeof(EnJso),

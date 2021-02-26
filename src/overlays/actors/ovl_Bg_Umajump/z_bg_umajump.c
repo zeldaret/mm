@@ -11,7 +11,7 @@ void BgUmajump_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(BgUmajump),

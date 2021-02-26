@@ -12,7 +12,7 @@ void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_COMB,
     sizeof(ObjComb),

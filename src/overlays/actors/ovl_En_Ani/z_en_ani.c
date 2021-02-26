@@ -12,7 +12,7 @@ void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_ANI,
     sizeof(EnAni),

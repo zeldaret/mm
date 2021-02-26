@@ -12,7 +12,7 @@ void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OWL,
     sizeof(EnOwl),

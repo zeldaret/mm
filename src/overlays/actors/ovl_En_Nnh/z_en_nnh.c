@@ -16,7 +16,7 @@ void func_80C088B8(EnNnh* this, GlobalContext* globalCtx);
 
 const ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_NNH,
     sizeof(EnNnh),
@@ -41,9 +41,9 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     Collision_InitCylinderDefault(globalCtx, &this->collider);
     Collision_InitCylinderWithData(globalCtx, &this->collider, &this->actor, &D_80C08A00);
-    this->actor.unk1F = 1;
-    this->actor.topPosRot.pos = this->actor.currPosRot.pos;
-    this->actor.topPosRot.pos.y += 30.0f;
+    this->actor.targetMode = 1;
+    this->actor.focus.pos = this->actor.world.pos;
+    this->actor.focus.pos.y += 30.0f;
     func_80C08828(this);
 }
 

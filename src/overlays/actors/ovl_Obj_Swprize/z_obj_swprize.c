@@ -11,7 +11,7 @@ void ObjSwprize_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjSwprize),

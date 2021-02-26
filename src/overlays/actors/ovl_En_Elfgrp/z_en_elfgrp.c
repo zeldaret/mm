@@ -11,7 +11,7 @@ void EnElfgrp_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnElfgrp),

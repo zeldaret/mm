@@ -12,7 +12,7 @@ void ObjDriftice_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DRIFTICE,
     sizeof(ObjDriftice),

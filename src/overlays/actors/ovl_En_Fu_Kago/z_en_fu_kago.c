@@ -12,7 +12,7 @@ void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FU_MATO,
     sizeof(EnFuKago),

@@ -12,7 +12,7 @@ void EnGrasshopper_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Grasshopper_InitVars = {
     ACTOR_EN_GRASSHOPPER,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_GRASSHOPPER,
     sizeof(EnGrasshopper),

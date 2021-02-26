@@ -12,7 +12,7 @@ void EnPrz_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_PR,
     sizeof(EnPrz),

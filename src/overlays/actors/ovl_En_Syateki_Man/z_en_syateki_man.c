@@ -12,7 +12,7 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SHN,
     sizeof(EnSyatekiMan),

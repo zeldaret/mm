@@ -12,7 +12,7 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_CS,
     sizeof(EnBomjima),

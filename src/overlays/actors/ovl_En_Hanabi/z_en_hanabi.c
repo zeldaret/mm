@@ -11,7 +11,7 @@ void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHanabi),

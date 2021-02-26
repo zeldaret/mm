@@ -12,7 +12,7 @@ void EnFuMato_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fu_Mato_InitVars = {
     ACTOR_EN_FU_MATO,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FU_MATO,
     sizeof(EnFuMato),

@@ -12,7 +12,7 @@ void BgLadder_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_LADDER,
     sizeof(BgLadder),
