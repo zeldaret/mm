@@ -219,7 +219,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         }
     } else {
         BgPolygon* poly;
-        u32 dynaPolyID;
+        u32 bgId;
         Vec3f sp78;
         Vec3f prevFrameDiff;
         Vec3f sp60;
@@ -231,9 +231,9 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
         sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
-        if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0 &&
-            (func_800B90AC(globalCtx, &this->actor, poly, dynaPolyID, &sp78) == 0 ||
-             func_800C576C(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &dynaPolyID) != 0)) {
+        if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &bgId) != 0 &&
+            (func_800B90AC(globalCtx, &this->actor, poly, bgId, &sp78) == 0 ||
+             func_800C576C(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &bgId) != 0)) {
             f32 sp5C = poly->normal.x * (1 / SHT_MAX);
             f32 sp58 = poly->normal.z * (1 / SHT_MAX);
 
@@ -241,11 +241,11 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             this->actor.world.pos.x += 10.0f * sp5C;
             this->actor.world.pos.z += 10.0f * sp58;
             this->timer = 1;
-            if (func_800C9CEC(&globalCtx->colCtx, poly, dynaPolyID)) {
+            if (func_800C9CEC(&globalCtx->colCtx, poly, bgId)) {
                 {
                     DynaPolyActor* dynaPolyActor;
-                    if (dynaPolyID != 0x32 &&
-                        (dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, dynaPolyID)) != NULL) {
+                    if (bgId != 0x32 &&
+                        (dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bgId)) != NULL) {
                         ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                     }
                 }

@@ -42,7 +42,7 @@ void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {
