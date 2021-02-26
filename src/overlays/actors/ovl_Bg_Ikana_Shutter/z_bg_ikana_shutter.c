@@ -9,7 +9,25 @@ void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80BD5828(BgIkanaShutter* this);
+void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5878(BgIkanaShutter* this);
+void func_80BD5894(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD58F0(BgIkanaShutter* this);
+void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD599C(BgIkanaShutter* this);
+void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD59F8(BgIkanaShutter* this);
+void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5AE8(BgIkanaShutter* this);
+void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5B44(BgIkanaShutter* this);
+void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5BC4(BgIkanaShutter* this);
+void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx);
+void func_80BD5C64(BgIkanaShutter* this);
+void func_80BD5C8C(BgIkanaShutter* this, GlobalContext* globalCtx);
+
 const ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
     ACTORTYPE_SWITCH,
@@ -21,16 +39,16 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
     (ActorFunc)BgIkanaShutter_Update,
     (ActorFunc)BgIkanaShutter_Draw
 };
-*/
 
 static InitChainEntry D_80BD5D10[] = {
     ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 700, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 600, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+    ICHAIN_F32(unk100, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk104, 200, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 50, ICHAIN_STOP),
 };
 
 extern BgMeshHeader D_06000F28;
+extern UNK_TYPE D_06000CE8;
 
 s32 func_80BD5690(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
@@ -65,42 +83,127 @@ void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
 }
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5828.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5844.asm")
+void func_80BD5828(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5844;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5878.asm")
+void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    if (func_80BD5690(this, globalCtx)) {
+        func_80BD5878(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5894.asm")
+void func_80BD5878(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5894;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD58F0.asm")
+void func_80BD5894(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        func_80BD58F0(this);
+        return;
+    }
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5910.asm")
+void func_80BD58F0(BgIkanaShutter* this) {
+    this->dyna.actor.velocity.y = 0.6f;
+    this->actionFunc = func_80BD5910;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD599C.asm")
+void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
+    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.currPosRot.pos.y, this->dyna.actor.initPosRot.pos.y + 220.0f, 0.5f, this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
+        func_80BD599C(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD59C4.asm")
+void func_80BD599C(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD59C4;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y + 220.0f;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD59F8.asm")
+void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    if (func_80BD5690(this, globalCtx) == 0) {
+        func_80BD59F8(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5A18.asm")
+void func_80BD59F8(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5A18;
+    this->dyna.actor.velocity.y = -23.0f;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5AE8.asm")
+void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    s16 temp_v0;
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5B04.asm")
+    this->dyna.actor.velocity.y += -5.0f;
+    this->dyna.actor.velocity.y *= 0x3F7A5E35;
+    this->dyna.actor.currPosRot.pos.y += this->dyna.actor.velocity.y;
+    if (this->dyna.actor.currPosRot.pos.y <= this->dyna.actor.initPosRot.pos.y) {
+        temp_v0 = Quake_Add(ACTIVE_CAM, 3U);
+        Quake_SetSpeed(temp_v0, 0x5420);
+        Quake_SetQuakeValues(temp_v0, 4, 0, 0, 0);
+        Quake_SetCountdown(temp_v0, 0xC);
+        func_80BD5828(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5B44.asm")
+void func_80BD5AE8(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5B04;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5B60.asm")
+void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    if (Actor_GetRoomClearedTemp(globalCtx, this->dyna.actor.room)) {
+        func_80BD5B44(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5BC4.asm")
+void func_80BD5B44(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5B60;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5BD8.asm")
+void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        Actor_SetRoomCleared(globalCtx, this->dyna.actor.room);
+        func_80BD5BC4(this);
+        return;
+    }
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5C64.asm")
+void func_80BD5BC4(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5BD8;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/func_80BD5C8C.asm")
+void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
+    Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
+    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.currPosRot.pos.y, this->dyna.actor.initPosRot.pos.y + -220.0f, 0.5f, this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
+        func_80BD5C64(this);
+    }
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/BgIkanaShutter_Update.asm")
+void func_80BD5C64(BgIkanaShutter* this) {
+    this->actionFunc = func_80BD5C8C;
+    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y + -220.0f;
+}
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Shutter_0x80BD5690/BgIkanaShutter_Draw.asm")
+void func_80BD5C8C(BgIkanaShutter* this, GlobalContext* globalCtx) {
+}
+
+void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
+    BgIkanaShutter* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
+
+void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, &D_06000CE8);
+}

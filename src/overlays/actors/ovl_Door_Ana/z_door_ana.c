@@ -23,18 +23,18 @@ const ActorInit Door_Ana_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E01A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E01A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E02A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E02A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E03B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E03B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E05C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/func_808E05C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Ana_0x808E01A0/DoorAna_Draw.asm")

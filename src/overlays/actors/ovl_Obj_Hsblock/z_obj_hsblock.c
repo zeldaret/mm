@@ -23,24 +23,24 @@ const ActorInit Obj_Hsblock_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093DEA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093DEA0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093DEAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093DEAC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E03C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E03C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E05C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E05C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E0A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E0A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E0E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E0E8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E10C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/func_8093E10C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hsblock_0x8093DEA0/ObjHsblock_Draw.asm")

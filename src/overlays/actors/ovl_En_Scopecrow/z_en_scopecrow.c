@@ -23,26 +23,26 @@ const ActorInit En_Scopecrow_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD000.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD000.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD09C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD09C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD1AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD1AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD2BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD2BC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD334.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD334.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD4D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD4D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD590.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/func_80BCD640.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Draw.asm")

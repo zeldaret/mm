@@ -23,18 +23,18 @@ const ActorInit Obj_Boyo_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5DC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5DC0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5DE0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5E14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5E14.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5E24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/func_809A5E24.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Draw.asm")

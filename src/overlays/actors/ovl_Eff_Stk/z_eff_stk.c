@@ -23,12 +23,12 @@ const ActorInit Eff_Stk_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/func_80BF0DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/func_80BF0DE0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Stk_0x80BF0D90/EffStk_Draw.asm")

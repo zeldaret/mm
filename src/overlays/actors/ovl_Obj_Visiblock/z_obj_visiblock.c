@@ -22,8 +22,8 @@ const ActorInit Obj_Visiblock_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Draw.asm")

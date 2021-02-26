@@ -23,46 +23,46 @@ const ActorInit En_Syateki_Dekunuts_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BE54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BE54.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BF18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BF18.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BFC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2BFC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C0F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C0F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C150.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C150.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C168.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C168.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C1AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C1AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C208.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C208.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C27C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C27C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C2E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C2E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C33C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C33C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C3AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C3AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C3F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C3F0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C478.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C478.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C48C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C48C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C4D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C4D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C5DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C5DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C8A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/func_80A2C8A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Dekunuts_0x80A2BC00/EnSyatekiDekunuts_Draw.asm")

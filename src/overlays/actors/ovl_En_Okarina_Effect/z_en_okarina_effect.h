@@ -5,9 +5,13 @@
 
 struct EnOkarinaEffect;
 
+typedef void (*EnOkarinaEffectActionFunc)(struct ArmsHook*, GlobalContext*);
+
 typedef struct EnOkarinaEffect {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x8];
+    /* 0x144 */ u16 unk144;
+    /* 0x146 */ u16 unk146;
+    /* 0x148 */ EnOkarinaEffectActionFunc actionFunc;
 } EnOkarinaEffect; // size = 0x14C
 
 extern const ActorInit En_Okarina_Effect_InitVars;

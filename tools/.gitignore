@@ -1,4 +1,5 @@
 # Output files
+!ido_recomp/**
 *.exe
 yaz0
 makeromfs

@@ -45,7 +45,7 @@ end:
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_AddClient.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_AddClient.asm")
 #endif
 
 void Fault_RemoveClient(FaultClient* client) {
@@ -119,7 +119,7 @@ end:
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_AddAddrConvClient.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_AddAddrConvClient.asm")
 #endif
 
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
@@ -233,7 +233,7 @@ s32 Fault_WaitForInputImpl() {
     return 0;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_WaitForInputImpl.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_WaitForInputImpl.asm")
 #endif
 
 void Fault_WaitForInput() {
@@ -289,7 +289,7 @@ void Fault_LogFReg(s32 idx, f32* value) {
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_LogFReg.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_LogFReg.asm")
 #endif
 
 void Fault_PrintFPCR(u32 value) {
@@ -574,7 +574,7 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
     faultCtxt->faultActive = 1;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_DrawMemDump.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_DrawMemDump.asm")
 #endif
 
 #ifdef NON_MATCHING
@@ -635,7 +635,7 @@ void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra) {
     *ra = currentRa;
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_FindNextStackCall.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_FindNextStackCall.asm")
 #endif
 
 void Fault_DrawStackTrace(OSThread* t, u32 flags) {
@@ -733,7 +733,7 @@ void Fault_CommitFB() {
     FaultDrawer_SetDrawerFB(fb, 0x140, 0xF0);
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_CommitFB.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_CommitFB.asm")
 #endif
 
 void Fault_ProcessClients(void) {
@@ -788,7 +788,7 @@ void Fault_SetOptionsFromController3(void) {
     }
 }
 #else
-GLOBAL_ASM("./asm/non_matchings/fault/Fault_SetOptionsFromController3.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/fault/Fault_SetOptionsFromController3.asm")
 #endif
 
 void Fault_SetOptions(void) {

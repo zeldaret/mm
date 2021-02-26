@@ -22,30 +22,30 @@ const ActorInit Obj_Mure3_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F040.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F040.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F110.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F110.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F220.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F220.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F364.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F364.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F438.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F438.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F598.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F598.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F5E4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F66C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F66C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F680.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/func_8098F680.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Mure3_0x8098F040/ObjMure3_Update.asm")

@@ -23,68 +23,68 @@ const ActorInit En_Kendo_Js_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26538.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26538.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2654C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2654C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26758.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26758.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B269A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B269A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26AE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26AE8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26AFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26AFC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26BF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26BF8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26EB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26EB4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26F14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26F14.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26F6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B26F6C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2701C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2701C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27030.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27030.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2714C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2714C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27188.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27188.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B273D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B273D0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2740C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2740C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B274BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B274BC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B276C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B276C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B276D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B276D8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27760.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27774.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27774.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2783C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B2783C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27880.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B278C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B278C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B279AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B279AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B279F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B279F0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27A90.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27B54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27B54.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27B8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/func_80B27B8C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Draw.asm")

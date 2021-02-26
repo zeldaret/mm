@@ -23,22 +23,22 @@ const ActorInit Demo_Moonend_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17B50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17B50.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17B60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17B60.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17C48.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17E70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17E70.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17EE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17EE0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Draw.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17FCC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Moonend_0x80C17A10/func_80C17FCC.asm")

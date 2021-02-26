@@ -23,14 +23,14 @@ const ActorInit En_Scopecoin_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/func_80BFCFA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/func_80BFCFA0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/func_80BFCFB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/func_80BFCFB8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Draw.asm")

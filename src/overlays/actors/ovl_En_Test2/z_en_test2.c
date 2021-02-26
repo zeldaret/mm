@@ -21,10 +21,10 @@ const ActorInit En_Test2_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/EnTest2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/EnTest2_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/EnTest2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/EnTest2_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/func_80A3E4EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/func_80A3E4EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/func_80A3E524.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Test2_0x80A3E390/func_80A3E524.asm")

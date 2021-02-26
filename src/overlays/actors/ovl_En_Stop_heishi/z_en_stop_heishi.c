@@ -23,32 +23,32 @@ const ActorInit En_Stop_heishi_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE750C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE750C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE75C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE75C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7718.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7718.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE77D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE77D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE795C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE795C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7E9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7E9C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7F34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7F34.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE854C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE854C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE85C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE85C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Draw.asm")

@@ -23,18 +23,18 @@ const ActorInit Oceff_Spot_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972680.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972680.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972844.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972844.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_809728F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_809728F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972934.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/func_80972934.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Spot_0x80972680/OceffSpot_Draw.asm")

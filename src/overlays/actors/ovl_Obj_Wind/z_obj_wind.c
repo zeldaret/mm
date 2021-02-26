@@ -23,10 +23,10 @@ const ActorInit Obj_Wind_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Wind_0x80B23ED0/ObjWind_Draw.asm")

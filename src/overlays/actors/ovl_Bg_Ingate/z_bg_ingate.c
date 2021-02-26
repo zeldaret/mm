@@ -23,36 +23,36 @@ const ActorInit Bg_Ingate_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953A90.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953B40.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953B40.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953BEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953BEC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953DA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953DA8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953E38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953E38.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953EA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953EA4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F14.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F8C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80953F9C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809541B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809541B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809542A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809542A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80954340.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_80954340.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809543D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/func_809543D4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ingate_0x80953A90/BgIngate_Draw.asm")

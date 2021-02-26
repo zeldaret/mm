@@ -23,20 +23,20 @@ const ActorInit Obj_Warpstone_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92B10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92B10.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92C00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92C00.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92C48.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92CD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92CD0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")

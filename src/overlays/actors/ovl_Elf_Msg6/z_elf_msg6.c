@@ -22,32 +22,32 @@ const ActorInit Elf_Msg6_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA15A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA15A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA165C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA165C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA16F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA16F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C00.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C88.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1CF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1CF8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1E30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1E30.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1F80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA1F80.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA2038.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA2038.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA2048.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA2048.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA215C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA215C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA21C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/func_80BA21C4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Update.asm")

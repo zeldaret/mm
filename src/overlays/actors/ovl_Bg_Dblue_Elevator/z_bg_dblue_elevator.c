@@ -23,30 +23,30 @@ const ActorInit Bg_Dblue_Elevator_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B91F20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B91F20.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B91F74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B91F74.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B922C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B922C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B922FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B922FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B924DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B924DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B924F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B924F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B9257C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B9257C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B925B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B925B8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B92644.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B92644.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B92660.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/func_80B92660.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dblue_Elevator_0x80B91F20/BgDblueElevator_Draw.asm")

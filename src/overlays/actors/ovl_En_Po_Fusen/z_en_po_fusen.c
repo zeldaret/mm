@@ -23,32 +23,32 @@ const ActorInit En_Po_Fusen_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1450.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1450.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC14A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC14A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1574.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1574.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC158C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC158C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC18EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC18EC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC192C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC192C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC19B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC19B0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC19DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC19DC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1A68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1A68.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1CE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1CE8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1D00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/func_80AC1D00.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Po_Fusen_0x80AC1270/EnPoFusen_Draw.asm")

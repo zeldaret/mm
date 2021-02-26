@@ -23,10 +23,10 @@ const ActorInit Obj_Y2lift_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Draw.asm")

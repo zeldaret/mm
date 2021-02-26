@@ -23,26 +23,26 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40080.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40080.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B4009C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B4009C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B400C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B400C8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40100.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40100.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40160.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40160.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B401F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B401F8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40308.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40308.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40394.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40394.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Draw.asm")

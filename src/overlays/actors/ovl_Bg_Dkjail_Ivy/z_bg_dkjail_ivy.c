@@ -23,24 +23,24 @@ const ActorInit Bg_Dkjail_Ivy_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE230.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE230.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6AC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE734.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE734.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE748.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE748.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7E0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Draw.asm")

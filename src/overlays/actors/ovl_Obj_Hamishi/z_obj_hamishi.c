@@ -23,20 +23,20 @@ const ActorInit Obj_Hamishi_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A0F20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A0F20.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A0F78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A0F78.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A10F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A10F4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A13A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A13A0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A1408.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/func_809A1408.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Hamishi_0x809A0F20/ObjHamishi_Draw.asm")

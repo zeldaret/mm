@@ -23,26 +23,26 @@ const ActorInit En_Look_Nuts_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67A34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67A34.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67AA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67AA8.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67C48.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67D0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67D0C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67F30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67F30.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67FC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A67FC4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A68080.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A68080.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A680FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/func_80A680FC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Draw.asm")

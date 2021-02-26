@@ -45,5 +45,5 @@ if __name__ == '__main__':
             f.write('#include <ultra64.h>\n#include <global.h>\n')
 
             for name in file_names:
-                f.write('\nGLOBAL_ASM("{}")\n'.format(name))
+                f.write('\n#pragma GLOBAL_ASM("{}")\n'.format(name))
 

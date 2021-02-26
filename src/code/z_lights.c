@@ -70,7 +70,7 @@ void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
     gSPLight(gCtxt->polyXlu.p++, &mapper->lights.a, i);
 }
 #else
-GLOBAL_ASM("asm/non_matchings/z_lights/Lights_UploadLights.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/z_lights/Lights_UploadLights.asm")
 #endif
 
 Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
@@ -126,7 +126,7 @@ void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalP
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositionalWithReference.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositionalWithReference.asm")
 #endif
 
 // This function matches, but uses .rodata. We don't have a good way to match partial .rodata for a file yet.
@@ -172,7 +172,7 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositional.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/z_lights/Lights_MapPositional.asm")
 #endif
 
 void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt) {
@@ -393,7 +393,7 @@ void func_80102880(GlobalContext* ctxt) {
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/z_lights/func_80102880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/z_lights/func_80102880.asm")
 #endif
 
 // XXX regalloc
@@ -440,5 +440,5 @@ void func_80102A64(GlobalContext* ctxt) {
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/z_lights/func_80102A64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/z_lights/func_80102A64.asm")
 #endif

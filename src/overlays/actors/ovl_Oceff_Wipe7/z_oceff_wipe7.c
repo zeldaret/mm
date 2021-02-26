@@ -23,10 +23,10 @@ const ActorInit Oceff_Wipe7_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Draw.asm")

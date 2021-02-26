@@ -23,18 +23,18 @@ const ActorInit En_Sc_Ruppe_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6910.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD697C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD697C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6A8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6A8C.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6B18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6B18.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Sc_Ruppe_0x80BD6910/EnScRuppe_Draw.asm")

@@ -23,18 +23,18 @@ const ActorInit En_Tanron4_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE3DC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE3DC0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE3DFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE3DFC.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE4268.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE4268.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE42A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/func_80BE42A4.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Draw.asm")

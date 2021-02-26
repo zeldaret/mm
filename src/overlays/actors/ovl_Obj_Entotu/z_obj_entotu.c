@@ -23,18 +23,18 @@ const ActorInit Obj_Entotu_InitVars = {
 };
 */
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34700.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34700.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A349C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A349C0.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34A44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34A44.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34B28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/func_80A34B28.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Init.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Destroy.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Update.asm")
 
-GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Entotu_0x80A34700/ObjEntotu_Draw.asm")
