@@ -19,7 +19,7 @@ const ActorInit En_Zoraegg_InitVars = {
     (ActorFunc)EnZoraegg_Init,
     (ActorFunc)EnZoraegg_Destroy,
     (ActorFunc)EnZoraegg_Update,
-    (ActorFunc)EnZoraegg_Draw
+    (ActorFunc)EnZoraegg_Draw,
 };
 */
 

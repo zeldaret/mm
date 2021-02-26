@@ -18,7 +18,7 @@ const ActorInit Obj_Bean_InitVars = {
     (ActorFunc)ObjBean_Init,
     (ActorFunc)ObjBean_Destroy,
     (ActorFunc)ObjBean_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

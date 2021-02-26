@@ -19,7 +19,7 @@ const ActorInit Bg_Ladder_InitVars = {
     (ActorFunc)BgLadder_Init,
     (ActorFunc)BgLadder_Destroy,
     (ActorFunc)BgLadder_Update,
-    (ActorFunc)BgLadder_Draw
+    (ActorFunc)BgLadder_Draw,
 };
 */
 

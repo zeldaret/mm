@@ -19,7 +19,7 @@ const ActorInit En_Ssh_InitVars = {
     (ActorFunc)EnSsh_Init,
     (ActorFunc)EnSsh_Destroy,
     (ActorFunc)EnSsh_Update,
-    (ActorFunc)EnSsh_Draw
+    (ActorFunc)EnSsh_Draw,
 };
 */
 

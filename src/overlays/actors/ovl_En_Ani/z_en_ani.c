@@ -19,7 +19,7 @@ const ActorInit En_Ani_InitVars = {
     (ActorFunc)EnAni_Init,
     (ActorFunc)EnAni_Destroy,
     (ActorFunc)EnAni_Update,
-    (ActorFunc)EnAni_Draw
+    (ActorFunc)EnAni_Draw,
 };
 */
 

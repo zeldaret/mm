@@ -19,7 +19,7 @@ const ActorInit Bg_Dblue_Movebg_InitVars = {
     (ActorFunc)BgDblueMovebg_Init,
     (ActorFunc)BgDblueMovebg_Destroy,
     (ActorFunc)BgDblueMovebg_Update,
-    (ActorFunc)BgDblueMovebg_Draw
+    (ActorFunc)BgDblueMovebg_Draw,
 };
 */
 

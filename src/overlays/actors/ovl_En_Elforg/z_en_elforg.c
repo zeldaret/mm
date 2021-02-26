@@ -19,7 +19,7 @@ const ActorInit En_Elforg_InitVars = {
     (ActorFunc)EnElforg_Init,
     (ActorFunc)EnElforg_Destroy,
     (ActorFunc)EnElforg_Update,
-    (ActorFunc)EnElforg_Draw
+    (ActorFunc)EnElforg_Draw,
 };
 */
 

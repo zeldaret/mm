@@ -19,7 +19,7 @@ const ActorInit Obj_Milk_Bin_InitVars = {
     (ActorFunc)ObjMilkBin_Init,
     (ActorFunc)ObjMilkBin_Destroy,
     (ActorFunc)ObjMilkBin_Update,
-    (ActorFunc)ObjMilkBin_Draw
+    (ActorFunc)ObjMilkBin_Draw,
 };
 */
 

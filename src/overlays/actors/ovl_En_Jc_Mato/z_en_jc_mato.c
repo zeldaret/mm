@@ -19,7 +19,7 @@ const ActorInit En_Jc_Mato_InitVars = {
     (ActorFunc)EnJcMato_Init,
     (ActorFunc)EnJcMato_Destroy,
     (ActorFunc)EnJcMato_Update,
-    (ActorFunc)EnJcMato_Draw
+    (ActorFunc)EnJcMato_Draw,
 };
 */
 

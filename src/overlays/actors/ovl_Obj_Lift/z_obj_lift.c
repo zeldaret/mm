@@ -19,7 +19,7 @@ const ActorInit Obj_Lift_InitVars = {
     (ActorFunc)ObjLift_Init,
     (ActorFunc)ObjLift_Destroy,
     (ActorFunc)ObjLift_Update,
-    (ActorFunc)ObjLift_Draw
+    (ActorFunc)ObjLift_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Init,
     (ActorFunc)DemoKankyo_Destroy,
     (ActorFunc)DemoKankyo_Update,
-    (ActorFunc)DemoKankyo_Draw
+    (ActorFunc)DemoKankyo_Draw,
 };
 */
 

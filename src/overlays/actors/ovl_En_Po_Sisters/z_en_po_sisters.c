@@ -19,7 +19,7 @@ const ActorInit En_Po_Sisters_InitVars = {
     (ActorFunc)EnPoSisters_Init,
     (ActorFunc)EnPoSisters_Destroy,
     (ActorFunc)EnPoSisters_Update,
-    (ActorFunc)EnPoSisters_Draw
+    (ActorFunc)EnPoSisters_Draw,
 };
 */
 

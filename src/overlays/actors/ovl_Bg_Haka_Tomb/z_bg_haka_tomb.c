@@ -19,7 +19,7 @@ const ActorInit Bg_Haka_Tomb_InitVars = {
     (ActorFunc)BgHakaTomb_Init,
     (ActorFunc)BgHakaTomb_Destroy,
     (ActorFunc)BgHakaTomb_Update,
-    (ActorFunc)BgHakaTomb_Draw
+    (ActorFunc)BgHakaTomb_Draw,
 };
 */
 

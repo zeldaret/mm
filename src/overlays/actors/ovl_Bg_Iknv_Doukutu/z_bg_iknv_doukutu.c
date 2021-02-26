@@ -19,7 +19,7 @@ const ActorInit Bg_Iknv_Doukutu_InitVars = {
     (ActorFunc)BgIknvDoukutu_Init,
     (ActorFunc)BgIknvDoukutu_Destroy,
     (ActorFunc)BgIknvDoukutu_Update,
-    (ActorFunc)BgIknvDoukutu_Draw
+    (ActorFunc)BgIknvDoukutu_Draw,
 };
 */
 

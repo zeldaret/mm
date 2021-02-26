@@ -21,7 +21,7 @@ const ActorInit Arms_Hook_InitVars = {
     (ActorFunc)ArmsHook_Init,
     (ActorFunc)ArmsHook_Destroy,
     (ActorFunc)ArmsHook_Update,
-    (ActorFunc)ArmsHook_Draw
+    (ActorFunc)ArmsHook_Draw,
 };
 
 ColQuadInit D_808C1BC0 = {
@@ -170,8 +170,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         {
             f32 velocity;
 
-            bodyDistDiff =
-                Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
+            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
             if (bodyDistDiff < 30.0f) {
                 velocity = 0.0f;
                 phi_f16 = 0.0f;
@@ -305,8 +304,8 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPMatrix(sp44->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(sp44->polyOpa.p++, D_0601D960);
-            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y,
-                                        this->actor.world.pos.z, MTXMODE_NEW);
+            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                        MTXMODE_NEW);
             Math_Vec3f_Diff(&player->unk368, &this->actor.world.pos, &sp68);
             sp48 = SQ(sp68.x) + SQ(sp68.z);
             sp4C = sqrtf(sp48);

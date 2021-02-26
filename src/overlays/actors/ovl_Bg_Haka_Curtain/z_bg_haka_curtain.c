@@ -28,7 +28,7 @@ const ActorInit Bg_Haka_Curtain_InitVars = {
     (ActorFunc)BgHakaCurtain_Init,
     (ActorFunc)BgHakaCurtain_Destroy,
     (ActorFunc)BgHakaCurtain_Update,
-    (ActorFunc)BgHakaCurtain_Draw
+    (ActorFunc)BgHakaCurtain_Draw,
 };
 
 static InitChainEntry D_80B6DFA0[] = {
@@ -57,7 +57,7 @@ void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgHakaCurtain_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B6DC98(BgHakaCurtain* this) {

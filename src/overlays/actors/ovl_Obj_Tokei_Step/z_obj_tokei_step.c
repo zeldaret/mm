@@ -19,7 +19,7 @@ const ActorInit Obj_Tokei_Step_InitVars = {
     (ActorFunc)ObjTokeiStep_Init,
     (ActorFunc)ObjTokeiStep_Destroy,
     (ActorFunc)ObjTokeiStep_Update,
-    (ActorFunc)ObjTokeiStep_Draw
+    (ActorFunc)ObjTokeiStep_Draw,
 };
 */
 

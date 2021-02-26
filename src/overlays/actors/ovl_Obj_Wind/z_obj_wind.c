@@ -19,7 +19,7 @@ const ActorInit Obj_Wind_InitVars = {
     (ActorFunc)ObjWind_Init,
     (ActorFunc)ObjWind_Destroy,
     (ActorFunc)ObjWind_Update,
-    (ActorFunc)ObjWind_Draw
+    (ActorFunc)ObjWind_Draw,
 };
 */
 

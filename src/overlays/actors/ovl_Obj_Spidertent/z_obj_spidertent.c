@@ -19,7 +19,7 @@ const ActorInit Obj_Spidertent_InitVars = {
     (ActorFunc)ObjSpidertent_Init,
     (ActorFunc)ObjSpidertent_Destroy,
     (ActorFunc)ObjSpidertent_Update,
-    (ActorFunc)ObjSpidertent_Draw
+    (ActorFunc)ObjSpidertent_Draw,
 };
 */
 

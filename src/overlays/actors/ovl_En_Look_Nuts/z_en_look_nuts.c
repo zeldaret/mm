@@ -19,7 +19,7 @@ const ActorInit En_Look_Nuts_InitVars = {
     (ActorFunc)EnLookNuts_Init,
     (ActorFunc)EnLookNuts_Destroy,
     (ActorFunc)EnLookNuts_Update,
-    (ActorFunc)EnLookNuts_Draw
+    (ActorFunc)EnLookNuts_Draw,
 };
 */
 

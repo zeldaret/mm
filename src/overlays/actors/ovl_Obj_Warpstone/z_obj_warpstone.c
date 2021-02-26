@@ -19,7 +19,7 @@ const ActorInit Obj_Warpstone_InitVars = {
     (ActorFunc)ObjWarpstone_Init,
     (ActorFunc)ObjWarpstone_Destroy,
     (ActorFunc)ObjWarpstone_Update,
-    (ActorFunc)ObjWarpstone_Draw
+    (ActorFunc)ObjWarpstone_Draw,
 };
 */
 

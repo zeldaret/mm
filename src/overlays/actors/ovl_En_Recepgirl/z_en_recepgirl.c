@@ -19,7 +19,7 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Init,
     (ActorFunc)EnRecepgirl_Destroy,
     (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw
+    (ActorFunc)EnRecepgirl_Draw,
 };
 */
 

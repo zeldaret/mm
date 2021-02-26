@@ -2,7 +2,8 @@
 #include <global.h>
 
 s800E03A0* func_800E03A0(s32 a0) {
-    if ((a0 < 0) || (a0 > 22)) return 0;
+    if ((a0 < 0) || (a0 > 22))
+        return 0;
     return &(D_801B9F20[a0]);
 }
 

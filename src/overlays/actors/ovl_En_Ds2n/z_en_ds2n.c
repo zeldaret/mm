@@ -19,7 +19,7 @@ const ActorInit En_Ds2n_InitVars = {
     (ActorFunc)EnDs2n_Init,
     (ActorFunc)EnDs2n_Destroy,
     (ActorFunc)EnDs2n_Update,
-    (ActorFunc)EnDs2n_Draw
+    (ActorFunc)EnDs2n_Draw,
 };
 */
 

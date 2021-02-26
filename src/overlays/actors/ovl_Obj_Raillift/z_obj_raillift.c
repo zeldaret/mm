@@ -19,7 +19,7 @@ const ActorInit Obj_Raillift_InitVars = {
     (ActorFunc)ObjRaillift_Init,
     (ActorFunc)ObjRaillift_Destroy,
     (ActorFunc)ObjRaillift_Update,
-    (ActorFunc)ObjRaillift_Draw
+    (ActorFunc)ObjRaillift_Draw,
 };
 */
 

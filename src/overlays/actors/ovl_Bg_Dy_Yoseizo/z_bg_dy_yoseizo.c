@@ -18,7 +18,7 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
     (ActorFunc)BgDyYoseizo_Init,
     (ActorFunc)BgDyYoseizo_Destroy,
     (ActorFunc)BgDyYoseizo_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

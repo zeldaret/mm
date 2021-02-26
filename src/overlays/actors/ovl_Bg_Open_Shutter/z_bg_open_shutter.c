@@ -19,7 +19,7 @@ const ActorInit Bg_Open_Shutter_InitVars = {
     (ActorFunc)BgOpenShutter_Init,
     (ActorFunc)BgOpenShutter_Destroy,
     (ActorFunc)BgOpenShutter_Update,
-    (ActorFunc)BgOpenShutter_Draw
+    (ActorFunc)BgOpenShutter_Draw,
 };
 */
 

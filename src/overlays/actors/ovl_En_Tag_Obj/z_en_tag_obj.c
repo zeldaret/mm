@@ -18,7 +18,7 @@ const ActorInit En_Tag_Obj_InitVars = {
     (ActorFunc)EnTagObj_Init,
     (ActorFunc)EnTagObj_Destroy,
     (ActorFunc)EnTagObj_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

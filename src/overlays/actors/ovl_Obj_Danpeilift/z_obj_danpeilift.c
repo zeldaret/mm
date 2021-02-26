@@ -19,7 +19,7 @@ const ActorInit Obj_Danpeilift_InitVars = {
     (ActorFunc)ObjDanpeilift_Init,
     (ActorFunc)ObjDanpeilift_Destroy,
     (ActorFunc)ObjDanpeilift_Update,
-    (ActorFunc)ObjDanpeilift_Draw
+    (ActorFunc)ObjDanpeilift_Draw,
 };
 */
 

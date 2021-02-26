@@ -1,7 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Lights_InitPositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius, u32 type) {
+void Lights_InitPositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue,
+                                s16 radius, u32 type) {
     info->type = type;
     info->params.posX = posX;
     info->params.posY = posY;
@@ -9,11 +10,13 @@ void Lights_InitPositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s
     Lights_SetPositionalLightColorAndRadius(info, red, green, blue, radius);
 }
 
-void Lights_InitType0PositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius) {
+void Lights_InitType0PositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue,
+                                     s16 radius) {
     Lights_InitPositionalLight(info, posX, posY, posZ, red, green, blue, radius, 0);
 }
 
-void Lights_InitType2PositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue, s16 radius) {
+void Lights_InitType2PositionalLight(LightInfoPositional* info, s16 posX, s16 posY, s16 posZ, u8 red, u8 green, u8 blue,
+                                     s16 radius) {
     Lights_InitPositionalLight(info, posX, posY, posZ, red, green, blue, radius, 2);
 }
 
@@ -90,9 +93,11 @@ void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalP
     f32 radiusF;
     Light* light;
 
-    if (pos == NULL) return;
+    if (pos == NULL)
+        return;
 
-    if (params->radius < 1) return;
+    if (params->radius < 1)
+        return;
 
     xDiff = params->posX - pos->x;
     yDiff = params->posY - pos->y;
@@ -102,7 +107,8 @@ void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalP
 
     if (radiusF * radiusF > dist) {
         light = Lights_MapperGetNextFreeSlot(mapper);
-        if (light == NULL) return;
+        if (light == NULL)
+            return;
 
         dist = sqrtf(dist);
 
@@ -141,10 +147,8 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
         posF.x = params->posX;
         posF.y = params->posY;
         posF.z = params->posZ;
-        Matrix_MultiplyByVectorXYZ(&ctxt->unk187B0,&posF,&adjustedPos);
-        if ((adjustedPos.z > -radiusF) &&
-            (600 + radiusF > adjustedPos.z) &&
-            (400 > fabsf(adjustedPos.x) - radiusF) &&
+        Matrix_MultiplyByVectorXYZ(&ctxt->unk187B0, &posF, &adjustedPos);
+        if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_MapperGetNextFreeSlot(mapper);
             if (light != NULL) {
@@ -234,7 +238,8 @@ void Lights_Free(z_Light* light) {
     if (light != NULL) {
         lightsList.numOccupied--;
         light->info = NULL;
-        lightsList.nextFree = (light - lightsList.lights) / (s32)sizeof(z_Light); //! @bug Due to pointer arithmetic, the division is unnecessary
+        lightsList.nextFree = (light - lightsList.lights) /
+                              (s32)sizeof(z_Light); //! @bug Due to pointer arithmetic, the division is unnecessary
     }
 }
 
@@ -260,7 +265,7 @@ void func_80102544(LightingContext* lCtxt, u8 a1, u8 a2, u8 a3, s16 sp12, s16 sp
 }
 
 LightMapper* Lights_CreateMapper(LightingContext* lCtxt, GraphicsContext* gCtxt) {
-   return Lights_MapperAllocateAndInit(gCtxt, lCtxt->ambientRed, lCtxt->ambientGreen, lCtxt->ambientBlue);
+    return Lights_MapperAllocateAndInit(gCtxt, lCtxt->ambientRed, lCtxt->ambientGreen, lCtxt->ambientBlue);
 }
 
 void Lights_ClearHead(GlobalContext* ctxt, LightingContext* lCtxt) {
@@ -309,12 +314,13 @@ void Lights_Remove(GlobalContext* ctxt, LightingContext* lCtxt, z_Light* light) 
     }
 }
 
-LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ) {
+LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red,
+                           u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ) {
     LightMapper* mapper;
     s32 i;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    mapper = (LightMapper*)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
     gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = mapper->lights.a.l.colc[0] = ambientRed;
@@ -332,7 +338,7 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
         mapper->lights.l[i].l.dir[2] = dirZ;
     }
 
-    Lights_UploadLights(mapper,gCtxt);
+    Lights_UploadLights(mapper, gCtxt);
 
     return mapper;
 }
@@ -341,7 +347,7 @@ LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 gre
     LightMapper* mapper;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    mapper = (LightMapper*)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
     gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = red;
@@ -378,9 +384,7 @@ void func_80102880(GlobalContext* ctxt) {
 
             params->unk9 = 0;
 
-            if ((local_20.z > 1) &&
-                (fabsf(local_20.x * local_24) < 1) &&
-                (fabsf(local_20.y * local_24) < 1)) {
+            if ((local_20.z > 1) && (fabsf(local_20.x * local_24) < 1) && (fabsf(local_20.y * local_24) < 1)) {
                 fVar4 = local_20.z * local_24;
                 s2 = (s32)(fVar4 * 16352) + 16352;
                 if (s2 < func_80178A94(local_20.x * local_24 * 160 + 160, local_20.y * local_24 * -120 + 120)) {
@@ -409,10 +413,11 @@ void func_80102A64(GlobalContext* ctxt) {
         gCtxt = ctxt->common.gCtxt;
         dl = func_8012C7FC(gCtxt->polyXlu.p);
 
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080); //! This doesn't resolve to any of the macros in gdi.h
+        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4,
+                        0x00000080); //! This doesn't resolve to any of the macros in gdi.h
 
-        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
-                                0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+                          0);
 
         gSPDisplayList(dl++, &D_04029CB0);
 
@@ -425,9 +430,10 @@ void func_80102A64(GlobalContext* ctxt) {
                     gDPSetPrimColor(dl++, 0, 0, params->red, params->green, params->blue, 50);
 
                     SysMatrix_InsertTranslation(params->posX, params->posY, params->posZ, 0);
-                    SysMatrix_InsertScale(scale,scale,scale,1);
+                    SysMatrix_InsertScale(scale, scale, scale, 1);
 
-                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp((ctxt->common).gCtxt), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp((ctxt->common).gCtxt),
+                              G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(dl++, &D_04029CF0);
                 }

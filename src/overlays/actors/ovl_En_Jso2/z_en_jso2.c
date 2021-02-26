@@ -19,7 +19,7 @@ const ActorInit En_Jso2_InitVars = {
     (ActorFunc)EnJso2_Init,
     (ActorFunc)EnJso2_Destroy,
     (ActorFunc)EnJso2_Update,
-    (ActorFunc)EnJso2_Draw
+    (ActorFunc)EnJso2_Draw,
 };
 */
 

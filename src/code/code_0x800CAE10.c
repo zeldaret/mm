@@ -2,11 +2,11 @@
 #include <global.h>
 
 void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
-    actor->dynaPolyId = -1;
+    actor->bgId = -1;
     actor->unk148 = 0;
     actor->unk14C = 0;
     actor->unk154 = param_2;
-    actor->dynaFlags = 0;
+    actor->unk_158 = 0;
 }
 
 void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, BgMeshHeader* meshHeader) {
@@ -14,53 +14,53 @@ void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, BgMeshHeader* 
 
     header = NULL;
     BgCheck_RelocateMeshHeader(meshHeader, &header);
-    actor->dynaPolyId = BgCheck_AddActorMesh(ctxt, &ctxt->colCtx.dyna, actor, header);
+    actor->bgId = BgCheck_AddActorMesh(ctxt, &ctxt->colCtx.dyna, actor, header);
 }
 
 void BgCheck3_ResetFlags(DynaPolyActor* actor) {
-    actor->dynaFlags = 0;
+    actor->unk_158 = 0;
 }
 
 void func_800CAE88(DynaPolyActor* actor) {
-    actor->dynaFlags |= 1;
+    actor->unk_158 |= 1;
 }
 
 void func_800CAE9C(DynaPolyActor* actor) {
-    actor->dynaFlags |= 2;
+    actor->unk_158 |= 2;
 }
 
 void func_800CAEB0(CollisionContext* bgCtxt, s32 index) {
     DynaPolyActor* actor;
 
     actor = BgCheck_GetActorOfMesh(bgCtxt, index);
-    if (actor != (DynaPolyActor *)0x0) {
+    if (actor != (DynaPolyActor*)0x0) {
         func_800CAE9C(actor);
     }
 }
 
 void func_800CAEE0(DynaPolyActor* actor) {
-    actor->dynaFlags |= 4;
+    actor->unk_158 |= 4;
 }
 
 void func_800CAEF4(CollisionContext* bgCtxt, s32 index) {
     DynaPolyActor* actor;
 
     actor = BgCheck_GetActorOfMesh(bgCtxt, index);
-    if (actor != (DynaPolyActor *)0x0) {
+    if (actor != (DynaPolyActor*)0x0) {
         func_800CAEE0(actor);
     }
 }
 
 void func_800CAF24(DynaPolyActor* actor) {
-    actor->dynaFlags |= 8;
+    actor->unk_158 |= 8;
 }
 
 void func_800CAF38(DynaPolyActor* actor) {
-    actor->dynaFlags |= 0x10;
+    actor->unk_158 |= 0x10;
 }
 
 s32 func_800CAF4C(DynaPolyActor* actor) {
-    if (actor->dynaFlags & 1) {
+    if (actor->unk_158 & 1) {
         return 1;
     } else {
         return 0;
@@ -68,7 +68,7 @@ s32 func_800CAF4C(DynaPolyActor* actor) {
 }
 
 s32 func_800CAF70(DynaPolyActor* actor) {
-    if (actor->dynaFlags & 2) {
+    if (actor->unk_158 & 2) {
         return 1;
     } else {
         return 0;
@@ -76,7 +76,7 @@ s32 func_800CAF70(DynaPolyActor* actor) {
 }
 
 s32 func_800CAF94(DynaPolyActor* actor) {
-    if (actor->dynaFlags & 4) {
+    if (actor->unk_158 & 4) {
         return 1;
     } else {
         return 0;
@@ -84,7 +84,7 @@ s32 func_800CAF94(DynaPolyActor* actor) {
 }
 
 s32 func_800CAFB8(DynaPolyActor* actor) {
-    if (actor->dynaFlags & 8) {
+    if (actor->unk_158 & 8) {
         return 1;
     } else {
         return 0;
@@ -92,7 +92,7 @@ s32 func_800CAFB8(DynaPolyActor* actor) {
 }
 
 s32 func_800CAFDC(DynaPolyActor* actor) {
-    if (actor->dynaFlags & 0x10) {
+    if (actor->unk_158 & 0x10) {
         return 1;
     } else {
         return 0;

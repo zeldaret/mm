@@ -19,7 +19,7 @@ const ActorInit Oceff_Spot_InitVars = {
     (ActorFunc)OceffSpot_Init,
     (ActorFunc)OceffSpot_Destroy,
     (ActorFunc)OceffSpot_Update,
-    (ActorFunc)OceffSpot_Draw
+    (ActorFunc)OceffSpot_Draw,
 };
 */
 

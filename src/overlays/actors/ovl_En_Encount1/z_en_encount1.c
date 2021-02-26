@@ -17,7 +17,7 @@ const ActorInit En_Encount1_InitVars = {
     (ActorFunc)EnEncount1_Init,
     (ActorFunc)NULL,
     (ActorFunc)EnEncount1_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

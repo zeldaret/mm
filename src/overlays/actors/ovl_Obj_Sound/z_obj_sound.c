@@ -18,7 +18,7 @@ const ActorInit Obj_Sound_InitVars = {
     (ActorFunc)ObjSound_Init,
     (ActorFunc)ObjSound_Destroy,
     (ActorFunc)ObjSound_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

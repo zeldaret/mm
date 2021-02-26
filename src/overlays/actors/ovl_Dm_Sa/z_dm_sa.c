@@ -19,7 +19,7 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Init,
     (ActorFunc)DmSa_Destroy,
     (ActorFunc)DmSa_Update,
-    (ActorFunc)DmSa_Draw
+    (ActorFunc)DmSa_Draw,
 };
 */
 

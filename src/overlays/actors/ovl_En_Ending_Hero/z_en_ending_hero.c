@@ -21,7 +21,7 @@ const ActorInit En_Ending_Hero_InitVars = {
     (ActorFunc)EnEndingHero_Init,
     (ActorFunc)EnEndingHero_Destroy,
     (ActorFunc)EnEndingHero_Update,
-    (ActorFunc)EnEndingHero_Draw
+    (ActorFunc)EnEndingHero_Draw,
 };
 
 extern SkeletonHeader D_0600B0CC;

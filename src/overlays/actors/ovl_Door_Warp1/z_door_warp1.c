@@ -19,7 +19,7 @@ const ActorInit Door_Warp1_InitVars = {
     (ActorFunc)DoorWarp1_Init,
     (ActorFunc)DoorWarp1_Destroy,
     (ActorFunc)DoorWarp1_Update,
-    (ActorFunc)DoorWarp1_Draw
+    (ActorFunc)DoorWarp1_Draw,
 };
 */
 

@@ -40,7 +40,8 @@ void PreNMI_Main(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.unkA3 = 1;
 }
 
-void PreNMI_Destroy(PreNMIContext* prenmiCtx) {}
+void PreNMI_Destroy(PreNMIContext* prenmiCtx) {
+}
 
 void PreNMI_Init(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.main = (GameStateFunc)PreNMI_Main;

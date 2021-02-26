@@ -19,7 +19,7 @@ const ActorInit En_Nimotsu_InitVars = {
     (ActorFunc)EnNimotsu_Init,
     (ActorFunc)EnNimotsu_Destroy,
     (ActorFunc)EnNimotsu_Update,
-    (ActorFunc)EnNimotsu_Draw
+    (ActorFunc)EnNimotsu_Draw,
 };
 */
 

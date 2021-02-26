@@ -19,7 +19,7 @@ const ActorInit Eff_Dust_InitVars = {
     (ActorFunc)EffDust_Init,
     (ActorFunc)EffDust_Destroy,
     (ActorFunc)EffDust_Update,
-    (ActorFunc)EffDust_Draw
+    (ActorFunc)EffDust_Draw,
 };
 */
 

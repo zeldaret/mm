@@ -2,9 +2,9 @@
 #include <global.h>
 
 // TODO move out
-#define	OS_CLOCK_RATE		62500000LL
-#define	OS_CPU_COUNTER		(OS_CLOCK_RATE*3/4)
-#define OS_USEC_TO_CYCLES(n)	(((u64)(n)*(OS_CPU_COUNTER/15625LL))/(1000000LL/15625LL))
+#define OS_CLOCK_RATE 62500000LL
+#define OS_CPU_COUNTER (OS_CLOCK_RATE * 3 / 4)
+#define OS_USEC_TO_CYCLES(n) (((u64)(n) * (OS_CPU_COUNTER / 15625LL)) / (1000000LL / 15625LL))
 
 void Fault_SleepImpl(u32 duration) {
     u64 value = (duration * OS_CPU_COUNTER) / 1000ull;
@@ -164,7 +164,7 @@ void* Fault_ConvertAddress(void* addr) {
     void* ret;
     FaultAddrConvClient* iter = faultCtxt->addrConvClients;
 
-    while(iter) {
+    while (iter) {
         if (iter->callback) {
             ret = iter->callback(addr, iter->param);
             if (ret != NULL) {
@@ -319,9 +319,9 @@ void Fault_LogFPCR(u32 value) {
     }
 }
 
-void Fault_PrintThreadContext(OSThread* t){
+void Fault_PrintThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
-    s32 causeStrIdx = (s32) ((((u32) t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
+    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
     if (causeStrIdx == 0x17)
         causeStrIdx = 0x10;
     if (causeStrIdx == 0x1F)
@@ -380,9 +380,9 @@ void Fault_PrintThreadContext(OSThread* t){
     }
 }
 
-void Fault_LogThreadContext(OSThread* t){
-    __OSThreadContext *ctx;
-    s32 causeStrIdx = (s32) ((((u32) t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
+void Fault_LogThreadContext(OSThread* t) {
+    __OSThreadContext* ctx;
+    s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
     if (causeStrIdx == 0x17)
         causeStrIdx = 0x10;
     if (causeStrIdx == 0x1f)
@@ -434,8 +434,7 @@ void Fault_LogThreadContext(OSThread* t){
 
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
-    while (iter->priority != -1)
-    {
+    while (iter->priority != -1) {
         if (iter->priority > 0 && iter->priority < 0x7f && (iter->flags & 3)) {
             return iter;
         }
@@ -487,7 +486,7 @@ void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3) {
     Fault_FillScreenBlack();
     FaultDrawer_SetCharPad(-2, 0);
 
-    FaultDrawer_DrawText(0x24, 0x12, D_80098954, title? title : D_8009895C, alignedAddr);
+    FaultDrawer_DrawText(0x24, 0x12, D_80098954, title ? title : D_8009895C, alignedAddr);
     if (alignedAddr >= (u32*)0x80000000 && alignedAddr < (u32*)0xC0000000) {
         for (y = 0x1C; y != 0xE2; y += 9) {
             FaultDrawer_DrawText(0x18, y, D_80098968, writeAddr);
@@ -655,7 +654,7 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     FaultDrawer_DrawText(0x24, 0x18, D_8009898C);
 
     for (y = 1; (y < 22) && (((ra != 0) || (sp != 0)) && (pc != (u32)__osCleanupThread)); y++) {
-        FaultDrawer_DrawText(0x24, y*8+24, D_800989A4, sp, pc);
+        FaultDrawer_DrawText(0x24, y * 8 + 24, D_800989A4, sp, pc);
 
         if (flags & 1) {
             convertedPc = (u32)Fault_ConvertAddress((void*)pc);
@@ -717,7 +716,7 @@ void Fault_CommitFB() {
     u16* fb;
     osViSetYScale(1.0f);
     osViSetMode(&osViModeNtscLan1);
-    osViSetSpecialFeatures(0x42); //gama_disable|dither_fliter_enable_aa_mode3_disable
+    osViSetSpecialFeatures(0x42); // gama_disable|dither_fliter_enable_aa_mode3_disable
     osViBlack(0);
 
     if (faultCtxt->fb) {
@@ -739,7 +738,7 @@ void Fault_CommitFB() {
 void Fault_ProcessClients(void) {
     FaultClient* iter = faultCtxt->clients;
     s32 idx = 0;
-    while(iter) {
+    while (iter) {
         if (iter->callback) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
@@ -773,17 +772,17 @@ void Fault_SetOptionsFromController3(void) {
         graphRA = graphOSThread.context.ra;
         graphSP = graphOSThread.context.sp;
         if (~(input3->current.buttons | ~0x10) == 0) {
-              faultCopyToLog = !faultCopyToLog;
-              FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
+            faultCopyToLog = !faultCopyToLog;
+            FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (~(input3->current.buttons | ~0x8000) == 0) {
-              Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
+            Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
         }
         if (~(input3->current.buttons | ~0x4000) == 0) {
-              FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
-              Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
-              FaultDrawer_SetCharPad(-2, 0);
-              FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
+            FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
+            Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
+            FaultDrawer_SetCharPad(-2, 0);
+            FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
         }
     }
 }
@@ -824,8 +823,7 @@ void Fault_ThreadEntry(void* arg) {
 
             faultedThread = __osGetCurrFaultedThread();
             Fault_Log(D_80098B28, faultedThread);
-            if (!faultedThread)
-            {
+            if (!faultedThread) {
                 faultedThread = Fault_FindFaultedThread();
                 Fault_Log(D_80098B4C, faultedThread);
             }
@@ -871,7 +869,8 @@ void Fault_ThreadEntry(void* arg) {
 
         } while (!faultCtxt->exitDebugger);
 
-        while(!faultCtxt->exitDebugger);
+        while (!faultCtxt->exitDebugger)
+            ;
 
         Fault_ResumeThread(faultedThread);
     }
@@ -882,7 +881,7 @@ void Fault_SetFB(void* fb, u16 w, u16 h) {
     FaultDrawer_SetDrawerFB(fb, w, h);
 }
 
-void Fault_Start(void){
+void Fault_Start(void) {
     faultCtxt = &faultContextStruct;
     bzero(faultCtxt, sizeof(FaultThreadStruct));
     FaultDrawer_Init();
@@ -914,7 +913,7 @@ void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1) {
     FaultClient client;
     char padd[4];
     Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
-    *(u32*)0x11111111 = 0; //trigger an exception
+    *(u32*)0x11111111 = 0; // trigger an exception
 }
 
 void Fault_AddHungupAndCrash(char* filename, u32 line) {

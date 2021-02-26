@@ -19,7 +19,7 @@ const ActorInit Obj_Tree_InitVars = {
     (ActorFunc)ObjTree_Init,
     (ActorFunc)ObjTree_Destroy,
     (ActorFunc)ObjTree_Update,
-    (ActorFunc)ObjTree_Draw
+    (ActorFunc)ObjTree_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Demo_Syoten_InitVars = {
     (ActorFunc)DemoSyoten_Init,
     (ActorFunc)DemoSyoten_Destroy,
     (ActorFunc)DemoSyoten_Update,
-    (ActorFunc)DemoSyoten_Draw
+    (ActorFunc)DemoSyoten_Draw,
 };
 */
 

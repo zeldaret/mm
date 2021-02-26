@@ -41,7 +41,8 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     u32 spaceSize;
     s32 i;
 
-    if (global->sceneNum == SCENE_CLOCKTOWER || global->sceneNum == SCENE_TOWN || global->sceneNum == SCENE_BACKTOWN || global->sceneNum == SCENE_ICHIBA) {
+    if (global->sceneNum == SCENE_CLOCKTOWER || global->sceneNum == SCENE_TOWN || global->sceneNum == SCENE_BACKTOWN ||
+        global->sceneNum == SCENE_ICHIBA) {
         spaceSize = 1566720;
     } else if (global->sceneNum == SCENE_MILK_BAR) {
         spaceSize = 1617920;
@@ -57,9 +58,11 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     sceneCtxt->keepObjectId = 0;
 
     // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
+    // clang-format off
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
-
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
+    // clang-format on
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr =
+        GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
@@ -86,8 +89,8 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart,
-                                            size, 0, &status->loadQueue, NULL);
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart, size, 0,
+                                           &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
                 status->id = id;
@@ -99,8 +102,8 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
 
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 objectId) {
     s32 i;
-    for(i = 0; i < sceneCtxt->objectCount; i++) {
-        if((sceneCtxt->objects[i].id < 0 ? -sceneCtxt->objects[i].id : sceneCtxt->objects[i].id) == objectId) {
+    for (i = 0; i < sceneCtxt->objectCount; i++) {
+        if ((sceneCtxt->objects[i].id < 0 ? -sceneCtxt->objects[i].id : sceneCtxt->objects[i].id) == objectId) {
             return i;
         }
     }
@@ -157,11 +160,10 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     s16 temp16;
     u8 unk20;
 
-    ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
-                    ctxt->setupEntranceList[ctxt->curSpawn].spawn;
-    if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-         (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
-    ) {
+    ctxt->linkActorEntry =
+        (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) + ctxt->setupEntranceList[ctxt->curSpawn].spawn;
+    if ((ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
+        (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)) {
         Scene_LoadObject(&ctxt->sceneContext, OBJECT_STK);
         return;
     }
@@ -226,8 +228,7 @@ void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x07: Special Files
 void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
     if (entry->specialFiles.keepObjectId != 0) {
-        ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
-                                                           entry->specialFiles.keepObjectId);
+        ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext, entry->specialFiles.keepObjectId);
         // TODO: Segment number enum?
         gRspSegmentPhysAddrs[5] =
             PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
@@ -254,7 +255,7 @@ void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 // Scene Command 0x0B: Object List
-void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
+void Scene_HeaderCommand0B(GlobalContext* ctxt, SceneCmd* entry) {
     s32 i, j, k;
     SceneObject* firstObject;
     SceneObject* status;
@@ -308,8 +309,7 @@ void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
     LightInfo* lightInfo;
 
     lightInfo = (LightInfo*)Lib_PtrSegToVirt(entry->lightList.segment);
-    for (i = 0; i < entry->lightList.num; i++)
-    {
+    for (i = 0; i < entry->lightList.num; i++) {
         Lights_Insert(ctxt, &ctxt->lightCtx, lightInfo);
         lightInfo++;
     }
@@ -364,7 +364,7 @@ void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 // Scene Command 0x10: Time Settings
-void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
+void Scene_HeaderCommand10(GlobalContext* ctxt, SceneCmd* entry) {
     u32 dayTime;
 
     if (entry->timeSettings.hour != 0xFF && entry->timeSettings.min != 0xFF) {
@@ -428,7 +428,6 @@ void Scene_HeaderCommand13(GlobalContext* ctxt, SceneCmd* entry) {
 
 // Scene Command 0x09: Undefined
 void Scene_HeaderCommand09(GlobalContext* ctxt, SceneCmd* entry) {
-
 }
 
 // Scene Command 0x15: Sound Settings
@@ -453,8 +452,8 @@ void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry) {
         altHeaderList = (SceneCmd**)Lib_PtrSegToVirt(entry->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.extra.sceneSetupIndex - 1];
         if (altHeader != NULL) {
-           Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_PtrSegToVirt(altHeader));
-           (entry + 1)->base.code = 0x14;
+            Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_PtrSegToVirt(altHeader));
+            (entry + 1)->base.code = 0x14;
         }
     }
 }
@@ -468,7 +467,7 @@ void Scene_HeaderCommand17(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x1B: Cutscene Actor List
 void Scene_HeaderCommand1B(GlobalContext* ctxt, SceneCmd* entry) {
     ActorCutscene_Init(ctxt, (ActorCutscene*)Lib_PtrSegToVirt(entry->cutsceneActorList.segment),
-                                                              entry->cutsceneActorList.num);
+                       entry->cutsceneActorList.num);
 }
 
 // Scene Command 0x1C: Mini Maps
@@ -479,7 +478,6 @@ void Scene_HeaderCommand1C(GlobalContext* ctxt, SceneCmd* entry) {
 
 // Scene Command 0x1D: Undefined
 void Scene_HeaderCommand1D(GlobalContext* ctxt, SceneCmd* entry) {
-
 }
 
 // Scene Command 0x1E: Minimap Chests
@@ -488,7 +486,7 @@ void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 // Scene Command 0x19: Misc. Settings (Camera & World Map Area)
-void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
+void Scene_HeaderCommand19(GlobalContext* ctxt, SceneCmd* entry) {
     s16 j;
     s16 i;
 
@@ -497,7 +495,7 @@ void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
     while (1) {
         if (scenesPerMapArea[i].scenes[j] == 0xFFFF) {
             i++;
-            j=0;
+            j = 0;
 
             // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
             if (i == 0x0B) {
@@ -524,7 +522,7 @@ void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->sceneTextureAnimations = (AnimatedTexture*)Lib_PtrSegToVirt(entry->textureAnimations.segment);
 }
 
-void func_801306A4(GlobalContext *ctxt) {
+void func_801306A4(GlobalContext* ctxt) {
     ctxt->unk1887F = func_801323A0(ctxt->unk1887A) & 0x7F;
 }
 

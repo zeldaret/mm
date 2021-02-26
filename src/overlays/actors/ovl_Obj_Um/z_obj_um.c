@@ -19,7 +19,7 @@ const ActorInit Obj_Um_InitVars = {
     (ActorFunc)ObjUm_Init,
     (ActorFunc)ObjUm_Destroy,
     (ActorFunc)ObjUm_Update,
-    (ActorFunc)ObjUm_Draw
+    (ActorFunc)ObjUm_Draw,
 };
 */
 

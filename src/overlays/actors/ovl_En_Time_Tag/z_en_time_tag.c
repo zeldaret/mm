@@ -18,7 +18,7 @@ const ActorInit En_Time_Tag_InitVars = {
     (ActorFunc)EnTimeTag_Init,
     (ActorFunc)EnTimeTag_Destroy,
     (ActorFunc)EnTimeTag_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

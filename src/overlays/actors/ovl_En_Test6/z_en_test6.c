@@ -19,7 +19,7 @@ const ActorInit En_Test6_InitVars = {
     (ActorFunc)EnTest6_Init,
     (ActorFunc)EnTest6_Destroy,
     (ActorFunc)EnTest6_Update,
-    (ActorFunc)EnTest6_Draw
+    (ActorFunc)EnTest6_Draw,
 };
 */
 

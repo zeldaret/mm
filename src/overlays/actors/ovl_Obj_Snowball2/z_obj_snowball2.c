@@ -19,7 +19,7 @@ const ActorInit Obj_Snowball2_InitVars = {
     (ActorFunc)ObjSnowball2_Init,
     (ActorFunc)ObjSnowball2_Destroy,
     (ActorFunc)ObjSnowball2_Update,
-    (ActorFunc)ObjSnowball2_Draw
+    (ActorFunc)ObjSnowball2_Draw,
 };
 */
 

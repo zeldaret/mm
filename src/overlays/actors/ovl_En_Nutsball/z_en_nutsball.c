@@ -19,7 +19,7 @@ const ActorInit En_Nutsball_InitVars = {
     (ActorFunc)EnNutsball_Init,
     (ActorFunc)EnNutsball_Destroy,
     (ActorFunc)EnNutsball_Update,
-    (ActorFunc)EnNutsball_Draw
+    (ActorFunc)EnNutsball_Draw,
 };
 */
 

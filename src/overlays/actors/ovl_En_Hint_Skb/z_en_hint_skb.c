@@ -19,7 +19,7 @@ const ActorInit En_Hint_Skb_InitVars = {
     (ActorFunc)EnHintSkb_Init,
     (ActorFunc)EnHintSkb_Destroy,
     (ActorFunc)EnHintSkb_Update,
-    (ActorFunc)EnHintSkb_Draw
+    (ActorFunc)EnHintSkb_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Egblock_InitVars = {
     (ActorFunc)EnEgblock_Init,
     (ActorFunc)EnEgblock_Destroy,
     (ActorFunc)EnEgblock_Update,
-    (ActorFunc)EnEgblock_Draw
+    (ActorFunc)EnEgblock_Draw,
 };
 */
 

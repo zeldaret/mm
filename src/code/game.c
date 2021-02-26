@@ -11,13 +11,13 @@ u32 D_801D1514[3] = { 0 };
 
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
-    gFramerateDivisorF = (f32) divisor;
-    gFramerateDivisorHalf = (f32) (divisor * 0.5f);
-    gFramerateDivisorThird = (f32) (divisor / 3.0f);
+    gFramerateDivisorF = (f32)divisor;
+    gFramerateDivisorHalf = (f32)(divisor * 0.5f);
+    gFramerateDivisorThird = (f32)(divisor / 3.0f);
 }
 
-void Game_SetFramerateDivisor(GameState *gameState, s32 divisor) {
-    R_UPDATE_RATE = (s16) divisor;
+void Game_SetFramerateDivisor(GameState* gameState, s32 divisor) {
+    R_UPDATE_RATE = (s16)divisor;
     gameState->framerateDivisor = divisor;
     Game_UpdateFramerateVariables(divisor);
 }
@@ -63,11 +63,11 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
     *gfx = _gfx;
 }
 
-void Game_Nop80173534(GameState *ctxt) {
+void Game_Nop80173534(GameState* ctxt) {
     ;
 }
 
-void GameState_Draw(GameState *ctxt, GraphicsContext *gCtxt) {
+void GameState_Draw(GameState* ctxt, GraphicsContext* gCtxt) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
     // Unused vars impact regalloc
@@ -79,13 +79,13 @@ void GameState_Draw(GameState *ctxt, GraphicsContext *gCtxt) {
     gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
-        GameState_SetFBFilter(&nextDisplayList, (u32) gCtxt->zbuffer);
+        GameState_SetFBFilter(&nextDisplayList, (u32)gCtxt->zbuffer);
     }
-    
+
     if (R_ENABLE_ARENA_DBG < 0) {
         R_ENABLE_ARENA_DBG = 0;
     }
-    
+
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
     gCtxt->polyOpa.p = nextDisplayList;
@@ -99,7 +99,7 @@ lblUnk:; // Label prevents reordering, if(1) around the above block don't seem t
     }
 }
 
-void Game_ResetSegments(GraphicsContext *gCtxt) {
+void Game_ResetSegments(GraphicsContext* gCtxt) {
     gSPSegment(gCtxt->polyOpa.p++, 0, 0);
     gSPSegment(gCtxt->polyOpa.p++, 0xF, gCtxt->framebuffer);
     gSPSegment(gCtxt->polyXlu.p++, 0, 0);
@@ -108,23 +108,23 @@ void Game_ResetSegments(GraphicsContext *gCtxt) {
     gSPSegment(gCtxt->overlay.p++, 0xF, gCtxt->framebuffer);
 }
 
-void func_801736DC(GraphicsContext *gCtxt) {
+void func_801736DC(GraphicsContext* gCtxt) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
-    
+
     nextDisplayList = Graph_GfxPlusOne(_polyOpa = gCtxt->polyOpa.p);
     gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
-    
+
     gCtxt->polyOpa.p = nextDisplayList;
 }
 
-void Game_UpdateInput(GameState *ctxt) {
+void Game_UpdateInput(GameState* ctxt) {
     Padmgr_GetInput(ctxt->input, 1);
 }
 
-void Game_Update(GameState *ctxt) {
+void Game_Update(GameState* ctxt) {
     GraphicsContext* _gCtx;
     _gCtx = ctxt->gfxCtx;
 
@@ -138,14 +138,14 @@ void Game_Update(GameState *ctxt) {
     }
 }
 
-void Game_IncrementFrameCount(GameState *ctxt) {
+void Game_IncrementFrameCount(GameState* ctxt) {
     Game_Nop80173534(ctxt);
     ctxt->frames++;
 }
 
-void Game_InitHeap(GameState *ctxt, u32 size) {
-    GameState *_ctx;
-    void *buf;
+void Game_InitHeap(GameState* ctxt, u32 size) {
+    GameState* _ctx;
+    void* buf;
 
     _ctx = ctxt;
     buf = Gamealloc_Alloc(&_ctx->alloc, size);
@@ -159,14 +159,13 @@ void Game_InitHeap(GameState *ctxt, u32 size) {
     assert_fail("../game.c", 0x40B);
 }
 
-void Game_ResizeHeap(GameState *ctxt, u32 size)
-{
-    GameAlloc *alloc;
-    void *buf;
+void Game_ResizeHeap(GameState* ctxt, u32 size) {
+    GameAlloc* alloc;
+    void* buf;
     u32 systemMaxFree;
     u32 bytesFree;
     u32 bytesAllocated;
-    void *heapStart;
+    void* heapStart;
 
     heapStart = ctxt->heap.heapStart;
     alloc = &ctxt->alloc;
@@ -174,23 +173,19 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
     Gamealloc_Free(alloc, heapStart);
     StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
-    if (!size)
-    {
+    if (!size) {
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (buf = Gamealloc_Alloc(alloc, size))
-    {
+    if (buf = Gamealloc_Alloc(alloc, size)) {
         GameStateHeap_Init(&ctxt->heap, buf, size);
-    }
-    else
-    {
+    } else {
         GameStateHeap_Init(&ctxt->heap, 0, 0);
         assert_fail("../game.c", 0x432);
     }
 }
 
-void Game_StateInit(GameState *ctxt, GameStateFunc gameStateInit, GraphicsContext *gCtxt) {
+void Game_StateInit(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gCtxt) {
     ctxt->gfxCtx = gCtxt;
     ctxt->frames = 0U;
     ctxt->main = NULL;
@@ -207,7 +202,7 @@ lblUnk:;
     Gamealloc_Init(&ctxt->alloc);
     Game_InitHeap(ctxt, 0x100000);
     Game_SetFramerateDivisor(ctxt, 3);
-    
+
     gameStateInit(ctxt);
 
     func_80140CE0(&D_801F8010);
@@ -216,11 +211,11 @@ lblUnk:;
     func_80140898(&D_801F8048);
     func_801773A0(&D_801F7FF0);
     func_8013ED9C();
-    
+
     osSendMesg(&ctxt->gfxCtx->unk5C, NULL, 1);
 }
 
-void Game_StateFini(GameState *ctxt) {
+void Game_StateFini(GameState* ctxt) {
     func_80172BC0();
     func_8019E014();
     osRecvMesg(&ctxt->gfxCtx->unk5C, 0, 1);
@@ -239,23 +234,23 @@ void Game_StateFini(GameState *ctxt) {
     Gamealloc_FreeAll(&ctxt->alloc);
 }
 
-GameStateFunc Game_GetNextStateInit(GameState *ctxt) {
+GameStateFunc Game_GetNextStateInit(GameState* ctxt) {
     return ctxt->nextGameStateInit;
 }
 
-u32 Game_GetNextStateSize(GameState *ctxt) {
+u32 Game_GetNextStateSize(GameState* ctxt) {
     return ctxt->nextGameStateSize;
 }
 
-u32 Game_GetShouldContinue(GameState *ctxt) {
+u32 Game_GetShouldContinue(GameState* ctxt) {
     return ctxt->running;
 }
 
-s32 Game_GetHeapFreeSize(GameState *ctxt) {
+s32 Game_GetHeapFreeSize(GameState* ctxt) {
     return GameStateHeap_GetFreeSize(&ctxt->heap);
 }
 
-s32 func_80173B48(GameState *ctxt) {
+s32 func_80173B48(GameState* ctxt) {
     s32 result;
     result = OS_CYCLES_TO_NSEC(ctxt->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(D_801FBAF0);
     return result;

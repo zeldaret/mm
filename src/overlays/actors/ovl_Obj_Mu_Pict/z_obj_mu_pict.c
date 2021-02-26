@@ -19,7 +19,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
     (ActorFunc)ObjMuPict_Init,
     (ActorFunc)ObjMuPict_Destroy,
     (ActorFunc)ObjMuPict_Update,
-    (ActorFunc)ObjMuPict_Draw
+    (ActorFunc)ObjMuPict_Draw,
 };
 */
 

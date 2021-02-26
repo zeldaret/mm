@@ -19,7 +19,7 @@ const ActorInit Obj_Boyo_InitVars = {
     (ActorFunc)ObjBoyo_Init,
     (ActorFunc)ObjBoyo_Destroy,
     (ActorFunc)ObjBoyo_Update,
-    (ActorFunc)ObjBoyo_Draw
+    (ActorFunc)ObjBoyo_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Tokei_Tobira_InitVars = {
     (ActorFunc)ObjTokeiTobira_Init,
     (ActorFunc)ObjTokeiTobira_Destroy,
     (ActorFunc)ObjTokeiTobira_Update,
-    (ActorFunc)ObjTokeiTobira_Draw
+    (ActorFunc)ObjTokeiTobira_Draw,
 };
 */
 

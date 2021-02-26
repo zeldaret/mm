@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-//From OOT
+// From OOT
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
@@ -65,7 +65,7 @@ u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     return 0;
 }
 
-void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag){
+void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
         ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
     }
@@ -137,7 +137,8 @@ void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt
     titleCtxt->alpha = 0;
 }
 
-void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7) {
+void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5,
+                           u8 param_6, u8 param_7) {
     titleCtxt->texture = texture;
     titleCtxt->unk4 = param_4;
     titleCtxt->unk6 = param_5;
@@ -291,7 +292,7 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Math_Coss(actor->world.rot.x) * actor->speedXZ;
+    f32 velX = Math_Coss(actor->world.rot.x) * actor->speedXZ;
     actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
     actor->velocity.y = Math_Sins(actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
@@ -303,7 +304,7 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Math_Coss(-actor->world.rot.x) * actor->speedXZ;
+    f32 velX = Math_Coss(-actor->world.rot.x) * actor->speedXZ;
     actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
     actor->velocity.y = Math_Sins(-actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
@@ -627,9 +628,9 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
     if (entry->nbLoaded == 0) {
         ramAddr = entry->loadedRamAddr;
         if (ramAddr != NULL) {
-            //Bit 1 - always loaded
+            // Bit 1 - always loaded
             if ((entry->allocType & 2) == 0) {
-                //Bit 0 - don't alloc memory
+                // Bit 0 - don't alloc memory
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {

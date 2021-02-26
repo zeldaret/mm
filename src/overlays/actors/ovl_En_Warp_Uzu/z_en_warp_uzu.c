@@ -19,7 +19,7 @@ const ActorInit En_Warp_Uzu_InitVars = {
     (ActorFunc)EnWarpUzu_Init,
     (ActorFunc)EnWarpUzu_Destroy,
     (ActorFunc)EnWarpUzu_Update,
-    (ActorFunc)EnWarpUzu_Draw
+    (ActorFunc)EnWarpUzu_Draw,
 };
 */
 

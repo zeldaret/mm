@@ -8,7 +8,7 @@ u32 gViConfigFeatures = 0x42;
 f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
-void Idle_ClearMemory(void* begin, void* end){
+void Idle_ClearMemory(void* begin, void* end) {
     if (begin < end) {
         bzero(begin, (s32)(int)end - (int)begin);
     }
@@ -55,7 +55,8 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)_codeSegmentRomStart, (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)_codeSegmentRomStart,
+                           (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, 0, 1);
@@ -85,19 +86,19 @@ void func_8008038C(void) {
     gViConfigYScale = 1.0;
 
     switch (osTvType) {
-    case 1:
-        D_8009B290 = 2;
-        D_8009B240 = osViModeNtscLan1;
-        break;
-    case 2:
-        D_8009B290 = 30;
-        D_8009B240 = osViModeMpalLan1;
-        break;
-    case 0:
-        D_8009B290 = 44;
-        D_8009B240 = D_800980E0;
-        gViConfigYScale = 0.833f;
-        break;
+        case 1:
+            D_8009B290 = 2;
+            D_8009B240 = osViModeNtscLan1;
+            break;
+        case 2:
+            D_8009B290 = 30;
+            D_8009B240 = osViModeMpalLan1;
+            break;
+        case 0:
+            D_8009B290 = 44;
+            D_8009B240 = D_800980E0;
+            gViConfigYScale = 0.833f;
+            break;
     }
 
     D_80096B20 = 1;
@@ -111,5 +112,6 @@ void Idle_ThreadEntry(void* arg) {
     osStartThread(&mainOSThread);
     osSetThreadPri(NULL, 0);
 
-    for(;;);
+    for (;;)
+        ;
 }

@@ -18,7 +18,7 @@ const ActorInit En_Jso_InitVars = {
     (ActorFunc)EnJso_Init,
     (ActorFunc)EnJso_Destroy,
     (ActorFunc)EnJso_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

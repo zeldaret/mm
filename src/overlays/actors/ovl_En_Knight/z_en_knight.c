@@ -19,7 +19,7 @@ const ActorInit En_Knight_InitVars = {
     (ActorFunc)EnKnight_Init,
     (ActorFunc)EnKnight_Destroy,
     (ActorFunc)EnKnight_Update,
-    (ActorFunc)EnKnight_Draw
+    (ActorFunc)EnKnight_Draw,
 };
 */
 

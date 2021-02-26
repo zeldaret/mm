@@ -18,7 +18,7 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)EnTalk_Init,
     (ActorFunc)EnTalk_Destroy,
     (ActorFunc)EnTalk_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

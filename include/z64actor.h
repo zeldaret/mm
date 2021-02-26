@@ -19,7 +19,7 @@ typedef struct {
 } PosRot; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ u8 attack[32];
+    /* 0x00 */ u8 table[32];
 } DamageTable; // size = 0x20
 
 typedef struct {
@@ -163,16 +163,44 @@ typedef struct Actor {
     /* 0x140 */ ActorOverlay* overlayEntry; // Pointer to the overlay table entry for this actor
 } Actor; // size = 0x144
 
+typedef enum {
+    /* 0 */ FOOT_LEFT,
+    /* 1 */ FOOT_RIGHT
+} ActorFootIndex;
+
+/*
+BgCheckFlags WIP documentation:
+& 0x001 : Standing on the ground
+& 0x002 : Has touched the ground (only active for 1 frame)
+& 0x004 : Has left the ground (only active for 1 frame)
+& 0x008 : Touching a wall
+& 0x010 : Touching a ceiling
+& 0x020 : On or below water surface
+& 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
+& 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
+& 0x100 : Crushed between a floor and ceiling (triggers a void for player)
+& 0x200 : Unknown (only set/used by player so far)
+*/
+
+/*
+colorFilterParams WIP documentation
+& 0x8000 : white
+& 0x4000 : red
+if neither of the above are set : blue
+(& 0x1F00 >> 5) | 7 : color intensity
+0x2000 : translucent, else opaque
+*/
+
 typedef struct {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s32 dynaPolyId;
+    /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 unk148;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
+    /* 0x152 */ u16 unk152;
     /* 0x154 */ u32 unk154;
-    /* 0x158 */ u8 dynaFlags;
-    /* 0x159 */ UNK_TYPE1 pad159[0x3];
+    /* 0x158 */ u8 unk_158;
+    /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
 typedef struct {

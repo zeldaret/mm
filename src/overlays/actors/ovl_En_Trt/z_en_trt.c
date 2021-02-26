@@ -19,7 +19,7 @@ const ActorInit En_Trt_InitVars = {
     (ActorFunc)EnTrt_Init,
     (ActorFunc)EnTrt_Destroy,
     (ActorFunc)EnTrt_Update,
-    (ActorFunc)EnTrt_Draw
+    (ActorFunc)EnTrt_Draw,
 };
 */
 

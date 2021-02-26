@@ -19,7 +19,7 @@ const ActorInit En_Ja_InitVars = {
     (ActorFunc)EnJa_Init,
     (ActorFunc)EnJa_Destroy,
     (ActorFunc)EnJa_Update,
-    (ActorFunc)EnJa_Draw
+    (ActorFunc)EnJa_Draw,
 };
 */
 

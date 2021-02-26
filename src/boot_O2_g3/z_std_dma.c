@@ -21,7 +21,8 @@ s32 DmaMgr_DMARomToRam(u32 a0, void* a1, u32 a2) {
             sp60.dramAddr = a1;
             sp60.size = s0;
             ret = osEPiStartDma(gCartHandle, &sp60, 0);
-            if (ret) goto END;
+            if (ret)
+                goto END;
 
             osRecvMesg(&sp48, NULL, 1);
             a2 -= s0;
@@ -35,7 +36,8 @@ s32 DmaMgr_DMARomToRam(u32 a0, void* a1, u32 a2) {
     sp60.dramAddr = a1;
     sp60.size = (u32)a2;
     ret = osEPiStartDma(gCartHandle, &sp60, 0);
-    if (ret) goto END;
+    if (ret)
+        goto END;
 
     osRecvMesg(&sp48, NULL, 1);
 
@@ -53,8 +55,10 @@ DmaEntry* Dmamgr_FindDmaEntry(u32 a0) {
     DmaEntry* curr;
 
     for (curr = dmadata; curr->vromEnd != 0; curr++) {
-        if (a0 < curr->vromStart) continue;
-        if (a0 >= curr->vromEnd) continue;
+        if (a0 < curr->vromStart)
+            continue;
+        if (a0 >= curr->vromEnd)
+            continue;
 
         return curr;
     }
@@ -84,7 +88,7 @@ s32 Dmamgr_FindDmaIndex(u32 a0) {
     DmaEntry* v0 = Dmamgr_FindDmaEntry(a0);
 
     if (v0 != NULL) {
-		return v0 - dmadata;
+        return v0 - dmadata;
     }
 
     return -1;
@@ -146,20 +150,23 @@ void DmaMgr_ProcessMsg(DmaRequest* a0) {
 
 void Dmamgr_ThreadEntry(void* a0) {
     OSMesg sp34;
-	u32 pad;
+    u32 pad;
     DmaRequest* s0;
 
     for (;;) {
         osRecvMesg(&dmamgrMsq, &sp34, 1);
-        if (sp34 == NULL) return;
+        if (sp34 == NULL)
+            return;
         s0 = (DmaRequest*)sp34;
         DmaMgr_ProcessMsg(s0);
-        if (s0->notifyQueue == NULL) continue;
+        if (s0->notifyQueue == NULL)
+            continue;
         osSendMesg(s0->notifyQueue, s0->notifyMsg, 0);
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused,
+                           OSMesgQueue* callback, void* callbackMesg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
     }
@@ -177,42 +184,44 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
 }
 
 s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
-	DmaRequest sp48;
+    DmaRequest sp48;
     OSMesgQueue sp30;
     OSMesg sp2C;
-	s32 ret;
+    s32 ret;
 
     osCreateMesgQueue(&sp30, &sp2C, 1);
 
-	ret = DmaMgr_SendRequestImpl(&sp48, vramStart, vromStart, size, 0, &sp30, 0);
+    ret = DmaMgr_SendRequestImpl(&sp48, vramStart, vromStart, size, 0, &sp30, 0);
 
-	if (ret == -1) {
-		return ret;
-	} else {
-		osRecvMesg(&sp30, NULL, 1);
-	}
+    if (ret == -1) {
+        return ret;
+    } else {
+        osRecvMesg(&sp30, NULL, 1);
+    }
 
-	return 0;
+    return 0;
 }
 
 #ifdef NON_MATCHING
 // TODO missing a useless move initializing v0, and some reorderings
 void Dmamgr_Start() {
-	DmaEntry* v0;
-	u32 v1;
-	DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
+    DmaEntry* v0;
+    u32 v1;
+    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata,
+                       (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
 
-	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
+    for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++)
+        ;
 
-	numDmaEntries = v1;
+    numDmaEntries = v1;
 
-	osCreateMesgQueue(&dmamgrMsq, dmamgrMsqMessages, 32);
+    osCreateMesgQueue(&dmamgrMsq, dmamgrMsqMessages, 32);
 
-	StackCheck_Init(&dmamgrStackEntry, &dmamgrStack, &dmamgrStack[1280], 0, 256, dmamgrThreadName);
+    StackCheck_Init(&dmamgrStackEntry, &dmamgrStack, &dmamgrStack[1280], 0, 256, dmamgrThreadName);
 
-	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &dmamgrStack[1280], 17);
+    osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &dmamgrStack[1280], 17);
 
-	osStartThread(&dmamgrOSThread);
+    osStartThread(&dmamgrOSThread);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_std_dma/Dmamgr_Start.asm")

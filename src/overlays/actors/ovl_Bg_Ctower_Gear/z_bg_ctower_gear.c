@@ -19,7 +19,7 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
     (ActorFunc)BgCtowerGear_Init,
     (ActorFunc)BgCtowerGear_Destroy,
     (ActorFunc)BgCtowerGear_Update,
-    (ActorFunc)BgCtowerGear_Draw
+    (ActorFunc)BgCtowerGear_Draw,
 };
 */
 

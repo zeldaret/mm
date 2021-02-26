@@ -23,22 +23,17 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
     (ActorFunc)BgIkanaRay_Init,
     (ActorFunc)BgIkanaRay_Destroy,
     (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw
+    (ActorFunc)BgIkanaRay_Draw,
 };
 
 // TODO better formatting
-ColCylinderInit bgIkanaRayCylinderInit = {
-    { 10, 33, 0, 0, 0, 1 },
-    { 0, { 0x00200000, 0, 0 }, { 0, 0, 0 }, 25, 0, 1 },
-    { 90, 420, 65116}
-};
+ColCylinderInit bgIkanaRayCylinderInit = { { 10, 33, 0, 0, 0, 1 },
+                                           { 0, { 0x00200000, 0, 0 }, { 0, 0, 0 }, 25, 0, 1 },
+                                           { 90, 420, 65116 } };
 
 // TODO macro
-InitChainEntry  bgIkanaRayCompInit[] = {
-    {1, 6, 0x0FC, 4000},
-    {1, 6, 0x100, 1000},
-    {1, 6, 0x104, 1000},
-    {0, 9, 0x058, 100}
+InitChainEntry bgIkanaRayCompInit[] = {
+    { 1, 6, 0x0FC, 4000 }, { 1, 6, 0x100, 1000 }, { 1, 6, 0x104, 1000 }, { 0, 9, 0x058, 100 }
 };
 
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {

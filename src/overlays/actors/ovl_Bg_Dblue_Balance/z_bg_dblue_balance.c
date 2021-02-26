@@ -19,7 +19,7 @@ const ActorInit Bg_Dblue_Balance_InitVars = {
     (ActorFunc)BgDblueBalance_Init,
     (ActorFunc)BgDblueBalance_Destroy,
     (ActorFunc)BgDblueBalance_Update,
-    (ActorFunc)BgDblueBalance_Draw
+    (ActorFunc)BgDblueBalance_Draw,
 };
 */
 

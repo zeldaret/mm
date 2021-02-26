@@ -18,7 +18,7 @@ const ActorInit Bg_Danpei_Movebg_InitVars = {
     (ActorFunc)BgDanpeiMovebg_Init,
     (ActorFunc)BgDanpeiMovebg_Destroy,
     (ActorFunc)BgDanpeiMovebg_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

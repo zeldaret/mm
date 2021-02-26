@@ -19,7 +19,7 @@ const ActorInit En_Syateki_Crow_InitVars = {
     (ActorFunc)EnSyatekiCrow_Init,
     (ActorFunc)EnSyatekiCrow_Destroy,
     (ActorFunc)EnSyatekiCrow_Update,
-    (ActorFunc)EnSyatekiCrow_Draw
+    (ActorFunc)EnSyatekiCrow_Draw,
 };
 */
 

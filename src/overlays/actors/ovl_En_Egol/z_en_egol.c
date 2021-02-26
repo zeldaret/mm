@@ -19,7 +19,7 @@ const ActorInit En_Egol_InitVars = {
     (ActorFunc)EnEgol_Init,
     (ActorFunc)EnEgol_Destroy,
     (ActorFunc)EnEgol_Update,
-    (ActorFunc)EnEgol_Draw
+    (ActorFunc)EnEgol_Draw,
 };
 */
 
