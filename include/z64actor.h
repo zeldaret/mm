@@ -168,28 +168,19 @@ typedef enum {
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
 
-/*
-BgCheckFlags WIP documentation:
-& 0x001 : Standing on the ground
-& 0x002 : Has touched the ground (only active for 1 frame)
-& 0x004 : Has left the ground (only active for 1 frame)
-& 0x008 : Touching a wall
-& 0x010 : Touching a ceiling
-& 0x020 : On or below water surface
-& 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
-& 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
-& 0x100 : Crushed between a floor and ceiling (triggers a void for player)
-& 0x200 : Unknown (only set/used by player so far)
-*/
-
-/*
-colorFilterParams WIP documentation
-& 0x8000 : white
-& 0x4000 : red
-if neither of the above are set : blue
-(& 0x1F00 >> 5) | 7 : color intensity
-0x2000 : translucent, else opaque
-*/
+/**
+ * BgCheckFlags WIP documentation (logical masks):
+ * 0x001 : Standing on the ground
+ * 0x002 : Has touched the ground (only active for 1 frame)
+ * 0x004 : Has left the ground (only active for 1 frame)
+ * 0x008 : Touching a wall
+ * 0x010 : Touching a ceiling
+ * 0x020 : On or below water surface
+ * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
+ * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
+ * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
+ * 0x200 : Unknown (only set/used by player so far)
+ */
 
 typedef struct {
     /* 0x000 */ Actor actor;
