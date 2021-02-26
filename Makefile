@@ -120,9 +120,12 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 # disasm is not a file so we must tell make not to check it when evaluating timestamps
 .INTERMEDIATE: disasm
 
-all:
-	$(MAKE) $(UNCOMPRESSED_ROM)
-	$(MAKE) $(ROM)
+$(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
+	./tools/makerom.py ./tables/dmadata_table.txt $@
+ifeq ($(COMPARE),1)
+	@md5sum $(UNCOMPRESSED_ROM)
+	@md5sum -c checksum_uncompressed.md5
+endif
 
 $(ROM): $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
@@ -131,12 +134,9 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum.md5
 endif
 
-$(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
-	./tools/makerom.py ./tables/dmadata_table.txt $@
-ifeq ($(COMPARE),1)
-	@md5sum $(UNCOMPRESSED_ROM)
-	@md5sum -c checksum_uncompressed.md5
-endif
+all:
+	$(MAKE) $(UNCOMPRESSED_ROM)
+	$(MAKE) $(ROM)
 
 build/code.elf: $(O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
 	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
