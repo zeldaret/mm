@@ -721,7 +721,7 @@ void func_800B6474(GlobalContext* ctxt); // func_800B6474
 UNK_TYPE4 func_800B648C(GlobalContext* ctxt, UNK_TYPE1 param_2, UNK_TYPE1 param_3, float param_4, Vec3f* param_5); // func_800B648C
 f32 func_800B64FC(GlobalContext* ctxt, f32 fParm2, Vec3f* pzParm3, u32* puParm4); // func_800B64FC
 void* func_800B6584(GlobalContext* ctxt, s16 sParm2, void* pvParm3, u32 uParm4); // func_800B6584
-UNK_TYPE4 func_800B6608(int iParm2, short sParm2); // func_800B6608
+UNK_TYPE4 func_800B6608(int iParm1, short sParm2); // func_800B6608
 void func_800B6680(void); // func_800B6680
 void Actor_MarkForDeath(Actor* actor); // func_800B670C
 void Actor_InitCurrPosition(Actor* actor); // func_800B672C
