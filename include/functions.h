@@ -971,13 +971,13 @@ void func_800C3C00(CollisionContext* bgCtxt, unsigned int param_2); // func_800C
 void func_800C3C14(CollisionContext* bgCtxt, unsigned int param_2); // func_800C3C14
 BgMeshHeader* BgCheck_GetActorMeshHeader(CollisionContext* bgCtxt, s32 index); // func_800C3C2C
 void func_800C3C94(void); // func_800C3C94
-f32 func_800C3D50(s32 arg0, CollisionContext* bgCtxt, s32 arg2, f32* arg3, void* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9); // func_800C3D50
+f32 func_800C3D50(s32 arg0, CollisionContext* bgCtxt, s32 arg2, BgPolygon* arg3, s32* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9); // func_800C3D50
 void func_800C3F40(void); // func_800C3F40
 void func_800C3FA0(void); // func_800C3FA0
 void func_800C4000(void); // func_800C4000
 void func_800C4058(void); // func_800C4058
 void func_800C40B4(void); // func_800C40B4
-f32 func_800C411C(CollisionContext* bgCtxt, f32* arg1, void* arg2, Actor* actor, Vec3f* pos); // func_800C411C
+f32 func_800C411C(CollisionContext* bgCtxt, BgPolygon* arg1, s32* arg2, Actor* actor, Vec3f* pos); // func_800C411C
 void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C4188
 void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C41E4
 void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800C4240
@@ -1101,7 +1101,7 @@ u32 func_800C9E40(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // f
 u32 func_800C9E88(CollisionContext* bgCtxt, BgPolygon* polygon, s32 index); // func_800C9E88
 void func_800C9EBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800C9EBC
 void func_800CA1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA1AC
-void func_800CA1E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA1E8
+void func_800CA1E8(GlobalContext* globalCtx, CollisionContext* bgCtxt, f32 arg2, f32 arg3, f32* arg4, UNK_PTR arg5); // func_800CA1E8
 void func_800CA22C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800CA22C
 void func_800CA568(void); // func_800CA568
 void func_800CA634(void); // func_800CA634
