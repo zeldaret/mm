@@ -218,7 +218,7 @@ s32 StartHeap_CheckArena(void); // func_80086F04
 void StartHeap_InitArena(u32 base, u32 size); // func_80086F28
 void StartHeap_Cleanup(void); // func_80086F58
 u32 StartHeap_IsInitialized(void); // func_80086F7C
-u32 rand(void); // func_80086FA0
+s32 rand(void); // func_80086FA0
 void randSetSeed(u32 seed); // func_80086FD0
 f32 randZeroOne(void); // func_80086FDC
 f32 randPlusMinusPoint5(void); // func_80087030
