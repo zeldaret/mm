@@ -1,7 +1,7 @@
 /*
  * File: z_bg_lotus.c
  * Overlay: Bg_Lotus
- * Description: Swamp Lilypads
+ * Description: Southern Swamp Lilypads
  */
 
 #include "z_bg_lotus.h"
@@ -31,11 +31,8 @@ const ActorInit Bg_Lotus_InitVars = {
     (ActorFunc)BgLotus_Draw,
 };
 
-static u32 D_80AD6D10[] = {
-    0x48580064,
-    0x00000000,
-    0x00000000,
-    0x00000000,
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 extern BgMeshHeader D_06000A20; // Lilypad collision
@@ -46,7 +43,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     s32 sp2C;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80AD6D10);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
     this->dyna.actor.floorHeight =
