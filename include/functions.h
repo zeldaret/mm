@@ -1320,8 +1320,8 @@ void func_800E0348(Camera* camera); // func_800E0348
 s800E03A0* func_800E03A0(s32 a0); // func_800E03A0
 void func_800E03CC(u8* param_1); // func_800E03CC
 f32 Collision_GetDamageAndEffectOnBumper(ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody, u32* effect); // func_800E0410
-void func_800E04BC(void); // func_800E04BC
-u32 Collision_GetToucherDamage(ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper); // func_800E04EC
+f32 func_800E04BC(f32 a0, ColBodyInfo* bumperBody); // func_800E04BC
+s32 Collision_GetToucherDamage(ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody); // func_800E04EC
 s32 Collision_InitCommonDefault(GlobalContext* ctxt, ColCommon* shape); // func_800E0538
 s32 Collision_FiniCommon(GlobalContext* ctxt, ColCommon* shape); // func_800E0580
 void func_800E0594(void); // func_800E0594
@@ -1359,9 +1359,9 @@ void func_800E0CA8(void); // func_800E0CA8
 void func_800E0D84(void); // func_800E0D84
 s32 Collision_InitSphereGroupWithData(GlobalContext* ctxt, ColSphereGroup* sphereGroup, Actor* actor, ColSphereGroupInit* init, ColSphereGroupElement* spheres); // func_800E0E60
 s32 Collision_InitSphereGroup(GlobalContext* ctxt, ColSphereGroup* sphereGroup, Actor* actor, ColSphereGroupInit* init, ColSphereGroupElement* spheres); // func_800E0F14
-s32 Collision_ResetSphereGroupForAT(GlobalContext* ctxt, ColSphereGroup* spheres); // func_800E0F68
-s32 Collision_ResetSphereGroupForAC(GlobalContext* ctxt, ColSphereGroup* spheres); // func_800E0FF4
-s32 Collision_ResetSphereGroupForOT(GlobalContext* ctst, ColSphereGroup* spheres); // func_800E1080
+s32 Collision_ResetSphereGroupForAT(GlobalContext* ctxt, ColCommon* collider); // func_800E0F68
+s32 Collision_ResetSphereGroupForAC(GlobalContext* ctxt, ColCommon* collider); // func_800E0FF4
+s32 Collision_ResetSphereGroupForOT(GlobalContext* ctst, ColCommon* collider); // func_800E1080
 s32 Collision_InitCylinderParamsDefault(GlobalContext* ctxt, ColCylinderParams* params); // func_800E110C
 s32 Collision_FiniCylinderParams(GlobalContext* ctxt, ColCylinderParams* params); // func_800E1148
 s32 Collision_InitCylinderParamsWithData(GlobalContext* ctxt, ColCylinderParams* info, ColCylinderParams* init); // func_800E115C
@@ -1383,20 +1383,20 @@ s32 Collision_InitTriWithData(GlobalContext* ctxt, ColTri* elem, ColTriInit* ini
 s32 Collision_ResetTriForAT(GlobalContext* ctxt, ColTri* tri); // func_800E1664
 s32 Collision_ResetTriForAC(GlobalContext* ctxt, ColTri* tri); // func_800E1688
 s32 func_800E16AC(GlobalContext* ctxt, ColTri* tri); // func_800E16AC
-s32 Collision_InitTriGroupDefault(GlobalContext* ctxt, ColTriGroup* quadGroup); // func_800E16D0
+s32 Collision_InitTriGroupDefault(GlobalContext* ctxt, ColTriGroup* triGroup); // func_800E16D0
 void func_800E16FC(void); // func_800E16FC
 s32 Collision_FiniTriGroup(GlobalContext* ctxt, ColTriGroup* triGroup); // func_800E17B4
 void func_800E1858(void); // func_800E1858
 s32 Collision_InitTriGroupWithData(GlobalContext* ctxt, ColTriGroup* triGroup, Actor* actor, ColTriGroupInit* init, ColTri* tris); // func_800E1958
 s32 Collision_InitTriGroup(GlobalContext* ctxt, ColTriGroup* triGroup, Actor* actor, ColTriGroupInit* init, ColTri* tris); // func_800E1A24
-s32 Collision_ResetTriGroupForAT(GlobalContext* ctxt, ColTriGroup* tris); // func_800E1A78
-s32 Collision_ResetTriGroupForAC(GlobalContext* ctxt, ColTriGroup* tris); // func_800E1B18
-s32 Collision_ResetTriGroupForOT(GlobalContext* ctxt, ColTriGroup* tris); // func_800E1BB8
+s32 Collision_ResetTriGroupForAT(GlobalContext* ctxt, ColCommon* collider); // func_800E1A78
+s32 Collision_ResetTriGroupForAC(GlobalContext* ctxt, ColCommon* collider); // func_800E1B18
+s32 Collision_ResetTriGroupForOT(GlobalContext* ctxt, ColCommon* collider); // func_800E1BB8
 s32 Collision_InitQuadParamsDefault(GlobalContext* ctxt, ColQuadParams* params); // func_800E1C58
 s32 Collision_FiniQuadParams(GlobalContext* ctxt, ColQuadParams* params); // func_800E1CA4
 s32 Collision_ResetQuadParamsForAT(GlobalContext* ctxt, ColQuadParams* params); // func_800E1CB8
 void Collision_QuadCalcMidpoints(ColQuadParams* params); // func_800E1CD4
-s32 Collision_InitQuadParamsWithData(GlobalContext* ctxt, ColQuadParams* params, ColQuadParams* init); // func_800E1D90
+s32 Collision_InitQuadParamsWithData(GlobalContext* ctxt, ColQuadParams* params, ColQuadParamsInit* init); // func_800E1D90
 s32 Collision_InitQuadDefault(GlobalContext* ctxt, ColQuad* quad); // func_800E1E18
 s32 Collision_FiniQuad(GlobalContext* ctxt, ColQuad* quad); // func_800E1E68
 void func_800E1EB8(void); // func_800E1EB8
@@ -1404,8 +1404,8 @@ s32 Collision_InitQuadWithData(GlobalContext* ctxt, ColQuad* quad, Actor* actor,
 s32 Collision_InitQuad(GlobalContext* ctxt, ColQuad* quad, Actor* actor, ColQuadInit* init); // func_800E1F88
 s32 Collision_ResetQuadForAT(GlobalContext* ctxt, ColQuad* quad); // func_800E1FD4
 s32 Collision_ResetQuadForAC(GlobalContext* param_1, ColQuad* quad); // func_800E2024
-s32 Collision_ResetQuadForOT(GlobalContext* ctxt, ColCommon* quad); // func_800E2064
-void func_800E20A4(void); // func_800E20A4
+s32 Collision_ResetQuadForOT(GlobalContext* ctxt, ColQuad* quad); // func_800E2064
+s32 func_800E20A4(GlobalContext* ctxt, ColQuad* quad, Vec3f* a2); // func_800E20A4
 s32 Collision_InitSphereDefault(GlobalContext* ctxt, ColSphere* sphere); // func_800E2154
 s32 Collision_FiniSphere(GlobalContext* pzParm1, ColSphere* sphere); // func_800E21A4
 s32 Collision_InitSphereWithData(GlobalContext* ctxt, ColSphere* sphere, Actor* actor, ColSphereInit* info); // func_800E21F4
@@ -1417,7 +1417,7 @@ void func_800E2368(void); // func_800E2368
 UNK_TYPE4 func_800E23B0(void); // func_800E23B0
 void func_800E23C4(void); // func_800E23C4
 void func_800E2408(void); // func_800E2408
-s32 func_800E2434(GlobalContext* ctxt, int param_2); // func_800E2434
+s32 func_800E2434(GlobalContext* ctxt, ColCommon* shape); // func_800E2434
 void Collision_Init(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2450
 void Collision_Fini(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2470
 void Collision_Reset(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E2480
@@ -1445,32 +1445,32 @@ void func_800E3168(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucher
 void func_800E3304(ColCommon* toucher, ColCommon* bumper); // func_800E3304
 s32 Collision_HandleCollisionATWithAC(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vec3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vec3f* bumperLoc, Vec3f* param_8); // func_800E3324
 void Collision_TriCalcAvgPoint(ColTri* tri, Vec3f* avg); // func_800E35C8
-void collision_quad_cal_avg_point(ColQuadParams* quad, Vec3f* avg); // func_800E362C
-void Collision_SphereGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E36AC
-void Collision_SphereGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E38F8
-void Collision_SphereGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColTriGroup* bumpee); // func_800E3B18
-void Collision_SphereGroupWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColQuad* bumpee); // func_800E3CC0
-void Collision_SphereGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E3E6C
-void Collision_CylinderWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E4058
-void Collision_CylinderWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E4298
-void Collision_CylinderWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColTriGroup* bumpee); // func_800E44C0
-void Collision_CylinderWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColQuad* bumpee); // func_800E4628
-void Collision_CylinderWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E47B8
-void Collision_TriGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColSphereGroup* bumpee); // func_800E494C
-void Collision_TriGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColCylinder* bumpee); // func_800E4B08
-void Collision_TriGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColTriGroup* bumpee); // func_800E4C70
-void Collision_TriGroupWithQuad(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColQuad* bumpee); // func_800E4E24
-void Collision_TriGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColTriGroup* toucher, ColSphere* bumpee); // func_800E4FE4
-void Collision_QuadWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColSphereGroup* bumpee); // func_800E5154
-void Collision_QuadWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColCylinder* bumpee); // func_800E531C
-void Collision_QuadWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColTriGroup* bumpee); // func_800E54DC
-void Collision_QuadWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColQuad* bumpee); // func_800E56B8
-void Collision_QuadWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColQuad* toucher, ColSphere* bumpee); // func_800E5874
-void Collision_SphereWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E59A4
-void Collision_SphereWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E5B94
-void Collision_SphereWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColTriGroup* bumpee); // func_800E5D10
-void Collision_SphereWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColQuad* bumpee); // func_800E5E54
-void Collision_SphereWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E5F6C
+void collision_quad_cal_avg_point(ColQuad* quad, Vec3f* avg); // func_800E362C
+void Collision_SphereGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E36AC
+void Collision_SphereGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E38F8
+void Collision_SphereGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E3B18
+void Collision_SphereGroupWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E3CC0
+void Collision_SphereGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E3E6C
+void Collision_CylinderWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4058
+void Collision_CylinderWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4298
+void Collision_CylinderWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E44C0
+void Collision_CylinderWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4628
+void Collision_CylinderWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E47B8
+void Collision_TriGroupWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E494C
+void Collision_TriGroupWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4B08
+void Collision_TriGroupWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4C70
+void Collision_TriGroupWithQuad(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4E24
+void Collision_TriGroupWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E4FE4
+void Collision_QuadWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5154
+void Collision_QuadWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E531C
+void Collision_QuadWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E54DC
+void Collision_QuadWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E56B8
+void Collision_QuadWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5874
+void Collision_SphereWithSphereGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E59A4
+void Collision_SphereWithCylinderAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5B94
+void Collision_SphereWithTriGroupAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5D10
+void Collision_SphereWithQuadAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5E54
+void Collision_SphereWithSphereAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E5F6C
 void func_800E60C0(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* spheres); // func_800E60C0
 void func_800E61A0(void); // func_800E61A0
 void func_800E6238(void); // func_800E6238
@@ -1479,17 +1479,17 @@ void func_800E63B8(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSpher
 void func_800E6450(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E6450
 void Collision_CollideWithAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* colObj); // func_800E6524
 void Collision_DoATWithAC(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E6654
-void func_800E6724(void); // func_800E6724
+s32 func_800E6724(u8 mass); // func_800E6724
 void Collision_HandleCollisionOTWithOT(GlobalContext* ctxt, ColCommon* toucher, ColBodyInfo* toucherBody, Vec3f* toucherLoc, ColCommon* bumper, ColBodyInfo* bumperBody, Vec3f* bumperLoc, f32 param_8); // func_800E6760
-void Collision_SphereGroupWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphereGroup* bumpee); // func_800E6A9C
-void Collision_SphereGroupWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColCylinder* bumpee); // func_800E6C84
-void Collision_SphereGroupWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphereGroup* toucher, ColSphere* bumpee); // func_800E6DF4
-void Collision_CylinderWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphereGroup* bumpee); // func_800E6F64
-void Collision_CylinderWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColCylinder* bumpee); // func_800E6F90
-void Collision_CylinderWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCylinder* toucher, ColSphere* bumpee); // func_800E7060
-void Collision_SphereWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphereGroup* bumpee); // func_800E7130
-void Collision_SphereWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColCylinder* bumpee); // func_800E715C
-void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColSphere* toucher, ColSphere* bumpee); // func_800E7188
+void Collision_SphereGroupWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E6A9C
+void Collision_SphereGroupWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E6C84
+void Collision_SphereGroupWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E6DF4
+void Collision_CylinderWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E6F64
+void Collision_CylinderWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E6F90
+void Collision_CylinderWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E7060
+void Collision_SphereWithSphereGroupOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E7130
+void Collision_SphereWithCylinderOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E715C
+void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* toucher, ColCommon* bumpee); // func_800E7188
 UNK_TYPE4 func_800E7264(ColCommon* iParm1); // func_800E7264
 UNK_TYPE4 func_800E7288(ColCommon* piParm1, ColCommon* piParm2); // func_800E7288
 void Collision_DoOTWithOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E7308
@@ -1514,7 +1514,7 @@ void func_800E7DA8(void); // func_800E7DA8
 s32 func_800E7DCC(GlobalContext* ctxt, CollisionCheckContext* colCtxt, Vec3f* param_3, Vec3f* param_4, Actor** param_5, s32 param_6); // func_800E7DCC
 void Collision_CylinderMoveToActor(Actor* actor, ColCylinder* cylinder); // func_800E7DF8
 void Collision_CylinderSetLoc(ColCylinder* cylinder, Vec3s* loc); // func_800E7E3C
-void Collision_QuadSetCoords(ColQuad* iParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5); // func_800E7E5C
+void Collision_QuadSetCoords(ColQuad* quad, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d); // func_800E7E5C
 void Collision_TriGroupSetCoordsAtIndex(ColTriGroup* tris, s32 index, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5); // func_800E7ECC
 void Collision_InitTriParamsAtIndex(GlobalContext* ctxt, ColTriGroup* tris, s32 index, ColTriParamsInit* init); // func_800E7F8C
 void func_800E7FDC(void); // func_800E7FDC

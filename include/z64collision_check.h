@@ -58,20 +58,14 @@ typedef struct {
 } ColCylinderParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Vec3f pointA;
-    /* 0x0C */ Vec3f pointB;
-    /* 0x18 */ Vec3f pointC;
-    /* 0x24 */ Vec3f pointD;
+    /* 0x00 */ Vec3f quad[4];
     /* 0x30 */ Vec3s unk30;
     /* 0x36 */ Vec3s unk36;
     /* 0x3C */ f32 unk3C;
 } ColQuadParams; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ Vec3f pointA;
-    /* 0x0C */ Vec3f pointB;
-    /* 0x18 */ Vec3f pointC;
-    /* 0x24 */ Vec3f pointD;
+    /* 0x00 */ Vec3f quad[4];
 } ColQuadParamsInit; // size = 0x30
 
 typedef struct {
@@ -80,8 +74,7 @@ typedef struct {
 } ColSphereCollisionInfo; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s unk0;
-    /* 0x06 */ s16 unk6;
+    /* 0x00 */ ColSphereCollisionInfo unk0;
     /* 0x08 */ ColSphereCollisionInfo colInfo;
     /* 0x10 */ f32 unk10;
     /* 0x14 */ u8 unk14;
@@ -95,17 +88,13 @@ typedef struct {
 } ColSphereParamsInit; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Vec3f pointA;
-    /* 0x0C */ Vec3f pointB;
-    /* 0x18 */ Vec3f pointC;
+    /* 0x00 */ Vec3f vtx[3];
     /* 0x24 */ Vec3f unitNormal;
     /* 0x30 */ f32 unk30;
 } ColTriParams; // size = 0x34
 
 typedef struct {
-    /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ Vec3f unk18;
+    /* 0x00 */ Vec3f vtx[3];
 } ColTriParamsInit; // size = 0x24
 
 typedef struct {
@@ -128,7 +117,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ ColCommonInit base;
     /* 0x6 */ UNK_TYPE1 pad6[0x2];
-    /* 0x8 */ u32 count;
+    /* 0x8 */ s32 count;
     /* 0xC */ ColSphereGroupElementInit* init;
 } ColSphereGroupInit; // size = 0x10
 
@@ -145,7 +134,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ColCommonInit base;
-    /* 0x8 */ u32 count;
+    /* 0x8 */ s32 count;
     /* 0xC */ ColTriInit* elemInit;
 } ColTriGroupInit; // size = 0x10
 
@@ -175,7 +164,7 @@ typedef struct {
     /* 0x290 */ ColCommon* group4[3];
 } CollisionCheckContext; // size = 0x29C
 
-typedef struct ColBodyInfo_t {
+typedef struct ColBodyInfo {
     /* 0x00 */ ColTouch toucher;
     /* 0x08 */ ColBump bumper;
     /* 0x14 */ u8 unk14;
@@ -184,8 +173,8 @@ typedef struct ColBodyInfo_t {
     /* 0x17 */ u8 unk17;
     /* 0x18 */ ColCommon* unk18;
     /* 0x1C */ ColCommon* unk1C;
-    /* 0x20 */ struct ColBodyInfo_t* unk20;
-    /* 0x24 */ struct ColBodyInfo_t* unk24;
+    /* 0x20 */ struct ColBodyInfo* unk20;
+    /* 0x24 */ struct ColBodyInfo* unk24;
 } ColBodyInfo; // size = 0x28
 
 typedef struct {
@@ -218,13 +207,13 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ ColCommon base;
-    /* 0x18 */ u32 count;
+    /* 0x18 */ s32 count;
     /* 0x1C */ ColSphereGroupElement* spheres;
 } ColSphereGroup; // size = 0x20
 
 typedef struct {
     /* 0x00 */ ColCommon base;
-    /* 0x18 */ u32 count;
+    /* 0x18 */ s32 count;
     /* 0x1C */ ColTri* tris;
 } ColTriGroup; // size = 0x20
 

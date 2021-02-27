@@ -55,7 +55,7 @@ typedef struct {
     /* 0x18 */ u8 damage;
     /* 0x19 */ u8 damageEffect;
     /* 0x1A */ u8 impactEffect;
-    /* 0x1B */ UNK_TYPE1 pad1B[0x1];
+    /* 0x1B */ u8 unk1B;
 } ActorA0; // size = 0x1C
 
 typedef struct {
