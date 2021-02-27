@@ -9,7 +9,6 @@ void BgLotus_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
     ACTORCAT_BG,
@@ -19,9 +18,15 @@ const ActorInit Bg_Lotus_InitVars = {
     (ActorFunc)BgLotus_Init,
     (ActorFunc)BgLotus_Destroy,
     (ActorFunc)BgLotus_Update,
-    (ActorFunc)BgLotus_Draw
+    (ActorFunc)BgLotus_Draw,
 };
-*/
+
+u32 D_80AD6D10[] = {
+    0x48580064,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+};
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/BgLotus_Init.asm")
 
