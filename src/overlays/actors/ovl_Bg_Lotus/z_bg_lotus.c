@@ -10,6 +10,7 @@ void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AD68DC(BgLotus* this, GlobalContext* globalCtx);
+void func_80AD6B68(BgLotus* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
@@ -66,7 +67,32 @@ void func_80AD6830(BgLotus* this) {
 void func_80AD68DC(BgLotus* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD68DC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6A88.asm")
+void func_80AD6A88(BgLotus* this, GlobalContext* globalCtx) {
+    if (this->unk160 < this->dyna.actor.world.pos.y) {
+        this->dyna.actor.world.pos.y = this->unk160;
+    }
+
+    this->dyna.actor.world.pos.y -= 1.0f;
+
+    if (this->dyna.actor.world.pos.y <= this->dyna.actor.floorHeight) {
+        this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
+        this->timer = 0;
+    }
+    
+    if (this->timer > 0) {
+        this->timer--;
+        func_80AD6830(this);
+    } else {
+        if (Lib_StepTowardsCheck_f(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+            this->dyna.actor.draw = NULL;
+            this->timer = 100;
+            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            this->actionFunc = func_80AD6B68;
+        }
+        
+        this->dyna.actor.scale.z = this->dyna.actor.scale.x;
+    }
+}
 
 void func_80AD6B68(BgLotus* this, GlobalContext* globalCtx) {
     if (this->timer > 0) {
