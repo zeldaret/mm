@@ -63,18 +63,33 @@ void func_80AD6830(BgLotus* this) {
     }
 }
 
+void func_80AD68DC(BgLotus* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD68DC.asm")
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6A88.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6B68.asm")
+void func_80AD6B68(BgLotus* this, GlobalContext* globalCtx) {
+    if (this->timer > 0) {
+        this->timer--;
+    } else if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
+        this->dyna.actor.draw = BgLotus_Draw;
+        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        Actor_SetScale(&this->dyna.actor, 0.1f);
+        this->dyna.actor.world.pos.y = (this->unk160 < this->dyna.actor.floorHeight) ? this->dyna.actor.floorHeight : this->unk160;
+        this->dyna.actor.flags &= ~0x10;
+        this->timer2 = 96;
+        this->actionFunc = func_80AD68DC;
+        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
+        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
+    }
+}
 
 void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
     s32 pad;
     void* sp2C;
 
-    func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &this->unk160, &sp2C);
+    func_800CA1E8(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &this->unk160, &sp2C);
     this->actionFunc(this, globalCtx);
 }
 
