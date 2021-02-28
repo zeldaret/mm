@@ -80,10 +80,6 @@ static SpiralObjectInfo sSpiralObjectInfo[] = {
     { SCENE_DANPEI2TEST, 5 }, { SCENE_IKNINSIDE, 6 }, { SCENE_CASTLE, 6 },
 };
 
-static u32 sInitChain[] = {
-    0xC0580001, 0xB0FC0FA0, 0xB1000190, 0x31040190, 0x00000000, 0x00000000,
-};
-
 /**
  * Sets the actor's action function
  */
@@ -119,34 +115,15 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
  * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral.
  */
 // DoorSpiral_GetObjectType
-#ifdef NON_MATCHING
-// Probably does the same thing
-s32 func_809A2BF8(GlobalContext* globalCtx) {
-    s32 i;
-    s32 type;
-
-    for (i = 0; i < ARRAY_COUNT(D_809A32EC); i++) {
-        if (globalCtx->sceneNum != D_809A32EC[i].sceneNum) {
-            continue;
-        }
-    }
-
-    if (i < 7) {
-        type = D_809A32EC[i].object;
-    } else {
-        type = 0;
-
-        if (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, GAMEPLAY_DANGEON_KEEP) >= 0) {
-            type = 1;
-        }
-    }
-
-    return type;
-}
-#else
 s32 func_809A2BF8(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2BF8.asm")
-#endif
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+};
 
 void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = THIS;
