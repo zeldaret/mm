@@ -853,7 +853,7 @@ extern UNK_TYPE4 D_801B9F04; // D_801B9F04
 extern UNK_TYPE2 D_801B9F0C; // D_801B9F0C
 extern UNK_TYPE4 D_801B9F10; // D_801B9F10
 extern ActorDamageChart D_801B9F20[23]; // D_801B9F20
-extern f32 gDamageMultipliers[16]; // D_801BA200
+extern f32 damageMultipliers[16]; // D_801BA200
 extern ColCommon defaultColCommon; // D_801BA240
 extern ColTouch defaultColTouch; // D_801BA258
 extern ColBump defaultColBump; // D_801BA260

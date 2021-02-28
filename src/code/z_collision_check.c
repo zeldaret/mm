@@ -2,6 +2,10 @@
 #include <global.h>
 
 f32 Collision_GetDamageAndEffectOnBumper(ColCommon *toucher, ColBodyInfo *toucherBody, ColCommon *bumper, ColBodyInfo *bumperBody, u32 *effect) {
+    static f32 damageMultipliers[] = { 
+        0.0f, 1.0f, 2.0f, 0.5f, 0.25f, 3.0f, 4.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    };
+
     u32 collidesWith;
     s32 i;
     f32 damage;
@@ -19,7 +23,7 @@ f32 Collision_GetDamageAndEffectOnBumper(ColCommon *toucher, ColBodyInfo *touche
             collidesWith >>= 1;
         }
 
-        damage *= gDamageMultipliers[bumper->actor->unkA0.damageChart->attack[i] & 0xF];
+        damage *= damageMultipliers[bumper->actor->unkA0.damageChart->attack[i] & 0xF];
         *effect = (bumper->actor->unkA0.damageChart->attack[i] >> 4) & 0xF;
     }
     return damage;
@@ -40,6 +44,10 @@ s32 Collision_GetToucherDamage(ColCommon *toucher, ColBodyInfo *toucherBody, Col
 }
 
 s32 Collision_InitCommonDefault(GlobalContext *ctxt, ColCommon *shape) {
+    static ColCommon defaultColCommon = {
+        NULL, NULL, NULL, NULL, 0x00, 0x00, 0x00, 0x00, 0x03, 0x05,
+    };
+
     *shape = defaultColCommon;
     return 1;
 }
@@ -97,6 +105,10 @@ void Collision_ResetCommonForOT(GlobalContext *ctxt, ColCommon *shape) {
 }
 
 s32 Collision_InitTouchDefault(GlobalContext *ctxt, ColTouch *touch) {
+    static ColTouch defaultColTouch = {
+        0x00000000, 0x00, 0x00,
+    };
+
     *touch = defaultColTouch;
     return 1;
 }
@@ -117,6 +129,11 @@ void Collision_nop800E0720(GlobalContext* ctxt, ColBodyInfo* body) {
 }
 
 s32 Collision_InitBumpDefault(GlobalContext *ctxt, ColBump *bump) {
+    static ColBump defaultColBump = {
+        0xF7CFFFFF, 0x00, 0x00,
+        { 0, 0, 0 },
+    };
+
     *bump = defaultColBump;
     return 1;
 }
@@ -133,6 +150,18 @@ s32 Collision_InitBumpWithData(GlobalContext *ctxt, ColBump *bump, ColBumpInit *
 }
 
 s32 Collision_InitBodyDefault(GlobalContext *ctxt, ColBodyInfo *body) {
+    static ColBodyInfo defaultColBodyInfo = {
+        {
+            0x00000000, 0x00, 0x00,
+        },
+        {
+            0xF7CFFFFF, 0x00, 0x00,
+            { 0, 0, 0 },
+        },
+        0x00, 0x00, 0x00, 0x00,
+        NULL, NULL, NULL, NULL,
+    };
+
     *body = defaultColBodyInfo;
 
     Collision_InitTouchDefault(ctxt, &body->toucher);
@@ -179,6 +208,10 @@ void Collision_ResetBodyForOT(GlobalContext *ctxt, ColBodyInfo *body) {
 }
 
 s32 Collision_InitSphereParamsDefault(GlobalContext *ctxt, ColSphereParams *params) {
+    static ColSphereParams defaultColSphereInfo = {
+        { { 0, 0, 0 }, 0, }, { { 0, 0, 0 }, 0, }, 0.0f, 0x00,
+    };
+
     *params = defaultColSphereInfo;
     return 1;
 }
@@ -190,7 +223,7 @@ s32 Collision_FiniSphereParams(GlobalContext *ctxt, ColSphereParams *params) {
 s32 Collision_InitSphereParamsWithData(GlobalContext *ctxt, ColSphereParams *params, ColSphereParamsInit *init) {
     params->unk14 = init->unk0;
     params->unk0 = init->unk1;
-    params->unk10 = init->unkA * D_801DD5C0; // rodata
+    params->unk10 = init->unkA * 0.01f;
     return 1;
 }
 
@@ -363,6 +396,10 @@ s32 Collision_ResetSphereGroupForOT(GlobalContext *ctxt, ColCommon *collider) {
 }
 
 s32 Collision_InitCylinderParamsDefault(GlobalContext* ctxt, ColCylinderParams* params) {
+    static ColCylinderParams defaultColCylinderInfo = {
+        0, 0, 0, { 0, 0, 0 },
+    };
+
     *params = defaultColCylinderInfo;
     return 1;
 }
@@ -436,6 +473,16 @@ s32 Collision_ReseCylinderForOT(GlobalContext *ctxt, ColCylinder *cylinder) {
 }
 
 s32 Collision_InitTriParamsDefault(GlobalContext *ctxt, ColTriParams *coords) {
+    static ColTriParams defaultColTriParams = {
+        {
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+        },
+        { 0.0f, 0.0f, 0.0f },
+        0.0f,
+    };
+
     *coords = defaultColTriParams;
     return 1;
 }
@@ -617,6 +664,18 @@ s32 Collision_ResetTriGroupForOT(GlobalContext *ctxt, ColCommon *collider) {
 }
 
 s32 Collision_InitQuadParamsDefault(GlobalContext *ctxt, ColQuadParams *params) {
+    static ColQuadParams defaultColQuadParams = {
+        {
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+        },
+        { 0, 0, 0 },
+        { 0, 0, 0 },
+        1.0E38f,
+    };
+
     *params = defaultColQuadParams;
     return 1;
 }
@@ -626,7 +685,7 @@ s32 Collision_FiniQuadParams(GlobalContext* ctxt, ColQuadParams* params) {
 }
 
 s32 Collision_ResetQuadParamsForAT(GlobalContext *ctxt, ColQuadParams *params) {
-    params->unk3C = D_801DD5C4; // rodata
+    params->unk3C = 1.0E38f;
     return 1;
 }
 
@@ -775,6 +834,8 @@ s32 Collision_ResetSphereForOT(GlobalContext *ctxt, ColSphere *sphere) {
 
 // Collision_InitLineDefault
 s32 func_800E2368(GlobalContext* ctxt, OcLine* line) {
+    static Vec3f D_801BA32C = { 0.0f, 0.0f, 0.0f };
+
     Math_Vec3f_Copy(&line->line.a, &D_801BA32C);
     Math_Vec3f_Copy(&line->line.b, &D_801BA32C);
     return 1;
@@ -848,6 +909,14 @@ void Collision_EnableAppendMode(GlobalContext *ctxt, CollisionCheckContext *colC
     colCtxt->flags &= ~1;
 }
 
+collision_add_func collisionAddATFuncs[] = {
+    Collision_ResetSphereGroupForAT,
+    Collision_ResetCylinderForAT,
+    Collision_ResetTriGroupForAT,
+    Collision_ResetQuadForAT,
+    Collision_ResetSphereForAT,
+};
+
 s32 Collision_AddAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
     s32 index;
 
@@ -898,6 +967,14 @@ s32 Collision_AddIndexAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Co
     }
     return index;
 }
+
+collision_add_func collisionAddACFuncs[] = {
+    Collision_ResetSphereGroupForAC,
+    Collision_ResetCylinderForAC,
+    Collision_ResetTriGroupForAC,
+    Collision_ResetQuadForAC,
+    Collision_ResetSphereForAC,
+};
 
 s32 Collision_AddAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
     s32 index;
@@ -950,6 +1027,14 @@ s32 collision_AddIndexAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Co
     }
     return index;
 }
+
+collision_add_func collisionAddOTFuncs[] = {
+    Collision_ResetSphereGroupForOT,
+    Collision_ReseCylinderForOT,
+    Collision_ResetTriGroupForOT,
+    Collision_ResetQuadForOT,
+    Collision_ResetSphereForOT,
+};
 
 s32 Collision_AddOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape) {
     s32 index;
@@ -1052,8 +1137,9 @@ void func_800E2C08(GlobalContext* ctxt, ColCommon* shape, Vec3f* v) {
 }
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E2C1C(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+    static EffSparkParams D_801EEC00;
     s32 effectIndex;
 
     D_801EEC00.position.x = v->x;
@@ -1105,8 +1191,9 @@ void func_800E2C1C(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
 #endif
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E2D88(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+    static EffSparkParams D_801EF0C8;
     s32 effectIndex;
 
     D_801EF0C8.position.x = v->x;
@@ -1218,6 +1305,32 @@ s32 func_800E30C8(ColCommon* toucher, ColBodyInfo* bumperBody) {
     return 1;
 }
 
+ColChkBloodFunc D_801BA374[] = {
+    func_800E2C08,
+    func_800E2C1C,
+    func_800E2D88,
+    func_800E2EF4,
+    func_800E2F30,
+    func_800E2F54,
+};
+
+HitInfo D_801BA38C[] = {
+    { 0x01, 0x00 },
+    { 0x00, 0x01 },
+    { 0x02, 0x01 },
+    { 0x00, 0x00 },
+    { 0x03, 0x05 },
+    { 0x00, 0x02 },
+    { 0x02, 0x00 },
+    { 0x04, 0x00 },
+    { 0x01, 0x02 },
+    { 0x00, 0x03 },
+    { 0x00, 0x05 },
+    { 0x00, 0x03 },
+    { 0x00, 0x03 },
+    { 0x00, 0x04 },
+};
+
 void func_800E3168(GlobalContext *ctxt, ColCommon *toucher, ColBodyInfo *toucherBody, ColCommon *bumper, ColBodyInfo *bumperBody, Vec3f *param_6) {
     if (bumperBody->unk16 & 0x40) {
         return;
@@ -1315,18 +1428,13 @@ s32 Collision_HandleCollisionATWithAC(GlobalContext *ctxt, ColCommon *toucher, C
     return 1;
 }
 
-#ifdef NON_MATCHING
-// needs rodata
 void Collision_TriCalcAvgPoint(ColTri *tri, Vec3f *avg) {
-    f32 temp_f0 = D_801DD5C8; // rodata
+    f32 temp_f0 = 1.0f / 3.0f;
 
     avg->x = (tri->params.vtx[0].x + tri->params.vtx[1].x + tri->params.vtx[2].x) * temp_f0;
     avg->y = (tri->params.vtx[0].y + tri->params.vtx[1].y + tri->params.vtx[2].y) * temp_f0;
     avg->z = (tri->params.vtx[0].z + tri->params.vtx[1].z + tri->params.vtx[2].z) * temp_f0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_TriCalcAvgPoint.asm")
-#endif
 
 void collision_quad_cal_avg_point(ColQuad *quad, Vec3f *avg) {
     avg->x = (quad->params.quad[0].x + (quad->params.quad[1].x + (quad->params.quad[3].x + quad->params.quad[2].x))) / 4.0f;
@@ -1334,8 +1442,6 @@ void collision_quad_cal_avg_point(ColQuad *quad, Vec3f *avg) {
     avg->z = (quad->params.quad[0].z + (quad->params.quad[1].z + (quad->params.quad[3].z + quad->params.quad[2].z))) / 4.0f;
 }
 
-#ifdef NON_MATCHING
-// needs rodata
 void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColSphereGroup* at = (ColSphereGroup*)toucher;
     ColSphereGroupElement* sphElem;
@@ -1367,7 +1473,7 @@ void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckC
                     Math_Vec3s_ToVec3f(&sp6C, &sphElem->params.colInfo.loc);
                     Math_Vec3s_ToVec3f(&sp60, &sphElem2->params.colInfo.loc);
 
-                    if (!(fabsf(sp88) < 0.008f)) { // D_801DD5CC rodata
+                    if (!(fabsf(sp88) < 0.008f)) {
                         temp_f0 = sphElem2->params.colInfo.radius / sp88;
                         sp78.x = ((sp6C.x - sp60.x) * temp_f0) + sp60.x;
                         sp78.y = ((sp6C.y - sp60.y) * temp_f0) + sp60.y;
@@ -1386,9 +1492,6 @@ void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckC
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_SphereGroupWithSphereGroupAC.asm")
-#endif
 
 void Collision_SphereGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColSphereGroup* at = (ColSphereGroup*)toucher;
@@ -1416,7 +1519,7 @@ void Collision_SphereGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckCont
 
                 Math_Vec3s_ToVec3f(&sp64, &sphElem->params.colInfo.loc);
                 Math_Vec3s_ToVec3f(&sp58, &ac->params.loc);
-                if (!(fabsf(sp7C) < D_801DD5D0)) { // rodata
+                if (!(fabsf(sp7C) < 0.008f)) {
                     temp_f0 = ac->params.radius / sp7C;
                     if (temp_f0 <= 1.0f) {
                         sp70.x = ((sp64.x - sp58.x) * temp_f0) + sp58.x;
@@ -1502,8 +1605,6 @@ void Collision_SphereGroupWithQuadAC(GlobalContext *ctxt, CollisionCheckContext 
     }
 }
 
-#ifdef NON_MATCHING
-// needs rodata
 void Collision_SphereGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColSphereGroup* at = (ColSphereGroup*)toucher;
     ColSphere* ac = (ColSphere*)bumpee;
@@ -1530,7 +1631,7 @@ void Collision_SphereGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContex
 
                 Math_Vec3s_ToVec3f(&sp70, &sphElem->params.colInfo.loc);
                 Math_Vec3s_ToVec3f(&sp64, &ac->params.colInfo.loc);
-                if (!(fabsf(sp8C) < D_801DD5D4)) { // rodata
+                if (!(fabsf(sp8C) < 0.008f)) {
                     temp_f0 = ac->params.colInfo.radius / sp8C;
                     sp7C.x = ((sp70.x - sp64.x) * temp_f0) + sp64.x;
                     sp7C.y = ((sp70.y - sp64.y) * temp_f0) + sp64.y;
@@ -1543,12 +1644,7 @@ void Collision_SphereGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContex
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_SphereGroupWithSphereAC.asm")
-#endif
 
-#ifdef NON_MATCHING
-// needs rodata
 void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColCylinder* at = (ColCylinder*)toucher;
     ColSphereGroup* ac = (ColSphereGroup*)bumpee;
@@ -1576,7 +1672,7 @@ void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckCont
 
                 Math_Vec3s_ToVec3f(&sp7C, &at->params.loc);
                 Math_Vec3s_ToVec3f(&sp70, &sphElem->params.colInfo.loc);
-                if (!(fabsf(sp98) < D_801DD5D8)) { // rodata
+                if (!(fabsf(sp98) < 0.008f)) {
                     temp_f0 = sphElem->params.colInfo.radius / sp98;
                     if (temp_f0 <= 1.0f) {
                         sp88.x = ((sp7C.x - sp70.x) * temp_f0) + sp70.x;
@@ -1596,12 +1692,7 @@ void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckCont
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_CylinderWithSphereGroupAC.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Single float register diff, single stack diff
 void Collision_CylinderWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColCylinder* at = (ColCylinder*)toucher;
     ColCylinder* ac = (ColCylinder*)bumpee;
@@ -1626,17 +1717,21 @@ void Collision_CylinderWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext
 
             Math_Vec3s_ToVec3f(&sp50, &at->params.loc);
             Math_Vec3s_ToVec3f(&sp44, &ac->params.loc);
-            if (!(fabsf(sp68) < minCylinderIntersectAmount)) {
+            if (!(fabsf(sp68) < 0.008f)) {
                 f32 temp_f12 = ac->params.radius / sp68;
+                f32 tmp;
 
                 sp5C.y = (f32)at->params.loc.y + at->params.yOffset + at->params.height * 0.5f;
+                tmp = (f32)ac->params.loc.y + ac->params.yOffset;
 
-                if (sp5C.y < (f32)ac->params.loc.y + ac->params.yOffset) {
-                    sp5C.y = (f32)ac->params.loc.y + ac->params.yOffset;
-                } else if (sp5C.y > (f32)ac->params.loc.y + ac->params.yOffset + ac->params.height) {
-                    sp5C.y = (f32)ac->params.loc.y + ac->params.yOffset + ac->params.height;
+                if (sp5C.y < tmp) {
+                    sp5C.y = tmp;
+                } else {
+                    tmp += ac->params.height;
+                    if (sp5C.y > tmp) {
+                        sp5C.y = tmp;
+                    }
                 }
-
                 sp5C.x = ((f32)at->params.loc.x - ac->params.loc.x) * temp_f12 + ac->params.loc.x;
                 sp5C.z = ((f32)at->params.loc.z - ac->params.loc.z) * temp_f12 + ac->params.loc.z;
             } else {
@@ -1646,9 +1741,6 @@ void Collision_CylinderWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_CylinderWithCylinderAC.asm")
-#endif
 
 void Collision_CylinderWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColCylinder* at = (ColCylinder*)toucher;
@@ -1741,7 +1833,7 @@ void Collision_CylinderWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *
             Math_Vec3s_ToVec3f(&sp50, &at->params.loc);
             Math_Vec3s_ToVec3f(&sp44, &ac->params.colInfo.loc);
 
-            if (!(fabsf(sp68) < D_801DD5E0)) {
+            if (!(fabsf(sp68) < 0.008f)) {
                 temp_f0 = ac->params.colInfo.radius / sp68;
                 if (temp_f0 <= 1.0f) {
                     sp5C.x = ((sp50.x - sp44.x) * temp_f0) + sp44.x;
@@ -2100,8 +2192,6 @@ void Collision_QuadWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colC
     }
 }
 
-#ifdef NON_MATCHING
-// needs rodata
 void Collision_SphereWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColSphere* at = (ColSphere*)toucher;
     ColSphereGroup* ac = (ColSphereGroup*)bumpee;
@@ -2130,7 +2220,7 @@ void Collision_SphereWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContex
 
                 Math_Vec3s_ToVec3f(&sp70, &at->params.colInfo.loc);
                 Math_Vec3s_ToVec3f(&sp64, &sphElem->params.colInfo.loc);
-                if (!(fabsf(sp8C) < D_801DD5E4)) { // rodata
+                if (!(fabsf(sp8C) < 0.008f)) {
                     temp_f0 = sphElem->params.colInfo.radius / sp8C;
                     sp7C.x = (sp70.x - sp64.x) * temp_f0 + sp64.x;
                     sp7C.y = (sp70.y - sp64.y) * temp_f0 + sp64.y;
@@ -2143,15 +2233,10 @@ void Collision_SphereWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContex
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_SphereWithSphereGroupAC.asm")
-#endif
 
-#ifdef NON_MATCHING
-// likely needs .data migration
 void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* at = (ColSphere*)toucher;
     ColCylinder* ac = (ColCylinder*)bumpee;
+    ColSphere* at = (ColSphere*)toucher;
     f32 sp6C;
     f32 sp68;
 
@@ -2169,13 +2254,13 @@ void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *
         Vec3f sp5C;
         Vec3f sp50;
         Vec3f sp44;
-        f32 temp_f0;
 
         Math_Vec3s_ToVec3f(&sp50, &at->params.colInfo.loc);
         Math_Vec3s_ToVec3f(&sp44, &ac->params.loc);
 
-        if (!(fabsf(sp68) < D_801DD5E8)) { // rodata
-            temp_f0 = ac->params.radius / sp68;
+        if (!(fabsf(sp68) < 0.008f)) {
+            f32 temp_f0 = ac->params.radius / sp68;
+
             if (temp_f0 <= 1.0f) {
                 sp5C.x = (sp50.x - sp44.x) * temp_f0 + sp44.x;
                 sp5C.y = (sp50.y - sp44.y) * temp_f0 + sp44.y;
@@ -2188,10 +2273,9 @@ void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *
         }
         Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp5C);
     }
+
+    if (at) {}
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/Collision_SphereWithCylinderAC.asm")
-#endif
 
 void Collision_SphereWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
     ColSphere* at = (ColSphere*)toucher;
@@ -2272,7 +2356,7 @@ void Collision_SphereWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *co
 
         Math_Vec3s_ToVec3f(&sp4C, &at->params.colInfo.loc);
         Math_Vec3s_ToVec3f(&sp40, &ac->params.colInfo.loc);
-        if (!(fabsf(sp68) < D_801DD5EC)) { // rodata
+        if (!(fabsf(sp68) < 0.008f)) {
             temp_f0 = ac->params.colInfo.radius / sp68;
             sp58.x = (sp4C.x - sp40.x) * temp_f0 + sp40.x;
             sp58.y = (sp4C.y - sp40.y) * temp_f0 + sp40.y;
@@ -2352,6 +2436,14 @@ void func_800E63B8(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommo
     }
 }
 
+ColChkApplyFunc D_801BA3A8[] = {
+    func_800E60C0,
+    func_800E61A0,
+    func_800E6238,
+    func_800E6320,
+    func_800E63B8,
+};
+
 void func_800E6450(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
     ColCommon **col;
 
@@ -2366,6 +2458,14 @@ void func_800E6450(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
         }
     }
 }
+
+collision_func collisionFuncTableATwithAC[5][5] = {
+    { Collision_SphereGroupWithSphereGroupAC, Collision_SphereGroupWithCylinderAC, Collision_SphereGroupWithTriGroupAC, Collision_SphereGroupWithQuadAC, Collision_SphereGroupWithSphereAC },
+    { Collision_CylinderWithSphereGroupAC, Collision_CylinderWithCylinderAC, Collision_CylinderWithTriGroupAC, Collision_CylinderWithQuadAC, Collision_CylinderWithSphereAC },
+    { Collision_TriGroupWithSphereGroupAC, Collision_TriGroupWithCylinderAC, Collision_TriGroupWithTriGroupAC, Collision_TriGroupWithQuad, Collision_TriGroupWithSphereAC },
+    { Collision_QuadWithSphereGroupAC, Collision_QuadWithCylinderAC, Collision_QuadWithTriGroupAC, Collision_QuadWithQuadAC, Collision_QuadWithSphereAC },
+    { Collision_SphereWithSphereGroupAC, Collision_SphereWithCylinderAC, Collision_SphereWithTriGroupAC, Collision_SphereWithQuadAC, Collision_SphereWithSphereAC },
+};
 
 void Collision_CollideWithAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *colObj) {
     ColCommon **col;
@@ -2459,7 +2559,7 @@ void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, ColCommon *toucher, 
     rightMass = bumperActor->unkA0.mass;
     totalMass = leftMass + rightMass;
 
-    if (fabsf(totalMass) < D_801DD5F0) { // rodata
+    if (fabsf(totalMass) < 0.008f) {
         leftMass = rightMass = 1.0f;
         totalMass = 2.0f;
     }
@@ -2497,7 +2597,7 @@ void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, ColCommon *toucher, 
         }
     }
 
-    if (!(fabsf(xzDist) < D_801DD5F4)) { // rodata
+    if (!(fabsf(xzDist) < 0.008f)) {
         xDelta *= param_8 / xzDist;
         zDelta *= param_8 / xzDist;
         toucherActor->unkA0.displacement.x += -xDelta * leftDispRatio;
@@ -2677,6 +2777,14 @@ s32 func_800E7288(ColCommon *piParm1, ColCommon *piParm2) {
     return 0;
 }
 
+collision_func collisionFuncTableOTwithOT[5][5] = {
+    { Collision_SphereGroupWithSphereGroupOT, Collision_SphereGroupWithCylinderOT, NULL, NULL, Collision_SphereGroupWithSphereOT },
+    { Collision_CylinderWithSphereGroupOT, Collision_CylinderWithCylinderOT, NULL, NULL, Collision_CylinderWithSphereOT },
+    { NULL, NULL, NULL, NULL, NULL },
+    { NULL, NULL, NULL, NULL, NULL },
+    { Collision_SphereWithSphereGroupOT, Collision_SphereWithCylinderOT, NULL, NULL, Collision_SphereWithSphereOT },
+};
+
 void Collision_DoOTWithOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
     ColCommon** left;
     ColCommon** right;
@@ -2700,6 +2808,20 @@ void Collision_DoOTWithOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
 }
 
 void func_800E7494(CollisionCheckInfo *info) {
+    static CollisionCheckInfo D_801BA484 = {
+        NULL,
+        { 0.0f, 0.0f, 0.0f },
+        0x000A,
+        0x000A,
+        0x0000,
+        0xFF,
+        0x08,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+    };
+
     *info = D_801BA484;
 }
 
@@ -2825,6 +2947,14 @@ void func_800E7968(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommo
     func_800E75C8(ctxt, colCtxt, &sphere->base, &sphere->body);
 }
 
+ColChkApplyFunc D_801BA4A0[] = {
+    func_800E77EC,
+    func_800E7894,
+    func_800E78B4,
+    func_800E7948,
+    func_800E7968,
+};
+
 void func_800E7988(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
     s32 i;
 
@@ -2890,6 +3020,14 @@ s32 func_800E7BCC(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Co
 
     return 0;
 }
+
+ColChkLineFunc D_801BA4B4[] = {
+    func_800E7A48,
+    func_800E7B54,
+    NULL,
+    NULL,
+    func_800E7BCC,
+};
 
 s32 func_800E7C64(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Vec3f *a, Vec3f *b, Actor **exclusions, s32 numExclusions) {
     ColChkLineFunc lineCheck;
@@ -2979,8 +3117,10 @@ void Collision_InitTriParamsAtIndex(GlobalContext *ctxt, ColTriGroup *tris, s32 
 }
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E7FDC(s32 limb, ColSphereGroup *sphereGroup) {
+    static Vec3f D_801EE1C0;
+    static Vec3f D_801EE1D0;
     s32 i;
 
     for (i = 0; i < sphereGroup->count; i++) {
@@ -3010,8 +3150,11 @@ void func_800E8160(ColSphereGroup *sphereGroup, s32 index, Actor *actor) {
 }
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E823C(s32 limb, ColSphere *sphere) {
+    static Vec3f D_801EE1E0;
+    static Vec3f D_801EE1F0;
+
     if (limb == sphere->params.unk14) {
         D_801EE1E0.x = sphere->params.unk0.loc.x;
         D_801EE1E0.y = sphere->params.unk0.loc.y;
@@ -3028,8 +3171,9 @@ void func_800E823C(s32 limb, ColSphere *sphere) {
 #endif
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E8318(GlobalContext* ctxt, Vec3f* v) {
+    static EffSparkParams D_801EE200;
     s32 effectIndex;
 
     D_801EE200.position.x = v->x;
@@ -3081,8 +3225,9 @@ void func_800E8318(GlobalContext* ctxt, Vec3f* v) {
 #endif
 
 #ifdef NON_MATCHING
-// needs in-function static
+// needs in-function static bss
 void func_800E8478(GlobalContext *ctxt, Vec3f *v) {
+    static EffSparkParams D_801EE738
     s32 effectIndex;
 
     D_801EE738.position.x = v->x;
@@ -3133,9 +3278,25 @@ void func_800E8478(GlobalContext *ctxt, Vec3f *v) {
 #pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/func_800E8478.asm")
 #endif
 
-#ifdef NON_MATCHING
-// needs in-function static, single additional lui
 void func_800E85D4(GlobalContext *ctxt, Vec3f *v) {
+    static EffShieldParticleInit D_801BA4C8 = {
+        16,
+        { 0, 0, 0 },
+        { 0, 200, 255, 255 },
+        { 255, 255, 255, 255 },
+        { 255, 255, 128, 255 },
+        { 255, 255, 0, 255 },
+        { 255, 64, 0, 200 },
+        { 255, 0, 0, 255 },
+        2.1f, 35.0f, 30.0f,
+        8,
+        {
+            0, 0, 0,
+            0, 128, 255, 0,
+            300,
+        },
+        1,
+    };
     s32 effectIndex;
 
     D_801BA4C8.position.x = v->x;
@@ -3147,9 +3308,6 @@ void func_800E85D4(GlobalContext *ctxt, Vec3f *v) {
 
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &D_801BA4C8);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/func_800E85D4.asm")
-#endif
 
 void func_800E8668(GlobalContext *ctxt, Vec3f *v) {
     func_800E85D4(ctxt, v);
@@ -3165,9 +3323,25 @@ void func_800E86C0(GlobalContext *ctxt, Vec3f *v) {
     func_800E8668(ctxt, v);
 }
 
-#ifdef NON_MATCHING
-// needs in-function static, single additional lui
 void func_800E86E0(GlobalContext *ctxt, Vec3f *v, Vec3f *pos) {
+    static EffShieldParticleInit D_801BA508 = {
+        16,
+        { 0, 0, 0 },
+        { 0, 200, 255, 255 },
+        { 255, 255, 255, 255 },
+        { 255, 255, 128, 255 },
+        { 255, 255, 0, 255 },
+        { 255, 64, 0, 200 },
+        { 255, 0, 0, 255 },
+        2.1f, 35.0f, 30.0f,
+        8,
+        {
+            0, 0, 0, 
+            0, 128, 255, 0,
+            300, 
+        },
+        0,
+    };
     s32 effectIndex;
 
     D_801BA508.position.x = v->x;
@@ -3180,9 +3354,6 @@ void func_800E86E0(GlobalContext *ctxt, Vec3f *v, Vec3f *pos) {
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &D_801BA508);
     func_8019F1C0(pos, 0x1837);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/func_800E86E0.asm")
-#endif
 
 s32 func_800E8784(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* itemPos, Vec3f* itemProjPos, Vec3f* out1, Vec3f* out2) {
     Vec3f actorToItem;
@@ -3221,7 +3392,7 @@ s32 func_800E8784(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* it
         return 3;
     }
     radSqDiff = SQXZ(actorToItem) - SQ(radius);
-    if (!(fabsf(SQXZ(itemStep)) < D_801DD5F8)) { // rodata
+    if (!(fabsf(SQXZ(itemStep)) < 0.008f)) {
         actorDotItemXZ = DOTXZ(2.0f * itemStep, actorToItem);
         if (SQ(actorDotItemXZ) < (4.0f * SQXZ(itemStep) * radSqDiff)) {
             return 0;
@@ -3239,7 +3410,7 @@ s32 func_800E8784(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* it
         if (intersect2 != 0) {
             frac2 = (-actorDotItemXZ - closeDist) / (2.0f * SQXZ(itemStep));
         }
-    } else if (!(fabsf(DOTXZ(2.0f * itemStep, actorToItem)) < D_801DD5FC)) { // rodata
+    } else if (!(fabsf(DOTXZ(2.0f * itemStep, actorToItem)) < 0.008f)) {
         intersect1 = 1;
         intersect2 = 0;
         frac1 = -radSqDiff / DOTXZ(2.0f * itemStep, actorToItem);

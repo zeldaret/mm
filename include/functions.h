@@ -1318,7 +1318,7 @@ void func_800E0308(void); // func_800E0308
 void func_800E031C(void); // func_800E031C
 void func_800E0348(Camera* camera); // func_800E0348
 ActorDamageChart* func_800E03A0(s32 index); // func_800E03A0
-void func_800E03CC(u8* param_1); // func_800E03CC
+void func_800E03CC(ActorDamageChart* damageChart); // func_800E03CC
 f32 Collision_GetDamageAndEffectOnBumper(ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody, u32* effect); // func_800E0410
 f32 func_800E04BC(f32 a0, ColBodyInfo* bumperBody); // func_800E04BC
 s32 Collision_GetToucherDamage(ColCommon* toucher, ColBodyInfo* toucherBody, ColCommon* bumper, ColBodyInfo* bumperBody); // func_800E04EC

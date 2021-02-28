@@ -850,7 +850,7 @@
     0x801B9F0C:("D_801B9F0C","UNK_TYPE2","",0x2),
     0x801B9F10:("D_801B9F10","UNK_TYPE4","",0x4),
     0x801B9F20:("D_801B9F20","ActorDamageChart","[23]",0x2e0),
-    0x801BA200:("gDamageMultipliers","f32","[16]",0x40),
+    0x801BA200:("damageMultipliers","f32","[16]",0x40),
     0x801BA240:("defaultColCommon","ColCommon","",0x18),
     0x801BA258:("defaultColTouch","ColTouch","",0x8),
     0x801BA260:("defaultColBump","ColBump","",0xc),

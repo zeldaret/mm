@@ -100,7 +100,6 @@ typedef struct {
     /* 0x08 */ ColSphereCollisionInfo colInfo;
     /* 0x10 */ f32 unk10;
     /* 0x14 */ u8 unk14;
-    /* 0x15 */ UNK_TYPE1 pad15[0x3];
 } ColSphereParams; // size = 0x18
 
 typedef struct {
@@ -206,7 +205,6 @@ typedef struct {
     /* 0x13 */ u8 unk13;
     /* 0x14 */ u8 unk14;
     /* 0x15 */ u8 type;
-    /* 0x16 */ UNK_TYPE1 pad16[0x2];
 } ColCommon; // size = 0x18
 
 typedef struct {
