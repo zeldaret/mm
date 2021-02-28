@@ -80,10 +80,10 @@ s32 func_809A2BF8(GlobalContext* globalCtx);
 void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = THIS;
     s32 pad;
-    s32 door = (u16)this->actor.params >> 10;
+    s32 transition = (u16)thisx->params >> 10;
     s8 objBankId;
 
-    if (this->actor.room != globalCtx->transitionActorList[door].unk0) {
+    if (thisx->room != globalCtx->transitionActorList[transition].sides[0].room) {
         Actor_MarkForDeath(thisx);
         return;
     }
@@ -104,7 +104,11 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(thisx, 60.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Destroy.asm")
+void DoorSpiral_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    s32 transition = (u16)thisx->params >> 10;
+    
+    globalCtx->transitionActorList[transition].id *= -1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2DB0.asm")
 

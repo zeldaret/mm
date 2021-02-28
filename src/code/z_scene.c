@@ -323,7 +323,7 @@ void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x0E: Transition Actor List
 void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->transitionActorCount = entry->transiActorList.num;
-    ctxt->transitionActorList = (TransitionActorInit*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
+    ctxt->transitionActorList = (TransitionActorEntry*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
     func_80105818(ctxt, ctxt->transitionActorCount, ctxt->transitionActorList);
 }
 
