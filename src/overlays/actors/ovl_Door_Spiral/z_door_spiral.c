@@ -153,30 +153,12 @@ f32 func_809A2E08(GlobalContext* globalCtx, DoorSpiral* this, f32 arg2, f32 arg3
     return offset.z;
 }
 
-#ifdef NON_MATCHING
-// wack
 s32 func_809A2EA0(DoorSpiral* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
     if (!(func_801233E4(globalCtx))) {
         SpiralStruct_809A3250* modelInfo = &D_809A3250[this->unk148];
-        f32 argfirst;
-        f32 argsecond;
-        f32 dist;
-
-        if (modelInfo->unkE < 0) {
-            argfirst = modelInfo->unkE + 4294967296.0f;
-        } else {
-            argfirst = modelInfo->unkE;
-        }
-
-        if (modelInfo->unkF < 0) {
-            argsecond = modelInfo->unkF + 4294967296.0f;
-        } else {
-            argsecond = modelInfo->unkF;
-        }
-
-        dist = func_809A2E08(globalCtx, this, 0.0f, argfirst, argsecond);
+        f32 dist = func_809A2E08(globalCtx, this, 0.0f, modelInfo->unkE, modelInfo->unkF);
 
         if (fabsf(dist) < 64.0f) {
             s16 angle = player->base.shape.rot.y - this->actor.shape.rot.y;
@@ -185,19 +167,14 @@ s32 func_809A2EA0(DoorSpiral* this, GlobalContext* globalCtx) {
                 angle = 0x8000 - angle;
             }
 
-            if (ABS(angle) < 0x3000) {
-                if (dist < 0.0f) {
-                    return -1.0f;
-                }
-                return 1.0f;
+            if (ABS_ALT(angle) < 0x3000) {
+                return (dist >= 0.0f) ? 1.0f : -1.0f;
             }
         }
     }
+
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2EA0.asm")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2FF8.asm")
 
