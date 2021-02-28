@@ -1,11 +1,10 @@
 #include <ultra64.h>
 #include <global.h>
 
-f32 Collision_GetDamageAndEffectOnBumper(ColCommon *toucher, ColBodyInfo *toucherBody, ColCommon *bumper, ColBodyInfo *bumperBody, u32 *effect) {
+f32 Collision_GetDamageAndEffectOnBumper(Collider *toucher, ColliderInfo *toucherBody, Collider *bumper, ColliderInfo *bumperBody, u32 *effect) {
     static f32 damageMultipliers[] = { 
         0.0f, 1.0f, 2.0f, 0.5f, 0.25f, 3.0f, 4.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
     };
-
     u32 collidesWith;
     s32 i;
     f32 damage;
@@ -13,8 +12,8 @@ f32 Collision_GetDamageAndEffectOnBumper(ColCommon *toucher, ColBodyInfo *touche
     *effect = 0;
 
     damage = Collision_GetToucherDamage(toucher, toucherBody, bumper, bumperBody);
-    if (bumper->actor->unkA0.damageChart != NULL) {
-        collidesWith = toucherBody->toucher.collidesWith;
+    if (bumper->actor->colChkInfo.damageChart != NULL) {
+        collidesWith = toucherBody->toucher.dmgFlags;
 
         for (i = 0; i != 32; i++) {
             if (collidesWith == 1) {
@@ -23,19 +22,19 @@ f32 Collision_GetDamageAndEffectOnBumper(ColCommon *toucher, ColBodyInfo *touche
             collidesWith >>= 1;
         }
 
-        damage *= damageMultipliers[bumper->actor->unkA0.damageChart->attack[i] & 0xF];
-        *effect = (bumper->actor->unkA0.damageChart->attack[i] >> 4) & 0xF;
+        damage *= damageMultipliers[bumper->actor->colChkInfo.damageChart->attack[i] & 0xF];
+        *effect = (bumper->actor->colChkInfo.damageChart->attack[i] >> 4) & 0xF;
     }
     return damage;
 }
 
-f32 func_800E04BC(f32 a0, ColBodyInfo *bumperBody) {
-    f32 sub = a0 - bumperBody->bumper.unk5;
+f32 func_800E04BC(f32 damage, ColliderInfo *bumperBody) {
+    f32 finalDamage = damage - bumperBody->bumper.defense;
 
-    return sub;
+    return finalDamage;
 }
 
-s32 Collision_GetToucherDamage(ColCommon *toucher, ColBodyInfo *toucherBody, ColCommon *bumper, ColBodyInfo *bumperBody) {
+s32 Collision_GetToucherDamage(Collider *toucher, ColliderInfo *toucherBody, Collider *bumper, ColliderInfo *bumperBody) {
     if (toucher->actor != NULL && toucher->actor->id == ACTOR_EN_BOM && 
         bumper->actor != NULL && bumper->actor->id == ACTOR_PLAYER) {
         return 8;
@@ -43,309 +42,301 @@ s32 Collision_GetToucherDamage(ColCommon *toucher, ColBodyInfo *toucherBody, Col
     return toucherBody->toucher.damage;
 }
 
-s32 Collision_InitCommonDefault(GlobalContext *ctxt, ColCommon *shape) {
-    static ColCommon defaultColCommon = {
-        NULL, NULL, NULL, NULL, 0x00, 0x00, 0x00, 0x00, 0x03, 0x05,
+s32 Collision_InitCommonDefault(GlobalContext *ctxt, Collider *shape) {
+    static Collider defaultColCommon = {
+        NULL, NULL, NULL, NULL, 0x00, 0x00, 0x00, 0x00, 0x03, COLSHAPE_NONE,
     };
 
     *shape = defaultColCommon;
     return 1;
 }
 
-s32 Collision_FiniCommon(GlobalContext *ctxt, ColCommon *shape) {
+s32 Collision_FiniCommon(GlobalContext *ctxt, Collider *shape) {
     return 1;
 }
 
-s32 func_800E0594(GlobalContext *ctxt, ColCommon *shape, ColInitToActor *init) {
+s32 func_800E0594(GlobalContext *ctxt, Collider *shape, ColliderInitToActor *init) {
     shape->actor = init->actor;
-    shape->flagsAT = init->atFlags;
-    shape->flagsAC = init->acFlags;
-    shape->unk12 = init->ocFlags1;
-    shape->unk13 = 0x10;
-    shape->type = init->type;
+    shape->atFlags = init->atFlags;
+    shape->acFlags = init->acFlags;
+    shape->ocFlags1 = init->ocFlags1;
+    shape->ocFlags2 = 0x10;
+    shape->shape = init->shape;
     return 1;
 }
 
-s32 func_800E05D4(GlobalContext* ctxt, ColCommon* shape, Actor* actor, ColInitType1* init) {
+s32 func_800E05D4(GlobalContext* ctxt, Collider* shape, Actor* actor, ColliderInitType1* init) {
     shape->actor = actor;
-    shape->unk14 = init->colType;
-    shape->flagsAT = init->atFlags;
-    shape->flagsAC = init->acFlags;
-    shape->unk12 = init->ocFlags1;
-    shape->unk13 = 0x10;
-    shape->type = init->shape;
+    shape->colType = init->colType;
+    shape->atFlags = init->atFlags;
+    shape->acFlags = init->acFlags;
+    shape->ocFlags1 = init->ocFlags1;
+    shape->ocFlags2 = 0x10;
+    shape->shape = init->shape;
     return 1;
 }
 
-s32 Collision_InitCommonWithData(GlobalContext *ctxt, ColCommon *shape, Actor *actor, ColCommonInit *init) {
+s32 Collision_InitCommonWithData(GlobalContext *ctxt, Collider *shape, Actor *actor, ColliderInit *init) {
     shape->actor = actor;
-    shape->unk14 = init->unk0;
-    shape->flagsAT = init->unk1;
-    shape->flagsAC = init->unk2;
-    shape->unk12 = init->unk3;
-    shape->unk13 = init->unk4;
-    shape->type = init->type;
+    shape->colType = init->colType;
+    shape->atFlags = init->atFlags;
+    shape->acFlags = init->acFlags;
+    shape->ocFlags1 = init->ocFlags1;
+    shape->ocFlags2 = init->ocFlags2;
+    shape->shape = init->shape;
     return 1;
 }
 
-void Collision_ResetCommonForAT(GlobalContext *ctxt, ColCommon *shape) {
-    shape->collisionAT = NULL;
-    shape->flagsAT = shape->flagsAT & ~6;
+void Collision_ResetCommonForAT(GlobalContext *ctxt, Collider *shape) {
+    shape->at = NULL;
+    shape->atFlags &= ~6;
 }
 
-void Collision_ResetCommonForAC(GlobalContext *ctxt, ColCommon *shape) {
-    shape->collisionAC = NULL;
-    shape->flagsAC = shape->flagsAC & ~0x82;
+void Collision_ResetCommonForAC(GlobalContext *ctxt, Collider *shape) {
+    shape->ac = NULL;
+    shape->acFlags &= ~0x82;
 }
 
-void Collision_ResetCommonForOT(GlobalContext *ctxt, ColCommon *shape) {
-    shape->collisionOT = NULL;
-    shape->unk12 = shape->unk12 & ~2;
-    shape->unk13 = shape->unk13 & ~1;
+void Collision_ResetCommonForOT(GlobalContext *ctxt, Collider *shape) {
+    shape->oc = NULL;
+    shape->ocFlags1 &= ~2;
+    shape->ocFlags2 &= ~1;
 }
 
-s32 Collision_InitTouchDefault(GlobalContext *ctxt, ColTouch *touch) {
-    static ColTouch defaultColTouch = {
-        0x00000000, 0x00, 0x00,
+s32 Collision_InitTouchDefault(GlobalContext *ctxt, ColliderTouch *touch) {
+    static ColliderTouch defaultColTouch = {
+        0, 0, 0,
     };
 
     *touch = defaultColTouch;
     return 1;
 }
 
-s32 Collision_FiniTouch(GlobalContext *ctxt, ColTouch *touch) {
+s32 Collision_FiniTouch(GlobalContext *ctxt, ColliderTouch *touch) {
     return 1;
 }
 
-s32 Collision_InitTouchWithData(GlobalContext *ctxt, ColTouch *touch, ColTouchInit *init) {
-    touch->collidesWith = init->unk0;
-    touch->unk4 = init->unk4;
-    touch->damage = init->unk5;
+s32 Collision_InitTouchWithData(GlobalContext *ctxt, ColliderTouch *touch, ColliderTouchInit *init) {
+    touch->dmgFlags = init->dmgFlags;
+    touch->effect = init->effect;
+    touch->damage = init->damage;
     return 1;
 }
 
-void Collision_nop800E0720(GlobalContext* ctxt, ColBodyInfo* body) {
+void Collision_nop800E0720(GlobalContext* ctxt, ColliderInfo* body) {
 
 }
 
-s32 Collision_InitBumpDefault(GlobalContext *ctxt, ColBump *bump) {
-    static ColBump defaultColBump = {
-        0xF7CFFFFF, 0x00, 0x00,
-        { 0, 0, 0 },
+s32 Collision_InitBumpDefault(GlobalContext *ctxt, ColliderBump *bump) {
+    static ColliderBump defaultColBump = {
+        0xF7CFFFFF, 0, 0, { 0, 0, 0 },
     };
 
     *bump = defaultColBump;
     return 1;
 }
 
-s32 Collision_FiniBump(GlobalContext* ctxt, ColBump* bump) {
+s32 Collision_FiniBump(GlobalContext* ctxt, ColliderBump* bump) {
     return 1;
 }
 
-s32 Collision_InitBumpWithData(GlobalContext *ctxt, ColBump *bump, ColBumpInit *init) {
-    bump->collidesWith = init->unk0;
-    bump->unk4 = init->unk4;
-    bump->unk5 = init->unk5;
+s32 Collision_InitBumpWithData(GlobalContext *ctxt, ColliderBump *bump, ColliderBumpInit *init) {
+    bump->dmgFlags = init->dmgFlags;
+    bump->effect = init->effect;
+    bump->defense = init->defense;
     return 1;
 }
 
-s32 Collision_InitBodyDefault(GlobalContext *ctxt, ColBodyInfo *body) {
-    static ColBodyInfo defaultColBodyInfo = {
-        {
-            0x00000000, 0x00, 0x00,
-        },
-        {
-            0xF7CFFFFF, 0x00, 0x00,
-            { 0, 0, 0 },
-        },
-        0x00, 0x00, 0x00, 0x00,
-        NULL, NULL, NULL, NULL,
+s32 Collision_InitBodyDefault(GlobalContext *ctxt, ColliderInfo *body) {
+    static ColliderInfo defaultColBodyInfo = {
+        { 0, 0, 0 },    { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
+        ELEMTYPE_UNK0, 0x00,
+        0x00,          0x00,
+        NULL,          NULL, 
+        NULL,          NULL,
     };
 
     *body = defaultColBodyInfo;
-
     Collision_InitTouchDefault(ctxt, &body->toucher);
     Collision_InitBumpDefault(ctxt, &body->bumper);
     return 1;
 }
 
-s32 Collision_FiniBody(GlobalContext *ctxt, ColBodyInfo *body) {
+s32 Collision_FiniBody(GlobalContext *ctxt, ColliderInfo *body) {
     Collision_FiniTouch(ctxt, &body->toucher);
     Collision_FiniBump(ctxt, &body->bumper);
     return 1;
 }
 
-s32 Collision_InitBodyWithData(GlobalContext *ctxt, ColBodyInfo *body, ColBodyInfoInit *init) {
-    body->unk14 = init->unk0;
-    Collision_InitTouchWithData(ctxt, &body->toucher, &init->unk4);
-    Collision_InitBumpWithData(ctxt, &body->bumper, &init->unkC);
-    body->unk15 = init->unk14;
-    body->unk16 = init->unk15;
-    body->unk17 = init->unk16;
+s32 Collision_InitBodyWithData(GlobalContext *ctxt, ColliderInfo *body, ColliderInfoInit *init) {
+    body->elemType = init->elemType;
+    Collision_InitTouchWithData(ctxt, &body->toucher, &init->toucher);
+    Collision_InitBumpWithData(ctxt, &body->bumper, &init->bumper);
+    body->toucherFlags = init->toucherFlags;
+    body->bumperFlags = init->bumperFlags;
+    body->ocElemFlags = init->ocElemFlags;
     return 1;
 }
 
-void Collision_ResetBodyForAT(GlobalContext *ctxt, ColBodyInfo *body) {
-    body->unk18 = NULL;
-    body->unk20 = NULL;
-    body->unk15 &= ~2;
-    body->unk15 &= ~0x40;
+void Collision_ResetBodyForAT(GlobalContext *ctxt, ColliderInfo *body) {
+    body->atHit = NULL;
+    body->atHitInfo = NULL;
+    body->toucherFlags &= ~2;
+    body->toucherFlags &= ~0x40;
     Collision_nop800E0720(ctxt, body);
 }
 
-void Collision_ResetBodyForAC(GlobalContext *ctxt, ColBodyInfo *body) {
-    body->bumper.unk6.z = 0;
-    body->unk16 &= ~2;
-    body->unk16 &= ~0x80;
-    body->unk1C = NULL;
-    body->unk24 = NULL;
-    body->bumper.unk6.y = body->bumper.unk6.z;
-    body->bumper.unk6.x = body->bumper.unk6.z;
+void Collision_ResetBodyForAC(GlobalContext *ctxt, ColliderInfo *body) {
+    body->bumper.hitPos.x = body->bumper.hitPos.y = body->bumper.hitPos.z = 0;
+    body->bumperFlags &= ~2;
+    body->bumperFlags &= ~0x80;
+    body->acHit = NULL;
+    body->acHitInfo = NULL;
 }
 
-void Collision_ResetBodyForOT(GlobalContext *ctxt, ColBodyInfo *body) {
-    body->unk17 &= ~2;
+void Collision_ResetBodyForOT(GlobalContext *ctxt, ColliderInfo *body) {
+    body->ocElemFlags &= ~2;
 }
 
-s32 Collision_InitSphereParamsDefault(GlobalContext *ctxt, ColSphereParams *params) {
-    static ColSphereParams defaultColSphereInfo = {
-        { { 0, 0, 0 }, 0, }, { { 0, 0, 0 }, 0, }, 0.0f, 0x00,
+s32 Collision_InitSphereParamsDefault(GlobalContext *ctxt, ColliderJntSphElementDim *params) {
+    static ColliderJntSphElementDim defaultColSphereInfo = {
+        { { 0, 0, 0 }, 0, }, { { 0, 0, 0 }, 0, }, 0.0f, 0,
     };
 
     *params = defaultColSphereInfo;
     return 1;
 }
 
-s32 Collision_FiniSphereParams(GlobalContext *ctxt, ColSphereParams *params) {
+s32 Collision_FiniSphereParams(GlobalContext *ctxt, ColliderJntSphElementDim *params) {
     return 1;
 }
 
-s32 Collision_InitSphereParamsWithData(GlobalContext *ctxt, ColSphereParams *params, ColSphereParamsInit *init) {
-    params->unk14 = init->unk0;
-    params->unk0 = init->unk1;
-    params->unk10 = init->unkA * 0.01f;
+s32 Collision_InitSphereParamsWithData(GlobalContext *ctxt, ColliderJntSphElementDim *params, ColliderJntSphElementDimInit *init) {
+    params->limb = init->limb;
+    params->modelSphere = init->modelSphere;
+    params->scale = init->scale * 0.01f;
     return 1;
 }
 
-s32 Collision_InitSphereGroupElemDefault(GlobalContext *pzParm1, ColSphereGroupElement *elem) {
-    Collision_InitBodyDefault(pzParm1, &elem->body);
-    Collision_InitSphereParamsDefault(pzParm1, &elem->params);
+s32 Collision_InitSphereGroupElemDefault(GlobalContext *pzParm1, ColliderJntSphElement *elem) {
+    Collision_InitBodyDefault(pzParm1, &elem->info);
+    Collision_InitSphereParamsDefault(pzParm1, &elem->dim);
     return 1;
 }
 
-s32 Collision_FiniSphereGroupElem(GlobalContext *ctxt, ColSphereGroupElement *elem) {
-    Collision_FiniBody(ctxt, &elem->body);
-    Collision_FiniSphereParams(ctxt, &elem->params);
+s32 Collision_FiniSphereGroupElem(GlobalContext *ctxt, ColliderJntSphElement *elem) {
+    Collision_FiniBody(ctxt, &elem->info);
+    Collision_FiniSphereParams(ctxt, &elem->dim);
     return 1;
 }
 
-s32 Collision_InitSphereGroupElemWithData(GlobalContext *ctxt, ColSphereGroupElement *elem, ColSphereGroupElementInit *init) {
-    Collision_InitBodyWithData(ctxt, &elem->body, &init->body);
-    Collision_InitSphereParamsWithData(ctxt, &elem->params, &init->params);
+s32 Collision_InitSphereGroupElemWithData(GlobalContext *ctxt, ColliderJntSphElement *elem, ColliderJntSphElementInit *init) {
+    Collision_InitBodyWithData(ctxt, &elem->info, &init->info);
+    Collision_InitSphereParamsWithData(ctxt, &elem->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_ResetSphereGroupElemForAT(GlobalContext *ctxt, ColSphereGroupElement *elem) {
-    Collision_ResetBodyForAT(ctxt, &elem->body);
+s32 Collision_ResetSphereGroupElemForAT(GlobalContext *ctxt, ColliderJntSphElement *elem) {
+    Collision_ResetBodyForAT(ctxt, &elem->info);
     return 1;
 }
 
-s32 Collision_ResetSphereGroupElemForAC(GlobalContext *ctxt, ColSphereGroupElement *elem) {
-    Collision_ResetBodyForAC(ctxt, &elem->body);
+s32 Collision_ResetSphereGroupElemForAC(GlobalContext *ctxt, ColliderJntSphElement *elem) {
+    Collision_ResetBodyForAC(ctxt, &elem->info);
     return 1;
 }
 
-s32 Collision_ResetSphereGroupElemForOT(GlobalContext *ctxt, ColSphereGroupElement *elem) {
-    Collision_ResetBodyForOT(ctxt, &elem->body);
+s32 Collision_ResetSphereGroupElemForOT(GlobalContext *ctxt, ColliderJntSphElement *elem) {
+    Collision_ResetBodyForOT(ctxt, &elem->info);
     return 1;
 }
 
-s32 Collision_InitSphereGroupDefault(GlobalContext *ctxt, ColSphereGroup *sphereGroup) {
+s32 Collision_InitSphereGroupDefault(GlobalContext *ctxt, ColliderJntSph *sphereGroup) {
     Collision_InitCommonDefault(ctxt, &sphereGroup->base);
     sphereGroup->count = 0;
-    sphereGroup->spheres = NULL;
+    sphereGroup->elements = NULL;
     return 1;
 }
 
 // free jnt sph
-s32 func_800E0B78(GlobalContext *ctxt, ColSphereGroup *sphereGroup) {
-    ColSphereGroupElement *sphElem;
+s32 func_800E0B78(GlobalContext *ctxt, ColliderJntSph *sphereGroup) {
+    ColliderJntSphElement *sphElem;
 
     Collision_FiniCommon(ctxt, &sphereGroup->base);
-    for (sphElem = &sphereGroup->spheres[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++) {
+    for (sphElem = &sphereGroup->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++) {
         Collision_FiniSphereGroupElem(ctxt, sphElem);
     }
 
     sphereGroup->count = 0;
-    if (sphereGroup->spheres != NULL) {
-        zelda_free(sphereGroup->spheres);
+    if (sphereGroup->elements != NULL) {
+        zelda_free(sphereGroup->elements);
     }
-    sphereGroup->spheres = NULL;
+    sphereGroup->elements = NULL;
     return 1;
 }
 
-s32 Collision_FiniSphereGroup(GlobalContext* ctxt, ColSphereGroup* sphereGroup) {
-    ColSphereGroupElement* sphElem;
+s32 Collision_FiniSphereGroup(GlobalContext* ctxt, ColliderJntSph* sphereGroup) {
+    ColliderJntSphElement* sphElem;
 
     Collision_FiniCommon(ctxt, &sphereGroup->base);
 
-    for (sphElem = &sphereGroup->spheres[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++) {
+    for (sphElem = &sphereGroup->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++) {
         Collision_FiniSphereGroupElem(ctxt, sphElem);
     }
     sphereGroup->count = 0;
-    sphereGroup->spheres = NULL;
+    sphereGroup->elements = NULL;
     return 1;
 }
 
-s32 func_800E0CA8(GlobalContext *ctxt, ColSphereGroup *sphereGroup, ColSphereGroupInitToActor *init) {
-    ColSphereGroupElement *sphElem;
-    ColSphereGroupElementInit *initElem;
+s32 func_800E0CA8(GlobalContext *ctxt, ColliderJntSph *sphereGroup, ColliderJntSphInitToActor *init) {
+    ColliderJntSphElement *sphElem;
+    ColliderJntSphElementInit *initElem;
 
     func_800E0594(ctxt, &sphereGroup->base, &init->base);
     sphereGroup->count = init->count;
-    sphereGroup->spheres = zelda_malloc(init->count * sizeof(ColSphereGroupElement));
+    sphereGroup->elements = zelda_malloc(init->count * sizeof(ColliderJntSphElement));
 
-    if (sphereGroup->spheres == NULL) {
+    if (sphereGroup->elements == NULL) {
         sphereGroup->count = 0;
         return 0;
     }
 
-    for (sphElem = &sphereGroup->spheres[0], initElem = &init->init[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++, initElem++) {
+    for (sphElem = &sphereGroup->elements[0], initElem = &init->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++, initElem++) {
         Collision_InitSphereGroupElemDefault(ctxt, sphElem);
         Collision_InitSphereGroupElemWithData(ctxt, sphElem, initElem);
     }
     return 1;
 }
 
-s32 func_800E0D84(GlobalContext *ctxt, ColSphereGroup *sphereGroup, Actor *actor, ColSphereGroupInitType1 *init) {
-    ColSphereGroupElement *sphElem;
-    ColSphereGroupElementInit *initElem;
+s32 func_800E0D84(GlobalContext *ctxt, ColliderJntSph *sphereGroup, Actor *actor, ColliderJntSphInitType1 *init) {
+    ColliderJntSphElement *sphElem;
+    ColliderJntSphElementInit *initElem;
 
     func_800E05D4(ctxt, &sphereGroup->base, actor, &init->base);
     sphereGroup->count = init->count;
-    sphereGroup->spheres = zelda_malloc(init->count * sizeof(ColSphereGroupElement));
+    sphereGroup->elements = zelda_malloc(init->count * sizeof(ColliderJntSphElement));
 
-    if (sphereGroup->spheres == NULL) {
+    if (sphereGroup->elements == NULL) {
         sphereGroup->count = 0;
         return 0;
     }
 
-    for (sphElem = &sphereGroup->spheres[0], initElem = &init->init[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++, initElem++) {
+    for (sphElem = &sphereGroup->elements[0], initElem = &init->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++, initElem++) {
         Collision_InitSphereGroupElemDefault(ctxt, sphElem);
         Collision_InitSphereGroupElemWithData(ctxt, sphElem, initElem);
     }
     return 1;
 }
 
-s32 Collision_InitSphereGroupWithData(GlobalContext *ctxt, ColSphereGroup *sphereGroup, Actor *actor, ColSphereGroupInit *init, ColSphereGroupElement *spheres) {
-    ColSphereGroupElement* sphElem;
-    ColSphereGroupElementInit* sphElemInit;
+s32 Collision_InitSphereGroupWithData(GlobalContext *ctxt, ColliderJntSph *sphereGroup, Actor *actor, ColliderJntSphInit *init, ColliderJntSphElement *spheres) {
+    ColliderJntSphElement* sphElem;
+    ColliderJntSphElementInit* sphElemInit;
 
     Collision_InitCommonWithData(ctxt, &sphereGroup->base, actor, &init->base);
     sphereGroup->count = init->count;
-    sphereGroup->spheres = spheres;
+    sphereGroup->elements = spheres;
 
-    for (sphElem = &sphereGroup->spheres[0], sphElemInit = &init->init[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++, sphElemInit++) {
+    for (sphElem = &sphereGroup->elements[0], sphElemInit = &init->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++, sphElemInit++) {
         Collision_InitSphereGroupElemDefault(ctxt, sphElem);
         Collision_InitSphereGroupElemWithData(ctxt, sphElem, sphElemInit);
     }
@@ -353,50 +344,50 @@ s32 Collision_InitSphereGroupWithData(GlobalContext *ctxt, ColSphereGroup *spher
     return 1;
 }
 
-s32 Collision_InitSphereGroup(GlobalContext *ctxt, ColSphereGroup *sphereGroup, Actor *actor, ColSphereGroupInit *init, ColSphereGroupElement *spheres) {
+s32 Collision_InitSphereGroup(GlobalContext *ctxt, ColliderJntSph *sphereGroup, Actor *actor, ColliderJntSphInit *init, ColliderJntSphElement *spheres) {
     Collision_InitSphereGroupDefault(ctxt, sphereGroup);
     Collision_InitSphereGroupWithData(ctxt, sphereGroup, actor, init, spheres);
     return 0;
 }
 
-s32 Collision_ResetSphereGroupForAT(GlobalContext *ctxt, ColCommon *collider) {
-    ColSphereGroupElement *sphElem;
-    ColSphereGroup* spheres = (ColSphereGroup*)collider;
+s32 Collision_ResetSphereGroupForAT(GlobalContext *ctxt, Collider *collider) {
+    ColliderJntSphElement *sphElem;
+    ColliderJntSph* spheres = (ColliderJntSph*)collider;
 
     Collision_ResetCommonForAT(ctxt, &spheres->base);
 
-    for (sphElem = &spheres->spheres[0]; sphElem < &spheres->spheres[spheres->count]; sphElem++) {
+    for (sphElem = &spheres->elements[0]; sphElem < &spheres->elements[spheres->count]; sphElem++) {
         Collision_ResetSphereGroupElemForAT(ctxt, sphElem);
     }
     return 1;
 }
 
-s32 Collision_ResetSphereGroupForAC(GlobalContext *ctxt, ColCommon *collider) {
-    ColSphereGroupElement *sphElem;
-    ColSphereGroup* spheres = (ColSphereGroup*)collider;
+s32 Collision_ResetSphereGroupForAC(GlobalContext *ctxt, Collider *collider) {
+    ColliderJntSphElement *sphElem;
+    ColliderJntSph* spheres = (ColliderJntSph*)collider;
 
     Collision_ResetCommonForAC(ctxt, &spheres->base);
 
-    for (sphElem = &spheres->spheres[0]; sphElem < &spheres->spheres[spheres->count]; sphElem++) {
+    for (sphElem = &spheres->elements[0]; sphElem < &spheres->elements[spheres->count]; sphElem++) {
         Collision_ResetSphereGroupElemForAC(ctxt, sphElem);
     }
     return 1;
 }
 
-s32 Collision_ResetSphereGroupForOT(GlobalContext *ctxt, ColCommon *collider) {
-    ColSphereGroupElement *sphElem;
-    ColSphereGroup* spheres = (ColSphereGroup*)collider;
+s32 Collision_ResetSphereGroupForOT(GlobalContext *ctxt, Collider *collider) {
+    ColliderJntSphElement *sphElem;
+    ColliderJntSph* spheres = (ColliderJntSph*)collider;
 
     Collision_ResetCommonForOT(ctxt, &spheres->base);
 
-    for (sphElem = &spheres->spheres[0]; sphElem < &spheres->spheres[spheres->count]; sphElem++) {
+    for (sphElem = &spheres->elements[0]; sphElem < &spheres->elements[spheres->count]; sphElem++) {
         Collision_ResetSphereGroupElemForOT(ctxt, sphElem);
     }
     return 1;
 }
 
-s32 Collision_InitCylinderParamsDefault(GlobalContext* ctxt, ColCylinderParams* params) {
-    static ColCylinderParams defaultColCylinderInfo = {
+s32 Collision_InitCylinderParamsDefault(GlobalContext* ctxt, Cylinder16* params) {
+    static Cylinder16 defaultColCylinderInfo = {
         0, 0, 0, { 0, 0, 0 },
     };
 
@@ -404,94 +395,102 @@ s32 Collision_InitCylinderParamsDefault(GlobalContext* ctxt, ColCylinderParams* 
     return 1;
 }
 
-s32 Collision_FiniCylinderParams(GlobalContext* ctxt, ColCylinderParams* params) {
+s32 Collision_FiniCylinderParams(GlobalContext* ctxt, Cylinder16* params) {
     return 1;
 }
 
-s32 Collision_InitCylinderParamsWithData(GlobalContext *ctxt, ColCylinderParams *info, ColCylinderParams *init) {
+s32 Collision_InitCylinderParamsWithData(GlobalContext *ctxt, Cylinder16 *info, Cylinder16 *init) {
     *info = *init;
     return 1;
 }
 
-s32 Collision_InitCylinderDefault(GlobalContext *ctxt, ColCylinder *cylinder) {
+s32 Collision_InitCylinderDefault(GlobalContext *ctxt, ColliderCylinder *cylinder) {
     Collision_InitCommonDefault(ctxt, &cylinder->base);
-    Collision_InitBodyDefault(ctxt, &cylinder->body);
-    Collision_InitCylinderParamsDefault(ctxt, &cylinder->params);
+    Collision_InitBodyDefault(ctxt, &cylinder->info);
+    Collision_InitCylinderParamsDefault(ctxt, &cylinder->dim);
     return 1;
 }
 
-s32 Collision_FiniCylinder(GlobalContext *ctxt, ColCylinder *cylinder) {
+s32 Collision_FiniCylinder(GlobalContext *ctxt, ColliderCylinder *cylinder) {
     Collision_FiniCommon(ctxt, &cylinder->base);
-    Collision_FiniBody(ctxt, &cylinder->body);
-    Collision_FiniCylinderParams(ctxt, &cylinder->params);
+    Collision_FiniBody(ctxt, &cylinder->info);
+    Collision_FiniCylinderParams(ctxt, &cylinder->dim);
     return 1;
 }
 
-s32 func_800E123C(GlobalContext* ctxt, ColCylinder* cylinder, ColCylinderInitToActor* init) {
+s32 func_800E123C(GlobalContext* ctxt, ColliderCylinder* cylinder, ColliderCylinderInitToActor* init) {
     func_800E0594(ctxt, &cylinder->base, &init->base);
-    Collision_InitBodyWithData(ctxt, &cylinder->body, &init->body);
-    Collision_InitCylinderParamsWithData(ctxt, &cylinder->params, &init->info);
+    Collision_InitBodyWithData(ctxt, &cylinder->info, &init->info);
+    Collision_InitCylinderParamsWithData(ctxt, &cylinder->dim, &init->dim);
     return 1;
 }
 
-s32 func_800E12A4(GlobalContext *ctxt, ColCylinder *cylinder, Actor *actor, ColCylinderInitType1 *init) {
+s32 func_800E12A4(GlobalContext *ctxt, ColliderCylinder *cylinder, Actor *actor, ColliderCylinderInitType1 *init) {
     func_800E05D4(ctxt, &cylinder->base, actor, &init->base);
-    Collision_InitBodyWithData(ctxt, &cylinder->body, &init->body);
-    Collision_InitCylinderParamsWithData(ctxt, &cylinder->params, &init->info);
+    Collision_InitBodyWithData(ctxt, &cylinder->info, &init->info);
+    Collision_InitCylinderParamsWithData(ctxt, &cylinder->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_InitCylinderWithData(GlobalContext *ctxt, ColCylinder *cylinder, Actor *actor, ColCylinderInit *init) {
+s32 Collision_InitCylinderWithData(GlobalContext *ctxt, ColliderCylinder *cylinder, Actor *actor, ColliderCylinderInit *init) {
     Collision_InitCommonWithData(ctxt, &cylinder->base, actor, &init->base);
-    Collision_InitBodyWithData(ctxt, &cylinder->body, &init->body);
-    Collision_InitCylinderParamsWithData(ctxt, &cylinder->params, &init->info);
+    Collision_InitBodyWithData(ctxt, &cylinder->info, &init->info);
+    Collision_InitCylinderParamsWithData(ctxt, &cylinder->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_InitCylinder(GlobalContext *ctxt, ColCylinder *cylinder, Actor *actor, ColCylinderInit *init) {
+s32 Collision_InitCylinder(GlobalContext *ctxt, ColliderCylinder *cylinder, Actor *actor, ColliderCylinderInit *init) {
     Collision_InitCylinderDefault(ctxt, cylinder);
     Collision_InitCylinderWithData(ctxt, cylinder, actor, init);
     return 1;
 }
 
-s32 Collision_ResetCylinderForAT(GlobalContext *ctxt, ColCylinder *cylinder) {
+s32 Collision_ResetCylinderForAT(GlobalContext *ctxt, Collider* collider) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)collider;
+
     Collision_ResetCommonForAT(ctxt, &cylinder->base);
-    Collision_ResetBodyForAT(ctxt, &cylinder->body);
+    Collision_ResetBodyForAT(ctxt, &cylinder->info);
     return 1;
 }
 
-s32 Collision_ResetCylinderForAC(GlobalContext *ctxt, ColCylinder *cylinder) {
+s32 Collision_ResetCylinderForAC(GlobalContext *ctxt, Collider* collider) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)collider;
+
     Collision_ResetCommonForAC(ctxt, &cylinder->base);
-    Collision_ResetBodyForAC(ctxt, &cylinder->body);
+    Collision_ResetBodyForAC(ctxt, &cylinder->info);
     return 1;
 }
 
-s32 Collision_ReseCylinderForOT(GlobalContext *ctxt, ColCylinder *cylinder) {
+s32 Collision_ReseCylinderForOT(GlobalContext *ctxt, Collider* collider) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)collider;
+
     Collision_ResetCommonForOT(ctxt, &cylinder->base);
-    Collision_ResetBodyForOT(ctxt, &cylinder->body);
+    Collision_ResetBodyForOT(ctxt, &cylinder->info);
     return 1;
 }
 
-s32 Collision_InitTriParamsDefault(GlobalContext *ctxt, ColTriParams *coords) {
-    static ColTriParams defaultColTriParams = {
+s32 Collision_InitTriParamsDefault(GlobalContext *ctxt, TriNorm *coords) {
+    static TriNorm defaultColTriParams = {
         {
             { 0.0f, 0.0f, 0.0f },
             { 0.0f, 0.0f, 0.0f },
             { 0.0f, 0.0f, 0.0f },
         },
-        { 0.0f, 0.0f, 0.0f },
-        0.0f,
+        {
+            { 0.0f, 0.0f, 0.0f },
+            0.0f,
+        },
     };
 
     *coords = defaultColTriParams;
     return 1;
 }
 
-s32 Collision_FiniTriParams(GlobalContext* ctxt, ColTriParams* params) {
+s32 Collision_FiniTriParams(GlobalContext* ctxt, TriNorm* params) {
     return 1;
 }
 
-s32 Collision_InitTriParamsWithData(GlobalContext *ctxt, ColTriParams *params, ColTriParamsInit *init) {
+s32 Collision_InitTriParamsWithData(GlobalContext *ctxt, TriNorm *params, ColliderTrisElementDimInit *init) {
     Vec3f* destVtx;
     Vec3f* srcVtx;
     f32 nx;
@@ -505,99 +504,99 @@ s32 Collision_InitTriParamsWithData(GlobalContext *ctxt, ColTriParams *params, C
 
     Math3D_UnitNormalVector(&init->vtx[0], &init->vtx[1], &init->vtx[2], &nx, &ny, &nz, &originDist);
 
-    params->unitNormal.x = nx;
-    params->unitNormal.y = ny;
-    params->unitNormal.z = nz;
-    params->unk30 = originDist;
+    params->plane.normal.x = nx;
+    params->plane.normal.y = ny;
+    params->plane.normal.z = nz;
+    params->plane.originDist = originDist;
     return 1;
 }
 
-s32 Collision_InitTriDefault(GlobalContext *ctxt, ColTri *elem) {
-    Collision_InitBodyDefault(ctxt, &elem->body);
-    Collision_InitTriParamsDefault(ctxt, &elem->params);
+s32 Collision_InitTriDefault(GlobalContext *ctxt, ColliderTrisElement *elem) {
+    Collision_InitBodyDefault(ctxt, &elem->info);
+    Collision_InitTriParamsDefault(ctxt, &elem->dim);
     return 1;
 }
 
-s32 Collision_FiniTri(GlobalContext *ctxt, ColTri *elem) {
-    Collision_FiniBody(ctxt, &elem->body);
-    Collision_FiniTriParams(ctxt, &elem->params);
+s32 Collision_FiniTri(GlobalContext *ctxt, ColliderTrisElement *elem) {
+    Collision_FiniBody(ctxt, &elem->info);
+    Collision_FiniTriParams(ctxt, &elem->dim);
     return 1;
 }
 
-s32 Collision_InitTriWithData(GlobalContext *ctxt, ColTri *elem, ColTriInit *init) {
-    Collision_InitBodyWithData(ctxt, &elem->body, &init->body);
-    Collision_InitTriParamsWithData(ctxt, &elem->params, &init->params);
+s32 Collision_InitTriWithData(GlobalContext *ctxt, ColliderTrisElement *elem, ColliderTrisElementInit *init) {
+    Collision_InitBodyWithData(ctxt, &elem->info, &init->info);
+    Collision_InitTriParamsWithData(ctxt, &elem->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_ResetTriForAT(GlobalContext *ctxt, ColTri *tri) {
-    Collision_ResetBodyForAT(ctxt, &tri->body);
+s32 Collision_ResetTriForAT(GlobalContext *ctxt, ColliderTrisElement *tri) {
+    Collision_ResetBodyForAT(ctxt, &tri->info);
     return 1;
 }
 
-s32 Collision_ResetTriForAC(GlobalContext *ctxt, ColTri *tri) {
-    Collision_ResetBodyForAC(ctxt, &tri->body);
+s32 Collision_ResetTriForAC(GlobalContext *ctxt, ColliderTrisElement *tri) {
+    Collision_ResetBodyForAC(ctxt, &tri->info);
     return 1;
 }
 
 // Collision_ResetTriForOT
-s32 func_800E16AC(GlobalContext *ctxt, ColTri *tri) {
-    Collision_ResetBodyForOT(ctxt, &tri->body);
+s32 func_800E16AC(GlobalContext *ctxt, ColliderTrisElement *tri) {
+    Collision_ResetBodyForOT(ctxt, &tri->info);
     return 1;
 }
 
-s32 Collision_InitTriGroupDefault(GlobalContext *ctxt, ColTriGroup *triGroup) {
+s32 Collision_InitTriGroupDefault(GlobalContext *ctxt, ColliderTris *triGroup) {
     Collision_InitCommonDefault(ctxt, &triGroup->base);
     triGroup->count = 0;
-    triGroup->tris = NULL;
+    triGroup->elements = NULL;
     return 1;
 }
 
-s32 func_800E16FC(GlobalContext *ctxt, ColTriGroup *triGroup) {
-    ColTri *triElem;
+s32 func_800E16FC(GlobalContext *ctxt, ColliderTris *triGroup) {
+    ColliderTrisElement *triElem;
 
     Collision_FiniCommon(ctxt, &triGroup->base);
     
-    for (triElem = &triGroup->tris[0]; triElem < &triGroup->tris[triGroup->count]; triElem++) {
+    for (triElem = &triGroup->elements[0]; triElem < &triGroup->elements[triGroup->count]; triElem++) {
         Collision_FiniTri(ctxt, triElem);
     }
 
     triGroup->count = 0;
-    if (triGroup->tris != NULL) {
-        zelda_free(triGroup->tris);
+    if (triGroup->elements != NULL) {
+        zelda_free(triGroup->elements);
     }
-    triGroup->tris = NULL;
+    triGroup->elements = NULL;
 
     return 1;
 }
 
-s32 Collision_FiniTriGroup(GlobalContext *ctxt, ColTriGroup *triGroup) {
-    ColTri* triElem;
+s32 Collision_FiniTriGroup(GlobalContext *ctxt, ColliderTris *triGroup) {
+    ColliderTrisElement* triElem;
 
     Collision_FiniCommon(ctxt, &triGroup->base);
 
-    for (triElem = &triGroup->tris[0]; triElem < &triGroup->tris[triGroup->count]; triElem++) {
+    for (triElem = &triGroup->elements[0]; triElem < &triGroup->elements[triGroup->count]; triElem++) {
         Collision_FiniTri(ctxt, triElem);
     }
     triGroup->count = 0;
-    triGroup->tris = NULL;
+    triGroup->elements = NULL;
     return 1;
 }
 
-s32 func_800E1858(GlobalContext *ctxt, ColTriGroup *triGroup, Actor *actor, ColTriGroupInitType1 *init) {
-    ColTri *triElem;
-    ColTriInit *triElemInit;
+s32 func_800E1858(GlobalContext *ctxt, ColliderTris *triGroup, Actor *actor, ColliderTrisInitType1 *init) {
+    ColliderTrisElement *triElem;
+    ColliderTrisElementInit *triElemInit;
 
     func_800E05D4(ctxt, &triGroup->base, actor, &init->base);
     triGroup->count = init->count;
-    triGroup->tris = zelda_malloc(triGroup->count * sizeof(ColTri));
+    triGroup->elements = zelda_malloc(triGroup->count * sizeof(ColliderTrisElement));
 
-    if (triGroup->tris == NULL) {
+    if (triGroup->elements == NULL) {
         triGroup->count = 0;
         return 0;
     }
 
-    for (triElem = &triGroup->tris[0], triElemInit = &init->elemInit[0]; triElem < &triGroup->tris[triGroup->count]; triElem++, triElemInit++) {
+    for (triElem = &triGroup->elements[0], triElemInit = &init->elements[0]; triElem < &triGroup->elements[triGroup->count]; triElem++, triElemInit++) {
         Collision_InitTriDefault(ctxt, triElem);
         Collision_InitTriWithData(ctxt, triElem, triElemInit);
     }
@@ -605,15 +604,15 @@ s32 func_800E1858(GlobalContext *ctxt, ColTriGroup *triGroup, Actor *actor, ColT
     return 1;
 }
 
-s32 Collision_InitTriGroupWithData(GlobalContext *ctxt, ColTriGroup *triGroup, Actor *actor, ColTriGroupInit *init, ColTri *tris) {
-    ColTri *triElem;
-    ColTriInit *triElemInit;
+s32 Collision_InitTriGroupWithData(GlobalContext *ctxt, ColliderTris *triGroup, Actor *actor, ColliderTrisInit *init, ColliderTrisElement *tris) {
+    ColliderTrisElement *triElem;
+    ColliderTrisElementInit *triElemInit;
 
     Collision_InitCommonWithData(ctxt, &triGroup->base, actor, &init->base);
     triGroup->count = init->count;
-    triGroup->tris = tris;
+    triGroup->elements = tris;
 
-    for (triElem = &triGroup->tris[0], triElemInit = &init->elemInit[0]; triElem < &triGroup->tris[triGroup->count]; triElem++, triElemInit++) {
+    for (triElem = &triGroup->elements[0], triElemInit = &init->elements[0]; triElem < &triGroup->elements[triGroup->count]; triElem++, triElemInit++) {
         Collision_InitTriDefault(ctxt, triElem);
         Collision_InitTriWithData(ctxt, triElem, triElemInit);
     }
@@ -621,50 +620,50 @@ s32 Collision_InitTriGroupWithData(GlobalContext *ctxt, ColTriGroup *triGroup, A
     return 1;
 }
 
-s32 Collision_InitTriGroup(GlobalContext *ctxt, ColTriGroup *triGroup, Actor *actor, ColTriGroupInit *init, ColTri *tris) {
+s32 Collision_InitTriGroup(GlobalContext *ctxt, ColliderTris *triGroup, Actor *actor, ColliderTrisInit *init, ColliderTrisElement *tris) {
     Collision_InitTriGroupDefault(ctxt, triGroup);
     Collision_InitTriGroupWithData(ctxt, triGroup, actor, init, tris);
     return 0;
 }
 
-s32 Collision_ResetTriGroupForAT(GlobalContext *ctxt, ColCommon *collider) {
-    ColTri *triElem;
-    ColTriGroup* tris = (ColTriGroup*)collider;
+s32 Collision_ResetTriGroupForAT(GlobalContext *ctxt, Collider *collider) {
+    ColliderTrisElement *triElem;
+    ColliderTris* tris = (ColliderTris*)collider;
 
     Collision_ResetCommonForAT(ctxt, &tris->base);
 
-    for (triElem = &tris->tris[0]; triElem < &tris->tris[tris->count]; triElem++) {
+    for (triElem = &tris->elements[0]; triElem < &tris->elements[tris->count]; triElem++) {
         Collision_ResetTriForAT(ctxt, triElem);
     }
     return 1;
 }
 
-s32 Collision_ResetTriGroupForAC(GlobalContext *ctxt, ColCommon *collider) {
-    ColTri *triElem;
-    ColTriGroup* tris = (ColTriGroup*)collider;
+s32 Collision_ResetTriGroupForAC(GlobalContext *ctxt, Collider *collider) {
+    ColliderTrisElement *triElem;
+    ColliderTris* tris = (ColliderTris*)collider;
 
     Collision_ResetCommonForAC(ctxt, &tris->base);
 
-    for (triElem = &tris->tris[0]; triElem < &tris->tris[tris->count]; triElem++) {
+    for (triElem = &tris->elements[0]; triElem < &tris->elements[tris->count]; triElem++) {
         Collision_ResetTriForAC(ctxt, triElem);
     }
     return 1;
 }
 
-s32 Collision_ResetTriGroupForOT(GlobalContext *ctxt, ColCommon *collider) {
-    ColTri *triElem;
-    ColTriGroup* tris = (ColTriGroup*)collider;
+s32 Collision_ResetTriGroupForOT(GlobalContext *ctxt, Collider *collider) {
+    ColliderTrisElement *triElem;
+    ColliderTris* tris = (ColliderTris*)collider;
 
     Collision_ResetCommonForOT(ctxt, &tris->base);
 
-    for (triElem = &tris->tris[0]; triElem < &tris->tris[tris->count]; triElem++) {
+    for (triElem = &tris->elements[0]; triElem < &tris->elements[tris->count]; triElem++) {
         func_800E16AC(ctxt, triElem);
     }
     return 1;
 }
 
-s32 Collision_InitQuadParamsDefault(GlobalContext *ctxt, ColQuadParams *params) {
-    static ColQuadParams defaultColQuadParams = {
+s32 Collision_InitQuadParamsDefault(GlobalContext *ctxt, ColliderQuadDim *params) {
+    static ColliderQuadDim defaultColQuadParams = {
         {
             { 0.0f, 0.0f, 0.0f },
             { 0.0f, 0.0f, 0.0f },
@@ -680,25 +679,25 @@ s32 Collision_InitQuadParamsDefault(GlobalContext *ctxt, ColQuadParams *params) 
     return 1;
 }
 
-s32 Collision_FiniQuadParams(GlobalContext* ctxt, ColQuadParams* params) {
+s32 Collision_FiniQuadParams(GlobalContext* ctxt, ColliderQuadDim* params) {
     return 1;
 }
 
-s32 Collision_ResetQuadParamsForAT(GlobalContext *ctxt, ColQuadParams *params) {
-    params->unk3C = 1.0E38f;
+s32 Collision_ResetQuadParamsForAT(GlobalContext *ctxt, ColliderQuadDim *params) {
+    params->acDist = 1.0E38f;
     return 1;
 }
 
-void Collision_QuadCalcMidpoints(ColQuadParams *params) {
-    params->unk30.x = (params->quad[3].x + params->quad[2].x) * 0.5f;
-    params->unk30.y = (params->quad[3].y + params->quad[2].y) * 0.5f;
-    params->unk30.z = (params->quad[3].z + params->quad[2].z) * 0.5f;
-    params->unk36.x = (params->quad[1].x + params->quad[0].x) * 0.5f;
-    params->unk36.y = (params->quad[1].y + params->quad[0].y) * 0.5f;
-    params->unk36.z = (params->quad[1].z + params->quad[0].z) * 0.5f;
+void Collision_QuadCalcMidpoints(ColliderQuadDim *params) {
+    params->dcMid.x = (params->quad[3].x + params->quad[2].x) * 0.5f;
+    params->dcMid.y = (params->quad[3].y + params->quad[2].y) * 0.5f;
+    params->dcMid.z = (params->quad[3].z + params->quad[2].z) * 0.5f;
+    params->baMid.x = (params->quad[1].x + params->quad[0].x) * 0.5f;
+    params->baMid.y = (params->quad[1].y + params->quad[0].y) * 0.5f;
+    params->baMid.z = (params->quad[1].z + params->quad[0].z) * 0.5f;
 }
 
-s32 Collision_InitQuadParamsWithData(GlobalContext *ctxt, ColQuadParams *params, ColQuadParamsInit *init) {
+s32 Collision_InitQuadParamsWithData(GlobalContext *ctxt, ColliderQuadDim *params, ColliderQuadDimInit *init) {
     params->quad[0] = init->quad[0];
     params->quad[1] = init->quad[1];
     params->quad[2] = init->quad[2];
@@ -708,77 +707,83 @@ s32 Collision_InitQuadParamsWithData(GlobalContext *ctxt, ColQuadParams *params,
     return 1;
 }
 
-s32 Collision_InitQuadDefault(GlobalContext *ctxt, ColQuad *quad) {
+s32 Collision_InitQuadDefault(GlobalContext *ctxt, ColliderQuad *quad) {
     Collision_InitCommonDefault(ctxt, &quad->base);
-    Collision_InitBodyDefault(ctxt, &quad->body);
-    Collision_InitQuadParamsDefault(ctxt, &quad->params);
+    Collision_InitBodyDefault(ctxt, &quad->info);
+    Collision_InitQuadParamsDefault(ctxt, &quad->dim);
     return 1;
 }
 
-s32 Collision_FiniQuad(GlobalContext *ctxt, ColQuad *quad) {
+s32 Collision_FiniQuad(GlobalContext *ctxt, ColliderQuad *quad) {
     Collision_FiniCommon(ctxt, &quad->base);
-    Collision_FiniBody(ctxt, &quad->body);
-    Collision_FiniQuadParams(ctxt, &quad->params);
+    Collision_FiniBody(ctxt, &quad->info);
+    Collision_FiniQuadParams(ctxt, &quad->dim);
     return 1;
 }
 
-s32 func_800E1EB8(GlobalContext *ctxt, ColQuad *quad, Actor *actor, ColQuadInitType1 *init) {
+s32 func_800E1EB8(GlobalContext *ctxt, ColliderQuad *quad, Actor *actor, ColliderQuadInitType1 *init) {
     func_800E05D4(ctxt, &quad->base, actor, &init->base);
-    Collision_InitBodyWithData(ctxt, &quad->body, &init->body);
-    Collision_InitQuadParamsWithData(ctxt, &quad->params, &init->params);
+    Collision_InitBodyWithData(ctxt, &quad->info, &init->info);
+    Collision_InitQuadParamsWithData(ctxt, &quad->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_InitQuadWithData(GlobalContext *ctxt, ColQuad *quad, Actor *actor, ColQuadInit *init) {
+s32 Collision_InitQuadWithData(GlobalContext *ctxt, ColliderQuad *quad, Actor *actor, ColliderQuadInit *init) {
     Collision_InitCommonWithData(ctxt, &quad->base, actor, &init->base);
-    Collision_InitBodyWithData(ctxt, &quad->body, &init->body);
-    Collision_InitQuadParamsWithData(ctxt, &quad->params, &init->params);
+    Collision_InitBodyWithData(ctxt, &quad->info, &init->info);
+    Collision_InitQuadParamsWithData(ctxt, &quad->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_InitQuad(GlobalContext *ctxt, ColQuad *quad, Actor *actor, ColQuadInit *init) {
+s32 Collision_InitQuad(GlobalContext *ctxt, ColliderQuad *quad, Actor *actor, ColliderQuadInit *init) {
     Collision_InitQuadDefault(ctxt, quad);
     Collision_InitQuadWithData(ctxt, quad, actor, init);
     return 0;
 }
 
-s32 Collision_ResetQuadForAT(GlobalContext *ctxt, ColQuad *quad) {
+s32 Collision_ResetQuadForAT(GlobalContext *ctxt, Collider *collider) {
+    ColliderQuad *quad = (ColliderQuad*)collider;
+
     Collision_ResetCommonForAT(ctxt, &quad->base);
-    Collision_ResetBodyForAT(ctxt, &quad->body);
-    Collision_ResetQuadParamsForAT(ctxt, &quad->params);
+    Collision_ResetBodyForAT(ctxt, &quad->info);
+    Collision_ResetQuadParamsForAT(ctxt, &quad->dim);
     return 1;
 }
 
-s32 Collision_ResetQuadForAC(GlobalContext *ctxt, ColQuad *quad) {
+s32 Collision_ResetQuadForAC(GlobalContext *ctxt, Collider *collider) {
+    ColliderQuad *quad = (ColliderQuad*)collider;
+
     Collision_ResetCommonForAC(ctxt, &quad->base);
-    Collision_ResetBodyForAC(ctxt, &quad->body);
+    Collision_ResetBodyForAC(ctxt, &quad->info);
     return 1;
 }
 
-s32 Collision_ResetQuadForOT(GlobalContext *ctxt, ColQuad *quad) {
+s32 Collision_ResetQuadForOT(GlobalContext *ctxt, Collider *collider) {
+    ColliderQuad *quad = (ColliderQuad*)collider;
+
     Collision_ResetCommonForOT(ctxt, &quad->base);
-    Collision_ResetBodyForOT(ctxt, &quad->body);
+    Collision_ResetBodyForOT(ctxt, &quad->info);
     return 1;
 }
 
-s32 func_800E20A4(GlobalContext *ctxt, ColQuad *quad, Vec3f *a2) {
+s32 func_800E20A4(GlobalContext *ctxt, ColliderQuad *quad, Vec3f *a2) {
     f32 dstSq;
     Vec3f sp20;
 
-    if (!(quad->body.unk15 & 4)) {
+    if (!(quad->info.toucherFlags & 4)) {
         return 1;
     }
-    Math_Vec3s_ToVec3f(&sp20, &quad->params.unk30);
+    Math_Vec3s_ToVec3f(&sp20, &quad->dim.dcMid);
     dstSq = Math3D_DistanceSquared(&sp20, a2);
 
-    if (dstSq < quad->params.unk3C) {
-        quad->params.unk3C = dstSq;
+    if (dstSq < quad->dim.acDist) {
+        quad->dim.acDist = dstSq;
     
-        if (quad->body.unk18 != 0) {
-            Collision_ResetCommonForAC(ctxt, quad->body.unk18);
+        if (quad->info.atHit != NULL) {
+            Collision_ResetCommonForAC(ctxt, quad->info.atHit);
         }
-        if (quad->body.unk20 != 0) {
-            Collision_ResetBodyForAC(ctxt, quad->body.unk20);
+        if (quad->info.atHitInfo != NULL) {
+            Collision_ResetBodyForAC(ctxt, quad->info.atHitInfo);
         }
         return 1;
     } else {
@@ -787,48 +792,54 @@ s32 func_800E20A4(GlobalContext *ctxt, ColQuad *quad, Vec3f *a2) {
 }
 
 
-s32 Collision_InitSphereDefault(GlobalContext *ctxt, ColSphere *sphere) {
+s32 Collision_InitSphereDefault(GlobalContext *ctxt, ColliderSphere *sphere) {
     Collision_InitCommonDefault(ctxt, &sphere->base);
-    Collision_InitBodyDefault(ctxt, &sphere->body);
-    Collision_InitSphereParamsDefault(ctxt, &sphere->params);
+    Collision_InitBodyDefault(ctxt, &sphere->info);
+    Collision_InitSphereParamsDefault(ctxt, &sphere->dim);
     return 1;
 }
 
-s32 Collision_FiniSphere(GlobalContext *pzParm1, ColSphere *sphere) {
+s32 Collision_FiniSphere(GlobalContext *pzParm1, ColliderSphere *sphere) {
     Collision_FiniCommon(pzParm1, &sphere->base);
-    Collision_FiniBody(pzParm1, &sphere->body);
-    Collision_FiniSphereParams(pzParm1, &sphere->params);
+    Collision_FiniBody(pzParm1, &sphere->info);
+    Collision_FiniSphereParams(pzParm1, &sphere->dim);
     return 1;
 }
 
-s32 Collision_InitSphereWithData(GlobalContext *ctxt, ColSphere *sphere, Actor *actor, ColSphereInit *info) {
-    Collision_InitCommonWithData(ctxt, &sphere->base, actor, &info->base);
-    Collision_InitBodyWithData(ctxt, &sphere->body, &info->body);
-    Collision_InitSphereParamsWithData(ctxt, &sphere->params, &info->info);
+s32 Collision_InitSphereWithData(GlobalContext *ctxt, ColliderSphere *sphere, Actor *actor, ColliderSphereInit *init) {
+    Collision_InitCommonWithData(ctxt, &sphere->base, actor, &init->base);
+    Collision_InitBodyWithData(ctxt, &sphere->info, &init->info);
+    Collision_InitSphereParamsWithData(ctxt, &sphere->dim, &init->dim);
     return 1;
 }
 
-s32 Collision_InitSphere(GlobalContext *ctxt, ColSphere *sphere, Actor *actor, ColSphereInit *init) {
+s32 Collision_InitSphere(GlobalContext *ctxt, ColliderSphere *sphere, Actor *actor, ColliderSphereInit *init) {
     Collision_InitSphereDefault(ctxt, sphere);
     Collision_InitSphereWithData(ctxt, sphere, actor, init);
     return 0;
 }
 
-s32 Collision_ResetSphereForAT(GlobalContext *ctxt, ColSphere *sphere) {
+s32 Collision_ResetSphereForAT(GlobalContext *ctxt, Collider *collider) {
+    ColliderSphere *sphere = (ColliderSphere*)collider;
+
     Collision_ResetCommonForAT(ctxt, &sphere->base);
-    Collision_ResetBodyForAT(ctxt, &sphere->body);
+    Collision_ResetBodyForAT(ctxt, &sphere->info);
     return 1;
 }
 
-s32 Collision_ResetSphereForAC(GlobalContext *ctxt, ColSphere *sphere) {
+s32 Collision_ResetSphereForAC(GlobalContext *ctxt, Collider *collider) {
+    ColliderSphere *sphere = (ColliderSphere*)collider;
+
     Collision_ResetCommonForAC(ctxt, &sphere->base);
-    Collision_ResetBodyForAC(ctxt, &sphere->body);
+    Collision_ResetBodyForAC(ctxt, &sphere->info);
     return 1;
 }
 
-s32 Collision_ResetSphereForOT(GlobalContext *ctxt, ColSphere *sphere) {
+s32 Collision_ResetSphereForOT(GlobalContext *ctxt, Collider *collider) {
+    ColliderSphere *sphere = (ColliderSphere*)collider;
+
     Collision_ResetCommonForOT(ctxt, &sphere->base);
-    Collision_ResetBodyForOT(ctxt, &sphere->body);
+    Collision_ResetBodyForOT(ctxt, &sphere->info);
     return 1;
 }
 
@@ -872,31 +883,31 @@ void Collision_Fini(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
 }
 
 void Collision_Reset(GlobalContext* ctxt, CollisionCheckContext* colCtxt) {
-    ColCommon** col;
+    Collider** col;
     OcLine** line;
 
     if (colCtxt->flags & 1) {
         return;
     }
 
-    colCtxt->ATgroupLength = 0;
-    colCtxt->ACgroupLength = 0;
-    colCtxt->OTgroupLength = 0;
-    colCtxt->group4Length = 0;
+    colCtxt->colATCount = 0;
+    colCtxt->colACCount = 0;
+    colCtxt->colOCCount = 0;
+    colCtxt->colLineCount = 0;
 
-    for (col = &colCtxt->ATgroup[0]; col < &colCtxt->ATgroup[ARRAY_COUNT(colCtxt->ATgroup)]; col++) {
+    for (col = &colCtxt->colAT[0]; col < &colCtxt->colAT[ARRAY_COUNT(colCtxt->colAT)]; col++) {
         *col = NULL;
     }
 
-    for (col = &colCtxt->ACgroup[0]; col < &colCtxt->ACgroup[ARRAY_COUNT(colCtxt->ACgroup)]; col++) {
+    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[ARRAY_COUNT(colCtxt->colAC)]; col++) {
         *col = NULL;
     }
 
-    for (col = &colCtxt->OTgroup[0]; col < &colCtxt->OTgroup[ARRAY_COUNT(colCtxt->OTgroup)]; col++) {
+    for (col = &colCtxt->colOC[0]; col < &colCtxt->colOC[ARRAY_COUNT(colCtxt->colOC)]; col++) {
         *col = NULL;
     }
 
-    for (line = &colCtxt->group4[0]; line < &colCtxt->group4[ARRAY_COUNT(colCtxt->group4)]; line++) {
+    for (line = &colCtxt->colLine[0]; line < &colCtxt->colLine[ARRAY_COUNT(colCtxt->colLine)]; line++) {
         *line = NULL;
     }
 }
@@ -909,7 +920,7 @@ void Collision_EnableAppendMode(GlobalContext *ctxt, CollisionCheckContext *colC
     colCtxt->flags &= ~1;
 }
 
-collision_add_func collisionAddATFuncs[] = {
+ColChkResetFunc collisionAddATFuncs[] = {
     Collision_ResetSphereGroupForAT,
     Collision_ResetCylinderForAT,
     Collision_ResetTriGroupForAT,
@@ -917,58 +928,58 @@ collision_add_func collisionAddATFuncs[] = {
     Collision_ResetSphereForAT,
 };
 
-s32 Collision_AddAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
+s32 Collision_AddAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
     s32 index;
 
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddATFuncs[shape->type](ctxt, shape);
+    collisionAddATFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
-    if (colCtxt->ATgroupLength >= ARRAY_COUNT(colCtxt->ATgroup)) {
+    if (colCtxt->colATCount >= ARRAY_COUNT(colCtxt->colAT)) {
         return -1;
     }
     if (colCtxt->flags & 1) {
         return -1;
     }
-    index = colCtxt->ATgroupLength;
+    index = colCtxt->colATCount;
 
-    colCtxt->ATgroup[colCtxt->ATgroupLength] = shape;
-    colCtxt->ATgroupLength++;
+    colCtxt->colAT[colCtxt->colATCount] = shape;
+    colCtxt->colATCount++;
 
     return index;
 }
 
-s32 Collision_AddIndexAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape, s32 index) {
+s32 Collision_AddIndexAT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape, s32 index) {
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddATFuncs[shape->type](ctxt, shape);
+    collisionAddATFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
     if (colCtxt->flags & 1) {
-        if (index >= colCtxt->ATgroupLength) {
+        if (index >= colCtxt->colATCount) {
             return -1;
         }
-        colCtxt->ATgroup[index] = shape;
+        colCtxt->colAT[index] = shape;
     } else {
-        if (colCtxt->ATgroupLength >= ARRAY_COUNT(colCtxt->ATgroup)) {
+        if (colCtxt->colATCount >= ARRAY_COUNT(colCtxt->colAT)) {
             return -1;
         }
-        index = colCtxt->ATgroupLength;
+        index = colCtxt->colATCount;
 
-        colCtxt->ATgroup[colCtxt->ATgroupLength] = shape;
-        colCtxt->ATgroupLength++;
+        colCtxt->colAT[colCtxt->colATCount] = shape;
+        colCtxt->colATCount++;
     }
     return index;
 }
 
-collision_add_func collisionAddACFuncs[] = {
+ColChkResetFunc collisionAddACFuncs[] = {
     Collision_ResetSphereGroupForAC,
     Collision_ResetCylinderForAC,
     Collision_ResetTriGroupForAC,
@@ -976,59 +987,59 @@ collision_add_func collisionAddACFuncs[] = {
     Collision_ResetSphereForAC,
 };
 
-s32 Collision_AddAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
+s32 Collision_AddAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
     s32 index;
 
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddACFuncs[shape->type](ctxt, shape);
+    collisionAddACFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
-    if (colCtxt->ACgroupLength >= ARRAY_COUNT(colCtxt->ACgroup)) {
+    if (colCtxt->colACCount >= ARRAY_COUNT(colCtxt->colAC)) {
         return -1;
     }
     if (colCtxt->flags & 1) {
         return -1;
     }
-    index = colCtxt->ACgroupLength;
+    index = colCtxt->colACCount;
 
-    colCtxt->ACgroup[colCtxt->ACgroupLength] = shape;
-    colCtxt->ACgroupLength++;
+    colCtxt->colAC[colCtxt->colACCount] = shape;
+    colCtxt->colACCount++;
 
     return index;
 }
 
 // TODO fix capitalization
-s32 collision_AddIndexAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape, s32 index) {
+s32 collision_AddIndexAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape, s32 index) {
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddACFuncs[shape->type](ctxt, shape);
+    collisionAddACFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
     if (colCtxt->flags & 1) {
-        if (index >= colCtxt->ACgroupLength) {
+        if (index >= colCtxt->colACCount) {
             return -1;
         }
-        colCtxt->ACgroup[index] = shape;
+        colCtxt->colAC[index] = shape;
     } else {
-        if (colCtxt->ACgroupLength >= ARRAY_COUNT(colCtxt->ACgroup)) {
+        if (colCtxt->colACCount >= ARRAY_COUNT(colCtxt->colAC)) {
             return -1;
         }
-        index = colCtxt->ACgroupLength;
+        index = colCtxt->colACCount;
 
-        colCtxt->ACgroup[colCtxt->ACgroupLength] = shape;
-        colCtxt->ACgroupLength++;
+        colCtxt->colAC[colCtxt->colACCount] = shape;
+        colCtxt->colACCount++;
     }
     return index;
 }
 
-collision_add_func collisionAddOTFuncs[] = {
+ColChkResetFunc collisionAddOTFuncs[] = {
     Collision_ResetSphereGroupForOT,
     Collision_ReseCylinderForOT,
     Collision_ResetTriGroupForOT,
@@ -1036,54 +1047,54 @@ collision_add_func collisionAddOTFuncs[] = {
     Collision_ResetSphereForOT,
 };
 
-s32 Collision_AddOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, ColCommon* shape) {
+s32 Collision_AddOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt, Collider* shape) {
     s32 index;
 
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddOTFuncs[shape->type](ctxt, shape);
+    collisionAddOTFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
-    if (colCtxt->OTgroupLength >= ARRAY_COUNT(colCtxt->OTgroup)) {
+    if (colCtxt->colOCCount >= ARRAY_COUNT(colCtxt->colOC)) {
         return -1;
     }
     if (colCtxt->flags & 1) {
         return -1;
     }
-    index = colCtxt->OTgroupLength;
+    index = colCtxt->colOCCount;
 
-    colCtxt->OTgroup[colCtxt->OTgroupLength] = shape;
-    colCtxt->OTgroupLength++;
+    colCtxt->colOC[colCtxt->colOCCount] = shape;
+    colCtxt->colOCCount++;
 
     return index;
 }
 
-s32 Collision_AddIndexOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape, s32 index) {
+s32 Collision_AddIndexOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape, s32 index) {
     if (func_8016A01C(ctxt)) {
         return -1;
     }
-    collisionAddOTFuncs[shape->type](ctxt, shape);
+    collisionAddOTFuncs[shape->shape](ctxt, shape);
 
     if (shape->actor != NULL && shape->actor->update == NULL) {
         return -1;
     }
     if (colCtxt->flags & 1) {
-        if (index >= colCtxt->OTgroupLength) {
+        if (index >= colCtxt->colOCCount) {
             return -1;
         }
-        //! @bug should be OTgroup
-        colCtxt->ATgroup[index] = shape;
+        //! @bug should be colOC
+        colCtxt->colAT[index] = shape;
     } else {
-        if (colCtxt->OTgroupLength >= ARRAY_COUNT(colCtxt->OTgroup)) {
+        if (colCtxt->colOCCount >= ARRAY_COUNT(colCtxt->colOC)) {
             return -1;
         }
-        index = colCtxt->OTgroupLength;
+        index = colCtxt->colOCCount;
 
-        colCtxt->OTgroup[colCtxt->OTgroupLength] = shape;
-        colCtxt->OTgroupLength++;
+        colCtxt->colOC[colCtxt->colOCCount] = shape;
+        colCtxt->colOCCount++;
     }
     return index;
 }
@@ -1098,47 +1109,47 @@ s32 Collision_AddGroup4(GlobalContext *ctxt, CollisionCheckContext *colCtxt, OcL
 
     func_800E2434(ctxt, line);
 
-    if (colCtxt->group4Length >= ARRAY_COUNT(colCtxt->group4)) {
+    if (colCtxt->colLineCount >= ARRAY_COUNT(colCtxt->colLine)) {
         return -1;
     }
-    index = colCtxt->group4Length;
+    index = colCtxt->colLineCount;
 
-    colCtxt->group4[colCtxt->group4Length] = line;
-    colCtxt->group4Length++;
+    colCtxt->colLine[colCtxt->colLineCount] = line;
+    colCtxt->colLineCount++;
 
     return index;
 }
 
-s32 Collision_CantBeToucherAC(ColBodyInfo *iParm1) {
-    if (!(iParm1->unk15 & 1)) {
+s32 Collision_CantBeToucherAC(ColliderInfo *iParm1) {
+    if (!(iParm1->toucherFlags & 1)) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 Collision_CantBeBumperAC(ColBodyInfo *iParm1) {
-    if (!(iParm1->unk16 & 1)) {
+s32 Collision_CantBeBumperAC(ColliderInfo *iParm1) {
+    if (!(iParm1->bumperFlags & 1)) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 Collision_ToucherIsExcluded(ColBodyInfo *toucher, ColBodyInfo *bumper) {
-    if (!(toucher->toucher.collidesWith & bumper->bumper.collidesWith)) {
+s32 Collision_ToucherIsExcluded(ColliderInfo *toucher, ColliderInfo *bumper) {
+    if (!(toucher->toucher.dmgFlags & bumper->bumper.dmgFlags)) {
         return 1;
     } else {
         return 0;
     }
 }
 
-void func_800E2C08(GlobalContext* ctxt, ColCommon* shape, Vec3f* v) {
+void func_800E2C08(GlobalContext* ctxt, Collider* shape, Vec3f* v) {
 }
 
 #ifdef NON_MATCHING
 // needs in-function static bss
-void func_800E2C1C(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+void func_800E2C1C(GlobalContext *ctxt, Collider *shape, Vec3f *v) {
     static EffSparkParams D_801EEC00;
     s32 effectIndex;
 
@@ -1192,7 +1203,7 @@ void func_800E2C1C(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
 
 #ifdef NON_MATCHING
 // needs in-function static bss
-void func_800E2D88(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+void func_800E2D88(GlobalContext *ctxt, Collider *shape, Vec3f *v) {
     static EffSparkParams D_801EF0C8;
     s32 effectIndex;
 
@@ -1243,23 +1254,23 @@ void func_800E2D88(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
 #pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/func_800E2D88.asm")
 #endif
 
-void func_800E2EF4(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+void func_800E2EF4(GlobalContext *ctxt, Collider *shape, Vec3f *v) {
     func_800B249C(ctxt, v);
     func_800E8478(ctxt, v);
 }
 
-void func_800E2F30(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+void func_800E2F30(GlobalContext *ctxt, Collider *shape, Vec3f *v) {
     func_800E8318(ctxt, v);
 }
 
-void func_800E2F54(GlobalContext *ctxt, ColCommon *shape, Vec3f *v) {
+void func_800E2F54(GlobalContext *ctxt, Collider *shape, Vec3f *v) {
     func_800E8318(ctxt, v);
 }
 
-void func_800E2F78(GlobalContext* ctxt, ColBodyInfo* toucherBody, ColCommon* bumper, Vec3f* hitPos) {
-    s32 flags = toucherBody->unk15 & 0x18;
+void func_800E2F78(GlobalContext* ctxt, ColliderInfo* toucherBody, Collider* bumper, Vec3f* hitPos) {
+    s32 flags = toucherBody->toucherFlags & 0x18;
 
-    if (flags == 0 && bumper->unk14 != 9) {
+    if (flags == 0 && bumper->colType != 9) {
         func_800B2684(ctxt, 0, hitPos);
         if (bumper->actor == NULL) {
             play_sound(0x1806);
@@ -1290,15 +1301,15 @@ void func_800E2F78(GlobalContext* ctxt, ColBodyInfo* toucherBody, ColCommon* bum
     }
 }
 
-s32 func_800E30C8(ColCommon* toucher, ColBodyInfo* bumperBody) {
-    if (toucher->actor != 0 && toucher->actor->type == 2) {
-        if (bumperBody->unk14 == 0) {
+s32 func_800E30C8(Collider* toucher, ColliderInfo* bumperBody) {
+    if (toucher->actor != NULL && toucher->actor->type == ACTORTYPE_PLAYER) {
+        if (bumperBody->elemType == ELEMTYPE_UNK0) {
             func_8019F1C0(&toucher->actor->projectedPos, 0x1811);
-        } else if (bumperBody->unk14 == 1) {
+        } else if (bumperBody->elemType == ELEMTYPE_UNK1) {
             func_8019F1C0(&toucher->actor->projectedPos, 0x1824);
-        } else if (bumperBody->unk14 == 2) {
+        } else if (bumperBody->elemType == ELEMTYPE_UNK2) {
             func_8019F1C0(&toucher->actor->projectedPos, 0);
-        } else if (bumperBody->unk14 == 3) {
+        } else if (bumperBody->elemType == ELEMTYPE_UNK3) {
             func_8019F1C0(&toucher->actor->projectedPos, 0);
         }
     }
@@ -1315,47 +1326,47 @@ ColChkBloodFunc D_801BA374[] = {
 };
 
 HitInfo D_801BA38C[] = {
-    { 0x01, 0x00 },
-    { 0x00, 0x01 },
-    { 0x02, 0x01 },
-    { 0x00, 0x00 },
-    { 0x03, 0x05 },
-    { 0x00, 0x02 },
-    { 0x02, 0x00 },
-    { 0x04, 0x00 },
-    { 0x01, 0x02 },
-    { 0x00, 0x03 },
-    { 0x00, 0x05 },
-    { 0x00, 0x03 },
-    { 0x00, 0x03 },
-    { 0x00, 0x04 },
+    { BLOOD_BLUE,  HIT_WHITE },
+    { BLOOD_NONE,  HIT_DUST },
+    { BLOOD_GREEN, HIT_DUST },
+    { BLOOD_NONE,  HIT_WHITE },
+    { BLOOD_WATER, HIT_NONE },
+    { BLOOD_NONE,  HIT_RED },
+    { BLOOD_GREEN, HIT_WHITE },
+    { BLOOD_RED,   HIT_WHITE },
+    { BLOOD_BLUE,  HIT_RED },
+    { BLOOD_NONE,  HIT_SOLID },
+    { BLOOD_NONE,  HIT_NONE },
+    { BLOOD_NONE,  HIT_SOLID },
+    { BLOOD_NONE,  HIT_SOLID },
+    { BLOOD_NONE,  HIT_WOOD },
 };
 
-void func_800E3168(GlobalContext *ctxt, ColCommon *toucher, ColBodyInfo *toucherBody, ColCommon *bumper, ColBodyInfo *bumperBody, Vec3f *param_6) {
-    if (bumperBody->unk16 & 0x40) {
+void func_800E3168(GlobalContext *ctxt, Collider *toucher, ColliderInfo *toucherBody, Collider *bumper, ColliderInfo *bumperBody, Vec3f *param_6) {
+    if (bumperBody->bumperFlags & 0x40) {
         return;
     }
 
-    if (!(toucherBody->unk15 & 0x20) && (toucherBody->unk15 & 0x40)) {
+    if (!(toucherBody->toucherFlags & 0x20) && (toucherBody->toucherFlags & 0x40)) {
         return;
     }
 
     if (bumper->actor != NULL) {
-        D_801BA374[D_801BA38C[bumper->unk14].blood](ctxt, bumper, param_6);
+        D_801BA374[D_801BA38C[bumper->colType].blood](ctxt, bumper, param_6);
     }
     if (bumper->actor != NULL) {
-        if (D_801BA38C[bumper->unk14].effect == 3) {
+        if (D_801BA38C[bumper->colType].effect == 3) {
             func_800E2F78(ctxt, toucherBody, bumper, param_6);
-        } else if (D_801BA38C[bumper->unk14].effect == 4) {
+        } else if (D_801BA38C[bumper->colType].effect == 4) {
             if (toucher->actor == NULL) {
                 func_800E85D4(ctxt, param_6);
                 play_sound(0x1837);
             } else {
                 func_800E86E0(ctxt, param_6, &toucher->actor->projectedPos);
             }
-        } else if (D_801BA38C[bumper->unk14].effect != 5) {
-            func_800B2684(ctxt, D_801BA38C[bumper->unk14].effect, param_6);
-            if (!(bumperBody->unk16 & 0x20)) {
+        } else if (D_801BA38C[bumper->colType].effect != 5) {
+            func_800B2684(ctxt, D_801BA38C[bumper->colType].effect, param_6);
+            if (!(bumperBody->bumperFlags & 0x20)) {
                 func_800E30C8(toucher, bumperBody);
             }
         }
@@ -1369,12 +1380,12 @@ void func_800E3168(GlobalContext *ctxt, ColCommon *toucher, ColBodyInfo *toucher
     }
 }
 
-void func_800E3304(ColCommon *toucher, ColCommon *bumper) {
-    toucher->flagsAT |= 4;
-    bumper->flagsAC |= 0x80;
+void func_800E3304(Collider *toucher, Collider *bumper) {
+    toucher->atFlags |= 4;
+    bumper->acFlags |= 0x80;
 }
 
-s32 Collision_HandleCollisionATWithAC(GlobalContext *ctxt, ColCommon *toucher, ColBodyInfo *toucherBody, Vec3f *toucherLoc, ColCommon *bumper, ColBodyInfo *bumperBody, Vec3f *bumperLoc, Vec3f *param_8) {
+s32 Collision_HandleCollisionATWithAC(GlobalContext *ctxt, Collider *toucher, ColliderInfo *toucherBody, Vec3f *toucherLoc, Collider *bumper, ColliderInfo *bumperBody, Vec3f *bumperLoc, Vec3f *param_8) {
     f32 damage;
     u32 effect;
 
@@ -1388,93 +1399,93 @@ s32 Collision_HandleCollisionATWithAC(GlobalContext *ctxt, ColCommon *toucher, C
             return 0;
         }
     }
-    if ((bumper->flagsAC & 4) && toucher->actor != NULL && bumper->actor != NULL) {
+    if ((bumper->acFlags & 4) && toucher->actor != NULL && bumper->actor != NULL) {
         func_800E3304(toucher, bumper);
     }
-    if (!(bumperBody->unk16 & 8)) {
-        toucher->flagsAT |= 2;
-        toucher->collisionAT = bumper->actor;
-        toucherBody->unk18 = bumper;
-        toucherBody->unk15 |= 2;
-        toucherBody->unk20 = bumperBody;
-        if (!(toucherBody->unk16 & 2)) {
-            toucherBody->bumper.unk6.x = param_8->x;
-            toucherBody->bumper.unk6.y = param_8->y;
-            toucherBody->bumper.unk6.z = param_8->z;
+    if (!(bumperBody->bumperFlags & 8)) {
+        toucher->atFlags |= 2;
+        toucher->at = bumper->actor;
+        toucherBody->atHit = bumper;
+        toucherBody->toucherFlags |= 2;
+        toucherBody->atHitInfo = bumperBody;
+        if (!(toucherBody->bumperFlags & 2)) {
+            toucherBody->bumper.hitPos.x = param_8->x;
+            toucherBody->bumper.hitPos.y = param_8->y;
+            toucherBody->bumper.hitPos.z = param_8->z;
         }
         if (toucher->actor != NULL) {
-            toucher->actor->unkA0.atHitEffect = bumperBody->bumper.unk4;
+            toucher->actor->colChkInfo.atHitEffect = bumperBody->bumper.effect;
         }
     }
-    if (!(toucherBody->unk17 & 4)) {
-        bumper->flagsAC |= 2;
-        bumper->collisionAC = toucher->actor;
-        bumperBody->unk1C = toucher;
-        bumperBody->unk24 = toucherBody;
-        bumperBody->unk16 |= 2;
+    if (!(toucherBody->ocElemFlags & 4)) {
+        bumper->acFlags |= 2;
+        bumper->ac = toucher->actor;
+        bumperBody->acHit = toucher;
+        bumperBody->acHitInfo = toucherBody;
+        bumperBody->bumperFlags |= 2;
         if (bumper->actor != NULL) {
-            bumper->actor->unkA0.acHitEffect = toucherBody->toucher.unk4;
+            bumper->actor->colChkInfo.acHitEffect = toucherBody->toucher.effect;
         }
-        bumperBody->bumper.unk6.x = param_8->x;
-        bumperBody->bumper.unk6.y = param_8->y;
-        bumperBody->bumper.unk6.z = param_8->z;
+        bumperBody->bumper.hitPos.x = param_8->x;
+        bumperBody->bumper.hitPos.y = param_8->y;
+        bumperBody->bumper.hitPos.z = param_8->z;
     }
-    if (!(toucherBody->unk15 & 0x20) &&  bumper->unk14 != 9 && bumper->unk14 != 0xB && bumper->unk14 != 0xC) {
-        bumperBody->unk16 |= 0x80;
+    if (!(toucherBody->toucherFlags & 0x20) &&  bumper->colType != 9 && bumper->colType != 0xB && bumper->colType != 0xC) {
+        bumperBody->bumperFlags |= 0x80;
     } else {
         func_800E3168(ctxt, toucher, toucherBody, bumper, bumperBody, param_8);
-        toucherBody->unk15 |= 0x40;
+        toucherBody->toucherFlags |= 0x40;
     }
     return 1;
 }
 
-void Collision_TriCalcAvgPoint(ColTri *tri, Vec3f *avg) {
+void Collision_TriCalcAvgPoint(ColliderTrisElement *tri, Vec3f *avg) {
     f32 temp_f0 = 1.0f / 3.0f;
 
-    avg->x = (tri->params.vtx[0].x + tri->params.vtx[1].x + tri->params.vtx[2].x) * temp_f0;
-    avg->y = (tri->params.vtx[0].y + tri->params.vtx[1].y + tri->params.vtx[2].y) * temp_f0;
-    avg->z = (tri->params.vtx[0].z + tri->params.vtx[1].z + tri->params.vtx[2].z) * temp_f0;
+    avg->x = (tri->dim.vtx[0].x + tri->dim.vtx[1].x + tri->dim.vtx[2].x) * temp_f0;
+    avg->y = (tri->dim.vtx[0].y + tri->dim.vtx[1].y + tri->dim.vtx[2].y) * temp_f0;
+    avg->z = (tri->dim.vtx[0].z + tri->dim.vtx[1].z + tri->dim.vtx[2].z) * temp_f0;
 }
 
-void collision_quad_cal_avg_point(ColQuad *quad, Vec3f *avg) {
-    avg->x = (quad->params.quad[0].x + (quad->params.quad[1].x + (quad->params.quad[3].x + quad->params.quad[2].x))) / 4.0f;
-    avg->y = (quad->params.quad[0].y + (quad->params.quad[1].y + (quad->params.quad[3].y + quad->params.quad[2].y))) / 4.0f;
-    avg->z = (quad->params.quad[0].z + (quad->params.quad[1].z + (quad->params.quad[3].z + quad->params.quad[2].z))) / 4.0f;
+void collision_quad_cal_avg_point(ColliderQuad *quad, Vec3f *avg) {
+    avg->x = (quad->dim.quad[0].x + (quad->dim.quad[1].x + (quad->dim.quad[3].x + quad->dim.quad[2].x))) / 4.0f;
+    avg->y = (quad->dim.quad[0].y + (quad->dim.quad[1].y + (quad->dim.quad[3].y + quad->dim.quad[2].y))) / 4.0f;
+    avg->z = (quad->dim.quad[0].z + (quad->dim.quad[1].z + (quad->dim.quad[3].z + quad->dim.quad[2].z))) / 4.0f;
 }
 
-void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* at = (ColSphereGroup*)toucher;
-    ColSphereGroupElement* sphElem;
-    ColSphereGroup* ac = (ColSphereGroup*)bumpee;
-    ColSphereGroupElement* sphElem2;
+void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* at = (ColliderJntSph*)toucher;
+    ColliderJntSphElement* sphElem;
+    ColliderJntSph* ac = (ColliderJntSph*)bumpee;
+    ColliderJntSphElement* sphElem2;
     f32 sp8C;
     f32 sp88;
 
-    if (at->count > 0 && at->spheres != NULL && ac->count > 0 && ac->spheres != NULL) {
-        for (sphElem = &at->spheres[0]; sphElem < &at->spheres[at->count]; sphElem++) {
-            if (Collision_CantBeToucherAC(&sphElem->body)) {
+    if (at->count > 0 && at->elements != NULL && ac->count > 0 && ac->elements != NULL) {
+        for (sphElem = &at->elements[0]; sphElem < &at->elements[at->count]; sphElem++) {
+            if (Collision_CantBeToucherAC(&sphElem->info)) {
                 continue;
             }
 
-            for (sphElem2 = &ac->spheres[0]; sphElem2 < &ac->spheres[ac->count]; sphElem2++) {
-                if (Collision_CantBeBumperAC(&sphElem2->body)) {
+            for (sphElem2 = &ac->elements[0]; sphElem2 < &ac->elements[ac->count]; sphElem2++) {
+                if (Collision_CantBeBumperAC(&sphElem2->info)) {
                     continue;
                 }
-                if (Collision_ToucherIsExcluded(&sphElem->body, &sphElem2->body)) {
+                if (Collision_ToucherIsExcluded(&sphElem->info, &sphElem2->info)) {
                     continue;
                 }
 
-                if (Math3D_ColSphereSphereIntersectAndDistance(&sphElem->params.colInfo, &sphElem2->params.colInfo, &sp8C, &sp88) != 0) {
+                if (Math3D_ColSphereSphereIntersectAndDistance(&sphElem->dim.worldSphere, &sphElem2->dim.worldSphere, &sp8C, &sp88) != 0) {
                     f32 temp_f0;
                     Vec3f sp78;
                     Vec3f sp6C;
                     Vec3f sp60;
 
-                    Math_Vec3s_ToVec3f(&sp6C, &sphElem->params.colInfo.loc);
-                    Math_Vec3s_ToVec3f(&sp60, &sphElem2->params.colInfo.loc);
+                    Math_Vec3s_ToVec3f(&sp6C, &sphElem->dim.worldSphere.center);
+                    Math_Vec3s_ToVec3f(&sp60, &sphElem2->dim.worldSphere.center);
 
                     if (!(fabsf(sp88) < 0.008f)) {
-                        temp_f0 = sphElem2->params.colInfo.radius / sp88;
+                        temp_f0 = sphElem2->dim.worldSphere.radius / sp88;
                         sp78.x = ((sp6C.x - sp60.x) * temp_f0) + sp60.x;
                         sp78.y = ((sp6C.y - sp60.y) * temp_f0) + sp60.y;
                         sp78.z = ((sp6C.z - sp60.z) * temp_f0) + sp60.z;
@@ -1482,9 +1493,9 @@ void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckC
                         Math_Vec3f_Copy(&sp78, &sp6C);
                     }
 
-                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->body, &sp6C, &ac->base, &sphElem2->body, &sp60, &sp78);
+                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->info, &sp6C, &ac->base, &sphElem2->info, &sp60, &sp78);
 
-                    if (!(ac->base.unk13 & 0x40)) {
+                    if (!(ac->base.ocFlags2 & 0x40)) {
                         return;
                     }
                 }
@@ -1493,34 +1504,34 @@ void Collision_SphereGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckC
     }
 }
 
-void Collision_SphereGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* at = (ColSphereGroup*)toucher;
-    ColSphereGroupElement *sphElem;
-    ColCylinder* ac = (ColCylinder*)bumpee;
+void Collision_SphereGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* at = (ColliderJntSph*)toucher;
+    ColliderJntSphElement *sphElem;
+    ColliderCylinder* ac = (ColliderCylinder*)bumpee;
     f32 sp80;
     f32 sp7C;
 
-    if (at->count > 0 && at->spheres != NULL && ac->params.radius > 0 && ac->params.height > 0) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->count > 0 && at->elements != NULL && ac->dim.radius > 0 && ac->dim.height > 0) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        for (sphElem = &at->spheres[0]; sphElem < &at->spheres[at->count]; sphElem++) {
-            if (Collision_CantBeToucherAC(&sphElem->body)) {
+        for (sphElem = &at->elements[0]; sphElem < &at->elements[at->count]; sphElem++) {
+            if (Collision_CantBeToucherAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&sphElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&sphElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_ColSphereCylinderDistanceAndAmount(&sphElem->params.colInfo, &ac->params, &sp80, &sp7C)) {
+            if (Math3D_ColSphereCylinderDistanceAndAmount(&sphElem->dim.worldSphere, &ac->dim, &sp80, &sp7C)) {
                 Vec3f sp70;
                 Vec3f sp64;
                 Vec3f sp58;
                 f32 temp_f0;
 
-                Math_Vec3s_ToVec3f(&sp64, &sphElem->params.colInfo.loc);
-                Math_Vec3s_ToVec3f(&sp58, &ac->params.loc);
+                Math_Vec3s_ToVec3f(&sp64, &sphElem->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&sp58, &ac->dim.pos);
                 if (!(fabsf(sp7C) < 0.008f)) {
-                    temp_f0 = ac->params.radius / sp7C;
+                    temp_f0 = ac->dim.radius / sp7C;
                     if (temp_f0 <= 1.0f) {
                         sp70.x = ((sp64.x - sp58.x) * temp_f0) + sp58.x;
                         sp70.y = ((sp64.y - sp58.y) * temp_f0) + sp58.y;
@@ -1531,39 +1542,39 @@ void Collision_SphereGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckCont
                 } else {
                     Math_Vec3f_Copy(&sp70, &sp64);
                 }
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->body, &sp64, &ac->base, &ac->body, &sp58, &sp70);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->info, &sp64, &ac->base, &ac->info, &sp58, &sp70);
                 return;
             }
         }
     }
 }
 
-void Collision_SphereGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup *at = (ColSphereGroup*)toucher;
-    ColSphereGroupElement *sphElem;
-    ColTriGroup *ac = (ColTriGroup*)bumpee;
-    ColTri *triElem;
+void Collision_SphereGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph *at = (ColliderJntSph*)toucher;
+    ColliderJntSphElement *sphElem;
+    ColliderTris *ac = (ColliderTris*)bumpee;
+    ColliderTrisElement *triElem;
     Vec3f sp6C;
 
-    if (at->count > 0 && at->spheres != NULL && ac->count > 0 && ac->tris != NULL) {
-        for (sphElem = &at->spheres[0]; sphElem < &at->spheres[at->count]; sphElem++) {
-            if (Collision_CantBeToucherAC(&sphElem->body)) {
+    if (at->count > 0 && at->elements != NULL && ac->count > 0 && ac->elements != NULL) {
+        for (sphElem = &at->elements[0]; sphElem < &at->elements[at->count]; sphElem++) {
+            if (Collision_CantBeToucherAC(&sphElem->info)) {
                 continue;
             }
-            for (triElem = ac->tris; triElem < &ac->tris[ac->count]; triElem++) {
-                if (Collision_CantBeBumperAC(&triElem->body)) {
+            for (triElem = ac->elements; triElem < &ac->elements[ac->count]; triElem++) {
+                if (Collision_CantBeBumperAC(&triElem->info)) {
                     continue;
                 }
-                if (Collision_ToucherIsExcluded(&sphElem->body, &triElem->body)) {
+                if (Collision_ToucherIsExcluded(&sphElem->info, &triElem->info)) {
                     continue;
                 }
-                if (Math3D_ColSphereTri(&sphElem->params.colInfo, &triElem->params, &sp6C) != 0) {
+                if (Math3D_ColSphereTri(&sphElem->dim.worldSphere, &triElem->dim, &sp6C) != 0) {
                     Vec3f sp60;
                     Vec3f sp54;
 
-                    Math_Vec3s_ToVec3f(&sp60, &sphElem->params.colInfo.loc);
+                    Math_Vec3s_ToVec3f(&sp60, &sphElem->dim.worldSphere.center);
                     Collision_TriCalcAvgPoint(triElem, &sp54);
-                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->body, &sp60, &ac->base, &triElem->body, &sp54, &sp6C);
+                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->info, &sp60, &ac->base, &triElem->info, &sp54, &sp6C);
                     return;
                 }
             }
@@ -1571,109 +1582,109 @@ void Collision_SphereGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckCont
     }
 }
 
-void Collision_SphereGroupWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* at = (ColSphereGroup*)toucher;
-    ColQuad *ac = (ColQuad*)bumpee;
+void Collision_SphereGroupWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* at = (ColliderJntSph*)toucher;
+    ColliderQuad *ac = (ColliderQuad*)bumpee;
     Vec3f sp74;
-    ColSphereGroupElement *sphElem;
+    ColliderJntSphElement *sphElem;
 
-    if (at->count > 0 && at->spheres != NULL) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->count > 0 && at->elements != NULL) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        Math3D_TriSetCoords(&D_801EF590, &ac->params.quad[2], &ac->params.quad[3], &ac->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EF5C8, &ac->params.quad[1], &ac->params.quad[0], &ac->params.quad[2]);
+        Math3D_TriSetCoords(&D_801EF590, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EF5C8, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-        for (sphElem = &at->spheres[0]; sphElem < &at->spheres[at->count]; sphElem++) {
-            if (Collision_CantBeToucherAC(&sphElem->body)) {
+        for (sphElem = &at->elements[0]; sphElem < &at->elements[at->count]; sphElem++) {
+            if (Collision_CantBeToucherAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&sphElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&sphElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_ColSphereTri(&sphElem->params.colInfo, &D_801EF590, &sp74) != 0 || 
-                Math3D_ColSphereTri(&sphElem->params.colInfo, &D_801EF5C8, &sp74) != 0) {
+            if (Math3D_ColSphereTri(&sphElem->dim.worldSphere, &D_801EF590, &sp74) != 0 || 
+                Math3D_ColSphereTri(&sphElem->dim.worldSphere, &D_801EF5C8, &sp74) != 0) {
                 Vec3f sp64;
                 Vec3f sp58;
 
-                Math_Vec3s_ToVec3f(&sp64, &sphElem->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp64, &sphElem->dim.worldSphere.center);
                 collision_quad_cal_avg_point(ac, &sp58);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->body, &sp64, &ac->base, &ac->body, &sp58, &sp74);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->info, &sp64, &ac->base, &ac->info, &sp58, &sp74);
                 return;
             }
         }
     }
 }
 
-void Collision_SphereGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* at = (ColSphereGroup*)toucher;
-    ColSphere* ac = (ColSphere*)bumpee;
-    ColSphereGroupElement *sphElem;
+void Collision_SphereGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* at = (ColliderJntSph*)toucher;
+    ColliderSphere* ac = (ColliderSphere*)bumpee;
+    ColliderJntSphElement *sphElem;
     f32 sp90;
     f32 sp8C;
 
-    if (at->count > 0 && at->spheres != NULL) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->count > 0 && at->elements != NULL) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        for (sphElem = &at->spheres[0]; sphElem < &at->spheres[at->count]; sphElem++) {
-            if (Collision_CantBeToucherAC(&sphElem->body)) {
+        for (sphElem = &at->elements[0]; sphElem < &at->elements[at->count]; sphElem++) {
+            if (Collision_CantBeToucherAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&sphElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&sphElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_ColSphereSphereIntersectAndDistance(&sphElem->params.colInfo, &ac->params.colInfo, &sp90, &sp8C) != 0) {
+            if (Math3D_ColSphereSphereIntersectAndDistance(&sphElem->dim.worldSphere, &ac->dim.worldSphere, &sp90, &sp8C) != 0) {
                 f32 temp_f0;
                 Vec3f sp7C;
                 Vec3f sp70;
                 Vec3f sp64;
 
-                Math_Vec3s_ToVec3f(&sp70, &sphElem->params.colInfo.loc);
-                Math_Vec3s_ToVec3f(&sp64, &ac->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp70, &sphElem->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&sp64, &ac->dim.worldSphere.center);
                 if (!(fabsf(sp8C) < 0.008f)) {
-                    temp_f0 = ac->params.colInfo.radius / sp8C;
+                    temp_f0 = ac->dim.worldSphere.radius / sp8C;
                     sp7C.x = ((sp70.x - sp64.x) * temp_f0) + sp64.x;
                     sp7C.y = ((sp70.y - sp64.y) * temp_f0) + sp64.y;
                     sp7C.z = ((sp70.z - sp64.z) * temp_f0) + sp64.z;
                 } else {
                     Math_Vec3f_Copy(&sp7C, &sp70);
                 }
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->body, &sp70, &ac->base, &ac->body, &sp64, &sp7C);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &sphElem->info, &sp70, &ac->base, &ac->info, &sp64, &sp7C);
             }
         }
     }
 }
 
-void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* at = (ColCylinder*)toucher;
-    ColSphereGroup* ac = (ColSphereGroup*)bumpee;
+void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* at = (ColliderCylinder*)toucher;
+    ColliderJntSph* ac = (ColliderJntSph*)bumpee;
     f32 sp9C;
     f32 sp98;
     f32 temp_f0;
     Vec3f sp88;
     Vec3f sp7C;
     Vec3f sp70;
-    ColSphereCollisionInfo *temp_s0;
-    ColSphereGroupElement *sphElem;
+    Sphere16 *temp_s0; // TODO remove
+    ColliderJntSphElement *sphElem;
 
-    if (ac->count > 0 && ac->spheres != NULL && at->params.radius > 0 && at->params.height > 0) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (ac->count > 0 && ac->elements != NULL && at->dim.radius > 0 && at->dim.height > 0) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        for (sphElem = &ac->spheres[0]; sphElem < &ac->spheres[ac->count]; sphElem++) {
-            if (Collision_CantBeBumperAC(&sphElem->body)) {
+        for (sphElem = &ac->elements[0]; sphElem < &ac->elements[ac->count]; sphElem++) {
+            if (Collision_CantBeBumperAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&at->body, &sphElem->body)) {
+            if (Collision_ToucherIsExcluded(&at->info, &sphElem->info)) {
                 continue;
             }
-            if (Math3D_ColSphereCylinderDistanceAndAmount(&sphElem->params.colInfo, &at->params, &sp9C, &sp98) != 0) {
+            if (Math3D_ColSphereCylinderDistanceAndAmount(&sphElem->dim.worldSphere, &at->dim, &sp9C, &sp98) != 0) {
 
-                Math_Vec3s_ToVec3f(&sp7C, &at->params.loc);
-                Math_Vec3s_ToVec3f(&sp70, &sphElem->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp7C, &at->dim.pos);
+                Math_Vec3s_ToVec3f(&sp70, &sphElem->dim.worldSphere.center);
                 if (!(fabsf(sp98) < 0.008f)) {
-                    temp_f0 = sphElem->params.colInfo.radius / sp98;
+                    temp_f0 = sphElem->dim.worldSphere.radius / sp98;
                     if (temp_f0 <= 1.0f) {
                         sp88.x = ((sp7C.x - sp70.x) * temp_f0) + sp70.x;
                         sp88.y = ((sp7C.y - sp70.y) * temp_f0) + sp70.y;
@@ -1684,8 +1695,8 @@ void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckCont
                 } else {
                     Math_Vec3f_Copy(&sp88, &sp7C);
                 }
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp7C, &ac->base, &sphElem->body, &sp70, &sp88);
-                if (!(ac->base.unk13 & 0x40)) {
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp7C, &ac->base, &sphElem->info, &sp70, &sp88);
+                if (!(ac->base.ocFlags2 & 0x40)) {
                     break;
                 }
             }
@@ -1693,148 +1704,148 @@ void Collision_CylinderWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckCont
     }
 }
 
-void Collision_CylinderWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* at = (ColCylinder*)toucher;
-    ColCylinder* ac = (ColCylinder*)bumpee;
+void Collision_CylinderWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* at = (ColliderCylinder*)toucher;
+    ColliderCylinder* ac = (ColliderCylinder*)bumpee;
     f32 sp6C;
     f32 sp68;
     Vec3f sp5C;
 
-    if (at->params.radius > 0 && at->params.height > 0 && ac->params.radius > 0 && ac->params.height > 0) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->dim.radius > 0 && at->dim.height > 0 && ac->dim.radius > 0 && ac->dim.height > 0) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        if (Collision_CantBeToucherAC(&at->body)) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+        if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
             return;
         }
 
-        if (Math3D_ColCylinderCylinderAmountAndDistance(&at->params, &ac->params, &sp6C, &sp68) != 0) {
+        if (Math3D_ColCylinderCylinderAmountAndDistance(&at->dim, &ac->dim, &sp6C, &sp68) != 0) {
             Vec3f sp50;
             Vec3f sp44;
 
-            Math_Vec3s_ToVec3f(&sp50, &at->params.loc);
-            Math_Vec3s_ToVec3f(&sp44, &ac->params.loc);
+            Math_Vec3s_ToVec3f(&sp50, &at->dim.pos);
+            Math_Vec3s_ToVec3f(&sp44, &ac->dim.pos);
             if (!(fabsf(sp68) < 0.008f)) {
-                f32 temp_f12 = ac->params.radius / sp68;
+                f32 temp_f12 = ac->dim.radius / sp68;
                 f32 tmp;
 
-                sp5C.y = (f32)at->params.loc.y + at->params.yOffset + at->params.height * 0.5f;
-                tmp = (f32)ac->params.loc.y + ac->params.yOffset;
+                sp5C.y = (f32)at->dim.pos.y + at->dim.yShift + at->dim.height * 0.5f;
+                tmp = (f32)ac->dim.pos.y + ac->dim.yShift;
 
                 if (sp5C.y < tmp) {
                     sp5C.y = tmp;
                 } else {
-                    tmp += ac->params.height;
+                    tmp += ac->dim.height;
                     if (sp5C.y > tmp) {
                         sp5C.y = tmp;
                     }
                 }
-                sp5C.x = ((f32)at->params.loc.x - ac->params.loc.x) * temp_f12 + ac->params.loc.x;
-                sp5C.z = ((f32)at->params.loc.z - ac->params.loc.z) * temp_f12 + ac->params.loc.z;
+                sp5C.x = ((f32)at->dim.pos.x - ac->dim.pos.x) * temp_f12 + ac->dim.pos.x;
+                sp5C.z = ((f32)at->dim.pos.z - ac->dim.pos.z) * temp_f12 + ac->dim.pos.z;
             } else {
-                Math_Vec3s_ToVec3f(&sp5C, &ac->params.loc);
+                Math_Vec3s_ToVec3f(&sp5C, &ac->dim.pos);
             }
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp5C);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp50, &ac->base, &ac->info, &sp44, &sp5C);
         }
     }
 }
 
-void Collision_CylinderWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* at = (ColCylinder*)toucher;
-    ColTriGroup* ac = (ColTriGroup*)bumpee;
-    ColTri *triElem;
+void Collision_CylinderWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* at = (ColliderCylinder*)toucher;
+    ColliderTris* ac = (ColliderTris*)bumpee;
+    ColliderTrisElement *triElem;
     Vec3f sp60;
 
-    if (at->params.radius > 0 && at->params.height > 0 && ac->count > 0 && ac->tris != 0) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (at->dim.radius > 0 && at->dim.height > 0 && ac->count > 0 && ac->elements != NULL) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
         
-        for (triElem = &ac->tris[0]; triElem < &ac->tris[ac->count]; triElem++) {
-            if (Collision_CantBeBumperAC(&triElem->body)) {
+        for (triElem = &ac->elements[0]; triElem < &ac->elements[ac->count]; triElem++) {
+            if (Collision_CantBeBumperAC(&triElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&at->body, &triElem->body)) {
+            if (Collision_ToucherIsExcluded(&at->info, &triElem->info)) {
                 continue;
             }
 
-            if (Math3D_ColCylinderTri(&at->params, &triElem->params, &sp60) != 0) {
+            if (Math3D_ColCylinderTri(&at->dim, &triElem->dim, &sp60) != 0) {
                 Vec3f sp54;
                 Vec3f sp48;
 
-                Math_Vec3s_ToVec3f(&sp54, &at->params.loc);
+                Math_Vec3s_ToVec3f(&sp54, &at->dim.pos);
                 Collision_TriCalcAvgPoint(triElem, &sp48);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp54, &ac->base, &triElem->body, &sp48, &sp60);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp54, &ac->base, &triElem->info, &sp48, &sp60);
                 return;
             }
         }
     }
 }
 
-void Collision_CylinderWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* at = (ColCylinder*)toucher;
-    ColQuad* ac = (ColQuad*)bumpee;
+void Collision_CylinderWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* at = (ColliderCylinder*)toucher;
+    ColliderQuad* ac = (ColliderQuad*)bumpee;
     Vec3f sp64;
     Vec3f sp58;
     Vec3f sp4C;
     Vec3f sp40;
 
-    if (at->params.height > 0 && at->params.radius > 0) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (at->dim.height > 0 && at->dim.radius > 0) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        if (Collision_CantBeBumperAC(&ac->body)) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+        if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
             return;
         }
 
-        Math3D_TriSetCoords(&D_801EF600, &ac->params.quad[2], &ac->params.quad[3], &ac->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EF638, &ac->params.quad[1], &ac->params.quad[0], &ac->params.quad[2]);
-        if (Math3D_ColCylinderTri(&at->params, &D_801EF600, &D_801EDE00) != 0) {
-            Math_Vec3s_ToVec3f(&sp64, &at->params.loc);
+        Math3D_TriSetCoords(&D_801EF600, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EF638, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
+        if (Math3D_ColCylinderTri(&at->dim, &D_801EF600, &D_801EDE00) != 0) {
+            Math_Vec3s_ToVec3f(&sp64, &at->dim.pos);
             collision_quad_cal_avg_point(ac, &sp58);
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp64, &ac->base, &ac->body, &sp58, &D_801EDE00);
-        } else if (Math3D_ColCylinderTri(&at->params, &D_801EF638, &D_801EDE00) != 0) {
-            Math_Vec3s_ToVec3f(&sp4C, &at->params.loc);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp64, &ac->base, &ac->info, &sp58, &D_801EDE00);
+        } else if (Math3D_ColCylinderTri(&at->dim, &D_801EF638, &D_801EDE00) != 0) {
+            Math_Vec3s_ToVec3f(&sp4C, &at->dim.pos);
             collision_quad_cal_avg_point(ac, &sp40);
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp4C, &ac->base, &ac->body, &sp40, &D_801EDE00);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp4C, &ac->base, &ac->info, &sp40, &D_801EDE00);
         }
     }
 }
 
-void Collision_CylinderWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* at = (ColCylinder*)toucher;
-    ColSphere* ac = (ColSphere*)bumpee;
+void Collision_CylinderWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* at = (ColliderCylinder*)toucher;
+    ColliderSphere* ac = (ColliderSphere*)bumpee;
     f32 sp6C;
     f32 sp68;
 
-    if (at->params.radius > 0 && at->params.height > 0) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (at->dim.radius > 0 && at->dim.height > 0) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        if (Collision_CantBeBumperAC(&ac->body)) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+        if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
             return;
         }
 
-        if (Math3D_ColSphereCylinderDistanceAndAmount(&ac->params.colInfo, &at->params, &sp6C, &sp68) != 0) {
+        if (Math3D_ColSphereCylinderDistanceAndAmount(&ac->dim.worldSphere, &at->dim, &sp6C, &sp68) != 0) {
             Vec3f sp5C;
             Vec3f sp50;
             Vec3f sp44;
             f32 temp_f0;
 
-            Math_Vec3s_ToVec3f(&sp50, &at->params.loc);
-            Math_Vec3s_ToVec3f(&sp44, &ac->params.colInfo.loc);
+            Math_Vec3s_ToVec3f(&sp50, &at->dim.pos);
+            Math_Vec3s_ToVec3f(&sp44, &ac->dim.worldSphere.center);
 
             if (!(fabsf(sp68) < 0.008f)) {
-                temp_f0 = ac->params.colInfo.radius / sp68;
+                temp_f0 = ac->dim.worldSphere.radius / sp68;
                 if (temp_f0 <= 1.0f) {
                     sp5C.x = ((sp50.x - sp44.x) * temp_f0) + sp44.x;
                     sp5C.y = ((sp50.y - sp44.y) * temp_f0) + sp44.y;
@@ -1845,39 +1856,39 @@ void Collision_CylinderWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *
             } else {
                 Math_Vec3f_Copy(&sp5C, &sp50);
             }
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp5C);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp50, &ac->base, &ac->info, &sp44, &sp5C);
         }
     }
 }
 
-void Collision_TriGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColTriGroup* at = (ColTriGroup*)toucher;
-    ColSphereGroupElement *sphElem;
-    ColSphereGroup* ac = (ColSphereGroup*)bumpee;
-    ColTri *triElem;
+void Collision_TriGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderTris* at = (ColliderTris*)toucher;
+    ColliderJntSphElement *sphElem;
+    ColliderJntSph* ac = (ColliderJntSph*)bumpee;
+    ColliderTrisElement *triElem;
     Vec3f sp74;
 
-    if (ac->count > 0 && ac->spheres != 0 && at->count > 0 && at->tris != 0) {
-        for (sphElem = &ac->spheres[0]; sphElem < &ac->spheres[ac->count]; sphElem++) {
-            if (Collision_CantBeBumperAC(&sphElem->body)) {
+    if (ac->count > 0 && ac->elements != 0 && at->count > 0 && at->elements != 0) {
+        for (sphElem = &ac->elements[0]; sphElem < &ac->elements[ac->count]; sphElem++) {
+            if (Collision_CantBeBumperAC(&sphElem->info)) {
                 continue;
             }
-            for (triElem = &at->tris[0]; triElem < &at->tris[at->count]; triElem++) {
-                if (Collision_CantBeToucherAC(&triElem->body)) {
+            for (triElem = &at->elements[0]; triElem < &at->elements[at->count]; triElem++) {
+                if (Collision_CantBeToucherAC(&triElem->info)) {
                     continue;
                 }
-                if (Collision_ToucherIsExcluded(&triElem->body, &sphElem->body)) {
+                if (Collision_ToucherIsExcluded(&triElem->info, &sphElem->info)) {
                     continue;
                 }
-                if (Math3D_ColSphereTri(&sphElem->params.colInfo, &triElem->params, &sp74)) {
+                if (Math3D_ColSphereTri(&sphElem->dim.worldSphere, &triElem->dim, &sp74)) {
                     Vec3f sp68;
                     Vec3f sp5C;
 
-                    Math_Vec3s_ToVec3f(&sp5C, &sphElem->params.colInfo.loc);
+                    Math_Vec3s_ToVec3f(&sp5C, &sphElem->dim.worldSphere.center);
                     Collision_TriCalcAvgPoint(triElem, &sp68);
-                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->body, &sp68, &ac->base, &sphElem->body, &sp5C, &sp74);
+                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->info, &sp68, &ac->base, &sphElem->info, &sp5C, &sp74);
 
-                    if (!(ac->base.unk13 & 0x40)) {
+                    if (!(ac->base.ocFlags2 & 0x40)) {
                         return;
                     }
                 }
@@ -1886,60 +1897,60 @@ void Collision_TriGroupWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckCont
     }
 }
 
-void Collision_TriGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColTriGroup* at = (ColTriGroup*)toucher;
-    ColCylinder* ac = (ColCylinder*)bumpee;
-    ColTri *triElem;
+void Collision_TriGroupWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderTris* at = (ColliderTris*)toucher;
+    ColliderCylinder* ac = (ColliderCylinder*)bumpee;
+    ColliderTrisElement *triElem;
 
-    if (ac->params.radius > 0 && ac->params.height > 0 && at->count > 0 && at->tris != NULL) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (ac->dim.radius > 0 && ac->dim.height > 0 && at->count > 0 && at->elements != NULL) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        for (triElem = &at->tris[0]; triElem < &at->tris[at->count]; triElem++) {
-            if (Collision_CantBeToucherAC(&triElem->body)) {
+        for (triElem = &at->elements[0]; triElem < &at->elements[at->count]; triElem++) {
+            if (Collision_CantBeToucherAC(&triElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&triElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&triElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_ColCylinderTri(&ac->params, &triElem->params, &D_801EDE10) != 0) {
+            if (Math3D_ColCylinderTri(&ac->dim, &triElem->dim, &D_801EDE10) != 0) {
                 Vec3f sp58;
                 Vec3f sp4C;
 
                 Collision_TriCalcAvgPoint(triElem, &sp58);
-                Math_Vec3s_ToVec3f(&sp4C, &ac->params.loc);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->body, &sp58, &ac->base, &ac->body, &sp4C, &D_801EDE10);
+                Math_Vec3s_ToVec3f(&sp4C, &ac->dim.pos);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->info, &sp58, &ac->base, &ac->info, &sp4C, &D_801EDE10);
                 return;
             }
         }
     }
 }
 
-void Collision_TriGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColTriGroup* at = (ColTriGroup*)toucher;
-    ColTri *triElem;
-    ColTriGroup* ac = (ColTriGroup*)bumpee;
-    ColTri *triElem2;
+void Collision_TriGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderTris* at = (ColliderTris*)toucher;
+    ColliderTrisElement *triElem;
+    ColliderTris* ac = (ColliderTris*)bumpee;
+    ColliderTrisElement *triElem2;
 
-    if (ac->count > 0 && ac->tris != NULL && at->count > 0 && at->tris != NULL) {
-        for (triElem = &ac->tris[0]; triElem < &ac->tris[ac->count]; triElem++) {
-            if (Collision_CantBeBumperAC(&triElem->body)) {
+    if (ac->count > 0 && ac->elements != NULL && at->count > 0 && at->elements != NULL) {
+        for (triElem = &ac->elements[0]; triElem < &ac->elements[ac->count]; triElem++) {
+            if (Collision_CantBeBumperAC(&triElem->info)) {
                 continue;
             }
-            for (triElem2 = &at->tris[0]; triElem2 < &at->tris[at->count]; triElem2++) {
-                if (Collision_CantBeToucherAC(&triElem2->body)) {
+            for (triElem2 = &at->elements[0]; triElem2 < &at->elements[at->count]; triElem2++) {
+                if (Collision_CantBeToucherAC(&triElem2->info)) {
                     continue;
                 }
-                if (Collision_ToucherIsExcluded(&triElem2->body, &triElem->body)) {
+                if (Collision_ToucherIsExcluded(&triElem2->info, &triElem->info)) {
                     continue;
                 }
-                if (Math3d_ColTriTri(&triElem2->params, &triElem->params, &D_801EDE20) != 0) {
+                if (Math3d_ColTriTri(&triElem2->dim, &triElem->dim, &D_801EDE20) != 0) {
                     Vec3f sp5C;
                     Vec3f sp50;
 
                     Collision_TriCalcAvgPoint(triElem2, &sp5C);
                     Collision_TriCalcAvgPoint(triElem, &sp50);
-                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem2->body, &sp5C, &ac->base, &triElem->body, &sp50, &D_801EDE20);
+                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem2->info, &sp5C, &ac->base, &triElem->info, &sp50, &D_801EDE20);
                     return;
                 }
             }
@@ -1947,101 +1958,101 @@ void Collision_TriGroupWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext
     }
 }
 
-void Collision_TriGroupWithQuad(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColTriGroup* at = (ColTriGroup*)toucher;
-    ColQuad* ac = (ColQuad*)bumpee;
-    ColTri *triElem;
+void Collision_TriGroupWithQuad(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderTris* at = (ColliderTris*)toucher;
+    ColliderQuad* ac = (ColliderQuad*)bumpee;
+    ColliderTrisElement *triElem;
 
-    if (at->count > 0 && at->tris != NULL) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->count > 0 && at->elements != NULL) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
 
-        Math3D_TriSetCoords(&D_801EDE40, &ac->params.quad[2], &ac->params.quad[3], &ac->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EDE78, &ac->params.quad[1], &ac->params.quad[0], &ac->params.quad[2]);
+        Math3D_TriSetCoords(&D_801EDE40, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EDE78, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-        for (triElem = &at->tris[0]; triElem < &at->tris[at->count]; triElem++) {
-            if (Collision_CantBeToucherAC(&triElem->body)) {
+        for (triElem = &at->elements[0]; triElem < &at->elements[at->count]; triElem++) {
+            if (Collision_CantBeToucherAC(&triElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&triElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&triElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3d_ColTriTri(&D_801EDE40, &triElem->params, &D_801EDE30) != 0 ||
-                Math3d_ColTriTri(&D_801EDE78, &triElem->params, &D_801EDE30) != 0) {
+            if (Math3d_ColTriTri(&D_801EDE40, &triElem->dim, &D_801EDE30) != 0 ||
+                Math3d_ColTriTri(&D_801EDE78, &triElem->dim, &D_801EDE30) != 0) {
                 Vec3f sp68;
                 Vec3f sp5C;
 
                 Collision_TriCalcAvgPoint(triElem, &sp68);
                 collision_quad_cal_avg_point(ac, &sp5C);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->body, &sp68, &ac->base, &ac->body, &sp5C, &D_801EDE30);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->info, &sp68, &ac->base, &ac->info, &sp5C, &D_801EDE30);
                 return;
             }
         }
     }
 }
 
-void Collision_TriGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColTriGroup* at = (ColTriGroup*)toucher;
-    ColTri *triElem;
-    ColSphere* ac = (ColSphere*)bumpee;
+void Collision_TriGroupWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderTris* at = (ColliderTris*)toucher;
+    ColliderTrisElement *triElem;
+    ColliderSphere* ac = (ColliderSphere*)bumpee;
     Vec3f sp70;
 
-    if (at->count > 0 && at->tris != NULL) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (at->count > 0 && at->elements != NULL) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        for (triElem = &at->tris[0]; triElem < &at->tris[at->count]; triElem++) {
-            if (Collision_CantBeToucherAC(&triElem->body)) {
+        for (triElem = &at->elements[0]; triElem < &at->elements[at->count]; triElem++) {
+            if (Collision_CantBeToucherAC(&triElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&triElem->body, &ac->body)) {
+            if (Collision_ToucherIsExcluded(&triElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_ColSphereTri(&ac->params.colInfo, &triElem->params, &sp70) != 0) {
+            if (Math3D_ColSphereTri(&ac->dim.worldSphere, &triElem->dim, &sp70) != 0) {
                 Vec3f sp64;
                 Vec3f sp58;
 
-                Math_Vec3s_ToVec3f(&sp58, &ac->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp58, &ac->dim.worldSphere.center);
                 Collision_TriCalcAvgPoint(triElem, &sp64);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->body, &sp64, &ac->base, &ac->body, &sp58, &sp70);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &triElem->info, &sp64, &ac->base, &ac->info, &sp58, &sp70);
             }
         }
     }
 }
 
-void Collision_QuadWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroupElement *sphElem;
+void Collision_QuadWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSphElement *sphElem;
     Vec3f sp80;
-    ColQuad* at = (ColQuad*)toucher;
-    ColSphereGroup* ac = (ColSphereGroup*)bumpee;
+    ColliderQuad* at = (ColliderQuad*)toucher;
+    ColliderJntSph* ac = (ColliderJntSph*)bumpee;
 
-    if (ac->count > 0 && ac->spheres != NULL) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (ac->count > 0 && ac->elements != NULL) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        Math3D_TriSetCoords(&D_801EDEC8, &at->params.quad[2], &at->params.quad[3], &at->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EDF00, &at->params.quad[2], &at->params.quad[1], &at->params.quad[0]);
+        Math3D_TriSetCoords(&D_801EDEC8, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EDF00, &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
 
-        for (sphElem = &ac->spheres[0]; sphElem < &ac->spheres[ac->count]; sphElem++) {
-            if (Collision_CantBeBumperAC(&sphElem->body)) {
+        for (sphElem = &ac->elements[0]; sphElem < &ac->elements[ac->count]; sphElem++) {
+            if (Collision_CantBeBumperAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&at->body, &sphElem->body)) {
+            if (Collision_ToucherIsExcluded(&at->info, &sphElem->info)) {
                 continue;
             }
-            if (Math3D_ColSphereTri(&sphElem->params.colInfo, &D_801EDEC8, &sp80) != 0 || Math3D_ColSphereTri(&sphElem->params.colInfo, &D_801EDF00, &sp80) != 0) {
+            if (Math3D_ColSphereTri(&sphElem->dim.worldSphere, &D_801EDEC8, &sp80) != 0 || Math3D_ColSphereTri(&sphElem->dim.worldSphere, &D_801EDF00, &sp80) != 0) {
                 Vec3f sp6C;
                 Vec3f sp60;
 
                 if (!func_800E20A4(ctxt, at, &sp80)) {
                     continue;
                 }
-                Math_Vec3s_ToVec3f(&sp60, &sphElem->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp60, &sphElem->dim.worldSphere.center);
                 collision_quad_cal_avg_point(at, &sp6C);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp6C, &ac->base, &sphElem->body, &sp60, &sp80);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp6C, &ac->base, &sphElem->info, &sp60, &sp80);
 
-                if (!(ac->base.unk13 & 0x40)) {
+                if (!(ac->base.ocFlags2 & 0x40)) {
                     break;
                 }
             }
@@ -2049,78 +2060,78 @@ void Collision_QuadWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext 
     }
 }
 
-void Collision_QuadWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColQuad* at = (ColQuad*)toucher;
-    ColCylinder* ac = (ColCylinder*)bumpee;
+void Collision_QuadWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderQuad* at = (ColliderQuad*)toucher;
+    ColliderCylinder* ac = (ColliderCylinder*)bumpee;
 
-    if (ac->params.height > 0 && ac->params.radius > 0) {
-        if (Collision_CantBeBumperAC(&ac->body)) {
+    if (ac->dim.height > 0 && ac->dim.radius > 0) {
+        if (Collision_CantBeBumperAC(&ac->info)) {
             return;
         }
-        if (Collision_CantBeToucherAC(&at->body)) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
-        if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+        if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
             return;
         }
 
-        Math3D_TriSetCoords(&D_801EDF58, &at->params.quad[2], &at->params.quad[3], &at->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EDF90, &at->params.quad[2], &at->params.quad[1], &at->params.quad[0]);
+        Math3D_TriSetCoords(&D_801EDF58, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EDF90, &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
 
-        if (Math3D_ColCylinderTri(&ac->params, &D_801EDF58, &D_801EDFE0) != 0) {
+        if (Math3D_ColCylinderTri(&ac->dim, &D_801EDF58, &D_801EDFE0) != 0) {
             if (func_800E20A4(ctxt, at, &D_801EDFE0)) {
                 Vec3f sp64;
                 Vec3f sp58;
 
                 collision_quad_cal_avg_point(at, &sp64);
-                Math_Vec3s_ToVec3f(&sp58, &ac->params.loc);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp64, &ac->base, &ac->body, &sp58, &D_801EDFE0);
+                Math_Vec3s_ToVec3f(&sp58, &ac->dim.pos);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp64, &ac->base, &ac->info, &sp58, &D_801EDFE0);
                 return;
             }
         }
-        if (Math3D_ColCylinderTri(&ac->params, &D_801EDF90, &D_801EDFE0) != 0) {
+        if (Math3D_ColCylinderTri(&ac->dim, &D_801EDF90, &D_801EDFE0) != 0) {
             if (func_800E20A4(ctxt, at, &D_801EDFE0)) {
                 Vec3f sp4C;
                 Vec3f sp40;
 
                 collision_quad_cal_avg_point(at, &sp4C);
-                Math_Vec3s_ToVec3f(&sp40, &ac->params.loc);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp4C, &ac->base, &ac->body, &sp40, &D_801EDFE0);
+                Math_Vec3s_ToVec3f(&sp40, &ac->dim.pos);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp4C, &ac->base, &ac->info, &sp40, &D_801EDFE0);
             }
         }
     }
 }
 
-void Collision_QuadWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColQuad* at = (ColQuad*)toucher;
-    ColTriGroup* ac = (ColTriGroup*)bumpee;
-    ColTri *triElem;
+void Collision_QuadWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderQuad* at = (ColliderQuad*)toucher;
+    ColliderTris* ac = (ColliderTris*)bumpee;
+    ColliderTrisElement *triElem;
 
-    if (ac->count > 0 && ac->tris != NULL) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (ac->count > 0 && ac->elements != NULL) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
 
-        Math3D_TriSetCoords(&D_801EE000, &at->params.quad[2], &at->params.quad[3], &at->params.quad[1]);
-        Math3D_TriSetCoords(&D_801EE038, &at->params.quad[1], &at->params.quad[0], &at->params.quad[2]);
+        Math3D_TriSetCoords(&D_801EE000, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
+        Math3D_TriSetCoords(&D_801EE038, &at->dim.quad[1], &at->dim.quad[0], &at->dim.quad[2]);
 
-        for (triElem = &ac->tris[0]; triElem < &ac->tris[ac->count]; triElem++) {
-            if (Collision_CantBeBumperAC(&triElem->body)) {
+        for (triElem = &ac->elements[0]; triElem < &ac->elements[ac->count]; triElem++) {
+            if (Collision_CantBeBumperAC(&triElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&at->body, &triElem->body)) {
+            if (Collision_ToucherIsExcluded(&at->info, &triElem->info)) {
                 continue;
             }
 
-            if ((Math3d_ColTriTri(&D_801EE000, &triElem->params, &D_801EDFF0) != 0) || 
-                (Math3d_ColTriTri(&D_801EE038, &triElem->params, &D_801EDFF0) != 0)) {
+            if ((Math3d_ColTriTri(&D_801EE000, &triElem->dim, &D_801EDFF0) != 0) || 
+                (Math3d_ColTriTri(&D_801EE038, &triElem->dim, &D_801EDFF0) != 0)) {
                 if (func_800E20A4(ctxt, at, &D_801EDFF0)) {
                     Vec3f sp68;
                     Vec3f sp5C;
 
                     Collision_TriCalcAvgPoint(triElem, &sp5C);
                     collision_quad_cal_avg_point(at, &sp68);
-                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp68, &ac->base, &triElem->body, &sp5C, &D_801EDFF0);
+                    Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp68, &ac->base, &triElem->info, &sp5C, &D_801EDFF0);
                     return;
                 }
             }
@@ -2128,26 +2139,26 @@ void Collision_QuadWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *co
     }
 }
 
-void Collision_QuadWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColQuad* at = (ColQuad*)toucher;
-    ColQuad* ac = (ColQuad*)bumpee;
+void Collision_QuadWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderQuad* at = (ColliderQuad*)toucher;
+    ColliderQuad* ac = (ColliderQuad*)bumpee;
     s32 i;
     s32 j;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
-    if (Collision_CantBeBumperAC(&ac->body)) {
+    if (Collision_CantBeBumperAC(&ac->info)) {
         return;
     }
-    if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+    if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
         return;
     }
 
-    Math3D_TriSetCoords(&D_801EE0E8[0], &at->params.quad[2], &at->params.quad[3], &at->params.quad[1]);
-    Math3D_TriSetCoords(&D_801EE0E8[1], &at->params.quad[2], &at->params.quad[1], &at->params.quad[0]);
-    Math3D_TriSetCoords(&D_801EE070[0], &ac->params.quad[2], &ac->params.quad[3], &ac->params.quad[1]);
-    Math3D_TriSetCoords(&D_801EE070[1], &ac->params.quad[2], &ac->params.quad[1], &ac->params.quad[0]);
+    Math3D_TriSetCoords(&D_801EE0E8[0], &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
+    Math3D_TriSetCoords(&D_801EE0E8[1], &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
+    Math3D_TriSetCoords(&D_801EE070[0], &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+    Math3D_TriSetCoords(&D_801EE070[1], &ac->dim.quad[2], &ac->dim.quad[1], &ac->dim.quad[0]);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
@@ -2157,109 +2168,109 @@ void Collision_QuadWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtx
 
                 collision_quad_cal_avg_point(at, &sp64);
                 collision_quad_cal_avg_point(ac, &sp58);
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp64, &ac->base, &ac->body, &sp58, &D_801EE0D8);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp64, &ac->base, &ac->info, &sp58, &D_801EE0D8);
                 return;
             }
         }
     }
 }
 
-void Collision_QuadWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColQuad* at = (ColQuad*)toucher;
+void Collision_QuadWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderQuad* at = (ColliderQuad*)toucher;
     Vec3f sp60;
-    ColSphere* ac = (ColSphere*)bumpee;
+    ColliderSphere* ac = (ColliderSphere*)bumpee;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
-    if (Collision_CantBeBumperAC(&ac->body) || Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+    if (Collision_CantBeBumperAC(&ac->info) || Collision_ToucherIsExcluded(&at->info, &ac->info)) {
         return;
     }
 
-    Math3D_TriSetCoords(&D_801EE150, &at->params.quad[2], &at->params.quad[3], &at->params.quad[1]);
-    Math3D_TriSetCoords(&D_801EE188, &at->params.quad[2], &at->params.quad[1], &at->params.quad[0]);
+    Math3D_TriSetCoords(&D_801EE150, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
+    Math3D_TriSetCoords(&D_801EE188, &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
 
-    if ((Math3D_ColSphereTri(&ac->params.colInfo, &D_801EE150, &sp60) != 0) || 
-        (Math3D_ColSphereTri(&ac->params.colInfo, &D_801EE188, &sp60) != 0)) {
+    if ((Math3D_ColSphereTri(&ac->dim.worldSphere, &D_801EE150, &sp60) != 0) || 
+        (Math3D_ColSphereTri(&ac->dim.worldSphere, &D_801EE188, &sp60) != 0)) {
         if (func_800E20A4(ctxt, at, &sp60)) {
             Vec3f sp50;
             Vec3f sp44;
 
-            Math_Vec3s_ToVec3f(&sp44, &ac->params.colInfo.loc);
+            Math_Vec3s_ToVec3f(&sp44, &ac->dim.worldSphere.center);
             collision_quad_cal_avg_point(at, &sp50);
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp60);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp50, &ac->base, &ac->info, &sp44, &sp60);
         }
     }
 }
 
-void Collision_SphereWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* at = (ColSphere*)toucher;
-    ColSphereGroup* ac = (ColSphereGroup*)bumpee;
-    ColSphereGroupElement *sphElem;
+void Collision_SphereWithSphereGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderSphere* at = (ColliderSphere*)toucher;
+    ColliderJntSph* ac = (ColliderJntSph*)bumpee;
+    ColliderJntSphElement *sphElem;
     f32 sp90;
     f32 sp8C;
 
-    if (ac->count > 0 && ac->spheres != NULL) {
-        if (Collision_CantBeToucherAC(&at->body)) {
+    if (ac->count > 0 && ac->elements != NULL) {
+        if (Collision_CantBeToucherAC(&at->info)) {
             return;
         }
 
-        for (sphElem = &ac->spheres[0]; sphElem < &ac->spheres[ac->count]; sphElem++) {
-            if (Collision_CantBeBumperAC(&sphElem->body)) {
+        for (sphElem = &ac->elements[0]; sphElem < &ac->elements[ac->count]; sphElem++) {
+            if (Collision_CantBeBumperAC(&sphElem->info)) {
                 continue;
             }
-            if (Collision_ToucherIsExcluded(&at->body, &sphElem->body)) {
+            if (Collision_ToucherIsExcluded(&at->info, &sphElem->info)) {
                 continue;
             }
 
-            if (Math3D_ColSphereSphereIntersectAndDistance(&at->params.colInfo, &sphElem->params.colInfo, &sp90, &sp8C) != 0) {
+            if (Math3D_ColSphereSphereIntersectAndDistance(&at->dim.worldSphere, &sphElem->dim.worldSphere, &sp90, &sp8C) != 0) {
                 f32 temp_f0;
                 Vec3f sp7C;
                 Vec3f sp70;
                 Vec3f sp64;
 
-                Math_Vec3s_ToVec3f(&sp70, &at->params.colInfo.loc);
-                Math_Vec3s_ToVec3f(&sp64, &sphElem->params.colInfo.loc);
+                Math_Vec3s_ToVec3f(&sp70, &at->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&sp64, &sphElem->dim.worldSphere.center);
                 if (!(fabsf(sp8C) < 0.008f)) {
-                    temp_f0 = sphElem->params.colInfo.radius / sp8C;
+                    temp_f0 = sphElem->dim.worldSphere.radius / sp8C;
                     sp7C.x = (sp70.x - sp64.x) * temp_f0 + sp64.x;
                     sp7C.y = (sp70.y - sp64.y) * temp_f0 + sp64.y;
                     sp7C.z = (sp70.z - sp64.z) * temp_f0 + sp64.z;
                 } else {
                     Math_Vec3f_Copy(&sp7C, &sp70);
                 }
-                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp70, &ac->base, &sphElem->body, &sp64, &sp7C);
+                Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp70, &ac->base, &sphElem->info, &sp64, &sp7C);
             }
         }
     }
 }
 
-void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* ac = (ColCylinder*)bumpee;
-    ColSphere* at = (ColSphere*)toucher;
+void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* ac = (ColliderCylinder*)bumpee;
+    ColliderSphere* at = (ColliderSphere*)toucher;
     f32 sp6C;
     f32 sp68;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
-    if (Collision_CantBeBumperAC(&ac->body)) {
+    if (Collision_CantBeBumperAC(&ac->info)) {
         return;
     }
-    if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+    if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
         return;
     }
 
-    if (Math3D_ColSphereCylinderDistanceAndAmount(&at->params.colInfo, &ac->params, &sp6C, &sp68) != 0) {
+    if (Math3D_ColSphereCylinderDistanceAndAmount(&at->dim.worldSphere, &ac->dim, &sp6C, &sp68) != 0) {
         Vec3f sp5C;
         Vec3f sp50;
         Vec3f sp44;
 
-        Math_Vec3s_ToVec3f(&sp50, &at->params.colInfo.loc);
-        Math_Vec3s_ToVec3f(&sp44, &ac->params.loc);
+        Math_Vec3s_ToVec3f(&sp50, &at->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&sp44, &ac->dim.pos);
 
         if (!(fabsf(sp68) < 0.008f)) {
-            f32 temp_f0 = ac->params.radius / sp68;
+            f32 temp_f0 = ac->dim.radius / sp68;
 
             if (temp_f0 <= 1.0f) {
                 sp5C.x = (sp50.x - sp44.x) * temp_f0 + sp44.x;
@@ -2271,168 +2282,168 @@ void Collision_SphereWithCylinderAC(GlobalContext *ctxt, CollisionCheckContext *
         } else {
             Math_Vec3f_Copy(&sp5C, &sp50);
         }
-        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp5C);
+        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp50, &ac->base, &ac->info, &sp44, &sp5C);
     }
 
     if (at) {}
 }
 
-void Collision_SphereWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* at = (ColSphere*)toucher;
-    ColTriGroup* ac = (ColTriGroup*)bumpee;
-    ColTri *triElem;
+void Collision_SphereWithTriGroupAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderSphere* at = (ColliderSphere*)toucher;
+    ColliderTris* ac = (ColliderTris*)bumpee;
+    ColliderTrisElement *triElem;
     Vec3f sp68;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
 
-    for (triElem = &ac->tris[0]; triElem < &ac->tris[ac->count]; triElem++) {
-        if (Collision_CantBeBumperAC(&triElem->body)) {
+    for (triElem = &ac->elements[0]; triElem < &ac->elements[ac->count]; triElem++) {
+        if (Collision_CantBeBumperAC(&triElem->info)) {
             continue;
         }
-        if (Collision_ToucherIsExcluded(&at->body, &triElem->body)) {
+        if (Collision_ToucherIsExcluded(&at->info, &triElem->info)) {
             continue;
         }
-        if (Math3D_ColSphereTri(&at->params.colInfo, &triElem->params, &sp68) != 0) {
+        if (Math3D_ColSphereTri(&at->dim.worldSphere, &triElem->dim, &sp68) != 0) {
             Vec3f sp5C;
             Vec3f sp50;
 
-            Math_Vec3s_ToVec3f(&sp5C, &at->params.colInfo.loc);
+            Math_Vec3s_ToVec3f(&sp5C, &at->dim.worldSphere.center);
             Collision_TriCalcAvgPoint(triElem, &sp50);
-            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp5C, &ac->base, &triElem->body, &sp50, &sp68);
+            Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp5C, &ac->base, &triElem->info, &sp50, &sp68);
             return;
         }
     }
 }
 
-void Collision_SphereWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* at = (ColSphere*)toucher;
+void Collision_SphereWithQuadAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderSphere* at = (ColliderSphere*)toucher;
     Vec3f sp60;
-    ColQuad* ac = (ColQuad*)bumpee;
+    ColliderQuad* ac = (ColliderQuad*)bumpee;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
-    if (Collision_CantBeBumperAC(&ac->body) || Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+    if (Collision_CantBeBumperAC(&ac->info) || Collision_ToucherIsExcluded(&at->info, &ac->info)) {
         return;
     }
 
-    Math3D_TriSetCoords(&D_801EE6C8, &ac->params.quad[2], &ac->params.quad[3], &ac->params.quad[1]);
-    Math3D_TriSetCoords(&D_801EE700, &ac->params.quad[1], &ac->params.quad[0], &ac->params.quad[2]);
+    Math3D_TriSetCoords(&D_801EE6C8, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+    Math3D_TriSetCoords(&D_801EE700, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-    if (Math3D_ColSphereTri(&at->params.colInfo, &D_801EE6C8, &sp60) != 0 || 
-        Math3D_ColSphereTri(&at->params.colInfo, &D_801EE700, &sp60) != 0) {
+    if (Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE6C8, &sp60) != 0 || 
+        Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE700, &sp60) != 0) {
         Vec3f sp50;
         Vec3f sp44;
 
-        Math_Vec3s_ToVec3f(&sp50, &at->params.colInfo.loc);
+        Math_Vec3s_ToVec3f(&sp50, &at->dim.worldSphere.center);
         collision_quad_cal_avg_point(ac, &sp44);
-        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp50, &ac->base, &ac->body, &sp44, &sp60);
+        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp50, &ac->base, &ac->info, &sp44, &sp60);
     }
 }
 
-void Collision_SphereWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* at = (ColSphere*)toucher;
-    ColSphere* ac = (ColSphere*)bumpee;
+void Collision_SphereWithSphereAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderSphere* at = (ColliderSphere*)toucher;
+    ColliderSphere* ac = (ColliderSphere*)bumpee;
     f32 sp6C;
     f32 sp68;
 
-    if (Collision_CantBeToucherAC(&at->body)) {
+    if (Collision_CantBeToucherAC(&at->info)) {
         return;
     }
-    if (Collision_CantBeBumperAC(&ac->body)) {
+    if (Collision_CantBeBumperAC(&ac->info)) {
         return;
     }
-    if (Collision_ToucherIsExcluded(&at->body, &ac->body)) {
+    if (Collision_ToucherIsExcluded(&at->info, &ac->info)) {
         return;
     }
 
-    if (Math3D_ColSphereSphereIntersectAndDistance(&at->params.colInfo, &ac->params.colInfo, &sp6C, &sp68) != 0) {
+    if (Math3D_ColSphereSphereIntersectAndDistance(&at->dim.worldSphere, &ac->dim.worldSphere, &sp6C, &sp68) != 0) {
         f32 temp_f0;
         Vec3f sp58;
         Vec3f sp4C;
         Vec3f sp40;
 
-        Math_Vec3s_ToVec3f(&sp4C, &at->params.colInfo.loc);
-        Math_Vec3s_ToVec3f(&sp40, &ac->params.colInfo.loc);
+        Math_Vec3s_ToVec3f(&sp4C, &at->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&sp40, &ac->dim.worldSphere.center);
         if (!(fabsf(sp68) < 0.008f)) {
-            temp_f0 = ac->params.colInfo.radius / sp68;
+            temp_f0 = ac->dim.worldSphere.radius / sp68;
             sp58.x = (sp4C.x - sp40.x) * temp_f0 + sp40.x;
             sp58.y = (sp4C.y - sp40.y) * temp_f0 + sp40.y;
             sp58.z = (sp4C.z - sp40.z) * temp_f0 + sp40.z;
         } else {
             Math_Vec3f_Copy(&sp58, &sp4C);
         }
-        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->body, &sp4C, &ac->base, &ac->body, &sp40, &sp58);
+        Collision_HandleCollisionATWithAC(ctxt, &at->base, &at->info, &sp4C, &ac->base, &ac->info, &sp40, &sp58);
     }
 }
 
-void func_800E60C0(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColSphereGroup *sphereGroup = (ColSphereGroup*)shape;
-    ColSphereGroupElement *sphElem;
+void func_800E60C0(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderJntSph *sphereGroup = (ColliderJntSph*)shape;
+    ColliderJntSphElement *sphElem;
 
-    for (sphElem = &sphereGroup->spheres[0]; sphElem < &sphereGroup->spheres[sphereGroup->count]; sphElem++) {
-        if ((sphElem->body.unk16 & 0x80) && sphElem->body.unk24 != 0 && !(sphElem->body.unk24->unk15 & 0x40)) {
+    for (sphElem = &sphereGroup->elements[0]; sphElem < &sphereGroup->elements[sphereGroup->count]; sphElem++) {
+        if ((sphElem->info.bumperFlags & 0x80) && sphElem->info.acHitInfo != 0 && !(sphElem->info.acHitInfo->toucherFlags & 0x40)) {
             Vec3f sp24;
 
-            Math_Vec3s_ToVec3f(&sp24, &sphElem->body.bumper.unk6);
-            func_800E3168(ctxt, sphElem->body.unk1C, sphElem->body.unk24, &sphereGroup->base, &sphElem->body, &sp24);
-            sphElem->body.unk24->unk15 |= 0x40;
+            Math_Vec3s_ToVec3f(&sp24, &sphElem->info.bumper.hitPos);
+            func_800E3168(ctxt, sphElem->info.acHit, sphElem->info.acHitInfo, &sphereGroup->base, &sphElem->info, &sp24);
+            sphElem->info.acHitInfo->toucherFlags |= 0x40;
             return;
         }
     }
 }
 
-void func_800E61A0(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColCylinder *cylinder = (ColCylinder*)shape;
+void func_800E61A0(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)shape;
 
-    if ((cylinder->body.unk16 & 0x80) && cylinder->body.unk24 != 0 && !(cylinder->body.unk24->unk15 & 0x40)) {
+    if ((cylinder->info.bumperFlags & 0x80) && cylinder->info.acHitInfo != 0 && !(cylinder->info.acHitInfo->toucherFlags & 0x40)) {
         Vec3f sp28;
 
-        Math_Vec3s_ToVec3f(&sp28, &cylinder->body.bumper.unk6);
-        func_800E3168(ctxt, cylinder->body.unk1C, cylinder->body.unk24, &cylinder->base, &cylinder->body, &sp28);
-        cylinder->body.unk24->unk15 |= 0x40;
+        Math_Vec3s_ToVec3f(&sp28, &cylinder->info.bumper.hitPos);
+        func_800E3168(ctxt, cylinder->info.acHit, cylinder->info.acHitInfo, &cylinder->base, &cylinder->info, &sp28);
+        cylinder->info.acHitInfo->toucherFlags |= 0x40;
     }
 }
 
-void func_800E6238(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColTriGroup *triGroup = (ColTriGroup*)shape;
-    ColTri *triElem;
+void func_800E6238(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderTris *triGroup = (ColliderTris*)shape;
+    ColliderTrisElement *triElem;
 
-    for (triElem = &triGroup->tris[0]; triElem < &triGroup->tris[triGroup->count]; triElem++) {
-        if ((triElem->body.unk16 & 0x80) && triElem->body.unk24 != 0 && !(triElem->body.unk24->unk15 & 0x40)) {
+    for (triElem = &triGroup->elements[0]; triElem < &triGroup->elements[triGroup->count]; triElem++) {
+        if ((triElem->info.bumperFlags & 0x80) && triElem->info.acHitInfo != 0 && !(triElem->info.acHitInfo->toucherFlags & 0x40)) {
             Vec3f sp24;
 
-            Math_Vec3s_ToVec3f(&sp24, &triElem->body.bumper.unk6);
-            func_800E3168(ctxt, triElem->body.unk1C, triElem->body.unk24, &triGroup->base, &triElem->body, &sp24);
-            triElem->body.unk24->unk15 |= 0x40;
+            Math_Vec3s_ToVec3f(&sp24, &triElem->info.bumper.hitPos);
+            func_800E3168(ctxt, triElem->info.acHit, triElem->info.acHitInfo, &triGroup->base, &triElem->info, &sp24);
+            triElem->info.acHitInfo->toucherFlags |= 0x40;
             return;
         }
     }
 }
 
-void func_800E6320(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColQuad *quad = (ColQuad*)shape;
+void func_800E6320(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderQuad *quad = (ColliderQuad*)shape;
 
-    if ((quad->body.unk16 & 0x80) && quad->body.unk24 != 0 && !(quad->body.unk24->unk15 & 0x40)) {
+    if ((quad->info.bumperFlags & 0x80) && quad->info.acHitInfo != 0 && !(quad->info.acHitInfo->toucherFlags & 0x40)) {
         Vec3f sp28;
 
-        Math_Vec3s_ToVec3f(&sp28, &quad->body.bumper.unk6);
-        func_800E3168(ctxt, quad->body.unk1C, quad->body.unk24, &quad->base, &quad->body, &sp28);
-        quad->body.unk24->unk15 |= 0x40;
+        Math_Vec3s_ToVec3f(&sp28, &quad->info.bumper.hitPos);
+        func_800E3168(ctxt, quad->info.acHit, quad->info.acHitInfo, &quad->base, &quad->info, &sp28);
+        quad->info.acHitInfo->toucherFlags |= 0x40;
     }
 }
 
-void func_800E63B8(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColSphere* sphere = (ColSphere*)shape;
+void func_800E63B8(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderSphere* sphere = (ColliderSphere*)shape;
 
-    if ((sphere->body.unk16 & 0x80) && sphere->body.unk24 != 0 && !(sphere->body.unk24->unk15 & 0x40)) {
+    if ((sphere->info.bumperFlags & 0x80) && sphere->info.acHitInfo != 0 && !(sphere->info.acHitInfo->toucherFlags & 0x40)) {
         Vec3f sp28;
 
-        Math_Vec3s_ToVec3f(&sp28, &sphere->body.bumper.unk6);
-        func_800E3168(ctxt, sphere->body.unk1C, sphere->body.unk24, &sphere->base, &sphere->body, &sp28);
-        sphere->body.unk24->unk15 |= 0x40;
+        Math_Vec3s_ToVec3f(&sp28, &sphere->info.bumper.hitPos);
+        func_800E3168(ctxt, sphere->info.acHit, sphere->info.acHitInfo, &sphere->base, &sphere->info, &sp28);
+        sphere->info.acHitInfo->toucherFlags |= 0x40;
     }
 }
 
@@ -2445,21 +2456,21 @@ ColChkApplyFunc D_801BA3A8[] = {
 };
 
 void func_800E6450(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
-    ColCommon **col;
+    Collider **col;
 
-    for (col = &colCtxt->ACgroup[0]; col < &colCtxt->ACgroup[colCtxt->ACgroupLength]; col++) {
-        ColCommon* colAC = *col;
+    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[colCtxt->colACCount]; col++) {
+        Collider* colAC = *col;
 
-        if (colAC != NULL && (colAC->flagsAC & 1)) {
+        if (colAC != NULL && (colAC->acFlags & 1)) {
             if (colAC->actor != NULL && colAC->actor->update == NULL) {
                 continue;
             }
-            D_801BA3A8[colAC->type](ctxt, colCtxt, colAC);
+            D_801BA3A8[colAC->shape](ctxt, colCtxt, colAC);
         }
     }
 }
 
-collision_func collisionFuncTableATwithAC[5][5] = {
+ColChkVsFunc collisionFuncTableATwithAC[5][5] = {
     { Collision_SphereGroupWithSphereGroupAC, Collision_SphereGroupWithCylinderAC, Collision_SphereGroupWithTriGroupAC, Collision_SphereGroupWithQuadAC, Collision_SphereGroupWithSphereAC },
     { Collision_CylinderWithSphereGroupAC, Collision_CylinderWithCylinderAC, Collision_CylinderWithTriGroupAC, Collision_CylinderWithQuadAC, Collision_CylinderWithSphereAC },
     { Collision_TriGroupWithSphereGroupAC, Collision_TriGroupWithCylinderAC, Collision_TriGroupWithTriGroupAC, Collision_TriGroupWithQuad, Collision_TriGroupWithSphereAC },
@@ -2467,37 +2478,37 @@ collision_func collisionFuncTableATwithAC[5][5] = {
     { Collision_SphereWithSphereGroupAC, Collision_SphereWithCylinderAC, Collision_SphereWithTriGroupAC, Collision_SphereWithQuadAC, Collision_SphereWithSphereAC },
 };
 
-void Collision_CollideWithAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *colObj) {
-    ColCommon **col;
+void Collision_CollideWithAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *colObj) {
+    Collider **col;
 
-    for (col = &colCtxt->ACgroup[0]; col < &colCtxt->ACgroup[colCtxt->ACgroupLength]; col++) {
-        ColCommon* colAC = *col;
+    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[colCtxt->colACCount]; col++) {
+        Collider* colAC = *col;
 
-        if (colAC != NULL && (colAC->flagsAC & 1)) {
+        if (colAC != NULL && (colAC->acFlags & 1)) {
             if (colAC->actor != NULL && colAC->actor->update == NULL) {
                 continue;
             }
-            if ((colAC->flagsAC & colObj->flagsAT & 0x38) && colObj != colAC) {
-                if (!(colObj->flagsAT & 0x40) && colObj->actor != NULL && colAC->actor == colObj->actor) {
+            if ((colAC->acFlags & colObj->atFlags & 0x38) && colObj != colAC) {
+                if (!(colObj->atFlags & 0x40) && colObj->actor != NULL && colAC->actor == colObj->actor) {
                     continue;
                 }
-                collisionFuncTableATwithAC[colObj->type][colAC->type](ctxt, colCtxt, colObj, colAC);
+                collisionFuncTableATwithAC[colObj->shape][colAC->shape](ctxt, colCtxt, colObj, colAC);
             }
         }
     }
 }
 
 void Collision_DoATWithAC(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
-    ColCommon **col;
+    Collider **col;
 
-    if (colCtxt->ATgroupLength == 0 || colCtxt->ACgroupLength == 0) {
+    if (colCtxt->colATCount == 0 || colCtxt->colACCount == 0) {
         return;
     }
 
-    for (col = &colCtxt->ATgroup[0]; col < &colCtxt->ATgroup[colCtxt->ATgroupLength]; col++) {
-        ColCommon* colAC = *col;
+    for (col = &colCtxt->colAT[0]; col < &colCtxt->colAT[colCtxt->colATCount]; col++) {
+        Collider* colAC = *col;
 
-        if (colAC != NULL && (colAC->flagsAT & 1)) {
+        if (colAC != NULL && (colAC->atFlags & 1)) {
             if (colAC->actor != NULL && colAC->actor->update == NULL) {
                 continue;
             }
@@ -2518,8 +2529,8 @@ s32 func_800E6724(u8 mass) {
     return 2;
 }
 
-void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, ColCommon *toucher, ColBodyInfo *toucherBody, 
-                                Vec3f *toucherLoc, ColCommon *bumper, ColBodyInfo *bumperBody, Vec3f *bumperLoc, f32 param_8) {
+void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, Collider *toucher, ColliderInfo *toucherBody, 
+                                Vec3f *toucherLoc, Collider *bumper, ColliderInfo *bumperBody, Vec3f *bumperLoc, f32 param_8) {
     f32 pad;
     f32 leftDispRatio;
     f32 rightDispRatio;
@@ -2535,28 +2546,28 @@ void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, ColCommon *toucher, 
     s32 leftMassType;
     s32 rightMassType;
 
-    toucher->unk12 |= 2;
-    toucher->collisionOT = bumperActor;
-    toucherBody->unk17 |= 2;
-    if (bumper->unk13 & 8) {
-        toucher->unk13 |= 1;
+    toucher->ocFlags1 |= 2;
+    toucher->oc = bumperActor;
+    toucherBody->ocElemFlags |= 2;
+    if (bumper->ocFlags2 & 8) {
+        toucher->ocFlags2 |= 1;
     }
 
-    bumper->unk12 |= 2;
-    bumper->collisionOT = toucherActor;
-    bumperBody->unk17 |= 2;
-    if (toucher->unk13 & 8) {
-        bumper->unk13 |= 1;
+    bumper->ocFlags1 |= 2;
+    bumper->oc = toucherActor;
+    bumperBody->ocElemFlags |= 2;
+    if (toucher->ocFlags2 & 8) {
+        bumper->ocFlags2 |= 1;
     }
 
-    if (toucherActor == NULL || bumperActor == NULL || (toucher->unk12 & 4) || (bumper->unk12 & 4)) {
+    if (toucherActor == NULL || bumperActor == NULL || (toucher->ocFlags1 & 4) || (bumper->ocFlags1 & 4)) {
         return;
     }
 
-    rightMassType = func_800E6724(toucherActor->unkA0.mass);
-    leftMassType = func_800E6724(bumperActor->unkA0.mass);
-    leftMass = toucherActor->unkA0.mass;
-    rightMass = bumperActor->unkA0.mass;
+    rightMassType = func_800E6724(toucherActor->colChkInfo.mass);
+    leftMassType = func_800E6724(bumperActor->colChkInfo.mass);
+    leftMass = toucherActor->colChkInfo.mass;
+    rightMass = bumperActor->colChkInfo.mass;
     totalMass = leftMass + rightMass;
 
     if (fabsf(totalMass) < 0.008f) {
@@ -2600,175 +2611,175 @@ void Collision_HandleCollisionOTWithOT(GlobalContext *ctxt, ColCommon *toucher, 
     if (!(fabsf(xzDist) < 0.008f)) {
         xDelta *= param_8 / xzDist;
         zDelta *= param_8 / xzDist;
-        toucherActor->unkA0.displacement.x += -xDelta * leftDispRatio;
-        toucherActor->unkA0.displacement.z += -zDelta * leftDispRatio;
-        bumperActor->unkA0.displacement.x += xDelta * rightDispRatio;
-        bumperActor->unkA0.displacement.z += zDelta * rightDispRatio;
+        toucherActor->colChkInfo.displacement.x += -xDelta * leftDispRatio;
+        toucherActor->colChkInfo.displacement.z += -zDelta * leftDispRatio;
+        bumperActor->colChkInfo.displacement.x += xDelta * rightDispRatio;
+        bumperActor->colChkInfo.displacement.z += zDelta * rightDispRatio;
     } else if (param_8 != 0.0f) {
-        toucherActor->unkA0.displacement.x += -param_8 * leftDispRatio;
-        bumperActor->unkA0.displacement.x += param_8 * rightDispRatio;
+        toucherActor->colChkInfo.displacement.x += -param_8 * leftDispRatio;
+        bumperActor->colChkInfo.displacement.x += param_8 * rightDispRatio;
     } else {
-        toucherActor->unkA0.displacement.x += -leftDispRatio;
-        bumperActor->unkA0.displacement.x += rightDispRatio;
+        toucherActor->colChkInfo.displacement.x += -leftDispRatio;
+        bumperActor->colChkInfo.displacement.x += rightDispRatio;
     }
 }
 
-void Collision_SphereGroupWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* left = (ColSphereGroup*)toucher;
-    ColSphereGroup* right = (ColSphereGroup*)bumpee;
-    ColSphereGroupElement *sphElem;
-    ColSphereGroupElement *sphElem2;
+void Collision_SphereGroupWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* left = (ColliderJntSph*)toucher;
+    ColliderJntSph* right = (ColliderJntSph*)bumpee;
+    ColliderJntSphElement *sphElem;
+    ColliderJntSphElement *sphElem2;
     f32 sp74;
 
-    if (left->count > 0 && left->spheres != NULL && right->count > 0 && right->spheres != NULL && 
-        (left->base.unk12 & 1) && (right->base.unk12 & 1)) {
+    if (left->count > 0 && left->elements != NULL && right->count > 0 && right->elements != NULL && 
+        (left->base.ocFlags1 & 1) && (right->base.ocFlags1 & 1)) {
 
-        for (sphElem = &left->spheres[0]; sphElem < &left->spheres[left->count]; sphElem++) {
-            if (!(sphElem->body.unk17 & 1)) {
+        for (sphElem = &left->elements[0]; sphElem < &left->elements[left->count]; sphElem++) {
+            if (!(sphElem->info.ocElemFlags & 1)) {
                 continue;
             }
-            for (sphElem2 = &right->spheres[0]; sphElem2 < &right->spheres[right->count]; sphElem2++) {
-                if (!(sphElem2->body.unk17 & 1)) {
+            for (sphElem2 = &right->elements[0]; sphElem2 < &right->elements[right->count]; sphElem2++) {
+                if (!(sphElem2->info.ocElemFlags & 1)) {
                     continue;
                 }
-                if (Math3D_ColSphereSphereIntersect(&sphElem->params.colInfo, &sphElem2->params.colInfo, &sp74) != 0) {
+                if (Math3D_ColSphereSphereIntersect(&sphElem->dim.worldSphere, &sphElem2->dim.worldSphere, &sp74) != 0) {
                     Vec3f sp68;
                     Vec3f sp5C;
 
-                    Math_Vec3s_ToVec3f(&sp68, &sphElem->params.colInfo.loc);
-                    Math_Vec3s_ToVec3f(&sp5C, &sphElem2->params.colInfo.loc);
-                    Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->body, &sp68, &right->base, &sphElem2->body, &sp5C, sp74);
+                    Math_Vec3s_ToVec3f(&sp68, &sphElem->dim.worldSphere.center);
+                    Math_Vec3s_ToVec3f(&sp5C, &sphElem2->dim.worldSphere.center);
+                    Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->info, &sp68, &right->base, &sphElem2->info, &sp5C, sp74);
                 }
             }
         }
     }
 }
 
-void Collision_SphereGroupWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* left = (ColSphereGroup*)toucher;
-    ColCylinder* right = (ColCylinder*)bumpee;
-    ColSphereGroupElement *sphElem;
+void Collision_SphereGroupWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* left = (ColliderJntSph*)toucher;
+    ColliderCylinder* right = (ColliderCylinder*)bumpee;
+    ColliderJntSphElement *sphElem;
     f32 sp78;
 
-    if (left->count > 0 && left->spheres != NULL && 
-        (left->base.unk12 & 1) && (right->base.unk12 & 1) && (right->body.unk17 & 1)) {
+    if (left->count > 0 && left->elements != NULL && 
+        (left->base.ocFlags1 & 1) && (right->base.ocFlags1 & 1) && (right->info.ocElemFlags & 1)) {
 
-        for (sphElem = &left->spheres[0]; sphElem < &left->spheres[left->count]; sphElem++) {
-            if (!(sphElem->body.unk17 & 1)) {
+        for (sphElem = &left->elements[0]; sphElem < &left->elements[left->count]; sphElem++) {
+            if (!(sphElem->info.ocElemFlags & 1)) {
                 continue;
             }
-            if (Math3D_ColSphereCylinderDistance(&sphElem->params.colInfo, &right->params, &sp78) != 0) {
+            if (Math3D_ColSphereCylinderDistance(&sphElem->dim.worldSphere, &right->dim, &sp78) != 0) {
                 Vec3f sp6C;
                 Vec3f sp60;
 
-                Math_Vec3s_ToVec3f(&sp6C, &sphElem->params.colInfo.loc);
-                Math_Vec3s_ToVec3f(&sp60, &right->params.loc);
-                Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->body, &sp6C, &right->base, &right->body, &sp60, sp78);
+                Math_Vec3s_ToVec3f(&sp6C, &sphElem->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&sp60, &right->dim.pos);
+                Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->info, &sp6C, &right->base, &right->info, &sp60, sp78);
             }
         }
     }
 }
 
-void Collision_SphereGroupWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphereGroup* left = (ColSphereGroup*)toucher;
-    ColSphere* right = (ColSphere*)bumpee;
-    ColSphereGroupElement *sphElem;
+void Collision_SphereGroupWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderJntSph* left = (ColliderJntSph*)toucher;
+    ColliderSphere* right = (ColliderSphere*)bumpee;
+    ColliderJntSphElement *sphElem;
     f32 sp78;
 
-    if (left->count > 0 && left->spheres != NULL && 
-        (left->base.unk12 & 1) && (right->base.unk12 & 1) && (right->body.unk17 & 1)) {
+    if (left->count > 0 && left->elements != NULL && 
+        (left->base.ocFlags1 & 1) && (right->base.ocFlags1 & 1) && (right->info.ocElemFlags & 1)) {
 
-        for (sphElem = &left->spheres[0]; sphElem < &left->spheres[left->count]; sphElem++) {
-            if (!(sphElem->body.unk17 & 1)) {
+        for (sphElem = &left->elements[0]; sphElem < &left->elements[left->count]; sphElem++) {
+            if (!(sphElem->info.ocElemFlags & 1)) {
                 continue;
             }
-            if (Math3D_ColSphereSphereIntersect(&sphElem->params.colInfo, &right->params.colInfo, &sp78) != 0) {
+            if (Math3D_ColSphereSphereIntersect(&sphElem->dim.worldSphere, &right->dim.worldSphere, &sp78) != 0) {
                 Vec3f sp6C;
                 Vec3f sp60;
 
-                Math_Vec3s_ToVec3f(&sp6C, &sphElem->params.colInfo.loc);
-                Math_Vec3s_ToVec3f(&sp60, &right->params.colInfo.loc);
-                Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->body, &sp6C, &right->base, &right->body, &sp60, sp78);
+                Math_Vec3s_ToVec3f(&sp6C, &sphElem->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&sp60, &right->dim.worldSphere.center);
+                Collision_HandleCollisionOTWithOT(ctxt, &left->base, &sphElem->info, &sp6C, &right->base, &right->info, &sp60, sp78);
             }
         }
     }
 }
 
-void Collision_CylinderWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
+void Collision_CylinderWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
     Collision_SphereGroupWithCylinderOT(ctxt, colCtxt, bumpee, toucher);
 }
 
-void Collision_CylinderWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* left = (ColCylinder*)toucher;
-    ColCylinder* right = (ColCylinder*)bumpee;
+void Collision_CylinderWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* left = (ColliderCylinder*)toucher;
+    ColliderCylinder* right = (ColliderCylinder*)bumpee;
     f32 sp4C;
 
-    if ((left->base.unk12 & 1) && (right->base.unk12 & 1) && (left->body.unk17 & 1) && (right->body.unk17 & 1)) {
-        if (Math3D_ColCylinderCylinderAmount(&left->params, &right->params, (f32 *) &sp4C) != 0) {
+    if ((left->base.ocFlags1 & 1) && (right->base.ocFlags1 & 1) && (left->info.ocElemFlags & 1) && (right->info.ocElemFlags & 1)) {
+        if (Math3D_ColCylinderCylinderAmount(&left->dim, &right->dim, &sp4C) != 0) {
             Vec3f sp40;
             Vec3f sp34;
 
-            Math_Vec3s_ToVec3f(&sp40, &left->params.loc);
-            Math_Vec3s_ToVec3f(&sp34, &right->params.loc);
-            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->body, &sp40, &right->base, &right->body, &sp34, sp4C);
+            Math_Vec3s_ToVec3f(&sp40, &left->dim.pos);
+            Math_Vec3s_ToVec3f(&sp34, &right->dim.pos);
+            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->info, &sp40, &right->base, &right->info, &sp34, sp4C);
         }
     }
 }
 
-void Collision_CylinderWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColCylinder* left = (ColCylinder*)toucher;
-    ColSphere* right = (ColSphere*)bumpee;
+void Collision_CylinderWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderCylinder* left = (ColliderCylinder*)toucher;
+    ColliderSphere* right = (ColliderSphere*)bumpee;
     f32 sp4C;
 
-    if ((left->base.unk12 & 1) && (left->body.unk17 & 1) && (right->base.unk12 & 1) && (right->body.unk17 & 1)) {
-        if (Math3D_ColSphereCylinderDistance(&right->params.colInfo, &left->params,  &sp4C) != 0) {
+    if ((left->base.ocFlags1 & 1) && (left->info.ocElemFlags & 1) && (right->base.ocFlags1 & 1) && (right->info.ocElemFlags & 1)) {
+        if (Math3D_ColSphereCylinderDistance(&right->dim.worldSphere, &left->dim,  &sp4C) != 0) {
             Vec3f sp40;
             Vec3f sp34;
 
-            Math_Vec3s_ToVec3f(&sp40, &left->params.loc);
-            Math_Vec3s_ToVec3f(&sp34, &right->params.colInfo.loc);
-            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->body, &sp40, &right->base, &right->body, &sp34, sp4C);
+            Math_Vec3s_ToVec3f(&sp40, &left->dim.pos);
+            Math_Vec3s_ToVec3f(&sp34, &right->dim.worldSphere.center);
+            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->info, &sp40, &right->base, &right->info, &sp34, sp4C);
         }
     }
 }
 
-void Collision_SphereWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
+void Collision_SphereWithSphereGroupOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
     Collision_SphereGroupWithSphereOT(ctxt, colCtxt, bumpee, toucher);
 }
 
-void Collision_SphereWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
+void Collision_SphereWithCylinderOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
     Collision_CylinderWithSphereOT(ctxt, colCtxt, bumpee, toucher);
 }
 
-void Collision_SphereWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *toucher, ColCommon *bumpee) {
-    ColSphere* left = (ColSphere*)toucher;
-    ColSphere* right = (ColSphere*)bumpee;
+void Collision_SphereWithSphereOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *toucher, Collider *bumpee) {
+    ColliderSphere* left = (ColliderSphere*)toucher;
+    ColliderSphere* right = (ColliderSphere*)bumpee;
     f32 sp54;
 
-    if ((left->base.unk12 & 1) && (left->body.unk17 & 1) && (right->base.unk12 & 1) && (right->body.unk17 & 1)) {
-        if (Math3D_ColSphereSphereIntersect(&left->params.colInfo, &right->params.colInfo,  &sp54) != 0) {
+    if ((left->base.ocFlags1 & 1) && (left->info.ocElemFlags & 1) && (right->base.ocFlags1 & 1) && (right->info.ocElemFlags & 1)) {
+        if (Math3D_ColSphereSphereIntersect(&left->dim.worldSphere, &right->dim.worldSphere,  &sp54) != 0) {
             Vec3f sp48;
             Vec3f sp3C;
 
-            Math_Vec3s_ToVec3f(&sp48, &left->params.colInfo.loc);
-            Math_Vec3s_ToVec3f(&sp3C, &right->params.colInfo.loc);
-            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->body, &sp48, &right->base, &right->body, &sp3C, sp54);
+            Math_Vec3s_ToVec3f(&sp48, &left->dim.worldSphere.center);
+            Math_Vec3s_ToVec3f(&sp3C, &right->dim.worldSphere.center);
+            Collision_HandleCollisionOTWithOT(ctxt, &left->base, &left->info, &sp48, &right->base, &right->info, &sp3C, sp54);
         }
     }
 }
 
-s32 func_800E7264(ColCommon *iParm1) {
-    if (!(iParm1->unk12 & 1)) {
+s32 func_800E7264(Collider *iParm1) {
+    if (!(iParm1->ocFlags1 & 1)) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800E7288(ColCommon *piParm1, ColCommon *piParm2) {
-    if (!(piParm1->unk12 & piParm2->unk13 & 0x38) || !(piParm1->unk13 & piParm2->unk12 & 0x38) || 
-        ((piParm1->unk13 & 2) && (piParm2->unk13 & 4)) ||
-        ((piParm2->unk13 & 2) && (piParm1->unk13 & 4))) {
+s32 func_800E7288(Collider *piParm1, Collider *piParm2) {
+    if (!(piParm1->ocFlags1 & piParm2->ocFlags2 & 0x38) || !(piParm1->ocFlags2 & piParm2->ocFlags1 & 0x38) || 
+        ((piParm1->ocFlags2 & 2) && (piParm2->ocFlags2 & 4)) ||
+        ((piParm2->ocFlags2 & 2) && (piParm1->ocFlags2 & 4))) {
         return 1;
     }
     if (piParm1->actor == piParm2->actor) {
@@ -2777,7 +2788,7 @@ s32 func_800E7288(ColCommon *piParm1, ColCommon *piParm2) {
     return 0;
 }
 
-collision_func collisionFuncTableOTwithOT[5][5] = {
+ColChkVsFunc collisionFuncTableOTwithOT[5][5] = {
     { Collision_SphereGroupWithSphereGroupOT, Collision_SphereGroupWithCylinderOT, NULL, NULL, Collision_SphereGroupWithSphereOT },
     { Collision_CylinderWithSphereGroupOT, Collision_CylinderWithCylinderOT, NULL, NULL, Collision_CylinderWithSphereOT },
     { NULL, NULL, NULL, NULL, NULL },
@@ -2786,19 +2797,19 @@ collision_func collisionFuncTableOTwithOT[5][5] = {
 };
 
 void Collision_DoOTWithOT(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
-    ColCommon** left;
-    ColCommon** right;
-    collision_func vsFunc;
+    Collider** left;
+    Collider** right;
+    ColChkVsFunc vsFunc;
 
-    for (left = colCtxt->OTgroup; left < colCtxt->OTgroup + colCtxt->OTgroupLength; left++) {
+    for (left = colCtxt->colOC; left < colCtxt->colOC + colCtxt->colOCCount; left++) {
         if (*left == NULL || func_800E7264(*left)) {
             continue;
         }
-        for (right = left + 1; right < colCtxt->OTgroup + colCtxt->OTgroupLength; right++) {
+        for (right = left + 1; right < colCtxt->colOC + colCtxt->colOCCount; right++) {
             if (*right == NULL || func_800E7264(*right) || func_800E7288(*left, *right)) {
                 continue;
             }
-            vsFunc = collisionFuncTableOTwithOT[(*left)->type][(*right)->type];
+            vsFunc = collisionFuncTableOTwithOT[(*left)->shape][(*right)->shape];
             if (vsFunc == NULL) {
                 continue;
             }
@@ -2840,7 +2851,7 @@ void func_800E7508(CollisionCheckInfo* info, CollisionCheckInfoInit *init) {
     info->mass = init->mass;
 }
 
-void func_800E7530(CollisionCheckInfo *info, ActorDamageChart *damageChart, CollisionCheckInfoInit *init) {
+void func_800E7530(CollisionCheckInfo *info, DamageTable *damageChart, CollisionCheckInfoInit *init) {
     info->health = init->health;
     info->damageChart = damageChart;
     info->cylRadius = init->cylRadius;
@@ -2848,7 +2859,7 @@ void func_800E7530(CollisionCheckInfo *info, ActorDamageChart *damageChart, Coll
     info->mass = init->mass;
 }
 
-void func_800E755C(CollisionCheckInfo *info, ActorDamageChart *damageChart, CollisionCheckInfoInit2 *init) {
+void func_800E755C(CollisionCheckInfo *info, DamageTable *damageChart, CollisionCheckInfoInit2 *init) {
     info->health = init->health;
     info->damageChart = damageChart;
     info->cylRadius = init->cylRadius;
@@ -2861,90 +2872,90 @@ void func_800E7590(CollisionCheckInfo *info, s32 index, CollisionCheckInfoInit2 
     func_800E755C(info, func_800E03A0(index), init);
 }
 
-void func_800E75C8(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *arg2, ColBodyInfo *arg3) {
-    f32 sp3C;
-    f32 damage = 0.0f;
+void func_800E75C8(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *bumper, ColliderInfo *info) {
+    f32 damage;
+    f32 finalDamage = 0.0f;
     s32 pad;
-    ColCommon* toucher;
-    ColBodyInfo* toucherBody;
+    Collider* toucher;
+    ColliderInfo* toucherBody;
     s32 pad1;
-    u32 effectId;
+    u32 effect;
 
-    if ((arg2->actor == NULL) || !(arg2->flagsAC & 2)) {
+    if ((bumper->actor == NULL) || !(bumper->acFlags & 2)) {
         return;
     }
-    if (!(arg3->unk16 & 2) || (arg3->unk16 & 0x10)) {
+    if (!(info->bumperFlags & 2) || (info->bumperFlags & 0x10)) {
         return;
     }
 
-    toucher = arg3->unk1C;
-    toucherBody = arg3->unk24;
+    toucher = info->acHit;
+    toucherBody = info->acHitInfo;
 
-    if (toucher != NULL && toucherBody != NULL && arg2 != NULL && arg3 != NULL) {
-        sp3C = Collision_GetDamageAndEffectOnBumper(toucher, toucherBody, arg2, arg3, &effectId);
+    if (toucher != NULL && toucherBody != NULL && bumper != NULL && info != NULL) {
+        damage = Collision_GetDamageAndEffectOnBumper(toucher, toucherBody, bumper, info, &effect);
 
-        if (Collision_GetToucherDamage(toucher, toucherBody, arg2, arg3) != 0) {
-            if (sp3C < 1.0f) {
-                damage = 0.0f;
-                if (effectId == 0) {
+        if (Collision_GetToucherDamage(toucher, toucherBody, bumper, info) != 0) {
+            if (damage < 1.0f) {
+                finalDamage = 0.0f;
+                if (effect == 0) {
                     return;
                 }
             } else {
-                damage = func_800E04BC(sp3C, arg3);
-                if (damage < 1.0f && effectId == 0) {
+                finalDamage = func_800E04BC(damage, info);
+                if (finalDamage < 1.0f && effect == 0) {
                     return;
                 }
             }
         }
-        if (arg2->actor->unkA0.damageChart != NULL) {
-            arg2->actor->unkA0.damageEffect = effectId;
+        if (bumper->actor->colChkInfo.damageChart != NULL) {
+            bumper->actor->colChkInfo.damageEffect = effect;
         }
-        if (!(arg2->flagsAC & 4) || ((arg2->flagsAC & 4) && toucherBody->toucher.collidesWith == 0x20000000)) {
-            if (arg2->actor->unkA0.damage < damage) {
-                arg2->actor->unkA0.damage = damage;
+        if (!(bumper->acFlags & 4) || ((bumper->acFlags & 4) && toucherBody->toucher.dmgFlags == 0x20000000)) {
+            if (bumper->actor->colChkInfo.damage < finalDamage) {
+                bumper->actor->colChkInfo.damage = finalDamage;
             }
         }
     }
 }
 
-void func_800E77EC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon* shape) {
-    ColSphereGroup *sphereGroup = (ColSphereGroup*)shape;
+void func_800E77EC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider* shape) {
+    ColliderJntSph *sphereGroup = (ColliderJntSph*)shape;
     s32 i;
 
-    if (sphereGroup->count > 0 && sphereGroup->spheres != NULL) {
+    if (sphereGroup->count > 0 && sphereGroup->elements != NULL) {
         for (i = 0; i < sphereGroup->count; i++) {
-            func_800E75C8(ctxt, colCtxt, &sphereGroup->base, &sphereGroup->spheres[i].body);
+            func_800E75C8(ctxt, colCtxt, &sphereGroup->base, &sphereGroup->elements[i].info);
         }
     }
 }
 
-void func_800E7894(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon* shape) {
-    ColCylinder *cylinder = (ColCylinder*)shape;
+void func_800E7894(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider* shape) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)shape;
 
-    func_800E75C8(ctxt, colCtxt, &cylinder->base, &cylinder->body);
+    func_800E75C8(ctxt, colCtxt, &cylinder->base, &cylinder->info);
 }
 
-void func_800E78B4(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColTriGroup *triGroup = (ColTriGroup*)shape;
+void func_800E78B4(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderTris *triGroup = (ColliderTris*)shape;
     s32 i;
 
     // unlike sphere groups above, tri groups are not guarded against
-    //  triGroup->tris being NULL
+    //  triGroup->elements being NULL
     for (i = 0; i < triGroup->count; i++) {
-        func_800E75C8(ctxt, colCtxt, &triGroup->base, &triGroup->tris[i].body);
+        func_800E75C8(ctxt, colCtxt, &triGroup->base, &triGroup->elements[i].info);
     }
 }
 
-void func_800E7948(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColQuad *quad = (ColQuad*)shape;
+void func_800E7948(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderQuad *quad = (ColliderQuad*)shape;
 
-    func_800E75C8(ctxt, colCtxt, &quad->base, &quad->body);
+    func_800E75C8(ctxt, colCtxt, &quad->base, &quad->info);
 }
 
-void func_800E7968(GlobalContext *ctxt, CollisionCheckContext *colCtxt, ColCommon *shape) {
-    ColSphere *sphere = (ColSphere*)shape;
+void func_800E7968(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Collider *shape) {
+    ColliderSphere *sphere = (ColliderSphere*)shape;
 
-    func_800E75C8(ctxt, colCtxt, &sphere->base, &sphere->body);
+    func_800E75C8(ctxt, colCtxt, &sphere->base, &sphere->info);
 }
 
 ColChkApplyFunc D_801BA4A0[] = {
@@ -2958,63 +2969,63 @@ ColChkApplyFunc D_801BA4A0[] = {
 void func_800E7988(GlobalContext *ctxt, CollisionCheckContext *colCtxt) {
     s32 i;
 
-    for (i = 0; i < colCtxt->ACgroupLength; i++) {
-        ColCommon* col = colCtxt->ACgroup[i];
+    for (i = 0; i < colCtxt->colACCount; i++) {
+        Collider* col = colCtxt->colAC[i];
 
         if (col == NULL) {
             continue;
         }
-        if (col->flagsAC & 0x40) {
+        if (col->acFlags & 0x40) {
             continue;
         }
-        D_801BA4A0[col->type](ctxt, colCtxt, col);
+        D_801BA4A0[col->shape](ctxt, colCtxt, col);
     }
 }
 
-s32 func_800E7A48(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, ColCommon *shape, Vec3f *a, Vec3f *b) {
-    ColSphereGroup *sphereGroup = (ColSphereGroup*)shape;
+s32 func_800E7A48(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Collider *shape, Vec3f *a, Vec3f *b) {
+    ColliderJntSph *sphereGroup = (ColliderJntSph*)shape;
     s32 i;
 
     for (i = 0; i < sphereGroup->count; i++) {
-        ColSphereGroupElement* sphElem = &sphereGroup->spheres[i];
+        ColliderJntSphElement* sphElem = &sphereGroup->elements[i];
 
-        if (!(sphElem->body.unk17 & 1)) {
+        if (!(sphElem->info.ocElemFlags & 1)) {
             continue;
         }
 
         D_801EDEB0.a = *a;
         D_801EDEB0.b = *b;
-        if (Math3D_ColSphereLineSeg(&sphElem->params.colInfo, &D_801EDEB0) != 0) {
+        if (Math3D_ColSphereLineSeg(&sphElem->dim.worldSphere, &D_801EDEB0) != 0) {
             return 1;
         }
     }
     return 0;
 }
 
-s32 func_800E7B54(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, ColCommon *shape, Vec3f *a, Vec3f *b) {
-    ColCylinder *cylinder = (ColCylinder*)shape;
+s32 func_800E7B54(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Collider *shape, Vec3f *a, Vec3f *b) {
+    ColliderCylinder *cylinder = (ColliderCylinder*)shape;
 
-    if (!(cylinder->body.unk17 & 1)) {
+    if (!(cylinder->info.ocElemFlags & 1)) {
         return 0;
     }
 
-    if (func_8017E350(&cylinder->params, a, b, &D_801EDF38, &D_801EDF48) != 0) {
+    if (func_8017E350(&cylinder->dim, a, b, &D_801EDF38, &D_801EDF48) != 0) {
         return 1;
     }
 
     return 0;
 }
 
-s32 func_800E7BCC(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, ColCommon *shape, Vec3f *a, Vec3f *b) {
-    ColSphere *sphere = (ColSphere*)shape;
+s32 func_800E7BCC(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Collider *shape, Vec3f *a, Vec3f *b) {
+    ColliderSphere *sphere = (ColliderSphere*)shape;
 
-    if (!(sphere->body.unk17 & 1)) {
+    if (!(sphere->info.ocElemFlags & 1)) {
         return 0;
     }
 
     D_801EDFC8.a = *a;
     D_801EDFC8.b = *b;
-    if (Math3D_ColSphereLineSeg(&sphere->params.colInfo, &D_801EDFC8) != 0) {
+    if (Math3D_ColSphereLineSeg(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
         return 1;
     }
 
@@ -3031,12 +3042,12 @@ ColChkLineFunc D_801BA4B4[] = {
 
 s32 func_800E7C64(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Vec3f *a, Vec3f *b, Actor **exclusions, s32 numExclusions) {
     ColChkLineFunc lineCheck;
-    ColCommon** col;
+    Collider** col;
     s32 i;
     s32 exclude;
     s32 result = 0;
 
-    for (col = colChkCtx->OTgroup; col < &colChkCtx->OTgroup[colChkCtx->OTgroupLength]; col++) {
+    for (col = colChkCtx->colOC; col < &colChkCtx->colOC[colChkCtx->colOCCount]; col++) {
         if (func_800E7264(*col)) {
             continue;
         }
@@ -3052,7 +3063,7 @@ s32 func_800E7C64(GlobalContext *globalCtx, CollisionCheckContext *colChkCtx, Ve
             continue;
         }
 
-        lineCheck = D_801BA4B4[(*col)->type];
+        lineCheck = D_801BA4B4[(*col)->shape];
         if (lineCheck == NULL) {
             continue;
         }
@@ -3073,66 +3084,66 @@ s32 func_800E7DCC(GlobalContext *ctxt, CollisionCheckContext *colCtxt, Vec3f *a,
     return func_800E7C64(ctxt, colCtxt, a, b, exclusions, numExclusions);
 }
 
-void Collision_CylinderMoveToActor(Actor *actor, ColCylinder *cylinder) {
-    cylinder->params.loc.x = actor->currPosRot.pos.x;
-    cylinder->params.loc.y = actor->currPosRot.pos.y;
-    cylinder->params.loc.z = actor->currPosRot.pos.z;
+void Collision_CylinderMoveToActor(Actor *actor, ColliderCylinder *cylinder) {
+    cylinder->dim.pos.x = actor->currPosRot.pos.x;
+    cylinder->dim.pos.y = actor->currPosRot.pos.y;
+    cylinder->dim.pos.z = actor->currPosRot.pos.z;
 }
 
-void Collision_CylinderSetLoc(ColCylinder *cylinder, Vec3s *loc) {
-    cylinder->params.loc.x = loc->x;
-    cylinder->params.loc.y = loc->y;
-    cylinder->params.loc.z = loc->z;
+void Collision_CylinderSetLoc(ColliderCylinder *cylinder, Vec3s *pos) {
+    cylinder->dim.pos.x = pos->x;
+    cylinder->dim.pos.y = pos->y;
+    cylinder->dim.pos.z = pos->z;
 }
 
-void Collision_QuadSetCoords(ColQuad *quad, Vec3f *a, Vec3f *b, Vec3f *c, Vec3f *d) {
-    Math_Vec3f_Copy(&quad->params.quad[2], c);
-    Math_Vec3f_Copy(&quad->params.quad[3], d);
-    Math_Vec3f_Copy(&quad->params.quad[0], a);
-    Math_Vec3f_Copy(&quad->params.quad[1], b);
-    Collision_QuadCalcMidpoints(&quad->params);
+void Collision_QuadSetCoords(ColliderQuad *quad, Vec3f *a, Vec3f *b, Vec3f *c, Vec3f *d) {
+    Math_Vec3f_Copy(&quad->dim.quad[2], c);
+    Math_Vec3f_Copy(&quad->dim.quad[3], d);
+    Math_Vec3f_Copy(&quad->dim.quad[0], a);
+    Math_Vec3f_Copy(&quad->dim.quad[1], b);
+    Collision_QuadCalcMidpoints(&quad->dim);
 }
 
-void Collision_TriGroupSetCoordsAtIndex(ColTriGroup *tris, s32 index, Vec3f *a, Vec3f *b, Vec3f *c) {
-    ColTri* tri = &tris->tris[index];
+void Collision_TriGroupSetCoordsAtIndex(ColliderTris *tris, s32 index, Vec3f *a, Vec3f *b, Vec3f *c) {
+    ColliderTrisElement* tri = &tris->elements[index];
     f32 nx;
     f32 ny;
     f32 nz;
     f32 originDist;
 
-    Math_Vec3f_Copy(&tri->params.vtx[0], a);
-    Math_Vec3f_Copy(&tri->params.vtx[1], b);
-    Math_Vec3f_Copy(&tri->params.vtx[2], c);
+    Math_Vec3f_Copy(&tri->dim.vtx[0], a);
+    Math_Vec3f_Copy(&tri->dim.vtx[1], b);
+    Math_Vec3f_Copy(&tri->dim.vtx[2], c);
     Math3D_UnitNormalVector(a, b, c, &nx, &ny, &nz, &originDist);
-    tri->params.unitNormal.x = nx;
-    tri->params.unitNormal.y = ny;
-    tri->params.unitNormal.z = nz;
-    tri->params.unk30 = originDist;
+    tri->dim.plane.normal.x = nx;
+    tri->dim.plane.normal.y = ny;
+    tri->dim.plane.normal.z = nz;
+    tri->dim.plane.originDist = originDist;
 }
 
-void Collision_InitTriParamsAtIndex(GlobalContext *ctxt, ColTriGroup *tris, s32 index, ColTriParamsInit *init) {
-    ColTri* tri = &tris->tris[index];
+void Collision_InitTriParamsAtIndex(GlobalContext *ctxt, ColliderTris *tris, s32 index, ColliderTrisElementDimInit *init) {
+    ColliderTrisElement* tri = &tris->elements[index];
 
-    Collision_InitTriParamsWithData(ctxt, &tri->params, init);
+    Collision_InitTriParamsWithData(ctxt, &tri->dim, init);
 }
 
 #ifdef NON_MATCHING
 // needs in-function static bss
-void func_800E7FDC(s32 limb, ColSphereGroup *sphereGroup) {
+void func_800E7FDC(s32 limb, ColliderJntSph *sphereGroup) {
     static Vec3f D_801EE1C0;
     static Vec3f D_801EE1D0;
     s32 i;
 
     for (i = 0; i < sphereGroup->count; i++) {
-        if (limb == sphereGroup->spheres[i].params.unk14) {
-            D_801EE1C0.x = sphereGroup->spheres[i].params.unk0.loc.x;
-            D_801EE1C0.y = sphereGroup->spheres[i].params.unk0.loc.y;
-            D_801EE1C0.z = sphereGroup->spheres[i].params.unk0.loc.z;
+        if (limb == sphereGroup->elements[i].dim.limb) {
+            D_801EE1C0.x = sphereGroup->elements[i].dim.modelSphere.center.x;
+            D_801EE1C0.y = sphereGroup->elements[i].dim.modelSphere.center.y;
+            D_801EE1C0.z = sphereGroup->elements[i].dim.modelSphere.center.z;
             SysMatrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
-            sphereGroup->spheres[i].params.colInfo.loc.x = D_801EE1D0.x;
-            sphereGroup->spheres[i].params.colInfo.loc.y = D_801EE1D0.y;
-            sphereGroup->spheres[i].params.colInfo.loc.z = D_801EE1D0.z;
-            sphereGroup->spheres[i].params.colInfo.radius = sphereGroup->spheres[i].params.unk0.radius * sphereGroup->spheres[i].params.unk10;
+            sphereGroup->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
+            sphereGroup->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
+            sphereGroup->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
+            sphereGroup->elements[i].dim.worldSphere.radius = sphereGroup->elements[i].dim.modelSphere.radius * sphereGroup->elements[i].dim.scale;
         }
     }
 }
@@ -3140,30 +3151,30 @@ void func_800E7FDC(s32 limb, ColSphereGroup *sphereGroup) {
 #pragma GLOBAL_ASM("asm/non_matchings/z_collision_check/func_800E7FDC.asm")
 #endif
 
-void func_800E8160(ColSphereGroup *sphereGroup, s32 index, Actor *actor) {
+void func_800E8160(ColliderJntSph *sphereGroup, s32 index, Actor *actor) {
     if (index < sphereGroup->count) {
-        sphereGroup->spheres[index].params.colInfo.loc.x = sphereGroup->spheres[index].params.unk0.loc.x + actor->currPosRot.pos.x;
-        sphereGroup->spheres[index].params.colInfo.loc.y = sphereGroup->spheres[index].params.unk0.loc.y + actor->currPosRot.pos.y;
-        sphereGroup->spheres[index].params.colInfo.loc.z = sphereGroup->spheres[index].params.unk0.loc.z + actor->currPosRot.pos.z;
-        sphereGroup->spheres[index].params.colInfo.radius = sphereGroup->spheres[index].params.unk0.radius * sphereGroup->spheres[index].params.unk10;
+        sphereGroup->elements[index].dim.worldSphere.center.x = sphereGroup->elements[index].dim.modelSphere.center.x + actor->currPosRot.pos.x;
+        sphereGroup->elements[index].dim.worldSphere.center.y = sphereGroup->elements[index].dim.modelSphere.center.y + actor->currPosRot.pos.y;
+        sphereGroup->elements[index].dim.worldSphere.center.z = sphereGroup->elements[index].dim.modelSphere.center.z + actor->currPosRot.pos.z;
+        sphereGroup->elements[index].dim.worldSphere.radius = sphereGroup->elements[index].dim.modelSphere.radius * sphereGroup->elements[index].dim.scale;
     }
 }
 
 #ifdef NON_MATCHING
 // needs in-function static bss
-void func_800E823C(s32 limb, ColSphere *sphere) {
+void func_800E823C(s32 limb, ColliderSphere *sphere) {
     static Vec3f D_801EE1E0;
     static Vec3f D_801EE1F0;
 
-    if (limb == sphere->params.unk14) {
-        D_801EE1E0.x = sphere->params.unk0.loc.x;
-        D_801EE1E0.y = sphere->params.unk0.loc.y;
-        D_801EE1E0.z = sphere->params.unk0.loc.z;
+    if (limb == sphere->dim.limb) {
+        D_801EE1E0.x = sphere->dim.modelSphere.center.x;
+        D_801EE1E0.y = sphere->dim.modelSphere.center.y;
+        D_801EE1E0.z = sphere->dim.modelSphere.center.z;
         SysMatrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
-        sphere->params.colInfo.loc.x = D_801EE1F0.x;
-        sphere->params.colInfo.loc.y = D_801EE1F0.y;
-        sphere->params.colInfo.loc.z = D_801EE1F0.z;
-        sphere->params.colInfo.radius = sphere->params.unk0.radius * sphere->params.unk10;
+        sphere->dim.worldSphere.center.x = D_801EE1F0.x;
+        sphere->dim.worldSphere.center.y = D_801EE1F0.y;
+        sphere->dim.worldSphere.center.z = D_801EE1F0.z;
+        sphere->dim.worldSphere.radius = sphere->dim.modelSphere.radius * sphere->dim.scale;
     }
 }
 #else
@@ -3227,7 +3238,7 @@ void func_800E8318(GlobalContext* ctxt, Vec3f* v) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 void func_800E8478(GlobalContext *ctxt, Vec3f *v) {
-    static EffSparkParams D_801EE738
+    static EffSparkParams D_801EE738;
     s32 effectIndex;
 
     D_801EE738.position.x = v->x;

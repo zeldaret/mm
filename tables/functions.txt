@@ -924,7 +924,7 @@
     0x800C003C:("BgCheck_PolygonGetNormal",),
     0x800C0094:("func_800C0094",),
     0x800C01B8:("func_800C01B8",),
-    0x800C0220:("BgCheck_CreateColTriParamsFromPolygon",),
+    0x800C0220:("BgCheck_CreateTriNormFromPolygon",),
     0x800C02C0:("func_800C02C0",),
     0x800C0340:("func_800C0340",),
     0x800C0474:("func_800C0474",),

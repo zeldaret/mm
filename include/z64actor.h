@@ -20,7 +20,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 attack[32];
-} ActorDamageChart; // size = 0x20
+} DamageTable; // size = 0x20
 
 typedef struct {
     /* 0x00 */ u8 health;
@@ -38,7 +38,7 @@ typedef struct {
 } CollisionCheckInfoInit2;
 
 typedef struct {
-    /* 0x00 */ ActorDamageChart* damageChart;
+    /* 0x00 */ DamageTable* damageChart;
     /* 0x04 */ Vec3f displacement;
     /* 0x10 */ s16 cylRadius;
     /* 0x12 */ s16 cylHeight;
@@ -149,7 +149,7 @@ typedef struct Actor {
     /* 0x094 */ f32 sqrdDistanceFromLink;
     /* 0x098 */ f32 xzDistanceFromLink;
     /* 0x09C */ f32 yDistanceFromLink;
-    /* 0x0A0 */ CollisionCheckInfo unkA0;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
     /* 0x0BC */ ActorShape shape;
     /* 0x0D4 */ UNK_TYPE1 padD4[0x18];
     /* 0x0EC */ Vec3f projectedPos;
@@ -244,14 +244,14 @@ typedef struct {
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
     /* 0x154 */ f32 unk154;
-    /* 0x158 */ ColCylinder collision;
+    /* 0x158 */ ColliderCylinder collision;
     /* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
 } ActorEnItem00; // size = 0x1A8
 
 typedef struct {
     /* 0x000 */ Actor base;
     /* 0x144 */ ActorFunc update;
-    /* 0x148 */ ColCylinder collision;
+    /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
 } ActorEnAObj; // size = 0x1A8
 

@@ -30,7 +30,7 @@ extern AnimationHeader D_060011C0;
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero2* this = THIS;
 
-    this->actor.unkA0.mass = 0xFF;
+    this->actor.colChkInfo.mass = 0xFF;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.unk1F = 6;
     this->actor.gravity = -3.0f;

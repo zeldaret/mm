@@ -24,7 +24,7 @@ const ActorInit Arms_Hook_InitVars = {
     (ActorFunc)ArmsHook_Draw
 };
 
-ColQuadInit D_808C1BC0 = {
+ColliderQuadInit D_808C1BC0 = {
     { 10, 0x09, 0x00, 0x00, 0x08, 3 },
     { 0x02, { 0x00000080, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, 0x05, 0x00, 0x00 },
     { 0 },
@@ -125,10 +125,10 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
     func_800B8F98(&player->base, 0x100B);
     ArmsHook_CheckForCancel(this);
 
-    if (this->timer != 0 && (this->collider.base.flagsAT & 2) && (this->collider.body.unk20->unk14 != 4)) {
-        Actor* touchedActor = this->collider.base.collisionAT;
+    if (this->timer != 0 && (this->collider.base.atFlags & 2) && (this->collider.info.atHitInfo->elemType != 4)) {
+        Actor* touchedActor = this->collider.base.at;
         if ((touchedActor->update != NULL) && (touchedActor->flags & 0x600)) {
-            if (this->collider.body.unk20->unk16 & 4) {
+            if (this->collider.info.atHitInfo->bumperFlags & 4) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if ((touchedActor->flags & 0x400) == 0x400) {
                     func_808C1154(this);

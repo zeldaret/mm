@@ -38,7 +38,7 @@ extern UNK_PTR D_0600A490[];
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
 
-    this->actor.unkA0.mass = 0xFF;
+    this->actor.colChkInfo.mass = 0xFF;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.unk1F = 6;
     this->actor.gravity = -3.0f;

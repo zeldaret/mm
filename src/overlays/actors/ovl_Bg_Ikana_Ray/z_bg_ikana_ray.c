@@ -27,7 +27,7 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
 };
 
 // TODO better formatting
-ColCylinderInit bgIkanaRayCylinderInit = {
+ColliderCylinderInit bgIkanaRayCylinderInit = {
     { 10, 33, 0, 0, 0, 1 },
     { 0, { 0x00200000, 0, 0 }, { 0, 0, 0 }, 25, 0, 1 },
     { 90, 420, 65116}
@@ -42,7 +42,7 @@ InitChainEntry  bgIkanaRayCompInit[] = {
 };
 
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ColCylinder* collision = &THIS->collision;
+    ColliderCylinder* collision = &THIS->collision;
     u32 pad;
 
     Actor_ProcessInitChain(thisx, bgIkanaRayCompInit);
@@ -61,7 +61,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ColCylinder* collision = &THIS->collision;
+    ColliderCylinder* collision = &THIS->collision;
     Collision_FiniCylinder(globalCtx, collision);
 }
 

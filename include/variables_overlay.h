@@ -1360,9 +1360,9 @@ extern u32 enOkutaOverlayRelocations[215]; // D_80870A44
 extern u32 enOkutaOverlayInfoOffset; // D_80870DAC
 extern ActorInit En_Bom_InitVars; // En_Bom_InitVars
 extern f32 enBomScales[2]; // D_80872DC0
-extern ColCylinderInit D_80872DC8; // D_80872DC8
-extern ColSphereGroupElementInit D_80872DF4[1]; // D_80872DF4
-extern ColSphereGroupInit D_80872E18; // D_80872E18
+extern ColliderCylinderInit D_80872DC8; // D_80872DC8
+extern ColliderJntSphElementInit D_80872DF4[1]; // D_80872DF4
+extern ColliderJntSphInit D_80872E18; // D_80872E18
 extern UNK_TYPE1 D_80872E28; // D_80872E28
 extern UNK_TYPE1 D_80872E4C; // D_80872E4C
 extern InitChainEntry D_80872E5C[3]; // D_80872E5C
@@ -1499,10 +1499,10 @@ extern OverlayRelocationSection enDodongoOverlayInfo; // D_80879400
 extern u32 enDodongoOverlayRelocations[182]; // D_80879414
 extern u32 enDodongoOverlayInfoOffset; // D_808796EC
 extern ActorInit En_Firefly_InitVars; // En_Firefly_InitVars
-extern ColSphereInit enFireflyCollisionInit; // D_8087B470
+extern ColliderSphereInit enFireflyCollisionInit; // D_8087B470
 extern UNK_TYPE1 D_8087B498; // D_8087B498
 extern UNK_TYPE1 D_8087B49C; // D_8087B49C
-extern ActorDamageChart enFireflyDamageChart; // D_8087B4A4
+extern DamageTable enFireflyDamageChart; // D_8087B4A4
 extern InitChainEntry enFireflyInitVars[4]; // D_8087B4C4
 extern UNK_TYPE1 D_8087B4D4; // D_8087B4D4
 extern UNK_TYPE1 D_8087B4D8; // D_8087B4D8
@@ -7639,7 +7639,7 @@ extern ActorInit Obj_Bell_InitVars; // Obj_Bell_InitVars
 extern UNK_TYPE1 D_80A35E90; // D_80A35E90
 extern UNK_TYPE1 D_80A35EBC; // D_80A35EBC
 extern UNK_TYPE1 D_80A35EE8; // D_80A35EE8
-extern ActorDamageChart D_80A35EF4; // D_80A35EF4
+extern DamageTable D_80A35EF4; // D_80A35EF4
 extern f32 D_80A35F20; // D_80A35F20
 extern f32 D_80A35F24; // D_80A35F24
 extern f32 D_80A35F28; // D_80A35F28
@@ -12746,7 +12746,7 @@ extern OverlayRelocationSection bgIkanaBombwallOverlayInfo; // D_80BD5300
 extern u32 bgIkanaBombwallOverlayRelocations[39]; // D_80BD5314
 extern u32 bgIkanaBombwallOverlayInfoOffset; // D_80BD53BC
 extern ActorInit Bg_Ikana_Ray_InitVars; // Bg_Ikana_Ray_InitVars
-extern ColCylinderInit bgIkanaRayCylinderInit; // D_80BD55F0
+extern ColliderCylinderInit bgIkanaRayCylinderInit; // D_80BD55F0
 extern InitChainEntry bgIkanaRayCompInit[4]; // D_80BD561C
 extern OverlayRelocationSection bgIkanaRayOverlayInfo; // D_80BD5630
 extern u32 bgIkanaRayOverlayRelocations[17]; // D_80BD5644
@@ -12789,7 +12789,7 @@ extern OverlayRelocationSection bgIknvDoukutuOverlayInfo; // D_80BD79F0
 extern u32 bgIknvDoukutuOverlayRelocations[39]; // D_80BD7A04
 extern u32 bgIknvDoukutuOverlayInfoOffset; // D_80BD7AAC
 extern ActorInit Bg_Iknv_Obj_InitVars; // Bg_Iknv_Obj_InitVars
-extern ColCylinderInit BgIknvObjCollisionInit; // D_80BD81F0
+extern ColliderCylinderInit BgIknvObjCollisionInit; // D_80BD81F0
 extern OverlayRelocationSection bgIknvObjOverlayInfo; // D_80BD8220
 extern u32 bgIknvObjOverlayRelocations[27]; // D_80BD8234
 extern u32 bgIknvObjOverlayInfoOffset; // D_80BD82AC
