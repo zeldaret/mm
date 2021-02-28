@@ -9,6 +9,8 @@ void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A2DB0(DoorSpiral* this, GlobalContext* globalCtx);
+
 const ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
@@ -65,13 +67,42 @@ u32 D_809A3308[] = {
     0xC0580001, 0xB0FC0FA0, 0xB1000190, 0x31040190, 0x00000000, 0x00000000,
 };
 
+void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc* actionFunc);
+
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2B60.asm")
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2B70.asm")
 
+s32 func_809A2BF8(GlobalContext* globalCtx);
+
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2BF8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Init.asm")
+void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
+    DoorSpiral* this = THIS;
+    s32 pad;
+    s32 door = (u16)this->actor.params >> 10;
+    s8 objBankId;
+
+    if (this->actor.room != globalCtx->transitionActorList[door].unk0) {
+        Actor_MarkForDeath(thisx);
+        return;
+    }
+
+    Actor_ProcessInitChain(thisx, &D_809A3308);
+    this->unk145 = (thisx->params >> 8) & 3;
+    this->unk146 = (thisx->params >> 7) & 1;
+    this->unk147 = func_809A2BF8(globalCtx);
+    objBankId = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, D_809A32D0[this->unk147].objectBankId);
+    this->unk149 = objBankId;
+
+    if (objBankId < 0) {
+        Actor_MarkForDeath(thisx);
+        return;
+    }
+
+    func_809A2B60(this, func_809A2DB0);
+    Actor_SetHeight(thisx, 60.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Destroy.asm")
 
@@ -87,4 +118,31 @@ u32 D_809A3308[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Draw.asm")
+#define OPEN_DISPS_TEST(gfxCtx) \
+    {                                      \
+        GraphicsContext* oGfxCtx = gfxCtx; \
+        s32 dispPad;                       \
+
+void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    DoorSpiral* this = THIS;
+
+    if (this->actor.objBankIndex == this->unk149) {
+        SpiralStruct_809A3250* modelInfo = &D_809A3250[this->unk148];
+        Gfx* dList;
+
+        dList = modelInfo->doorDList[this->unk146];
+
+        if (dList != NULL) {
+            OPEN_DISPS_TEST(globalCtx->state.gfxCtx);
+
+            func_8012C28C(globalCtx->state.gfxCtx);
+
+            gSPMatrix(oGfxCtx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(oGfxCtx->polyOpa.p++, modelInfo->doorDList[this->unk146]);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
