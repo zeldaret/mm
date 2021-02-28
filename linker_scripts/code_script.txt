@@ -3471,7 +3471,7 @@ SECTIONS
     ovl_Door_Spiral : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.text)
-        build/asm/ovl_Door_Spiral_data.o(.data)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.data)
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.rodata)
         build/asm/ovl_Door_Spiral_rodata.o(.rodata)
     }
