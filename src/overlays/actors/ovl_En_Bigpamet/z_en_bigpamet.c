@@ -19,7 +19,7 @@ const ActorInit En_Bigpamet_InitVars = {
     (ActorFunc)EnBigpamet_Init,
     (ActorFunc)EnBigpamet_Destroy,
     (ActorFunc)EnBigpamet_Update,
-    (ActorFunc)EnBigpamet_Draw
+    (ActorFunc)EnBigpamet_Draw,
 };
 */
 

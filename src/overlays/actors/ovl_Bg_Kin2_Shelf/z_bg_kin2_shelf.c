@@ -19,7 +19,7 @@ const ActorInit Bg_Kin2_Shelf_InitVars = {
     (ActorFunc)BgKin2Shelf_Init,
     (ActorFunc)BgKin2Shelf_Destroy,
     (ActorFunc)BgKin2Shelf_Update,
-    (ActorFunc)BgKin2Shelf_Draw
+    (ActorFunc)BgKin2Shelf_Draw,
 };
 */
 

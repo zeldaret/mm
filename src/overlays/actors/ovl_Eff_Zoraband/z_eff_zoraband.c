@@ -19,7 +19,7 @@ const ActorInit Eff_Zoraband_InitVars = {
     (ActorFunc)EffZoraband_Init,
     (ActorFunc)EffZoraband_Destroy,
     (ActorFunc)EffZoraband_Update,
-    (ActorFunc)EffZoraband_Draw
+    (ActorFunc)EffZoraband_Draw,
 };
 */
 

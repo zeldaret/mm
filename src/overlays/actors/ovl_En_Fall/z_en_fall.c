@@ -18,7 +18,7 @@ const ActorInit En_Fall_InitVars = {
     (ActorFunc)EnFall_Init,
     (ActorFunc)EnFall_Destroy,
     (ActorFunc)EnFall_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

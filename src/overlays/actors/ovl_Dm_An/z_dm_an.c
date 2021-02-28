@@ -18,7 +18,7 @@ const ActorInit Dm_An_InitVars = {
     (ActorFunc)DmAn_Init,
     (ActorFunc)DmAn_Destroy,
     (ActorFunc)DmAn_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

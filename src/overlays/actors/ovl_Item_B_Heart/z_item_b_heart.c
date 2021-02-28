@@ -19,7 +19,7 @@ const ActorInit Item_B_Heart_InitVars = {
     (ActorFunc)ItemBHeart_Init,
     (ActorFunc)ItemBHeart_Destroy,
     (ActorFunc)ItemBHeart_Update,
-    (ActorFunc)ItemBHeart_Draw
+    (ActorFunc)ItemBHeart_Draw,
 };
 */
 

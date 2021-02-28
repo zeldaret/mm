@@ -19,7 +19,7 @@ const ActorInit Bg_Lotus_InitVars = {
     (ActorFunc)BgLotus_Init,
     (ActorFunc)BgLotus_Destroy,
     (ActorFunc)BgLotus_Update,
-    (ActorFunc)BgLotus_Draw
+    (ActorFunc)BgLotus_Draw,
 };
 */
 

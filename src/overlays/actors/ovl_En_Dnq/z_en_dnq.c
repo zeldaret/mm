@@ -19,7 +19,7 @@ const ActorInit En_Dnq_InitVars = {
     (ActorFunc)EnDnq_Init,
     (ActorFunc)EnDnq_Destroy,
     (ActorFunc)EnDnq_Update,
-    (ActorFunc)EnDnq_Draw
+    (ActorFunc)EnDnq_Draw,
 };
 */
 

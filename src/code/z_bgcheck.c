@@ -32,7 +32,8 @@ void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* lis
 }
 
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes) {
-    list->nodes = (BgPolygonLinkedListNode*)GameStateHeap_AllocFromEndAligned(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
+    list->nodes =
+        (BgPolygonLinkedListNode*)GameStateHeap_AllocFromEndAligned(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
     list->maxNodes = numNodes;
     list->nextFreeNode = 0;
 }
@@ -429,4 +430,3 @@ void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector) {
 #pragma GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800CA9D0.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/z_bgcheck/func_800CAA14.asm")
-

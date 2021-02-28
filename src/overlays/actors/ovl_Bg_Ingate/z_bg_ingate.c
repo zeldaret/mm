@@ -19,7 +19,7 @@ const ActorInit Bg_Ingate_InitVars = {
     (ActorFunc)BgIngate_Init,
     (ActorFunc)BgIngate_Destroy,
     (ActorFunc)BgIngate_Update,
-    (ActorFunc)BgIngate_Draw
+    (ActorFunc)BgIngate_Draw,
 };
 */
 

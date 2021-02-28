@@ -18,7 +18,7 @@ const ActorInit Shot_Sun_InitVars = {
     (ActorFunc)ShotSun_Init,
     (ActorFunc)ShotSun_Destroy,
     (ActorFunc)ShotSun_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

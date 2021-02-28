@@ -6,7 +6,8 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     LoadedParticleEntry* iter;
     ParticleOverlay* iter2;
 
-    EffectSS2Info.data_table = (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->state.heap, numEntries * sizeof(LoadedParticleEntry));
+    EffectSS2Info.data_table =
+        (LoadedParticleEntry*)GameStateHeap_AllocFromEnd(&ctxt->state.heap, numEntries * sizeof(LoadedParticleEntry));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -112,7 +113,8 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
             i = 0;
         }
 
-        if (i == EffectSS2Info.searchIndex) break;
+        if (i == EffectSS2Info.searchIndex)
+            break;
     }
 
     if (ret == 1) {
@@ -137,7 +139,6 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
                 return ret;
             }
         }
-
     }
 
     *tableEntry = i;
@@ -183,7 +184,8 @@ void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* in
                 return;
             }
 
-            load_and_relocate_overlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
+            load_and_relocate_overlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd,
+                                      entry->loadedRamAddr);
         }
 
         // XXX this should use a0, but it doesn't
@@ -262,13 +264,9 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
-            if (EffectSS2Info.data_table[i].position.x > 32000 ||
-                EffectSS2Info.data_table[i].position.x < -32000 ||
-                EffectSS2Info.data_table[i].position.y > 32000 ||
-                EffectSS2Info.data_table[i].position.y < -32000 ||
-                EffectSS2Info.data_table[i].position.z > 32000 ||
-                EffectSS2Info.data_table[i].position.z < -32000
-            ) {
+            if (EffectSS2Info.data_table[i].position.x > 32000 || EffectSS2Info.data_table[i].position.x < -32000 ||
+                EffectSS2Info.data_table[i].position.y > 32000 || EffectSS2Info.data_table[i].position.y < -32000 ||
+                EffectSS2Info.data_table[i].position.z > 32000 || EffectSS2Info.data_table[i].position.z < -32000) {
                 EffectSS_Delete(&EffectSS2Info.data_table[i]);
             } else {
                 EffectSS_DrawParticle(ctxt, i);

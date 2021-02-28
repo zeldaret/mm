@@ -18,7 +18,7 @@ const ActorInit En_Baguo_InitVars = {
     (ActorFunc)EnBaguo_Init,
     (ActorFunc)EnBaguo_Destroy,
     (ActorFunc)EnBaguo_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

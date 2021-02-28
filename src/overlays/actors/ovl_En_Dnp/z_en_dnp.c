@@ -19,7 +19,7 @@ const ActorInit En_Dnp_InitVars = {
     (ActorFunc)EnDnp_Init,
     (ActorFunc)EnDnp_Destroy,
     (ActorFunc)EnDnp_Update,
-    (ActorFunc)EnDnp_Draw
+    (ActorFunc)EnDnp_Draw,
 };
 */
 

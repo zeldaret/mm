@@ -19,7 +19,7 @@ const ActorInit En_Bbfall_InitVars = {
     (ActorFunc)EnBbfall_Init,
     (ActorFunc)EnBbfall_Destroy,
     (ActorFunc)EnBbfall_Update,
-    (ActorFunc)EnBbfall_Draw
+    (ActorFunc)EnBbfall_Draw,
 };
 */
 

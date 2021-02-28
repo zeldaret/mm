@@ -19,7 +19,7 @@ const ActorInit En_Dno_InitVars = {
     (ActorFunc)EnDno_Init,
     (ActorFunc)EnDno_Destroy,
     (ActorFunc)EnDno_Update,
-    (ActorFunc)EnDno_Draw
+    (ActorFunc)EnDno_Draw,
 };
 */
 

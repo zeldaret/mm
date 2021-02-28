@@ -19,7 +19,7 @@ const ActorInit En_Gamelupy_InitVars = {
     (ActorFunc)EnGamelupy_Init,
     (ActorFunc)EnGamelupy_Destroy,
     (ActorFunc)EnGamelupy_Update,
-    (ActorFunc)EnGamelupy_Draw
+    (ActorFunc)EnGamelupy_Draw,
 };
 */
 

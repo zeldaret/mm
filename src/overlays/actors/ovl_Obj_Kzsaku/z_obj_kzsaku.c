@@ -19,7 +19,7 @@ const ActorInit Obj_Kzsaku_InitVars = {
     (ActorFunc)ObjKzsaku_Init,
     (ActorFunc)ObjKzsaku_Destroy,
     (ActorFunc)ObjKzsaku_Update,
-    (ActorFunc)ObjKzsaku_Draw
+    (ActorFunc)ObjKzsaku_Draw,
 };
 */
 

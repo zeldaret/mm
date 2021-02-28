@@ -19,7 +19,7 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Init,
     (ActorFunc)BgTobira01_Destroy,
     (ActorFunc)BgTobira01_Update,
-    (ActorFunc)BgTobira01_Draw
+    (ActorFunc)BgTobira01_Draw,
 };
 */
 

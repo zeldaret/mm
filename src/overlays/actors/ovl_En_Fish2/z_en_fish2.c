@@ -19,7 +19,7 @@ const ActorInit En_Fish2_InitVars = {
     (ActorFunc)EnFish2_Init,
     (ActorFunc)EnFish2_Destroy,
     (ActorFunc)EnFish2_Update,
-    (ActorFunc)EnFish2_Draw
+    (ActorFunc)EnFish2_Draw,
 };
 */
 

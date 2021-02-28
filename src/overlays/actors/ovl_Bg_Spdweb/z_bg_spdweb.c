@@ -19,7 +19,7 @@ const ActorInit Bg_Spdweb_InitVars = {
     (ActorFunc)BgSpdweb_Init,
     (ActorFunc)BgSpdweb_Destroy,
     (ActorFunc)BgSpdweb_Update,
-    (ActorFunc)BgSpdweb_Draw
+    (ActorFunc)BgSpdweb_Draw,
 };
 */
 

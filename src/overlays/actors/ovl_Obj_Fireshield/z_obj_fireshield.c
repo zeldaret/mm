@@ -19,7 +19,7 @@ const ActorInit Obj_Fireshield_InitVars = {
     (ActorFunc)ObjFireshield_Init,
     (ActorFunc)ObjFireshield_Destroy,
     (ActorFunc)ObjFireshield_Update,
-    (ActorFunc)ObjFireshield_Draw
+    (ActorFunc)ObjFireshield_Draw,
 };
 */
 

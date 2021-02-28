@@ -19,7 +19,7 @@ const ActorInit En_Goroiwa_InitVars = {
     (ActorFunc)EnGoroiwa_Init,
     (ActorFunc)EnGoroiwa_Destroy,
     (ActorFunc)EnGoroiwa_Update,
-    (ActorFunc)EnGoroiwa_Draw
+    (ActorFunc)EnGoroiwa_Draw,
 };
 */
 

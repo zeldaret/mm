@@ -3,8 +3,7 @@
 #include <osint.h>
 #include <viint.h>
 
-s32 osStopTimer(OSTimer* t)
-{
+s32 osStopTimer(OSTimer* t) {
     register u32 savedMask;
     OSTimer* timep;
 

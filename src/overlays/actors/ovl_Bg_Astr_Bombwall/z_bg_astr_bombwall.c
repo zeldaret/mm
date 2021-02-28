@@ -19,7 +19,7 @@ const ActorInit Bg_Astr_Bombwall_InitVars = {
     (ActorFunc)BgAstrBombwall_Init,
     (ActorFunc)BgAstrBombwall_Destroy,
     (ActorFunc)BgAstrBombwall_Update,
-    (ActorFunc)BgAstrBombwall_Draw
+    (ActorFunc)BgAstrBombwall_Draw,
 };
 */
 

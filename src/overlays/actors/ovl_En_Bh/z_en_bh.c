@@ -19,7 +19,7 @@ const ActorInit En_Bh_InitVars = {
     (ActorFunc)EnBh_Init,
     (ActorFunc)EnBh_Destroy,
     (ActorFunc)EnBh_Update,
-    (ActorFunc)EnBh_Draw
+    (ActorFunc)EnBh_Draw,
 };
 */
 

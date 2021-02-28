@@ -19,7 +19,7 @@ const ActorInit En_Dodongo_InitVars = {
     (ActorFunc)EnDodongo_Init,
     (ActorFunc)EnDodongo_Destroy,
     (ActorFunc)EnDodongo_Update,
-    (ActorFunc)EnDodongo_Draw
+    (ActorFunc)EnDodongo_Draw,
 };
 */
 

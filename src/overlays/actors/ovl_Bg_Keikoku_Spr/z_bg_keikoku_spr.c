@@ -19,7 +19,7 @@ const ActorInit Bg_Keikoku_Spr_InitVars = {
     (ActorFunc)BgKeikokuSpr_Init,
     (ActorFunc)BgKeikokuSpr_Destroy,
     (ActorFunc)BgKeikokuSpr_Update,
-    (ActorFunc)BgKeikokuSpr_Draw
+    (ActorFunc)BgKeikokuSpr_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Init,
     (ActorFunc)EnKujiya_Destroy,
     (ActorFunc)EnKujiya_Update,
-    (ActorFunc)EnKujiya_Draw
+    (ActorFunc)EnKujiya_Draw,
 };
 */
 

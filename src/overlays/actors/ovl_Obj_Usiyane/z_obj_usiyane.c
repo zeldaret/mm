@@ -19,7 +19,7 @@ const ActorInit Obj_Usiyane_InitVars = {
     (ActorFunc)ObjUsiyane_Init,
     (ActorFunc)ObjUsiyane_Destroy,
     (ActorFunc)ObjUsiyane_Update,
-    (ActorFunc)ObjUsiyane_Draw
+    (ActorFunc)ObjUsiyane_Draw,
 };
 */
 

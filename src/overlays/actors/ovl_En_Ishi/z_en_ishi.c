@@ -18,7 +18,7 @@ const ActorInit En_Ishi_InitVars = {
     (ActorFunc)EnIshi_Init,
     (ActorFunc)EnIshi_Destroy,
     (ActorFunc)EnIshi_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

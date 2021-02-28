@@ -19,7 +19,7 @@ const ActorInit Obj_Hunsui_InitVars = {
     (ActorFunc)ObjHunsui_Init,
     (ActorFunc)ObjHunsui_Destroy,
     (ActorFunc)ObjHunsui_Update,
-    (ActorFunc)ObjHunsui_Draw
+    (ActorFunc)ObjHunsui_Draw,
 };
 */
 

@@ -17,7 +17,7 @@ const ActorInit Obj_Funen_InitVars = {
     (ActorFunc)ObjFunen_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)ObjFunen_Draw
+    (ActorFunc)ObjFunen_Draw,
 };
 */
 

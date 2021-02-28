@@ -19,7 +19,7 @@ const ActorInit Obj_Kibako2_InitVars = {
     (ActorFunc)ObjKibako2_Init,
     (ActorFunc)ObjKibako2_Destroy,
     (ActorFunc)ObjKibako2_Update,
-    (ActorFunc)ObjKibako2_Draw
+    (ActorFunc)ObjKibako2_Draw,
 };
 */
 

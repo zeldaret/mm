@@ -19,7 +19,7 @@ const ActorInit En_Bigokuta_InitVars = {
     (ActorFunc)EnBigokuta_Init,
     (ActorFunc)EnBigokuta_Destroy,
     (ActorFunc)EnBigokuta_Update,
-    (ActorFunc)EnBigokuta_Draw
+    (ActorFunc)EnBigokuta_Draw,
 };
 */
 

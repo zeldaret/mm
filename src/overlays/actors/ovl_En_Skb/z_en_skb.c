@@ -19,7 +19,7 @@ const ActorInit En_Skb_InitVars = {
     (ActorFunc)EnSkb_Init,
     (ActorFunc)EnSkb_Destroy,
     (ActorFunc)EnSkb_Update,
-    (ActorFunc)EnSkb_Draw
+    (ActorFunc)EnSkb_Draw,
 };
 */
 

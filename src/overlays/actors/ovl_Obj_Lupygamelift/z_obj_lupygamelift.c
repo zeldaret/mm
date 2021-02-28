@@ -19,7 +19,7 @@ const ActorInit Obj_Lupygamelift_InitVars = {
     (ActorFunc)ObjLupygamelift_Init,
     (ActorFunc)ObjLupygamelift_Destroy,
     (ActorFunc)ObjLupygamelift_Update,
-    (ActorFunc)ObjLupygamelift_Draw
+    (ActorFunc)ObjLupygamelift_Draw,
 };
 */
 

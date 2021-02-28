@@ -18,7 +18,7 @@ const ActorInit Bg_Lbfshot_InitVars = {
     (ActorFunc)BgLbfshot_Init,
     (ActorFunc)BgLbfshot_Destroy,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)BgLbfshot_Draw
+    (ActorFunc)BgLbfshot_Draw,
 };
 */
 

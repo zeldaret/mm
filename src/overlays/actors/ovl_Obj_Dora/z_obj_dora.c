@@ -19,7 +19,7 @@ const ActorInit Obj_Dora_InitVars = {
     (ActorFunc)ObjDora_Init,
     (ActorFunc)ObjDora_Destroy,
     (ActorFunc)ObjDora_Update,
-    (ActorFunc)ObjDora_Draw
+    (ActorFunc)ObjDora_Draw,
 };
 */
 

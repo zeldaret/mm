@@ -19,7 +19,7 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Init,
     (ActorFunc)EnRacedog_Destroy,
     (ActorFunc)EnRacedog_Update,
-    (ActorFunc)EnRacedog_Draw
+    (ActorFunc)EnRacedog_Draw,
 };
 */
 

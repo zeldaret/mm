@@ -19,7 +19,7 @@ const ActorInit En_Peehat_InitVars = {
     (ActorFunc)EnPeehat_Init,
     (ActorFunc)EnPeehat_Destroy,
     (ActorFunc)EnPeehat_Update,
-    (ActorFunc)EnPeehat_Draw
+    (ActorFunc)EnPeehat_Draw,
 };
 */
 

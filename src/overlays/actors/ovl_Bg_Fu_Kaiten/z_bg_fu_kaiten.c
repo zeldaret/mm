@@ -18,7 +18,7 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Init,
     (ActorFunc)BgFuKaiten_Destroy,
     (ActorFunc)BgFuKaiten_Update,
-    (ActorFunc)BgFuKaiten_Draw
+    (ActorFunc)BgFuKaiten_Draw,
 };
 
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -44,8 +44,7 @@ void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
     f32 f0;
     this->bg.actor.shape.rot.y += this->rotationSpeed;
-    if (this->rotationSpeed > 0)
-    {
+    if (this->rotationSpeed > 0) {
         f0 = this->rotationSpeed * .002f;
         func_8019FAD8(&this->bg.actor.projectedPos, 8310, f0);
     }
@@ -69,6 +68,7 @@ void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(gfxCtx);
 
-    gSPMatrix(gfxCtx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfxCtx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, object_fu_kaiten_0005D0);
 }

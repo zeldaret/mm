@@ -173,7 +173,6 @@ s32 func_800FF0D0(s16* a0, s16 a1, s16 a2) {
 
 #ifdef NON_MATCHING
 void func_800FF138() {
-
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF138.asm")
@@ -181,7 +180,6 @@ void func_800FF138() {
 
 #ifdef NON_MATCHING
 void func_800FF1FC(void) {
-
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF1FC.asm")
@@ -189,7 +187,6 @@ void func_800FF1FC(void) {
 
 #ifdef NON_MATCHING
 void func_800FF2A8(void) {
-
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF2A8.asm")
@@ -197,7 +194,6 @@ void func_800FF2A8(void) {
 
 #ifdef NON_MATCHING
 void func_800FF2F8(void) {
-
 }
 
 #else
@@ -206,7 +202,6 @@ void func_800FF2F8(void) {
 
 #ifdef NON_MATCHING
 void func_800FF3A0(void) {
-
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_lib/func_800FF3A0.asm")
@@ -502,20 +497,19 @@ void Math_SmoothScaleMaxF(f32* start, f32 target, f32 scale, f32 maxStep) {
 }
 
 void Math_SmoothDownscaleMaxF(f32* start, f32 scale, f32 maxStep) {
-  f32 f0 = *start * scale;
+    f32 f0 = *start * scale;
 
-  if (maxStep < f0) {
-    f0 = maxStep;
-  } else if (f0 < -maxStep) {
-    f0 = -maxStep;
-  }
+    if (maxStep < f0) {
+        f0 = maxStep;
+    } else if (f0 < -maxStep) {
+        f0 = -maxStep;
+    }
 
-  *start = *start - f0;
+    *start = *start - f0;
 }
 
 #ifdef NON_MATCHING
 s32 Math_SmoothScaleMaxMinS(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep) {
-
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/z_lib/Math_SmoothScaleMaxMinS.asm")
@@ -600,7 +594,8 @@ f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     return f0;
 }
 
-void Lib_Nop801004FC(void) {}
+void Lib_Nop801004FC(void) {
+}
 
 void* Lib_PtrSegToVirt(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);

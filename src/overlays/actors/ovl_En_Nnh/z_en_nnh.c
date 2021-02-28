@@ -23,11 +23,10 @@ const ActorInit En_Nnh_InitVars = {
     (ActorFunc)EnNnh_Init,
     (ActorFunc)EnNnh_Destroy,
     (ActorFunc)EnNnh_Update,
-    (ActorFunc)EnNnh_Draw
+    (ActorFunc)EnNnh_Draw,
 };
 
-ColCylinderInit D_80C08A00 =
-{
+ColCylinderInit D_80C08A00 = {
     { 0x0D, 0x00, 0x09, 0x39, 0x10, 0x01 },
     { 0x01, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, 0x00, 0x01, 0x01 },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -35,7 +34,7 @@ ColCylinderInit D_80C08A00 =
 
 extern Gfx D_06001510[];
 
-void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -47,7 +46,7 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80C08828(this);
 }
 
-void EnNnh_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
 
     Collision_FiniCylinder(globalCtx, &this->collider);
@@ -76,7 +75,7 @@ void func_80C088B8(EnNnh* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNnh_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
     s32 pad;
 
@@ -85,7 +84,7 @@ void EnNnh_Update(Actor *thisx, GlobalContext *globalCtx) {
     Collision_AddOT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
-void EnNnh_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s32 pad;
 

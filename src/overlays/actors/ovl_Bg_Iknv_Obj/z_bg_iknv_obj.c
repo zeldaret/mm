@@ -19,7 +19,7 @@ const ActorInit Bg_Iknv_Obj_InitVars = {
     (ActorFunc)BgIknvObj_Init,
     (ActorFunc)BgIknvObj_Destroy,
     (ActorFunc)BgIknvObj_Update,
-    (ActorFunc)BgIknvObj_Draw
+    (ActorFunc)BgIknvObj_Draw,
 };
 */
 

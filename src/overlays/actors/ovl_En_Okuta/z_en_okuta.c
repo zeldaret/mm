@@ -19,7 +19,7 @@ const ActorInit En_Okuta_InitVars = {
     (ActorFunc)EnOkuta_Init,
     (ActorFunc)EnOkuta_Destroy,
     (ActorFunc)EnOkuta_Update,
-    (ActorFunc)EnOkuta_Draw
+    (ActorFunc)EnOkuta_Draw,
 };
 */
 

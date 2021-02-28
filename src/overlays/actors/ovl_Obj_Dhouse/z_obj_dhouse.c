@@ -19,7 +19,7 @@ const ActorInit Obj_Dhouse_InitVars = {
     (ActorFunc)ObjDhouse_Init,
     (ActorFunc)ObjDhouse_Destroy,
     (ActorFunc)ObjDhouse_Update,
-    (ActorFunc)ObjDhouse_Draw
+    (ActorFunc)ObjDhouse_Draw,
 };
 */
 

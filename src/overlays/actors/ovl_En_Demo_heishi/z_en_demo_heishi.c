@@ -19,7 +19,7 @@ const ActorInit En_Demo_heishi_InitVars = {
     (ActorFunc)EnDemoheishi_Init,
     (ActorFunc)EnDemoheishi_Destroy,
     (ActorFunc)EnDemoheishi_Update,
-    (ActorFunc)EnDemoheishi_Draw
+    (ActorFunc)EnDemoheishi_Draw,
 };
 */
 

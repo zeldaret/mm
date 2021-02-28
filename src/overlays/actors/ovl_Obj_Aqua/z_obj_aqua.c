@@ -19,7 +19,7 @@ const ActorInit Obj_Aqua_InitVars = {
     (ActorFunc)ObjAqua_Init,
     (ActorFunc)ObjAqua_Destroy,
     (ActorFunc)ObjAqua_Update,
-    (ActorFunc)ObjAqua_Draw
+    (ActorFunc)ObjAqua_Draw,
 };
 */
 

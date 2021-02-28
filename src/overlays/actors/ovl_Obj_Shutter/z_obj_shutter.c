@@ -19,7 +19,7 @@ const ActorInit Obj_Shutter_InitVars = {
     (ActorFunc)ObjShutter_Init,
     (ActorFunc)ObjShutter_Destroy,
     (ActorFunc)ObjShutter_Update,
-    (ActorFunc)ObjShutter_Draw
+    (ActorFunc)ObjShutter_Draw,
 };
 */
 

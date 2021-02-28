@@ -18,7 +18,7 @@ const ActorInit Bg_Sinkai_Kabe_InitVars = {
     (ActorFunc)BgSinkaiKabe_Init,
     (ActorFunc)BgSinkaiKabe_Destroy,
     (ActorFunc)BgSinkaiKabe_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

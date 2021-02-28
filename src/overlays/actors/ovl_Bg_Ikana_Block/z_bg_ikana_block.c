@@ -18,7 +18,7 @@ const ActorInit Bg_Ikana_Block_InitVars = {
     (ActorFunc)BgIkanaBlock_Init,
     (ActorFunc)BgIkanaBlock_Destroy,
     (ActorFunc)BgIkanaBlock_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

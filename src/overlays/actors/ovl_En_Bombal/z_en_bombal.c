@@ -19,7 +19,7 @@ const ActorInit En_Bombal_InitVars = {
     (ActorFunc)EnBombal_Init,
     (ActorFunc)EnBombal_Destroy,
     (ActorFunc)EnBombal_Update,
-    (ActorFunc)EnBombal_Draw
+    (ActorFunc)EnBombal_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Dm_Ravine_InitVars = {
     (ActorFunc)DmRavine_Init,
     (ActorFunc)DmRavine_Destroy,
     (ActorFunc)DmRavine_Update,
-    (ActorFunc)DmRavine_Draw
+    (ActorFunc)DmRavine_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Viewer_InitVars = {
     (ActorFunc)EnViewer_Init,
     (ActorFunc)EnViewer_Destroy,
     (ActorFunc)EnViewer_Update,
-    (ActorFunc)EnViewer_Draw
+    (ActorFunc)EnViewer_Draw,
 };
 */
 

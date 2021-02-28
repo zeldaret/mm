@@ -18,7 +18,7 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)ObjDowsing_Init,
     (ActorFunc)ObjDowsing_Destroy,
     (ActorFunc)ObjDowsing_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

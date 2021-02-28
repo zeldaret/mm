@@ -19,7 +19,7 @@ const ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Init,
     (ActorFunc)EnHorseLinkChild_Destroy,
     (ActorFunc)EnHorseLinkChild_Update,
-    (ActorFunc)EnHorseLinkChild_Draw
+    (ActorFunc)EnHorseLinkChild_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Muto_InitVars = {
     (ActorFunc)EnMuto_Init,
     (ActorFunc)EnMuto_Destroy,
     (ActorFunc)EnMuto_Update,
-    (ActorFunc)EnMuto_Draw
+    (ActorFunc)EnMuto_Draw,
 };
 */
 

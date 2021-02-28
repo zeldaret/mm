@@ -19,7 +19,7 @@ const ActorInit En_Tubo_Trap_InitVars = {
     (ActorFunc)EnTuboTrap_Init,
     (ActorFunc)EnTuboTrap_Destroy,
     (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw
+    (ActorFunc)EnTuboTrap_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit En_Hit_Tag_InitVars = {
     (ActorFunc)EnHitTag_Init,
     (ActorFunc)EnHitTag_Destroy,
     (ActorFunc)EnHitTag_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

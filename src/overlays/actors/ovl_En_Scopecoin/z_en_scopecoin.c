@@ -19,7 +19,7 @@ const ActorInit En_Scopecoin_InitVars = {
     (ActorFunc)EnScopecoin_Init,
     (ActorFunc)EnScopecoin_Destroy,
     (ActorFunc)EnScopecoin_Update,
-    (ActorFunc)EnScopecoin_Draw
+    (ActorFunc)EnScopecoin_Draw,
 };
 */
 

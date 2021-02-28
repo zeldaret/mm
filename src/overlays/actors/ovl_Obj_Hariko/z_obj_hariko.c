@@ -19,7 +19,7 @@ const ActorInit Obj_Hariko_InitVars = {
     (ActorFunc)ObjHariko_Init,
     (ActorFunc)ObjHariko_Destroy,
     (ActorFunc)ObjHariko_Update,
-    (ActorFunc)ObjHariko_Draw
+    (ActorFunc)ObjHariko_Draw,
 };
 */
 

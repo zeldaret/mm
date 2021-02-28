@@ -21,7 +21,7 @@ const ActorInit En_Dy_Extra_InitVars = {
     (ActorFunc)EnDyExtra_Init,
     (ActorFunc)EnDyExtra_Destroy,
     (ActorFunc)EnDyExtra_Update,
-    (ActorFunc)EnDyExtra_Draw
+    (ActorFunc)EnDyExtra_Draw,
 };
 
 extern Vtx D_0600DD40[];
@@ -66,7 +66,7 @@ void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     }
 
     this->unk150 -= 0.02f;
-    
+
     if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }

@@ -19,7 +19,7 @@ const ActorInit Obj_Toudai_InitVars = {
     (ActorFunc)ObjToudai_Init,
     (ActorFunc)ObjToudai_Destroy,
     (ActorFunc)ObjToudai_Update,
-    (ActorFunc)ObjToudai_Draw
+    (ActorFunc)ObjToudai_Draw,
 };
 */
 

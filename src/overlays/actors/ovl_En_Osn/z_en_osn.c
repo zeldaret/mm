@@ -19,7 +19,7 @@ const ActorInit En_Osn_InitVars = {
     (ActorFunc)EnOsn_Init,
     (ActorFunc)EnOsn_Destroy,
     (ActorFunc)EnOsn_Update,
-    (ActorFunc)EnOsn_Draw
+    (ActorFunc)EnOsn_Draw,
 };
 */
 

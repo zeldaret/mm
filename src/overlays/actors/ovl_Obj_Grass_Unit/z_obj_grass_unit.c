@@ -16,7 +16,7 @@ const ActorInit Obj_Grass_Unit_InitVars = {
     (ActorFunc)ObjGrassUnit_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

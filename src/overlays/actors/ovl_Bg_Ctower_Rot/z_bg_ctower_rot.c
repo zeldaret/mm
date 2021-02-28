@@ -19,7 +19,7 @@ const ActorInit Bg_Ctower_Rot_InitVars = {
     (ActorFunc)BgCtowerRot_Init,
     (ActorFunc)BgCtowerRot_Destroy,
     (ActorFunc)BgCtowerRot_Update,
-    (ActorFunc)BgCtowerRot_Draw
+    (ActorFunc)BgCtowerRot_Draw,
 };
 */
 

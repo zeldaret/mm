@@ -17,7 +17,7 @@ const ActorInit Bg_Breakwall_InitVars = {
     (ActorFunc)BgBreakwall_Init,
     (ActorFunc)NULL,
     (ActorFunc)BgBreakwall_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

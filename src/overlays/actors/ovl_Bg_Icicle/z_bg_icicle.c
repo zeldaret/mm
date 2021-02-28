@@ -19,7 +19,7 @@ const ActorInit Bg_Icicle_InitVars = {
     (ActorFunc)BgIcicle_Init,
     (ActorFunc)BgIcicle_Destroy,
     (ActorFunc)BgIcicle_Update,
-    (ActorFunc)BgIcicle_Draw
+    (ActorFunc)BgIcicle_Draw,
 };
 */
 

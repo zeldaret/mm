@@ -19,7 +19,7 @@ const ActorInit En_Po_Composer_InitVars = {
     (ActorFunc)EnPoComposer_Init,
     (ActorFunc)EnPoComposer_Destroy,
     (ActorFunc)EnPoComposer_Update,
-    (ActorFunc)EnPoComposer_Draw
+    (ActorFunc)EnPoComposer_Draw,
 };
 */
 

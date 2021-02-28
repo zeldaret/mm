@@ -19,7 +19,7 @@ const ActorInit En_S_Goro_InitVars = {
     (ActorFunc)EnSGoro_Init,
     (ActorFunc)EnSGoro_Destroy,
     (ActorFunc)EnSGoro_Update,
-    (ActorFunc)EnSGoro_Draw
+    (ActorFunc)EnSGoro_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Door_Spiral_InitVars = {
     (ActorFunc)DoorSpiral_Init,
     (ActorFunc)DoorSpiral_Destroy,
     (ActorFunc)DoorSpiral_Update,
-    (ActorFunc)DoorSpiral_Draw
+    (ActorFunc)DoorSpiral_Draw,
 };
 */
 

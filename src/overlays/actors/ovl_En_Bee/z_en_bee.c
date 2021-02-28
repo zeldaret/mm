@@ -19,7 +19,7 @@ const ActorInit En_Bee_InitVars = {
     (ActorFunc)EnBee_Init,
     (ActorFunc)EnBee_Destroy,
     (ActorFunc)EnBee_Update,
-    (ActorFunc)EnBee_Draw
+    (ActorFunc)EnBee_Draw,
 };
 */
 

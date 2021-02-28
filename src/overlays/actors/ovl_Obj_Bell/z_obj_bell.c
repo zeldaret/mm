@@ -19,7 +19,7 @@ const ActorInit Obj_Bell_InitVars = {
     (ActorFunc)ObjBell_Init,
     (ActorFunc)ObjBell_Destroy,
     (ActorFunc)ObjBell_Update,
-    (ActorFunc)ObjBell_Draw
+    (ActorFunc)ObjBell_Draw,
 };
 */
 

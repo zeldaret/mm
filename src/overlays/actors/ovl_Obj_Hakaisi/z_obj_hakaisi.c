@@ -19,7 +19,7 @@ const ActorInit Obj_Hakaisi_InitVars = {
     (ActorFunc)ObjHakaisi_Init,
     (ActorFunc)ObjHakaisi_Destroy,
     (ActorFunc)ObjHakaisi_Update,
-    (ActorFunc)ObjHakaisi_Draw
+    (ActorFunc)ObjHakaisi_Draw,
 };
 */
 

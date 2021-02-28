@@ -19,7 +19,7 @@ const ActorInit Bg_Haka_Bombwall_InitVars = {
     (ActorFunc)BgHakaBombwall_Init,
     (ActorFunc)BgHakaBombwall_Destroy,
     (ActorFunc)BgHakaBombwall_Update,
-    (ActorFunc)BgHakaBombwall_Draw
+    (ActorFunc)BgHakaBombwall_Draw,
 };
 */
 

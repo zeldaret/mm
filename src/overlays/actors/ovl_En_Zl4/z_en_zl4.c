@@ -19,7 +19,7 @@ const ActorInit En_Zl4_InitVars = {
     (ActorFunc)EnZl4_Init,
     (ActorFunc)EnZl4_Destroy,
     (ActorFunc)EnZl4_Update,
-    (ActorFunc)EnZl4_Draw
+    (ActorFunc)EnZl4_Draw,
 };
 */
 

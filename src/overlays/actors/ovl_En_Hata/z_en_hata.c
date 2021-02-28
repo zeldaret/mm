@@ -19,7 +19,7 @@ const ActorInit En_Hata_InitVars = {
     (ActorFunc)EnHata_Init,
     (ActorFunc)EnHata_Destroy,
     (ActorFunc)EnHata_Update,
-    (ActorFunc)EnHata_Draw
+    (ActorFunc)EnHata_Draw,
 };
 */
 

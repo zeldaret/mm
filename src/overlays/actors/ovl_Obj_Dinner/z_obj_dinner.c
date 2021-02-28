@@ -18,7 +18,7 @@ const ActorInit Obj_Dinner_InitVars = {
     (ActorFunc)ObjDinner_Init,
     (ActorFunc)ObjDinner_Destroy,
     (ActorFunc)ObjDinner_Update,
-    (ActorFunc)ObjDinner_Draw
+    (ActorFunc)ObjDinner_Draw,
 };
 
 extern Gfx D_060011E0[];

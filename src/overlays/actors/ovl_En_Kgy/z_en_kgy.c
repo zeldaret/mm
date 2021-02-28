@@ -19,7 +19,7 @@ const ActorInit En_Kgy_InitVars = {
     (ActorFunc)EnKgy_Init,
     (ActorFunc)EnKgy_Destroy,
     (ActorFunc)EnKgy_Update,
-    (ActorFunc)EnKgy_Draw
+    (ActorFunc)EnKgy_Draw,
 };
 */
 

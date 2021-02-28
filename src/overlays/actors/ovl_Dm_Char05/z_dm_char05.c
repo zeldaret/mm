@@ -19,7 +19,7 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Init,
     (ActorFunc)DmChar05_Destroy,
     (ActorFunc)DmChar05_Update,
-    (ActorFunc)DmChar05_Draw
+    (ActorFunc)DmChar05_Draw,
 };
 */
 

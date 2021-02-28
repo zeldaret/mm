@@ -18,7 +18,7 @@ const ActorInit Obj_Pzlblock_InitVars = {
     (ActorFunc)ObjPzlblock_Init,
     (ActorFunc)ObjPzlblock_Destroy,
     (ActorFunc)ObjPzlblock_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Boss_Hakugin_InitVars = {
     (ActorFunc)BossHakugin_Init,
     (ActorFunc)BossHakugin_Destroy,
     (ActorFunc)BossHakugin_Update,
-    (ActorFunc)BossHakugin_Draw
+    (ActorFunc)BossHakugin_Draw,
 };
 */
 
