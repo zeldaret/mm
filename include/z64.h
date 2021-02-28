@@ -463,10 +463,6 @@ typedef void(*osCreateThread_func)(void*);
 typedef void*(*printf_func)(void*, char*, size_t);
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x20];
-} s800E03A0; // size = 0x20
-
-typedef struct {
     /* 0x000 */ OSThread unk0;
     /* 0x1B0 */ s8 argCount;
     /* 0x1B1 */ s8 unk1B1;
@@ -642,11 +638,6 @@ typedef struct {
     /* 0x0C */ InputInfo pressEdge;
     /* 0x12 */ InputInfo releaseEdge;
 } Input; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ Vec3f a;
-    /* 0x0C */ Vec3f b;
-} LineSegment; // size = 0x18
 
 // Permanent save context, kept in regular save files
 typedef struct {
@@ -1262,6 +1253,12 @@ typedef struct {
 typedef s32(*collision_add_func)(GlobalContext*, ColCommon*);
 
 typedef void(*collision_func)(GlobalContext*, CollisionCheckContext*, ColCommon*, ColCommon*);
+
+typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, ColCommon*);
+
+typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, ColCommon*, Vec3f*, Vec3f*);
+
+typedef void (*ColChkBloodFunc)(GlobalContext*, ColCommon*, Vec3f*);
 
 typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
 

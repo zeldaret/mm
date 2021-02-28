@@ -1,12 +1,15 @@
 #include <ultra64.h>
 #include <global.h>
 
-s800E03A0* func_800E03A0(s32 a0) {
-    if ((a0 < 0) || (a0 > 22)) return 0;
-    return &(D_801B9F20[a0]);
+ActorDamageChart* func_800E03A0(s32 index) {
+    if (index < 0 || index > 22) {
+        return 0;
+    }
+
+    return &(D_801B9F20[index]);
 }
 
-// Probably zeroes out a s800E03A0?
+// Probably zeroes out a damage chart?
 void func_800E03CC(u8* a0) {
     s32 i;
     u8* v1;

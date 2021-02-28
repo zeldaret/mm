@@ -23,6 +23,35 @@ typedef struct {
 } ActorDamageChart; // size = 0x20
 
 typedef struct {
+    /* 0x00 */ u8 health;
+    /* 0x02 */ s16 cylRadius;
+    /* 0x04 */ s16 cylHeight;
+    /* 0x06 */ u8 mass;
+} CollisionCheckInfoInit;
+
+typedef struct {
+    /* 0x00 */ u8 health;
+    /* 0x02 */ s16 cylRadius;
+    /* 0x04 */ s16 cylHeight;
+    /* 0x06 */ s16 cylYShift;
+    /* 0x08 */ u8 mass;
+} CollisionCheckInfoInit2;
+
+typedef struct {
+    /* 0x00 */ ActorDamageChart* damageChart;
+    /* 0x04 */ Vec3f displacement;
+    /* 0x10 */ s16 cylRadius;
+    /* 0x12 */ s16 cylHeight;
+    /* 0x14 */ s16 cylYShift;
+    /* 0x16 */ u8 mass;
+    /* 0x17 */ u8 health;
+    /* 0x18 */ u8 damage;
+    /* 0x19 */ u8 damageEffect;
+    /* 0x1A */ u8 atHitEffect;
+    /* 0x1B */ u8 acHitEffect;
+} CollisionCheckInfo; // size = 0x1C
+
+typedef struct {
     /* 0x00 */ s32 unk0;
     /* 0x04 */ s32 unk4;
     /* 0x08 */ f32 unk8;
@@ -42,21 +71,6 @@ typedef struct {
     /* 0x38 */ s16 unk38;
     /* 0x3A */ s16 unk3A;
 } ActorEnTest20C; // size = 0x3C
-
-// Related to collision?
-typedef struct {
-    /* 0x00 */ ActorDamageChart* damageChart;
-    /* 0x04 */ Vec3f displacement;
-    /* 0x10 */ s16 unk10;
-    /* 0x12 */ s16 unk12;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ u8 mass;
-    /* 0x17 */ u8 health;
-    /* 0x18 */ u8 damage;
-    /* 0x19 */ u8 damageEffect;
-    /* 0x1A */ u8 impactEffect;
-    /* 0x1B */ u8 unk1B;
-} ActorA0; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s16 id;
@@ -135,7 +149,7 @@ typedef struct Actor {
     /* 0x094 */ f32 sqrdDistanceFromLink;
     /* 0x098 */ f32 xzDistanceFromLink;
     /* 0x09C */ f32 yDistanceFromLink;
-    /* 0x0A0 */ ActorA0 unkA0;
+    /* 0x0A0 */ CollisionCheckInfo unkA0;
     /* 0x0BC */ ActorShape shape;
     /* 0x0D4 */ UNK_TYPE1 padD4[0x18];
     /* 0x0EC */ Vec3f projectedPos;

@@ -6,6 +6,12 @@
 #include <unk.h>
 
 struct Actor;
+struct GlobalContext;
+
+typedef struct {
+    /* 0 */ u8 blood;
+    /* 1 */ u8 effect;
+} HitInfo; // size = 0x2
 
 typedef struct {
     /* 0x0 */ u32 unk0;
@@ -21,6 +27,22 @@ typedef struct {
     /* 0x4 */ u8 unk4;
     /* 0x5 */ u8 type;
 } ColCommonInit; // size = 0x6
+
+typedef struct {
+    /* 0x00 */ struct Actor* actor;
+    /* 0x04 */ u8 atFlags;
+    /* 0x05 */ u8 acFlags;
+    /* 0x06 */ u8 ocFlags1;
+    /* 0x07 */ u8 type;
+} ColInitToActor; // size = 0x08
+
+typedef struct {
+    /* 0x00 */ u8 colType;
+    /* 0x01 */ u8 atFlags;
+    /* 0x02 */ u8 acFlags;
+    /* 0x03 */ u8 ocFlags1;
+    /* 0x04 */ u8 shape;
+} ColInitType1; // size = 0x05
 
 typedef struct {
     /* 0x0 */ u32 collidesWith;
@@ -104,10 +126,28 @@ typedef struct {
 } ColCylinderInit; // size = 0x2C
 
 typedef struct {
+    /* 0x00 */ ColInitType1 base;
+    /* 0x08 */ ColBodyInfoInit body;
+    /* 0x20 */ ColCylinderParams info;
+} ColCylinderInitType1; // size = 0x2C
+
+typedef struct {
+    /* 0x00 */ ColInitToActor base;
+    /* 0x08 */ ColBodyInfoInit body;
+    /* 0x20 */ ColCylinderParams info;
+} ColCylinderInitToActor; // size = 0x2C
+
+typedef struct {
     /* 0x00 */ ColCommonInit base;
     /* 0x08 */ ColBodyInfoInit body;
     /* 0x20 */ ColQuadParamsInit params;
 } ColQuadInit; // size = 0x50
+
+typedef struct {
+    /* 0x00 */ ColInitType1 base;
+    /* 0x08 */ ColBodyInfoInit body;
+    /* 0x20 */ ColQuadParamsInit params;
+} ColQuadInitType1; // size = 0x50
 
 typedef struct {
     /* 0x00 */ ColBodyInfoInit body;
@@ -116,10 +156,21 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ColCommonInit base;
-    /* 0x6 */ UNK_TYPE1 pad6[0x2];
     /* 0x8 */ s32 count;
     /* 0xC */ ColSphereGroupElementInit* init;
 } ColSphereGroupInit; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ ColInitType1 base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ ColSphereGroupElementInit* init;
+} ColSphereGroupInitType1; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ ColInitToActor base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ ColSphereGroupElementInit* init;
+} ColSphereGroupInitToActor; // size = 0x10
 
 typedef struct {
     /* 0x00 */ ColCommonInit base;
@@ -139,6 +190,12 @@ typedef struct {
 } ColTriGroupInit; // size = 0x10
 
 typedef struct {
+    /* 0x00 */ ColInitType1 base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ ColTriInit* elemInit;
+} ColTriGroupInitType1; // size = 0x10
+
+typedef struct {
     /* 0x00 */ struct Actor* actor;
     /* 0x04 */ struct Actor* collisionAT;
     /* 0x08 */ struct Actor* collisionAC;
@@ -153,6 +210,11 @@ typedef struct {
 } ColCommon; // size = 0x18
 
 typedef struct {
+    /* 0x00 */ LineSegment line;
+    /* 0x18 */ u16 ocFlags;
+} OcLine; // size = 0x1C
+
+typedef struct {
     /* 0x000 */ s16 ATgroupLength;
     /* 0x002 */ u16 flags; // bit 0: collision bodies can't be added or removed, only swapped out
     /* 0x004 */ ColCommon* ATgroup[50];
@@ -161,7 +223,7 @@ typedef struct {
     /* 0x1C0 */ s32 OTgroupLength;
     /* 0x1C4 */ ColCommon* OTgroup[50];
     /* 0x28C */ s32 group4Length;
-    /* 0x290 */ ColCommon* group4[3];
+    /* 0x290 */ OcLine* group4[3];
 } CollisionCheckContext; // size = 0x29C
 
 typedef struct ColBodyInfo {

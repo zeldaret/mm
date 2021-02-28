@@ -17,4 +17,17 @@ typedef struct {
     /* 0x4 */ s16 z;
 } Vec3s; // size = 0x6
 
+typedef struct {
+    /* 0x00 */ Vec3f a;
+    /* 0x0C */ Vec3f b;
+} LineSegment; // size = 0x18
+
+#define IS_ZERO(f) (fabsf(f) < 0.008f)
+
+// Vector macros
+#define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))
+#define DOTXZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.z) * (vec2.z))
+#define SQXYZ(vec) ((vec.x) * (vec.x) + (vec.y) * (vec.y) + (vec.z) * (vec.z))
+#define DOTXYZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.y) * (vec2.y) + (vec1.z) * (vec2.z))
+
 #endif
