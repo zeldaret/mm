@@ -75,7 +75,7 @@ void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 15) {
-        gSPDisplayList(oGfxCtx->polyOpa.p++, D_80C23BF0[this->unk25C]);
+        gSPDisplayList(POLY_OPA_DISP++, D_80C23BF0[this->unk25C]);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -90,19 +90,19 @@ void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk25C) {
         case 0:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 170, 10, 70, 255);
+            gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
             break;
         case 1:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 170, 200, 255, 255);
+            gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
             break;
         case 2:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 0, 230, 70, 255);
+            gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
             break;
         case 3:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 200, 0, 150, 255);
+            gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
             break;
         case 4:
-            gDPSetEnvColor(oGfxCtx->polyOpa.p++, 245, 155, 0, 255);
+            gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
             break;
     }
 

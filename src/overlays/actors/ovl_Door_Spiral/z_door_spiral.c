@@ -133,9 +133,9 @@ void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
             func_8012C28C(globalCtx->state.gfxCtx);
 
-            gSPMatrix(oGfxCtx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+            gSPMatrix(POLY_OPA_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(oGfxCtx->polyOpa.p++, modelInfo->doorDList[this->unk146]);
+            gSPDisplayList(POLY_OPA_DISP++, modelInfo->doorDList[this->unk146]);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }

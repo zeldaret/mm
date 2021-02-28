@@ -80,14 +80,12 @@ s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return 0;
 }
 
-static Vec3f D_80C26028 = { 0.0f, 0.0f, 0.0f };
-
 void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnRsn* this = THIS;
-    Vec3f sp18 = D_80C26028;
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus);
+        SysMatrix_MultiplyVector3fByState(&zeroVec, &this->actor.focus.pos);
     }
 }
 
@@ -98,7 +96,7 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C5B0(globalCtx->state.gfxCtx);
 
-    gSPSegment(oGfxCtx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_06005458));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_06005458));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
 
