@@ -110,8 +110,8 @@ s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 objectId) {
     return -1;
 }
 
-s32 Scene_IsObjectLoaded(SceneContext* actorShape, s32 index) {
-    if (actorShape->objects[index].id > 0) {
+s32 Scene_IsObjectLoaded(SceneContext* sceneCtxt, s32 index) {
+    if (sceneCtxt->objects[index].id > 0) {
         return 1;
     } else {
         return 0;

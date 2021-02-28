@@ -2436,7 +2436,7 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id); // func_8012F2E0
 void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt); // func_8012F3D0
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt); // func_8012F4FC
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 id); // func_8012F608
-s32 Scene_IsObjectLoaded(SceneContext* actorShape, s32 index); // func_8012F668
+s32 Scene_IsObjectLoaded(SceneContext* sceneCtxt, s32 index); // func_8012F668
 void Scene_DmaAllObjects(SceneContext* sceneCtxt); // func_8012F698
 void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry); // func_8012F79C

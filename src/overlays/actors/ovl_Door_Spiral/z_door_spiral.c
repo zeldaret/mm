@@ -10,6 +10,7 @@ void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809A2DB0(DoorSpiral* this, GlobalContext* globalCtx);
+void func_809A2FF8(DoorSpiral* this, GlobalContext* globalCtx);
 
 const ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
@@ -67,11 +68,28 @@ u32 D_809A3308[] = {
     0xC0580001, 0xB0FC0FA0, 0xB1000190, 0x31040190, 0x00000000, 0x00000000,
 };
 
-void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc* actionFunc);
+void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc* actionFunc) {
+    this->actionFunc = actionFunc;
+    this->unk14A = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2B60.asm")
+s32 func_809A2B70(DoorSpiral* this, GlobalContext* globalCtx) {
+    SpiralStruct_809A32D0* doorObjectInfo = &D_809A32D0[this->unk147];
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2B70.asm")
+    this->unk148 = doorObjectInfo->modelNum;
+
+    if ((this->unk148 == 7) || ((this->unk148 == 2) && globalCtx->roomContext.currRoom.enablePosLights)) {
+        if (this->unk148 == 2) {
+            this->unk148 = 3;
+        }
+
+        this->actor.flags |= 0x10000000;
+    }
+
+    func_809A2B60(this, func_809A2FF8);
+
+    return 0;
+}
 
 s32 func_809A2BF8(GlobalContext* globalCtx);
 
@@ -104,23 +122,96 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(thisx, 60.0f);
 }
 
-void DoorSpiral_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = (u16)thisx->params >> 10;
-    
+
     globalCtx->transitionActorList[transition].id *= -1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2DB0.asm")
+void func_809A2DB0(DoorSpiral* this, GlobalContext* globalCtx) {
+    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, this->unk149)) {
+        this->actor.objBankIndex = this->unk149;
+        func_809A2B70(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2E08.asm")
+f32 func_809A2E08(GlobalContext* globalCtx, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg4) {
+    ActorPlayer* player = PLAYER;
+    Vec3f target;
+    Vec3f offset;
 
+    target.x = player->base.world.pos.x;
+    target.y = player->base.world.pos.y + arg2;
+    target.z = player->base.world.pos.z;
+
+    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
+
+    if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
+        return 3.4028235e38f;
+    }
+
+    return offset.z;
+}
+
+#ifdef NON_MATCHING
+// wack
+s32 func_809A2EA0(DoorSpiral* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
+
+    if (!(func_801233E4(globalCtx))) {
+        SpiralStruct_809A3250* modelInfo = &D_809A3250[this->unk148];
+        f32 argfirst;
+        f32 argsecond;
+        f32 dist;
+
+        if (modelInfo->unkE < 0) {
+            argfirst = modelInfo->unkE + 4294967296.0f;
+        } else {
+            argfirst = modelInfo->unkE;
+        }
+
+        if (modelInfo->unkF < 0) {
+            argsecond = modelInfo->unkF + 4294967296.0f;
+        } else {
+            argsecond = modelInfo->unkF;
+        }
+
+        dist = func_809A2E08(globalCtx, this, 0.0f, argfirst, argsecond);
+
+        if (fabsf(dist) < 64.0f) {
+            s16 angle = player->base.shape.rot.y - this->actor.shape.rot.y;
+
+            if (dist > 0.0f) {
+                angle = 0x8000 - angle;
+            }
+
+            if (ABS(angle) < 0x3000) {
+                if (dist < 0.0f) {
+                    return -1.0f;
+                }
+                return 1.0f;
+            }
+        }
+    }
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2EA0.asm")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2FF8.asm")
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A3098.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Update.asm")
+void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DoorSpiral* this = THIS;
+    s32 pad;
+    ActorPlayer* player = PLAYER;
+
+    if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == func_809A2DB0)) {
+        this->actionFunc(this, globalCtx);
+    }
+}
 
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
