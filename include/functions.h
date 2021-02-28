@@ -2203,7 +2203,7 @@ void func_80122C20(void); // func_80122C20
 void func_80122D44(void); // func_80122D44
 void func_80122ED8(void); // func_80122ED8
 void func_80122EEC(void); // func_80122EEC
-void func_80122F28(void); // func_80122F28
+void func_80122F28(ActorPlayer* player, GlobalContext* globalCtx, Actor* actor); // func_80122F28
 void func_80122F9C(void); // func_80122F9C
 void func_80122FCC(void); // func_80122FCC
 void func_8012300C(void); // func_8012300C

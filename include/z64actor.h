@@ -218,7 +218,13 @@ typedef struct {
     /* 0x34C */ Actor* heldActor;
     /* 0x350 */ UNK_TYPE1 pad350[0x18];
     /* 0x368 */ Vec3f unk368;
-    /* 0x374 */ UNK_TYPE1 pad374[0x20];
+    /* 0x374 */ UNK_TYPE1 pad374[0x8];
+    /* 0x37C */ s8 doorType;
+    /* 0x37D */ s8 doorDirection;
+    /* 0x37E */ s8 doorTimer;
+    /* 0x37F */ s8 unk37F;
+    /* 0x380 */ Actor* doorActor;
+    /* 0x384 */ char unk384[0x10];
     /* 0x394 */ u8 unk394;
     /* 0x395 */ UNK_TYPE1 pad395[0x37];
     /* 0x3CC */ s16 unk3CC;
