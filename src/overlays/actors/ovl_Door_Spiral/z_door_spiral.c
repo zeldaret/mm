@@ -118,11 +118,6 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/DoorSpiral_Update.asm")
 
-#define OPEN_DISPS_TEST(gfxCtx) \
-    {                                      \
-        GraphicsContext* oGfxCtx = gfxCtx; \
-        s32 dispPad;                       \
-
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DoorSpiral* this = THIS;
@@ -134,7 +129,7 @@ void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
         dList = modelInfo->doorDList[this->unk146];
 
         if (dList != NULL) {
-            OPEN_DISPS_TEST(globalCtx->state.gfxCtx);
+            OPEN_DISPS(globalCtx->state.gfxCtx);
 
             func_8012C28C(globalCtx->state.gfxCtx);
 

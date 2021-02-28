@@ -28,10 +28,10 @@
 
 extern GraphicsContext* oGfxCtx;
 
-#define OPEN_DISPS(gfxCtx) \
-    {                                  \
-        GraphicsContext* oGfxCtx;      \
-        oGfxCtx = gfxCtx;              \
+#define OPEN_DISPS(gfxCtx)                 \
+    {                                      \
+        GraphicsContext* oGfxCtx = gfxCtx; \
+        s32 dispPad;                       \
 
 #define CLOSE_DISPS(gfxCtx)                 \
     }                                       \

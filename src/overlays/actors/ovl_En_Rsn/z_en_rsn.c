@@ -93,13 +93,14 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C5B0(globalCtx->state.gfxCtx);
-    if (1) { // debug define?
-        s32 pad;
-        gSPSegment(oGfxCtx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_06005458));
-        SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                         EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
-    }
+
+    gSPSegment(oGfxCtx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_06005458));
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
