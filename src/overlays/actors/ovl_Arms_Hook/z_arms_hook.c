@@ -47,8 +47,8 @@ void ArmsHook_SetupAction(ArmsHook* this, ArmsHookActionFunc actionFunc) {
 void ArmsHook_Init(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
 
-    Collision_InitQuadDefault(globalCtx, &this->collider);
-    Collision_InitQuadWithData(globalCtx, &this->collider, &this->actor, &D_808C1BC0);
+    Collider_InitQuad(globalCtx, &this->collider);
+    Collider_SetQuad(globalCtx, &this->collider, &this->actor, &D_808C1BC0);
     ArmsHook_SetupAction(this, ArmsHook_Wait);
     this->unk1E0 = this->actor.currPosRot.pos;
 }
@@ -59,7 +59,7 @@ void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     if (this->grabbed != NULL) {
         this->grabbed->flags &= ~0x2000;
     }
-    Collision_FiniQuad(globalCtx, &this->collider);
+    Collider_DestroyQuad(globalCtx, &this->collider);
 }
 
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
@@ -252,7 +252,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 func_808C1154(this);
                 func_8019F1C0(&this->actor.projectedPos, 0x1829);
             } else {
-                func_800E8668(globalCtx, &this->actor.currPosRot.pos);
+                CollisionCheck_SpawnShieldParticlesMetal(globalCtx, &this->actor.currPosRot.pos);
                 func_8019F1C0(&this->actor.projectedPos, 0x1813);
             }
         } else {

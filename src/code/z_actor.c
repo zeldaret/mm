@@ -230,7 +230,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
-    func_800E7494(&actor->colChkInfo);
+    CollisionCheck_InitInfo(&actor->colChkInfo);
     actor->unkFC = 1000.0f;
     actor->unk100 = 350.0f;
     actor->unk104 = 700.0f;

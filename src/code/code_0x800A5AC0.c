@@ -9,15 +9,15 @@ void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt) {
     s0->base.params = (s0->base.params & 0xFF) - 9;
     Actor_ProcessInitChain((Actor*)s0, &enAObjInitVar);
     Actor_SetDrawParams(&s0->base.shape, 0, (actor_shadow_draw_func)func_800B3FC0, 12);
-    Collision_InitCylinder(ctxt, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
-    Collision_CylinderMoveToActor((Actor*)s0, &s0->collision);
+    Collider_InitAndSetCylinder(ctxt, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
+    Collider_UpdateCylinder((Actor*)s0, &s0->collision);
     s0->base.colChkInfo.mass = 255;
     s0->update = (ActorFunc)EnAObj_Update1;
 }
 
 void EnAObj_Destroy(ActorEnAObj* this, GlobalContext* ctxt) {
     ColliderCylinder* a2 = &this->collision;
-    Collision_FiniCylinder(ctxt, a2);
+    Collider_DestroyCylinder(ctxt, a2);
 }
 
 void EnAObj_Update1(ActorEnAObj* this, GlobalContext* ctxt) {
@@ -43,7 +43,7 @@ void EnAObj_Update2(ActorEnAObj* this, GlobalContext* ctxt) {
 void EnAObj_Update(ActorEnAObj* this, GlobalContext* ctxt) {
     (this->update)((Actor*)this, (GlobalContext*)ctxt);
     Actor_SetHeight((Actor*)this, 45.0f);
-    Collision_AddOT(ctxt, &ctxt->colCheckCtx, (Collider*)&this->collision);
+    CollisionCheck_SetOC(ctxt, &ctxt->colCheckCtx, (Collider*)&this->collision);
 }
 
 void EnAObj_Draw(ActorEnAObj* this, GlobalContext* ctxt) {

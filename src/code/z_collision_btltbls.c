@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-DamageTable D_801B9F20[] = {
+DamageTable sDamageTablePresets[] = {
     { { 0x10, 0x01, 0x01, 0x02, 0xE0, 0x01, 0xF2, 0x10, 0xF1, 0xF2, 0xF2, 0x22, 0x01, 0x01, 0x00, 0x00,
         0x00, 0x22, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
     { { 0x10, 0x01, 0x01, 0x02, 0xE0, 0x01, 0xF2, 0x10, 0xF1, 0xF2, 0xF2, 0x22, 0x01, 0x01, 0x00, 0x00,
@@ -50,18 +50,25 @@ DamageTable D_801B9F20[] = {
         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 } },
 };
 
-DamageTable* func_800E03A0(s32 index) {
-    if (index < 0 || index > 22) {
-        return 0;
+/**
+ * Returns a pointer to one of the 23 damage table presets, or NULL if the index
+ * is out of range.
+ */
+DamageTable* DamageTable_Get(s32 index) {
+    if (index < 0 || index > ARRAY_COUNT(sDamageTablePresets)-1) {
+        return NULL;
     }
 
-    return &(D_801B9F20[index]);
+    return &sDamageTablePresets[index];
 }
 
-void func_800E03CC(DamageTable* damageChart) {
+/**
+ * Sets all entries in a damage table to 0
+ */
+void DamageTable_Clear(DamageTable* damageTable) {
     s32 i;
 
-    for (i = 0; i < 32; i++) {
-        damageChart->attack[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(damageTable->attack); i++) {
+        damageTable->attack[i] = 0;
     }
 }

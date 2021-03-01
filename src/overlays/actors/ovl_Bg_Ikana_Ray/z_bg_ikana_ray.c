@@ -47,9 +47,9 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(thisx, bgIkanaRayCompInit);
 
-    Collision_InitCylinderDefault(globalCtx, collision);
-    Collision_InitCylinderWithData(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
-    Collision_CylinderMoveToActor(thisx, &THIS->collision);
+    Collider_InitCylinder(globalCtx, collision);
+    Collider_SetCylinder(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
+    Collider_UpdateCylinder(thisx, &THIS->collision);
 
     THIS->animatedTextures = (AnimatedTexture*)Lib_PtrSegToVirt(object_ikana_obj_001228);
 
@@ -62,7 +62,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgIkanaRay_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ColliderCylinder* collision = &THIS->collision;
-    Collision_FiniCylinder(globalCtx, collision);
+    Collider_DestroyCylinder(globalCtx, collision);
 }
 
 void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
@@ -84,7 +84,7 @@ void BgIkanaRay_SetActivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, GlobalContext* globalCtx) {
-    Collision_AddAT(globalCtx, &globalCtx->colCheckCtx, &this->collision.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collision.base);
 }
 
 void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {

@@ -39,8 +39,8 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNnh* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    Collision_InitCylinderDefault(globalCtx, &this->collider);
-    Collision_InitCylinderWithData(globalCtx, &this->collider, &this->actor, &D_80C08A00);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80C08A00);
     this->actor.unk1F = 1;
     this->actor.topPosRot.pos = this->actor.currPosRot.pos;
     this->actor.topPosRot.pos.y += 30.0f;
@@ -50,7 +50,7 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
 void EnNnh_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnNnh* this = THIS;
 
-    Collision_FiniCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80C08828(EnNnh* this) {
@@ -81,8 +81,8 @@ void EnNnh_Update(Actor *thisx, GlobalContext *globalCtx) {
     s32 pad;
 
     this->actionFunc(this, globalCtx);
-    Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddOT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
 void EnNnh_Draw(Actor *thisx, GlobalContext *globalCtx) {
