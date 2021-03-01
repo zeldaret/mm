@@ -12,7 +12,7 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEKUNUTS,
     sizeof(EnDekunuts),

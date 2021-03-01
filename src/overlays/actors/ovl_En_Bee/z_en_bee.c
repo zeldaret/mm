@@ -12,7 +12,7 @@ void EnBee_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BEE,
     sizeof(EnBee),

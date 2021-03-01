@@ -12,7 +12,7 @@ void BgHakaTomb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Haka_Tomb_InitVars = {
     ACTOR_BG_HAKA_TOMB,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaTomb),

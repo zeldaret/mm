@@ -12,7 +12,7 @@ void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Tokei_Turret_InitVars = {
     ACTOR_OBJ_TOKEI_TURRET,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_TOKEI_TURRET,
     sizeof(ObjTokeiTurret),

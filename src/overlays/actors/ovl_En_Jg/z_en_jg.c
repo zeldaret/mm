@@ -12,7 +12,7 @@ void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_JG,
     sizeof(EnJg),

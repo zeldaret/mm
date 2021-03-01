@@ -12,7 +12,7 @@ void DmChar05_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_DMASK,
     sizeof(DmChar05),

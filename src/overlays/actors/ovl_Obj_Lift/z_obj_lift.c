@@ -12,7 +12,7 @@ void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_D_LIFT,
     sizeof(ObjLift),

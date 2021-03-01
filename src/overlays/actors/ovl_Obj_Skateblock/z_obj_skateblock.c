@@ -12,7 +12,7 @@ void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(ObjSkateblock),

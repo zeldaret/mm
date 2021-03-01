@@ -12,7 +12,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OT,
     sizeof(EnOt),

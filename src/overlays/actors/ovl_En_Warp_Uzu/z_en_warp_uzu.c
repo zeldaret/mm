@@ -12,7 +12,7 @@ void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Warp_Uzu_InitVars = {
     ACTOR_EN_WARP_UZU,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_WARP_UZU,
     sizeof(EnWarpUzu),

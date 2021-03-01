@@ -12,7 +12,7 @@ void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNQ,
     sizeof(EnDnq),

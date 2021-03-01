@@ -12,7 +12,7 @@ void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wf_InitVars = {
     ACTOR_EN_WF,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_WF,
     sizeof(EnWf),

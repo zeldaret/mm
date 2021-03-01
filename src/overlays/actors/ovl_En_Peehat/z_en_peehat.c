@@ -12,7 +12,7 @@ void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_PH,
     sizeof(EnPeehat),

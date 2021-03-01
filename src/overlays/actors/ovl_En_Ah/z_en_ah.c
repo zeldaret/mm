@@ -12,7 +12,7 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AH,
     sizeof(EnAh),

@@ -12,7 +12,7 @@ void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNT,
     sizeof(EnAkindonuts),

@@ -12,7 +12,7 @@ void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_IKNINSIDE_OBJ,
     sizeof(BgIkninside),

@@ -11,7 +11,7 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnFall),

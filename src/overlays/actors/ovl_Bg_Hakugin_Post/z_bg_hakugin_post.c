@@ -11,7 +11,7 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginPost),

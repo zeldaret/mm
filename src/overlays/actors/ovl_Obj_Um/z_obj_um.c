@@ -12,7 +12,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_UM,
     sizeof(ObjUm),

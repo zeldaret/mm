@@ -12,7 +12,7 @@ void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_NB,
     sizeof(EnNb),

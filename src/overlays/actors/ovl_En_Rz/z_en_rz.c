@@ -12,7 +12,7 @@ void EnRz_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_RZ,
     sizeof(EnRz),

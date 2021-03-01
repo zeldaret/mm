@@ -11,7 +11,7 @@ void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoEffect),

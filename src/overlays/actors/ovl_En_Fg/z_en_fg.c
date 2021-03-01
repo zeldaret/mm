@@ -12,7 +12,7 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_FR,
     sizeof(EnFg),

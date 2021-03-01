@@ -12,7 +12,7 @@ void ObjMoonStone_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Moon_Stone_InitVars = {
     ACTOR_OBJ_MOON_STONE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_GI_RESERVE00,
     sizeof(ObjMoonStone),

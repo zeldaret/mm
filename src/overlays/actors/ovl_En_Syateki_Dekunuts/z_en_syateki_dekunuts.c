@@ -12,7 +12,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEKUNUTS,
     sizeof(EnSyatekiDekunuts),

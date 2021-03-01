@@ -12,7 +12,7 @@ void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_NIW,
     sizeof(EnNiw),

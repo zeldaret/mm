@@ -12,7 +12,7 @@ void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_CROW,
     sizeof(EnRuppecrow),

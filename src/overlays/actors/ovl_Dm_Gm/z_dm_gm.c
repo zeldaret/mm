@@ -11,7 +11,7 @@ void DmGm_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AN1,
     sizeof(DmGm),

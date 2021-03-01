@@ -12,7 +12,7 @@ void ObjMuPict_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Mu_Pict_InitVars = {
     ACTOR_OBJ_MU_PICT,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMuPict),

@@ -12,7 +12,7 @@ void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bu_InitVars = {
     ACTOR_EN_BU,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBu),

@@ -12,7 +12,7 @@ void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_YB,
     sizeof(EnYb),

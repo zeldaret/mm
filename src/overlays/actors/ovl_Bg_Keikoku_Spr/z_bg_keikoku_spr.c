@@ -12,7 +12,7 @@ void BgKeikokuSpr_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Keikoku_Spr_InitVars = {
     ACTOR_BG_KEIKOKU_SPR,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_KEIKOKU_OBJ,
     sizeof(BgKeikokuSpr),

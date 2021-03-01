@@ -12,7 +12,7 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
-    ACTORTYPE_DOOR,
+    ACTORCAT_DOOR,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDoor),

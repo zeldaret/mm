@@ -12,7 +12,7 @@ void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest),

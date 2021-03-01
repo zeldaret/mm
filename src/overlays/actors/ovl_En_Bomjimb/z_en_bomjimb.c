@@ -12,7 +12,7 @@ void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_CS,
     sizeof(EnBomjimb),

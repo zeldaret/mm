@@ -12,7 +12,7 @@ void EnEstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_EG,
     sizeof(EnEstone),

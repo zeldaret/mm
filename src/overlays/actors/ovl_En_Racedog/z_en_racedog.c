@@ -12,7 +12,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DOG,
     sizeof(EnRacedog),

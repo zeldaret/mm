@@ -12,7 +12,7 @@ void EnGamelupy_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGamelupy),

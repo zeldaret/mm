@@ -12,7 +12,7 @@ void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DINOFOS,
     sizeof(EnDinofos),

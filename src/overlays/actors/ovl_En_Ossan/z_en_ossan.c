@@ -11,7 +11,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOssan),

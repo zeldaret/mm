@@ -12,7 +12,7 @@ void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Jc_Mato_InitVars = {
     ACTOR_EN_JC_MATO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_TRU,
     sizeof(EnJcMato),

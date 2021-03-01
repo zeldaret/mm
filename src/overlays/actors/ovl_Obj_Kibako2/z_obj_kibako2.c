@@ -12,7 +12,7 @@ void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KIBAKO2,
     sizeof(ObjKibako2),

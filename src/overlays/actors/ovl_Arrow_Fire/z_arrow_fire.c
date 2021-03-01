@@ -12,7 +12,7 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowFire),

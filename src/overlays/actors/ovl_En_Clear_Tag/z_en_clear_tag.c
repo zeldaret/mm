@@ -12,7 +12,7 @@ void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnClearTag),

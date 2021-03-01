@@ -12,7 +12,7 @@ void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_PO_COMPOSER,
     sizeof(EnPoComposer),

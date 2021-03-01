@@ -12,7 +12,7 @@ void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnScopecoin),

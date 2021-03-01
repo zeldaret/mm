@@ -12,7 +12,7 @@ void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HGDOOR,
     sizeof(ObjHgdoor),

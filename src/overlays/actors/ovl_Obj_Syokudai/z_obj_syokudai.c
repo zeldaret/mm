@@ -12,7 +12,7 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_SYOKUDAI,
     sizeof(ObjSyokudai),

@@ -12,7 +12,7 @@ void EnBat_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bat_InitVars = {
     ACTOR_EN_BAT,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BAT,
     sizeof(EnBat),

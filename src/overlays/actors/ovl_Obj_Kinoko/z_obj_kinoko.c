@@ -12,7 +12,7 @@ void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kinoko_InitVars = {
     ACTOR_OBJ_KINOKO,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjKinoko),

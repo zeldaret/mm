@@ -12,7 +12,7 @@ void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DAI,
     sizeof(EnDai),

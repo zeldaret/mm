@@ -12,7 +12,7 @@ void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_PAMERA,
     sizeof(EnPamera),

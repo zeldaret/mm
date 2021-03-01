@@ -12,7 +12,7 @@ void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNO,
     sizeof(EnDno),

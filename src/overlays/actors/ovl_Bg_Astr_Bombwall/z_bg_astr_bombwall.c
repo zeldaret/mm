@@ -12,7 +12,7 @@ void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_ASTR_OBJ,
     sizeof(BgAstrBombwall),

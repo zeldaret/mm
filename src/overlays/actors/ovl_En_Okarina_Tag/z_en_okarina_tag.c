@@ -11,7 +11,7 @@ void EnOkarinaTag_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Okarina_Tag_InitVars = {
     ACTOR_EN_OKARINA_TAG,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOkarinaTag),

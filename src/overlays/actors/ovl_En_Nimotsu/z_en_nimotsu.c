@@ -12,7 +12,7 @@ void EnNimotsu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnNimotsu),

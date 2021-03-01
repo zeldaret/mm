@@ -12,7 +12,7 @@ void EnInvadepohDemo_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvadepohDemo),

@@ -9,7 +9,7 @@ void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassUnit),

@@ -12,7 +12,7 @@ void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_ZORABAND,
     sizeof(EffZoraband),

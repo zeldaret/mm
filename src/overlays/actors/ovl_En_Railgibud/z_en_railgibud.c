@@ -12,7 +12,7 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_RD,
     sizeof(EnRailgibud),

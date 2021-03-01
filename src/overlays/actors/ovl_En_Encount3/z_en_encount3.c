@@ -12,7 +12,7 @@ void EnEncount3_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Encount3_InitVars = {
     ACTOR_EN_ENCOUNT3,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BIG_FWALL,
     sizeof(EnEncount3),

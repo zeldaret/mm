@@ -12,7 +12,7 @@ void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ctower_Gear_InitVars = {
     ACTOR_BG_CTOWER_GEAR,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_CTOWER_ROT,
     sizeof(BgCtowerGear),

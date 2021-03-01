@@ -12,7 +12,7 @@ void DemoMoonend_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_MOONEND,
     sizeof(DemoMoonend),

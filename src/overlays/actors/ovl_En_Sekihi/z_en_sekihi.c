@@ -11,7 +11,7 @@ void EnSekihi_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSekihi),

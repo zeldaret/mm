@@ -11,7 +11,7 @@ void DemoShd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Demo_Shd_InitVars = {
     ACTOR_DEMO_SHD,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_FWALL,
     sizeof(DemoShd),

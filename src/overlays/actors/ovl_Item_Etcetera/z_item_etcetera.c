@@ -11,7 +11,7 @@ void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Item_Etcetera_InitVars = {
     ACTOR_ITEM_ETCETERA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ItemEtcetera),

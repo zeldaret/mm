@@ -11,7 +11,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BIGPO,
     sizeof(EnBigpo),

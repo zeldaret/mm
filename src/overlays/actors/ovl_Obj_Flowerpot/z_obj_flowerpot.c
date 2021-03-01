@@ -12,7 +12,7 @@ void ObjFlowerpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Flowerpot_InitVars = {
     ACTOR_OBJ_FLOWERPOT,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_FLOWERPOT,
     sizeof(ObjFlowerpot),

@@ -11,7 +11,7 @@ void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnWarptag),

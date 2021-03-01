@@ -872,7 +872,7 @@ extern UNK_TYPE1 D_801BA38D; // D_801BA38D
 extern UNK_PTR D_801BA3A8; // D_801BA3A8
 extern collision_func collisionFuncTableATwithAC[25]; // D_801BA3BC
 extern collision_func collisionFuncTableOTwithOT[25]; // D_801BA420
-extern ActorA0 D_801BA484; // D_801BA484
+extern CollisionCheckInfo D_801BA484; // D_801BA484
 extern UNK_PTR D_801BA4A0; // D_801BA4A0
 extern UNK_TYPE1 D_801BA4B4; // D_801BA4B4
 extern EffShieldParticleInit D_801BA4C8; // D_801BA4C8

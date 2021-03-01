@@ -11,7 +11,7 @@ void EnEncount4_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Encount4_InitVars = {
     ACTOR_EN_ENCOUNT4,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEncount4),

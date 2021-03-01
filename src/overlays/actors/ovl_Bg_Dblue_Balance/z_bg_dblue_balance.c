@@ -12,7 +12,7 @@ void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueBalance),

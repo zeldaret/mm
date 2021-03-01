@@ -11,7 +11,7 @@ void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHitTag),

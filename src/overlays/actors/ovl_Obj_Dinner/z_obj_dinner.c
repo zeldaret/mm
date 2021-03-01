@@ -11,7 +11,7 @@ void ObjDinner_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Dinner_InitVars = {
     ACTOR_OBJ_DINNER,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_OBJECT_UNSET_DINNER,
     sizeof(ObjDinner),

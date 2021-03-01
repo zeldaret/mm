@@ -11,7 +11,7 @@ void ObjGrassCarry_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassCarry),

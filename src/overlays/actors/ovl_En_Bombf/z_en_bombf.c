@@ -12,7 +12,7 @@ void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BOMBF,
     sizeof(EnBombf),

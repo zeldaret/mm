@@ -12,7 +12,7 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DORA,
     sizeof(ObjKendoKanban),

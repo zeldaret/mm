@@ -12,7 +12,7 @@ void ObjWind_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Wind_InitVars = {
     ACTOR_OBJ_WIND,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjWind),

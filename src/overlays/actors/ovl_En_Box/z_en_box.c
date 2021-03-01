@@ -12,7 +12,7 @@ void EnBox_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
-    ACTORTYPE_CHEST,
+    ACTORCAT_CHEST,
     FLAGS,
     OBJECT_BOX,
     sizeof(EnBox),

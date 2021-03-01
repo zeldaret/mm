@@ -12,7 +12,7 @@ void EnOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_OKUTA,
     sizeof(EnOkuta),

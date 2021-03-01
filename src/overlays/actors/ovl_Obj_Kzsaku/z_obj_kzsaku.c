@@ -12,7 +12,7 @@ void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_KZSAKU,
     sizeof(ObjKzsaku),

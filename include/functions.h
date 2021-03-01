@@ -676,7 +676,7 @@ void func_800B3644(void); // func_800B3644
 void DLF_LoadGameState(GameStateOverlay* gameState); // func_800B3880
 void DLF_FreeGameState(GameStateOverlay* gameState); // func_800B39A4
 void Actor_PrintLists(ActorContext* actCtxt); // func_800B3AD0
-void Actor_SetDrawParams(ActorShape* iParm1, f32 yDisplacement, actor_shadow_draw_func func, f32 scale); // func_800B3BA4
+void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale); // func_800B3BA4
 void Actor_PostDraw(Actor* actor, LightMapper* mapper, GlobalContext* ctxt, u32 displayList, ColorRGBA8* color); // func_800B3BC8
 void func_800B3FC0(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B3FC0
 void func_800B4024(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B4024
@@ -686,7 +686,7 @@ void func_800B40E0(GlobalContext* ctxt, int iParm2, z_Matrix* pzParm3, int iParm
 void func_800B42F8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B42F8
 void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B4A98
 void func_800B4AEC(GlobalContext* ctxt, Actor* actor, f32 param_3); // func_800B4AEC
-void func_800B4B50(Actor* iParm1, int iParm2, GlobalContext* pzParm3); // func_800B4B50
+void func_800B4B50(Actor* actor, int iParm2, GlobalContext* pzParm3); // func_800B4B50
 void func_800B4EDC(GlobalContext* ctxt, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4); // func_800B4EDC
 void func_800B4F40(TargetContext* targetContext, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800B4F40
 void func_800B4F78(TargetContext* targetContext, u8 type, GlobalContext* ctxt); // func_800B4F78
@@ -734,7 +734,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt); // func_800B6
 void Actor_FiniActor(Actor* actor, GlobalContext* ctxt); // func_800B6948
 void Actor_SetMovementScale(s32 scale); // func_800B6988
 void Actor_ApplyMovement(Actor* actor); // func_800B69AC
-void Actor_SetVelocityYRotationAndGravity(Actor* iParm1); // func_800B6A10
+void Actor_SetVelocityYRotationAndGravity(Actor* actor); // func_800B6A10
 void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor); // func_800B6A88
 void Actor_SetVelocityXYRotation(Actor* actor); // func_800B6AB4
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor); // func_800B6B24
@@ -805,7 +805,7 @@ void func_800B886C(void); // func_800B886C
 void func_800B8898(GlobalContext* ctxt, Actor* actor, UNK_PTR param_3, UNK_PTR param_4); // func_800B8898
 void func_800B8934(void); // func_800B8934
 u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt); // func_800B89F8
-UNK_TYPE4 func_800B8A1C(Actor* iParm1, GlobalContext* ctxt, int iParm3, float fParm4, float param_5); // func_800B8A1C
+UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* ctxt, int iParm3, float fParm4, float param_5); // func_800B8A1C
 void func_800B8B84(void); // func_800B8B84
 void func_800B8BB0(void); // func_800B8BB0
 void func_800B8BD0(void); // func_800B8BD0
@@ -821,7 +821,7 @@ void func_800B8D98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B8DD4
 void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B8E1C
 void func_800B8E58(void); // func_800B8E58
-void func_800B8EC8(Actor* iParm1, u32 uParm2); // func_800B8EC8
+void func_800B8EC8(Actor* actor, u32 uParm2); // func_800B8EC8
 void func_800B8EF4(void); // func_800B8EF4
 void func_800B8F98(Actor* actor, u16 sfxId); // func_800B8F98
 void func_800B8FC0(void); // func_800B8FC0
@@ -1493,11 +1493,11 @@ void Collision_SphereWithSphereOT(GlobalContext* ctxt, CollisionCheckContext* co
 UNK_TYPE4 func_800E7264(ColCommon* iParm1); // func_800E7264
 UNK_TYPE4 func_800E7288(ColCommon* piParm1, ColCommon* piParm2); // func_800E7288
 void Collision_DoOTWithOT(GlobalContext* ctxt, CollisionCheckContext* colCtxt); // func_800E7308
-void func_800E7494(ActorA0* param_1); // func_800E7494
-void func_800E74DC(ActorA0* param_1); // func_800E74DC
+void func_800E7494(CollisionCheckInfo* param_1); // func_800E7494
+void func_800E74DC(CollisionCheckInfo* param_1); // func_800E74DC
 void func_800E7508(s32 param_1, UNK_PTR param_2); // func_800E7508
-void func_800E7530(ActorA0* param_1, ActorDamageChart* param_2, UNK_PTR param_3); // func_800E7530
-void func_800E755C(ActorA0* puParm1, ActorDamageChart* uParm2, UNK_PTR puParm3); // func_800E755C
+void func_800E7530(CollisionCheckInfo* param_1, DamageTable* param_2, UNK_PTR param_3); // func_800E7530
+void func_800E755C(CollisionCheckInfo* puParm1, DamageTable* uParm2, UNK_PTR puParm3); // func_800E755C
 void func_800E7590(void); // func_800E7590
 void func_800E75C8(void); // func_800E75C8
 void func_800E77EC(void); // func_800E77EC
@@ -2436,7 +2436,7 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id); // func_8012F2E0
 void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt); // func_8012F3D0
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt); // func_8012F4FC
 s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 id); // func_8012F608
-s32 Scene_IsObjectLoaded(SceneContext* iParm1, s32 index); // func_8012F668
+s32 Scene_IsObjectLoaded(SceneContext* sceneCtxt, s32 index); // func_8012F668
 void Scene_DmaAllObjects(SceneContext* sceneCtxt); // func_8012F698
 void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id); // func_8012F73C
 void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry); // func_8012F79C
@@ -2885,9 +2885,9 @@ void func_801496C8(void); // func_801496C8
 void func_8014995C(void); // func_8014995C
 void func_80149C18(void); // func_80149C18
 void func_80149EBC(void); // func_80149EBC
-void func_80149F74(GlobalContext* iParm1, unsigned int** ppuParm2); // func_80149F74
+void func_80149F74(GlobalContext* globalCtx, unsigned int** ppuParm2); // func_80149F74
 void func_8014AAD0(void); // func_8014AAD0
-void func_8014ADBC(GlobalContext* iParm1, UNK_PTR puParm2); // func_8014ADBC
+void func_8014ADBC(GlobalContext* globalCtx, UNK_PTR puParm2); // func_8014ADBC
 void func_8014C70C(void); // func_8014C70C
 void func_8014CC14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_8014CC14
 void func_8014CCB4(void); // func_8014CCB4
@@ -2907,7 +2907,7 @@ void func_80151C9C(void); // func_80151C9C
 void func_80151DA4(void); // func_80151DA4
 void func_80152434(void); // func_80152434
 void func_80152464(void); // func_80152464
-UNK_TYPE4 func_80152498(MessageContext* iParm1); // func_80152498
+UNK_TYPE4 func_80152498(MessageContext* msgCtx); // func_80152498
 void func_8015268C(void); // func_8015268C
 void func_80152C64(void); // func_80152C64
 void func_80152CAC(void); // func_80152CAC
@@ -2933,7 +2933,7 @@ void func_8015966C(void); // func_8015966C
 void func_8015A144(void); // func_8015A144
 void func_8015B198(void); // func_8015B198
 void func_8015E750(void); // func_8015E750
-void func_8015E7EC(GlobalContext* iParm1, UNK_PTR puParm2); // func_8015E7EC
+void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2); // func_8015E7EC
 void func_8015F8A8(UNK_TYPE4 ctxt); // func_8015F8A8
 void func_80160A90(void); // func_80160A90
 void func_80160AF8(void); // func_80160AF8

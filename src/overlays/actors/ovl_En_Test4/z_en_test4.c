@@ -11,7 +11,7 @@ void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest4),

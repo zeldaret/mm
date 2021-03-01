@@ -12,7 +12,7 @@ void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_TRAP,
     sizeof(ObjToge),

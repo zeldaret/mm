@@ -12,7 +12,7 @@ void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_WOOD02,
     sizeof(EnWood02),

@@ -12,7 +12,7 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ma4_InitVars = {
     ACTOR_EN_MA4,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MA1,
     sizeof(EnMa4),

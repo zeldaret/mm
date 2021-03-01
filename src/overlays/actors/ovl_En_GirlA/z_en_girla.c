@@ -11,7 +11,7 @@ void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGirlA),

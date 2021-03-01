@@ -11,7 +11,7 @@ void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_DRS,
     sizeof(EnDrs),

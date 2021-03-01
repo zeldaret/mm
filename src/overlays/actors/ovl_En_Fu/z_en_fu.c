@@ -12,7 +12,7 @@ void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MU,
     sizeof(EnFu),

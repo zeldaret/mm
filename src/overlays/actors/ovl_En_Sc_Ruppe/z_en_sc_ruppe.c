@@ -12,7 +12,7 @@ void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnScRuppe),

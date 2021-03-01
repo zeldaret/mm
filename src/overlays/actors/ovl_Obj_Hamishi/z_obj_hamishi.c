@@ -12,7 +12,7 @@ void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Hamishi_InitVars = {
     ACTOR_OBJ_HAMISHI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjHamishi),

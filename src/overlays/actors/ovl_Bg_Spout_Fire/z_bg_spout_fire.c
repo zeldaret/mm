@@ -11,7 +11,7 @@ void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FWALL,
     sizeof(BgSpoutFire),

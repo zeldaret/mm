@@ -12,7 +12,7 @@ void ObjSmork_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Smork_InitVars = {
     ACTOR_OBJ_SMORK,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjSmork),

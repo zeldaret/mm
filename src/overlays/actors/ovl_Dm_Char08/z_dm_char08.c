@@ -12,7 +12,7 @@ void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KAMEJIMA,
     sizeof(DmChar08),

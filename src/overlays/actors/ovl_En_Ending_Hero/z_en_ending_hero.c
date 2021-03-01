@@ -14,7 +14,7 @@ void func_80C1E764(EnEndingHero* this, GlobalContext* globalCtx);
 
 const ActorInit En_Ending_Hero_InitVars = {
     ACTOR_EN_ENDING_HERO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DT,
     sizeof(EnEndingHero),
@@ -38,9 +38,9 @@ extern UNK_PTR D_0600A490[];
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
 
-    this->actor.unkA0.mass = 0xFF;
+    this->actor.colChkInfo.mass = 0xFF;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.unk1F = 6;
+    this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->limbDrawTable,
                      this->transitionDrawTable, 15);

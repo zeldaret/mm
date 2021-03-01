@@ -11,7 +11,7 @@ void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTalk),

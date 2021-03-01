@@ -12,7 +12,7 @@ void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Tokei_Step_InitVars = {
     ACTOR_OBJ_TOKEI_STEP,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_TOKEI_STEP,
     sizeof(ObjTokeiStep),

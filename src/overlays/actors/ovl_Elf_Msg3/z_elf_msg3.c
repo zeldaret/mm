@@ -11,7 +11,7 @@ void ElfMsg3_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Elf_Msg3_InitVars = {
     ACTOR_ELF_MSG3,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ElfMsg3),

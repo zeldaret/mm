@@ -12,7 +12,7 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kakasi_InitVars = {
     ACTOR_EN_KAKASI,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_KA,
     sizeof(EnKakasi),

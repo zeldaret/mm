@@ -12,7 +12,7 @@ void EnMinifrog_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_FR,
     sizeof(EnMinifrog),

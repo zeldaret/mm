@@ -12,7 +12,7 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnElforg),

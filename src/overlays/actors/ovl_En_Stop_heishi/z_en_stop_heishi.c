@@ -12,7 +12,7 @@ void EnStopheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Stop_heishi_InitVars = {
     ACTOR_EN_STOP_HEISHI,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SDN,
     sizeof(EnStopheishi),

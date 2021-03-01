@@ -12,7 +12,7 @@ void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Sa_InitVars = {
     ACTOR_DM_SA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_STK,
     sizeof(DmSa),

@@ -12,7 +12,7 @@ void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_KUJIYA,
     sizeof(EnKujiya),

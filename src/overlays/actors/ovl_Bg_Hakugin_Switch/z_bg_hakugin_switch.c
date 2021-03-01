@@ -12,7 +12,7 @@ void BgHakuginSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
-    ACTORTYPE_SWITCH,
+    ACTORCAT_SWITCH,
     FLAGS,
     OBJECT_GORONSWITCH,
     sizeof(BgHakuginSwitch),

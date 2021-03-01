@@ -12,7 +12,7 @@ void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_WALLMASTER,
     sizeof(EnFloormas),
