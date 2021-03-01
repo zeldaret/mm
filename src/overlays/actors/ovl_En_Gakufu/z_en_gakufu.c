@@ -12,7 +12,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGakufu),

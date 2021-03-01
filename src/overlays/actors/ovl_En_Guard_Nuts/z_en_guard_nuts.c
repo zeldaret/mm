@@ -12,7 +12,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNK,
     sizeof(EnGuardNuts),

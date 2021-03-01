@@ -12,7 +12,7 @@ void OceffWipe5_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Oceff_Wipe5_InitVars = {
     ACTOR_OCEFF_WIPE5,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(OceffWipe5),

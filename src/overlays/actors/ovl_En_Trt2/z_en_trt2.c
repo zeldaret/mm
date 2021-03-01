@@ -11,7 +11,7 @@ void EnTrt2_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Trt2_InitVars = {
     ACTOR_EN_TRT2,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TRT,
     sizeof(EnTrt2),

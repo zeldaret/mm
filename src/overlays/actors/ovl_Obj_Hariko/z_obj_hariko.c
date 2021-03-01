@@ -12,7 +12,7 @@ void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HARIKO,
     sizeof(ObjHariko),

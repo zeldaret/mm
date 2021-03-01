@@ -11,7 +11,7 @@ void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjKibako),

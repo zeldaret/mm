@@ -11,7 +11,7 @@ void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Nozoki_InitVars = {
     ACTOR_OBJ_NOZOKI,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjNozoki),

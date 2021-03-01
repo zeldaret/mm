@@ -12,7 +12,7 @@ void ObjLightblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_LIGHTBLOCK,
     sizeof(ObjLightblock),

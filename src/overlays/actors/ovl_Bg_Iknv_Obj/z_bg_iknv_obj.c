@@ -12,7 +12,7 @@ void BgIknvObj_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Iknv_Obj_InitVars = {
     ACTOR_BG_IKNV_OBJ,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_IKNV_OBJ,
     sizeof(BgIknvObj),

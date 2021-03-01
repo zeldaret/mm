@@ -12,7 +12,7 @@ void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_ST,
     sizeof(EnSi),

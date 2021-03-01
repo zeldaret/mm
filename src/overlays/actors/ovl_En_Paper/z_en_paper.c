@@ -12,7 +12,7 @@ void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BAL,
     sizeof(EnPaper),

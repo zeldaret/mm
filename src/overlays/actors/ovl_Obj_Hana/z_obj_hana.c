@@ -16,7 +16,7 @@ void ObjHana_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Hana_InitVars = {
     ACTOR_OBJ_HANA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HANA,
     sizeof(ObjHana),
@@ -30,9 +30,9 @@ extern UNK_TYPE D_06000500;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(unkFC, 900, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 40, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 40, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 900, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_STOP),
 };
 
 void ObjHana_Init(Actor* thisx, GlobalContext* globalCtx) {

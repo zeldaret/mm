@@ -11,7 +11,7 @@ void ObjBombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BOMBIWA,
     sizeof(ObjBombiwa),

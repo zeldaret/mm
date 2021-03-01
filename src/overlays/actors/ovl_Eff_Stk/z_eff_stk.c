@@ -12,7 +12,7 @@ void EffStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_STK2,
     sizeof(EffStk),

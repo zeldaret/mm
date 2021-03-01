@@ -11,7 +11,7 @@ void EffKamejimaWave_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_KAMEJIMA,
     sizeof(EffKamejimaWave),

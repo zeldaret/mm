@@ -11,7 +11,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_GMO,
     sizeof(EnBaguo),

@@ -12,7 +12,7 @@ void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HANAREYAMA_OBJ,
     sizeof(EnDnb),

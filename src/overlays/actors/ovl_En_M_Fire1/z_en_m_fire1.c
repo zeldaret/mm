@@ -11,7 +11,7 @@ void EnMFire1_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_M_Fire1_InitVars = {
     ACTOR_EN_M_FIRE1,
-    ACTORTYPE_MISC,
+    ACTORCAT_MISC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMFire1),

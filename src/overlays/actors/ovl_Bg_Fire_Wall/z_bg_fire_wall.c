@@ -11,7 +11,7 @@ void BgFireWall_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FWALL,
     sizeof(BgFireWall),

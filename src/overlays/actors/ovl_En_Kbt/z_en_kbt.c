@@ -12,7 +12,7 @@ void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_KBT,
     sizeof(EnKbt),

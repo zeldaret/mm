@@ -11,7 +11,7 @@ void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ShotSun),

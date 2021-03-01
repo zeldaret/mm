@@ -12,7 +12,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_OKUTA,
     sizeof(EnSyatekiOkuta),

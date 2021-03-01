@@ -12,7 +12,7 @@ void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_LOTUS,
     sizeof(BgLotus),

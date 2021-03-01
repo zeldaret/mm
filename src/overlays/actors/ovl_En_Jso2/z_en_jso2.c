@@ -12,7 +12,7 @@ void EnJso2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Jso2_InitVars = {
     ACTOR_EN_JSO2,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_JSO,
     sizeof(EnJso2),

@@ -12,7 +12,7 @@ void EnTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tsn_InitVars = {
     ACTOR_EN_TSN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TSN,
     sizeof(EnTsn),

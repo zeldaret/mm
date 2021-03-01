@@ -12,7 +12,7 @@ void EnSlime_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Slime_InitVars = {
     ACTOR_EN_SLIME,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_SLIME,
     sizeof(EnSlime),

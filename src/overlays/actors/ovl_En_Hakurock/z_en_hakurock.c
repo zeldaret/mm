@@ -11,7 +11,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BOSS_HAKUGIN,
     sizeof(EnHakurock),

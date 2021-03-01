@@ -12,7 +12,7 @@ void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_PO_FUSEN,
     sizeof(EnPoFusen),

@@ -12,7 +12,7 @@ void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_STREAM,
     sizeof(EnStream),

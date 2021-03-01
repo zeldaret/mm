@@ -12,7 +12,7 @@ void ItemInbox_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Item_Inbox_InitVars = {
     ACTOR_ITEM_INBOX,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ItemInbox),

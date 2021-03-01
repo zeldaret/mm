@@ -12,7 +12,7 @@ void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BOSS_HAKUGIN,
     sizeof(BossHakugin),

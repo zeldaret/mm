@@ -12,7 +12,7 @@ void EnDekubaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEKUBABA,
     sizeof(EnDekubaba),

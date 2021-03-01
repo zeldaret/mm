@@ -12,7 +12,7 @@ void EnFish2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_FB,
     sizeof(EnFish2),

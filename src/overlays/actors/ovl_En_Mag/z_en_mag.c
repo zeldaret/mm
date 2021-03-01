@@ -12,7 +12,7 @@ void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_MAG,
     sizeof(EnMag),

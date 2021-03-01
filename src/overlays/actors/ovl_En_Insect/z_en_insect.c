@@ -12,7 +12,7 @@ void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Insect_InitVars = {
     ACTOR_EN_INSECT,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInsect),

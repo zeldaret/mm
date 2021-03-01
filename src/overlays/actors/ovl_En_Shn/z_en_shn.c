@@ -12,7 +12,7 @@ void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Shn_InitVars = {
     ACTOR_EN_SHN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SHN,
     sizeof(EnShn),

@@ -12,7 +12,7 @@ void EnWeatherTag_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Weather_Tag_InitVars = {
     ACTOR_EN_WEATHER_TAG,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnWeatherTag),

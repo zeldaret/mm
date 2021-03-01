@@ -12,7 +12,7 @@ void EnTanron5_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tanron5_InitVars = {
     ACTOR_EN_TANRON5,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BOSS02,
     sizeof(EnTanron5),

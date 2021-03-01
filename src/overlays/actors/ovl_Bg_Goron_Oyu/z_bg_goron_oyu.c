@@ -12,7 +12,7 @@ void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_OYU,
     sizeof(BgGoronOyu),

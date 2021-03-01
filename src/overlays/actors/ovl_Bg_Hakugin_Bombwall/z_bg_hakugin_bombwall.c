@@ -12,7 +12,7 @@ void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginBombwall),

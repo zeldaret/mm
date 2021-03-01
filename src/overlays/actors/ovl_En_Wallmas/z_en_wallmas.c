@@ -12,7 +12,7 @@ void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_WALLMASTER,
     sizeof(EnWallmas),

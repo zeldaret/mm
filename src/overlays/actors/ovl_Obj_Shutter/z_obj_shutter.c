@@ -12,7 +12,7 @@ void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjShutter),

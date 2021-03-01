@@ -12,7 +12,7 @@ void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_NY,
     sizeof(ObjMine),

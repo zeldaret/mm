@@ -12,7 +12,7 @@ void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BIGOKUTA,
     sizeof(EnBigokuta),

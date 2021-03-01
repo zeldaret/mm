@@ -12,7 +12,7 @@ void DmChar04_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DmChar04),

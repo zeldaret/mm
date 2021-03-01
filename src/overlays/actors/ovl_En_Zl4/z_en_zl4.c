@@ -12,7 +12,7 @@ void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_STK,
     sizeof(EnZl4),

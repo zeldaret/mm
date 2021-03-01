@@ -11,7 +11,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Minislime_InitVars = {
     ACTOR_EN_MINISLIME,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnMinislime),

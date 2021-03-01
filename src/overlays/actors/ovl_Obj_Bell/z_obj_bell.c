@@ -12,7 +12,7 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Bell_InitVars = {
     ACTOR_OBJ_BELL,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_F52_OBJ,
     sizeof(ObjBell),

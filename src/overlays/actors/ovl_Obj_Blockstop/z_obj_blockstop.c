@@ -10,7 +10,7 @@ void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjBlockstop),

@@ -12,7 +12,7 @@ void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Light_InitVars = {
     ACTOR_EN_LIGHT,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnLight),

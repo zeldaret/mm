@@ -12,7 +12,7 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowIce),

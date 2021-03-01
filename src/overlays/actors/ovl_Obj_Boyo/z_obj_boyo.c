@@ -12,7 +12,7 @@ void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Boyo_InitVars = {
     ACTOR_OBJ_BOYO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BOYO,
     sizeof(ObjBoyo),

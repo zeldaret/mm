@@ -12,7 +12,7 @@ void EnDnh_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dnh_InitVars = {
     ACTOR_EN_DNH,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TRO,
     sizeof(EnDnh),

@@ -12,7 +12,7 @@ void EnRat_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_RAT,
     sizeof(EnRat),

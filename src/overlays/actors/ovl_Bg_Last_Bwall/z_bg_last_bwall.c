@@ -12,7 +12,7 @@ void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_LAST_OBJ,
     sizeof(BgLastBwall),

@@ -12,7 +12,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_TAKARAYA_OBJECTS,
     sizeof(ObjTakarayaWall),

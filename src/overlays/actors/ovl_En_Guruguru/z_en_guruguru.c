@@ -12,7 +12,7 @@ void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_FU,
     sizeof(EnGuruguru),

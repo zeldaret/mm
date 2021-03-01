@@ -12,7 +12,7 @@ void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Kin2_Fence_InitVars = {
     ACTOR_BG_KIN2_FENCE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Fence),

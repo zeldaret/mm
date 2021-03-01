@@ -12,7 +12,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Karebaba_InitVars = {
     ACTOR_EN_KAREBABA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEKUBABA,
     sizeof(EnKarebaba),

@@ -12,7 +12,7 @@ void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_CROW,
     sizeof(EnScopecrow),

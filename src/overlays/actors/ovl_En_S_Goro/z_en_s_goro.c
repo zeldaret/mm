@@ -12,7 +12,7 @@ void EnSGoro_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_S_Goro_InitVars = {
     ACTOR_EN_S_GORO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OF1D_MAP,
     sizeof(EnSGoro),

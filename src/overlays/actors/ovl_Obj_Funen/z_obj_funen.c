@@ -10,7 +10,7 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Funen_InitVars = {
     ACTOR_OBJ_FUNEN,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_FUNEN,
     sizeof(ObjFunen),

@@ -12,7 +12,7 @@ void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Bombwall),

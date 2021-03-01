@@ -11,7 +11,7 @@ void EnIshi_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnIshi),

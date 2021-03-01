@@ -11,7 +11,7 @@ void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTimeTag),

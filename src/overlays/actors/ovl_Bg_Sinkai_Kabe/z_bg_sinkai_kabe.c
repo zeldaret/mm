@@ -11,7 +11,7 @@ void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_SINKAI_KABE,
     sizeof(BgSinkaiKabe),

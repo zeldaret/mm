@@ -12,7 +12,7 @@ void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_KGY,
     sizeof(EnKgy),

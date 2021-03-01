@@ -14,7 +14,7 @@ void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx);
 
 const ActorInit En_Dy_Extra_InitVars = {
     ACTOR_EN_DY_EXTRA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_DY_OBJ,
     sizeof(EnDyExtra),
@@ -37,7 +37,7 @@ void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.x = 0.025f;
     this->actor.scale.y = 0.039f;
     this->actor.scale.z = 0.025f;
-    this->unk160 = this->actor.currPosRot.pos;
+    this->unk160 = this->actor.world.pos;
     this->actor.gravity = -0.2f;
     this->unk150 = 1.0f;
     this->unk14C = 0x3C;
@@ -47,7 +47,7 @@ void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
 void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
     Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
-    if (this->actor.currPosRot.pos.y < -85.0f) {
+    if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
 
@@ -67,7 +67,7 @@ void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
 
     this->unk150 -= 0.02f;
     
-    if (this->actor.currPosRot.pos.y < -85.0f) {
+    if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
 }

@@ -12,7 +12,7 @@ void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaMirror),

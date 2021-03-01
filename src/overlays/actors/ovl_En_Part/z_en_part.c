@@ -12,7 +12,7 @@ void EnPart_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Part_InitVars = {
     ACTOR_EN_PART,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnPart),

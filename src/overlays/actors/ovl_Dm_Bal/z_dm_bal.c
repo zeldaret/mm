@@ -12,7 +12,7 @@ void DmBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Bal_InitVars = {
     ACTOR_DM_BAL,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BAL,
     sizeof(DmBal),

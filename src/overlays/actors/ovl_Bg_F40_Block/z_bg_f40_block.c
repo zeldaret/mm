@@ -12,7 +12,7 @@ void BgF40Block_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_F40_Block_InitVars = {
     ACTOR_BG_F40_BLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_F40_OBJ,
     sizeof(BgF40Block),

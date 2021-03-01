@@ -12,7 +12,7 @@ void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_CROW,
     sizeof(EnCrow),

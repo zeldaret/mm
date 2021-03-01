@@ -12,7 +12,7 @@ void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_COW,
     sizeof(EnCow),

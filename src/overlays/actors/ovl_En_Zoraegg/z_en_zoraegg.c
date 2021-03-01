@@ -12,7 +12,7 @@ void EnZoraegg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_ZORAEGG,
     sizeof(EnZoraegg),

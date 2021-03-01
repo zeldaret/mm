@@ -12,7 +12,7 @@ void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TRU,
     sizeof(EnTruMt),

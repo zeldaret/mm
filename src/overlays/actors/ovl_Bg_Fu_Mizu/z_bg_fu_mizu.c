@@ -12,7 +12,7 @@ void BgFuMizu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_FU_KAITEN,
     sizeof(BgFuMizu),

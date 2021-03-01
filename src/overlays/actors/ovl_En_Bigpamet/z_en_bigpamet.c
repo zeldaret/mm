@@ -12,7 +12,7 @@ void EnBigpamet_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bigpamet_InitVars = {
     ACTOR_EN_BIGPAMET,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_TL,
     sizeof(EnBigpamet),

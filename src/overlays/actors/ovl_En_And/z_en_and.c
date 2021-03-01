@@ -12,7 +12,7 @@ void EnAnd_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AND,
     sizeof(EnAnd),

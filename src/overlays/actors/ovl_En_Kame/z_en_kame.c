@@ -12,7 +12,7 @@ void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_TL,
     sizeof(EnKame),

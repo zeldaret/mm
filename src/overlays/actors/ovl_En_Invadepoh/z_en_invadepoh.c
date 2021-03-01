@@ -11,7 +11,7 @@ void EnInvadepoh_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvadepoh),

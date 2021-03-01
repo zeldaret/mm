@@ -12,7 +12,7 @@ void BgHakaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaBombwall),

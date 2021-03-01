@@ -11,7 +11,7 @@ void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tag_Obj_InitVars = {
     ACTOR_EN_TAG_OBJ,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTagObj),

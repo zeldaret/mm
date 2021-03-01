@@ -12,7 +12,7 @@ void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_ICICLE,
     sizeof(BgIcicle),

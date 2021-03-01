@@ -12,7 +12,7 @@ void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sb_InitVars = {
     ACTOR_EN_SB,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_SB,
     sizeof(EnSb),

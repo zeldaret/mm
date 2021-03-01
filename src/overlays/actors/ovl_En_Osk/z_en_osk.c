@@ -12,7 +12,7 @@ void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_IKN_DEMO,
     sizeof(EnOsk),

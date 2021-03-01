@@ -12,7 +12,7 @@ void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Keikoku_Saku_InitVars = {
     ACTOR_BG_KEIKOKU_SAKU,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_KEIKOKU_OBJ,
     sizeof(BgKeikokuSaku),

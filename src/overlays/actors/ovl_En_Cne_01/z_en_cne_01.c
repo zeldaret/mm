@@ -12,7 +12,7 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnCne01),

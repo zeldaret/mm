@@ -12,7 +12,7 @@ void EnBigslime_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnBigslime),

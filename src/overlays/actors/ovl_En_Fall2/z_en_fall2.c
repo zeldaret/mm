@@ -12,7 +12,7 @@ void EnFall2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_FALL2,
     sizeof(EnFall2),

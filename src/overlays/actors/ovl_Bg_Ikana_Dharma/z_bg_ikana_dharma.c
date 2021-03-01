@@ -12,7 +12,7 @@ void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaDharma),

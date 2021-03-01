@@ -12,7 +12,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kanban_InitVars = {
     ACTOR_EN_KANBAN,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_KANBAN,
     sizeof(EnKanban),

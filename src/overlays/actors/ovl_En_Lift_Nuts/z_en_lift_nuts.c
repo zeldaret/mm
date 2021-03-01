@@ -12,7 +12,7 @@ void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DNT,
     sizeof(EnLiftNuts),

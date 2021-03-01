@@ -12,7 +12,7 @@ void BgOpenShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
-    ACTORTYPE_DOOR,
+    ACTORCAT_DOOR,
     FLAGS,
     OBJECT_OPEN_OBJ,
     sizeof(BgOpenShutter),

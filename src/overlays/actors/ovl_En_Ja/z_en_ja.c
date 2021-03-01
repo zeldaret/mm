@@ -12,7 +12,7 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnJa),

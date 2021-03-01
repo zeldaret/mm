@@ -12,7 +12,7 @@ void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_YADO_OBJ,
     sizeof(ObjYado),

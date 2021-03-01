@@ -11,7 +11,7 @@ void EnSt_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_ST,
     sizeof(EnSt),

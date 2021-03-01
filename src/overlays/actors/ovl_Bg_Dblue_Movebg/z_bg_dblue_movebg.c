@@ -12,7 +12,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueMovebg),

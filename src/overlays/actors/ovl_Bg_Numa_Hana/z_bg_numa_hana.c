@@ -12,7 +12,7 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_NUMA_OBJ,
     sizeof(BgNumaHana),

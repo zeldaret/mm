@@ -12,7 +12,7 @@ void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_SPINYROLL,
     sizeof(ObjSpinyroll),

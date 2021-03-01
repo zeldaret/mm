@@ -12,7 +12,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Mir_Ray3_InitVars = {
     ACTOR_MIR_RAY3,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_MIR_RAY,
     sizeof(MirRay3),

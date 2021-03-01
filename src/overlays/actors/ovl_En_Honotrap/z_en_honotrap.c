@@ -12,7 +12,7 @@ void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(EnHonotrap),

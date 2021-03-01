@@ -12,7 +12,7 @@ void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Ravine_InitVars = {
     ACTOR_DM_RAVINE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_KEIKOKU_DEMO,
     sizeof(DmRavine),

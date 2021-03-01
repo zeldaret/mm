@@ -12,7 +12,7 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_RAF,
     sizeof(EnRaf),

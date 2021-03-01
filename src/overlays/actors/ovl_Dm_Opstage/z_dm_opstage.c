@@ -12,7 +12,7 @@ void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_KEIKOKU_DEMO,
     sizeof(DmOpstage),

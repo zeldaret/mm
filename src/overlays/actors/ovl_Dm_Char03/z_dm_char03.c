@@ -12,7 +12,7 @@ void DmChar03_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Char03_InitVars = {
     ACTOR_DM_CHAR03,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_OSN,
     sizeof(DmChar03),

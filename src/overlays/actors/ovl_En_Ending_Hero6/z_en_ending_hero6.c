@@ -12,7 +12,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEndingHero6),

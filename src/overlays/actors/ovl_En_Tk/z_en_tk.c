@@ -12,7 +12,7 @@ void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TK,
     sizeof(EnTk),

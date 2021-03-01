@@ -12,7 +12,7 @@ void EnRu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_RU2,
     sizeof(EnRu),

@@ -12,7 +12,7 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_ST,
     sizeof(EnSw),

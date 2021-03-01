@@ -12,7 +12,7 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DODONGO,
     sizeof(EnDodongo),

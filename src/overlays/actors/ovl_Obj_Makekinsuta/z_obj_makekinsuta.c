@@ -11,7 +11,7 @@ void ObjMakekinsuta_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Makekinsuta_InitVars = {
     ACTOR_OBJ_MAKEKINSUTA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMakekinsuta),

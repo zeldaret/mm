@@ -12,7 +12,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueWaterfall),

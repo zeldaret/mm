@@ -12,7 +12,7 @@ void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DORA,
     sizeof(ObjDora),

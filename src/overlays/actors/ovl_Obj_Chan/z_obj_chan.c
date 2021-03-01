@@ -12,7 +12,7 @@ void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_OBJECT_UNSET_CHAN,
     sizeof(ObjChan),

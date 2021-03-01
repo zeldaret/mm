@@ -14,7 +14,7 @@ void func_80BE60D0(EnTanron6* this, GlobalContext* globalCtx);
 
 const ActorInit En_Tanron6_InitVars = {
     ACTOR_EN_TANRON6,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_TANRON5,
     sizeof(EnTanron6),
@@ -24,18 +24,18 @@ const ActorInit En_Tanron6_InitVars = {
     (ActorFunc)EnTanron6_Draw
 };
 
-ActorDamageChart D_80BE6170 = { 0xF0, 0xF0, 0x00, 0xF1, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0,
+DamageTable D_80BE6170 = { 0xF0, 0xF0, 0x00, 0xF1, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0,
                                 0xE1, 0xE1, 0x46, 0xF0, 0xF0, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0xF0,
                                 0xE1, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0 };
 
 void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6* this = THIS;
 
-    this->actor.unkA0.mass = 0xA;
+    this->actor.colChkInfo.mass = 0xA;
     Actor_SetDrawParams(&this->actor.shape, 0, func_800B3FC0, 19.0f);
-    this->actor.unkA0.health = 1;
-    this->actor.unkA0.damageChart = &D_80BE6170;
-    this->actor.unk1F = 6;
+    this->actor.colChkInfo.health = 1;
+    this->actor.colChkInfo.damageTable = &D_80BE6170;
+    this->actor.targetMode = 6;
     EnTanron6_DoNothing(this);
 }
 

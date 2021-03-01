@@ -12,7 +12,7 @@ void ObjY2shutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Y2shutter_InitVars = {
     ACTOR_OBJ_Y2SHUTTER,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjY2shutter),

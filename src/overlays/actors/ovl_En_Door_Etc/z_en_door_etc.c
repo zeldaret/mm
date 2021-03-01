@@ -11,7 +11,7 @@ void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Door_Etc_InitVars = {
     ACTOR_EN_DOOR_ETC,
-    ACTORTYPE_DOOR,
+    ACTORCAT_DOOR,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDoorEtc),

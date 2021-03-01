@@ -12,7 +12,7 @@ void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_ICEFLOE,
     sizeof(BgIcefloe),

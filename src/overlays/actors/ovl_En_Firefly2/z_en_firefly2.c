@@ -11,7 +11,7 @@ void EnFirefly2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Firefly2_InitVars = {
     ACTOR_EN_FIREFLY2,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_FIREFLY,
     sizeof(EnFirefly2),

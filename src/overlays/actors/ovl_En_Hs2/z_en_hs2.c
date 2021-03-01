@@ -13,7 +13,7 @@ void EnHs2_DoNothing(EnHs2* this, GlobalContext* globalCtx);
 
 const ActorInit En_Hs2_InitVars = {
     ACTOR_EN_HS2,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHs2),

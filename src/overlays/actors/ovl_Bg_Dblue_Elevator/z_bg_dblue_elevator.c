@@ -12,7 +12,7 @@ void BgDblueElevator_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Dblue_Elevator_InitVars = {
     ACTOR_BG_DBLUE_ELEVATOR,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueElevator),

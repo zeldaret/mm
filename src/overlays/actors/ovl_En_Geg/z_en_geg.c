@@ -12,7 +12,7 @@ void EnGeg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OF1D_MAP,
     sizeof(EnGeg),

@@ -14,7 +14,7 @@ void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx);
 
 const ActorInit En_Okarina_Effect_InitVars = {
     ACTOR_EN_OKARINA_EFFECT,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOkarinaEffect),
