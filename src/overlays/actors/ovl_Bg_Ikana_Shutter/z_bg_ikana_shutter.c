@@ -41,9 +41,9 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
 };
 
 static InitChainEntry D_80BD5D10[] = {
-    ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -81,12 +81,12 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD5828(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5844;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
 void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx) {
@@ -97,7 +97,7 @@ void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
 void func_80BD5878(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5894;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
 void func_80BD5894(BgIkanaShutter* this, GlobalContext* globalCtx) {
@@ -116,7 +116,7 @@ void func_80BD58F0(BgIkanaShutter* this) {
 
 void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx) {
     Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
-    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.currPosRot.pos.y, this->dyna.actor.initPosRot.pos.y + 220.0f, 0.5f,
+    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 220.0f, 0.5f,
                                 this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
         func_80BD599C(this);
     }
@@ -124,7 +124,7 @@ void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
 void func_80BD599C(BgIkanaShutter* this) {
     this->actionFunc = func_80BD59C4;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y + 220.0f;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 220.0f;
 }
 
 void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx) {
@@ -144,8 +144,8 @@ void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
     this->dyna.actor.velocity.y += -5.0f;
     this->dyna.actor.velocity.y *= 0.978f;
-    this->dyna.actor.currPosRot.pos.y += this->dyna.actor.velocity.y;
-    if (this->dyna.actor.currPosRot.pos.y <= this->dyna.actor.initPosRot.pos.y) {
+    this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
+    if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         quake = Quake_Add(ACTIVE_CAM, 3U);
         Quake_SetSpeed(quake, 0x5420);
         Quake_SetQuakeValues(quake, 4, 0, 0, 0);
@@ -156,7 +156,7 @@ void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
 void func_80BD5AE8(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5B04;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
 void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
@@ -167,7 +167,7 @@ void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
 void func_80BD5B44(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5B60;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 }
 
 void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx) {
@@ -186,7 +186,7 @@ void func_80BD5BC4(BgIkanaShutter* this) {
 
 void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
     Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
-    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.currPosRot.pos.y, this->dyna.actor.initPosRot.pos.y + -220.0f, 0.5f,
+    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + -220.0f, 0.5f,
                                 this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
         func_80BD5C64(this);
     }
@@ -194,7 +194,7 @@ void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
 
 void func_80BD5C64(BgIkanaShutter* this) {
     this->actionFunc = func_80BD5C8C;
-    this->dyna.actor.currPosRot.pos.y = this->dyna.actor.initPosRot.pos.y + -220.0f;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + -220.0f;
 }
 
 void func_80BD5C8C(BgIkanaShutter* this, GlobalContext* globalCtx) {
