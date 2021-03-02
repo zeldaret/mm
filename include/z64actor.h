@@ -41,7 +41,7 @@ typedef struct {
 } CollisionCheckInfoInit2;
 
 typedef struct {
-    /* 0x00 */ DamageTable* damageChart;
+    /* 0x00 */ DamageTable* damageTable;
     /* 0x04 */ Vec3f displacement;
     /* 0x10 */ s16 cylRadius;
     /* 0x12 */ s16 cylHeight;

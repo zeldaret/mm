@@ -25,8 +25,22 @@ const ActorInit Arms_Hook_InitVars = {
 };
 
 ColliderQuadInit D_808C1BC0 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_PLAYER, COLSHAPE_QUAD, },
-    { ELEMTYPE_UNK2, { 0x00000080, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000080, 0x00, 0x02 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
@@ -125,10 +139,11 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
     func_800B8F98(&player->base, 0x100B);
     ArmsHook_CheckForCancel(this);
 
-    if (this->timer != 0 && (this->collider.base.atFlags & 2) && (this->collider.info.atHitInfo->elemType != 4)) {
+    if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
+        (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
         if ((touchedActor->update != NULL) && (touchedActor->flags & 0x600)) {
-            if (this->collider.info.atHitInfo->bumperFlags & 4) {
+            if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if ((touchedActor->flags & 0x400) == 0x400) {
                     func_808C1154(this);
@@ -170,8 +185,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         {
             f32 velocity;
 
-            bodyDistDiff =
-                Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
+            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
             if (bodyDistDiff < 30.0f) {
                 velocity = 0.0f;
                 phi_f16 = 0.0f;
@@ -244,8 +258,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             if (func_800C9CEC(&globalCtx->colCtx, poly, bgId)) {
                 {
                     DynaPolyActor* dynaPolyActor;
-                    if (bgId != 0x32 &&
-                        (dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bgId)) != NULL) {
+                    if (bgId != 0x32 && (dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bgId)) != NULL) {
                         ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                     }
                 }
@@ -305,8 +318,8 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPMatrix(sp44->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(sp44->polyOpa.p++, D_0601D960);
-            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y,
-                                        this->actor.world.pos.z, MTXMODE_NEW);
+            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                        MTXMODE_NEW);
             Math_Vec3f_Diff(&player->unk368, &this->actor.world.pos, &sp68);
             sp48 = SQ(sp68.x) + SQ(sp68.z);
             sp4C = sqrtf(sp48);

@@ -17,18 +17,18 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo
     *effect = 0;
     damage = CollisionCheck_GetToucherDamage(at, atInfo, ac, acInfo);
 
-    if (ac->actor->colChkInfo.damageChart != NULL) {
+    if (ac->actor->colChkInfo.damageTable != NULL) {
         dmgFlags = atInfo->toucher.dmgFlags;
 
-        for (i = 0; i != ARRAY_COUNT(ac->actor->colChkInfo.damageChart->attack); i++) {
+        for (i = 0; i != ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
             if (dmgFlags == 1) {
                 break;
             }
             dmgFlags >>= 1;
         }
 
-        damage *= damageMultipliers[ac->actor->colChkInfo.damageChart->attack[i] & 0xF];
-        *effect = (ac->actor->colChkInfo.damageChart->attack[i] >> 4) & 0xF;
+        damage *= damageMultipliers[ac->actor->colChkInfo.damageTable->attack[i] & 0xF];
+        *effect = (ac->actor->colChkInfo.damageTable->attack[i] >> 4) & 0xF;
     }
     return damage;
 }
@@ -161,7 +161,7 @@ s32 Collider_SetBump(GlobalContext* ctxt, ColliderBump* bump, ColliderBumpInit* 
 
 s32 Collider_InitInfo(GlobalContext* ctxt, ColliderInfo* info) {
     static ColliderInfo defaultColliderInfo = {
-        { 0, 0, 0 }, { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
+        { 0, 0, 0 },   { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
         ELEMTYPE_UNK0, TOUCH_NONE,
         BUMP_NONE,     OCELEM_NONE,
         NULL,          NULL,
@@ -2903,8 +2903,8 @@ s32 CollisionCheck_GetMassType(u8 mass) {
  * Sets OC collision flags for OC collider overlaps. If both colliders are attached to actors and can push,
  * also performs an elastic collision where both colliders are moved apart in proportion to their masses.
  */
-void CollisionCheck_SetOCvsOC(GlobalContext* ctxt, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right,
-                              ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap) {
+void CollisionCheck_SetOCvsOC(GlobalContext* ctxt, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos,
+                              Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap) {
     f32 pad;
     f32 leftDispRatio;
     f32 rightDispRatio;
@@ -3043,8 +3043,8 @@ void CollisionCheck_OC_JntSphVsCyl(GlobalContext* ctxt, CollisionCheckContext* c
     ColliderJntSphElement* leftElem;
     f32 overlap;
 
-    if (left->count > 0 && left->elements != NULL && (left->base.ocFlags1 & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
-        (right->info.ocElemFlags & OCELEM_ON)) {
+    if (left->count > 0 && left->elements != NULL && (left->base.ocFlags1 & OCELEM_ON) &&
+        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
 
         for (leftElem = &left->elements[0]; leftElem < &left->elements[left->count]; leftElem++) {
             if (!(leftElem->info.ocElemFlags & OCELEM_ON)) {
@@ -3072,8 +3072,8 @@ void CollisionCheck_OC_JntSphVsSphere(GlobalContext* ctxt, CollisionCheckContext
     ColliderJntSphElement* leftElem;
     f32 overlap;
 
-    if (left->count > 0 && left->elements != NULL && (left->base.ocFlags1 & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
-        (right->info.ocElemFlags & OCELEM_ON)) {
+    if (left->count > 0 && left->elements != NULL && (left->base.ocFlags1 & OCELEM_ON) &&
+        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
 
         for (leftElem = &left->elements[0]; leftElem < &left->elements[left->count]; leftElem++) {
             if (!(leftElem->info.ocElemFlags & OCELEM_ON)) {
@@ -3107,8 +3107,8 @@ void CollisionCheck_OC_CylVsCyl(GlobalContext* ctxt, CollisionCheckContext* colC
     ColliderCylinder* right = (ColliderCylinder*)r;
     f32 overlap;
 
-    if ((left->base.ocFlags1 & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
-        (right->info.ocElemFlags & OCELEM_ON)) {
+    if ((left->base.ocFlags1 & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
+        (left->info.ocElemFlags & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
         if (Math3D_ColCylinderCylinderAmount(&left->dim, &right->dim, &overlap) != 0) {
             Vec3f leftPos;
             Vec3f rightPos;
@@ -3129,8 +3129,8 @@ void CollisionCheck_OC_CylVsSphere(GlobalContext* ctxt, CollisionCheckContext* c
     ColliderSphere* right = (ColliderSphere*)r;
     f32 overlap;
 
-    if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
-        (right->info.ocElemFlags & OCELEM_ON)) {
+    if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
+        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
         if (Math3D_ColSphereCylinderDistance(&right->dim.worldSphere, &left->dim, &overlap) != 0) {
             Vec3f leftPos;
             Vec3f rightPos;
@@ -3165,8 +3165,8 @@ void CollisionCheck_OC_SphereVsSphere(GlobalContext* ctxt, CollisionCheckContext
     ColliderSphere* right = (ColliderSphere*)r;
     f32 overlap;
 
-    if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
-        (right->info.ocElemFlags & OCELEM_ON)) {
+    if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
+        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
         if (Math3D_ColSphereSphereIntersect(&left->dim.worldSphere, &right->dim.worldSphere, &overlap) != 0) {
             Vec3f leftPos;
             Vec3f rightPos;
@@ -3279,9 +3279,9 @@ void CollisionCheck_SetInfoNoDamageTable(CollisionCheckInfo* info, CollisionChec
 /**
  * Sets up CollisionCheckInfo using the values in init. Does not set the unused unk_14
  */
-void CollisionCheck_SetInfo(CollisionCheckInfo* info, DamageTable* damageChart, CollisionCheckInfoInit* init) {
+void CollisionCheck_SetInfo(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit* init) {
     info->health = init->health;
-    info->damageChart = damageChart;
+    info->damageTable = damageTable;
     info->cylRadius = init->cylRadius;
     info->cylHeight = init->cylHeight;
     info->mass = init->mass;
@@ -3290,9 +3290,9 @@ void CollisionCheck_SetInfo(CollisionCheckInfo* info, DamageTable* damageChart, 
 /**
  * Sets up CollisionCheckInfo using the values in init. Sets the unused unk_14
  */
-void CollisionCheck_SetInfo2(CollisionCheckInfo* info, DamageTable* damageChart, CollisionCheckInfoInit2* init) {
+void CollisionCheck_SetInfo2(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit2* init) {
     info->health = init->health;
-    info->damageChart = damageChart;
+    info->damageTable = damageTable;
     info->cylRadius = init->cylRadius;
     info->cylHeight = init->cylHeight;
     info->cylYShift = init->cylYShift;
@@ -3345,10 +3345,11 @@ void CollisionCheck_ApplyDamage(GlobalContext* ctxt, CollisionCheckContext* colC
                 }
             }
         }
-        if (collider->actor->colChkInfo.damageChart != NULL) {
+        if (collider->actor->colChkInfo.damageTable != NULL) {
             collider->actor->colChkInfo.damageEffect = effect;
         }
-        if (!(collider->acFlags & AC_HARD) || ((collider->acFlags & AC_HARD) && atInfo->toucher.dmgFlags == 0x20000000)) {
+        if (!(collider->acFlags & AC_HARD) ||
+            ((collider->acFlags & AC_HARD) && atInfo->toucher.dmgFlags == 0x20000000)) {
             if (collider->actor->colChkInfo.damage < finalDamage) {
                 collider->actor->colChkInfo.damage = finalDamage;
             }
