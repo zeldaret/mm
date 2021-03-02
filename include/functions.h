@@ -2826,10 +2826,10 @@ void func_801420C0(void* arg0); // func_801420C0
 void func_801420F4(void* arg0); // func_801420F4
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2); // func_80142100
 void func_80142440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9); // func_80142440
-void func_80143148(void); // func_80143148
-void func_801431E8(void); // func_801431E8
+void func_80143148(SkyboxContext* skyboxCtx, int arg1); // func_80143148
+void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801431E8
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
-void func_801434E4(GameState* ctxt, int iParm2, short sParm3); // func_801434E4
+void func_801434E4(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801434E4
 void func_801435A0(void); // func_801435A0
 void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7); // func_80143624
 void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_80143668
