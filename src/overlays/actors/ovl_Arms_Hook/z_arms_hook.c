@@ -25,9 +25,9 @@ const ActorInit Arms_Hook_InitVars = {
 };
 
 ColliderQuadInit D_808C1BC0 = {
-    { 10, 0x09, 0x00, 0x00, 0x08, 3 },
-    { 0x02, { 0x00000080, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, 0x05, 0x00, 0x00 },
-    { 0 },
+    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_PLAYER, COLSHAPE_QUAD, },
+    { ELEMTYPE_UNK2, { 0x00000080, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
 Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };

@@ -26,19 +26,17 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
     (ActorFunc)BgIkanaRay_Draw
 };
 
-// TODO better formatting
 ColliderCylinderInit bgIkanaRayCylinderInit = {
-    { 10, 33, 0, 0, 0, 1 },
-    { 0, { 0x00200000, 0, 0 }, { 0, 0, 0 }, 25, 0, 1 },
-    { 90, 420, 65116}
+    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
+    { 90, 420, -420, { 0, 0, 0 } },
 };
 
-// TODO macro
-InitChainEntry  bgIkanaRayCompInit[] = {
-    {1, 6, 0x0FC, 4000},
-    {1, 6, 0x100, 1000},
-    {1, 6, 0x104, 1000},
-    {0, 9, 0x058, 100}
+InitChainEntry bgIkanaRayCompInit[] = {
+    ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk100, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(unk104, 1000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {

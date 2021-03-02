@@ -21,7 +21,7 @@ ICHAIN_MACROS = [
     'ICHAIN_VEC3S',
 ]
 
-Z64_ACTOR_PATH = "../include/z64actor.h"
+Z64_ACTOR_PATH = "../../include/z64actor.h"
 
 def get_actor_var_names():
     in_actor = False
