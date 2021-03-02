@@ -507,7 +507,7 @@ SECTIONS
         build/asm/code_data_0x80138BA0.o(.data)
         build/asm/code_data_z_sub_s.o(.data)
         build/asm/code_data_z_vimode.o(.data)
-        build/asm/code_data_z_vr_box.o(.data)
+        build/src/code/z_vr_box.o(.data)
         build/asm/code_data_z_vr_box_draw.o(.data)
         build/asm/code_data_z_sram_NES.o(.data)
         build/asm/code_data_z_message_nes.o(.data)

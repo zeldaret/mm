@@ -1794,6 +1794,14 @@ struct ActorBgIknvObj {
 }; // size = 0x1B0
 
 typedef struct {
+    /* 0x0 */ s32 unk0;
+    /* 0x4 */ s32 unk4;
+    /* 0x8 */ s32 unk8;
+    /* 0xC */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+} struct_801C5F44;
+
+typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ ColorRGBA8 color;
