@@ -801,8 +801,8 @@ typedef struct {
     /* 0x04 */ f32 unk4;
     /* 0x08 */ f32 unk8;
     /* 0x0C */ f32 unkC;
-    /* 0x10 */ UNK_TYPE1 unk10;
-    /* 0x11 */ UNK_TYPE1 unk11;
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 unk11;
     /* 0x12 */ UNK_TYPE1 unk12;
     /* 0x13 */ UNK_TYPE1 unk13;
     /* 0x14 */ UNK_TYPE1 unk14;
@@ -957,6 +957,32 @@ typedef struct {
     /* 0xF1 */ UNK_TYPE1 unkF1;
     /* 0xF2 */ u8 unkF2[0xC];
 } KankyoContext; // size = 0xFE
+
+typedef struct {
+    /* 0x00000 */ View view;
+    /* 0x00168 */ void* skyboxStaticSegment[4];
+    /* 0x00178 */ void* skyboxPaletteStaticSegment;
+    /* 0x0017C */ Gfx* unk17C;
+    /* 0x00180 */ Gfx* unk180;
+    /* 0x00184 */ void* roomVtx;
+    /* 0x00188 */ DmaRequest unk188;
+    /* 0x001A8 */ DmaRequest unk1A8;
+    /* 0x001C8 */ DmaRequest unk1C8;
+    /* 0x001E8 */ OSMesgQueue loadQueue;
+    /* 0x00200 */ OSMesg loadMsg;
+    /* 0x00204 */ s16 skyboxShouldDraw;
+    /* 0x00208 */ f32 rotX;
+    /* 0x0020C */ f32 rotY;
+    /* 0x00210 */ f32 rotZ;
+    /* 0x00214 */ Vec3f eye;
+    /* 0x00220 */ s16 angle;
+    /* 0x00222 */ u8 primR;
+    /* 0x00223 */ u8 primG;
+    /* 0x00224 */ u8 primB;
+    /* 0x00225 */ u8 envR;
+    /* 0x00226 */ u8 envG;
+    /* 0x00227 */ u8 envB;
+} SkyboxContext;
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -1611,7 +1637,8 @@ struct GlobalContext {
     /* 0x01F78 */ GlobalContext1F78 unk1F78[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
-    /* 0x046D8 */ UNK_TYPE1 pad46D8[0x230];
+    /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
+    /* 0x046E0 */ SkyboxContext skyboxCtx;
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;

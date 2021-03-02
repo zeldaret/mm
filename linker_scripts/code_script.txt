@@ -396,7 +396,7 @@ SECTIONS
         build/asm/code_0x80140E80.o(.text)
         build/asm/z_vismono.o(.text)
         build/asm/code_0x801420C0.o(.text)
-        build/asm/z_vr_box.o(.text)
+        build/src/code/z_vr_box.o(.text)
         build/asm/z_vr_box_draw.o(.text)
         build/asm/z_sram_NES.o(.text)
         build/asm/z_message.o(.text)
