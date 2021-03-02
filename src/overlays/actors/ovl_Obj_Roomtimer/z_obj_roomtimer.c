@@ -11,7 +11,7 @@ void ObjRoomtimer_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Roomtimer_InitVars = {
     ACTOR_OBJ_ROOMTIMER,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjRoomtimer),

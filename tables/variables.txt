@@ -6134,7 +6134,7 @@
     0x8087B470:("enFireflyCollisionInit","ColliderSphereInit","",0x2c),
     0x8087B498:("D_8087B498","UNK_TYPE1","",0x1),
     0x8087B49C:("D_8087B49C","UNK_TYPE1","",0x1),
-    0x8087B4A4:("enFireflyDamageChart","DamageTable","",0x20),
+    0x8087B4A4:("enFireflyDamageTable","DamageTable","",0x20),
     0x8087B4C4:("enFireflyInitVars","ActorInitVar","[4]",0x10),
     0x8087B4D4:("D_8087B4D4","UNK_TYPE1","",0x1),
     0x8087B4D8:("D_8087B4D8","UNK_TYPE1","",0x1),

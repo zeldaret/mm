@@ -12,7 +12,7 @@ void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Botihasira_InitVars = {
     ACTOR_BG_BOTIHASIRA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BOTIHASIRA,
     sizeof(BgBotihasira),

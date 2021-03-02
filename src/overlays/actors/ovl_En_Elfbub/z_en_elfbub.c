@@ -12,7 +12,7 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Elfbub_InitVars = {
     ACTOR_EN_ELFBUB,
-    ACTORTYPE_MISC,
+    ACTORCAT_MISC,
     FLAGS,
     OBJECT_BUBBLE,
     sizeof(EnElfbub),

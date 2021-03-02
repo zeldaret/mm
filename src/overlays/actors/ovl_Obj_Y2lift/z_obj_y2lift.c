@@ -12,7 +12,7 @@ void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjY2lift),

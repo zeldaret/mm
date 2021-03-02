@@ -12,7 +12,7 @@ void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_DS2N,
     sizeof(EnDs2n),

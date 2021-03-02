@@ -12,7 +12,7 @@ void EnTakaraya_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BG,
     sizeof(EnTakaraya),

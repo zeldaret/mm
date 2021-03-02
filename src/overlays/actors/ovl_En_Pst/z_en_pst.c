@@ -12,7 +12,7 @@ void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_PST,
     sizeof(EnPst),

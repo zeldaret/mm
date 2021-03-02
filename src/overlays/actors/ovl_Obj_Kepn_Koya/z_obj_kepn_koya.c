@@ -12,7 +12,7 @@ void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Kepn_Koya_InitVars = {
     ACTOR_OBJ_KEPN_KOYA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_KEPN_KOYA,
     sizeof(ObjKepnKoya),

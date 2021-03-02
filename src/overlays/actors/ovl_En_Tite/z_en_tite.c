@@ -12,7 +12,7 @@ void EnTite_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_TITE,
     sizeof(EnTite),

@@ -12,7 +12,7 @@ void ObjHakaisi_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_HAKAISI,
     sizeof(ObjHakaisi),

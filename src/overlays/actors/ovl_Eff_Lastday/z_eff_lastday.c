@@ -12,7 +12,7 @@ void EffLastday_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_LASTDAY,
     sizeof(EffLastday),

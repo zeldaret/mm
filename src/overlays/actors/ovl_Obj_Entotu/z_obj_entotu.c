@@ -12,7 +12,7 @@ void ObjEntotu_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Entotu_InitVars = {
     ACTOR_OBJ_ENTOTU,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjEntotu),

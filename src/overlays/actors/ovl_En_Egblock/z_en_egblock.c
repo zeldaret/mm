@@ -12,7 +12,7 @@ void EnEgblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Egblock_InitVars = {
     ACTOR_EN_EGBLOCK,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_EG,
     sizeof(EnEgblock),

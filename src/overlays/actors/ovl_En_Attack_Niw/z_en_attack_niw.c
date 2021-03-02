@@ -12,7 +12,7 @@ void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_NIW,
     sizeof(EnAttackNiw),

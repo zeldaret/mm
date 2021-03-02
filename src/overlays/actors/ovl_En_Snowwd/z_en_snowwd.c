@@ -12,7 +12,7 @@ void EnSnowwd_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_SNOWWD,
     sizeof(EnSnowwd),

@@ -12,7 +12,7 @@ void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjBoat),

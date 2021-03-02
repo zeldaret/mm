@@ -12,7 +12,7 @@ void EnBh_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_BH,
     sizeof(EnBh),

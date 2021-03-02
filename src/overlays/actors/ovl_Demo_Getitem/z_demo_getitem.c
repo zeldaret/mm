@@ -11,7 +11,7 @@ void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoGetitem),

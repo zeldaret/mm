@@ -12,7 +12,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjAqua),

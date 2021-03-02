@@ -12,7 +12,7 @@ void EnBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BAL,
     sizeof(EnBal),

@@ -9,7 +9,7 @@ void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Market_Step_InitVars = {
     ACTOR_BG_MARKET_STEP,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_MARKET_OBJ,
     sizeof(BgMarketStep),
@@ -20,9 +20,9 @@ const ActorInit Bg_Market_Step_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(unkFC, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 

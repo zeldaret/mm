@@ -12,7 +12,7 @@ void EnDeath_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEATH,
     sizeof(EnDeath),

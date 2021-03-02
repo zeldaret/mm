@@ -11,7 +11,7 @@ void EnBoj05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Boj_05_InitVars = {
     ACTOR_EN_BOJ_05,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBoj05),

@@ -10,7 +10,7 @@ void ObjDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Demo_InitVars = {
     ACTOR_OBJ_DEMO,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjDemo),

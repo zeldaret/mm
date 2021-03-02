@@ -12,7 +12,7 @@ void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Zl_InitVars = {
     ACTOR_DM_ZL,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_ZL4,
     sizeof(DmZl),

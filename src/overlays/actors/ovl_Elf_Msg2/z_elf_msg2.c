@@ -11,7 +11,7 @@ void ElfMsg2_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Elf_Msg2_InitVars = {
     ACTOR_ELF_MSG2,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ElfMsg2),

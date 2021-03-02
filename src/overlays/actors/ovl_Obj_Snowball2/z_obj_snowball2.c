@@ -12,7 +12,7 @@ void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_GOROIWA,
     sizeof(ObjSnowball2),

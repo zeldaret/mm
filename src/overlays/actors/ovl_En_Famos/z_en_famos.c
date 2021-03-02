@@ -12,7 +12,7 @@ void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_FAMOS,
     sizeof(EnFamos),

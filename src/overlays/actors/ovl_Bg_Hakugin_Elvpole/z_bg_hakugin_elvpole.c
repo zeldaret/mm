@@ -12,7 +12,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     ACTOR_BG_HAKUGIN_ELVPOLE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginElvpole),

@@ -12,7 +12,7 @@ void BgF40Flift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_F40_Flift_InitVars = {
     ACTOR_BG_F40_FLIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_F40_OBJ,
     sizeof(BgF40Flift),

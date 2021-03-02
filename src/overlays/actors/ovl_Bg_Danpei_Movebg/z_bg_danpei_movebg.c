@@ -11,7 +11,7 @@ void BgDanpeiMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Danpei_Movebg_InitVars = {
     ACTOR_BG_DANPEI_MOVEBG,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(BgDanpeiMovebg),

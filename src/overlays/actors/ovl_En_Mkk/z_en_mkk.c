@@ -12,7 +12,7 @@ void EnMkk_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_MKK,
     sizeof(EnMkk),

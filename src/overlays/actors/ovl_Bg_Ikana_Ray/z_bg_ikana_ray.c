@@ -16,7 +16,7 @@ void BgIkanaRay_UpdateActivated(BgIkanaRay* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ikana_Ray_InitVars = {
     ACTOR_BG_IKANA_RAY,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaRay),

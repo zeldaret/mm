@@ -12,7 +12,7 @@ void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_OBJECT_UNSET_MILK_BIN,
     sizeof(ObjMilkBin),

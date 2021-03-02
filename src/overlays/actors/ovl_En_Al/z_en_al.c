@@ -12,7 +12,7 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AL,
     sizeof(EnAl),

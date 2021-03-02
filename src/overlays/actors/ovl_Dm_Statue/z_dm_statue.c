@@ -12,7 +12,7 @@ void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Statue_InitVars = {
     ACTOR_DM_STATUE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_SMTOWER,
     sizeof(DmStatue),

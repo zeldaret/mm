@@ -11,7 +11,7 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDnk),

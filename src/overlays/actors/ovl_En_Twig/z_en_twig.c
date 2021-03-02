@@ -12,7 +12,7 @@ void EnTwig_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
-    ACTORTYPE_MISC,
+    ACTORCAT_MISC,
     FLAGS,
     OBJECT_TWIG,
     sizeof(EnTwig),

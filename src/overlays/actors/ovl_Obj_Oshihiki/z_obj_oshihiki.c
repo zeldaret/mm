@@ -12,7 +12,7 @@ void ObjOshihiki_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Oshihiki_InitVars = {
     ACTOR_OBJ_OSHIHIKI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(ObjOshihiki),

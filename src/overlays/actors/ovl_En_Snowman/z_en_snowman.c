@@ -12,7 +12,7 @@ void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_SNOWMAN,
     sizeof(EnSnowman),

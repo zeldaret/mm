@@ -12,7 +12,7 @@ void EnBomBowlMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_CS,
     sizeof(EnBomBowlMan),

@@ -12,7 +12,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_RR,
     sizeof(EnRr),

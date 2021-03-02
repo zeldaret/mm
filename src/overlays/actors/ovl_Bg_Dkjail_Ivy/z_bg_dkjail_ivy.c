@@ -12,7 +12,7 @@ void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_DKJAIL_OBJ,
     sizeof(BgDkjailIvy),

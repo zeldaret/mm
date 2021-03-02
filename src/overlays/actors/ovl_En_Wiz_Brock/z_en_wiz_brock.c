@@ -12,7 +12,7 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_WIZ,
     sizeof(EnWizBrock),

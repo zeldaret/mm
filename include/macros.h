@@ -21,7 +21,7 @@
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
             (curState)->nextGameStateSize = sizeof(newStruct); 
         
-#define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORTYPE_PLAYER].first)
+#define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))

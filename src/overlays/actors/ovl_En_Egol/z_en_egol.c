@@ -12,7 +12,7 @@ void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Egol_InitVars = {
     ACTOR_EN_EGOL,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_EG,
     sizeof(EnEgol),

@@ -12,7 +12,7 @@ void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BG,
     sizeof(EnRecepgirl),

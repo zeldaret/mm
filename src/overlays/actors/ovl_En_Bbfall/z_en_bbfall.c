@@ -12,7 +12,7 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_BB,
     sizeof(EnBbfall),

@@ -12,7 +12,7 @@ void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
-    ACTORTYPE_DOOR,
+    ACTORCAT_DOOR,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DoorSpiral),

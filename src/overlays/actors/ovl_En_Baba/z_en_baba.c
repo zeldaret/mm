@@ -12,7 +12,7 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BBA,
     sizeof(EnBaba),

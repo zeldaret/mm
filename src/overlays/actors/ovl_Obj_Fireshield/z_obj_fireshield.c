@@ -12,7 +12,7 @@ void ObjFireshield_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Fireshield_InitVars = {
     ACTOR_OBJ_FIRESHIELD,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjFireshield),

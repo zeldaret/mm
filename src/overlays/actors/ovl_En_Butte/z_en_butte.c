@@ -12,7 +12,7 @@ void EnButte_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Butte_InitVars = {
     ACTOR_EN_BUTTE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(EnButte),

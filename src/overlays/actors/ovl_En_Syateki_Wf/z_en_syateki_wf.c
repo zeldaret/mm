@@ -12,7 +12,7 @@ void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_WF,
     sizeof(EnSyatekiWf),

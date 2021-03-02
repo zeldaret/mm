@@ -12,7 +12,7 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_RD,
     sizeof(EnTalkGibud),

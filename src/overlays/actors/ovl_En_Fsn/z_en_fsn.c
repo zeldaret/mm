@@ -12,7 +12,7 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_FSN,
     sizeof(EnFsn),

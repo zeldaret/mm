@@ -12,7 +12,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
-    ACTORTYPE_EXPLOSIVES,
+    ACTORCAT_EXPLOSIVES,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBom),

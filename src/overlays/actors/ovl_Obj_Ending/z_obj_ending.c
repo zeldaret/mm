@@ -11,7 +11,7 @@ void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Ending_InitVars = {
     ACTOR_OBJ_ENDING,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_ENDING_OBJ,
     sizeof(ObjEnding),

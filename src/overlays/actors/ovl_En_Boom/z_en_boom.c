@@ -12,7 +12,7 @@ void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBoom),

@@ -12,7 +12,7 @@ void EnHintSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hint_Skb_InitVars = {
     ACTOR_EN_HINT_SKB,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SKB,
     sizeof(EnHintSkb),

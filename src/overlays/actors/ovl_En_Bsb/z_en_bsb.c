@@ -12,7 +12,7 @@ void EnBsb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bsb_InitVars = {
     ACTOR_EN_BSB,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_BSB,
     sizeof(EnBsb),

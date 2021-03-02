@@ -12,7 +12,7 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
-    ACTORTYPE_DOOR,
+    ACTORCAT_DOOR,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHoll),

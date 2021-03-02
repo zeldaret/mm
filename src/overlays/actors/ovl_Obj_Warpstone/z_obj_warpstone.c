@@ -12,7 +12,7 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_SEK,
     sizeof(ObjWarpstone),

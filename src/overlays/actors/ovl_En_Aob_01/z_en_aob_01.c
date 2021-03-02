@@ -12,7 +12,7 @@ void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AOB,
     sizeof(EnAob01),

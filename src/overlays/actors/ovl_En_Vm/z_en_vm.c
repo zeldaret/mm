@@ -12,7 +12,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_VM,
     sizeof(EnVm),

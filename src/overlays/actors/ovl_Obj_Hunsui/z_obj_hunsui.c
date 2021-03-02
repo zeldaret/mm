@@ -12,7 +12,7 @@ void ObjHunsui_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HUNSUI,
     sizeof(ObjHunsui),

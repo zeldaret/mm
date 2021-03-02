@@ -10,7 +10,7 @@ void ObjMakeoshihiki_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Makeoshihiki_InitVars = {
     ACTOR_OBJ_MAKEOSHIHIKI,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMakeoshihiki),

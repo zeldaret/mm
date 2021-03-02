@@ -12,7 +12,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_OSN,
     sizeof(EnOsn),

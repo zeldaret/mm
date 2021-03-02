@@ -12,7 +12,7 @@ void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Ctower_Rot_InitVars = {
     ACTOR_BG_CTOWER_ROT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_CTOWER_ROT,
     sizeof(BgCtowerRot),

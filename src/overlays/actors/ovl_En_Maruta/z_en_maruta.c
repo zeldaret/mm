@@ -12,7 +12,7 @@ void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_MARUTA,
     sizeof(EnMaruta),

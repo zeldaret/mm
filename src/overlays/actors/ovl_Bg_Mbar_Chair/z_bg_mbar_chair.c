@@ -11,7 +11,7 @@ void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Mbar_Chair_InitVars = {
     ACTOR_BG_MBAR_CHAIR,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_MBAR_OBJ,
     sizeof(BgMbarChair),
@@ -22,9 +22,9 @@ const ActorInit Bg_Mbar_Chair_InitVars = {
 };
 
 static InitChainEntry bgMbarChairInitVars[] = {
-    ICHAIN_F32(unkFC, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 60, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -42,7 +42,7 @@ void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.dynaPolyId);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {

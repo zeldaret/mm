@@ -7,11 +7,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PrintLists.asm")
 
-void Actor_SetDrawParams(ActorShape* iParm1, f32 yDisplacement, actor_shadow_draw_func func, f32 scale) {
-    iParm1->yDisplacement = yDisplacement;
-    iParm1->shadowDrawFunc = func;
-    iParm1->scale = scale;
-    iParm1->alphaScale = 255;
+void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale) {
+    actorShape->yOffset = yOffset;
+    actorShape->shadowDraw = func;
+    actorShape->shadowScale = scale;
+    actorShape->shadowAlpha = 255;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//Actor_PostDraw.asm")
@@ -50,8 +50,8 @@ void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalCont
     targetCtxt->unk4B = 0;
     targetCtxt->unk4C = 0;
     targetCtxt->unk40 = 0;
-    func_800B5040(targetCtxt, actor, actor->type, ctxt);
-    func_800B4F78(targetCtxt, actor->type, ctxt);
+    func_800B5040(targetCtxt, actor, actor->category, ctxt);
+    func_800B4F78(targetCtxt, actor->category, ctxt);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//func_800B5208.asm")
@@ -186,24 +186,24 @@ void Actor_MarkForDeath(Actor* actor) {
 }
 
 void Actor_InitCurrPosition(Actor* actor) {
-    actor->currPosRot = actor->initPosRot;
+    actor->world = actor->home;
 }
 
 void Actor_SetHeight(Actor* actor, f32 height) {
-    actor->topPosRot.pos.x = actor->currPosRot.pos.x;
-    actor->topPosRot.pos.y = actor->currPosRot.pos.y + height;
-    actor->topPosRot.pos.z = actor->currPosRot.pos.z;
-    actor->topPosRot.rot.x = actor->currPosRot.rot.x;
-    actor->topPosRot.rot.y = actor->currPosRot.rot.y;
-    actor->topPosRot.rot.z = actor->currPosRot.rot.z;
+    actor->focus.pos.x = actor->world.pos.x;
+    actor->focus.pos.y = actor->world.pos.y + height;
+    actor->focus.pos.z = actor->world.pos.z;
+    actor->focus.rot.x = actor->world.rot.x;
+    actor->focus.rot.y = actor->world.rot.y;
+    actor->focus.rot.z = actor->world.rot.z;
 }
 
 void Actor_SetRotationFromDrawRotation(Actor* actor) {
-    actor->currPosRot.rot = actor->shape.rot;
+    actor->world.rot = actor->shape.rot;
 }
 
 void Actor_InitDrawRotation(Actor* actor) {
-    actor->shape.rot = actor->currPosRot.rot;
+    actor->shape.rot = actor->world.rot;
 }
 
 void Actor_SetScale(Actor* actor, f32 scale) {
@@ -222,18 +222,18 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     Actor_InitCurrPosition(actor);
     Actor_InitDrawRotation(actor);
     Actor_SetHeight(actor, 0);
-    Math_Vec3f_Copy(&actor->lastPos, &actor->currPosRot.pos);
+    Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
     Actor_SetScale(actor, 0.01);
-    actor->unk1F = 3;
+    actor->targetMode = 3;
     actor->minYVelocity = -20.0f;
 
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
     CollisionCheck_InitInfo(&actor->colChkInfo);
-    actor->unkFC = 1000.0f;
-    actor->unk100 = 350.0f;
-    actor->unk104 = 700.0f;
+    actor->uncullZoneForward = 1000.0f;
+    actor->uncullZoneScale = 350.0f;
+    actor->uncullZoneDownward = 700.0f;
 
     actor->naviMsgId = 255;
 
@@ -263,9 +263,9 @@ void Actor_SetMovementScale(s32 scale) {
 
 #ifdef NON_MATCHING
 void Actor_ApplyMovement(Actor* actor) {
-    actor->currPosRot.pos.x += ((actor->velocity.x * actorMovementScale) + actor->colChkInfo.displacement.x);
-    actor->currPosRot.pos.y += ((actor->velocity.y * actorMovementScale) + actor->colChkInfo.displacement.y);
-    actor->currPosRot.pos.z += ((actor->velocity.z * actorMovementScale) + actor->colChkInfo.displacement.z);
+    actor->world.pos.x += ((actor->velocity.x * actorMovementScale) + actor->colChkInfo.displacement.x);
+    actor->world.pos.y += ((actor->velocity.y * actorMovementScale) + actor->colChkInfo.displacement.y);
+    actor->world.pos.z += ((actor->velocity.z * actorMovementScale) + actor->colChkInfo.displacement.z);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//Actor_ApplyMovement.asm")
@@ -273,9 +273,9 @@ void Actor_ApplyMovement(Actor* actor) {
 
 #ifdef NON_MATCHING
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_Sins(actor->currPosRot.rot.x);
+    actor->velocity.x = actor->speedXZ * Math_Sins(actor->world.rot.x);
     actor->velocity.y = actor->velocity.y + actor->gravity;
-    actor->velocity.z = actor->speedXZ * Math_Coss(actor->currPosRot.rot.x);
+    actor->velocity.z = actor->speedXZ * Math_Coss(actor->world.rot.x);
 
     if (actor->velocity.y < actor->minYVelocity) {
         actor->velocity.y = actor->minYVelocity;
@@ -291,10 +291,10 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Math_Coss(actor->currPosRot.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->currPosRot.rot.y) * velX;
-    actor->velocity.y = Math_Sins(actor->currPosRot.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->currPosRot.rot.y) * velX;
+    f32 velX =  Math_Coss(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_Sins(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
@@ -303,10 +303,10 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Math_Coss(-actor->currPosRot.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->currPosRot.rot.y) * velX;
-    actor->velocity.y = Math_Sins(-actor->currPosRot.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->currPosRot.rot.y) * velX;
+    f32 velX =  Math_Coss(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_Sins(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
@@ -319,43 +319,43 @@ void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6C58.asm")
 
 s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->currPosRot.pos, &to->currPosRot.pos);
+    return Math_Vec3f_Yaw(&from->world.pos, &to->world.pos);
 }
 
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Yaw(&from->topPosRot.pos, &to->topPosRot.pos);
+    return Math_Vec3f_Yaw(&from->focus.pos, &to->focus.pos);
 }
 
 s16 Actor_YawToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Yaw(&actor->currPosRot.pos, point);
+    return Math_Vec3f_Yaw(&actor->world.pos, point);
 }
 
 s16 Actor_PitchBetweenActors(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->currPosRot.pos, &to->currPosRot.pos);
+    return Math_Vec3f_Pitch(&from->world.pos, &to->world.pos);
 }
 
 s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to) {
-    return Math_Vec3f_Pitch(&from->topPosRot.pos, &to->topPosRot.pos);
+    return Math_Vec3f_Pitch(&from->focus.pos, &to->focus.pos);
 }
 
 s16 Actor_PitchToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_Pitch(&actor->currPosRot.pos, point);
+    return Math_Vec3f_Pitch(&actor->world.pos, point);
 }
 
 f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXYZ(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+    return Math_Vec3f_DistXYZ(&actor1->world.pos, &actor2->world.pos);
 }
 
 f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXYZ(&actor->currPosRot.pos, point);
+    return Math_Vec3f_DistXYZ(&actor->world.pos, point);
 }
 
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2) {
-    return Math_Vec3f_DistXZ(&actor1->currPosRot.pos, &actor2->currPosRot.pos);
+    return Math_Vec3f_DistXZ(&actor1->world.pos, &actor2->world.pos);
 }
 
 f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
-    return Math_Vec3f_DistXZ(&actor->currPosRot.pos, point);
+    return Math_Vec3f_DistXZ(&actor->world.pos, point);
 }
 
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
@@ -366,15 +366,15 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
 
     cos_rot_y = Math_Coss(actor->shape.rot.y);
     sin_rot_y = Math_Sins(actor->shape.rot.y);
-    imm_x = point->x - actor->currPosRot.pos.x;
-    imm_z = point->z - actor->currPosRot.pos.z;
+    imm_x = point->x - actor->world.pos.x;
+    imm_z = point->z - actor->world.pos.z;
     offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
     offset->z = ((imm_z * cos_rot_y) + (imm_x * sin_rot_y));
-    offset->y = point->y - actor->currPosRot.pos.y;
+    offset->y = point->y - actor->world.pos.y;
 }
 
 f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
-    return actor2->currPosRot.pos.y - actor1->currPosRot.pos.y;
+    return actor2->world.pos.y - actor1->world.pos.y;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/z_actor//func_800B6F20.asm")
@@ -425,7 +425,7 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
 s32 Actor_IsActorFacingLink(Actor* actor, s16 angle) {
     s16 dist;
 
-    dist = actor->rotTowardsLinkY - actor->shape.rot.y;
+    dist = actor->yawTowardsPlayer - actor->shape.rot.y;
     if (ABS(dist) < angle) {
         return 1;
     }

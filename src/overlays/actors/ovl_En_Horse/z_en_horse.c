@@ -12,7 +12,7 @@ void EnHorse_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHorse),

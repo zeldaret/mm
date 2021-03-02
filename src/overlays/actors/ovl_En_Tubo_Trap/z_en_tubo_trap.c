@@ -12,7 +12,7 @@ void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tubo_Trap_InitVars = {
     ACTOR_EN_TUBO_TRAP,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(EnTuboTrap),

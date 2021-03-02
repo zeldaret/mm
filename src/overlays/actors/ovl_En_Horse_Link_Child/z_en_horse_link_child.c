@@ -12,7 +12,7 @@ void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HORSE_LINK_CHILD,
     sizeof(EnHorseLinkChild),

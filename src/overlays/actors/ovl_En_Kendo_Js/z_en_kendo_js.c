@@ -12,7 +12,7 @@ void EnKendoJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_JS,
     sizeof(EnKendoJs),

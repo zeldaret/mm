@@ -11,7 +11,7 @@ void EnAn_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AN1,
     sizeof(EnAn),

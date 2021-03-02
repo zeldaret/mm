@@ -12,7 +12,7 @@ void EnHorseGameCheck_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_HORSE_GAME_CHECK,
     sizeof(EnHorseGameCheck),

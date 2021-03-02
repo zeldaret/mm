@@ -1502,7 +1502,7 @@ extern ActorInit En_Firefly_InitVars; // En_Firefly_InitVars
 extern ColliderSphereInit enFireflyCollisionInit; // D_8087B470
 extern UNK_TYPE1 D_8087B498; // D_8087B498
 extern UNK_TYPE1 D_8087B49C; // D_8087B49C
-extern DamageTable enFireflyDamageChart; // D_8087B4A4
+extern DamageTable enFireflyDamageTable; // D_8087B4A4
 extern InitChainEntry enFireflyInitVars[4]; // D_8087B4C4
 extern UNK_TYPE1 D_8087B4D4; // D_8087B4D4
 extern UNK_TYPE1 D_8087B4D8; // D_8087B4D8

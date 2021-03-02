@@ -11,7 +11,7 @@ void EnOnpuman_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Onpuman_InitVars = {
     ACTOR_EN_ONPUMAN,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOnpuman),

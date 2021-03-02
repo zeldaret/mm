@@ -12,7 +12,7 @@ void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Shelf),

@@ -12,7 +12,7 @@ void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoKankyo),

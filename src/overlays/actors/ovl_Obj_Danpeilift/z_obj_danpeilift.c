@@ -12,7 +12,7 @@ void ObjDanpeilift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_OBJECT_UNSET_DANPEILIFT,
     sizeof(ObjDanpeilift),

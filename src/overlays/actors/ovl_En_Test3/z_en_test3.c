@@ -11,7 +11,7 @@ void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Test3_InitVars = {
     ACTOR_EN_TEST3,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_TEST3,
     sizeof(EnTest3),

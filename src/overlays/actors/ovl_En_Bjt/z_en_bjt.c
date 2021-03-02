@@ -12,7 +12,7 @@ void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Bjt_InitVars = {
     ACTOR_EN_BJT,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_BJT,
     sizeof(EnBjt),

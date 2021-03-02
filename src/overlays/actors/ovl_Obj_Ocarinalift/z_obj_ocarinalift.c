@@ -12,7 +12,7 @@ void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjOcarinalift),

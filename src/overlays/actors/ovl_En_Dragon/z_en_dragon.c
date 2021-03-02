@@ -12,7 +12,7 @@ void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_UTUBO,
     sizeof(EnDragon),

@@ -10,7 +10,7 @@ void EnEncount1_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEncount1),

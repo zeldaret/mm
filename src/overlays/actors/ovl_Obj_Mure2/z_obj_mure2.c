@@ -10,7 +10,7 @@ void ObjMure2_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Mure2_InitVars = {
     ACTOR_OBJ_MURE2,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMure2),

@@ -12,7 +12,7 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_FZ,
     sizeof(EnFz),

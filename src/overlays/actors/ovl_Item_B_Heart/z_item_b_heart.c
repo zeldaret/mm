@@ -12,7 +12,7 @@ void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
-    ACTORTYPE_BOSS,
+    ACTORCAT_BOSS,
     FLAGS,
     OBJECT_GI_HEARTS,
     sizeof(ItemBHeart),

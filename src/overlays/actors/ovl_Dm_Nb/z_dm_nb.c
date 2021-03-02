@@ -12,7 +12,7 @@ void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_NB,
     sizeof(DmNb),

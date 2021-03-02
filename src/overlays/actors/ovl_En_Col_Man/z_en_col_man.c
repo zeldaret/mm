@@ -11,7 +11,7 @@ void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Col_Man_InitVars = {
     ACTOR_EN_COL_MAN,
-    ACTORTYPE_MISC,
+    ACTORCAT_MISC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnColMan),

@@ -12,7 +12,7 @@ void EnSsh_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_SSH,
     sizeof(EnSsh),

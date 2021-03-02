@@ -12,7 +12,7 @@ void EnNeoReeba_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Neo_Reeba_InitVars = {
     ACTOR_EN_NEO_REEBA,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_RB,
     sizeof(EnNeoReeba),

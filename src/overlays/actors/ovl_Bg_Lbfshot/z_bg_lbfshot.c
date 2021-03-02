@@ -11,7 +11,7 @@ void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Bg_Lbfshot_InitVars = {
     ACTOR_BG_LBFSHOT,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_LBFSHOT,
     sizeof(BgLbfshot),

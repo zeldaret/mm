@@ -11,7 +11,7 @@ void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Visiblock_InitVars = {
     ACTOR_OBJ_VISIBLOCK,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_VISIBLOCK,
     sizeof(ObjVisiblock),

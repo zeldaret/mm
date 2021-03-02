@@ -12,7 +12,7 @@ void ObjTaru_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     OBJECT_TARU,
     sizeof(ObjTaru),

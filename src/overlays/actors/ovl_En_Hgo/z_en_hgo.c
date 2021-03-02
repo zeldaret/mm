@@ -12,7 +12,7 @@ void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_HARFGIBUD,
     sizeof(EnHgo),

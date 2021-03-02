@@ -12,7 +12,7 @@ void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMushi2),

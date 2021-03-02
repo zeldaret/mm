@@ -12,7 +12,7 @@ void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_SYOKUDAI,
     sizeof(ObjJgameLight),

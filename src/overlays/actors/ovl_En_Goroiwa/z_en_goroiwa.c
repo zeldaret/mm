@@ -12,7 +12,7 @@ void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
-    ACTORTYPE_PROP,
+    ACTORCAT_PROP,
     FLAGS,
     OBJECT_GOROIWA,
     sizeof(EnGoroiwa),

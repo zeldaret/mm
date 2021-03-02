@@ -11,7 +11,7 @@ void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,
-    ACTORTYPE_ENEMY,
+    ACTORCAT_ENEMY,
     FLAGS,
     OBJECT_DEATH,
     sizeof(EnMinideath),

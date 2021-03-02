@@ -11,7 +11,7 @@ void EnInvisibleRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Invisible_Ruppe_InitVars = {
     ACTOR_EN_INVISIBLE_RUPPE,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvisibleRuppe),

@@ -12,7 +12,7 @@ void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     OBJECT_TANRON4,
     sizeof(EnTanron4),

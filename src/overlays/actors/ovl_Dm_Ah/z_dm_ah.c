@@ -12,7 +12,7 @@ void DmAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_AH,
     sizeof(DmAh),

@@ -10,7 +10,7 @@ void EnTest2_Update(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
-    ACTORTYPE_BG,
+    ACTORCAT_BG,
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest2),

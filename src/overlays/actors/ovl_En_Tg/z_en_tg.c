@@ -12,7 +12,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
-    ACTORTYPE_NPC,
+    ACTORCAT_NPC,
     FLAGS,
     OBJECT_MU,
     sizeof(EnTg),

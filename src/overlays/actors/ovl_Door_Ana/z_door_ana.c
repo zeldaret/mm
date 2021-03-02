@@ -12,7 +12,7 @@ void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx);
 /*
 const ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
-    ACTORTYPE_ITEMACTION,
+    ACTORCAT_ITEMACTION,
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(DoorAna),
