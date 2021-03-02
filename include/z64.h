@@ -325,7 +325,11 @@ typedef struct {
     /* 0x010 */ s32 unk10;
     /* 0x014 */ UNK_TYPE1 pad14[0x2E];
     /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x43];
+    /* 0x044 */ UNK_TYPE1 pad44[0x34];
+    /* 0x078 */ f32 previousPlayerHeight; //OvlDoorAna
+    /* 0x07C */ UNK_TYPE1 pad7C[0x4];
+    /* 0x080 */ s16 previousPlayerYRot; //OvlDoorAna
+    /* 0x082 */ UNK_TYPE1 pad82[0x5];
     /* 0x087 */ s8 unk87;
     /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
     /* 0x276 */ u8 unk276;
@@ -1679,13 +1683,14 @@ struct GlobalContext {
     /* 0x18845 */ u8 unk18845;
     /* 0x18846 */ u16 sceneNumActorsToLoad;
     /* 0x18848 */ u8 numRooms;
-    /* 0x18849 */ UNK_TYPE1 pad18849[0x3];
+    /* 0x18849 */ UNK_TYPE1 pad18849;
+    /* 0x1884A */ s16 unk1884A;
     /* 0x1884C */ RoomFileLocation* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
-    /* 0x18860 */ void* setupExitList;
+    /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
     /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;

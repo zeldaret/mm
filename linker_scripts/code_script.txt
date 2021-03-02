@@ -1606,9 +1606,9 @@ SECTIONS
     ovl_Door_Ana : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.text)
-        build/asm/overlays/ovl_Door_Ana_data.o(.data)
+        build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.data)
         build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.rodata)
-        build/asm/overlays/ovl_Door_Ana_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Ana/z_door_ana_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

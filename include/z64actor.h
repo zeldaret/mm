@@ -254,7 +254,9 @@ typedef struct {
     /* 0xADE */ u8 unkADE;
     /* 0xADF */ UNK_TYPE1 padADF[0x4];
     /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x44];
+    /* 0xAE4 */ UNK_TYPE1 padAE4[0x3];
+    /* 0xAE7 */ s8 unkAE7;
+    /* 0xAE8 */ UNK_TYPE1 padAE8[0x40];
     /* 0xB28 */ s16 unkB28;
     /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
     /* 0xB9C */ Vec3f unkB9C;
