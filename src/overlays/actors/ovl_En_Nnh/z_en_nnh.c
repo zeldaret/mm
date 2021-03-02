@@ -38,8 +38,8 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNnh* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    Collision_InitCylinderDefault(globalCtx, &this->collider);
-    Collision_InitCylinderWithData(globalCtx, &this->collider, &this->actor, &D_80C08A00);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80C08A00);
     this->actor.targetMode = 1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;

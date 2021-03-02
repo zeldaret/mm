@@ -1515,7 +1515,7 @@ void CollisionCheck_HitSolid(GlobalContext* ctxt, ColliderInfo* info, Collider* 
  * Plays a hit sound effect for AT colliders attached to Player based on the AC element's elemType.
  */
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo) {
-    if (at->actor != NULL && at->actor->type == ACTORTYPE_PLAYER) {
+    if (at->actor != NULL && at->actor->category == ACTORCAT_PLAYER) {
         if (acInfo->elemType == ELEMTYPE_UNK0) {
             func_8019F1C0(&at->actor->projectedPos, 0x1811);
         } else if (acInfo->elemType == ELEMTYPE_UNK1) {
@@ -3564,9 +3564,9 @@ s32 CollisionCheck_LineOCCheck(GlobalContext* ctxt, CollisionCheckContext* colCt
  * Moves the ColliderCylinder's position to the actor's position
  */
 void Collider_UpdateCylinder(Actor* actor, ColliderCylinder* collider) {
-    collider->dim.pos.x = actor->currPosRot.pos.x;
-    collider->dim.pos.y = actor->currPosRot.pos.y;
-    collider->dim.pos.z = actor->currPosRot.pos.z;
+    collider->dim.pos.x = actor->world.pos.x;
+    collider->dim.pos.y = actor->world.pos.y;
+    collider->dim.pos.z = actor->world.pos.z;
 }
 
 /**
@@ -3652,11 +3652,11 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
 void Collider_UpdateSpheresElement(ColliderJntSph* collider, s32 index, Actor* actor) {
     if (index < collider->count) {
         collider->elements[index].dim.worldSphere.center.x =
-            collider->elements[index].dim.modelSphere.center.x + actor->currPosRot.pos.x;
+            collider->elements[index].dim.modelSphere.center.x + actor->world.pos.x;
         collider->elements[index].dim.worldSphere.center.y =
-            collider->elements[index].dim.modelSphere.center.y + actor->currPosRot.pos.y;
+            collider->elements[index].dim.modelSphere.center.y + actor->world.pos.y;
         collider->elements[index].dim.worldSphere.center.z =
-            collider->elements[index].dim.modelSphere.center.z + actor->currPosRot.pos.z;
+            collider->elements[index].dim.modelSphere.center.z + actor->world.pos.z;
         collider->elements[index].dim.worldSphere.radius =
             collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale;
     }

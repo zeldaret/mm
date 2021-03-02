@@ -33,9 +33,9 @@ ColliderCylinderInit bgIkanaRayCylinderInit = {
 };
 
 InitChainEntry bgIkanaRayCompInit[] = {
-    ICHAIN_F32(unkFC, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk100, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(unk104, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
