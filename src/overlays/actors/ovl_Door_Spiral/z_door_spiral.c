@@ -73,13 +73,6 @@ static SpiralObjectInfo sSpiralObjectInfo[] = {
     { OBJECT_IKANA_OBJ, 5 }, { OBJECT_DANPEI_OBJECT, 7 },  { OBJECT_IKNINSIDE_OBJ, 6 },
 };
 
-// Defines which object type should be used for specific scenes
-// sSpiralSceneInfo
-/*static*/ SpiralSceneInfo D_809A32EC[] = {
-    { SCENE_MITURIN, 2 },     { SCENE_HAKUGIN, 3 },   { SCENE_INISIE_N, 4 }, { SCENE_INISIE_R, 4 },
-    { SCENE_DANPEI2TEST, 5 }, { SCENE_IKNINSIDE, 6 }, { SCENE_CASTLE, 6 },
-};
-
 /**
  * Sets the actor's action function
  */
@@ -114,9 +107,32 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
  * Gets the object type to be used as an index to `sSpiralObjectInfo`.
  * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral.
  */
-// DoorSpiral_GetObjectType
-s32 func_809A2BF8(GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Door_Spiral_0x809A2B60/func_809A2BF8.asm")
+s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
+    // Defines which object type should be used for specific scenes
+    static SpiralSceneInfo spiralSceneInfo[] = {
+        { SCENE_MITURIN, 2 },     { SCENE_HAKUGIN, 3 },   { SCENE_INISIE_N, 4 }, { SCENE_INISIE_R, 4 },
+        { SCENE_DANPEI2TEST, 5 }, { SCENE_IKNINSIDE, 6 }, { SCENE_CASTLE, 6 },
+    };
+    SpiralSceneInfo* sceneInfo = spiralSceneInfo;
+    s32 i;
+    s32 type;
+
+    for (i = 0; i < 7; sceneInfo++, i++) {
+        if (globalCtx->sceneNum == sceneInfo->sceneNum) {
+            break;
+        }
+    }
+
+    type = i;
+
+    if (type < 7) {
+        type = sceneInfo->objectType;
+    } else {
+        type = (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 3) >= 0) ? 1 : 0;
+    }
+
+    return type;
+}
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -139,7 +155,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(thisx, &sInitChain);
     this->unk145 = (thisx->params >> 8) & 3; // set but never used
     this->orientation = (thisx->params >> 7) & 1;
-    this->objectType = func_809A2BF8(globalCtx);
+    this->objectType = DoorSpiral_GetObjectType(globalCtx);
     objBankId = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, sSpiralObjectInfo[this->objectType].objectBankId);
     this->bankIndex = objBankId;
 
