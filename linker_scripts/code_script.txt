@@ -3470,10 +3470,12 @@ SECTIONS
     _ovl_Door_SpiralSegmentStart = SegmentStart;
     ovl_Door_Spiral : AT(RomLocation)
     {
+
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.text)
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.data)
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.rodata)
-        build/asm/ovl_Door_Spiral_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
