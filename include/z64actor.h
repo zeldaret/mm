@@ -190,7 +190,7 @@ if neither of the above are set : blue
 (& 0x1F00 >> 5) | 7 : color intensity
 0x2000 : translucent, else opaque
 */
-=======
+
 /**
  * BgCheckFlags WIP documentation (logical masks):
  * 0x001 : Standing on the ground
