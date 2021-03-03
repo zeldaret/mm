@@ -964,7 +964,7 @@ typedef struct {
     /* 0x00178 */ void* skyboxPaletteStaticSegment;
     /* 0x0017C */ Gfx* unk17C;
     /* 0x00180 */ Gfx* unk180;
-    /* 0x00184 */ void* roomVtx;
+    /* 0x00184 */ Vtx* roomVtx;
     /* 0x00188 */ DmaRequest unk188;
     /* 0x001A8 */ DmaRequest unk1A8;
     /* 0x001C8 */ DmaRequest unk1C8;
