@@ -1,25 +1,16 @@
 #include <ultra64.h>
 #include <global.h>
 
-s32 D_801C5E30[] = {
-    0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000,
-};
+s32 D_801C5E30[] = { 0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000 };
 
 u16 D_801C5E48[] = {
     0, 2, 10, 12, 2, 4, 12, 14, 10, 12, 20, 22, 12, 14, 22, 24, 1, 3, 5, 6, 7, 8, 9, 11, 13, 15, 16, 17, 18, 19, 21, 23,
 };
+s32 D_801C5E88[] = { 0, 0x7C0, 0xF80, 0x1740, 0x1F00 };
 
-s32 D_801C5E88[] = {
-    0, 0x7C0, 0xF80, 0x1740, 0x1F00,
-};
+s32 D_801C5E9C[] = { 0, 0x7C0, 0xF80, 0x1740, 0x1F00 };
 
-s32 D_801C5E9C[] = {
-    0, 0x7C0, 0xF80, 0x1740, 0x1F00,
-};
-
-s32 D_801C5EB0[] = {
-    0, 0x7C0, 0xF80, 0x7C0, 0,
-};
+s32 D_801C5EB0[] = { 0, 0x7C0, 0xF80, 0x7C0, 0 };
 
 s16 D_801C5EC4[] = {
     0,  16, 19, 18, 16, 1,  20, 19, 1,  17, 21, 20, 17, 5,  22, 21, 18, 19, 23, 2,  19, 20,
@@ -27,8 +18,6 @@ s16 D_801C5EC4[] = {
     24, 7,  29, 28, 25, 26, 30, 10, 26, 27, 11, 30, 27, 28, 31, 11, 28, 29, 15, 31,
 };
 
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
-                  s32 arg8);
 #pragma GLOBAL_ASM("./asm/nonmatching/z_vr_box/func_80142440.asm")
 
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
@@ -47,10 +36,8 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     }
 }
 
-#define ALIGN8(val) (((val) + 7) & ~7)
-
 #ifdef NON_MATCHING
-// Matches besides rodata
+// Matches besides rodata, since rodata is not merged into the asm in code files yet.
 void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType) {
     GlobalContext* globalCtx = (GlobalContext*)state;
     u32 size;
