@@ -111,7 +111,7 @@ typedef struct Actor {
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objBankIndex; // Object bank index of the actor's object dependency; original name: "bank"
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
-    /* 0x020 */ u16 unk1F;
+    /* 0x020 */ u16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
     /* 0x039 */ s8 unk39;
@@ -151,7 +151,7 @@ typedef struct Actor {
     /* 0x11C */ u8 colorFilterTimer; // A non-zero value enables the color filter. Decrements automatically
     /* 0x11D */ u8 isDrawn; // Set to true if the actor is currently being drawn. Always stays false for lens actors
     /* 0x11E */ u8 dropFlag; // Configures what item is dropped by the actor from `Item_DropCollectibleRandom`
-    /* 0x11F */ u8 naviEnemyId; // Sets what 0600 dialog to display when talking to navi. Default 0xFF
+    /* 0x11F */ u8 hintId; // Sets what 0600 dialog to display when talking to navi. Default 0xFF
     /* 0x120 */ struct Actor* parent; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x124 */ struct Actor* child; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x128 */ struct Actor* prev; // Previous actor of this category
@@ -190,6 +190,20 @@ if neither of the above are set : blue
 (& 0x1F00 >> 5) | 7 : color intensity
 0x2000 : translucent, else opaque
 */
+=======
+/**
+ * BgCheckFlags WIP documentation (logical masks):
+ * 0x001 : Standing on the ground
+ * 0x002 : Has touched the ground (only active for 1 frame)
+ * 0x004 : Has left the ground (only active for 1 frame)
+ * 0x008 : Touching a wall
+ * 0x010 : Touching a ceiling
+ * 0x020 : On or below water surface
+ * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
+ * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
+ * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
+ * 0x200 : Unknown (only set/used by player so far)
+ */
 
 typedef struct {
     /* 0x000 */ Actor actor;

@@ -12,25 +12,31 @@ void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* ac
     Vec3f newPos;
     Vec3f posWithInv;
 
-    if (BgCheck_IsActorMeshIndexValid(index) == 0)
-        return;
+    if (BgCheck_IsActorMeshIndexValid(index) == 0) return;
 
-    Matrix_MakeTranslationRotationYXZScale(
-        &prevMatrix, bgCtxt->dyna.actorMeshArr[index].prevParams.scale.x,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.y, bgCtxt->dyna.actorMeshArr[index].prevParams.scale.z,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.x, bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.y,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.z, bgCtxt->dyna.actorMeshArr[index].prevParams.pos.x,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.y, bgCtxt->dyna.actorMeshArr[index].prevParams.pos.z);
+    Matrix_MakeTranslationRotationYXZScale(&prevMatrix,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.x,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.y,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.z,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.x,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.y,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.z,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.x,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.y,
+        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.z);
 
-    if (Matrix_Invert(&prevMatrix, &prevMatrixInv) == 2)
-        return;
+    if (Matrix_Invert(&prevMatrix, &prevMatrixInv) == 2) return;
 
-    Matrix_MakeTranslationRotationYXZScale(
-        &currMatrix, bgCtxt->dyna.actorMeshArr[index].currParams.scale.x,
-        bgCtxt->dyna.actorMeshArr[index].currParams.scale.y, bgCtxt->dyna.actorMeshArr[index].currParams.scale.z,
-        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.x, bgCtxt->dyna.actorMeshArr[index].currParams.rotation.y,
-        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.z, bgCtxt->dyna.actorMeshArr[index].currParams.pos.x,
-        bgCtxt->dyna.actorMeshArr[index].currParams.pos.y, bgCtxt->dyna.actorMeshArr[index].currParams.pos.z);
+    Matrix_MakeTranslationRotationYXZScale(&currMatrix,
+        bgCtxt->dyna.actorMeshArr[index].currParams.scale.x,
+        bgCtxt->dyna.actorMeshArr[index].currParams.scale.y,
+        bgCtxt->dyna.actorMeshArr[index].currParams.scale.z,
+        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.x,
+        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.y,
+        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.z,
+        bgCtxt->dyna.actorMeshArr[index].currParams.pos.x,
+        bgCtxt->dyna.actorMeshArr[index].currParams.pos.y,
+        bgCtxt->dyna.actorMeshArr[index].currParams.pos.z);
 
     Matrix_MultiplyByVectorXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
     Matrix_MultiplyByVectorXYZ(&currMatrix, &posWithInv, &newPos);

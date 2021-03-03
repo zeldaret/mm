@@ -85,7 +85,7 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&zeroVec, &this->actor.focus.pos);
+        SysMatrix_MultiplyVector3fByState(&zeroVec, &this->actor.focus);
     }
 }
 

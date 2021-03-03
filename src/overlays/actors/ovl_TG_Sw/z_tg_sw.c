@@ -49,8 +49,7 @@ static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCt
 
     actorIterator = NULL;
     do {
-        actorEntry =
-            func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        actorEntry = func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
         if (actorIterator = (void*)!actorEntry) {
             break;
         }
@@ -111,9 +110,11 @@ void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
             ;
         }
         absoluteRotY = ABS_ALT(this->actor.world.rot.y);
-
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
-                               this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
+        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                               0, this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
+                               globalCtx->state.gfxCtx);
+        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                               0, 0, 0, 0.1f, absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6,
                                globalCtx->state.gfxCtx);
         DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0.1f,
                                absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);

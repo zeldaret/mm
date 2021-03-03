@@ -686,7 +686,7 @@ void func_800B40E0(GlobalContext* ctxt, int iParm2, z_Matrix* pzParm3, int iParm
 void func_800B42F8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B42F8
 void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B4A98
 void func_800B4AEC(GlobalContext* ctxt, Actor* actor, f32 param_3); // func_800B4AEC
-void func_800B4B50(Actor* actorShape, int iParm2, GlobalContext* pzParm3); // func_800B4B50
+void func_800B4B50(Actor* actor, int iParm2, GlobalContext* pzParm3); // func_800B4B50
 void func_800B4EDC(GlobalContext* ctxt, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4); // func_800B4EDC
 void func_800B4F40(TargetContext* targetContext, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800B4F40
 void func_800B4F78(TargetContext* targetContext, u8 type, GlobalContext* ctxt); // func_800B4F78
@@ -734,7 +734,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt); // func_800B6
 void Actor_FiniActor(Actor* actor, GlobalContext* ctxt); // func_800B6948
 void Actor_SetMovementScale(s32 scale); // func_800B6988
 void Actor_ApplyMovement(Actor* actor); // func_800B69AC
-void Actor_SetVelocityYRotationAndGravity(Actor* actorShape); // func_800B6A10
+void Actor_SetVelocityYRotationAndGravity(Actor* actor); // func_800B6A10
 void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor); // func_800B6A88
 void Actor_SetVelocityXYRotation(Actor* actor); // func_800B6AB4
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor); // func_800B6B24
@@ -805,7 +805,7 @@ void func_800B886C(void); // func_800B886C
 void func_800B8898(GlobalContext* ctxt, Actor* actor, UNK_PTR param_3, UNK_PTR param_4); // func_800B8898
 void func_800B8934(void); // func_800B8934
 u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt); // func_800B89F8
-UNK_TYPE4 func_800B8A1C(Actor* actorShape, GlobalContext* ctxt, int iParm3, float fParm4, float param_5); // func_800B8A1C
+UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* ctxt, int iParm3, float fParm4, float param_5); // func_800B8A1C
 void func_800B8B84(void); // func_800B8B84
 void func_800B8BB0(void); // func_800B8BB0
 void func_800B8BD0(void); // func_800B8BD0
@@ -821,7 +821,7 @@ void func_800B8D98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B8DD4
 void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B8E1C
 void func_800B8E58(void); // func_800B8E58
-void func_800B8EC8(Actor* actorShape, u32 uParm2); // func_800B8EC8
+void func_800B8EC8(Actor* actor, u32 uParm2); // func_800B8EC8
 void func_800B8EF4(void); // func_800B8EF4
 void func_800B8F98(Actor* actor, u16 sfxId); // func_800B8F98
 void func_800B8FC0(void); // func_800B8FC0
@@ -2885,9 +2885,9 @@ void func_801496C8(void); // func_801496C8
 void func_8014995C(void); // func_8014995C
 void func_80149C18(void); // func_80149C18
 void func_80149EBC(void); // func_80149EBC
-void func_80149F74(GlobalContext* actorShape, unsigned int** ppuParm2); // func_80149F74
+void func_80149F74(GlobalContext* globalCtx, unsigned int** ppuParm2); // func_80149F74
 void func_8014AAD0(void); // func_8014AAD0
-void func_8014ADBC(GlobalContext* actorShape, UNK_PTR puParm2); // func_8014ADBC
+void func_8014ADBC(GlobalContext* globalCtx, UNK_PTR puParm2); // func_8014ADBC
 void func_8014C70C(void); // func_8014C70C
 void func_8014CC14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_8014CC14
 void func_8014CCB4(void); // func_8014CCB4
@@ -2907,7 +2907,7 @@ void func_80151C9C(void); // func_80151C9C
 void func_80151DA4(void); // func_80151DA4
 void func_80152434(void); // func_80152434
 void func_80152464(void); // func_80152464
-UNK_TYPE4 func_80152498(MessageContext* actorShape); // func_80152498
+UNK_TYPE4 func_80152498(MessageContext* msgCtx); // func_80152498
 void func_8015268C(void); // func_8015268C
 void func_80152C64(void); // func_80152C64
 void func_80152CAC(void); // func_80152CAC
@@ -2933,7 +2933,7 @@ void func_8015966C(void); // func_8015966C
 void func_8015A144(void); // func_8015A144
 void func_8015B198(void); // func_8015B198
 void func_8015E750(void); // func_8015E750
-void func_8015E7EC(GlobalContext* actorShape, UNK_PTR puParm2); // func_8015E7EC
+void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2); // func_8015E7EC
 void func_8015F8A8(UNK_TYPE4 ctxt); // func_8015F8A8
 void func_80160A90(void); // func_80160A90
 void func_80160AF8(void); // func_80160AF8
