@@ -5,7 +5,7 @@
 
 struct EnRsn;
 
-typedef void (*EnRsnActionFunc)(struct BgHakaCurtain*, GlobalContext*);
+typedef void (*EnRsnActionFunc)(struct EnRsn*, GlobalContext*);
 
 typedef struct EnRsn {
     /* 0x000 */ Actor actor;
