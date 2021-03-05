@@ -9,8 +9,7 @@ typedef void (*EnTuboTrapActionFunc)(struct EnTuboTrap*, GlobalContext*);
 
 typedef struct EnTuboTrap {
     /* 0x000 */ Actor actor;
-    // actor is smaller by 4 I think
-    /* 0x014X */ EnTuboTrapActionFunc actionFunc;
+    /* 0x0144 */ EnTuboTrapActionFunc actionFunc;
     /* 0x015X */ f32 targetY;
     /* 0x015X */ Vec3f originPos;
     /* 0x0158 */ ColCylinder collider;
@@ -20,10 +19,10 @@ typedef struct EnTuboTrap {
 
 extern const ActorInit En_Tubo_Trap_InitVars;
 
-extern s32 D_05018090; // pot break shard displaylist?
+extern u32 D_05018090; // pot break shard displaylist?
 
-extern s32 D_05017EA0; // the pot displaylist?
+extern u32 D_05017EA0; // the pot displaylist?
 
-extern f32 D_80931494; // distance to player
+//extern s32 D_8093146C;
 
 #endif // Z_EN_TUBO_TRAP_H

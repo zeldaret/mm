@@ -2063,7 +2063,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.text)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.data)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.rodata)
-        build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap_overlay.o(.ovl)
+        build/asm/ovl_En_Tubo_Trap_rodata.o(.rodata)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
