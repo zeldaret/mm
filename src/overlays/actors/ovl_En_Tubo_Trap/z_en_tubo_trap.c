@@ -47,15 +47,12 @@ s8 D_8093146C[] = {
 void EnTuboTrap_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnTuboTrap* this = THIS;
 
-    Actor_ProcessInitChain(thisx, &D_8093145C);
-    thisx->shape.rot.z = 0;
-    thisx->world.rot.z = 0;
-    Actor_SetDrawParams(&thisx->shape, 0.0f,
-          (void (*)(struct Actor *actor,
-                    struct LightMapper *mapper,
-                    struct GlobalContext *ctxt)) func_800B3FC0, 1.8f);
+    Actor_ProcessInitChain(&this->actor, &D_8093145C);
+    this->actor.shape.rot.z = 0;
+    this->actor.world.rot.z = 0;
+    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
     Collision_InitCylinderDefault(globalCtx, &this->collider);
-    Collision_InitCylinderWithData(globalCtx, &this->collider, thisx, &D_80931410);
+    Collision_InitCylinderWithData(globalCtx, &this->collider, &this->actor, &D_80931410);
     this->actionFunc = func_80931004;
 }
 
@@ -66,15 +63,15 @@ void EnTuboTrap_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 }
 
 // drop collectable
-void func_8093089C(EnTuboTrap *thisx, GlobalContext *globalCtx) {
-    s32 itemParam = ((thisx->actor.params >> 8) & 0x3F);
+void func_8093089C(EnTuboTrap *this, GlobalContext *globalCtx) {
+    s32 itemParam = ((this->actor.params >> 8) & 0x3F);
     s32 dropCount = func_800A8150(itemParam);
 
     if (dropCount >= 0) {
         // in OOT this is Item_DropCollectible
         func_800A7730(globalCtx, 
-                      &thisx->actor.world, 
-                      ((thisx->actor.params & 0x7F) << 8) | dropCount);
+                      &this->actor.world, 
+                      ((this->actor.params & 0x7F) << 8) | dropCount);
     }
 }
 
@@ -137,7 +134,7 @@ void func_809308F4(EnTuboTrap *this, GlobalContext *globalCtx) {
     func_800BBFB0(globalCtx, actorPos, 30.0f, 4, 0x14, 0x32, 0);
 }
 
-// this is the water version of the function above
+// EnTuboTrap_SpawnEffectsInWater
 void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
     f32 rand;
     f32 sin;
@@ -195,11 +192,10 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
   }
 }
 
-// "handle impact"
+// EnTuboTrap_HandleImpact
 void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     Actor *player = PLAYER;
     Actor *player2 = PLAYER;
-    // double player, the same as OOT
     
     // in oot func_800F0568 is Audio_PlaySoundAtPosition
 
@@ -262,7 +258,6 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.yDistToPlayer <= ((f32) startingRotation * 10.0f))) {
-            // actor change category in OOT, changed to enemy_actor_group
             func_800BC154(globalCtx, &globalCtx->actorCtx, this, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags = |= 0x11; // always update and can target
@@ -278,7 +273,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
             }
             this->originPos = this->actor.world.pos;
             func_800B8EC8(&this->actor, 0x28C4U); // play actorsound2 pot move start
-            this->actionFunc = func_80931138; // levitate
+            this->actionFunc = func_80931138;
         }
     }
 } // */
@@ -291,7 +286,6 @@ void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y += 0x1388;
     Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetY, 0.8f, 3.0f);
 
-    // once height is reached, switch to flying at link
     if (fabsf(this->actor.world.pos.y - this->targetY) < 10.0f) {
         this->actor.speedXZ = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -320,26 +314,25 @@ void EnTuboTrap_Update(Actor *thisx, GlobalContext *globalCtx) {
     s32 padding;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(thisx);
-    func_800B78B8(globalCtx, thisx, 12.0f, 10.0f, 20.0f, 0x1F);
-    Actor_SetHeight(thisx, 0.0f);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    func_800B78B8(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
+    Actor_SetHeight(&this->actor, 0.0f);
 
-    if (thisx->projectedPos.z < 811.0f) {
-        if (thisx->projectedPos.z > 300.0f) {
-            // evil floating point bit level hacking
-            thisx->shape.shadowAlpha = (u8) ( (0x32B - (s32) thisx->projectedPos.z) >> 1);
-            thisx->shape.shadowDraw = func_800B3FC0;
-        } else if (thisx->projectedPos.z > -10.0f) {
-            thisx->shape.shadowAlpha = 0xFF;
-            thisx->shape.shadowDraw = func_800B3FC0;
+    if (this->actor.projectedPos.z < 811.0f) {
+        if (this->actor.projectedPos.z > 300.0f) {
+            this->actor.shape.shadowAlpha = (u8) ( (0x32B - (s32) this->actor.projectedPos.z) >> 1);
+            this->actor.shape.shadowDraw = func_800B3FC0;
+        } else if (this->actor.projectedPos.z > -10.0f) {
+            this->actor.shape.shadowAlpha = 0xFF;
+            this->actor.shape.shadowDraw = func_800B3FC0;
         } else{
-            thisx->shape.shadowDraw = NULL;
+            this->actor.shape.shadowDraw = NULL;
         }
     } else {
-        thisx->shape.shadowDraw = NULL;
+        this->actor.shape.shadowDraw = NULL;
     }
 
-    Collision_CylinderMoveToActor(thisx, &this->collider);
+    Collision_CylinderMoveToActor(&this->actor, &this->collider);
     Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     Collision_AddAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
