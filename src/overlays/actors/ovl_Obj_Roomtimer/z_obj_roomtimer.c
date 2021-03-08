@@ -22,14 +22,14 @@ const ActorInit Obj_Roomtimer_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/func_80973CD8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/func_80973CD8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/func_80973D3C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/func_80973D3C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/func_80973DE0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/func_80973DE0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Update.asm")

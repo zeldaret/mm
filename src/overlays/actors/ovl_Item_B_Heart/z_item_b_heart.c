@@ -23,12 +23,12 @@ const ActorInit Item_B_Heart_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Item_B_Heart_0x808BCDF0/func_808BCF54.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Item_B_Heart_0x808BCDF0/func_808BCF54.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Item_B_Heart_0x808BCDF0/ItemBHeart_Draw.asm")

@@ -22,8 +22,8 @@ const ActorInit En_Tag_Obj_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Update.asm")

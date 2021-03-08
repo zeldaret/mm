@@ -22,8 +22,8 @@ const ActorInit En_M_Fire1_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Fire1_0x808B5230/EnMFire1_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_M_Fire1_0x808B5230/EnMFire1_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Fire1_0x808B5230/EnMFire1_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_M_Fire1_0x808B5230/EnMFire1_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_M_Fire1_0x808B5230/EnMFire1_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_M_Fire1_0x808B5230/EnMFire1_Update.asm")

@@ -23,16 +23,16 @@ const ActorInit Obj_Chikuwa_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/func_809B1550.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/func_809B1550.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/func_809B17D0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/func_809B17D0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/func_809B1AA0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/func_809B1AA0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/ObjChikuwa_Draw.asm")

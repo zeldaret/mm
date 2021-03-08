@@ -23,16 +23,16 @@ const ActorInit Dm_Nb_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/func_80C1DED0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/func_80C1DED0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/func_80C1DF18.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/func_80C1DF18.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/DmNb_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/DmNb_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/DmNb_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/DmNb_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/DmNb_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/DmNb_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/func_80C1E168.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/func_80C1E168.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Nb_0x80C1DED0/DmNb_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/DmNb_Draw.asm")

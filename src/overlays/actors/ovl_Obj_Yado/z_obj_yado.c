@@ -23,10 +23,10 @@ const ActorInit Obj_Yado_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yado_0x80C161E0/ObjYado_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yado_0x80C161E0/ObjYado_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yado_0x80C161E0/ObjYado_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yado_0x80C161E0/ObjYado_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Draw.asm")

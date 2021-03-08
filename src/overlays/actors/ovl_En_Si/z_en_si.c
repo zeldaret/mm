@@ -23,18 +23,18 @@ const ActorInit En_Si_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/func_8098CA20.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CA20.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/func_8098CAD0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CAD0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/func_8098CB70.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CB70.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/func_8098CBDC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CBDC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/EnSi_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/EnSi_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/EnSi_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Si_0x8098CA20/EnSi_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Draw.asm")

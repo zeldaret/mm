@@ -349,7 +349,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/z_view/View_RenderToPerspectiveMatrix.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/View_RenderToPerspectiveMatrix.asm")
 #endif
 
 #ifdef NON_MATCHING
@@ -393,12 +393,12 @@ s32 View_RenderToOrthographicMatrix(View* view) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/z_view/View_RenderToOrthographicMatrix.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/View_RenderToOrthographicMatrix.asm")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/z_view/func_8013FBC8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_8013FBC8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/z_view/func_8013FD74.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_8013FD74.asm")
 
 s32 func_80140024(View* view) {
     guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z,
@@ -411,5 +411,5 @@ s32 func_80140024(View* view) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/z_view/func_801400CC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_801400CC.asm")
 

@@ -23,12 +23,12 @@ const ActorInit En_Bu_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bu_0x809ACD90/EnBu_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bu_0x809ACD90/EnBu_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bu_0x809ACD90/EnBu_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bu_0x809ACD90/EnBu_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bu_0x809ACD90/func_809ACDB8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bu_0x809ACD90/func_809ACDB8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bu_0x809ACD90/EnBu_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bu_0x809ACD90/EnBu_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Bu_0x809ACD90/EnBu_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bu_0x809ACD90/EnBu_Draw.asm")

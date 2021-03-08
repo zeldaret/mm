@@ -22,8 +22,8 @@ const ActorInit Obj_Ending_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ending_0x80C25BC0/ObjEnding_Draw.asm")

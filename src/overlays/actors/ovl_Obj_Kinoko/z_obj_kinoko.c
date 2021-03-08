@@ -23,10 +23,10 @@ const ActorInit Obj_Kinoko_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Draw.asm")

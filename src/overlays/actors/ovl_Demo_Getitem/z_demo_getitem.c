@@ -22,14 +22,14 @@ const ActorInit Demo_Getitem_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB10.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB10.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB68.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Getitem_0x80A4FA40/func_80A4FCF0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FCF0.asm")

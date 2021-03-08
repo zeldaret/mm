@@ -22,12 +22,12 @@ const ActorInit Obj_Dowsing_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Dowsing_0x80B23D50/func_80B23D50.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/func_80B23D50.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Dowsing_0x80B23D50/func_80B23DD0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/func_80B23DD0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Update.asm")

@@ -23,12 +23,12 @@ const ActorInit En_Nutsball_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Nutsball_0x80985C40/EnNutsball_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/EnNutsball_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Nutsball_0x80985C40/EnNutsball_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/EnNutsball_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Nutsball_0x80985C40/func_80985D3C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/func_80985D3C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Nutsball_0x80985C40/EnNutsball_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/EnNutsball_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Nutsball_0x80985C40/EnNutsball_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/EnNutsball_Draw.asm")

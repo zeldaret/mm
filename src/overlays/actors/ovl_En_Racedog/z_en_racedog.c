@@ -23,48 +23,48 @@ const ActorInit En_Racedog_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B24630.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24630.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B246F4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B246F4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B2478C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B2478C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B248B8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B248B8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/EnRacedog_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/EnRacedog_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/EnRacedog_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/EnRacedog_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B24C14.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24C14.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B24CB4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24CB4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B24E14.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24E14.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B24F08.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24F08.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B251EC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B251EC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B252F8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B252F8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B2538C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B2538C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B25448.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B25448.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B25490.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B25490.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B255AC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B255AC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B256BC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B256BC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/EnRacedog_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/EnRacedog_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B2583C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B2583C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B258D8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B258D8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B25A74.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B25A74.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/func_80B25A90.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B25A90.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Racedog_0x80B24630/EnRacedog_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/EnRacedog_Draw.asm")

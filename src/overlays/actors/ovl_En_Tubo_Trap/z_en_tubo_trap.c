@@ -23,24 +23,24 @@ const ActorInit En_Tubo_Trap_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_8093089C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_8093089C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_809308F4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_809308F4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_80930B60.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80930B60.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_80930DDC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80930DDC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_80931138.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931138.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_809311C4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_809311C4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/EnTuboTrap_Draw.asm")

@@ -22,14 +22,14 @@ const ActorInit Eff_Change_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/EffChange_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/EffChange_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/EffChange_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/EffChange_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/func_80A4C578.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/func_80A4C578.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/func_80A4C5CC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/func_80A4C5CC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/EffChange_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/EffChange_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Eff_Change_0x80A4C490/func_80A4C7B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Change_0x80A4C490/func_80A4C7B0.asm")

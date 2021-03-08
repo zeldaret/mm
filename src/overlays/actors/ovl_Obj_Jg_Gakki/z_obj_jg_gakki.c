@@ -23,10 +23,10 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Draw.asm")

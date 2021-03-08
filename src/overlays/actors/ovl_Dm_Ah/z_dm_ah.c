@@ -23,28 +23,28 @@ const ActorInit Dm_Ah_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D410.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D410.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D458.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D458.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D4D0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D4D0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D6E0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D6E0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D78C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D78C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D7FC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D7FC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1D92C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1D92C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/DmAh_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/DmAh_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/DmAh_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/DmAh_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/DmAh_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/DmAh_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1DAD4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1DAD4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/func_80C1DB24.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/func_80C1DB24.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Ah_0x80C1D410/DmAh_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ah_0x80C1D410/DmAh_Draw.asm")

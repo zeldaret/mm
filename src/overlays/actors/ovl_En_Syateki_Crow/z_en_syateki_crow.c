@@ -23,30 +23,30 @@ const ActorInit En_Syateki_Crow_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA5D4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA5D4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA67C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA67C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA71C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA71C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA840.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA840.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA8E4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CA8E4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAAF8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAAF8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CABC0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CABC0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CACD0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CACD0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAE5C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAE5C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAF2C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/func_809CAF2C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Draw.asm")

@@ -23,16 +23,16 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A5389C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A5389C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A538E0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A538E0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A53994.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/func_80A53994.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Draw.asm")

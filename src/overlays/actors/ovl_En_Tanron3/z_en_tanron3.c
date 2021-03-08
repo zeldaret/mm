@@ -23,26 +23,26 @@ const ActorInit En_Tanron3_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB85A0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB85A0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB87D4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB87D4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB897C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB897C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB8A48.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB8A48.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB91D4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB91D4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB9288.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB9288.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB9308.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB9308.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/func_80BB95FC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/func_80BB95FC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron3_0x80BB85A0/EnTanron3_Draw.asm")

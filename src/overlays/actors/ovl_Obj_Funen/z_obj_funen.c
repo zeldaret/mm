@@ -21,6 +21,6 @@ const ActorInit Obj_Funen_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Funen_0x80A19740/ObjFunen_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Funen_0x80A19740/ObjFunen_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Draw.asm")
