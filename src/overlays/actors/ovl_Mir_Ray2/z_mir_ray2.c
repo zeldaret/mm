@@ -23,14 +23,14 @@ const ActorInit Mir_Ray2_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/func_80AF3F70.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/func_80AF3F70.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/func_80AF3FE0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/func_80AF3FE0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/MirRay2_Draw.asm")

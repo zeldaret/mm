@@ -23,20 +23,20 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7F730.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7F730.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA84.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA84.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA9C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA9C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FB84.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FB84.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FBA4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FBA4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Draw.asm")

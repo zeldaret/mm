@@ -23,26 +23,26 @@ const ActorInit Obj_Usiyane_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C07C80.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C07C80.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C07CD0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C07CD0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C07DC4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C07DC4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C07DFC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C07DFC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C07F30.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C07F30.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C081C8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C081C8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C082CC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C082CC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/func_80C082E0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/func_80C082E0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Usiyane_0x80C07C80/ObjUsiyane_Draw.asm")

@@ -23,14 +23,14 @@ const ActorInit En_Light_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/EnLight_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/EnLight_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/func_80865BF8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/func_80865BF8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/EnLight_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/func_80865F38.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/func_80865F38.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Light_0x80865990/EnLight_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Draw.asm")

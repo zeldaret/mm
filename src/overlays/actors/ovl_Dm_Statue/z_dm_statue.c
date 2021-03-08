@@ -23,10 +23,10 @@ const ActorInit Dm_Statue_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Draw.asm")

@@ -23,20 +23,20 @@ const ActorInit Demo_Tre_Lgt_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0EE8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0EE8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0EF4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0EF4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0F4C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0F4C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0FE0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E0FE0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E12A4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/func_808E12A4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Draw.asm")
