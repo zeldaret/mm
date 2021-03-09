@@ -60,12 +60,17 @@ map_file = ReadAllLines('build/mm.map')
 
 # Get list of Non-Matchings
 all_files = GetFiles("src", ".c")
-non_matching_functions = GetFunctionsByPattern(NON_MATCHING_PATTERN, all_files) if not args.matching else []
+non_matching_functions = GetFunctionsByPattern(NON_MATCHING_PATTERN, all_files)
 
 # Get list of functions not attempted.
 not_attempted_functions = GetFunctionsByPattern(NOT_ATTEMPTED_PATTERN, all_files)
 not_attempted_functions = list(set(not_attempted_functions).difference(non_matching_functions))
 
+# If we are looking for a count that includes non-matchings, then we want to set non matching functions list to empty.
+# We want to do this after not attempted functions list generation so we can remove all non matchings.
+if not args.matching:
+    non_matching_functions = []
+    
 # Initialize all the code values
 src = 0
 src_code = 0
