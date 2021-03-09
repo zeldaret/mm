@@ -49,7 +49,7 @@ def GetRemovableSize(functions_to_count, path):
             asm_lines = ReadAllLines(asm_file_path)
 
             for asm_line in asm_lines:
-                if (asm_line.startswith("/*")):
+                if (asm_line[0:2] == "/*" and asm_line[30:32] == "*/"):
                     file_size += 4
                     
         size += file_size
@@ -160,6 +160,8 @@ num_masks = 24
 max_rupees = 500
 bytes_per_mask = total / num_masks
 bytes_per_rupee = bytes_per_mask / max_rupees
+masks = int(src / bytes_per_mask)
+rupees = int((src % bytes_per_mask) / bytes_per_rupee)
 
 # Debug print statements for the values
 print("Total: ", total)
@@ -217,9 +219,6 @@ elif args.format == 'text':
     print(str(code) + "/" + str(code_size) + " bytes " + adjective + " in code " + str(code_percent) + "%\n")
     print(str(ovl) + "/" + str(ovl_size) + " bytes " + adjective + " in overlays " + str(ovl_percent) + "%\n")
     print("------------------------------------\n")
-
-    masks = int(src / bytes_per_mask)
-    rupees = int((src % bytes_per_mask) / bytes_per_rupee)
 
     if (rupees > 0):
         print('You have {}/{} masks and {}/{} rupee(s).\n'.format(masks, num_masks, rupees, max_rupees))
