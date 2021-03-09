@@ -2,14 +2,21 @@ pipeline {
     agent any
 
     stages {
-
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
                 sh 'cp /usr/local/etc/roms/baserom_mm.z64 baserom.z64'
             }
         }
-        stage('Build') {
+        stage('Build (qemu-irix)') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'ORIG_COMPILER=1 make -j init'
+            }
+        }
+        stage('Build (ido-recomp)') {
             when {
                 not {
                     branch 'master'
