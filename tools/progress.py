@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, struct, sys, ast, argparse, json, re, csv
+import os, argparse, json, re, csv, git
 
 parser = argparse.ArgumentParser()
 
