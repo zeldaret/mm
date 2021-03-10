@@ -5552,9 +5552,9 @@ SECTIONS
     ovl_En_Po_Fusen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.text)
-        build/asm/overlays/ovl_En_Po_Fusen_data.o(.data)
+        build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.data)
         build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.rodata)
-        build/asm/overlays/ovl_En_Po_Fusen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
