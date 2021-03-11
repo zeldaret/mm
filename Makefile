@@ -167,7 +167,6 @@ $(S_FILES): disasm
 disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt tables/files_with_nonmatching.txt
 	./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
 	@while read -r file; do \
-		#echo "$$file" \
 		./tools/split_asm.py ./asm/$$file.asm ./asm/non_matchings/$$file; \
 	done < ./tables/files_with_nonmatching.txt
 

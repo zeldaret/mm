@@ -7,18 +7,23 @@ then
     exit 1
 fi
 
+code_file=$1
+code_path=$2
+
 # If there are only two arguments, then we will use the non_matchings path to be the same as src_path
 if [ "$#" -eq "2" ];
 then
-	3=$2
+	code_bucket=$code_path
+else
+	code_bucket=$3
 fi
 
 # Split asm file, create base c file, and add it to the list of non-matchings
-tools/split_asm.py -c "src/$2/$1.c" "asm/$1.asm" "asm/non_matchings/$3/$1"
-echo "$1" >> tables/files_with_nonmatching.txt
+tools/split_asm.py -c "./src/$code_path/$code_file.c" "./asm/$code_bucket/$code_file.asm" "./asm/non_matchings/$code_bucket/$code_file"
+echo "$code_bucket/$code_file" >> tables/files_with_nonmatching.txt
 
 # Edit linker script to use new .c file
-sed -i "s/asm\/$1.o/src\/${2//\//\\\/}\/$1.o/g" linker_scripts/code_script.txt
+sed -i "s/asm\/$code_file.o/src\/${2//\//\\\/}\/$code_file.o/g" linker_scripts/code_script.txt
 
 # Build with new file
-make diff-init
+make -j diff-init
