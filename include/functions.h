@@ -524,7 +524,7 @@ void EnItem00_DrawSprite(ActorEnItem00* actor, GlobalContext* ctxt); // func_800
 void EnItem00_DrawHeartContainer(ActorEnItem00* actor, GlobalContext* ctxt); // func_800A74D8
 void EnItem00_DrawHeartPiece(void); // func_800A75B8
 void func_800A7650(void); // func_800A7650
-void func_800A7730(void); // func_800A7730
+void func_800A7730(GlobalContext* globalCtx, PosRot* world, UNK_TYPE param_3); // func_800A7730
 void func_800A7AD4(void); // func_800A7AD4
 void func_800A7D28(void); // func_800A7D28
 void func_800A8150(void); // func_800A8150

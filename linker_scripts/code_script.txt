@@ -8581,9 +8581,10 @@ SECTIONS
     ovl_En_Scopecoin : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Scopecoin/z_en_scopecoin.o(.text)
-        build/asm/ovl_En_Scopecoin_data.o(.data)
+        build/src/overlays/actors/ovl_En_Scopecoin/z_en_scopecoin.o(.data)
         build/src/overlays/actors/ovl_En_Scopecoin/z_en_scopecoin.o(.rodata)
-        build/asm/ovl_En_Scopecoin_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Scopecoin/z_en_scopecoin.o(.rodata)
+        build/src/overlays/actors/ovl_En_Scopecoin/z_en_scopecoin_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

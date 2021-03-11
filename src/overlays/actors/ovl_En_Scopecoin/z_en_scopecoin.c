@@ -12,7 +12,6 @@ void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx);
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
     ACTORCAT_NPC,
@@ -24,7 +23,15 @@ const ActorInit En_Scopecoin_InitVars = {
     (ActorFunc)EnScopecoin_Update,
     (ActorFunc)EnScopecoin_Draw
 };
-*/
+
+extern UNK_PTR D_04061FC0[];
+extern UNK_PTR D_04061FE0[];
+extern UNK_PTR D_04062000[];
+extern UNK_PTR D_04062040[];
+extern UNK_PTR D_04062020[];
+extern UNK_PTR D_04062060[];
+extern UNK_PTR D_04062000[];
+extern Gfx D_040622C0[];
 
 void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y += 500;
@@ -32,7 +39,7 @@ void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
 
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
     if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
-        func_800A7730();
+        func_800A7730(globalCtx, &this->actor.world, 2);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -41,41 +48,33 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnScopecoin* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
-    this->unk148 = this->actor.params & 0xF;
-
-    if ((this->unk148 < 0) || (this->unk148 >= 8)) {
+    Actor_SetDrawParams(&this->actor.shape, 0, func_800B3FC0, 10.0f);
+    this->unk148 = (this->actor.params & 0xF);
+    if (this->unk148 < 0 || this->unk148 >= 8) {
         this->unk148 = 0;
     }
-    if ((globalCtx->actorCtx.unk5 & 2) != 0) {
-        if ((this->unk148 == 2) || (this->unk148 == 6)) {
 
-        } else {
-block_8:
-            this->actionFunc = func_80BFCFA0;
-            this->actor.shape.yOffset = 700.0f;
-            return;
+    if ((globalCtx->actorCtx.unk5 & 2)) {
+        if (this->unk148 == 2 || this->unk148 == 6) {
+            if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+                Actor_MarkForDeath(&this->actor);
+                return;
+            }
         }
-        if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4) == 0) {
-            goto block_8;
-        }
-        Actor_MarkForDeath(&this->actor);
+        this->actor.shape.yOffset = 700.0f;
+        this->actionFunc = func_80BFCFA0;
         return;
     }
-    if (this->unk148 == 2) {
-block_11:
-        if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4) == 0) {
+    if (this->unk148 == 2 || this->unk148 == 6) {
+        if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+            Actor_MarkForDeath(&this->actor);
+        } else {
             this->actor.draw = NULL;
             this->actionFunc = func_80BFCFB8;
-            return;
         }
+    } else {
         Actor_MarkForDeath(&this->actor);
-        return;
     }
-    if (this->unk148 == 6) {
-        goto block_11;
-    }
-    Actor_MarkForDeath(&this->actor);
 }
 
 void EnScopecoin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -87,4 +86,19 @@ void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Scopecoin_0x80BFCFA0/EnScopecoin_Draw.asm")
+static UNK_PTR D_80BFD280[] = {D_04061FC0, D_04061FE0, D_04062000, D_04062040, D_04062020, D_04062060, D_04062000};
+
+void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    EnScopecoin* this = THIS;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_800B8050(&this->actor, globalCtx, 0); 
+    OPEN_DISPS(gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_80BFD280[this->unk148]));
+    gSPDisplayList(POLY_OPA_DISP++, &D_040622C0);
+
+    CLOSE_DISPS(gfxCtx);
+}
