@@ -23,10 +23,10 @@ const ActorInit Obj_Yasi_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Draw.asm")

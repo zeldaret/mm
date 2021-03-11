@@ -23,20 +23,20 @@ const ActorInit Arrow_Light_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/func_80924300.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_80924300.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/ArrowLight_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/ArrowLight_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/func_809243AC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809243AC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/func_809244A0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809244A0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/func_809244F8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809244F8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/func_809246C4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809246C4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/ArrowLight_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Arrow_Light_0x80924300/ArrowLight_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Draw.asm")

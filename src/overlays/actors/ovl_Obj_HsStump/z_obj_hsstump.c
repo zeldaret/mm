@@ -23,18 +23,18 @@ const ActorInit Obj_HsStump_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB00.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB00.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB18.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB18.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB6C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDAB6C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/func_80BDABCC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDABCC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Draw.asm")

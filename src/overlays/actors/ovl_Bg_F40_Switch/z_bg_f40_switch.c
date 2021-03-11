@@ -23,22 +23,22 @@ const ActorInit Bg_F40_Switch_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC47B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC47B0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4B20.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4B20.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4B94.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4B94.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4BB8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4BB8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4C68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4C68.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4D30.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/func_80BC4D30.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Switch_0x80BC47B0/BgF40Switch_Draw.asm")

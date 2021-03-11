@@ -23,26 +23,26 @@ const ActorInit En_Gamelupy_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6854.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6854.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6944.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6944.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6958.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6958.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6994.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6994.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF69A8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF69A8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6A38.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6A38.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6A78.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6A78.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/func_80AF6B40.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/func_80AF6B40.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Draw.asm")
