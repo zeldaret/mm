@@ -22,10 +22,10 @@ const ActorInit Obj_Sound_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Sound_0x8099A920/ObjSound_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Sound_0x8099A920/ObjSound_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Sound_0x8099A920/ObjSound_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Sound_0x8099A920/ObjSound_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Sound_0x8099A920/ObjSound_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Sound_0x8099A920/ObjSound_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Sound_0x8099A920/func_8099AA84.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Sound_0x8099A920/func_8099AA84.asm")

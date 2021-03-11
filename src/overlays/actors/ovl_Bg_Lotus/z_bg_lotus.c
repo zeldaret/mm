@@ -23,18 +23,18 @@ const ActorInit Bg_Lotus_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/BgLotus_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/BgLotus_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/BgLotus_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/BgLotus_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6830.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/func_80AD6830.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD68DC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/func_80AD68DC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6A88.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/func_80AD6A88.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/func_80AD6B68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/func_80AD6B68.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/BgLotus_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/BgLotus_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Lotus_0x80AD6760/BgLotus_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lotus_0x80AD6760/BgLotus_Draw.asm")

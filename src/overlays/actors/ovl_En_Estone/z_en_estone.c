@@ -23,20 +23,20 @@ const ActorInit En_Estone_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/EnEstone_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/EnEstone_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/func_80A9A1DC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/func_80A9A1DC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/func_80A9A4B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/func_80A9A4B0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/EnEstone_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/EnEstone_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Draw.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/func_80A9A774.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/func_80A9A774.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/func_80A9A870.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/func_80A9A870.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Estone_0x80A99EA0/func_80A9A9C0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/func_80A9A9C0.asm")

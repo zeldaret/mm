@@ -97,7 +97,7 @@ ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
 # create build directories
-$(shell mkdir -p build/asm build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/io/%: OPTFLAGS := -O2
@@ -187,6 +187,7 @@ diff-init: all
 	cp $(ROM) expected/$(ROM)
 
 init:
+	$(MAKE) clean
 	$(MAKE) setup
 	$(MAKE) all
 	$(MAKE) diff-init

@@ -23,20 +23,20 @@ const ActorInit Bg_Open_Shutter_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAB10.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAB10.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACABA8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACABA8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAD88.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAD88.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAE5C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAE5C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAEF0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAEF0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/BgOpenShutter_Draw.asm")

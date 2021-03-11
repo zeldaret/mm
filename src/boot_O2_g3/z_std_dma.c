@@ -141,7 +141,7 @@ void DmaMgr_ProcessMsg(DmaRequest* a0) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/z_std_dma/DmaMgr_ProcessMsg.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/DmaMgr_ProcessMsg.asm")
 #endif
 
 void Dmamgr_ThreadEntry(void* a0) {
@@ -215,7 +215,7 @@ void Dmamgr_Start() {
 	osStartThread(&dmamgrOSThread);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/z_std_dma/Dmamgr_Start.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/Dmamgr_Start.asm")
 #endif
 
 void Dmamgr_Stop() {

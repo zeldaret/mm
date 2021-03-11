@@ -1,102 +1,233 @@
 #!/usr/bin/env python3
-import os, struct, sys, ast, argparse
+import os, argparse, json, re, csv, git
 
-def read_all_lines(file_name):
-    lines = list()
-    try:
-        with open(file_name) as f:
-            lines = f.readlines()
-    except IOError:
-        print('failed to read file ' + file_name)
-        sys.exit(1)
+parser = argparse.ArgumentParser()
 
-    return lines
+parser = argparse.ArgumentParser(description="Computes current progress throughout the whole project.")
+parser.add_argument("format", nargs="?", default="text", choices=["text", "csv", "shield-json"])
+parser.add_argument("-m", "--matching", dest='matching', action='store_true',
+                    help="Output matching progress instead of decompilation progress")
+args = parser.parse_args()
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+NON_MATCHING_PATTERN = r"#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\).*?#endif"
+NOT_ATTEMPTED_PATTERN = r"#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\)"
 
-    parser.add_argument('--file', help='File to print progress off. If excluded, defaults to all files.')
-    args = parser.parse_args()
+def GetFunctionsByPattern(pattern, files):
+    functions = []
 
-    map_lines = read_all_lines('build/mm.map')
+    for file in files:
+        with open(file) as f:
+            functions += re.findall(pattern, f.read(), re.DOTALL)
 
-    current_section = ''
-    in_section_list = False
-    asm_amounts = dict()
-    src_amounts = dict()
-    src_files = dict()
-    for line in map_lines:
-        if in_section_list:
-            if line.startswith('OUTPUT(build/code.elf elf32-tradbigmips)'):
-                break
+    return functions
 
-            line_split =  list(filter(None, line.split()))
+def ReadAllLines(fileName):
+    line_list = list()
+    with open(fileName) as f:
+        line_list = f.readlines()
 
-            if (len(line_split) > 0 and not line.startswith(' ')):
-                current_section = line_split[0]
-                src_amounts[current_section] = 0
-                asm_amounts[current_section] = 0
-                src_files[current_section] = []
+    return line_list
 
-            if (len(line_split) == 4 and line_split[0].startswith(".")):
-                section = line_split[0]
-                size = int(line_split[2], 16)
-                obj_file = line_split[3]
+def GetFiles(path, ext):
+    files = []
+    
+    for r, d, f in os.walk(path):
+        for file in f:
+            if file.endswith(ext):
+                files.append(os.path.join(r, file))
 
-                if (section == ".text" and not current_section + '_data' in obj_file and not current_section + '_rodata' in obj_file):
-                    if (obj_file.startswith("build/src")):
-                        src_amounts[current_section] += size
-                        formatted_name = obj_file[len('build/'):] # remove build/ prefix
-                        formatted_name = formatted_name[:-1] + 'c' # replace .o preface with .c
-                        src_files[current_section].append(formatted_name)
-                    elif (obj_file.startswith("build/asm")):
-                        asm_amounts[current_section] += size
-        else:
-           in_section_list = line.startswith('Linker script and memory map')
+    return files
 
-    for section in src_files:
-        for file in src_files[section]:
-            file_lines = read_all_lines(file)
-            for line in file_lines:
-                if line.startswith('#pragma GLOBAL_ASM'):
-                    line_split =  list(filter(None, line.split('\"')))
-                    asm_lines = read_all_lines(line_split[1])
-                    for asm_line in asm_lines:
-                        if asm_line.startswith('/*'):
-                            asm_amounts[section] += 4
-                            src_amounts[section] -= 4
+def GetRemovableSize(functions_to_count, path):
+    size = 0
 
-    src = 0
-    asm = 0
-    if args.file == None:
-        for section in src_amounts:
-            src += src_amounts[section]
-        for section in asm_amounts:
-            asm += asm_amounts[section]
-    else:
-        if args.file not in src_amounts or args.file not in asm_amounts:
-            sys.exit('{} not found in map file'.format(args.file))
-        src += src_amounts[args.file]
-        asm += asm_amounts[args.file]
+    asm_files = GetFiles(path, ".asm")
 
-    total = src + asm
-    src_percent = 100 * src / total
-    asm_percent = 100 * asm / total
+    for asm_file_path in asm_files:
+        file_size = 0
+        if asm_file_path in functions_to_count:
+            asm_lines = ReadAllLines(asm_file_path)
 
-    print('{} total bytes of decompilable code\n'.format(total))
-    print('{} bytes of code in src {}%'.format(src, src_percent))
-    print('{} bytes of code in asm {}%\n'.format(asm, asm_percent))
+            for asm_line in asm_lines:
+                if (asm_line[0:2] == "/*" and asm_line[30:32] == "*/"):
+                    file_size += 4
+                    
+        size += file_size
+
+    return size
+    
+map_file = ReadAllLines('build/mm.map')
+
+# Get list of Non-Matchings
+all_files = GetFiles("src", ".c")
+non_matching_functions = GetFunctionsByPattern(NON_MATCHING_PATTERN, all_files)
+
+# Get list of functions not attempted.
+not_attempted_functions = GetFunctionsByPattern(NOT_ATTEMPTED_PATTERN, all_files)
+not_attempted_functions = list(set(not_attempted_functions).difference(non_matching_functions))
+
+# If we are looking for a count that includes non-matchings, then we want to set non matching functions list to empty.
+# We want to do this after not attempted functions list generation so we can remove all non matchings.
+if not args.matching:
+    non_matching_functions = []
+    
+# Initialize all the code values
+src = 0
+src_code = 0
+src_boot = 0
+src_ovl = 0
+src_libultra = 0
+asm = 0
+asm_code = 0
+asm_boot = 0
+asm_ovl = 0
+asm_libultra = 0
+
+for line in map_file:
+    line_split =  list(filter(None, line.split(" ")))
+
+    if (len(line_split) == 4 and line_split[0].startswith(".")):
+        section = line_split[0]
+        file_size = int(line_split[2], 16)
+        obj_file = line_split[3]
+
+        if (section == ".text"):
+            if (obj_file.startswith("build/src")):
+                if (obj_file.startswith("build/src/code")):  
+                    src_code += file_size
+                elif (obj_file.startswith("build/src/libultra")):
+                    src_libultra += file_size
+                elif (obj_file.startswith("build/src/boot")):     
+                    src_boot += file_size
+                elif (obj_file.startswith("build/src/overlays")):
+                    src_ovl += file_size
+            elif (obj_file.startswith("build/asm")):
+                if (obj_file.startswith("build/asm/code")):  
+                    asm_code += file_size
+                elif (obj_file.startswith("build/asm/libultra")):
+                    asm_libultra += file_size
+                elif (obj_file.startswith("build/asm/boot")):     
+                    asm_boot += file_size
+                elif (obj_file.startswith("build/asm/overlays")):
+                    asm_ovl += file_size
+
+# Add libultra to boot.        
+src_boot += src_libultra
+asm_boot += asm_libultra
+
+# Calculate Non-Matching
+non_matching_asm_ovl = GetRemovableSize(non_matching_functions, "./asm/non_matchings/overlays")
+non_matching_asm_code = GetRemovableSize(non_matching_functions, "./asm/non_matchings/code")
+non_matching_asm_boot = GetRemovableSize(non_matching_functions, "./asm/non_matchings/boot")
+
+# Calculate Not Attempted
+not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/overlays")
+not_attempted_asm_code = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/code")
+not_attempted_asm_boot = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/boot")
+
+# All the non matching asm is the sum of non-matching code
+non_matching_asm = non_matching_asm_ovl + non_matching_asm_code + non_matching_asm_boot
+
+# All the not attempted asm is the sum of not attemped code
+not_attempted_asm = not_attempted_asm_ovl + not_attempted_asm_code + not_attempted_asm_boot
+
+# Calculate total decompiled for each bucket by taking out the non-matching and not attempted in ovl/code/boot buckets.
+code = src_code - (non_matching_asm_code + not_attempted_asm_code)
+boot = src_boot - (non_matching_asm_boot + not_attempted_asm_boot)
+ovl = src_ovl - (non_matching_asm_ovl + not_attempted_asm_ovl)
+
+# Total code bucket sizes
+code_size = src_code + asm_code
+boot_size = src_boot + asm_boot
+ovl_size = src_ovl + asm_ovl
+handwritten = 0 # Currently unsure of any handwritten asm in MM
+
+# Calculate asm and src totals
+src = src_code + src_boot + src_ovl
+asm = asm_code + asm_boot + asm_ovl
+
+# Take out the non-matchings and not attempted in grand totals
+src -= non_matching_asm + not_attempted_asm
+asm += non_matching_asm + not_attempted_asm
+
+# Calculate the total amount of decompilable code
+total = src + asm
+
+# Convert vaules to percentages
+src_percent = 100 * src / total
+asm_percent = 100 * asm / total
+code_percent = 100 * code / code_size
+boot_percent = 100 * boot / boot_size
+ovl_percent = 100 * ovl / ovl_size
+
+# convert bytes to masks and rupees
+num_masks = 24
+max_rupees = 500
+bytes_per_mask = total / num_masks
+bytes_per_rupee = bytes_per_mask / max_rupees
+masks = int(src / bytes_per_mask)
+rupees = int((src % bytes_per_mask) / bytes_per_rupee)
+
+# Debug print statements for the values
+#print("Total: ", total)
+#print("src: ", src)
+#print("asm: ", asm)
+#print("")
+#print("src_code: ", src_code)
+#print("src_boot: ", src_boot)
+#print("src_ovl: ", src_ovl)
+#print("")
+#print("asm_code: ", asm_code)
+#print("asm_boot: ", asm_boot)
+#print("asm_ovl: ", asm_ovl)
+#print("")
+#print("Nonmatching code: ", non_matching_asm_code)
+#print("Nonmatching boot: ", non_matching_asm_boot)
+#print("Nonmatching ovl: ", non_matching_asm_ovl)
+#print("")
+#print("Not attempted code: ", not_attempted_asm_code)
+#print("Not attempted boot: ", not_attempted_asm_boot)
+#print("Not attempted ovl: ", not_attempted_asm_ovl)
+#print("")
+#print("code_size: ", code_size)
+#print("boot_size: ", boot_size)
+#print("ovl_size: ", ovl_size)
+#print("")
+#print("code: ", code)
+#print("boot: ", boot)
+#print("ovl: ", ovl)
+#print("")
+
+if args.format == 'csv':
+    version = 1
+    git_object = git.Repo().head.object
+    timestamp = str(git_object.committed_date)
+    git_hash = git_object.hexsha
+    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size), 
+                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions))]
+    
+    print(",".join(csv_list))
+elif args.format == 'shield-json':
+    # https://shields.io/endpoint
+    print(json.dumps({
+        "schemaVersion": 1,
+        "label": "progress",
+        "message": f"{src_percent:.3g}%",
+        "color": 'yellow',
+    }))
+elif args.format == 'text':
+    adjective = "decompiled" if not args.matching else "matched"
+
+    print(str(total) + " total bytes of decompilable code\n")
+    print(str(src) + " bytes " + adjective + " in src " + str(src_percent) + "%\n")
+    print(str(boot) + "/" + str(boot_size) + " bytes " + adjective + " in boot " + str(boot_percent) + "%\n")
+    print(str(code) + "/" + str(code_size) + " bytes " + adjective + " in code " + str(code_percent) + "%\n")
+    print(str(ovl) + "/" + str(ovl_size) + " bytes " + adjective + " in overlays " + str(ovl_percent) + "%\n")
     print("------------------------------------\n")
 
-    num_masks = 24
-    max_rupees = 500
-    bytes_per_mask = total / num_masks
-    bytes_per_rupee = bytes_per_mask / max_rupees
-    masks = int(src / bytes_per_mask)
-    rupees = int((src % bytes_per_mask) / bytes_per_rupee)
-
     if (rupees > 0):
-        print('You have {}/{} masks and {}/{} rupee(s).\n'.format(masks, num_masks, rupees, max_rupees));
+        print('You have {}/{} masks and {}/{} rupee(s).\n'.format(masks, num_masks, rupees, max_rupees))
     else:
-        print('You have {}/{} masks.\n'.format(masks, num_masks));
-
+        print('You have {}/{} masks.\n'.format(masks, num_masks))
+else:
+    print("Unknown format argument: " + args.format)

@@ -22,8 +22,8 @@ const ActorInit En_River_Sound_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Draw.asm")
