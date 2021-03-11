@@ -319,7 +319,7 @@ SECTIONS
     {
         code_text_start = .;
         build/src/code/code_0x800A5AC0.o(.text)
-        build/asm/code/z_en_item00.o(.text)
+        build/src/code/z_en_item00.o(.text)
         build/src/code/z_eff_blure.o(.text)
         build/asm/code/z_eff_shield_particle.o(.text)
         build/asm/code/z_eff_spark.o(.text)

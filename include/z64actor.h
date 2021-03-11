@@ -263,19 +263,23 @@ typedef struct {
     /* 0xCC4 */ UNK_TYPE1 padCC4[0xB4];
 } ActorPlayer; // size = 0xD78
 
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
-    /* 0x148 */ s16 collectibleFlagId;
+struct EnItem00;
+
+typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
+
+typedef struct EnItem00 {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnItem00ActionFunc actionFunc;
+    /* 0x148 */ s16 collectibleFlag;
     /* 0x14A */ s16 unk14A;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
     /* 0x154 */ f32 unk154;
-    /* 0x158 */ ColliderCylinder collision;
-    /* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
-} ActorEnItem00; // size = 0x1A8
+    /* 0x158 */ ColliderCylinder collider;
+    /* 0x1A4 */ s8 unk1A4;
+} EnItem00; // size = 0x1A8
 
 typedef struct {
     /* 0x000 */ Actor base;
