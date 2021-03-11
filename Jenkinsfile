@@ -8,20 +8,7 @@ pipeline {
                 sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 baserom.z64'
             }
         }
-        stage('Build (qemu-irix)') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh 'ORIG_COMPILER=1 make -j init'
-            }
-        }
-        stage('Build (ido-recomp)') {
-            when {
-                not {
-                    branch 'master'
-                }
-            }
+        stage('Build') {
             steps {
                 sh 'make -j init'
             }
