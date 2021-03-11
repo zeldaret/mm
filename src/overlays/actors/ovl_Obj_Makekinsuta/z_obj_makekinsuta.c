@@ -22,14 +22,14 @@ const ActorInit Obj_Makekinsuta_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FA40.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FA40.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FB64.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FB64.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/ObjMakekinsuta_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FD7C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FD7C.asm")

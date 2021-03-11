@@ -23,12 +23,12 @@ const ActorInit En_Hata_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Hata_0x8089E8E0/EnHata_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Hata_0x8089E8E0/EnHata_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Hata_0x8089E8E0/EnHata_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Hata_0x8089E8E0/func_8089EC68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/func_8089EC68.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Hata_0x8089E8E0/EnHata_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Draw.asm")

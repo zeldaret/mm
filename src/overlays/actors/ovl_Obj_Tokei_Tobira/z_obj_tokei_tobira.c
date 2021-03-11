@@ -23,12 +23,12 @@ const ActorInit Obj_Tokei_Tobira_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Tobira_0x80ABD1D0/func_80ABD3B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/func_80ABD3B0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Draw.asm")

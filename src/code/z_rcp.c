@@ -1303,7 +1303,7 @@ void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/z_rcp/func_8012CF0C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_rcp/func_8012CF0C.asm")
 #endif
 
 void func_8012D374(GraphicsContext* gCtxt, u8 r, u8 g, u8 b) {

@@ -23,28 +23,28 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65880.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65880.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65894.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65894.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B658A4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B658A4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65CE0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65CE0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D54.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D54.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D68.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65DA8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65DA8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B6618C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B6618C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B66304.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B66304.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Draw.asm")

@@ -164,8 +164,9 @@ def write_header(file, is_data):
 class Disassembler:
 
     class File:
-        def __init__(self, name, data, vaddr):
+        def __init__(self, name, disasmPath, data, vaddr):
             self.name = name
+            self.disasmPath = disasmPath
             self.data = data
             self.vaddr = vaddr
             self.size = len(data)
@@ -196,13 +197,13 @@ class Disassembler:
 
     def load_defaults(self):
         for file in known_files:
-            self.add_file(file[0], file[1], file[2])
-            self.add_object(file[2]) # assume every file starts with a object and function
-            self.add_function(file[2])
-            for region in file[3]:
-                self.add_data_region(region[0], region[1], file[1])
+            self.add_file(file[0], file[1], file[2], file[3])
+            self.add_object(file[3]) # assume every file starts with a object and function
+            self.add_function(file[3])
             for region in file[4]:
-                self.add_bss_region(region[0], region[1], file[1])
+                self.add_data_region(region[0], region[1], file[2])
+            for region in file[5]:
+                self.add_bss_region(region[0], region[1], file[2])
 
         for addr in known_funcs:
             self.add_function(addr)
@@ -220,8 +221,8 @@ class Disassembler:
         self.is_code_cache = {}
         self.is_bss_cache = {}
 
-    def add_file(self, path, name, vaddr):
-        self.files.append(self.File(name, read_file(path + '/' + name), vaddr))
+    def add_file(self, disasmPath, readPath, name, vaddr):
+        self.files.append(self.File(name, disasmPath, read_file(readPath + '/' + name), vaddr))
         self.files = sorted(self.files, key = lambda file: file.vaddr)
         self.reset_cache()
 
@@ -432,10 +433,13 @@ class Disassembler:
         if self.auto_analysis:
             self.guess_functions_and_variables_from_data()
         self.has_done_first_pass = True
+        
+    def build_disassembled_path(self, basePath, addr, file):
+        return basePath + '/' + file.disasmPath + '%s.asm' % self.get_object_name(addr, file.vaddr)
 
     def second_pass(self, path):
         for file in self.files:
-            filename = path + '/%s.asm' % self.get_object_name(file.vaddr, file.vaddr)
+            filename = self.build_disassembled_path(path, file.vaddr, file)
 
             with open(filename, 'w') as f:
                 write_header(f, self.is_in_data_or_undef(file.vaddr))
@@ -446,7 +450,7 @@ class Disassembler:
 
                     if addr in self.objects and SPLIT_FILES:
                         f.close()
-                        filename = path + '/%s.asm' % self.get_object_name(addr, file.vaddr)
+                        filename = self.build_disassembled_path(path, addr, file)
                         f = open(filename, 'w')
                         write_header(f, self.is_in_data_or_undef(addr))
 
@@ -965,6 +969,9 @@ if __name__ == "__main__":
 
     if args.disassemble != None:
         os.makedirs(args.disassemble, exist_ok=True)
+        os.makedirs(args.disassemble + "/boot", exist_ok=True)
+        os.makedirs(args.disassemble + "/code", exist_ok=True)
+        os.makedirs(args.disassemble + "/overlays", exist_ok=True)
         dis.disassemble(args.disassemble)
     if args.undefined != None:
         os.makedirs(args.undefined, exist_ok=True)
