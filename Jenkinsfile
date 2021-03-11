@@ -31,9 +31,9 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'python3 ./tools/progress.py csv >> /var/www/html/reports/progress_mm.csv'
-                sh 'python3 ./tools/progress.py csv -m >> /var/www/html/reports/progress_mm_matching.csv'
-                sh 'python3 ./tools/progress.py shield-json > /var/www/html/reports/progress_mm_shield.json'
+                sh 'python3 ./tools/progress.py csv >> /var/www/html/reports/progress_mm.us.rev1.csv'
+                sh 'python3 ./tools/progress.py csv -m >> /var/www/html/reports/progress_matching_mm.us.rev1.csv'
+                sh 'python3 ./tools/progress.py shield-json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
             }
         }
     }
