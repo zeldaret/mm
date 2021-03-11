@@ -278,7 +278,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
     }
 } // */
 #else
-  #pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
+  #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
 #endif
 
 // levitate
