@@ -17,8 +17,4 @@ typedef struct EnTuboTrap {
 
 extern const ActorInit En_Tubo_Trap_InitVars;
 
-extern u32 D_05018090; // pot break shard displaylist
-
-extern u32 D_05017EA0; // the pot displaylist
-
 #endif // Z_EN_TUBO_TRAP_H

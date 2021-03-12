@@ -6,6 +6,11 @@
 extern UNK_TYPE D_04029CB0; // D_04029CB0
 extern UNK_TYPE D_04029CF0; // D_04029CF0
 
+//extern Gfx[] D_05018090; // pot break shard displaylist
+//extern Gfx[] D_05017EA0; // pot displaylist
+extern UNK_TYPE D_05018090; // pot break shard displaylist
+extern UNK_TYPE D_05017EA0; // pot displaylist
+
 extern UNK_TYPE D_0E000048;
 extern UNK_TYPE D_0E000088;
 extern UNK_TYPE D_0E000140;
