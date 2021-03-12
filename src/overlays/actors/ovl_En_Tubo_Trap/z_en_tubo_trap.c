@@ -305,7 +305,7 @@ void func_809311C4(EnTuboTrap *this, GlobalContext *globalCtx) {
         Math_SmoothScaleMaxF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 0x1388;
+    this->actor.shape.rot.y += 5000;
     func_80930DDC(this, globalCtx); // "handle impact"
 }
 
