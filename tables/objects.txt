@@ -570,7 +570,7 @@
     0x80865920:"ovl_En_Part_rodata",
     0x808666B0:"ovl_En_Light_data",
     0x80866750:"ovl_En_Light_rodata",
-    0x808674B0:"ovl_En_Door_data",
+    0x808675D0:"ovl_En_Door_data",
     0x80867A20:"ovl_En_Door_rodata",
     0x80869B30:"ovl_En_Box_data",
     0x80869BA0:"ovl_En_Box_rodata",

@@ -44,3 +44,5 @@ const ActorInit En_Door_InitVars = {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Update.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80867350.asm")
+
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Draw.asm")
