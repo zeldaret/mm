@@ -283,7 +283,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
 
 // levitate
 void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
-    this->actor.shape.rot.y += 0x1388;
+    this->actor.shape.rot.y += 5000;
     Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetY, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetY) < 10.0f) {
