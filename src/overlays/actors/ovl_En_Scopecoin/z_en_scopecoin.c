@@ -24,15 +24,6 @@ const ActorInit En_Scopecoin_InitVars = {
     (ActorFunc)EnScopecoin_Draw
 };
 
-extern UNK_PTR D_04061FC0[];
-extern UNK_PTR D_04061FE0[];
-extern UNK_PTR D_04062000[];
-extern UNK_PTR D_04062040[];
-extern UNK_PTR D_04062020[];
-extern UNK_PTR D_04062060[];
-extern UNK_PTR D_04062000[];
-extern Gfx D_040622C0[];
-
 void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y += 500;
 }

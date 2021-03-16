@@ -236,5 +236,5 @@ build/src/%.d: src/%.c
 	@$(GCC) $< -Iinclude -MM -MT 'build/src/$*.o' >> $@
 
 ifneq ($(MAKECMDGOALS), clean)
-include $(C_FILES:src/%.c=build/src/%.d)
+-include $(C_FILES:src/%.c=build/src/%.d)
 endif
