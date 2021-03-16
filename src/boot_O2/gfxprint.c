@@ -80,22 +80,84 @@ void func_80085A54(GfxPrint* this, s32 x, s32 y) {
 /* GfxPrint_PrintCharImpl */
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085A68.asm")
 
+/* GfxPrint_PrintChar */
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085D74.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085F30.asm")
+/* GfxPrint_PrintStringWithSize */
+void func_80085F30(GfxPrint* this, const void* buffer, size_t charSize, size_t charCount) {
+    const char* str = (const char*)buffer;
+    size_t count = charSize * charCount;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085F8C.asm")
+    while (count) {
+        func_80085D74(this, *str++);
+        count--;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085FE4.asm")
+/* GfxPrint_PrintString */
+void func_80085F8C(GfxPrint* this, const char* str) {
+    while (*str) {
+        func_80085D74(this, *(str++));
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80086010.asm")
+/* GfxPrint_Callback */
+GfxPrint* func_80085FE4(GfxPrint* this, const char* str, size_t size)  {
+    func_80085F30(this, str, sizeof(char), size);
+    return this;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80086064.asm")
+/* GfxPrint_Init */
+void func_80086010(GfxPrint* this) {
+    this->flag &= ~GFXPRINT_OPEN;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_8008606C.asm")
+    this->callback = func_80085FE4;
+    
+    this->dlist = NULL;
+    this->posX = 0;
+    this->posY = 0;
+    this->baseX = 0;
+    this->baseY = 0;
+    this->color.rgba = 0;
+    this->flag &= ~GFXPRINT_FLAG1;
+    this->flag &= ~GFXPRINT_USE_RGBA16;
+    this->flag |= GFXPRINT_FLAG4;
+    this->flag |= GFXPRINT_UPDATE_MODE;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_800860A0.asm")
+/* GfxPrint_Destroy */
+void func_80086064(GfxPrint* this) {
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_800860B8.asm")
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_800860D8.asm")
+/* GfxPrint_Open */
+void func_8008606C(GfxPrint* this, Gfx* dlist) {
+    if (!(this->flag & GFXPRINT_OPEN)) {
+        this->flag |= GFXPRINT_OPEN;
+        this->dlist = dlist;
+        func_80085570(this);
+    } 
+}
+
+/* GfxPrint_Close */
+Gfx* func_800860A0(GfxPrint* this) {
+    Gfx* ret;
+
+    this->flag &= ~GFXPRINT_OPEN;
+    ret = this->dlist;
+    this->dlist = NULL;
+    return ret;
+}
+
+/* GfxPrint_VPrintf */
+void func_800860B8(GfxPrint* this, const char* fmt, va_list args) {
+    func_80087900(&this->callback, fmt, args);
+}
+
+/* GfxPrint_Printf */
+void func_800860D8(GfxPrint* this, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    func_800860B8(this, fmt, args);
+}
