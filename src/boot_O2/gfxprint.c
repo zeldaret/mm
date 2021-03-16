@@ -78,7 +78,47 @@ void func_80085A54(GfxPrint* this, s32 x, s32 y) {
 }
 
 /* GfxPrint_PrintCharImpl */
+#ifdef NON_MATCHING
+void func_80085A68(GfxPrint* this, u8 c) {
+    u32 tile = (c & 0xFF) * 2;
+
+    if (this->flag & GFXPRINT_UPDATE_MODE) {
+        this->flag &= ~GFXPRINT_UPDATE_MODE;
+
+        gDPPipeSync(this->dlist++);
+        if (this->flag & GFXPRINT_USE_RGBA16) {
+            gDPSetTextureLUT(this->dlist++, G_TT_RGBA16);
+            gDPSetCycleType(this->dlist++, G_CYC_2CYCLE);
+            gDPSetRenderMode(this->dlist++, G_RM_OPA_CI, G_RM_XLU_SURF2);
+            gDPSetCombineMode(this->dlist++, G_CC_INTERFERENCE, G_CC_PASS2);
+        } else {
+            gDPSetTextureLUT(this->dlist++, G_TT_IA16);
+            gDPSetCycleType(this->dlist++, G_CYC_1CYCLE);
+            gDPSetRenderMode(this->dlist++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+            gDPSetCombineMode(this->dlist++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+        }
+    }
+
+    if (this->flag & GFXPRINT_FLAG4) {
+        gDPSetPrimColorMod(this->dlist++, 0, 0, 0);
+
+            gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
+                                (c & 3) << 1, (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
+        
+
+        gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
+    } 
+
+
+    gSPTextureRectangle(this->dlist++, this->posX, this->posY, this->posX + 32, this->posY + 32, (u16)(tile & 7),
+                        (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
+    
+
+    this->posX += 32;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085A68.asm")
+#endif
 
 /* GfxPrint_PrintChar */
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085D74.asm")

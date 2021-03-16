@@ -27,7 +27,7 @@ SECTIONS
         build/asm/boot/boot_0x80085130.o(.text)
         build/src/boot_O2/stackcheck.o(.text)
         build/src/boot_O2/gfxprint.o(.text)
-        build/asm/boot/mtxuty-cvt.o(.text)
+        build/src/boot_O2/mtxuty-cvt.o(.text)
         build/asm/boot/boot_0x80086280.o(.text)
         build/asm/boot/boot_0x800862E0.o(.text)
         build/asm/boot/boot_0x80086760.o(.text)
