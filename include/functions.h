@@ -10,910 +10,910 @@ float sqrtf(float f);
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 
-void bootproc(void);
-void Idle_ClearMemory(void* begin, void* end);
-void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value);
-void Idle_InitScreen(void);
-void Idle_InitMemory(void);
-void Idle_InitCodeAndMemory(void);
-void Main_ThreadEntry(void* arg);
-void func_8008038C(void);
-void Idle_ThreadEntry(void* arg);
-void ViConfig_UpdateVi(u32 arg0);
-void ViConfig_UpdateBlack(void);
-s32 DmaMgr_DMARomToRam(u32 src, void* dst, u32 size);
-void DmaMgr_DmaCallback0(OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3);
-DmaEntry* Dmamgr_FindDmaEntry(u32 vromAddr);
-u32 Dmamgr_TranslateVromToRom(u32 vromAddr);
-s32 Dmamgr_FindDmaIndex(u32 vromAddr);
-char* func_800809F4(u32 param_1);
-void DmaMgr_ProcessMsg(DmaRequest* request);
-void Dmamgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg);
-s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size);
-void Dmamgr_Start(void);
-void Dmamgr_Stop(void);
-// u8* Yaz0_LoadFirstChunk(void);
-u8* Yaz0_LoadNextChunk(void* currDecompPos);
-s32 Yaz0_Decompress(u8* src, u8* dest);
-void Yaz0_LoadAndDecompressFile(u32 romStart, u32 vramStart, u32 size);
-void IrqMgr_AddClient(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3);
-void IrqMgr_RemoveClient(IrqMgr* irqmgr, OSMesgQueueListNode* remove);
-void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_HandlePreNMI(IrqMgr* irqmgr);
-void IrqMgr_CheckStack(void);
-void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr);
-void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
-void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
-void IrqMgr_Create(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
-void CIC6105_Nop80081820(void);
-void CIC6105_Nop80081828(void);
-void CIC6105_PrintRomInfo(void);
-void CIC6105_AddRomInfoFaultPage(void);
-void CIC6105_RemoveRomInfoFaultPage(void);
-void func_800818F4(void);
-void Fault_Nop80081920(UNK_TYPE4 param_1, ...);
-void Fault_Log(char* str, ...);
-void Fault_Nop80081958(UNK_TYPE4 param_1, ...);
-void Fault_SleepImpl(u32 duration);
-void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1);
-void Fault_RemoveClient(FaultClient* client);
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param);
-void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
-void* Fault_ConvertAddress(void* addr);
-void Fault_Sleep(u32 duration);
-void Fault_PadCallback(Input* input);
-void Fault_UpdatePadImpl(void);
-s32 Fault_WaitForInputImpl(void);
-void Fault_WaitForInput(void);
-void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color);
-void Fault_FillScreenBlack(void);
-void Fault_FillScreenRed(void);
-void Fault_DrawCornerRec(u16 color);
-void Fault_PrintFReg(s32 idx, f32* value);
-void Fault_LogFReg(s32 idx, f32* value);
-void Fault_PrintFPCR(u32 value);
-void Fault_LogFPCR(u32 value);
-void Fault_PrintThreadContext(OSThread* t);
-void Fault_LogThreadContext(OSThread* t);
-OSThread* Fault_FindFaultedThread(void);
-void Fault_Wait5Seconds(void);
-void Fault_WaitForButtonCombo(void);
-void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3);
-void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1);
-void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra);
-void Fault_DrawStackTrace(OSThread* t, u32 flags);
-void Fault_LogStackTrace(OSThread* t, u32 flags);
-void Fault_ResumeThread(OSThread* t);
-void Fault_CommitFB(void);
-void Fault_ProcessClients(void);
-void Fault_SetOptionsFromController3(void);
-void Fault_SetOptions(void);
-void Fault_ThreadEntry(void* arg);
-void Fault_SetFB(void* fb, u16 w, u16 h);
-void Fault_Start(void);
-void Fault_HangupFaultClient(char* arg0, char* arg1);
-void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1);
-void Fault_AddHungupAndCrash(char* filename, u32 line);
-void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled);
-void FaultDrawer_DrawRecImpl(s32 xstart, s32 ystart, s32 xend, s32 yend, u16 color);
-void FaultDrawer_DrawChar(char c);
-s32 FaultDrawer_ColorToPrintColor(u16 color);
-void FaultDrawer_UpdatePrintColor(void);
-void FaultDrawer_SetForeColor(u16 color);
-void FaultDrawer_SetBackColor(u16 color);
-void FaultDrawer_SetFontColor(u16 color);
-void FaultDrawer_SetCharPad(s8 padW, s8 padH);
-void FaultDrawer_SetCursor(s32 x, s32 y);
-void FaultDrawer_FillScreen(void);
-FaultDrawer* FaultDrawer_FormatStringFunc(FaultDrawer* arg, char* str, s32 count);
-void FaultDrawer_VPrintf(char* str, char* args);
-void FaultDrawer_Printf(char* fmt, ...);
-void FaultDrawer_DrawText(s32 x, s32 y, char* fmt, ...);
-void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h);
-void FaultDrawer_SetInputCallback(func_ptr func);
-void FaultDrawer_Init(void);
-void func_80084940(void);
-void func_80084968(void);
-void Load_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart);
-s32 Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes);
-void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart);
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart);
-s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr);
-void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd);
-// void func_80085130(void);
-// void func_80085150(void);
-void func_80085158(s32 param_1);
-u32 func_80085164(s16* param_1, s16 param_2);
-u32 func_8008517C(u16* param_1, u16 param_2);
-u32 func_80085198(s32 param_1, u16 param_2);
-u32 func_800851B4(s32 param_1, u16 param_2);
-u32 func_800851D0(u16* param_1);
-u32 func_800851D8(s32 param_1);
-// void func_800851E0(void);
-// void func_800851E8(void);
-// void func_800851F0(void);
-// void func_800851FC(void);
-// void func_80085204(void);
-// void func_8008520C(void);
-// void func_8008522C(void);
-// void func_8008524C(void);
-void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name);
-void StackCheck_Cleanup(StackEntry* entry);
-s32 StackCheck_GetState(StackEntry* entry);
-u32 StackCheck_CheckAll(void);
-u32 StackCheck_Check(StackEntry* entry);
-// void func_80085570(void);
-// void func_800859BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_80085A08(void);
-// void func_80085A2C(void);
-void func_80085A54(s32 param_1, s32 param_2, s32 param_3);
-// void func_80085A68(void);
-// void func_80085D74(void);
-// void func_80085F30(void);
-// void func_80085F8C(void);
-// void func_80085FE4(void);
-// void func_80086010(void);
-// void func_80086064(void);
-// void func_8008606C(void);
-// void func_800860A0(void);
-// void func_800860B8(void);
-// void func_800860D8(void);
-// void func_80086110(void);
-// void func_80086258(void);
-void assert_fail(char* file, u32 lineNum);
-// void func_800862B4(void);
-void* StartHeap_AllocMin1(u32 size);
-void StartHeap_FreeNull(void* pvParm1);
-void func_8008633C(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
-void func_800863AC(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
-// void func_8008641C(void);
-// void func_800864EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_80086588(void);
-void StartHeap_Init(u32 base, u32 size);
-s32 func_80086620(OSMesgQueue* param_1, PadmgrThreadStruct* param_2, OSContStatus* param_3);
-// void func_80086760(void);
-// void func_80086794(void);
-// void func_800867B4(void);
-// void func_800867D4(void);
-// void func_800867F4(void);
-// void func_80086814(void);
-// void func_80086834(void);
-// void func_80086880(void);
-// void func_800869A4(void);
-// void func_80086AF0(void);
-// void func_80086B30(void);
-// void func_80086C18(void);
-// void func_80086C48(void);
-// void func_80086C70(void);
-f64 func_80086C7C(f64 param_1);
-s32 func_80086C88(f32 param_1);
-s32 func_80086C98(f64 param_1);
-// void func_80086CA8(void);
-f64 func_80086CB4(f64 param_1);
-s32 func_80086CC0(f32 param_1);
-s32 func_80086CD0(f64 param_1);
-// void func_80086CE0(void);
-f64 func_80086CEC(f64 param_1);
-s32 func_80086CF8(f32 param_1);
-s32 func_80086D08(f64 param_1);
-// void func_80086D18(void);
-// void func_80086D24(void);
-s32 func_80086D30(f32 param_1);
-s32 func_80086D40(f64 param_1);
-// void func_80086D50(void);
-f64 func_80086D6C(f64 param_1);
-s32 func_80086D8C(f32 param_1);
-s32 func_80086DAC(f64 param_1);
-void* StartHeap_Alloc(u32 size);
-void* StartHeap_AllocR(u32 size);
-void* StartHeap_Realloc(void* oldPtr, u32 newSize);
-void StartHeap_Free(void* ptr);
-void* StartHeap_Calloc(s32 param_1, s32 param_2);
-void StartHeap_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
-// s32 StartHeap_CheckArena(void);
-void StartHeap_InitArena(u32 base, u32 size);
-// void StartHeap_Cleanup(void);
-// u32 StartHeap_IsInitialized(void);
-u32 rand(void);
-void randSetSeed(u32 seed);
-f32 randZeroOne(void);
-f32 randPlusMinusPoint5(void);
-// void func_80087088(UNK_PTR param_1, UNK_TYPE4 param_2);
-void func_80087090(s32* param_1);
-f32 func_800870B8(u32* param_1);
-f32 func_80087104(u32* param_1);
-void arena_lock_init(Arena* heap);
-void arena_lock(Arena* heap);
-void arena_unlock(Arena* heap);
-ArenaNode* heap_get_tail(Arena* param_1);
-void __osMallocInit(Arena* heap, u32 heapBase, u32 heapSize);
-void __osMallocAddBlock(Arena* heap, u32 start, u32 size);
-void __osMallocCleanup(Arena* heap);
-u32 __osMallocIsInitalized(Arena* heap);
-void* __osMalloc(Arena* heap, u32 size);
-void* __osMallocR(Arena* heap, u32 size);
-void __osFree(Arena* heap, void* ptr);
-void* __osRealloc(Arena* heap, void* oldPtr, u32 newSize);
-void __osAnalyzeArena(Arena* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
-s32 __osCheckArena(Arena* heap);
-void* proutSprintf(void* s, char* buf, size_t n);
-s32 vsprintf(char* dst, char* fmt, va_list args);
-s32 sprintf(char* s, char* fmt, ...);
-// void func_80087900(void);
-// void func_80087934(void);
-void wait_cycles(OSTime uParm1);
-// void func_800879CC(void);
-// void func_80087A1C(void);
-void func_80087A6C(u32 param_1);
-// void func_80087AC0(void);
-// void __osSetCause(void);
-s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
-// void func_80087C60(void);
-void func_80087E00(u32 param_1);
-void osStopThread(OSThread* t);
-s32 osRecvMesg(OSMesgQueue* mq, OSMesg* msg, s32 flags);
-OSIntMask osSetIntMask(OSIntMask im);
-// OSIntMask osGetIntMask(void);
-// void func_80088110(void);
-// void func_800882A0(void);
-f32 __sinf(f32 __x);
-s16 sins(u16 x);
-OSTask* _VirtualToPhysicalTask(OSTask* intp);
-void osSpTaskLoad(OSTask* intp);
-void osSpTaskStartGo(OSTask* tp);
-long long __ull_rshift(unsigned long long left, unsigned long long right);
-unsigned long long __ull_rem(unsigned long long left, unsigned long long right);
-unsigned long long __ull_div(unsigned long long left, unsigned long long right);
-long long __ll_lshift(long long left, long long right);
-long long __ll_rem(long long left, unsigned long long right);
-long long __ll_div(long long left, long long right);
-long long __ll_mul(long long left, long long right);
-void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend, unsigned short divisor);
-long long __ll_mod(long long left, long long right);
-long long __ll_rshift(long long left, long long right);
-void __osExceptionPreamble(void);
-void __osException(void);
-// void func_80088D48(void);
-// void func_80088D54(void);
-// void func_80088D60(void);
-// void func_80088D80(void);
-// void func_80088DC4(void);
-// void func_80088F2C(void);
-// void func_80088F88(void);
-// void func_80088FA8(void);
-// void func_80088FE0(void);
-// void send_mesg(void);
-// void handle_CpU(void);
-void __osEnqueueAndYield(OSThread** param_1);
-void __osEnqueueThread(OSThread** param_1, OSThread* param_2);
-OSThread* __osPopThread(OSThread** param_1);
-// void func_8008929c(void);
-void __osDispatchThread(void);
-void __osCleanupThread(void);
-void __osDequeueThread(OSThread** param_1, OSThread* param_2);
-void osDestroyThread(OSThread* puParm1);
-// void func_80089580(void);
-void bzero(void* begin, s32 length);
-// void func_800896D0(void);
-// void func_80089838(void);
-// void func_80089944(void);
-void __osSiCreateAccessQueue(void);
-void __osSiGetAccess(void);
-void __osSiRelAccess(void);
-s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data);
-void __osContGetInitData(u8* pattern, OSContStatus* data);
-void __osPackRequestData(u8 cmd);
-void osCreateThread(OSThread* t, OSId id, osCreateThread_func entry, void* arg, void* sp, OSPri p);
-s32 osContStartReadData(OSMesgQueue* mq);
-void osContGetReadData(OSContPad* data);
-void __osPackReadData(void);
-// void func_8008A170(void);
-u32 osVirtualToPhysical(void* vaddr);
-u32 __osGetSR(void);
-void __osSetSR(u32 value);
-void osWritebackDCache(void* vaddr, s32 nbytes);
-void func_8008A660(void);
-void osInitialize(void);
-void func_8008A9A8(void);
-void* osViGetNextFramebuffer(void);
-void guPerspectiveF(float mf[4][4], u16* perspNorm, f32 fovy, f32 aspect, f32 near, f32 far, f32 scale);
-void guPerspective(Mtx* m, u16* perspNorm, f32 fovy, f32 aspect, f32 near, f32 far, f32 scale);
-s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size);
-s32 __osSiRawStartDma(s32 direction, void* dramAddr);
-// void func_8008AE20(void);
-void osViBlack(u8 active);
-s32 __osSiRawReadIo(u32 devAddr, u32* data);
-OSId osGetThreadId(OSThread* t);
-void osSpTaskYield(void);
-s32 __osPfsRWInode(OSPfs* param_1, __OSInode* param_2, u8 param_3, u8 param_4);
-s32 osPfsReadWriteFile(OSPfs* pfs, s32 file_no, u8 flag, s32 offset, s32 size_in_bytes, u8* data_buffer);
-// void func_8008B3C0(void);
-// void func_8008B490(void);
-// void func_8008B554(void);
-void guMtxIdentF(float mf[4][4]);
-void osViSetMode(OSViMode* modep);
-// void __osGetConfig(void);
-// void __osSetConfig(void);
-void guLookAtF(float mf[4][4], f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
-void guLookAt(Mtx* m, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
-// void func_8008B9F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8008BD24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-s32 osStopTimer(OSTimer* t);
-u32 __osProbeTLB(void* param_1);
-void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt);
-void __osPiCreateAccessQueue(void);
-void __osPiGetAccess(void);
-void __osPiRelAccess(void);
-void __osDevMgrMain(void* arg);
-// void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4 param_17, UNK_TYPE4 param_18);
-s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size);
-// void func_8008C740(void);
-// void func_8008C7B4(void);
-// void func_8008C8B0(void);
-// void func_8008CC00(void);
-// void func_8008CD64(void);
-// void func_8008CF10(void);
-// void func_8008CFE4(void);
-u32 osGetCount(void);
-// void func_8008D2E0(void);
-u32 osGetMemSize(void);
-// void func_8008D470(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m);
-f32 sqrtf(f32 __x);
-s32 osAfterPreNMI(void);
-s32 osContStartQuery(OSMesgQueue* mq);
-void osContGetQuery(OSContStatus* data);
-void guLookAtHiliteF(float mf[4][4], UNK_PTR l, s32* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight);
-void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight);
-s32 _Printf(printf_func pfn, void* arg, char* fmt, va_list ap);
-void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
-// void func_8008ED30(void);
-void osUnmapTLBAll(void);
-s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
-// void func_8008EED0(void);
-// void func_8008F100(void);
-u8* strchr(u8* __s, s32 __c);
-size_t strlen(u8* __s);
-void* memcpy(void* __dest, void* __src, size_t __n);
-void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count);
-void osInvalICache(void* vaddr, s32 nbytes);
-void osInvalDCache(void* vaddr, s32 nbytes);
-void __osTimerServicesInit(void);
-void __osTimerInterrupt(void);
-void __osSetTimerIntr(OSTime tim);
-OSTime __osInsertTimer(OSTimer* t);
-// void func_8008F7D0(void);
-s32 __osSpDeviceBusy(void);
-s32 __osSiDeviceBusy(void);
-// void func_8008FA60(void);
-s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag);
-void osSetThreadPri(OSThread* t, OSPri pri);
-OSPri osGetThreadPri(OSThread* t);
-// void func_8008FD00(void);
-void osViSwapBuffer(void* frameBufPtr);
-void guPositionF(float mf[4][4], f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
-void guPosition(Mtx* m, f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
-void func_800900C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-OSYieldResult osSpTaskYielded(OSTask* task);
-s32 memcmp(void* __s1, void* __s2, size_t __n);
-OSTime osGetTime(void);
-void guRotateF(float mf[4][4], f32 a, f32 x, f32 y, f32 z);
-void guRotate(Mtx* m, f32 a, f32 x, f32 y, f32 z);
-// void __osSetGlobalIntMask(void);
-// void func_800906D0(void);
-// void func_80090810(void);
-// void func_80090900(void);
-s32 osAiSetFrequency(u32 frequency);
-s32 __osContRamRead(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer);
-// void func_80090E70(void);
-u8 __osContAddressCrc(u16 addr);
-u8 __osContDataCrc(u8* data);
-OSThread* __osGetActiveQueue(void);
-void guNormalize(float* x, float* y, float* z);
-void __osSetCompare(u32 value);
-// u32 __osGetCompare(void);
-u32 osDpGetStatus(void);
-void osDpSetStatus(u32 data);
-void _bcopy(void* __src, void* __dest, size_t __n);
-// void __osResetGlobalIntMask(void);
-// void func_80091630(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_80091808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-void guOrthoF(float mf[4][4], f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale);
-void guOrtho(Mtx* m, f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale);
-OSIntMask __osDisableInt(void);
-void __osRestoreInt(OSIntMask im);
-void __osViInit(void);
-void __osViSwapContext(void);
-OSMesgQueue* osPiGetCmdQueue(void);
-f32 __cosf(f32 __x);
-// void func_800920B0(void);
-void osViSetSpecialFeatures(u32 func);
-s16 coss(u16 x);
-void osSetTime(OSTime ticks);
-// void func_800922C0(void);
-void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);
-s32 osPfsIsPlug(OSMesgQueue* queue, u8* pattern);
-// void func_800925CC(void);
-// void func_80092680(void);
-// void func_80092730(void);
-OSPiHandle* osCartRomInit(void);
-// void func_80092A80(void);
-// s32 __osPfsSelectBank(OSPfs* pfs, UNK_TYPE4 param_2);
-s32 osContSetCh(u8 ch);
-u32 __osSetFpcCsr(u32 value);
-u32 __osGetFpcCsr(void);
-// void func_80092D00(void);
-// void func_80092EE0(void);
-// void func_800930E8(void);
-// void func_800931F0(void);
-// void func_80093728(void);
-// void func_80093A00(void);
-u32 osAiGetLength(void);
-// void func_80093BB0(void);
-void osMapTLBRdb(void);
-void osYieldThread(void);
-// void func_80093CC0(void);
-u32 __osGetCause(void);
-s32 __osContRamWrite(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer, s32 force);
-// void func_80093FF0(void);
-s32 osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg);
-void _Ldtob(_Pft* px, u8 code);
-// void _Ldunscale(void);
-void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp);
-ldiv_t ldiv(long numer, long denom);
-lldiv_t lldiv(long long numer, long long denom);
-void _Litob(_Pft* px, u8 code);
-s32 __osSiRawWriteIo(u32 devAddr, u32 data);
-u32 __osSpGetStatus(void);
-void __osSpSetStatus(u32 value);
-void osCreateViManager(OSPri pri);
-void viMgrMain(OSDevMgr* iParm1);
-__OSViContext* __osViGetCurrentContext(void);
-void osWritebackDCacheAll(void);
-OSThread* __osGetCurrFaultedThread(void);
-// void func_80095600(void);
-void guMtxF2L(float mf[4][4], Mtx* m);
-void osStartThread(OSThread* param_1);
-void osViSetYScale(f32 value);
-void osViSetXScale(f32 value);
-long long __d_to_ll(double d);
-long long __f_to_ll(float f);
-unsigned long long __d_to_ull(double d);
-unsigned long long __f_to_ull(float f);
-double __ll_to_d(long long l);
-float __ll_to_f(long long l);
-double __ull_to_d(unsigned long long l);
-float __ull_to_f(unsigned long long l);
-// void func_80095C70(void);
-// void func_80096360(void);
-// void func_80096410(void);
-// void func_800964D0(void);
-s32 __osSpSetPc(u32 data);
-// void func_80096540(void);
-void func_80096770(s32 param_1, UNK_PTR param_2, UNK_PTR param_3);
-// void func_800967A0(void);
-// u32 __osGetWatchLo(void);
-void __osSetWatchLo(u32 value);
-f32 func_80096830(f32 param_1, f32 param_2);
-void* func_80096880(void* param_1, u8 param_2, s32 param_3);
-s32 func_800968B0(const char* str1, const char* str2);
-char* func_800968f0(char* param_1, char* param_2);
-// void func_80096930(void);
-void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt);
-void EnAObj_Destroy(ActorEnAObj* this, GlobalContext* ctxt);
-void EnAObj_Update1(ActorEnAObj* this, GlobalContext* ctxt);
-void EnAObj_Update2(ActorEnAObj* this, GlobalContext* ctxt);
-void EnAObj_Update(ActorEnAObj* this, GlobalContext* ctxt);
-void EnAObj_Draw(ActorEnAObj* this, GlobalContext* ctxt);
-void EnItem00_UpdateForNewObjectId(ActorEnItem00* this, GlobalContext* ctxt, f32* puParm3, f32* pfParm4);
-void EnItem00_Init(ActorEnItem00* this, GlobalContext* ctxt);
-void EnItem00_Destroy(ActorEnItem00* this, GlobalContext* ctxt);
-void func_800A63A8(ActorEnItem00* this, GlobalContext* ctxt);
-void func_800A640C(ActorEnItem00* this);
-// void func_800A6650(void);
-// void func_800A6780(void);
-void EnItem00_Update1(ActorEnItem00* this, GlobalContext* ctxt);
-void EnItem00_Update(ActorEnItem00* this, GlobalContext* ctxt);
-void EnItem00_Draw(ActorEnItem00* this, GlobalContext* ctxt);
-void EnItem00_DrawRupee(ActorEnItem00* this, GlobalContext* ctxt);
-void EnItem00_DrawSprite(ActorEnItem00* actor, GlobalContext* ctxt);
-void EnItem00_DrawHeartContainer(ActorEnItem00* actor, GlobalContext* ctxt);
-// void EnItem00_DrawHeartPiece(void);
-// void func_800A7650(void);
-// void func_800A7730(void);
-// void func_800A7AD4(void);
-// void func_800A7D28(void);
-// void func_800A8150(void);
-// void func_800A817C(void);
-// void func_800A81A4(void);
-// void func_800A81F0(void);
-// void func_800A8514(void);
-void EffectBlure_Initcommon(EffBlureParams* params);
-void EffectBlure_Init1(EffBlureParams* params, EffBlureInit1* init);
-void EffectBlure_Init2(EffBlureParams* params, EffBlureInit2* init);
-void EffectBlure_Destroy(EffBlureParams* params);
-s32 EffectBlure_Update(EffBlureParams* params);
-// void func_800A8C78(void);
-// void func_800A8DE8(void);
-// void func_800A92FC(void);
-// void func_800A9330(void);
-// void func_800A9804(void);
-// void func_800AA190(void);
-// void func_800AA460(void);
-// void func_800AA498(void);
-// void func_800AA700(void);
-// void func_800AABE0(void);
-void EffectBlure_Draw(EffBlureParams* params, GraphicsContext* gCtxt);
-void EffectShieldParticle_Init(EffShieldParticleParams* params, EffShieldParticleInit* init);
-void EffectShieldParticle_Destroy(EffShieldParticleParams* params);
-s32 EffectShieldParticle_Update(EffShieldParticleParams* params);
-void EffectShieldParticle_CalculateColors(EffShieldParticleParams* params, ColorRGBA8* primColor, ColorRGBA8* envColor);
-void EffectShieldParticle_Draw(EffShieldParticleParams* params, GraphicsContext* gCtxt);
-void EffectSpark_Init(EffSparkParams* params, EffSparkParams* init);
-void EffectSpark_Destroy(EffSparkParams* params);
-s32 EffectSpark_Update(EffSparkParams* params);
-void EffectSpark_Draw(EffSparkParams* params, GraphicsContext* gCtxt);
-// void func_800AE2A0(void);
-void func_800AE434(GlobalContext* ctxt, ColorRGBA8* color, s16 sParm3, s16 sParm4);
-void func_800AE5A0(GlobalContext* ctxt);
-// void func_800AE5E4(void);
-void func_800AE778(GlobalContext* ctxt, ColorRGBA8* color, s16 param_3, s16 param_4);
-void func_800AE8EC(GlobalContext* ctxt);
-void func_800AE930(CollisionContext* bgCtxt, s32 param_2, float* param_3, f32 param_4, s16 param_5, BgPolygon* param_6, s32 param_7);
-// void func_800AEF44(void);
-void EffectTireMark_InitParticle(EffTireMarkParticle* particle);
-void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init);
-void EffectTireMark_Destroy(EffTireMarkParams* params);
-s32 EffectTireMark_Update(EffTireMarkParams* params);
-void EffectTireMark_InitVertices(F3DVertexColor* vertices, EffTireMarkParticle* particle, s32 index, s32 alpha);
-void EffectTireMark_Draw(EffTireMarkParams* params, GraphicsContext* gCtxt);
-GlobalContext* Effect_GetContext(void);
-void* Effect_GetParams(s32 index);
-void Effect_InitCommon(EffCommon* common);
-void Effect_Init(GlobalContext* ctxt);
-void Effect_Add(GlobalContext* ctxt, s32* index, s32 type, u8 param_4, u8 param_5, void* initParams);
-void Effect_DrawAll(GraphicsContext* gCtxt);
-void Effect_UpdateAll(GlobalContext* ctxt);
-void Effect_Destroy(GlobalContext* ctxt, s32 index);
-void Effect_DestroyAll(GlobalContext* ctxt);
-void EffectSS_Init(GlobalContext* ctxt, s32 numEntries);
-void EffectSS_Clear(GlobalContext* ctxt);
-LoadedParticleEntry* EffectSS_GetTable(void);
-void EffectSS_Delete(LoadedParticleEntry* param_1);
-void EffectSS_ResetEntry(LoadedParticleEntry* particle);
-s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry);
-void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* particle);
-// void EffectSS_LoadParticle(UNK_TYPE4 param_1, EffectSSType type, u32 priority, void* particleInitData);
-void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index);
-void EffectSS_UpdateAllParticles(GlobalContext* ctxt);
-void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index);
-void EffectSS_DrawAllParticles(GlobalContext* ctxt);
-s32 func_800B096C(s16 param_1, s16 param_2, s32 param_3);
-s16 func_800B09D0(s16 a0, s16 a1, f32 a2);
-u8 func_800B0A24(u8 a0, u8 a1, f32 a2);
-void func_800B0B10(GlobalContext* ctxt, LoadedParticleEntry* particle, u32 uParm3);
-void EffectSS_SpawnDust(GlobalContext* ctxt, u16 flags, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, ColorRGBA8* color1, ColorRGBA8* color2, s16 scale, s16 scaleChangePerFrame, s16 life, u8 type);
-// void func_800B0DE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void func_800B0E48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void func_800B0EB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void func_800B0F18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void func_800B0F80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void func_800B0FE8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void func_800B1054(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void func_800B10C0(void);
-// void func_800B1130(void);
-// void func_800B11A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void func_800B1210(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void func_800B1280(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B12F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B1360(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800B139C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800B13D8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800B14D4(void);
-// void func_800B1598(void);
-// void func_800B165C(void);
-// void func_800B16B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void EffectSS_SpawnSparkle(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4* param_5, UNK_TYPE4* param_6, UNK_TYPE2 param_7, s32 param_8);
-// void func_800B1830(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
-// void EffectSS_SpawnBomb2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4);
-// void func_800B1970(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void EffectSS_SpawnBlast(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, ColorRGBA8* param_5, ColorRGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
-// void func_800B1A70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B1AC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
-// void func_800B1B10(void);
-// void EffectSS_SpawnGSpark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, ColorRGBA8* param_6, ColorRGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void func_800B1BDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void func_800B1C70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800B1CC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B1DC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void EffectSS_SpawnDodongoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
-// void EffectSS_SpawnBubble(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void EffectSS_SpawnGRipple(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5);
-// void EffectSS_SpawnGSplash(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4* puParm3, UNK_TYPE4* puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6);
-// void EffectSS_SpawnGFire(UNK_TYPE4 uParm1, Vec3f* pzParm2);
-// void EffectSS_SpawnLightning(UNK_TYPE4 uParm1, Vec3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void func_800B2090(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void EffectSS_SpawnBigOctoBubble2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
-// void EffectSS_SpawnFragment(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9);
-// void func_800B221C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
-// void func_800B2364(void);
-// void EffectSS_SpawnStick(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
-// void EffectSS_SpawnSplash(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B249C(void);
-// void EffectSS_SpawnStone1(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE4 uParm3);
-// void EffectSS_SpawnHitMark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vec3f* pzParm4);
-// void func_800B2684(void);
-// void func_800B26A8(void);
-// void EffectSS_SpawnPhantomGanonFlash(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
-// void EffectSS_SpawnKakarikoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
-// void EffectSS_SpawnSoldierSearchBall(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
-// void EffectSS_SpawnShard(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE2 param_14, UNK_TYPE2 param_15, UNK_TYPE4 param_16);
-// void EffectSS_SpawnIcePiece(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
-// void func_800B2930(void);
-// void EffectSS_SpawnEnemyIce(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, ColorRGBA8* pzParm4, ColorRGBA8* param_5, UNK_TYPE4 param_6);
-// void func_800B2B44(void);
-// void func_800B2B7C(void);
-// void func_800B2BC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
-// void EffectSS_SpawnFireTail(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, ColorRGBA8* param_7, ColorRGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11);
-// void func_800B2CE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
-// void func_800B2DA4(void);
-// void EffectSS_SpawnEnemyFire(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_800B2E6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void EffectSS_SpawnExtra(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void EffectSS_SpawnDeadDekuBaba(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9);
-// void func_800B3030(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7);
-// void EffectSS_SpawnDeadDodongo(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
-// void EffectSS_SpawnDeadDekuScrub(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
-// void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
-// void EffectSS_SpawnIceSmoke(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5);
-// void EffectSS_SpawnIceBlock(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5);
-void func_800B32D0(GameState* ctxt);
-// void func_800B3644(void);
-void DLF_LoadGameState(GameStateOverlay* gameState);
-void DLF_FreeGameState(GameStateOverlay* gameState);
-void Actor_PrintLists(ActorContext* actCtxt);
-void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale);
-void Actor_PostDraw(Actor* actor, LightMapper* mapper, GlobalContext* ctxt, u32 displayList, ColorRGBA8* color);
-void func_800B3FC0(Actor* actor, LightMapper* mapper, GlobalContext* ctxt);
-void func_800B4024(Actor* actor, LightMapper* mapper, GlobalContext* ctxt);
-void func_800B4088(Actor* actor, LightMapper* mapper, GlobalContext* ctxt);
-void func_800B40B8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt);
-void func_800B40E0(GlobalContext* ctxt, s32 iParm2, z_Matrix* pzParm3, s32 iParm4, f32 param_5, f32 param_6, f32 param_7);
-void func_800B42F8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt);
-// void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-void func_800B4AEC(GlobalContext* ctxt, Actor* actor, f32 param_3);
-void func_800B4B50(Actor* actor, s32 iParm2, GlobalContext* pzParm3);
-void func_800B4EDC(GlobalContext* ctxt, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
-// void func_800B4F40(TargetContext* targetContext, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5);
-void func_800B4F78(TargetContext* targetContext, u8 type, GlobalContext* ctxt);
-void func_800B5040(TargetContext* targetContext, Actor* actor, u8 type, GlobalContext* ctxt);
-void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt);
-void func_800B5208(TargetContext* targetCtxt, GlobalContext* ctxt);
-void func_800B5814(TargetContext* targetContext, ActorPlayer* player, Actor* param_3, GlobalContext* ctxt);
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag);
-void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag);
-void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag);
-u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag);
-void Actor_SetChestFlag(GlobalContext* ctxt, u32 flag);
-void Actor_SetAllChestFlag(GlobalContext* ctxt, u32 flags);
-u32 Actor_GetAllChestFlag(GlobalContext* ctxt);
-u32 Actor_GetRoomCleared(GlobalContext* ctxt, u32 roomNumber);
-void Actor_SetRoomCleared(GlobalContext* ctxt, u32 roomNumber);
-void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber);
-u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber);
-void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber);
-void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber);
-u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, s32 index);
-void Actor_SetCollectibleFlag(GlobalContext* ctxt, s32 index);
-void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt);
-void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7);
-// void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4);
-void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt);
-void Actor_TitleCardDraw(GlobalContext* ctxt, TitleCardContext* titleCtxt);
-// UNK_TYPE4 func_800B6434(GlobalContext* ctxt, TitleCardContext* titleCtxt);
-// UNK_TYPE4 func_800B645C(void);
-void func_800B6468(GlobalContext* ctxt);
-void func_800B6474(GlobalContext* ctxt);
-// UNK_TYPE4 func_800B648C(GlobalContext* ctxt, UNK_TYPE1 param_2, UNK_TYPE1 param_3, f32 param_4, Vec3f* param_5);
-f32 func_800B64FC(GlobalContext* ctxt, f32 fParm2, Vec3f* pzParm3, u32* puParm4);
-void* func_800B6584(GlobalContext* ctxt, s16 sParm2, void* pvParm3, u32 uParm4);
-// UNK_TYPE4 func_800B6608(s32 iParm1, s16 sParm2);
-// void func_800B6680(void);
-void Actor_MarkForDeath(Actor* actor);
-void Actor_InitCurrPosition(Actor* actor);
-void Actor_SetHeight(Actor* actor, f32 height);
-void Actor_SetRotationFromDrawRotation(Actor* actor);
-void Actor_InitDrawRotation(Actor* actor);
-void Actor_SetScale(Actor* actor, f32 scale);
-void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor);
-void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt);
-void Actor_FiniActor(Actor* actor, GlobalContext* ctxt);
-void Actor_SetMovementScale(s32 scale);
-void Actor_ApplyMovement(Actor* actor);
-void Actor_SetVelocityYRotationAndGravity(Actor* actor);
-void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor);
-void Actor_SetVelocityXYRotation(Actor* actor);
-void Actor_SetVelocityAndMoveXYRotation(Actor* actor);
-void Actor_SetVelocityXYRotationReverse(Actor* actor);
-void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor);
-void func_800B6C04(Actor* actor, f32 fParm2);
-// void func_800B6C58(Actor* actor, UNK_TYPE4 param_2);
-s16 Actor_YawBetweenActors(Actor* from, Actor* to);
-s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to);
-s16 Actor_YawToPoint(Actor* actor, Vec3f* point);
-s16 Actor_PitchBetweenActors(Actor* from, Actor* to);
-s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to);
-s16 Actor_PitchToPoint(Actor* actor, Vec3f* point);
-f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2);
-f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point);
-f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2);
-f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point);
-void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point);
-f32 Actor_YDistance(Actor* actor1, Actor* actor2);
-void func_800B6F20(GlobalContext* ctxt, s32 param_2, f32 param_3, s16 param_4);
-float func_800B6FC8(ActorPlayer* player);
-// void func_800B7090(void);
-// void func_800B7118(void);
-// void func_800B7128(void);
-// void func_800B715C(void);
-// void func_800B7170(void);
-// void func_800B71DC(void);
-u32 func_800B7200(s32 param_1);
-// void func_800B722C(void);
-// UNK_TYPE4 func_800B724C(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3);
-u32 func_800B7298(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3);
-void func_800B72E0(s32 param_1);
-void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2);
-s32 Actor_IsLinkFacingActor(Actor* actor, s16 tolerance, GlobalContext* ctxt);
-s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance);
-s32 Actor_IsActorFacingLink(Actor* actor, s16 angle);
-s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance);
-s32 Actor_IsActorFacingLinkAndWithinRange(Actor* actor, f32 range, s16 tolerance);
-s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance);
-void func_800B75A0(BgPolygon* param_1, Vec3f* param_2, s16* param_3);
-// UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
-// UNK_TYPE4 func_800B7678(GlobalContext* ctxt, Actor* param_2, s32 param_3, u32 param_4);
-void func_800B78B8(GlobalContext* ctxt, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6);
-// void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gCtxt);
-// void func_800B8018(void);
-void func_800B8050(Actor* actor, GlobalContext* ctxt, s32 iParm3);
-// void func_800B8118(void);
-// void func_800B81E0(void);
-UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2);
-f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2);
-// void func_800B82EC(void);
-// void func_800B83BC(void);
-// void func_800B83F8(void);
-s32 func_800B84D0(Actor* actor, GlobalContext* ctxt);
-// UNK_TYPE4 func_800B8500(Actor* actor, GlobalContext* ctxt, f32 fParm3, f32 fParm4, s32 param_5);
-void func_800B85E0(Actor* actor, GlobalContext* ctxt, f32 uParm3, s32 uParm4);
-void func_800B8614(Actor* actor, GlobalContext* ctxt, f32 uParm3);
-void func_800B863C(Actor* actor, GlobalContext* ctxt);
-u32 func_800B867C(Actor* actor, GlobalContext* ctxt);
-// UNK_TYPE4 func_800B86C8(UNK_TYPE4 param_1, GlobalContext* ctxt, UNK_TYPE4 param_3);
-s32 func_800B8708(GlobalContext* ctxt);
-// void func_800B8718(void);
-// void func_800B874C(void);
-// void func_800B8804(void);
-// void func_800B882C(void);
-// void func_800B886C(void);
-void func_800B8898(GlobalContext* ctxt, Actor* actor, UNK_PTR param_3, UNK_PTR param_4);
-// void func_800B8934(void);
-u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt);
-// UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* ctxt, s32 iParm3, f32 fParm4, f32 param_5);
-// void func_800B8B84(void);
-// void func_800B8BB0(void);
-// void func_800B8BD0(void);
-// void func_800B8BFC(void);
-// void func_800B8C20(void);
-// void func_800B8C50(void);
-// void func_800B8C78(void);
-// void func_800B8C9C(void);
-// void func_800B8CEC(void);
-// void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_800B8D50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800B8D98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800B8E58(void);
-void func_800B8EC8(Actor* actor, u32 uParm2);
-// void func_800B8EF4(void);
-void func_800B8F98(Actor* actor, u16 sfxId);
-// void func_800B8FC0(void);
-// void func_800B8FE8(void);
-void func_800B9010(Actor* actor, UNK_TYPE2 uParm2);
-// void func_800B9038(void);
-// void func_800B9084(void);
-void func_800B9098(Actor* actor);
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4);
-// void func_800B90F4(void);
-void func_800B9120(ActorContext* actCtxt);
-// void Actor_Init(GlobalContext* ctxt, ActorContext* actCtxt, UNK_TYPE4 uParm3);
-void func_800B9334(GlobalContext* ctxt, ActorContext* actCtxt);
-Actor* Actor_UpdateActor(s800B948C* params);
-void Actor_UpdateAll(GlobalContext* ctxt, ActorContext* actCtxt);
-void Actor_DrawActor(GlobalContext* ctxt, Actor* actor);
-void func_800B9D1C(Actor* actor);
-void Actor_DrawAllSetup(GlobalContext* ctxt);
-s32 Actor_RecordUndrawnActor(GlobalContext* ctxt, Actor* actor);
-// void func_800B9E84(void);
-void func_800B9EF4(GlobalContext* ctxt, s32 numActors, Actor** actors);
-s32 func_800BA2D8(GlobalContext* ctxt, Actor* actor);
-s32 func_800BA2FC(GlobalContext* ctxt, Actor* actor, Vec3f* param_3, f32 param_4);
-void Actor_DrawAll(GlobalContext* ctxt, ActorContext* aCtxt);
-void func_800BA6FC(GlobalContext* ctxt, ActorContext* aCtxt);
-void func_800BA798(GlobalContext* ctxt, ActorContext* aCtxt);
-void func_800BA8B8(GlobalContext* ctxt, ActorContext* actCtxt);
-// void func_800BA9B4(void);
-void Actor_InsertIntoTypeList(ActorContext* actCtxt, Actor* actor, u8 type);
-Actor* Actor_RemoveFromTypeList(GlobalContext* ctxt, ActorContext* actCtxt, Actor* actor);
-void Actor_FreeOverlay(ActorOverlay* entry);
-Actor* Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10);
-ActorInit* Actor_LoadOverlay(ActorContext* actCtxt, s16 index);
-Actor* Actor_SpawnWithParentAndCutscene(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent);
-void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable);
-void Actor_SpawnTransitionActors(GlobalContext* ctxt, ActorContext* actCtxt);
-void func_800BB2D0(ActorContext* aCtxt, u16* param_2, GlobalContext* ctxt);
-Actor* func_800BB498(ActorContext* actCtxt, Actor* actor, GlobalContext* ctxt);
-// void func_800BB59C(void);
-// void func_800BB604(void);
-// void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-void func_800BBA88(GlobalContext* ctxt, Actor* iParm2);
-// void func_800BBAC0(void);
-// void func_800BBB74(void);
-// void func_800BBC20(void);
-// void func_800BBCEC(void);
-// void func_800BBDAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
-// void func_800BBFB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE1 param_7);
-// void func_800BC154(void);
-// void func_800BC188(void);
-// void func_800BC1B4(void);
-// void func_800BC270(void);
-// void func_800BC444(void);
-// void func_800BC4EC(void);
-// void func_800BC5B8(void);
-// void func_800BC5EC(void);
-// void func_800BC620(void);
-// void func_800BC770(void);
-// void func_800BC7D8(void);
-// void func_800BC848(void);
-// void func_800BC8B8(void);
-// void func_800BCB50(void);
-// void func_800BCB70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
-void func_800BCBF4(Vec3f* uParm1, GlobalContext* ctxt);
-void func_800BCC68(Vec3f* param_1, GlobalContext* ctxt);
-// void func_800BCCDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
-// void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
-// void func_800BD888(void);
-// void func_800BD9A0(void);
-// void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
-// void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
-// void func_800BDB6C(void);
-void func_800BDC5C(SkelAnime* skelAnime, UNK_PTR animation, UNK_TYPE param_3);
-// void func_800BDCF4(void);
-void func_800BDFB0(void);
-void func_800BDFC0(GlobalContext* ctxt, UNK_TYPE4 uParm2);
-void func_800BE03C(GlobalContext* ctxt, Gfx* dl);
-// void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void func_800BE22C(void);
-// void func_800BE258(void);
-// void func_800BE2B8(void);
-// void func_800BE33C(void);
-// void func_800BE3D0(void);
-// void func_800BE504(void);
-// void func_800BE568(void);
-// void func_800BE5CC(void);
-// void func_800BE63C(void);
-// void func_800BE680(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8);
-// void func_800BF7CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+void bootproc(void); // func_80080060
+void Idle_ClearMemory(void* begin, void* end); // func_80080150
+void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value); // func_80080180
+void Idle_InitScreen(void); // func_8008019C
+void Idle_InitMemory(void); // func_800801EC
+void Idle_InitCodeAndMemory(void); // func_80080250
+void Main_ThreadEntry(void* arg); // func_80080300
+void func_8008038C(void); // func_8008038C
+void Idle_ThreadEntry(void* arg); // func_80080514
+void ViConfig_UpdateVi(u32 arg0); // func_800805E0
+void ViConfig_UpdateBlack(void); // func_80080748
+s32 DmaMgr_DMARomToRam(u32 src, void* dst, u32 size); // func_80080790
+void DmaMgr_DmaCallback0(OSPiHandle* pOParm1, OSIoMesg* pOParm2, s32 OParm3); // func_800808D4
+DmaEntry* Dmamgr_FindDmaEntry(u32 vromAddr); // func_800808F4
+u32 Dmamgr_TranslateVromToRom(u32 vromAddr); // func_80080950
+s32 Dmamgr_FindDmaIndex(u32 vromAddr); // func_800809BC
+char* func_800809F4(u32 param_1); // func_800809F4
+void DmaMgr_ProcessMsg(DmaRequest* request); // func_80080A08
+void Dmamgr_ThreadEntry(void* arg); // func_80080B84
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg); // func_80080C04
+s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size); // func_80080C90
+void Dmamgr_Start(void); // func_80080D0C
+void Dmamgr_Stop(void); // func_80080E00
+u8* Yaz0_LoadFirstChunk(void); // func_80080E30
+u8* Yaz0_LoadNextChunk(void* currDecompPos); // func_80080ED0
+s32 Yaz0_Decompress(u8* src, u8* dest); // func_80080FF0
+void Yaz0_LoadAndDecompressFile(u32 romStart, u32 vramStart, u32 size); // func_80081178
+void IrqMgr_AddClient(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3); // func_80081250
+void IrqMgr_RemoveClient(IrqMgr* irqmgr, OSMesgQueueListNode* remove); // func_800812DC
+void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg); // func_80081368
+void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg); // func_800813B8
+void IrqMgr_HandlePreNMI(IrqMgr* irqmgr); // func_8008141C
+void IrqMgr_CheckStack(void); // func_800814B4
+void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr); // func_800814D4
+void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr); // func_80081550
+void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr); // func_800815A8
+void IrqMgr_HandleRetrace(IrqMgr* irqmgr); // func_800815CC
+void IrqMgr_ThreadEntry(IrqMgr* irqmgr); // func_80081684
+void IrqMgr_Create(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount); // func_80081754
+void CIC6105_Nop80081820(void); // func_80081820
+void CIC6105_Nop80081828(void); // func_80081828
+void CIC6105_PrintRomInfo(void); // func_80081830
+void CIC6105_AddRomInfoFaultPage(void); // func_8008189C
+void CIC6105_RemoveRomInfoFaultPage(void); // func_800818D0
+void func_800818F4(void); // func_800818F4
+void Fault_Nop80081920(UNK_TYPE4 param_1, ...); // func_80081920
+void Fault_Log(char* str, ...); // func_8008193C
+void Fault_Nop80081958(UNK_TYPE4 param_1, ...); // func_80081958
+void Fault_SleepImpl(u32 duration); // func_80081980
+void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1); // func_800819F0
+void Fault_RemoveClient(FaultClient* client); // func_80081AD4
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param); // func_80081BCC
+void Fault_RemoveAddrConvClient(FaultAddrConvClient* client); // func_80081CA4
+void* Fault_ConvertAddress(void* addr); // func_80081D9C
+void Fault_Sleep(u32 duration); // func_80081E2C
+void Fault_PadCallback(Input* input); // func_80081E68
+void Fault_UpdatePadImpl(void); // func_80081EA4
+s32 Fault_WaitForInputImpl(void); // func_80081EF0
+void Fault_WaitForInput(void); // func_8008203C
+void Fault_DrawRec(s32 x, s32 y, s32 w, s32 h, u16 color); // func_80082078
+void Fault_FillScreenBlack(void); // func_800820D8
+void Fault_FillScreenRed(void); // func_8008212C
+void Fault_DrawCornerRec(u16 color); // func_80082180
+void Fault_PrintFReg(s32 idx, f32* value); // func_800821D4
+void Fault_LogFReg(s32 idx, f32* value); // func_80082280
+void Fault_PrintFPCR(u32 value); // func_80082330
+void Fault_LogFPCR(u32 value); // func_800823D4
+void Fault_PrintThreadContext(OSThread* t); // func_8008246C
+void Fault_LogThreadContext(OSThread* t); // func_800827BC
+OSThread* Fault_FindFaultedThread(void); // func_80082AB8
+void Fault_Wait5Seconds(void); // func_80082B40
+void Fault_WaitForButtonCombo(void); // func_80082BD0
+void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3); // func_80082C6C
+void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1); // func_80082DD8
+void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra); // func_80082FD0
+void Fault_DrawStackTrace(OSThread* t, u32 flags); // func_80083144
+void Fault_LogStackTrace(OSThread* t, u32 flags); // func_800832D4
+void Fault_ResumeThread(OSThread* t); // func_80083450
+void Fault_CommitFB(void); // func_800834CC
+void Fault_ProcessClients(void); // func_8008358C
+void Fault_SetOptionsFromController3(void); // func_80083670
+void Fault_SetOptions(void); // func_800837E4
+void Fault_ThreadEntry(void* arg); // func_80083828
+void Fault_SetFB(void* fb, u16 w, u16 h); // func_80083B70
+void Fault_Start(void); // func_80083BC4
+void Fault_HangupFaultClient(char* arg0, char* arg1); // func_80083CF8
+void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1); // func_80083DF4
+void Fault_AddHungupAndCrash(char* filename, u32 line); // func_80083E4C
+void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled); // func_80083EB0
+void FaultDrawer_DrawRecImpl(s32 xstart, s32 ystart, s32 xend, s32 yend, u16 color); // func_80083EC4
+void FaultDrawer_DrawChar(char c); // func_80083FE4
+s32 FaultDrawer_ColorToPrintColor(u16 color); // func_80084160
+void FaultDrawer_UpdatePrintColor(void); // func_80084210
+void FaultDrawer_SetForeColor(u16 color); // func_800842BC
+void FaultDrawer_SetBackColor(u16 color); // func_80084308
+void FaultDrawer_SetFontColor(u16 color); // func_80084354
+void FaultDrawer_SetCharPad(s8 padW, s8 padH); // func_8008439C
+void FaultDrawer_SetCursor(s32 x, s32 y); // func_800843D4
+void FaultDrawer_FillScreen(void); // func_800844D8
+FaultDrawer* FaultDrawer_FormatStringFunc(FaultDrawer* arg, char* str, s32 count); // func_80084568
+void FaultDrawer_VPrintf(char* str, char* args); // func_8008477C
+void FaultDrawer_Printf(char* fmt, ...); // func_800847CC
+void FaultDrawer_DrawText(s32 x, s32 y, char* fmt, ...); // func_8008481C
+void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h); // func_8008486C
+void FaultDrawer_SetInputCallback(func_ptr func); // func_800848A4
+void FaultDrawer_Init(void); // func_800848B8
+void func_80084940(void); // func_80084940
+void func_80084968(void); // func_80084968
+void Load_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart); // func_800849A0
+s32 Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes); // func_80084C0C
+void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart); // func_80084CD0
+void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart); // func_80084DB0
+s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr); // func_8008501C
+void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd); // func_800850C8
+void func_80085130(void); // func_80085130
+void func_80085150(void); // func_80085150
+void func_80085158(s32 param_1); // func_80085158
+u32 func_80085164(s16* param_1, s16 param_2); // func_80085164
+u32 func_8008517C(u16* param_1, u16 param_2); // func_8008517C
+u32 func_80085198(s32 param_1, u16 param_2); // func_80085198
+u32 func_800851B4(s32 param_1, u16 param_2); // func_800851B4
+u32 func_800851D0(u16* param_1); // func_800851D0
+u32 func_800851D8(s32 param_1); // func_800851D8
+void func_800851E0(void); // func_800851E0
+void func_800851E8(void); // func_800851E8
+void func_800851F0(void); // func_800851F0
+void func_800851FC(void); // func_800851FC
+void func_80085204(void); // func_80085204
+void func_8008520C(void); // func_8008520C
+void func_8008522C(void); // func_8008522C
+void func_8008524C(void); // func_8008524C
+void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name); // func_80085320
+void StackCheck_Cleanup(StackEntry* entry); // func_800853F8
+s32 StackCheck_GetState(StackEntry* entry); // func_80085468
+u32 StackCheck_CheckAll(void); // func_800854E0
+u32 StackCheck_Check(StackEntry* entry); // func_80085538
+void func_80085570(void); // func_80085570
+void func_800859BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800859BC
+void func_80085A08(void); // func_80085A08
+void func_80085A2C(void); // func_80085A2C
+void func_80085A54(int param_1, int param_2, int param_3); // func_80085A54
+void func_80085A68(void); // func_80085A68
+void func_80085D74(void); // func_80085D74
+void func_80085F30(void); // func_80085F30
+void func_80085F8C(void); // func_80085F8C
+void func_80085FE4(void); // func_80085FE4
+void func_80086010(void); // func_80086010
+void func_80086064(void); // func_80086064
+void func_8008606C(void); // func_8008606C
+void func_800860A0(void); // func_800860A0
+void func_800860B8(void); // func_800860B8
+void func_800860D8(void); // func_800860D8
+void func_80086110(void); // func_80086110
+void func_80086258(void); // func_80086258
+void assert_fail(char* file, u32 lineNum); // func_80086280
+void func_800862B4(void); // func_800862B4
+void* StartHeap_AllocMin1(u32 size); // func_800862E0
+void StartHeap_FreeNull(void* pvParm1); // func_80086310
+void func_8008633C(unsigned int param_1, int param_2, int param_3, UNK_PTR param_4); // func_8008633C
+void func_800863AC(unsigned int param_1, int param_2, int param_3, UNK_PTR param_4); // func_800863AC
+void func_8008641C(void); // func_8008641C
+void func_800864EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800864EC
+void func_80086588(void); // func_80086588
+void StartHeap_Init(u32 base, u32 size); // func_800865F8
+int func_80086620(OSMesgQueue* param_1, PadmgrThreadStruct* param_2, OSContStatus* param_3); // func_80086620
+void func_80086760(void); // func_80086760
+void func_80086794(void); // func_80086794
+void func_800867B4(void); // func_800867B4
+void func_800867D4(void); // func_800867D4
+void func_800867F4(void); // func_800867F4
+void func_80086814(void); // func_80086814
+void func_80086834(void); // func_80086834
+void func_80086880(void); // func_80086880
+void func_800869A4(void); // func_800869A4
+void func_80086AF0(void); // func_80086AF0
+void func_80086B30(void); // func_80086B30
+void func_80086C18(void); // func_80086C18
+void func_80086C48(void); // func_80086C48
+void func_80086C70(void); // func_80086C70
+f64 func_80086C7C(f64 param_1); // func_80086C7C
+s32 func_80086C88(f32 param_1); // func_80086C88
+s32 func_80086C98(f64 param_1); // func_80086C98
+void func_80086CA8(void); // func_80086CA8
+f64 func_80086CB4(f64 param_1); // func_80086CB4
+s32 func_80086CC0(f32 param_1); // func_80086CC0
+s32 func_80086CD0(f64 param_1); // func_80086CD0
+void func_80086CE0(void); // func_80086CE0
+f64 func_80086CEC(f64 param_1); // func_80086CEC
+s32 func_80086CF8(f32 param_1); // func_80086CF8
+s32 func_80086D08(f64 param_1); // func_80086D08
+void func_80086D18(void); // func_80086D18
+void func_80086D24(void); // func_80086D24
+s32 func_80086D30(f32 param_1); // func_80086D30
+s32 func_80086D40(f64 param_1); // func_80086D40
+void func_80086D50(void); // func_80086D50
+f64 func_80086D6C(f64 param_1); // func_80086D6C
+s32 func_80086D8C(f32 param_1); // func_80086D8C
+s32 func_80086DAC(f64 param_1); // func_80086DAC
+void* StartHeap_Alloc(u32 size); // func_80086DD0
+void* StartHeap_AllocR(u32 size); // func_80086DF8
+void* StartHeap_Realloc(void* oldPtr, u32 newSize); // func_80086E20
+void StartHeap_Free(void* ptr); // func_80086E50
+void* StartHeap_Calloc(s32 param_1, s32 param_2); // func_80086E78
+void StartHeap_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated); // func_80086ECC
+s32 StartHeap_CheckArena(void); // func_80086F04
+void StartHeap_InitArena(u32 base, u32 size); // func_80086F28
+void StartHeap_Cleanup(void); // func_80086F58
+u32 StartHeap_IsInitialized(void); // func_80086F7C
+u32 rand(void); // func_80086FA0
+void randSetSeed(u32 seed); // func_80086FD0
+f32 randZeroOne(void); // func_80086FDC
+f32 randPlusMinusPoint5(void); // func_80087030
+void func_80087088(UNK_PTR param_1, UNK_TYPE4 param_2); // func_80087088
+void func_80087090(s32* param_1); // func_80087090
+f32 func_800870B8(u32* param_1); // func_800870B8
+f32 func_80087104(u32* param_1); // func_80087104
+void arena_lock_init(Arena* heap); // func_80087160
+void arena_lock(Arena* heap); // func_8008718C
+void arena_unlock(Arena* heap); // func_800871B4
+ArenaNode* heap_get_tail(Arena* param_1); // func_800871DC
+void __osMallocInit(Arena* heap, u32 heapBase, u32 heapSize); // func_8008720C
+void __osMallocAddBlock(Arena* heap, u32 start, u32 size); // func_8008725C
+void __osMallocCleanup(Arena* heap); // func_800872FC
+u32 __osMallocIsInitalized(Arena* heap); // func_8008731C
+void* __osMalloc(Arena* heap, u32 size); // func_80087324
+void* __osMallocR(Arena* heap, u32 size); // func_80087408
+void __osFree(Arena* heap, void* ptr); // func_800874EC
+void* __osRealloc(Arena* heap, void* oldPtr, u32 newSize); // func_800875E4
+void __osAnalyzeArena(Arena* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated); // func_80087714
+s32 __osCheckArena(Arena* heap); // func_800877C4
+void* proutSprintf(void* s, char* buf, size_t n); // func_80087830
+int vsprintf(char* dst, char* fmt, va_list args); // func_80087854
+int sprintf(char* s, char* fmt, ...); // func_800878A4
+void func_80087900(void); // func_80087900
+void func_80087934(void); // func_80087934
+void wait_cycles(OSTime uParm1); // func_80087960
+void func_800879CC(void); // func_800879CC
+void func_80087A1C(void); // func_80087A1C
+void func_80087A6C(u32 param_1); // func_80087A6C
+void func_80087AC0(void); // func_80087AC0
+void __osSetCause(void); // func_80087B00
+s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags); // func_80087B10
+void func_80087C60(void); // func_80087C60
+void func_80087E00(u32 param_1); // func_80087E00
+void osStopThread(OSThread* t); // func_80087E10
+s32 osRecvMesg(OSMesgQueue* mq, OSMesg* msg, s32 flags); // func_80087ED0
+OSIntMask osSetIntMask(OSIntMask im); // func_80088010
+OSIntMask osGetIntMask(void); // func_800880B0
+void func_80088110(void); // func_80088110
+void func_800882A0(void); // func_800882A0
+f32 __sinf(f32 __x); // func_80088350
+short sins(unsigned short x); // func_80088510
+OSTask* _VirtualToPhysicalTask(OSTask* intp); // func_80088580
+void osSpTaskLoad(OSTask* intp); // func_8008868C
+void osSpTaskStartGo(OSTask* tp); // func_800887F4
+long long __ull_rshift(unsigned long long left, unsigned long long right); // func_80088840
+unsigned long long __ull_rem(unsigned long long left, unsigned long long right); // func_8008886C
+unsigned long long __ull_div(unsigned long long left, unsigned long long right); // func_800888A8
+long long __ll_lshift(long long left, long long right); // func_800888E4
+long long __ll_rem(long long left, unsigned long long right); // func_80088910
+long long __ll_div(long long left, long long right); // func_8008894C
+long long __ll_mul(long long left, long long right); // func_800889A8
+void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend, unsigned short divisor); // func_800889D8
+long long __ll_mod(long long left, long long right); // func_80088A38
+long long __ll_rshift(long long left, long long right); // func_80088AD4
+void __osExceptionPreamble(void); // func_80088B00
+void __osException(void); // func_80088B10
+void func_80088D48(void); // func_80088D48
+void func_80088D54(void); // func_80088D54
+void func_80088D60(void); // func_80088D60
+void func_80088D80(void); // func_80088D80
+void func_80088DC4(void); // func_80088DC4
+void func_80088F2C(void); // func_80088F2C
+void func_80088F88(void); // func_80088F88
+void func_80088FA8(void); // func_80088FA8
+void func_80088FE0(void); // func_80088FE0
+void send_mesg(void); // func_8008905C
+void handle_CpU(void); // func_80089110
+void __osEnqueueAndYield(OSThread** param_1); // func_80089144
+void __osEnqueueThread(OSThread** param_1, OSThread* param_2); // func_80089244
+OSThread* __osPopThread(OSThread** param_1); // func_8008928C
+void func_8008929c(void); // func_8008929C
+void __osDispatchThread(void); // func_800892A4
+void __osCleanupThread(void); // func_80089420
+void __osDequeueThread(OSThread** param_1, OSThread* param_2); // func_80089430
+void osDestroyThread(OSThread* puParm1); // func_80089470
+void func_80089580(void); // func_80089580
+void bzero(void* begin, s32 length); // func_80089630
+void func_800896D0(void); // func_800896D0
+void func_80089838(void); // func_80089838
+void func_80089944(void); // func_80089944
+void __osSiCreateAccessQueue(void); // func_80089AA0
+void __osSiGetAccess(void); // func_80089AF0
+void __osSiRelAccess(void); // func_80089B34
+s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data); // func_80089B60
+void __osContGetInitData(u8* pattern, OSContStatus* data); // func_80089CBC
+void __osPackRequestData(u8 cmd); // func_80089D68
+void osCreateThread(OSThread* t, OSId id, osCreateThread_func entry, void* arg, void* sp, OSPri p); // func_80089E40
+s32 osContStartReadData(OSMesgQueue* mq); // func_80089F90
+void osContGetReadData(OSContPad* data); // func_8008A014
+void __osPackReadData(void); // func_8008A0A0
+void func_8008A170(void); // func_8008A170
+u32 osVirtualToPhysical(void* vaddr); // func_8008A540
+u32 __osGetSR(void); // func_8008A5C0
+void __osSetSR(u32 value); // func_8008A5D0
+void osWritebackDCache(void* vaddr, s32 nbytes); // func_8008A5E0
+void func_8008A660(void); // func_8008A660
+void osInitialize(void); // func_8008A6FC
+void func_8008A9A8(void); // func_8008A9A8
+void* osViGetNextFramebuffer(void); // func_8008AA10
+void guPerspectiveF(float mf[4][4], u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AA50
+void guPerspective(Mtx* m, u16* perspNorm, float fovy, float aspect, float near, float far, float scale); // func_8008AC80
+s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008ACE0
+s32 __osSiRawStartDma(s32 direction, void* dramAddr); // func_8008AD70
+void func_8008AE20(void); // func_8008AE20
+void osViBlack(u8 active); // func_8008AE70
+s32 __osSiRawReadIo(u32 devAddr, u32* data); // func_8008AEE0
+OSId osGetThreadId(OSThread* t); // func_8008AF30
+void osSpTaskYield(void); // func_8008AF50
+s32 __osPfsRWInode(OSPfs* param_1, __OSInode* param_2, u8 param_3, u8 param_4); // func_8008AF70
+s32 osPfsReadWriteFile(OSPfs* pfs, s32 file_no, u8 flag, int offset, int size_in_bytes, u8* data_buffer); // func_8008B044
+void func_8008B3C0(void); // func_8008B3C0
+void func_8008B490(void); // func_8008B490
+void func_8008B554(void); // func_8008B554
+void guMtxIdentF(float mf[4][4]); // func_8008B600
+void osViSetMode(OSViMode* modep); // func_8008B650
+void __osGetConfig(void); // func_8008B6B0
+void __osSetConfig(void); // func_8008B6C0
+void guLookAtF(float mf[4][4], float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp); // func_8008B6D0
+void guLookAt(Mtx* m, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp); // func_8008B974
+void func_8008B9F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8008B9F0
+void func_8008BD24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_8008BD24
+s32 osStopTimer(OSTimer* t); // func_8008BE70
+u32 __osProbeTLB(void* param_1); // func_8008BF60
+void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt); // func_8008C020
+void __osPiCreateAccessQueue(void); // func_8008C190
+void __osPiGetAccess(void); // func_8008C1E0
+void __osPiRelAccess(void); // func_8008C224
+void __osDevMgrMain(void* arg); // func_8008C260
+void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4 param_17, UNK_TYPE4 param_18); // func_8008C640
+s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size); // func_8008C670
+void func_8008C740(void); // func_8008C740
+void func_8008C7B4(void); // func_8008C7B4
+void func_8008C8B0(void); // func_8008C8B0
+void func_8008CC00(void); // func_8008CC00
+void func_8008CD64(void); // func_8008CD64
+void func_8008CF10(void); // func_8008CF10
+void func_8008CFE4(void); // func_8008CFE4
+u32 osGetCount(void); // func_8008D2C0
+void func_8008D2E0(void); // func_8008D2E0
+u32 osGetMemSize(void); // func_8008D350
+void func_8008D470(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_8008D470
+void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m); // func_8008D640
+f32 sqrtf(f32 __x); // func_8008D700
+s32 osAfterPreNMI(void); // func_8008D710
+s32 osContStartQuery(OSMesgQueue* mq); // func_8008D730
+void osContGetQuery(OSContStatus* data); // func_8008D7AC
+void guLookAtHiliteF(float mf[4][4], UNK_PTR l, int* h, float xEye, float yEye, float zEye, float xAt, float yAt, float zAt, float xUp, float yUp, float zUp, float xl1, float yl1, float zl1, float xl2, float yl2, float zl2, int twidth, int theight); // func_8008D7D0
+void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight); // func_8008DF90
+int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap); // func_8008E050
+void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac); // func_8008E698
+void func_8008ED30(void); // func_8008ED30
+void osUnmapTLBAll(void); // func_8008EDE0
+s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction); // func_8008EE30
+void func_8008EED0(void); // func_8008EED0
+void func_8008F100(void); // func_8008F100
+unsigned char* strchr(unsigned char* __s, int __c); // func_8008F1A0
+size_t strlen(unsigned char* __s); // func_8008F1E0
+void* memcpy(void* __dest, void* __src, size_t __n); // func_8008F208
+void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count); // func_8008F240
+void osInvalICache(void* vaddr, s32 nbytes); // func_8008F270
+void osInvalDCache(void* vaddr, s32 nbytes); // func_8008F2F0
+void __osTimerServicesInit(void); // func_8008F3A0
+void __osTimerInterrupt(void); // func_8008F42C
+void __osSetTimerIntr(OSTime tim); // func_8008F5A4
+OSTime __osInsertTimer(OSTimer* t); // func_8008F644
+void func_8008F7D0(void); // func_8008F7D0
+int __osSpDeviceBusy(void); // func_8008FA00
+int __osSiDeviceBusy(void); // func_8008FA30
+void func_8008FA60(void); // func_8008FA60
+s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag); // func_8008FAB0
+void osSetThreadPri(OSThread* t, OSPri pri); // func_8008FC00
+OSPri osGetThreadPri(OSThread* t); // func_8008FCE0
+void func_8008FD00(void); // func_8008FD00
+void osViSwapBuffer(void* frameBufPtr); // func_8008FE60
+void guPositionF(float mf[4][4], float r, float p, float h, float s, float x, float y, float z); // func_8008FEB0
+void guPosition(Mtx* m, float r, float p, float h, float s, float x, float y, float z); // func_80090058
+void func_800900C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800900C0
+OSYieldResult osSpTaskYielded(OSTask* task); // func_800902A0
+s32 memcmp(void* __s1, void* __s2, size_t __n); // func_80090300
+OSTime osGetTime(void); // func_80090420
+void guRotateF(float mf[4][4], float a, float x, float y, float z); // func_800904B0
+void guRotate(Mtx* m, float a, float x, float y, float z); // func_80090634
+void __osSetGlobalIntMask(void); // func_80090680
+void func_800906D0(void); // func_800906D0
+void func_80090810(void); // func_80090810
+void func_80090900(void); // func_80090900
+s32 osAiSetFrequency(u32 frequency); // func_80090AF0
+s32 __osContRamRead(OSMesgQueue* mq, int channel, u16 address, u8* buffer); // func_80090C40
+void func_80090E70(void); // func_80090E70
+u8 __osContAddressCrc(u16 addr); // func_800910A0
+u8 __osContDataCrc(u8* data); // func_80091170
+OSThread* __osGetActiveQueue(void); // func_80091210
+void guNormalize(float* x, float* y, float* z); // func_80091220
+void __osSetCompare(u32 value); // func_80091280
+u32 __osGetCompare(void); // func_80091290
+u32 osDpGetStatus(void); // func_800912A0
+void osDpSetStatus(u32 data); // func_800912B0
+void _bcopy(void* __src, void* __dest, size_t __n); // func_800912C0
+void __osResetGlobalIntMask(void); // func_800915D0
+void func_80091630(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80091630
+void func_80091808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_80091808
+void guOrthoF(float mf[4][4], float l, float r, float b, float t, float n, float f, float scale); // func_800918A0
+void guOrtho(Mtx* m, float l, float r, float b, float t, float n, float f, float scale); // func_800919F4
+OSIntMask __osDisableInt(void); // func_80091A60
+void __osRestoreInt(OSIntMask im); // func_80091AD0
+void __osViInit(void); // func_80091AF0
+void __osViSwapContext(void); // func_80091C10
+OSMesgQueue* osPiGetCmdQueue(void); // func_80091F10
+f32 __cosf(f32 __x); // func_80091F40
+void func_800920B0(void); // func_800920B0
+void osViSetSpecialFeatures(u32 func); // func_80092100
+short coss(unsigned short x); // func_80092260
+void osSetTime(OSTime ticks); // func_80092290
+void func_800922C0(void); // func_800922C0
+void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount); // func_800923E0
+s32 osPfsIsPlug(OSMesgQueue* queue, u8* pattern); // func_80092440
+void func_800925CC(void); // func_800925CC
+void func_80092680(void); // func_80092680
+void func_80092730(void); // func_80092730
+OSPiHandle* osCartRomInit(void); // func_80092920
+void func_80092A80(void); // func_80092A80
+s32 __osPfsSelectBank(OSPfs* pfs, UNK_TYPE4 param_2); // func_80092C00
+s32 osContSetCh(u8 ch); // func_80092C80
+u32 __osSetFpcCsr(u32 value); // func_80092CE0
+u32 __osGetFpcCsr(void); // func_80092CF0
+void func_80092D00(void); // func_80092D00
+void func_80092EE0(void); // func_80092EE0
+void func_800930E8(void); // func_800930E8
+void func_800931F0(void); // func_800931F0
+void func_80093728(void); // func_80093728
+void func_80093A00(void); // func_80093A00
+u32 osAiGetLength(void); // func_80093BA0
+void func_80093BB0(void); // func_80093BB0
+void osMapTLBRdb(void); // func_80093C00
+void osYieldThread(void); // func_80093C60
+void func_80093CC0(void); // func_80093CC0
+u32 __osGetCause(void); // func_80093D90
+s32 __osContRamWrite(OSMesgQueue* mq, int channel, u16 address, u8* buffer, int force); // func_80093DA0
+void func_80093FF0(void); // func_80093FF0
+int osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg); // func_80094150
+void _Ldtob(_Pft* px, unsigned char code); // func_800942E0
+void _Ldunscale(void); // func_80094770
+void _Genld(_Pft* px, unsigned char code, unsigned char* p, short nsig, short xexp); // func_80094828
+ldiv_t ldiv(long numer, long denom); // func_80094DF0
+lldiv_t lldiv(long long numer, long long denom); // func_80094E74
+void _Litob(_Pft* px, unsigned char code); // func_80094F80
+s32 __osSiRawWriteIo(u32 devAddr, u32 data); // func_80095220
+u32 __osSpGetStatus(void); // func_80095270
+void __osSpSetStatus(u32 value); // func_80095280
+void osCreateViManager(OSPri pri); // func_800952A0
+void viMgrMain(OSDevMgr* iParm1); // func_80095420
+__OSViContext* __osViGetCurrentContext(void); // func_800955B0
+void osWritebackDCacheAll(void); // func_800955C0
+OSThread* __osGetCurrFaultedThread(void); // func_800955F0
+void func_80095600(void); // func_80095600
+void guMtxF2L(float mf[4][4], Mtx* m); // func_80095740
+void osStartThread(OSThread* param_1); // func_800957B0
+void osViSetYScale(f32 value); // func_80095900
+void osViSetXScale(f32 value); // func_80095950
+long long __d_to_ll(double d); // func_80095A60
+long long __f_to_ll(float f); // func_80095A7C
+unsigned long long __d_to_ull(double d); // func_80095A98
+unsigned long long __f_to_ull(float f); // func_80095B38
+double __ll_to_d(long long l); // func_80095BD4
+float __ll_to_f(long long l); // func_80095BEC
+double __ull_to_d(unsigned long long l); // func_80095C04
+float __ull_to_f(unsigned long long l); // func_80095C38
+void func_80095C70(void); // func_80095C70
+void func_80096360(void); // func_80096360
+void func_80096410(void); // func_80096410
+void func_800964D0(void); // func_800964D0
+s32 __osSpSetPc(u32 data); // func_80096510
+void func_80096540(void); // func_80096540
+void func_80096770(int param_1, UNK_PTR param_2, UNK_PTR param_3); // func_80096770
+void func_800967A0(void); // func_800967A0
+u32 __osGetWatchLo(void); // func_80096810
+void __osSetWatchLo(u32 value); // func_80096820
+f32 func_80096830(f32 param_1, f32 param_2); // func_80096830
+void* func_80096880(void* param_1, u8 param_2, s32 param_3); // func_80096880
+s32 func_800968B0(const char* str1, const char* str2); // func_800968B0
+char* func_800968f0(char* param_1, char* param_2); // func_800968F0
+void func_80096930(void); // func_80096930
+void EnAObj_Init(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5AC0
+void EnAObj_Destroy(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5B6C
+void EnAObj_Update1(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5B98
+void EnAObj_Update2(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5C28
+void EnAObj_Update(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5C60
+void EnAObj_Draw(ActorEnAObj* this, GlobalContext* ctxt); // func_800A5CB8
+void EnItem00_UpdateForNewObjectId(ActorEnItem00* this, GlobalContext* ctxt, f32* puParm3, f32* pfParm4); // func_800A5D00
+void EnItem00_Init(ActorEnItem00* this, GlobalContext* ctxt); // func_800A5D70
+void EnItem00_Destroy(ActorEnItem00* this, GlobalContext* ctxt); // func_800A637C
+void func_800A63A8(ActorEnItem00* this, GlobalContext* ctxt); // func_800A63A8
+void func_800A640C(ActorEnItem00* this); // func_800A640C
+void func_800A6650(void); // func_800A6650
+void func_800A6780(void); // func_800A6780
+void EnItem00_Update1(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6A40
+void EnItem00_Update(ActorEnItem00* this, GlobalContext* ctxt); // func_800A6B98
+void EnItem00_Draw(ActorEnItem00* this, GlobalContext* ctxt); // func_800A7128
+void EnItem00_DrawRupee(ActorEnItem00* this, GlobalContext* ctxt); // func_800A72AC
+void EnItem00_DrawSprite(ActorEnItem00* actor, GlobalContext* ctxt); // func_800A73A0
+void EnItem00_DrawHeartContainer(ActorEnItem00* actor, GlobalContext* ctxt); // func_800A74D8
+void EnItem00_DrawHeartPiece(void); // func_800A75B8
+void func_800A7650(void); // func_800A7650
+void func_800A7730(GlobalContext* globalCtx, PosRot* world, UNK_TYPE param_3); // func_800A7730
+void func_800A7AD4(void); // func_800A7AD4
+void func_800A7D28(void); // func_800A7D28
+void func_800A8150(void); // func_800A8150
+void func_800A817C(void); // func_800A817C
+void func_800A81A4(void); // func_800A81A4
+void func_800A81F0(void); // func_800A81F0
+void func_800A8514(void); // func_800A8514
+void EffectBlure_Initcommon(EffBlureParams* params); // func_800A8558
+void EffectBlure_Init1(EffBlureParams* params, EffBlureInit1* init); // func_800A8610
+void EffectBlure_Init2(EffBlureParams* params, EffBlureInit2* init); // func_800A8720
+void EffectBlure_Destroy(EffBlureParams* params); // func_800A8854
+s32 EffectBlure_Update(EffBlureParams* params); // func_800A8860
+void func_800A8C78(void); // func_800A8C78
+void func_800A8DE8(void); // func_800A8DE8
+void func_800A92FC(void); // func_800A92FC
+void func_800A9330(void); // func_800A9330
+void func_800A9804(void); // func_800A9804
+void func_800AA190(void); // func_800AA190
+void func_800AA460(void); // func_800AA460
+void func_800AA498(void); // func_800AA498
+void func_800AA700(void); // func_800AA700
+void func_800AABE0(void); // func_800AABE0
+void EffectBlure_Draw(EffBlureParams* params, GraphicsContext* gCtxt); // func_800AB0EC
+void EffectShieldParticle_Init(EffShieldParticleParams* params, EffShieldParticleInit* init); // func_800AB5D0
+void EffectShieldParticle_Destroy(EffShieldParticleParams* params); // func_800AB808
+s32 EffectShieldParticle_Update(EffShieldParticleParams* params); // func_800AB894
+void EffectShieldParticle_CalculateColors(EffShieldParticleParams* params, ColorRGBA8* primColor, ColorRGBA8* envColor); // func_800AB9F8
+void EffectShieldParticle_Draw(EffShieldParticleParams* params, GraphicsContext* gCtxt); // func_800AC718
+void EffectSpark_Init(EffSparkParams* params, EffSparkParams* init); // func_800ACBF0
+void EffectSpark_Destroy(EffSparkParams* params); // func_800ACFCC
+s32 EffectSpark_Update(EffSparkParams* params); // func_800ACFD8
+void EffectSpark_Draw(EffSparkParams* params, GraphicsContext* gCtxt); // func_800AD09C
+void func_800AE2A0(void); // func_800AE2A0
+void func_800AE434(GlobalContext* ctxt, ColorRGBA8* color, short sParm3, short sParm4); // func_800AE434
+void func_800AE5A0(GlobalContext* ctxt); // func_800AE5A0
+void func_800AE5E4(void); // func_800AE5E4
+void func_800AE778(GlobalContext* ctxt, ColorRGBA8* color, short param_3, short param_4); // func_800AE778
+void func_800AE8EC(GlobalContext* ctxt); // func_800AE8EC
+void func_800AE930(CollisionContext* bgCtxt, int param_2, float* param_3, float param_4, short param_5, BgPolygon* param_6, int param_7); // func_800AE930
+void func_800AEF44(void); // func_800AEF44
+void EffectTireMark_InitParticle(EffTireMarkParticle* particle); // func_800AEF70
+void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init); // func_800AEFA0
+void EffectTireMark_Destroy(EffTireMarkParams* params); // func_800AF044
+s32 EffectTireMark_Update(EffTireMarkParams* params); // func_800AF050
+void EffectTireMark_InitVertices(F3DVertexColor* vertices, EffTireMarkParticle* particle, s32 index, s32 alpha); // func_800AF284
+void EffectTireMark_Draw(EffTireMarkParams* params, GraphicsContext* gCtxt); // func_800AF310
+GlobalContext* Effect_GetContext(void); // func_800AF710
+void* Effect_GetParams(s32 index); // func_800AF720
+void Effect_InitCommon(EffCommon* common); // func_800AF87C
+void Effect_Init(GlobalContext* ctxt); // func_800AF890
+void Effect_Add(GlobalContext* ctxt, s32* index, s32 type, u8 param_4, u8 param_5, void* initParams); // func_800AF960
+void Effect_DrawAll(GraphicsContext* gCtxt); // func_800AFB24
+void Effect_UpdateAll(GlobalContext* ctxt); // func_800AFC60
+void Effect_Destroy(GlobalContext* ctxt, s32 index); // func_800AFDCC
+void Effect_DestroyAll(GlobalContext* ctxt); // func_800AFF24
+void EffectSS_Init(GlobalContext* ctxt, s32 numEntries); // func_800B0050
+void EffectSS_Clear(GlobalContext* ctxt); // func_800B0140
+LoadedParticleEntry* EffectSS_GetTable(void); // func_800B0200
+void EffectSS_Delete(LoadedParticleEntry* param_1); // func_800B0210
+void EffectSS_ResetEntry(LoadedParticleEntry* particle); // func_800B0270
+s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry); // func_800B0304
+void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* particle); // func_800B043C
+void EffectSS_LoadParticle(UNK_TYPE4 param_1, EffectSSType type, u32 priority, void* particleInitData); // func_800B04D4
+void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index); // func_800B067C
+void EffectSS_UpdateAllParticles(GlobalContext* ctxt); // func_800B071C
+void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index); // func_800B07D8
+void EffectSS_DrawAllParticles(GlobalContext* ctxt); // func_800B081C
+s32 func_800B096C(s16 param_1, s16 param_2, s32 param_3); // func_800B096C
+s16 func_800B09D0(s16 a0, s16 a1, f32 a2); // func_800B09D0
+u8 func_800B0A24(u8 a0, u8 a1, f32 a2); // func_800B0A24
+void func_800B0B10(GlobalContext* ctxt, LoadedParticleEntry* particle, u32 uParm3); // func_800B0B10
+void EffectSS_SpawnDust(GlobalContext* ctxt, u16 flags, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, ColorRGBA8* color1, ColorRGBA8* color2, s16 scale, s16 scaleChangePerFrame, s16 life, u8 type); // func_800B0D2C
+void func_800B0DE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B0DE0
+void func_800B0E48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B0E48
+void func_800B0EB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B0EB0
+void func_800B0F18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B0F18
+void func_800B0F80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B0F80
+void func_800B0FE8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B0FE8
+void func_800B1054(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B1054
+void func_800B10C0(void); // func_800B10C0
+void func_800B1130(void); // func_800B1130
+void func_800B11A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B11A0
+void func_800B1210(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B1210
+void func_800B1280(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B1280
+void func_800B12F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B12F0
+void func_800B1360(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B1360
+void func_800B139C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B139C
+void func_800B13D8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B13D8
+void func_800B14D4(void); // func_800B14D4
+void func_800B1598(void); // func_800B1598
+void func_800B165C(void); // func_800B165C
+void func_800B16B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B16B8
+void EffectSS_SpawnSparkle(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4* param_5, UNK_TYPE4* param_6, UNK_TYPE2 param_7, int param_8); // func_800B16F4
+void func_800B1830(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B1830
+void EffectSS_SpawnBomb2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4); // func_800B1908
+void func_800B1970(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B1970
+void EffectSS_SpawnBlast(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, ColorRGBA8* param_5, ColorRGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); // func_800B19E0
+void func_800B1A70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B1A70
+void func_800B1AC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_800B1AC4
+void func_800B1B10(void); // func_800B1B10
+void EffectSS_SpawnGSpark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, ColorRGBA8* param_6, ColorRGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B1B4C
+void func_800B1BDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B1BDC
+void func_800B1C70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B1C70
+void func_800B1CC4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B1CC4
+void func_800B1DC8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800B1DC8
+void EffectSS_SpawnDodongoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B1E0C
+void EffectSS_SpawnBubble(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B1E94
+void EffectSS_SpawnGRipple(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5); // func_800B1EF4
+void EffectSS_SpawnGSplash(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4* puParm3, UNK_TYPE4* puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6); // func_800B1F4C
+void EffectSS_SpawnGFire(UNK_TYPE4 uParm1, Vec3f* pzParm2); // func_800B1FE0
+void EffectSS_SpawnLightning(UNK_TYPE4 uParm1, Vec3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2018
+void func_800B2090(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); // func_800B2090
+void EffectSS_SpawnBigOctoBubble2(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); // func_800B210C
+void EffectSS_SpawnFragment(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B219C
+void func_800B221C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B221C
+void func_800B2364(void); // func_800B2364
+void EffectSS_SpawnStick(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3); // func_800B23D8
+void EffectSS_SpawnSplash(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B242C
+void func_800B249C(void); // func_800B249C
+void EffectSS_SpawnStone1(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE4 uParm3); // func_800B25D8
+void EffectSS_SpawnHitMark(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vec3f* pzParm4); // func_800B262C
+void func_800B2684(void); // func_800B2684
+void func_800B26A8(void); // func_800B26A8
+void EffectSS_SpawnPhantomGanonFlash(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5); // func_800B26D4
+void EffectSS_SpawnKakarikoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6); // func_800B2738
+void EffectSS_SpawnSoldierSearchBall(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7); // func_800B27A0
+void EffectSS_SpawnShard(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE2 param_14, UNK_TYPE2 param_15, UNK_TYPE4 param_16); // func_800B2810
+void EffectSS_SpawnIcePiece(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6); // func_800B28C8
+void func_800B2930(void); // func_800B2930
+void EffectSS_SpawnEnemyIce(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, ColorRGBA8* pzParm4, ColorRGBA8* param_5, UNK_TYPE4 param_6); // func_800B2AC4
+void func_800B2B44(void); // func_800B2B44
+void func_800B2B7C(void); // func_800B2B7C
+void func_800B2BC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); // func_800B2BC0
+void EffectSS_SpawnFireTail(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, ColorRGBA8* param_7, ColorRGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11); // func_800B2C48
+void func_800B2CE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); // func_800B2CE0
+void func_800B2DA4(void); // func_800B2DA4
+void EffectSS_SpawnEnemyFire(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2DF4
+void func_800B2E6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); // func_800B2E6C
+void EffectSS_SpawnExtra(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800B2F18
+void EffectSS_SpawnDeadDekuBaba(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9); // func_800B2F80
+void func_800B3030(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7); // func_800B3030
+void EffectSS_SpawnDeadDodongo(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); // func_800B3088
+void EffectSS_SpawnDeadDekuScrub(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); // func_800B3144
+void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); // func_800B31BC
+void EffectSS_SpawnIceSmoke(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5); // func_800B320C
+void EffectSS_SpawnIceBlock(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5); // func_800B326C
+void func_800B32D0(GameState* ctxt); // func_800B32D0
+void func_800B3644(void); // func_800B3644
+void DLF_LoadGameState(GameStateOverlay* gameState); // func_800B3880
+void DLF_FreeGameState(GameStateOverlay* gameState); // func_800B39A4
+void Actor_PrintLists(ActorContext* actCtxt); // func_800B3AD0
+void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale); // func_800B3BA4
+void Actor_PostDraw(Actor* actor, LightMapper* mapper, GlobalContext* ctxt, u32 displayList, ColorRGBA8* color); // func_800B3BC8
+void func_800B3FC0(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B3FC0
+void func_800B4024(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B4024
+void func_800B4088(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B4088
+void func_800B40B8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B40B8
+void func_800B40E0(GlobalContext* ctxt, int iParm2, z_Matrix* pzParm3, int iParm4, float param_5, float param_6, float param_7); // func_800B40E0
+void func_800B42F8(Actor* actor, LightMapper* mapper, GlobalContext* ctxt); // func_800B42F8
+void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B4A98
+void func_800B4AEC(GlobalContext* ctxt, Actor* actor, f32 param_3); // func_800B4AEC
+void func_800B4B50(Actor* actor, int iParm2, GlobalContext* pzParm3); // func_800B4B50
+void func_800B4EDC(GlobalContext* ctxt, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4); // func_800B4EDC
+void func_800B4F40(TargetContext* targetContext, int param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5); // func_800B4F40
+void func_800B4F78(TargetContext* targetContext, u8 type, GlobalContext* ctxt); // func_800B4F78
+void func_800B5040(TargetContext* targetContext, Actor* actor, u8 type, GlobalContext* ctxt); // func_800B5040
+void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt); // func_800B51A4
+void func_800B5208(TargetContext* targetCtxt, GlobalContext* ctxt); // func_800B5208
+void func_800B5814(TargetContext* targetContext, ActorPlayer* player, Actor* param_3, GlobalContext* ctxt); // func_800B5814
+u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5BB0
+void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5BF4
+void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag); // func_800B5C34
+u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag); // func_800B5C78
+void Actor_SetChestFlag(GlobalContext* ctxt, u32 flag); // func_800B5C90
+void Actor_SetAllChestFlag(GlobalContext* ctxt, u32 flags); // func_800B5CAC
+u32 Actor_GetAllChestFlag(GlobalContext* ctxt); // func_800B5CB8
+u32 Actor_GetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CC4
+void Actor_SetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CDC
+void Actor_UnsetRoomCleared(GlobalContext* ctxt, u32 roomNumber); // func_800B5CF8
+u32 Actor_GetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D18
+void Actor_SetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D30
+void Actor_UnsetRoomClearedTemp(GlobalContext* ctxt, u32 roomNumber); // func_800B5D4C
+u32 Actor_GetCollectibleFlag(GlobalContext* ctxt, s32 index); // func_800B5D6C
+void Actor_SetCollectibleFlag(GlobalContext* ctxt, s32 index); // func_800B5DB0
+void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5DF0
+void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7); // func_800B5E0C
+void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4); // func_800B5E50
+void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5E68
+void Actor_TitleCardDraw(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B5F24
+UNK_TYPE4 func_800B6434(GlobalContext* ctxt, TitleCardContext* titleCtxt); // func_800B6434
+UNK_TYPE4 func_800B645C(void); // func_800B645C
+void func_800B6468(GlobalContext* ctxt); // func_800B6468
+void func_800B6474(GlobalContext* ctxt); // func_800B6474
+UNK_TYPE4 func_800B648C(GlobalContext* ctxt, UNK_TYPE1 param_2, UNK_TYPE1 param_3, float param_4, Vec3f* param_5); // func_800B648C
+f32 func_800B64FC(GlobalContext* ctxt, f32 fParm2, Vec3f* pzParm3, u32* puParm4); // func_800B64FC
+void* func_800B6584(GlobalContext* ctxt, s16 sParm2, void* pvParm3, u32 uParm4); // func_800B6584
+UNK_TYPE4 func_800B6608(int iParm1, short sParm2); // func_800B6608
+void func_800B6680(void); // func_800B6680
+void Actor_MarkForDeath(Actor* actor); // func_800B670C
+void Actor_InitCurrPosition(Actor* actor); // func_800B672C
+void Actor_SetHeight(Actor* actor, f32 height); // func_800B675C
+void Actor_SetRotationFromDrawRotation(Actor* actor); // func_800B67A0
+void Actor_InitDrawRotation(Actor* actor); // func_800B67C0
+void Actor_SetScale(Actor* actor, f32 scale); // func_800B67E0
+void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor); // func_800B67FC
+void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt); // func_800B6834
+void Actor_FiniActor(Actor* actor, GlobalContext* ctxt); // func_800B6948
+void Actor_SetMovementScale(s32 scale); // func_800B6988
+void Actor_ApplyMovement(Actor* actor); // func_800B69AC
+void Actor_SetVelocityYRotationAndGravity(Actor* actor); // func_800B6A10
+void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor); // func_800B6A88
+void Actor_SetVelocityXYRotation(Actor* actor); // func_800B6AB4
+void Actor_SetVelocityAndMoveXYRotation(Actor* actor); // func_800B6B24
+void Actor_SetVelocityXYRotationReverse(Actor* actor); // func_800B6B50
+void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor); // func_800B6BD8
+void func_800B6C04(Actor* actor, float fParm2); // func_800B6C04
+void func_800B6C58(Actor* actor, UNK_TYPE4 param_2); // func_800B6C58
+s16 Actor_YawBetweenActors(Actor* from, Actor* to); // func_800B6CD4
+s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to); // func_800B6D00
+s16 Actor_YawToPoint(Actor* actor, Vec3f* point); // func_800B6D2C
+s16 Actor_PitchBetweenActors(Actor* from, Actor* to); // func_800B6D50
+s16 Actor_PitchBetweenActorsTop(Actor* from, Actor* to); // func_800B6D7C
+s16 Actor_PitchToPoint(Actor* actor, Vec3f* point); // func_800B6DA8
+f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6DCC
+f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point); // func_800B6DF8
+f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2); // func_800B6E1C
+f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point); // func_800B6E48
+void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point); // func_800B6E6C
+f32 Actor_YDistance(Actor* actor1, Actor* actor2); // func_800B6F0C
+void func_800B6F20(GlobalContext* ctxt, int param_2, float param_3, short param_4); // func_800B6F20
+float func_800B6FC8(ActorPlayer* player); // func_800B6FC8
+void func_800B7090(void); // func_800B7090
+void func_800B7118(void); // func_800B7118
+void func_800B7128(void); // func_800B7128
+void func_800B715C(void); // func_800B715C
+void func_800B7170(void); // func_800B7170
+void func_800B71DC(void); // func_800B71DC
+u32 func_800B7200(s32 param_1); // func_800B7200
+void func_800B722C(void); // func_800B722C
+UNK_TYPE4 func_800B724C(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3); // func_800B724C
+unsigned int func_800B7298(GlobalContext* ctxt, UNK_TYPE4 param_2, u8 param_3); // func_800B7298
+void func_800B72E0(s32 param_1); // func_800B72E0
+void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2); // func_800B72F8
+s32 Actor_IsLinkFacingActor(Actor* actor, s16 tolerance, GlobalContext* ctxt); // func_800B7320
+s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance); // func_800B7378
+s32 Actor_IsActorFacingLink(Actor* actor, s16 angle); // func_800B73E0
+s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance); // func_800B742C
+s32 Actor_IsActorFacingLinkAndWithinRange(Actor* actor, f32 range, s16 tolerance); // func_800B748C
+s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance); // func_800B750C
+void func_800B75A0(BgPolygon* param_1, Vec3f* param_2, s16* param_3); // func_800B75A0
+UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, unsigned int param_3); // func_800B761C
+UNK_TYPE4 func_800B7678(GlobalContext* ctxt, Actor* param_2, int param_3, unsigned int param_4); // func_800B7678
+void func_800B78B8(GlobalContext* ctxt, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6); // func_800B78B8
+void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B7E04
+s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gCtxt); // func_800B7FE0
+void func_800B8018(void); // func_800B8018
+void func_800B8050(Actor* actor, GlobalContext* ctxt, s32 iParm3); // func_800B8050
+void func_800B8118(void); // func_800B8118
+void func_800B81E0(void); // func_800B81E0
+UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2); // func_800B8214
+f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2); // func_800B8248
+void func_800B82EC(void); // func_800B82EC
+void func_800B83BC(void); // func_800B83BC
+void func_800B83F8(void); // func_800B83F8
+int func_800B84D0(Actor* actor, GlobalContext* ctxt); // func_800B84D0
+UNK_TYPE4 func_800B8500(Actor* actor, GlobalContext* ctxt, float fParm3, float fParm4, int param_5); // func_800B8500
+void func_800B85E0(Actor* actor, GlobalContext* ctxt, f32 uParm3, s32 uParm4); // func_800B85E0
+void func_800B8614(Actor* actor, GlobalContext* ctxt, f32 uParm3); // func_800B8614
+void func_800B863C(Actor* actor, GlobalContext* ctxt); // func_800B863C
+u32 func_800B867C(Actor* actor, GlobalContext* ctxt); // func_800B867C
+UNK_TYPE4 func_800B86C8(UNK_TYPE4 param_1, GlobalContext* ctxt, UNK_TYPE4 param_3); // func_800B86C8
+int func_800B8708(GlobalContext* ctxt); // func_800B8708
+void func_800B8718(void); // func_800B8718
+void func_800B874C(void); // func_800B874C
+void func_800B8804(void); // func_800B8804
+void func_800B882C(void); // func_800B882C
+void func_800B886C(void); // func_800B886C
+void func_800B8898(GlobalContext* ctxt, Actor* actor, UNK_PTR param_3, UNK_PTR param_4); // func_800B8898
+void func_800B8934(void); // func_800B8934
+u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt); // func_800B89F8
+UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* ctxt, int iParm3, float fParm4, float param_5); // func_800B8A1C
+void func_800B8B84(void); // func_800B8B84
+void func_800B8BB0(void); // func_800B8BB0
+void func_800B8BD0(void); // func_800B8BD0
+void func_800B8BFC(void); // func_800B8BFC
+void func_800B8C20(void); // func_800B8C20
+void func_800B8C50(void); // func_800B8C50
+void func_800B8C78(void); // func_800B8C78
+void func_800B8C9C(void); // func_800B8C9C
+void func_800B8CEC(void); // func_800B8CEC
+void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800B8D10
+void func_800B8D50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B8D50
+void func_800B8D98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B8D98
+void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800B8DD4
+void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800B8E1C
+void func_800B8E58(void); // func_800B8E58
+void func_800B8EC8(Actor* actor, u32 uParm2); // func_800B8EC8
+void func_800B8EF4(void); // func_800B8EF4
+void func_800B8F98(Actor* actor, u16 sfxId); // func_800B8F98
+void func_800B8FC0(void); // func_800B8FC0
+void func_800B8FE8(void); // func_800B8FE8
+void func_800B9010(Actor* actor, UNK_TYPE2 uParm2); // func_800B9010
+void func_800B9038(void); // func_800B9038
+void func_800B9084(void); // func_800B9084
+void func_800B9098(Actor* actor); // func_800B9098
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4); // func_800B90AC
+void func_800B90F4(void); // func_800B90F4
+void func_800B9120(ActorContext* actCtxt); // func_800B9120
+void Actor_Init(GlobalContext* ctxt, ActorContext* actCtxt, UNK_TYPE4 uParm3); // func_800B9170
+void func_800B9334(GlobalContext* ctxt, ActorContext* actCtxt); // func_800B9334
+Actor* Actor_UpdateActor(s800B948C* params); // func_800B948C
+void Actor_UpdateAll(GlobalContext* ctxt, ActorContext* actCtxt); // func_800B9780
+void Actor_DrawActor(GlobalContext* ctxt, Actor* actor); // func_800B9A04
+void func_800B9D1C(Actor* actor); // func_800B9D1C
+void Actor_DrawAllSetup(GlobalContext* ctxt); // func_800B9E3C
+s32 Actor_RecordUndrawnActor(GlobalContext* ctxt, Actor* actor); // func_800B9E4C
+void func_800B9E84(void); // func_800B9E84
+void func_800B9EF4(GlobalContext* ctxt, int numActors, Actor** actors); // func_800B9EF4
+s32 func_800BA2D8(GlobalContext* ctxt, Actor* actor); // func_800BA2D8
+s32 func_800BA2FC(GlobalContext* ctxt, Actor* actor, Vec3f* param_3, f32 param_4); // func_800BA2FC
+void Actor_DrawAll(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA42C
+void func_800BA6FC(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA6FC
+void func_800BA798(GlobalContext* ctxt, ActorContext* aCtxt); // func_800BA798
+void func_800BA8B8(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BA8B8
+void func_800BA9B4(void); // func_800BA9B4
+void Actor_InsertIntoTypeList(ActorContext* actCtxt, Actor* actor, u8 type); // func_800BAAB4
+Actor* Actor_RemoveFromTypeList(GlobalContext* ctxt, ActorContext* actCtxt, Actor* actor); // func_800BAB24
+void Actor_FreeOverlay(ActorOverlay* entry); // func_800BABFC
+Actor* Actor_Spawn(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10); // func_800BAC60
+ActorInit* Actor_LoadOverlay(ActorContext* actCtxt, s16 index); // func_800BACD4
+Actor* Actor_SpawnWithParentAndCutscene(ActorContext* actCtxt, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent); // func_800BAE14
+void Actor_SpawnWithParent(ActorContext* actCtxt, Actor* parent, GlobalContext* ctxt, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable); // func_800BB0C0
+void Actor_SpawnTransitionActors(GlobalContext* ctxt, ActorContext* actCtxt); // func_800BB140
+void func_800BB2D0(ActorContext* aCtxt, unsigned short* param_2, GlobalContext* ctxt); // func_800BB2D0
+Actor* func_800BB498(ActorContext* actCtxt, Actor* actor, GlobalContext* ctxt); // func_800BB498
+void func_800BB59C(void); // func_800BB59C
+void func_800BB604(void); // func_800BB604
+void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800BB8EC
+void func_800BBA88(GlobalContext* ctxt, Actor* iParm2); // func_800BBA88
+void func_800BBAC0(void); // func_800BBAC0
+void func_800BBB74(void); // func_800BBB74
+void func_800BBC20(void); // func_800BBC20
+void func_800BBCEC(void); // func_800BBCEC
+void func_800BBDAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9); // func_800BBDAC
+void func_800BBFB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE1 param_7); // func_800BBFB0
+void func_800BC154(void); // func_800BC154
+void func_800BC188(void); // func_800BC188
+void func_800BC1B4(void); // func_800BC1B4
+void func_800BC270(void); // func_800BC270
+void func_800BC444(void); // func_800BC444
+void func_800BC4EC(void); // func_800BC4EC
+void func_800BC5B8(void); // func_800BC5B8
+void func_800BC5EC(void); // func_800BC5EC
+void func_800BC620(void); // func_800BC620
+void func_800BC770(void); // func_800BC770
+void func_800BC7D8(void); // func_800BC7D8
+void func_800BC848(void); // func_800BC848
+void func_800BC8B8(void); // func_800BC8B8
+void func_800BCB50(void); // func_800BCB50
+void func_800BCB70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800BCB70
+void func_800BCBF4(Vec3f* uParm1, GlobalContext* ctxt); // func_800BCBF4
+void func_800BCC68(Vec3f* param_1, GlobalContext* ctxt); // func_800BCC68
+void func_800BCCDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800BCCDC
+void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); // func_800BD2B4
+void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9); // func_800BD384
+void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); // func_800BD6E4
+void func_800BD888(void); // func_800BD888
+void func_800BD9A0(void); // func_800BD9A0
+void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_800BD9E0
+void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6); // func_800BDAA0
+void func_800BDB6C(void); // func_800BDB6C
+void func_800BDC5C(SkelAnime* skelAnime, UNK_PTR animation, UNK_TYPE param_3); // func_800BDC5C
+void func_800BDCF4(void); // func_800BDCF4
+void func_800BDFB0(void); // func_800BDFB0
+void func_800BDFC0(GlobalContext* ctxt, UNK_TYPE4 uParm2); // func_800BDFC0
+void func_800BE03C(GlobalContext* ctxt, Gfx* dl); // func_800BE03C
+void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); // func_800BE0B8
+void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); // func_800BE184
+void func_800BE22C(void); // func_800BE22C
+void func_800BE258(void); // func_800BE258
+void func_800BE2B8(void); // func_800BE2B8
+void func_800BE33C(void); // func_800BE33C
+void func_800BE3D0(void); // func_800BE3D0
+void func_800BE504(void); // func_800BE504
+void func_800BE568(void); // func_800BE568
+void func_800BE5CC(void); // func_800BE5CC
+void func_800BE63C(void); // func_800BE63C
+void func_800BE680(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8); // func_800BE680
+void func_800BF7CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); // func_800BF7CC
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
 void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
 void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
