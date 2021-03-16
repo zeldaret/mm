@@ -26,7 +26,7 @@
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
-extern GraphicsContext* __gfxCtx;
+GraphicsContext* __gfxCtx;
 
 #define WORK_DISP       __gfxCtx->work.p
 #define POLY_OPA_DISP   __gfxCtx->polyOpa.p

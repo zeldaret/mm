@@ -54,7 +54,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk148 = 0;
     }
 
-    if ((globalCtx->actorCtx.unk5 & 2)) {
+    if (globalCtx->actorCtx.unk5 & 2) {
         if (this->unk148 == 2 || this->unk148 == 6) {
             if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
                 Actor_MarkForDeath(&this->actor);
@@ -98,7 +98,7 @@ void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_80BFD280[this->unk148]));
-    gSPDisplayList(POLY_OPA_DISP++, &D_040622C0);
+    gSPDisplayList(POLY_OPA_DISP++, D_040622C0);
 
     CLOSE_DISPS(gfxCtx);
 }
