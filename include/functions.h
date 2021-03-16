@@ -11,7 +11,7 @@ double sqrt(double d);
 #pragma intrinsic(sqrt)
 
 void bootproc(void);
-void Idle_ClearMemory(void* begin, void* end);
+void Idle_ClearMemory(const void* begin, const void* end);
 void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value);
 void Idle_InitScreen(void);
 void Idle_InitMemory(void);
