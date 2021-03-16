@@ -115,6 +115,7 @@ build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
+build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 

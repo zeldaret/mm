@@ -12,7 +12,7 @@ s32 osContStartQuery(OSMesgQueue* mq)
     if (__osContLastCmd != 0) {
         __osPackRequestData(0);
         __osSiRawStartDma(1, &__osContPifRam);
-        osRecvMesg(mq, NULL, 1);
+        osRecvMesg(mq, NULL, OS_MESG_BLOCK);
     }
 
     ret = __osSiRawStartDma(0, &__osContPifRam);
