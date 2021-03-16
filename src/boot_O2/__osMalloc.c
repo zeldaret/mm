@@ -51,7 +51,6 @@ void __osMallocInit(Arena* arena, void* start, u32 size) {
     arena->isInit = 1;
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osMallocAddBlock.asm")
 void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
     s32 diff;
     s32 size2;
@@ -92,7 +91,6 @@ u8 __osMallocIsInitalized(Arena* arena) {
     return arena->isInit;
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osMalloc.asm")
 void* __osMalloc(Arena* arena, u32 size) {
     ArenaNode* iter;
     ArenaNode* newNode;
@@ -178,7 +176,6 @@ void* __osMallocR(Arena* arena, u32 size) {
     return alloc;
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osFree.asm")
 void __osFree(Arena* arena, void* ptr) {
     ArenaNode* node;
     ArenaNode* next;

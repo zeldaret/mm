@@ -23,4 +23,12 @@ typedef struct {
     /* 0x3 */ u8 alpha;
 } RGBA8; // size = 0x4
 
+// only use when necessary for alignment purposes
+typedef union {
+    struct {
+        u8 r, g, b, a;
+    };
+    u32 rgba;
+} Color_RGBA8_u32;
+
 #endif

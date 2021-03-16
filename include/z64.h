@@ -616,6 +616,27 @@ typedef struct {
     /* 0x38 */ func_ptr inputCallback;
 } FaultDrawer; // size = 0x3C
 
+typedef struct GfxPrint {
+    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
+    /* 0x04 */ Gfx* dlist;
+    /* 0x08 */ u16 posX;
+    /* 0x0A */ u16 posY;
+    /* 0x0C */ u16 baseX;
+    /* 0x0E */ u8 baseY;
+    /* 0x0F */ u8 flag;
+    /* 0x10 */ Color_RGBA8_u32 color;
+    /* 0x14 */ char unk_14[0x1C]; // unused
+} GfxPrint; // size = 0x30
+
+typedef enum {
+    GFXPRINT_FLAG1 = 1,
+    GFXPRINT_USE_RGBA16 = 2,
+    GFXPRINT_FLAG4 = 4,
+    GFXPRINT_UPDATE_MODE = 8,
+    GFXPRINT_FLAG64 = 0x40,
+    GFXPRINT_OPEN = 0x80
+} GfxPrintFlag;
+
 typedef struct {
     /* 0x0 */ u16 cycleLength;
     /* 0x2 */ u16 numKeyFrames;

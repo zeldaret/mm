@@ -150,7 +150,7 @@ u32 StackCheck_Check(StackEntry* entry);
 // void func_800859BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80085A08(void);
 // void func_80085A2C(void);
-void func_80085A54(s32 param_1, s32 param_2, s32 param_3);
+void func_80085A54(GfxPrint* this, s32 param_2, s32 param_3);
 // void func_80085A68(void);
 // void func_80085D74(void);
 // void func_80085F30(void);
