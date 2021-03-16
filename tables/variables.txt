@@ -79,7 +79,6 @@
     0x800981A0:("irqmgrThreadName","char","[]",0x7),
     0x800981A8:("mainThreadName","char","[]",0x5),
     0x800981B0:("D_800981B0","f32","",0x4),
-    0x800981C0:("D_800981C0","char","[]",0x3),
     0x800981C4:("dmamgrString800981C4","char","[]",0xf),
     0x800981D4:("dmamgrString800981D4","char","[]",0xf),
     0x800981E4:("dmamgrString800981E4","char","[]",0xf),

@@ -231,8 +231,6 @@
     0x80098160:"boot_data_vimgr",
 
     0x80098190:"boot_rodata_0x80080060",
-    0x800981A0:"boot_rodata_idle",
-    0x800981C0:"boot_rodata_z_std_dma",
     0x80098210:"boot_rodata_0x80080E30",
     0x80098260:"boot_rodata_0x80081250",
     0x80098280:"boot_rodata_CIC6105",

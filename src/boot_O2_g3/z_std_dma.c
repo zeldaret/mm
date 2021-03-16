@@ -90,10 +90,14 @@ s32 DmaMgr_FindDmaIndex(u32 vrom) {
     return -1;
 }
 
-// TODO this should be a string
 char* func_800809F4(u32 a0) {
-    return &D_800981C0[0];
+    return "??";
 }
+
+const char dmamgrString800981C4[] = "../z_std_dma.c";
+const char dmamgrString800981D4[] = "../z_std_dma.c";
+const char dmamgrString800981E4[] = "../z_std_dma.c";
+const char dmamgrString800981F4[] = "../z_std_dma.c";
 
 #ifdef NON_MATCHING
 void DmaMgr_ProcessMsg(DmaRequest* req) {
@@ -201,6 +205,8 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
 
 	return 0;
 }
+
+const char dmamgrThreadName[] = "dmamgr";
 
 #ifdef NON_MATCHING
 // TODO missing a useless move initializing v0, and some reorderings

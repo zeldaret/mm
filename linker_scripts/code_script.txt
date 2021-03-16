@@ -251,7 +251,7 @@ SECTIONS
         boot_rodata_start = .;
         build/src/boot_O2_g3/boot_main.o(.rodata)
         build/src/boot_O2_g3/idle.o(.rodata)
-        build/asm/boot/boot_rodata_z_std_dma.rodata.o(.rodata)
+        build/src/boot_O2_g3/z_std_dma.o(.rodata)
         build/asm/boot/boot_rodata_0x80080E30.rodata.o(.rodata)
         build/src/boot_O2_g3/irqmgr.o(.rodata)
         build/src/boot_O2_g3/CIC6105.o(.rodata)
