@@ -69,15 +69,15 @@ void Idle_InitCodeAndMemory(void) {
 #endif
 
 void Main_ThreadEntry(void* arg) {
-    StackCheck_Init(&irqmgrStackEntry, &irqmgrStack, &irqmgrStack[1280], 0, 256, "irqmgr");
-    IrqMgr_Create(&irqmgrContext, &irqmgrStackEntry, 18, 1);
-    Dmamgr_Start();
+    StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 256, "irqmgr");
+    IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, 18, 1);
+    DmaMgr_Start();
     Idle_InitCodeAndMemory();
     main(arg);
-    Dmamgr_Stop();
+    DmaMgr_Stop();
 }
 
-void func_8008038C(void) {
+void Idle_InitVideo(void) {
     osCreateViManager(254);
 
     gViConfigFeatures = 66;
@@ -87,15 +87,15 @@ void func_8008038C(void) {
     switch (osTvType) {
     case 1:
         D_8009B290 = 2;
-        D_8009B240 = osViModeNtscLan1;
+        gViConfigMode = osViModeNtscLan1;
         break;
     case 2:
         D_8009B290 = 30;
-        D_8009B240 = osViModeMpalLan1;
+        gViConfigMode = osViModeMpalLan1;
         break;
     case 0:
         D_8009B290 = 44;
-        D_8009B240 = D_800980E0;
+        gViConfigMode = osViModeFpalLan1;
         gViConfigYScale = 0.833f;
         break;
     }
@@ -104,11 +104,11 @@ void func_8008038C(void) {
 }
 
 void Idle_ThreadEntry(void* arg) {
-    func_8008038C();
-    osCreatePiManager(150, &D_8009B228, D_8009B160, 50);
-    StackCheck_Init(&mainStackEntry, &mainStack, &mainStack[2304], 0, 1024, "main");
-    osCreateThread(&mainOSThread, 3, (osCreateThread_func)Main_ThreadEntry, arg, &mainStack[2304], 12);
-    osStartThread(&mainOSThread);
+    Idle_InitVideo();
+    osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
+    StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 1024, "main");
+    osCreateThread(&gMainThread, 3, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack), 12);
+    osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 
     for(;;);

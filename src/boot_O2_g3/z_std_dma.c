@@ -3,43 +3,43 @@
 
 UNK_TYPE4 sDmaMgrDmaBuffSize = 0x2000;
 
-s32 DmaMgr_DMARomToRam(u32 a0, void* a1, u32 a2) {
-    OSIoMesg sp60;
-    OSMesgQueue sp48;
-    OSMesg sp44;
+s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
+    OSIoMesg ioMsg;
+    OSMesgQueue queue;
+    OSMesg msg[1];
     s32 ret;
-    u32 s0 = sDmaMgrDmaBuffSize;
+    u32 buffSize = sDmaMgrDmaBuffSize;
 
-    osInvalDCache(a1, a2);
-    osCreateMesgQueue(&sp48, &sp44, 1);
+    osInvalDCache(ram, size);
+    osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
 
-    if (s0 != 0) {
-        while (s0 < a2) {
-            sp60.hdr.pri = 0;
-            sp60.hdr.retQueue = &sp48;
-            sp60.devAddr = (u32)a0;
-            sp60.dramAddr = a1;
-            sp60.size = s0;
-            ret = osEPiStartDma(gCartHandle, &sp60, 0);
+    if (buffSize != 0) {
+        while (buffSize < size) {
+            ioMsg.hdr.pri = 0;
+            ioMsg.hdr.retQueue = &queue;
+            ioMsg.devAddr = (u32)rom;
+            ioMsg.dramAddr = ram;
+            ioMsg.size = buffSize;
+            ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
             if (ret) goto END;
 
-            osRecvMesg(&sp48, NULL, 1);
-            a2 -= s0;
-            a0 = a0 + s0;
-            a1 = (u8*)a1 + s0;
+            osRecvMesg(&queue, NULL, 1);
+            size -= buffSize;
+            rom = rom + buffSize;
+            ram = (u8*)ram + buffSize;
         }
     }
-    sp60.hdr.pri = 0;
-    sp60.hdr.retQueue = &sp48;
-    sp60.devAddr = (u32)a0;
-    sp60.dramAddr = a1;
-    sp60.size = (u32)a2;
-    ret = osEPiStartDma(gCartHandle, &sp60, 0);
+    ioMsg.hdr.pri = 0;
+    ioMsg.hdr.retQueue = &queue;
+    ioMsg.devAddr = (u32)rom;
+    ioMsg.dramAddr = ram;
+    ioMsg.size = (u32)size;
+    ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
     if (ret) goto END;
 
-    osRecvMesg(&sp48, NULL, 1);
+    osRecvMesg(&queue, NULL, 1);
 
-    osInvalDCache(a1, a2);
+    osInvalDCache(ram, size);
 
 END:
     return ret;
@@ -49,12 +49,12 @@ void DmaMgr_DmaCallback0(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
     osEPiStartDma(pihandle, mb, direction);
 }
 
-DmaEntry* Dmamgr_FindDmaEntry(u32 a0) {
+DmaEntry* DmaMgr_FindDmaEntry(u32 vrom) {
     DmaEntry* curr;
 
     for (curr = dmadata; curr->vromEnd != 0; curr++) {
-        if (a0 < curr->vromStart) continue;
-        if (a0 >= curr->vromEnd) continue;
+        if (vrom < curr->vromStart) continue;
+        if (vrom >= curr->vromEnd) continue;
 
         return curr;
     }
@@ -62,16 +62,16 @@ DmaEntry* Dmamgr_FindDmaEntry(u32 a0) {
     return NULL;
 }
 
-u32 Dmamgr_TranslateVromToRom(u32 a0) {
-    DmaEntry* v0 = Dmamgr_FindDmaEntry(a0);
+u32 DmaMgr_TranslateVromToRom(u32 vrom) {
+    DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
-    if (v0 != NULL) {
-        if (v0->romEnd == 0) {
-            return a0 + v0->romStart - v0->vromStart;
+    if (entry != NULL) {
+        if (entry->romEnd == 0) {
+            return vrom + entry->romStart - entry->vromStart;
         }
 
-        if (a0 == v0->vromStart) {
-            return v0->romStart;
+        if (vrom == entry->vromStart) {
+            return entry->romStart;
         }
 
         return -1;
@@ -80,11 +80,11 @@ u32 Dmamgr_TranslateVromToRom(u32 a0) {
     return -1;
 }
 
-s32 Dmamgr_FindDmaIndex(u32 a0) {
-    DmaEntry* v0 = Dmamgr_FindDmaEntry(a0);
+s32 DmaMgr_FindDmaIndex(u32 vrom) {
+    DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
-    if (v0 != NULL) {
-		return v0 - dmadata;
+    if (entry != NULL) {
+		return entry - dmadata;
     }
 
     return -1;
@@ -96,45 +96,46 @@ char* func_800809F4(u32 a0) {
 }
 
 #ifdef NON_MATCHING
-void DmaMgr_ProcessMsg(DmaRequest* a0) {
-    u32 sp34;
-    u32 sp30;
-    UNK_TYPE sp2C;
-    UNK_TYPE sp28;
-    UNK_TYPE sp24;
+void DmaMgr_ProcessMsg(DmaRequest* req) {
+    u32 vrom;
+    u32 ram;
+    u32 size;
+    u32 romStart;
+    u32 romSize;
     UNK_TYPE sp20;
     s32 sp1C;
     UNK_TYPE sp18;
 
-    sp34 = a0->vromStart;
-    sp30 = a0->dramAddr;
-    sp2C = a0->size;
+    vrom = req->vromAddr;
+    ram = req->dramAddr;
+    size = req->size;
 
-    sp1C = Dmamgr_FindDmaIndex(sp34);
+    sp1C = DmaMgr_FindDmaIndex(vrom);
 
+        
     if ((sp1C >= 0) && (sp1C < numDmaEntries)) {
         if (dmadata[sp1C].romEnd == 0) {
-            if (dmadata[sp1C].vromEnd < (sp2C + sp34)) {
+            if (dmadata[sp1C].vromEnd < (size + vrom)) {
                 Fault_AddHungupAndCrash(dmamgrString800981C4, 499);
             }
-            DmaMgr_DMARomToRam((dmadata[sp1C].romStart + sp34) - dmadata[sp1C].vromStart, (u8*)sp30, sp2C);
+            DmaMgr_DMARomToRam((dmadata[sp1C].romStart + vrom) - dmadata[sp1C].vromStart, (u8*)ram, size);
             return;
         }
 
         // TODO this part is arranged slightly different is ASM
-        sp24 = dmadata[sp1C].romEnd - dmadata[sp1C].romStart;
-        sp28 = dmadata[sp1C].romStart;
+        romSize = dmadata[sp1C].romEnd - dmadata[sp1C].romStart;
+        romStart = dmadata[sp1C].romStart;
 
-        if (sp34 != dmadata[sp1C].vromStart) {
+        if (vrom != dmadata[sp1C].vromStart) {
             Fault_AddHungupAndCrash(dmamgrString800981D4, 518);
         }
 
-        if (sp2C != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
+        if (size != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
             Fault_AddHungupAndCrash(dmamgrString800981E4, 525);
         }
 
         osSetThreadPri(NULL, 10);
-        Yaz0_LoadAndDecompressFile(sp28, sp30, sp24);
+        Yaz0_LoadAndDecompressFile(romStart, ram, romSize);
         osSetThreadPri(NULL, 17);
     } else {
         Fault_AddHungupAndCrash(dmamgrString800981F4, 558);
@@ -144,22 +145,28 @@ void DmaMgr_ProcessMsg(DmaRequest* a0) {
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/DmaMgr_ProcessMsg.asm")
 #endif
 
-void Dmamgr_ThreadEntry(void* a0) {
-    OSMesg sp34;
-	u32 pad;
-    DmaRequest* s0;
+void DmaMgr_ThreadEntry(void* a0) {
+    OSMesg msg;
+    DmaRequest* req;
 
-    for (;;) {
-        osRecvMesg(&dmamgrMsq, &sp34, 1);
-        if (sp34 == NULL) return;
-        s0 = (DmaRequest*)sp34;
-        DmaMgr_ProcessMsg(s0);
-        if (s0->notifyQueue == NULL) continue;
-        osSendMesg(s0->notifyQueue, s0->notifyMsg, 0);
+    while (1) {
+        osRecvMesg(&sDmaMgrMsgQueue, &msg, OS_MESG_BLOCK);
+        
+        if (msg == NULL) {
+            break;
+        }
+    
+        req = (DmaRequest *)msg;
+
+        DmaMgr_ProcessMsg(req);
+        if (req->notifyQueue) {
+            osSendMesg(req->notifyQueue, req->notifyMsg, OS_MESG_NOBLOCK);
+        }
+        
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg) {
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* queue, OSMesg msg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
     }
@@ -168,28 +175,28 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
     request->dramAddr = vramStart;
     request->size = size;
     request->unk14 = 0;
-    request->notifyQueue = callback;
-    request->notifyMsg = callbackMesg;
+    request->notifyQueue = queue;
+    request->notifyMsg = msg;
 
-    osSendMesg(&dmamgrMsq, request, 1);
+    osSendMesg(&sDmaMgrMsgQueue, request, OS_MESG_BLOCK);
 
     return 0;
 }
 
 s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
-	DmaRequest sp48;
-    OSMesgQueue sp30;
-    OSMesg sp2C;
+	DmaRequest req;
+    OSMesgQueue queue;
+    OSMesg msg[1];
 	s32 ret;
 
-    osCreateMesgQueue(&sp30, &sp2C, 1);
+    osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
 
-	ret = DmaMgr_SendRequestImpl(&sp48, vramStart, vromStart, size, 0, &sp30, 0);
+	ret = DmaMgr_SendRequestImpl(&req, vramStart, vromStart, size, 0, &queue, NULL);
 
 	if (ret == -1) {
 		return ret;
 	} else {
-		osRecvMesg(&sp30, NULL, 1);
+		osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 	}
 
 	return 0;
@@ -197,27 +204,25 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
 
 #ifdef NON_MATCHING
 // TODO missing a useless move initializing v0, and some reorderings
-void Dmamgr_Start() {
-	DmaEntry* v0;
-	u32 v1;
-	DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
+void DmaMgr_Start() {
+	DmaEntry* iter;
+	u32 idx;
 
-	for (v0 = dmadata, v1 = 0; v0->vromEnd != 0; v0++, v1++);
+	DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)(_dmadataSegmentRomEnd - _dmadataSegmentRomStart));
 
-	numDmaEntries = v1;
+	for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++);
 
-	osCreateMesgQueue(&dmamgrMsq, dmamgrMsqMessages, 32);
+	numDmaEntries = idx;
 
-	StackCheck_Init(&dmamgrStackEntry, &dmamgrStack, &dmamgrStack[1280], 0, 256, dmamgrThreadName);
-
-	osCreateThread(&dmamgrOSThread, 18, Dmamgr_ThreadEntry, NULL, &dmamgrStack[1280], 17);
-
-	osStartThread(&dmamgrOSThread);
+	osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
+	StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 256, dmamgrThreadName);
+	osCreateThread(&sDmaMgrThread, 18, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack), 17);
+	osStartThread(&sDmaMgrThread);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/Dmamgr_Start.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/DmaMgr_Start.asm")
 #endif
 
-void Dmamgr_Stop() {
-    osSendMesg(&dmamgrMsq, NULL, 1);
+void DmaMgr_Stop() {
+    osSendMesg(&sDmaMgrMsgQueue, NULL, OS_MESG_BLOCK);
 }

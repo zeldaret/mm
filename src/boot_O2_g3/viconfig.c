@@ -26,7 +26,7 @@ void ViConfig_UpdateVi(u32 arg0) {
             osViSetYScale(1);
         }
     } else {
-        osViSetMode(&D_8009B240);
+        osViSetMode(&gViConfigMode);
 
         if (gViConfigAdditionalScanLines != 0) {
             func_80087E00(gViConfigAdditionalScanLines);

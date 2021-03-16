@@ -27,6 +27,9 @@
 #include <z64object.h>
 #include <z64scene.h>
 
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
@@ -438,6 +441,14 @@ typedef struct {
     /* 0x0C */ u32 loadNextChunkBoundary;
     /* 0x10 */ u32 destBufferEnd;
 } Yaz0DecompState; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ char magic[4]; // Yaz0
+    /* 0x04 */ u32 decSize;
+    /* 0x08 */ u32 compInfoOffset; // only used in mio0
+    /* 0x0C */ u32 uncompDataOffset; // only used in mio0
+    /* 0x10 */ u32 data[1];
+} Yaz0Header; // size = 0x10 ("data" is not part of the header)
 
 typedef struct {
     /* 0x0 */ unsigned int inst1;
@@ -1399,6 +1410,12 @@ typedef struct StackEntry_t {
     /* 0x14 */ s32 minSpace;
     /* 0x18 */ const char* name;
 } StackEntry; // size = 0x1C
+
+typedef enum {
+    STACK_STATUS_OK = 0,
+    STACK_STATUS_WARNING = 1,
+    STACK_STATUS_OVERFLOW = 2
+} StackStatus;
 
 typedef struct TargetContext TargetContext;
 
