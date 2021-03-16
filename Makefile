@@ -209,6 +209,9 @@ build/baserom/%: baserom/%
 build/asm/%.o: asm/%.asm | $(C_O_FILES)
 	$(AS) $(ASFLAGS) $^ -o $@
 
+build/asm/%.rodata.o: asm/%.rodata.asm
+	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
+
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s

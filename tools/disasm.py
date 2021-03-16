@@ -435,7 +435,13 @@ class Disassembler:
         self.has_done_first_pass = True
         
     def build_disassembled_path(self, basePath, addr, file):
-        return basePath + '/' + file.disasmPath + '%s.asm' % self.get_object_name(addr, file.vaddr)
+        name = self.get_object_name(addr, file.vaddr)
+    
+        if "_rodata" in name:
+            suffix = "%s.rodata.asm"
+        else:
+            suffix = "%s.asm"
+        return basePath + '/' + file.disasmPath + suffix % name
 
     def second_pass(self, path):
         for file in self.files:

@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-UNK_TYPE4 sDmaMgrDmaBuffSize = 0x2000;
+u32 sDmaMgrDmaBuffSize = 0x2000;
 
 s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
     OSIoMesg ioMsg;

@@ -8,7 +8,7 @@
     0x80096B30:("gViConfigXScale","f32","",0x4),
     0x80096B34:("gViConfigYScale","f32","",0x4),
     0x80096B40:("gCartHandle","OSPiHandle*","",0x4),
-    0x80096B50:("sDmaMgrDmaBuffSize","UNK_TYPE4","",0x4),
+    0x80096B50:("sDmaMgrDmaBuffSize","u32","",0x4),
     0x80096B60:("gIrqMgrResetStatus","vs32","",0x4),
     0x80096B68:("sIrqMgrResetTime","volatile OSTime","",0x8),
     0x80096B70:("sIrqMgrRetraceTime","volatile OSTime","",0x8),
