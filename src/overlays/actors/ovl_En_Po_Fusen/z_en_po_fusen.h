@@ -32,4 +32,7 @@ extern AnimationHeader D_060024F0;
 
 extern const ActorInit En_Po_Fusen_InitVars;
 
+#define GET_FUSE_LEN_PARAM(thisx) ((this)->actor.params & 0x3FF)
+#define GET_IS_FUSE_TYPE_PARAM(thisx) ((this)->actor.params & 0x8000)
+
 #endif // Z_EN_PO_FUSEN_H

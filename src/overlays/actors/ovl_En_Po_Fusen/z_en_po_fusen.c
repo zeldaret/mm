@@ -11,10 +11,10 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx);
-void EnPoFusen_Init2(EnPoFusen* this);
+void EnPoFusen_InitNoFuse(EnPoFusen* this);
 void EnPoFusen_InitFuse(EnPoFusen *this);
 void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx);
-void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* gCtx);
+void func_80AC158C(EnPoFusen* this, GlobalContext* gCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* gCtx);
 s32  EnPoFusen_OverrideLimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 
@@ -39,8 +39,6 @@ DamageTable EnPoFusenDamageTable = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00, 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
-
-u32 unkpadding = 0x0;
 
 void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnPoFusen* this = THIS;
@@ -67,20 +65,20 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.home.pos.y = heightTemp;
     }
 
-    this->randScaleChange = (s16) ((rand() % 0xFFFEU) - 0x7FFF);
-    this->randYRotChange = (s16) ((rand() % 0x4B0U) - 600);
-    this->avgBaseRotation = 5461;
+    this->randScaleChange = ((rand() % 0xFFFEU) - 0x7FFF);
+    this->randYRotChange = ((rand() % 0x4B0U) - 0x258);
+    this->avgBaseRotation = 0x1555;
     this->limb3Rot = 0;
     this->limb46Rot = 0;
     this->limb57Rot = 0;
     this->limb8Rot = 0;
-    this->limb9Rot = 1820;
+    this->limb9Rot = 0x71C;
     this->randBaseRotChange = 0;
-    if ((this->actor.params & 0x8000) != 0) {
+    if (GET_IS_FUSE_TYPE_PARAM(this)) {
         EnPoFusen_InitFuse(this);
         return;
     }
-    EnPoFusen_Init2(this);
+    EnPoFusen_InitNoFuse(this);
 }
 
 void EnPoFusen_Destroy(Actor* thisx, GlobalContext *gCtx) {
@@ -92,7 +90,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
     struct Actor *actorPtr;
 
     actorPtr = globalCtx->actorCtx.actorList[4].first;
-    if ((this->actor.params & 0x8000) != 0) {
+    if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }
     if (actorPtr != 0) {
@@ -113,9 +111,9 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
       return 0;
     }
 
-    this->collider.params.colInfo.loc.x = (s16) this->actor.world.pos.x;
-    this->collider.params.colInfo.loc.y = (s16) (this->actor.world.pos.y + 20.0f);
-    this->collider.params.colInfo.loc.z = (s16) this->actor.world.pos.z;
+    this->collider.params.colInfo.loc.x = this->actor.world.pos.x;
+    this->collider.params.colInfo.loc.y = (this->actor.world.pos.y + 20.0f);
+    this->collider.params.colInfo.loc.z = this->actor.world.pos.z;
     if (((this->collider.base.flagsAC & 2) != 0) 
       && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.flagsAC &= ~0x2;
@@ -126,36 +124,36 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
     return 0;
 }
 
-void EnPoFusen_Init2(EnPoFusen *this) {
+void EnPoFusen_InitNoFuse(EnPoFusen *this) {
     this->actor.shape.rot.z = 0;
-    this->actionFunc = EnPoFusen_Idle;
+    this->actionFunc = func_80AC158C;
 }
 
-void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
+void func_80AC158C(EnPoFusen *this, GlobalContext *gCtx) {
     f32 shadowScaleTmp;
     f32 shadowAlphaTmp;
     f32 heightOffset;
     f32 f255 = 255.0f;
 
     this->actor.world.pos = this->actor.home.pos;
-    this->randScaleChange += 400;
-    this->randXZRotChange += 1500;
-    this->randBaseRotChange += 2500;
+    this->randScaleChange += 0x190;
+    this->randXZRotChange += 0x5DC;
+    this->randBaseRotChange += 0x9C4;
     heightOffset = Math_Sins(this->randScaleChange);
     heightOffset = 50.0f * heightOffset;
     this->actor.shape.rot.y += this->randYRotChange;
     this->actor.world.pos.y += heightOffset;
-    this->actor.shape.rot.z = (s16) (Math_Sins(this->randBaseRotChange) * 910.0f);
+    this->actor.shape.rot.z =  (Math_Sins(this->randBaseRotChange) * 910.0f);
     if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
-        Math_SmoothScaleMaxMinS( &this->limb9Rot, 910, 20, 3000, 100);
+        Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
     } else {
-        Math_SmoothScaleMaxMinS( &this->limb9Rot, 1820, 8, 3000, 100);
+        Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x71C, 0x8, 0xBB8, 0x64);
     }
     this->avgBaseRotation = this->limb9Rot * 3;
-    this->limb3Rot = (u16) (s32) (Math_Sins(this->randBaseRotChange + 0x38E3) * (f32) this->avgBaseRotation);
-    this->limb46Rot = (u16) (s32) (Math_Sins(this->randBaseRotChange)          * (f32) this->avgBaseRotation);
-    this->limb57Rot = (u16) (s32) (Math_Sins(this->randBaseRotChange - 0x38E3) * (f32) this->avgBaseRotation);
-    this->limb8Rot = (u16) (s32) (Math_Sins(this->randBaseRotChange - 0x71C6) * (f32) this->avgBaseRotation);
+    this->limb3Rot  = (Math_Sins(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
+    this->limb46Rot = (Math_Sins(this->randBaseRotChange)          * this->avgBaseRotation);
+    this->limb57Rot = (Math_Sins(this->randBaseRotChange - 0x38E3) * this->avgBaseRotation);
+    this->limb8Rot  = (Math_Sins(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
 
     shadowScaleTmp = ((1.0f - Math_Sins(this->randScaleChange)) * 10.0f) + 50.0f;
     shadowAlphaTmp = ((1.0f - Math_Sins(this->randScaleChange)) * 75.0f) + 100.0f;
@@ -186,7 +184,7 @@ void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx) {
 
 void EnPoFusen_InitFuse(EnPoFusen *this) {
     s16 rotZ = this->actor.shape.rot.z;
-    this->fuse = this->actor.params & 0x3FF;
+    this->fuse = GET_FUSE_LEN_PARAM(this);
     this->actor.shape.rot.z = 0;
     this->randScaleChange = rotZ & 0xFFFFu;
     this->actionFunc = EnPoFusen_IdleFuse;
@@ -194,7 +192,7 @@ void EnPoFusen_InitFuse(EnPoFusen *this) {
 
 void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) {
 
-    EnPoFusen_Idle(this, gCtx);
+    func_80AC158C(this, gCtx);
     if ((this->fuse--) == 0) {
         EnPoFusen_IncrementMalonPop(this);
     }
@@ -224,8 +222,8 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, 
         if (!zScale) { }
         yScale = (Math_Sins(this->randScaleChange) * 0.0799999982119f) + 1.0f;
         yScale = yScale * yScale;
-        xRot = (s16) ((Math_Sins(this->randXZRotChange) * 2730.0f));
-        zRot = (s16) ((Math_Coss(this->randXZRotChange) * 2730.0f));
+        xRot = ((Math_Sins(this->randXZRotChange) * 2730.0f));
+        zRot = ((Math_Coss(this->randXZRotChange) * 2730.0f));
         SysMatrix_InsertRotation(xRot, 0, zRot , 1);
         SysMatrix_InsertScale(xScale, yScale , zScale, 1);
         SysMatrix_InsertZRotation_s( -zRot, 1);
@@ -241,8 +239,8 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, 
     } else if (limbIndex == 8) {
         rot->z += this->limb8Rot;
     } else if (limbIndex == 9) {
-        rot->y += (s16) ( this->limb9Rot * Math_Sins(this->randBaseRotChange));
-        rot->z += (s16) ( this->limb9Rot * Math_Coss(this->randBaseRotChange));
+        rot->y += (s16) (this->limb9Rot * Math_Sins(this->randBaseRotChange));
+        rot->z += (s16) (this->limb9Rot * Math_Coss(this->randBaseRotChange));
     }
     return 0;
 }
