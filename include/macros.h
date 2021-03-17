@@ -26,12 +26,19 @@
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
-extern GraphicsContext* oGfxCtx;
+extern GraphicsContext* __gfxCtx;
 
-#define OPEN_DISPS(gfxCtx) \
-    {                                  \
-        GraphicsContext* oGfxCtx;      \
-        oGfxCtx = gfxCtx;              \
+#define WORK_DISP       __gfxCtx->work.p
+#define POLY_OPA_DISP   __gfxCtx->polyOpa.p
+#define POLY_XLU_DISP   __gfxCtx->polyXlu.p
+#define OVERLAY_DISP    __gfxCtx->overlay.p
+
+// __gfxCtx shouldn't be used directly.
+// Use the DISP macros defined above when writing to display buffers.
+#define OPEN_DISPS(gfxCtx)                  \
+    {                                       \
+        GraphicsContext* __gfxCtx = gfxCtx; \
+        s32 __dispPad;                      \
 
 #define CLOSE_DISPS(gfxCtx)                 \
     }                                       \
