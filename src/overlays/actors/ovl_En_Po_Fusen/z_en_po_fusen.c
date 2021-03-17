@@ -14,7 +14,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_InitNoFuse(EnPoFusen* this);
 void EnPoFusen_InitFuse(EnPoFusen *this);
 void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx);
-void func_80AC158C(EnPoFusen* this, GlobalContext* gCtx);
+void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* gCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* gCtx);
 s32  EnPoFusen_OverrideLimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 
@@ -126,10 +126,10 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
 
 void EnPoFusen_InitNoFuse(EnPoFusen *this) {
     this->actor.shape.rot.z = 0;
-    this->actionFunc = func_80AC158C;
+    this->actionFunc = EnPoFusen_Idle;
 }
 
-void func_80AC158C(EnPoFusen *this, GlobalContext *gCtx) {
+void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
     f32 shadowScaleTmp;
     f32 shadowAlphaTmp;
     f32 heightOffset;
@@ -192,7 +192,7 @@ void EnPoFusen_InitFuse(EnPoFusen *this) {
 
 void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) {
 
-    func_80AC158C(this, gCtx);
+    EnPoFusen_Idle(this, gCtx);
     if ((this->fuse--) == 0) {
         EnPoFusen_IncrementMalonPop(this);
     }
