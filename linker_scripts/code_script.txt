@@ -15,7 +15,7 @@ SECTIONS
         build/src/boot_O2_g3/idle.o(.text)
         build/src/boot_O2_g3/viconfig.o(.text)
         build/src/boot_O2_g3/z_std_dma.o(.text)
-        build/asm/boot/boot_0x80080E30.o(.text)
+        build/src/boot_O2_g3/yaz0.o(.text)
         build/src/boot_O2_g3/irqmgr.o(.text)
         build/src/boot_O2_g3/CIC6105.o(.text)
         build/src/boot_O2_g3/boot_0x80081920.o(.text)
@@ -252,7 +252,7 @@ SECTIONS
         build/src/boot_O2_g3/boot_main.o(.rodata)
         build/src/boot_O2_g3/idle.o(.rodata)
         build/asm/boot/boot_rodata_z_std_dma.o(.rodata)
-        build/asm/boot/boot_rodata_0x80080E30.o(.rodata)
+        build/src/boot_O2_g3/yaz0.o(.rodata)
         build/src/boot_O2_g3/irqmgr.o(.rodata)
         build/src/boot_O2_g3/CIC6105.o(.rodata)
         build/asm/boot/boot_rodata_fault.o(.rodata)
@@ -284,7 +284,7 @@ SECTIONS
     . += 0x1C60; /* boot_main */
     . += 0x140; /* idle */
     . += 0x770; /* z_std_dma */
-    . += 0x420; /* 0x80080E30 */
+    . += 0x420; /* yaz0 */
     . += 0x20; /* CIC6105 */
     . += 0xE80; /* fault */
     . += 0x40; /* fault_drawer */

@@ -432,14 +432,6 @@ typedef struct {
 } Viewport; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ void* bufferEnd;
-    /* 0x04 */ u32 romReadHead;
-    /* 0x08 */ u32 amountLeftToRead;
-    /* 0x0C */ u32 loadNextChunkBoundary;
-    /* 0x10 */ u32 destBufferEnd;
-} Yaz0DecompState; // size = 0x14
-
-typedef struct {
     /* 0x0 */ unsigned int inst1;
     /* 0x4 */ unsigned int inst2;
     /* 0x8 */ unsigned int inst3;
