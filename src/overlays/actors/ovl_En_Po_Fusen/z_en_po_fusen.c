@@ -54,7 +54,7 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->collider.params.colInfo.radius  = 40;
     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040,
         &this->limbDrawTbl, &this->transitionDrawTbl, 10);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, EnPoFusen_Idle, 25.0f);
+    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
         Actor_MarkForDeath(&this->actor);
