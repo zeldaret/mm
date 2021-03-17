@@ -39,6 +39,9 @@ extern GraphicsContext* oGfxCtx;
 
 #define GRAPH_ALLOC(gfxCtx, size)         \
     ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
+	
+#define ALIGN8(val) (((val) + 7) & ~7)
+#define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
 #define SQ(x)      ((x)*(x))
 #define ABS(x)     ((x) >= 0 ? (x) : -(x))

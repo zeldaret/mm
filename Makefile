@@ -173,6 +173,7 @@ asm/%.asm: disasm ;
 
 disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt
 	./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
+	@echo "done with disasm"
 
 clean:
 	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
