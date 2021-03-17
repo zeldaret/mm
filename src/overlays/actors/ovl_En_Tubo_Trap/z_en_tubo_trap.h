@@ -17,4 +17,6 @@ typedef struct EnTuboTrap {
 
 extern const ActorInit En_Tubo_Trap_InitVars;
 
+
+
 #endif // Z_EN_TUBO_TRAP_H

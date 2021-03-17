@@ -29,25 +29,19 @@ const ActorInit En_Tubo_Trap_InitVars = {
 };
 
 s32 D_8093145C[] = { // actorprocessinitchain
-    0xC85800C5,
-    0xB0FC0FA0,
-    0xB1000064,
-    0x31040064,
+    0xC85800C5, 0xB0FC0FA0, 0xB1000064, 0x31040064,
 };
 
-// used in WaitForProximity
+//used in WaitForProximity
 s8 D_8093146C[] = {
-    0x28, 0x28, 0x28, 0x19,
-    0x1C, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
+    0x28, 0x28, 0x28, 0x19, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
 };
 
 void EnTuboTrap_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnTuboTrap* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, &D_8093145C);
+    Actor_ProcessInitChain(&this->actor, D_8093145C);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
@@ -201,7 +195,7 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
 
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f)) {
         func_80930B60(this, globalCtx);
-        func_800F0568(globalCtx,  &this->actor.world, 0x28, (u16)0x2817);
+        func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2817);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -210,8 +204,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     if ((this->collider.base.flagsAT & 4) != 0) {
         this->collider.base.flagsAT &= ~4;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, (u16)0x1808);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, (u16)0x2887);
+        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x1808);
+        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -220,8 +214,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     if ((this->collider.base.flagsAC & 2) != 0) {
         this->collider.base.flagsAC &= ~2;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world , 0x28, (u16)0x2802);
-        func_800F0568(globalCtx, &this->actor.world , 0x28, (u16)0x2887);
+        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2802);
+        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -231,8 +225,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         this->collider.base.flagsAT &= ~2;
         if (player == this->collider.base.collisionAT) {
             func_809308F4(this, globalCtx);
-            func_800F0568(globalCtx,  &this->actor.world, 0x28, (u16)0x2887);
-            func_800F0568(globalCtx,  &player2->world, 0x28, (u16)0x83E);
+            func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
+            func_800F0568(globalCtx,  &player2->world, 0x28, 0x83E);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -240,7 +234,7 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     }
     if (((this->actor.bgCheckFlags & 8) != 0) || ((this->actor.bgCheckFlags & 1) != 0)) {
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx,  &this->actor.world, 0x28, (u16)0x2887);
+        func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }
@@ -254,13 +248,17 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
     f32 currentHeight;
     s8 weirdvalue;
     s16 startingRotation;
+    static s8 D_8093146C[] = {
+        0x28, 0x28, 0x28, 0x19, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,
+    };
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.yDistToPlayer <= ((f32) startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, this, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags = |= 0x11; // always update and can target
+            this->actor.flags |= 0x11; // always update and can target
             
             // hard to know what this value is even used for without knowing what ActorPlayer::unk14B is
             // wild guess: this is player animation state, height is modified to always point at center of link model
@@ -278,18 +276,18 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
     }
 } // */
 #else
-  #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
 #endif
 
 // levitate
 void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetY, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetY) < 10.0f) {
         this->actor.speedXZ = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        this->actionFunc = &func_809311C4;
+        this->actionFunc = func_809311C4;
     }
 }
 
@@ -305,7 +303,7 @@ void func_809311C4(EnTuboTrap *this, GlobalContext *globalCtx) {
         Math_SmoothScaleMaxF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     func_80930DDC(this, globalCtx); // "handle impact"
 }
 
