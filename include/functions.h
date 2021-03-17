@@ -2794,11 +2794,11 @@ void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2); // VisMono_Draw
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-// void func_80142440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9);
-// void func_80143148(void);
-// void func_801431E8(void);
-// void func_80143324(void);
-void func_801434E4(GameState* ctxt, s32 iParm2, s16 sParm3);
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8); // func_80142440
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1); // func_80143148
+void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801431E8
+void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
+void func_801434E4(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801434E4
 // void func_801435A0(void);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);

@@ -2082,13 +2082,13 @@ extern z_Matrix identityMatrix;
 // extern UNK_TYPE1 D_801C5DE0;
 // extern UNK_TYPE1 D_801C5DF0;
 // extern UNK_TYPE1 D_801C5E00;
-// extern UNK_TYPE1 D_801C5E30;
-// extern UNK_TYPE2 D_801C5E48;
-// extern UNK_TYPE4 D_801C5E88;
-// extern UNK_TYPE4 D_801C5E9C;
-// extern UNK_TYPE4 D_801C5EB0;
-// extern UNK_TYPE2 D_801C5EC4;
-// extern UNK_TYPE4 D_801C5F44;
+extern s32 D_801C5E30[]; // D_801C5E30
+extern u16 D_801C5E48[]; // D_801C5E48
+extern s32 D_801C5E88[]; // D_801C5E88
+extern s32 D_801C5E9C[]; // D_801C5E9C
+extern s32 D_801C5EB0[]; // D_801C5EB0
+extern s16 D_801C5EC4[]; // D_801C5EC4
+extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 // extern UNK_TYPE4 D_801C5FC0;
 // extern UNK_TYPE4 D_801C5FC4;
 // extern UNK_TYPE4 D_801C5FC8;
