@@ -21,7 +21,7 @@ const ActorInit En_Dy_Extra_InitVars = {
     (ActorFunc)EnDyExtra_Init,
     (ActorFunc)EnDyExtra_Destroy,
     (ActorFunc)EnDyExtra_Update,
-    (ActorFunc)EnDyExtra_Draw
+    (ActorFunc)EnDyExtra_Draw,
 };
 
 extern Vtx D_0600DD40[];
@@ -66,7 +66,7 @@ void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     }
 
     this->unk150 -= 0.02f;
-    
+
     if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -109,23 +109,20 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    {
-        s32 pad2;
-        OPEN_DISPS(gfxCtx);
+    OPEN_DISPS(gfxCtx);
 
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        gSPSegment(oGfxCtx->polyXlu.p++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
-                                    globalCtx->state.frames, globalCtx->state.frames * -8, 0x10, 0x10));
-        gDPPipeSync(oGfxCtx->polyXlu.p++);
-        gSPMatrix(oGfxCtx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
-                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(oGfxCtx->polyXlu.p++, 0, 0x80, D_80A61740[this->type].red, D_80A61740[this->type].green,
-                        D_80A61740[this->type].blue, 255);
-        gDPSetEnvColor(oGfxCtx->polyXlu.p++, D_80A61754[this->type].red, D_80A61754[this->type].green,
-                       D_80A61754[this->type].blue, 128);
-        gSPDisplayList(oGfxCtx->polyXlu.p++, D_0600DEF0);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
+                                globalCtx->state.frames, globalCtx->state.frames * -8, 0x10, 0x10));
+    gDPPipeSync(POLY_XLU_DISP++);
+    gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].red, D_80A61740[this->type].green,
+                    D_80A61740[this->type].blue, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].red, D_80A61754[this->type].green,
+                   D_80A61754[this->type].blue, 128);
+    gSPDisplayList(POLY_XLU_DISP++, D_0600DEF0);
 
-        CLOSE_DISPS(gfxCtx);
-    }
+    CLOSE_DISPS(gfxCtx);
 }
