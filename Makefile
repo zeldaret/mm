@@ -35,6 +35,7 @@ endif
 
 CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
 CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
+GCC      := gcc
 QEMU_IRIX ?= ./tools/qemu-mips
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
@@ -91,8 +92,9 @@ SRC_DIRS := $(shell find src -type d)
 # Instead, generate a list of assembly files based on what's listed in the linker script.
 S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-O_FILES := $(C_FILES:src/%.c=build/src/%.o) \
-           $(S_FILES:asm/%.asm=build/asm/%.o)
+C_O_FILES := $(C_FILES:src/%.c=build/src/%.o)
+S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
+O_FILES := $(C_O_FILES) $(S_O_FILES)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
@@ -119,6 +121,8 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .PHONY: all clean setup diff-init init
 # disasm is not a file so we must tell make not to check it when evaluating timestamps
 .INTERMEDIATE: disasm
+# make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
+.PRECIOUS: asm/%.asm
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
@@ -160,15 +164,15 @@ build/decomp/code: build/code.bin
 	cp $< $@
 
 build/decomp/ovl_%: build/code.elf
-	$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
 
-$(S_FILES): disasm
+asm/non_matchings/%: asm/%.asm
+	@./tools/split_asm.py $< $@
 
-disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt tables/files_with_nonmatching.txt
+asm/%.asm: disasm ;
+
+disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt
 	./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
-	@while read -r file; do \
-		./tools/split_asm.py ./asm/$$file.asm ./asm/non_matchings/$$file; \
-	done < ./tables/files_with_nonmatching.txt
 
 clean:
 	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
@@ -195,33 +199,42 @@ init:
 # Recipes
 
 build/%.bin: build/code.elf
-	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 build/baserom/%: baserom/%
-	cp $< $@
+	@cp $< $@
 
-build/asm/%.o: asm/%.asm
+# FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
+# The simplest way to do that is to give them an order dependency on .c files' .o files
+build/asm/%.o: asm/%.asm | $(C_O_FILES)
 	$(AS) $(ASFLAGS) $^ -o $@
 
-build/src/overlays/%.o: src/overlays/%.c include/* $(S_FILES)
+build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	./tools/overlay.py $@ build/src/overlays/$*_overlay.s
-	$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
+	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s
+	@$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
 
-build/src/%.o: src/%.c include/* $(S_FILES)
+build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
-build/src/libultra/libc/ll.o: src/libultra/libc/ll.c include/*
+build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	./tools/set_o32abi_bit.py $@
+	@./tools/set_o32abi_bit.py $@
 
-build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c include/*
+build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	./tools/set_o32abi_bit.py $@
+	@./tools/set_o32abi_bit.py $@
 
 build/decomp/%: decomp/%
-	cp $< $@
+	@cp $< $@
 
 build/comp/%.yaz0: build/decomp/%
 	./tools/yaz0 $< $@
 
+build/src/%.d: src/%.c
+	@./tools/depend.py $< $@
+	@$(GCC) $< -Iinclude -MM -MT 'build/src/$*.o' >> $@
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(C_FILES:src/%.c=build/src/%.d)
+endif

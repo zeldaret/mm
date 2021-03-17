@@ -132,7 +132,7 @@ void FaultDrawer_SetInputCallback(void(*callback)()) {
 
 void FaultDrawer_Init() {
     sFaultDrawContext = &sFaultDrawerStruct;
-    _bcopy(&sFaultDrawerDefault, sFaultDrawContext, sizeof(FaultDrawer));
+    bcopy(&sFaultDrawerDefault, sFaultDrawContext, sizeof(FaultDrawer));
     sFaultDrawContext->fb = (u16*)((osMemSize | 0x80000000) - 0x25800);
 }
 
