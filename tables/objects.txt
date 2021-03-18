@@ -160,7 +160,7 @@
     0x80093CC0:"",
     0x80093D90:"getcause",
     0x80093DA0:"contramwrite",
-    0x80093FF0:"",
+    0x80093FF0:"epirawwrite",
     0x80094150:"settimer",
     0x800942E0:"xldtob",
     0x80094DF0:"ldiv",

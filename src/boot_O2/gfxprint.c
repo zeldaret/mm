@@ -14,8 +14,7 @@ extern u8 sGfxPrintFontData[2048];
         _g->words.w1 = (rgba);                                                                 \
     }
 
-/* GfxPrint_InitDlist */
-void func_80085570(GfxPrint* this) {
+void GfxPrint_InitDlist(GfxPrint* this) {
     s32 width = 16;
     s32 height = 256;
     s32 i;
@@ -50,8 +49,7 @@ void func_80085570(GfxPrint* this) {
     }
 }
 
-/* GfxPrint_SetColor */
-void func_800859BC(GfxPrint* this, u32 r, u32 g, u32 b, u32 a) {
+void GfxPrint_SetColor(GfxPrint* this, u32 r, u32 g, u32 b, u32 a) {
     this->color.r = r;
     this->color.g = g;
     this->color.b = b;
@@ -60,26 +58,23 @@ void func_800859BC(GfxPrint* this, u32 r, u32 g, u32 b, u32 a) {
     gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
 }
 
-/* GfxPrint_SetPosPx */
-void func_80085A08(GfxPrint* this, s32 x, s32 y) {
+void GfxPrint_SetPosPx(GfxPrint* this, s32 x, s32 y) {
     this->posX = this->baseX + (x << 2);
     this->posY = this->baseY + (y << 2);
 }
 
-/* GfxPrint_SetPos */
-void func_80085A2C(GfxPrint* this, s32 x, s32 y) {
-    func_80085A08(this, x << 3, y << 3);
+void GfxPrint_SetPos(GfxPrint* this, s32 x, s32 y) {
+    GfxPrint_SetPosPx(this, x << 3, y << 3);
 }
 
-/* GfxPrint_SetBasePosPx */
-void func_80085A54(GfxPrint* this, s32 x, s32 y) {
+void GfxPrint_SetBasePosPx(GfxPrint* this, s32 x, s32 y) {
     this->baseX = x << 2;
     this->baseY = y << 2;
 }
 
-/* GfxPrint_PrintCharImpl */
+/* regalloc in the final gSPTextureRectangle */
 #ifdef NON_MATCHING
-void func_80085A68(GfxPrint* this, u8 c) {
+void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
     u32 tile = (c & 0xFF) * 2;
 
     if (this->flag & GFXPRINT_UPDATE_MODE) {
@@ -102,8 +97,8 @@ void func_80085A68(GfxPrint* this, u8 c) {
     if (this->flag & GFXPRINT_FLAG4) {
         gDPSetPrimColorMod(this->dlist++, 0, 0, 0);
 
-            gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
-                                (c & 3) << 1, (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
+        gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
+                            (c & 3) << 1, (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
         
 
         gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
@@ -117,41 +112,36 @@ void func_80085A68(GfxPrint* this, u8 c) {
     this->posX += 32;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085A68.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/GfxPrint_PrintCharImpl.asm")
 #endif
 
-/* GfxPrint_PrintChar */
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/func_80085D74.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/GfxPrint_PrintChar.asm")
 
-/* GfxPrint_PrintStringWithSize */
-void func_80085F30(GfxPrint* this, const void* buffer, size_t charSize, size_t charCount) {
+void GfxPrint_PrintStringWithSize(GfxPrint* this, const void* buffer, size_t charSize, size_t charCount) {
     const char* str = (const char*)buffer;
     size_t count = charSize * charCount;
 
     while (count) {
-        func_80085D74(this, *str++);
+        GfxPrint_PrintChar(this, *str++);
         count--;
     }
 }
 
-/* GfxPrint_PrintString */
-void func_80085F8C(GfxPrint* this, const char* str) {
+void GfxPrint_PrintString(GfxPrint* this, const char* str) {
     while (*str) {
-        func_80085D74(this, *(str++));
+        GfxPrint_PrintChar(this, *(str++));
     }
 }
 
-/* GfxPrint_Callback */
-GfxPrint* func_80085FE4(GfxPrint* this, const char* str, size_t size)  {
-    func_80085F30(this, str, sizeof(char), size);
+GfxPrint* GfxPrint_Callback(GfxPrint* this, const char* str, size_t size)  {
+    GfxPrint_PrintStringWithSize(this, str, sizeof(char), size);
     return this;
 }
 
-/* GfxPrint_Init */
-void func_80086010(GfxPrint* this) {
+void GfxPrint_Init(GfxPrint* this) {
     this->flag &= ~GFXPRINT_OPEN;
 
-    this->callback = func_80085FE4;
+    this->callback = GfxPrint_Callback;
     
     this->dlist = NULL;
     this->posX = 0;
@@ -165,22 +155,19 @@ void func_80086010(GfxPrint* this) {
     this->flag |= GFXPRINT_UPDATE_MODE;
 }
 
-/* GfxPrint_Destroy */
-void func_80086064(GfxPrint* this) {
+void GfxPrint_Destroy(GfxPrint* this) {
 
 }
 
-/* GfxPrint_Open */
-void func_8008606C(GfxPrint* this, Gfx* dlist) {
+void GfxPrint_Open(GfxPrint* this, Gfx* dlist) {
     if (!(this->flag & GFXPRINT_OPEN)) {
         this->flag |= GFXPRINT_OPEN;
         this->dlist = dlist;
-        func_80085570(this);
+        GfxPrint_InitDlist(this);
     } 
 }
 
-/* GfxPrint_Close */
-Gfx* func_800860A0(GfxPrint* this) {
+Gfx* GfxPrint_Close(GfxPrint* this) {
     Gfx* ret;
 
     this->flag &= ~GFXPRINT_OPEN;
@@ -189,15 +176,13 @@ Gfx* func_800860A0(GfxPrint* this) {
     return ret;
 }
 
-/* GfxPrint_VPrintf */
-void func_800860B8(GfxPrint* this, const char* fmt, va_list args) {
+void GfxPrint_VPrintf(GfxPrint* this, const char* fmt, va_list args) {
     func_80087900(&this->callback, fmt, args);
 }
 
-/* GfxPrint_Printf */
-void func_800860D8(GfxPrint* this, const char* fmt, ...) {
+void GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 
-    func_800860B8(this, fmt, args);
+    GfxPrint_VPrintf(this, fmt, args);
 }

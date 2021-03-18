@@ -55,7 +55,7 @@ extern UNK_TYPE4 __osShutdown;
 extern UNK_TYPE4 __OSGlobalIntMask;
 extern OSDevMgr __osPiDevMgr;
 extern OSPiHandle* __osPiTable;
-extern UNK_PTR D_80097E90;
+extern OSPiHandle* __osCurrentHandle[];
 extern UNK_TYPE4 __osPiAccessQueueEnabled;
 extern OSViMode osViModeNtscHpn1;
 // extern UNK_TYPE4 D_80097F00;
