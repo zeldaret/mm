@@ -5,7 +5,25 @@
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_PrintLists.asm")
+void Actor_PrintLists(ActorContext *actorCtx) {
+    ActorListEntry* actorList = &actorCtx->actorList[0];
+    Actor* actor;
+    s32 i;
+
+    FaultDrawer_SetCharPad(-2, 0);
+    FaultDrawer_Printf(D_801DC9D0, gMaxActorId);
+    FaultDrawer_Printf(D_801DC9D8);
+    
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+        actor = actorList[i].first;
+
+        while (actor != NULL) {
+            FaultDrawer_Printf(D_801DC9F8, i, actor, actor->id, actor->category, D_801DCA10);
+            actor = actor->next;
+        }
+        
+    }
+}
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale) {
     actorShape->yOffset = yOffset;
@@ -217,7 +235,7 @@ void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     gRspSegmentPhysAddrs[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].vramAddr);
 }
 
-#ifdef NON_MATCHING
+#if 0
 void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     Actor_InitCurrPosition(actor);
     Actor_InitDrawRotation(actor);
@@ -271,7 +289,7 @@ void Actor_ApplyMovement(Actor* actor) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_ApplyMovement.asm")
 #endif
 
-#ifdef NON_MATCHING
+#if 0
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
     actor->velocity.x = actor->speedXZ * Math_Sins(actor->world.rot.x);
     actor->velocity.y = actor->velocity.y + actor->gravity;

@@ -198,7 +198,7 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
     temp_ret = (BgMeshHeader*)Lib_PtrSegToVirt(entry->colHeader.segment);
     temp_s0 = temp_ret;
     temp_s0->vertices = (BgVertex*)Lib_PtrSegToVirt(temp_ret->vertices);
-    temp_s0->polygons = (BgPolygon*)Lib_PtrSegToVirt(temp_s0->polygons);
+    temp_s0->polygons = (CollisionPoly*)Lib_PtrSegToVirt(temp_s0->polygons);
     if (temp_s0->attributes != 0) {
         temp_s0->attributes = (BgPolygonAttributes*)Lib_PtrSegToVirt(temp_s0->attributes);
     }

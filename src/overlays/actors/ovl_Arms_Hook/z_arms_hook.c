@@ -218,7 +218,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        BgPolygon* poly;
+        CollisionPoly* poly;
         u32 bgId;
         Vec3f sp78;
         Vec3f prevFrameDiff;

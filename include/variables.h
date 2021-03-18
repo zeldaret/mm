@@ -2731,7 +2731,7 @@ extern char D_801DC998[];
 extern char D_801DC9D0[];
 extern char D_801DC9D8[];
 extern char D_801DC9F8[];
-// extern UNK_TYPE1 D_801DCA10;
+extern char D_801DCA10[];
 extern f32 D_801DCA14;
 extern f32 D_801DCA18;
 extern f32 D_801DCA1C;

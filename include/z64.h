@@ -540,13 +540,21 @@ typedef struct {
 } ActorMeshParams; // size = 0x20
 
 typedef struct {
-    /* 0x0 */ u16 attributeIndex;
-    /* 0x2 */ u16 vertA; // upper 3 bits contain flags
-    /* 0x4 */ u16 vertB; // upper 3 bits contain flags
-    /* 0x6 */ u16 vertC;
-    /* 0x8 */ Vec3s normal;
-    /* 0xE */ s16 unkE;
-} BgPolygon; // size = 0x10
+    /* 0x00 */ u16 type;
+    union {
+        u16 vtxData[3];
+        struct {
+            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
+            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
+                                      // 0x2000 = poly IsConveyor surface
+            /* 0x06 */ u16 vIC;
+        };
+    };
+    /* 0x08 */ Vec3s normal; // Unit normal vector
+                             // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
+
+    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
+} CollisionPoly; // size = 0x10
 
 typedef struct {
     /* 0x0 */ BgPolygonLinkedListNode* nodes;
@@ -751,7 +759,7 @@ typedef struct {
     /* 0x0C */ u16 numVertices;
     /* 0x10 */ BgVertex* vertices;
     /* 0x14 */ u16 numPolygons;
-    /* 0x18 */ BgPolygon* polygons;
+    /* 0x18 */ CollisionPoly* polygons;
     /* 0x1C */ BgPolygonAttributes* attributes;
     /* 0x20 */ UNK_PTR cameraData;
     /* 0x24 */ u16 numWaterBoxes;
@@ -1100,7 +1108,7 @@ struct DynaCollisionContext {
     /* 0x0001 */ UNK_TYPE1 pad1[0x3];
     /* 0x0004 */ ActorMesh actorMeshArr[50];
     /* 0x138C */ u16 flags[50]; // bit 0 - Is mesh active
-    /* 0x13F0 */ BgPolygon* polygons;
+    /* 0x13F0 */ CollisionPoly* polygons;
     /* 0x13F4 */ BgVertex* vertices;
     /* 0x13F8 */ BgWaterboxList waterboxes;
     /* 0x1400 */ BgPolygonLinkedList polygonList;
