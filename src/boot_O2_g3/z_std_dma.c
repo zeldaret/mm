@@ -131,7 +131,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
         }
 
         osSetThreadPri(NULL, 10);
-        Yaz0_LoadAndDecompressFile(romStart, ram, romSize);
+        Yaz0_Decompress(romStart, ram, romSize);
         osSetThreadPri(NULL, 17);
     } else {
         Fault_AddHungupAndCrash("../z_std_dma.c", 558);

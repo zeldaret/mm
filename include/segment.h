@@ -18,4 +18,13 @@ extern AnimatedTexture object_ikana_obj_001228[];
 extern Gfx object_fu_kaiten_0005D0[];
 extern BgMeshHeader object_fu_kaiten_002D30;
 
+extern UNK_PTR D_04061FC0[];
+extern UNK_PTR D_04061FE0[];
+extern UNK_PTR D_04062000[];
+extern UNK_PTR D_04062040[];
+extern UNK_PTR D_04062020[];
+extern UNK_PTR D_04062060[];
+extern UNK_PTR D_04062000[];
+extern Gfx D_040622C0[];
+
 #endif

@@ -295,8 +295,12 @@ extern OSMesg sDmaMgrMsgs[32];
 extern OSThread sDmaMgrThread;
 extern u8 sDmaMgrStack[1280];
 // extern UNK_TYPE1 D_8009BA08;
-extern u8 sYaz0DataBuffer[1024];
-extern Yaz0DecompState yaz0DecompStatus;
+extern u8 sYaz0DataBuffer[0x400];
+extern u8* sYaz0CurDataEnd;
+extern u32 sYaz0CurRomStart;
+extern u32 sYaz0CurSize;
+extern u8* sYaz0MaxPtr;
+extern u8* D_8009BE20;
 extern UNK_TYPE4 D_8009BE30;
 extern UNK_TYPE4 D_8009BE34;
 extern FaultClient romInfoFaultClient;
@@ -2082,13 +2086,13 @@ extern z_Matrix identityMatrix;
 // extern UNK_TYPE1 D_801C5DE0;
 // extern UNK_TYPE1 D_801C5DF0;
 // extern UNK_TYPE1 D_801C5E00;
-// extern UNK_TYPE1 D_801C5E30;
-// extern UNK_TYPE2 D_801C5E48;
-// extern UNK_TYPE4 D_801C5E88;
-// extern UNK_TYPE4 D_801C5E9C;
-// extern UNK_TYPE4 D_801C5EB0;
-// extern UNK_TYPE2 D_801C5EC4;
-// extern UNK_TYPE4 D_801C5F44;
+extern s32 D_801C5E30[]; // D_801C5E30
+extern u16 D_801C5E48[]; // D_801C5E48
+extern s32 D_801C5E88[]; // D_801C5E88
+extern s32 D_801C5E9C[]; // D_801C5E9C
+extern s32 D_801C5EB0[]; // D_801C5EB0
+extern s16 D_801C5EC4[]; // D_801C5EC4
+extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 // extern UNK_TYPE4 D_801C5FC0;
 // extern UNK_TYPE4 D_801C5FC4;
 // extern UNK_TYPE4 D_801C5FC8;

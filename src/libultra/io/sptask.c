@@ -5,7 +5,7 @@
 OSTask* _VirtualToPhysicalTask(OSTask* intp)
 {
     OSTask* tp = &tmp_task;
-    _bcopy((void*)intp, (void*)tp, sizeof(OSTask));
+    bcopy((void*)intp, (void*)tp, sizeof(OSTask));
     if (tp->t.ucode) {
         tp->t.ucode = (u64*)osVirtualToPhysical(tp->t.ucode);
     }

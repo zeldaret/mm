@@ -454,7 +454,7 @@ void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
     for (i = 0; i < 9; i++, dlHead += 2) {
         u32 lodFrac = 0;
 
-        _bcopy(D_801C3C88, dlHead, sizeof(Gfx[2]));
+        bcopy(D_801C3C88, dlHead, sizeof(Gfx[2]));
 
         switch(i) {
         case 0:

@@ -35,6 +35,7 @@ sYaz0CurDataEnd = boot_bss_start + 0x00002910;
 sYaz0CurRomStart = boot_bss_start + 0x00002914;
 sYaz0CurSize = boot_bss_start + 0x00002918;
 sYaz0MaxPtr = boot_bss_start + 0x0000291C;
+D_8009BE20 = boot_bss_start + 0x00002920;
 D_8009BE30 = boot_bss_start + 0x00002930;
 D_8009BE34 = boot_bss_start + 0x00002934;
 romInfoFaultClient = boot_bss_start + 0x00002938;

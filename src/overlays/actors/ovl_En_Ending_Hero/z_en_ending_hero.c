@@ -21,7 +21,7 @@ const ActorInit En_Ending_Hero_InitVars = {
     (ActorFunc)EnEndingHero_Init,
     (ActorFunc)EnEndingHero_Destroy,
     (ActorFunc)EnEndingHero_Update,
-    (ActorFunc)EnEndingHero_Draw
+    (ActorFunc)EnEndingHero_Draw,
 };
 
 extern SkeletonHeader D_0600B0CC;
@@ -82,22 +82,19 @@ void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
     s32 index = 0;
 
-    {
-        s32 pad;
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        func_8012C28C(globalCtx->state.gfxCtx);
-        func_8012C2DC(globalCtx->state.gfxCtx);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
 
-        gSPSegment(oGfxCtx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_80C1E970[this->unk242]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_80C1E970[this->unk242]));
 
-        if (this->unk242 < 3) {
-            index = this->unk242;
-        }
-
-        gSPSegment(oGfxCtx->polyOpa.p++, 0x09, Lib_PtrSegToVirt(D_80C1E984[index]));
-        SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                         0, 0, &this->actor);
-
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    if (this->unk242 < 3) {
+        index = this->unk242;
     }
+
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_PtrSegToVirt(D_80C1E984[index]));
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
+                     &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

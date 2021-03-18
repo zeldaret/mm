@@ -33,10 +33,10 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
 s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
-u8* Yaz0_LoadFirstChunk(void);
-u8* Yaz0_LoadNextChunk(u8* currDecompPos);
-s32 Yaz0_Decompress(u8* src, u8* dest);
-void Yaz0_LoadAndDecompressFile(u32 romStart, u8* vramStart, u32 size);
+void* Yaz0_FirstDMA(void);
+void* Yaz0_NextDMA(void* curSrcPos);
+s32 Yaz0_DecompressImpl(u8* hdr, u8* dst);
+void Yaz0_Decompress(u32 romStart, void* dst, u32 size);
 void IrqMgr_AddClient(IrqMgr* irqmgr, OSMesgQueueListNode* param_2, OSMesgQueue* param_3);
 void IrqMgr_RemoveClient(IrqMgr* irqmgr, OSMesgQueueListNode* remove);
 void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
@@ -418,7 +418,7 @@ void __osSetCompare(u32 value);
 // u32 __osGetCompare(void);
 u32 osDpGetStatus(void);
 void osDpSetStatus(u32 data);
-void _bcopy(void* __src, void* __dest, size_t __n);
+void bcopy(void* __src, void* __dest, size_t __n);
 // void __osResetGlobalIntMask(void);
 // void func_80091630(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80091808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -2794,11 +2794,11 @@ void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2); // VisMono_Draw
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-// void func_80142440(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9);
-// void func_80143148(void);
-// void func_801431E8(void);
-// void func_80143324(void);
-void func_801434E4(GameState* ctxt, s32 iParm2, s16 sParm3);
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8); // func_80142440
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1); // func_80143148
+void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801431E8
+void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
+void func_801434E4(GameState* state, SkyboxContext* skyboxCtx, s16 skyType); // func_801434E4
 // void func_801435A0(void);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);

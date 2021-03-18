@@ -2,7 +2,7 @@
 #include <global.h>
 
 void* Lib_bcopy(void* dest, void* src, size_t n) {
-    _bcopy(src, dest, n);
+    bcopy(src, dest, n);
 
     return dest;
 }
