@@ -213,11 +213,11 @@ void func_800FF3A0(void) {
 #endif
 
 s16 Math_Rand_S16Offset(s16 base, s16 range) {
-    return (s16)(randZeroOne() * range) + base;
+    return (s16)(Rand_ZeroOne() * range) + base;
 }
 
 s16 Math_Rand_S16OffsetStride(s16 base, s16 stride, s16 range) {
-    return (s16)(randZeroOne() * range) * stride + base;
+    return (s16)(Rand_ZeroOne() * range) * stride + base;
 }
 
 void Math_Vec3f_Copy(Vec3f* dest, Vec3f* src) {

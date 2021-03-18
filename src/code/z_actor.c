@@ -7,10 +7,10 @@
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_PrintLists.asm")
 
-void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale) {
+void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale) {
     actorShape->yOffset = yOffset;
-    actorShape->shadowDraw = func;
-    actorShape->shadowScale = scale;
+    actorShape->shadowDraw = shadowDraw;
+    actorShape->shadowScale = shadowScale;
     actorShape->shadowAlpha = 255;
 }
 

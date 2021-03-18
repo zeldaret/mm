@@ -871,7 +871,7 @@ void Fault_Start(void) {
     osStartThread(&sFaultContext->thread);
 }
 
-void Fault_HangupFaultClient(char* arg0, char* arg1) {
+void Fault_HangupFaultClient(const char* arg0, char* arg1) {
     Fault_Log(D_80098BE0, osGetThreadId(NULL));
     Fault_Log(D_80098BF8, arg0 ? arg0 : D_80098BFC);
     Fault_Log(D_80098C04, arg1 ? arg1 : D_80098C08);
@@ -880,14 +880,14 @@ void Fault_HangupFaultClient(char* arg0, char* arg1) {
     FaultDrawer_Printf(D_80098C34, arg1 ? arg1 : D_80098C38);
 }
 
-void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1) {
+void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
     char padd[4];
     Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 
-void Fault_AddHungupAndCrash(char* filename, u32 line) {
+void Fault_AddHungupAndCrash(const char* filename, u32 line) {
     char msg[256];
     sprintf(msg, D_80098C40, filename, line);
     Fault_AddHungupAndCrashImpl(msg, NULL);

@@ -90,64 +90,53 @@ s32 DmaMgr_FindDmaIndex(u32 vrom) {
     return -1;
 }
 
-char* func_800809F4(u32 a0) {
+const char* func_800809F4(u32 a0) {
     return "??";
 }
 
-const char dmamgrString800981C4[] = "../z_std_dma.c";
-const char dmamgrString800981D4[] = "../z_std_dma.c";
-const char dmamgrString800981E4[] = "../z_std_dma.c";
-const char dmamgrString800981F4[] = "../z_std_dma.c";
-
-#ifdef NON_MATCHING
 void DmaMgr_ProcessMsg(DmaRequest* req) {
     u32 vrom;
-    u32 ram;
+    void* ram;
     u32 size;
     u32 romStart;
     u32 romSize;
-    UNK_TYPE sp20;
-    s32 sp1C;
-    UNK_TYPE sp18;
+    DmaEntry* dmaEntry;
+    s32 index;
 
     vrom = req->vromAddr;
     ram = req->dramAddr;
     size = req->size;
 
-    sp1C = DmaMgr_FindDmaIndex(vrom);
-
-        
-    if ((sp1C >= 0) && (sp1C < numDmaEntries)) {
-        if (dmadata[sp1C].romEnd == 0) {
-            if (dmadata[sp1C].vromEnd < (size + vrom)) {
-                Fault_AddHungupAndCrash(dmamgrString800981C4, 499);
+    index = DmaMgr_FindDmaIndex(vrom);
+   
+    if ((index >= 0) && (index < numDmaEntries)) {
+        dmaEntry = &dmadata[index];
+        if (dmaEntry->romEnd == 0) {
+            if (dmaEntry->vromEnd < (vrom + size)) {
+                Fault_AddHungupAndCrash("../z_std_dma.c", 499);
             }
-            DmaMgr_DMARomToRam((dmadata[sp1C].romStart + vrom) - dmadata[sp1C].vromStart, (u8*)ram, size);
+            DmaMgr_DMARomToRam((dmaEntry->romStart + vrom) - dmaEntry->vromStart, (u8*)ram, size);
             return;
         }
 
-        // TODO this part is arranged slightly different is ASM
-        romSize = dmadata[sp1C].romEnd - dmadata[sp1C].romStart;
-        romStart = dmadata[sp1C].romStart;
+        romSize = dmaEntry->romEnd - dmaEntry->romStart;
+        romStart = dmaEntry->romStart;
 
-        if (vrom != dmadata[sp1C].vromStart) {
-            Fault_AddHungupAndCrash(dmamgrString800981D4, 518);
+        if (vrom != dmaEntry->vromStart) {
+            Fault_AddHungupAndCrash("../z_std_dma.c", 518);
         }
 
-        if (size != (dmadata[sp1C].vromEnd - dmadata[sp1C].vromStart)) {
-            Fault_AddHungupAndCrash(dmamgrString800981E4, 525);
+        if (size != (dmaEntry->vromEnd - dmaEntry->vromStart)) {
+            Fault_AddHungupAndCrash("../z_std_dma.c", 525);
         }
 
         osSetThreadPri(NULL, 10);
         Yaz0_LoadAndDecompressFile(romStart, ram, romSize);
         osSetThreadPri(NULL, 17);
     } else {
-        Fault_AddHungupAndCrash(dmamgrString800981F4, 558);
+        Fault_AddHungupAndCrash("../z_std_dma.c", 558);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/DmaMgr_ProcessMsg.asm")
-#endif
 
 void DmaMgr_ThreadEntry(void* a0) {
     OSMesg msg;

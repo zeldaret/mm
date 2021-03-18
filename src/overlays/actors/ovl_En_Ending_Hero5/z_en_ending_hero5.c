@@ -42,7 +42,7 @@ void EnEndingHero5_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->limbDrawTable,
                      this->transitionDrawTable, 17);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     this->unk25C = this->actor.params;
     func_80C23980(this);
 }
