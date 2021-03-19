@@ -26,5 +26,11 @@ extern UNK_PTR D_04062020[];
 extern UNK_PTR D_04062060[];
 extern UNK_PTR D_04062000[];
 extern Gfx D_040622C0[];
+extern Gfx D_04075A40[];
+
+/* z_actor.c */
+extern Gfx D_04076BC0[];
+extern Gfx D_04077480[];
+extern Gfx D_04075B30[];
 
 #endif

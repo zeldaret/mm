@@ -40,7 +40,7 @@ void Lights_InitDirectional(LightInfoDirectional* info, s8 dirX, s8 dirY, s8 dir
     info->params.blue = blue;
 }
 
-void Lights_MapperInit(LightMapper* mapper, u8 red, u8 green, u8 blue) {
+void Lights_MapperInit(Lights* mapper, u8 red, u8 green, u8 blue) {
     mapper->lights.a.l.colc[0] = red;
     mapper->lights.a.l.col[0] = red;
     mapper->lights.a.l.colc[1] = green;
@@ -52,7 +52,7 @@ void Lights_MapperInit(LightMapper* mapper, u8 red, u8 green, u8 blue) {
 
 // XXX regalloc
 #ifdef NON_MATCHING
-void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
+void Lights_UploadLights(Lights* mapper, GraphicsContext* gCtxt) {
     Light* l;
     s32 i;
 
@@ -73,7 +73,7 @@ void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_UploadLights.asm")
 #endif
 
-Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
+Light* Lights_MapperGetNextFreeSlot(Lights* mapper) {
     if (6 < mapper->numLights) {
         return NULL;
     }
@@ -82,7 +82,7 @@ Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
 
 // XXX regalloc, some reorderings
 #ifdef NON_MATCHING
-void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vec3f* pos) {
+void Lights_MapPositionalWithReference(Lights* mapper, LightInfoPositionalParams* params, Vec3f* pos) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -131,7 +131,7 @@ void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalP
 
 // This function matches, but uses .rodata. We don't have a good way to match partial .rodata for a file yet.
 #ifdef NON_MATCHING
-void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt) {
+void Lights_MapPositional(Lights* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt) {
     Light* light;
     f32 radiusF = params->radius;
     Vec3f posF;
@@ -175,7 +175,7 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_MapPositional.asm")
 #endif
 
-void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt) {
+void Lights_MapDirectional(Lights* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt) {
     Light* light = Lights_MapperGetNextFreeSlot(mapper);
 
     if (light != NULL) {
@@ -192,7 +192,7 @@ void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* para
     }
 }
 
-void Lights_MapLights(LightMapper* mapper, z_Light* lights, Vec3f* refPos, GlobalContext* ctxt) {
+void Lights_MapLights(Lights* mapper, z_Light* lights, Vec3f* refPos, GlobalContext* ctxt) {
     if (lights != NULL) {
         if ((refPos == NULL) && (mapper->enablePosLights == 1)) {
             do {
@@ -259,7 +259,7 @@ void func_80102544(LightingContext* lCtxt, u8 a1, u8 a2, u8 a3, s16 sp12, s16 sp
     lCtxt->unkC = sp16;
 }
 
-LightMapper* Lights_CreateMapper(LightingContext* lCtxt, GraphicsContext* gCtxt) {
+Lights* Lights_CreateMapper(LightingContext* lCtxt, GraphicsContext* gCtxt) {
    return Lights_MapperAllocateAndInit(gCtxt, lCtxt->ambientRed, lCtxt->ambientGreen, lCtxt->ambientBlue);
 }
 
@@ -309,12 +309,12 @@ void Lights_Remove(GlobalContext* ctxt, LightingContext* lCtxt, z_Light* light) 
     }
 }
 
-LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ) {
-    LightMapper* mapper;
+Lights* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8 ambientBlue, u8 numLights, u8 red, u8 green, u8 blue, s8 dirX, s8 dirY, s8 dirZ) {
+    Lights* mapper;
     s32 i;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    mapper = (Lights *)((int)gCtxt->polyOpa.d - sizeof(Lights));
     gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = mapper->lights.a.l.colc[0] = ambientRed;
@@ -337,11 +337,11 @@ LightMapper* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGree
     return mapper;
 }
 
-LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 green, u8 blue) {
-    LightMapper* mapper;
+Lights* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 green, u8 blue) {
+    Lights* mapper;
 
     // TODO allocation should be a macro
-    mapper = (LightMapper *)((int)gCtxt->polyOpa.d - sizeof(LightMapper));
+    mapper = (Lights *)((int)gCtxt->polyOpa.d - sizeof(Lights));
     gCtxt->polyOpa.d = (void*)mapper;
 
     mapper->lights.a.l.col[0] = red;
@@ -425,9 +425,9 @@ void func_80102A64(GlobalContext* ctxt) {
                     gDPSetPrimColor(dl++, 0, 0, params->red, params->green, params->blue, 50);
 
                     SysMatrix_InsertTranslation(params->posX, params->posY, params->posZ, 0);
-                    SysMatrix_InsertScale(scale,scale,scale,1);
+                    Matrix_Scale(scale,scale,scale,1);
 
-                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp((ctxt->common).gCtxt), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, Matrix_NewMtx((ctxt->common).gCtxt), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(dl++, &D_04029CF0);
                 }

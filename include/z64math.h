@@ -4,6 +4,7 @@
 #include <ultra64.h>
 
 #define SHT_MAX 32767.0f
+#define M_PI 3.14159265358979323846f
 
 typedef struct {
     /* 0x0 */ f32 x;

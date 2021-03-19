@@ -146,15 +146,15 @@ void func_801434E4(GameState* state, SkyboxContext* skyboxCtx, s16 skyType) {
     func_801431E8(state, skyboxCtx, skyType);
 
     if (skyType != 0) {
-        skyboxCtx->unk17C = GameStateHeap_AllocFromEnd(&state->heap, 0x3840);
+        skyboxCtx->unk17C = GameState_Alloc(&state->heap, 0x3840);
 
         if (skyType == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
-            skyboxCtx->roomVtx = GameStateHeap_AllocFromEnd(&state->heap, sizeof(Vtx) * 32 * 6);
+            skyboxCtx->roomVtx = GameState_Alloc(&state->heap, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);
         } else {
             // Allocate enough space for the vertices for a 5 sided skybox (bottom is missing)
-            skyboxCtx->roomVtx = GameStateHeap_AllocFromEnd(&state->heap, sizeof(Vtx) * 32 * 5);
+            skyboxCtx->roomVtx = GameState_Alloc(&state->heap, sizeof(Vtx) * 32 * 5);
             func_80143148(skyboxCtx, 5);
         }
     }

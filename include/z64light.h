@@ -59,7 +59,7 @@ typedef struct {
     /* 0x01 */ u8 numLights;
     /* 0x02 */ UNK_TYPE1 pad2[6];
     /* 0x08 */ Lights7 lights;
-} LightMapper; // size = 0x80
+} Lights; // size = 0x80
 
 typedef struct {
     /* 0x0 */ u8 type;

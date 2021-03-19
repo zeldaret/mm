@@ -215,7 +215,7 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE4 size;
+    /* 0x0 */ u32 size;
     /* 0x4 */ void* heapStart;
     /* 0x8 */ void* heapAppendStart;
     /* 0xC */ void* heapAppendEnd;
@@ -451,7 +451,7 @@ typedef void(*func_ptr)(void);
 
 typedef void(*actor_init_var_func)(u8*, InitChainEntry*);
 
-typedef void(*light_map_directional_func)(LightMapper* mapper, void* params, Vec3f* pos);
+typedef void(*light_map_directional_func)(Lights* mapper, void* params, Vec3f* pos);
 
 typedef void(*osCreateThread_func)(void*);
 
@@ -1321,7 +1321,7 @@ typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
 typedef void(*global_context_func)(GlobalContext*);
 
-typedef void(*light_map_positional_func)(LightMapper* mapper, void* params, GlobalContext* ctxt);
+typedef void(*light_map_positional_func)(Lights* mapper, void* params, GlobalContext* ctxt);
 
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 

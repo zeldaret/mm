@@ -373,11 +373,11 @@ f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b) {
 s16 Math_Vec3f_Yaw(Vec3f* from, Vec3f* to) {
     f32 f14 = to->x - from->x;
     f32 f12 = to->z - from->z;
-    return atans_flip(f12, f14);
+    return Math_FAtan2F(f12, f14);
 }
 
 s16 Math_Vec3f_Pitch(Vec3f* from, Vec3f* to) {
-    return atans_flip(Math_Vec3f_DistXZ(from, to), from->y - to->y);
+    return Math_FAtan2F(Math_Vec3f_DistXZ(from, to), from->y - to->y);
 }
 
 void Actor_ProcessInitChain(Actor* actor, InitChainEntry* init) {
