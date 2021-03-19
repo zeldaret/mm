@@ -23,26 +23,26 @@ const ActorInit En_Daiku_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/EnDaiku_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/EnDaiku_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/EnDaiku_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/EnDaiku_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_8094373C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_8094373C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_809437C8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_809437C8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_80943820.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_80943820.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_809438F8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_809438F8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_80943BC0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_80943BC0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_80943BDC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_80943BDC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/EnDaiku_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/EnDaiku_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_80943E18.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_80943E18.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/func_80943E60.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/func_80943E60.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_En_Daiku_0x809434B0/EnDaiku_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku_0x809434B0/EnDaiku_Draw.asm")

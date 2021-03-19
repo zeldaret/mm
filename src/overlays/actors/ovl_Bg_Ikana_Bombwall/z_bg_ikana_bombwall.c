@@ -23,34 +23,34 @@ const ActorInit Bg_Ikana_Bombwall_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4720.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4720.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4A14.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4A14.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4E44.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4E44.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4EAC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4EAC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F18.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F18.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F2C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F2C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F88.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F88.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F9C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4F9C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4FF8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4FF8.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD503C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD503C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD5118.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD5118.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD5134.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD5134.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/BgIkanaBombwall_Draw.asm")

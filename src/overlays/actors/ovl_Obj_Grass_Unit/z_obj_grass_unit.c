@@ -20,12 +20,12 @@ const ActorInit Obj_Grass_Unit_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABDE0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABDE0.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABE54.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABE54.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABEC4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABEC4.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABF38.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABF38.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Grass_Unit_0x809ABDE0/ObjGrassUnit_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/ObjGrassUnit_Init.asm")

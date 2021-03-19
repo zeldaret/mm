@@ -5,9 +5,13 @@
 
 struct EnScopecoin;
 
+typedef void (*EnScopecoinActionFunc)(struct EnScopecoin*, GlobalContext*);
+
 typedef struct EnScopecoin {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x8];
+    /* 0x144 */ EnScopecoinActionFunc actionFunc;
+    /* 0x148 */ s16 unk148;
+    /* 0x14A */ s16 unk14A;
 } EnScopecoin; // size = 0x14C
 
 extern const ActorInit En_Scopecoin_InitVars;

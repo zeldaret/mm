@@ -848,7 +848,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
 }
 
 //Function is unused.
-#pragma GLOBAL_ASM("asm/non_matchings/z_skelanime/func_80134FFC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/func_80134FFC.asm")
 
 s16 func_801353D4(GenericAnimationHeader* animationSeg) {
     GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
@@ -1731,5 +1731,5 @@ void SkelAnime_Free(SkelAnime* skelAnime, GlobalContext* globalCtx) {
 }
 
 void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src) {
-    _bcopy(src, dst, sizeof(Vec3s) * skelAnime->limbCount);
+    bcopy(src, dst, sizeof(Vec3s) * skelAnime->limbCount);
 }

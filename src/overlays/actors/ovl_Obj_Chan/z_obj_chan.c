@@ -23,28 +23,28 @@ const ActorInit Obj_Chan_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/ObjChan_Init.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/ObjChan_Init.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/ObjChan_Destroy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/ObjChan_Destroy.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BB9A1C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BB9A1C.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BB9B40.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BB9B40.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BB9C08.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BB9C08.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BB9F24.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BB9F24.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BBA2FC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BBA2FC.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BBA314.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BBA314.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BBA488.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BBA488.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/ObjChan_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/ObjChan_Update.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/ObjChan_Draw.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/ObjChan_Draw.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BBA894.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BBA894.asm")
 
-#pragma GLOBAL_ASM("asm/non_matchings/ovl_Obj_Chan_0x80BB98E0/func_80BBA930.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/func_80BBA930.asm")

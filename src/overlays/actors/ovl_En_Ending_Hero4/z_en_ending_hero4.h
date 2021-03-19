@@ -5,7 +5,7 @@
 
 struct EnEndingHero4;
 
-typedef void (*EnEndingHero4ActionFunc)(struct BgHakaCurtain*, GlobalContext*);
+typedef void (*EnEndingHero4ActionFunc)(struct EnEndingHero4*, GlobalContext*);
 
 typedef struct EnEndingHero4 {
     /* 0x000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnOkarinaEffect;
 
-typedef void (*EnOkarinaEffectActionFunc)(struct ArmsHook*, GlobalContext*);
+typedef void (*EnOkarinaEffectActionFunc)(struct EnOkarinaEffect*, GlobalContext*);
 
 typedef struct EnOkarinaEffect {
     /* 0x000 */ Actor actor;
