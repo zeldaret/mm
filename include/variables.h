@@ -5,7 +5,19 @@
 #include <segment_symbols.h>
 #include <segment.h>
 #include <section.h>
-#include <pre_boot_variables.h>
+
+// pre-boot variables
+extern UNK_TYPE osTvType;
+extern UNK_TYPE osRomType;
+extern UNK_TYPE osRomBase;
+extern UNK_TYPE osResetType;
+extern UNK_TYPE osCicId;
+extern UNK_TYPE osVersion;
+extern UNK_TYPE osMemSize;
+extern s32 osAppNmiBuffer[0x10];
+extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
+extern u16 gFramebufferHighRes1[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80000500
+extern u8 D_80025D00[];
 
 // data
 extern UNK_TYPE1 D_800969C0;
@@ -4531,14 +4543,15 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE1 D_80208E98;
 // extern UNK_TYPE1 D_80208E99;
 // extern UNK_TYPE1 D_80208E9C;
-// extern UNK_TYPE1 D_80208EA0;
-// extern UNK_TYPE1 D_80209AA0;
+extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
+extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
-extern u8 gAudioHeap[1277952];
-extern u32 gSystemHeap[1046224];
-extern u8 D_80780000[17920];
-extern u8 D_80784600[352768];
-extern u16 D_807DA800[76800];
+extern u8 gAudioHeap[0x138000];
+extern u32 gSystemHeap[UNK_SIZE];
+extern u16 gFramebufferHighRes0[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80780000
+extern u8 D_80780000[0x4600];
+extern u8 D_80784600[0x56200];
+extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x807DA800
 
 #endif
 

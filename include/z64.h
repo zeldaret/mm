@@ -27,6 +27,12 @@
 #include <z64object.h>
 #include <z64scene.h>
 
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
