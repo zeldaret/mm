@@ -3833,7 +3833,7 @@ void func_8019E014(void);
 void play_sound(u16 param_1);
 void func_8019F128(u16 param_1);
 // void func_8019F170(void);
-void func_8019F1C0(UNK_TYPE4 param_1, u16 param_2);
+void func_8019F1C0(Vec3f* pos, u16 sfxId);
 // void func_8019F208(void);
 // void func_8019F230(void);
 // void func_8019F258(void);
