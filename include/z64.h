@@ -621,21 +621,10 @@ typedef struct {
 } GlobalContext1F78; // size = 0x1C
 
 typedef struct {
-    PadInput in;
-    union {
-        u16 status;
-        struct {
-            u8 errno;
-            u8 statusLo;
-        };
-    };
-} PadState;
-
-typedef struct {
-    /* 0x00 */ PadState cur;
-    /* 0x06 */ PadState prev;
-    /* 0x0C */ PadState press; // X/Y store delta from last frame
-    /* 0x12 */ PadState rel; // X/Y store adjusted
+    /* 0x00 */ OSContPad cur;
+    /* 0x06 */ OSContPad prev;
+    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
+    /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
 
 typedef struct {
