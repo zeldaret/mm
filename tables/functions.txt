@@ -15750,7 +15750,7 @@
     0x80BD5530:("BgIkanaRay_UpdateActivated",),
     0x80BD556C:("BgIkanaRay_Update",),
     0x80BD5590:("BgIkanaRay_Draw",),
-    0x80BD5690:("func_80BD5690",),
+    0x80BD5690:("BgIkanaShutter_AllSwitchesPressed",),
     0x80BD5728:("BgIkanaShutter_Init",),
     0x80BD57F4:("BgIkanaShutter_Destroy",),
     0x80BD5828:("func_80BD5828",),

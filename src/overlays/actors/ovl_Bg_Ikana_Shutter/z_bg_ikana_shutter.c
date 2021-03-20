@@ -50,7 +50,6 @@ static InitChainEntry D_80BD5D10[] = {
 extern BgMeshHeader D_06000F28;
 extern UNK_PTR D_06000CE8;
 
-//func_80BD5690
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
            Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
