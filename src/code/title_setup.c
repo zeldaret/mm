@@ -1,5 +1,5 @@
 #include <ultra64.h>
-#include <global_overlay.h>
+#include <global.h>
 
 void TitleSetup_GameStateResetContext(void) {
     XREG(2) = 0;
@@ -53,7 +53,7 @@ void TitleSetup_InitImpl(GameState *gameState) {
     gameState->running = 0;
 
 setNextGamestate:; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
-    SET_NEXT_GAMESTATE(gameState, &Title_Init, TitleContext);
+    SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
 }
 
 void TitleSetup_Destroy(GameState *gameState) {

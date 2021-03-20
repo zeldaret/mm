@@ -432,14 +432,6 @@ typedef struct {
 } Viewport; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ void* bufferEnd;
-    /* 0x04 */ u32 romReadHead;
-    /* 0x08 */ u32 amountLeftToRead;
-    /* 0x0C */ u32 loadNextChunkBoundary;
-    /* 0x10 */ u32 destBufferEnd;
-} Yaz0DecompState; // size = 0x14
-
-typedef struct {
     /* 0x0 */ unsigned int inst1;
     /* 0x4 */ unsigned int inst2;
     /* 0x8 */ unsigned int inst3;
@@ -801,8 +793,8 @@ typedef struct {
     /* 0x04 */ f32 unk4;
     /* 0x08 */ f32 unk8;
     /* 0x0C */ f32 unkC;
-    /* 0x10 */ UNK_TYPE1 unk10;
-    /* 0x11 */ UNK_TYPE1 unk11;
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 unk11;
     /* 0x12 */ UNK_TYPE1 unk12;
     /* 0x13 */ UNK_TYPE1 unk13;
     /* 0x14 */ UNK_TYPE1 unk14;
@@ -957,6 +949,34 @@ typedef struct {
     /* 0xF1 */ UNK_TYPE1 unkF1;
     /* 0xF2 */ u8 unkF2[0xC];
 } KankyoContext; // size = 0xFE
+
+typedef struct {
+    /* 0x00000 */ View view;
+    /* 0x00168 */ void* skyboxStaticSegment[2];
+    /* 0x00170 */ char unk170[8]; // more static segments?
+    /* 0x00178 */ void* skyboxPaletteStaticSegment;
+    /* 0x0017C */ Gfx* unk17C;
+    /* 0x00180 */ Gfx* unk180;
+    /* 0x00184 */ Vtx* roomVtx;
+    /* 0x00188 */ DmaRequest unk188;
+    /* 0x001A8 */ DmaRequest unk1A8;
+    /* 0x001C8 */ DmaRequest unk1C8;
+    /* 0x001E8 */ OSMesgQueue loadQueue;
+    /* 0x00200 */ OSMesg loadMsg;
+    /* 0x00204 */ s16 skyboxShouldDraw;
+    /* 0x00208 */ f32 rotX;
+    /* 0x0020C */ f32 rotY;
+    /* 0x00210 */ f32 rotZ;
+    /* 0x00214 */ Vec3f eye;
+    /* 0x00220 */ s16 angle;
+    /* 0x00222 */ u8 primR;
+    /* 0x00223 */ u8 primG;
+    /* 0x00224 */ u8 primB;
+    /* 0x00225 */ u8 envR;
+    /* 0x00226 */ u8 envG;
+    /* 0x00227 */ u8 envB;
+} SkyboxContext; // size = 0x228
+
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -1611,7 +1631,8 @@ struct GlobalContext {
     /* 0x01F78 */ GlobalContext1F78 unk1F78[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
-    /* 0x046D8 */ UNK_TYPE1 pad46D8[0x230];
+    /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
+    /* 0x046E0 */ SkyboxContext skyboxCtx;
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
@@ -1663,6 +1684,14 @@ struct GlobalContext {
     /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
     /* 0x18E58 */ UNK_TYPE1 pad18E58[0x400];
 }; // size = 0x19258
+
+typedef struct {
+    /* 0x00 */ s32 unk0;
+    /* 0x04 */ s32 unk4;
+    /* 0x08 */ s32 unk8;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+} struct_801C5F44; // size = 0x14
 
 typedef struct {
     /* 0x000 */ Actor base;

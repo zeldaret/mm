@@ -25,8 +25,8 @@ void func_80BD5B44(BgIkanaShutter* this);
 void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx);
 void func_80BD5BC4(BgIkanaShutter* this);
 void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx);
-void func_80BD5C64(BgIkanaShutter* this);
-void func_80BD5C8C(BgIkanaShutter* this, GlobalContext* globalCtx);
+void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
+void BgIkanaShutter_DoNothing(BgIkanaShutter* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ikana_Shutter_InitVars = {
     ACTOR_BG_IKANA_SHUTTER,
@@ -50,7 +50,8 @@ static InitChainEntry D_80BD5D10[] = {
 extern BgMeshHeader D_06000F28;
 extern UNK_PTR D_06000CE8;
 
-s32 func_80BD5690(BgIkanaShutter* this, GlobalContext* globalCtx) {
+//func_80BD5690
+s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
            Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
            Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
@@ -64,7 +65,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
-        if (func_80BD5690(this, globalCtx)) {
+        if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
             func_80BD599C(this);
             return;
         }
@@ -72,7 +73,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
-        func_80BD5C64(this);
+        BgIkanaShutter_SetupDoNothing(this);
         return;
     }
     func_80BD5AE8(this);
@@ -90,7 +91,7 @@ void func_80BD5828(BgIkanaShutter* this) {
 }
 
 void func_80BD5844(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (func_80BD5690(this, globalCtx)) {
+    if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
         func_80BD5878(this);
     }
 }
@@ -128,7 +129,7 @@ void func_80BD599C(BgIkanaShutter* this) {
 }
 
 void func_80BD59C4(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (func_80BD5690(this, globalCtx) == 0) {
+    if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx) == 0) {
         func_80BD59F8(this);
     }
 }
@@ -146,10 +147,10 @@ void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quake = Quake_Add(ACTIVE_CAM, 3U);
+        quake = Quake_Add(ACTIVE_CAM, 3);
         Quake_SetSpeed(quake, 0x5420);
         Quake_SetQuakeValues(quake, 4, 0, 0, 0);
-        Quake_SetCountdown(quake, 0xC);
+        Quake_SetCountdown(quake, 12);
         func_80BD5828(this);
     }
 }
@@ -188,16 +189,16 @@ void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
     Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
     if (Math_SmoothScaleMaxMinF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + -220.0f, 0.5f,
                                 this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
-        func_80BD5C64(this);
+        BgIkanaShutter_SetupDoNothing(this);
     }
 }
 
-void func_80BD5C64(BgIkanaShutter* this) {
-    this->actionFunc = func_80BD5C8C;
+void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this) {
+    this->actionFunc = BgIkanaShutter_DoNothing;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + -220.0f;
 }
 
-void func_80BD5C8C(BgIkanaShutter* this, GlobalContext* globalCtx) {
+void BgIkanaShutter_DoNothing(BgIkanaShutter* this, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {

@@ -14,7 +14,7 @@
     ('overlays/', 'decomp/', 'ovl_En_GirlA', 0x80863870, ((0x80864A30, 0x8086536F),),()),
     ('overlays/', 'decomp/', 'ovl_En_Part', 0x80865370, ((0x808658E0, 0x8086598F),),()),
     ('overlays/', 'decomp/', 'ovl_En_Light', 0x80865990, ((0x808666B0, 0x808667FF),),()),
-    ('overlays/', 'decomp/', 'ovl_En_Door', 0x80866800, ((0x808674B0, 0x80867BBF),),((0x80867BC0,0x80867BCF),)),
+    ('overlays/', 'decomp/', 'ovl_En_Door', 0x80866800, ((0x808675D0, 0x80867BBF),),((0x80867BC0,0x80867BCF),)),
     ('overlays/', 'decomp/', 'ovl_En_Box', 0x80867BD0, ((0x80869B30, 0x80869D8F),),()),
     ('overlays/', 'decomp/', 'ovl_En_Pametfrog', 0x80869D90, ((0x8086D940, 0x8086DE1F),),()),
     ('overlays/', 'decomp/', 'ovl_En_Okuta', 0x8086DE20, ((0x80870870, 0x80870DAF),),()),

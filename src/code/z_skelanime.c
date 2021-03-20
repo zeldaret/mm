@@ -1731,5 +1731,5 @@ void SkelAnime_Free(SkelAnime* skelAnime, GlobalContext* globalCtx) {
 }
 
 void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src) {
-    _bcopy(src, dst, sizeof(Vec3s) * skelAnime->limbCount);
+    bcopy(src, dst, sizeof(Vec3s) * skelAnime->limbCount);
 }
