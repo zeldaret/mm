@@ -8057,9 +8057,9 @@ SECTIONS
     ovl_Bg_Ikana_Shutter : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.text)
-        build/asm/overlays/ovl_Bg_Ikana_Shutter_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.data)
         build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.rodata)
-        build/asm/overlays/ovl_Bg_Ikana_Shutter_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
