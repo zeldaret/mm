@@ -663,8 +663,6 @@ void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-extern u32 D_0405F6F0;
-
 void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
     s32 iconNb = this->actor.params - 3;
 
@@ -692,13 +690,13 @@ void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
 
         gSPMatrix(gfx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-        gSPDisplayList(gfx->polyOpa.p++, &D_0405F6F0); // TODO symbol
+        gSPDisplayList(gfx->polyOpa.p++, D_0405F6F0);
 
     }
 }
 
-extern u32 D_06001290;
-extern u32 D_06001470;
+extern Gfx D_06001290[];
+extern Gfx D_06001470[];
 
 void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
     s32 pad;
@@ -715,13 +713,11 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
 
             gSPMatrix(gfx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-            gSPDisplayList(gfx->polyXlu.p++, &D_06001290);
-            gSPDisplayList(gfx->polyXlu.p++, &D_06001470);
+            gSPDisplayList(gfx->polyXlu.p++, D_06001290);
+            gSPDisplayList(gfx->polyXlu.p++, D_06001470);
         }
     }
 }
-
-extern u32 D_0405AAB0;
 
 void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
     s32 pad;
@@ -736,7 +732,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 
         gSPMatrix(gfx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-        gSPDisplayList(gfx->polyXlu.p++, &D_0405AAB0);
+        gSPDisplayList(gfx->polyXlu.p++, D_0405AAB0);
     }
 }
 
@@ -837,9 +833,10 @@ EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/func_800A7730.asm")
 
 /*
-EnItem00* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
-    EnItem00* spawnedActor = NULL;
-    s32 temp_t1;
+Actor* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
+    Actor* spawnedActor = NULL;
+    u32 pad;
+    u32 temp_t1;
     s16 sp42;
     s16 temp_t0;
 
@@ -867,15 +864,15 @@ EnItem00* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, params | sp42 | temp_t0);
             if (spawnedActor != NULL) {
                 if (sp42 == 0) {
-                    spawnedActor->actor.velocity.y = 0.0f;
-                    spawnedActor->actor.speedXZ = 0.0f;
+                    spawnedActor->velocity.y = 0.0f;
+                    spawnedActor->speedXZ = 0.0f;
                     if (temp_t1 != 0) {
-                        spawnedActor->actor.gravity = 0.0f;
+                        spawnedActor->gravity = 0.0f;
                     } else {
-                        spawnedActor->actor.gravity = -0.9f;
+                        spawnedActor->gravity = -0.9f;
                     }
-                    spawnedActor->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
-                    spawnedActor->actor.flags |= 0x10;
+                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
+                    spawnedActor->flags |= 0x10;
                 }
             }
         }

@@ -537,7 +537,7 @@ SECTIONS
         code_data_end = .;
 
         code_rodata_start = .;
-        build/asm/code/code_rodata_z_en_item00.o(.rodata)
+        build/src/code/z_en_item00.o(.rodata)
         build/asm/code/code_rodata_z_eff_blure.o(.rodata)
         build/asm/code/code_rodata_z_eff_shield_particle.o(.rodata)
         build/asm/code/code_rodata_z_eff_spark.o(.rodata)
