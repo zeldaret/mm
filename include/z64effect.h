@@ -40,8 +40,8 @@ typedef struct {
     /* 0x490 */ f32 gravity;
     /* 0x494 */ u32 particleFactor1;
     /* 0x498 */ u32 particleFactor2;
-    /* 0x49C */ ColorRGBA8 colorStart[4];
-    /* 0x4AC */ ColorRGBA8 colorEnd[4];
+    /* 0x49C */ Color_RGBA8 colorStart[4];
+    /* 0x4AC */ Color_RGBA8 colorEnd[4];
     /* 0x4BC */ s32 age;
     /* 0x4C0 */ s32 duration;
 } EffSparkParams; // size = 0x4C4
@@ -57,19 +57,19 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ UNK_TYPE1 pad0[0x184];
-    /* 0x184 */ ColorRGBA8 unk184;
-    /* 0x188 */ ColorRGBA8 unk188;
-    /* 0x18C */ ColorRGBA8 unk18C;
-    /* 0x190 */ ColorRGBA8 unk190;
+    /* 0x184 */ Color_RGBA8 unk184;
+    /* 0x188 */ Color_RGBA8 unk188;
+    /* 0x18C */ Color_RGBA8 unk18C;
+    /* 0x190 */ Color_RGBA8 unk190;
     /* 0x194 */ UNK_TYPE1 pad194[0xC];
 } EffBlureInit1; // size = 0x1A0
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 pad0[0x8];
-    /* 0x08 */ ColorRGBA8 unk8;
-    /* 0x0C */ ColorRGBA8 unkC;
-    /* 0x10 */ ColorRGBA8 unk10;
-    /* 0x14 */ ColorRGBA8 unk14;
+    /* 0x08 */ Color_RGBA8 unk8;
+    /* 0x0C */ Color_RGBA8 unkC;
+    /* 0x10 */ Color_RGBA8 unk10;
+    /* 0x14 */ Color_RGBA8 unk14;
     /* 0x18 */ UNK_TYPE1 pad18[0xC];
 } EffBlureInit2; // size = 0x24
 
@@ -79,10 +79,10 @@ typedef struct {
     /* 0x184 */ f32 unk184;
     /* 0x188 */ u16 unk188;
     /* 0x18A */ UNK_TYPE1 pad18A[0x4];
-    /* 0x18E */ ColorRGBA8 unk18E;
-    /* 0x192 */ ColorRGBA8 unk192;
-    /* 0x196 */ ColorRGBA8 unk196;
-    /* 0x19A */ ColorRGBA8 unk19A;
+    /* 0x18E */ Color_RGBA8 unk18E;
+    /* 0x192 */ Color_RGBA8 unk192;
+    /* 0x196 */ Color_RGBA8 unk196;
+    /* 0x19A */ Color_RGBA8 unk19A;
     /* 0x19E */ u8 unk19E;
     /* 0x19F */ u8 unk19F;
     /* 0x1A0 */ u8 unk1A0;
@@ -108,17 +108,17 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u8 numParticles;
     /* 0x02 */ Vec3s position;
-    /* 0x08 */ ColorRGBA8 primColorStart;
-    /* 0x0C */ ColorRGBA8 envColorStart;
-    /* 0x10 */ ColorRGBA8 primColorMid;
-    /* 0x14 */ ColorRGBA8 envColorMid;
-    /* 0x18 */ ColorRGBA8 primColorEnd;
-    /* 0x1C */ ColorRGBA8 envColorEnd;
+    /* 0x08 */ Color_RGBA8 primColorStart;
+    /* 0x0C */ Color_RGBA8 envColorStart;
+    /* 0x10 */ Color_RGBA8 primColorMid;
+    /* 0x14 */ Color_RGBA8 envColorMid;
+    /* 0x18 */ Color_RGBA8 primColorEnd;
+    /* 0x1C */ Color_RGBA8 envColorEnd;
     /* 0x20 */ f32 acceleration;
     /* 0x24 */ f32 maxInitialSpeed;
     /* 0x28 */ f32 lengthCutoff;
     /* 0x2C */ u8 duration;
-    /* 0x2E */ LightInfoPositionalParams lightParams;
+    /* 0x2E */ LightPoint lightParams;
     /* 0x3C */ s32 hasLight;
 } EffShieldParticleInit; // size = 0x40
 
@@ -127,12 +127,12 @@ typedef struct {
     /* 0x180 */ u8 numParticles;
     /* 0x181 */ UNK_TYPE1 pad181[0x1];
     /* 0x182 */ Vec3s position;
-    /* 0x188 */ ColorRGBA8 primColorStart;
-    /* 0x18C */ ColorRGBA8 envColorStart;
-    /* 0x190 */ ColorRGBA8 primColorMid;
-    /* 0x194 */ ColorRGBA8 envColorMid;
-    /* 0x198 */ ColorRGBA8 primColorEnd;
-    /* 0x19C */ ColorRGBA8 envColorEnd;
+    /* 0x188 */ Color_RGBA8 primColorStart;
+    /* 0x18C */ Color_RGBA8 envColorStart;
+    /* 0x190 */ Color_RGBA8 primColorMid;
+    /* 0x194 */ Color_RGBA8 envColorMid;
+    /* 0x198 */ Color_RGBA8 primColorEnd;
+    /* 0x19C */ Color_RGBA8 envColorEnd;
     /* 0x1A0 */ f32 acceleration;
     /* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
     /* 0x1A8 */ f32 maxInitialSpeed;
@@ -140,7 +140,7 @@ typedef struct {
     /* 0x1B0 */ u8 duration;
     /* 0x1B1 */ u8 age;
     /* 0x1B2 */ LightInfo lightInfo;
-    /* 0x1C0 */ z_Light* light;
+    /* 0x1C0 */ LightNode* light;
     /* 0x1C4 */ s32 hasLight;
 } EffShieldParticleParams; // size = 0x1C8
 
@@ -161,7 +161,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ s16 unk0;
     /* 0x2 */ s16 maxLife;
-    /* 0x4 */ ColorRGBA8 color;
+    /* 0x4 */ Color_RGBA8 color;
 } EffTireMarkInit; // size = 0x8
 
 typedef struct {
@@ -169,7 +169,7 @@ typedef struct {
     /* 0x600 */ s16 unk600;
     /* 0x602 */ s16 numParticles;
     /* 0x604 */ s16 maxLife;
-    /* 0x606 */ ColorRGBA8 color;
+    /* 0x606 */ Color_RGBA8 color;
     /* 0x60A */ UNK_TYPE1 pad60A[0x2];
 } EffTireMarkParams; // size = 0x60C
 
@@ -198,8 +198,8 @@ typedef struct {
     /* 0x00 */ Vec3f position;
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f acceleration;
-    /* 0x24 */ ColorRGBA8 color1;
-    /* 0x28 */ ColorRGBA8 color2;
+    /* 0x24 */ Color_RGBA8 color1;
+    /* 0x28 */ Color_RGBA8 color2;
     /* 0x2C */ s16 scale;
     /* 0x2E */ s16 scaleChangePerFrame;
     /* 0x30 */ s16 life;

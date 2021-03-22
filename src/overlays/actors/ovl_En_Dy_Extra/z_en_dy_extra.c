@@ -82,12 +82,12 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static ColorRGBA8 D_80A61740[] = { { 255, 255, 170, 255 },
-                                       { 255, 170, 255, 255 },
-                                       { 255, 255, 170, 255 },
-                                       { 170, 255, 255, 255 },
-                                       { 255, 255, 170, 255 } };
-    static ColorRGBA8 D_80A61754[] = {
+    static Color_RGBA8 D_80A61740[] = { { 255, 255, 170, 255 },
+                                        { 255, 170, 255, 255 },
+                                        { 255, 255, 170, 255 },
+                                        { 170, 255, 255, 255 },
+                                        { 255, 255, 170, 255 } };
+    static Color_RGBA8 D_80A61754[] = {
         { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
     };
     static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01,
@@ -118,10 +118,10 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPPipeSync(POLY_XLU_DISP++);
     gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].red, D_80A61740[this->type].green,
-                    D_80A61740[this->type].blue, 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].red, D_80A61754[this->type].green,
-                   D_80A61754[this->type].blue, 128);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].r, D_80A61740[this->type].g,
+                    D_80A61740[this->type].b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g,
+                   D_80A61754[this->type].b, 128);
     gSPDisplayList(POLY_XLU_DISP++, D_0600DEF0);
 
     CLOSE_DISPS(gfxCtx);

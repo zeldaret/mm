@@ -489,7 +489,7 @@ SECTIONS
         build/asm/code/code_data_z_kankyo.o(.data)
         build/asm/code/code_data_z_lib.o(.data)
         build/asm/code/code_data_z_lifemeter.o(.data)
-        build/asm/code/code_data_z_lights.o(.data)
+        build/src/code/z_lights.o(.data)
         build/asm/code/code_data_z_map_disp.o(.data)
         build/asm/code/code_data_z_map_exp.o(.data)
         build/asm/code/code_data_z_msgevent.o(.data)
