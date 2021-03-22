@@ -317,11 +317,11 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded
     /* 0x02 */ UNK_TYPE1 pad2[0x2];
-    /* 0x04 */ void* vramAddr;
+    /* 0x04 */ void* segment;
     /* 0x08 */ DmaRequest dmaReq;
     /* 0x28 */ OSMesgQueue loadQueue;
     /* 0x40 */ OSMesg loadMsg;
-} SceneObject; // size = 0x44
+} ObjectStatus; // size = 0x44
 
 typedef struct {
     /* 0x0 */ u32 romStart;
@@ -348,7 +348,7 @@ typedef struct {
     /* 0x009 */ u8 spawnedObjectCount;
     /* 0x00A */ u8 mainKeepIndex;
     /* 0x00B */ u8 keepObjectId;
-    /* 0x00C */ SceneObject objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
+    /* 0x00C */ ObjectStatus objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
 } SceneContext; // size = 0x958
 
 typedef union {

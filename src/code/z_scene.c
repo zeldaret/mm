@@ -19,14 +19,14 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     if (sceneCtxt) {}
 
     if (size) {
-        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].vramAddr, objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].segment, objectFileTable[id].vromStart, size);
     }
 
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
     if (sceneCtxt->objectCount < 0x22) {
-        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr =
+        sceneCtxt->objects[sceneCtxt->objectCount + 1].segment =
             // UB to cast pointer to u32
-            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size);
+            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].segment + size);
     }
 
     sceneCtxt->objectCount++;
@@ -59,18 +59,18 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
 
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameState_Alloc(&ctxt->state.heap, spaceSize);
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].segment = GameState_Alloc(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
     // TODO: Segment number enum?
-    gRspSegmentPhysAddrs[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr);
+    gSegments[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].segment);
 }
 
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
     s32 i;
-    SceneObject* status;
+    ObjectStatus* status;
     ObjectFileTableEntry* objectFile;
     u32 size;
 
@@ -86,7 +86,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart,
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->segment, objectFile->vromStart,
                                             size, 0, &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
@@ -128,7 +128,7 @@ void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
             continue;
         }
 
-        DmaMgr_SendRequest0(sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(sceneCtxt->objects[i].segment, objectFileTable[id].vromStart, vromSize);
     }
 }
 
@@ -143,7 +143,7 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
     // TODO: UB to cast void to u32
-    addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
+    addr = ((u32)sceneCtxt->objects[iParm2].segment) + vromSize;
     addr = ALIGN16(addr);
     // UB to cast u32 to pointer
     return (void*)addr;
@@ -167,7 +167,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     }
 
     loadedCount = Scene_LoadObject(&ctxt->sceneContext, OBJECT_LINK_CHILD);
-    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
+    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].segment;
     ctxt->sceneContext.objectCount = loadedCount;
     ctxt->sceneContext.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
@@ -175,7 +175,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     gActorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
-    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
+    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].segment = objectVramAddr;
 }
 
 // Scene Command 0x01: Actor List
@@ -229,8 +229,8 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
                                                            entry->specialFiles.keepObjectId);
         // TODO: Segment number enum?
-        gRspSegmentPhysAddrs[5] =
-            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
+        gSegments[5] =
+            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].segment);
     }
 
     if (entry->specialFiles.cUpElfMsgNum != 0) {
@@ -256,9 +256,9 @@ void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x0B: Object List
 void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
     s32 i, j, k;
-    SceneObject* firstObject;
-    SceneObject* status;
-    SceneObject* status2;
+    ObjectStatus* firstObject;
+    ObjectStatus* status;
+    ObjectStatus* status2;
     s16* objectEntry;
     void* nextPtr;
 
@@ -292,7 +292,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
 
         // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
         if (i < 0x22) {
-            firstObject[i + 1].vramAddr = nextPtr;
+            firstObject[i + 1].segment = nextPtr;
         }
         i++;
         k++;

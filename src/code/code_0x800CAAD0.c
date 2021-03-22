@@ -38,8 +38,8 @@ void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* ac
         bgCtxt->dyna.actorMeshArr[index].currParams.pos.y,
         bgCtxt->dyna.actorMeshArr[index].currParams.pos.z);
 
-    Matrix_MultiplyByVectorXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
-    Matrix_MultiplyByVectorXYZ(&currMatrix, &posWithInv, &newPos);
+    SkinMatrix_Vec3fMtxFMultXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
+    SkinMatrix_Vec3fMtxFMultXYZ(&currMatrix, &posWithInv, &newPos);
 
     actor->world.pos = newPos;
 }

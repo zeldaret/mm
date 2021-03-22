@@ -4118,7 +4118,7 @@ extern Gfx* graphDlEntry;
 extern u64 lastRenderFrameTimestamp;
 extern OSMesgQueue siEventCallbackQueue;
 extern OSMesg siEventCallbackBuffer[1];
-extern u32 gRspSegmentPhysAddrs[NUM_SEGMENTS];
+extern u32 gSegments[NUM_SEGMENTS];
 extern SchedThreadStruct schedContext;
 extern OSMesgQueueListNode mainIrqmgrCallbackNode;
 extern OSMesgQueue mainIrqmgrCallbackQueue;

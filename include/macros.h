@@ -12,7 +12,8 @@
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((u32)(addr) + 0x80000000)
 #define PHYSICAL_TO_VIRTUAL2(addr) ((u32)(addr) - 0x80000000)
-#define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gRspSegmentPhysAddrs[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
+#define VIRTUAL_TO_PHYSICAL(addr) (u32)((u8*)(addr) - 0x80000000)
+#define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 

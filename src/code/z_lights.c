@@ -141,7 +141,7 @@ void Lights_MapPositional(Lights* mapper, LightInfoPositionalParams* params, Glo
         posF.x = params->posX;
         posF.y = params->posY;
         posF.z = params->posZ;
-        Matrix_MultiplyByVectorXYZ(&ctxt->unk187B0,&posF,&adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&ctxt->unk187B0,&posF,&adjustedPos);
         if ((adjustedPos.z > -radiusF) &&
             (600 + radiusF > adjustedPos.z) &&
             (400 > fabsf(adjustedPos.x) - radiusF) &&

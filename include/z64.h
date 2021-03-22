@@ -1687,7 +1687,7 @@ struct GlobalContext {
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
     /* 0x187B0 */ z_Matrix unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
-    /* 0x187FC */ z_Matrix unk187FC;
+    /* 0x187FC */ MtxF mf_187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
     /* 0x18840 */ u32 unk18840;
     /* 0x18844 */ u8 unk18844;

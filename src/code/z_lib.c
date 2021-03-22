@@ -585,7 +585,7 @@ f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     f32 f0;
 
     Math_Vec3f_Diff(pusher, start, &sp24);
-    f0 = Math3D_Length(&sp24);
+    f0 = Math3D_Vec3fMagnitude(&sp24);
     if (distanceToApproach < f0) {
         f2 = distanceToApproach / f0;
         f0 = f0 - distanceToApproach;

@@ -327,7 +327,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     // TODO: Segment number enum
-    gRspSegmentPhysAddrs[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].vramAddr);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].segment);
 }
 
 #if 0

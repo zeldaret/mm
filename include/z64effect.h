@@ -18,6 +18,21 @@ typedef void(*eff_init_func)(void* params, void* init);
 
 typedef s32(*eff_update_func)(void* params);
 
+/* G Effect Regs */
+
+#define rgTexIdx regs[0]
+#define rgScale regs[1]
+#define rgTexIdxStep regs[2]
+#define rgPrimColorR regs[3]
+#define rgPrimColorG regs[4]
+#define rgPrimColorB regs[5]
+#define rgPrimColorA regs[6]
+#define rgEnvColorR regs[7]
+#define rgEnvColorG regs[8]
+#define rgEnvColorB regs[9]
+#define rgEnvColorA regs[10]
+#define rgObjBankIdx regs[11]
+
 typedef struct {
     /* 0x0 */ u8 active;
     /* 0x1 */ u8 unk1;
@@ -52,8 +67,12 @@ typedef struct {
 } EffSpark; // size = 0x4C8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x18];
-} EffBlureParticle; // size = 0x18
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 timer;
+    /* 0x08 */ Vec3s p1;
+    /* 0x0E */ Vec3s p2;
+    /* 0x14 */ u16 flags;
+} EffectBlureElement; // size = 0x18
 
 typedef struct {
     /* 0x000 */ UNK_TYPE1 pad0[0x184];
@@ -74,25 +93,27 @@ typedef struct {
 } EffBlureInit2; // size = 0x24
 
 typedef struct {
-    /* 0x000 */ EffBlureParticle particles[16];
-    /* 0x180 */ UNK_TYPE1 pad180[0x4];
-    /* 0x184 */ f32 unk184;
-    /* 0x188 */ u16 unk188;
-    /* 0x18A */ UNK_TYPE1 pad18A[0x4];
-    /* 0x18E */ ColorRGBA8 unk18E;
-    /* 0x192 */ ColorRGBA8 unk192;
-    /* 0x196 */ ColorRGBA8 unk196;
-    /* 0x19A */ ColorRGBA8 unk19A;
-    /* 0x19E */ u8 unk19E;
-    /* 0x19F */ u8 unk19F;
-    /* 0x1A0 */ u8 unk1A0;
-    /* 0x1A1 */ u8 unk1A1;
-    /* 0x1A2 */ UNK_TYPE1 pad1A2[0xA];
-} EffBlureParams; // size = 0x1AC
+    /* 0x000 */ EffectBlureElement elements[16];
+    /* 0x180 */ s32 calcMode;
+    /* 0x184 */ f32 mode4Param;
+    /* 0x188 */ u16 flags;
+    /* 0x18A */ s16 addAngleChange;
+    /* 0x18C */ s16 addAngle;
+    /* 0x18E */ ColorRGBA8 p1StartColor;
+    /* 0x192 */ ColorRGBA8 p2StartColor;
+    /* 0x196 */ ColorRGBA8 p1EndColor;
+    /* 0x19A */ ColorRGBA8 p2EndColor;
+    /* 0x19E */ u8 numElements;
+    /* 0x19F */ u8 elemDuration;
+    /* 0x1A0 */ u8 unkFlag;
+    /* 0x1A1 */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
+    /* 0x1A2 */ ColorRGBA8 altPrimColor;
+    /* 0x1A6 */ ColorRGBA8 altEnvColor;
+} EffectBlure; // size = 0x1AC
 
 typedef struct {
     /* 0x000 */ EffCommon base;
-    /* 0x004 */ EffBlureParams params;
+    /* 0x004 */ EffectBlure params;
 } EffBlure; // size = 0x1B0
 
 typedef struct {
@@ -207,37 +228,35 @@ typedef struct {
     /* 0x34 */ u8 type; // type0: start small, get big, fade away type1: start big, fade away
 } EffectDustInit; // size = 0x35
 
-typedef struct LoadedParticleEntry LoadedParticleEntry;
+typedef void(*EffectSsUpdateFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
 
-typedef void(*effect_func)(struct GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle);
+typedef void(*EffectSsDrawFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
 
-typedef void(*effect_init_func)(struct GlobalContext* ctxt, u32 index, LoadedParticleEntry* particle, void* init);
-
-struct LoadedParticleEntry {
-    /* 0x00 */ Vec3f position;
+typedef struct EffectSs {
+    /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
-    /* 0x18 */ Vec3f acceleration;
-    /* 0x24 */ effect_func update;
-    /* 0x28 */ effect_func draw;
-    /* 0x2C */ Vec3f unk2C;
-    /* 0x38 */ u32 displayList;
-    /* 0x3C */ UNK_TYPE4 unk3C;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ EffectSsUpdateFunc update;
+    /* 0x28 */ EffectSsDrawFunc draw;
+    /* 0x2C */ Vec3f vec;
+    /* 0x38 */ void* gfx;
+    /* 0x3C */ Actor* actor;
     /* 0x40 */ s16 regs[13]; // These are particle-specific
     /* 0x5A */ u16 flags; // bit 0: set if this entry is not considered free on a priority tie bit 1: ? bit 2: ?
     /* 0x5C */ s16 life; // -1 means this entry is free
     /* 0x5E */ u8 priority; // Lower number mean higher priority
     /* 0x5F */ u8 type;
-}; // size = 0x60
+} EffectSs; // size = 0x60
 
 typedef struct {
-    /* 0x0 */ LoadedParticleEntry* data_table; // Name from debug assert
+    /* 0x0 */ EffectSs* data_table; // Name from debug assert
     /* 0x4 */ s32 searchIndex;
     /* 0x8 */ s32 size;
 } EffectTableInfo; // size = 0xC
 
 typedef struct {
     /* 0x0 */ UNK_TYPE4 unk0;
-    /* 0x4 */ effect_init_func init;
+    /* 0x4 */ EffectSsDrawFunc init;
 } ParticleOverlayInfo; // size = 0x8
 
 typedef struct {
@@ -292,5 +311,21 @@ typedef enum EffectSSType {
     EFFECT_SS2_TYPE_SBN = 0x26,
     EFFECT_SS2_TYPE_LAST_LABEL = 0x27
 } EffectSSType;
+
+/* Init param structs, split into overlay headers when effects folder is made */
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ ColorRGBA8 primColor;
+    /* 0x28 */ ColorRGBA8 envColor;
+    /* 0x2C */ s16 scale;
+    /* 0x2E */ s16 scaleStep;
+    /* 0x30 */ s16 life;
+    /* 0x32 */ u16 drawFlags;
+    /* 0x34 */ u8 updateMode;
+} EffectSsDustInitParams; // size = 0x38
+
 
 #endif
