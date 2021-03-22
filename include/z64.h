@@ -22,6 +22,7 @@
 #include <z64cutscene.h>
 #include <z64dma.h>
 #include <z64effect.h>
+#include <z64item.h>
 #include <z64light.h>
 #include <z64math.h>
 #include <z64object.h>

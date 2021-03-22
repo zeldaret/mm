@@ -68,7 +68,7 @@ void func_8093089C(EnTuboTrap *this, GlobalContext *globalCtx) {
 
     if (dropCount >= 0) {
         // in OOT this is Item_DropCollectible
-        func_800A7730(globalCtx, 
+        Item_DropCollectible(globalCtx, 
                       &this->actor.world, 
                       ((this->actor.params & 0x7F) << 8) | dropCount);
     }

@@ -1,9 +1,44 @@
 #include <ultra64.h>
 #include <global.h>
 
+#define FLAGS 0x00000000
+
 #define THIS ((EnItem00*)thisx)
 
-void EnItem00_UpdateForNewObjectId(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale) {
+void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx);
+void EnItem00_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx);
+void func_800A640C(EnItem00* this, GlobalContext* globalCtx);
+void func_800A6650(EnItem00* this, GlobalContext* globalCtx);
+void func_800A6780(EnItem00* this, GlobalContext* globalCtx);
+void func_800A6A40(EnItem00* this, GlobalContext* globalCtx);
+
+ActorInit En_Item00_InitVars = {
+    ACTOR_EN_ITEM00,
+    ACTORCAT_MISC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnItem00),
+    (ActorFunc)EnItem00_Init,
+    (ActorFunc)EnItem00_Destroy,
+    (ActorFunc)EnItem00_Update,
+    (ActorFunc)EnItem00_Draw,
+};
+
+ColliderCylinderInit enItem00CylinderInit = {
+    { 0x0A, 0x00, 0x09, 0x00, 0x00, 0x01 },
+    { 0x00, { 0x00000000, 0x00, 0x00 }, { 0x00000010, 0x00, 0x00 }, 0x00, 0x01, 0x00 },
+    { 10, 30, 0, { 0, 0, 0 } },
+};
+
+InitChainEntry enItem00InitVars[1] = {
+    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP)
+};
+
+void EnItem00_SetObject(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale) {
     Actor_SetObjectSegment(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.5f);
     this->unk154 = 0.5f;
@@ -17,126 +52,126 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
-    s32 getItemId = 0;
+    s32 getItemId = GI_NONE;
     s32 sp30 = (this->actor.params & 0x8000) ? 1 : 0;
 
     this->collectibleFlag = (this->actor.params & 0x7F00) >> 8;
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
-    if (Actor_GetCollectibleFlag(globalCtx, this->collectibleFlag) != 0) {
-        if (this->actor.params == 6) {
+    if (Actor_GetCollectibleFlag(globalCtx, this->collectibleFlag)) {
+        if (this->actor.params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
-            this->actor.params = 3;
+            this->actor.params = ITEM00_HEART;
         } else {
             Actor_MarkForDeath(&this->actor);
             return;
         }
     }
-    if (this->actor.params == 0x15) {
-        this->actor.params = 3;
+    if (this->actor.params == ITEM00_3_HEARTS) {
+        this->actor.params = ITEM00_HEART;
     }
 
     Actor_ProcessInitChain(&this->actor, enItem00InitVars);
-    Collision_InitCylinder(globalCtx, &this->collider, &this->actor, &enItem00CylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &enItem00CylinderInit);
 
     this->unk150 = 1;
 
     switch (this->actor.params) {
-    case 0:
-    case 1:
-    case 2:
+    case ITEM00_RUPEE_GREEN:
+    case ITEM00_RUPEE_BLUE:
+    case ITEM00_RUPEE_RED:
         Actor_SetScale(&this->actor, 0.015f);
         this->unk154 = 0.015f;
         shadowOffset = 750.0f;
         break;
-    case 17:
+    case ITEM00_SMALL_KEY:
         this->unk150 = 0;
         Actor_SetScale(&this->actor, 0.03f);
         this->unk154 = 0.03f;
         shadowOffset = 350.0f;
         break;
-    case 6:
-    case 7:
+    case ITEM00_HEART_PIECE:
+    case ITEM00_HEART_CONTAINER:
         this->unk150 = 0;
         Actor_SetScale(&this->actor, 0.02f);
         this->unk154 = 0.02f;
         shadowOffset = 650.0f;
-        if (this->actor.params == 7) {
+        if (this->actor.params == ITEM00_HEART_CONTAINER) {
             sp30 = -1;
         }
         break;
-    case 3:
+    case ITEM00_HEART:
         this->actor.home.rot.z = randPlusMinusPoint5Scaled(65535.0f);
         shadowOffset = 430.0f;
         Actor_SetScale(&this->actor, 0.02f);
         this->unk154 = 0.02f;
         break;
-    case 5:
-    case 8:
-    case 9:
-    case 10:
+    case ITEM00_ARROWS_10:
+    case ITEM00_ARROWS_30:
+    case ITEM00_ARROWS_40:
+    case ITEM00_ARROWS_50:
         Actor_SetScale(&this->actor, 0.035f);
         this->unk154 = 0.035f;
         shadowOffset = 250.0f;
         break;
-    case 4:
-    case 11:
-    case 12:
-    case 13:
-    case 15:
-    case 23:
-    case 25:
+    case ITEM00_BOMBS_A:
+    case ITEM00_BOMBS_B:
+    case ITEM00_NUTS_1:
+    case ITEM00_STICK:
+    case ITEM00_MAGIC_SMALL:
+    case ITEM00_NUTS_10:
+    case ITEM00_BOMBS_0:
         Actor_SetScale(&this->actor, 0.03f);
         this->unk154 = 0.03f;
         shadowOffset = 320.0f;
         break;
-    case 14:
+    case ITEM00_MAGIC_LARGE:
         Actor_SetScale(&this->actor, 0.044999998f);
         this->unk154 = 0.044999998f;
         shadowOffset = 320.0f;
         break;
-    case 19:
+    case ITEM00_RUPEE_ORANGE:
         Actor_SetScale(&this->actor, 0.044999998f);
         this->unk154 = 0.044999998f;
         shadowOffset = 750.0f;
         break;
-    case 20:
+    case ITEM00_RUPEE_PURPLE:
         Actor_SetScale(&this->actor, 0.03f);
         this->unk154 = 0.03f;
         shadowOffset = 750.0f;
         break;
-    case 18:
-    case 26:
+    case ITEM00_FLEXIBLE:
+    case ITEM00_BIG_FAIRY:
         shadowOffset = 500.0f;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk154 = 0.01f;
         break;
-    case 22:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0xB3);
-        EnItem00_UpdateForNewObjectId(this, globalCtx, &shadowOffset, &shadowScale);
+    case ITEM00_SHIELD_HERO:
+        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_SHIELD_2);
+        EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
-    case 27:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0xA0);
-        EnItem00_UpdateForNewObjectId(this, globalCtx, &shadowOffset, &shadowScale);
+    case ITEM00_MAP:
+        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_MAP);
+        EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
-    case 28:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0x91);
-        EnItem00_UpdateForNewObjectId(this, globalCtx, &shadowOffset, &shadowScale);
+    case ITEM00_COMPASS:
+        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_COMPASS);
+        EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     default:
         break;
     }
 
     this->unk14E = 0;
-    Actor_SetDrawParams(&this->actor.shape, shadowOffset, func_800B3FC0, shadowScale);
+    ActorShape_Init(&this->actor.shape, shadowOffset, func_800B3FC0, shadowScale);
     this->actor.shape.shadowAlpha = 180;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk14A = 0;
 
     if (sp30 < 0) {
-        this->actionFunc = func_800A63A8;
+        this->actionFunc = EnItem00_WaitForHeartObject;
         this->unk152 = -1;
         return;
     }
@@ -154,81 +189,81 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
 
     switch (this->actor.params) {
-    case 0:
-        func_80112E80(globalCtx, 0x84);
+    case ITEM00_RUPEE_GREEN:
+        Item_Give(globalCtx, ITEM_RUPEE_GREEN);
         break;
-    case 1:
-        func_80112E80(globalCtx, 0x85);
+    case ITEM00_RUPEE_BLUE:
+        Item_Give(globalCtx, ITEM_RUPEE_BLUE);
         break;
-    case 2:
-        func_80112E80(globalCtx, 0x87);
+    case ITEM00_RUPEE_RED:
+        Item_Give(globalCtx, ITEM_RUPEE_RED);
         break;
-    case 20:
-        func_80112E80(globalCtx, 0x88);
+    case ITEM00_RUPEE_PURPLE:
+        Item_Give(globalCtx, ITEM_RUPEE_PURPLE);
         break;
-    case 19:
-        func_80112E80(globalCtx, 0x8A);
+    case ITEM00_RUPEE_ORANGE:
+        Item_Give(globalCtx, ITEM_RUPEE_ORANGE);
         break;
-    case 3:
-        func_80112E80(globalCtx, 0x83);
+    case ITEM00_HEART:
+        Item_Give(globalCtx, ITEM_HEART);
         break;
-    case 18:
-    case 26:
+    case ITEM00_FLEXIBLE:
+    case ITEM00_BIG_FAIRY:
         func_80115908(globalCtx, 0x70);
         break;
-    case 4:
-    case 11:
-        func_80112E80(globalCtx, 0x8F);
+    case ITEM00_BOMBS_A:
+    case ITEM00_BOMBS_B:
+        Item_Give(globalCtx, ITEM_BOMBS_5);
         break;
-    case 5:
-        func_80112E80(globalCtx, 0x93);
+    case ITEM00_ARROWS_10:
+        Item_Give(globalCtx, ITEM_ARROWS_10);
         break;
-    case 8:
-        func_80112E80(globalCtx, 0x94);
+    case ITEM00_ARROWS_30:
+        Item_Give(globalCtx, ITEM_ARROWS_30);
         break;
-    case 9:
-        func_80112E80(globalCtx, 0x95);
+    case ITEM00_ARROWS_40:
+        Item_Give(globalCtx, ITEM_ARROWS_40);
         break;
-    case 10:
-        func_80112E80(globalCtx, 0x96);
+    case ITEM00_ARROWS_50:
+        Item_Give(globalCtx, ITEM_ARROWS_50);
         break;
-    case 14:
-        func_80112E80(globalCtx, 0x7A);
+    case ITEM00_MAGIC_LARGE:
+        Item_Give(globalCtx, ITEM_MAGIC_LARGE);
         break;
-    case 15:
-        func_80112E80(globalCtx, 0x79);
+    case ITEM00_MAGIC_SMALL:
+        Item_Give(globalCtx, ITEM_MAGIC_SMALL);
         break;
-    case 17:
-        func_80112E80(globalCtx, 0x78);
+    case ITEM00_SMALL_KEY:
+        Item_Give(globalCtx, ITEM_KEY_SMALL);
         break;
-    case 12:
-        getItemId = 0x28;
+    case ITEM00_NUTS_1:
+        getItemId = GI_NUTS_1;
         break;
-    case 23:
-        getItemId = 0x2A;
+    case ITEM00_NUTS_10:
+        getItemId = GI_NUTS_10;
         break;
     default:
         break;
     }
 
-    if ((getItemId != 0) && (Actor_HasParent(&this->actor, globalCtx) == 0)) {
+    if ((getItemId != GI_NONE) && (Actor_HasParent(&this->actor, globalCtx) == 0)) {
         func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
     }
 
-    this->actionFunc = EnItem00_Update1;
+    this->actionFunc = func_800A6A40;
     this->actionFunc(this, globalCtx);
 }
 
 void EnItem00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
 
-    Collision_FiniCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_800A63A8(EnItem00* this, GlobalContext* globalCtx) {
+void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx) {
     s32 sp1C;
 
-    sp1C = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0x96);
+    sp1C = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS);
     if (Scene_IsObjectLoaded(&globalCtx->sceneContext, sp1C)) {
         this->actor.objBankIndex = sp1C;
         this->actionFunc = func_800A640C;
@@ -236,9 +271,9 @@ void func_800A63A8(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
-    if ((this->actor.params <= 2) || ((this->actor.params == 3) && (this->unk152 < 0)) || (this->actor.params == 6) || (this->actor.params == 7)) {
+    if ((this->actor.params <= ITEM00_RUPEE_RED) || ((this->actor.params == ITEM00_HEART) && (this->unk152 < 0)) || (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
-    } else if ((this->actor.params >= 0x16) && (this->actor.params != 0x17) && (this->actor.params < 0x19)) {
+    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) && (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
             if (!Math_SmoothScaleMaxMinS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
                 this->unk152 = -2;
@@ -248,25 +283,25 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
         }
 
         Math_SmoothScaleMaxMinS(&this->actor.world.rot.x, 0, 2, 2500, 500);
-    } else if ((this->actor.params == 0x1B) || (this->actor.params == 0x1C)) {
+    } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     }
 
-    if ((this->actor.params == 6) || (this->actor.params == 7)) {
-        this->actor.shape.yOffset = (Math_Sins(this->actor.shape.rot.y) * 150.0f) + 850.0f;
+    if ((this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
+        this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
     Math_SmoothScaleMaxMinF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
-        if ((this->actor.params != 0x11) && (this->actor.params != 6) && (this->actor.params != 7)) {
+        if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) && (this->actor.params != ITEM00_HEART_CONTAINER)) {
             this->unk14C = -1;
         }
     }
 
     if (this->unk152 == 0) {
-        if ((this->actor.params != 0x11) && (this->actor.params != 6) && (this->actor.params != 7)) {
+        if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) && (this->actor.params != ITEM00_HEART_CONTAINER)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -276,18 +311,23 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
     }
 }
 
+Color_RGBA8 D_801ADF10 = { 0xFF, 0xFF, 0x7F, 0x00 };
+Color_RGBA8 D_801ADF14 = { 0xFF, 0xFF, 0xFF, 0x00 };
+Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
+Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
+
 void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     u32 pad;
     Vec3f pos;
 
-    if (this->actor.params < 3) {
+    if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     }
     if ((globalCtx->unk18840 & 1) != 0) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
-        func_800B16B8(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
     if ((this->actor.bgCheckFlags & 3) != 0) {
         if (this->actor.velocity.y > -2.0f) {
@@ -307,7 +347,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 
     this->unk152++;
 
-    if (this->actor.params == 3) {
+    if (this->actor.params == ITEM00_HEART) {
         if (this->actor.velocity.y < 0.0f) {
             this->actor.speedXZ = 0.0f;
             this->actor.gravity = -0.4f;
@@ -315,14 +355,14 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
                 this->actor.velocity.y = -1.5f;
             }
             this->actor.home.rot.z += (s16)((this->actor.velocity.y + 3.0f) * 1000.0f);
-            this->actor.world.pos.x += (Math_Coss(this->actor.yawTowardsPlayer) * (-3.0f * Math_Coss(this->actor.home.rot.z)));
-            this->actor.world.pos.z += (Math_Sins(this->actor.yawTowardsPlayer) * (-3.0f * Math_Coss(this->actor.home.rot.z)));
+            this->actor.world.pos.x += (Math_CosS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
+            this->actor.world.pos.z += (Math_SinS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
         }
     }
 
-    if (this->actor.params < 3) {
+    if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y += 960;
-    } else if ((this->actor.params >= 0x16) && (this->actor.params != 0x17) && (this->actor.params != 0x19)) {
+    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) && (this->actor.params != ITEM00_BOMBS_0)) {
         this->actor.world.rot.x -= 700;
         this->actor.shape.rot.y += 400;
         this->actor.shape.rot.x = this->actor.world.rot.x - 0x4000;
@@ -338,10 +378,10 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->unk18840 & 1) == 0) {
-        pos.x = this->actor.world.pos.x + ((randZeroOne() - 0.5f) * 10.0f);
-        pos.y = this->actor.world.pos.y + ((randZeroOne() - 0.5f) * 10.0f);
-        pos.z = this->actor.world.pos.z + ((randZeroOne() - 0.5f) * 10.0f);
-        func_800B16B8(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
+        pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
+        pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);
+        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
 
     if (this->actor.bgCheckFlags & 0x0003) {
@@ -351,9 +391,8 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnItem00_Update1(EnItem00* this, GlobalContext* globalCtx) {
-    ActorPlayer* sp2C = globalCtx->actorCtx.actorList[2].first;
-    // TODO PLAYER macro
+void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -369,18 +408,17 @@ void EnItem00_Update1(EnItem00* this, GlobalContext* globalCtx) {
         return;
     }
 
-    this->actor.world.pos = sp2C->base.world.pos;
+    this->actor.world.pos = player->base.world.pos;
 
-    if (this->actor.params < 3) {
+    if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
-    } else if (this->actor.params == 3) {
+    } else if (this->actor.params == ITEM00_HEART) {
         this->actor.shape.rot.y = 0;
     }
 
-    this->actor.world.pos.y += (40.0f + (Math_Sins(this->unk152 * 15000) * (this->unk152 * 0.3f)));
+    this->actor.world.pos.y += (40.0f + (Math_SinS(this->unk152 * 15000) * (this->unk152 * 0.3f)));
 
-    // TODO LINK_IS_ADULT macro
-    if (gSaveContext.perm.linkAge == 0) {
+    if (LINK_IS_ADULT) {
         this->actor.world.pos.y = this->actor.world.pos.y + 20.0f;
     }
 }
@@ -389,9 +427,9 @@ void EnItem00_Update1(EnItem00* this, GlobalContext* globalCtx) {
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    ActorPlayer* player = globalCtx->actorCtx.actorList[2].first;
+    ActorPlayer* player = PLAYER;
     s32 sp38 = player->unkA74 & 0x1000;
-    s32 getItemId = 0;
+    s32 getItemId = GI_NONE;
     s32 pad2;
 
     if (this->unk152 > 0) {
@@ -421,8 +459,8 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collision_CylinderMoveToActor(&this->actor, &this->collider);
     Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 
-    if ((this->actor.params == 0x16) || (this->actor.params == 0x1B) || (this->actor.params == 0x1C)) {
-        this->actor.shape.yOffset = fabsf(Math_Coss(this->actor.shape.rot.x) * 37.0f);
+    if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
+        this->actor.shape.yOffset = fabsf(Math_CosS(this->actor.shape.rot.x) * 37.0f);
     }
 
     if (this->unk14C > 0) {
@@ -441,98 +479,98 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     switch (this->actor.params) {
-    case 0:
+    case ITEM00_RUPEE_GREEN:
         this->unk1A4 = 1;
-        func_80112E80(globalCtx, 0x84);
+        Item_Give(globalCtx, ITEM_RUPEE_GREEN);
         break;
-    case 1:
+    case ITEM00_RUPEE_BLUE:
         this->unk1A4 = 1;
-        func_80112E80(globalCtx, 0x85);
+        Item_Give(globalCtx, ITEM_RUPEE_BLUE);
         break;
-    case 2:
+    case ITEM00_RUPEE_RED:
         this->unk1A4 = 1;
-        func_80112E80(globalCtx, 0x87);
+        Item_Give(globalCtx, ITEM_RUPEE_RED);
         break;
-    case 20:
+    case ITEM00_RUPEE_PURPLE:
         this->unk1A4 = 1;
-        func_80112E80(globalCtx, 0x88);
+        Item_Give(globalCtx, ITEM_RUPEE_PURPLE);
         break;
-    case 19:
+    case ITEM00_RUPEE_ORANGE:
         this->unk1A4 = 1;
-        func_80112E80(globalCtx, 0x8A);
+        Item_Give(globalCtx, ITEM_RUPEE_ORANGE);
         break;
-    case 13:
-        getItemId = 0x19;
+    case ITEM00_STICK:
+        getItemId = GI_STICKS_1;
         break;
-    case 12:
-        getItemId = 0x28;
+    case ITEM00_NUTS_1:
+        getItemId = GI_NUTS_1;
         break;
-    case 23:
-        getItemId = 0x2A;
+    case ITEM00_NUTS_10:
+        getItemId = GI_NUTS_10;
         break;
-    case 3:
-        func_80112E80(globalCtx, 0x83);
+    case ITEM00_HEART:
+        Item_Give(globalCtx, ITEM_HEART);
         break;
-    case 18:
-    case 26:
+    case ITEM00_FLEXIBLE:
+    case ITEM00_BIG_FAIRY:
         func_80115908(globalCtx, 0x70);
         break;
-    case 4:
-    case 11:
-        func_80112E80(globalCtx, 0x8F);
+    case ITEM00_BOMBS_A:
+    case ITEM00_BOMBS_B:
+        Item_Give(globalCtx, ITEM_BOMBS_5);
         break;
-    case 5:
-        func_80112E80(globalCtx, 0x93);
+    case ITEM00_ARROWS_10:
+        Item_Give(globalCtx, ITEM_ARROWS_10);
         break;
-    case 8:
-        func_80112E80(globalCtx, 0x94);
+    case ITEM00_ARROWS_30:
+        Item_Give(globalCtx, ITEM_ARROWS_30);
         break;
-    case 9:
-        func_80112E80(globalCtx, 0x95);
+    case ITEM00_ARROWS_40:
+        Item_Give(globalCtx, ITEM_ARROWS_40);
         break;
-    case 10:
-        func_80112E80(globalCtx, 0x96);
+    case ITEM00_ARROWS_50:
+        Item_Give(globalCtx, ITEM_ARROWS_50);
         break;
-    case 17:
-        getItemId = 0x3C;
+    case ITEM00_SMALL_KEY:
+        getItemId = GI_KEY_SMALL;
         break;
-    case 6:
-        getItemId = 0xC;
+    case ITEM00_HEART_PIECE:
+        getItemId = GI_HEART_PIECE;
         break;
-    case 7:
-        getItemId = 0xD;
+    case ITEM00_HEART_CONTAINER:
+        getItemId = GI_HEART_CONTAINER;
         break;
-    case 14:
-        func_80112E80(globalCtx, 0x7A);
+    case ITEM00_MAGIC_LARGE:
+        Item_Give(globalCtx, ITEM_MAGIC_LARGE);
         break;
-    case 15:
-        func_80112E80(globalCtx, 0x79);
+    case ITEM00_MAGIC_SMALL:
+        Item_Give(globalCtx, ITEM_MAGIC_SMALL);
         break;
-    case 22:
-        getItemId = 0x32;
+    case ITEM00_SHIELD_HERO:
+        getItemId = GI_SHIELD_HERO;
         break;
-    case 27:
-        getItemId = 0x3E;
+    case ITEM00_MAP:
+        getItemId = GI_MAP;
         break;
-    case 28:
-        getItemId = 0x3F;
+    case ITEM00_COMPASS:
+        getItemId = GI_COMPASS;
     default:
         break;
     }
 
-    if (getItemId != 0) {
+    if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
             func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
         }
     }
 
     switch (this->actor.params) {
-    case 6:
-    case 7:
-    case 17:
-    case 22:
-    case 27:
-    case 28:
+    case ITEM00_HEART_PIECE:
+    case ITEM00_HEART_CONTAINER:
+    case ITEM00_SMALL_KEY:
+    case ITEM00_SHIELD_HERO:
+    case ITEM00_MAP:
+    case ITEM00_COMPASS:
         if (Actor_HasParent(&this->actor, globalCtx)) {
             Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
             Actor_MarkForDeath(&this->actor);
@@ -540,9 +578,9 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((this->actor.params < 3) || (this->actor.params == 0x13)) {
+    if ((this->actor.params <= ITEM00_RUPEE_RED) || (this->actor.params == ITEM00_RUPEE_ORANGE)) {
         play_sound(0x4803);
-    } else if (getItemId != 0) {
+    } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
             Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
             Actor_MarkForDeath(&this->actor);
@@ -564,11 +602,16 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->unk154);
 
     this->unk14A = 0;
-    this->actionFunc = EnItem00_Update1;
+    this->actionFunc = func_800A6A40;
 }
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/EnItem00_Update.asm")
+
+void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx);
+void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx);
+void EnItem00_DrawHeartContainer(EnItem00* this, GlobalContext* globalCtx);
+void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx);
 
 void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -576,123 +619,141 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!(this->unk14E & this->unk150)) {
         switch (this->actor.params) {
-        case 0:
-        case 1:
-        case 2:
-        case 19:
-        case 20:
+        case ITEM00_RUPEE_GREEN:
+        case ITEM00_RUPEE_BLUE:
+        case ITEM00_RUPEE_RED:
+        case ITEM00_RUPEE_ORANGE:
+        case ITEM00_RUPEE_PURPLE:
             EnItem00_DrawRupee(this, globalCtx);
             break;
-        case 6:
+        case ITEM00_HEART_PIECE:
             EnItem00_DrawHeartPiece(this, globalCtx);
             break;
-        case 7:
+        case ITEM00_HEART_CONTAINER:
             EnItem00_DrawHeartContainer(this, globalCtx);
             break;
-        case 3:
+        case ITEM00_HEART:
             if (this->unk152 < 0) {
                 if (this->unk152 == -1) {
-                    s8 bankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0x90);
-                    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, bankIndex) != 0) {
+                    s8 bankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEART);
+                    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, bankIndex)) {
                         this->actor.objBankIndex = bankIndex;
                         Actor_SetObjectSegment(globalCtx, &this->actor);
                         this->unk152 = -2;
                     }
                 } else {
-                    SysMatrix_InsertScale(16.0f, 16.0f, 16.0f, 1);
-                    func_800EE320(globalCtx, 8);
+                    Matrix_Scale(16.0f, 16.0f, 16.0f, 1);
+                    GetItem_Draw(globalCtx, 8);
                 }
                 break;
             }
-        case 4:
-        case 5:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 17:
-        case 23:
-        case 25:
+        case ITEM00_BOMBS_A:
+        case ITEM00_ARROWS_10:
+        case ITEM00_ARROWS_30:
+        case ITEM00_ARROWS_40:
+        case ITEM00_ARROWS_50:
+        case ITEM00_BOMBS_B:
+        case ITEM00_NUTS_1:
+        case ITEM00_STICK:
+        case ITEM00_MAGIC_LARGE:
+        case ITEM00_MAGIC_SMALL:
+        case ITEM00_SMALL_KEY:
+        case ITEM00_NUTS_10:
+        case ITEM00_BOMBS_0:
             EnItem00_DrawSprite(this, globalCtx);
             break;
-        case 22:
-            func_800EE320(globalCtx, 0x27);
+        case ITEM00_SHIELD_HERO:
+            GetItem_Draw(globalCtx, GID_SHIELD_HERO);
             break;
-        case 27:
-            func_800EE320(globalCtx, 0x1B);
+        case ITEM00_MAP:
+            GetItem_Draw(globalCtx, GID_DUNGEON_MAP);
             break;
-        case 28:
-            func_800EE320(globalCtx, 0xA);
-        case 16:
-        case 18:
-        case 21:
-        case 24:
-        case 26:
+        case ITEM00_COMPASS:
+            GetItem_Draw(globalCtx, GID_COMPASS);
+        case ITEM00_MASK:
+        case ITEM00_FLEXIBLE:
+        case ITEM00_3_HEARTS:
+        case ITEM00_NOTHING:
+        case ITEM00_BIG_FAIRY:
             break;
         }
     }
 }
+
+UNK_PTR D_801ADF30[5] = {
+    &D_04061FC0, // Green rupee
+    &D_04061FE0, // Blue rupee
+    &D_04062000, // Red rupee
+    &D_04062040, // Orange rupee
+    &D_04062020  // Purple rupee
+};
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 iconNb;
 
-    // OPEN_DISP macro
-    {
-        GraphicsContext* gfx = globalCtx->state.gfxCtx;
-        s32 pad;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        func_8012C28C(globalCtx->state.gfxCtx);
-        func_800B8050(&this->actor, globalCtx, 0);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_800B8050(&this->actor, globalCtx, 0);
 
-        if (this->actor.params <= 2) {
-            iconNb = this->actor.params;
-        } else {
-            iconNb = this->actor.params - 0x10;
-        }
-
-        gSPMatrix(gfx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-
-        gSPSegment(gfx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_801ADF30[iconNb]));
-
-        gSPDisplayList(gfx->polyOpa.p++, &D_040622C0); // TODO symbol
+    if (this->actor.params <= ITEM00_RUPEE_RED) {
+        iconNb = this->actor.params;
+    } else {
+        iconNb = this->actor.params - 0x10;
     }
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF30[iconNb]));
+
+    gSPDisplayList(POLY_OPA_DISP++, &D_040622C0); // TODO symbol
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
+
+UNK_PTR D_801ADF44[12] = {
+    &D_0405E6F0, // Heart (Not used)
+    &D_0405CEF0, // Bombs (A), Bombs (0)
+    &D_0405BEF0, // Arrows (10)
+    &D_0405B6F0, // Arrows (30)
+    &D_0405C6F0, // Arrows (40), Arrows (50)
+    &D_0405CEF0, // Bombs (B)
+    &D_040607C0, // Nuts (1), Nuts (10)
+    &D_04060FC0, // Sticks (1)
+    &D_040617C0, // Magic (Large)
+    &D_0405FFC0, // Magic (Small)
+    NULL,
+    &D_0405F7C0  // Small Key
+};
 
 void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
     s32 iconNb = this->actor.params - 3;
 
-    // OPEN_DISP macro
-    {
-        GraphicsContext* gfx = globalCtx->state.gfxCtx;
-        s32 pad;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gfx->polyOpa.p = func_801660B8(globalCtx, gfx->polyOpa.p);
+    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
-        if (this->actor.params == 0x17) {
-            iconNb = 6;
-        } else if (this->actor.params == 0x19) {
-            iconNb = 1;
-        } else if (this->actor.params >= 8) {
-            iconNb -= 3;
-            if (this->actor.params < 0xA) {
-                iconNb++;
-            }
+    if (this->actor.params == ITEM00_NUTS_10) {
+        iconNb = 6;
+    } else if (this->actor.params == ITEM00_BOMBS_0) {
+        iconNb = 1;
+    } else if (this->actor.params >= ITEM00_ARROWS_30) {
+        iconNb -= 3;
+        if (this->actor.params < ITEM00_ARROWS_50) {
+            iconNb++;
         }
-
-        gfx->polyOpa.p = func_8012C724(gfx->polyOpa.p);
-
-        gSPSegment(gfx->polyOpa.p++, 0x08, Lib_PtrSegToVirt(D_801ADF44[iconNb]));
-
-        gSPMatrix(gfx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-
-        gSPDisplayList(gfx->polyOpa.p++, D_0405F6F0);
-
     }
+
+    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF44[iconNb]));
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+
+    gSPDisplayList(POLY_OPA_DISP++, D_0405F6F0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 extern Gfx D_06001290[];
@@ -702,55 +763,51 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
-    if (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, 0x96) == actor->actor.objBankIndex) {
-        // OPEN_DISP macro
-        {
-            GraphicsContext* gfx = globalCtx->state.gfxCtx;
-            s32 pad;
+    if (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            func_8012C2DC(globalCtx->state.gfxCtx);
-            SysMatrix_InsertScale(20.0f, 20.0f, 20.0f, 1);
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        Matrix_Scale(20.0f, 20.0f, 20.0f, 1);
 
-            gSPMatrix(gfx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-            gSPDisplayList(gfx->polyXlu.p++, D_06001290);
-            gSPDisplayList(gfx->polyXlu.p++, D_06001470);
-        }
+        gSPDisplayList(POLY_XLU_DISP++, D_06001290);
+        gSPDisplayList(POLY_XLU_DISP++, D_06001470);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 
 void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    // OPEN_DISP macro
-    {
-        GraphicsContext* gfx = globalCtx->state.gfxCtx;
-        s32 pad;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        func_800B8118(&this->actor, globalCtx, 0);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_800B8118(&this->actor, globalCtx, 0);
 
-        gSPMatrix(gfx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-        gSPDisplayList(gfx->polyXlu.p++, D_0405AAB0);
-    }
+    gSPDisplayList(POLY_XLU_DISP++, D_0405AAB0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 s16 func_800A7650(s16 dropId) {
     s16 maxLife;
 
-    if ((((dropId == 4) || (dropId == 0x19) || (dropId == 0xB)) && (gSaveContext.perm.inv.items[D_801C207E] == 0xFF)) ||
-        (((dropId == 5) || (dropId == 8) || (dropId == 9) || (dropId == 0xA)) && (gSaveContext.perm.inv.items[D_801C2079] == 0xFF)) ||
-        (((dropId == 0xE) || (dropId == 0xF)) && (gSaveContext.perm.unk24.unk14 == 0))) {
-        return -1;
+    if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) && (gSaveContext.perm.inv.items[D_801C207E] == 0xFF)) ||
+        (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) || (dropId == ITEM00_ARROWS_50)) && (gSaveContext.perm.inv.items[D_801C2079] == 0xFF)) ||
+        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.perm.unk24.unk14 == 0))) {
+        return ITEM00_NO_DROP;
     }
 
     ;
 
-    if (dropId == 3) {
+    if (dropId == ITEM00_HEART) {
         maxLife = gSaveContext.perm.unk24.maxLife;
         if (maxLife == gSaveContext.perm.unk24.currentLife) {
-            return 0;
+            return ITEM00_RUPEE_GREEN;
         }
     }
 
@@ -758,7 +815,7 @@ s16 func_800A7650(s16 dropId) {
 }
 
 /*
-EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
+EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
     s32 pad;
     EnItem00* spawnedActor = NULL;
     s32 pad2;
@@ -777,23 +834,23 @@ EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
 
     params &= 0x7FFF;
 
-    if (paramFF == 0x15) {
+    if (paramFF == ITEM00_3_HEARTS) {
         for (i = 0; i != 3; i++) {
-            spawnedActor = func_800A7730(globalCtx, spawnPos, param7F00 | 3 | param8000);
+            spawnedActor = Item_DropCollectible(globalCtx, spawnPos, param7F00 | ITEM00_HEART | param8000);
         }
-    } else if (paramFF == 0x1D) {
+    } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
         param7F00 >>= 8;
         if (!Actor_GetCollectibleFlag(globalCtx, param7F00)) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x23B, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, param7F00);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, param7F00);
         }
-    } else if (((paramFF == 0x12) || ((params & 0xFF) == 0x1A)) && (param10000 == 0)) {
-        if ((params & 0xFF) == 0x12) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x10, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+    } else if (((paramFF == ITEM00_FLEXIBLE) || ((params & 0xFF) == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
+        if ((params & 0xFF) == ITEM00_FLEXIBLE) {
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
                 func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
             }
         } else {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x1B0, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
                     func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
@@ -804,8 +861,8 @@ EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
         if (param8000 == 0) {
             params = func_800A7650(params & 0xFF);
         }
-        if (params != -1) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, params | param8000 | param7F00);
+        if (params != ITEM00_NO_DROP) {
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, params | param8000 | param7F00);
             if ((spawnedActor != NULL) && (param8000 == 0)) {
                 if (param10000 == 0) {
                     spawnedActor->actor.velocity.y = 8.0f;
@@ -818,7 +875,7 @@ EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
                 Actor_SetScale(spawnedActor, 0.0f);
                 spawnedActor->actionFunc = func_800A6780;
                 spawnedActor->unk152 = 0xDC;
-                if ((spawnedActor->actor.params != 0x11) && (spawnedActor->actor.params != 6) && (spawnedActor->actor.params != 7)) {
+                if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) && (spawnedActor->actor.params != ITEM00_HEART_PIECE) && (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {
                     spawnedActor->actor.room = -1;
                 }
                 spawnedActor->actor.flags |= 0x0010;
@@ -830,10 +887,10 @@ EnItem00* func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
 }
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/func_800A7730.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible.asm")
 
 /*
-Actor* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
+Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
     Actor* spawnedActor = NULL;
     u32 pad;
     u32 temp_t1;
@@ -845,23 +902,23 @@ Actor* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
     temp_t0 = params & 0x7F00;
     params &= 0xFF;
 
-    if (params == 0x15) {
+    if (params == ITEM00_3_HEARTS) {
         return NULL;
     }
 
-    if (((params == 0x12) || (params == 0x1A)) && (temp_t1 == 0)) {
-        if (params == 0x12) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x10, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((temp_t0 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+    if (((params == ITEM00_FLEXIBLE) || (params == ITEM00_BIG_FAIRY)) && (temp_t1 == 0)) {
+        if (params == ITEM00_FLEXIBLE) {
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((temp_t0 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
         } else {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x1B0, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((temp_t0 >> 8) & 0x7F) & 0x7F) << 9) | 7);
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, ((((temp_t0 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Actor_GetCollectibleFlag(globalCtx, (temp_t0 >> 8) & 0x7F) == 0) {
             func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
         }
     } else {
         params = func_800A7650(params);
-        if (params != -1) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, params | sp42 | temp_t0);
+        if (params != ITEM00_NO_DROP) {
+            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, params | sp42 | temp_t0);
             if (spawnedActor != NULL) {
                 if (sp42 == 0) {
                     spawnedActor->velocity.y = 0.0f;
@@ -882,36 +939,76 @@ Actor* func_800A7AD4(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
 }
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/func_800A7AD4.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible2.asm")
+
+u8 sDropTable[16 * 17] = {
+    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_MASK, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_BOMBS_A, ITEM00_MAGIC_SMALL, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_MASK, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_MAGIC_SMALL, ITEM00_NO_DROP, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_MASK, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_BOMBS_A, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN, ITEM00_NO_DROP, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_NO_DROP, ITEM00_MASK, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_BOMBS_A, ITEM00_MAGIC_SMALL, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_MASK, ITEM00_MASK, ITEM00_MASK, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP,
+    ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP,
+    ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART, ITEM00_HEART,
+    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP,
+    ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED, ITEM00_RUPEE_RED,
+    ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_30, ITEM00_ARROWS_30, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE,
+    ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A, ITEM00_BOMBS_A,
+    ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE,
+    ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE,
+    ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NUTS_1, ITEM00_NUTS_1, ITEM00_NO_DROP, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_STICK, ITEM00_STICK, ITEM00_NO_DROP, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_NO_DROP, ITEM00_ARROWS_10, ITEM00_ARROWS_10, ITEM00_ARROWS_30, ITEM00_BOMBS_A, ITEM00_NO_DROP, ITEM00_STICK, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_HEART, ITEM00_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN, ITEM00_HEART, ITEM00_HEART, ITEM00_MAGIC_SMALL, ITEM00_MASK, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP, ITEM00_NO_DROP,
+};
+
+u8 sDropTableAmounts[16 * 17] = {
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x01,
+    0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    0x01, 0x01, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+};
 
 /*
-void func_800A7D28(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params) {
+void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params) {
     EnItem00* spawnedActor;
     u8 dropId;
     s32 dropQuantity;
     s16 dropTableIndex;
     s16 param8000;
 
-    dropTableIndex = randZeroOne() * 16.0f;
+    dropTableIndex = Rand_ZeroOne() * 16.0f;
     param8000 = params & 0x8000;
     params &= 0x1F0;
 
     if (params < 0x101) {
-        dropId = D_801ADF74[params + dropTableIndex];
-        dropQuantity = D_801AE084[params + dropTableIndex];
+        dropId = sDropTable[params + dropTableIndex];
+        dropQuantity = sDropTableAmounts[params + dropTableIndex];
 
-        if (dropId == 0x10) {
-            dropId = 0xF;
+        if (dropId == ITEM00_MASK) {
+            dropId = ITEM00_MAGIC_SMALL;
             dropQuantity = 1;
             if (gSaveContext.perm.unk20 != 1) {
                 if (gSaveContext.perm.unk20 != 2) {
                     if (gSaveContext.perm.unk20 != 4) {
-                        dropId = 0;
+                        dropId = ITEM00_RUPEE_GREEN;
                     } else {
-                        dropId = 5;
+                        dropId = ITEM00_ARROWS_10;
                     }
                 } else {
-                    dropId = 3;
+                    dropId = ITEM00_HEART;
                 }
             }
         }
@@ -919,78 +1016,78 @@ void func_800A7D28(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, 
         if (fromActor != NULL) {
             if (fromActor->dropFlag != 0) {
                 if ((fromActor->dropFlag & 1) != 0) {
-                    dropId = 8;
+                    dropId = ITEM00_ARROWS_30;
                     params = 0x10;
                 } else if ((fromActor->dropFlag & 2) != 0) {
-                    dropId = 3;
+                    dropId = ITEM00_HEART;
                     params = 0x10;
                 } else  if ((fromActor->dropFlag & 0x20) != 0) {
-                    dropId = 0x14;
+                    dropId = ITEM00_RUPEE_PURPLE;
                 }
                 dropQuantity = 1;
             }
         }
 
-        if (dropId == 0x12) {
+        if (dropId == ITEM00_FLEXIBLE) {
             if (gSaveContext.perm.unk24.currentLife < 0x11) {
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x10, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, 2);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0, 2);
                 func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
                 return;
             }
 
             if (gSaveContext.perm.unk24.currentLife < 0x31) {
                 params = 0x10;
-                dropId = 3;
+                dropId = ITEM00_HEART;
                 dropQuantity = 3;
             } else if (gSaveContext.perm.unk24.currentLife < 0x51) {
                 params = 0x10;
-                dropId = 3;
+                dropId = ITEM00_HEART;
                 dropQuantity = 1;
             } else  if ((gSaveContext.perm.unk24.unk14 != 0) && (gSaveContext.perm.unk24.currentMagic == 0)) {
                 params = 0xD0;
-                dropId = 0xE;
+                dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
             } else if ((gSaveContext.perm.unk24.unk14 != 0) && ((gSaveContext.perm.unk24.unk14 >> 1) >= gSaveContext.perm.unk24.currentMagic)) {
                 params = 0xD0;
-                dropId = 0xE;
+                dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
             } else if (gSaveContext.perm.inv.quantities[D_801C2078[1]] < 6) {
                 params = 0xA0;
-                dropId = 8;
+                dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
             } else if (gSaveContext.perm.inv.quantities[D_801C2078[6]] < 6) {
                 params = 0xB0;
-                dropId = 4;
+                dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
             } else if (gSaveContext.perm.unk24.unk16 < 0xB) {
                 params = 0xA0;
-                dropId = 2;
+                dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;
             }
         }
 
-        if (dropId != 0xFF) {
+        if (dropId != ITEM00_NO_DROP) {
             while (dropQuantity > 0) {
                 if (param8000 == 0) {
                     dropId = func_800A7650(dropId);
-                    if (dropId != 0xFF) {
-                        spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
-                        if ((spawnedActor != 0) && (dropId != 0xFF)) {
+                    if (dropId != ITEM00_NO_DROP) {
+                        spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
+                        if ((spawnedActor != 0) && (dropId != ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
                             spawnedActor->actor.speedXZ = 2.0f;
                             spawnedActor->actor.gravity = -0.9f;
-                            spawnedActor->actor.world.rot.y = randZeroOne() * 40000.0f;
+                            spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(spawnedActor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
                             spawnedActor->actor.flags = spawnedActor->actor.flags | 0x10;
-                            if ((spawnedActor->actor.params != 0x11) && (spawnedActor->actor.params != 6) && (spawnedActor->actor.params != 7)) {
+                            if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) && (spawnedActor->actor.params != ITEM00_HEART_PIECE) && (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {
                                 spawnedActor->actor.room = -1;
                             }
                             spawnedActor->unk152 = 220;
                         }
                     }
                 } else {
-                    func_800A7730(globalCtx, spawnPos, params | 0x8000);
+                    Item_DropCollectible(globalCtx, spawnPos, params | 0x8000);
                 }
 
                 dropQuantity--;
@@ -1000,18 +1097,57 @@ void func_800A7D28(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, 
 }
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/func_800A7D28.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectibleRandom.asm")
+
+s32 D_801AE194[32] = {
+    ITEM00_NO_DROP,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_NO_DROP,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_PURPLE,
+    ITEM00_NO_DROP,
+    ITEM00_RUPEE_ORANGE,
+    ITEM00_COMPASS,
+    ITEM00_MUSHROOM_CLOUD,
+    ITEM00_HEART,
+    ITEM00_3_HEARTS,
+    ITEM00_HEART_PIECE,
+    ITEM00_HEART_CONTAINER,
+    ITEM00_MAGIC_SMALL,
+    ITEM00_MAGIC_LARGE,
+    ITEM00_FLEXIBLE,
+    ITEM00_BIG_FAIRY,
+    ITEM00_NO_DROP,
+    ITEM00_NUTS_10,
+    ITEM00_NO_DROP,
+    ITEM00_BOMBS_A,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_STICK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_30
+};
 
 s32 func_800A8150(s32 index) {
-    if ((index < 0) || (index >= 32)) {
-        return -1;
+    if ((index < 0) || (index >= ARRAY_COUNT(D_801AE194))) {
+        return ITEM00_NO_DROP;
     }
 
     return D_801AE194[index];
 }
 
+u8 D_801AE214[32] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
 s32 func_800A817C(s32 index) {
-    if ((index < 0) || (index >= 32)) {
+    if ((index < 0) || (index >= ARRAY_COUNT(D_801AE214))) {
         return 0;
     }
 
@@ -1019,5 +1155,5 @@ s32 func_800A817C(s32 index) {
 }
 
 s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2) {
-    return (func_800A8150(a1) == 0x1A) && (Actor_GetCollectibleFlag(globalCtx, a2) == 0);
+    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Actor_GetCollectibleFlag(globalCtx, a2));
 }

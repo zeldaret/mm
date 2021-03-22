@@ -461,7 +461,7 @@ SECTIONS
         code_data_start = .;
         build/asm/code/code_data_0x801AAAB0.o(.data)
         build/asm/code/code_data_0x800A5AC0.o(.data)
-        build/asm/code/code_data_z_en_item00.o(.data)
+        build/src/code/z_en_item00.o(.data)
         build/asm/code/code_data_z_eff_blure.o(.data)
         build/asm/code/code_data_z_eff_shield_particle.o(.data)
         build/src/code/code_0x800AF710.o(.data)

@@ -263,6 +263,41 @@ typedef struct {
     /* 0xCC4 */ UNK_TYPE1 padCC4[0xB4];
 } ActorPlayer; // size = 0xD78
 
+typedef enum {
+    /* 0x00 */ ITEM00_RUPEE_GREEN,
+    /* 0x01 */ ITEM00_RUPEE_BLUE,
+    /* 0x02 */ ITEM00_RUPEE_RED,
+    /* 0x03 */ ITEM00_HEART,
+    /* 0x04 */ ITEM00_BOMBS_A,
+    /* 0x05 */ ITEM00_ARROWS_10,
+    /* 0x06 */ ITEM00_HEART_PIECE,
+    /* 0x07 */ ITEM00_HEART_CONTAINER,
+    /* 0x08 */ ITEM00_ARROWS_30,
+    /* 0x09 */ ITEM00_ARROWS_40,
+    /* 0x0A */ ITEM00_ARROWS_50,
+    /* 0x0B */ ITEM00_BOMBS_B,
+    /* 0x0C */ ITEM00_NUTS_1,
+    /* 0x0D */ ITEM00_STICK,
+    /* 0x0E */ ITEM00_MAGIC_LARGE,
+    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x10 */ ITEM00_MASK,
+    /* 0x11 */ ITEM00_SMALL_KEY,
+    /* 0x12 */ ITEM00_FLEXIBLE,
+    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x14 */ ITEM00_RUPEE_PURPLE,
+    /* 0x15 */ ITEM00_3_HEARTS,
+    /* 0x16 */ ITEM00_SHIELD_HERO,
+    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x18 */ ITEM00_NOTHING,
+    /* 0x19 */ ITEM00_BOMBS_0,
+    /* 0x1A */ ITEM00_BIG_FAIRY,
+    /* 0x1B */ ITEM00_MAP,
+    /* 0x1C */ ITEM00_COMPASS,
+    /* 0x1D */ ITEM00_MUSHROOM_CLOUD,
+
+    /* 0xFF */ ITEM00_NO_DROP = -1
+} Item00Type;
+
 struct EnItem00;
 
 typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);

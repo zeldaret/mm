@@ -414,7 +414,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
                                 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
 
-        gSPDisplayList(dl++, &D_04029CB0);
+        gSPDisplayList(dl++, D_04029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -429,7 +429,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
                     gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, &D_04029CF0);
+                    gSPDisplayList(dl++, D_04029CF0);
                 }
             }
 

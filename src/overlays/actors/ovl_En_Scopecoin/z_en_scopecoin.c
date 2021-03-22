@@ -30,7 +30,7 @@ void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
 
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
     if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
-        func_800A7730(globalCtx, &this->actor.world, 2);
+        Item_DropCollectible(globalCtx, &this->actor.world, 2);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -77,14 +77,14 @@ void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-static UNK_PTR D_80BFD280[] = {D_04061FC0, D_04061FE0, D_04062000, D_04062040, D_04062020, D_04062060, D_04062000};
+static UNK_PTR D_80BFD280[] = {&D_04061FC0, &D_04061FE0, &D_04062000, &D_04062040, &D_04062020, &D_04062060, &D_04062000};
 
 void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnScopecoin* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    
+
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_800B8050(&this->actor, globalCtx, 0); 
+    func_800B8050(&this->actor, globalCtx, 0);
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
