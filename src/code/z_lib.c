@@ -28,11 +28,11 @@ void* Lib_MemSet(u8* a0, u32 a1, u32 a2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_MemSet.asm")
 #endif
 
-f32 Math_Coss(s16 angle) {
+f32 Math_CosS(s16 angle) {
     return coss(angle) * D_801DDA80;
 }
 
-f32 Math_Sins(s16 angle) {
+f32 Math_SinS(s16 angle) {
     return sins(angle) * D_801DDA84;
 }
 
@@ -561,8 +561,8 @@ void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, 
     f32 sp1C;
     f32 f0;
 
-    sp1C = Math_Coss(rotation);
-    f0 = Math_Sins(rotation);
+    sp1C = Math_CosS(rotation);
+    f0 = Math_SinS(rotation);
     dst->x = translation->x + (src->x * sp1C + src->z * f0);
     dst->y = translation->y + src->y;
     dst->z = translation->z + (src->z * sp1C - src->x * f0);

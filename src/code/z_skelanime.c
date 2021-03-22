@@ -1462,11 +1462,11 @@ s32 func_80136D98(SkelAnime* skelAnime) {
     }
     temp_a1 = (s16)(skelAnime->transCurrentFrame * 16384.0f);
     if (skelAnime->unk03 < 0) {
-        sp28 = 1.0f - Math_Coss(temp_a2);
-        phi_f2 = 1.0f - Math_Coss(temp_a1);
+        sp28 = 1.0f - Math_CosS(temp_a2);
+        phi_f2 = 1.0f - Math_CosS(temp_a1);
     } else {
-        sp28 = Math_Sins(temp_a2);
-        phi_f2 = Math_Sins(temp_a1);
+        sp28 = Math_SinS(temp_a2);
+        phi_f2 = Math_SinS(temp_a1);
     }
     if (phi_f2 != 0.0f) {
         phi_f2 /= sp28;
@@ -1691,8 +1691,8 @@ void func_80137748(SkelAnime* skelAnime, Vec3f* pos, s16 angle) {
         // `angle` rotation around y axis.
         x = skelAnime->limbDrawTbl->x - skelAnime->prevFramePos.x;
         z = skelAnime->limbDrawTbl->z - skelAnime->prevFramePos.z;
-        sin = Math_Sins(angle);
-        cos = Math_Coss(angle);
+        sin = Math_SinS(angle);
+        cos = Math_CosS(angle);
         pos->x = x * cos + z * sin;
         pos->z = z * cos - x * sin;
     }

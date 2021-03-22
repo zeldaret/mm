@@ -55,7 +55,7 @@ void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
     this->bg.actor.world.pos.y = this->bg.actor.home.pos.y + this->elevation + this->bouceHeight;
 
-    this->bg.actor.world.pos.y -= this->bouceHeight * Math_Coss(this->bounce);
+    this->bg.actor.world.pos.y -= this->bouceHeight * Math_CosS(this->bounce);
 }
 
 void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {

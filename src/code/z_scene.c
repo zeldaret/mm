@@ -390,11 +390,11 @@ void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
     }
 
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk4 = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk8 = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unkC = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
+    ctxt->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
     if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
         gSaveContext.extra.environmentTime = gSaveContext.perm.time;

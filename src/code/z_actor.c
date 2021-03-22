@@ -386,9 +386,9 @@ void Actor_ApplyMovement(Actor* actor) {
 
 #if 0
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_Sins(actor->world.rot.x);
+    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.x);
     actor->velocity.y = actor->velocity.y + actor->gravity;
-    actor->velocity.z = actor->speedXZ * Math_Coss(actor->world.rot.x);
+    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.x);
 
     if (actor->velocity.y < actor->minYVelocity) {
         actor->velocity.y = actor->minYVelocity;
@@ -404,10 +404,10 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Math_Coss(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
-    actor->velocity.y = Math_Sins(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
+    f32 velX =  Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
@@ -416,10 +416,10 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Math_Coss(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
-    actor->velocity.y = Math_Sins(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
+    f32 velX =  Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
@@ -477,8 +477,8 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     f32 imm_x;
     f32 imm_z;
 
-    cos_rot_y = Math_Coss(actor->shape.rot.y);
-    sin_rot_y = Math_Sins(actor->shape.rot.y);
+    cos_rot_y = Math_CosS(actor->shape.rot.y);
+    sin_rot_y = Math_SinS(actor->shape.rot.y);
     imm_x = point->x - actor->world.pos.x;
     imm_z = point->z - actor->world.pos.z;
     offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
