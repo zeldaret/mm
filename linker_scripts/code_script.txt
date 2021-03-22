@@ -24,7 +24,7 @@ SECTIONS
         build/src/boot_O1/boot_0x80084940.o(.text)
         build/asm/boot/loadfragment.o(.text)
         build/src/boot_O2/loadfragment2.o(.text)
-        build/asm/boot/boot_0x80085130.o(.text)
+        build/src/boot_O2/padutils.o(.text)
         build/src/boot_O2/stackcheck.o(.text)
         build/asm/boot/boot_0x80085570.o(.text)
         build/asm/boot/mtxuty-cvt.o(.text)
