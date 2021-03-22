@@ -18,9 +18,9 @@ void Lights_InitType2PositionalLight(LightInfoPositional* info, s16 posX, s16 po
 }
 
 void Lights_SetPositionalLightColorAndRadius(LightInfoPositional* info, u8 red, u8 green, u8 blue, s16 radius) {
-    info->params.red = red;
-    info->params.green = green;
-    info->params.blue = blue;
+    info->params.color[0] = red;
+    info->params.color[1] = green;
+    info->params.color[2] = blue;
     info->params.radius = radius;
 }
 
@@ -50,28 +50,27 @@ void Lights_MapperInit(LightMapper* mapper, u8 red, u8 green, u8 blue) {
     mapper->numLights = 0;
 }
 
-// XXX regalloc
-#ifdef NON_MATCHING
-void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gCtxt) {
+void Lights_UploadLights(LightMapper* mapper, GraphicsContext* gfxCtx) {
     Light* l;
     s32 i;
 
-    gSPNumLights(gCtxt->polyOpa.p++, mapper->numLights);
-    gSPNumLights(gCtxt->polyXlu.p++, mapper->numLights);
+    OPEN_DISPS(gfxCtx);
 
-    l = &mapper->lights.l[0];
+    gSPNumLights(POLY_OPA_DISP++, mapper->numLights);
+    gSPNumLights(POLY_XLU_DISP++, mapper->numLights);
+
+    l = mapper->lights.l;
 
     for (i = 0; i < mapper->numLights;) {
-        gSPLight(gCtxt->polyOpa.p++, l, ++i);
-        gSPLight(gCtxt->polyXlu.p++, l++, i);
+        gSPLight(POLY_OPA_DISP++, l, ++i);
+        gSPLight(POLY_XLU_DISP++, l++, i);
     }
 
-    gSPLight(gCtxt->polyOpa.p++, &mapper->lights.a, ++i);
-    gSPLight(gCtxt->polyXlu.p++, &mapper->lights.a, i);
+    gSPLight(POLY_OPA_DISP++, &mapper->lights.a, ++i);
+    gSPLight(POLY_XLU_DISP++, &mapper->lights.a, i);
+
+    CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_UploadLights.asm")
-#endif
 
 Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
     if (6 < mapper->numLights) {
@@ -80,59 +79,48 @@ Light* Lights_MapperGetNextFreeSlot(LightMapper* mapper) {
     return &mapper->lights.l[mapper->numLights++];
 }
 
-// XXX regalloc, some reorderings
-#ifdef NON_MATCHING
 void Lights_MapPositionalWithReference(LightMapper* mapper, LightInfoPositionalParams* params, Vec3f* pos) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    f32 dist;
-    f32 radiusF;
+    f32 posDiff;
+    f32 scale;
     Light* light;
 
-    if (pos == NULL) return;
+    if ((pos != NULL) && (params->radius >= 1)) {
+        xDiff = params->posX - pos->x;
+        yDiff = params->posY - pos->y;
+        zDiff = params->posZ - pos->z;
+        scale = params->radius;
+        posDiff = SQ(xDiff) + SQ(yDiff) + SQ(zDiff);
 
-    if (params->radius < 1) return;
+        if (SQ(scale) > posDiff) {
+            light = Lights_MapperGetNextFreeSlot(mapper);
 
-    xDiff = params->posX - pos->x;
-    yDiff = params->posY - pos->y;
-    zDiff = params->posZ - pos->z;
-    radiusF = params->radius;
-    dist = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff;
+            if (light != NULL) {
+                posDiff = sqrtf(posDiff);
+                scale = posDiff / scale;
+                scale = 1 - SQ(scale);
 
-    if (radiusF * radiusF > dist) {
-        light = Lights_MapperGetNextFreeSlot(mapper);
-        if (light == NULL) return;
+                light->l.col[0] = params->color[0] * scale;
+                light->l.colc[0] = light->l.col[0];
+                light->l.col[1] = params->color[1] * scale;
+                light->l.colc[1] = light->l.col[1];
+                light->l.col[2] = params->color[2] * scale;
+                light->l.colc[2] = light->l.col[2];
 
-        dist = sqrtf(dist);
+                scale = (posDiff < 1) ? 120 : 120 / posDiff;
 
-        light->l.colc[0] = light->l.col[0] = params->red * (1 - (dist / radiusF) * (dist / radiusF));
-        light->l.colc[1] = light->l.col[1] = params->green * (1 - (dist / radiusF) * (dist / radiusF));
-        light->l.colc[2] = light->l.col[2] = params->blue * (1 - (dist / radiusF) * (dist / radiusF));
-
-        if (dist < 1) {
-            dist = 120;
-        } else {
-            dist = 120 / dist;
+                light->l.dir[0] = xDiff * scale;
+                light->l.dir[1] = yDiff * scale;
+                light->l.dir[2] = zDiff * scale;
+            }
         }
-
-        xDiff *= dist;
-        yDiff *= dist;
-        zDiff *= dist;
-
-        light->l.dir[0] = xDiff;
-        light->l.dir[1] = yDiff;
-        light->l.dir[2] = zDiff;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_MapPositionalWithReference.asm")
-#endif
 
-// This function matches, but uses .rodata. We don't have a good way to match partial .rodata for a file yet.
-#ifdef NON_MATCHING
 void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params, GlobalContext* ctxt) {
-    Light* light;
+    PosLight* light;
     f32 radiusF = params->radius;
     Vec3f posF;
     Vec3f adjustedPos;
@@ -146,7 +134,7 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
             (600 + radiusF > adjustedPos.z) &&
             (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
-            light = Lights_MapperGetNextFreeSlot(mapper);
+            light = (PosLight*)Lights_MapperGetNextFreeSlot(mapper);
             if (light != NULL) {
                 radiusF = 4500000.0f / (radiusF * radiusF);
                 if (radiusF > 255) {
@@ -155,25 +143,22 @@ void Lights_MapPositional(LightMapper* mapper, LightInfoPositionalParams* params
                     radiusF = 20;
                 }
 
-                light->lPos.col[0] = params->red;
-                light->lPos.colc[0] = light->lPos.col[0];
-                light->lPos.col[1] = params->green;
-                light->lPos.colc[1] = light->lPos.col[1];
-                light->lPos.col[2] = params->blue;
-                light->lPos.colc[2] = light->lPos.col[2];
-                light->lPos.pos[0] = params->posX;
-                light->lPos.pos[1] = params->posY;
-                light->lPos.pos[2] = params->posZ;
-                light->lPos.pad1 = 0x8;
-                light->lPos.pad2 = 0xFF;
-                light->lPos.unkE = (s8)radiusF;
+                light->col[0] = params->color[0];
+                light->colc[0] = light->col[0];
+                light->col[1] = params->color[1];
+                light->colc[1] = light->col[1];
+                light->col[2] = params->color[2];
+                light->colc[2] = light->col[2];
+                light->pos[0] = params->posX;
+                light->pos[1] = params->posY;
+                light->pos[2] = params->posZ;
+                light->unk3 = 0x8;
+                light->unk7 = 0xFF;
+                light->unkE = (s32)radiusF;
             }
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_MapPositional.asm")
-#endif
 
 void Lights_MapDirectional(LightMapper* mapper, LightInfoDirectionalParams* params, GlobalContext* ctxt) {
     Light* light = Lights_MapperGetNextFreeSlot(mapper);
@@ -356,34 +341,31 @@ LightMapper* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 gre
     return mapper;
 }
 
-// XXX regalloc
-#ifdef NON_MATCHING
 void func_80102880(GlobalContext* ctxt) {
-    z_Light* light = ctxt->lightsContext.lightsHead;
-    LightInfoPositionalParams* params;
-    Vec3f local_14;
-    Vec3f local_20;
-    f32 local_24;
-    f32 fVar4;
-    s32 s2;
-    u32 pad[2];
+    z_Light* light = ctxt->lightCtx.lightsHead;
 
     while (light != NULL) {
+        LightInfoPositionalParams* params = (LightInfoPositionalParams*)&light->info->params;
+
         if (light->info->type == 2) {
-            params = (LightInfoPositionalParams*)&light->info->params;
-            local_14.x = params->posX;
-            local_14.y = params->posY;
-            local_14.z = params->posZ;
-            func_800B4EDC(ctxt, &local_14, &local_20, &local_24);
+            Vec3f pos;
+            Vec3f multDest;
+            f32 wDest;
+
+            pos.x = params->posX;
+            pos.y = params->posY;
+            pos.z = params->posZ;
+            func_800B4EDC(ctxt, &pos, &multDest, &wDest);
 
             params->unk9 = 0;
 
-            if ((local_20.z > 1) &&
-                (fabsf(local_20.x * local_24) < 1) &&
-                (fabsf(local_20.y * local_24) < 1)) {
-                fVar4 = local_20.z * local_24;
-                s2 = (s32)(fVar4 * 16352) + 16352;
-                if (s2 < func_80178A94(local_20.x * local_24 * 160 + 160, local_20.y * local_24 * -120 + 120)) {
+            if ((multDest.z > 1) && (fabsf(multDest.x * wDest) < 1) && (fabsf(multDest.y * wDest) < 1)) {
+                s32 wX = multDest.x * wDest * 160 + 160;
+                s32 wY = multDest.y * wDest * -120 + 120;
+                s32 wZ = (s32)((multDest.z * wDest) * 16352) + 16352;
+                s32 zBuf = func_80178A94(wX, wY);
+
+                if (wZ < zBuf) {
                     params->unk9 = 1;
                 }
             }
@@ -392,22 +374,16 @@ void func_80102880(GlobalContext* ctxt) {
         light = light->next;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/func_80102880.asm")
-#endif
 
-// XXX regalloc
-#ifdef NON_MATCHING
 void func_80102A64(GlobalContext* ctxt) {
     Gfx* dl;
     LightInfoPositionalParams* params;
-    f32 scale;
-    GraphicsContext* gCtxt;
-    z_Light* light = ctxt->lightsContext.lightsHead;
+    z_Light* light = ctxt->lightCtx.lightsHead;
 
     if (light != NULL) {
-        gCtxt = ctxt->common.gCtxt;
-        dl = func_8012C7FC(gCtxt->polyXlu.p);
+        OPEN_DISPS(ctxt->state.gfxCtx);
+
+        dl = func_8012C7FC(POLY_XLU_DISP);
 
         gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080); //! This doesn't resolve to any of the macros in gdi.h
 
@@ -420,14 +396,14 @@ void func_80102A64(GlobalContext* ctxt) {
             if (light->info->type == 2) {
                 params = (LightInfoPositionalParams*)&light->info->params;
                 if (params->unk9 != 0) {
-                    scale = (f32)params->radius * (f32)params->radius * 2e-6f;
+                    f32 scale = SQ((f32)params->radius) * 2e-6f;
 
-                    gDPSetPrimColor(dl++, 0, 0, params->red, params->green, params->blue, 50);
+                    gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     SysMatrix_InsertTranslation(params->posX, params->posY, params->posZ, 0);
                     SysMatrix_InsertScale(scale,scale,scale,1);
 
-                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp((ctxt->common).gCtxt), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp(ctxt->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(dl++, &D_04029CF0);
                 }
@@ -436,9 +412,8 @@ void func_80102A64(GlobalContext* ctxt) {
             light = light->next;
         } while (light != NULL);
 
-        gCtxt->polyXlu.p = dl;
+        POLY_XLU_DISP = dl;
+
+        CLOSE_DISPS(ctxt->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/func_80102A64.asm")
-#endif

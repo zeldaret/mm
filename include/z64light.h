@@ -5,6 +5,16 @@
 #include <PR/gbi.h>
 
 typedef struct {
+    /* 0x0 */ u8 col[3];
+    /* 0x3 */ u8 unk3;
+    /* 0x4 */ u8 colc[3];
+    /* 0x7 */ u8 unk7;
+    /* 0x8 */ s16 pos[3];
+    /* 0xE */ u8 unkE;
+    /* 0xF */ u8 unkF;
+} PosLight; // size = 0x10
+
+typedef struct {
     /* 0x0 */ u8 type;
     /* 0x2 */ u16 params[6];
 } LightInfo; // size = 0xE
@@ -47,9 +57,7 @@ typedef struct {
     /* 0x0 */ s16 posX;
     /* 0x2 */ s16 posY;
     /* 0x4 */ s16 posZ;
-    /* 0x6 */ u8 red;
-    /* 0x7 */ u8 green;
-    /* 0x8 */ u8 blue;
+    /* 0x6 */ u8 color[3];
     /* 0x9 */ u8 unk9; // func_80102880 sets this only for type 2, func_80102A64 draws something if this is set
     /* 0xA */ s16 radius;
 } LightInfoPositionalParams; // size = 0xC
