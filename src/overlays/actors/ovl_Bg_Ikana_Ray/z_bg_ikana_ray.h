@@ -7,7 +7,7 @@ struct BgIkanaRay;
 
 typedef struct BgIkanaRay {
     /* 0x000 */ Actor base;
-    /* 0x144 */ ColCylinder collision;
+    /* 0x144 */ ColliderCylinder collision;
     /* 0x190 */ AnimatedTexture* animatedTextures;
     /* 0x194 */ void (*update)(struct BgIkanaRay*, GlobalContext*);
 } BgIkanaRay; // size = 0x198

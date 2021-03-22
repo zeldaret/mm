@@ -447,10 +447,6 @@ typedef void(*osCreateThread_func)(void*);
 typedef void*(*printf_func)(void*, char*, size_t);
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x20];
-} s800E03A0; // size = 0x20
-
-typedef struct {
     /* 0x000 */ OSThread unk0;
     /* 0x1B0 */ s8 argCount;
     /* 0x1B1 */ s8 unk1B1;
@@ -626,11 +622,6 @@ typedef struct {
     /* 0x0C */ OSContPad press; // X/Y store delta from last frame
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ Vec3f a;
-    /* 0x0C */ Vec3f b;
-} LineSegment; // size = 0x18
 
 // Permanent save context, kept in regular save files
 typedef struct {
@@ -1264,16 +1255,18 @@ typedef struct AudioThreadStruct AudioThreadStruct;
 
 typedef struct GlobalContext GlobalContext;
 
+typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
+typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+
 typedef struct {
     /* 0x0 */ GlobalContext* ctxt;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
 } Quake2Context; // size = 0xC
-
-typedef s32(*collision_add_func)(GlobalContext*, ColCommon*);
-
-typedef void(*collision_func)(GlobalContext*, CollisionCheckContext*, ColCommon*, ColCommon*);
 
 typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
 
@@ -1526,7 +1519,7 @@ struct FireObj {
     /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
     /* 0x29 */ UNK_TYPE1 pad29[0x1];
     /* 0x2A */ s16 ignitionDelay;
-    /* 0x2C */ ColCylinder collision;
+    /* 0x2C */ ColliderCylinder collision;
     /* 0x78 */ FireObjLight light;
 }; // size = 0x8B
 
@@ -1687,8 +1680,8 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ ColQuad unk144;
-    /* 0x1C4 */ ColQuad unk1C4;
+    /* 0x144 */ ColliderQuad unk144;
+    /* 0x1C4 */ ColliderQuad unk1C4;
     /* 0x244 */ Vec3f unk244;
     /* 0x250 */ f32 unk250;
     /* 0x254 */ f32 unk254;
@@ -1711,9 +1704,9 @@ struct ActorEnBji01 {
 
 struct ActorEnBom {
     /* 0x000 */ Actor base;
-    /* 0x144 */ ColCylinder unk144;
-    /* 0x190 */ ColSphereGroup unk190;
-    /* 0x1B0 */ ColSphereGroupElement unk1B0[1];
+    /* 0x144 */ ColliderCylinder unk144;
+    /* 0x190 */ ColliderJntSph unk190;
+    /* 0x1B0 */ ColliderJntSphElement unk1B0[1];
     /* 0x1F0 */ s16 unk1F0;
     /* 0x1F2 */ UNK_TYPE1 pad1F2[0x6];
     /* 0x1F8 */ u8 unk1F8;
@@ -1741,7 +1734,7 @@ struct ActorEnFirefly {
     /* 0x2EC */ f32 unk2EC;
     /* 0x2F0 */ f32 unk2F0;
     /* 0x2F4 */ UNK_TYPE1 pad2F4[0x28];
-    /* 0x31C */ ColSphere collision;
+    /* 0x31C */ ColliderSphere collision;
 }; // size = 0x374
 
 struct ActorEnTest {
@@ -1771,8 +1764,8 @@ typedef struct {
 struct ActorObjBell {
     /* 0x000 */ Actor base;
     /* 0x144 */ UNK_TYPE1 pad144[0x18];
-    /* 0x15C */ ColSphere unk15C;
-    /* 0x1B4 */ ColSphere unk1B4;
+    /* 0x15C */ ColliderSphere unk15C;
+    /* 0x1B4 */ ColliderSphere unk1B4;
     /* 0x20C */ UNK_TYPE1 pad20C[0x2];
     /* 0x20E */ s16 unk20E;
     /* 0x210 */ UNK_TYPE1 pad210[0x4];
@@ -1782,7 +1775,7 @@ struct ActorObjBell {
 
 struct ActorBgIknvObj {
     /* 0x000 */ DynaPolyActor bg;
-    /* 0x15C */ ColCylinder collision;
+    /* 0x15C */ ColliderCylinder collision;
     /* 0x1A8 */ u32 displayListAddr;
     /* 0x1AC */ ActorFunc updateFunc;
 }; // size = 0x1B0
