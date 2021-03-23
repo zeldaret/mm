@@ -2081,7 +2081,7 @@ extern SceneEntranceTableEnty gSceneEntranceTable[110];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
 extern UNK_PTR D_801C5CB0;
-extern z_Matrix identityMatrix;
+extern MtxF sMtxFClear;
 // extern UNK_TYPE1 D_801C5D10;
 // extern UNK_TYPE1 D_801C5D20;
 // extern UNK_TYPE1 D_801C5D60;

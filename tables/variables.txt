@@ -2075,7 +2075,7 @@
     0x801C5C50:("D_801C5C50","UNK_PTR","",0x4),
     0x801C5C9C:("D_801C5C9C","UNK_TYPE1","",0x1),
     0x801C5CB0:("D_801C5CB0","UNK_PTR","",0x4),
-    0x801C5CD0:("identityMatrix","z_Matrix","",0x40),
+    0x801C5CD0:("sMtxFClear","MtxF","",0x40),
     0x801C5D10:("D_801C5D10","UNK_TYPE1","",0x1),
     0x801C5D20:("D_801C5D20","UNK_TYPE1","",0x1),
     0x801C5D60:("D_801C5D60","UNK_TYPE1","",0x1),
