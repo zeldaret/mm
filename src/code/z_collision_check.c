@@ -3828,9 +3828,9 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* ctxt, Vec3f* v) {
     shieldParticleInitMetal.position.x = v->x;
     shieldParticleInitMetal.position.y = v->y;
     shieldParticleInitMetal.position.z = v->z;
-    shieldParticleInitMetal.lightParams.posX = shieldParticleInitMetal.position.x;
-    shieldParticleInitMetal.lightParams.posY = shieldParticleInitMetal.position.y;
-    shieldParticleInitMetal.lightParams.posZ = shieldParticleInitMetal.position.z;
+    shieldParticleInitMetal.lightPoint.x = shieldParticleInitMetal.position.x;
+    shieldParticleInitMetal.lightPoint.y = shieldParticleInitMetal.position.y;
+    shieldParticleInitMetal.lightPoint.z = shieldParticleInitMetal.position.z;
 
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &shieldParticleInitMetal);
 }
@@ -3883,9 +3883,9 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* ctxt, Vec3f* v, Vec3
     shieldParticleInitWood.position.x = v->x;
     shieldParticleInitWood.position.y = v->y;
     shieldParticleInitWood.position.z = v->z;
-    shieldParticleInitWood.lightParams.posX = shieldParticleInitWood.position.x;
-    shieldParticleInitWood.lightParams.posY = shieldParticleInitWood.position.y;
-    shieldParticleInitWood.lightParams.posZ = shieldParticleInitWood.position.z;
+    shieldParticleInitWood.lightPoint.x = shieldParticleInitWood.position.x;
+    shieldParticleInitWood.lightPoint.y = shieldParticleInitWood.position.y;
+    shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
     func_8019F1C0(pos, 0x1837);

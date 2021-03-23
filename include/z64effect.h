@@ -118,7 +118,7 @@ typedef struct {
     /* 0x24 */ f32 maxInitialSpeed;
     /* 0x28 */ f32 lengthCutoff;
     /* 0x2C */ u8 duration;
-    /* 0x2E */ LightPoint lightParams;
+    /* 0x2E */ LightPoint lightPoint;
     /* 0x3C */ s32 hasLight;
 } EffShieldParticleInit; // size = 0x40
 
