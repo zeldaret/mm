@@ -48,10 +48,10 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.targetMode = 6;
     this->actor.colChkInfo.damageTable = &EnPoFusenDamageTable;
 
-    Collision_InitSphereDefault(globalCtx, &this->collider);
-    Collision_InitSphereWithData(globalCtx, &this->collider, &this->actor, &EnPoFusenSphereInit);
+    Collider_InitSphere(globalCtx, &this->collider);
+    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &EnPoFusenSphereInit);
     if (0){}
-    this->collider.params.colInfo.radius  = 40;
+    this->collider.dim.worldSphere.radius = 40;
     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040,
         &this->limbDrawTbl, &this->transitionDrawTbl, 10);
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
@@ -83,7 +83,7 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
 
 void EnPoFusen_Destroy(Actor* thisx, GlobalContext *gCtx) {
     EnPoFusen* this = THIS;
-    Collision_FiniSphere(gCtx, &this->collider);
+    Collider_DestroySphere(gCtx, &this->collider);
 }
 
 u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
@@ -111,16 +111,16 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
       return 0;
     }
 
-    this->collider.params.colInfo.loc.x = this->actor.world.pos.x;
-    this->collider.params.colInfo.loc.y = (this->actor.world.pos.y + 20.0f);
-    this->collider.params.colInfo.loc.z = this->actor.world.pos.z;
-    if (((this->collider.base.flagsAC & 2) != 0) 
+    this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
+    this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
+    if (((this->collider.base.acFlags & 2) != 0) 
       && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->collider.base.flagsAC &= ~0x2;
+        this->collider.base.acFlags &= ~0x2;
         return 1;
     }
-    Collision_AddOT(gCtx, &gCtx->colCheckCtx, &this->collider);
-    Collision_AddAC(gCtx, &gCtx->colCheckCtx, &this->collider);
+    CollisionCheck_SetOC(gCtx, &gCtx->colCheckCtx, &this->collider);
+    CollisionCheck_SetAC(gCtx, &gCtx->colCheckCtx, &this->collider);
     return 0;
 }
 

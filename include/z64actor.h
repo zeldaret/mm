@@ -6,6 +6,9 @@
 #include <z64collision_check.h>
 #include <unk.h>
 
+#define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
+#define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
+
 struct Actor;
 struct GlobalContext;
 struct LightMapper;
@@ -19,8 +22,37 @@ typedef struct {
 } PosRot; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ u8 table[32];
+    /* 0x00 */ u8 attack[32];
 } DamageTable; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u8 health;
+    /* 0x02 */ s16 cylRadius;
+    /* 0x04 */ s16 cylHeight;
+    /* 0x06 */ u8 mass;
+} CollisionCheckInfoInit;
+
+typedef struct {
+    /* 0x00 */ u8 health;
+    /* 0x02 */ s16 cylRadius;
+    /* 0x04 */ s16 cylHeight;
+    /* 0x06 */ s16 cylYShift;
+    /* 0x08 */ u8 mass;
+} CollisionCheckInfoInit2;
+
+typedef struct {
+    /* 0x00 */ DamageTable* damageTable;
+    /* 0x04 */ Vec3f displacement;
+    /* 0x10 */ s16 cylRadius;
+    /* 0x12 */ s16 cylHeight;
+    /* 0x14 */ s16 cylYShift;
+    /* 0x16 */ u8 mass;
+    /* 0x17 */ u8 health;
+    /* 0x18 */ u8 damage;
+    /* 0x19 */ u8 damageEffect;
+    /* 0x1A */ u8 atHitEffect;
+    /* 0x1B */ u8 acHitEffect;
+} CollisionCheckInfo; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s32 unk0;
@@ -42,21 +74,6 @@ typedef struct {
     /* 0x38 */ s16 unk38;
     /* 0x3A */ s16 unk3A;
 } ActorEnTest20C; // size = 0x3C
-
-// Related to collision?
-typedef struct {
-    /* 0x00 */ DamageTable* damageTable;
-    /* 0x04 */ Vec3f displacement; // Amount to correct velocity (0x5C) by when colliding into a body
-    /* 0x10 */ s16 cylRadius; // Used for various purposes
-    /* 0x12 */ s16 cylHeight; // Used for various purposes
-    /* 0x14 */ s16 cylYShift; // Unused. Purpose inferred from Cylinder16 and CollisionCheck_CylSideVsLineSeg
-    /* 0x16 */ u8 mass; // Used to compute displacement for OC collisions
-    /* 0x17 */ u8 health; // Note: some actors may use their own health variable instead of this one
-    /* 0x18 */ u8 damage; // Amount to decrement health by
-    /* 0x19 */ u8 damageEffect; // Stores what effect should occur when hit by a weapon
-    /* 0x1A */ u8 atHitEffect; // Stores what effect should occur when AT connects with an AC
-    /* 0x1B */ u8 acHitEffect; // Stores what effect should occur when AC is touched by an AT
-} CollisionCheckInfo; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s16 id;
@@ -248,14 +265,14 @@ typedef struct {
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
     /* 0x154 */ f32 unk154;
-    /* 0x158 */ ColCylinder collision;
+    /* 0x158 */ ColliderCylinder collision;
     /* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
 } ActorEnItem00; // size = 0x1A8
 
 typedef struct {
     /* 0x000 */ Actor base;
     /* 0x144 */ ActorFunc update;
-    /* 0x148 */ ColCylinder collision;
+    /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
 } ActorEnAObj; // size = 0x1A8
 
