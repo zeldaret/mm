@@ -810,7 +810,7 @@
     0x800B8DD4:("func_800B8DD4",),
     0x800B8E1C:("func_800B8E1C",),
     0x800B8E58:("func_800B8E58",),
-    0x800B8EC8:("func_800B8EC8",),
+    0x800B8EC8:("Audio_PlayActorSound2",),
     0x800B8EF4:("func_800B8EF4",),
     0x800B8F98:("func_800B8F98",),
     0x800B8FC0:("func_800B8FC0",),

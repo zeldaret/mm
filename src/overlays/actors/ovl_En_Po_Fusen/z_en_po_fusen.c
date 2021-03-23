@@ -188,7 +188,7 @@ void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx) {
     Actor_Spawn(&gCtx->actorCtx, gCtx, ACTOR_EN_CLEAR_TAG,
        this->actor.world.pos.x, this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 
        255, 255, 200, 2);
-    func_800B8EC8(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
+    Audio_PlayActorSound2(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
     Actor_MarkForDeath(&this->actor);
 }
 
