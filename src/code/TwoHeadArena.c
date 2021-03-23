@@ -28,19 +28,15 @@ void* GameStateHeap_AllocFromEndAlignedTo(TwoHeadArena* tha, u32 size) {
     u32 mask;
 
     if (size >= 0x10) {
-        mask = -0x10;
+        mask = ~0xF;
     } else if (size & 1) {
         mask = -1;
     } else if (size & 2) {
-        mask = -2;
+        mask = ~0x1;
     } else if (size & 4) {
-        mask = -4;
+        mask = ~0x3;
     } else {
-        if ((size & 8)) {
-            mask = -8;
-        } else {
-            mask = -1;
-        }
+        mask = (size & 8) ? ~0x7 : -1;
     }
 
     tha->tail = (((u32)tha->tail & mask) - size) & mask;
