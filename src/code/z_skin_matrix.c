@@ -250,18 +250,8 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
         }
         if (thisCol != thisRow) { // responsible for swapping columns if zero on diagonal
             for (i = 0; i < 4; i++) {
-                // TODO SWAP macro?
-                {
-                    f32 temp = mfCopy.mf[i][thisCol];
-                    mfCopy.mf[i][thisCol] = mfCopy.mf[i][thisRow];
-                    mfCopy.mf[i][thisRow] = temp;
-                }
-
-                {
-                    f32 temp = dest->mf[i][thisCol];
-                    dest->mf[i][thisCol] = dest->mf[i][thisRow];
-                    dest->mf[i][thisRow] = temp;
-                }
+                SWAP(f32, mfCopy.mf[i][thisCol], mfCopy.mf[i][thisRow]);
+                SWAP(f32, dest->mf[i][thisCol],  dest->mf[i][thisRow]);
             }
         }
 
