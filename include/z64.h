@@ -1667,7 +1667,7 @@ struct GlobalContext {
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
     /* 0x18764 */ TransitionActorEntry* transitionActorList;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
-    /* 0x187B0 */ z_Matrix unk187B0;
+    /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF mf_187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];

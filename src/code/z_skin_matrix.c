@@ -1,50 +1,50 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MultiplyByVectorXYZW.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Vec3fMtxFMultXYZW.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MultiplyByVectorXYZ.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Vec3fMtxFMultXYZ.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_Multiply.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MtxFMtxFMult.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_GetIdentity.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_GetClear.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeIdentity.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Clear.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_Copy.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MtxFCopy.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_Invert.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Invert.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeScale.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetScale.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeRotationZYX.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetRotateRPY.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeRotationYXZ.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetRotateYRP.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeTranslation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetTranslate.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeTranslationRotationZYXScale.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetScaleRotateRPYTranslate.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeTranslationRotationYXZScale.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetScaleRotateYRPTranslate.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeTranslationRotationZYX.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetRotateRPYTranslate.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_ToVec3s.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Vec3fToVec3s.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_ToVec3f.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_Vec3sToVec3f.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_ToRSPMatrix.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MtxFToMtx.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_AppendToPloyOpaDisp.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MtxFToNewMtx.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeRotationAroundUnitVector.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetRotateAroundVec.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeXRotation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetXRotation.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_XRotation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MulXRotation.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeYRotation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetYRotation.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_YRotation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_MulYRotation.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/Matrix_MakeZRotation.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skin_matrix/SkinMatrix_SetZRotation.asm")
