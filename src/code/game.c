@@ -168,7 +168,7 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
     u32 bytesAllocated;
     void *heapStart;
 
-    heapStart = ctxt->heap.heapStart;
+    heapStart = ctxt->heap.bufp;
     alloc = &ctxt->alloc;
     GameStateHeap_Clear(&ctxt->heap);
     Gamealloc_Free(alloc, heapStart);
