@@ -207,7 +207,7 @@ build/baserom/%: baserom/%
 # FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
 # The simplest way to do that is to give them an order dependency on .c files' .o files
 build/asm/%.o: asm/%.asm | $(C_O_FILES)
-	$(AS) $(ASFLAGS) $^ -o $@
+	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
