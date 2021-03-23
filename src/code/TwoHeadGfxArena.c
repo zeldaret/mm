@@ -1,66 +1,66 @@
 #include <ultra64.h>
 #include <global.h>
 
-void func_801727F0(TwoHeadGfxArena* thga, Gfx* start, u32 size) {
-    GameStateHeap_Init((TwoHeadArena*)thga, start, size);
+void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, u32 size) {
+    THA_Ct((TwoHeadArena*)thga, start, size);
 }
 
-void func_80172810(TwoHeadGfxArena* thga) {
-    GameStateHeap_Clear((TwoHeadArena*)thga);
+void THGA_Dt(TwoHeadGfxArena* thga) {
+    THA_Dt((TwoHeadArena*)thga);
 }
 
-u32 func_80172830(TwoHeadGfxArena* thga) {
-    return GameStateHeap_GetHasOverflowed((TwoHeadArena*)thga);
+u32 THGA_IsCrash(TwoHeadGfxArena* thga) {
+    return THA_IsCrash((TwoHeadArena*)thga);
 }
 
-void func_80172850(TwoHeadGfxArena* thga) {
-    GameStateHeap_InitAppend((TwoHeadArena*)thga);
+void THGA_Init(TwoHeadGfxArena* thga) {
+    THA_Init((TwoHeadArena*)thga);
 }
 
-s32 func_80172870(TwoHeadGfxArena* thga) {
-    return GameStateHeap_GetFreeSize((TwoHeadArena*)thga);
+s32 THGA_GetSize(TwoHeadGfxArena* thga) {
+    return THA_GetSize((TwoHeadArena*)thga);
 }
 
-Gfx* func_80172890(TwoHeadGfxArena* thga) {
-    return GameStateHeap_GetStart((TwoHeadArena*)thga);
+Gfx* THGA_GetHead(TwoHeadGfxArena* thga) {
+    return THA_GetHead((TwoHeadArena*)thga);
 }
 
-void func_801728B0(TwoHeadGfxArena* thga, Gfx* start) {
-    GameStateHeap_SetStart((TwoHeadArena*)thga, start);
+void THGA_SetHead(TwoHeadGfxArena* thga, Gfx* start) {
+    THA_SetHead((TwoHeadArena*)thga, start);
 }
 
-Gfx* func_801728D0(TwoHeadGfxArena* thga) {
-    return GameStateHeap_GetEnd((TwoHeadArena*)thga);
+Gfx* THGA_GetTail(TwoHeadGfxArena* thga) {
+    return THA_GetTail((TwoHeadArena*)thga);
 }
 
-Gfx* func_801728F0(TwoHeadGfxArena* thga, u32 count) {
-    return GameStateHeap_Alloc((TwoHeadArena*)thga, count * 8);
+Gfx* THGA_AllocStartArray8(TwoHeadGfxArena* thga, u32 count) {
+    return THA_AllocStart((TwoHeadArena*)thga, count * 8);
 }
 
-Gfx* func_80172914(TwoHeadGfxArena* thga) {
-    return func_801728F0(thga, 1);
+Gfx* THGA_AllocStart8(TwoHeadGfxArena* thga) {
+    return THGA_AllocStartArray8(thga, 1);
 }
 
-Gfx* func_80172934(TwoHeadGfxArena* thga) {
-    return func_80172914(thga);
+Gfx* THGA_AllocStart8Wrapper(TwoHeadGfxArena* thga) {
+    return THGA_AllocStart8(thga);
 }
 
-Gfx* func_80172954(TwoHeadGfxArena* thga, u32 size) {
-    return GameStateHeap_AllocFromEndAlignedTo((TwoHeadArena*)thga, size);
+Gfx* THGA_AllocEnd(TwoHeadGfxArena* thga, u32 size) {
+    return THA_AllocEnd((TwoHeadArena*)thga, size);
 }
 
-Gfx* func_80172974(TwoHeadGfxArena* thga, u32 count) {
-    return func_80172954(thga, count * 0x40);
+Gfx* THGA_AllocEndArray64(TwoHeadGfxArena* thga, u32 count) {
+    return THGA_AllocEnd(thga, count * 0x40);
 }
 
-Gfx* func_80172998(TwoHeadGfxArena* thga) {
-    return func_80172954(thga, 0x40);
+Gfx* THGA_AllocEnd64(TwoHeadGfxArena* thga) {
+    return THGA_AllocEnd(thga, 0x40);
 }
 
-Gfx* func_801729B8(TwoHeadGfxArena* thga, u32 count) {
-    return func_80172954(thga, count * 0x10);
+Gfx* THGA_AllocEndArray16(TwoHeadGfxArena* thga, u32 count) {
+    return THGA_AllocEnd(thga, count * 0x10);
 }
 
-Gfx* func_801729DC(TwoHeadGfxArena* thga) {
-    return func_80172954(thga, 0x10);
+Gfx* THGA_AllocEnd16(TwoHeadGfxArena* thga) {
+    return THGA_AllocEnd(thga, 0x10);
 }

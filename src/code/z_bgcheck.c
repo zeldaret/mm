@@ -32,7 +32,7 @@ void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* lis
 }
 
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes) {
-    list->nodes = (BgPolygonLinkedListNode*)GameStateHeap_AllocFromEndAligned(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
+    list->nodes = (BgPolygonLinkedListNode*)THA_AllocEndAlign(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
     list->maxNodes = numNodes;
     list->nextFreeNode = 0;
 }
