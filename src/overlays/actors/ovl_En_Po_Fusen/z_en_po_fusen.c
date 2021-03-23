@@ -30,10 +30,11 @@ const ActorInit En_Po_Fusen_InitVars = {
     (ActorFunc)EnPoFusen_Draw
 };
 
-u32 EnPoFusenSphereInit[] = { //ColSphereInit  
-    0x0A000939, 0x12040000, 0x00000000, 0xF7CFFFFF,
-    0x00000000, 0xF7CFFFFF, 0x00000000, 0x00010100,
-    0x00000000, 0x00000000, 0x00C80064, };
+static ColliderSphereInit sSphereInit = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_SPHERE, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 0, { { 0, 0, 0 }, 200 }, 100 },
+};
 
 DamageTable EnPoFusenDamageTable = { 
     0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00, 
@@ -49,13 +50,14 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.colChkInfo.damageTable = &EnPoFusenDamageTable;
 
     Collider_InitSphere(globalCtx, &this->collider);
-    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &EnPoFusenSphereInit);
+    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+
     if (0){}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040,
-        &this->limbDrawTbl, &this->transitionDrawTbl, 10);
+    SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
+
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
         Actor_MarkForDeath(&this->actor);
     }
@@ -74,10 +76,12 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->limb8Rot = 0;
     this->limb9Rot = 0x71C;
     this->randBaseRotChange = 0;
+
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         EnPoFusen_InitFuse(this);
         return;
     }
+
     EnPoFusen_InitNoFuse(this);
 }
 
@@ -93,6 +97,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }
+
     if (actorPtr != 0) {
         do{
             if (actorPtr->id == ACTOR_EN_MA4) {
@@ -102,11 +107,11 @@ u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
             actorPtr = actorPtr->next;
         } while (actorPtr != 0);
     }
+
     return 0;
 }
 
-u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
-    
+u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) { 
     if ((u32) this->actionFunc == (u32) EnPoFusen_IdleFuse ) {
       return 0;
     }
@@ -114,13 +119,16 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
+
     if (((this->collider.base.acFlags & 2) != 0) 
       && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~0x2;
         return 1;
     }
+
     CollisionCheck_SetOC(gCtx, &gCtx->colCheckCtx, &this->collider);
     CollisionCheck_SetAC(gCtx, &gCtx->colCheckCtx, &this->collider);
+
     return 0;
 }
 
@@ -144,11 +152,13 @@ void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
     this->actor.shape.rot.y += this->randYRotChange;
     this->actor.world.pos.y += heightOffset;
     this->actor.shape.rot.z =  (Math_Sins(this->randBaseRotChange) * 910.0f);
+
     if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
         Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
     } else {
         Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x71C, 0x8, 0xBB8, 0x64);
     }
+
     this->avgBaseRotation = this->limb9Rot * 3;
     this->limb3Rot  = (Math_Sins(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
     this->limb46Rot = (Math_Sins(this->randBaseRotChange)          * this->avgBaseRotation);
@@ -167,7 +177,7 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen *this) {
 
     if ((parent != 0) && (parent->id == ACTOR_EN_MA4)) { 
         romani = (EnMa4*) parent;
-        romani->unk338 += 1;
+        romani->unk338++;
     }
 
     this->actor.draw = NULL;
@@ -190,10 +200,9 @@ void EnPoFusen_InitFuse(EnPoFusen *this) {
     this->actionFunc = EnPoFusen_IdleFuse;
 }
 
-void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) {
-
+void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) { 
     EnPoFusen_Idle(this, gCtx);
-    if ((this->fuse--) == 0) {
+    if (this->fuse-- == 0) {
         EnPoFusen_IncrementMalonPop(this);
     }
 }
