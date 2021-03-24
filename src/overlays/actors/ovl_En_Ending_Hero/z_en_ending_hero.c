@@ -67,7 +67,7 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk242 += 1;
         if (this->unk242 > 2) {
             this->unk242 = 0;
-            this->unk240 = (s16)randZeroOneScaled(60.0f) + 0x14;
+            this->unk240 = (s16)Rand_ZeroFloat(60.0f) + 0x14;
         }
     }
     this->actionFunc(this, globalCtx);

@@ -3951,7 +3951,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F3F42;
 // extern UNK_TYPE1 D_801F3F4A;
 // extern UNK_TYPE1 D_801F3F5A;
-extern GameInfo* gStaticContext;
+extern GameInfo* gGameInfo;
 // extern UNK_TYPE1 D_801F3F70;
 // extern UNK_TYPE1 D_801F3F80;
 // extern UNK_TYPE1 D_801F3F83;

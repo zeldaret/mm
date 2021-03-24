@@ -159,7 +159,7 @@ void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
 }
 
 #ifdef NON_MATCHING
-void EffectSs_Spawn(GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
+void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData) {
     u32 index;
     u32 initRet;
     u32 overlaySize;

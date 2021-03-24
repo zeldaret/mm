@@ -312,6 +312,47 @@ typedef enum EffectSSType {
     EFFECT_SS2_TYPE_LAST_LABEL = 0x27
 } EffectSSType;
 
+typedef enum {
+    /* 0x00 */ EFFECT_SS_DUST,
+    /* 0x01 */ EFFECT_SS_KIRAKIRA,
+    /* 0x02 */ EFFECT_SS_BOMB,
+    /* 0x03 */ EFFECT_SS_BOMB2,
+    /* 0x04 */ EFFECT_SS_BLAST,
+    /* 0x05 */ EFFECT_SS_G_SPK,
+    /* 0x06 */ EFFECT_SS_D_FIRE,
+    /* 0x07 */ EFFECT_SS_BUBBLE,
+    /* 0x08 */ EFFECT_SS_UNSET,
+    /* 0x09 */ EFFECT_SS_G_RIPPLE,
+    /* 0x0A */ EFFECT_SS_G_SPLASH,
+    /* 0x0B */ EFFECT_SS_G_MAGMA,
+    /* 0x0C */ EFFECT_SS_G_FIRE,
+    /* 0x0D */ EFFECT_SS_LIGHTNING,
+    /* 0x0E */ EFFECT_SS_DT_BUBBLE,
+    /* 0x0F */ EFFECT_SS_HAHEN,
+    /* 0x10 */ EFFECT_SS_STICK,
+    /* 0x11 */ EFFECT_SS_SIBUKI,
+    /* 0x12 */ EFFECT_SS_SIBUKI2,
+    /* 0x13 */ EFFECT_SS_G_MAGMA2,
+    /* 0x14 */ EFFECT_SS_STONE1,
+    /* 0x15 */ EFFECT_SS_HITMARK,
+    /* 0x16 */ EFFECT_SS_FHG_FLASH,
+    /* 0x17 */ EFFECT_SS_K_FIRE,
+    /* 0x18 */ EFFECT_SS_SOLDER_SRCH_BALL,
+    /* 0x19 */ EFFECT_SS_KAKERA,
+    /* 0x1A */ EFFECT_SS_ICE_PIECE,
+    /* 0x1B */ EFFECT_SS_EN_ICE,
+    /* 0x1C */ EFFECT_SS_FIRE_TAIL,
+    /* 0x1D */ EFFECT_SS_EN_FIRE,
+    /* 0x1E */ EFFECT_SS_EXTRA,
+    /* 0x1F */ EFFECT_SS_FCIRCLE,
+    /* 0x20 */ EFFECT_SS_DEAD_DB,
+    /* 0x21 */ EFFECT_SS_DEAD_DD,
+    /* 0x22 */ EFFECT_SS_DEAD_DS,
+    /* 0x23 */ EFFECT_SS_DEAD_SOUND,
+    /* 0x24 */ EFFECT_SS_ICE_SMOKE,
+    /* 0x25 */ EFFECT_SS_TYPE_MAX // originally "EFFECT_SS2_TYPE_LAST_LABEL"
+} EffectSsType;
+
 /* Init param structs, split into overlay headers when effects folder is made */
 
 typedef struct {
@@ -327,5 +368,267 @@ typedef struct {
     /* 0x34 */ u8 updateMode;
 } EffectSsDustInitParams; // size = 0x38
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ ColorRGBA8 primColor;
+    /* 0x28 */ ColorRGBA8 envColor;
+    /* 0x2C */ s16 alphaStep;
+    /* 0x2E */ s16 scale;
+    /* 0x30 */ s32 life;
+    /* 0x34 */ s16 rotSpeed;
+    /* 0x36 */ s16 yaw;
+    /* 0x38 */ u8 updateMode;
+} EffectSsKiraKiraInitParams; // size = 0x3C
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scaleStep;
+    /* 0x28 */ u8 drawMode;
+} EffectSsBomb2InitParams; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ ColorRGBA8 primColor;
+    /* 0x28 */ ColorRGBA8 envColor;
+    /* 0x2C */ s16 scale;
+    /* 0x2E */ s16 scaleStep;
+    /* 0x30 */ s16 sclaeStepDecay;
+    /* 0x32 */ s16 life;
+} EffectSsBlastInitParams; // size = 0x34
+
+typedef struct {
+    /* 0x00 */ Actor* actor;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f accel;
+    /* 0x28 */ ColorRGBA8 primColor;
+    /* 0x2C */ ColorRGBA8 envColor;
+    /* 0x30 */ s16 scale;
+    /* 0x32 */ s16 scaleStep;
+    /* 0x34 */ u8 updateMode;
+} EffectSsGSpkInitParams; // size = 0x38
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scaleStep;
+    /* 0x28 */ s16 alpha;
+    /* 0x2A */ s16 fadeDelay;
+    /* 0x2C */ s32 life;
+} EffectSsDFireInitParams; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 yPosOffset;
+    /* 0x10 */ f32 yPosRandScale;
+    /* 0x14 */ f32 xzPosRandScale;
+    /* 0x18 */ f32 scale;
+} EffectSsBubbleInitParams; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ s16 radius;
+    /* 0x0E */ s16 radiusMax;
+    /* 0x10 */ s16 life;
+} EffectSsGRippleInitParams; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ u8 type;
+    /* 0x0D */ u8 customColor;
+    /* 0x0E */ s16 scale;
+    /* 0x10 */ ColorRGBA8 primColor;
+    /* 0x14 */ ColorRGBA8 envColor;
+} EffectSsGSplashInitParams; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+} EffectSsGFireInitParams; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ ColorRGBA8 primColor;
+    /* 0x10 */ ColorRGBA8 envColor;
+    /* 0x14 */ s16 scale;
+    /* 0x16 */ s16 yaw;
+    /* 0x18 */ s16 life;
+    /* 0x1A */ s16 numBolts;
+} EffectSsLightningInitParams; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ ColorRGBA8 primColor;
+    /* 0x28 */ ColorRGBA8 envColor;
+    /* 0x2C */ s16 scale;
+    /* 0x2E */ s16 life;
+    /* 0x30 */ s16 colorProfile;
+    /* 0x32 */ s16 randXZ; // randomly moves in the xz plane if true
+    /* 0x34 */ u8 customColor;
+} EffectSsDtBubbleInitParams; // size = 0x3C
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ Gfx* dList;
+    /* 0x28 */ s16 unused;
+    /* 0x2A */ s16 scale;
+    /* 0x2C */ s16 objId;
+    /* 0x2C */ s16 life;
+} EffectSsHahenInitParams; // size = 0x30
+
+#define HAHEN_OBJECT_DEFAULT -1
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ s16 yaw;
+} EffectSsStickInitParams; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 moveDelay;
+    /* 0x26 */ s16 direction;
+    /* 0x28 */ s16 scale;
+} EffectSsSibukiInitParams; // size = 0x2C
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x00 */ s32 unk_C;
+} EffectSsStone1InitParams; // size = 0x
+
+typedef struct {
+    /* 0x00 */ s32 type;
+    /* 0x04 */ s16 scale;
+    /* 0x08 */ Vec3f pos;
+} EffectSsHitMarkInitParams; // size = 0x14
+
+typedef enum {
+    EFFECT_HITMARK_WHITE,
+    EFFECT_HITMARK_DUST,
+    EFFECT_HITMARK_RED,
+    EFFECT_HITMARK_METAL
+} EffectSsHitmarkType;
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ u8 param;
+    /* 0x28 */ Actor* actor;
+    /* 0x2C */ u8 type;
+} EffectSsFhgFlashInitParams; // size = 0x30
+
+typedef enum {
+    /* 0x00 */ FHGFLASH_LIGHTBALL,
+    /* 0x01 */ FHGFLASH_SHOCK
+} FhgFlashType;
+
+typedef enum {
+    /* 0x00 */ FHGFLASH_LIGHTBALL_GREEN,
+    /* 0x01 */ FHGFLASH_LIGHTBALL_LIGHTBLUE,
+    /* 0x02 */ FHGFLASH_LIGHTBALL_RED,
+    /* 0x03 */ FHGFLASH_LIGHTBALL_YELLOW,
+    /* 0x04 */ FHGFLASH_LIGHTBALL_BLUE,
+    /* 0x05 */ FHGFLASH_LIGHTBALL_PURPLE,
+    /* 0x06 */ FHGFLASH_LIGHTBALL_ORANGE,
+    /* 0x07 */ FHGFLASH_LIGHTBALL_WHITE1,
+    /* 0x08 */ FHGFLASH_LIGHTBALL_WHITE2
+} FhgFlashLightBallParam;
+
+typedef enum {
+    /* 0x00 */ FHGFLASH_SHOCK_NO_ACTOR,
+    /* 0x01 */ FHGFLASH_SHOCK_PLAYER,
+    /* 0x02 */ FHGFLASH_SHOCK_PG
+} FhgFlashLightningParam;
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scaleMax;
+    /* 0x26 */ u8 type;
+} EffectSsKFireInitParams; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 unused;
+    /* 0x28 */ s16* linkDetected;
+    /* 0x2C */ s16 drawFlag;
+} EffectSsSolderSrchBallInitParams;
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f unk_18;
+    /* 0x24 */ s16 gravity;
+    /* 0x26 */ s16 unk_26;
+    /* 0x28 */ s16 unk_28;
+    /* 0x2A */ s16 unk_2A;
+    /* 0x2C */ s16 unk_2C;
+    /* 0x2E */ s16 scale;
+    /* 0x30 */ s16 unk_30;
+    /* 0x32 */ s16 unk_32;
+    /* 0x34 */ s32 life;
+    /* 0x38 */ s16 colorIdx;
+    /* 0x3A */ s16 objId;
+    /* 0x3C */ Gfx* dList;
+} EffectSsKakeraInitParams; // size = 0x40
+
+#define KAKERA_OBJECT_DEFAULT -1
+
+typedef enum {
+    /* -1 */ KAKERA_COLOR_NONE = -1,
+    /*  0 */ KAKERA_COLOR_WHITE,
+    /*  1 */ KAKERA_COLOR_BROWN
+} KakeraColorIndex;
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 scale;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f accel;
+    /* 0x28 */ s32 life;
+} EffectSsIcePieceInitParams; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Actor* actor;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ f32 scale;
+    /* 0x14 */ Vec3f velocity;
+    /* 0x20 */ Vec3f accel;
+    /* 0x2C */ ColorRGBA8 primColor;
+    /* 0x30 */ ColorRGBA8 envColor;
+    /* 0x34 */ s32 life;
+    /* 0x38 */ s16 type;
+} EffectSsEnIceInitParams; // size = 0x3C
+
+typedef struct {
+    /* 0x00 */ Actor* actor;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ f32 scale;
+    /* 0x14 */ Vec3f unk_14;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ ColorRGBA8 primColor; 
+    /* 0x26 */ ColorRGBA8 envColor;
+    /* 0x2A */ s16 type;
+    /* 0x2C */ s16 bodyPart;
+    /* 0x30 */ s32 life;
+} EffectSsFireTailInitParams; // size = 0x34
 
 #endif

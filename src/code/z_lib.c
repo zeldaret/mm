@@ -212,7 +212,7 @@ void func_800FF3A0(void) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF3A0.asm")
 #endif
 
-s16 Math_Rand_S16Offset(s16 base, s16 range) {
+s16 Rand_S16Offset(s16 base, s16 range) {
     return (s16)(Rand_ZeroOne() * range) + base;
 }
 

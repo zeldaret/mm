@@ -76,7 +76,7 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    func_800B8EC8(&this->actor, 0xC4U);
+    Audio_PlayActorSound2(&this->actor, 0xC4U);
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
