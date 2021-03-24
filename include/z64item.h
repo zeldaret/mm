@@ -1,6 +1,9 @@
 #ifndef _Z64ITEM_H_
 #define _Z64ITEM_H_
 
+#define DROP_TABLE_SIZE 16
+#define DROP_TABLE_NUMBER 17
+
 // TODO fill out these enums
 
 typedef enum {

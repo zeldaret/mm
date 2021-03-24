@@ -26,8 +26,9 @@
 
 #define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
-// TODO do these names still make sense in MM?
-#define LINK_IS_CHILD (gSaveContext.perm.linkAge != 0)
+// linkAge still exists in MM, but is always set to 0 (always adult)
+// There are remnants of these macros from OOT, but they are essentially useless
+//#define LINK_IS_CHILD (gSaveContext.perm.linkAge != 0)
 #define LINK_IS_ADULT (gSaveContext.perm.linkAge == 0)
 
 #define SQ(x) ((x)*(x))
