@@ -3158,7 +3158,7 @@ void Gamealloc_Free(GameAlloc* heap, void* ptr);
 void Gamealloc_FreeAll(GameAlloc* heap);
 void Gamealloc_Init(GameAlloc* iParm1);
 // void Graph_FaultClient(void);
-void Graph_DlAlloc(DispBuf* dl, void* memoryBlock, u32 size);
+void Graph_DlAlloc(TwoHeadGfxArena* dl, void* memoryBlock, u32 size);
 void Graph_InitTHGA(GraphicsContext* gCtxt);
 GameStateOverlay* Graph_GetNextGameState(GameState* ctxt);
 void* Graph_FaultAddrConvFunc(void* addr);
