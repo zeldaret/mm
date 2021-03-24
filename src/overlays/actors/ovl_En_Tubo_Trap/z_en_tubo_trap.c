@@ -205,9 +205,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    // 4 = !AT_BOUNCED
-    if ((this->collider.base.atFlags & 4) != 0) {
-        this->collider.base.atFlags &= ~4;
+    if ((this->collider.base.atFlags & AT_BOUNCED) != 0) {
+        this->collider.base.atFlags &= ~AT_BOUNCED;
         func_809308F4(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x1808);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
@@ -215,9 +214,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    // AC_HIT
-    if ((this->collider.base.acFlags & 2) != 0) {
-        this->collider.base.acFlags &= ~2;
+    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+        this->collider.base.acFlags &= ~AC_HIT;
         func_809308F4(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2802);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
@@ -225,9 +223,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    // AT_HIT
-    if ((this->collider.base.atFlags & 2) != 0) {
-        this->collider.base.atFlags &= ~2;
+    if ((this->collider.base.atFlags & AT_HIT) != 0) {
+        this->collider.base.atFlags &= ~AT_HIT;
         if (player == this->collider.base.at) {
             func_809308F4(this, globalCtx);
             func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
