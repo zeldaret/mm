@@ -8,23 +8,9 @@ void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx);
 
-static ColliderCylinderInit unusedColliderInit = {
-    {
-        COLTYPE_NONE,
-        AT_NONE,
-        AC_ON | AC_TYPE_PLAYER,
-        OC1_NONE,
-        OC2_TYPE_2,
-        COLSHAPE_CYLINDER,
-    },
-    {
-        ELEMTYPE_UNK0,
-        { 0x00000000, 0x00, 0x00 },
-        { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
-        OCELEM_NONE,
-    },
+static ColliderCylinderInit sCylinderInit = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
@@ -43,7 +29,7 @@ const ActorInit En_Tag_Obj_InitVars = {
 void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTagObj* this = THIS;
 
-    this->unk194 = 0;
+    this->hasSpawnedSeahorse = 0;
 }
 
 void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -52,9 +38,9 @@ void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTagObj* this = THIS;
 
-    if (this->unk194 == 0) {
+    if (!this->hasSpawnedSeahorse) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, 0, 0, 0);
-        this->unk194 = 1;
+        this->hasSpawnedSeahorse = 1;
     }
 }
