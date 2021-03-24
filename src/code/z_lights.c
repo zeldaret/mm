@@ -82,7 +82,7 @@ Light* Lights_FindSlot(Lights* lights) {
     return &lights->l.l[lights->numLights++];
 }
 
-void Lights_BindPointWithReference(Lights* lights, LightPoint* params, Vec3f* pos) {
+void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* pos) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -90,11 +90,11 @@ void Lights_BindPointWithReference(Lights* lights, LightPoint* params, Vec3f* po
     f32 scale;
     Light* light;
 
-    if ((pos != NULL) && (params->radius >= 1)) {
-        xDiff = params->x - pos->x;
-        yDiff = params->y - pos->y;
-        zDiff = params->z - pos->z;
-        scale = params->radius;
+    if ((pos != NULL) && (params->point.radius >= 1)) {
+        xDiff = params->point.x - pos->x;
+        yDiff = params->point.y - pos->y;
+        zDiff = params->point.z - pos->z;
+        scale = params->point.radius;
         posDiff = SQ(xDiff) + SQ(yDiff) + SQ(zDiff);
 
         if (SQ(scale) > posDiff) {
@@ -105,11 +105,11 @@ void Lights_BindPointWithReference(Lights* lights, LightPoint* params, Vec3f* po
                 scale = posDiff / scale;
                 scale = 1 - SQ(scale);
 
-                light->l.col[0] = params->color[0] * scale;
+                light->l.col[0] = params->point.color[0] * scale;
                 light->l.colc[0] = light->l.col[0];
-                light->l.col[1] = params->color[1] * scale;
+                light->l.col[1] = params->point.color[1] * scale;
                 light->l.colc[1] = light->l.col[1];
-                light->l.col[2] = params->color[2] * scale;
+                light->l.col[2] = params->point.color[2] * scale;
                 light->l.colc[2] = light->l.col[2];
 
                 scale = (posDiff < 1) ? 120 : 120 / posDiff;
@@ -122,16 +122,16 @@ void Lights_BindPointWithReference(Lights* lights, LightPoint* params, Vec3f* po
     }
 }
 
-void Lights_BindPoint(Lights* lights, LightPoint* params, GlobalContext* globalCtx) {
+void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* globalCtx) {
     Light* light;
-    f32 radiusF = params->radius;
+    f32 radiusF = params->point.radius;
     Vec3f posF;
     Vec3f adjustedPos;
     u32 pad;
     if (radiusF > 0) {
-        posF.x = params->x;
-        posF.y = params->y;
-        posF.z = params->z;
+        posF.x = params->point.x;
+        posF.y = params->point.y;
+        posF.z = params->point.z;
         Matrix_MultiplyByVectorXYZ(&globalCtx->unk187B0,&posF,&adjustedPos);
         if ((adjustedPos.z > -radiusF) &&
             (600 + radiusF > adjustedPos.z) &&
@@ -146,15 +146,15 @@ void Lights_BindPoint(Lights* lights, LightPoint* params, GlobalContext* globalC
                     radiusF = 20;
                 }
 
-                light->p.col[0] = params->color[0];
+                light->p.col[0] = params->point.color[0];
                 light->p.colc[0] = light->p.col[0];
-                light->p.col[1] = params->color[1];
+                light->p.col[1] = params->point.color[1];
                 light->p.colc[1] = light->p.col[1];
-                light->p.col[2] = params->color[2];
+                light->p.col[2] = params->point.color[2];
                 light->p.colc[2] = light->p.col[2];
-                light->p.pos[0] = params->x;
-                light->p.pos[1] = params->y;
-                light->p.pos[2] = params->z;
+                light->p.pos[0] = params->point.x;
+                light->p.pos[1] = params->point.y;
+                light->p.pos[2] = params->point.z;
                 light->p.unk3 = 0x8;
                 light->p.unk7 = 0xFF;
                 light->p.unkE = (s32)radiusF;
@@ -163,19 +163,19 @@ void Lights_BindPoint(Lights* lights, LightPoint* params, GlobalContext* globalC
     }
 }
 
-void Lights_BindDirectional(Lights* lights, LightDirectional* params, GlobalContext* globalCtx) {
+void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
     Light* light = Lights_FindSlot(lights);
 
     if (light != NULL) {
-        light->l.col[0] = params->color[0];
+        light->l.col[0] = params->dir.color[0];
         light->l.colc[0] = light->l.col[0];
-        light->l.col[1] = params->color[1];
+        light->l.col[1] = params->dir.color[1];
         light->l.colc[1] = light->l.col[1];
-        light->l.col[2] = params->color[2];
+        light->l.col[2] = params->dir.color[2];
         light->l.colc[2] = light->l.col[2];
-        light->l.dir[0] = params->x;
-        light->l.dir[1] = params->y;
-        light->l.dir[2] = params->z;
+        light->l.dir[0] = params->dir.x;
+        light->l.dir[1] = params->dir.y;
+        light->l.dir[2] = params->dir.z;
         light->l.pad1 = 0; // TODO the fact that pad1 is set here means that it now does something in MM's microcode
     }
 }

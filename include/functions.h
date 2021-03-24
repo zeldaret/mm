@@ -1892,9 +1892,9 @@ void Lights_DirectionalSetInfo(LightInfo* info, s8 x, s8 y, s8 z, u8 r, u8 g, u8
 void Lights_Reset(Lights* lights, u8 r, u8 g, u8 b);
 void Lights_Draw(Lights* lights, GraphicsContext* gfxCtx);
 Light* Lights_FindSlot(Lights* lights);
-void Lights_BindPointWithReference(Lights* lights, LightPoint* params, Vec3f* pos);
-void Lights_BindPoint(Lights* lights, LightPoint* params, GlobalContext* globalCtx);
-void Lights_BindDirectional(Lights* lights, LightDirectional* params, GlobalContext* globalCtx);
+void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* pos);
+void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* globalCtx);
+void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused);
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx);
 LightNode* Lights_FindBufSlot();
 void Lights_FreeNode(LightNode* light);

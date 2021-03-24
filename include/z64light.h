@@ -75,7 +75,7 @@ typedef enum {
 
 typedef struct GlobalContext GlobalContext;
 
-typedef void (*LightsBindFunc)(Lights* lights, void* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, void* params, GlobalContext* globalCtx);
+typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, GlobalContext* globalCtx);
 
 #endif
