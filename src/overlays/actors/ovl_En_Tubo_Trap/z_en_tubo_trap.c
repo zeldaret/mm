@@ -12,8 +12,10 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx);
 void func_80931138(EnTuboTrap* this, GlobalContext* globalCtx);
 void func_809311C4(EnTuboTrap* this, GlobalContext* globalCtx);
 
-s32 D_80931410[] = { // Colliderinit
-    0x0A110900, 0x20010000, 0x00000000, 0xF7CFFFFF, 0x00040000, 0xF7CFFFFF, 0x00000000, 0x01010000, 0x000B001C, 0x00000000, 0x00000000, 
+static ColliderCylinderInit sCylinderInit = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 11, 28, 0, { 0, 0, 0 } },
 };
 
 const ActorInit En_Tubo_Trap_InitVars = {
@@ -28,8 +30,11 @@ const ActorInit En_Tubo_Trap_InitVars = {
     (ActorFunc)EnTuboTrap_Draw
 };
 
-s32 D_8093145C[] = { // actorprocessinitchain
-    0xC85800C5, 0xB0FC0FA0, 0xB1000064, 0x31040064,
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 197, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
 //used in WaitForProximity
@@ -41,19 +46,19 @@ s8 D_8093146C[] = {
 void EnTuboTrap_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnTuboTrap* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_8093145C);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
-    Collision_InitCylinderDefault(globalCtx, &this->collider);
-    Collision_InitCylinderWithData(globalCtx, &this->collider, &this->actor, &D_80931410);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actionFunc = func_80931004;
 }
 
 void EnTuboTrap_Destroy(Actor* thisx, GlobalContext *globalCtx) {
     EnTuboTrap* this = THIS;
 
-    Collision_FiniCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 // drop collectable
@@ -201,8 +206,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         return;
     }
     // 4 = !AT_BOUNCED
-    if ((this->collider.base.flagsAT & 4) != 0) {
-        this->collider.base.flagsAT &= ~4;
+    if ((this->collider.base.atFlags & 4) != 0) {
+        this->collider.base.atFlags &= ~4;
         func_809308F4(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x1808);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
@@ -211,8 +216,8 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         return;
     }
     // AC_HIT
-    if ((this->collider.base.flagsAC & 2) != 0) {
-        this->collider.base.flagsAC &= ~2;
+    if ((this->collider.base.acFlags & 2) != 0) {
+        this->collider.base.acFlags &= ~2;
         func_809308F4(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2802);
         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
@@ -221,9 +226,9 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         return;
     }
     // AT_HIT
-    if ((this->collider.base.flagsAT & 2) != 0) {
-        this->collider.base.flagsAT &= ~2;
-        if (player == this->collider.base.collisionAT) {
+    if ((this->collider.base.atFlags & 2) != 0) {
+        this->collider.base.atFlags &= ~2;
+        if (player == this->collider.base.at) {
             func_809308F4(this, globalCtx);
             func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
             func_800F0568(globalCtx,  &player2->world, 0x28, 0x83E);
@@ -264,27 +269,27 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
             // wild guess: this is player animation state, height is modified to always point at center of link model
             weirdvalue = D_8093146C[ ((ActorPlayer*) player)->unk14B & 0xFF];
 
-            this->targetY = player->world.pos.y + (f32) weirdvalue;
-            if (this->targetY < currentHeight) {
-                this->targetY = currentHeight;
-                this->targetY += weirdvalue;
+            this->targetHeight = player->world.pos.y + (f32) weirdvalue;
+            if (this->targetHeight < currentHeight) {
+                this->targetHeight = currentHeight;
+                this->targetHeight += weirdvalue;
             }
             this->originPos = this->actor.world.pos;
             func_800B8EC8(&this->actor, 0x28C4U); // play actorsound2 pot move start
             this->actionFunc = func_80931138;
         }
     }
-} // */
+}
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tubo_Trap_0x809307E0/func_80931004.asm")
 #endif
 
 // levitate
 void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
-    this->actor.shape.rot.y += 0x1388;
-    Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetY, 0.8f, 3.0f);
+    this->actor.shape.rot.y += 5000;
+    Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
-    if (fabsf(this->actor.world.pos.y - this->targetY) < 10.0f) {
+    if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
         this->actor.speedXZ = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actionFunc = func_809311C4;
@@ -303,7 +308,7 @@ void func_809311C4(EnTuboTrap *this, GlobalContext *globalCtx) {
         Math_SmoothScaleMaxF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 0x1388;
+    this->actor.shape.rot.y += 5000;
     func_80930DDC(this, globalCtx); // "handle impact"
 }
 
@@ -330,9 +335,9 @@ void EnTuboTrap_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.shape.shadowDraw = NULL;
     }
 
-    Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-    Collision_AddAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
 void EnTuboTrap_Draw(Actor *thisx, GlobalContext *globalCtx) {
