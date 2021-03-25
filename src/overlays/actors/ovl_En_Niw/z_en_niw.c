@@ -107,7 +107,7 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 
     if (this->paramsCopy == 2) {
-        func_800B8EC8(&this->actor, 0x2813U);
+        Audio_PlayActorSound2(&this->actor, 0x2813U);
         this->unk256 = (u16)0x1E;
         this->unk250 = (u16)0x1E;
         this->actor.flags &= ~1;
@@ -321,7 +321,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     posZ  = randPlusMinusPoint5Scaled(100.0f);
     if (this->paramsCopy == 0) {
         if (Actor_HasParent( &this->actor, globalCtx) != 0) {
-            func_800B8EC8(&this->actor, 0x2813U); // chicken cry m sfx
+            Audio_PlayActorSound2(&this->actor, 0x2813U); // chicken cry m sfx
             this->unk256 = 30;
             this->unk250 = 30;
             this->actor.flags &= ~1;
@@ -407,7 +407,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     return func_80891320(this, globalCtx, s16tmp);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
 #endif
 
 // action func
@@ -478,7 +478,7 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
         }
     }
     if (Actor_HasParent( &this->actor, globalCtx) != 0) {
-        func_800B8EC8( &this->actor, 0x2813U);
+        Audio_PlayActorSound2( &this->actor, 0x2813U);
         this->unk256 = 30;
         this->unk2EC = 0;
         this->unk250 = 30;
@@ -581,7 +581,7 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
         this->unk268 = 0.0f;
         this->unk26C = 0.0f;
         this->unk24C = 0xA;
-        func_800B8EC8(&this->actor, 0x2813U); //play actor sound 2 chicken cry m
+        Audio_PlayActorSound2(&this->actor, 0x2813U); //play actor sound 2 chicken cry m
     }
     if (this->unk252 == 0) {
         this->unk252 = 0xA;
@@ -684,7 +684,7 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, 2);
 }
 #else 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
 #endif
 
 void func_808925F8(EnNiw *this, GlobalContext* gCtx) {
@@ -694,10 +694,10 @@ void func_808925F8(EnNiw *this, GlobalContext* gCtx) {
 }
 
 // I think this requires more collider decomp
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_8089262C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_8089262C.asm")
 
 // is huge, if above requires collider so does this
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
 
 // override limb draw function
 s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
@@ -786,4 +786,4 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
 }
 
 //opa
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
