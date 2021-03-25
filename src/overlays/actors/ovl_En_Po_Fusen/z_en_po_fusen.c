@@ -157,9 +157,9 @@ void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
     this->actor.shape.rot.z =  (Math_SinS(this->randBaseRotChange) * 910.0f);
 
     if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
-        Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
+        Math_SmoothStepToS( &this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
     } else {
-        Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x71C, 0x8, 0xBB8, 0x64);
+        Math_SmoothStepToS( &this->limb9Rot, 0x71C, 0x8, 0xBB8, 0x64);
     }
 
     this->avgBaseRotation = this->limb9Rot * 3;

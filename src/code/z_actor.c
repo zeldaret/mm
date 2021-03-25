@@ -265,11 +265,11 @@ void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32
 void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
     if (DECR(titleCtxt->fadeInDelay) == 0) {
         if (DECR(titleCtxt->fadeOutDelay) == 0) {
-            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 0, 30);
-            Lib_StepTowardsCheck_s(&titleCtxt->color, 0, 70);
+            Math_StepToS(&titleCtxt->alpha, 0, 30);
+            Math_StepToS(&titleCtxt->color, 0, 70);
         } else {
-            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 255, 10);
-            Lib_StepTowardsCheck_s(&titleCtxt->color, 255, 20);
+            Math_StepToS(&titleCtxt->alpha, 255, 10);
+            Math_StepToS(&titleCtxt->color, 255, 20);
         }
     }
 }

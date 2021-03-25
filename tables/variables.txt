@@ -1004,7 +1004,7 @@
     0x801BE90C:("D_801BE90C","UNK_TYPE1","",0x1),
     0x801BE92C:("D_801BE92C","UNK_TYPE1","",0x1),
     0x801BE944:("D_801BE944","UNK_TYPE1","",0x1),
-    0x801BE960:("actorInitVarFuncs","actor_init_var_func","[11]",0x2c),
+    0x801BE960:("sInitChainHandlers","actor_init_var_func","[11]",0x2c),
     0x801BE990:("D_801BE990","UNK_TYPE2","",0x2),
     0x801BE992:("D_801BE992","UNK_TYPE2","",0x2),
     0x801BE994:("D_801BE994","UNK_TYPE2","",0x2),
