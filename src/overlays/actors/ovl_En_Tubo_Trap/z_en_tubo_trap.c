@@ -52,7 +52,7 @@ void EnTuboTrap_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actionFunc = func_80931004;
+    this->actionFunc = func_80931004; // idle
 }
 
 void EnTuboTrap_Destroy(Actor* thisx, GlobalContext *globalCtx) {
@@ -243,7 +243,7 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
 } 
 
 #if NON-MATCHING
-// Wait For Proximity (sitting)
+// Wait For Proximity (idle)
   // NON-MATCHING: wrong register used, v instead of t for the weirdValues[] pointer
 void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
     Actor *player = PLAYER; 
@@ -272,7 +272,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
                 this->targetHeight += weirdvalue;
             }
             this->originPos = this->actor.world.pos;
-            func_800B8EC8(&this->actor, 0x28C4U); // play actorsound2 pot move start
+            Audio_PlayActorSound2(&this->actor, 0x28C4);
             this->actionFunc = func_80931138;
         }
     }
@@ -289,7 +289,7 @@ void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
         this->actor.speedXZ = 10.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        this->actionFunc = func_809311C4;
+        this->actionFunc = func_809311C4; // flying at link
     }
 }
 
@@ -299,8 +299,8 @@ void func_809311C4(EnTuboTrap *this, GlobalContext *globalCtx) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    func_800B8EC8(&this->actor, 0x3037U); // play flying sfx
-    
+    Audio_PlayActorSound2(&this->actor, 0x3037);
+
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > 57600.0f)) { //240.0f ^ 2
         Math_SmoothScaleMaxF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
