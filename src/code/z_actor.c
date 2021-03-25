@@ -230,7 +230,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
-    func_800E7494(&actor->colChkInfo);
+    CollisionCheck_InitInfo(&actor->colChkInfo);
     actor->uncullZoneForward = 1000.0f;
     actor->uncullZoneScale = 350.0f;
     actor->uncullZoneDownward = 700.0f;
@@ -556,7 +556,7 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8E58.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8EC8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Audio_PlayActorSound2.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8EF4.asm")
 

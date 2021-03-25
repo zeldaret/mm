@@ -21,12 +21,15 @@
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-            (curState)->nextGameStateSize = sizeof(newStruct); 
-        
+            (curState)->nextGameStateSize = sizeof(newStruct);
+
 #define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
+
+#define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
+#define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
 extern GraphicsContext* __gfxCtx;
 
@@ -48,7 +51,7 @@ extern GraphicsContext* __gfxCtx;
 
 #define GRAPH_ALLOC(gfxCtx, size)         \
     ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
-	
+
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 

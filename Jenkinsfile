@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'mm'
+    }
 
     stages {
         stage('Copy ROM') {
@@ -18,9 +20,25 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'python3 ./tools/progress.py csv >> /var/www/html/reports/progress_mm.us.rev1.csv'
-                sh 'python3 ./tools/progress.py csv -m >> /var/www/html/reports/progress_matching_mm.us.rev1.csv'
-                sh 'python3 ./tools/progress.py shield-json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
+                sh 'mkdir reports'
+                sh 'python3 ./tools/progress.py csv >> reports/progress_mm.us.rev1.csv'
+                sh 'python3 ./tools/progress.py csv -m >> reports/progress_matching_mm.us.rev1.csv'
+                sh 'python3 ./tools/progress.py shield-json > reports/progress_shield_mm.us.rev1.json'
+                stash includes: 'reports/*', name: 'reports'
+            }
+        }
+        stage('Update Progress') {
+            when {
+                branch 'master'
+            }
+            agent{
+                label 'master'
+            }
+            steps {
+                unstash 'reports'
+                sh 'cat reports/progress_mm.us.rev1.csv >> /var/www/html/reports/progress_mm.us.rev1.csv'
+                sh 'cat reports/progress_matching_mm.us.rev1.csv >> /var/www/html/reports/progress_matching_mm.us.rev1.csv'
+                sh 'cat reports/progress_shield_mm.us.rev1.json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
             }
         }
     }
