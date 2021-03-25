@@ -74,13 +74,13 @@ s32 Math_ScaledStepToS(s16* pValue, s16 target, s16 step) {
         if (((s16)(*pValue - target) * step) >= 0) {
             *pValue = target;
 
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepToS(s16* pValue, s16 target, s16 step) {
@@ -94,13 +94,13 @@ s32 Math_StepToS(s16* pValue, s16 target, s16 step) {
         if (((*pValue - target) * step) >= 0) {
             *pValue = target;
 
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepToC(s8* pValue, s8 target, s8 step) {
@@ -114,13 +114,13 @@ s32 Math_StepToC(s8* pValue, s8 target, s8 step) {
         if (((*pValue - target) * step) >= 0) {
             *pValue = target;
 
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepToF(f32* pValue, f32 target, f32 step) {
@@ -134,13 +134,13 @@ s32 Math_StepToF(f32* pValue, f32 target, f32 step) {
         if (((*pValue - target) * step) >= 0) {
             *pValue = target;
 
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepUntilAngleS(s16* pValue, s16 target, s16 step) {
@@ -151,10 +151,10 @@ s32 Math_StepUntilAngleS(s16* pValue, s16 target, s16 step) {
     if (((s16)(*pValue - target) * (s16)(orig - target)) <= 0) {
         *pValue = target;
 
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepToAngleS(s16* pValue, s16 target, s16 step) {
@@ -164,11 +164,11 @@ s32 Math_StepToAngleS(s16* pValue, s16 target, s16 step) {
         step = -step;
     }
 
-    if (diff >= 0x8000) {
+    if (diff > INT16_MAX) {
         step = -step;
-        diff = -0xFFFF - -diff;
-    } else if (diff <= -0x8000) {
-        diff += 0xFFFF;
+        diff = -UINT16_MAX - -diff;
+    } else if (diff <= INT16_MIN) {
+        diff += UINT16_MAX;
         step = -step;
     }
 
@@ -177,13 +177,13 @@ s32 Math_StepToAngleS(s16* pValue, s16 target, s16 step) {
 
         if ((diff * step) <= 0) {
             *pValue = target;
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_AsymStepToS(s16* pValue, s16 target, s16 incrStep, s16 decrStep) {
@@ -198,13 +198,13 @@ s32 Math_AsymStepToS(s16* pValue, s16 target, s16 incrStep, s16 decrStep) {
 
         if (((*pValue - target) * step) >= 0) {
             *pValue = target;
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_StepUntilF(f32* pValue, f32 limit, f32 step) {
@@ -214,10 +214,10 @@ s32 Math_StepUntilF(f32* pValue, f32 limit, f32 step) {
 
     if (((*pValue - limit) * (orig - limit)) <= 0) {
         *pValue = limit;
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 s32 Math_AsymStepToF(f32* pValue, f32 target, f32 incrStep, f32 decrStep) {
@@ -232,29 +232,29 @@ s32 Math_AsymStepToF(f32* pValue, f32 target, f32 incrStep, f32 decrStep) {
 
         if (((*pValue - target) * step) >= 0) {
             *pValue = target;
-            return 1;
+            return true;
         }
     } else if (target == *pValue) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-void func_800FF3A0(f32* arg0, s16* arg1, Input* input) {
+void func_800FF3A0(f32* distOut, s16* angleOut, Input* input) {
     f32 x = input->rel.stick_x;
     f32 y = input->rel.stick_y;
     f32 dist;
 
     dist = sqrtf(SQ(x) + SQ(y));
-    *arg0 = (60.0f < dist) ? 60.0f : dist;
+    *distOut = (60.0f < dist) ? 60.0f : dist;
 
     if (dist > 0.0f) {
         x = input->cur.stick_x;
         y = input->cur.stick_y;
-        *arg1 = atans_flip(y, -x);
+        *angleOut = atans_flip(y, -x);
     } else {
-        *arg1 = 0;
+        *angleOut = 0;
     }
 }
 
@@ -702,8 +702,7 @@ void* Lib_PtrSegToVirt(void* ptr) {
 }
 
 void* Lib_PtrSegToVirtNull(void* ptr) {
-    // UB: to cast the pointer to u32 in order to bitshift.
-    if (((u32)ptr >> 28) == 0) {
+    if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
     }
 
