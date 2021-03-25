@@ -7,26 +7,22 @@ void* Lib_bcopy(void* dest, void* src, size_t n) {
     return dest;
 }
 
-#ifdef NON_MATCHING
-void* Lib_MemSet(u8* a0, u32 a1, u32 a2) {
+s32* Lib_MemSet(s32* buffer, s32 value, s32 size) {
     u8* v0;
+    s32 i;
 
-    // XXX: realloc is messed up
-    if (a1 == 0) {
-        _blkclr((void*)a0, (u32)a2);
+    if (value == 0) {
+        bzero((void*)buffer, (u32)size);
 
-        return a0;
+        return buffer;
     }
 
-    for (v0 = a0; a2 != 0; a2--) {
-        *v0++ = a1;
+    for (v0 = buffer, i = size; i > 0; i--) {
+        *v0++ = value;
     }
 
-    return a0;
+    return buffer;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_MemSet.asm")
-#endif
 
 f32 Math_CosS(s16 angle) {
     return coss(angle) * D_801DDA80;
@@ -127,10 +123,8 @@ s32 Lib_StepTowardsCheck_c(s8* start, s8 target, s8 step) {
     return 0;
 }
 
-#ifdef NON_MATCHING
 s32 Lib_StepTowardsCheck_f(f32* start, f32 target, f32 step) {
-    if (step != 0) {
-        // XXX: regalloc is messed up
+    if (step != 0.0f) {
         if (target < *start) {
             step = -step;
         }
@@ -142,24 +136,19 @@ s32 Lib_StepTowardsCheck_f(f32* start, f32 target, f32 step) {
 
             return 1;
         }
-    } else if (target != *start) {
+    } else if (target == *start) {
         return 1;
     }
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_StepTowardsCheck_f.asm")
-#endif
 
-#ifdef NON_MATCHING
 s32 func_800FF0D0(s16* a0, s16 a1, s16 a2) {
-    s32 v0 = *a0;
+    s16 v0 = *a0;
 
-    // XXX: regalloc is messed up
     *a0 += a2;
 
-    if (((*a0 - a1) * (v0 - a1)) <= 0) {
+    if (((s16)(*a0 - a1) * (s16)(v0 - a1)) <= 0) {
         *a0 = a1;
 
         return 1;
@@ -167,50 +156,105 @@ s32 func_800FF0D0(s16* a0, s16 a1, s16 a2) {
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF0D0.asm")
-#endif
 
-#ifdef NON_MATCHING
-void func_800FF138() {
+s32 func_800FF138(s16* pValue, s16 target, s16 step) {
+    s32 diff = target - *pValue;
 
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF138.asm")
-#endif
+    if (diff < 0) {
+        step = -step;
+    }
 
-#ifdef NON_MATCHING
-void func_800FF1FC(void) {
+    if (diff >= 0x8000) {
+        step = -step;
+        diff = -0xFFFF - -diff;
+    } else if (diff <= -0x8000) {
+        diff += 0xFFFF;
+        step = -step;
+    }
 
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF1FC.asm")
-#endif
+    if (step != 0) {
+        *pValue += step;
 
-#ifdef NON_MATCHING
-void func_800FF2A8(void) {
+        if ((diff * step) <= 0) {
+            *pValue = target;
+            return 1;
+        }
+    } else if (target == *pValue) {
+        return 1;
+    }
 
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF2A8.asm")
-#endif
-
-#ifdef NON_MATCHING
-void func_800FF2F8(void) {
-
+    return 0;
 }
 
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF2F8.asm")
-#endif
+s32 func_800FF1FC(s16* a0, s16 a1, s16 a2, s16 a3) {
+    s16 phi_v1;
 
-#ifdef NON_MATCHING
-void func_800FF3A0(void) {
-
+    phi_v1 = ((a1 - *a0) >= 0) ? a2 : a3;
+    if (phi_v1 != 0) {
+        if (a1 < *a0) {
+            phi_v1 = -phi_v1;
+        }
+        *a0 += phi_v1;
+        if (((*a0 - a1) * phi_v1) >= 0) {
+            *a0 = a1;
+            return 1;
+        }
+    } else if (a1 == *a0) {
+        return 1;
+    }
+    return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF3A0.asm")
-#endif
+
+s32 func_800FF2A8(f32* pValue, f32 limit, f32 step) {
+    f32 orig = *pValue;
+
+    *pValue += step;
+
+    if (((*pValue - limit) * (orig - limit)) <= 0) {
+        *pValue = limit;
+        return 1;
+    }
+
+    return 0;
+}
+
+s32 func_800FF2F8(f32* pValue, f32 target, f32 incrStep, f32 decrStep) {
+    f32 step = (target >= *pValue) ? incrStep : decrStep;
+
+    if (step != 0) {
+        if (target < *pValue) {
+            step = -step;
+        }
+
+        *pValue += step;
+
+        if (((*pValue - target) * step) >= 0) {
+            *pValue = target;
+            return 1;
+        }
+    } else if (target == *pValue) {
+        return 1;
+    }
+
+    return 0;
+}
+
+void func_800FF3A0(f32* arg0, s16* arg1, Input* input) {
+    f32 x = input->rel.stick_x;
+    f32 y = input->rel.stick_y;
+    f32 dist;
+
+    dist = sqrtf(SQ(x) + SQ(y));
+    *arg0 = (60.0f < dist) ? 60.0f : dist;
+
+    if (dist > 0.0f) {
+        x = input->cur.stick_x;
+        y = input->cur.stick_y;
+        *arg1 = atans_flip(y, -x);
+    } else {
+        *arg1 = 0;
+    }
+}
 
 s16 Rand_S16Offset(s16 base, s16 range) {
     return (s16)(Rand_ZeroOne() * range) + base;
@@ -346,25 +390,27 @@ f32 Math_Vec3f_DistXZAndStore(Vec3f* a, Vec3f* b, f32* xDiff, f32* zDiff) {
     return sqrtf((*xDiff * *xDiff) + (*zDiff * *zDiff));
 }
 
-#ifdef NON_MATCHING
-void Math_Vec3f_PushAwayXZ(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
+f32 Math_Vec3f_PushAwayXZ(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     f32 sp24;
     f32 sp20;
     f32 f0 = Math_Vec3f_DistXZAndStore(pusher, start, &sp24, &sp20);
     f32 f2 = f0 - distanceToApproach;
 
-    if ((f0 >= distanceToApproach) && (f2 != 0)) {
-        f2 /= f0;
-    } else {
-        f2 = 0;
+    if (distanceToApproach > f0) {
+        f2 = 0.0f;
     }
 
-    start->x = pusher->x + sp24 * f2;
-    start->z = pusher->z + sp20 * f2;
+    if (f2 == 0.0f) {
+        f0 = 0.0f;
+    } else {
+        f0 = f2 / f0;
+    }
+
+    start->x = pusher->x + sp24 * f0;
+    start->z = pusher->z + sp20 * f0;
+
+    return f2;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Math_Vec3f_PushAwayXZ.asm")
-#endif
 
 f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b) {
     return b->y - a->y;
@@ -513,13 +559,42 @@ void Math_SmoothDownscaleMaxF(f32* start, f32 scale, f32 maxStep) {
   *start = *start - f0;
 }
 
-#ifdef NON_MATCHING
-s32 Math_SmoothScaleMaxMinS(s16* start, s16 target, s16 scale, s16 maxStep, s16 minStep) {
+s32 Math_SmoothScaleMaxMinS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
+    s16 stepSize = 0;
+    s16 diff = target - *pValue;
 
+    if (*pValue != target) {
+        stepSize = diff / scale;
+
+        if ((stepSize > minStep) || (stepSize < -minStep)) {
+            if (stepSize > step) {
+                stepSize = step;
+            }
+
+            if (stepSize < -step) {
+                stepSize = -step;
+            }
+
+            *pValue += stepSize;
+        } else {
+            if (diff >= 0) {
+                *pValue += minStep;
+
+                if ((s16)(target - *pValue) <= 0) {
+                    *pValue = target;
+                }
+            } else {
+                *pValue -= minStep;
+
+                if ((s16)(target - *pValue) >= 0) {
+                    *pValue = target;
+                }
+            }
+        }
+    }
+
+    return diff;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Math_SmoothScaleMaxMinS.asm")
-#endif
 
 void Math_SmoothScaleMaxS(s16* start, s16 target, s16 scale, s16 maxStep) {
     s16 v0 = target - *start;
@@ -568,16 +643,16 @@ void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, 
     dst->z = translation->z + (src->z * sp1C - src->x * f0);
 }
 
-#ifdef NON_MATCHING
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst) {
-    // XXX regalloc is slightly off
-    dst->r = (f32)a->r + ((f32)b->r - (f32)a->r) * t;
-    dst->g = (f32)a->g + ((f32)b->g - (f32)a->g) * t;
-    dst->b = (f32)a->b + ((f32)b->b - (f32)a->b) * t;
+    f32 aF;
+
+    aF = a->r;
+    dst->r = aF + (b->r - aF) * t;
+    aF = a->g;
+    dst->g = aF + (b->g - aF) * t;
+    aF = a->b;
+    dst->b = aF + (b->b - aF) * t;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_LerpRGB.asm")
-#endif
 
 f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     Vec3f sp24;
