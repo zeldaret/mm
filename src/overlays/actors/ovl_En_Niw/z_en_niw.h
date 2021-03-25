@@ -89,35 +89,4 @@ extern const ActorInit En_Niw_InitVars;
 extern SkeletonHeader D_6002530;
 extern AnimationHeader D_60000E8;
 
-// most of these are not actually defined anywhere yet because I suspect they are late rodata, will fix later
-
-extern f32 D_80893500;
-extern f32 D_80893504;
-extern f32 D_80893508;
-
-extern f32 D_8089354C;
-
-extern f32 D_80893490; // used by func_808917F8
-
-extern f32 D_80893564; //used by func_808922D0
-extern f32 D_80893568; //used by func_808922D0
-
-extern f32 D_80893584; //used in func_808930FC
-extern f32 D_80893580;
-extern f32 D_80893588;
-
-extern f32 D_80893558;
-extern f32 D_8089355C;
-extern f32 D_80893560;
-
-extern f32 D_80893578; // func_8089262C
-
-extern f32 D_8089356C;
-
-extern f32 D_80893570; // func_80892414
-
-
-extern f32 D_80893550; //func_808919E8
-extern f32 D_80893554;
-
 #endif // Z_EN_NIW_H

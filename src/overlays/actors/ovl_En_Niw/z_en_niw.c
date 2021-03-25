@@ -54,10 +54,12 @@ const ActorInit En_Niw_InitVars = {
 //D_8089348C
 f32 D_80893484[] = { 0x459C4000, 0xC59C4000, 0x459C4000, 0x453B8000, 0x457A0000,};
 
-u32 D_80893498[] = { // collider
- 0x0500093D, 0x20010000, 0x00000000, 0x00000000,
- 0x00000000, 0xF7CFFFFF, 0x00000000, 0x00010100,
- 0x000F0019, 0x00040000, 0x00000000, };
+//u32 D_80893498[] = { // collider
+static ColliderCylinderInit sCylinderInit = {
+    { 0x45, AT_NONE | AT_BOUNCED | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_NONE | AC_NO_DAMAGE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK2 | OC2_HIT_PLAYER, 0x9C, },
+    { 0x45, { 0x453B8000, 0x45, 0x7A }, { 0x0500093D, 0x20, 0x01 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+    { 0, 0, 0, { 0, -2097, -1 } },
+};
 
 Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
 
@@ -97,13 +99,14 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->paramsCopy == 1) {
-        Actor_SetScale(&this->actor, ((f32) gStaticContext->data[2486] / D_80893500) + D_80893504);
+        Actor_SetScale(&this->actor, ((f32) gStaticContext->data[2486] / 10000.0f) + 0.00400000018999f);
     }
 
-    this->actor.colChkInfo.health = (u8) (u32) (randZeroOneScaled(D_80893508) + 10.0f);
+    // random health between 18-20?
+    this->actor.colChkInfo.health = (u8) (u32) (randZeroOneScaled(9.98999977112f) + 10.0f);
     this->actor.colChkInfo.mass = 0xFF;
     if (this->paramsCopy == 0) {
-        Collision_InitCylinder(globalCtx, &this->collider, &this->actor, &D_80893498);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
     if (this->paramsCopy == 2) {
@@ -126,7 +129,7 @@ void EnNiw_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnNiw* this = THIS;
 
     if (this->paramsCopy == 0) {
-        Collision_FiniCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
 
@@ -246,7 +249,7 @@ void func_808916B0(EnNiw *this, GlobalContext *globalCtx) {
             yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
             zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
             newNiwPos.x = ((randZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
-            newNiwPos.y = randPlusMinusPoint5Scaled(D_8089354C) 
+            newNiwPos.y = randPlusMinusPoint5Scaled(0.300000011921f) 
                  + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
             newNiwPos.z = ((randZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
             attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx,
@@ -337,7 +340,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
 
     s16tmp = 0;
     if (this->unk252 != 0) {
-        if (randZeroOneScaled(D_80893550) < 1.0f) {
+        if (randZeroOneScaled(3.99000000954f) < 1.0f) {
             this->unk2EA = this->unk2EA + 1;
             this->unk2EA = this->unk2EA & 1;
         }
@@ -349,7 +352,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
 
         if (this->unk298 >= 8) {
             this->unk252 = (s32) randZeroOneScaled(30.0f);
-            this->unk298 = (s32) randZeroOneScaled(D_80893554);
+            this->unk298 = (s32) randZeroOneScaled(3.99000000954f);
             if (posY < 0.0f) {
                 posY -= 100.0f;
             } else {
@@ -421,9 +424,9 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->unk250 = (s32) (randZeroOneScaled(1.0f) * 10.0f) + 0xA;
     }
 
-    this->actor.shape.rot.x = ((s16) randPlusMinusPoint5Scaled(D_80893558)) + this->actor.world.rot.x;
-    this->actor.shape.rot.y = ((s16) randPlusMinusPoint5Scaled(D_8089355C)) + this->actor.world.rot.y;
-    this->actor.shape.rot.z = ((s16) randPlusMinusPoint5Scaled(D_80893560)) + this->actor.world.rot.z;
+    this->actor.shape.rot.x = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.x;
+    this->actor.shape.rot.y = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.y;
+    this->actor.shape.rot.z = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.z;
     if (this->paramsCopy == 0) {
         if (func_800B8BFC( &this->actor, globalCtx) != 0) {
             this->actor.shape.rot.z = 0;
@@ -445,7 +448,7 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->paramsCopy = 0;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-        Collision_InitCylinder(globalCtx, &this->collider, &this->actor,  &D_80893498);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= 1;
         this->actionFunc = func_80891F60;
@@ -571,8 +574,8 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
 
     this->unk256 = 100;
     if (this->unk252 == 0x28) {
-        temp_f2 = D_80893564;
-        this->unk264 = D_80893568;
+        temp_f2 = 14000.0f;
+        this->unk264 = 10000.0f;
         this->unk280 = temp_f2;
         if (0) {}
         this->unk278 = temp_f2;
@@ -601,7 +604,7 @@ s16 func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     if (this->unk252 == 1) {
         this->actor.speedXZ = 3.0f;
         this = this;
-        temp_f6 = randZeroOneScaled(D_8089356C);
+        temp_f6 = randZeroOneScaled(1.99000000954f);
         this->unk250 = 0;
         returnValue = this->unk250;
         this->unk24E = (u16) returnValue;
@@ -617,7 +620,7 @@ void func_80892414(EnNiw *this) {
 
     SkelAnime_ChangeAnim(&this->skelanime, &D_60000E8, 1.0f, 0.0f, 
           (f32) SkelAnime_GetFrameCount(&D_60000E8), 0, -10.0f);
-    temp_t7 = (s32) randZeroOneScaled(D_80893570);
+    temp_t7 = (s32) randZeroOneScaled(1.99000000954f);
     this->unk29A = (s16) temp_t7;
     this->unk28E = 7;
     this->actionFunc = func_808924B0;
