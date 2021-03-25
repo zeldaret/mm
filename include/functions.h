@@ -821,7 +821,7 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt);
 // void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800B8E58(void);
-void func_800B8EC8(Actor* actor, u32 uParm2);
+void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 // void func_800B8EF4(void);
 void func_800B8F98(Actor* actor, u16 sfxId);
 // void func_800B8FC0(void);

@@ -556,7 +556,7 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8E58.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8EC8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Audio_PlayActorSound2.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8EF4.asm")
 
