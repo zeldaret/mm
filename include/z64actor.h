@@ -252,7 +252,9 @@ typedef struct {
     /* 0xB28 */ s16 unkB28;
     /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
     /* 0xB9C */ Vec3f unkB9C;
-    /* 0xBA8 */ UNK_TYPE1 padBA8[0x1D0];
+    /* 0xBA8 */ UNK_TYPE1 padBA8[0x1B4];
+    /* 0xBA8 */ s32 unkD5C;
+    /* 0xBA8 */ UNK_TYPE1 padD60[0x18];
 } ActorPlayer; // size = 0xD78
 
 typedef struct {

@@ -141,14 +141,14 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
     tempOne = 1.0f;
     if (this->unk24C == 0) {
         if (arg2 == 0) {
-            this->unk264 = 0.0f;
+            this->unk264[0] = 0.0f;
         } else {
-            this->unk264 = (-10000.0f) * tempOne;
+            this->unk264[0] = (-10000.0f) * tempOne;
         }
         this->unk292 += 1;
         this->unk24C = 3;
         if ((this->unk292 & 1) == 0) {
-            this->unk264 = 0.0f;
+            this->unk264[0] = 0.0f;
             if (arg2 == 0) {
                 this->unk24C = randZeroOneScaled(30.0f);
             }
@@ -159,39 +159,39 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
         this->unk296 &= 1;
         switch( arg2 ){
             case 0:
-                this->unk26C = 0.0f;
-                this->unk268 = 0.0f;
+                this->unk264[2] = 0.0f;
+                this->unk264[1] = 0.0f;
                 break;
             case 1:
                 this->unk24E = 3;
                 temp7expr = 7000.0f * tempOne;
-                this->unk26C = temp7expr;
-                this->unk268 = temp7expr;
+                this->unk264[2] = temp7expr;
+                this->unk264[1] = temp7expr;
                 if (this->unk296 == 0) {
-                    this->unk26C = 0.0f;
-                    this->unk268 = 0.0f;
+                    this->unk264[2] = 0.0f;
+                    this->unk264[1] = 0.0f;
                 }
                 break;
             case 2:
                 this->unk24E = 2;
-                this->unk268 = -10000.0f;
-                this->unk26C = -10000.0f;
-                this->unk280 = 25000.0f;
-                this->unk278 = 25000.0f;
-                this->unk284 = 6000.0f;
-                this->unk27C = 6000.0f;
+                this->unk264[1] = -10000.0f;
+                this->unk264[2] = -10000.0f;
+                this->unk264[7] = 25000.0f;
+                this->unk264[5] = 25000.0f;
+                this->unk264[8] = 6000.0f;
+                this->unk264[6] = 6000.0f;
                 if (this->unk296 == 0) {
-                    this->unk280 = 8000.0f;
-                    this->unk278 = 8000.0f;
+                    this->unk264[7] = 8000.0f;
+                    this->unk264[5] = 8000.0f;
                 }
                 break;
             case 3:
                 this->unk24E = 2;
-                this->unk278 = 10000.0f;
-                this->unk280 = 10000.0f;
+                this->unk264[5] = 10000.0f;
+                this->unk264[7] = 10000.0f;
                 if (this->unk296 == 0) {
-                    this->unk278 = 3000.0f;
-                    this->unk280 = 3000.0f;
+                    this->unk264[5] = 3000.0f;
+                    this->unk264[7] = 3000.0f;
                 }
                 break;
             case 4:
@@ -199,39 +199,39 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
                 break;
             case 5:
                 this->unk24E = 5;
-                this->unk278 = 14000.0f;
-                this->unk280 = 14000.0f;
+                this->unk264[5] = 14000.0f;
+                this->unk264[7] = 14000.0f;
                 if (this->unk296 == 0) {
-                    this->unk278 = 10000.0f;
-                    this->unk280 = 10000.0f;
+                    this->unk264[5] = 10000.0f;
+                    this->unk264[7] = 10000.0f;
                 }
                 break;
             }
             
     }
-    if (this->unk288 != this->unk2E4) {
-        Math_SmoothScaleMaxF(&this->unk2E4, this->unk288, 0.5f, 4000.0f);
+    if (this->unk264[9] != this->unk2E4) {
+        Math_SmoothScaleMaxF(&this->unk2E4, this->unk264[9], 0.5f, 4000.0f);
     }
-    if (this->unk264 != this->unk2E0) {
-        Math_SmoothScaleMaxF(&this->unk2E0, this->unk264, 0.5f, 4000.0f);
+    if (this->unk264[0] != this->unk2E0) {
+        Math_SmoothScaleMaxF(&this->unk2E0, this->unk264[0], 0.5f, 4000.0f);
     }
-    if (this->unk26C !=  this->unk2C8) {
-        Math_SmoothScaleMaxF(&this->unk2C8, this->unk26C, 0.8f, 7000.0f);
+    if (this->unk264[2] !=  this->unk2C8) {
+        Math_SmoothScaleMaxF(&this->unk2C8, this->unk264[2], 0.8f, 7000.0f);
     }
-    if (this->unk280 != this->unk2CC) {
-        Math_SmoothScaleMaxF(&this->unk2CC, this->unk280, 0.8f, 7000.0f);
+    if (this->unk264[7] != this->unk2CC) {
+        Math_SmoothScaleMaxF(&this->unk2CC, this->unk264[7], 0.8f, 7000.0f);
     }
-    if (this->unk284 != this->unk2D0 ) {
-        Math_SmoothScaleMaxF(&this->unk2D0, this->unk284, 0.8f, 7000.0f);
+    if (this->unk264[8] != this->unk2D0 ) {
+        Math_SmoothScaleMaxF(&this->unk2D0, this->unk264[8], 0.8f, 7000.0f);
     }
-    if (this->unk268 != this->unk2D4 ) {
-        Math_SmoothScaleMaxF(&this->unk2D4, this->unk268, 0.8f, 7000.0f);
+    if (this->unk264[1] != this->unk2D4 ) {
+        Math_SmoothScaleMaxF(&this->unk2D4, this->unk264[1], 0.8f, 7000.0f);
     }
-    if (this->unk278 != this->unk2D8 ) {
-        Math_SmoothScaleMaxF(&this->unk2D8, this->unk278, 0.8f, 7000.0f);
+    if (this->unk264[5] != this->unk2D8 ) {
+        Math_SmoothScaleMaxF(&this->unk2D8, this->unk264[5], 0.8f, 7000.0f);
     }
-    if (this->unk27C != this->unk2DC ) {
-        Math_SmoothScaleMaxF(&this->unk2DC, this->unk27C, 0.8f, 7000.0f);
+    if (this->unk264[6] != this->unk2DC ) {
+        Math_SmoothScaleMaxF(&this->unk2DC, this->unk264[6], 0.8f, 7000.0f);
     }
 }
 
@@ -344,7 +344,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
             this->unk2EA = this->unk2EA + 1;
             this->unk2EA = this->unk2EA & 1;
         }
-        Math_SmoothScaleMaxF(&this->unk288, D_80893484[this->unk2EA], 0.5f, 4000.0f);
+        Math_SmoothScaleMaxF(&this->unk264[9], D_80893484[this->unk2EA], 0.5f, 4000.0f);
     }
 
     if ((this->unk252 == 0) && (this->unk250 == 0)) {
@@ -375,7 +375,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     }
 
     if (this->unk250 != 0) {
-        Math_SmoothDownscaleMaxF(&this->unk288, 0.5f, 4000.0f);
+        Math_SmoothDownscaleMaxF(&this->unk264[9], 0.5f, 4000.0f);
         s16tmp = 1;
         //pad = 0.0f;
         //pad2 = 0.0f;
@@ -578,14 +578,14 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     this->unk256 = 100;
     if (this->unk252 == 0x28) {
         temp_f2 = 14000.0f;
-        this->unk264 = 10000.0f;
-        this->unk280 = temp_f2;
+        this->unk264[0] = 10000.0f;
+        this->unk264[7] = temp_f2;
         if (0) {}
-        this->unk278 = temp_f2;
-        this->unk27C = 0.0f;
-        this->unk284 = 0.0f;
-        this->unk268 = 0.0f;
-        this->unk26C = 0.0f;
+        this->unk264[5] = temp_f2;
+        this->unk264[6] = 0.0f;
+        this->unk264[8] = 0.0f;
+        this->unk264[1] = 0.0f;
+        this->unk264[2] = 0.0f;
         this->unk24C = 0xA;
         Audio_PlayActorSound2(&this->actor, 0x2813U); //play actor sound 2 chicken cry m
     }
@@ -667,10 +667,10 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
         this->unk304 = 0;
         this->unk300 = 0;
         this->actor.speedXZ = 0;
-        this->unk284 = 0;
-        this->unk27C = 0;
-        this->unk278 = 0;
-        this->unk280 = 0;
+        this->unk264[8] = 0;
+        this->unk264[6] = 0;
+        this->unk264[5] = 0;
+        this->unk264[7] = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
         //Math_Vec3f_Copy(&this->unk2BC, &D_808934E8);
         func_80891974(&this->actor);
@@ -727,12 +727,12 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
                 this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
                 this->unk252 = this->unk250 = this->unk298;
                   
-                this->unk284 = 0.0f;
+                this->unk264[8] = 0.0f;
                 this->unk2A0 = 1;
-                this->unk27C = 0.0f;
+                this->unk264[6] = 0.0f;
                 this->actionFunc = func_80892248;
-                this->unk278 = 0.0f;
-                this->unk280 = 0.0f;
+                this->unk264[5] = 0.0f;
+                this->unk264[7] = 0.0f;
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
                 this->actor.speedXZ = 0.0f;
@@ -752,7 +752,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
 //working
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*) thisx;
-    Actor *player;
+    ActorPlayer *player = PLAYER;
     //s16 spD0;
     //f32 spCC;
     //f32 spC8;
@@ -778,179 +778,178 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     s16 temp_s0;
     s16 temp_s0_3;
     s16 temp_v0;
-    s16 temp_v0_10;
-    s16 temp_v0_11;
-    s16 temp_v0_12;
-    s16 temp_v0_13;
+    //s16 temp_v0_10;
+    //s16 temp_v0_11;
+    //s16 temp_v0_12;
+    //s16 temp_v0_13;
     //s16 this->unk28E;
-    s16 temp_v0_15;
-    s16 temp_v0_2;
-    s16 temp_v0_3;
-    s16 temp_v0_4;
-    s16 temp_v0_5;
-    s16 temp_v0_6;
-    s16 temp_v0_7;
-    s16 temp_v0_8;
-    s16 temp_v0_9;
-    s32 phi_v1;
-    f32 phi_f20;
-    s16 phi_s0;
-    s16 phi_s0_2;
+    s16 temp29C;
+    //s16 temp_v0_4;
+    //s16 temp_v0_5;
+    //s16 temp_v0_6;
+    //s16 temp_v0_7;
+    //s16 temp_v0_8;
+    //s16 temp_v0_9;
+    s32 featherCount;
+    f32 randomFloat;
+    s16 i;
 
     //player = globalCtx->actorCtx.actorList[2].first;
-    player = PLAYER; 
-    this->unk28C = this->unk28C + 1;
+    this->unk28C++;
     if (this->paramsCopy == 1) {
-        temp_v0 = this->actor.parent->shape.rot.y;
-        this->actor.world.rot.y = temp_v0;
-        this->actor.shape.rot.y = temp_v0;
+        //temp_v0 = this->actor.parent->shape.rot.y;
+        //this->actor.world.rot.y = this->actor.parent->shape.rot.y;
+        //this->actor.shape.rot.y = this->actor.parent->shape.rot.y;
+        this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.parent->shape.rot.y;
     }
+
     if (this->unk28E != 0) {
-        this->unk288 = 0.0f;
+        this->unk264[9] = 0.0f;
     }
-    temp_v0_2 = this->unk29E;
-    if (temp_v0_2 != 0) {
-        phi_v1 = 0x14;
-        if (temp_v0_2 == 2) {
-            phi_v1 = 4;
+
+    if (this->unk29E != 0) {
+        featherCount = 20;
+        if (this->unk29E == 2) {
+            featherCount = 4;
         }
-        if (phi_v1 > 0) {
-            //spD0 = (s16) phi_v1;
-            phi_s0 = 0;
+        if (featherCount > 0) {
+            //spD0 = (s16) featherCount;
 //loop_9:
-            while ((s32) temp_s0 < (s32) phi_v1){
+            i = 0;
+            while (i < featherCount){
                 spC4.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
                 spC4.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
                 spC4.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
+                randomFloat = randZeroOneScaled(6.0f) + 6.0f;
                 if ((this->unk29E == 2) && (this->unk308 != 0.0f)) {
                     spC4.y += 10.0f;
                 }
-                phi_f20 = randZeroOneScaled(6.0f) + 6.0f;
+
                 if (this->unk308 == 0.0f) {
-                    phi_f20 = randZeroOneScaled(2.0f) + 2.0f;
+                    randomFloat = randZeroOneScaled(2.0f) + 2.0f;
                 }
                 spB8.x = randPlusMinusPoint5Scaled(3.0f);
                 spB8.y = (randZeroOneScaled(2.0f) * 0.5f) + 2.0f;
                 spB8.z = randPlusMinusPoint5Scaled(3.0f);
-                spAC.x = 0.0f;
-                spAC.z = 0.0f;
+                // loading 0 twice
+                spAC.z = spAC.x = 0.0f;
                 spAC.y = -0.15000000596f;
-                func_80893008(this, &spC4, &spB8, &spAC, phi_f20);
-                phi_s0 += 1;
-            //if ((s32) temp_s0 < (s32) phi_v1) {
+                func_80893008(this, &spC4, &spB8, &spAC, randomFloat); //spawn feather
+                i += 1;
+            //if ((s32) temp_s0 < (s32) featherCount) {
                 //goto loop_9;
             }
         }
         this->unk29E = 0;
     }
+
+    // load 4000 here
     func_808930FC(this, globalCtx);
-    temp_v0_3 = this->unk24C;
-    if (temp_v0_3 != 0) {
-        this->unk24C = temp_v0_3--;
+
+
+    if (this->unk24C != 0) {
+        this->unk24C--;
     }
-    temp_v0_4 = this->unk24E;
-    if (temp_v0_4 != 0) {
-        this->unk24E = temp_v0_4--;
+    //temp_v0_4 = ;
+    if (this->unk24E != 0) {
+        this->unk24E--;
     }
-    temp_v0_5 = this->unk250;
-    if (temp_v0_5 != 0) {
-        this->unk250 = temp_v0_5--;
+    //temp_v0_5 = this->unk250;
+    if (this->unk250 != 0) {
+        this->unk250--;
     }
-    temp_v0_6 = this->unk252;
-    if (temp_v0_6 != 0) {
-        this->unk252 = temp_v0_6--;
+    //temp_v0_6 = this->unk252;
+    if (this->unk252 != 0) {
+        this->unk252--;
     }
-    temp_v0_7 = this->unk254;
-    if (temp_v0_7 != 0) {
-        this->unk254 = temp_v0_7--;
+    //temp_v0_7 = this->unk254;
+    if (this->unk254 != 0) {
+        this->unk254--;
     }
-    temp_v0_8 = this->unk256;
-    if (temp_v0_8 != 0) {
-        this->unk256 = temp_v0_8--;
+    //temp_v0_8 = this->unk256;
+    if (this->unk256 != 0) {
+        this->unk256--;
     }
-    temp_v0_9 = this->unk258;
-    if (temp_v0_9 != 0) {
-        this->unk258 = temp_v0_9--;
+    //temp_v0_9 = this->unk258;
+    if (this->unk258 != 0) {
+        this->unk258--;
     }
-    temp_v0_10 = this->unk25A;
-    if (temp_v0_10 != 0) {
-        this->unk25A = temp_v0_10--;
+    //temp_v0_10 = this->unk25A;
+    if (this->unk25A != 0) {
+        this->unk25A--;
     }
-    temp_v0_11 = this->unk25C;
-    if (temp_v0_11 != 0) {
-        this->unk25C = temp_v0_11--;
+    //temp_v0_11 = this->unk25C;
+    if (this->unk25C != 0) {
+        this->unk25C--;
     }
-    temp_v0_12 = this->unk25E;
-    if (temp_v0_12 != 0) {
-        this->unk25E = temp_v0_12--;
+    //temp_v0_12 = this->unk25E;
+    if (this->unk25E != 0) {
+        this->unk25E--;
     }
-    temp_v0_13 = this->unk260;
-    if (temp_v0_13 != 0) {
-        this->unk260 = temp_v0_13--;
+    //temp_v0_13 = this->unk260;
+    if (this->unk260 != 0) {
+        this->unk260--;
     }
+
     //this->actor.shape.rot.x = (unaligned s32) this->actor.world.rot.x;
     this->actor.shape.rot.x = this->actor.world.rot.x;
     this->actor.shape.shadowScale = 15.0f;
-    this->actor.shape.rot.z = (s16) (u16) this->actor.world.rot.z;
+    this->actor.shape.rot.z = this->actor.world.rot.z;
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, (f32) (s32) this->unk308);
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor *) this);
+    Actor_SetHeight(&this->actor, this->unk308);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
     temp_f0 = this->actor.floorHeight;
     if (temp_f0 <= -32000.0f) {
-block_40:
-        temp_f12 = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        temp_f2 = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        temp_f14 = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
-        temp_f16 = this->actor.home.pos.y;
-        this->actor.world.pos.x = this->actor.home.pos.x;
-        this->actor.world.pos.z = this->actor.home.pos.z;
-        this->actor.world.pos.y = temp_f16 + globalCtx->view.eye.y + ((temp_f2 / sqrtf((temp_f12 * temp_f12) + (temp_f2 * temp_f2) + (temp_f14 * temp_f14))) * 160.0f);
-        if (this->actor.world.pos.y < temp_f16) {
-            this->actor.world.pos.y = temp_f16 + 300.0f;
+        //block_40:
+        while (temp_f0 >= 32000.0f) {
+            temp_f12 = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
+            temp_f2 = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
+            temp_f14 = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+            temp_f16 = this->actor.home.pos.y;
+            this->actor.world.pos.x = this->actor.home.pos.x;
+            this->actor.world.pos.z = this->actor.home.pos.z;
+            this->actor.world.pos.y = temp_f16 + globalCtx->view.eye.y 
+              + ((temp_f2 / sqrtf((temp_f12 * temp_f12) + (temp_f2 * temp_f2) + (temp_f14 * temp_f14))) * 160.0f);
+            if (this->actor.world.pos.y < temp_f16) {
+                this->actor.world.pos.y = temp_f16 + 300.0f;
+            }
+            this->actor.speedXZ = 0.0f;
+            //temp_a1_2 = &this->actor.home;
+            this->actor.gravity = -2.0f;
+            Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
+            Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
+            temp29C = this->unk29C = 0;
+            this->unk304 = 0.0f;
+            this->unk300 = 0.0f;
+            this->unk2FC = 0.0f;
+            this->unk2F8 = 0.0f;
+            this->unk2F4 = 0.0f;
+            this->unk2DC = 0.0f;
+            this->unk2D8 = 0.0f;
+            this->unk2D4 = 0.0f;
+            this->unk2D0 = 0.0f;
+            this->unk2CC = 0.0f;
+            this->unk2C8 = 0.0f;
+            this->unk2E0 = 0.0f;
+            this->unk2E4 = 0.0f;
+            this->unk29A = temp29C;
+            this->unk298 = temp29C;
+            this->unk29E = temp29C;
+            this->unk292 = temp29C;
+            this->unk28C = temp29C;
+            this->unk2A0 = temp29C;
+            i = 0;
+            while (i < 0xA) {
+                this->unk264[i] = 0.0f;
+            //if ((s32) temp_s0_3 < 0xA) {
+                //goto loop_43;
+            }
+            this->unk28E = 8;
+            this->unk2A0 = 0;
+            this->actionFunc = func_808925F8;
+            return; // a return in a loop? clearly wrong
         }
-        this->actor.speedXZ = 0.0f;
-        //temp_a1_2 = &this->actor.home;
-        this->actor.gravity = -2.0f;
-        Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
-        Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
-        this->unk29C = 0;
-        temp_v0_15 = (s16) this->unk29C;
-        this->unk304 = 0.0f;
-        this->unk300 = 0.0f;
-        this->unk2FC = 0.0f;
-        this->unk2F8 = 0.0f;
-        this->unk2F4 = 0.0f;
-        this->unk2DC = 0.0f;
-        this->unk2D8 = 0.0f;
-        this->unk2D4 = 0.0f;
-        this->unk2D0 = 0.0f;
-        this->unk2CC = 0.0f;
-        this->unk2C8 = 0.0f;
-        this->unk2E0 = 0.0f;
-        this->unk2E4 = 0.0f;
-        this->unk29A = temp_v0_15;
-        this->unk298 = temp_v0_15;
-        this->unk29E = temp_v0_15;
-        this->unk292 = temp_v0_15;
-        this->unk28C = temp_v0_15;
-        this->unk2A0 = temp_v0_15;
-        phi_s0_2 = (u16)0;
-loop_43:
-        while ((s32) temp_s0_3 < 0xA) {
-            temp_s0_3 = phi_s0_2 + 1;
-            (this + (phi_s0_2 * 4))->unk264 = 0.0f;
-            phi_s0_2 = temp_s0_3;
-        //if ((s32) temp_s0_3 < 0xA) {
-            //goto loop_43;
-        }
-        this->unk28E = 8;
-        this->unk2A0 = 0;
-        this->actionFunc = func_808925F8;
-        return;
-    }
-    if (temp_f0 >= 32000.0f) {
-        goto block_40;
     }
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != (u16)6)) {
         this->actor.velocity.y = 0.0f;
@@ -964,6 +963,7 @@ loop_43:
         this->actionFunc = func_808920A0;
         return;
     }
+    //player = PLAYER; 
     if ((this->unk2A0 != 0) && (this->actor.xyzDistToPlayerSq < (20.0f * 20.0f)) && (player->unkD5C == 0)) {
         func_800B8D50(globalCtx, this, 0x40000000, this->actor.world.rot.y, 0.0f, 0x10);
     }

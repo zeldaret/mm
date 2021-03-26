@@ -25,7 +25,7 @@ typedef struct EnNiw {
     /* 0x144 */ SkelAnime skelanime;
     /* 0x188 */ Vec3s limbDrawTbl[0x10];
     /* 0x1E8 */ Vec3s transitionDrawtable[0x10];
-    /* 0x248 */ EnNiwActionFunc* actionFunc;
+    /* 0x248 */ EnNiwActionFunc actionFunc;
 
     /* 0x24C */ s16 unk24C;// used in func_808922D0
     /* 0x24E */ s16 unk24E;
@@ -39,15 +39,15 @@ typedef struct EnNiw {
     /* 0x25E */ s16 unk25E;
     /* 0x260 */ s16 unk260;
     /* 0x262 */ s16 unk262;
-    /* 0x264 */ f32 unk264; // used in func_808922D0
-    /* 0x268 */ f32 unk268; // used in func_808922D0
-    /* 0x26C */ f32 unk26C; // used in func_808922D0
-    /* 0x270 */ u8  unk279[0x8]; // pad
-    /* 0x278 */ f32 unk278; // used in func_808922D0
-    /* 0x27C */ f32 unk27C; // used in func_808922D0
-    /* 0x280 */ f32 unk280; // used in func_808922D0
-    /* 0x284 */ f32 unk284; // used in func_808922D0
-    /* 0x288 */ f32 unk288; 
+    ///* 0x264 */ f32 unk264; // used in func_808922D0 0
+    ///* 0x268 */ f32 unk268; // used in func_808922D0 
+    ///* 0x26C */ f32 unk26C; // used in func_808922D0 2
+    ///* 0x278 */ f32 unk278; // used in func_808922D0
+    ///* 0x27C */ f32 unk27C; // used in func_808922D0
+    ///* 0x280 */ f32 unk280; // used in func_808922D0
+    ///* 0x284 */ f32 unk284; // used in func_808922D0
+    ///* 0x288 */ f32 unk288; 
+    /* 0x264 */ f32 unk264[10];
     /* 0x28C */ s16 unk28C; // used in EnNiw_Update
     /* 0x28E */ s16 unk28E; // might not be signed
     /* 0x290 */ s16 unk290;
