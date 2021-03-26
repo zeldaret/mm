@@ -350,7 +350,7 @@ typedef enum {
     /* 0x22 */ EFFECT_SS_DEAD_DS,
     /* 0x23 */ EFFECT_SS_DEAD_SOUND,
     /* 0x24 */ EFFECT_SS_ICE_SMOKE,
-    /* 0x25 */ EFFECT_SS_TYPE_MAX // originally "EFFECT_SS2_TYPE_LAST_LABEL"
+    /* 0x25 */ EFFECT_SS_ICE_BLOCK
 } EffectSsType;
 
 /* Init param structs, split into overlay headers when effects folder is made */
@@ -630,5 +630,79 @@ typedef struct {
     /* 0x2C */ s16 bodyPart;
     /* 0x30 */ s32 life;
 } EffectSsFireTailInitParams; // size = 0x34
+
+typedef struct {
+    /* 0x00 */ Actor* actor;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ s16 scale;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 flags;
+    /* 0x16 */ s16 bodyPart;
+} EffectSsEnFireInitParams; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scoreIdx;
+} EffectSsExtraInitParams; // size = 0x28
+
+typedef enum {
+    /* 0 */ EXTRA_SCORE_30,
+    /* 1 */ EXTRA_SCORE_60,
+    /* 2 */ EXTRA_SCORE_100
+} ExtraScoreIdx;
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scaleStep;
+    /* 0x28 */ ColorRGBA8 primColor;
+    /* 0x2C */ ColorRGBA8 envColor;
+    /* 0x30 */ s32 unk_30;
+} EffectSsDeadDbInitParams; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scaleStep;
+    /* 0x28 */ ColorRGBA8 primColor;
+    /* 0x2C */ ColorRGBA8 envColor;
+    /* 0x30 */ s16 alphaStep;
+    /* 0x34 */ s32 life;
+    /* 0x38 */ f32 randPosScale;
+    /* 0x3C */ s32 randIter;
+    /* 0x40 */ u8 type;
+} EffectSsDeadDdInitParams; // size = 0x44
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+    /* 0x26 */ s16 scaleStep;
+    /* 0x28 */ s16 alpha;
+    /* 0x2C */ s32 life;
+} EffectSsDeadDsInitParams; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ s16 scale;
+} EffectSsIceSmokeInitParams; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ Actor* actor;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f accel;
+    /* 0x28 */ s16 scale;
+} EffectSsIceBlockInitParams; // size = 0x2A
 
 #endif
