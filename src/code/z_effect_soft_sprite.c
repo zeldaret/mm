@@ -38,7 +38,7 @@ void EffectSS_Clear(GlobalContext* ctxt) {
     for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS_MAX; i++) {
         addr = (void*)iter2->loadedRamAddr;
         if (addr != NULL) {
-            zelda_free(addr);
+            ZeldaArena_Free(addr);
         }
         (iter2++)->loadedRamAddr = 0;
     }

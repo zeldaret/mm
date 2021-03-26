@@ -1181,12 +1181,12 @@ struct GameState {
     /* 0x0C */ GameStateFunc nextGameStateInit;
     /* 0x10 */ u32 nextGameStateSize;
     /* 0x14 */ Input input[4];
-    /* 0x74 */ GameStateHeap heap;
+    /* 0x74 */ GameStateHeap heap; // actually TwoHeadArena
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
     /* 0x9B */ u8 running; // If 0, switch to next game state
     /* 0x9C */ u32 frames;
-    /* 0xA0 */ UNK_TYPE1 padA0[0x2];
+    /* 0xA0 */ u8 padA0[0x2];
     /* 0xA2 */ u8 framerateDivisor; // game speed?
     /* 0xA3 */ UNK_TYPE1 unkA3;
 }; // size = 0xA4

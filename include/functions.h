@@ -1682,14 +1682,16 @@ s16 ActorCutscene_GetLength(s16 index);
 // UNK_TYPE4 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
 // void func_800F23E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800F2478(void);
-// void func_800F2620(void);
-// void func_800F2650(void);
-// void func_800F26C0(void);
-// void func_800F26F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800F2728(void);
-// void func_800F29A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_800F2CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+f32 func_800F2478(f32 target, TransformData* transData, s32 refIdx);
+void SkelCurve_Clear(SkelAnimeCurve* skelCurve);
+s32 SkelCurve_Init(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, SkelCurveLimbList* limbListSeg,
+                   TransformUpdateIndex* transUpdIdx);
+void SkelCurve_Destroy(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve);
+void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpdIdx, f32 arg2, f32 animFinalFrame,
+                       f32 animCurFrame, f32 animSpeed);
+s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve);
+// void SkelCurve_DrawLimb(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void SkelCurve_Draw(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 void FireObj_InitWithParams(GlobalContext* ctxt, FireObj* fire, FireObjInitParams* init);
 void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState);
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
@@ -1911,10 +1913,10 @@ Lights* func_801026E8(GraphicsContext* gCtxt, u8 ambientRed, u8 ambientGreen, u8
 Lights* Lights_MapperAllocateAndInit(GraphicsContext* gCtxt, u8 red, u8 green, u8 blue);
 void func_80102880(GlobalContext* ctxt);
 void func_80102A64(GlobalContext* ctxt);
-void* zelda_malloc(u32 size);
+void* ZeldaArena_Malloc(u32 size);
 void* zelda_mallocR(u32 size);
 void* zelda_realloc(void* oldPtr, u32 newSize);
-void zelda_free(void* param_1);
+void ZeldaArena_Free(void* param_1);
 void* zelda_calloc(u32 num, u32 size);
 void MainHeap_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
 // s32 MainHeap_Check(void);

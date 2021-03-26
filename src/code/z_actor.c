@@ -746,7 +746,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {
-                    zelda_free(ramAddr);
+                    ZeldaArena_Free(ramAddr);
                     entry->loadedRamAddr = NULL;
                 }
             }

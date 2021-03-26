@@ -1119,8 +1119,8 @@ void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime,
     }
 
     if (limbDrawTbl == NULL) {
-        skelAnime->limbDrawTbl = zelda_malloc(allocSize);
-        skelAnime->transitionDrawTbl = zelda_malloc(allocSize);
+        skelAnime->limbDrawTbl = ZeldaArena_Malloc(allocSize);
+        skelAnime->transitionDrawTbl = ZeldaArena_Malloc(allocSize);
     } else {
         skelAnime->limbDrawTbl = (Vec3s*)ALIGN16((u32)limbDrawTbl);
         skelAnime->transitionDrawTbl = (Vec3s*)ALIGN16((u32)transitionDrawTbl);
@@ -1367,8 +1367,8 @@ void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHead
     skelAnime->limbCount = skeletonHeader->limbCount + 1;
     skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
     if (limbDrawTbl == NULL) {
-        skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
-        skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
+        skelAnime->limbDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
+        skelAnime->transitionDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
     } else {
         skelAnime->limbDrawTbl = limbDrawTbl;
         skelAnime->transitionDrawTbl = transitionDrawTable;
@@ -1389,9 +1389,9 @@ void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHe
     skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
 
     if (limbDrawTbl == NULL) {
-        skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
+        skelAnime->limbDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
 
-        skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
+        skelAnime->transitionDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
     } else {
         skelAnime->limbDrawTbl = limbDrawTbl;
         skelAnime->transitionDrawTbl = transitionDrawTable;
@@ -1409,8 +1409,8 @@ void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, Skeleton
     skeletonHeader = Lib_PtrSegToVirt(skeletonHeaderSeg);
     skelAnime->limbCount = skeletonHeader->limbCount + 1;
     skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
-    skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
-    skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
+    skelAnime->limbDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
+    skelAnime->transitionDrawTbl = ZeldaArena_Malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
 
     // Debug prints here, required to match.
     if (1) {};
@@ -1722,11 +1722,11 @@ s32 func_801378B8(SkelAnime* skelAnime, f32 arg1) {
 
 void SkelAnime_Free(SkelAnime* skelAnime, GlobalContext* globalCtx) {
     if (skelAnime->limbDrawTbl != NULL) {
-        zelda_free(skelAnime->limbDrawTbl);
+        ZeldaArena_Free(skelAnime->limbDrawTbl);
     }
 
     if (skelAnime->transitionDrawTbl != NULL) {
-        zelda_free(skelAnime->transitionDrawTbl);
+        ZeldaArena_Free(skelAnime->transitionDrawTbl);
     }
 }
 

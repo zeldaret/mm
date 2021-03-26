@@ -290,7 +290,7 @@ s32 Collider_FreeJntSph(GlobalContext* ctxt, ColliderJntSph* collider) {
 
     collider->count = 0;
     if (collider->elements != NULL) {
-        zelda_free(collider->elements);
+        ZeldaArena_Free(collider->elements);
     }
     collider->elements = NULL;
     return 1;
@@ -322,7 +322,7 @@ s32 Collider_SetJntSphToActor(GlobalContext* ctxt, ColliderJntSph* collider, Col
 
     Collider_SetBaseToActor(ctxt, &collider->base, &src->base);
     collider->count = src->count;
-    collider->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    collider->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (collider->elements == NULL) {
         collider->count = 0;
@@ -348,7 +348,7 @@ s32 Collider_SetJntSphAllocType1(GlobalContext* ctxt, ColliderJntSph* sphereGrou
 
     Collider_SetBaseType1(ctxt, &sphereGroup->base, actor, &src->base);
     sphereGroup->count = src->count;
-    sphereGroup->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    sphereGroup->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (sphereGroup->elements == NULL) {
         sphereGroup->count = 0;
@@ -642,7 +642,7 @@ s32 Collider_FreeTris(GlobalContext* ctxt, ColliderTris* tris) {
 
     tris->count = 0;
     if (tris->elements != NULL) {
-        zelda_free(tris->elements);
+        ZeldaArena_Free(tris->elements);
     }
     tris->elements = NULL;
 
@@ -675,7 +675,7 @@ s32 Collider_SetTrisAllocType1(GlobalContext* ctxt, ColliderTris* tris, Actor* a
 
     Collider_SetBaseType1(ctxt, &tris->base, actor, &src->base);
     tris->count = src->count;
-    tris->elements = zelda_malloc(tris->count * sizeof(ColliderTrisElement));
+    tris->elements = ZeldaArena_Malloc(tris->count * sizeof(ColliderTrisElement));
 
     if (tris->elements == NULL) {
         tris->count = 0;
