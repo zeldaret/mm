@@ -49,7 +49,7 @@ typedef struct EnNiw {
     /* 0x284 */ f32 unk284; // used in func_808922D0
     /* 0x288 */ f32 unk288; 
     /* 0x28C */ s16 unk28C; // used in EnNiw_Update
-    /* 0x28E */ u16 unk28E;
+    /* 0x28E */ s16 unk28E; // might not be signed
     /* 0x290 */ s16 unk290;
     /* 0x292 */ s16 unk292;
     /* 0x294 */ s16 unk294; // padd
@@ -75,6 +75,9 @@ typedef struct EnNiw {
     /* 0x2EA */ s16 unk2EA; // func_808919E8
     /* 0x2EC */ u16 unk2EC; // used in func_80891D78 
     /* 0x2EE */ u8  unk2EE[0x12]; // pad
+    /* 0x2F4 */ f32 unk2F4; // used func_808917F8
+    /* 0x2F8 */ f32 unk2F8; // used func_808917F8
+    /* 0x2FC */ f32 unk2FC; // used func_808917F8
     /* 0x300 */ f32 unk300; // used func_808917F8
     /* 0x304 */ f32 unk304; 
     /* 0x308 */ f32 unk308; // init 10f
@@ -86,7 +89,7 @@ typedef struct EnNiw {
 
 extern const ActorInit En_Niw_InitVars;
 
-extern SkeletonHeader D_6002530;
-extern AnimationHeader D_60000E8;
+extern SkeletonHeader D_06002530;
+extern AnimationHeader D_060000E8;
 
 #endif // Z_EN_NIW_H
