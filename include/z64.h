@@ -1378,7 +1378,7 @@ typedef struct {
     /* 0x024 */ UNK_TYPE4 unk24;
     /* 0x028 */ OSMesg lockMesg[1];
     /* 0x02C */ OSMesg interrupts[8];
-    /* 0x04C */ OSMesgQueue siEventCallbackQueue;
+    /* 0x04C */ OSMesgQueue sSiIntMsgQ;
     /* 0x064 */ OSMesgQueue lock;
     /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
     /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
@@ -1392,7 +1392,7 @@ typedef struct {
     /* 0x47D */ u8 unk47D;
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
-} PadmgrThreadStruct; // size = 0x480
+} PadMgr; // size = 0x480
 
 typedef struct {
     /* 0x000 */ OSMesgQueue unk0;
