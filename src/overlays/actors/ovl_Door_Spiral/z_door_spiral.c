@@ -10,7 +10,7 @@ typedef enum {
     /* 0 */ SPIRAL_OVERWORLD, // does not display anything as there is not a DL in GAMEPLAY_KEEP for it
     /* 1 */ SPIRAL_DUNGEON,
     /* 2 */ SPIRAL_WOODFALL_TEMPLE,
-    /* 3 */ SPIRAL_WOODFAL_TEMPLE_ALT,
+    /* 3 */ SPIRAL_WOODFALL_TEMPLE_ALT, // SPIRAL_WOODFALL_TEMPLE but with positional lights enabled?
     /* 4 */ SPIRAL_SNOWHEAD_TEMPLE,
     /* 5 */ SPIRAL_STONE_TOWER,
     /* 6 */ SPIRAL_IKANA_CASTLE,
@@ -87,7 +87,7 @@ static SpiralInfo sSpiralInfo[] = {
     { { NULL, NULL }, 0, 130, 12, 50, 15 }, // SPIRAL_OVERWORLD
     { { D_050219E0, D_0501D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
     { { D_06004448, D_060007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
-    { { D_060051B8, D_060014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFAL_TEMPLE_ALT
+    { { D_060051B8, D_060014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
     { { D_06009278, D_06006128 }, 0, 130, 12, 50, 15 }, // SPIRAL_SNOWHEAD_TEMPLE
     { { D_06013EA8, D_06012B70 }, 0, 130, 12, 50, 15 }, // SPIRAL_STONE_TOWER
     { { D_06000EA0, D_06000590 }, 0, 130, 12, 50, 15 }, // SPIRAL_IKANA_CASTLE
@@ -124,7 +124,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
         ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomContext.currRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
-            this->spiralType = SPIRAL_WOODFAL_TEMPLE_ALT;
+            this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
 
         this->actor.flags |= 0x10000000;
@@ -137,7 +137,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
 
 /**
  * Gets the object type to be used as an index to `sSpiralObjectInfo`.
- * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral.
+ * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral (overworld or dungeon).
  */
 s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
     // Defines which object type should be used for specific scenes
@@ -165,6 +165,7 @@ s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
     if (type < ARRAY_COUNT(spiralSceneInfo)) {
         type = sceneInfo->objectType;
     } else {
+        // Set the type based on if link is in a dungeon scene, or the overworld
         type = (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON : SPIRAL_OBJECT_OVERWORLD;
     }
 
@@ -222,7 +223,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Finds the distance between the spiral and the player.
+ * Finds the distance between the stairs and the player.
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
