@@ -1,6 +1,11 @@
 #include <ultra64.h>
 #include <global.h>
 
+#define BANK_ADDR 0x400
+#define MOTOR_ID 0x80
+
+s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
+
 s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
     s32 i;
     s32 ret;
@@ -63,4 +68,53 @@ void __osSetupMotorWrite(s32 channel, OSPifRam* buf) {
     *bufptr = 0xFE;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/motor/osMotorInit.asm")
+s32 osMotorInit(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
+    s32 ret;
+    u8 sp24[BLOCKSIZE];
+
+    pfs->queue = ctrlrqueue;
+    pfs->channel = channel;
+    pfs->activebank = 0xFF;
+    pfs->status = 0;
+
+    ret = __osPfsSelectBank(pfs, 0xFE);
+    if (ret == 2) {
+        ret = __osPfsSelectBank(pfs, MOTOR_ID);
+    }
+    if (ret != 0) {
+        return ret;
+    }
+    ret = __osContRamRead(ctrlrqueue, channel, 0x400, sp24);
+    if (ret == 2) {
+        ret = 4; // "Controller pack communication error"
+    }
+    if (ret != 0) {
+        return ret;
+    }
+    if (sp24[BLOCKSIZE - 1] == 0xFE) {
+        return 0xB;
+    }
+    ret = __osPfsSelectBank(pfs, MOTOR_ID);
+    if (ret == 2) {
+        ret = 4; // "Controller pack communication error"
+    }
+    if (ret != 0) {
+        return ret;
+    }
+    ret = __osContRamRead(ctrlrqueue, channel, BANK_ADDR, sp24);
+    if (ret == 2) {
+        ret = 4; // "Controller pack communication error"
+    }
+    if (ret != 0) {
+        return ret;
+    }
+    if (sp24[BLOCKSIZE - 1] != MOTOR_ID) {
+        return 0xB;
+    }
+    if ((pfs->status & PFS_MOTOR_INITIALIZED) == 0) {
+        __osSetupMotorWrite(channel, &osPifBuffers[channel]);
+    }
+    pfs->status = PFS_MOTOR_INITIALIZED;
+
+    return 0; // "Recognized rumble pak"
+}
