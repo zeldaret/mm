@@ -148,7 +148,7 @@ void Game_InitHeap(GameState *ctxt, u32 size) {
     void *buf;
 
     _ctx = ctxt;
-    buf = Gamealloc_Alloc(&_ctx->alloc, size);
+    buf = GameAlloc_Malloc(&_ctx->alloc, size);
 
     if (buf) {
         GameStateHeap_Init(&ctxt->heap, buf, size);
@@ -171,7 +171,7 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
     heapStart = ctxt->heap.heapStart;
     alloc = &ctxt->alloc;
     GameStateHeap_Clear(&ctxt->heap);
-    Gamealloc_Free(alloc, heapStart);
+    GameAlloc_Free(alloc, heapStart);
     StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
     if (!size)
@@ -179,7 +179,7 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (buf = Gamealloc_Alloc(alloc, size))
+    if (buf = GameAlloc_Malloc(alloc, size))
     {
         GameStateHeap_Init(&ctxt->heap, buf, size);
     }
@@ -204,7 +204,7 @@ void Game_StateInit(GameState *ctxt, GameStateFunc gameStateInit, GraphicsContex
     ctxt->nextGameStateSize = 0U;
 
 lblUnk:;
-    Gamealloc_Init(&ctxt->alloc);
+    GameAlloc_Init(&ctxt->alloc);
     Game_InitHeap(ctxt, 0x100000);
     Game_SetFramerateDivisor(ctxt, 3);
     
@@ -236,7 +236,7 @@ void Game_StateFini(GameState *ctxt) {
     func_80141900(&sMonoColors);
     func_80140900(&D_801F8048);
     GameStateHeap_Clear(&ctxt->heap);
-    Gamealloc_FreeAll(&ctxt->alloc);
+    GameAlloc_Cleanup(&ctxt->alloc);
 }
 
 GameStateFunc Game_GetNextStateInit(GameState *ctxt) {

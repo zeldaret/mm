@@ -14,7 +14,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
         EffectSS_ResetEntry(iter);
     }
 
-    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS_MAX; i++) {
         (iter2++)->loadedRamAddr = 0;
     }
 }
@@ -35,7 +35,7 @@ void EffectSS_Clear(GlobalContext* ctxt) {
     }
 
     // Free memory from loaded particle overlays
-    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS_MAX; i++) {
         addr = (void*)iter2->loadedRamAddr;
         if (addr != NULL) {
             zelda_free(addr);
@@ -63,7 +63,7 @@ void EffectSS_Delete(EffectSs* a0) {
 void EffectSS_ResetEntry(EffectSs* particle) {
     u32 i;
 
-    particle->type = EFFECT_SS2_TYPE_LAST_LABEL;
+    particle->type = EFFECT_SS_MAX;
     particle->accel.z = 0;
     particle->accel.y = 0;
     particle->accel.x = 0;

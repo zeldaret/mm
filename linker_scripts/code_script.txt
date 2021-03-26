@@ -421,7 +421,7 @@ SECTIONS
         build/asm/code/code_0x80172C30.o(.text)
         build/src/code/title_setup.o(.text)
         build/src/code/game.o(.text)
-        build/asm/code/gamealloc.o(.text)
+        build/src/code/gamealloc.o(.text)
         build/asm/code/graph.o(.text)
         build/asm/code/code_0x80174A40.o(.text)
         build/asm/code/listalloc.o(.text)

@@ -1152,8 +1152,6 @@ typedef struct FireObj FireObj;
 
 typedef struct FireObjLight FireObjLight;
 
-typedef struct GameAlloc GameAlloc;
-
 typedef struct GameState GameState;
 
 typedef struct OpeningContext OpeningContext;
@@ -1162,19 +1160,17 @@ typedef struct PreNMIContext PreNMIContext;
 
 typedef struct TitleContext TitleContext;
 
-typedef struct GameAllocNode GameAllocNode;
-
-struct GameAllocNode {
-    /* 0x0 */ GameAllocNode* next;
-    /* 0x4 */ GameAllocNode* prev;
+typedef struct GameAllocEntry {
+    /* 0x0 */ struct GameAllocEntry* next;
+    /* 0x4 */ struct GameAllocEntry* prev;
     /* 0x8 */ u32 size;
-    /* 0xC */ UNK_TYPE1 padC[0x4];
-}; // size = 0x10
+    /* 0xC */ u32 unk_0C;
+} GameAllocEntry; // size = 0x10
 
-struct GameAlloc {
-    /* 0x00 */ GameAllocNode base;
-    /* 0x10 */ GameAllocNode* head;
-}; // size = 0x14
+typedef struct GameAlloc {
+    /* 0x00 */ GameAllocEntry base;
+    /* 0x10 */ GameAllocEntry* head;
+} GameAlloc; // size = 0x14
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
