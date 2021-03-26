@@ -76,7 +76,7 @@ void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C01B8.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/BgCheck_CreateColTriParamsFromPolygon.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/BgCheck_CreateTriNormFromPolygon.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C02C0.asm")
 

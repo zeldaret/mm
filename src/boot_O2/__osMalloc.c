@@ -45,7 +45,7 @@ ArenaNode* heap_get_tail(Arena* arena) {
 }
 
 void __osMallocInit(Arena* arena, void* start, u32 size) {
-    bzero(arena, sizeof(Arena));
+    bzero(arena, sizeof(*arena));
     ArenaImpl_LockInit(arena);
     __osMallocAddBlock(arena, start, size);
     arena->isInit = 1;

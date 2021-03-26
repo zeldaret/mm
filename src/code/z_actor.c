@@ -343,7 +343,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->meshAttachedTo = 0x32;
 
     actor->sqrdDistToLink = D_801DCA54;
-    func_800E7494(&actor->colChkInfo);
+    CollisionCheck_InitInfo(&actor->colChkInfo);
     actor->uncullZoneForward = 1000.0f;
     actor->uncullZoneScale = 350.0f;
     actor->uncullZoneDownward = 700.0f;
