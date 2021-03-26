@@ -7,20 +7,49 @@ void* ZeldaArena_Malloc(u32 size) {
     return ptr;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_MallocR.asm")
+void* ZeldaArena_MallocR(u32 size) {
+    void* ptr = __osMallocR(&sZeldaArena, size);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Realloc.asm")
+    return ptr;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Free.asm")
+void* ZeldaArena_Realloc(void* ptr, u32 newSize) {
+    ptr = __osRealloc(&sZeldaArena, ptr, newSize);
+    return ptr;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Calloc.asm")
+void ZeldaArena_Free(void* ptr) {
+    __osFree(&sZeldaArena, ptr);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_GetSizes.asm")
+void* ZeldaArena_Calloc(u32 num, u32 size) {
+    void* ret;
+    u32 n = num * size;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Check.asm")
+    ret = __osMalloc(&sZeldaArena, n);
+    if (ret != NULL) {
+        bzero(ret, n);
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Init.asm")
+    return ret;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_Cleanup.asm")
+void ZeldaArena_GetSizes(u32* outMaxFree, u32* outFree, u32* outAlloc) {
+    __osAnalyzeArena(&sZeldaArena, outMaxFree, outFree, outAlloc);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_malloc/ZeldaArena_IsInitialized.asm")
+void ZeldaArena_Check() {
+    __osCheckArena(&sZeldaArena);
+}
+
+void ZeldaArena_Init(void* start, u32 size) {
+    __osMallocInit(&sZeldaArena, start, size);
+}
+
+void ZeldaArena_Cleanup() {
+    __osMallocCleanup(&sZeldaArena);
+}
+
+u8 ZeldaArena_IsInitialized() {
+    return __osMallocIsInitalized(&sZeldaArena);
+}
