@@ -5880,9 +5880,9 @@ SECTIONS
     ovl_Bg_Lotus : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.text)
-        build/asm/overlays/ovl_Bg_Lotus_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.data)
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.rodata)
-        build/asm/overlays/ovl_Bg_Lotus_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
