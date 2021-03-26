@@ -353,7 +353,7 @@ SECTIONS
         build/asm/code/code_0x800F1250.o(.text)
         build/asm/code/code_0x800F1460.o(.text)
         build/asm/code/code_0x800F23E0.o(.text)
-        build/asm/code/z_fcurve_data_skelanime.o(.text)
+        build/src/code/z_fcurve_data_skelanime.o(.text)
         build/asm/code/z_fireobj.o(.text)
         build/asm/code/z_horse.o(.text)
         build/src/code/z_jpeg.o(.text)
