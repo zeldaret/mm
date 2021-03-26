@@ -27,4 +27,7 @@ extern UNK_PTR D_04062060[];
 extern UNK_PTR D_04062000[];
 extern Gfx D_040622C0[];
 
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
+
 #endif
