@@ -1203,6 +1203,13 @@ struct PreNMIContext {
     /* 0xA8 */ UNK_TYPE4 unkA8;
 }; // size = 0xAC
 
+typedef struct {
+    /* 0x00 */ u32 resetting;
+    /* 0x04 */ u32 resetCount;
+    /* 0x08 */ OSTime duration;
+    /* 0x10 */ OSTime resetTime;
+} PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
+
 struct TitleContext {
     /* 0x000 */ GameState state;
     /* 0x0A4 */ u8* nintendo_logo_data;

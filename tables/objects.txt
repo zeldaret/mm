@@ -252,7 +252,7 @@
     0x800994C0:"boot_rodata_llcvt",
     0x800994D0:"boot_rodata_build_date",
 
-    0x800A5AC0:"",
+    0x800A5AC0:"z_en_a_keep",
     0x800A5D00:"z_en_item00",
     0x800A81F0:"z_eff_blure",
     0x800AB5D0:"z_eff_shield_particle",

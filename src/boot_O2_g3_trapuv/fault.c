@@ -738,9 +738,9 @@ void Fault_SetOptionsFromController3(void) {
     }
 
     if (faultCustomOptions) {
-        graphPC = graphOSThread.context.pc;
-        graphRA = graphOSThread.context.ra;
-        graphSP = graphOSThread.context.sp;
+        graphPC = sGraphThread.context.pc;
+        graphRA = sGraphThread.context.ra;
+        graphSP = sGraphThread.context.sp;
 <<<<<<< HEAD
         if (~(input3->current.buttons | ~0x10) == 0) {
             faultCopyToLog = !faultCopyToLog;

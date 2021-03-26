@@ -2071,7 +2071,7 @@
     0x8010BF24:("func_8010BF24",),
     0x8010BF58:("func_8010BF58",),
     0x8010C0C0:("Nmi_Init",),
-    0x8010C164:("Nmi_SetPrenmiStart",),
+    0x8010C164:("PreNmiBuff_SetReset",),
     0x8010C19C:("Nmi_GetPrenmiHasStarted",),
     0x8010C1B0:("func_8010C1B0",),
     0x8010C230:("CamMath_Distance",),

@@ -276,7 +276,7 @@ typedef struct {
     /* 0x144 */ ActorFunc update;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} ActorEnAObj; // size = 0x1A8
+} EnAObj; // size = 0x1A8
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
