@@ -95,7 +95,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/loadfragment2/Load2_LoadOverlay.asm")
 #endif
 
-void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
+void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
     void* allocatedVRamAddr;
     u32 size;
 

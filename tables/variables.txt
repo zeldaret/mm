@@ -4113,7 +4113,7 @@
     0x801F4F68:("D_801F4F68","UNK_TYPE1","",0x1),
     0x801F4F6A:("D_801F4F6A","UNK_TYPE1","",0x1),
     0x801F4F70:("lightsList","LightsList","",0x188),
-    0x801F5100:("mainHeap","Arena","",0x24),
+    0x801F5100:("sZeldaArena","Arena","",0x24),
     0x801F5130:("D_801F5130","UNK_TYPE1","",0x1),
     0x801F5270:("D_801F5270","UNK_TYPE1","",0x1),
     0x801F528E:("D_801F528E","UNK_TYPE1","",0x1),

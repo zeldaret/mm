@@ -99,7 +99,6 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_fcurve_data_skelanime/SkelCurve_Update.asm")
 #endif
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fcurve_data_skelanime/SkelCurve_DrawLimb.asm")
 void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve* skelCurve,
                         OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, void* data) {
     SkelCurveLimb* limb = (SkelCurveLimb *)Lib_PtrSegToVirt(skelCurve->limbList[limbIndex]);

@@ -631,12 +631,12 @@ typedef struct {
     /* 0x08 */ u32 vromEnd;
     /* 0x0C */ void* vramStart;
     /* 0x10 */ void* vramEnd;
-    /* 0x14 */ UNK_TYPE4 unk14;
-    /* 0x18 */ func_ptr init;
-    /* 0x1C */ func_ptr destroy;
-    /* 0x20 */ UNK_TYPE4 unk20;
-    /* 0x24 */ UNK_TYPE4 unk24;
-    /* 0x28 */ UNK_TYPE4 unk28;
+    /* 0x14 */ UNK_PTR unk14;
+    /* 0x18 */ void* init;
+    /* 0x1C */ void* destroy;
+    /* 0x20 */ UNK_PTR unk20;
+    /* 0x24 */ UNK_PTR unk24;
+    /* 0x28 */ UNK_TYPE unk28;
     /* 0x2C */ u32 instanceSize;
 } GameStateOverlay; // size = 0x30
 
