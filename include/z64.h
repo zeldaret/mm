@@ -30,6 +30,9 @@
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
@@ -137,13 +140,6 @@ typedef struct {
 } CyclingTextureParams; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u32 size;
-    /* 0x4 */ Gfx* buf;
-    /* 0x8 */ Gfx* p;
-    /* 0xC */ Gfx* d;
-} DispBuf; // size = 0x10
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -215,11 +211,18 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE4 size;
-    /* 0x4 */ void* heapStart;
-    /* 0x8 */ void* heapAppendStart;
-    /* 0xC */ void* heapAppendEnd;
-} GameStateHeap; // size = 0x10
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ void*  bufp;
+    /* 0x0008 */ void*  head;
+    /* 0x000C */ void*  tail;
+} TwoHeadArena; // size = 0x10
+
+typedef struct {
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ Gfx*   bufp;
+    /* 0x0008 */ Gfx*   p;
+    /* 0x000C */ Gfx*   d;
+} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x00000 */ u16 headMagic; // 1234
@@ -248,16 +251,16 @@ typedef struct {
     /* 0x05C */ OSMesgQueue unk5C;
     /* 0x074 */ UNK_TYPE1 pad74[0x12C];
     /* 0x1A0 */ Gfx* unk1A0;
-    /* 0x1A4 */ DispBuf unk1A4;
+    /* 0x1A4 */ TwoHeadGfxArena unk1A4;
     /* 0x1B4 */ Gfx* unk1B4;
-    /* 0x1B8 */ DispBuf unk1B8;
+    /* 0x1B8 */ TwoHeadGfxArena unk1B8;
     /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
     /* 0x274 */ OSViMode* unk274;
     /* 0x278 */ void* zbuffer;
     /* 0x27C */ UNK_TYPE1 pad27C[0x1C];
-    /* 0x298 */ DispBuf overlay;
-    /* 0x2A8 */ DispBuf polyOpa;
-    /* 0x2B8 */ DispBuf polyXlu;
+    /* 0x298 */ TwoHeadGfxArena overlay;
+    /* 0x2A8 */ TwoHeadGfxArena polyOpa;
+    /* 0x2B8 */ TwoHeadGfxArena polyXlu;
     /* 0x2C8 */ s32 displaylistCounter;
     /* 0x2CC */ void* framebuffer;
     /* 0x2D0 */ int pad2D0;
@@ -407,17 +410,15 @@ typedef struct {
 } TitleCardContext; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s8 unk0;
-    /* 0x1 */ UNK_TYPE1 pad1[0x1];
-    /* 0x2 */ s8 unk2;
-    /* 0x3 */ UNK_TYPE1 pad3[0x1];
-    /* 0x4 */ s16 actorIndex; // negative means already loaded?
-    /* 0x6 */ s16 x;
-    /* 0x8 */ s16 y;
-    /* 0xA */ s16 z;
-    /* 0xC */ s16 yRot; // lower 7 bits contain cutscene number
-    /* 0xE */ u16 variable;
-} TransitionActorInit; // size = 0x10
+    struct {
+        s8 room;    // Room to switch to
+        s8 effects; // How the camera reacts during the transition
+    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
+    /* 0x04 */ s16   id;
+    /* 0x06 */ Vec3s pos;
+    /* 0x0C */ s16   rotY;
+    /* 0x0E */ s16   params;
+} TransitionActorEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s32 topY;
@@ -1177,7 +1178,7 @@ struct GameState {
     /* 0x0C */ GameStateFunc nextGameStateInit;
     /* 0x10 */ u32 nextGameStateSize;
     /* 0x14 */ Input input[4];
-    /* 0x74 */ GameStateHeap heap;
+    /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
     /* 0x9B */ u8 running; // If 0, switch to next game state
@@ -1660,7 +1661,7 @@ struct GlobalContext {
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
-    /* 0x18764 */ TransitionActorInit* transitionActorList;
+    /* 0x18764 */ TransitionActorEntry* transitionActorList;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
     /* 0x187B0 */ z_Matrix unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];

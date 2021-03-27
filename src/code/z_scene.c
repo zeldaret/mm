@@ -59,7 +59,7 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
 
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = THA_AllocEndAlign16(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
@@ -323,7 +323,7 @@ void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x0E: Transition Actor List
 void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->transitionActorCount = entry->transiActorList.num;
-    ctxt->transitionActorList = (TransitionActorInit*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
+    ctxt->transitionActorList = (TransitionActorEntry*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
     func_80105818(ctxt, ctxt->transitionActorCount, ctxt->transitionActorList);
 }
 
@@ -342,7 +342,7 @@ s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
     u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
 
     if (fileSize) {
-        ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
+        ctxt->roomContext.unk74 = THA_AllocEndAlign16(&ctxt->state.heap, fileSize);
         return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
     }
 
