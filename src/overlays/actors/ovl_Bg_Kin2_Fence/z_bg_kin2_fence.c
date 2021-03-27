@@ -23,12 +23,44 @@ const ActorInit Bg_Kin2_Fence_InitVars = {
 };
 */
 
+static InitChainEntry D_80B6EEE8[] = {
+    ICHAIN_U8(shape, 8, ICHAIN_STOP),
+};
+
+extern BgMeshHeader* D_06000908;
+extern ColliderJntSphInit* D_80B6EE70; 
+
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6E820.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6E890.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Init.asm")
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Init.asm")
+void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgKin2Fence* this = THIS;
 
+    ColliderJntSph *temp_s3;
+    s32 temp_s0;
+    s32 i;
+
+    Actor_ProcessInitChain(&this->dyna.actor, &D_80B6EEE8);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
+    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &D_80B6EE70, &this->collider.elements);
+    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, &this->dyna.actor.shape);
+    SysMatrix_InsertScale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, 1);
+    i = 0;
+
+    for (i = 0; i < 4; i++){
+        Collider_UpdateSpheres(i, &this->collider);
+    }
+
+    if (Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F)) {
+        func_80B6ED30(this);
+        return;
+    }
+    func_80B6EADC(this);
+}
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Destroy.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6EADC.asm")
