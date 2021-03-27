@@ -135,7 +135,7 @@ void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
         this->timer--;
         BgLotus_SetScaleXZ(this);
     } else {
-        if (Lib_StepTowardsCheck_f(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
