@@ -174,8 +174,8 @@ typedef struct {
     /* 0x8 */ OSMesgQueue* cmdQueue;
     /* 0xC */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*dma)(void);
-    /* 0x14 */ s32 (*unk18)(void);
+    /* 0x14 */ s32 (*dma)(s32, u32, void*, u32);
+    /* 0x18 */ s32 (*edma)(OSPiHandle*, s32, u32, void*, u32);
 } OSDevMgr;
 
 

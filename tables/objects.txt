@@ -243,7 +243,7 @@
     0x80099220:"boot_rodata_sinf",
     0x80099270:"boot_rodata_exceptasm",
     0x800992C0:"boot_rodata_perspective",
-    0x800992D0:"boot_rodata_0x8008C260",
+    0x800992D0:"boot_rodata_devmgr",
     0x800992F0:"boot_rodata_lookathil",
     0x80099300:"boot_rodata_xprintf",
     0x80099400:"boot_rodata_cosf",
