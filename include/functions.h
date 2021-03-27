@@ -633,7 +633,7 @@ void EffectSS_SpawnDust(GlobalContext* ctxt, u16 flags, Vec3f* position, Vec3f* 
 // void EffectSS_SpawnDodongoFire(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
 // void EffectSS_SpawnBubble(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void EffectSS_SpawnGRipple(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE2 uParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5);
-void EffectSS_SpawnGSplash(GlobalContext *globalCtx, Vec3f* pzParm2, ColorRGBA8* primaryCol, ColorRGBA8* envCol, s16 type, s16 scale);
+void EffectSS_SpawnGSplash(GlobalContext *globalCtx, Vec3f* pzParm2, Color_RGBA8* primaryCol, Color_RGBA8* envCol, s16 type, s16 scale);
 // void EffectSS_SpawnGFire(UNK_TYPE4 uParm1, Vec3f* pzParm2);
 // void EffectSS_SpawnLightning(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
 // void func_800B2090(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
