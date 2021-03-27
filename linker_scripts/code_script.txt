@@ -625,6 +625,23 @@ SECTIONS
     . += 0x24F00;
     code_bss_end = .;
 
+    buffers ALIGN(0x10):
+    {
+        build/src/buffers/gfxbuffers.o(.bss)
+        build/src/buffers/heaps.o(.bss)
+    }
+
+    /* Framebuffers */
+    gFramebuffer1 = 0x80000500;
+    gFramebuffer0 = 0x80800000 - 320*240*2; /* SCREEN_WIDTH*SCREEN_HEIGHT*sizeof(s16) */
+    gFramebufferHighRes1 = 0x80000500;
+    gFramebufferHighRes0 = 0x80780000;
+
+    /* Unkown buffers */
+    D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
+    D_80780000 = 0x80780000;
+    D_80784600 = 0x80784600;
+
     . = 0x80800000;
     SegmentStart = .;
     _ovl_titleSegmentStart = SegmentStart;
