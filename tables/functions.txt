@@ -10065,7 +10065,7 @@
     0x80A2E960:("func_80A2E960",),
     0x80A2E9FC:("DmSa_Init",),
     0x80A2EAAC:("DmSa_Destroy",),
-    0x80A2EABC:("func_80A2EABC",),
+    0x80A2EABC:("DmSa_DoNothing",),
     0x80A2EACC:("DmSa_Update",),
     0x80A2EB10:("func_80A2EB10",),
     0x80A2EB2C:("func_80A2EB2C",),

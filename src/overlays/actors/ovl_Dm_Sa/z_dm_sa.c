@@ -9,18 +9,8 @@ void DmSa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmSa_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A2EABC(DmSa* this, GlobalContext* globalCtx);
+void DmSa_DoNothing(DmSa* this, GlobalContext* globalCtx);
 
-typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 unk_10;
-    /* 0x14 */ f32 transitionRate;
-} DmSa_AnimationStruct; // size = 0x18
-
-/*
 const ActorInit Dm_Sa_InitVars = {
     ACTOR_DM_SA,
     ACTORCAT_ITEMACTION,
@@ -30,57 +20,102 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Init,
     (ActorFunc)DmSa_Destroy,
     (ActorFunc)DmSa_Update,
-    (ActorFunc)DmSa_Draw
+    (ActorFunc)DmSa_Draw,
 };
-*/
 
 extern SkeletonHeader D_06013328;
-extern AnimationHeader D_0600788C;
+extern AnimationHeader D_0600CC94;
 
-static DmSa_AnimationStruct animation = { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f };
+static ActorAnimationEntry D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
 
-void func_80A2E960(SkelAnime* skelAnime, DmSa_AnimationStruct* animation1, s32 arg2) {
+void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) {
     f32 frameCount;
-    AnimationHeader* animationHeader;
-    f32 phi_f2;
+    animations += index;
 
-    animationHeader = &animation1[arg2];
-    frameCount = animation1->frameCount;
-    if (frameCount < 0.0f) {
-        phi_f2 = SkelAnime_GetFrameCount(&animationHeader->genericHeader);
+    if (animations->frameCount < 0.0f) {
+        frameCount = (f32)SkelAnime_GetFrameCount(animations->animation);
     } else {
-        phi_f2 = frameCount;
+        frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(skelAnime, animationHeader, animation1->playbackSpeed, animation1->unk_08, phi_f2, animation1->unk_10, animation1->transitionRate);
+    SkelAnime_ChangeAnim(arg0, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                         animations->mode, animations->morphFrames);
 }
 
 void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmSa* this = THIS;
 
     this->unk2E0 = 0;
-    this->unk2F0 = 0xFF;
+    this->alpha = 0xFF;
     this->actor.targetArrowOffset = 3000.0f;
     Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013328, NULL, 0, 0, 0);
-    func_80A2E960(&this->skelAnime, &animation, 0);
+    func_80A2E960(&this->skelAnime, &D_80A2ED00, 0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_80A2EABC;
+    this->actionFunc = DmSa_DoNothing;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/DmSa_Destroy.asm")
+void DmSa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EABC.asm")
+void DmSa_DoNothing(DmSa* this, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/DmSa_Update.asm")
+void DmSa_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DmSa* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EB10.asm")
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->alpha += 0;
+    this->actionFunc(this, globalCtx);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EB2C.asm")
+s32 func_80A2EB10(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    return 0;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EB44.asm")
+void func_80A2EB2C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EB58.asm")
+void func_80A2EB44(s32 arg0, s32 arg1, s32 arg2) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/func_80A2EBB0.asm")
+Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
+    Gfx* dList;
+    Gfx* dListHead;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Sa_0x80A2E960/DmSa_Draw.asm")
+    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    gDPSetRenderMode(dListHead++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
+    gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
+    gSPEndDisplayList(dListHead++);
+
+    return dList;
+}
+
+Gfx* func_80A2EBB0(GraphicsContext* gfxCtx, u32 alpha) {
+    Gfx* dList;
+    Gfx* dListHead;
+
+    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
+    gSPEndDisplayList(dListHead++);
+
+    return dList;
+}
+
+void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    DmSa* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    if (this->alpha < 0xFF) {
+        gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EB58(globalCtx->state.gfxCtx, this->alpha));
+    } else {
+        gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EBB0(globalCtx->state.gfxCtx, this->alpha));
+    }
+
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                  func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
