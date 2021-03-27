@@ -27,6 +27,13 @@ typedef struct {
 } SkelLimbEntry;                      // Size = 0xC or 0x10
 
 typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
+    /* 0x08 */ Gfx* dLists[2]; // Near and far
+} LodLimb; // size = 0x10
+
+typedef struct {
     /* 0x000 */ SkelLimbEntry* limbs[1]; // One or more limbs, index 0 is the root limb.
 } Skeleton;                              // Size >= 4
 
@@ -174,11 +181,11 @@ struct SkelAnime {
     /* 0x3E */ Vec3s unk3E;
 }; // size = 0x44
 
-typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                struct Actor* actor);
+typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                void* arg);
 
-typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                             struct Actor* actor);
+typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                             void* arg);
 
 typedef s32 (*OverrideLimbDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  struct Actor* actor, Gfx** gfx);

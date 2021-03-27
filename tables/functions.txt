@@ -2528,7 +2528,7 @@
     0x80132FDC:("func_80132FDC",),
     0x80133000:("func_80133000",),
     0x80133038:("func_80133038",),
-    0x801330E0:("SkelAnime_LodDrawLimb",),
+    0x801330E0:("SkelAnime_DrawLimbLod",),
     0x801332F0:("SkelAnime_LodDraw",),
     0x801334A0:("SkelAnime_LodDrawLimbSV",),
     0x80133710:("SkelAnime_LodDrawSV",),

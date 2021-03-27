@@ -29,9 +29,9 @@ s32 D_801F5AB4;
 /*
  * Draws the limb at `limbIndex` with a level of detail display lists index by `dListIndex`
  */
-void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
-                           OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex) {
-    SkelLimbEntry* limbEntry;
+void SkelAnime_DrawLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                           OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg, s32 lod) {
+    LodLimb* limb;
     Gfx* dList;
     Vec3f pos;
     Vec3s rot;
@@ -39,16 +39,16 @@ void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
     s32 pad;
 
     Matrix_Push();
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limb = (LodLimb *)Lib_PtrSegToVirt(skeleton[limbIndex]);
     limbIndex++;
-    rot = limbDrawTable[limbIndex];
+    rot = jointTable[limbIndex];
 
-    pos.x = limbEntry->translation.x;
-    pos.y = limbEntry->translation.y;
-    pos.z = limbEntry->translation.z;
+    pos.x = limb->jointPos.x;
+    pos.y = limb->jointPos.y;
+    pos.z = limb->jointPos.z;
 
-    dList = limbEntry->displayLists[dListIndex];
-    if ((overrideLimbDraw == NULL) || (overrideLimbDraw(globalCtx, limbIndex, &dList, &pos, &rot, actor) == 0)) {
+    dList = limb->dLists[lod];
+    if ((overrideLimbDraw == NULL) || (overrideLimbDraw(globalCtx, limbIndex, &dList, &pos, &rot, arg) == 0)) {
         SysMatrix_RotateAndTranslateState(&pos, &rot);
         if (dList != NULL) {
             Gfx* polyTemp = gfxCtx->polyOpa.p;
@@ -61,19 +61,19 @@ void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
     }
 
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, limbIndex, &dList, &rot, actor);
+        postLimbDraw(globalCtx, limbIndex, &dList, &rot, arg);
     }
 
-    if (limbEntry->firstChildIndex != LIMB_DONE) {
-        SkelAnime_LodDrawLimb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
-                              postLimbDraw, actor, dListIndex);
+    if (limb->child != LIMB_DONE) {
+        SkelAnime_DrawLimbLod(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw,
+                              postLimbDraw, arg, lod);
     }
 
     Matrix_Pop();
 
-    if (limbEntry->nextLimbIndex != LIMB_DONE) {
-        SkelAnime_LodDrawLimb(globalCtx, limbEntry->nextLimbIndex, skeleton, limbDrawTable, overrideLimbDraw,
-                              postLimbDraw, actor, dListIndex);
+    if (limb->sibling != LIMB_DONE) {
+        SkelAnime_DrawLimbLod(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw,
+                              postLimbDraw, arg, lod);
     }
 }
 
@@ -81,7 +81,7 @@ void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
  * Draws the Skeleton described by `skeleton` with a level of detail display list indexed by `dListIndex`
  */
 void SkelAnime_LodDraw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
-                       OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex) {
+                       OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 dListIndex) {
     SkelLimbEntry* limbEntry;
     s32 pad;
     Gfx* dList;
@@ -124,7 +124,7 @@ void SkelAnime_LodDraw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
     }
 
     if (limbEntry->firstChildIndex != 0xFF) {
-        SkelAnime_LodDrawLimb(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
+        SkelAnime_DrawLimbLod(globalCtx, limbEntry->firstChildIndex, skeleton, limbDrawTable, overrideLimbDraw,
                               postLimbDraw, actor, dListIndex);
     }
 
@@ -258,7 +258,7 @@ void SkelAnime_LodDrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* li
  * Draws the limb of the Skeleton `skeleton` at `limbIndex`
  */
 void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
-                        OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
+                        OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor) {
     SkelLimbEntry* limbEntry;
     Gfx* dList;
     Vec3f pos;
@@ -305,7 +305,7 @@ void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skele
 }
 
 void SkelAnime_Draw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable,
-                    OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
+                    OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor) {
     SkelLimbEntry* rootLimb;
     s32 pad;
     Gfx* dList;
@@ -354,7 +354,7 @@ void SkelAnime_Draw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDra
 }
 
 void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
-                          OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor,
+                          OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor,
                           RSPMatrix** limbMatricies) {
     SkelLimbEntry* limbEntry;
     Gfx* dList[2];
@@ -407,7 +407,7 @@ void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* ske
 }
 
 void SkelAnime_DrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                      OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
+                      OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor) {
     SkelLimbEntry* limbEntry;
     s32 pad;
     Gfx* dList[2];
@@ -469,7 +469,7 @@ void SkelAnime_DrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbD
 }
 
 void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor,
                    RSPMatrix** mtx) {
     SkelLimbEntry* limbEntry;
     Gfx* dList[2];
@@ -529,7 +529,7 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
 }
 
 void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor) {
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor) {
     SkelLimbEntry* limbEntry;
     s32 pad;
     Gfx* dList[2];
