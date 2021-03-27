@@ -69,13 +69,11 @@ void StackCheck_Cleanup(StackEntry* entry) {
     if (inconsistency) {}
 }
 
-#ifdef NON_MATCHING
-// Missing useless move
-s32 StackCheck_GetState(StackEntry* entry) {
+StackStatus StackCheck_GetState(StackEntry* entry) {
     u32* last;
     u32 used;
     u32 free;
-    s32 ret;
+    s32 status;
 
     for (last = (u32*)entry->head; (u32)last < entry->tail; last++) {
         if (entry->initValue != *last) {
@@ -87,23 +85,20 @@ s32 StackCheck_GetState(StackEntry* entry) {
     free = (u32)last - entry->head;
 
     if (free == 0) {
-        return 2;
+        status = STACK_STATUS_OVERFLOW;
+    } else if (free < (u32)entry->minSpace && entry->minSpace != -1) {
+        status = STACK_STATUS_WARNING;
+    } else {
+        status = STACK_STATUS_OK;
     }
 
-    if (free < entry->minSpace && entry->minSpace != -1) {
-        return 1;
-    }
-
-    return 0;
+    return status;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/stackcheck/StackCheck_GetState.asm")
-#endif
 
 u32 StackCheck_CheckAll() {
     u32 ret = 0;
-
     StackEntry* iter = sStackInfoListStart;
+
     while(iter) {
         u32 state = StackCheck_GetState(iter);
         if (state) {

@@ -55,7 +55,7 @@ void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
     this->bg.actor.world.pos.y = this->bg.actor.home.pos.y + this->elevation + this->bouceHeight;
 
-    this->bg.actor.world.pos.y -= this->bouceHeight * Math_Coss(this->bounce);
+    this->bg.actor.world.pos.y -= this->bouceHeight * Math_CosS(this->bounce);
 }
 
 void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -69,6 +69,6 @@ void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(gfxCtx);
 
-    gSPMatrix(gfxCtx->polyOpa.p++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, object_fu_kaiten_0005D0);
 }

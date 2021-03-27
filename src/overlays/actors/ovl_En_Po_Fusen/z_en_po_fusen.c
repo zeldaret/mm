@@ -58,7 +58,7 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     if (0){}
     this->collider.dim.worldSphere.radius = 40;
     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
 
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
@@ -70,8 +70,8 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.home.pos.y = heightTemp;
     }
 
-    this->randScaleChange = ((rand() % 0xFFFEU) - 0x7FFF);
-    this->randYRotChange = ((rand() % 0x4B0U) - 0x258);
+    this->randScaleChange = ((Rand_Next() % 0xFFFEU) - 0x7FFF);
+    this->randYRotChange = ((Rand_Next() % 0x4B0U) - 0x258);
     this->avgBaseRotation = 0x1555;
     this->limb3Rot = 0;
     this->limb46Rot = 0;
@@ -150,11 +150,11 @@ void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
     this->randScaleChange += 0x190;
     this->randXZRotChange += 0x5DC;
     this->randBaseRotChange += 0x9C4;
-    heightOffset = Math_Sins(this->randScaleChange);
+    heightOffset = Math_SinS(this->randScaleChange);
     heightOffset = 50.0f * heightOffset;
     this->actor.shape.rot.y += this->randYRotChange;
     this->actor.world.pos.y += heightOffset;
-    this->actor.shape.rot.z =  (Math_Sins(this->randBaseRotChange) * 910.0f);
+    this->actor.shape.rot.z =  (Math_SinS(this->randBaseRotChange) * 910.0f);
 
     if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
         Math_SmoothScaleMaxMinS( &this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
@@ -163,13 +163,13 @@ void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
     }
 
     this->avgBaseRotation = this->limb9Rot * 3;
-    this->limb3Rot  = (Math_Sins(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
-    this->limb46Rot = (Math_Sins(this->randBaseRotChange)          * this->avgBaseRotation);
-    this->limb57Rot = (Math_Sins(this->randBaseRotChange - 0x38E3) * this->avgBaseRotation);
-    this->limb8Rot  = (Math_Sins(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
+    this->limb3Rot  = (Math_SinS(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
+    this->limb46Rot = (Math_SinS(this->randBaseRotChange)          * this->avgBaseRotation);
+    this->limb57Rot = (Math_SinS(this->randBaseRotChange - 0x38E3) * this->avgBaseRotation);
+    this->limb8Rot  = (Math_SinS(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
 
-    shadowScaleTmp = ((1.0f - Math_Sins(this->randScaleChange)) * 10.0f) + 50.0f;
-    shadowAlphaTmp = ((1.0f - Math_Sins(this->randScaleChange)) * 75.0f) + 100.0f;
+    shadowScaleTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 10.0f) + 50.0f;
+    shadowAlphaTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 75.0f) + 100.0f;
     this->actor.shape.shadowScale = shadowScaleTmp;
     this->actor.shape.shadowAlpha = (shadowAlphaTmp > f255) ? (u8) f255 : (u8) shadowAlphaTmp;
 }
@@ -229,15 +229,15 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, 
     s16 xRot;
 
     if (limbIndex == 2) {
-        zScale = (Math_Coss(this->randScaleChange) * 0.0799999982119f) + 1.0f;
+        zScale = (Math_CosS(this->randScaleChange) * 0.0799999982119f) + 1.0f;
         xScale = zScale;
         if (!zScale) { }
-        yScale = (Math_Sins(this->randScaleChange) * 0.0799999982119f) + 1.0f;
+        yScale = (Math_SinS(this->randScaleChange) * 0.0799999982119f) + 1.0f;
         yScale = yScale * yScale;
-        xRot = ((Math_Sins(this->randXZRotChange) * 2730.0f));
-        zRot = ((Math_Coss(this->randXZRotChange) * 2730.0f));
+        xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
+        zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
         SysMatrix_InsertRotation(xRot, 0, zRot , 1);
-        SysMatrix_InsertScale(xScale, yScale , zScale, 1);
+        Matrix_Scale(xScale, yScale, zScale, 1);
         SysMatrix_InsertZRotation_s( -zRot, 1);
         SysMatrix_InsertXRotation_s( -xRot, 1);
     } else if (limbIndex == 3) {
@@ -251,8 +251,8 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, 
     } else if (limbIndex == 8) {
         rot->z += this->limb8Rot;
     } else if (limbIndex == 9) {
-        rot->y += (s16) (this->limb9Rot * Math_Sins(this->randBaseRotChange));
-        rot->z += (s16) (this->limb9Rot * Math_Coss(this->randBaseRotChange));
+        rot->y += (s16) (this->limb9Rot * Math_SinS(this->randBaseRotChange));
+        rot->z += (s16) (this->limb9Rot * Math_CosS(this->randBaseRotChange));
     }
     return 0;
 }

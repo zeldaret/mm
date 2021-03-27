@@ -44,7 +44,7 @@ void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->limbDrawTable,
                      this->transitionDrawTable, 15);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C1E748(this);
 }
 
@@ -67,7 +67,7 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk242 += 1;
         if (this->unk242 > 2) {
             this->unk242 = 0;
-            this->unk240 = (s16)randZeroOneScaled(60.0f) + 0x14;
+            this->unk240 = (s16)Rand_ZeroFloat(60.0f) + 0x14;
         }
     }
     this->actionFunc(this, globalCtx);

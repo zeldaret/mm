@@ -4,6 +4,7 @@
 #include <ultra64.h>
 
 #define SHT_MAX 32767.0f
+#define M_PI 3.14159265358979323846f
 
 #define VEC_SET(V,X,Y,Z) V.x=X;V.y=Y;V.z=Z
 

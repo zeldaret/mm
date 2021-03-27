@@ -132,7 +132,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        Matrix_MultiplyByVectorXYZ(&globalCtx->unk187B0,&posF,&adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0,&posF,&adjustedPos);
         if ((adjustedPos.z > -radiusF) &&
             (600 + radiusF > adjustedPos.z) &&
             (400 > fabsf(adjustedPos.x) - radiusF) &&
@@ -398,6 +398,7 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     }
 }
 
+#if 1
 void Lights_DrawGlow(GlobalContext* globalCtx) {
     Gfx* dl;
     LightPoint* params;
@@ -424,9 +425,9 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
                     gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     SysMatrix_InsertTranslation(params->x, params->y, params->z, 0);
-                    SysMatrix_InsertScale(scale,scale,scale,1);
+                    Matrix_Scale(scale,scale,scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(dl++, &D_04029CF0);
                 }
@@ -440,3 +441,6 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_DrawGlow.asm")
+#endif

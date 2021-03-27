@@ -50,7 +50,7 @@ void func_80C25D84(EnRsn* this, GlobalContext* globalCtx) {
 void EnRsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, NULL, NULL, 0);
     this->actor.flags &= ~1;
     func_80C25D40(this);

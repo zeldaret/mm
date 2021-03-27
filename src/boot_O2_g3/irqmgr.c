@@ -155,7 +155,7 @@ void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
     }
 }
 
-void IrqMgr_Create(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
+void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     irqmgr->callbacks = NULL;
     irqmgr->verticalRetraceMesg.type = 1;
     irqmgr->prenmiMsg.type = 4;

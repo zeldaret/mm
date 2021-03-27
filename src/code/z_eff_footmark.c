@@ -52,7 +52,7 @@ void EffFootmark_Add(GlobalContext* ctxt, z_Matrix* displayMatrix, Actor* actor,
         if (destination == NULL) {
             destination = oldest;
         }
-        SysMatrix_Copy(&destination->displayMatrix,displayMatrix);
+        Matrix_MtxFCopy(&destination->displayMatrix,displayMatrix);
         destination->actor = actor;
         destination->location.x = location->x;
         destination->location.y = location->y;
@@ -106,10 +106,10 @@ void EffFootmark_Draw(GlobalContext* ctxt) {
 
     for (footmark = ctxt->footmarks, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
-            SysMatrix_SetCurrentState(&footmark->displayMatrix);
-            SysMatrix_InsertScale(footmark->size * 0.00390625f * 0.7f, 1, footmark->size * 0.00390625f, 1);
+            Matrix_Put(&footmark->displayMatrix);
+            Matrix_Scale(footmark->size * 0.00390625f * 0.7f, 1, footmark->size * 0.00390625f, 1);
 
-            gSPMatrix(gfxCtx->polyXlu.p++, SysMatrix_AppendStateToPolyOpaDisp(ctxt->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
+            gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(ctxt->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
 
             gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue, footmark->alpha >> 8);
 

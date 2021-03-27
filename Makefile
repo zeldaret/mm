@@ -102,6 +102,7 @@ UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 $(shell mkdir -p build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
+build/src/libultra/voice/%: OPTFLAGS := -O2
 build/src/libultra/io/%: OPTFLAGS := -O2
 build/src/libultra/libc/%: OPTFLAGS := -O2
 build/src/libultra/libc/ll%: OPTFLAGS := -O1
@@ -115,6 +116,8 @@ build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
+build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 

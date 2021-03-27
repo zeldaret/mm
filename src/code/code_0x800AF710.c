@@ -10,14 +10,14 @@ EffInfo sEffInfoTable[] = {
         (eff_draw_func)EffectSpark_Draw,
     },
     {
-        sizeof(EffBlureParams),
+        sizeof(EffectBlure),
         (eff_init_func)EffectBlure_Init1,
         (eff_destroy_func)EffectBlure_Destroy,
         (eff_update_func)EffectBlure_Update,
         (eff_draw_func)EffectBlure_Draw,
     },
     {
-        sizeof(EffBlureParams),
+        sizeof(EffectBlure),
         (eff_init_func)EffectBlure_Init2,
         (eff_destroy_func)EffectBlure_Destroy,
         (eff_update_func)EffectBlure_Update,

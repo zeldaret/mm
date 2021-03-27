@@ -28,11 +28,11 @@ void* Lib_MemSet(u8* a0, u32 a1, u32 a2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_MemSet.asm")
 #endif
 
-f32 Math_Coss(s16 angle) {
+f32 Math_CosS(s16 angle) {
     return coss(angle) * D_801DDA80;
 }
 
-f32 Math_Sins(s16 angle) {
+f32 Math_SinS(s16 angle) {
     return sins(angle) * D_801DDA84;
 }
 
@@ -212,12 +212,12 @@ void func_800FF3A0(void) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/func_800FF3A0.asm")
 #endif
 
-s16 Math_Rand_S16Offset(s16 base, s16 range) {
-    return (s16)(randZeroOne() * range) + base;
+s16 Rand_S16Offset(s16 base, s16 range) {
+    return (s16)(Rand_ZeroOne() * range) + base;
 }
 
 s16 Math_Rand_S16OffsetStride(s16 base, s16 stride, s16 range) {
-    return (s16)(randZeroOne() * range) * stride + base;
+    return (s16)(Rand_ZeroOne() * range) * stride + base;
 }
 
 void Math_Vec3f_Copy(Vec3f* dest, Vec3f* src) {
@@ -373,11 +373,11 @@ f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b) {
 s16 Math_Vec3f_Yaw(Vec3f* from, Vec3f* to) {
     f32 f14 = to->x - from->x;
     f32 f12 = to->z - from->z;
-    return atans_flip(f12, f14);
+    return Math_FAtan2F(f12, f14);
 }
 
 s16 Math_Vec3f_Pitch(Vec3f* from, Vec3f* to) {
-    return atans_flip(Math_Vec3f_DistXZ(from, to), from->y - to->y);
+    return Math_FAtan2F(Math_Vec3f_DistXZ(from, to), from->y - to->y);
 }
 
 void Actor_ProcessInitChain(Actor* actor, InitChainEntry* init) {
@@ -561,8 +561,8 @@ void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, 
     f32 sp1C;
     f32 f0;
 
-    sp1C = Math_Coss(rotation);
-    f0 = Math_Sins(rotation);
+    sp1C = Math_CosS(rotation);
+    f0 = Math_SinS(rotation);
     dst->x = translation->x + (src->x * sp1C + src->z * f0);
     dst->y = translation->y + src->y;
     dst->z = translation->z + (src->z * sp1C - src->x * f0);
@@ -585,7 +585,7 @@ f32 Lib_PushAwayVec3f(Vec3f* start, Vec3f* pusher, f32 distanceToApproach) {
     f32 f0;
 
     Math_Vec3f_Diff(pusher, start, &sp24);
-    f0 = Math3D_Length(&sp24);
+    f0 = Math3D_Vec3fMagnitude(&sp24);
     if (distanceToApproach < f0) {
         f2 = distanceToApproach / f0;
         f0 = f0 - distanceToApproach;

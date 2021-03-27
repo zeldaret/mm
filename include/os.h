@@ -7,6 +7,9 @@ typedef s32 OSPri;
 
 typedef s32 OSId;
 
+#define OS_READ     0
+#define OS_WRITE    1
+
 typedef union {
     /* 0x0 */ struct {
         /* 0x0 */ f32 f_odd;
@@ -240,38 +243,18 @@ typedef struct {
     /* 0x26 */ u8 errno;
 } OSContRamIo;
 
-
-typedef struct {
-    /* 0x0 */ int status;
-    /* 0x4 */ OSMesgQueue* queue;
-    /* 0x8 */ int channel;
-    /* 0xC */ u8 id[32];
-    /* 0x4C */ u8 label[32];
-    /* 0x6C */ int version;
-    /* 0x70 */ int dir_size;
-    /* 0x74 */ int inode_table;
-    /* 0x78 */ int minode_table;
-    /* 0x7C */ int dir_table;
-    /* 0x80 */ int inode_start_page;
-    /* 0x84 */ u8 banks;
-    /* 0x88 */ u8 activebank;
-} OSPfs;
-
-
-typedef struct {
-    /* 0x0 */ u32 file_size;
-    /* 0x4 */ u16 company_code;
-    /* 0x6 */ u16 game_code;
-    /* 0x8 */ unsigned char ext_name[4];
-    /* 0xC */ unsigned char game_name[16];
-} OSPfsState;
-
-
 typedef struct {
     /* 0x0 */ u16* histo_base;
     /* 0x4 */ u32 histo_size;
     /* 0x8 */ u32* text_start;
     /* 0xC */ u32* text_end;
 } OSProf;
+
+typedef struct {
+    /* 0x0 */ OSMesgQueue* mq;
+    /* 0x4 */ s32 port; /* Controller port */
+    /* 0x8 */ s32 mode;
+    /* 0xC */ u8 status;
+} OSVoiceHandle; // size = 0x10
 
 #endif

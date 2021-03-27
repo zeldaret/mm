@@ -49,7 +49,7 @@ void EnTuboTrap_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actionFunc = func_80931004; // idle
@@ -90,21 +90,21 @@ void func_809308F4(EnTuboTrap *this, GlobalContext *globalCtx) {
     Vec3f *actorPos = &this->actor.world.pos;
 
     for (i = 0, var = 0; i < 15; i++, var += 20000){
-        sin = Math_Sins(var);
-        cos = Math_Coss(var);
+        sin = Math_SinS(var);
+        cos = Math_CosS(var);
         pos.x = sin * 8.0f;
-        pos.y = (randZeroOne() * 5.0f) + 2.0f;
+        pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
         vel.x = pos.x * 0.23f;
-        vel.y = (randZeroOne() * 5.0f) + 2.0f;
+        vel.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         vel.z = pos.z * 0.23f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
         pos.z += actorPos->z;
 
-        rand = randZeroOne();
+        rand = Rand_ZeroOne();
         if (rand < 0.2f) {
             arg5 = 0x60;
         }else if (rand < 0.6f){
@@ -112,7 +112,7 @@ void func_809308F4(EnTuboTrap *this, GlobalContext *globalCtx) {
         }else {
             arg5 = 0x20;
         }
-        EffectSS_SpawnShard(globalCtx,
+        EffectSsKakera_Spawn(globalCtx,
                             &pos,
                             &vel,
                             actorPos,
@@ -121,7 +121,7 @@ void func_809308F4(EnTuboTrap *this, GlobalContext *globalCtx) {
                             0x14,
                             0,
                             0, 
-                            ((randZeroOne() * 85.0f) + 15.0f), 
+                            ((Rand_ZeroOne() * 85.0f) + 15.0f), 
                             0,
                             0, 
                             0x3C,
@@ -151,38 +151,38 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
     pos = *actorPos;
     pos.y += this->actor.yDistToWater;
     
-    EffectSS_SpawnGSplash(globalCtx, &pos, NULL, NULL, 0, 0x190);
+    EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 0x190);
 
     for (i = 0, var = 0; i < 15; i++, var += 20000) {
-        sin = Math_Sins(var);
-        cos = Math_Coss(var);
+        sin = Math_SinS(var);
+        cos = Math_CosS(var);
         pos.x = sin * 8.0f;
-        pos.y = (randZeroOne() * 5.0f) + 2.0f;
+        pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
         vel.x = pos.x * 0.20f;
-        vel.y = (randZeroOne() * 4.0f) + 2.0f;
+        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
         vel.z = pos.z * 0.20f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
         pos.z += actorPos->z;
 
-        rand = randZeroOne();
+        rand = Rand_ZeroOne();
         if (rand < 0.2f) {
             arg5 = 64;
         } else {
             arg5 = 32;
         }
 
-       EffectSS_SpawnShard(globalCtx,
+       EffectSsKakera_Spawn(globalCtx,
                           &pos, 
                           &vel, 
                           actorPos,
                           -0xAA, 
                           arg5,
                           0x32, 5, 0, 
-                          ((randZeroOne() * 85.0f) + 15.0f),
+                          ((Rand_ZeroOne() * 85.0f) + 15.0f),
                           0, 0, 0x46, 
                           -1, 
                           GAMEPLAY_DANGEON_KEEP,

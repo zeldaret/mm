@@ -12,7 +12,7 @@
 struct Actor;
 struct GlobalContext;
 struct Lights;
-struct BgPolygon;
+struct CollisionPoly;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* ctxt);
 
@@ -140,8 +140,8 @@ typedef struct Actor {
     /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
     /* 0x078 */ f32 minVelocityY; // Sets the lower bounds cap on velocity along the Y axis
-    /* 0x07C */ struct BgPolygon* wallPoly; // Wall polygon the actor is touching
-    /* 0x080 */ struct BgPolygon* floorPoly; // Floor polygon directly below the actor
+    /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
+    /* 0x080 */ struct CollisionPoly* floorPoly; // Floor polygon directly below the actor
     /* 0x084 */ u8 wallBgId; // Bg ID of the wall polygon the actor is touching
     /* 0x085 */ u8 floorBgId; // Bg ID of the floor polygon directly below the actor
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
@@ -258,7 +258,9 @@ typedef struct {
     /* 0xB28 */ s16 unkB28;
     /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
     /* 0xB9C */ Vec3f unkB9C;
-    /* 0xBA8 */ UNK_TYPE1 padBA8[0x1D0];
+    /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
+    /* 0xBEC */ Vec3f bodyPartsPos[18];
+    /* 0xCC4 */ UNK_TYPE1 padCC4[0xB4];
 } ActorPlayer; // size = 0xD78
 
 typedef struct {

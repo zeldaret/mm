@@ -3,10 +3,10 @@
 
 void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     u32 i;
-    LoadedParticleEntry* iter;
+    EffectSs* iter;
     ParticleOverlay* iter2;
 
-    EffectSS2Info.data_table = (LoadedParticleEntry*)THA_AllocEndAlign16(&ctxt->state.heap, numEntries * sizeof(LoadedParticleEntry));
+    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&ctxt->state.heap, numEntries * sizeof(EffectSs));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -21,7 +21,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
 
 void EffectSS_Clear(GlobalContext* ctxt) {
     u32 i;
-    LoadedParticleEntry* iter;
+    EffectSs* iter;
     ParticleOverlay* iter2;
     void* addr;
 
@@ -44,47 +44,47 @@ void EffectSS_Clear(GlobalContext* ctxt) {
     }
 }
 
-LoadedParticleEntry* EffectSS_GetTable() {
+EffectSs* EffectSS_GetTable() {
     return EffectSS2Info.data_table;
 }
 
-void EffectSS_Delete(LoadedParticleEntry* a0) {
+void EffectSS_Delete(EffectSs* a0) {
     if (a0->flags & 0x2) {
-        func_801A72CC((UNK_PTR)&a0->position);
+        func_801A72CC((UNK_PTR)&a0->pos);
     }
 
     if (a0->flags & 0x4) {
-        func_801A72CC((UNK_PTR)&a0->unk2C);
+        func_801A72CC((UNK_PTR)&a0->vec);
     }
 
     EffectSS_ResetEntry(a0);
 }
 
-void EffectSS_ResetEntry(LoadedParticleEntry* particle) {
+void EffectSS_ResetEntry(EffectSs* particle) {
     u32 i;
 
     particle->type = EFFECT_SS2_TYPE_LAST_LABEL;
-    particle->acceleration.z = 0;
-    particle->acceleration.y = 0;
-    particle->acceleration.x = 0;
+    particle->accel.z = 0;
+    particle->accel.y = 0;
+    particle->accel.x = 0;
     particle->velocity.z = 0;
     particle->velocity.y = 0;
     particle->velocity.x = 0;
-    particle->unk2C.z = 0;
-    particle->unk2C.y = 0;
-    particle->unk2C.x = 0;
-    particle->position.z = 0;
-    particle->position.y = 0;
-    particle->position.x = 0;
+    particle->vec.z = 0;
+    particle->vec.y = 0;
+    particle->vec.x = 0;
+    particle->pos.z = 0;
+    particle->pos.y = 0;
+    particle->pos.x = 0;
     particle->life = -1;
     particle->flags = 0;
     particle->priority = 128;
     particle->draw = NULL;
     particle->update = NULL;
-    particle->displayList = 0;
-    particle->unk3C = 0;
+    particle->gfx = NULL;
+    particle->actor = NULL;
 
-    for (i = 0; i != 13; i++) {
+    for (i = 0; i != ARRAY_COUNT(particle->regs); i++) {
         particle->regs[i] = 0;
     }
 }
@@ -148,7 +148,7 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
 #endif
 
-void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* a1) {
+void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
     u32 index;
     if (func_8016A01C(ctxt) != 1) {
         if (EffectSS_FindFreeSpace(a1->priority, &index) == 0) {
@@ -159,7 +159,7 @@ void EffectSS_Copy(GlobalContext* ctxt, LoadedParticleEntry* a1) {
 }
 
 #ifdef NON_MATCHING
-void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* initData) {
+void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData) {
     u32 index;
     u32 initRet;
     u32 overlaySize;
@@ -208,20 +208,20 @@ void EffectSS_LoadParticle(GlobalContext* ctxt, u32 type, u32 priority, void* in
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSS_LoadParticle.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSs_Spawn.asm")
 #endif
 
 void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
-    LoadedParticleEntry* particle = &EffectSS2Info.data_table[index];
+    EffectSs* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
-        particle->velocity.x += particle->acceleration.x;
-        particle->velocity.y += particle->acceleration.y;
-        particle->velocity.z += particle->acceleration.z;
+        particle->velocity.x += particle->accel.x;
+        particle->velocity.y += particle->accel.y;
+        particle->velocity.z += particle->accel.z;
 
-        particle->position.x += particle->velocity.x;
-        particle->position.y += particle->velocity.y;
-        particle->position.z += particle->velocity.z;
+        particle->pos.x += particle->velocity.x;
+        particle->pos.y += particle->velocity.y;
+        particle->pos.z += particle->velocity.z;
 
         (*particle->update)(ctxt, index, particle);
     }
@@ -246,7 +246,7 @@ void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
 }
 
 void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
-    LoadedParticleEntry* entry = &EffectSS2Info.data_table[index];
+    EffectSs* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
         (*entry->draw)(ctxt, index, entry);
     }
@@ -262,12 +262,12 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
-            if (EffectSS2Info.data_table[i].position.x > 32000 ||
-                EffectSS2Info.data_table[i].position.x < -32000 ||
-                EffectSS2Info.data_table[i].position.y > 32000 ||
-                EffectSS2Info.data_table[i].position.y < -32000 ||
-                EffectSS2Info.data_table[i].position.z > 32000 ||
-                EffectSS2Info.data_table[i].position.z < -32000
+            if (EffectSS2Info.data_table[i].pos.x > 32000 ||
+                EffectSS2Info.data_table[i].pos.x < -32000 ||
+                EffectSS2Info.data_table[i].pos.y > 32000 ||
+                EffectSS2Info.data_table[i].pos.y < -32000 ||
+                EffectSS2Info.data_table[i].pos.z > 32000 ||
+                EffectSS2Info.data_table[i].pos.z < -32000
             ) {
                 EffectSS_Delete(&EffectSS2Info.data_table[i]);
             } else {

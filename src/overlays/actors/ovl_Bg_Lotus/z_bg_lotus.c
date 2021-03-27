@@ -49,7 +49,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.floorHeight =
         func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
-    this->dyna.actor.world.rot.y = (s16)(rand() >> 0x10);
+    this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
 }
 
@@ -78,13 +78,13 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
 
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x =
-            (Math_Sins(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.x;
+            (Math_SinS(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z =
-            (Math_Coss(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.z;
+            (Math_CosS(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.z;
 
         if (this->timer2 == 0) {
             this->timer2 = 96;
-            this->dyna.actor.world.rot.y += (s16)(rand() >> 0x12);
+            this->dyna.actor.world.rot.y += (s16)(Rand_Next() >> 0x12);
         }
     }
 
@@ -95,8 +95,8 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
 
         if (func_800CAF70(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
-                EffectSS_SpawnGRipple(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
-                EffectSS_SpawnGRipple(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
+                EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
+                EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
             if (gSaveContext.perm.unk20 != 3) {
