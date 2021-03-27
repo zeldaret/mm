@@ -32,8 +32,8 @@ typedef struct EnNiw {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 unk252;// used by func_80892248
     /* 0x254 */ s16 unk254; // changed in func_808917F8 unsure
-    /* 0x256 */ s16 unk256; //sfxtimer?
-    /* 0x258 */ s16 unk258;
+    /* 0x256 */ s16 sfxTimer1; 
+    /* 0x258 */ s16 sfxTimer2;
     /* 0x25A */ s16 unk25A;
     /* 0x25C */ s16 unk25C;
     /* 0x25E */ s16 unk25E;
@@ -62,7 +62,7 @@ typedef struct EnNiw {
     /* 0x2A2 */ s16 paramsCopy;
     /* 0x2A4 */ Vec3f unk2A4; // this actors starting position
     /* 0x2B0 */ Vec3f unk2B0;// this actors starting position
-    /* 0x2BC */ Vec3f unk2BC; // init
+    /* 0x2BC */ Vec3f unk2BC;
     /* 0x2C8 */ f32 unk2C8; //func_80891320
     /* 0x2CC */ f32 unk2CC; //func_80891320
     /* 0x2D0 */ f32 unk2D0; //func_80891320
@@ -74,7 +74,7 @@ typedef struct EnNiw {
     /* 0x2E8 */ s16 unk2E8;
     /* 0x2EA */ s16 unk2EA; // func_808919E8
     /* 0x2EC */ u16 unk2EC; // used in func_80891D78 
-    /* 0x2EE */ u8  unk2EE[0x12]; // pad
+    /* 0x2EE */ u8  unk2EE[0x6]; // pad
     /* 0x2F4 */ f32 unk2F4; // used func_808917F8
     /* 0x2F8 */ f32 unk2F8; // used func_808917F8
     /* 0x2FC */ f32 unk2FC; // used func_808917F8

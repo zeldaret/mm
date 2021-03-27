@@ -816,7 +816,7 @@ s16 func_800B8BFC(Actor* actor, GlobalContext* gCtx);
 // void func_800B8C9C(void);
 // void func_800B8CEC(void);
 // void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_800B8D50(GlobalContext* gCtx, Actor* actor, UNK_TYPE param_3, s16 param_4, f32 param_5, UNK_TYPE4 param_6);
+void func_800B8D50(GlobalContext* gCtx, Actor* actor, f32 param_3, s16 param_4, f32 param_5, u32 param_6);
 // void func_800B8D98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);

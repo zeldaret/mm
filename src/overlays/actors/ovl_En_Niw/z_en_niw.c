@@ -111,8 +111,8 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     if (this->paramsCopy == 2) {
         Audio_PlayActorSound2(&this->actor, 0x2813U);
-        this->unk256 = (u16)0x1E;
-        this->unk250 = (u16)0x1E;
+        this->sfxTimer1 = 0x1E;
+        this->unk250 = 0x1E;
         this->actor.flags &= ~1;
         this->unk28E = 4;
         this->actionFunc = func_80891D78;
@@ -174,8 +174,8 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
                 break;
             case 2:
                 this->unk24E = 2;
-                this->unk264[1] = -10000.0f;
                 this->unk264[2] = -10000.0f;
+                this->unk264[1] = -10000.0f;
                 this->unk264[7] = 25000.0f;
                 this->unk264[5] = 25000.0f;
                 this->unk264[8] = 6000.0f;
@@ -325,7 +325,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     if (this->paramsCopy == 0) {
         if (Actor_HasParent( &this->actor, globalCtx) != 0) {
             Audio_PlayActorSound2(&this->actor, 0x2813U); // chicken cry m sfx
-            this->unk256 = 30;
+            this->sfxTimer1 = 30;
             this->unk250 = 30;
             this->actor.flags &= ~1;
             this->unk28E = 4;
@@ -468,7 +468,7 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
         }
       } else {
           if ((this->actor.bgCheckFlags & 1)) {
-            this->unk256 = 0;
+            this->sfxTimer1 = 0;
             this->actor.velocity.y = 4.0f;
             this->unk29E = 1;
         }
@@ -482,7 +482,7 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
     }
     if (Actor_HasParent( &this->actor, globalCtx) != 0) {
         Audio_PlayActorSound2( &this->actor, 0x2813U);
-        this->unk256 = 30;
+        this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unk250 = 30;
         this->actor.flags &= ~1;
@@ -559,7 +559,7 @@ void func_80892248(EnNiw *this, GlobalContext *globalCtx) {
 // action func
 void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
 
-    this->unk256 = 100;
+    this->sfxTimer1 = 100;
     if ( this->unk252 == 0) {
         this->unk252 = 60; // reset timers, change action
         this->unk24C = 10;
@@ -573,15 +573,15 @@ void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
 
 //action func
 void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
-    f32 temp_f2;
+    f32 viewY;
 
-    this->unk256 = 100;
+    this->sfxTimer1 = 100;
     if (this->unk252 == 0x28) {
-        temp_f2 = 14000.0f;
+        viewY = 14000.0f;
         this->unk264[0] = 10000.0f;
-        this->unk264[7] = temp_f2;
+        this->unk264[7] = viewY;
         if (0) {}
-        this->unk264[5] = temp_f2;
+        this->unk264[5] = viewY;
         this->unk264[6] = 0.0f;
         this->unk264[8] = 0.0f;
         this->unk264[1] = 0.0f;
@@ -704,7 +704,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
     if ((this->unk2A0 == 0) && (this->unk260 == 0) && (this->paramsCopy == 0)) {
         if (( this->unk28E != 7) && (90000.0f != this->unk2BC.x)) {
             this->unk260 = 0xA;
-            this->unk256 = 0x1E;
+            this->sfxTimer1 = 0x1E;
             this->unk29E = 1;
             Audio_PlayActorSound2(&this->actor, 0x2813);
             this->unk254 = 0x64;
@@ -723,7 +723,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
                 this->unk298 = 0;
                 this->unk2A4.x = this->unk2B0.x = this->actor.world.pos.x;
                 this->unk2A4.y = this->unk2B0.y = this->actor.world.pos.y;
-                this->unk256 = 0x2710;
+                this->sfxTimer1 = 0x2710;
                 this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
                 this->unk252 = this->unk250 = this->unk298;
                   
@@ -739,7 +739,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
                 return;
             }
             this->unk260 = 0xA;
-            this->unk256 = 0x1E;
+            this->sfxTimer1 = 0x1E;
             this->unk29E = 1;
             Audio_PlayActorSound2(&this->actor, 0x2813);
             this->unk254 = 0x64;
@@ -753,53 +753,24 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*) thisx;
     ActorPlayer *player = PLAYER;
-    //s16 spD0;
-    //f32 spCC;
-    //f32 spC8;
-    //f32 spC4;
-    Vec3f spC4;
-    //f32 spC0;
-    //f32 spBC;
-    //f32 spB8;
-    Vec3f spB8;
-    //f32 spB4;
-    //f32 spB0;
-    //f32 spAC;
-    Vec3f spAC;
-    //CollisionCheckContext *sp54;
-    //ColliderCylinder *&this->collider;
-    //CollisionCheckContext *&globalCtx->colCheckCtx;
-    //PosRot *temp_a1_2;
-    f32 temp_f0;
-    f32 temp_f12;
-    f32 temp_f14;
-    f32 temp_f16;
-    f32 temp_f2;
-    s16 temp_s0;
-    s16 temp_s0_3;
-    s16 temp_v0;
-    //s16 temp_v0_10;
-    //s16 temp_v0_11;
-    //s16 temp_v0_12;
-    //s16 temp_v0_13;
-    //s16 this->unk28E;
-    s16 temp29C;
-    //s16 temp_v0_4;
-    //s16 temp_v0_5;
-    //s16 temp_v0_6;
-    //s16 temp_v0_7;
-    //s16 temp_v0_8;
-    //s16 temp_v0_9;
-    s32 featherCount;
-    f32 randomFloat;
     s16 i;
+    s16 featherCount;
+    Vec3f pos;
+    Vec3f spB8;
+    Vec3f spAC;
+    Vec3f* tempHomePos;
+    s32 pad[10];
+    s16 temp29C;
+    f32 featherScale;
+    Vec3f camera;
+    f32 camResult;
+    f32 temp_f0;
+    f32 dist = 20.0f;
+    s8 padding[4];
 
-    //player = globalCtx->actorCtx.actorList[2].first;
     this->unk28C++;
+
     if (this->paramsCopy == 1) {
-        //temp_v0 = this->actor.parent->shape.rot.y;
-        //this->actor.world.rot.y = this->actor.parent->shape.rot.y;
-        //this->actor.shape.rot.y = this->actor.parent->shape.rot.y;
         this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.parent->shape.rot.y;
     }
 
@@ -812,182 +783,176 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk29E == 2) {
             featherCount = 4;
         }
-        if (featherCount > 0) {
-            //spD0 = (s16) featherCount;
-//loop_9:
-            i = 0;
-            while (i < featherCount){
-                spC4.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
-                spC4.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
-                spC4.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
-                randomFloat = randZeroOneScaled(6.0f) + 6.0f;
-                if ((this->unk29E == 2) && (this->unk308 != 0.0f)) {
-                    spC4.y += 10.0f;
-                }
+        //featherCount = this->unk29E == 2 ? 4 : 20;
+        for(i = 0; i < featherCount; ++i) {
+            pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
+            pos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
+            pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
+            featherScale = randZeroOneScaled(6.0f) + 6.0f;
 
-                if (this->unk308 == 0.0f) {
-                    randomFloat = randZeroOneScaled(2.0f) + 2.0f;
-                }
-                spB8.x = randPlusMinusPoint5Scaled(3.0f);
-                spB8.y = (randZeroOneScaled(2.0f) * 0.5f) + 2.0f;
-                spB8.z = randPlusMinusPoint5Scaled(3.0f);
-                // loading 0 twice
-                spAC.z = spAC.x = 0.0f;
-                spAC.y = -0.15000000596f;
-                func_80893008(this, &spC4, &spB8, &spAC, randomFloat); //spawn feather
-                i += 1;
-            //if ((s32) temp_s0 < (s32) featherCount) {
-                //goto loop_9;
+            //original code wants two DIFFERENT zeros for these two compares?
+            if ((this->unk29E == 2) && (this->unk308 != 0)) {
+            //if ((this->unk29E == 2) && (this->unk308 != tempZero1)) {
+                pos.y += 10.0f;
             }
+
+            if (this->unk308 == 0) {
+            //if (this->unk308 == tempZero2) {
+                featherScale = randZeroOneScaled(2.0f) + 2.0f;
+            }
+            spB8.x = randPlusMinusPoint5Scaled(3.0f);
+            spB8.y = (randZeroOneScaled(2.0f) * 0.5f) + 2.0f;
+            spB8.z = randPlusMinusPoint5Scaled(3.0f);
+            spAC.z = spAC.x = 0.0f;
+            spAC.y = -0.15000000596f;
+
+            func_80893008(this, &pos, &spB8, &spAC, featherScale); //spawn feather
         }
         this->unk29E = 0;
     }
 
-    // load 4000 here
     func_808930FC(this, globalCtx);
-
 
     if (this->unk24C != 0) {
         this->unk24C--;
     }
-    //temp_v0_4 = ;
     if (this->unk24E != 0) {
         this->unk24E--;
     }
-    //temp_v0_5 = this->unk250;
     if (this->unk250 != 0) {
         this->unk250--;
     }
-    //temp_v0_6 = this->unk252;
     if (this->unk252 != 0) {
         this->unk252--;
     }
-    //temp_v0_7 = this->unk254;
     if (this->unk254 != 0) {
         this->unk254--;
     }
-    //temp_v0_8 = this->unk256;
-    if (this->unk256 != 0) {
-        this->unk256--;
+    if (this->sfxTimer1 != 0) {
+        this->sfxTimer1--;
     }
-    //temp_v0_9 = this->unk258;
-    if (this->unk258 != 0) {
-        this->unk258--;
+    if (this->sfxTimer2 != 0) {
+        this->sfxTimer2--;
     }
-    //temp_v0_10 = this->unk25A;
     if (this->unk25A != 0) {
         this->unk25A--;
     }
-    //temp_v0_11 = this->unk25C;
     if (this->unk25C != 0) {
         this->unk25C--;
     }
-    //temp_v0_12 = this->unk25E;
     if (this->unk25E != 0) {
         this->unk25E--;
     }
-    //temp_v0_13 = this->unk260;
     if (this->unk260 != 0) {
         this->unk260--;
     }
 
     //this->actor.shape.rot.x = (unaligned s32) this->actor.world.rot.x;
-    this->actor.shape.rot.x = this->actor.world.rot.x;
+    this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
-    this->actor.shape.rot.z = this->actor.world.rot.z;
+    //this->actor.shape.rot.z = this->actor.world.rot.z;
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, this->unk308);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
+
+    func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F); //update bgcheckinfo
+    
+    
+    // this branch wants to branch likely instead of unlikley
     temp_f0 = this->actor.floorHeight;
-    if (temp_f0 <= -32000.0f) {
-        //block_40:
-        while (temp_f0 >= 32000.0f) {
-            temp_f12 = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-            temp_f2 = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-            temp_f14 = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
-            temp_f16 = this->actor.home.pos.y;
-            this->actor.world.pos.x = this->actor.home.pos.x;
-            this->actor.world.pos.z = this->actor.home.pos.z;
-            this->actor.world.pos.y = temp_f16 + globalCtx->view.eye.y 
-              + ((temp_f2 / sqrtf((temp_f12 * temp_f12) + (temp_f2 * temp_f2) + (temp_f14 * temp_f14))) * 160.0f);
-            if (this->actor.world.pos.y < temp_f16) {
-                this->actor.world.pos.y = temp_f16 + 300.0f;
-            }
-            this->actor.speedXZ = 0.0f;
-            //temp_a1_2 = &this->actor.home;
-            this->actor.gravity = -2.0f;
-            Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
-            Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
-            temp29C = this->unk29C = 0;
-            this->unk304 = 0.0f;
-            this->unk300 = 0.0f;
-            this->unk2FC = 0.0f;
-            this->unk2F8 = 0.0f;
-            this->unk2F4 = 0.0f;
-            this->unk2DC = 0.0f;
-            this->unk2D8 = 0.0f;
-            this->unk2D4 = 0.0f;
-            this->unk2D0 = 0.0f;
-            this->unk2CC = 0.0f;
-            this->unk2C8 = 0.0f;
-            this->unk2E0 = 0.0f;
-            this->unk2E4 = 0.0f;
-            this->unk29A = temp29C;
-            this->unk298 = temp29C;
-            this->unk29E = temp29C;
-            this->unk292 = temp29C;
-            this->unk28C = temp29C;
-            this->unk2A0 = temp29C;
-            i = 0;
-            while (i < 0xA) {
-                this->unk264[i] = 0.0f;
-            //if ((s32) temp_s0_3 < 0xA) {
-                //goto loop_43;
-            }
-            this->unk28E = 8;
-            this->unk2A0 = 0;
-            this->actionFunc = func_808925F8;
-            return; // a return in a loop? clearly wrong
+    //if (this->actor.floorHeight <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
+    //if (temp_f0 <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
+    if (temp_f0 <= -32000.0f || 32000.0f <= temp_f0) {
+        camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
+        camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
+        camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        camResult = camera.y / sqrtf((SQ(camera.x)) + (SQ(camera.y)) + (SQ(camera.z)));
+
+        this->actor.world.pos.x = this->actor.home.pos.x;
+        this->actor.world.pos.z = this->actor.home.pos.z;
+        this->actor.world.pos.y = (this->actor.home.pos.y + globalCtx->view.eye.y ) + (camResult * 160.0f);
+      
+        if (this->actor.world.pos.y < this->actor.home.pos.y) {
+            this->actor.world.pos.y = this->actor.home.pos.y + 300.0f;
         }
+
+        this->actor.speedXZ = 0.0f;
+        //temp_a1_2 = &this->actor.home;
+        this->actor.gravity = -2.0f;
+        Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
+        Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
+        //tempHomePos = &this->actor.home.pos;
+        //Math_Vec3f_Copy(&this->unk2A4, &tempHomePos);
+        //Math_Vec3f_Copy(&this->unk2B0, &tempHomePos);
+
+        this->unk304 = 0.0f;
+        this->unk300 = 0.0f;
+        this->unk2FC = 0.0f;
+        this->unk2F8 = 0.0f;
+        this->unk2F4 = 0.0f;
+        this->unk2DC = 0.0f;
+        this->unk2D8 = 0.0f;
+        this->unk2D4 = 0.0f;
+        this->unk2D0 = 0.0f;
+        this->unk2CC = 0.0f;
+        this->unk2C8 = 0.0f;
+        this->unk2E0 = 0.0f;
+        this->unk2E4 = 0.0f;
+        this->unk2A0 = this->unk28C = this->unk292 = this->unk29E = this->unk298 = this->unk29A = this->unk29C = 0; 
+
+        for( i = 0; i < 0xA; ++i) {
+            this->unk264[i] = 0.0f;
+        }
+
+        this->unk28E = 8;
+        this->unk2A0 = 0;
+        this->actionFunc = func_808925F8;
+        return; // a return in a loop? clearly wrong
     }
-    if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != (u16)6)) {
+
+    if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
-        Math_Vec3f_Copy(&spC4, &this->actor.world.pos);
-        spC4.y += this->actor.yDistToWater;
-        this->unk250 = 0x1E;
-        EffectSS_SpawnGSplash(globalCtx, &spC4.x, 0, 0, 0, 0x190);
+        Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+        pos.y += this->actor.yDistToWater;
+        this->unk250 = 30;
+        EffectSS_SpawnGSplash(globalCtx, &pos, 0, 0, 0, 400);
         this->unk252 = 0;
         this->unk28E = 6;
         this->actionFunc = func_808920A0;
         return;
     }
-    //player = PLAYER; 
-    if ((this->unk2A0 != 0) && (this->actor.xyzDistToPlayerSq < (20.0f * 20.0f)) && (player->unkD5C == 0)) {
-        func_800B8D50(globalCtx, this, 0x40000000, this->actor.world.rot.y, 0.0f, 0x10);
+  
+    // player->invincibilityTimer
+    if ((this->unk2A0 != 0) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->unkD5C == 0)) {
+        func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
     }
+
     func_8089262C(this, globalCtx);
-    if ((this->unk258 == 0) && (this->unk28E == 4)) {
-        this->unk258 = 7;
+    if ((this->sfxTimer2 == 0) && (this->unk28E == 4)) {
+        this->sfxTimer2 = 7;
         Audio_PlayActorSound2(&this->actor, 0x38FF);
     }
-    if (this->unk256 == 0) {
+
+    if (this->sfxTimer1 == 0) {
         if (this->unk28E != 0) {
-            this->unk256 = 0x1E;
+            this->sfxTimer1 = 30;
             Audio_PlayActorSound2(&this->actor, 0x2812);
         } else {
-            this->unk256 = 0x12C;
+            this->sfxTimer1 = 300;
             Audio_PlayActorSound2(&this->actor, 0x2811);
         }
     }
+
     if (this->unk2A0 == 0) {
         //&this->collider = &this->collider;
         if (this->paramsCopy == 0) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             //&globalCtx->colCheckCtx = &globalCtx->colCheckCtx;
             CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-            this->unk28E = this->unk28E;
+            
+            if (globalCtx){}
+
             if ((this->unk28E != 4) && (this->unk28E != 5)) {
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx,  &this->collider);
             }
