@@ -6422,9 +6422,9 @@ SECTIONS
     ovl_En_Tag_Obj : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Tag_Obj/z_en_tag_obj.o(.text)
-        build/asm/overlays/ovl_En_Tag_Obj_data.o(.data)
+        build/src/overlays/actors/ovl_En_Tag_Obj/z_en_tag_obj.o(.data)
         build/src/overlays/actors/ovl_En_Tag_Obj/z_en_tag_obj.o(.rodata)
-        build/asm/overlays/ovl_En_Tag_Obj_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Tag_Obj/z_en_tag_obj_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
