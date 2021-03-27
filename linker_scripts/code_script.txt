@@ -24,7 +24,7 @@ SECTIONS
         build/src/boot_O1/boot_0x80084940.o(.text)
         build/asm/boot/loadfragment.o(.text)
         build/src/boot_O2/loadfragment2.o(.text)
-        build/asm/boot/boot_0x80085130.o(.text)
+        build/src/boot_O2/padutils.o(.text)
         build/src/boot_O2/stackcheck.o(.text)
         build/src/boot_O2/gfxprint.o(.text)
         build/src/boot_O2/mtxuty-cvt.o(.text)
@@ -337,9 +337,9 @@ SECTIONS
         build/src/code/code_0x800CAE10.o(.text)
         build/asm/code/code_0x800CB000.o(.text)
         build/asm/code/z_camera.o(.text)
-        build/src/code/code_0x800E03A0.o(.text)
+        build/src/code/z_collision_btltbls.o(.text)
         . += 0x10;
-        build/asm/code/z_collision_check.o(.text)
+        build/src/code/z_collision_check.o(.text)
         build/src/code/code_0x800E8EA0.o(.text)
         build/asm/code/code_0x800E9360.o(.text)
         build/asm/code/z_debug.o(.text)
@@ -415,8 +415,8 @@ SECTIONS
         build/asm/code/z_play.o(.text)
         build/asm/code/z_play_hireso.o(.text)
         build/asm/code/PreRender.o(.text)
-        build/asm/code/code_0x801727F0.o(.text)
-        build/asm/code/code_0x80172A00.o(.text)
+        build/src/code/TwoHeadGfxArena.o(.text)
+        build/src/code/TwoHeadArena.o(.text)
         build/asm/code/code_0x80172BC0.o(.text)
         build/asm/code/code_0x80172C30.o(.text)
         build/src/code/title_setup.o(.text)
@@ -473,7 +473,8 @@ SECTIONS
         build/src/code/z_actor_dlftbls.o(.data)
         build/asm/code/code_data_z_bgcheck.o(.data)
         build/asm/code/code_data_z_camera.o(.data)
-        build/asm/code/code_data_z_collision_check.o(.data)
+        build/src/code/z_collision_btltbls.o(.data)
+        build/src/code/z_collision_check.o(.data)
         build/asm/code/code_data_z_debug_display.o(.data)
         build/asm/code/code_data_z_debug_mode.o(.data)
         build/asm/code/code_data_z_draw.o(.data)
@@ -549,7 +550,7 @@ SECTIONS
         build/asm/code/code_rodata_z_bgcheck.o(.rodata)
         build/asm/code/code_rodata_0x800CB000.o(.rodata)
         build/asm/code/code_rodata_z_camera.o(.rodata)
-        build/asm/code/code_rodata_z_collision_check.o(.rodata)
+        build/src/code/z_collision_check.o(.rodata)
         build/asm/code/code_rodata_0x800E8EA0.o(.rodata)
         build/asm/code/code_rodata_z_debug_mode.o(.rodata)
         build/asm/code/code_rodata_z_draw.o(.rodata)
@@ -623,6 +624,23 @@ SECTIONS
     code_bss_start = .;
     . += 0x24F00;
     code_bss_end = .;
+
+    buffers ALIGN(0x10):
+    {
+        build/src/buffers/gfxbuffers.o(.bss)
+        build/src/buffers/heaps.o(.bss)
+    }
+
+    /* Framebuffers */
+    gFramebuffer1 = 0x80000500;
+    gFramebuffer0 = 0x80800000 - 320*240*2; /* SCREEN_WIDTH*SCREEN_HEIGHT*sizeof(s16) */
+    gFramebufferHighRes1 = 0x80000500;
+    gFramebufferHighRes0 = 0x80780000;
+
+    /* Unkown buffers */
+    D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
+    D_80780000 = 0x80780000;
+    D_80784600 = 0x80784600;
 
     . = 0x80800000;
     SegmentStart = .;
@@ -3471,9 +3489,9 @@ SECTIONS
     ovl_Door_Spiral : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.text)
-        build/asm/overlays/ovl_Door_Spiral_data.o(.data)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.data)
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.rodata)
-        build/asm/overlays/ovl_Door_Spiral_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -5552,9 +5570,9 @@ SECTIONS
     ovl_En_Po_Fusen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.text)
-        build/asm/overlays/ovl_En_Po_Fusen_data.o(.data)
+        build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.data)
         build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen.o(.rodata)
-        build/asm/overlays/ovl_En_Po_Fusen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Po_Fusen/z_en_po_fusen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -5879,9 +5897,9 @@ SECTIONS
     ovl_Bg_Lotus : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.text)
-        build/asm/overlays/ovl_Bg_Lotus_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.data)
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.rodata)
-        build/asm/overlays/ovl_Bg_Lotus_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8057,9 +8075,9 @@ SECTIONS
     ovl_Bg_Ikana_Shutter : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.text)
-        build/asm/overlays/ovl_Bg_Ikana_Shutter_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.data)
         build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter.o(.rodata)
-        build/asm/overlays/ovl_Bg_Ikana_Shutter_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Ikana_Shutter/z_bg_ikana_shutter_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

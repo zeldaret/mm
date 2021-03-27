@@ -5,9 +5,11 @@
 
 struct BgIkanaShutter;
 
+typedef void (*BgIkanaShutterActionFunc)(struct BgIkanaShutter*, GlobalContext*);
+
 typedef struct BgIkanaShutter {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgIkanaShutterActionFunc actionFunc;
 } BgIkanaShutter; // size = 0x160
 
 extern const ActorInit Bg_Ikana_Shutter_InitVars;

@@ -6,7 +6,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     EffectSs* iter;
     ParticleOverlay* iter2;
 
-    EffectSS2Info.data_table = (EffectSs*)GameState_Alloc(&ctxt->state.heap, numEntries * sizeof(EffectSs));
+    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&ctxt->state.heap, numEntries * sizeof(EffectSs));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 

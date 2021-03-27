@@ -186,9 +186,9 @@ u32 Fault_WaitForInputImpl() {
         Fault_Sleep(0x10);
         Fault_UpdatePadImpl();
 
-        kDown = curInput->pressEdge.buttons;
+        kDown = curInput->press.button;
 
-        if (kDown == L_TRIG) {
+        if (kDown == BTN_L) {
             sFaultContext->faultActive = !sFaultContext->faultActive;
         }
 
@@ -197,19 +197,19 @@ u32 Fault_WaitForInputImpl() {
                 return 0;
             }
         } else {
-            if (kDown == A_BUTTON || kDown == R_JPAD) {
+            if (kDown == BTN_A || kDown == BTN_DRIGHT) {
                 return 0;
             }
 
-            if (kDown == L_JPAD) {
+            if (kDown == BTN_DLEFT) {
                 return 1;
             }
 
-            if (kDown == U_JPAD) {
+            if (kDown == BTN_DUP) {
                 FaultDrawer_SetOsSyncPrintfEnabled(1);
             }
 
-            if (kDown == D_JPAD) {
+            if (kDown == BTN_DDOWN) {
                 FaultDrawer_SetOsSyncPrintfEnabled(0);
             }
         }
@@ -440,8 +440,8 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (~(input->pressEdge.buttons | ~0x80) != 0);
-    } while (~(input->current.buttons | ~0x231) != 0);
+        } while (!CHECK_BTN_ALL(input->press.button, 0x80));
+    } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
 void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3) {
@@ -506,46 +506,46 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
 
-            if (~(input->pressEdge.buttons | ~0x20) == 0) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
                 sFaultContext->faultActive = 0;
             }
         }
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (input->pressEdge.buttons == 0);
+        } while (input->press.button == 0);
 
-        if (~(input->pressEdge.buttons | ~0x1000) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
             return;
         }
 
         off = 0x10;
-        if (~(input->current.buttons | ~0x8000) == 0) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
             off = 0x100;
         }
-        if (~(input->current.buttons | ~0x4000) == 0) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_B)) {
             off <<= 8;
         }
-        if (~(input->pressEdge.buttons | ~0x800) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
             addr -= off;
         }
-        if (~(input->pressEdge.buttons | ~0x400) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
             addr += off;
         }
-        if (~(input->pressEdge.buttons | ~0x8) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
             addr = pc;
         }
-        if (~(input->pressEdge.buttons | ~0x4) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
             addr = sp;
         }
-        if (~(input->pressEdge.buttons | ~0x2) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
             addr = unk0;
         }
-        if (~(input->pressEdge.buttons | ~0x1) == 0) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
             addr = unk1;
         }
 
-    } while (~(input->pressEdge.buttons | ~0x20) != 0);
+    } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
 
     sFaultContext->faultActive = 1;
 }
@@ -733,7 +733,7 @@ void Fault_SetOptionsFromController3(void) {
 
     input3 = &sFaultContext->padInput[3];
 
-    if (~(input3->pressEdge.buttons | ~0x80) == 0) {
+    if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
         faultCustomOptions = faultCustomOptions == 0;
     }
 
@@ -741,18 +741,18 @@ void Fault_SetOptionsFromController3(void) {
         graphPC = graphOSThread.context.pc;
         graphRA = graphOSThread.context.ra;
         graphSP = graphOSThread.context.sp;
-        if (~(input3->current.buttons | ~0x10) == 0) {
-            faultCopyToLog = !faultCopyToLog;
-            FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
+        if (CHECK_BTN_ALL(input3->press.button, BTN_R)) {
+              faultCopyToLog = !faultCopyToLog;
+              FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
-        if (~(input3->current.buttons | ~0x8000) == 0) {
-            Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
+        if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
+              Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
         }
-        if (~(input3->current.buttons | ~0x4000) == 0) {
-            FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
-            Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
-            FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
+        if (CHECK_BTN_ALL(input3->press.button, BTN_B)) {
+              FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
+              Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
+              FaultDrawer_SetCharPad(-2, 0);
+              FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
         }
     }
 }

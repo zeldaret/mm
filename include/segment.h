@@ -33,4 +33,7 @@ extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 extern Gfx D_04075B30[];
 
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
+
 #endif
