@@ -538,11 +538,11 @@ void Math_SmoothScaleMaxS(s16* start, s16 target, s16 scale, s16 maxStep) {
     *start += v0;
 }
 
-void Color_RGBA8_Copy(ColorRGBA8* dst, ColorRGBA8* src) {
-    dst->red = src->red;
-    dst->green = src->green;
-    dst->blue = src->blue;
-    dst->alpha = src->alpha;
+void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src) {
+    dst->r = src->r;
+    dst->g = src->g;
+    dst->b = src->b;
+    dst->a = src->a;
 }
 
 void func_801000A4(u16 a0) {
@@ -569,11 +569,11 @@ void Lib_TranslateAndRotateYVec3f(Vec3f* translation, s16 rotation, Vec3f* src, 
 }
 
 #ifdef NON_MATCHING
-void Lib_LerpRGB(RGB* a, RGB* b, f32 t, RGB* dst) {
+void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst) {
     // XXX regalloc is slightly off
-    dst->red = (f32)a->red + ((f32)b->red - (f32)a->red) * t;
-    dst->green = (f32)a->green + ((f32)b->green - (f32)a->green) * t;
-    dst->blue = (f32)a->blue + ((f32)b->blue - (f32)a->blue) * t;
+    dst->r = (f32)a->r + ((f32)b->r - (f32)a->r) * t;
+    dst->g = (f32)a->g + ((f32)b->g - (f32)a->g) * t;
+    dst->b = (f32)a->b + ((f32)b->b - (f32)a->b) * t;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_lib/Lib_LerpRGB.asm")

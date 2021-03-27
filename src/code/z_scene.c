@@ -310,7 +310,7 @@ void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
     lightInfo = (LightInfo*)Lib_PtrSegToVirt(entry->lightList.segment);
     for (i = 0; i < entry->lightList.num; i++)
     {
-        Lights_Insert(ctxt, &ctxt->lightCtx, lightInfo);
+        LightContext_InsertLight(ctxt, &ctxt->lightCtx, lightInfo);
         lightInfo++;
     }
 }
