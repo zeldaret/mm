@@ -545,6 +545,7 @@ SECTIONS
         build/src/code/code_0x800AF710.o(.rodata)
         build/asm/code/code_rodata_z_effect_soft_sprite_old_init.o(.rodata)
         build/asm/code/code_rodata_flg_set.o(.rodata)
+        . += 0x10;
         build/asm/code/code_rodata_z_actor.o(.rodata)
         build/src/code/z_actor_dlftbls.o(.rodata)
         build/asm/code/code_rodata_z_bgcheck.o(.rodata)
@@ -1946,8 +1947,8 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_Arrow_Ice/z_arrow_ice.o(.text)
         build/asm/overlays/ovl_Arrow_Ice_data.o(.data)
-        build/src/overlays/actors/ovl_Arrow_Ice/z_arrow_ice.o(.rodata)
         build/asm/overlays/ovl_Arrow_Ice_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Arrow_Ice/z_arrow_ice.o(.rodata)
         build/asm/overlays/ovl_Arrow_Ice_late_rodata.o(.rodata)
         ovl_Arrow_Ice_bss_start = .;
     }
@@ -1963,8 +1964,8 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_Arrow_Light/z_arrow_light.o(.text)
         build/asm/overlays/ovl_Arrow_Light_data.o(.data)
-        build/src/overlays/actors/ovl_Arrow_Light/z_arrow_light.o(.rodata)
         build/asm/overlays/ovl_Arrow_Light_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Arrow_Light/z_arrow_light.o(.rodata)
         build/asm/overlays/ovl_Arrow_Light_late_rodata.o(.rodata)
         ovl_Arrow_Light_bss_start = .;
     }
