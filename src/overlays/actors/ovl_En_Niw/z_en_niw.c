@@ -749,22 +749,24 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
-//working
+# if NON-MATCHING
+// non-matching: one branch is likely instead of not-likely, and one stack offset
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*) thisx;
-    ActorPlayer *player = PLAYER;
+    s8 pad0;
     s16 i;
+    ActorPlayer *player = PLAYER;
     s16 featherCount;
+    s16 pad1;
     Vec3f pos;
     Vec3f spB8;
     Vec3f spAC;
-    Vec3f* tempHomePos;
-    s32 pad[10];
+    s32 padArr[9];
     s16 temp29C;
     f32 featherScale;
     Vec3f camera;
     f32 camResult;
-    f32 temp_f0;
+    f32 floorHeight;
     f32 dist = 20.0f;
     s8 padding[4];
 
@@ -783,21 +785,17 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk29E == 2) {
             featherCount = 4;
         }
-        //featherCount = this->unk29E == 2 ? 4 : 20;
         for(i = 0; i < featherCount; ++i) {
             pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
             pos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
             pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
             featherScale = randZeroOneScaled(6.0f) + 6.0f;
 
-            //original code wants two DIFFERENT zeros for these two compares?
             if ((this->unk29E == 2) && (this->unk308 != 0)) {
-            //if ((this->unk29E == 2) && (this->unk308 != tempZero1)) {
                 pos.y += 10.0f;
             }
 
             if (this->unk308 == 0) {
-            //if (this->unk308 == tempZero2) {
                 featherScale = randZeroOneScaled(2.0f) + 2.0f;
             }
             spB8.x = randPlusMinusPoint5Scaled(3.0f);
@@ -810,7 +808,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         this->unk29E = 0;
     }
-
+  
     func_808930FC(this, globalCtx);
 
     if (this->unk24C != 0) {
@@ -847,22 +845,19 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk260--;
     }
 
-    //this->actor.shape.rot.x = (unaligned s32) this->actor.world.rot.x;
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
-    //this->actor.shape.rot.z = this->actor.world.rot.z;
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, this->unk308);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F); //update bgcheckinfo
     
-    
-    // this branch wants to branch likely instead of unlikley
-    temp_f0 = this->actor.floorHeight;
-    //if (this->actor.floorHeight <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
-    //if (temp_f0 <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
-    if (temp_f0 <= -32000.0f || 32000.0f <= temp_f0) {
+    // this branch wants to branch likely instead of regular branch, no other difference
+    floorHeight = this->actor.floorHeight;
+    if ((this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
+    //if (floorHeight <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
+    //if (floorHeight <= -32000.0f || 32000.0f <= floorHeight) {
         camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
         camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
         camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
@@ -877,13 +872,9 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         this->actor.speedXZ = 0.0f;
-        //temp_a1_2 = &this->actor.home;
         this->actor.gravity = -2.0f;
         Math_Vec3f_Copy(&this->unk2A4, &this->actor.home.pos);
         Math_Vec3f_Copy(&this->unk2B0, &this->actor.home.pos);
-        //tempHomePos = &this->actor.home.pos;
-        //Math_Vec3f_Copy(&this->unk2A4, &tempHomePos);
-        //Math_Vec3f_Copy(&this->unk2B0, &tempHomePos);
 
         this->unk304 = 0.0f;
         this->unk300 = 0.0f;
@@ -907,7 +898,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk28E = 8;
         this->unk2A0 = 0;
         this->actionFunc = func_808925F8;
-        return; // a return in a loop? clearly wrong
+        return;
     }
 
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != 6)) {
@@ -945,10 +936,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk2A0 == 0) {
-        //&this->collider = &this->collider;
         if (this->paramsCopy == 0) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            //&globalCtx->colCheckCtx = &globalCtx->colCheckCtx;
             CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
             
             if (globalCtx){}
@@ -959,7 +948,9 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
+#endif
 
 // override limb draw function
 s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
@@ -1046,5 +1037,68 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
-//opa
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+//xlu
+// feather draw function?
+///* 
+// this isnt even close
+void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
+    
+    //EnNiwFeather *temp_s1;
+    EnNiwFeather *feather = &this->feathers;
+    //f32 temp_f12;
+    //z_Matrix *temp_s0;
+    u8 flag = 0;
+    s16 i;
+    GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
+
+
+    // where is the opendisks
+
+    //func_8012C2DC(gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    //feather = temp_s1;
+    //flag = 0;
+    //i = (u16)0;
+//loop_1:
+    //if ((s32) temp_s3 < 0x14) {
+        //goto loop_1;
+    for(i = 0; i < 10; i++, feather++) {
+        if (feather->type == 1) {
+            //temp_s0 = &globalCtx->unk187FC;
+            if (flag == 0) {
+                //temp_v0 = gfxCtx->polyXlu.p;
+                //gfxCtx->polyXlu.p = temp_v0 + 8;
+                //temp_v0->words.w1 = 0x60023B0;
+                //temp_v0->words.w0 = 0xDE000000;
+                //gSPDisplayList(POLY_XLU_DISP++, 0x60023B0);
+                gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);
+
+                flag++;// = (flag + 1) & 0xFF;
+            }
+            SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, 0); // MTXMODE_NEW?
+            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            //temp_f12 = feather->scale;
+            //SysMatrix_InsertScale(temp_f12, temp_f12, 1.0f, 1);
+            SysMatrix_InsertScale(feather->scale, feather->scale, 1.0f, 1);
+            SysMatrix_InsertZRotation_f(feather->unk_30, 1);
+            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
+
+            //temp_v0_2 = gfxCtx->polyXlu.p;
+            //gfxCtx->polyXlu.p = temp_v0_2 + 8;
+            //temp_v0_2->words.w0 = 0xDA380003;
+            //temp_v0_2->words.w1 = SysMatrix_AppendStateToPolyOpaDisp(gfxCtx);
+            gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(gfxCtx),
+            //gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            //temp_v0_3 = gfxCtx->polyXlu.p;
+            //gfxCtx->polyXlu.p = temp_v0_3 + 8;
+            //temp_v0_3->words.w1 = 0x6002428;
+            //temp_v0_3->words.w0 = 0xDE000000;
+            gSPDisplayList(POLY_XLU_DISP++, &D_06002428);
+
+        }
+    }
+} // */
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")

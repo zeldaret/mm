@@ -92,4 +92,9 @@ extern const ActorInit En_Niw_InitVars;
 extern SkeletonHeader D_06002530;
 extern AnimationHeader D_060000E8;
 
+// feathers
+extern void* D_060023B0;
+extern void* D_06002428;
+
+
 #endif // Z_EN_NIW_H
