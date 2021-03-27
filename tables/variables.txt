@@ -34,7 +34,7 @@
     0x80096C50:("sGfxPrintFontTLUT","u16","[64]",0x80),
     0x80096CD0:("sGfxPrintUnkTLUT","u16","[16]",0x20),
     0x80096CF0:("sGfxPrintUnkData","u8","[8]",0x8),
-    0x80096CF8:("sGfxPrintFontData","u8","[0x800]",0x1),
+    0x80096CF8:("sGfxPrintFontData","u8","[0x800]",0x800),
     0x80097500:("D_80097500","UNK_TYPE4","",0x4),
     0x80097524:("D_80097524","UNK_TYPE4","",0x4),
     0x80097530:("sRandInt","u32","",0x4),

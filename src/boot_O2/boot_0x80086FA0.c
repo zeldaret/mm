@@ -1,6 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
+#define RAND_MULTIPLIER 1664525
+#define RAND_INCREMENT 1013904223
+
 /**
  * Gets the next integer in the sequence of pseudo-random numbers.
  */
@@ -21,7 +24,7 @@ void Rand_Seed(u32 seed) {
  * between 1.0f and 2.0f, returning the result subtract 1.0f.
  */
 f32 Rand_ZeroOne(void) {
-    sRandInt = (sRandInt * 1664525) + 1013904223;
+    sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
     sRandFloat = ((sRandInt >> 9) | 0x3F800000);
     return *((f32*)&sRandFloat) - 1.0f;
 }
@@ -31,7 +34,7 @@ f32 Rand_ZeroOne(void) {
  * manner in which Rand_ZeroOne generates its result.
  */
 f32 Rand_Centered(void) {
-    sRandInt = (sRandInt * 1664525) + 1013904223;
+    sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
     sRandFloat = ((sRandInt >> 9) | 0x3F800000);
     return *((f32*)&sRandFloat) - 1.5f;
 }
@@ -47,7 +50,7 @@ void Rand_Seed_Variable(u32* rndNum, u32 seed) {
  * Generates the next pseudo-random integer from the provided rndNum.
  */
 u32 Rand_Next_Variable(u32* rndNum) {
-    return *rndNum = (*rndNum * 1664525) + 1013904223;
+    return *rndNum = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 }
 
 /**
@@ -55,7 +58,7 @@ u32 Rand_Next_Variable(u32* rndNum) {
  * 1.0f from the provided rndNum.
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
-    u32 next = (*rndNum * 1664525) + 1013904223;
+    u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
     // clang-format off
     *rndNum = next; sRandFloat = (next >> 9) | 0x3F800000;
     // clang-format on
@@ -67,7 +70,7 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
  * 0.5f from the provided rndNum.
  */
 f32 Rand_Centered_Variable(u32* rndNum) {
-    u32 next = (*rndNum * 1664525) + 1013904223;
+    u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
     // clang-format off
     *rndNum = next; sRandFloat = (next >> 9) | 0x3F800000;
     // clang-format on

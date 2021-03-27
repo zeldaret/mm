@@ -524,10 +524,10 @@ void EnItem00_DrawSprite(ActorEnItem00* actor, GlobalContext* ctxt);
 void EnItem00_DrawHeartContainer(ActorEnItem00* actor, GlobalContext* ctxt);
 // void EnItem00_DrawHeartPiece(void);
 // void func_800A7650(void);
-// void func_800A7730(void);
+void func_800A7730(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params);
 // void func_800A7AD4(void);
 // void func_800A7D28(void);
-// void func_800A8150(void);
+s32 func_800A8150(s32 params);
 // void func_800A817C(void);
 // void func_800A81A4(void);
 void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2);
@@ -634,7 +634,8 @@ void EffectSsKiraKira_SpawnDispersed (GlobalContext * globalCtx, Vec3f * pos, Ve
 // void EffectSsDFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
 // void EffectSsBubble_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
-// void EffectSsGSplash_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4* puParm3, UNK_TYPE4* puParm4, UNK_TYPE1 uParm5, UNK_TYPE2 param_6);
+void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, ColorRGBA8* primColor, ColorRGBA8* envColor,
+                           s16 type, s16 scale);
 // void EffectSsGFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2);
 // void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, ColorRGBA8* pzParm3, ColorRGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
 // void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
@@ -652,7 +653,9 @@ void EffectSsHitMark_SpawnFixedScale(GlobalContext* globalCtx, s32 type, Vec3f* 
 // void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
 // void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
 // void EffectSsSolderSrchBall_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
-// void EffectSsKakera_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE4 param_13, UNK_TYPE2 param_14, UNK_TYPE2 param_15, UNK_TYPE4 param_16);
+void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5,
+                          s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx,
+                          s16 objId, Gfx* dList);
 // void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
 // void EffectSsIcePiece_SpawnBurst(void);
 // void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, ColorRGBA8* pzParm4, ColorRGBA8* param_5, UNK_TYPE4 param_6);
@@ -866,8 +869,8 @@ void func_800BBA88(GlobalContext* ctxt, Actor* iParm2);
 // void func_800BBC20(void);
 // void func_800BBCEC(void);
 // void func_800BBDAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
-// void func_800BBFB0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE1 param_7);
-// void func_800BC154(void);
+void func_800BBFB0(GlobalContext* gCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
+void func_800BC154(GlobalContext* gCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 // void func_800BC188(void);
 // void func_800BC1B4(void);
 // void func_800BC270(void);
@@ -1629,7 +1632,7 @@ void EffFootmark_Draw(GlobalContext* ctxt);
 void func_800F0390(GlobalContext* ctxt);
 void func_800F03C0(GlobalContext* ctxt);
 void func_800F048C(GlobalContext* ctxt, Vec3f* param_2, u8 param_3, u16 param_4, u8 param_5);
-// void func_800F0568(void);
+void func_800F0568(GlobalContext* ctxt, Vec3f* position, s32 param_3, s16 sfxId);
 // void func_800F0590(void);
 // void func_800F05C0(void);
 // void func_800F07C0(void);
