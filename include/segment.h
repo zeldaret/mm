@@ -3,8 +3,13 @@
 
 #include <z64.h>
 
-extern UNK_TYPE D_04029CB0; // D_04029CB0
-extern UNK_TYPE D_04029CF0; // D_04029CF0
+extern Gfx D_04029CB0[]; // D_04029CB0
+extern Gfx D_04029CF0[]; // D_04029CF0
+
+//extern Gfx[] D_05018090; // pot break shard displaylist
+//extern Gfx[] D_05017EA0; // pot displaylist
+extern UNK_TYPE D_05018090; // pot break shard displaylist
+extern UNK_TYPE D_05017EA0; // pot displaylist
 
 extern UNK_TYPE D_0E000048;
 extern UNK_TYPE D_0E000088;
@@ -32,5 +37,8 @@ extern Gfx D_04075A40[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 extern Gfx D_04075B30[];
+
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
 
 #endif

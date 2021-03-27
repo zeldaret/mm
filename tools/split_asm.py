@@ -35,10 +35,10 @@ def split_asm_and_rodata():
                 if line.startswith('glabel') and not line.startswith('glabel L80'):
                     current_rodata = line.split()[1]
                     assert(current_rodata != '')
-                if '.byte' in line or '.short' in line or '.word' in line:
+                if any([directive in line for directive in ['.byte', '.half', '.short', '.word', '.ascii', '.asciz', '.float', '.double']]):
                     rodata_entries.append([current_rodata, line, False])
             f.close()
-        
+
     with open(args.input, 'r') as f:
         current_file = None
         relevant_rodata = []
@@ -91,7 +91,7 @@ def split_asm_and_rodata():
                 writing = True
                 file_names.append(file_name)
 
-            if '.byte' in line or '.short' in line or '.word' in line:
+            if any([directive in line for directive in ['.byte', '.half', '.short', '.word', '.ascii', '.asciz', '.float', '.double']]):
                 writing = False
 
             for entries in rodata_entries:
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     file_names = []
 
-    if "ovl_" in str(args.input) and not any(ovlFile in str(args.input) for ovlFile in ["ovl_Arrow_Ice", "ovl_Arrow_Light", "ovl_Bg_Dkjail_Ivy", "ovl_Bg_Ikana_Mirror", "ovl_Boss_02", "ovl_Boss_07", "ovl_Boss_Hakugin", "ovl_Elf_Msg", "ovl_Elf_Msg2", "ovl_Elf_Msg3", "ovl_Elf_Msg4", "ovl_Elf_Msg5", "ovl_En_Az", "ovl_En_Bigokuta", "ovl_En_Bigpamet", "ovl_En_Bigpo", "ovl_En_Bigslime", "ovl_En_Box", "ovl_En_Butte", "ovl_En_Col_Man", "ovl_En_Crow", "ovl_En_Death", "ovl_En_Elf", "ovl_En_Elforg", "ovl_En_Encount3", "ovl_En_Encount4", "ovl_En_Fish", "ovl_En_Fish2", "ovl_En_Fsn", "ovl_En_Honotrap", "ovl_En_Horse", "ovl_En_Horse_Game", "ovl_En_Invadepoh", "ovl_En_Ishi", "ovl_En_Kame", "ovl_En_Kanban", "ovl_En_Kusa2", "ovl_En_M_Thunder", "ovl_En_Maruta", "ovl_En_Mushi2", "ovl_En_Okuta", "ovl_En_Ossan", "ovl_En_Pametfrog", "ovl_En_Peehat", "ovl_En_Rg", "ovl_En_Ruppecrow", "ovl_En_Slime", "ovl_En_Sob1", "ovl_En_Syateki_Man", "ovl_En_Test7", "ovl_En_Trt", "ovl_En_Wiz_Fire", "ovl_Mir_Ray", "ovl_Obj_Bombiwa", "ovl_Obj_Driftice", "ovl_Obj_Hariko", "ovl_Obj_Iceblock", "ovl_Obj_Mure", "ovl_Obj_Snowball2", "ovl_Obj_Toudai", "ovl_select"]):
+    if "ovl_" in str(args.input) and not any(ovlFile in str(args.input) for ovlFile in ["ovl_Bg_Dkjail_Ivy", "ovl_Bg_Ikana_Mirror", "ovl_Boss_02", "ovl_Boss_07", "ovl_Boss_Hakugin", "ovl_Elf_Msg", "ovl_Elf_Msg2", "ovl_Elf_Msg3", "ovl_Elf_Msg4", "ovl_Elf_Msg5", "ovl_En_Az", "ovl_En_Bigokuta", "ovl_En_Bigpamet", "ovl_En_Bigpo", "ovl_En_Bigslime", "ovl_En_Box", "ovl_En_Butte", "ovl_En_Col_Man", "ovl_En_Crow", "ovl_En_Death", "ovl_En_Elf", "ovl_En_Elforg", "ovl_En_Encount3", "ovl_En_Encount4", "ovl_En_Fish", "ovl_En_Fish2", "ovl_En_Fsn", "ovl_En_Honotrap", "ovl_En_Horse", "ovl_En_Horse_Game", "ovl_En_Invadepoh", "ovl_En_Ishi", "ovl_En_Kame", "ovl_En_Kanban", "ovl_En_Kusa2", "ovl_En_M_Thunder", "ovl_En_Maruta", "ovl_En_Mushi2", "ovl_En_Okuta", "ovl_En_Ossan", "ovl_En_Pametfrog", "ovl_En_Peehat", "ovl_En_Rg", "ovl_En_Ruppecrow", "ovl_En_Slime", "ovl_En_Sob1", "ovl_En_Syateki_Man", "ovl_En_Test7", "ovl_En_Trt", "ovl_En_Wiz_Fire", "ovl_Mir_Ray", "ovl_Obj_Bombiwa", "ovl_Obj_Driftice", "ovl_Obj_Hariko", "ovl_Obj_Iceblock", "ovl_Obj_Mure", "ovl_Obj_Snowball2", "ovl_Obj_Toudai", "ovl_select"]):
         split_asm_and_rodata()
         exit(0)
 

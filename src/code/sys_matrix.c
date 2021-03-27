@@ -2,7 +2,7 @@
 #include <global.h>
 
 void Matrix_Init(GameState* state) {
-    sMatrixStack = (MtxF *)GameState_Alloc(&state->heap, 0x500);
+    sMatrixStack = (MtxF *)THA_AllocEndAlign16(&state->heap, 0x500);
     sCurrentMatrix = sMatrixStack;
 }
 

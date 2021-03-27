@@ -5,7 +5,19 @@
 #include <segment_symbols.h>
 #include <segment.h>
 #include <section.h>
-#include <pre_boot_variables.h>
+
+// pre-boot variables
+extern UNK_TYPE osTvType;
+extern UNK_TYPE osRomType;
+extern UNK_TYPE osRomBase;
+extern UNK_TYPE osResetType;
+extern UNK_TYPE osCicId;
+extern UNK_TYPE osVersion;
+extern UNK_TYPE osMemSize;
+extern s32 osAppNmiBuffer[0x10];
+extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
+extern u16 gFramebufferHighRes1[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80000500
+extern u8 D_80025D00[];
 
 // data
 extern UNK_TYPE1 D_800969C0;
@@ -420,14 +432,14 @@ extern UNK_PTR D_801AE8F0;
 // extern UNK_TYPE4 D_801AEC70;
 // extern UNK_TYPE4 D_801AEC74;
 // extern UNK_TYPE4 D_801AEC78;
-extern ColorRGBA8 D_801AEC80;
+extern Color_RGBA8 D_801AEC80;
 extern s801AEC84 D_801AEC84[13];
 extern f32 actorMovementScale;
 extern f32 D_801AECF0;
 extern f32 D_801AECF4;
 // extern UNK_TYPE1 D_801AED48;
 // extern UNK_TYPE4 D_801AED58;
-extern ColorRGBA8 actorDefaultHitColor;
+extern Color_RGBA8 actorDefaultHitColor;
 // extern UNK_TYPE1 D_801AED8C;
 // extern UNK_TYPE4 D_801AED98;
 // extern UNK_TYPE4 D_801AEDA4;
@@ -1021,8 +1033,8 @@ extern actor_init_var_func actorInitVarFuncs[11];
 // extern UNK_TYPE2 D_801BEA20;
 // extern UNK_TYPE1 D_801BEA30;
 // extern UNK_TYPE1 D_801BEA70;
-extern light_map_positional_func lightPositionalMapFuncs[3];
-extern light_map_directional_func lightDirectionalMapFuncs[3];
+//extern LightsPosBindFunc posBindFuncs[3];
+//extern LightsBindFunc dirBindFuncs[3];
 // extern UNK_TYPE4 D_801BEAD4;
 // extern UNK_TYPE4 D_801BEAD8;
 // extern UNK_TYPE1 D_801BEAE0;
@@ -3248,7 +3260,7 @@ extern f32 D_801DDA9C;
 extern f32 D_801DDAA0;
 extern f32 D_801DDAB0;
 extern f32 D_801DDAB4;
-extern f32 D_801DDAB8;
+extern const f32 D_801DDAB8;
 extern f32 D_801DDAC0;
 extern f32 D_801DDAC4;
 extern f32 D_801DDAC8;
@@ -4005,7 +4017,7 @@ extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4F66;
 // extern UNK_TYPE1 D_801F4F68;
 // extern UNK_TYPE1 D_801F4F6A;
-extern LightsList lightsList;
+extern LightsBuffer sLightsBuffer;
 extern Arena sZeldaArena;
 // extern UNK_TYPE1 D_801F5130;
 // extern UNK_TYPE1 D_801F5270;
@@ -4078,7 +4090,7 @@ extern Input D_801F6C18;
 // extern UNK_TYPE1 D_801F6D0C;
 extern UNK_TYPE4 D_801F6D10;
 // extern UNK_TYPE1 D_801F6D18;
-extern ColorRGBA8 D_801F6D30;
+extern Color_RGBA8 D_801F6D30;
 // extern UNK_TYPE1 D_801F6D38;
 // extern UNK_TYPE4 D_801F6D4C;
 // extern UNK_TYPE1 D_801F6D50;
@@ -4514,14 +4526,15 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE1 D_80208E98;
 // extern UNK_TYPE1 D_80208E99;
 // extern UNK_TYPE1 D_80208E9C;
-// extern UNK_TYPE1 D_80208EA0;
-// extern UNK_TYPE1 D_80209AA0;
+extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
+extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
-extern u8 gAudioHeap[1277952];
-extern u32 gSystemHeap[1046224];
-extern u8 D_80780000[17920];
-extern u8 D_80784600[352768];
-extern u16 D_807DA800[76800];
+extern u8 gAudioHeap[0x138000];
+extern u32 gSystemHeap[UNK_SIZE];
+extern u16 gFramebufferHighRes0[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80780000
+extern u8 D_80780000[0x4600];
+extern u8 D_80784600[0x56200];
+extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x807DA800
 
 #endif
 

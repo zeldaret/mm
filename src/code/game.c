@@ -27,34 +27,34 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
         D_801F8010.type = R_FB_FILTER_TYPE;
-        D_801F8010.color.red = R_FB_FILTER_PRIM_COLOR(0);
-        D_801F8010.color.green = R_FB_FILTER_PRIM_COLOR(1);
-        D_801F8010.color.blue = R_FB_FILTER_PRIM_COLOR(2);
-        D_801F8010.color.alpha = R_FB_FILTER_A;
+        D_801F8010.color.r = R_FB_FILTER_PRIM_COLOR(0);
+        D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
+        D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
+        D_801F8010.color.a = R_FB_FILTER_A;
         func_80140D10(&D_801F8010, &_gfx, arg1);
     } else {
         if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
             D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
-            D_801F8020.primColor.red = R_FB_FILTER_PRIM_COLOR(0);
-            D_801F8020.primColor.green = R_FB_FILTER_PRIM_COLOR(1);
-            D_801F8020.primColor.blue = R_FB_FILTER_PRIM_COLOR(2);
-            D_801F8020.primColor.alpha = R_FB_FILTER_A;
-            D_801F8020.envColor.red = R_FB_FILTER_ENV_COLOR(0);
-            D_801F8020.envColor.green = R_FB_FILTER_ENV_COLOR(1);
-            D_801F8020.envColor.blue = R_FB_FILTER_ENV_COLOR(2);
-            D_801F8020.envColor.alpha = R_FB_FILTER_A;
+            D_801F8020.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+            D_801F8020.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+            D_801F8020.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+            D_801F8020.primColor.a = R_FB_FILTER_A;
+            D_801F8020.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+            D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+            D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+            D_801F8020.envColor.a = R_FB_FILTER_A;
             func_80142100(&D_801F8020, &_gfx, arg1);
         } else {
             if (R_FB_FILTER_TYPE == 7) {
                 sMonoColors.unk_00 = 0;
-                sMonoColors.primColor.red = R_FB_FILTER_PRIM_COLOR(0);
-                sMonoColors.primColor.green = R_FB_FILTER_PRIM_COLOR(1);
-                sMonoColors.primColor.blue = R_FB_FILTER_PRIM_COLOR(2);
-                sMonoColors.primColor.alpha = R_FB_FILTER_A;
-                sMonoColors.envColor.red = R_FB_FILTER_ENV_COLOR(0);
-                sMonoColors.envColor.green = R_FB_FILTER_ENV_COLOR(1);
-                sMonoColors.envColor.blue = R_FB_FILTER_ENV_COLOR(2);
-                sMonoColors.envColor.alpha = R_FB_FILTER_A;
+                sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+                sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+                sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+                sMonoColors.primColor.a = R_FB_FILTER_A;
+                sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+                sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+                sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+                sMonoColors.envColor.a = R_FB_FILTER_A;
                 VisMono_Draw(&sMonoColors, &_gfx, arg1);
             }
         }
@@ -81,11 +81,11 @@ void GameState_Draw(GameState *ctxt, GraphicsContext *gCtxt) {
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
         GameState_SetFBFilter(&nextDisplayList, (u32) gCtxt->zbuffer);
     }
-    
+
     if (R_ENABLE_ARENA_DBG < 0) {
         R_ENABLE_ARENA_DBG = 0;
     }
-    
+
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
     gCtxt->polyOpa.p = nextDisplayList;
@@ -111,12 +111,12 @@ void Game_ResetSegments(GraphicsContext *gCtxt) {
 void func_801736DC(GraphicsContext *gCtxt) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
-    
+
     nextDisplayList = Graph_GfxPlusOne(_polyOpa = gCtxt->polyOpa.p);
     gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
-    
+
     gCtxt->polyOpa.p = nextDisplayList;
 }
 
@@ -151,11 +151,11 @@ void Game_InitHeap(GameState *ctxt, u32 size) {
     buf = GameAlloc_Malloc(&_ctx->alloc, size);
 
     if (buf) {
-        GameStateHeap_Init(&ctxt->heap, buf, size);
+        THA_Ct(&ctxt->heap, buf, size);
         return;
     }
 
-    GameStateHeap_Init(&ctxt->heap, NULL, 0);
+    THA_Ct(&ctxt->heap, NULL, 0);
     assert_fail("../game.c", 0x40B);
 }
 
@@ -168,9 +168,9 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
     u32 bytesAllocated;
     void *heapStart;
 
-    heapStart = ctxt->heap.heapStart;
+    heapStart = ctxt->heap.bufp;
     alloc = &ctxt->alloc;
-    GameStateHeap_Clear(&ctxt->heap);
+    THA_Dt(&ctxt->heap);
     GameAlloc_Free(alloc, heapStart);
     StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
@@ -181,12 +181,12 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
 
     if (buf = GameAlloc_Malloc(alloc, size))
     {
-        GameStateHeap_Init(&ctxt->heap, buf, size);
+        THA_Ct(&ctxt->heap, buf, size);
     }
     else
     {
-        GameStateHeap_Init(&ctxt->heap, 0, 0);
-        assert_fail("../game.c", 0x432);
+        THA_Ct(&ctxt->heap, 0, 0);
+        assert_fail("../game.c", 1074);
     }
 }
 
@@ -207,7 +207,7 @@ lblUnk:;
     GameAlloc_Init(&ctxt->alloc);
     Game_InitHeap(ctxt, 0x100000);
     Game_SetFramerateDivisor(ctxt, 3);
-    
+
     gameStateInit(ctxt);
 
     func_80140CE0(&D_801F8010);
@@ -216,7 +216,7 @@ lblUnk:;
     func_80140898(&D_801F8048);
     func_801773A0(&D_801F7FF0);
     func_8013ED9C();
-    
+
     osSendMesg(&ctxt->gfxCtx->unk5C, NULL, 1);
 }
 
@@ -235,7 +235,7 @@ void Game_StateFini(GameState *ctxt) {
     func_801420F4(&D_801F8020);
     func_80141900(&sMonoColors);
     func_80140900(&D_801F8048);
-    GameStateHeap_Clear(&ctxt->heap);
+    THA_Dt(&ctxt->heap);
     GameAlloc_Cleanup(&ctxt->alloc);
 }
 
@@ -252,7 +252,7 @@ u32 Game_GetShouldContinue(GameState *ctxt) {
 }
 
 s32 Game_GetHeapFreeSize(GameState *ctxt) {
-    return GameStateHeap_GetFreeSize(&ctxt->heap);
+    return THA_GetSize(&ctxt->heap);
 }
 
 s32 func_80173B48(GameState *ctxt) {

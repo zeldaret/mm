@@ -175,8 +175,8 @@ asm/non_matchings/%: asm/%.asm
 
 asm/%.asm: disasm ;
 
-disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt tables/pre_boot_variables.txt
-	./tools/disasm.py -d ./asm -u . -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt -v ./tables/pre_boot_variables.txt
+disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
+	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
 
 clean:
 	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
@@ -211,7 +211,7 @@ build/baserom/%: baserom/%
 # FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
 # The simplest way to do that is to give them an order dependency on .c files' .o files
 build/asm/%.o: asm/%.asm | $(C_O_FILES)
-	$(AS) $(ASFLAGS) $^ -o $@
+	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<

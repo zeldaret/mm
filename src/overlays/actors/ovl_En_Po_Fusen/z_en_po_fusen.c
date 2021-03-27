@@ -5,6 +5,9 @@
 
 #define THIS ((EnPoFusen*)thisx)
 
+#define GET_FUSE_LEN_PARAM(this) (((Actor*)(this))->params & 0x3FF)
+#define GET_IS_FUSE_TYPE_PARAM(this) (((Actor*)(this))->params & 0x8000)
+
 void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -36,9 +39,9 @@ static ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
-DamageTable EnPoFusenDamageTable = { 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+DamageTable EnPoFusenDamageTable = {
+    0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
 void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -111,7 +114,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
     return 0;
 }
 
-u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) { 
+u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
     if ((u32) this->actionFunc == (u32) EnPoFusen_IdleFuse ) {
       return 0;
     }
@@ -120,7 +123,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
     this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if (((this->collider.base.acFlags & 2) != 0) 
+    if (((this->collider.base.acFlags & 2) != 0)
       && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~0x2;
         return 1;
@@ -175,7 +178,7 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen *this) {
     Actor* parent = this->actor.parent;
     EnMa4* romani;
 
-    if ((parent != 0) && (parent->id == ACTOR_EN_MA4)) { 
+    if ((parent != 0) && (parent->id == ACTOR_EN_MA4)) {
         romani = (EnMa4*) parent;
         romani->unk338++;
     }
@@ -186,7 +189,7 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen *this) {
 
 void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx) {
     Actor_Spawn(&gCtx->actorCtx, gCtx, ACTOR_EN_CLEAR_TAG,
-       this->actor.world.pos.x, this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 
+       this->actor.world.pos.x, this->actor.world.pos.y + 20.0f, this->actor.world.pos.z,
        255, 255, 200, 2);
     Audio_PlayActorSound2(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
     Actor_MarkForDeath(&this->actor);
@@ -200,7 +203,7 @@ void EnPoFusen_InitFuse(EnPoFusen *this) {
     this->actionFunc = EnPoFusen_IdleFuse;
 }
 
-void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) { 
+void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) {
     EnPoFusen_Idle(this, gCtx);
     if (this->fuse-- == 0) {
         EnPoFusen_IncrementMalonPop(this);
@@ -233,10 +236,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, 
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        SysMatrix_InsertRotation(xRot, 0, zRot , 1);
-        Matrix_Scale(xScale, yScale , zScale, 1);
-        SysMatrix_InsertZRotation_s( -zRot, 1);
-        SysMatrix_InsertXRotation_s( -xRot, 1);
+        SysMatrix_InsertRotation(xRot, 0, zRot , MTXMODE_APPLY);
+        Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
+        SysMatrix_InsertZRotation_s( -zRot, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s( -xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {
@@ -262,6 +265,6 @@ void EnPoFusen_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     func_801343C0(globalCtx, this->anime.skeleton,
-       this->anime.limbDrawTbl, this->anime.dListCount, 
+       this->anime.limbDrawTbl, this->anime.dListCount,
        EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
 }

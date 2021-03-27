@@ -159,8 +159,6 @@
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_parameter/func_80120F90.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_parameter/func_80121000.asm")
-
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_parameter/func_80121064.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_parameter/func_801210E0.asm")
