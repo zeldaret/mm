@@ -14,10 +14,11 @@ if __name__ == '__main__':
         # Search for the first GLOBAL_ASM and use that as a dependency
         # We won't list all split assembly files as it is tricky to properly set up make recipes with multiple outputs
         for line in lines:
-            if line.startswith('#pragma GLOBAL_ASM('):
-                lines = line.replace('//', '/').split('/')
-                asm_file = '/'.join(lines[1:-1]).replace('non_matchings/', '') + '.asm ' # base .asm file
-                asm_file += '/'.join(lines[1:-1]) # split function .asm file
+            if '#pragma GLOBAL_ASM(' in line:
+                base_path = os.path.normpath(line.split('"')[1])
+                path = os.path.split(base_path)[0]
+                asm_file = path.replace('non_matchings/', '') + '.asm ' # base .asm file
+                asm_file += path # split function .asm file
                 break
 
     with open(args.output, 'w') as f:

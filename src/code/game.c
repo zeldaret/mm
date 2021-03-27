@@ -151,11 +151,11 @@ void Game_InitHeap(GameState *ctxt, u32 size) {
     buf = Gamealloc_Alloc(&_ctx->alloc, size);
 
     if (buf) {
-        GameStateHeap_Init(&ctxt->heap, buf, size);
+        THA_Ct(&ctxt->heap, buf, size);
         return;
     }
 
-    GameStateHeap_Init(&ctxt->heap, NULL, 0);
+    THA_Ct(&ctxt->heap, NULL, 0);
     assert_fail("../game.c", 0x40B);
 }
 
@@ -168,9 +168,9 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
     u32 bytesAllocated;
     void *heapStart;
 
-    heapStart = ctxt->heap.heapStart;
+    heapStart = ctxt->heap.bufp;
     alloc = &ctxt->alloc;
-    GameStateHeap_Clear(&ctxt->heap);
+    THA_Dt(&ctxt->heap);
     Gamealloc_Free(alloc, heapStart);
     StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
@@ -181,11 +181,11 @@ void Game_ResizeHeap(GameState *ctxt, u32 size)
 
     if (buf = Gamealloc_Alloc(alloc, size))
     {
-        GameStateHeap_Init(&ctxt->heap, buf, size);
+        THA_Ct(&ctxt->heap, buf, size);
     }
     else
     {
-        GameStateHeap_Init(&ctxt->heap, 0, 0);
+        THA_Ct(&ctxt->heap, 0, 0);
         assert_fail("../game.c", 0x432);
     }
 }
@@ -235,7 +235,7 @@ void Game_StateFini(GameState *ctxt) {
     func_801420F4(&D_801F8020);
     func_80141900(&sMonoColors);
     func_80140900(&D_801F8048);
-    GameStateHeap_Clear(&ctxt->heap);
+    THA_Dt(&ctxt->heap);
     Gamealloc_FreeAll(&ctxt->alloc);
 }
 
@@ -252,7 +252,7 @@ u32 Game_GetShouldContinue(GameState *ctxt) {
 }
 
 s32 Game_GetHeapFreeSize(GameState *ctxt) {
-    return GameStateHeap_GetFreeSize(&ctxt->heap);
+    return THA_GetSize(&ctxt->heap);
 }
 
 s32 func_80173B48(GameState *ctxt) {

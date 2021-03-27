@@ -415,8 +415,8 @@ SECTIONS
         build/asm/code/z_play.o(.text)
         build/asm/code/z_play_hireso.o(.text)
         build/asm/code/PreRender.o(.text)
-        build/asm/code/code_0x801727F0.o(.text)
-        build/asm/code/code_0x80172A00.o(.text)
+        build/src/code/TwoHeadGfxArena.o(.text)
+        build/src/code/TwoHeadArena.o(.text)
         build/asm/code/code_0x80172BC0.o(.text)
         build/asm/code/code_0x80172C30.o(.text)
         build/src/code/title_setup.o(.text)
@@ -624,6 +624,23 @@ SECTIONS
     code_bss_start = .;
     . += 0x24F00;
     code_bss_end = .;
+
+    buffers ALIGN(0x10):
+    {
+        build/src/buffers/gfxbuffers.o(.bss)
+        build/src/buffers/heaps.o(.bss)
+    }
+
+    /* Framebuffers */
+    gFramebuffer1 = 0x80000500;
+    gFramebuffer0 = 0x80800000 - 320*240*2; /* SCREEN_WIDTH*SCREEN_HEIGHT*sizeof(s16) */
+    gFramebufferHighRes1 = 0x80000500;
+    gFramebufferHighRes0 = 0x80780000;
+
+    /* Unkown buffers */
+    D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
+    D_80780000 = 0x80780000;
+    D_80784600 = 0x80784600;
 
     . = 0x80800000;
     SegmentStart = .;
@@ -3472,9 +3489,9 @@ SECTIONS
     ovl_Door_Spiral : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.text)
-        build/asm/overlays/ovl_Door_Spiral_data.o(.data)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.data)
         build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o(.rodata)
-        build/asm/overlays/ovl_Door_Spiral_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -5880,9 +5897,9 @@ SECTIONS
     ovl_Bg_Lotus : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.text)
-        build/asm/overlays/ovl_Bg_Lotus_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.data)
         build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o(.rodata)
-        build/asm/overlays/ovl_Bg_Lotus_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
