@@ -22,6 +22,7 @@
 #include <z64cutscene.h>
 #include <z64dma.h>
 #include <z64effect.h>
+#include <z64item.h>
 #include <z64light.h>
 #include <z64math.h>
 #include <z64object.h>
@@ -366,9 +367,10 @@ typedef struct {
     /* 0x06 */ UNK_TYPE1 pad6[0xA];
     /* 0x10 */ s16 maxLife;
     /* 0x12 */ s16 currentLife;
-    /* 0x14 */ UNK_TYPE1 pad14[0x1];
+    /* 0x14 */ s8 unk14;
     /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ UNK_TYPE1 pad16[0x12];
+    /* 0x16 */ s16 unk16;
+    /* 0x16 */ UNK_TYPE1 pad17[0x10];
 } SaveContext_struct1; // size = 0x28
 
 typedef struct {
@@ -659,7 +661,8 @@ typedef struct {
 // Permanent save context, kept in regular save files
 typedef struct {
     /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ UNK_TYPE1 pad4[0x4];
+    /* 0x0004 */ UNK_TYPE1 pad4[0x3];
+    /* 0x0007 */ u8 linkAge;
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
     /* 0x000E */ UNK_TYPE1 padE[0x2];

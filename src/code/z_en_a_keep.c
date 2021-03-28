@@ -3,6 +3,9 @@
 
 #define THIS ((EnAObj*)thisx)
 
+void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx);
+void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx);
+
 void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAObj* this = THIS;
 
