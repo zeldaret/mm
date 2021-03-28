@@ -51,97 +51,116 @@ typedef struct {
     /* 0x008 */ u8 dListCount;         // Number of display lists in the model.
 } SkeletonHeader;                      // Size = 0xC
 
+// Model has limbs with flexible meshes
+typedef struct {
+    /* 0x00 */ SkeletonHeader sh;
+    /* 0x08 */ u8 dListCount;
+} FlexSkeletonHeader; // size = 0xC
+
 typedef s16 AnimationRotationValue;
 
+// Index into the frame data table. 
 typedef struct {
-    /* 0x000 */ u16 x;
-    /* 0x002 */ u16 y;
-    /* 0x004 */ u16 z;
+    /* 0x00 */ u16 x;
+    /* 0x02 */ u16 y;
+    /* 0x04 */ u16 z;
 } JointIndex; // size = 0x06
 
 typedef struct {
-    /* 0x000 */ s16 frameCount;
-    /* 0x002 */ s16 unk02;
-} AnimationHeaderCommon; // size = 0x4
+    /* 0x00 */ s16 frameCount;
+} AnimationHeaderCommon;
 
 typedef struct {
-    /* 0x000 */ AnimationHeaderCommon genericHeader;
-    /* 0x004 */ u32 rotationValueSeg; // referenced as tbl
-    /* 0x008 */ u32 rotationIndexSeg; // referenced as ref_tbl
-    /* 0x00C */ u16 limit;
+    /* 0x000 */ AnimationHeaderCommon common;
+    /* 0x004 */ s16* frameData; // referenced as tbl
+    /* 0x008 */ JointIndex* jointIndices; // referenced as ref_tbl
+    /* 0x00C */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ s16 xMax;
+    /* 0x02 */ s16 x;
+    /* 0x04 */ s16 yMax;
+    /* 0x06 */ s16 y;
+    /* 0x08 */ s16 zMax;
+    /* 0x10 */ s16 z;
+} JointKey; // size = 0x12
+
+typedef struct {
+    /* 0x00 */ s16 frameCount;
+    /* 0x02 */ s16 limbCount;
+    /* 0x04 */ s16* frameData;
+    /* 0x08 */ JointKey* jointKey;
+} LegacyAnimationHeader; // size = 0xC
 
 typedef enum {
     ANIMATION_LINKANIMETION,
-    ANIMATION_TYPE1,
-    ANIMATION_TYPE2,
-    ANIMATION_TYPE3,
-    ANIMATION_TYPE4,
-    ANIMATION_TYPE5
+    ANIMENTRY_COPYALL,
+    ANIMENTRY_INTERP,
+    ANIMENTRY_COPYTRUE,
+    ANIMENTRY_COPYFALSE,
+    ANIMENTRY_MOVEACTOR
 } AnimationType;
 
 typedef struct {
     /* 0x000 */ DmaRequest req;
     /* 0x020 */ OSMesgQueue msgQueue;
     /* 0x038 */ OSMesg msg;
-} AnimationEntryType0; // size = 0x3C
+} AnimEntryLoadFrame; // size = 0x3C
 
 typedef struct {
-    /* 0x000 */ u8 unk00;
+    /* 0x000 */ u8 queueFlag;
     /* 0x001 */ u8 vecCount;
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
-} AnimationEntryType1; // size = 0xC
+} AnimEntryCopyAll; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ u8 unk00;
-    /* 0x001 */ u8 limbCount;
-    /* 0x004 */ Vec3s* unk04;
-    /* 0x008 */ Vec3s* unk08;
-    /* 0x00C */ f32 unk0C;
-} AnimationEntryType2; // size = 0x10
+    /* 0x000 */ u8 queueFlag;
+    /* 0x001 */ u8 vecCount;
+    /* 0x004 */ Vec3s* base;
+    /* 0x008 */ Vec3s* mod;
+    /* 0x00C */ f32 weight;
+} AnimEntryInterp; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 unk00;
+    /* 0x000 */ u8 queueFlag;
     /* 0x001 */ u8 vecCount;
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
-    /* 0x00C */ u8* index;
-} AnimationEntryType3; // size = 0x10
+    /* 0x00C */ u8* copyFlag;
+} AnimEntryCopyTrue; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 unk00;
+    /* 0x000 */ u8 queueFlag;
     /* 0x001 */ u8 vecCount;
-    /* 0x002 */ char unk02[0x2];
     /* 0x004 */ Vec3s* dst;
     /* 0x008 */ Vec3s* src;
-    /* 0x00C */ u8* index;
-} AnimationEntryType4; // size = 0x10
+    /* 0x00C */ u8* copyFlag;
+} AnimEntryCopyFalse; // size = 0x10
 
 typedef struct {
     /* 0x000 */ struct Actor* actor;
     /* 0x004 */ SkelAnime* skelAnime;
     /* 0x008 */ f32 unk08;
-} AnimationEntryType5; // size = 0xC
+} AnimEntryMoveActor; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ u8 raw[0x3C];
-} AnimationEntryRaw; // size = 0x3C
+    /* 0x000 */ u8 load[0x3C];
+} AnimEntry0; // size = 0x3C
 
 typedef union {
-    AnimationEntryRaw raw;
-    AnimationEntryType0 type0;
-    AnimationEntryType1 type1;
-    AnimationEntryType2 type2;
-    AnimationEntryType3 type3;
-    AnimationEntryType4 type4;
-    AnimationEntryType5 type5;
-} AnimationEntryType; // size = 0x3C
+    AnimEntryLoadFrame load;
+    AnimEntryCopyAll copy;
+    AnimEntryInterp interp;
+    AnimEntryCopyTrue copy1;
+    AnimEntryCopyFalse copy0;
+    AnimEntryMoveActor move;
+} AnimationEntryData; // size = 0x3C
 
 typedef struct {
     /* 0x000 */ u8 type;
-    /* 0x001 */ u8 unk01;
-    /* 0x004 */ AnimationEntryType types;
+    /* 0x004 */ AnimationEntryData data;
 } AnimationEntry; // size = 0x40
 
 typedef struct AnimationContext {
@@ -151,9 +170,9 @@ typedef struct AnimationContext {
 } AnimationContext; // size = 0xC84
 
 typedef struct {
-    /* 0x000 */ AnimationHeaderCommon genericHeader;
-    /* 0x004 */ u32 animationSegAddress;
-} LinkAnimetionEntry; // size = 0x8
+    /* 0x000 */ AnimationHeaderCommon common;
+    /* 0x004 */ u32 segment;
+} LinkAnimationHeader; // size = 0x8
 
 struct SkelAnime {
     /* 0x00 */ u8 limbCount; // joint_Num
@@ -168,7 +187,7 @@ struct SkelAnime {
     /* 0x08 */
     union {
         AnimationHeader* animCurrentSeg;
-        LinkAnimetionEntry* linkAnimetionSeg;
+        LinkAnimationHeader* linkAnimetionSeg;
         AnimationHeaderCommon* genericSeg;
     };
     /* 0x0C */ f32 initialFrame;
@@ -194,10 +213,10 @@ typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbInde
 typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
                              void* arg);
 
-typedef s32 (*OverrideLimbDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  struct Actor* actor, Gfx** gfx);
 
-typedef void (*PostLimbDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
                               struct Actor* actor, Gfx** gfx);
 
 typedef s32 (*OverrideLimbDrawSV)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -208,7 +227,7 @@ typedef void (*PostLimbDrawSV)(struct GlobalContext* globalCtx, s32 limbIndex, G
 
 typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 
-typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryType*);
+typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
 
 extern u32 link_animetion_segment;
 
