@@ -52,7 +52,6 @@ Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
 Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 extern Gfx D_0601D960[];
-extern Gfx D_040008D0[];
 
 void ArmsHook_SetupAction(ArmsHook* this, ArmsHookActionFunc actionFunc) {
     this->actionFunc = actionFunc;

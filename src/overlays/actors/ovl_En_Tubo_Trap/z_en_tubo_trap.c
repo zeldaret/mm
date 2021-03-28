@@ -67,10 +67,9 @@ void func_8093089C(EnTuboTrap *this, GlobalContext *globalCtx) {
     s32 dropCount = func_800A8150(itemParam);
 
     if (dropCount >= 0) {
-        // in OOT this is Item_DropCollectible
-        func_800A7730(globalCtx, 
-                      &this->actor.world, 
-                      ((this->actor.params & 0x7F) << 8) | dropCount);
+        Item_DropCollectible(globalCtx,
+                             &this->actor.world,
+                             ((this->actor.params & 0x7F) << 8) | dropCount);
     }
 }
 
@@ -120,10 +119,10 @@ void func_809308F4(EnTuboTrap *this, GlobalContext *globalCtx) {
                             arg5,
                             0x14,
                             0,
-                            0, 
-                            ((Rand_ZeroOne() * 85.0f) + 15.0f), 
                             0,
-                            0, 
+                            ((Rand_ZeroOne() * 85.0f) + 15.0f),
+                            0,
+                            0,
                             0x3C,
                             -1,
                             GAMEPLAY_DANGEON_KEEP,
@@ -150,7 +149,7 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
 
     pos = *actorPos;
     pos.y += this->actor.yDistToWater;
-    
+
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 0x190);
 
     for (i = 0, var = 0; i < 15; i++, var += 20000) {
@@ -176,15 +175,15 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
         }
 
        EffectSsKakera_Spawn(globalCtx,
-                          &pos, 
-                          &vel, 
+                          &pos,
+                          &vel,
                           actorPos,
-                          -0xAA, 
+                          -0xAA,
                           arg5,
-                          0x32, 5, 0, 
+                          0x32, 5, 0,
                           ((Rand_ZeroOne() * 85.0f) + 15.0f),
-                          0, 0, 0x46, 
-                          -1, 
+                          0, 0, 0x46,
+                          -1,
                           GAMEPLAY_DANGEON_KEEP,
                           &D_05018090);
 
@@ -195,7 +194,7 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
 void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     Actor *player = PLAYER;
     Actor *player2 = PLAYER;
-    
+
     // in oot func_800F0568 is Audio_PlaySoundAtPosition
 
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f)) {
@@ -240,13 +239,13 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }
-} 
+}
 
 #if NON-MATCHING
 // Wait For Proximity (idle)
   // NON-MATCHING: wrong register used, v instead of t for the weirdValues[] pointer
 void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
-    Actor *player = PLAYER; 
+    Actor *player = PLAYER;
     f32 currentHeight;
     s8 weirdvalue;
     s16 startingRotation;
@@ -261,7 +260,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, this, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= 0x11; // always update and can target
-            
+
             // hard to know what this value is even used for without knowing what ActorPlayer::unk14B is
             // wild guess: this is player animation state, height is modified to always point at center of link model
             weirdvalue = D_8093146C[ ((ActorPlayer*) player)->unk14B & 0xFF];
