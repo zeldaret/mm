@@ -48,13 +48,13 @@ void Matrix_Pop(void) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_InsertRotation.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_RotateAndTranslateState.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/Matrix_JointPosition.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_SetStateRotationAndTranslation.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_ToRSPMatrix.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_GetStateAsRSPMatrix.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/Matrix_ToMtx.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/Matrix_NewMtx.asm")
 

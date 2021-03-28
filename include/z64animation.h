@@ -30,6 +30,13 @@ typedef struct {
     /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
     /* 0x06 */ u8 child;
     /* 0x07 */ u8 sibling;
+    /* 0x08 */ Gfx* dList;
+} StandardLimb; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
     /* 0x08 */ Gfx* dLists[2]; // Near and far
 } LodLimb; // size = 0x10
 
@@ -50,15 +57,15 @@ typedef struct {
     /* 0x000 */ u16 x;
     /* 0x002 */ u16 y;
     /* 0x004 */ u16 z;
-} AnimationRotationIndex; // size = 0x06
+} JointIndex; // size = 0x06
 
 typedef struct {
     /* 0x000 */ s16 frameCount;
     /* 0x002 */ s16 unk02;
-} GenericAnimationHeader; // size = 0x4
+} AnimationHeaderCommon; // size = 0x4
 
 typedef struct {
-    /* 0x000 */ GenericAnimationHeader genericHeader;
+    /* 0x000 */ AnimationHeaderCommon genericHeader;
     /* 0x004 */ u32 rotationValueSeg; // referenced as tbl
     /* 0x008 */ u32 rotationIndexSeg; // referenced as ref_tbl
     /* 0x00C */ u16 limit;
@@ -144,7 +151,7 @@ typedef struct AnimationContext {
 } AnimationContext; // size = 0xC84
 
 typedef struct {
-    /* 0x000 */ GenericAnimationHeader genericHeader;
+    /* 0x000 */ AnimationHeaderCommon genericHeader;
     /* 0x004 */ u32 animationSegAddress;
 } LinkAnimetionEntry; // size = 0x8
 
@@ -162,7 +169,7 @@ struct SkelAnime {
     union {
         AnimationHeader* animCurrentSeg;
         LinkAnimetionEntry* linkAnimetionSeg;
-        GenericAnimationHeader* genericSeg;
+        AnimationHeaderCommon* genericSeg;
     };
     /* 0x0C */ f32 initialFrame;
     /* 0x10 */ f32 animFrameCount;

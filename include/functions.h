@@ -2541,24 +2541,31 @@ s16 func_801323A0(u32 entrance);
 void SkelAnime_DrawLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg, s32 lod);
 void SkelAnime_DrawLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg, s32 lod);
 void SkelAnime_DrawFlexLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, void* arg, s32 lod, Mtx** mtx);
-void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex);
-void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void SkelAnime_DrawOpa(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, RSPMatrix** limbMatricies);
-void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
+void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                         OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, void* arg,
+                         s32 lod);
+void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                        OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg);
+void SkelAnime_DrawOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
+                    OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg);
+void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                          OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg,
+                          Mtx** limbMatricies);
+void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                      OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, void* arg);
 void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor, RSPMatrix** mtx);
 void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
 void SkelAnime_GetFrameData(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
-s16 Animation_GetLength(GenericAnimationHeader* animationSeg);
-s16 Animation_GetLastFrame(GenericAnimationHeader* animationSeg);
+s16 Animation_GetLength(void* animation);
+s16 Animation_GetLastFrame(void* animation);
 Gfx* SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
 Gfx* SkelAnime_Draw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
 Gfx* SkelAnime_DrawFlexLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, RSPMatrix** mtx, Gfx* gfx);
 Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
 s32 SkelAnime_GetFrameData2(s32 arg0, s32 arg1, Vec3s* dst);
-s16 Animation_GetLimbCount2(GenericAnimationHeader* animationSeg);
-s16 Animation_GetLength2(GenericAnimationHeader* animationSeg);
-s16 Animation_GetLastFrame2(GenericAnimationHeader* animationSeg);
+s16 Animation_GetLimbCount2(AnimationHeaderCommon* animationSeg);
+s16 Animation_GetLength2(AnimationHeaderCommon* animationSeg);
+s16 Animation_GetLastFrame2(AnimationHeaderCommon* animationSeg);
 void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* vec2, Vec3s* vec3, f32 unkf);
 void AnimationContext_Reset(AnimationContext* animationCtx);
 void AnimationContext_SetNextQueue(GlobalContext* globalCtx);
@@ -3388,12 +3395,11 @@ void SysMatrix_InsertYRotation_f(f32 rotation, s32 appendToState);
 void SysMatrix_InsertZRotation_s(s16 rotation, s32 appendToState);
 void SysMatrix_InsertZRotation_f(f32 rotation, s32 appendToState);
 void SysMatrix_InsertRotation(s16 xRotation, s16 yRotation, s16 zRotation, s32 appendToState);
-void SysMatrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rotation);
+void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation);
 void SysMatrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation);
-RSPMatrix* SysMatrix_ToRSPMatrix(z_Matrix* src, RSPMatrix* dst);
-RSPMatrix* SysMatrix_GetStateAsRSPMatrix(RSPMatrix* matrix);
+Mtx* SysMatrix_ToRSPMatrix(MtxF* src, Mtx* dst);
+Mtx* Matrix_ToMtx(Mtx* matrix);
 Mtx* Matrix_NewMtx(GraphicsContext* gCtxt);
-void SysMatrix_AppendToPolyOpaDisp(z_Matrix* ctxt, GraphicsContext* gCtxt);
 void SysMatrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dst);
 void SysMatrix_GetStateTranslation(Vec3f* dst);
 void SysMatrix_GetStateTranslationAndScaledX(f32 scale, Vec3f* dst);
