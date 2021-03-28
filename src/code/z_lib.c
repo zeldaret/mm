@@ -252,7 +252,7 @@ void func_800FF3A0(f32* distOut, s16* angleOut, Input* input) {
     if (dist > 0.0f) {
         x = input->cur.stick_x;
         y = input->cur.stick_y;
-        *angleOut = atans_flip(y, -x);
+        *angleOut = Math_FAtan2F(y, -x);
     } else {
         *angleOut = 0;
     }
