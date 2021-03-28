@@ -315,11 +315,6 @@ typedef struct {
     /* 0x4 */ s16 unk4;
 } QuakeRequest14; // size = 0x6
 
-typedef struct {
-    /* 0x00 */ s16 intPart[16];
-    /* 0x20 */ u16 fracPart[16];
-} RSPMatrix; // size = 0x40
-
 // Extra information in the save context that is not saved
 typedef struct {
     /* 0x000 */ UNK_TYPE1 pad0[0xC];
@@ -516,13 +511,6 @@ typedef struct {
     /* 0x18 */ s16 unk18;
     /* 0x1A */ s16 unk1A;
 } s80874650; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ f32 x[4];
-    /* 0x10 */ f32 y[4];
-    /* 0x20 */ f32 z[4];
-    /* 0x30 */ f32 w[4];
-} z_Matrix; // size = 0x40
 
 typedef struct {
     /* 0x00 */ Vec3f scale;
@@ -1531,7 +1519,7 @@ struct Camera {
 }; // size = 0x178
 
 typedef struct {
-    /* 0x00 */ z_Matrix displayMatrix;
+    /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
     /* 0x44 */ Vec3f location;
     /* 0x50 */ u8 flags; // bit 0 - footmark fades out
@@ -1675,7 +1663,7 @@ struct GlobalContext {
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
     /* 0x18764 */ TransitionActorEntry* transitionActorList;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
-    /* 0x187B0 */ z_Matrix unk187B0;
+    /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF mf_187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];

@@ -6,9 +6,9 @@
 // The functions will use the BgCheck2 prefix for now.
 
 void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* actor) {
-    z_Matrix prevMatrix;
-    z_Matrix prevMatrixInv;
-    z_Matrix currMatrix;
+    MtxF prevMatrix;
+    MtxF prevMatrixInv;
+    MtxF currMatrix;
     Vec3f newPos;
     Vec3f posWithInv;
 
