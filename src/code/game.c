@@ -16,14 +16,14 @@ void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisorThird = (f32) (divisor / 3.0f);
 }
 
-void Game_SetFramerateDivisor(GameState *gameState, s32 divisor) {
+void Game_SetFramerateDivisor(GameState* this, s32 divisor) {
     R_UPDATE_RATE = (s16) divisor;
-    gameState->framerateDivisor = divisor;
+    this->framerateDivisor = divisor;
     Game_UpdateFramerateVariables(divisor);
 }
 
 void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
-    Gfx* _gfx = *gfx;
+    Gfx* gfxP = *gfx;
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
         D_801F8010.type = R_FB_FILTER_TYPE;
@@ -31,7 +31,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
         D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
-        func_80140D10(&D_801F8010, &_gfx, arg1);
+        func_80140D10(&D_801F8010, &gfxP, arg1);
     } else {
         if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
             D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
@@ -43,7 +43,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
             D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
             D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
             D_801F8020.envColor.a = R_FB_FILTER_A;
-            func_80142100(&D_801F8020, &_gfx, arg1);
+            func_80142100(&D_801F8020, &gfxP, arg1);
         } else {
             if (R_FB_FILTER_TYPE == 7) {
                 sMonoColors.unk_00 = 0;
@@ -55,31 +55,29 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
                 sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
                 sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
                 sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &_gfx, arg1);
+                VisMono_Draw(&sMonoColors, &gfxP, arg1);
             }
         }
     }
 
-    *gfx = _gfx;
+    *gfx = gfxP;
 }
 
-void Game_Nop80173534(GameState *ctxt) {
+void Game_Nop80173534(GameState* this) {
     ;
 }
 
-void GameState_Draw(GameState *ctxt, GraphicsContext *gCtxt) {
+void GameState_Draw(GameState* this, GraphicsContext *gfxCtx) {
     Gfx* nextDisplayList;
-    Gfx* _polyOpa;
-    // Unused vars impact regalloc
-    Gfx* temp_t2;
-    u32 temp_v1;
+    Gfx* polyOpa;
+    
+    OPEN_DISPS(gfxCtx);
 
-    _polyOpa = gCtxt->polyOpa.p;
-    nextDisplayList = Graph_GfxPlusOne(gCtxt->polyOpa.p);
-    gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
+    nextDisplayList = Graph_GfxPlusOne(polyOpa = POLY_OPA_DISP);
+    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
-        GameState_SetFBFilter(&nextDisplayList, (u32) gCtxt->zbuffer);
+        GameState_SetFBFilter(&nextDisplayList, (u32) gfxCtx->zbuffer);
     }
 
     if (R_ENABLE_ARENA_DBG < 0) {
@@ -87,128 +85,134 @@ void GameState_Draw(GameState *ctxt, GraphicsContext *gCtxt) {
     }
 
     gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(_polyOpa, nextDisplayList);
-    gCtxt->polyOpa.p = nextDisplayList;
+    Graph_BranchDlist(polyOpa, nextDisplayList);
+    POLY_OPA_DISP = nextDisplayList;
 
-lblUnk:; // Label prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    func_800E9F78(gCtxt);
+label:
+    func_800E9F78(gfxCtx);
 
     if (R_ENABLE_ARENA_DBG != 0) {
-        SpeedMeter_DrawTimeEntries(&D_801F7FF0, gCtxt);
-        SpeedMeter_DrawAllocEntries(&D_801F7FF0, gCtxt, ctxt);
+        SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
+        SpeedMeter_DrawAllocEntries(&D_801F7FF0, gfxCtx, this);
     }
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void Game_ResetSegments(GraphicsContext *gCtxt) {
-    gSPSegment(gCtxt->polyOpa.p++, 0, 0);
-    gSPSegment(gCtxt->polyOpa.p++, 0xF, gCtxt->framebuffer);
-    gSPSegment(gCtxt->polyXlu.p++, 0, 0);
-    gSPSegment(gCtxt->polyXlu.p++, 0xF, gCtxt->framebuffer);
-    gSPSegment(gCtxt->overlay.p++, 0, 0);
-    gSPSegment(gCtxt->overlay.p++, 0xF, gCtxt->framebuffer);
+void GameState_SetFrameBuffer(GraphicsContext *gfxCtx) {
+
+    OPEN_DISPS(gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0, NULL);
+    gSPSegment(POLY_OPA_DISP++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(POLY_XLU_DISP++, 0, NULL);
+    gSPSegment(POLY_XLU_DISP++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(OVERLAY_DISP++, 0, NULL);
+    gSPSegment(OVERLAY_DISP++, 0xF, gfxCtx->framebuffer);
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void func_801736DC(GraphicsContext *gCtxt) {
+void func_801736DC(GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
-    Gfx* _polyOpa;
+    Gfx* polyOpa;
 
-    nextDisplayList = Graph_GfxPlusOne(_polyOpa = gCtxt->polyOpa.p);
-    gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
+    OPEN_DISPS(gfxCtx);
+
+    nextDisplayList = Graph_GfxPlusOne(polyOpa = gfxCtx->polyOpa.p);
+    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
     gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(_polyOpa, nextDisplayList);
+    Graph_BranchDlist(polyOpa, nextDisplayList);
 
-    gCtxt->polyOpa.p = nextDisplayList;
+    POLY_OPA_DISP = nextDisplayList;
+
+    CLOSE_DISPS(gfxCtx);
 }
 
-void Game_UpdateInput(GameState *ctxt) {
-    Padmgr_GetInput(ctxt->input, 1);
+void Game_UpdateInput(GameState* this) {
+    Padmgr_GetInput(this->input, 1);
 }
 
-void Game_Update(GameState *ctxt) {
-    GraphicsContext* _gCtx;
-    _gCtx = ctxt->gfxCtx;
+void Game_Update(GameState* this) {
+    GraphicsContext* gfxCtx = this->gfxCtx;
 
-    Game_ResetSegments(ctxt->gfxCtx);
+    GameState_SetFrameBuffer(this->gfxCtx);
 
-    ctxt->main(ctxt);
+    this->main(this);
 
     if (R_PAUSE_MENU_MODE != 2) {
-        GameState_Draw(ctxt, _gCtx);
-        func_801736DC(_gCtx);
+        GameState_Draw(this, gfxCtx);
+        func_801736DC(gfxCtx);
     }
 }
 
-void Game_IncrementFrameCount(GameState *ctxt) {
-    Game_Nop80173534(ctxt);
-    ctxt->frames++;
+void Game_IncrementFrameCount(GameState* this) {
+    Game_Nop80173534(this);
+    this->frames++;
 }
 
-void Game_InitHeap(GameState *ctxt, u32 size) {
-    GameState *_ctx;
-    void *buf;
+void GameState_InitArena(GameState* this, size_t size) {
+    GameAlloc* alloc;
+    void* arena;
 
-    _ctx = ctxt;
-    buf = GameAlloc_Malloc(&_ctx->alloc, size);
+    alloc = &this->alloc;
 
-    if (buf) {
-        THA_Ct(&ctxt->heap, buf, size);
+    arena = GameAlloc_Malloc(alloc, size);
+
+    if (arena != NULL) {
+        THA_Ct(&this->heap, arena, size);
         return;
     }
 
-    THA_Ct(&ctxt->heap, NULL, 0);
-    assert_fail("../game.c", 0x40B);
+    THA_Ct(&this->heap, NULL, 0);
+    assert_fail("../game.c", 1035);
 }
 
-void Game_ResizeHeap(GameState *ctxt, u32 size)
-{
-    GameAlloc *alloc;
-    void *buf;
-    u32 systemMaxFree;
-    u32 bytesFree;
-    u32 bytesAllocated;
-    void *heapStart;
+void GameState_Realloc(GameState* this, size_t size) {
+    GameAlloc* alloc;
+    void* gameArena;
+    size_t systemMaxFree;
+    size_t bytesFree;
+    size_t bytesAllocated;
+    void* heapStart;
 
-    heapStart = ctxt->heap.bufp;
-    alloc = &ctxt->alloc;
-    THA_Dt(&ctxt->heap);
+    heapStart = this->heap.bufp;
+    alloc = &this->alloc;
+    THA_Dt(&this->heap);
     GameAlloc_Free(alloc, heapStart);
     StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
-    if (!size)
-    {
+    if (size == 0) {
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (buf = GameAlloc_Malloc(alloc, size))
-    {
-        THA_Ct(&ctxt->heap, buf, size);
-    }
-    else
-    {
-        THA_Ct(&ctxt->heap, 0, 0);
+    if (gameArena = GameAlloc_Malloc(alloc, size), gameArena != NULL) {
+        THA_Ct(&this->heap, gameArena, size);
+    } else {
+        THA_Ct(&this->heap, NULL, 0);
         assert_fail("../game.c", 1074);
     }
 }
 
-void Game_StateInit(GameState *ctxt, GameStateFunc gameStateInit, GraphicsContext *gCtxt) {
-    ctxt->gfxCtx = gCtxt;
-    ctxt->frames = 0U;
-    ctxt->main = NULL;
-    ctxt->destroy = NULL;
-    ctxt->running = 1;
-    gCtxt->unk274 = D_801FBB88;
-    gCtxt->viConfigFeatures = gViConfigFeatures;
-    gCtxt->viConfigXScale = gViConfigXScale;
-    gCtxt->viConfigYScale = gViConfigYScale;
-    ctxt->nextGameStateInit = NULL;
-    ctxt->nextGameStateSize = 0U;
+void GameState_Init(GameState* this, GameStateFunc init, GraphicsContext* gfxCtx) {
+    this->gfxCtx = gfxCtx;
+    this->frames = 0U;
+    this->main = NULL;
+    this->destroy = NULL;
+    this->running = 1;
+    gfxCtx->viMode = D_801FBB88;
+    gfxCtx->viConfigFeatures = gViConfigFeatures;
+    gfxCtx->viConfigXScale = gViConfigXScale;
+    gfxCtx->viConfigYScale = gViConfigYScale;
+    this->init = NULL;
+    this->size = 0U;
 
 lblUnk:;
-    GameAlloc_Init(&ctxt->alloc);
-    Game_InitHeap(ctxt, 0x100000);
-    Game_SetFramerateDivisor(ctxt, 3);
+    GameAlloc_Init(&this->alloc);
+    GameState_InitArena(this, 0x100000);
+    Game_SetFramerateDivisor(this, 3);
 
-    gameStateInit(ctxt);
+    init(this);
 
     func_80140CE0(&D_801F8010);
     func_801420C0(&D_801F8020);
@@ -217,16 +221,16 @@ lblUnk:;
     func_801773A0(&D_801F7FF0);
     func_8013ED9C();
 
-    osSendMesg(&ctxt->gfxCtx->unk5C, NULL, 1);
+    osSendMesg(&this->gfxCtx->unk5C, NULL, OS_MESG_BLOCK);
 }
 
-void Game_StateFini(GameState *ctxt) {
+void GameState_Destroy(GameState* this) {
     func_80172BC0();
     func_8019E014();
-    osRecvMesg(&ctxt->gfxCtx->unk5C, 0, 1);
+    osRecvMesg(&this->gfxCtx->unk5C, NULL, OS_MESG_BLOCK);
 
-    if (ctxt->destroy != 0) {
-        ctxt->destroy(ctxt);
+    if (this->destroy != NULL) {
+        this->destroy(this);
     }
 
     func_8013EDD0();
@@ -235,28 +239,28 @@ void Game_StateFini(GameState *ctxt) {
     func_801420F4(&D_801F8020);
     func_80141900(&sMonoColors);
     func_80140900(&D_801F8048);
-    THA_Dt(&ctxt->heap);
-    GameAlloc_Cleanup(&ctxt->alloc);
+    THA_Dt(&this->heap);
+    GameAlloc_Cleanup(&this->alloc);
 }
 
-GameStateFunc Game_GetNextStateInit(GameState *ctxt) {
-    return ctxt->nextGameStateInit;
+GameStateFunc GameState_GetInit(GameState* this) {
+    return this->init;
 }
 
-u32 Game_GetNextStateSize(GameState *ctxt) {
-    return ctxt->nextGameStateSize;
+size_t Game_GetNextStateSize(GameState* this) {
+    return this->size;
 }
 
-u32 Game_GetShouldContinue(GameState *ctxt) {
-    return ctxt->running;
+u32 GameState_IsRunning(GameState* this) {
+    return this->running;
 }
 
-s32 Game_GetHeapFreeSize(GameState *ctxt) {
-    return THA_GetSize(&ctxt->heap);
+s32 GameState_GetArenaSize(GameState* this) {
+    return THA_GetSize(&this->heap);
 }
 
-s32 func_80173B48(GameState *ctxt) {
-    s32 result;
-    result = OS_CYCLES_TO_NSEC(ctxt->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(D_801FBAF0);
+s32 func_80173B48(GameState* this) {
+    s32 result = OS_CYCLES_TO_NSEC(this->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(D_801FBAF0);
+    
     return result;
 }

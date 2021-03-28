@@ -33,6 +33,8 @@
 #define SCREEN_WIDTH_HIGH_RES  576
 #define SCREEN_HEIGHT_HIGH_RES 454
 
+#define Z_PRIORITY_MAIN 12
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
@@ -255,7 +257,7 @@ typedef struct {
     /* 0x1B4 */ Gfx* unk1B4;
     /* 0x1B8 */ TwoHeadGfxArena unk1B8;
     /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
-    /* 0x274 */ OSViMode* unk274;
+    /* 0x274 */ OSViMode* viMode;
     /* 0x278 */ void* zbuffer;
     /* 0x27C */ UNK_TYPE1 pad27C[0x1C];
     /* 0x298 */ TwoHeadGfxArena overlay;
@@ -1177,8 +1179,8 @@ struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc nextGameStateInit;
-    /* 0x10 */ u32 nextGameStateSize;
+    /* 0x0C */ GameStateFunc init;
+    /* 0x10 */ u32 size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
@@ -1712,6 +1714,32 @@ typedef struct ListAlloc {
     /* 0x00 */ struct ListAlloc* prev;
     /* 0x04 */ struct ListAlloc* next;
 } ListAlloc; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u16 width;
+    /* 0x02 */ u16 height;
+    /* 0x04 */ u16 widthSave;
+    /* 0x06 */ u16 heightSave;
+    /* 0x08 */ u8 unk_08[8];
+    /* 0x10 */ void* fbuf;
+    /* 0x14 */ void* fbufSave;
+    /* 0x18 */ void* cvgSave;
+    /* 0x1C */ void* zbuf;
+    /* 0x20 */ void* zbufSave;
+    /* 0x24 */ u16 uls;
+    /* 0x26 */ u16 ult;
+    /* 0x28 */ u16 lrs;
+    /* 0x2A */ u16 lrt;
+    /* 0x2C */ u16 ulx;
+    /* 0x2E */ u16 uly;
+    /* 0x30 */ u16 lrx;
+    /* 0x32 */ u16 lry;
+    /* 0x34 */ u8 unk_3A[16];
+    /* 0x44 */ ListAlloc alloc;
+    /* 0x4C */ u8 unk_52;
+    /* 0x4D */ u8 unk_53;
+    /* 0x4E */ u8 unk_54[2];
+} PreRenderContext; // size = 0x50
 
 typedef struct {
     /* 0x00 */ s32 unk0;

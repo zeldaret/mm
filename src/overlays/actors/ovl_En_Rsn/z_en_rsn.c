@@ -51,7 +51,7 @@ void EnRsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, NULL, NULL, 0);
     this->actor.flags &= ~1;
     func_80C25D40(this);
 }
@@ -67,7 +67,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
 
@@ -96,7 +96,7 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_06005458));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

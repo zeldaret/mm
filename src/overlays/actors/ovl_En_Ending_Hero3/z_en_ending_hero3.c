@@ -34,7 +34,7 @@ void EnEndingHero3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->limbDrawTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->limbDrawTable,
                      this->transitionDrawTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C23518(&this->actor);
@@ -49,7 +49,7 @@ void func_80C23518(EnEndingHero3* this) {
 }
 
 void func_80C23534(EnEndingHero3* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnEndingHero3_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -65,6 +65,6 @@ void EnEndingHero3_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
                      &this->actor);
 }

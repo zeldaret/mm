@@ -116,11 +116,11 @@ build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/libc/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/libc/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/io/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+CC := python3 -B ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 .PHONY: all clean setup diff-init init
 # disasm is not a file so we must tell make not to check it when evaluating timestamps

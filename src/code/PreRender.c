@@ -1,13 +1,26 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8016FCF0.asm")
+void PreRender_SetValuesSave(PreRenderContext* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg) {
+    this->widthSave = width;
+    this->heightSave = height;
+    this->fbufSave = fbuf;
+    this->cvgSave = cvg;
+    this->zbufSave = zbuf;
+    this->uls = 0;
+    this->ult = 0;
+    this->lrs = width - 1;
+    this->lrt = height - 1;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8016FD2C.asm")
+void PreRender_Init(PreRenderContext* this) {
+    bzero(this, sizeof(PreRenderContext));
+    ListAlloc_Init(&this->alloc);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8016FD60.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/PreRender_SetValues.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8016FD94.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/PreRender_Destroy.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8016FDB8.asm")
 

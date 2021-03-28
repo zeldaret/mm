@@ -24,8 +24,8 @@
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
-            (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-            (curState)->nextGameStateSize = sizeof(newStruct);
+            (curState)->init = (GameStateFunc)newInit; \
+            (curState)->size = sizeof(newStruct);
 
 #define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 

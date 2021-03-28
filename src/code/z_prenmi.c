@@ -3,8 +3,8 @@
 
 void PreNMI_Stop(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.running = 0;
-    prenmiCtx->state.nextGameStateInit = NULL;
-    prenmiCtx->state.nextGameStateSize = 0;
+    prenmiCtx->state.init = NULL;
+    prenmiCtx->state.size = 0;
 }
 
 void PreNMI_Update(PreNMIContext* prenmiCtx) {
