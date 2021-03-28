@@ -6,17 +6,32 @@
 #include <z64dma.h>
 #include <z64math.h>
 
+struct GlobalContext;
+struct Actor;
+struct SkelAnime;
+
 #define LINK_ANIMETION_OFFSET(addr, offset) \
     (((u32)&_link_animetionSegmentRomStart) + ((u32)addr & 0xFFFFFF) + ((u32)offset))
 #define LIMB_DONE 0xFF
 #define ANIMATION_ENTRY_MAX 50
 
-#define ANIM_FLAG_UPDATEXZ 0x02
-#define ANIM_FLAG_UPDATEY 0x10
+#define ANIM_FLAG_UPDATEY   (1 << 1)
+#define ANIM_FLAG_NOMOVE    (1 << 4)
 
-struct GlobalContext;
-struct Actor;
-typedef struct SkelAnime SkelAnime;
+typedef enum {
+    /* 0 */ ANIMMODE_LOOP,
+    /* 1 */ ANIMMODE_LOOP_INTERP,
+    /* 2 */ ANIMMODE_ONCE,
+    /* 3 */ ANIMMODE_ONCE_INTERP,
+    /* 4 */ ANIMMODE_LOOP_PARTIAL,
+    /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
+} AnimationModes;
+
+typedef enum { 
+    /* -1 */ ANIMTAPER_DECEL = -1, 
+    /*  0 */ ANIMTAPER_NONE, 
+    /*  1 */ ANIMTAPER_ACCEL
+} AnimationTapers;
 
 typedef struct {
     /* 0x000 */ Vec3s translation;  // Translation relative to parent limb.  root limb is a tranlation for entire model.
@@ -44,12 +59,11 @@ typedef struct {
     /* 0x000 */ SkelLimbEntry* limbs[1]; // One or more limbs, index 0 is the root limb.
 } Skeleton;                              // Size >= 4
 
+// Model has limbs with only rigid meshes
 typedef struct {
-    /* 0x000 */ Skeleton* skeletonSeg; // Segment address of SkelLimbIndex.
-    /* 0x004 */ u8 limbCount;          // Number of limbs in the model.
-    /* 0x005 */ char unk05[3];         // unknown, maybe padding?
-    /* 0x008 */ u8 dListCount;         // Number of display lists in the model.
-} SkeletonHeader;                      // Size = 0xC
+    /* 0x00 */ void** segment;
+    /* 0x04 */ u8 limbCount;
+} SkeletonHeader; // size = 0x8
 
 // Model has limbs with flexible meshes
 typedef struct {
@@ -141,7 +155,7 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ struct Actor* actor;
-    /* 0x004 */ SkelAnime* skelAnime;
+    /* 0x004 */ struct SkelAnime* skelAnime;
     /* 0x008 */ f32 unk08;
 } AnimEntryMoveActor; // size = 0xC
 
@@ -174,38 +188,29 @@ typedef struct {
     /* 0x004 */ u32 segment;
 } LinkAnimationHeader; // size = 0x8
 
-struct SkelAnime {
-    /* 0x00 */ u8 limbCount; // joint_Num
-                             /* modes 0 and 1 repeat the animation indefinitely
-                              * modes 2 and 3 play the animaton once then stop
-                              * modes >= 4 play the animation once, and always start at frame 0.
-                              */
-    /* 0x01 */ u8 mode;
-    /* 0x02 */ u8 dListCount;
-    /* 0x03 */ s8 unk03;
-    /* 0x04 */ Skeleton* skeleton;
-    /* 0x08 */
-    union {
-        AnimationHeader* animCurrentSeg;
-        LinkAnimationHeader* linkAnimetionSeg;
-        AnimationHeaderCommon* genericSeg;
-    };
-    /* 0x0C */ f32 initialFrame;
-    /* 0x10 */ f32 animFrameCount;
-    /* 0x14 */ f32 totalFrames;
-    /* 0x18 */ f32 animCurrentFrame;
-    /* 0x1C */ f32 animPlaybackSpeed;
-    /* 0x20 */ Vec3s* limbDrawTbl;       // now_joint
-    /* 0x24 */ Vec3s* transitionDrawTbl; // morf_joint
-    /* 0x28 */ f32 transCurrentFrame;
-    /* 0x2C */ f32 transitionStep;
-    /* 0x30 */ s32 (*animUpdate)();
-    /* 0x34 */ s8 initFlags;
-    /* 0x35 */ u8 flags;
-    /* 0x36 */ s16 prevFrameRot;
-    /* 0x38 */ Vec3s prevFramePos;
-    /* 0x3E */ Vec3s unk3E;
-}; // size = 0x44
+typedef struct SkelAnime {
+    /* 0x00 */ u8 limbCount;      // Number of limbs in the skeleton
+    /* 0x01 */ u8 mode;           // 0: loop, 2: play once, 4: partial loop. +1 to interpolate between frames.
+    /* 0x02 */ u8 dListCount;     // Number of display lists in a flexible skeleton
+    /* 0x03 */ s8 taper;          // Tapering to use when morphing between animations. Only used by Door_Warp1.
+    /* 0x04 */ void** skeleton;   // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
+    /* 0x08 */ void* animation;   // Can be an AnimationHeader or LinkAnimationHeader.
+    /* 0x0C */ f32 startFrame;    // In mode 4, start of partial loop.
+    /* 0x10 */ f32 endFrame;      // In mode 2, Update returns true when curFrame is equal to this. In mode 4, end of partial loop.
+    /* 0x14 */ f32 animLength;    // Total number of frames in the current animation's file.
+    /* 0x18 */ f32 curFrame;      // Current frame in the animation
+    /* 0x1C */ f32 playSpeed;     // Multiplied by R_UPDATE_RATE / 3 to get the animation's frame rate.
+    /* 0x20 */ Vec3s* jointTable; // Current translation of model and rotations of all limbs
+    /* 0x24 */ Vec3s* morphTable; // Table of values used to morph between animations
+    /* 0x28 */ f32 morphWeight;   // Weight of the current animation morph as a fraction in [0,1]
+    /* 0x2C */ f32 morphRate;     // Reciprocal of the number of frames in the morph
+    /* 0x30 */ s32 (*update)();   // Can be Loop, Partial loop, Play once, Morph, or Tapered morph. Link only has Loop, Play once, and Morph
+    /* 0x34 */ s8 initFlags;      // Flags used when initializing Link's skeleton
+    /* 0x35 */ u8 moveFlags;          // Flags used for animations that move the actor in worldspace.
+    /* 0x36 */ s16 prevRot;       // Previous rotation in worldspace.
+    /* 0x38 */ Vec3s prevTransl;  // Previous modelspace translation.
+    /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
+} SkelAnime; // size = 0x44
 
 typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                 void* arg);

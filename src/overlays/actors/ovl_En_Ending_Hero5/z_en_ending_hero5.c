@@ -106,7 +106,7 @@ void EnEndingHero5_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                      func_80C23A30, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

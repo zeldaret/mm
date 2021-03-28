@@ -96,7 +96,7 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_06005458));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

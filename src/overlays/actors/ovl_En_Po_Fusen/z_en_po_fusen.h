@@ -12,8 +12,8 @@ typedef struct EnPoFusen {
     /* 0x144 */ SkelAnime anime;
     /* 0x188 */ EnPoFusenActionFunc actionFunc;
     /* 0x18C */ ColliderSphere collider;
-    /* 0x1E4 */ Vec3s limbDrawTbl[0xA];
-    /* 0x220 */ Vec3s transitionDrawTbl[0xA];
+    /* 0x1E4 */ Vec3s jointTable[0xA];
+    /* 0x220 */ Vec3s morphTable[0xA];
     /* 0x25C */ s16 randScaleChange;
     /* 0x25E */ s16 randXZRotChange;
     /* 0x260 */ s16 randYRotChange;

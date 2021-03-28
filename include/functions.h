@@ -2593,7 +2593,9 @@ void AnimationContext_CopyTrue(GlobalContext* globalCtx, AnimationEntryData* dat
 void AnimationContext_CopyFalse(GlobalContext* globalCtx, AnimationEntryData* data);
 void AnimationContext_MoveActor(GlobalContext* globalCtx, AnimationEntryData* data);
 void AnimationContext_Update(GlobalContext* globalCtx, AnimationContext* animationCtx);
-void SkelAnime_InitLink(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, LinkAnimationHeader* linkAnimetionEntrySeg, s32 flags, Vec3s* limbDrawTbl, Vec3s* transitionDrawTbl, s32 limbBufCount);
+void SkelAnime_InitLink(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+                                 LinkAnimationHeader* animation, s32 flags, Vec3s* jointTable,
+                                 Vec3s* morphTable, s32 limbBufCount);
 void LinkAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 LinkAnimation_Update(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 LinkAnimation_Morph(GlobalContext* globalCtx, SkelAnime* skelAnime);
@@ -2611,13 +2613,14 @@ void LinkAnimation_CopyMorphToJoint(GlobalContext* globalCtx, SkelAnime* skelAni
 void LinkAnimation_LoadToMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 frame);
 void LinkAnimation_LoadToJoint(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 frame);
 void LinkAnimation_InterpJointMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 frame);
-void LinkAnimation_BlendToJoint(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 transitionFrame, LinkAnimationHeader* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate, Vec3s* limbDrawTbl);
-void LinkAnimation_BlendToMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 transitionFrame, LinkAnimationHeader* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate, Vec3s* limbDrawTbl);
+void LinkAnimation_BlendToJoint(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 transitionFrame, LinkAnimationHeader* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate, Vec3s* jointTable);
+void LinkAnimation_BlendToMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg, f32 transitionFrame, LinkAnimationHeader* linkAnimetionEntrySeg2, f32 frame, f32 transitionRate, Vec3s* jointTable);
 void LinkAnimation_EndLoop(SkelAnime* skelAnime);
 s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 arg1, f32 updateRate);
 s32 LinkAnimation_OnFrame(SkelAnime* skelAnime, f32 arg1);
-void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
-void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* jointTable, Vec3s* transitionDrawTable, s32 limbCount);
+void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+                      AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg);
 void SkelAnime_SetUpdate(SkelAnime* skelAnime);
 s32 SkelAnime_Update(SkelAnime* skelAnime);
