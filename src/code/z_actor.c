@@ -5,26 +5,139 @@
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_PrintLists.asm")
+void Actor_PrintLists(ActorContext *actorCtx) {
+    ActorListEntry* actorList = &actorCtx->actorList[0];
+    Actor* actor;
+    s32 i;
 
-void Actor_SetDrawParams(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale) {
+    FaultDrawer_SetCharPad(-2, 0);
+    FaultDrawer_Printf(D_801DC9D0, gMaxActorId);
+    FaultDrawer_Printf(D_801DC9D8);
+    
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+        actor = actorList[i].first;
+
+        while (actor != NULL) {
+            FaultDrawer_Printf(D_801DC9F8, i, actor, actor->id, actor->category, D_801DCA10);
+            actor = actor->next;
+        }
+        
+    }
+}
+
+void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale) {
     actorShape->yOffset = yOffset;
-    actorShape->shadowDraw = func;
-    actorShape->shadowScale = scale;
+    actorShape->shadowDraw = shadowDraw;
+    actorShape->shadowScale = shadowScale;
     actorShape->shadowAlpha = 255;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_PostDraw.asm")
+#ifdef NON_MATCHING
+void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gfx* dlist, Color_RGBA8* color) {
+    if (actor->floorPoly != NULL) {
+        f32 dy = actor->world.pos.y - actor->floorHeight;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B3FC0.asm")
+        if (dy >= -50.0f && dy < 500.0f) {
+            f32 shadowScale;
+            MtxF mtx;
+        
+            OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4024.asm")
+            
+            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4088.asm")
+            gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
+                              COMBINED);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B40B8.asm")
+            dy = CLAMP(dy, 0.0f, 150.0f);
+            shadowScale = 1.0f - (dy * D_801DCA14);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B40E0.asm")
+            if (color != NULL) {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, color->red, color->green, color->blue,
+                                (u8)(actor->shape.shadowAlpha * shadowScale));
+            } else {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(actor->shape.shadowAlpha * shadowScale));
+            }
+
+            func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
+            Matrix_Put(&mtx);
+
+            if (dlist != D_04076BC0) {
+                Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
+            }
+
+            shadowScale =  1.0f - (dy * D_801DCA14);
+            shadowScale *= actor->shape.shadowScale;
+            Matrix_Scale(shadowScale * actor->scale.x, 1.0f, shadowScale * actor->scale.z, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPDisplayList(POLY_OPA_DISP++, dlist);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//ActorShadow_Draw.asm")
+#endif
+
+/* ActorShadow_DrawCircle */
+void func_800B3FC0(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+    if (actor->bgCheckFlags & 0x400) {
+        func_800B4AEC(globalCtx, actor, 50.0f);
+    }
+
+    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, NULL);
+}
+
+/* ActorShadow_DrawSquare */
+void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+    if (actor->bgCheckFlags & 0x400) {
+        func_800B4AEC(globalCtx, actor, 50.0f);
+    }
+
+    ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
+}
+
+/* ActorShadow_DrawWhiteCircle */
+void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &D_801AEC80);
+}
+
+/* ActorShadow_DrawHorse */
+void func_800B40B8(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+    ActorShadow_Draw(actor, lights, globalCtx, D_04077480, NULL);
+}
+
+/* ActorShadow_DrawFoot */
+#ifdef NON_MATCHING
+void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6) {
+    s32 pad1;
+    s16 sp58;
+    s32 pad2[2];
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0,
+                    (u32)(((arg3 * D_801DCA18) > 1.0f ? 1.0f : (arg3 * D_801DCA18)) * arg4) & 0xFF);
+
+    sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
+    arg6 *= (4.5f - (light->l.dir[1] * D_801DCA1C));
+    arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
+    Matrix_Put(arg2);
+    Matrix_RotateY(sp58, MTXMODE_APPLY);
+    Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+              G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPDisplayList(POLY_OPA_DISP++, D_04075B30);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B40E0.asm")
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B42F8.asm")
 
@@ -214,10 +327,10 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     // TODO: Segment number enum
-    gRspSegmentPhysAddrs[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].vramAddr);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].segment);
 }
 
-#ifdef NON_MATCHING
+#if 0
 void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     Actor_InitCurrPosition(actor);
     Actor_InitDrawRotation(actor);
@@ -271,11 +384,11 @@ void Actor_ApplyMovement(Actor* actor) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_ApplyMovement.asm")
 #endif
 
-#ifdef NON_MATCHING
+#if 0
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_Sins(actor->world.rot.x);
+    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.x);
     actor->velocity.y = actor->velocity.y + actor->gravity;
-    actor->velocity.z = actor->speedXZ * Math_Coss(actor->world.rot.x);
+    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.x);
 
     if (actor->velocity.y < actor->minYVelocity) {
         actor->velocity.y = actor->minYVelocity;
@@ -291,10 +404,10 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Math_Coss(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
-    actor->velocity.y = Math_Sins(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
+    f32 velX =  Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
@@ -303,10 +416,10 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Math_Coss(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.x = Math_Sins(actor->world.rot.y) * velX;
-    actor->velocity.y = Math_Sins(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_Coss(actor->world.rot.y) * velX;
+    f32 velX =  Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
@@ -364,8 +477,8 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     f32 imm_x;
     f32 imm_z;
 
-    cos_rot_y = Math_Coss(actor->shape.rot.y);
-    sin_rot_y = Math_Sins(actor->shape.rot.y);
+    cos_rot_y = Math_CosS(actor->shape.rot.y);
+    sin_rot_y = Math_SinS(actor->shape.rot.y);
     imm_x = point->x - actor->world.pos.x;
     imm_z = point->z - actor->world.pos.z;
     offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));

@@ -33,7 +33,7 @@ void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6* this = THIS;
 
     this->actor.colChkInfo.mass = 10;
-    Actor_SetDrawParams(&this->actor.shape, 0, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 19.0f);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &D_80BE6170;
     this->actor.targetMode = 6;

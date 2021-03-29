@@ -19,14 +19,14 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     if (sceneCtxt) {}
 
     if (size) {
-        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].vramAddr, objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].segment, objectFileTable[id].vromStart, size);
     }
 
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
     if (sceneCtxt->objectCount < 0x22) {
-        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr =
+        sceneCtxt->objects[sceneCtxt->objectCount + 1].segment =
             // UB to cast pointer to u32
-            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size);
+            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].segment + size);
     }
 
     sceneCtxt->objectCount++;
@@ -59,18 +59,18 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
 
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].segment = THA_AllocEndAlign16(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
     // TODO: Segment number enum?
-    gRspSegmentPhysAddrs[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr);
+    gSegments[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].segment);
 }
 
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
     s32 i;
-    SceneObject* status;
+    ObjectStatus* status;
     ObjectFileTableEntry* objectFile;
     u32 size;
 
@@ -86,7 +86,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart,
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->segment, objectFile->vromStart,
                                             size, 0, &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
@@ -128,7 +128,7 @@ void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
             continue;
         }
 
-        DmaMgr_SendRequest0(sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(sceneCtxt->objects[i].segment, objectFileTable[id].vromStart, vromSize);
     }
 }
 
@@ -143,7 +143,7 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
     // TODO: UB to cast void to u32
-    addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
+    addr = ((u32)sceneCtxt->objects[iParm2].segment) + vromSize;
     addr = ALIGN16(addr);
     // UB to cast u32 to pointer
     return (void*)addr;
@@ -167,7 +167,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     }
 
     loadedCount = Scene_LoadObject(&ctxt->sceneContext, OBJECT_LINK_CHILD);
-    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
+    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].segment;
     ctxt->sceneContext.objectCount = loadedCount;
     ctxt->sceneContext.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
@@ -175,7 +175,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     gActorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
-    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
+    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].segment = objectVramAddr;
 }
 
 // Scene Command 0x01: Actor List
@@ -198,7 +198,7 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
     temp_ret = (BgMeshHeader*)Lib_PtrSegToVirt(entry->colHeader.segment);
     temp_s0 = temp_ret;
     temp_s0->vertices = (BgVertex*)Lib_PtrSegToVirt(temp_ret->vertices);
-    temp_s0->polygons = (BgPolygon*)Lib_PtrSegToVirt(temp_s0->polygons);
+    temp_s0->polygons = (CollisionPoly*)Lib_PtrSegToVirt(temp_s0->polygons);
     if (temp_s0->attributes != 0) {
         temp_s0->attributes = (BgPolygonAttributes*)Lib_PtrSegToVirt(temp_s0->attributes);
     }
@@ -229,8 +229,8 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
                                                            entry->specialFiles.keepObjectId);
         // TODO: Segment number enum?
-        gRspSegmentPhysAddrs[5] =
-            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
+        gSegments[5] =
+            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].segment);
     }
 
     if (entry->specialFiles.cUpElfMsgNum != 0) {
@@ -256,9 +256,9 @@ void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x0B: Object List
 void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
     s32 i, j, k;
-    SceneObject* firstObject;
-    SceneObject* status;
-    SceneObject* status2;
+    ObjectStatus* firstObject;
+    ObjectStatus* status;
+    ObjectStatus* status2;
     s16* objectEntry;
     void* nextPtr;
 
@@ -292,7 +292,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
 
         // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
         if (i < 0x22) {
-            firstObject[i + 1].vramAddr = nextPtr;
+            firstObject[i + 1].segment = nextPtr;
         }
         i++;
         k++;
@@ -310,7 +310,7 @@ void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
     lightInfo = (LightInfo*)Lib_PtrSegToVirt(entry->lightList.segment);
     for (i = 0; i < entry->lightList.num; i++)
     {
-        Lights_Insert(ctxt, &ctxt->lightCtx, lightInfo);
+        LightContext_InsertLight(ctxt, &ctxt->lightCtx, lightInfo);
         lightInfo++;
     }
 }
@@ -323,7 +323,7 @@ void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x0E: Transition Actor List
 void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->transitionActorCount = entry->transiActorList.num;
-    ctxt->transitionActorList = (TransitionActorInit*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
+    ctxt->transitionActorList = (TransitionActorEntry*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
     func_80105818(ctxt, ctxt->transitionActorCount, ctxt->transitionActorList);
 }
 
@@ -342,7 +342,7 @@ s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
     u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
 
     if (fileSize) {
-        ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
+        ctxt->roomContext.unk74 = THA_AllocEndAlign16(&ctxt->state.heap, fileSize);
         return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
     }
 
@@ -386,15 +386,15 @@ void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
 
     if (gSaveContext.extra.unk2b8 == 0) {
         // TODO: Needs REG macro
-        gStaticContext->data[0x0F] = ctxt->kankyoContext.unk2;
+        gGameInfo->data[0x0F] = ctxt->kankyoContext.unk2;
     }
 
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk4 = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk8 = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unkC = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
+    ctxt->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
     if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
         gSaveContext.extra.environmentTime = gSaveContext.perm.time;
