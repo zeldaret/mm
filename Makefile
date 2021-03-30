@@ -55,12 +55,14 @@ LD      := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
+ZAPD := archive/ZAPD/ZAPD.out
+
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mul -woff 649,838
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 649,838
 
 #### Files ####
 
@@ -85,21 +87,27 @@ DMADATA_FILES := $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
 DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
 DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_SOUGEN=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_SOUGEN_room_00=)
 
 SRC_DIRS := $(shell find src -type d)
+ASSET_XML_DIRS := $(shell find assets/xml* -type d)
+ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
+ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
+ASSET_FILES_OUT := $(patsubst assets/xml%,assets/src%,$(patsubst %.xml,%.c,$(ASSET_FILES_XML)))
 
 # Because we may not have disassembled the code files yet, there might not be any assembly files.
 # Instead, generate a list of assembly files based on what's listed in the linker script.
 S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
-C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-C_O_FILES := $(C_FILES:src/%.c=build/src/%.o)
+C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c)) $(ASSET_FILES_OUT)
+C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
 O_FILES := $(C_O_FILES) $(S_O_FILES)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
 # create build directories
-$(shell mkdir -p build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -164,6 +172,12 @@ build/baserom/boot build/decomp/code: build/code.elf
 build/decomp/ovl_%: build/code.elf
 	@$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
 
+build/decomp/Z2_SOUGEN: build/code.elf
+	@$(OBJCOPY) --dump-section Z2_SOUGEN=$@ $< /dev/null
+
+build/decomp/Z2_SOUGEN_room_00: build/code.elf
+	@$(OBJCOPY) --dump-section Z2_SOUGEN_room_00=$@ $< /dev/null
+
 asm/non_matchings/%: asm/%.asm
 	@./tools/split_asm.py $< $@
 
@@ -173,7 +187,7 @@ disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variable
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
 
 clean:
-	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
+	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm assets/src
 
 setup:
 	git submodule update --init --recursive
@@ -194,6 +208,9 @@ init:
 	$(MAKE) all
 	$(MAKE) diff-init
 
+test:
+	@$(OBJCOPY) --dump-section Z2_SOUGEN=build/Z2_SOUGEN.bin build/code.elf /dev/null
+
 # Recipes
 
 build/baserom/%: baserom/%
@@ -209,8 +226,12 @@ build/src/overlays/%.o: src/overlays/%.c
 	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s
 	@$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
 
-build/src/%.o: src/%.c
+build/%.o: %.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+
+build/assets/src/scenes/%.o: assets/src/scenes/%.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" | sed 's/\(.*\)\.c/build\/\1.o/' | xargs -n 1 -r $(MAKE)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -226,10 +247,17 @@ build/decomp/%: decomp/%
 build/comp/%.yaz0: build/decomp/%
 	./tools/yaz0 $< $@
 
-build/src/%.d: src/%.c
+build/%.d: %.c
 	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -MM -MT 'build/src/$*.o' >> $@
+	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
+
+build/assets/%.d: assets/%.c
+	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
+
+assets/src/%.c: assets/xml/%.xml
+	$(ZAPD) e -b decomp/ -i $< -o $(dir assets/src/$*)
+	find $(dir assets/src/$*) -path "assets/src/$**.png" | sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | bash
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(C_FILES:src/%.c=build/src/%.d)
+-include $(C_FILES:%.c=build/%.d)
 endif

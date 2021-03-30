@@ -1,7 +1,5 @@
-#include <osint.h>
-
-#include "io/controller.h"
-#include "siint.h"
+#include <ultra64.h>
+#include <global.h>
 
 s32 osContStartQuery(OSMesgQueue* mq)
 {

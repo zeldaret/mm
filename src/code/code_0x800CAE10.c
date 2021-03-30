@@ -9,8 +9,8 @@ void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
     actor->unk_158 = 0;
 }
 
-void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, BgMeshHeader* meshHeader) {
-    BgMeshHeader* header;
+void BgCheck3_LoadMesh(GlobalContext* ctxt, DynaPolyActor* actor, CollisionHeader* meshHeader) {
+    CollisionHeader* header;
 
     header = NULL;
     BgCheck_RelocateMeshHeader(meshHeader, &header);

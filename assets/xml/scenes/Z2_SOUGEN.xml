@@ -1,0 +1,11 @@
+<Root>
+    <File Name="Z2_SOUGEN" Game="MM">
+        <Scene Name="Z2_SOUGEN"/>
+    </File>
+    <File Name="Z2_SOUGEN_room_00" Game="MM">
+        <Room Name="Z2_SOUGEN_room_00">
+            <DListHint Offset="0x51F0"/>
+            <DListHint Offset="0x7A88"/>
+        </Room>
+    </File>
+</Root>

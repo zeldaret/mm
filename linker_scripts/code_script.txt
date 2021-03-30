@@ -9359,4 +9359,37 @@ SECTIONS
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
     _ovl_En_RsnSegmentEnd = SegmentEnd;
+
+    SegmentStart = .;
+    _Z2_SOUGENSegmentStart = SegmentStart;
+    Z2_SOUGEN 0x02000000 : AT(RomLocation)
+    {
+        build/assets/src/scenes/Z2_SOUGEN.o(.data)
+    }
+    SegmentEnd = .;
+    SegmentSize = SegmentEnd - SegmentStart;
+    RomLocation += SegmentSize;
+    _Z2_SOUGENSegmentEnd = SegmentEnd;
+
+    SegmentStart = .;
+    _Z2_SOUGENSegmentStart = SegmentStart;
+    Z2_SOUGEN 0x02000000 : AT(RomLocation)
+    {
+        build/assets/src/scenes/Z2_SOUGEN.o(.data)
+    }
+    SegmentEnd = .;
+    SegmentSize = SegmentEnd - SegmentStart;
+    RomLocation += SegmentSize;
+    _Z2_SOUGENSegmentEnd = SegmentEnd;
+
+    SegmentStart = .;
+    _Z2_SOUGEN_room_00SegmentStart = SegmentStart;
+    Z2_SOUGEN_room_00 0x03000000 : AT(RomLocation)
+    {
+        build/assets/src/scenes/Z2_SOUGEN_room_00.o(.data)
+    }
+    SegmentEnd = .;
+    SegmentSize = SegmentEnd - SegmentStart;
+    RomLocation += SegmentSize;
+    _Z2_SOUGEN_room_00SegmentEnd = SegmentEnd;
 }

@@ -22,6 +22,7 @@
 
 #include <z64actor.h>
 #include <z64animation.h>
+#include <z64bgcheck.h>
 #include <z64collision_check.h>
 #include <z64cutscene.h>
 #include <z64dma.h>
@@ -52,39 +53,10 @@ typedef struct {
 } ActorCutscene; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s16 polyStartIndex;
-    /* 0x2 */ s16 ceilingNodeHead;
-    /* 0x4 */ s16 wallNodeHead;
-    /* 0x6 */ s16 floorNodeHead;
-} ActorMeshPolyLists; // size = 0x8
-
-typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedTexture; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u16 floorHead;
-    /* 0x2 */ u16 wallHead;
-    /* 0x4 */ u16 ceilingHead;
-} BgMeshSubdivision; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ u32 attributes[2];
-} BgPolygonAttributes; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 polyIndex;
-    /* 0x2 */ u16 next;
-} BgPolygonLinkedListNode; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ u16 maxNodes;
-    /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ BgPolygonLinkedListNode* nodes;
-    /* 0x8 */ u8* unk8;
-} BgScenePolygonLists; // size = 0xC
 
 typedef struct {
     /* 0x0 */ s16 sceneNumber;
@@ -524,53 +496,6 @@ typedef struct {
     /* 0x30 */ f32 w[4];
 } z_Matrix; // size = 0x40
 
-typedef struct {
-    /* 0x00 */ Vec3f scale;
-    /* 0x0C */ Vec3s rotation;
-    /* 0x14 */ Vec3f pos;
-} ActorMeshParams; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ u16 type;
-    union {
-        u16 vtxData[3];
-        struct {
-            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
-            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
-                                      // 0x2000 = poly IsConveyor surface
-            /* 0x06 */ u16 vIC;
-        };
-    };
-    /* 0x08 */ Vec3s normal; // Unit normal vector
-                             // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
-
-    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
-} CollisionPoly; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ BgPolygonLinkedListNode* nodes;
-    /* 0x4 */ u32 nextFreeNode;
-    /* 0x8 */ s32 maxNodes;
-} BgPolygonLinkedList; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-} BgVertex; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ Vec3s minPos;
-    /* 0x6 */ UNK_TYPE1 xLength; // Created by retype action
-    /* 0x7 */ UNK_TYPE1 pad7[0x1];
-    /* 0x8 */ UNK_TYPE1 zLength; // Created by retype action
-    /* 0x9 */ UNK_TYPE1 pad9[0x3];
-    /* 0xC */ u32 properties;
-} BgWaterBox; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x4];
-    /* 0x4 */ BgWaterBox* boxes;
-} BgWaterboxList; // size = 0x8
-
 typedef union {
     F3DVertexColor color;
     F3DVertexNormal normal;
@@ -739,19 +664,6 @@ typedef struct {
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
-
-typedef struct {
-    /* 0x00 */ Vec3s min;
-    /* 0x06 */ Vec3s max;
-    /* 0x0C */ u16 numVertices;
-    /* 0x10 */ BgVertex* vertices;
-    /* 0x14 */ u16 numPolygons;
-    /* 0x18 */ CollisionPoly* polygons;
-    /* 0x1C */ BgPolygonAttributes* attributes;
-    /* 0x20 */ UNK_PTR cameraData;
-    /* 0x24 */ u16 numWaterBoxes;
-    /* 0x28 */ BgWaterBox* waterboxes;
-} BgMeshHeader; // size = 0x2C
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1026,19 +938,6 @@ typedef struct {
     /* 0x3CA0 */ SaveContextExtra extra;
 } SaveContext; // size = 0x48C8
 
-typedef struct {
-    /* 0x00 */ BgMeshHeader* sceneMesh;
-    /* 0x04 */ Vec3f sceneMin;
-    /* 0x10 */ Vec3f sceneMax;
-    /* 0x1C */ s32 xSubdivisions;
-    /* 0x20 */ s32 ySubdivisions;
-    /* 0x24 */ s32 zSubdivisions;
-    /* 0x28 */ Vec3f subdivisionSize;
-    /* 0x34 */ Vec3f inverseSubdivisionSize;
-    /* 0x40 */ BgMeshSubdivision* subdivisions;
-    /* 0x44 */ BgScenePolygonLists scenePolyLists;
-} StaticCollisionContext; // size = 0x50
-
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
 typedef struct ActorEnBji01 ActorEnBji01;
@@ -1046,10 +945,6 @@ typedef struct ActorEnBji01 ActorEnBji01;
 typedef struct ActorEnTest ActorEnTest;
 
 typedef struct ActorListEntry ActorListEntry;
-
-typedef struct DynaCollisionContext DynaCollisionContext;
-
-typedef struct CollisionContext CollisionContext;
 
 typedef struct ArenaNode_t {
     /* 0x0 */ s16 magic; // Should always be 0x7373
@@ -1075,41 +970,6 @@ typedef struct ActorEnFirefly ActorEnFirefly;
 typedef struct ActorObjBell ActorObjBell;
 
 typedef struct DaytelopContext DaytelopContext;
-
-typedef struct {
-    /* 0x00 */ DynaPolyActor* actor;
-    /* 0x04 */ BgMeshHeader* header;
-    /* 0x08 */ ActorMeshPolyLists polyLists;
-    /* 0x10 */ s16 verticesStartIndex;
-    /* 0x12 */ s16 waterboxesStartIndex;
-    /* 0x14 */ ActorMeshParams prevParams;
-    /* 0x34 */ ActorMeshParams currParams;
-    /* 0x54 */ Vec3s averagePos;
-    /* 0x5A */ s16 radiusFromAveragePos;
-    /* 0x5C */ f32 minY;
-    /* 0x60 */ f32 maxY;
-} ActorMesh; // size = 0x64
-
-struct DynaCollisionContext {
-    /* 0x0000 */ u8 unk0;
-    /* 0x0001 */ UNK_TYPE1 pad1[0x3];
-    /* 0x0004 */ ActorMesh actorMeshArr[50];
-    /* 0x138C */ u16 flags[50]; // bit 0 - Is mesh active
-    /* 0x13F0 */ CollisionPoly* polygons;
-    /* 0x13F4 */ BgVertex* vertices;
-    /* 0x13F8 */ BgWaterboxList waterboxes;
-    /* 0x1400 */ BgPolygonLinkedList polygonList;
-    /* 0x140C */ u32 maxNodes;
-    /* 0x1410 */ u32 maxPolygons;
-    /* 0x1414 */ u32 maxVertices;
-    /* 0x1418 */ u32 maxMemory;
-    /* 0x141C */ u32 unk141C;
-}; // size = 0x1420
-
-struct CollisionContext {
-    /* 0x0000 */ StaticCollisionContext stat;
-    /* 0x0050 */ DynaCollisionContext dyna;
-}; // size = 0x1470
 
 typedef struct ActorBgIknvObj ActorBgIknvObj;
 
@@ -1682,7 +1542,7 @@ struct GlobalContext {
     /* 0x18846 */ u16 sceneNumActorsToLoad;
     /* 0x18848 */ u8 numRooms;
     /* 0x18849 */ UNK_TYPE1 pad18849[0x3];
-    /* 0x1884C */ RoomFileLocation* roomList;
+    /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;
