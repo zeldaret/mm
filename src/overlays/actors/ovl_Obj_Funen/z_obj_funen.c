@@ -21,6 +21,28 @@ const ActorInit Obj_Funen_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Init.asm")
+extern Gfx D_060000D0[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Draw.asm")
+f32 D_80A198D0[] = {0.1f, 0.025f};
+
+void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjFunen* this = THIS;
+
+    Actor_SetScale(this, D_80A198D0[this->actor.params & 1]);
+}
+
+void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    u32 temp_a3;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    SysMatrix_InsertYRotation_s(func_800DFCDC(ACTIVE_CAM) - 0x8000, 1);
+
+    gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+
+    temp_a3 = -(globalCtx->unk18840 & 0x7FFFFFFF) & 0x7F;
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, temp_a3, 0x20, 0x20, 1, 0, temp_a3, 0x20, 0x20));
+    gSPDisplayList(POLY_XLU_DISP++, D_060000D0);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
