@@ -21,8 +21,8 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw
 };
 
-extern Gfx* D_06001788;
-extern Gfx* D_06000520;
+extern AnimatedTexture D_06001788;
+extern Gfx D_06000520[];
 
 void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmStatue* this = THIS;
@@ -38,5 +38,5 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_PtrSegToVirt(&D_06001788));
-    func_800BE03C(globalCtx, &D_06000520);
+    func_800BE03C(globalCtx, D_06000520);
 }
