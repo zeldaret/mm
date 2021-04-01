@@ -2465,7 +2465,6 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.text)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.data)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.rodata)
-        build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.rodata)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana_overlay.o(.ovl)
     }
     SegmentEnd = .;
@@ -8981,9 +8980,9 @@ SECTIONS
     ovl_Bg_Lbfshot : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Lbfshot/z_bg_lbfshot.o(.text)
-        build/asm/overlays/ovl_Bg_Lbfshot_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Lbfshot/z_bg_lbfshot.o(.data)
         build/src/overlays/actors/ovl_Bg_Lbfshot/z_bg_lbfshot.o(.rodata)
-        build/asm/overlays/ovl_Bg_Lbfshot_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Lbfshot/z_bg_lbfshot_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
