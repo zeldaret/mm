@@ -8755,9 +8755,9 @@ SECTIONS
     ovl_Obj_Kepn_Koya : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.text)
-        build/asm/overlays/ovl_Obj_Kepn_Koya_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.data)
         build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.rodata)
-        build/asm/overlays/ovl_Obj_Kepn_Koya_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

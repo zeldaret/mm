@@ -9,7 +9,6 @@ void ObjKepnKoya_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Obj_Kepn_Koya_InitVars = {
     ACTOR_OBJ_KEPN_KOYA,
     ACTORCAT_PROP,
@@ -21,12 +20,36 @@ const ActorInit Obj_Kepn_Koya_InitVars = {
     (ActorFunc)ObjKepnKoya_Update,
     (ActorFunc)ObjKepnKoya_Draw
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Init.asm")
+static InitChainEntry D_80C07C40[] = {
+    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Destroy.asm")
+extern BgMeshHeader D_0600805C;
+extern UNK_TYPE D_06003478;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Update.asm")
+void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjKepnKoya* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Draw.asm")
+    Actor_ProcessInitChain(&this->dyna.actor, &D_80C07C40);
+    Actor_SetScale(&this->dyna.actor, 0.1f);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
+    if (this->dyna.bgId == 0x32) {
+        Actor_MarkForDeath(&this->dyna.actor);
+    }
+}
+
+void ObjKepnKoya_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjKepnKoya* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
+
+void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, &D_06003478);
+}
