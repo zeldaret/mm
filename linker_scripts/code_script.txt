@@ -2265,9 +2265,9 @@ SECTIONS
     ovl_Item_Inbox : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Item_Inbox/z_item_inbox.o(.text)
-        build/asm/overlays/ovl_Item_Inbox_data.o(.data)
+        build/src/overlays/actors/ovl_Item_Inbox/z_item_inbox.o(.data)
         build/src/overlays/actors/ovl_Item_Inbox/z_item_inbox.o(.rodata)
-        build/asm/overlays/ovl_Item_Inbox_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Item_Inbox/z_item_inbox_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
