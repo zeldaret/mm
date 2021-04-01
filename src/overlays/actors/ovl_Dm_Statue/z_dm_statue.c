@@ -9,7 +9,6 @@ void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Dm_Statue_InitVars = {
     ACTOR_DM_STATUE,
     ACTORCAT_ITEMACTION,
@@ -21,12 +20,23 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Update,
     (ActorFunc)DmStatue_Draw
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Init.asm")
+extern Gfx D_06001788[];
+extern Gfx* D_06000520;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Destroy.asm")
+void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
+    DmStatue* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Update.asm")
+    Actor_SetScale(&this->actor, 10.0f);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Statue_0x80A4C9B0/DmStatue_Draw.asm")
+void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_PtrSegToVirt(&D_06001788));
+    func_800BE03C(globalCtx, &D_06000520);
+}
