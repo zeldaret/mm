@@ -21,7 +21,7 @@ const ActorInit Obj_Funen_InitVars = {
 
 extern Gfx D_060000D0[];
 
-f32 D_80A198D0[] = {0.1f, 0.024390244f};
+f32 D_80A198D0[] = { 0.1f, 0.024390244f };
 
 void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjFunen* this = THIS;
@@ -30,9 +30,9 @@ void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s32 temp_a3;
+    s32 temp;
     s32 pad[2];
-    
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -40,9 +40,10 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
-    temp_a3 = -(globalCtx->unk18840 & 0x7FFFFFFF) & 0x7F;
+    temp = -(globalCtx->unk18840 & 0x7FFFFFFF) & 0x7F;
 
-    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, temp_a3, 0x20, 0x20, 1, 0, temp_a3, 0x20, 0x20));
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, temp, 0x20, 0x20, 1, 0, temp, 0x20, 0x20));
     gSPDisplayList(POLY_XLU_DISP++, D_060000D0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
