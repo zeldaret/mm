@@ -21,7 +21,7 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw
 };
 
-extern Gfx D_06001788[];
+extern Gfx* D_06001788;
 extern Gfx* D_06000520;
 
 void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
