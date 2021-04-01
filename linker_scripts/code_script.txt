@@ -5984,9 +5984,9 @@ SECTIONS
     ovl_Obj_Visiblock : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Visiblock/z_obj_visiblock.o(.text)
-        build/asm/overlays/ovl_Obj_Visiblock_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Visiblock/z_obj_visiblock.o(.data)
         build/src/overlays/actors/ovl_Obj_Visiblock/z_obj_visiblock.o(.rodata)
-        build/asm/overlays/ovl_Obj_Visiblock_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Visiblock/z_obj_visiblock_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
