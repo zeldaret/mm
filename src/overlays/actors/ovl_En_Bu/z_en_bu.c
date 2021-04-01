@@ -9,7 +9,7 @@ void EnBu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809ACDB8(EnBu* this, GlobalContext* globalCtx);
+void EnBu_DoNothing(EnBu* this, GlobalContext* globalCtx);
 
 const ActorInit En_Bu_InitVars = {
     ACTOR_EN_BU,
@@ -26,13 +26,13 @@ const ActorInit En_Bu_InitVars = {
 void EnBu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBu* this = THIS;
 
-    this->actionFunc = &func_809ACDB8;
+    this->actionFunc = EnBu_DoNothing;
 }
 
 void EnBu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_809ACDB8(EnBu* this, GlobalContext* globalCtx) {
+void EnBu_DoNothing(EnBu* this, GlobalContext* globalCtx) {
 }
 
 void EnBu_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -46,7 +46,7 @@ void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBu* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    
+
     SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
     SysMatrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
     Matrix_RotateY(this->actor.shape.rot.y, 1);
