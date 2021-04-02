@@ -55,7 +55,7 @@ LD      := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
-ZAPD := archive/ZAPD/ZAPD.out
+ZAPD := tools/ZAPD/ZAPD.out
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32

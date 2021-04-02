@@ -4,9 +4,10 @@
 [submodule "tools/asm-differ"]
 	path = tools/asm-differ
 	url = https://github.com/simonlindholm/asm-differ.git
-[submodule "tools/ZAP2"]
-	path = tools/ZAP2
-	url = https://github.com/NEstelami/ZAP2.git
 [submodule "tools/decomp-permuter"]
 	path = tools/decomp-permuter
 	url = https://github.com/simonlindholm/decomp-permuter
+[submodule "ZAPD"]
+	path = tools/ZAPD
+	url = https://github.com/Rozelette/ZAP2.git
+	branch = mm
