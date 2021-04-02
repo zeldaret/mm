@@ -88,8 +88,8 @@ DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
 DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
 DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
 DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_%=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/KAKUSIANA=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/SPOT00=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/KAKUSIAN%=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/SPOT0%=)
 
 SRC_DIRS := $(shell find src -type d)
 ASSET_XML_DIRS := $(shell find assets/xml* -type d)
@@ -100,10 +100,11 @@ ASSET_FILES_OUT := $(patsubst assets/xml%,assets/src%,$(patsubst %.xml,%.c,$(ASS
 # Because we may not have disassembled the code files yet, there might not be any assembly files.
 # Instead, generate a list of assembly files based on what's listed in the linker script.
 S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
-C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c)) $(ASSET_FILES_OUT)
+C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-O_FILES := $(C_O_FILES) $(S_O_FILES)
+ASSET_O_FILES := $(ASSET_FILES_OUT:%.c=build/%.o)
+O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
@@ -134,8 +135,7 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 # disasm is not a file so we must tell make not to check it when evaluating timestamps
 .INTERMEDIATE: disasm
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm
-.PRECIOUS: assets/%
+.PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
@@ -172,12 +172,15 @@ build/baserom/boot build/decomp/code: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 build/decomp/ovl_%: build/code.elf
-	@$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 build/decomp/Z2_%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/KAKUSIANA build/decomp/SPOT00: build/code.elf
+build/decomp/KAKUSIAN%: build/code.elf
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
+
+build/decomp/SPOT0%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 asm/non_matchings/%: asm/%.asm
@@ -210,8 +213,8 @@ init:
 	$(MAKE) all
 	$(MAKE) diff-init
 
-test:
-	$(OBJCOPY) --dump-section $(notdir build/decomp/Z2_SOUGEN)=build/Z2_SOUGEN.bin build/code_pre_dmadata.elf /dev/null
+test: build/code_pre_dmadata.elf build/linker_scripts/dmadata_script.txt
+	$(LD) build/code_pre_dmadata.elf -T build/linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o build/test.elf
 
 # Recipes
 
@@ -233,7 +236,9 @@ build/%.o: %.c
 
 build/assets/src/scenes/%.o: assets/src/scenes/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | sed 's/\(.*\)\.c/build\/\1.o/' | xargs -n 1 -r $(MAKE)
+	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | \
+     sed 's/\(.*\)\.c/\1/' | \
+     xargs -n 1 -r -I'{}' $(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/'{}'.o '{}'.c
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -261,7 +266,9 @@ build/assets/%.d: assets/%.c
 
 assets/src/%.c: assets/xml/%.xml
 	$(ZAPD) e -b decomp/ -i $< -o $(dir assets/src/$*)
-	find $(dir assets/src/$*) -path "assets/src/$**.png" | sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | bash
+	find $(dir assets/src/$*) -path "assets/src/$**.png" | \
+     sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
+     bash
 
 ifneq ($(MAKECMDGOALS), clean)
 -include $(C_FILES:%.c=build/%.d)
