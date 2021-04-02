@@ -1449,7 +1449,7 @@ build/comp/Z2_12HAKUGINMAE.yaz0
 build/comp/Z2_12HAKUGINMAE_room_00.yaz0
 build/comp/Z2_17SETUGEN.yaz0
 build/comp/Z2_17SETUGEN_room_00.yaz0
-build/comp/1455_0x01d35b80.yaz0
+build/comp/Z2_17SETUGEN2.yaz0
 build/comp/Z2_17SETUGEN2_room_00.yaz0
 build/comp/Z2_SEA_BS.yaz0
 build/comp/Z2_SEA_BS_room_00.yaz0

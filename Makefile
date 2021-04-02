@@ -62,7 +62,7 @@ ASFLAGS := -march=vr4300 -32
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 649,838
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 649,838,712
 
 #### Files ####
 
@@ -87,8 +87,9 @@ DMADATA_FILES := $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
 DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
 DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_SOUGEN=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_SOUGEN_room_00=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_%=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/KAKUSIANA=)
+DMADATA_FILES := $(DMADATA_FILES:build/decomp/SPOT00=)
 
 SRC_DIRS := $(shell find src -type d)
 ASSET_XML_DIRS := $(shell find assets/xml* -type d)
@@ -107,7 +108,7 @@ ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
 # create build directories
-$(shell mkdir -p build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -134,6 +135,7 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .INTERMEDIATE: disasm
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm
+.PRECIOUS: assets/%
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
@@ -151,11 +153,11 @@ endif
 
 all: $(UNCOMPRESSED_ROM) $(ROM) ;
 
-build/code.elf: $(O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
-	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
+build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt build/linker_scripts/dmadata_script.txt
+	$(LD) -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt -T build/linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
 
-build/code_pre_dmadata.elf: $(O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt
-	$(LD) -r -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
+build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt
+	$(LD) -r -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
 
 linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
 	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
@@ -172,11 +174,11 @@ build/baserom/boot build/decomp/code: build/code.elf
 build/decomp/ovl_%: build/code.elf
 	@$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
 
-build/decomp/Z2_SOUGEN: build/code.elf
-	@$(OBJCOPY) --dump-section Z2_SOUGEN=$@ $< /dev/null
+build/decomp/Z2_%: build/code.elf
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/Z2_SOUGEN_room_00: build/code.elf
-	@$(OBJCOPY) --dump-section Z2_SOUGEN_room_00=$@ $< /dev/null
+build/decomp/KAKUSIANA build/decomp/SPOT00: build/code.elf
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 asm/non_matchings/%: asm/%.asm
 	@./tools/split_asm.py $< $@
@@ -209,7 +211,7 @@ init:
 	$(MAKE) diff-init
 
 test:
-	@$(OBJCOPY) --dump-section Z2_SOUGEN=build/Z2_SOUGEN.bin build/code.elf /dev/null
+	$(OBJCOPY) --dump-section $(notdir build/decomp/Z2_SOUGEN)=build/Z2_SOUGEN.bin build/code_pre_dmadata.elf /dev/null
 
 # Recipes
 
@@ -231,7 +233,7 @@ build/%.o: %.c
 
 build/assets/src/scenes/%.o: assets/src/scenes/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" | sed 's/\(.*\)\.c/build\/\1.o/' | xargs -n 1 -r $(MAKE)
+	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | sed 's/\(.*\)\.c/build\/\1.o/' | xargs -n 1 -r $(MAKE)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -251,8 +253,11 @@ build/%.d: %.c
 	@./tools/depend.py $< $@
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
 
+build/linker_scripts/%: linker_scripts/%
+	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+
 build/assets/%.d: assets/%.c
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
+	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
 assets/src/%.c: assets/xml/%.xml
 	$(ZAPD) e -b decomp/ -i $< -o $(dir assets/src/$*)

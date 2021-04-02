@@ -1449,7 +1449,7 @@ build/decomp/Z2_12HAKUGINMAE
 build/decomp/Z2_12HAKUGINMAE_room_00
 build/decomp/Z2_17SETUGEN
 build/decomp/Z2_17SETUGEN_room_00
-build/decomp/1455_0x01d35b80
+build/decomp/Z2_17SETUGEN2
 build/decomp/Z2_17SETUGEN2_room_00
 build/decomp/Z2_SEA_BS
 build/decomp/Z2_SEA_BS_room_00
