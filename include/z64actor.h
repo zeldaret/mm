@@ -254,13 +254,16 @@ typedef struct {
     /* 0xADE */ u8 unkADE;
     /* 0xADF */ UNK_TYPE1 padADF[0x4];
     /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x44];
+    /* 0xAE4 */ UNK_TYPE1 padAE4[0x24];
+    /* 0xB08 */ f32 unkB08;
+    /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
     /* 0xB28 */ s16 unkB28;
     /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
     /* 0xB9C */ Vec3f unkB9C;
     /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
     /* 0xBEC */ Vec3f bodyPartsPos[18];
-    /* 0xCC4 */ UNK_TYPE1 padCC4[0xB4];
+    /* 0xCC4 */ MtxF mf_CC4;
+    /* 0xD04 */ UNK_TYPE1 padD04[0x74];
 } ActorPlayer; // size = 0xD78
 
 typedef enum {
