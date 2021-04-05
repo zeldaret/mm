@@ -25,9 +25,12 @@ const ActorInit Eff_Dust_InitVars = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80918B40.asm")
 
+void EffDust_Init(Actor* thisx, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Init.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Destroy.asm")
+void EffDust_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80918D64.asm")
 
@@ -35,10 +38,18 @@ const ActorInit Eff_Dust_InitVars = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919230.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Update.asm")
+void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EffDust* this = THIS;
+
+    this->actionFunc(thisx, globalCtx);
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919768.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_809199FC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Draw.asm")
+void EffDust_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    EffDust* this = THIS;
+
+    this->drawFunc(thisx, globalCtx);
+}
