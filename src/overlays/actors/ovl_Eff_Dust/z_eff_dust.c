@@ -168,21 +168,21 @@ void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
     }
 }
 
-/*
 void func_80919230(EffDust *this, GlobalContext *globalCtx) {
     s16 theta;
     ActorPlayer* player = PLAYER;
     Actor* parent = this->actor.parent;
-    f32* distanceTraveled = this->distanceTraveled;
+    f32 *distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
 
     if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & 0x1000)) {
         if (this->life != 0) {
-            this->life -= 1;
+            this->life--;
         } else {
-            Actor_MarkForDeath((Actor *) this);
+            Actor_MarkForDeath(&this->actor);
         }
+
         for (i = 0; i < 64; i++) {
             if ((*distanceTraveled) < 1.0f) {
                 *distanceTraveled += 0.2f;
@@ -200,12 +200,13 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
         distanceTraveled++;
     }
 
-    this->actor.world.pos = player->base.world.pos;
+    this->actor.world.pos = parent->world.pos;
 
     for (j = 0; j < 3; j++) {
         i = this->index & 0x3F;
+
         if (this->distanceTraveled[i] >= 1.0f) {
-            theta = randPlusMinusPoint5Scaled(65536.0f);
+            theta = randPlusMinusPoint5Scaled(0x10000);
             switch (this->actor.params) {
                 case 2:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
@@ -238,9 +239,6 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
                         this->initialPositions[i].y = 4000.0f * Math_SinS(theta);
                         this->initialPositions[i].z = 4000.0f * Math_CosS(theta);
                     }
-
-                    break;
-                default:
                     break;
             }
 
@@ -249,8 +247,6 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
         }
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919230.asm")
 
 void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
     EffDust* this = THIS;
