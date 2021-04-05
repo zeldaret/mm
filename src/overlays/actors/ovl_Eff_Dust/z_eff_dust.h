@@ -6,7 +6,7 @@
 struct EffDust;
 
 typedef void (*EffDustActionFunc)(struct EffDust*, GlobalContext*);
-typedef void (*EffDustDrawFunc)(Actor*, GlobalContext*);
+//typedef void (*EffDustDrawFunc)(Actor*, GlobalContext*);
 
 typedef struct EffDust {
     /* 0x0000 */ Actor actor;
@@ -19,7 +19,7 @@ typedef struct EffDust {
     /* 0x0550 */ f32 dz; // Normalized. 0.0f to 1.0f
     /* 0x0554 */ f32 scalingFactor;
     /* 0x0558 */ EffDustActionFunc actionFunc;
-    /* 0x055C */ EffDustDrawFunc drawFunc;
+    /* 0x055C */ ActorFunc drawFunc;
 } EffDust; // size = 0x560
 
 extern const ActorInit Eff_Dust_InitVars;

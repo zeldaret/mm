@@ -20,10 +20,9 @@ void func_80918D64(EffDust* this, GlobalContext* globalCtx);
 void func_80918FE4(EffDust* this, GlobalContext* globalCtx);
 void func_80919230(EffDust* this, GlobalContext* globalCtx);
 
-void func_80919768(Actor* this, GlobalContext* globalCtx);
-void func_809199FC(Actor* this, GlobalContext* globalCtx);
+void func_80919768(Actor* thisx, GlobalContext* globalCtx);
+void func_809199FC(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
     ACTORCAT_NPC,
@@ -35,7 +34,6 @@ const ActorInit Eff_Dust_InitVars = {
     (ActorFunc)EffDust_Update,
     (ActorFunc)EffDust_Draw
 };
-*/
 
 void func_80918B40(EffDust* this) {
     s32 i;
@@ -140,11 +138,9 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
 void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
     s16 theta;
     s16 fi;
-    f32 *distanceTraveled;
+    f32* distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
-
-    distanceTraveled = this->distanceTraveled;
 
     for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
         if ((*distanceTraveled) < 1.0f) {
@@ -254,7 +250,81 @@ void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
+
+Gfx D_80919DB0[] = {
+    gsSPEndDisplayList(),
+};
+
+extern Gfx D_04054A90[];
+
+#ifdef NON_MATCHING
+void func_80919768(Actor *thisx, GlobalContext *globalCtx2) {
+    //EffDust* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+    GraphicsContext *gfxCtx;
+    Vec3f *initialPositions;
+    f32 *distanceTraveled;
+    //Vec3f *new_var;
+    Camera* cam = ACTIVE_CAM;
+    f32 aux;
+    s32 i;
+    //f32 aux;
+    s16 sp92;
+    Vec3f sp84;
+    //MtxF *temp_s0;
+
+    gfxCtx = globalCtx->state.gfxCtx;
+
+    sp84 = cam->eye;
+    sp92 = Math_Vec3f_Yaw(&sp84, &THIS->actor.world.pos); // & 0xFFFF;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C28C(gfxCtx);
+
+    gDPPipeSync(POLY_XLU_DISP++);
+
+    initialPositions = THIS->initialPositions;
+    distanceTraveled = THIS->distanceTraveled;
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 255, 0);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
+
+    for (i = 0; i < 64; i++) {
+        if (*distanceTraveled < 1.0f) {
+            //temp_s0 = &globalCtx->mf_187FC;
+            aux = 1.0f - SQ(*distanceTraveled);
+            SysMatrix_InsertTranslation(THIS->actor.world.pos.x, THIS->actor.world.pos.y, THIS->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_RotateY(sp92, MTXMODE_APPLY);
+
+            //new_var = initialPositions;
+            SysMatrix_InsertTranslation(initialPositions->x * ((THIS->dx * aux) + (1.0f - THIS->dx)), 
+                                        initialPositions->y * ((THIS->dy * aux) + (1.0f - THIS->dy)), 
+                                        initialPositions->z * ((THIS->dz * aux) + (1.0f - THIS->dz)), 
+                                        MTXMODE_APPLY);
+            Matrix_Scale(THIS->scalingFactor, THIS->scalingFactor, THIS->scalingFactor, MTXMODE_APPLY);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
+
+            gSPDisplayList(POLY_XLU_DISP++, D_04054A90);
+
+            gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
+        }
+        initialPositions++;
+        distanceTraveled++;
+    }
+
+    CLOSE_DISPS(gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919768.asm")
+#endif
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_809199FC.asm")
 
