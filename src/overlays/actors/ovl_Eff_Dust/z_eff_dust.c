@@ -113,7 +113,7 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
     s32 j;
     f32* distanceTraveled = this->distanceTraveled;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
         if ((*distanceTraveled) < 1.0f) {
             *distanceTraveled += 0.05f;
         }
@@ -137,8 +137,119 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80918FE4.asm")
+void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
+    s16 theta;
+    s16 fi;
+    f32 *distanceTraveled;
+    s32 i;
+    s32 j;
 
+    distanceTraveled = this->distanceTraveled;
+
+    for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
+        if ((*distanceTraveled) < 1.0f) {
+            *distanceTraveled += 0.03f;
+        }
+        distanceTraveled++;
+    }
+
+    for (j = 0; j < 2; j++){
+        i = this->index & 0x3F;
+        if (this->distanceTraveled[i] >= 1.0f) {
+            // Spherical coordinate system.
+            fi = randPlusMinusPoint5Scaled(0x10000);
+            theta = Rand_ZeroFloat(0x2000);
+            this->initialPositions[i].x = 400.0f * Math_CosS(fi) * Math_CosS(theta);
+            this->initialPositions[i].y = 400.0f * Math_SinS(theta);
+            this->initialPositions[i].z = 400.0f * Math_SinS(fi) * Math_CosS(theta);
+            this->distanceTraveled[i] = 0.0f;
+            this->index++;
+        }
+    }
+}
+
+/*
+void func_80919230(EffDust *this, GlobalContext *globalCtx) {
+    s16 theta;
+    ActorPlayer* player = PLAYER;
+    Actor* parent = this->actor.parent;
+    f32* distanceTraveled = this->distanceTraveled;
+    s32 i;
+    s32 j;
+
+    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & 0x1000)) {
+        if (this->life != 0) {
+            this->life -= 1;
+        } else {
+            Actor_MarkForDeath((Actor *) this);
+        }
+        for (i = 0; i < 64; i++) {
+            if ((*distanceTraveled) < 1.0f) {
+                *distanceTraveled += 0.2f;
+            }
+            distanceTraveled++;
+        }
+
+        return;
+    }
+
+    for (i = 0; i < 64; i++) {
+        if ((*distanceTraveled) < 1.0f) {
+            *distanceTraveled += 0.1f;
+        }
+        distanceTraveled++;
+    }
+
+    this->actor.world.pos = player->base.world.pos;
+
+    for (j = 0; j < 3; j++) {
+        i = this->index & 0x3F;
+        if (this->distanceTraveled[i] >= 1.0f) {
+            theta = randPlusMinusPoint5Scaled(65536.0f);
+            switch (this->actor.params) {
+                case 2:
+                    this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
+                    if (this->initialPositions[i].x > 3000.0f) {
+                        this->initialPositions[i].y = (3000.0f * Rand_ZeroOne()) * Math_SinS(theta);
+                        this->initialPositions[i].z = (3000.0f * Rand_ZeroOne()) * Math_CosS(theta);
+                    } else {
+                        this->initialPositions[i].y = 3000.0f * Math_SinS(theta);
+                        this->initialPositions[i].z = 3000.0f * Math_CosS(theta);
+                    }
+                    break;
+
+                case 3:
+                    this->initialPositions[i].x = (Rand_ZeroOne() * 2500.0f) + 700.0f;
+                    if (this->initialPositions[i].x > 2000.0f) {
+                        this->initialPositions[i].y = (2000.0f * Rand_ZeroOne()) * Math_SinS(theta);
+                        this->initialPositions[i].z = (2000.0f * Rand_ZeroOne()) * Math_CosS(theta);
+                    } else {
+                        this->initialPositions[i].y = 2000.0f * Math_SinS(theta);
+                        this->initialPositions[i].z = 2000.0f * Math_CosS(theta);
+                    }
+                    break;
+
+                case 4:
+                    this->initialPositions[i].x = (Rand_ZeroOne() * 8500.0f) + 1700.0f;
+                    if (this->initialPositions[i].x > 5000.0f) {
+                        this->initialPositions[i].y = (4000.0f * Rand_ZeroOne()) * Math_SinS(theta);
+                        this->initialPositions[i].z = (4000.0f * Rand_ZeroOne()) * Math_CosS(theta);
+                    } else {
+                        this->initialPositions[i].y = 4000.0f * Math_SinS(theta);
+                        this->initialPositions[i].z = 4000.0f * Math_CosS(theta);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
+            this->distanceTraveled[i] = 0.0f;
+            this->index++;
+        }
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919230.asm")
 
 void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
