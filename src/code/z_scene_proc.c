@@ -109,14 +109,14 @@ void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTex
 
 void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     Color_RGBA8* envColor;
-    FlashingTexturePrimColor* primColor = (FlashingTexturePrimColor *)Lib_PtrSegToVirt(params->primColors);
+    FlashingTexturePrimColor* primColor = (FlashingTexturePrimColor *)Lib_SegmentedToVirtual(params->primColors);
     u32 pad;
     u32 index = gSceneProcStep % params->cycleLength;
 
     primColor += index;
 
     if (params->envColors) {
-        envColor = (Color_RGBA8*)Lib_PtrSegToVirt(params->envColors) + index;
+        envColor = (Color_RGBA8*)Lib_SegmentedToVirtual(params->envColors) + index;
     } else {
         envColor = NULL;
     }
@@ -133,8 +133,8 @@ s32 SceneProc_Lerp(s32 a, s32 b, f32 t) {
 void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     FlashingTextureParams* params2 = params;
     Color_RGBA8* envColorTo;
-    FlashingTexturePrimColor* primColorTo = (FlashingTexturePrimColor *)Lib_PtrSegToVirt(params2->primColors);
-    u16* keyFrames = (u16*)Lib_PtrSegToVirt(params2->keyFrames);
+    FlashingTexturePrimColor* primColorTo = (FlashingTexturePrimColor *)Lib_SegmentedToVirtual(params2->primColors);
+    u16* keyFrames = (u16*)Lib_SegmentedToVirtual(params2->keyFrames);
     s32 index = gSceneProcStep % params2->cycleLength;
     s32 pad1;
     s32 keyFrameIndex;
@@ -169,7 +169,7 @@ void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
     primColorIn.lodFrac = SceneProc_Lerp(primColorFrom->lodFrac, primColorTo->lodFrac, t);
 
     if (params2->envColors) {
-        envColorTo = (Color_RGBA8*)Lib_PtrSegToVirt(params2->envColors) + keyFrameIndex;
+        envColorTo = (Color_RGBA8*)Lib_SegmentedToVirtual(params2->envColors) + keyFrameIndex;
         envColorFrom = envColorTo - 1;
         envColorIn.red = SceneProc_Lerp(envColorFrom->red, envColorTo->red, t);
         envColorIn.green = SceneProc_Lerp(envColorFrom->green, envColorTo->green, t);
@@ -210,10 +210,10 @@ void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTexture
     GraphicsContext* gfxCtx;
     s32 step;
 
-    dls = (Gfx**)Lib_PtrSegToVirt(params->textureDls);
-    offsets = (u8*)Lib_PtrSegToVirt(params->textureDlOffsets);
+    dls = (Gfx**)Lib_SegmentedToVirtual(params->textureDls);
+    offsets = (u8*)Lib_SegmentedToVirtual(params->textureDlOffsets);
     step = gSceneProcStep % params->cycleLength;
-    dl = (Gfx*)Lib_PtrSegToVirt(dls[offsets[step]]);
+    dl = (Gfx*)Lib_SegmentedToVirtual(dls[offsets[step]]);
 
     gfxCtx = ctxt->state.gfxCtx;
     if (gSceneProcFlags & 1) {
@@ -239,7 +239,7 @@ void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textur
             segment = textures->segment;
             segmentAbs = ((segment < 0)? -segment : segment) + 7;
 
-            gSceneProcDrawFuncs[textures->type](ctxt, segmentAbs, (void*)Lib_PtrSegToVirt(textures->params));
+            gSceneProcDrawFuncs[textures->type](ctxt, segmentAbs, (void*)Lib_SegmentedToVirtual(textures->params));
 
             textures++;
         } while (segment > -1);

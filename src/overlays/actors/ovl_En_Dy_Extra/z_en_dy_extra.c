@@ -95,7 +95,7 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    Vtx* vertices = Lib_PtrSegToVirt(D_0600DD40);
+    Vtx* vertices = Lib_SegmentedToVirtual(D_0600DD40);
     s32 i;
     u8 unk[3];
 

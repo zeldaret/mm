@@ -1871,10 +1871,10 @@ void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f*
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst);
 f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed);
 void Lib_Nop801004FC(void);
-void* Lib_PtrSegToVirt(void* ptr);
-void* Lib_PtrSegToVirtNull(void* ptr);
-void* Lib_PtrSegToK0(void* ptr);
-void* Lib_PtrSegToK0Null(void* ptr);
+void* Lib_SegmentedToVirtual(void* ptr);
+void* Lib_SegmentedToVirtualNull(void* ptr);
+void* Lib_PhysicalToVirtual(void* ptr);
+void* Lib_PhysicalToVirtualNull(void* ptr);
 void LifeMeter_Init(GlobalContext* ctxt);
 void LifeMeter_UpdateColors(GlobalContext* ctxt);
 // UNK_TYPE4 func_80100A80(GlobalContext* ctxt);

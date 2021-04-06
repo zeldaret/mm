@@ -697,11 +697,11 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
 
 void Lib_Nop801004FC(void) {}
 
-void* Lib_PtrSegToVirt(void* ptr) {
+void* Lib_SegmentedToVirtual(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
-void* Lib_PtrSegToVirtNull(void* ptr) {
+void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
     }
@@ -709,7 +709,7 @@ void* Lib_PtrSegToVirtNull(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
-void* Lib_PtrSegToK0(void* ptr) {
+void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
@@ -717,7 +717,7 @@ void* Lib_PtrSegToK0(void* ptr) {
     }
 }
 
-void* Lib_PtrSegToK0Null(void* ptr) {
+void* Lib_PhysicalToVirtualNull(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
