@@ -5,6 +5,8 @@
 #include <z64dma.h>
 #include <unk.h>
 
+#define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
+
 typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
