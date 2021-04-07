@@ -141,9 +141,7 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum.md5
 endif
 
-all:
-	$(MAKE) $(UNCOMPRESSED_ROM)
-	$(MAKE) $(ROM)
+all: $(UNCOMPRESSED_ROM) $(ROM) ;
 
 build/code.elf: $(O_FILES) linker_scripts/code_script.txt undef.txt linker_scripts/object_script.txt linker_scripts/dmadata_script.txt
 	$(LD) -T linker_scripts/code_script.txt -T undef.txt -T linker_scripts/object_script.txt -T linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
@@ -160,11 +158,8 @@ build/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 build/uncompressed_dmadata: $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
 
-build/baserom/boot: build/boot.bin
-	cp $< $@
-
-build/decomp/code: build/code.bin
-	cp $< $@
+build/baserom/boot build/decomp/code: build/code.elf
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 build/decomp/ovl_%: build/code.elf
 	@$(OBJCOPY) --dump-section ovl_$*=$@ $< /dev/null
@@ -200,9 +195,6 @@ init:
 	$(MAKE) diff-init
 
 # Recipes
-
-build/%.bin: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 build/baserom/%: baserom/%
 	@cp $< $@
