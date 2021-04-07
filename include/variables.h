@@ -4096,7 +4096,7 @@ extern Color_RGBA8 D_801F6D30;
 // extern UNK_TYPE1 D_801F6D50;
 extern u8 D_801F6DFC;
 // extern UNK_TYPE1 D_801F6DFD;
-extern s8018571C D_801F6E00;
+extern SlowlyContext D_801F6E00;
 // extern UNK_TYPE1 D_801F6FC0;
 extern StackEntry slowlyStackEntry;
 extern u8 slowlyStack[4096];
