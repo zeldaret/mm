@@ -1010,7 +1010,7 @@ extern u8 kanfontOrdering[92];
 // extern UNK_TYPE1 D_801BE90C;
 // extern UNK_TYPE1 D_801BE92C;
 // extern UNK_TYPE1 D_801BE944;
-extern actor_init_var_func actorInitVarFuncs[11];
+// extern actor_init_var_func sInitChainHandlers[11];
 // extern UNK_TYPE2 D_801BE990;
 // extern UNK_TYPE2 D_801BE992;
 // extern UNK_TYPE2 D_801BE994;
