@@ -4276,7 +4276,7 @@
     0x801F6D50:("D_801F6D50","UNK_TYPE1","",0x1),
     0x801F6DFC:("D_801F6DFC","u8","",0x1),
     0x801F6DFD:("D_801F6DFD","UNK_TYPE1","",0x1),
-    0x801F6E00:("D_801F6E00","SlowlyContext","",0x1c0),
+    0x801F6E00:("D_801F6E00","SlowlyTask","",0x1c0),
     0x801F6FC0:("D_801F6FC0","UNK_TYPE1","",0x1),
     0x801F6FC8:("slowlyStackEntry","StackEntry","",0x1c),
     0x801F6FE8:("slowlyStack","u8","[4096]",0x1000),

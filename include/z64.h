@@ -467,20 +467,20 @@ typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
     SLOWLY_CALLBACK_ONE_ARG,
     SLOWLY_CALLBACK_TWO_ARGS
-} SlowlyCallbackType;
+} SlowlyCallbackArgCount;
 
 typedef struct {
     /* 0x000 */ OSThread thread;
     /* 0x1B0 */ u8 callbackType;
     /* 0x1B1 */ u8 status;
     /* 0x1B4 */ union {
-        void (*callback0)();
-        void (*callback1)(s32);
-        void (*callback2)(s32, s32);
+        void (*callback0)(void);
+        void (*callback1)(void*);
+        void (*callback2)(void*, void*);
     };
-    /* 0x1B8 */ s32 callbackArg0;
-    /* 0x1BC */ s32 callbackArg1;
-} SlowlyContext; // size = 0x1C0
+    /* 0x1B8 */ void* callbackArg0;
+    /* 0x1BC */ void* callbackArg1;
+} SlowlyTask; // size = 0x1C0
 
 typedef struct {
     /* 0x00 */ int unk0;

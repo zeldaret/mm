@@ -4,7 +4,7 @@
 #define SLOWLY_STATUS_DONE    (1 << 0)
 #define SLOWLY_STATUS_STARTED (1 << 1)
 
-void Slowly_Main(SlowlyContext* slowly) {
+void Slowly_Main(SlowlyTask* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;
 
     switch (slowly->callbackType) {
@@ -22,12 +22,12 @@ void Slowly_Main(SlowlyContext* slowly) {
     slowly->status |= SLOWLY_STATUS_DONE;
 }
 
-void Slowly_ThreadEntry(SlowlyContext* slowly) {
+void Slowly_ThreadEntry(SlowlyTask* slowly) {
     Slowly_Main(slowly);
 }
 
-void Slowly_Start(SlowlyContext* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1) {
-    bzero(slowly, sizeof(SlowlyContext));
+void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1) {
+    bzero(slowly, sizeof(SlowlyTask));
 
     slowly->callbackType = SLOWLY_CALLBACK_TWO_ARGS;
     slowly->status = 0;
@@ -39,6 +39,6 @@ void Slowly_Start(SlowlyContext* slowly, void* stack, void (*callback)(), void* 
     osStartThread(&slowly->thread);
 }
 
-void Slowly_Stop(SlowlyContext* slowly) {
+void Slowly_Stop(SlowlyTask* slowly) {
     osDestroyThread(&slowly->thread);
 }
