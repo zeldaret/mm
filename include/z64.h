@@ -1,13 +1,17 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
 #include <PR/sched.h>
 #include <io/controller.h>
 #include <osint.h>
 #include <viint.h>
-#include <guint.h>
+#include <math.h>
 #include <os.h>
 #include <stdlib.h>
 #include <xstdio.h>
@@ -447,8 +451,6 @@ typedef void(*fault_client_func)(void* arg1, void* arg2);
 typedef unsigned long(*func)(void);
 
 typedef void(*func_ptr)(void);
-
-typedef void(*actor_init_var_func)(u8*, InitChainEntry*);
 
 typedef void(*osCreateThread_func)(void*);
 

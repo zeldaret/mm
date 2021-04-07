@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <z64math.h>
+#include <z64animation.h>
 #include <z64collision_check.h>
 #include <unk.h>
 
@@ -339,6 +340,15 @@ typedef enum {
     /* 0x0A */ ACTORCAT_DOOR,
     /* 0x0B */ ACTORCAT_CHEST
 } ActorType;
+
+typedef struct {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
+    /* 0x08 */ f32 startFrame;
+    /* 0x0C */ f32 frameCount;
+    /* 0x10 */ u8 mode;
+    /* 0x14 */ f32 morphFrames;
+} ActorAnimationEntry;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

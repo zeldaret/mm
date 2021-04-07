@@ -1,4 +1,4 @@
-#include <guint.h>
+#include <math.h>
 
 static const du	P[] = {
     {0x3FF00000, 0x00000000},

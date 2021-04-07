@@ -19,10 +19,10 @@ s32 nop_800E8EEC(UNK_TYPE4 param_1) {
 void nop_800E8EFC(UNK_TYPE4 param_1) {}
 
 s32 func_800E8F08(Vec3s* param_1, Vec3s* param_2) {
-  Math_SmoothScaleMaxMinS(&param_1->y, 0, 6, 6200, 100);
-  Math_SmoothScaleMaxMinS(&param_1->x, 0, 6, 6200, 100);
-  Math_SmoothScaleMaxMinS(&param_2->y, 0, 6, 6200, 100);
-  Math_SmoothScaleMaxMinS(&param_2->x, 0, 6, 6200, 100);
+  Math_SmoothStepToS(&param_1->y, 0, 6, 6200, 100);
+  Math_SmoothStepToS(&param_1->x, 0, 6, 6200, 100);
+  Math_SmoothStepToS(&param_2->y, 0, 6, 6200, 100);
+  Math_SmoothStepToS(&param_2->x, 0, 6, 6200, 100);
   return 1;
 }
 
@@ -34,10 +34,10 @@ s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4) 
     targetPitch = Math_Vec3f_Pitch(&actor->focus.pos,param_2);
     targetYaw = Math_Vec3f_Yaw(&actor->focus.pos,param_2) - actor->world.rot.y;
 
-    Math_SmoothScaleMaxMinS(&param_3->x, targetPitch, 6, 2000, 1);
+    Math_SmoothStepToS(&param_3->x, targetPitch, 6, 2000, 1);
     param_3->x = (param_3->x < -6000)? -6000 : ((6000 < param_3->x)? 6000 : param_3->x);
 
-    yawDiffFromTarget = Math_SmoothScaleMaxMinS(&param_3->y, targetYaw, 6, 2000, 1);
+    yawDiffFromTarget = Math_SmoothStepToS(&param_3->y, targetYaw, 6, 2000, 1);
     param_3->y = (param_3->y < -8000)? -8000 : ((8000 < param_3->y)? 8000 : param_3->y);
 
     if (yawDiffFromTarget != 0) {
@@ -46,7 +46,7 @@ s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4) 
         }
     }
 
-    Math_SmoothScaleMaxMinS(&param_4->y, targetYaw - param_3->y, 4, 2000, 1);
+    Math_SmoothStepToS(&param_4->y, targetYaw - param_3->y, 4, 2000, 1);
     param_4->y = (param_4->y < -12000)? -12000 : ((12000 < param_4->y)? 12000 : param_4->y);
 
     return 1;
