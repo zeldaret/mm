@@ -325,31 +325,19 @@ void func_80919768(Actor *thisx, GlobalContext *globalCtx2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919768.asm")
 #endif
 
-void func_809199FC(Actor *thisx, GlobalContext *globalCtx) {
-    ActorPlayer *player;
-    Gfx *temp_v0;
-    Gfx *temp_v0_2;
-    Gfx *temp_v0_3;
-    Gfx *temp_v0_4;
-    Gfx *temp_v0_5;
-    Gfx *temp_v0_6;
-    Gfx *temp_v0_7;
-    Gfx *temp_v0_8;
-    Gfx *temp_v0_9;
-    Gfx *temp_v1;
+void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
+    EffDust* this = THIS;
+    GlobalContext *globalCtx = globalCtx2;
     GraphicsContext *temp_s1;
-    MtxF *temp_s0;
-    f32 temp_f0;
     f32 temp_f0_2;
-    f32 temp_f12;
     f32 temp_f20;
-    f32 temp_f2;
-    s32 temp_s4;
-    f32 *phi_s2;
-    Vec3f *phi_s3;
-    s32 phi_s4;
+    f32 *distanceTraveled;
+    Vec3f *initialPositions;
+    ActorPlayer *player;
+    s32 i;
 
     temp_s1 = globalCtx->state.gfxCtx;
+
     player = PLAYER;
 
     OPEN_DISPS(temp_s1);
@@ -357,7 +345,6 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_s1);
 
     gDPPipeSync(POLY_XLU_DISP++);
-
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
 
     if (player->unkB08 >= 0.85f) {
@@ -368,45 +355,34 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
 
-    phi_s2 = THIS + 0x144;
-    phi_s3 = THIS + 0x244;
-    phi_s4 = 0;
-loop_4:
-    if (*phi_s2 < 1.0f) {
-        temp_s0 = &globalCtx->mf_187FC;
-        
-        /*
-        temp_v1 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1 + 8;
-        temp_v1->words.w0 = 0xFA000000;
-        temp_v1->words.w1 = ((u32) (*phi_s2 * 255.0f) & 0xFF) | ~0xFF;
-        */
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ((*phi_s2 * 255.0f) & 0xFF));
+    initialPositions = this->initialPositions;
+    distanceTraveled = this->distanceTraveled;
 
-        temp_f0 = *phi_s2;
-        temp_f20 = 1.0f - (temp_f0 * temp_f0);
-        SysMatrix_InsertMatrix(&player->mf_CC4, 0);
-        temp_f2 = THIS->dx;
-        temp_f0_2 = 1.0f - *phi_s2;
-        SysMatrix_InsertTranslation(phi_s3->x * ((temp_f2 * temp_f20) + (1.0f - temp_f2)), (temp_f0_2 * phi_s3->y) + 320.0f, (temp_f0_2 * phi_s3->z) + -20.0f, 1);
-        temp_f12 = *phi_s2 * THIS->scalingFactor;
-        Matrix_Scale(temp_f12, temp_f12, temp_f12, (u8)1U);
-        SysMatrix_NormalizeXYZ((z_Matrix *) temp_s0);
+    for (i = 0; i < 0x40; i++) {
+        if (*distanceTraveled < 1.0f) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ((*distanceTraveled * 255.0f)));
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s1), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            temp_f20 = 1.0f - SQ(*distanceTraveled);
+            SysMatrix_InsertMatrix(&player->mf_CC4, 0);
+            temp_f0_2 = *distanceTraveled;
+            temp_f0_2 = 1.0f - temp_f0_2;
+            SysMatrix_InsertTranslation(initialPositions->x * ((this->dx * temp_f20) + (1.0f - this->dx)), 
+                                        (temp_f0_2 * initialPositions->y) + 320.0f, 
+                                        (temp_f0_2 * initialPositions->z) + -20.0f, 
+                                        1);
+            Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, (u8)1U);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
-        gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s1), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, D_04054A90);
+            gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
-        gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-    }
-    temp_s4 = phi_s4 + 1;
-    phi_s2++;
-    phi_s3++;
-    phi_s4 = temp_s4;
-    if (temp_s4 != 0x40) {
-        goto loop_4;
+            gSPDisplayList(POLY_XLU_DISP++, D_04054A90);
+
+            gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
+        }
+        initialPositions++;
+        distanceTraveled++;
     }
 
     CLOSE_DISPS(temp_s1);
