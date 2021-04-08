@@ -39,7 +39,7 @@ void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
     s32 pad;
 
     Matrix_Push();
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
     rot = limbDrawTable[limbIndex];
 
@@ -98,7 +98,7 @@ void SkelAnime_LodDraw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
     pos.z = limbDrawTable[0].z;
@@ -147,7 +147,7 @@ void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* 
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
 
     rot = limbDrawTable[limbIndex];
@@ -217,7 +217,7 @@ void SkelAnime_LodDrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* li
     gSPSegment(gfxCtx->polyOpa.p++, 0xD, mtx);
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
     pos.z = limbDrawTable[0].z;
@@ -268,7 +268,7 @@ void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skele
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
     rot = limbDrawTable[limbIndex];
     pos.x = limbEntry->translation.x;
@@ -321,7 +321,7 @@ void SkelAnime_Draw(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDra
     gfxCtx = globalCtx->state.gfxCtx;
 
     Matrix_Push();
-    rootLimb = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    rootLimb = Lib_SegmentedToVirtual(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
@@ -365,7 +365,7 @@ void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, Skeleton* ske
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
     rot = limbDrawTable[limbIndex];
 
@@ -429,7 +429,7 @@ void SkelAnime_DrawSV(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbD
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
@@ -480,7 +480,7 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skeleton, 
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
 
     rot = limbDrawTable[limbIndex];
@@ -551,7 +551,7 @@ void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
@@ -598,9 +598,9 @@ void func_801343C0(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDraw
  * rotation value list, otherwise it is copied from the initial rotation value list
  */
 void SkelAnime_AnimateFrame(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst) {
-    AnimationHeader* animationHeader = Lib_PtrSegToVirt(animationSeg);
-    AnimationRotationIndex* index = Lib_PtrSegToVirt(animationHeader->rotationIndexSeg);
-    AnimationRotationValue* rotationValueTable = Lib_PtrSegToVirt(animationHeader->rotationValueSeg);
+    AnimationHeader* animationHeader = Lib_SegmentedToVirtual(animationSeg);
+    AnimationRotationIndex* index = Lib_SegmentedToVirtual(animationHeader->rotationIndexSeg);
+    AnimationRotationValue* rotationValueTable = Lib_SegmentedToVirtual(animationHeader->rotationValueSeg);
     AnimationRotationValue* frameRotationValueTable = &rotationValueTable[currentFrame];
     s32 i;
     u16 limit = animationHeader->limit;
@@ -618,12 +618,12 @@ void SkelAnime_AnimateFrame(AnimationHeader* animationSeg, s32 currentFrame, s32
 }
 
 s16 SkelAnime_GetTotalFrames(GenericAnimationHeader* animationSeg) {
-    GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
+    GenericAnimationHeader* animation = Lib_SegmentedToVirtual(animationSeg);
     return animation->frameCount;
 }
 
 s16 SkelAnime_GetFrameCount(GenericAnimationHeader* animationSeg) {
-    GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
+    GenericAnimationHeader* animation = Lib_SegmentedToVirtual(animationSeg);
 
     return (u16)animation->frameCount - 1;
 }
@@ -641,7 +641,7 @@ Gfx* SkelAnime_Draw2Limb(GlobalContext* globalCtx, s32 limbIndex, Skeleton* skel
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
 
     rot = limbDrawTable[limbIndex];
@@ -697,7 +697,7 @@ Gfx* SkelAnime_Draw2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limbDr
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
@@ -744,7 +744,7 @@ Gfx* SkelAnime_DrawLimbSV2(GlobalContext* globalCtx, s32 limbIndex, Skeleton* sk
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[limbIndex]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[limbIndex]);
     limbIndex++;
     rot = limbDrawTable[limbIndex];
 
@@ -808,7 +808,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
 
     Matrix_Push();
 
-    limbEntry = Lib_PtrSegToVirt(skeleton->limbs[0]);
+    limbEntry = Lib_SegmentedToVirtual(skeleton->limbs[0]);
 
     pos.x = limbDrawTable[0].x;
     pos.y = limbDrawTable[0].y;
@@ -851,7 +851,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/func_80134FFC.asm")
 
 s16 func_801353D4(GenericAnimationHeader* animationSeg) {
-    GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
+    GenericAnimationHeader* animation = Lib_SegmentedToVirtual(animationSeg);
 
     return animation->unk02;
 }
@@ -861,7 +861,7 @@ s16 func_801353D4(GenericAnimationHeader* animationSeg) {
  * SkelAnime_GetTotalFrames
  */
 s16 SkelAnime_GetTotalFrames2(GenericAnimationHeader* animationSeg) {
-    GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
+    GenericAnimationHeader* animation = Lib_SegmentedToVirtual(animationSeg);
 
     return animation->frameCount;
 }
@@ -871,7 +871,7 @@ s16 SkelAnime_GetTotalFrames2(GenericAnimationHeader* animationSeg) {
  * SkelAnime_GetFrameCount
  */
 s16 SkelAnime_GetFrameCount2(GenericAnimationHeader* animationSeg) {
-    GenericAnimationHeader* animation = Lib_PtrSegToVirt(animationSeg);
+    GenericAnimationHeader* animation = Lib_SegmentedToVirtual(animationSeg);
 
     return animation->frameCount - 1;
 }
@@ -941,7 +941,7 @@ void SkelAnime_LoadLinkAnimetion(GlobalContext* globalCtx, LinkAnimetionEntry* l
     entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_LINKANIMETION);
 
     if (entry != NULL) {
-        linkAnimetionEntry = Lib_PtrSegToVirt(linkAnimetionSeg);
+        linkAnimetionEntry = Lib_SegmentedToVirtual(linkAnimetionSeg);
         osCreateMesgQueue(&entry->types.type0.msgQueue, &entry->types.type0.msg, 1);
         DmaMgr_SendRequestImpl(
             &entry->types.type0.req, ram,
@@ -1096,7 +1096,7 @@ void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime,
     s32 limbCount;
     u32 allocSize;
 
-    skeletonHeader = Lib_PtrSegToVirt(skeletonHeaderSeg);
+    skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
     headerCount = skeletonHeader->limbCount;
     skelAnime->initFlags = flags;
     limbCount = (flags & 2) ? headerCount : 1;
@@ -1111,7 +1111,7 @@ void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime,
 
     skelAnime->limbCount = limbCount;
     skelAnime->dListCount = skeletonHeader->dListCount;
-    skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
     allocSize = sizeof(Vec3s) * limbCount;
 
     if (flags & 8) {
@@ -1363,9 +1363,9 @@ void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHead
                     AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount) {
     SkeletonHeader* skeletonHeader;
 
-    skeletonHeader = Lib_PtrSegToVirt(skeletonHeaderSeg);
+    skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
     skelAnime->limbCount = skeletonHeader->limbCount + 1;
-    skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
     if (limbDrawTbl == NULL) {
         skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
         skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
@@ -1383,10 +1383,10 @@ void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHe
                       AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount) {
     SkeletonHeader* skeletonHeader;
 
-    skeletonHeader = Lib_PtrSegToVirt(skeletonHeaderSeg);
+    skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
     skelAnime->limbCount = skeletonHeader->limbCount + 1;
     skelAnime->dListCount = skeletonHeader->dListCount;
-    skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
 
     if (limbDrawTbl == NULL) {
         skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
@@ -1406,9 +1406,9 @@ void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, Skeleton
                         AnimationHeader* animationSeg) {
     SkeletonHeader* skeletonHeader;
 
-    skeletonHeader = Lib_PtrSegToVirt(skeletonHeaderSeg);
+    skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
     skelAnime->limbCount = skeletonHeader->limbCount + 1;
-    skelAnime->skeleton = Lib_PtrSegToVirt(skeletonHeader->skeletonSeg);
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
     skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
     skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
 

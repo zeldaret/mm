@@ -37,6 +37,6 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_PtrSegToVirt(&D_06001788));
+    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_SegmentedToVirtual(&D_06001788));
     func_800BE03C(globalCtx, D_06000520);
 }
