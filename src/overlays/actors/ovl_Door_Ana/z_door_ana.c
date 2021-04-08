@@ -116,35 +116,38 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
           (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
 
             if (dooranaType == DOORANA_TYPE_ADJACENT) {
-                // 300 uses scene exit addresses, not static grotto addresses, 
-                // eg. deku playground gets address in the NCT scene exit table, not in grotto table
+                // 300 uses scene exit addresses, not static DoorAna entrance addresses, 
+                // eg. deku playground gets address in the NCT scene exit table
 
-                entranceIndex = this->actor.params & 0x1F;
+                entranceIndex = GET_DOORANA_ADJACENT_ENTRANCE(this);
                 globalCtx->unk1887A = globalCtx->setupExitList[entranceIndex];
-                label_required_to_convince_compiler_to_not_use_delay_slot: ;
+                lblUnk_808E03B8: ; // required to convince compiler to not use delay slot
 
             } else { 
-                // 0x7xxx range, minus 1 so that 0xxx is a special case
-                entranceIndex = ((this->actor.params >> 0xC) & 0x7) - 1;
+                // unused in vanilla, the highest params bits can directly index an address
+                entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);
 
-                func_80169E6C(globalCtx, 3, 0x4FF); // in OOT, Gameplay_SetupRespawnPoint?
+                func_80169E6C(globalCtx, 3, 0x4FF);
 
                 gSaveContext.extra.previousPlayerHeight = this->actor.world.pos.y;
                 gSaveContext.extra.previousPlayerYRot   = this->actor.home.rot.y;
 
                 // save the params lower byte for En_Torch to decide what item to use in the grotto chest
-                gSaveContext.extra.unk87 = this->actor.params & 0xFF; 
-                if (entranceIndex < 0) {
-                    // if 0x00xx, entrance is z rotation, mind the rotation conversion flag
-                    entranceIndex = this->actor.home.rot.z + 1;
+                gSaveContext.extra.unk87 = GET_DOORANA_ITEMFLAGS(this);
+
+                // most grottos use the zrotation as their entrance index instead
+                if (DOORANA_TYPE_ROTATION_ENTRANCE(entranceIndex)) {
+                    entranceIndex = GET_DOORANA_ROTATION_ENTRANCE(this);
                 }
+
                 globalCtx->unk1887A = entrances[entranceIndex];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
         } else { 
-            if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) && (this->actor.xzDistToPlayer <= 20.0f) 
+            if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) 
+              && (this->actor.xzDistToPlayer <= 20.0f) 
               && (yDist = this->actor.yDistToPlayer, (yDist >= -50.0f)) && (yDist <= 15.0f)) {
                 player->stateFlags1 |= 0x80000000; 
                 this->actor.targetMode = 1;
