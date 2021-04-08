@@ -1654,7 +1654,7 @@ void func_800F0568(GlobalContext* ctxt, Vec3f* position, s32 param_3, s16 sfxId)
 void func_800F12D0(GlobalContext* ctxt);
 void func_800F1304(GlobalContext* ctxt, s16 param_2);
 void func_800F1374(s32 param_1, s16 param_2);
-s16 func_800F13E8(GlobalContext* ctxt, short param_2);
+s16 func_800F13E8(GlobalContext* ctxt, s16 param_2);
 s16 func_800F1460(s16 param_1);
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 index);
 void ActorCutscene_Init(GlobalContext* ctxt, ActorCutscene* cutscenes, s32 num);

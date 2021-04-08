@@ -9,8 +9,8 @@ void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void DoorAna_WaitClosed(DoorAna* thisx, GlobalContext* globalCtx);
-void DoorAna_WaitOpen(DoorAna* thisx, GlobalContext* globalCtx);
+void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx);
+void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx);
 void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx);
 
 const ActorInit Door_Ana_InitVars = {
@@ -77,27 +77,27 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     s32 grottoIsOpen = 0;
     u32 grottoType = GET_DOORANA_TYPE(this);
 
-    if ((grottoType) == DOORANA_TYPE_UNK) {
+    if (grottoType == DOORANA_TYPE_UNK) {
         // in OOT decomp its marked as open with storms, but does not seem to open with storms in MM
-        if ((this->actor.xyzDistToPlayerSq < 40000.0f) && (func_800F13E8(globalCtx, 5) != 0)) {
+        if ((this->actor.xyzDistToPlayerSq < 40000.0f) && (func_800F13E8(globalCtx, 5))) {
             grottoIsOpen = 1;
             this->actor.flags &= ~0x10; // always update OFF
         }
 
     } else {
-        if ((this->bombCollider.base.acFlags & AC_HIT) ) { // bomb collision
+        if (this->bombCollider.base.acFlags & AC_HIT) { // bomb collision
             grottoIsOpen = 1;
             Collider_DestroyCylinder(globalCtx, &this->bombCollider);
 
         } else {
             Collider_UpdateCylinder(&this->actor, &this->bombCollider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx , &this->bombCollider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->bombCollider.base);
         }
     }
 
     if (grottoIsOpen) {
         this->actor.params &= ~DOORANA_TYPE_BITRANGE;
-        DoorAna_SetupAction(this, DoorAna_WaitOpen); // change update function to "waiting open"
+        DoorAna_SetupAction(this, DoorAna_WaitOpen);
         play_sound(0x4802); // CORRECT_CHIME sfx
     }
 
@@ -115,7 +115,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
         if ((this->actor.targetMode != 0) && (globalCtx->unk18875 == 0) && (globalCtx->unk18B4A == 0) &&
           (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
 
-            if ((dooranaType) == DOORANA_TYPE_ADJACENT) {
+            if (dooranaType == DOORANA_TYPE_ADJACENT) {
                 // 300 uses scene exit addresses, not static grotto addresses, 
                 // eg. deku playground gets address in the NCT scene exit table, not in grotto table
 
@@ -125,7 +125,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
             } else { 
                 // 0x7xxx range, minus 1 so that 0xxx is a special case
-                entranceIndex = (( this->actor.params >> 0xC) & 0x7) - 1;
+                entranceIndex = ((this->actor.params >> 0xC) & 0x7) - 1;
 
                 func_80169E6C(globalCtx, 3, 0x4FF); // in OOT, Gameplay_SetupRespawnPoint?
 
@@ -163,8 +163,8 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
     s8 pad[2];
 
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext( this->actor.cutscene ) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields( this->actor.cutscene, &this->actor);
+        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
