@@ -525,7 +525,7 @@ void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 void func_801306A4(GlobalContext *ctxt) {
-    ctxt->unk1887F = func_801323A0(ctxt->unk1887A) & 0x7F;
+    ctxt->unk1887F = func_801323A0(ctxt->nextEntranceIndex) & 0x7F;
 }
 
 s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header) {

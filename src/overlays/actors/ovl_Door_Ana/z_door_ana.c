@@ -120,7 +120,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                 // eg. deku playground gets address in the NCT scene exit table
 
                 entranceIndex = GET_DOORANA_ADJACENT_ENTRANCE(this);
-                globalCtx->unk1887A = globalCtx->setupExitList[entranceIndex];
+                globalCtx->nextEntranceIndex = globalCtx->setupExitList[entranceIndex];
                 lblUnk_808E03B8: ; // required to convince compiler to not use delay slot
 
             } else { 
@@ -135,12 +135,12 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                 // save the params lower byte for En_Torch to decide what item to use in the grotto chest
                 gSaveContext.extra.unk87 = GET_DOORANA_ITEMFLAGS(this);
 
-                // most grottos use the zrotation as their entrance index instead
+                // most grottos in the game use their zrotation as their entrance index, not params
                 if (DOORANA_TYPE_ROTATION_ENTRANCE(entranceIndex)) {
                     entranceIndex = GET_DOORANA_ROTATION_ENTRANCE(this);
                 }
 
-                globalCtx->unk1887A = entrances[entranceIndex];
+                globalCtx->nextEntranceIndex = entrances[entranceIndex];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
