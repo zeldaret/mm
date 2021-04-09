@@ -19,14 +19,14 @@ s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
     if (sceneCtxt) {}
 
     if (size) {
-        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].vramAddr, objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].segment, objectFileTable[id].vromStart, size);
     }
 
     // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
     if (sceneCtxt->objectCount < 0x22) {
-        sceneCtxt->objects[sceneCtxt->objectCount + 1].vramAddr =
+        sceneCtxt->objects[sceneCtxt->objectCount + 1].segment =
             // UB to cast pointer to u32
-            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].vramAddr + size);
+            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].segment + size);
     }
 
     sceneCtxt->objectCount++;
@@ -59,18 +59,18 @@ void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
     // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
     for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
 
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].vramAddr = GameStateHeap_AllocFromEnd(&ctxt->state.heap, spaceSize);
+    sceneCtxt->objectVramStart = sceneCtxt->objects[0].segment = THA_AllocEndAlign16(&ctxt->state.heap, spaceSize);
     // UB to cast sceneCtxt->objectVramStart to s32
     sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
     // TODO: Second argument here is an object enum
     sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
     // TODO: Segment number enum?
-    gRspSegmentPhysAddrs[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].vramAddr);
+    gSegments[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].segment);
 }
 
 void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
     s32 i;
-    SceneObject* status;
+    ObjectStatus* status;
     ObjectFileTableEntry* objectFile;
     u32 size;
 
@@ -86,7 +86,7 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&status->dmaReq, status->vramAddr, objectFile->vromStart,
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->segment, objectFile->vromStart,
                                             size, 0, &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
@@ -128,7 +128,7 @@ void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
             continue;
         }
 
-        DmaMgr_SendRequest0(sceneCtxt->objects[i].vramAddr, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(sceneCtxt->objects[i].segment, objectFileTable[id].vromStart, vromSize);
     }
 }
 
@@ -143,7 +143,7 @@ void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
     // TODO: UB to cast void to u32
-    addr = ((u32)sceneCtxt->objects[iParm2].vramAddr) + vromSize;
+    addr = ((u32)sceneCtxt->objects[iParm2].segment) + vromSize;
     addr = ALIGN16(addr);
     // UB to cast u32 to pointer
     return (void*)addr;
@@ -157,7 +157,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     s16 temp16;
     u8 unk20;
 
-    ctxt->linkActorEntry = (ActorEntry*)Lib_PtrSegToVirt(entry->spawnList.segment) +
+    ctxt->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(entry->spawnList.segment) +
                     ctxt->setupEntranceList[ctxt->curSpawn].spawn;
     if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
          (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
@@ -167,7 +167,7 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     }
 
     loadedCount = Scene_LoadObject(&ctxt->sceneContext, OBJECT_LINK_CHILD);
-    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].vramAddr;
+    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].segment;
     ctxt->sceneContext.objectCount = loadedCount;
     ctxt->sceneContext.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
@@ -175,19 +175,19 @@ void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
     gActorOverlayTable[0].initInfo->objectId = temp16;
     Scene_LoadObject(&ctxt->sceneContext, temp16);
 
-    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].vramAddr = objectVramAddr;
+    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].segment = objectVramAddr;
 }
 
 // Scene Command 0x01: Actor List
 void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->sceneNumActorsToLoad = (u16)entry->actorList.num;
-    ctxt->setupActorList = (ActorEntry*)Lib_PtrSegToVirt(entry->actorList.segment);
+    ctxt->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(entry->actorList.segment);
     ctxt->actorCtx.unkC = (u16)0;
 }
 
 // Scene Command 0x02: Cutscene Camera List
 void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->unk18858 = (UNK_PTR)Lib_PtrSegToVirt(entry->csCameraList.segment);
+    ctxt->unk18858 = (UNK_PTR)Lib_SegmentedToVirtual(entry->csCameraList.segment);
 }
 
 // Scene Command 0x03: Collision Header
@@ -195,18 +195,18 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
     BgMeshHeader* temp_ret;
     BgMeshHeader* temp_s0;
 
-    temp_ret = (BgMeshHeader*)Lib_PtrSegToVirt(entry->colHeader.segment);
+    temp_ret = (BgMeshHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
     temp_s0 = temp_ret;
-    temp_s0->vertices = (BgVertex*)Lib_PtrSegToVirt(temp_ret->vertices);
-    temp_s0->polygons = (BgPolygon*)Lib_PtrSegToVirt(temp_s0->polygons);
+    temp_s0->vertices = (BgVertex*)Lib_SegmentedToVirtual(temp_ret->vertices);
+    temp_s0->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(temp_s0->polygons);
     if (temp_s0->attributes != 0) {
-        temp_s0->attributes = (BgPolygonAttributes*)Lib_PtrSegToVirt(temp_s0->attributes);
+        temp_s0->attributes = (BgPolygonAttributes*)Lib_SegmentedToVirtual(temp_s0->attributes);
     }
     if (temp_s0->cameraData != 0) {
-        temp_s0->cameraData = (void*)Lib_PtrSegToVirt(temp_s0->cameraData);
+        temp_s0->cameraData = (void*)Lib_SegmentedToVirtual(temp_s0->cameraData);
     }
     if (temp_s0->waterboxes != 0) {
-        temp_s0->waterboxes = (BgWaterBox*)Lib_PtrSegToVirt(temp_s0->waterboxes);
+        temp_s0->waterboxes = (BgWaterBox*)Lib_SegmentedToVirtual(temp_s0->waterboxes);
     }
 
     BgCheck_Init(&ctxt->colCtx, ctxt, temp_s0);
@@ -215,12 +215,12 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x04: Room List
 void Scene_HeaderCommand04(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->numRooms = entry->roomList.num;
-    ctxt->roomList = (RoomFileLocation*)Lib_PtrSegToVirt(entry->roomList.segment);
+    ctxt->roomList = (RoomFileLocation*)Lib_SegmentedToVirtual(entry->roomList.segment);
 }
 
 // Scene Command 0x06: Entrance List
 void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupEntranceList = (EntranceEntry*)Lib_PtrSegToVirt(entry->entranceList.segment);
+    ctxt->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(entry->entranceList.segment);
 }
 
 // Scene Command 0x07: Special Files
@@ -229,8 +229,8 @@ void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
         ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
                                                            entry->specialFiles.keepObjectId);
         // TODO: Segment number enum?
-        gRspSegmentPhysAddrs[5] =
-            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].vramAddr);
+        gSegments[5] =
+            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].segment);
     }
 
     if (entry->specialFiles.cUpElfMsgNum != 0) {
@@ -250,19 +250,19 @@ void Scene_HeaderCommand08(GlobalContext* ctxt, SceneCmd* entry) {
 
 // Scene Command 0x0A: Mesh Header
 void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->roomContext.currRoom.mesh = (RoomMesh*)Lib_PtrSegToVirt(entry->mesh.segment);
+    ctxt->roomContext.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(entry->mesh.segment);
 }
 
 // Scene Command 0x0B: Object List
 void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
     s32 i, j, k;
-    SceneObject* firstObject;
-    SceneObject* status;
-    SceneObject* status2;
+    ObjectStatus* firstObject;
+    ObjectStatus* status;
+    ObjectStatus* status2;
     s16* objectEntry;
     void* nextPtr;
 
-    objectEntry = (s16*)Lib_PtrSegToVirt(entry->objectList.segment);
+    objectEntry = (s16*)Lib_SegmentedToVirtual(entry->objectList.segment);
     k = 0;
     i = ctxt->sceneContext.spawnedObjectCount;
     status = &ctxt->sceneContext.objects[i];
@@ -292,7 +292,7 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
 
         // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
         if (i < 0x22) {
-            firstObject[i + 1].vramAddr = nextPtr;
+            firstObject[i + 1].segment = nextPtr;
         }
         i++;
         k++;
@@ -307,23 +307,23 @@ void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
     s32 i;
     LightInfo* lightInfo;
 
-    lightInfo = (LightInfo*)Lib_PtrSegToVirt(entry->lightList.segment);
+    lightInfo = (LightInfo*)Lib_SegmentedToVirtual(entry->lightList.segment);
     for (i = 0; i < entry->lightList.num; i++)
     {
-        Lights_Insert(ctxt, &ctxt->lightCtx, lightInfo);
+        LightContext_InsertLight(ctxt, &ctxt->lightCtx, lightInfo);
         lightInfo++;
     }
 }
 
 // Scene Command 0x0D: Path List
 void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupPathList = (void*)Lib_PtrSegToVirt(entry->pathList.segment);
+    ctxt->setupPathList = (void*)Lib_SegmentedToVirtual(entry->pathList.segment);
 }
 
 // Scene Command 0x0E: Transition Actor List
 void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->transitionActorCount = entry->transiActorList.num;
-    ctxt->transitionActorList = (TransitionActorInit*)Lib_PtrSegToVirt((void*)entry->transiActorList.segment);
+    ctxt->transitionActorList = (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)entry->transiActorList.segment);
     func_80105818(ctxt, ctxt->transitionActorCount, ctxt->transitionActorList);
 }
 
@@ -334,7 +334,7 @@ void func_8012FEBC(GlobalContext* ctxt, u8* nbTransitionActors) {
 // Scene Command 0x0F: Light Setting List
 void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->kankyoContext.environmentSettingsCount = entry->lightSettingList.num;
-    ctxt->kankyoContext.environmentSettingsList = (void*)Lib_PtrSegToVirt(entry->lightSettingList.segment);
+    ctxt->kankyoContext.environmentSettingsList = (void*)Lib_SegmentedToVirtual(entry->lightSettingList.segment);
 }
 
 s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
@@ -342,7 +342,7 @@ s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
     u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
 
     if (fileSize) {
-        ctxt->roomContext.unk74 = GameStateHeap_AllocFromEnd(&ctxt->state.heap, fileSize);
+        ctxt->roomContext.unk74 = THA_AllocEndAlign16(&ctxt->state.heap, fileSize);
         return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
     }
 
@@ -386,15 +386,15 @@ void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
 
     if (gSaveContext.extra.unk2b8 == 0) {
         // TODO: Needs REG macro
-        gStaticContext->data[0x0F] = ctxt->kankyoContext.unk2;
+        gGameInfo->data[0x0F] = ctxt->kankyoContext.unk2;
     }
 
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk4 = -(Math_Sins(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk8 = (Math_Coss(dayTime - 0x8000) * 120.0f) * 25.0f;
+    ctxt->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unkC = (Math_Coss(dayTime - 0x8000) * 20.0f) * 25.0f;
+    ctxt->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
     if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
         gSaveContext.extra.environmentTime = gSaveContext.perm.time;
@@ -423,7 +423,7 @@ void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry) {
 }
 
 void Scene_HeaderCommand13(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupExitList = (void*)Lib_PtrSegToVirt(entry->exitList.segment);
+    ctxt->setupExitList = (void*)Lib_SegmentedToVirtual(entry->exitList.segment);
 }
 
 // Scene Command 0x09: Undefined
@@ -450,10 +450,10 @@ void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
     if (gSaveContext.extra.sceneSetupIndex) {
-        altHeaderList = (SceneCmd**)Lib_PtrSegToVirt(entry->altHeaders.segment);
+        altHeaderList = (SceneCmd**)Lib_SegmentedToVirtual(entry->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.extra.sceneSetupIndex - 1];
         if (altHeader != NULL) {
-           Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_PtrSegToVirt(altHeader));
+           Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_SegmentedToVirtual(altHeader));
            (entry + 1)->base.code = 0x14;
         }
     }
@@ -462,12 +462,12 @@ void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x17: Cutscene Data
 void Scene_HeaderCommand17(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->csCtx.cutsceneCount = (u8)entry->base.data1;
-    ctxt->cutsceneList = (CutsceneEntry*)Lib_PtrSegToVirt((void*)entry->base.data2);
+    ctxt->cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)entry->base.data2);
 }
 
 // Scene Command 0x1B: Cutscene Actor List
 void Scene_HeaderCommand1B(GlobalContext* ctxt, SceneCmd* entry) {
-    ActorCutscene_Init(ctxt, (ActorCutscene*)Lib_PtrSegToVirt(entry->cutsceneActorList.segment),
+    ActorCutscene_Init(ctxt, (ActorCutscene*)Lib_SegmentedToVirtual(entry->cutsceneActorList.segment),
                                                               entry->cutsceneActorList.num);
 }
 
@@ -521,7 +521,7 @@ void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
 
 // Scene Command 0x1A: Texture Animations
 void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->sceneTextureAnimations = (AnimatedTexture*)Lib_PtrSegToVirt(entry->textureAnimations.segment);
+    ctxt->sceneTextureAnimations = (AnimatedTexture*)Lib_SegmentedToVirtual(entry->textureAnimations.segment);
 }
 
 void func_801306A4(GlobalContext *ctxt) {

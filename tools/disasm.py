@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, os, struct, ast, bisect
+import argparse, os, struct, ast, bisect, math
 
 SPLIT_FILES = True # TODO this should be a flag somewhere
 
@@ -159,6 +159,63 @@ def write_header(file, is_data):
         else:
             file.write(".section .data\n\n")
 
+    file.write(".balign 16\n\n")
+
+def format_string(data_bytes, output_ends = True, force_ascii = False):
+    """
+    Swiss Cheese
+    """
+    hex_digits = "0123456789abcdefABCDEF"
+    result = ""
+    directive = "ascii" if force_ascii else "asciz"
+
+    if 0x8C in data_bytes or 0x8D in data_bytes or 0x1B in data_bytes:
+        char = ""
+        index = None
+        if 0x8C in data_bytes:
+            char = "\\x8C"
+            index = data_bytes.index(0x8C)
+        elif 0x8D in data_bytes:
+            char = "\\x8D"
+            index = data_bytes.index(0x8D)
+        elif 0x1B in data_bytes:
+            char = "\\x1B"
+            index = data_bytes.index(0x1B)
+        else:
+            assert False , "???"
+        part1 = format_string(data_bytes[0:index], output_ends=False)
+        part2 = format_string(data_bytes[index+1:], output_ends=False)
+        if part2 != "":
+            result = part1 + ("\"\n                        .ascii \"" if part2[0] in hex_digits and part1 != "" else "") + \
+                    char +  ("\"\n                        .asciz \"" if part2[0] in hex_digits else "") + part2
+            if output_ends and part2[0] in hex_digits and part1 == "":
+                directive = "ascii"
+        else:
+            result = part1 + ("\"\n                        .ascii \"" if part2[0] in hex_digits and part1 != "" else "") + char + "\"\n"
+    else:
+        result = data_bytes.decode("EUC-JP").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t").replace("\0", "")
+
+    return (("." + directive + " \"") if output_ends else "") + result + ("\"" if output_ends else "")
+
+def format_float(f):
+    """
+    naive approach to reduce float decimals, also for doubles
+    """
+    if math.isnan(f) or (type(f) == float and f == 4294967296.0):
+        return str(f)
+    struct_fmt = ">f" if type(f) == float else ">d"
+
+    float_str = str(f)
+    precision = len(float_str.split(".")[1].strip())
+    word = struct.pack(struct_fmt, f)
+    while precision != 0:
+        new_f = round(f,precision-1)
+        precision -= 1
+        if struct.pack(struct_fmt, new_f) != word:
+            return f
+        else:
+            f = new_f
+    return f
 
 # TODO add code_regions?
 class Disassembler:
@@ -444,15 +501,49 @@ class Disassembler:
             with open(filename, 'w') as f:
                 write_header(f, self.is_in_data_or_undef(file.vaddr))
 
+                # strings can span many words and more often than not do
+                # but are luckily always 4-byte aligned
+                string_start = -1
+                string_data = bytearray()
+                force_ascii_str = False # hack for non-null-terminated strings in .data
+
+                # whether to output floats
+                is_floats = False
+
                 for i in range(0, file.size // 4):
-                    inst = file.get_inst(i)
                     addr = file.vaddr + i*4
+                    inst = file.get_inst(i)
 
                     if addr in self.objects and SPLIT_FILES:
+                        # if currently accumulating a string, write it out as-is since there's no way it's extending over a file boundary
+                        if string_start != -1:
+                            f.write("glabel %s\n" % self.make_load(string_start))
+                            f.write("/* %06d 0x%08X */ %s\n                        .balign 4\n" % ((string_start - file.vaddr)//4, string_start, format_string(string_data, force_ascii=force_ascii_str)))
+                            string_data = bytearray()
+                            # reset string writing
+                            string_start = -1
                         f.close()
                         filename = self.build_disassembled_path(path, addr, file)
                         f = open(filename, 'w')
                         write_header(f, self.is_in_data_or_undef(addr))
+
+                    var = known_vars.get(addr, None)
+                    if var is not None:
+                        is_floats = var[1] == "f32"
+                        # is_doubles = var[1] == "f64"
+                        # end of the string, write it out
+                        if string_start != -1:
+                            f.write("glabel %s\n" % self.make_load(string_start))
+                            f.write("/* %06d 0x%08X */ %s\n                        .balign 4\n" % ((string_start - file.vaddr)//4, string_start, format_string(string_data, force_ascii=force_ascii_str)))
+                            string_data = bytearray()
+                        # string check
+                        string_start = addr if (var[1] == "char" and var[2].startswith("[") and var[2].endswith("]")) else -1
+                        force_ascii_str = addr in [0x801D0708] # non-null-terminated strings in .data
+
+                    # accumulate string data
+                    if string_start != -1:
+                        string_data.extend(file.data[i*4:(i+1)*4])
+                        continue
 
                     if addr in self.labels and addr not in self.switch_cases:
                         f.write(".L%08X:\n" % addr)
@@ -505,9 +596,19 @@ class Disassembler:
                                 data_stream <<= 16
                                 print_head += 2
                             else:
-                                f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, data_stream & 0xFFFFFFFF))
+                                if is_floats:
+                                    flt = struct.unpack(">f", struct.pack(">I", data_stream & 0xFFFFFFFF))[0]
+                                    f.write("/* %06d 0x%08X */ .float\t%s\n" % (i, addr, format_float(flt)))
+                                else:
+                                    f.write("/* %06d 0x%08X */ .word\t0x%08X\n" % (i, addr, data_stream & 0xFFFFFFFF))
                                 data_stream <<= 32
                                 print_head += 4
+                # catch strings at the end of a section
+                if string_start != -1:
+                    f.write("glabel %s\n" % self.make_load(string_start))
+                    f.write("/* %06d 0x%08X */ %s\n                        .balign 4\n" % ((string_start - file.vaddr)//4, string_start, format_string(string_data, force_ascii=force_ascii_str)))
+                    string_data = bytearray()
+                    string_start = -1
 
     def determine_load_ref_impl(self, file, inst_i, start_i, depth, from_branch=False, visited=set()):
         candidates = []

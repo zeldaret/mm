@@ -28,7 +28,7 @@ void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
     }
 
     mesh = &room->mesh->type0;
-    meshParams = (RoomMeshType0Params*)Lib_PtrSegToVirt(mesh->paramsStart);
+    meshParams = (RoomMeshType0Params*)Lib_SegmentedToVirtual(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
         if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
@@ -110,7 +110,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
             roomCtxt->unk31 = 0;
             roomCtxt->currRoom.segment = roomCtxt->activeRoomVram;
             // TODO: Segment number enum
-            gRspSegmentPhysAddrs[3] = PHYSICAL_TO_VIRTUAL(roomCtxt->activeRoomVram);
+            gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtxt->activeRoomVram);
 
             Scene_ProcessHeader(ctxt, (SceneCmd*)roomCtxt->currRoom.segment);
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
@@ -135,7 +135,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
 void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
-        gRspSegmentPhysAddrs[3] = PHYSICAL_TO_VIRTUAL(room->segment);
+        gSegments[3] = PHYSICAL_TO_VIRTUAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](ctxt, room, flags);
     }
     return;

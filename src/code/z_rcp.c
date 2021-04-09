@@ -1229,9 +1229,9 @@ void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u
     s32 i;
     Gfx* gfx;
 
-    gRspSegmentPhysAddrs[0] = 0;
-    gRspSegmentPhysAddrs[14] = (u32)graphDlEntry;
-    gRspSegmentPhysAddrs[15] = (u32)gCtxt->framebuffer;
+    gSegments[0] = 0;
+    gSegments[14] = (u32)graphDlEntry;
+    gSegments[15] = (u32)gCtxt->framebuffer;
 
     gfx = graphDlEntry + 0x16;
     gSPDisplayList(gfx + 0, &D_0E000140);
@@ -1285,7 +1285,7 @@ void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u
         if (i == 0xE) {
             gSPNoOp(gfx + i);
         } else {
-            gSPSegment(gfx + i, i, gRspSegmentPhysAddrs[i]);
+            gSPSegment(gfx + i, i, gSegments[i]);
         }
     }
     gSPEndDisplayList(gfx + i);

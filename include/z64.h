@@ -1,13 +1,17 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
 #include <PR/sched.h>
 #include <io/controller.h>
 #include <osint.h>
 #include <viint.h>
-#include <guint.h>
+#include <math.h>
 #include <os.h>
 #include <stdlib.h>
 #include <xstdio.h>
@@ -22,10 +26,17 @@
 #include <z64cutscene.h>
 #include <z64dma.h>
 #include <z64effect.h>
+#include <z64item.h>
 #include <z64light.h>
 #include <z64math.h>
 #include <z64object.h>
 #include <z64scene.h>
+
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -134,13 +145,6 @@ typedef struct {
 } CyclingTextureParams; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u32 size;
-    /* 0x4 */ Gfx* buf;
-    /* 0x8 */ Gfx* p;
-    /* 0xC */ Gfx* d;
-} DispBuf; // size = 0x10
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -212,11 +216,18 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE4 size;
-    /* 0x4 */ void* heapStart;
-    /* 0x8 */ void* heapAppendStart;
-    /* 0xC */ void* heapAppendEnd;
-} GameStateHeap; // size = 0x10
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ void*  bufp;
+    /* 0x0008 */ void*  head;
+    /* 0x000C */ void*  tail;
+} TwoHeadArena; // size = 0x10
+
+typedef struct {
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ Gfx*   bufp;
+    /* 0x0008 */ Gfx*   p;
+    /* 0x000C */ Gfx*   d;
+} TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x00000 */ u16 headMagic; // 1234
@@ -245,16 +256,16 @@ typedef struct {
     /* 0x05C */ OSMesgQueue unk5C;
     /* 0x074 */ UNK_TYPE1 pad74[0x12C];
     /* 0x1A0 */ Gfx* unk1A0;
-    /* 0x1A4 */ DispBuf unk1A4;
+    /* 0x1A4 */ TwoHeadGfxArena unk1A4;
     /* 0x1B4 */ Gfx* unk1B4;
-    /* 0x1B8 */ DispBuf unk1B8;
+    /* 0x1B8 */ TwoHeadGfxArena unk1B8;
     /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
     /* 0x274 */ OSViMode* unk274;
     /* 0x278 */ void* zbuffer;
     /* 0x27C */ UNK_TYPE1 pad27C[0x1C];
-    /* 0x298 */ DispBuf overlay;
-    /* 0x2A8 */ DispBuf polyOpa;
-    /* 0x2B8 */ DispBuf polyXlu;
+    /* 0x298 */ TwoHeadGfxArena overlay;
+    /* 0x2A8 */ TwoHeadGfxArena polyOpa;
+    /* 0x2B8 */ TwoHeadGfxArena polyXlu;
     /* 0x2C8 */ s32 displaylistCounter;
     /* 0x2CC */ void* framebuffer;
     /* 0x2D0 */ int pad2D0;
@@ -358,9 +369,10 @@ typedef struct {
     /* 0x06 */ UNK_TYPE1 pad6[0xA];
     /* 0x10 */ s16 maxLife;
     /* 0x12 */ s16 currentLife;
-    /* 0x14 */ UNK_TYPE1 pad14[0x1];
+    /* 0x14 */ s8 unk14;
     /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ UNK_TYPE1 pad16[0x12];
+    /* 0x16 */ s16 unk16;
+    /* 0x16 */ UNK_TYPE1 pad17[0x10];
 } SaveContext_struct1; // size = 0x28
 
 typedef struct {
@@ -388,7 +400,7 @@ typedef struct {
     /* 0x04 */ UNK_TYPE4 unk4;
     /* 0x08 */ UNK_TYPE4 unk8;
     /* 0x0C */ f32 unkC;
-    /* 0x10 */ ColorRGBA8 unk10;
+    /* 0x10 */ Color_RGBA8 unk10;
 } TargetContextEntry; // size = 0x14
 
 typedef struct {
@@ -404,17 +416,15 @@ typedef struct {
 } TitleCardContext; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s8 unk0;
-    /* 0x1 */ UNK_TYPE1 pad1[0x1];
-    /* 0x2 */ s8 unk2;
-    /* 0x3 */ UNK_TYPE1 pad3[0x1];
-    /* 0x4 */ s16 actorIndex; // negative means already loaded?
-    /* 0x6 */ s16 x;
-    /* 0x8 */ s16 y;
-    /* 0xA */ s16 z;
-    /* 0xC */ s16 yRot; // lower 7 bits contain cutscene number
-    /* 0xE */ u16 variable;
-} TransitionActorInit; // size = 0x10
+    struct {
+        s8 room;    // Room to switch to
+        s8 effects; // How the camera reacts during the transition
+    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
+    /* 0x04 */ s16   id;
+    /* 0x06 */ Vec3s pos;
+    /* 0x0C */ s16   rotY;
+    /* 0x0E */ s16   params;
+} TransitionActorEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s32 topY;
@@ -437,10 +447,6 @@ typedef void(*fault_client_func)(void* arg1, void* arg2);
 typedef unsigned long(*func)(void);
 
 typedef void(*func_ptr)(void);
-
-typedef void(*actor_init_var_func)(u8*, InitChainEntry*);
-
-typedef void(*light_map_directional_func)(LightMapper* mapper, void* params, Vec3f* pos);
 
 typedef void(*osCreateThread_func)(void*);
 
@@ -525,13 +531,21 @@ typedef struct {
 } ActorMeshParams; // size = 0x20
 
 typedef struct {
-    /* 0x0 */ u16 attributeIndex;
-    /* 0x2 */ u16 vertA; // upper 3 bits contain flags
-    /* 0x4 */ u16 vertB; // upper 3 bits contain flags
-    /* 0x6 */ u16 vertC;
-    /* 0x8 */ Vec3s normal;
-    /* 0xE */ s16 unkE;
-} BgPolygon; // size = 0x10
+    /* 0x00 */ u16 type;
+    union {
+        u16 vtxData[3];
+        struct {
+            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
+            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
+                                      // 0x2000 = poly IsConveyor surface
+            /* 0x06 */ u16 vIC;
+        };
+    };
+    /* 0x08 */ Vec3s normal; // Unit normal vector
+                             // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
+
+    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
+} CollisionPoly; // size = 0x10
 
 typedef struct {
     /* 0x0 */ BgPolygonLinkedListNode* nodes;
@@ -585,11 +599,32 @@ typedef struct {
     /* 0x38 */ func_ptr inputCallback;
 } FaultDrawer; // size = 0x3C
 
+typedef struct GfxPrint {
+    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
+    /* 0x04 */ Gfx* dlist;
+    /* 0x08 */ u16 posX;
+    /* 0x0A */ u16 posY;
+    /* 0x0C */ u16 baseX;
+    /* 0x0E */ u8 baseY;
+    /* 0x0F */ u8 flag;
+    /* 0x10 */ Color_RGBA8_u32 color;
+    /* 0x14 */ char unk_14[0x1C]; // unused
+} GfxPrint; // size = 0x30
+
+typedef enum {
+    GFXPRINT_FLAG1 = 1,
+    GFXPRINT_USE_RGBA16 = 2,
+    GFXPRINT_FLAG4 = 4,
+    GFXPRINT_UPDATE_MODE = 8,
+    GFXPRINT_FLAG64 = 0x40,
+    GFXPRINT_OPEN = 0x80
+} GfxPrintFlag;
+
 typedef struct {
     /* 0x0 */ u16 cycleLength;
     /* 0x2 */ u16 numKeyFrames;
     /* 0x4 */ FlashingTexturePrimColor* primColors;
-    /* 0x8 */ RGBA8* envColors;
+    /* 0x8 */ Color_RGBA8* envColors;
     /* 0xC */ u16* keyFrames;
 } FlashingTextureParams; // size = 0x10
 
@@ -626,7 +661,8 @@ typedef struct {
 // Permanent save context, kept in regular save files
 typedef struct {
     /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ UNK_TYPE1 pad4[0x4];
+    /* 0x0004 */ UNK_TYPE1 pad4[0x3];
+    /* 0x0007 */ u8 linkAge;
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
     /* 0x000E */ UNK_TYPE1 padE[0x2];
@@ -710,7 +746,7 @@ typedef struct {
     /* 0x0C */ u16 numVertices;
     /* 0x10 */ BgVertex* vertices;
     /* 0x14 */ u16 numPolygons;
-    /* 0x18 */ BgPolygon* polygons;
+    /* 0x18 */ CollisionPoly* polygons;
     /* 0x1C */ BgPolygonAttributes* attributes;
     /* 0x20 */ UNK_PTR cameraData;
     /* 0x24 */ u16 numWaterBoxes;
@@ -798,8 +834,8 @@ typedef struct {
     /* 0x24 */ u16 unk24;
     /* 0x26 */ UNK_TYPE1 unk26;
     /* 0x27 */ UNK_TYPE1 unk27;
-    /* 0x28 */ LightInfoDirectional unk28;
-    /* 0x36 */ LightInfoDirectional unk36;
+    /* 0x28 */ LightInfo unk28;
+    /* 0x36 */ LightInfo unk36;
     /* 0x44 */ UNK_TYPE1 unk44;
     /* 0x45 */ UNK_TYPE1 unk45;
     /* 0x46 */ UNK_TYPE1 unk46;
@@ -897,16 +933,16 @@ typedef struct {
     /* 0xC1 */ u8 unkC1;
     /* 0xC2 */ u8 unkC2;
     /* 0xC3 */ u8 unkC3;
-    /* 0xC4 */ RGB unkC4;
+    /* 0xC4 */ Color_RGB8 unkC4;
     /* 0xC7 */ s8 unkC7;
     /* 0xC8 */ s8 unkC8;
     /* 0xC9 */ s8 unkC9;
-    /* 0xCA */ RGB unkCA;
+    /* 0xCA */ Color_RGB8 unkCA;
     /* 0xCD */ s8 unkCD;
     /* 0xCE */ s8 unkCE;
     /* 0xCF */ s8 unkCF;
-    /* 0xD0 */ RGB unkD0;
-    /* 0xD3 */ RGB unkD3;
+    /* 0xD0 */ Color_RGB8 unkD0;
+    /* 0xD3 */ Color_RGB8 unkD3;
     /* 0xD6 */ s16 unkD6;
     /* 0xD8 */ s16 unkD8;
     /* 0xDA */ UNK_TYPE1 unkDA;
@@ -1059,7 +1095,7 @@ struct DynaCollisionContext {
     /* 0x0001 */ UNK_TYPE1 pad1[0x3];
     /* 0x0004 */ ActorMesh actorMeshArr[50];
     /* 0x138C */ u16 flags[50]; // bit 0 - Is mesh active
-    /* 0x13F0 */ BgPolygon* polygons;
+    /* 0x13F0 */ CollisionPoly* polygons;
     /* 0x13F4 */ BgVertex* vertices;
     /* 0x13F8 */ BgWaterboxList waterboxes;
     /* 0x1400 */ BgPolygonLinkedList polygonList;
@@ -1153,7 +1189,7 @@ struct GameState {
     /* 0x0C */ GameStateFunc nextGameStateInit;
     /* 0x10 */ u32 nextGameStateSize;
     /* 0x14 */ Input input[4];
-    /* 0x74 */ GameStateHeap heap;
+    /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
     /* 0x9B */ u8 running; // If 0, switch to next game state
@@ -1273,8 +1309,6 @@ typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt)
 typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
 typedef void(*global_context_func)(GlobalContext*);
-
-typedef void(*light_map_positional_func)(LightMapper* mapper, void* params, GlobalContext* ctxt);
 
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 
@@ -1405,6 +1439,12 @@ typedef struct StackEntry_t {
     /* 0x18 */ const char* name;
 } StackEntry; // size = 0x1C
 
+typedef enum {
+    STACK_STATUS_OK = 0,
+    STACK_STATUS_WARNING = 1,
+    STACK_STATUS_OVERFLOW = 2
+} StackStatus;
+
 typedef struct TargetContext TargetContext;
 
 typedef struct ActorContext ActorContext;
@@ -1412,7 +1452,7 @@ typedef struct ActorContext ActorContext;
 typedef struct s800B948C s800B948C;
 
 struct FireObjLight {
-    /* 0x00 */ z_Light* light;
+    /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfoPositional lightInfo;
     /* 0x12 */ u8 unk12;
 }; // size = 0x13
@@ -1606,7 +1646,7 @@ struct GlobalContext {
     /* 0x00814 */ u8 unk814;
     /* 0x00815 */ u8 unk815;
     /* 0x00816 */ UNK_TYPE1 pad816[0x2];
-    /* 0x00818 */ LightingContext lightCtx;
+    /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ u32 unk828;
     /* 0x0082C */ UNK_TYPE1 pad82C[0x4];
     /* 0x00830 */ CollisionContext colCtx;
@@ -1630,11 +1670,11 @@ struct GlobalContext {
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
-    /* 0x18764 */ TransitionActorInit* transitionActorList;
+    /* 0x18764 */ TransitionActorEntry* transitionActorList;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
     /* 0x187B0 */ z_Matrix unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
-    /* 0x187FC */ z_Matrix unk187FC;
+    /* 0x187FC */ MtxF mf_187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
     /* 0x18840 */ u32 unk18840;
     /* 0x18844 */ u8 unk18844;
@@ -1783,22 +1823,22 @@ struct ActorBgIknvObj {
 typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ ColorRGBA8 color;
-    /* 0x0C */ ColorRGBA8 envColor;
+    /* 0x08 */ Color_RGBA8 color;
+    /* 0x0C */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 useRgba;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ ColorRGBA8 primColor;
-    /* 0x08 */ ColorRGBA8 envColor;
+    /* 0x08 */ Color_RGBA8 primColor;
+    /* 0x08 */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 unk_00;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ ColorRGBA8 primColor;
-    /* 0x0C */ ColorRGBA8 envColor;
+    /* 0x08 */ Color_RGBA8 primColor;
+    /* 0x0C */ Color_RGBA8 envColor;
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* monoDl;
 } VisMono; // size = 0x18
@@ -1807,5 +1847,10 @@ typedef enum {
     MTXMODE_NEW,  // generates a new matrix
     MTXMODE_APPLY // applies transformation to the current matrix
 } MatrixMode;
+
+typedef struct {
+    /* 0x00 */ u16 intPart[4][4];
+    /* 0x20 */ u16 fracPart[4][4];
+} MatrixInternal; // size = 0x40
 
 #endif

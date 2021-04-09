@@ -1455,7 +1455,7 @@ void CollisionCheck_GreenBlood(GlobalContext* ctxt, Collider* collider, Vec3f* v
  * Used by collider type HIT4.
  */
 void CollisionCheck_WaterBurst(GlobalContext* ctxt, Collider* collider, Vec3f* v) {
-    func_800B249C(ctxt, v);
+    EffectSsSibuki_SpawnBurst(ctxt, v);
     CollisionCheck_SpawnWaterDroplets(ctxt, v);
 }
 
@@ -1481,28 +1481,28 @@ void CollisionCheck_HitSolid(GlobalContext* ctxt, ColliderInfo* info, Collider* 
     s32 flags = info->toucherFlags & TOUCH_SFX_NONE;
 
     if (flags == TOUCH_SFX_NORMAL && collider->colType != COLTYPE_METAL) {
-        func_800B2684(ctxt, 0, hitPos);
+        EffectSsHitMark_SpawnFixedScale(ctxt, 0, hitPos);
         if (collider->actor == NULL) {
             play_sound(0x1806);
         } else {
             func_8019F1C0(&collider->actor->projectedPos, 0x1806);
         }
     } else if (flags == TOUCH_SFX_NORMAL) {
-        func_800B2684(ctxt, 3, hitPos);
+        EffectSsHitMark_SpawnFixedScale(ctxt, 3, hitPos);
         if (collider->actor == NULL) {
             CollisionCheck_SpawnShieldParticlesMetal(ctxt, hitPos);
         } else {
             CollisionCheck_SpawnShieldParticlesMetalSound(ctxt, hitPos, &collider->actor->projectedPos);
         }
     } else if (flags == TOUCH_SFX_HARD) {
-        func_800B2684(ctxt, 0, hitPos);
+        EffectSsHitMark_SpawnFixedScale(ctxt, 0, hitPos);
         if (collider->actor == NULL) {
             play_sound(0x1806);
         } else {
             func_8019F1C0(&collider->actor->projectedPos, 0x1806);
         }
     } else if (flags == TOUCH_SFX_WOOD) {
-        func_800B2684(ctxt, 1, hitPos);
+        EffectSsHitMark_SpawnFixedScale(ctxt, 1, hitPos);
         if (collider->actor == NULL) {
             play_sound(0x1837);
         } else {
@@ -1568,13 +1568,13 @@ void CollisionCheck_HitEffects(GlobalContext* ctxt, Collider* at, ColliderInfo* 
                 CollisionCheck_SpawnShieldParticlesWood(ctxt, hitPos, &at->actor->projectedPos);
             }
         } else if (sHitInfo[ac->colType].effect != HIT_NONE) {
-            func_800B2684(ctxt, sHitInfo[ac->colType].effect, hitPos);
+            EffectSsHitMark_SpawnFixedScale(ctxt, sHitInfo[ac->colType].effect, hitPos);
             if (!(acInfo->bumperFlags & BUMP_NO_SWORD_SFX)) {
                 CollisionCheck_SwordHitAudio(at, acInfo);
             }
         }
     } else {
-        func_800B2684(ctxt, 0, hitPos);
+        EffectSsHitMark_SpawnFixedScale(ctxt, 0, hitPos);
         if (ac->actor == NULL) {
             play_sound(0x1806);
         } else {
@@ -3828,9 +3828,9 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* ctxt, Vec3f* v) {
     shieldParticleInitMetal.position.x = v->x;
     shieldParticleInitMetal.position.y = v->y;
     shieldParticleInitMetal.position.z = v->z;
-    shieldParticleInitMetal.lightParams.posX = shieldParticleInitMetal.position.x;
-    shieldParticleInitMetal.lightParams.posY = shieldParticleInitMetal.position.y;
-    shieldParticleInitMetal.lightParams.posZ = shieldParticleInitMetal.position.z;
+    shieldParticleInitMetal.lightPoint.x = shieldParticleInitMetal.position.x;
+    shieldParticleInitMetal.lightPoint.y = shieldParticleInitMetal.position.y;
+    shieldParticleInitMetal.lightPoint.z = shieldParticleInitMetal.position.z;
 
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &shieldParticleInitMetal);
 }
@@ -3883,9 +3883,9 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* ctxt, Vec3f* v, Vec3
     shieldParticleInitWood.position.x = v->x;
     shieldParticleInitWood.position.y = v->y;
     shieldParticleInitWood.position.z = v->z;
-    shieldParticleInitWood.lightParams.posX = shieldParticleInitWood.position.x;
-    shieldParticleInitWood.lightParams.posY = shieldParticleInitWood.position.y;
-    shieldParticleInitWood.lightParams.posZ = shieldParticleInitWood.position.z;
+    shieldParticleInitWood.lightPoint.x = shieldParticleInitWood.position.x;
+    shieldParticleInitWood.lightPoint.y = shieldParticleInitWood.position.y;
+    shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
     Effect_Add(ctxt, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
     func_8019F1C0(pos, 0x1837);
