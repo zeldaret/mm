@@ -5641,64 +5641,64 @@ SECTIONS
     _ovl_Bg_IcefloeSegmentEnd = SegmentEnd;
 
     SegmentStart = .;
-    _f385_0x00cfc450SegmentStart = SegmentStart;
-    f385_0x00cfc450 :
+    _ovl_fbdemo_triforceSegmentStart = SegmentStart;
+    ovl_fbdemo_triforce :
     {
-        build/asm/overlays/385_0x00cfc450_0x80AC5070.o(.text)
-        build/asm/overlays/385_0x00cfc450_data.o(.data)
+        build/asm/overlays/ovl_fbdemo_triforce_0x80AC5070.o(.text)
+        build/asm/overlays/ovl_fbdemo_triforce_data.o(.data)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
-    _f385_0x00cfc450SegmentEnd = SegmentEnd;
+    _ovl_fbdemo_triforceSegmentEnd = SegmentEnd;
 
     SegmentStart = .;
-    _f386_0x00cfc970SegmentStart = SegmentStart;
-    f386_0x00cfc970 :
+    _ovl_fbdemo_wipe1SegmentStart = SegmentStart;
+    ovl_fbdemo_wipe1 :
     {
-        build/asm/overlays/386_0x00cfc970_0x80AC57B0.o(.text)
-        build/asm/overlays/386_0x00cfc970_data.o(.data)
+        build/asm/overlays/ovl_fbdemo_wipe1_0x80AC57B0.o(.text)
+        build/asm/overlays/ovl_fbdemo_wipe1_data.o(.data)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
-    _f386_0x00cfc970SegmentEnd = SegmentEnd;
+    _ovl_fbdemo_wipe1SegmentEnd = SegmentEnd;
 
     SegmentStart = .;
-    _f387_0x00cfd400SegmentStart = SegmentStart;
-    f387_0x00cfd400 :
+    _ovl_fbdemo_wipe3SegmentStart = SegmentStart;
+    ovl_fbdemo_wipe3 :
     {
-        build/asm/overlays/387_0x00cfd400_0x80AC6740.o(.text)
-        build/asm/overlays/387_0x00cfd400_data.o(.data)
+        build/asm/overlays/ovl_fbdemo_wipe3_0x80AC6740.o(.text)
+        build/asm/overlays/ovl_fbdemo_wipe3_data.o(.data)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
-    _f387_0x00cfd400SegmentEnd = SegmentEnd;
+    _ovl_fbdemo_wipe3SegmentEnd = SegmentEnd;
 
     SegmentStart = .;
-    _f388_0x00cfdf10SegmentStart = SegmentStart;
-    f388_0x00cfdf10 :
+    _ovl_fbdemo_wipe4SegmentStart = SegmentStart;
+    ovl_fbdemo_wipe4 :
     {
-        build/asm/overlays/388_0x00cfdf10_0x80AC8430.o(.text)
-        build/asm/overlays/388_0x00cfdf10_data.o(.data)
+        build/asm/overlays/ovl_fbdemo_wipe4_0x80AC8430.o(.text)
+        build/asm/overlays/ovl_fbdemo_wipe4_data.o(.data)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
-    _f388_0x00cfdf10SegmentEnd = SegmentEnd;
+    _ovl_fbdemo_wipe4SegmentEnd = SegmentEnd;
 
     SegmentStart = .;
-    _f389_0x00cfe150SegmentStart = SegmentStart;
-    f389_0x00cfe150 :
+    _ovl_fbdemo_wipe5SegmentStart = SegmentStart;
+    ovl_fbdemo_wipe5 :
     {
-        build/asm/overlays/389_0x00cfe150_0x80AC86F0.o(.text)
-        build/asm/overlays/389_0x00cfe150_data.o(.data)
+        build/asm/overlays/ovl_fbdemo_wipe5_0x80AC86F0.o(.text)
+        build/asm/overlays/ovl_fbdemo_wipe5_data.o(.data)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
     RomLocation += SegmentSize;
-    _f389_0x00cfe150SegmentEnd = SegmentEnd;
+    _ovl_fbdemo_wipe5SegmentEnd = SegmentEnd;
 
     SegmentStart = .;
     _ovl_Effect_Ss_SbnSegmentStart = SegmentStart;

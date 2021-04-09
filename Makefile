@@ -73,25 +73,9 @@ ROM := $(MM_ROM_NAME).z64
 UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
 ELF := $(MM_ROM_NAME).elf
 
-BASEROM_FILES := $(wildcard baserom/*)
-# Exclude dmadata, it will be generated right before packing the rom
-BASEROM_FILES := $(subst baserom/dmadata ,,$(BASEROM_FILES))
-BASEROM_BUILD_FILES := $(BASEROM_FILES:baserom/%=build/baserom/%)
-
-BASE_DECOMP_FILES := $(wildcard decomp/*)
-DECOMP_FILES := $(BASE_DECOMP_FILES:decomp/%=build/decomp/%)
-COMP_FILES := $(DECOMP_FILES:build/decomp/%=build/comp/%.yaz0)
-
-DMADATA_FILES := $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
-# Exclude code files, they will be extracted from the file instead
-DMADATA_FILES := $(subst build/baserom/boot ,,$(DMADATA_FILES))
-DMADATA_FILES := $(subst build/decomp/code ,,$(DMADATA_FILES))
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/ovl_%=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/Z2_%=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/KAKUSIAN%=)
-DMADATA_FILES := $(DMADATA_FILES:build/decomp/SPOT0%=)
-
 SRC_DIRS := $(shell find src -type d)
+BASEROM_DIRS := $(shell find baserom -type d)
+COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 ASSET_XML_DIRS := $(shell find assets/xml* -type d)
 ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
 ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
@@ -108,8 +92,15 @@ O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 ROM_FILES := $(shell cat ./tables/makerom_files.txt)
 UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
 
+# Exclude code and scene files, they will be extracted from the file instead
+DMADATA_FILES := $(subst build/baserom/boot ,,$(UNCOMPRESSED_ROM_FILES))
+DMADATA_FILES := $(subst build/baserom/code ,,$(DMADATA_FILES))
+DMADATA_FILES := $(DMADATA_FILES:build/baserom/overlays/%=)
+DMADATA_FILES := $(DMADATA_FILES:build/baserom/assets/scenes/%=)
+DMADATA_FILES := $(DMADATA_FILES:build/uncompressed_dmadata=)
+
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays build/baserom build/comp build/decomp $(foreach dir,$(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -162,25 +153,25 @@ build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.txt unde
 linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
 	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
 
-build/dmadata: $(COMP_FILES) $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
+build/dmadata: $(ROM_FILES:build/dmadata=)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@
 
-build/uncompressed_dmadata: $(DECOMP_FILES) $(BASEROM_BUILD_FILES)
+build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
 
-build/baserom/boot build/decomp/code: build/code.elf
+build/baserom/boot build/baserom/code: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/ovl_%: build/code.elf
+build/baserom/ovl_%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/Z2_%: build/code.elf
+build/baserom/Z2_%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/KAKUSIAN%: build/code.elf
+build/baserom/KAKUSIAN%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/decomp/SPOT0%: build/code.elf
+build/baserom/SPOT0%: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 asm/non_matchings/%: asm/%.asm
@@ -214,7 +205,7 @@ init:
 	$(MAKE) diff-init
 
 test: build/code_pre_dmadata.elf build/linker_scripts/dmadata_script.txt
-	$(LD) build/code_pre_dmadata.elf -T build/linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o build/test.elf
+	@echo $(COMP_DIRS)
 
 # Recipes
 
@@ -248,10 +239,7 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@./tools/set_o32abi_bit.py $@
 
-build/decomp/%: decomp/%
-	@cp $< $@
-
-build/comp/%.yaz0: build/decomp/%
+build/comp/%.yaz0: build/baserom/%
 	./tools/yaz0 $< $@
 
 build/%.d: %.c
@@ -264,9 +252,9 @@ build/linker_scripts/%: linker_scripts/%
 build/assets/%.d: assets/%.c
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
-assets/src/%.c: assets/xml/%.xml
-	$(ZAPD) e -b decomp/ -i $< -o $(dir assets/src/$*)
-	find $(dir assets/src/$*) -path "assets/src/$**.png" | \
+assets/src/scenes/%.c: assets/xml/scenes/%.xml
+	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*)
+	find $(dir assets/src/scenes/$*) -path "assets/src/scenes/$**.png" | \
      sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
      bash
 
