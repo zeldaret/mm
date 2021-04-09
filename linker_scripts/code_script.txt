@@ -7,8 +7,8 @@
     RomLocation += . - _##_Name##SegmentStart; \
     _##_Name##SegmentEnd = .;
 
-#define DECL_SEG_SCENE(_SceneName, _SceneFolder) DECL_SEG(_SceneName, _SceneFolder, 0x02000000)
-#define DECL_SEG_ROOM(_RoomName, _RoomFolder) DECL_SEG(_RoomName, _RoomFolder, 0x03000000)
+#define DECL_SEG_SCENE(_SceneName) DECL_SEG(_SceneName, build/assets/src/scenes/_SceneName, 0x02000000)
+#define DECL_SEG_ROOM(_SceneName, _RoomNum) DECL_SEG(_SceneName##_room_##_RoomNum, build/assets/src/scenes/_SceneName, 0x03000000)
 
 #define DECL_ACTOR(_ActorName, _File)                                      \
     _ovl_##_ActorName##SegmentStart = .;                                   \
@@ -17,8 +17,11 @@
         build/src/overlays/actors/ovl_##_ActorName/_File.o(.text)          \
         build/src/overlays/actors/ovl_##_ActorName/_File.o(.data)          \
         build/src/overlays/actors/ovl_##_ActorName/_File.o(.rodata)        \
-        build/src/overlays/actors/ovl_##_ActorName/_File.o(.bss)           \
         build/src/overlays/actors/ovl_##_ActorName/_File##_overlay.o(.ovl) \
+    }                                                                      \
+    ovl_##_ActorName.bss : AT(RomLocation)                                 \
+    {                                                                      \
+        build/src/overlays/actors/ovl_##_ActorName/_File.o(.bss)           \
     }                                                                      \
     RomLocation += . - _ovl_##_ActorName##SegmentStart;                    \
     _ovl_##_ActorName##SegmentEnd = .;
@@ -9376,506 +9379,506 @@ SECTIONS
 
     RomLocation = 0x01654830;
 
-    DECL_SEG_SCENE(Z2_20SICHITAI2, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI2_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI2_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI2_room_02, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_WITCH_SHOP, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_WITCH_SHOP_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LAST_BS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_BS_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_HAKASHITA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKASHITA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKASHITA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKASHITA_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKASHITA_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKASHITA_room_04, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_AYASHIISHOP, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_AYASHIISHOP_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_AYASHIISHOP_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_OMOYA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OMOYA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OMOYA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OMOYA_room_02, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_BOWLING, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BOWLING_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SONCHONOIE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SONCHONOIE_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SONCHONOIE_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SONCHONOIE_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SONCHONOIE_room_03, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_IKANA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANA_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANA_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANA_room_04, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KAIZOKU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KAIZOKU_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_MILK_BAR, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MILK_BAR_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_INISIE_N, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_N_room_11, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TAKARAYA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TAKARAYA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_INISIE_R, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_R_room_11, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_OKUJOU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OKUJOU_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_OPENINGDAN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OPENINGDAN_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_OPENINGDAN_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_MITURIN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_room_12, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_13HUBUKINOMITI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_13HUBUKINOMITI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_CASTLE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CASTLE_room_09, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_DEKUTES, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DEKUTES_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_MITURIN_BS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MITURIN_BS_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SYATEKI_MIZU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SYATEKI_MIZU_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_HAKUGIN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_12, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_room_13, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_ROMANYMAE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_ROMANYMAE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_PIRATE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_12, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_13, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_PIRATE_room_14, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SYATEKI_MORI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SYATEKI_MORI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SINKAI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SINKAI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_YOUSEI_IZUMI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI_room_04, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KINSTA1, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINSTA1_room_05, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KINDAN2, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KINDAN2_room_05, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TENMON_DAI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TENMON_DAI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TENMON_DAI_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LAST_DEKU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_DEKU_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_DEKU_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_22DEKUCITY, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_22DEKUCITY_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_22DEKUCITY_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_22DEKUCITY_room_02, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KAJIYA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KAJIYA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_00KEIKOKU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_00KEIKOKU_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_POSTHOUSE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_POSTHOUSE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LABO, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LABO_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_DANPEI2TEST, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI2TEST_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI2TEST_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_16GORON_HOUSE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_16GORON_HOUSE_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_16GORON_HOUSE_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_33ZORACITY, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_33ZORACITY_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_8ITEMSHOP, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_8ITEMSHOP_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_F01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_F01_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_INISIE_BS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INISIE_BS_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_30GYOSON, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_30GYOSON_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_31MISAKI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_31MISAKI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TAKARAKUJI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TAKARAKUJI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TORIDE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TORIDE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_FISHERMAN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_FISHERMAN_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_GORONSHOP, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_GORONSHOP_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_DEKU_KING, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DEKU_KING_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LAST_GORON, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_GORON_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_GORON_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_24KEMONOMITI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_24KEMONOMITI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_F01_B, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_F01_B_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_F01C, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_F01C_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_BOTI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BOTI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BOTI_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_HAKUGIN_BS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_HAKUGIN_BS_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_20SICHITAI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_20SICHITAI_room_02, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_21MITURINMAE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_21MITURINMAE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LAST_ZORA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_ZORA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_11GORONNOSATO2, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_11GORONNOSATO2_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_11GORONNOSATO2_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SEA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_12, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_13, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_14, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_room_15, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_35TAKI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_35TAKI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_REDEAD, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_12, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_REDEAD_room_13, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_BANDROOM, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BANDROOM_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BANDROOM_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BANDROOM_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BANDROOM_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BANDROOM_room_04, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_11GORONNOSATO, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_11GORONNOSATO_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_11GORONNOSATO_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_GORON_HAKA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_GORON_HAKA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SECOM, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SECOM_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SECOM_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_10YUKIYAMANOMURA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TOUGITES, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TOUGITES_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_DANPEI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DANPEI_room_08, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_IKANAMAE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKANAMAE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_DOUJOU, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_DOUJOU_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_MUSICHOUSE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MUSICHOUSE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_IKNINSIDE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKNINSIDE_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_IKNINSIDE_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_MAP_SHOP, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_MAP_SHOP_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_F40, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_F40_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_F41, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_F41_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_10YUKIYAMANOMURA2, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA2_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA2_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_14YUKIDAMANOMITI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_14YUKIDAMANOMITI_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_12HAKUGINMAE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_12HAKUGINMAE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_17SETUGEN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_17SETUGEN_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_17SETUGEN2, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_17SETUGEN2_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SEA_BS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SEA_BS_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_RANDOM, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_RANDOM_room_05, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_YADOYA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YADOYA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YADOYA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YADOYA_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YADOYA_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_YADOYA_room_04, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KONPEKI_ENT, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KONPEKI_ENT_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_INSIDETOWER, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INSIDETOWER_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_INSIDETOWER_room_01, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_26SARUNOMORI, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_26SARUNOMORI_room_08, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LOST_WOODS, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LOST_WOODS_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LOST_WOODS_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LOST_WOODS_room_02, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_LAST_LINK, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_LAST_LINK_room_07, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_SOUGEN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_SOUGEN_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_BOMYA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BOMYA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KYOJINNOMA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KYOJINNOMA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_KOEPONARACE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_KOEPONARACE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_GORONRACE, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_GORONRACE_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_TOWN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_TOWN_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_ICHIBA, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_ICHIBA_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_BACKTOWN, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_BACKTOWN_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_CLOCKTOWER, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_CLOCKTOWER_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(Z2_ALLEY, build/assets/src/scenes)
-    DECL_SEG_ROOM(Z2_ALLEY_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(SPOT00, build/assets/src/scenes)
-    DECL_SEG_ROOM(SPOT00_room_00, build/assets/src/scenes)
-
-    DECL_SEG_SCENE(KAKUSIANA, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_00, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_01, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_02, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_03, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_04, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_05, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_06, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_07, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_08, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_09, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_10, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_11, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_12, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_13, build/assets/src/scenes)
-    DECL_SEG_ROOM(KAKUSIANA_room_14, build/assets/src/scenes)
+    DECL_SEG_SCENE(Z2_20SICHITAI2)
+    DECL_SEG_ROOM(Z2_20SICHITAI2, 00)
+    DECL_SEG_ROOM(Z2_20SICHITAI2, 01)
+    DECL_SEG_ROOM(Z2_20SICHITAI2, 02)
+
+    DECL_SEG_SCENE(Z2_WITCH_SHOP)
+    DECL_SEG_ROOM(Z2_WITCH_SHOP, 00)
+
+    DECL_SEG_SCENE(Z2_LAST_BS)
+    DECL_SEG_ROOM(Z2_LAST_BS, 00)
+
+    DECL_SEG_SCENE(Z2_HAKASHITA)
+    DECL_SEG_ROOM(Z2_HAKASHITA, 00)
+    DECL_SEG_ROOM(Z2_HAKASHITA, 01)
+    DECL_SEG_ROOM(Z2_HAKASHITA, 02)
+    DECL_SEG_ROOM(Z2_HAKASHITA, 03)
+    DECL_SEG_ROOM(Z2_HAKASHITA, 04)
+
+    DECL_SEG_SCENE(Z2_AYASHIISHOP)
+    DECL_SEG_ROOM(Z2_AYASHIISHOP, 00)
+    DECL_SEG_ROOM(Z2_AYASHIISHOP, 01)
+
+    DECL_SEG_SCENE(Z2_OMOYA)
+    DECL_SEG_ROOM(Z2_OMOYA, 00)
+    DECL_SEG_ROOM(Z2_OMOYA, 01)
+    DECL_SEG_ROOM(Z2_OMOYA, 02)
+
+    DECL_SEG_SCENE(Z2_BOWLING)
+    DECL_SEG_ROOM(Z2_BOWLING, 00)
+
+    DECL_SEG_SCENE(Z2_SONCHONOIE)
+    DECL_SEG_ROOM(Z2_SONCHONOIE, 00)
+    DECL_SEG_ROOM(Z2_SONCHONOIE, 01)
+    DECL_SEG_ROOM(Z2_SONCHONOIE, 02)
+    DECL_SEG_ROOM(Z2_SONCHONOIE, 03)
+
+    DECL_SEG_SCENE(Z2_IKANA)
+    DECL_SEG_ROOM(Z2_IKANA, 00)
+    DECL_SEG_ROOM(Z2_IKANA, 01)
+    DECL_SEG_ROOM(Z2_IKANA, 02)
+    DECL_SEG_ROOM(Z2_IKANA, 03)
+    DECL_SEG_ROOM(Z2_IKANA, 04)
+
+    DECL_SEG_SCENE(Z2_KAIZOKU)
+    DECL_SEG_ROOM(Z2_KAIZOKU, 00)
+
+    DECL_SEG_SCENE(Z2_MILK_BAR)
+    DECL_SEG_ROOM(Z2_MILK_BAR, 00)
+
+    DECL_SEG_SCENE(Z2_INISIE_N)
+    DECL_SEG_ROOM(Z2_INISIE_N, 00)
+    DECL_SEG_ROOM(Z2_INISIE_N, 01)
+    DECL_SEG_ROOM(Z2_INISIE_N, 02)
+    DECL_SEG_ROOM(Z2_INISIE_N, 03)
+    DECL_SEG_ROOM(Z2_INISIE_N, 04)
+    DECL_SEG_ROOM(Z2_INISIE_N, 05)
+    DECL_SEG_ROOM(Z2_INISIE_N, 06)
+    DECL_SEG_ROOM(Z2_INISIE_N, 07)
+    DECL_SEG_ROOM(Z2_INISIE_N, 08)
+    DECL_SEG_ROOM(Z2_INISIE_N, 09)
+    DECL_SEG_ROOM(Z2_INISIE_N, 10)
+    DECL_SEG_ROOM(Z2_INISIE_N, 11)
+
+    DECL_SEG_SCENE(Z2_TAKARAYA)
+    DECL_SEG_ROOM(Z2_TAKARAYA, 00)
+
+    DECL_SEG_SCENE(Z2_INISIE_R)
+    DECL_SEG_ROOM(Z2_INISIE_R, 00)
+    DECL_SEG_ROOM(Z2_INISIE_R, 01)
+    DECL_SEG_ROOM(Z2_INISIE_R, 02)
+    DECL_SEG_ROOM(Z2_INISIE_R, 03)
+    DECL_SEG_ROOM(Z2_INISIE_R, 04)
+    DECL_SEG_ROOM(Z2_INISIE_R, 05)
+    DECL_SEG_ROOM(Z2_INISIE_R, 06)
+    DECL_SEG_ROOM(Z2_INISIE_R, 07)
+    DECL_SEG_ROOM(Z2_INISIE_R, 08)
+    DECL_SEG_ROOM(Z2_INISIE_R, 09)
+    DECL_SEG_ROOM(Z2_INISIE_R, 10)
+    DECL_SEG_ROOM(Z2_INISIE_R, 11)
+
+    DECL_SEG_SCENE(Z2_OKUJOU)
+    DECL_SEG_ROOM(Z2_OKUJOU, 00)
+
+    DECL_SEG_SCENE(Z2_OPENINGDAN)
+    DECL_SEG_ROOM(Z2_OPENINGDAN, 00)
+    DECL_SEG_ROOM(Z2_OPENINGDAN, 01)
+
+    DECL_SEG_SCENE(Z2_MITURIN)
+    DECL_SEG_ROOM(Z2_MITURIN, 00)
+    DECL_SEG_ROOM(Z2_MITURIN, 01)
+    DECL_SEG_ROOM(Z2_MITURIN, 02)
+    DECL_SEG_ROOM(Z2_MITURIN, 03)
+    DECL_SEG_ROOM(Z2_MITURIN, 04)
+    DECL_SEG_ROOM(Z2_MITURIN, 05)
+    DECL_SEG_ROOM(Z2_MITURIN, 06)
+    DECL_SEG_ROOM(Z2_MITURIN, 07)
+    DECL_SEG_ROOM(Z2_MITURIN, 08)
+    DECL_SEG_ROOM(Z2_MITURIN, 09)
+    DECL_SEG_ROOM(Z2_MITURIN, 10)
+    DECL_SEG_ROOM(Z2_MITURIN, 11)
+    DECL_SEG_ROOM(Z2_MITURIN, 12)
+
+    DECL_SEG_SCENE(Z2_13HUBUKINOMITI)
+    DECL_SEG_ROOM(Z2_13HUBUKINOMITI, 00)
+
+    DECL_SEG_SCENE(Z2_CASTLE)
+    DECL_SEG_ROOM(Z2_CASTLE, 00)
+    DECL_SEG_ROOM(Z2_CASTLE, 01)
+    DECL_SEG_ROOM(Z2_CASTLE, 02)
+    DECL_SEG_ROOM(Z2_CASTLE, 03)
+    DECL_SEG_ROOM(Z2_CASTLE, 04)
+    DECL_SEG_ROOM(Z2_CASTLE, 05)
+    DECL_SEG_ROOM(Z2_CASTLE, 06)
+    DECL_SEG_ROOM(Z2_CASTLE, 07)
+    DECL_SEG_ROOM(Z2_CASTLE, 08)
+    DECL_SEG_ROOM(Z2_CASTLE, 09)
+
+    DECL_SEG_SCENE(Z2_DEKUTES)
+    DECL_SEG_ROOM(Z2_DEKUTES, 00)
+
+    DECL_SEG_SCENE(Z2_MITURIN_BS)
+    DECL_SEG_ROOM(Z2_MITURIN_BS, 00)
+
+    DECL_SEG_SCENE(Z2_SYATEKI_MIZU)
+    DECL_SEG_ROOM(Z2_SYATEKI_MIZU, 00)
+
+    DECL_SEG_SCENE(Z2_HAKUGIN)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 00)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 01)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 02)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 03)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 04)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 05)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 06)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 07)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 08)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 09)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 10)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 11)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 12)
+    DECL_SEG_ROOM(Z2_HAKUGIN, 13)
+
+    DECL_SEG_SCENE(Z2_ROMANYMAE)
+    DECL_SEG_ROOM(Z2_ROMANYMAE, 00)
+
+    DECL_SEG_SCENE(Z2_PIRATE)
+    DECL_SEG_ROOM(Z2_PIRATE, 00)
+    DECL_SEG_ROOM(Z2_PIRATE, 01)
+    DECL_SEG_ROOM(Z2_PIRATE, 02)
+    DECL_SEG_ROOM(Z2_PIRATE, 03)
+    DECL_SEG_ROOM(Z2_PIRATE, 04)
+    DECL_SEG_ROOM(Z2_PIRATE, 05)
+    DECL_SEG_ROOM(Z2_PIRATE, 06)
+    DECL_SEG_ROOM(Z2_PIRATE, 07)
+    DECL_SEG_ROOM(Z2_PIRATE, 08)
+    DECL_SEG_ROOM(Z2_PIRATE, 09)
+    DECL_SEG_ROOM(Z2_PIRATE, 10)
+    DECL_SEG_ROOM(Z2_PIRATE, 11)
+    DECL_SEG_ROOM(Z2_PIRATE, 12)
+    DECL_SEG_ROOM(Z2_PIRATE, 13)
+    DECL_SEG_ROOM(Z2_PIRATE, 14)
+
+    DECL_SEG_SCENE(Z2_SYATEKI_MORI)
+    DECL_SEG_ROOM(Z2_SYATEKI_MORI, 00)
+
+    DECL_SEG_SCENE(Z2_SINKAI)
+    DECL_SEG_ROOM(Z2_SINKAI, 00)
+
+    DECL_SEG_SCENE(Z2_YOUSEI_IZUMI)
+    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI, 00)
+    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI, 01)
+    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI, 02)
+    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI, 03)
+    DECL_SEG_ROOM(Z2_YOUSEI_IZUMI, 04)
+
+    DECL_SEG_SCENE(Z2_KINSTA1)
+    DECL_SEG_ROOM(Z2_KINSTA1, 00)
+    DECL_SEG_ROOM(Z2_KINSTA1, 01)
+    DECL_SEG_ROOM(Z2_KINSTA1, 02)
+    DECL_SEG_ROOM(Z2_KINSTA1, 03)
+    DECL_SEG_ROOM(Z2_KINSTA1, 04)
+    DECL_SEG_ROOM(Z2_KINSTA1, 05)
+
+    DECL_SEG_SCENE(Z2_KINDAN2)
+    DECL_SEG_ROOM(Z2_KINDAN2, 00)
+    DECL_SEG_ROOM(Z2_KINDAN2, 01)
+    DECL_SEG_ROOM(Z2_KINDAN2, 02)
+    DECL_SEG_ROOM(Z2_KINDAN2, 03)
+    DECL_SEG_ROOM(Z2_KINDAN2, 04)
+    DECL_SEG_ROOM(Z2_KINDAN2, 05)
+
+    DECL_SEG_SCENE(Z2_TENMON_DAI)
+    DECL_SEG_ROOM(Z2_TENMON_DAI, 00)
+    DECL_SEG_ROOM(Z2_TENMON_DAI, 01)
+
+    DECL_SEG_SCENE(Z2_LAST_DEKU)
+    DECL_SEG_ROOM(Z2_LAST_DEKU, 00)
+    DECL_SEG_ROOM(Z2_LAST_DEKU, 01)
+
+    DECL_SEG_SCENE(Z2_22DEKUCITY)
+    DECL_SEG_ROOM(Z2_22DEKUCITY, 00)
+    DECL_SEG_ROOM(Z2_22DEKUCITY, 01)
+    DECL_SEG_ROOM(Z2_22DEKUCITY, 02)
+
+    DECL_SEG_SCENE(Z2_KAJIYA)
+    DECL_SEG_ROOM(Z2_KAJIYA, 00)
+
+    DECL_SEG_SCENE(Z2_00KEIKOKU)
+    DECL_SEG_ROOM(Z2_00KEIKOKU, 00)
+
+    DECL_SEG_SCENE(Z2_POSTHOUSE)
+    DECL_SEG_ROOM(Z2_POSTHOUSE, 00)
+
+    DECL_SEG_SCENE(Z2_LABO)
+    DECL_SEG_ROOM(Z2_LABO, 00)
+
+    DECL_SEG_SCENE(Z2_DANPEI2TEST)
+    DECL_SEG_ROOM(Z2_DANPEI2TEST, 00)
+    DECL_SEG_ROOM(Z2_DANPEI2TEST, 01)
+
+    DECL_SEG_SCENE(Z2_16GORON_HOUSE)
+    DECL_SEG_ROOM(Z2_16GORON_HOUSE, 00)
+    DECL_SEG_ROOM(Z2_16GORON_HOUSE, 01)
+
+    DECL_SEG_SCENE(Z2_33ZORACITY)
+    DECL_SEG_ROOM(Z2_33ZORACITY, 00)
+
+    DECL_SEG_SCENE(Z2_8ITEMSHOP)
+    DECL_SEG_ROOM(Z2_8ITEMSHOP, 00)
+
+    DECL_SEG_SCENE(Z2_F01)
+    DECL_SEG_ROOM(Z2_F01, 00)
+
+    DECL_SEG_SCENE(Z2_INISIE_BS)
+    DECL_SEG_ROOM(Z2_INISIE_BS, 00)
+
+    DECL_SEG_SCENE(Z2_30GYOSON)
+    DECL_SEG_ROOM(Z2_30GYOSON, 00)
+
+    DECL_SEG_SCENE(Z2_31MISAKI)
+    DECL_SEG_ROOM(Z2_31MISAKI, 00)
+
+    DECL_SEG_SCENE(Z2_TAKARAKUJI)
+    DECL_SEG_ROOM(Z2_TAKARAKUJI, 00)
+
+    DECL_SEG_SCENE(Z2_TORIDE)
+    DECL_SEG_ROOM(Z2_TORIDE, 00)
+
+    DECL_SEG_SCENE(Z2_FISHERMAN)
+    DECL_SEG_ROOM(Z2_FISHERMAN, 00)
+
+    DECL_SEG_SCENE(Z2_GORONSHOP)
+    DECL_SEG_ROOM(Z2_GORONSHOP, 00)
+
+    DECL_SEG_SCENE(Z2_DEKU_KING)
+    DECL_SEG_ROOM(Z2_DEKU_KING, 00)
+
+    DECL_SEG_SCENE(Z2_LAST_GORON)
+    DECL_SEG_ROOM(Z2_LAST_GORON, 00)
+    DECL_SEG_ROOM(Z2_LAST_GORON, 01)
+
+    DECL_SEG_SCENE(Z2_24KEMONOMITI)
+    DECL_SEG_ROOM(Z2_24KEMONOMITI, 00)
+
+    DECL_SEG_SCENE(Z2_F01_B)
+    DECL_SEG_ROOM(Z2_F01_B, 00)
+
+    DECL_SEG_SCENE(Z2_F01C)
+    DECL_SEG_ROOM(Z2_F01C, 00)
+
+    DECL_SEG_SCENE(Z2_BOTI)
+    DECL_SEG_ROOM(Z2_BOTI, 00)
+    DECL_SEG_ROOM(Z2_BOTI, 01)
+
+    DECL_SEG_SCENE(Z2_HAKUGIN_BS)
+    DECL_SEG_ROOM(Z2_HAKUGIN_BS, 00)
+
+    DECL_SEG_SCENE(Z2_20SICHITAI)
+    DECL_SEG_ROOM(Z2_20SICHITAI, 00)
+    DECL_SEG_ROOM(Z2_20SICHITAI, 01)
+    DECL_SEG_ROOM(Z2_20SICHITAI, 02)
+
+    DECL_SEG_SCENE(Z2_21MITURINMAE)
+    DECL_SEG_ROOM(Z2_21MITURINMAE, 00)
+
+    DECL_SEG_SCENE(Z2_LAST_ZORA)
+    DECL_SEG_ROOM(Z2_LAST_ZORA, 00)
+
+    DECL_SEG_SCENE(Z2_11GORONNOSATO2)
+    DECL_SEG_ROOM(Z2_11GORONNOSATO2, 00)
+    DECL_SEG_ROOM(Z2_11GORONNOSATO2, 01)
+
+    DECL_SEG_SCENE(Z2_SEA)
+    DECL_SEG_ROOM(Z2_SEA, 00)
+    DECL_SEG_ROOM(Z2_SEA, 01)
+    DECL_SEG_ROOM(Z2_SEA, 02)
+    DECL_SEG_ROOM(Z2_SEA, 03)
+    DECL_SEG_ROOM(Z2_SEA, 04)
+    DECL_SEG_ROOM(Z2_SEA, 05)
+    DECL_SEG_ROOM(Z2_SEA, 06)
+    DECL_SEG_ROOM(Z2_SEA, 07)
+    DECL_SEG_ROOM(Z2_SEA, 08)
+    DECL_SEG_ROOM(Z2_SEA, 09)
+    DECL_SEG_ROOM(Z2_SEA, 10)
+    DECL_SEG_ROOM(Z2_SEA, 11)
+    DECL_SEG_ROOM(Z2_SEA, 12)
+    DECL_SEG_ROOM(Z2_SEA, 13)
+    DECL_SEG_ROOM(Z2_SEA, 14)
+    DECL_SEG_ROOM(Z2_SEA, 15)
+
+    DECL_SEG_SCENE(Z2_35TAKI)
+    DECL_SEG_ROOM(Z2_35TAKI, 00)
+
+    DECL_SEG_SCENE(Z2_REDEAD)
+    DECL_SEG_ROOM(Z2_REDEAD, 00)
+    DECL_SEG_ROOM(Z2_REDEAD, 01)
+    DECL_SEG_ROOM(Z2_REDEAD, 02)
+    DECL_SEG_ROOM(Z2_REDEAD, 03)
+    DECL_SEG_ROOM(Z2_REDEAD, 04)
+    DECL_SEG_ROOM(Z2_REDEAD, 05)
+    DECL_SEG_ROOM(Z2_REDEAD, 06)
+    DECL_SEG_ROOM(Z2_REDEAD, 07)
+    DECL_SEG_ROOM(Z2_REDEAD, 08)
+    DECL_SEG_ROOM(Z2_REDEAD, 09)
+    DECL_SEG_ROOM(Z2_REDEAD, 10)
+    DECL_SEG_ROOM(Z2_REDEAD, 11)
+    DECL_SEG_ROOM(Z2_REDEAD, 12)
+    DECL_SEG_ROOM(Z2_REDEAD, 13)
+
+    DECL_SEG_SCENE(Z2_BANDROOM)
+    DECL_SEG_ROOM(Z2_BANDROOM, 00)
+    DECL_SEG_ROOM(Z2_BANDROOM, 01)
+    DECL_SEG_ROOM(Z2_BANDROOM, 02)
+    DECL_SEG_ROOM(Z2_BANDROOM, 03)
+    DECL_SEG_ROOM(Z2_BANDROOM, 04)
+
+    DECL_SEG_SCENE(Z2_11GORONNOSATO)
+    DECL_SEG_ROOM(Z2_11GORONNOSATO, 00)
+    DECL_SEG_ROOM(Z2_11GORONNOSATO, 01)
+
+    DECL_SEG_SCENE(Z2_GORON_HAKA)
+    DECL_SEG_ROOM(Z2_GORON_HAKA, 00)
+
+    DECL_SEG_SCENE(Z2_SECOM)
+    DECL_SEG_ROOM(Z2_SECOM, 00)
+    DECL_SEG_ROOM(Z2_SECOM, 01)
+
+    DECL_SEG_SCENE(Z2_10YUKIYAMANOMURA)
+    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA, 00)
+
+    DECL_SEG_SCENE(Z2_TOUGITES)
+    DECL_SEG_ROOM(Z2_TOUGITES, 00)
+
+    DECL_SEG_SCENE(Z2_DANPEI)
+    DECL_SEG_ROOM(Z2_DANPEI, 00)
+    DECL_SEG_ROOM(Z2_DANPEI, 01)
+    DECL_SEG_ROOM(Z2_DANPEI, 02)
+    DECL_SEG_ROOM(Z2_DANPEI, 03)
+    DECL_SEG_ROOM(Z2_DANPEI, 04)
+    DECL_SEG_ROOM(Z2_DANPEI, 05)
+    DECL_SEG_ROOM(Z2_DANPEI, 06)
+    DECL_SEG_ROOM(Z2_DANPEI, 07)
+    DECL_SEG_ROOM(Z2_DANPEI, 08)
+
+    DECL_SEG_SCENE(Z2_IKANAMAE)
+    DECL_SEG_ROOM(Z2_IKANAMAE, 00)
+
+    DECL_SEG_SCENE(Z2_DOUJOU)
+    DECL_SEG_ROOM(Z2_DOUJOU, 00)
+
+    DECL_SEG_SCENE(Z2_MUSICHOUSE)
+    DECL_SEG_ROOM(Z2_MUSICHOUSE, 00)
+
+    DECL_SEG_SCENE(Z2_IKNINSIDE)
+    DECL_SEG_ROOM(Z2_IKNINSIDE, 00)
+    DECL_SEG_ROOM(Z2_IKNINSIDE, 01)
+
+    DECL_SEG_SCENE(Z2_MAP_SHOP)
+    DECL_SEG_ROOM(Z2_MAP_SHOP, 00)
+
+    DECL_SEG_SCENE(Z2_F40)
+    DECL_SEG_ROOM(Z2_F40, 00)
+
+    DECL_SEG_SCENE(Z2_F41)
+    DECL_SEG_ROOM(Z2_F41, 00)
+
+    DECL_SEG_SCENE(Z2_10YUKIYAMANOMURA2)
+    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA2, 00)
+    DECL_SEG_ROOM(Z2_10YUKIYAMANOMURA2, 01)
+
+    DECL_SEG_SCENE(Z2_14YUKIDAMANOMITI)
+    DECL_SEG_ROOM(Z2_14YUKIDAMANOMITI, 00)
+
+    DECL_SEG_SCENE(Z2_12HAKUGINMAE)
+    DECL_SEG_ROOM(Z2_12HAKUGINMAE, 00)
+
+    DECL_SEG_SCENE(Z2_17SETUGEN)
+    DECL_SEG_ROOM(Z2_17SETUGEN, 00)
+
+    DECL_SEG_SCENE(Z2_17SETUGEN2)
+    DECL_SEG_ROOM(Z2_17SETUGEN2, 00)
+
+    DECL_SEG_SCENE(Z2_SEA_BS)
+    DECL_SEG_ROOM(Z2_SEA_BS, 00)
+
+    DECL_SEG_SCENE(Z2_RANDOM)
+    DECL_SEG_ROOM(Z2_RANDOM, 00)
+    DECL_SEG_ROOM(Z2_RANDOM, 01)
+    DECL_SEG_ROOM(Z2_RANDOM, 02)
+    DECL_SEG_ROOM(Z2_RANDOM, 03)
+    DECL_SEG_ROOM(Z2_RANDOM, 04)
+    DECL_SEG_ROOM(Z2_RANDOM, 05)
+
+    DECL_SEG_SCENE(Z2_YADOYA)
+    DECL_SEG_ROOM(Z2_YADOYA, 00)
+    DECL_SEG_ROOM(Z2_YADOYA, 01)
+    DECL_SEG_ROOM(Z2_YADOYA, 02)
+    DECL_SEG_ROOM(Z2_YADOYA, 03)
+    DECL_SEG_ROOM(Z2_YADOYA, 04)
+
+    DECL_SEG_SCENE(Z2_KONPEKI_ENT)
+    DECL_SEG_ROOM(Z2_KONPEKI_ENT, 00)
+
+    DECL_SEG_SCENE(Z2_INSIDETOWER)
+    DECL_SEG_ROOM(Z2_INSIDETOWER, 00)
+    DECL_SEG_ROOM(Z2_INSIDETOWER, 01)
+
+    DECL_SEG_SCENE(Z2_26SARUNOMORI)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 00)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 01)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 02)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 03)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 04)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 05)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 06)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 07)
+    DECL_SEG_ROOM(Z2_26SARUNOMORI, 08)
+
+    DECL_SEG_SCENE(Z2_LOST_WOODS)
+    DECL_SEG_ROOM(Z2_LOST_WOODS, 00)
+    DECL_SEG_ROOM(Z2_LOST_WOODS, 01)
+    DECL_SEG_ROOM(Z2_LOST_WOODS, 02)
+
+    DECL_SEG_SCENE(Z2_LAST_LINK)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 00)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 01)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 02)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 03)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 04)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 05)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 06)
+    DECL_SEG_ROOM(Z2_LAST_LINK, 07)
+
+    DECL_SEG_SCENE(Z2_SOUGEN)
+    DECL_SEG_ROOM(Z2_SOUGEN, 00)
+
+    DECL_SEG_SCENE(Z2_BOMYA)
+    DECL_SEG_ROOM(Z2_BOMYA, 00)
+
+    DECL_SEG_SCENE(Z2_KYOJINNOMA)
+    DECL_SEG_ROOM(Z2_KYOJINNOMA, 00)
+
+    DECL_SEG_SCENE(Z2_KOEPONARACE)
+    DECL_SEG_ROOM(Z2_KOEPONARACE, 00)
+
+    DECL_SEG_SCENE(Z2_GORONRACE)
+    DECL_SEG_ROOM(Z2_GORONRACE, 00)
+
+    DECL_SEG_SCENE(Z2_TOWN)
+    DECL_SEG_ROOM(Z2_TOWN, 00)
+
+    DECL_SEG_SCENE(Z2_ICHIBA)
+    DECL_SEG_ROOM(Z2_ICHIBA, 00)
+
+    DECL_SEG_SCENE(Z2_BACKTOWN)
+    DECL_SEG_ROOM(Z2_BACKTOWN, 00)
+
+    DECL_SEG_SCENE(Z2_CLOCKTOWER)
+    DECL_SEG_ROOM(Z2_CLOCKTOWER, 00)
+
+    DECL_SEG_SCENE(Z2_ALLEY)
+    DECL_SEG_ROOM(Z2_ALLEY, 00)
+
+    DECL_SEG_SCENE(SPOT00)
+    DECL_SEG_ROOM(SPOT00, 00)
+
+    DECL_SEG_SCENE(KAKUSIANA)
+    DECL_SEG_ROOM(KAKUSIANA, 00)
+    DECL_SEG_ROOM(KAKUSIANA, 01)
+    DECL_SEG_ROOM(KAKUSIANA, 02)
+    DECL_SEG_ROOM(KAKUSIANA, 03)
+    DECL_SEG_ROOM(KAKUSIANA, 04)
+    DECL_SEG_ROOM(KAKUSIANA, 05)
+    DECL_SEG_ROOM(KAKUSIANA, 06)
+    DECL_SEG_ROOM(KAKUSIANA, 07)
+    DECL_SEG_ROOM(KAKUSIANA, 08)
+    DECL_SEG_ROOM(KAKUSIANA, 09)
+    DECL_SEG_ROOM(KAKUSIANA, 10)
+    DECL_SEG_ROOM(KAKUSIANA, 11)
+    DECL_SEG_ROOM(KAKUSIANA, 12)
+    DECL_SEG_ROOM(KAKUSIANA, 13)
+    DECL_SEG_ROOM(KAKUSIANA, 14)
 }
