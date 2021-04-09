@@ -12,7 +12,10 @@ typedef struct BgKin2Fence {
     /* 0x15C */ ColliderJntSph collider;
     /* 0x17C */ ColliderJntSphElement colliderElements[4];
     /* 0x27C */ BgKin2FenceActionFunc actionFunc;
-    /* 0x280 */ s32 unk280;
+    /* 0x280 */ s8 unk280;
+    /* 0x281 */ s8 unk281;
+    /* 0x282 */ s8 unk282;
+    /* 0x283 */ s8 unk283;
 } BgKin2Fence; // size = 0x284
 
 extern const ActorInit Bg_Kin2_Fence_InitVars;

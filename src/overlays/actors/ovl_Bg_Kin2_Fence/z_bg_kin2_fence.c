@@ -32,7 +32,23 @@ extern InitChainEntry D_80B6EEE8;
 extern BgMeshHeader* D_06000908;
 extern ColliderJntSphInit* D_80B6EE70; 
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6E820.asm")
+s32 func_80B6E820(BgKin2Fence* this) {
+    ColliderJntSphElement* elements = this->collider.elements;
+    
+    if (elements[0].info.bumperFlags & 2) {
+        return 0;
+    }
+    if (elements[1].info.bumperFlags & 2) {
+        return 1;
+    }
+    if (elements[2].info.bumperFlags & 2) {
+        return 2;
+    }
+    if (elements[3].info.bumperFlags & 2) {
+        return 3;
+    }
+    return -1;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6E890.asm")
 
@@ -59,7 +75,12 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B6EADC(this);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Destroy.asm")
+void BgKin2Fence_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    BgKin2Fence* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
 
 void func_80B6EADC(BgKin2Fence* this) {
     this->unk280 = 0;
@@ -67,42 +88,34 @@ void func_80B6EADC(BgKin2Fence* this) {
 }
 
 void func_80B6EAF4(BgKin2Fence* this, GlobalContext* globalCtx) {
-    s32 sp20;
-    GlobalContext *temp_a3;
-    s32 temp_v0;
-    s8 temp_a2;
-    s8 temp_v0_2;
+    s32 hitMask;
+    s32 nextMask;
 
-    temp_a3 = arg1;
-    if ((arg0->unk16D & 2) != 0) {
-        arg1 = temp_a3;
-        temp_v0 = func_80B6E820(arg0, temp_a3);
-        if (temp_v0 >= 0) {
-            temp_a2 = (s8) gSaveContext.perm.spiderHouseMaskOrder[arg0->unk280];
-            if (temp_v0 == temp_a2) {
-                sp20 = (s32) temp_a2;
-                arg1 = arg1;
-                play_sound((u16)0x4807U);
-                arg0->unk280 = (s8) (arg0->unk280 + 1);
-                func_80B6E890(arg0, arg1, temp_a2);
+    if (this->collider.base.acFlags & 2) {
+        hitMask = func_80B6E820(this);
+        if (hitMask >= 0) {
+            nextMask = (s8)gSaveContext.perm.spiderHouseMaskOrder[this->unk280];
+            if (hitMask == nextMask) {
+                play_sound(0x4807U);
+                this->unk280 += 1;
+                func_80B6E890(this, globalCtx, nextMask);
             } else {
-                play_sound((u16)0x4806U);
-                arg0->unk280 = (u8)0;
+                play_sound(0x4806U);
+                this->unk280 = 0;
             }
         }
-        arg0->unk16D = (u8) (arg0->unk16D & 0xFFFD);
-        arg0->unk281 = (u8)5;
-        if ((s32) arg0->unk280 >= 6) {
-            func_80B6EBF4(arg0);
+        this->collider.base.acFlags &= 0xFFFD;
+        this->unk281 = 5;
+        if (this->unk280 >= 6) {
+            func_80B6EBF4(this);
             return;
         }
     } else {
-        temp_v0_2 = arg0->unk281;
-        if ((s32) temp_v0_2 > 0) {
-            arg0->unk281 = (s8) (temp_v0_2 - 1);
+        if (this->unk281 > 0) {
+            this->unk281 -= 1;
             return;
         }
-        CollisionCheck_SetAC(temp_a3, temp_a3 + 0x18884, arg0 + 0x15C);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
     }
 }
 
@@ -116,8 +129,11 @@ void func_80B6EAF4(BgKin2Fence* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6ECC4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6ECD8.asm")
-
+void func_80B6ECD8(BgKin2Fence* this, GlobalContext* globalCtx) {
+    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 58.0f, 5.0f)) {
+        func_80B6ED30(this);
+    }
+}
 void func_80B6ED30(BgKin2Fence* this) {
     this->actionFunc = func_80B6ED58;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 58.0f;
