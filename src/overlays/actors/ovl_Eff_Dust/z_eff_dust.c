@@ -329,7 +329,6 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
     EffDust* this = THIS;
     GlobalContext *globalCtx = globalCtx2;
     GraphicsContext *temp_s1;
-    f32 temp_f0_2;
     f32 temp_f20;
     f32 *distanceTraveled;
     Vec3f *initialPositions;
@@ -364,13 +363,14 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
 
             temp_f20 = 1.0f - SQ(*distanceTraveled);
             SysMatrix_InsertMatrix(&player->mf_CC4, 0);
-            temp_f0_2 = *distanceTraveled;
-            temp_f0_2 = 1.0f - temp_f0_2;
             SysMatrix_InsertTranslation(initialPositions->x * ((this->dx * temp_f20) + (1.0f - this->dx)), 
-                                        (temp_f0_2 * initialPositions->y) + 320.0f, 
-                                        (temp_f0_2 * initialPositions->z) + -20.0f, 
+                                        ((1.0f - *distanceTraveled) * initialPositions->y) + 320.0f, 
+                                        ((1.0f - *distanceTraveled) * initialPositions->z) + -20.0f, 
                                         1);
-            Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, (u8)1U);
+            Matrix_Scale(*distanceTraveled * this->scalingFactor, 
+                         *distanceTraveled * this->scalingFactor, 
+                         *distanceTraveled * this->scalingFactor, 
+                         (u8)1U);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s1), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
