@@ -9,12 +9,17 @@ void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B6EADC(BgKin2Fence* this);
-void func_80B6EAF4(BgKin2Fence* this, GlobalContext* globalCtx);
-void func_80B6ED30(BgKin2Fence* this);
-void func_80B6ED58(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_SetupHandleMaskCode(BgKin2Fence* this);
+void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this);
+void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_SetupWaitBeforeOpen(BgKin2Fence* this);
+void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_SetupRaiseFence(BgKin2Fence* this);
+void BgKin2Fence_RaiseFence(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
+void BgKin2Fence_DoNothing(BgKin2Fence* this, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Kin2_Fence_InitVars = {
     ACTOR_BG_KIN2_FENCE,
     ACTORCAT_BG,
@@ -26,15 +31,55 @@ const ActorInit Bg_Kin2_Fence_InitVars = {
     (ActorFunc)BgKin2Fence_Update,
     (ActorFunc)BgKin2Fence_Draw
 };
-*/
 
-extern InitChainEntry D_80B6EEE8;
+static ColliderJntSphElementInit sJntSphElementsInit[4] = {
+    {
+        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 0, { { -2040, 1400, 350 }, 28 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 0, { { -1140, 1400, 350 }, 28 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 0, { { 1140, 1400, 350 }, 28 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 0, { { 2040, 1400, 350 }, 28 }, 100 },
+    },
+};
+
+static ColliderJntSphInit sJntSphInit = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_JNTSPH, },
+    4, sJntSphElementsInit,
+};
+
+Vec3f D_80B6EE80[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+
+                          { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+
+                          { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+
+                          { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } } };
+
+Color_RGBA8 primColor = { 0xFF, 0xFF, 0xFF, 0x00 };
+Color_RGBA8 envColor = { 0x00, 128, 128, 0x00 };
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
+extern Gfx D_06000828[];
 extern BgMeshHeader* D_06000908;
-extern ColliderJntSphInit* D_80B6EE70; 
 
-s32 func_80B6E820(BgKin2Fence* this) {
+s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
-    
+
     if (elements[0].info.bumperFlags & 2) {
         return 0;
     }
@@ -50,98 +95,138 @@ s32 func_80B6E820(BgKin2Fence* this) {
     return -1;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6E890.asm")
+void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s32 mask) {
+    s32 i;
+    Vec3f sp58;
+    s32 pad[2];
+
+    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+
+    for (i = 0; i < 2; i++) {
+        SysMatrix_MultiplyVector3fByState(&D_80B6EE80[mask][i], &sp58);
+        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 6000, -10);
+    }
+}
 
 void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
     s32 i = 0;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &D_80B6EEE8);
+    Actor_ProcessInitChain(&this->dyna.actor, &sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
     Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &D_80B6EE70, &this->colliderElements);
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, &this->dyna.actor.shape);
+    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colliderElements);
+    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, 1);
 
-    for (i = 0; i < 4; i++){
+    for (i = 0; i < 4; i++) {
         Collider_UpdateSpheres(i, &this->collider);
     }
 
     if (Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F)) {
-        func_80B6ED30(this);
+        BgKin2Fence_SetupDoNothing(this);
         return;
     }
-    func_80B6EADC(this);
+    BgKin2Fence_SetupHandleMaskCode(this);
 }
 
-void BgKin2Fence_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
 
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-void func_80B6EADC(BgKin2Fence* this) {
-    this->unk280 = 0;
-    this->actionFunc = func_80B6EAF4;
+void BgKin2Fence_SetupHandleMaskCode(BgKin2Fence* this) {
+    this->masksHit = 0;
+    this->actionFunc = BgKin2Fence_HandleMaskCode;
 }
 
-void func_80B6EAF4(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     s32 hitMask;
     s32 nextMask;
 
     if (this->collider.base.acFlags & 2) {
-        hitMask = func_80B6E820(this);
+        hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.perm.spiderHouseMaskOrder[this->unk280];
+            nextMask = (s8)gSaveContext.perm.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
-                play_sound(0x4807U);
-                this->unk280 += 1;
-                func_80B6E890(this, globalCtx, nextMask);
+                play_sound(0x4807);
+                this->masksHit += 1;
+                BgKin2Fence_SpawnEyeSparkles(this, globalCtx, nextMask);
             } else {
-                play_sound(0x4806U);
-                this->unk280 = 0;
+                play_sound(0x4806);
+                this->masksHit = 0;
             }
         }
         this->collider.base.acFlags &= 0xFFFD;
-        this->unk281 = 5;
-        if (this->unk280 >= 6) {
-            func_80B6EBF4(this);
+        this->cooldownTimer = 5;
+        if (this->masksHit > 5) {
+            BgKin2Fence_SetupPlayOpenCutscene(this);
             return;
         }
     } else {
-        if (this->unk281 > 0) {
-            this->unk281 -= 1;
+        if (this->cooldownTimer > 0) {
+            this->cooldownTimer -= 1;
             return;
         }
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6EBF4.asm")
+void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
+    this->actionFunc = BgKin2Fence_PlayOpenCutscene;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6EC08.asm")
+void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        Actor_SetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F);
+        BgKin2Fence_SetupWaitBeforeOpen(this);
+        return;
+    }
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6EC70.asm")
+void BgKin2Fence_SetupWaitBeforeOpen(BgKin2Fence* this) {
+    this->waitBeforeOpenTimer = 14;
+    this->actionFunc = BgKin2Fence_WaitBeforeOpen;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6EC8C.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/func_80B6ECC4.asm")
-
-void func_80B6ECD8(BgKin2Fence* this, GlobalContext* globalCtx) {
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 58.0f, 5.0f)) {
-        func_80B6ED30(this);
+void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, GlobalContext* globalCtx) {
+    if (this->waitBeforeOpenTimer > 0) {
+        this->waitBeforeOpenTimer -= 1;
+    } else {
+        BgKin2Fence_SetupRaiseFence(this);
     }
 }
-void func_80B6ED30(BgKin2Fence* this) {
-    this->actionFunc = func_80B6ED58;
+
+void BgKin2Fence_SetupRaiseFence(BgKin2Fence* this) {
+    this->actionFunc = BgKin2Fence_RaiseFence;
+}
+
+void BgKin2Fence_RaiseFence(BgKin2Fence* this, GlobalContext* globalCtx) {
+    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 58.0f, 5.0f)) {
+        BgKin2Fence_SetupDoNothing(this);
+    }
+}
+void BgKin2Fence_SetupDoNothing(BgKin2Fence* this) {
+    this->actionFunc = BgKin2Fence_DoNothing;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 58.0f;
 }
 
-void func_80B6ED58(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_DoNothing(BgKin2Fence* this, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Update.asm")
+void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
+    BgKin2Fence* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Fence_0x80B6E820/BgKin2Fence_Draw.asm")
+    this->actionFunc(this, globalCtx);
+}
+
+void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, D_06000828);
+}

@@ -7045,9 +7045,9 @@ SECTIONS
     ovl_Bg_Kin2_Fence : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Kin2_Fence/z_bg_kin2_fence.o(.text)
-        build/asm/overlays/ovl_Bg_Kin2_Fence_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Kin2_Fence/z_bg_kin2_fence.o(.data)
         build/src/overlays/actors/ovl_Bg_Kin2_Fence/z_bg_kin2_fence.o(.rodata)
-        build/asm/overlays/ovl_Bg_Kin2_Fence_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Kin2_Fence/z_bg_kin2_fence_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
