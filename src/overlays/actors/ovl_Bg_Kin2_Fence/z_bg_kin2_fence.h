@@ -15,7 +15,6 @@ typedef struct BgKin2Fence {
     /* 0x280 */ s8 masksHit;
     /* 0x281 */ s8 cooldownTimer;
     /* 0x282 */ s8 waitBeforeOpenTimer;
-    /* 0x283 */ s8 unk283; //unused
 } BgKin2Fence; // size = 0x284
 
 extern const ActorInit Bg_Kin2_Fence_InitVars;
