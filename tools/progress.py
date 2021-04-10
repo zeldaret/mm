@@ -250,7 +250,9 @@ if args.format == 'csv':
     timestamp = str(git_object.committed_date)
     git_hash = git_object.hexsha
     csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size),
-                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions))]
+                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions)),
+                str(audio), str(audio_size), str(misc), str(misc_size), str(object_), str(object_size),
+                str(scene), str(scene_size), str(texture), str(texture_size)]
 
     print(",".join(csv_list))
 elif args.format == 'shield-json':
