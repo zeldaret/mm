@@ -9,5 +9,4 @@
 	url = https://github.com/simonlindholm/decomp-permuter
 [submodule "ZAPD"]
 	path = tools/ZAPD
-	url = https://github.com/Rozelette/ZAP2.git
-	branch = mm
+	url = https://github.com/zeldaret/ZAPD.git
