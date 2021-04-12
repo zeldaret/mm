@@ -330,9 +330,9 @@ typedef struct {
     /* 0x014 */ UNK_TYPE1 pad14[0x2E];
     /* 0x042 */ s16 unk42;
     /* 0x044 */ UNK_TYPE1 pad44[0x34];
-    /* 0x078 */ f32 previousPlayerHeight; //OvlDoorAna
+    /* 0x078 */ f32 unk78;
     /* 0x07C */ UNK_TYPE1 pad7C[0x4];
-    /* 0x080 */ s16 previousPlayerYRot; //OvlDoorAna
+    /* 0x080 */ s16 unk80;
     /* 0x082 */ UNK_TYPE1 pad82[0x5];
     /* 0x087 */ s8 unk87;
     /* 0x088 */ UNK_TYPE1 pad88[0x1EE];

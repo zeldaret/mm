@@ -34,7 +34,7 @@ static ColliderCylinderInit sCylinderInit = {
 // entrances grottos can link to statically, type DOORANA_TYPE_ADJACENT uses scene exit addresses instead
 static u16 entrances[] = {
     0x1A00, 0x1400, 0x1410, 0x1420, 0x1430, 0x1440, 0x1450, 0x1460,
-    0x1470, 0x1480, 0x1490, 0x14A0, 0x14B0, 0x14C0, 0x14D0, 0x0000, 0x0000, 0x0000,
+    0x1470, 0x1480, 0x1490, 0x14A0, 0x14B0, 0x14C0, 0x14D0,
 };
 
 void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
@@ -49,7 +49,6 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
     if ((grottoType == DOORANA_TYPE_UNK) || (grottoType == DOORANA_TYPE_HIDDEN)) {
         if (grottoType == DOORANA_TYPE_HIDDEN) {
             Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
-
         } else {
             this->actor.flags |= 0x10; // always update 
         }
@@ -129,8 +128,8 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
                 func_80169E6C(globalCtx, 3, 0x4FF);
 
-                gSaveContext.extra.previousPlayerHeight = this->actor.world.pos.y;
-                gSaveContext.extra.previousPlayerYRot   = this->actor.home.rot.y;
+                gSaveContext.extra.unk78 = this->actor.world.pos.y;
+                gSaveContext.extra.unk80 = this->actor.home.rot.y;
 
                 // save the params lower byte for En_Torch to decide what item to use in the grotto chest
                 gSaveContext.extra.unk87 = GET_DOORANA_ITEMFLAGS(this);
@@ -166,7 +165,7 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
     s8 pad[2];
 
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene) != 0) {
+        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -187,6 +186,6 @@ void DoorAna_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void DoorAna_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    Gfx* doorAnaDL = &D_05000C40;
+    Gfx* doorAnaDL = D_05000C40;
     func_800BE03C(globalCtx, doorAnaDL);
 }

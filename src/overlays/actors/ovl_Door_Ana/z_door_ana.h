@@ -15,8 +15,6 @@ typedef struct DoorAna {
 
 extern const ActorInit Door_Ana_InitVars;
 
-extern Gfx D_05000C40[];
-
 #define DOORANA_TYPE_REGULAR      0x000
 #define DOORANA_TYPE_UNK          0x100
 #define DOORANA_TYPE_HIDDEN       0x200
