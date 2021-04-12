@@ -74,7 +74,7 @@ UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
 ELF := $(MM_ROM_NAME).elf
 
 SRC_DIRS := $(shell find src -type d)
-BASEROM_DIRS := $(shell find baserom -type d)
+BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 ASSET_XML_DIRS := $(shell find assets/xml* -type d)
 ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
@@ -183,10 +183,10 @@ disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variable
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
 
 clean:
-	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
+	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
 
 distclean: clean
-	rm -r assets/src baserom/
+	rm -rf assets/src baserom/
 
 setup:
 	git submodule update --init --recursive
@@ -259,5 +259,7 @@ assets/src/scenes/%.c: assets/xml/scenes/%.xml
      bash
 
 ifneq ($(MAKECMDGOALS), clean)
+ifneq ($(MAKECMDGOALS), distclean)
 -include $(C_FILES:%.c=build/%.d)
+endif
 endif
