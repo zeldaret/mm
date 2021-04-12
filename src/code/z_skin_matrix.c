@@ -33,13 +33,14 @@ void SkinMatrix_Vec3fMtxFMultXYZ(MtxF* mf, Vec3f* src, Vec3f* dest) {
     f32 my = mf->yx;
     f32 mz = mf->zx;
     f32 mw = mf->wx;
-
     dest->x = mw + ((src->x * mx) + (src->y * my) + (src->z * mz));
+
     mx = mf->xy;
     my = mf->yy;
     mz = mf->zy;
     mw = mf->wy;
     dest->y = mw + ((src->x * mx) + (src->y * my) + (src->z * mz));
+
     mx = mf->xz;
     my = mf->yz;
     mz = mf->zz;
@@ -56,6 +57,7 @@ void SkinMatrix_MtxFMtxFMult(MtxF* mfB, MtxF* mfA, MtxF* dest) {
     f32 ry;
     f32 rz;
     f32 rw;
+
     //---COL1---
     f32 cx = mfB->xx;
     f32 cy = mfB->yx;
@@ -238,6 +240,7 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
 
     SkinMatrix_MtxFCopy(src, &mfCopy);
     SkinMatrix_Clear(dest);
+
     for (thisRow = 0; thisRow < 4; thisRow++) {
         thisCol = thisRow;
         while ((thisCol < 4) && (fabsf(mfCopy.mf[thisRow][thisCol]) < 0.0005f)) {
@@ -272,6 +275,7 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
             }
         }
     }
+
     return 0;
 }
 
@@ -327,7 +331,6 @@ void SkinMatrix_SetRotateRPY(MtxF* mf, s16 roll, s16 pitch, s16 yaw) {
         mf->zy = sin * sin2;
         mf->xz = -sin2;
         mf->zz = cos2;
-
     } else {
         mf->xx = cos;
         if (1) {}
@@ -373,8 +376,10 @@ void SkinMatrix_SetRotateYRP(MtxF* mf, s16 yaw, s16 roll, s16 pitch) {
     f32 yz;
     f32 xx;
     f32 yx;
+
     sin = Math_SinS(roll);
     cos = Math_CosS(roll);
+
     mf->xx = cos;
     mf->xz = -sin;
     mf->zw = 0;
@@ -396,7 +401,6 @@ void SkinMatrix_SetRotateYRP(MtxF* mf, s16 yaw, s16 roll, s16 pitch) {
         mf->yx = sin * sin2;
         mf->zy = -sin2;
         mf->yy = cos2;
-
     } else {
         mf->zz = cos;
         if (1) {}
@@ -584,6 +588,7 @@ Mtx* SkinMatrix_MtxFToNewMtx(GraphicsContext* gfxCtx, MtxF* src) {
     if (mtx == NULL) {
         return NULL;
     }
+
     SkinMatrix_MtxFToMtx(src, mtx);
     return mtx;
 }
@@ -657,7 +662,6 @@ void SkinMatrix_SetXRotation(MtxF* mf, s16 a) {
     mf->wy = 0.0f;
     mf->wz = 0.0f;
 
-
     mf->xx = 1.0f;
     mf->ww = 1.0f;
 
@@ -724,7 +728,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a) {
     mf->wx = 0.0f;
     mf->wy = 0.0f;
     mf->wz = 0.0f;
-
 
     mf->yy = 1.0f;
     mf->ww = 1.0f;
