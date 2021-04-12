@@ -183,7 +183,10 @@ disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variable
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
 
 clean:
-	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm assets/src
+	rm -f $(ROM) $(UNCOMPRESSED_ROM) -r build asm
+
+distclean: clean
+	rm -r assets/src baserom/
 
 setup:
 	git submodule update --init --recursive
@@ -199,13 +202,10 @@ diff-init: all
 	cp $(ROM) expected/$(ROM)
 
 init:
-	$(MAKE) clean
+	$(MAKE) distclean
 	$(MAKE) setup
 	$(MAKE) all
 	$(MAKE) diff-init
-
-test: build/code_pre_dmadata.elf build/linker_scripts/dmadata_script.txt
-	@echo $(COMP_DIRS)
 
 # Recipes
 
