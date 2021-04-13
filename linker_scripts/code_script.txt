@@ -414,7 +414,7 @@ SECTIONS
         build/asm/code/z_overlay.o(.text)
         build/asm/code/z_play.o(.text)
         build/asm/code/z_play_hireso.o(.text)
-        build/asm/code/PreRender.o(.text)
+        build/src/code/PreRender.o(.text)
         build/src/code/TwoHeadGfxArena.o(.text)
         build/src/code/TwoHeadArena.o(.text)
         build/asm/code/code_0x80172BC0.o(.text)
