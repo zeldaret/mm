@@ -3092,7 +3092,7 @@ void func_80171FA8(PreRender* this);
 void func_80172078(PreRender* this);
 void func_801720C4(PreRender* this);
 // void func_801720FC(void);
-void func_80172758(const Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 arg7, u16 arg8, f32 x, f32 y, f32 z, f32 arg12, u32 flags);
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 arg7, u16 arg8, f32 x, f32 y, f32 z, f32 arg12, u32 flags);
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, u32 size);
 void THGA_Dt(TwoHeadGfxArena* thga);
 u32 THGA_IsCrash(TwoHeadGfxArena* thga);
