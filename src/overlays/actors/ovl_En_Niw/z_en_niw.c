@@ -34,7 +34,6 @@ void func_8089262C(EnNiw* this, GlobalContext* globalCtx);
 s16 func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 
 s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor );
-// the limb function
 void func_80893008(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 s16 D_80893460 = 0x0; 
@@ -253,7 +252,7 @@ void func_808916B0(EnNiw *this, GlobalContext *globalCtx) {
                  + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
             newNiwPos.z = ((randZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
             attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx,
-                  0xAA, newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
+                  ACTOR_EN_ATTACK_NIW, newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
 
             if (attackNiw != NULL) {
                 this->unk290 += 1;
@@ -984,7 +983,6 @@ void EnNiw_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_808932B0(&this->actor, globalCtx);
 }
 
-// "FeatherSpawn" in OOT
 void func_80893008(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale) {
     s16 i;
     EnNiwFeather* feather = this->feathers;
@@ -1039,7 +1037,7 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
 
 //xlu
 // feather draw function?
-///* 
+//#if NON_EQUIVELENT
 // this isnt even close
 void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     
@@ -1049,10 +1047,9 @@ void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     //z_Matrix *temp_s0;
     u8 flag = 0;
     s16 i;
-    GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
+    //GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
 
-
-    // where is the opendisks
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     //func_8012C2DC(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -1088,7 +1085,7 @@ void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
             //gfxCtx->polyXlu.p = temp_v0_2 + 8;
             //temp_v0_2->words.w0 = 0xDA380003;
             //temp_v0_2->words.w1 = SysMatrix_AppendStateToPolyOpaDisp(gfxCtx);
-            gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(gfxCtx),
+            gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
             //gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1100,5 +1097,8 @@ void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
 
         }
     }
-} // */
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+//#else
 //#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+//#endif
