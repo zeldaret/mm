@@ -1648,7 +1648,7 @@ SECTIONS
     ovl_En_Encount2 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.text)
-        build/asm/overlays/ovl_En_Encount2_data.o(.data)
+        build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.data)
         build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.rodata)
         build/asm/overlays/ovl_En_Encount2_rodata.o(.rodata)
     }
