@@ -47,7 +47,7 @@ void func_8016FDB8(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, u3
         flags = 0x1C;
     }
 
-    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0, 0, 1, 1, flags);
+    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
