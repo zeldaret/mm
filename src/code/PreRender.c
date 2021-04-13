@@ -371,7 +371,23 @@ void func_80170B4C(PreRender* this, s32 x, s32 y) {
     this->fbufSave[x + y * this->width] = pxOut.rgba;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017160C.asm")
+void func_8017160C(PreRender* this) {
+    s32 x;
+    s32 y;
+    s32 cvg;
+
+    for (y = 0; y < this->height; y++) {
+        for (x = 0; x < this->width; x++) {
+            cvg = this->cvgSave[x + y * this->width];
+            cvg >>= 5;
+            cvg++;
+
+            if (cvg != 8) {
+                func_80170B4C(this, x, y);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801716C4.asm")
 
