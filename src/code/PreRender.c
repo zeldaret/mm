@@ -175,7 +175,6 @@ void func_801705EC(PreRender* this, Gfx** dList) {
     *dList = dList2;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170730.asm")
 void func_80170730(PreRender* this, Gfx** dList) {
     func_801705EC(this, dList);
 
@@ -184,15 +183,193 @@ void func_80170730(PreRender* this, Gfx** dList) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170774.asm")
+void func_80170774(PreRender* this, Gfx** dList) {
+    func_8016FF70(this, dList, this->zbufSave, this->zbuf);
+}
 
+#ifdef NON_MATCHING
+// just regalloc
+void func_80170798(PreRender* this, Gfx** dList) {
+    Gfx* gfx;
+    s32 y;
+    s32 y2;
+    s32 dy;
+    s32 rtile = 1;
+
+    if (this->cvgSave != NULL) {
+        gfx = *dList;
+
+        gDPPipeSync(gfx++);
+        gDPSetEnvColor(gfx++, 255, 255, 255, 32);
+        gDPSetOtherMode(gfx++,
+                        G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                            G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                        G_AC_NONE | G_ZS_PRIM | AA_EN | CVG_DST_CLAMP | ZMODE_OPA | CVG_X_ALPHA |
+                            GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1) |
+                            GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1));
+        gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 1, 0, TEXEL1, ENVIRONMENT, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED);
+
+        dy = (this->width > 320) ? 2 : 4;
+        y = this->height;
+        y2 = 0;
+
+        while (y > 0) {
+            s32 uls = 0;
+            s32 lrs = this->width - 1;
+            s32 ult;
+            s32 lrt;
+
+            dy = CLAMP_MAX(dy, y);
+
+            ult = y2;
+            lrt = (y2 + dy - 1);
+
+            gDPLoadMultiTile(gfx++, this->fbufSave, 0x0000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width,
+                             this->height, uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            if (1) {}
+            gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
+                             uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                             G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            if (1) {}
+            gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
+                                ult << 5, 1 << 10, 1 << 10);
+
+            y2 += dy;
+            y -= dy;
+        }
+
+        gDPPipeSync(gfx++);
+        *dList = gfx;
+    }
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170798.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170AE0.asm")
+void func_80170AE0(PreRender* this, Gfx** dList, s32 alpha) {
+    func_8016FF90(this, dList, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170B28.asm")
+void func_80170B28(PreRender* this, Gfx** dList) {
+    func_8016FF70(this, dList, this->fbufSave, this->fbuf);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170B4C.asm")
+void func_80170B4C(PreRender* this, s32 x, s32 y) {
+    s32 i;
+    s32 j;
+    s32 buffA[3 * 5];
+    s32 buffR[3 * 5];
+    s32 buffG[3 * 5];
+    s32 buffB[3 * 5];
+    s32 x1;
+    s32 y1;
+    s32 pad;
+    s32 pxR;
+    s32 pxG;
+    s32 pxB;
+    s32 pxR2;
+    s32 pxG2;
+    s32 pxB2;
+    Color_RGB5A1 pxIn;
+    Color_RGB5A1 pxOut;
+    u32 pxR3;
+    u32 pxG3;
+    u32 pxB3;
+
+    /*
+    Picture this as a 3x5 rectangle where the middle pixel (index 7) correspond to (x, y)
+      _ _ _ _ _
+    | 0 1 2 3 4 |
+    | 5 6 7 8 9 |
+    | A B C D E |
+      ‾ ‾ ‾ ‾ ‾
+    */
+    for (i = 0; i < 3 * 5; i++) {
+        x1 = (i % 5) + x - 2;
+        y1 = (i / 5) + y - 1;
+
+        if (x1 < 0) {
+            x1 = 0;
+        } else if (x1 > (this->width - 1)) {
+            x1 = this->width - 1;
+        }
+        if (y1 < 0) {
+            y1 = 0;
+        } else if (y1 > (this->height - 1)) {
+            y1 = this->height - 1;
+        }
+
+        pxIn.rgba = this->fbufSave[x1 + y1 * this->width];
+        buffR[i] = (pxIn.r << 3) | (pxIn.r >> 2);
+        buffG[i] = (pxIn.g << 3) | (pxIn.g >> 2);
+        buffB[i] = (pxIn.b << 3) | (pxIn.b >> 2);
+        buffA[i] = this->cvgSave[x1 + y1 * this->width] >> 5; // A
+    }
+
+    pxR = pxR2 = buffR[7];
+    pxG = pxG2 = buffG[7];
+    pxB = pxB2 = buffB[7];
+
+    for (i = 1; i < 3 * 5; i += 2) {
+        if (buffA[i] == 7) {
+            if (pxR < buffR[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffR[j] >= buffR[i]) && (buffA[j] == 7)) {
+                        pxR = buffR[i];
+                    }
+                }
+            }
+            if (pxG < buffG[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffG[j] >= buffG[i]) && (buffA[j] == 7)) {
+                        pxG = buffG[i];
+                    }
+                }
+            }
+            if (pxB < buffB[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffB[j] >= buffB[i]) && (buffA[j] == 7)) {
+                        pxB = buffB[i];
+                    }
+                }
+            }
+            if (1) {}
+            if (pxR2 > buffR[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffR[j] <= buffR[i]) && (buffA[j] == 7)) {
+                        pxR2 = buffR[i];
+                    }
+                }
+            }
+            if (pxG2 > buffG[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffG[j] <= buffG[i]) && (buffA[j] == 7)) {
+                        pxG2 = buffG[i];
+                    }
+                }
+            }
+            if (pxB2 > buffB[i]) {
+                for (j = 1; j < 15; j += 2) {
+                    if ((i != j) && (buffB[j] <= buffB[i]) && (buffA[j] == 7)) {
+                        pxB2 = buffB[i];
+                    }
+                }
+            }
+        }
+    }
+
+    pad = 7 - buffA[7];
+    pxR3 = buffR[7] + (((s32)((pad * ((pxR + pxR2) - (buffR[7] << 1))) + 4)) >> 3);
+    pxG3 = buffG[7] + (((s32)((pad * ((pxG + pxG2) - (buffG[7] << 1))) + 4)) >> 3);
+    pxB3 = buffB[7] + (((s32)((pad * ((pxB + pxB2) - (buffB[7] << 1))) + 4)) >> 3);
+
+    pxOut.r = pxR3 >> 3;
+    pxOut.g = pxG3 >> 3;
+    pxOut.b = pxB3 >> 3;
+    pxOut.a = 1;
+    this->fbufSave[x + y * this->width] = pxOut.rgba;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017160C.asm")
 

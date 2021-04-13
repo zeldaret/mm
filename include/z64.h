@@ -1000,11 +1000,11 @@ typedef struct {
     /* 0x04 */ u16 widthSave;
     /* 0x06 */ u16 heightSave;
     /* 0x08 */ char unk_8[8];
-    /* 0x10 */ void* fbuf;
-    /* 0x14 */ void* fbufSave;
-    /* 0x18 */ void* cvgSave;
-    /* 0x1C */ void* zbuf;
-    /* 0x20 */ void* zbufSave;
+    /* 0x10 */ u16* fbuf;
+    /* 0x14 */ u16* fbufSave;
+    /* 0x18 */ u8* cvgSave;
+    /* 0x1C */ u16* zbuf;
+    /* 0x20 */ u16* zbufSave;
     /* 0x24 */ u16 ulxSave;
     /* 0x26 */ u16 ulySave;
     /* 0x28 */ u16 lrxSave;
