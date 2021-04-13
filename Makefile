@@ -162,17 +162,8 @@ build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=
 build/baserom/boot build/baserom/code: build/code.elf
 	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/baserom/ovl_%: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
-
-build/baserom/Z2_%: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
-
-build/baserom/KAKUSIAN%: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
-
-build/baserom/SPOT0%: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
+build/baserom/assets/scenes/%: build/code.elf
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 asm/non_matchings/%: asm/%.asm
 	@./tools/split_asm.py $< $@
