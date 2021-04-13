@@ -47,7 +47,8 @@ void func_8016FDB8(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, u3
         flags = 0x1C;
     }
 
-    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f, 1.0f, flags);
+    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f,
+                  1.0f, flags);
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -82,7 +83,8 @@ void func_8016FF90(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, s3
 
     gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&dList2, srcBuf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f, 1.0f, 0xB);
+    func_80172758(&dList2, srcBuf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f,
+                  1.0f, 0xB);
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -93,15 +95,94 @@ void func_80170200(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf) {
     func_8016FF90(this, dList, srcBuf, destBuf, 255, 255, 255, 255);
 }
 
+#ifdef NON_MATCHING
+// just regalloc
+void func_8017023C(PreRender* this, Gfx** dList, void* srcBuf, void* dstBuf) {
+    Gfx* dList2 = *dList;
+    s32 x;
+    s32 x2;
+    s32 dx;
+
+    gDPPipeSync(dList2++);
+    gDPSetOtherMode(dList2++,
+                    G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PRIM | G_RM_PASS | G_RM_OPA_CI2);
+    gDPSetCombineLERP(dList2++, 0, 0, 0, TEXEL0, 0, 0, 0, 0, 0, 0, 0, TEXEL0, 0, 0, 0, 0);
+    gDPSetColorImage(dList2++, G_IM_FMT_I, G_IM_SIZ_8b, this->width, dstBuf);
+    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+
+    dx = 0x1000 / (this->width * 2);
+    x = this->height;
+    x2 = 0;
+
+    while (x > 0) {
+        s32 uls = 0;
+        s32 lrs = this->width - 1;
+        s32 ult;
+        s32 lrt;
+
+        dx = CLAMP_MAX(dx, x);
+        ult = x2;
+        lrt = x2 + dx - 1;
+
+        gDPLoadTextureTile(dList2++, srcBuf, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt,
+                           0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                           G_TX_NOLOD, G_TX_NOLOD);
+
+        gSPTextureRectangle(dList2++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
+                            ult << 5, 1 << 10, 1 << 10);
+
+        x2 += dx;
+        x -= dx;
+    }
+
+    gDPPipeSync(dList2++);
+    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
+
+    *dList = dList2;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017023C.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017057C.asm")
+void func_8017057C(PreRender* this, Gfx** dList) {
+    if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
+        func_8016FF70(this, dList, this->zbuf, this->zbufSave);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801705B4.asm")
+void func_801705B4(PreRender* this, Gfx** dList) {
+    if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
+        func_80170200(this, dList, this->fbuf, this->fbufSave);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801705EC.asm")
+void func_801705EC(PreRender* this, Gfx** dList) {
+    Gfx* dList2 = *dList;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170730.asm")
+    gDPPipeSync(dList2++);
+    gDPSetBlendColor(dList2++, 255, 255, 255, 8);
+    gDPSetPrimDepth(dList2++, -1, -1);
+    gDPSetOtherMode(dList2++,
+                    G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PRIM | G_RM_VISCVG | G_RM_VISCVG2);
+    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    gDPFillRectangle(dList2++, 0, 0, this->width, this->height);
+    gDPPipeSync(dList2++);
+
+    *dList = dList2;
+}
+
+// #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170730.asm")
+void func_80170730(PreRender* this, Gfx** dList) {
+    func_801705EC(this, dList);
+
+    if (this->cvgSave != NULL) {
+        func_8017023C(this, dList, this->fbuf, this->cvgSave);
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170774.asm")
 
