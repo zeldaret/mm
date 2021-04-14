@@ -39,84 +39,84 @@ void PreRender_Destroy(PreRenderContext* this) {
     func_80174BA0(&this->alloc);
 }
 
-void func_8016FDB8(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf, u32 arg4) {
-    Gfx* dList2 = *dList;
+void func_8016FDB8(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {
+    Gfx* gfx = *gfxp;
     u32 flags;
 
-    gDPPipeSync(dList2++);
-    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, destBuf);
-    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    gDPPipeSync(gfx++);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, bufSave);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
     flags = 0x18;
     if (arg4 == true) {
         flags = 0x1C;
     }
 
-    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
-                  0.0f, 1.0f, 1.0f, flags);
-    gDPPipeSync(dList2++);
-    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
+    func_80172758(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
+                  1.0f, 1.0f, flags);
+    gDPPipeSync(gfx++);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *dList = dList2;
+    *gfxp = gfx;
 }
 
-void func_8016FF70(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf) {
-    func_8016FDB8(this, dList, srcBuf, destBuf, false);
+void func_8016FF70(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+    func_8016FDB8(this, gfxp, buf, bufSave, false);
 }
 
-void func_8016FF90(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf, s32 envR, s32 envG, s32 envB,
+void func_8016FF90(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB,
                    s32 envA) {
-    Gfx* dList2 = *dList;
+    Gfx* gfx = *gfxp;
 
-    gDPPipeSync(dList2++);
+    gDPPipeSync(gfx++);
 
     if (envA == 255) {
-        gDPSetOtherMode(dList2++,
+        gDPSetOtherMode(gfx++,
                         G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PRIM | G_RM_OPA_SURF | G_RM_OPA_SURF2);
     } else {
-        gDPSetOtherMode(dList2++,
+        gDPSetOtherMode(gfx++,
                         G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
     }
 
-    gDPSetEnvColor(dList2++, envR, envG, envB, envA);
-    gDPSetCombineLERP(dList2++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0,
+    gDPSetEnvColor(gfx++, envR, envG, envB, envA);
+    gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0,
                       ENVIRONMENT);
-    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, destBuf);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, bufSave);
 
-    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&dList2, srcBuf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
-                  1.0f, 1.0f, 0xB);
-    gDPPipeSync(dList2++);
-    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
+    func_80172758(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f, 1.0f,
+                  1.0f, 0xB);
+    gDPPipeSync(gfx++);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *dList = dList2;
+    *gfxp = gfx;
 }
 
-void func_80170200(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf) {
-    func_8016FF90(this, dList, srcBuf, destBuf, 255, 255, 255, 255);
+void func_80170200(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+    func_8016FF90(this, gfxp, buf, bufSave, 255, 255, 255, 255);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_8017023C(PreRenderContext* this, Gfx** dList, void* srcBuf, void* dstBuf) {
-    Gfx* dList2 = *dList;
+void func_8017023C(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+    Gfx* gfx = *gfxp;
     s32 x;
     s32 x2;
     s32 dx;
 
-    gDPPipeSync(dList2++);
-    gDPSetOtherMode(dList2++,
+    gDPPipeSync(gfx++);
+    gDPSetOtherMode(gfx++,
                     G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_PASS | G_RM_OPA_CI2);
-    gDPSetCombineLERP(dList2++, 0, 0, 0, TEXEL0, 0, 0, 0, 0, 0, 0, 0, TEXEL0, 0, 0, 0, 0);
-    gDPSetColorImage(dList2++, G_IM_FMT_I, G_IM_SIZ_8b, this->width, dstBuf);
-    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, 0, 0, 0, 0, TEXEL0, 0, 0, 0, 0);
+    gDPSetColorImage(gfx++, G_IM_FMT_I, G_IM_SIZ_8b, this->width, bufSave);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
     dx = 0x1000 / (this->width * 2);
     x = this->height;
@@ -132,70 +132,70 @@ void func_8017023C(PreRenderContext* this, Gfx** dList, void* srcBuf, void* dstB
         ult = x2;
         lrt = x2 + dx - 1;
 
-        gDPLoadTextureTile(dList2++, srcBuf, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt,
-                           0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                           G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureTile(gfx++, buf, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
 
-        gSPTextureRectangle(dList2++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
+        gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                             ult << 5, 1 << 10, 1 << 10);
 
         x2 += dx;
         x -= dx;
     }
 
-    gDPPipeSync(dList2++);
-    gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
+    gDPPipeSync(gfx++);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *dList = dList2;
+    *gfxp = gfx;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017023C.asm")
 #endif
 
-void func_8017057C(PreRenderContext* this, Gfx** dList) {
+void func_8017057C(PreRenderContext* this, Gfx** gfxp) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
-        func_8016FF70(this, dList, this->zbuf, this->zbufSave);
+        func_8016FF70(this, gfxp, this->zbuf, this->zbufSave);
     }
 }
 
-void func_801705B4(PreRenderContext* this, Gfx** dList) {
+void func_801705B4(PreRenderContext* this, Gfx** gfxp) {
     if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
-        func_80170200(this, dList, this->fbuf, this->fbufSave);
+        func_80170200(this, gfxp, this->fbuf, this->fbufSave);
     }
 }
 
-void func_801705EC(PreRenderContext* this, Gfx** dList) {
-    Gfx* dList2 = *dList;
+void func_801705EC(PreRenderContext* this, Gfx** gfxp) {
+    Gfx* gfx = *gfxp;
 
-    gDPPipeSync(dList2++);
-    gDPSetBlendColor(dList2++, 255, 255, 255, 8);
-    gDPSetPrimDepth(dList2++, -1, -1);
-    gDPSetOtherMode(dList2++,
+    gDPPipeSync(gfx++);
+    gDPSetBlendColor(gfx++, 255, 255, 255, 8);
+    gDPSetPrimDepth(gfx++, -1, -1);
+    gDPSetOtherMode(gfx++,
                     G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_VISCVG | G_RM_VISCVG2);
-    gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
-    gDPFillRectangle(dList2++, 0, 0, this->width, this->height);
-    gDPPipeSync(dList2++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    gDPFillRectangle(gfx++, 0, 0, this->width, this->height);
+    gDPPipeSync(gfx++);
 
-    *dList = dList2;
+    *gfxp = gfx;
 }
 
-void func_80170730(PreRenderContext* this, Gfx** dList) {
-    func_801705EC(this, dList);
+void func_80170730(PreRenderContext* this, Gfx** gfxp) {
+    func_801705EC(this, gfxp);
 
     if (this->cvgSave != NULL) {
-        func_8017023C(this, dList, this->fbuf, this->cvgSave);
+        func_8017023C(this, gfxp, this->fbuf, this->cvgSave);
     }
 }
 
-void func_80170774(PreRenderContext* this, Gfx** dList) {
-    func_8016FF70(this, dList, this->zbufSave, this->zbuf);
+void func_80170774(PreRenderContext* this, Gfx** gfxp) {
+    func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_80170798(PreRenderContext* this, Gfx** dList) {
+void func_80170798(PreRenderContext* this, Gfx** gfxp) {
     Gfx* gfx;
     s32 y;
     s32 y2;
@@ -203,7 +203,7 @@ void func_80170798(PreRenderContext* this, Gfx** dList) {
     s32 rtile = 1;
 
     if (this->cvgSave != NULL) {
-        gfx = *dList;
+        gfx = *gfxp;
 
         gDPPipeSync(gfx++);
         gDPSetEnvColor(gfx++, 255, 255, 255, 32);
@@ -246,19 +246,19 @@ void func_80170798(PreRenderContext* this, Gfx** dList) {
         }
 
         gDPPipeSync(gfx++);
-        *dList = gfx;
+        *gfxp = gfx;
     }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170798.asm")
 #endif
 
-void func_80170AE0(PreRenderContext* this, Gfx** dList, s32 alpha) {
-    func_8016FF90(this, dList, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
+void func_80170AE0(PreRenderContext* this, Gfx** gfxp, s32 alpha) {
+    func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
 }
 
-void func_80170B28(PreRenderContext* this, Gfx** dList) {
-    func_8016FF70(this, dList, this->fbufSave, this->fbuf);
+void func_80170B28(PreRenderContext* this, Gfx** gfxp) {
+    func_8016FF70(this, gfxp, this->fbufSave, this->fbuf);
 }
 
 /**
@@ -444,7 +444,7 @@ void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this) {
     }
 }
 
-// Unused
+// Unused, likely since `PreRender_ApplyFilters` already handles NULL checks
 void func_801720C4(PreRenderContext* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         PreRender_ApplyFilters(this);
@@ -467,7 +467,7 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } someprerenderparams;
 
-void func_801720FC(someprerenderparams* params, Gfx** dList);
+void func_801720FC(someprerenderparams* params, Gfx** gfxp);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720FC.asm")
 
 void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
