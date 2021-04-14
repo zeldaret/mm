@@ -393,11 +393,38 @@ void func_8017160C(PreRender* this) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801717F8.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80171F4C.asm")
+void func_80171F4C(PreRender* this) {
+    if (this->cvgSave == NULL || this->fbufSave == NULL) {
+        this->unk_4D = 0;
+    } else {
+        this->unk_4D = 1;
+        func_8017160C(this);
+        func_801717F8(this);
+        this->unk_4D = 2;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80171FA8.asm")
+void func_80171FA8(PreRender* this) {
+    if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
+        if (D_801F6FC0) {
+            StackCheck_Cleanup(&slowlyStackEntry);
+            func_801857A0(&D_801F6E00);
+        }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80172078.asm")
+        this->unk_4D = 1;
+        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, D_801DFC60);
+        Slowly_Start(&D_801F6E00, &D_801F7FE8, func_80171F4C, this, 0);
+        D_801F6FC0 = true;
+    }
+}
+
+void func_80172078(PreRender *this) {
+    if (D_801F6FC0) {
+        StackCheck_Cleanup(&slowlyStackEntry);
+        func_801857A0(&D_801F6E00);
+        D_801F6FC0 = false;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720C4.asm")
 
