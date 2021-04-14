@@ -418,7 +418,7 @@ void func_80171FA8(PreRender* this) {
     }
 }
 
-void func_80172078(PreRender *this) {
+void func_80172078(PreRender* this) {
     if (D_801F6FC0) {
         StackCheck_Cleanup(&slowlyStackEntry);
         func_801857A0(&D_801F6E00);
@@ -426,8 +426,49 @@ void func_80172078(PreRender *this) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720C4.asm")
+void func_801720C4(PreRender* this) {
+    if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
+        func_80171F4C(this);
+    }
+}
 
+typedef struct {
+    /* 0x00 */ void* timg;
+    /* 0x04 */ void* tlut;
+    /* 0x08 */ u16 width;
+    /* 0x0A */ u16 height;
+    /* 0x0C */ u8 fmt;
+    /* 0x0D */ u8 siz;
+    /* 0x0E */ u16 tt;
+    /* 0x10 */ u16 unk_10;
+    /* 0x14 */ f32 x;
+    /* 0x18 */ f32 y;
+    /* 0x1C */ f32 xScale;
+    /* 0x20 */ f32 yScale;
+    /* 0x24 */ u32 flags;
+} someprerenderparams;
+
+void func_801720FC(someprerenderparams* params, Gfx** dList);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720FC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80172758.asm")
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
+                   f32 y, f32 xScale, f32 yScale, u32 flags) {
+    someprerenderparams params;
+    someprerenderparams* paramsp = &params;
+
+    params.timg = timg;
+    params.tlut = tlut;
+    params.width = width;
+    params.height = height;
+    params.fmt = fmt;
+    params.siz = siz;
+    params.tt = tt;
+    params.unk_10 = arg8;
+    params.x = x;
+    params.y = y;
+    params.xScale = xScale;
+    params.yScale = yScale;
+    params.flags = flags;
+
+    func_801720FC(paramsp, gfxp);
+}
