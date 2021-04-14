@@ -7,7 +7,7 @@
 void Slowly_Main(SlowlyTask* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;
 
-    switch (slowly->callbackType) {
+    switch (slowly->callbackArgCount) {
     case SLOWLY_CALLBACK_NO_ARGS:
         slowly->callback0();
         break;
@@ -29,7 +29,7 @@ void Slowly_ThreadEntry(SlowlyTask* slowly) {
 void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1) {
     bzero(slowly, sizeof(SlowlyTask));
 
-    slowly->callbackType = SLOWLY_CALLBACK_TWO_ARGS;
+    slowly->callbackArgCount = SLOWLY_CALLBACK_TWO_ARGS;
     slowly->status = 0;
     slowly->callback0 = callback;
     slowly->callbackArg0 = callbackArg0;
