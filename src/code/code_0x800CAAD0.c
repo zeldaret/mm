@@ -6,15 +6,15 @@
 // The functions will use the BgCheck2 prefix for now.
 
 void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* actor) {
-    z_Matrix prevMatrix;
-    z_Matrix prevMatrixInv;
-    z_Matrix currMatrix;
+    MtxF prevMatrix;
+    MtxF prevMatrixInv;
+    MtxF currMatrix;
     Vec3f newPos;
     Vec3f posWithInv;
 
     if (BgCheck_IsActorMeshIndexValid(index) == 0) return;
 
-    Matrix_MakeTranslationRotationYXZScale(&prevMatrix,
+    SkinMatrix_SetScaleRotateYRPTranslate(&prevMatrix,
         bgCtxt->dyna.actorMeshArr[index].prevParams.scale.x,
         bgCtxt->dyna.actorMeshArr[index].prevParams.scale.y,
         bgCtxt->dyna.actorMeshArr[index].prevParams.scale.z,
@@ -25,9 +25,9 @@ void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* ac
         bgCtxt->dyna.actorMeshArr[index].prevParams.pos.y,
         bgCtxt->dyna.actorMeshArr[index].prevParams.pos.z);
 
-    if (Matrix_Invert(&prevMatrix, &prevMatrixInv) == 2) return;
+    if (SkinMatrix_Invert(&prevMatrix, &prevMatrixInv) == 2) return;
 
-    Matrix_MakeTranslationRotationYXZScale(&currMatrix,
+    SkinMatrix_SetScaleRotateYRPTranslate(&currMatrix,
         bgCtxt->dyna.actorMeshArr[index].currParams.scale.x,
         bgCtxt->dyna.actorMeshArr[index].currParams.scale.y,
         bgCtxt->dyna.actorMeshArr[index].currParams.scale.z,
