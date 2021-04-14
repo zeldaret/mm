@@ -1018,7 +1018,7 @@ typedef struct {
     /* 0x4C */ u8 unk_4C;
     /* 0x4D */ u8 unk_4D;
     /* 0x4E */ char unk_4E[2];
-} PreRender; // size = 0x50
+} PreRenderContext; // size = 0x50
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -1729,7 +1729,7 @@ struct GlobalContext {
     /* 0x18B49 */ UNK_TYPE1 pad18B49[0x1];
     /* 0x18B4A */ u8 unk18B4A;
     /* 0x18B4B */ char pad18B4B[1];
-    /* 0x18B4C */ PreRender pauseBgPreRender;
+    /* 0x18B4C */ PreRenderContext pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
     /* 0x18E58 */ UNK_TYPE1 pad18E58[0x400];

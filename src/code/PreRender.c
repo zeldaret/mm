@@ -1,7 +1,10 @@
 #include <ultra64.h>
 #include <global.h>
 
-void func_8016FCF0(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg) {
+/**
+ * Assigns the "save" values in PreRenderContext
+ */
+void PreRender_SetValuesSave(PreRenderContext* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg) {
     this->widthSave = width;
     this->heightSave = height;
     this->fbufSave = fbuf;
@@ -13,12 +16,15 @@ void func_8016FCF0(PreRender* this, u32 width, u32 height, void* fbuf, void* zbu
     this->lrySave = height - 1;
 }
 
-void func_8016FD2C(PreRender* this) {
-    bzero(this, sizeof(PreRender));
+void PreRender_Init(PreRenderContext* this) {
+    bzero(this, sizeof(PreRenderContext));
     func_80174AA0(&this->alloc);
 }
 
-void func_8016FD60(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf) {
+/**
+ * Assigns the current values in PreRenderContext
+ */
+void PreRender_SetValues(PreRenderContext* this, u32 width, u32 height, void* fbuf, void* zbuf) {
     this->width = width;
     this->height = height;
     this->fbuf = fbuf;
@@ -29,17 +35,16 @@ void func_8016FD60(PreRender* this, u32 width, u32 height, void* fbuf, void* zbu
     this->lry = height - 1;
 }
 
-void func_8016FD94(PreRender* this) {
+void PreRender_Destroy(PreRenderContext* this) {
     func_80174BA0(&this->alloc);
 }
 
-void func_8016FDB8(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, u32 arg4) {
+void func_8016FDB8(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf, u32 arg4) {
     Gfx* dList2 = *dList;
     u32 flags;
 
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, destBuf);
-
     gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
     flags = 0x18;
@@ -47,19 +52,20 @@ void func_8016FDB8(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, u3
         flags = 0x1C;
     }
 
-    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f,
-                  1.0f, flags);
+    func_80172758(&dList2, srcBuf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
+                  0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
     *dList = dList2;
 }
 
-void func_8016FF70(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf) {
+void func_8016FF70(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf) {
     func_8016FDB8(this, dList, srcBuf, destBuf, false);
 }
 
-void func_8016FF90(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, s32 envR, s32 envG, s32 envB, s32 envA) {
+void func_8016FF90(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf, s32 envR, s32 envG, s32 envB,
+                   s32 envA) {
     Gfx* dList2 = *dList;
 
     gDPPipeSync(dList2++);
@@ -83,21 +89,21 @@ void func_8016FF90(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf, s3
 
     gDPSetScissor(dList2++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&dList2, srcBuf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 0.0f, 0.0f, 1.0f,
-                  1.0f, 0xB);
+    func_80172758(&dList2, srcBuf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
+                  1.0f, 1.0f, 0xB);
     gDPPipeSync(dList2++);
     gDPSetColorImage(dList2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
     *dList = dList2;
 }
 
-void func_80170200(PreRender* this, Gfx** dList, void* srcBuf, void* destBuf) {
+void func_80170200(PreRenderContext* this, Gfx** dList, void* srcBuf, void* destBuf) {
     func_8016FF90(this, dList, srcBuf, destBuf, 255, 255, 255, 255);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_8017023C(PreRender* this, Gfx** dList, void* srcBuf, void* dstBuf) {
+void func_8017023C(PreRenderContext* this, Gfx** dList, void* srcBuf, void* dstBuf) {
     Gfx* dList2 = *dList;
     s32 x;
     s32 x2;
@@ -146,19 +152,19 @@ void func_8017023C(PreRender* this, Gfx** dList, void* srcBuf, void* dstBuf) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017023C.asm")
 #endif
 
-void func_8017057C(PreRender* this, Gfx** dList) {
+void func_8017057C(PreRenderContext* this, Gfx** dList) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
         func_8016FF70(this, dList, this->zbuf, this->zbufSave);
     }
 }
 
-void func_801705B4(PreRender* this, Gfx** dList) {
+void func_801705B4(PreRenderContext* this, Gfx** dList) {
     if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
         func_80170200(this, dList, this->fbuf, this->fbufSave);
     }
 }
 
-void func_801705EC(PreRender* this, Gfx** dList) {
+void func_801705EC(PreRenderContext* this, Gfx** dList) {
     Gfx* dList2 = *dList;
 
     gDPPipeSync(dList2++);
@@ -175,7 +181,7 @@ void func_801705EC(PreRender* this, Gfx** dList) {
     *dList = dList2;
 }
 
-void func_80170730(PreRender* this, Gfx** dList) {
+void func_80170730(PreRenderContext* this, Gfx** dList) {
     func_801705EC(this, dList);
 
     if (this->cvgSave != NULL) {
@@ -183,13 +189,13 @@ void func_80170730(PreRender* this, Gfx** dList) {
     }
 }
 
-void func_80170774(PreRender* this, Gfx** dList) {
+void func_80170774(PreRenderContext* this, Gfx** dList) {
     func_8016FF70(this, dList, this->zbufSave, this->zbuf);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_80170798(PreRender* this, Gfx** dList) {
+void func_80170798(PreRenderContext* this, Gfx** dList) {
     Gfx* gfx;
     s32 y;
     s32 y2;
@@ -247,15 +253,23 @@ void func_80170798(PreRender* this, Gfx** dList) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170798.asm")
 #endif
 
-void func_80170AE0(PreRender* this, Gfx** dList, s32 alpha) {
+void func_80170AE0(PreRenderContext* this, Gfx** dList, s32 alpha) {
     func_8016FF90(this, dList, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
 }
 
-void func_80170B28(PreRender* this, Gfx** dList) {
+void func_80170B28(PreRenderContext* this, Gfx** dList) {
     func_8016FF70(this, dList, this->fbufSave, this->fbuf);
 }
 
-void func_80170B4C(PreRender* this, s32 x, s32 y) {
+/**
+ * Applies an anti-alias filter where the middle pixel (index 7) correspond to (x, y) in this 3x5 rectangle
+ *     _ _ _ _ _
+ *   | 0 1 2 3 4 |
+ *   | 5 6 7 8 9 |
+ *   | A B C D E |
+ *     ‾ ‾ ‾ ‾ ‾
+ */
+void PreRender_AntiAliasAlgorithm(PreRenderContext* this, s32 x, s32 y) {
     s32 i;
     s32 j;
     s32 buffA[3 * 5];
@@ -277,14 +291,6 @@ void func_80170B4C(PreRender* this, s32 x, s32 y) {
     u32 pxG3;
     u32 pxB3;
 
-    /*
-    Picture this as a 3x5 rectangle where the middle pixel (index 7) correspond to (x, y)
-      _ _ _ _ _
-    | 0 1 2 3 4 |
-    | 5 6 7 8 9 |
-    | A B C D E |
-      ‾ ‾ ‾ ‾ ‾
-    */
     for (i = 0; i < 3 * 5; i++) {
         x1 = (i % 5) + x - 2;
         y1 = (i / 5) + y - 1;
@@ -304,7 +310,7 @@ void func_80170B4C(PreRender* this, s32 x, s32 y) {
         buffR[i] = (pxIn.r << 3) | (pxIn.r >> 2);
         buffG[i] = (pxIn.g << 3) | (pxIn.g >> 2);
         buffB[i] = (pxIn.b << 3) | (pxIn.b >> 2);
-        buffA[i] = this->cvgSave[x1 + y1 * this->width] >> 5; // A
+        buffA[i] = this->cvgSave[x1 + y1 * this->width] >> 5;
     }
 
     pxR = pxR2 = buffR[7];
@@ -371,7 +377,10 @@ void func_80170B4C(PreRender* this, s32 x, s32 y) {
     this->fbufSave[x + y * this->width] = pxOut.rgba;
 }
 
-void func_8017160C(PreRender* this) {
+/**
+ * Applies an anti-alias filter to the current prerender
+ */
+void PreRender_ApplyAntiAliasingFilter(PreRenderContext* this) {
     s32 x;
     s32 y;
     s32 cvg;
@@ -383,7 +392,7 @@ void func_8017160C(PreRender* this) {
             cvg++;
 
             if (cvg != 8) {
-                func_80170B4C(this, x, y);
+                PreRender_AntiAliasAlgorithm(this, x, y);
             }
         }
     }
@@ -393,18 +402,24 @@ void func_8017160C(PreRender* this) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801717F8.asm")
 
-void func_80171F4C(PreRender* this) {
+/**
+ * Applies filters to the framebuffer prerender to make it look smoother
+ */
+void PreRender_ApplyFilters(PreRenderContext* this) {
     if (this->cvgSave == NULL || this->fbufSave == NULL) {
         this->unk_4D = 0;
     } else {
         this->unk_4D = 1;
-        func_8017160C(this);
+        PreRender_ApplyAntiAliasingFilter(this);
         func_801717F8(this);
         this->unk_4D = 2;
     }
 }
 
-void func_80171FA8(PreRender* this) {
+/**
+ * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread
+ */
+void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
             StackCheck_Cleanup(&slowlyStackEntry);
@@ -413,12 +428,15 @@ void func_80171FA8(PreRender* this) {
 
         this->unk_4D = 1;
         StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, D_801DFC60);
-        Slowly_Start(&D_801F6E00, &D_801F7FE8, func_80171F4C, this, 0);
+        Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }
 
-void func_80172078(PreRender* this) {
+/**
+ * Destroys the "slowly" thread
+ */
+void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this) {
     if (D_801F6FC0) {
         StackCheck_Cleanup(&slowlyStackEntry);
         func_801857A0(&D_801F6E00);
@@ -426,9 +444,10 @@ void func_80172078(PreRender* this) {
     }
 }
 
-void func_801720C4(PreRender* this) {
+// Unused
+void func_801720C4(PreRenderContext* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
-        func_80171F4C(this);
+        PreRender_ApplyFilters(this);
     }
 }
 
