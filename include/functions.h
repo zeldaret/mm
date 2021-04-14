@@ -3091,7 +3091,7 @@ void PreRender_ApplyFilters(PreRenderContext* this);
 void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this);
 void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this);
 void func_801720C4(PreRenderContext* this);
-// void func_801720FC(void);
+void func_801720FC(PreRenderParams* params, Gfx** gfxp);
 void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, u32 size);
 void THGA_Dt(TwoHeadGfxArena* thga);

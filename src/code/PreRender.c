@@ -451,29 +451,12 @@ void func_801720C4(PreRenderContext* this) {
     }
 }
 
-typedef struct {
-    /* 0x00 */ void* timg;
-    /* 0x04 */ void* tlut;
-    /* 0x08 */ u16 width;
-    /* 0x0A */ u16 height;
-    /* 0x0C */ u8 fmt;
-    /* 0x0D */ u8 siz;
-    /* 0x0E */ u16 tt;
-    /* 0x10 */ u16 unk_10;
-    /* 0x14 */ f32 x;
-    /* 0x18 */ f32 y;
-    /* 0x1C */ f32 xScale;
-    /* 0x20 */ f32 yScale;
-    /* 0x24 */ u32 flags;
-} someprerenderparams;
-
-void func_801720FC(someprerenderparams* params, Gfx** gfxp);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720FC.asm")
 
 void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
                    f32 y, f32 xScale, f32 yScale, u32 flags) {
-    someprerenderparams params;
-    someprerenderparams* paramsp = &params;
+    PreRenderParams params;
+    PreRenderParams* paramsp = &params;
 
     params.timg = timg;
     params.tlut = tlut;
