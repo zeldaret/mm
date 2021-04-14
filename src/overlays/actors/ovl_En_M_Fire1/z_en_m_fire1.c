@@ -24,7 +24,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 
         COLTYPE_NONE, 
         AT_ON | AT_TYPE_PLAYER, 
-        AC_NONE, OC1_NONE, 
+        AC_NONE, 
+        OC1_NONE, 
         OC2_TYPE_PLAYER, 
         COLSHAPE_CYLINDER, 
     },
