@@ -18,17 +18,14 @@ void func_80960260(ObjLightswitch* this, GlobalContext* globalCtx);
 void func_80960370(ObjLightswitch* this, GlobalContext* globalCtx);
 void func_80960440(ObjLightswitch* this, GlobalContext* globalCtx);
 
-// other func
 void func_80960088(ObjLightswitch *this);
 void func_80960224(ObjLightswitch *this);
-
-// unk func
 void func_80960088(ObjLightswitch *this);
 void func_80960424(ObjLightswitch *this);
 void func_8096012C(ObjLightswitch *this);
 void func_8096034C(ObjLightswitch *this);
 
-/*
+
 const ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
     ACTORCAT_SWITCH,
@@ -40,34 +37,107 @@ const ActorInit Obj_Lightswitch_InitVars = {
     (ActorFunc)ObjLightswitch_Update,
     (ActorFunc)ObjLightswitch_Draw
 };
+
+s32 D_80960B90[] = {
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00202000,
+    0x00000000,
+    0x00010100,
+    0x00000000,
+    0x00000000,
+    0x00130064,
+};
+
+// collider init D_80960BB4
+// works
+static s32 sJntSphInit[] = {
+    0x0A002939,
+    0x20000000,
+    0x00000001,
+    0x80960B90, //D_80960B90,
+};
+// error: collider overlay helper is giving the wrong output, too much data shifts rom
+/* 
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00202000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 19 }, 100 },
+    },
+};
+
+static ColliderJntSphInit sJntSphInit = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
+    1, sJntSphElementsInit,
+};
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FBF0.asm")
+ // segmented addresses for poly opa func
+void* D_80960BC4[] = {
+    0x06000C20,
+    0x06000420,
+    0x06001420,
+};
 
-//what
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FC94.asm")
+s32 D_80960BD0 = 0xFFFFA0A0;
 
-/*
+s32 D_80960BD4 = 0xFF000000;
+
+static InitChainEntry sInitChain[] = {
+//static InitChainEntry D_80960BD8[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+void func_8095FBF0(ObjLightswitch* this, GlobalContext *arg1) {
+    s8 pad;
+
+    Collider_InitJntSph(arg1, &this->collider);
+    //Collider_SetJntSph(arg1, &this->collider, &this->actor, &D_80960BB4, this->unk164);
+    Collider_SetJntSph(arg1, &this->collider, &this->actor, &sJntSphInit, this->unk164);
+    this->actor.colChkInfo.mass = 0xFF;
+    SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, 
+        this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+        this->actor.world.pos.z, &this->actor.shape);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+    Collider_UpdateSpheres(0, &this->collider);
+}
+
+// set params based switch flag
+void func_8095FC94(ObjLightswitch *this, GlobalContext *globalCtx, s32 set) {
+    if (this){} // likely optimized out
+
+    if (set) {
+        Actor_SetSwitchFlag(globalCtx, (this->actor.params >> 8) & 0x7F);
+    } else {
+        Actor_UnsetSwitchFlag(globalCtx, (this->actor.params >> 8) & 0x7F);
+    }
+}
+
+
 // what a fucking stack vomit exhibit
-s16 func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
+/*
+void func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
     f32 sp64;
     f32 sp60;
     f32 sp5C;
     f32 sinResult;
     f32 cosResult;
-    f32 sp4C;
-    f32 sp40;
+    //f32 sp40;
     f32 *temp_a1;
-    f32 temp_f0;
+    f32 tempResult;
     f32 temp_f12;
-    f32 temp_f12_2;
-    f32 temp_f14;
-    f32 temp_f2;
+    f32 randomOutput;
+    f32 fabsResult;
+    f32 tempResult3;
     f32 temp_f2_2;
-    f32 temp_f2_3;
+    f32 tempResult5;
     s16 temp_v0;
-    f32 phi_f14;
-    f32 phi_f2;
+    f32 tempResult2;
+    f32 tempResult4;
     s16 phi_return;
     f32 phi_f2_2;
 
@@ -76,42 +146,42 @@ s16 func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
     temp_v0 = this->unk1AE;
     phi_return = temp_v0;
     if ((s32) temp_v0 >= 0x1900) {
-        temp_f0 = (1.0f - ((f32) temp_v0 * D_80960BF0)) * 400.0f;
-        if (temp_f0 > 60.0f) {
-            phi_f14 = 60.0f;
+        tempResult = (1.0f - ((f32) temp_v0 * D_80960BF0)) * 400.0f;
+        if (tempResult > 60.0f) {
+            tempResult2 = 60.0f;
         } else {
-            phi_f14 = temp_f0;
+            tempResult2 = tempResult;
         }
-        sp40 = phi_f14;
-        temp_f2 = Rand_ZeroOne() * ((phi_f14 - 30.0f) + 30.0f);
-        temp_f12 = temp_f2 - 30.0f;
-        sp4C = temp_f12;
+        //sp40 = tempResult2;
+        tempResult3 = Rand_ZeroOne() * ((tempResult2 - 30.0f) + 30.0f);
+        temp_f12 = tempResult3 - 30.0f;
 
-        if (temp_f2 > 30.0f) {
-            phi_f2 = 30.0f;
+        if (tempResult3 > 30.0f) {
+            tempResult4 = 30.0f;
         } else {
-            temp_f2_2 = 900.0f - (temp_f12 * temp_f12);
-            phi_f2_2 = temp_f2_2;
-            if (temp_f2_2 < 100.0f) {
-                phi_f2_2 = 100.0f;
+            tempResult3 = 900.0f - (temp_f12 * temp_f12);
+            ;
+            if (tempResult3 < 100.0f) {
+                tempResult3 = 100.0f;
             }
-            phi_f2 = sqrtf(phi_f2_2);
+            tempResult4 = sqrtf(tempResult3);
         }
 
-        temp_f2_3 = 2.0f * ((Rand_ZeroOne() - 0.5f) * phi_f2);
-        temp_f14 = fabsf(temp_f2_3);
-        sp40 = temp_f14;
-        temp_f12_2 = (Rand_ZeroOne() * 10.0f) + ((30.0f - temp_f14) * 0.5f);
-        temp_a1 = &sp5C;
-        sp5C = this->actor.world.pos.x + ((temp_f12_2 * sinResult) + (temp_f2_3 * cosResult));
-        sp60 = this->actor.world.pos.y + sp4C + 10.0f;
-        sp64 = this->actor.world.pos.z + ((temp_f12_2 * cosResult) - (temp_f2_3 * sinResult));
-        phi_return = EffectSsDeadDb_Spawn(temp_f12_2, temp_f14, globalCtx, temp_a1, &D_801D15B0, &D_801D15B0, &D_80960BD0, &D_80960BD4, 0x64, 0, 9);
+        tempResult5 = 2.0f * ((Rand_ZeroOne() - 0.5f) * tempResult4);
+        fabsResult = fabsf(tempResult5);
+        //sp40 = fabsResult;
+        randomOutput = (Rand_ZeroOne() * 10.0f) + ((30.0f - fabsResult) * 0.5f);
+        //temp_a1 = &sp5C;
+        sp5C = this->actor.world.pos.x + ((randomOutput * sinResult) + (tempResult5 * cosResult));
+        sp60 = this->actor.world.pos.y + temp_f12 + 10.0f;
+        sp64 = this->actor.world.pos.z + ((randomOutput * cosResult) - (tempResult5 * sinResult));
+        EffectSsDeadDb_Spawn(randomOutput, fabsResult, globalCtx, temp_a1, &D_801D15B0, &D_801D15B0, &D_80960BD0, &D_80960BD4, 0x64, 0, 9);
+
     }
     return phi_return;
 }
-*/
-s16 func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx);
+// */
+//s16 func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FCEC.asm")
 
 void ObjLightswitch_Init(Actor* thisx, GlobalContext *globalCtx) {
@@ -122,7 +192,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     switchFlagResult = Actor_GetSwitchFlag(globalCtx, (this->actor.params >> 8) & 0x7F);
     previouslyTriggered = 0;
-    Actor_ProcessInitChain(&this->actor, &D_80960BD8);
+    Actor_ProcessInitChain(&this->actor, &sInitChain);// &D_80960BD8);
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (switchFlagResult != 0) {
@@ -195,7 +265,6 @@ void func_809600BC(ObjLightswitch *this, GlobalContext *globalCtx) {
     }
 }
 
-// unk func ptr
 void func_8096012C(ObjLightswitch *this) {
     this->unk1B6 = 0;
     this->unk1B4 = 0;
@@ -260,7 +329,6 @@ void func_80960260(ObjLightswitch *this, GlobalContext *globalCtx) {
     this->unk1B0 += this->unk1B2;
 }
 
-// unk func ptr
 void func_8096034C(ObjLightswitch *this) {
     this->unk1B4 = 0x14;
     this->unk1B6 = 1;
@@ -282,7 +350,6 @@ void func_80960370(ObjLightswitch *this, GlobalContext *globalCtx) {
     }
 }
 
-// unk func ptr
 void func_80960424(ObjLightswitch *this) {
     this->unk1AE = 0x3FC0;
     this->actionFunc = func_80960440;

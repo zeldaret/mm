@@ -2477,7 +2477,7 @@ SECTIONS
     ovl_Obj_Lightswitch : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.text)
-        build/asm/overlays/ovl_Obj_Lightswitch_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.data)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.rodata)
         build/asm/overlays/ovl_Obj_Lightswitch_rodata.o(.rodata)
     }

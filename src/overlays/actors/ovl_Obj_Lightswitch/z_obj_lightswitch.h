@@ -34,9 +34,12 @@ typedef struct ObjLightswitch {
 
 extern const ActorInit Obj_Lightswitch_InitVars;
 
-extern s32 D_80960BD8;//init chain
-
+//late rodata
 extern s32 D_80960BF0; // 6.127451e-05
 
+// unk
+//extern f32 D_801D15B0;
+//extern f32 D_80960BD0;
+//extern f32 D_80960BD4;
 
 #endif // Z_OBJ_LIGHTSWITCH_H
