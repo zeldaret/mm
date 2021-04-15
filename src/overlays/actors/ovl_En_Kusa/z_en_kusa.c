@@ -14,6 +14,17 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
 
+s32 func_80934F58(EnKusa* this, GlobalContext* globalCtx, f32 yOffset);
+void func_80934FFC(EnKusa* this, GlobalContext* globalCtx);
+void func_809350C4(EnKusa* this);
+void func_809350F8(Vec3f* vec, f32 arg1);
+void func_8093517C(EnKusa* this);
+
+s16 D_809366A0 = 0;
+s16 D_809366A8 = 0;
+s16 D_809366A4 = 0;
+s16 D_809366AC = 0;
+
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
@@ -52,38 +63,59 @@ const ActorInit En_Kusa_InitVars = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934AB4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934F58.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934F58.asm")
+s32 func_80934F58(EnKusa* this, GlobalContext* globalCtx, f32 yOffset) {
+    s32 pad;
+    CollisionPoly* poly;
+    Vec3f pos;
+    s32 bgId;
+    f32 floorY;
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934FFC.asm")
-void func_80934FFC(EnKusa* this, GlobalContext* globalCtx) {
-    s16 temp_v1;
-    s32 temp_v0;
-    s32 temp_v0_2;
+    pos.x = this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + 30.0f;
+    pos.z = this->actor.world.pos.z;
 
-    temp_v1 = this->actor.params;
-    temp_v0 = temp_v1 & 3;
-    if (temp_v0 != 2) {
-        if (temp_v0 == 0) {
-        block_2:
-            if (((temp_v1 >> 0xC) & 1) == 0) {
-                Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world, (((temp_v1 >> 8) & 0xF) * 0x10));
-                return;
-            }
-        } else {
-            if (temp_v0 == 1) {
-                Item_DropCollectible(globalCtx, &this->actor.world, 3U);
-                return;
-            }
-            temp_v0_2 = func_800A8150((temp_v1 >> 2) & 0x3F);
-            if (temp_v0_2 >= 0) {
-                Item_DropCollectible(globalCtx, &this->actor.world,
-                                     (((this->actor.params >> 8) & 0x7F) << 8) | temp_v0_2);
-            }
-        }
+    floorY = func_800C411C(&globalCtx->colCtx, &poly, &bgId, &this->actor, &pos);
+    if (floorY > -32000.0f) {
+        this->actor.world.pos.y = floorY + yOffset;
+        Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
+        return true;
     } else {
-        goto block_2;
+        return false;
     }
 }
+
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934FFC.asm")
+// void func_80934FFC(EnKusa* this, GlobalContext* globalCtx) {
+//     s16 temp_v1;
+//     s32 temp_v0;
+//     s32 temp_v0_2;
+
+//     temp_v1 = this->actor.params;
+//     temp_v0 = temp_v1 & 3;
+//     if (temp_v0 != 2) {
+//         if (temp_v0 == 0) {
+//         block_2:
+//             if (((temp_v1 >> 0xC) & 1) == 0) {
+//                 Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world, (((temp_v1 >> 8) & 0xF) * 0x10));
+//                 return;
+//             }
+//         } else {
+//             if (temp_v0 == 1) {
+//                 Item_DropCollectible(globalCtx, &this->actor.world, 3U);
+//                 return;
+//             }
+//             temp_v0_2 = func_800A8150((temp_v1 >> 2) & 0x3F);
+//             if (temp_v0_2 >= 0) {
+//                 Item_DropCollectible(globalCtx, &this->actor.world,
+//                                      (((this->actor.params >> 8) & 0x7F) << 8) | temp_v0_2);
+//             }
+//         }
+//     } else {
+//         goto block_2;
+//     }
+// }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809350C4.asm")
 void func_809350C4(EnKusa* this) {
@@ -93,14 +125,41 @@ void func_809350C4(EnKusa* this) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809350F8.asm")
+// matches...?
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809350F8.asm")
+void func_809350F8(Vec3f* vec, f32 arg1) {
+    arg1 += ((Rand_ZeroOne() * 0.2f) - 0.1f) * arg1;
+    vec->x -= vec->x * arg1;
+    vec->y -= vec->y * arg1;
+    vec->z -= vec->z * arg1;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_8093517C.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_8093517C.asm")
+void func_8093517C(EnKusa* this) {
+    this->actor.scale.y = 0.16000001f;
+    this->actor.scale.x = 0.120000005f;
+    this->actor.scale.z = 0.120000005f;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809351A0.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809354F8.asm")
+// Matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809354F8.asm")
+void func_809354F8(EnKusa* this, GlobalContext* globalCtx) {
+    u32 i = 0;
+    for (i = 0; i < 3; i++) {
+        Actor* bug = Actor_SpawnWithParentAndCutscene(
+            &globalCtx->actorCtx, globalCtx, (u16)0x16, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, 0, 0, 1, this->actor.cutscene, (s16)this->actor.unk20, 0);
 
+        if (bug == NULL) {
+            break;
+        }
+    }
+}
+
+// Can't finish, func_800C9EBC is missing?
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809355A4.asm")
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_8093561C.asm")
@@ -176,8 +235,7 @@ void func_8093561C(Actor* thisx, GlobalContext* globalCtx) {
 
 // Matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/EnKusa_Destroy.asm")
-void EnKusa_Destroy(Actor *thisx, GlobalContext *globalCtx2)
-{
+void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnKusa* this = THIS;
 
@@ -191,6 +249,33 @@ void EnKusa_Destroy(Actor *thisx, GlobalContext *globalCtx2)
 // }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809358D8.asm")
+// void func_809358D8(EnKusa *this, GlobalContext *globalCtx)
+// {
+//     s32 sp20;
+
+//     if (Scene_IsObjectLoaded(&globalCtx->sceneContext, (s32) (s8) this->unk_197) != 0)
+//     {
+//         sp20 = this->actor.params & 3;
+//         if (this->unk197 != 0)
+//         {
+//             func_80936120(this);
+//         }
+//         else
+//         {
+//             func_80935988(this);
+//         }
+//         if (sp20 == 0)
+//         {
+//             this->actor.draw = &func_80936414;
+//         }
+//         else
+//         {
+//             this->actor.draw = &func_809365CC;
+//         }
+//         this->actor.flags &= ~0x10;
+//         this->actor.objBankIndex = (s8) this->unk_197;
+//     }
+// }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935988.asm")
 // void func_80935988(EnKusa *this)
@@ -257,7 +342,17 @@ void func_809359AC(EnKusa* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935BBC.asm")
 
+// Should match once func_80935D64 is done
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935CE8.asm")
+// void func_80935CE8(EnKusa *this)
+// {
+//     this->unk_144 = func_80935D64();
+//     D_809366A0 = -0xBB8;
+//     D_809366A8 =  ((Rand_ZeroOne() - 0.5f) * 1600.0f);
+//     D_809366A4 = 0;
+//     D_809366AC = 0;
+//     this->timer = 0;
+// }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935D64.asm")
 
@@ -269,7 +364,7 @@ void func_80936168(EnKusa* this, GlobalContext* globalCtx) {
     this->timer += 1;
 
     if ((this->timer) >= 120) {
-        func_80936290();
+        func_80936290(this);
     }
 }
 
@@ -280,11 +375,41 @@ void func_809361A4(EnKusa* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809361B4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936220.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936220.asm")
+void func_80936220(EnKusa* this, GlobalContext* globalCtx) {
 
+    this->timer++;
+    if ((this->timer) >= 0x79) {
+        if ((Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.6f)) && (this->timer >= 170)) {
+            func_80936290(this);
+        }
+    }
+}
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936290.asm")
+// void func_80936290(EnKusa *this)
+// {
+//     this->actionFunc = func_809362D8;
+//     func_8093517C();
+//     this->unk_197 = 0;
+//     this->actor.shape.rot.x = this->actor.home.rot.x;
+//     this->actor.shape.rot.z = this->actor.home.rot.z;
+// }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809362D8.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809362D8.asm")
+void func_809362D8(EnKusa* this, GlobalContext* globalCtx) {
+    s32 sp24;
+
+    sp24 = Math_StepToF(&this->actor.scale.y, 0.4f, 0.014f) & 1;
+    sp24 &= Math_StepToF(&this->actor.scale.x, 0.4f, 0.011f);
+    this->actor.scale.z = this->actor.scale.x;
+    if (sp24) {
+        Actor_SetScale(&this->actor, 0.4f);
+        func_80935988(this);
+        this->collider.base.ocFlags1 &= 0xFFF7;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/EnKusa_Update.asm")
 
