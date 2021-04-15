@@ -62,7 +62,7 @@ void EnMFire1_Update(Actor* thisx, GlobalContext *globalCtx) {
     EnMFire1* this = THIS;
     s32 pad;
 
-    if (Math_StepToF(&this->unk_190, 1.0f, 0.2f) != 0) {
+    if (Math_StepToF(&this->unk190, 1.0f, 0.2f)) {
         Actor_MarkForDeath(&this->actor);
     } else {
         Collider_UpdateCylinder(&this->actor, &this->collider);
