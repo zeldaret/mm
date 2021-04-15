@@ -38,28 +38,6 @@ const ActorInit Obj_Lightswitch_InitVars = {
     (ActorFunc)ObjLightswitch_Draw
 };
 
-s32 D_80960B90[] = {
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00202000,
-    0x00000000,
-    0x00010100,
-    0x00000000,
-    0x00000000,
-    0x00130064,
-};
-
-// collider init D_80960BB4
-// works
-static s32 sJntSphInit[] = {
-    0x0A002939,
-    0x20000000,
-    0x00000001,
-    0x80960B90, //D_80960B90,
-};
-// error: collider overlay helper is giving the wrong output, too much data shifts rom
-/* 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00202000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
@@ -71,9 +49,8 @@ static ColliderJntSphInit sJntSphInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
     1, sJntSphElementsInit,
 };
-*/
 
- // segmented addresses for poly opa func
+// segmented addresses for poly opa func
 void* D_80960BC4[] = {
     0x06000C20,
     0x06000420,
@@ -85,7 +62,6 @@ s32 D_80960BD0 = 0xFFFFA0A0;
 s32 D_80960BD4 = 0xFF000000;
 
 static InitChainEntry sInitChain[] = {
-//static InitChainEntry D_80960BD8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
@@ -96,7 +72,6 @@ void func_8095FBF0(ObjLightswitch* this, GlobalContext *arg1) {
     s8 pad;
 
     Collider_InitJntSph(arg1, &this->collider);
-    //Collider_SetJntSph(arg1, &this->collider, &this->actor, &D_80960BB4, this->unk164);
     Collider_SetJntSph(arg1, &this->collider, &this->actor, &sJntSphInit, this->unk164);
     this->actor.colChkInfo.mass = 0xFF;
     SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, 
@@ -117,13 +92,12 @@ void func_8095FC94(ObjLightswitch *this, GlobalContext *globalCtx, s32 set) {
     }
 }
 
-
-// what a fucking stack vomit exhibit
+// issue: mips2c misunderstand the whole function because of non-existent vec3f detection
 /*
 void func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
-    f32 sp64;
-    f32 sp60;
-    f32 sp5C;
+    Vec3f tempVec3f;
+    //f32 sp60;
+    //f32 sp5C;
     f32 sinResult;
     f32 cosResult;
     //f32 sp40;
@@ -160,7 +134,6 @@ void func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
             tempResult4 = 30.0f;
         } else {
             tempResult3 = 900.0f - (temp_f12 * temp_f12);
-            ;
             if (tempResult3 < 100.0f) {
                 tempResult3 = 100.0f;
             }
@@ -172,13 +145,18 @@ void func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx) {
         //sp40 = fabsResult;
         randomOutput = (Rand_ZeroOne() * 10.0f) + ((30.0f - fabsResult) * 0.5f);
         //temp_a1 = &sp5C;
-        sp5C = this->actor.world.pos.x + ((randomOutput * sinResult) + (tempResult5 * cosResult));
-        sp60 = this->actor.world.pos.y + temp_f12 + 10.0f;
-        sp64 = this->actor.world.pos.z + ((randomOutput * cosResult) - (tempResult5 * sinResult));
-        EffectSsDeadDb_Spawn(randomOutput, fabsResult, globalCtx, temp_a1, &D_801D15B0, &D_801D15B0, &D_80960BD0, &D_80960BD4, 0x64, 0, 9);
+        tempVec3f.x = this->actor.world.pos.x + ((randomOutput * sinResult) + (tempResult5 * cosResult));
+        tempVec3f.y = this->actor.world.pos.y + temp_f12 + 10.0f;
+        tempVec3f.z = this->actor.world.pos.z + ((randomOutput * cosResult) - (tempResult5 * sinResult));
+        //EffectSsDeadDb_Spawn(randomOutput, fabsResult, globalCtx,
+             //&tempVec3f, &D_801D15B0, &D_801D15B0, 
+             //&D_80960BD0, &D_80960BD4, 0x64, 0, 9);
+        // issue: where the hell did velocity and acc go?
+        EffectSsDeadDb_Spawn(globalCtx, &tempVec3f, NULL, NULL,
+             &D_801D15B0, &D_801D15B0, 
+             &D_80960BD0, &D_80960BD4, 100, 0, 9);
 
     }
-    return phi_return;
 }
 // */
 //s16 func_8095FCEC(ObjLightswitch *this, GlobalContext *globalCtx);
@@ -192,7 +170,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     switchFlagResult = Actor_GetSwitchFlag(globalCtx, (this->actor.params >> 8) & 0x7F);
     previouslyTriggered = 0;
-    Actor_ProcessInitChain(&this->actor, &sInitChain);// &D_80960BD8);
+    Actor_ProcessInitChain(&this->actor, &sInitChain);
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (switchFlagResult != 0) {
