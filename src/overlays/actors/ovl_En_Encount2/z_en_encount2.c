@@ -98,7 +98,7 @@ void func_808E16FC(EnEncount2* this) {
 void func_808E1714(EnEncount2* this, GlobalContext* globalCtx) {
     this->oscillationAngle += 1500.0f;
     this->dynaActor.actor.velocity.y = Math_SinS(this->oscillationAngle);
-    Math_SmoothScaleMaxF(&this->scale, 0.1f, 0.3f, 0.01f);
+    Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
     if (((this->collider.base.acFlags & AC_HIT) != 0) && (this->dynaActor.actor.colChkInfo.damageEffect == 0xE)) {
         this->dynaActor.actor.colChkInfo.health = 0;
         this->statePopped = 1;
