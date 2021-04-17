@@ -86,36 +86,9 @@ s32 func_80934F58(EnKusa* this, GlobalContext* globalCtx, f32 yOffset) {
     }
 }
 
+// Can't match with Item_DropCollectible not matching
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80934FFC.asm")
-// void func_80934FFC(EnKusa* this, GlobalContext* globalCtx) {
-//     s16 temp_v1;
-//     s32 temp_v0;
-//     s32 temp_v0_2;
 
-//     temp_v1 = this->actor.params;
-//     temp_v0 = temp_v1 & 3;
-//     if (temp_v0 != 2) {
-//         if (temp_v0 == 0) {
-//         block_2:
-//             if (((temp_v1 >> 0xC) & 1) == 0) {
-//                 Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world, (((temp_v1 >> 8) & 0xF) * 0x10));
-//                 return;
-//             }
-//         } else {
-//             if (temp_v0 == 1) {
-//                 Item_DropCollectible(globalCtx, &this->actor.world, 3U);
-//                 return;
-//             }
-//             temp_v0_2 = func_800A8150((temp_v1 >> 2) & 0x3F);
-//             if (temp_v0_2 >= 0) {
-//                 Item_DropCollectible(globalCtx, &this->actor.world,
-//                                      (((this->actor.params >> 8) & 0x7F) << 8) | temp_v0_2);
-//             }
-//         }
-//     } else {
-//         goto block_2;
-//     }
-// }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809350C4.asm")
 void func_809350C4(EnKusa* this) {
@@ -172,66 +145,6 @@ void func_8093561C(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/EnKusa_Init.asm")
-// void EnKusa_Init(Actor *thisx, GlobalContext *globalCtx)
-// {
-//     s32 sp24;
-//     s16 temp_v1;
-
-//     sp24 = thisx->params & 3;
-//     Actor_ProcessInitChain(thisx, &D_80936754);
-//     if (globalCtx->csCtx.state != 0)
-//     {
-//         thisx->uncullZoneForward = thisx->uncullZoneForward + 1000.0f;
-//     }
-//     func_8093561C(thisx, globalCtx);
-//     CollisionCheck_SetInfo(&thisx->colChkInfo, NULL, &D_8093670C);
-//     if (sp24 == 0)
-//     {
-//         thisx->shape.shadowAlpha = 0x3C;
-//         thisx->shape.shadowScale = 1.0f;
-//     }
-//     else
-//     {
-//         thisx->shape.shadowAlpha = 0x46;
-//         thisx->shape.shadowScale = 0.9f;
-//     }
-//     if (thisx->shape.rot.y == 0)
-//     {
-//         thisx->shape.rot.y = (s16) (Rand_Next() >> 0x10);
-//         temp_v1 = thisx->shape.rot.y;
-//         thisx->home.rot.y = temp_v1;
-//         thisx->world.rot.y = temp_v1;
-//     }
-//     if (func_80934F58(thisx, globalCtx, 0) == 0)
-//     {
-//         Actor_MarkForDeath(thisx);
-//         return;
-//     }
-//     if (func_809355A4(thisx, globalCtx) != 0)
-//     {
-//         thisx->unk198 = (u8) (thisx->unk198 | 1);
-//     }
-//     thisx->unk195 = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, *(&D_809366D8 + ((thisx->params & 3) * 2)));
-//     if ((s32) thisx->unk195 < 0)
-//     {
-//         Actor_MarkForDeath(thisx);
-//         return;
-//     }
-//     func_809358C4(thisx);
-//     if (D_809366B4 != 0)
-//     {
-//         D_80936CD8 = (s16) (Rand_Next() >> 0x10);
-//         D_80936CDA = (s16) (Rand_Next() >> 0x10);
-//         D_80936CDC = (s16) (Rand_Next() >> 0x10);
-//         D_80936CDE = (s16) (Rand_Next() >> 0x10);
-//         D_80936CE0 = (s16) (Rand_Next() >> 0x10);
-//         D_809366B4 = (u8)0;
-//         func_80934AB4();
-//         D_80936AD0 = (u32) globalCtx->unk18840;
-//     }
-//     thisx->unk196 = (s8) (D_809366B0 & 7);
-//     D_809366B0 = (s16) (D_809366B0 + 1);
-// }
 
 // Matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/EnKusa_Destroy.asm")
