@@ -34,7 +34,7 @@ extern unkStruct D_80C25CE0[];
 static unkStruct D_80C25CE0[2] = {
     {0x06003440, 0x060031A0, 0x00000000},
     {0x00000000, 0x060003D0, 0x06001FF8}
-}
+};
 */
 
 void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
