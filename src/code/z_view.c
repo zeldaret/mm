@@ -237,7 +237,7 @@ s32 View_SetQuake(View* view, Vec3f rot, Vec3f scale, f32 speed) {
 }
 
 s32 View_StepQuake(View* view, RSPMatrix* matrix) {
-    z_Matrix mf;
+    MtxF mf;
 
     if (view->quakeSpeed == 0.0f) {
         return 0;

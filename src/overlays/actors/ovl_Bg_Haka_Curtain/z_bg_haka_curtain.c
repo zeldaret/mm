@@ -97,9 +97,9 @@ void func_80B6DD80(BgHakaCurtain* this) {
 
 void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.world.pos.y < this->dyna.actor.home.pos.y + 150.0f - 30.0f) {
-        Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 1.6f, 0.12f);
+        Math_StepToF(&this->dyna.actor.velocity.y, 1.6f, 0.12f);
     } else {
-        Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 0.8f, 0.05f);
+        Math_StepToF(&this->dyna.actor.velocity.y, 0.8f, 0.05f);
     }
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.home.pos.y + 150.0f < this->dyna.actor.world.pos.y) {

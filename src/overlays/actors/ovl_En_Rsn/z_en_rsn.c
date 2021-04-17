@@ -11,15 +11,6 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80C25D84(EnRsn* this, GlobalContext* globalCtx);
 
-typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 unk_10;
-    /* 0x14 */ f32 transitionRate;
-} EnRsn_AnimationStruct; // size = 0x18
-
 const ActorInit En_Rsn_InitVars = {
     ACTOR_EN_RSN,
     ACTORCAT_NPC,
@@ -37,10 +28,10 @@ extern AnimationHeader D_06009120;
 extern AnimationHeader D_0600788C;
 extern Gfx D_06005458[];
 
-static EnRsn_AnimationStruct animation = { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f };
+static ActorAnimationEntry animations[] = {{ &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f }};
 
 void func_80C25D40(EnRsn* this) {
-    func_800BDC5C(&this->skelAnime, &animation, 0);
+    func_800BDC5C(&this->skelAnime, &animations, 0);
     this->actionFunc = func_80C25D84;
 }
 
@@ -95,7 +86,7 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C5B0(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_06005458));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_06005458));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

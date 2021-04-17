@@ -387,7 +387,7 @@ SECTIONS
         build/src/code/z_skelanime.o(.text)
         build/asm/code/z_skin.o(.text)
         build/asm/code/z_skin_awb.o(.text)
-        build/asm/code/code_0x80138BA0.o(.text)
+        build/src/code/z_skin_matrix.o(.text)
         build/src/code/z_snap.o(.text)
         build/asm/code/z_sub_s.o(.text)
         build/asm/code/code_0x8013EC10.o(.text)
@@ -487,7 +487,7 @@ SECTIONS
         build/asm/code/code_data_z_jpeg.o(.data)
         build/asm/code/code_data_z_kanfont.o(.data)
         build/asm/code/code_data_z_kankyo.o(.data)
-        build/asm/code/code_data_z_lib.o(.data)
+        build/src/code/z_lib.o(.data)
         build/asm/code/code_data_z_lifemeter.o(.data)
         build/src/code/z_lights.o(.data)
         build/asm/code/code_data_z_map_disp.o(.data)
@@ -505,7 +505,7 @@ SECTIONS
         build/asm/code/code_data_z_scene_table.o(.data)
         build/asm/code/code_data_0x801323D0.o(.data)
         build/src/code/z_skelanime.o(.data)
-        build/asm/code/code_data_0x80138BA0.o(.data)
+        build/src/code/z_skin_matrix.o(.data)
         build/asm/code/code_data_z_sub_s.o(.data)
         build/asm/code/code_data_z_vimode.o(.data)
         build/src/code/z_vr_box.o(.data)
@@ -563,7 +563,7 @@ SECTIONS
         build/asm/code/code_rodata_z_horse.o(.rodata)
         build/asm/code/code_rodata_z_jpeg.o(.rodata)
         build/asm/code/code_rodata_z_kankyo.o(.rodata)
-        build/asm/code/code_rodata_z_lib.o(.rodata)
+        build/src/code/z_lib.o(.rodata)
         build/asm/code/code_rodata_z_lifemeter.o(.rodata)
         build/src/code/z_lights.o(.rodata)
         build/asm/code/code_rodata_z_map_disp.o(.rodata)
@@ -575,7 +575,7 @@ SECTIONS
         build/src/code/z_scene_proc.o(.rodata)
         build/asm/code/code_rodata_z_scene_table.o(.rodata)
         build/asm/code/code_rodata_z_skin.o(.rodata)
-        build/asm/code/code_rodata_0x80138BA0.o(.rodata)
+        build/src/code/z_skin_matrix.o(.rodata)
         build/asm/code/code_rodata_z_sub_s.o(.rodata)
         build/asm/code/code_rodata_0x8013EC10.o(.rodata)
         build/src/code/z_view.o(.rodata)
@@ -2465,7 +2465,6 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.text)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.data)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.rodata)
-        build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana.o(.rodata)
         build/src/overlays/actors/ovl_Obj_Hana/z_obj_hana_overlay.o(.ovl)
     }
     SegmentEnd = .;
@@ -4342,9 +4341,9 @@ SECTIONS
     ovl_Dm_Sa : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Sa/z_dm_sa.o(.text)
-        build/asm/overlays/ovl_Dm_Sa_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Sa/z_dm_sa.o(.data)
         build/src/overlays/actors/ovl_Dm_Sa/z_dm_sa.o(.rodata)
-        build/asm/overlays/ovl_Dm_Sa_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Sa/z_dm_sa_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
