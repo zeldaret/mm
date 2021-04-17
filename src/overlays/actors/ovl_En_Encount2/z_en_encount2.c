@@ -46,7 +46,7 @@ DamageTable damageTable[] = {
     0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 
 };
 
-void EnEncount2_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s8 pad[4];
     BgMeshHeader* bgMeshHeader = NULL;
@@ -82,20 +82,20 @@ void EnEncount2_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_808E16FC(this);
 }
 
-void EnEncount2_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dynaActor.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
 // init extension func
-void func_808E16FC(EnEncount2 *this) {
+void func_808E16FC(EnEncount2* this) {
     this->statePopped = 0;
     this->actionFunc = &func_808E1714;
 }
 
 //actionfunc: idle floating
-void func_808E1714(EnEncount2 *this, GlobalContext *globalCtx) {
+void func_808E1714(EnEncount2* this, GlobalContext* globalCtx) {
     this->oscillationAngle += 1500.0f;
     this->dynaActor.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_SmoothScaleMaxF(&this->scale, 0.1f, 0.3f, 0.01f);
@@ -107,7 +107,7 @@ void func_808E1714(EnEncount2 *this, GlobalContext *globalCtx) {
 }
 
 //actionfunc: pop
-void func_808E17C4(EnEncount2 *this, GlobalContext *globalCtx) {
+void func_808E17C4(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f curPos;
 
@@ -126,7 +126,7 @@ void func_808E17C4(EnEncount2 *this, GlobalContext *globalCtx) {
 }
 
 //actionfunc: after pop, waiting for timer then death
-void func_808E18A8(EnEncount2 *this, GlobalContext *globalCtx) {
+void func_808E18A8(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlag);
@@ -135,7 +135,7 @@ void func_808E18A8(EnEncount2 *this, GlobalContext *globalCtx) {
     }
 }
 
-void EnEncount2_Update(Actor* thisx, GlobalContext *globalCtx) {
+void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s8 pad[4];
 
@@ -157,7 +157,7 @@ void EnEncount2_Update(Actor* thisx, GlobalContext *globalCtx) {
     }
 }
 
-void EnEncount2_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     if (this->statePopped != 1) { // is NOT popped (0 only other option)
         func_800BDFC0(globalCtx, &D_06000A00);
@@ -167,7 +167,7 @@ void EnEncount2_Draw(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 // init all particles
-void func_808E1A24(EnEncount2 *this, Vec3f *vec, s16 fadeDelay) {
+void func_808E1A24(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
     s16 i;
     EnEncount2Particle *sPtr = &this->particles;
 
@@ -194,7 +194,7 @@ void func_808E1A24(EnEncount2 *this, Vec3f *vec, s16 fadeDelay) {
 }
 
 // updates all effect structs
-void func_808E1B4C(EnEncount2 *this, GlobalContext *globalCtx) {
+void func_808E1B4C(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     EnEncount2Particle *sPtr = &this->particles;
 
@@ -238,103 +238,4 @@ void func_808E1B4C(EnEncount2 *this, GlobalContext *globalCtx) {
 }
 
 // draw particles
-# if COMPLETELY_BROKEN
-// not even close, everything is off
-void func_808E1C9C(EnEncount2* this, GlobalContext* globalCtx) {
-    //GraphicsContext *tempGfxC;
-    EnEncount2Particle *sPtr;
-    //MtxF *temp_s6;
-    f32 tempFramesFloat;
-    //u32 tempFrames;
-    s16 i;
-    f32 tmpD_808E1F58;// = D_808E1F58;
-    //f32 phi_f6;
-    //s16 phi_s4;
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    //tempGfxC = globalCtx->state.gfxCtx;
-    //func_8012C28C(tempGfxC);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-
-
-    tmpD_808E1F58 = 0.017453292f; // D_808E1F58
-    sPtr = this->particles;
-
-    for (i = 0; i < 200; ++i) { //loop_1:
-        if (sPtr->enabled) {
-            //temp_s6 = &globalCtx->mf_187FC;
-            //temp_f12 = sPtr->scale;
-
-            // bunch wrong right here
-            SysMatrix_InsertTranslation(sPtr->unk4.x, sPtr->unk4.y, sPtr->unk4.z, 0);
-            Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, 1);
-    
-            globalCtx->state.gfxCtx->polyXlu.p = Gfx_CallSetupDL(globalCtx->state.gfxCtx->polyXlu.p, 0x14);
-
-            //temp_v0 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0 + 8;
-            //temp_v0->words.w0 = 0xDB060020;
-            //temp_v0->words.w1 = Lib_PtrSegToVirt((void *)0x4079B10);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_PtrSegToVirt(0x4079B10));
-
-            //temp_v0_2 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_2 + 8;
-            //temp_v0_2->words.w1 = 0x407AB10;
-            //temp_v0_2->words.w0 = 0xDE000000;
-            gSPDisplayList(POLY_XLU_DISP++, 0x407AB10);
-
-            //temp_v0_3 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_3 + 8;
-            //temp_v0_3->words.w1 = 0;
-            //temp_v0_3->words.w0 = 0xE7000000;
-            gDPPipeSync(POLY_XLU_DISP++); // maybe not
-
-            //temp_v0_4 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_4 + 8;
-            //temp_v0_4->words.w1 = -1;
-            //temp_v0_4->words.w0 = 0xFA000000;
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-
-            //temp_v0_5 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_5 + 8;
-            //temp_v0_5->words.w0 = 0xFB000000;
-            //temp_v0_5->words.w1 = (sPtr->alpha & 0xFF) | 0xFAB4FF00;
-            gDPSetEnvColor(POLY_XLU_DISP++, 0xFA, 0xB4, 0xFF, (sPtr->alpha & 0xFF));
-
-            SysMatrix_InsertMatrix((z_Matrix *) &globalCtx->mf_187FC, 1);
-            //tempFrames = globalCtx->state.frames;
-            //tempFramesFloat = (f32) tempFrames;
-            tempFramesFloat = globalCtx->state.frames;
-            if (globalCtx->state.frames < 0) {
-                tempFramesFloat += 4294967296.0f; // wtf
-            }
-            SysMatrix_InsertZRotation_f(tempFramesFloat * 20.0f * tmpD_808E1F58, 1);
-            //SysMatrix_InsertZRotation_f(tempFramesFloat * 20.0f * D_808E1F58, 1);
-
-            //temp_v0_6 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_6 + 8;
-            //temp_v0_6->words.w0 = 0xDA380003;
-            //temp_v0_6->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-            //temp_v0_7 = tempGfxC->polyXlu.p;
-            //tempGfxC->polyXlu.p = temp_v0_7 + 8;
-            //temp_v0_7->words.w1 = 0x407AB58;
-            //temp_v0_7->words.w0 = 0xDE000000;
-            gSPDisplayList(POLY_XLU_DISP++, 0x407AB508);
-
-        }
-        //i = phi_s4 + 1;
-        sPtr += 1;
-        //phi_s4 = i;
-        //if ((s32) i < 0xC8) {
-            //goto loop_1;
-    }
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/func_808E1C9C.asm")
-#endif
