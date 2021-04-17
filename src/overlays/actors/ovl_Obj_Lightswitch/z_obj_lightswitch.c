@@ -18,7 +18,6 @@ void func_80960370(ObjLightswitch* this, GlobalContext* globalCtx);
 void func_80960440(ObjLightswitch* this, GlobalContext* globalCtx);
 
 // setup func
-void func_80960088(ObjLightswitch* this);
 void func_80960224(ObjLightswitch* this);
 void func_80960088(ObjLightswitch* this);
 void func_80960424(ObjLightswitch* this);
@@ -51,7 +50,8 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 // segmented addresses for poly opa and xlu funcs
-void* D_80960BC4[] = { 0x06000C20, 0x06000420, 0x06001420,};
+// different face addresses for sleep -> wake of light switch face
+void* D_80960BC4[] = { 0x06000C20, 0x06000420, 0x06001420,}; // D_80960BC4
 
 // colors used when spawning an effect
 Color_RGBA8 D_80960BD0 = { 0xFF, 0xFF, 0xA0, 0xA0, };
@@ -104,9 +104,9 @@ void func_8095FCEC(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     sinResult = Math_SinS(this->actor.shape.rot.y);
     cosResult = Math_CosS(this->actor.shape.rot.y);
-    if (this->colorValue4 >= 0x1900) {
-        // 6.127451e-05f = 1 / 16320 ?
-        tempResult = (1.0f - ( this->colorValue4 * 6.127451e-05f)) * 400.0f;
+    if (this->colorAlpha >= 0x1900) {
+        // late rodata: 6.127451e-05f = 1 / 16320 ?
+        tempResult = (1.0f - ( this->colorAlpha * 6.127451e-05f)) * 400.0f;
 
         if (tempResult > 60.0f) {
             tempResult2 = 60.0f;
@@ -133,6 +133,7 @@ void func_8095FCEC(ObjLightswitch* this, GlobalContext* globalCtx) {
         //goto dummy_label_809848; dummy_label_809848: ; // minor regalloc fix
         //if (cosResult){} // minor regalloc fix, but breaks some code
 
+        // saving fabsf result as a temp might help, but need to reduce temps
         //fabsResult = fabsf(tempResult5);
         //randomOutput = (Rand_ZeroOne() * 10.0f) + ((30.0f - fabsResult) * 0.5f);
         //randomOutput = fabsf(tempResult5);
@@ -168,16 +169,16 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (switchFlagResult != 0) {
-        if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_ANIMATED_FACE) {
+        if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) {
             previouslyTriggered = 1;
         } else {
             func_80960224(this);
         }
     } else {
-        func_80960088(this);
+        func_80960088(this); // switch off setup off
     }
 
-    func_8095FBF0(this, globalCtx);
+    func_8095FBF0(this, globalCtx); // init collider
 
     if (GET_LIGHTSWITCH_INVISIBLE(this)) {
         // the stone tower exterior switch is part of the scene mesh, the actor is invisble on top
@@ -194,12 +195,14 @@ void ObjLightswitch_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
+// setup func
 void func_8095FFF8(ObjLightswitch* this, ObjLightswitchSetupFunc setupFunc, u32 setState) {
     this->setupFunc = setupFunc;
     this->switchFlagSetType = setState;
     this->actionFunc = func_80960014;
 }
 
+// action func: check for cutscene and setup next actionfunc
 void func_80960014(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
@@ -211,132 +214,137 @@ void func_80960014(ObjLightswitch* this, GlobalContext* globalCtx) {
     }
 }
 
+// setup: switch is off and ready
 void func_80960088(ObjLightswitch* this) {
-    this->segmentIndex = 0;
-    this->colorValue1 = 0x26C0;
-    this->colorValue2 = 0x1F40;
-    this->colorValue3 = 0x3FC0;
-    this->colorValue4 = 0x3FC0;
+    this->faceState = LIGHTSWITCH_FACE_ASLEEP;
+    this->colorR = 0x26C0;
+    this->colorG = 0x1F40;
+    this->colorB = 0x3FC0;
+    this->colorAlpha = 0x3FC0;
     this->actionFunc = func_809600BC;
 }
 
-// action func
+// action func: switch is off and ready
 void func_809600BC(ObjLightswitch* this, GlobalContext* globalCtx) {
-    s32 actorType;
+    s32 actorType = GET_LIGHTSWITCH_TYPE(this);
 
-    actorType = GET_LIGHTSWITCH_TYPE(this);
-    if (this->unk1B5 >= 10) {
-        if (actorType == LIGHTSWITCH_TYPE_ANIMATED_FACE) {
-            func_8095FFF8(this, func_80960424, 1);
+    if (this->hitState >= 10) {
+        if (actorType == LIGHTSWITCH_TYPE_FAKE) {
+            func_8095FFF8(this, func_80960424, 1); // setup burn switch away
         } else {
             if (actorType == LIGHTSWITCH_TYPE_FLIP) {
-                this->unk1B5 = 0;
+                this->hitState = 0;
             }
-            func_8095FFF8(this, func_8096012C, 1);
+            func_8095FFF8(this, func_8096012C, 1); // setup switch on transition
         }
     }
 }
 
+// setup: trigger switch stage 1
 void func_8096012C(ObjLightswitch* this) {
-    this->segmentIndex = 0;
+    this->faceState = LIGHTSWITCH_FACE_ASLEEP;
     this->colorShiftTimer = 0;
     this->actionFunc = func_80960148;
 }
 
-//action func
+//action func: switch is triggered, color shift has begun
 void func_80960148(ObjLightswitch* this, GlobalContext* globalCtx) { 
     if (this->colorShiftTimer == 0) {
-        Audio_PlayActorSound2(&this->actor, 0x286F);
+        Audio_PlayActorSound2(&this->actor, 0x286F); // sfx NA_SE_EV_SUN_MARK_FLASH
     }
     this->colorShiftTimer++;
 
-    Math_StepToS(&this->zRotIncr, -0xAA, 0xA);
-    this->zRotOffset += this->zRotIncr;
-    this->colorValue1 = (this->colorShiftTimer * 0x140) + 0x26C0;
-    this->colorValue2 = (this->colorShiftTimer * 0x1A0) + 0x1F40;
+    Math_StepToS(&this->edgeRotSpeed, -0xAA, 0xA);
+    this->edgeRot += this->edgeRotSpeed;
+    this->colorR = (this->colorShiftTimer * 0x140) + 0x26C0;
+    this->colorG = (this->colorShiftTimer * 0x1A0) + 0x1F40;
 
     if (this->colorShiftTimer >= 20) {
         func_80960224(this);
     } else if (this->colorShiftTimer == 15) {
-        this->segmentIndex = 1;
-        Audio_PlayActorSound2(this, 0x2815);
+        this->faceState = LIGHTSWITCH_FACE_WAKING;
+        Audio_PlayActorSound2(this, 0x2815); // sfx NA_SE_EV_FOOT_SWITCH
     }
 }
 
+// setup: switch is fully on
 void func_80960224(ObjLightswitch* this) {
-    this->segmentIndex = 2;
-    this->colorValue1 = 0x3FC0;
-    this->colorValue2 = 0x3FC0;
-    this->colorValue3 = 0x3FC0;
-    this->colorValue4 = 0x3FC0;
-    this->zRotIncr = -0xAA;
+    this->faceState = LIGHTSWITCH_FACE_FULLAWAKE;
+    this->colorR = 0x3FC0;
+    this->colorG = 0x3FC0;
+    this->colorB = 0x3FC0;
+    this->colorAlpha = 0x3FC0;
+    this->edgeRotSpeed = -0xAA;
     this->colorShiftTimer = 0;
     this->actionFunc = func_80960260;
 }
 
-//action func
+//action func: switch is fully on
 void func_80960260(ObjLightswitch* this, GlobalContext* globalCtx) {
     s32 actorType = GET_LIGHTSWITCH_TYPE(this);
 
-    if (actorType == LIGHTSWITCH_TYPE_FLAT) {
+    if (actorType == LIGHTSWITCH_TYPE_REGULAR) {
+        // switch can be disabled outside of this actor by flag
         if (Actor_GetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this)) == 0) {
-            func_8096034C(this);
+            func_8096034C(this); // disable switch
         }
     } else if (actorType == LIGHTSWITCH_TYPE_FLIP) {
-        if (this->unk1B5 >= 10) {
-            this->unk1B5 = 0;
-            func_8095FFF8(this, func_8096034C, 0);
+        if (this->hitState >= 10) {
+            this->hitState = 0;
+            func_8095FFF8(this, func_8096034C, 0); //disable switch
         }
-    } else if (this->unk1B5 == 0) {
+    } else if (this->hitState == 0) {
         if (this->colorShiftTimer >= 13) {
             func_8095FC94(this, globalCtx, 0);
-            func_8096034C(this);
+            func_8096034C(this); // disable switch
         } else {
             this->colorShiftTimer += 1;
         }
     } else {
         this->colorShiftTimer = 0;
     }
-    this->zRotOffset += this->zRotIncr;
+    this->edgeRot += this->edgeRotSpeed;
 }
 
+// setup: disable switch transition
 void func_8096034C(ObjLightswitch* this) {
     this->colorShiftTimer = 20;
-    this->segmentIndex = 1;
+    this->faceState = LIGHTSWITCH_FACE_WAKING;
     this->actionFunc = func_80960370;
 }
 
+// action func: disable switch transition
 void func_80960370(ObjLightswitch* this, GlobalContext* globalCtx) {
     this->colorShiftTimer--;
-    Math_StepToS(&this->zRotIncr, 0, 0xA);
-    this->zRotOffset += this->zRotIncr;
-    this->colorValue1 = (this->colorShiftTimer * 0x140) + 0x26C0;
-    this->colorValue2 = (this->colorShiftTimer * 0x1A0) + 0x1F40;
+    Math_StepToS(&this->edgeRotSpeed, 0, 0xA);
+    this->edgeRot += this->edgeRotSpeed;
+    this->colorR = (this->colorShiftTimer * 0x140) + 0x26C0;
+    this->colorG = (this->colorShiftTimer * 0x1A0) + 0x1F40;
 
     if (this->colorShiftTimer <= 0) {
-        func_80960088(this);
+        func_80960088(this); // setup switch to off
     } else if (this->colorShiftTimer == 15) {
-        this->segmentIndex = 0;
-        Audio_PlayActorSound2(&this->actor, 0x2815);
+        this->faceState = LIGHTSWITCH_FACE_ASLEEP;
+        Audio_PlayActorSound2(&this->actor, 0x2815); // NA_SE_EV_FOOT_SWITCH
     }
 }
 
+// setup: fake switch burn away
 void func_80960424(ObjLightswitch* this) {
-    this->colorValue4 = 0x3FC0;
+    this->colorAlpha = 0x3FC0;
     this->actionFunc = func_80960440;
 }
 
-// action func
+// action func: fake switch burning away
 void func_80960440(ObjLightswitch* this, GlobalContext* globalCtx) {
-    this->colorValue4 -= 0xC8;
-    func_8095FCEC(this, globalCtx); // spawn effect
-    if (this->colorValue4 < 0) {
+    this->colorAlpha -= 0xC8;
+    func_8095FCEC(this, globalCtx); // spawn burning fire effect
+    if (this->colorAlpha < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        func_800B9010(&this->actor, 0x321F);
+        func_800B9010(&this->actor, 0x321F); // sfx NA_SE_EN_COMMON_EXTINCT_LEV "burn into ashes"
     }
 } 
-
 
 void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
@@ -345,22 +353,22 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->collider.base.acFlags & AC_HIT) != 0) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
         if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
-            this->unk1B5 = 10;
+            this->hitState = 10;
         } else if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FLIP) {
-            if (this->unk1B5 == 0) {
+            if (this->hitState == 0) {
                 if ((this->previousACFlags & AC_HIT) == 0) {
-                    this->unk1B5 = 1;
+                    this->hitState = 1;
                 }
-            } else if (this->unk1B5 < 10) {
-                this->unk1B5++;
+            } else if (this->hitState < 10) {
+                this->hitState++;
             }
         } else {
-            if (this->unk1B5 < 10) { 
-                this->unk1B5++;
+            if (this->hitState < 10) { 
+                this->hitState++;
             }
         }
     } else {
-        this->unk1B5 = 0;
+        this->hitState = 0;
     }
 
     // why wouldn't this be in the action func?
@@ -379,7 +387,6 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// opa func
 #if NON_EQUIVELENT
 // gDPSetEnvColor parameter load order is different than the order in which the value is built
 // also massive regalloc probably caused by the above
@@ -391,16 +398,16 @@ void func_809605F4(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    //temp_v0->words.w1 = ((((s32) this->colorValue3 >> 6) & 0xFF) << 8)
-          //| (((s32) this->colorValue1 >> 6) << 0x18) 
-          //| ((((s32) this->colorValue2 >> 6) & 0xFF) << 0x10) 
-          //| (((s32) this->colorValue4 >> 6) & 0xFF);
+    //temp_v0->words.w1 = ((((s32) this->colorB >> 6) & 0xFF) << 8)
+          //| (((s32) this->colorR >> 6) << 0x18) 
+          //| ((((s32) this->colorG >> 6) & 0xFF) << 0x10) 
+          //| (((s32) this->colorAlpha >> 6) & 0xFF);
     // load order issues with loading this in the right order for the function
     gDPSetEnvColor(POLY_OPA_DISP++, 
-        this->colorValue1 >> 6,
-        this->colorValue2 >> 6, 
-        this->colorValue3 >> 6,
-        this->colorValue4 >> 6);
+        this->colorR >> 6,
+        this->colorG >> 6, 
+        this->colorB >> 6,
+        this->colorAlpha >> 6);
 
     gSPSegment(POLY_OPA_DISP++, 0x09, &D_801AEFA0);
 
@@ -411,13 +418,13 @@ void func_809605F4(ObjLightswitch* this, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 
         G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80960BC4[this->segmentIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80960BC4[this->faceState]));
 
     gSPDisplayList(POLY_OPA_DISP++, 0x6000260);
 
     tempVec3s.x = this->actor.shape.rot.x;
     tempVec3s.y = this->actor.shape.rot.y;
-    tempVec3s.z = this->actor.shape.rot.z + this->zRotOffset;
+    tempVec3s.z = this->actor.shape.rot.z + this->edgeRot;
     SysMatrix_SetStateRotationAndTranslation(tempVec3f.z, tempVec3f.y, tempVec3f.x, &tempVec3s);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
 
@@ -426,7 +433,7 @@ void func_809605F4(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     gSPDisplayList(POLY_OPA_DISP++, 0x6000398);
 
-    tempVec3s.z = this->actor.shape.rot.z - this->zRotOffset;
+    tempVec3s.z = this->actor.shape.rot.z - this->edgeRot;
     SysMatrix_SetStateRotationAndTranslation(tempVec3f.z, tempVec3f.y, tempVec3f.x, &tempVec3s);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
 
@@ -443,7 +450,6 @@ void func_809605F4(ObjLightswitch* this, GlobalContext* globalCtx) {
 #endif
 
 #if NON_EQUIVELENT
-// xlu func
 // same issue as above
 void func_80960880(ObjLightswitch* this, GlobalContext* globalCtx) {
     Vec3f temp3f;
@@ -453,15 +459,15 @@ void func_80960880(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    //temp_v0->words.w1 = ((((s32) this->colorValue3 >> 6) & 0xFF) << 8) 
-        //| (((s32) this->colorValue1 >> 6) << 0x18) 
-        //| ((((s32) this->colorValue2 >> 6) & 0xFF) << 0x10) 
-        //| (((s32) this->colorValue4 >> 6) & 0xFF);
+    //temp_v0->words.w1 = ((((s32) this->colorB >> 6) & 0xFF) << 8) 
+        //| (((s32) this->colorR >> 6) << 0x18) 
+        //| ((((s32) this->colorG >> 6) & 0xFF) << 0x10) 
+        //| (((s32) this->colorAlpha >> 6) & 0xFF);
     gDPSetEnvColor(POLY_XLU_DISP++,
-        this->colorValue1 >> 6,
-        this->colorValue2 >> 6,
-        this->colorValue3 >> 6,
-        this->colorValue4 >> 6);
+        this->colorR >> 6,
+        this->colorG >> 6,
+        this->colorB >> 6,
+        this->colorAlpha >> 6);
 
 
     gSPSegment(POLY_XLU_DISP++, 0x09, &D_801AEF88);
@@ -473,13 +479,13 @@ void func_80960880(ObjLightswitch* this, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80960BC4[this->segmentIndex]));
+    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80960BC4[this->faceState]));
 
     gSPDisplayList(POLY_XLU_DISP++, 0x6000260);
 
     temp3s.x = this->actor.shape.rot.x;
     temp3s.y = this->actor.shape.rot.y;
-    temp3s.z = this->actor.shape.rot.z + this->zRotOffset;
+    temp3s.z = this->actor.shape.rot.z + this->edgeRot;
     SysMatrix_SetStateRotationAndTranslation(temp3f.x, temp3f.y,  temp3f.z, &temp3s);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y,  this->actor.scale.z, 1);
 
@@ -488,7 +494,7 @@ void func_80960880(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     gSPDisplayList(POLY_XLU_DISP++, 0x6000398);
 
-    temp3s.z = this->actor.shape.rot.z - this->zRotOffset;
+    temp3s.z = this->actor.shape.rot.z - this->edgeRot;
     SysMatrix_SetStateRotationAndTranslation(temp3f.x, temp3f.y, temp3f.z, &temp3s);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
 
@@ -505,13 +511,12 @@ void func_80960880(ObjLightswitch* this, GlobalContext* globalCtx) {
 
 void ObjLightswitch_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
-    s32 result;
+    s32 alpha = (this->colorAlpha >> 6) & 0xFF;
 
-    result = (this->colorValue4 >> 6) & 0xFF;
-    if ((GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_ANIMATED_FACE) && (result > 0) && (result < 0xFF)) {
-        func_80960880(this, globalCtx);
+    if ((GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 0xFF)) {
+        func_80960880(this, globalCtx); // xlu func
     } else { 
-        func_809605F4(this, globalCtx);
+        func_809605F4(this, globalCtx); // opa func
     }
 }
 
