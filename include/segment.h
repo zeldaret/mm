@@ -30,6 +30,7 @@ extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 
+extern Gfx D_05000C40[];
 extern Gfx D_05017EA0[]; // pot displaylist
 extern Gfx D_05018090[]; // pot break shard displaylist
 extern Gfx D_0501D980[];
