@@ -793,10 +793,13 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x1A];
+    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x25C */ s16 unk25C;
+    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
     /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} InterfaceContext; // size = 0x348
+} 
+InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
