@@ -3455,7 +3455,7 @@
     0x80185660:("Slowly_Main",),
     0x801856FC:("Slowly_ThreadEntry",),
     0x8018571C:("Slowly_Start",),
-    0x801857A0:("func_801857A0",),
+    0x801857A0:("Slowly_Stop",),
     0x801857C0:("func_801857C0",),
     0x801857D0:("func_801857D0",),
     0x80185864:("func_80185864",),
