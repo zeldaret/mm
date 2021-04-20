@@ -1015,7 +1015,8 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ UNK_TYPE1 pad1206C[0x10];
+    /* 0x1206C */ UNK_TYPE1 pad1206C[0xC];
+    /* 0x1207C */ s32 unk12078;
     /* 0x1207C */ s32 unk1207C;
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8

@@ -107,9 +107,40 @@ void func_80A645A4(EnGinkoMan *this, GlobalContext *globalCtx) {
 //jump tables
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A646F4.asm")
 
+//huge
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A64DC4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A65364.asm")
+void func_80A65364(EnGinkoMan *this, GlobalContext *globalCtx) {
+    if (func_80147624(globalCtx)) {
+        switch (this->unk258){
+            case 0x450:
+                if (globalCtx->msgCtx.unk12078 == 0) {
+                    globalCtx = globalCtx;
+                    func_800BDC5C(&this->anime, &D_80A65D60, 1);
+                    func_801518B0(globalCtx, 0x457U, &this->actor);
+                    this->unk258 = 0x457;
+                } else {
+                    func_801518B0(globalCtx, 0x452U, &this->actor);
+                    this->unk258 = 0x452;
+                }
+                break;
+
+            case 0x46E:
+                if (globalCtx->msgCtx.unk12078 == 0) {
+                    func_801518B0(globalCtx, 0x46F, &this->actor);
+                    this->unk258 = 0x46F;
+                } else if (gSaveContext.perm.isNight == 1) {
+                    func_801518B0(globalCtx, 0x477, &this->actor);
+                    this->unk258 = 0x477;
+                } else {
+                    func_801518B0(globalCtx, 0x471, &this->actor);
+                    this->unk258 = 0x471;
+                    this->unk25A = 0;
+                }
+                break;
+        }
+    }
+}
 
 // setup
 void func_80A65490(EnGinkoMan* this) {
@@ -242,7 +273,6 @@ void func_80A65844(EnGinkoMan *this, GlobalContext *globalCtx) {
 
 // update extension
 //think this function adjusts his animation so that he faces the player
-// non-matching: branch delay slot shinanigans
 void func_80A65A5C(EnGinkoMan *this, GlobalContext *globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->anime);
 
@@ -253,7 +283,6 @@ void func_80A65A5C(EnGinkoMan *this, GlobalContext *globalCtx) {
         func_800E8F08(&this->unk24C, &this->unk252);
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A65A5C.asm")
 
 void EnGinkoMan_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnGinkoMan* this = THIS;
@@ -266,25 +295,22 @@ void EnGinkoMan_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 //override limbdraw
-// issue: these use values in the padding, I suspect a struct
-/*
 s32 func_80A65B44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor){
     EnGinkoMan* this = (EnGinkoMan*) actor;
     if (limbIndex == 15) {
-        *dList = (void *)0x600B1D8;
+        *dList = &D_0600B1D8; 
     }
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(D_80A65EE8, 0.0f, 0.0f, 1);
-        SysMatrix_InsertXRotation_s(this->unk24E, 1);
-        SysMatrix_InsertZRotation_s(this->unk24C, 1);
-        SysMatrix_InsertTranslation(D_80A65EEC, 0.0f, 0.0f, 1);
+        SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
+        SysMatrix_InsertXRotation_s(this->unk24C.y, 1);
+        SysMatrix_InsertZRotation_s(this->unk24C.x, 1);
+        SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
     } else if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s((s16) -(s32) this->unk254, 1);
-        SysMatrix_InsertZRotation_s((s16) -(s32) this->unk252, 1);
+        SysMatrix_InsertXRotation_s(-this->unk252.y, 1);
+        SysMatrix_InsertZRotation_s(-this->unk252.x, 1);
     }
     return 0;
-} // */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A65B44.asm")
+}
 
 // post limbdraw
 void func_80A65C18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor){ }
