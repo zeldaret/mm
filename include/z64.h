@@ -678,7 +678,9 @@ typedef struct {
     /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
     /* 0x0E78 */ u32 pictoFlags0;
     /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ UNK_TYPE1 padE80[0x78];
+    /* 0x0E80 */ UNK_TYPE1 padE80[0x5C];
+    /* 0x0EDC */ u32 unkEDC;
+    /* 0x0EE0 */ UNK_TYPE1 padEE0[0x18];
     /* 0x0EF8 */ u8 weekEventReg[100];
     /* 0x0F5C */ u32 mapsVisited;
     /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];
@@ -1013,7 +1015,9 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ UNK_TYPE1 pad1206C[0x6C];
+    /* 0x1206C */ UNK_TYPE1 pad1206C[0x10];
+    /* 0x1207C */ s32 unk1207C;
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
 
 // Full save context
