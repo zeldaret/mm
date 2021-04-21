@@ -8,13 +8,13 @@ struct ObjEnding;
 typedef struct {
     /* 0x0 */   UNK_TYPE4 unk0;
     /* 0x4 */   Gfx* dl;
-    /* 0x8 */   UNK_PTR unk8;
+    /* 0x8 */   AnimatedTexture *texture;
 } unkStruct; // size = 0xC
 
 typedef struct ObjEnding {
     /* 0x000 */ Actor actor;
     /* 0x144 */ unkStruct* unk144;
-    /* 0x148 */ AnimatedTexture* texturePtr;
+    /* 0x148 */ AnimatedTexture* texture;
 } ObjEnding; // size = 0x14C
 
 extern const ActorInit Obj_Ending_InitVars;
