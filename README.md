@@ -1,9 +1,12 @@
 # Legend of Zelda: Majora's Mask (US) 1.0
 
-[![Build Status][jenkins-badge]][jenkins][![Contributors][contributors-badge]][contributors] [![Discord Channel][discord-badge]][discord]
+[![Build Status][jenkins-badge]][jenkins] [![Decompilation Progress][progress-badge]][progress] [![Contributors][contributors-badge]][contributors] [![Discord Channel][discord-badge]][discord]
 
 [jenkins]: https://jenkins.deco.mp/job/MM/job/master
 [jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmaster
+
+[progress]: https://zelda64.dev/progress.html
+[progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/reports/progress_shield_mm.us.rev1.json
 
 [contributors]: https://github.com/zeldaret/mm/graphs/contributors
 [contributors-badge]: https://img.shields.io/github/contributors/zeldaret/mm
