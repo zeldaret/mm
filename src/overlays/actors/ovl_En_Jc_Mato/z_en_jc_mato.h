@@ -9,9 +9,8 @@ typedef void (*EnJcMatoActionFunc)(struct EnJcMato*, GlobalContext*);
 
 typedef struct EnJcMato {
     /* 0x000 */ Actor actor;
-    // /* 0x144 */ char unk_144[0x6C];
     /* 0x144 */ EnJcMatoActionFunc actionFunc;
-    /* 0x148 */ ColliderSphere collider; // size: 0x58
+    /* 0x148 */ ColliderSphere collider;
     /* 0x1A0 */ s16 unk1A0;
     /* 0x1A2 */ s16 unk1A2;
     /* 0x1A4 */ Vec3f unk1A4; // TargetPos Vector?
