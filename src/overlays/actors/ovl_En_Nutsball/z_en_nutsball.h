@@ -7,7 +7,9 @@ struct EnNutsball;
 
 typedef struct EnNutsball {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x50];
+    /* 0x144 */ UNK_TYPE2 unk144;
+    /* 0x146 */ UNK_TYPE2 unk146;
+    /* 0x148 */ ColliderCylinder collider;
 } EnNutsball; // size = 0x194
 
 extern const ActorInit En_Nutsball_InitVars;
