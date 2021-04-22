@@ -1011,7 +1011,9 @@ typedef struct {
     /* 0x11F22 */ u8 unk11F22;
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ UNK_TYPE1 pad12021[0x23];
+    /* 0x12021 */ u8 unk12021;
+    /* 0x12022 */ u8 unk12022;
+    /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
