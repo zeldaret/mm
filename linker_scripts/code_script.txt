@@ -3546,7 +3546,7 @@ SECTIONS
     ovl_Obj_Boyo : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o(.text)
-        build/asm/overlays/ovl_Obj_Boyo_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o(.data)
         build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o(.rodata)
         build/asm/overlays/ovl_Obj_Boyo_rodata.o(.rodata)
     }
