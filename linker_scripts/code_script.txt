@@ -1335,7 +1335,7 @@ SECTIONS
     ovl_Item_B_Heart : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Item_B_Heart/z_item_b_heart.o(.text)
-        build/asm/overlays/ovl_Item_B_Heart_data.o(.data)
+        build/src/overlays/actors/ovl_Item_B_Heart/z_item_b_heart.o(.data)
         build/src/overlays/actors/ovl_Item_B_Heart/z_item_b_heart.o(.rodata)
         build/asm/overlays/ovl_Item_B_Heart_rodata.o(.rodata)
     }

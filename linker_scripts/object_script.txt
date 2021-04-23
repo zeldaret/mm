@@ -134,6 +134,10 @@ D_0600CC94 = 0x0600CC94;
 D_06000F28 = 0x06000F28;
 D_06000CE8 = 0x06000CE8;
 
+/* item_b_heart */
+D_06001290 = 0x06001290;
+D_06001470 = 0x06001470;
+
 /* door_spiral */
 /* these are symbols from other objects based on the type of door */
 D_06000590 = 0x06000590;

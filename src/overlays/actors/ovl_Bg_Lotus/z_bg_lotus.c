@@ -1,6 +1,6 @@
 /*
  * File: z_bg_lotus.c
- * Overlay: Bg_Lotus
+ * Overlay: ovl_Bg_Lotus
  * Description: Southern Swamp Lilypads
  */
 
