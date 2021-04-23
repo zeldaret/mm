@@ -1,4 +1,12 @@
+/*
+ * File: z_obj_boyo.c
+ * Overlay: ovl_Obj_Boyo
+ * Description: Unused Bumper
+ */
+
 #include "z_obj_boyo.h"
+#include "../ovl_En_Kaizoku/z_en_kaizoku.h"
+#include "../ovl_En_Bom/z_en_bom.h"
 
 #define FLAGS 0x00000010
 
@@ -6,34 +14,46 @@
 
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2);
-void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2);
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
-                                      ACTORCAT_PROP,
-                                      FLAGS,
-                                      OBJECT_BOYO,
-                                      sizeof(ObjBoyo),
-                                      (ActorFunc)ObjBoyo_Init,
-                                      (ActorFunc)ObjBoyo_Destroy,
-                                      (ActorFunc)ObjBoyo_Update,
-                                      (ActorFunc)ObjBoyo_Draw };
-
-u32 D_809A6170[] = {
-    0x0A000D39, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0x01CBFFBE,
-    0x00000000, 0x00010100, 0x003C008C, 0x00000000, 0x00000000,
+const ActorInit Obj_Boyo_InitVars = {
+    ACTOR_OBJ_BOYO,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_BOYO,
+    sizeof(ObjBoyo),
+    (ActorFunc)ObjBoyo_Init,
+    (ActorFunc)ObjBoyo_Destroy,
+    (ActorFunc)ObjBoyo_Update,
+    (ActorFunc)ObjBoyo_Draw,
 };
 
-u32 sInitChain[] = {
-    0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064, 0x00000000,
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x01CBFFBE, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 60, 140, 0, { 0, 0, 0 } },
 };
 
-u32 D_809A61B0[] = {
-    0x809A5DC0,
-};
-
-u32 D_809A61B4[] = {
-    0x021D0000, 0x809A5DE0, 0x00090000, 0x809A5E14, 0x00000000, 0x00000000, 0x00000000,
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 extern Gfx D_06000300[];
@@ -44,9 +64,9 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, &sInitChain);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809A6170);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(this, &this->collider);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_190 = Lib_SegmentedToVirtual(&D_06000E88);
 }
 
@@ -57,15 +77,106 @@ void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/func_809A5DC0.asm")
+void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, ActorPlayer* target) {
+    target->unk_B80 = 30.0f;
+    target->unk_B84 = this->actor.yawTowardsPlayer;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/func_809A5DE0.asm")
+void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
+    target->unk_2F0 = 30.0f;
+    target->unk_2F4 = Actor_YawBetweenActors(src, target);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/func_809A5E14.asm")
+void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
+    target->timer = 0;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/func_809A5E24.asm")
+BumperCollideInfo sBumperCollideInfo[] = {
+    { ACTOR_PLAYER, ObjBoyo_UpdatePlayerBumpValues },
+    { ACTOR_EN_KAIZOKU, ObjBoyo_UpdatePirateBumpValues },
+    { ACTOR_EN_BOM, ObjBoyo_UpdateBombBumpValues },
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Update.asm")
+Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* num) {
+    Actor* collideActor;
+    BumperCollideInfo* collideInfo;
+    s32 i;
+
+    if (this->collider.base.ocFlags2 & 1) {
+        *num = 0;
+        return globalCtx->actorCtx.actorList[2].first;
+    }
+
+    if (this->collider.base.ocFlags1 & 2) {
+        for (collideActor = this->collider.base.oc, collideInfo = &sBumperCollideInfo[1], i = 1; i < 3;
+             collideInfo++, i++) {
+            if (collideInfo->id == collideActor->id) {
+                *num = i;
+                return collideActor;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    ObjBoyo* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+    Actor* target;
+    s32 num;
+
+    target = ObjBoyo_GetCollidedActor(thisx, globalCtx, &num);
+
+    if (target != NULL) {
+        sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
+        this->unk_194 = 100;
+        this->unk_196 = 3;
+        this->unk_198 = 0.01f;
+        this->unk_19C = this->unk_1A0 = 0.03f;
+        this->unk_1A4 = 0x3F40;
+        this->unk_1A6 = 2000;
+        this->unk_1A8 = 0;
+        this->unk_1AA = 0x2DF7;
+        this->unk_1AC = 600;
+    }
+
+    if (this->unk_194 > 0) {
+        this->unk_194 -= this->unk_196;
+        this->unk_1AA += this->unk_1AC;
+        this->unk_1A8 += this->unk_1AA;
+
+        this->actor.scale.x = this->actor.scale.z =
+            (Math_CosS(this->unk_1A8 + this->unk_1A4) * this->unk_194 * this->unk_19C * this->unk_198) + 0.1f;
+        this->actor.scale.y =
+            (Math_CosS(this->unk_1A8 + this->unk_1A6) * this->unk_194 * this->unk_1A0 * this->unk_198) + 0.1f;
+    } else {
+        Actor_SetScale(&this->actor, 0.1f);
+
+        if (this->collider.base.acFlags & 2) {
+            this->unk_194 = 30;
+            this->unk_196 = 2;
+            this->unk_198 = 0.033333335f;
+            this->unk_19C = 0.012f;
+            this->unk_1A0 = 0.006f;
+            this->unk_1A4 = 0x3F40;
+            this->unk_1A6 = 2000;
+            this->unk_1A8 = 0;
+            this->unk_1AA = 15000;
+            this->unk_1AC = 1600;
+        }
+    }
+
+    this->collider.base.acFlags &= ~2;
+    this->collider.base.ocFlags1 &= ~2;
+    this->collider.base.ocFlags2 &= ~1;
+
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+
+    if (thisx->xzDistToPlayer < 2000.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    }
+}
 
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;

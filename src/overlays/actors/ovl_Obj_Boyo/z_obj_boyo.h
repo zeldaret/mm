@@ -5,6 +5,13 @@
 
 struct ObjBoyo;
 
+typedef void (*BumperCollideActorFunc)(struct ObjBoyo*, void*);
+
+typedef struct {
+    /* 0x0 */ s16 id;
+    /* 0x4 */ BumperCollideActorFunc actorCollideFunc;
+} BumperCollideInfo;
+
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
