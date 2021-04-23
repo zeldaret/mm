@@ -9,17 +9,15 @@ void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2);
 void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-const ActorInit Obj_Boyo_InitVars = {
-    ACTOR_OBJ_BOYO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOYO,
-    sizeof(ObjBoyo),
-    (ActorFunc)ObjBoyo_Init,
-    (ActorFunc)ObjBoyo_Destroy,
-    (ActorFunc)ObjBoyo_Update,
-    (ActorFunc)ObjBoyo_Draw
-};
+const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
+                                      ACTORCAT_PROP,
+                                      FLAGS,
+                                      OBJECT_BOYO,
+                                      sizeof(ObjBoyo),
+                                      (ActorFunc)ObjBoyo_Init,
+                                      (ActorFunc)ObjBoyo_Destroy,
+                                      (ActorFunc)ObjBoyo_Update,
+                                      (ActorFunc)ObjBoyo_Draw };
 
 u32 D_809A6170[] = {
     0x0A000D39, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0x01CBFFBE,
@@ -55,7 +53,7 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjBoyo* this = THIS;
-    
+
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -71,7 +69,7 @@ void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
 
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
-    
+
     SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->unk_190);
     func_800BDFC0(globalCtx, D_06000300);
 }

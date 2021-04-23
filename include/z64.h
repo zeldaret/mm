@@ -769,7 +769,7 @@ typedef struct {
     /* 0x20 */ UNK_PTR cameraData;
     /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ BgWaterBox* waterboxes;
-} BgMeshHeader; // size = 0x2C
+} CollisionHeader; // size = 0x2C
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1045,7 +1045,7 @@ typedef struct {
 } SaveContext; // size = 0x48C8
 
 typedef struct {
-    /* 0x00 */ BgMeshHeader* sceneMesh;
+    /* 0x00 */ CollisionHeader* sceneMesh;
     /* 0x04 */ Vec3f sceneMin;
     /* 0x10 */ Vec3f sceneMax;
     /* 0x1C */ s32 xSubdivisions;
@@ -1095,23 +1095,38 @@ typedef struct ActorObjBell ActorObjBell;
 typedef struct DaytelopContext DaytelopContext;
 
 typedef struct {
-    /* 0x00 */ DynaPolyActor* actor;
-    /* 0x04 */ BgMeshHeader* header;
-    /* 0x08 */ ActorMeshPolyLists polyLists;
-    /* 0x10 */ s16 verticesStartIndex;
-    /* 0x12 */ s16 waterboxesStartIndex;
-    /* 0x14 */ ActorMeshParams prevParams;
-    /* 0x34 */ ActorMeshParams currParams;
-    /* 0x54 */ Vec3s averagePos;
-    /* 0x5A */ s16 radiusFromAveragePos;
+    u16 head; // first SSNode index
+} SSList;
+
+typedef struct {
+    u16 polyStartIndex;
+    SSList ceiling;
+    SSList wall;
+    SSList floor;
+} DynaLookup;
+
+typedef struct {
+    Vec3f scale;
+    Vec3s rot;
+    Vec3f pos;
+} ScaleRotPos;
+
+typedef struct {
+    /* 0x00 */ struct Actor* actor;
+    /* 0x04 */ CollisionHeader* colHeader;
+    /* 0x08 */ DynaLookup dynaLookup;
+    /* 0x10 */ u16 vtxStartIndex;
+    /* 0x14 */ ScaleRotPos prevTransform;
+    /* 0x34 */ ScaleRotPos curTransform;
+    /* 0x54 */ Sphere16 boundingSphere;
     /* 0x5C */ f32 minY;
     /* 0x60 */ f32 maxY;
-} ActorMesh; // size = 0x64
+} BgActor; // size = 0x64
 
 struct DynaCollisionContext {
     /* 0x0000 */ u8 unk0;
     /* 0x0001 */ UNK_TYPE1 pad1[0x3];
-    /* 0x0004 */ ActorMesh actorMeshArr[50];
+    /* 0x0004 */ BgActor bgActors[50];
     /* 0x138C */ u16 flags[50]; // bit 0 - Is mesh active
     /* 0x13F0 */ CollisionPoly* polygons;
     /* 0x13F4 */ BgVertex* vertices;

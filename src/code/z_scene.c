@@ -192,10 +192,10 @@ void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry) {
 
 // Scene Command 0x03: Collision Header
 void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
-    BgMeshHeader* temp_ret;
-    BgMeshHeader* temp_s0;
+    CollisionHeader* temp_ret;
+    CollisionHeader* temp_s0;
 
-    temp_ret = (BgMeshHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
+    temp_ret = (CollisionHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
     temp_s0 = temp_ret;
     temp_s0->vertices = (BgVertex*)Lib_SegmentedToVirtual(temp_ret->vertices);
     temp_s0->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(temp_s0->polygons);

@@ -15,28 +15,28 @@ void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* ac
     if (BgCheck_IsActorMeshIndexValid(index) == 0) return;
 
     SkinMatrix_SetScaleRotateYRPTranslate(&prevMatrix,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.x,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.y,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.scale.z,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.x,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.y,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.z,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.x,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.y,
-        bgCtxt->dyna.actorMeshArr[index].prevParams.pos.z);
+        bgCtxt->dyna.bgActors[index].prevTransform.scale.x,
+        bgCtxt->dyna.bgActors[index].prevTransform.scale.y,
+        bgCtxt->dyna.bgActors[index].prevTransform.scale.z,
+        bgCtxt->dyna.bgActors[index].prevTransform.rot.x,
+        bgCtxt->dyna.bgActors[index].prevTransform.rot.y,
+        bgCtxt->dyna.bgActors[index].prevTransform.rot.z,
+        bgCtxt->dyna.bgActors[index].prevTransform.pos.x,
+        bgCtxt->dyna.bgActors[index].prevTransform.pos.y,
+        bgCtxt->dyna.bgActors[index].prevTransform.pos.z);
 
     if (SkinMatrix_Invert(&prevMatrix, &prevMatrixInv) == 2) return;
 
     SkinMatrix_SetScaleRotateYRPTranslate(&currMatrix,
-        bgCtxt->dyna.actorMeshArr[index].currParams.scale.x,
-        bgCtxt->dyna.actorMeshArr[index].currParams.scale.y,
-        bgCtxt->dyna.actorMeshArr[index].currParams.scale.z,
-        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.x,
-        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.y,
-        bgCtxt->dyna.actorMeshArr[index].currParams.rotation.z,
-        bgCtxt->dyna.actorMeshArr[index].currParams.pos.x,
-        bgCtxt->dyna.actorMeshArr[index].currParams.pos.y,
-        bgCtxt->dyna.actorMeshArr[index].currParams.pos.z);
+        bgCtxt->dyna.bgActors[index].curTransform.scale.x,
+        bgCtxt->dyna.bgActors[index].curTransform.scale.y,
+        bgCtxt->dyna.bgActors[index].curTransform.scale.z,
+        bgCtxt->dyna.bgActors[index].curTransform.rot.x,
+        bgCtxt->dyna.bgActors[index].curTransform.rot.y,
+        bgCtxt->dyna.bgActors[index].curTransform.rot.z,
+        bgCtxt->dyna.bgActors[index].curTransform.pos.x,
+        bgCtxt->dyna.bgActors[index].curTransform.pos.y,
+        bgCtxt->dyna.bgActors[index].curTransform.pos.z);
 
     SkinMatrix_Vec3fMtxFMultXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
     SkinMatrix_Vec3fMtxFMultXYZ(&currMatrix, &posWithInv, &newPos);
@@ -49,7 +49,7 @@ void BgCheck2_UpdateActorYRotation(CollisionContext* bgCtxt, s32 index, Actor* a
 
     if (BgCheck_IsActorMeshIndexValid(index) == 0) return;
 
-    angleChange = bgCtxt->dyna.actorMeshArr[index].currParams.rotation.y - bgCtxt->dyna.actorMeshArr[index].prevParams.rotation.y;
+    angleChange = bgCtxt->dyna.bgActors[index].curTransform.rot.y - bgCtxt->dyna.bgActors[index].prevTransform.rot.y;
 
     if (actor->id == 0) {
         ((ActorPlayer*)actor)->unkAD4 += angleChange;
