@@ -1406,7 +1406,7 @@ SECTIONS
     ovl_Bg_Keikoku_Spr : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o(.text)
-        build/asm/overlays/ovl_Bg_Keikoku_Spr_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o(.data)
         build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o(.rodata)
         build/asm/overlays/ovl_Bg_Keikoku_Spr_rodata.o(.rodata)
     }
