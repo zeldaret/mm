@@ -5,7 +5,7 @@
 #define THIS ((ObjBoyo*)thisx)
 
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2);
 void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
@@ -38,9 +38,9 @@ u32 D_809A61B4[] = {
     0x021D0000, 0x809A5DE0, 0x00090000, 0x809A5E14, 0x00000000, 0x00000000, 0x00000000,
 };
 
+extern Gfx D_06000300[];
 extern AnimatedTexture D_06000E88;
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Init.asm")
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
@@ -52,7 +52,12 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_190 = Lib_SegmentedToVirtual(&D_06000E88);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Destroy.asm")
+void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjBoyo* this = THIS;
+    
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/func_809A5DC0.asm")
 
@@ -64,4 +69,9 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Update.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boyo_0x809A5D10/ObjBoyo_Draw.asm")
+void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjBoyo* this = THIS;
+    
+    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->unk_190);
+    func_800BDFC0(globalCtx, D_06000300);
+}
