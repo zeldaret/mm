@@ -26,6 +26,27 @@ const ActorInit En_Nutsball_InitVars = {
 */
 
 extern ColliderCylinderInit D_809861F0;
+/*
+static ColliderCylinderInit sCylinderInit = {
+    { 
+        COLTYPE_NONE, 
+        AT_ON | AT_TYPE_ENEMY, 
+        AC_ON | AC_TYPE_PLAYER, 
+        OC1_ON | OC1_TYPE_ALL, 
+        OC2_TYPE_2, 
+        COLSHAPE_CYLINDER, 
+    },
+    { 
+        ELEMTYPE_UNK0, 
+        { 0xF7CFFFFF, 0x00, 0x04 }, 
+        { 0xF7CFFFFF, 0x00, 0x00 }, 
+        TOUCH_ON | TOUCH_SFX_WOOD, 
+        BUMP_ON, 
+        OCELEM_ON, 
+    },
+    { 13, 13, 0, { 0, 0, 0 } },
+};
+*/
 
 void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
@@ -34,11 +55,11 @@ void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.shape.rot.y = 0;
     this->actor.speedXZ = 10.0f;
     if (this->actor.params == 2) {
-        this->unk144 = 1;
+        this->timer = 1;
         this->unk146 = 0;
         this->actor.gravity = -1.0f;
     } else {
-        this->unk144 = 20;
+        this->timer = 20;
         this->unk146 = 19;
         this->actor.gravity = -0.5f;
     }
@@ -61,22 +82,22 @@ void func_80985D3C(EnNutsball *this) {
     this->collider.info.toucher.damage = 2;
 }
 
-#ifdef NON_MATCHING
-//Quite a few stack issues
+#if NON_MATCHING
+//minor stack issues starting around Actor_SetVelocityAndMoveXYRotation
 void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
     EnNutsball *this = THIS;
-
+    s32 pad;
+    ActorPlayer *player = PLAYER;
     Vec3f sp60;
     Vec3s sp58;
     Vec3f sp4c;
-
-    u32 sp44;
+    s32 sp44;
     CollisionPoly *sp40;
 
+
     if (!(player->stateFlags1 & 0x300000C0)) {
-        this->unk144--;
-        if (this->unk144 < 0) {
+        this->timer--;
+        if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
             this->actor.world.rot.x = Math_FAtan2F(sqrtf((this->actor.velocity.x * this->actor.velocity.x) + (this->actor.velocity.z * this->actor.velocity.z)), this->actor.velocity.y);
         }
@@ -86,7 +107,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
                 func_80985D3C(this);
                 func_8018219C(&player->unkD04, &sp58, 0);
                 this->actor.world.rot.y = sp58.y + 0x8000;
-                this->unk144 = 20;
+                this->timer = 20;
             } else {
                 sp4c.x = this->actor.world.pos.x;
                 sp4c.y = this->actor.world.pos.y + 4.0f;
@@ -100,7 +121,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
         } else {
-            if (this->unk144 == -300) {
+            if (this->timer == -300) {
                 Actor_MarkForDeath(&this->actor);
             }
         }
@@ -131,7 +152,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         
-        if (this->unk144 < this->unk146) {
+        if (this->timer < this->unk146) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         }
     }
