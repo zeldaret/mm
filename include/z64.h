@@ -75,7 +75,7 @@ typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
-} AnimatedTexture; // size = 0x8
+} AnimatedMaterial; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -203,21 +203,6 @@ typedef struct {
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
 } FireObjLightParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u8 r;
-    /* 0x1 */ u8 g;
-    /* 0x2 */ u8 b;
-    /* 0x3 */ u8 a;
-    /* 0x4 */ u8 lodFrac;
-} SceneDrawPrimColor; // size = 0x5
-
-typedef struct {
-    /* 0x0 */ u8 r;
-    /* 0x1 */ u8 g;
-    /* 0x2 */ u8 b;
-    /* 0x3 */ u8 a;
-} SceneDrawEnvColor; // size = 0x4
 
 // Font textures are loaded into here
 typedef struct {
@@ -644,14 +629,6 @@ typedef enum {
     GFXPRINT_FLAG64 = 0x40,
     GFXPRINT_OPEN = 0x80
 } GfxPrintFlag;
-
-typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x2 */ u16 numKeyFrames;
-    /* 0x4 */ SceneDrawPrimColor* primColors;
-    /* 0x8 */ Color_RGBA8* envColors;
-    /* 0xC */ u16* keyFrames;
-} FlashingTextureParams; // size = 0x10
 
 typedef struct {
     /* 0x00 */ void* loadedRamAddr;
@@ -1351,7 +1328,7 @@ typedef struct {
 
 typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
 
-typedef void(*AnimatedTextureDrawFunc)(GlobalContext* globalCtx, u32 segment, TextureAnimParams *params);
+typedef void(*AnimatedTextureDrawFunc)(GlobalContext* globalCtx, u32 segment, TextureScrollAnimParams *params);
 
 typedef struct Camera Camera;
 
@@ -1716,7 +1693,7 @@ struct GlobalContext {
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
-    /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
+    /* 0x1886C */ AnimatedMaterial* sceneTextureAnimations;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
     /* 0x18874 */ u8 unk18874;
     /* 0x18875 */ s8 unk18875;
