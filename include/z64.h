@@ -340,7 +340,9 @@ typedef struct {
     /* 0x000 */ UNK_TYPE1 pad0[0xC];
     /* 0x00C */ s32 sceneSetupIndex;
     /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x2E];
+    /* 0x014 */ UNK_TYPE1 pad14[0x10];
+    /* 0x024 */ s16 unk24;
+    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
     /* 0x042 */ s16 unk42;
     /* 0x044 */ UNK_TYPE1 pad44[0x34];
     /* 0x078 */ f32 unk78;
@@ -378,7 +380,8 @@ typedef struct {
     /* 0x0002 */ u8 unk2;
     /* 0x0003 */ UNK_TYPE1 pad3[0x2];
     /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8E];
+    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
+    /* 0x0006 */ s16 unk_A00;
 } SaveContextOwl; // size = 0x2C94
 
 typedef struct {
