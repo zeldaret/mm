@@ -684,7 +684,7 @@
     0x800B51A4:("Actor_TargetContextInit",),
     0x800B5208:("func_800B5208",),
     0x800B5814:("func_800B5814",),
-    0x800B5BB0:("Actor_GetSwitchFlag",),
+    0x800B5BB0:("Flags_GetSwitch",),
     0x800B5BF4:("Actor_SetSwitchFlag",),
     0x800B5C34:("Actor_UnsetSwitchFlag",),
     0x800B5C78:("Actor_GetChestFlag",),

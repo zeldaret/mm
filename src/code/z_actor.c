@@ -171,7 +171,7 @@ void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalCont
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5814.asm")
 
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
+u32 Flags_GetSwitch(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
         return ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
     }

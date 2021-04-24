@@ -492,7 +492,7 @@ void SceneProc_SceneDrawConfigSakonsHideout(GlobalContext* ctxt) {
     SceneProc_DrawAllAnimatedTextures(ctxt, ctxt->sceneTextureAnimations, ctxt->roomContext.unk7A[0]);
 }
 
-void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* ctxt) {
+void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx) {
     static Gfx D_801C3C88[] = {
         gsDPSetPrimColor(0, 255, 255, 255, 255, 255),
         gsSPEndDisplayList(),
@@ -508,77 +508,85 @@ void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* ctxt) {
     u32 pad6;
     Gfx* dl;
 
-    if (Actor_GetSwitchFlag(ctxt, 0x33) && Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35) &&
-        Actor_GetSwitchFlag(ctxt, 0x36)) {
-        func_800C3C00(&ctxt->colCtx, 1);
+    if (Flags_GetSwitch(globalCtx,0x33) &&
+        Flags_GetSwitch(globalCtx,0x34) &&
+        Flags_GetSwitch(globalCtx,0x35) &&
+        Flags_GetSwitch(globalCtx,0x36)) {
+        func_800C3C00(&globalCtx->colCtx, 1);
     } else {
-        func_800C3C14(&ctxt->colCtx, 1);
+        func_800C3C14(&globalCtx->colCtx, 1);
     }
 
     {
-        dl = (Gfx*)ctxt->state.gfxCtx->polyOpa.d - 18;
-        // dl = _g;
-        ctxt->state.gfxCtx->polyOpa.d = dl;
+        dl = (Gfx*)globalCtx->state.gfxCtx->polyOpa.d - 18;
+        //dl = _g;
+        globalCtx->state.gfxCtx->polyOpa.d = dl;
     }
 
-    SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
+    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
 
-    gfxCtx = ctxt->state.gfxCtx;
+    gfxCtx = globalCtx->state.gfxCtx;
     dlHead = dl;
     for (i = 0; i < 9; i++, dlHead += 2) {
         u32 lodFrac = 0;
 
         bcopy(D_801C3C88, dlHead, sizeof(Gfx[2]));
 
-        switch (i) {
-            case 0:
-                if (Actor_GetSwitchFlag(ctxt, 0x33) && Actor_GetSwitchFlag(ctxt, 0x34) &&
-                    Actor_GetSwitchFlag(ctxt, 0x35) && Actor_GetSwitchFlag(ctxt, 0x36)) {
-                    lodFrac = 0xFF;
-                }
-                break;
-            case 1:
-                if (Actor_GetSwitchFlag(ctxt, 0x37)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 2:
-                if (Actor_GetSwitchFlag(ctxt, 0x37) && Actor_GetSwitchFlag(ctxt, 0x38)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 3:
-                if (Actor_GetSwitchFlag(ctxt, 0x37) && Actor_GetSwitchFlag(ctxt, 0x38) &&
-                    Actor_GetSwitchFlag(ctxt, 0x39)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 4:
-                if (!Actor_GetSwitchFlag(ctxt, 0x33)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 5:
-                if (Actor_GetSwitchFlag(ctxt, 0x34)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 6:
-                if (Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 7:
-                if (Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35) &&
-                    Actor_GetSwitchFlag(ctxt, 0x36)) {
-                    lodFrac = 0x44;
-                }
-                break;
-            case 8:
-                if (Actor_GetSwitchFlag(ctxt, 0x3A)) {
-                    lodFrac = 0x44;
-                }
-                break;
+        switch(i) {
+        case 0:
+            if (Flags_GetSwitch(globalCtx,0x33) &&
+                Flags_GetSwitch(globalCtx,0x34) &&
+                Flags_GetSwitch(globalCtx,0x35) &&
+                Flags_GetSwitch(globalCtx,0x36)) {
+                lodFrac = 0xFF;
+            }
+            break;
+        case 1:
+            if (Flags_GetSwitch(globalCtx,0x37)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 2:
+            if (Flags_GetSwitch(globalCtx,0x37) &&
+                Flags_GetSwitch(globalCtx,0x38)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 3:
+            if (Flags_GetSwitch(globalCtx,0x37) &&
+                Flags_GetSwitch(globalCtx,0x38) &&
+                Flags_GetSwitch(globalCtx,0x39)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 4:
+            if (!Flags_GetSwitch(globalCtx,0x33)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 5:
+            if (Flags_GetSwitch(globalCtx,0x34)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 6:
+            if (Flags_GetSwitch(globalCtx,0x34) &&
+                Flags_GetSwitch(globalCtx,0x35)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 7:
+            if (Flags_GetSwitch(globalCtx,0x34) &&
+                Flags_GetSwitch(globalCtx,0x35) &&
+                Flags_GetSwitch(globalCtx,0x36)) {
+                lodFrac = 0x44;
+            }
+            break;
+        case 8:
+            if (Flags_GetSwitch(globalCtx,0x3A)) {
+                lodFrac = 0x44;
+            }
+            break;
         }
 
         gDPSetPrimColor(dlHead, 0, lodFrac, 0xFF, 0xFF, 0xFF, 0xFF);

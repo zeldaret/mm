@@ -51,7 +51,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     THIS->animatedTextures = (AnimatedTexture*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
-    if (Actor_GetSwitchFlag(globalCtx, THIS->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, THIS->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(THIS);
     } else {
         BgIkanaRay_SetDeactivated(THIS);
@@ -70,7 +70,7 @@ void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Actor_GetSwitchFlag(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     }
 }

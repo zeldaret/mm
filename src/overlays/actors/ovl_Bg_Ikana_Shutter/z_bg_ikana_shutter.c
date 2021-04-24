@@ -51,10 +51,10 @@ extern BgMeshHeader D_06000F28;
 extern UNK_PTR D_06000CE8;
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
+    return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
 }
 
 void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {

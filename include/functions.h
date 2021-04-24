@@ -698,7 +698,7 @@ void func_800B5040(TargetContext* targetContext, Actor* actor, u8 type, GlobalCo
 void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt);
 void func_800B5208(TargetContext* targetCtxt, GlobalContext* ctxt);
 void func_800B5814(TargetContext* targetContext, ActorPlayer* player, Actor* param_3, GlobalContext* ctxt);
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag);
+u32 Flags_GetSwitch(GlobalContext* ctxt, s32 flag);
 void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag);
 void Actor_UnsetSwitchFlag(GlobalContext* ctxt, s32 flag);
 u32 Actor_GetChestFlag(GlobalContext* ctxt, u32 flag);
@@ -2510,7 +2510,7 @@ void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags);
 void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags);
 void SceneProc_SceneDrawConfig5(GlobalContext* ctxt);
 void SceneProc_SceneDrawConfigSakonsHideout(GlobalContext* ctxt);
-void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* ctxt);
+void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx);
 EntranceRecord* SceneTable_LookupEntrance(u32 entrance);
 s32 SceneTable_LookupEntranceScene(u32 entrance);
 s32 SceneTable_LookupEntranceAbsoluteScene(u32 entrance);
