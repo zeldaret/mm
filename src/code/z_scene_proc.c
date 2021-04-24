@@ -64,48 +64,34 @@ void SceneProc_DrawType1Texture(GlobalContext* ctxt, u32 segment, ScrollingTextu
     }
 }
 
-#ifdef NON_MATCHING
-// Slight ordering differences at the beginning
-void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTexturePrimColor* primColor, Color_RGBA8* envColor) {
-    GraphicsContext* gfxCtx;
-    Gfx* dl;
+void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTexturePrimColor* primColor,
+                                   Color_RGBA8* envColor) {
+    Gfx* colorDList;
+    Gfx* _g;
 
-    {
-        Gfx* _g = (Gfx*)ctxt->state.gfxCtx->polyOpa.d - 4;
-        dl = _g;
-        ctxt->state.gfxCtx->polyOpa.d = _g;
-    }
+    // TODO allocation should be a macro
+    _g = ((u32)ctxt->state.gfxCtx->polyOpa.d) - sizeof(Gfx) * 4; // Allocate enough space for 4 Gfx
+    colorDList = _g;
+    ctxt->state.gfxCtx->polyOpa.d = _g;
 
-    gfxCtx = ctxt->state.gfxCtx;
-    if (gSceneProcFlags & 1) {
-        gSPSegment(gfxCtx->polyOpa.p++, segment, dl);
-    }
+    OPEN_DISPS(ctxt->state.gfxCtx);
 
-    if (gSceneProcFlags & 2) {
-        gSPSegment(gfxCtx->polyXlu.p++, segment, dl);
-    }
+    // clang-format off
+    if (gSceneProcFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
+    if (gSceneProcFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
+    // clang-format on
 
-    gDPSetPrimColor(dl++,
-                    0,
-                    primColor->lodFrac,
-                    primColor->red,
-                    primColor->green,
-                    primColor->blue,
+    gDPSetPrimColor(colorDList++, 0, primColor->lodFrac, primColor->red, primColor->green, primColor->blue,
                     (u8)(primColor->alpha * gSceneProcFlashingAlpha));
 
     if (envColor != NULL) {
-        gDPSetEnvColor(dl++,
-                       envColor->red,
-                       envColor->green,
-                       envColor->blue,
-                       envColor->alpha);
+        gDPSetEnvColor(colorDList++, envColor->r, envColor->g, envColor->b, envColor->a);
     }
 
-    gSPEndDisplayList(dl++);
+    gSPEndDisplayList(colorDList++);
+
+    CLOSE_DISPS(ctxt->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawFlashingTexture.asm")
-#endif
 
 void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     Color_RGBA8* envColor;
