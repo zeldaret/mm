@@ -205,12 +205,19 @@ typedef struct {
 } FireObjLightParams; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ u8 red;
-    /* 0x1 */ u8 green;
-    /* 0x2 */ u8 blue;
-    /* 0x3 */ u8 alpha;
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+    /* 0x3 */ u8 a;
     /* 0x4 */ u8 lodFrac;
-} FlashingTexturePrimColor; // size = 0x5
+} SceneDrawPrimColor; // size = 0x5
+
+typedef struct {
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+    /* 0x3 */ u8 a;
+} SceneDrawEnvColor; // size = 0x4
 
 // Font textures are loaded into here
 typedef struct {
@@ -641,7 +648,7 @@ typedef enum {
 typedef struct {
     /* 0x0 */ u16 cycleLength;
     /* 0x2 */ u16 numKeyFrames;
-    /* 0x4 */ FlashingTexturePrimColor* primColors;
+    /* 0x4 */ SceneDrawPrimColor* primColors;
     /* 0x8 */ Color_RGBA8* envColors;
     /* 0xC */ u16* keyFrames;
 } FlashingTextureParams; // size = 0x10
@@ -1326,7 +1333,7 @@ typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt)
 
 typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
-typedef void(*global_context_func)(GlobalContext*);
+typedef void(*SceneDrawConfigFunc)(GlobalContext*);
 
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 

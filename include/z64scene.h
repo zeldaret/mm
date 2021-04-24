@@ -339,7 +339,7 @@ typedef struct {
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
-} ScrollingTextureParams; // size = 0x4
+} TextureAnimParams; // size = 0x4
 
 typedef struct {
     /* 0x000 */ void* objectVramStart;

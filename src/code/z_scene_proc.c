@@ -1,88 +1,124 @@
 #include <ultra64.h>
 #include <global.h>
 
-void SceneProc_DrawCurrentSceneAnimatedTextures(GlobalContext* ctxt) {
-    gSceneProcSceneDrawFuncs[ctxt->sceneConfig](ctxt);
+// Default displaylist that sets a valid displaylist into all of the segments
+static Gfx sSceneDrawDefaultDl[] = {
+    gsSPSegment(0x08, gEmptyDL),
+    gsSPSegment(0x09, gEmptyDL),
+    gsSPSegment(0x0A, gEmptyDL),
+    gsSPSegment(0x0B, gEmptyDL),
+    gsSPSegment(0x0C, gEmptyDL),
+    gsSPSegment(0x0D, gEmptyDL),
+    gsSPSegment(0x06, gEmptyDL),
+    gsDPPipeSync(),
+    gsDPSetPrimColor(0, 0, 128, 128, 128, 128),
+    gsDPSetEnvColor(128, 128, 128, 128),
+    gsSPEndDisplayList(),
+};
+
+/**
+ * Executes the current scene draw config function
+ */
+void SceneProc_ExecuteSceneDrawFunc(GlobalContext* globalCtx) {
+    static SceneDrawConfigFunc sceneDrawConfigFuncs[] = {
+        SceneProc_SceneDrawConfigDefault,
+        SceneProc_SceneDrawConfigAnimatedTexture,
+        SceneProc_SceneDrawConfigDoNothing,
+        SceneProc_DrawSceneConfig3, // unused
+        SceneProc_DrawSceneConfig4, // unused
+        SceneProc_SceneDrawConfig5, // unused
+        SceneProc_SceneDrawConfigGreatBayTemple,
+        SceneProc_SceneDrawConfigSakonsHideout,
+    };
+
+    sceneDrawConfigFuncs[globalCtx->sceneConfig](globalCtx);
 }
 
-void SceneProc_DrawSceneConfig0(GlobalContext* ctxt) {
-    GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
+/**
+ * Default scene draw config function. This will only execute `sSceneDrawDefaultDl` on both POLY_OPA_DISP and
+ * POLY_XLU_DISP
+ */
+void SceneProc_SceneDrawConfigDefault(GlobalContext* globalCtx) {
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
-    gSPDisplayList(gfxCtx->polyOpa.p++, gSceneProcDefaultDl);
-    gSPDisplayList(gfxCtx->polyXlu.p++, gSceneProcDefaultDl);
+    gSPDisplayList(gfxCtx->polyOpa.p++, sSceneDrawDefaultDl);
+    gSPDisplayList(gfxCtx->polyXlu.p++, sSceneDrawDefaultDl);
 }
 
-Gfx* SceneProc_SetTile1Layer(GlobalContext* ctxt, ScrollingTextureParams* params) {
-    return Gfx_TexScroll((ctxt->state).gfxCtx,
-                         params->xStep * gSceneProcStep,
-                         -(params->yStep * gSceneProcStep),
-                         params->width,
-                         params->height);
+/**
+ * Returns a pointer to a single layer texture scroll displaylist
+ */
+Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, TextureAnimParams* params) {
+    return Gfx_TexScroll(globalCtx->state.gfxCtx, params->xStep * gSceneProcStep, -(params->yStep * gSceneProcStep),
+                         params->width, params->height);
 }
 
-void SceneProc_DrawType0Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params) {
-    Gfx* dl = SceneProc_SetTile1Layer(ctxt, params);
+// TODO: name
+void SceneProc_DrawType0Texture(GlobalContext* globalCtx, u32 segment, TextureAnimParams* params) {
+    Gfx* texScrollDList = SceneProc_SingleLayerTexScroll(globalCtx, params);
 
-    {
-        GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
-        if (gSceneProcFlags & 1) {
-            gSPSegment(gfxCtx->polyOpa.p++, segment, dl);
-        }
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (gSceneProcFlags & 2) {
-            gSPSegment(gfxCtx->polyXlu.p++, segment, dl);
-        }
+    if (gSceneProcFlags & 1) {
+        gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
     }
+
+    if (gSceneProcFlags & 2) {
+        gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-Gfx* SceneProc_SetTile2Layers(GlobalContext* ctxt, ScrollingTextureParams* params) {
-    return Gfx_TwoTexScroll((ctxt->state).gfxCtx,
-                            0,
-                            params[0].xStep * gSceneProcStep,
-                            -(params[0].yStep * gSceneProcStep),
-                            params[0].width,
-                            params[0].height,
-                            1,
-                            params[1].xStep * gSceneProcStep,
-                            -(params[1].yStep * gSceneProcStep),
-                            params[1].width,
+/**
+ * Returns a pointer to a two layer texture scroll displaylist
+ */
+Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, TextureAnimParams* params) {
+    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params[0].xStep * gSceneProcStep,
+                            -(params[0].yStep * gSceneProcStep), params[0].width, params[0].height, 1,
+                            params[1].xStep * gSceneProcStep, -(params[1].yStep * gSceneProcStep), params[1].width,
                             params[1].height);
 }
 
-void SceneProc_DrawType1Texture(GlobalContext* ctxt, u32 segment, ScrollingTextureParams* params) {
-    Gfx* dl = SceneProc_SetTile2Layers(ctxt, params);
+// TODO: name
+void SceneProc_DrawType1Texture(GlobalContext* globalCtx, u32 segment, TextureAnimParams* params) {
+    Gfx* texScrollDList = SceneProc_TwoLayerTexScroll(globalCtx, params);
 
-    {
-        GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
-        if (gSceneProcFlags & 1) {
-            gSPSegment(gfxCtx->polyOpa.p++, segment, dl);
-        }
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (gSceneProcFlags & 2) {
-            gSPSegment(gfxCtx->polyXlu.p++, segment, dl);
-        }
+    if (gSceneProcFlags & 1) {
+        gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
     }
+
+    if (gSceneProcFlags & 2) {
+        gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTexturePrimColor* primColor,
-                                   Color_RGBA8* envColor) {
+/**
+ * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID
+ */
+void SceneProc_SetColorInSegment(GlobalContext* globalCtx, u32 segment, SceneDrawPrimColor* primColor,
+                                 SceneDrawEnvColor* envColor) {
     Gfx* colorDList;
     Gfx* _g;
 
     // TODO allocation should be a macro
-    _g = ((u32)ctxt->state.gfxCtx->polyOpa.d) - sizeof(Gfx) * 4; // Allocate enough space for 4 Gfx
+    _g = (Gfx*)(((u32)globalCtx->state.gfxCtx->polyOpa.d) - sizeof(Gfx) * 4); // Allocate enough space for 4 Gfx
     colorDList = _g;
-    ctxt->state.gfxCtx->polyOpa.d = _g;
+    globalCtx->state.gfxCtx->polyOpa.d = _g;
 
-    OPEN_DISPS(ctxt->state.gfxCtx);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     // clang-format off
     if (gSceneProcFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
     if (gSceneProcFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
     // clang-format on
 
-    gDPSetPrimColor(colorDList++, 0, primColor->lodFrac, primColor->red, primColor->green, primColor->blue,
-                    (u8)(primColor->alpha * gSceneProcFlashingAlpha));
+    gDPSetPrimColor(colorDList++, 0, primColor->lodFrac, primColor->r, primColor->g, primColor->b,
+                    (u8)(primColor->a * gSceneProcFlashingAlpha));
 
     if (envColor != NULL) {
         gDPSetEnvColor(colorDList++, envColor->r, envColor->g, envColor->b, envColor->a);
@@ -90,12 +126,12 @@ void SceneProc_DrawFlashingTexture(GlobalContext* ctxt, u32 segment, FlashingTex
 
     gSPEndDisplayList(colorDList++);
 
-    CLOSE_DISPS(ctxt->state.gfxCtx);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     Color_RGBA8* envColor;
-    FlashingTexturePrimColor* primColor = (FlashingTexturePrimColor *)Lib_SegmentedToVirtual(params->primColors);
+    SceneDrawPrimColor* primColor = (SceneDrawPrimColor*)Lib_SegmentedToVirtual(params->primColors);
     u32 pad;
     u32 index = gSceneProcStep % params->cycleLength;
 
@@ -107,7 +143,7 @@ void SceneProc_DrawType2Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
         envColor = NULL;
     }
 
-    SceneProc_DrawFlashingTexture(ctxt, segment, primColor, envColor);
+    SceneProc_SetColorInSegment(ctxt, segment, primColor, envColor);
 }
 
 s32 SceneProc_Lerp(s32 a, s32 b, f32 t) {
@@ -119,7 +155,7 @@ s32 SceneProc_Lerp(s32 a, s32 b, f32 t) {
 void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextureParams* params) {
     FlashingTextureParams* params2 = params;
     Color_RGBA8* envColorTo;
-    FlashingTexturePrimColor* primColorTo = (FlashingTexturePrimColor *)Lib_SegmentedToVirtual(params2->primColors);
+    SceneDrawPrimColor* primColorTo = (SceneDrawPrimColor*)Lib_SegmentedToVirtual(params2->primColors);
     u16* keyFrames = (u16*)Lib_SegmentedToVirtual(params2->keyFrames);
     s32 index = gSceneProcStep % params2->cycleLength;
     s32 pad1;
@@ -127,16 +163,17 @@ void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
     Color_RGBA8* envColorPtrIn;
     f32 t;
     s32 pad2;
-    FlashingTexturePrimColor primColorIn;
+    SceneDrawPrimColor primColorIn;
     Color_RGBA8* envColorFrom;
     Color_RGBA8 envColorIn;
     s32 pad3;
-    FlashingTexturePrimColor* primColorFrom;
+    SceneDrawPrimColor* primColorFrom;
 
     keyFrameIndex = 1;
     keyFrames += 1;
     while (params2->numKeyFrames > keyFrameIndex) {
-        if (index < *keyFrames) break;
+        if (index < *keyFrames)
+            break;
         keyFrameIndex++;
         keyFrames++;
     }
@@ -171,7 +208,7 @@ void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
         envColorPtrIn = NULL;
     }
 
-    SceneProc_DrawFlashingTexture(ctxt, segment, &primColorIn, envColorPtrIn);
+    SceneProc_SetColorInSegment(ctxt, segment, &primColorIn, envColorPtrIn);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawType3Texture.asm")
@@ -182,9 +219,7 @@ void SceneProc_DrawType3Texture(GlobalContext* ctxt, u32 segment, FlashingTextur
 u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame) {
     s32 ret = SceneProc_Interpolate(numKeyFrames, keyFrames, values, frame);
 
-    return (ret < 0)   ? 0    :
-           (ret > 0xFF)? 0xFF :
-                         ret;
+    return (ret < 0) ? 0 : (ret > 0xFF) ? 0xFF : ret;
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawType4Texture.asm")
@@ -211,8 +246,12 @@ void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTexture
     }
 }
 
-
-void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 flashingAlpha, u32 step, u32 flags) {
+void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 flashingAlpha, u32 step,
+                                    u32 flags) {
+    static scene_proc_draw_func gSceneProcDrawFuncs[] = {
+        SceneProc_DrawType0Texture, SceneProc_DrawType1Texture, SceneProc_DrawType2Texture,
+        SceneProc_DrawType3Texture, SceneProc_DrawType4Texture, SceneProc_DrawType5Texture,
+    };
     s32 segmentAbs;
     s32 segment;
 
@@ -223,7 +262,7 @@ void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textur
     if ((textures != NULL) && (textures->segment != 0)) {
         do {
             segment = textures->segment;
-            segmentAbs = ((segment < 0)? -segment : segment) + 7;
+            segmentAbs = ((segment < 0) ? -segment : segment) + 7;
 
             gSceneProcDrawFuncs[textures->type](ctxt, segmentAbs, (void*)Lib_SegmentedToVirtual(textures->params));
 
@@ -252,7 +291,8 @@ void SceneProc_DrawOpaqueSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, Ani
     SceneProc_DrawAnimatedTextures(ctxt, textures, alpha, ctxt->unk18840, 1);
 }
 
-void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha) {
+void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures,
+                                                             f32 alpha) {
     SceneProc_DrawAnimatedTextures(ctxt, textures, alpha, ctxt->unk18840, 2);
 }
 
@@ -271,15 +311,17 @@ void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* ctxt, AnimatedText
 void SceneProc_DrawAllAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step) {
     SceneProc_DrawAnimatedTextures(ctxt, textures, alpha, step, 3);
 }
-void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step) {
+void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha,
+                                                   u32 step) {
     SceneProc_DrawAnimatedTextures(ctxt, textures, alpha, step, 1);
 }
-void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha, u32 step) {
+void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* ctxt, AnimatedTexture* textures, f32 alpha,
+                                                        u32 step) {
     SceneProc_DrawAnimatedTextures(ctxt, textures, alpha, step, 2);
 }
 
-void SceneProc_DrawSceneConfig1(GlobalContext* ctxt) {
-  SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
+void SceneProc_SceneDrawConfigAnimatedTexture(GlobalContext* ctxt) {
+    SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
 }
 
 #ifdef NON_MATCHING
@@ -288,28 +330,21 @@ void SceneProc_DrawSceneConfig3(GlobalContext* ctxt) {
     GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
     u32 frames = ctxt->unk18840;
 
-    if (0);
+    if (0)
+        ;
 
-    gSPSegment(gfxCtx->polyXlu.p++, 8,
-               Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x3f, 0x100, 0x10));
+    gSPSegment(gfxCtx->polyXlu.p++, 8, Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x3f, 0x100, 0x10));
     gSPSegment(gfxCtx->polyXlu.p++, 9,
-               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
-                                0, 0x7F - (frames & 0x7F), frames & 0x7F, 0x20, 0x20,
-                                1, frames & 0x7F, frames & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx, 0, 0x7F - (frames & 0x7F), frames & 0x7F, 0x20, 0x20, 1,
+                                frames & 0x7F, frames & 0x7F, 0x20, 0x20));
     gSPSegment(gfxCtx->polyOpa.p++, 10,
-               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
-                                0, 0, 0, 0x20, 0x20,
-                                1, 0, 0x7F - (frames & 0x7F), 0x20, 0x20));
-    gSPSegment(gfxCtx->polyOpa.p++, 11,
-               Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx, 0, 0, 0, 0x20, 0x20, 1, 0, 0x7F - (frames & 0x7F), 0x20, 0x20));
+    gSPSegment(gfxCtx->polyOpa.p++, 11, Rcp_GenerateSetTileSizeDl(ctxt->state.gfxCtx, 0, frames & 0x7F, 0x20, 0x20));
     gSPSegment(gfxCtx->polyXlu.p++, 12,
-               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
-                                0, 0, frames * 0x32 & 0x7Ff, 8, 0x200,
-                                1, 0, frames * 0x3c & 0x7Ff, 8, 0x200));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx, 0, 0, frames * 0x32 & 0x7Ff, 8, 0x200, 1, 0, frames * 0x3c & 0x7Ff,
+                                8, 0x200));
     gSPSegment(gfxCtx->polyOpa.p++, 13,
-               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
-                                0, 0, 0, 0x20, 0x40,
-                                1, 0, frames & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, frames & 0x7F, 0x20, 0x20));
 
     gDPPipeSync(gfxCtx->polyXlu.p++);
     gDPSetEnvColor(gfxCtx->polyXlu.p++, 0x80, 0x80, 0x80, 0x80);
@@ -330,20 +365,59 @@ void SceneProc_DrawSceneConfig4(GlobalContext* ctxt) {
     frames2 = frames * 1;
 
     gSPSegment(gfxCtx->polyXlu.p++, 8,
-               Gfx_TwoTexScroll(ctxt->state.gfxCtx,
-                                0, 0x7F - (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20,
-                                1, (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20));
+               Gfx_TwoTexScroll(ctxt->state.gfxCtx, 0, 0x7F - (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20, 1,
+                                (frames & 0x7F), frames2 & 0x7F, 0x20, 0x20));
 
     gDPPipeSync(gfxCtx->polyOpa.p++);
-    gDPSetEnvColor(gfxCtx->polyOpa.p++, 0x80, 0x80, 0x80, 0x80);
+    gDPSetEnvColor(gfxCtx->polyOpa.p++, 128, 128, 128, 128);
 
     gDPPipeSync(gfxCtx->polyXlu.p++);
-    gDPSetEnvColor(gfxCtx->polyXlu.p++, 0x80, 0x80, 0x80, 0x80);
+    gDPSetEnvColor(gfxCtx->polyXlu.p++, 128, 128, 128, 128);
 }
 
-void SceneProc_DrawSceneConfig2(GlobalContext* ctxt){}
+void SceneProc_SceneDrawConfigDoNothing(GlobalContext* ctxt) {
+}
+
+Gfx D_801C3BF0[] = {
+    gsSPEndDisplayList(),
+    //! @bug These instructions will never get executed
+    gsSPEndDisplayList(),
+    gsSPEndDisplayList(),
+    gsSPEndDisplayList(),
+};
+
+static Gfx D_801C3C10[] = {
+    gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
+                      G_RM_AA_ZB_XLU_SURF2),
+    gsSPEndDisplayList(),
+    //! @bug These instructions will never get executed
+    gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+                      G_RM_AA_ZB_XLU_SURF2),
+    gsSPEndDisplayList(),
+};
+
+static Gfx D_801C3C30[] = {
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsSPEndDisplayList(),
+    //! @bug These instructions will never get executed
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsSPEndDisplayList(),
+};
 
 void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags) {
+    static Gfx* D_801C3C50[] = {
+        D_801C3BF0,
+        D_801C3C10,
+        D_801C3C30,
+    };
     Gfx* dl = D_801C3C50[param_2];
 
     {
@@ -357,8 +431,20 @@ void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags) {
         }
     }
 }
-
+static Gfx D_801C3C60[] = {
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+static Gfx D_801C3C70[] = {
+    gsSPSetGeometryMode(G_CULL_FRONT),
+    gsSPEndDisplayList(),
+};
 void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags) {
+
+    static Gfx* D_801C3C80[] = {
+        D_801C3C60,
+        D_801C3C70,
+    };
     Gfx* dl = D_801C3C80[param_2];
 
     {
@@ -373,7 +459,7 @@ void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags) {
     }
 }
 
-void SceneProc_DrawSceneConfig5(GlobalContext* ctxt) {
+void SceneProc_SceneDrawConfig5(GlobalContext* ctxt) {
     u32 dlIndex;
     u32 alpha;
     GraphicsContext* gfxCtx;
@@ -383,7 +469,7 @@ void SceneProc_DrawSceneConfig5(GlobalContext* ctxt) {
         alpha = ctxt->roomContext.unk7A[1];
     } else {
         dlIndex = 0;
-        alpha = 0xff;
+        alpha = 255;
     }
 
     if (alpha == 0) {
@@ -397,16 +483,20 @@ void SceneProc_DrawSceneConfig5(GlobalContext* ctxt) {
 
         func_80131DF0(ctxt, dlIndex, 3);
 
-        gDPSetEnvColor(gfxCtx->polyOpa.p++, 0xFF, 0xFF, 0xFF, alpha);
-        gDPSetEnvColor(gfxCtx->polyXlu.p++, 0xFF, 0xFF, 0xFF, alpha);
+        gDPSetEnvColor(gfxCtx->polyOpa.p++, 255, 255, 255, alpha);
+        gDPSetEnvColor(gfxCtx->polyXlu.p++, 255, 255, 255, alpha);
     }
 }
 
-void SceneProc_DrawSceneConfig7(GlobalContext* ctxt) {
-      SceneProc_DrawAllAnimatedTextures(ctxt, ctxt->sceneTextureAnimations, ctxt->roomContext.unk7A[0]);
+void SceneProc_SceneDrawConfigSakonsHideout(GlobalContext* ctxt) {
+    SceneProc_DrawAllAnimatedTextures(ctxt, ctxt->sceneTextureAnimations, ctxt->roomContext.unk7A[0]);
 }
 
-void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
+void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* ctxt) {
+    static Gfx D_801C3C88[] = {
+        gsDPSetPrimColor(0, 255, 255, 255, 255, 255),
+        gsSPEndDisplayList(),
+    };
     s32 i;
     Gfx* dlHead;
     u32 pad1;
@@ -418,10 +508,8 @@ void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
     u32 pad6;
     Gfx* dl;
 
-    if (Actor_GetSwitchFlag(ctxt,0x33) &&
-        Actor_GetSwitchFlag(ctxt,0x34) &&
-        Actor_GetSwitchFlag(ctxt,0x35) &&
-        Actor_GetSwitchFlag(ctxt,0x36)) {
+    if (Actor_GetSwitchFlag(ctxt, 0x33) && Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35) &&
+        Actor_GetSwitchFlag(ctxt, 0x36)) {
         func_800C3C00(&ctxt->colCtx, 1);
     } else {
         func_800C3C14(&ctxt->colCtx, 1);
@@ -429,7 +517,7 @@ void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
 
     {
         dl = (Gfx*)ctxt->state.gfxCtx->polyOpa.d - 18;
-        //dl = _g;
+        // dl = _g;
         ctxt->state.gfxCtx->polyOpa.d = dl;
     }
 
@@ -442,61 +530,55 @@ void SceneProc_DrawSceneConfig6(GlobalContext* ctxt) {
 
         bcopy(D_801C3C88, dlHead, sizeof(Gfx[2]));
 
-        switch(i) {
-        case 0:
-            if (Actor_GetSwitchFlag(ctxt,0x33) &&
-                Actor_GetSwitchFlag(ctxt,0x34) &&
-                Actor_GetSwitchFlag(ctxt,0x35) &&
-                Actor_GetSwitchFlag(ctxt,0x36)) {
-                lodFrac = 0xFF;
-            }
-            break;
-        case 1:
-            if (Actor_GetSwitchFlag(ctxt,0x37)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 2:
-            if (Actor_GetSwitchFlag(ctxt,0x37) &&
-                Actor_GetSwitchFlag(ctxt,0x38)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 3:
-            if (Actor_GetSwitchFlag(ctxt,0x37) &&
-                Actor_GetSwitchFlag(ctxt,0x38) &&
-                Actor_GetSwitchFlag(ctxt,0x39)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 4:
-            if (!Actor_GetSwitchFlag(ctxt,0x33)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 5:
-            if (Actor_GetSwitchFlag(ctxt,0x34)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 6:
-            if (Actor_GetSwitchFlag(ctxt,0x34) &&
-                Actor_GetSwitchFlag(ctxt,0x35)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 7:
-            if (Actor_GetSwitchFlag(ctxt,0x34) &&
-                Actor_GetSwitchFlag(ctxt,0x35) &&
-                Actor_GetSwitchFlag(ctxt,0x36)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 8:
-            if (Actor_GetSwitchFlag(ctxt,0x3A)) {
-                lodFrac = 0x44;
-            }
-            break;
+        switch (i) {
+            case 0:
+                if (Actor_GetSwitchFlag(ctxt, 0x33) && Actor_GetSwitchFlag(ctxt, 0x34) &&
+                    Actor_GetSwitchFlag(ctxt, 0x35) && Actor_GetSwitchFlag(ctxt, 0x36)) {
+                    lodFrac = 0xFF;
+                }
+                break;
+            case 1:
+                if (Actor_GetSwitchFlag(ctxt, 0x37)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 2:
+                if (Actor_GetSwitchFlag(ctxt, 0x37) && Actor_GetSwitchFlag(ctxt, 0x38)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 3:
+                if (Actor_GetSwitchFlag(ctxt, 0x37) && Actor_GetSwitchFlag(ctxt, 0x38) &&
+                    Actor_GetSwitchFlag(ctxt, 0x39)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 4:
+                if (!Actor_GetSwitchFlag(ctxt, 0x33)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 5:
+                if (Actor_GetSwitchFlag(ctxt, 0x34)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 6:
+                if (Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 7:
+                if (Actor_GetSwitchFlag(ctxt, 0x34) && Actor_GetSwitchFlag(ctxt, 0x35) &&
+                    Actor_GetSwitchFlag(ctxt, 0x36)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 8:
+                if (Actor_GetSwitchFlag(ctxt, 0x3A)) {
+                    lodFrac = 0x44;
+                }
+                break;
         }
 
         gDPSetPrimColor(dlHead, 0, lodFrac, 0xFF, 0xFF, 0xFF, 0xFF);
