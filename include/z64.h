@@ -1351,7 +1351,7 @@ typedef struct {
 
 typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
 
-typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* params);
+typedef void(*AnimatedTextureDrawFunc)(GlobalContext* globalCtx, u32 segment, TextureAnimParams *params);
 
 typedef struct Camera Camera;
 

@@ -102,13 +102,7 @@ void SceneProc_DrawType1Texture(GlobalContext* globalCtx, u32 segment, TextureAn
  */
 void SceneProc_SetColorInSegment(GlobalContext* globalCtx, u32 segment, SceneDrawPrimColor* primColor,
                                  SceneDrawEnvColor* envColor) {
-    Gfx* colorDList;
-    Gfx* _g;
-
-    // TODO allocation should be a macro
-    _g = (Gfx*)(((u32)globalCtx->state.gfxCtx->polyOpa.d) - sizeof(Gfx) * 4); // Allocate enough space for 4 Gfx
-    colorDList = _g;
-    globalCtx->state.gfxCtx->polyOpa.d = _g;
+    Gfx* colorDList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -248,7 +242,7 @@ void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTexture
 
 void SceneProc_DrawAnimatedTextures(GlobalContext* ctxt, AnimatedTexture* textures, f32 flashingAlpha, u32 step,
                                     u32 flags) {
-    static scene_proc_draw_func gSceneProcDrawFuncs[] = {
+    static AnimatedTextureDrawFunc gSceneProcDrawFuncs[] = {
         SceneProc_DrawType0Texture, SceneProc_DrawType1Texture, SceneProc_DrawType2Texture,
         SceneProc_DrawType3Texture, SceneProc_DrawType4Texture, SceneProc_DrawType5Texture,
     };
@@ -378,7 +372,7 @@ void SceneProc_DrawSceneConfig4(GlobalContext* ctxt) {
 void SceneProc_SceneDrawConfigDoNothing(GlobalContext* ctxt) {
 }
 
-Gfx D_801C3BF0[] = {
+static Gfx D_801C3BF0[] = {
     gsSPEndDisplayList(),
     //! @bug These instructions will never get executed
     gsSPEndDisplayList(),
@@ -493,105 +487,89 @@ void SceneProc_SceneDrawConfigSakonsHideout(GlobalContext* ctxt) {
 }
 
 void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx) {
-    static Gfx D_801C3C88[] = {
+    static Gfx greatBayTempleColorSetDL[] = {
         gsDPSetPrimColor(0, 255, 255, 255, 255, 255),
         gsSPEndDisplayList(),
     };
+    s32 lodFrac;
     s32 i;
-    Gfx* dlHead;
-    u32 pad1;
-    u32 pad2;
-    GraphicsContext* gfxCtx;
-    u32 pad3;
-    u32 pad4;
-    u32 pad5;
-    u32 pad6;
-    Gfx* dl;
+    Gfx* dListHead;
+    Gfx* dList;
 
-    if (Flags_GetSwitch(globalCtx,0x33) &&
-        Flags_GetSwitch(globalCtx,0x34) &&
-        Flags_GetSwitch(globalCtx,0x35) &&
-        Flags_GetSwitch(globalCtx,0x36)) {
+    if (Flags_GetSwitch(globalCtx, 0x33) && Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35) &&
+        Flags_GetSwitch(globalCtx, 0x36)) {
         func_800C3C00(&globalCtx->colCtx, 1);
     } else {
         func_800C3C14(&globalCtx->colCtx, 1);
     }
 
-    {
-        dl = (Gfx*)globalCtx->state.gfxCtx->polyOpa.d - 18;
-        //dl = _g;
-        globalCtx->state.gfxCtx->polyOpa.d = dl;
-    }
+    dList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 18);
 
     SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
 
-    gfxCtx = globalCtx->state.gfxCtx;
-    dlHead = dl;
-    for (i = 0; i < 9; i++, dlHead += 2) {
-        u32 lodFrac = 0;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        bcopy(D_801C3C88, dlHead, sizeof(Gfx[2]));
+    for (dListHead = dList, i = 0; i < 9; i++, dListHead += 2) {
+        lodFrac = 0;
 
-        switch(i) {
-        case 0:
-            if (Flags_GetSwitch(globalCtx,0x33) &&
-                Flags_GetSwitch(globalCtx,0x34) &&
-                Flags_GetSwitch(globalCtx,0x35) &&
-                Flags_GetSwitch(globalCtx,0x36)) {
-                lodFrac = 0xFF;
-            }
-            break;
-        case 1:
-            if (Flags_GetSwitch(globalCtx,0x37)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 2:
-            if (Flags_GetSwitch(globalCtx,0x37) &&
-                Flags_GetSwitch(globalCtx,0x38)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 3:
-            if (Flags_GetSwitch(globalCtx,0x37) &&
-                Flags_GetSwitch(globalCtx,0x38) &&
-                Flags_GetSwitch(globalCtx,0x39)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 4:
-            if (!Flags_GetSwitch(globalCtx,0x33)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 5:
-            if (Flags_GetSwitch(globalCtx,0x34)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 6:
-            if (Flags_GetSwitch(globalCtx,0x34) &&
-                Flags_GetSwitch(globalCtx,0x35)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 7:
-            if (Flags_GetSwitch(globalCtx,0x34) &&
-                Flags_GetSwitch(globalCtx,0x35) &&
-                Flags_GetSwitch(globalCtx,0x36)) {
-                lodFrac = 0x44;
-            }
-            break;
-        case 8:
-            if (Flags_GetSwitch(globalCtx,0x3A)) {
-                lodFrac = 0x44;
-            }
-            break;
+        bcopy(greatBayTempleColorSetDL, dListHead, sizeof(greatBayTempleColorSetDL));
+
+        switch (i) {
+            case 0:
+                if (Flags_GetSwitch(globalCtx, 0x33) && Flags_GetSwitch(globalCtx, 0x34) &&
+                    Flags_GetSwitch(globalCtx, 0x35) && Flags_GetSwitch(globalCtx, 0x36)) {
+                    lodFrac = 0xFF;
+                }
+                break;
+            case 1:
+                if (Flags_GetSwitch(globalCtx, 0x37)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 2:
+                if (Flags_GetSwitch(globalCtx, 0x37) && Flags_GetSwitch(globalCtx, 0x38)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 3:
+                if (Flags_GetSwitch(globalCtx, 0x37) && Flags_GetSwitch(globalCtx, 0x38) &&
+                    Flags_GetSwitch(globalCtx, 0x39)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 4:
+                if (!(Flags_GetSwitch(globalCtx, 0x33))) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 5:
+                if (Flags_GetSwitch(globalCtx, 0x34)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 6:
+                if (Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 7:
+                if (Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35) &&
+                    Flags_GetSwitch(globalCtx, 0x36)) {
+                    lodFrac = 0x44;
+                }
+                break;
+            case 8:
+                if (Flags_GetSwitch(globalCtx, 0x3A)) {
+                    lodFrac = 0x44;
+                }
+                break;
         }
 
-        gDPSetPrimColor(dlHead, 0, lodFrac, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPSetPrimColor(dListHead, 0, lodFrac, 255, 255, 255, 255);
     }
 
-    gSPSegment(gfxCtx->polyOpa.p++, 6, dl);
-    gSPSegment(gfxCtx->polyXlu.p++, 6, dl);
+    gSPSegment(POLY_OPA_DISP++, 0x06, dList);
+    gSPSegment(POLY_XLU_DISP++, 0x06, dList);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
