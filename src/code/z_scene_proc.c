@@ -24,9 +24,9 @@ void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
         SceneProc_SceneDrawConfigDefault,
         SceneProc_SceneDrawConfigMatAnim,
         SceneProc_SceneDrawConfigDoNothing,
-        SceneProc_SceneDrawConfigGrottoUnused, // unused
-        SceneProc_DrawSceneConfig4,            // unused
-        SceneProc_SceneDrawConfig5,            // unused
+        SceneProc_SceneDrawConfig3, // unused, leftover from OoT
+        SceneProc_DrawSceneConfig4, // unused, leftover from OoT
+        SceneProc_SceneDrawConfig5, // unused
         SceneProc_SceneDrawConfigGreatBayTemple,
         SceneProc_SceneDrawConfigMatAnimManualStep,
     };
@@ -59,7 +59,7 @@ Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollA
  * Animated Material Type 0:
  * Scrolls a single layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, u32 segment, MaterialTexScrollAnimParams* params) {
+void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, s32 segment, MaterialTexScrollAnimParams* params) {
     Gfx* texScrollDList = SceneProc_SingleLayerTexScroll(globalCtx, params);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -89,7 +89,7 @@ Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnim
  * Animated Material Type 1:
  * Scrolls a two layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, MaterialTexScrollAnimParams* params) {
+void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, s32 segment, MaterialTexScrollAnimParams* params) {
     Gfx* texScrollDList = SceneProc_TwoLayerTexScroll(globalCtx, params);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -108,7 +108,7 @@ void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, Ma
 /**
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
-void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
+void SceneProc_SetColor(GlobalContext* globalCtx, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
     Gfx* colorDList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -134,7 +134,7 @@ void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* pri
  * Animated Material Type 2:
  * Color key frame animation without linear interpolation.
  */
-void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, u32 segment, void* params) {
+void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, s32 segment, void* params) {
     MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
     F3DPrimColor* primColor;
     F3DEnvColor* envColor;
@@ -162,7 +162,7 @@ s32 SceneProc_Lerp(s32 min, s32 max, f32 norm) {
  * Animated Material Type 3:
  * Color key frame animation with linear interpolation.
  */
-void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void* params) {
+void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, s32 segment, void* params) {
     MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
     F3DPrimColor* primColorMax;
     F3DEnvColor* envColorMax;
@@ -274,14 +274,103 @@ u8 SceneProc_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp) {
     return CLAMP(intp, 0, 255);
 }
 
-//! @TODO
+// #if 1
+#ifdef NON_MATCHING
+// Just regalloc
+/**
+ * Animated Material Type 4:
+ * Color key frame animation with non-linear interpolation.
+ */
+// SceneProc_DrawMatAnimColorNonLinearInterp()
+void SceneProc_DrawType4Texture(GlobalContext* globalCtx, s32 segment, void* params) {
+    MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
+    F3DPrimColor* primColorCur = Lib_SegmentedToVirtual(colorAnimParams->primColors);
+    F3DEnvColor* envColorCur = Lib_SegmentedToVirtual(colorAnimParams->envColors);
+    u16* keyFrames = Lib_SegmentedToVirtual(colorAnimParams->keyFrames);
+    f32 curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
+    F3DPrimColor primColorResult;
+    F3DEnvColor envColorResult;
+    f32 x[50];
+    f32 fxPrimR[50];
+    f32 fxPrimG[50];
+    f32 fxPrimB[50];
+    f32 fxPrimA[50];
+    f32 fxPrimLodFrac[50];
+    f32 fxEnvR[50];
+    f32 fxEnvG[50];
+    f32 fxEnvB[50];
+    f32 fxEnvA[50];
+    f32* xPtr = x;
+    f32* fxPrimRPtr = fxPrimR;
+    f32* fxPrimGPtr = fxPrimG;
+    f32* fxPrimBPtr = fxPrimB;
+    f32* fxPrimAPtr = fxPrimA;
+    f32* fxPrimLodFracPtr = fxPrimLodFrac;
+    f32* fxEnvRPtr = fxEnvR;
+    f32* fxEnvGPtr = fxEnvG;
+    f32* fxEnvBPtr = fxEnvB;
+    f32* fxEnvAPtr = fxEnvA;
+    s32 i;
+
+    for (i = 0; i < colorAnimParams->keyFrameCount; i++) {
+        *fxEnvAPtr = *keyFrames;
+        *fxEnvRPtr = primColorCur->r;
+        *fxEnvGPtr = primColorCur->g;
+        *fxEnvBPtr = primColorCur->b;
+        *fxPrimAPtr = primColorCur->a;
+        *fxPrimLodFracPtr = primColorCur->lodFrac;
+
+        primColorCur++;
+        fxEnvRPtr++;
+        fxEnvGPtr++;
+        fxEnvBPtr++;
+        fxPrimAPtr++;
+        fxPrimLodFracPtr++;
+
+        if (envColorCur != NULL) {
+            *fxPrimRPtr = envColorCur->r;
+            *fxPrimGPtr = envColorCur->g;
+            *fxPrimBPtr = envColorCur->b;
+            *xPtr = envColorCur->a;
+
+            envColorCur++;
+            fxPrimRPtr++;
+            fxPrimGPtr++;
+            fxPrimBPtr++;
+            xPtr++;
+        }
+
+        keyFrames++;
+        fxEnvAPtr++;
+    }
+
+    primColorResult.r = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimR, curFrame);
+    primColorResult.g = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimG, curFrame);
+    primColorResult.b = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimB, curFrame);
+    primColorResult.a = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimA, curFrame);
+    primColorResult.lodFrac = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimLodFrac, curFrame);
+
+    if (colorAnimParams->envColors != NULL) {
+        envColorCur = Lib_SegmentedToVirtual(colorAnimParams->envColors);
+        envColorResult.r = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxEnvR, curFrame);
+        envColorResult.g = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxEnvG, curFrame);
+        envColorResult.b = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxEnvB, curFrame);
+        envColorResult.a = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxEnvA, curFrame);
+    } else {
+        envColorCur = NULL;
+    }
+
+    SceneProc_SetColor(globalCtx, segment, &primColorResult, (envColorCur != NULL) ? &envColorResult : NULL);
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawType4Texture.asm")
+#endif
 
 /**
  * Animated Material Type 5:
  * Cycles between a list of textures (imagine like a GIF)
  */
-void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* params) {
+void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, s32 segment, void* params) {
     MaterialTexCycleAnimParams* texAnimParams = params;
     void** texList = (void**)Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = (u8*)Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
@@ -427,7 +516,7 @@ void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
  * Scene Draw Config 3:
  * This config is unused, although it is identical to the grotto scene config from Ocarina of Time.
  */
-void SceneProc_SceneDrawConfigGrottoUnused(GlobalContext* globalCtx) {
+void SceneProc_SceneDrawConfig3(GlobalContext* globalCtx) {
     u32 frames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
