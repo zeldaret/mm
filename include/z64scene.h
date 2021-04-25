@@ -355,14 +355,14 @@ typedef struct {
     /* 0x4 */ SceneDrawPrimColor* primColors;
     /* 0x8 */ SceneDrawEnvColor* envColors;
     /* 0xC */ u16* keyFrames;
-} TextureColorAnimParams; // size = 0x10
+} MaterialColorAnimParams; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s8 xStep;
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
-} TextureScrollAnimParams; // size = 0x4
+} TexScrollParams; // size = 0x4
 
 typedef struct {
     /* 0x000 */ void* objectVramStart;

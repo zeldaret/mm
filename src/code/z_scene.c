@@ -521,7 +521,7 @@ void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
 
 // Scene Command 0x1A: Texture Animations
 void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->sceneTextureAnimations = (AnimatedMaterial*)Lib_SegmentedToVirtual(entry->textureAnimations.segment);
+    ctxt->sceneTextureAnimations = (MaterialAnimation*)Lib_SegmentedToVirtual(entry->textureAnimations.segment);
 }
 
 void func_801306A4(GlobalContext *ctxt) {
