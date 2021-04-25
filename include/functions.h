@@ -2485,7 +2485,7 @@ void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* pri
 void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, u32 segment, void* params);
 s32 SceneProc_Lerp(s32 min, s32 max, f32 norm);
 void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void* params);
-f32 SceneProc_Interpolate(s32 numKeyFrames, f32* keyFrames, f32* values, f32 frame);
+f32 SceneProc_Interpolate(s32 n, f32 x[], f32 fx[], f32 xp);
 u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame);
 void SceneProc_DrawType4Texture(GlobalContext* ctxt, u32 segment, MaterialColorAnimParams* params);
 void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* params);

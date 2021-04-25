@@ -220,55 +220,46 @@ void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void*
     SceneProc_SetColor(globalCtx, segment, &primColorResult, (envColorMax != NULL) ? &envColorResult : NULL);
 }
 
-//! @TODO
-#ifdef NON_EQUIVALENT
-// still needs a lot of work
-f32 SceneProc_Interpolate(s32 n, f32* keyFrames, f32* values, f32 frame) {
-    f32 buffer[50];
-    f32 ret;
-    s32 pad1;
-    f32 factor;
-    f32* keyFramesPtr1;
-    s32 pad2;
-    f32* bufferPtr;
-    f32* keyFramesPtr2;
+f32 SceneProc_Interpolate(s32 n, f32 x[], f32 fx[], f32 xp) {
+    f32 weights[50];
+    f32 xVal;
+    f32 m;
+    f32 intp;
+    f32* xPtr1;
+    f32* fxPtr;
+    f32* weightsPtr;
+    f32* xPtr2;
     s32 i;
     s32 j;
 
-    for (bufferPtr = buffer, keyFramesPtr1 = keyFrames, i = 0; i < n; bufferPtr++, keyFramesPtr1++, i++) {
-        ret = *keyFramesPtr1;
-        factor = 1.0f;
-
-        for (j = 0, keyFramesPtr2 = keyFrames; j < n; j++, keyFramesPtr2++) {
+    for (i = 0, weightsPtr = weights, xPtr1 = x, fxPtr = fx, weightsPtr = weightsPtr; i < n; i++) {
+        for (xVal = *xPtr1, m = 1.0f, j = 0, xPtr2 = x; j < n; j++) {
             if (j != i) {
-                factor *= (ret - *keyFramesPtr2);
+                m *= xVal - (*xPtr2);
             }
+            xPtr2++;
         }
 
-        ret = *values;
-        values++;
-        *bufferPtr = ret / factor;
+        xPtr1++;
+        *weightsPtr = (*fxPtr) / m;
+        fxPtr++;
+        weightsPtr++;
     }
 
-    ret = 0.0f;
-
-    for (keyFramesPtr1 = buffer, i = 0; i < n; keyFramesPtr1++, i++) {
-        factor = 1.0f;
-
-        for (j = 0, keyFramesPtr2 = keyFrames; j < n; j++, keyFramesPtr2++) {
+    for (intp = 0.0f, i = 0, weightsPtr = weights; i < n; i++) {
+        for (m = 1.0f, j = 0, xPtr2 = x; j < n; j++) {
             if (j != i) {
-                factor *= (frame - *keyFramesPtr2);
+                m *= xp - (*xPtr2);
             }
+            xPtr2++;
         }
 
-        ret += *keyFramesPtr1 * factor;
+        intp += (*weightsPtr) * m;
+        weightsPtr++;
     }
 
-    return ret;
+    return intp;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_Interpolate.asm")
-#endif
 
 //! @TODO
 u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame) {
