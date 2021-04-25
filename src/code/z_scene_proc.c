@@ -108,8 +108,7 @@ void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, Ma
 /**
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
-void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* primColorResult,
-                        F3DEnvColor* envColor) {
+void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
     Gfx* colorDList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
