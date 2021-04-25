@@ -463,8 +463,8 @@ void SceneProc_SceneDrawConfigGrottoUnused(GlobalContext* globalCtx) {
 
 /**
  * Scene Draw Config 4:
- * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures, possibly a carryover from
- * Ocarina of Time.
+ * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures (likely two water textures).
+ * It is identical to the Castle Courtyard and Sacred Forest Meadow scene config from Ocarina of Time.
  */
 void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx) {
     u32 frames;
@@ -473,9 +473,9 @@ void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx) {
 
     frames = globalCtx->unk18840;
 
-    gSPSegment(POLY_XLU_DISP++, 8,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x7F - (frames & 0x7F), (frames * 1) & 0x7F, 32, 32, 1,
-                                (frames & 0x7F), (frames * 1) & 0x7F, 32, 32));
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1,
+                                frames % 128, (frames * 1) % 128, 32, 32));
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
