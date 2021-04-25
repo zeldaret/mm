@@ -2,7 +2,7 @@
 #include <global.h>
 
 // Default displaylist that sets a valid displaylist into all of the segments.
-static Gfx sSceneDrawDefaultDl[] = {
+static Gfx sSceneDrawDefaultDL[] = {
     gsSPSegment(0x08, gEmptyDL),
     gsSPSegment(0x09, gEmptyDL),
     gsSPSegment(0x0A, gEmptyDL),
@@ -36,13 +36,13 @@ void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
 
 /**
  * Scene Draw Config 0:
- * Default scene draw config function. This just executes `sSceneDrawDefaultDl`.
+ * Default scene draw config function. This just executes `sSceneDrawDefaultDL`.
  */
 void SceneProc_SceneDrawConfigDefault(GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, sSceneDrawDefaultDl);
-    gSPDisplayList(POLY_XLU_DISP++, sSceneDrawDefaultDl);
+    gSPDisplayList(POLY_OPA_DISP++, sSceneDrawDefaultDL);
+    gSPDisplayList(POLY_XLU_DISP++, sSceneDrawDefaultDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -304,8 +304,8 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* 
  * This is the main function that handles the animated material system.
  * There are six different animated material types, which should be set in the provided `MaterialAnimation`.
  */
-void SceneProc_DrawMaterialAnimation(GlobalContext* globalCtx, MaterialAnimation* animatedMat, f32 flashingAlpha,
-                                     u32 step, u32 flags) {
+void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step,
+                                    u32 flags) {
     static MaterialAnimationDrawFunc gSceneProcDrawFuncs[] = {
         SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll, SceneProc_DrawMatAnimColor,
         SceneProc_DrawMatAnimColorLerp, SceneProc_DrawType4Texture,        SceneProc_DrawMatAnimTexCycle,
@@ -313,84 +313,105 @@ void SceneProc_DrawMaterialAnimation(GlobalContext* globalCtx, MaterialAnimation
     s32 segmentAbs;
     s32 segment;
 
-    gSceneProcFlashingAlpha = flashingAlpha;
+    gSceneProcFlashingAlpha = alphaRatio;
     gSceneProcStep = step;
     gSceneProcFlags = flags;
 
-    if ((animatedMat != NULL) && (animatedMat->segment != 0)) {
+    if ((matAnim != NULL) && (matAnim->segment != 0)) {
         do {
-            segment = animatedMat->segment;
+            segment = matAnim->segment;
             segmentAbs = ((segment < 0) ? -segment : segment) + 7;
-            gSceneProcDrawFuncs[animatedMat->type](globalCtx, segmentAbs,
-                                                   (void*)Lib_SegmentedToVirtual(animatedMat->params));
-            animatedMat++;
+            gSceneProcDrawFuncs[matAnim->type](globalCtx, segmentAbs, (void*)Lib_SegmentedToVirtual(matAnim->params));
+            matAnim++;
         } while (segment > -1);
     }
 }
 
-//! @TODO
-void SceneProc_DrawAllSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 3);
+/**
+ * Draws a material animation to both OPA and XLU buffers.
+ */
+void SceneProc_DrawMaterialAnim(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 3);
 }
 
-//! @TODO
-void SceneProc_DrawOpaqueSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 1);
+/**
+ * Draws a material animation to only the OPA buffer.
+ */
+void SceneProc_DrawMaterialAnimOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 1);
 }
 
-//! @TODO
-void SceneProc_DrawTranslucentSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 2);
+/**
+ * Draws a material animation to only the XLU buffer.
+ */
+void SceneProc_DrawMaterialAnimXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 2);
 }
 
-//! @TODO
-void SceneProc_DrawAllSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 3);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) both OPA and XLU buffers.
+ */
+void SceneProc_DrawMaterialAnimAlpha(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 3);
 }
 
-//! @TODO
-void SceneProc_DrawOpaqueSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
-                                                        f32 alpha) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 1);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) to only the OPA buffer.
+ */
+void SceneProc_DrawMaterialAnimAlphaOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 1);
 }
 
-//! @TODO
-void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
-                                                             f32 alpha) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 2);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) to only the XLU buffer.
+ */
+void SceneProc_DrawMaterialAnimAlphaXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 2);
 }
 
-//! @TODO
-void SceneProc_DrawAllAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 3);
+/**
+ * Draws a material animation with a step to both the OPA and XLU buffers.
+ */
+void SceneProc_DrawMaterialAnimStep(GlobalContext* globalCtx, MaterialAnimation* matAnim, u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, step, 3);
 }
 
-//! @TODO
-void SceneProc_DrawOpaqueAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 1);
+/**
+ * Draws a material animation with a step to only the OPA buffer.
+ */
+void SceneProc_DrawMaterialAnimStepOpa(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, textures, 1, step, 1);
 }
 
-//! @TODO
-void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 2);
+/**
+ * Draws a material animation with a step to only the XLU buffer.
+ */
+void SceneProc_DrawMaterialAnimStepXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim, u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, step, 2);
 }
 
-//! @TODO
-void SceneProc_DrawAllAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha,
-                                                u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 3);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) and a step to both the OPA and XLU buffers.
+ */
+void SceneProc_DrawMaterialAnimAlphaStep(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio,
+                                         u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, step, 3);
 }
 
-//! @TODO
-void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha,
-                                                   u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 1);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) and a step to only the OPA buffer.
+ */
+void SceneProc_DrawMaterialAnimAlphaStepOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio,
+                                            u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, step, 1);
 }
 
-//! @TODO
-void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
-                                                        f32 alpha, u32 step) {
-    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 2);
+/**
+ * Draws a material animation with an alpha ratio (0.0 - 1.0) and a step to only the XLU buffer.
+ */
+void SceneProc_DrawMaterialAnimAlphaStepXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio,
+                                            u32 step) {
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, step, 2);
 }
 
 /**
@@ -398,7 +419,7 @@ void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* globalCtx
  * Allows the usage of the animated material system in scenes.
  */
 void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
+    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
 }
 
 //! @TODO
@@ -409,7 +430,6 @@ void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
 void SceneProc_DrawSceneConfig3(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawSceneConfig3.asm")
 
-//! @TODO use DISP macros for this!
 /**
  * Scene Draw Config 4:
  * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures, possibly a carryover from
@@ -417,113 +437,115 @@ void SceneProc_DrawSceneConfig3(GlobalContext* globalCtx);
  */
 void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx) {
     u32 frames;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    u32 frames2;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     frames = globalCtx->unk18840;
-    frames2 = frames * 1;
 
-    gSPSegment(gfxCtx->polyXlu.p++, 8,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x7F - (frames & 0x7F), frames2 & 0x7F, 32, 32, 1,
-                                (frames & 0x7F), frames2 & 0x7F, 32, 32));
+    gSPSegment(POLY_XLU_DISP++, 8,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x7F - (frames & 0x7F), (frames * 1) & 0x7F, 32, 32, 1,
+                                (frames & 0x7F), (frames * 1) & 0x7F, 32, 32));
 
-    gDPPipeSync(gfxCtx->polyOpa.p++);
-    gDPSetEnvColor(gfxCtx->polyOpa.p++, 128, 128, 128, 128);
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
 
-    gDPPipeSync(gfxCtx->polyXlu.p++);
-    gDPSetEnvColor(gfxCtx->polyXlu.p++, 128, 128, 128, 128);
+    gDPPipeSync(POLY_XLU_DISP++);
+    gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 128);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 /**
  * Scene Draw Config 2:
- * Has no effect, and is only used in SPOT00 (cutscene map).
+ * Has no effect, and is only used in SPOT00 (cutscene scene).
  */
 void SceneProc_SceneDrawConfigDoNothing(GlobalContext* globalCtx) {
 }
 
-static Gfx D_801C3BF0[] = {
-    gsSPEndDisplayList(),
-    //! @bug These instructions will never get executed
-    gsSPEndDisplayList(),
-    gsSPEndDisplayList(),
-    gsSPEndDisplayList(),
-};
-
-static Gfx D_801C3C10[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
-                      G_RM_AA_ZB_XLU_SURF2),
-    gsSPEndDisplayList(),
-    //! @bug These instructions will never get executed
-    gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
-                      G_RM_AA_ZB_XLU_SURF2),
-    gsSPEndDisplayList(),
-};
-
-static Gfx D_801C3C30[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsSPEndDisplayList(),
-    //! @bug These instructions will never get executed
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsSPEndDisplayList(),
-};
-
-//! @TODO
-void func_80131DF0(GlobalContext* globalCtx, u32 param_2, u32 flags) {
-    static Gfx* D_801C3C50[] = {
-        D_801C3BF0,
-        D_801C3C10,
-        D_801C3C30,
+/**
+ * This function sets a render mode in the segment ID provided.
+ */
+void SceneProc_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) {
+    static Gfx renderModeSetNoneDL[] = {
+        gsSPEndDisplayList(),
+        // These instructions will never get executed
+        gsSPEndDisplayList(),
+        gsSPEndDisplayList(),
+        gsSPEndDisplayList(),
     };
-    Gfx* dl = D_801C3C50[param_2];
+    static Gfx renderModeSetXluSingleCycleDL[] = {
+        gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
+                          G_RM_AA_ZB_XLU_SURF2),
+        gsSPEndDisplayList(),
+        // These instructions will never get executed
+        gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+                          G_RM_AA_ZB_XLU_SURF2),
+        gsSPEndDisplayList(),
+    };
+    static Gfx renderModeSetXluTwoCycleDL[] = {
+        gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
+                          AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPEndDisplayList(),
+        // These instructions will never get executed
+        gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+                          AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPEndDisplayList(),
+    };
+    static Gfx* dLists[] = {
+        renderModeSetNoneDL,
+        renderModeSetXluSingleCycleDL,
+        renderModeSetXluTwoCycleDL,
+    };
+    Gfx* dList = dLists[index];
 
-    {
-        GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-        if (flags & 1) {
-            gSPSegment(gfxCtx->polyOpa.p++, 12, dl);
-        }
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (flags & 2) {
-            gSPSegment(gfxCtx->polyXlu.p++, 12, dl);
-        }
+    if (flags & 1) {
+        gSPSegment(POLY_OPA_DISP++, 0x0C, dList);
     }
+
+    if (flags & 2) {
+        gSPSegment(POLY_XLU_DISP++, 0x0C, dList);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-static Gfx D_801C3C60[] = {
-    gsSPSetGeometryMode(G_CULL_BACK),
-    gsSPEndDisplayList(),
-};
-
-static Gfx D_801C3C70[] = {
-    gsSPSetGeometryMode(G_CULL_FRONT),
-    gsSPEndDisplayList(),
-};
-
-//! @TODO
-void func_80131E58(GlobalContext* globalCtx, u32 param_2, u32 flags) {
-    static Gfx* D_801C3C80[] = {
-        D_801C3C60,
-        D_801C3C70,
+/**
+ * Although this function is unused, it will set either front culling or back culling in the segment ID provided.
+ */
+void SceneProc_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
+    static Gfx setBackCullDL[] = {
+        gsSPSetGeometryMode(G_CULL_BACK),
+        gsSPEndDisplayList(),
     };
-    Gfx* dl = D_801C3C80[param_2];
+    static Gfx setFrontCullDL[] = {
+        gsSPSetGeometryMode(G_CULL_FRONT),
+        gsSPEndDisplayList(),
+    };
+    static Gfx* dLists[] = {
+        setBackCullDL,
+        setFrontCullDL,
+    };
+    Gfx* dList = dLists[index];
 
-    {
-        GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-        if (flags & 1) {
-            gSPSegment(gfxCtx->polyOpa.p++, 12, dl);
-        }
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (flags & 2) {
-            gSPSegment(gfxCtx->polyXlu.p++, 12, dl);
-        }
+    if (flags & 1) {
+        gSPSegment(POLY_OPA_DISP++, 0x0C, dList);
     }
+
+    if (flags & 2) {
+        gSPSegment(POLY_XLU_DISP++, 0x0C, dList);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 /**
@@ -548,8 +570,8 @@ void SceneProc_SceneDrawConfig5(GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         globalCtx->roomContext.unk78 = 1;
-        SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
-        func_80131DF0(globalCtx, dListIndex, 3);
+        SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
+        SceneProc_SetRenderModeXlu(globalCtx, dListIndex, 3);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, alpha);
 
@@ -563,7 +585,7 @@ void SceneProc_SceneDrawConfig5(GlobalContext* globalCtx) {
  * rather than always animating like `SceneProc_SceneDrawConfigMatAnim`.
  */
 void SceneProc_SceneDrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
-    SceneProc_DrawAllAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations, globalCtx->roomContext.unk7A[0]);
+    SceneProc_DrawMaterialAnimStep(globalCtx, globalCtx->sceneTextureAnimations, globalCtx->roomContext.unk7A[0]);
 }
 
 /**
@@ -591,7 +613,7 @@ void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx) {
 
     dList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 18);
 
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
+    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
