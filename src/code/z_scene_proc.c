@@ -39,25 +39,27 @@ void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
  * Default scene draw config function. This just executes `sSceneDrawDefaultDl`.
  */
 void SceneProc_SceneDrawConfigDefault(GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gSPDisplayList(gfxCtx->polyOpa.p++, sSceneDrawDefaultDl);
-    gSPDisplayList(gfxCtx->polyXlu.p++, sSceneDrawDefaultDl);
+    gSPDisplayList(POLY_OPA_DISP++, sSceneDrawDefaultDl);
+    gSPDisplayList(POLY_XLU_DISP++, sSceneDrawDefaultDl);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 /**
  * Returns a pointer to a single layer texture scroll displaylist.
  */
-Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, TexScrollParams* params) {
+Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnimParams* params) {
     return Gfx_TexScroll(globalCtx->state.gfxCtx, params->xStep * gSceneProcStep, -(params->yStep * gSceneProcStep),
                          params->width, params->height);
 }
 
 /**
  * Animated Material Type 0:
- * Scrolls a single layer texture using the provided `TexScrollParams`.
+ * Scrolls a single layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, u32 segment, TexScrollParams* params) {
+void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, u32 segment, MaterialTexScrollAnimParams* params) {
     Gfx* texScrollDList = SceneProc_SingleLayerTexScroll(globalCtx, params);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -76,7 +78,7 @@ void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, u32 segment, TexSc
 /**
  * Returns a pointer to a two layer texture scroll displaylist.
  */
-Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, TexScrollParams* params) {
+Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnimParams* params) {
     return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params[0].xStep * gSceneProcStep,
                             -(params[0].yStep * gSceneProcStep), params[0].width, params[0].height, 1,
                             params[1].xStep * gSceneProcStep, -(params[1].yStep * gSceneProcStep), params[1].width,
@@ -85,9 +87,9 @@ Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, TexScrollParams* para
 
 /**
  * Animated Material Type 1:
- * Scrolls a two layer texture using the provided `TexScrollParams`.
+ * Scrolls a two layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, TexScrollParams* params) {
+void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, MaterialTexScrollAnimParams* params) {
     Gfx* texScrollDList = SceneProc_TwoLayerTexScroll(globalCtx, params);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -106,8 +108,8 @@ void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, u32 segment, Te
 /**
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
-void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, SceneDrawPrimColor* primColorResult,
-                        SceneDrawEnvColor* envColor) {
+void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, F3DPrimColor* primColorResult,
+                        F3DEnvColor* envColor) {
     Gfx* colorDList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -135,16 +137,16 @@ void SceneProc_SetColor(GlobalContext* globalCtx, u32 segment, SceneDrawPrimColo
  */
 void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, u32 segment, void* params) {
     MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
-    SceneDrawPrimColor* primColor;
-    SceneDrawPrimColor* envColor;
+    F3DPrimColor* primColor;
+    F3DEnvColor* envColor;
     s32 curFrame;
 
-    primColor = (SceneDrawPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
+    primColor = (F3DPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
 
     curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
     primColor += curFrame;
     envColor = (colorAnimParams->envColors != NULL)
-                   ? (SceneDrawEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors) + curFrame
+                   ? (F3DEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors) + curFrame
                    : NULL;
 
     SceneProc_SetColor(globalCtx, segment, primColor, envColor);
@@ -163,21 +165,21 @@ s32 SceneProc_Lerp(s32 min, s32 max, f32 norm) {
  */
 void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void* params) {
     MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
-    SceneDrawPrimColor* primColorMax;
-    SceneDrawEnvColor* envColorMax;
+    F3DPrimColor* primColorMax;
+    F3DEnvColor* envColorMax;
     u16* keyFrames;
     s32 curFrame;
     s32 endFrame;
     s32 relativeFrame; // relative to the start frame
     s32 startFrame;
     f32 norm;
-    SceneDrawPrimColor* primColorMin;
-    SceneDrawPrimColor primColorResult;
-    SceneDrawEnvColor* envColorMin;
-    SceneDrawEnvColor envColorResult;
+    F3DPrimColor* primColorMin;
+    F3DPrimColor primColorResult;
+    F3DEnvColor* envColorMin;
+    F3DEnvColor envColorResult;
     s32 i;
 
-    primColorMax = (SceneDrawPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
+    primColorMax = (F3DPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
     keyFrames = (u16*)Lib_SegmentedToVirtual(colorAnimParams->keyFrames);
     curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
     keyFrames++;
@@ -205,7 +207,7 @@ void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void*
     primColorResult.lodFrac = SceneProc_Lerp(primColorMin->lodFrac, primColorMax->lodFrac, norm);
 
     if (colorAnimParams->envColors) {
-        envColorMax = (SceneDrawEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors);
+        envColorMax = (F3DEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors);
         envColorMax += i;
         envColorMin = envColorMax - 1;
         envColorResult.r = SceneProc_Lerp(envColorMin->r, envColorMax->r, norm);
@@ -279,27 +281,28 @@ u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f
 //! @TODO
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawType4Texture.asm")
 
-//! @TODO
-void SceneProc_DrawType5Texture(GlobalContext* ctxt, u32 segment, CyclingTextureParams* params) {
-    u8* offsets;
-    Gfx** dls;
-    Gfx* dl;
-    GraphicsContext* gfxCtx;
-    s32 step;
+/**
+ * Animated Material Type 5:
+ * Cycles between a list of textures (imagine like a GIF)
+ */
+void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* params) {
+    MaterialTexCycleAnimParams* texAnimParams = params;
+    void** texList = (void**)Lib_SegmentedToVirtual(texAnimParams->textureList);
+    u8* texId = (u8*)Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
+    s32 curFrame = gSceneProcStep % texAnimParams->keyFrameLength;
+    void* tex = (Gfx*)Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
-    dls = (Gfx**)Lib_SegmentedToVirtual(params->textureDls);
-    offsets = (u8*)Lib_SegmentedToVirtual(params->textureDlOffsets);
-    step = gSceneProcStep % params->cycleLength;
-    dl = (Gfx*)Lib_SegmentedToVirtual(dls[offsets[step]]);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gfxCtx = ctxt->state.gfxCtx;
     if (gSceneProcFlags & 1) {
-        gSPSegment(gfxCtx->polyOpa.p++, segment, dl);
+        gSPSegment(POLY_OPA_DISP++, segment, tex);
     }
 
     if (gSceneProcFlags & 2) {
-        gSPSegment(gfxCtx->polyXlu.p++, segment, dl);
+        gSPSegment(POLY_XLU_DISP++, segment, tex);
     }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 /**
@@ -310,7 +313,7 @@ void SceneProc_DrawMaterialAnimation(GlobalContext* ctxt, MaterialAnimation* ani
                                      u32 flags) {
     static MaterialAnimationDrawFunc gSceneProcDrawFuncs[] = {
         SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll, SceneProc_DrawMatAnimColor,
-        SceneProc_DrawMatAnimColorLerp, SceneProc_DrawType4Texture,        SceneProc_DrawType5Texture,
+        SceneProc_DrawMatAnimColorLerp, SceneProc_DrawType4Texture,        SceneProc_DrawMatAnimTexCycle,
     };
     s32 segmentAbs;
     s32 segment;

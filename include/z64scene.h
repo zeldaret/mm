@@ -340,20 +340,20 @@ typedef struct {
     /* 0x2 */ u8 b;
     /* 0x3 */ u8 a;
     /* 0x4 */ u8 lodFrac;
-} SceneDrawPrimColor; // size = 0x5
+} F3DPrimColor; // size = 0x5
 
 typedef struct {
     /* 0x0 */ u8 r;
     /* 0x1 */ u8 g;
     /* 0x2 */ u8 b;
     /* 0x3 */ u8 a;
-} SceneDrawEnvColor; // size = 0x4
+} F3DEnvColor; // size = 0x4
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
     /* 0x2 */ u16 keyFrameCount;
-    /* 0x4 */ SceneDrawPrimColor* primColors;
-    /* 0x8 */ SceneDrawEnvColor* envColors;
+    /* 0x4 */ F3DPrimColor* primColors;
+    /* 0x8 */ F3DEnvColor* envColors;
     /* 0xC */ u16* keyFrames;
 } MaterialColorAnimParams; // size = 0x10
 
@@ -362,7 +362,13 @@ typedef struct {
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
-} TexScrollParams; // size = 0x4
+} MaterialTexScrollAnimParams; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ u16 keyFrameLength;
+    /* 0x4 */ void** textureList;
+    /* 0x8 */ u8* textureIndexList;
+} MaterialTexCycleAnimParams; // size = 0xC
 
 typedef struct {
     /* 0x000 */ void* objectVramStart;

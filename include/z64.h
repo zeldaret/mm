@@ -152,12 +152,6 @@ typedef struct {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x4 */ Gfx** textureDls;
-    /* 0x8 */ u8* textureDlOffsets;
-} CyclingTextureParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -1328,7 +1322,7 @@ typedef struct {
 
 typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
 
-typedef void(*MaterialAnimationDrawFunc)(GlobalContext* globalCtx, u32 segment, TexScrollParams *params);
+typedef void(*MaterialAnimationDrawFunc)(GlobalContext* globalCtx, u32 segment, void *params);
 
 typedef struct Camera Camera;
 

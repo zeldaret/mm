@@ -2480,7 +2480,7 @@
     0x80130F58:("SceneProc_Interpolate",),
     0x8013115C:("SceneProc_InterpolateClamped",),
     0x801311B4:("SceneProc_DrawType4Texture",),
-    0x80131580:("SceneProc_DrawType5Texture",),
+    0x80131580:("SceneProc_DrawMatAnimTexCycle",),
     0x80131690:("SceneProc_DrawMaterialAnimation",),
     0x80131758:("SceneProc_DrawAllSceneAnimatedTextures",),
     0x8013178C:("SceneProc_DrawOpaqueSceneAnimatedTextures",),
