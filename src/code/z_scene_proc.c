@@ -419,7 +419,7 @@ void SceneProc_DrawMaterialAnimAlphaStepXlu(GlobalContext* globalCtx, MaterialAn
  * Allows the usage of the animated material system in scenes.
  */
 void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
-    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
+    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneMaterialAnims);
 }
 
 //! @TODO
@@ -463,7 +463,7 @@ void SceneProc_SceneDrawConfigDoNothing(GlobalContext* globalCtx) {
 }
 
 /**
- * This function sets a render mode in the segment ID provided.
+ * Stores a displaylist in the provided segment ID that sets a render mode from the index provided.
  */
 void SceneProc_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) {
     static Gfx renderModeSetNoneDL[] = {
@@ -518,7 +518,8 @@ void SceneProc_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags) 
 }
 
 /**
- * Although this function is unused, it will set either front culling or back culling in the segment ID provided.
+ * Although this function is unused, it will store a displaylist in the provided segment ID that sets the culling mode
+ * from the index provided.
  */
 void SceneProc_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
     static Gfx setBackCullDL[] = {
@@ -570,7 +571,7 @@ void SceneProc_SceneDrawConfig5(GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         globalCtx->roomContext.unk78 = 1;
-        SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
+        SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneMaterialAnims);
         SceneProc_SetRenderModeXlu(globalCtx, dListIndex, 3);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, alpha);
@@ -585,7 +586,7 @@ void SceneProc_SceneDrawConfig5(GlobalContext* globalCtx) {
  * rather than always animating like `SceneProc_SceneDrawConfigMatAnim`.
  */
 void SceneProc_SceneDrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
-    SceneProc_DrawMaterialAnimStep(globalCtx, globalCtx->sceneTextureAnimations, globalCtx->roomContext.unk7A[0]);
+    SceneProc_DrawMaterialAnimStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomContext.unk7A[0]);
 }
 
 /**
@@ -613,7 +614,7 @@ void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx) {
 
     dList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 18);
 
-    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneTextureAnimations);
+    SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneMaterialAnims);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
