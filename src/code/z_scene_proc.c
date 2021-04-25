@@ -152,7 +152,7 @@ void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, u32 segment, void* par
 }
 
 /**
- * Linear interpolation
+ * Linear Interpolation
  */
 s32 SceneProc_Lerp(s32 min, s32 max, f32 norm) {
     return (s32)((max - min) * norm) + min;
@@ -220,7 +220,10 @@ void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, u32 segment, void*
     SceneProc_SetColor(globalCtx, segment, &primColorResult, (envColorMax != NULL) ? &envColorResult : NULL);
 }
 
-f32 SceneProc_Interpolate(s32 n, f32 x[], f32 fx[], f32 xp) {
+/**
+ * Lagrange interpolation
+ */
+f32 SceneProc_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
     f32 weights[50];
     f32 xVal;
     f32 m;
@@ -261,11 +264,13 @@ f32 SceneProc_Interpolate(s32 n, f32 x[], f32 fx[], f32 xp) {
     return intp;
 }
 
-//! @TODO
-u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame) {
-    s32 ret = SceneProc_Interpolate(numKeyFrames, keyFrames, values, frame);
+/**
+ * Lagrange interpolation specifically for colors
+ */
+u8 SceneProc_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp) {
+    s32 intp = SceneProc_LagrangeInterp(n, x, fx, xp);
 
-    return (ret < 0) ? 0 : (ret > 255) ? 255 : ret;
+    return (intp < 0) ? 0 : (intp > 255) ? 255 : intp;
 }
 
 //! @TODO
@@ -299,8 +304,8 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* 
  * This is the main function that handles the animated material system.
  * There are six different animated material types, which should be set in the provided `MaterialAnimation`.
  */
-void SceneProc_DrawMaterialAnimation(GlobalContext* ctxt, MaterialAnimation* animatedMat, f32 flashingAlpha, u32 step,
-                                     u32 flags) {
+void SceneProc_DrawMaterialAnimation(GlobalContext* globalCtx, MaterialAnimation* animatedMat, f32 flashingAlpha,
+                                     u32 step, u32 flags) {
     static MaterialAnimationDrawFunc gSceneProcDrawFuncs[] = {
         SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll, SceneProc_DrawMatAnimColor,
         SceneProc_DrawMatAnimColorLerp, SceneProc_DrawType4Texture,        SceneProc_DrawMatAnimTexCycle,
@@ -316,7 +321,7 @@ void SceneProc_DrawMaterialAnimation(GlobalContext* ctxt, MaterialAnimation* ani
         do {
             segment = animatedMat->segment;
             segmentAbs = ((segment < 0) ? -segment : segment) + 7;
-            gSceneProcDrawFuncs[animatedMat->type](ctxt, segmentAbs,
+            gSceneProcDrawFuncs[animatedMat->type](globalCtx, segmentAbs,
                                                    (void*)Lib_SegmentedToVirtual(animatedMat->params));
             animatedMat++;
         } while (segment > -1);
@@ -324,74 +329,76 @@ void SceneProc_DrawMaterialAnimation(GlobalContext* ctxt, MaterialAnimation* ani
 }
 
 //! @TODO
-void SceneProc_DrawAllSceneAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, ctxt->unk18840, 3);
+void SceneProc_DrawAllSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 3);
 }
 
 //! @TODO
-void SceneProc_DrawOpaqueSceneAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, ctxt->unk18840, 1);
+void SceneProc_DrawOpaqueSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 1);
 }
 
 //! @TODO
-void SceneProc_DrawTranslucentSceneAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, ctxt->unk18840, 2);
+void SceneProc_DrawTranslucentSceneAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, globalCtx->unk18840, 2);
 }
 
 //! @TODO
-void SceneProc_DrawAllSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures, f32 alpha) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, ctxt->unk18840, 3);
+void SceneProc_DrawAllSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 3);
 }
 
 //! @TODO
-void SceneProc_DrawOpaqueSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures, f32 alpha) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, ctxt->unk18840, 1);
+void SceneProc_DrawOpaqueSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
+                                                        f32 alpha) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 1);
 }
 
 //! @TODO
-void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures,
+void SceneProc_DrawTranslucentSceneAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
                                                              f32 alpha) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, ctxt->unk18840, 2);
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, globalCtx->unk18840, 2);
 }
 
 //! @TODO
-void SceneProc_DrawAllAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, step, 3);
+void SceneProc_DrawAllAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 3);
 }
 
 //! @TODO
-void SceneProc_DrawOpaqueAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, step, 1);
+void SceneProc_DrawOpaqueAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 1);
 }
 
 //! @TODO
-void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* ctxt, MaterialAnimation* textures, u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, 1, step, 2);
+void SceneProc_DrawTranslucentAnimatedTextures(GlobalContext* globalCtx, MaterialAnimation* textures, u32 step) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, 1, step, 2);
 }
 
 //! @TODO
-void SceneProc_DrawAllAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures, f32 alpha, u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, step, 3);
+void SceneProc_DrawAllAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha,
+                                                u32 step) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 3);
 }
 
 //! @TODO
-void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures, f32 alpha,
+void SceneProc_DrawOpaqueAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures, f32 alpha,
                                                    u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, step, 1);
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 1);
 }
 
 //! @TODO
-void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* ctxt, MaterialAnimation* textures, f32 alpha,
-                                                        u32 step) {
-    SceneProc_DrawMaterialAnimation(ctxt, textures, alpha, step, 2);
+void SceneProc_DrawTranslucentAnimatedTexturesWithAlpha(GlobalContext* globalCtx, MaterialAnimation* textures,
+                                                        f32 alpha, u32 step) {
+    SceneProc_DrawMaterialAnimation(globalCtx, textures, alpha, step, 2);
 }
 
 /**
  * Scene Draw Config 1:
  * Allows the usage of the animated material system in scenes.
  */
-void SceneProc_SceneDrawConfigMatAnim(GlobalContext* ctxt) {
-    SceneProc_DrawAllSceneAnimatedTextures(ctxt, ctxt->sceneTextureAnimations);
+void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
+    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, globalCtx->sceneTextureAnimations);
 }
 
 //! @TODO
@@ -399,7 +406,7 @@ void SceneProc_SceneDrawConfigMatAnim(GlobalContext* ctxt) {
  * Scene Draw Config 3:
  * Unused.
  */
-void SceneProc_DrawSceneConfig3(GlobalContext* ctxt);
+void SceneProc_DrawSceneConfig3(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawSceneConfig3.asm")
 
 //! @TODO use DISP macros for this!
@@ -431,7 +438,7 @@ void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx) {
  * Scene Draw Config 2:
  * Has no effect, and is only used in SPOT00 (cutscene map).
  */
-void SceneProc_SceneDrawConfigDoNothing(GlobalContext* ctxt) {
+void SceneProc_SceneDrawConfigDoNothing(GlobalContext* globalCtx) {
 }
 
 static Gfx D_801C3BF0[] = {
@@ -469,7 +476,7 @@ static Gfx D_801C3C30[] = {
 };
 
 //! @TODO
-void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags) {
+void func_80131DF0(GlobalContext* globalCtx, u32 param_2, u32 flags) {
     static Gfx* D_801C3C50[] = {
         D_801C3BF0,
         D_801C3C10,
@@ -478,7 +485,7 @@ void func_80131DF0(GlobalContext* ctxt, u32 param_2, u32 flags) {
     Gfx* dl = D_801C3C50[param_2];
 
     {
-        GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
+        GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
         if (flags & 1) {
             gSPSegment(gfxCtx->polyOpa.p++, 12, dl);
         }
@@ -500,7 +507,7 @@ static Gfx D_801C3C70[] = {
 };
 
 //! @TODO
-void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags) {
+void func_80131E58(GlobalContext* globalCtx, u32 param_2, u32 flags) {
     static Gfx* D_801C3C80[] = {
         D_801C3C60,
         D_801C3C70,
@@ -508,7 +515,7 @@ void func_80131E58(GlobalContext* ctxt, u32 param_2, u32 flags) {
     Gfx* dl = D_801C3C80[param_2];
 
     {
-        GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
+        GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
         if (flags & 1) {
             gSPSegment(gfxCtx->polyOpa.p++, 12, dl);
         }
