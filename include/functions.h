@@ -2503,7 +2503,7 @@ void SceneProc_DrawMaterialAnimAlphaStep(GlobalContext* globalCtx, MaterialAnima
 void SceneProc_DrawMaterialAnimAlphaStepOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step);
 void SceneProc_DrawMaterialAnimAlphaStepXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step);
 void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx);
-void SceneProc_DrawSceneConfig3(GlobalContext* globalCtx);
+void SceneProc_SceneDrawConfigGrottoUnused(GlobalContext* globalCtx);
 void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx);
 void SceneProc_SceneDrawConfigDoNothing(GlobalContext* globalCtx);
 void SceneProc_SetRenderModeXlu(GlobalContext* globalCtx, s32 index, u32 flags);

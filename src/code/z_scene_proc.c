@@ -24,9 +24,9 @@ void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
         SceneProc_SceneDrawConfigDefault,
         SceneProc_SceneDrawConfigMatAnim,
         SceneProc_SceneDrawConfigDoNothing,
-        SceneProc_DrawSceneConfig3, // unused
-        SceneProc_DrawSceneConfig4, // unused
-        SceneProc_SceneDrawConfig5, // unused
+        SceneProc_SceneDrawConfigGrottoUnused, // unused
+        SceneProc_DrawSceneConfig4,            // unused
+        SceneProc_SceneDrawConfig5,            // unused
         SceneProc_SceneDrawConfigGreatBayTemple,
         SceneProc_SceneDrawConfigMatAnimManualStep,
     };
@@ -270,7 +270,8 @@ f32 SceneProc_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
 u8 SceneProc_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp) {
     s32 intp = SceneProc_LagrangeInterp(n, x, fx, xp);
 
-    return (intp < 0) ? 0 : (intp > 255) ? 255 : intp;
+    // Clamp between 0 and 255 to ensure the color value does not overflow in either direction
+    return CLAMP(intp, 0, 255);
 }
 
 //! @TODO
@@ -422,13 +423,43 @@ void SceneProc_SceneDrawConfigMatAnim(GlobalContext* globalCtx) {
     SceneProc_DrawMaterialAnim(globalCtx, globalCtx->sceneMaterialAnims);
 }
 
-//! @TODO
 /**
  * Scene Draw Config 3:
- * Unused.
+ * This config is unused, although it is identical to the grotto scene config from Ocarina of Time.
  */
-void SceneProc_DrawSceneConfig3(GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawSceneConfig3.asm")
+void SceneProc_SceneDrawConfigGrottoUnused(GlobalContext* globalCtx) {
+    u32 frames;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    frames = globalCtx->unk18840;
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 64, 256, 16));
+
+    gSPSegment(POLY_XLU_DISP++, 0x09,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - (frames % 128), (frames * 1) % 128, 32, 32, 1,
+                                frames % 128, (frames * 1) % 128, 32, 32));
+
+    gSPSegment(POLY_OPA_DISP++, 0x0A,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 32, 1, 0, 127 - (frames * 1) % 128, 32, 32));
+
+    gSPSegment(POLY_OPA_DISP++, 0x0B, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 128, 32, 32));
+
+    gSPSegment(POLY_XLU_DISP++, 0x0C,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, (frames * 50) % 2048, 8, 512, 1, 0, (frames * 60) % 2048,
+                                8, 512));
+
+    gSPSegment(POLY_OPA_DISP++, 0x0D,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (frames * 1) % 128, 32, 32));
+
+    gDPPipeSync(POLY_XLU_DISP++);
+    gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 128);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 /**
  * Scene Draw Config 4:

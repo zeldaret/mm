@@ -2495,7 +2495,7 @@
     0x8013194C:("SceneProc_DrawMaterialAnimAlphaStepOpa",),
     0x80131978:("SceneProc_DrawMaterialAnimAlphaStepXlu",),
     0x801319A4:("SceneProc_SceneDrawConfigMatAnim",),
-    0x801319CC:("SceneProc_DrawSceneConfig3",),
+    0x801319CC:("SceneProc_SceneDrawConfigGrottoUnused",),
     0x80131CDC:("SceneProc_DrawSceneConfig4",),
     0x80131DE4:("SceneProc_SceneDrawConfigDoNothing",),
     0x80131DF0:("SceneProc_SetRenderModeXlu",),
