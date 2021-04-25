@@ -289,7 +289,7 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, u32 segment, void* 
     void** texList = (void**)Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = (u8*)Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
     s32 curFrame = gSceneProcStep % texAnimParams->keyFrameLength;
-    void* tex = (Gfx*)Lib_SegmentedToVirtual(texList[texId[curFrame]]);
+    void* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -413,7 +413,7 @@ void SceneProc_DrawSceneConfig3(GlobalContext* ctxt);
 
 //! @TODO use DISP macros for this!
 /**
- * Scene Draw Config 3:
+ * Scene Draw Config 4:
  * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures, possibly a carryover from
  * Ocarina of Time.
  */
