@@ -1,6 +1,11 @@
 #include <ultra64.h>
 #include <global.h>
 
+//! @TODO: Once BSS is supported, remove these from `variables.h` (because they are static), and uncomment these here.
+// static s32 sMatAnimStep;
+// static u32 sMatAnimFlags;
+// static f32 sMatAnimAlphaRatio;
+
 // Default displaylist that sets a valid displaylist into all of the segments.
 static Gfx sSceneDrawDefaultDL[] = {
     gsSPSegment(0x08, gEmptyDL),
@@ -51,7 +56,7 @@ void SceneProc_SceneDrawConfigDefault(GlobalContext* globalCtx) {
  * Returns a pointer to a single layer texture scroll displaylist.
  */
 Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnimParams* params) {
-    return Gfx_TexScroll(globalCtx->state.gfxCtx, params->xStep * gSceneProcStep, -(params->yStep * gSceneProcStep),
+    return Gfx_TexScroll(globalCtx->state.gfxCtx, params->xStep * sMatAnimStep, -(params->yStep * sMatAnimStep),
                          params->width, params->height);
 }
 
@@ -64,11 +69,11 @@ void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, s32 segment, Mater
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (gSceneProcFlags & 1) {
+    if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
     }
 
-    if (gSceneProcFlags & 2) {
+    if (sMatAnimFlags & 2) {
         gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
     }
 
@@ -79,9 +84,9 @@ void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, s32 segment, Mater
  * Returns a pointer to a two layer texture scroll displaylist.
  */
 Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnimParams* params) {
-    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params[0].xStep * gSceneProcStep,
-                            -(params[0].yStep * gSceneProcStep), params[0].width, params[0].height, 1,
-                            params[1].xStep * gSceneProcStep, -(params[1].yStep * gSceneProcStep), params[1].width,
+    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params[0].xStep * sMatAnimStep,
+                            -(params[0].yStep * sMatAnimStep), params[0].width, params[0].height, 1,
+                            params[1].xStep * sMatAnimStep, -(params[1].yStep * sMatAnimStep), params[1].width,
                             params[1].height);
 }
 
@@ -94,11 +99,11 @@ void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, s32 segment, Ma
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (gSceneProcFlags & 1) {
+    if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, texScrollDList);
     }
 
-    if (gSceneProcFlags & 2) {
+    if (sMatAnimFlags & 2) {
         gSPSegment(POLY_XLU_DISP++, segment, texScrollDList);
     }
 
@@ -114,12 +119,12 @@ void SceneProc_SetColor(GlobalContext* globalCtx, s32 segment, F3DPrimColor* pri
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     // clang-format off
-    if (gSceneProcFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
-    if (gSceneProcFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
+    if (sMatAnimFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
+    if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
     // clang-format on
 
     gDPSetPrimColor(colorDList++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g,
-                    primColorResult->b, (u8)(primColorResult->a * gSceneProcFlashingAlpha));
+                    primColorResult->b, (u8)(primColorResult->a * sMatAnimAlphaRatio));
 
     if (envColor != NULL) {
         gDPSetEnvColor(colorDList++, envColor->r, envColor->g, envColor->b, envColor->a);
@@ -142,7 +147,7 @@ void SceneProc_DrawMatAnimColor(GlobalContext* globalCtx, s32 segment, void* par
 
     primColor = (F3DPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
 
-    curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
+    curFrame = sMatAnimStep % colorAnimParams->keyFrameLength;
     primColor += curFrame;
     envColor = (colorAnimParams->envColors != NULL)
                    ? (F3DEnvColor*)Lib_SegmentedToVirtual(colorAnimParams->envColors) + curFrame
@@ -180,7 +185,7 @@ void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, s32 segment, void*
 
     primColorMax = (F3DPrimColor*)Lib_SegmentedToVirtual(colorAnimParams->primColors);
     keyFrames = (u16*)Lib_SegmentedToVirtual(colorAnimParams->keyFrames);
-    curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
+    curFrame = sMatAnimStep % colorAnimParams->keyFrameLength;
     keyFrames++;
     i = 1;
 
@@ -274,20 +279,16 @@ u8 SceneProc_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp) {
     return CLAMP(intp, 0, 255);
 }
 
-// #if 1
-#ifdef NON_MATCHING
-// Just regalloc
 /**
  * Animated Material Type 4:
  * Color key frame animation with non-linear interpolation.
  */
-// SceneProc_DrawMatAnimColorNonLinearInterp()
-void SceneProc_DrawType4Texture(GlobalContext* globalCtx, s32 segment, void* params) {
+void SceneProc_DrawMatAnimColorNonLinearInterp(GlobalContext* globalCtx, s32 segment, void* params) {
     MaterialColorAnimParams* colorAnimParams = (MaterialColorAnimParams*)params;
     F3DPrimColor* primColorCur = Lib_SegmentedToVirtual(colorAnimParams->primColors);
     F3DEnvColor* envColorCur = Lib_SegmentedToVirtual(colorAnimParams->envColors);
     u16* keyFrames = Lib_SegmentedToVirtual(colorAnimParams->keyFrames);
-    f32 curFrame = gSceneProcStep % colorAnimParams->keyFrameLength;
+    f32 curFrame = sMatAnimStep % colorAnimParams->keyFrameLength;
     F3DPrimColor primColorResult;
     F3DEnvColor envColorResult;
     f32 x[50];
@@ -313,35 +314,35 @@ void SceneProc_DrawType4Texture(GlobalContext* globalCtx, s32 segment, void* par
     s32 i;
 
     for (i = 0; i < colorAnimParams->keyFrameCount; i++) {
-        *fxEnvAPtr = *keyFrames;
-        *fxEnvRPtr = primColorCur->r;
-        *fxEnvGPtr = primColorCur->g;
-        *fxEnvBPtr = primColorCur->b;
+        *xPtr = *keyFrames;
+        *fxPrimRPtr = primColorCur->r;
+        *fxPrimGPtr = primColorCur->g;
+        *fxPrimBPtr = primColorCur->b;
         *fxPrimAPtr = primColorCur->a;
         *fxPrimLodFracPtr = primColorCur->lodFrac;
 
         primColorCur++;
-        fxEnvRPtr++;
-        fxEnvGPtr++;
-        fxEnvBPtr++;
+        fxPrimRPtr++;
+        fxPrimGPtr++;
+        fxPrimBPtr++;
         fxPrimAPtr++;
         fxPrimLodFracPtr++;
 
         if (envColorCur != NULL) {
-            *fxPrimRPtr = envColorCur->r;
-            *fxPrimGPtr = envColorCur->g;
-            *fxPrimBPtr = envColorCur->b;
-            *xPtr = envColorCur->a;
+            *fxEnvRPtr = envColorCur->r;
+            *fxEnvGPtr = envColorCur->g;
+            *fxEnvBPtr = envColorCur->b;
+            *fxEnvAPtr = envColorCur->a;
 
             envColorCur++;
-            fxPrimRPtr++;
-            fxPrimGPtr++;
-            fxPrimBPtr++;
-            xPtr++;
+            fxEnvRPtr++;
+            fxEnvGPtr++;
+            fxEnvBPtr++;
+            fxEnvAPtr++;
         }
 
         keyFrames++;
-        fxEnvAPtr++;
+        xPtr++;
     }
 
     primColorResult.r = SceneProc_LagrangeInterpColor(colorAnimParams->keyFrameCount, x, fxPrimR, curFrame);
@@ -362,9 +363,6 @@ void SceneProc_DrawType4Texture(GlobalContext* globalCtx, s32 segment, void* par
 
     SceneProc_SetColor(globalCtx, segment, &primColorResult, (envColorCur != NULL) ? &envColorResult : NULL);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_proc/SceneProc_DrawType4Texture.asm")
-#endif
 
 /**
  * Animated Material Type 5:
@@ -374,16 +372,16 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, s32 segment, void* 
     MaterialTexCycleAnimParams* texAnimParams = params;
     void** texList = (void**)Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = (u8*)Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
-    s32 curFrame = gSceneProcStep % texAnimParams->keyFrameLength;
+    s32 curFrame = sMatAnimStep % texAnimParams->keyFrameLength;
     void* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (gSceneProcFlags & 1) {
+    if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, tex);
     }
 
-    if (gSceneProcFlags & 2) {
+    if (sMatAnimFlags & 2) {
         gSPSegment(POLY_XLU_DISP++, segment, tex);
     }
 
@@ -397,15 +395,15 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, s32 segment, void* 
 void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step,
                                     u32 flags) {
     static MaterialAnimationDrawFunc gSceneProcDrawFuncs[] = {
-        SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll, SceneProc_DrawMatAnimColor,
-        SceneProc_DrawMatAnimColorLerp, SceneProc_DrawType4Texture,        SceneProc_DrawMatAnimTexCycle,
+        SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll,         SceneProc_DrawMatAnimColor,
+        SceneProc_DrawMatAnimColorLerp, SceneProc_DrawMatAnimColorNonLinearInterp, SceneProc_DrawMatAnimTexCycle,
     };
     s32 segmentAbs;
     s32 segment;
 
-    gSceneProcFlashingAlpha = alphaRatio;
-    gSceneProcStep = step;
-    gSceneProcFlags = flags;
+    sMatAnimAlphaRatio = alphaRatio;
+    sMatAnimStep = step;
+    sMatAnimFlags = flags;
 
     if ((matAnim != NULL) && (matAnim->segment != 0)) {
         do {

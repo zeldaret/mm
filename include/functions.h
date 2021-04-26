@@ -2487,7 +2487,7 @@ s32 SceneProc_Lerp(s32 min, s32 max, f32 norm);
 void SceneProc_DrawMatAnimColorLerp(GlobalContext* globalCtx, s32 segment, void* params);
 f32 SceneProc_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp);
 u8 SceneProc_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp);
-void SceneProc_DrawType4Texture(GlobalContext* globalCtx, s32 segment, void* params);
+void SceneProc_DrawMatAnimColorNonLinearInterp(GlobalContext* globalCtx, s32 segment, void* params);
 void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, s32 segment, void* params);
 void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step, u32 flags);
 void SceneProc_DrawMaterialAnim(GlobalContext* globalCtx, MaterialAnimation* matAnim);
