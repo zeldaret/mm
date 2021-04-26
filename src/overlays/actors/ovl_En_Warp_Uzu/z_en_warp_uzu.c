@@ -32,42 +32,32 @@ const ActorInit En_Warp_Uzu_InitVars = {
     (ActorFunc)EnWarpUzu_Draw,
 };
 
-// ColliderCylinderInit D_80A664C0 = {
-//     {
-//         COLTYPE_HIT0,
-//         AT_NONE,
-//         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
-//         OC1_ON | OC1_TYPE_ALL,
-//         OC2_TYPE_1,
-//         COLSHAPE_CYLINDER,
-//     },
-//     {
-//         ELEMTYPE_UNK1,
-//         { 0x00000000, 0x00, 0x00 },
-//         { 0xF7CFFFFF, 0x00, 0x00 },
-//         TOUCH_NONE | TOUCH_SFX_NORMAL,
-//         BUMP_ON,
-//         OCELEM_ON,
-//     },
-//     { 25, 43, -20, { 0, 0, 0 } },
-// };
+static ColliderCylinderInit D_80A664C0 = {
+    {
+        COLTYPE_HIT0,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 25, 43, -20, { 0, 0, 0 } },
+};
 
-// InitChainEntry D_80A664EC[] = {
-//     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
-//     ICHAIN_F32(uncullZoneDownward, 1100, ICHAIN_CONTINUE),
-//     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
-//     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
-// };
-
-// ColliderCylinder
-s32 D_80A664C0[] = { 0x00001939, 0x10010000, 0x01000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
-                     0x00000000, 0x00010100, 0x0019002B, 0xFFEC0000, 0x00000000 };
-
-//iChain
-s32 D_80A664EC[] = { 0xB10005DC, 0xB104044C, 0xB0FC03E8, 0x48580064 };
-
-// Vec3f
-s32 D_80A664FC[] = { 0x00000000, 0x42540000, 0xC1E80000, 0x00000000, 0x00000000 };
+static InitChainEntry D_80A664EC[] = {
+    ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
 extern UNK_TYPE D_06000EC0;
 
@@ -86,7 +76,7 @@ void EnWarpUzu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-// Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
+static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
 void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
