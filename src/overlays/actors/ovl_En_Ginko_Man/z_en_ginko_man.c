@@ -37,7 +37,7 @@ const ActorInit En_Ginko_Man_InitVars = {
     (ActorFunc)EnGinkoMan_Draw
 };
 
-// looks like an array of structs
+// gets passed to other functions as is
 UNK_TYPE D_80A65D60[] = {
 0x060008C0, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000,
 0x060043F0, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000,
@@ -58,7 +58,7 @@ void EnGinkoMan_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk260 = 0;
     this->unk25C = 0;
     this->unk25A = 0;
-    SkelAnime_InitSV(globalCtx, &this->anime, &D_0600C240, &D_060043F0, &this->unk18C, &this->unk1EC, 0x10);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, &this->unk18C, &this->unk1EC, 0x10);
     func_80A64554(this);
 }
 
@@ -68,7 +68,7 @@ void EnGinkoMan_Destroy(Actor *thisx, GlobalContext *globalCtx) { }
 void func_80A64554(EnGinkoMan* this) {
 
     this->actor.flags |= 1;
-    func_800BDC5C(&this->anime, &D_80A65D60, 1);
+    func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
     this->actionFunc = func_80A645A4;
 }
 
@@ -81,11 +81,11 @@ void func_80A645A4(EnGinkoMan *this, GlobalContext *globalCtx) {
     func_80A65988(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx)) {
         if ((gSaveContext.perm.unkEDC & 0xFFFF) == 0) {
-            func_800BDC5C(&this->anime, D_80A65D60, 0);
+            func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
             func_801518B0(globalCtx, 0x44CU, &this->actor);
             this->lastText = 0x44C; // would you like to make an account
         } else {
-            func_800BDC5C(&this->anime, D_80A65D60, 1);
+            func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
             if ((((s32) gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
                 func_801518B0(globalCtx, 0x467U, &this->actor);
                 this->lastText = 0x467; // "What's this? You need somethin' on a day like this?
@@ -104,298 +104,252 @@ void func_80A645A4(EnGinkoMan *this, GlobalContext *globalCtx) {
     }
 }
 
-//jump tables
-// fuck this one is even bigger damn it
-/*
+// action func: non-imput dialogue
+// if else inside of jump tables
+// case 14 is possibly still non-equiv but def does not match
+///*
 void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
-    GlobalContext *temp_a0;
-    GlobalContext *temp_a3;
-    s16 temp_v0;
-    s16 temp_v0_4;
-    s32 temp_v1_2;
-    u32 temp_t6;
-    u32 temp_v1;
-    u8 temp_t0;
-    u8 temp_v0_2;
-    u8 temp_v0_3;
-    GlobalContext *phi_a3;
-    GlobalContext *phi_a3_2;
-    s16 phi_t6;
-    GlobalContext *phi_a3_3;
+    u32 tempEDC;
+    //u8 weekEventReg;
+    s16* unk262;
 
-    temp_a0 = globalCtx;
-    globalCtx = globalCtx;
-    temp_a3 = globalCtx;
-    if (func_80147624(globalCtx) != 0) {
-        temp_v0 = this->lastText;
-        temp_t6 = temp_v0 - 0x44C;
-        
-        //if (temp_t6 < 0x33U) {
-            //phi_a3_3 = temp_a3;
-            //goto **(&jtbl_D_80A65DE0 + (temp_t6 * 4));
-        switch (this->lastText - 0x44C)
-        case 0:
-            globalCtx = temp_a3;
-            func_800BDC5C(&this->anime, (void *) D_80A65D60, 1);
-            if ((gSaveContext.unkF02 & 8) == 0) {
-                func_801518B0(globalCtx, 0x44DU, (Actor *) this);
-                this->lastText = 0x44D;
-                return;
-            case 1:
-                func_801518B0(temp_a3, 0x44EU, (Actor *) this);
-                this->lastText = 0x44E;
-                return;
-            case 3:
-                globalCtx = temp_a3;
-                func_800BDC5C(&this->anime, (void *) D_80A65D60, 0);
-                func_801518B0(globalCtx, 0x450U, (Actor *) this);
-                this->lastText = 0x450;
-                return;
-            case 7:
-            case 8:
-            case 9:
-                if (this->unk25E != 1) {
-                    phi_a3_2 = temp_a3;
-                    if (temp_v0 == 0x453) {
-                        globalCtx = temp_a3;
-                        func_800BDC5C(&this->anime, (void *) D_80A65D60, 0);
-                        phi_a3_2 = globalCtx;
-                    }
-                    phi_a3_2->msgCtx.unk1207C = gSaveContext.perm.unkEDC & 0xFFFF;
-                    func_801518B0(phi_a3_2, 0x45AU, (Actor *) this);
-                    this->lastText = 0x45A;
-                    return;
-                case 10:
-                case 13:
-                    func_801518B0(temp_a3, 0x44EU, (Actor *) this);
-                    this->lastText = 0x44E;
-                    return;
-                case 14:
-                    temp_v1 = gSaveContext.perm.unkEDC & 0xFFFF;
-                    if (temp_v1 < 0xC8U) {
-block_20:
-                        if (temp_v1 < 0x3E8U) {
-block_24:
-                            if (temp_v1 < 0x1388U) {
-                                globalCtx = temp_a3;
-                                func_800BDC5C(&this->anime, (void *) D_80A65D60, 0);
-                                func_801518B0(globalCtx, 0x460U, (Actor *) this);
-                                this->lastText = 0x460;
-                                return;
-                            case 15:
-                            case 16:
-                            case 17:
-                                this->unk260 = 0;
-                                globalCtx = temp_a3;
-                                func_801477B4(temp_a3);
-                                func_80A6557C(this);
-                                func_80A65590(this, globalCtx);
-                                return;
-                            case 21:
-                                func_801518B0(temp_a3, 0x462U, (Actor *) this);
-                                this->lastText = 0x462;
-                                return;
-                            case 22:
-                                func_801518B0(temp_a3, 0x463U, (Actor *) this);
-                                this->lastText = 0x463;
-                                return;
-                            case 23:
-                                func_801518B0(temp_a3, 0x464U, (Actor *) this);
-                                this->lastText = 0x464;
-                                return;
-                            case 24:
-                                temp_a3->msgCtx.pad11F23 = 0x44;
-                                func_80A65800(this);
-                                return;
-                            case 25:
-                                globalCtx = temp_a3;
-                                func_800BDC5C(&this->anime, (void *) D_80A65D60, 0);
-                                globalCtx->msgCtx.unk1207C = gSaveContext.perm.unkEDC & 0xFFFF;
-                                func_801518B0(globalCtx, 0x45AU, (Actor *) this);
-                                this->lastText = 0x45A;
-                                return;
-                            case 26:
-                            case 27:
-                                func_801518B0(temp_a3, 0x468U, (Actor *) this);
-                                this->lastText = 0x468;
-                                return;
-                            case 29:
-                                func_80A65800(this);
-                                return;
-                            case 30:
-                            case 32:
-                            case 50:
-                                if (this->unk25C == 0) {
-                                    if ((u32) (gSaveContext.perm.unkEDC & 0xFFFF) >= 0x1388U) {
-                                        func_801518B0(temp_a3, 0x45FU, (Actor *) this);
-                                        phi_t6 = (u16)0x45F;
-block_50:
-                                        this->lastText = phi_t6;
-                                    } else if (gSaveContext.perm.unk24.unk16 == 0) {
-                                        func_801518B0(temp_a3, 0x458U, (Actor *) this);
-                                        this->lastText = 0x458;
-                                    } else {
-                                        func_801518B0(temp_a3, 0x479U, (Actor *) this);
-                                        this->lastText = 0x479;
-                                    }
-                                } else if ((((s32) gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
-                                    func_801518B0(temp_a3, 0x46DU, (Actor *) this);
-                                    this->lastText = 0x46D;
-                                } else {
-                                    func_801518B0(temp_a3, 0x46BU, (Actor *) this);
-                                    phi_t6 = (u16)0x46B;
-                                    goto block_50;
-                                }
-                                this->unk25C = 0;
-                                return;
-                            case 31:
-                                func_801518B0(temp_a3, 0x46EU, (Actor *) this);
-                                this->lastText = 0x46E;
-                                return;
-                            case 33:
-                                func_801518B0(temp_a3, 0x46BU, (Actor *) this);
-                                this->lastText = 0x46B;
-                                return;
-                            case 36:
-                                globalCtx = temp_a3;
-                                if (func_80147624(temp_a3) == 0) {
-                                default:
-                                    return;
-                                }
-                                func_801477B4(globalCtx);
-                                this->unk260 = 0;
-                                func_80A64554(this);
-                                return;
-                            case 42:
-                                globalCtx = temp_a3;
-                                func_800BDC5C(&this->anime, (void *) D_80A65D60, 1);
-                                phi_a3_3 = globalCtx;
-                            case 41:
-                            case 48:
-                            case 49:
-                                func_801518B0(phi_a3_3, 0x468U, (Actor *) this);
-                                this->lastText = 0x468;
-                                return;
-                            case 38:
-                            case 39:
-                            case 40:
-                                temp_v1_2 = gSaveContext.perm.unkEDC & 0xFFFF;
-                                if (temp_v1_2 != 0) {
-                                    temp_a3->msgCtx.unk1207C = temp_v1_2;
-                                    func_801518B0(temp_a3, 0x45AU, (Actor *) this);
-                                    this->lastText = 0x45A;
-                                    return;
-                                case 43:
-                                    globalCtx = temp_a3;
-                                    func_801518B0(temp_a3, 0x471U, (Actor *) this);
-                                    this->lastText = 0x471;
-                                    this->unk25A = (s16) globalCtx->msgCtx.pad1206C;
-                                    return;
-                                case 45:
-                                    func_801518B0(temp_a3, 0x44FU, (Actor *) this);
-                                    this->lastText = 0x44F;
-                                default:
-                                    return;
-                                }
-                                func_801518B0(temp_a3, 0x478U, (Actor *) this);
-                                this->lastText = 0x478;
-                                return;
-                                return;
-                                return;
-                            }
-                            temp_v0_4 = this->unk262;
-                            if ((s32) temp_v0_4 >= 0x1388) {
-block_28:
-                                if ((s32) temp_v0_4 >= (s32) (s16) temp_v1) {
-                                    globalCtx = temp_a3;
-                                    func_800BDC5C(&this->anime, (void *) D_80A65D60, 0);
-                                    func_801518B0(globalCtx, 0x460U, (Actor *) this);
-                                    this->lastText = 0x460;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                    return;
-                                }
-                                globalCtx = temp_a3;
-                                func_800BDC5C(&this->anime, (void *) D_80A65D60, 1);
-                                func_801518B0(globalCtx, 0x45EU, (Actor *) this);
-                                this->lastText = 0x45E;
-                                return;
-                            }
-                            temp_t0 = gSaveContext.unkF34;
-                            if ((temp_t0 & 1) != 0) {
-                                goto block_28;
-                            }
-                            gSaveContext.unkF34 = (u8) (temp_t0 | 1);
-                            func_801518B0(temp_a3, 0x45DU, (Actor *) this);
-                            this->lastText = 0x45D;
-                            return;
-                        }
-                        if ((s32) this->unk262 >= 0x3E8) {
-                            goto block_24;
-                        }
-                        temp_v0_3 = gSaveContext.unkF33;
-                        if ((temp_v0_3 & 0x80) != 0) {
-                            goto block_24;
-                        }
-                        gSaveContext.unkF33 = (u8) (temp_v0_3 | 0x80);
-                        func_801518B0(temp_a3, 0x45CU, (Actor *) this);
-                        this->lastText = 0x45C;
-                        return;
-                    }
-                    if ((s32) this->unk262 >= 0xC8) {
-                        goto block_20;
-                    }
-                    temp_v0_2 = gSaveContext.unkF33;
-                    if ((temp_v0_2 & 0x40) != 0) {
-                        goto block_20;
-                    }
-                    gSaveContext.unkF33 = (u8) (temp_v0_2 | 0x40);
-                    func_801518B0(temp_a3, 0x45BU, (Actor *) this);
-                    this->lastText = 0x45B;
-                    return;
-                }
-                this->unk25E = 0;
-                phi_a3 = temp_a3;
-                if (temp_v0 != 0x453) {
-                    globalCtx = temp_a3;
-                    func_800BDC5C(&this->anime, (void *) D_80A65D60, 1);
-                    phi_a3 = globalCtx;
-                }
-                func_801518B0(phi_a3, 0x461U, (Actor *) this);
-                this->lastText = 0x461;
-                return;
-                return;
-                return;
+    if (func_80147624(globalCtx) == 0) {
+      return;
+    }
+    
+    //if (temp_t6 < 0x33) { //phi_a3_3 = globalCtx; //goto **(&jtbl_D_80A65DE0 + (temp_t6 * 4));
+    switch (this->lastText - 0x44C) {
+
+    case 0: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
+        globalCtx = globalCtx;
+        func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
+        if ((gSaveContext.perm.weekEventReg[10] & 8) != 0) {
+            func_801518B0(globalCtx, 0x44E, &this->actor);
+            this->lastText = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
+        } else {
+            func_801518B0(globalCtx, 0x44D, &this->actor);
+            this->lastText = 0x44D; // "For example, if you deposit 200 Rupees, you'll get an item that holds a lot of Rupees."
+        }
+        break; 
+
+    case 1: // "For example, if you deposit 200 Rupees, you'll get an item that holds a lot of Rupees."
+        func_801518B0(globalCtx, 0x44E, &this->actor);
+        this->lastText = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
+        return;
+    case 3: // "...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
+        func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
+        func_801518B0(globalCtx, 0x450, &this->actor);
+        this->lastText = 0x450; // "How much? How much?  [rupee prompt]
+        return;
+
+    case 7: // you deposited a tiny amount
+    case 8: // you deposited a normal amount
+    case 9: // you deposited alot
+        if (this->unk25E == 1) {
+            this->unk25E = 0;
+            if (this->lastText != 0x453) { // "That's it? That ain't nothing at all, big spender!
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
             }
-            func_801518B0(globalCtx, 0x44EU, (Actor *) this);
-            this->lastText = 0x44E;
+            func_801518B0(globalCtx, 0x461, &this->actor);
+            this->lastText = 0x461; // So, little guy, what's your name?
+        } else { 
+            if (this->lastText == 0x453) { // "That's it? That ain't nothing at all, big spender!
+                globalCtx = globalCtx;
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
+            }
+            globalCtx->msgCtx.unk1207C = gSaveContext.perm.unkEDC & 0xFFFF;
+            func_801518B0(globalCtx, 0x45A, &this->actor);
+            this->lastText = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
+        }
+        break;
+    case 10: // "Is that so? Think about it, little guy!"
+    case 13: // "Heyyy! You don't have that much!
+        func_801518B0(globalCtx, 0x44E, &this->actor);
+        this->lastText = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
+        return;
+
+    case 14: // "All right, little guy, now I've got a total of [rupees] from you!"
+        tempEDC = gSaveContext.perm.unkEDC & 0xFFFF;
+        if ((tempEDC >= 200) 
+        && (this->unk262 < 200) 
+        && ((gSaveContext.perm.weekEventReg[0x3B] & 0x40) == 0)) {
+            //block_20:
+            gSaveContext.perm.weekEventReg[0x3B] = gSaveContext.perm.weekEventReg[0x3B] | 0x40;
+            func_801518B0(globalCtx, 0x45B, &this->actor);
+            this->lastText = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
             return;
+        } // bright pink arrow
+
+        // branch likely when shouldn'tbe
+        //unk262 = & this->unk262;
+        if ( (tempEDC >= 1000)
+        && ((this->unk262) < 1000)
+        //&& ((*unk262) < 0x3E8)
+        && (gSaveContext.perm.weekEventReg[0x3B] & 0x80) == 0) {
+           //block_24:
+            gSaveContext.perm.weekEventReg[0x3B] |= 0x80;
+            func_801518B0(globalCtx, 0x45C, &this->actor);
+            this->lastText = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
             return;
-            return;
+        } // bright blue arrow
+
+
+        if (( this->unk262) >= 5000) { // added back in because missing
+        //if ((*unk262) >= 0x1388) { // added back in because missing
+            if ((((s16) tempEDC ) < 5000) 
+            && (( gSaveContext.perm.weekEventReg[0x3B] & 1) == 0)) {
+                gSaveContext.perm.weekEventReg[0x3B] |= 1;
+                func_801518B0(globalCtx, 0x45D, &this->actor);
+                this->lastText = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
+                return;
+            } else { // olive arrow
+                //block_28:
+                if (this->unk262 < gSaveContext.perm.unkEDC) {
+                //if (*unk262 < gSaveContext.perm.unkEDC) {
+                    func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
+                    func_801518B0(globalCtx, 0x45E, &this->actor);
+                    this->lastText = 0x45E; // "...Hang on there, little guy.  I can't take any more deposits.  Sorry..."
+                    return;
+                } else {
+                    func_800BDC5C(&this->skelAnime, D_80A65D60, 0); // this is 460 just renamed for visual
+                    func_801518B0(globalCtx, 0x460, &this->actor);
+                    this->lastText = 0x460; // "Come back and deposit some after you save up a bunch!"
+                    return;
+                }
+
+            }
+        }
+
+        // bright green arrow
+        func_800BDC5C(&this->skelAnime, D_80A65D60, 0); 
+        func_801518B0(globalCtx, 0x460, &this->actor);
+        this->lastText = 0x460;  // "Come back and deposit some after you save up a bunch!" 
+        break;
+  
+        break; //catchall until I get this shit straight
+    case 15: // given 200 reward
+    case 16: // given 1000 reward
+    case 17: // given 5000 reward
+        this->unk260 = 0;
+        globalCtx = globalCtx;
+        func_801477B4(globalCtx);
+        func_80A6557C(this);
+        func_80A65590(this, globalCtx);
+        return;
+    case 21: // So, little guy, what's your name?
+        func_801518B0(globalCtx, 0x462, &this->actor);
+        this->lastText = 0x462; // Hmm... Link is it?
+        return;
+    case 22: // Hmm.. Link is it?
+        func_801518B0(globalCtx, 0x463, &this->actor);
+        this->lastText = 0x463; // Got it... I won't forget your deposits. Let me stamp you
+        return;
+    case 23: // Got it... I won't forget your deposits. Let me stamp you
+        func_801518B0(globalCtx, 0x464, &this->actor);
+        this->lastText = 0x464; // Hey, relax! It doesn't leave any marks
+        return;
+    case 24: // Hey, relax! It doesn't leave any marks
+        //globalCtx->msgCtx.pad11F23 = 0x44;
+        globalCtx->msgCtx.pad11F23[0] = 0x44;
+        func_80A65800(this); // stamp player
+        return;
+    case 25: // "There! Now I'll know you when I see you!"
+        globalCtx = globalCtx;
+        func_800BDC5C(&this->skelAnime, (void *) D_80A65D60, 0);
+        globalCtx->msgCtx.unk1207C = gSaveContext.perm.unkEDC & 0xFFFF;
+        func_801518B0(globalCtx, 0x45A, &this->actor);
+        this->lastText = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
+        return;
+    case 26:
+    case 27:
+        func_801518B0(globalCtx, 0x468, &this->actor);
+        this->lastText = 0x468; // " Deposit Rupees Withdraw Rupees Nothing really"
+        return;
+    case 29:
+        func_80A65800(this); // stamp player
+        return;
+    case 30:
+    case 32:
+    case 50:
+        if (this->unk25C == 0) {
+            if ((u32) (gSaveContext.perm.unkEDC & 0xFFFF) >= 0x1388) {
+                func_801518B0(globalCtx, 0x45F, &this->actor);
+                this->lastText = 0x45F; // "Excuuuse me! But I can't take anymore deposits!
+            } else if (gSaveContext.perm.unk24.unk16 == 0) {
+                func_801518B0(globalCtx, 0x458, &this->actor);
+                this->lastText = 0x458; // "Hmm...You play mean jokes, little guy! You haven't even got a single Rupee!  
+            } else {
+                func_801518B0(globalCtx, 0x479, &this->actor);
+                this->lastText = 0x479; // "Well, are you gonna make a deposit?"
+            }
+        } else if ((((s32) gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
+            func_801518B0(globalCtx, 0x46D, &this->actor);
+            // "Look, little guy, if it's 'cause of the bad rumors going around, forget it! They're just rumors!"
+            this->lastText = 0x46D;
+        } else {
+            func_801518B0(globalCtx, 0x46B, &this->actor);
+            this->lastText = 0x46B; // "So..."
+        }
+        this->unk25C = 0;
+        return;
+    case 31:
+        func_801518B0(globalCtx, 0x46E, &this->actor);
+        this->lastText = 0x46E; // "How much do you want?  [rupee prompt]
+        return;
+    case 33:
+        func_801518B0(globalCtx, 0x46B, &this->actor);
+        this->lastText = 0x46B; // So...
+        return;
+    case 36:
+        if (func_80147624(globalCtx) == 0) {
             return;
         }
-    }
-default:
-} // */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A646F4.asm")
+        func_801477B4(globalCtx);
+        this->unk260 = 0;
+        func_80A64554(this);
+        return;
+    case 42:
+        func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
+    case 41:
+    case 48:
+    case 49:
+        func_801518B0(globalCtx, 0x468, &this->actor);
+        this->lastText = 0x468; // " Deposit Rupees Withdraw Rupees Nothing really"
+        return;
+    case 38:
+    case 39:
+    case 40:
+        if ((gSaveContext.perm.unkEDC & 0xFFFF) == 0) {
+            func_801518B0(globalCtx, 0x478, &this->actor);
+            //  "Look, little guy, all the Rupees you deposited are gone, so you can't use that stamp anymore."
+            this->lastText = 0x478;
+        } else {
+            globalCtx->msgCtx.unk1207C = gSaveContext.perm.unkEDC & 0xFFFF;
+            func_801518B0(globalCtx, 0x45A, &this->actor);
+            this->lastText = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
+        }
+        break;
+    case 43:
+        func_801518B0(globalCtx, 0x471, &this->actor);
+        this->lastText = 0x471; // "Are you really withdrawing [rupees selected]? Y/n"
+        this->unk25A = globalCtx->msgCtx.unk1206C;
+        return;
+    case 45:
+        func_801518B0(globalCtx, 0x44F, &this->actor);
+        this->lastText = 0x44F; // "All right! So..."
+        return;
+    default:
+        break;
+    } // end switch
 
-// huge dialogue tree?
+} // */
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A646F4.asm")
+
+// actionfunc: accept dialogue input
 //working
-// nowhere close: because its in a switch, all the if/else's are swapped or worse, what a mess
-//  adding a fake condition can cause certain trouble areas to fix themselves, but this can be placed in multiple loc
-///*
+// NON-MATCHING: lots of regalloc 
+// ROM SHIFT a couple redundant li 0x4806 added
+#if NON_MATCHING
 void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
 
     // branch likely instead of branch, fixed by adding a fake if though
@@ -405,13 +359,12 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
 
     switch (this->lastText) {
 
-    case 0x44E: //if (this->lastText == 0x44E) {
-    // "...So, what'll it be?
+    case 0x44E: // "...So, what'll it be?
         if (globalCtx->msgCtx.unk12022 == 0) {
             if ( (gSaveContext.perm.unkEDC & 0xFFFF) >= 0x1388) {
                 play_sound(0x4806);// NA_SE_SY_ERROR
                 func_801518B0(globalCtx, 0x45F, &this->actor);
-                this->lastText = 0x45F; // EXCUSE ME I cannot take anymore
+                this->lastText = 0x45F; // bank full, cannot accept more
                 return;
             }
             else {
@@ -432,12 +385,12 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
         this->lastText = 0x451; // dont say that, come on, trust me!
         break;
 
-    case 0x452: //if (this->lastText == 0x452) { // Really? are you really depositing rupees?
-        if (globalCtx->msgCtx.unk12022 == 0){ // Selected: YES
+    case 0x452: // Really? are you really depositing rupees?
 
+        if (globalCtx->msgCtx.unk12022 == 0){ // Selected: YES
             if (gSaveContext.perm.unk24.unk16 < globalCtx->msgCtx.unk12078) {
                 play_sound(0x4806); // NA_SE_SY_ERROR
-                func_800BDC5C(&this->anime, D_80A65D60, 1);
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
                 func_801518B0(globalCtx, 0x459, &this->actor);
                 this->lastText = 0x459; // HEY you dont have that much
                 //return;
@@ -451,13 +404,11 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                     func_801518B0(globalCtx, 0x454, &this->actor);
                     this->lastText = 0x454; // Seriously? that's a lot. A lot!
                 } else {
-                    func_800BDC5C(&this->anime, D_80A65D60, 1);
+                    func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
                     func_801518B0(globalCtx, 0x453, &this->actor);
                     this->lastText = 0x453; // That's it? That aint nothing at all
                 }
                 if ((gSaveContext.perm.unkEDC & 0xFFFF) == 0) {
-                    // FAKE MATCH
-                    if (gSaveContext.perm.unkEDC) {} // -4000 permuter score mostly regalloc
                     this->unk25E = 1;
                 }
                 func_801159EC((s16) -(s32) globalCtx->msgCtx.unk12078);
@@ -468,7 +419,7 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
             }
         }else{ // Selected: NO
             func_8019F230();
-            func_800BDC5C(&this->anime, D_80A65D60, 1);
+            func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
             // different forms?
             if ((gSaveContext.perm.unkEDC & 0xFFFF) == 0) { // @B74
                 func_801518B0(globalCtx, 0x456, &this->actor);
@@ -480,9 +431,10 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
         }
         break;
 
-    case 0x468: //if (this->lastText != 0x468) { // location: @C38
-      // [Deposit rupees selected]
-      //working
+    case 0x468:  // [Deposit rupees selected] // location: @C38
+        // FAKE MATCH
+        if (globalCtx->msgCtx.unk12022) {} // -5000 permuter score: regalloc and branch likely swapping
+
         if (globalCtx->msgCtx.unk12022 == 2) {
             func_8019F230();
             func_801518B0(globalCtx, 0x470, &this->actor);
@@ -501,23 +453,21 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
         }
         break;
 
-    case 0x471: //if (this->lastText != 0x471) { //return; //} // @CDC
-    // Are you really withdrawling [selected rupees]?
+    case 0x471: // Are you really withdrawling [selected rupees]? // @CDC
         if (globalCtx->msgCtx.unk12022 == 0) {
-            // think thi sis sltu instead of slt
-            if (((u32)(gSaveContext.perm.unkEDC & 0xFFFF)) < ((u32)( globalCtx->msgCtx.unk12078 + this->unk25A))) { 
+            // s32 casts required for slt instead of sltu
+            if ((s32)((gSaveContext.perm.unkEDC & 0xFFFF)) < ((s32)( globalCtx->msgCtx.unk12078 + this->unk25A))) { 
                 play_sound(0x4806); // NA_SE_SY_ERROR
-                func_800BDC5C(&this->anime, D_80A65D60, 0);       // @ D30
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 0);       // @ D30
                 func_801518B0(globalCtx, 0x476, &this->actor);
                 this->lastText = 0x476; // you dont have enough deposited to withdrawl
                 return;
             }
-            //if (!D_801C1E08){}
             
             // an array of what though
-            //if ((s32) *(&D_801C1E2C + (((u32) ((s32) gSaveContext.perm.inv.pad48 & D_801C1DD0) >> D_801C1E08) * 2))
+            //if ((s32) *(&D_801C1E2C + (((u32) ((s32) gSaveContext.perm.inv.unk48 & D_801C1DD0) >> D_801C1E08) * 2))
                //< (globalCtx->msgCtx.unk12078 + gSaveContext.perm.unk24.unk16)) {
-            if ((s32) *(&D_801C1E2C + (((u32) ((s32) gSaveContext.perm.inv.pad48 & D_801C1DD0) >> D_801C1E08) * 2))
+            if ( (D_801C1E2C[ ( gSaveContext.perm.inv.unk48 & D_801C1DD0) >> D_801C1E08])
                < (globalCtx->msgCtx.unk12078 + gSaveContext.perm.unk24.unk16)) {
                 play_sound(0x4806); // NA_SE_SY_ERROR
                 func_801518B0(globalCtx, 0x475, &this->actor);
@@ -529,7 +479,7 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
             //temp_v0_3 = globalCtx->msgCtx.unk12078;
             if (globalCtx->msgCtx.unk12078 >= 100) {
                 func_801518B0(globalCtx, 0x474, &this->actor);
-                this->lastText = 0x474; // Aw, you're talking out all that?
+                this->lastText = 0x474; // Aw, you're taking out all that?
             } else if (globalCtx->msgCtx.unk12078 >= 10) {
                 func_801518B0(globalCtx, 0x473, &this->actor);
                 this->lastText = 0x473; // use it wisely
@@ -550,8 +500,10 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
             this->lastText = 0x47C; // "Is that so? Think it over, little guy! So what are you gonna do?"
         }
     } // end switch
-} // */
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A64DC4.asm")
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A64DC4.asm")
+#endif
 
 void func_80A65364(EnGinkoMan *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx)) {
@@ -559,7 +511,7 @@ void func_80A65364(EnGinkoMan *this, GlobalContext *globalCtx) {
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (globalCtx->msgCtx.unk12078 == 0) {
                     globalCtx = globalCtx;
-                    func_800BDC5C(&this->anime, &D_80A65D60, 1);
+                    func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
                     func_801518B0(globalCtx, 0x457, &this->actor);
                     this->lastText = 0x457; // Zero Rupees? Cruel joke!
                 } else {
@@ -616,8 +568,8 @@ void func_80A654A4(EnGinkoMan *this, GlobalContext *globalCtx) {
         break;
     }
 
-    if ((this->anime.animCurrentSeg == &D_060008C0) 
-      && (func_801378B8(&this->anime, this->anime.animFrameCount) != 0)) {
+    if ((this->skelAnime.animCurrentSeg == &D_060008C0) 
+      && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
         Audio_PlayActorSound2(this, 0x2992); // NA_SE_EV_BANK_MAN_HAND_HIT
     }
 }
@@ -679,7 +631,7 @@ void func_80A656D8(EnGinkoMan* this, GlobalContext *globalCtx) {
                 this->lastText = 0x47A;
             }
         } else {
-            func_800BDC5C(&this->anime, &D_80A65D60, 1);
+            func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
             func_801518B0(globalCtx, 0x47B, &this->actor);
             this->lastText = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
         }
@@ -701,8 +653,9 @@ void func_80A656D8(EnGinkoMan* this, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/func_80A656D8.asm")
 #endif
 
+// setup: stamp player
 void func_80A65800(EnGinkoMan* this) {
-    func_800BDC5C(&this->anime, D_80A65D60, 2);
+    func_800BDC5C(&this->skelAnime, D_80A65D60, 2);
     this->actionFunc =  func_80A65844;
 }
 
@@ -710,20 +663,20 @@ void func_80A65800(EnGinkoMan* this) {
 void func_80A65844(EnGinkoMan *this, GlobalContext *globalCtx) {
       
     if ((this->lastText == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-    && (func_801378B8(&this->anime, 10.0f))) {
+    && (func_801378B8(&this->skelAnime, 10.0f))) {
         Audio_PlayActorSound2(this, 0x2993); // NA_SE_EV_HANKO "stamp"
     }
 
-    if (func_801378B8(&this->anime, this->anime.animFrameCount)) {
+    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
         switch(this->lastText){
             case 0x464: // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-                func_800BDC5C(&this->anime, D_80A65D60, 1);
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
                 func_801518B0(globalCtx, 0x465, &this->actor);
                 this->lastText = 0x465; // "There! Now I'll know you when I see you!"
                 break;
 
             case 0x469: // "Excuse me, but let me take a look at you..."
-                func_800BDC5C(&this->anime, D_80A65D60, 1);
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
                 globalCtx->msgCtx.unk1207C = (gSaveContext.perm.unkEDC & 0xFFFF); 
                 // perm.day case req for div vs divu
                 if ((((s32) gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
@@ -744,14 +697,14 @@ void func_80A65844(EnGinkoMan *this, GlobalContext *globalCtx) {
 void func_80A65988(EnGinkoMan *this, GlobalContext *globalCtx) {
     if (this->actor.xzDistToPlayer > 160.0f) {
         if (this->unk264 == 0) {
-            if (this->anime.animCurrentSeg != &D_06004A7C) {
+            if (this->skelAnime.animCurrentSeg != &D_06004A7C) {
                 this->unk264 = 0x28;
-                func_800BDC5C(&this->anime, &D_80A65D60, 4);
+                func_800BDC5C(&this->skelAnime, &D_80A65D60, 4);
             }
         }
-    } else if ((this->unk264 == 0) && (this->anime.animCurrentSeg != &D_06000AC4)) {
+    } else if ((this->unk264 == 0) && (this->skelAnime.animCurrentSeg != &D_06000AC4)) {
         this->unk264 = 0x28;
-        func_800BDC5C(&this->anime, &D_80A65D60, 3);
+        func_800BDC5C(&this->skelAnime, &D_80A65D60, 3);
     }
 
     if (this->unk264 != 0) {
@@ -762,9 +715,9 @@ void func_80A65988(EnGinkoMan *this, GlobalContext *globalCtx) {
 // update extension
 //think this function adjusts his animation so that he faces the player while talking
 void func_80A65A5C(EnGinkoMan *this, GlobalContext *globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->anime);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 
-    if (this->anime.animCurrentSeg != &D_06004A7C) {
+    if (this->skelAnime.animCurrentSeg != &D_06004A7C) {
         func_800E9250(globalCtx, &this->actor, &this->unk24C, &this->unk252,
            this->actor.focus.pos);
     } else {
@@ -831,6 +784,7 @@ void EnGinkoMan_Draw(EnGinkoMan *this, GlobalContext *globalCtx) {
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE7000000;
-    SkelAnime_DrawSV(globalCtx, this->anime.skeleton, this->anime.limbDrawTbl, (s32) this->anime.dListCount, &func_80A65B44, &func_80A65C18, this);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, &func_80A65B44, &func_80A65C18, this);
 } // */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/EnGinkoMan_Draw.asm")
+

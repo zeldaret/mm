@@ -355,7 +355,8 @@ typedef struct {
     /* 0x00 */ u8 items[24];
     /* 0x18 */ u8 masks[24];
     /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ UNK_TYPE1 pad48[0x40];
+    /* 0x48 */ s32 unk48;
+    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
 } SaveContextInventory; // size = 0x88
 
 // Save Context that is only stored in an owl save
@@ -1017,8 +1018,9 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ UNK_TYPE1 pad1206C[0xC];
-    /* 0x1207C */ s32 unk12078;
+    /* 0x1206C */ s32 unk1206C;
+    /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
+    /* 0x12078 */ s32 unk12078;
     /* 0x1207C */ s32 unk1207C;
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
