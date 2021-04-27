@@ -12,19 +12,19 @@ typedef struct EnGinkoMan {
     ///* 0x144 */ char unk_144[0x124];
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
-    /* 0x18C */ Vec3s unk18C;
-    /* 0x192 */ UNK_TYPE1 unk192[0x5A];
-    /* 0x1EC */ Vec3s unk1EC;
-    /* 0x1F2 */ UNK_TYPE1 unk1F2[0x5A];
-    /* 0x24C */ Vec3s unk24C;
-    /* 0x252 */ Vec3s unk252;
+    /* 0x18C */ Vec3s limbDrawTbl[0x10];
+    ///* 0x192 */ UNK_TYPE1 unk192[0x5A];
+    /* 0x1EC */ Vec3s transitionDrawTbl[0x10];
+    ///* 0x1F2 */ UNK_TYPE1 unk1F2[0x5A];
+    /* 0x24C */ Vec3s limb15Rot;
+    /* 0x252 */ Vec3s limb8Rot;
     /* 0x258 */ s16 lastText;
-    /* 0x25A */ s16 unk25A;
-    /* 0x25C */ s16 unk25C;
-    /* 0x25E */ s16 unk25E;
-    /* 0x260 */ s16 unk260;
-    /* 0x262 */ s16 unk262; // padding
-    /* 0x264 */ s16 unk264;
+    /* 0x25A */ s16 unk25A; // copied from save context
+    /* 0x25C */ s16 unk25C; // copied from msgCtx -> unk12022
+    /* 0x25E */ s16 unk25E; // think this: double dialogue for opening acount with smol deposit
+    /* 0x260 */ s16 unk260; // busy with dialogue?
+    /* 0x262 */ s16 previousBankValue;
+    /* 0x264 */ s16 unk264; // animation timer of some sort
     /* 0x266 */ UNK_TYPE1 unk266[0x2];
 } EnGinkoMan; // size = 0x268
 
