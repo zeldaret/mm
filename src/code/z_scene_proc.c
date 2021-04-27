@@ -64,8 +64,9 @@ Gfx* SceneProc_SingleLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollA
  * Animated Material Type 0:
  * Scrolls a single layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, s32 segment, MaterialTexScrollAnimParams* params) {
-    Gfx* texScrollDList = SceneProc_SingleLayerTexScroll(globalCtx, params);
+void SceneProc_DrawMatAnimTexScroll(GlobalContext* globalCtx, s32 segment, void* params) {
+    MaterialTexScrollAnimParams* texScrollParams = (MaterialTexScrollAnimParams*)params;
+    Gfx* texScrollDList = SceneProc_SingleLayerTexScroll(globalCtx, texScrollParams);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -94,8 +95,9 @@ Gfx* SceneProc_TwoLayerTexScroll(GlobalContext* globalCtx, MaterialTexScrollAnim
  * Animated Material Type 1:
  * Scrolls a two layer texture using the provided `MaterialTexScrollAnimParams`.
  */
-void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, s32 segment, MaterialTexScrollAnimParams* params) {
-    Gfx* texScrollDList = SceneProc_TwoLayerTexScroll(globalCtx, params);
+void SceneProc_DrawMatAnimTwoTexScroll(GlobalContext* globalCtx, s32 segment, void* params) {
+    MaterialTexScrollAnimParams* texScrollParams = (MaterialTexScrollAnimParams*)params;
+    Gfx* texScrollDList = SceneProc_TwoLayerTexScroll(globalCtx, texScrollParams);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
