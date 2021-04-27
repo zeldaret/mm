@@ -101,13 +101,13 @@ s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId) {
 
 s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
     if (objectCtx->status[index].id > 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
-void Scene_DmaAllObjects(ObjectContext* objectCtx) {
+void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
     u32 vromSize;
@@ -141,68 +141,57 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     return (void*)addr;
 }
 
-/**
- * Scene Header Command 0x00:
- * Spawn List
- */
+// Scene Header Command 0x00: Spawn List
 void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    GlobalContext* global = globalCtx; // Needs to be a new variable to match (possibly a sub struct?)
+    GlobalContext* globalCtx2 = globalCtx;
     s32 loadedCount;
-    void* objectVramAddr;
-    s16 temp16;
+    void* nextObject;
+    s16 playerObjectId;
     u8 unk20;
 
-    globalCtx->linkActorEntry =
-        (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
+    globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
+                                globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
     if ((globalCtx->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
         (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)) {
+        // Skull Kid Object
         Object_Spawn(&globalCtx->objectCtx, OBJECT_STK);
         return;
     }
 
     loadedCount = Object_Spawn(&globalCtx->objectCtx, OBJECT_LINK_CHILD);
-    objectVramAddr = global->objectCtx.status[global->objectCtx.num].segment;
+    nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
     unk20 = gSaveContext.perm.unk20;
-    temp16 = D_801C2730[unk20];
-    gActorOverlayTable[0].initInfo->objectId = temp16;
-    Object_Spawn(&globalCtx->objectCtx, temp16);
+    playerObjectId = gLinkFormObjectIndexes[unk20];
+    gActorOverlayTable[0].initInfo->objectId = playerObjectId;
+    Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 
-    globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment = objectVramAddr;
+    globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment = nextObject;
 }
 
-/**
- * Scene Header Command 0x01:
- * Actor List
- */
+// Scene Header Command 0x01: Actor List
 void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->sceneNumActorsToLoad = (u16)cmd->actorList.num;
     globalCtx->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(cmd->actorList.segment);
     globalCtx->actorCtx.unkC = (u16)0;
 }
 
-/**
- * Scene Header Command 0x02:
- * List of cameras for actor cutscened
- */
+// Scene Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->unk18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
-/**
- * Scene Header Command 0x03:
- * Collision Header
- */
+// Scene Header Command 0x03: Collision Header
 void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
-    BgMeshHeader* temp_ret;
+    BgMeshHeader* colHeaderTemp;
     BgMeshHeader* colHeader;
 
-    temp_ret = (BgMeshHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
-    colHeader = temp_ret;
-    colHeader->vertices = (BgVertex*)Lib_SegmentedToVirtual(temp_ret->vertices);
+    colHeaderTemp = (BgMeshHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
+    colHeader = colHeaderTemp;
+    colHeader->vertices = (BgVertex*)Lib_SegmentedToVirtual(colHeaderTemp->vertices);
     colHeader->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(colHeader->polygons);
-    
+
     if (colHeader->attributes != NULL) {
         colHeader->attributes = (BgPolygonAttributes*)Lib_SegmentedToVirtual(colHeader->attributes);
     }
@@ -218,27 +207,18 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
     BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
-/**
- * Scene Header Command 0x04:
- * Room List
- */
+// Scene Header Command 0x04: Room List
 void Scene_HeaderCmdRoomList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->numRooms = cmd->roomList.num;
     globalCtx->roomList = (RomFile*)Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
-/**
- * Scene Header Command 0x06:
- * Entrance List
- */
+// Scene Header Command 0x06: Entrance List
 void Scene_HeaderCmdEntranceList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(cmd->entranceList.segment);
 }
 
-/**
- * Scene Header Command 0x07:
- * Special Files
- */
+// Scene Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     static RomFile tatlMessageFiles[2] = {
         { (u32)_elf_message_fieldSegmentRomStart, (u32)_elf_message_fieldSegmentRomEnd },
@@ -256,10 +236,7 @@ void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-/**
- * Scene Header Command 0x08:
- * Room Behavior
- */
+// Scene Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomContext.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
     globalCtx->roomContext.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
@@ -269,18 +246,12 @@ void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->kankyoContext.unkE2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
 }
 
-/**
- * Scene Header Command 0x0A:
- * Mesh Header
- */
+// Scene Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomContext.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
-/**
- * Scene Header Command 0x0B:
- * Object List
- */
+// Scene Header Command 0x0B:  Object List
 void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i, j, k;
     ObjectStatus* firstObject;
@@ -331,54 +302,48 @@ void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->objectCtx.num = i;
 }
 
-/**
- * Scene Header Command 0x0C:
- * Light List
- */
+// Scene Header Command 0x0C: Light List
 void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i;
     LightInfo* lightInfo = (LightInfo*)Lib_SegmentedToVirtual(cmd->lightList.segment);
-    
+
     for (i = 0; i < cmd->lightList.num; i++) {
         LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, lightInfo);
         lightInfo++;
     }
 }
 
-/**
- * Scene Header Command 0x0D:
- * Path List
- */
+// Scene Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupPathList = (void*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
-/**
- * Scene Header Command 0x0E:
- * Transition Actor List
- */
+// Scene Header Command 0x0E: Transition Actor List
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->transitionActorCount = cmd->transiActorList.num;
-    globalCtx->transitionActorList = (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
-    func_80105818(globalCtx, globalCtx->transitionActorCount, globalCtx->transitionActorList);
+    globalCtx->transitionCtx.nbTransitionActors = cmd->transiActorList.num;
+    globalCtx->transitionCtx.transitionActorList =
+        (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
+    func_80105818(globalCtx, globalCtx->transitionCtx.nbTransitionActors, globalCtx->transitionCtx.transitionActorList);
 }
 
-void func_8012FEBC(GlobalContext* globalCtx, u8* nbTransitionActors) {
-    *nbTransitionActors = 0;
+// Init function for the transition system.
+void Transition_Init(GameState* state, TransitionContext* transitionCtx) {
+    transitionCtx->nbTransitionActors = 0;
 }
 
-/**
- * Scene Header Command 0x0F:
- * Environment Light Settings List
- */
+// Scene Header Command 0x0F: Environment Light Settings List
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->kankyoContext.environmentSettingsCount = cmd->lightSettingList.num;
     globalCtx->kankyoContext.environmentSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
-s32 func_8012FF10(GlobalContext* globalCtx, s32 fileIndex) {
+/**
+ * Loads different texture files for each region of the world.
+ * These later are stored in segment 0x06, and used in maps.
+ */
+s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
-        { 0, 0 },
+        { 0, 0 }, // Default
         { (u32)__1114_0x01607b40SegmentRomStart, (u32)__1114_0x01607b40SegmentRomEnd },
         { (u32)__1115_0x0160b1d0SegmentRomStart, (u32)__1115_0x0160b1d0SegmentRomEnd },
         { (u32)__1116_0x0160c540SegmentRomStart, (u32)__1116_0x0160c540SegmentRomEnd },
@@ -399,30 +364,21 @@ s32 func_8012FF10(GlobalContext* globalCtx, s32 fileIndex) {
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
-/**
- * Scene Header Command 0x11:
- * Skybox Settings
- */
+// Scene Header Command 0x11: Skybox Settings
 void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->unk18874 = cmd->skyboxSettings.skyboxId & 3;
     globalCtx->kankyoContext.unk17 = globalCtx->kankyoContext.unk18 = cmd->skyboxSettings.unk5;
     globalCtx->kankyoContext.unk1E = cmd->skyboxSettings.unk6;
-    func_8012FF10(globalCtx, cmd->skyboxSettings.data1);
+    Scene_LoadAreaTextures(globalCtx, cmd->skyboxSettings.data1);
 }
 
-/**
- * Scene Header Command 0x12:
- * Skybox Disables
- */
+// Scene Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->kankyoContext.unk15 = cmd->skyboxDisables.unk4;
     globalCtx->kankyoContext.unk16 = cmd->skyboxDisables.unk5;
 }
 
-/**
- * Scene Header Command 0x10:
- * Time Settings
- */
+// Scene Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
@@ -437,15 +393,12 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->kankyoContext.unk2 = 0;
     }
 
-    if (gSaveContext.perm.inv.items[0] == 0xFF) {
-        if (globalCtx->kankyoContext.unk2 != 0) {
-            globalCtx->kankyoContext.unk2 = 5;
-        }
+    if ((gSaveContext.perm.inv.items[0] == 0xFF) && (globalCtx->kankyoContext.unk2 != 0)) {
+        globalCtx->kankyoContext.unk2 = 5;
     }
 
     if (gSaveContext.extra.unk2b8 == 0) {
-        // TODO: Needs REG macro // bREG(93)
-        gGameInfo->data[0x0F] = globalCtx->kankyoContext.unk2;
+        REG(15) = globalCtx->kankyoContext.unk2;
     }
 
     dayTime = gSaveContext.perm.time;
@@ -470,10 +423,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-/**
- * Scene Header Command 0x05:
- * Wind Settings
- */
+// Scene Header Command 0x05: Wind Settings
 void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     s8 temp1 = cmd->windSettings.west;
     s8 temp2 = cmd->windSettings.vertical;
@@ -485,46 +435,32 @@ void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->kankyoContext.windClothIntensity = cmd->windSettings.clothIntensity;
 }
 
-/**
- * Scene Header Command 0x13:
- * Exit List
- */
+// Scene Header Command 0x13: Exit List
 void Scene_HeaderCmdExitList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupExitList = (u16*)Lib_SegmentedToVirtual(cmd->exitList.segment);
 }
 
-/**
- * Scene Header Command 0x09:
- * Undefined
- */
+// Scene Header Command 0x09: Undefined
 void Scene_HeaderCmd09(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-/**
- * Scene Header Command 0x15:
- * Sound Settings
- */
+// Scene Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->unk814 = cmd->soundSettings.musicSeq;
     globalCtx->unk815 = cmd->soundSettings.nighttimeSFX;
+
     if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }
 
-/**
- * Scene Header Command 0x16:
- * Echo Setting
- */
-void Scene_HeaderEchoSetting(GlobalContext* globalCtx, SceneCmd* cmd) {
+// Scene Header Command 0x16: Echo Setting
+void Scene_HeaderCmdEchoSetting(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomContext.currRoom.echo = cmd->echoSettings.echo;
 }
 
-/**
- * Scene Header Command 0x18:
- * Alternate Header List
- */
-void Scene_HeaderAlternateHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
+// Scene Header Command 0x18: Alternate Header List=
+void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
@@ -539,52 +475,34 @@ void Scene_HeaderAlternateHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-/**
- * Scene Header Command 0x17:
- * Cutscene List
- */
-void Scene_HeaderCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
+// Scene Header Command 0x17: Cutscene List
+void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->csCtx.cutsceneCount = (u8)cmd->base.data1;
     globalCtx->cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
 }
 
-/**
- * Scene Header Command 0x1B:
- * Actor Cutscene List
- */
-void Scene_HeaderActorCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
+// Scene Header Command 0x1B: Actor Cutscene List
+void Scene_HeaderCmdActorCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
     ActorCutscene_Init(globalCtx, (ActorCutscene*)Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment),
                        cmd->cutsceneActorList.num);
 }
 
-/**
- * Scene Header Command 0x1C:
- * Mini Maps
- */
+// Scene Header Command 0x1C: Mini Maps
 void Scene_HeaderCmdMiniMap(GlobalContext* globalCtx, SceneCmd* cmd) {
     func_80104CF4(globalCtx);
     func_8010549C(globalCtx, cmd->minimapSettings.segment);
 }
 
-/**
- * Scene Header Command 0x1D:
- * Undefined
- */
+// Scene Header Command 0x1D: Undefined
 void Scene_HeaderCmd1D(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-/**
- * Scene Header Command 0x1E:
- * Minimap Compass Icon Info
- */
+// Scene Header Command 0x1E: Minimap Compass Icon Info
 void Scene_HeaderCmdMiniMapCompassInfo(GlobalContext* globalCtx, SceneCmd* cmd) {
     func_8010565C(globalCtx, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-/**
- * Scene Header Command 0x1A:
- * Set Area Visited Flag
- */
+// Scene Header Command 0x1A: Sets Area Visited Flag
 void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
@@ -611,10 +529,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     }
 }
 
-/**
- * Scene Header Command 0x1A:
- * Material Animations
- */
+// Scene Header Command 0x1A: Material Animations
 void Scene_HeaderCmdMaterialAnimations(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->sceneMaterialAnims = (MaterialAnimation*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }
@@ -653,12 +568,12 @@ s32 Scene_ProcessHeader(GlobalContext* globalCtx, SceneCmd* header) {
         Scene_HeaderCmdExitList,
         NULL,
         Scene_HeaderCmdSoundSettings,
-        Scene_HeaderEchoSetting,
-        Scene_HeaderCutsceneList,
-        Scene_HeaderAlternateHeaderList,
+        Scene_HeaderCmdEchoSetting,
+        Scene_HeaderCmdCutsceneList,
+        Scene_HeaderCmdAltHeaderList,
         Scene_HeaderCmdSetAreaVisitedFlag,
         Scene_HeaderCmdMaterialAnimations,
-        Scene_HeaderActorCutsceneList,
+        Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,
         Scene_HeaderCmd1D,
         Scene_HeaderCmdMiniMapCompassInfo,
