@@ -430,7 +430,7 @@ void __osViInit(void);
 void __osViSwapContext(void);
 OSMesgQueue* osPiGetCmdQueue(void);
 f32 __cosf(f32 __x);
-// void func_800920B0(void);
+s32 func_800920B0(OSPiHandle* pihandle, u32 devAddr, u32* data); // func_800920B0
 void osViSetSpecialFeatures(u32 func);
 s16 coss(u16 x);
 void osSetTime(OSTime ticks);
@@ -453,7 +453,7 @@ u32 __osGetFpcCsr(void);
 // void func_80093728(void);
 // void func_80093A00(void);
 u32 osAiGetLength(void);
-// void func_80093BB0(void);
+s32 func_80093BB0(OSPiHandle* pihandle, u32 devAddr, u32 data); // func_80093BB0
 void osMapTLBRdb(void);
 void osYieldThread(void);
 // void func_80093CC0(void);
@@ -3476,19 +3476,21 @@ void SysFlashrom_ThreadEntry(s80185D40* param_1);
 // void func_80185F04(void);
 // void func_80185F64(void);
 s32 func_80185F90(u32 param_1);
-// void func_80186A70(void);
-// void func_80186B78(void);
-// void func_80186CAC(void);
-// void func_80186D60(void);
-// void func_80186E64(void);
-// void func_80186EC8(void);
-// void func_80187018(void);
-// void func_80187080(void);
-// void func_80187124(void);
-// void func_80187284(void);
-// void func_801872FC(void);
-// void func_801873BC(void);
-// void func_8018752C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+u32 osFlashGetAddr(u32 page_num); // func_80186A70
+OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u32 start); // func_80186AB8
+void osFlashChange(u32 flash_num); // func_80186B38
+OSPiHandle* osFlashInit(void); // func_80186B78
+void osFlashReadStatus(u8* flash_status); // func_80186CAC
+void osFlashReadId(u32 *flash_type, u32 *flash_maker); // func_80186D60
+void osFlashClearStatus(void); // func_80186E64
+s32 osFlashAllErase(void); // func_80186EC8
+void osFlashAllEraseThrough(void); // func_80187018
+s32 osFlashCheckEraseEnd(void); // func_80187080
+s32 osFlashSectorErase(u32 page_num); // func_80187124
+void osFlashSectorEraseThrough(u32 page_num); // func_80187284
+s32 osFlashWriteBuffer(OSIoMesg *mb, s32 priority, void *dramAddr, OSMesgQueue *mq); // func_801872FC
+s32 osFlashWriteArray(u32 page_num); // func_801873BC
+s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u32 n_pages, OSMesgQueue *mq); // func_8018752C
 // void func_801877D0(void);
 // void func_80187B64(void);
 // void func_80187BEC(void);

@@ -441,6 +441,7 @@ SECTIONS
         build/src/code/sys_slowly.o(.text)
         build/asm/code/sys_flashrom.o(.text)
         build/asm/code/code_0x80185F90.o(.text)
+        build/src/code/code_0x80186A70.o(.text)
         build/asm/code/code_0x801877D0.o(.text)
         build/asm/code/code_0x8018B0F0.o(.text)
         build/asm/code/code_0x8018EB60.o(.text)
