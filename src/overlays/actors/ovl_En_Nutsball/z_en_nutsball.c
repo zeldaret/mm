@@ -12,7 +12,6 @@ void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80985D3C(EnNutsball* this);
 
 
-/*
 const ActorInit En_Nutsball_InitVars = {
     ACTOR_EN_NUTSBALL,
     ACTORCAT_PROP,
@@ -24,10 +23,7 @@ const ActorInit En_Nutsball_InitVars = {
     (ActorFunc)EnNutsball_Update,
     (ActorFunc)EnNutsball_Draw
 };
-*/
 
-extern ColliderCylinderInit D_809861F0;
-/*
 static ColliderCylinderInit sCylinderInit = {
     { 
         COLTYPE_NONE, 
@@ -47,13 +43,12 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 13, 13, 0, { 0, 0, 0 } },
 };
-*/
 
 void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
     
     ActorShape_Init(&this->actor.shape, 400.0f, (ActorShadowFunc)func_800B3FC0, 13.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_809861F0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.y = 0;
     this->actor.speedXZ = 10.0f;
     if (this->actor.params == 2) {
@@ -84,8 +79,6 @@ void func_80985D3C(EnNutsball *this) {
     this->collider.info.toucher.damage = 2;
 }
 
-#if NON_MATCHING
-//sp44 is at 0x48(sp) instead of 0x44(sp) while sp40 is at 0x44(sp) instead of 0x40(sp) 
 void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
     GlobalContext *globalCtx2 = globalCtx;
@@ -94,14 +87,16 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     Vec3f sp60;
     Vec3s sp58;
     Vec3f sp4c;
-    u32 sp44;
-    CollisionPoly *sp40;
+    f32 temp;
+    u32 bgId;
+    CollisionPoly *poly;
 
     if (!(player->stateFlags1 & 0x300000C0)) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
-            this->actor.world.rot.x = Math_FAtan2F(sqrtf((this->actor.velocity.x * this->actor.velocity.x) + (this->actor.velocity.z * this->actor.velocity.z)), this->actor.velocity.y);
+            temp = sqrtf((this->actor.velocity.x * this->actor.velocity.x) + (this->actor.velocity.z * this->actor.velocity.z));
+            this->actor.world.rot.x = Math_FAtan2F(temp, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) || (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
@@ -135,8 +130,8 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         if (this->actor.bgCheckFlags & 8) {
             if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &sp60, &this->actor.world.pos, &sp40, 1, 0, 0, 1, &sp44)) {
-                    if (func_800C9A4C(&globalCtx2->colCtx, sp40, sp44) & 0x30) {
+                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &sp60, &this->actor.world.pos, &poly, 1, 0, 0, 1, &bgId)) {
+                    if (func_800C9A4C(&globalCtx2->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {
@@ -159,9 +154,6 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nutsball_0x80985C40/EnNutsball_Update.asm")
-#endif
 
 void EnNutsball_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
