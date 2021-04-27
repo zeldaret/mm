@@ -11,6 +11,7 @@ void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80985D3C(EnNutsball* this);
 
+
 /*
 const ActorInit En_Nutsball_InitVars = {
     ACTOR_EN_NUTSBALL,
@@ -50,6 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
+    
     ActorShape_Init(&this->actor.shape, 400.0f, (ActorShadowFunc)func_800B3FC0, 13.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_809861F0);
     this->actor.shape.rot.y = 0;
@@ -83,17 +85,17 @@ void func_80985D3C(EnNutsball *this) {
 }
 
 #if NON_MATCHING
-//minor stack issues starting around Actor_SetVelocityAndMoveXYRotation
+//sp44 is at 0x48(sp) instead of 0x44(sp) while sp40 is at 0x44(sp) instead of 0x40(sp) 
 void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
-    s32 pad;
+    GlobalContext *globalCtx2 = globalCtx;
+    
     ActorPlayer *player = PLAYER;
     Vec3f sp60;
     Vec3s sp58;
     Vec3f sp4c;
-    s32 sp44;
+    u32 sp44;
     CollisionPoly *sp40;
-
 
     if (!(player->stateFlags1 & 0x300000C0)) {
         this->timer--;
@@ -131,10 +133,10 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         func_800B78B8(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 7);
         
         if (this->actor.bgCheckFlags & 8) {
-            if (func_800C9A4C(&globalCtx->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
+            if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (func_800C55C4(&globalCtx->colCtx, &this->actor.prevPos, &sp60, &this->actor.world.pos, &sp40, 1, 0, 0, 1, &sp44)) {
-                    if (func_800C9A4C(&globalCtx->colCtx, sp40, sp44) & 0x30) {
+                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &sp60, &this->actor.world.pos, &sp40, 1, 0, 0, 1, &sp44)) {
+                    if (func_800C9A4C(&globalCtx2->colCtx, sp40, sp44) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {
