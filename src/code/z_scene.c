@@ -47,7 +47,7 @@ void Object_InitBank(GameState* state, ObjectContext* objectCtx) {
     objectCtx->subKeepIndex = 0;
 
     // clang-format off
-    for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) objectCtx->status[i].id = 0;
+    for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
     objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&state->heap, spaceSize);

@@ -1293,8 +1293,6 @@ typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt)
 
 typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
-typedef void(*SceneDrawConfigFunc)(GlobalContext*);
-
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 
 typedef struct {
@@ -1308,10 +1306,6 @@ typedef struct {
     /* 0x1C */ u32 unk1C;
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
-
-typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
-
-typedef void(*MaterialAnimationDrawFunc)(GlobalContext* globalCtx, u32 segment, void *params);
 
 typedef struct Camera Camera;
 

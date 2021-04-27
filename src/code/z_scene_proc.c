@@ -22,10 +22,10 @@ static Gfx sSceneDrawDefaultDL[] = {
 };
 
 /**
- * Executes the current scene draw config function.
+ * Executes the current scene draw config handler.
  */
 void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
-    static SceneDrawConfigFunc sceneDrawConfigFuncs[] = {
+    static void (*sceneDrawConfigHandlers[])(GlobalContext*) = {
         SceneProc_SceneDrawConfigDefault,
         SceneProc_SceneDrawConfigMatAnim,
         SceneProc_SceneDrawConfigDoNothing,
@@ -36,7 +36,7 @@ void SceneProc_ExecuteSceneDrawConfig(GlobalContext* globalCtx) {
         SceneProc_SceneDrawConfigMatAnimManualStep,
     };
 
-    sceneDrawConfigFuncs[globalCtx->sceneConfig](globalCtx);
+    sceneDrawConfigHandlers[globalCtx->sceneConfig](globalCtx);
 }
 
 /**
@@ -394,7 +394,7 @@ void SceneProc_DrawMatAnimTexCycle(GlobalContext* globalCtx, s32 segment, void* 
  */
 void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio, u32 step,
                                     u32 flags) {
-    static MaterialAnimationDrawFunc gSceneProcDrawFuncs[] = {
+    static void (*gSceneProcDrawHandlers[])(GlobalContext*, u32 segment, void* params) = {
         SceneProc_DrawMatAnimTexScroll, SceneProc_DrawMatAnimTwoTexScroll,         SceneProc_DrawMatAnimColor,
         SceneProc_DrawMatAnimColorLerp, SceneProc_DrawMatAnimColorNonLinearInterp, SceneProc_DrawMatAnimTexCycle,
     };
@@ -409,7 +409,8 @@ void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation*
         do {
             segment = matAnim->segment;
             segmentAbs = ((segment < 0) ? -segment : segment) + 7;
-            gSceneProcDrawFuncs[matAnim->type](globalCtx, segmentAbs, (void*)Lib_SegmentedToVirtual(matAnim->params));
+            gSceneProcDrawHandlers[matAnim->type](globalCtx, segmentAbs,
+                                                  (void*)Lib_SegmentedToVirtual(matAnim->params));
             matAnim++;
         } while (segment > -1);
     }
