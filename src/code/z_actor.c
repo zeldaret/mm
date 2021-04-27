@@ -327,7 +327,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     // TODO: Segment number enum
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->objectCtx.status[actor->objBankIndex].segment);
 }
 
 #if 0
@@ -351,7 +351,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->naviMsgId = 255;
 
     Actor_Setshape(&actor->shape, 0, 0, 0);
-    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objBankIndex) != 0) {
+    if (Object_IsLoaded(&ctxt->objectCtx, actor->objBankIndex) != 0) {
         Actor_SetObjectSegment(ctxt, actor);
         actor->init(actor, ctxt);
         actor->init = NULL;

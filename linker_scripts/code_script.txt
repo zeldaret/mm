@@ -500,7 +500,7 @@ SECTIONS
         build/src/code/z_rcp.o(.data)
         build/asm/code/code_data_z_room.o(.data)
         build/asm/code/code_data_0x801C1D30.o(.data)
-        build/asm/code/code_data_z_scene.o(.data)
+        build/src/code/z_scene.o(.data)
         build/asm/code/code_data_0x801C2730.o(.data)
         build/src/code/z_scene_proc.o(.data)
         build/asm/code/code_data_z_scene_table.o(.data)

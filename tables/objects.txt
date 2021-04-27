@@ -429,7 +429,7 @@
     0x801C0EF0:"code_data_z_rcp",
     0x801C1D10:"code_data_z_room",
     0x801C1D30:"code_data_0x801C1D30",
-    0x801C20A0:"code_data_z_scene", # bit of a guess
+    0x801C2650:"code_data_z_scene",
     0x801C2730:"code_data_0x801C2730",
     0x801C3B60:"code_data_z_scene_proc",
     0x801C3CA0:"code_data_z_scene_table",

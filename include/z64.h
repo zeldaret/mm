@@ -296,7 +296,7 @@ typedef enum IRQ_TYPE {
 typedef struct {
     /* 0x0 */ u32 vromStart;
     /* 0x4 */ u32 vromEnd;
-} ObjectFileTableEntry; // size = 0x8
+} RomFile; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u32 textSize;
@@ -1662,7 +1662,7 @@ struct GlobalContext {
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
     /* 0x17104 */ AnimationContext animationCtx;
-    /* 0x17D88 */ SceneContext sceneContext;
+    /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
@@ -1679,7 +1679,7 @@ struct GlobalContext {
     /* 0x18848 */ u8 numRooms;
     /* 0x18849 */ UNK_TYPE1 pad18849;
     /* 0x1884A */ s16 unk1884A;
-    /* 0x1884C */ RoomFileLocation* roomList;
+    /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;

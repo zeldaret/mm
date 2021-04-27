@@ -6,11 +6,6 @@
 #include <unk.h>
 
 typedef struct {
-/* 0x0 */ u32 vromStart;
-/* 0x4 */ u32 vromEnd;
-} RoomFileLocation; // size = 0x8
-
-typedef struct {
     /* 0x00 */ u8  code;
     /* 0x01 */ u8  data1;
     /* 0x04 */ u32 data2;
@@ -65,7 +60,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u8  code;
     /* 0x01 */ u8  cUpElfMsgNum;
-    /* 0x04 */ u32 keepObjectId;
+    /* 0x04 */ u32 subKeepIndex;
 } SCmdSpecialFiles;
 
 typedef struct {
@@ -371,14 +366,14 @@ typedef struct {
 } MaterialTexCycleAnimParams; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ void* objectVramStart;
-    /* 0x004 */ void* objectVramEnd;
-    /* 0x008 */ u8 objectCount;
+    /* 0x000 */ void* spaceStart;
+    /* 0x004 */ void* spaceEnd;
+    /* 0x008 */ u8 num;
     /* 0x009 */ u8 spawnedObjectCount;
     /* 0x00A */ u8 mainKeepIndex;
-    /* 0x00B */ u8 keepObjectId;
-    /* 0x00C */ ObjectStatus objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
-} SceneContext; // size = 0x958
+    /* 0x00B */ u8 subKeepIndex;
+    /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
+} ObjectContext; // size = 0x958
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
@@ -530,5 +525,121 @@ typedef enum {
     /* 0x6F */ SCENE_CLOCKTOWER,
     /* 0x70 */ SCENE_ALLEY
 } SceneID;
+
+// Scene commands
+typedef enum {
+    /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
+    /* 0x01 */ SCENE_CMD_ID_ACTOR_LIST,
+    /* 0x02 */ SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST,
+    /* 0x03 */ SCENE_CMD_ID_COL_HEADER,
+    /* 0x04 */ SCENE_CMD_ID_ROOM_LIST,
+    /* 0x05 */ SCENE_CMD_ID_WIND_SETTINGS,
+    /* 0x06 */ SCENE_CMD_ID_ENTRANCE_LIST,
+    /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
+    /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
+    /* 0x09 */ SCENE_CMD_ID_UNUSED_09,
+    /* 0x0A */ SCENE_CMD_ID_MESH,
+    /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
+    /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
+    /* 0x0D */ SCENE_CMD_ID_PATH_LIST,
+    /* 0x0E */ SCENE_CMD_ID_TRANSI_ACTOR_LIST,
+    /* 0x0F */ SCENE_CMD_ID_ENV_LIGHT_SETTINGS,
+    /* 0x10 */ SCENE_CMD_ID_TIME_SETTINGS,
+    /* 0x11 */ SCENE_CMD_ID_SKYBOX_SETTINGS,
+    /* 0x12 */ SCENE_CMD_ID_SKYBOX_DISABLES,
+    /* 0x13 */ SCENE_CMD_ID_EXIT_LIST,
+    /* 0x14 */ SCENE_CMD_ID_END,
+    /* 0x15 */ SCENE_CMD_ID_SOUND_SETTINGS,
+    /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
+    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
+    /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
+    /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
+    /* 0x1A */ SCENE_CMD_ID_MATERIAL_ANIM_LIST,
+    /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
+    /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
+    /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
+    /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
+    /* 0x1F */ SCENE_CMD_MAX
+} SceneCommandTypeID;
+
+#define SCENE_CMD_SPAWN_LIST(numSpawns, spawnList) \
+    { SCENE_CMD_ID_SPAWN_LIST, numSpawns, CMD_PTR(spawnList) }
+
+#define SCENE_CMD_ACTOR_LIST(numActors, actorList) \
+    { SCENE_CMD_ID_ACTOR_LIST, numActors, CMD_PTR(actorList) }
+
+#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(camList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, 0, CMD_PTR(camList) }
+
+#define SCENE_CMD_COL_HEADER(colHeader) \
+    { SCENE_CMD_ID_COL_HEADER, 0, CMD_PTR(colHeader) }
+
+#define SCENE_CMD_ROOM_LIST(numRooms, roomList) \
+    { SCENE_CMD_ID_ROOM_LIST, numRooms, CMD_PTR(roomList) }
+
+#define SCENE_CMD_WIND_SETTINGS(xDir, yDir, zDir, strength) \
+    { SCENE_CMD_ID_WIND_SETTINGS, 0, CMD_BBBB(xDir, yDir, zDir, strength) }
+
+#define SCENE_CMD_ENTRANCE_LIST(entranceList) \
+    { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
+
+#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+
+#define SCENE_CMD_ROOM_BEHAVIOR(currRoomUnk3, currRoomUnk2, currRoomUnk5, msgCtxunk12044, enablePosLights,  \
+                                kankyoContextUnkE2)                                                         \
+    {                                                                                                       \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
+            _SHIFTL(currRoomUnk2, 0xFF, 0) | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+                _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
+    }
+
+#define SCENE_CMD_MESH(meshHeader) \
+    { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
+
+#define SCENE_CMD_OBJECT_LIST(numObjects, objectList) \
+    { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
+
+#define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
+    { SCENE_CMD_ID_POS_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+
+#define SCENE_CMD_PATH_LIST(pathList) \
+    { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
+
+#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, transitionActorList) \
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(transitionActorList) } 
+
+#define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
+    { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
+
+#define SCENE_CMD_TIME_SETTINGS(hour, min, speed) \
+    { SCENE_CMD_ID_TIME_SETTINGS, 0, CMD_BBBB(hour, min, speed, 0) }
+
+#define SCENE_CMD_SKYBOX_SETTINGS(externalTextureFileId, skyboxId, weather, lightMode) \
+    { SCENE_CMD_ID_SKYBOX_SETTINGS, externalTextureFileId, CMD_BBBB(skyboxId, weather, lightMode, 0) }
+
+#define SCENE_CMD_SKYBOX_DISABLES(disableSky, disableSunMoon) \
+    { SCENE_CMD_ID_SKYBOX_DISABLES, 0, CMD_BBBB(disableSky, disableSunMoon, 0, 0) }
+
+#define SCENE_CMD_EXIT_LIST(exitList) \
+    { SCENE_CMD_ID_EXIT_LIST, 0, CMD_PTR(exitList) }
+
+#define SCENE_CMD_END() \
+    { SCENE_CMD_ID_END, 0, CMD_W(0) }
+
+#define SCENE_CMD_SOUND_SETTINGS(audioSessionId, nighttimeSfx, bgmId) \
+    { SCENE_CMD_ID_SOUND_SETTINGS, audioSessionId, CMD_BBBB(0, 0, nighttimeSfx, bgmId) }
+
+#define SCENE_CMD_ECHO_SETTINGS(echo) \
+    { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
+
+#define SCENE_CMD_CUTSCENE_LIST(numCutscene, cutsceneList) \
+    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(cutsceneList) }
+
+#define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
+    { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
+
+#define SCENE_CMD_MISC_SETTINGS() \
+    { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
 
 #endif
