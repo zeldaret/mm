@@ -1013,15 +1013,15 @@ typedef struct {
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
-    /* 0x12022 */ u8 unk12022; // input option chosen?
+    /* 0x12022 */ u8 choiceIndex;
     /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
-    /* 0x12078 */ s32 unk12078; // selected rupee count
-    /* 0x1207C */ s32 unk1207C; // bank rupee displayable 
+    /* 0x12078 */ s32 bankRupeesSelected;
+    /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
 
