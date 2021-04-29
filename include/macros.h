@@ -86,4 +86,11 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP_MAX(x, max)  ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min)  ((x) < (min) ? (min) : (x))
 
+#define SWAP(type, a, b) \
+{                        \
+    type _temp = (a);    \
+    (a) = (b);           \
+    (b) = _temp;         \
+}
+
 #endif // _MACROS_H_

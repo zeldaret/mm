@@ -39,6 +39,19 @@
 #define SCREEN_WIDTH_HIGH_RES  576
 #define SCREEN_HEIGHT_HIGH_RES 454
 
+#define Z_THREAD_ID_IDLE     1
+#define Z_THREAD_ID_SLOWLY   2
+#define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_DMAMGR  18
+#define Z_THREAD_ID_IRQMGR  19
+
+#define Z_PRIORITY_SLOWLY  5
+#define Z_PRIORITY_GRAPH   9
+#define Z_PRIORITY_IDLE   12
+#define Z_PRIORITY_MAIN   12
+#define Z_PRIORITY_DMAMGR 17
+#define Z_PRIORITY_IRQMGR 18
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
@@ -53,10 +66,39 @@ typedef struct {
 } ActorCutscene; // size = 0x10
 
 typedef struct {
+    /* 0x0 */ s16 polyStartIndex;
+    /* 0x2 */ s16 ceilingNodeHead;
+    /* 0x4 */ s16 wallNodeHead;
+    /* 0x6 */ s16 floorNodeHead;
+} ActorMeshPolyLists; // size = 0x8
+
+typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedTexture; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ u16 floorHead;
+    /* 0x2 */ u16 wallHead;
+    /* 0x4 */ u16 ceilingHead;
+} BgMeshSubdivision; // size = 0x6
+
+typedef struct {
+    /* 0x0 */ u32 attributes[2];
+} BgPolygonAttributes; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ s16 polyIndex;
+    /* 0x2 */ u16 next;
+} BgPolygonLinkedListNode; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ u16 maxNodes;
+    /* 0x2 */ u16 reservedNodes;
+    /* 0x4 */ BgPolygonLinkedListNode* nodes;
+    /* 0x8 */ u8* unk8;
+} BgScenePolygonLists; // size = 0xC
 
 typedef struct {
     /* 0x0 */ s16 sceneNumber;
@@ -301,7 +343,11 @@ typedef struct {
     /* 0x010 */ s32 unk10;
     /* 0x014 */ UNK_TYPE1 pad14[0x2E];
     /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x43];
+    /* 0x044 */ UNK_TYPE1 pad44[0x34];
+    /* 0x078 */ f32 unk78;
+    /* 0x07C */ UNK_TYPE1 pad7C[0x4];
+    /* 0x080 */ s16 unk80;
+    /* 0x082 */ UNK_TYPE1 pad82[0x5];
     /* 0x087 */ s8 unk87;
     /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
     /* 0x276 */ u8 unk276;
@@ -424,16 +470,24 @@ typedef void(*osCreateThread_func)(void*);
 
 typedef void*(*printf_func)(void*, char*, size_t);
 
+typedef enum {
+    SLOWLY_CALLBACK_NO_ARGS,
+    SLOWLY_CALLBACK_ONE_ARG,
+    SLOWLY_CALLBACK_TWO_ARGS
+} SlowlyCallbackArgCount;
+
 typedef struct {
-    /* 0x000 */ OSThread unk0;
-    /* 0x1B0 */ s8 argCount;
-    /* 0x1B1 */ s8 unk1B1;
-    /* 0x1B2 */ UNK_TYPE1 pad1B2[0x2];
-    /* 0x1B4 */ UNK_TYPE1 func;
-    /* 0x1B5 */ UNK_TYPE1 pad1B5[0x3];
-    /* 0x1B8 */ s32 arg0;
-    /* 0x1BC */ s32 arg1;
-} s8018571C; // size = 0x1C0
+    /* 0x000 */ OSThread thread;
+    /* 0x1B0 */ u8 callbackArgCount;
+    /* 0x1B1 */ u8 status;
+    /* 0x1B4 */ union {
+        void (*callback0)(void);
+        void (*callback1)(void*);
+        void (*callback2)(void*, void*);
+    };
+    /* 0x1B8 */ void* callbackArg0;
+    /* 0x1BC */ void* callbackArg1;
+} SlowlyTask; // size = 0x1C0
 
 typedef struct {
     /* 0x00 */ int unk0;
@@ -490,11 +544,41 @@ typedef struct {
 } s80874650; // size = 0x1C
 
 typedef struct {
+    /* 0x00 */ Vec3f scale;
+    /* 0x0C */ Vec3s rotation;
+    /* 0x14 */ Vec3f pos;
+} ActorMeshParams; // size = 0x20
+
+typedef struct {
+    /* 0x0 */ BgPolygonLinkedListNode* nodes;
+    /* 0x4 */ u32 nextFreeNode;
+    /* 0x8 */ s32 maxNodes;
+} BgPolygonLinkedList; // size = 0xC
+
+typedef struct {
     /* 0x00 */ f32 x[4];
     /* 0x10 */ f32 y[4];
     /* 0x20 */ f32 z[4];
     /* 0x30 */ f32 w[4];
 } z_Matrix; // size = 0x40
+
+typedef struct {
+    /* 0x0 */ Vec3s pos;
+} BgVertex; // size = 0x6
+
+typedef struct {
+    /* 0x0 */ Vec3s minPos;
+    /* 0x6 */ UNK_TYPE1 xLength; // Created by retype action
+    /* 0x7 */ UNK_TYPE1 pad7[0x1];
+    /* 0x8 */ UNK_TYPE1 zLength; // Created by retype action
+    /* 0x9 */ UNK_TYPE1 pad9[0x3];
+    /* 0xC */ u32 properties;
+} BgWaterBox; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ UNK_TYPE1 pad0[0x4];
+    /* 0x4 */ BgWaterBox* boxes;
+} BgWaterboxList; // size = 0x8
 
 typedef union {
     F3DVertexColor color;
@@ -1388,7 +1472,7 @@ struct Camera {
 }; // size = 0x178
 
 typedef struct {
-    /* 0x00 */ z_Matrix displayMatrix;
+    /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
     /* 0x44 */ Vec3f location;
     /* 0x50 */ u8 flags; // bit 0 - footmark fades out
@@ -1532,22 +1616,23 @@ struct GlobalContext {
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
     /* 0x18764 */ TransitionActorEntry* transitionActorList;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
-    /* 0x187B0 */ z_Matrix unk187B0;
+    /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
-    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x187FC */ MtxF unk187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
     /* 0x18840 */ u32 unk18840;
     /* 0x18844 */ u8 unk18844;
     /* 0x18845 */ u8 unk18845;
     /* 0x18846 */ u16 sceneNumActorsToLoad;
     /* 0x18848 */ u8 numRooms;
-    /* 0x18849 */ UNK_TYPE1 pad18849[0x3];
+    /* 0x18849 */ UNK_TYPE1 pad18849;
+    /* 0x1884A */ s16 unk1884A;
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
-    /* 0x18860 */ void* setupExitList;
+    /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
     /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
@@ -1555,7 +1640,7 @@ struct GlobalContext {
     /* 0x18874 */ u8 unk18874;
     /* 0x18875 */ s8 unk18875;
     /* 0x18876 */ UNK_TYPE1 pad18876[0x4];
-    /* 0x1887A */ u16 unk1887A;
+    /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk1887C;
     /* 0x1887D */ UNK_TYPE1 pad1887D[0x2];
     /* 0x1887F */ u8 unk1887F;

@@ -415,7 +415,7 @@ SECTIONS
         build/src/code/z_skelanime.o(.text)
         build/asm/code/z_skin.o(.text)
         build/asm/code/z_skin_awb.o(.text)
-        build/asm/code/code_0x80138BA0.o(.text)
+        build/src/code/z_skin_matrix.o(.text)
         build/src/code/z_snap.o(.text)
         build/asm/code/z_sub_s.o(.text)
         build/asm/code/code_0x8013EC10.o(.text)
@@ -466,6 +466,7 @@ SECTIONS
         build/asm/code/code_0x80182CE0.o(.text)
         build/src/code/code_0x80183070.o(.text)
         build/asm/code/code_0x801830A0.o(.text)
+        build/src/code/sys_slowly.o(.text)
         build/asm/code/sys_flashrom.o(.text)
         build/asm/code/code_0x80185F90.o(.text)
         build/asm/code/code_0x801877D0.o(.text)
@@ -533,7 +534,7 @@ SECTIONS
         build/asm/code/code_data_z_scene_table.o(.data)
         build/asm/code/code_data_0x801323D0.o(.data)
         build/src/code/z_skelanime.o(.data)
-        build/asm/code/code_data_0x80138BA0.o(.data)
+        build/src/code/z_skin_matrix.o(.data)
         build/asm/code/code_data_z_sub_s.o(.data)
         build/asm/code/code_data_z_vimode.o(.data)
         build/src/code/z_vr_box.o(.data)
@@ -603,7 +604,7 @@ SECTIONS
         build/src/code/z_scene_proc.o(.rodata)
         build/asm/code/code_rodata_z_scene_table.o(.rodata)
         build/asm/code/code_rodata_z_skin.o(.rodata)
-        build/asm/code/code_rodata_0x80138BA0.o(.rodata)
+        build/src/code/z_skin_matrix.o(.rodata)
         build/asm/code/code_rodata_z_sub_s.o(.rodata)
         build/asm/code/code_rodata_0x8013EC10.o(.rodata)
         build/src/code/z_view.o(.rodata)
@@ -1634,9 +1635,9 @@ SECTIONS
     ovl_Door_Ana : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.text)
-        build/asm/overlays/ovl_Door_Ana_data.o(.data)
+        build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.data)
         build/src/overlays/actors/ovl_Door_Ana/z_door_ana.o(.rodata)
-        build/asm/overlays/ovl_Door_Ana_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Door_Ana/z_door_ana_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
