@@ -9,7 +9,7 @@ void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemInbox_Update(Actor* thisx, GlobalContext* globalCtx);
 void ItemInbox_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80945534(ItemInbox* this, GlobalContext* globalCtx);
+void ItemInbox_Idle(ItemInbox* this, GlobalContext* globalCtx);
 
 const ActorInit Item_Inbox_InitVars = {
     ACTOR_ITEM_INBOX,
@@ -26,14 +26,14 @@ const ActorInit Item_Inbox_InitVars = {
 void ItemInbox_Init(Actor* thisx, GlobalContext* globalCtx) {
     ItemInbox* this = THIS;
 
-    this->actionFunc = func_80945534;
+    this->actionFunc = ItemInbox_Idle;
     Actor_SetScale(&this->actor, 0.2f);
 }
 
 void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80945534(ItemInbox* this, GlobalContext* globalCtx) {
+void ItemInbox_Idle(ItemInbox* this, GlobalContext* globalCtx) {
     if (Actor_GetChestFlag(globalCtx, (this->actor.params >> 8) & 0x1F)) {
         Actor_MarkForDeath(&this->actor);
     }
