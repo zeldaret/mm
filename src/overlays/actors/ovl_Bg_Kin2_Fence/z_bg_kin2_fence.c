@@ -56,7 +56,7 @@ static ColliderJntSphInit sJntSphInit = {
     4, sJntSphElementsInit,
 };
 
-Vec3f D_80B6EE80[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+Vec3f eyeSparkleSpawnPositions[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
 
                           { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
 
@@ -104,7 +104,7 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        SysMatrix_MultiplyVector3fByState(&D_80B6EE80[mask][i], &sp58);
+        SysMatrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
         EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 6000, -10);
     }
 }
