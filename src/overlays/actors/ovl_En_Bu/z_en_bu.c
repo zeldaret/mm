@@ -53,7 +53,7 @@ void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
     Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, this->unk18C);
+    gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
