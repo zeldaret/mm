@@ -35,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000A20; // Lilypad collision
+extern CollisionHeader D_06000A20; // Lilypad collision
 extern Gfx D_06000040[];        // Lilypad model
 
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {

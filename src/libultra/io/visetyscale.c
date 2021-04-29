@@ -1,7 +1,5 @@
-#include <stdarg.h>
-#include <osint.h>
-#include <viint.h>
-#include <assert.h>
+#include <ultra64.h>
+#include <global.h>
 
 void osViSetYScale(f32 value) {
     register u32 saveMask;

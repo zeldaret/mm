@@ -30,7 +30,7 @@ def ReadAllLines(fileName):
 
 def GetFiles(path, ext):
     files = []
-    
+
     for r, d, f in os.walk(path):
         for file in f:
             if file.endswith(ext):
@@ -51,11 +51,11 @@ def GetRemovableSize(functions_to_count, path):
             for asm_line in asm_lines:
                 if (asm_line[0:2] == "/*" and asm_line[30:32] == "*/"):
                     file_size += 4
-                    
+
         size += file_size
 
     return size
-    
+
 map_file = ReadAllLines('build/mm.map')
 
 # Get list of Non-Matchings
@@ -70,7 +70,14 @@ not_attempted_functions = list(set(not_attempted_functions).difference(non_match
 # We want to do this after not attempted functions list generation so we can remove all non matchings.
 if not args.matching:
     non_matching_functions = []
-    
+
+# Get asset files
+audio_files = GetFiles("baserom/assets/audio", "")
+misc_files = GetFiles("baserom/assets/misc", "")
+object_files = GetFiles("baserom/assets/objects", "")
+scene_files = GetFiles("baserom/assets/scenes", "")
+texture_files = GetFiles("baserom/assets/textures", "")
+
 # Initialize all the code values
 src = 0
 src_code = 0
@@ -82,6 +89,11 @@ asm_code = 0
 asm_boot = 0
 asm_ovl = 0
 asm_libultra = 0
+audio = 0
+misc = 0
+object_ = 0
+scene = 0
+texture = 0
 
 for line in map_file:
     line_split =  list(filter(None, line.split(" ")))
@@ -93,25 +105,37 @@ for line in map_file:
 
         if (section == ".text"):
             if (obj_file.startswith("build/src")):
-                if (obj_file.startswith("build/src/code")):  
+                if (obj_file.startswith("build/src/code")):
                     src_code += file_size
                 elif (obj_file.startswith("build/src/libultra")):
                     src_libultra += file_size
-                elif (obj_file.startswith("build/src/boot")):     
+                elif (obj_file.startswith("build/src/boot")):
                     src_boot += file_size
                 elif (obj_file.startswith("build/src/overlays")):
                     src_ovl += file_size
             elif (obj_file.startswith("build/asm")):
-                if (obj_file.startswith("build/asm/code")):  
+                if (obj_file.startswith("build/asm/code")):
                     asm_code += file_size
                 elif (obj_file.startswith("build/asm/libultra")):
                     asm_libultra += file_size
-                elif (obj_file.startswith("build/asm/boot")):     
+                elif (obj_file.startswith("build/asm/boot")):
                     asm_boot += file_size
                 elif (obj_file.startswith("build/asm/overlays")):
                     asm_ovl += file_size
 
-# Add libultra to boot.        
+        if (section == ".data"):
+            if (obj_file.startswith("build/assets/src/audio")):
+                audio += file_size
+            if (obj_file.startswith("build/assets/src/misc")):
+                misc += file_size
+            if (obj_file.startswith("build/assets/src/objects")):
+                object_ += file_size
+            if (obj_file.startswith("build/assets/src/scenes")):
+                scene += file_size
+            if (obj_file.startswith("build/assets/src/textures")):
+                texture += file_size
+
+# Add libultra to boot.
 src_boot += src_libultra
 asm_boot += asm_libultra
 
@@ -142,6 +166,23 @@ boot_size = src_boot + asm_boot
 ovl_size = src_ovl + asm_ovl
 handwritten = 0 # Currently unsure of any handwritten asm in MM
 
+# Calculate size of all assets
+audio_size = 0
+misc_size = 0
+object_size = 0
+scene_size = 0
+texture_size = 0
+for f in audio_files:
+    audio_size += os.stat(f).st_size
+for f in misc_files:
+    misc_size += os.stat(f).st_size
+for f in object_files:
+    object_size += os.stat(f).st_size
+for f in scene_files:
+    scene_size += os.stat(f).st_size
+for f in texture_files:
+    texture_size += os.stat(f).st_size
+
 # Calculate asm and src totals
 src = src_code + src_boot + src_ovl
 asm = asm_code + asm_boot + asm_ovl
@@ -159,6 +200,11 @@ asm_percent = 100 * asm / total
 code_percent = 100 * code / code_size
 boot_percent = 100 * boot / boot_size
 ovl_percent = 100 * ovl / ovl_size
+audio_percent = 100 * audio / audio_size
+misc_percent = 100 * misc / misc_size
+object_percent = 100 * object_ / object_size
+scene_percent = 100 * scene / scene_size
+texture_percent = 100 * texture / texture_size
 
 # convert bytes to masks and rupees
 num_masks = 24
@@ -203,9 +249,11 @@ if args.format == 'csv':
     git_object = git.Repo().head.object
     timestamp = str(git_object.committed_date)
     git_hash = git_object.hexsha
-    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size), 
-                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions))]
-    
+    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size),
+                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions)),
+                str(audio), str(audio_size), str(misc), str(misc_size), str(object_), str(object_size),
+                str(scene), str(scene_size), str(texture), str(texture_size)]
+
     print(",".join(csv_list))
 elif args.format == 'shield-json':
     # https://shields.io/endpoint
@@ -223,6 +271,11 @@ elif args.format == 'text':
     print(str(boot) + "/" + str(boot_size) + " bytes " + adjective + " in boot " + str(boot_percent) + "%\n")
     print(str(code) + "/" + str(code_size) + " bytes " + adjective + " in code " + str(code_percent) + "%\n")
     print(str(ovl) + "/" + str(ovl_size) + " bytes " + adjective + " in overlays " + str(ovl_percent) + "%\n")
+    print(str(audio) + "/" + str(audio_size) + " bytes reconstructed in audio " + str(audio_percent) + "%\n")
+    print(str(misc) + "/" + str(misc_size) + " bytes reconstructed in misc " + str(misc_percent) + "%\n")
+    print(str(object_) + "/" + str(object_size) + " bytes reconstructed in objects " + str(object_percent) + "%\n")
+    print(str(scene) + "/" + str(scene_size) + " bytes reconstructed in scenes " + str(scene_percent) + "%\n")
+    print(str(texture) + "/" + str(texture_size) + " bytes reconstructed in textures " + str(texture_percent) + "%\n")
     print("------------------------------------\n")
 
     if (rupees > 0):
