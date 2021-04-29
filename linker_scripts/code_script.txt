@@ -4699,9 +4699,9 @@ SECTIONS
     ovl_Dm_Statue : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Statue/z_dm_statue.o(.text)
-        build/asm/overlays/ovl_Dm_Statue_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Statue/z_dm_statue.o(.data)
         build/src/overlays/actors/ovl_Dm_Statue/z_dm_statue.o(.rodata)
-        build/asm/overlays/ovl_Dm_Statue_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Statue/z_dm_statue_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
