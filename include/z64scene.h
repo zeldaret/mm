@@ -673,4 +673,16 @@ typedef enum {
 #define SCENE_CMD_MISC_SETTINGS() \
     { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
 
+#define SCENE_CMD_MATERIAL_ANIM_LIST(matAnimList) \
+    { SCENE_CMD_ID_MATERIAL_ANIM_LIST, 0, CMD_PTR(matAnimList) }
+
+#define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
+
+#define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
+    { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
+
+#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
+    { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+
 #endif
