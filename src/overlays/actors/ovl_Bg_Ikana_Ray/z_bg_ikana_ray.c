@@ -90,6 +90,6 @@ void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    SceneProc_DrawMaterialAnim(globalCtx, THIS->animatedTextures);
+    Scene_DrawMaterialAnim(globalCtx, THIS->animatedTextures);
     func_800BE03C(globalCtx, object_ikana_obj_001100);
 }

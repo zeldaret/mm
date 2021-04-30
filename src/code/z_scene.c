@@ -598,15 +598,15 @@ s32 Scene_ProcessHeader(GlobalContext* globalCtx, SceneCmd* header) {
 }
 
 /**
- * Returns an entrance index from the scene index, spawn index, and offset.
+ * Creates an entrance index from the scene index, spawn index, and scene setup.
  */
-u16 Scene_CreateEntrance(s32 sceneIndex, s32 spawnIndex, s32 offset) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | offset) & 0xFFFF;
+u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
+    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
 }
 
 /**
- * Returns an entrance index from the current entrance with the given spawn index.
+ * Creates an entrance index from the current entrance index with the given spawn index.
  */
-u16 Scene_CreateEntranceFromSpawn(s32 spawnIndex) {
-    return Scene_CreateEntrance(gSaveContext.perm.entranceIndex >> 9, spawnIndex, 0);
+u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
+    return Entrance_CreateIndex(gSaveContext.perm.entranceIndex >> 9, spawnIndex, 0);
 }

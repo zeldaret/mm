@@ -321,9 +321,9 @@ typedef struct {
 } EntranceTableEntry; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u32 spawnNum : 8;
-    /* 0x4 */ EntranceTableEntry** sceneEntranceTable;
-    /* 0x8 */ char* sceneName;
+    /* 0x0 */ u32 tableCount : 8;
+    /* 0x4 */ EntranceTableEntry** table;
+    /* 0x8 */ char* name;
 } SceneEntranceTableEntry; // size = 0xC
 
 typedef struct {
@@ -554,7 +554,7 @@ typedef enum {
     /* 4 */ SCENE_DRAW_CFG_UNUSED_4,
     /* 5 */ SCENE_DRAW_CFG_UNUSED_5,
     /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
-    /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP,
+    /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
 // Scene commands
