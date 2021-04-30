@@ -545,6 +545,18 @@ typedef enum {
     /* 0x70 */ SCENE_ALLEY
 } SceneID;
 
+// Scene draw configs
+typedef enum {
+    /* 0 */ SCENE_DRAW_CFG_DEFAULT,
+    /* 1 */ SCENE_DRAW_CFG_MAT_ANIM,
+    /* 2 */ SCENE_DRAW_CFG_NOTHING,
+    /* 3 */ SCENE_DRAW_CFG_UNUSED_3,
+    /* 4 */ SCENE_DRAW_CFG_UNUSED_4,
+    /* 5 */ SCENE_DRAW_CFG_UNUSED_5,
+    /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
+    /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP,
+} SceneDrawConfigIds;
+
 // Scene commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
