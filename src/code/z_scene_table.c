@@ -2657,7 +2657,7 @@ static EntranceTableEntry* sCutsceneEntranceTable[] = {
 #define SCENE_ENTRANCE_NONE() \
     { 0, NULL, NULL }
 
-SceneEntranceTableEntry gSceneEntranceTable[] = {
+/*static*/ SceneEntranceTableEntry sSceneEntranceTable[] = {
     SCENE_ENTRANCE(sMayorsResidenceEntranceTable, "Z2_SONCHONOIE"),
     SCENE_ENTRANCE(sMajorasLairEntranceTable, "Z2_LAST_BS"),
     SCENE_ENTRANCE(sMagicHagsPotionShopEntranceTable, "Z2_WITCH_SHOP"),
@@ -2770,27 +2770,49 @@ SceneEntranceTableEntry gSceneEntranceTable[] = {
     SCENE_ENTRANCE(sLaundryPoolEntranceTable, "Z2_ALLEY"),
 };
 
+/**
+ * Returns a pointer to an entrance table from a given entrance index.
+ */
+// Entrance_GetTableEntry()
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntrance.asm")
+// EntranceTableEntry *SceneTable_LookupEntrance(u16 entrance)
+// {
+//   unsigned int new_var;
+//   new_var = entrance;
+//   return &sSceneEntranceTable[new_var >> 9].sceneEntranceTable[(((((((((new_var >> 4) & 0x1F) & 0xFFFF) & 0xFFFF) & 0xFFFF) & 0xFFFF) & 0xFFFF) & 0xFFFF) & 0xFFFF) & 0xFFFF][new_var & 0xF];
+// }
 
-s32 SceneTable_LookupEntranceScene(u16 entranceIndex) {
+/**
+ * Returns the scene index from a given entrance index.
+ */
+s32 Entrance_GetSceneNum(u16 entranceIndex) {
     EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
     return tableEntry->sceneNum;
 }
 
-s32 SceneTable_LookupEntranceAbsoluteScene(u16 entranceIndex) {
+/**
+ * Returns the absolute value scene index (since for some reason some of them are negative) from a given entrance index.
+ */
+s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex) {
     EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
     return ABS_ALT(tableEntry->sceneNum);
 }
 
-s32 func_80132374(u16 entranceIndex) {
+/**
+ * Returns the spawn index from a given entrance index.
+ */
+s32 Entrance_GetSpawnNum(u16 entranceIndex) {
     EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
     return tableEntry->spawnNum;
 }
 
-s32 func_801323A0(u16 entranceIndex) {
+/**
+ * Returns the transition effect flags from a given entrance index.
+ */
+s32 Entrance_GetTransitionFlags(u16 entranceIndex) {
     EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
     return tableEntry->flags;

@@ -538,7 +538,7 @@ void Scene_HeaderCmdMaterialAnimations(GlobalContext* globalCtx, SceneCmd* cmd) 
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(GlobalContext* globalCtx) {
-    globalCtx->unk1887F = func_801323A0(globalCtx->nextEntranceIndex) & 0x7F;
+    globalCtx->unk1887F = Entrance_GetTransitionFlags(globalCtx->nextEntranceIndex) & 0x7F;
 }
 
 /**

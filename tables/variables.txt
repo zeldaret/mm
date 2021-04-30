@@ -2071,7 +2071,7 @@
     0x801C56A0:("D_801C56A0","UNK_TYPE1","",0x1),
     0x801C56CC:("D_801C56CC","UNK_TYPE1","",0x1),
     0x801C56F8:("D_801C56F8","UNK_PTR","",0x4),
-    0x801C5720:("gSceneEntranceTable","SceneEntranceTableEnty","[110]",0x528),
+    0x801C5720:("sSceneEntranceTable","SceneEntranceTableEnty","[110]",0x528),
     0x801C5C50:("D_801C5C50","UNK_PTR","",0x4),
     0x801C5C9C:("D_801C5C9C","UNK_TYPE1","",0x1),
     0x801C5CB0:("D_801C5CB0","UNK_PTR","",0x4),

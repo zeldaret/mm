@@ -1507,7 +1507,6 @@ extern SceneIdList scenesPerMapArea[11];
 extern s16 gLinkFormObjectIndexes[8];
 extern RomFile objectFileTable[643];
 extern SceneTableEntry gSceneTable[];
-extern SceneEntranceTableEntry gSceneEntranceTable[];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
 extern UNK_PTR D_801C5CB0;
