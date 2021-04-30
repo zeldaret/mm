@@ -621,7 +621,7 @@ typedef enum {
                                 kankyoContextUnkE2)                                                         \
     {                                                                                                       \
         SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
-            _SHIFTL(currRoomUnk2, 0xFF, 0) | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+            currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
 
