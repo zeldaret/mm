@@ -83,7 +83,7 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* bgCtxt, s32 index, Acto
 
     if (BgCheck_IsActorMeshIndexValid(index) == 0) return 0;
 
-    if (((bgCtxt->dyna.flags[index] & 2) != 0) || ((bgCtxt->dyna.flags[index] & 1) == 0)) return 0;
+    if (((bgCtxt->dyna.bgActorFlags[index] & 2) != 0) || ((bgCtxt->dyna.bgActorFlags[index] & 1) == 0)) return 0;
 
     meshActor = BgCheck_GetActorOfMesh(bgCtxt,index);
 

@@ -22,6 +22,7 @@
 
 #include <z64actor.h>
 #include <z64animation.h>
+#include <z64bgcheck.h>
 #include <z64collision_check.h>
 #include <z64cutscene.h>
 #include <z64dma.h>
@@ -549,27 +550,17 @@ typedef struct {
 } ActorMeshParams; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u16 type;
-    union {
-        u16 vtxData[3];
-        struct {
-            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
-            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
-                                      // 0x2000 = poly IsConveyor surface
-            /* 0x06 */ u16 vIC;
-        };
-    };
-    /* 0x08 */ Vec3s normal; // Unit normal vector
-                             // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
-
-    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
-} CollisionPoly; // size = 0x10
-
-typedef struct {
     /* 0x0 */ BgPolygonLinkedListNode* nodes;
     /* 0x4 */ u32 nextFreeNode;
     /* 0x8 */ s32 maxNodes;
 } BgPolygonLinkedList; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ f32 x[4];
+    /* 0x10 */ f32 y[4];
+    /* 0x20 */ f32 z[4];
+    /* 0x30 */ f32 w[4];
+} z_Matrix; // size = 0x40
 
 typedef struct {
     /* 0x0 */ Vec3s pos;
@@ -1064,10 +1055,6 @@ typedef struct ActorEnBji01 ActorEnBji01;
 typedef struct ActorEnTest ActorEnTest;
 
 typedef struct ActorListEntry ActorListEntry;
-
-typedef struct DynaCollisionContext DynaCollisionContext;
-
-typedef struct CollisionContext CollisionContext;
 
 typedef struct ArenaNode_t {
     /* 0x0 */ s16 magic; // Should always be 0x7373
@@ -1716,7 +1703,7 @@ struct GlobalContext {
     /* 0x18848 */ u8 numRooms;
     /* 0x18849 */ UNK_TYPE1 pad18849;
     /* 0x1884A */ s16 unk1884A;
-    /* 0x1884C */ RoomFileLocation* roomList;
+    /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;
