@@ -344,14 +344,14 @@ void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
         { 0, 0 }, // Default
-        { (u32)__1114_0x01607b40SegmentRomStart, (u32)__1114_0x01607b40SegmentRomEnd },
-        { (u32)__1115_0x0160b1d0SegmentRomStart, (u32)__1115_0x0160b1d0SegmentRomEnd },
-        { (u32)__1116_0x0160c540SegmentRomStart, (u32)__1116_0x0160c540SegmentRomEnd },
-        { (u32)__1117_0x0160ed50SegmentRomStart, (u32)__1117_0x0160ed50SegmentRomEnd },
-        { (u32)__1118_0x01611e20SegmentRomStart, (u32)__1118_0x01611e20SegmentRomEnd },
-        { (u32)__1119_0x01615e00SegmentRomStart, (u32)__1119_0x01615e00SegmentRomEnd },
-        { (u32)__1120_0x01619170SegmentRomStart, (u32)__1120_0x01619170SegmentRomEnd },
-        { (u32)__1121_0x01619190SegmentRomStart, (u32)__1121_0x01619190SegmentRomEnd },
+        { (u32)_scene_texture_01SegmentRomStart, (u32)_scene_texture_01SegmentRomEnd },
+        { (u32)_scene_texture_02SegmentRomStart, (u32)_scene_texture_02SegmentRomEnd },
+        { (u32)_scene_texture_03SegmentRomStart, (u32)_scene_texture_03SegmentRomEnd },
+        { (u32)_scene_texture_04SegmentRomStart, (u32)_scene_texture_04SegmentRomEnd },
+        { (u32)_scene_texture_05SegmentRomStart, (u32)_scene_texture_05SegmentRomEnd },
+        { (u32)_scene_texture_06SegmentRomStart, (u32)_scene_texture_06SegmentRomEnd },
+        { (u32)_scene_texture_07SegmentRomStart, (u32)_scene_texture_07SegmentRomEnd },
+        { (u32)_scene_texture_08SegmentRomStart, (u32)_scene_texture_08SegmentRomEnd },
     };
     u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
     u32 size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
