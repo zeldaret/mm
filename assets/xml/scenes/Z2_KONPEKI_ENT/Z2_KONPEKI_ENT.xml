@@ -1,0 +1,10 @@
+<Root>
+    <File Name="Z2_KONPEKI_ENT" Game="MM">
+        <Scene Name="Z2_KONPEKI_ENT">
+            <TextureHint Offset="0x5020" Type="rgb5a1" Width="64" Height="64"/>
+        </Scene>
+    </File>
+    <File Name="Z2_KONPEKI_ENT_room_00" Game="MM">
+        <Room Name="Z2_KONPEKI_ENT_room_00"/>
+    </File>
+</Root>
