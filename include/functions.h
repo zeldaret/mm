@@ -2511,7 +2511,7 @@ void SceneProc_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags);
 void SceneProc_SceneDrawConfig5(GlobalContext* globalCtx);
 void SceneProc_SceneDrawConfigMatAnimManualStep(GlobalContext* globalCtx);
 void SceneProc_SceneDrawConfigGreatBayTemple(GlobalContext* globalCtx);
-EntranceRecord* SceneTable_LookupEntrance(u32 entrance);
+EntranceTableEntry* SceneTable_LookupEntrance(u32 entrance);
 s32 SceneTable_LookupEntranceScene(u32 entrance);
 s32 SceneTable_LookupEntranceAbsoluteScene(u32 entrance);
 // void func_80132374(void);

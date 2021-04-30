@@ -6,6 +6,11 @@
 #include <unk.h>
 
 typedef struct {
+    /* 0x00 */ u32 vromStart;
+    /* 0x04 */ u32 vromEnd;
+} RomFile; // size = 0x8
+
+typedef struct {
     /* 0x00 */ u8  code;
     /* 0x01 */ u8  data1;
     /* 0x04 */ u32 data2;
@@ -310,16 +315,16 @@ typedef struct {
 } EntranceEntry; // size = 0x2
 
 typedef struct {
-    /* 0x0 */ s8 scene; // TODO what does it means for this to be neagtive?
-    /* 0x1 */ s8 unk1;
-    /* 0x2 */ u16 unk2;
-} EntranceRecord; // size = 0x4
+    /* 0x0 */ s8 sceneNum;
+    /* 0x1 */ s8 spawnNum;
+    /* 0x2 */ u16 flags;
+} EntranceTableEntry; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u32 entranceCount;
-    /* 0x4 */ EntranceRecord** entrances;
-    /* 0x8 */ char* name;
-} SceneEntranceTableEnty; // size = 0xC
+    /* 0x0 */ u32 spawnNum : 8;
+    /* 0x4 */ EntranceTableEntry** scene_status_table;
+    /* 0x8 */ unsigned char* scene_name;
+} SceneEntranceTableEntry;
 
 typedef struct {
     /* 0x00 */ u16 scenes[27];
@@ -335,15 +340,13 @@ typedef struct {
 } ObjectStatus; // size = 0x44
 
 typedef struct {
-    /* 0x0 */ u32 romStart;
-    /* 0x4 */ u32 romEnd;
-    /* 0x8 */ u16 unk8;
-    /* 0xA */ UNK_TYPE1 padA[0x1];
-    /* 0xB */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
-    /* 0xC */ UNK_TYPE1 padC[0x1];
-    /* 0xD */ u8 unkD;
-    /* 0xE */ UNK_TYPE1 padE[0x2];
-} SceneTableEntry; // size = 0x10
+    /* 0x0 */ RomFile segment;
+    /* 0x8 */ u16 titleTextId;
+    /* 0xA */ u8 unk_A;
+    /* 0xB */ u8 drawConfig;
+    /* 0xC */ u8 unk_C;
+    /* 0xD */ char pad_D[3];
+} SceneTableEntry; // size = 0x10;
 
 typedef struct {
     /* 0x0 */ u8 r;
