@@ -843,4 +843,11 @@ typedef struct {
     /* 0xC */ u16* keyFrames;
 } FlashingTextureParams; // size = 0x10
 
+// ----> MaterialTexCycleAnimParams
+typedef struct {
+    /* 0x0 */ u16 cycleLength;
+    /* 0x4 */ Gfx** textureDls;
+    /* 0x8 */ u8* textureDlOffsets;
+} CyclingTextureParams; // size = 0xC
+
 #endif
