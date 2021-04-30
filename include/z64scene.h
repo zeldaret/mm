@@ -808,4 +808,18 @@ typedef enum {
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
 
+//! @TODO: Remove these! These are only here for the time being to prevent compiler errors with scenes and rooms!
+typedef struct {
+    /* 0x0 */ s8 segment;
+    /* 0x2 */ s16 type;
+    /* 0x4 */ void* params;
+} AnimatedTexture; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ s8 xStep;
+    /* 0x1 */ s8 yStep;
+    /* 0x2 */ u8 width;
+    /* 0x3 */ u8 height;
+} ScrollingTextureParams; // size = 0x4
+
 #endif
