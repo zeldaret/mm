@@ -323,7 +323,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     }
-    if ((globalCtx->unk18840 & 1) != 0) {
+    if ((globalCtx->gameplayFrames & 1) != 0) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
@@ -377,7 +377,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->unk18840 & 1) == 0) {
+    if ((globalCtx->gameplayFrames & 1) == 0) {
         pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);

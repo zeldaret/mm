@@ -2770,7 +2770,13 @@ SceneEntranceTableEntry gSceneEntranceTable[] = {
     SCENE_ENTRANCE(sLaundryPoolEntranceTable, "Z2_ALLEY"),
 };
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntrance.asm")
+// #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntrance.asm")
+// s32 SceneTable_LookupEntrance(s32 arg0) {
+//     u32 temp_a0;
+// 
+//     temp_a0 = arg0 & 0xFFFF;
+//     return ((temp_a0 & 0xF) * 4) +                     gSceneEntranceTable[temp_a0 >> 9].sceneEntranceTable      +                            (((temp_a0 >> 4) & 0x1F) * 4));
+// }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntranceScene.asm")
 

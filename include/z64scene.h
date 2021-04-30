@@ -322,9 +322,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u32 spawnNum : 8;
-    /* 0x4 */ EntranceTableEntry** scene_status_table;
-    /* 0x8 */ unsigned char* scene_name;
-} SceneEntranceTableEntry;
+    /* 0x4 */ EntranceTableEntry** sceneEntranceTable;
+    /* 0x8 */ char* sceneName;
+} SceneEntranceTableEntry; // size = 0xC
 
 typedef struct {
     /* 0x00 */ u16 scenes[27];

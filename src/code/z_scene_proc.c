@@ -422,42 +422,42 @@ void SceneProc_DrawMaterialAnimMain(GlobalContext* globalCtx, MaterialAnimation*
  * Draws a material animation to both OPA and XLU buffers.
  */
 void SceneProc_DrawMaterialAnim(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 3);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 3);
 }
 
 /**
  * Draws a material animation to only the OPA buffer.
  */
 void SceneProc_DrawMaterialAnimOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 1);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 1);
 }
 
 /**
  * Draws a material animation to only the XLU buffer.
  */
 void SceneProc_DrawMaterialAnimXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->unk18840, 2);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, 1, globalCtx->gameplayFrames, 2);
 }
 
 /**
  * Draws a material animation with an alpha ratio (0.0 - 1.0) both OPA and XLU buffers.
  */
 void SceneProc_DrawMaterialAnimAlpha(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 3);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 3);
 }
 
 /**
  * Draws a material animation with an alpha ratio (0.0 - 1.0) to only the OPA buffer.
  */
 void SceneProc_DrawMaterialAnimAlphaOpa(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 1);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 1);
 }
 
 /**
  * Draws a material animation with an alpha ratio (0.0 - 1.0) to only the XLU buffer.
  */
 void SceneProc_DrawMaterialAnimAlphaXlu(GlobalContext* globalCtx, MaterialAnimation* matAnim, f32 alphaRatio) {
-    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->unk18840, 2);
+    SceneProc_DrawMaterialAnimMain(globalCtx, matAnim, alphaRatio, globalCtx->gameplayFrames, 2);
 }
 
 /**
@@ -522,7 +522,7 @@ void SceneProc_SceneDrawConfig3(GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    frames = globalCtx->unk18840;
+    frames = globalCtx->gameplayFrames;
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 64, 256, 16));
 
@@ -561,7 +561,7 @@ void SceneProc_DrawSceneConfig4(GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    frames = globalCtx->unk18840;
+    frames = globalCtx->gameplayFrames;
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1,
