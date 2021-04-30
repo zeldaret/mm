@@ -35,11 +35,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern Gfx D_06000100[];
-extern AnimatedTexture D_060001F8;
+extern MaterialAnimation D_060001F8;
 extern Gfx D_06000300[];
-extern AnimatedTexture D_060003F8;
+extern MaterialAnimation D_060003F8;
 extern Gfx D_06000500[];
-extern AnimatedTexture D_060005F8;
+extern MaterialAnimation D_060005F8;
 
 void BgKeikokuSpr_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -56,12 +56,12 @@ void BgKeikokuSpr_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_SegmentedToVirtual(&D_060001F8));
+    Scene_DrawMaterialAnim(globalCtx, Lib_SegmentedToVirtual(&D_060001F8));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06000100);
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_SegmentedToVirtual(&D_060003F8));
+    Scene_DrawMaterialAnim(globalCtx, Lib_SegmentedToVirtual(&D_060003F8));
     gSPDisplayList(POLY_XLU_DISP++, D_06000300);
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, Lib_SegmentedToVirtual(&D_060005F8));
+    Scene_DrawMaterialAnim(globalCtx, Lib_SegmentedToVirtual(&D_060005F8));
     gSPDisplayList(POLY_XLU_DISP++, D_06000500);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
