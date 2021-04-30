@@ -184,24 +184,24 @@ void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd
 
 // Scene Header Command 0x03: Collision Header
 void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
-    BgMeshHeader* colHeaderTemp;
-    BgMeshHeader* colHeader;
+    CollisionHeader* colHeaderTemp;
+    CollisionHeader* colHeader;
 
-    colHeaderTemp = (BgMeshHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
+    colHeaderTemp = (CollisionHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
     colHeader = colHeaderTemp;
-    colHeader->vertices = (BgVertex*)Lib_SegmentedToVirtual(colHeaderTemp->vertices);
-    colHeader->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(colHeader->polygons);
+    colHeader->vtxList = (Vec3s*)Lib_SegmentedToVirtual(colHeaderTemp->vtxList);
+    colHeader->polyList = (CollisionPoly*)Lib_SegmentedToVirtual(colHeader->polyList);
 
-    if (colHeader->attributes != NULL) {
-        colHeader->attributes = (BgPolygonAttributes*)Lib_SegmentedToVirtual(colHeader->attributes);
+    if (colHeader->surfaceTypeList != NULL) {
+        colHeader->surfaceTypeList = (SurfaceType*)Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
-    if (colHeader->cameraData != NULL) {
-        colHeader->cameraData = (void*)Lib_SegmentedToVirtual(colHeader->cameraData);
+    if (colHeader->cameraDataList != NULL) {
+        colHeader->cameraDataList = (void*)Lib_SegmentedToVirtual(colHeader->cameraDataList);
     }
 
-    if (colHeader->waterboxes != NULL) {
-        colHeader->waterboxes = (BgWaterBox*)Lib_SegmentedToVirtual(colHeader->waterboxes);
+    if (colHeader->waterBoxes != NULL) {
+        colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
     BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);

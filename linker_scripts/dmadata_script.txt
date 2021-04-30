@@ -16,8 +16,8 @@ _AudioseqSegmentRomEnd = 0x00097F70;
 _AudiotableSegmentRomStart = 0x00097F70;
 _AudiotableSegmentRomEnd = 0x005E06E0;
 
-_jpn_font_staticSegmentRomStart = 0x005E06E0;
-_jpn_font_staticSegmentRomEnd = 0x0065C9E0;
+_kanjiSegmentRomStart = 0x005E06E0;
+_kanjiSegmentRomEnd = 0x0065C9E0;
 
 _link_animetionSegmentRomStart = 0x0065D000;
 _link_animetionSegmentRomEnd = 0x00956DA0;
@@ -31,11 +31,11 @@ _icon_item_dungeon_staticSegmentRomEnd = 0x00A0EB80;
 _icon_item_gameover_staticSegmentRomStart = 0x00A0F000;
 _icon_item_gameover_staticSegmentRomEnd = 0x00A12300;
 
-__013_0x00963540SegmentRomStart = 0x00A13000;
-__013_0x00963540SegmentRomEnd = 0x00A1BA00;
+_icon_item_jpn_staticSegmentRomStart = 0x00A13000;
+_icon_item_jpn_staticSegmentRomEnd = 0x00A1BA00;
 
-__014_0x00967260SegmentRomStart = 0x00A1C000;
-__014_0x00967260SegmentRomEnd = 0x00A1C2E0;
+_icon_item_vtx_staticSegmentRomStart = 0x00A1C000;
+_icon_item_vtx_staticSegmentRomEnd = 0x00A1C2E0;
 
 _map_i_staticSegmentRomStart = 0x00A1D000;
 _map_i_staticSegmentRomEnd = 0x00A1E310;
@@ -49,20 +49,20 @@ _item_name_staticSegmentRomEnd = 0x00A352F0;
 _map_name_staticSegmentRomStart = 0x00A352F0;
 _map_name_staticSegmentRomEnd = 0x00A36C10;
 
-__019_0x00980f60SegmentRomStart = 0x00A36C10;
-__019_0x00980f60SegmentRomEnd = 0x00A7BEE0;
+_icon_item_static_testSegmentRomStart = 0x00A36C10;
+_icon_item_static_testSegmentRomEnd = 0x00A7BEE0;
 
-__020_0x009c6230SegmentRomStart = 0x00A7BEE0;
-__020_0x009c6230SegmentRomEnd = 0x00A807A0;
+_icon_item_24_static_testSegmentRomStart = 0x00A7BEE0;
+_icon_item_24_static_testSegmentRomEnd = 0x00A807A0;
 
-__022_0x009caaf0SegmentRomStart = 0x00A8C000;
-__022_0x009caaf0SegmentRomEnd = 0x00A92A10;
+_schedule_dma_static_testSegmentRomStart = 0x00A8C000;
+_schedule_dma_static_testSegmentRomEnd = 0x00A92A10;
 
-__023_0x009d1500SegmentRomStart = 0x00A92A10;
-__023_0x009d1500SegmentRomEnd = 0x00A990E0;
+_schedule_staticSegmentRomStart = 0x00A92A10;
+_schedule_staticSegmentRomEnd = 0x00A990E0;
 
-__024_0x009d3760SegmentRomStart = 0x00A9A000;
-__024_0x009d3760SegmentRomEnd = 0x00ABFC00;
+_story_staticSegmentRomStart = 0x00A9A000;
+_story_staticSegmentRomEnd = 0x00ABFC00;
 
 _do_action_staticSegmentRomStart = 0x00AC0000;
 _do_action_staticSegmentRomEnd = 0x00AC3F00;
@@ -76,8 +76,8 @@ _message_texture_staticSegmentRomEnd = 0x00ACB200;
 _nes_font_staticSegmentRomStart = 0x00ACC000;
 _nes_font_staticSegmentRomEnd = 0x00AD0E00;
 
-_en_message_data_staticSegmentRomStart = 0x00AD1000;
-_en_message_data_staticSegmentRomEnd = 0x00B3A9F0;
+_message_data_staticSegmentRomStart = 0x00AD1000;
+_message_data_staticSegmentRomEnd = 0x00B3A9F0;
 
 _staff_message_data_staticSegmentRomStart = 0x00B3B000;
 _staff_message_data_staticSegmentRomEnd = 0x00B3BE60;
@@ -1144,20 +1144,20 @@ _ovl_En_BigokutaSegmentRomEnd = 0x00F2A320;
 _ovl_Bg_IcefloeSegmentRomStart = 0x00F2A320;
 _ovl_Bg_IcefloeSegmentRomEnd = 0x00F2AA90;
 
-__385_0x00cfc450SegmentRomStart = 0x00F2AA90;
-__385_0x00cfc450SegmentRomEnd = 0x00F2B1D0;
+_ovl_fbdemo_triforceSegmentRomStart = 0x00F2AA90;
+_ovl_fbdemo_triforceSegmentRomEnd = 0x00F2B1D0;
 
-__386_0x00cfc970SegmentRomStart = 0x00F2B1D0;
-__386_0x00cfc970SegmentRomEnd = 0x00F2C160;
+_ovl_fbdemo_wipe1SegmentRomStart = 0x00F2B1D0;
+_ovl_fbdemo_wipe1SegmentRomEnd = 0x00F2C160;
 
-__387_0x00cfd400SegmentRomStart = 0x00F2C160;
-__387_0x00cfd400SegmentRomEnd = 0x00F2DE50;
+_ovl_fbdemo_wipe3SegmentRomStart = 0x00F2C160;
+_ovl_fbdemo_wipe3SegmentRomEnd = 0x00F2DE50;
 
-__388_0x00cfdf10SegmentRomStart = 0x00F2DE50;
-__388_0x00cfdf10SegmentRomEnd = 0x00F2E110;
+_ovl_fbdemo_wipe4SegmentRomStart = 0x00F2DE50;
+_ovl_fbdemo_wipe4SegmentRomEnd = 0x00F2E110;
 
-__389_0x00cfe150SegmentRomStart = 0x00F2E110;
-__389_0x00cfe150SegmentRomEnd = 0x00F2E570;
+_ovl_fbdemo_wipe5SegmentRomStart = 0x00F2E110;
+_ovl_fbdemo_wipe5SegmentRomEnd = 0x00F2E570;
 
 _ovl_Effect_Ss_SbnSegmentRomStart = 0x00F2E570;
 _ovl_Effect_Ss_SbnSegmentRomEnd = 0x00F2EEE0;
@@ -3328,29 +3328,29 @@ _object_ending_objSegmentRomEnd = 0x01E5A7E0;
 _object_gi_mask13SegmentRomStart = 0x01E5B000;
 _object_gi_mask13SegmentRomEnd = 0x01E5C600;
 
-__1114_0x01607b40SegmentRomStart = 0x01E5D000;
-__1114_0x01607b40SegmentRomEnd = 0x01E61D00;
+_scene_texture_01SegmentRomStart = 0x01E5D000;
+_scene_texture_01SegmentRomEnd = 0x01E61D00;
 
-__1115_0x0160b1d0SegmentRomStart = 0x01E62000;
-__1115_0x0160b1d0SegmentRomEnd = 0x01E63D00;
+_scene_texture_02SegmentRomStart = 0x01E62000;
+_scene_texture_02SegmentRomEnd = 0x01E63D00;
 
-__1116_0x0160c540SegmentRomStart = 0x01E64000;
-__1116_0x0160c540SegmentRomEnd = 0x01E68800;
+_scene_texture_03SegmentRomStart = 0x01E64000;
+_scene_texture_03SegmentRomEnd = 0x01E68800;
 
-__1117_0x0160ed50SegmentRomStart = 0x01E69000;
-__1117_0x0160ed50SegmentRomEnd = 0x01E6E200;
+_scene_texture_04SegmentRomStart = 0x01E69000;
+_scene_texture_04SegmentRomEnd = 0x01E6E200;
 
-__1118_0x01611e20SegmentRomStart = 0x01E6F000;
-__1118_0x01611e20SegmentRomEnd = 0x01E75800;
+_scene_texture_05SegmentRomStart = 0x01E6F000;
+_scene_texture_05SegmentRomEnd = 0x01E75800;
 
-__1119_0x01615e00SegmentRomStart = 0x01E76000;
-__1119_0x01615e00SegmentRomEnd = 0x01E7B460;
+_scene_texture_06SegmentRomStart = 0x01E76000;
+_scene_texture_06SegmentRomEnd = 0x01E7B460;
 
-__1120_0x01619170SegmentRomStart = 0x01E7C000;
-__1120_0x01619170SegmentRomEnd = 0x01E7C010;
+_scene_texture_07SegmentRomStart = 0x01E7C000;
+_scene_texture_07SegmentRomEnd = 0x01E7C010;
 
-__1121_0x01619190SegmentRomStart = 0x01E7D000;
-__1121_0x01619190SegmentRomEnd = 0x01E85000;
+_scene_texture_08SegmentRomStart = 0x01E7D000;
+_scene_texture_08SegmentRomEnd = 0x01E85000;
 
 _nintendo_rogo_staticSegmentRomStart = 0x01E85000;
 _nintendo_rogo_staticSegmentRomEnd = 0x01E87DC0;
@@ -3358,38 +3358,38 @@ _nintendo_rogo_staticSegmentRomEnd = 0x01E87DC0;
 _title_staticSegmentRomStart = 0x01E88000;
 _title_staticSegmentRomEnd = 0x01EB9730;
 
-__1124_0x0163f490SegmentRomStart = 0x01EBA000;
-__1124_0x0163f490SegmentRomEnd = 0x01EBB280;
+_memerrmsgSegmentRomStart = 0x01EBA000;
+_memerrmsgSegmentRomEnd = 0x01EBB280;
 
-__1125_0x0163fc10SegmentRomStart = 0x01EBC000;
-__1125_0x0163fc10SegmentRomEnd = 0x01EBC680;
+_locerrmsgSegmentRomStart = 0x01EBC000;
+_locerrmsgSegmentRomEnd = 0x01EBC680;
 
-__1126_0x0163ffc0SegmentRomStart = 0x01EBD000;
-__1126_0x0163ffc0SegmentRomEnd = 0x01EC8B20;
+_parameter_staticSegmentRomStart = 0x01EBD000;
+_parameter_staticSegmentRomEnd = 0x01EC8B20;
 
-__1127_0x01643d50SegmentRomStart = 0x01EC9000;
-__1127_0x01643d50SegmentRomEnd = 0x01EC9F30;
+_week_staticSegmentRomStart = 0x01EC9000;
+_week_staticSegmentRomEnd = 0x01EC9F30;
 
-__1128_0x01644c80SegmentRomStart = 0x01ECA000;
-__1128_0x01644c80SegmentRomEnd = 0x01ED3B00;
+_daytelop_staticSegmentRomStart = 0x01ECA000;
+_daytelop_staticSegmentRomEnd = 0x01ED3B00;
 
-__1129_0x01646b60SegmentRomStart = 0x01ED4000;
-__1129_0x01646b60SegmentRomEnd = 0x01EDDB00;
+_ger_daytelop_staticSegmentRomStart = 0x01ED4000;
+_ger_daytelop_staticSegmentRomEnd = 0x01EDDB00;
 
-__1130_0x01649020SegmentRomStart = 0x01EDE000;
-__1130_0x01649020SegmentRomEnd = 0x01EE7B00;
+_fra_daytelop_staticSegmentRomStart = 0x01EDE000;
+_fra_daytelop_staticSegmentRomEnd = 0x01EE7B00;
 
-__1131_0x0164ad90SegmentRomStart = 0x01EE8000;
-__1131_0x0164ad90SegmentRomEnd = 0x01EF1B00;
+_spa_daytelop_staticSegmentRomStart = 0x01EE8000;
+_spa_daytelop_staticSegmentRomEnd = 0x01EF1B00;
 
-_vr_fine_staticSegmentRomStart = 0x01EF2000;
-_vr_fine_staticSegmentRomEnd = 0x01EFE000;
+_d2_fine_staticSegmentRomStart = 0x01EF2000;
+_d2_fine_staticSegmentRomEnd = 0x01EFE000;
 
-_vr_cloud_staticSegmentRomStart = 0x01EFE000;
-_vr_cloud_staticSegmentRomEnd = 0x01F0A000;
+_d2_cloud_staticSegmentRomStart = 0x01EFE000;
+_d2_cloud_staticSegmentRomEnd = 0x01F0A000;
 
-_vr_pal_staticSegmentRomStart = 0x01F0A000;
-_vr_pal_staticSegmentRomEnd = 0x01F0A200;
+_d2_fine_pal_staticSegmentRomStart = 0x01F0A000;
+_d2_fine_pal_staticSegmentRomEnd = 0x01F0A200;
 
 _elf_message_fieldSegmentRomStart = 0x01F0B000;
 _elf_message_fieldSegmentRomEnd = 0x01F0B070;

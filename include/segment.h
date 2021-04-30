@@ -46,6 +46,6 @@ extern Gfx object_ikana_obj_001100[];
 extern MaterialAnimation object_ikana_obj_001228[];
 
 extern Gfx object_fu_kaiten_0005D0[];
-extern BgMeshHeader object_fu_kaiten_002D30;
+extern CollisionHeader object_fu_kaiten_002D30;
 
 #endif
