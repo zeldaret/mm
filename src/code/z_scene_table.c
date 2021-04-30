@@ -2770,18 +2770,28 @@ SceneEntranceTableEntry gSceneEntranceTable[] = {
     SCENE_ENTRANCE(sLaundryPoolEntranceTable, "Z2_ALLEY"),
 };
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntrance.asm")
-// s32 SceneTable_LookupEntrance(s32 arg0) {
-//     u32 temp_a0;
-// 
-//     temp_a0 = arg0 & 0xFFFF;
-//     return ((temp_a0 & 0xF) * 4) +                     gSceneEntranceTable[temp_a0 >> 9].sceneEntranceTable      +                            (((temp_a0 >> 4) & 0x1F) * 4));
-// }
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntrance.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntranceScene.asm")
+s32 SceneTable_LookupEntranceScene(u16 entranceIndex) {
+    EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/SceneTable_LookupEntranceAbsoluteScene.asm")
+    return tableEntry->sceneNum;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/func_80132374.asm")
+s32 SceneTable_LookupEntranceAbsoluteScene(u16 entranceIndex) {
+    EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_scene_table/func_801323A0.asm")
+    return ABS_ALT(tableEntry->sceneNum);
+}
+
+s32 func_80132374(u16 entranceIndex) {
+    EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
+
+    return tableEntry->spawnNum;
+}
+
+s32 func_801323A0(u16 entranceIndex) {
+    EntranceTableEntry* tableEntry = SceneTable_LookupEntrance(entranceIndex);
+
+    return tableEntry->flags;
+}
