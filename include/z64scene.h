@@ -809,17 +809,38 @@ typedef enum {
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
 
 //! @TODO: Remove these! These are only here for the time being to prevent compiler errors with scenes and rooms!
+
+// ----> MaterialAnimation
 typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedTexture; // size = 0x8
 
+// ----> MaterialTexScrollAnimParams
 typedef struct {
     /* 0x0 */ s8 xStep;
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
 } ScrollingTextureParams; // size = 0x4
+
+// ----> F3DPrimColor
+typedef struct {
+    /* 0x0 */ u8 red;
+    /* 0x1 */ u8 green;
+    /* 0x2 */ u8 blue;
+    /* 0x3 */ u8 alpha;
+    /* 0x4 */ u8 lodFrac;
+} FlashingTexturePrimColor; // size = 0x5
+
+// ----> MaterialColorAnimParams
+typedef struct {
+    /* 0x0 */ u16 cycleLength;
+    /* 0x2 */ u16 numKeyFrames;
+    /* 0x4 */ FlashingTexturePrimColor* primColors;
+    /* 0x8 */ Color_RGBA8* envColors;
+    /* 0xC */ u16* keyFrames;
+} FlashingTextureParams; // size = 0x10
 
 #endif
