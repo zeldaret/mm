@@ -8846,7 +8846,7 @@
     0x809ACB28:("func_809ACB28",),
     0x809ACD90:("EnBu_Init",),
     0x809ACDA8:("EnBu_Destroy",),
-    0x809ACDB8:("func_809ACDB8",),
+    0x809ACDB8:("EnBu_DoNothing",),
     0x809ACDC8:("EnBu_Update",),
     0x809ACE00:("EnBu_Draw",),
     0x809ACF40:("EnEncount3_Init",),

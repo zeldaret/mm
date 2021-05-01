@@ -3649,9 +3649,9 @@ SECTIONS
     ovl_En_Bu : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Bu/z_en_bu.o(.text)
-        build/asm/overlays/ovl_En_Bu_data.o(.data)
+        build/src/overlays/actors/ovl_En_Bu/z_en_bu.o(.data)
         build/src/overlays/actors/ovl_En_Bu/z_en_bu.o(.rodata)
-        build/asm/overlays/ovl_En_Bu_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Bu/z_en_bu_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
