@@ -1431,7 +1431,7 @@ struct Camera {
     /* 0x084 */ f32 unk84;
     /* 0x088 */ f32 unk88;
     /* 0x08C */ GlobalContext* ctxt;
-    /* 0x090 */ ActorPlayer* player;
+    /* 0x090 */ Player* player;
     /* 0x094 */ PosRot unk94;
     /* 0x0A8 */ Actor* unkA8;
     /* 0x0AC */ Vec3f unkAC;
@@ -1539,7 +1539,7 @@ struct s800B948C {
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
-    /* 0x14 */ ActorPlayer* player;
+    /* 0x14 */ Player* player;
     /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
 }; // size = 0x1C
 

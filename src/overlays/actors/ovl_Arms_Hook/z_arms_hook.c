@@ -89,7 +89,7 @@ void func_808C1154(ArmsHook* this) {
     this->actor.parent->parent = &this->actor;
 }
 
-s32 ArmsHook_AttachToPlayer(ArmsHook* this, ActorPlayer* player) {
+s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
     player->base.child = &this->actor;
     player->heldActor = &this->actor;
     if (this->actor.child != NULL) {
@@ -107,7 +107,7 @@ void ArmsHook_DetachHookFromActor(ArmsHook* this) {
 }
 
 s32 ArmsHook_CheckForCancel(ArmsHook* this) {
-    ActorPlayer* player = (ActorPlayer*)this->actor.parent;
+    Player* player = (Player*)this->actor.parent;
     if (func_801240C8(player)) {
         if ((player->heldItemActionParam != player->itemActionParam) || ((player->base.flags & 0x100)) ||
             ((player->stateFlags1 & 0x4000080))) {
@@ -127,7 +127,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 }
 
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
         ArmsHook_DetachHookFromActor(this);
@@ -287,7 +287,7 @@ void ArmsHook_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f sp68;
     Vec3f sp5C;
     Vec3f sp50;

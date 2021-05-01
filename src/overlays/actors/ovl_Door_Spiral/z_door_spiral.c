@@ -227,7 +227,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f target;
     Vec3f offset;
 
@@ -248,7 +248,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
  * Checks if the player should climb the stairs.
  */
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (!(func_801233E4(globalCtx))) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
@@ -275,7 +275,7 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
  * Wait for the player to interact with the stairs.
  */
 void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
     s32 transition;
 
     if (this->shouldClimb) {
@@ -297,7 +297,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
  * Player is climbing the stairs.
  */
 void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (!(player->stateFlags1 & 0x20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
@@ -308,7 +308,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = (DoorSpiral*)thisx;
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, globalCtx);

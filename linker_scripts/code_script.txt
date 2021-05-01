@@ -4583,7 +4583,7 @@ SECTIONS
     ovl_En_Test3 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Test3/z_en_test3.o(.text)
-        build/asm/overlays/ovl_En_Test3_data.o(.data)
+        build/src/overlays/actors/ovl_En_Test3/z_en_test3.o(.data)
         build/src/overlays/actors/ovl_En_Test3/z_en_test3.o(.rodata)
         build/asm/overlays/ovl_En_Test3_rodata.o(.rodata)
         ovl_En_Test3_bss_start = .;

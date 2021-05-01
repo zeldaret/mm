@@ -267,7 +267,7 @@ typedef struct {
     /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
     /* 0xBEC */ Vec3f bodyPartsPos[18];
     /* 0xCC4 */ UNK_TYPE1 padCC4[0xB4];
-} ActorPlayer; // size = 0xD78
+} Player; // size = 0xD78
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,

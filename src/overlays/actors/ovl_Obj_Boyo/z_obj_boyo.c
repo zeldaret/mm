@@ -77,7 +77,7 @@ void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, ActorPlayer* target) {
+void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
     target->unk_B80 = 30.0f;
     target->unk_B84 = this->actor.yawTowardsPlayer;
 }

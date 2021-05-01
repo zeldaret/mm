@@ -104,7 +104,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
 }
 
 void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s32 dooranaType = GET_DOORANA_TYPE(this);
     s8 pad[4];
     s32 entranceIndex;
