@@ -7,7 +7,6 @@ struct ObjKepnKoya;
 
 typedef struct ObjKepnKoya {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ UNK_TYPE1 unk15C;
 } ObjKepnKoya; // size = 0x160
 
 extern const ActorInit Obj_Kepn_Koya_InitVars;
