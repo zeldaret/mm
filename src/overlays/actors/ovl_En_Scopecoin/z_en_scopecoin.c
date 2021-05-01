@@ -88,7 +88,7 @@ void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_80BFD280[this->unk148]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BFD280[this->unk148]));
     gSPDisplayList(POLY_OPA_DISP++, D_040622C0);
 
     CLOSE_DISPS(gfxCtx);

@@ -275,14 +275,14 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) && (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
-            if (!Math_SmoothScaleMaxMinS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
+            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
                 this->unk152 = -2;
             }
-        } else if (!Math_SmoothScaleMaxMinS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
+        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
             this->unk152 = -1;
         }
 
-        Math_SmoothScaleMaxMinS(&this->actor.world.rot.x, 0, 2, 2500, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 2500, 500);
     } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
@@ -292,7 +292,7 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
         this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
-    Math_SmoothScaleMaxMinF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) && (this->actor.params != ITEM00_HEART_CONTAINER)) {
@@ -443,7 +443,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    Math_SmoothScaleMaxMinF(&this->actor.scale.x, this->unk154, 0.1f, this->unk154 * 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.scale.x, this->unk154, 0.1f, this->unk154 * 0.1f, 0.0f);
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = this->actor.scale.x;
 
@@ -709,7 +709,7 @@ void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF30[iconNb]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_801ADF30[iconNb]));
 
     gSPDisplayList(POLY_OPA_DISP++, &D_040622C0); // TODO symbol
 
@@ -751,7 +751,7 @@ void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF44[iconNb]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_801ADF44[iconNb]));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 

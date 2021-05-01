@@ -1,8 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
-void BgCheck_PolygonLinkedListNodeInit(BgPolygonLinkedListNode* node, s16* polyIndex, u16 next) {
-    node->polyIndex = *polyIndex;
+void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next) {
+    node->polyId = *polyIndex;
     node->next = next;
 }
 
@@ -10,58 +10,58 @@ void BgCheck_PolygonLinkedListResetHead(u16* head) {
     *head = 0xFFFF;
 }
 
-void BgCheck_ScenePolygonListsNodeInsert(BgScenePolygonLists* list, u16* head, s16* polyIndex) {
+void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, u16* head, s16* polyIndex) {
     u16 index;
 
     index = BgCheck_ScenePolygonListsReserveNode(list);
-    BgCheck_PolygonLinkedListNodeInit(&list->nodes[index], polyIndex, *head);
+    BgCheck_PolygonLinkedListNodeInit(&list->tbl[index], polyIndex, *head);
     *head = index;
 }
 
-void BgCheck_PolygonLinkedListNodeInsert(BgPolygonLinkedList* list, u16* head, s16* polyIndex) {
+void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, u16* head, s16* polyIndex) {
     u16 index;
 
     index = BgCheck_AllocPolygonLinkedListNode(list);
-    BgCheck_PolygonLinkedListNodeInit(&list->nodes[index], polyIndex, *head);
+    BgCheck_PolygonLinkedListNodeInit(&list->tbl[index], polyIndex, *head);
     *head = index;
 }
 
-void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, BgPolygonLinkedList* list) {
-    list->nodes = NULL;
-    list->nextFreeNode = 0;
+void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, DynaSSNodeList* list) {
+    list->tbl = NULL;
+    list->count = 0;
 }
 
-void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, BgPolygonLinkedList* list, u32 numNodes) {
-    list->nodes = (BgPolygonLinkedListNode*)THA_AllocEndAlign(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
-    list->maxNodes = numNodes;
-    list->nextFreeNode = 0;
+void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, DynaSSNodeList* list, u32 numNodes) {
+    list->tbl = (SSNode*)THA_AllocEndAlign(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
+    list->max = numNodes;
+    list->count = 0;
 }
 
-void BgCheck_PolygonLinkedListReset(BgPolygonLinkedList* list) {
-    list->nextFreeNode = 0;
+void BgCheck_PolygonLinkedListReset(DynaSSNodeList* list) {
+    list->count = 0;
 }
 
-u16 BgCheck_AllocPolygonLinkedListNode(BgPolygonLinkedList* list) {
+u16 BgCheck_AllocPolygonLinkedListNode(DynaSSNodeList* list) {
     u16 index;
 
-    index = list->nextFreeNode++;
-    if (list->maxNodes <= index) {
+    index = list->count++;
+    if (list->max <= index) {
         return 0xffff;
     }
 
     return index;
 }
 
-void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vec3f* vector) {
-    vector->x = vertex->pos.x;
-    vector->y = vertex->pos.y;
-    vector->z = vertex->pos.z;
+void BgCheck_CreateVec3fFromVertex(Vec3s* vertex, Vec3f* vector) {
+    vector->x = vertex->x;
+    vector->y = vertex->y;
+    vector->z = vertex->z;
 }
 
-void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector) {
-    vertex->pos.x = vector->x;
-    vertex->pos.y = vector->y;
-    vertex->pos.z = vector->z;
+void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector) {
+    vertex->x = vector->x;
+    vertex->y = vector->y;
+    vertex->z = vector->z;
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800BFD84.asm")

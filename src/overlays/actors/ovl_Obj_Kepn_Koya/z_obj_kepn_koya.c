@@ -26,7 +26,7 @@ static InitChainEntry D_80C07C40[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_0600805C;
+extern CollisionHeader D_0600805C;
 extern UNK_TYPE D_06003478;
 
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
