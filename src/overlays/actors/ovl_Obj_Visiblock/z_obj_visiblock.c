@@ -27,7 +27,7 @@ static InitChainEntry D_80ADEB50[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000AD0;
+extern CollisionHeader D_06000AD0;
 extern UNK_TYPE D_06000140;
 
 void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
