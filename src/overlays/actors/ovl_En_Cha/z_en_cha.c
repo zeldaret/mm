@@ -1,3 +1,9 @@
+/*
+ * File: z_en_cha.c
+ * Overlay: ovl_En_Cha
+ * Description: Laundry Pool Bell
+ */
+
 #include "z_en_cha.h"
 
 #define FLAGS 0x00000000
@@ -71,14 +77,13 @@ void func_80BEB5DC(EnCha *this, GlobalContext *globalCtx) {
     func_80BEB654(this, globalCtx);
     if (this->actor.cutscene == -1) {
         this->actionFunc = func_80BEB654;
-        return;
     }
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80BEB654;
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 }
 
 void func_80BEB654(EnCha *this, GlobalContext *globalCtx) {
