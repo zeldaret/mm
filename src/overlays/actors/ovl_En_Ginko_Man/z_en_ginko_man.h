@@ -9,40 +9,43 @@ struct EnGinkoMan;
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
-    ///* 0x144 */ char unk_144[0x124];
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
     /* 0x18C */ Vec3s limbDrawTbl[0x10];
-    ///* 0x192 */ UNK_TYPE1 unk192[0x5A];
     /* 0x1EC */ Vec3s transitionDrawTbl[0x10];
-    ///* 0x1F2 */ UNK_TYPE1 unk1F2[0x5A];
     /* 0x24C */ Vec3s limb15Rot;
     /* 0x252 */ Vec3s limb8Rot;
     /* 0x258 */ s16 curTextId;
-    /* 0x25A */ s16 unk25A; // copied from save context <- unk1206C //unused?
-    /* 0x25C */ s16 unk25C; // copied from msgCtx <- unk12022
+    /* 0x25A */ s16 serviceFee;
+    /* 0x25C */ s16 choiceDepositWithdrawl;
     /* 0x25E */ s16 newAccountFlag;
-    /* 0x260 */ s16 unk260; // busy with dialogue?
+    /* 0x260 */ s16 stampChecked;
     /* 0x262 */ s16 previousBankValue;
-    /* 0x264 */ s16 animTimer; // for animation 3 or 4?
-    /* 0x266 */ UNK_TYPE1 unk266[0x2];
+    /* 0x264 */ s16 animTimer;
 } EnGinkoMan; // size = 0x268
 
 extern const ActorInit En_Ginko_Man_InitVars;
 
+#define GINKOMAN_CHOICE_DEPOSIT   0
+#define GINKOMAN_CHOICE_WITHDRAWL 1
+#define GINKOMAN_CHOICE_CANCEL    2
+#define GINKOMAN_CHOICE_RESET     0
+
+#define GINKOMAN_CHOICE_YES  0
+#define GINKOMAN_CHOICE_NO   1
+
 extern SkeletonHeader*  D_0600C240;
-extern AnimationHeader* D_060043F0; // 0x60043F0;
+extern AnimationHeader* D_060043F0;
 
 extern AnimationHeader D_06004A7C; // these are segments found in our animation list
-extern AnimationHeader D_06000AC4; // haven't figured out how to reference them as static addresses
+extern AnimationHeader D_06000AC4; // haven't figured out how to reference them from said list
 extern AnimationHeader D_060008C0;
 
-// values to get wallet max?
-extern u32 D_801C1DD0; // index on unk inventory read
+// values to get wallet capacity
+extern u16 D_801C1E2C[]; // wallet capacities
+extern u32 D_801C1DD0; // bit mask for wallet size in savecontext
 extern u8 D_801C1E08; // bit shift on index to align
 
 extern Gfx D_0600B1D8;
-
-extern u16 D_801C1E2C[]; // wallet capacities
 
 #endif // Z_EN_GINKO_MAN_H

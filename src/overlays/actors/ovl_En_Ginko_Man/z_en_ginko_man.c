@@ -40,10 +40,10 @@ const ActorInit En_Ginko_Man_InitVars = {
 // gets passed to func_800BDC5C as array ptr with index
 ActorAnimationEntry D_80A65D60[] = {
 {0x060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f,}, // smacking the floor
-{0x060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f,}, // after stamp return
+{0x060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f,}, // after stamp reach, returning
 {0x06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f,}, // stamp reach
-{0x06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f,},
-{0x06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f,},
+{0x06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f,}, // advertising / dog-paddling and looking around / "hey crowd, come check this out"
+{0x06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f,}, // hands up staring at link `oh a small puppy` kind of pose "wow!"
 };
 
 void EnGinkoMan_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -54,9 +54,9 @@ void EnGinkoMan_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.colChkInfo.cylRadius = 100;
     this->curTextId = 0;
     this->newAccountFlag = 0;
-    this->unk260 = 0;
-    this->unk25C = 0;
-    this->unk25A = 0;
+    this->stampChecked = 0;
+    this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
+    this->serviceFee = 0;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, &this->limbDrawTbl, &this->transitionDrawTbl, 0x10);
     func_80A64554(this);
 }
@@ -66,34 +66,34 @@ void EnGinkoMan_Destroy(Actor *thisx, GlobalContext *globalCtx) { }
 // setup wait for dialogue
 void func_80A64554(EnGinkoMan* this) {
 
-    this->actor.flags |= 1;
-    func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
+    this->actor.flags |= 1; // targetable
+    func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
     this->actionFunc = func_80A645A4;
 }
 
-//action func: waiting for dialogue?
+//action func: waiting for dialogue
 void func_80A645A4(EnGinkoMan *this, GlobalContext *globalCtx) {
     s32 dYaw;
     s32 dYawABS;
 
     dYaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     func_80A65988(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (func_800B84D0(&this->actor, globalCtx)) { // Listen for dialogue start?
         if ((gSaveContext.perm.bankRupees & 0xFFFF) == 0) {
             func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
-            func_801518B0(globalCtx, 0x44CU, &this->actor);
+            func_801518B0(globalCtx, 0x44C, &this->actor);
             this->curTextId = 0x44C; // would you like to make an account
         } else {
             func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
             if ((((s32) gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
-                func_801518B0(globalCtx, 0x467U, &this->actor);
+                func_801518B0(globalCtx, 0x467, &this->actor);
                 this->curTextId = 0x467; // "What's this? You need somethin' on a day like this?
             } else {
-                func_801518B0(globalCtx, 0x466U, &this->actor);
+                func_801518B0(globalCtx, 0x466, &this->actor);
                 this->curTextId = 0x466; // What's this? You need somethin'?
             }
         }
-        func_80A65490(this);
+        func_80A65490(this); // switch dialogue actionfunc
     } else {
 
         dYawABS = dYaw < 0 ? -dYaw : dYaw;
@@ -107,7 +107,7 @@ void func_80A645A4(EnGinkoMan *this, GlobalContext *globalCtx) {
 // non-equiv: case 14 is possibly still non-equiv but def does not match, hard to tell 
 // if else inside of jump tables makes mips2c confused, also late rodata
 // action func: non-input dialogue
-void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
+void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) { // 80418E34
     u32 tempEDC;
     s16* previousBankValue;
 
@@ -115,11 +115,9 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
       return;
     }
     
-    //if (temp_t6 < 0x33) { //phi_a3_3 = globalCtx; //goto **(&jtbl_D_80A65DE0 + (temp_t6 * 4));
     switch (this->curTextId - 0x44C) {
 
     case 0: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
-        globalCtx = globalCtx;
         func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
         if ((gSaveContext.perm.weekEventReg[10] & 8) != 0) {
             func_801518B0(globalCtx, 0x44E, &this->actor);
@@ -142,7 +140,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
 
     case 7: // you deposited a tiny amount
     case 8: // you deposited a normal amount
-    case 9: // you deposited alot
+    case 9: // you deposited a lot
         if (this->newAccountFlag == 1) {
             this->newAccountFlag = 0;
             if (this->curTextId != 0x453) { // "That's it? That ain't nothing at all, big spender!
@@ -152,7 +150,6 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
             this->curTextId = 0x461; // So, little guy, what's your name?
         } else { 
             if (this->curTextId == 0x453) { // "That's it? That ain't nothing at all, big spender!
-                globalCtx = globalCtx;
                 func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
             }
             globalCtx->msgCtx.bankRupees = gSaveContext.perm.bankRupees & 0xFFFF;
@@ -181,7 +178,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
             return;
         } // bright pink arrow
 
-        // branch likely when shouldn'tbe
+        // "branch likely" when shouldn't be
         if ( (tempEDC >= 1000)
         && ((this->previousBankValue) < 1000)
         && (gSaveContext.perm.weekEventReg[0x3B] & 0x80) == 0) {
@@ -216,7 +213,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
             }
         }
 
-        // bright green arrow
+        // bright green arrow goes here
         func_800BDC5C(&this->skelAnime, D_80A65D60, 0); 
         func_801518B0(globalCtx, 0x460, &this->actor);
         this->curTextId = 0x460;  // "Come back and deposit some after you save up a bunch!" 
@@ -225,8 +222,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
     case 15: // given 200 reward
     case 16: // given 1000 reward
     case 17: // given 5000 reward
-        this->unk260 = 0;
-        globalCtx = globalCtx;
+        this->stampChecked = 0;
         func_801477B4(globalCtx);
         func_80A6557C(this);
         func_80A65590(this, globalCtx);
@@ -249,7 +245,6 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
         func_80A65800(this); // stamp player
         return;
     case 25: // "There! Now I'll know you when I see you!"
-        globalCtx = globalCtx;
         func_800BDC5C(&this->skelAnime, D_80A65D60, 0);
         globalCtx->msgCtx.bankRupees = gSaveContext.perm.bankRupees & 0xFFFF;
         func_801518B0(globalCtx, 0x45A, &this->actor);
@@ -266,7 +261,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
     case 30: // "Ah, yes...[Link].  If I remember, you're the little guy who deposited [rupees]."
     case 32: // "Ah, yes...[Link], right?  If I remember, you're the little guy who deposited [rupees]."
     case 50: // "Your deposits total [rupees]."
-        if (this->unk25C == 0) {
+        if (this->choiceDepositWithdrawl == GINKOMAN_CHOICE_DEPOSIT) {
             if ((u32) (gSaveContext.perm.bankRupees & 0xFFFF) >= 0x1388) {
                 func_801518B0(globalCtx, 0x45F, &this->actor);
                 this->curTextId = 0x45F; // "Excuuuse me! But I can't take anymore deposits!
@@ -281,11 +276,11 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
             func_801518B0(globalCtx, 0x46D, &this->actor);
             // "Look, little guy, if it's 'cause of the bad rumors going around, forget it! They're just rumors!"
             this->curTextId = 0x46D;
-        } else {
+        } else { // GINKOMAN_CHOICE_WITHDRAWL
             func_801518B0(globalCtx, 0x46B, &this->actor);
             this->curTextId = 0x46B; // "So..."
         }
-        this->unk25C = 0;
+        this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
         return;
     case 31: // So...
         func_801518B0(globalCtx, 0x46E, &this->actor);
@@ -300,7 +295,7 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
             return;
         }
         func_801477B4(globalCtx);
-        this->unk260 = 0;
+        this->stampChecked = 0;
         func_80A64554(this); // change to waiting for approach
         return;
     case 42: // "...You haven't deposited that many Rupees, so that much isn't available for withdrawal. Do the math! 
@@ -327,9 +322,9 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
     case 43: // "...You know, at this time of day there's a 4 Rupee service charge on withdrawals!"
         func_801518B0(globalCtx, 0x471, &this->actor);
         this->curTextId = 0x471; // "Are you really withdrawing [rupees selected]? Y/n"
-        this->unk25A = globalCtx->msgCtx.unk1206C;
+        this->serviceFee = globalCtx->msgCtx.unk1206C;
         return;
-    case 45: // "Look, little guy, all the Rupees you deposited are gone, so you can't use that stamp anymore."
+    case 45: // Well, are you gonna make a deposit?
         func_801518B0(globalCtx, 0x44F, &this->actor);
         this->curTextId = 0x44F; // "All right! So..."
         return;
@@ -344,12 +339,12 @@ void func_80A646F4(EnGinkoMan *this, GlobalContext *globalCtx) {
 
 #if NON_MATCHING
 // NON-MATCHING: lots of regalloc 
-// ROM SHIFT: a couple redundant li 0x4806 added
+// ROM SHIFT: a couple redundant li 0x4806 added reason unk
 // actionfunc: wait for player dialogue input
 void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
 
-    // branch likely instead of branch, fixed by adding a fake if though
-    // probably because its supposed to wrap around the whole switch, but hoping thats not the case
+    // branch likely instead of branch, fixed by adding a fake if later though
+    // probably because its supposed to wrap around the whole switch, but couldn't match with that either
     if (func_80147624(globalCtx) == 0) {
       return;
     }
@@ -357,7 +352,7 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
     switch (this->curTextId) {
 
     case 0x44E: // "...So, what'll it be?
-        if (globalCtx->msgCtx.choiceIndex == 0) {
+        if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
             if ( (gSaveContext.perm.bankRupees & 0xFFFF) >= 0x1388) {
                 play_sound(0x4806);// NA_SE_SY_ERROR
                 func_801518B0(globalCtx, 0x45F, &this->actor);
@@ -376,15 +371,16 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                 }
                 return;
             } 
+        } else { // GINKOMAN_CHOICE_NO
+            func_8019F230();
+            func_801518B0(globalCtx, 0x451, &this->actor);
+            this->curTextId = 0x451; // dont say that, come on, trust me!
+            break;
         }
-        func_8019F230();
-        func_801518B0(globalCtx, 0x451, &this->actor);
-        this->curTextId = 0x451; // dont say that, come on, trust me!
-        break;
 
     case 0x452: // Really? are you really depositing rupees?
 
-        if (globalCtx->msgCtx.choiceIndex == 0){ // Selected: YES
+        if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES){
             if (gSaveContext.perm.unk24.currentRupees < globalCtx->msgCtx.bankRupeesSelected) {
                 play_sound(0x4806); // NA_SE_SY_ERROR
                 func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
@@ -393,7 +389,6 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                 //return;
             } else {
                 func_8019F208(0x4806);
-                ////temp_v0_5 = globalCtx->msgCtx.bankRupeesSelected;
                 if (globalCtx->msgCtx.bankRupeesSelected >= 100) {
                     func_801518B0(globalCtx, 0x455, &this->actor);
                     this->curTextId = 0x455; // You're really going to be give me that much? Rich little guy!
@@ -414,10 +409,9 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                 gSaveContext.perm.bankRupees = ((gSaveContext.perm.bankRupees & 0xFFFF) 
                     + globalCtx->msgCtx.bankRupeesSelected) | (gSaveContext.perm.bankRupees & 0xFFFF0000);
             }
-        }else{ // Selected: NO
+        }else{ // GINKOMAN_CHOICE_NO
             func_8019F230();
             func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
-            // different forms?
             if ((gSaveContext.perm.bankRupees & 0xFFFF) == 0) { // @B74
                 func_801518B0(globalCtx, 0x456, &this->actor);
                 this->curTextId = 0x456; // Is that so? think about it 
@@ -428,33 +422,33 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
         }
         break;
 
-    case 0x468:  // [Deposit rupees selected] // location: @C38
+    case 0x468:  // Deposit OR withdrawl OR cancel screen // location: @C38
         // FAKE MATCH
         if (globalCtx->msgCtx.choiceIndex) {} // -5000 permuter score: regalloc and branch likely swapping
 
-        if (globalCtx->msgCtx.choiceIndex == 2) {
+        if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_CANCEL) {
             func_8019F230();
             func_801518B0(globalCtx, 0x470, &this->actor);
             this->curTextId = 0x470; // "Is that so? Come back and deposit some after saving up a bunch!"
         } else {
             func_8019F208();
-            this->unk25C = globalCtx->msgCtx.choiceIndex;
-            if (this->unk260 == 0) {                          // @C94
-                this->unk260 = 1;
+            this->choiceDepositWithdrawl = globalCtx->msgCtx.choiceIndex;
+            if (this->stampChecked == 0) {                          // @C94
+                this->stampChecked = 1;
                 func_801518B0(globalCtx, 0x469, &this->actor);
-                this->curTextId = 0x469; // Excuse me, but let me look at you
+                this->curTextId = 0x469; // "Excuse me, but let me take a look at you..."
             } else {
                 func_801518B0(globalCtx, 0x47E, &this->actor);
-                this->curTextId = 0x47E; // your deposits total X rupees
+                this->curTextId = 0x47E; // "Your deposits total [rupees]."
             }
         }
         break;
 
-    case 0x471: // Are you really withdrawling [selected rupees]? // @CDC
+    case 0x471: // Are you really withdrawling [selected rupees]?   // @CDC
         // 0xEDC: bankRupees
-        if (globalCtx->msgCtx.choiceIndex == 0) {
+        if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
             // s32 casts required for slt instead of sltu
-            if ((s32)((gSaveContext.perm.bankRupees & 0xFFFF)) < ((s32)( globalCtx->msgCtx.bankRupeesSelected + this->unk25A))) { 
+            if ((s32)((gSaveContext.perm.bankRupees & 0xFFFF)) < ((s32)( globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) { 
                 play_sound(0x4806); // NA_SE_SY_ERROR
                 func_800BDC5C(&this->skelAnime, D_80A65D60, 0);       // @ D30
                 func_801518B0(globalCtx, 0x476, &this->actor);
@@ -462,9 +456,7 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                 return;
             }
             
-            // an array of what though
-            //if ((s32) *(&D_801C1E2C + (((u32) ((s32) gSaveContext.perm.inv.unk48 & D_801C1DD0) >> D_801C1E08) * 2))
-               //< (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.perm.unk24.currentRupees)) {
+            // check if wallet is big enough
             if ( (D_801C1E2C[ ( gSaveContext.perm.inv.unk48 & D_801C1DD0) >> D_801C1E08])
                < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.perm.unk24.currentRupees)) {
                 play_sound(0x4806); // NA_SE_SY_ERROR
@@ -485,13 +477,11 @@ void func_80A64DC4(EnGinkoMan *this, GlobalContext *globalCtx) {
                 this->curTextId = 0x472; // It's a waste to take out such a tiny bit
             }
             this->previousBankValue = (s16) gSaveContext.perm.bankRupees;
-            //temp_v0_4 = gSaveContext.perm.bankRupees;
             gSaveContext.perm.bankRupees = (((gSaveContext.perm.bankRupees & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) 
-              - this->unk25A) | (gSaveContext.perm.bankRupees & 0xFFFF0000);
+              - this->serviceFee) | (gSaveContext.perm.bankRupees & 0xFFFF0000);
             func_801159EC( (s16) globalCtx->msgCtx.bankRupeesSelected, &gSaveContext); // cast req
             return;
         } else { 
-            //func_8019F230(&gSaveContext);
             func_8019F230();
             func_801518B0(globalCtx, 0x47C, &this->actor);
             this->curTextId = 0x47C; // "Is that so? Think it over, little guy! So what are you gonna do?"
@@ -508,8 +498,7 @@ void func_80A65364(EnGinkoMan *this, GlobalContext *globalCtx) {
         switch (this->curTextId){
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (globalCtx->msgCtx.bankRupeesSelected == 0) {
-                    globalCtx = globalCtx;
-                    func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
+                    func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
                     func_801518B0(globalCtx, 0x457, &this->actor);
                     this->curTextId = 0x457; // Zero Rupees? Cruel joke!
                 } else {
@@ -528,33 +517,34 @@ void func_80A65364(EnGinkoMan *this, GlobalContext *globalCtx) {
                 } else {
                     func_801518B0(globalCtx, 0x471, &this->actor);
                     this->curTextId = 0x471; // "Are you really withdrawing [rupees selected]? Y/n
-                    this->unk25A = 0;
+                    this->serviceFee = 0;
                 }
                 break;
         }
     }
 }
 
-// setup
+// setup: switch dialogue actionfunc
 void func_80A65490(EnGinkoMan* this) {
     this->actionFunc = func_80A654A4;
 }
 
-//action func
+//action func: switch action function to match current dialogue state
+// also handles hand slap sfx while waiting player input
 void func_80A654A4(EnGinkoMan *this, GlobalContext *globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (func_80152498(&globalCtx->msgCtx)) { // get dialogue state?
         case 2:
             func_80A64554(this); // change to waiting for appraoch
             break;
         case 4:
-            func_80A64DC4(this, globalCtx); // wait for player dilogue choice
+            func_80A64DC4(this, globalCtx); // wait for player dialogue choice
             break;
         case 5:
             func_80A646F4(this, globalCtx); // wait for non-input dialogue
             break;
         case 6:
             if (func_80147624(globalCtx) != 0) {
-                this->unk260 = 0;
+                this->stampChecked = 0;
                 func_80A64554(this); // change to waiting for approach
             }
             break;
@@ -572,13 +562,14 @@ void func_80A654A4(EnGinkoMan *this, GlobalContext *globalCtx) {
     }
 }
 
+// setup: give bank rewards
 void func_80A6557C(EnGinkoMan* this) {
     this->actionFunc = func_80A65590;
 }
 
-// action func: give wallet checks
+// action func: give bank rewards
 void func_80A65590(EnGinkoMan *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx) != 0) {
+    if (Actor_HasParent(&this->actor, globalCtx)) {
         // ? when would bank have a parent?
         this->actor.parent = NULL;
         func_80A656C4(this);
@@ -598,13 +589,14 @@ void func_80A65590(EnGinkoMan *this, GlobalContext *globalCtx) {
     }
 }
 
-//setup 
+// called from parent above: 
 void func_80A656C4(EnGinkoMan* this) {
     this->actionFunc = func_80A656D8;
 }
 
 # if NON_MATCHING
 // NON_MATCHING: minor regalloc at globalCtx into func_80152498
+// separate function to handle bank rewards... if the bank has a parent actor? might be unused
 void func_80A656D8(EnGinkoMan* this, GlobalContext *globalCtx) {
     GlobalContext* gCtx;// = globalCtx;
 
@@ -613,17 +605,19 @@ void func_80A656D8(EnGinkoMan* this, GlobalContext *globalCtx) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take it!"
             gSaveContext.perm.weekEventReg[0xA] |= 8;
             func_801518B0(globalCtx, 0x47A, &this->actor);
+
             if (1) { // might be fake, but it solves almost everything
                 this->curTextId = 0x47A; // "See! Doesn't it hold more than your old one?
             }
+
         } else {
-            func_800BDC5C(&this->skelAnime, &D_80A65D60, 1);
+            func_800BDC5C(&this->skelAnime, D_80A65D60, 1);
             func_801518B0(globalCtx, 0x47B, &this->actor);
             this->curTextId = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
         }
         func_80A65490(this);
+
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        //if ((func_80152498(&globalCtx->msgCtx, globalCtx) == 6) && (func_80147624(globalCtx) != 0)) {
         gCtx = globalCtx;
         if ((func_80152498(&gCtx->msgCtx, globalCtx) == 6) && (func_80147624(globalCtx) != 0)) {
             if ((gSaveContext.perm.weekEventReg[0x3B] & 8) == 0) {
@@ -631,6 +625,7 @@ void func_80A656D8(EnGinkoMan* this, GlobalContext *globalCtx) {
             }
             func_80A64554(this); // change to waiting for approach
         }
+
     } else {
         func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
     }
@@ -684,17 +679,16 @@ void func_80A65988(EnGinkoMan *this, GlobalContext *globalCtx) {
         if (this->animTimer == 0) {
             if (this->skelAnime.animCurrentSeg != &D_06004A7C) { // not 4
                 this->animTimer = 0x28;
-                func_800BDC5C(&this->skelAnime, &D_80A65D60, 4);
+                func_800BDC5C(&this->skelAnime, D_80A65D60, 4);
             }
         }
+
     } else if ((this->animTimer == 0) && (this->skelAnime.animCurrentSeg != &D_06000AC4)) { // not 3
         this->animTimer = 0x28;
-        func_800BDC5C(&this->skelAnime, &D_80A65D60, 3);
+        func_800BDC5C(&this->skelAnime, D_80A65D60, 3);
     }
 
-    if (this->animTimer != 0) {
-        this->animTimer--;
-    }
+    DECR(this->animTimer);
 }
 
 // update extension
@@ -702,9 +696,8 @@ void func_80A65988(EnGinkoMan *this, GlobalContext *globalCtx) {
 void func_80A65A5C(EnGinkoMan *this, GlobalContext *globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 
-    if (this->skelAnime.animCurrentSeg != &D_06004A7C) { //not 4
-        func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot,
-           this->actor.focus.pos);
+    if (this->skelAnime.animCurrentSeg != &D_06004A7C) { // not 4
+        func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
         func_800E8F08(&this->limb15Rot, &this->limb8Rot);
     }
