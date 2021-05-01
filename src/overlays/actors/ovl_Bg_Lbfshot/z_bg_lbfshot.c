@@ -24,7 +24,7 @@ static InitChainEntry D_80C18200[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_060014D8;
+extern CollisionHeader D_060014D8;
 extern UNK_TYPE D_06000228;
 
 void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
