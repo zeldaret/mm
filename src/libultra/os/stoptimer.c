@@ -1,7 +1,5 @@
-#include <PR/ultratypes.h>
-#include <rmon.h>
-#include <osint.h>
-#include <viint.h>
+#include <ultra64.h>
+#include <global.h>
 
 s32 osStopTimer(OSTimer* t)
 {
