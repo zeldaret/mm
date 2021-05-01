@@ -259,7 +259,10 @@ typedef struct {
     /* 0xAE7 */ s8 unkAE7;
     /* 0xAE8 */ UNK_TYPE1 padAE8[0x40];
     /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
+    /* 0xB2A */ UNK_TYPE1 padB2A[0x56];
+    /* 0xB80 */ f32 unk_B80;
+    /* 0xB84 */ s16 unk_B84;
+    /* 0xB86 */ char unk_B86[0x16];
     /* 0xB9C */ Vec3f unkB9C;
     /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
     /* 0xBEC */ Vec3f bodyPartsPos[18];

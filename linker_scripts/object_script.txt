@@ -110,6 +110,10 @@ D_0600DEF0 = 0x0600DEF0;
 /* arms_hook */
 D_0601D960 = 0x0601D960;
 
+/* z_obj_boyo */
+D_06000300 = 0x06000300;
+D_06000E88 = 0x06000E88;
+
 /* en_ending_hero */
 D_0600B0CC = 0x0600B0CC;
 D_06000BE0 = 0x06000BE0;
