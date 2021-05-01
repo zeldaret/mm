@@ -369,7 +369,7 @@ typedef struct {
     /* 0x00 */ u8 items[24];
     /* 0x18 */ u8 masks[24];
     /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ s32 unk48;
+    /* 0x48 */ s32 unk48; // some bits are wallet upgrades
     /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
 } SaveContextInventory; // size = 0x88
 
@@ -391,7 +391,7 @@ typedef struct {
     /* 0x14 */ s8 unk14;
     /* 0x15 */ s8 currentMagic;
     /* 0x16 */ s16 currentRupees;
-    /* 0x16 */ UNK_TYPE1 pad17[0x10];
+    /* 0x18 */ UNK_TYPE1 pad18[0x10];
 } SaveContext_struct1; // size = 0x28
 
 typedef struct {
