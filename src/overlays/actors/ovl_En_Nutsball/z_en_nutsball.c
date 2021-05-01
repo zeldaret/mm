@@ -53,11 +53,11 @@ void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.speedXZ = 10.0f;
     if (this->actor.params == 2) {
         this->timer = 1;
-        this->unk146 = 0;
+        this->startTimeOC = 0;
         this->actor.gravity = -1.0f;
     } else {
         this->timer = 20;
-        this->unk146 = 19;
+        this->startTimeOC = 19;
         this->actor.gravity = -0.5f;
     }
     this->actor.world.rot.x = -this->actor.shape.rot.x;
@@ -84,10 +84,10 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     GlobalContext *globalCtx2 = globalCtx;
     
     ActorPlayer *player = PLAYER;
-    Vec3f sp60;
+    Vec3f worldPos;
     Vec3s sp58;
-    Vec3f sp4c;
-    f32 temp;
+    Vec3f spawnBurstPos;
+    f32 spdXZ;
     u32 bgId;
     CollisionPoly *poly;
 
@@ -95,8 +95,8 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
-            temp = sqrtf((this->actor.velocity.x * this->actor.velocity.x) + (this->actor.velocity.z * this->actor.velocity.z));
-            this->actor.world.rot.x = Math_FAtan2F(temp, this->actor.velocity.y);
+            spdXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) + (this->actor.velocity.z * this->actor.velocity.z));
+            this->actor.world.rot.x = Math_FAtan2F(spdXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) || (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
@@ -106,10 +106,10 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
                 this->actor.world.rot.y = sp58.y + 0x8000;
                 this->timer = 20;
             } else {
-                sp4c.x = this->actor.world.pos.x;
-                sp4c.y = this->actor.world.pos.y + 4.0f;
-                sp4c.z = this->actor.world.pos.z;
-                EffectSsHahen_SpawnBurst(globalCtx, &sp4c, 0x40C00000, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
+                spawnBurstPos.x = this->actor.world.pos.x;
+                spawnBurstPos.y = this->actor.world.pos.y + 4.0f;
+                spawnBurstPos.z = this->actor.world.pos.z;
+                EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 0x40C00000, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
                     func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28F4);
                 } else {
@@ -124,13 +124,13 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         }
         
         Actor_SetVelocityAndMoveXYRotation(&this->actor);
-        Math_Vec3f_Copy(&sp60, &this->actor.world.pos);
+        Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
         func_800B78B8(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 7);
         
         if (this->actor.bgCheckFlags & 8) {
             if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &sp60, &this->actor.world.pos, &poly, 1, 0, 0, 1, &bgId)) {
+                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos, &poly, 1, 0, 0, 1, &bgId)) {
                     if (func_800C9A4C(&globalCtx2->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
@@ -138,7 +138,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
                         this->actor.bgCheckFlags |= 8;
                     }
                 } else {
-                    Math_Vec3f_Copy(&this->actor.world.pos, &sp60);
+                    Math_Vec3f_Copy(&this->actor.world.pos, &worldPos);
                 }
             }
         }
@@ -149,7 +149,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         
-        if (this->timer < this->unk146) {
+        if (this->timer < this->startTimeOC) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         }
     }
