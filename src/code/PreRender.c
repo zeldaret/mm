@@ -423,7 +423,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
             StackCheck_Cleanup(&slowlyStackEntry);
-            func_801857A0(&D_801F6E00);
+            Slowly_Stop(&D_801F6E00);
         }
 
         this->unk_4D = 1;
@@ -439,7 +439,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this) {
 void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this) {
     if (D_801F6FC0) {
         StackCheck_Cleanup(&slowlyStackEntry);
-        func_801857A0(&D_801F6E00);
+        Slowly_Stop(&D_801F6E00);
         D_801F6FC0 = false;
     }
 }
