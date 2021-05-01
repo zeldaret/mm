@@ -1,0 +1,8 @@
+<Root>
+    <File Name="Z2_MITURIN_BS" Game="MM">
+        <Scene Name="Z2_MITURIN_BS"/>
+    </File>
+    <File Name="Z2_MITURIN_BS_room_00" Game="MM">
+        <Room Name="Z2_MITURIN_BS_room_00"/>
+    </File>
+</Root>
