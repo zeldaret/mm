@@ -15,8 +15,7 @@ void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCha_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BEB654(EnCha* this, GlobalContext* globalCtx);
-void func_80BEB5DC(EnCha* this, GlobalContext* globalCtx);
+void EnCha_Idle(EnCha* this, GlobalContext* globalCtx);
 
 
 const ActorInit En_Cha_InitVars = {
@@ -62,7 +61,7 @@ void EnCha_Init(Actor *thisx, GlobalContext *globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.home.rot.z = 0;
-    this->actionFunc = func_80BEB654;
+    this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
     gSaveContext.perm.weekEventReg[60] &= 0xFB;
 }
@@ -73,20 +72,20 @@ void EnCha_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80BEB5DC(EnCha *this, GlobalContext *globalCtx) {
-    func_80BEB654(this, globalCtx);
+void EnCha_Ring(EnCha *this, GlobalContext *globalCtx) {
+    EnCha_Idle(this, globalCtx);
     if (this->actor.cutscene == -1) {
-        this->actionFunc = func_80BEB654;
+        this->actionFunc = EnCha_Idle;
     }
     else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        this->actionFunc = func_80BEB654;
+        this->actionFunc = EnCha_Idle;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void func_80BEB654(EnCha *this, GlobalContext *globalCtx) {
+void EnCha_Idle(EnCha *this, GlobalContext *globalCtx) {
     if (gSaveContext.perm.weekEventReg[60] & 4) {
         Audio_PlayActorSound2(&this->actor, 0x289E);
         gSaveContext.perm.weekEventReg[60] &= 0xFB;
@@ -97,7 +96,7 @@ void func_80BEB654(EnCha *this, GlobalContext *globalCtx) {
         this->actor.home.rot.z = 0x7D0;
         if (!(gSaveContext.perm.weekEventReg[51] & 4)) {
             gSaveContext.perm.weekEventReg[51] |= 4;
-            this->actionFunc = func_80BEB5DC;
+            this->actionFunc = EnCha_Ring;
         }
     }
     this->actor.home.rot.x += this->actor.home.rot.z;
