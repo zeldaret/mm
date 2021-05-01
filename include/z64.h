@@ -22,6 +22,7 @@
 
 #include <z64actor.h>
 #include <z64animation.h>
+#include <z64bgcheck.h>
 #include <z64collision_check.h>
 #include <z64cutscene.h>
 #include <z64dma.h>
@@ -37,6 +38,19 @@
 
 #define SCREEN_WIDTH_HIGH_RES  576
 #define SCREEN_HEIGHT_HIGH_RES 454
+
+#define Z_THREAD_ID_IDLE     1
+#define Z_THREAD_ID_SLOWLY   2
+#define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_DMAMGR  18
+#define Z_THREAD_ID_IRQMGR  19
+
+#define Z_PRIORITY_SLOWLY  5
+#define Z_PRIORITY_GRAPH   9
+#define Z_PRIORITY_IDLE   12
+#define Z_PRIORITY_MAIN   12
+#define Z_PRIORITY_DMAMGR 17
+#define Z_PRIORITY_IRQMGR 18
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -457,16 +471,24 @@ typedef void(*osCreateThread_func)(void*);
 
 typedef void*(*printf_func)(void*, char*, size_t);
 
+typedef enum {
+    SLOWLY_CALLBACK_NO_ARGS,
+    SLOWLY_CALLBACK_ONE_ARG,
+    SLOWLY_CALLBACK_TWO_ARGS
+} SlowlyCallbackArgCount;
+
 typedef struct {
-    /* 0x000 */ OSThread unk0;
-    /* 0x1B0 */ s8 argCount;
-    /* 0x1B1 */ s8 unk1B1;
-    /* 0x1B2 */ UNK_TYPE1 pad1B2[0x2];
-    /* 0x1B4 */ UNK_TYPE1 func;
-    /* 0x1B5 */ UNK_TYPE1 pad1B5[0x3];
-    /* 0x1B8 */ s32 arg0;
-    /* 0x1BC */ s32 arg1;
-} s8018571C; // size = 0x1C0
+    /* 0x000 */ OSThread thread;
+    /* 0x1B0 */ u8 callbackArgCount;
+    /* 0x1B1 */ u8 status;
+    /* 0x1B4 */ union {
+        void (*callback0)(void);
+        void (*callback1)(void*);
+        void (*callback2)(void*, void*);
+    };
+    /* 0x1B8 */ void* callbackArg0;
+    /* 0x1BC */ void* callbackArg1;
+} SlowlyTask; // size = 0x1C0
 
 typedef struct {
     /* 0x00 */ int unk0;
@@ -529,27 +551,17 @@ typedef struct {
 } ActorMeshParams; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u16 type;
-    union {
-        u16 vtxData[3];
-        struct {
-            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
-            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
-                                      // 0x2000 = poly IsConveyor surface
-            /* 0x06 */ u16 vIC;
-        };
-    };
-    /* 0x08 */ Vec3s normal; // Unit normal vector
-                             // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
-
-    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
-} CollisionPoly; // size = 0x10
-
-typedef struct {
     /* 0x0 */ BgPolygonLinkedListNode* nodes;
     /* 0x4 */ u32 nextFreeNode;
     /* 0x8 */ s32 maxNodes;
 } BgPolygonLinkedList; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ f32 x[4];
+    /* 0x10 */ f32 y[4];
+    /* 0x20 */ f32 z[4];
+    /* 0x30 */ f32 w[4];
+} z_Matrix; // size = 0x40
 
 typedef struct {
     /* 0x0 */ Vec3s pos;
@@ -739,19 +751,6 @@ typedef struct {
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
-
-typedef struct {
-    /* 0x00 */ Vec3s min;
-    /* 0x06 */ Vec3s max;
-    /* 0x0C */ u16 numVertices;
-    /* 0x10 */ BgVertex* vertices;
-    /* 0x14 */ u16 numPolygons;
-    /* 0x18 */ CollisionPoly* polygons;
-    /* 0x1C */ BgPolygonAttributes* attributes;
-    /* 0x20 */ UNK_PTR cameraData;
-    /* 0x24 */ u16 numWaterBoxes;
-    /* 0x28 */ BgWaterBox* waterboxes;
-} BgMeshHeader; // size = 0x2C
 
 typedef struct {
     /* 0x000 */ View view;
@@ -996,6 +995,52 @@ typedef struct {
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
+typedef struct ListAlloc {
+    /* 0x00 */ struct ListAlloc* prev;
+    /* 0x04 */ struct ListAlloc* next;
+} ListAlloc; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u16 width;
+    /* 0x02 */ u16 height;
+    /* 0x04 */ u16 widthSave;
+    /* 0x06 */ u16 heightSave;
+    /* 0x08 */ char unk_8[8];
+    /* 0x10 */ u16* fbuf;
+    /* 0x14 */ u16* fbufSave;
+    /* 0x18 */ u8* cvgSave;
+    /* 0x1C */ u16* zbuf;
+    /* 0x20 */ u16* zbufSave;
+    /* 0x24 */ u16 ulxSave;
+    /* 0x26 */ u16 ulySave;
+    /* 0x28 */ u16 lrxSave;
+    /* 0x2A */ u16 lrySave;
+    /* 0x2C */ u16 ulx;
+    /* 0x2E */ u16 uly;
+    /* 0x30 */ u16 lrx;
+    /* 0x32 */ u16 lry;
+    /* 0x34 */ char unk_34[16];
+    /* 0x44 */ ListAlloc alloc;
+    /* 0x4C */ u8 unk_4C;
+    /* 0x4D */ u8 unk_4D;
+    /* 0x4E */ char unk_4E[2];
+} PreRenderContext; // size = 0x50
+
+typedef struct {
+    /* 0x00 */ void* timg;
+    /* 0x04 */ void* tlut;
+    /* 0x08 */ u16 width;
+    /* 0x0A */ u16 height;
+    /* 0x0C */ u8 fmt;
+    /* 0x0D */ u8 siz;
+    /* 0x0E */ u16 tt;
+    /* 0x10 */ u16 unk_10;
+    /* 0x14 */ f32 x;
+    /* 0x18 */ f32 y;
+    /* 0x1C */ f32 xScale;
+    /* 0x20 */ f32 yScale;
+    /* 0x24 */ u32 flags;
+} PreRenderParams; // size = 0x28
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -1032,19 +1077,6 @@ typedef struct {
     /* 0x3CA0 */ SaveContextExtra extra;
 } SaveContext; // size = 0x48C8
 
-typedef struct {
-    /* 0x00 */ BgMeshHeader* sceneMesh;
-    /* 0x04 */ Vec3f sceneMin;
-    /* 0x10 */ Vec3f sceneMax;
-    /* 0x1C */ s32 xSubdivisions;
-    /* 0x20 */ s32 ySubdivisions;
-    /* 0x24 */ s32 zSubdivisions;
-    /* 0x28 */ Vec3f subdivisionSize;
-    /* 0x34 */ Vec3f inverseSubdivisionSize;
-    /* 0x40 */ BgMeshSubdivision* subdivisions;
-    /* 0x44 */ BgScenePolygonLists scenePolyLists;
-} StaticCollisionContext; // size = 0x50
-
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
 typedef struct ActorEnBji01 ActorEnBji01;
@@ -1052,10 +1084,6 @@ typedef struct ActorEnBji01 ActorEnBji01;
 typedef struct ActorEnTest ActorEnTest;
 
 typedef struct ActorListEntry ActorListEntry;
-
-typedef struct DynaCollisionContext DynaCollisionContext;
-
-typedef struct CollisionContext CollisionContext;
 
 typedef struct ArenaNode_t {
     /* 0x0 */ s16 magic; // Should always be 0x7373
@@ -1081,41 +1109,6 @@ typedef struct ActorEnFirefly ActorEnFirefly;
 typedef struct ActorObjBell ActorObjBell;
 
 typedef struct DaytelopContext DaytelopContext;
-
-typedef struct {
-    /* 0x00 */ DynaPolyActor* actor;
-    /* 0x04 */ BgMeshHeader* header;
-    /* 0x08 */ ActorMeshPolyLists polyLists;
-    /* 0x10 */ s16 verticesStartIndex;
-    /* 0x12 */ s16 waterboxesStartIndex;
-    /* 0x14 */ ActorMeshParams prevParams;
-    /* 0x34 */ ActorMeshParams currParams;
-    /* 0x54 */ Vec3s averagePos;
-    /* 0x5A */ s16 radiusFromAveragePos;
-    /* 0x5C */ f32 minY;
-    /* 0x60 */ f32 maxY;
-} ActorMesh; // size = 0x64
-
-struct DynaCollisionContext {
-    /* 0x0000 */ u8 unk0;
-    /* 0x0001 */ UNK_TYPE1 pad1[0x3];
-    /* 0x0004 */ ActorMesh actorMeshArr[50];
-    /* 0x138C */ u16 flags[50]; // bit 0 - Is mesh active
-    /* 0x13F0 */ CollisionPoly* polygons;
-    /* 0x13F4 */ BgVertex* vertices;
-    /* 0x13F8 */ BgWaterboxList waterboxes;
-    /* 0x1400 */ BgPolygonLinkedList polygonList;
-    /* 0x140C */ u32 maxNodes;
-    /* 0x1410 */ u32 maxPolygons;
-    /* 0x1414 */ u32 maxVertices;
-    /* 0x1418 */ u32 maxMemory;
-    /* 0x141C */ u32 unk141C;
-}; // size = 0x1420
-
-struct CollisionContext {
-    /* 0x0000 */ StaticCollisionContext stat;
-    /* 0x0050 */ DynaCollisionContext dyna;
-}; // size = 0x1470
 
 typedef struct ActorBgIknvObj ActorBgIknvObj;
 
@@ -1689,7 +1682,7 @@ struct GlobalContext {
     /* 0x18848 */ u8 numRooms;
     /* 0x18849 */ UNK_TYPE1 pad18849;
     /* 0x1884A */ s16 unk1884A;
-    /* 0x1884C */ RoomFileLocation* roomList;
+    /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ UNK_PTR unk18858;
@@ -1712,7 +1705,9 @@ struct GlobalContext {
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ UNK_TYPE1 pad18B49[0x1];
     /* 0x18B4A */ u8 unk18B4A;
-    /* 0x18B4B */ UNK_TYPE1 pad18B4B[0x309];
+    /* 0x18B4B */ char pad18B4B[1];
+    /* 0x18B4C */ PreRenderContext preRenderCtx;
+    /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
     /* 0x18E58 */ UNK_TYPE1 pad18E58[0x400];
 }; // size = 0x19258

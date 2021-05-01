@@ -108,7 +108,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
     size = req->size;
 
     index = DmaMgr_FindDmaIndex(vrom);
-   
+
     if ((index >= 0) && (index < numDmaEntries)) {
         dmaEntry = &dmadata[index];
         if (dmaEntry->romEnd == 0) {
@@ -144,18 +144,18 @@ void DmaMgr_ThreadEntry(void* a0) {
 
     while (1) {
         osRecvMesg(&sDmaMgrMsgQueue, &msg, OS_MESG_BLOCK);
-        
+
         if (msg == NULL) {
             break;
         }
-    
+
         req = (DmaRequest *)msg;
 
         DmaMgr_ProcessMsg(req);
         if (req->notifyQueue) {
             osSendMesg(req->notifyQueue, req->notifyMsg, OS_MESG_NOBLOCK);
         }
-        
+
     }
 }
 
@@ -211,7 +211,7 @@ void DmaMgr_Start() {
 
 	osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
 	StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 256, dmamgrThreadName);
-	osCreateThread(&sDmaMgrThread, 18, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack), 17);
+	osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack), Z_PRIORITY_DMAMGR);
 	osStartThread(&sDmaMgrThread);
 }
 #else
