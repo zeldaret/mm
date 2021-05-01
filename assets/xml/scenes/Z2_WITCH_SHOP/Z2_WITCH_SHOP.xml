@@ -1,0 +1,8 @@
+<Root>
+    <File Name="Z2_WITCH_SHOP" Game="MM">
+        <Scene Name="Z2_WITCH_SHOP"/>
+    </File>
+    <File Name="Z2_WITCH_SHOP_room_00" Game="MM">
+        <Room Name="Z2_WITCH_SHOP_room_00"/>
+    </File>
+</Root>

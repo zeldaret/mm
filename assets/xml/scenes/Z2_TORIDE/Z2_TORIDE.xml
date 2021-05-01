@@ -1,0 +1,8 @@
+<Root>
+    <File Name="Z2_TORIDE" Game="MM">
+        <Scene Name="Z2_TORIDE"/>
+    </File>
+    <File Name="Z2_TORIDE_room_00" Game="MM">
+        <Room Name="Z2_TORIDE_room_00"/>
+    </File>
+</Root>
