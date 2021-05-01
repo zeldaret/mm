@@ -322,8 +322,14 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x1C];
-} PermanentSceneFlags; // size = 0x1C
+    /* 0x00 */ u32 chest;
+    /* 0x04 */ u32 swch;
+    /* 0x08 */ u32 clear;
+    /* 0x0C */ u32 collect;
+    /* 0x10 */ u32 unk;
+    /* 0x14 */ u32 rooms;
+    /* 0x18 */ u32 floors;
+} SavedSceneFlags; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 unk0;
@@ -686,7 +692,7 @@ typedef struct {
     /* 0x004C */ SaveContext_struct2 unk4C;
     /* 0x006E */ UNK_TYPE1 pad6E[0x2];
     /* 0x0070 */ SaveContextInventory inv;
-    /* 0x00F8 */ PermanentSceneFlags sceneFlags[120];
+    /* 0x00F8 */ SavedSceneFlags sceneFlags[120];
     /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
     /* 0x0E78 */ u32 pictoFlags0;
     /* 0x0E7C */ u32 pictoFlags1;

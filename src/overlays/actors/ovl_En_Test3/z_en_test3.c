@@ -34,6 +34,8 @@ const ActorInit En_Test3_InitVars = {
     (ActorFunc)NULL,
 };
 
+extern LinkAnimetionEntry D_0400CF88;
+
 // char bss[0x50];
 
 s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
@@ -156,14 +158,34 @@ u32 D_80A418A4[] = {
     0x04001465,
 };
 
-s32 func_80A3E870(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E870.asm")
+s32 func_80A3E870(EnTest3 *this, GlobalContext *globalCtx) {
+    return true;
+}
 
-s32 func_80A3E884(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E884.asm")
+s32 func_80A3E884(EnTest3 *this, GlobalContext *globalCtx) {
+    return false;
+}
 
-s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E898.asm")
+s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
+    u16 textId = this->talkState->textId;
+
+    //! @TODO: fix scene flags here!
+    if ((this->talkState->unk_00 == 4) && (*(u8*)(&gSaveContext.perm.sceneFlags + 0xE33) & 8)) {
+        func_80151BB4(globalCtx, 2);
+    }
+
+    if (textId == 0xFFFF) {
+        func_801477B4(globalCtx);
+    } else if (textId) {
+        func_80151938(globalCtx, textId);
+    }
+
+    if (textId == 0x296B) {
+        SkelAnime_ChangeLinkAnimPlaybackStop(globalCtx, &this->actor.unk_240, &D_0400CF88, 0.6666667f);
+    }
+
+    return 0;
+}
 
 s32 func_80A3E960(EnTest3* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E960.asm")

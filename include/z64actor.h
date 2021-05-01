@@ -223,7 +223,9 @@ typedef struct {
     /* 0x151 */ u8 unk151;
     /* 0x152 */ UNK_TYPE1 unk152;
     /* 0x153 */ u8 unk153;
-    /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
+    /* 0x154 */ UNK_TYPE1 pad154[0xEC];
+    /* 0x240 */ SkelAnime unk_240;
+    /* 0x284 */ UNK_TYPE1 unk_284[0xC8];
     /* 0x34C */ Actor* heldActor;
     /* 0x350 */ UNK_TYPE1 pad350[0x18];
     /* 0x368 */ Vec3f unk368;
