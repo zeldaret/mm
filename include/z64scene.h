@@ -5,10 +5,12 @@
 #include <z64dma.h>
 #include <unk.h>
 
+#define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
+
 typedef struct {
 /* 0x0 */ u32 vromStart;
 /* 0x4 */ u32 vromEnd;
-} RoomFileLocation; // size = 0x8
+} RomFile; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8  code;
@@ -169,6 +171,12 @@ typedef struct {
     /* 0x01 */ u8  data1;
     /* 0x04 */ void* segment;
 } SCmdCutsceneData;
+
+typedef struct {
+    /* 0x00 */ u8  code;
+    /* 0x01 */ u8  cameraMovement;
+    /* 0x04 */ u32 area;
+} SCmdMiscSettings;
 
 typedef struct {
     /* 0x00 */ u8  code;
@@ -351,6 +359,121 @@ typedef struct {
     /* 0x00C */ ObjectStatus objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
 } SceneContext; // size = 0x958
 
+typedef struct {
+    u8 headerType;
+} MeshHeaderBase;
+
+typedef struct {
+    MeshHeaderBase base;
+
+    u8 numEntries;
+    u32 dListStart;
+    u32 dListEnd;
+} MeshHeader0;
+
+typedef struct {
+    u32 opaqueDList;
+    u32 translucentDList;
+} MeshEntry0;
+
+typedef struct {
+    MeshHeaderBase base;
+    u8 format;
+    u32 entryRecord;
+} MeshHeader1Base;
+
+typedef struct {
+    MeshHeader1Base base;
+    u32 imagePtr; // 0x08
+    u32 unknown; // 0x0C
+    u32 unknown2; // 0x10
+    u16 bgWidth; // 0x14
+    u16 bgHeight; // 0x16
+    u8 imageFormat; // 0x18
+    u8 imageSize; // 0x19
+    u16 imagePal; // 0x1A
+    u16 imageFlip; // 0x1C
+} MeshHeader1Single;
+
+typedef struct {
+    MeshHeader1Base base;
+    u8 bgCnt;
+    u32 bgRecordPtr;
+} MeshHeader1Multi;
+
+typedef struct {
+    u16 unknown; // 0x00
+    s8 bgID; // 0x02
+    u32 imagePtr; // 0x04
+    u32 unknown2; // 0x08
+    u32 unknown3; // 0x0C
+    u16 bgWidth; // 0x10
+    u16 bgHeight; // 0x12
+    u8 imageFmt; // 0x14
+    u8 imageSize; // 0x15
+    u16 imagePal; // 0x16
+    u16 imageFlip; // 0x18
+} BackgroundRecord;
+
+typedef struct {
+    s16 playerXMax, playerZMax;
+    s16 playerXMin, playerZMin;
+    u32 opaqueDList;
+    u32 translucentDList;
+} MeshEntry2;
+
+typedef struct {
+    MeshHeaderBase base;
+    u8 numEntries;
+    u32 dListStart;
+    u32 dListEnd;
+} MeshHeader2;
+
+typedef struct {
+    u8 ambientClrR, ambientClrG, ambientClrB;
+    u8 diffuseClrA_R, diffuseClrA_G, diffuseClrA_B;
+    u8 diffuseDirA_X, diffuseDirA_Y, diffuseDirA_Z;
+    u8 diffuseClrB_R, diffuseClrB_G, diffuseClrB_B;
+    u8 diffuseDirB_X, diffuseDirB_Y, diffuseDirB_Z;
+    u8 fogClrR, fogClrG, fogClrB;
+    u16 unk;
+    u16 drawDistance;
+} LightSettings;
+
+typedef struct {
+    /* 0x00 */ u8 count; // number of points in the path
+    /* 0x01 */ s8 unk1;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ Vec3s* points; // Segment Address to the array of points
+} Path; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapEntry; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ UNK_TYPE unk4;
+} MinimapList; // size  = 0x8
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapChest; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ s16 type;
+    /* 0x00 */ s16 numPoints;
+    /* 0x00 */ Vec3s* points;
+} CsCameraEntry;
+
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
     /* Command: 0x00 */ SCmdSpawnList         spawnList;
@@ -376,7 +499,7 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneData      cutsceneData;
+    /* Command: 0x17 */ SCmdMiscSettings      miscSettings;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdWorldMapVisited   worldMapVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;

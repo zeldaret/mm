@@ -167,6 +167,6 @@ void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     osSetEventMesg(0xE, &irqmgr->irqQueue, (OSMesg)0x29D);
     osViSetEvent(&irqmgr->irqQueue, (OSMesg)0x29A, retraceCount);
 
-    osCreateThread(&irqmgr->thread, 0x13, (osCreateThread_func)IrqMgr_ThreadEntry, irqmgr, stack, pri);
+    osCreateThread(&irqmgr->thread, Z_THREAD_ID_IRQMGR, (osCreateThread_func)IrqMgr_ThreadEntry, irqmgr, stack, pri);
     osStartThread(&irqmgr->thread);
 }

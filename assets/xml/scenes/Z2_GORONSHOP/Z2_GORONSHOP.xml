@@ -1,0 +1,11 @@
+<Root>
+    <File Name="Z2_GORONSHOP" Game="MM">
+        <Scene Name="Z2_GORONSHOP">
+            <TextureHint Offset="0x4630" Type="i8" Width="128" Height="64"/>
+            <TextureHint Offset="0x9230" Type="rgb5a1" Width="64" Height="64"/>
+        </Scene>
+    </File>
+    <File Name="Z2_GORONSHOP_room_00" Game="MM">
+        <Room Name="Z2_GORONSHOP_room_00"/>
+    </File>
+</Root>
