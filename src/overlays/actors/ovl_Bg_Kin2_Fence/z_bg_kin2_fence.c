@@ -75,7 +75,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern Gfx D_06000828[];
-extern BgMeshHeader* D_06000908;
+extern CollisionHeader* D_06000908;
 
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
