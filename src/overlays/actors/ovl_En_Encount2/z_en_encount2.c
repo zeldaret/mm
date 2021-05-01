@@ -49,11 +49,11 @@ DamageTable damageTable[] = {
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s8 pad[4];
-    BgMeshHeader* bgMeshHeader = NULL;
+    CollisionHeader* colHeader = NULL;
 
     BcCheck3_BgActorInit(&this->dynaActor, 0);
-    BgCheck_RelocateMeshHeader(&D_06002420, &bgMeshHeader);
-    this->dynaActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dynaActor, bgMeshHeader);
+    BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
+    this->dynaActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dynaActor, colHeader);
     ActorShape_Init(&this->dynaActor.actor.shape, 0.0f, func_800B3FC0, 25.0f);
     this->dynaActor.actor.colChkInfo.mass = 0xFF;
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dynaActor, &sJntSphInit, &this->colElement);

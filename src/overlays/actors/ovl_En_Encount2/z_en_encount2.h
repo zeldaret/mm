@@ -25,7 +25,7 @@ typedef struct EnEncount2 {
     /* 0x015C */ EnEncount2ActionFunc actionFunc;
     /* 0x0160 */ s16 deathTimer;
     /* 0x0162 */ s16 statePopped;
-    /* 0x0164 */ s16 switchFlag; // auto pad to 168
+    /* 0x0164 */ s16 switchFlag;
     /* 0x0168 */ f32 scale;
     /* 0x016C */ f32 oscillationAngle;
     /* 0x0170 */ ColliderJntSph collider;
@@ -35,7 +35,7 @@ typedef struct EnEncount2 {
 
 extern const ActorInit En_Encount2_InitVars;
 
-extern BgMeshHeader D_06002420;
+extern CollisionHeader D_06002420;
 
 extern s32 D_06000A00;
 extern s32 D_06000D78;
