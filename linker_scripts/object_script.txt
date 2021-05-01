@@ -31,6 +31,9 @@ D_05017EA0 = 0x05017EA0;
 D_0501D980 = 0x0501D980;
 D_050219E0 = 0x050219E0;
 
+/* gameplay_field_keep */ 
+D_05000C40 = 0x05000C40;
+
 object_ikana_obj_001100 = 0x06001100;
 object_ikana_obj_001228 = 0x06001228;
 
@@ -107,6 +110,10 @@ D_0600DEF0 = 0x0600DEF0;
 /* arms_hook */
 D_0601D960 = 0x0601D960;
 
+/* z_obj_boyo */
+D_06000300 = 0x06000300;
+D_06000E88 = 0x06000E88;
+
 /* en_ending_hero */
 D_0600B0CC = 0x0600B0CC;
 D_06000BE0 = 0x06000BE0;
@@ -123,9 +130,29 @@ D_0600A490 = 0x0600A490;
 D_06000040 = 0x06000040;
 D_060024F0 = 0x060024F0;
 
+/* z_bg_keikoku_spr */
+D_06000100 = 0x06000100;
+D_060001F8 = 0x060001F8;
+D_06000300 = 0x06000300;
+D_060003F8 = 0x060003F8;
+D_06000500 = 0x06000500;
+D_060005F8 = 0x060005F8;
+
+/* z_dm_sa */
+D_06013328 = 0x06013328;
+D_0600CC94 = 0x0600CC94;
+
 /* bg_ikana_shutter */
 D_06000F28 = 0x06000F28;
 D_06000CE8 = 0x06000CE8;
+
+/* item_b_heart */
+D_06001290 = 0x06001290;
+D_06001470 = 0x06001470;
+
+/* z_dm_statue */
+D_06001788 = 0x06001788;
+D_06000520 = 0x06000520;
 
 /* door_spiral */
 /* these are symbols from other objects based on the type of door */

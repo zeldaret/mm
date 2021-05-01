@@ -45,7 +45,7 @@ void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
-    Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
+    Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
@@ -58,7 +58,7 @@ void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
 }
 
 void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
-    Math_SmoothScaleMaxF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
+    Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
         Actor_MarkForDeath(&this->actor);
@@ -95,7 +95,7 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    Vtx* vertices = Lib_PtrSegToVirt(D_0600DD40);
+    Vtx* vertices = Lib_SegmentedToVirtual(D_0600DD40);
     s32 i;
     u8 unk[3];
 
