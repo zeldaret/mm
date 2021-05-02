@@ -38,7 +38,7 @@ static InitChainEntry D_80B6DFA0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06001588;
+extern CollisionHeader D_06001588;
 extern UNK_TYPE D_06001410;
 
 void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
