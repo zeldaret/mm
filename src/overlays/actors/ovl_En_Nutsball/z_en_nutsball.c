@@ -157,12 +157,12 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 void EnNutsball_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
-    GraphicsContext *sp20 = globalCtx->state.gfxCtx; 
-    s32 pad;
 
+    OPEN_DISPS(globalCtx->state.gfxCtx)
     func_8012C28C(globalCtx->state.gfxCtx);
     SysMatrix_InsertMatrix(&globalCtx->unk187FC, 1);
     SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);
-    gSPMatrix(sp20->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(sp20->polyOpa.p++, D_04058BA0);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_04058BA0);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
