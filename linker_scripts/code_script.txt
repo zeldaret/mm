@@ -4345,9 +4345,9 @@ SECTIONS
     ovl_Dm_Ravine : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.text)
-        build/asm/overlays/ovl_Dm_Ravine_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.data)
         build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.rodata)
-        build/asm/overlays/ovl_Dm_Ravine_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
