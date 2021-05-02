@@ -35,7 +35,7 @@ typedef struct EnTest3 {
     /* 0xD89 */ u8 actionId;
     /* 0xD8A */ s16 unk_D8A;
     /* 0xD8C */ u8 timer;
-    /* 0xD8D */ s8 eventId;
+    /* 0xD8D */ s8 actorCutsceneId;
     /* 0xD8E */ s16 camId;
     /* 0xD90 */ Player* player;
     /* 0xD94 */ EnTest3ActionFunc actionFunc;

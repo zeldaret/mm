@@ -1012,9 +1012,12 @@ typedef struct {
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F11 */ UNK_TYPE1 pad11F11[0xD];
     /* 0x11F22 */ u8 unk11F22;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x11F23 */ u8 unk_11F23;
+    /* 0x11F24 */ UNK_TYPE1 unk11F24[0xFC];
     /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ UNK_TYPE1 pad12021[0x23];
+    /* 0x12021 */ u8 unk_12021;
+    /* 0x12022 */ u8 unk_12022;
+    /* 0x12023 */ u8 unk_12023[0x21];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;

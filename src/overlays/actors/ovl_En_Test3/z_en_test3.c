@@ -72,15 +72,170 @@ s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
     return true;
 }
 
-// function pointers!
-u32 D_80A4169C[] = {
-    0x80A3E898, 0x80A3E898, 0x80A3E884, 0x80A3E898, 0x80A3E898, 0x80A3EA30, 0x80A3E898, 0x80A3E960, 0x80A3E870,
-};
+s32 func_80A3E870(EnTest3* this, GlobalContext* globalCtx) {
+    return 1;
+}
 
-// function pointers!
-u32 D_80A416C0[] = {
-    0x80A3EAC4, 0x80A3EAF8, 0x80A3EBFC, 0x80A3EC44, 0x80A3EC30, 0x80A3E9DC, 0x80A3EB8C, 0x80A3E97C,
-};
+s32 func_80A3E884(EnTest3* this, GlobalContext* globalCtx) {
+    return 0;
+}
+
+s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
+    u16 textId = this->talkState->textId;
+
+    if ((this->talkState->unk_00 == 4) && (gSaveContext.perm.weekEventReg[51])) {
+        func_80151BB4(globalCtx, 2);
+    }
+
+    if (textId == 0xFFFF) {
+        func_801477B4(globalCtx);
+    } else if (textId) {
+        func_80151938(globalCtx, textId);
+    }
+
+    if (textId == 0x296B) {
+        SkelAnime_ChangeLinkAnimPlaybackStop(globalCtx, &this->actor.unk_240, &D_0400CF88, 0.6666667f);
+    }
+
+    return 0;
+}
+
+s32 func_80A3E960(EnTest3* this, GlobalContext* globalCtx) {
+    this->timer = this->talkState->unk_01;
+    return 0;
+}
+
+s32 func_80A3E97C(EnTest3* this, GlobalContext* globalCtx) {
+    if (DECR(this->timer) == 0) {
+        func_801518B0(globalCtx, this->talkState->textId, NULL);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+s32 func_80A3E9DC(EnTest3* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->actorCutsceneId)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->actorCutsceneId, &this->actor.base);
+        return true;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
+        return false;
+    }
+}
+
+s32 func_80A3EA30(EnTest3* this, GlobalContext* globalCtx) {
+    if (this->talkState->textId == 0x145F) {
+        Actor* actor = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_BG, ACTOR_BG_IKNV_OBJ);
+
+        if (actor != NULL) {
+            this->actor.unk730 = actor;
+        }
+    }
+
+    if (this->talkState->unk_01 != 0) {
+        ActorCutscene_Stop(124);
+        ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
+        globalCtx->msgCtx.unk_11F23 = 0x44;
+    }
+
+    return 0;
+}
+
+s32 func_80A3EAC4(EnTest3* this, GlobalContext* game_play) {
+    if (func_80152498(&game_play->msgCtx) == 6) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+s32 func_80A3EAF8(EnTest3* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
+        if (this->talkState->textId == 0x145F) {
+            ActorCutscene_Stop(this->actorCutsceneId);
+            this->actorCutsceneId = 0x7C;
+            ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
+            this->actor.unk730 = (Actor*)PLAYER;
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+s32 func_80A3EB8C(EnTest3* this, GlobalContext* globalCtx) {
+    if (func_80A3EAF8(this, globalCtx) != 0) {
+        Actor* actor = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_ITEMACTION, ACTOR_OBJ_NOZOKI);
+
+        if (actor != NULL) {
+            this->actor.unk730 = actor;
+        }
+
+        globalCtx->msgCtx.unk_11F23 = 0x44;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+s32 func_80A3EBFC(EnTest3* this, GlobalContext* globalCtx) {
+    if (func_80152498(&globalCtx->msgCtx) == 2) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+s32 func_80A3EC30(EnTest3* this, GlobalContext* globalCtx) {
+    return 0;
+}
+
+#ifdef NON_EQUIVALENT
+// single instruction difference at "return (globalCtx->msgCtx.unk_12022) ..."
+s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        if (globalCtx->msgCtx.unk_12022) {
+            func_8019F230();
+        } else {
+            func_8019F208();
+        }
+
+        return (globalCtx->msgCtx.unk_12022) ? true : this->talkState->unk_01;
+    }
+
+    return false;
+}
+#else
+s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx);
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EC44.asm")
+#endif
+
+typedef s32 (*EnTest3_functions_80A4169C)(struct EnTest3*, struct GlobalContext*);
+
+s32 func_80A3ECEC(EnTest3* this, GlobalContext* globalCtx) {
+    static EnTest3_functions_80A4169C D_80A4169C[] = {
+        func_80A3E898, func_80A3E898, func_80A3E884, func_80A3E898, func_80A3E898,
+        func_80A3EA30, func_80A3E898, func_80A3E960, func_80A3E870,
+    };
+
+    return D_80A4169C[this->talkState->unk_00](this, globalCtx);
+}
+
+s32 func_80A3ED24(EnTest3* this, GlobalContext* globalCtx) {
+    static EnTest3_functions_80A4169C D_80A416C0[] = {
+        func_80A3EAC4, func_80A3EAF8, func_80A3EBFC, func_80A3EC44,
+        func_80A3EC30, func_80A3E9DC, func_80A3EB8C, func_80A3E97C,
+    };
+    s32 index = D_80A416C0[this->talkState->unk_00](this, globalCtx);
+
+    if (index != 0) {
+        this->talkState = &this->talkState[index];
+        return func_80A3ECEC(this, globalCtx);
+    }
+
+    return 0;
+}
 
 u32 D_80A416E0[] = {
     0x42200000, 0x42700000, 0x3F25A5A6, 0x428E0000, 0x42480000, 0x42440000, 0x421C0000, 0x41D80000,
@@ -157,71 +312,6 @@ u32 D_80A418A0[] = {
 u32 D_80A418A4[] = {
     0x04001465,
 };
-
-s32 func_80A3E870(EnTest3 *this, GlobalContext *globalCtx) {
-    return true;
-}
-
-s32 func_80A3E884(EnTest3 *this, GlobalContext *globalCtx) {
-    return false;
-}
-
-s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
-    u16 textId = this->talkState->textId;
-
-    //! @TODO: fix scene flags here!
-    if ((this->talkState->unk_00 == 4) && (*(u8*)(&gSaveContext.perm.sceneFlags + 0xE33) & 8)) {
-        func_80151BB4(globalCtx, 2);
-    }
-
-    if (textId == 0xFFFF) {
-        func_801477B4(globalCtx);
-    } else if (textId) {
-        func_80151938(globalCtx, textId);
-    }
-
-    if (textId == 0x296B) {
-        SkelAnime_ChangeLinkAnimPlaybackStop(globalCtx, &this->actor.unk_240, &D_0400CF88, 0.6666667f);
-    }
-
-    return 0;
-}
-
-s32 func_80A3E960(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E960.asm")
-
-s32 func_80A3E97C(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E97C.asm")
-
-s32 func_80A3E9DC(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3E9DC.asm")
-
-s32 func_80A3EA30(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EA30.asm")
-
-s32 func_80A3EAC4(EnTest3* this, GlobalContext* game_play);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EAC4.asm")
-
-s32 func_80A3EAF8(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EAF8.asm")
-
-s32 func_80A3EB8C(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EB8C.asm")
-
-s32 func_80A3EBFC(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EBFC.asm")
-
-s32 func_80A3EC30(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EC30.asm")
-
-s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EC44.asm")
-
-s32 func_80A3ECEC(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3ECEC.asm")
-
-s32 func_80A3ED24(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3ED24.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Init.asm")
 
