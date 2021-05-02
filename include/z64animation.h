@@ -37,6 +37,12 @@ typedef struct {
     /* 0x008 */ u8 dListCount;         // Number of display lists in the model.
 } SkeletonHeader;                      // Size = 0xC
 
+// Model has limbs with flexible meshes
+typedef struct {
+    /* 0x00 */ SkeletonHeader sh;
+    /* 0x08 */ u8 dListCount;
+} FlexSkeletonHeader; // size = 0xC
+
 typedef s16 AnimationRotationValue;
 
 typedef struct {

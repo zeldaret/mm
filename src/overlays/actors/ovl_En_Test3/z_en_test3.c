@@ -8,7 +8,9 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A40A6C(); // TODO
+void func_80A40678(EnTest3* this, GlobalContext* globalCtx);
+void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx);
+void func_80A40824(EnTest3* this, GlobalContext* globalCtx);
 
 u32 D_80A41530[] = {
     0x0C000142, 0x0A007018, 0x02063207, 0x140C0F07, 0x1E070033, 0x04010509, 0x0A050E06, 0x3207140F, 0x0A006F21,
@@ -35,6 +37,7 @@ const ActorInit En_Test3_InitVars = {
 };
 
 extern LinkAnimetionEntry D_0400CF88;
+extern FlexSkeletonHeader D_0600F7EC;
 
 // char bss[0x50];
 
@@ -94,7 +97,7 @@ s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
     }
 
     if (textId == 0x296B) {
-        SkelAnime_ChangeLinkAnimPlaybackStop(globalCtx, &this->actor.unk_240, &D_0400CF88, 0.6666667f);
+        SkelAnime_ChangeLinkAnimPlaybackStop(globalCtx, &this->actor.skelAnime, &D_0400CF88, 0.6666667f);
     }
 
     return 0;
@@ -129,7 +132,7 @@ s32 func_80A3EA30(EnTest3* this, GlobalContext* globalCtx) {
         Actor* actor = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_BG, ACTOR_BG_IKNV_OBJ);
 
         if (actor != NULL) {
-            this->actor.unk730 = actor;
+            this->actor.unk_730 = actor;
         }
     }
 
@@ -156,7 +159,7 @@ s32 func_80A3EAF8(EnTest3* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(this->actorCutsceneId);
             this->actorCutsceneId = 0x7C;
             ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
-            this->actor.unk730 = (Actor*)PLAYER;
+            this->actor.unk_730 = (Actor*)PLAYER;
         }
         return true;
     } else {
@@ -169,7 +172,7 @@ s32 func_80A3EB8C(EnTest3* this, GlobalContext* globalCtx) {
         Actor* actor = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_ITEMACTION, ACTOR_OBJ_NOZOKI);
 
         if (actor != NULL) {
-            this->actor.unk730 = actor;
+            this->actor.unk_730 = actor;
         }
 
         globalCtx->msgCtx.unk_11F23 = 0x44;
@@ -237,14 +240,56 @@ s32 func_80A3ED24(EnTest3* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-u32 D_80A416E0[] = {
-    0x42200000, 0x42700000, 0x3F25A5A6, 0x428E0000, 0x42480000, 0x42440000, 0x421C0000, 0x41D80000,
-    0x41980000, 0x41B00000, 0x4201999A, 0x42000000, 0x42400000, 0x42352D2E, 0x41600000, 0x41400000,
-    0x425C0000, 0xFFE80DED, 0x036CFFE8, 0x0D92035E, 0xFFE81371, 0x03A90008, 0x1256017C, 0x000917EA,
-    0x0167FFE8, 0x137103A9, 0xFFE8195F, 0x03A90009, 0x17EA0167, 0x00091E0D, 0x017C0008, 0x1256017C,
-    0x000917EA, 0x0167F9C8, 0x1256017C, 0xF9C917EA, 0x01670020, 0x00000000, 0x41B00000, 0x41EB7972,
-    0x0400D128, 0x0400D170, 0x0400D1B8, 0x0400D1F8, 0x0400D200, 0x0400D208, 0x0400D210, 0x0400DAB0,
-    0x0400DAB8, 0x0400DA90, 0x0400DA98, 0x0400D1D8, 0x0400D1E0, 0x0400D1F0, 0x0400D1E8,
+PlayerAgeProperties D_80A416E0 = {
+    40.0f,
+    60.0f,
+    0.647059f,
+    71.0f,
+    50.0f,
+    49.0f,
+    39.0f,
+    27.0f,
+    19.0f,
+    22.0f,
+    32.4f,
+    32.0f,
+    48.0f,
+    45.2941f,
+    14.0f,
+    12.0f,
+    55.0f,
+    { -24, 3565, 876 },
+    {
+        { -24, 3474, 862 },
+        { -24, 4977, 937 },
+        { 8, 4694, 380 },
+        { 9, 6122, 359 },
+    },
+    {
+        { -24, 4977, 0x03A9 },
+        { -24, 6495, 0x03A9 },
+        { 9, 6122, 359 },
+        { 9, 7693, 380 },
+    },
+    {
+        { 8, 4694, 380 },
+        { 9, 6122, 359 },
+        { -1592, 4694, 380 },
+        { -1591, 6122, 359 },
+    },
+    0x20,
+    0,
+    22.0f,
+    29.4343f,
+    0x0400D128,
+    0x0400D170,
+    0x0400D1B8,
+    0x0400D1F8,
+    0x0400D200,
+    { 0x0400D208, 0x0400D210, 0x0400DAB0, 0x0400DAB8 },
+    { 0x0400DA90, 0x0400DA98 },
+    { 0x0400D1D8, 0x0400D1E0 },
+    { 0x0400D1F0, 0x0400D1E8 },
 };
 
 u32 D_80A417BC[] = {
@@ -255,6 +300,88 @@ u32 D_80A417E0[] = {
     0x0000003F,
     0x00000F64,
 };
+
+extern s32 D_80A41D24;
+
+void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTest3* this = THIS;
+    s32 pad;
+    Camera* camera;
+
+    if (D_80A41D24) {
+        Actor_MarkForDeath(&this->actor.base);
+        return;
+    }
+
+    D_80A41D24 = true;
+    this->actor.base.room = -1;
+    this->actor.unk_A86 = -1;
+    this->actor.linkForm = 4;
+    this->actor.ageProperties = &D_80A416E0;
+    this->actor.itemActionParam = 0;
+    this->actor.heldItemId = 0;
+    func_80123BD4(&this->actor.base, 3);
+
+    if (1) {}
+
+    globalCtx->playerInit(&this->actor, globalCtx, &D_0600F7EC);
+
+    Effect_Add(globalCtx, &this->actor.blureEffectIndex[0], 2, 0, 0, D_80A417BC);
+    Effect_Add(globalCtx, &this->actor.blureEffectIndex[1], 2, 0, 0, D_80A417BC);
+    Effect_Add(globalCtx, &this->actor.blureEffectIndex[2], 4, 0, 0, D_80A417E0);
+
+    this->actor.maskObjectSegment = zelda_malloc(0x3800);
+
+    globalCtx->func_18780(&this->actor, globalCtx);
+
+    this->player = PLAYER;
+    this->actor.giObjectSegment = this->player->giObjectSegment;
+    this->actor.naviActor = this->player->naviActor;
+
+    if (((gSaveContext.perm.day % 5) != 3) || (gSaveContext.perm.weekEventReg[33] & 8) ||
+        (!(gSaveContext.perm.weekEventReg[51] & 8))) {
+        this->actor.currentMask = 5;
+    }
+
+    this->actor.prevMask = this->actor.currentMask;
+
+    if (globalCtx->sceneNum == SCENE_SECOM) {
+        this->camId = func_801694DC(globalCtx);
+        camera = Play_GetCamera(globalCtx, this->camId);
+        func_800DE0EC(camera, &this->actor.base);
+        Camera_SetFlags(camera, 0x41);
+        func_80169590(globalCtx, this->camId, 1);
+    }
+
+    this->actor.base.colChkInfo.cylRadius = 20;
+    this->actor.base.colChkInfo.cylHeight = 60;
+    this->actor.base.colChkInfo.health = 0xFF;
+
+    if (((this->actor.base.params >> 5) & 0xF) == 0) {
+        func_80A3E7E0(this, func_80A40824);
+    } else {
+        func_80A3E7E0(this, func_80A40678);
+    }
+}
+
+void EnTest3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnTest3* this = THIS;
+
+    Effect_Destroy(globalCtx, this->actor.blureEffectIndex[0]);
+    Effect_Destroy(globalCtx, this->actor.blureEffectIndex[1]);
+    Effect_Destroy(globalCtx, this->actor.blureEffectIndex[2]);
+
+    Collider_DestroyCylinder(globalCtx, &this->actor.cylinder);
+    Collider_DestroyCylinder(globalCtx, &this->actor.shieldCylinder);
+
+    Collider_DestroyQuad(globalCtx, &this->actor.swordQuads[0]);
+    Collider_DestroyQuad(globalCtx, &this->actor.swordQuads[1]);
+    Collider_DestroyQuad(globalCtx, &this->actor.swordQuads[2]);
+
+    zelda_free(this->actor.maskObjectSegment);
+
+    func_800FE498();
+}
 
 // function pointers!
 u32 D_80A417E8[] = {
@@ -312,10 +439,6 @@ u32 D_80A418A0[] = {
 u32 D_80A418A4[] = {
     0x04001465,
 };
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Init.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Destroy.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F080.asm")
 

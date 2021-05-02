@@ -91,7 +91,7 @@ void func_808C1154(ArmsHook* this) {
 
 s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
     player->base.child = &this->actor;
-    player->heldActor = &this->actor;
+    player->leftHandActor = &this->actor;
     if (this->actor.child != NULL) {
         player->base.parent = this->actor.child = NULL;
         return 1;
@@ -113,7 +113,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
             ((player->stateFlags1 & 0x4000080))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
-            Math_Vec3f_Copy(&this->actor.world.pos, &player->unk368);
+            Math_Vec3f_Copy(&this->actor.world.pos, &player->rightHandWorld.pos);
             return 1;
         }
     }
@@ -184,7 +184,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         {
             f32 velocity;
 
-            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
+            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->rightHandWorld.pos, &this->actor.world.pos, &bodyDistDiffVec);
             if (bodyDistDiff < 30.0f) {
                 velocity = 0.0f;
                 phi_f16 = 0.0f;
@@ -211,7 +211,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.child == NULL) {
-            Math_Vec3f_Sum(&player->unk368, &newPos, &this->actor.world.pos);
+            Math_Vec3f_Sum(&player->rightHandWorld.pos, &newPos, &this->actor.world.pos);
             if (grabbed != NULL) {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk1FC, &grabbed->world.pos);
             }
@@ -294,7 +294,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     f32 sp4C;
     f32 sp48;
 
-    if (player->base.draw != NULL && player->unk151 == 0xB) {
+    if (player->base.draw != NULL && player->rightHandType == 0xB) {
         // OPEN_DISP macro
         {
             GraphicsContext* sp44 = globalCtx->state.gfxCtx;
@@ -319,7 +319,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(sp44->polyOpa.p++, D_0601D960);
             SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                         MTXMODE_NEW);
-            Math_Vec3f_Diff(&player->unk368, &this->actor.world.pos, &sp68);
+            Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
             sp48 = SQ(sp68.x) + SQ(sp68.z);
             sp4C = sqrtf(sp48);
             Matrix_RotateY(atans(sp68.x, sp68.z), MTXMODE_APPLY);

@@ -287,7 +287,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->unk37F = ((u16)globalCtx->transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)globalCtx->transitionActorList[transition].params) >> 10;
 
         func_80122F28(player, globalCtx, &this->actor);
     }

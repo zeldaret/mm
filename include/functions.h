@@ -1788,7 +1788,7 @@ void func_800FD928(s32 param_1);
 // void func_800FE390(void);
 // void func_800FE3E0(void);
 // void func_800FE484(void);
-// void func_800FE498(void);
+void func_800FE498();
 // void func_800FE4A8(void);
 u32 func_800FE4B8(GlobalContext* ctxt);
 // void func_800FE590(void);

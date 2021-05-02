@@ -112,7 +112,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
     if (Math_StepToF( &this->actor.scale, 0.01f, 0.001f) != 0) { 
         if ((this->actor.targetMode != 0) && (globalCtx->unk18875 == 0) && (globalCtx->unk18B4A == 0) &&
-          (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
+          (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
 
             if (dooranaType == DOORANA_TYPE_ADJACENT) {
                 // 300 uses scene exit addresses, not static DoorAna entrance addresses, 

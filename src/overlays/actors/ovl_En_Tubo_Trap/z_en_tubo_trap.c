@@ -261,9 +261,9 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= 0x11; // always update and can target
 
-            // hard to know what this value is even used for without knowing what Player::unk14B is
+            // hard to know what this value is even used for without knowing what Player::linkForm is
             // wild guess: this is player animation state, height is modified to always point at center of link model
-            weirdvalue = D_8093146C[ ((Player*) player)->unk14B & 0xFF];
+            weirdvalue = D_8093146C[ ((Player*) player)->linkForm & 0xFF];
 
             this->targetHeight = player->world.pos.y + (f32) weirdvalue;
             if (this->targetHeight < currentHeight) {
