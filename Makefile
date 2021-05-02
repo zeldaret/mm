@@ -67,8 +67,8 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r43
 #### Files ####
 
 # ROM image
-MM_BASEROM ?= baserom.z64
-MM_ROM_NAME ?= rom
+MM_BASEROM ?= mm.us.rev1.z64
+MM_ROM_NAME ?= mm.us.rev1.rom
 ROM := $(MM_ROM_NAME).z64
 UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
 ELF := $(MM_ROM_NAME).elf
