@@ -14,13 +14,6 @@ typedef struct {
 } TalkState; // size = 0x04
 
 typedef struct {
-    /* 0x0 */ u8 unk_00;
-    /* 0x1 */ u8 unk_01;
-    /* 0x2 */ s16 unk_02;
-    /* 0x4 */ Vec3s* pos;
-} PathInfo;
-
-typedef struct {
     /* 0x0 */ u8 eyeTexId;
     /* 0x1 */ u8 mouthTexId;
 } FaceAnimKeyFrame;

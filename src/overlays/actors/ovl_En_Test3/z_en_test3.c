@@ -209,25 +209,26 @@ s32 func_80A3EC30(EnTest3* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_EQUIVALENT
-// single instruction difference at "return (globalCtx->msgCtx.unk_12022) ..."
 s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+    u8 ret;
+
+    if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.unk_12022) {
             func_8019F230();
         } else {
             func_8019F208();
         }
 
-        return (globalCtx->msgCtx.unk_12022) ? true : this->talkState->unk_01;
+        if (globalCtx->msgCtx.unk_12022) {
+            return 1;
+        } else {
+            ret = this->talkState->unk_01;
+            return ret + 1;
+        }
     }
 
-    return false;
+    return 0;
 }
-#else
-s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EC44.asm")
-#endif
 
 s32 func_80A3ECEC(EnTest3* this, GlobalContext* globalCtx) {
     static EnTest3_functions_80A4169C D_80A4169C[] = {
@@ -471,6 +472,7 @@ void func_80A3F114(EnTest3* this, GlobalContext* globalCtx) {
 }
 
 // 97 line
+void func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
 
 // 54 line
@@ -582,8 +584,36 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 // 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FFD0.asm")
 
-// 112 line
+#ifdef NON_MATCHING
+// reg alloc
+s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    u16 curTime = gSaveContext.perm.time - 0x3FFC;
+    u16 nextTime;
+    u16 new_var;
+    u32 new_var2;
+
+    func_80A3F15C(this, globalCtx, arg2);
+    this->path = func_8013BB34(globalCtx, this->actor.base.params & 0x1F, ABS_ALT(arg2->unk_01_0) - 1);
+
+    new_var2 = curTime;
+
+    nextTime = ((this->schedule < 7) && (this->schedule != 0) && (this->unk_D80 >= 0)) ? new_var2 : arg3->unk_04;
+    this->unk_DA8 = (arg3->unk_08 < nextTime) ? (nextTime - arg3->unk_08) + 0xFFFF : arg3->unk_08 - nextTime;
+    this->unk_DB4 = new_var2 - nextTime;
+
+    if (1) {}
+
+    new_var = this->path->unk_00 - 2;
+    this->unk_DAC = this->unk_DA8 / new_var;
+    this->unk_DB0 = (this->unk_DB4 / this->unk_DAC) + 2;
+    this->actionId &= ~1;
+    this->unk_D84 = 1.0f;
+
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40098.asm")
+#endif
 
 // 286 line yikes
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40230.asm")

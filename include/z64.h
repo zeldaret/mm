@@ -1780,6 +1780,13 @@ struct ActorBgIknvObj {
 }; // size = 0x1B0
 
 typedef struct {
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ Vec3s* pos;
+} PathInfo; // size = 0x08
+
+typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ Color_RGBA8 color;
