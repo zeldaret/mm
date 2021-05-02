@@ -67,7 +67,7 @@ void Idle_InitCodeAndMemory(void) {
 
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 256, "irqmgr");
-    IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, 18, 1);
+    IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
     Idle_InitCodeAndMemory();
     main(arg);
@@ -104,7 +104,7 @@ void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 1024, "main");
-    osCreateThread(&gMainThread, 3, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack), 12);
+    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack), Z_PRIORITY_MAIN);
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 

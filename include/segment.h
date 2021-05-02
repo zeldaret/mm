@@ -30,6 +30,7 @@ extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 
+extern Gfx D_05000C40[];
 extern Gfx D_05017EA0[]; // pot displaylist
 extern Gfx D_05018090[]; // pot break shard displaylist
 extern Gfx D_0501D980[];
@@ -45,6 +46,6 @@ extern Gfx object_ikana_obj_001100[];
 extern AnimatedTexture object_ikana_obj_001228[];
 
 extern Gfx object_fu_kaiten_0005D0[];
-extern BgMeshHeader object_fu_kaiten_002D30;
+extern CollisionHeader object_fu_kaiten_002D30;
 
 #endif

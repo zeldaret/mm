@@ -47,7 +47,7 @@ static InitChainEntry D_80BD5D10[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000F28;
+extern CollisionHeader D_06000F28;
 extern UNK_PTR D_06000CE8;
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
