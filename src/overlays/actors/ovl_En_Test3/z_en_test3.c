@@ -519,8 +519,18 @@ s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
     return false;
 }
 
-// 31 line
+#ifdef NON_MATCHING
+// Weird register swap
+s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    arg3->unk_04 = (u16)(gSaveContext.perm.time - 0x3FFC);
+    arg3->unk_08 = (u16)(arg3->unk_04 + 70);
+    func_80A40098(this, globalCtx, arg2, arg3);
+    this->unk_D8A = (this->actor.base.xzDistToPlayer < 300.0f) ? -1 : 120;
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9E4.asm")
+#endif
 
 // 103 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
@@ -661,45 +671,40 @@ void func_80A40CF0();
 void func_80A40F34();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40F34.asm")
 
-/* static */ void* eyeTextures[] = {
-    0x06000DC0, 0x06003680, 0x06003E80, 0x06004680, 0x06004E80, 0x06005680, 0x06005E80, 0x06006680,
-};
-
-/* static */ void* mouthTextures[] = {
-    0x060009C0,
-    0x06006E80,
-    0x06007280,
-    0x06007680,
-};
-
-/* static */ FaceAnimKeyFrame faceAnimInfo[] = {
-    { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 }, { 7, 2 }, { 0, 2 },
-    { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
-};
-
-#ifdef NON_EQUIVALENT
-// needs a lot more work done
 void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
+    static void* eyeTextures[] = {
+        0x06000DC0, 0x06003680, 0x06003E80, 0x06004680, 0x06004E80, 0x06005680, 0x06005E80, 0x06006680,
+    };
+    static void* mouthTextures[] = {
+        0x060009C0,
+        0x06006E80,
+        0x06007280,
+        0x06007680,
+    };
+    static FaceAnimKeyFrame faceAnimInfo[] = {
+        { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 }, { 7, 2 }, { 0, 2 },
+        { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
+    };
     EnTest3* this = THIS;
     s32 pad;
-    s32 eyeTexId = (this->actor.skelAnime.limbDrawTbl[11].x & 0xF) - 1;
-    s32 mouthTexId = ((this->actor.skelAnime.limbDrawTbl[11].x >> 4) & 0xF) - 1;
-    s32 pad2;
+    s32 eyeTexId = (this->actor.skelAnime.limbDrawTbl[22].x & 0xF) - 1;
+    s32 mouthTexId = ((this->actor.skelAnime.limbDrawTbl[22].x >> 4) & 0xF) - 1;
+    Gfx* gfx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C268(globalCtx);
 
     if (this->actor.unk_D5C > 0) {
-        // s32 num = this->actor.unk_B5F + CLAMP(0x32 - this->actor.unk_D5C, 8, 40);
-        // this->actor.unk_B5F = num;
-        this->actor.unk_B5F += CLAMP(0x32 - this->actor.unk_D5C, 8, 40);
-        POLY_OPA_DISP =
-            Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 0xFA0 - (Math_CosS(this->actor.unk_B5F << 8) * 2000.0f));
+        s32 lodFrac;
+
+        this->actor.unk_B5F += CLAMP(50 - this->actor.unk_D5C, 8, 40);
+        lodFrac = 4000 - (s32)(Math_CosS(this->actor.unk_B5F << 8) * 2000.0f);
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, lodFrac);
     }
 
-    func_800B8050(this, globalCtx, 0);
-    D_80A418C8 = false;
+    func_800B8050(thisx, globalCtx, 0);
+    D_80A418C8 = 0;
 
     if (this->actor.stateFlags1 & 0x100000) {
         Vec3f cameraPos;
@@ -711,17 +716,21 @@ void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
+    gfx = POLY_OPA_DISP;
+
     if (eyeTexId < 0) {
-        eyeTexId = faceAnimInfo[this->actor.base.shape.face].eyeTexId;
+        eyeTexId = faceAnimInfo[thisx->shape.face].eyeTexId;
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[eyeTexId]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[eyeTexId]));
 
     if (mouthTexId < 0) {
         mouthTexId = faceAnimInfo[this->actor.base.shape.face].mouthTexId;
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(mouthTextures[mouthTexId]));
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(mouthTextures[mouthTexId]));
+
+    POLY_OPA_DISP = &gfx[2];
 
     SkelAnime_LodDrawSV(globalCtx, this->actor.skelAnime.skeleton, this->actor.skelAnime.limbDrawTbl,
                         this->actor.skelAnime.dListCount, func_80A40CF0, func_80A40F34, this, 0);
@@ -736,7 +745,3 @@ void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-void func_80A4129C(Actor* thisx, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A4129C.asm")
-#endif
