@@ -45,7 +45,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s32 (*init)(struct EnTest3*, struct GlobalContext*, struct_80A417E8_arg2*, struct_80A417E8_arg3*);
-    /* 0x4 */ s32 (*update)(struct EnTest3*, struct GlobalContext*, struct_80A417E8_arg2*, struct_80A417E8_arg3*);
+    /* 0x4 */ s32 (*update)(struct EnTest3*, struct GlobalContext*);
 } struct_80A417E8; // size = 0x08
 
 typedef s32 (*EnTest3_functions_80A4169C)(struct EnTest3*, struct GlobalContext*);

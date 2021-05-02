@@ -1623,12 +1623,11 @@ struct GlobalContext {
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ u8 transitionActorCount;
     /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
-    /* 0x18764 */ TransitionActorEntry* transitionActorList;
-    /* 0x18768 */ 
-    
+    /* 0x18764 */ TransitionActorEntry* transitionActorList;    
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ UNK_TYPE1 unk_18770[0x10];
+    /* 0x18770 */ UNK_TYPE1 unk_18770[0xC];
+    /* 0x1877C */ void (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ UNK_TYPE1 unk_18784[0x2C];
     /* 0x187B0 */ MtxF unk187B0;

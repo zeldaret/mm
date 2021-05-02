@@ -13,23 +13,24 @@ void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx);
 
 s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A40230(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A40230(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3F62C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3F73C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F73C(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3F8D4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3FA58(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FA58(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3FE20(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FE20(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
-s32 func_80A3FFD0(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FFD0(EnTest3* this, GlobalContext* globalCtx);
 
 // bss
+extern s32 D_80A41D20;
 extern s32 D_80A41D24;
 
 // Extenal
@@ -447,17 +448,27 @@ TalkState D_80A418A4[] = {
     { 4, 0, 0x1465 },
 };
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F080.asm")
+s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    return true;
+}
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F09C.asm")
+s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx) {
+    this->actor.base.draw = NULL;
+    return 1;
+}
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F0B0.asm")
+void func_80A3F0B0(EnTest3* this, GlobalContext* globalCtx) {
+    func_800BC154(globalCtx, &globalCtx->actorCtx, (Actor*)this->player, ACTORCAT_PLAYER);
+    func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor.base, ACTORCAT_NPC);
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F114.asm")
+    this->player->stateFlags1 &= ~0x20;
+}
+
+void func_80A3F114(EnTest3* this, GlobalContext* globalCtx) {
+    if (this->actor.unk_394 != 0) {
+        globalCtx->func_1877C(globalCtx, this, 6);
+    }
+}
 
 // 97 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
@@ -490,8 +501,11 @@ TalkState* D_80A418A8[] = {
 // 55 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F8D4.asm")
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9A4.asm")
+s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
+    Math_ScaledStepToS(&this->actor.base.shape.rot.y, this->actor.base.home.rot.y, 800);
+    this->actor.unk_AD4 = this->actor.base.shape.rot.y;
+    return false;
+}
 
 // 31 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9E4.asm")
@@ -499,14 +513,63 @@ TalkState* D_80A418A8[] = {
 // 103 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FBCC.asm")
+s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    return true;
+}
 
-// 138 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FBE8.asm")
+s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
+    if (D_80A41D20 == 0) {
+        if (func_801690CC(globalCtx) == 0) {
+            D_80A41D20 = 1;
+            this->talkState = D_80A418A4;
+            this->actorCutsceneId = this->actor.base.cutscene;
+            this->actor.base.textId = D_80A418A4->textId;
+        }
+    } else if (D_80A41D20 == 1) {
+        if (this->actorCutsceneId >= 0) {
+            if (func_80A3E9DC(this, globalCtx)) {
+                this->actorCutsceneId = -1;
+                func_800FE484();
+            }
+        } else {
+            if ((globalCtx->actorCtx.unk5 & 0x40) || (globalCtx->actorCtx.unk5 & 0x20)) {
+                this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actor.base.cutscene);
+                gSaveContext.perm.weekEventReg[90] |= 2;
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FDE4.asm")
+                if (globalCtx->actorCtx.unk5 & 0x20) {
+                    this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actorCutsceneId);
+                }
+
+                func_801A89A8(0x100100FF);
+
+                D_80A41D20 = 2;
+            } else {
+                func_80A3F73C(this, globalCtx);
+            }
+        }
+    } else if ((D_80A41D20 == 2) && (func_80A3E9DC(this, globalCtx))) {
+        ActorCutscene_SetReturnCamera(0);
+        func_800FE498();
+
+        if (gSaveContext.perm.time > 0x4000) {
+            func_800FE658(fabsf((s16) - ((0, gSaveContext.perm.time))) / 45.511112f);
+        }
+
+        if ((globalCtx->actorCtx.unk5 & 0x40) != 0) {
+            gSaveContext.perm.weekEventReg[51] |= 0x20;
+            gSaveContext.perm.weekEventReg[90] &= 0xfd;
+        }
+
+        D_80A41D20 = 3;
+    }
+
+    return false;
+}
+
+s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actor.base.cutscene);
+    return true;
+}
 
 // 65 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FE20.asm")
@@ -528,8 +591,10 @@ TalkState* D_80A418A8[] = {
 // 117 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40678.asm")
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40824.asm")
+void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
+    this->talkState = &D_80A41854[0];
+    func_80A3F73C(this, globalCtx);
+}
 
 // 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A4084C.asm")
@@ -540,8 +605,9 @@ TalkState* D_80A418A8[] = {
 // 42 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A409D4.asm")
 
-// very easy
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40A6C.asm")
+void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx) {
+    gSaveContext.perm.weekEventReg[64] |= 0x20;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
 

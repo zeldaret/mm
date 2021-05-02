@@ -391,7 +391,7 @@ typedef struct {
     /* 0xACE */ s8 unk_ACE;
     /* 0xACF */ u8 unk_ACF;
     /* 0xAD0 */ f32 unk_AD0;
-    /* 0xAD4 */ s16 unkAD4;
+    /* 0xAD4 */ s16 unk_AD4;
     /* 0xAD6 */ s16 unk_AD6;
     /* 0xAD8 */ u16 unk_AD8;
     /* 0xADA */ s8 unk_ADA;
