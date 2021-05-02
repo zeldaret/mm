@@ -12,6 +12,13 @@ void func_80A40678(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx);
 
+// bss
+extern s32 D_80A41D24;
+
+// Extenal
+extern LinkAnimetionEntry D_0400CF88;
+extern FlexSkeletonHeader D_0600F7EC;
+
 u32 D_80A41530[] = {
     0x0C000142, 0x0A007018, 0x02063207, 0x140C0F07, 0x1E070033, 0x04010509, 0x0A050E06, 0x3207140F, 0x0A006F21,
     0x02060006, 0x1E150206, 0x1E06230D, 0x02062306, 0x3201050E, 0x06230632, 0x0E09010E, 0x0600061E, 0x0D050C00,
@@ -35,11 +42,6 @@ const ActorInit En_Test3_InitVars = {
     (ActorFunc)EnTest3_Update,
     (ActorFunc)NULL,
 };
-
-extern LinkAnimetionEntry D_0400CF88;
-extern FlexSkeletonHeader D_0600F7EC;
-
-// char bss[0x50];
 
 s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     if (actionFunc == this->actionFunc) {
@@ -76,11 +78,11 @@ s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
 }
 
 s32 func_80A3E870(EnTest3* this, GlobalContext* globalCtx) {
-    return 1;
+    return true;
 }
 
 s32 func_80A3E884(EnTest3* this, GlobalContext* globalCtx) {
-    return 0;
+    return false;
 }
 
 s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
@@ -191,7 +193,7 @@ s32 func_80A3EBFC(EnTest3* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A3EC30(EnTest3* this, GlobalContext* globalCtx) {
-    return 0;
+    return false;
 }
 
 #ifdef NON_EQUIVALENT
@@ -300,8 +302,6 @@ u32 D_80A417E0[] = {
     0x0000003F,
     0x00000F64,
 };
-
-extern s32 D_80A41D24;
 
 void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTest3* this = THIS;
@@ -508,12 +508,14 @@ u32 D_80A418A4[] = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
 
-/* static */ u32 D_80A418C8 = 0;
+/* static */ s32 D_80A418C8 = false;
 
+void func_80A40CF0();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40CF0.asm")
 
 /* static */ Vec3f D_80A418CC[] = { 1100.0f, -700.0f, 0.0f };
 
+void func_80A40F34();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40F34.asm")
 
 /* static */ void* eyeTextures[] = {
@@ -532,4 +534,66 @@ u32 D_80A418A4[] = {
     { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
 };
 
+#ifdef NON_EQUIVALENT
+// needs a lot more work done
+void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
+    EnTest3* this = THIS;
+    s32 pad;
+    s32 eyeTexId = (this->actor.skelAnime.limbDrawTbl[11].x & 0xF) - 1;
+    s32 mouthTexId = ((this->actor.skelAnime.limbDrawTbl[11].x >> 4) & 0xF) - 1;
+    s32 pad2;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C268(globalCtx);
+
+    if (this->actor.unk_D5C > 0) {
+        // s32 num = this->actor.unk_B5F + CLAMP(0x32 - this->actor.unk_D5C, 8, 40);
+        // this->actor.unk_B5F = num;
+        this->actor.unk_B5F += CLAMP(0x32 - this->actor.unk_D5C, 8, 40);
+        POLY_OPA_DISP =
+            Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 0xFA0 - (Math_CosS(this->actor.unk_B5F << 8) * 2000.0f));
+    }
+
+    func_800B8050(this, globalCtx, 0);
+    D_80A418C8 = false;
+
+    if (this->actor.stateFlags1 & 0x100000) {
+        Vec3f cameraPos;
+
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &this->actor.base.focus, &cameraPos);
+
+        if (cameraPos.z < -4.0f) {
+            D_80A418C8 = true;
+        }
+    }
+
+    if (eyeTexId < 0) {
+        eyeTexId = faceAnimInfo[this->actor.base.shape.face].eyeTexId;
+    }
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[eyeTexId]));
+
+    if (mouthTexId < 0) {
+        mouthTexId = faceAnimInfo[this->actor.base.shape.face].mouthTexId;
+    }
+
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(mouthTextures[mouthTexId]));
+
+    SkelAnime_LodDrawSV(globalCtx, this->actor.skelAnime.skeleton, this->actor.skelAnime.limbDrawTbl,
+                        this->actor.skelAnime.dListCount, func_80A40CF0, func_80A40F34, this, 0);
+
+    if (this->actor.unk_D5C > 0) {
+        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    }
+
+    if (this->actor.unk_B2A != 0) {
+        func_8012697C(globalCtx, &this->actor);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
+void func_80A4129C(Actor* thisx, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A4129C.asm")
+#endif

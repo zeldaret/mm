@@ -2272,7 +2272,7 @@ void func_80126440(GlobalContext* globalCtx, Collider* param_2, s32* param_3, Ve
 // void func_801265C8(void);
 // void func_8012669C(void);
 // void func_80126808(void);
-// void func_8012697C(void);
+void func_8012697C(GlobalContext* globalCtx, Player* player);
 // void func_80126AB4(void);
 // void func_80126B8C(void);
 // void func_80126BD0(void);
@@ -3000,7 +3000,7 @@ void func_80165438(UNK_PTR param_1);
 // void func_80165E7C(void);
 // void func_80165EC0(void);
 // void func_80166060(void);
-UNK_TYPE4 func_801660B8(GlobalContext* ctxt, UNK_TYPE4 param_2);
+Gfx* func_801660B8(GlobalContext* ctxt, Gfx* gfx);
 void Play_Fini(GlobalContext* ctxt);
 // void func_801663C4(void);
 // void func_80166644(void);
