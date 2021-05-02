@@ -288,7 +288,7 @@ void ObjTokeiStep_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800BDFC0(globalCtx, D_06000088);
 }
 
-#if 1
+#if NON_MATCHING
 void func_80AD6508(Actor *thisx, GlobalContext *globalCtx) {
     ObjTokeiStep *this = THIS;
     int i;
