@@ -472,7 +472,7 @@ void func_80A3F114(EnTest3* this, GlobalContext* globalCtx) {
 }
 
 // 97 line
-void func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2);
+s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
 
 // 54 line
@@ -482,10 +482,20 @@ void func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F384.asm")
 
 // 38 line
+s32 func_80A3F4A4(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F4A4.asm")
 
-// 32 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F534.asm")
+void func_80A3F534(EnTest3* this, GlobalContext* globalCtx) {
+    if (func_80A3F4A4(globalCtx) == 0) {
+        this->talkState = D_80A4187C;
+    } else if (gSaveContext.perm.weekEventReg[51] & 8) {
+        this->talkState = D_80A41870;
+    } else {
+        this->talkState = D_80A41858;
+    }
+
+    this->actorCutsceneId = this->actor.base.cutscene;
+}
 
 // 39 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F5A4.asm")
@@ -590,16 +600,16 @@ s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
     u16 curTime = gSaveContext.perm.time - 0x3FFC;
     u16 nextTime;
     u16 new_var;
-    u32 new_var2;
 
     func_80A3F15C(this, globalCtx, arg2);
     this->path = func_8013BB34(globalCtx, this->actor.base.params & 0x1F, ABS_ALT(arg2->unk_01_0) - 1);
 
-    new_var2 = curTime;
-
-    nextTime = ((this->schedule < 7) && (this->schedule != 0) && (this->unk_D80 >= 0)) ? new_var2 : arg3->unk_04;
+    nextTime = ((this->schedule < 7) && (this->schedule != 0) && (this->unk_D80 >= 0)) ? (u32)curTime : arg3->unk_04;
     this->unk_DA8 = (arg3->unk_08 < nextTime) ? (nextTime - arg3->unk_08) + 0xFFFF : arg3->unk_08 - nextTime;
-    this->unk_DB4 = new_var2 - nextTime;
+
+    if (1) {}
+
+    this->unk_DB4 = curTime - nextTime;
 
     if (1) {}
 
@@ -622,7 +632,7 @@ s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40678.asm")
 
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
-    this->talkState = &D_80A41854[0];
+    this->talkState = D_80A41854;
     func_80A3F73C(this, globalCtx);
 }
 
