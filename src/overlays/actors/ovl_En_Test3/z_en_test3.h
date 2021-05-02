@@ -11,7 +11,7 @@ typedef struct {
     /* 0x0 */ u8 unk_00;
     /* 0x1 */ u8 unk_01;
     /* 0x2 */ u16 textId;
-} TalkState;
+} TalkState; // size = 0x04
 
 typedef struct {
     /* 0x0 */ u8 unk_00;
@@ -24,6 +24,31 @@ typedef struct {
     /* 0x0 */ u8 eyeTexId;
     /* 0x1 */ u8 mouthTexId;
 } FaceAnimKeyFrame;
+
+typedef struct {
+    EnTest3ActionFunc actionInitFunc;
+    EnTest3ActionFunc actionFunc;
+} KafeiActionSetupInfo;
+
+typedef struct {
+    /* 0x0 */ s8 unk_00;
+    /* 0x1 */ s8 unk_01_0 : 4;
+    /* 0x1 */ s8 unk_01_1 : 4;
+} struct_80A417E8_arg2; // size = 0x02
+
+typedef struct {
+    /* 0x0 */ u8 unk_00;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 unk_08;
+    /* 0xC */ s32 unk_0C;
+} struct_80A417E8_arg3; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ s32 (*init)(struct EnTest3*, struct GlobalContext*, struct_80A417E8_arg2*, struct_80A417E8_arg3*);
+    /* 0x4 */ s32 (*update)(struct EnTest3*, struct GlobalContext*, struct_80A417E8_arg2*, struct_80A417E8_arg3*);
+} struct_80A417E8; // size = 0x08
+
+typedef s32 (*EnTest3_functions_80A4169C)(struct EnTest3*, struct GlobalContext*);
 
 typedef struct EnTest3 {
     /* 0x000 */ Player actor;

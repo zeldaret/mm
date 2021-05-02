@@ -12,6 +12,23 @@ void func_80A40678(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx);
 
+s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A40230(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F62C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F73C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F8D4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FA58(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FE20(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+s32 func_80A3FFD0(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
+
 // bss
 extern s32 D_80A41D24;
 
@@ -53,11 +70,6 @@ s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     this->schedule = 0;
     return true;
 }
-
-typedef struct {
-    EnTest3ActionFunc actionInitFunc;
-    EnTest3ActionFunc actionFunc;
-} KafeiActionSetupInfo;
 
 s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
     static KafeiActionSetupInfo actionSetupInfoList[] = {
@@ -215,8 +227,6 @@ s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx) {
 s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3EC44.asm")
 #endif
-
-typedef s32 (*EnTest3_functions_80A4169C)(struct EnTest3*, struct GlobalContext*);
 
 s32 func_80A3ECEC(EnTest3* this, GlobalContext* globalCtx) {
     static EnTest3_functions_80A4169C D_80A4169C[] = {
@@ -383,127 +393,154 @@ void EnTest3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_800FE498();
 }
 
-// function pointers!
-u32 D_80A417E8[] = {
-    0x80A3F080, 0x80A3F09C, 0x80A40098, 0x80A40230, 0x80A3F62C, 0x80A3F73C, 0x80A3F8D4, 0x80A3F9A4,
-    0x80A3F9E4, 0x80A3FA58, 0x80A3FBCC, 0x80A3FBE8, 0x80A3FDE4, 0x80A3FE20, 0x80A3FF10, 0x80A3FFD0,
+struct_80A417E8 D_80A417E8[] = {
+    { func_80A3F080, func_80A3F09C }, { func_80A40098, func_80A40230 }, { func_80A3F62C, func_80A3F73C },
+    { func_80A3F8D4, func_80A3F9A4 }, { func_80A3F9E4, func_80A3FA58 }, { func_80A3FBCC, func_80A3FBE8 },
+    { func_80A3FDE4, func_80A3FE20 }, { func_80A3FF10, func_80A3FFD0 },
 };
 
-u32 D_80A41828[] = {
-    0x000003E0, 0x02F002F1, 0x02F20213, 0x02E40510, 0x07F00620, 0x04400110,
-    0x01100120, 0x01100110, 0x01200130, 0x01100120, 0x01100000,
+struct_80A417E8_arg2 D_80A41828[] = {
+    { 0, 0, 0 },  { 3, 14, 0 }, { 2, 15, 0 }, { 2, 15, 1 }, { 2, 15, 2 }, { 2, 1, 3 }, { 2, 14, 4 }, { 5, 1, 0 },
+    { 7, 15, 0 }, { 6, 2, 0 },  { 4, 4, 0 },  { 1, 1, 0 },  { 1, 1, 0 },  { 1, 2, 0 }, { 1, 1, 0 },  { 1, 1, 0 },
+    { 1, 2, 0 },  { 1, 3, 0 },  { 1, 1, 0 },  { 1, 2, 0 },  { 1, 1, 0 },  { 0, 0, 0 },
 };
 
-u32 D_80A41854[] = {
-    0x04002B25,
+TalkState D_80A41854[] = {
+    { 0x04, 0x00, 0x2B25 },
 };
 
-u32 D_80A41858[] = {
-    0x01002969, 0x0301296A, 0x0100296B, 0x05010000, 0x08000000,
+TalkState D_80A41858[] = {
+    { 1, 0, 0x2969 }, { 3, 1, 0x296A }, { 1, 0, 0x296B }, { 5, 1, 0x0000 }, { 8, 0, 0x0000 },
 };
 
-u32 D_80A4186C[] = {
-    0x04002976,
+TalkState D_80A4186C[] = {
+    { 4, 0, 0x2976 },
 };
 
-u32 D_80A41870[] = {
-    0x06002977,
-    0x070A2978,
-    0x04010000,
+TalkState D_80A41870[] = {
+    { 6, 0, 0x2977 },
+    { 7, 10, 0x2978 },
+    { 4, 1, 0x0000 },
 };
 
-u32 D_80A4187C[] = {
-    0x04002968,
+TalkState D_80A4187C[] = {
+    { 4, 0, 0x2968 },
 };
 
-u32 D_80A41880[] = {
-    0x0400297A,
+TalkState D_80A41880[] = {
+    { 4, 0, 0x297A },
 };
 
-u32 D_80A41884[] = {
-    0x0100145D, 0x0100145E, 0x0501145F, 0x0100145F, 0x05000000,
+TalkState D_80A41884[] = {
+    { 1, 0, 0x145D }, { 1, 0, 0x145E }, { 5, 1, 0x145F }, { 1, 0, 0x145F }, { 5, 0, 0x0000 }, { 4, 0, 0x1460 },
 };
 
-u32 D_80A41898[] = {
-    0x04001460,
+TalkState D_80A4189C[] = {
+    { 4, 0, 0x145C },
 };
 
-u32 D_80A4189C[] = {
-    0x0400145C,
+TalkState D_80A418A0[] = {
+    { 4, 0, 0x2913 },
 };
 
-u32 D_80A418A0[] = {
-    0x04002913,
+TalkState D_80A418A4[] = {
+    { 4, 0, 0x1465 },
 };
 
-u32 D_80A418A4[] = {
-    0x04001465,
-};
-
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F080.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F09C.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F0B0.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F114.asm")
 
+// 97 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
 
+// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F2BC.asm")
 
+// 78 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F384.asm")
 
+// 38 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F4A4.asm")
 
+// 32 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F534.asm")
 
+// 39 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F5A4.asm")
 
-/* static */ void* D_80A418A8[] = {
+TalkState* D_80A418A8[] = {
     D_80A41854, D_80A41858, D_80A41880, D_80A41884, D_80A418A0,
 };
 
+// 76 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F62C.asm")
 
+// 109 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F73C.asm")
 
+// 55 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F8D4.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9A4.asm")
 
+// 31 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9E4.asm")
 
+// 103 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FBCC.asm")
 
+// 138 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FBE8.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FDE4.asm")
 
+// 65 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FE20.asm")
 
 /* static */ Vec3f D_80A418BC[] = { -420.0f, 210.0f, -162.0f };
 
+// 51 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FF10.asm")
 
+// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FFD0.asm")
 
+// 112 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40098.asm")
 
+// 286 line yikes
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40230.asm")
 
+// 117 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40678.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40824.asm")
 
+// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A4084C.asm")
 
+// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40908.asm")
 
+// 42 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A409D4.asm")
 
+// very easy
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40A6C.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
