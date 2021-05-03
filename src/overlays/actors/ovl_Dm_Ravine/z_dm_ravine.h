@@ -5,7 +5,7 @@
 
 struct DmRavine;
 
-typedef void (*DmRavineActionFunc)(Actor*, GlobalContext*);
+typedef void (*DmRavineActionFunc)(struct DmRavine*, GlobalContext*);
 
 typedef struct DmRavine {
     /* 0x000 */ Actor actor;

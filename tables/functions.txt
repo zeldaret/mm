@@ -10123,7 +10123,7 @@
     0x80A2E268:("func_80A2E268",),
     0x80A2E7A0:("DmRavine_Init",),
     0x80A2E828:("DmRavine_Destroy",),
-    0x80A2E838:("func_80A2E838",),
+    0x80A2E838:("DmRavine_DoNothing",),
     0x80A2E848:("DmRavine_Update",),
     0x80A2E8F4:("DmRavine_Draw",),
     0x80A2E960:("func_80A2E960",),

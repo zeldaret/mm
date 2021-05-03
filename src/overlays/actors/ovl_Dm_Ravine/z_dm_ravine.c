@@ -12,7 +12,7 @@
 
 void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmRavine_Action(Actor* thisx, GlobalContext* globalCtx);
+void DmRavine_DoNothing(DmRavine* thisx, GlobalContext* globalCtx);
 void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
@@ -41,7 +41,7 @@ void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
     globalCtx->roomContext.unk7A[1] = 0;
     this->state = 0;
     Actor_SetScale(&this->actor, 1.0f);
-    this->actionFunc = &DmRavine_Action;
+    this->actionFunc = &DmRavine_DoNothing;
 }
 
 void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -49,7 +49,7 @@ void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 // This function is unused, but takes two word-sized arguments
 // `thisx` & `globalCtx` are guesses; but it could be something else
-void DmRavine_Action(Actor* thisx, GlobalContext* globalCtx) {
+void DmRavine_DoNothing(DmRavine* this, GlobalContext* globalCtx) {
 }
 
 void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
