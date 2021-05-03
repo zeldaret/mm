@@ -25,7 +25,6 @@ void func_80AD6480(ObjTokeiStep *this);
 void func_80AD64A4(ObjTokeiStep *this, GlobalContext* globalCtx);
 void func_80AD6508(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Obj_Tokei_Step_InitVars = {
     ACTOR_OBJ_TOKEI_STEP,
     ACTORCAT_BG,
@@ -37,29 +36,23 @@ const ActorInit Obj_Tokei_Step_InitVars = {
     (ActorFunc)ObjTokeiStep_Update,
     (ActorFunc)ObjTokeiStep_Draw
 };
-*/
 
-extern InitChainEntry D_80AD6664[];
-/*
+static f32 D_80AD6620[] = {-105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f};
+
+static f32 D_80AD663C[] = {-60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f};
+
+static Vec3f D_80AD6658 = {0.0f, 0.3f, 0.0f};
+
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
-*/
+
 extern Gfx D_06000088[];
 
 extern BgMeshHeader D_06000968;
-
-extern f32 D_80AD6620[];
-//static f32 D_80AD6620[] = {-105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f};
-
-extern f32 D_80AD663C[];
-//static f32 D_80AD663C[] = {-60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f};
-
-extern Vec3f D_80AD6658;
-//static Vec3f D_80AD6658 = {0.0f, 0.3f, 0.0f};
 
 
 void func_80AD5BB0(ObjTokeiStepStep *step) {
@@ -200,7 +193,7 @@ s32 func_80AD5FB0(ObjTokeiStep *this, GlobalContext *globalCtx) {
 void ObjTokeiStep_Init(Actor *thisx, GlobalContext *globalCtx) {
     ObjTokeiStep *this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80AD6664);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.extra.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
@@ -280,23 +273,22 @@ void ObjTokeiStep_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800BDFC0(globalCtx, D_06000088);
 }
 
-#if NON_MATCHING
 void func_80AD6508(Actor *thisx, GlobalContext *globalCtx) {
     ObjTokeiStep *this = THIS;
     int i;
     ObjTokeiStepStep *step;
+    Gfx *gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx)
-    gSPDisplayList(POLY_OPA_DISP++, &sSetupDL[6 * 0x19]);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    gfx = POLY_OPA_DISP;
+    gSPDisplayList(gfx++, &sSetupDL[6 * 0x19]);
 
     for(i=0; i<7; i++) {
         step = &this->steps[i];
         func_80AD5BB0(step);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000088);
+        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, D_06000088);
     }
+    POLY_OPA_DISP = gfx;
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Step_0x80AD5BB0/func_80AD6508.asm")
-#endif
