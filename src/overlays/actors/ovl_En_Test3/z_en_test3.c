@@ -471,27 +471,25 @@ void func_80A3F114(EnTest3* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// some registers are wrong
 s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2) {
     s32 pathIndex = ABS_ALT(arg2->unk_01_0) - 1;
 
     if (pathIndex >= 0) {
         PathInfo* path = func_8013BB34(globalCtx, this->actor.base.params & 0x1F, pathIndex);
-        Vec3s* startPoint = Lib_SegmentedToVirtual(path->pos);
-        Vec3s* nextPoint;
+        Vec3s* startPosP = Lib_SegmentedToVirtual(path->pos);
+        Vec3s* nextPosP;
         Vec3f startPos;
         Vec3f nextPos;
 
         if (arg2->unk_01_0 > 0) {
-            nextPoint = startPoint + 1;
+            nextPosP = startPosP + 1;
         } else {
-            nextPoint = &startPoint[path->unk_00 - 1];
-            startPoint = nextPoint - 1;
+            startPosP += path->unk_00 - 1;
+            nextPosP = startPosP - 1;
         }
 
-        Math_Vec3s_ToVec3f(&startPos, startPoint);
-        Math_Vec3s_ToVec3f(&nextPos, nextPoint);
+        Math_Vec3s_ToVec3f(&startPos, startPosP);
+        Math_Vec3s_ToVec3f(&nextPos, nextPosP);
 
         if (Math_Vec3f_DistXZ(&this->actor.base.world.pos, &startPos) > 10.0f) {
             Math_Vec3f_Copy(&this->actor.base.world.pos, &startPos);
@@ -511,10 +509,6 @@ s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 
     return 0;
 }
-#else
-s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
-#endif
 
 // 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F2BC.asm")
@@ -560,18 +554,19 @@ s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// Weird register swap
 s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
-    arg3->unk_04 = (u16)(gSaveContext.perm.time - 0x3FFC);
-    arg3->unk_08 = (u16)(arg3->unk_04 + 70);
+    arg3->unk_04 = (gSaveContext.perm.time - 0x3FFC) & 0xFFFF;
+    arg3->unk_08 = (arg3->unk_04 + 0x46) & 0xFFFF;
     func_80A40098(this, globalCtx, arg2, arg3);
-    this->unk_D8A = (this->actor.base.xzDistToPlayer < 300.0f) ? -1 : 120;
+
+    if (this->actor.base.xzDistToPlayer < 300.0f) {
+        this->unk_D8A = -1;
+    } else {
+        this->unk_D8A = 0x78;
+    }
+
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F9E4.asm")
-#endif
 
 // 103 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
