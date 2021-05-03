@@ -11,7 +11,7 @@ typedef struct EnJcMato {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnJcMatoActionFunc actionFunc;
     /* 0x148 */ ColliderSphere collider;
-    /* 0x1A0 */ s16 unk1A0;
+    /* 0x1A0 */ s16 despawnTimer;
     /* 0x1A2 */ s16 hitFlag;
     /* 0x1A4 */ Vec3f JcMatoPos;
 } EnJcMato; // size = 0x1B0

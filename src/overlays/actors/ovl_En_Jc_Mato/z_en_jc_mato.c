@@ -31,7 +31,6 @@ const ActorInit En_Jc_Mato_InitVars = {
     (ActorFunc)EnJcMato_Draw,
 };
 
-// was D_80B9E210
 ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
@@ -79,16 +78,16 @@ void func_80B9DFC8(EnJcMato* this) {
 }
 
 void func_80B9DFDC(EnJcMato* this, GlobalContext* globalCtx) {
-    s16 phi_v1;
+    s16 despawn_temp;
 
     if (this->hitFlag != 0) {
-        if (this->unk1A0 == 0) {
-            phi_v1 = 0;
+        if (this->despawnTimer == 0) {
+            despawn_temp = 0;
         } else {
-            this->unk1A0 -= 1;
-            phi_v1 = this->unk1A0;
+            this->despawnTimer--;
+            despawn_temp = this->despawnTimer;
         }
-        if (phi_v1 == 0) {
+        if (despawn_temp == 0) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -104,7 +103,7 @@ void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.damageTable = &EnJcMatoDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = 0;
-    this->unk1A0 = 25;
+    this->despawnTimer = 25;
     func_80B9DFC8(this);
 }
 
