@@ -192,7 +192,7 @@ distclean: clean
 	rm -rf assets/src baserom/
 
 setup:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
