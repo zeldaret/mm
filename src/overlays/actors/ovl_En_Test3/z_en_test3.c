@@ -1,4 +1,5 @@
 #include "z_en_test3.h"
+#include "../ovl_En_Door/z_en_door.h"
 
 #define FLAGS 0x04000030
 
@@ -445,10 +446,6 @@ TalkState D_80A418A0[] = {
     { 4, 0, 0x2913 },
 };
 
-TalkState D_80A418A4[] = {
-    { 4, 0, 0x1465 },
-};
-
 s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
     return 1;
 }
@@ -510,11 +507,45 @@ s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
     return 0;
 }
 
-// 54 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F2BC.asm")
+Actor* func_80A3F2BC(GlobalContext* globalCtx, Actor* thisx, s32 actorId, s32 actorCat, f32 xzDist, f32 yDist) {
+    Actor* curActor = globalCtx->actorCtx.actorList[actorCat].first;
 
-// 78 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F384.asm")
+    while (curActor != NULL) {
+        if (actorId == curActor->id) {
+            f32 dist = thisx->world.pos.y - curActor->world.pos.y;
+
+            if ((fabsf(dist) < yDist) && (Actor_XZDistanceBetweenActors(thisx, curActor) < xzDist)) {
+                return curActor;
+            }
+        }
+
+        curActor = curActor->next;
+    }
+
+    return NULL;
+}
+
+s32 func_80A3F384(EnTest3* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    EnDoor* doorActor =
+        (EnDoor*)func_80A3F2BC(globalCtx, &this->actor.base, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
+    Vec3f dist;
+
+    if ((doorActor != NULL) && (!(doorActor->opening))) {
+        if ((player->doorType == 0) || ((Actor*)doorActor != player->doorActor)) {
+            if (Actor_IsActorFacingActor(&this->actor.base, (Actor*)doorActor, 0x3000)) {
+                Actor_CalcOffsetOrientedToDrawRotation((Actor*)doorActor, &dist, &this->actor.base.world.pos);
+                this->actor.doorType = 1;
+                this->actor.doorDirection = (dist.z >= 0.0f) ? 1.0f : -1.0f;
+                this->actor.doorActor = (Actor*)doorActor;
+                this->actor.unk_A86 = -1;
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 // 38 line
 s32 func_80A3F4A4(GlobalContext* globalCtx);
@@ -576,6 +607,10 @@ s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 }
 
 s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
+    static TalkState D_80A418A4[] = {
+        { 4, 0, 0x1465 },
+    };
+
     if ((D_80A41D20 == 0) && (func_801690CC(globalCtx) == 0)) {
         D_80A41D20 = 1;
         this->talkState = D_80A418A4;
