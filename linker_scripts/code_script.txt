@@ -9337,9 +9337,9 @@ SECTIONS
     ovl_Obj_Ending : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.text)
-        build/asm/overlays/ovl_Obj_Ending_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.data)
         build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.rodata)
-        build/asm/overlays/ovl_Obj_Ending_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
