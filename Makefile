@@ -165,6 +165,9 @@ build/baserom/boot build/baserom/code: build/code.elf
 build/baserom/assets/scenes/%: build/code.elf
 	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
+build/baserom/overlays/%: build/code.elf
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+
 asm/non_matchings/%: asm/%.asm
 	@./tools/split_asm.py $< $@
 
