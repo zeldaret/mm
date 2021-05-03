@@ -576,19 +576,15 @@ s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 }
 
 s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
-    if (D_80A41D20 == 0) {
-        if (func_801690CC(globalCtx) == 0) {
-            D_80A41D20 = 1;
-            this->talkState = D_80A418A4;
-            this->actorCutsceneId = this->actor.base.cutscene;
-            this->actor.base.textId = D_80A418A4->textId;
-        }
+    if ((D_80A41D20 == 0) && (func_801690CC(globalCtx) == 0)) {
+        D_80A41D20 = 1;
+        this->talkState = D_80A418A4;
+        this->actorCutsceneId = this->actor.base.cutscene;
+        this->actor.base.textId = D_80A418A4->textId;
     } else if (D_80A41D20 == 1) {
-        if (this->actorCutsceneId >= 0) {
-            if (func_80A3E9DC(this, globalCtx)) {
-                this->actorCutsceneId = -1;
-                func_800FE484();
-            }
+        if ((this->actorCutsceneId >= 0) && (func_80A3E9DC(this, globalCtx))) {
+            this->actorCutsceneId = -1;
+            func_800FE484();
         } else {
             if ((globalCtx->actorCtx.unk5 & 0x40) || (globalCtx->actorCtx.unk5 & 0x20)) {
                 this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actor.base.cutscene);
