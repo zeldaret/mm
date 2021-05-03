@@ -63,13 +63,13 @@ const ActorInit En_Test3_InitVars = {
 
 s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     if (actionFunc == this->actionFunc) {
-        return false;
+        return 0;
     }
 
     this->actionFunc = actionFunc;
     this->unk_D8A = 0;
     this->schedule = 0;
-    return true;
+    return 1;
 }
 
 s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
@@ -82,20 +82,20 @@ s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
     actionSetup->actionInitFunc(this, globalCtx);
 
     if (actionSetup->actionFunc == NULL) {
-        return false;
+        return 0;
     }
 
     func_80A3E7E0(this, actionSetup->actionFunc);
 
-    return true;
+    return 1;
 }
 
 s32 func_80A3E870(EnTest3* this, GlobalContext* globalCtx) {
-    return true;
+    return 1;
 }
 
 s32 func_80A3E884(EnTest3* this, GlobalContext* globalCtx) {
-    return false;
+    return 0;
 }
 
 s32 func_80A3E898(EnTest3* this, GlobalContext* globalCtx) {
@@ -126,19 +126,19 @@ s32 func_80A3E960(EnTest3* this, GlobalContext* globalCtx) {
 s32 func_80A3E97C(EnTest3* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         func_801518B0(globalCtx, this->talkState->textId, NULL);
-        return true;
+        return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
 s32 func_80A3E9DC(EnTest3* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actorCutsceneId)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutsceneId, &this->actor.base);
-        return true;
+        return 1;
     } else {
         ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
-        return false;
+        return 0;
     }
 }
 
@@ -162,9 +162,9 @@ s32 func_80A3EA30(EnTest3* this, GlobalContext* globalCtx) {
 
 s32 func_80A3EAC4(EnTest3* this, GlobalContext* game_play) {
     if (func_80152498(&game_play->msgCtx) == 6) {
-        return true;
+        return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
@@ -176,9 +176,9 @@ s32 func_80A3EAF8(EnTest3* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->actorCutsceneId);
             this->actor.unk_730 = (Actor*)PLAYER;
         }
-        return true;
+        return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
@@ -191,22 +191,22 @@ s32 func_80A3EB8C(EnTest3* this, GlobalContext* globalCtx) {
         }
 
         globalCtx->msgCtx.unk_11F23 = 0x44;
-        return true;
+        return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
 s32 func_80A3EBFC(EnTest3* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 2) {
-        return true;
+        return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
 s32 func_80A3EC30(EnTest3* this, GlobalContext* globalCtx) {
-    return false;
+    return 0;
 }
 
 s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx) {
@@ -325,7 +325,7 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    D_80A41D24 = true;
+    D_80A41D24 = 1;
     this->actor.base.room = -1;
     this->actor.unk_A86 = -1;
     this->actor.linkForm = 4;
@@ -361,7 +361,7 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->camId = func_801694DC(globalCtx);
         camera = Play_GetCamera(globalCtx, this->camId);
         func_800DE0EC(camera, &this->actor.base);
-        Camera_SetFlags(camera, 0x41);
+        Camera_SetFlags(camera, 64 | 1);
         func_80169590(globalCtx, this->camId, 1);
     }
 
@@ -450,7 +450,7 @@ TalkState D_80A418A4[] = {
 };
 
 s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
-    return true;
+    return 1;
 }
 
 s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx) {
@@ -467,13 +467,54 @@ void func_80A3F0B0(EnTest3* this, GlobalContext* globalCtx) {
 
 void func_80A3F114(EnTest3* this, GlobalContext* globalCtx) {
     if (this->actor.unk_394 != 0) {
-        globalCtx->func_1877C(globalCtx, this, 6);
+        globalCtx->func_1877C(globalCtx, &this->actor, 6);
     }
 }
 
-// 97 line
+#ifdef NON_EQUIVALENT
+// some registers are wrong
+s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2) {
+    s32 pathIndex = ABS_ALT(arg2->unk_01_0) - 1;
+
+    if (pathIndex >= 0) {
+        PathInfo* path = func_8013BB34(globalCtx, this->actor.base.params & 0x1F, pathIndex);
+        Vec3s* startPoint = Lib_SegmentedToVirtual(path->pos);
+        Vec3s* nextPoint;
+        Vec3f startPos;
+        Vec3f nextPos;
+
+        if (arg2->unk_01_0 > 0) {
+            nextPoint = startPoint + 1;
+        } else {
+            nextPoint = &startPoint[path->unk_00 - 1];
+            startPoint = nextPoint - 1;
+        }
+
+        Math_Vec3s_ToVec3f(&startPos, startPoint);
+        Math_Vec3s_ToVec3f(&nextPos, nextPoint);
+
+        if (Math_Vec3f_DistXZ(&this->actor.base.world.pos, &startPos) > 10.0f) {
+            Math_Vec3f_Copy(&this->actor.base.world.pos, &startPos);
+            Math_Vec3f_Copy(&this->actor.base.home.pos, &startPos);
+            Math_Vec3f_Copy(&this->actor.base.prevPos, &startPos);
+            this->actor.unk_AD4 = Math_Vec3f_Yaw(&this->actor.base.world.pos, &nextPos);
+
+            if (arg2->unk_01_0 < 0) {
+                this->actor.unk_AD4 += 0x8000;
+            }
+
+            this->actor.base.shape.rot.y = this->actor.unk_AD4;
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+#else
 s32 func_80A3F15C(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F15C.asm")
+#endif
 
 // 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F2BC.asm")
@@ -516,7 +557,7 @@ TalkState* D_80A418A8[] = {
 s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.base.shape.rot.y, this->actor.base.home.rot.y, 800);
     this->actor.unk_AD4 = this->actor.base.shape.rot.y;
-    return false;
+    return 0;
 }
 
 #ifdef NON_MATCHING
@@ -536,7 +577,7 @@ s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
 
 s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
-    return true;
+    return 1;
 }
 
 s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
@@ -585,12 +626,12 @@ s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
         D_80A41D20 = 3;
     }
 
-    return false;
+    return 0;
 }
 
 s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
     this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actor.base.cutscene);
-    return true;
+    return 1;
 }
 
 // 65 line
@@ -661,7 +702,7 @@ void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
 
-/* static */ s32 D_80A418C8 = false;
+/* static */ s32 D_80A418C8 = 0;
 
 void func_80A40CF0();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40CF0.asm")
@@ -709,10 +750,10 @@ void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.stateFlags1 & 0x100000) {
         Vec3f cameraPos;
 
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &this->actor.base.focus, &cameraPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &this->actor.base.focus.pos, &cameraPos);
 
         if (cameraPos.z < -4.0f) {
-            D_80A418C8 = true;
+            D_80A418C8 = 1;
         }
     }
 
@@ -733,7 +774,7 @@ void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP = &gfx[2];
 
     SkelAnime_LodDrawSV(globalCtx, this->actor.skelAnime.skeleton, this->actor.skelAnime.limbDrawTbl,
-                        this->actor.skelAnime.dListCount, func_80A40CF0, func_80A40F34, this, 0);
+                        this->actor.skelAnime.dListCount, func_80A40CF0, func_80A40F34, &this->actor.base, 0);
 
     if (this->actor.unk_D5C > 0) {
         POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
