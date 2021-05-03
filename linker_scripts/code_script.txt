@@ -4429,9 +4429,9 @@ SECTIONS
     ovl_Obj_Bell : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Bell/z_obj_bell.o(.text)
-        build/asm/overlays/ovl_Obj_Bell_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Bell/z_obj_bell.o(.data)
         build/src/overlays/actors/ovl_Obj_Bell/z_obj_bell.o(.rodata)
-        build/asm/overlays/ovl_Obj_Bell_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Bell/z_obj_bell_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
