@@ -220,3 +220,13 @@ D_06000958 = 0x06000958;
 
 /* z_en_jc_mato */
 D_06000390 = 0x06000390;
+
+/* z_bg_ladder */
+object_ladder_12rung_dlist = 0x060000A0;
+object_ladder_12rung_collision = 0x060001D8;
+object_ladder_16rung_dlist = 0x060002D0;
+object_ladder_16rung_collision = 0x06000408;
+object_ladder_20rung_dlist = 0x06000500;
+object_ladder_20rung_collision = 0x06000638;
+object_ladder_24rung_dlist = 0x06000730;
+object_ladder_24rung_collision = 0x06000868;

@@ -4727,9 +4727,9 @@ SECTIONS
     ovl_Bg_Ladder : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Ladder/z_bg_ladder.o(.text)
-        build/asm/overlays/ovl_Bg_Ladder_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Ladder/z_bg_ladder.o(.data)
         build/src/overlays/actors/ovl_Bg_Ladder/z_bg_ladder.o(.rodata)
-        build/asm/overlays/ovl_Bg_Ladder_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Ladder/z_bg_ladder_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
