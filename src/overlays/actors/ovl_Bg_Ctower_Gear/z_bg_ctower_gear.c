@@ -73,13 +73,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-static InitChainEntry sInitChain1[] = {
+static InitChainEntry sInitChainCenterCog[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 2000, ICHAIN_STOP),
 };
 
-static InitChainEntry sInitChain3[] = {
+static InitChainEntry sInitChainOrgan[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 420, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 570, ICHAIN_STOP),
@@ -144,9 +144,9 @@ void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
     type = GET_TYPE(this);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     if (type == CENTER_COG) {
-        Actor_ProcessInitChain(&this->dyna.actor, sInitChain1);
+        Actor_ProcessInitChain(&this->dyna.actor, sInitChainCenterCog);
     } else if (type == ORGAN) {
-        Actor_ProcessInitChain(&this->dyna.actor, sInitChain3);
+        Actor_ProcessInitChain(&this->dyna.actor, sInitChainOrgan);
         this->dyna.actor.draw = NULL;
         this->dyna.actor.update = BgCtowerGear_UpdateOrgan;
     } else {
