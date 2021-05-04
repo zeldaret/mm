@@ -76,6 +76,7 @@ ELF := $(MM_ROM_NAME).elf
 SRC_DIRS := $(shell find src -type d)
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
+BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
 ASSET_XML_DIRS := $(shell find assets/xml* -type d)
 ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
 ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
@@ -89,18 +90,19 @@ C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
 ASSET_O_FILES := $(ASSET_FILES_OUT:%.c=build/%.o)
 O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
-ROM_FILES := $(shell cat ./tables/makerom_files.txt)
-UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
-
-# Exclude code and scene files, they will be extracted from the file instead
-DMADATA_FILES := $(subst build/baserom/boot ,,$(UNCOMPRESSED_ROM_FILES))
-DMADATA_FILES := $(subst build/baserom/code ,,$(DMADATA_FILES))
-DMADATA_FILES := $(DMADATA_FILES:build/baserom/overlays/%=)
-DMADATA_FILES := $(DMADATA_FILES:build/baserom/assets/scenes/%=)
-DMADATA_FILES := $(DMADATA_FILES:build/uncompressed_dmadata=)
 
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+
+# This file defines `ROM_FILES`, `UNCOMPRESSED_ROM_FILES`, and rules for generating `.yaz0` files
+ifneq ($(MAKECMDGOALS), clean)
+ifneq ($(MAKECMDGOALS), distclean)
+$(shell tools/dmadata_dependencies.py \
+	--dmadata-table=tables/dmadata_table.txt \
+	--output-deps=build/rom_dependencies.d)
+-include build/rom_dependencies.d
+endif
+endif
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -123,10 +125,11 @@ build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASF
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 .PHONY: all clean setup diff-init init
-# disasm is not a file so we must tell make not to check it when evaluating timestamps
-.INTERMEDIATE: disasm
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
+# .DELETE_ON_ERROR is a GNU extension, but is not required for building
+.DELETE_ON_ERROR:
+.DEFAULT_GOAL := all
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
@@ -144,14 +147,14 @@ endif
 
 all: $(UNCOMPRESSED_ROM) $(ROM) ;
 
-build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt build/linker_scripts/dmadata_script.txt
-	$(LD) -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt -T build/linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
+build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt build/linker_scripts/dmadata_script.ld
+	$(LD) -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt -T build/linker_scripts/dmadata_script.ld --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
 
 build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt
 	$(LD) -r -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
 
-linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
-	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
+build/linker_scripts/dmadata_script.ld.pre: tables/dmadata_table.txt build/code_pre_dmadata.elf
+	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l $@ -e build/code_pre_dmadata.elf
 
 build/dmadata: $(ROM_FILES:build/dmadata=)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@
@@ -159,22 +162,24 @@ build/dmadata: $(ROM_FILES:build/dmadata=)
 build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=)
 	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
 
-build/baserom/boot build/baserom/code: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
+build/binary/boot build/binary/code: build/code.elf
+	$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
-build/baserom/assets/scenes/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+build/binary/assets/scenes/%: build/code.elf
+	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
-build/baserom/overlays/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+build/binary/overlays/%: build/code.elf
+	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
-asm/non_matchings/%: asm/%.asm
-	@./tools/split_asm.py $< $@
+asm/non_matchings/%/dep: asm/%.asm
+	./tools/split_asm.py $< asm/non_matchings/$*
+	@touch $@
 
-asm/%.asm: disasm ;
+asm/%.asm: asm/disasm.dep ;
 
-disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
+asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
+	@touch $@
 
 clean:
 	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
@@ -233,14 +238,30 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@./tools/set_o32abi_bit.py $@
 
-build/comp/%.yaz0: build/baserom/%
+build/comp/%.yaz0: build/binary/%
+	./tools/yaz0 $< $@
+
+build/comp/assets/audio/%.yaz0: build/baserom/assets/audio/%
+	./tools/yaz0 $< $@
+
+build/comp/assets/misc/%.yaz0: build/baserom/assets/misc/%
+	./tools/yaz0 $< $@
+
+build/comp/assets/objects/%.yaz0: build/baserom/assets/objects/%
+	./tools/yaz0 $< $@
+
+build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
 	./tools/yaz0 $< $@
 
 build/%.d: %.c
 	@./tools/depend.py $< $@
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
 
-build/linker_scripts/%: linker_scripts/%
+build/linker_scripts/%.ld: build/linker_scripts/%.ld.pre
+	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+
+# TODO: Rename these files; this is sort of a hack
+build/linker_scripts/%.txt: linker_scripts/%.txt
 	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
 
 build/assets/%.d: assets/%.c
