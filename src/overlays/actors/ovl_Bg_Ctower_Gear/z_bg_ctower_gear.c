@@ -1,17 +1,29 @@
+/*
+ * File: z_bg_ctower_gear.c
+ * Overlay: Bg_Ctower_Gear
+ * Description: Different Cogs/Organ inside Clock Tower
+ */
+
 #include "z_bg_ctower_gear.h"
 
 #define FLAGS 0x00000010
 
 #define THIS ((BgCtowerGear*)thisx)
 
+typedef enum {
+    /* 0x00 */ CEILING_COG,
+    /* 0x01 */ CENTER_COG,
+    /* 0x02 */ WATER_WHEEL,
+    /* 0x03 */ ORGAN
+} BgCtowerGearType;
+
 void BgCtowerGear_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerGear_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* GlobalContext);
-void func_80AD3054(Actor* thisx, GlobalContext* globalCtx);
-void func_80AD3164(Actor* thisx, GlobalContext* globalCtx);
+void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx);
+void BgCtowerGear_DrawOrgan(Actor* thisx, GlobalContext* globalCtx);
 
 
 const ActorInit Bg_Ctower_Gear_InitVars = {
@@ -129,19 +141,19 @@ void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     type = this->dyna.actor.params & 3;
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    if (type == 1) {
+    if (type == CENTER_COG) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain1);
-    } else if (type == 3) {
+    } else if (type == ORGAN) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain3);
         this->dyna.actor.draw = NULL;
-        this->dyna.actor.update = func_80AD3054;
+        this->dyna.actor.update = BgCtowerGear_UpdateOrgan;
     } else {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
-    if (type == 2) {
+    if (type == WATER_WHEEL) {
         BcCheck3_BgActorInit(&this->dyna, 3);
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06018588);
-    } else if (type == 3) {
+    } else if (type == ORGAN) {
         BcCheck3_BgActorInit(&this->dyna, 0);
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -163,20 +175,20 @@ void BgCtowerGear_Update(Actor *thisx, GlobalContext *globalCtx) {
     s32 type;
 
     type = this->dyna.actor.params & 3;
-    if (type == 0) {
+    if (type == CEILING_COG) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     }
-    else if (type == 1) {
+    else if (type == CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
         func_800B9010(&this->dyna.actor, 0x2085);
     }
-    else if (type == 2) {
+    else if (type == WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, globalCtx);
     }
 }
 
-void func_80AD3054(Actor *thisx, GlobalContext *globalCtx) {
+void BgCtowerGear_UpdateOrgan(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
@@ -186,7 +198,7 @@ void func_80AD3054(Actor *thisx, GlobalContext *globalCtx) {
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
                 break;
             case 2:
-                this->dyna.actor.draw = func_80AD3164;
+                this->dyna.actor.draw = BgCtowerGear_DrawOrgan;
                 func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
                 break;
             case 3:
@@ -201,7 +213,7 @@ void BgCtowerGear_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800BDFC0(globalCtx, D_80AD32E8[thisx->params & 3]);
 }
 
-void func_80AD3164(Actor *thisx, GlobalContext *globalCtx) {
+void BgCtowerGear_DrawOrgan(Actor *thisx, GlobalContext *globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
