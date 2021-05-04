@@ -15,15 +15,15 @@ void ObjTokeiStep_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AD6348(ObjTokeiStep *this);
-void func_80AD635C(ObjTokeiStep *this, GlobalContext* globalCtx);
-void func_80AD63D4(ObjTokeiStep *this);
-void func_80AD63E8(ObjTokeiStep *this, GlobalContext* globalCtx);
-void func_80AD63F8(ObjTokeiStep *this);
-void func_80AD642C(ObjTokeiStep *this, GlobalContext* globalCtx);
-void func_80AD6480(ObjTokeiStep *this);
-void func_80AD64A4(ObjTokeiStep *this, GlobalContext* globalCtx);
-void func_80AD6508(Actor* thisx, GlobalContext* globalCtx);
+void ObjTokeiStep_SetBeginCutscene(ObjTokeiStep *this);
+void ObjTokeiStep_SetupCutscene(ObjTokeiStep *this, GlobalContext* globalCtx);
+void ObjTokeiStep_SetDoNothing(ObjTokeiStep *this);
+void ObjTokeiStep_DoNothing(ObjTokeiStep *this, GlobalContext* globalCtx);
+void ObjTokeiStep_BeginCutscene(ObjTokeiStep *this);
+void ObjTokeiStep_Open(ObjTokeiStep *this, GlobalContext* globalCtx);
+void ObjTokeiStep_SetDoNothingOpen(ObjTokeiStep *this);
+void ObjTokeiStep_DoNothingOpen(ObjTokeiStep *this, GlobalContext* globalCtx);
+void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Tokei_Step_InitVars = {
     ACTOR_OBJ_TOKEI_STEP,
@@ -36,6 +36,10 @@ const ActorInit Obj_Tokei_Step_InitVars = {
     (ActorFunc)ObjTokeiStep_Update,
     (ActorFunc)ObjTokeiStep_Draw
 };
+
+extern Gfx D_06000088[];
+
+extern BgMeshHeader D_06000968;
 
 static f32 D_80AD6620[] = {-105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f};
 
@@ -50,21 +54,17 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000088[];
 
-extern BgMeshHeader D_06000968;
-
-
-void func_80AD5BB0(ObjTokeiStepStep *step) {
+void ObjTokeiStep_SetSysMatrix(ObjTokeiStepStep *step) {
     MtxF* sysMatrix;
 
     sysMatrix = SysMatrix_GetCurrentState();
-    sysMatrix->wx = step->unk0.x;
-    sysMatrix->wy = step->unk0.y;
-    sysMatrix->wz = step->unk0.z;
+    sysMatrix->wx = step->pos.x;
+    sysMatrix->wy = step->pos.y;
+    sysMatrix->wz = step->pos.z;
 }
 
-void func_80AD5BE8(ObjTokeiStep *this, GlobalContext *globalCtx) {
+void ObjTokeiStep_AddQuake(ObjTokeiStep *this, GlobalContext *globalCtx) {
     s32 pad[2];
     s16 idx;
 
@@ -75,7 +75,7 @@ void func_80AD5BE8(ObjTokeiStep *this, GlobalContext *globalCtx) {
     func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 0x78, 0x14, 0xA);
 }
 
-void func_80AD5C70(ObjTokeiStep *this, ObjTokeiStepStep *step, GlobalContext *globalCtx) {
+void ObjTokeiStep_SpawnDust(ObjTokeiStep *this, ObjTokeiStepStep *step, GlobalContext *globalCtx) {
     s32 i;
     s32 pad;
     Vec3f sp84;
@@ -88,14 +88,14 @@ void func_80AD5C70(ObjTokeiStep *this, ObjTokeiStepStep *step, GlobalContext *gl
     for (i=0; i<7; i++) {
         sp84.x = D_80AD663C[i];
         SysMatrix_MultiplyVector3fByState(&sp84, &sp78);
-        sp78.x += step->unk0.x;
-        sp78.y += step->unk0.y;
-        sp78.z += step->unk0.z;
+        sp78.x += step->pos.x;
+        sp78.y += step->pos.y;
+        sp78.z += step->pos.z;
         func_800B1210(globalCtx, &sp78, &D_801D15B0, &D_80AD6658, (s32) ((Rand_ZeroOne() * 40.0f) + 80.0f), (s32) ((Rand_ZeroOne() * 20.0f) + 50.0f));
     }
 }
 
-void func_80AD5DFC(ObjTokeiStep *this) {
+void ObjTokeiStep_InitSteps(ObjTokeiStep *this) {
     s32 i;
     ObjTokeiStepStep *step;
     Vec3f sp4c;
@@ -108,13 +108,13 @@ void func_80AD5DFC(ObjTokeiStep *this) {
     for (i=0; i<7; i++) {
         step = &this->steps[i];
         sp4c.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&sp4c, &step->unk0);
-        step->unkc = 0.0f;
-        step->unk12 = 0;
+        SysMatrix_MultiplyVector3fByState(&sp4c, &step->pos);
+        step->posChangeY = 0.0f;
+        step->numBounces = 0;
     }
 }
 
-void func_80AD5EB8(ObjTokeiStep *this) {
+void ObjTokeiStep_InitStepsOpen(ObjTokeiStep *this) {
     s32 i;
     ObjTokeiStepStep *step;
     Vec3f sp44;
@@ -126,68 +126,68 @@ void func_80AD5EB8(ObjTokeiStep *this) {
         step = &this->steps[i];
         sp44.y = D_80AD6620[i];
         sp44.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&sp44, &step->unk0);
+        SysMatrix_MultiplyVector3fByState(&sp44, &step->pos);
     }
 }
 
-void func_80AD5F70(ObjTokeiStep *this) {
+void ObjTokeiStep_InitTimers(ObjTokeiStep *this) {
     s32 i;
 
-    this->steps[0].unk10 = 0;
+    this->steps[0].startFallingTimer = 0;
     for (i=1; i<7; i++) {
-        this->steps[i].unk10 = 0xA;
+        this->steps[i].startFallingTimer = 10;
     }
 }
 
-s32 func_80AD5FB0(ObjTokeiStep *this, GlobalContext *globalCtx) {
+s32 ObjTokeiStep_OpenProcess(ObjTokeiStep *this, GlobalContext *globalCtx) {
     ObjTokeiStep *this2 = this;
     s32 i;
     ObjTokeiStepStep *step;
-    f32 ftemp;
-    s32 ret = 1;
-    s32 phi_v1 = 1;
+    f32 finalPosY;
+    s32 isOpen = 1;
+    s32 prevBounced = 1;
 
     for (i=0; i<7; i++) {
         step = &this->steps[i];
-        if (phi_v1 && step->unk10 > 0) {
-            step->unk10--;
-            ret = 0;
+        if (prevBounced && step->startFallingTimer > 0) {
+            step->startFallingTimer--;
+            isOpen = 0;
         }
-        if (phi_v1 && step->unk12 < 3 && step->unk10 <= 0){
-            ftemp = D_80AD6620[i] + this->dyna.actor.world.pos.y;
-            if (step->unk13 == 0) {
+        if (prevBounced && step->numBounces < 3 && step->startFallingTimer <= 0){
+            finalPosY = D_80AD6620[i] + this->dyna.actor.world.pos.y;
+            if (!step->hasSoundPlayed) {
                 Audio_PlayActorSound2(&this->dyna.actor, 0x2945);
-                step->unk13 = 1;
+                step->hasSoundPlayed = true;
             }
-            step->unkc += -2.5f;
-            step->unkc *= 0.83f;
-            step->unk0.y += step->unkc;
-            ret = 0;
-            if (step->unk0.y < ftemp) {
-                step->unk12++;
-                if (step->unk12 >= 3) {
-                    step->unk0.y = ftemp;
+            step->posChangeY += -2.5f;
+            step->posChangeY *= 0.83f;
+            step->pos.y += step->posChangeY;
+            isOpen = 0;
+            if (step->pos.y < finalPosY) {
+                step->numBounces++;
+                if (step->numBounces >= 3) {
+                    step->pos.y = finalPosY;
                 } else {
-                    step->unkc *= -0.4f;
-                    if (step->unkc > 4.0f) {
-                        step->unkc = 4.0f;
+                    step->posChangeY *= -0.4f;
+                    if (step->posChangeY > 4.0f) {
+                        step->posChangeY = 4.0f;
                     }
-                    step->unk0.y = (step->unk0.y - ftemp) * -0.4f;
-                    if (step->unkc < step->unk0.y) {
-                        step->unk0.y = step->unkc + ftemp;
+                    step->pos.y = (step->pos.y - finalPosY) * -0.4f;
+                    if (step->posChangeY < step->pos.y) {
+                        step->pos.y = step->posChangeY + finalPosY;
                     } else {
-                        step->unk0.y += ftemp;
+                        step->pos.y += finalPosY;
                     }
-                    if (step->unk12 == 1) {
-                        func_80AD5C70(this2, step, globalCtx);
-                        func_80AD5BE8(this2, globalCtx);
+                    if (step->numBounces == 1) {
+                        ObjTokeiStep_SpawnDust(this2, step, globalCtx);
+                        ObjTokeiStep_AddQuake(this2, globalCtx);
                     }
                 }
             }
         }
-        phi_v1 = step->unk12 > 0;
+        prevBounced = step->numBounces > 0;
     }
-    return ret;
+    return isOpen;
 }
 
 void ObjTokeiStep_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -197,17 +197,17 @@ void ObjTokeiStep_Init(Actor *thisx, GlobalContext *globalCtx) {
     BcCheck3_BgActorInit(&this->dyna, 0);
     if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.extra.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
-        func_80AD5DFC(this);
-        func_80AD6348(this);
+        ObjTokeiStep_InitSteps(this);
+        ObjTokeiStep_SetBeginCutscene(this);
     }
     else if (!((((s32) gSaveContext.perm.day % 5) != 3) || (gSaveContext.perm.time >= 0x4000)) || (s32) gSaveContext.perm.day >= 4) {
-        this->dyna.actor.draw = func_80AD6508;
-        func_80AD5EB8(this);
-        func_80AD6480(this);
+        this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
+        ObjTokeiStep_InitStepsOpen(this);
+        ObjTokeiStep_SetDoNothingOpen(this);
     } else {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
-        func_80AD5DFC(this);
-        func_80AD63D4(this);
+        ObjTokeiStep_InitSteps(this);
+        ObjTokeiStep_SetDoNothing(this);
     }
 }
 
@@ -218,47 +218,47 @@ void ObjTokeiStep_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 
-void func_80AD6348(ObjTokeiStep *this) {
-    this->actionFunc = func_80AD635C;
+void ObjTokeiStep_SetBeginCutscene(ObjTokeiStep *this) {
+    this->actionFunc = ObjTokeiStep_SetupCutscene;
 }
 
-void func_80AD635C(ObjTokeiStep *this, GlobalContext *globalCtx) {
+void ObjTokeiStep_SetupCutscene(ObjTokeiStep *this, GlobalContext *globalCtx) {
     CsCmdActorAction *action;
 
     if (func_800EE29C(globalCtx, 0x86)) {
         action = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x86)];
         if ((globalCtx->csCtx.frames == (*action).startFrame) && action->unk0) {
-            this->dyna.actor.draw = func_80AD6508;
-            func_80AD63F8(this);
+            this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
+            ObjTokeiStep_BeginCutscene(this);
         }
     }
 }
 
-void func_80AD63D4(ObjTokeiStep *this) {
-    this->actionFunc = func_80AD63E8;
+void ObjTokeiStep_SetDoNothing(ObjTokeiStep *this) {
+    this->actionFunc = ObjTokeiStep_DoNothing;
 }
 
-void func_80AD63E8(ObjTokeiStep *this, GlobalContext *globalCtx) {
+void ObjTokeiStep_DoNothing(ObjTokeiStep *this, GlobalContext *globalCtx) {
 }
 
-void func_80AD63F8(ObjTokeiStep *this) {
-    func_80AD5F70(this);
-    this->actionFunc = func_80AD642C;
+void ObjTokeiStep_BeginCutscene(ObjTokeiStep *this) {
+    ObjTokeiStep_InitTimers(this);
+    this->actionFunc = ObjTokeiStep_Open;
 }
 
-void func_80AD642C(ObjTokeiStep *this, GlobalContext *globalCtx) {
-    if (func_80AD5FB0(this, globalCtx) != 0) {
+void ObjTokeiStep_Open(ObjTokeiStep *this, GlobalContext *globalCtx) {
+    if (ObjTokeiStep_OpenProcess(this, globalCtx)) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        func_80AD6480(this);
+        ObjTokeiStep_SetDoNothingOpen(this);
     }
 }
 
-void func_80AD6480(ObjTokeiStep *this) {
+void ObjTokeiStep_SetDoNothingOpen(ObjTokeiStep *this) {
     this->dyna.actor.flags &= ~0x10;
-    this->actionFunc = func_80AD64A4;
+    this->actionFunc = ObjTokeiStep_DoNothingOpen;
 }
 
-void func_80AD64A4(ObjTokeiStep *this, GlobalContext *globalCtx) {
+void ObjTokeiStep_DoNothingOpen(ObjTokeiStep *this, GlobalContext *globalCtx) {
 }
 
 void ObjTokeiStep_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -273,7 +273,7 @@ void ObjTokeiStep_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800BDFC0(globalCtx, D_06000088);
 }
 
-void func_80AD6508(Actor *thisx, GlobalContext *globalCtx) {
+void ObjTokeiStep_DrawOpen(Actor *thisx, GlobalContext *globalCtx) {
     ObjTokeiStep *this = THIS;
     int i;
     ObjTokeiStepStep *step;
@@ -285,7 +285,7 @@ void func_80AD6508(Actor *thisx, GlobalContext *globalCtx) {
 
     for(i=0; i<7; i++) {
         step = &this->steps[i];
-        func_80AD5BB0(step);
+        ObjTokeiStep_SetSysMatrix(step);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, D_06000088);
     }
