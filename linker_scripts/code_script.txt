@@ -4132,9 +4132,9 @@ SECTIONS
     ovl_Obj_Funen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.text)
-        build/asm/overlays/ovl_Obj_Funen_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.data)
         build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.rodata)
-        build/asm/overlays/ovl_Obj_Funen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
