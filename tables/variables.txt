@@ -10539,7 +10539,7 @@
     0x809A6150:("Obj_Boyo_InitVars","UNK_TYPE1","",0x1),
     0x809A6170:("D_809A6170","UNK_TYPE1","",0x1),
     0x809A619C:("D_809A619C","UNK_TYPE1","",0x1),
-    0x809A61B0:("D_809A61B0","UNK_TYPE1","",0x1),
+    0x809A61B0:("sBumperCollideInfo","UNK_TYPE1","",0x1),
     0x809A61B4:("D_809A61B4","UNK_TYPE2","",0x2),
     0x809A61D0:("D_809A61D0","f32","",0x4),
     0x809A61D4:("D_809A61D4","f32","",0x4),

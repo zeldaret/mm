@@ -24,7 +24,7 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     UNK_TYPE pad0;
     UNK_TYPE pad1;
-    BgMeshHeader* header = 0;
+    CollisionHeader* header = 0;
 
     Actor_SetScale(thisx, 1.0);
     BcCheck3_BgActorInit(&THIS->bg, 3);

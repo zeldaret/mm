@@ -192,21 +192,21 @@ void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry) {
 
 // Scene Command 0x03: Collision Header
 void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
-    BgMeshHeader* temp_ret;
-    BgMeshHeader* temp_s0;
+    CollisionHeader* temp_ret;
+    CollisionHeader* temp_s0;
 
-    temp_ret = (BgMeshHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
+    temp_ret = (CollisionHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
     temp_s0 = temp_ret;
-    temp_s0->vertices = (BgVertex*)Lib_SegmentedToVirtual(temp_ret->vertices);
-    temp_s0->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(temp_s0->polygons);
-    if (temp_s0->attributes != 0) {
-        temp_s0->attributes = (BgPolygonAttributes*)Lib_SegmentedToVirtual(temp_s0->attributes);
+    temp_s0->vtxList = (Vec3s*)Lib_SegmentedToVirtual(temp_ret->vtxList);
+    temp_s0->polyList = (CollisionPoly*)Lib_SegmentedToVirtual(temp_s0->polyList);
+    if (temp_s0->surfaceTypeList != 0) {
+        temp_s0->surfaceTypeList = (SurfaceType*)Lib_SegmentedToVirtual(temp_s0->surfaceTypeList);
     }
-    if (temp_s0->cameraData != 0) {
-        temp_s0->cameraData = (void*)Lib_SegmentedToVirtual(temp_s0->cameraData);
+    if (temp_s0->cameraDataList != 0) {
+        temp_s0->cameraDataList = (void*)Lib_SegmentedToVirtual(temp_s0->cameraDataList);
     }
-    if (temp_s0->waterboxes != 0) {
-        temp_s0->waterboxes = (BgWaterBox*)Lib_SegmentedToVirtual(temp_s0->waterboxes);
+    if (temp_s0->waterBoxes != 0) {
+        temp_s0->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(temp_s0->waterBoxes);
     }
 
     BgCheck_Init(&ctxt->colCtx, ctxt, temp_s0);
@@ -215,7 +215,7 @@ void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
 // Scene Command 0x04: Room List
 void Scene_HeaderCommand04(GlobalContext* ctxt, SceneCmd* entry) {
     ctxt->numRooms = entry->roomList.num;
-    ctxt->roomList = (RoomFileLocation*)Lib_SegmentedToVirtual(entry->roomList.segment);
+    ctxt->roomList = (RomFile*)Lib_SegmentedToVirtual(entry->roomList.segment);
 }
 
 // Scene Command 0x06: Entrance List
