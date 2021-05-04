@@ -39,7 +39,7 @@ const ActorInit Obj_Tokei_Step_InitVars = {
 
 extern Gfx D_06000088[];
 
-extern BgMeshHeader D_06000968;
+extern CollisionHeader D_06000968;
 
 static f32 D_80AD6620[] = {-105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f};
 
@@ -66,12 +66,12 @@ void ObjTokeiStep_SetSysMatrix(ObjTokeiStepStep *step) {
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep *this, GlobalContext *globalCtx) {
     s32 pad[2];
-    s16 idx;
+    s16 quake;
 
-    idx = Quake_Add(ACTIVE_CAM, 3);
-    Quake_SetSpeed(idx, 0x4E20);
-    Quake_SetQuakeValues(idx, 1, 0, 0, 0);
-    Quake_SetCountdown(idx, 7);
+    quake = Quake_Add(ACTIVE_CAM, 3);
+    Quake_SetSpeed(quake, 0x4E20);
+    Quake_SetQuakeValues(quake, 1, 0, 0, 0);
+    Quake_SetCountdown(quake, 7);
     func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 0x78, 0x14, 0xA);
 }
 
