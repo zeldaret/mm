@@ -10,6 +10,8 @@
 
 #define THIS ((BgCtowerGear*)thisx)
 
+#define GET_TYPE(this) (((BgCtowerGear*)this)->dyna.actor.params & 3)
+
 typedef enum {
     /* 0x00 */ CEILING_COG,
     /* 0x01 */ CENTER_COG,
@@ -139,7 +141,7 @@ void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = this->dyna.actor.params & 3;
+    type = GET_TYPE(this);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     if (type == CENTER_COG) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain1);
@@ -164,8 +166,8 @@ void BgCtowerGear_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = this->dyna.actor.params & 3;
-    if ((type == 2) || (type == 3)) {
+    type = GET_TYPE(this);
+    if ((type == WATER_WHEEL) || (type == ORGAN)) {
         BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -174,7 +176,7 @@ void BgCtowerGear_Update(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = this->dyna.actor.params & 3;
+    type = GET_TYPE(this);
     if (type == CEILING_COG) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     }
