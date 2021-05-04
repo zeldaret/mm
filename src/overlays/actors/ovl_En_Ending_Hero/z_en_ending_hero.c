@@ -86,13 +86,13 @@ void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_80C1E970[this->unk242]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1E970[this->unk242]));
 
     if (this->unk242 < 3) {
         index = this->unk242;
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_PtrSegToVirt(D_80C1E984[index]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1E984[index]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
                      &this->actor);
 

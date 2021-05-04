@@ -2,18 +2,19 @@
 #define _MACROS_H_
 
 #include "convert.h"
+#include "stdint.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
 #define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
 
-// UB: u32 casts here should be uintptr_t casts.
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((u32)(addr) + 0x80000000)
-#define PHYSICAL_TO_VIRTUAL2(addr) ((u32)(addr) - 0x80000000)
-#define VIRTUAL_TO_PHYSICAL(addr) (u32)((u8*)(addr) - 0x80000000)
+#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + 0x80000000)
+#define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr) - 0x80000000)
+#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - 0x80000000)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
+
 
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
@@ -55,6 +56,21 @@ extern GraphicsContext* __gfxCtx;
     }                                       \
     (void)0
 
+/**
+ * `x` vertex x
+ * `y` vertex y
+ * `z` vertex z
+ * `s` texture s coordinate
+ * `t` texture t coordinate
+ * `crnx` red component of color vertex, or x component of normal vertex
+ * `cgny` green component of color vertex, or y component of normal vertex
+ * `cbnz` blue component of color vertex, or z component of normal vertex
+ * `a` alpha
+ */
+#define VTX(x,y,z,s,t,crnx,cgny,cbnz,a) { { { x, y, z }, 0, { s, t }, { crnx, cgny, cbnz, a } } }
+
+#define VTX_T(x,y,z,s,t,cr,cg,cb,a) { { x, y, z }, 0, { s, t }, { cr, cg, cb, a } }
+
 #define GRAPH_ALLOC(gfxCtx, size)         \
     ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
 
@@ -69,5 +85,12 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max)  ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min)  ((x) < (min) ? (min) : (x))
+
+#define SWAP(type, a, b) \
+{                        \
+    type _temp = (a);    \
+    (a) = (b);           \
+    (b) = _temp;         \
+}
 
 #endif // _MACROS_H_

@@ -283,7 +283,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
 // levitate
 void func_80931138(EnTuboTrap *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y += 5000;
-    Math_SmoothScaleMaxF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
+    Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
         this->actor.speedXZ = 10.0f;
@@ -301,7 +301,7 @@ void func_809311C4(EnTuboTrap *this, GlobalContext *globalCtx) {
     Audio_PlayActorSound2(&this->actor, 0x3037);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > 57600.0f)) { //240.0f ^ 2
-        Math_SmoothScaleMaxF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
     this->actor.shape.rot.y += 5000;

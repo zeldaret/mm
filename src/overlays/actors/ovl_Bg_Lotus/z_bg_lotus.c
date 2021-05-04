@@ -1,6 +1,6 @@
 /*
  * File: z_bg_lotus.c
- * Overlay: Bg_Lotus
+ * Overlay: ovl_Bg_Lotus
  * Description: Southern Swamp Lilypads
  */
 
@@ -35,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000A20; // Lilypad collision
+extern CollisionHeader D_06000A20; // Lilypad collision
 extern Gfx D_06000040[];        // Lilypad model
 
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -135,7 +135,7 @@ void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
         this->timer--;
         BgLotus_SetScaleXZ(this);
     } else {
-        if (Lib_StepTowardsCheck_f(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
