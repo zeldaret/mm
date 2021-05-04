@@ -18,7 +18,7 @@ void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx);
 void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx);
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx);
-void func_80A663E8(EnWarpUzu* this, GlobalContext* globalCtx);
+void EnWarpUzu_DoNothing(EnWarpUzu* this, GlobalContext* globalCtx);
 
 const ActorInit En_Warp_Uzu_InitVars = {
     ACTOR_EN_WARP_UZU,
@@ -116,10 +116,10 @@ void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     gSaveContext.extra.unk24 = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx);
     gSaveContext.extra.unk10 = -2;
-    this->actionFunc = func_80A663E8;
+    this->actionFunc = EnWarpUzu_DoNothing;
 }
 
-void func_80A663E8(EnWarpUzu* this, GlobalContext* globalCtx) {
+void EnWarpUzu_DoNothing(EnWarpUzu* this, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
