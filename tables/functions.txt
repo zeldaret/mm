@@ -12169,7 +12169,7 @@
     0x80AD1DA8:("func_80AD1DA8",),
     0x80AD1E28:("func_80AD1E28",),
     0x80AD1F88:("EnOsn_Draw",),
-    0x80AD2B70:("func_80AD2B70",),
+    0x80AD2B70:("BgCtowerGear_Splash",),
     0x80AD2E84:("BgCtowerGear_Init",),
     0x80AD2F8C:("BgCtowerGear_Destroy",),
     0x80AD2FD8:("BgCtowerGear_Update",),
