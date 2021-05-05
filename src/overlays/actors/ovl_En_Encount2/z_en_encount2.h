@@ -8,12 +8,12 @@ typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 typedef struct EnEncount2Particle{
    /* 0x00 */ u8 enabled;
    /* 0x01 */ u8 pad1[3];
-   /* 0x04 */ Vec3f unk4; // pos?
+   /* 0x04 */ Vec3f pos;
    /* 0x10 */ u8 pad10[0x4];
    /* 0x14 */ s16 alpha;
    /* 0x16 */ s16 alphaFadeDelay; // frame count before alpha fade starts
-   /* 0x18 */ Vec3f unk18; // vel?
-   /* 0x24 */ Vec3f unk24; // accel?
+   /* 0x18 */ Vec3f vel;
+   /* 0x24 */ Vec3f accel;
    /* 0x30 */ f32 scale;
 
 } EnEncount2Particle; // size = 0x34
@@ -24,7 +24,7 @@ typedef struct EnEncount2 {
     /* 0x0000 */ DynaPolyActor dynaActor;
     /* 0x015C */ EnEncount2ActionFunc actionFunc;
     /* 0x0160 */ s16 deathTimer;
-    /* 0x0162 */ s16 statePopped;
+    /* 0x0162 */ s16 isPopped;
     /* 0x0164 */ s16 switchFlag;
     /* 0x0168 */ f32 scale;
     /* 0x016C */ f32 oscillationAngle;

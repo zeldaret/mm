@@ -9,13 +9,13 @@ void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808E1714(EnEncount2* this, GlobalContext* globalCtx);
-void func_808E17C4(EnEncount2* this, GlobalContext* globalCtx);
-void func_808E18A8(EnEncount2* this, GlobalContext* globalCtx);
-void func_808E16FC(EnEncount2* this);
-void func_808E1A24(EnEncount2* this, Vec3f* vec, s16 arg2);
-void func_808E1B4C(EnEncount2* this, GlobalContext* globalCtx);
-void func_808E1C9C(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_SetIdle(EnEncount2* this);
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 arg2);
+void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx);
 
 const ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
@@ -67,8 +67,8 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->switchFlag = -1;
     }
 
-    if ((this->switchFlag >= 0) && (Actor_GetSwitchFlag(globalCtx, this->switchFlag) != 0)) {
-        Actor_MarkForDeath(this);
+    if ((this->switchFlag >= 0) && (Actor_GetSwitchFlag(globalCtx, this->switchFlag))) {
+        Actor_MarkForDeath(&this->dynaActor.actor);
         return;
     }
 
@@ -79,7 +79,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements->dim.modelSphere.center.z = 0;
 
     this->dynaActor.actor.colChkInfo.damageTable = &damageTable;
-    func_808E16FC(this);
+    EnEncount2_SetIdle(this);
 }
 
 void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -88,26 +88,23 @@ void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-// init extension func
-void func_808E16FC(EnEncount2* this) {
-    this->statePopped = 0;
-    this->actionFunc = &func_808E1714;
+void EnEncount2_SetIdle(EnEncount2* this) {
+    this->isPopped = 0;
+    this->actionFunc = &EnEncount2_Idle;
 }
 
-//actionfunc: idle floating
-void func_808E1714(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
     this->oscillationAngle += 1500.0f;
     this->dynaActor.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
     if (((this->collider.base.acFlags & AC_HIT) != 0) && (this->dynaActor.actor.colChkInfo.damageEffect == 0xE)) {
         this->dynaActor.actor.colChkInfo.health = 0;
-        this->statePopped = 1;
-        this->actionFunc = func_808E17C4; // pop
+        this->isPopped = 1;
+        this->actionFunc = EnEncount2_Popped;
     }
 }
 
-//actionfunc: pop
-void func_808E17C4(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f curPos;
 
@@ -116,17 +113,16 @@ void func_808E17C4(EnEncount2* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z,
        0xFF, 0xFF, 0xC8, 0x0001);
 
-    for(i = 0; i != 100; i++){
-        func_808E1A24(this, &curPos, 10); // init particle
+    for(i = 0; i != 100; ++i){
+        EnEncount2_InitParticles(this, &curPos, 10);
     }
 
     Audio_PlayActorSound2(this, 0x2949);
     this->deathTimer = 30;
-    this->actionFunc = func_808E18A8; // post-pop
+    this->actionFunc = EnEncount2_Die;
 }
 
-//actionfunc: after pop, waiting for timer then death
-void func_808E18A8(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlag);
@@ -139,18 +135,19 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s8 pad[4];
 
-    if (this->deathTimer != 0) {
-        this->deathTimer--;
-    }
+    DECR(this->deathTimer);
+    //if (this->deathTimer != 0) {
+        //this->deathTimer--;
+    //}
 
     this->dynaActor.actor.shape.rot.y = this->dynaActor.actor.world.rot.y;
     Actor_SetHeight(&this->dynaActor.actor, 30.0f);
     Actor_SetScale(&this->dynaActor.actor, this->scale);
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->dynaActor.actor);
-    func_808E1B4C(this, globalCtx); // update all particles
+    EnEncount2_UpdateParticles(this, globalCtx);
 
-    if (! this->statePopped) {
+    if (! this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dynaActor.actor);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
@@ -159,32 +156,31 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    if (this->statePopped != 1) { // is NOT popped (0 only other option)
+    if (this->isPopped != 1) {
         func_800BDFC0(globalCtx, &D_06000A00);
         func_800BDFC0(globalCtx, &D_06000D78);
     }
-    func_808E1C9C(this, globalCtx);
+    EnEncount2_DrawParticles(this, globalCtx);
 }
 
-// init all particles
-void func_808E1A24(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
     s16 i;
     EnEncount2Particle *sPtr = &this->particles;
 
     for (i = 0; i < 200; ++i) {
         if ( ! sPtr->enabled) {
             sPtr->enabled = 1;
-            sPtr->unk4 = *vec;
+            sPtr->pos = *vec;
             sPtr->alphaFadeDelay = fadeDelay;
             sPtr->alpha = 0xFF;
 
-            sPtr->unk24.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->unk24.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->unk24.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            sPtr->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
 
-            sPtr->unk18.x = Rand_ZeroOne() - 0.5f;
-            sPtr->unk18.y = Rand_ZeroOne() - 0.5f;
-            sPtr->unk18.z = Rand_ZeroOne() - 0.5f;
+            sPtr->vel.x = Rand_ZeroOne() - 0.5f;
+            sPtr->vel.y = Rand_ZeroOne() - 0.5f;
+            sPtr->vel.z = Rand_ZeroOne() - 0.5f;
 
             sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
@@ -193,19 +189,18 @@ void func_808E1A24(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
     }
 }
 
-// updates all effect structs
-void func_808E1B4C(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     EnEncount2Particle *sPtr = &this->particles;
 
     for(i = 0 ; i < 200; i += 2) {
         if (sPtr->enabled) {
-            sPtr->unk4.x += sPtr->unk18.x;
-            sPtr->unk4.y += sPtr->unk18.y;
-            sPtr->unk4.z += sPtr->unk18.z;
-            sPtr->unk18.x += sPtr->unk24.x;
-            sPtr->unk18.y += sPtr->unk24.y;
-            sPtr->unk18.z += sPtr->unk24.z;
+            sPtr->pos.x += sPtr->vel.x;
+            sPtr->pos.y += sPtr->vel.y;
+            sPtr->pos.z += sPtr->vel.z;
+            sPtr->vel.x += sPtr->accel.x;
+            sPtr->vel.y += sPtr->accel.y;
+            sPtr->vel.z += sPtr->accel.z;
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
@@ -218,12 +213,12 @@ void func_808E1B4C(EnEncount2* this, GlobalContext* globalCtx) {
         sPtr++;
 
         if (sPtr->enabled) {
-            sPtr->unk4.x += sPtr->unk18.x;
-            sPtr->unk4.y += sPtr->unk18.y;
-            sPtr->unk4.z += sPtr->unk18.z;
-            sPtr->unk18.x += sPtr->unk24.x;
-            sPtr->unk18.y += sPtr->unk24.y;
-            sPtr->unk18.z += sPtr->unk24.z;
+            sPtr->pos.x += sPtr->vel.x;
+            sPtr->pos.y += sPtr->vel.y;
+            sPtr->pos.z += sPtr->vel.z;
+            sPtr->vel.x += sPtr->accel.x;
+            sPtr->vel.y += sPtr->accel.y;
+            sPtr->vel.z += sPtr->accel.z;
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
@@ -237,5 +232,4 @@ void func_808E1B4C(EnEncount2* this, GlobalContext* globalCtx) {
     }
 }
 
-// draw particles
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/func_808E1C9C.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/EnEncount2_DrawParticles.asm")
