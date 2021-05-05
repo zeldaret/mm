@@ -8444,9 +8444,9 @@ SECTIONS
     ovl_En_Cha : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.text)
-        build/asm/overlays/ovl_En_Cha_data.o(.data)
+        build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.data)
         build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.rodata)
-        build/asm/overlays/ovl_En_Cha_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Cha/z_en_cha_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
