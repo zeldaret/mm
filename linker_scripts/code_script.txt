@@ -7518,9 +7518,9 @@ SECTIONS
     ovl_En_Jc_Mato : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.text)
-        build/asm/overlays/ovl_En_Jc_Mato_data.o(.data)
+        build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.data)
         build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.rodata)
-        build/asm/overlays/ovl_En_Jc_Mato_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
