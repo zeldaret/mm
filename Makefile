@@ -127,8 +127,6 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .PHONY: all clean setup diff-init init
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
-# .DELETE_ON_ERROR is a GNU extension, but is not required for building
-.DELETE_ON_ERROR:
 .DEFAULT_GOAL := all
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
@@ -172,14 +170,14 @@ build/binary/overlays/%: build/code.elf
 	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 asm/non_matchings/%/dep: asm/%.asm
-	./tools/split_asm.py $< asm/non_matchings/$*
 	@touch $@
+	./tools/split_asm.py $< asm/non_matchings/$* || rm $@
 
 asm/%.asm: asm/disasm.dep ;
 
 asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
-	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
 	@touch $@
+	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
 
 clean:
 	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
