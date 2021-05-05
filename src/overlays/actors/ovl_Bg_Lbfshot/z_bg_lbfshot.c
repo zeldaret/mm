@@ -8,7 +8,6 @@ void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Lbfshot_InitVars = {
     ACTOR_BG_LBFSHOT,
     ACTORCAT_BG,
@@ -20,10 +19,27 @@ const ActorInit Bg_Lbfshot_InitVars = {
     (ActorFunc)func_800BDFB0,
     (ActorFunc)BgLbfshot_Draw
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Init.asm")
+static InitChainEntry D_80C18200[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Destroy.asm")
+extern CollisionHeader D_060014D8;
+extern UNK_TYPE D_06000228;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Draw.asm")
+void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgLbfshot* this = THIS;
+
+    Actor_ProcessInitChain(&this->dyna.actor, D_80C18200);
+    this->dyna.actor.uncullZoneForward = 4000.0f;
+    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060014D8);
+}
+void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgLbfshot* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
+void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, &D_06000228);
+}
