@@ -1706,9 +1706,9 @@ SECTIONS
     ovl_Bg_Ctower_Rot : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Ctower_Rot/z_bg_ctower_rot.o(.text)
-        build/asm/overlays/ovl_Bg_Ctower_Rot_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Ctower_Rot/z_bg_ctower_rot.o(.data)
         build/src/overlays/actors/ovl_Bg_Ctower_Rot/z_bg_ctower_rot.o(.rodata)
-        build/asm/overlays/ovl_Bg_Ctower_Rot_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Ctower_Rot/z_bg_ctower_rot_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
