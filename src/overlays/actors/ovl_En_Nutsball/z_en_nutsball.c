@@ -9,7 +9,7 @@ void EnNutsball_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80985D3C(EnNutsball* this);
+void EnNutsball_InitColliderParams(EnNutsball* this);
 
 
 const ActorInit En_Nutsball_InitVars = {
@@ -53,17 +53,17 @@ void EnNutsball_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.speedXZ = 10.0f;
     if (this->actor.params == 2) {
         this->timer = 1;
-        this->startTimeOC = 0;
+        this->timerThreshold = 0;
         this->actor.gravity = -1.0f;
     } else {
         this->timer = 20;
-        this->startTimeOC = 19;
+        this->timerThreshold = 19;
         this->actor.gravity = -0.5f;
     }
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.shape.rot.x = 0;
     if (this->actor.params == 1) {
-        func_80985D3C(this);
+        EnNutsball_InitColliderParams(this);
     }
 }
 
@@ -72,7 +72,7 @@ void EnNutsball_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80985D3C(EnNutsball *this) {
+void EnNutsball_InitColliderParams(EnNutsball *this) {
     this->collider.base.atFlags &= ~AT_TYPE_ENEMY & ~AT_BOUNCED & ~AT_HIT;
     this->collider.base.atFlags |= AT_TYPE_PLAYER;
     this->collider.info.toucher.dmgFlags = 0x400000;
@@ -85,7 +85,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     
     ActorPlayer *player = PLAYER;
     Vec3f worldPos;
-    Vec3s sp58;
+    Vec3s worldRot;
     Vec3f spawnBurstPos;
     f32 spdXZ;
     u32 bgId;
@@ -101,9 +101,9 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) || (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
             if ((player->unk144 == 1) && (this->collider.base.atFlags & AT_HIT) && (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
-                func_80985D3C(this);
-                func_8018219C(&player->unkD04, &sp58, 0);
-                this->actor.world.rot.y = sp58.y + 0x8000;
+                EnNutsball_InitColliderParams(this);
+                func_8018219C(&player->unkD04, &worldRot, 0);
+                this->actor.world.rot.y = worldRot.y + 0x8000;
                 this->timer = 20;
             } else {
                 spawnBurstPos.x = this->actor.world.pos.x;
@@ -149,7 +149,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         
-        if (this->timer < this->startTimeOC) {
+        if (this->timer < this->timerThreshold) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         }
     }
