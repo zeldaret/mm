@@ -123,7 +123,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 extern Gfx D_06000390[];
-Vec3f targetMovementScalar = { 0.0f, -2500.0f, 0.0f };
+Vec3f movement = { 0.0f, -2500.0f, 0.0f };
 
 void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
@@ -132,6 +132,6 @@ void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000390);
-    SysMatrix_MultiplyVector3fByState(&targetMovementScalar, &this->pos);
+    SysMatrix_MultiplyVector3fByState(&movement, &this->pos);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
