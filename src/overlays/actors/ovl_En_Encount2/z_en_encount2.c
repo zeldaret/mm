@@ -29,14 +29,14 @@ const ActorInit En_Encount2_InitVars = {
     (ActorFunc)EnEncount2_Draw
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit[1] = { // D_808E1EF0
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
     },
 };
 
-static ColliderJntSphInit sJntSphInit = { // D_808E1F14 
+static ColliderJntSphInit sJntSphInit = {
     { COLTYPE_HARD, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, sJntSphElementsInit,
 };
@@ -136,9 +136,6 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     s8 pad[4];
 
     DECR(this->deathTimer);
-    //if (this->deathTimer != 0) {
-        //this->deathTimer--;
-    //}
 
     this->dynaActor.actor.shape.rot.y = this->dynaActor.actor.world.rot.y;
     Actor_SetHeight(&this->dynaActor.actor, 30.0f);
