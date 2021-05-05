@@ -90,7 +90,7 @@ static Gfx* D_80AD32E8[] = {D_06010828, D_06017018, D_06018118};
 void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
     int i;
     s32 sp88;
-    Vec3f sp7C;
+    Vec3f splashSpawnPos;
     Vec3f sp70;
     s32 pad;
     int j;
@@ -107,11 +107,11 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
                 sp70.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
                 sp70.y = D_80AD3270[i].y;
                 sp70.z = D_80AD3270[i].z;
-                SysMatrix_MultiplyVector3fByState(&sp70, &sp7C);
-                sp7C.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                sp7C.y += this->dyna.actor.world.pos.y;
-                sp7C.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(GlobalContext, &sp7C, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 340);
+                SysMatrix_MultiplyVector3fByState(&sp70, &splashSpawnPos);
+                splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
+                splashSpawnPos.y += this->dyna.actor.world.pos.y;
+                splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
+                EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 340);
             }
         }
     }
@@ -125,11 +125,11 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
                     sp70.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
                     sp70.y = D_80AD32A0[i].y;
                     sp70.z = D_80AD32A0[i].z;
-                    SysMatrix_MultiplyVector3fByState(&sp70, &sp7C);
-                    sp7C.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    sp7C.y += this->dyna.actor.world.pos.y;
-                    sp7C.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(GlobalContext, &sp7C, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 280);
+                    SysMatrix_MultiplyVector3fByState(&sp70, &splashSpawnPos);
+                    splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
+                    splashSpawnPos.y += this->dyna.actor.world.pos.y;
+                    splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
+                    EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 280);
                 }
             }
         }
@@ -212,7 +212,7 @@ void BgCtowerGear_UpdateOrgan(Actor *thisx, GlobalContext *globalCtx) {
 
 //Using BgCtowerGear *this = THIS causes regalloc issues
 void BgCtowerGear_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    func_800BDFC0(globalCtx, D_80AD32E8[thisx->params & 3]);
+    func_800BDFC0(globalCtx, D_80AD32E8[GET_TYPE(thisx)]);
 }
 
 void BgCtowerGear_DrawOrgan(Actor *thisx, GlobalContext *globalCtx) {
