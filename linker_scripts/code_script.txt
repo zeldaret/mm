@@ -4132,9 +4132,9 @@ SECTIONS
     ovl_Obj_Funen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.text)
-        build/asm/overlays/ovl_Obj_Funen_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.data)
         build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen.o(.rodata)
-        build/asm/overlays/ovl_Obj_Funen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Funen/z_obj_funen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -4969,9 +4969,9 @@ SECTIONS
     ovl_En_Warp_Uzu : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Warp_Uzu/z_en_warp_uzu.o(.text)
-        build/asm/overlays/ovl_En_Warp_Uzu_data.o(.data)
+        build/src/overlays/actors/ovl_En_Warp_Uzu/z_en_warp_uzu.o(.data)
         build/src/overlays/actors/ovl_En_Warp_Uzu/z_en_warp_uzu.o(.rodata)
-        build/asm/overlays/ovl_En_Warp_Uzu_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Warp_Uzu/z_en_warp_uzu_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8444,9 +8444,9 @@ SECTIONS
     ovl_En_Cha : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.text)
-        build/asm/overlays/ovl_En_Cha_data.o(.data)
+        build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.data)
         build/src/overlays/actors/ovl_En_Cha/z_en_cha.o(.rodata)
-        build/asm/overlays/ovl_En_Cha_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Cha/z_en_cha_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8772,9 +8772,9 @@ SECTIONS
     ovl_Obj_Kepn_Koya : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.text)
-        build/asm/overlays/ovl_Obj_Kepn_Koya_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.data)
         build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya.o(.rodata)
-        build/asm/overlays/ovl_Obj_Kepn_Koya_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Kepn_Koya/z_obj_kepn_koya_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
