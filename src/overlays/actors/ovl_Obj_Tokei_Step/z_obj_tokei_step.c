@@ -15,13 +15,13 @@ void ObjTokeiStep_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjTokeiStep_SetBeginCutscene(ObjTokeiStep *this);
-void ObjTokeiStep_SetupCutscene(ObjTokeiStep *this, GlobalContext* globalCtx);
-void ObjTokeiStep_SetDoNothing(ObjTokeiStep *this);
+void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep *this);
+void ObjTokeiStep_BeginOpen(ObjTokeiStep *this, GlobalContext* globalCtx);
+void ObjTokeiStep_SetupDoNothing(ObjTokeiStep *this);
 void ObjTokeiStep_DoNothing(ObjTokeiStep *this, GlobalContext* globalCtx);
-void ObjTokeiStep_BeginCutscene(ObjTokeiStep *this);
+void ObjTokeiStep_SetupOpen(ObjTokeiStep *this);
 void ObjTokeiStep_Open(ObjTokeiStep *this, GlobalContext* globalCtx);
-void ObjTokeiStep_SetDoNothingOpen(ObjTokeiStep *this);
+void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep *this);
 void ObjTokeiStep_DoNothingOpen(ObjTokeiStep *this, GlobalContext* globalCtx);
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx);
 
@@ -79,7 +79,7 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep *this, ObjTokeiStepStep *step, GlobalCo
     s32 i;
     s32 pad;
     Vec3f sp84;
-    Vec3f sp78;
+    Vec3f dustSpawnPos;
     
     Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
 
@@ -87,11 +87,11 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep *this, ObjTokeiStepStep *step, GlobalCo
     sp84.z = -10.0f;
     for (i=0; i<7; i++) {
         sp84.x = D_80AD663C[i];
-        SysMatrix_MultiplyVector3fByState(&sp84, &sp78);
-        sp78.x += step->pos.x;
-        sp78.y += step->pos.y;
-        sp78.z += step->pos.z;
-        func_800B1210(globalCtx, &sp78, &D_801D15B0, &D_80AD6658, (s32) ((Rand_ZeroOne() * 40.0f) + 80.0f), (s32) ((Rand_ZeroOne() * 20.0f) + 50.0f));
+        SysMatrix_MultiplyVector3fByState(&sp84, &dustSpawnPos);
+        dustSpawnPos.x += step->pos.x;
+        dustSpawnPos.y += step->pos.y;
+        dustSpawnPos.z += step->pos.z;
+        func_800B1210(globalCtx, &dustSpawnPos, &D_801D15B0, &D_80AD6658, (s32) ((Rand_ZeroOne() * 40.0f) + 80.0f), (s32) ((Rand_ZeroOne() * 20.0f) + 50.0f));
     }
 }
 
@@ -198,16 +198,16 @@ void ObjTokeiStep_Init(Actor *thisx, GlobalContext *globalCtx) {
     if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.extra.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
-        ObjTokeiStep_SetBeginCutscene(this);
+        ObjTokeiStep_SetupBeginOpen(this);
     }
     else if (!((((s32) gSaveContext.perm.day % 5) != 3) || (gSaveContext.perm.time >= 0x4000)) || (s32) gSaveContext.perm.day >= 4) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
-        ObjTokeiStep_SetDoNothingOpen(this);
+        ObjTokeiStep_SetupDoNothingOpen(this);
     } else {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
-        ObjTokeiStep_SetDoNothing(this);
+        ObjTokeiStep_SetupDoNothing(this);
     }
 }
 
@@ -218,30 +218,30 @@ void ObjTokeiStep_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 
-void ObjTokeiStep_SetBeginCutscene(ObjTokeiStep *this) {
-    this->actionFunc = ObjTokeiStep_SetupCutscene;
+void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep *this) {
+    this->actionFunc = ObjTokeiStep_BeginOpen;
 }
 
-void ObjTokeiStep_SetupCutscene(ObjTokeiStep *this, GlobalContext *globalCtx) {
+void ObjTokeiStep_BeginOpen(ObjTokeiStep *this, GlobalContext *globalCtx) {
     CsCmdActorAction *action;
 
     if (func_800EE29C(globalCtx, 0x86)) {
         action = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x86)];
         if ((globalCtx->csCtx.frames == (*action).startFrame) && action->unk0) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
-            ObjTokeiStep_BeginCutscene(this);
+            ObjTokeiStep_SetupOpen(this);
         }
     }
 }
 
-void ObjTokeiStep_SetDoNothing(ObjTokeiStep *this) {
+void ObjTokeiStep_SetupDoNothing(ObjTokeiStep *this) {
     this->actionFunc = ObjTokeiStep_DoNothing;
 }
 
 void ObjTokeiStep_DoNothing(ObjTokeiStep *this, GlobalContext *globalCtx) {
 }
 
-void ObjTokeiStep_BeginCutscene(ObjTokeiStep *this) {
+void ObjTokeiStep_SetupOpen(ObjTokeiStep *this) {
     ObjTokeiStep_InitTimers(this);
     this->actionFunc = ObjTokeiStep_Open;
 }
@@ -249,11 +249,11 @@ void ObjTokeiStep_BeginCutscene(ObjTokeiStep *this) {
 void ObjTokeiStep_Open(ObjTokeiStep *this, GlobalContext *globalCtx) {
     if (ObjTokeiStep_OpenProcess(this, globalCtx)) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        ObjTokeiStep_SetDoNothingOpen(this);
+        ObjTokeiStep_SetupDoNothingOpen(this);
     }
 }
 
-void ObjTokeiStep_SetDoNothingOpen(ObjTokeiStep *this) {
+void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep *this) {
     this->dyna.actor.flags &= ~0x10;
     this->actionFunc = ObjTokeiStep_DoNothingOpen;
 }
