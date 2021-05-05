@@ -3179,9 +3179,9 @@ SECTIONS
     ovl_En_Nutsball : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.text)
-        build/asm/overlays/ovl_En_Nutsball_data.o(.data)
+        build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.data)
         build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.rodata)
-        build/asm/overlays/ovl_En_Nutsball_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

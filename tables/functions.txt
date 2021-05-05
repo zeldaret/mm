@@ -8307,7 +8307,7 @@
     0x80985538:("EnMinislime_Update",),
     0x80985C40:("EnNutsball_Init",),
     0x80985D10:("EnNutsball_Destroy",),
-    0x80985D3C:("func_80985D3C",),
+    0x80985D3C:("EnNutsball_InitColliderParams",),
     0x80985D68:("EnNutsball_Update",),
     0x80986120:("EnNutsball_Draw",),
     0x80986270:("OceffWipe2_Init",),
