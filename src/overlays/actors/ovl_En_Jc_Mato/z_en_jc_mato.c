@@ -15,9 +15,9 @@ void EnJcMato_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_80B9DEE0(EnJcMato* this, GlobalContext* globalCtx);
-void func_80B9DFC8(EnJcMato* this);
-void func_80B9DFDC(EnJcMato* this, GlobalContext* globalCtx);
+s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx);
+void EnJcMato_SetupIdle(EnJcMato* this);
+void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx);
 
 const ActorInit En_Jc_Mato_InitVars = {
     ACTOR_EN_JC_MATO,
@@ -56,10 +56,10 @@ DamageTable EnJcMatoDamageTable = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 };
 
-s32 func_80B9DEE0(EnJcMato* this, GlobalContext* globalCtx) {
-    this->collider.dim.worldSphere.center.x = this->JcMatoPos.x;
-    this->collider.dim.worldSphere.center.y = this->JcMatoPos.y;
-    this->collider.dim.worldSphere.center.z = this->JcMatoPos.z;
+s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
+    this->collider.dim.worldSphere.center.x = this->pos.x;
+    this->collider.dim.worldSphere.center.y = this->pos.y;
+    this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & 2) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= 0xFFFD;
         Audio_PlayActorSound2(&this->actor, 0x4807);
@@ -73,21 +73,21 @@ s32 func_80B9DEE0(EnJcMato* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B9DFC8(EnJcMato* this) {
-    this->actionFunc = func_80B9DFDC;
+void EnJcMato_SetupIdle(EnJcMato* this) {
+    this->actionFunc = EnJcMato_Idle;
 }
 
-void func_80B9DFDC(EnJcMato* this, GlobalContext* globalCtx) {
-    s16 despawn_temp;
+void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx) {
+    s16 shouldDespawn;
 
     if (this->hitFlag != 0) {
         if (this->despawnTimer == 0) {
-            despawn_temp = 0;
+            shouldDespawn = 0;
         } else {
             this->despawnTimer--;
-            despawn_temp = this->despawnTimer;
+            shouldDespawn = this->despawnTimer;
         }
-        if (despawn_temp == 0) {
+        if (shouldDespawn == 0) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -104,7 +104,7 @@ void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = 0;
     this->despawnTimer = 25;
-    func_80B9DFC8(this);
+    EnJcMato_SetupIdle(this);
 }
 
 void EnJcMato_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -118,12 +118,12 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if (!(gSaveContext.owl.unk4 & 1)) {
-        func_80B9DEE0(this, globalCtx);
+        EnJcMato_CheckForHit(this, globalCtx);
     }
 }
 
 extern Gfx D_06000390[];
-Vec3f D_80B9E25C = { 0.0f, -2500.0f, 0.0f };
+Vec3f targetMovementScalar = { 0.0f, -2500.0f, 0.0f };
 
 void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
@@ -132,6 +132,6 @@ void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000390);
-    SysMatrix_MultiplyVector3fByState(&D_80B9E25C, &this->JcMatoPos);
+    SysMatrix_MultiplyVector3fByState(&targetMovementScalar, &this->pos);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
