@@ -6546,7 +6546,7 @@
     0x808E2070:("BgCtowerRot_Init",),
     0x808E21C8:("BgCtowerRot_Destroy",),
     0x808E21FC:("func_808E21FC",),
-    0x808E22DC:("func_808E22DC",),
+    0x808E22DC:("BgCtowerRot_DoNothing",),
     0x808E22EC:("func_808E22EC",),
     0x808E23D0:("func_808E23D0",),
     0x808E2444:("func_808E2444",),

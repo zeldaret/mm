@@ -10,8 +10,7 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808E21FC(BgCtowerRot* this, GlobalContext* globalCtx);
-void func_808E22DC(BgCtowerRot* this, GlobalContext* globalCtx);
-void func_808E22EC(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx);
 void func_808E23D0(BgCtowerRot* this, GlobalContext* globalCtx);
 void func_808E2444(BgCtowerRot* this, GlobalContext* globalCtx);
 
@@ -76,7 +75,7 @@ void BgCtowerRot_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->timer = 80.0f;
         this->actionFunc = func_808E23D0;
     } else {
-        this->actionFunc = func_808E22DC;
+        this->actionFunc = BgCtowerRot_DoNothing;
     }
 }
 
@@ -90,19 +89,15 @@ void func_808E21FC(BgCtowerRot *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     Vec3f offset;
     f32 rotZ;
+    f32 offsetDiffZ;
     f32 rotZtmp;
-    f32 rotZtmp2;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
     if (offset.z > 1100.0f) {
         rotZ = 0.0f;
     } else {
-        rotZtmp2 = 1100.0f - offset.z;
-        if (rotZtmp2 > 1000.0f) {
-            rotZtmp = 1000.0f;
-        } else {
-            rotZtmp = rotZtmp2;
-        }
+        offsetDiffZ = 1100.0f - offset.z;
+        rotZtmp = (offsetDiffZ > 1000.0f) ? 1000.0f : offsetDiffZ; //Removing rotZtmp just causes regalloc issues and a missing instruction
         rotZ = rotZtmp;
     }
     func_800DFAC8(globalCtx->cameraPtrs[0], 0x11);
@@ -112,7 +107,7 @@ void func_808E21FC(BgCtowerRot *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_808E22DC(BgCtowerRot* this, GlobalContext* globalCtx) {
+void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
 }
 
 void func_808E22EC(BgCtowerRot *this, GlobalContext *globalCtx) {
@@ -121,7 +116,7 @@ void func_808E22EC(BgCtowerRot *this, GlobalContext *globalCtx) {
             Audio_PlayActorSound2(&this->dyna.actor, 0x2893);
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        this->actionFunc = func_808E22DC;
+        this->actionFunc = BgCtowerRot_DoNothing;
     } else if (this->dyna.actor.params == 1) {
         func_800B9010(&this->dyna.actor, 0x201E);
     }
