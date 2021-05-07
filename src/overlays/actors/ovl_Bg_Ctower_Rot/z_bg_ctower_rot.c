@@ -1,18 +1,26 @@
+
+
 #include "z_bg_ctower_rot.h"
 
 #define FLAGS 0x00000030
 
 #define THIS ((BgCtowerRot*)thisx)
 
+typedef enum {
+    /* 0 */ CORRIDOR,
+    /* 1 */ MAIN_DOOR, //Main door controls cutscene flow (updating Link fields and playing sounds). It is the one on the left when entering from the Lost Woods
+    /* 2 */ DOOR,
+} BgCtowerRotType;
+
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808E21FC(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx);
 void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx);
-void func_808E23D0(BgCtowerRot* this, GlobalContext* globalCtx);
-void func_808E2444(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_DoorWait(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_SetupDoorOpen(BgCtowerRot* this, GlobalContext* globalCtx);
 
 
 const ActorInit Bg_Ctower_Rot_InitVars = {
@@ -55,13 +63,13 @@ void BgCtowerRot_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
-    if (this->dyna.actor.params == 0) {
+    if (this->dyna.actor.params == CORRIDOR) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
-        this->actionFunc = func_808E21FC;
+        this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
     player = PLAYER;
-    if (this->dyna.actor.params == 1) {
+    if (this->dyna.actor.params == MAIN_DOOR) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06017410);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y + 0x4000;
     } else {
@@ -73,7 +81,7 @@ void BgCtowerRot_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * 80.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 80.0f);
         this->timer = 80.0f;
-        this->actionFunc = func_808E23D0;
+        this->actionFunc = BgCtowerRot_DoorWait;
     } else {
         this->actionFunc = BgCtowerRot_DoNothing;
     }
@@ -85,7 +93,7 @@ void BgCtowerRot_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_808E21FC(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_CorridorRotate(BgCtowerRot *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     Vec3f offset;
     f32 rotZ;
@@ -110,9 +118,9 @@ void func_808E21FC(BgCtowerRot *this, GlobalContext *globalCtx) {
 void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
 }
 
-void func_808E22EC(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_DoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
-        if (this->dyna.actor.params == 1) {
+        if (this->dyna.actor.params == MAIN_DOOR) {
             Audio_PlayActorSound2(&this->dyna.actor, 0x2893);
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
@@ -124,7 +132,7 @@ void func_808E22EC(BgCtowerRot *this, GlobalContext *globalCtx) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * this->timer);
 }
 
-void func_808E23D0(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_DoorWait(BgCtowerRot *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     Vec3f offset;
 
@@ -132,16 +140,16 @@ void func_808E23D0(BgCtowerRot *this, GlobalContext *globalCtx) {
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-        this->actionFunc = func_808E2444;
+        this->actionFunc = BgCtowerRot_SetupDoorOpen;
     }
 }
 
-void func_808E2444(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_SetupDoorOpen(BgCtowerRot *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        if (this->dyna.actor.params == 1) {
+        if (this->dyna.actor.params == MAIN_DOOR) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         }
-        this->actionFunc = func_808E22EC;
+        this->actionFunc = BgCtowerRot_DoorClose;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -157,7 +165,7 @@ void BgCtowerRot_Draw(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerRot *this = THIS;
 
     func_800BDFC0(globalCtx, D_808E2564[this->dyna.actor.params]);
-    if (this->dyna.actor.params == 0) {
+    if (this->dyna.actor.params == CORRIDOR) {
         func_800BE03C(globalCtx, D_060129D0);
     }
 }
