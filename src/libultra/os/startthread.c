@@ -1,10 +1,11 @@
-#include <osint.h>
+#include <ultra64.h>
+#include <global.h>
 
 void osStartThread(OSThread* t) {
     register u32 saveMask;
-    
+
     saveMask = __osDisableInt();
-    
+
     switch (t->state) {
     case 8:
         t->state = 2;
@@ -21,7 +22,7 @@ void osStartThread(OSThread* t) {
         }
         break;
     }
-    
+
     if (__osRunningThread == NULL) {
         __osDispatchThread();
     } else {
@@ -30,6 +31,6 @@ void osStartThread(OSThread* t) {
             __osEnqueueAndYield(&__osRunQueue);
         }
     }
-    
+
     __osRestoreInt(saveMask);
 }
