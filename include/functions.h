@@ -827,7 +827,7 @@ UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* ctxt, s32 iParm3, f32 fParm
 // void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800B8E58(void);
 // void func_800B8FC0(void);
-void func_800B9010(Actor* actor, UNK_TYPE2 sfxId);
+void func_800B9010(Actor* actor, s16 sfxId);
 // void func_800B9038(void);
 // void func_800B9084(void);
 void func_800B9098(Actor* actor);

@@ -31,6 +31,10 @@ typedef struct ObjLightswitch {
 
 extern const ActorInit Obj_Lightswitch_InitVars;
 
+extern Gfx D_06000C20[]; 
+extern Gfx D_06000420[]; 
+extern Gfx D_06001420[];
+
 // opa func
 extern s32 D_801AEFA0;
 

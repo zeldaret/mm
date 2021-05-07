@@ -7807,7 +7807,7 @@
     0x8095FB38:("ObjHana_Destroy",),
     0x8095FB48:("ObjHana_Update",),
     0x8095FB58:("ObjHana_Draw",),
-    0x8095FBF0:("func_8095FBF0",),
+    0x8095FBF0:("ObjLightswitch_InitCollider",),
     0x8095FC94:("ObjLightswitch_UpdateSwitchFlags",),
     0x8095FCEC:("ObjLightswitch_SpawnEffects",),
     0x8095FEEC:("ObjLightswitch_Init",),

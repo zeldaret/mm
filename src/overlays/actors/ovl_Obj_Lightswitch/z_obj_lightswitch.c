@@ -44,12 +44,11 @@ static ColliderJntSphInit sJntSphInit = {
     1, sJntSphElementsInit,
 };
 
-// segmented addresses for poly opa and xlu funcs
-// different face addresses for sleep -> waking -> awake of light switch face
-void* lightswitchFaceGfx[] = { 0x06000C20, 0x06000420, 0x06001420,};
+// different face addresses for (sleep -> waking -> awake) of light switch face
+Gfx* lightswitchFaceGfx[] = {D_06000C20, D_06000420, D_06001420,};
 
-Color_RGBA8 lightswitchEffectPrimColor = { 0xFF, 0xFF, 0xA0, 0xA0, }; // lightswitchEffectPrimColor 
-Color_RGBA8 lightswitchEffectEnvColor = { 0xFF, 0x0, 0x0, 0x0, }; // lightswitchEffectEnvColor  
+Color_RGBA8 lightswitchEffectPrimColor = { 0xFF, 0xFF, 0xA0, 0xA0, };
+Color_RGBA8 lightswitchEffectEnvColor  = { 0xFF, 0x0,  0x0,  0x0, };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -58,11 +57,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-void func_8095FBF0(ObjLightswitch* this, GlobalContext* arg1) {
+void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    Collider_InitJntSph(arg1, &this->collider);
-    Collider_SetJntSph(arg1, &this->collider, &this->actor, &sJntSphInit, &this->elements);
+    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->elements);
     this->actor.colChkInfo.mass = 0xFF;
     SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, 
         this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
@@ -151,7 +150,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
 
 void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
-    s8 pad[4];
+    s32 pad;
     u32 switchFlagResult;
     s32 isTriggered;
 
@@ -170,7 +169,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjLightswitch_SetupIdle(this);
     }
 
-    func_8095FBF0(this, globalCtx); // init collider
+    ObjLightswitch_InitCollider(this, globalCtx);
 
     if (GET_LIGHTSWITCH_INVISIBLE(this)) {
         // the stone tower exterior switch is part of the scene mesh, the actor is invisble on top
