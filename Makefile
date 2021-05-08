@@ -170,12 +170,14 @@ build/binary/overlays/%: build/code.elf
 	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 asm/non_matchings/%/dep: asm/%.asm
+	@mkdir -p $(dir $@)
 	@touch $@
 	./tools/split_asm.py $< asm/non_matchings/$* || rm $@
 
 asm/%.asm: asm/disasm.dep ;
 
 asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
+	@mkdir -p asm
 	@touch $@
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
 
