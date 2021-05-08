@@ -3179,9 +3179,9 @@ SECTIONS
     ovl_En_Nutsball : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.text)
-        build/asm/overlays/ovl_En_Nutsball_data.o(.data)
+        build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.data)
         build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball.o(.rodata)
-        build/asm/overlays/ovl_En_Nutsball_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Nutsball/z_en_nutsball_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -4345,9 +4345,9 @@ SECTIONS
     ovl_Dm_Ravine : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.text)
-        build/asm/overlays/ovl_Dm_Ravine_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.data)
         build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.o(.rodata)
-        build/asm/overlays/ovl_Dm_Ravine_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -7518,9 +7518,9 @@ SECTIONS
     ovl_En_Jc_Mato : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.text)
-        build/asm/overlays/ovl_En_Jc_Mato_data.o(.data)
+        build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.data)
         build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.o(.rodata)
-        build/asm/overlays/ovl_En_Jc_Mato_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
