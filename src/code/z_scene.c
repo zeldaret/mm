@@ -135,6 +135,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
 
+    // TODO: UB to cast void to u32
     addr = ((u32)objectCtx->status[iParm2].segment) + vromSize;
     addr = ALIGN16(addr);
 
