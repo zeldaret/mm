@@ -319,10 +319,14 @@ typedef struct {
 
 // Extra information in the save context that is not saved
 typedef struct {
-    /* 0x000 */ UNK_TYPE1 pad0[0xC];
+    /* 0x000 */ UNK_TYPE1 pad0[0x4];
+    /* 0x004 */ s16 unk04;
+    /* 0x006 */ UNK_TYPE1 pad06[0x6];
     /* 0x00C */ s32 sceneSetupIndex;
     /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x2E];
+    /* 0x014 */ UNK_TYPE1 pad14[0x10];
+    /* 0x024 */ s16 unk24;
+    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
     /* 0x042 */ s16 unk42;
     /* 0x044 */ UNK_TYPE1 pad44[0x34];
     /* 0x078 */ f32 unk78;
@@ -358,9 +362,11 @@ typedef struct {
     /* 0x0000 */ UNK_TYPE1 pad0[0x1];
     /* 0x0001 */ u8 unk1;
     /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ UNK_TYPE1 pad3[0x2];
+    /* 0x0003 */ u8 unk3;
+    /* 0x0004 */ u8 unk4;
     /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8E];
+    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
+    /* 0x0006 */ s16 unk_A00;
 } SaveContextOwl; // size = 0x2C94
 
 typedef struct {
@@ -758,10 +764,13 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x1A];
+    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x25C */ u16 unk25C;
+    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
     /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} InterfaceContext; // size = 0x348
+} 
+InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
@@ -954,6 +963,52 @@ typedef struct {
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
+typedef struct ListAlloc {
+    /* 0x00 */ struct ListAlloc* prev;
+    /* 0x04 */ struct ListAlloc* next;
+} ListAlloc; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u16 width;
+    /* 0x02 */ u16 height;
+    /* 0x04 */ u16 widthSave;
+    /* 0x06 */ u16 heightSave;
+    /* 0x08 */ char unk_8[8];
+    /* 0x10 */ u16* fbuf;
+    /* 0x14 */ u16* fbufSave;
+    /* 0x18 */ u8* cvgSave;
+    /* 0x1C */ u16* zbuf;
+    /* 0x20 */ u16* zbufSave;
+    /* 0x24 */ u16 ulxSave;
+    /* 0x26 */ u16 ulySave;
+    /* 0x28 */ u16 lrxSave;
+    /* 0x2A */ u16 lrySave;
+    /* 0x2C */ u16 ulx;
+    /* 0x2E */ u16 uly;
+    /* 0x30 */ u16 lrx;
+    /* 0x32 */ u16 lry;
+    /* 0x34 */ char unk_34[16];
+    /* 0x44 */ ListAlloc alloc;
+    /* 0x4C */ u8 unk_4C;
+    /* 0x4D */ u8 unk_4D;
+    /* 0x4E */ char unk_4E[2];
+} PreRenderContext; // size = 0x50
+
+typedef struct {
+    /* 0x00 */ void* timg;
+    /* 0x04 */ void* tlut;
+    /* 0x08 */ u16 width;
+    /* 0x0A */ u16 height;
+    /* 0x0C */ u8 fmt;
+    /* 0x0D */ u8 siz;
+    /* 0x0E */ u16 tt;
+    /* 0x10 */ u16 unk_10;
+    /* 0x14 */ f32 x;
+    /* 0x18 */ f32 y;
+    /* 0x1C */ f32 xScale;
+    /* 0x20 */ f32 yScale;
+    /* 0x24 */ u32 flags;
+} PreRenderParams; // size = 0x28
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -1604,7 +1659,9 @@ struct GlobalContext {
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ UNK_TYPE1 pad18B49[0x1];
     /* 0x18B4A */ u8 unk18B4A;
-    /* 0x18B4B */ UNK_TYPE1 pad18B4B[0x309];
+    /* 0x18B4B */ char pad18B4B[1];
+    /* 0x18B4C */ PreRenderContext preRenderCtx;
+    /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
     /* 0x18E58 */ UNK_TYPE1 pad18E58[0x400];
 }; // size = 0x19258

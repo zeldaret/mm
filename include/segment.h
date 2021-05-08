@@ -6,6 +6,7 @@
 extern Gfx D_040008D0[];
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
+extern Gfx D_04058BA0[];
 extern Gfx D_0405AAB0[];
 extern UNK_TYPE D_0405BEF0;
 extern UNK_TYPE D_0405B6F0;
