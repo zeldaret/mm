@@ -377,20 +377,20 @@ typedef struct {
     /* 0x4 */ F3DPrimColor* primColors;
     /* 0x8 */ F3DEnvColor* envColors;
     /* 0xC */ u16* keyFrames;
-} MaterialColorAnimParams; // size = 0x10
+} AnimatedMatColorParams; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s8 xStep;
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
-} MaterialTexScrollAnimParams; // size = 0x4
+} AnimatedMatTexScrollParams; // size = 0x4
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
     /* 0x4 */ void** textureList;
     /* 0x8 */ u8* textureIndexList;
-} MaterialTexCycleAnimParams; // size = 0xC
+} AnimatedMatTexCycleParams; // size = 0xC
 
 typedef struct {
     /* 0x000 */ void* spaceStart;
@@ -708,7 +708,7 @@ typedef enum {
     /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
     /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
-    /* 0x1A */ SCENE_CMD_ID_MATERIAL_ANIM_LIST,
+    /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
     /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
     /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
@@ -796,8 +796,8 @@ typedef enum {
 #define SCENE_CMD_MISC_SETTINGS() \
     { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
 
-#define SCENE_CMD_MATERIAL_ANIM_LIST(matAnimList) \
-    { SCENE_CMD_ID_MATERIAL_ANIM_LIST, 0, CMD_PTR(matAnimList) }
+#define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
+    { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }
 
 #define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
     { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
@@ -810,14 +810,14 @@ typedef enum {
 
 //! @TODO: Remove these! These are only here for the time being to prevent compiler errors with scenes and rooms!
 
-// ----> MaterialAnimation
+// ----> AnimatedMaterial
 typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedTexture; // size = 0x8
 
-// ----> MaterialTexScrollAnimParams
+// ----> AnimatedMatTexScrollParams
 typedef struct {
     /* 0x0 */ s8 xStep;
     /* 0x1 */ s8 yStep;
@@ -834,7 +834,7 @@ typedef struct {
     /* 0x4 */ u8 lodFrac;
 } FlashingTexturePrimColor; // size = 0x5
 
-// ----> MaterialColorAnimParams
+// ----> AnimatedMatColorParams
 typedef struct {
     /* 0x0 */ u16 cycleLength;
     /* 0x2 */ u16 numKeyFrames;
@@ -843,7 +843,7 @@ typedef struct {
     /* 0xC */ u16* keyFrames;
 } FlashingTextureParams; // size = 0x10
 
-// ----> MaterialTexCycleAnimParams
+// ----> AnimatedMatTexCycleParams
 typedef struct {
     /* 0x0 */ u16 cycleLength;
     /* 0x4 */ Gfx** textureDls;

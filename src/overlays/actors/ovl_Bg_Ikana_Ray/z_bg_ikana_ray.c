@@ -49,7 +49,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
     Collider_UpdateCylinder(thisx, &THIS->collision);
 
-    THIS->animatedTextures = (MaterialAnimation*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
+    THIS->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
     if (Flags_GetSwitch(globalCtx, THIS->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(THIS);
@@ -90,6 +90,6 @@ void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Scene_DrawMaterialAnim(globalCtx, THIS->animatedTextures);
+    AnimatedMat_Draw(globalCtx, THIS->animatedTextures);
     func_800BE03C(globalCtx, object_ikana_obj_001100);
 }

@@ -76,7 +76,7 @@ typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
-} MaterialAnimation; // size = 0x8
+} AnimatedMaterial; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -1644,7 +1644,7 @@ struct GlobalContext {
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
-    /* 0x1886C */ MaterialAnimation* sceneMaterialAnims;
+    /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
     /* 0x18874 */ u8 unk18874;
     /* 0x18875 */ s8 unk18875;

@@ -15,7 +15,7 @@ typedef struct {
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
-    /* 0x190 */ MaterialAnimation* unk_190;
+    /* 0x190 */ AnimatedMaterial* unk_190;
     /* 0x194 */ s16 unk_194;
     /* 0x196 */ s16 unk_196;
     /* 0x198 */ f32 unk_198;

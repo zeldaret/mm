@@ -530,8 +530,8 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
 }
 
 // Scene Header Command 0x1A: Material Animations
-void Scene_HeaderCmdMaterialAnimations(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->sceneMaterialAnims = (MaterialAnimation*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
+void Scene_HeaderCmdAnimatedMaterials(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->sceneMaterialAnims = (AnimatedMaterial*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }
 
 /**
@@ -572,7 +572,7 @@ s32 Scene_ProcessHeader(GlobalContext* globalCtx, SceneCmd* header) {
         Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdAltHeaderList,
         Scene_HeaderCmdSetAreaVisitedFlag,
-        Scene_HeaderCmdMaterialAnimations,
+        Scene_HeaderCmdAnimatedMaterials,
         Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,
         Scene_HeaderCmd1D,
