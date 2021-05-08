@@ -127,7 +127,7 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .PHONY: all clean setup diff-init init
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
 
 $(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
@@ -145,7 +145,7 @@ endif
 
 all: $(UNCOMPRESSED_ROM) $(ROM) ;
 
-build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.ld build/dmadata_script.ld
+build/code.elf: $(O_FILES) build/linker_scripts/code_script.ld undef.txt build/linker_scripts/object_script.ld build/dmadata_script.ld
 	$(LD) -T build/linker_scripts/code_script.ld -T undef.txt -T build/linker_scripts/object_script.ld -T build/dmadata_script.ld --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
 
 build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.ld undef.txt build/linker_scripts/object_script.ld
@@ -161,13 +161,13 @@ build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=
 	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
 
 build/binary/boot build/binary/code: build/code.elf
-	$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 build/binary/assets/scenes/%: build/code.elf
-	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 build/binary/overlays/%: build/code.elf
-	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 # Use an empty sentinel file (dep) to track the directory as a dependency, and
 # emulate GNU Make's order-only dependency.
