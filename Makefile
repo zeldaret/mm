@@ -145,13 +145,13 @@ endif
 
 all: $(UNCOMPRESSED_ROM) $(ROM) ;
 
-build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt build/linker_scripts/dmadata_script.ld
-	$(LD) -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt -T build/linker_scripts/dmadata_script.ld --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
+build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.ld build/dmadata_script.ld
+	$(LD) -T build/linker_scripts/code_script.ld -T undef.txt -T build/linker_scripts/object_script.ld -T build/dmadata_script.ld --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
 
-build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt
-	$(LD) -r -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
+build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.ld undef.txt build/linker_scripts/object_script.ld
+	$(LD) -r -T build/linker_scripts/code_script.ld -T undef.txt -T build/linker_scripts/object_script.ld --no-check-sections --accept-unknown-input-arch -N -o $@
 
-build/linker_scripts/dmadata_script.ld.pre: tables/dmadata_table.txt build/code_pre_dmadata.elf
+build/dmadata_script.txt: tables/dmadata_table.txt build/code_pre_dmadata.elf
 	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l $@ -e build/code_pre_dmadata.elf
 
 build/dmadata: $(ROM_FILES:build/dmadata=)
@@ -169,6 +169,10 @@ build/binary/assets/scenes/%: build/code.elf
 build/binary/overlays/%: build/code.elf
 	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
+# Use an empty sentinel file (dep) to track the directory as a dependency, and
+# emulate GNU Make's order-only dependency.
+# The `touch $@; action || rm $@` pattern ensures that the `dep` file is older
+# than the output files from `action`, and only exists if `action` succeeds.
 asm/non_matchings/%/dep: asm/%.asm
 	@mkdir -p $(dir $@)
 	@touch $@
@@ -257,11 +261,10 @@ build/%.d: %.c
 	@./tools/depend.py $< $@
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
 
-build/linker_scripts/%.ld: build/linker_scripts/%.ld.pre
+build/dmadata_script.ld: build/dmadata_script.txt
 	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
 
-# TODO: Rename these files; this is sort of a hack
-build/linker_scripts/%.txt: linker_scripts/%.txt
+build/linker_scripts/%.ld: linker_scripts/%.txt
 	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
 
 build/assets/%.d: assets/%.c
