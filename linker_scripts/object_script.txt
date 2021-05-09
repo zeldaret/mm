@@ -91,12 +91,13 @@ D_06005458 = 0x06005458;
 D_0600788C = 0x0600788C;
 
 /* en_ginko_man */
-D_0600C240 = 0x0600C240;
-D_060043F0 = 0x060043F0;
-D_06004A7C = 0x06004A7C;
-D_0600B1D8 = 0x0600B1D8; 
-D_06000AC4 = 0x06000AC4;
-D_060008C0 = 0x060008C0;
+object_ginko_skeleton            = 0x0600C240;
+object_ginko_limb15_dlist        = 0x0600B1D8; 
+object_ginko_sitting_anim        = 0x060043F0;
+object_ginko_stamp_reach_anim    = 0x06004F40;
+object_ginko_floorsmacking_anim  = 0x060008C0;
+object_ginko_amazed_anim         = 0x06004A7C;
+object_ginko_advertising_anim    = 0x06000AC4;
 
 
 /* en_ending_hero4 */

@@ -34,18 +34,26 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern SkeletonHeader*  D_0600C240;
-extern AnimationHeader* D_060043F0;
+extern SkeletonHeader object_ginko_skeleton[];
+extern Gfx object_ginko_limb15_dlist[];
 
-extern AnimationHeader D_06004A7C; // these are segments found in our animation list
-extern AnimationHeader D_06000AC4; // haven't figured out how to reference them from said list
-extern AnimationHeader D_060008C0;
+extern AnimationHeader object_ginko_floorsmacking_anim[];
+extern AnimationHeader object_ginko_sitting_anim[];
+extern AnimationHeader object_ginko_amazed_anim[];
+extern AnimationHeader object_ginko_stamp_reach_anim[];
+extern AnimationHeader object_ginko_advertising_anim[];
+
+typedef enum {
+    /* 0 */ GINKO_FLOORSMACKING,
+    /* 1 */ GINKO_SITTING,
+    /* 2 */ GINKO_REACHING,
+    /* 3 */ GINKO_AMAZED,
+    /* 4 */ GINKO_ADVERTISING,
+} GinkoAnimationIndex;
 
 // values to get wallet capacity
 extern u16 D_801C1E2C[]; // wallet capacities
 extern u32 D_801C1DD0; // bit mask for wallet size in savecontext
-extern u8 D_801C1E08; // bit shift on index to align
-
-extern Gfx D_0600B1D8;
+extern u8  D_801C1E08; // bit shift on index to align
 
 #endif // Z_EN_GINKO_MAN_H
