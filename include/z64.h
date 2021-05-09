@@ -1627,7 +1627,7 @@ struct GlobalContext {
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
     /* 0x18770 */ UNK_TYPE1 unk_18770[0xC];
-    /* 0x1877C */ void (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
+    /* 0x1877C */ s32 (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ UNK_TYPE1 unk_18784[0x2C];
     /* 0x187B0 */ MtxF unk187B0;
