@@ -7,9 +7,7 @@ typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 
 typedef struct EnEncount2Particle{
    /* 0x00 */ u8 enabled;
-   /* 0x01 */ u8 pad1[3];
    /* 0x04 */ Vec3f pos;
-   /* 0x10 */ u8 pad10[0x4];
    /* 0x14 */ s16 alpha;
    /* 0x16 */ s16 alphaFadeDelay; // frame count before alpha fade starts
    /* 0x18 */ Vec3f vel;
@@ -32,6 +30,8 @@ typedef struct EnEncount2 {
     /* 0x0190 */ ColliderJntSphElement colElement;
     /* 0x01D0 */ EnEncount2Particle particles[200];
 } EnEncount2; // size = 0x2A70
+
+#define GET_ENCOUNT2_SWITCH_FLAG(this)((s16) (this->dynaActor.actor.params & 0x7F))
 
 extern const ActorInit En_Encount2_InitVars;
 

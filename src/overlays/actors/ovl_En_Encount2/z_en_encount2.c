@@ -13,7 +13,7 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_SetIdle(EnEncount2* this);
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 arg2);
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay);
 void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx);
 
@@ -48,7 +48,7 @@ DamageTable damageTable[] = {
 
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    s8 pad[4];
+    s32 pad;
     CollisionHeader* colHeader = NULL;
 
     BcCheck3_BgActorInit(&this->dynaActor, 0);
@@ -61,7 +61,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dynaActor.actor.targetMode = 6;
     this->dynaActor.actor.colChkInfo.health = 1;
     this->scale = 0.1;
-    this->switchFlag = (s16) (this->dynaActor.actor.params & 0x7F);
+    this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
 
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
@@ -117,7 +117,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(this, 0x2949);
+    Audio_PlayActorSound2(this, 0x2949); // NA_SE_EV_MUJURA_BALLOON_BROKEN
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -133,7 +133,7 @@ void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
 
 void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    s8 pad[4];
+    s32 pad;
 
     DECR(this->deathTimer);
 
