@@ -154,7 +154,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     u32 switchFlagResult;
     s32 isTriggered;
 
-    switchFlagResult = Actor_GetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+    switchFlagResult = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = 0;
     Actor_ProcessInitChain(&this->actor, &sInitChain);
     Actor_SetHeight(&this->actor, 0.0f);
@@ -268,7 +268,7 @@ void ObjLightSwitch_Enabled(ObjLightswitch* this, GlobalContext* globalCtx) {
 
     if (actorType == LIGHTSWITCH_TYPE_REGULAR) {
         // switch can be disabled outside of this actor by flag
-        if (Actor_GetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this)) == 0) {
+        if (Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this)) == 0) {
             ObjLightSwitch_SetupDisabled(this);
         }
     } else if (actorType == LIGHTSWITCH_TYPE_FLIP) {
