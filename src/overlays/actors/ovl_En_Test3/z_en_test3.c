@@ -43,6 +43,7 @@ extern f32 D_80A41D40;
 extern s16 D_80A41D44;
 extern Vec3f D_80A41D50;
 extern s32 D_80A41D5C;
+extern s32 D_80A41D68;
 
 // Extenal
 extern LinkAnimetionEntry D_0400CF88;
@@ -597,8 +598,21 @@ TalkState* D_80A418A8[] = {
 // 109 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F73C.asm")
 
-// 55 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F8D4.asm")
+s32 func_80A3F8D4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    Actor* actor;
+
+    func_80A3F15C(this, globalCtx, arg2);
+
+    if (((actor = func_80A3F2BC(globalCtx, &this->actor.base, ACTOR_EN_PST, ACTORCAT_PROP, 100.0f, 20.0f)),
+         (actor != NULL)) ||
+        ((actor = func_80A3F2BC(globalCtx, &this->actor.base, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f),
+          (actor != NULL)))) {
+        this->actor.base.home.rot.y = Actor_YawBetweenActors(&this->actor.base, actor);
+    }
+
+    globalCtx->func_1877C(globalCtx, &this->actor, 0x61);
+    return 1;
+}
 
 s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.base.shape.rot.y, this->actor.base.home.rot.y, 800);
@@ -684,10 +698,28 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 // 65 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FE20.asm")
 
-/* static */ Vec3f D_80A418BC[] = { -420.0f, 210.0f, -162.0f };
+s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
+    static Vec3f D_80A418BC = { -420.0f, 210.0f, -162.0f };
 
-// 51 line
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FF10.asm")
+    if (gSaveContext.perm.weekEventReg[51] & 0x40) {
+        D_80A41D68 = 2;
+        Math_Vec3f_Copy(&this->actor.base.world.pos, &D_80A418BC);
+        Math_Vec3f_Copy(&this->actor.base.home.pos, &D_80A418BC);
+        this->actor.base.home.rot.y = -0x2AAB;
+        this->actor.base.shape.rot.y = -0x2AAB;
+        this->actor.unk_AD4 = -0x2AAB;
+        goto dummy_label_829727;
+    dummy_label_829727:; // required to match
+    } else {
+        func_80A3F15C(this, globalCtx, arg2);
+        this->actorCutsceneId = this->actor.base.cutscene;
+
+        if (globalCtx->roomContext.currRoom.num == 2) {
+            this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actorCutsceneId);
+        }
+    }
+    return 1;
+}
 
 // 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FFD0.asm")
