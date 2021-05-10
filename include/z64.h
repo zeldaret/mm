@@ -76,7 +76,7 @@ typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
-} AnimatedTexture; // size = 0x8
+} AnimatedMaterial; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -153,12 +153,6 @@ typedef struct {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x4 */ Gfx** textureDls;
-    /* 0x8 */ u8* textureDlOffsets;
-} CyclingTextureParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -204,14 +198,6 @@ typedef struct {
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
 } FireObjLightParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u8 red;
-    /* 0x1 */ u8 green;
-    /* 0x2 */ u8 blue;
-    /* 0x3 */ u8 alpha;
-    /* 0x4 */ u8 lodFrac;
-} FlashingTexturePrimColor; // size = 0x5
 
 // Font textures are loaded into here
 typedef struct {
@@ -307,11 +293,6 @@ typedef enum IRQ_TYPE {
     IRQ_PRENMI_3 = 0x2A0,
     IRQ_PRENMI_4 = 0x2A1
 } IRQ_TYPE;
-
-typedef struct {
-    /* 0x0 */ u32 vromStart;
-    /* 0x4 */ u32 vromEnd;
-} ObjectFileTableEntry; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u32 textSize;
@@ -438,17 +419,6 @@ typedef struct {
     /* 0xC */ s16 alpha;
     /* 0xE */ s16 color;
 } TitleCardContext; // size = 0x10
-
-typedef struct {
-    struct {
-        s8 room;    // Room to switch to
-        s8 effects; // How the camera reacts during the transition
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ s16   params;
-} TransitionActorEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s32 topY;
@@ -634,14 +604,6 @@ typedef enum {
     GFXPRINT_FLAG64 = 0x40,
     GFXPRINT_OPEN = 0x80
 } GfxPrintFlag;
-
-typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x2 */ u16 numKeyFrames;
-    /* 0x4 */ FlashingTexturePrimColor* primColors;
-    /* 0x8 */ Color_RGBA8* envColors;
-    /* 0xC */ u16* keyFrames;
-} FlashingTextureParams; // size = 0x10
 
 typedef struct {
     /* 0x00 */ void* loadedRamAddr;
@@ -1307,8 +1269,6 @@ typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt)
 
 typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
-typedef void(*global_context_func)(GlobalContext*);
-
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 
 typedef struct {
@@ -1322,10 +1282,6 @@ typedef struct {
     /* 0x1C */ u32 unk1C;
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
-
-typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
-
-typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* params);
 
 typedef struct Camera Camera;
 
@@ -1665,17 +1621,15 @@ struct GlobalContext {
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
     /* 0x17104 */ AnimationContext animationCtx;
-    /* 0x17D88 */ SceneContext sceneContext;
+    /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
-    /* 0x18760 */ u8 transitionActorCount;
-    /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
-    /* 0x18764 */ TransitionActorEntry* transitionActorList;
+    /* 0x18760 */ TransitionContext transitionCtx;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
     /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF unk187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
-    /* 0x18840 */ u32 unk18840;
+    /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk18844;
     /* 0x18845 */ u8 unk18845;
     /* 0x18846 */ u16 sceneNumActorsToLoad;
@@ -1690,7 +1644,7 @@ struct GlobalContext {
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
-    /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
+    /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
     /* 0x18874 */ u8 unk18874;
     /* 0x18875 */ s8 unk18875;

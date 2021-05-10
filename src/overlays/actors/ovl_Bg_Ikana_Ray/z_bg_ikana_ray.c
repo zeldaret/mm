@@ -49,9 +49,9 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
     Collider_UpdateCylinder(thisx, &THIS->collision);
 
-    THIS->animatedTextures = (AnimatedTexture*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
+    THIS->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
-    if (Actor_GetSwitchFlag(globalCtx, THIS->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, THIS->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(THIS);
     } else {
         BgIkanaRay_SetDeactivated(THIS);
@@ -70,7 +70,7 @@ void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Actor_GetSwitchFlag(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     }
 }
@@ -90,6 +90,6 @@ void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, THIS->animatedTextures);
+    AnimatedMat_Draw(globalCtx, THIS->animatedTextures);
     func_800BE03C(globalCtx, object_ikana_obj_001100);
 }
