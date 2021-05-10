@@ -710,7 +710,7 @@ def null_or_ptr(w):
 # (name, vrom_st, vrom_end, vram_st, vram_end)
 def read_actor_ovl_tbl():
     actortbl = []
-    with open(repo + "decomp/code","rb") as codefile:
+    with open(repo + "build/baserom/code","rb") as codefile:
         codefile.seek(0x109510) # actor overlay table offset into code
         entry = as_word_list(codefile.read(0x20))
         i = 0
@@ -730,10 +730,10 @@ def resolve_symbol(address):
     for entry in actor_tbl:
         if address >= 0x80000000:
             if entry[3] <= address < entry[4]:
-                return repo + "decomp" + os.sep + entry[0], address - entry[3]
+                return repo + "build/baserom/overlays" + os.sep + entry[0], address - entry[3]
         else:
             if entry[1] <= address < entry[2]:
-                return repo + "decomp" + os.sep + entry[0], address - entry[1]
+                return repo + "build/baserom/overlays" + os.sep + entry[0], address - entry[1]
     else:
         return None, None
 
