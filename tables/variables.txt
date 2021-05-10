@@ -13255,7 +13255,7 @@
     0x80A64044:("enBalOverlayRelocations","u32","[277]",0x454),
     0x80A6449C:("enBalOverlayInfoOffset","u32","",0x4),
     0x80A65D40:("En_Ginko_Man_InitVars","UNK_TYPE1","",0x1),
-    0x80A65D60:("D_80A65D60","UNK_PTR","",0x4),
+    0x80A65D60:("animations","UNK_PTR","",0x4),
     0x80A65DE0:("jtbl_D_80A65DE0","UNK_PTR","",0x4),
     0x80A65EAC:("jtbl_D_80A65EAC","UNK_PTR","",0x4),
     0x80A65EE8:("D_80A65EE8","f32","",0x4),

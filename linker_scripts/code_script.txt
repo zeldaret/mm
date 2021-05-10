@@ -4955,7 +4955,7 @@ SECTIONS
     ovl_En_Ginko_Man : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.text)
-        build/asm/overlays/ovl_En_Ginko_Man_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.data)
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.rodata)
         build/asm/overlays/ovl_En_Ginko_Man_rodata.o(.rodata)
     }
