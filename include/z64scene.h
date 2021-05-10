@@ -722,8 +722,8 @@ typedef enum {
 #define SCENE_CMD_ACTOR_LIST(numActors, actorList) \
     { SCENE_CMD_ID_ACTOR_LIST, numActors, CMD_PTR(actorList) }
 
-#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(camList) \
-    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, 0, CMD_PTR(camList) }
+#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(numCams, camList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, numCams, CMD_PTR(camList) }
 
 #define SCENE_CMD_COL_HEADER(colHeader) \
     { SCENE_CMD_ID_COL_HEADER, 0, CMD_PTR(colHeader) }
@@ -755,7 +755,7 @@ typedef enum {
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
 
 #define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
-    { SCENE_CMD_ID_POS_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
 
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
