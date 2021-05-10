@@ -1,8 +1,8 @@
 <Root>
-    <File Name="Z2_ICHIBA" Game="MM">
+    <File Name="Z2_ICHIBA" Segment="2" Game="MM">
         <Scene Name="Z2_ICHIBA"/>
     </File>
-    <File Name="Z2_ICHIBA_room_00" Game="MM">
+    <File Name="Z2_ICHIBA_room_00" Segment="3" Game="MM">
         <Room Name="Z2_ICHIBA_room_00"/>
     </File>
 </Root>

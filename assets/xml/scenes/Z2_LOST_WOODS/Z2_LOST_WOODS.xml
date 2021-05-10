@@ -4,13 +4,13 @@
             <TextureHint Offset="0xB9D0" Type="ia16" Width="64" Height="64"/>
         </Scene>
     </File>
-    <File Name="Z2_LOST_WOODS_room_00" Game="MM">
+    <File Name="Z2_LOST_WOODS_room_00" Segment="3" Game="MM">
         <Room Name="Z2_LOST_WOODS_room_00"/>
     </File>
-    <File Name="Z2_LOST_WOODS_room_01" Game="MM">
+    <File Name="Z2_LOST_WOODS_room_01" Segment="3" Game="MM">
         <Room Name="Z2_LOST_WOODS_room_01"/>
     </File>
-    <File Name="Z2_LOST_WOODS_room_02" Game="MM">
+    <File Name="Z2_LOST_WOODS_room_02" Segment="3" Game="MM">
         <Room Name="Z2_LOST_WOODS_room_02"/>
     </File>
 </Root>

@@ -1,11 +1,11 @@
 <Root>
-    <File Name="Z2_TENMON_DAI" Game="MM">
+    <File Name="Z2_TENMON_DAI" Segment="2" Game="MM">
         <Scene Name="Z2_TENMON_DAI"/>
     </File>
-    <File Name="Z2_TENMON_DAI_room_00" Game="MM">
+    <File Name="Z2_TENMON_DAI_room_00" Segment="3" Game="MM">
         <Room Name="Z2_TENMON_DAI_room_00"/>
     </File>
-    <File Name="Z2_TENMON_DAI_room_01" Game="MM">
+    <File Name="Z2_TENMON_DAI_room_01" Segment="3" Game="MM">
         <Room Name="Z2_TENMON_DAI_room_01"/>
     </File>
 </Root>

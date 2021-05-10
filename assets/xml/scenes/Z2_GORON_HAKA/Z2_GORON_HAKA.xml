@@ -1,8 +1,8 @@
 <Root>
-    <File Name="Z2_GORON_HAKA" Game="MM">
+    <File Name="Z2_GORON_HAKA" Segment="2" Game="MM">
         <Scene Name="Z2_GORON_HAKA"/>
     </File>
-    <File Name="Z2_GORON_HAKA_room_00" Game="MM">
+    <File Name="Z2_GORON_HAKA_room_00" Segment="3" Game="MM">
         <Room Name="Z2_GORON_HAKA_room_00"/>
     </File>
 </Root>

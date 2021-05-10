@@ -1,20 +1,20 @@
 <Root>
-    <File Name="Z2_HAKASHITA" Game="MM">
+    <File Name="Z2_HAKASHITA" Segment="2" Game="MM">
         <Scene Name="Z2_HAKASHITA"/>
     </File>
-    <File Name="Z2_HAKASHITA_room_00" Game="MM">
+    <File Name="Z2_HAKASHITA_room_00" Segment="3" Game="MM">
         <Room Name="Z2_HAKASHITA_room_00"/>
     </File>
-    <File Name="Z2_HAKASHITA_room_01" Game="MM">
+    <File Name="Z2_HAKASHITA_room_01" Segment="3" Game="MM">
         <Room Name="Z2_HAKASHITA_room_01"/>
     </File>
-    <File Name="Z2_HAKASHITA_room_02" Game="MM">
+    <File Name="Z2_HAKASHITA_room_02" Segment="3" Game="MM">
         <Room Name="Z2_HAKASHITA_room_02"/>
     </File>
-    <File Name="Z2_HAKASHITA_room_03" Game="MM">
+    <File Name="Z2_HAKASHITA_room_03" Segment="3" Game="MM">
         <Room Name="Z2_HAKASHITA_room_03"/>
     </File>
-    <File Name="Z2_HAKASHITA_room_04" Game="MM">
+    <File Name="Z2_HAKASHITA_room_04" Segment="3" Game="MM">
         <Room Name="Z2_HAKASHITA_room_04"/>
     </File>
 </Root>

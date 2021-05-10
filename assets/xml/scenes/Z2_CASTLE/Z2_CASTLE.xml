@@ -1,5 +1,5 @@
 <Root>
-    <File Name="Z2_CASTLE" Game="MM">
+    <File Name="Z2_CASTLE" Segment="2" Game="MM">
         <Scene Name="Z2_CASTLE"/>
     </File>
     <File Name="Z2_CASTLE_room_00" Game="MM">
@@ -8,13 +8,13 @@
             <TextureHint Offset="0x127B8" Type="rgb5a1" Width="32" Height="128"/>
         </Room>
     </File>
-    <File Name="Z2_CASTLE_room_01" Game="MM">
+    <File Name="Z2_CASTLE_room_01" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_01"/>
     </File>
-    <File Name="Z2_CASTLE_room_02" Game="MM">
+    <File Name="Z2_CASTLE_room_02" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_02"/>
     </File>
-    <File Name="Z2_CASTLE_room_03" Game="MM">
+    <File Name="Z2_CASTLE_room_03" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_03"/>
     </File>
     <File Name="Z2_CASTLE_room_04" Game="MM">
@@ -22,19 +22,19 @@
             <TextureHint Offset="0x4AC0" Type="rgb5a1" Width="64" Height="64"/>
         </Room>
     </File>
-    <File Name="Z2_CASTLE_room_05" Game="MM">
+    <File Name="Z2_CASTLE_room_05" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_05"/>
     </File>
-    <File Name="Z2_CASTLE_room_06" Game="MM">
+    <File Name="Z2_CASTLE_room_06" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_06"/>
     </File>
-    <File Name="Z2_CASTLE_room_07" Game="MM">
+    <File Name="Z2_CASTLE_room_07" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_07"/>
     </File>
-    <File Name="Z2_CASTLE_room_08" Game="MM">
+    <File Name="Z2_CASTLE_room_08" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_08"/>
     </File>
-    <File Name="Z2_CASTLE_room_09" Game="MM">
+    <File Name="Z2_CASTLE_room_09" Segment="3" Game="MM">
         <Room Name="Z2_CASTLE_room_09"/>
     </File>
 </Root>
