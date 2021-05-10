@@ -125,7 +125,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
-            Flags_GetSwitch(globalCtx, this->switchFlag);
+            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
         }
         Actor_MarkForDeath(&this->dynaActor.actor);
     }
