@@ -192,7 +192,10 @@ distclean: clean
 	rm -rf assets/src baserom/
 
 setup:
-	git submodule update --init --recursive --remote
+	# Initialize submodules, fetching commit in case it is not on the default branch
+	-git submodule update --init --recursive
+	git submodule foreach --recursive 'git fetch origin $$sha1'
+	git submodule update --recursive
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
