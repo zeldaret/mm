@@ -691,7 +691,7 @@ typedef enum {
     /* 0x06 */ SCENE_CMD_ID_ENTRANCE_LIST,
     /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
     /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
-    /* 0x09 */ SCENE_CMD_ID_UNUSED_09,
+    /* 0x09 */ SCENE_CMD_ID_UNK_09,
     /* 0x0A */ SCENE_CMD_ID_MESH,
     /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
     /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
@@ -747,6 +747,9 @@ typedef enum {
             currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
+
+#define SCENE_CMD_UNK_09() \
+    { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
 
 #define SCENE_CMD_MESH(meshHeader) \
     { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
