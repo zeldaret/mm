@@ -19,8 +19,8 @@ void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx);
 void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx);
-void BgCtowerRot_DoorWait(BgCtowerRot* this, GlobalContext* globalCtx);
-void BgCtowerRot_SetupDoorOpen(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_DoorIdle(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, GlobalContext* globalCtx);
 
 
 const ActorInit Bg_Ctower_Rot_InitVars = {
@@ -81,7 +81,7 @@ void BgCtowerRot_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * 80.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 80.0f);
         this->timer = 80.0f;
-        this->actionFunc = BgCtowerRot_DoorWait;
+        this->actionFunc = BgCtowerRot_DoorIdle;
     } else {
         this->actionFunc = BgCtowerRot_DoNothing;
     }
@@ -132,7 +132,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * this->timer);
 }
 
-void BgCtowerRot_DoorWait(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_DoorIdle(BgCtowerRot *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     Vec3f offset;
 
@@ -140,11 +140,11 @@ void BgCtowerRot_DoorWait(BgCtowerRot *this, GlobalContext *globalCtx) {
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-        this->actionFunc = BgCtowerRot_SetupDoorOpen;
+        this->actionFunc = BgCtowerRot_SetupDoorClose;
     }
 }
 
-void BgCtowerRot_SetupDoorOpen(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_SetupDoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         if (this->dyna.actor.params == MAIN_DOOR) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
