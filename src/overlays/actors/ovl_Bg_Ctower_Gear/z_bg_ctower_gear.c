@@ -10,7 +10,7 @@
 
 #define THIS ((BgCtowerGear*)thisx)
 
-#define GET_TYPE(this) (((BgCtowerGear*)this)->dyna.actor.params & 3)
+#define BGCTOWERGEAR_GET_TYPE(this) (((BgCtowerGear*)this)->dyna.actor.params & 3)
 
 typedef enum {
     /* 0x00 */ CEILING_COG,
@@ -63,7 +63,7 @@ static Vec3f D_80AD3270[] = {
 
 static Vec3f D_80AD32A0[] = {
     {85.0f, -60.0f, 8.0f},
-    {85.0f, -60.0f, -9.1f},
+    {80.0f, -60.0f, -9.1f},
     {85.0f, -60.0f, -26.2f},
 };
 
@@ -89,25 +89,25 @@ static Gfx* D_80AD32E8[] = {D_06010828, D_06017018, D_06018118};
 
 void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
     int i;
-    s32 sp88;
+    s32 flags;
     Vec3f splashSpawnPos;
-    Vec3f sp70;
+    Vec3f splashOffset;
     s32 pad;
     int j;
-    s16 sp66;
+    s16 rotZ;
 
-    sp88 = this->dyna.actor.flags & 0x40;
-    sp66 = this->dyna.actor.shape.rot.z & 0x1FFF;
-    if ((sp88 != 0) && (sp66 < 0x1B58) && (sp66 >= 0x1388)) {
+    flags = this->dyna.actor.flags & 0x40;
+    rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
+    if ((flags != 0) && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
         SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
         SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
         for(i=0; i<4; i++) {
             if ((u32) Rand_Next() >= 0x40000000) {
-                sp70.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
-                sp70.y = D_80AD3270[i].y;
-                sp70.z = D_80AD3270[i].z;
-                SysMatrix_MultiplyVector3fByState(&sp70, &splashSpawnPos);
+                splashOffset.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
+                splashOffset.y = D_80AD3270[i].y;
+                splashOffset.z = D_80AD3270[i].z;
+                SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -115,17 +115,17 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
             }
         }
     }
-    if ((sp66 < 0x1F4) && (sp66 >= 0)) {
-        if (sp88 != 0) {
+    if ((rotZ < 0x1F4) && (rotZ >= 0)) {
+        if (flags != 0) {
             Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
             SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
             SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
             for(i=0; i<3; i++) {
                 for(j=0; j<2; j++) {
-                    sp70.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
-                    sp70.y = D_80AD32A0[i].y;
-                    sp70.z = D_80AD32A0[i].z;
-                    SysMatrix_MultiplyVector3fByState(&sp70, &splashSpawnPos);
+                    splashOffset.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
+                    splashOffset.y = D_80AD32A0[i].y;
+                    splashOffset.z = D_80AD32A0[i].z;
+                    SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -141,7 +141,7 @@ void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = GET_TYPE(this);
+    type = BGCTOWERGEAR_GET_TYPE(this);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     if (type == CENTER_COG) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChainCenterCog);
@@ -166,7 +166,7 @@ void BgCtowerGear_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = GET_TYPE(this);
+    type = BGCTOWERGEAR_GET_TYPE(this);
     if ((type == WATER_WHEEL) || (type == ORGAN)) {
         BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
@@ -176,7 +176,7 @@ void BgCtowerGear_Update(Actor *thisx, GlobalContext *globalCtx) {
     BgCtowerGear *this = THIS;
     s32 type;
 
-    type = GET_TYPE(this);
+    type = BGCTOWERGEAR_GET_TYPE(this);
     if (type == CEILING_COG) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     }
@@ -212,7 +212,7 @@ void BgCtowerGear_UpdateOrgan(Actor *thisx, GlobalContext *globalCtx) {
 
 //Using BgCtowerGear *this = THIS causes regalloc issues
 void BgCtowerGear_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    func_800BDFC0(globalCtx, D_80AD32E8[GET_TYPE(thisx)]);
+    func_800BDFC0(globalCtx, D_80AD32E8[BGCTOWERGEAR_GET_TYPE(thisx)]);
 }
 
 void BgCtowerGear_DrawOrgan(Actor *thisx, GlobalContext *globalCtx) {
