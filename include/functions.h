@@ -932,8 +932,8 @@ void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
 void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
 void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next);
 void BgCheck_PolygonLinkedListResetHead(u16* head);
-void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, u16* head, s16* polyIndex);
-void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, u16* head, s16* polyIndex);
+void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, SSList* ssList, s16* polyIndex);
+void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, SSList* ssList, s16* polyIndex);
 void BgCheck_PolygonLinkedListInit(GlobalContext* globalCtx, DynaSSNodeList* list);
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes);
 void BgCheck_PolygonLinkedListReset(DynaSSNodeList* list);
@@ -942,9 +942,9 @@ void BgCheck_CreateVec3fFromVertex(Vec3s* vertex, Vec3f* vector);
 void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector);
 float func_800BFD84(CollisionPoly* polygon, f32 param_2, f32 param_3);
 s32 func_800BFDEC(CollisionPoly* param_1, CollisionPoly* param_2, u32* param_3, u32* param_4);
-s32 BgCheck_PolygonGetMinY(CollisionPoly* polygons, Vec3s* vertices);
+s16 BgCheck_PolygonGetMinY(CollisionPoly* polygons, Vec3s* vertices);
 void BgCheck_PolygonGetNormal(CollisionPoly* polygon, f32* normalX, f32* normalY, f32* normalZ);
-void func_800C0094(struct CollisionPoly* param_1, f32 xOffset, f32 yOffset, f32 zOffset, MtxF* matrix);
+void func_800C0094(CollisionPoly* param_1, f32 xOffset, f32 yOffset, f32 zOffset, MtxF* matrix);
 f32 func_800C01B8(CollisionPoly* param_1, Vec3f* param_2);
 void BgCheck_CreateColTriParamsFromPolygon(CollisionPoly* polygon, Vec3s* vertices, TriNorm* tri);
 void func_800C02C0(CollisionPoly* poly, s32 index, CollisionContext* colCtx, TriNorm* tri);

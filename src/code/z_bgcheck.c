@@ -1,96 +1,350 @@
 #include "global.h"
 
+//SSNode_SetValue
 void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next) {
     node->polyId = *polyIndex;
     node->next = next;
 }
 
+//SSList_SetNull
 void BgCheck_PolygonLinkedListResetHead(u16* head) {
-    *head = 0xFFFF;
+    *head = SS_NULL;
 }
 
-void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, u16* head, s16* polyIndex) {
+//SSNodeList_SetSSListHead
+void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, SSList* ssList, s16* polyIndex) {
     u16 index;
 
     index = BgCheck_ScenePolygonListsReserveNode(list);
-    BgCheck_PolygonLinkedListNodeInit(&list->tbl[index], polyIndex, *head);
-    *head = index;
+    BgCheck_PolygonLinkedListNodeInit(&list->nodes[index], polyIndex, ssList->head);
+    ssList->head = index;
 }
 
-void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, u16* head, s16* polyIndex) {
+//DynaSSNodeList_SetSSListHead
+void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, SSList* ssList, s16* polyIndex) {
     u16 index;
 
     index = BgCheck_AllocPolygonLinkedListNode(list);
-    BgCheck_PolygonLinkedListNodeInit(&list->tbl[index], polyIndex, *head);
-    *head = index;
+    BgCheck_PolygonLinkedListNodeInit(&list->nodes[index], polyIndex, ssList->head);
+    ssList->head = index;
 }
 
+//DynaSSNodeList_Initialize
 void BgCheck_PolygonLinkedListInit(GlobalContext* globalCtx, DynaSSNodeList* list) {
-    list->tbl = NULL;
+    list->nodes = NULL;
     list->count = 0;
 }
 
+//DynaSSNodeList_Alloc
 void BgCheck_PolygonLinkedListAlloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes) {
-    list->tbl = (SSNode*)THA_AllocEndAlign(&globalCtx->state.heap, numNodes << 2, 0xfffffffe);
-    list->max = numNodes;
+    list->nodes = (SSNode*)THA_AllocEndAlign(&globalCtx->state.heap, numNodes * sizeof(SSNode), -2);
+    list->maxNodes = numNodes;
     list->count = 0;
 }
 
+//DynaSSNodeList_ResetCount
 void BgCheck_PolygonLinkedListReset(DynaSSNodeList* list) {
     list->count = 0;
 }
 
+//DynaSSNodeList_GetNextNodeIdx
 u16 BgCheck_AllocPolygonLinkedListNode(DynaSSNodeList* list) {
     u16 index;
 
     index = list->count++;
-    if (list->max <= index) {
-        return 0xffff;
+    if (list->maxNodes <= index) {
+        return SS_NULL;
     }
 
     return index;
 }
 
-void BgCheck_CreateVec3fFromVertex(Vec3s* vertex, Vec3f* vector) {
-    vector->x = vertex->x;
-    vector->y = vertex->y;
-    vector->z = vertex->z;
+//BgCheck_Vec3sToVec3f
+void BgCheck_CreateVec3fFromVertex(BgVertex* vertex, Vec3f* vector) {
+    vector->x = vertex->pos.x;
+    vector->y = vertex->pos.y;
+    vector->z = vertex->pos.z;
 }
 
-void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector) {
-    vertex->x = vector->x;
-    vertex->y = vector->y;
-    vertex->z = vector->z;
+//BgCheck_Vec3fToVec3s
+void BgCheck_CreateVertexFromVec3f(BgVertex* vertex, Vec3f* vector) {
+    vertex->pos.x = vector->x;
+    vertex->pos.y = vector->y;
+    vertex->pos.z = vector->z;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFD84.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFD84.s")
+f32 func_800BFD84(CollisionPoly *polygon, f32 param_2, f32 param_3) {
+    return ((COLPOLY_GET_NORMAL(polygon->normal.x * param_2 + polygon->normal.z * param_3)) + (f32) polygon->dist) / ((f32) -(s32) polygon->normal.y * COLPOLY_NORMAL_FRAC);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFDEC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetMinY.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetMinY.s")
+//CollisionPoly_GetMinY
+s16 BgCheck_PolygonGetMinY(CollisionPoly* poly, BgVertex* vertices) {
+    s16 phi_a3;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetNormal.s")
+    s32 a;
+    s32 b;
+    s32 c;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0094.s")
+    a = COLPOLY_VTX_INDEX(poly->flags_vIA);
+    b = COLPOLY_VTX_INDEX(poly->flags_vIB);
+    c = poly->vIC;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C01B8.s")
+    phi_a3 = vertices[a].pos.y;
+    if (vertices[b].pos.y < phi_a3) {
+        phi_a3 = vertices[b].pos.y;
+    }
+    if (phi_a3 < vertices[c].pos.y) {
+        return phi_a3;
+    }
+    return vertices[c].pos.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CreateTriNormFromPolygon.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetNormal.s")
+//CollisionPoly_GetNormalF
+void BgCheck_PolygonGetNormal(CollisionPoly* poly, f32* nx, f32* ny, f32* nz) {
+    *nx = COLPOLY_GET_NORMAL(poly->normal.x);
+    *ny = COLPOLY_GET_NORMAL(poly->normal.y);
+    *nz = COLPOLY_GET_NORMAL(poly->normal.z);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C02C0.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0094.s")
+/**
+ * Compute transform matrix mapping +y (up) to the collision poly's normal
+ */
+//func_80038A28
+void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
+    f32 nx;
+    f32 ny;
+    f32 nz;
+    s32 pad;
+    f32 z_f14;
+    f32 phi_f14;
+    f32 phi_f12;
+    f32 inv_z_f14;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0340.s")
+    if (poly == NULL) {
+        return;
+    }
+    BgCheck_PolygonGetNormal(poly, &nx, &ny, &nz);
+
+    z_f14 = sqrtf(SQ(ny) + SQ(nz));
+    if (!IS_ZERO(z_f14)) {
+        inv_z_f14 = 1.0f / z_f14;
+        phi_f14 = ny * inv_z_f14;
+        phi_f12 = nz * inv_z_f14;
+    }
+    else {
+        phi_f14 = 1.0f;
+        phi_f12 = 0.0f;
+    }
+    dest->xx = z_f14;
+    dest->xy = (-nx) * phi_f14;
+    dest->xz = (-nx) * phi_f12;
+    dest->yx = nx;
+    dest->yy = ny;
+    dest->yz = nz;
+    dest->zx = 0.0f;
+    dest->zy = -phi_f12;
+    dest->zz = phi_f14;
+    dest->wx = tx;
+    dest->wy = ty;
+    dest->wz = tz;
+    dest->xw = 0.0f;
+    dest->yw = 0.0f;
+    dest->zw = 0.0f;
+    dest->ww = 1.0f;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C01B8.s")
+//CollisionPoly_GetPointDistanceFromPlane
+f32 func_800C01B8(CollisionPoly* poly, Vec3f* point) {
+    return (poly->normal.x * point->x + poly->normal.y * point->y + poly->normal.z * point->z) * COLPOLY_NORMAL_FRAC +
+        poly->dist;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CreateTriNormFromPolygon.s")
+//CollisionPoly_GetVertices
+void BgCheck_CreateTriNormFromPolygon(CollisionPoly* poly, Vec3s* vtxList, Vec3f* dest) {
+    BgCheck_CreateVec3fFromVertex(&vtxList[COLPOLY_VTX_INDEX(poly->flags_vIA)], &dest[0]);
+    BgCheck_CreateVec3fFromVertex(&vtxList[COLPOLY_VTX_INDEX(poly->flags_vIB)], &dest[1]);
+    BgCheck_CreateVec3fFromVertex(&vtxList[poly->vIC], &dest[2]);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C02C0.s")
+//CollisionPoly_GetVerticesByBgId
+void func_800C02C0(CollisionPoly* poly, s32 bgId, CollisionContext* bgCtxt, Vec3f* dest) {
+    Vec3s* vtxList;
+
+    if (poly == NULL || bgId > BG_ACTOR_MAX || dest == NULL) {
+        if (0) {
+            //
+        }
+
+        if (dest != NULL) {
+            // @bug: dest[2] x and y are not set to 0
+            dest[0].x = dest[0].y = dest[0].z = dest[1].x = dest[1].y = dest[1].z = dest[2].z = 0.0f;
+            return;
+        }
+    }
+    else {
+        if (bgId == BGCHECK_SCENE) {
+            vtxList = bgCtxt->colHeader->vtxList;
+        }
+        else {
+            vtxList = bgCtxt->dyna.vtxList;
+        }
+        BgCheck_CreateTriNormFromPolygon(poly, vtxList, dest);
+    }
+}
+
+s32 func_8017BE30(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0340.s")
+extern Vec3f D_801ED9F0[3]; //polyVerts
+//CollisionPoly_CheckYIntersectApprox1
+s32 func_800C0340(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist) {
+    f32 nx;
+    f32 ny;
+    f32 nz;
+    Vec3s* vA;
+    Vec3s* vB;
+    Vec3s* vC;
+
+    vA = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIA)];
+    Math_Vec3s_ToVec3f(&D_801ED9F0[0], vA);
+    vB = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIB)];
+    Math_Vec3s_ToVec3f(&D_801ED9F0[1], vB);
+    vC = &vtxList[poly->vIC];
+    Math_Vec3s_ToVec3f(&D_801ED9F0[2], vC);
+
+    nx = COLPOLY_GET_NORMAL(poly->normal.x);
+    ny = COLPOLY_GET_NORMAL(poly->normal.y);
+    nz = COLPOLY_GET_NORMAL(poly->normal.z);
+
+    return func_8017BE30(&D_801ED9F0[0], &D_801ED9F0[1], &D_801ED9F0[2], nx, ny, nz, poly->dist, z,
+        x, yIntersect, chkDist);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0474.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0668.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0668.s")
+//CollisionPoly_CheckYIntersectApprox2
+void func_800C0668(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
+    func_800C0340(poly, vtxList, x, z, yIntersect, 1.0f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C06A8.s")
+s32 func_8017C850(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C074C.s")
+extern Vec3f D_801EDA80[3]; //polyVerts
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C06A8.s")
+//CollisionPoly_CheckXIntersectApprox
+s32 func_800C06A8(CollisionPoly* poly, Vec3s* vtxList, f32 y, f32 z, f32* xIntersect) {
+    f32 nx;
+    f32 ny;
+    f32 nz;
+
+    BgCheck_CreateTriNormFromPolygon(poly, vtxList, D_801EDA80);
+    BgCheck_PolygonGetNormal(poly, &nx, &ny, &nz);
+    return func_8017C850(&D_801EDA80[0], &D_801EDA80[1], &D_801EDA80[2], nx, ny, nz, poly->dist, y, z,
+        xIntersect);
+}
+
+s32 func_8017CEF0(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y, f32* zIntersect);
+extern Vec3f D_801EDB48[3]; //polyVerts
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C074C.s")
+//CollisionPoly_CheckZIntersectApprox
+s32 func_800C074C(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 y, f32* zIntersect) {
+    f32 nx;
+    f32 ny;
+    f32 nz;
+
+    BgCheck_CreateTriNormFromPolygon(poly, vtxList, D_801EDB48);
+    BgCheck_PolygonGetNormal(poly, &nx, &ny, &nz);
+    return func_8017CEF0(&D_801EDB48[0], &D_801EDB48[1], &D_801EDB48[2], nx, ny, nz, poly->dist, x, y,
+        zIntersect);
+}
+
+typedef struct {
+    CollisionPoly* poly;
+    Vec3s* vtxList;
+    Vec3f* posA;
+    Vec3f* posB;
+    Vec3f* planeIntersect;
+    s32 chkOneFace;
+    f32 chkDist;
+} func_800C07F0_args;
+
+s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx); //Math3D_TriChkPointParaXDist
+s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny); //Math3D_TriChkPointParaYDist
+s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz); //Math3D_TriChkLineSegParaZDist
+
+Vec3f D_801EDB70[3];
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C07F0.s")
+//extern Vec3f D_01EDB70[3];//polyVerts[3];
+//extern Plane D_801EDB98;//plane;
+//CollisionPoly_LineVsPoly
+/*
+s32 func_800C07F0(func_800C07F0_args* a0) {
+    f32 planeDistA;
+    f32 planeDistB;
+    f32 planeDistDelta;
 
+    D_801EDB98.originDist = a0->poly->dist;
+    planeDistA =
+        (a0->poly->normal.x * a0->posA->x + a0->poly->normal.y * a0->posA->y + a0->poly->normal.z * a0->posA->z) * COLPOLY_NORMAL_FRAC +
+        D_801EDB98.originDist;
+    planeDistB =
+        (a0->poly->normal.x * a0->posB->x + a0->poly->normal.y * a0->posB->y + a0->poly->normal.z * a0->posB->z) * COLPOLY_NORMAL_FRAC +
+        D_801EDB98.originDist;
+
+    planeDistDelta = planeDistA - planeDistB;
+    if ((planeDistA >= 0.0f && planeDistB >= 0.0f) || (planeDistA < 0.0f && planeDistB < 0.0f) ||
+        (a0->chkOneFace && planeDistA < 0.0f && planeDistB > 0.0f) || IS_ZERO(planeDistDelta)) {
+        return false;
+    }
+
+    BgCheck_PolygonGetNormal(a0->poly, &D_801EDB98.normal.x, &D_801EDB98.normal.y, &D_801EDB98.normal.z);
+    BgCheck_CreateTriNormFromPolygon(a0->poly, a0->vtxList, D_01EDB70);
+    Math3D_Lerp(a0->posA, a0->posB, planeDistA / planeDistDelta, a0->planeIntersect);
+    if ((fabsf(D_801EDB98.normal.x) > 0.5f &&
+        func_8017C540(
+            &D_01EDB70[0], 
+            &D_01EDB70[1],
+            &D_01EDB70[2], 
+            a0->planeIntersect->y,
+            a0->planeIntersect->z,
+            0.0f,
+            a0->chkDist, 
+            D_801EDB98.normal.x)) ||
+        (fabsf(D_801EDB98.normal.y) > 0.5f &&
+            func_8017BAD0(
+                &D_01EDB70[0],
+                &D_01EDB70[1],
+                &D_01EDB70[2],
+                a0->planeIntersect->z,
+                a0->planeIntersect->x,
+                0.0f,
+                a0->chkDist, D_801EDB98.normal.y)) ||
+        (fabsf(D_801EDB98.normal.z) > 0.5f &&
+            func_8017CB7C(
+                &D_01EDB70[0],
+                &D_01EDB70[1],
+                &D_01EDB70[2],
+                a0->planeIntersect->x,
+                a0->planeIntersect->y,
+                0.0f,
+                a0->chkDist,
+                D_801EDB98.normal.z))) {
+        return true;
+    }
+    return false;
+}
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonCollidesWithSphere.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_ScenePolygonListsInsertSorted.s")
