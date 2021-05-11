@@ -67,7 +67,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->switchFlag = -1;
     }
 
-    if ((this->switchFlag >= 0) && (Actor_GetSwitchFlag(globalCtx, this->switchFlag))) {
+    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag))) {
         Actor_MarkForDeath(&this->dynaActor.actor);
         return;
     }

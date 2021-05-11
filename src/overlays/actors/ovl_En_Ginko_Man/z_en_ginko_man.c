@@ -665,13 +665,13 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan *this, GlobalContext *globalCtx) {
         if (this->animTimer == 0) {
             if (this->skelAnime.animCurrentSeg != object_ginko_amazed_anim) {
                 this->animTimer = 0x28;
-                func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                func_800BDC5C(&this->skelAnime, animations, GINKO_ADVERTISING);
             }
         }
 
     } else if ((this->animTimer == 0) && (this->skelAnime.animCurrentSeg != object_ginko_advertising_anim)) {
         this->animTimer = 0x28;
-        func_800BDC5C(&this->skelAnime, animations, GINKO_REACHING);
+        func_800BDC5C(&this->skelAnime, animations, GINKO_AMAZED);
     }
 
     DECR(this->animTimer);
