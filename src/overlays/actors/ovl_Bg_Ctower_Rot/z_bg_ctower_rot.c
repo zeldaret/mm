@@ -18,8 +18,8 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx);
-void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx);
-void BgCtowerRot_DoorWait(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, GlobalContext* globalCtx);
+void BgCtowerRot_DoorIdle(BgCtowerRot* this, GlobalContext* globalCtx);
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, GlobalContext* globalCtx);
 
 
@@ -81,9 +81,9 @@ void BgCtowerRot_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * 80.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 80.0f);
         this->timer = 80.0f;
-        this->actionFunc = BgCtowerRot_DoorWait;
+        this->actionFunc = BgCtowerRot_DoorIdle;
     } else {
-        this->actionFunc = BgCtowerRot_DoNothing;
+        this->actionFunc = BgCtowerRot_DoorDoNothing;
     }
 }
 
@@ -115,7 +115,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot *this, GlobalContext *globalCtx) {
     }
 }
 
-void BgCtowerRot_DoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
+void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
 }
 
 void BgCtowerRot_DoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
@@ -124,7 +124,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
             Audio_PlayActorSound2(&this->dyna.actor, 0x2893);
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        this->actionFunc = BgCtowerRot_DoNothing;
+        this->actionFunc = BgCtowerRot_DoorDoNothing;
     } else if (this->dyna.actor.params == 1) {
         func_800B9010(&this->dyna.actor, 0x201E);
     }
@@ -132,7 +132,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot *this, GlobalContext *globalCtx) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * this->timer);
 }
 
-void BgCtowerRot_DoorWait(BgCtowerRot *this, GlobalContext *globalCtx) {
+void BgCtowerRot_DoorIdle(BgCtowerRot *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     Vec3f offset;
 

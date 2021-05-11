@@ -6546,7 +6546,7 @@
     0x808E2070:("BgCtowerRot_Init",),
     0x808E21C8:("BgCtowerRot_Destroy",),
     0x808E21FC:("BgCtowerRot_CorridorRotate",),
-    0x808E22DC:("BgCtowerRot_DoNothing",),
+    0x808E22DC:("BgCtowerRot_DoorDoNothing",),
     0x808E22EC:("BgCtowerRot_DoorClose",),
     0x808E23D0:("BgCtowerRot_DoorIdle",),
     0x808E2444:("BgCtowerRot_SetupDoorClose",),
