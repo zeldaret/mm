@@ -271,7 +271,7 @@ build/assets/%.d: assets/%.c
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
 assets/src/scenes/%.c: assets/xml/scenes/%.xml
-	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*)
+	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*) -rconf tools/ZAPDConfigs/MM/Config.xml
 	find $(dir assets/src/scenes/$*) -path "assets/src/scenes/$**.png" | \
      sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
      bash
