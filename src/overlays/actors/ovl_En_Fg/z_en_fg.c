@@ -309,24 +309,27 @@ void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#ifdef NON_MATCHING
 void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
+    s32 flag;
+    s32 flagSet;
 
-    // Both "> 1" should be "> 0" to be equivalent, but loses the xor in the assembly. 
-    // xor typically involes a negation of the > sign, can't pinpoint the matching.
-    if (((this->actor.flags & 0x2000 ^ 0x2000) > 1) && ((this->actor.flags & 0x8000 ^ 0x8000) > 1)) {
-        this->actionFunc(this, globalCtx);
-        func_800B78B8(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 5);
+    flag = this->actor.flags;
+    flagSet = ((flag & 0x2000) == 0x2000);
+    if (1) {}
+    if (!flagSet) {
+        flagSet = ((flag & 0x8000) == 0x8000);
+        if (1) {}
+        if (!flagSet) {
+            this->actionFunc(this, globalCtx);
+            func_800B78B8(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 5);
+        }
     }
 
     func_80A2D3D4(this, globalCtx);
     EnFg_UpdateDust(&this->dustEffect);
     func_80A2D348(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fg_0x80A2D280/EnFg_Update.asm")
-#endif
 
 s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, EnFg* this) {
     if ((limbIndex == 7) || (limbIndex == 8)) {
@@ -403,7 +406,7 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
 
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     s32 i;
-    
+
     for (i = 0; i < 10; i++, dustEffect++) {
         if (dustEffect->type) {
             if (DECR(dustEffect->timer) == 0) {
