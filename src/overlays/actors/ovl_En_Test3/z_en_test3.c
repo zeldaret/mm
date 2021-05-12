@@ -1,9 +1,3 @@
-/*
- * File: z_en_test3.c
- * Overlay: ovl_En_Test3
- * Description: Kafei
- */
-
 #include "z_en_test3.h"
 #include "../ovl_En_Door/z_en_door.h"
 
@@ -34,22 +28,12 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 s32 func_80A3FE20(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
 s32 func_80A3FFD0(EnTest3* this, GlobalContext* globalCtx);
-void EnTest3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-// bss variables
-extern Input D_80A41D28;
+// bss
 extern s32 D_80A41D20;
 extern s32 D_80A41D24;
-extern s32 D_80A41D60;
-extern s32 D_801C20A8;
-extern s32 D_80A41D48;
-extern f32 D_80A41D40;
-extern s16 D_80A41D44;
-extern Vec3f D_80A41D50;
-extern s32 D_80A41D5C;
-extern s32 D_80A41D68;
 
-// external variables
+// Extenal
 extern LinkAnimetionEntry D_0400CF88;
 extern FlexSkeletonHeader D_0600F7EC;
 
@@ -77,12 +61,12 @@ const ActorInit En_Test3_InitVars = {
     (ActorFunc)NULL,
 };
 
-s32 EnTest3_SetupAction(EnTest3* this, EnTest3ActionFunc action) {
-    if (action == this->action) {
+s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
+    if (actionFunc == this->actionFunc) {
         return 0;
     }
 
-    this->action = action;
+    this->actionFunc = actionFunc;
     this->unk_D8A = 0;
     this->schedule = 0;
     return 1;
@@ -101,7 +85,7 @@ s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
         return 0;
     }
 
-    EnTest3_SetupAction(this, actionSetup->action);
+    func_80A3E7E0(this, actionSetup->action);
 
     return 1;
 }
@@ -386,9 +370,9 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.base.colChkInfo.health = 0xFF;
 
     if (((this->actor.base.params >> 5) & 0xF) == 0) {
-        EnTest3_SetupAction(this, func_80A40824);
+        func_80A3E7E0(this, func_80A40824);
     } else {
-        EnTest3_SetupAction(this, func_80A40678);
+        func_80A3E7E0(this, func_80A40678);
     }
 }
 
@@ -562,35 +546,22 @@ s32 func_80A3F384(EnTest3* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-s32 func_80A3F4A4(GlobalContext* globalCtx) {
-    return ((func_8012403C(globalCtx) == 0) || (func_8012403C(globalCtx) == 4) || (func_8012403C(globalCtx) == 9) ||
-            (func_8012403C(globalCtx) == 5) || (func_8012403C(globalCtx) == 2));
-}
+s32 func_80A3F4A4(GlobalContext* globalCtx);
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F4A4.asm")
 
 void func_80A3F534(EnTest3* this, GlobalContext* globalCtx) {
     if (func_80A3F4A4(globalCtx) == 0) {
-        this->talkState = &D_80A4187C[0];
+        this->talkState = D_80A4187C;
     } else if (gSaveContext.perm.weekEventReg[51] & 8) {
-        this->talkState = &D_80A41870[0];
+        this->talkState = D_80A41870;
     } else {
-        this->talkState = &D_80A41858[0];
+        this->talkState = D_80A41858;
     }
 
     this->actorCutsceneId = this->actor.base.cutscene;
 }
 
-void func_80A3F5A4(EnTest3* this, GlobalContext* globalCtx) {
-    if ((!(gSaveContext.perm.weekEventReg[51] & 8)) || (!(func_80A3F4A4(globalCtx)))) {
-        this->talkState = &D_80A4189C[0];
-        D_80A41D5C = 0;
-    } else if (D_80A41D5C != 0) {
-        this->talkState = &D_80A41884[5];
-    } else {
-        this->talkState = &D_80A41884[0];
-    }
-
-    this->actorCutsceneId = this->actor.base.cutscene;
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F5A4.asm")
 
 TalkState* D_80A418A8[] = {
     D_80A41854, D_80A41858, D_80A41880, D_80A41884, D_80A418A0,
@@ -600,21 +571,7 @@ TalkState* D_80A418A8[] = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F73C.asm")
 
-s32 func_80A3F8D4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
-    Actor* actor;
-
-    func_80A3F15C(this, globalCtx, arg2);
-
-    if (((actor = func_80A3F2BC(globalCtx, &this->actor.base, ACTOR_EN_PST, ACTORCAT_PROP, 100.0f, 20.0f)),
-         (actor != NULL)) ||
-        ((actor = func_80A3F2BC(globalCtx, &this->actor.base, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f),
-          (actor != NULL)))) {
-        this->actor.base.home.rot.y = Actor_YawBetweenActors(&this->actor.base, actor);
-    }
-
-    globalCtx->func_1877C(globalCtx, &this->actor, 0x61);
-    return 1;
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F8D4.asm")
 
 s32 func_80A3F9A4(EnTest3* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.base.shape.rot.y, this->actor.base.home.rot.y, 800);
@@ -649,7 +606,7 @@ s32 func_80A3FBE8(EnTest3* this, GlobalContext* globalCtx) {
 
     if ((D_80A41D20 == 0) && (func_801690CC(globalCtx) == 0)) {
         D_80A41D20 = 1;
-        this->talkState = &D_80A418A4[0];
+        this->talkState = D_80A418A4;
         this->actorCutsceneId = this->actor.base.cutscene;
         this->actor.base.textId = D_80A418A4->textId;
     } else if (D_80A41D20 == 1) {
@@ -698,28 +655,9 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FE20.asm")
 
-s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
-    static Vec3f D_80A418BC = { -420.0f, 210.0f, -162.0f };
+Vec3f D_80A418BC[] = { -420.0f, 210.0f, -162.0f };
 
-    if (gSaveContext.perm.weekEventReg[51] & 0x40) {
-        D_80A41D68 = 2;
-        Math_Vec3f_Copy(&this->actor.base.world.pos, &D_80A418BC);
-        Math_Vec3f_Copy(&this->actor.base.home.pos, &D_80A418BC);
-        this->actor.base.home.rot.y = -0x2AAB;
-        this->actor.base.shape.rot.y = -0x2AAB;
-        this->actor.unk_AD4 = -0x2AAB;
-        goto dummy_label_829727;
-    dummy_label_829727:; // required to match
-    } else {
-        func_80A3F15C(this, globalCtx, arg2);
-        this->actorCutsceneId = this->actor.base.cutscene;
-
-        if (globalCtx->roomContext.currRoom.num == 2) {
-            this->actorCutsceneId = ActorCutscene_GetAdditionalCutscene(this->actorCutsceneId);
-        }
-    }
-    return 1;
-}
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FF10.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FFD0.asm")
 
@@ -759,7 +697,7 @@ s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40678.asm")
 
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
-    this->talkState = &D_80A41854[0];
+    this->talkState = D_80A41854;
     func_80A3F73C(this, globalCtx);
 }
 
@@ -767,65 +705,13 @@ void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40908.asm")
 
-void func_80A409D4(EnTest3* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A409D4.asm")
 
 void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx) {
     gSaveContext.perm.weekEventReg[64] |= 0x20;
 }
 
-#ifdef NON_EQUIVALENT
-// instructions are mostly correct, but the control flow is very wrong!
-void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnTest3* this = (EnTest3*)thisx;
-    volatile u32 pad; // fake but helps matching; fixing the control flow should make this removable though
-
-    D_80A41D28.rel.button = D_80A41D28.cur.button;
-    D_80A41D28.cur.button = 0;
-    D_80A41D28.rel.stick_x = 0;
-    D_80A41D28.rel.stick_y = 0;
-    globalCtx->actorCtx.unk5 &= ~0x80;
-    this->actor.base.draw = EnTest3_Draw;
-    D_80A41D48 = 0;
-    this->actor.base.flags &= ~9;
-
-    if (func_800EE29C(globalCtx, 0x1FA)) {
-        if ((this->actor.base.category != ACTORCAT_PLAYER) ||
-            ((!((globalCtx->actorCtx.unk5 & 0xFFu) & 0x20)) && (!(globalCtx->actorCtx.unk5 & 0x10)))) {
-            if (this->actor.unk_394 != 5) {
-                globalCtx->func_1877C(globalCtx, &this->actor, 5);
-            }
-
-            globalCtx->actorCtx.unk5 &= ~0x10;
-        } else if (pad = this->actor.base.category, pad == ACTORCAT_PLAYER) {
-            func_80A409D4(this, globalCtx);
-        } else if (globalCtx->func_1877C(globalCtx, &this->actor, 0) && (this->schedule >= 7)) {
-            Vec3f sp34;
-            Math_Vec3f_Copy(&sp34, &this->actor.base.world.pos);
-            this->unk_D80 = 4;
-            func_80A40230(this, globalCtx);
-            Math_Vec3f_Copy(&this->actor.base.world.pos, &sp34);
-            D_80A41D48 = 0;
-            this->unk_D84 = 0.0f;
-        } else {
-            D_80A41D40 = 0.0f;
-            D_80A41D44 = this->actor.base.shape.rot.y;
-            this->action(this, globalCtx);
-            D_80A41D28.press.button = (D_80A41D28.rel.button ^ D_80A41D28.cur.button) & D_80A41D28.cur.button;
-            func_800B6F20(globalCtx, &D_80A41D28, D_80A41D40, D_80A41D44);
-        }
-
-        globalCtx->playerUpdate(&this->actor, globalCtx, &D_80A41D28);
-        if (D_80A41D48) {
-            this->actor.base.world.pos.x = D_80A41D50.x;
-            this->actor.base.world.pos.z = D_80A41D50.z;
-            this->actor.unk_AD0 = 0.0f;
-        }
-    }
-}
-#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
-#endif
 
 s32 D_80A418C8 = 0;
 
@@ -834,10 +720,10 @@ void func_80A40CF0();
 
 Vec3f D_80A418CC[] = { 1100.0f, -700.0f, 0.0f };
 
-void func_80A40F34(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
+void func_80A40F34();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40F34.asm")
 
-void EnTest3_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
     static void* eyeTextures[] = {
         0x06000DC0, 0x06003680, 0x06003E80, 0x06004680, 0x06004E80, 0x06005680, 0x06005E80, 0x06006680,
     };

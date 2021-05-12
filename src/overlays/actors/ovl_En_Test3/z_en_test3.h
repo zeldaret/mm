@@ -56,7 +56,7 @@ typedef struct EnTest3 {
     /* 0xD8D */ s8 actorCutsceneId;
     /* 0xD8E */ s16 camId;
     /* 0xD90 */ Player* player;
-    /* 0xD94 */ EnTest3ActionFunc action;
+    /* 0xD94 */ EnTest3ActionFunc actionFunc;
     /* 0xD98 */ Vec3f unk_D98;
     /* 0xDA4 */ f32 unk_DA4;
     /* 0xDA8 */ s32 unk_DA8;
