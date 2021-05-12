@@ -16,13 +16,13 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-extern u64 D_0408F7E0[]; 
-extern u64 D_0408F3E0[]; 
-extern u64 D_0408EFE0[]; 
-extern u64 D_0408EBE0[]; 
-extern u64 D_0408E7E0[]; 
-extern u64 D_0408E3E0[]; 
-extern u64 D_0408DFE0[]; 
+extern u64 D_0408F7E0[];
+extern u64 D_0408F3E0[];
+extern u64 D_0408EFE0[];
+extern u64 D_0408EBE0[];
+extern u64 D_0408E7E0[];
+extern u64 D_0408E3E0[];
+extern u64 D_0408DFE0[];
 extern u64 D_0408DBE0[];
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
@@ -101,7 +101,7 @@ void func_80A2D348(EnFg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health != 0) {
         this->collider.dim.pos.x = this->actor.world.pos.x;
         this->collider.dim.pos.y = this->actor.world.pos.y;
-        this->collider.dim.pos.z = this->actor.world.pos.z; 
+        this->collider.dim.pos.z = this->actor.world.pos.z;
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
@@ -144,7 +144,7 @@ s32 func_80A2D42C(EnFg* this) {
         this->collider.base.acFlags &= ~2;
         func_80A2D400(this);
     }
-    return ret; 
+    return ret;
 }
 
 void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
@@ -348,7 +348,7 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnFg* this = THIS;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
-    
+
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Matrix_Push();
@@ -362,7 +362,7 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == 4) {
         SysMatrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
     }
-} 
+}
 
 void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
@@ -411,7 +411,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
         if (dustEffect->type) {
             if (DECR(dustEffect->timer) == 0) {
                 dustEffect->type = false;
-            } 
+            }
             dustEffect->pos.y += dustEffect->velocity.y;
         }
     }
@@ -425,7 +425,7 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
     s16 i;
     s16 alpha;
     s16 index;
-    s16 firstDone = false; 
+    s16 firstDone = false;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
