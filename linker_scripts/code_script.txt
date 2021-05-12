@@ -410,7 +410,7 @@ SECTIONS
         build/asm/code/code_0x8012EC80.o(.text)
         build/src/code/z_scene.o(.text)
         build/src/code/z_scene_proc.o(.text)
-        build/asm/code/z_scene_table.o(.text)
+        build/src/code/z_scene_table.o(.text)
         build/asm/code/code_0x801323D0.o(.text)
         build/src/code/z_skelanime.o(.text)
         build/asm/code/z_skin.o(.text)
@@ -528,10 +528,10 @@ SECTIONS
         build/src/code/z_rcp.o(.data)
         build/asm/code/code_data_z_room.o(.data)
         build/asm/code/code_data_0x801C1D30.o(.data)
-        build/asm/code/code_data_z_scene.o(.data)
+        build/src/code/z_scene.o(.data)
         build/asm/code/code_data_0x801C2730.o(.data)
-        build/asm/code/code_data_z_scene_proc.o(.data)
-        build/asm/code/code_data_z_scene_table.o(.data)
+        build/src/code/z_scene_proc.o(.data)
+        build/src/code/z_scene_table.o(.data)
         build/asm/code/code_data_0x801323D0.o(.data)
         build/src/code/z_skelanime.o(.data)
         build/src/code/z_skin_matrix.o(.data)
@@ -602,7 +602,7 @@ SECTIONS
         build/asm/code/code_rodata_0x8012A080.o(.rodata)
         build/asm/code/code_rodata_z_room.o(.rodata)
         build/src/code/z_scene_proc.o(.rodata)
-        build/asm/code/code_rodata_z_scene_table.o(.rodata)
+        build/src/code/z_scene_table.o(.rodata)
         build/asm/code/code_rodata_z_skin.o(.rodata)
         build/src/code/z_skin_matrix.o(.rodata)
         build/asm/code/code_rodata_z_sub_s.o(.rodata)
@@ -1677,7 +1677,7 @@ SECTIONS
     ovl_En_Encount2 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.text)
-        build/asm/overlays/ovl_En_Encount2_data.o(.data)
+        build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.data)
         build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o(.rodata)
         build/asm/overlays/ovl_En_Encount2_rodata.o(.rodata)
     }
@@ -2506,7 +2506,7 @@ SECTIONS
     ovl_Obj_Lightswitch : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.text)
-        build/asm/overlays/ovl_Obj_Lightswitch_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.data)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.rodata)
         build/asm/overlays/ovl_Obj_Lightswitch_rodata.o(.rodata)
     }
@@ -4955,7 +4955,7 @@ SECTIONS
     ovl_En_Ginko_Man : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.text)
-        build/asm/overlays/ovl_En_Ginko_Man_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.data)
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.rodata)
         build/asm/overlays/ovl_En_Ginko_Man_rodata.o(.rodata)
     }
