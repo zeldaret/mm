@@ -74,21 +74,22 @@ static DamageTable sDamageTable = {
 };
 
 static EnFgAnimation sAnimations[] = {
-    { &D_06001534, 1.0f, -1, 0, 0, 0 },
-    { &D_06001534, 1.0f, -1, 0, 0, -4 },
-    { &D_060011C0, 1.0f, -1, 0, 0, -4 },
-    { &D_060007BC, 1.0f, -1, 0, 2, -4 },
+    { &D_06001534, 1.0f, 0, -1, 0, 0 },
+    { &D_06001534, 1.0f, 0, -1, 0, -4 },
+    { &D_060011C0, 1.0f, 0, -1, 0, -4 },
+    { &D_060007BC, 1.0f, 0, -1, 2, -4 },
 };
 
 s32 func_80A2D280(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
-    s32 ret = false;
+    s32 ret;
 
+    ret = false;
     if (animIndex >= 0 && animIndex < 4) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount((GenericAnimationHeader*)&sAnimations[animIndex].animationSeg);
+            frameCount = SkelAnime_GetFrameCount((GenericAnimationHeader*)sAnimations[animIndex].animationSeg);
         }
         SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
                                 sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
@@ -180,9 +181,9 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80A2D9CC;
             break;
         case 1:
-            if(1) {}
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E3);
+            if(1) {}
             this->actor.params = 5;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -327,7 +328,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_80A2D3D4(this, globalCtx);
-    EnFg_UpdateDust(&this->dustEffect);
+    EnFg_UpdateDust(&this->dustEffect[0]);
     func_80A2D348(this, globalCtx);
 }
 
