@@ -1,7 +1,7 @@
 /*
  * File: z_en_torch2.c
  * Overlay: ovl_En_Torch2
- * Description: Elegy of Emptiness Statue
+ * Description: Elegy of Emptiness Shell
  */
 
 #include "z_en_torch2.h"
@@ -17,10 +17,10 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx D_0401C430;
-extern Gfx D_04048DF0;
-extern Gfx D_04057B10;
-extern Gfx D_04089070;
+extern Gfx object_torch2_shell_human[];
+extern Gfx object_torch2_shell_goron[];
+extern Gfx object_torch2_shell_deku[];
+extern Gfx object_torch2_shell_zora[];
 
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
@@ -46,9 +46,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 // Statues for each of Link's different forms
-// (Playing elegy as Fierce Deity puts down a human statue)
-static Gfx* const sGfxs[] = {
-    &D_0401C430, &D_04048DF0, &D_04089070, &D_04057B10, &D_0401C430,
+// (Playing elegy as Fierce Deity puts down a human shell)
+static Gfx* sStatueDLists[] = {
+    object_torch2_shell_human,
+    object_torch2_shell_goron,
+    object_torch2_shell_zora,
+    object_torch2_shell_deku,
+    object_torch2_shell_human,
 };
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -60,13 +64,13 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
-    if (params != 3) {
-        this->actor.flags |= 0x4000000;
-        if (params == 1) {
-            this->actor.flags |= 0x20000;
+    if (params != TORCH2_PARAM_DEKU) {
+        this->actor.flags |= 0x4000000; // Can press switch
+        if (params == TORCH2_PARAM_GORON) {
+            this->actor.flags |= 0x20000; // Can press heavy switches
         }
     }
-    this->framesUntilNextStep = 20;
+    this->framesUntilNextState = 20;
 }
 
 void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -79,14 +83,12 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
-
     u16 targetAlpha;
     u16 remainingFrames;
-    u32 unused0;
-    u32 unused1;
+    s32 pad[2];
 
-    if (this->step == 3) {
-        this->actor.update = &EnTorch2_UpdateIdle;
+    if (this->state == TORCH2_STATE_IDLE) {
+        this->actor.update = EnTorch2_UpdateIdle;
         return;
     }
 
@@ -94,25 +96,25 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
-    if (this->framesUntilNextStep == 0) {
+    if (this->framesUntilNextState == 0) {
         remainingFrames = 0;
     } else {
-        remainingFrames = --this->framesUntilNextStep;
+        remainingFrames = --this->framesUntilNextState;
     }
 
     if (remainingFrames == 0) {
-        if (this->step == 0) {
+        if (this->state == TORCH2_STATE_INITIALIZED) {
             // Spawn in
             if (this->alpha == 0) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
                 this->actor.shape.rot.y = this->actor.home.rot.y;
-                this->step = 1;
+                this->state = TORCH2_STATE_FADING_IN;
             }
             targetAlpha = 0;
-        } else if (this->step == 1) {
+        } else if (this->state == TORCH2_STATE_FADING_IN) {
             // Stay semitransparent until the player moves away
             if ((this->actor.xzDistToPlayer > 32.0f) || (fabsf(this->actor.yDistToPlayer) > 70.0f)) {
-                this->step = 2;
+                this->state = TORCH2_STATE_SOLID;
             }
             targetAlpha = 60;
         } else {
@@ -128,9 +130,9 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
-    if (this->step == 4) {
+    if (this->state == TORCH2_STATE_DYING) {
         // Start death animation
-        this->actor.update = &EnTorch2_UpdateDeath;
+        this->actor.update = EnTorch2_UpdateDeath;
         this->actor.velocity.y = 0.0f;
     }
 }
@@ -151,7 +153,7 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     GlobalContext* unused = globalCtx;
-    Gfx* gfx = sGfxs[thisx->params];
+    Gfx* gfx = sStatueDLists[thisx->params];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->alpha == 0xFF) {
