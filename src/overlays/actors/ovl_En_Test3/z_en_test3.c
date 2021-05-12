@@ -1,3 +1,9 @@
+/*
+ * File: z_en_test3.c
+ * Overlay: ovl_En_Test3
+ * Description: Kafei
+ */
+
 #include "z_en_test3.h"
 #include "../ovl_En_Door/z_en_door.h"
 
@@ -12,7 +18,6 @@ void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx);
 void func_80A40678(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx);
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx);
-
 s32 func_80A3F080(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
 s32 func_80A3F09C(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
@@ -29,10 +34,9 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 s32 func_80A3FE20(EnTest3* this, GlobalContext* globalCtx);
 s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3);
 s32 func_80A3FFD0(EnTest3* this, GlobalContext* globalCtx);
+void EnTest3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A4129C(Actor* thisx, GlobalContext* globalCtx);
-
-// bss
+// bss variables
 extern Input D_80A41D28;
 extern s32 D_80A41D20;
 extern s32 D_80A41D24;
@@ -45,7 +49,7 @@ extern Vec3f D_80A41D50;
 extern s32 D_80A41D5C;
 extern s32 D_80A41D68;
 
-// Extenal
+// external variables
 extern LinkAnimetionEntry D_0400CF88;
 extern FlexSkeletonHeader D_0600F7EC;
 
@@ -73,12 +77,12 @@ const ActorInit En_Test3_InitVars = {
     (ActorFunc)NULL,
 };
 
-s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
-    if (actionFunc == this->actionFunc) {
+s32 EnTest3_SetupAction(EnTest3* this, EnTest3ActionFunc action) {
+    if (action == this->action) {
         return 0;
     }
 
-    this->actionFunc = actionFunc;
+    this->action = action;
     this->unk_D8A = 0;
     this->schedule = 0;
     return 1;
@@ -91,13 +95,13 @@ s32 func_80A3E80C(EnTest3* this, GlobalContext* globalCtx, s32 actionIndex) {
     };
     KafeiActionSetupInfo* actionSetup = &actionSetupInfoList[actionIndex];
 
-    actionSetup->actionInitFunc(this, globalCtx);
+    actionSetup->init(this, globalCtx);
 
-    if (actionSetup->actionFunc == NULL) {
+    if (actionSetup->action == NULL) {
         return 0;
     }
 
-    func_80A3E7E0(this, actionSetup->actionFunc);
+    EnTest3_SetupAction(this, actionSetup->action);
 
     return 1;
 }
@@ -382,9 +386,9 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.base.colChkInfo.health = 0xFF;
 
     if (((this->actor.base.params >> 5) & 0xF) == 0) {
-        func_80A3E7E0(this, func_80A40824);
+        EnTest3_SetupAction(this, func_80A40824);
     } else {
-        func_80A3E7E0(this, func_80A40678);
+        EnTest3_SetupAction(this, func_80A40678);
     }
 }
 
@@ -592,10 +596,8 @@ TalkState* D_80A418A8[] = {
     D_80A41854, D_80A41858, D_80A41880, D_80A41884, D_80A418A0,
 };
 
-// 76 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F62C.asm")
 
-// 109 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3F73C.asm")
 
 s32 func_80A3F8D4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
@@ -634,7 +636,6 @@ s32 func_80A3F9E4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
     return 1;
 }
 
-// 103 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FA58.asm")
 
 s32 func_80A3FBCC(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
@@ -695,7 +696,6 @@ s32 func_80A3FDE4(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
     return 1;
 }
 
-// 65 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FE20.asm")
 
 s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2* arg2, struct_80A417E8_arg3* arg3) {
@@ -721,7 +721,6 @@ s32 func_80A3FF10(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
     return 1;
 }
 
-// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A3FFD0.asm")
 
 #ifdef NON_MATCHING
@@ -755,10 +754,8 @@ s32 func_80A40098(EnTest3* this, GlobalContext* globalCtx, struct_80A417E8_arg2*
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40098.asm")
 #endif
 
-// 286 line yikes
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40230.asm")
 
-// 117 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40678.asm")
 
 void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
@@ -766,13 +763,10 @@ void func_80A40824(EnTest3* this, GlobalContext* globalCtx) {
     func_80A3F73C(this, globalCtx);
 }
 
-// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A4084C.asm")
 
-// 54 line
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40908.asm")
 
-// 42 line
 void func_80A409D4(EnTest3* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A409D4.asm")
 
@@ -781,17 +775,17 @@ void func_80A40A6C(EnTest3* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_EQUIVALENT
-// instructions are mostly correct, but the control flow is very wrong
+// instructions are mostly correct, but the control flow is very wrong!
 void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTest3* this = (EnTest3*)thisx;
-    volatile u32 pad; // fake but helps matchimg; fixing the control flow should make this removable though
+    volatile u32 pad; // fake but helps matching; fixing the control flow should make this removable though
 
     D_80A41D28.rel.button = D_80A41D28.cur.button;
     D_80A41D28.cur.button = 0;
     D_80A41D28.rel.stick_x = 0;
     D_80A41D28.rel.stick_y = 0;
     globalCtx->actorCtx.unk5 &= ~0x80;
-    this->actor.base.draw = func_80A4129C;
+    this->actor.base.draw = EnTest3_Draw;
     D_80A41D48 = 0;
     this->actor.base.flags &= ~9;
 
@@ -816,7 +810,7 @@ void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             D_80A41D40 = 0.0f;
             D_80A41D44 = this->actor.base.shape.rot.y;
-            this->actionFunc(this, globalCtx);
+            this->action(this, globalCtx);
             D_80A41D28.press.button = (D_80A41D28.rel.button ^ D_80A41D28.cur.button) & D_80A41D28.cur.button;
             func_800B6F20(globalCtx, &D_80A41D28, D_80A41D40, D_80A41D44);
         }
@@ -833,17 +827,17 @@ void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/EnTest3_Update.asm")
 #endif
 
-/* static */ s32 D_80A418C8 = 0;
+s32 D_80A418C8 = 0;
 
 void func_80A40CF0();
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40CF0.asm")
 
-/* static */ Vec3f D_80A418CC[] = { 1100.0f, -700.0f, 0.0f };
+Vec3f D_80A418CC[] = { 1100.0f, -700.0f, 0.0f };
 
 void func_80A40F34(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test3_0x80A3E7E0/func_80A40F34.asm")
 
-void func_80A4129C(Actor* thisx, GlobalContext* globalCtx) {
+void EnTest3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static void* eyeTextures[] = {
         0x06000DC0, 0x06003680, 0x06003E80, 0x06004680, 0x06004E80, 0x06005680, 0x06005E80, 0x06006680,
     };
