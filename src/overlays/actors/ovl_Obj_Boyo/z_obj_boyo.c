@@ -57,7 +57,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern Gfx D_06000300[];
-extern AnimatedTexture D_06000E88;
+extern AnimatedMaterial D_06000E88;
 
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
@@ -181,6 +181,6 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->unk_190);
+    AnimatedMat_Draw(globalCtx, this->unk_190);
     func_800BDFC0(globalCtx, D_06000300);
 }

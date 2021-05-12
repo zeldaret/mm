@@ -149,15 +149,15 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk154 = 0.01f;
         break;
     case ITEM00_SHIELD_HERO:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_SHIELD_2);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_SHIELD_2);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     case ITEM00_MAP:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_MAP);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_MAP);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     case ITEM00_COMPASS:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_COMPASS);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_COMPASS);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     default:
@@ -263,8 +263,8 @@ void EnItem00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx) {
     s32 sp1C;
 
-    sp1C = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS);
-    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, sp1C)) {
+    sp1C = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEARTS);
+    if (Object_IsLoaded(&globalCtx->objectCtx, sp1C)) {
         this->actor.objBankIndex = sp1C;
         this->actionFunc = func_800A640C;
     }
@@ -323,7 +323,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     }
-    if ((globalCtx->unk18840 & 1) != 0) {
+    if ((globalCtx->gameplayFrames & 1) != 0) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
@@ -377,7 +377,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->unk18840 & 1) == 0) {
+    if ((globalCtx->gameplayFrames & 1) == 0) {
         pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);
@@ -639,8 +639,8 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM00_HEART:
             if (this->unk152 < 0) {
                 if (this->unk152 == -1) {
-                    s8 bankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEART);
-                    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, bankIndex)) {
+                    s8 bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEART);
+                    if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex)) {
                         this->actor.objBankIndex = bankIndex;
                         Actor_SetObjectSegment(globalCtx, &this->actor);
                         this->unk152 = -2;
@@ -767,7 +767,7 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
-    if (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
+    if (Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);

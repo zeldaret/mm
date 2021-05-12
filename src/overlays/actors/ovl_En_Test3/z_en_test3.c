@@ -229,13 +229,13 @@ s32 func_80A3EC44(EnTest3* this, GlobalContext* globalCtx) {
     u8 ret;
 
     if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
-        if (globalCtx->msgCtx.unk_12022) {
+        if (globalCtx->msgCtx.choiceIndex) {
             func_8019F230();
         } else {
             func_8019F208();
         }
 
-        if (globalCtx->msgCtx.unk_12022) {
+        if (globalCtx->msgCtx.choiceIndex) {
             return 1;
         } else {
             ret = this->talkState->unk_01;

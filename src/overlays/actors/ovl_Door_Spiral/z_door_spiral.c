@@ -166,7 +166,7 @@ s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
         type = sceneInfo->objectType;
     } else {
         // Set the type based on if link is in a dungeon scene, or the overworld
-        type = (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON : SPIRAL_OBJECT_OVERWORLD;
+        type = (Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON : SPIRAL_OBJECT_OVERWORLD;
     }
 
     return type;
@@ -185,7 +185,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
 
-    if (this->actor.room != globalCtx->transitionActorList[transition].sides[0].room) {
+    if (this->actor.room != globalCtx->transitionCtx.transitionActorList[transition].sides[0].room) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -194,7 +194,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk145 = GET_UNK145_PARAM(thisx); // set but never used
     this->orientation = GET_ORIENTATION_PARAM(thisx);
     this->objectType = DoorSpiral_GetObjectType(globalCtx);
-    objBankId = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, sSpiralObjectInfo[this->objectType].objectBankId);
+    objBankId = Object_GetIndex(&globalCtx->objectCtx, sSpiralObjectInfo[this->objectType].objectBankId);
     this->bankIndex = objBankId;
 
     if (objBankId < 0) {
@@ -209,14 +209,14 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
 
-    globalCtx->transitionActorList[transition].id *= -1;
+    globalCtx->transitionCtx.transitionActorList[transition].id *= -1;
 }
 
 /**
  * Waits for the required object to be loaded.
  */
 void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
-    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, this->bankIndex)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         DoorSpiral_SetSpiralType(this, globalCtx);
     }
@@ -287,7 +287,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->doorNext = ((u16)globalCtx->transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)globalCtx->transitionCtx.transitionActorList[transition].params) >> 10;
 
         func_80122F28(player, globalCtx, &this->actor);
     }
