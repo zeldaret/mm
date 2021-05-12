@@ -128,7 +128,7 @@ build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASF
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
-.PHONY: all clean setup diff-init init
+.PHONY: all clean setup diff-init init assetclean distclean
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
@@ -192,8 +192,11 @@ asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/
 clean:
 	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
 
-distclean: clean
+assetclean:
 	$(RM) -r $(ASSET_BIN_DIRS)
+	$(RM) -r build/assets
+
+distclean: assetclean clean
 	$(RM) -r baserom/
 
 setup:
