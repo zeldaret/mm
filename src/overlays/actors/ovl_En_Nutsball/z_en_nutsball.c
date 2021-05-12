@@ -82,8 +82,7 @@ void EnNutsball_InitColliderParams(EnNutsball *this) {
 void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnNutsball *this = THIS;
     GlobalContext *globalCtx2 = globalCtx;
-    
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;
