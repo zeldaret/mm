@@ -48,16 +48,16 @@ void ObjHsStump_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     params = &this->dyna.actor.params;  
     Actor_ProcessInitChain(&this->dyna.actor, D_80BDAF80);
-    this->unk162 = (this->dyna.actor.params >> 0xC) & 0xF;
-    this->unk160 = *params & 0x7F;
+    this->isHidden = (this->dyna.actor.params >> 0xC) & 0xF;
+    this->flag = *params & 0x7F;
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
-    if (this->unk162 != 0) {
-        if (this->unk162 != 1) {
+    if (this->isHidden != 0) {
+        if (this->isHidden != 1) {
             return;
         }
-        if (Actor_GetSwitchFlag(globalCtx, this->unk160)) {
-            this->unk162 = 0;
+        if (Actor_GetSwitchFlag(globalCtx, this->flag)) {
+            this->isHidden = 0;
         } else {
             this->dyna.actor.draw = NULL;
             Actor_SetScale(&this->dyna.actor, 0.0f);
@@ -72,8 +72,8 @@ void ObjHsStump_SetupIdle(ObjHsStump* this, GlobalContext* globalCtx) {
 }
 
 void ObjHsStump_Idle(ObjHsStump* this, GlobalContext *globalCtx) {
-    if (this->unk162 == 1) {
-        if (Actor_GetSwitchFlag(globalCtx, this->unk160)) {
+    if (this->isHidden == 1) {
+        if (Actor_GetSwitchFlag(globalCtx, this->flag)) {
             ObjHsStump_SetupAppear(this, globalCtx);
         }
     }
@@ -81,33 +81,33 @@ void ObjHsStump_Idle(ObjHsStump* this, GlobalContext *globalCtx) {
 
 void ObjHsStump_SetupAppear(ObjHsStump *this, GlobalContext *globalCtx) {
     this->dyna.actor.draw = ObjHsStump_Draw;
-    this->unk164 = 0;
-    this->unk166 = 0;
-    this->unk168 = 3640.0f;
+    this->framesAppeared = 0;
+    this->rotAngle = 0;
+    this->rotFactor = 3640.0f;
     func_8019F128(0x3A86);
     this->actionFunc = func_80BDABCC;
 }
 
-#ifdef NON_MATCHING
+#if NON_MATCHING
 void func_80BDABCC(ObjHsStump *this, GlobalContext *globalCtx) {
-    int i;
+    s32 i;
+    s16 offsetAngle;
+    s32 tmp2;
+    s16 tmp;
     Vec3f iceSmokePosOffset;
     Vec3f iceSmokeVelOffset;
     Vec3f iceSmokeVel;
     Vec3f iceSmokePos;
-    s16 offsetAngle;
-    s32 tmp;
-    s16 tmp3;
     
 
-    if (this->unk164 >= 0) {
-        Math_SmoothStepToF(&this->unk168, 0.0f, 1.0f, this->unk164 + 18.0f, 0.01f);
-        this->dyna.actor.shape.rot.x = (Math_SinS(this->unk166) * this->unk168) + this->dyna.actor.home.rot.x;
-        this->dyna.actor.shape.rot.z = (Math_SinS(this->unk166 * 2) * this->unk168) + this->dyna.actor.home.rot.z;
-        this->unk166 += 0x2000;
+    if (this->framesAppeared >= 0) {
+        Math_SmoothStepToF(&this->rotFactor, 0.0f, 1.0f, this->framesAppeared + 18.0f, 0.01f);
+        this->dyna.actor.shape.rot.x = (Math_SinS(this->rotAngle) * this->rotFactor) + this->dyna.actor.home.rot.x;
+        this->dyna.actor.shape.rot.z = (Math_SinS(this->rotAngle * 2) * this->rotFactor) + this->dyna.actor.home.rot.z;
+        this->rotAngle += 0x2000;
     }
-    if (this->unk164 < 0xB) {
-        if (this->unk164 == 0) {
+    if (this->framesAppeared < 11) {
+        if (this->framesAppeared == 0) {
             iceSmokePosOffset.x = 1.0f;
             iceSmokePosOffset.y = 0.5f;
             iceSmokePosOffset.z = 0.0f;
@@ -115,27 +115,27 @@ void func_80BDABCC(ObjHsStump *this, GlobalContext *globalCtx) {
             iceSmokeVelOffset.y = 0.5f;
             iceSmokeVelOffset.z = 0.0f;
 
-            tmp3 = 4;
-            tmp = 360.0f / tmp3;
+            tmp = 4;
+            tmp2 = 360.0f / tmp;
 
-            for(i=0; i<tmp3; i++) {
-                offsetAngle = tmp * 182.04445f * i;
+            for(i=0; i<tmp; i++) {
+                offsetAngle = tmp2 * (0x10000 / 360.0f) * i;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset, &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &D_80BDAF84, 0x64);
             }
         }
     }
-    if (this->unk164 >= 0xA) {
+    if (this->framesAppeared >= 10) {
         Math_SmoothStepToF(&this->dyna.actor.scale.x, 0.17999999f, 1.0f, 0.01f, 0.001f);
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
     }
     if (this->dyna.actor.scale.x == 0.17999999f) {
-        this->unk162 = 0;
+        this->isHidden = 0;
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         ObjHsStump_SetupIdle(this, globalCtx);
     }
-    this->unk164++;
+    this->framesAppeared++;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDABCC.asm")
