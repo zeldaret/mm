@@ -7,14 +7,23 @@ struct EnMinifrog;
 
 typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, GlobalContext*);
 
+typedef enum {
+    /* 00 */ FROG_YELLOW,
+    /* 01 */ FROG_CYAN,
+    /* 02 */ FROG_PINK,
+    /* 03 */ FROG_BLUE,
+    /* 04 */ FROG_WHITE
+} FrogType;
+
+
 typedef struct EnMinifrog {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime anime;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s limbDrawTable[24];
     /* 0x218 */ Vec3s transitionDrawTable[24];
     /* 0x2A8 */ EnMinifrogActionFunc actionFunc;
     /* 0x2AC */ struct EnMinifrog* frog;
-    /* 0x2B0 */ u16 unk_2B0;
+    /* 0x2B0 */ u16 frogIndex;
     /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ s16 timer;
     /* 0x2B6 */ u16 flags;
