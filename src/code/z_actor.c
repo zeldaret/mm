@@ -171,7 +171,7 @@ void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalCont
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5814.asm")
 
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
+u32 Flags_GetSwitch(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
         return ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
     }
@@ -265,11 +265,11 @@ void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32
 void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
     if (DECR(titleCtxt->fadeInDelay) == 0) {
         if (DECR(titleCtxt->fadeOutDelay) == 0) {
-            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 0, 30);
-            Lib_StepTowardsCheck_s(&titleCtxt->color, 0, 70);
+            Math_StepToS(&titleCtxt->alpha, 0, 30);
+            Math_StepToS(&titleCtxt->color, 0, 70);
         } else {
-            Lib_StepTowardsCheck_s(&titleCtxt->alpha, 255, 10);
-            Lib_StepTowardsCheck_s(&titleCtxt->color, 255, 20);
+            Math_StepToS(&titleCtxt->alpha, 255, 10);
+            Math_StepToS(&titleCtxt->color, 255, 20);
         }
     }
 }
@@ -327,7 +327,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     // TODO: Segment number enum
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->objectCtx.status[actor->objBankIndex].segment);
 }
 
 #if 0
@@ -351,7 +351,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->naviMsgId = 255;
 
     Actor_Setshape(&actor->shape, 0, 0, 0);
-    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objBankIndex) != 0) {
+    if (Object_IsLoaded(&ctxt->objectCtx, actor->objBankIndex) != 0) {
         Actor_SetObjectSegment(ctxt, actor);
         actor->init(actor, ctxt);
         actor->init = NULL;

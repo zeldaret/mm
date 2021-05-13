@@ -149,15 +149,15 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk154 = 0.01f;
         break;
     case ITEM00_SHIELD_HERO:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_SHIELD_2);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_SHIELD_2);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     case ITEM00_MAP:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_MAP);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_MAP);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     case ITEM00_COMPASS:
-        this->actor.objBankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_COMPASS);
+        this->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_COMPASS);
         EnItem00_SetObject(this, globalCtx, &shadowOffset, &shadowScale);
         break;
     default:
@@ -263,8 +263,8 @@ void EnItem00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx) {
     s32 sp1C;
 
-    sp1C = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS);
-    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, sp1C)) {
+    sp1C = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEARTS);
+    if (Object_IsLoaded(&globalCtx->objectCtx, sp1C)) {
         this->actor.objBankIndex = sp1C;
         this->actionFunc = func_800A640C;
     }
@@ -275,14 +275,14 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) && (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
-            if (!Math_SmoothScaleMaxMinS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
+            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
                 this->unk152 = -2;
             }
-        } else if (!Math_SmoothScaleMaxMinS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
+        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
             this->unk152 = -1;
         }
 
-        Math_SmoothScaleMaxMinS(&this->actor.world.rot.x, 0, 2, 2500, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 2500, 500);
     } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
@@ -292,7 +292,7 @@ void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
         this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
-    Math_SmoothScaleMaxMinF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) && (this->actor.params != ITEM00_HEART_CONTAINER)) {
@@ -323,7 +323,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     }
-    if ((globalCtx->unk18840 & 1) != 0) {
+    if ((globalCtx->gameplayFrames & 1) != 0) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
@@ -377,7 +377,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->unk18840 & 1) == 0) {
+    if ((globalCtx->gameplayFrames & 1) == 0) {
         pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);
@@ -443,7 +443,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    Math_SmoothScaleMaxMinF(&this->actor.scale.x, this->unk154, 0.1f, this->unk154 * 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.scale.x, this->unk154, 0.1f, this->unk154 * 0.1f, 0.0f);
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = this->actor.scale.x;
 
@@ -639,8 +639,8 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM00_HEART:
             if (this->unk152 < 0) {
                 if (this->unk152 == -1) {
-                    s8 bankIndex = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEART);
-                    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, bankIndex)) {
+                    s8 bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEART);
+                    if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex)) {
                         this->actor.objBankIndex = bankIndex;
                         Actor_SetObjectSegment(globalCtx, &this->actor);
                         this->unk152 = -2;
@@ -709,7 +709,7 @@ void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF30[iconNb]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_801ADF30[iconNb]));
 
     gSPDisplayList(POLY_OPA_DISP++, &D_040622C0); // TODO symbol
 
@@ -751,7 +751,7 @@ void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_PtrSegToVirt(D_801ADF44[iconNb]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_801ADF44[iconNb]));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
@@ -767,7 +767,7 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
-    if (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
+    if (Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);

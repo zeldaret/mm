@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <z64math.h>
+#include <z64animation.h>
 #include <z64collision_check.h>
 #include <unk.h>
 
@@ -213,7 +214,8 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ UNK_TYPE1 pad144[0x3];
+    /* 0x144 */ UNK_TYPE1 unk144;
+    /* 0x145 */ UNK_TYPE1 pad145[0x2];
     /* 0x147 */ s8 itemActionParam;
     /* 0x148 */ UNK_TYPE1 pad148[0x2];
     /* 0x14A */ s8 heldItemActionParam;
@@ -254,16 +256,22 @@ typedef struct {
     /* 0xADE */ u8 unkADE;
     /* 0xADF */ UNK_TYPE1 padADF[0x4];
     /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x24];
+    /* 0xAE4 */ UNK_TYPE1 padAE4[0x3];
+    /* 0xAE7 */ s8 unkAE7;
+    /* 0xAE8 */ UNK_TYPE1 padAE8[0x20];
     /* 0xB08 */ f32 unkB08;
     /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
     /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
+    /* 0xB2A */ UNK_TYPE1 padB2A[0x56];
+    /* 0xB80 */ f32 unk_B80;
+    /* 0xB84 */ s16 unk_B84;
+    /* 0xB86 */ char unk_B86[0x16];
     /* 0xB9C */ Vec3f unkB9C;
     /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
     /* 0xBEC */ Vec3f bodyPartsPos[18];
     /* 0xCC4 */ MtxF mf_CC4;
-    /* 0xD04 */ UNK_TYPE1 padD04[0x74];
+    /* 0xD04 */ MtxF unkD04;
+    /* 0xD44 */ UNK_TYPE1 padD44[0x34];
 } ActorPlayer; // size = 0xD78
 
 typedef enum {
@@ -340,6 +348,15 @@ typedef enum {
     /* 0x0A */ ACTORCAT_DOOR,
     /* 0x0B */ ACTORCAT_CHEST
 } ActorType;
+
+typedef struct {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
+    /* 0x08 */ f32 startFrame;
+    /* 0x0C */ f32 frameCount;
+    /* 0x10 */ u8 mode;
+    /* 0x14 */ f32 morphFrames;
+} ActorAnimationEntry;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

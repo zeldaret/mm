@@ -1,0 +1,8 @@
+<Root>
+    <File Name="Z2_SYATEKI_MIZU" Game="MM">
+        <Scene Name="Z2_SYATEKI_MIZU"/>
+    </File>
+    <File Name="Z2_SYATEKI_MIZU_room_00" Game="MM">
+        <Room Name="Z2_SYATEKI_MIZU_room_00"/>
+    </File>
+</Root>
