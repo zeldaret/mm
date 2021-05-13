@@ -409,7 +409,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     s32 i;
 
     for (i = 0; i < 10; i++, dustEffect++) {
-        if (dustEffect->type) {
+        if (dustEffect->type == true) {
             if (DECR(dustEffect->timer) == 0) {
                 dustEffect->type = false;
             }
