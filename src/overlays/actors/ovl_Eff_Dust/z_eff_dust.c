@@ -48,7 +48,7 @@ void func_80918B40(EffDust* this) {
     this->index = 0;
 }
 
-/*
+#ifdef NON_MATCHING
 void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     EffDust* this = THIS;
     u32 sp18 = this->actor.params;
@@ -98,8 +98,9 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->life = 10;
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Init.asm")
+#endif
 
 void EffDust_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
@@ -325,22 +326,23 @@ void func_80919768(Actor *thisx, GlobalContext *globalCtx2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_80919768.asm")
 #endif
 
-void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
+#ifdef NON_MATCHING
+void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     EffDust* this = THIS;
-    GlobalContext *globalCtx = globalCtx2;
-    GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
+    GlobalContext* globalCtx = globalCtx2;
+    GraphicsContext *gfxCtx = globalCtx2->state.gfxCtx;
     f32 *distanceTraveled;
     Vec3f *initialPositions;
     s32 i;
     f32 aux;
-    ActorPlayer *player = PLAYER;
+    ActorPlayer* player = PLAYER;
 
     OPEN_DISPS(gfxCtx);
-
     func_8012C28C(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+
     if (player->unkB08 >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
@@ -349,25 +351,25 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
 
-    initialPositions = this->initialPositions;
-    distanceTraveled = this->distanceTraveled;
+    initialPositions = this->initialPositions; // 0x244
+    distanceTraveled = this->distanceTraveled; // 0x144
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < 0x40; i++) {
         if (*distanceTraveled < 1.0f) {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, *distanceTraveled * 255);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
             aux = 1.0f - SQ(*distanceTraveled);
-
             SysMatrix_InsertMatrix(&player->mf_CC4, 0);
-            SysMatrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)), 
-                                        initialPositions->y * (1.0f - *distanceTraveled) + 320.0f, 
-                                        initialPositions->z * (1.0f - *distanceTraveled) + -20.0f, 
-                                        1);
-            Matrix_Scale(*distanceTraveled * this->scalingFactor, 
-                         *distanceTraveled * this->scalingFactor, 
-                         *distanceTraveled * this->scalingFactor, 
-                         (u8)1U);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            SysMatrix_InsertTranslation(
+                initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)), 
+                (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f, 
+                (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, 
+                1);
+
+            Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, 
+                *distanceTraveled * this->scalingFactor, 1);
+
+            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
@@ -382,7 +384,9 @@ void func_809199FC(Actor *thisx, GlobalContext *globalCtx2) {
 
     CLOSE_DISPS(gfxCtx);
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_809199FC.asm")
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_809199FC.asm")
+#endif
 
 void EffDust_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EffDust* this = THIS;
