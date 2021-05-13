@@ -16985,7 +16985,7 @@
     0x80C1E048:("DmNb_Init",),
     0x80C1E0F8:("DmNb_Destroy",),
     0x80C1E108:("DmNb_Update",),
-    0x80C1E168:("func_80C1E168",),
+    0x80C1E168:("DmNb_UnkActorDraw",),
     0x80C1E17C:("DmNb_Draw",),
     0x80C1E290:("func_80C1E290",),
     0x80C1E2D4:("func_80C1E2D4",),
