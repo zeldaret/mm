@@ -314,7 +314,6 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     EffDust* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
@@ -329,8 +328,11 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
 
+    initialPositions = this->initialPositions;
+    distanceTraveled = this->distanceTraveled;
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     if (player->unkB08 >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
@@ -339,23 +341,20 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
 
-    initialPositions = this->initialPositions; // 0x244
-    distanceTraveled = this->distanceTraveled; // 0x144
-
     for (i = 0; i < 0x40; i++) {
         if (*distanceTraveled < 1.0f) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
             aux = 1.0f - SQ(*distanceTraveled);
-            SysMatrix_InsertMatrix(&player->mf_CC4, 0);
+            SysMatrix_InsertMatrix(&player->mf_CC4, MTXMODE_NEW);
             SysMatrix_InsertTranslation(
                 initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)), 
                 (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f, 
                 (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, 
-                1);
+                MTXMODE_APPLY);
 
             Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, 
-                *distanceTraveled * this->scalingFactor, 1);
+                *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);
 
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
 
@@ -372,9 +371,6 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
 
     CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/func_809199FC.asm")
-#endif
 
 void EffDust_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EffDust* this = THIS;
