@@ -15,13 +15,14 @@ void EffDust_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffDust_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffDust_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-
 void func_80918D64(EffDust* this, GlobalContext* globalCtx);
 void func_80918FE4(EffDust* this, GlobalContext* globalCtx);
 void func_80919230(EffDust* this, GlobalContext* globalCtx);
 
 void func_80919768(Actor* thisx, GlobalContext* globalCtx);
 void func_809199FC(Actor* thisx, GlobalContext* globalCtx);
+
+extern Gfx D_04054A90[];
 
 const ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
@@ -48,7 +49,6 @@ void func_80918B40(EffDust* this) {
     this->index = 0;
 }
 
-#ifdef NON_MATCHING
 void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     EffDust* this = THIS;
     u32 sp18 = this->actor.params;
@@ -72,6 +72,7 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->scalingFactor = 0.5f;
         break;
     case 2:
+    case 3:
         this->actionFunc = func_80919230;
         this->actor.draw = func_809199FC;
         this->actor.room = -1;
@@ -98,9 +99,6 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->life = 10;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Dust_0x80918B40/EffDust_Init.asm")
-#endif
 
 void EffDust_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
@@ -255,8 +253,6 @@ void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
 Gfx D_80919DB0[] = {
     gsSPEndDisplayList(),
 };
-
-extern Gfx D_04054A90[];
 
 void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     EffDust* this = THIS;
