@@ -1774,7 +1774,7 @@ extern UNK_PTR D_801D1540;
 extern f32 D_801D1570[13];
 extern Vec3f D_801D15B0;
 // extern UNK_TYPE4 D_801D15BC;
-extern s16 atan_first_8th_array[1025];
+extern u16 atan_first_8th_array[1025];
 extern RSPMatrix D_801D1DE0;
 extern MtxF D_801D1E20;
 extern UNK_PTR D_801D1E60;

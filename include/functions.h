@@ -3368,7 +3368,7 @@ s16 atans_first_8th(f32 opposite, f32 adjacent);
 s16 atans(f32 opposite, f32 adjacent);
 f32 atan(f32 opposite, f32 adjacent);
 s16 Math_FAtan2F(f32 adjacent, f32 opposite);
-s16 atan_flip(f32 adjacent, f32 opposite);
+f32 atan_flip(f32 adjacent, f32 opposite);
 void SysMatrix_StateAlloc(GameState* ctxt);
 void SysMatrix_StatePush(void);
 void SysMatrix_StatePop(void);
