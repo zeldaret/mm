@@ -33,7 +33,7 @@ const ActorInit Eff_Dust_InitVars = {
     (ActorFunc)EffDust_Init,
     (ActorFunc)EffDust_Destroy,
     (ActorFunc)EffDust_Update,
-    (ActorFunc)EffDust_Draw
+    (ActorFunc)EffDust_Draw,
 };
 
 void func_80918B40(EffDust* this) {
@@ -55,55 +55,55 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80918B40(this);
     switch (type) {
-    case EFF_DUST_TYPE_0:
-        this->actionFunc = func_80918D64;
-        this->actor.draw = func_80919768;
-        this->dx = 1.0f;
-        this->dy = 1.0f;
-        this->dz = 1.0f;
-        this->scalingFactor = 0.2f;
-        break;
-    case EFF_DUST_TYPE_1:
-        this->actionFunc = func_80918FE4;
-        this->actor.draw = func_80919768;
-        this->dy = 1.0f;
-        this->dx = 0.8f;
-        this->dz = 0.8f;
-        this->scalingFactor = 0.5f;
-        break;
-    case EFF_DUST_TYPE_2:
-    case EFF_DUST_TYPE_3:
-        this->actionFunc = func_80919230;
-        this->actor.draw = func_809199FC;
-        this->actor.room = -1;
-        this->dx = 0.5f;
-        this->scalingFactor = 15.0f;
-        break;
-    case EFF_DUST_TYPE_4:
-        this->actionFunc = func_80919230;
-        this->actor.draw = func_809199FC;
-        this->actor.room = -1;
-        this->dx = 0.5f;
-        this->scalingFactor = 10.0f;
-        break;
-    case EFF_DUST_TYPE_5:
-        this->actionFunc = func_80919230;
-        this->actor.draw = func_809199FC;
-        this->actor.room = -1;
-        this->dx = 0.5f;
-        this->scalingFactor = 20.0f;
-        break;
-    default:
-        StartHeap_Free(this);
-        break;
+        case EFF_DUST_TYPE_0:
+            this->actionFunc = func_80918D64;
+            this->actor.draw = func_80919768;
+            this->dx = 1.0f;
+            this->dy = 1.0f;
+            this->dz = 1.0f;
+            this->scalingFactor = 0.2f;
+            break;
+        case EFF_DUST_TYPE_1:
+            this->actionFunc = func_80918FE4;
+            this->actor.draw = func_80919768;
+            this->dy = 1.0f;
+            this->dx = 0.8f;
+            this->dz = 0.8f;
+            this->scalingFactor = 0.5f;
+            break;
+        case EFF_DUST_TYPE_2:
+        case EFF_DUST_TYPE_3:
+            this->actionFunc = func_80919230;
+            this->actor.draw = func_809199FC;
+            this->actor.room = -1;
+            this->dx = 0.5f;
+            this->scalingFactor = 15.0f;
+            break;
+        case EFF_DUST_TYPE_4:
+            this->actionFunc = func_80919230;
+            this->actor.draw = func_809199FC;
+            this->actor.room = -1;
+            this->dx = 0.5f;
+            this->scalingFactor = 10.0f;
+            break;
+        case EFF_DUST_TYPE_5:
+            this->actionFunc = func_80919230;
+            this->actor.draw = func_809199FC;
+            this->actor.room = -1;
+            this->dx = 0.5f;
+            this->scalingFactor = 20.0f;
+            break;
+        default:
+            StartHeap_Free(this);
+            break;
     }
     this->life = 10;
 }
 
-void EffDust_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EffDust_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
+void func_80918D64(EffDust* this, GlobalContext* globalCtx) {
     s16 theta;
     s16 fi;
     s32 i;
@@ -124,9 +124,9 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
                 // Spherical coordinate system.
                 fi = randPlusMinusPoint5Scaled(0x10000);
                 theta = Rand_ZeroFloat(0x1000);
-                this->initialPositions[i].x = -(f32) this->actor.home.rot.z * Math_CosS(fi) * Math_CosS(theta);
-                this->initialPositions[i].y = -(f32) this->actor.home.rot.z * Math_SinS(fi) * Math_CosS(theta);
-                this->initialPositions[i].z = -(f32) this->actor.home.rot.z * Math_SinS(theta);
+                this->initialPositions[i].x = -(f32)this->actor.home.rot.z * Math_CosS(fi) * Math_CosS(theta);
+                this->initialPositions[i].y = -(f32)this->actor.home.rot.z * Math_SinS(fi) * Math_CosS(theta);
+                this->initialPositions[i].z = -(f32)this->actor.home.rot.z * Math_SinS(theta);
                 this->distanceTraveled[i] = 0.0f;
                 this->index++;
             }
@@ -134,7 +134,7 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
+void func_80918FE4(EffDust* this, GlobalContext* globalCtx) {
     s16 theta;
     s16 fi;
     f32* distanceTraveled = this->distanceTraveled;
@@ -148,7 +148,7 @@ void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
         distanceTraveled++;
     }
 
-    for (j = 0; j < 2; j++){
+    for (j = 0; j < 2; j++) {
         i = this->index & 0x3F;
         if (this->distanceTraveled[i] >= 1.0f) {
             // Spherical coordinate system.
@@ -163,11 +163,11 @@ void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80919230(EffDust *this, GlobalContext *globalCtx) {
+void func_80919230(EffDust* this, GlobalContext* globalCtx) {
     s16 theta;
     ActorPlayer* player = PLAYER;
     Actor* parent = this->actor.parent;
-    f32 *distanceTraveled = this->distanceTraveled;
+    f32* distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
 
@@ -249,7 +249,6 @@ void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-
 Gfx D_80919DB0[] = {
     gsSPEndDisplayList(),
 };
@@ -257,7 +256,7 @@ Gfx D_80919DB0[] = {
 void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     EffDust* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext *gfxCtx = globalCtx2->state.gfxCtx;
+    GraphicsContext* gfxCtx = globalCtx2->state.gfxCtx;
     f32* distanceTraveled;
     Vec3f* initialPositions;
     s32 i;
@@ -286,11 +285,9 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
             aux = 1.0f - SQ(*distanceTraveled);
             SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
             Matrix_RotateY(sp92, MTXMODE_APPLY);
-            SysMatrix_InsertTranslation(
-                initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
-                initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
-                initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)),
-                MTXMODE_APPLY);
+            SysMatrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
+                                        initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
+                                        initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
             Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, 1);
 
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
@@ -313,9 +310,9 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
 void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     EffDust* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext *gfxCtx = globalCtx2->state.gfxCtx;
-    f32 *distanceTraveled;
-    Vec3f *initialPositions;
+    GraphicsContext* gfxCtx = globalCtx2->state.gfxCtx;
+    f32* distanceTraveled;
+    Vec3f* initialPositions;
     s32 i;
     f32 aux;
     ActorPlayer* player = PLAYER;
@@ -343,14 +340,12 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
 
             aux = 1.0f - SQ(*distanceTraveled);
             SysMatrix_InsertMatrix(&player->mf_CC4, MTXMODE_NEW);
-            SysMatrix_InsertTranslation(
-                initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)), 
-                (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f, 
-                (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, 
-                MTXMODE_APPLY);
+            SysMatrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
+                                        (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
+                                        (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);
 
-            Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor, 
-                *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);
+            Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor,
+                         *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);
 
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
 
@@ -368,7 +363,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffDust_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EffDust_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EffDust* this = THIS;
 
     this->drawFunc(thisx, globalCtx);
