@@ -3364,7 +3364,7 @@ s32 Math3d_ColTriTri(TriNorm* tri1, TriNorm* tri2, Vec3f* uParm3);
 // void func_8017FAA8(void);
 // void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
-s16 atans_first_8th(f32 opposite, f32 adjacent);
+u16 atans_first_8th(f32 opposite, f32 adjacent);
 s16 atans(f32 opposite, f32 adjacent);
 f32 atan(f32 opposite, f32 adjacent);
 s16 Math_FAtan2F(f32 adjacent, f32 opposite);

@@ -58,7 +58,7 @@ u16 atan_first_8th_array[] = {
     8105, 8110, 8115, 8120, 8125, 8131, 8136, 8141, 8146, 8151, 8156, 8161, 8166, 8172, 8177, 8182, 8187, 8192,
 };
 
-s16 atans_first_8th(f32 opposite, f32 adjacent) {
+u16 atans_first_8th(f32 opposite, f32 adjacent) {
     return atan_first_8th_array[(s32)((opposite / adjacent) * 0x400)];
 }
 
@@ -108,7 +108,7 @@ s16 atans(f32 opposite, f32 adjacent) {
 }
 
 f32 atan(f32 opposite, f32 adjacent) {
-    return atans(opposite, adjacent) * 9.58738e-05;
+    return atans(opposite, adjacent) * (M_PI / 0x8000);
 }
 
 s16 Math_FAtan2F(f32 adjacent, f32 opposite) {
