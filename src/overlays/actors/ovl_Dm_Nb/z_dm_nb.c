@@ -13,7 +13,6 @@ UNK_TYPE func_80C1DED0(DmNb* this, s32 arg1);
 void func_80C1DF18(DmNb* this, GlobalContext* globalCtx);
 void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor *actor);
 
-/*
 const ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
     ACTORCAT_NPC,
@@ -25,14 +24,10 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Update,
     (ActorFunc)DmNb_Draw
 };
-*/
 
 extern SkeletonHeader D_06008C40; 
 
-extern UNK_TYPE D_80C1E200;
-
-extern s32 D_80C1E210[];
-//static s32 D_80C1E210[] = {0, 0, 0, 0, 0}
+static UNK_TYPE D_80C1E200[] = {0x06000990, 0x3F800000, 0x0000FFFF, 0x00000000};
 
 UNK_TYPE func_80C1DED0(DmNb *this, s32 arg1) {
     UNK_TYPE ret = 0;
@@ -44,16 +39,11 @@ UNK_TYPE func_80C1DED0(DmNb *this, s32 arg1) {
     return ret;
 }
 
-#if NON_MATCHING
 void func_80C1DF18(DmNb *this, GlobalContext *globalCtx) {
-    int i;
-    s32 sp2C[5];
-    u32 actorActionsIndex;
+    s32 sp2C[] = {0, 0, 0, 0, 0};
     u16 actorActionsUnk0;
+    u32 actorActionsIndex;
 
-    for(i=0; i<5; i++) {
-        sp2C[i] = D_80C1E210[i];
-    }
     if (globalCtx->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
             this->unk1EC = 0xFF;
@@ -63,7 +53,7 @@ void func_80C1DF18(DmNb *this, GlobalContext *globalCtx) {
         if (func_800EE29C(globalCtx, 0x232)) {
             actorActionsIndex = func_800EE200(globalCtx, 0x232);
             actorActionsUnk0 = globalCtx->csCtx.actorActions[actorActionsIndex]->unk0;
-            if ((actorActionsUnk0 & 0xFF) != this->unk1EC) {
+            if (this->unk1EC != (actorActionsUnk0 & 0xFF)) {
                 this->unk1EC = actorActionsUnk0;
                 func_80C1DED0(this, sp2C[actorActionsUnk0]);
             }
@@ -74,9 +64,6 @@ void func_80C1DF18(DmNb *this, GlobalContext *globalCtx) {
         func_80C1DED0(this, this->unk1F4);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Nb_0x80C1DED0/func_80C1DF18.asm")
-#endif
 
 void DmNb_Init(Actor *thisx, GlobalContext *globalCtx) {
     DmNb *this = THIS;
