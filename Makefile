@@ -77,10 +77,7 @@ SRC_DIRS := $(shell find src -type d)
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
-ASSET_XML_DIRS := $(shell find assets/xml* -type d)
-ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
-ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
-ASSET_FILES_OUT := $(patsubst assets/xml%,assets/src%,$(patsubst %.xml,%.c,$(ASSET_FILES_XML)))
+ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
 
 # Because we may not have disassembled the code files yet, there might not be any assembly files.
 # Instead, generate a list of assembly files based on what's listed in the linker script.
@@ -88,11 +85,18 @@ S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*b
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-ASSET_O_FILES := $(ASSET_FILES_OUT:%.c=build/%.o)
+ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
 O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+
+TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
+TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
+TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
+					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
+
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 # This file defines `ROM_FILES`, `UNCOMPRESSED_ROM_FILES`, and rules for generating `.yaz0` files
 ifneq ($(MAKECMDGOALS), clean)
@@ -124,12 +128,12 @@ build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASF
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
-.PHONY: all clean setup diff-init init
+.PHONY: all clean setup diff-init init assetclean distclean
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
+.PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
 
-$(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
+$(UNCOMPRESSED_ROM): $(TEXTURE_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
 ifeq ($(COMPARE),1)
 	@md5sum $(UNCOMPRESSED_ROM)
@@ -186,16 +190,21 @@ asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
 
 clean:
-	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
+	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
 
-distclean: clean
-	rm -rf assets/src baserom/
+assetclean:
+	$(RM) -r $(ASSET_BIN_DIRS)
+	$(RM) -r build/assets
+
+distclean: assetclean clean
+	$(RM) -r baserom/
 
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
+	python3 extract_assets.py
 
 diff-init: all
 	rm -rf expected/
@@ -228,11 +237,8 @@ build/src/overlays/%.o: src/overlays/%.c
 build/%.o: %.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
-build/assets/src/scenes/%.o: assets/src/scenes/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | \
-     sed 's/\(.*\)\.c/\1/' | \
-     xargs -n 1 -r -I'{}' $(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/'{}'.o '{}'.c
+build/assets/%.o: assets/%.c
+	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -270,11 +276,13 @@ build/linker_scripts/%.ld: linker_scripts/%.txt
 build/assets/%.d: assets/%.c
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
-assets/src/scenes/%.c: assets/xml/scenes/%.xml
-	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*) -rconf tools/ZAPDConfigs/MM/Config.xml
-	find $(dir assets/src/scenes/$*) -path "assets/src/scenes/$**.png" | \
-     sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
-     bash
+# Build C files from assets
+
+build/%.inc.c: %.png
+	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.jpg.inc.c: assets/%.jpg
+	$(ZAPD) bren -eh -i $< -o $@
 
 ifneq ($(MAKECMDGOALS), clean)
 ifneq ($(MAKECMDGOALS), distclean)
