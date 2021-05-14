@@ -7,8 +7,8 @@
     RomLocation += . - _##_Name##SegmentStart; \
     _##_Name##SegmentEnd = .;
 
-#define DECL_SEG_SCENE(_SceneName) DECL_SEG(_SceneName, build/assets/src/scenes/_SceneName, 0x02000000)
-#define DECL_SEG_ROOM(_SceneName, _RoomNum) DECL_SEG(_SceneName##_room_##_RoomNum, build/assets/src/scenes/_SceneName, 0x03000000)
+#define DECL_SEG_SCENE(_SceneName) DECL_SEG(_SceneName, build/assets/scenes/_SceneName, 0x02000000)
+#define DECL_SEG_ROOM(_SceneName, _RoomNum) DECL_SEG(_SceneName##_room_##_RoomNum, build/assets/scenes/_SceneName, 0x03000000)
 
 #define DECL_ACTOR(_ActorName, _File)                                      \
     _ovl_##_ActorName##SegmentStart = .;                                   \
@@ -5873,9 +5873,9 @@ SECTIONS
     ovl_Bg_Ctower_Gear : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Ctower_Gear/z_bg_ctower_gear.o(.text)
-        build/asm/overlays/ovl_Bg_Ctower_Gear_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Ctower_Gear/z_bg_ctower_gear.o(.data)
         build/src/overlays/actors/ovl_Bg_Ctower_Gear/z_bg_ctower_gear.o(.rodata)
-        build/asm/overlays/ovl_Bg_Ctower_Gear_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Ctower_Gear/z_bg_ctower_gear_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
