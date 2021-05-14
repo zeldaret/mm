@@ -6,7 +6,6 @@
 struct EffDust;
 
 typedef void (*EffDustActionFunc)(struct EffDust*, GlobalContext*);
-//typedef void (*EffDustDrawFunc)(Actor*, GlobalContext*);
 
 typedef struct EffDust {
     /* 0x0000 */ Actor actor;
@@ -21,6 +20,15 @@ typedef struct EffDust {
     /* 0x0558 */ EffDustActionFunc actionFunc;
     /* 0x055C */ ActorFunc drawFunc;
 } EffDust; // size = 0x560
+
+typedef enum {
+    /* 0x00 */ EFF_DUST_TYPE_0,
+    /* 0x01 */ EFF_DUST_TYPE_1,
+    /* 0x02 */ EFF_DUST_TYPE_2,
+    /* 0x03 */ EFF_DUST_TYPE_3,
+    /* 0x04 */ EFF_DUST_TYPE_4,
+    /* 0x05 */ EFF_DUST_TYPE_5
+} EffDustType;
 
 extern const ActorInit Eff_Dust_InitVars;
 

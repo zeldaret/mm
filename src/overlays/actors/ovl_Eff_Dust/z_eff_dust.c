@@ -51,11 +51,11 @@ void func_80918B40(EffDust* this) {
 
 void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     EffDust* this = THIS;
-    u32 sp18 = this->actor.params;
+    u32 type = this->actor.params;
 
     func_80918B40(this);
-    switch (sp18) {
-    case 0:
+    switch (type) {
+    case EFF_DUST_TYPE_0:
         this->actionFunc = func_80918D64;
         this->actor.draw = func_80919768;
         this->dx = 1.0f;
@@ -63,7 +63,7 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dz = 1.0f;
         this->scalingFactor = 0.2f;
         break;
-    case 1:
+    case EFF_DUST_TYPE_1:
         this->actionFunc = func_80918FE4;
         this->actor.draw = func_80919768;
         this->dy = 1.0f;
@@ -71,22 +71,22 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dz = 0.8f;
         this->scalingFactor = 0.5f;
         break;
-    case 2:
-    case 3:
+    case EFF_DUST_TYPE_2:
+    case EFF_DUST_TYPE_3:
         this->actionFunc = func_80919230;
         this->actor.draw = func_809199FC;
         this->actor.room = -1;
         this->dx = 0.5f;
         this->scalingFactor = 15.0f;
         break;
-    case 4:
+    case EFF_DUST_TYPE_4:
         this->actionFunc = func_80919230;
         this->actor.draw = func_809199FC;
         this->actor.room = -1;
         this->dx = 0.5f;
         this->scalingFactor = 10.0f;
         break;
-    case 5:
+    case EFF_DUST_TYPE_5:
         this->actionFunc = func_80919230;
         this->actor.draw = func_809199FC;
         this->actor.room = -1;
@@ -111,7 +111,7 @@ void func_80918D64(EffDust *this, GlobalContext *globalCtx) {
     f32* distanceTraveled = this->distanceTraveled;
 
     for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
-        if ((*distanceTraveled) < 1.0f) {
+        if (*distanceTraveled < 1.0f) {
             *distanceTraveled += 0.05f;
         }
         distanceTraveled++;
@@ -142,7 +142,7 @@ void func_80918FE4(EffDust *this, GlobalContext *globalCtx) {
     s32 j;
 
     for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
-        if ((*distanceTraveled) < 1.0f) {
+        if (*distanceTraveled < 1.0f) {
             *distanceTraveled += 0.03f;
         }
         distanceTraveled++;
@@ -178,8 +178,8 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
             Actor_MarkForDeath(&this->actor);
         }
 
-        for (i = 0; i < 64; i++) {
-            if ((*distanceTraveled) < 1.0f) {
+        for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
+            if (*distanceTraveled < 1.0f) {
                 *distanceTraveled += 0.2f;
             }
             distanceTraveled++;
@@ -188,8 +188,8 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
         return;
     }
 
-    for (i = 0; i < 64; i++) {
-        if ((*distanceTraveled) < 1.0f) {
+    for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
+        if (*distanceTraveled < 1.0f) {
             *distanceTraveled += 0.1f;
         }
         distanceTraveled++;
@@ -203,7 +203,7 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
         if (this->distanceTraveled[i] >= 1.0f) {
             theta = randPlusMinusPoint5Scaled(0x10000);
             switch (this->actor.params) {
-                case 2:
+                case EFF_DUST_TYPE_2:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
                     if (this->initialPositions[i].x > 3000.0f) {
                         this->initialPositions[i].y = (3000.0f * Rand_ZeroOne()) * Math_SinS(theta);
@@ -214,7 +214,7 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
                     }
                     break;
 
-                case 3:
+                case EFF_DUST_TYPE_3:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 2500.0f) + 700.0f;
                     if (this->initialPositions[i].x > 2000.0f) {
                         this->initialPositions[i].y = (2000.0f * Rand_ZeroOne()) * Math_SinS(theta);
@@ -225,7 +225,7 @@ void func_80919230(EffDust *this, GlobalContext *globalCtx) {
                     }
                     break;
 
-                case 4:
+                case EFF_DUST_TYPE_4:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 8500.0f) + 1700.0f;
                     if (this->initialPositions[i].x > 5000.0f) {
                         this->initialPositions[i].y = (4000.0f * Rand_ZeroOne()) * Math_SinS(theta);
@@ -263,10 +263,10 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     s32 i;
     f32 aux;
     s16 sp92;
-    Vec3f sp84;
+    Vec3f activeCamEye;
 
-    sp84 = ACTIVE_CAM->eye;
-    sp92 = Math_Vec3f_Yaw(&sp84, &thisx->world.pos);
+    activeCamEye = ACTIVE_CAM->eye;
+    sp92 = Math_Vec3f_Yaw(&activeCamEye, &thisx->world.pos);
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(gfxCtx);
@@ -281,7 +281,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
 
-    for (i = 0; i < 0x40; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
         if (*distanceTraveled < 1.0f) {
             aux = 1.0f - SQ(*distanceTraveled);
             SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
@@ -337,7 +337,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, D_80919DB0);
 
-    for (i = 0; i < 0x40; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
         if (*distanceTraveled < 1.0f) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
