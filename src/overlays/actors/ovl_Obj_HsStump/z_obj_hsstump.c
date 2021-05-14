@@ -44,12 +44,10 @@ extern Vec3f D_80BDAF84;
 
 void ObjHsStump_Init(Actor *thisx, GlobalContext *globalCtx) {
     ObjHsStump *this = THIS;
-    s16 *params;
 
-    params = &this->dyna.actor.params;  
     Actor_ProcessInitChain(&this->dyna.actor, D_80BDAF80);
     this->isHidden = (this->dyna.actor.params >> 0xC) & 0xF;
-    this->flag = *params & 0x7F;
+    this->flag = thisx->params & 0x7F; //Must be thisx to match
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
     if (this->isHidden != 0) {
@@ -91,12 +89,13 @@ void ObjHsStump_SetupAppear(ObjHsStump *this, GlobalContext *globalCtx) {
 #if NON_MATCHING
 void func_80BDABCC(ObjHsStump *this, GlobalContext *globalCtx) {
     s32 i;
-    s16 offsetAngle;
-    s32 tmp2;
-    s16 tmp;
+    s32 angle;
+    s16 numDirections;
     Vec3f iceSmokePosOffset;
     Vec3f iceSmokeVelOffset;
+    s16 offsetAngle;
     Vec3f iceSmokeVel;
+    f32 angleBAMS;
     Vec3f iceSmokePos;
     
 
@@ -115,11 +114,12 @@ void func_80BDABCC(ObjHsStump *this, GlobalContext *globalCtx) {
             iceSmokeVelOffset.y = 0.5f;
             iceSmokeVelOffset.z = 0.0f;
 
-            tmp = 4;
-            tmp2 = 360.0f / tmp;
+            numDirections = 4;
+            angle = 360.0f / numDirections;
+            angleBAMS = angle * (0x10000 / 360.0f);
 
-            for(i=0; i<tmp; i++) {
-                offsetAngle = tmp2 * (0x10000 / 360.0f) * i;
+            for(i=0; i<numDirections; i++) {
+                offsetAngle = i * angleBAMS;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset, &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &D_80BDAF84, 0x64);
