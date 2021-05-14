@@ -7,8 +7,8 @@
     RomLocation += . - _##_Name##SegmentStart; \
     _##_Name##SegmentEnd = .;
 
-#define DECL_SEG_SCENE(_SceneName) DECL_SEG(_SceneName, build/assets/src/scenes/_SceneName, 0x02000000)
-#define DECL_SEG_ROOM(_SceneName, _RoomNum) DECL_SEG(_SceneName##_room_##_RoomNum, build/assets/src/scenes/_SceneName, 0x03000000)
+#define DECL_SEG_SCENE(_SceneName) DECL_SEG(_SceneName, build/assets/scenes/_SceneName, 0x02000000)
+#define DECL_SEG_ROOM(_SceneName, _RoomNum) DECL_SEG(_SceneName##_room_##_RoomNum, build/assets/scenes/_SceneName, 0x03000000)
 
 #define DECL_ACTOR(_ActorName, _File)                                      \
     _ovl_##_ActorName##SegmentStart = .;                                   \
