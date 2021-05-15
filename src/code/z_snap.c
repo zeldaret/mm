@@ -13,8 +13,8 @@ s32 func_8013A240(GlobalContext* ctxt) {
     s32 seen;
     s32 count = 0;
 
-    gSaveContext.perm.pictoFlags0 = 0;
-    gSaveContext.perm.pictoFlags1 = 0;
+    gSaveContext.pictoFlags0 = 0;
+    gSaveContext.pictoFlags1 = 0;
 
     if (ctxt->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
@@ -75,29 +75,30 @@ s32 func_8013A240(GlobalContext* ctxt) {
 
 void func_8013A41C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 |= (1 << flag);
+        gSaveContext.pictoFlags0 |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 |= (1 << flag);
+        gSaveContext.pictoFlags1 |= (1 << flag);
     }
 }
 
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 &= ~(1 << flag);
+        gSaveContext.pictoFlags0 &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 &= ~(1 << flag);
+        gSaveContext.pictoFlags1 &= ~(1 << flag);
     }
 }
 
 u32 func_8013A4C4(s32 flag) {
-    SaveContextPerm* save = &gSaveContext.perm;
+    SaveContext* saveCtx = &gSaveContext;
+    
     if (flag < 0x20) {
-        return save->pictoFlags0 & (1 << flag);
+        return saveCtx->pictoFlags0 & (1 << flag);
     } else {
         flag &= 0x1F;
-        return save->pictoFlags1 & (1 << flag);
+        return saveCtx->pictoFlags1 & (1 << flag);
     }
 }
 

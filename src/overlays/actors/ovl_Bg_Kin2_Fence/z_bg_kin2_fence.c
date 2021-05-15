@@ -152,7 +152,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 2) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.perm.spiderHouseMaskOrder[this->masksHit];
+            nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
                 play_sound(0x4807);
                 this->masksHit += 1;

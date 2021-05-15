@@ -21,13 +21,13 @@ u8 gEquipShifts[] = { 0, 4, 8, 12 };
 u8 gUpgradeShifts[] = { 0, 3, 6, 9, 12, 14, 17, 20, 0, 0, 0, 30, 0, 40, 0, 50 };
 
 u16 gUpgradeCapacities[][4] = {
-    { 0, 20, 30, 40 },    // Bomb Bags
-    { 0, 0, 0, 0 },       // Unused (Scale)
-    { 0, 0, 0, 0 },       // Unused (Strength)
+    { 0, 20, 30, 40 },     // Bomb Bags
+    { 0, 0, 0, 0 },        // Unused (Scale)
+    { 0, 0, 0, 0 },        // Unused (Strength)
     { 99, 200, 500, 500 }, // Wallets
-    { 0, 30, 40, 50 },    // Quivers
-    { 0, 10, 20, 30 },    // Unused (Deku Stick)
-    { 0, 20, 30, 40 },    // Unused (Deku Nut)
+    { 0, 30, 40, 50 },     // Quivers
+    { 0, 10, 20, 30 },     // Unused (Deku Stick)
+    { 0, 20, 30, 40 },     // Unused (Deku Nut)
 };
 
 u32 gGsFlagsMask[] = { 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000 };

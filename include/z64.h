@@ -304,7 +304,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 pad0[0x1C];
-} PermanentSceneFlags; // size = 0x1C
+} SavedSceneFlags; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 unk0;
@@ -353,10 +353,14 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u8 items[24];
     /* 0x18 */ u8 masks[24];
-    /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ s32 unk48; // some bits are wallet upgrades
-    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
-} SaveContextInventory; // size = 0x88
+    /* 0x30 */ s8 ammo[24];
+    /* 0x48 */ u32 upgrades; // some bits are wallet upgrades
+    /* 0x4C */ u32 questItems;
+    /* 0x50 */ u8 dungeonItems[10];
+    /* 0x5A */ s8 dungeonKeys[10];
+    /* 0x64 */ s8 strayFairies[10];
+    /* 0x6E */ u8 unk_6E[8][3];
+} Inventory; // size = 0x88
 
 // Save Context that is only stored in an owl save
 typedef struct {
@@ -369,21 +373,6 @@ typedef struct {
     /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
     /* 0x0006 */ s16 unk_A00;
 } SaveContextOwl; // size = 0x2C94
-
-typedef struct {
-    /* 0x00 */ u8 zelda[6]; // Will always be "ZELDA3" for a valid save
-    /* 0x06 */ UNK_TYPE1 pad6[0xA];
-    /* 0x10 */ s16 maxLife;
-    /* 0x12 */ s16 currentLife;
-    /* 0x14 */ s8 unk14;
-    /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ s16 currentRupees;
-    /* 0x18 */ UNK_TYPE1 pad18[0x10];
-} SaveContext_struct1; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x22];
-} SaveContext_struct2; // size = 0x22
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
@@ -439,7 +428,7 @@ typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
 
-typedef unsigned long(*func)(void);
+typedef u32(*func)(void);
 
 typedef void(*func_ptr)(void);
 
@@ -636,42 +625,6 @@ typedef struct {
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
 
-// Permanent save context, kept in regular save files
-typedef struct {
-    /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ UNK_TYPE1 pad4[0x3];
-    /* 0x0007 */ u8 linkAge;
-    /* 0x0008 */ s32 cutscene;
-    /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0x2];
-    /* 0x0010 */ u32 isNight;
-    /* 0x0014 */ u32 unk14;
-    /* 0x0018 */ u32 day;
-    /* 0x001C */ u32 daysElapsed;
-    /* 0x0020 */ u8 unk20;
-    /* 0x0021 */ UNK_TYPE1 pad21[0x2];
-    /* 0x0023 */ u8 owlSave;
-    /* 0x0024 */ SaveContext_struct1 unk24;
-    /* 0x004C */ SaveContext_struct2 unk4C;
-    /* 0x006E */ UNK_TYPE1 pad6E[0x2];
-    /* 0x0070 */ SaveContextInventory inv;
-    /* 0x00F8 */ PermanentSceneFlags sceneFlags[120];
-    /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ UNK_TYPE1 padE80[0x5C];
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ UNK_TYPE1 padEE0[0x18];
-    /* 0x0EF8 */ u8 weekEventReg[100];
-    /* 0x0F5C */ u32 mapsVisited;
-    /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];
-    /* 0x0FEC */ u8 lotteryCodes[9];
-    /* 0x0FF5 */ u8 spiderHouseMaskOrder[6];
-    /* 0x0FFB */ u8 bomberCode[5];
-    /* 0x1000 */ UNK_TYPE1 pad1000[0xA];
-    /* 0x100A */ u16 checksum;
-} SaveContextPerm; // size = 0x100C
-
 typedef struct {
     /* 0x00 */ Vec3f focalPointChange;
     /* 0x0C */ Vec3f eyeChange;
@@ -772,8 +725,7 @@ typedef struct {
     /* 0x25E */ UNK_TYPE1 pad25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
     /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} 
-InterfaceContext; // size = 0x348
+} InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
@@ -1041,9 +993,73 @@ typedef struct {
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
 
+typedef struct {
+    /* 0x00 */ s16 scene;
+    /* 0x02 */ Vec3s pos;
+    /* 0x08 */ s16 angle;
+} HorseData; // size = 0x0A
+
 // Full save context
 typedef struct {
-    /* 0x0000 */ SaveContextPerm perm;
+    /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
+    /* 0x0004 */ u8 equippedMask;
+    /* 0x0005 */ u8 unk_05;
+    /* 0x0006 */ u8 unk_06;
+    /* 0x0007 */ u8 linkAge;
+    /* 0x0008 */ s32 cutscene;
+    /* 0x000C */ u16 time;
+    /* 0x000E */ u16 owlSaveLocation;
+    /* 0x0010 */ u32 isNight;
+    /* 0x0014 */ u32 unk_14;
+    /* 0x0018 */ u32 day;
+    /* 0x001C */ u32 daysElapsed;
+    /* 0x0020 */ u8 playerForm; // transformation mask ID
+    /* 0x0021 */ u8 snowheadCleared;
+    /* 0x0022 */ u8 unk_22;
+    /* 0x0023 */ u8 owlSave;
+    /* 0x0024 */ char newf[6]; // Will always be "ZELDA3" for a valid save
+    /* 0x002B */ u16 deaths;
+    /* 0x002C */ char playerName[8];
+    /* 0x0034 */ s16 healthCapacity;
+    /* 0x0036 */ s16 health;
+    /* 0x0038 */ s8 magicLevel;
+    /* 0x0039 */ s8 magic;
+    /* 0x003A */ s16 rupees;
+    /* 0x003C */ u16 swordHealth;
+    /* 0x003E */ u16 naviTimer;
+    /* 0x0040 */ u8 magicAcquired;
+    /* 0x0041 */ u8 doubleMagic;
+    /* 0x0042 */ u8 doubleDefense;
+    /* 0x0043 */ u8 unk_43;
+    /* 0x0044 */ u8 unk_44;
+    /* 0x0046 */ u16 unk_46;
+    /* 0x0048 */ u8 unk_48;
+    /* 0x004A */ s16 savedSceneNum;
+    /* 0x004C */ u8 unk_4C[4][4];
+    /* 0x005C */ u8 unk_5C[4][4];
+    /* 0x006C */ u16 unk_6C;
+    /* 0x0070 */ Inventory inventory;
+    /* 0x00F8 */ SavedSceneFlags sceneFlags[120];
+    /* 0x0E18 */ char unk_E18[0x60];
+    /* 0x0E78 */ u32 pictoFlags0;
+    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E80 */ char unk_E80[0x5C];
+    /* 0x0EDC */ u32 bankRupees;
+    /* 0x0EE0 */ char unk_EE0[0x18];
+    /* 0x0EF8 */ u8 weekEventReg[100];
+    /* 0x0F5C */ u32 mapsVisited;
+    /* 0x0F60 */ u32 unk_F60; // Ikana cleared?
+    /* 0x0F64 */ u8 unk_F64;
+    /* 0x0F65 */ u8 unk_F65;
+    /* 0x0F66 */ u8 unk_F66[128];
+    /* 0x0FE6 */ s8 unk_FE6;
+    /* 0x0FE7 */ s8 unk_FE7[5];
+    /* 0x0FEC */ s8 lotteryCodes[3][3];
+    /* 0x0FF5 */ s8 spiderHouseMaskOrder[6];
+    /* 0x0FFB */ s8 bomberCode[5];
+    /* 0x1000 */ HorseData horseData;
+    /* 0x100A */ u16 checksum;
+
     /* 0x100C */ SaveContextOwl owl;
     /* 0x3CA0 */ SaveContextExtra extra;
 } SaveContext; // size = 0x48C8

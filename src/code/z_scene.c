@@ -163,7 +163,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
-    unk20 = gSaveContext.perm.unk20;
+    unk20 = gSaveContext.playerForm;
     playerObjectId = gLinkFormObjectIndexes[unk20];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
@@ -384,7 +384,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.extra.environmentTime = gSaveContext.perm.time =
+        gSaveContext.extra.environmentTime = gSaveContext.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
@@ -394,7 +394,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->kankyoContext.unk2 = 0;
     }
 
-    if ((gSaveContext.perm.inv.items[0] == 0xFF) && (globalCtx->kankyoContext.unk2 != 0)) {
+    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->kankyoContext.unk2 != 0)) {
         globalCtx->kankyoContext.unk2 = 5;
     }
 
@@ -402,15 +402,15 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         REG(15) = globalCtx->kankyoContext.unk2;
     }
 
-    dayTime = gSaveContext.perm.time;
+    dayTime = gSaveContext.time;
     globalCtx->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.perm.time;
+    dayTime = gSaveContext.time;
     globalCtx->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.perm.time;
+    dayTime = gSaveContext.time;
     globalCtx->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
-        gSaveContext.extra.environmentTime = gSaveContext.perm.time;
+    if (globalCtx->kankyoContext.unk2 == 0 && gSaveContext.cutscene < 0xFFF0) {
+        gSaveContext.extra.environmentTime = gSaveContext.time;
 
         if (gSaveContext.extra.environmentTime >= 0x2AAA && gSaveContext.extra.environmentTime < 0x4555) {
             gSaveContext.extra.environmentTime = 0x3555;
@@ -526,7 +526,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     }
 
     if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.perm.mapsVisited = (gBitFlags[i] | gSaveContext.perm.mapsVisited) | gSaveContext.perm.mapsVisited;
+        gSaveContext.mapsVisited = (gBitFlags[i] | gSaveContext.mapsVisited) | gSaveContext.mapsVisited;
     }
 }
 
@@ -609,5 +609,5 @@ u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
  * Creates an entrance index from the current entrance index with the given spawn index.
  */
 u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.perm.entranceIndex >> 9, spawnIndex, 0);
+    return Entrance_CreateIndex(gSaveContext.entranceIndex >> 9, spawnIndex, 0);
 }
