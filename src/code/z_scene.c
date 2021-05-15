@@ -509,23 +509,23 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     s16 i = 0;
 
     while (true) {
-        if (scenesPerMapArea[i].scenes[j] == 0xFFFF) {
+        if (gScenesPerRegion[i][j] == 0xFFFF) {
             i++;
             j = 0;
 
-            if (i == (s32)(sizeof(scenesPerMapArea) / sizeof(SceneIdList))) {
+            if (i == ARRAY_COUNT(gScenesPerRegion)) {
                 break;
             }
         }
 
-        if (globalCtx->sceneNum == scenesPerMapArea[i].scenes[j]) {
+        if (globalCtx->sceneNum == gScenesPerRegion[i][j]) {
             break;
         }
 
         j++;
     }
 
-    if (i < (s32)(sizeof(scenesPerMapArea) / sizeof(SceneIdList))) {
+    if (i < ARRAY_COUNT(gScenesPerRegion)) {
         gSaveContext.perm.mapsVisited = (gBitFlags[i] | gSaveContext.perm.mapsVisited) | gSaveContext.perm.mapsVisited;
     }
 }
