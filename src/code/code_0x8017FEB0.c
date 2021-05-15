@@ -63,48 +63,48 @@ u16 atans_first_8th(f32 opposite, f32 adjacent) {
 }
 
 s16 atans(f32 opposite, f32 adjacent) {
-    s32 phi_v1;
+    s32 angle;
 
     if (opposite == 0.0f) {
         if (adjacent >= 0.0f) {
-            phi_v1 = 0;
+            angle = 0;
         } else {
-            phi_v1 = 0x8000;
+            angle = 0x8000;
         }
     } else if (adjacent == 0.0f) {
         if (opposite >= 0.0f) {
-            phi_v1 = 0x4000;
+            angle = 0x4000;
         } else {
-            phi_v1 = 0xC000;
+            angle = 0xC000;
         }
     } else if (opposite >= 0.0f) {
         if (adjacent >= 0.0f) {
             if (opposite <= adjacent) {
-                phi_v1 = atans_first_8th(opposite, adjacent);
+                angle = atans_first_8th(opposite, adjacent);
             } else {
-                phi_v1 = 0x4000 - atans_first_8th(adjacent, opposite);
+                angle = 0x4000 - atans_first_8th(adjacent, opposite);
             }
         } else {
             if (-adjacent < opposite) {
-                phi_v1 = atans_first_8th(-adjacent, opposite) + 0x4000;
+                angle = atans_first_8th(-adjacent, opposite) + 0x4000;
             } else {
-                phi_v1 = 0x8000 - atans_first_8th(opposite, -adjacent);
+                angle = 0x8000 - atans_first_8th(opposite, -adjacent);
             }
         }
     } else if (adjacent < 0.0f) {
         if (-opposite <= -adjacent) {
-            phi_v1 = atans_first_8th(-opposite, -adjacent) + 0x8000;
+            angle = atans_first_8th(-opposite, -adjacent) + 0x8000;
         } else {
-            phi_v1 = 0xC000 - atans_first_8th(-adjacent, -opposite);
+            angle = 0xC000 - atans_first_8th(-adjacent, -opposite);
         }
     } else {
         if (adjacent < -opposite) {
-            phi_v1 = atans_first_8th(adjacent, -opposite) + 0xC000;
+            angle = atans_first_8th(adjacent, -opposite) + 0xC000;
         } else {
-            phi_v1 = -atans_first_8th(-opposite, adjacent);
+            angle = -atans_first_8th(-opposite, adjacent);
         }
     }
-    return phi_v1;
+    return angle;
 }
 
 f32 atan(f32 opposite, f32 adjacent) {
