@@ -20,9 +20,15 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Draw
 };
 
-static unkStruct D_80C25CE0[2] = {
-    {0x06003440, 0x060031A0, 0x00000000},
-    {0x00000000, 0x060003D0, 0x06001FF8}
+extern Gfx D_060003D0[];
+extern Gfx D_060031A0[];
+extern Gfx D_06003440[];
+extern AnimatedMaterial D_06001FF8;
+
+
+static ObjEndingGraphics D_80C25CE0[2] = {
+    {D_06003440, D_060031A0, NULL},
+    {NULL, D_060003D0, &D_06001FF8}
 };
 
 static InitChainEntry sInitChain[] = {
@@ -34,12 +40,12 @@ void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
     AnimatedMaterial *texture;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk144 = &D_80C25CE0[this->actor.params];
+    this->graphics = &D_80C25CE0[this->actor.params];
     if(false){}
-    texture = this->unk144->texture;
+    texture = this->graphics->texture;
     
     if (texture != NULL) {
-        this->texture = Lib_SegmentedToVirtual(texture);
+        this->texture = (AnimatedMaterial*)Lib_SegmentedToVirtual(texture);
     }
 }
 
@@ -48,18 +54,18 @@ void ObjEnding_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {
     ObjEnding *this = THIS;
-    Gfx *dl;
-    UNK_TYPE4 tempunk4;
+    Gfx *dl1;
+    Gfx *dl2;
 
     if (this->texture != NULL) {
         AnimatedMat_Draw(globalCtx, this->texture);
     }
-    tempunk4 = this->unk144->unk0;
-    if (tempunk4 != 0) {
-        func_800BDFC0(globalCtx, tempunk4);
+    dl1 = this->graphics->dl1;
+    if (dl1 != 0) {
+        func_800BDFC0(globalCtx, dl1);
     }
-    dl = this->unk144->dl;
-    if (dl != NULL) {
-        func_800BE03C(globalCtx, dl);
+    dl2 = this->graphics->dl2;
+    if (dl2 != NULL) {
+        func_800BE03C(globalCtx, dl2);
     }
 }
