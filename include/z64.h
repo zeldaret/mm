@@ -628,7 +628,10 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ View view;
-    /* 0x168 */ UNK_TYPE1 pad168[0xBE];
+    /* 0x168 */ char unk_168[0xB4];
+    /* 0x21C */ s16 unk_21C;
+    /* 0x21E */ s16 unk_21E;
+    /* 0x220 */ char unk_220[6];
     /* 0x226 */ s16 lifeColorChange;
     /* 0x228 */ s16 lifeColorChangeDirection;
     /* 0x22A */ s16 unk22A;
@@ -653,11 +656,11 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x256 */ char unk_256[0x06];
     /* 0x25C */ u16 unk25C;
-    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
+    /* 0x25E */ char unk_25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
-    /* 0x272 */ UNK_TYPE1 pad272[0xD6];
+    /* 0x272 */ char unk_272[0xD6];
 } InterfaceContext; // size = 0x348
 
 typedef struct {

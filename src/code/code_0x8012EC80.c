@@ -247,8 +247,23 @@ static u16 unkscenelist[12][6] = {
     },
 };
 
-s32 func_8012EC80(GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EC80.asm")
+s32 func_8012EC80(GlobalContext* globalCtx) {
+    if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
+        return 0xFF;
+    } else if (gSaveContext.unk_1015 == 0xFF) {
+        return 0xFF;
+    } else if (gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0] ==
+               0xFF) {
+        if (globalCtx->interfaceCtx.unk_21C != 0) {
+            if (globalCtx->interfaceCtx.unk_21E != 0) {
+                return globalCtx->interfaceCtx.unk_21E;
+            }
+        }
+        return 0xFF;
+    } else {
+        return gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0];
+    }
+}
 
 void func_8012ED34(s16 equipment);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED34.asm")
