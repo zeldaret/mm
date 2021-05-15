@@ -20,44 +20,20 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Draw
 };
 
-<<<<<<< HEAD
-//extern unkStruct D_80C25CE0[];
-=======
-extern InitChainEntry D_80C25CF8[];
-/*
-static InitChainEntry sInitChain[] = {
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
-};
-*/
-
-extern unkStruct D_80C25CE0[];
-/*
->>>>>>> upstream/master
 static unkStruct D_80C25CE0[2] = {
     {0x06003440, 0x060031A0, 0x00000000},
     {0x00000000, 0x060003D0, 0x06001FF8}
 };
-<<<<<<< HEAD
 
-//extern InitChainEntry D_80C25CF8[];
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
-
-void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
-    ObjEnding* this = THIS;
-    AnimatedTexture *texture;
-
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-=======
-*/
 
 void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
     ObjEnding* this = THIS;
     AnimatedMaterial *texture;
 
-    Actor_ProcessInitChain(&this->actor, D_80C25CF8);
->>>>>>> upstream/master
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk144 = &D_80C25CE0[this->actor.params];
     if(false){}
     texture = this->unk144->texture;
@@ -76,11 +52,7 @@ void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {
     UNK_TYPE4 tempunk4;
 
     if (this->texture != NULL) {
-<<<<<<< HEAD
-        SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->texture);
-=======
         AnimatedMat_Draw(globalCtx, this->texture);
->>>>>>> upstream/master
     }
     tempunk4 = this->unk144->unk0;
     if (tempunk4 != 0) {
