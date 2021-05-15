@@ -24,7 +24,7 @@ u16 gUpgradeCapacities[][4] = {
     { 0, 20, 30, 40 },    // Bomb Bags
     { 0, 0, 0, 0 },       // Unused (Scale)
     { 0, 0, 0, 0 },       // Unused (Strength)
-    { 99, 20, 500, 500 }, // Wallets
+    { 99, 200, 500, 500 }, // Wallets
     { 0, 30, 40, 50 },    // Quivers
     { 0, 10, 20, 30 },    // Unused (Deku Stick)
     { 0, 20, 30, 40 },    // Unused (Deku Nut)
@@ -247,24 +247,34 @@ static u16 unkscenelist[12][6] = {
     },
 };
 
+s32 func_8012EC80(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EC80.asm")
 
+void func_8012ED34(s16 equipment);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED34.asm")
 
+u8 func_8012ED78(GlobalContext* globalCtx, s16 equipment);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED78.asm")
 
+void func_8012EDE8(s16 arg0, u32 arg1);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EDE8.asm")
 
+s32 func_8012EE34(s16 sceneIndex);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EE34.asm")
 
+void func_8012EF0C(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EF0C.asm")
 
+void func_8012F0EC(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F0EC.asm")
 
+void func_8012F1BC(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F1BC.asm")
 
+void func_8012F22C(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F22C.asm")
 
+void func_8012F278(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F278.asm")
 
 u32 D_801C2410[] = {
