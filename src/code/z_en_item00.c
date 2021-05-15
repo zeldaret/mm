@@ -800,8 +800,8 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 s16 func_800A7650(s16 dropId) {
     s16 maxLife;
 
-    if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) && (gSaveContext.perm.inv.items[D_801C207E] == 0xFF)) ||
-        (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) || (dropId == ITEM00_ARROWS_50)) && (gSaveContext.perm.inv.items[D_801C2079] == 0xFF)) ||
+    if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) && (gSaveContext.perm.inv.items[gItemSlots[6]] == 0xFF)) ||
+        (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) || (dropId == ITEM00_ARROWS_50)) && (gSaveContext.perm.inv.items[gItemSlots[1]] == 0xFF)) ||
         (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.perm.unk24.unk14 == 0))) {
         return ITEM00_NO_DROP;
     }
@@ -1059,11 +1059,11 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[1]] < 6) {
+            } else if (gSaveContext.perm.inv.quantities[gItemSlots[1]] < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[6]] < 6) {
+            } else if (gSaveContext.perm.inv.quantities[gItemSlots[6]] < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
