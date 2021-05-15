@@ -2431,7 +2431,7 @@ s32 func_8012EE34(s16 sceneIndex);
 void func_8012EF0C(s16 arg0);
 void func_8012F0EC(s16 arg0);
 void func_8012F1BC(s16 arg0);
-void func_8012F22C(s16 arg0);
+s16 func_8012F22C(s16 sceneIndex);
 void func_8012F278(GlobalContext* globalCtx);
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
 void Object_InitBank(GameState* state, ObjectContext* objectCtx);

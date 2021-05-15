@@ -286,8 +286,15 @@ void func_8012F0EC(s16 arg0);
 void func_8012F1BC(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F1BC.asm")
 
-void func_8012F22C(s16 arg0);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F22C.asm")
+// void func_8012F22C(s16 arg0);
+// #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F22C.asm")
+s16 func_8012F22C(s16 sceneIndex) {
+    if (sceneIndex == SCENE_KINSTA1) {
+        return (gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10;
+    }
+    return gSaveContext.roomInf[126][0] & 0xFFFF;
+}
+
 
 void func_8012F278(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F278.asm")
