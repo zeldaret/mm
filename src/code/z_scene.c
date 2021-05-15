@@ -153,7 +153,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
                                 globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
     if ((globalCtx->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)) {
+        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[1].playerParams == 0x0CFF)) {
         // Skull Kid Object
         Object_Spawn(&globalCtx->objectCtx, OBJECT_STK);
         return;
@@ -384,7 +384,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.extra.environmentTime = gSaveContext.time =
+        gSaveContext.environmentTime = gSaveContext.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
@@ -398,7 +398,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->kankyoContext.unk2 = 5;
     }
 
-    if (gSaveContext.extra.unk2b8 == 0) {
+    if (gSaveContext.unk_3F58 == 0) {
         REG(15) = globalCtx->kankyoContext.unk2;
     }
 
@@ -410,16 +410,16 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
     if (globalCtx->kankyoContext.unk2 == 0 && gSaveContext.cutscene < 0xFFF0) {
-        gSaveContext.extra.environmentTime = gSaveContext.time;
+        gSaveContext.environmentTime = gSaveContext.time;
 
-        if (gSaveContext.extra.environmentTime >= 0x2AAA && gSaveContext.extra.environmentTime < 0x4555) {
-            gSaveContext.extra.environmentTime = 0x3555;
-        } else if (gSaveContext.extra.environmentTime >= 0x4555 && gSaveContext.extra.environmentTime < 0x5555) {
-            gSaveContext.extra.environmentTime = 0x5555;
-        } else if (gSaveContext.extra.environmentTime >= 0xAAAA && gSaveContext.extra.environmentTime < 0xB555) {
-            gSaveContext.extra.environmentTime = 0xB555;
-        } else if (gSaveContext.extra.environmentTime >= 0xC000 && gSaveContext.extra.environmentTime < 0xCAAA) {
-            gSaveContext.extra.environmentTime = 0xCAAA;
+        if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
+            gSaveContext.environmentTime = 0x3555;
+        } else if (gSaveContext.environmentTime >= 0x4555 && gSaveContext.environmentTime < 0x5555) {
+            gSaveContext.environmentTime = 0x5555;
+        } else if (gSaveContext.environmentTime >= 0xAAAA && gSaveContext.environmentTime < 0xB555) {
+            gSaveContext.environmentTime = 0xB555;
+        } else if (gSaveContext.environmentTime >= 0xC000 && gSaveContext.environmentTime < 0xCAAA) {
+            gSaveContext.environmentTime = 0xCAAA;
         }
     }
 }
@@ -450,7 +450,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->unk814 = cmd->soundSettings.musicSeq;
     globalCtx->unk815 = cmd->soundSettings.nighttimeSFX;
 
-    if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }
@@ -465,9 +465,9 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.extra.sceneSetupIndex) {
+    if (gSaveContext.sceneSetupIndex) {
         altHeaderList = (SceneCmd**)Lib_SegmentedToVirtual(cmd->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.extra.sceneSetupIndex - 1];
+        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
 
         if (altHeader != NULL) {
             Scene_ProcessHeader(globalCtx, (SceneCmd*)Lib_SegmentedToVirtual(altHeader));

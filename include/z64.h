@@ -32,6 +32,7 @@
 #include <z64math.h>
 #include <z64object.h>
 #include <z64scene.h>
+#include <z64save.h>
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -144,13 +145,6 @@ typedef struct {
     /* 0x14 */ UNK_TYPE1 pad14[0x14];
     /* 0x28 */ CsCmdActorAction* actorActions[10];
 } CutsceneContext; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ u32 chestFlags;
-    /* 0x04 */ u32 switchFlags[2];
-    /* 0x0C */ u32 clearedRooms;
-    /* 0x10 */ u32 collectibleFlags;
-} CycleSceneFlags; // size = 0x14
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -303,10 +297,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x1C];
-} SavedSceneFlags; // size = 0x1C
-
-typedef struct {
     /* 0x0 */ s16 unk0;
     /* 0x2 */ s16 unk2;
     /* 0x4 */ s16 unk4;
@@ -316,63 +306,6 @@ typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
-
-// Extra information in the save context that is not saved
-typedef struct {
-    /* 0x000 */ UNK_TYPE1 pad0[0x4];
-    /* 0x004 */ s16 unk04;
-    /* 0x006 */ UNK_TYPE1 pad06[0x6];
-    /* 0x00C */ s32 sceneSetupIndex;
-    /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x10];
-    /* 0x024 */ s16 unk24;
-    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x34];
-    /* 0x078 */ f32 unk78;
-    /* 0x07C */ UNK_TYPE1 pad7C[0x4];
-    /* 0x080 */ s16 unk80;
-    /* 0x082 */ UNK_TYPE1 pad82[0x5];
-    /* 0x087 */ s8 unk87;
-    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
-    /* 0x276 */ u8 unk276;
-    /* 0x277 */ UNK_TYPE1 pad277[0x9];
-    /* 0x280 */ u16 unk280;
-    /* 0x282 */ u16 unk282;
-    /* 0x284 */ UNK_TYPE1 pad284[0x28];
-    /* 0x2AC */ u8 cutsceneTrigger;
-    /* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
-    /* 0x2B2 */ u16 environmentTime;
-    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
-    /* 0x2B8 */ s16 unk2b8;
-    /* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
-    /* 0x2C4 */ f32 unk2C4;
-    /* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
-} SaveContextExtra; // size = 0xC28
-
-typedef struct {
-    /* 0x00 */ u8 items[24];
-    /* 0x18 */ u8 masks[24];
-    /* 0x30 */ s8 ammo[24];
-    /* 0x48 */ u32 upgrades; // some bits are wallet upgrades
-    /* 0x4C */ u32 questItems;
-    /* 0x50 */ u8 dungeonItems[10];
-    /* 0x5A */ s8 dungeonKeys[10];
-    /* 0x64 */ s8 strayFairies[10];
-    /* 0x6E */ u8 unk_6E[8][3];
-} Inventory; // size = 0x88
-
-// Save Context that is only stored in an owl save
-typedef struct {
-    /* 0x0000 */ UNK_TYPE1 pad0[0x1];
-    /* 0x0001 */ u8 unk1;
-    /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ u8 unk3;
-    /* 0x0004 */ u8 unk4;
-    /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
-    /* 0x0006 */ s16 unk_A00;
-} SaveContextOwl; // size = 0x2C94
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
@@ -428,7 +361,7 @@ typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
 
-typedef u32(*func)(void);
+typedef unsigned long(*func)(void);
 
 typedef void(*func_ptr)(void);
 
@@ -992,77 +925,6 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
-
-typedef struct {
-    /* 0x00 */ s16 scene;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ s16 angle;
-} HorseData; // size = 0x0A
-
-// Full save context
-typedef struct {
-    /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ u8 equippedMask;
-    /* 0x0005 */ u8 unk_05;
-    /* 0x0006 */ u8 unk_06;
-    /* 0x0007 */ u8 linkAge;
-    /* 0x0008 */ s32 cutscene;
-    /* 0x000C */ u16 time;
-    /* 0x000E */ u16 owlSaveLocation;
-    /* 0x0010 */ u32 isNight;
-    /* 0x0014 */ u32 unk_14;
-    /* 0x0018 */ u32 day;
-    /* 0x001C */ u32 daysElapsed;
-    /* 0x0020 */ u8 playerForm; // transformation mask ID
-    /* 0x0021 */ u8 snowheadCleared;
-    /* 0x0022 */ u8 unk_22;
-    /* 0x0023 */ u8 owlSave;
-    /* 0x0024 */ char newf[6]; // Will always be "ZELDA3" for a valid save
-    /* 0x002B */ u16 deaths;
-    /* 0x002C */ char playerName[8];
-    /* 0x0034 */ s16 healthCapacity;
-    /* 0x0036 */ s16 health;
-    /* 0x0038 */ s8 magicLevel;
-    /* 0x0039 */ s8 magic;
-    /* 0x003A */ s16 rupees;
-    /* 0x003C */ u16 swordHealth;
-    /* 0x003E */ u16 naviTimer;
-    /* 0x0040 */ u8 magicAcquired;
-    /* 0x0041 */ u8 doubleMagic;
-    /* 0x0042 */ u8 doubleDefense;
-    /* 0x0043 */ u8 unk_43;
-    /* 0x0044 */ u8 unk_44;
-    /* 0x0046 */ u16 unk_46;
-    /* 0x0048 */ u8 unk_48;
-    /* 0x004A */ s16 savedSceneNum;
-    /* 0x004C */ u8 unk_4C[4][4];
-    /* 0x005C */ u8 unk_5C[4][4];
-    /* 0x006C */ u16 unk_6C;
-    /* 0x0070 */ Inventory inventory;
-    /* 0x00F8 */ SavedSceneFlags sceneFlags[120];
-    /* 0x0E18 */ char unk_E18[0x60];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ char unk_E80[0x5C];
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ char unk_EE0[0x18];
-    /* 0x0EF8 */ u8 weekEventReg[100];
-    /* 0x0F5C */ u32 mapsVisited;
-    /* 0x0F60 */ u32 unk_F60; // Ikana cleared?
-    /* 0x0F64 */ u8 unk_F64;
-    /* 0x0F65 */ u8 unk_F65;
-    /* 0x0F66 */ u8 unk_F66[128];
-    /* 0x0FE6 */ s8 unk_FE6;
-    /* 0x0FE7 */ s8 unk_FE7[5];
-    /* 0x0FEC */ s8 lotteryCodes[3][3];
-    /* 0x0FF5 */ s8 spiderHouseMaskOrder[6];
-    /* 0x0FFB */ s8 bomberCode[5];
-    /* 0x1000 */ HorseData horseData;
-    /* 0x100A */ u16 checksum;
-
-    /* 0x100C */ SaveContextOwl owl;
-    /* 0x3CA0 */ SaveContextExtra extra;
-} SaveContext; // size = 0x48C8
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 

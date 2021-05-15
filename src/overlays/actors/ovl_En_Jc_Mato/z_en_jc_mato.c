@@ -117,7 +117,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    if (!(gSaveContext.owl.unk4 & 1)) {
+    if (!(gSaveContext.eventInf[4] & 1)) {
         EnJcMato_CheckForHit(this, globalCtx);
     }
 }
