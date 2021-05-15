@@ -407,7 +407,7 @@ SECTIONS
         build/src/code/z_rcp.o(.text)
         . += 0x10;
         build/src/code/z_room.o(.text)
-        build/src/code/code_0x8012EC80.o(.src)
+        build/src/code/code_0x8012EC80.o(.text)
         build/src/code/z_scene.o(.text)
         build/src/code/z_scene_proc.o(.text)
         build/src/code/z_scene_table.o(.text)
@@ -601,6 +601,7 @@ SECTIONS
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
         build/asm/code/code_rodata_0x8012A080.o(.rodata)
         build/asm/code/code_rodata_z_room.o(.rodata)
+        build/src/code/code_0x8012EC80.o(.rodata)
         build/src/code/z_scene_proc.o(.rodata)
         build/src/code/z_scene_table.o(.rodata)
         build/asm/code/code_rodata_z_skin.o(.rodata)
