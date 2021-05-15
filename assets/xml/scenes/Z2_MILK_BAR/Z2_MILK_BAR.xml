@@ -1,0 +1,8 @@
+<Root>
+    <File Name="Z2_MILK_BAR" Game="MM">
+        <Scene Name="Z2_MILK_BAR"/>
+    </File>
+    <File Name="Z2_MILK_BAR_room_00" Game="MM">
+        <Room Name="Z2_MILK_BAR_room_00"/>
+    </File>
+</Root>

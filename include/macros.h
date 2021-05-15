@@ -15,9 +15,6 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - 0x80000000)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-
-#define ALIGN16(val) (((val) + 0xF) & ~0xF)
-
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 
@@ -55,6 +52,21 @@ extern GraphicsContext* __gfxCtx;
 #define CLOSE_DISPS(gfxCtx)                 \
     }                                       \
     (void)0
+
+/**
+ * `x` vertex x
+ * `y` vertex y
+ * `z` vertex z
+ * `s` texture s coordinate
+ * `t` texture t coordinate
+ * `crnx` red component of color vertex, or x component of normal vertex
+ * `cgny` green component of color vertex, or y component of normal vertex
+ * `cbnz` blue component of color vertex, or z component of normal vertex
+ * `a` alpha
+ */
+#define VTX(x,y,z,s,t,crnx,cgny,cbnz,a) { { { x, y, z }, 0, { s, t }, { crnx, cgny, cbnz, a } } }
+
+#define VTX_T(x,y,z,s,t,cr,cg,cb,a) { { x, y, z }, 0, { s, t }, { cr, cg, cb, a } }
 
 #define GRAPH_ALLOC(gfxCtx, size)         \
     ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))

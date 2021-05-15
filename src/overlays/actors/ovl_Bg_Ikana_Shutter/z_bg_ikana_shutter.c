@@ -47,14 +47,14 @@ static InitChainEntry D_80BD5D10[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000F28;
+extern CollisionHeader D_06000F28;
 extern UNK_PTR D_06000CE8;
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
+    return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
 }
 
 void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
