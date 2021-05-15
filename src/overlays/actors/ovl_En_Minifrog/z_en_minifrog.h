@@ -23,7 +23,7 @@ typedef struct EnMinifrog {
     /* 0x218 */ Vec3s transitionDrawTable[24];
     /* 0x2A8 */ EnMinifrogActionFunc actionFunc;
     /* 0x2AC */ struct EnMinifrog* frog;
-    /* 0x2B0 */ u16 frogIndex;
+    /* 0x2B0 */ s16 frogIndex;
     /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ s16 timer;
     /* 0x2B6 */ u16 flags;
