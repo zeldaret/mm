@@ -61,7 +61,7 @@ void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {
         AnimatedMat_Draw(globalCtx, this->texture);
     }
     dl1 = this->graphics->dl1;
-    if (dl1 != 0) {
+    if (dl1 != NULL) {
         func_800BDFC0(globalCtx, dl1);
     }
     dl2 = this->graphics->dl2;
