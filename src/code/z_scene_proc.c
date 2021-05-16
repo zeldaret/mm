@@ -256,13 +256,6 @@ f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
         weightsPtr++;
     }
 
-<<<<<<< HEAD
-    gSPEndDisplayList(dl++);
-}
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene_proc/SceneProc_DrawFlashingTexture.s")
-#endif
-=======
     for (intp = 0.0f, i = 0, weightsPtr = weights; i < n; i++) {
         for (m = 1.0f, j = 0, xPtr2 = x; j < n; j++) {
             if (j != i) {
@@ -270,7 +263,6 @@ f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
             }
             xPtr2++;
         }
->>>>>>> 4279f12414f94d46383ee494efed8281a4267ac7
 
         intp += (*weightsPtr) * m;
         weightsPtr++;
@@ -373,23 +365,6 @@ void AnimatedMat_DrawColorNonLinearInterp(GlobalContext* globalCtx, s32 segment,
 
     AnimatedMat_SetColor(globalCtx, segment, &primColorResult, (envColorCur != NULL) ? &envColorResult : NULL);
 }
-<<<<<<< HEAD
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene_proc/SceneProc_DrawType3Texture.s")
-#endif
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene_proc/SceneProc_Interpolate.s")
-
-u8 SceneProc_InterpolateClamped(u32 numKeyFrames, f32* keyFrames, f32* values, f32 frame) {
-    s32 ret = SceneProc_Interpolate(numKeyFrames, keyFrames, values, frame);
-
-    return (ret < 0)   ? 0    :
-           (ret > 0xFF)? 0xFF :
-                         ret;
-}
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene_proc/SceneProc_DrawType4Texture.s")
-=======
 
 /**
  * Animated Material Type 5:
@@ -403,7 +378,6 @@ void AnimatedMat_DrawTexCycle(GlobalContext* globalCtx, s32 segment, void* param
     void* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
->>>>>>> 4279f12414f94d46383ee494efed8281a4267ac7
 
     if (sMatAnimFlags & 1) {
         gSPSegment(POLY_OPA_DISP++, segment, tex);
@@ -547,18 +521,9 @@ void Scene_DrawConfig3(GlobalContext* globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TexScroll(globalCtx->state.gfxCtx, 0, (frames * 1) % 64, 256, 16));
 
-<<<<<<< HEAD
-    gDPPipeSync(gfxCtx->polyOpa.p++);
-    gDPSetEnvColor(gfxCtx->polyOpa.p++, 0x80, 0x80, 0x80, 0x80);
-}
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_scene_proc/SceneProc_DrawSceneConfig3.s")
-#endif
-=======
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 127 - (frames % 128), (frames * 1) % 128, 32, 32, 1,
                                 frames % 128, (frames * 1) % 128, 32, 32));
->>>>>>> 4279f12414f94d46383ee494efed8281a4267ac7
 
     gSPSegment(POLY_OPA_DISP++, 0x0A,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 32, 1, 0, 127 - (frames * 1) % 128, 32, 32));
