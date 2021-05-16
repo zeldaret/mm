@@ -23,26 +23,26 @@ const ActorInit En_Ru_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A389A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A389A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38A68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38A68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38B7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38B7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38BF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38BF0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38C70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38C70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38DF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38DF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/EnRu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/EnRu_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/EnRu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/EnRu_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/EnRu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/EnRu_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A38FB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A38FB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A390F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/func_80A390F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/EnRu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ru/EnRu_Draw.s")

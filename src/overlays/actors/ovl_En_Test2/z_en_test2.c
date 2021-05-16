@@ -15,16 +15,16 @@ const ActorInit En_Test2_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(EnTest2),
     (ActorFunc)EnTest2_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)EnTest2_Update,
     (ActorFunc)NULL
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/EnTest2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/EnTest2_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/EnTest2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/EnTest2_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/func_80A3E4EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/func_80A3E4EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/func_80A3E524.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/func_80A3E524.s")

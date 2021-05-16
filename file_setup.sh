@@ -21,7 +21,7 @@ fi
 echo "split_asm : $code_file : $code_path : $code_bucket"
 
 # Split asm file and create base c file
-tools/split_asm.py -c "./src/$code_path/$code_file.c" "./asm/$code_bucket/$code_file.asm" "./asm/non_matchings/$code_bucket/$code_file"
+tools/split_asm.py -c "./src/$code_path/$code_file.c" "./asm/$code_bucket/$code_file.s" "./asm/non_matchings/$code_bucket/$code_file"
 
 # Edit linker script to use new .c file
 sed -i "s/asm\/$code_file.o/src\/${2//\//\\\/}\/$code_file.o/g" linker_scripts/code_script.txt

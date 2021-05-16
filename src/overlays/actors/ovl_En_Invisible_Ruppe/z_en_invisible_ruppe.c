@@ -22,14 +22,14 @@ const ActorInit En_Invisible_Ruppe_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/func_80C258A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/func_80C258A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/func_80C2590C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/func_80C2590C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/func_80C259E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/func_80C259E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/EnInvisibleRuppe_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/EnInvisibleRuppe_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/EnInvisibleRuppe_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/EnInvisibleRuppe_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/EnInvisibleRuppe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invisible_Ruppe/EnInvisibleRuppe_Update.s")

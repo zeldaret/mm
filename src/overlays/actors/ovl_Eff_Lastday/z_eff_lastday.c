@@ -23,20 +23,20 @@ const ActorInit Eff_Lastday_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/EffLastday_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/EffLastday_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/func_80BEBD0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBD0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/func_80BEBDF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBDF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/func_80BEBEB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBEB8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/func_80BEBF78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBF78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/EffLastday_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/func_80BEC0A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEC0A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/EffLastday_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Draw.s")

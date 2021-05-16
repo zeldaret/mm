@@ -70,7 +70,7 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/fault_drawer/FaultDrawer_DrawChar.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/FaultDrawer_DrawChar.s")
 
 s32 FaultDrawer_ColorToPrintColor(u16 color) {
     s32 i;
@@ -135,7 +135,7 @@ void FaultDrawer_FillScreen() {
     FaultDrawer_SetCursor(sFaultDrawContext->xStart, sFaultDrawContext->yStart);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/fault_drawer/FaultDrawer_FormatStringFunc.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/FaultDrawer_FormatStringFunc.s")
 
 void FaultDrawer_VPrintf(char* str, char* args) { //va_list
     _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);

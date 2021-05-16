@@ -22,28 +22,28 @@ const ActorInit Dm_Tag_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C22350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C22350.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C22400.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C22400.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C2247C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C2247C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C224D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C224D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C227E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C227E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C22880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C22880.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C2291C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C2291C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C229AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C229AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C229EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C229EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C229FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/func_80C229FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/DmTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/DmTag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/DmTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/DmTag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/DmTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tag/DmTag_Update.s")

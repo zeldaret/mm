@@ -23,20 +23,20 @@ const ActorInit Oceff_Storm_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981760.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_8098176C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_8098176C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981928.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981928.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981B48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981B48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981BB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981BB8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Draw.s")

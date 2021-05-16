@@ -23,10 +23,10 @@ const ActorInit Obj_Kepn_Koya_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kepn_Koya/ObjKepnKoya_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kepn_Koya/ObjKepnKoya_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kepn_Koya/ObjKepnKoya_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kepn_Koya_0x80C07B20/ObjKepnKoya_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kepn_Koya/ObjKepnKoya_Draw.s")

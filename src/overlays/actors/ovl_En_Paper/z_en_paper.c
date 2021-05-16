@@ -23,24 +23,24 @@ const ActorInit En_Paper_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/EnPaper_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/EnPaper_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F46C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F46C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F480.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F480.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F4E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F4E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F4FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F4FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F55C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F55C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F6E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F6E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/func_80C1F87C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/func_80C1F87C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/EnPaper_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/EnPaper_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Draw.s")

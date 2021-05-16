@@ -442,5 +442,5 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_DrawGlow.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_lights/Lights_DrawGlow.s")
 #endif

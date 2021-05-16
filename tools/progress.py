@@ -41,7 +41,7 @@ def GetFiles(path, ext):
 def GetRemovableSize(functions_to_count, path):
     size = 0
 
-    asm_files = GetFiles(path, ".asm")
+    asm_files = GetFiles(path, ".s")
 
     for asm_file_path in asm_files:
         file_size = 0

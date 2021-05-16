@@ -22,10 +22,10 @@ const ActorInit En_Hit_Tag_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/func_80BE20E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Update.s")

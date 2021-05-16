@@ -23,16 +23,16 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD2B70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/func_80AD2B70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/BgCtowerGear_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/BgCtowerGear_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/BgCtowerGear_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3054.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/func_80AD3054.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/BgCtowerGear_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/BgCtowerGear_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ctower_Gear_0x80AD2B70/func_80AD3164.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ctower_Gear/func_80AD3164.s")

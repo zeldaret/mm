@@ -23,30 +23,30 @@ const ActorInit Obj_Fireshield_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CA90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CA90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CABC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CABC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CB7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CB7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CC54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CC54.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CCBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CCBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CD28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CD28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CD34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CD34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CE28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4CE28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4D174.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4D174.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4D1CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/func_80A4D1CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/ObjFireshield_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/ObjFireshield_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/ObjFireshield_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/ObjFireshield_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/ObjFireshield_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/ObjFireshield_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/ObjFireshield_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Fireshield/ObjFireshield_Draw.s")

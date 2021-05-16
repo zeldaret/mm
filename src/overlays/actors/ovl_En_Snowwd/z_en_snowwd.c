@@ -23,12 +23,12 @@ const ActorInit En_Snowwd_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/EnSnowwd_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/EnSnowwd_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/func_80AF76F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/func_80AF76F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/EnSnowwd_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/EnSnowwd_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Draw.s")

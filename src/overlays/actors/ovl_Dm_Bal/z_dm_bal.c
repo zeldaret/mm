@@ -23,26 +23,26 @@ const ActorInit Dm_Bal_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/DmBal_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/DmBal_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1EAC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EAC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1EAD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EAD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1EAE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EAE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1EC60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EC60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1ED0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1ED0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1ED64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1ED64.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/DmBal_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1EF80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EF80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/func_80C1F060.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1F060.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Bal_0x80C1E9E0/DmBal_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Draw.s")

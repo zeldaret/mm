@@ -23,16 +23,16 @@ const ActorInit En_Wood02_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C3C00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C3C00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C3D28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C3D28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C4458.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C4458.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Draw.s")

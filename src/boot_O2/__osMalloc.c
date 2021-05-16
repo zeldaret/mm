@@ -218,7 +218,7 @@ end:
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osRealloc.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osRealloc.s")
 
 void __osAnalyzeArena(Arena* arena, u32* outMaxFree, u32* outFree, u32* outAlloc) {
     ArenaNode* iter;
@@ -246,4 +246,4 @@ void __osAnalyzeArena(Arena* arena, u32* outMaxFree, u32* outFree, u32* outAlloc
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osCheckArena.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osCheckArena.s")

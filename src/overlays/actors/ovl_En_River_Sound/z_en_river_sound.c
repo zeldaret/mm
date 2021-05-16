@@ -16,14 +16,14 @@ const ActorInit En_River_Sound_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(EnRiverSound),
     (ActorFunc)EnRiverSound_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)EnRiverSound_Update,
     (ActorFunc)EnRiverSound_Draw
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_River_Sound/EnRiverSound_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_River_Sound/EnRiverSound_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_River_Sound_0x808A7E30/EnRiverSound_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_River_Sound/EnRiverSound_Draw.s")

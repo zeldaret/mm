@@ -23,44 +23,44 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A740.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0A740.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A804.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0A804.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A838.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0A838.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A86C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0A86C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A95C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0A95C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/BgIkninSusceil_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/BgIkninSusceil_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/BgIkninSusceil_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/BgIkninSusceil_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AB14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AB14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AB44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AB44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AB88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AB88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0ABA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0ABA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AC74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AC74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AC90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AC90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0ACD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0ACD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0ACE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0ACE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AD44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AD44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AD64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AD64.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AE3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AE3C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0AE5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/func_80C0AE5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/BgIkninSusceil_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/BgIkninSusceil_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/BgIkninSusceil_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil/BgIkninSusceil_Draw.s")

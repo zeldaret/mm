@@ -23,16 +23,16 @@ const ActorInit Obj_Boat_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9AF50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9AF50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9B124.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9B124.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9B428.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9B428.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Draw.s")

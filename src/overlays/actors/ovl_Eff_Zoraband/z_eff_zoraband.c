@@ -23,12 +23,12 @@ const ActorInit Eff_Zoraband_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/func_80C07790.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/func_80C07790.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Draw.s")

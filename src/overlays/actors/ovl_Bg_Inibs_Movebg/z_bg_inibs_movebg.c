@@ -17,13 +17,13 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     sizeof(BgInibsMovebg),
     (ActorFunc)BgInibsMovebg_Init,
     (ActorFunc)BgInibsMovebg_Destroy,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)BgInibsMovebg_Draw
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg_0x80B96410/BgInibsMovebg_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg_0x80B96410/BgInibsMovebg_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg_0x80B96410/BgInibsMovebg_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Draw.s")

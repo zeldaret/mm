@@ -22,10 +22,10 @@ const ActorInit Bg_Open_Spot_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/func_80ACB2B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/func_80ACB2B0.s")

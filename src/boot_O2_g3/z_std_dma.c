@@ -215,7 +215,7 @@ void DmaMgr_Start() {
 	osStartThread(&sDmaMgrThread);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/z_std_dma/DmaMgr_Start.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/z_std_dma/DmaMgr_Start.s")
 #endif
 
 void DmaMgr_Stop() {

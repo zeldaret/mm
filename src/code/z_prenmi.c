@@ -30,7 +30,7 @@ void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     gDPFillRectangle(gfxCtx->polyOpa.p++, 0, prenmiCtx->timer + 100, 320 /*SCREEN_WIDTH*/ - 1, prenmiCtx->timer + 100);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_prenmi/PreNMI_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_prenmi/PreNMI_Draw.s")
 #endif
 
 void PreNMI_Main(PreNMIContext* prenmiCtx) {

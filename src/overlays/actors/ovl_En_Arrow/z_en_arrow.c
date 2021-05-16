@@ -23,28 +23,28 @@ const ActorInit En_Arrow_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/EnArrow_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/EnArrow_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/EnArrow_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/EnArrow_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088A514.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088A514.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088A594.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088A594.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088A7D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088A7D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088A894.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088A894.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088AA98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088AA98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088ACE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088ACE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088B630.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088B630.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088B6B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088B6B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/EnArrow_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/EnArrow_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/func_8088B88C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088B88C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/EnArrow_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/EnArrow_Draw.s")

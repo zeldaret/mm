@@ -23,48 +23,48 @@ const ActorInit En_Horse_Game_Check_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8AA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8AA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8C24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8C24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8C5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8C5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8C70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8C70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8CCC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8CCC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8E94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8E94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8EB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8EB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8FAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8FAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F96E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F96E4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F9830.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F9830.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F9868.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F9868.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F987C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F987C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F990C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F990C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F9944.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F9944.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F9958.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F9958.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F999C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F999C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F99B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F99B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F99C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F99C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F99D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F99D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/EnHorseGameCheck_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/EnHorseGameCheck_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/EnHorseGameCheck_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/EnHorseGameCheck_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/EnHorseGameCheck_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/EnHorseGameCheck_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/EnHorseGameCheck_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/EnHorseGameCheck_Draw.s")

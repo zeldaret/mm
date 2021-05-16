@@ -23,12 +23,12 @@ const ActorInit En_Nimotsu_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/func_80BE1C80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/func_80BE1C80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/EnNimotsu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/EnNimotsu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/EnNimotsu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/EnNimotsu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nimotsu/EnNimotsu_Draw.s")

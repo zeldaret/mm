@@ -22,12 +22,12 @@ const ActorInit En_Okarina_Tag_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/func_8093E518.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/func_8093E518.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/func_8093E68C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/func_8093E68C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Update.s")

@@ -112,10 +112,10 @@ void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
     this->posX += 32;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/GfxPrint_PrintCharImpl.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/gfxprint/GfxPrint_PrintCharImpl.s")
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/gfxprint/GfxPrint_PrintChar.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/gfxprint/GfxPrint_PrintChar.s")
 
 void GfxPrint_PrintStringWithSize(GfxPrint* this, const void* buffer, size_t charSize, size_t charCount) {
     const char* str = (const char*)buffer;

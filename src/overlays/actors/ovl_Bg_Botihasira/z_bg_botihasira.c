@@ -23,12 +23,12 @@ const ActorInit Bg_Botihasira_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/func_80B2815C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/func_80B2815C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Draw.s")

@@ -22,12 +22,12 @@ const ActorInit Elf_Msg5_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg5_0x80AFD990/func_80AFD990.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/func_80AFD990.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg5_0x80AFD990/ElfMsg5_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/ElfMsg5_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg5_0x80AFD990/ElfMsg5_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/ElfMsg5_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg5_0x80AFD990/func_80AFDB38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/func_80AFDB38.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg5_0x80AFD990/ElfMsg5_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/ElfMsg5_Update.s")

@@ -23,28 +23,28 @@ const ActorInit En_Dnb_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A4FDD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A4FDD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A4FEBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A4FEBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A4FFE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A4FFE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A500F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A500F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/EnDnb_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/EnDnb_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/EnDnb_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/EnDnb_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/EnDnb_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/EnDnb_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A50510.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A50510.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A5063C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A5063C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/EnDnb_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/EnDnb_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A507C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A507C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A5086C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A5086C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A50950.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A50950.s")

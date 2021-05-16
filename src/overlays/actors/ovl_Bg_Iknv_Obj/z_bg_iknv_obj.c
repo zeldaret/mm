@@ -23,30 +23,30 @@ const ActorInit Bg_Iknv_Obj_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD7CEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD7CEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_UpdateType0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_UpdateType0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD7E0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD7E0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD7ED8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD7ED8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD7F4C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD7F4C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD7FDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD7FDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/func_80BD8040.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/func_80BD8040.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_UpdateType2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_UpdateType2.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_UpdateType1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_UpdateType1.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_UpdateDefault.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_UpdateDefault.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknv_Obj_0x80BD7AB0/BgIknvObj_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Obj/BgIknvObj_Draw.s")

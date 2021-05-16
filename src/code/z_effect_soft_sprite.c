@@ -145,7 +145,7 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
     return ret;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite/EffectSS_FindFreeSpace.s")
 #endif
 
 void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
@@ -208,7 +208,7 @@ void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData)
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSs_Spawn.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite/EffectSs_Spawn.s")
 #endif
 
 void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
@@ -291,7 +291,7 @@ s16 func_800B096C(s16 a0, s16 a1, s32 a2) {
     return ret;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/func_800B096C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite/func_800B096C.s")
 #endif
 
 s16 func_800B09D0(s16 a0, s16 a1, f32 a2) {

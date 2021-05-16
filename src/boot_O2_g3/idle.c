@@ -62,7 +62,7 @@ void Idle_InitCodeAndMemory(void) {
     Idle_ClearMemory(&code_bss_start, &code_bss_end);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
 #endif
 
 void Main_ThreadEntry(void* arg) {

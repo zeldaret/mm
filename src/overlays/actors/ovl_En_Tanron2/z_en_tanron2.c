@@ -23,32 +23,32 @@ const ActorInit En_Tanron2_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/EnTanron2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/EnTanron2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB69C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB69C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB69FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB69FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB6B80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB6B80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB6BD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB6BD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB6F64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB6F64.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB6F78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB6F78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB71C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB71C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB7398.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB7398.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB7408.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB7408.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB7578.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB7578.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/EnTanron2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/func_80BB7B90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/func_80BB7B90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/EnTanron2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Draw.s")

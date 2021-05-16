@@ -22,24 +22,24 @@ const ActorInit Bg_Fire_Wall_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/BgFireWall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/BgFireWall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC5C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC5C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC638.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC638.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC68C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC68C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC6C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC6C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC760.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC7F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC7F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809AC970.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC970.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/BgFireWall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/func_809ACB28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809ACB28.s")

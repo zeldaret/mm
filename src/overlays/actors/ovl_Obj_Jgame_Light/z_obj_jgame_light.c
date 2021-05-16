@@ -23,16 +23,16 @@ const ActorInit Obj_Jgame_Light_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/ObjJgameLight_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/ObjJgameLight_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/func_80C15474.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C15474.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/func_80C156C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C156C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/func_80C15718.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C15718.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/ObjJgameLight_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/ObjJgameLight_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Draw.s")

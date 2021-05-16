@@ -15,28 +15,28 @@ const ActorInit Obj_Wturn_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjWturn),
     (ActorFunc)ObjWturn_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjWturn_Update,
     (ActorFunc)NULL
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/ObjWturn_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/ObjWturn_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7954.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7954.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7968.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7968.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7A24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7A24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7A5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7A5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7AAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7AAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7BA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7BA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7C04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7C04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/func_808A7C78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/func_808A7C78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/ObjWturn_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/ObjWturn_Update.s")

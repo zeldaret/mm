@@ -18,6 +18,7 @@ enum
     STMT_after,
     STMT_align,
     STMT_beginseg,
+    STMT_compress,
     STMT_endseg,
     STMT_entry,
     STMT_flags,
@@ -34,6 +35,7 @@ enum
     FLAG_BOOT = (1 << 0),
     FLAG_OBJECT = (1 << 1),
     FLAG_RAW = (1 << 2),
+    FLAG_NOLOAD = (1 << 3),
 };
 
 struct Segment
@@ -51,6 +53,7 @@ struct Segment
     uint32_t number;
     char **includes;
     int includesCount;
+    bool compress;
 };
 
 static struct Segment *g_segments = NULL;
@@ -128,6 +131,8 @@ static bool parse_flags(char *str, unsigned int *flags)
             f |= FLAG_OBJECT;
         else if (strcmp(str, "RAW") == 0)
             f |= FLAG_RAW;
+        else if (strcmp(str, "NOLOAD") == 0)
+            f |= FLAG_NOLOAD;
         else
             return false;
 
@@ -172,6 +177,7 @@ static const char *const stmtNames[] =
     [STMT_after]     = "after",
     [STMT_align]     = "align",
     [STMT_beginseg]  = "beginseg",
+    [STMT_compress]  = "compress",
     [STMT_endseg]    = "endseg",
     [STMT_entry]     = "entry",
     [STMT_flags]     = "flags",
@@ -198,6 +204,8 @@ static void parse_rom_spec(char *spec)
         if (line[0] != 0)
         {
             char *stmtName = skip_whitespace(line);
+            if (strlen(stmtName) == 0) // skip empty lines
+                goto no_stmt;
             char *args = token_split(stmtName);
             unsigned int stmt;
 
@@ -205,7 +213,7 @@ static void parse_rom_spec(char *spec)
                 if (strcmp(stmtName, stmtNames[stmt]) == 0)
                     goto got_stmt;
             util_fatal_error("line %i: unknown statement '%s'", lineNum, stmtName);
-          got_stmt:
+        got_stmt:
 
             if (currSeg != NULL)
             {
@@ -214,6 +222,7 @@ static void parse_rom_spec(char *spec)
                     util_fatal_error("line %i: duplicate '%s' statement", lineNum, stmtName);
 
                 currSeg->fields |= 1 << stmt;
+                currSeg->compress = false;
 
                 // statements valid within a segment definition
                 switch (stmt)
@@ -271,6 +280,9 @@ static void parse_rom_spec(char *spec)
                     if (!parse_number(args, &currSeg->increment))
                         util_fatal_error("line %i: expected number after 'increment'", lineNum);
                     break;
+                case STMT_compress:
+                    currSeg->compress = true;
+                    break;
                 default:
                     fprintf(stderr, "warning: '%s' is not implemented\n", stmtName);
                     break;
@@ -293,7 +305,7 @@ static void parse_rom_spec(char *spec)
                 }
             }
         }
-
+    no_stmt:
         line = nextLine;
         lineNum++;
     }
@@ -316,6 +328,8 @@ static void write_ld_script(void)
         // align start of ROM segment
         if (seg->fields & (1 << STMT_romalign))
             fprintf(fout, "    _RomSize = (_RomSize + %i) & ~ %i;\n", seg->romalign - 1, seg->romalign - 1);
+		else if (seg->fields & (1 << STMT_increment)) // align only start of ROM segment
+            fprintf(fout, "    _RomSize = (_RomSize + %i) & ~ %i;\n", seg->increment - 1, seg->increment - 1);
 
         // initialized data (.text, .data, .rodata, .sdata)
 
@@ -323,8 +337,8 @@ static void write_ld_script(void)
         //if (seg->fields & (1 << STMT_increment))
             //fprintf(fout, "    . += 0x%08X;\n", seg->increment);
 
-        fprintf(fout, "    _%sSegmentRomStart = _RomSize;\n"
-                  "    ..%s ", seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentRomStart = _RomSize;\n    _%sSegmentPRomStart = _RomSize;\n"
+                "    ..%s ", seg->name, seg->name, seg->name);
 
         if (seg->fields & (1 << STMT_after))
             fprintf(fout, "_%sSegmentEnd ", seg->after);
@@ -335,10 +349,10 @@ static void write_ld_script(void)
 
         // (AT(_RomSize) isn't necessary, but adds useful "load address" lines to the map file)
         fprintf(fout, ": AT(_RomSize)\n    {\n"
-                  "        _%sSegmentStart = .;\n"
-                  "        . = ALIGN(0x10);\n"
-                  "        _%sSegmentTextStart = .;\n",
-                  seg->name, seg->name);
+                "        _%sSegmentStart = .;\n"
+                "        . = ALIGN(0x10);\n"
+                "        _%sSegmentTextStart = .;\n",
+                seg->name, seg->name);
 
         if (seg->fields & (1 << STMT_align))
             fprintf(fout, "        . = ALIGN(0x%X);\n", seg->align);
@@ -356,10 +370,10 @@ static void write_ld_script(void)
             fprintf(fout, "            %s (.data)\n", seg->includes[j]);
 
         /*
-         for (j = 0; j < seg->includesCount; j++)
+        for (j = 0; j < seg->includesCount; j++)
             fprintf(fout, "            %s (.rodata)\n", seg->includes[j]);
 
-          for (j = 0; j < seg->includesCount; j++)
+        for (j = 0; j < seg->includesCount; j++)
             fprintf(fout, "            %s (.sdata)\n", seg->includes[j]);
         */
 
@@ -373,7 +387,7 @@ static void write_ld_script(void)
         for (j = 0; j < seg->includesCount; j++)
             fprintf(fout, "            %s (.rodata)\n", seg->includes[j]);
 
-         //fprintf(fout, "        . = ALIGN(0x10);\n");
+        //fprintf(fout, "        . = ALIGN(0x10);\n");
 
         fprintf(fout, "        _%sSegmentRoDataEnd = .;\n", seg->name);
 
@@ -384,21 +398,21 @@ static void write_ld_script(void)
         for (j = 0; j < seg->includesCount; j++)
             fprintf(fout, "            %s (.sdata)\n", seg->includes[j]);
 
-         fprintf(fout, "        . = ALIGN(0x10);\n");
+        fprintf(fout, "        . = ALIGN(0x10);\n");
 
         fprintf(fout, "        _%sSegmentSDataEnd = .;\n", seg->name);
 
-		fprintf(fout, "        _%sSegmentOvlStart = .;\n", seg->name);
+        fprintf(fout, "        _%sSegmentOvlStart = .;\n", seg->name);
 
-		for (j = 0; j < seg->includesCount; j++)
-			fprintf(fout, "            %s (.ovl)\n", seg->includes[j]);
+        for (j = 0; j < seg->includesCount; j++)
+            fprintf(fout, "            %s (.ovl)\n", seg->includes[j]);
 
-		fprintf(fout, "        . = ALIGN(0x10);\n");
+        fprintf(fout, "        . = ALIGN(0x10);\n");
 
-		fprintf(fout, "        _%sSegmentOvlEnd = .;\n", seg->name);
+        fprintf(fout, "        _%sSegmentOvlEnd = .;\n", seg->name);
 
-        if (seg->fields & (1 << STMT_increment))
-            fprintf(fout, "    . += 0x%08X;\n", seg->increment);
+        //if (seg->fields & (1 << STMT_increment))
+        //    fprintf(fout, "    . += 0x%08X;\n", seg->increment);
         
 
         fputs("    }\n", fout);
@@ -407,17 +421,19 @@ static void write_ld_script(void)
 
         fprintf(fout, "    _%sSegmentRomEnd = _RomSize;\n\n", seg->name);
 
+        fprintf(fout, "    _%sSegmentPRomEnd = 0;\n\n", seg->name);
+
         // algn end of ROM segment
         if (seg->fields & (1 << STMT_romalign))
             fprintf(fout, "    _RomSize = (_RomSize + %i) & ~ %i;\n", seg->romalign - 1, seg->romalign - 1);
 
         // uninitialized data (.sbss, .scommon, .bss, COMMON)
         fprintf(fout, "    ..%s.bss ADDR(..%s) + SIZEOF(..%s) (NOLOAD) :\n"
-                      /*"    ..%s.bss :\n"*/
-                      "    {\n"
-                      "        . = ALIGN(0x10);\n"
-                      "        _%sSegmentBssStart = .;\n",
-                      seg->name, seg->name, seg->name, seg->name);
+                    /*"    ..%s.bss :\n"*/
+                    "    {\n"
+                    "        . = ALIGN(0x10);\n"
+                    "        _%sSegmentBssStart = .;\n",
+                    seg->name, seg->name, seg->name, seg->name);
         if (seg->fields & (1 << STMT_align))
             fprintf(fout, "        . = ALIGN(0x%X);\n", seg->align);
         for (j = 0; j < seg->includesCount; j++)
@@ -429,39 +445,38 @@ static void write_ld_script(void)
         for (j = 0; j < seg->includesCount; j++)
             fprintf(fout, "            %s (COMMON)\n", seg->includes[j]);
         fprintf(fout, "        . = ALIGN(0x10);\n"
-                      "        _%sSegmentBssEnd = .;\n"
-                      "        _%sSegmentEnd = .;\n"
-                      "    }\n"
-                      "    _%sSegmentBssSize = ABSOLUTE( _%sSegmentBssEnd - _%sSegmentBssStart );\n\n",
-                      seg->name, seg->name, seg->name, seg->name, seg->name);
+                    "        _%sSegmentBssEnd = .;\n"
+                    "        _%sSegmentEnd = .;\n"
+                    "    }\n"
+                    "    _%sSegmentBssSize = ABSOLUTE( _%sSegmentBssEnd - _%sSegmentBssStart );\n\n",
+                    seg->name, seg->name, seg->name, seg->name, seg->name);
 
         // Increment the end of the segment
         //if (seg->fields & (1 << STMT_increment))
-            //fprintf(fout, "    . += 0x%08X;\n", seg->increment);
+        //    fprintf(fout, "    . += 0x%08X;\n", seg->increment);
 
-		//fprintf(fout, "    ..%s.ovl ADDR(..%s) + SIZEOF(..%s) :\n"
-		//	/*"    ..%s.bss :\n"*/
-		//	"    {\n",
-		//	seg->name, seg->name, seg->name);
-		//fprintf(fout, "        _%sSegmentOvlStart = .;\n", seg->name);
+        //fprintf(fout, "    ..%s.ovl ADDR(..%s) + SIZEOF(..%s) :\n"
+        //	/*"    ..%s.bss :\n"*/
+        //	"    {\n",
+        //	seg->name, seg->name, seg->name);
+        //fprintf(fout, "        _%sSegmentOvlStart = .;\n", seg->name);
 
-		//for (j = 0; j < seg->includesCount; j++)
-		//	fprintf(fout, "            %s (.ovl)\n", seg->includes[j]);
+        //for (j = 0; j < seg->includesCount; j++)
+        //	fprintf(fout, "            %s (.ovl)\n", seg->includes[j]);
 
-		////fprintf(fout, "        . = ALIGN(0x10);\n");
+        ////fprintf(fout, "        . = ALIGN(0x10);\n");
 
-		//fprintf(fout, "        _%sSegmentOvlEnd = .;\n", seg->name);
+        //fprintf(fout, "        _%sSegmentOvlEnd = .;\n", seg->name);
 
-		//fprintf(fout, "\n    }\n");
+        //fprintf(fout, "\n    }\n");
     }
-
 
     fputs("    _RomEnd = _RomSize;\n}\n", fout);
 }
 
 static void usage(const char *execname)
 {
-    fprintf(stderr, "Nintendo 64 linker script generation tool v0.01\n"
+    fprintf(stderr, "Nintendo 64 linker script generation tool v0.02\n"
                     "usage: %s SPEC_FILE LD_SCRIPT\n"
                     "SPEC_FILE    file describing the organization of object files into segments\n"
                     "LD_SCRIPT    filename of output linker script\n",
@@ -470,23 +485,28 @@ static void usage(const char *execname)
 
 int main(int argc, char **argv)
 {
+    const char* spec_arg = NULL;
+    const char* ldscript_arg = NULL;
+
 	void *spec;
 	size_t size;
 
-	if (argc != 3)
-	{
+	 if (argc == 3) {
+        spec_arg = argv[1];
+        ldscript_arg = argv[2];
+    } else {
 		usage(argv[0]);
 		return 1;
-	}
+    }
 
-	spec = util_read_whole_file(argv[1], &size);
-	parse_rom_spec(spec);
-	fout = fopen(argv[2], "w");
-	if (fout == NULL)
-		util_fatal_error("failed to open file '%s' for writing", argv[2]);
-	write_ld_script();
-	free(spec);
-	fclose(fout);
+    spec = util_read_whole_file(spec_arg, &size);
+    parse_rom_spec(spec);
+    fout = fopen(ldscript_arg, "w");
+    if (fout == NULL)
+        util_fatal_error("failed to open file '%s' for writing", ldscript_arg);
+    write_ld_script();
+    free(spec);
+    fclose(fout);
 
 	return 0;
 }

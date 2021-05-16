@@ -23,14 +23,14 @@ const ActorInit En_Kanban_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/func_80954960.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/func_80954960.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/func_80954BE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/func_80954BE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Draw.s")

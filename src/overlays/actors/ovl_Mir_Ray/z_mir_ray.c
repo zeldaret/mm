@@ -23,24 +23,24 @@ const ActorInit Mir_Ray_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E2600.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2600.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E26C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E26C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/MirRay_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/MirRay_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/MirRay_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E2C68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2C68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E2E1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2E1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E2FF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2FF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E30FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E30FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/MirRay_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E3984.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E3984.s")

@@ -23,28 +23,28 @@ const ActorInit En_Guard_Nuts_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/EnGuardNuts_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/EnGuardNuts_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/EnGuardNuts_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/EnGuardNuts_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB210.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB210.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB29C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB29C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB2D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB2D4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB540.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB540.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB854.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB854.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB91C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB91C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABB990.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABB990.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/EnGuardNuts_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/EnGuardNuts_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/func_80ABBC60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/func_80ABBC60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/EnGuardNuts_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Guard_Nuts/EnGuardNuts_Draw.s")

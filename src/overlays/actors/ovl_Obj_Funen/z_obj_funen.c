@@ -15,12 +15,12 @@ const ActorInit Obj_Funen_InitVars = {
     OBJECT_FUNEN,
     sizeof(ObjFunen),
     (ActorFunc)ObjFunen_Init,
-    (ActorFunc)func_800BDFB0,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjFunen_Draw
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Funen/ObjFunen_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Funen_0x80A19740/ObjFunen_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Funen/ObjFunen_Draw.s")

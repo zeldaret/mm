@@ -23,14 +23,14 @@ const ActorInit En_Torch2_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/EnTorch2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/EnTorch2_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/EnTorch2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/EnTorch2_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/EnTorch2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/EnTorch2_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/func_808A3428.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/func_808A3428.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/func_808A3458.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/func_808A3458.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Torch2_0x808A31B0/EnTorch2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Torch2/EnTorch2_Draw.s")

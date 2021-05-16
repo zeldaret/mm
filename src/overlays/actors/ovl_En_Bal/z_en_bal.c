@@ -23,80 +23,80 @@ const ActorInit En_Bal_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/EnBal_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/EnBal_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61A18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61A18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61A44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61A44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61A6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61A6C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61ADC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61ADC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61B5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61B5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61C9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61C9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61CE4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61CE4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61DF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61DF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A61E5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61E5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62128.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62128.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A621C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A621C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62260.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62260.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A622A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A622A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A623CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A623CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A624DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A624DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62818.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62818.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62830.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62830.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A629C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A629C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62AC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62AC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62B30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62B30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62B78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62B78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62CF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62CF0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62DCC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62DCC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62ED0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62ED0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A62FAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A62FAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A63158.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A63158.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A634B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A634B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A634C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A634C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A635DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A635DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A635F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A635F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A636AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A636AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A637FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A637FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A63884.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A63884.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/EnBal_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A63A10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A63A10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/func_80A63B94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A63B94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/EnBal_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Draw.s")

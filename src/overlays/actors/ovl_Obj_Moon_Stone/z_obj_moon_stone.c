@@ -23,26 +23,26 @@ const ActorInit Obj_Moon_Stone_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/ObjMoonStone_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/ObjMoonStone_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/ObjMoonStone_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/ObjMoonStone_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C0662C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C0662C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C06640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C06640.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C066F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C066F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C0670C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C0670C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C0673C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C0673C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C06768.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C06768.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C0685C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C0685C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/func_80C06870.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/func_80C06870.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/ObjMoonStone_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/ObjMoonStone_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Moon_Stone_0x80C06510/ObjMoonStone_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Moon_Stone/ObjMoonStone_Draw.s")

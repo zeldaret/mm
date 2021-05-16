@@ -23,24 +23,24 @@ const ActorInit Bg_Dkjail_Ivy_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE230.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE230.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/BgDkjailIvy_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/BgDkjailIvy_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE6AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE6C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE6C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE734.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE734.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE748.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE748.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE7E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE7F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE7F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/BgDkjailIvy_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/BgDkjailIvy_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/BgDkjailIvy_Draw.s")

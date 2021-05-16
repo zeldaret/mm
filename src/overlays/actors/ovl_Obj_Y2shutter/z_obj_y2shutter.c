@@ -23,12 +23,12 @@ const ActorInit Obj_Y2shutter_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/ObjY2shutter_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/ObjY2shutter_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/ObjY2shutter_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/ObjY2shutter_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/func_80B9AA20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/func_80B9AA20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/ObjY2shutter_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/ObjY2shutter_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/ObjY2shutter_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/ObjY2shutter_Draw.s")

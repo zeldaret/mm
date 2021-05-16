@@ -22,34 +22,34 @@ const ActorInit Obj_Bombiwa_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_809393B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_809393B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939470.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939470.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_8093951C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_8093951C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939594.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939594.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/ObjBombiwa_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/ObjBombiwa_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/ObjBombiwa_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/ObjBombiwa_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939794.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939794.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939994.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939994.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939C50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939C50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939EE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939EE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_80939EF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939EF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_8093A080.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_8093A080.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_8093A1F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_8093A1F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/ObjBombiwa_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/ObjBombiwa_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_8093A418.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_8093A418.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_8093A608.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_8093A608.s")

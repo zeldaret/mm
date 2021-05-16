@@ -23,26 +23,26 @@ const ActorInit En_Gakufu_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFC960.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFC960.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/EnGakufu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/EnGakufu_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/EnGakufu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/EnGakufu_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCB94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCB94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCBD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCBD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCC14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCC14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCC24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCC24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCC58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCC58.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCD44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCD44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/func_80AFCDC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFCDC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/EnGakufu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/EnGakufu_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gakufu_0x80AFC960/EnGakufu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/EnGakufu_Draw.s")

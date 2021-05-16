@@ -1,12 +1,12 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8017FEB0/atans_first_8th.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math_atan/atans_first_8th.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8017FEB0/atans.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math_atan/atans.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8017FEB0/atan.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math_atan/atan.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8017FEB0/Math_FAtan2F.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math_atan/Math_FAtan2F.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8017FEB0/atan_flip.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math_atan/atan_flip.s")

@@ -22,22 +22,22 @@ const ActorInit En_Door_Etc_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2044.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2044.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC20A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC20A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2118.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2118.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2154.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2154.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC21A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC21A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2354.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC24A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC24A8.s")

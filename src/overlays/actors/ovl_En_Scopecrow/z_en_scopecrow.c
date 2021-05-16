@@ -23,26 +23,26 @@ const ActorInit En_Scopecrow_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD000.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD000.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD09C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD09C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD1AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD1AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD2BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD2BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD334.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD334.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD4D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD4D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD640.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Draw.s")

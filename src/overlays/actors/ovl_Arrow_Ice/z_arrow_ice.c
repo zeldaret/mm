@@ -23,20 +23,20 @@ const ActorInit Arrow_Ice_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_80922430.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922430.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/ArrowIce_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/ArrowIce_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_809224DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809224DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_809225D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809225D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_80922628.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922628.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_809227F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809227F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/ArrowIce_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/ArrowIce_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Draw.s")

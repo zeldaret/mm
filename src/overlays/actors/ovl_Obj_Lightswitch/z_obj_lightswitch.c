@@ -23,44 +23,44 @@ const ActorInit Obj_Lightswitch_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FBF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8095FBF0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FC94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8095FC94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FCEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8095FCEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightswitch_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightswitch_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8095FFF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8095FFF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960014.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960014.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960088.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960088.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_809600BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_809600BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8096012C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8096012C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960148.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960148.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960224.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960224.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960260.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960260.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_8096034C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_8096034C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960370.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960370.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960424.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960424.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960440.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960440.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightswitch_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_809605F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_809605F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/func_80960880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/func_80960880.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightswitch_Draw.s")

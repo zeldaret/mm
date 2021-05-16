@@ -23,24 +23,24 @@ const ActorInit Obj_Lightblock_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3910.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/ObjLightblock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/ObjLightblock_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/ObjLightblock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/ObjLightblock_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3AC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3AC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3ADC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3ADC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3B8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3B8C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3BA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3BA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3C18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3C18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3C34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3C34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/ObjLightblock_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/ObjLightblock_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/ObjLightblock_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/ObjLightblock_Draw.s")

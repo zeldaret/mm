@@ -17,13 +17,13 @@ const ActorInit Bg_Lbfshot_InitVars = {
     sizeof(BgLbfshot),
     (ActorFunc)BgLbfshot_Init,
     (ActorFunc)BgLbfshot_Destroy,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)BgLbfshot_Draw
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Lbfshot/BgLbfshot_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Lbfshot/BgLbfshot_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Lbfshot_0x80C18120/BgLbfshot_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Lbfshot/BgLbfshot_Draw.s")

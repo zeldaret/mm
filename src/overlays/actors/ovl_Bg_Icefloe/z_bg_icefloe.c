@@ -23,22 +23,22 @@ const ActorInit Bg_Icefloe_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4A80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4A80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4AE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4AE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4C18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4C34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4CF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4CF0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4D2C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4D2C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Draw.s")

@@ -17,13 +17,13 @@ const ActorInit Obj_Visiblock_InitVars = {
     sizeof(ObjVisiblock),
     (ActorFunc)ObjVisiblock_Init,
     (ActorFunc)ObjVisiblock_Destroy,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjVisiblock_Draw
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Visiblock/ObjVisiblock_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Visiblock/ObjVisiblock_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Visiblock_0x80ADEA70/ObjVisiblock_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Visiblock/ObjVisiblock_Draw.s")

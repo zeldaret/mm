@@ -23,10 +23,10 @@ const ActorInit Obj_Milk_Bin_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Milk_Bin/ObjMilkBin_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Milk_Bin/ObjMilkBin_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Milk_Bin/ObjMilkBin_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Milk_Bin/ObjMilkBin_Draw.s")

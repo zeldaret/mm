@@ -10,3 +10,6 @@
 [submodule "ZAPD"]
 	path = tools/ZAPD
 	url = https://github.com/zeldaret/ZAPD.git
+[submodule "tools/z64compress"]
+	path = tools/z64compress
+	url = https://github.com/z64me/z64compress

@@ -1,9 +1,12 @@
+MAKEFLAGS += --no-builtin-rules
+
+# Build options can either be changed by modifying the makefile, or by building with 'make SETTING=value'
+
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
-# TODO we do not support static recomp, so force this to 1
 ORIG_COMPILER ?= 0
 
 ifeq ($(NON_MATCHING),1)
@@ -12,31 +15,34 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
+PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
+MAKE = make
+CPPFLAGS += -P
+
 ifeq ($(OS),Windows_NT)
-    DETECTED_OS=windows
+  DETECTED_OS=windows
 else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        DETECTED_OS=linux
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        DETECTED_OS=macos
-        MAKE=gmake
-        CPPFLAGS += -xc++
-    endif
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Linux)
+    DETECTED_OS=linux
+  endif
+  ifeq ($(UNAME_S),Darwin)
+    DETECTED_OS=macos
+    MAKE=gmake
+    CPPFLAGS += -xc++
+  endif
 endif
 
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 else
-  MIPS_BINUTILS_PREFIX := mips64-elf-
+  $(error Please install or build mips-linux-gnu)
 endif
 
 CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
 CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
-GCC      := gcc
-QEMU_IRIX ?= ./tools/qemu-mips
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
 ifeq ($(ORIG_COMPILER),1)
@@ -50,57 +56,58 @@ ifeq ($(ORIG_COMPILER),1)
   CC_OLD    = $(QEMU_IRIX) -L tools/ido5.3_compiler tools/ido5.3_compiler/usr/bin/cc
 endif
 
-AS      := $(MIPS_BINUTILS_PREFIX)as
-LD      := $(MIPS_BINUTILS_PREFIX)ld
-OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
-OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
+AS         := $(MIPS_BINUTILS_PREFIX)as
+LD         := $(MIPS_BINUTILS_PREFIX)ld
+OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
+OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
-ZAPD := tools/ZAPD/ZAPD.out
+# Check code syntax with host compiler
+CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -include stdarg.h $(CHECK_WARNINGS)
+
+CPP        := cpp
+ELF2ROM    := tools/buildtools/elf2rom
+MKLDSCRIPT := tools/buildtools/mkldscript
+YAZ0       := tools/buildtools/yaz0
+ZAPD       := tools/ZAPD/ZAPD.out
 
 OPTFLAGS := -O2 -g3
-ASFLAGS := -march=vr4300 -32
+ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mul -woff 649,838,712
+
+ifeq ($(shell getconf LONG_BIT), 32)
+  # Work around memory allocation bug in QEMU
+  export QEMU_GUEST_BASE := 1
+else
+  # Ensure that gcc treats the code as 32-bit
+  CC_CHECK += -m32
+endif
 
 #### Files ####
 
 # ROM image
-MM_BASEROM ?= baserom.z64
-MM_ROM_NAME ?= rom
-ROM := $(MM_ROM_NAME).z64
-UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
-ELF := $(MM_ROM_NAME).elf
+ROM := zelda_majora_us.z64
+ROMC := $(ROM:.z64=.compressed.z64)
+ELF := $(ROM:.z64=.elf)
+# description of ROM segments
+SPEC := spec
+
+# create asm directories
+$(shell mkdir -p asm data)
 
 SRC_DIRS := $(shell find src -type d)
-BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
-COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
-ASSET_XML_DIRS := $(shell find assets/xml* -type d)
-ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
-ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
-ASSET_FILES_OUT := $(patsubst assets/xml%,assets/src%,$(patsubst %.xml,%.c,$(ASSET_FILES_XML)))
+ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
-# Because we may not have disassembled the code files yet, there might not be any assembly files.
-# Instead, generate a list of assembly files based on what's listed in the linker script.
-S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
-C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-C_O_FILES := $(C_FILES:%.c=build/%.o)
-S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-ASSET_O_FILES := $(ASSET_FILES_OUT:%.c=build/%.o)
-O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
-ROM_FILES := $(shell cat ./tables/makerom_files.txt)
-UNCOMPRESSED_ROM_FILES := $(shell cat ./tables/makerom_uncompressed_files.txt)
-
-# Exclude code and scene files, they will be extracted from the file instead
-DMADATA_FILES := $(subst build/baserom/boot ,,$(UNCOMPRESSED_ROM_FILES))
-DMADATA_FILES := $(subst build/baserom/code ,,$(DMADATA_FILES))
-DMADATA_FILES := $(DMADATA_FILES:build/baserom/overlays/%=)
-DMADATA_FILES := $(DMADATA_FILES:build/baserom/assets/scenes/%=)
-DMADATA_FILES := $(DMADATA_FILES:build/uncompressed_dmadata=)
-
+C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
+O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
+                 $(foreach f,$(C_FILES:.c=.o),build/$f) \
+                 $(foreach f,$(wildcard baserom/*),build/$f.o)
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS),build/$(dir)))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -116,141 +123,83 @@ build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
-build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
-.PHONY: all clean setup diff-init init
-# disasm is not a file so we must tell make not to check it when evaluating timestamps
-.INTERMEDIATE: disasm
-# make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
+#### Main Targets ###
 
-$(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
-	./tools/makerom.py ./tables/dmadata_table.txt $@
+uncompressed: $(ROM)
 ifeq ($(COMPARE),1)
-	@md5sum $(UNCOMPRESSED_ROM)
+	@md5sum $(ROM)
 	@md5sum -c checksum_uncompressed.md5
 endif
 
-$(ROM): $(ROM_FILES)
-	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
+compressed: $(ROMC)
 ifeq ($(COMPARE),1)
-	@md5sum $(ROM)
-	@md5sum -c checksum.md5
+	@md5sum $(ROMC)
+	@md5sum -c checksum_compressed.md5
 endif
 
-all: $(UNCOMPRESSED_ROM) $(ROM) ;
+all: uncompressed compressed
 
-build/code.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt build/linker_scripts/dmadata_script.txt
-	$(LD) -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt -T build/linker_scripts/dmadata_script.txt --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
+$(ROM): $(ELF)
+	$(ELF2ROM) -cic 6105 $< $@
 
-build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.txt undef.txt build/linker_scripts/object_script.txt
-	$(LD) -r -T build/linker_scripts/code_script.txt -T undef.txt -T build/linker_scripts/object_script.txt --no-check-sections --accept-unknown-input-arch -N -o $@
+$(ROMC): $(ROM)
+	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC)
 
-linker_scripts/dmadata_script.txt: $(DMADATA_FILES) build/code_pre_dmadata.elf
-	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l linker_scripts/dmadata_script.txt -e build/code_pre_dmadata.elf
-
-build/dmadata: $(ROM_FILES:build/dmadata=)
-	./tools/dmadata.py ./tables/dmadata_table.txt $@
-
-build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=)
-	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
-
-build/baserom/boot build/baserom/code: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
-
-build/baserom/assets/scenes/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
-
-asm/non_matchings/%: asm/%.asm
-	@./tools/split_asm.py $< $@
-
-asm/%.asm: disasm ;
-
-disasm: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
-	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt
+$(ELF): $(TEXTURE_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
+	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/z64.map -o $@
 
 clean:
-	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
+	$(RM) -r $(ROM) $(ELF) build
 
-distclean: clean
-	rm -rf assets/src baserom/
+distclean:
+	$(RM) -r $(ROM) $(ROMC) $(ELF) build asm baserom data
+	$(MAKE) -C tools clean
 
-setup:
-	git submodule update --init --recursive
-	python3 -m pip install -r requirements.txt
-	$(MAKE) -C tools
-	./tools/extract_rom.py $(MM_BASEROM)
-
-diff-init: all
-	rm -rf expected/
-	mkdir -p expected/
-	cp -r build expected/build
-	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
-	cp $(ROM) expected/$(ROM)
+disasm:
+	python3 tools/disasm/disasm.py
 
 init:
+	git submodule update --init --recursive
+	python3 -m pip install -r requirements.txt
 	$(MAKE) distclean
 	$(MAKE) setup
-	$(MAKE) all
-	$(MAKE) diff-init
+	$(MAKE) disasm
 
-# Recipes
+setup:
+	$(MAKE) -C tools
+	python3 tools/fixbaserom.py
+	python3 tools/extract_baserom.py
 
-build/baserom/%: baserom/%
-	@cp $< $@
+.PHONY: all uncompressed compressed clean distclean disasm init setup
 
-# FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
-# The simplest way to do that is to give them an order dependency on .c files' .o files
-build/asm/%.o: asm/%.asm | $(C_O_FILES)
+#### Various Recipes ####
+
+build/undefined_syms.txt: undefined_syms.txt
+	$(CPP) $(CPPFLAGS) $< > build/undefined_syms.txt
+
+build/ldscript.txt: $(SPEC)
+	$(CPP) $(CPPFLAGS) $< > build/spec
+	$(MKLDSCRIPT) build/spec $@
+
+build/baserom/%.o: baserom/%
+	$(OBJCOPY) -I binary -O elf32-big $< $@
+
+build/asm/%.o: asm/%.s
+	$(AS) $(ASFLAGS) $^ -o $@
+
+build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s
-	@$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
+#	$(CC_CHECK) $^
+	$(ZAPD) bovl -i $@ -cfg $^ --outputpath $(@D)/$(notdir $(@D))_reloc.s
+	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
-build/%.o: %.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-
-build/assets/src/scenes/%.o: assets/src/scenes/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | \
-     sed 's/\(.*\)\.c/\1/' | \
-     xargs -n 1 -r -I'{}' $(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/'{}'.o '{}'.c
-
-build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/set_o32abi_bit.py $@
-
-build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/set_o32abi_bit.py $@
-
-build/comp/%.yaz0: build/baserom/%
-	./tools/yaz0 $< $@
-
-build/%.d: %.c
-	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
-
-build/linker_scripts/%: linker_scripts/%
-	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
-
-build/assets/%.d: assets/%.c
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
-
-assets/src/scenes/%.c: assets/xml/scenes/%.xml
-	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*)
-	find $(dir assets/src/scenes/$*) -path "assets/src/scenes/$**.png" | \
-     sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
-     bash
-
-ifneq ($(MAKECMDGOALS), clean)
-ifneq ($(MAKECMDGOALS), distclean)
--include $(C_FILES:%.c=build/%.d)
-endif
-endif
+build/src/%.o: src/%.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
+#	$(CC_CHECK) $^
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)

@@ -18,7 +18,7 @@ s16 D_801C5EC4[] = {
     24, 7,  29, 28, 25, 26, 30, 10, 26, 27, 11, 30, 27, 28, 31, 11, 28, 29, 15, 31,
 };
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_vr_box/func_80142440.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_vr_box/func_80142440.s")
 
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     static struct_801C5F44 D_801C5F44[] = {
@@ -84,7 +84,7 @@ void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_vr_box/func_801431E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_vr_box/func_801431E8.s")
 #endif
 
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {

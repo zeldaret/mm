@@ -23,12 +23,12 @@ const ActorInit Dm_Ravine_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ravine/DmRavine_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ravine/DmRavine_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/func_80A2E838.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ravine/func_80A2E838.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ravine/DmRavine_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Ravine/DmRavine_Draw.s")

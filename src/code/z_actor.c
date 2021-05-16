@@ -79,7 +79,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//ActorShadow_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//ActorShadow_Draw.s")
 #endif
 
 /* ActorShadow_DrawCircle */
@@ -136,24 +136,24 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B40E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B40E0.s")
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B42F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B42F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4A98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4A98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4AEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4AEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4B50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4B50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4EDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4EDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4F40.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4F40.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B4F78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B4F78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5040.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B5040.s")
 
 void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* ctxt) {
     targetCtxt->unk90 = NULL;
@@ -167,9 +167,9 @@ void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalCont
     func_800B4F78(targetCtxt, actor->category, ctxt);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5208.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B5208.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5814.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B5814.s")
 
 u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
@@ -260,7 +260,7 @@ void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32
     titleCtxt->fadeInDelay = 0;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Nop800B5E50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_Nop800B5E50.s")
 
 void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
     if (DECR(titleCtxt->fadeInDelay) == 0) {
@@ -274,23 +274,23 @@ void Actor_TitleCardUpdate(GlobalContext* ctxt, TitleCardContext* titleCtxt) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_TitleCardDraw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_TitleCardDraw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6434.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6434.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6468.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6468.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6474.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6474.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B648C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B648C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B64FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B64FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6584.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6584.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6608.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6608.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6680.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6680.s")
 
 void Actor_MarkForDeath(Actor* actor) {
     actor->draw = NULL;
@@ -358,7 +358,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_InitToDefaultValues.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_InitToDefaultValues.s")
 #endif
 
 void Actor_FiniActor(Actor* actor, GlobalContext* ctxt) {
@@ -381,7 +381,7 @@ void Actor_ApplyMovement(Actor* actor) {
     actor->world.pos.z += ((actor->velocity.z * actorMovementScale) + actor->colChkInfo.displacement.z);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_ApplyMovement.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_ApplyMovement.s")
 #endif
 
 #if 0
@@ -395,7 +395,7 @@ void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_SetVelocityYRotationAndGravity.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_SetVelocityYRotationAndGravity.s")
 #endif
 
 void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
@@ -427,9 +427,9 @@ void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
     Actor_ApplyMovement(actor);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6C04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6C04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6C58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6C58.s")
 
 s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
     return Math_Vec3f_Yaw(&from->world.pos, &to->world.pos);
@@ -490,38 +490,38 @@ f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
     return actor2->world.pos.y - actor1->world.pos.y;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6F20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6F20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B6FC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B6FC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7090.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7090.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7118.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7118.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7128.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7128.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B715C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B715C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7170.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7170.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B71DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B71DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7200.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7200.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B722C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B722C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B724C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B724C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7298.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7298.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B72E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B72E0.s")
 
 void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2) {
     dpactor->unk150 = a2;
     dpactor->unk148 += a1;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_IsLinkFacingActor.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_IsLinkFacingActor.s")
 
 s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
     s16 angle;
@@ -555,7 +555,7 @@ s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_IsActorFacingLinkAndWithinRange.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_IsActorFacingLinkAndWithinRange.s")
 
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance) {
     s16 dist;
@@ -569,65 +569,65 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
     return 0;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B75A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B75A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B761C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B761C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7678.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7678.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B78B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B78B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7E04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7E04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7FE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B7FE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8018.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8018.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8050.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8050.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8118.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8118.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B81E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B81E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8214.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8214.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8248.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8248.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B82EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B82EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B83BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B83BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B83F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B83F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B84D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B84D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8500.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8500.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B85E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B85E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8614.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8614.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B863C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B863C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B867C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B867C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B86C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B86C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8708.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8708.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8718.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8718.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B874C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B874C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8804.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8804.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B882C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B882C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B886C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B886C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8898.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8898.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8934.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8934.s")
 
 u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt) {
     if (actor->parent != NULL) {
@@ -637,102 +637,102 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* ctxt) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8A1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8A1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8B84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8B84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8BB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8BD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8BFC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8C20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8C50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8C78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8C9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8CEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8CEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8D10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8D10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8D50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8D50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8D98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8D98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8DD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8DD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8E1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8E1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8E58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8E58.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Audio_PlayActorSound2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Audio_PlayActorSound2.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8EF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8EF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8F98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8F98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8FC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8FC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8FE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B8FE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9010.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9010.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9038.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9038.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9084.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9084.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9098.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9098.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B90AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B90AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B90F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B90F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9120.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9120.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9334.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9334.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_UpdateActor.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_UpdateActor.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_UpdateAll.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_UpdateAll.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_DrawActor.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_DrawActor.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9D1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9D1C.s")
 
 void Actor_DrawAllSetup(GlobalContext* ctxt) {
     ctxt->actorCtx.undrawnActorCount = 0;
     ctxt->actorCtx.unkB = 0;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_RecordUndrawnActor.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_RecordUndrawnActor.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9E84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9E84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B9EF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800B9EF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA2D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA2D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA2FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA2FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_DrawAll.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_DrawAll.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA6FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA6FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA798.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA798.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA8B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA8B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BA9B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BA9B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_InsertIntoTypeList.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_InsertIntoTypeList.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_RemoveFromTypeList.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_RemoveFromTypeList.s")
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
     void* ramAddr;
@@ -754,126 +754,126 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Spawn.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_Spawn.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_LoadOverlay.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_LoadOverlay.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_SpawnWithParentAndCutscene.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_SpawnWithParentAndCutscene.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_SpawnWithParent.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_SpawnWithParent.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_SpawnTransitionActors.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_SpawnTransitionActors.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BB2D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BB2D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BB498.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BB498.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BB59C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BB59C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BB604.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BB604.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BB8EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BB8EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBA88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBA88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBAC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBAC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBB74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBB74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBC20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBC20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBCEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBCEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBDAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBDAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BBFB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BBFB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC154.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC154.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC188.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC188.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC1B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC1B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC270.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC270.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC444.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC444.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC4EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC4EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC5B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC5B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC5EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC5EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC620.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC620.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC770.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC770.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC7D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC7D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC848.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC848.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BC8B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BC8B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BCB50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BCB50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BCB70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BCB70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BCBF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BCBF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BCC68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BCC68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BCCDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BCCDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD2B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD2B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD384.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD384.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD6B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD6B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD6E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD6E4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD888.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD888.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD9A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD9A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD9E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BD9E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDAA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BDAA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDB6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BDB6C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDC5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BDC5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDCF4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BDCF4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDFB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//Actor_NoOp.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDFC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BDFC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE03C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE03C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE0B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE0B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE184.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE184.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE22C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE22C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE258.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE258.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE2B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE2B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE33C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE33C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE3D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE3D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE504.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE504.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE568.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE568.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE5CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE5CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE63C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE63C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BE680.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BE680.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BF7CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor//func_800BF7CC.s")

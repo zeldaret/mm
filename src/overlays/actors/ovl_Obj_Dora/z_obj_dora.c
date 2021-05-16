@@ -23,22 +23,22 @@ const ActorInit Obj_Dora_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/ObjDora_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/ObjDora_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60C9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60C9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60CB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60CB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60CC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60CC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60D34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60D34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60E54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60E54.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/func_80B60EE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/func_80B60EE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/ObjDora_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/ObjDora_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Draw.s")

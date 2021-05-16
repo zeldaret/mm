@@ -23,50 +23,50 @@ const ActorInit En_Niw_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/EnNiw_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/EnNiw_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80891320.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80891320.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808916B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808916B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808917F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808917F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80891974.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80891974.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808919E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80891D78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80891D78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80891F60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80891F60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808920A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808920A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80892248.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80892248.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80892274.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80892274.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808922D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808922D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80892390.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80892390.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80892414.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80892414.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808924B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808925F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808925F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_8089262C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_8089262C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/EnNiw_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80892E70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80892E70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/EnNiw_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_80893008.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_80893008.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808930FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808930FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808932B0.s")

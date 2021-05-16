@@ -16,7 +16,7 @@ const ActorInit Obj_Ending_InitVars = {
     OBJECT_ENDING_OBJ,
     sizeof(ObjEnding),
     (ActorFunc)ObjEnding_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjEnding_Update,
     (ActorFunc)ObjEnding_Draw
 };

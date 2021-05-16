@@ -608,7 +608,7 @@ void Fault_FindNextStackCall(u32** sp, u32** pc, u32** ra) {
     *ra = currentRa;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/fault/Fault_FindNextStackCall.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_FindNextStackCall.s")
 #endif
 
 void Fault_DrawStackTrace(OSThread* t, u32 flags) {
@@ -757,7 +757,7 @@ void Fault_SetOptionsFromController3(void) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s")
 #endif
 
 void Fault_SetOptions(void) {

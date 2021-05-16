@@ -234,8 +234,5 @@ int yaz0_encode(uint8_t *src, uint8_t *dst, int srcSize)
         bufPos = 0;
     }
 
-    while ((dstPos % 16) != 0)
-        dst[dstPos++] = 0;
-
     return dstPos;
 }

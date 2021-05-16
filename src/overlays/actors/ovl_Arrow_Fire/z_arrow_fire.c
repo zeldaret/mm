@@ -23,22 +23,22 @@ const ActorInit Arrow_Fire_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_SetUpdateFunc.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_SetUpdateFunc.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/ArrowFire_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/ArrowFire_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_Update1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update1.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_Lerp.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Lerp.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_Update3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update3.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_Update2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update2.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/ArrowFire_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/func_80920948.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_80920948.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/ArrowFire_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Draw.s")

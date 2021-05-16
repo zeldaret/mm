@@ -23,24 +23,24 @@ const ActorInit Bg_Haka_Tomb_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/BgHakaTomb_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/BgHakaTomb_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6624.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD6624.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6638.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD6638.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD66AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD66AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6754.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD6754.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD6768.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD6768.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD67A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/func_80BD67BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/func_80BD67BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/BgHakaTomb_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Tomb_0x80BD6580/BgHakaTomb_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Tomb/BgHakaTomb_Draw.s")

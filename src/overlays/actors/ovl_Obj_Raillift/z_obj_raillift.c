@@ -23,28 +23,28 @@ const ActorInit Obj_Raillift_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19910.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/ObjRaillift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/ObjRaillift_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19B98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19B98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19BA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19BA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19E84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19E84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19EE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19EE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19F18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19F18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A19F78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A19F78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/ObjRaillift_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/ObjRaillift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/ObjRaillift_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A1A330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A1A330.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Raillift_0x80A19910/func_80A1A360.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Raillift/func_80A1A360.s")

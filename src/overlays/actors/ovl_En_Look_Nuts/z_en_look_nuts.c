@@ -23,26 +23,26 @@ const ActorInit En_Look_Nuts_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67A34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67A34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67AA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67AA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67C48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67D0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67D0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67F30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67F30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A67FC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67FC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A68080.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A68080.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/func_80A680FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A680FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Draw.s")

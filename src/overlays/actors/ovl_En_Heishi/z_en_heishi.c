@@ -23,20 +23,20 @@ const ActorInit En_Heishi_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/EnHeishi_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/EnHeishi_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/func_80BE90BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE90BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/func_80BE9148.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9148.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/func_80BE91DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE91DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/func_80BE9214.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9214.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/EnHeishi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/func_80BE9380.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9380.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Heishi_0x80BE8F20/EnHeishi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Draw.s")

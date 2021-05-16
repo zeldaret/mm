@@ -23,28 +23,28 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/ObjMuPict_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/ObjMuPict_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/ObjMuPict_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/ObjMuPict_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06B5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06B5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06B70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06B70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06C54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06C54.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06C68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06C68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06CC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06CC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06CD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06CD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06D90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06D90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06DC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06DC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06E88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/func_80C06E88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/ObjMuPict_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/ObjMuPict_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/ObjMuPict_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mu_Pict/ObjMuPict_Draw.s")

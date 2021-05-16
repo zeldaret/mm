@@ -15,16 +15,16 @@ const ActorInit Obj_Blockstop_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjBlockstop),
     (ActorFunc)ObjBlockstop_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjBlockstop_Update,
     (ActorFunc)NULL
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/func_809466F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809466F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/func_809467E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809467E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Update.s")

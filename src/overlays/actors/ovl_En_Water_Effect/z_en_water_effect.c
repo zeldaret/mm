@@ -23,24 +23,24 @@ const ActorInit En_Water_Effect_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A587A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A587A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A58908.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A58908.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/EnWaterEffect_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/EnWaterEffect_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/EnWaterEffect_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/EnWaterEffect_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/EnWaterEffect_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/EnWaterEffect_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/EnWaterEffect_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/EnWaterEffect_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A599E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A599E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A59C04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A59C04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A5A184.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A5A184.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A5A534.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A5A534.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A5A6B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A5A6B8.s")

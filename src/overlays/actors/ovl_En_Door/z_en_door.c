@@ -23,26 +23,26 @@ const ActorInit En_Door_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80866A5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866A5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80866B20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866B20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80866F94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866F94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_8086704C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_8086704C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80867080.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80867080.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_808670F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_808670F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80867144.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80867144.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/func_80867350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80867350.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_0x80866800/EnDoor_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Draw.s")
