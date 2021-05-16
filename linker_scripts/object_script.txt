@@ -56,6 +56,11 @@ D_06001470 = 0x06001470;
 /* z_en_nnh */
 D_06001510 = 0x06001510;
 
+/* en_encount2 */
+D_06000A00 = 0x6000A00;
+D_06000D78 = 0x6000D78;
+D_06002420 = 0x6002420;
+
 /* bg_haka_curtain */
 D_06001410 = 0x06001410;
 D_06001588 = 0x06001588;
@@ -90,6 +95,15 @@ D_06009220 = 0x06009220;
 D_06009120 = 0x06009120;
 D_06005458 = 0x06005458;
 D_0600788C = 0x0600788C;
+
+/* en_ginko_man */
+object_ginko_skeleton            = 0x0600C240;
+object_ginko_limb15_dlist        = 0x0600B1D8; 
+object_ginko_sitting_anim        = 0x060043F0;
+object_ginko_stamp_reach_anim    = 0x06004F40;
+object_ginko_floorsmacking_anim  = 0x060008C0;
+object_ginko_amazed_anim         = 0x06004A7C;
+object_ginko_advertising_anim    = 0x06000AC4;
 
 /* z_bg_lbfshot */
 D_060014D8 = 0x060014D8;
@@ -129,6 +143,11 @@ D_0600AB90 = 0x0600AB90;
 D_06007750 = 0x06007750;
 D_0600A390 = 0x0600A390;
 D_0600A490 = 0x0600A490;
+
+/* obj_lightswitch */
+D_06000C20 = 0x6000C20; 
+D_06000420 = 0x6000420; 
+D_06001420 = 0x6001420;
 
 /* z_obj_kepn_koya */
 D_0600805C = 0x0600805C;
@@ -191,6 +210,15 @@ D_06000140 = 0x06000140;
 /* bg_lotus */
 D_06000A20 = 0x06000A20;
 D_06000040 = 0x06000040;
+
+/* z_bg_ctower_gear */
+D_06010828 = 0x06010828;
+D_06015F30 = 0x06015F30;
+D_060160A0 = 0x060160A0;
+D_06016E70 = 0x06016E70;
+D_06017018 = 0x06017018;
+D_06018118 = 0x06018118;
+D_06018588 = 0x06018588;
 
 /* z_en_warp_uzu */ 
 D_06000EC0 = 0x06000EC0;

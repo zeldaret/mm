@@ -126,7 +126,7 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_UpdateSpheres(i, &this->collider);
     }
 
-    if (Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F)) {
+    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F)) {
         BgKin2Fence_SetupDoNothing(this);
         return;
     }
