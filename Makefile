@@ -1,9 +1,10 @@
+MAKEFLAGS += --no-builtin-rules
+
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
-# TODO we do not support static recomp, so force this to 1
 ORIG_COMPILER ?= 0
 
 ifeq ($(NON_MATCHING),1)
@@ -74,6 +75,7 @@ UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
 ELF := $(MM_ROM_NAME).elf
 
 SRC_DIRS := $(shell find src -type d)
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
@@ -83,13 +85,13 @@ ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
 # Instead, generate a list of assembly files based on what's listed in the linker script.
 S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+
 C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
 ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
 O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
-
+## Assets binaries (PNGs, JPGs, etc)
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
@@ -207,12 +209,15 @@ distclean: assetclean clean
 	$(RM) -rf baserom/ asm 
 
 ## Extraction step
+# The `cp -r baserom/ build/baserom/` is a temporary solution to the race condition/dependency bug we currently have.
+# It should properly fixed in the future.
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
 	python3 extract_assets.py
+	cp -r baserom/ build/baserom/
 
 ## Assembly generation
 assembly: $(S_FILES)
