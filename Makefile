@@ -173,6 +173,9 @@ build/binary/assets/scenes/%: build/code.elf
 build/binary/overlays/%: build/code.elf
 	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
+
+#### ASM rules ####
+
 # Use an empty sentinel file (dep) to track the directory as a dependency, and
 # emulate GNU Make's order-only dependency.
 # The `touch $@; action || rm $@` pattern ensures that the `dep` file is older
@@ -189,16 +192,21 @@ asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/
 	@touch $@
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
 
+
+#### Main commands ####
+
+## Cleaning ##
 clean:
-	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
+	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build
 
 assetclean:
-	$(RM) -r $(ASSET_BIN_DIRS)
-	$(RM) -r build/assets
+	$(RM) -rf $(ASSET_BIN_DIRS)
+	$(RM) -rf build/assets
 
 distclean: assetclean clean
-	$(RM) -r baserom/
+	$(RM) -rf baserom/ asm 
 
+## Extraction step
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
@@ -206,8 +214,12 @@ setup:
 	./tools/extract_rom.py $(MM_BASEROM)
 	python3 extract_assets.py
 
+## Assembly generation
+assembly: $(S_FILES)
+	@echo "Assembly generated."
+
 diff-init: all
-	rm -rf expected/
+	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
 	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
@@ -216,6 +228,7 @@ diff-init: all
 init:
 	$(MAKE) distclean
 	$(MAKE) setup
+	$(MAKE) assembly
 	$(MAKE) all
 	$(MAKE) diff-init
 
@@ -276,7 +289,7 @@ build/linker_scripts/%.ld: linker_scripts/%.txt
 build/assets/%.d: assets/%.c
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
-# Build C files from assets
+## Build C files from assets
 
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
