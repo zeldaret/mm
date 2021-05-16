@@ -1,7 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-u16 atan_first_8th_array[] = {
+u16 sATan2Tbl[] = {
     0,    10,   20,   31,   41,   51,   61,   71,   81,   92,   102,  112,  122,  132,  143,  153,  163,  173,  183,
     194,  204,  214,  224,  234,  244,  255,  265,  275,  285,  295,  305,  316,  326,  336,  346,  356,  367,  377,
     387,  397,  407,  417,  428,  438,  448,  458,  468,  478,  489,  499,  509,  519,  529,  539,  550,  560,  570,
@@ -58,11 +58,11 @@ u16 atan_first_8th_array[] = {
     8105, 8110, 8115, 8120, 8125, 8131, 8136, 8141, 8146, 8151, 8156, 8161, 8166, 8172, 8177, 8182, 8187, 8192,
 };
 
-u16 atans_first_8th(f32 opposite, f32 adjacent) {
-    return atan_first_8th_array[(s32)((opposite / adjacent) * 0x400)];
+u16 Math_GetAtan2Tbl(f32 opposite, f32 adjacent) {
+    return sATan2Tbl[(s32)((opposite / adjacent) * 0x400)];
 }
 
-s16 atans(f32 opposite, f32 adjacent) {
+s16 Math_Atan2S(f32 opposite, f32 adjacent) {
     s32 angle;
 
     if (opposite == 0.0f) {
@@ -80,41 +80,41 @@ s16 atans(f32 opposite, f32 adjacent) {
     } else if (opposite >= 0.0f) {
         if (adjacent >= 0.0f) {
             if (opposite <= adjacent) {
-                angle = atans_first_8th(opposite, adjacent);
+                angle = Math_GetAtan2Tbl(opposite, adjacent);
             } else {
-                angle = 0x4000 - atans_first_8th(adjacent, opposite);
+                angle = 0x4000 - Math_GetAtan2Tbl(adjacent, opposite);
             }
         } else {
             if (-adjacent < opposite) {
-                angle = atans_first_8th(-adjacent, opposite) + 0x4000;
+                angle = Math_GetAtan2Tbl(-adjacent, opposite) + 0x4000;
             } else {
-                angle = 0x8000 - atans_first_8th(opposite, -adjacent);
+                angle = 0x8000 - Math_GetAtan2Tbl(opposite, -adjacent);
             }
         }
     } else if (adjacent < 0.0f) {
         if (-opposite <= -adjacent) {
-            angle = atans_first_8th(-opposite, -adjacent) + 0x8000;
+            angle = Math_GetAtan2Tbl(-opposite, -adjacent) + 0x8000;
         } else {
-            angle = 0xC000 - atans_first_8th(-adjacent, -opposite);
+            angle = 0xC000 - Math_GetAtan2Tbl(-adjacent, -opposite);
         }
     } else {
         if (adjacent < -opposite) {
-            angle = atans_first_8th(adjacent, -opposite) + 0xC000;
+            angle = Math_GetAtan2Tbl(adjacent, -opposite) + 0xC000;
         } else {
-            angle = -atans_first_8th(-opposite, adjacent);
+            angle = -Math_GetAtan2Tbl(-opposite, adjacent);
         }
     }
     return angle;
 }
 
-f32 atan(f32 opposite, f32 adjacent) {
-    return atans(opposite, adjacent) * (M_PI / 0x8000);
+f32 Math_Atan2F(f32 opposite, f32 adjacent) {
+    return Math_Atan2S(opposite, adjacent) * (M_PI / 0x8000);
 }
 
 s16 Math_FAtan2F(f32 adjacent, f32 opposite) {
-    return atans(opposite, adjacent);
+    return Math_Atan2S(opposite, adjacent);
 }
 
-f32 atan_flip(f32 adjacent, f32 opposite) {
-    return atan(opposite, adjacent);
+f32 Math_Acot2F(f32 adjacent, f32 opposite) {
+    return Math_Atan2F(opposite, adjacent);
 }
