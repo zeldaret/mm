@@ -100,6 +100,24 @@ $(shell mkdir -p asm data)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
+BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
+ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
+
+# Because we may not have disassembled the code files yet, there might not be any assembly files.
+# Instead, generate a list of assembly files based on what's listed in the linker script.
+S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
+C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+C_O_FILES := $(C_FILES:%.c=build/%.o)
+S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
+ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
+O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
+
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+
+TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
+TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
+TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
+					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
 C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
@@ -139,6 +157,11 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum_compressed.md5
 endif
 
+.PHONY: all clean setup diff-init init assetclean distclean
+# make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
+.PRECIOUS: asm/%.asm
+.DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
+
 all: uncompressed compressed
 
 $(ROM): $(ELF)
@@ -172,6 +195,12 @@ setup:
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
 
+build/assets/%.o: assets/%.c
+	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+
+build/binary/assets/scenes/%: build/code.elf
+	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+
 .PHONY: all uncompressed compressed clean distclean disasm init setup
 
 #### Various Recipes ####
@@ -191,6 +220,13 @@ build/asm/%.o: asm/%.s
 
 build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
+
+# Build C files from assets
+build/%.inc.c: %.png
+	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.jpg.inc.c: assets/%.jpg
+	$(ZAPD) bren -eh -i $< -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
