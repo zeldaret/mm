@@ -176,7 +176,60 @@ u16 gScenesPerRegion[11][27] = {
     },
 };
 
-static u16 unkscenelist[12][6] = {
+s32 func_8012EC80(GlobalContext* globalCtx) {
+    if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
+        return 0xFF;
+    } else if (gSaveContext.unk_1015 == 0xFF) {
+        return 0xFF;
+    } else if (gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0] ==
+               0xFF) {
+        if (globalCtx->interfaceCtx.unk_21C != 0) {
+            if (globalCtx->interfaceCtx.unk_21E != 0) {
+                return globalCtx->interfaceCtx.unk_21E;
+            }
+        }
+        return 0xFF;
+    } else {
+        return gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0];
+    }
+}
+
+void func_8012ED34(s16 equipment);
+#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED34.asm")
+
+u8 func_8012ED78(GlobalContext* globalCtx, s16 equipment);
+#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED78.asm")
+
+void func_8012EDE8(s16 arg0, u32 arg1);
+#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EDE8.asm")
+
+s32 func_8012EE34(s16 arg0) {
+    s16 num = 0;
+
+    if (arg0 >= 0x20) {
+        if (arg0 < 0x40) {
+            num = 1;
+        } else if (arg0 < 0x60) {
+            num = 2;
+        } else if (arg0 < 0x80) {
+            num = 3;
+        } else if (arg0 < 0xA0) {
+            num = 4;
+        } else if (arg0 < 0xC0) {
+            num = 5;
+        } else if (arg0 < 0xE0) {
+            num = 6;
+        }
+    }
+
+    if (gSaveContext.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
+        return 1;
+    }
+
+    return 0;
+}
+
+/* static */ u16 D_801C2380[12][6] = {
     {
         SCENE_00KEIKOKU,
         SCENE_BOTI,
@@ -247,54 +300,88 @@ static u16 unkscenelist[12][6] = {
     },
 };
 
-s32 func_8012EC80(GlobalContext* globalCtx) {
-    if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
-        return 0xFF;
-    } else if (gSaveContext.unk_1015 == 0xFF) {
-        return 0xFF;
-    } else if (gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0] ==
-               0xFF) {
-        if (globalCtx->interfaceCtx.unk_21C != 0) {
-            if (globalCtx->interfaceCtx.unk_21E != 0) {
-                return globalCtx->interfaceCtx.unk_21E;
+#ifdef NON_EQUIVALENT
+// loop seems wrong?
+void func_8012EF0C(s16 arg0) {
+    s16 i;
+    s16 num;
+    s16 sceneIndex;
+
+    if ((arg0 >= 0) && (arg0 < ARRAY_COUNT(D_801C2380))) {
+        i = 0;
+        num = 0;
+        sceneIndex = D_801C2380[arg0][i];
+
+        while (sceneIndex != 0xFFFF) {
+            sceneIndex = D_801C2380[arg0][i];
+            if (sceneIndex < 0x20) {
+                num = 0;
+            } else if (sceneIndex < 0x40) {
+                num = 1;
+            } else if (sceneIndex < 0x60) {
+                num = 2;
+            } else if (sceneIndex < 0x80) {
+                num = 3;
+            } else if (sceneIndex < 0xA0) {
+                num = 4;
+            } else if (sceneIndex < 0xC0) {
+                num = 5;
+            } else if (sceneIndex < 0xE0) {
+                num = 6;
             }
+
+            gSaveContext.roomInf[125][sceneIndex] |= gBitFlags[(-(num << 7)) + num];
+            i++;
         }
-        return 0xFF;
-    } else {
-        return gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0];
+
+        if (i == 0) {
+            gSaveContext.unk_F60 |= 3;
+        } else if (i == 1) {
+            gSaveContext.unk_F60 |= 0x1C;
+        } else if (i == 2) {
+            gSaveContext.unk_F60 |= 0xE0;
+        } else if (i == 3) {
+            gSaveContext.unk_F60 |= 0x100;
+        } else if (i == 4) {
+            gSaveContext.unk_F60 |= 0x1E00;
+        } else if (i == 5) {
+            gSaveContext.unk_F60 |= 0x6000;
+        }
     }
+
+    dREG(82) = 0;
 }
-
-void func_8012ED34(s16 equipment);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED34.asm")
-
-u8 func_8012ED78(GlobalContext* globalCtx, s16 equipment);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012ED78.asm")
-
-void func_8012EDE8(s16 arg0, u32 arg1);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EDE8.asm")
-
-s32 func_8012EE34(s16 sceneIndex);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EE34.asm")
-
+#else
 void func_8012EF0C(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012EF0C.asm")
+#endif
 
 void func_8012F0EC(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F0EC.asm")
 
+#ifdef NON_MATCHING
+// regalloc
+void func_8012F1BC(s16 sceneIndex) {
+    if (sceneIndex == SCENE_KINSTA1) {
+        gSaveContext.roomInf[126][0] = ((((gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                                       (gSaveContext.roomInf[126][0] & 0xFFFF);
+    } else {
+        gSaveContext.roomInf[126][0] =
+            ((gSaveContext.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.roomInf[126][0] & 0xFFFF0000);
+    }
+}
+#else
 void func_8012F1BC(s16 arg0);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F1BC.asm")
+#endif
 
-// void func_8012F22C(s16 arg0);
-// #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F22C.asm")
 s16 func_8012F22C(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         return (gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10;
+    } else {
+        return gSaveContext.roomInf[126][0] & 0xFFFF;
     }
-    return gSaveContext.roomInf[126][0] & 0xFFFF;
 }
-
 
 void func_8012F278(GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x8012EC80/func_8012F278.asm")

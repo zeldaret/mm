@@ -1412,6 +1412,7 @@
     0x801C2078:("gItemSlots","u8","",0x1),
     0x801C20C8:("gItemPrices","UNK_TYPE1","",0x1),
     0x801C212C:("gScenesPerRegion","SceneIdList","[11]",0x252),
+    0x801C2380:("D_801C2380","UNK_TYPE1","",0x1),
     0x801C2410:("D_801C2410","UNK_TYPE1","",0x1),
     0x801C2650:("tatlMessageFiles","RomFile","[2]",0x10),
     0x801C2660:("sceneTextureFiles","RomFile","[9]",0x48),
