@@ -209,7 +209,7 @@ distclean: assetclean clean
 	$(RM) -rf baserom/ asm 
 
 ## Extraction step
-# The `cp -r baserom/ build/baserom/` is a temporary solution to the race condition/dependency bug we currently have.
+# TODO: The `cp -r baserom/ build/baserom/` is a temporary solution to the race condition/dependency bug we currently have.
 # It should properly fixed in the future.
 setup:
 	git submodule update --init --recursive
