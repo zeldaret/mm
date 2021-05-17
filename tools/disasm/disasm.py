@@ -88,8 +88,9 @@ vrom_variables = list() # (name,addr)
 functions_ast = None
 variables_ast = None
 
+vars_cache = {} # (address: variable + addend)
+
 def proper_name(symbol, in_data=False, is_symbol=True):
-    # TODO addends
     # hacks
     if symbol == 0x809C46F0: # ovl_En_Encount4 fake symbol at the very end of the data section
         return variables_ast[0x809C46DC][0] + " + 0x14"
@@ -99,9 +100,9 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return variables_ast[0x80B801A8][0] + f" + 0x{0x80B80248 - 0x80B801A8:X}"
     elif symbol == 0x8084D2FC: # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
         return variables_ast[0x8085B9F0][0] + f" - 0x{0x8085B9F0 - 0x8084D2FC:X}"
-    elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0: # OS_K0_TO_PHYSICAL
+    elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0: # OS_K0_TO_PHYSICAL on rspS2DEX text and data symbols
         return variables_ast[symbol + 0x80000000][0] + " - 0x80000000"
-    elif symbol == 0x00AC0480: # do_action_static + 0x480
+    elif symbol == 0x00AC0480: # do_action_static + 0x480, this is the only rom segment that has a constant offset folded into it so just hack it
         return "_do_action_staticSegmentRomStart + 0x480"
 
     # real names
@@ -115,6 +116,11 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name,addr in vrom_variables if "SegmentRomStart" in name and addr == symbol][0]
         else:
             return [name for name,addr in vrom_variables if addr == symbol][0]
+
+    # addends
+    if is_symbol and symbol in vars_cache.keys():
+        return vars_cache[symbol]
+
     # generated names
     if symbol in functions and not in_data:
         return f"func_{symbol:08X}"
@@ -976,7 +982,14 @@ with open("tables/functions.txt", "r") as infile:
 with open("tables/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
-# Read in binary and relocation data for each segment, disassemble each segment with capstone
+# Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
+for var in sorted(variables_ast.keys()):
+    for i in range(var, var + variables_ast[var][3], 1):
+        addend = i - var
+        assert addend >= 0
+        vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
+
+# Read in binary and relocation data for each segment
 for segment in files_spec:
     binary = None
     with open(segment[1] + "/" + segment[0],"rb") as infile:
