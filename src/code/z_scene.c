@@ -148,7 +148,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 loadedCount;
     void* nextObject;
     s16 playerObjectId;
-    u8 unk20;
+    u8 playerForm;
 
     globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
                                 globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
@@ -163,8 +163,8 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
-    unk20 = gSaveContext.playerForm;
-    playerObjectId = gLinkFormObjectIndexes[unk20];
+    playerForm = gSaveContext.playerForm;
+    playerObjectId = gLinkFormObjectIndexes[playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 
