@@ -233,7 +233,67 @@ void func_80B8D6BC(EnMaYts *this, s32 arg1) {
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6BC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6F8.asm")
+void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
+    s16 sp26;
+    s32 phi_v0;
+
+    sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+        if (gSaveContext.perm.unk20 != 4) {
+            if ((gSaveContext.perm.weekEventReg[0x41] & 0x80) == 0) {
+                gSaveContext.perm.weekEventReg[0x41] |= 0x80;
+                func_80B8DD88(this, (u16)0, (u16)0);
+                func_801518B0(globalCtx, 0x335F, &this->actor);
+                this->unk_338 = 0x335F;
+            } else {
+                func_80B8DD88(this, (u16)4, (u16)3);
+                func_801518B0(globalCtx, 0x3362U, &this->actor);
+                this->unk_338 = 0x3362;
+                func_80151BB4((s32) globalCtx, 5U);
+            }
+        } else if (func_8012403C(globalCtx) != 0) {
+            if ((gSaveContext.perm.weekEventReg[0x41] & 0x40) == 0) {
+                gSaveContext.perm.weekEventReg[0x41] |= 0x40;
+                func_80B8DD88(this, (u16)0, (u16)0);
+                func_801518B0(globalCtx, 0x3363U, &this->actor);
+                this->unk_338 = 0x3363;
+            } else {
+                func_80B8DD88(this, (u16)4, (u16)2);
+                func_801518B0(globalCtx, 0x3366U, &this->actor);
+                this->unk_338 = 0x3366;
+                func_80151BB4((s32) globalCtx, 5U);
+            }
+        } else if ((gSaveContext.perm.weekEventReg[0x15] & 0x20) == 0) {
+            func_80B8DD88(this, (u16)0, (u16)0);
+            func_801518B0(globalCtx, 0x3367U, &this->actor);
+            this->unk_338 = 0x3367;
+        } else {
+            if ((gSaveContext.perm.weekEventReg[0x41] & 0x20) == 0) {
+                gSaveContext.perm.weekEventReg[0x41] |= 0x20;
+                func_80B8DD88(this, (u16)4, (u16)2);
+                func_801518B0(globalCtx, 0x3369U, &this->actor);
+                this->unk_338 = 0x3369;
+            } else {
+                func_80B8DD88(this, (u16)0, (u16)0);
+                func_801518B0(globalCtx, 0x336CU, &this->actor);
+                this->unk_338 = 0x336C;
+                func_80151BB4((s32) globalCtx, 5U);
+            }
+        }
+        func_80B8D95C(this);
+    }
+    else {
+        // ABS?
+        phi_v0 = (s32) sp26;
+        if ((s32) sp26 < 0) {
+            phi_v0 = -(s32) sp26;
+        }
+        if (phi_v0 < 0x4000) {
+            func_800B8614(&this->actor, globalCtx, 120.0f);
+        }
+    }
+}
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6F8.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D95C.asm")
 
