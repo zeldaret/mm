@@ -237,37 +237,31 @@ void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
 }
 //#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Update.asm")
 
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06007D98;
+
 // OverrideLimbDraw
-s32 func_80B8DE44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-/*
 s32 func_80B8DE44(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
     EnMaYts* this = THIS;
-    s16 sp4;
-    s32 temp_a0;
+    Vec3s sp4;
 
-    if (limbIndex == 0xE) {
-        sp4.unk0 = (?32) (unaligned s32) actor->unk1E0;
-        sp4.unk4 = (u16) actor->unk1E4;
-        rot->x = rot->x + sp6;
-        temp_a0 = actor->unk14C;
-        if ((temp_a0 == 0x6009E58) || (temp_a0 == 0x6007D98)) {
-            rot->z = rot->z + sp4;
+    if (limbIndex == 14) {
+        sp4 = this->unk_1E0;
+        rot->x = rot->x + sp4.y;
+        if ((this->unk_144.animCurrentSeg == &D_06009E58) || (this->unk_144.animCurrentSeg == &D_06007D98)) {
+            rot->z = rot->z + sp4.x;
         }
-    } else if (limbIndex == 0xD) {
-        sp4.unk0 = (?32) (unaligned s32) actor->unk1E6;
-        (&sp4)[2] = (s16) actor->unk1EA;
-        rot->x = rot->x + sp6;
-        rot->z = rot->z + sp4;
+    } else if (limbIndex == 13) {
+        sp4 = this->unk_1E6;
+        rot->x = rot->x + sp4.y;
+        rot->z = rot->z + sp4.x;
     }
     return 0;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DE44.asm")
 
 extern UNK_TYPE D_060003B0;
 
 // PostLimbDraw
-void func_80B8DF18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80B8DF18(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
     EnMaYts* this = THIS;
 
@@ -280,35 +274,23 @@ void func_80B8DF18(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DF18.asm")
 
-/*
+extern void* D_80B8E308[];
+extern void* D_80B8E318[]; // eyeTextures
+
 void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    GraphicsContext *sp30;
-    Actor *sp18;
-    Gfx *temp_v1;
-    Gfx *temp_v1_2;
-    GraphicsContext *temp_a0;
-    s32 temp_a0_2;
-    s32 temp_a0_3;
+    EnMaYts* this = THIS;
 
-    temp_a0 = globalCtx->state.gfxCtx;
-    sp30 = temp_a0;
-    func_8012C28C(temp_a0);
-    temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
-    temp_v1->words.w0 = 0xDB060024;
-    temp_a0_2 = *(&D_80B8E308 + (thisx->unk32E * 4));
-    temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;
-    temp_v1_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1_2 + 8;
-    temp_v1_2->words.w0 = 0xDB060020;
-    temp_a0_3 = *(&D_80B8E318 + (thisx->unk32A * 4));
-    temp_v1_2->words.w1 = (temp_a0_3 & 0xFFFFFF) + gSegments[(u32) (temp_a0_3 * 0x10) >> 0x1C] + 0x80000000;
-    sp18 = thisx;
-    SkelAnime_DrawSV(globalCtx, thisx->unk148, thisx->unk164, (s32) thisx->unk146, &func_80B8DE44, &func_80B8DF18);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80B8E308[this->unk_32E]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80B8E318[this->unk_32A]));
+
+    SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80B8DE44, func_80B8DF18, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Draw.asm")
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Draw.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8E0BC.asm")
