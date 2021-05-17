@@ -354,7 +354,7 @@ typedef struct {
     /* 0x0C */ f32 frameCount;
     /* 0x10 */ u8 mode;
     /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry;
+} ActorAnimationEntry; // size = 0x18
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

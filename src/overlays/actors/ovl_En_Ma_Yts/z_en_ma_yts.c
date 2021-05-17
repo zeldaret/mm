@@ -55,18 +55,74 @@ void EnMaYts_UpdateEyes(EnMaYts *this) {
     }
 }
 
+struct struct_80B8E1A8{
+    /* 0x00 */ AnimationHeader* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ u8 unk_08;
+    /* 0x0C */ f32 unk_0C;
+};
 
-// This is probably wrong...
-extern AnimationHeader D_80B8E1A8[0x16];
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06018948;
+extern AnimationHeader D_06018948;
+extern AnimationHeader D_0601B76C;
+extern AnimationHeader D_0601B76C;
+extern AnimationHeader D_06007328;
+extern AnimationHeader D_06007328;
+extern AnimationHeader D_06014088;
+extern AnimationHeader D_06014088;
+extern AnimationHeader D_06002A8C;
+extern AnimationHeader D_06002A8C;
+extern AnimationHeader D_06015B7C;
+extern AnimationHeader D_06015B7C;
+extern AnimationHeader D_06007D98;
+extern AnimationHeader D_06007D98;
+extern AnimationHeader D_0600852C;
+extern AnimationHeader D_0600852C;
+extern AnimationHeader D_06008F6C;
+extern AnimationHeader D_06008F6C;
+extern AnimationHeader D_060180DC;
+extern AnimationHeader D_060180DC;
 
-void func_80B8D0BC(EnMaYts *this, s32 arg1);
+extern struct struct_80B8E1A8 D_80B8E1A8[];
 /*
-void func_80B8D0BC(EnMaYts *this, s32 arg1) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_80B8E1A8[arg1], 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B8E1A8[arg1].genericHeader), &D_80B8E1A8[arg1].rotationIndexSeg, D_80B8E1A8[arg1].limit);
-}
+struct struct_80B8E1A8 D_80B8E1A8[] = {
+    { &D_06009E58, 0x3F800000, 0x00, 0.0f },
+    { &D_06009E58, 0x3F800000, 0x00, -6.0f },
+    { &D_06018948, 0x3F800000, 0x02, 0.0f },
+    { &D_06018948, 0x3F800000, 0x02, -6.0f },
+    { &D_0601B76C, 0x3F800000, 0x00, 0.0f },
+    { &D_0601B76C, 0x3F800000, 0x00, -6.0f },
+    { &D_06007328, 0x3F800000, 0x00, 0.0f },
+    { &D_06007328, 0x3F800000, 0x00, -6.0f },
+    { &D_06014088, 0x3F800000, 0x00, 0.0f },
+    { &D_06014088, 0x3F800000, 0x00, -6.0f },
+    { &D_06002A8C, 0x3F800000, 0x00, 0.0f },
+    { &D_06002A8C, 0x3F800000, 0x00, -6.0f },
+    { &D_06015B7C, 0x3F800000, 0x00, 0.0f },
+    { &D_06015B7C, 0x3F800000, 0x00, -6.0f },
+    { &D_06007D98, 0x3F800000, 0x00, 0.0f },
+    { &D_06007D98, 0x3F800000, 0x00, -6.0f },
+    { &D_0600852C, 0x3F800000, 0x00, 0.0f },
+    { &D_0600852C, 0x3F800000, 0x00, -6.0f },
+    { &D_06008F6C, 0x3F800000, 0x00, 0.0f },
+    { &D_06008F6C, 0x3F800000, 0x00, -6.0f },
+    { &D_060180DC, 0x3F800000, 0x02, 0.0f },
+    { &D_060180DC, 0x3F800000, 0x02, -6.0f },
+};
 */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D0BC.asm")
 
+#ifdef NON_MATCHING
+void func_80B8D0BC(EnMaYts* this, s32 index) {
+    struct struct_80B8E1A8* temp_v1 = &D_80B8E1A8[index];
+
+    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk_00, 1.0f, 0.0f, SkelAnime_GetFrameCount(&temp_v1->unk_00->genericHeader), temp_v1->unk_08, temp_v1->unk_0C);
+}
+#else 
+void func_80B8D0BC(EnMaYts *this, s32 index);
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D0BC.asm")
+#endif
 
 void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
@@ -77,7 +133,7 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
         this->unk_1F0.y -= -10.0f;
     } else {
         Math_Vec3f_StepTo(&this->unk_1F0, &this->actor.parent->world.pos, 8.0f);
-        this->unk_1F0.y = (f32) (this->unk_1F0.y - -10.0f);
+        this->unk_1F0.y -= -10.0f;
     }
 
     func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
@@ -169,7 +225,8 @@ extern CollisionCheckInfoInit2 D_80B8E19C;
 extern SkeletonHeader D_06013928;
 
 //void EnMaYts_Init(EnMaYts* this, GlobalContext *globalCtx);
-/*
+
+#ifdef NON_MATCHING
 void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
 
@@ -230,8 +287,9 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         func_80B8D698(this);
     }
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Init.asm")
+#endif
 
 void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
