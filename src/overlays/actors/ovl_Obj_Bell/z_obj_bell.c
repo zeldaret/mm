@@ -82,6 +82,11 @@ extern CollisionHeader D_06001BA8;
 extern Gfx D_06000840[];
 extern Gfx D_06000570[];
 
+extern Gfx D_06000698[];
+extern Gfx D_060008D0[];
+extern Gfx D_06000960[];
+extern Gfx D_060007A8[];
+
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
 
 // matches
@@ -127,7 +132,26 @@ void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A359B4.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A359B4.asm")
+void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
+    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0);
+    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1U);
+    SysMatrix_InsertTranslation(0.0f, 2600.0f, 0.0f, 1);
+    Matrix_RotateY(thisx->world.rot.y, 1U);
+    SysMatrix_InsertXRotation_s(thisx->world.rot.x, 1);
+    Matrix_RotateY(-thisx->world.rot.y, 1U);
+    SysMatrix_InsertTranslation(0.0f, -2600.0f, 0.0f, 1);
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_06000698);
+    gSPDisplayList(POLY_OPA_DISP++, D_060008D0);
+    gSPDisplayList(POLY_OPA_DISP++, D_06000960);
+    gSPDisplayList(POLY_OPA_DISP++, D_060007A8);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35B18.asm")
