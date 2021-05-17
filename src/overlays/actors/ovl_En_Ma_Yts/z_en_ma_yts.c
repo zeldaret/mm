@@ -69,46 +69,32 @@ void func_80B8D030(EnMaYts *this) {
     }
 }
 
-/*
-void func_80B8D0BC(EnMaYts *this, GlobalContext *globalCtx) {
-    void *sp28;
-    void *temp_v1;
 
-    temp_v1 = ((s32) globalCtx * 0x10) + &D_80B8E1A8;
-    sp28 = temp_v1;
-    SkelAnime_ChangeAnim(&this->unk_144, temp_v1->unk0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk0), (?32) temp_v1->unk8, temp_v1->unkC);
+// This is probably wrong...
+extern AnimationHeader D_80B8E1A8[0x16];
+
+/*
+void func_80B8D0BC(EnMaYts *this, s32 arg1) {
+    SkelAnime_ChangeAnim(&this->unk_144, &D_80B8E1A8[arg1], 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B8E1A8[arg1].genericHeader), &D_80B8E1A8[arg1].rotationIndexSeg, D_80B8E1A8[arg1].limit);
 }
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D0BC.asm")
 
-/*
-void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
-    s16 sp22;
-    Actor *temp_v1;
-    s16 temp_v0;
-    struct Actor *temp_v0_2;
-    s16 phi_a3;
 
-    temp_v0 = (s16) this->unk_32C;
-    temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    phi_a3 = (u16)0;
-    if (temp_v0 == 2) {
-        phi_a3 = (u16)1;
-    }
-    if ((temp_v0 == 0) || (temp_v0_2 = this->actor.parent, (temp_v0_2 == 0))) {
-        this->unk1F0 = (bitwise s32) temp_v1->world.pos.x;
-        this->unk1F4 = (bitwise f32) (bitwise s32) temp_v1->world.pos.y;
-        this->unk1F8 = (bitwise s32) temp_v1->world.pos.z;
-        this->unk1F4 = (f32) (this->unk1F4 - -10.0f);
+void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
+    ActorPlayer* player = PLAYER;
+    s16 phi_a3 = this->unk_32C == 2 ? 1 : 0;
+
+    if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
+        this->unk_1F0 = player->base.world.pos;
+        this->unk_1F0.y -= -10.0f;
     } else {
-        sp22 = phi_a3;
-        Math_Vec3f_StepTo(this + 0x1F0, (Vec3f *) &temp_v0_2->world, 8.0f);
-        this->unk1F4 = (f32) (this->unk1F4 - -10.0f);
+        Math_Vec3f_StepTo(&this->unk_1F0, &this->actor.parent->world.pos, 8.0f);
+        this->unk_1F0.y = (f32) (this->unk_1F0.y - -10.0f);
     }
-    func_800BD888(this, &this->unk_1D8, 0, phi_a3);
+
+    func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D12C.asm")
 
 void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx);
 /*
