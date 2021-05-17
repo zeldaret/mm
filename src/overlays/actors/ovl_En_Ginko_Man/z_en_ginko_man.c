@@ -257,7 +257,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan *this, GlobalContext *globalCtx) { //
     case 32: // "Ah, yes...[Link], right?  If I remember, you're the little guy who deposited [rupees]."
     case 50: // "Your deposits total [rupees]."
         if (this->choiceDepositWithdrawl == GINKOMAN_CHOICE_DEPOSIT) {
-            if ((u32) (gSaveContext.roomInf[127][0] & 0xFFFF) >= 0x1388) {
+            if ((u32) (gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
                 func_801518B0(globalCtx, 0x45F, &this->actor);
                 this->curTextId = 0x45F; // "Excuuuse me! But I can't take anymore deposits!
             } else if (gSaveContext.rupees == 0) {
@@ -348,7 +348,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan *this, GlobalContext *globalCtx)
 
     case 0x44E: // "...So, what'll it be?
         if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-            if ( (gSaveContext.roomInf[127][0] & 0xFFFF) >= 0x1388) {
+            if ( (gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
                 play_sound(0x4806);// NA_SE_SY_ERROR
                 func_801518B0(globalCtx, 0x45F, &this->actor);
                 this->curTextId = 0x45F; // bank full, cannot accept more
