@@ -181,7 +181,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s16 unk0;
-    /* 0x2 */ s16 healthCapacity;
+    /* 0x2 */ s16 maxLife;
     /* 0x4 */ Color_RGBA8 color;
 } EffTireMarkInit; // size = 0x8
 
@@ -189,7 +189,7 @@ typedef struct {
     /* 0x000 */ EffTireMarkParticle particles[64];
     /* 0x600 */ s16 unk600;
     /* 0x602 */ s16 numParticles;
-    /* 0x604 */ s16 healthCapacity;
+    /* 0x604 */ s16 maxLife;
     /* 0x606 */ Color_RGBA8 color;
     /* 0x60A */ UNK_TYPE1 pad60A[0x2];
 } EffTireMarkParams; // size = 0x60C
