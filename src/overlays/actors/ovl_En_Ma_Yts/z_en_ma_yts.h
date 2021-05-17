@@ -27,7 +27,7 @@ typedef struct EnMaYts {
     /* 0x29C */ char unk_29C[0x88];
     /* 0x324 */ u16 unk_324;
     /* 0x326 */ u16 unk_326; // blinkTimer, usually s16
-    /* 0x328 */ u16 unk_328; // blink something. s16?
+    /* 0x328 */ s16 unk_328; // blink something. s16?
     /* 0x32A */ s16 unk_32A; // eyeTexIndex
     /* 0x32C */ u16 unk_32C;
     /* 0x32E */ s16 unk_32E; // mouthTexIndex

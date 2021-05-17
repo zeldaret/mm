@@ -13,12 +13,16 @@ void func_80B8D030(EnMaYts* this);
 // func_80B8D0BC
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx);
 
-void func_80B8D698(EnMaYts* this, s32);
+void func_80B8D698(EnMaYts* this);
 void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx);
-void func_80B8D6BC(EnMaYts* this, s32);
+void func_80B8D6BC(EnMaYts* this);
 void func_80B8D6F8(EnMaYts* this, GlobalContext* globalCtx);
-void func_80B8D9E4(EnMaYts* this, s32);
+void func_80B8D9E4(EnMaYts* this);
+void func_80B8DA28(EnMaYts* this, GlobalContext* globalCtx);
+
 void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2);
+
+void func_80B8E0BC(Actor *thisx, GlobalContext *globalCtx);
 
 /*
 const ActorInit En_Ma_Yts_InitVars = {
@@ -61,7 +65,6 @@ void func_80B8D030(EnMaYts *this) {
         }
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D030.asm")
 
 /*
 void func_80B8D0BC(EnMaYts *this, GlobalContext *globalCtx) {
@@ -106,17 +109,17 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
 
 void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx);
 /*
-void func_80B8D1E8(void *arg0, ? arg1) {
+void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
     s16 temp_v0;
 
-    temp_v0 = arg0->unk330;
+    temp_v0 = this->unk_330;
     if (temp_v0 == 0) {
-        arg0->unk1F = (u8)0;
+        this->actor.targetMode = 0;
         func_80B8D0BC(0);
         return;
     }
     if (temp_v0 == 1) {
-        arg0->unk1F = (u8)6;
+        this->actor.targetMode = 6;
         if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.unkF0E & 1) != 0)) {
 
         } else {
@@ -127,13 +130,13 @@ void func_80B8D1E8(void *arg0, ? arg1) {
         return;
     }
     if (temp_v0 == 2) {
-        arg0->unk1F = (u8)0;
-        arg0->unk13C = &func_80B8E0BC;
+        this->actor.targetMode = 0;
+        this->actor.draw = &func_80B8E0BC;
         func_80B8D0BC(0);
         return;
     }
     if (temp_v0 == 3) {
-        arg0->unk1F = (u8)0;
+        this->actor.targetMode = 0;
         func_80B8D0BC(0);
         return;
     }
@@ -213,25 +216,18 @@ void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 
 // EnMaYts_SetupDoNothing
-/*
-void func_80B8D698(EnMaYts *this, s32 arg1) {
+void func_80B8D698(EnMaYts *this) {
     this->unk_188 = &func_80B8D6AC;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D698.asm")
 
 // EnMaYts_DoNothing
 void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx) {
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6AC.asm")
 
-/*
-void func_80B8D6BC(EnMaYts *this, s32 arg1) {
+void func_80B8D6BC(EnMaYts *this) {
     func_80B8DD88(this, 0, 0);
     this->unk_188 = &func_80B8D6F8;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6BC.asm")
 
 void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
     s16 sp26;
@@ -293,35 +289,30 @@ void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
         }
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6F8.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D95C.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D970.asm")
 
-/*
-void func_80B8D9E4(EnMaYts *this, s32 arg1) {
-    this->actor.flags = this->actor.flags | 0x10;
-    func_80B8DD88(0, 0);
+
+void func_80B8D9E4(EnMaYts *this) {
+    this->actor.flags |= 0x10;
+    func_80B8DD88(this, 0, 0);
     this->unk_188 = &func_80B8DA28;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D9E4.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DBB8.asm")
 
-/*
+
 void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2) {
     this->unk_328 = (u16) arg1;
     this->unk_32E = arg2;
-    if ((s16) this->unk_328 == 0) {
+    if (this->unk_328 == 0) {
         this->unk_32A = 0;
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DD88.asm")
 
 void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
@@ -335,7 +326,6 @@ void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
     func_80B8D030(this);
     func_80B8D12C(this, globalCtx);
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Update.asm")
 
 extern AnimationHeader D_06009E58;
 extern AnimationHeader D_06007D98;
@@ -392,6 +382,17 @@ void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Draw.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8E0BC.asm")
+
+extern Gfx D_060043A0[];
+
+// Alternative draw function
+void func_80B8E0BC(Actor *thisx, GlobalContext *globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_060043A0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
