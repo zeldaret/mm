@@ -122,8 +122,8 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
-                 $(foreach f,$(C_FILES:.c=.o),build/$f) \
                  $(foreach f,$(wildcard baserom/*),build/$f.o)
+                 #$(foreach f,$(C_FILES:.c=.o),build/$f) \
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS),build/$(dir)))
 
@@ -157,10 +157,9 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum_compressed.md5
 endif
 
-.PHONY: all clean setup diff-init init assetclean distclean
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm
-.DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
+.DEFAULT_GOAL := uncompressed
 
 all: uncompressed compressed
 

@@ -115,7 +115,7 @@
     0x8008501C:("Load2_LoadOverlay",),
     0x800850C8:("Load2_AllocateAndLoad",),
     0x80085130:("PadUtils_Init",),
-    0x80085150:("func_800FCB70",),
+    0x80085150:("func_80085150",),
     0x80085158:("PadUtils_ResetPressRel",),
     0x80085164:("PadUtils_CheckCurExact",),
     0x8008517C:("PadUtils_CheckCur",),

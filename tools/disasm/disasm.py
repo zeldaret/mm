@@ -36,8 +36,25 @@ MIPS_JUMP_INSNS = [
     MIPS_INS_JAL, MIPS_INS_JALR, MIPS_INS_J, MIPS_INS_JR
 ]
 
+MIPS_FP_LOAD_INSNS = [
+    MIPS_INS_LWC1, MIPS_INS_LDC1
+]
+
+MIPS_FP_STORE_INSNS = [
+    MIPS_INS_SWC1, MIPS_INS_SDC1
+]
+
 MIPS_FP_LOAD_STORE_INSNS = [
-    MIPS_INS_LWC1, MIPS_INS_LDC1, MIPS_INS_SWC1, MIPS_INS_SDC1
+    *MIPS_FP_LOAD_INSNS, *MIPS_FP_STORE_INSNS
+]
+
+MIPS_STORE_INSNS = [
+    MIPS_INS_SB, 
+    MIPS_INS_SH, 
+    MIPS_INS_SW, MIPS_INS_SWL, MIPS_INS_SWR,     
+    MIPS_INS_SD, MIPS_INS_SDL, MIPS_INS_SDR, 
+    MIPS_INS_SC, MIPS_INS_SCD,
+    *MIPS_FP_STORE_INSNS
 ]
 
 MIPS_LOAD_STORE_INSNS = [
@@ -46,15 +63,9 @@ MIPS_LOAD_STORE_INSNS = [
     MIPS_INS_LW, MIPS_INS_LWL, MIPS_INS_LWR, MIPS_INS_LWU, 
     MIPS_INS_LD, MIPS_INS_LDL, MIPS_INS_LDR, 
     MIPS_INS_LL, MIPS_INS_LLD, 
-    MIPS_INS_SB, 
-    MIPS_INS_SH, 
-    MIPS_INS_SW, MIPS_INS_SWL, MIPS_INS_SWR,     
-    MIPS_INS_SD, MIPS_INS_SDL, MIPS_INS_SDR, 
-    MIPS_INS_SC, MIPS_INS_SCD,
+    *MIPS_STORE_INSNS,
     *MIPS_FP_LOAD_STORE_INSNS
 ]
-
-# TODO symbol addends
 
 functions = set()      # vram of functions
 data_labels = set()    # vram of data labels, TODO this + functions can merge into something more general eventually
@@ -72,15 +83,38 @@ multiply_referenced_rodata = set() # rodata with more than 1 reference outside o
 
 files = set()          # vram start of file
 
+vrom_variables = list() # (name,addr)
+
 functions_ast = None
 variables_ast = None
 
 def proper_name(symbol, in_data=False, is_symbol=True):
+    # TODO addends
+    # hacks
+    if symbol == 0x809C46F0: # ovl_En_Encount4 fake symbol at the very end of the data section
+        return variables_ast[0x809C46DC][0] + " + 0x14"
+    elif symbol == 0x80A09740: # boss_07 symbol with large addend folded into %lo
+        return variables_ast[0x80A09A60][0] + f" - 0x{0x80A09A60 - 0x80A09740:X}"
+    elif symbol == 0x80B80248: # bg_ikana_mirror symbol with large addend folded into %lo
+        return variables_ast[0x80B801A8][0] + f" + 0x{0x80B80248 - 0x80B801A8:X}"
+    elif symbol == 0x8084D2FC: # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
+        return variables_ast[0x8085B9F0][0] + f" - 0x{0x8085B9F0 - 0x8084D2FC:X}"
+    elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0: # OS_K0_TO_PHYSICAL
+        return variables_ast[symbol + 0x80000000][0] + " - 0x80000000"
+    elif symbol == 0x00AC0480: # do_action_static + 0x480
+        return "_do_action_staticSegmentRomStart + 0x480"
+
     # real names
     if symbol in functions and symbol in functions_ast.keys():
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
+    elif symbol in [addr for _,addr in vrom_variables]:
+        # prefer "start" vrom symbols
+        if symbol in [addr for name,addr in vrom_variables if "SegmentRomStart" in name]:
+            return [name for name,addr in vrom_variables if "SegmentRomStart" in name and addr == symbol][0]
+        else:
+            return [name for name,addr in vrom_variables if addr == symbol][0]
     # generated names
     if symbol in functions and not in_data:
         return f"func_{symbol:08X}"
@@ -94,7 +128,15 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         else:
             return f"0x{symbol:08X}"
 
-def lookup_name(word):
+def lookup_name(symbol, word):
+    # hacks for vrom variables in data
+    if word in [addr for _,addr in vrom_variables]:
+        if word == 0: # no makerom segment start
+            return "0x00000000"
+        if symbol in []: # data labels that are allowed to have vrom variables
+            return proper_name(word, is_symbol=False)
+        else:
+            return f"0x{word:08X}"
     return proper_name(word, is_symbol=False)
 
 def as_double(b):
@@ -124,13 +166,65 @@ def as_word_list(b):
 def as_hword_list(b):
     return [h[0] for h in struct.iter_unpack(">H", b)]
 
+STR_INDENT = "                      "
+
+def try_decode_string(data_bytes, output_ends = True, force_ascii = False):
+    """
+    Swiss Cheese
+    """
+    hex_digits = "0123456789abcdefABCDEF"
+    result = ""
+    directive = "ascii" if force_ascii else "asciz"
+
+    if 0x8C in data_bytes or 0x8D in data_bytes or 0x1B in data_bytes:
+        char = ""
+        index = None
+        if 0x8C in data_bytes:
+            char = "\\x8C"
+            index = data_bytes.index(0x8C)
+        elif 0x8D in data_bytes:
+            char = "\\x8D"
+            index = data_bytes.index(0x8D)
+        elif 0x1B in data_bytes:
+            char = "\\x1B"
+            index = data_bytes.index(0x1B)
+        else:
+            assert False , "???"
+        part1 = try_decode_string(data_bytes[0:index], output_ends=False)
+        part2 = try_decode_string(data_bytes[index+1:], output_ends=False)
+        if part2 != "":
+            result = part1 + (("\"\n" + STR_INDENT + ".ascii \"") if part2[0] in hex_digits and part1 != "" else "") + \
+                     char +  (("\"\n" + STR_INDENT + ".asciz \"") if part2[0] in hex_digits else "") + part2
+            if output_ends and part2[0] in hex_digits and part1 == "":
+                directive = "ascii"
+        else:
+            result = part1 + (("\"\n" + STR_INDENT + ".ascii \"") if part2[0] in hex_digits and part1 != "" else "") + char + "\"\n"
+    else:
+        result = data_bytes.decode("EUC-JP").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t").replace("\0", "")
+
+    return (("." + directive + " \"") if output_ends else "") + result + ("\"" if output_ends else "")
+
 def format_f64(d):
     # TODO double simplification
     return d
 
-def format_f32(f):
-    if math.isnan(f) or f == 4294967296.0:
-        return str(f)
+def format_f32(f_wd):
+    # GNU AS isn't ieee compliant
+    if f_wd in [0xB8E4AECD, 0xB8E4C3AA, 0x38D1B718]:
+        return f".word 0x{f_wd:08X}"
+
+    f = as_float(struct.pack(">I", f_wd))
+    if math.isnan(f):
+        return f".word 0x{f_wd:08X}"
+    return f".float {f}"
+    """
+    directive = ".float "
+    f = as_float(f_wd)
+
+    if math.isnan(f):
+        return f_wd
+    elif f == 4294967296.0:
+        return directive + str(f)
 
     float_str = str(f)
     precision = len(float_str.split(".")[1].strip())
@@ -139,10 +233,11 @@ def format_f32(f):
         new_f = round(f,precision-1)
         precision -= 1
         if struct.pack(">f", new_f) != word:
-            return f
+            return directive + str(f)
         else:
             f = new_f
-    return f
+    return directive + str(f)
+    """
 
 def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
     if rodata is not None:
@@ -176,6 +271,23 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
     delay_slot = False
     delayed_insn = None
     next_jtbl_jr = 0
+
+    def clobber_conditionally(insn):
+        # Don't clobber immediately if in a branch likely's delay slot as it only runs if the branch is taken,
+        # instead clobber at the branch target.
+        # This may appear suspicious at first since something could have set a good register in another code path,
+        # however that does not make sense since all code paths must resolve a valid symbol, so if one code path clobbers,
+        # that means no code path produces a valid symbol at he convergent code, unless the convergent code provides all the
+        # new registers.
+
+        assert insn.value_forname(insn.fields[0]) is not None
+        # print(f"insn: {insn.mnemonic}, rt: {insn.rt}, first: {insn.value_forname(insn.fields[0])}")
+        assert insn.id not in [MIPS_INS_ORI, MIPS_INS_ADDIU, *MIPS_LOAD_STORE_INSNS] or insn.rt == insn.value_forname(insn.fields[0])
+
+        if delay_slot and delayed_insn is not None and delayed_insn.id in MIPS_BRANCH_LIKELY_INSNS:
+            clobber_later.update({delayed_insn.offset : insn.value_forname(insn.fields[0])})
+        else:
+            lui_tracker.pop(insn.value_forname(insn.fields[0]), None)
 
     for region in data_regions:
         assert region[1] != 0
@@ -269,12 +381,16 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
             # restore lui tracking state if previously saved
             lui_tracker.update(saved_lui_trackers.pop(vaddr, {}))
 
-        # register clobbering in delay slots
-        lui_tracker.pop(clobber_later.pop(vaddr, None), None)
+        # register clobbering in branch likely delay slots
+        cl = clobber_later.pop(vaddr, None)
+        if cl is not None:
+            lui_tracker.pop(cl, None)
 
         if insn.id in MIPS_BRANCH_INSNS:
             func_branch_labels.add(insn.offset)
             delayed_insn = insn
+        elif insn.id == MIPS_INS_ERET:
+            functions.add(vaddr + 4)
         elif insn.id in MIPS_JUMP_INSNS:
             if insn.id == MIPS_INS_JAL:
                 # mark function at target
@@ -371,9 +487,10 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                 elif insn.id == MIPS_INS_ADDIU and vaddr % 4 == 0: # strings seem to only ever be 4-byte aligned
                     # add possible string
                     prospective_strings.add(symbol_value)
-            # clear lui tracking state if register is clobbered by the addiu/load/store instruction itself
-            if insn.rt == insn.rs if insn.id == MIPS_INS_ADDIU else insn.base:
-                lui_tracker.pop(insn.rt, None)
+            # clear lui tracking state if register is clobbered by the addiu/load instruction itself
+            # insn.rt == (insn.rs if insn.id == MIPS_INS_ADDIU else insn.base) and 
+            if insn.id not in MIPS_STORE_INSNS and insn.id not in MIPS_FP_LOAD_INSNS:
+                clobber_conditionally(insn)
         elif insn.id == MIPS_INS_ORI:
             # try match with tracked lui and mark constant
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
@@ -383,8 +500,9 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                 constants.update({hi_vram : const_value})
                 constants.update({lo_vram : const_value})
             # clear lui tracking state if register is clobbered by the ori instruction itself
-            if insn.rt == insn.rs:
-                lui_tracker.pop(insn.rt, None)
+            # insn.rt == insn.rs or 
+            if insn.rt in lui_tracker.keys():
+                clobber_conditionally(insn)
         else:
             # clear lui tracking if register is clobbered by something unrelated
             if insn.id == MIPS_INS_ADDU and insn.rs in lui_tracker.keys() and (insn.rd == insn.rs):
@@ -402,19 +520,12 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                                  MIPS_INS_MTHI, MIPS_INS_MTLO,
                                  MIPS_INS_CTC1,
                                  MIPS_INS_NOP,
-                                 MIPS_INS_ERET,
                                  MIPS_INS_BREAK,
-                                 MIPS_INS_TLBP, MIPS_INS_TLBR, MIPS_INS_TLBWI]:
-                # Don't clobber immediately if in a branch likely's delay slot as it only runs if the branch is taken,
-                # instead clobber at the branch target.
-                # This may appear suspicious at first since something could have set a good register in another code path,
-                # however that does not make sense since all code paths must resolve a valid symbol, so if one code path clobbers,
-                # that means no code path produces a valid symbol at he convergent code, unless the convergent code provides all the
-                # new registers.
-                if delay_slot and delayed_insn is not None and delayed_insn.id in MIPS_BRANCH_LIKELY_INSNS:
-                    clobber_later.update({delayed_insn.offset : insn.value_forname(insn.fields[0])})
-                else:
-                    lui_tracker.pop(insn.value_forname(insn.fields[0]), None)
+                                 MIPS_INS_TLBP, MIPS_INS_TLBR, MIPS_INS_TLBWI,
+                                 MIPS_INS_MOV_S, MIPS_INS_MOV_D, MIPS_INS_C_LT_S, MIPS_INS_C_LT_D, 
+                                 MIPS_INS_DIV_S, MIPS_INS_MUL_S, MIPS_INS_TRUNC_W_S, MIPS_INS_CVT_S_W, 
+                                 MIPS_INS_SUB_S, MIPS_INS_ADD_S]:
+                clobber_conditionally(insn)
 
         if delay_slot and delayed_insn is not None:
             if delayed_insn.id == MIPS_INS_JAL or delayed_insn.id == MIPS_INS_JALR or \
@@ -434,9 +545,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                     lui_tracker.clear()
 
             delayed_insn = None
-        delay_slot = False
-        if delayed_insn is not None:
-            delay_slot = True
+
+        delay_slot = delayed_insn is not None
 
     branch_labels.update(func_branch_labels)
     jtbl_labels.update(func_jtbl_labels)
@@ -657,9 +767,12 @@ def disassemble_data(data, vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    for data_file_st in [sym for sym in segment[4].keys() if sym >= vram and sym < end]:
-        section_symbols.append(data_file_st)
+    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+
+    # remove symbols that are addends of other symbols
+    section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
 
     section_symbols = list(set(section_symbols))
 
@@ -689,6 +802,7 @@ def disassemble_data(data, vram, end, segment):
         data_size = next_symbol - symbol
 
         result += f"\nglabel {proper_name(symbol, True)}\n"
+
         if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
             result += "\n".join(\
                 [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .double {format_f64(dbl)}" for j,dbl in enumerate(as_double_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
@@ -698,11 +812,11 @@ def disassemble_data(data, vram, end, segment):
         elif symbol % 4 == 0 and data_size % 4 == 0:
             if symbol in floats:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {struct.unpack('>I', struct.pack('>f', flt))[0]:08X} */ .float {format_f32(flt)}" for j,flt in enumerate(as_float_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
                 # TODO output pointers as symbols
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 2 == 0 and data_size % 2 == 0:
             result += "\n".join(\
                 [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
@@ -714,32 +828,16 @@ def disassemble_data(data, vram, end, segment):
     with open(f"{DATA_OUT}/{segment[0]}/{cur_file}.data.s", "w") as outfile:
         outfile.write(result)
 
-def try_decode_string(data_bytes):
-    """
-    Swiss Cheese
-    """
-    if 0x8C in data_bytes or 0x8D in data_bytes or 0x1B in data_bytes:
-        if 0x8C in data_bytes:
-            index = data_bytes.index(0x8C)
-            return try_decode_string(data_bytes[0:index]) + "\\x8C" + try_decode_string(data_bytes[index+1:])
-        elif 0x8D in data_bytes:
-            index = data_bytes.index(0x8D)
-            return try_decode_string(data_bytes[0:index]) + "\\x8D" + try_decode_string(data_bytes[index+1:])
-        elif 0x1B in data_bytes:
-            index = data_bytes.index(0x1B)
-            return try_decode_string(data_bytes[0:index]) + "\\x1B" + try_decode_string(data_bytes[index+1:])
-        else:
-            assert False , "???"
-    else:
-        return data_bytes.decode("EUC-JP").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
-
 def disassemble_rodata(data, vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    for data_file_st in [sym for sym in segment[4].keys() if sym >= vram and sym < end]:
-        section_symbols.append(data_file_st)
+    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+
+    # remove symbols that are addends of other symbols
+    section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
 
     section_symbols = list(set(section_symbols))
 
@@ -749,6 +847,8 @@ def disassemble_rodata(data, vram, end, segment):
 
     result = asm_header(".rodata")
     cur_file = ""
+
+    force_ascii_str = False # hack for non-null-terminated strings in .data
 
     for i,symbol in enumerate(section_symbols,0):
         next_symbol = section_symbols[i + 1] if i < len(section_symbols) - 1 else end
@@ -768,24 +868,26 @@ def disassemble_rodata(data, vram, end, segment):
         data_offset = symbol - vram
         data_size = next_symbol - symbol
 
+        force_ascii_str = symbol in [0x801D0708]
+
         result += f"\nglabel {proper_name(symbol, True)}\n"
-        
+
         if symbol in strings:
             string_data = data[data_offset:data_offset+data_size]
             string_data = string_data[:string_data.index(0)]
             assert all([b != 0 for b in string_data[:-1]]) , f"{symbol:08X} , {data_size:X} , {string_data}" # ensure strings don't have a null char midway through
-            result += f"/* {data_offset:06X} {symbol:08X} */ .asciz \"{try_decode_string(string_data)}\"\n                      .balign 4\n"
+            result += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
         elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
             result += "\n".join(\
                 [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .double {format_f64(dbl)}" for j,dbl in enumerate(as_double_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 4 == 0 and data_size % 4 == 0:
             if symbol in floats:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {struct.unpack('>I', struct.pack('>f', flt))[0]:08X} */ .float {format_f32(flt)}" for j,flt in enumerate(as_float_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
                 # TODO output pointers as symbols
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 2 == 0 and data_size % 2 == 0:
             result += "\n".join(\
                 [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
@@ -801,9 +903,12 @@ def disassemble_bss(vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    for data_file_st in [sym for sym in segment[4].keys() if sym >= vram and sym < end]:
-        section_symbols.append(data_file_st)
+    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+
+    # remove symbols that are addends of other symbols
+    section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
 
     section_symbols = list(set(section_symbols))
 
@@ -841,7 +946,8 @@ def get_overlay_sections(vram, overlay):
     text_vram = vram
     data_vram = vram + text_size
     rodata_vram = data_vram + data_size
-    bss_vram = rodata_vram + rodata_size
+
+    bss_vram = vram + len(overlay)
     bss_end_vram = bss_vram + bss_size
 
     reloc = as_word_list(overlay[header_loc + 0x14: header_loc + 0x14 + n_relocs * 4])
@@ -921,13 +1027,15 @@ for segment in files_spec:
             dmadata = segment[3][0][4]
             filenames = []
             with open("tools/disasm/dma_filenames.txt","r") as infile:
-                filenames = infile.read()
+                filenames = ast.literal_eval(infile.read())
 
             i = 0
             dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
             while any([word != 0 for word in as_word_list(dmadata_entry)]):
                 vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-                print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X}")
+                print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
+                vrom_variables.append(("_" + filenames[i] + "SegmentRomStart", vrom_start))
+                vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
 
@@ -965,7 +1073,7 @@ for segment in files_spec:
             segment_dirname = segment[0]
 
             result = asm_header(".rodata")
-            result += f"\nglabel {proper_name(section[0], True)}\n"
+            result += f"\nglabel {segment[0]}_Reloc\n"
 
             lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
             for line in [line for line in lines if len(line) != 0]:
