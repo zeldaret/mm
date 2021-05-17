@@ -13,6 +13,13 @@ void func_80B8D030(EnMaYts* this);
 // func_80B8D0BC
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx);
 
+void func_80B8D698(EnMaYts* this, s32);
+void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx);
+void func_80B8D6BC(EnMaYts* this, s32);
+void func_80B8D6F8(EnMaYts* this, GlobalContext* globalCtx);
+void func_80B8D9E4(EnMaYts* this, s32);
+void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2);
+
 /*
 const ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
@@ -97,6 +104,7 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D12C.asm")
 
+void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx);
 /*
 void func_80B8D1E8(void *arg0, ? arg1) {
     s16 temp_v0;
@@ -134,6 +142,7 @@ void func_80B8D1E8(void *arg0, ? arg1) {
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D1E8.asm")
 
+void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D2D8.asm")
 
 extern ColliderCylinderInit D_80B8E170;
@@ -201,12 +210,27 @@ void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
     Collider_DestroyCylinder(globalCtx, &this->unk_18C);
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Destroy.asm")
 
+
+// EnMaYts_SetupDoNothing
+/*
+void func_80B8D698(EnMaYts *this, s32 arg1) {
+    this->unk_188 = &func_80B8D6AC;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D698.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6AC.asm")
+// EnMaYts_DoNothing
+void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx) {
+}
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6AC.asm")
 
+/*
+void func_80B8D6BC(EnMaYts *this, s32 arg1) {
+    func_80B8DD88(this, 0, 0);
+    this->unk_188 = &func_80B8D6F8;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6BC.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D6F8.asm")
@@ -215,12 +239,28 @@ void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D970.asm")
 
+/*
+void func_80B8D9E4(EnMaYts *this, s32 arg1) {
+    this->actor.flags = this->actor.flags | 0x10;
+    func_80B8DD88(0, 0);
+    this->unk_188 = &func_80B8DA28;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D9E4.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DBB8.asm")
 
+/*
+void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2) {
+    this->unk_328 = (u16) arg1;
+    this->unk_32E = arg2;
+    if ((s16) this->unk_328 == 0) {
+        this->unk_32A = 0;
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DD88.asm")
 
 void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
@@ -259,6 +299,7 @@ s32 func_80B8DE44(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     return 0;
 }
 
+//extern Gfx D_060003B0[];
 extern UNK_TYPE D_060003B0;
 
 // PostLimbDraw
@@ -275,7 +316,7 @@ void func_80B8DF18(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
     }
 }
 
-extern void* D_80B8E308[];
+extern void* D_80B8E308[]; // mouthTextures
 extern void* D_80B8E318[]; // eyeTextures
 
 void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {

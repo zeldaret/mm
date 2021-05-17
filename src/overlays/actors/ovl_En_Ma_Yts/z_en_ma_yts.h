@@ -30,7 +30,7 @@ typedef struct EnMaYts {
     /* 0x328 */ u16 unk_328; // blink something. s16?
     /* 0x32A */ s16 unk_32A; // eyeTexIndex
     /* 0x32C */ u16 unk_32C;
-    /* 0x32E */ s16 unk_32E;
+    /* 0x32E */ s16 unk_32E; // mouthTexIndex
     /* 0x330 */ s16 unk_330;
     /* 0x332 */ char unk_332[0x2];
     /* 0x334 */ char unk_334[0x2];
