@@ -9,9 +9,9 @@ typedef void (*EnMaYtsActionFunc)(struct EnMaYts*, GlobalContext*);
 
 typedef struct EnMaYts {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime unk_144;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtsActionFunc actionFunc;
-    /* 0x18C */ ColliderCylinder unk_18C;
+    /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DE */ char unk_1DE[0x2];
     /* 0x1DC */ char unk_1DC[0x4];
@@ -28,9 +28,9 @@ typedef struct EnMaYts {
     /* 0x29A */ char unk_29A[0x2];
     /* 0x29C */ char unk_29C[0x88];
     /* 0x324 */ u16 unk_324;
-    /* 0x326 */ u16 unk_326; // blinkTimer, usually s16
-    /* 0x328 */ s16 unk_328; // blink something. s16?
-    /* 0x32A */ s16 unk_32A; // eyeTexIndex
+    /* 0x326 */ s16 blinkTimer;
+    /* 0x328 */ s16 unk_328; // blink something.
+    /* 0x32A */ s16 eyeTexIndex;
     /* 0x32C */ s16 unk_32C;
     /* 0x32E */ s16 unk_32E; // mouthTexIndex
     /* 0x330 */ s16 type;

@@ -9,7 +9,7 @@ void EnMaYts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B8D030(EnMaYts* this);
+void EnMaYts_UpdateEyes(EnMaYts* this);
 // func_80B8D0BC
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx);
 
@@ -42,29 +42,15 @@ const ActorInit En_Ma_Yts_InitVars = {
 */
 
 // blinking probably. DECR does weird things, probably bad types in the actor's struct
-void func_80B8D030(EnMaYts *this) {
-    s16 temp_v0;
-    s16 temp_v0_2;
-    s16 phi_v1;
-
-    temp_v0 = (s16) this->unk_328;
-    if (temp_v0 != 0) {
-        this->unk_32A = (u16) temp_v0;
-        return;
+void EnMaYts_UpdateEyes(EnMaYts *this) {
+    if (this->unk_328 != 0) {
+        this->eyeTexIndex = this->unk_328;
     }
-    temp_v0_2 = (s16) this->unk_326;
-    if (temp_v0_2 == 0) {
-        phi_v1 = (u16)0;
-    } else {
-        this->unk_326 = temp_v0_2 - 1;
-        phi_v1 = (s16) this->unk_326;
-    }
-    if (phi_v1 == 0) {
-        this->unk_32A = (s16) this->unk_32A + 1;
-        if ((s32) (s16) this->unk_32A >= 3) {
-            this = this;
-            this->unk_326 = Rand_S16Offset(30, 30);
-            this->unk_32A = 0;
+    else if (DECR(this->blinkTimer) == 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex >= 3) {
+            this->blinkTimer = Rand_S16Offset(30, 30);
+            this->eyeTexIndex = 0;
         }
     }
 }
@@ -76,7 +62,7 @@ extern AnimationHeader D_80B8E1A8[0x16];
 void func_80B8D0BC(EnMaYts *this, s32 arg1);
 /*
 void func_80B8D0BC(EnMaYts *this, s32 arg1) {
-    SkelAnime_ChangeAnim(&this->unk_144, &D_80B8E1A8[arg1], 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B8E1A8[arg1].genericHeader), &D_80B8E1A8[arg1].rotationIndexSeg, D_80B8E1A8[arg1].limit);
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_80B8E1A8[arg1], 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B8E1A8[arg1].genericHeader), &D_80B8E1A8[arg1].rotationIndexSeg, D_80B8E1A8[arg1].limit);
 }
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D0BC.asm")
@@ -110,7 +96,6 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
         this->actor.targetMode = 6;
         if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
             func_80B8D0BC(this, 14);
-            return;
         }
         else {
             func_80B8D0BC(this, 18);
@@ -193,15 +178,15 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->unk_144, &D_06013928, NULL, &this->unk_204, &this->unk_294, 0x17);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, &this->unk_204, &this->unk_294, 0x17);
     func_80B8D1E8(this, globalCtx);
 
-    Collider_InitCylinder(globalCtx, &this->unk_18C);
-    Collider_SetCylinder(globalCtx, &this->unk_18C, &this->actor, &D_80B8E170);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B8E170);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B8E19C);
 
     if (this->type == 2) {
-        this->unk_18C.dim.radius = 0x28;
+        this->collider.dim.radius = 0x28;
     }
 
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -219,19 +204,19 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     if (((u16)1 == ((s32) gSaveContext.perm.day % 5)) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
         this->unk_328 = 0;
-        this->unk_32A = 0;
+        this->eyeTexIndex = 0;
         this->unk_32E = 0;
         this->unk_32C = 0;
     } else {
         this->unk_328 = 1;
-        this->unk_32A = 1;
+        this->eyeTexIndex = 1;
         this->unk_32E = 2;
         this->unk_32C = 2;
     }
 
     if (this->type == 3) {
         this->unk_328 = 0;
-        this->unk_32A = 0;
+        this->eyeTexIndex = 0;
         this->unk_32E = 0;
         this->unk_32C = 2;
         func_80B8D9E4(this);
@@ -251,13 +236,13 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
 void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->unk_18C);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 
 // EnMaYts_SetupDoNothing
 void func_80B8D698(EnMaYts *this) {
-    this->actionFunc = &func_80B8D6AC;
+    this->actionFunc = func_80B8D6AC;
 }
 
 // EnMaYts_DoNothing
@@ -266,7 +251,7 @@ void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx) {
 
 void func_80B8D6BC(EnMaYts *this) {
     func_80B8DD88(this, 0, 0);
-    this->actionFunc = &func_80B8D6F8;
+    this->actionFunc = func_80B8D6F8;
 }
 
 void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
@@ -322,7 +307,7 @@ void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8D95C(EnMaYts *this) {
-    this->actionFunc = &func_80B8D970;
+    this->actionFunc = func_80B8D970;
 }
 
 /*
@@ -355,7 +340,7 @@ void func_80B8D970(EnMaYts *this, GlobalContext *globalCtx) {
 void func_80B8D9E4(EnMaYts *this) {
     this->actor.flags |= 0x10;
     func_80B8DD88(this, 0, 0);
-    this->actionFunc = &func_80B8DA28;
+    this->actionFunc = func_80B8DA28;
 }
 
 
@@ -403,7 +388,7 @@ void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
             }
         }
         func_800EDF24(this, globalCtx, sp24, globalCtx);
-        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->unk_144, this->unk_144.animFrameCount) != 0)) {
+        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
             this->unk_334 = (s16) this->unk_334 + 1;
             func_80B8D0BC(this, 5);
             //return;
@@ -474,23 +459,23 @@ void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
 
 
 void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2) {
-    this->unk_328 = (u16) arg1;
+    this->unk_328 = arg1;
     this->unk_32E = arg2;
     if (this->unk_328 == 0) {
-        this->unk_32A = 0;
+        this->eyeTexIndex = 0;
     }
 }
 
 void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
-    ColliderCylinder *cylinder;
+    ColliderCylinder *collider;
 
     this->actionFunc(this, globalCtx);
-    cylinder = &this->unk_18C;
-    Collider_UpdateCylinder(&this->actor, cylinder);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &cylinder->base);
-    SkelAnime_FrameUpdateMatrix(&this->unk_144);
-    func_80B8D030(this);
+    collider = &this->collider;
+    Collider_UpdateCylinder(&this->actor, collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &collider->base);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    EnMaYts_UpdateEyes(this);
     func_80B8D12C(this, globalCtx);
 }
 
@@ -505,7 +490,7 @@ s32 func_80B8DE44(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     if (limbIndex == 14) {
         sp4 = this->unk_1E0;
         rot->x = rot->x + sp4.y;
-        if ((this->unk_144.animCurrentSeg == &D_06009E58) || (this->unk_144.animCurrentSeg == &D_06007D98)) {
+        if ((this->skelAnime.animCurrentSeg == &D_06009E58) || (this->skelAnime.animCurrentSeg == &D_06007D98)) {
             rot->z = rot->z + sp4.x;
         }
     } else if (limbIndex == 13) {
@@ -543,9 +528,9 @@ void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80B8E308[this->unk_32E]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80B8E318[this->unk_32A]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80B8E318[this->eyeTexIndex]));
 
-    SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80B8DE44, func_80B8DF18, &this->actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, func_80B8DE44, func_80B8DF18, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

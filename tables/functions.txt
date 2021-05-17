@@ -14745,7 +14745,7 @@
     0x80B8CCB4:("func_80B8CCB4",),
     0x80B8CCFC:("func_80B8CCFC",),
     0x80B8CD3C:("EnGe2_Draw",),
-    0x80B8D030:("func_80B8D030",),
+    0x80B8D030:("EnMaYts_UpdateEyes",),
     0x80B8D0BC:("func_80B8D0BC",),
     0x80B8D12C:("func_80B8D12C",),
     0x80B8D1E8:("func_80B8D1E8",),
