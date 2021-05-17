@@ -73,6 +73,7 @@ void func_80B8D030(EnMaYts *this) {
 // This is probably wrong...
 extern AnimationHeader D_80B8E1A8[0x16];
 
+void func_80B8D0BC(EnMaYts *this, s32 arg1);
 /*
 void func_80B8D0BC(EnMaYts *this, s32 arg1) {
     SkelAnime_ChangeAnim(&this->unk_144, &D_80B8E1A8[arg1], 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B8E1A8[arg1].genericHeader), &D_80B8E1A8[arg1].rotationIndexSeg, D_80B8E1A8[arg1].limit);
@@ -96,43 +97,44 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
 
-void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx);
-/*
+
 void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
-    s16 temp_v0;
-
-    temp_v0 = this->unk_330;
-    if (temp_v0 == 0) {
+    switch (this->unk_330)
+    {
+    case 0:
         this->actor.targetMode = 0;
-        func_80B8D0BC(0);
-        return;
-    }
-    if (temp_v0 == 1) {
-        this->actor.targetMode = 6;
-        if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.unkF0E & 1) != 0)) {
+        func_80B8D0BC(this, 0);
+        break;
 
-        } else {
-            func_80B8D0BC(0x12);
+    case 1:
+        this->actor.targetMode = 6;
+        if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+            func_80B8D0BC(this, 14);
             return;
         }
-        func_80B8D0BC(0xE);
-        return;
-    }
-    if (temp_v0 == 2) {
+        else {
+            func_80B8D0BC(this, 18);
+        }
+        break;
+
+    case 2:
         this->actor.targetMode = 0;
-        this->actor.draw = &func_80B8E0BC;
-        func_80B8D0BC(0);
-        return;
-    }
-    if (temp_v0 == 3) {
+        this->actor.draw = func_80B8E0BC;
+        func_80B8D0BC(this, 0);
+        break;
+
+    case 3:
         this->actor.targetMode = 0;
-        func_80B8D0BC(0);
-        return;
+        func_80B8D0BC(this, 0);
+        break;
+
+    default:
+        func_80B8D0BC(this, 0);
+        break;
     }
-    func_80B8D0BC(0);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D1E8.asm")
+
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D1E8.asm")
 
 void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
 /*
@@ -147,7 +149,7 @@ void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
                 if (temp_v0 != 3) {
 
                 }
-            } else if ((gSaveContext.unkF0E & 1) != 0) {
+            } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
                 return;
             }
         } else {
@@ -156,16 +158,16 @@ void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
                 if (temp_hi != 2) {
                     if (temp_hi != 3) {
 
-                    } else if ((gSaveContext.unkF0E & 1) != 0) {
+                    } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
                         return;
                     }
-                } else if ((gSaveContext.unkF0E & 1) == 0) {
+                } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
                     return;
                 }
             }
         }
     } else {
-        if ((gSaveContext.unkF0E & 1) == 0) {
+        if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
             return;
         }
         if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
