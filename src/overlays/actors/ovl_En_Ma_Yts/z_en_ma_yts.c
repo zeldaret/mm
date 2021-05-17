@@ -17,8 +17,11 @@ void func_80B8D698(EnMaYts* this);
 void func_80B8D6AC(EnMaYts* this, GlobalContext* globalCtx);
 void func_80B8D6BC(EnMaYts* this);
 void func_80B8D6F8(EnMaYts* this, GlobalContext* globalCtx);
+void func_80B8D95C(EnMaYts* this);
+void func_80B8D970(EnMaYts* this, GlobalContext* globalCtx);
 void func_80B8D9E4(EnMaYts* this);
 void func_80B8DA28(EnMaYts* this, GlobalContext* globalCtx);
+void func_80B8DBB8(EnMaYts* this, GlobalContext* globalCtx);
 
 void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2);
 
@@ -146,6 +149,45 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D1E8.asm")
 
 void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
+/*
+void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
+    s16 temp_v0;
+    s32 temp_hi;
+
+    temp_v0 = this->unk_330;
+    if (temp_v0 != 0) {
+        if (temp_v0 != 1) {
+            if (temp_v0 != 2) {
+                if (temp_v0 != 3) {
+
+                }
+            } else if ((gSaveContext.unkF0E & 1) != 0) {
+                return;
+            }
+        } else {
+            temp_hi = (s32) gSaveContext.perm.day % 5;
+            if (temp_hi != 1) {
+                if (temp_hi != 2) {
+                    if (temp_hi != 3) {
+
+                    } else if ((gSaveContext.unkF0E & 1) != 0) {
+                        return;
+                    }
+                } else if ((gSaveContext.unkF0E & 1) == 0) {
+                    return;
+                }
+            }
+        }
+    } else {
+        if ((gSaveContext.unkF0E & 1) == 0) {
+            return;
+        }
+        if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
+            return;
+        }
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D2D8.asm")
 
 extern ColliderCylinderInit D_80B8E170;
@@ -230,10 +272,8 @@ void func_80B8D6BC(EnMaYts *this) {
 }
 
 void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
-    s16 sp26;
-    s32 phi_v0;
+    s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         if (gSaveContext.perm.unk20 != 4) {
             if ((gSaveContext.perm.weekEventReg[0x41] & 0x80) == 0) {
@@ -278,20 +318,34 @@ void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
         }
         func_80B8D95C(this);
     }
-    else {
-        // ABS?
-        phi_v0 = (s32) sp26;
-        if ((s32) sp26 < 0) {
-            phi_v0 = -(s32) sp26;
-        }
-        if (phi_v0 < 0x4000) {
-            func_800B8614(&this->actor, globalCtx, 120.0f);
-        }
+    else if (ABS_ALT(sp26) < 0x4000) {
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D95C.asm")
+void func_80B8D95C(EnMaYts *this) {
+    this->unk_188 = &func_80B8D970;
+}
 
+/*
+void func_80B8D970(EnMaYts *this, GlobalContext *globalCtx) {
+    u32 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 < 7U) {
+        goto **(&jtbl_D_80B8E330 + (temp_v0 * 4));
+    case 5:
+        func_80B8DBB8(this, globalCtx);
+        return;
+    case 6:
+        if (func_80147624(globalCtx) != 0) {
+            func_80B8D6BC(this);
+        }
+    }
+default:
+case 0:
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D970.asm")
 
 
@@ -301,8 +355,120 @@ void func_80B8D9E4(EnMaYts *this) {
     this->unk_188 = &func_80B8DA28;
 }
 
+/*
+void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
+    u32 sp24;
+    s32 temp_t6;
+    u16 temp_a1;
+    u16 temp_v1_2;
+    u32 temp_v0;
+    void *temp_a0;
+    void *temp_v1;
+
+    if (func_800EE29C(globalCtx, 0x78U) != 0) {
+        temp_v0 = func_800EE200(globalCtx, 0x78U);
+        temp_t6 = temp_v0 * 4;
+        sp24 = temp_v0;
+        temp_a0 = globalCtx + temp_t6;
+        temp_v1 = temp_a0->unk1F4C;
+        if (globalCtx->csCtx.frames == temp_v1->unk2) {
+            temp_a1 = temp_v1->unk0;
+            if (D_80B8E32C != temp_a1) {
+                D_80B8E32C = temp_a1;
+                this->unk_334 = 0;
+                temp_v1_2 = temp_a0->unk1F4C->unk0;
+                if (temp_v1_2 != (u16)1) {
+                    if (temp_v1_2 != 2) {
+                        if (temp_v1_2 != 3) {
+                            if (temp_v1_2 != 4) {
+
+                            } else {
+                                this->unk_336 = 1;
+                                func_80B8D0BC(this, 0x14, (u16)1, globalCtx);
+block_12:
+                            }
+                        } else {
+                            this->unk_336 = 1;
+                            func_80B8D0BC(this, 0xC, (u16)1, globalCtx);
+                            goto block_12;
+                        }
+                    } else {
+                        this->unk_336 = 0;
+                        func_80B8D0BC(this, 2, (u16)1, globalCtx);
+                        goto block_12;
+                    }
+                } else {
+                    this->unk_336 = 1;
+                    func_80B8D0BC(this, 0, (u16)1, globalCtx);
+                    goto block_12;
+                }
+            }
+        }
+        func_800EDF24(this, globalCtx, sp24, globalCtx);
+        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->unk_144, (bitwise f32) (bitwise s32) this->unk_144.animFrameCount) != 0)) {
+            this->unk_334 = (s16) this->unk_334 + 1;
+            func_80B8D0BC(this, 5);
+            return;
+        }
+    } else {
+        D_80B8E32C = (u16)0x63;
+        this->unk_336 = 1;
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
 
+/*
+void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
+    u32 temp_t7;
+
+    if (func_80147624(globalCtx) != 0) {
+        temp_t7 = this->unk_338 - 0x335F;
+        if (temp_t7 < 0xCU) {
+            goto **(&jtbl_D_80B8E34C + (temp_t7 * 4));
+        case 0:
+            func_80B8DD88(this, (u16)0, (u16)2);
+            func_801518B0(globalCtx, 0x3360U, (Actor *) this);
+            this->unk_338 = 0x3360;
+            return;
+        case 1:
+            func_80B8DD88(this, (u16)4, (u16)3);
+            func_801518B0(globalCtx, 0x3361U, (Actor *) this);
+            this->unk_338 = 0x3361;
+            func_80151BB4((s32) globalCtx, 5U);
+            return;
+        case 4:
+            func_80B8DD88(this, (u16)1, (u16)1);
+            func_801518B0(globalCtx, 0x3364U, (Actor *) this);
+            this->unk_338 = 0x3364;
+            return;
+        case 5:
+            func_80B8DD88(this, (u16)4, (u16)2);
+            func_801518B0(globalCtx, 0x3365U, (Actor *) this);
+            this->unk_338 = 0x3365;
+            func_80151BB4((s32) globalCtx, 5U);
+            return;
+        case 8:
+            func_80B8DD88(this, (u16)4, (u16)3);
+            func_801518B0(globalCtx, 0x3368U, (Actor *) this);
+            this->unk_338 = 0x3368;
+            func_80151BB4((s32) globalCtx, 5U);
+            return;
+        case 10:
+            func_80B8DD88(this, (u16)0, (u16)0);
+            func_801518B0(globalCtx, 0x336AU, (Actor *) this);
+            this->unk_338 = 0x336A;
+            return;
+        case 11:
+            func_80B8DD88(this, (u16)3, (u16)3);
+            func_801518B0(globalCtx, 0x336BU, (Actor *) this);
+            this->unk_338 = 0x336B;
+            func_80151BB4((s32) globalCtx, 5U);
+        }
+    }
+default:
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DBB8.asm")
 
 
