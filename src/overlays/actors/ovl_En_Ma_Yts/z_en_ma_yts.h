@@ -35,9 +35,9 @@ typedef struct EnMaYts {
     /* 0x32E */ s16 unk_32E; // mouthTexIndex
     /* 0x330 */ s16 unk_330;
     /* 0x332 */ char unk_332[0x2];
-    /* 0x334 */ char unk_334[0x2];
+    /* 0x334 */ u16 unk_334;
     /* 0x336 */ s16 unk_336;
-    /* 0x338 */ u16 unk_338;
+    /* 0x338 */ u16 unk_338; // messageTextId
     /* 0x33A */ char unk_33A[0x2];
 } EnMaYts; // size = 0x33C
 

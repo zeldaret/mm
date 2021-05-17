@@ -134,11 +134,10 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D1E8.asm")
 
-void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
+s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
 /*
-void func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
+s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
     s16 temp_v0;
     s32 temp_hi;
 
@@ -343,121 +342,119 @@ void func_80B8D9E4(EnMaYts *this) {
     this->unk_188 = &func_80B8DA28;
 }
 
+
+extern u16 D_80B8E32C;
 /*
 void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
     u32 sp24;
-    s32 temp_t6;
-    u16 temp_a1;
-    u16 temp_v1_2;
-    u32 temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    //s32 temp_t6;
+    //u32 temp_v0;
+    //void *temp_a0;
+    CsCmdActorAction* actorAction;
 
     if (func_800EE29C(globalCtx, 0x78U) != 0) {
-        temp_v0 = func_800EE200(globalCtx, 0x78U);
-        temp_t6 = temp_v0 * 4;
-        sp24 = temp_v0;
-        temp_a0 = globalCtx + temp_t6;
-        temp_v1 = temp_a0->unk1F4C;
-        if (globalCtx->csCtx.frames == temp_v1->unk2) {
-            temp_a1 = temp_v1->unk0;
-            if (D_80B8E32C != temp_a1) {
-                D_80B8E32C = temp_a1;
+        //temp_v0 = func_800EE200(globalCtx, 0x78U);
+        //temp_t6 = temp_v0 * 4;
+        sp24 = func_800EE200(globalCtx, 0x78);
+        //temp_a0 = globalCtx + temp_t6;
+        //temp_v1 = temp_a0->unk1F4C;
+        actorAction = globalCtx->csCtx.actorActions[sp24];
+        if (globalCtx->csCtx.frames == actorAction->startFrame) {
+            if (D_80B8E32C != actorAction->unk0) {
+                D_80B8E32C = actorAction->unk0;
                 this->unk_334 = 0;
-                temp_v1_2 = temp_a0->unk1F4C->unk0;
-                if (temp_v1_2 != (u16)1) {
-                    if (temp_v1_2 != 2) {
-                        if (temp_v1_2 != 3) {
-                            if (temp_v1_2 != 4) {
-
-                            } else {
-                                this->unk_336 = 1;
-                                func_80B8D0BC(this, 0x14, (u16)1, globalCtx);
-block_12:
-                            }
-                        } else {
-                            this->unk_336 = 1;
-                            func_80B8D0BC(this, 0xC, (u16)1, globalCtx);
-                            goto block_12;
-                        }
-                    } else {
-                        this->unk_336 = 0;
-                        func_80B8D0BC(this, 2, (u16)1, globalCtx);
-                        goto block_12;
-                    }
-                } else {
+                switch (actorAction->unk0) {
+                case 1:
                     this->unk_336 = 1;
-                    func_80B8D0BC(this, 0, (u16)1, globalCtx);
-                    goto block_12;
+                    func_80B8D0BC(this, 0);
+                    break;
+
+                case 2:
+                    this->unk_336 = 0;
+                    func_80B8D0BC(this, 2);
+                    break;
+
+                case 3:
+                    this->unk_336 = 1;
+                    func_80B8D0BC(this, 0xC);
+                    break;
+
+                case 4:
+                    this->unk_336 = 1;
+                    func_80B8D0BC(this, 0x14);
+                    break;
                 }
             }
         }
         func_800EDF24(this, globalCtx, sp24, globalCtx);
-        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->unk_144, (bitwise f32) (bitwise s32) this->unk_144.animFrameCount) != 0)) {
+        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->unk_144, this->unk_144.animFrameCount) != 0)) {
             this->unk_334 = (s16) this->unk_334 + 1;
             func_80B8D0BC(this, 5);
-            return;
+            //return;
         }
     } else {
-        D_80B8E32C = (u16)0x63;
+        D_80B8E32C = 99;
         this->unk_336 = 1;
     }
 }
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
 
-/*
 void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
-    u32 temp_t7;
 
     if (func_80147624(globalCtx) != 0) {
-        temp_t7 = this->unk_338 - 0x335F;
-        if (temp_t7 < 0xCU) {
-            goto **(&jtbl_D_80B8E34C + (temp_t7 * 4));
-        case 0:
+        switch (this->unk_338) {
+        case 0x335F:
             func_80B8DD88(this, (u16)0, (u16)2);
-            func_801518B0(globalCtx, 0x3360U, (Actor *) this);
+            func_801518B0(globalCtx, 0x3360U, &this->actor);
             this->unk_338 = 0x3360;
-            return;
-        case 1:
+            break;
+
+        case 0x3360:
             func_80B8DD88(this, (u16)4, (u16)3);
-            func_801518B0(globalCtx, 0x3361U, (Actor *) this);
+            func_801518B0(globalCtx, 0x3361U, &this->actor);
             this->unk_338 = 0x3361;
-            func_80151BB4((s32) globalCtx, 5U);
-            return;
-        case 4:
+            func_80151BB4(globalCtx, 5U);
+            break;
+
+        case 0x3363:
             func_80B8DD88(this, (u16)1, (u16)1);
-            func_801518B0(globalCtx, 0x3364U, (Actor *) this);
+            func_801518B0(globalCtx, 0x3364U, &this->actor);
             this->unk_338 = 0x3364;
-            return;
-        case 5:
+            break;
+
+        case 0x3364:
             func_80B8DD88(this, (u16)4, (u16)2);
-            func_801518B0(globalCtx, 0x3365U, (Actor *) this);
+            func_801518B0(globalCtx, 0x3365U, &this->actor);
             this->unk_338 = 0x3365;
-            func_80151BB4((s32) globalCtx, 5U);
-            return;
-        case 8:
+            func_80151BB4(globalCtx, 5U);
+            break;
+
+        case 0x3367:
             func_80B8DD88(this, (u16)4, (u16)3);
-            func_801518B0(globalCtx, 0x3368U, (Actor *) this);
+            func_801518B0(globalCtx, 0x3368U, &this->actor);
             this->unk_338 = 0x3368;
-            func_80151BB4((s32) globalCtx, 5U);
-            return;
-        case 10:
+            func_80151BB4(globalCtx, 5U);
+            break;
+
+        case 0x3369:
             func_80B8DD88(this, (u16)0, (u16)0);
-            func_801518B0(globalCtx, 0x336AU, (Actor *) this);
+            func_801518B0(globalCtx, 0x336AU, &this->actor);
             this->unk_338 = 0x336A;
-            return;
-        case 11:
+            break;
+
+        case 0x336A:
             func_80B8DD88(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x336BU, (Actor *) this);
+            func_801518B0(globalCtx, 0x336BU, &this->actor);
             this->unk_338 = 0x336B;
-            func_80151BB4((s32) globalCtx, 5U);
+            func_80151BB4(globalCtx, 5U);
+            break;
+
+        default:
+            break;
         }
     }
-default:
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DBB8.asm")
 
 
 void func_80B8DD88(EnMaYts* this, s16 arg1, s16 arg2) {
