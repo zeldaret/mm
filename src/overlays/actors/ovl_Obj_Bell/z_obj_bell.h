@@ -14,7 +14,7 @@ typedef struct ObjBell {
     /* 0x20E */ s16 unk_20F;
     /* 0x212 */ s16 unk_212;
     /* 0x214 */ s16 unk_214;
-    /* 0x216 */ s16 unk_216[0x06];
+    /* 0x216 */ char unk_216[0x06];
     /* 0x21C */ f32 unk_21C;
     /* 0x220 */ f32 unk_220;
     /* 0x224 */ char unk_224[0x04];
