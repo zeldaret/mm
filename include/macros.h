@@ -20,7 +20,7 @@
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct) \
             (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-            (curState)->nextGameStateSize = sizeof(newStruct);
+            (curState)->nextGameStateSize = sizeof(newStruct)
 
 #define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
@@ -28,6 +28,8 @@
 // There are remnants of these macros from OOT, but they are essentially useless
 //#define LINK_IS_CHILD (gSaveContext.perm.linkAge != 0)
 #define LINK_IS_ADULT (gSaveContext.perm.linkAge == 0)
+
+#define CURRENT_DAY (gSaveContext.perm.day % 5)
 
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
@@ -47,7 +49,7 @@ extern GraphicsContext* __gfxCtx;
 #define OPEN_DISPS(gfxCtx)                  \
     {                                       \
         GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad;                      \
+        s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx)                 \
     }                                       \

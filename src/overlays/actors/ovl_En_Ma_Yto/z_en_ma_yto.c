@@ -15,20 +15,18 @@ void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8EBDC(EnMaYto* this);
+void func_80B8E938(EnMaYto* this, GlobalContext* globalCtx);
 
-s32 func_80B8E6E0(EnMaYto *this, GlobalContext *globalCtx);
-void func_80B8E84C(EnMaYto *this, GlobalContext *globalCtx);
-void func_80B8EBDC(EnMaYto *this);
-void func_80B8E938(EnMaYto *this,  GlobalContext *globalCtx);
+void func_80B90C08(EnMaYto* this, s32 index);
 
-void func_80B90C08(EnMaYto *this, s32 index);
-
-s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx);
+s32 func_80B8EABC(EnMaYto* this, GlobalContext* globalCtx);
 
 void func_80B90EC8(EnMaYto* this, s16, s16);
 
 void func_80B90DF0(EnMaYto* this);
-
 
 /*
 const ActorInit En_Ma_Yto_InitVars = {
@@ -40,19 +38,18 @@ const ActorInit En_Ma_Yto_InitVars = {
     (ActorFunc)EnMaYto_Init,
     (ActorFunc)EnMaYto_Destroy,
     (ActorFunc)EnMaYto_Update,
-    (ActorFunc)EnMaYto_Draw
+    (ActorFunc)EnMaYto_Draw,
 };
 */
-
 
 extern ColliderCylinderInit D_80B91410;
 extern CollisionCheckInfoInit2 D_80B9143C;
 
 extern SkeletonHeader D_06015C28;
 
-void EnMaYto_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
-    ColliderCylinder *temp_a1;
+    ColliderCylinder* temp_a1;
 
     this->actor.targetMode = 0;
     this->unk_200 = 0;
@@ -60,7 +57,7 @@ void EnMaYto_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_320 = 0;
     this->unk_31A = 0;
 
-    if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
         func_80B90EC8(this, 0, 1);
     } else {
         func_80B90EC8(this, 5, 2);
@@ -68,7 +65,7 @@ void EnMaYto_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     this->unk_31E = 0;
     this->unk_31C = 0x64;
-    this->type = (s32) (this->actor.params & 0xF000) >> 0xC;
+    this->type = (s32)(this->actor.params & 0xF000) >> 0xC;
     if (func_80B8E6E0(this, globalCtx) == 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -84,86 +81,82 @@ void EnMaYto_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (func_80B8EABC(this, globalCtx) == 1) {
         func_80B8EBDC(this);
-    }
-    else {
+    } else {
         func_80B8E938(this, globalCtx);
     }
 }
 
-
 #ifdef NON_MATCHING
-s32 func_80B8E6E0(EnMaYto *this, GlobalContext *globalCtx) {
+s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
-    case 0:
-        if ((((s32) gSaveContext.perm.day % 5) == 3) && ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0)) {
-            return 0;
-        }
-    case 2:
-        if ((((s32) gSaveContext.perm.day % 5) != 1) && ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
-            return 0;
-        }
-    case 1:
-        if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-            if (((s32) (this->actor.params & 0xF00) >> 8) != 0) {
+        case 0:
+            if ((CURRENT_DAY == 3) && ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0)) {
                 return 0;
             }
-        } else if (((s32) (this->actor.params & 0xF00) >> 8) == 0) {
-            return 0;
-        }
-        if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
-            return 0;
-        }
-    case 3:
-        if (((gSaveContext.perm.weekEventReg[0x34] & 1) == 0) && ((gSaveContext.perm.weekEventReg[0x34] & 2) != 0)) {
-            return 0;
-        }
-        if ((gSaveContext.perm.weekEventReg[0xE] & 1) != 0) {
-            return 0;
-        }
-    case 4:
-        return 1;
+        case 2:
+            if ((CURRENT_DAY != 1) && ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+                return 0;
+            }
+        case 1:
+            if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+                if (((s32)(this->actor.params & 0xF00) >> 8) != 0) {
+                    return 0;
+                }
+            } else if (((s32)(this->actor.params & 0xF00) >> 8) == 0) {
+                return 0;
+            }
+            if (((s32)gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
+                return 0;
+            }
+        case 3:
+            if (((gSaveContext.perm.weekEventReg[0x34] & 1) == 0) &&
+                ((gSaveContext.perm.weekEventReg[0x34] & 2) != 0)) {
+                return 0;
+            }
+            if ((gSaveContext.perm.weekEventReg[0xE] & 1) != 0) {
+                return 0;
+            }
+        case 4:
+            return 1;
     }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E6E0.asm")
 #endif
 
-
-void func_80B8E84C(EnMaYto *this, GlobalContext *globalCtx) {
+void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
-    case 0:
-        func_80B90C08(this, 10);
-        break;
+        case 0:
+            func_80B90C08(this, 10);
+            break;
 
-    case 2:
-        if (((s32)gSaveContext.perm.day) % 5 == 1) {
-            func_80B90C08(this, 14);
-        }
-        else {
-            func_80B90C08(this, 16);
-        }
-        break;
+        case 2:
+            if (CURRENT_DAY == 1) {
+                func_80B90C08(this, 14);
+            } else {
+                func_80B90C08(this, 16);
+            }
+            break;
 
-    case 1:
-        if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-            func_80B90C08(this, 12);
-        }
-        else {
-            func_80B90C08(this, 8);
-        }
-        break;
+        case 1:
+            if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+                func_80B90C08(this, 12);
+            } else {
+                func_80B90C08(this, 8);
+            }
+            break;
 
-    case 3:
-        func_80B90C08(this, 0);
-        break;
+        case 3:
+            func_80B90C08(this, 0);
+            break;
 
-    case 4:
-        func_80B90C08(this, 0);
-        break;
+        case 4:
+            func_80B90C08(this, 0);
+            break;
 
-    default:
-        func_80B90C08(this, 0);
-        break;
+        default:
+            func_80B90C08(this, 0);
+            break;
     }
 }
 
@@ -249,7 +242,6 @@ loop_1:
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EA38.asm")
 
-
 /*
 ? func_80B8EABC(void *arg0) {
     u32 temp_t6;
@@ -283,7 +275,7 @@ block_6:
             return 2;
             return 1;
         }
-        if (((s32) gSaveContext.perm.day % 5) != 2) {
+        if (CURRENT_DAY != 2) {
             goto block_6;
         }
         return 0;
@@ -293,12 +285,18 @@ block_6:
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EABC.asm")
 
-void EnMaYto_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
+/*
+// Setup function
+void func_80B8EBDC(EnMaYto *this) {
+    this->actionFunc = &func_80B8EBF0;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EBDC.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EBF0.asm")
@@ -399,9 +397,8 @@ block_10:
             }
         }
         func_800EDF24(this, globalCtx, sp24, globalCtx);
-        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == 0x6001FD0) && (func_801378B8(&this->skelAnime, (bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) {
-            func_80B90C08(this, 0x14);
-            return;
+        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == 0x6001FD0) && (func_801378B8(&this->skelAnime,
+(bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) { func_80B90C08(this, 0x14); return;
         }
     } else {
         D_80B915F0 = (u16)0x63;
@@ -424,7 +421,6 @@ block_10:
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90A78.asm")
 
-
 /*
 void func_80B90C08(EnMaYto *this, s32 index) {
     void *sp28;
@@ -432,12 +428,13 @@ void func_80B90C08(EnMaYto *this, s32 index) {
 
     temp_v1 = (index * 0x10) + &D_80B91448;
     sp28 = temp_v1;
-    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk0), (?32) temp_v1->unk8, temp_v1->unkC);
+    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk0),
+(?32) temp_v1->unk8, temp_v1->unkC);
 }
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90C08.asm")
 
-void func_80B90C78(EnMaYto *this, GlobalContext *globalCtx) {
+void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     s16 phi_a3;
 
@@ -466,7 +463,6 @@ void func_80B90C78(EnMaYto *this, GlobalContext *globalCtx) {
 
     func_80B90DF0(this);
 }
-
 
 void func_80B90D98(EnMaYto* this, GlobalContext* globalCtx);
 /*
@@ -534,7 +530,7 @@ void func_80B90EC8(EnMaYto *this, s16 arg1, s16 arg2) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9109C.asm")
 
-void EnMaYto_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
 
     this->actionFunc(this, globalCtx);
@@ -550,7 +546,7 @@ extern AnimationHeader D_060070EC;
 extern AnimationHeader D_06003D54;
 
 // OverrideLimbDraw
-s32 func_80B91154(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 func_80B91154(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
     Vec3s sp4;
 
@@ -562,7 +558,8 @@ s32 func_80B91154(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
         if ((this->skelAnime.animCurrentSeg != &D_06007E28) && (this->skelAnime.animCurrentSeg != &D_06003D54)) {
             sp4 = this->unk_1E6;
             rot->x = rot->x + sp4.y;
-            if ((this->skelAnime.animCurrentSeg == &D_0600A174) || (this->skelAnime.animCurrentSeg == &D_060070EC) || (this->skelAnime.animCurrentSeg == &D_06003D54)) {
+            if ((this->skelAnime.animCurrentSeg == &D_0600A174) || (this->skelAnime.animCurrentSeg == &D_060070EC) ||
+                (this->skelAnime.animCurrentSeg == &D_06003D54)) {
                 rot->z = rot->z + sp4.x;
             }
         }
@@ -570,16 +567,14 @@ s32 func_80B91154(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     return 0;
 }
 
-
 // PostLimbDraw
-void func_80B91250(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+void func_80B91250(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
 
     if (limbIndex == 9) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
-
 
 extern Gfx D_06005430[];
 extern void* D_80B915C8[];
@@ -599,7 +594,8 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B915C8[this->unk_318]));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B915D8[this->unk_31A]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_80B91154, func_80B91250, &this->actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     func_80B91154, func_80B91250, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
