@@ -28,7 +28,7 @@ This repo does not include all assets necessary for compiling the ROM. A prior c
 This is a decompilation of Legend of Zelda: Majora's Mask (US) 1.0
 
 It builds the following ROM:
-* rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
+* mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 Please refer to the following for more information:
 
@@ -86,16 +86,16 @@ make init
 
 This will extract all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
-This make target will also build the ROM. If all goes well, a new ROM called "rom.z64" should be built and the following text should be printed:
+This make target will also build the ROM. If all goes well, a new ROM called "mm.us.rev1.rom.z64" should be built and the following text should be printed:
 
 ```bash
-rom.z64: OK
+mm.us.rev1.rom.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-rom.z64: FAILED
+mm.us.rev1.rom.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 
