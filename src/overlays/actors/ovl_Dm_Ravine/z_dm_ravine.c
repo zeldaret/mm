@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_ravine.c
+ * Overlay: ovl_Dm_Ravine
+ * Description: Lost Woods Cutscene - Tree Trunk
+ */
+
 #include "z_dm_ravine.h"
 
 #define FLAGS 0x00000030
@@ -6,10 +12,10 @@
 
 void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void DmRavine_DoNothing(DmRavine* this, GlobalContext* globalCtx);
 void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Dm_Ravine_InitVars = {
     ACTOR_DM_RAVINE,
     ACTORCAT_ITEMACTION,
@@ -19,16 +25,55 @@ const ActorInit Dm_Ravine_InitVars = {
     (ActorFunc)DmRavine_Init,
     (ActorFunc)DmRavine_Destroy,
     (ActorFunc)DmRavine_Update,
-    (ActorFunc)DmRavine_Draw
+    (ActorFunc)DmRavine_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Init.asm")
+void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
+    DmRavine* this = THIS;
+    u8 flag = gSaveContext.perm.weekEventReg[0];
+    if (((flag & 0x10) | cREG(0)) != 0) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Destroy.asm")
+    this->isActive = false;
+    globalCtx->roomContext.unk7A[0] = 1;
+    globalCtx->roomContext.unk7A[1] = 0;
+    this->state = 0;
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = DmRavine_DoNothing;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/func_80A2E838.asm")
+void DmRavine_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Update.asm")
+void DmRavine_DoNothing(DmRavine* this, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Ravine_0x80A2E7A0/DmRavine_Draw.asm")
+void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DmRavine* this = THIS;
+    RoomContext* roomCtx;
+
+    switch ((DmRavineState) this->state) {
+        case DM_RAVINE_STATE_INITIALIZED:
+            return;
+        case DM_RAVINE_STATE_ACTIVE:
+            this->isActive = true;
+            globalCtx->roomContext.unk7A[1]++;
+            if (globalCtx->roomContext.unk7A[1] > 254) {
+                globalCtx->roomContext.unk7A[1] = 254;
+                if (globalCtx->csCtx.frames > 700) {
+                    globalCtx->roomContext.unk7A[1] = 255;
+                    globalCtx->roomContext.unk7A[0] = 0;
+                    this->state++; // -> DM_RAVINE_STATE_PENDING_DEATH
+                }
+            }
+            break;
+        case DM_RAVINE_STATE_PENDING_DEATH:
+            Actor_MarkForDeath(&this->actor);
+            break;
+    }
+}
+
+void DmRavine_Draw(Actor* thisx, GlobalContext* globalCtx) {
+}
