@@ -37,7 +37,7 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
     (ActorFunc)BgIkanaShutter_Init,
     (ActorFunc)BgIkanaShutter_Destroy,
     (ActorFunc)BgIkanaShutter_Update,
-    (ActorFunc)BgIkanaShutter_Draw
+    (ActorFunc)BgIkanaShutter_Draw,
 };
 
 static InitChainEntry D_80BD5D10[] = {

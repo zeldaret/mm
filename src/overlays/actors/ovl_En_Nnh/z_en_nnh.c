@@ -23,7 +23,7 @@ const ActorInit En_Nnh_InitVars = {
     (ActorFunc)EnNnh_Init,
     (ActorFunc)EnNnh_Destroy,
     (ActorFunc)EnNnh_Update,
-    (ActorFunc)EnNnh_Draw
+    (ActorFunc)EnNnh_Draw,
 };
 
 ColliderCylinderInit D_80C08A00 = {

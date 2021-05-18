@@ -18,7 +18,7 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Init,
     (ActorFunc)BgFuKaiten_Destroy,
     (ActorFunc)BgFuKaiten_Update,
-    (ActorFunc)BgFuKaiten_Draw
+    (ActorFunc)BgFuKaiten_Draw,
 };
 
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {

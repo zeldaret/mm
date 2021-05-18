@@ -19,7 +19,7 @@ const ActorInit Bg_Kin2_Picture_InitVars = {
     (ActorFunc)BgKin2Picture_Init,
     (ActorFunc)BgKin2Picture_Destroy,
     (ActorFunc)BgKin2Picture_Update,
-    (ActorFunc)BgKin2Picture_Draw
+    (ActorFunc)BgKin2Picture_Draw,
 };
 */
 

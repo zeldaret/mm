@@ -19,7 +19,7 @@ const ActorInit En_Famos_InitVars = {
     (ActorFunc)EnFamos_Init,
     (ActorFunc)EnFamos_Destroy,
     (ActorFunc)EnFamos_Update,
-    (ActorFunc)EnFamos_Draw
+    (ActorFunc)EnFamos_Draw,
 };
 */
 

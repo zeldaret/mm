@@ -19,7 +19,7 @@ const ActorInit En_Pametfrog_InitVars = {
     (ActorFunc)EnPametfrog_Init,
     (ActorFunc)EnPametfrog_Destroy,
     (ActorFunc)EnPametfrog_Update,
-    (ActorFunc)EnPametfrog_Draw
+    (ActorFunc)EnPametfrog_Draw,
 };
 */
 

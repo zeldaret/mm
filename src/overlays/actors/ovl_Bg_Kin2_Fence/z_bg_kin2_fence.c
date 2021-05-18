@@ -29,7 +29,7 @@ const ActorInit Bg_Kin2_Fence_InitVars = {
     (ActorFunc)BgKin2Fence_Init,
     (ActorFunc)BgKin2Fence_Destroy,
     (ActorFunc)BgKin2Fence_Update,
-    (ActorFunc)BgKin2Fence_Draw
+    (ActorFunc)BgKin2Fence_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {

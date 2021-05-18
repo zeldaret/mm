@@ -19,7 +19,7 @@ const ActorInit En_Kanban_InitVars = {
     (ActorFunc)EnKanban_Init,
     (ActorFunc)EnKanban_Destroy,
     (ActorFunc)EnKanban_Update,
-    (ActorFunc)EnKanban_Draw
+    (ActorFunc)EnKanban_Draw,
 };
 */
 

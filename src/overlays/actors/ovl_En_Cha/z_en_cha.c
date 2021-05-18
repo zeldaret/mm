@@ -27,7 +27,7 @@ const ActorInit En_Cha_InitVars = {
     (ActorFunc)EnCha_Init,
     (ActorFunc)EnCha_Destroy,
     (ActorFunc)EnCha_Update,
-    (ActorFunc)EnCha_Draw
+    (ActorFunc)EnCha_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -22,7 +22,7 @@ const ActorInit Door_Ana_InitVars = {
     (ActorFunc)DoorAna_Init,
     (ActorFunc)DoorAna_Destroy,
     (ActorFunc)DoorAna_Update,
-    (ActorFunc)DoorAna_Draw
+    (ActorFunc)DoorAna_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = { 

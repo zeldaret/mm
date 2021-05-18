@@ -21,7 +21,7 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Init,
     (ActorFunc)TGSw_Destroy,
     (ActorFunc)TGSw_Update,
-    (ActorFunc)TGSw_Draw
+    (ActorFunc)TGSw_Draw,
 };
 
 static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {

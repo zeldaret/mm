@@ -18,7 +18,7 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)ObjEnding_Update,
-    (ActorFunc)ObjEnding_Draw
+    (ActorFunc)ObjEnding_Draw,
 };
 */
 

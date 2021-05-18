@@ -30,7 +30,7 @@ const ActorInit En_Po_Fusen_InitVars = {
     (ActorFunc)EnPoFusen_Init,
     (ActorFunc)EnPoFusen_Destroy,
     (ActorFunc)EnPoFusen_Update,
-    (ActorFunc)EnPoFusen_Draw
+    (ActorFunc)EnPoFusen_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

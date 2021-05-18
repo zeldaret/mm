@@ -23,7 +23,7 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
     (ActorFunc)BgIkanaRay_Init,
     (ActorFunc)BgIkanaRay_Destroy,
     (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw
+    (ActorFunc)BgIkanaRay_Draw,
 };
 
 ColliderCylinderInit bgIkanaRayCylinderInit = {

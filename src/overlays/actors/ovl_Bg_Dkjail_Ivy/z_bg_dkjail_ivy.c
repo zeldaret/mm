@@ -19,7 +19,7 @@ const ActorInit Bg_Dkjail_Ivy_InitVars = {
     (ActorFunc)BgDkjailIvy_Init,
     (ActorFunc)BgDkjailIvy_Destroy,
     (ActorFunc)BgDkjailIvy_Update,
-    (ActorFunc)BgDkjailIvy_Draw
+    (ActorFunc)BgDkjailIvy_Draw,
 };
 */
 

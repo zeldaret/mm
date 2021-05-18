@@ -29,7 +29,7 @@ const ActorInit Obj_Lightswitch_InitVars = {
     (ActorFunc)ObjLightswitch_Init,
     (ActorFunc)ObjLightswitch_Destroy,
     (ActorFunc)ObjLightswitch_Update,
-    (ActorFunc)ObjLightswitch_Draw
+    (ActorFunc)ObjLightswitch_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

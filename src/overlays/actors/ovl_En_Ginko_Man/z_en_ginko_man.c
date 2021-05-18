@@ -32,7 +32,7 @@ const ActorInit En_Ginko_Man_InitVars = {
     (ActorFunc)EnGinkoMan_Init,
     (ActorFunc)EnGinkoMan_Destroy,
     (ActorFunc)EnGinkoMan_Update,
-    (ActorFunc)EnGinkoMan_Draw
+    (ActorFunc)EnGinkoMan_Draw,
 };
 
 ActorAnimationEntry animations[] = {

@@ -19,7 +19,7 @@ const ActorInit En_Scopecrow_InitVars = {
     (ActorFunc)EnScopecrow_Init,
     (ActorFunc)EnScopecrow_Destroy,
     (ActorFunc)EnScopecrow_Update,
-    (ActorFunc)EnScopecrow_Draw
+    (ActorFunc)EnScopecrow_Draw,
 };
 */
 
