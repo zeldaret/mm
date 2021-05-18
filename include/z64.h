@@ -339,11 +339,15 @@ typedef struct {
     /* 0x277 */ UNK_TYPE1 pad277[0x9];
     /* 0x280 */ u16 unk280;
     /* 0x282 */ u16 unk282;
-    /* 0x284 */ UNK_TYPE1 pad284[0x28];
+    /* 0x284 */ UNK_TYPE1 pad284[0x24];
+    /* 0x2A8 */ UNK_TYPE1 pad2A8[0x2];
+    /* 0x2AA */ u16 unk2AA;
     /* 0x2AC */ u8 cutsceneTrigger;
     /* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
     /* 0x2B2 */ u16 environmentTime;
-    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
+    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x1];
+    /* 0x2B5 */ u8 unk2B5;
+    /* 0x2B6 */ UNK_TYPE1 pad2B6[0x2];
     /* 0x2B8 */ s16 unk2b8;
     /* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
     /* 0x2C4 */ f32 unk2C4;
@@ -1038,7 +1042,11 @@ typedef struct {
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
+    /* 0x120B0 */ UNK_TYPE1 pad120B0[0x1];
+    /* 0x120B1 */ u8 unk120B1;
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x2];
+    /* 0x120B4 */ UNK_TYPE1 pad120B4[0x24];
 } MessageContext; // size = 0x120D8
 
 // Full save context
