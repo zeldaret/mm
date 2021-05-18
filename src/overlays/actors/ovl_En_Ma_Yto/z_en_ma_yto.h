@@ -28,7 +28,7 @@ typedef struct EnMaYto {
     /* 0x294 */ char unk_294[0x7C];
     /* 0x310 */ s16 unk_310;
     /* 0x312 */ char unk_312[0x2];
-    /* 0x314 */ char unk_314[0x2];
+    /* 0x314 */ s16 unk_314;
     /* 0x316 */ s16 unk_316;
     /* 0x318 */ s16 unk_318; // mouthTexIndex?
     /* 0x31A */ s16 unk_31A; // eyeTexIndex?
