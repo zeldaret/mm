@@ -21,6 +21,7 @@ void func_80B8E84C(EnMaYto *this, GlobalContext *globalCtx);
 void func_80B8EBDC(EnMaYto *this);
 void func_80B8E938(EnMaYto *this,  GlobalContext *globalCtx);
 
+void func_80B90C08(EnMaYto *this, s32 index);
 
 s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx);
 
@@ -89,90 +90,82 @@ void EnMaYto_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/EnMaYto_Init.asm")
 
-/*
-? func_80B8E6E0(void *arg0, ? arg1) {
-    u32 temp_t6;
-    u8 temp_v0;
-
-    temp_t6 = arg0->unk204;
-    if (temp_t6 < 5U) {
-        goto **(&jtbl_D_80B91600 + (temp_t6 * 4));
+#ifdef NON_MATCHING
+s32 func_80B8E6E0(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (this->type) {
     case 0:
-        if ((((s32) gSaveContext.perm.day % 5) == 3) && ((gSaveContext.unkF0E & 1) == 0)) {
+        if ((((s32) gSaveContext.perm.day % 5) == 3) && ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0)) {
             return 0;
-        case 2:
-            if ((((s32) gSaveContext.perm.day % 5) != 1) && ((gSaveContext.unkF0E & 1) != 0)) {
-                return 0;
-            case 1:
-                if ((gSaveContext.unkF0E & 1) != 0) {
-                    if (((s32) (arg0->unk1C & 0xF00) >> 8) != 0) {
-                        return 0;
-                    }
-                } else if (((s32) (arg0->unk1C & 0xF00) >> 8) == 0) {
-                    return 0;
-                }
-                if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
-                    return 0;
-                case 3:
-                    temp_v0 = gSaveContext.unkF2C;
-                    if (((temp_v0 & 1) != 0) || ((temp_v0 & 2) != 0)) {
-
-                    } else {
-                        return 0;
-                    }
-                    if ((gSaveContext.unkF06 & 1) != 0) {
-                        return 0;
-                    }
-                }
-            }
         }
-    }
-case 4:
-    return 1;
-}
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E6E0.asm")
-
-/*
-void func_80B8E84C(void *arg0, ? arg1) {
-    u32 temp_t6;
-
-    temp_t6 = arg0->unk204;
-    if (temp_t6 < 5U) {
-        goto **(&jtbl_D_80B91614 + (temp_t6 * 4));
-    case 0:
-        func_80B90C08(0xA);
-        return;
     case 2:
-        if (((s32) gSaveContext.perm.day % 5) != 1) {
-            func_80B90C08(0x10);
-            return;
-        case 1:
-            if ((*(&gSaveContext + 0xF0E) & 1) == 0) {
-                func_80B90C08(8);
-                return;
-            case 3:
-                func_80B90C08(0);
-                return;
-            case 4:
-                func_80B90C08(0);
-                return;
-            }
-            func_80B90C08(0xC);
-            return;
-            return;
-            return;
+        if ((((s32) gSaveContext.perm.day % 5) != 1) && ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+            return 0;
         }
-        func_80B90C08(0xE);
-        return;
-        return;
+    case 1:
+        if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+            if (((s32) (this->actor.params & 0xF00) >> 8) != 0) {
+                return 0;
+            }
+        } else if (((s32) (this->actor.params & 0xF00) >> 8) == 0) {
+            return 0;
+        }
+        if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
+            return 0;
+        }
+    case 3:
+        if (((gSaveContext.perm.weekEventReg[0x34] & 1) == 0) && ((gSaveContext.perm.weekEventReg[0x34] & 2) != 0)) {
+            return 0;
+        }
+        if ((gSaveContext.perm.weekEventReg[0xE] & 1) != 0) {
+            return 0;
+        }
+    case 4:
+        return 1;
     }
-    func_80B90C08(0);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E84C.asm")
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E6E0.asm")
+#endif
+
+
+void func_80B8E84C(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (this->type) {
+    case 0:
+        func_80B90C08(this, 10);
+        break;
+
+    case 2:
+        if (((s32)gSaveContext.perm.day) % 5 == 1) {
+            func_80B90C08(this, 14);
+        }
+        else {
+            func_80B90C08(this, 16);
+        }
+        break;
+
+    case 1:
+        if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+            func_80B90C08(this, 12);
+        }
+        else {
+            func_80B90C08(this, 8);
+        }
+        break;
+
+    case 3:
+        func_80B90C08(this, 0);
+        break;
+
+    case 4:
+        func_80B90C08(this, 0);
+        break;
+
+    default:
+        func_80B90C08(this, 0);
+        break;
+    }
+}
 
 /*
 void func_80B8E938(void *arg0, ? arg1) {
@@ -432,7 +425,6 @@ block_10:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90A78.asm")
 
 
-void func_80B90C08(EnMaYto *this, s32 index);
 /*
 void func_80B90C08(EnMaYto *this, s32 index) {
     void *sp28;
