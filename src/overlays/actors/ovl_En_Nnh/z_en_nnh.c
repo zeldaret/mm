@@ -26,7 +26,7 @@ const ActorInit En_Nnh_InitVars = {
     (ActorFunc)EnNnh_Draw
 };
 
-ColliderCylinderInit D_80C08A00 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -39,7 +39,7 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80C08A00);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.targetMode = 1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;

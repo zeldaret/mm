@@ -41,7 +41,7 @@ static ColliderJntSphInit sJntSphInit = {
     1, sJntSphElementsInit,
 };
 
-DamageTable damageTable[] = {
+static DamageTable sDamageTable = {
     0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0, 
     0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 
 };
@@ -78,7 +78,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
-    this->dynaActor.actor.colChkInfo.damageTable = &damageTable;
+    this->dynaActor.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetIdle(this);
 }
 
@@ -146,8 +146,8 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (! this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dynaActor.actor);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
 

@@ -16,10 +16,10 @@ void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx);
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_InitNoFuse(EnPoFusen* this);
 void EnPoFusen_InitFuse(EnPoFusen *this);
-void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx);
-void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* gCtx);
-void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* gCtx);
-s32  EnPoFusen_OverrideLimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
+void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *globalCtx);
+void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
+void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
+s32  EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
@@ -39,7 +39,7 @@ static ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
-DamageTable EnPoFusenDamageTable = {
+static DamageTable sDamageTable = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
@@ -50,7 +50,7 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.00700000021607;
     this->actor.targetMode = 6;
-    this->actor.colChkInfo.damageTable = &EnPoFusenDamageTable;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
 
     Collider_InitSphere(globalCtx, &this->collider);
     Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
@@ -88,15 +88,15 @@ void EnPoFusen_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnPoFusen_InitNoFuse(this);
 }
 
-void EnPoFusen_Destroy(Actor* thisx, GlobalContext *gCtx) {
+void EnPoFusen_Destroy(Actor* thisx, GlobalContext *globalCtx) {
     EnPoFusen* this = THIS;
-    Collider_DestroySphere(gCtx, &this->collider);
+    Collider_DestroySphere(globalCtx, &this->collider);
 }
 
 u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
     struct Actor *actorPtr;
 
-    actorPtr = globalCtx->actorCtx.actorList[4].first;
+    actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }
@@ -114,7 +114,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen *this, GlobalContext *globalCtx) {
     return 0;
 }
 
-u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
+u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *globalCtx) {
     if ((u32) this->actionFunc == (u32) EnPoFusen_IdleFuse ) {
       return 0;
     }
@@ -129,8 +129,8 @@ u16 EnPoFusen_CheckCollision(EnPoFusen *this, GlobalContext *gCtx) {
         return 1;
     }
 
-    CollisionCheck_SetOC(gCtx, &gCtx->colCheckCtx, &this->collider);
-    CollisionCheck_SetAC(gCtx, &gCtx->colCheckCtx, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 
     return 0;
 }
@@ -140,7 +140,7 @@ void EnPoFusen_InitNoFuse(EnPoFusen *this) {
     this->actionFunc = EnPoFusen_Idle;
 }
 
-void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *gCtx) {
+void EnPoFusen_Idle(EnPoFusen *this, GlobalContext *globalCtx) {
     f32 shadowScaleTmp;
     f32 shadowAlphaTmp;
     f32 heightOffset;
@@ -187,8 +187,8 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen *this) {
     this->actionFunc = EnPoFusen_Pop;
 }
 
-void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *gCtx) {
-    Actor_Spawn(&gCtx->actorCtx, gCtx, ACTOR_EN_CLEAR_TAG,
+void EnPoFusen_Pop(EnPoFusen *this, GlobalContext *globalCtx) {
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
        this->actor.world.pos.x, this->actor.world.pos.y + 20.0f, this->actor.world.pos.z,
        255, 255, 200, 2);
     Audio_PlayActorSound2(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
@@ -203,8 +203,8 @@ void EnPoFusen_InitFuse(EnPoFusen *this) {
     this->actionFunc = EnPoFusen_IdleFuse;
 }
 
-void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *gCtx) {
-    EnPoFusen_Idle(this, gCtx);
+void EnPoFusen_IdleFuse(EnPoFusen *this, GlobalContext *globalCtx) {
+    EnPoFusen_Idle(this, globalCtx);
     if (this->fuse-- == 0) {
         EnPoFusen_IncrementMalonPop(this);
     }
@@ -218,7 +218,7 @@ void EnPoFusen_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-s32 EnPoFusen_OverrideLimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
+s32 EnPoFusen_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
     EnPoFusen* this = (EnPoFusen*)actor;
     f32 zScale;
     f32 yScale;

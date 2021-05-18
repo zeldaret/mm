@@ -16,7 +16,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx);
 void func_800A6780(EnItem00* this, GlobalContext* globalCtx);
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx);
 
-ActorInit En_Item00_InitVars = {
+const ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,
@@ -28,13 +28,13 @@ ActorInit En_Item00_InitVars = {
     (ActorFunc)EnItem00_Draw,
 };
 
-ColliderCylinderInit enItem00CylinderInit = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AT_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000010, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE },
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-InitChainEntry enItem00InitVars[1] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP)
 };
 
@@ -73,8 +73,8 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.params = ITEM00_HEART;
     }
 
-    Actor_ProcessInitChain(&this->actor, enItem00InitVars);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &enItem00CylinderInit);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->unk150 = 1;
 

@@ -192,8 +192,8 @@ void func_80930B60(EnTuboTrap *this, GlobalContext *globalCtx) {
 
 // EnTuboTrap_HandleImpact
 void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
-    Actor *player = PLAYER;
-    Actor *player2 = PLAYER;
+    ActorPlayer* player = PLAYER;
+    ActorPlayer* player2 = PLAYER;
 
     // in oot func_800F0568 is Audio_PlaySoundAtPosition
 
@@ -224,10 +224,10 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
     }
     if ((this->collider.base.atFlags & AT_HIT) != 0) {
         this->collider.base.atFlags &= ~AT_HIT;
-        if (player == this->collider.base.at) {
+        if (&player->base == this->collider.base.at) {
             func_809308F4(this, globalCtx);
             func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
-            func_800F0568(globalCtx,  &player2->world, 0x28, 0x83E);
+            func_800F0568(globalCtx,  &player2->base.world, 0x28, 0x83E);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -245,7 +245,7 @@ void func_80930DDC(EnTuboTrap *this, GlobalContext *globalCtx) {
 // Wait For Proximity (idle)
   // NON-MATCHING: wrong register used, v instead of t for the weirdValues[] pointer
 void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
-    Actor *player = PLAYER;
+    ActorPlayer* player = PLAYER;
     f32 currentHeight;
     s8 weirdvalue;
     s16 startingRotation;
@@ -254,7 +254,7 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
         0x00, 0x00, 0x00, 0x00,
     };
 
-    if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->world.pos.y)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->base.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.yDistToPlayer <= ((f32) startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, this, ACTORCAT_ENEMY);
@@ -263,9 +263,9 @@ void func_80931004(EnTuboTrap *this, GlobalContext *globalCtx) {
 
             // hard to know what this value is even used for without knowing what ActorPlayer::unk14B is
             // wild guess: this is player animation state, height is modified to always point at center of link model
-            weirdvalue = D_8093146C[ ((ActorPlayer*) player)->unk14B & 0xFF];
+            weirdvalue = D_8093146C[player->unk14B & 0xFF];
 
-            this->targetHeight = player->world.pos.y + (f32) weirdvalue;
+            this->targetHeight = player->base.world.pos.y + (f32) weirdvalue;
             if (this->targetHeight < currentHeight) {
                 this->targetHeight = currentHeight;
                 this->targetHeight += weirdvalue;

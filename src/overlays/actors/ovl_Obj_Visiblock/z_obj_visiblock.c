@@ -20,7 +20,7 @@ const ActorInit Obj_Visiblock_InitVars = {
     (ActorFunc)ObjVisiblock_Draw
 };
 
-static InitChainEntry D_80ADEB50[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
@@ -33,7 +33,7 @@ extern UNK_TYPE D_06000140;
 void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
-    Actor_ProcessInitChain(this, D_80ADEB50);
+    Actor_ProcessInitChain(this, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
 }

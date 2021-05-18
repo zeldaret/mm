@@ -21,7 +21,7 @@ const ActorInit Obj_Kepn_Koya_InitVars = {
     (ActorFunc)ObjKepnKoya_Draw
 };
 
-static InitChainEntry D_80C07C40[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
@@ -32,7 +32,7 @@ extern UNK_TYPE D_06003478;
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &D_80C07C40);
+    Actor_ProcessInitChain(&this->dyna.actor, &sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);

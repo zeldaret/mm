@@ -104,7 +104,7 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
 
     if (this->collider.base.ocFlags2 & 1) {
         *num = 0;
-        return globalCtx->actorCtx.actorList[2].first;
+        return PLAYER;
     }
 
     if (this->collider.base.ocFlags1 & 2) {

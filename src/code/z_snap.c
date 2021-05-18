@@ -145,7 +145,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     }
 
     actors[0] = actor;
-    actors[1] = globalCtx->actorCtx.actorList[2].first; // TODO PLAYER macro
+    actors[1] = &PLAYER->base;
     if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;
