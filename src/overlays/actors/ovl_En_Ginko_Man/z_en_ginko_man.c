@@ -356,7 +356,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan *this, GlobalContext *globalCtx)
             }
             else {
                 if (gSaveContext.perm.unk24.currentRupees > 0) {
-                    func_8019F208(0x4806);
+                    func_8019F208();
                     func_801518B0(globalCtx, 0x44F, &this->actor);
                     this->curTextId = 0x44F; // "All right! so..."
                 } else {
@@ -383,7 +383,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan *this, GlobalContext *globalCtx)
                 this->curTextId = 0x459; // HEY you dont have that much
                 //return;
             } else {
-                func_8019F208(0x4806);
+                func_8019F208();
                 if (globalCtx->msgCtx.bankRupeesSelected >= 100) {
                     func_801518B0(globalCtx, 0x455, &this->actor);
                     this->curTextId = 0x455; // You're really going to be give me that much? Rich little guy!
@@ -459,7 +459,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan *this, GlobalContext *globalCtx)
                 this->curTextId = 0x475; // You can't hold that many in your wallet
                 return;
             }
-            func_8019F208(0x4806);
+            func_8019F208();
 
             if (globalCtx->msgCtx.bankRupeesSelected >= 100) {
                 func_801518B0(globalCtx, 0x474, &this->actor);

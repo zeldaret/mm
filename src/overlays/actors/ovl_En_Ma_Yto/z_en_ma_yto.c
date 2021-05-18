@@ -28,8 +28,8 @@ void func_80B8EC30(EnMaYto* this);
 void func_80B8ECAC(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8ED8C(EnMaYto* this);
 void func_80B8EDC8(EnMaYto* this, GlobalContext* globalCtx);
-// void func_80B8EEAC(EnMaYto* this, GlobalContext* globalCtx);
-// void func_80B8EF4C(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8EEAC(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8EF4C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8F074(EnMaYto* this);
 void func_80B8F108(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8F254(EnMaYto* this);
@@ -63,6 +63,7 @@ void func_80B905B0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90C08(EnMaYto* this, s32 index);
 void func_80B90DF0(EnMaYto* this);
+void func_80B90E50(EnMaYto* this, s32);
 void func_80B90E84(EnMaYto* this, s16, s16);
 void func_80B90EC8(EnMaYto* this, s16, s16);
 void func_80B90EF0(EnMaYto* this);
@@ -382,42 +383,152 @@ void func_80B8ED8C(EnMaYto *this) {
     this->actionFunc = func_80B8EDC8;
 }
 
-/*
-void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
-    u32 temp_v0;
+extern AnimationHeader D_0600AF7C;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
-    if (temp_v0 < 7U) {
-        goto **(&jtbl_D_80B91650 + (temp_v0 * 4));
-    case 4:
-        func_80B8EEAC(this, globalCtx);
-        goto block_6;
-    case 5:
-        func_80B8EF4C(this, globalCtx);
-        goto block_6;
-    case 6:
-        if (func_80147624(globalCtx) != 0) {
-            this->unk_31E = 0;
-            func_80B8EC30(this);
-        }
+void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 4:
+            func_80B8EEAC(this, globalCtx);
+            break;
+
+        case 5:
+            func_80B8EF4C(this, globalCtx);
+            break;
+
+        case 6:
+            if (func_80147624(globalCtx) != 0) {
+                this->unk_31E = 0;
+                func_80B8EC30(this);
+            }
+            break;
+
+        case 0:
+            break;
+
+        case 1:
+            break;
+
+        case 2:
+            break;
+
+        case 3:
+            break;
     }
-default:
-case 0:
-block_6:
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x3000, 0x100);
-    if ((this->unk_322 == 0x3395) && (this->skelAnime.animCurrentSeg == 0x600AF7C) && (func_801378B8(&this->skelAnime, (bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) {
+    if ((this->unk_322 == 0x3395) && (this->skelAnime.animCurrentSeg == &D_0600AF7C) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
         func_80B90C08(this, 4);
     }
 }
+
+void func_80B8EEAC(EnMaYto *this, GlobalContext *globalCtx) {
+    if (func_80147624(globalCtx) != 0) {
+        if (globalCtx->msgCtx.choiceIndex == 0) {
+            func_8019F208();
+            func_80B90EC8(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x3392U, &this->actor);
+            this->unk_322 = 0x3392;
+        }
+        else {
+            func_8019F230();
+            func_801518B0(globalCtx, 0x3391U, &this->actor);
+            this->unk_322 = 0x3391;
+        }
+    }
+}
+
+void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
+    if (func_80147624(globalCtx) != 0) {
+        switch (this->unk_322) {
+        case 0x3391:
+            func_80B90EC8(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x3392U, (Actor *) this);
+            this->unk_322 = 0x3392;
+            break;
+
+        case 0x3392:
+            func_80B90EC8(this, (u16)3, (u16)1);
+            func_801518B0(globalCtx, 0x3393U, (Actor *) this);
+            this->unk_322 = 0x3393;
+            func_80151BB4(globalCtx, 6U);
+            break;
+
+        case 0x3394:
+            func_80B90C08(this, 2);
+            func_801518B0(globalCtx, 0x3395U, (Actor *) this);
+            this->unk_322 = 0x3395;
+            break;
+
+        case 0x3395:
+            func_80B90C08(this, 1);
+            func_801518B0(globalCtx, 0x3396U, (Actor *) this);
+            this->unk_322 = 0x3396;
+            func_80151BB4(globalCtx, 6U);
+            break;
+        }
+    }
+}
+
+void func_80B8F074(EnMaYto *this) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+        func_80B90E50(this, 0);
+        this->unk_31E = 0;
+    } else {
+        func_80B90E50(this, 2);
+        this->unk_31E = 2;
+    }
+    func_80B90EF0(this);
+    this->actionFunc = func_80B8F108;
+}
+
+/*
+void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
+    s16 sp26;
+    s16 temp_v1;
+    s16 temp_v1_2;
+    s16 temp_v1_3;
+    struct Actor *temp_a0;
+    struct Actor *temp_a0_2;
+    s32 phi_v0;
+    s32 phi_v0_2;
+
+    temp_v1 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
+    temp_v1_2 = temp_v1;
+    sp26 = temp_v1_2;
+    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+        func_80B9083C(this, globalCtx);
+        func_80B8F254(this);
+        return;
+    }
+    temp_a0 = this->actor.child;
+    if (temp_a0 != 0) {
+        sp26 = temp_v1_2;
+        if (func_800B84D0((Actor *) temp_a0, globalCtx) != 0) {
+            func_800B86C8(this, globalCtx, this);
+            func_80B9083C(this, globalCtx);
+            func_80B8F254(this);
+            return;
+        }
+    }
+    phi_v0 = (s32) temp_v1;
+    if ((s32) temp_v1 < 0) {
+        phi_v0 = -(s32) temp_v1;
+    }
+    if (phi_v0 < 0x4000) {
+        func_800B8614((Actor *) this, globalCtx, 120.0f);
+        temp_a0_2 = this->actor.child;
+        if ((temp_a0_2 != 0) && (((s32) gSaveContext.perm.day % 5) != 2)) {
+            temp_v1_3 = temp_a0_2->shape.rot.y - temp_a0_2->yawTowardsPlayer;
+            phi_v0_2 = (s32) temp_v1_3;
+            if ((s32) temp_v1_3 < 0) {
+                phi_v0_2 = -(s32) temp_v1_3;
+            }
+            if (phi_v0_2 < 0x4000) {
+                func_800B8614((Actor *) temp_a0_2, globalCtx, 120.0f);
+            }
+        }
+    }
+}
 */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EDC8.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EEAC.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EF4C.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F074.asm")
-
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F108.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F254.asm")
@@ -868,15 +979,15 @@ void func_80B90DF0(EnMaYto *this) {
     }
 }
 
-/*
-void *func_80B90E50(void *arg0, s16 arg1) {
-    void *temp_v0;
 
-    temp_v0 = arg0->unk124;
-    if ((temp_v0 != 0) && (temp_v0->unk0 == 0x21F)) {
-        temp_v0->unk32C = arg1;
+/*
+void func_80B90E50(EnMaYto *this, s32 arg1) {
+    EnMaYts* romani;
+
+    romani = (EnMaYts*)this->actor.child;
+    if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
+        romani->unk_32C = (s16) arg1;
     }
-    return temp_v0;
 }
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E50.asm")
