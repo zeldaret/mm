@@ -32,7 +32,7 @@ extern UNK_TYPE D_06003478;
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &D_80C07C40);
+    Actor_ProcessInitChain(&this->dyna.actor, D_80C07C40);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);

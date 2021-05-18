@@ -8,7 +8,7 @@ u32 gViConfigFeatures = 0x42;
 f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
-void Idle_ClearMemory(const void* begin, const void* end) {
+void Idle_ClearMemory(void* begin, void* end) {
     if (begin < end) {
         bzero(begin, (s32)(int)end - (int)begin);
     }

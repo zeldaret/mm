@@ -141,14 +141,14 @@ void FaultDrawer_VPrintf(char* str, char* args) { //va_list
     _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
 }
 
-void FaultDrawer_Printf(const char* fmt, ...) {
+void FaultDrawer_Printf(char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 
     FaultDrawer_VPrintf(fmt, args);
 }
 
-void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
+void FaultDrawer_DrawText(s32 x, s32 y, char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 

@@ -238,7 +238,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
-        return 3.4028235e38f; // TODO FLT_MAX
+        return FLT_MAX;
     }
 
     return offset.z;

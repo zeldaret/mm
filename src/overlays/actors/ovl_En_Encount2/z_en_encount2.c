@@ -56,7 +56,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dynaActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dynaActor, colHeader);
     ActorShape_Init(&this->dynaActor.actor.shape, 0.0f, func_800B3FC0, 25.0f);
     this->dynaActor.actor.colChkInfo.mass = 0xFF;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dynaActor, &sJntSphInit, &this->colElement);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dynaActor.actor, &sJntSphInit, &this->colElement);
 
     this->dynaActor.actor.targetMode = 6;
     this->dynaActor.actor.colChkInfo.health = 1;
@@ -78,7 +78,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
-    this->dynaActor.actor.colChkInfo.damageTable = &damageTable;
+    this->dynaActor.actor.colChkInfo.damageTable = damageTable;
     EnEncount2_SetIdle(this);
 }
 
@@ -90,7 +90,7 @@ void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_SetIdle(EnEncount2* this) {
     this->isPopped = 0;
-    this->actionFunc = &EnEncount2_Idle;
+    this->actionFunc = EnEncount2_Idle;
 }
 
 void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
@@ -146,8 +146,8 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (! this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dynaActor.actor);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
 
@@ -162,7 +162,7 @@ void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_InitParticles(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
     s16 i;
-    EnEncount2Particle *sPtr = &this->particles;
+    EnEncount2Particle *sPtr = this->particles;
 
     for (i = 0; i < 200; ++i) {
         if ( ! sPtr->enabled) {
@@ -188,7 +188,7 @@ void EnEncount2_InitParticles(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
 
 void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
-    EnEncount2Particle *sPtr = &this->particles;
+    EnEncount2Particle *sPtr = this->particles;
 
     for(i = 0 ; i < 200; i += 2) {
         if (sPtr->enabled) {
