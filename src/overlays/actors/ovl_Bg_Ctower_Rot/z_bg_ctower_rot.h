@@ -5,9 +5,13 @@
 
 struct BgCtowerRot;
 
+typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, GlobalContext*);
+
 typedef struct BgCtowerRot {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x24];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgCtowerRotActionFunc actionFunc;
+    /* 0x160 */ f32 unk160; // Set to 0 but never used
+    /* 0x164 */ f32 timer;
 } BgCtowerRot; // size = 0x168
 
 extern const ActorInit Bg_Ctower_Rot_InitVars;
