@@ -375,10 +375,41 @@ void func_80B8ECAC(EnMaYto *this, GlobalContext *globalCtx) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8ECAC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8ED8C.asm")
+void func_80B8ED8C(EnMaYto *this) {
+    func_80B90C08(this, 1);
+    this->unk_31E = 2;
+    this->actionFunc = func_80B8EDC8;
+}
 
+/*
+void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
+    u32 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 < 7U) {
+        goto **(&jtbl_D_80B91650 + (temp_v0 * 4));
+    case 4:
+        func_80B8EEAC(this, globalCtx);
+        goto block_6;
+    case 5:
+        func_80B8EF4C(this, globalCtx);
+        goto block_6;
+    case 6:
+        if (func_80147624(globalCtx) != 0) {
+            this->unk_31E = 0;
+            func_80B8EC30(this);
+        }
+    }
+default:
+case 0:
+block_6:
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x3000, 0x100);
+    if ((this->unk_322 == 0x3395) && (this->skelAnime.animCurrentSeg == 0x600AF7C) && (func_801378B8(&this->skelAnime, (bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) {
+        func_80B90C08(this, 4);
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EDC8.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EEAC.asm")

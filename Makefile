@@ -265,7 +265,7 @@ build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
 
 build/%.d: %.c
 	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
+	@$(GCC) $< -Iinclude -I./ -Isrc -MM -MT 'build/$*.o' >> $@
 
 build/dmadata_script.ld: build/dmadata_script.txt
 	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
