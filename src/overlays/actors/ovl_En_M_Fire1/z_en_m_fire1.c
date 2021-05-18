@@ -8,15 +8,17 @@ void EnMFire1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMFire1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMFire1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-const ActorInit En_M_Fire1_InitVars = { ACTOR_EN_M_FIRE1,
-                                        ACTORCAT_MISC,
-                                        FLAGS,
-                                        GAMEPLAY_KEEP,
-                                        sizeof(EnMFire1),
-                                        (ActorFunc)EnMFire1_Init,
-                                        (ActorFunc)EnMFire1_Destroy,
-                                        (ActorFunc)EnMFire1_Update,
-                                        NULL };
+const ActorInit En_M_Fire1_InitVars = {
+    ACTOR_EN_M_FIRE1,
+    ACTORCAT_MISC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnMFire1),
+    (ActorFunc)EnMFire1_Init,
+    (ActorFunc)EnMFire1_Destroy,
+    (ActorFunc)EnMFire1_Update,
+    (ActorFunc)NULL,
+};
 
 static ColliderCylinderInit sCylinderInit = {
     {
