@@ -15,8 +15,8 @@ This is a decompilation of Legend of Zelda: Majora's Mask (U) 1.0
 It builds the following ROM:
 * rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
-Please refer to the Installation guide in the Wiki for setup instructions.
+Please refer to the [Installation guide in the Wiki](https://github.com/zeldaret/mm/wiki/Installation) for setup instructions.
 
-Website: https://zelda64.dev/
-
-Discord: https://discord.zelda64.dev
+- [Website](https://zelda64.dev/)
+- [Discord](https://discord.zelda64.dev/)
+- [How to Contribute](CONTRIBUTING.md)
