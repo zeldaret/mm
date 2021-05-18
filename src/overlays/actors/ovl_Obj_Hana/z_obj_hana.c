@@ -37,7 +37,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHana* this = THIS;
-    
+
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }
 

@@ -77,9 +77,10 @@ void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-static UNK_PTR D_80BFD280[] = {&D_04061FC0, &D_04061FE0, &D_04062000, &D_04062040, &D_04062020, &D_04062060, &D_04062000};
+static UNK_PTR D_80BFD280[] = { &D_04061FC0, &D_04061FE0, &D_04062000, &D_04062040,
+                                &D_04062020, &D_04062060, &D_04062000 };
 
-void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnScopecoin* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 

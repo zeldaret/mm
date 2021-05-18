@@ -132,10 +132,8 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0,&posF,&adjustedPos);
-        if ((adjustedPos.z > -radiusF) &&
-            (600 + radiusF > adjustedPos.z) &&
-            (400 > fabsf(adjustedPos.x) - radiusF) &&
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &posF, &adjustedPos);
+        if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_FindSlot(lights);
             if (light != NULL) {
@@ -190,7 +188,8 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx) {
     static LightsPosBindFunc posBindFuncs[] = { Lights_BindPoint, Lights_BindDirectional, Lights_BindPoint };
-    static LightsBindFunc dirBindFuncs[] = { Lights_BindPointWithReference, Lights_BindDirectional, Lights_BindPointWithReference };
+    static LightsBindFunc dirBindFuncs[] = { Lights_BindPointWithReference, Lights_BindDirectional,
+                                             Lights_BindPointWithReference };
 
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
@@ -233,7 +232,9 @@ void Lights_FreeNode(LightNode* light) {
     if (light != NULL) {
         sLightsBuffer.numOccupied--;
         light->info = NULL;
-        sLightsBuffer.searchIndex = (light - sLightsBuffer.lights) / (s32)sizeof(LightNode); //! @bug Due to pointer arithmetic, the division is unnecessary
+        sLightsBuffer.searchIndex =
+            (light - sLightsBuffer.lights) /
+            (s32)sizeof(LightNode); //! @bug Due to pointer arithmetic, the division is unnecessary
     }
 }
 
@@ -262,7 +263,7 @@ void func_80102544(LightContext* lightCtx, u8 a1, u8 a2, u8 a3, s16 numLights, s
  * Allocate a new Lights group and initilize the ambient color with that provided by LightContext
  */
 Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx) {
-   return Lights_New(gfxCtx, lightCtx->ambient.r, lightCtx->ambient.g, lightCtx->ambient.b);
+    return Lights_New(gfxCtx, lightCtx->ambient.r, lightCtx->ambient.g, lightCtx->ambient.b);
 }
 
 void LightContext_InitList(GlobalContext* globalCtx, LightContext* lightCtx) {
@@ -317,12 +318,13 @@ void LightContext_RemoveLight(GlobalContext* globalCtx, LightContext* lightCtx, 
     }
 }
 
-Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB, u8 numLights, u8 r, u8 g, u8 b, s8 x, s8 y, s8 z) {
+Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB, u8 numLights, u8 r, u8 g,
+                          u8 b, s8 x, s8 y, s8 z) {
     Lights* lights;
     s32 i;
 
     // TODO allocation should be a macro
-    lights = (Lights *)((int)gfxCtx->polyOpa.d - sizeof(Lights));
+    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
     gfxCtx->polyOpa.d = (void*)lights;
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
@@ -340,7 +342,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
         lights->l.l[i].l.dir[2] = z;
     }
 
-    Lights_Draw(lights,gfxCtx);
+    Lights_Draw(lights, gfxCtx);
 
     return lights;
 }
@@ -349,7 +351,7 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
     Lights* lights;
 
     // TODO allocation should be a macro
-    lights = (Lights *)((int)gfxCtx->polyOpa.d - sizeof(Lights));
+    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
     gfxCtx->polyOpa.d = (void*)lights;
 
     lights->l.a.l.col[0] = ambientR;
@@ -409,10 +411,11 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
         dl = func_8012C7FC(POLY_XLU_DISP);
 
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080); //! This doesn't resolve to any of the macros in gdi.h
+        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4,
+                        0x00000080); //! This doesn't resolve to any of the macros in gdi.h
 
-        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
-                                0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+                          0);
 
         gSPDisplayList(dl++, D_04029CB0);
 
@@ -425,9 +428,10 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
                     gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     SysMatrix_InsertTranslation(params->x, params->y, params->z, 0);
-                    Matrix_Scale(scale,scale,scale, MTXMODE_APPLY);
+                    Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(dl++, D_04029CF0);
                 }

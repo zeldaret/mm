@@ -17,7 +17,8 @@ void EffFootmark_Init(GlobalContext* ctxt) {
     }
 }
 
-void EffFootmark_Add(GlobalContext* ctxt, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
+void EffFootmark_Add(GlobalContext* ctxt, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red,
+                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
     s32 i;
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
@@ -52,7 +53,7 @@ void EffFootmark_Add(GlobalContext* ctxt, MtxF* displayMatrix, Actor* actor, u8 
         if (destination == NULL) {
             destination = oldest;
         }
-        Matrix_MtxFCopy(&destination->displayMatrix,displayMatrix);
+        Matrix_MtxFCopy(&destination->displayMatrix, displayMatrix);
         destination->actor = actor;
         destination->location.x = location->x;
         destination->location.y = location->y;
@@ -98,7 +99,7 @@ void EffFootmark_Update(GlobalContext* ctxt) {
 void EffFootmark_Draw(GlobalContext* ctxt) {
     EffFootmark* footmark;
     s32 i;
-    GraphicsContext *gfxCtx = ctxt->state.gfxCtx;
+    GraphicsContext* gfxCtx = ctxt->state.gfxCtx;
 
     func_8012C448(ctxt->state.gfxCtx);
 
@@ -111,10 +112,10 @@ void EffFootmark_Draw(GlobalContext* ctxt) {
 
             gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(ctxt->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
 
-            gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue, footmark->alpha >> 8);
+            gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue,
+                            footmark->alpha >> 8);
 
             gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC288);
         }
     }
 }
-
