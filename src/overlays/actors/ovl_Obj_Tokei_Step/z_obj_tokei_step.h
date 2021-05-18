@@ -10,8 +10,10 @@ typedef void (*ObjTokeiStepFunc)(struct ObjTokeiStep*, struct GlobalContext*);
 typedef struct ObjTokeiStepStep {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 posChangeY;
-    /* 0x10 */ s16 startFallingTimer; // Timer for when a step starts falling after the previous step has started bouncing during opening cutscene
-    /* 0x12 */ s8 numBounces; // Counter for times the step falls below its final Y pos, and thus will bounce back up during opening cutscene
+    /* 0x10 */ s16 startFallingTimer; // Timer for when a step starts falling after the previous step has started
+                                      // bouncing during opening cutscene
+    /* 0x12 */ s8 numBounces; // Counter for times the step falls below its final Y pos, and thus will bounce back up
+                              // during opening cutscene
     /* 0x13 */ s8 hasSoundPlayed;
 } ObjTokeiStepStep; // size = 0x14
 
