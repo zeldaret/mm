@@ -26,7 +26,7 @@ typedef struct EnMaYto {
     /* 0x28C */ Vec3s unk_28C;
     /* 0x292 */ char unk_292[0x2];
     /* 0x294 */ char unk_294[0x7C];
-    /* 0x310 */ u16 unk_310;
+    /* 0x310 */ s16 unk_310;
     /* 0x312 */ char unk_312[0x2];
     /* 0x314 */ char unk_314[0x2];
     /* 0x316 */ s16 unk_316;
@@ -35,7 +35,7 @@ typedef struct EnMaYto {
     /* 0x31C */ s16 unk_31C;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ s16 unk_320;
-    /* 0x322 */ char unk_322[0x2];
+    /* 0x322 */ u16 unk_322; // textId
 } EnMaYto; // size = 0x324
 
 extern const ActorInit En_Ma_Yto_InitVars;

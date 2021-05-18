@@ -15,18 +15,19 @@ void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx);
+s32  func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx);
-void func_80B8EBDC(EnMaYto* this);
 void func_80B8E938(EnMaYto* this, GlobalContext* globalCtx);
+s32  func_80B8EABC(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8EBDC(EnMaYto* this);
+void func_80B8EBF0(EnMaYto* this, GlobalContext* globalCtx);
 
 void func_80B90C08(EnMaYto* this, s32 index);
-
-s32 func_80B8EABC(EnMaYto* this, GlobalContext* globalCtx);
-
+void func_80B90DF0(EnMaYto* this);
 void func_80B90EC8(EnMaYto* this, s16, s16);
 
-void func_80B90DF0(EnMaYto* this);
+s32  func_80B91014(void);
+void func_80B9109C(void);
 
 /*
 const ActorInit En_Ma_Yto_InitVars = {
@@ -243,11 +244,11 @@ loop_1:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EA38.asm")
 
 /*
-? func_80B8EABC(void *arg0) {
-    u32 temp_t6;
+s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
+    s32 temp_t6;
 
-    temp_t6 = arg0->unk204;
-    if (temp_t6 < 5U) {
+    temp_t6 = this->type;
+    if ((u32) temp_t6 < 5U) {
         goto **(&jtbl_D_80B9163C + (temp_t6 * 4));
     case 0:
         return 0;
@@ -275,7 +276,7 @@ block_6:
             return 2;
             return 1;
         }
-        if (CURRENT_DAY != 2) {
+        if (((s32) gSaveContext.perm.day % 5) != 2) {
             goto block_6;
         }
         return 0;
@@ -291,15 +292,16 @@ void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-/*
 // Setup function
 void func_80B8EBDC(EnMaYto *this) {
-    this->actionFunc = &func_80B8EBF0;
+    this->actionFunc = func_80B8EBF0;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EBDC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EBF0.asm")
+void func_80B8EBF0(EnMaYto *this, GlobalContext *globalCtx) {
+    if (func_80B8EABC(this, globalCtx) == 2) {
+        func_80B8E938(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EC30.asm")
 
@@ -419,7 +421,52 @@ block_10:
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9083C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90A78.asm")
+void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
+
+void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
+    s32 temp_hi;
+
+    if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+        temp_hi = CURRENT_DAY;
+        if (temp_hi == 2) {
+            if (this->unk_310 == 1) {
+                func_801518B0(globalCtx, 0x33AEU, &this->actor);
+                this->unk_322 = 0x33AE;
+            } else {
+                this->unk_310 = 1;
+                func_80B9109C();
+                func_801518B0(globalCtx, 0x33A9U, &this->actor);
+                this->unk_322 = 0x33A9;
+            }
+        }
+        else if (temp_hi == 3) {
+            if (this->unk_310 == 1) {
+                func_801518B0(globalCtx, 0x33CBU, &this->actor);
+                this->unk_322 = 0x33CB;
+            } else {
+                this->unk_310 = 1;
+                func_80B9109C();
+                func_80B90EC8(this, (u16)0, (u16)1);
+                func_801518B0(globalCtx, 0x33C6U, &this->actor);
+                this->unk_322 = 0x33C6;
+            }
+        }
+    } else {
+        if (func_80B91014() != 0) {
+            this->unk_31E = 2;
+            func_80B90EC8(this, (u16)5, (u16)3);
+            func_801518B0(globalCtx, 0x33B3U, &this->actor);
+            this->unk_322 = 0x33B3;
+            func_80151BB4(globalCtx, 6U);
+        }
+        else {
+            func_80B9109C();
+            func_80B90EC8(this, (u16)5, (u16)3);
+            func_801518B0(globalCtx, 0x33B1U, &this->actor);
+            this->unk_322 = 0x33B1;
+        }
+    }
+}
 
 /*
 void func_80B90C08(EnMaYto *this, s32 index) {
@@ -474,7 +521,7 @@ void func_80B90D98(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80B9037C != this->actionFunc) {
         sp1C = temp_a2;
         globalCtx = globalCtx;
-        Collider_UpdateCylinder((Actor *) this, temp_a2);
+        Collider_UpdateCylinder(&this->actor, temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, (Collider *) temp_a2);
     }
 }
@@ -514,13 +561,11 @@ void func_80B90DF0(EnMaYto *this) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E84.asm")
 
-/*
+
 void func_80B90EC8(EnMaYto *this, s16 arg1, s16 arg2) {
     this->unk_316 = arg1;
     this->unk_318 = arg2;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90EC8.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90EF0.asm")
 
@@ -528,6 +573,26 @@ void func_80B90EC8(EnMaYto *this, s16 arg1, s16 arg2) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B91014.asm")
 
+/*
+s32 func_80B9109C(void) {
+    s32 temp_hi;
+
+    temp_hi = CURRENT_DAY;
+    if (temp_hi == 1) {
+        gSaveContext.perm.weekEventReg[0xD] |= 1<<2;
+        return temp_hi;
+    }
+    if (temp_hi == 2) {
+        gSaveContext.perm.weekEventReg[0xD] |= 1<<3;
+        return temp_hi;
+    }
+    if (temp_hi != 3) {
+        return temp_hi;
+    }
+    gSaveContext.perm.weekEventReg[0xD] |= 1<<4;
+    return temp_hi;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9109C.asm")
 
 void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -580,9 +645,9 @@ extern Gfx D_06005430[];
 extern void* D_80B915C8[];
 extern void* D_80B915D8[];
 
-#ifdef NON_MATCHING
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
+    s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->type == 1 && (gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
@@ -599,6 +664,3 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/EnMaYto_Draw.asm")
-#endif
