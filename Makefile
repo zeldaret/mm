@@ -98,7 +98,7 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 # This file defines `ROM_FILES`, `UNCOMPRESSED_ROM_FILES`, and rules for generating `.yaz0` files
 ifneq ($(MAKECMDGOALS), clean)
@@ -135,14 +135,16 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 .PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
 
-$(UNCOMPRESSED_ROM): $(TEXTURE_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
+# just using build/baserom still probably has some race condiction/dependency bug, but since
+# it is first and should be completed relatively fast, it should not occur all that often.
+$(UNCOMPRESSED_ROM): build/baserom $(TEXTURE_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
 ifeq ($(COMPARE),1)
 	@md5sum $(UNCOMPRESSED_ROM)
 	@md5sum -c checksum_uncompressed.md5
 endif
 
-$(ROM): $(ROM_FILES)
+$(ROM): build/baserom $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
 ifeq ($(COMPARE),1)
 	@md5sum $(ROM)
@@ -206,18 +208,15 @@ assetclean:
 	$(RM) -rf build/assets
 
 distclean: assetclean clean
-	$(RM) -rf baserom/ asm 
+	$(RM) -rf baserom/ asm/ distclean/
 
 ## Extraction step
-# TODO: The `cp -r baserom/ build/baserom/` is a temporary solution to the race condition/dependency bug we currently have.
-# It should properly fixed in the future.
 setup:
 	git submodule update --init --recursive
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
 	python3 extract_assets.py
-	cp -r baserom/ build/baserom/
 
 ## Assembly generation
 assembly: $(S_FILES)
@@ -239,8 +238,8 @@ init:
 
 # Recipes
 
-build/baserom/%: baserom/%
-	@cp $< $@
+build/baserom:
+	cp -r baserom/ build/baserom/
 
 # FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
 # The simplest way to do that is to give them an order dependency on .c files' .o files
