@@ -7,7 +7,7 @@ pipeline {
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
-                sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 mm.us.rev1.z64'
+                sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 baserom.mm.us.rev1.z64'
             }
         }
         stage('Build') {
