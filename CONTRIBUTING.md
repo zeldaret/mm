@@ -57,7 +57,9 @@ There are some conventions that cannot be automatically enforced.
 (TODO)
 - Naming scheme
 - `ActorFunc` naming specifics
+- Actor `struct` & `enum` defintions go in the header file
 - Renaming symbols referenced by asm (?)
+- Documentation step - what does this entail? (Not required for actors, but if started should be complete. Should be required for code/boot)
 
 ### `NON_MATCHING`
 
