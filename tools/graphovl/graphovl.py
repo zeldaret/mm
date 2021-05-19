@@ -23,8 +23,6 @@ def actor_src_path(name):
         filename += name + "_actor"
     filename += "/z_" + name.lower() + ".c"
 
-    filename = os.path.join(script_dir, "..", filename)
-
     return filename
 
 func_call_regexpr = re.compile(r'[a-zA-Z_\d]+\([^\)]*\)(\.[^\)]*\))?')
