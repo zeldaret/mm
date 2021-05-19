@@ -897,8 +897,8 @@ void func_8012C240(GraphicsContext* gCtxt) {
     gSPDisplayList(gCtxt->polyXlu.p++, &sSetupDL[6 * 0x19]);
 }
 
-void func_8012C268(GlobalContext* ctxt) {
-    func_8012C28C(ctxt->state.gfxCtx);
+void func_8012C268(GlobalContext* globalCtx) {
+    func_8012C28C(globalCtx->state.gfxCtx);
 }
 
 void func_8012C28C(GraphicsContext* gCtxt) {

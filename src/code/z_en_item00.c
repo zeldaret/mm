@@ -270,7 +270,7 @@ void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
+void func_800A640C(EnItem00* this, GlobalContext* globalCtx) {
     if ((this->actor.params <= ITEM00_RUPEE_RED) || ((this->actor.params == ITEM00_HEART) && (this->unk152 < 0)) || (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) && (this->actor.params < ITEM00_BOMBS_0)) {
