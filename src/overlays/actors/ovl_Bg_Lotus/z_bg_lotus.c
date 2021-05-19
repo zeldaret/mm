@@ -36,7 +36,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_06000A20; // Lilypad collision
-extern Gfx D_06000040[];        // Lilypad model
+extern Gfx D_06000040[];           // Lilypad model
 
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;

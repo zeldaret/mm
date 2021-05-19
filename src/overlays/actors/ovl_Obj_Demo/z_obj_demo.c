@@ -17,7 +17,7 @@ const ActorInit Obj_Demo_InitVars = {
     (ActorFunc)ObjDemo_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)ObjDemo_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

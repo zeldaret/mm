@@ -18,7 +18,7 @@ const ActorInit En_Kitan_InitVars = {
     (ActorFunc)EnKitan_Init,
     (ActorFunc)EnKitan_Destroy,
     (ActorFunc)EnKitan_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Eff_Stk_InitVars = {
     (ActorFunc)EffStk_Init,
     (ActorFunc)EffStk_Destroy,
     (ActorFunc)EffStk_Update,
-    (ActorFunc)EffStk_Draw
+    (ActorFunc)EffStk_Draw,
 };
 */
 

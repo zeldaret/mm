@@ -19,7 +19,7 @@ const ActorInit En_Bom_Chu_InitVars = {
     (ActorFunc)EnBomChu_Init,
     (ActorFunc)EnBomChu_Destroy,
     (ActorFunc)EnBomChu_Update,
-    (ActorFunc)EnBomChu_Draw
+    (ActorFunc)EnBomChu_Draw,
 };
 */
 

@@ -20,7 +20,7 @@ const ActorInit Item_Inbox_InitVars = {
     (ActorFunc)ItemInbox_Init,
     (ActorFunc)ItemInbox_Destroy,
     (ActorFunc)ItemInbox_Update,
-    (ActorFunc)ItemInbox_Draw
+    (ActorFunc)ItemInbox_Draw,
 };
 
 void ItemInbox_Init(Actor* thisx, GlobalContext* globalCtx) {

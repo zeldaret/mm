@@ -19,7 +19,7 @@ const ActorInit En_Stone_heishi_InitVars = {
     (ActorFunc)EnStoneheishi_Init,
     (ActorFunc)EnStoneheishi_Destroy,
     (ActorFunc)EnStoneheishi_Update,
-    (ActorFunc)EnStoneheishi_Draw
+    (ActorFunc)EnStoneheishi_Draw,
 };
 */
 
