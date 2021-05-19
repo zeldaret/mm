@@ -322,8 +322,8 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_Diff(&player->unk368, &this->actor.world.pos, &sp68);
             sp48 = SQ(sp68.x) + SQ(sp68.z);
             sp4C = sqrtf(sp48);
-            Matrix_RotateY(atans(sp68.x, sp68.z), MTXMODE_APPLY);
-            SysMatrix_InsertXRotation_s(atans(-sp68.y, sp4C), MTXMODE_APPLY);
+            Matrix_RotateY(Math_Atan2S(sp68.x, sp68.z), MTXMODE_APPLY);
+            SysMatrix_InsertXRotation_s(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
             f0 = sqrtf(SQ(sp68.y) + sp48);
             Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
             gSPMatrix(sp44->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
