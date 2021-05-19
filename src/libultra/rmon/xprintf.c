@@ -52,7 +52,7 @@ int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
         while ((c = *s) != 0 && c != '%') {
             s++;
         }
-        _PROUT((char *) fmt, s - fmt);
+        _PROUT((char*)fmt, s - fmt);
         if (c == 0) {
             return x.nchar;
         }

@@ -1,9 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
 
-// From OOT
-#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
-
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
     Actor* actor;

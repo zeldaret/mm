@@ -177,7 +177,7 @@ void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay) {
     s16 i;
-    EnEncount2Particle *sPtr = this->particles;
+    EnEncount2Particle* sPtr = this->particles;
 
     for (i = 0; i < 200; ++i) {
         if (!sPtr->enabled) {
@@ -203,7 +203,7 @@ void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay) {
 
 void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
-    EnEncount2Particle *sPtr = this->particles;
+    EnEncount2Particle* sPtr = this->particles;
 
     for (i = 0; i < 200; i += 2) {
         if (sPtr->enabled) {

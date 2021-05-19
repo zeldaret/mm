@@ -92,9 +92,9 @@ void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
 }
 
 BumperCollideInfo sBumperCollideInfo[] = {
-    { ACTOR_PLAYER, (BumperCollideActorFunc) ObjBoyo_UpdatePlayerBumpValues },
-    { ACTOR_EN_KAIZOKU, (BumperCollideActorFunc) ObjBoyo_UpdatePirateBumpValues },
-    { ACTOR_EN_BOM, (BumperCollideActorFunc) ObjBoyo_UpdateBombBumpValues },
+    { ACTOR_PLAYER, (BumperCollideActorFunc)ObjBoyo_UpdatePlayerBumpValues },
+    { ACTOR_EN_KAIZOKU, (BumperCollideActorFunc)ObjBoyo_UpdatePirateBumpValues },
+    { ACTOR_EN_BOM, (BumperCollideActorFunc)ObjBoyo_UpdateBombBumpValues },
 };
 
 Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* num) {
@@ -126,7 +126,7 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor* target;
     s32 num;
 
-    target = ObjBoyo_GetCollidedActor((ObjBoyo *)thisx, globalCtx, &num);
+    target = ObjBoyo_GetCollidedActor((ObjBoyo*)thisx, globalCtx, &num);
 
     if (target != NULL) {
         sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);

@@ -72,7 +72,8 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitSV(globalCtx, &this->anime, (SkeletonHeader *) &D_060024F0, (AnimationHeader *) &D_06000040, this->limbDrawTbl, this->transitionDrawTbl, 10);
+    SkelAnime_InitSV(globalCtx, &this->anime, (SkeletonHeader*)&D_060024F0, (AnimationHeader*)&D_06000040,
+                     this->limbDrawTbl, this->transitionDrawTbl, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
@@ -271,9 +272,11 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) { }
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+}
 
-void EnPoFusen_UnkActorDraw(GlobalContext *globalCtx, s32 limbIndex, Actor* actor) { }
+void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+}
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;

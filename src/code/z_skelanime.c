@@ -19,12 +19,9 @@ void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType
 void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType5* entry);
 
 static AnimationEntryCallback sAnimationLoadDone[] = {
-    (AnimationEntryCallback) SkelAnime_LinkAnimetionLoaded,
-    (AnimationEntryCallback) SkelAnime_AnimationType1Loaded,
-    (AnimationEntryCallback) SkelAnime_AnimationType2Loaded,
-    (AnimationEntryCallback) SkelAnime_AnimationType3Loaded,
-    (AnimationEntryCallback) SkelAnime_AnimationType4Loaded,
-    (AnimationEntryCallback) SkelAnime_AnimationType5Loaded,
+    (AnimationEntryCallback)SkelAnime_LinkAnimetionLoaded,  (AnimationEntryCallback)SkelAnime_AnimationType1Loaded,
+    (AnimationEntryCallback)SkelAnime_AnimationType2Loaded, (AnimationEntryCallback)SkelAnime_AnimationType3Loaded,
+    (AnimationEntryCallback)SkelAnime_AnimationType4Loaded, (AnimationEntryCallback)SkelAnime_AnimationType5Loaded,
 };
 
 s32 D_801F5AB0;

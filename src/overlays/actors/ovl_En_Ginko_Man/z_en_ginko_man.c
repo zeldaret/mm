@@ -89,7 +89,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->stampChecked = 0;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->limbDrawTbl, this->transitionDrawTbl, 0x10);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->limbDrawTbl,
+                     this->transitionDrawTbl, 0x10);
     EnGinkoMan_SetupIdle(this);
 }
 
