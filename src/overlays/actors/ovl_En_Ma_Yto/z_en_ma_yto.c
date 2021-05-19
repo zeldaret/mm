@@ -675,8 +675,67 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F744.asm")
+void func_80B8F744(EnMaYto *this) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+        func_80B90C08(this, 0xD);
+        func_80B90E50(this, 0);
+        this->unk_31E = 0;
+    } else {
+        this->unk_320 = 0;
+        func_80B90C08(this, 9);
+        func_80B90E50(this, 2);
+        this->unk_31E = 2;
+    }
+    func_80B90EF0(this);
+    this->actionFunc = func_80B8F7F4;
+}
 
+
+/*
+void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
+    s16 sp26;
+    s16 temp_v1;
+    s16 temp_v1_2;
+    struct Actor *temp_a0;
+    struct Actor *temp_a0_2;
+    s32 phi_v0;
+
+    temp_v1 = (s16) (this->actor.shape.rot.y + 0x471C) - this->actor.yawTowardsPlayer;
+    temp_v1_2 = temp_v1;
+    sp26 = temp_v1_2;
+    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+        func_80B90A78(this, globalCtx);
+        func_80B8F918(this);
+        return;
+    }
+    temp_a0 = this->actor.child;
+    if (temp_a0 != 0) {
+        sp26 = temp_v1_2;
+        if (func_800B84D0((Actor *) temp_a0, globalCtx) != 0) {
+            func_800B86C8(this, globalCtx, this);
+            func_80B90A78(this, globalCtx);
+            func_80B8F918(this);
+            return;
+        }
+    }
+    if ((*(&gSaveContext + 0xF0E) & 1) != 0) {
+        phi_v0 = (s32) temp_v1;
+        if ((s32) temp_v1 < 0) {
+            phi_v0 = -(s32) temp_v1;
+        }
+        if (phi_v0 < 0x2000) {
+block_9:
+            func_800B8614((Actor *) this, globalCtx, 100.0f);
+            temp_a0_2 = this->actor.child;
+            if (temp_a0_2 != 0) {
+                func_800B8614((Actor *) temp_a0_2, globalCtx, 100.0f);
+            }
+        }
+    } else {
+        goto block_9;
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F7F4.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F918.asm")
