@@ -19,7 +19,7 @@ const ActorInit Oceff_Storm_InitVars = {
     (ActorFunc)OceffStorm_Init,
     (ActorFunc)OceffStorm_Destroy,
     (ActorFunc)OceffStorm_Update,
-    (ActorFunc)OceffStorm_Draw
+    (ActorFunc)OceffStorm_Draw,
 };
 */
 

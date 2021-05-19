@@ -19,7 +19,7 @@ const ActorInit En_Bjt_InitVars = {
     (ActorFunc)EnBjt_Init,
     (ActorFunc)EnBjt_Destroy,
     (ActorFunc)EnBjt_Update,
-    (ActorFunc)EnBjt_Draw
+    (ActorFunc)EnBjt_Draw,
 };
 */
 

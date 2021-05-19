@@ -19,7 +19,7 @@ const ActorInit En_Dekubaba_InitVars = {
     (ActorFunc)EnDekubaba_Init,
     (ActorFunc)EnDekubaba_Destroy,
     (ActorFunc)EnDekubaba_Update,
-    (ActorFunc)EnDekubaba_Draw
+    (ActorFunc)EnDekubaba_Draw,
 };
 */
 

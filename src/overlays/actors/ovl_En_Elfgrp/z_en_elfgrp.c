@@ -18,7 +18,7 @@ const ActorInit En_Elfgrp_InitVars = {
     (ActorFunc)EnElfgrp_Init,
     (ActorFunc)EnElfgrp_Destroy,
     (ActorFunc)EnElfgrp_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Fu_Mato_InitVars = {
     (ActorFunc)EnFuMato_Init,
     (ActorFunc)EnFuMato_Destroy,
     (ActorFunc)EnFuMato_Update,
-    (ActorFunc)EnFuMato_Draw
+    (ActorFunc)EnFuMato_Draw,
 };
 */
 

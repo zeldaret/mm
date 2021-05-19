@@ -19,7 +19,7 @@ const ActorInit En_Kbt_InitVars = {
     (ActorFunc)EnKbt_Init,
     (ActorFunc)EnKbt_Destroy,
     (ActorFunc)EnKbt_Update,
-    (ActorFunc)EnKbt_Draw
+    (ActorFunc)EnKbt_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Maruta_InitVars = {
     (ActorFunc)EnMaruta_Init,
     (ActorFunc)EnMaruta_Destroy,
     (ActorFunc)EnMaruta_Update,
-    (ActorFunc)EnMaruta_Draw
+    (ActorFunc)EnMaruta_Draw,
 };
 */
 

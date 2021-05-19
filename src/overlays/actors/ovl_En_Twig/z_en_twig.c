@@ -19,7 +19,7 @@ const ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Init,
     (ActorFunc)EnTwig_Destroy,
     (ActorFunc)EnTwig_Update,
-    (ActorFunc)EnTwig_Draw
+    (ActorFunc)EnTwig_Draw,
 };
 */
 

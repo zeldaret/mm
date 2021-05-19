@@ -19,7 +19,7 @@ const ActorInit En_Torch2_InitVars = {
     (ActorFunc)EnTorch2_Init,
     (ActorFunc)EnTorch2_Destroy,
     (ActorFunc)EnTorch2_Update,
-    (ActorFunc)EnTorch2_Draw
+    (ActorFunc)EnTorch2_Draw,
 };
 */
 
