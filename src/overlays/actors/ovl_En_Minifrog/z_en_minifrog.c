@@ -19,7 +19,7 @@ const ActorInit En_Minifrog_InitVars = {
     (ActorFunc)EnMinifrog_Init,
     (ActorFunc)EnMinifrog_Destroy,
     (ActorFunc)EnMinifrog_Update,
-    (ActorFunc)EnMinifrog_Draw
+    (ActorFunc)EnMinifrog_Draw,
 };
 */
 

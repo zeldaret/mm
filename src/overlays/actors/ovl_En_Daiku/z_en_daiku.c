@@ -19,7 +19,7 @@ const ActorInit En_Daiku_InitVars = {
     (ActorFunc)EnDaiku_Init,
     (ActorFunc)EnDaiku_Destroy,
     (ActorFunc)EnDaiku_Update,
-    (ActorFunc)EnDaiku_Draw
+    (ActorFunc)EnDaiku_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Tokei_Turret_InitVars = {
     (ActorFunc)ObjTokeiTurret_Init,
     (ActorFunc)ObjTokeiTurret_Destroy,
     (ActorFunc)ObjTokeiTurret_Update,
-    (ActorFunc)ObjTokeiTurret_Draw
+    (ActorFunc)ObjTokeiTurret_Draw,
 };
 */
 

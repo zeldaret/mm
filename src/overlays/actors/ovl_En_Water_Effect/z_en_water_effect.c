@@ -19,7 +19,7 @@ const ActorInit En_Water_Effect_InitVars = {
     (ActorFunc)EnWaterEffect_Init,
     (ActorFunc)EnWaterEffect_Destroy,
     (ActorFunc)EnWaterEffect_Update,
-    (ActorFunc)EnWaterEffect_Draw
+    (ActorFunc)EnWaterEffect_Draw,
 };
 */
 

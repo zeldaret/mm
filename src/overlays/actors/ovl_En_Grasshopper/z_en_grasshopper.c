@@ -19,7 +19,7 @@ const ActorInit En_Grasshopper_InitVars = {
     (ActorFunc)EnGrasshopper_Init,
     (ActorFunc)EnGrasshopper_Destroy,
     (ActorFunc)EnGrasshopper_Update,
-    (ActorFunc)EnGrasshopper_Draw
+    (ActorFunc)EnGrasshopper_Draw,
 };
 */
 
