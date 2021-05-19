@@ -19,7 +19,7 @@ const ActorInit En_Estone_InitVars = {
     (ActorFunc)EnEstone_Init,
     (ActorFunc)EnEstone_Destroy,
     (ActorFunc)EnEstone_Update,
-    (ActorFunc)EnEstone_Draw
+    (ActorFunc)EnEstone_Draw,
 };
 */
 

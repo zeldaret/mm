@@ -17,7 +17,7 @@ const ActorInit Obj_Blockstop_InitVars = {
     (ActorFunc)ObjBlockstop_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)ObjBlockstop_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

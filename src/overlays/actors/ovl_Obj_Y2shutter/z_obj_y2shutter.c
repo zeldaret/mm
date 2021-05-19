@@ -19,7 +19,7 @@ const ActorInit Obj_Y2shutter_InitVars = {
     (ActorFunc)ObjY2shutter_Init,
     (ActorFunc)ObjY2shutter_Destroy,
     (ActorFunc)ObjY2shutter_Update,
-    (ActorFunc)ObjY2shutter_Draw
+    (ActorFunc)ObjY2shutter_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit En_Hakurock_InitVars = {
     (ActorFunc)EnHakurock_Init,
     (ActorFunc)EnHakurock_Destroy,
     (ActorFunc)EnHakurock_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 
