@@ -18,7 +18,7 @@ const ActorInit Dm_Gm_InitVars = {
     (ActorFunc)DmGm_Init,
     (ActorFunc)DmGm_Destroy,
     (ActorFunc)DmGm_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

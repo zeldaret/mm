@@ -19,7 +19,7 @@ const ActorInit En_Elf_InitVars = {
     (ActorFunc)EnElf_Init,
     (ActorFunc)EnElf_Destroy,
     (ActorFunc)EnElf_Update,
-    (ActorFunc)EnElf_Draw
+    (ActorFunc)EnElf_Draw,
 };
 */
 

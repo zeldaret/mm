@@ -8,8 +8,7 @@ OSThread* __osActiveQueue = (OSThread*)&__osThreadTail;
 OSThread* __osRunningThread = NULL;
 OSThread* __osFaultedThread = NULL;
 
-void __osDequeueThread(OSThread** queue, OSThread* t)
-{
+void __osDequeueThread(OSThread** queue, OSThread* t) {
     register OSThread* pred;
     register OSThread* succ;
 

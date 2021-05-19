@@ -1,9 +1,10 @@
+MAKEFLAGS += --no-builtin-rules
+
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
-# TODO we do not support static recomp, so force this to 1
 ORIG_COMPILER ?= 0
 
 ifeq ($(NON_MATCHING),1)
@@ -62,37 +63,42 @@ ASFLAGS := -march=vr4300 -32
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 624,649,838,712
 
 #### Files ####
 
 # ROM image
-MM_BASEROM ?= baserom.z64
-MM_ROM_NAME ?= rom
+MM_BASEROM ?= baserom.mm.us.rev1.z64
+MM_ROM_NAME ?= mm.us.rev1.rom
 ROM := $(MM_ROM_NAME).z64
 UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
 ELF := $(MM_ROM_NAME).elf
 
 SRC_DIRS := $(shell find src -type d)
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
-ASSET_XML_DIRS := $(shell find assets/xml* -type d)
-ASSET_SRC_DIRS := $(patsubst assets/xml%,assets/src%,$(ASSET_XML_DIRS))
-ASSET_FILES_XML := $(foreach dir,$(ASSET_XML_DIRS),$(wildcard $(dir)/*.xml))
-ASSET_FILES_OUT := $(patsubst assets/xml%,assets/src%,$(patsubst %.xml,%.c,$(ASSET_FILES_XML)))
+ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
 
 # Because we may not have disassembled the code files yet, there might not be any assembly files.
 # Instead, generate a list of assembly files based on what's listed in the linker script.
 S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+
 C_O_FILES := $(C_FILES:%.c=build/%.o)
 S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-ASSET_O_FILES := $(ASSET_FILES_OUT:%.c=build/%.o)
+ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
 O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 
+## Assets binaries (PNGs, JPGs, etc)
+TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
+TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
+TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
+					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
+
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir,$(BASEROM_DIRS) $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_SRC_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 # This file defines `ROM_FILES`, `UNCOMPRESSED_ROM_FILES`, and rules for generating `.yaz0` files
 ifneq ($(MAKECMDGOALS), clean)
@@ -124,19 +130,21 @@ build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASF
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
-.PHONY: all clean setup diff-init init
+.PHONY: all clean setup diff-init init assetclean distclean assembly
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm $(ASSET_FILES_OUT)
+.PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
 
-$(UNCOMPRESSED_ROM): $(UNCOMPRESSED_ROM_FILES)
+# just using build/baserom still probably has some race condiction/dependency bug, but since
+# it is first and should be completed relatively fast, it should not occur all that often.
+$(UNCOMPRESSED_ROM): build/baserom $(TEXTURE_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
 ifeq ($(COMPARE),1)
 	@md5sum $(UNCOMPRESSED_ROM)
 	@md5sum -c checksum_uncompressed.md5
 endif
 
-$(ROM): $(ROM_FILES)
+$(ROM): build/baserom $(ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
 ifeq ($(COMPARE),1)
 	@md5sum $(ROM)
@@ -169,6 +177,9 @@ build/binary/assets/scenes/%: build/code.elf
 build/binary/overlays/%: build/code.elf
 	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
+
+#### ASM rules ####
+
 # Use an empty sentinel file (dep) to track the directory as a dependency, and
 # emulate GNU Make's order-only dependency.
 # The `touch $@; action || rm $@` pattern ensures that the `dep` file is older
@@ -185,20 +196,37 @@ asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/
 	@touch $@
 	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
 
+
+#### Main commands ####
+
+## Cleaning ##
 clean:
-	rm -rf $(ROM) $(UNCOMPRESSED_ROM) build asm
+	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build
 
-distclean: clean
-	rm -rf assets/src baserom/
+assetclean:
+	$(RM) -rf $(ASSET_BIN_DIRS)
+	$(RM) -rf build/assets
 
+distclean: assetclean clean
+	$(RM) -rf baserom/ asm/ distclean/
+
+## Extraction step
 setup:
-	git submodule update --init --recursive
+	# Initialize submodules, fetching commit in case it is not on the default branch
+	-git submodule update --init --recursive
+	git submodule foreach --recursive 'git fetch origin $$sha1'
+	git submodule update --recursive
 	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
+	python3 extract_assets.py
+
+## Assembly generation
+assembly: $(S_FILES)
+	@echo "Assembly generated."
 
 diff-init: all
-	rm -rf expected/
+	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
 	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
@@ -207,13 +235,14 @@ diff-init: all
 init:
 	$(MAKE) distclean
 	$(MAKE) setup
+	$(MAKE) assembly
 	$(MAKE) all
 	$(MAKE) diff-init
 
 # Recipes
 
-build/baserom/%: baserom/%
-	@cp $< $@
+build/baserom:
+	cp -r baserom/ build/baserom/
 
 # FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
 # The simplest way to do that is to give them an order dependency on .c files' .o files
@@ -228,11 +257,8 @@ build/src/overlays/%.o: src/overlays/%.c
 build/%.o: %.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
-build/assets/src/scenes/%.o: assets/src/scenes/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	find assets/src/scenes/ -path "assets/src/scenes/$*_room*.c" -not -path "*.inc.c" | \
-     sed 's/\(.*\)\.c/\1/' | \
-     xargs -n 1 -r -I'{}' $(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/'{}'.o '{}'.c
+build/assets/%.o: assets/%.c
+	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -270,11 +296,13 @@ build/linker_scripts/%.ld: linker_scripts/%.txt
 build/assets/%.d: assets/%.c
 	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
-assets/src/scenes/%.c: assets/xml/scenes/%.xml
-	$(ZAPD) e -b baserom/assets/scenes -i $< -o $(dir assets/src/scenes/$*)
-	find $(dir assets/src/scenes/$*) -path "assets/src/scenes/$**.png" | \
-     sed 's/\([^\.]*\)\.\([^\.]*\)\.png/$(subst /,\/,$(ZAPD)) btex -tt \2 -i \1.\2.png -o \1.\2.inc.c/' | \
-     bash
+## Build C files from assets
+
+build/%.inc.c: %.png
+	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.jpg.inc.c: assets/%.jpg
+	$(ZAPD) bren -eh -i $< -o $@
 
 ifneq ($(MAKECMDGOALS), clean)
 ifneq ($(MAKECMDGOALS), distclean)

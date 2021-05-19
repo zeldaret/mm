@@ -3,6 +3,8 @@
 
 #include <global.h>
 
+struct EnEncount2;
+
 typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 
 typedef struct EnEncount2Particle{
@@ -16,8 +18,6 @@ typedef struct EnEncount2Particle{
    /* 0x30 */ f32 scale;
 
 } EnEncount2Particle; // size = 0x34
-
-struct EnEncount2;
 
 typedef struct EnEncount2 {
     /* 0x0000 */ DynaPolyActor dynaActor;

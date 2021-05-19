@@ -18,7 +18,7 @@ const ActorInit Obj_Etcetera_InitVars = {
     (ActorFunc)ObjEtcetera_Init,
     (ActorFunc)ObjEtcetera_Destroy,
     (ActorFunc)ObjEtcetera_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

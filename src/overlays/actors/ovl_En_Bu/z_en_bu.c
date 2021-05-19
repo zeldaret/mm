@@ -20,7 +20,7 @@ const ActorInit En_Bu_InitVars = {
     (ActorFunc)EnBu_Init,
     (ActorFunc)EnBu_Destroy,
     (ActorFunc)EnBu_Update,
-    (ActorFunc)EnBu_Draw
+    (ActorFunc)EnBu_Draw,
 };
 
 void EnBu_Init(Actor* thisx, GlobalContext* globalCtx) {

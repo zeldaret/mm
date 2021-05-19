@@ -19,7 +19,7 @@ const ActorInit En_Butte_InitVars = {
     (ActorFunc)EnButte_Init,
     (ActorFunc)EnButte_Destroy,
     (ActorFunc)EnButte_Update,
-    (ActorFunc)EnButte_Draw
+    (ActorFunc)EnButte_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit Bg_Open_Spot_InitVars = {
     (ActorFunc)BgOpenSpot_Init,
     (ActorFunc)BgOpenSpot_Destroy,
     (ActorFunc)BgOpenSpot_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

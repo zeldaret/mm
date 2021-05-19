@@ -19,7 +19,7 @@ const ActorInit En_Bigslime_InitVars = {
     (ActorFunc)EnBigslime_Init,
     (ActorFunc)EnBigslime_Destroy,
     (ActorFunc)EnBigslime_Update,
-    (ActorFunc)EnBigslime_Draw
+    (ActorFunc)EnBigslime_Draw,
 };
 */
 
