@@ -108,6 +108,8 @@ Running `make init` will also make the `./expected` directory and copy all of th
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.
 Some tasks also don't require much knowledge to get started.
 
+Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.
+
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
-More details are available in the [contributing document](CONTRIBUTING.md).
+For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md).

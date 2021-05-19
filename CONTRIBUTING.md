@@ -5,7 +5,7 @@ Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask* for 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference. Some tasks also don't require much knowledge to get started.
 
 This document is meant to be a set of tips and guidelines for contributing to the project.
-For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md) or [our wiki](https://github.com/zeldaret/mm/wiki).
+For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md).
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
@@ -13,12 +13,13 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev), wh
 Useful Links
 ------------
 
-- [Zelda 64 Reverse Engineering Website](https://zelda64.dev/) - Our homepage, with links to other resources.
-- [Installation guide](https://github.com/zeldaret/mm/wiki/Installation) - Instructions for getting this repository set up and built on your machine.
-- [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - A very detailed tutorial on how to get started with decomp. For OOT, but largely applicable to MM as well.
-
 - [Discord](https://discord.zelda64.dev/) - Primary discussion platform.
 - [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) - We use this to track decompilation progress, not GitHub Issues.
+
+- [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
+- [Zelda 64 Reverse Engineering Website](https://zelda64.dev/) - Our homepage, with links to other resources.
+- [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - A very detailed tutorial on how to get started with decomp. For OOT, but largely applicable to MM as well.
+- The `#resources` channel on the Discord contains many more links
 
 Getting Started
 ---------------
@@ -30,12 +31,14 @@ Basic knowledge of C, particularly arrays and pointers, is extremely useful. Kno
 You should be familiar with using git and GitHub. There are a number of tutorials available online, [such as this one](https://github.com/firstcontributions/first-contributions), which can help you get started.
 
 The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [OOT Practice Rom](http://practicerom.com/) (aka GZ) or the [MM Practice Rom](https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
+The [OOT Decompilation Project](https://github.com/zeldaret/oot) is farther along than this project, so it can also be a great resource.
 
-This project only uses *publicly available code*. In particular, do not use any Nintendo source code leaks.
+This project only uses *publicly available code*.
+Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.
 
 ### Environment Setup
 
-Get started by following our [installation guide](https://github.com/zeldaret/mm/wiki/Installation).
+Get started by following the [installation guide in the readme](https://github.com/zeldaret/mm/blob/master/README.md#installation).
 When successful, you should be able to build a matching ROM before you start making any changes.
 
 ### First Contribution
@@ -58,12 +61,25 @@ There are some conventions that cannot be automatically enforced.
 
 ### Naming Scheme
 
-(TODO)
-- Naming scheme
-- `ActorFunc` naming specifics
-- Actor `struct` & `enum` defintions go in the header file
-- Renaming symbols referenced by asm (?)
-- Documentation step - what does this entail? (Not required for actors, but if started should be complete. Should be required for code/boot)
+The following overlays are good examples of our naming conventions:
+
+- [`ovl_Dm_Ravine`](src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.c)
+- [`ovl_En_Jc_Mato`](src/overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.c)
+
+These files demonstrate the following:
+
+- Word order in names are from least-to-most specific (`DM_RAVINE_STATE_ACTIVE` not `DM_RAVINE_ACTIVE_STATE`)
+- Functions, structs, unions, enums, and typedefs are `TitleCase` (`DmRavine` not `dm_ravine`)
+    - "Methods" for objects separate the object from the verb with an underscore (`DmRavine_Init` not `DmRavineInit`)
+- Variable names are `camelCase` (`actionFunc`)
+    - Global variables start with `g` (`gSaveContext`)
+    - Static global variables start with `s` (`sSphereInit`)
+- Macros and enum constants are `SCREAMING_SNAKE_CASE` (`DM_RAVINE_STATE_ACTIVE`)
+- Auxiliary structs, enums, and constants are defined in the header file
+- Trailing commas in array and struct definitions (see `EnJcMatoDamageTable`)
+- Constants converted to whichever looks best in context: hexadecimal, decimal, float, or boolean
+    - Rotation angles should always be in hexadecimal
+- Define macros for bitwise access to `actor->params`
 
 ### `NON_MATCHING`
 
@@ -89,29 +105,31 @@ So, beyond producing matching C code, the next steps are *documenting* the code.
 Documenting is more than just adding comments, and entails:
 
 - Renaming functions, variables, and struct members
-- Using (or adding) constants and macros when possible
-- Commenting sections of code that are not straightforward
-- (TODO)
+- Using (or adding) constants, enums, and macros when possible
+- Explaining sections of code that are not straightforward
 
-It is expected that additions to `boot/` and `code/` are fully documented.
-Overlays do not need to be fully documented, but it is encouraged.
+Overlays are not required to be documented at this time, but `code/` and `boot/` are.
+When an overlay documentation has been started, it will be required to be completed.
+
+For right now, object segment symbols should not be documented/renamed.
+These will be given names when object reconstruction is ready.
+However, it can be useful to add comments with name suggestions.
+
 
 Pull Requests (PRs)
 -------------------
 
 ### Checklist
 
-Before opening a PR, walk through the following steps to ensure that your code confroms to the style guide & conventions.
+Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide & conventions.
 
 - Run `./format.sh` to reformat your updated files.
 - Ensure `make` successfully builds a matching ROM.
-- Your changes should not introduce new warnings (TODO: See PR #150 for check)
+- No new compiler warnings during the build process
 - New variables & functions should follow the naming conventions above.
 - Check spelling in comments & renamed symbols
 
 ### Pull Request Process
-
-TODO: What should go in the pull request body?
 
 After opening a PR, the Jenkins server will verify your changes.
 If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
@@ -124,18 +142,4 @@ Once all comments are addressed, it is courteous to ping the reviewer on either 
 After all the comments are addressed and at least one contributor has approved the review, the project lead can then merge the code.
 The project lead is also responsible for ensuring that all of these procedures are followed.
 
-Throughout the process, you should update the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the status of your PR.
-
-Tools
------
-
-(NB: This should probably go in a different place)
-
-- `mips_to_c` + `m2ctx.py`
-- Decomp Permuter
-- `diff.sh`, the `expected/` directory
-- `rename_sym.sh`
-- `overlayhelpers/actor_symbols.py` 
-- `overlayhelpers/colliderinit.py`
-- `overlayhelpers/ichaindis.py`
-
+Throughout the process, you (the PR author) should update the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the status of your PR.
