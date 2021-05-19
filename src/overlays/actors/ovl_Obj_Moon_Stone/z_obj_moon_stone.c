@@ -44,7 +44,7 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
 
     Actor_SetScale(this, 0.3f);
-    this->unk194 = ((this->actor.params & 0xF000) >> 0xC);
+    this->unk194 = (this->actor.params & 0xF000) >> 0xC;
     this->actor.targetMode = 0;
     this->actor.shape.yOffset = 25.0f;
     this->actor.focus.pos.y += 10.0f;
@@ -75,18 +75,15 @@ void func_80C0662C(ObjMoonStone* this) {
 
 void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
-    s16 sp1A;
-    s32 phi_v0;
+    s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
-    sp1A = this->actor.yawTowardsPlayer - 0x8000;
     sp1A -= player->base.shape.rot.y;
     if (func_800B84D0(this, globalCtx)) {
         this->actor.colChkInfo.health = 1;
         func_801518B0(globalCtx, 0x5E3U, this);
         func_80C066F8(this);
-
     } else {
-        phi_v0 = ABS_ALT(sp1A);
+        s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
             func_800B8614(this, globalCtx, 80.0f);
         }
@@ -124,9 +121,7 @@ void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
             this->actor.parent = NULL;
             this->actor.draw = NULL;
             func_80C0685C(this);
-            return;
-        }
-        if (this->actor.xzDistToPlayer < 25.0f) {
+        } else if (this->actor.xzDistToPlayer < 25.0f) {
             func_800B8A1C(this, globalCtx, 0x96, 100.0f, 30.0f);
         }
     }
@@ -137,11 +132,9 @@ void func_80C0685C(ObjMoonStone* this) {
 }
 
 void func_80C06870(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6) {
-        if (func_80147624(globalCtx)) {
-            gSaveContext.perm.weekEventReg[74] |= 0x40;
-            Actor_MarkForDeath(&this->actor);
-        }
+    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+        gSaveContext.perm.weekEventReg[74] |= 0x40;
+        Actor_MarkForDeath(&this->actor);
     }
 }
 

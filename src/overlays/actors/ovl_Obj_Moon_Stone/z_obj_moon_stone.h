@@ -9,7 +9,7 @@ typedef void (*ObjMoonStoneActionFunc)(struct ObjMoonStone*, GlobalContext*);
 
 typedef struct ObjMoonStone {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x49];
+    /* 0x144 */ char unk_144[0x4C];
     /* 0x190 */ ObjMoonStoneActionFunc actionFunc;
     /* 0x194 */ s16 unk194;
 } ObjMoonStone; // size = 0x198
