@@ -126,7 +126,7 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor* target;
     s32 num;
 
-    target = ObjBoyo_GetCollidedActor((ObjBoyo*)thisx, globalCtx, &num);
+    target = ObjBoyo_GetCollidedActor(this, globalCtx, &num);
 
     if (target != NULL) {
         sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
