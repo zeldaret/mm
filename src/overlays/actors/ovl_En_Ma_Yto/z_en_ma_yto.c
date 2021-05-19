@@ -40,7 +40,7 @@ void func_80B8F744(EnMaYto* this);
 void func_80B8F7F4(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8F918(EnMaYto* this);
 void func_80B8F998(EnMaYto* this, GlobalContext* globalCtx);
-// void func_80B8FA14(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B8FA14(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8FE04(EnMaYto* this);
 void func_80B8FE74(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8FF80(EnMaYto* this);
@@ -62,6 +62,7 @@ void func_80B9059C(EnMaYto *this);
 void func_80B905B0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9083C(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90C08(EnMaYto* this, s32 index);
 void func_80B90DF0(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s32);
@@ -691,57 +692,175 @@ void func_80B8F744(EnMaYto *this) {
 }
 
 
-/*
-void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
-    s16 sp26;
-    s16 temp_v1;
-    s16 temp_v1_2;
-    struct Actor *temp_a0;
-    struct Actor *temp_a0_2;
-    s32 phi_v0;
 
-    temp_v1 = (s16) (this->actor.shape.rot.y + 0x471C) - this->actor.yawTowardsPlayer;
-    temp_v1_2 = temp_v1;
-    sp26 = temp_v1_2;
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
+    s16 temp_v1 = this->actor.shape.rot.y + 0x471C;
+
+    temp_v1 -= this->actor.yawTowardsPlayer;
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
         func_80B90A78(this, globalCtx);
         func_80B8F918(this);
         return;
-    }
-    temp_a0 = this->actor.child;
-    if (temp_a0 != 0) {
-        sp26 = temp_v1_2;
-        if (func_800B84D0((Actor *) temp_a0, globalCtx) != 0) {
-            func_800B86C8(this, globalCtx, this);
-            func_80B90A78(this, globalCtx);
-            func_80B8F918(this);
-            return;
-        }
-    }
-    if ((*(&gSaveContext + 0xF0E) & 1) != 0) {
-        phi_v0 = (s32) temp_v1;
-        if ((s32) temp_v1 < 0) {
-            phi_v0 = -(s32) temp_v1;
-        }
-        if (phi_v0 < 0x2000) {
-block_9:
-            func_800B8614((Actor *) this, globalCtx, 100.0f);
-            temp_a0_2 = this->actor.child;
-            if (temp_a0_2 != 0) {
-                func_800B8614((Actor *) temp_a0_2, globalCtx, 100.0f);
+    } else {
+        Actor *temp_a0 = this->actor.child;
+        if (temp_a0 != NULL) {
+            if (func_800B84D0(temp_a0, globalCtx) != 0) {
+                func_800B86C8(this, globalCtx, this);
+                func_80B90A78(this, globalCtx);
+                func_80B8F918(this);
+                return;
             }
         }
-    } else {
-        goto block_9;
+
+        if ((!(gSaveContext.perm.weekEventReg[0x16] & 1)) || (ABS_ALT(temp_v1) < 0x2000)) {
+            Actor *temp_a0_2;
+
+            func_800B8614(this, globalCtx, 100.0f);
+            temp_a0_2 = this->actor.child;
+            if (temp_a0_2 != NULL) {
+                func_800B8614(temp_a0_2, globalCtx, 100.0f);
+            }
+        }
     }
 }
+
+void func_80B8F918(EnMaYto *this) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1))) {
+        func_80B90E50(this, 1);
+    } else {
+        func_80B90E50(this, 2);
+    }
+    this->actionFunc = func_80B8F998;
+}
+
+
+/*
+void func_80B8F998(EnMaYto *this, GlobalContext *globalCtx) {
+    u32 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 < 7U) {
+        goto **(&jtbl_D_80B916C8 + (temp_v0 * 4));
+    case 5:
+        func_80B8FA14(this, globalCtx);
+        return;
+    case 6:
+        if (func_80147624(globalCtx) != 0) {
+            this->unk_31E = 0;
+            func_80B8F744(this);
+        }
+    }
+default:
+case 0:
+}
 */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F7F4.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F918.asm")
-
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F998.asm")
 
+/*
+void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
+    u32 temp_t7;
+
+    if (func_80147624(globalCtx) != 0) {
+        temp_t7 = this->unk_322 - 0x33A9;
+        if (temp_t7 < 0x23U) {
+            goto **(&jtbl_D_80B916E4 + (temp_t7 * 4));
+        case 0:
+            func_80B90E50(this, 0);
+            func_800B86C8(this, globalCtx, this->actor.child);
+            func_80B90E84(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x33AAU, (Actor *) this);
+            this->unk_322 = 0x33AA;
+            return;
+        case 1:
+            func_800B86C8(this, globalCtx, this);
+            this->unk_31E = 1;
+            func_801518B0(globalCtx, 0x33ABU, (Actor *) this);
+            this->unk_322 = 0x33AB;
+            return;
+        case 2:
+            func_80B90E50(this, 1);
+            func_800B86C8(this, globalCtx, this->actor.child);
+            func_80B90E84(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33ACU, (Actor *) this);
+            this->unk_322 = 0x33AC;
+            return;
+        case 3:
+            this->unk_31E = 0;
+            func_800B86C8(this, globalCtx, this);
+            func_801518B0(globalCtx, 0x33ADU, (Actor *) this);
+            this->unk_322 = 0x33AD;
+            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 5U);
+            return;
+        case 5:
+            func_80B90E50(this, 1);
+            func_800B86C8(this, globalCtx, this->actor.child);
+            func_80B90E84(this, (u16)4, (u16)2);
+            func_801518B0(globalCtx, 0x33AFU, (Actor *) this);
+            this->unk_322 = 0x33AF;
+            return;
+        case 6:
+            this->unk_31E = 1;
+            func_800B86C8(this, globalCtx, this);
+            func_80B90EC8(this, (u16)4, (u16)2);
+            func_801518B0(globalCtx, 0x33B0U, (Actor *) this);
+            this->unk_322 = 0x33B0;
+            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 5U);
+            return;
+        case 8:
+            this->unk_31E = 2;
+            func_80B90EC8(this, (u16)5, (u16)3);
+            func_801518B0(globalCtx, 0x33B2U, (Actor *) this);
+            this->unk_322 = 0x33B2;
+            func_80151BB4(globalCtx, 6U);
+            return;
+        case 29:
+            func_800B86C8(this, globalCtx, this->actor.child);
+            this->unk_31E = 0;
+            func_80B90EC8(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33C7U, (Actor *) this);
+            this->unk_322 = 0x33C7;
+            return;
+        case 30:
+            func_800B86C8(this, globalCtx, this);
+            this->unk_31E = 1;
+            func_80B90EC8(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33C8U, (Actor *) this);
+            this->unk_322 = 0x33C8;
+            return;
+        case 31:
+            func_800B86C8(this, globalCtx, this->actor.child);
+            func_80B90E50(this, 1);
+            func_80B90E84(this, (u16)0, (u16)2);
+            func_801518B0(globalCtx, 0x33C9U, (Actor *) this);
+            this->unk_322 = 0x33C9;
+            return;
+        case 32:
+            func_800B86C8(this, globalCtx, this);
+            this->unk_31E = 1;
+            func_80B90EC8(this, (u16)3, (u16)1);
+            func_801518B0(globalCtx, 0x33CAU, (Actor *) this);
+            this->unk_322 = 0x33CA;
+            return;
+        case 33:
+            this->unk_31E = 1;
+            func_801518B0(globalCtx, 0x33CBU, (Actor *) this);
+            this->unk_322 = 0x33CB;
+            return;
+        case 34:
+            func_800B86C8(this, globalCtx, this->actor.child);
+            func_80B90E50(this, 1);
+            func_80B90E84(this, (u16)3, (u16)3);
+            func_801518B0(globalCtx, 0x33CCU, (Actor *) this);
+            this->unk_322 = 0x33CC;
+            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 5U);
+        }
+    }
+default:
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FA14.asm")
 
 /*
@@ -757,6 +876,30 @@ void func_80B8FE04(EnMaYto *this) {
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE04.asm")
 
+/*
+void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
+    this->actor.flags = this->actor.flags | 0x10000;
+    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+        this->actor.flags = this->actor.flags & 0xFFFEFFFF;
+        if (((gSaveContext.perm.weekEventReg[0x34]) & 1) == 0) {
+            func_80B90EC8(this, (u16)5, (u16)2);
+            func_801518B0(globalCtx, 0x33C0U, (Actor *) this);
+            this->unk_322 = 0x33C0;
+            gSaveContext.perm.weekEventReg[0x16] |= 1;
+            this->unk_310 = 4;
+            func_80B904D0(this);
+            func_80151BB4(globalCtx, 6U);
+        }
+        else {
+            func_801518B0(globalCtx, 0x33C1U, (Actor *) this);
+            this->unk_322 = 0x33C1;
+            func_80B8FF80(this);
+        }
+    } else {
+        func_800B8614((Actor *) this, globalCtx, 200.0f);
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE74.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FF80.asm")
@@ -769,6 +912,21 @@ void func_80B900AC(EnMaYto *this) {
     this->actionFunc = func_80B900C0;
 }
 
+/*
+void func_80B900C0(EnMaYto *this, GlobalContext *globalCtx) {
+    if (Actor_HasParent((Actor *) this, globalCtx) != 0) {
+        func_80B90170(this);
+        return;
+    }
+    if (gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) {
+        func_800B8A1C((Actor *) this, globalCtx, 7, 500.0f, 100.0f);
+        this->unk_310 = 2;
+        return;
+    }
+    func_800B8A1C((Actor *) this, globalCtx, 0x82, 500.0f, 100.0f);
+    this->unk_310 = 1;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B900C0.asm")
 
 void func_80B90170(EnMaYto *this) {
