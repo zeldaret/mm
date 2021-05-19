@@ -3,6 +3,9 @@
 
 #include <global.h>
 
+#define GET_BGLADDER_SIZE(actor) ((actor)->params & 0xFF)
+#define GET_BGLADDER_SWITCHFLAG(actor) (((actor)->params >> 8) & 0xFF)
+
 struct BgLadder;
 
 typedef void (*BgLadderActionFn)(struct BgLadder*, GlobalContext*);
