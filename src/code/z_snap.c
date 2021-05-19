@@ -113,11 +113,11 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s16 x;
     s16 y;
     f32 distance;
-    UNK_TYPE unk1;
+    CollisionPoly* unk1;
     Camera* camera;
     Actor* actors[2];
     s32 ret = 0;
-    UNK_TYPE unk2;
+    u32 unk2;
 
     camera = ACTIVE_CAM;
 

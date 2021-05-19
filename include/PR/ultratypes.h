@@ -27,7 +27,7 @@ typedef long int Mtx_t[4][4];
 typedef union {
     Mtx_t m;
     long long int forc_structure_alignment;
-} Mtx;
+} Mtx; // size = 0x40
 
 typedef float MtxF_t[4][4];
 typedef union {
@@ -38,6 +38,6 @@ typedef union {
               zx, zy, zz, zw,
               wx, wy, wz, ww;
     };
-} MtxF;
+} MtxF; // size = 0x40
 
 #endif

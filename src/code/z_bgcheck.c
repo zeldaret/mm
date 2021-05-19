@@ -162,7 +162,7 @@ void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C40B4.asm")
 
-f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly* arg1, s32* arg2, Actor* actor, Vec3f* pos) {
+f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos) {
     return func_800C3D50(0, bgCtxt, 2, arg1, arg2, pos, actor, 28, 1.0f, 0);
 }
 

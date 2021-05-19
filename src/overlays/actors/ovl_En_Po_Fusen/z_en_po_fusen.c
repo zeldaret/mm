@@ -22,6 +22,9 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                struct Actor* actor);
 
+extern AnimationHeader D_06000040;
+extern SkeletonHeader D_060024F0;
+
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
     ACTORCAT_PROP,
@@ -72,10 +75,10 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl,
-                     10);
+    SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040,
+                     this->limbDrawTbl, this->transitionDrawTbl, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
+    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
         Actor_MarkForDeath(&this->actor);
@@ -143,7 +146,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~0x2;
         return 1;
     }
-
+  
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 
@@ -272,10 +275,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return 0;
 }
 
-void EnPoFusen_PostLimbDraw(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
 }
 
-void EnPoFusen_UnkActorDraw(s32 arg0, s32 arg1, s32 arg2) {
+void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
 }
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
