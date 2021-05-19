@@ -43,8 +43,10 @@ When successful, you should be able to build a matching ROM before you start mak
 Usually, the best place to get started is to decompile an actor overlay. 
 An *actor* is any thing in the game that moves or performs actions or interactions: Link is an actor, enemies are actors, NPCs are actors, etc.
 
-You can [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
+You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
+
 We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
+After joining the Discord, ask to be added to the Trello board so you can claim your actor and avoid duplicate work.
 
 Style Guide & Conventions
 -------------------------
@@ -53,6 +55,8 @@ Most of the C formatting style is enforced by the `format.sh` script, which is b
 Running `./format.sh` will apply our standard style to all `.c` files in the repository.
 
 There are some conventions that cannot be automatically enforced.
+
+### Naming Scheme
 
 (TODO)
 - Naming scheme
@@ -74,6 +78,23 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* ctxt, Vec3f* v) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.asm")
 #endif
 ```
+
+### Matching vs. Documenting
+
+Usually, the first step of decompiling a section of code is to get it *matching*: to produce a C version of the code that can be compiled into an identical ROM.
+
+However, the goal of this project is to produce a codebase that can be understood and modified.
+So, beyond producing matching C code, the next steps are *documenting* the code.
+
+Documenting is more than just adding comments, and entails:
+
+- Renaming functions, variables, and struct members
+- Using (or adding) constants and macros when possible
+- Commenting sections of code that are not straightforward
+- (TODO)
+
+It is expected that additions to `boot/` and `code/` are fully documented.
+Overlays do not need to be fully documented, but it is encouraged.
 
 Pull Requests (PRs)
 -------------------
