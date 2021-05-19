@@ -902,10 +902,48 @@ void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE74.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FF80.asm")
+void func_80B8FF80(EnMaYto *this) {
+    this->actionFunc = func_80B8FF94;
+}
 
+/*
+void func_80B8FF94(EnMaYto *this, GlobalContext *globalCtx) {
+    u32 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 < 7U) {
+        goto **(&jtbl_D_80B91770 + (temp_v0 * 4));
+    case 5:
+        func_80B9000C(this, globalCtx);
+    }
+default:
+case 0:
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x71C, 0xB6);
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FF94.asm")
 
+/*
+void func_80B9000C(EnMaYto *arg0, GlobalContext *arg1) {
+    u16 temp_v0;
+
+    if (func_80147624(arg1) != 0) {
+        temp_v0 = arg0->unk_322;
+        if (temp_v0 == 0x33C1) {
+            func_80B90EC8(arg0, (u16)3, (u16)1);
+            func_801518B0(arg1, 0x33C2U, (Actor *) arg0);
+            arg0->unk_322 = 0x33C2;
+            return;
+        }
+        if (temp_v0 != 0x33C2) {
+            return;
+        }
+        func_801477B4(arg1);
+        func_80B900AC(arg0);
+        func_80B900C0(arg0, arg1);
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9000C.asm")
 
 void func_80B900AC(EnMaYto *this) {
@@ -1033,7 +1071,6 @@ block_10:
 void func_80B904D0(EnMaYto *this) {
     this->actionFunc = func_80B904E4;
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B904D0.asm")
 
 void func_80B904E4(EnMaYto *this, GlobalContext *globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 6) || (func_80152498(&globalCtx->msgCtx) == 5)) {
@@ -1359,6 +1396,7 @@ void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E84.asm")
 
 
+// UpdateMouth?
 void func_80B90EC8(EnMaYto *this, s16 arg1, s16 arg2) {
     this->unk_316 = arg1;
     this->unk_318 = arg2;
@@ -1374,7 +1412,27 @@ void func_80B90EF0(EnMaYto *this) {
     }
 }
 
+/*
+? func_80B90F84(void) {
+    s32 temp_hi;
 
+    temp_hi = (s32) gSaveContext.perm.day % 5;
+    if (temp_hi != 1) {
+        if (temp_hi != 2) {
+            if (temp_hi != 3) {
+
+            } else if ((gSaveContext.unkF05 & 0x10) != 0) {
+                return 1;
+            }
+        } else if ((gSaveContext.unkF05 & 8) != 0) {
+            return 1;
+        }
+    } else if ((gSaveContext.unkF05 & 4) != 0) {
+        return 1;
+    }
+    return 0;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90F84.asm")
 
 
