@@ -19,7 +19,7 @@ const ActorInit En_Osk_InitVars = {
     (ActorFunc)EnOsk_Init,
     (ActorFunc)EnOsk_Destroy,
     (ActorFunc)EnOsk_Update,
-    (ActorFunc)EnOsk_Draw
+    (ActorFunc)EnOsk_Draw,
 };
 */
 

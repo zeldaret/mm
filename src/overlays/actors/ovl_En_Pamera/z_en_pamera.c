@@ -19,7 +19,7 @@ const ActorInit En_Pamera_InitVars = {
     (ActorFunc)EnPamera_Init,
     (ActorFunc)EnPamera_Destroy,
     (ActorFunc)EnPamera_Update,
-    (ActorFunc)EnPamera_Draw
+    (ActorFunc)EnPamera_Draw,
 };
 */
 

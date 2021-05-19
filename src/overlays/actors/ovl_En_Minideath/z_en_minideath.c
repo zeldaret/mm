@@ -18,7 +18,7 @@ const ActorInit En_Minideath_InitVars = {
     (ActorFunc)EnMinideath_Init,
     (ActorFunc)EnMinideath_Destroy,
     (ActorFunc)EnMinideath_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Akindonuts_InitVars = {
     (ActorFunc)EnAkindonuts_Init,
     (ActorFunc)EnAkindonuts_Destroy,
     (ActorFunc)EnAkindonuts_Update,
-    (ActorFunc)EnAkindonuts_Draw
+    (ActorFunc)EnAkindonuts_Draw,
 };
 */
 

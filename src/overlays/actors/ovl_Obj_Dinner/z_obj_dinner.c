@@ -18,7 +18,7 @@ const ActorInit Obj_Dinner_InitVars = {
     (ActorFunc)ObjDinner_Init,
     (ActorFunc)ObjDinner_Destroy,
     (ActorFunc)ObjDinner_Update,
-    (ActorFunc)ObjDinner_Draw
+    (ActorFunc)ObjDinner_Draw,
 };
 
 extern Gfx D_060011E0[];
@@ -44,7 +44,6 @@ void ObjDinner_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     func_8012C28C(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, D_060011E0);
 }
