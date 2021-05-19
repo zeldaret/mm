@@ -883,7 +883,7 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
 void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
     char padd[4];
-    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
+    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, (void*)arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 

@@ -170,7 +170,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 this->grabbed = NULL;
             } else {
                 if (this->actor.child != NULL) {
-                    f32 sp94 = Actor_DistanceBetweenActors(this, grabbed);
+                    f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
                     f32 sp90 = sqrtf(SQ(this->unk1FC.x) + SQ(this->unk1FC.y) + SQ(this->unk1FC.z));
                     Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
                     if (50.0f < (sp94 - sp90)) {

@@ -31,7 +31,7 @@ extern Gfx D_06005458[];
 static ActorAnimationEntry animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    func_800BDC5C(&this->skelAnime, &animations, 0);
+    func_800BDC5C(&this->skelAnime, animations, 0);
     this->actionFunc = func_80C25D84;
 }
 
@@ -78,7 +78,7 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp18 = D_80C26028;
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus);
+        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
 

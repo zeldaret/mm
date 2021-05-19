@@ -187,9 +187,16 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx) {
-    static LightsPosBindFunc posBindFuncs[] = { Lights_BindPoint, Lights_BindDirectional, Lights_BindPoint };
-    static LightsBindFunc dirBindFuncs[] = { Lights_BindPointWithReference, Lights_BindDirectional,
-                                             Lights_BindPointWithReference };
+    static LightsPosBindFunc posBindFuncs[] = {
+        Lights_BindPoint,
+        (LightsPosBindFunc)Lights_BindDirectional,
+        Lights_BindPoint,
+    };
+    static LightsBindFunc dirBindFuncs[] = {
+        Lights_BindPointWithReference,
+        (LightsBindFunc)Lights_BindDirectional,
+        Lights_BindPointWithReference,
+    };
 
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
