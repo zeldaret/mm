@@ -4,26 +4,30 @@
 
 #define THIS ((EnFg*)thisx)
 
+/*
+This may be a beta file of frogs, a version of them where they were all enemies
+*/
+
 void EnFg_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A2D778(EnFg* this, GlobalContext* globalCtx);
-void func_80A2D9CC(EnFg* this, GlobalContext* globalCtx);
+void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx);
 void func_80A2D9DC(EnFg* this, GlobalContext* globalCtx);
 void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-extern u64 D_0408F7E0[];
-extern u64 D_0408F3E0[];
-extern u64 D_0408EFE0[];
-extern u64 D_0408EBE0[];
-extern u64 D_0408E7E0[];
-extern u64 D_0408E3E0[];
-extern u64 D_0408DFE0[];
-extern u64 D_0408DBE0[];
+extern u64 gDust1Tex[];
+extern u64 gDust2Tex[];
+extern u64 gDust3Tex[];
+extern u64 gDust4Tex[];
+extern u64 gDust5Tex[];
+extern u64 gDust6Tex[];
+extern u64 gDust7Tex[];
+extern u64 gDust8Tex[];
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
 extern AnimationHeader D_060007BC;
@@ -112,11 +116,11 @@ void func_80A2D3D4(EnFg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
-u8 func_80A2D400(EnFg* this) {
+u8 EnFg_UpdateHealth(EnFg* this) {
     if (this->actor.colChkInfo.damage >= this->actor.colChkInfo.health) {
         this->actor.colChkInfo.health = 0;
     } else {
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
+        this->actor.colChkInfo.health -= this->actor.colChkInfo.damage;
     }
     return this->actor.colChkInfo.health;
 }
@@ -143,7 +147,7 @@ s32 func_80A2D42C(EnFg* this) {
                 break;
         }
         this->collider.base.acFlags &= ~2;
-        func_80A2D400(this);
+        EnFg_UpdateHealth(this);
     }
     return ret;
 }
@@ -161,9 +165,9 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
             this->actor.scale.z *= 1.5f;
-            this->actor.world.pos.y = this->actor.floorHeight + 2.0f;
-            this->actionFunc = func_80A2D9CC;
             this->actor.scale.y = 0.001f;
+            this->actor.world.pos.y = this->actor.floorHeight + 2.0f;
+            this->actionFunc = EnFg_DoNothing;
             break;
         case 3:
             break;
@@ -178,7 +182,7 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actor.scale.x = CLAMP_MIN(this->actor.scale.x, 0.001f);
             this->actor.scale.y = CLAMP_MIN(this->actor.scale.y, 0.001f);
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
-            this->actionFunc = func_80A2D9CC;
+            this->actionFunc = EnFg_DoNothing;
             break;
         case 1:
             this->actor.flags &= ~1;
@@ -227,7 +231,7 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
             this->actor.scale.x = CLAMP_MIN(this->actor.scale.x, 0.001f);
             this->actor.scale.y = CLAMP_MIN(this->actor.scale.y, 0.001f);
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
-            this->actionFunc = func_80A2D9CC;
+            this->actionFunc = EnFg_DoNothing;
             break;
         case 3:
             break;
@@ -263,7 +267,7 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A2D9CC(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2D9DC(EnFg* this, GlobalContext* globalCtx) {
@@ -273,7 +277,7 @@ void func_80A2D9DC(EnFg* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.x += 0x1000;
             this->actor.velocity.y = 10.0f / this->unk_2FA;
         } else {
-            this->actionFunc = func_80A2D9CC;
+            this->actionFunc = EnFg_DoNothing;
         }
     } else {
         if (this->actor.bgCheckFlags & 8) {
@@ -332,7 +336,9 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A2D348(this, globalCtx);
 }
 
-s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, EnFg* this) {
+s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+    EnFg* this = THIS;
+
     if ((limbIndex == 7) || (limbIndex == 8)) {
         *dList = NULL;
     }
@@ -419,7 +425,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
 }
 
 u64* sDustTex[] = {
-    D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {

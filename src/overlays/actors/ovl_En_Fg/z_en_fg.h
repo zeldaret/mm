@@ -7,6 +7,16 @@ struct EnFg;
 
 typedef void (*EnFgActionFunc)(struct EnFg*, GlobalContext*);
 
+// Based on the envColor data. Related to params but mostly unused.
+typedef enum {
+    /* 00 */ FROG_YELLOW,   // Mountain Village
+    /* 01 */ FROG_CYAN,     // Woodfall Temple
+    /* 02 */ FROG_PINK,     // Great Bay Temple
+    /* 03 */ FROG_BLUE,     // Southern Swamp
+    /* 04 */ FROG_WHITE,    // Laundry Pool
+    /* 05 */ FROG_BLACK,    // Extra frog??? Uncertain
+} FrogType;
+
 typedef struct {
     /* 0x00 */ AnimationHeader* animationSeg;
     /* 0x04 */ f32 playbackSpeed;
