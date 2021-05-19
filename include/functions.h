@@ -794,7 +794,7 @@ f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2);
 // void func_800B82EC(void);
 // void func_800B83BC(void);
 // void func_800B83F8(void);
-s32 func_800B84D0(Actor* actor, GlobalContext* ctxt);
+s32 func_800B84D0(Actor* actor, GlobalContext* ctxt); // its result should be used as a boolean
 // UNK_TYPE4 func_800B8500(Actor* actor, GlobalContext* ctxt, f32 fParm3, f32 fParm4, s32 param_5);
 void func_800B85E0(Actor* actor, GlobalContext* ctxt, f32 uParm3, s32 uParm4);
 void func_800B8614(Actor* actor, GlobalContext* ctxt, f32 uParm3);

@@ -46,7 +46,7 @@ void func_80B8FE74(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B8FF80(EnMaYto* this);
 void func_80B8FF94(EnMaYto* this, GlobalContext* globalCtx);
 
-// void func_80B9000C(EnMaYto* this, GlobalContext* globalCtx);
+void func_80B9000C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B900AC(EnMaYto* this);
 void func_80B900C0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90170(EnMaYto* this);
@@ -64,11 +64,12 @@ void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9083C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90C08(EnMaYto* this, s32 index);
-void func_80B90DF0(EnMaYto* this);
+void EnMaYto_Blink(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s32);
 void func_80B90E84(EnMaYto* this, s16, s16);
-void func_80B90EC8(EnMaYto* this, s16, s16);
+void EnMaYto_SetFaceExpression(EnMaYto* this, s16 arg1, s16 mouthIndex);
 void func_80B90EF0(EnMaYto* this);
+s32  func_80B90F84();
 
 s32  func_80B91014(void);
 void func_80B9109C(void);
@@ -87,6 +88,166 @@ const ActorInit En_Ma_Yto_InitVars = {
 };
 */
 
+
+/*
+
+glabel D_80B91410
+0x0A000039
+0x20010000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000100
+0x0012002E
+0x00000000
+0x00000000
+*/
+
+/*
+glabel D_80B9143C
+0x00000000
+0x00000000
+0xFF000000
+*/
+
+/*
+glabel D_80B91448
+0x0600A174
+0x3F800000
+0x00000000
+0x00000000
+0x0600A174
+0x3F800000
+0x00000000
+0xC0C00000
+0x0600AF7C
+0x3F800000
+0x02000000
+0x00000000
+0x0600AF7C
+0x3F800000
+0x02000000
+0xC0C00000
+0x06000CC0
+0x3F800000
+0x00000000
+0x00000000
+0x06000CC0
+0x3F800000
+0x00000000
+0xC0C00000
+0x06016720
+0x3F800000
+0x00000000
+0x00000000
+0x06016720
+0x3F800000
+0x00000000
+0xC1000000
+0x06005314
+0x3F800000
+0x00000000
+0x00000000
+0x06005314
+0x3F800000
+0x00000000
+0xC1000000
+0x060093E8
+0x3F800000
+0x00000000
+0x00000000
+0x060093E8
+0x3F800000
+0x00000000
+0xC1200000
+0x06007E28
+0x3F800000
+0x00000000
+0x00000000
+0x06007E28
+0x3F800000
+0x00000000
+0xC1000000
+0x060070EC
+0x3F800000
+0x00000000
+0x00000000
+0x060070EC
+0x3F800000
+0x00000000
+0xC1000000
+0x06003D54
+0x3F800000
+0x00000000
+0x00000000
+0x06003D54
+0x3F800000
+0x00000000
+0xC1000000
+0x06001FD0
+0x3F800000
+0x00000000
+0x00000000
+0x06001FD0
+0x3F800000
+0x00000000
+0xC1000000
+0x060030B4
+0x3F800000
+0x00000000
+0x00000000
+0x060030B4
+0x3F800000
+0x00000000
+0xC1000000
+0x06004370
+0x3F800000
+0x00000000
+0x00000000
+0x06004370
+0x3F800000
+0x00000000
+0xC1000000
+*/
+
+/*
+extern u64 D_06014AD8[];
+extern u64 D_06014ED8[];
+extern u64 D_060152D8[];
+extern u64 D_060156D8[];
+
+// sMouthTextures
+void* D_80B915C8[] = {
+    D_06014AD8, D_06014ED8, D_060152D8, D_060156D8, 
+};
+*/
+
+/*
+extern u64 D_06011AD8[];
+extern u64 D_060122D8[];
+extern u64 D_06012AD8[];
+extern u64 D_060132D8[];
+extern u64 D_06013AD8[];
+extern u64 D_060142D8[];
+
+// sEyesTextures
+void* D_80B915D8[] = {
+    D_06011AD8, D_060122D8, D_06012AD8, D_060132D8, D_06013AD8, D_060142D8,
+};
+*/
+
+/*
+static u16 D_80B915F0 = 0x63;
+glabel D_80B915F0
+0x00630000
+0x00000000
+0x00000000
+0x00000000
+*/
+
+
 extern ColliderCylinderInit D_80B91410;
 extern CollisionCheckInfoInit2 D_80B9143C;
 
@@ -100,16 +261,16 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_200 = 0;
     this->unk_310 = 0;
     this->unk_320 = 0;
-    this->unk_31A = 0;
+    this->eyeTexIndex = 0;
 
     if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
-        func_80B90EC8(this, 0, 1);
+        EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
-        func_80B90EC8(this, 5, 2);
+        EnMaYto_SetFaceExpression(this, 5, 2);
     }
 
     this->unk_31E = 0;
-    this->unk_31C = 0x64;
+    this->blinkTimer = 0x64;
     this->type = (s32)(this->actor.params & 0xF000) >> 0xC;
     if (func_80B8E6E0(this, globalCtx) == 0) {
         Actor_MarkForDeath(&this->actor);
@@ -367,11 +528,11 @@ void func_80B8ECAC(EnMaYto *this, GlobalContext *globalCtx) {
 
     sp2C = rotY - this->actor.yawTowardsPlayer;
     if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, (u16)5, (u16)0x3000, 0x100) == 0) && (this->unk_314 == 1)) {
-        this->unk_314 = 0xB;
-        func_80B90C08(this, 0xB);
+        this->unk_314 = 11;
+        func_80B90C08(this, 11);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         func_80B9061C(this, globalCtx);
         func_80B8ED8C(this);
     } else if (ABS_ALT(sp2C) < 0x1555) {
@@ -417,7 +578,7 @@ void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
             break;
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x3000, 0x100);
-    if ((this->unk_322 == 0x3395) && (this->skelAnime.animCurrentSeg == &D_0600AF7C) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
+    if ((this->textId == 0x3395) && (this->skelAnime.animCurrentSeg == &D_0600AF7C) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
         func_80B90C08(this, 4);
     }
 }
@@ -426,44 +587,44 @@ void func_80B8EEAC(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_80B90EC8(this, (u16)0, (u16)3);
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
             func_801518B0(globalCtx, 0x3392U, &this->actor);
-            this->unk_322 = 0x3392;
+            this->textId = 0x3392;
         }
         else {
             func_8019F230();
             func_801518B0(globalCtx, 0x3391U, &this->actor);
-            this->unk_322 = 0x3391;
+            this->textId = 0x3391;
         }
     }
 }
 
 void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
-        switch (this->unk_322) {
+        switch (this->textId) {
         case 0x3391:
-            func_80B90EC8(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x3392U, (Actor *) this);
-            this->unk_322 = 0x3392;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x3392U, &this->actor);
+            this->textId = 0x3392;
             break;
 
         case 0x3392:
-            func_80B90EC8(this, (u16)3, (u16)1);
-            func_801518B0(globalCtx, 0x3393U, (Actor *) this);
-            this->unk_322 = 0x3393;
+            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+            func_801518B0(globalCtx, 0x3393U, &this->actor);
+            this->textId = 0x3393;
             func_80151BB4(globalCtx, 6U);
             break;
 
         case 0x3394:
             func_80B90C08(this, 2);
-            func_801518B0(globalCtx, 0x3395U, (Actor *) this);
-            this->unk_322 = 0x3395;
+            func_801518B0(globalCtx, 0x3395U, &this->actor);
+            this->textId = 0x3395;
             break;
 
         case 0x3395:
             func_80B90C08(this, 1);
-            func_801518B0(globalCtx, 0x3396U, (Actor *) this);
-            this->unk_322 = 0x3396;
+            func_801518B0(globalCtx, 0x3396U, &this->actor);
+            this->textId = 0x3396;
             func_80151BB4(globalCtx, 6U);
             break;
         }
@@ -486,14 +647,14 @@ void func_80B8F074(EnMaYto *this) {
 void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
     s16 temp_v1 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         func_80B9083C(this, globalCtx);
         func_80B8F254(this);
     } else {
         Actor* temp_a0 = this->actor.child;
 
         if (temp_a0 != NULL) {
-            if (func_800B84D0(temp_a0, globalCtx) != 0) {
+            if (func_800B84D0(temp_a0, globalCtx)) {
                 func_800B86C8(this, globalCtx, this);
                 func_80B9083C(this, globalCtx);
                 func_80B8F254(this);
@@ -562,14 +723,14 @@ void func_80B8F360(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_80B90EC8(this, (u16)0, (u16)3);
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
             func_801518B0(globalCtx, 0x3399U, &this->actor);
-            this->unk_322 = 0x3399;
+            this->textId = 0x3399;
         }
         else {
             func_8019F230();
             func_801518B0(globalCtx, 0x3398U, &this->actor);
-            this->unk_322 = 0x3398;
+            this->textId = 0x3398;
         }
     }
 }
@@ -579,97 +740,97 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
     u32 temp_t7;
 
     if (func_80147624(globalCtx) != 0) {
-        switch (this->unk_322) {
+        switch (this->textId) {
         case 0x3398:
-            func_80B90EC8(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x3399U, (Actor *) this);
-            this->unk_322 = 0x3399;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x3399U, &this->actor);
+            this->textId = 0x3399;
             break;
 
         case 0x3399:
-            func_80B90EC8(this, (u16)3, (u16)1);
-            func_801518B0(globalCtx, 0x339AU, (Actor *) this);
-            this->unk_322 = 0x339A;
+            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+            func_801518B0(globalCtx, 0x339AU, &this->actor);
+            this->textId = 0x339A;
             break;
 
         case 0x339A:
             this->unk_31E = 1;
-            func_80B90EC8(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x339BU, (Actor *) this);
-            this->unk_322 = 0x339B;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x339BU, &this->actor);
+            this->textId = 0x339B;
             break;
 
         case 0x339B:
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E50(this, 0);
             func_80B90E84(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x339CU, (Actor *) this);
-            this->unk_322 = 0x339C;
+            func_801518B0(globalCtx, 0x339CU, &this->actor);
+            this->textId = 0x339C;
             break;
 
         case 0x339C:
             this->unk_31E = 1;
             func_800B86C8(this, globalCtx, this);
-            func_80B90EC8(this, (u16)0, (u16)2);
-            func_801518B0(globalCtx, 0x339DU, (Actor *) this);
-            this->unk_322 = 0x339D;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)2);
+            func_801518B0(globalCtx, 0x339DU, &this->actor);
+            this->textId = 0x339D;
             break;
 
         case 0x339D:
             func_80B90E50(this, 1);
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x339EU, (Actor *) this);
-            this->unk_322 = 0x339E;
+            func_801518B0(globalCtx, 0x339EU, &this->actor);
+            this->textId = 0x339E;
             func_80151BB4(globalCtx, 6U);
             func_80151BB4(globalCtx, 5U);
             break;
 
         case 0x339F:
             this->unk_31E = 0;
-            func_801518B0(globalCtx, 0x33A0U, (Actor *) this);
-            this->unk_322 = 0x33A0;
+            func_801518B0(globalCtx, 0x33A0U, &this->actor);
+            this->textId = 0x33A0;
             break;
 
         case 0x33A0:
-            func_801518B0(globalCtx, 0x33A1U, (Actor *) this);
-            this->unk_322 = 0x33A1;
+            func_801518B0(globalCtx, 0x33A1U, &this->actor);
+            this->textId = 0x33A1;
             break;
 
         case 0x33A1:
             func_80B90E50(this, 1);
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)2);
-            func_801518B0(globalCtx, 0x33A2U, (Actor *) this);
-            this->unk_322 = 0x33A2;
+            func_801518B0(globalCtx, 0x33A2U, &this->actor);
+            this->textId = 0x33A2;
             break;
 
         case 0x33A2:
             this->unk_31E = 1;
             func_800B86C8(this, globalCtx, this);
-            func_80B90EC8(this, (u16)4, (u16)3);
-            func_801518B0(globalCtx, 0x33A3U, (Actor *) this);
-            this->unk_322 = 0x33A3;
+            EnMaYto_SetFaceExpression(this, (u16)4, (u16)3);
+            func_801518B0(globalCtx, 0x33A3U, &this->actor);
+            this->textId = 0x33A3;
             break;
 
         case 0x33A3:
             this->unk_31E = 0;
-            func_80B90EC8(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x33A4U, (Actor *) this);
-            this->unk_322 = 0x33A4;
+            EnMaYto_SetFaceExpression(this, (u16)3, (u16)3);
+            func_801518B0(globalCtx, 0x33A4U, &this->actor);
+            this->textId = 0x33A4;
             func_80151BB4(globalCtx, 6U);
             func_80151BB4(globalCtx, 5U);
             break;
 
         case 0x33A5:
-            func_801518B0(globalCtx, 0x33A6U, (Actor *) this);
-            this->unk_322 = 0x33A6;
+            func_801518B0(globalCtx, 0x33A6U, &this->actor);
+            this->textId = 0x33A6;
             func_80151BB4(globalCtx, 6U);
             break;
 
         case 0x33A7:
-            func_801518B0(globalCtx, 0x33A8U, (Actor *) this);
-            this->unk_322 = 0x33A8;
+            func_801518B0(globalCtx, 0x33A8U, &this->actor);
+            this->textId = 0x33A8;
             func_80151BB4(globalCtx, 6U);
             break;
         }
@@ -697,14 +858,13 @@ void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
     s16 temp_v1 = this->actor.shape.rot.y + 0x471C;
 
     temp_v1 -= this->actor.yawTowardsPlayer;
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         func_80B90A78(this, globalCtx);
         func_80B8F918(this);
-        return;
     } else {
         Actor *temp_a0 = this->actor.child;
         if (temp_a0 != NULL) {
-            if (func_800B84D0(temp_a0, globalCtx) != 0) {
+            if (func_800B84D0(temp_a0, globalCtx)) {
                 func_800B86C8(this, globalCtx, this);
                 func_80B90A78(this, globalCtx);
                 func_80B8F918(this);
@@ -715,7 +875,7 @@ void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
         if ((!(gSaveContext.perm.weekEventReg[0x16] & 1)) || (ABS_ALT(temp_v1) < 0x2000)) {
             Actor *temp_a0_2;
 
-            func_800B8614(this, globalCtx, 100.0f);
+            func_800B8614(&this->actor, globalCtx, 100.0f);
             temp_a0_2 = this->actor.child;
             if (temp_a0_2 != NULL) {
                 func_800B8614(temp_a0_2, globalCtx, 100.0f);
@@ -761,34 +921,34 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
     u32 temp_t7;
 
     if (func_80147624(globalCtx) != 0) {
-        temp_t7 = this->unk_322 - 0x33A9;
+        temp_t7 = this->textId - 0x33A9;
         if (temp_t7 < 0x23U) {
             goto **(&jtbl_D_80B916E4 + (temp_t7 * 4));
         case 0:
             func_80B90E50(this, 0);
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x33AAU, (Actor *) this);
-            this->unk_322 = 0x33AA;
+            func_801518B0(globalCtx, 0x33AAU, &this->actor);
+            this->textId = 0x33AA;
             return;
         case 1:
             func_800B86C8(this, globalCtx, this);
             this->unk_31E = 1;
-            func_801518B0(globalCtx, 0x33ABU, (Actor *) this);
-            this->unk_322 = 0x33AB;
+            func_801518B0(globalCtx, 0x33ABU, &this->actor);
+            this->textId = 0x33AB;
             return;
         case 2:
             func_80B90E50(this, 1);
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33ACU, (Actor *) this);
-            this->unk_322 = 0x33AC;
+            func_801518B0(globalCtx, 0x33ACU, &this->actor);
+            this->textId = 0x33AC;
             return;
         case 3:
             this->unk_31E = 0;
             func_800B86C8(this, globalCtx, this);
-            func_801518B0(globalCtx, 0x33ADU, (Actor *) this);
-            this->unk_322 = 0x33AD;
+            func_801518B0(globalCtx, 0x33ADU, &this->actor);
+            this->textId = 0x33AD;
             func_80151BB4(globalCtx, 6U);
             func_80151BB4(globalCtx, 5U);
             return;
@@ -796,64 +956,64 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
             func_80B90E50(this, 1);
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)4, (u16)2);
-            func_801518B0(globalCtx, 0x33AFU, (Actor *) this);
-            this->unk_322 = 0x33AF;
+            func_801518B0(globalCtx, 0x33AFU, &this->actor);
+            this->textId = 0x33AF;
             return;
         case 6:
             this->unk_31E = 1;
             func_800B86C8(this, globalCtx, this);
-            func_80B90EC8(this, (u16)4, (u16)2);
-            func_801518B0(globalCtx, 0x33B0U, (Actor *) this);
-            this->unk_322 = 0x33B0;
+            EnMaYto_SetFaceExpression(this, (u16)4, (u16)2);
+            func_801518B0(globalCtx, 0x33B0U, &this->actor);
+            this->textId = 0x33B0;
             func_80151BB4(globalCtx, 6U);
             func_80151BB4(globalCtx, 5U);
             return;
         case 8:
             this->unk_31E = 2;
-            func_80B90EC8(this, (u16)5, (u16)3);
-            func_801518B0(globalCtx, 0x33B2U, (Actor *) this);
-            this->unk_322 = 0x33B2;
+            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
+            func_801518B0(globalCtx, 0x33B2U, &this->actor);
+            this->textId = 0x33B2;
             func_80151BB4(globalCtx, 6U);
             return;
         case 29:
             func_800B86C8(this, globalCtx, this->actor.child);
             this->unk_31E = 0;
-            func_80B90EC8(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33C7U, (Actor *) this);
-            this->unk_322 = 0x33C7;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33C7U, &this->actor);
+            this->textId = 0x33C7;
             return;
         case 30:
             func_800B86C8(this, globalCtx, this);
             this->unk_31E = 1;
-            func_80B90EC8(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33C8U, (Actor *) this);
-            this->unk_322 = 0x33C8;
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33C8U, &this->actor);
+            this->textId = 0x33C8;
             return;
         case 31:
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E50(this, 1);
             func_80B90E84(this, (u16)0, (u16)2);
-            func_801518B0(globalCtx, 0x33C9U, (Actor *) this);
-            this->unk_322 = 0x33C9;
+            func_801518B0(globalCtx, 0x33C9U, &this->actor);
+            this->textId = 0x33C9;
             return;
         case 32:
             func_800B86C8(this, globalCtx, this);
             this->unk_31E = 1;
-            func_80B90EC8(this, (u16)3, (u16)1);
-            func_801518B0(globalCtx, 0x33CAU, (Actor *) this);
-            this->unk_322 = 0x33CA;
+            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+            func_801518B0(globalCtx, 0x33CAU, &this->actor);
+            this->textId = 0x33CA;
             return;
         case 33:
             this->unk_31E = 1;
-            func_801518B0(globalCtx, 0x33CBU, (Actor *) this);
-            this->unk_322 = 0x33CB;
+            func_801518B0(globalCtx, 0x33CBU, &this->actor);
+            this->textId = 0x33CB;
             return;
         case 34:
             func_800B86C8(this, globalCtx, this->actor.child);
             func_80B90E50(this, 1);
             func_80B90E84(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x33CCU, (Actor *) this);
-            this->unk_322 = 0x33CC;
+            func_801518B0(globalCtx, 0x33CCU, &this->actor);
+            this->textId = 0x33CC;
             func_80151BB4(globalCtx, 6U);
             func_80151BB4(globalCtx, 5U);
         }
@@ -863,40 +1023,42 @@ default:
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FA14.asm")
 
-/*
+
+#ifdef NON_MATCHING
 void func_80B8FE04(EnMaYto *this) {
-    if ((*(&gSaveContext + 0xF2C) & 1) != 0) {
-        func_80B90EC8(this, (u16)3, (u16)1);
+    if (gSaveContext.perm.weekEventReg[0x34] & 1) {
+        EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
         func_801A3098(9, (u16)3);
-        func_80B90EC8(this, (u16)5, (u16)2);
+        EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = func_80B8FE74;
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE04.asm")
+#endif
 
 /*
+// problematic
 void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
     this->actor.flags = this->actor.flags | 0x10000;
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-        if (((gSaveContext.perm.weekEventReg[0x34]) & 1) == 0) {
-            func_80B90EC8(this, (u16)5, (u16)2);
+        if ((gSaveContext.perm.weekEventReg[0x16] & 1)) {
+            func_801518B0(globalCtx, 0x33C1U, (Actor *) this);
+            this->textId = 0x33C1;
+            func_80B8FF80(this);
+        } else {
+            EnMaYto_SetFaceExpression(this, (u16)5, (u16)2);
             func_801518B0(globalCtx, 0x33C0U, (Actor *) this);
-            this->unk_322 = 0x33C0;
-            gSaveContext.perm.weekEventReg[0x16] |= 1;
+            this->textId = 0x33C0;
+            gSaveContext.perm.weekEventReg[0xD] = (u8) (gSaveContext.perm.weekEventReg[0xD] | 1);
             this->unk_310 = 4;
             func_80B904D0(this);
             func_80151BB4(globalCtx, 6U);
         }
-        else {
-            func_801518B0(globalCtx, 0x33C1U, (Actor *) this);
-            this->unk_322 = 0x33C1;
-            func_80B8FF80(this);
-        }
     } else {
-        func_800B8614((Actor *) this, globalCtx, 200.0f);
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
 }
 */
@@ -906,99 +1068,93 @@ void func_80B8FF80(EnMaYto *this) {
     this->actionFunc = func_80B8FF94;
 }
 
-/*
-void func_80B8FF94(EnMaYto *this, GlobalContext *globalCtx) {
-    u32 temp_v0;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
-    if (temp_v0 < 7U) {
-        goto **(&jtbl_D_80B91770 + (temp_v0 * 4));
-    case 5:
-        func_80B9000C(this, globalCtx);
+
+void func_80B8FF94(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 6:
+            break;
+
+        case 5:
+            func_80B9000C(this, globalCtx);
+            break;
     }
-default:
-case 0:
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x71C, 0xB6);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FF94.asm")
 
-/*
-void func_80B9000C(EnMaYto *arg0, GlobalContext *arg1) {
-    u16 temp_v0;
 
-    if (func_80147624(arg1) != 0) {
-        temp_v0 = arg0->unk_322;
-        if (temp_v0 == 0x33C1) {
-            func_80B90EC8(arg0, (u16)3, (u16)1);
-            func_801518B0(arg1, 0x33C2U, (Actor *) arg0);
-            arg0->unk_322 = 0x33C2;
-            return;
+void func_80B9000C(EnMaYto *this, GlobalContext *globalCtx) {
+    if (func_80147624(globalCtx) != 0) {
+        switch (this->textId) {
+            case 0x33C1:
+                EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+                func_801518B0(globalCtx, 0x33C2U, &this->actor);
+                this->textId = 0x33C2;
+                break;
+
+            case 0x33C2:
+                func_801477B4(globalCtx);
+                func_80B900AC(this);
+                func_80B900C0(this, globalCtx);
+                break;
         }
-        if (temp_v0 != 0x33C2) {
-            return;
-        }
-        func_801477B4(arg1);
-        func_80B900AC(arg0);
-        func_80B900C0(arg0, arg1);
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9000C.asm")
 
 void func_80B900AC(EnMaYto *this) {
     this->actionFunc = func_80B900C0;
 }
 
-/*
+
 void func_80B900C0(EnMaYto *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent((Actor *) this, globalCtx) != 0) {
+    if (Actor_HasParent(&this->actor, globalCtx) != 0) {
         func_80B90170(this);
         return;
-    }
-    if (gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) {
-        func_800B8A1C((Actor *) this, globalCtx, 7, 500.0f, 100.0f);
+    } else if (gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) {
+        func_800B8A1C(&this->actor, globalCtx, 7, 500.0f, 100.0f);
         this->unk_310 = 2;
-        return;
+    } else {
+        func_800B8A1C(&this->actor, globalCtx, 0x82, 500.0f, 100.0f);
+        this->unk_310 = 1;
     }
-    func_800B8A1C((Actor *) this, globalCtx, 0x82, 500.0f, 100.0f);
-    this->unk_310 = 1;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B900C0.asm")
 
 void func_80B90170(EnMaYto *this) {
     this->actionFunc = func_80B90184;
 }
 
-/*
+
 void func_80B90184(EnMaYto *this, GlobalContext *globalCtx) {
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
-        if (this->unk_310 != 1) {
-            func_80B90EC8(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33D0U, (Actor *) this);
-            this->unk_322 = 0x33D0;
-            gSaveContext.unkF06 = (u8) (gSaveContext.unkF06 | 1);
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        if (this->unk_310 == 1) {
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33C3U, &this->actor);
+            this->textId = 0x33C3;
+            gSaveContext.perm.weekEventReg[0xE] |= 1;
+            this->unk_310 = 3;
+            func_80151BB4(globalCtx, 0x20U);
+            func_80151BB4(globalCtx, 0x1FU);
+            func_80151BB4(globalCtx, 6U);
+            func_80B904D0(this);
+        } else {
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            func_801518B0(globalCtx, 0x33D0U, &this->actor);
+            this->textId = 0x33D0;
+            gSaveContext.perm.weekEventReg[0xE] |= 1;
             this->unk_310 = 3;
             func_80151BB4(globalCtx, 6U);
             func_80B904D0(this);
-            return;
         }
-        func_80B90EC8(this, (u16)0, (u16)1);
-        func_801518B0(globalCtx, 0x33C3U, (Actor *) this);
-        this->unk_322 = 0x33C3;
-        gSaveContext.unkF06 = (u8) (gSaveContext.unkF06 | 1);
-        this->unk_310 = 3;
-        func_80151BB4(globalCtx, 0x20U);
-        func_80151BB4(globalCtx, 0x1FU);
-        func_80151BB4(globalCtx, 6U);
-        func_80B904D0(this);
-        return;
+    } else {
+        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
     }
-    func_800B85E0((Actor *) this, globalCtx, 200.0f, -1);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90184.asm")
+
 
 void func_80B902B8(EnMaYto *this) {
     this->actionFunc = func_80B902CC;
@@ -1017,7 +1173,7 @@ void func_80B902CC(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B90340(EnMaYto *this) {
-    func_80B90EC8(this, (u16)0, (u16)1);
+    EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
     this->actionFunc = func_80B9037C;
 }
 
@@ -1109,14 +1265,14 @@ void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx) {
     if (temp_hi == 1) {
         if (func_8012403C(globalCtx) == 0) {
 block_13:
-            if (func_80B91014() == 0) {
+            if (!func_80B91014()) {
                 func_80B9109C();
-                func_801518B0(globalCtx, 0x3390U, (Actor *) this);
-                this->unk_322 = 0x3390;
+                func_801518B0(globalCtx, 0x3390U, &this->actor);
+                this->textId = 0x3390;
                 return;
             }
-            func_801518B0(globalCtx, 0x3394U, (Actor *) this);
-            this->unk_322 = 0x3394;
+            func_801518B0(globalCtx, 0x3394U, &this->actor);
+            this->textId = 0x3394;
             return;
         }
         if (gSaveContext.perm.unk20 != 4) {
@@ -1124,43 +1280,43 @@ block_13:
         }
         temp_v0 = func_8012403C(globalCtx);
         if (temp_v0 == 2) {
-            func_80B90EC8(this, (u16)1, (u16)2);
-            func_801518B0(globalCtx, 0x235FU, (Actor *) this);
-            this->unk_322 = 0x235F;
+            EnMaYto_SetFaceExpression(this, (u16)1, (u16)2);
+            func_801518B0(globalCtx, 0x235FU, &this->actor);
+            this->textId = 0x235F;
             return;
         }
         if (temp_v0 == 7) {
-            func_801518B0(globalCtx, 0x235DU, (Actor *) this);
-            this->unk_322 = 0x235D;
+            func_801518B0(globalCtx, 0x235DU, &this->actor);
+            this->textId = 0x235D;
             return;
         }
         if (temp_v0 == 8) {
-            func_80B90EC8(this, (u16)1, (u16)3);
-            func_801518B0(globalCtx, 0x235EU, (Actor *) this);
-            this->unk_322 = 0x235E;
+            EnMaYto_SetFaceExpression(this, (u16)1, (u16)3);
+            func_801518B0(globalCtx, 0x235EU, &this->actor);
+            this->textId = 0x235E;
             return;
         }
         if (temp_v0 == 0xA) {
-            func_801518B0(globalCtx, 0x2360U, (Actor *) this);
-            this->unk_322 = 0x2360;
+            func_801518B0(globalCtx, 0x2360U, &this->actor);
+            this->textId = 0x2360;
             return;
         }
-        func_801518B0(globalCtx, 0x2361U, (Actor *) this);
-        this->unk_322 = 0x2361;
+        func_801518B0(globalCtx, 0x2361U, &this->actor);
+        this->textId = 0x2361;
         return;
     }
     if (temp_hi == 3) {
-        if (func_80B90F84() != 0) {
-            func_80B90EC8(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x33C5U, (Actor *) this);
-            this->unk_322 = 0x33C5;
+        if (func_80B90F84()) {
+            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            func_801518B0(globalCtx, 0x33C5U, &this->actor);
+            this->textId = 0x33C5;
             func_80151BB4(globalCtx, 6U);
             return;
         }
         func_80B9109C();
-        func_80B90EC8(this, (u16)0, (u16)3);
-        func_801518B0(globalCtx, 0x33C4U, (Actor *) this);
-        this->unk_322 = 0x33C4;
+        EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+        func_801518B0(globalCtx, 0x33C4U, &this->actor);
+        this->textId = 0x33C4;
         func_80151BB4(globalCtx, 6U);
     }
 }
@@ -1176,7 +1332,7 @@ void func_80B9083C(Actor *arg0, GlobalContext *arg1) {
     temp_hi = (s32) gSaveContext.perm.day % 5;
     if (temp_hi != 1) {
         if (temp_hi == 2) {
-            if (func_80B91014() == 0) {
+            if (!func_80B91014()) {
                 func_80B9109C();
                 func_801518B0(arg1, 0x33A5U, arg0);
                 arg0->unk322 = (u16)0x33A5;
@@ -1190,7 +1346,7 @@ void func_80B9083C(Actor *arg0, GlobalContext *arg1) {
         if (temp_hi != 3) {
             return;
         }
-        if (func_80B91014() != 0) {
+        if (func_80B91014()) {
             func_801518B0(arg1, 0x33A8U, arg0);
             arg0->unk322 = (u16)0x33A8;
             func_80151BB4(arg1, 6U);
@@ -1202,7 +1358,7 @@ void func_80B9083C(Actor *arg0, GlobalContext *arg1) {
     } else {
         if (func_8012403C(arg1) == 0) {
 block_16:
-            if (func_80B91014() == 0) {
+            if (!func_80B91014()) {
                 func_80B9109C();
                 func_801518B0(arg1, 0x3397U, arg0);
                 arg0->unk322 = (u16)0x3397;
@@ -1253,39 +1409,39 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
         if (temp_hi == 2) {
             if (this->unk_310 == 1) {
                 func_801518B0(globalCtx, 0x33AEU, &this->actor);
-                this->unk_322 = 0x33AE;
+                this->textId = 0x33AE;
             } else {
                 this->unk_310 = 1;
                 func_80B9109C();
                 func_801518B0(globalCtx, 0x33A9U, &this->actor);
-                this->unk_322 = 0x33A9;
+                this->textId = 0x33A9;
             }
         }
         else if (temp_hi == 3) {
             if (this->unk_310 == 1) {
                 func_801518B0(globalCtx, 0x33CBU, &this->actor);
-                this->unk_322 = 0x33CB;
+                this->textId = 0x33CB;
             } else {
                 this->unk_310 = 1;
                 func_80B9109C();
-                func_80B90EC8(this, (u16)0, (u16)1);
+                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
                 func_801518B0(globalCtx, 0x33C6U, &this->actor);
-                this->unk_322 = 0x33C6;
+                this->textId = 0x33C6;
             }
         }
     } else {
-        if (func_80B91014() != 0) {
+        if (func_80B91014()) {
             this->unk_31E = 2;
-            func_80B90EC8(this, (u16)5, (u16)3);
+            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
             func_801518B0(globalCtx, 0x33B3U, &this->actor);
-            this->unk_322 = 0x33B3;
+            this->textId = 0x33B3;
             func_80151BB4(globalCtx, 6U);
         }
         else {
             func_80B9109C();
-            func_80B90EC8(this, (u16)5, (u16)3);
+            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
             func_801518B0(globalCtx, 0x33B1U, &this->actor);
-            this->unk_322 = 0x33B1;
+            this->textId = 0x33B1;
         }
     }
 }
@@ -1330,41 +1486,30 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->unk_1E0.x, (u16)0x18E3, (u16)5, (u16)0x71C, 0xB6);
     }
 
-    func_80B90DF0(this);
+    EnMaYto_Blink(this);
 }
 
-void func_80B90D98(EnMaYto* this, GlobalContext* globalCtx);
-/*
-void func_80B90D98(EnMaYto *this, GlobalContext *globalCtx) {
-    ColliderCylinder *sp1C;
-    ColliderCylinder *temp_a2;
-
-    temp_a2 = &this->collider;
-    if (func_80B9037C != this->actionFunc) {
-        sp1C = temp_a2;
-        globalCtx = globalCtx;
-        Collider_UpdateCylinder(&this->actor, temp_a2);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, (Collider *) temp_a2);
+void func_80B90D98(EnMaYto* this, GlobalContext* globalCtx) {
+    if (this->actionFunc != func_80B9037C) {
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90D98.asm")
 
 
-// UpdateEyes?
-void func_80B90DF0(EnMaYto *this) {
+void EnMaYto_Blink(EnMaYto *this) {
     if (this->unk_316 != 0) {
-        this->unk_31A = this->unk_316;
-    } else if (this->unk_31C == 0x64) {
-        if (this->unk_31A == 0) {
-            this->unk_31C = 0;
+        this->eyeTexIndex = this->unk_316;
+    } else if (this->blinkTimer == 0x64) {
+        if (this->eyeTexIndex == 0) {
+            this->blinkTimer = 0;
         } else {
-            this->unk_31A--;
+            this->eyeTexIndex--;
         }
     } else {
-        this->unk_31C++;
-        if (this->unk_31C == 0x64) {
-            this->unk_31A = 2;
+        this->blinkTimer++;
+        if (this->blinkTimer == 0x64) {
+            this->eyeTexIndex = 2;
         }
     }
 }
@@ -1396,76 +1541,67 @@ void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E84.asm")
 
 
-// UpdateMouth?
-void func_80B90EC8(EnMaYto *this, s16 arg1, s16 arg2) {
+void EnMaYto_SetFaceExpression(EnMaYto *this, s16 arg1, s16 mouthIndex) {
     this->unk_316 = arg1;
-    this->unk_318 = arg2;
+    this->mouthTexIndex = mouthIndex;
 }
 
 void func_80B90EF0(EnMaYto *this) {
     if (CURRENT_DAY == 1 || (gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-        func_80B90EC8(this, (u16)0, (u16)1);
+        EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
         func_80B90E84(this, 0, 0);
     } else {
-        func_80B90EC8(this, (u16)5, (u16)2);
+        EnMaYto_SetFaceExpression(this, (u16)5, (u16)2);
         func_80B90E84(this, 1, 2);
     }
 }
 
-/*
-? func_80B90F84(void) {
-    s32 temp_hi;
-
-    temp_hi = (s32) gSaveContext.perm.day % 5;
-    if (temp_hi != 1) {
-        if (temp_hi != 2) {
-            if (temp_hi != 3) {
-
-            } else if ((gSaveContext.unkF05 & 0x10) != 0) {
-                return 1;
+s32 func_80B90F84(void) {
+    switch (CURRENT_DAY) {
+        case 1:
+            if (gSaveContext.perm.weekEventReg[0xD] & 4) {
+                return true;
             }
-        } else if ((gSaveContext.unkF05 & 8) != 0) {
+            break;
+
+        case 2:
+            if (gSaveContext.perm.weekEventReg[0xD] & 8) {
+                return true;
+            }
+            break;
+
+        case 3:
+            if (gSaveContext.perm.weekEventReg[0xD] & 0x10) {
+                return true;
+            }
+            break;
+
+    }
+    return false;
+}
+
+
+
+s32 func_80B91014(void) {
+    // Note each case doesn't have `break`s.
+    switch (CURRENT_DAY) {
+    case 3:
+        if ((gSaveContext.perm.weekEventReg[0xD] & 0x10) != 0) {
             return 1;
         }
-    } else if ((gSaveContext.unkF05 & 4) != 0) {
-        return 1;
-    }
-    return 0;
-}
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90F84.asm")
 
-
-/*
-s32 func_80B91014(void) {
-    s32 temp_hi;
-
-    temp_hi = (s32) gSaveContext.perm.day % 5;
-    if (temp_hi != 1) {
-        if (temp_hi != 2) {
-            if (temp_hi == 3) {
-                if ((gSaveContext.unkF05 & 0x10) != 0) {
-                    return 1;
-                }
-block_5:
-                if ((gSaveContext.unkF05 & 8) != 0) {
-                    return 1;
-                }
-block_7:
-                if ((gSaveContext.unkF05 & 4) != 0) {
-                    return 1;
-                }
-            }
-        } else {
-            goto block_5;
+    case 2:
+        if ((gSaveContext.perm.weekEventReg[0xD] & 8) != 0) {
+            return 1;
         }
-    } else {
-        goto block_7;
+
+    case 1:
+        if (gSaveContext.perm.weekEventReg[0xD] & 4) {
+            return 1;
+        }
     }
     return 0;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B91014.asm")
 
 /*
 s32 func_80B9109C(void) {
@@ -1549,8 +1685,8 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B915C8[this->unk_318]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B915D8[this->unk_31A]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B915C8[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B915D8[this->eyeTexIndex]));
 
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      func_80B91154, func_80B91250, &this->actor);

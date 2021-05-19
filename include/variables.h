@@ -1481,7 +1481,7 @@ extern u8 D_801C207E;
 // extern UNK_TYPE1 D_801C20B1;
 // extern UNK_TYPE1 D_801C20B2;
 // extern UNK_TYPE1 D_801C20B3;
-// extern UNK_TYPE1 D_801C20B4;
+extern u8 D_801C20B4;
 // extern UNK_TYPE1 D_801C20B5;
 // extern UNK_TYPE1 D_801C20B6;
 // extern UNK_TYPE1 D_801C20B7;
