@@ -212,7 +212,7 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_HIT;
         if (&player->base == this->collider.base.at) {
             func_809308F4(this, globalCtx);
-            func_800F0568(globalCtx, &this->base.actor.world, 0x28, 0x2887);
+            func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
             func_800F0568(globalCtx, &player2->base.world, 0x28, 0x83E);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
