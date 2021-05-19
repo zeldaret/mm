@@ -41,11 +41,11 @@ extern Gfx D_06000088[];
 
 extern CollisionHeader D_06000968;
 
-static f32 D_80AD6620[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };
+static f32 panelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };
 
-static f32 D_80AD663C[] = { -60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f };
+static f32 dustSpawnXOffsets[] = { -60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f };
 
-static Vec3f D_80AD6658 = { 0.0f, 0.3f, 0.0f };
+static Vec3f dustEffectAccel = { 0.0f, 0.3f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -54,13 +54,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjTokeiStep_SetSysMatrix(ObjTokeiStepStep* step) {
+void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     MtxF* sysMatrix;
 
     sysMatrix = SysMatrix_GetCurrentState();
-    sysMatrix->wx = step->pos.x;
-    sysMatrix->wy = step->pos.y;
-    sysMatrix->wz = step->pos.z;
+    sysMatrix->wx = panel->pos.x;
+    sysMatrix->wy = panel->pos.y;
+    sysMatrix->wz = panel->pos.z;
 }
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
@@ -74,120 +74,120 @@ void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 0x78, 0x14, 0xA);
 }
 
-void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepStep* step, GlobalContext* globalCtx) {
+void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, GlobalContext* globalCtx) {
     s32 i;
     s32 pad;
-    Vec3f sp84;
+    Vec3f dustSpawnOffset;
     Vec3f dustSpawnPos;
 
     Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
 
-    sp84.y = 115.0f;
-    sp84.z = -10.0f;
+    dustSpawnOffset.y = 115.0f;
+    dustSpawnOffset.z = -10.0f;
     for (i = 0; i < 7; i++) {
-        sp84.x = D_80AD663C[i];
-        SysMatrix_MultiplyVector3fByState(&sp84, &dustSpawnPos);
-        dustSpawnPos.x += step->pos.x;
-        dustSpawnPos.y += step->pos.y;
-        dustSpawnPos.z += step->pos.z;
-        func_800B1210(globalCtx, &dustSpawnPos, &D_801D15B0, &D_80AD6658, (s32)((Rand_ZeroOne() * 40.0f) + 80.0f),
+        dustSpawnOffset.x = dustSpawnXOffsets[i];
+        SysMatrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
+        dustSpawnPos.x += panel->pos.x;
+        dustSpawnPos.y += panel->pos.y;
+        dustSpawnPos.z += panel->pos.z;
+        func_800B1210(globalCtx, &dustSpawnPos, &D_801D15B0, &dustEffectAccel, (s32)((Rand_ZeroOne() * 40.0f) + 80.0f),
                       (s32)((Rand_ZeroOne() * 20.0f) + 50.0f));
     }
 }
 
 void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     s32 i;
-    ObjTokeiStepStep* step;
-    Vec3f sp4c;
+    ObjTokeiStepPanel* panel;
+    Vec3f panelOffset;
     s32 pad;
 
     SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    sp4c.x = 0.0f;
-    sp4c.y = 0.0f;
+    panelOffset.x = 0.0f;
+    panelOffset.y = 0.0f;
     for (i = 0; i < 7; i++) {
-        step = &this->steps[i];
-        sp4c.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&sp4c, &step->pos);
-        step->posChangeY = 0.0f;
-        step->numBounces = 0;
+        panel = &this->panels[i];
+        panelOffset.z = i * -20.0f;
+        SysMatrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        panel->posChangeY = 0.0f;
+        panel->numBounces = 0;
     }
 }
 
 void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
     s32 i;
-    ObjTokeiStepStep* step;
-    Vec3f sp44;
+    ObjTokeiStepPanel* panel;
+    Vec3f panelOffset;
 
     SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    sp44.x = 0.0f;
+    panelOffset.x = 0.0f;
     for (i = 0; i < 7; i++) {
-        step = &this->steps[i];
-        sp44.y = D_80AD6620[i];
-        sp44.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&sp44, &step->pos);
+        panel = &this->panels[i];
+        panelOffset.y = panelXOffsets[i];
+        panelOffset.z = i * -20.0f;
+        SysMatrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
     }
 }
 
 void ObjTokeiStep_InitTimers(ObjTokeiStep* this) {
     s32 i;
 
-    this->steps[0].startFallingTimer = 0;
+    this->panels[0].startFallingTimer = 0;
     for (i = 1; i < 7; i++) {
-        this->steps[i].startFallingTimer = 10;
+        this->panels[i].startFallingTimer = 10;
     }
 }
 
 s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
     ObjTokeiStep* this2 = this;
     s32 i;
-    ObjTokeiStepStep* step;
+    ObjTokeiStepPanel* panel;
     f32 finalPosY;
     s32 isOpen = 1;
     s32 prevBounced = 1;
 
     for (i = 0; i < 7; i++) {
-        step = &this->steps[i];
-        if (prevBounced && step->startFallingTimer > 0) {
-            step->startFallingTimer--;
+        panel = &this->panels[i];
+        if (prevBounced && panel->startFallingTimer > 0) {
+            panel->startFallingTimer--;
             isOpen = 0;
         }
-        if (prevBounced && step->numBounces < 3 && step->startFallingTimer <= 0) {
-            finalPosY = D_80AD6620[i] + this->dyna.actor.world.pos.y;
-            if (!step->hasSoundPlayed) {
+        if (prevBounced && panel->numBounces < 3 && panel->startFallingTimer <= 0) {
+            finalPosY = panelXOffsets[i] + this->dyna.actor.world.pos.y;
+            if (!panel->hasSoundPlayed) {
                 Audio_PlayActorSound2(&this->dyna.actor, 0x2945);
-                step->hasSoundPlayed = true;
+                panel->hasSoundPlayed = true;
             }
-            step->posChangeY += -2.5f;
-            step->posChangeY *= 0.83f;
-            step->pos.y += step->posChangeY;
+            panel->posChangeY += -2.5f;
+            panel->posChangeY *= 0.83f;
+            panel->pos.y += panel->posChangeY;
             isOpen = 0;
-            if (step->pos.y < finalPosY) {
-                step->numBounces++;
-                if (step->numBounces >= 3) {
-                    step->pos.y = finalPosY;
+            if (panel->pos.y < finalPosY) {
+                panel->numBounces++;
+                if (panel->numBounces >= 3) {
+                    panel->pos.y = finalPosY;
                 } else {
-                    step->posChangeY *= -0.4f;
-                    if (step->posChangeY > 4.0f) {
-                        step->posChangeY = 4.0f;
+                    panel->posChangeY *= -0.4f;
+                    if (panel->posChangeY > 4.0f) {
+                        panel->posChangeY = 4.0f;
                     }
-                    step->pos.y = (step->pos.y - finalPosY) * -0.4f;
-                    if (step->posChangeY < step->pos.y) {
-                        step->pos.y = step->posChangeY + finalPosY;
+                    panel->pos.y = (panel->pos.y - finalPosY) * -0.4f;
+                    if (panel->posChangeY < panel->pos.y) {
+                        panel->pos.y = panel->posChangeY + finalPosY;
                     } else {
-                        step->pos.y += finalPosY;
+                        panel->pos.y += finalPosY;
                     }
-                    if (step->numBounces == 1) {
-                        ObjTokeiStep_SpawnDust(this2, step, globalCtx);
+                    if (panel->numBounces == 1) {
+                        ObjTokeiStep_SpawnDust(this2, panel, globalCtx);
                         ObjTokeiStep_AddQuake(this2, globalCtx);
                     }
                 }
             }
         }
-        prevBounced = step->numBounces > 0;
+        prevBounced = panel->numBounces > 0;
     }
     return isOpen;
 }
@@ -277,7 +277,7 @@ void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
     int i;
-    ObjTokeiStepStep* step;
+    ObjTokeiStepPanel* panel;
     Gfx* gfx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -285,8 +285,8 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(gfx++, &sSetupDL[6 * 0x19]);
 
     for (i = 0; i < 7; i++) {
-        step = &this->steps[i];
-        ObjTokeiStep_SetSysMatrix(step);
+        panel = &this->panels[i];
+        ObjTokeiStep_SetSysMatrix(panel);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, D_06000088);
     }
