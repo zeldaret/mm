@@ -18,7 +18,7 @@ const ActorInit Obj_Kepn_Koya_InitVars = {
     (ActorFunc)ObjKepnKoya_Init,
     (ActorFunc)ObjKepnKoya_Destroy,
     (ActorFunc)ObjKepnKoya_Update,
-    (ActorFunc)ObjKepnKoya_Draw
+    (ActorFunc)ObjKepnKoya_Draw,
 };
 
 static InitChainEntry D_80C07C40[] = {

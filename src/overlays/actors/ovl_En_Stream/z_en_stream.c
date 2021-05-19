@@ -19,7 +19,7 @@ const ActorInit En_Stream_InitVars = {
     (ActorFunc)EnStream_Init,
     (ActorFunc)EnStream_Destroy,
     (ActorFunc)EnStream_Update,
-    (ActorFunc)EnStream_Draw
+    (ActorFunc)EnStream_Draw,
 };
 */
 

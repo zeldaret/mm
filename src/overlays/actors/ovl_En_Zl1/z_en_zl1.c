@@ -18,7 +18,7 @@ const ActorInit En_Zl1_InitVars = {
     (ActorFunc)EnZl1_Init,
     (ActorFunc)EnZl1_Destroy,
     (ActorFunc)EnZl1_Update,
-    (ActorFunc)EnZl1_Draw
+    (ActorFunc)EnZl1_Draw,
 };
 
 void EnZl1_Init(Actor* thisx, GlobalContext* globalCtx) {

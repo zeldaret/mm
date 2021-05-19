@@ -19,7 +19,7 @@ const ActorInit En_Sda_InitVars = {
     (ActorFunc)EnSda_Init,
     (ActorFunc)EnSda_Destroy,
     (ActorFunc)EnSda_Update,
-    (ActorFunc)EnSda_Draw
+    (ActorFunc)EnSda_Draw,
 };
 */
 

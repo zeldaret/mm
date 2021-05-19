@@ -19,7 +19,7 @@ const ActorInit Bg_Dblue_Elevator_InitVars = {
     (ActorFunc)BgDblueElevator_Init,
     (ActorFunc)BgDblueElevator_Destroy,
     (ActorFunc)BgDblueElevator_Update,
-    (ActorFunc)BgDblueElevator_Draw
+    (ActorFunc)BgDblueElevator_Draw,
 };
 */
 

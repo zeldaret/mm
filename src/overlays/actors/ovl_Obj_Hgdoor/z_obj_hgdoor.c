@@ -19,7 +19,7 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Init,
     (ActorFunc)ObjHgdoor_Destroy,
     (ActorFunc)ObjHgdoor_Update,
-    (ActorFunc)ObjHgdoor_Draw
+    (ActorFunc)ObjHgdoor_Draw,
 };
 */
 
