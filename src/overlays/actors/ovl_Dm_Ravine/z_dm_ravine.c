@@ -54,7 +54,7 @@ void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmRavine* this = THIS;
     RoomContext* roomCtx;
 
-    switch ((DmRavineState) this->state) {
+    switch ((DmRavineState)this->state) {
         case DM_RAVINE_STATE_INITIALIZED:
             return;
         case DM_RAVINE_STATE_ACTIVE:

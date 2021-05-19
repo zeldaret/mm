@@ -19,7 +19,7 @@ const ActorInit En_Gs_InitVars = {
     (ActorFunc)EnGs_Init,
     (ActorFunc)EnGs_Destroy,
     (ActorFunc)EnGs_Update,
-    (ActorFunc)EnGs_Draw
+    (ActorFunc)EnGs_Draw,
 };
 */
 

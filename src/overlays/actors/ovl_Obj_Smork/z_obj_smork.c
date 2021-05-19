@@ -19,7 +19,7 @@ const ActorInit Obj_Smork_InitVars = {
     (ActorFunc)ObjSmork_Init,
     (ActorFunc)ObjSmork_Destroy,
     (ActorFunc)ObjSmork_Update,
-    (ActorFunc)ObjSmork_Draw
+    (ActorFunc)ObjSmork_Draw,
 };
 */
 

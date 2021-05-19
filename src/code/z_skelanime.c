@@ -851,7 +851,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
     return gfx;
 }
 
-//Function is unused.
+// Function is unused.
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/func_80134FFC.asm")
 
 s16 func_801353D4(GenericAnimationHeader* animationSeg) {

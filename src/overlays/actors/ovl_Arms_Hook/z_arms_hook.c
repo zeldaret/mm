@@ -21,7 +21,7 @@ const ActorInit Arms_Hook_InitVars = {
     (ActorFunc)ArmsHook_Init,
     (ActorFunc)ArmsHook_Destroy,
     (ActorFunc)ArmsHook_Update,
-    (ActorFunc)ArmsHook_Draw
+    (ActorFunc)ArmsHook_Draw,
 };
 
 ColliderQuadInit D_808C1BC0 = {

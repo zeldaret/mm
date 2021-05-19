@@ -18,7 +18,7 @@ const ActorInit En_Onpuman_InitVars = {
     (ActorFunc)EnOnpuman_Init,
     (ActorFunc)EnOnpuman_Destroy,
     (ActorFunc)EnOnpuman_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

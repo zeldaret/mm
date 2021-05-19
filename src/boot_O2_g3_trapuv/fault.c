@@ -742,17 +742,17 @@ void Fault_SetOptionsFromController3(void) {
         graphRA = graphOSThread.context.ra;
         graphSP = graphOSThread.context.sp;
         if (CHECK_BTN_ALL(input3->press.button, BTN_R)) {
-              faultCopyToLog = !faultCopyToLog;
-              FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
+            faultCopyToLog = !faultCopyToLog;
+            FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
-              Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
+            Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_B)) {
-              FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
-              Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
-              FaultDrawer_SetCharPad(-2, 0);
-              FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
+            FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
+            Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
+            FaultDrawer_SetCharPad(-2, 0);
+            FaultDrawer_DrawText(0x20, 0xD8, D_80098A68, graphPC, graphRA, graphSP);
         }
     }
 }

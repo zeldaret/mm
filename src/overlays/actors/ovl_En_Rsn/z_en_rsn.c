@@ -28,7 +28,7 @@ extern AnimationHeader D_06009120;
 extern AnimationHeader D_0600788C;
 extern Gfx D_06005458[];
 
-static ActorAnimationEntry animations[] = {{ &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f }};
+static ActorAnimationEntry animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
     func_800BDC5C(&this->skelAnime, animations, 0);

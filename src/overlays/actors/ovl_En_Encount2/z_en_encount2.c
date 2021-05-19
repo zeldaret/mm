@@ -26,24 +26,39 @@ const ActorInit En_Encount2_InitVars = {
     (ActorFunc)EnEncount2_Init,
     (ActorFunc)EnEncount2_Destroy,
     (ActorFunc)EnEncount2_Update,
-    (ActorFunc)EnEncount2_Draw
+    (ActorFunc)EnEncount2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
     },
 };
 
 static ColliderJntSphInit sJntSphInit = {
-    { COLTYPE_HARD, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, sJntSphElementsInit,
+    {
+        COLTYPE_HARD,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    sJntSphElementsInit,
 };
 
 DamageTable damageTable[] = {
-    0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0, 
-    0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 
+    0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0,
+    0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
 };
 
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -110,10 +125,10 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&curPos, &this->dynaActor.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z,
-       0xFF, 0xFF, 0xC8, 0x0001);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 0xFF, 0xFF, 0xC8,
+                0x0001);
 
-    for(i = 0; i != 100; ++i){
+    for (i = 0; i != 100; ++i) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
@@ -144,7 +159,7 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->dynaActor.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
-    if (! this->isPopped) {
+    if (!this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dynaActor.actor);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -160,12 +175,12 @@ void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2_DrawParticles(this, globalCtx);
 }
 
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f *vec, s16 fadeDelay) {
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay) {
     s16 i;
     EnEncount2Particle *sPtr = this->particles;
 
     for (i = 0; i < 200; ++i) {
-        if ( ! sPtr->enabled) {
+        if (!sPtr->enabled) {
             sPtr->enabled = 1;
             sPtr->pos = *vec;
             sPtr->alphaFadeDelay = fadeDelay;
@@ -190,7 +205,7 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     EnEncount2Particle *sPtr = this->particles;
 
-    for(i = 0 ; i < 200; i += 2) {
+    for (i = 0; i < 200; i += 2) {
         if (sPtr->enabled) {
             sPtr->pos.x += sPtr->vel.x;
             sPtr->pos.y += sPtr->vel.y;

@@ -28,7 +28,9 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->unk164 = 0;
     view->flags = 1 | 2 | 4;
 
-    if (1);
+    if (1) {
+        ;
+    }
 
     view->scale = 1.0f;
     view->upDir.y = 1.0f;
@@ -339,7 +341,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     }
 
     guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->focalPoint.x, view->focalPoint.y, view->focalPoint.z,
-                  view->upDir.x, view->upDir.y, view->upDir.z);
+             view->upDir.x, view->upDir.y, view->upDir.z);
 
     view->viewing = *viewing;
 
@@ -382,8 +384,8 @@ s32 View_RenderToOrthographicMatrix(View* view) {
     }
     view->projectionPtr = projection;
 
-    guOrtho(projection, -0.5f ,0.5f, screenWidth * -0.5f, screenWidth * 0.5f,
-            screenHeight * -0.5f, screenHeight * 0.5f, view->zNear);
+    guOrtho(projection, -0.5f, 0.5f, gScreenWidth * -0.5f, gScreenWidth * 0.5f, gScreenHeight * -0.5f,
+            gScreenHeight * 0.5f, view->zNear);
 
     view->projection = *projection;
 
@@ -401,9 +403,8 @@ s32 View_RenderToOrthographicMatrix(View* view) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_8013FD74.asm")
 
 s32 func_80140024(View* view) {
-    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z,
-             view->focalPoint.x, view->focalPoint.y, view->focalPoint.z,
-             view->upDir.x, view->upDir.y, view->upDir.z);
+    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z, view->focalPoint.x, view->focalPoint.y,
+             view->focalPoint.z, view->upDir.x, view->upDir.y, view->upDir.z);
 
     view->unkE0 = *view->viewingPtr;
     view->viewingPtr = &view->unkE0;
@@ -412,4 +413,3 @@ s32 func_80140024(View* view) {
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_801400CC.asm")
-

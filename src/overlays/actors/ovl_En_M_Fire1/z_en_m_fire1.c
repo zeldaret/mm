@@ -17,30 +17,30 @@ const ActorInit En_M_Fire1_InitVars = {
     (ActorFunc)EnMFire1_Init,
     (ActorFunc)EnMFire1_Destroy,
     (ActorFunc)EnMFire1_Update,
-    NULL
+    (ActorFunc)NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { 
-        COLTYPE_NONE, 
-        AT_ON | AT_TYPE_PLAYER, 
-        AC_NONE, 
-        OC1_NONE, 
-        OC2_TYPE_PLAYER, 
-        COLSHAPE_CYLINDER, 
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_CYLINDER,
     },
-    { 
-        ELEMTYPE_UNK2, 
-        { 0x00000001, 0x00, 0x01 }, 
-        { 0xF7CFFFFF, 0x00, 0x00 }, 
-        TOUCH_ON | TOUCH_SFX_NONE, 
-        BUMP_NONE, 
-        OCELEM_NONE, 
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000001, 0x00, 0x01 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_NONE,
+        OCELEM_NONE,
     },
     { 100, 100, 0, { 0, 0, 0 } },
 };
 
-void EnMFire1_Init(Actor* thisx, GlobalContext *globalCtx) {
+void EnMFire1_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMFire1* this = THIS;
     s32 pad;
 
@@ -51,14 +51,13 @@ void EnMFire1_Init(Actor* thisx, GlobalContext *globalCtx) {
     }
 }
 
-void EnMFire1_Destroy(Actor* thisx, GlobalContext *globalCtx) {
+void EnMFire1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMFire1* this = THIS;
-    
+
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-
-void EnMFire1_Update(Actor* thisx, GlobalContext *globalCtx) {
+void EnMFire1_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMFire1* this = THIS;
     s32 pad;
 
