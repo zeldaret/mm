@@ -3391,6 +3391,7 @@ void SysMatrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rotation);
 void SysMatrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation);
 RSPMatrix* SysMatrix_ToRSPMatrix(MtxF* src, RSPMatrix* dst);
 RSPMatrix* SysMatrix_GetStateAsRSPMatrix(RSPMatrix* matrix);
+Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx);
 RSPMatrix* SysMatrix_AppendStateToPolyOpaDisp(GraphicsContext* gCtxt);
 void SysMatrix_AppendToPolyOpaDisp(MtxF* ctxt, GraphicsContext* gCtxt);
 void SysMatrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dst);

@@ -1923,9 +1923,9 @@ SECTIONS
     ovl_Eff_Dust : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o(.text)
-        build/asm/overlays/ovl_Eff_Dust_data.o(.data)
+        build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o(.data)
         build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust.o(.rodata)
-        build/asm/overlays/ovl_Eff_Dust_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Eff_Dust/z_eff_dust_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
