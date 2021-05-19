@@ -29,7 +29,7 @@ Basic knowledge of C, particularly arrays and pointers, is extremely useful. Kno
 
 You should be familiar with using git and GitHub. There are a number of tutorials available online, [such as this one](https://github.com/firstcontributions/first-contributions), which can help you get started.
 
-The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in [OOT's Practice Rom](http://practicerom.com/) (aka GZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
+The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [OOT Practice Rom](http://practicerom.com/) (aka GZ) or the [MM Practice Rom](https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
 
 This project only uses *publicly available code*. In particular, do not use any Nintendo source code leaks.
 
@@ -58,7 +58,6 @@ There are some conventions that cannot be automatically enforced.
 - Naming scheme
 - `ActorFunc` naming specifics
 - Renaming symbols referenced by asm (?)
-- Check for new warnings
 
 ### `NON_MATCHING`
 
@@ -81,24 +80,28 @@ Pull Requests (PRs)
 
 Before opening a PR, walk through the following steps to ensure that your code confroms to the style guide & conventions.
 
-- Ensure `make` successfully builds a matching ROM.
 - Run `./format.sh` to reformat your updated files.
-- The MIPS C compiler should not produce additional warnings. 
-    - In most cases, you can check this by `touch`ing (or re-saving) your modified `.c` files, and re-running `make`.
+- Ensure `make` successfully builds a matching ROM.
+- Your changes should not introduce new warnings (TODO: See PR #150 for check)
 - New variables & functions should follow the naming conventions above.
 - Check spelling in comments & renamed symbols
-
-TODO: Do we care about commit messages, hygine, etc?
 
 ### Pull Request Process
 
 TODO: What should go in the pull request body?
 
-After opening a PR, the Jenkins server will verify your changes. If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
+After opening a PR, the Jenkins server will verify your changes.
+If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
 
-Each PR needs a review from one reviewer, plus the project lead. The project lead can then merge the code once all comments are addressed. (TODO: add more detail here)
+Each PR needs a review from one reviewer, plus the project lead.
 
-Be sure to update the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the status of your PR.
+The PR author marks the comments as resolved, since they are the ones with permissions.
+Once all comments are addressed, it is courteous to ping the reviewer on either Discord or GitHub via re-requesting a review.
+
+After all the comments are addressed and at least one contributor has approved the review, the project lead can then merge the code.
+The project lead is also responsible for ensuring that all of these procedures are followed.
+
+Throughout the process, you should update the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the status of your PR.
 
 Tools
 -----
