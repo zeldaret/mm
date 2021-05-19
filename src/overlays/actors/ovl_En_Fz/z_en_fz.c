@@ -19,7 +19,7 @@ const ActorInit En_Fz_InitVars = {
     (ActorFunc)EnFz_Init,
     (ActorFunc)EnFz_Destroy,
     (ActorFunc)EnFz_Update,
-    (ActorFunc)EnFz_Draw
+    (ActorFunc)EnFz_Draw,
 };
 */
 

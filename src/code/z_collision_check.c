@@ -329,8 +329,8 @@ s32 Collider_SetJntSphToActor(GlobalContext* ctxt, ColliderJntSph* collider, Col
         return 0;
     }
 
-    for (destElem = collider->elements, srcElem = src->elements;
-         destElem < &collider->elements[collider->count]; destElem++, srcElem++) {
+    for (destElem = collider->elements, srcElem = src->elements; destElem < &collider->elements[collider->count];
+         destElem++, srcElem++) {
         Collider_InitJntSphElement(ctxt, destElem);
         Collider_SetJntSphElement(ctxt, destElem, srcElem);
     }

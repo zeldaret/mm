@@ -18,7 +18,7 @@ const ActorInit Demo_Shd_InitVars = {
     (ActorFunc)DemoShd_Init,
     (ActorFunc)DemoShd_Destroy,
     (ActorFunc)DemoShd_Update,
-    (ActorFunc)DemoShd_Draw
+    (ActorFunc)DemoShd_Draw,
 };
 
 void DemoShd_Init(Actor* thisx, GlobalContext* globalCtx) {

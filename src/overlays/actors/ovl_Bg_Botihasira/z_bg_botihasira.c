@@ -19,7 +19,7 @@ const ActorInit Bg_Botihasira_InitVars = {
     (ActorFunc)BgBotihasira_Init,
     (ActorFunc)BgBotihasira_Destroy,
     (ActorFunc)BgBotihasira_Update,
-    (ActorFunc)BgBotihasira_Draw
+    (ActorFunc)BgBotihasira_Draw,
 };
 */
 

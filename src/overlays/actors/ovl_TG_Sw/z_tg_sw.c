@@ -21,7 +21,7 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Init,
     (ActorFunc)TGSw_Destroy,
     (ActorFunc)TGSw_Update,
-    (ActorFunc)TGSw_Draw
+    (ActorFunc)TGSw_Draw,
 };
 
 static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
@@ -34,8 +34,7 @@ static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
-        if (!(scaledAbsoluteRotZ < this->actor.xzDistToPlayer) &&
-            !(scaledAbsoluteRotY < this->actor.yDistToPlayer)) {
+        if (!(scaledAbsoluteRotZ < this->actor.xzDistToPlayer) && !(scaledAbsoluteRotY < this->actor.yDistToPlayer)) {
             unk1F4 = globalCtx->actorCtx.unk1F4;
             if (unk1F4 == 2 || !unk1F4) {
                 this->actionFunc = &TGSw_ActionExecuteOneShot;
@@ -50,7 +49,8 @@ static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCt
 
     actorIterator = NULL;
     do {
-        actorEntry = func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        actorEntry =
+            func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
         if (actorIterator = (void*)!actorEntry) {
             break;
         }
@@ -107,18 +107,16 @@ void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
         absoluteRotZ = ABS_ALT(this->actor.world.rot.z);
         factoredRotZ = absoluteRotZ * 0.2f;
         // if needs to use the factored Rot as a var, "true" doesnt work
-        if (factoredRotZ)
-        {
+        if (factoredRotZ) {
             ;
         }
         absoluteRotY = ABS_ALT(this->actor.world.rot.y);
-        
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               0, this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
+
+        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
+                               this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
                                globalCtx->state.gfxCtx);
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                               0, 0, 0, 0.1f, absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6,
-                               globalCtx->state.gfxCtx);
+        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0.1f,
+                               absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
         this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + 0x1000);
     }
 }

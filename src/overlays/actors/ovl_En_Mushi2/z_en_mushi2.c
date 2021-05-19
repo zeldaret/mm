@@ -19,7 +19,7 @@ const ActorInit En_Mushi2_InitVars = {
     (ActorFunc)EnMushi2_Init,
     (ActorFunc)EnMushi2_Destroy,
     (ActorFunc)EnMushi2_Update,
-    (ActorFunc)EnMushi2_Draw
+    (ActorFunc)EnMushi2_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Elfbub_InitVars = {
     (ActorFunc)EnElfbub_Init,
     (ActorFunc)EnElfbub_Destroy,
     (ActorFunc)EnElfbub_Update,
-    (ActorFunc)EnElfbub_Draw
+    (ActorFunc)EnElfbub_Draw,
 };
 */
 

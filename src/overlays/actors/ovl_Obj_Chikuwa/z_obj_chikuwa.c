@@ -19,7 +19,7 @@ const ActorInit Obj_Chikuwa_InitVars = {
     (ActorFunc)ObjChikuwa_Init,
     (ActorFunc)ObjChikuwa_Destroy,
     (ActorFunc)ObjChikuwa_Update,
-    (ActorFunc)ObjChikuwa_Draw
+    (ActorFunc)ObjChikuwa_Draw,
 };
 */
 

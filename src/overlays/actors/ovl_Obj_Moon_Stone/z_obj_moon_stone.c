@@ -19,7 +19,7 @@ const ActorInit Obj_Moon_Stone_InitVars = {
     (ActorFunc)ObjMoonStone_Init,
     (ActorFunc)ObjMoonStone_Destroy,
     (ActorFunc)ObjMoonStone_Update,
-    (ActorFunc)ObjMoonStone_Draw
+    (ActorFunc)ObjMoonStone_Draw,
 };
 */
 

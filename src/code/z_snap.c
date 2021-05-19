@@ -25,38 +25,40 @@ s32 func_8013A240(GlobalContext* ctxt) {
             seen = 0;
 
             switch (ctxt->sceneNum) {
-            case SCENE_20SICHITAI:
-                if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
-                    seen = 1;
-                }
-                break;
-            default:
-                seen = 0;
+                case SCENE_20SICHITAI:
+                    if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
+                        seen = 1;
+                    }
+                    break;
+                default:
+                    seen = 0;
             }
 
-            if (actor->id); // Needed to match
+            if (actor->id) {
+                ; // Needed to match
+            }
 
             switch (actor->id) {
-            case ACTOR_EN_KAKASI:
-                if ((actor->params & 1) == 1) {
+                case ACTOR_EN_KAKASI:
+                    if ((actor->params & 1) == 1) {
+                        seen |= 2;
+                        break; //! @bug break is inside conditional, meaning it falls through if it is false
+                    }
+                case ACTOR_EN_ZOV:
                     seen |= 2;
-                    break; //! @bug break is inside conditional, meaning it falls through if it is false
-                }
-            case ACTOR_EN_ZOV:
-                seen |= 2;
-                break;
-            case ACTOR_EN_BAL:
-                seen |= 2;
-                break;
-            case ACTOR_EN_DNQ:
-                seen |= 2;
-                break;
-            case ACTOR_EN_GE1:
-            case ACTOR_EN_GE3:
-            case ACTOR_EN_KAIZOKU:
-            case ACTOR_EN_GE2:
-                seen |= 2;
-                break;
+                    break;
+                case ACTOR_EN_BAL:
+                    seen |= 2;
+                    break;
+                case ACTOR_EN_DNQ:
+                    seen |= 2;
+                    break;
+                case ACTOR_EN_GE1:
+                case ACTOR_EN_GE3:
+                case ACTOR_EN_KAIZOKU:
+                case ACTOR_EN_GE2:
+                    seen |= 2;
+                    break;
             }
 
             if (seen != 0) {
@@ -105,7 +107,8 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+                  f32 distanceMax, s16 angleError) {
     Vec3f screenSpace;
     s16 x;
     s16 y;
@@ -157,4 +160,3 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
 
     return ret;
 }
-
