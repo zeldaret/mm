@@ -23,7 +23,7 @@ const ActorInit Obj_Hana_InitVars = {
     (ActorFunc)ObjHana_Init,
     (ActorFunc)ObjHana_Destroy,
     (ActorFunc)ObjHana_Update,
-    (ActorFunc)ObjHana_Draw
+    (ActorFunc)ObjHana_Draw,
 };
 
 extern UNK_TYPE D_06000500;
@@ -37,7 +37,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHana* this = THIS;
-    
+
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }
 

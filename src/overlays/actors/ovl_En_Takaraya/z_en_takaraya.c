@@ -19,7 +19,7 @@ const ActorInit En_Takaraya_InitVars = {
     (ActorFunc)EnTakaraya_Init,
     (ActorFunc)EnTakaraya_Destroy,
     (ActorFunc)EnTakaraya_Update,
-    (ActorFunc)EnTakaraya_Draw
+    (ActorFunc)EnTakaraya_Draw,
 };
 */
 

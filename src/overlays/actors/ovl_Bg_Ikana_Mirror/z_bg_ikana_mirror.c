@@ -19,7 +19,7 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
     (ActorFunc)BgIkanaMirror_Init,
     (ActorFunc)BgIkanaMirror_Destroy,
     (ActorFunc)BgIkanaMirror_Update,
-    (ActorFunc)BgIkanaMirror_Draw
+    (ActorFunc)BgIkanaMirror_Draw,
 };
 */
 

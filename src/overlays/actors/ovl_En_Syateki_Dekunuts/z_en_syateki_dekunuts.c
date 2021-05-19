@@ -19,7 +19,7 @@ const ActorInit En_Syateki_Dekunuts_InitVars = {
     (ActorFunc)EnSyatekiDekunuts_Init,
     (ActorFunc)EnSyatekiDekunuts_Destroy,
     (ActorFunc)EnSyatekiDekunuts_Update,
-    (ActorFunc)EnSyatekiDekunuts_Draw
+    (ActorFunc)EnSyatekiDekunuts_Draw,
 };
 */
 

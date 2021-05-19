@@ -19,7 +19,7 @@ const ActorInit En_Scopenuts_InitVars = {
     (ActorFunc)EnScopenuts_Init,
     (ActorFunc)EnScopenuts_Destroy,
     (ActorFunc)EnScopenuts_Update,
-    (ActorFunc)EnScopenuts_Draw
+    (ActorFunc)EnScopenuts_Draw,
 };
 */
 

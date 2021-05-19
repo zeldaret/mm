@@ -19,7 +19,7 @@ const ActorInit Bg_F40_Swlift_InitVars = {
     (ActorFunc)BgF40Swlift_Init,
     (ActorFunc)BgF40Swlift_Destroy,
     (ActorFunc)BgF40Swlift_Update,
-    (ActorFunc)BgF40Swlift_Draw
+    (ActorFunc)BgF40Swlift_Draw,
 };
 */
 

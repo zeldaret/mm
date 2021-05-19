@@ -19,7 +19,7 @@ const ActorInit En_Js_InitVars = {
     (ActorFunc)EnJs_Init,
     (ActorFunc)EnJs_Destroy,
     (ActorFunc)EnJs_Update,
-    (ActorFunc)EnJs_Draw
+    (ActorFunc)EnJs_Draw,
 };
 */
 
