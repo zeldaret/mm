@@ -19,7 +19,7 @@ const ActorInit En_Bomjima_InitVars = {
     (ActorFunc)EnBomjima_Init,
     (ActorFunc)EnBomjima_Destroy,
     (ActorFunc)EnBomjima_Update,
-    (ActorFunc)EnBomjima_Draw
+    (ActorFunc)EnBomjima_Draw,
 };
 */
 

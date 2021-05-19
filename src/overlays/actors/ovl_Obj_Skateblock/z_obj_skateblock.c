@@ -19,7 +19,7 @@ const ActorInit Obj_Skateblock_InitVars = {
     (ActorFunc)ObjSkateblock_Init,
     (ActorFunc)ObjSkateblock_Destroy,
     (ActorFunc)ObjSkateblock_Update,
-    (ActorFunc)ObjSkateblock_Draw
+    (ActorFunc)ObjSkateblock_Draw,
 };
 */
 

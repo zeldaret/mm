@@ -19,7 +19,7 @@ const ActorInit Mir_Ray_InitVars = {
     (ActorFunc)MirRay_Init,
     (ActorFunc)MirRay_Destroy,
     (ActorFunc)MirRay_Update,
-    (ActorFunc)MirRay_Draw
+    (ActorFunc)MirRay_Draw,
 };
 */
 

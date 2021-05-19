@@ -6,6 +6,8 @@ import argparse
 # "old": "new"
 animdict ={
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
+    "atan_flip": "Math_Acot2F",
+    "atans": "Math_Atan2S",
 }
 
 def replace_anim(file):

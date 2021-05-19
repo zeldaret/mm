@@ -568,15 +568,15 @@ void Math_ApproachF(f32* pValue, f32 target, f32 scale, f32 maxStep) {
 }
 
 void Math_ApproachZeroF(f32* pValue, f32 scale, f32 maxStep) {
-  f32 f0 = *pValue * scale;
+    f32 f0 = *pValue * scale;
 
-  if (maxStep < f0) {
-    f0 = maxStep;
-  } else if (f0 < -maxStep) {
-    f0 = -maxStep;
-  }
+    if (maxStep < f0) {
+        f0 = maxStep;
+    } else if (f0 < -maxStep) {
+        f0 = -maxStep;
+    }
 
-  *pValue = *pValue - f0;
+    *pValue = *pValue - f0;
 }
 
 s32 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
@@ -695,7 +695,8 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
     return f0;
 }
 
-void Lib_Nop801004FC(void) {}
+void Lib_Nop801004FC(void) {
+}
 
 void* Lib_SegmentedToVirtual(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);

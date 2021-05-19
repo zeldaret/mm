@@ -19,7 +19,7 @@ const ActorInit En_Wf_InitVars = {
     (ActorFunc)EnWf_Init,
     (ActorFunc)EnWf_Destroy,
     (ActorFunc)EnWf_Update,
-    (ActorFunc)EnWf_Draw
+    (ActorFunc)EnWf_Draw,
 };
 */
 

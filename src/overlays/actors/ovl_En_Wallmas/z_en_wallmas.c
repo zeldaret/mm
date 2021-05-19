@@ -19,7 +19,7 @@ const ActorInit En_Wallmas_InitVars = {
     (ActorFunc)EnWallmas_Init,
     (ActorFunc)EnWallmas_Destroy,
     (ActorFunc)EnWallmas_Update,
-    (ActorFunc)EnWallmas_Draw
+    (ActorFunc)EnWallmas_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Kusa2_InitVars = {
     (ActorFunc)EnKusa2_Init,
     (ActorFunc)EnKusa2_Destroy,
     (ActorFunc)EnKusa2_Update,
-    (ActorFunc)EnKusa2_Draw
+    (ActorFunc)EnKusa2_Draw,
 };
 */
 

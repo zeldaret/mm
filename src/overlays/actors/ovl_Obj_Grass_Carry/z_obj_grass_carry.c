@@ -18,7 +18,7 @@ const ActorInit Obj_Grass_Carry_InitVars = {
     (ActorFunc)ObjGrassCarry_Init,
     (ActorFunc)ObjGrassCarry_Destroy,
     (ActorFunc)ObjGrassCarry_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

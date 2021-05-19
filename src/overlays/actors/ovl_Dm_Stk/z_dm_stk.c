@@ -19,7 +19,7 @@ const ActorInit Dm_Stk_InitVars = {
     (ActorFunc)DmStk_Init,
     (ActorFunc)DmStk_Destroy,
     (ActorFunc)DmStk_Update,
-    (ActorFunc)DmStk_Draw
+    (ActorFunc)DmStk_Draw,
 };
 */
 
