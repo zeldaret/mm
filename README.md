@@ -103,6 +103,14 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
+**Note**: if you rename symbols, it is reccomended that you use the `tools/rename_sym.sh` to ensure that you cover all instances, including the tables which are used to generate the `asm/` directory.
+
+Usage: `tools/rename_sym.sh old_name new_name`. Example:
+
+```bash
+tools/rename_sym.sh func_808A3428 EnTorch2_UpdateIdle
+```
+
 ## Contributing
 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.

@@ -68,9 +68,9 @@ The following overlays are good examples of our naming conventions:
 
 These files demonstrate the following:
 
-- Word order in names are from least-to-most specific (`DM_RAVINE_STATE_ACTIVE` not `DM_RAVINE_ACTIVE_STATE`)
-- Functions, structs, unions, enums, and typedefs are `TitleCase` (`DmRavine` not `dm_ravine`)
-    - "Methods" for objects separate the object from the verb with an underscore (`DmRavine_Init` not `DmRavineInit`)
+- Word order in names are from least-to-most specific (`DM_RAVINE_STATE_ACTIVE`, not `DM_RAVINE_ACTIVE_STATE`)
+- Functions, structs, unions, enums, and typedefs are `TitleCase` (`DmRavine`)
+    - "Methods" for objects separate the object from the verb with an underscore (`DmRavine_Init`)
 - Variable names are `camelCase` (`actionFunc`)
     - Global variables start with `g` (`gSaveContext`)
     - Static global variables start with `s` (`sSphereInit`)
@@ -94,6 +94,8 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* ctxt, Vec3f* v) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.asm")
 #endif
 ```
+
+Before using `NON_MATCHING`, first try to use the [decomp-permuter](tools/decomp-permuter) tool to find a closer match.
 
 ### Matching vs. Documenting
 
@@ -123,11 +125,11 @@ Pull Requests (PRs)
 
 Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide & conventions.
 
-- Run `./format.sh` to reformat your updated files.
-- Ensure `make` successfully builds a matching ROM.
+- `./format.sh` was run to apply standard formatting.
+- `make` successfully builds a matching ROM.
 - No new compiler warnings during the build process
-- New variables & functions should follow the naming conventions above.
-- Check spelling in comments & renamed symbols
+- New variables & functions should follow standard naming conventions.
+- Comments and variables have correct spelling.
 
 ### Pull Request Process
 
@@ -136,7 +138,7 @@ If there is an error, double-check that you can successfully `make clean && make
 
 Each PR needs a review from one reviewer, plus the project lead.
 
-The PR author marks the comments as resolved, since they are the ones with permissions.
+The PR author marks the comments as resolved: the commenter may not have permissions to do so.
 Once all comments are addressed, it is courteous to ping the reviewer on either Discord or GitHub via re-requesting a review.
 
 After all the comments are addressed and at least one contributor has approved the review, the project lead can then merge the code.
