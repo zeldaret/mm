@@ -3,10 +3,10 @@
 
 #include <global.h>
 
+struct ObjLightswitch;
+
 typedef void (*ObjLightswitchActionFunc)(struct ObjLightswitch*, GlobalContext*);
 typedef void (*ObjLightswitchSetupFunc)(struct ObjLightswitch*);
-
-struct ObjLightswitch;
 
 typedef struct ObjLightswitch {
     /* 0x000 */ Actor actor;

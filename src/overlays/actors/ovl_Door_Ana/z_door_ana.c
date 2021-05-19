@@ -124,7 +124,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
     s32 entranceIndex;
     f32 yDist;
 
-    if (Math_StepToF(&this->actor.scale, 0.01f, 0.001f) != 0) {
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f) != 0) {
         if ((this->actor.targetMode != 0) && (globalCtx->unk18875 == 0) && (globalCtx->unk18B4A == 0) &&
             (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
 
@@ -175,7 +175,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 }
 
 void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
-    Actor* player;
+    ActorPlayer* player;
     s8 pad[2];
 
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
@@ -188,8 +188,8 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
 
     if ((this->actor.yDistToPlayer <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
         player = PLAYER;
-        player->world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
-        player->world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
+        player->base.world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
+        player->base.world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
     }
 }
 

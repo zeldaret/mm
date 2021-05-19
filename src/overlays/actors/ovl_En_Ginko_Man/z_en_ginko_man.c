@@ -89,8 +89,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->stampChecked = 0;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, &this->limbDrawTbl,
-                     &this->transitionDrawTbl, 0x10);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->limbDrawTbl,
+                     this->transitionDrawTbl, 0x10);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -741,7 +741,7 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnGinkoMan_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     EnGinkoMan* this = (EnGinkoMan*)actor;
     if (limbIndex == 15) {
-        *dList = &object_ginko_limb15_dlist;
+        *dList = object_ginko_limb15_dlist;
     }
     if (limbIndex == 15) {
         SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
