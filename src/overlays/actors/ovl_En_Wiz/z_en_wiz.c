@@ -19,7 +19,7 @@ const ActorInit En_Wiz_InitVars = {
     (ActorFunc)EnWiz_Init,
     (ActorFunc)EnWiz_Destroy,
     (ActorFunc)EnWiz_Update,
-    (ActorFunc)EnWiz_Draw
+    (ActorFunc)EnWiz_Draw,
 };
 */
 

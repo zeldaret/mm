@@ -17,7 +17,7 @@ const ActorInit Obj_Visiblock_InitVars = {
     (ActorFunc)ObjVisiblock_Init,
     (ActorFunc)ObjVisiblock_Destroy,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)ObjVisiblock_Draw
+    (ActorFunc)ObjVisiblock_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -18,7 +18,7 @@ const ActorInit Obj_Roomtimer_InitVars = {
     (ActorFunc)ObjRoomtimer_Init,
     (ActorFunc)ObjRoomtimer_Destroy,
     (ActorFunc)ObjRoomtimer_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

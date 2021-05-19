@@ -19,7 +19,7 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Init,
     (ActorFunc)EnNiw_Destroy,
     (ActorFunc)EnNiw_Update,
-    (ActorFunc)EnNiw_Draw
+    (ActorFunc)EnNiw_Draw,
 };
 */
 

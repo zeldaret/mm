@@ -19,7 +19,7 @@ const ActorInit Bg_Numa_Hana_InitVars = {
     (ActorFunc)BgNumaHana_Init,
     (ActorFunc)BgNumaHana_Destroy,
     (ActorFunc)BgNumaHana_Update,
-    (ActorFunc)BgNumaHana_Draw
+    (ActorFunc)BgNumaHana_Draw,
 };
 */
 

@@ -431,4 +431,3 @@ f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly* arg1, s32* arg2, Acto
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CA9D0.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CAA14.asm")
-

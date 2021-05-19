@@ -27,7 +27,7 @@ void EnAObj_Update1(ActorEnAObj* this, GlobalContext* globalCtx) {
         this->update = (ActorFunc)EnAObj_Update2;
     } else {
         v0 = this->base.yawTowardsPlayer - this->base.shape.rot.y;
-        v1 = (v0 < 0)? -v0 : v0;
+        v1 = (v0 < 0) ? -v0 : v0;
         if ((v1 < 10240) || ((this->base.params == 1) && (v1 > 22528))) {
             func_800B863C((Actor*)this, globalCtx);
         }

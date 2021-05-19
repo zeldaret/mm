@@ -28,7 +28,7 @@ const ActorInit Bg_Haka_Curtain_InitVars = {
     (ActorFunc)BgHakaCurtain_Init,
     (ActorFunc)BgHakaCurtain_Destroy,
     (ActorFunc)BgHakaCurtain_Update,
-    (ActorFunc)BgHakaCurtain_Draw
+    (ActorFunc)BgHakaCurtain_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

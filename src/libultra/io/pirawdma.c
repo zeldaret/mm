@@ -14,14 +14,14 @@ s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size) {
     *(u32*)0xA4600004 = ((osRomBase | devAddr) & 0x1fffffff);
 
     switch (direction) {
-    case 0:
-        *(u32*)0xA460000C = size - 1;
-        break;
-    case 1:
-        *(u32*)0xA4600008 = size - 1;
-        break;
-    default:
-        return -1;
+        case 0:
+            *(u32*)0xA460000C = size - 1;
+            break;
+        case 1:
+            *(u32*)0xA4600008 = size - 1;
+            break;
+        default:
+            return -1;
     }
     return 0;
 }
