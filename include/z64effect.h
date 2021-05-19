@@ -9,6 +9,7 @@
 
 struct GraphicsContext;
 struct GlobalContext;
+struct EffectSs;
 
 typedef void(*eff_destroy_func)(void* params);
 
