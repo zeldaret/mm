@@ -3,6 +3,9 @@
 
 #include <global.h>
 
+#define OBJHSSTUMP_GET_SWITCHFLAG(this) (((ObjHsStump*)this)->dyna.actor.params & 0x7F)
+#define OBJHSSTUMP_GET_ISHIDDEN(this) ((((ObjHsStump*)this)->dyna.actor.params >> 12) & 0xF)
+
 struct ObjHsStump;
 
 typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, GlobalContext*);
@@ -10,7 +13,7 @@ typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, GlobalContext*);
 typedef struct ObjHsStump {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjHsStumpActionFunc actionFunc;
-    /* 0x160 */ s16 flag;
+    /* 0x160 */ s16 switchFlag;
     /* 0x162 */ u8 isHidden;
     /* 0x164 */ s16 framesAppeared;
     /* 0x166 */ s16 rotAngle;

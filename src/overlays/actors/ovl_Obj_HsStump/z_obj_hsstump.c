@@ -40,21 +40,21 @@ static InitChainEntry sInitChain[] = {
 */
 
 extern Vec3f D_80BDAF84;
-//static Vec3f D_80BDAF84 = {0.0f, 0.0f, 0.0f};
+//static Vec3f iceSmokeAccel = {0.0f, 0.0f, 0.0f};
 
 void ObjHsStump_Init(Actor *thisx, GlobalContext *globalCtx) {
     ObjHsStump *this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80BDAF80);
-    this->isHidden = (this->dyna.actor.params >> 0xC) & 0xF;
-    this->flag = thisx->params & 0x7F; //Must be thisx to match
+    this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
+    this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); //Must be thisx to match
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
     if (this->isHidden != 0) {
         if (this->isHidden != 1) {
             return;
         }
-        if (Actor_GetSwitchFlag(globalCtx, this->flag)) {
+        if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
             this->isHidden = 0;
         } else {
             this->dyna.actor.draw = NULL;
@@ -71,7 +71,7 @@ void ObjHsStump_SetupIdle(ObjHsStump* this, GlobalContext* globalCtx) {
 
 void ObjHsStump_Idle(ObjHsStump* this, GlobalContext *globalCtx) {
     if (this->isHidden == 1) {
-        if (Actor_GetSwitchFlag(globalCtx, this->flag)) {
+        if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
             ObjHsStump_SetupAppear(this, globalCtx);
         }
     }
@@ -86,7 +86,8 @@ void ObjHsStump_SetupAppear(ObjHsStump *this, GlobalContext *globalCtx) {
     this->actionFunc = func_80BDABCC;
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
+//Correct instructions, but they are all out of order in the (this->framesAppeared) < 11 branch
 void func_80BDABCC(ObjHsStump *this, GlobalContext *globalCtx) {
     s32 i;
     s32 angle;
@@ -154,7 +155,5 @@ void ObjHsStump_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHsStump_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHsStump *this = THIS;
-
     func_800BDFC0(globalCtx, D_060003B8);
 }
