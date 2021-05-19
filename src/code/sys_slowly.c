@@ -1,22 +1,22 @@
 #include <ultra64.h>
 #include <global.h>
 
-#define SLOWLY_STATUS_DONE    (1 << 0)
+#define SLOWLY_STATUS_DONE (1 << 0)
 #define SLOWLY_STATUS_STARTED (1 << 1)
 
 void Slowly_Main(SlowlyTask* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;
 
     switch (slowly->callbackArgCount) {
-    case SLOWLY_CALLBACK_NO_ARGS:
-        slowly->callback0();
-        break;
-    case SLOWLY_CALLBACK_ONE_ARG:
-        slowly->callback1(slowly->callbackArg0);
-        break;
-    case SLOWLY_CALLBACK_TWO_ARGS:
-        slowly->callback2(slowly->callbackArg0, slowly->callbackArg1);
-        break;
+        case SLOWLY_CALLBACK_NO_ARGS:
+            slowly->callback0();
+            break;
+        case SLOWLY_CALLBACK_ONE_ARG:
+            slowly->callback1(slowly->callbackArg0);
+            break;
+        case SLOWLY_CALLBACK_TWO_ARGS:
+            slowly->callback2(slowly->callbackArg0, slowly->callbackArg1);
+            break;
     }
 
     slowly->status |= SLOWLY_STATUS_DONE;

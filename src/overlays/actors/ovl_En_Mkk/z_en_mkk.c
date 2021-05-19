@@ -19,7 +19,7 @@ const ActorInit En_Mkk_InitVars = {
     (ActorFunc)EnMkk_Init,
     (ActorFunc)EnMkk_Destroy,
     (ActorFunc)EnMkk_Update,
-    (ActorFunc)EnMkk_Draw
+    (ActorFunc)EnMkk_Draw,
 };
 */
 

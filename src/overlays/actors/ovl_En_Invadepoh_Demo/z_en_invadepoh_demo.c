@@ -19,7 +19,7 @@ const ActorInit En_Invadepoh_Demo_InitVars = {
     (ActorFunc)EnInvadepohDemo_Init,
     (ActorFunc)EnInvadepohDemo_Destroy,
     (ActorFunc)EnInvadepohDemo_Update,
-    (ActorFunc)EnInvadepohDemo_Draw
+    (ActorFunc)EnInvadepohDemo_Draw,
 };
 */
 

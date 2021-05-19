@@ -7,20 +7,20 @@ void osStartThread(OSThread* t) {
     saveMask = __osDisableInt();
 
     switch (t->state) {
-    case 8:
-        t->state = 2;
-        __osEnqueueThread(&__osRunQueue, t);
-        break;
-    case 1:
-        if ((t->queue == NULL) || (t->queue == &__osRunQueue)) {
+        case 8:
             t->state = 2;
             __osEnqueueThread(&__osRunQueue, t);
-        } else {
-            t->state = 8;
-            __osEnqueueThread(t->queue, t);
-            __osEnqueueThread(&__osRunQueue, __osPopThread(t->queue));
-        }
-        break;
+            break;
+        case 1:
+            if ((t->queue == NULL) || (t->queue == &__osRunQueue)) {
+                t->state = 2;
+                __osEnqueueThread(&__osRunQueue, t);
+            } else {
+                t->state = 8;
+                __osEnqueueThread(t->queue, t);
+                __osEnqueueThread(&__osRunQueue, __osPopThread(t->queue));
+            }
+            break;
     }
 
     if (__osRunningThread == NULL) {
