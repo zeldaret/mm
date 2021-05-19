@@ -10,13 +10,6 @@
 
 #define THIS ((BgCtowerRot*)thisx)
 
-typedef enum {
-    /* 0 */ CORRIDOR,
-    /* 1 */ MAIN_DOOR, // Main door controls cutscene flow (updating Link fields and playing sounds). It is the one on
-                       // the left when entering from the Lost Woods
-    /* 2 */ DOOR,
-} BgCtowerRotType;
-
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx);

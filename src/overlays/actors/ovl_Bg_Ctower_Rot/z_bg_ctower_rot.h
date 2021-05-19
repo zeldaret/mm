@@ -7,6 +7,13 @@ struct BgCtowerRot;
 
 typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ CORRIDOR,
+    /* 1 */ MAIN_DOOR, // Main door controls cutscene flow (updating Link fields and playing sounds). It is the one on
+                       // the left when entering from the Lost Woods
+    /* 2 */ DOOR,
+} BgCtowerRotType;
+
 typedef struct BgCtowerRot {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgCtowerRotActionFunc actionFunc;
