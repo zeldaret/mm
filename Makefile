@@ -208,7 +208,8 @@ assetclean:
 	$(RM) -rf build/assets
 
 distclean: assetclean clean
-	$(RM) -rf baserom/ asm/ distclean/
+	$(RM) -rf baserom/ asm/ expected/
+	$(MAKE) -C tools clean
 
 ## Extraction step
 setup:

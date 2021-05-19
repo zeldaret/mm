@@ -6,407 +6,409 @@ cfe: Warning 709: src/libultra/gu/lookat.c, line 65: Incompatible pointer type a
 cfe: Warning 709: src/libultra/gu/lookathil.c, line 157: Incompatible pointer type assignment
      guMtxF2L((MtxF*)mf, m);
  -------------^
-cfe: Warning 581: /tmp/preprocessedhl3fnkdz.c:5: Macro ABS redefined.
-cfe: Warning 709: /tmp/preprocessedcr7tuzii.c, line 226: Incompatible pointer type assignment
+cfe: Warning 581: /tmp/preprocessedq473hda5.c:5: Macro ABS redefined.
+cfe: Warning 709: /tmp/preprocessedj26nk466.c, line 228: Incompatible pointer type assignment
          (*particle->update)(ctxt, index, particle);
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessedcr7tuzii.c, line 251: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedj26nk466.c, line 253: Incompatible pointer type assignment
          (*entry->draw)(ctxt, index, entry);
  ------------------------------------^
-cfe: Warning 709: /tmp/preprocessedsr89fa5v.c, line 168: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessede81e1y6i.c, line 171: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, shadowOffset, func_800B3FC0, shadowScale);
  ------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedzy0onli7.c, line 192: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedugc2mjnu.c, line 190: Incompatible pointer type assignment
      static LightsPosBindFunc posBindFuncs[] = { Lights_BindPoint, Lights_BindDirectional, Lights_BindPoint };
  ------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedzy0onli7.c, line 193: Incompatible pointer type assignment
-     static LightsBindFunc dirBindFuncs[] = { Lights_BindPointWithReference, Lights_BindDirectional, Lights_BindPointWithReference };
+cfe: Warning 709: /tmp/preprocessedugc2mjnu.c, line 191: Incompatible pointer type assignment
+     static LightsBindFunc dirBindFuncs[] = { Lights_BindPointWithReference, Lights_BindDirectional,
  ----------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 22: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 22: Incompatible pointer type assignment
      SkelAnime_LinkAnimetionLoaded,  SkelAnime_AnimationType1Loaded, SkelAnime_AnimationType2Loaded,
  ----^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 22: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 22: Incompatible pointer type assignment
      SkelAnime_LinkAnimetionLoaded,  SkelAnime_AnimationType1Loaded, SkelAnime_AnimationType2Loaded,
  ------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 22: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 22: Incompatible pointer type assignment
      SkelAnime_LinkAnimetionLoaded,  SkelAnime_AnimationType1Loaded, SkelAnime_AnimationType2Loaded,
  --------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 23: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 23: Incompatible pointer type assignment
      SkelAnime_AnimationType3Loaded, SkelAnime_AnimationType4Loaded, SkelAnime_AnimationType5Loaded,
  ----^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 23: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 23: Incompatible pointer type assignment
      SkelAnime_AnimationType3Loaded, SkelAnime_AnimationType4Loaded, SkelAnime_AnimationType5Loaded,
  ------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 23: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 23: Incompatible pointer type assignment
      SkelAnime_AnimationType3Loaded, SkelAnime_AnimationType4Loaded, SkelAnime_AnimationType5Loaded,
  --------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4y44y7ms.c, line 1243: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7zrq4v5i.c, line 1243: Incompatible pointer type assignment
      skelAnime->totalFrames = SkelAnime_GetTotalFrames(linkAnimetionEntrySeg);
  ------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedpn3wefkf.c, line 142: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedpuegaia0.c, line 145: Incompatible pointer type assignment
      if (func_800C576C(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
  ---------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedpn3wefkf.c, line 142: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedpuegaia0.c, line 145: Incompatible pointer type assignment
      if (func_800C576C(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
  ----------------------------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedccf1i8jl.c, line 886: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedajpkb8ps.c, line 886: Incompatible pointer type assignment
      Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
  -------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedjslbd0mo.c, line 148: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed1i9y_lr1.c, line 151: Incompatible pointer type assignment
      FaultDrawer_VPrintf(fmt, args);
  ------------------------^
-cfe: Warning 709: /tmp/preprocessedjslbd0mo.c, line 156: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed1i9y_lr1.c, line 159: Incompatible pointer type assignment
      FaultDrawer_VPrintf(fmt, args);
  ------------------------^
-cfe: Warning 709: /tmp/preprocessedecwo9vf6.c, line 34: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedvmgkx3fg.c, line 34: Incompatible pointer type assignment
      func_800BDC5C(&this->skelAnime, &animations, 0);
  ------------------------------------^
-cfe: Warning 709: /tmp/preprocessedecwo9vf6.c, line 44: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedvmgkx3fg.c, line 44: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedecwo9vf6.c, line 81: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedvmgkx3fg.c, line 81: Incompatible pointer type assignment
          SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus);
  -------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedbwnjsl9z.c, line 39: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed34f79ygy.c, line 39: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 68: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 97: Incompatible pointer type assignment
          this->actor.world.pos.z, &this->actor.shape);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 159: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 188: Incompatible pointer type assignment
      Actor_ProcessInitChain(&this->actor, &sInitChain);
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 192: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 221: Incompatible pointer type assignment
      this->actionFunc = ObjLightswitch_PlayCinema;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 200: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 229: Incompatible pointer type assignment
          this->setupFunc(this);
  ------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 212: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 241: Incompatible pointer type assignment
      this->actionFunc = ObjLightswitch_Idle;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 220: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 249: Incompatible pointer type assignment
              ObjLightswitch_SetAction(this, ObjLightSwitch_SetupFade, 1);
  -------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 225: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 254: Incompatible pointer type assignment
              ObjLightswitch_SetAction(this, ObjLightSwitch_SetupAsleep, 1);
  -------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 233: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 262: Incompatible pointer type assignment
      this->actionFunc = ObjLightSwitch_Asleep;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 263: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 292: Incompatible pointer type assignment
      this->actionFunc = ObjLightSwitch_Enabled;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 277: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 306: Incompatible pointer type assignment
              ObjLightswitch_SetAction(this, ObjLightSwitch_SetupDisabled, 0);
  -------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 295: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 324: Incompatible pointer type assignment
      this->actionFunc = ObjLightSwitch_Disabled;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 315: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 344: Incompatible pointer type assignment
      this->actionFunc = ObjLightSwitch_Fade;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 361: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 390: Incompatible pointer type assignment
      this->actionFunc(this, globalCtx);
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 364: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 393: Incompatible pointer type assignment
          CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -----------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedtf2d4iui.c, line 365: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedmyrg2fnh.c, line 394: Incompatible pointer type assignment
          CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -----------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed9me89for.c, line 113: Incompatible pointer type assignment
-     if (Math_StepToF( &this->actor.scale, 0.01f, 0.001f) != 0) {
- ----------------------^
-cfe: Warning 709: /tmp/preprocessed9me89for.c, line 176: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddgs9_yef.c, line 127: Incompatible pointer type assignment
+     if (Math_StepToF(&this->actor.scale, 0.01f, 0.001f) != 0) {
+ ---------------------^
+cfe: Warning 709: /tmp/preprocesseddgs9_yef.c, line 190: Incompatible pointer type assignment
          player = ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) ;
  ---------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 65: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 65: Incompatible pointer type assignment
      Actor_ProcessInitChain(&this->actor, &sInitChain);
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 68: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 68: Incompatible pointer type assignment
      Collider_UpdateCylinder(this, &this->collider);
  ----------------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 87: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 87: Incompatible pointer type assignment
      target->unk_2F4 = Actor_YawBetweenActors(src, target);
  ---------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 87: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 87: Incompatible pointer type assignment
      target->unk_2F4 = Actor_YawBetweenActors(src, target);
  --------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 95: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 95: Incompatible pointer type assignment
      { ACTOR_PLAYER, ObjBoyo_UpdatePlayerBumpValues },
  --------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 96: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 96: Incompatible pointer type assignment
      { ACTOR_EN_KAIZOKU, ObjBoyo_UpdatePirateBumpValues },
  ------------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 97: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 97: Incompatible pointer type assignment
      { ACTOR_EN_BOM, ObjBoyo_UpdateBombBumpValues },
  --------------------^
-cfe: Warning 709: /tmp/preprocessed5__k773x.c, line 129: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlpo811xj.c, line 129: Incompatible pointer type assignment
      target = ObjBoyo_GetCollidedActor(thisx, globalCtx, &num);
  --------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw2ymovyt.c, line 50: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedsbkf36e4.c, line 50: Incompatible pointer type assignment
          func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
  ------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedbxjf6gug.c, line 36: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed1qzdiyop.c, line 36: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 19.0f);
  -------------------------------------------^
-cfe: Warning 709: /tmp/preprocesseda13p95ot.c, line 39: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedpvi5xlyw.c, line 39: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedah96thoc.c, line 116: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7jwdw2na.c, line 152: Incompatible pointer type assignment
      Actor_ProcessInitChain(&this->dyna.actor, &sInitChain);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedah96thoc.c, line 118: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7jwdw2na.c, line 154: Incompatible pointer type assignment
      BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedah96thoc.c, line 120: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7jwdw2na.c, line 156: Incompatible pointer type assignment
      Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colliderElements);
  ------------------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedah96thoc.c, line 122: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7jwdw2na.c, line 158: Incompatible pointer type assignment
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape);
  ---------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedah96thoc.c, line 176: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7jwdw2na.c, line 212: Incompatible pointer type assignment
          CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -----------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedq0cj7ypo.c, line 36: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlp3kawo7.c, line 36: Incompatible pointer type assignment
      Actor_ProcessInitChain(this, D_80ADEB50);
  ---------------------------^
-cfe: Warning 709: /tmp/preprocessedq0cj7ypo.c, line 48: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlp3kawo7.c, line 48: Incompatible pointer type assignment
      func_800BE03C(globalCtx, &D_06000140);
  -----------------------------^
-cfe: Warning 709: /tmp/preprocessedsjlmfb_a.c, line 28: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedavzfthlb.c, line 28: Incompatible pointer type assignment
      this->actionFunc = actionFunc;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedsjlmfb_a.c, line 40: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedavzfthlb.c, line 40: Incompatible pointer type assignment
      EnOkarinaEffect_SetupAction(&this->actor, func_8096B104);
  --------------------------------^
-cfe: Warning 709: /tmp/preprocessedsjlmfb_a.c, line 40: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedavzfthlb.c, line 40: Incompatible pointer type assignment
      EnOkarinaEffect_SetupAction(&this->actor, func_8096B104);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedsjlmfb_a.c, line 49: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedavzfthlb.c, line 49: Incompatible pointer type assignment
      EnOkarinaEffect_SetupAction(this, func_8096B174);
  --------------------------------------^
-cfe: Warning 709: /tmp/preprocessedsjlmfb_a.c, line 56: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedavzfthlb.c, line 56: Incompatible pointer type assignment
          EnOkarinaEffect_SetupAction(this, func_8096B1FC);
  ------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed1bpq0a83.c, line 99: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed8a222mki.c, line 99: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 60: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 75: Incompatible pointer type assignment
+     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl,
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 60: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 75: Incompatible pointer type assignment
+     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl,
  -----------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 60: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 75: Incompatible pointer type assignment
+     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl,
  ------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 60: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl, 10);
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 75: Incompatible pointer type assignment
+     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->limbDrawTbl, &this->transitionDrawTbl,
  --------------------------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 61: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 77: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 62: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 78: Incompatible pointer type assignment
      func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
  -----------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 132: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 147: Incompatible pointer type assignment
      CollisionCheck_SetOC(gCtx, &gCtx->colCheckCtx, &this->collider);
  ---------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 133: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 148: Incompatible pointer type assignment
      CollisionCheck_SetAC(gCtx, &gCtx->colCheckCtx, &this->collider);
  ---------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 269: Incompatible pointer type assignment
-        EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
- -----------------------------------^
-cfe: Warning 709: /tmp/preprocessedog6c9hzr.c, line 269: Incompatible pointer type assignment
-        EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
- -----------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedcgxhqdml.c, line 131: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 285: Incompatible pointer type assignment
+                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
+ ----------------------------------------------^
+cfe: Warning 709: /tmp/preprocessedulaehxz4.c, line 285: Incompatible pointer type assignment
+                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
+ ----------------------------------------------------------------------^
+cfe: Warning 709: /tmp/preprocessed0r790vj5.c, line 135: Incompatible pointer type assignment
              if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
  --------------------------------------------------------------^
-cfe: Warning 763: /tmp/preprocessedlmc5tvuf.c, line 241: value is outside range representable for type 'float'
+cfe: Warning 763: /tmp/preprocessedazqg5__t.c, line 237: value is outside range representable for type 'float'
          return 3.4028235e38f;  
  ---------------^
-as1: Warning: /tmp/preprocessedlmc5tvuf.c, line 241: number outside range for single precision floating point values
-cfe: Warning 709: /tmp/preprocessedx_u7hoq6.c, line 45: Incompatible pointer type assignment
+as1: Warning: /tmp/preprocessedazqg5__t.c, line 237: number outside range for single precision floating point values
+cfe: Warning 709: /tmp/preprocessedxoe5g2o7.c, line 45: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedt48obep_.c, line 35: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed7ckabqla.c, line 35: Incompatible pointer type assignment
      Actor_ProcessInitChain(&this->dyna.actor, &D_80C07C40);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocesseds739iwxp.c, line 39: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedpjbfxjh6.c, line 39: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocesseds739iwxp.c, line 40: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedpjbfxjh6.c, line 40: Incompatible pointer type assignment
      func_80C23518(&this->actor);
  ------------------^
 cfe: Warning 624: /home/angie/Documents/Projects/oot_decomp_stuff/mm/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.h, line 51: Trailing comma in enumerator list
        GINKO_ADVERTISING,
  -----------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 57: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, &this->limbDrawTbl, &this->transitionDrawTbl, 0x10);
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 92: Incompatible pointer type assignment
+     SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, &this->limbDrawTbl,
  ----------------------------------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 57: Incompatible pointer type assignment
-     SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, &this->limbDrawTbl, &this->transitionDrawTbl, 0x10);
- ------------------------------------------------------------------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 67: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 93: Incompatible pointer type assignment
+                      &this->transitionDrawTbl, 0x10);
+ ---------------------^
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 104: Incompatible pointer type assignment
      this->actionFunc = EnGinkoMan_Idle;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 522: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 563: Incompatible pointer type assignment
      this->actionFunc = EnGinkoMan_Dialogue;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 557: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 598: Incompatible pointer type assignment
      this->actionFunc = EnGinkoMan_BankAward;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 583: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 624: Incompatible pointer type assignment
      this->actionFunc = EnGinkoMan_BankAward2;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 628: Incompatible pointer type assignment
-     this->actionFunc =  EnGinkoMan_Stamp;
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 670: Incompatible pointer type assignment
+     this->actionFunc = EnGinkoMan_Stamp;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 693: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 735: Incompatible pointer type assignment
      this->actionFunc(this, globalCtx);
  ---------------------^
-cfe: Warning 709: /tmp/preprocessedpbtx2sly.c, line 702: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessed4ps39oaq.c, line 744: Incompatible pointer type assignment
          *dList = &object_ginko_limb15_dlist;
  ---------------^
 cfe: Warning 624: /home/angie/Documents/Projects/oot_decomp_stuff/mm/src/overlays/actors/ovl_Dm_Ravine/z_dm_ravine.h, line 13: Trailing comma in enumerator list
        DM_RAVINE_STATE_PENDING_DEATH,
  -----------------------------------^
-cfe: Warning 709: /tmp/preprocessed4ifxhaol.c, line 47: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedr48d19r8.c, line 47: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 67: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 67: Incompatible pointer type assignment
      Actor_ProcessInitChain(&this->actor, &D_80A664EC);
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 70: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 70: Incompatible pointer type assignment
      func_80A66208(thisx, globalCtx);
  ------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 86: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 86: Incompatible pointer type assignment
      Math_Vec3f_Sum(&this->actor.world, &sp24, &this->actor.focus);
  -------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 86: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 86: Incompatible pointer type assignment
      Math_Vec3f_Sum(&this->actor.world, &sp24, &this->actor.focus);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 87: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 87: Incompatible pointer type assignment
      Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.shape);
  --------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed68us79uv.c, line 132: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedc_a78xsb.c, line 132: Incompatible pointer type assignment
      CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 36: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 36: Incompatible pointer type assignment
          frameCount = SkelAnime_GetFrameCount(animations->animation);
  -------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 50: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 50: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 52: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 52: Incompatible pointer type assignment
      func_80A2E960(&this->skelAnime, &D_80A2ED00, 0);
  ------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 118: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 118: Incompatible pointer type assignment
                    func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
  ------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 118: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 118: Incompatible pointer type assignment
                    func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 118: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 118: Incompatible pointer type assignment
                    func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
  ------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedw6lh07na.c, line 118: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddtus87j2.c, line 118: Incompatible pointer type assignment
                    func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
  ---------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocesseddic7t8f4.c, line 33: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlbs62xa0.c, line 33: Incompatible pointer type assignment
          Item_DropCollectible(globalCtx, &this->actor.world, 2);
  ----------------------------------------^
-cfe: Warning 709: /tmp/preprocesseddic7t8f4.c, line 42: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedlbs62xa0.c, line 42: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 10.0f);
  -------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 57: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 72: Incompatible pointer type assignment
      ActorShape_Init(&this->dynaActor.actor.shape, 0.0f, func_800B3FC0, 25.0f);
  --------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 59: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 74: Incompatible pointer type assignment
      Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dynaActor, &sJntSphInit, &this->colElement);
  ----------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 81: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 96: Incompatible pointer type assignment
      this->dynaActor.actor.colChkInfo.damageTable = &damageTable;
  -------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 93: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 108: Incompatible pointer type assignment
      this->actionFunc = &EnEncount2_Idle;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 103: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 118: Incompatible pointer type assignment
          this->actionFunc = EnEncount2_Popped;
  -------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 122: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 137: Incompatible pointer type assignment
      this->actionFunc = EnEncount2_Die;
  ---------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 143: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 158: Incompatible pointer type assignment
      this->actionFunc(this, globalCtx);
  ---------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 149: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 164: Incompatible pointer type assignment
          CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -----------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 150: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 165: Incompatible pointer type assignment
          CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
  -----------------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 165: Incompatible pointer type assignment
-     EnEncount2Particle *sPtr = &this->particles;
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 180: Incompatible pointer type assignment
+     EnEncount2Particle* sPtr = &this->particles;
  ------------------------^
-cfe: Warning 709: /tmp/preprocessed20v9phiq.c, line 191: Incompatible pointer type assignment
-     EnEncount2Particle *sPtr = &this->particles;
+cfe: Warning 709: /tmp/preprocessedu7_qfcak.c, line 206: Incompatible pointer type assignment
+     EnEncount2Particle* sPtr = &this->particles;
  ------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 52: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 66: Incompatible pointer type assignment
      ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
  ----------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 71: Incompatible pointer type assignment
-                              &this->actor.world,
- -----------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 129: Incompatible pointer type assignment
-                             &D_05018090);
- ----------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 188: Incompatible pointer type assignment
-                           &D_05018090);
- --------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 195: Incompatible pointer type assignment
-     Actor *player = ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) ;
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 84: Incompatible pointer type assignment
+         Item_DropCollectible(globalCtx, &this->actor.world, ((this->actor.params & 0x7F) << 8) | dropCount);
+ ----------------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 127: Incompatible pointer type assignment
+                              ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, &D_05018090);
+ --------------------------------------------------------------------------------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 175: Incompatible pointer type assignment
+                              ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, &D_05018090);
+ --------------------------------------------------------------------------------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 181: Incompatible pointer type assignment
+     Actor* player = ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) ;
  -----------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 196: Incompatible pointer type assignment
-     Actor *player2 = ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) ;
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 182: Incompatible pointer type assignment
+     Actor* player2 = ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) ;
  -----------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 202: Incompatible pointer type assignment
-         func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2817);
- ----------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 210: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 188: Incompatible pointer type assignment
+         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2817);
+ ---------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 196: Incompatible pointer type assignment
          func_800F0568(globalCtx, &this->actor.world, 0x28, 0x1808);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 211: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 197: Incompatible pointer type assignment
          func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 219: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 205: Incompatible pointer type assignment
          func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2802);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 220: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 206: Incompatible pointer type assignment
          func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
  ---------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 229: Incompatible pointer type assignment
-             func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
- --------------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 230: Incompatible pointer type assignment
-             func_800F0568(globalCtx,  &player2->world, 0x28, 0x83E);
- --------------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 238: Incompatible pointer type assignment
-         func_800F0568(globalCtx,  &this->actor.world, 0x28, 0x2887);
- ----------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 323: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 215: Incompatible pointer type assignment
+             func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
+ -------------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 216: Incompatible pointer type assignment
+             func_800F0568(globalCtx, &player2->world, 0x28, 0x83E);
+ -------------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 224: Incompatible pointer type assignment
+         func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
+ ---------------------------------^
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 309: Incompatible pointer type assignment
              this->actor.shape.shadowDraw = func_800B3FC0;
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessedqeobb9c6.c, line 326: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedzq3hrwn5.c, line 312: Incompatible pointer type assignment
              this->actor.shape.shadowDraw = func_800B3FC0;
  -----------------------------------------^
-cfe: Warning 709: /tmp/preprocessed4970ezuu.c, line 173: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocesseddcz1yh36.c, line 173: Incompatible pointer type assignment
                      f32 sp94 = Actor_DistanceBetweenActors(this, grabbed);
  -----------------------------------------------------------^
-cfe: Warning 709: /tmp/preprocessedykyu7pjy.c, line 13: Incompatible pointer type assignment
+cfe: Warning 709: /tmp/preprocessedgn8smyos.c, line 13: Incompatible pointer type assignment
          bzero(begin, (s32)(int)end - (int)begin);
  --------------^
+cfe: Warning 581: /tmp/preprocessed2nufpvl2.c:6: Macro OS_CPU_COUNTER redefined.
+cfe: Warning 581: /tmp/preprocessed2nufpvl2.c:7: Macro OS_USEC_TO_CYCLES redefined.
