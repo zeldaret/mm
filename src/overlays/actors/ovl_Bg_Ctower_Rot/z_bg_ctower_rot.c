@@ -50,7 +50,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static Gfx* D_808E2564[] = { D_06012DA0, D_06017220, D_060174E0 };
+static Gfx* BgCtowerRotDlists[] = { D_06012DA0, D_06017220, D_060174E0 };
 
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;
@@ -165,7 +165,7 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;
 
-    func_800BDFC0(globalCtx, D_808E2564[this->dyna.actor.params]);
+    func_800BDFC0(globalCtx, BgCtowerRotDlists[this->dyna.actor.params]);
     if (this->dyna.actor.params == CORRIDOR) {
         func_800BE03C(globalCtx, D_060129D0);
     }
