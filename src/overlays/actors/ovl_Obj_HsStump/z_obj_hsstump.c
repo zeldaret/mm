@@ -24,7 +24,7 @@ const ActorInit Obj_HsStump_InitVars = {
     (ActorFunc)ObjHsStump_Init,
     (ActorFunc)ObjHsStump_Destroy,
     (ActorFunc)ObjHsStump_Update,
-    (ActorFunc)ObjHsStump_Draw
+    (ActorFunc)ObjHsStump_Draw,
 };
 */
 

@@ -92,4 +92,3 @@ void PadUtils_UpdateRelXY(Input* input) {
 
     PadUtils_SetRelXY(input, relX, relY);
 }
-

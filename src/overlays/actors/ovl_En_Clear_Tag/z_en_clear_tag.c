@@ -19,7 +19,7 @@ const ActorInit En_Clear_Tag_InitVars = {
     (ActorFunc)EnClearTag_Init,
     (ActorFunc)EnClearTag_Destroy,
     (ActorFunc)EnClearTag_Update,
-    (ActorFunc)EnClearTag_Draw
+    (ActorFunc)EnClearTag_Draw,
 };
 */
 

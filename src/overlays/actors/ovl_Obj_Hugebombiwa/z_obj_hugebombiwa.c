@@ -19,7 +19,7 @@ const ActorInit Obj_Hugebombiwa_InitVars = {
     (ActorFunc)ObjHugebombiwa_Init,
     (ActorFunc)ObjHugebombiwa_Destroy,
     (ActorFunc)ObjHugebombiwa_Update,
-    (ActorFunc)ObjHugebombiwa_Draw
+    (ActorFunc)ObjHugebombiwa_Draw,
 };
 */
 

@@ -1,9 +1,11 @@
 #include <ultra64.h>
 #include <global.h>
 
-void CIC6105_Nop80081820(void) {}
+void CIC6105_Nop80081820(void) {
+}
 
-void CIC6105_Nop80081828(void) {}
+void CIC6105_Nop80081828(void) {
+}
 
 void CIC6105_PrintRomInfo(void) {
     FaultDrawer_DrawText(80, 200, "SP_STATUS %08x", (UNK_PTR)(*(u32*)0xA4040010));

@@ -19,7 +19,7 @@ const ActorInit En_Ma4_InitVars = {
     (ActorFunc)EnMa4_Init,
     (ActorFunc)EnMa4_Destroy,
     (ActorFunc)EnMa4_Update,
-    (ActorFunc)EnMa4_Draw
+    (ActorFunc)EnMa4_Draw,
 };
 */
 

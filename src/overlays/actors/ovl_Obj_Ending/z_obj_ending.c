@@ -18,7 +18,7 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)ObjEnding_Update,
-    (ActorFunc)ObjEnding_Draw
+    (ActorFunc)ObjEnding_Draw,
 };
 */
 
@@ -37,30 +37,30 @@ static unkStruct D_80C25CE0[2] = {
 };
 */
 
-void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
+void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
-    AnimatedTexture *texture;
+    AnimatedMaterial* texture;
 
     Actor_ProcessInitChain(&this->actor, D_80C25CF8);
     this->unk144 = &D_80C25CE0[this->actor.params];
-    if(false){}
+    if (false) {}
     texture = this->unk144->texture;
-    
+
     if (texture != NULL) {
         this->texture = Lib_SegmentedToVirtual(texture);
     }
 }
 
-void ObjEnding_Update(Actor *thisx, GlobalContext *globalCtx) {
+void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    ObjEnding *this = THIS;
-    Gfx *dl;
+void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEnding* this = THIS;
+    Gfx* dl;
     UNK_TYPE4 tempunk4;
 
     if (this->texture != NULL) {
-        SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->texture);
+        AnimatedMat_Draw(globalCtx, this->texture);
     }
     tempunk4 = this->unk144->unk0;
     if (tempunk4 != 0) {

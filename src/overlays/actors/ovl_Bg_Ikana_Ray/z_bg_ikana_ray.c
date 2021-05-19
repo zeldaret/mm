@@ -23,12 +23,26 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
     (ActorFunc)BgIkanaRay_Init,
     (ActorFunc)BgIkanaRay_Destroy,
     (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw
+    (ActorFunc)BgIkanaRay_Draw,
 };
 
 ColliderCylinderInit bgIkanaRayCylinderInit = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_OTHER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00200000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 90, 420, -420, { 0, 0, 0 } },
 };
 
@@ -49,9 +63,9 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
     Collider_UpdateCylinder(thisx, &THIS->collision);
 
-    THIS->animatedTextures = (AnimatedTexture*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
+    THIS->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
-    if (Actor_GetSwitchFlag(globalCtx, THIS->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, THIS->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(THIS);
     } else {
         BgIkanaRay_SetDeactivated(THIS);
@@ -70,7 +84,7 @@ void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Actor_GetSwitchFlag(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     }
 }
@@ -90,6 +104,6 @@ void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, THIS->animatedTextures);
+    AnimatedMat_Draw(globalCtx, THIS->animatedTextures);
     func_800BE03C(globalCtx, object_ikana_obj_001100);
 }

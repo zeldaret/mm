@@ -19,7 +19,7 @@ const ActorInit Obj_Ghaka_InitVars = {
     (ActorFunc)ObjGhaka_Init,
     (ActorFunc)ObjGhaka_Destroy,
     (ActorFunc)ObjGhaka_Update,
-    (ActorFunc)ObjGhaka_Draw
+    (ActorFunc)ObjGhaka_Draw,
 };
 */
 

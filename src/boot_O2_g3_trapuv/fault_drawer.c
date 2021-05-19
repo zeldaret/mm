@@ -19,7 +19,8 @@ FaultDrawer sFaultDrawerDefault = {
     8,                                  // charH
     0,                                  // charWPad
     0,                                  //  charHPad
-    {   // printColors
+    {
+        // printColors
         GPACK_RGBA5551(0, 0, 0, 1),
         GPACK_RGBA5551(255, 0, 0, 1),
         GPACK_RGBA5551(0, 255, 0, 1),
@@ -39,7 +40,6 @@ FaultDrawer sFaultDrawerDefault = {
 void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
     sFaultDrawContext->osSyncPrintfEnabled = enabled;
 }
-
 
 void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 color) {
     u16* fb;
@@ -110,7 +110,7 @@ void FaultDrawer_SetBackColor(u16 color) {
 }
 
 void FaultDrawer_SetFontColor(u16 color) {
-    FaultDrawer_SetForeColor(color | 1); //force alpha to be set
+    FaultDrawer_SetForeColor(color | 1); // force alpha to be set
 }
 
 void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
@@ -120,7 +120,9 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        Fault_Log(D_80099064, (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad), (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
+        Fault_Log(D_80099064,
+                  (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
+                  (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
     }
     sFaultDrawContext->cursorX = x;
     sFaultDrawContext->cursorY = y;
@@ -131,13 +133,14 @@ void FaultDrawer_FillScreen() {
         Fault_Log(D_80099070);
     }
 
-    FaultDrawer_DrawRecImpl(sFaultDrawContext->xStart, sFaultDrawContext->yStart, sFaultDrawContext->xEnd, sFaultDrawContext->yEnd, sFaultDrawContext->backColor | 1);
+    FaultDrawer_DrawRecImpl(sFaultDrawContext->xStart, sFaultDrawContext->yStart, sFaultDrawContext->xEnd,
+                            sFaultDrawContext->yEnd, sFaultDrawContext->backColor | 1);
     FaultDrawer_SetCursor(sFaultDrawContext->xStart, sFaultDrawContext->yStart);
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/boot/fault_drawer/FaultDrawer_FormatStringFunc.asm")
 
-void FaultDrawer_VPrintf(char* str, char* args) { //va_list
+void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
     _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
 }
 
@@ -162,7 +165,7 @@ void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     sFaultDrawContext->h = h;
 }
 
-void FaultDrawer_SetInputCallback(void(*callback)()) {
+void FaultDrawer_SetInputCallback(void (*callback)()) {
     sFaultDrawContext->inputCallback = callback;
 }
 
@@ -171,4 +174,3 @@ void FaultDrawer_Init() {
     bcopy(&sFaultDrawerDefault, sFaultDrawContext, sizeof(FaultDrawer));
     sFaultDrawContext->fb = (u16*)((osMemSize | 0x80000000) - 0x25800);
 }
-
