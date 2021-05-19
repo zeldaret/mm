@@ -21,7 +21,7 @@ const ActorInit En_Ending_Hero3_InitVars = {
     (ActorFunc)EnEndingHero3_Init,
     (ActorFunc)EnEndingHero3_Destroy,
     (ActorFunc)EnEndingHero3_Update,
-    (ActorFunc)EnEndingHero3_Draw
+    (ActorFunc)EnEndingHero3_Draw,
 };
 
 extern SkeletonHeader D_06007150;
@@ -37,7 +37,7 @@ void EnEndingHero3_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->limbDrawTable,
                      this->transitionDrawTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    func_80C23518(&this->actor);
+    func_80C23518(this);
 }
 
 void EnEndingHero3_Destroy(Actor* thisx, GlobalContext* globalCtx) {

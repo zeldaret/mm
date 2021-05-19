@@ -19,7 +19,7 @@ const ActorInit En_Kame_InitVars = {
     (ActorFunc)EnKame_Init,
     (ActorFunc)EnKame_Destroy,
     (ActorFunc)EnKame_Update,
-    (ActorFunc)EnKame_Draw
+    (ActorFunc)EnKame_Draw,
 };
 */
 

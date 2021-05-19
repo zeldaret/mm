@@ -128,51 +128,51 @@ void Effect_Add(GlobalContext* ctxt, s32* index, s32 type, u8 param_4, u8 param_
     if (func_8016A01C(ctxt) != 1) {
         slotFound = 0;
         switch (type) {
-        case 0:
-            for (i = 0; i < 3; i++) {
-                if (sEffTable.sparks[i].base.active == 0) {
-                    slotFound = 1;
-                    *index = i;
-                    params = &sEffTable.sparks[i].params;
-                    common = &sEffTable.sparks[i].base;
-                    break;
+            case 0:
+                for (i = 0; i < 3; i++) {
+                    if (sEffTable.sparks[i].base.active == 0) {
+                        slotFound = 1;
+                        *index = i;
+                        params = &sEffTable.sparks[i].params;
+                        common = &sEffTable.sparks[i].base;
+                        break;
+                    }
                 }
-            }
-            break;
-        case 1:
-        case 2:
-            for (i = 0; i < 25; i++) {
-                if (sEffTable.blures[i].base.active == 0) {
-                    slotFound = 1;
-                    *index = i + 3;
-                    params = &sEffTable.blures[i].params;
-                    common = &sEffTable.blures[i].base;
-                    break;
+                break;
+            case 1:
+            case 2:
+                for (i = 0; i < 25; i++) {
+                    if (sEffTable.blures[i].base.active == 0) {
+                        slotFound = 1;
+                        *index = i + 3;
+                        params = &sEffTable.blures[i].params;
+                        common = &sEffTable.blures[i].base;
+                        break;
+                    }
                 }
-            }
-            break;
-        case 3:
-            for (i = 0; i < 3; i++) {
-                if (sEffTable.shieldParticles[i].base.active == 0) {
-                    slotFound = 1;
-                    *index = i + 28;
-                    params = &sEffTable.shieldParticles[i].params;
-                    common = &sEffTable.shieldParticles[i].base;
-                    break;
+                break;
+            case 3:
+                for (i = 0; i < 3; i++) {
+                    if (sEffTable.shieldParticles[i].base.active == 0) {
+                        slotFound = 1;
+                        *index = i + 28;
+                        params = &sEffTable.shieldParticles[i].params;
+                        common = &sEffTable.shieldParticles[i].base;
+                        break;
+                    }
                 }
-            }
-            break;
-        case 4:
-            for (i = 0; i < 15; i++) {
-                if (sEffTable.tireMarks[i].base.active == 0) {
-                    slotFound = 1;
-                    *index = i + 31;
-                    params = &sEffTable.tireMarks[i].params;
-                    common = &sEffTable.tireMarks[i].base;
-                    break;
+                break;
+            case 4:
+                for (i = 0; i < 15; i++) {
+                    if (sEffTable.tireMarks[i].base.active == 0) {
+                        slotFound = 1;
+                        *index = i + 31;
+                        params = &sEffTable.tireMarks[i].params;
+                        common = &sEffTable.tireMarks[i].base;
+                        break;
+                    }
                 }
-            }
-            break;
+                break;
         }
 
         if (slotFound) {
@@ -264,28 +264,28 @@ void Effect_Destroy(GlobalContext* ctxt, s32 index) {
     }
 
     if (index < 3) {
-        sEffTable.sparks[index].base.active = 0 ;
+        sEffTable.sparks[index].base.active = 0;
         sEffInfoTable[0].destroy(&sEffTable.sparks[index].params);
         return;
     }
 
     index -= 3;
     if (index < 25) {
-        sEffTable.blures[index].base.active = 0 ;
+        sEffTable.blures[index].base.active = 0;
         sEffInfoTable[1].destroy(&sEffTable.blures[index].params);
         return;
     }
 
     index -= 25;
     if (index < 3) {
-        sEffTable.shieldParticles[index].base.active = 0 ;
+        sEffTable.shieldParticles[index].base.active = 0;
         sEffInfoTable[3].destroy(&sEffTable.shieldParticles[index].params);
         return;
     }
 
     index -= 3;
     if (index < 15) {
-        sEffTable.tireMarks[index].base.active = 0 ;
+        sEffTable.tireMarks[index].base.active = 0;
         sEffInfoTable[4].destroy(&sEffTable.tireMarks[index].params);
         return;
     }
@@ -314,4 +314,3 @@ void Effect_DestroyAll(GlobalContext* ctxt) {
         sEffInfoTable[4].destroy(&sEffTable.tireMarks[i].params);
     }
 }
-

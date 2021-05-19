@@ -19,7 +19,7 @@ const ActorInit En_Karebaba_InitVars = {
     (ActorFunc)EnKarebaba_Init,
     (ActorFunc)EnKarebaba_Destroy,
     (ActorFunc)EnKarebaba_Update,
-    (ActorFunc)EnKarebaba_Draw
+    (ActorFunc)EnKarebaba_Draw,
 };
 */
 

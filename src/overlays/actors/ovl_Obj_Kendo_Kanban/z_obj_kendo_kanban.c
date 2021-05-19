@@ -19,7 +19,7 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
     (ActorFunc)ObjKendoKanban_Init,
     (ActorFunc)ObjKendoKanban_Destroy,
     (ActorFunc)ObjKendoKanban_Update,
-    (ActorFunc)ObjKendoKanban_Draw
+    (ActorFunc)ObjKendoKanban_Draw,
 };
 */
 

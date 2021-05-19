@@ -19,7 +19,7 @@ const ActorInit Obj_Yado_InitVars = {
     (ActorFunc)ObjYado_Init,
     (ActorFunc)ObjYado_Destroy,
     (ActorFunc)ObjYado_Update,
-    (ActorFunc)ObjYado_Draw
+    (ActorFunc)ObjYado_Draw,
 };
 */
 

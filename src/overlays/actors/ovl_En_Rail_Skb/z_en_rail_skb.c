@@ -19,7 +19,7 @@ const ActorInit En_Rail_Skb_InitVars = {
     (ActorFunc)EnRailSkb_Init,
     (ActorFunc)EnRailSkb_Destroy,
     (ActorFunc)EnRailSkb_Update,
-    (ActorFunc)EnRailSkb_Draw
+    (ActorFunc)EnRailSkb_Draw,
 };
 */
 

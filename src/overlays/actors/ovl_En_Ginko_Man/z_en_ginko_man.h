@@ -3,9 +3,9 @@
 
 #include <global.h>
 
- typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
-
 struct EnGinkoMan;
+
+ typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;

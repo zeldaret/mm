@@ -19,8 +19,9 @@ void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType
 void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType5* entry);
 
 static AnimationEntryCallback sAnimationLoadDone[] = {
-    SkelAnime_LinkAnimetionLoaded,  SkelAnime_AnimationType1Loaded, SkelAnime_AnimationType2Loaded,
-    SkelAnime_AnimationType3Loaded, SkelAnime_AnimationType4Loaded, SkelAnime_AnimationType5Loaded,
+    (AnimationEntryCallback)SkelAnime_LinkAnimetionLoaded,  (AnimationEntryCallback)SkelAnime_AnimationType1Loaded,
+    (AnimationEntryCallback)SkelAnime_AnimationType2Loaded, (AnimationEntryCallback)SkelAnime_AnimationType3Loaded,
+    (AnimationEntryCallback)SkelAnime_AnimationType4Loaded, (AnimationEntryCallback)SkelAnime_AnimationType5Loaded,
 };
 
 s32 D_801F5AB0;
@@ -847,7 +848,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, Skeleton* skeleton, Vec3s* limb
     return gfx;
 }
 
-//Function is unused.
+// Function is unused.
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/func_80134FFC.asm")
 
 s16 func_801353D4(GenericAnimationHeader* animationSeg) {
@@ -1240,7 +1241,7 @@ void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, Li
     skelAnime->initialFrame = frame;
     skelAnime->animCurrentFrame = frame;
     skelAnime->animFrameCount = frameCount;
-    skelAnime->totalFrames = SkelAnime_GetTotalFrames(linkAnimetionEntrySeg);
+    skelAnime->totalFrames = SkelAnime_GetTotalFrames(&linkAnimetionEntrySeg->genericHeader);
     skelAnime->animPlaybackSpeed = playbackSpeed;
 }
 

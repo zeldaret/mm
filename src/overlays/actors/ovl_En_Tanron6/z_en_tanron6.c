@@ -21,7 +21,7 @@ const ActorInit En_Tanron6_InitVars = {
     (ActorFunc)EnTanron6_Init,
     (ActorFunc)EnTanron6_Destroy,
     (ActorFunc)EnTanron6_Update,
-    (ActorFunc)EnTanron6_Draw
+    (ActorFunc)EnTanron6_Draw,
 };
 
 DamageTable D_80BE6170 = {

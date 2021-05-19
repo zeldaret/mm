@@ -1,9 +1,11 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Room_nop8012D510(GlobalContext* ctxt, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {}
+void Room_nop8012D510(GlobalContext* ctxt, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {
+}
 
-void Room_DrawType3Mesh(GlobalContext* ctxt, Room* room, u32 flags) {}
+void Room_DrawType3Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
+}
 
 void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
     RoomMeshType0* mesh;
@@ -53,11 +55,11 @@ void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
 void Room_DrawType1Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
     RoomMeshType1* mesh = &room->mesh->type1;
     if (mesh->format == 1) {
-        func_8012DEE8(ctxt,room,flags);
+        func_8012DEE8(ctxt, room, flags);
     } else if (mesh->format == 2) {
-        func_8012E32C(ctxt,room,flags);
+        func_8012E32C(ctxt, room, flags);
     } else {
-        assert_fail(D_801DDFAC,0x3c5);
+        assert_fail(D_801DDFAC, 0x3c5);
     }
 }
 
@@ -86,11 +88,13 @@ s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 ind
         roomCtxt->unk31 = 1;
 
         size = ctxt->roomAddrs[index].vromEnd - ctxt->roomAddrs[index].vromStart;
-        roomCtxt->activeRoomVram = (void*)((s32)roomCtxt->roomMemPages[roomCtxt->activeMemPage] - (size + 8) * roomCtxt->activeMemPage + 8) & 0xfffffff0;
+        roomCtxt->activeRoomVram =
+            (void*)((s32)roomCtxt->roomMemPages[roomCtxt->activeMemPage] - (size + 8) * roomCtxt->activeMemPage + 8) &
+            0xfffffff0;
 
         osCreateMesgQueue(&roomCtxt->loadQueue, roomCtxt->loadMsg, 1);
         DmaMgr_SendRequestImpl(&roomCtxt->dmaRequest, roomCtxt->activeRoomVram, ctxt->roomAddrs[index].vromStart, size,
-                      0, &roomCtxt->loadQueue, NULL);
+                               0, &roomCtxt->loadQueue, NULL);
         roomCtxt->activeMemPage ^= 1;
 
         return 1;
@@ -103,10 +107,8 @@ s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 ind
 #endif
 
 s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
-    if (roomCtxt->unk31 == 1)
-    {
-        if (!osRecvMesg(&roomCtxt->loadQueue, NULL, OS_MESG_NOBLOCK))
-        {
+    if (roomCtxt->unk31 == 1) {
+        if (!osRecvMesg(&roomCtxt->loadQueue, NULL, OS_MESG_NOBLOCK)) {
             roomCtxt->unk31 = 0;
             roomCtxt->currRoom.segment = roomCtxt->activeRoomVram;
             // TODO: Segment number enum
@@ -116,7 +118,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
             func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
             Actor_SpawnTransitionActors(ctxt, &ctxt->actorCtx);
 
-            if (((ctxt->sceneNum != SCENE_IKANA) || (roomCtxt->currRoom.num != 1)) && (ctxt->sceneNum != SCENE_IKNINSIDE)) {
+            if (((ctxt->sceneNum != SCENE_IKANA) || (roomCtxt->currRoom.num != 1)) &&
+                (ctxt->sceneNum != SCENE_IKNINSIDE)) {
                 ctxt->kankyoContext.unkC3 = 0xff;
                 ctxt->kankyoContext.unkE0 = 0;
             }
@@ -141,7 +144,7 @@ void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags) {
     return;
 }
 
-void func_8012EBF8(GlobalContext* ctxt, RoomContext* roomCtxt){
+void func_8012EBF8(GlobalContext* ctxt, RoomContext* roomCtxt) {
     roomCtxt->prevRoom.num = -1;
     roomCtxt->prevRoom.segment = NULL;
     func_800BA798(ctxt, &ctxt->actorCtx);

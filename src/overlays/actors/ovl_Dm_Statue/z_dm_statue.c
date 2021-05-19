@@ -18,7 +18,7 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Init,
     (ActorFunc)DmStatue_Destroy,
     (ActorFunc)DmStatue_Update,
-    (ActorFunc)DmStatue_Draw
+    (ActorFunc)DmStatue_Draw,
 };
 
 extern AnimatedMaterial D_06001788;

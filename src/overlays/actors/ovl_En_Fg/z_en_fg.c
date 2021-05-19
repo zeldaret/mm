@@ -19,7 +19,7 @@ const ActorInit En_Fg_InitVars = {
     (ActorFunc)EnFg_Init,
     (ActorFunc)EnFg_Destroy,
     (ActorFunc)EnFg_Update,
-    (ActorFunc)EnFg_Draw
+    (ActorFunc)EnFg_Draw,
 };
 */
 

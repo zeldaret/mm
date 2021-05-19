@@ -19,7 +19,7 @@ const ActorInit En_Sellnuts_InitVars = {
     (ActorFunc)EnSellnuts_Init,
     (ActorFunc)EnSellnuts_Destroy,
     (ActorFunc)EnSellnuts_Update,
-    (ActorFunc)EnSellnuts_Draw
+    (ActorFunc)EnSellnuts_Draw,
 };
 */
 
