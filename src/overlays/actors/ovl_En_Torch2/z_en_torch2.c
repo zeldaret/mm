@@ -17,10 +17,10 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx object_torch2_shell_human[];
-extern Gfx object_torch2_shell_goron[];
-extern Gfx object_torch2_shell_deku[];
-extern Gfx object_torch2_shell_zora[];
+extern Gfx D_0401C430[];
+extern Gfx D_04048DF0[];
+extern Gfx D_04057B10[];
+extern Gfx D_04089070[];
 
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
@@ -45,14 +45,14 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(colChkInfo.mass, MASS_IMMOVABLE, ICHAIN_STOP),
 };
 
-// Statues for each of Link's different forms
+// Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
-static Gfx* sStatueDLists[] = {
-    object_torch2_shell_human,
-    object_torch2_shell_goron,
-    object_torch2_shell_zora,
-    object_torch2_shell_deku,
-    object_torch2_shell_human,
+static Gfx* sShellDLists[] = {
+    D_0401C430, // Human
+    D_04048DF0, // Zora
+    D_04089070, // Deku
+    D_04057B10, // Goron
+    D_0401C430, // Human
 };
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -153,7 +153,7 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     GlobalContext* unused = globalCtx;
-    Gfx* gfx = sStatueDLists[thisx->params];
+    Gfx* gfx = sShellDLists[thisx->params];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->alpha == 0xFF) {
