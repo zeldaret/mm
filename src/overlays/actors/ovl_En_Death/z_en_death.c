@@ -19,7 +19,7 @@ const ActorInit En_Death_InitVars = {
     (ActorFunc)EnDeath_Init,
     (ActorFunc)EnDeath_Destroy,
     (ActorFunc)EnDeath_Update,
-    (ActorFunc)EnDeath_Draw
+    (ActorFunc)EnDeath_Draw,
 };
 */
 

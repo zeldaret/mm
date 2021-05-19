@@ -18,7 +18,7 @@ const ActorInit Obj_Purify_InitVars = {
     (ActorFunc)ObjPurify_Init,
     (ActorFunc)ObjPurify_Destroy,
     (ActorFunc)ObjPurify_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

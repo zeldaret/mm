@@ -19,7 +19,7 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Init,
     (ActorFunc)BgIkninSusceil_Destroy,
     (ActorFunc)BgIkninSusceil_Update,
-    (ActorFunc)BgIkninSusceil_Draw
+    (ActorFunc)BgIkninSusceil_Draw,
 };
 */
 

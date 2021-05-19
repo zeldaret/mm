@@ -1,11 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
 
-// TODO move out
-#define	OS_CLOCK_RATE		62500000LL
-#define	OS_CPU_COUNTER		(OS_CLOCK_RATE*3/4)
-#define OS_USEC_TO_CYCLES(n)	(((u64)(n)*(OS_CPU_COUNTER/15625LL))/(1000000LL/15625LL))
-
 vs32 gIrqMgrResetStatus = 0;
 volatile OSTime sIrqMgrResetTime = 0;
 volatile OSTime sIrqMgrRetraceTime = 0;
@@ -122,7 +117,7 @@ void IrqMgr_HandleRetrace(IrqMgr* irqmgr) {
     }
 
     sIrqMgrRetraceCount += 1;
-    IrqMgr_SendMesgForClient(irqmgr,irqmgr);
+    IrqMgr_SendMesgForClient(irqmgr, irqmgr);
 }
 
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
@@ -132,25 +127,27 @@ void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
     interrupt = 0;
     stop = 0;
     while (stop == 0) {
-        if (stop);
+        if (stop) {
+            ;
+        }
 
         osRecvMesg(&irqmgr->irqQueue, (OSMesg*)&interrupt, 1);
         switch (interrupt) {
-        case 0x29A:
-            IrqMgr_HandleRetrace(irqmgr);
-            break;
-        case 0x29D:
-            IrqMgr_HandlePreNMI(irqmgr);
-            break;
-        case 0x29F:
-            IrqMgr_HandlePRENMI450(irqmgr);
-            break;
-        case 0x2A0:
-            IrqMgr_HandlePRENMI480(irqmgr);
-            break;
-        case 0x2A1:
-            IrqMgr_HandlePRENMI500(irqmgr);
-            break;
+            case 0x29A:
+                IrqMgr_HandleRetrace(irqmgr);
+                break;
+            case 0x29D:
+                IrqMgr_HandlePreNMI(irqmgr);
+                break;
+            case 0x29F:
+                IrqMgr_HandlePRENMI450(irqmgr);
+                break;
+            case 0x2A0:
+                IrqMgr_HandlePRENMI480(irqmgr);
+                break;
+            case 0x2A1:
+                IrqMgr_HandlePRENMI500(irqmgr);
+                break;
         }
     }
 }
@@ -163,7 +160,7 @@ void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     irqmgr->prenmiStage = 0;
     irqmgr->lastPrenmiTime = 0;
 
-    osCreateMesgQueue(&irqmgr->irqQueue,(OSMesg *)irqmgr->irqBuffer,8);
+    osCreateMesgQueue(&irqmgr->irqQueue, (OSMesg*)irqmgr->irqBuffer, 8);
     osSetEventMesg(0xE, &irqmgr->irqQueue, (OSMesg)0x29D);
     osViSetEvent(&irqmgr->irqQueue, (OSMesg)0x29A, retraceCount);
 

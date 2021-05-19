@@ -18,7 +18,7 @@ const ActorInit En_Firefly2_InitVars = {
     (ActorFunc)EnFirefly2_Init,
     (ActorFunc)EnFirefly2_Destroy,
     (ActorFunc)EnFirefly2_Update,
-    (ActorFunc)EnFirefly2_Draw
+    (ActorFunc)EnFirefly2_Draw,
 };
 
 void EnFirefly2_Init(Actor* thisx, GlobalContext* globalCtx) {

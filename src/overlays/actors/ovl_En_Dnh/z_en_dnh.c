@@ -19,7 +19,7 @@ const ActorInit En_Dnh_InitVars = {
     (ActorFunc)EnDnh_Init,
     (ActorFunc)EnDnh_Destroy,
     (ActorFunc)EnDnh_Update,
-    (ActorFunc)EnDnh_Draw
+    (ActorFunc)EnDnh_Draw,
 };
 */
 

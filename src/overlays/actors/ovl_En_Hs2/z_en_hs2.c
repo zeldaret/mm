@@ -20,7 +20,7 @@ const ActorInit En_Hs2_InitVars = {
     (ActorFunc)EnHs2_Init,
     (ActorFunc)EnHs2_Destroy,
     (ActorFunc)EnHs2_Update,
-    (ActorFunc)EnHs2_Draw
+    (ActorFunc)EnHs2_Draw,
 };
 
 void EnHs2_Init(Actor* thisx, GlobalContext* globalCtx) {

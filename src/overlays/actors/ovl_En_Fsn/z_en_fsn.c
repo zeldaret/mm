@@ -19,7 +19,7 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Init,
     (ActorFunc)EnFsn_Destroy,
     (ActorFunc)EnFsn_Update,
-    (ActorFunc)EnFsn_Draw
+    (ActorFunc)EnFsn_Draw,
 };
 */
 
