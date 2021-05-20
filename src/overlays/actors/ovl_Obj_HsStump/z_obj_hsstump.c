@@ -50,19 +50,18 @@ void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); // Must be thisx to match
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
-    if (this->isHidden != 0) {
-        if (this->isHidden != 1) {
-            return;
-        }
-        if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
-            this->isHidden = 0;
-        } else {
-            this->dyna.actor.draw = NULL;
-            Actor_SetScale(&this->dyna.actor, 0.0f);
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        }
+    switch (this->isHidden) {
+        case true:
+            if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+                this->isHidden = false;
+            } else {
+                this->dyna.actor.draw = NULL;
+                Actor_SetScale(&this->dyna.actor, 0.0f);
+                func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            }
+        case false:
+            ObjHsStump_SetupIdle(this, globalCtx);
     }
-    ObjHsStump_SetupIdle(this, globalCtx);
 }
 
 void ObjHsStump_SetupIdle(ObjHsStump* this, GlobalContext* globalCtx) {
@@ -70,10 +69,9 @@ void ObjHsStump_SetupIdle(ObjHsStump* this, GlobalContext* globalCtx) {
 }
 
 void ObjHsStump_Idle(ObjHsStump* this, GlobalContext* globalCtx) {
-    if (this->isHidden == 1) {
-        if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
-            ObjHsStump_SetupAppear(this, globalCtx);
-        }
+    //Must compare this->isHidden to 1/true to match
+    if (this->isHidden == true && Flags_GetSwitch(globalCtx, this->switchFlag)) {
+        ObjHsStump_SetupAppear(this, globalCtx);
     }
 }
 
@@ -88,6 +86,8 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 // Correct instructions, but they are all out of order in the (this->framesAppeared) < 11 branch
+// Loop looks fine, it's everything before
+// void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx)
 void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
     s32 i;
     s32 angle;
@@ -107,12 +107,9 @@ void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
     }
     if (this->framesAppeared < 11) {
         if (this->framesAppeared == 0) {
-            iceSmokePosOffset.x = 1.0f;
-            iceSmokePosOffset.y = 0.5f;
-            iceSmokePosOffset.z = 0.0f;
-            iceSmokeVelOffset.x = 1.0f;
-            iceSmokeVelOffset.y = 0.5f;
-            iceSmokeVelOffset.z = 0.0f;
+            iceSmokePosOffset.x = iceSmokeVelOffset.x = 1.0f;
+            iceSmokePosOffset.y = iceSmokeVelOffset.y = 0.5f;
+            iceSmokePosOffset.z = iceSmokeVelOffset.z = 0.0f;
 
             numDirections = 4;
             angle = 360.0f / numDirections;
@@ -123,7 +120,7 @@ void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
-                EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &D_80BDAF84, 0x64);
+                EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &D_80BDAF84, 100);
             }
         }
     }
@@ -132,7 +129,7 @@ void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
     }
     if (this->dyna.actor.scale.x == 0.17999999f) {
-        this->isHidden = 0;
+        this->isHidden = false;
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         ObjHsStump_SetupIdle(this, globalCtx);
     }
