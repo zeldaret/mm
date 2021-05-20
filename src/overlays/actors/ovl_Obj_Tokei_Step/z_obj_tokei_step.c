@@ -201,7 +201,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (!((((s32)gSaveContext.perm.day % 5) != 3) || (gSaveContext.perm.time >= 0x4000)) ||
+    } else if (!((CURRENT_DAY != 3) || (gSaveContext.perm.time >= 0x4000)) ||
                (s32)gSaveContext.perm.day >= 4) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
