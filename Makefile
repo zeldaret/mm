@@ -117,6 +117,7 @@ build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
 build/src/code/code_0x80186A70.o: OPTFLAGS := -g
 build/src/code/code_0x80186A70.o: MIPS_VERSION := -mips1
+build/src/code/code_0x80186A70.o: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%: CC := $(CC_OLD)
 build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --

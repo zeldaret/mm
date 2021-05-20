@@ -3481,7 +3481,7 @@ OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u
 void osFlashChange(u32 flash_num); // func_80186B38
 OSPiHandle* osFlashInit(void); // func_80186B78
 void osFlashReadStatus(u8* flash_status); // func_80186CAC
-void osFlashReadId(u32 *flash_type, u32 *flash_maker); // func_80186D60
+void osFlashReadId(u32 *flash_type, u32 *flash_vendor); // func_80186D60
 void osFlashClearStatus(void); // func_80186E64
 s32 osFlashAllErase(void); // func_80186EC8
 void osFlashAllEraseThrough(void); // func_80187018
