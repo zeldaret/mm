@@ -92,7 +92,7 @@ If you make significant progress on decompiling a function, but can't get it to 
 
 ```c
 #ifdef NON_MATCHING
-void CollisionCheck_SpawnWaterDroplets(GlobalContext* ctxt, Vec3f* v) {
+void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     // ... 
 }
 #else
@@ -117,7 +117,7 @@ Documenting is more than just adding comments. Documenting also includes:
 - Using (or adding) constants, enums, and macros when possible
 - Explaining sections of code that are not straightforward
 
-Overlays are not required to be documented at this time, but `code/` and `boot/` are.
+Overlays are not required to be documented at this time, but `code/` and `boot/` should be documented as much as possible.
 When an overlay documentation has been started, it will be required to be completed.
 
 For right now, object segment symbols should not be documented/renamed.
@@ -138,6 +138,8 @@ Before opening a PR, walk through the following steps to ensure that your code c
     - Can be verified locally by running `tools/warnings_count/check_new_warnings.sh`
 - New variables & functions should follow standard naming conventions.
 - Comments and variables have correct spelling.
+
+Feel free to reach out on the Discord if you have any questions about these steps or encounter any issues.
 
 ### Pull Request Process
 
