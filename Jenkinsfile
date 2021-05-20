@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Setup') {
             steps {
-                sh 'make -j setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)'
+                sh 'bash -c "make -j setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)"'
             }
         }
         stage('Check setup warnings') {
@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)'
+                sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
