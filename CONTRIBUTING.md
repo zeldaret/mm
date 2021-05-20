@@ -7,7 +7,7 @@ All contributions are welcome. This is a group effort, and even small contributi
 This document is meant to be a set of tips and guidelines for contributing to the project.
 For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md).
 
-Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
+Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
 
 Useful Links
@@ -28,7 +28,7 @@ Getting Started
 
 Basic knowledge of C, particularly arrays and pointers, is extremely useful. Knowledge of MIPS is not required initially, you can pick it up as you work through some decompilation.
 
-You should be familiar with using git and GitHub. There are a number of tutorials available online, [such as this one](https://github.com/firstcontributions/first-contributions), which can help you get started.
+You should be familiar with using git and GitHub. There are a number of tutorials available online, [such as this one](https://github.com/firstcontributions/first-contributions) which can help you get started.
 
 The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [OOT Practice Rom](http://practicerom.com/) (aka GZ) or the [MM Practice Rom](https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
 The [OOT Decompilation Project](https://github.com/zeldaret/oot) is farther along than this project, so it can also be a great resource.
@@ -39,7 +39,7 @@ Anyone who wishes to contribute to the OOT or MM projects **must not have access
 ### Environment Setup
 
 Get started by following the [installation guide in the readme](https://github.com/zeldaret/mm/blob/master/README.md#installation).
-When successful, you should be able to build a matching ROM before you start making any changes.
+You should be able to build a matching ROM before you start making any changes.
 
 ### First Contribution
 
@@ -54,7 +54,7 @@ After joining the Discord, ask to be added to the Trello board so you can claim 
 Style Guide & Conventions
 -------------------------
 
-Most of the C formatting style is enforced by the `format.sh` script, which is based on `clang-format`.
+Most of the C formatting style is enforced by the `format.sh` script which is based on `clang-format`.
 Running `./format.sh` will apply our standard style to all `.c` files in the repository.
 
 There are some conventions that cannot be automatically enforced.
@@ -75,7 +75,12 @@ These files demonstrate the following:
     - Global variables start with `g` (`gSaveContext`)
     - Static global variables start with `s` (`sSphereInit`)
 - Macros and enum constants are `SCREAMING_SNAKE_CASE` (`DM_RAVINE_STATE_ACTIVE`)
-- Auxiliary structs, enums, and constants are defined in the header file
+- Public structs, enums, and constants should be defined in the header file in the following cases:
+    - The primary `Actor` struct (`DmRavine`)
+    - The actor's `InitVars`, as an `extern` symbol (`Dm_Ravine_InitVars`)
+    - Types used in other public declarations, like `actionFunc` typedefs (`DmRavineActionFunc`)
+    - Macros and enums for accessing & setting actor `params`
+    - The struct/enum/define is needed by other files
 - Trailing commas in array and struct definitions (see `EnJcMatoDamageTable`)
 - Constants converted to whichever looks best in context: hexadecimal, decimal, or float
     - Rotation angles should always be in hexadecimal
@@ -106,7 +111,7 @@ Usually, the first step of decompiling a section of code is to get it *matching*
 However, the goal of this project is to produce a codebase that can be understood and modified.
 So, beyond producing matching C code, the next steps are *documenting* the code.
 
-Documenting is more than just adding comments, and entails:
+Documenting is more than just adding comments. Documenting also includes:
 
 - Renaming functions, variables, and struct members
 - Using (or adding) constants, enums, and macros when possible
@@ -125,11 +130,12 @@ Pull Requests (PRs)
 
 ### Checklist
 
-Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide & conventions.
+Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide and conventions.
 
 - `./format.sh` was run to apply standard formatting.
 - `make` successfully builds a matching ROM.
 - No new compiler warnings were introduced during the build process.
+    - Can be verified locally by running `tools/warnings_count/check_new_warnings.sh`
 - New variables & functions should follow standard naming conventions.
 - Comments and variables have correct spelling.
 
@@ -138,12 +144,12 @@ Before opening a PR, walk through the following steps to ensure that your code c
 After opening a PR, the Jenkins server will verify your changes.
 If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
 
-Each PR needs a review from one reviewer, plus the project lead.
+Each PR needs a review from one reviewer and the project lead.
 
 The PR author marks the comments as resolved: the commenter may not have permissions to do so.
 Once all comments are addressed, it is courteous to ping the reviewer on either Discord or GitHub via re-requesting a review.
 
-After all the comments are addressed and at least one contributor has approved the review, the project lead can then merge the code.
+After all the comments are addressed and at least one contributor has approved the review, the project lead can then review and merge the code.
 The project lead is also responsible for ensuring that all of these procedures are followed.
 
 Throughout the PR process, you (the author) should update the card on [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the appropriate column and labels.

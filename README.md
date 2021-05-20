@@ -103,7 +103,12 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
-**Note**: if you rename symbols, it is reccomended that you use the `tools/rename_sym.sh` to ensure that you cover all instances, including the tables which are used to generate the `asm/` directory.
+**Note**: to speed up the build, you can either:
+* Pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has.
+* Pass `-j` to `make setup` and `make`, to use as many threads as possible, but beware that this can use too much memory on lower-end systems.
+Both of these have the disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-j` or `-jN`).
+
+**Note**: if you rename symbols, it is recommended that you use the `tools/rename_sym.sh` to ensure that you cover all instances, including the tables which are used to generate the `asm/` directory.
 
 Usage: `tools/rename_sym.sh old_name new_name`. Example:
 
