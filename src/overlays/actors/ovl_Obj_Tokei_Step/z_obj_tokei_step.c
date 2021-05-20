@@ -202,7 +202,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
     } else if (!((CURRENT_DAY != 3) || (gSaveContext.perm.time >= 0x4000)) ||
-               (s32)gSaveContext.perm.day >= 4) {
+               gSaveContext.perm.day >= 4) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);
