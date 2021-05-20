@@ -8764,9 +8764,9 @@ SECTIONS
     ovl_Obj_Moon_Stone : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Moon_Stone/z_obj_moon_stone.o(.text)
-        build/asm/overlays/ovl_Obj_Moon_Stone_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Moon_Stone/z_obj_moon_stone.o(.data)
         build/src/overlays/actors/ovl_Obj_Moon_Stone/z_obj_moon_stone.o(.rodata)
-        build/asm/overlays/ovl_Obj_Moon_Stone_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Moon_Stone/z_obj_moon_stone_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
