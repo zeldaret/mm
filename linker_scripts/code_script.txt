@@ -1196,9 +1196,9 @@ SECTIONS
     ovl_En_Torch2 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Torch2/z_en_torch2.o(.text)
-        build/asm/overlays/ovl_En_Torch2_data.o(.data)
+        build/src/overlays/actors/ovl_En_Torch2/z_en_torch2.o(.data)
         build/src/overlays/actors/ovl_En_Torch2/z_en_torch2.o(.rodata)
-        build/asm/overlays/ovl_En_Torch2_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Torch2/z_en_torch2_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -5949,9 +5949,9 @@ SECTIONS
     ovl_Obj_Tokei_Step : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Tokei_Step/z_obj_tokei_step.o(.text)
-        build/asm/overlays/ovl_Obj_Tokei_Step_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Tokei_Step/z_obj_tokei_step.o(.data)
         build/src/overlays/actors/ovl_Obj_Tokei_Step/z_obj_tokei_step.o(.rodata)
-        build/asm/overlays/ovl_Obj_Tokei_Step_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Tokei_Step/z_obj_tokei_step_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
