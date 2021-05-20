@@ -24,13 +24,7 @@ typedef struct {
     /* 0x007 */ u8 nextLimbIndex;   // The parent limb's next limb index into the limb table.
     /* 0x008 */ Gfx* displayLists[1]; // Display lists for the limb. Index 0 is the normal display list, index 1 is the
                                       // far model display list.
-} StandardLimb;                      // Size = 0xC or 0x10
-
-#if 0
-typedef struct {
-    /* 0x000 */ StandardLimb* limbs; // One or more limbs, index 0 is the root limb.
-} Skeleton;                              // Size >= 4
-#endif
+} StandardLimb; // Size = 0xC
 
 // Model has limbs with only rigid meshes
 typedef struct {
