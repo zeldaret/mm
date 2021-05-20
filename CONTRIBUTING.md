@@ -81,7 +81,7 @@ These files demonstrate the following:
     - Rotation angles should always be in hexadecimal
 - Define macros for bitwise access to `actor->params`
 
-### `NON_MATCHING`
+### `NON_MATCHING` & `NON_EQUIVALENT`
 
 If you make significant progress on decompiling a function, but can't get it to match perfectly, you can use a `NON_MATCHING` block to commit your code but have it excluded from the build, like so:
 
@@ -96,6 +96,8 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* ctxt, Vec3f* v) {
 ```
 
 Before using `NON_MATCHING`, first try to use the [decomp-permuter](tools/decomp-permuter) tool to find a closer match.
+
+`NON_EQUIVALENT` can be used with the same syntax as `NON_MATCHING`, but it is used to mark sections of code which do not match *and* do not have the same behavior as the original code.
 
 ### Matching vs. Documenting
 

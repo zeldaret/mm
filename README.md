@@ -23,7 +23,7 @@ in an experimental and research phase and cannot currently be used traditionally
 source code base for general changes.
 ```
 
-This repo does not include all assets necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.
+**This repo does not include any assets or code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
 This is a decompilation of Legend of Zelda: Majora's Mask (US) 1.0
 
