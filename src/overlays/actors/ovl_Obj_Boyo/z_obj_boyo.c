@@ -57,15 +57,15 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern Gfx D_06000300[];
-extern AnimatedTexture D_06000E88;
+extern AnimatedMaterial D_06000E88;
 
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, &sInitChain);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(this, &this->collider);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_190 = Lib_SegmentedToVirtual(&D_06000E88);
 }
@@ -84,7 +84,7 @@ void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, ActorPlayer* target) {
 
 void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
     target->unk_2F0 = 30.0f;
-    target->unk_2F4 = Actor_YawBetweenActors(src, target);
+    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->actor);
 }
 
 void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
@@ -92,9 +92,9 @@ void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
 }
 
 BumperCollideInfo sBumperCollideInfo[] = {
-    { ACTOR_PLAYER, ObjBoyo_UpdatePlayerBumpValues },
-    { ACTOR_EN_KAIZOKU, ObjBoyo_UpdatePirateBumpValues },
-    { ACTOR_EN_BOM, ObjBoyo_UpdateBombBumpValues },
+    { ACTOR_PLAYER, (BumperCollideActorFunc)ObjBoyo_UpdatePlayerBumpValues },
+    { ACTOR_EN_KAIZOKU, (BumperCollideActorFunc)ObjBoyo_UpdatePirateBumpValues },
+    { ACTOR_EN_BOM, (BumperCollideActorFunc)ObjBoyo_UpdateBombBumpValues },
 };
 
 Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* num) {
@@ -126,7 +126,7 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor* target;
     s32 num;
 
-    target = ObjBoyo_GetCollidedActor(thisx, globalCtx, &num);
+    target = ObjBoyo_GetCollidedActor(this, globalCtx, &num);
 
     if (target != NULL) {
         sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
@@ -181,6 +181,6 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, this->unk_190);
+    AnimatedMat_Draw(globalCtx, this->unk_190);
     func_800BDFC0(globalCtx, D_06000300);
 }

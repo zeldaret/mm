@@ -19,7 +19,7 @@ const ActorInit En_Arrow_InitVars = {
     (ActorFunc)EnArrow_Init,
     (ActorFunc)EnArrow_Destroy,
     (ActorFunc)EnArrow_Update,
-    (ActorFunc)EnArrow_Draw
+    (ActorFunc)EnArrow_Draw,
 };
 */
 

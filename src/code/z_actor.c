@@ -1,11 +1,7 @@
 #include <ultra64.h>
 #include <global.h>
 
-//From OOT
-#define ABS(x) ((x) < 0 ? -(x) : (x))
-#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
-
-void Actor_PrintLists(ActorContext *actorCtx) {
+void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
     Actor* actor;
     s32 i;
@@ -13,7 +9,7 @@ void Actor_PrintLists(ActorContext *actorCtx) {
     FaultDrawer_SetCharPad(-2, 0);
     FaultDrawer_Printf(D_801DC9D0, gMaxActorId);
     FaultDrawer_Printf(D_801DC9D8);
-    
+
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
         actor = actorList[i].first;
 
@@ -21,7 +17,6 @@ void Actor_PrintLists(ActorContext *actorCtx) {
             FaultDrawer_Printf(D_801DC9F8, i, actor, actor->id, actor->category, D_801DCA10);
             actor = actor->next;
         }
-        
     }
 }
 
@@ -40,10 +35,9 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
         if (dy >= -50.0f && dy < 500.0f) {
             f32 shadowScale;
             MtxF mtx;
-        
+
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            
             POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
@@ -66,12 +60,11 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
             }
 
-            shadowScale =  1.0f - (dy * D_801DCA14);
+            shadowScale = 1.0f - (dy * D_801DCA14);
             shadowScale *= actor->shape.shadowScale;
             Matrix_Scale(shadowScale * actor->scale.x, 1.0f, shadowScale * actor->scale.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_OPA_DISP++, dlist);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -129,8 +122,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-              G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, D_04075B30);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -171,14 +163,14 @@ void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalCont
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5814.asm")
 
-u32 Actor_GetSwitchFlag(GlobalContext* ctxt, s32 flag) {
+u32 Flags_GetSwitch(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
         return ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
 
-void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag){
+void Actor_SetSwitchFlag(GlobalContext* ctxt, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
         ctxt->actorCtx.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
     }
@@ -250,7 +242,8 @@ void Actor_TitleCardContextInit(GlobalContext* ctxt, TitleCardContext* titleCtxt
     titleCtxt->alpha = 0;
 }
 
-void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7) {
+void Actor_TitleCardCreate(GlobalContext* ctxt, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5,
+                           u8 param_6, u8 param_7) {
     titleCtxt->texture = texture;
     titleCtxt->unk4 = param_4;
     titleCtxt->unk6 = param_5;
@@ -327,7 +320,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* ctxt, Actor* actor) {
     // TODO: Segment number enum
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[actor->objBankIndex].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(ctxt->objectCtx.status[actor->objBankIndex].segment);
 }
 
 #if 0
@@ -351,7 +344,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* ctxt) {
     actor->naviMsgId = 255;
 
     Actor_Setshape(&actor->shape, 0, 0, 0);
-    if (Scene_IsObjectLoaded(&ctxt->sceneContext, actor->objBankIndex) != 0) {
+    if (Object_IsLoaded(&ctxt->objectCtx, actor->objBankIndex) != 0) {
         Actor_SetObjectSegment(ctxt, actor);
         actor->init(actor, ctxt);
         actor->init = NULL;
@@ -404,7 +397,7 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
-    f32 velX =  Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    f32 velX = Math_CosS(actor->world.rot.x) * actor->speedXZ;
     actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
     actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
@@ -416,7 +409,7 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
 }
 
 void Actor_SetVelocityXYRotationReverse(Actor* actor) {
-    f32 velX =  Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    f32 velX = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
     actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
     actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
@@ -529,7 +522,7 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
 
     angle = Actor_YawBetweenActors(actor, other) + 0x8000;
     dist = angle - other->shape.rot.y;
-    if (ABS(dist) < tolerance) {
+    if (ABS_ALT(dist) < tolerance) {
         return 1;
     }
     return 0;
@@ -539,7 +532,7 @@ s32 Actor_IsActorFacingLink(Actor* actor, s16 angle) {
     s16 dist;
 
     dist = actor->yawTowardsPlayer - actor->shape.rot.y;
-    if (ABS(dist) < angle) {
+    if (ABS_ALT(dist) < angle) {
         return 1;
     }
     return 0;
@@ -549,7 +542,7 @@ s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
     s16 dist;
 
     dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
-    if (ABS(dist) < tolerance) {
+    if (ABS_ALT(dist) < tolerance) {
         return 1;
     }
     return 0;
@@ -562,7 +555,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
     if (Actor_DistanceBetweenActors(actor, other) < range) {
         dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
-        if (ABS(dist) < tolerance) {
+        if (ABS_ALT(dist) < tolerance) {
             return 1;
         }
     }
@@ -740,9 +733,9 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
     if (entry->nbLoaded == 0) {
         ramAddr = entry->loadedRamAddr;
         if (ramAddr != NULL) {
-            //Bit 1 - always loaded
+            // Bit 1 - always loaded
             if ((entry->allocType & 2) == 0) {
-                //Bit 0 - don't alloc memory
+                // Bit 0 - don't alloc memory
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {

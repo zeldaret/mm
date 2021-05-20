@@ -18,7 +18,7 @@ const ActorInit Dm_Tag_InitVars = {
     (ActorFunc)DmTag_Init,
     (ActorFunc)DmTag_Destroy,
     (ActorFunc)DmTag_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

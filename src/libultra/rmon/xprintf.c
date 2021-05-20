@@ -1,29 +1,29 @@
 #include <ultra64.h>
 #include <global.h>
 
-#define ATOI(i, a)                                                                                     \
-    for (i = 0; *a >= '0' && *a <= '9'; a++)                                                           \
-        if (i < 999)                                                                                   \
+#define ATOI(i, a)                           \
+    for (i = 0; *a >= '0' && *a <= '9'; a++) \
+        if (i < 999)                         \
             i = *a + i * 10 - '0';
-#define _PROUT(fmt, _size)                                                                        \
-    if (_size > 0) {                                                                                   \
-        arg = (void*)pfn(arg, fmt, _size);                                                                  \
-        if (arg != 0)                                                                                  \
-            x.nchar += _size;                                                                        \
-        else                                                                                           \
-            return x.nchar;                                                                          \
+#define _PROUT(fmt, _size)                 \
+    if (_size > 0) {                       \
+        arg = (void*)pfn(arg, fmt, _size); \
+        if (arg != 0)                      \
+            x.nchar += _size;              \
+        else                               \
+            return x.nchar;                \
     }
-#define _PAD(m, src, extracond)                                                                       \
-    if (extracond && m > 0) {                                                                          \
-        int i;                                                                                         \
-        int j;                                                                                         \
-        for (j = m; j > 0; j -= i) {                                                                   \
-            if ((u32) j > 32)                                                                          \
-                i = 32;                                                                                \
-            else                                                                                       \
-                i = j;                                                                                 \
-            _PROUT(src, i);                                                                       \
-        }                                                                                              \
+#define _PAD(m, src, extracond)      \
+    if (extracond && m > 0) {        \
+        int i;                       \
+        int j;                       \
+        for (j = m; j > 0; j -= i) { \
+            if ((u32)j > 32)         \
+                i = 32;              \
+            else                     \
+                i = j;               \
+            _PROUT(src, i);          \
+        }                            \
     }
 
 #define FLAGS_SPACE 1
@@ -35,11 +35,11 @@
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
 
-int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
+int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;
     x.nchar = 0;
     while (1) {
-        unsigned char* s;
+        const char* s;
         unsigned char c;
         unsigned char* t;
 
@@ -52,11 +52,11 @@ int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
         while ((c = *s) != 0 && c != '%') {
             s++;
         }
-        _PROUT(fmt, s - fmt);
+        _PROUT((char*)fmt, s - fmt);
         if (c == 0) {
             return x.nchar;
         }
-        fmt = (char *) ++s;
+        fmt = ++s;
         x.flags = 0;
         // TODO the cast isn't necessary because strchr should take it in as const, but it currently doesn't
         for (; (t = strchr((char*)fchar, *s)) != NULL; s++) {
@@ -94,23 +94,21 @@ int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
             s++;
         }
         _Putfld(&x, &ap, *s, ac);
-        x.width -= x.n0 + x.nz0 + x.n1 + x.nz1
-                      + x.n2 + x.nz2;
+        x.width -= x.n0 + x.nz0 + x.n1 + x.nz1 + x.n2 + x.nz2;
         _PAD(x.width, spaces, !(x.flags & FLAGS_MINUS));
-        _PROUT((char *) ac, x.n0);
+        _PROUT((char*)ac, x.n0);
         _PAD(x.nz0, zeroes, 1);
         _PROUT(x.s, x.n1);
         _PAD(x.nz1, zeroes, 1);
-        _PROUT((char *) (&x.s[x.n1]), x.n2)
+        _PROUT((char*)(&x.s[x.n1]), x.n2)
         _PAD(x.nz2, zeroes, 1);
         _PAD(x.width, spaces, x.flags & FLAGS_MINUS);
-        fmt = (char *) s + 1;
+        fmt = (char*)s + 1;
     }
 }
 
 void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
-    px->n0 = px->nz0 = px->n1 = px->nz1 = px->n2 =
-        px->nz2 = 0;
+    px->n0 = px->nz0 = px->n1 = px->nz1 = px->n2 = px->nz2 = 0;
 
     switch (code) {
 
@@ -129,7 +127,7 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
             }
 
             if (px->qual == 'h') {
-                px->v.ll = (s16) px->v.ll;
+                px->v.ll = (s16)px->v.ll;
             }
 
             if (px->v.ll < 0) {
@@ -140,7 +138,7 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
                 ac[px->n0++] = ' ';
             }
 
-            px->s = (char *) &ac[px->n0];
+            px->s = (char*)&ac[px->n0];
 
             _Litob(px, code);
             break;
@@ -158,9 +156,9 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
             }
 
             if (px->qual == 'h') {
-                px->v.ll = (u16) px->v.ll;
+                px->v.ll = (u16)px->v.ll;
             } else if (px->qual == 0) {
-                px->v.ll = (u32) px->v.ll;
+                px->v.ll = (u32)px->v.ll;
             }
 
             if (px->flags & FLAGS_HASH) {
@@ -170,7 +168,7 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
                     ac[px->n0++] = code;
                 }
             }
-            px->s = (char *) &ac[px->n0];
+            px->s = (char*)&ac[px->n0];
             _Litob(px, code);
             break;
 
@@ -191,30 +189,30 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
                 }
             }
 
-            px->s = (char *) &ac[px->n0];
+            px->s = (char*)&ac[px->n0];
             _Ldtob(px, code);
             break;
 
         case 'n':
             if (px->qual == 'h') {
-                *(va_arg(*pap, u16 *)) = px->nchar;
+                *(va_arg(*pap, u16*)) = px->nchar;
             } else if (px->qual == 'l') {
-                *va_arg(*pap, u32 *) = px->nchar;
+                *va_arg(*pap, u32*) = px->nchar;
             } else if (px->qual == 'L') {
-                *va_arg(*pap, u64 *) = px->nchar;
+                *va_arg(*pap, u64*) = px->nchar;
             } else {
-                *va_arg(*pap, u32 *) = px->nchar;
+                *va_arg(*pap, u32*) = px->nchar;
             }
             break;
 
         case 'p':
-            px->v.ll = (long) va_arg(*pap, void *);
-            px->s = (char *) &ac[px->n0];
+            px->v.ll = (long)va_arg(*pap, void*);
+            px->s = (char*)&ac[px->n0];
             _Litob(px, 'x');
             break;
 
         case 's':
-            px->s = va_arg(*pap, char *);
+            px->s = va_arg(*pap, char*);
             px->n1 = strlen(px->s);
             if (px->prec >= 0 && px->n1 > px->prec) {
                 px->n1 = px->prec;

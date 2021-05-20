@@ -19,7 +19,7 @@ const ActorInit Dm_Opstage_InitVars = {
     (ActorFunc)DmOpstage_Init,
     (ActorFunc)DmOpstage_Destroy,
     (ActorFunc)DmOpstage_Update,
-    (ActorFunc)DmOpstage_Draw
+    (ActorFunc)DmOpstage_Draw,
 };
 */
 

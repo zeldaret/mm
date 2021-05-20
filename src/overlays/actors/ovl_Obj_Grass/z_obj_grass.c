@@ -19,7 +19,7 @@ const ActorInit Obj_Grass_InitVars = {
     (ActorFunc)ObjGrass_Init,
     (ActorFunc)ObjGrass_Destroy,
     (ActorFunc)ObjGrass_Update,
-    (ActorFunc)ObjGrass_Draw
+    (ActorFunc)ObjGrass_Draw,
 };
 */
 

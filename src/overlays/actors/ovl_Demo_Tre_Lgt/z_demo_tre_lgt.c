@@ -19,7 +19,7 @@ const ActorInit Demo_Tre_Lgt_InitVars = {
     (ActorFunc)DemoTreLgt_Init,
     (ActorFunc)DemoTreLgt_Destroy,
     (ActorFunc)DemoTreLgt_Update,
-    (ActorFunc)DemoTreLgt_Draw
+    (ActorFunc)DemoTreLgt_Draw,
 };
 */
 

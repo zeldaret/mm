@@ -19,7 +19,7 @@ const ActorInit Obj_Lightblock_InitVars = {
     (ActorFunc)ObjLightblock_Init,
     (ActorFunc)ObjLightblock_Destroy,
     (ActorFunc)ObjLightblock_Update,
-    (ActorFunc)ObjLightblock_Draw
+    (ActorFunc)ObjLightblock_Draw,
 };
 */
 

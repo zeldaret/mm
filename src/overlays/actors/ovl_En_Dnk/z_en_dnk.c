@@ -18,7 +18,7 @@ const ActorInit En_Dnk_InitVars = {
     (ActorFunc)EnDnk_Init,
     (ActorFunc)EnDnk_Destroy,
     (ActorFunc)EnDnk_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

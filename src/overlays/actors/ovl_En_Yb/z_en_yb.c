@@ -19,7 +19,7 @@ const ActorInit En_Yb_InitVars = {
     (ActorFunc)EnYb_Init,
     (ActorFunc)EnYb_Destroy,
     (ActorFunc)EnYb_Update,
-    (ActorFunc)EnYb_Draw
+    (ActorFunc)EnYb_Draw,
 };
 */
 

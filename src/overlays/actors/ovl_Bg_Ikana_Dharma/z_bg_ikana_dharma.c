@@ -19,7 +19,7 @@ const ActorInit Bg_Ikana_Dharma_InitVars = {
     (ActorFunc)BgIkanaDharma_Init,
     (ActorFunc)BgIkanaDharma_Destroy,
     (ActorFunc)BgIkanaDharma_Update,
-    (ActorFunc)BgIkanaDharma_Draw
+    (ActorFunc)BgIkanaDharma_Draw,
 };
 */
 

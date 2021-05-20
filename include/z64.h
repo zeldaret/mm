@@ -76,7 +76,7 @@ typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
-} AnimatedTexture; // size = 0x8
+} AnimatedMaterial; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -153,12 +153,6 @@ typedef struct {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x4 */ Gfx** textureDls;
-    /* 0x8 */ u8* textureDlOffsets;
-} CyclingTextureParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -204,14 +198,6 @@ typedef struct {
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
 } FireObjLightParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u8 red;
-    /* 0x1 */ u8 green;
-    /* 0x2 */ u8 blue;
-    /* 0x3 */ u8 alpha;
-    /* 0x4 */ u8 lodFrac;
-} FlashingTexturePrimColor; // size = 0x5
 
 // Font textures are loaded into here
 typedef struct {
@@ -309,11 +295,6 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x0 */ u32 vromStart;
-    /* 0x4 */ u32 vromEnd;
-} ObjectFileTableEntry; // size = 0x8
-
-typedef struct {
     /* 0x00 */ u32 textSize;
     /* 0x04 */ u32 dataSize;
     /* 0x08 */ u32 rodataSize;
@@ -338,10 +319,14 @@ typedef struct {
 
 // Extra information in the save context that is not saved
 typedef struct {
-    /* 0x000 */ UNK_TYPE1 pad0[0xC];
+    /* 0x000 */ UNK_TYPE1 pad0[0x4];
+    /* 0x004 */ s16 unk04;
+    /* 0x006 */ UNK_TYPE1 pad06[0x6];
     /* 0x00C */ s32 sceneSetupIndex;
     /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x2E];
+    /* 0x014 */ UNK_TYPE1 pad14[0x10];
+    /* 0x024 */ s16 unk24;
+    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
     /* 0x042 */ s16 unk42;
     /* 0x044 */ UNK_TYPE1 pad44[0x34];
     /* 0x078 */ f32 unk78;
@@ -369,7 +354,8 @@ typedef struct {
     /* 0x00 */ u8 items[24];
     /* 0x18 */ u8 masks[24];
     /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ UNK_TYPE1 pad48[0x40];
+    /* 0x48 */ s32 unk48; // some bits are wallet upgrades
+    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
 } SaveContextInventory; // size = 0x88
 
 // Save Context that is only stored in an owl save
@@ -377,9 +363,11 @@ typedef struct {
     /* 0x0000 */ UNK_TYPE1 pad0[0x1];
     /* 0x0001 */ u8 unk1;
     /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ UNK_TYPE1 pad3[0x2];
+    /* 0x0003 */ u8 unk3;
+    /* 0x0004 */ u8 unk4;
     /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8E];
+    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
+    /* 0x0006 */ s16 unk_A00;
 } SaveContextOwl; // size = 0x2C94
 
 typedef struct {
@@ -389,8 +377,8 @@ typedef struct {
     /* 0x12 */ s16 currentLife;
     /* 0x14 */ s8 unk14;
     /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ s16 unk16;
-    /* 0x16 */ UNK_TYPE1 pad17[0x10];
+    /* 0x16 */ s16 currentRupees;
+    /* 0x18 */ UNK_TYPE1 pad18[0x10];
 } SaveContext_struct1; // size = 0x28
 
 typedef struct {
@@ -432,17 +420,6 @@ typedef struct {
     /* 0xC */ s16 alpha;
     /* 0xE */ s16 color;
 } TitleCardContext; // size = 0x10
-
-typedef struct {
-    struct {
-        s8 room;    // Room to switch to
-        s8 effects; // How the camera reacts during the transition
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ s16   params;
-} TransitionActorEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s32 topY;
@@ -630,14 +607,6 @@ typedef enum {
 } GfxPrintFlag;
 
 typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x2 */ u16 numKeyFrames;
-    /* 0x4 */ FlashingTexturePrimColor* primColors;
-    /* 0x8 */ Color_RGBA8* envColors;
-    /* 0xC */ u16* keyFrames;
-} FlashingTextureParams; // size = 0x10
-
-typedef struct {
     /* 0x00 */ void* loadedRamAddr;
     /* 0x04 */ u32 vromStart;
     /* 0x08 */ u32 vromEnd;
@@ -690,7 +659,9 @@ typedef struct {
     /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
     /* 0x0E78 */ u32 pictoFlags0;
     /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ UNK_TYPE1 padE80[0x78];
+    /* 0x0E80 */ UNK_TYPE1 padE80[0x5C];
+    /* 0x0EDC */ u32 bankRupees;
+    /* 0x0EE0 */ UNK_TYPE1 padEE0[0x18];
     /* 0x0EF8 */ u8 weekEventReg[100];
     /* 0x0F5C */ u32 mapsVisited;
     /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];
@@ -796,10 +767,13 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x1A];
+    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x25C */ u16 unk25C;
+    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
     /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} InterfaceContext; // size = 0x348
+} 
+InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
@@ -1054,11 +1028,17 @@ typedef struct {
     /* 0x11F22 */ u8 unk11F22;
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ UNK_TYPE1 pad12021[0x23];
+    /* 0x12021 */ u8 unk12021;
+    /* 0x12022 */ u8 choiceIndex;
+    /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ UNK_TYPE1 pad1206C[0x6C];
+    /* 0x1206C */ s32 unk1206C;
+    /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
+    /* 0x12078 */ s32 bankRupeesSelected;
+    /* 0x1207C */ s32 bankRupees; 
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
 
 // Full save context
@@ -1298,8 +1278,6 @@ typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt)
 
 typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
 
-typedef void(*global_context_func)(GlobalContext*);
-
 typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
 
 typedef struct {
@@ -1313,10 +1291,6 @@ typedef struct {
     /* 0x1C */ u32 unk1C;
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
-
-typedef void(*scene_header_func)(GlobalContext* ctxt, SceneCmd* entry);
-
-typedef void(*scene_proc_draw_func)(GlobalContext* ctxt, u32 segment, void* params);
 
 typedef struct Camera Camera;
 
@@ -1616,7 +1590,7 @@ struct ActorContext {
     /* 0x1FC */ Vec3f unk1FC;
     /* 0x208 */ UNK_TYPE1 pad208[0x48];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ UNK_TYPE1 pad254[0x14];
+    /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284
@@ -1656,17 +1630,15 @@ struct GlobalContext {
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
     /* 0x17104 */ AnimationContext animationCtx;
-    /* 0x17D88 */ SceneContext sceneContext;
+    /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
-    /* 0x18760 */ u8 transitionActorCount;
-    /* 0x18761 */ UNK_TYPE1 pad18761[0x3];
-    /* 0x18764 */ TransitionActorEntry* transitionActorList;
+    /* 0x18760 */ TransitionContext transitionCtx;
     /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
     /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF unk187FC;
     /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
-    /* 0x18840 */ u32 unk18840;
+    /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk18844;
     /* 0x18845 */ u8 unk18845;
     /* 0x18846 */ u16 sceneNumActorsToLoad;
@@ -1681,7 +1653,7 @@ struct GlobalContext {
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ void* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
-    /* 0x1886C */ AnimatedTexture* sceneTextureAnimations;
+    /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
     /* 0x18874 */ u8 unk18874;
     /* 0x18875 */ s8 unk18875;

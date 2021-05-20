@@ -23,18 +23,32 @@ const ActorInit En_Nnh_InitVars = {
     (ActorFunc)EnNnh_Init,
     (ActorFunc)EnNnh_Destroy,
     (ActorFunc)EnNnh_Update,
-    (ActorFunc)EnNnh_Draw
+    (ActorFunc)EnNnh_Draw,
 };
 
 ColliderCylinderInit D_80C08A00 = {
-    { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_TREE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
 extern Gfx D_06001510[];
 
-void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -46,7 +60,7 @@ void EnNnh_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80C08828(this);
 }
 
-void EnNnh_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -75,7 +89,7 @@ void func_80C088B8(EnNnh* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNnh_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
     s32 pad;
 
@@ -84,12 +98,11 @@ void EnNnh_Update(Actor *thisx, GlobalContext *globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
-void EnNnh_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s32 pad;
 
     func_8012C28C(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, D_06001510);
 }

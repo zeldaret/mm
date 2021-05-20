@@ -6,7 +6,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
     __OSContRequestHeaderAligned header;
     s32 ret = 0;
     s32 i;
-    u8* ptr = (u8 *)&__osContPifRam;
+    u8* ptr = (u8*)&__osContPifRam;
     s32 var = 2;
 
     __osSiGetAccess();
@@ -19,8 +19,8 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
                 ;
             }
 
-            *ptr++ = 1;                    
-            *ptr++ = 3;                    
+            *ptr++ = 1;
+            *ptr++ = 3;
             *ptr = CONT_CMD_REQUEST_STATUS;
             ptr += 4;
             *ptr = CONT_CMD_END;
@@ -32,7 +32,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
 
-        ptr = (u8 *)&__osContPifRam + port;
+        ptr = (u8*)&__osContPifRam + port;
 
         header = *((__OSContRequestHeaderAligned*)ptr);
 

@@ -22,12 +22,26 @@ const ActorInit Door_Ana_InitVars = {
     (ActorFunc)DoorAna_Init,
     (ActorFunc)DoorAna_Destroy,
     (ActorFunc)DoorAna_Update,
-    (ActorFunc)DoorAna_Draw
+    (ActorFunc)DoorAna_Draw,
 };
 
-static ColliderCylinderInit sCylinderInit = { 
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000008, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 50, 10, 0, { 0, 0, 0 } },
 };
 
@@ -50,7 +64,7 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (grottoType == DOORANA_TYPE_HIDDEN) {
             Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= 0x10; // always update 
+            this->actor.flags |= 0x10; // always update
         }
 
         Actor_SetScale(&this->actor, 0);
@@ -110,19 +124,19 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
     s32 entranceIndex;
     f32 yDist;
 
-    if (Math_StepToF( &this->actor.scale, 0.01f, 0.001f) != 0) { 
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f) != 0) {
         if ((this->actor.targetMode != 0) && (globalCtx->unk18875 == 0) && (globalCtx->unk18B4A == 0) &&
-          (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
+            (player->stateFlags1 & 0x80000000) && (player->unkAE7 == 0)) {
 
             if (dooranaType == DOORANA_TYPE_ADJACENT) {
-                // 300 uses scene exit addresses, not static DoorAna entrance addresses, 
+                // 300 uses scene exit addresses, not static DoorAna entrance addresses,
                 // eg. deku playground gets address in the NCT scene exit table
 
                 entranceIndex = GET_DOORANA_ADJACENT_ENTRANCE(this);
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[entranceIndex];
-                lblUnk_808E03B8: ; // required to convince compiler to not use delay slot
+            lblUnk_808E03B8:; // required to convince compiler to not use delay slot
 
-            } else { 
+            } else {
                 // unused in vanilla, the highest params bits can directly index an address
                 entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);
 
@@ -144,11 +158,11 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else { 
-            if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) 
-              && (this->actor.xzDistToPlayer <= 20.0f) 
-              && (yDist = this->actor.yDistToPlayer, (yDist >= -50.0f)) && (yDist <= 15.0f)) {
-                player->stateFlags1 |= 0x80000000; 
+        } else {
+            if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) &&
+                (this->actor.xzDistToPlayer <= 20.0f) && (yDist = this->actor.yDistToPlayer, (yDist >= -50.0f)) &&
+                (yDist <= 15.0f)) {
+                player->stateFlags1 |= 0x80000000;
                 this->actor.targetMode = 1;
 
             } else {
@@ -157,11 +171,11 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetScale( &this->actor, this->actor.scale.x);
+    Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
 void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
-    Actor* player;
+    ActorPlayer* player;
     s8 pad[2];
 
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
@@ -174,18 +188,18 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
 
     if ((this->actor.yDistToPlayer <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
         player = PLAYER;
-        player->world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
-        player->world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
+        player->base.world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
+        player->base.world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
     }
 }
 
-void DoorAna_Update(Actor *thisx, GlobalContext *globalCtx) {
-    DoorAna* this = THIS;    
+void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DoorAna* this = THIS;
     this->actionFunc(this, globalCtx);
     this->actor.shape.rot.y = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
 }
 
-void DoorAna_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* doorAnaDL = D_05000C40;
     func_800BE03C(globalCtx, doorAnaDL);
 }
