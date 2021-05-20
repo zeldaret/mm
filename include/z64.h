@@ -1590,7 +1590,7 @@ struct ActorContext {
     /* 0x1FC */ Vec3f unk1FC;
     /* 0x208 */ UNK_TYPE1 pad208[0x48];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ UNK_TYPE1 pad254[0x14];
+    /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284
