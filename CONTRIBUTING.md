@@ -127,7 +127,7 @@ Before opening a PR, walk through the following steps to ensure that your code c
 
 - `./format.sh` was run to apply standard formatting.
 - `make` successfully builds a matching ROM.
-- No new compiler warnings during the build process
+- No new compiler warnings were introduced during the build process
 - New variables & functions should follow standard naming conventions.
 - Comments and variables have correct spelling.
 
@@ -144,4 +144,4 @@ Once all comments are addressed, it is courteous to ping the reviewer on either 
 After all the comments are addressed and at least one contributor has approved the review, the project lead can then merge the code.
 The project lead is also responsible for ensuring that all of these procedures are followed.
 
-Throughout the process, you (the PR author) should update the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the status of your PR.
+Throughout the PR process, you (the author) should update the card on [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the appropriate column and labels.
