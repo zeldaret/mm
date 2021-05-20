@@ -23,7 +23,7 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, 
                                struct Actor* actor);
 
 extern AnimationHeader D_06000040;
-extern SkeletonHeader D_060024F0;
+extern FlexSkeletonHeader D_060024F0;
 
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
