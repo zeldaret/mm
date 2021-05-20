@@ -1360,13 +1360,13 @@ s32 func_80136A48(SkelAnime* skelAnime, f32 arg1) {
     return func_80136990(skelAnime, arg1, updateRate);
 }
 
-void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                     AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount) {
-    FlexSkeletonHeader* skeletonHeader;
+    SkeletonHeader* skeletonHeader;
 
     skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
-    skelAnime->limbCount = skeletonHeader->sh.limbCount + 1;
-    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->sh.skeletonSeg);
+    skelAnime->limbCount = skeletonHeader->limbCount + 1;
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
     if (limbDrawTbl == NULL) {
         skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
         skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
@@ -1403,13 +1403,13 @@ void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkelet
     }
 }
 
-void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                         AnimationHeader* animationSeg) {
-    FlexSkeletonHeader* skeletonHeader;
+    SkeletonHeader* skeletonHeader;
 
     skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
-    skelAnime->limbCount = skeletonHeader->sh.limbCount + 1;
-    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->sh.skeletonSeg);
+    skelAnime->limbCount = skeletonHeader->limbCount + 1;
+    skelAnime->skeleton = Lib_SegmentedToVirtual(skeletonHeader->skeletonSeg);
     skelAnime->limbDrawTbl = zelda_malloc(sizeof(*skelAnime->limbDrawTbl) * skelAnime->limbCount);
     skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
 

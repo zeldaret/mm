@@ -2599,9 +2599,9 @@ void func_801368CC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimation
 void SkelAnime_SetModeStop(SkelAnime* skelAnime);
 s32 func_80136990(SkelAnime* skelAnime, f32 arg1, f32 updateRate);
 s32 func_80136A48(SkelAnime* skelAnime, f32 arg1);
-void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
 void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
-void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg);
+void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg);
 void func_80136C84(SkelAnime* skelAnime);
 s32 SkelAnime_FrameUpdateMatrix(SkelAnime* skelAnime);
 s32 func_80136CF4(SkelAnime* skelAnime);
