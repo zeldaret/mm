@@ -8,8 +8,9 @@ s32 func_801370B0(SkelAnime* skelAnime);
 s32 func_8013713C(SkelAnime* skelAnime);
 void SkelAnime_ChangeAnimDefaultRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg);
 void func_80137748(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
-void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* LinkAnimationHeaderSeg,
-                              f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
+void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime,
+                              LinkAnimationHeader* LinkAnimationHeaderSeg, f32 playbackSpeed, f32 frame, f32 frameCount,
+                              u8 animationMode, f32 transitionRate);
 void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 void SkelAnime_LinkAnimetionLoaded(GlobalContext* globalCtx, AnimationEntryType0* entry);
 void SkelAnime_AnimationType1Loaded(GlobalContext* globalCtx, AnimationEntryType1* entry);
@@ -305,8 +306,8 @@ void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton
     }
 }
 
-void SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable,
-                    OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor) {
+void SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw,
+                    PostLimbDraw postLimbDraw, Actor* actor) {
     StandardLimb* rootLimb;
     s32 pad;
     Gfx* dList;
@@ -1213,8 +1214,9 @@ void SkelAnime_SetTransition(GlobalContext* globalCtx, SkelAnime* skelAnime, f32
     skelAnime->transitionStep = 1.0f / transitionRate;
 }
 
-void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* LinkAnimationHeaderSeg,
-                              f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate) {
+void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime,
+                              LinkAnimationHeader* LinkAnimationHeaderSeg, f32 playbackSpeed, f32 frame, f32 frameCount,
+                              u8 animationMode, f32 transitionRate) {
     skelAnime->mode = animationMode;
     if ((transitionRate != 0.0f) &&
         ((LinkAnimationHeaderSeg != skelAnime->linkAnimetionSeg) || (frame != skelAnime->animCurrentFrame))) {
@@ -1614,8 +1616,7 @@ void SkelAnime_ChangeAnim(SkelAnime* skelAnime, AnimationHeader* animationSeg, f
 }
 
 void SkelAnime_ChangeAnimDefaultStop(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
-    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common), 2,
-                         0.0f);
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common), 2, 0.0f);
 }
 
 void SkelAnime_ChangeAnimTransitionStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
@@ -1624,13 +1625,12 @@ void SkelAnime_ChangeAnimTransitionStop(SkelAnime* skelAnime, AnimationHeader* a
 }
 
 void SkelAnime_ChangeAnimPlaybackStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
-    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f,
-                         SkelAnime_GetFrameCount(&animationSeg->common), 2, 0.0f);
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common),
+                         2, 0.0f);
 }
 
 void SkelAnime_ChangeAnimDefaultRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg) {
-    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common), 0,
-                         0.0f);
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common), 0, 0.0f);
 }
 
 void SkelAnime_ChangeAnimTransitionRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate) {
@@ -1638,8 +1638,8 @@ void SkelAnime_ChangeAnimTransitionRepeat(SkelAnime* skelAnime, AnimationHeader*
 }
 
 void SkelAnime_ChangeAnimPlaybackRepeat(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed) {
-    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f,
-                         SkelAnime_GetFrameCount(&animationSeg->common), 0, 0.0f);
+    SkelAnime_ChangeAnim(skelAnime, animationSeg, playbackSpeed, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common),
+                         0, 0.0f);
 }
 
 void SkelAnime_AnimSetStop(SkelAnime* skelAnime) {
