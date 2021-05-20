@@ -7,6 +7,8 @@ struct EnMaYts;
 
 typedef void (*EnMaYtsActionFunc)(struct EnMaYts*, GlobalContext*);
 
+#define EN_MA_YTS_LIMB_COUNT 23
+
 typedef struct EnMaYts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -35,7 +37,7 @@ typedef struct EnMaYts {
     /* 0x32E */ s16 mouthTexIndex; // mouthTexIndex
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
-    /* 0x334 */ u16 unk_334;
+    /* 0x334 */ s16 unk_334;
     /* 0x336 */ s16 unk_336;
     /* 0x338 */ u16 textId; // messageTextId
     /* 0x33A */ char unk_33A[0x2];

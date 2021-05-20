@@ -156,16 +156,11 @@ glabel D_80B8E32C
 0x00630000
 */
 
-#ifdef NON_MATCHING
 void func_80B8D0BC(EnMaYts* this, s32 index) {
-    struct struct_80B8E1A8* temp_v1 = &D_80B8E1A8[index];
-
-    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk_00, 1.0f, 0.0f, SkelAnime_GetFrameCount(&temp_v1->unk_00->genericHeader), temp_v1->unk_08, temp_v1->unk_0C);
+    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f, 
+        SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->genericHeader), 
+        D_80B8E1A8[index].unk_08, D_80B8E1A8[index].unk_0C);
 }
-#else 
-void func_80B8D0BC(EnMaYts *this, s32 index);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D0BC.asm")
-#endif
 
 void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
@@ -318,11 +313,9 @@ extern CollisionCheckInfoInit2 D_80B8E19C;
 
 extern SkeletonHeader D_06013928;
 
-//void EnMaYts_Init(EnMaYts* this, GlobalContext *globalCtx);
-
-#ifdef NON_MATCHING
 void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
+    s32 pad;
 
     this->type = (this->actor.params & 0xF000) >> 0xC;
     if (func_80B8D2D8(this, globalCtx) == 0) {
@@ -345,7 +338,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     this->unk_1D8 = 0;
     this->unk_200 = 0;
-    this->unk_326 = 0;
+    this->blinkTimer = 0;
 
     if (this->type == 3) {
         this->unk_336 = 1;
@@ -371,19 +364,17 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         func_80B8D9E4(this);
-        //return;
     }
-    else if ((((s32) gSaveContext.perm.day % 5) == (u16)2) && ((u16)1 == gSaveContext.perm.isNight) && ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    else if (
+        (((s32) gSaveContext.perm.day % 5) == 2) && 
+        (1 == (s32)gSaveContext.perm.isNight) && 
+        ((gSaveContext.perm.weekEventReg[0x16] & 1))) {
         func_80B8D6BC(this);
-        //return;
     }
     else {
         func_80B8D698(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/EnMaYts_Init.asm")
-#endif
 
 void EnMaYts_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
@@ -493,68 +484,66 @@ void func_80B8D9E4(EnMaYts *this) {
 
 
 extern u16 D_80B8E32C;
-/*
+#ifdef NON_MATCHING
 void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
-    u32 sp24;
-    s32 temp_t6;
-    u16 temp_a1;
-    u16 temp_v1_2;
+    //u32 sp24;
+    //s32 temp_t6;
+    //u16 temp_a1;
+    //u16 temp_v1_2;
     u32 temp_v0;
-    void *temp_a0;
+    //void *temp_a0;
     CsCmdActorAction *temp_v1;
 
     if (func_800EE29C(globalCtx, 0x78U) != 0) {
         temp_v0 = func_800EE200(globalCtx, 0x78U);
-        temp_t6 = temp_v0 * 4;
-        sp24 = temp_v0;
-        temp_a0 = globalCtx + temp_t6;
+        //temp_t6 = temp_v0 * 4;
+        //sp24 = temp_v0;
+        //temp_a0 = globalCtx + temp_t6;
         temp_v1 = globalCtx->csCtx.actorActions[temp_v0];
         if (globalCtx->csCtx.frames == temp_v1->startFrame) {
-            temp_a1 = temp_v1->unk0;
-            if (D_80B8E32C != temp_a1) {
-                D_80B8E32C = temp_a1;
+            //temp_a1 = temp_v1->unk0;
+            if (temp_v1->unk0 != D_80B8E32C) {
+                D_80B8E32C = temp_v1->unk0;
                 this->unk_334 = 0;
-                temp_v1_2 = globalCtx->csCtx.actorActions[temp_v0]->unk0;
-                if (temp_v1_2 != (u16)1) {
-                    if (temp_v1_2 != 2) {
-                        if (temp_v1_2 != 3) {
-                            if (temp_v1_2 != 4) {
+                switch (globalCtx->csCtx.actorActions[temp_v0]->unk0) {
+                    case 1:
+                        this->unk_336 = 1;
+                        func_80B8D0BC(this, 0);
+                        break;
 
-                            } else {
-                                this->unk_336 = 1;
-                                func_80B8D0BC(this, 0x14);
-block_12:;
-                            }
-                        } else {
-                            this->unk_336 = 1;
-                            func_80B8D0BC(this, 0xC);
-                            goto block_12;
-                        }
-                    } else {
+                    case 2:
                         this->unk_336 = 0;
                         func_80B8D0BC(this, 2);
-                        goto block_12;
-                    }
-                } else {
-                    this->unk_336 = 1;
-                    func_80B8D0BC(this, 0);
-                    goto block_12;
+                        break;
+
+                    case 3:
+                        this->unk_336 = 1;
+                        func_80B8D0BC(this, 0xC);
+                        break;
+
+                    case 4:
+                        this->unk_336 = 1;
+                        func_80B8D0BC(this, 0x14);
+                        break;
+
+                    //default:
+                        //break;
                 }
             }
         }
-        func_800EDF24(this, globalCtx, sp24, globalCtx);
-        if ((D_80B8E32C == 2) && ((s16) this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
-            this->unk_334 = (s16) this->unk_334 + 1;
+        func_800EDF24(this, globalCtx, temp_v0, globalCtx);
+        if ((D_80B8E32C == 2) && (this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount))) {
+            this->unk_334++;
             func_80B8D0BC(this, 5);
-            //return;
         }
     } else {
         D_80B8E32C = 0x63;
         this->unk_336 = 1;
     }
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
+#endif
 
 void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
 
