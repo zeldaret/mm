@@ -44,7 +44,7 @@ When successful, you should be able to build a matching ROM before you start mak
 ### First Contribution
 
 Usually, the best place to get started is to decompile an actor overlay. 
-An *actor* is any thing in the game that moves or performs actions or interactions: Link is an actor, enemies are actors, NPCs are actors, etc.
+An *actor* is any thing in the game that moves or performs actions or interactions. This includes things like Link, enemies, NPCs, doors, pots, etc.
 
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
@@ -77,7 +77,7 @@ These files demonstrate the following:
 - Macros and enum constants are `SCREAMING_SNAKE_CASE` (`DM_RAVINE_STATE_ACTIVE`)
 - Auxiliary structs, enums, and constants are defined in the header file
 - Trailing commas in array and struct definitions (see `EnJcMatoDamageTable`)
-- Constants converted to whichever looks best in context: hexadecimal, decimal, float, or boolean
+- Constants converted to whichever looks best in context: hexadecimal, decimal, or float
     - Rotation angles should always be in hexadecimal
 - Define macros for bitwise access to `actor->params`
 
@@ -127,7 +127,7 @@ Before opening a PR, walk through the following steps to ensure that your code c
 
 - `./format.sh` was run to apply standard formatting.
 - `make` successfully builds a matching ROM.
-- No new compiler warnings were introduced during the build process
+- No new compiler warnings were introduced during the build process.
 - New variables & functions should follow standard naming conventions.
 - Comments and variables have correct spelling.
 
