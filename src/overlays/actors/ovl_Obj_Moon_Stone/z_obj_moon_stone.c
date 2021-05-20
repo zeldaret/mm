@@ -43,7 +43,7 @@ extern Gfx D_06000C80[];
 void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
 
-    Actor_SetScale(this, 0.3f);
+    Actor_SetScale(&this->actor, 0.3f);
     this->unk194 = (this->actor.params & 0xF000) >> 0xC;
     this->actor.targetMode = 0;
     this->actor.shape.yOffset = 25.0f;
@@ -78,14 +78,14 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
     sp1A -= player->base.shape.rot.y;
-    if (func_800B84D0(this, globalCtx)) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         this->actor.colChkInfo.health = 1;
-        func_801518B0(globalCtx, 0x5E3U, this);
+        func_801518B0(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(this, globalCtx, 80.0f);
+            func_800B8614(&this->actor, globalCtx, 80.0f);
         }
     }
 }
@@ -95,7 +95,7 @@ void func_80C066F8(ObjMoonStone* this) {
 }
 
 void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (func_800B867C(this, globalCtx) != 0) {
+    if (func_800B867C(&this->actor, globalCtx) != 0) {
         this->actor.colChkInfo.health = 0;
         func_80C0662C(this);
     }
@@ -117,12 +117,12 @@ void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
         }
     }
     if (this->actor.draw) {
-        if (Actor_HasParent(this, globalCtx)) {
+        if (Actor_HasParent(&this->actor, globalCtx)) {
             this->actor.parent = NULL;
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            func_800B8A1C(this, globalCtx, 0x96, 100.0f, 30.0f);
+            func_800B8A1C(&this->actor, globalCtx, 0x96, 100.0f, 30.0f);
         }
     }
 }
