@@ -32,12 +32,12 @@ typedef struct EnMaYts {
     /* 0x328 */ s16 unk_328; // blink something.
     /* 0x32A */ s16 eyeTexIndex;
     /* 0x32C */ s16 unk_32C;
-    /* 0x32E */ s16 unk_32E; // mouthTexIndex
+    /* 0x32E */ s16 mouthTexIndex; // mouthTexIndex
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
     /* 0x334 */ u16 unk_334;
     /* 0x336 */ s16 unk_336;
-    /* 0x338 */ u16 unk_338; // messageTextId
+    /* 0x338 */ u16 textId; // messageTextId
     /* 0x33A */ char unk_33A[0x2];
 } EnMaYts; // size = 0x33C
 
