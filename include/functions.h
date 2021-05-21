@@ -900,7 +900,7 @@ void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s16 index);
 // void func_800BDCF4(void);
 void func_800BDFB0(void);
-void func_800BDFC0(GlobalContext* globalCtx, UNK_TYPE4 uParm2);
+void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
 void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 // void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
