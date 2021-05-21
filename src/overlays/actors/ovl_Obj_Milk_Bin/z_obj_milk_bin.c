@@ -48,7 +48,6 @@ static ColliderCylinderInit sCylinderInit = {
 };
 */
 
-#ifdef NON_MATCHING
 void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
@@ -60,12 +59,9 @@ void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_198 = thisx->params;
 
     if ((this->unk_198 == 2) && !(gSaveContext.perm.weekEventReg[0x34] & 1)) {
-        this->unk_194 = 1;
+        this->unk_194 += 1;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Init.asm")
-#endif
 
 void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
@@ -73,9 +69,9 @@ void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->unk_148);
 }
 
-#ifdef NON_MATCHING
-void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
     ObjMilkBin* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
 
     if (this->unk_198 == 1) {
         if (gSaveContext.perm.weekEventReg[0x16] & 1) {
@@ -97,9 +93,6 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->unk_148.base);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Update.asm")
-#endif
 
 // gMilkBinMilkJarDL
 extern Gfx D_060004B0[];
