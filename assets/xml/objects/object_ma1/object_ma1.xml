@@ -33,10 +33,10 @@
         -->
         <!-- Sitting -->
         <!-- 
-        <Animation Name="object_ma1_Anim_007D98" Offset="0x7D98" />
+        <Animation Name=gRomaniSittingAnim" Offset="0x7D98" />
 
         <Animation Name="object_ma1_Anim_00852C" Offset="0x852C" />
-        <Animation Name="object_ma1_Anim_008F6C" Offset="0x8F6C" />
+        <Animation Name="gRomaniSittingSadAnim" Offset="0x8F6C" />
         <Animation Name="gRomaniIdleAnim" Offset="0x9E58" />
 
         <DList Name="object_ma1_DL_00D060" Offset="0xD060" />

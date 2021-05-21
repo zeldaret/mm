@@ -130,13 +130,12 @@ glabel D_80B8E32C
 0x00630000
 */
 
-void EnMaYts_UpdateAnim(EnMaYts* this, s32 index) {
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f, 
         SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->common), 
         D_80B8E1A8[index].unk_08, D_80B8E1A8[index].unk_0C);
 }
 
-// Suggested name: EnMaYts_UpdatePosition
 void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
     s16 phi_a3 = this->unk_32C == 2 ? 1 : 0;
@@ -153,38 +152,37 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
 
-
+// SetAnimPerType?
 void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
-    switch (this->type)
-    {
-    case 0:
+    switch (this->type) {
+    case EN_NA_YTS_TYPE_0:
         this->actor.targetMode = 0;
-        EnMaYts_UpdateAnim(this, 0);
+        EnMaYts_ChangeAnim(this, 0);
         break;
 
-    case 1:
+    case EN_NA_YTS_TYPE_SITTING:
         this->actor.targetMode = 6;
-        if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
-            EnMaYts_UpdateAnim(this, 14);
+        if ((CURRENT_DAY == 1) || (gSaveContext.perm.weekEventReg[0x16] & 1)) {
+            EnMaYts_ChangeAnim(this, 14);
         }
         else {
-            EnMaYts_UpdateAnim(this, 18);
+            EnMaYts_ChangeAnim(this, 18);
         }
         break;
 
-    case 2:
+    case EN_NA_YTS_TYPE_SLEEPING:
         this->actor.targetMode = 0;
         this->actor.draw = EnMaYts_DrawSleeping;
-        EnMaYts_UpdateAnim(this, 0);
+        EnMaYts_ChangeAnim(this, 0);
         break;
 
-    case 3:
+    case EN_NA_YTS_TYPE_BOW:
         this->actor.targetMode = 0;
-        EnMaYts_UpdateAnim(this, 0);
+        EnMaYts_ChangeAnim(this, 0);
         break;
 
     default:
-        EnMaYts_UpdateAnim(this, 0);
+        EnMaYts_ChangeAnim(this, 0);
         break;
     }
 }
@@ -199,11 +197,11 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
     s32 temp_hi;
 
     switch (this->type) {
-        case 3:
+        case EN_NA_YTS_TYPE_BOW:
             break;
 
-        case 1:
-            switch CURRENT_DAY {
+        case EN_NA_YTS_TYPE_SITTING:
+            switch (CURRENT_DAY) {
                 default:
                     break;
 
@@ -227,7 +225,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             }
             break;
 
-        case 0:
+        case EN_NA_YTS_TYPE_0:
             if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
                 return 0;
             }
@@ -236,7 +234,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             }
             break;
 
-        case 2:
+        case EN_NA_YTS_TYPE_SLEEPING:
             if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
                 return 0;
             }
@@ -292,7 +290,7 @@ extern CollisionCheckInfoInit2 D_80B8E19C;
 
 extern FlexSkeletonHeader D_06013928;
 
-#define EN_MA_YTS_PARSE_TYPE(params) (((params) & 0xF000) >> 0xC)
+#define EN_MA_YTS_PARSE_TYPE(params) (((params) & 0xF000) >> 12)
 
 void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
@@ -310,7 +308,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B8E170);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B8E19C);
 
-    if (this->type == 2) {
+    if (this->type == EN_NA_YTS_TYPE_SLEEPING) {
         this->collider.dim.radius = 40;
     }
 
@@ -321,10 +319,10 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     this->unk_200 = 0;
     this->blinkTimer = 0;
 
-    if (this->type == 3) {
-        this->unk_336 = 1;
+    if (this->type == EN_NA_YTS_TYPE_BOW) {
+        this->hasBow = true;
     } else {
-        this->unk_336 = 0;
+        this->hasBow = false;
     }
 
     if ((1 == CURRENT_DAY) || (gSaveContext.perm.weekEventReg[0x16] & 1)) {
@@ -339,7 +337,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         this->unk_32C = 2;
     }
 
-    if (this->type == 3) {
+    if (this->type == EN_NA_YTS_TYPE_BOW) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -461,7 +459,7 @@ void func_80B8D9E4(EnMaYts *this) {
     this->actionFunc = func_80B8DA28;
 }
 
-
+// CutsceneHandler?
 extern u16 D_80B8E32C;
 #ifdef NON_MATCHING
 void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
@@ -486,23 +484,23 @@ void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
                 this->unk_334 = 0;
                 switch (globalCtx->csCtx.actorActions[temp_v0]->unk0) {
                     case 1:
-                        this->unk_336 = 1;
-                        EnMaYts_UpdateAnim(this, 0);
+                        this->hasBow = true;
+                        EnMaYts_ChangeAnim(this, 0);
                         break;
 
                     case 2:
-                        this->unk_336 = 0;
-                        EnMaYts_UpdateAnim(this, 2);
+                        this->hasBow = false;
+                        EnMaYts_ChangeAnim(this, 2);
                         break;
 
                     case 3:
-                        this->unk_336 = 1;
-                        EnMaYts_UpdateAnim(this, 0xC);
+                        this->hasBow = true;
+                        EnMaYts_ChangeAnim(this, 0xC);
                         break;
 
                     case 4:
-                        this->unk_336 = 1;
-                        EnMaYts_UpdateAnim(this, 0x14);
+                        this->hasBow = true;
+                        EnMaYts_ChangeAnim(this, 0x14);
                         break;
 
                     //default:
@@ -513,19 +511,21 @@ void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
         func_800EDF24(this, globalCtx, temp_v0, globalCtx);
         if ((D_80B8E32C == 2) && (this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount))) {
             this->unk_334++;
-            EnMaYts_UpdateAnim(this, 5);
+            EnMaYts_ChangeAnim(this, 5);
         }
     } else {
         D_80B8E32C = 0x63;
-        this->unk_336 = 1;
+        this->hasBow = true;
     }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
 #endif
 
-void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
 
+// ContinueTalking?
+// Select the following dialogue based on the current one, and an appropiate face expression
+void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
         case 0x335F:
@@ -634,7 +634,7 @@ void EnMaYts_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     if (limbIndex == EN_MA_YTS_LIMB_HAIR_TOP) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
-    else if ((limbIndex == EN_MA_YTS_LIMB_ARM_RIGHT) && (this->unk_336 == 1)) {
+    else if ((limbIndex == EN_MA_YTS_LIMB_ARM_RIGHT) && (this->hasBow == true)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, &D_060003B0);
         CLOSE_DISPS(globalCtx->state.gfxCtx);

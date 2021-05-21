@@ -31,7 +31,7 @@ typedef enum {
     /* 18 */ EN_MA_YTS_LIMB_HAND_LEFT,
     /* 19 */ EN_MA_YTS_LIMB_ARM_RIGHT,
     /* 20 */ EN_MA_YTS_LIMB_FOREARM_RIGHT,
-    /* 21 */ EN_MA_YTS_LIMB_HAND_RIGHT,
+    /* 21 */ EN_MA_YTS_LIMB_HAND_RIGHT
 } EnMaYtsLimbs;
 
 typedef struct EnMaYts {
@@ -48,16 +48,25 @@ typedef struct EnMaYts {
     /* 0x326 */ s16 blinkTimer;
     /* 0x328 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex
     /* 0x32A */ s16 eyeTexIndex;
-    /* 0x32C */ s16 unk_32C;
+    /* 0x32C */ s16 unk_32C; // flag?
     /* 0x32E */ s16 mouthTexIndex;
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
     /* 0x334 */ s16 unk_334;
-    /* 0x336 */ s16 unk_336; // hasBow?
+    /* 0x336 */ s16 hasBow;
     /* 0x338 */ u16 textId;
     /* 0x33A */ char unk_33A[0x2];
 } EnMaYts; // size = 0x33C
 
 extern const ActorInit En_Ma_Yts_InitVars;
+
+typedef enum {
+    /* 0 */ EN_NA_YTS_TYPE_0,
+    /* 1 */ EN_NA_YTS_TYPE_SITTING,
+    /* 2 */ EN_NA_YTS_TYPE_SLEEPING,
+    /* 3 */ EN_NA_YTS_TYPE_BOW // EN_NA_YTS_TYPE_CUTSCENE?
+} EnMaYtsType;
+
+#define EN_MA_YTS_PARAM(enMaYtsType) ((enMaYtsType) << 12)
 
 #endif // Z_EN_MA_YTS_H
