@@ -190,6 +190,9 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
 }
 
 
+// ShouldSpawn?
+// IsAbleToSpawn?
+// CheckValidSpawn?
 #ifdef NON_EQUIVALENT
 s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
     s16 temp_v0;
@@ -287,27 +290,28 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
 extern ColliderCylinderInit D_80B8E170;
 extern CollisionCheckInfoInit2 D_80B8E19C;
 
-extern SkeletonHeader D_06013928;
+extern FlexSkeletonHeader D_06013928;
+
+#define EN_MA_YTS_PARSE_TYPE(params) (((params) & 0xF000) >> 0xC)
 
 void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
     s32 pad;
 
-    this->type = (this->actor.params & 0xF000) >> 0xC;
-    if (func_80B8D2D8(this, globalCtx) == 0) {
+    this->type = EN_MA_YTS_PARSE_TYPE(this->actor.params);
+    if (!func_80B8D2D8(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTbl, this->transitionDrawTbl, EN_MA_YTS_LIMB_TABLE_COUNT);
     func_80B8D1E8(this, globalCtx);
 
-
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B8E170);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B8E19C);
 
     if (this->type == 2) {
-        this->collider.dim.radius = 0x28;
+        this->collider.dim.radius = 40;
     }
 
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -323,7 +327,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         this->unk_336 = 0;
     }
 
-    if (((u16)1 == CURRENT_DAY) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((1 == CURRENT_DAY) || (gSaveContext.perm.weekEventReg[0x16] & 1)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -384,9 +388,9 @@ void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
                 this->textId = 0x335F;
             } else {
                 EnMaYts_SetFaceExpression(this, (u16)4, (u16)3);
-                func_801518B0(globalCtx, 0x3362U, &this->actor);
+                func_801518B0(globalCtx, 0x3362, &this->actor);
                 this->textId = 0x3362;
-                func_80151BB4((s32) globalCtx, 5U);
+                func_80151BB4(globalCtx, 5);
             }
         } else if (func_8012403C(globalCtx) != 0) {
             if (!(gSaveContext.perm.weekEventReg[0x41] & 0x40)) {
@@ -396,9 +400,9 @@ void func_80B8D6F8(EnMaYts *this, GlobalContext *globalCtx) {
                 this->textId = 0x3363;
             } else {
                 EnMaYts_SetFaceExpression(this, (u16)4, (u16)2);
-                func_801518B0(globalCtx, 0x3366U, &this->actor);
+                func_801518B0(globalCtx, 0x3366, &this->actor);
                 this->textId = 0x3366;
-                func_80151BB4((s32) globalCtx, 5U);
+                func_80151BB4(globalCtx, 5);
             }
         } else if (!(gSaveContext.perm.weekEventReg[0x15] & 0x20)) {
             EnMaYts_SetFaceExpression(this, (u16)0, (u16)0);
