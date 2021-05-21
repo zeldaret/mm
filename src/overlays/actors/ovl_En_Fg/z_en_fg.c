@@ -15,7 +15,7 @@ void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnFg_IdleFalling(EnFg* this, GlobalContext* globalCtx);
+void EnFg_Jump(EnFg* this, GlobalContext* globalCtx);
 void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx);
 void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx);
 void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
@@ -154,7 +154,7 @@ s32 EnFg_GetDamageEffect(EnFg* this) {
     return ret;
 }
 
-void EnFg_IdleJumping(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
     Actor* ac;
     s16 rotY;
     s16 rotX;
@@ -208,13 +208,13 @@ void EnFg_IdleJumping(EnFg* this, GlobalContext* globalCtx) {
                 EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
-                this->actionFunc = EnFg_IdleFalling;
+                this->actionFunc = EnFg_Jump;
             }
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-void EnFg_IdleFalling(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
     Actor* ac;
     s32 pad;
     s16 rotY;
@@ -261,7 +261,7 @@ void EnFg_IdleFalling(EnFg* this, GlobalContext* globalCtx) {
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
                 EnFg_UpdateAnimation(&this->skelAnime, 0);
-                this->actionFunc = EnFg_IdleJumping;
+                this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
                 Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -307,7 +307,7 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags |= 0x4000;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = -1.6f;
-    this->actionFunc = EnFg_IdleJumping;
+    this->actionFunc = EnFg_Idle;
 }
 
 void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
