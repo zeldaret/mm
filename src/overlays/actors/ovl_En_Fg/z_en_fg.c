@@ -93,7 +93,7 @@ s32 func_80A2D280(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount((GenericAnimationHeader*)sAnimations[animIndex].animationSeg);
+            frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->genericHeader);
         }
         SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
                                 sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
@@ -131,19 +131,19 @@ s32 func_80A2D42C(EnFg* this) {
     if (this->collider.base.acFlags & 2) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
-                ret = 2;
+                ret = FG_DMGEFFECT_DEKUSTICK;
                 break;
             case 15:
-                ret = 3;
+                ret = FG_DMGEFFECT_HOOKSHOT;
                 break;
             case 14:
-                ret = 4;
+                ret = FG_DMGEFFECT_ARROW;
                 break;
             case 3:
-                ret = 5;
+                ret = FG_DMGEFFECT_ICEARROW;
                 break;
             default:
-                ret = 1;
+                ret = FG_DMGEFFECT_EXPLOSION;
                 break;
         }
         this->collider.base.acFlags &= ~2;
@@ -158,7 +158,7 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
     s16 rotX;
 
     switch (func_80A2D42C(this)) {
-        case 2:
+        case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E4);
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -169,9 +169,9 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actor.world.pos.y = this->actor.floorHeight + 2.0f;
             this->actionFunc = EnFg_DoNothing;
             break;
-        case 3:
+        case FG_DMGEFFECT_HOOKSHOT:
             break;
-        case 4:
+        case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~1;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
@@ -184,11 +184,11 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
             this->actionFunc = EnFg_DoNothing;
             break;
-        case 1:
+        case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E3);
             if(1) {}
-            this->actor.params = 5;
+            this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -219,7 +219,7 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
     s16 rotX;
 
     switch (func_80A2D42C(this)) {
-        case 4:
+        case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~1;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -233,9 +233,9 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
             this->actionFunc = EnFg_DoNothing;
             break;
-        case 3:
+        case FG_DMGEFFECT_HOOKSHOT:
             break;
-        case 1:
+        case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E3);
             func_80A2D280(&this->skelAnime, 0);

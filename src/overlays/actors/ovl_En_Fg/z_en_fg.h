@@ -9,14 +9,25 @@ typedef void (*EnFgActionFunc)(struct EnFg*, GlobalContext*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 00 */ FROG_YELLOW,   // Mountain Village
-    /* 01 */ FROG_CYAN,     // Woodfall Temple
-    /* 02 */ FROG_PINK,     // Great Bay Temple
-    /* 03 */ FROG_BLUE,     // Southern Swamp
-    /* 04 */ FROG_WHITE,    // Laundry Pool
-    /* 05 */ FROG_BLACK,    // Extra frog??? Uncertain
+    /* 0x00 */ FG_YELLOW,
+    /* 0x01 */ FG_CYAN,
+    /* 0x02 */ FG_PINK,
+    /* 0x03 */ FG_BLUE,
+    /* 0x04 */ FG_WHITE,
+    /* 0x05 */ FG_BLACK, // All frogs are blackened when hit by an explosion
 } FrogType;
 
+typedef enum {
+    /* 0x00 */ FG_DMGEFFECT_NONE,
+    /* 0x01 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
+    /* 0x02 */ FG_DMGEFFECT_DEKUSTICK,
+    /* 0x03 */ FG_DMGEFFECT_HOOKSHOT,
+    /* 0x04 */ FG_DMGEFFECT_ARROW,
+    /* 0x05 */ FG_DMGEFFECT_ICEARROW,
+} FrogDamageEffect;
+
+// TODO: This is a common struct and may be moved to a more global header
+// Typically the frame/transition data is f32, not s16. 
 typedef struct {
     /* 0x00 */ AnimationHeader* animationSeg;
     /* 0x04 */ f32 playbackSpeed;
