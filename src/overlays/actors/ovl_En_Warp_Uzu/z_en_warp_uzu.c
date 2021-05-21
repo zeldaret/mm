@@ -64,7 +64,7 @@ extern UNK_TYPE D_06000EC0;
 void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarpUzu* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, &sInitChain);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     thisx->targetMode = 0;
     func_80A66208(this, globalCtx);

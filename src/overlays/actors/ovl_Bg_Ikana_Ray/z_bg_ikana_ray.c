@@ -57,10 +57,10 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
     ColliderCylinder* collision = &this->collision;
 
-    Actor_ProcessInitChain(this, sInitChain);
+    Actor_ProcessInitChain(&this->base, sInitChain);
     Collider_InitCylinder(globalCtx, collision);
-    Collider_SetCylinder(globalCtx, collision, this, &sCylinderInit);
-    Collider_UpdateCylinder(this, &this->collision);
+    Collider_SetCylinder(globalCtx, collision, &this->base, &sCylinderInit);
+    Collider_UpdateCylinder(&this->base, &this->collision);
 
     this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
