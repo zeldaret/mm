@@ -94,7 +94,7 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx)
     this->actor.colChkInfo.mass = 0xFF;
     SysMatrix_SetStateRotationAndTranslation(
         this->actor.world.pos.x, this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
-        this->actor.world.pos.z, &this->actor.shape);
+        this->actor.world.pos.z, &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
     Collider_UpdateSpheres(0, &this->collider);
 }
@@ -185,7 +185,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switchFlagResult = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = 0;
-    Actor_ProcessInitChain(&this->actor, &sInitChain);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (switchFlagResult != 0) {

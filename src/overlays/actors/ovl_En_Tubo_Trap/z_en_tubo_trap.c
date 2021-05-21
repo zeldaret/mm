@@ -81,7 +81,7 @@ void func_8093089C(EnTuboTrap* this, GlobalContext* globalCtx) {
     s32 dropCount = func_800A8150(itemParam);
 
     if (dropCount >= 0) {
-        Item_DropCollectible(globalCtx, &this->actor.world, ((this->actor.params & 0x7F) << 8) | dropCount);
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ((this->actor.params & 0x7F) << 8) | dropCount);
     }
 }
 
@@ -124,7 +124,7 @@ void func_809308F4(EnTuboTrap* this, GlobalContext* globalCtx) {
             arg5 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &pos, &vel, actorPos, -0xF0, arg5, 0x14, 0, 0,
-                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, &D_05018090);
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, D_05018090);
     }
 
     func_800BBFB0(globalCtx, actorPos, 30.0f, 4, 0x14, 0x32, 0);
@@ -172,7 +172,7 @@ void func_80930B60(EnTuboTrap* this, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &pos, &vel, actorPos, -0xAA, arg5, 0x32, 5, 0,
-                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, &D_05018090);
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, D_05018090);
     }
 }
 
@@ -185,7 +185,7 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f)) {
         func_80930B60(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2817);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2817);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -193,8 +193,8 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
     if ((this->collider.base.atFlags & AT_BOUNCED) != 0) {
         this->collider.base.atFlags &= ~AT_BOUNCED;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x1808);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x1808);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -202,8 +202,8 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
     if ((this->collider.base.acFlags & AC_HIT) != 0) {
         this->collider.base.acFlags &= ~AC_HIT;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2802);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2802);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -212,8 +212,8 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_HIT;
         if (&player->base == this->collider.base.at) {
             func_809308F4(this, globalCtx);
-            func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
-            func_800F0568(globalCtx, &player2->base.world, 0x28, 0x83E);
+            func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+            func_800F0568(globalCtx, &player2->base.world.pos, 0x28, 0x83E);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -221,7 +221,7 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
     }
     if (((this->actor.bgCheckFlags & 8) != 0) || ((this->actor.bgCheckFlags & 1) != 0)) {
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }

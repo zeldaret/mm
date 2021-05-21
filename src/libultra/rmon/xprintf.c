@@ -35,11 +35,11 @@
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
 
-int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
+int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;
     x.nchar = 0;
     while (1) {
-        unsigned char* s;
+        const char* s;
         unsigned char c;
         unsigned char* t;
 
@@ -52,11 +52,11 @@ int _Printf(printf_func pfn, void* arg, char* fmt, va_list ap) {
         while ((c = *s) != 0 && c != '%') {
             s++;
         }
-        _PROUT(fmt, s - fmt);
+        _PROUT((char*)fmt, s - fmt);
         if (c == 0) {
             return x.nchar;
         }
-        fmt = (char*)++s;
+        fmt = ++s;
         x.flags = 0;
         // TODO the cast isn't necessary because strchr should take it in as const, but it currently doesn't
         for (; (t = strchr((char*)fchar, *s)) != NULL; s++) {

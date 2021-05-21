@@ -225,7 +225,7 @@ void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
         particle->pos.y += particle->velocity.y;
         particle->pos.z += particle->velocity.z;
 
-        (*particle->update)(globalCtx, index, particle);
+        particle->update(globalCtx, index, particle);
     }
 }
 
@@ -250,7 +250,7 @@ void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
 void EffectSS_DrawParticle(GlobalContext* globalCtx, s32 index) {
     EffectSs* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
-        (*entry->draw)(globalCtx, index, entry);
+        entry->draw(globalCtx, index, entry);
     }
 }
 
