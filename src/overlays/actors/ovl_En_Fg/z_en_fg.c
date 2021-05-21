@@ -1,33 +1,35 @@
+/*
+ * File: z_en_fg.c
+ * Overlay: En_Fg
+ * Description: Likely beta frogs, a version where they were all enemies
+ */
+
 #include "z_en_fg.h"
 
 #define FLAGS 0x00004209
 
 #define THIS ((EnFg*)thisx)
 
-/*
-This may be a beta file of frogs, a version of them where they were all enemies
-*/
-
 void EnFg_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A2D778(EnFg* this, GlobalContext* globalCtx);
+void EnFg_IdleFalling(EnFg* this, GlobalContext* globalCtx);
 void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx);
-void func_80A2D9DC(EnFg* this, GlobalContext* globalCtx);
+void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx);
 void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-extern u64 gDust1Tex[];
-extern u64 gDust2Tex[];
-extern u64 gDust3Tex[];
-extern u64 gDust4Tex[];
-extern u64 gDust5Tex[];
-extern u64 gDust6Tex[];
-extern u64 gDust7Tex[];
-extern u64 gDust8Tex[];
+extern u64 gDust1Tex[]; // D_0408DBE0
+extern u64 gDust2Tex[]; // D_0408DFE0
+extern u64 gDust3Tex[]; // D_0408E3E0
+extern u64 gDust4Tex[]; // D_0408E7E0
+extern u64 gDust5Tex[]; // D_0408EBE0
+extern u64 gDust6Tex[]; // D_0408EFE0
+extern u64 gDust7Tex[]; // D_0408F3E0
+extern u64 gDust8Tex[]; // D_0408F7E0
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
 extern AnimationHeader D_060007BC;
@@ -84,7 +86,7 @@ static EnFgAnimation sAnimations[] = {
     { &D_060007BC, 1.0f, 0, -1, 2, -4 },
 };
 
-s32 func_80A2D280(SkelAnime* skelAnime, s16 animIndex) {
+s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret;
 
@@ -125,7 +127,7 @@ u8 EnFg_UpdateHealth(EnFg* this) {
     return this->actor.colChkInfo.health;
 }
 
-s32 func_80A2D42C(EnFg* this) {
+s32 EnFg_GetDamageEffect(EnFg* this) {
     s32 ret = 0;
 
     if (this->collider.base.acFlags & 2) {
@@ -152,12 +154,12 @@ s32 func_80A2D42C(EnFg* this) {
     return ret;
 }
 
-void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_IdleJumping(EnFg* this, GlobalContext* globalCtx) {
     Actor* ac;
     s16 rotY;
     s16 rotX;
 
-    switch (func_80A2D42C(this)) {
+    switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E4);
@@ -196,29 +198,29 @@ void func_80A2D4B8(EnFg* this, GlobalContext* globalCtx) {
             this->actor.velocity.y = 10.0f;
             this->actor.speedXZ = 3.0f;
             this->actor.gravity = -0.8f;
-            this->unk_2FA = 1;
+            this->knockbackCounter = 1;
             this->timer = 0;
-            this->actionFunc = func_80A2D9DC;
+            this->actionFunc = EnFg_Knockback;
             break;
         default:
             if (DECR(this->timer) == 0) {
                 Audio_PlayActorSound2(this, 0x28B1);
-                func_80A2D280(&this->skelAnime, 3);
+                EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
-                this->actionFunc = func_80A2D778;
+                this->actionFunc = EnFg_IdleFalling;
             }
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_IdleFalling(EnFg* this, GlobalContext* globalCtx) {
     Actor* ac;
     s32 pad;
     s16 rotY;
     s16 rotX;
 
-    switch (func_80A2D42C(this)) {
+    switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~1;
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -238,8 +240,8 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(this, 0x28E3);
-            func_80A2D280(&this->skelAnime, 0);
-            this->actor.params = 5;
+            EnFg_UpdateAnimation(&this->skelAnime, 0);
+            this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -247,9 +249,9 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
             this->actor.velocity.y = 10.0f;
             this->actor.speedXZ = 3.0f;
             this->actor.gravity = -0.8f;
-            this->unk_2FA = 1;
+            this->knockbackCounter = 1;
             this->timer = 0;
-            this->actionFunc = func_80A2D9DC;
+            this->actionFunc = EnFg_Knockback;
             break;
         default:
             if (func_801378B8(&this->skelAnime, 8.0f)) {
@@ -258,8 +260,8 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
-                func_80A2D280(&this->skelAnime, 0);
-                this->actionFunc = func_80A2D4B8;
+                EnFg_UpdateAnimation(&this->skelAnime, 0);
+                this->actionFunc = EnFg_IdleJumping;
                 this->actor.velocity.y = 0.0f;
             } else {
                 Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -270,12 +272,12 @@ void func_80A2D778(EnFg* this, GlobalContext* globalCtx) {
 void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx) {
 }
 
-void func_80A2D9DC(EnFg* this, GlobalContext* globalCtx) {
+void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx) {
     if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
-        this->unk_2FA++;
-        if (this->unk_2FA < 4) {
+        this->knockbackCounter++;
+        if (this->knockbackCounter < 4) {
             this->actor.shape.rot.x += 0x1000;
-            this->actor.velocity.y = 10.0f / this->unk_2FA;
+            this->actor.velocity.y = 10.0f / this->knockbackCounter;
         } else {
             this->actionFunc = EnFg_DoNothing;
         }
@@ -298,14 +300,14 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, NULL, this->limbDrawTbl, this->transitionDrawTbl, 24);
-    func_80A2D280(&this->skelAnime, 0);
+    EnFg_UpdateAnimation(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     this->actor.flags |= 0x4000;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = -1.6f;
-    this->actionFunc = func_80A2D4B8;
+    this->actionFunc = EnFg_IdleJumping;
 }
 
 void EnFg_Destroy(Actor* thisx, GlobalContext* globalCtx) {

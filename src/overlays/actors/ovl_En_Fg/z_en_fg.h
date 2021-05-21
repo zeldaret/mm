@@ -41,11 +41,11 @@ typedef struct {
     /* 0x0000 */ u8 type;
     /* 0x0001 */ u8 timer;
     /* 0x0004 */ f32 xyScale;
-    /* 0x0008 */ char unk_08[0xC];
+    /* 0x0008 */ UNK_TYPE1 unk_08[0xC];
     /* 0x0014 */ Vec3f pos;
     /* 0x0020 */ Vec3f unk_20; // Likely acceleration, set to 0 but unused
     /* 0x002C */ Vec3f velocity;
-    /* 0x0038 */ char unk_38[0x4];
+    /* 0x0038 */ UNK_TYPE1 unk_38[0x4];
 } EnFgEffectDust; // size = 0x3C
 
 typedef struct EnFg {
@@ -56,7 +56,7 @@ typedef struct EnFg {
     /* 0x1D8 */ Vec3s limbDrawTbl[24];
     /* 0x268 */ Vec3s transitionDrawTbl[24];
     /* 0x2F8 */ s16 timer;
-    /* 0x2FA */ s16 unk_2FA; // Scales y-velocity of actor
+    /* 0x2FA */ s16 knockbackCounter;
     /* 0x2FC */ EnFgEffectDust dustEffect[10];
 } EnFg; // size = 0x554
 
