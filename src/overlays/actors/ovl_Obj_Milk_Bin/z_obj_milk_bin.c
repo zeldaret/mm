@@ -59,7 +59,7 @@ void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_198 = thisx->params;
 
     if ((this->unk_198 == 2) && !(gSaveContext.perm.weekEventReg[0x34] & 1)) {
-        this->unk_194 += 1;
+        this->unk_194 |= 1;
     }
 }
 
