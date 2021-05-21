@@ -644,9 +644,9 @@ typedef struct {
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
     /* 0x000E */ UNK_TYPE1 padE[0x2];
-    /* 0x0010 */ u32 isNight;
+    /* 0x0010 */ s32 isNight;
     /* 0x0014 */ u32 unk14;
-    /* 0x0018 */ u32 day;
+    /* 0x0018 */ s32 day;
     /* 0x001C */ u32 daysElapsed;
     /* 0x0020 */ u8 unk20;
     /* 0x0021 */ UNK_TYPE1 pad21[0x2];
@@ -1590,7 +1590,7 @@ struct ActorContext {
     /* 0x1FC */ Vec3f unk1FC;
     /* 0x208 */ UNK_TYPE1 pad208[0x48];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ UNK_TYPE1 pad254[0x14];
+    /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284

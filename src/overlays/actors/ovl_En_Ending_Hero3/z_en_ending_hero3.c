@@ -24,7 +24,7 @@ const ActorInit En_Ending_Hero3_InitVars = {
     (ActorFunc)EnEndingHero3_Draw,
 };
 
-extern SkeletonHeader D_06007150;
+extern FlexSkeletonHeader D_06007150;
 extern AnimationHeader D_06000E50;
 
 void EnEndingHero3_Init(Actor* thisx, GlobalContext* globalCtx) {
