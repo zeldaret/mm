@@ -80,6 +80,8 @@ BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
 BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
 ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
+ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
 # Because we may not have disassembled the code files yet, there might not be any assembly files.
 # Instead, generate a list of assembly files based on what's listed in the linker script.
@@ -137,7 +139,7 @@ CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 # just using build/baserom still probably has some race condiction/dependency bug, but since
 # it is first and should be completed relatively fast, it should not occur all that often.
-$(UNCOMPRESSED_ROM): build/baserom $(TEXTURE_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
+$(UNCOMPRESSED_ROM): build/baserom $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
 	./tools/makerom.py ./tables/dmadata_table.txt $@
 ifeq ($(COMPARE),1)
 	@md5sum $(UNCOMPRESSED_ROM)
@@ -208,7 +210,8 @@ assetclean:
 	$(RM) -rf build/assets
 
 distclean: assetclean clean
-	$(RM) -rf baserom/ asm/ distclean/
+	$(RM) -rf baserom/ asm/ expected/
+	$(MAKE) -C tools clean
 
 ## Extraction step
 setup:
@@ -300,6 +303,9 @@ build/assets/%.d: assets/%.c
 
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.bin.inc.c: assets/%.bin
+	$(ZAPD) bblb -eh -i $< -o $@
 
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@

@@ -117,7 +117,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x44C; // would you like to make an account
         } else {
             func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
-            if ((((s32)gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
+            if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
                 func_801518B0(globalCtx, 0x467, &this->actor);
                 this->curTextId = 0x467; // "What's this? You need somethin' on a day like this?
             } else {
@@ -304,7 +304,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
                     func_801518B0(globalCtx, 0x479, &this->actor);
                     this->curTextId = 0x479; // "Well, are you gonna make a deposit?"
                 }
-            } else if ((((s32)gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
+            } else if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
                 func_801518B0(globalCtx, 0x46D, &this->actor);
                 // "Look, little guy, if it's 'cause of the bad rumors going around, forget it! They're just rumors!"
                 this->curTextId = 0x46D;
@@ -687,8 +687,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
             case 0x469: // "Excuse me, but let me take a look at you..."
                 func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
                 globalCtx->msgCtx.bankRupees = (gSaveContext.perm.bankRupees & 0xFFFF);
-                // perm.day cast req for div vs divu
-                if ((((s32)gSaveContext.perm.day % 5) == 3) && (gSaveContext.perm.isNight == 1)) {
+                if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
                     func_801518B0(globalCtx, 0x46C, &this->actor);
                     this->curTextId = 0x46C; // "Ah, yes...[Link], right?
                 } else {

@@ -23,7 +23,7 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-extern SkeletonHeader D_06013328;
+extern FlexSkeletonHeader D_06013328;
 extern AnimationHeader D_0600CC94;
 
 static ActorAnimationEntry D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
@@ -33,7 +33,7 @@ void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) 
     animations += index;
 
     if (animations->frameCount < 0.0f) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animation->genericHeader);
+        frameCount = SkelAnime_GetFrameCount(&animations->animation->common);
     } else {
         frameCount = animations->frameCount;
     }
