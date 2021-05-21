@@ -23,80 +23,91 @@ const ActorInit Obj_Milk_Bin_InitVars = {
 };
 */
 
-extern ColliderCylinderInit D_80C09050;
+// D_80C09050
+extern ColliderCylinderInit sCylinderInit;
 
 /*
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HARD,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 12, 30, 0, { 0, 0, 0 } },
+};
+*/
+
+#ifdef NON_MATCHING
 void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
-    //ColliderCylinder *sp18;
-    ColliderCylinder *temp_a1;
-    Actor *temp_a2;
-    s16 temp_t6;
 
-    //temp_a2 = this;
-    //temp_a1 = temp_a2 + 0x148;
-    //sp18 = temp_a1;
-    //this = temp_a2;
-    Collider_InitAndSetCylinder(globalCtx, temp_a1, this->unk_148, &D_80C09050);
-    Collider_UpdateCylinder(&this->actor, temp_a1);
-    //temp_t6 = this->actor.params;
-    this->unk_194 = 0;
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_148, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->unk_148);
+
     this->actor.shape.yOffset = 1100.0f;
-    this->unk_198 = this->actor.params;
-    if ((temp_t6 == 2) && (((gSaveContext.perm.weekEventReg[0x34]) & 1) == 0)) {
+    this->unk_194 = 0;
+    this->unk_198 = thisx->params;
+
+    if ((this->unk_198 == 2) && !(gSaveContext.perm.weekEventReg[0x34] & 1)) {
         this->unk_194 = 1;
     }
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Init.asm")
+#endif
 
-void ObjMilkBin_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->unk_148);
 }
-/*
-void ObjMilkBin_Update(Actor *thisx, GlobalContext *globalCtx) {
+
+#ifdef NON_MATCHING
+void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
-    ColliderCylinder *temp_a2;
-    CollisionCheckContext *temp_a1;
-    s32 temp_v0;
-    s32 temp_v0_2;
-
-    temp_v0 = this->unk_198;
-    if (temp_v0 == 1) {
-        if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-            temp_v0_2 = gSaveContext.perm.day;
-            if (((temp_v0_2 == 2) && (gSaveContext.perm.isNight == 1)) || temp_v0_2 >= 3) {
-                Actor_MarkForDeath((Actor *) this);
+    if (this->unk_198 == 1) {
+        if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+            if (((gSaveContext.perm.day == 2) && (gSaveContext.perm.isNight == 1)) || (gSaveContext.perm.day >= 3)) {
+                Actor_MarkForDeath(&this->actor);
                 return;
             }
         }
-    } else if (temp_v0 == 2) {
-        if ((gSaveContext.perm.weekEventReg[0x34] & 1) != 0) {
-            this->unk_194 = this->unk_194 & ~1;
+    } else if (this->unk_198 == 2) {
+        if (gSaveContext.perm.weekEventReg[0x34] & 1) {
+            this->unk_194 &= ~1;
         } else {
-            this->unk_194 = this->unk_194 | 1;
+            this->unk_194 |= 1;
         }
     }
-    if ((this->unk_194 & 1) == 0) {
-        temp_a1 = &globalCtx->colCheckCtx;
-        temp_a2 = &this->unk_148;
-        CollisionCheck_SetAC(globalCtx, temp_a1, &temp_a2->base);
-        CollisionCheck_SetOC(globalCtx, temp_a1, &temp_a2->base);
+
+    if (!(this->unk_194 & 1)) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->unk_148.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->unk_148.base);
     }
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Milk_Bin_0x80C08E40/ObjMilkBin_Update.asm")
+#endif
 
 // gMilkBinMilkJarDL
 extern Gfx D_060004B0[];
 
-void ObjMilkBin_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     if (!(this->unk_194 & 1)) {
-        func_800BDFC0(globalCtx, &D_060004B0);
+        func_800BDFC0(globalCtx, D_060004B0);
     }
 }
