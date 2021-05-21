@@ -10,9 +10,24 @@ pipeline {
                 sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 baserom.mm.us.rev1.z64'
             }
         }
+        stage('Setup') {
+            steps {
+                sh 'bash -c "make -j setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)"'
+            }
+        }
+        stage('Check setup warnings') {
+            steps {
+                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_setup_current.txt tools/warnings_count/warnings_setup_new.txt'
+            }
+        }
         stage('Build') {
             steps {
-                sh 'make -j init'
+                sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
+            }
+        }
+        stage('Check build warnings') {
+            steps {
+                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_build_current.txt tools/warnings_count/warnings_build_new.txt'
             }
         }
         stage('Report Progress') {
