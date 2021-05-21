@@ -93,7 +93,7 @@ s32 func_80A2D280(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->genericHeader);
+            frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->common);
         }
         SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
                                 sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
