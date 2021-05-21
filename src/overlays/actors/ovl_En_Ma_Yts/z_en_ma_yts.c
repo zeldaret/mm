@@ -132,7 +132,7 @@ glabel D_80B8E32C
 
 void EnMaYts_UpdateAnim(EnMaYts* this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f, 
-        SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->genericHeader), 
+        SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->common), 
         D_80B8E1A8[index].unk_08, D_80B8E1A8[index].unk_0C);
 }
 
@@ -164,7 +164,7 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
 
     case 1:
         this->actor.targetMode = 6;
-        if ((((s32) gSaveContext.perm.day % 5) == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+        if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
             EnMaYts_UpdateAnim(this, 14);
         }
         else {
@@ -200,7 +200,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             break;
 
         case 1:
-            switch ((s32) gSaveContext.perm.day % 5) {
+            switch CURRENT_DAY {
                 default:
                     break;
 
@@ -228,7 +228,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
                 return 0;
             }
-            if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
+            if (((s32) gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
                 return 0;
             }
             break;
@@ -272,7 +272,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
         if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
             return 0;
         }
-        if (((s32) gSaveContext.perm.time >= 0xD555) && (((s32) gSaveContext.perm.day % 5) == 3)) {
+        if (((s32) gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
             return 0;
         }
     }
@@ -323,7 +323,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         this->unk_336 = 0;
     }
 
-    if (((u16)1 == ((s32) gSaveContext.perm.day % 5)) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if (((u16)1 == CURRENT_DAY) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -343,7 +343,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
         func_80B8D9E4(this);
     }
     else if (
-        (((s32) gSaveContext.perm.day % 5) == 2) && 
+        (CURRENT_DAY == 2) && 
         (1 == (s32)gSaveContext.perm.isNight) && 
         ((gSaveContext.perm.weekEventReg[0x16] & 1))) {
         func_80B8D6BC(this);
