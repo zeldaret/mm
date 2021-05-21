@@ -1683,6 +1683,19 @@ typedef struct {
     /* 0x10 */ s32 unk10;
 } struct_801C5F44; // size = 0x14
 
+// From OoT's struct_80034A14_arg1
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3s unk_08;
+    /* 0x0E */ Vec3s unk_0E;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
+    /* 0x24 */ s16 unk_24;
+} struct_800BD888_arg1; // size = 0x28
+
 typedef struct {
     /* 0x000 */ Actor base;
     /* 0x144 */ ColliderQuad unk144;

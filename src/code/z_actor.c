@@ -825,6 +825,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD6E4.asm")
 
+// This function is very similar to OoT's func_80034A14
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD888.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BD9A0.asm")

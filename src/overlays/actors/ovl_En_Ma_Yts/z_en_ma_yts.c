@@ -142,11 +142,11 @@ void func_80B8D12C(EnMaYts *this, GlobalContext *globalCtx) {
     s16 phi_a3 = this->unk_32C == 2 ? 1 : 0;
 
     if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
-        this->unk_1F0 = player->base.world.pos;
-        this->unk_1F0.y -= -10.0f;
+        this->unk_1D8.unk_18 = player->base.world.pos;
+        this->unk_1D8.unk_18.y -= -10.0f;
     } else {
-        Math_Vec3f_StepTo(&this->unk_1F0, &this->actor.parent->world.pos, 8.0f);
-        this->unk_1F0.y -= -10.0f;
+        Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.parent->world.pos, 8.0f);
+        this->unk_1D8.unk_18.y -= -10.0f;
     }
 
     // TODO: check what this function does
@@ -317,7 +317,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->unk_1D8 = 0;
+    this->unk_1D8.unk_00 = 0;
     this->unk_200 = 0;
     this->blinkTimer = 0;
 
@@ -611,13 +611,13 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dLis
     Vec3s sp4;
 
     if (limbIndex == EN_MA_YTS_LIMB_HAIR_TOP) {
-        sp4 = this->unk_1E0;
+        sp4 = this->unk_1D8.unk_08;
         rot->x += sp4.y;
         if ((this->skelAnime.animCurrentSeg == &D_06009E58) || (this->skelAnime.animCurrentSeg == &D_06007D98)) {
             rot->z += sp4.x;
         }
     } else if (limbIndex == EN_MA_YTS_LIMB_HEAD) {
-        sp4 = this->unk_1E6;
+        sp4 = this->unk_1D8.unk_0E;
         rot->x += sp4.y;
         rot->z += sp4.x;
     }

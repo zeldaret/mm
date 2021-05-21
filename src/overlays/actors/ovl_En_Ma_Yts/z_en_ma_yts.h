@@ -39,13 +39,7 @@ typedef struct EnMaYts {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ s16 unk_1D8; // I suspect this is actually a struct
-    /* 0x1DE */ char unk_1DE[0x6];
-    /* 0x1E0 */ Vec3s unk_1E0; // Read from, but not set
-    /* 0x1E6 */ Vec3s unk_1E6; // Read from, but not set
-    /* 0x1EC */ char unk_1EC[0x4];
-    /* 0x1F0 */ Vec3f unk_1F0;
-    /* 0x1FC */ char unk_1FC[0x4];
+    /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ s32 unk_200; // Set, but not used
     /* 0x204 */ Vec3s limbDrawTbl[EN_MA_YTS_LIMB_TABLE_COUNT];
     /* 0x28E */ char unk_28E[0x6];
