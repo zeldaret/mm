@@ -34,7 +34,7 @@ extern AnimationHeader D_060007BC;
 extern Gfx* D_060059A0[];
 extern Gfx* D_0600B328[];
 extern Gfx* D_0600B338[];
-extern SkeletonHeader D_0600B538;
+extern FlexSkeletonHeader D_0600B538;
 
 const ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
@@ -336,7 +336,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A2D348(this, globalCtx);
 }
 
-s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFg* this = THIS;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
@@ -351,7 +351,7 @@ s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFg* this = THIS;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
@@ -389,7 +389,8 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g, envColor[this->actor.params].b, envColor[this->actor.params].a);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060059A0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_060059A0));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 
+                     EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
