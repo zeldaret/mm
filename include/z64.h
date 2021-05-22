@@ -334,7 +334,13 @@ typedef struct {
     /* 0x080 */ s16 unk80;
     /* 0x082 */ UNK_TYPE1 pad82[0x5];
     /* 0x087 */ s8 unk87;
-    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
+    /* 0x088 */ UNK_TYPE1 pad88[0xAC];
+    /* 0x134 */ s8 unk_134;
+    /* 0x135 */ UNK_TYPE1 pad135[0x3];
+    /* 0x138 */ UNK_TYPE1 pad138[0x28];
+    /* 0x160 */ s32 unk_160;
+    /* 0x164 */ u32 unk_164;
+    /* 0x168 */ UNK_TYPE1 pad168[0x10E];
     /* 0x276 */ u8 unk276;
     /* 0x277 */ UNK_TYPE1 pad277[0x9];
     /* 0x280 */ u16 unk280;
@@ -771,9 +777,11 @@ typedef struct {
     /* 0x25C */ u16 unk25C;
     /* 0x25E */ UNK_TYPE1 pad25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
-    /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} 
-InterfaceContext; // size = 0x348
+    /* 0x272 */ UNK_TYPE1 pad272[0xE];
+    /* 0x280 */ u8 unk_280;
+    /* 0x281 */ UNK_TYPE1 pad281[0x3];
+    /* 0x284 */ UNK_TYPE1 pad284[0xC4];
+} InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
