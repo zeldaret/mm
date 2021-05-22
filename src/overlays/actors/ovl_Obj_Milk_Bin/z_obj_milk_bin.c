@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_milk_bin.c
+ * Overlay: ovl_Obj_Milk_Bin
+ * Description: Milk jar
+ */
+
 #include "z_obj_milk_bin.h"
 
 #define FLAGS 0x00000000
