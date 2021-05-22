@@ -2423,7 +2423,7 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtxt, s3
 s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtxt);
 void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags);
 void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtxt);
-u32 func_8012EC80(GlobalContext* globalCtx);
+s32 func_8012EC80(GlobalContext* globalCtx);
 void func_8012ED34(s16 equipment);
 u8 func_8012ED78(GlobalContext* globalCtx, s16 equipment);
 void func_8012EDE8(s16 arg0, u32 arg1);
