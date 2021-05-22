@@ -372,7 +372,7 @@ extern DmaEntry dmadata[1568];
 extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
-extern u32 enAObjDisplayLists[2];
+extern Gfx* enAObjDisplayLists[2];
 extern Color_RGBA8 D_801ADF10;
 extern Color_RGBA8 D_801ADF14;
 extern Vec3f D_801ADF18;
