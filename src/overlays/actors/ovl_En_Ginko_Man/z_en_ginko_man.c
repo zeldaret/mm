@@ -184,7 +184,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
                 if (this->curTextId == 0x453) { // "That's it? That ain't nothing at all, big spender!
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                 }
-                globalCtx->msgCtx.bankRupees = gSaveContext.perm.bankRupees & 0xFFFF;
+                globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
                 func_801518B0(globalCtx, 0x45A, &this->actor);
                 this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
             }
@@ -199,11 +199,11 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
 
             /***** WARNING: this case is non-equivelent ****/
 
-            tempEDC = gSaveContext.perm.bankRupees & 0xFFFF;
+            tempEDC = gSaveContext.roomInf[127][0] & 0xFFFF;
             if ((tempEDC >= 200) && (this->previousBankValue < 200) &&
-                ((gSaveContext.perm.weekEventReg[0x3B] & 0x40) == 0)) {
+                ((gSaveContext.weekEventReg[0x3B] & 0x40) == 0)) {
                 // block_20:
-                gSaveContext.perm.weekEventReg[0x3B] = gSaveContext.perm.weekEventReg[0x3B] | 0x40;
+                gSaveContext.weekEventReg[0x3B] = gSaveContext.weekEventReg[0x3B] | 0x40;
                 func_801518B0(globalCtx, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
                 return;
@@ -211,24 +211,24 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
 
             // "branch likely" when shouldn't be
             if ((tempEDC >= 1000) && ((this->previousBankValue) < 1000) &&
-                (gSaveContext.perm.weekEventReg[0x3B] & 0x80) == 0) {
+                (gSaveContext.weekEventReg[0x3B] & 0x80) == 0) {
                 // block_24:
-                gSaveContext.perm.weekEventReg[0x3B] |= 0x80;
+                gSaveContext.weekEventReg[0x3B] |= 0x80;
                 func_801518B0(globalCtx, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
                 return;
             } // bright blue arrow
 
             if ((this->previousBankValue) >= 5000) { // added back in because missing
-                if ((((s16)tempEDC) < 5000) && ((gSaveContext.perm.weekEventReg[0x3B] & 1) == 0)) {
-                    gSaveContext.perm.weekEventReg[0x3B] |= 1;
+                if ((((s16)tempEDC) < 5000) && ((gSaveContext.weekEventReg[0x3B] & 1) == 0)) {
+                    gSaveContext.weekEventReg[0x3B] |= 1;
                     func_801518B0(globalCtx, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
                     return;
                 } else { // olive arrow
                     // block_28:
-                    if (this->previousBankValue < gSaveContext.perm.bankRupees) {
-                        // if (*previousBankValue < gSaveContext.perm.bankRupees) {
+                    if (this->previousBankValue < gSaveContext.roomInf[127][0]) {
+                        // if (*previousBankValue < gSaveContext.roomInf[127][0]) {
                         func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
                         func_801518B0(globalCtx, 0x45E, &this->actor);
                         this->curTextId =
@@ -302,7 +302,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
                     func_801518B0(globalCtx, 0x479, &this->actor);
                     this->curTextId = 0x479; // "Well, are you gonna make a deposit?"
                 }
-            } else if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
+            } else if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                 func_801518B0(globalCtx, 0x46D, &this->actor);
                 // "Look, little guy, if it's 'cause of the bad rumors going around, forget it! They're just rumors!"
                 this->curTextId = 0x46D;
@@ -345,7 +345,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
                 //  "Look, little guy, all the Rupees you deposited are gone, so you can't use that stamp anymore."
                 this->curTextId = 0x478;
             } else {
-                globalCtx->msgCtx.bankRupees = gSaveContext.perm.bankRupees & 0xFFFF;
+                globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
                 func_801518B0(globalCtx, 0x45A, &this->actor);
                 this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
             }
@@ -429,20 +429,20 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         func_801518B0(globalCtx, 0x453, &this->actor);
                         this->curTextId = 0x453; // That's it? That aint nothing at all
                     }
-                    if ((gSaveContext.perm.bankRupees & 0xFFFF) == 0) {
+                    if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
                         this->newAccountFlag = 1;
                     }
                     func_801159EC((s16) - (s32)globalCtx->msgCtx.bankRupeesSelected);
-                    this->previousBankValue = gSaveContext.perm.bankRupees;
+                    this->previousBankValue = gSaveContext.roomInf[127][0];
 
-                    gSaveContext.perm.bankRupees =
-                        ((gSaveContext.perm.bankRupees & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected) |
-                        (gSaveContext.perm.bankRupees & 0xFFFF0000);
+                    gSaveContext.roomInf[127][0] =
+                        ((gSaveContext.roomInf[127][0] & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected) |
+                        (gSaveContext.roomInf[127][0] & 0xFFFF0000);
                 }
             } else { // GINKOMAN_CHOICE_NO
                 func_8019F230();
                 func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
-                if ((gSaveContext.perm.bankRupees & 0xFFFF) == 0) { // @B74
+                if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) { // @B74
                     func_801518B0(globalCtx, 0x456, &this->actor);
                     this->curTextId = 0x456; // Is that so? think about it
                 } else {
@@ -477,7 +477,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
             // 0xEDC: bankRupees
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 // s32 casts required for slt instead of sltu
-                if ((s32)((gSaveContext.perm.bankRupees & 0xFFFF)) <
+                if ((s32)((gSaveContext.roomInf[127][0] & 0xFFFF)) <
                     ((s32)(globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) {
                     play_sound(0x4806);                                               // NA_SE_SY_ERROR
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING); // @ D30
@@ -506,7 +506,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     func_801518B0(globalCtx, 0x472, &this->actor);
                     this->curTextId = 0x472; // It's a waste to take out such a tiny bit
                 }
-                this->previousBankValue = (s16)gSaveContext.perm.bankRupees;
+                this->previousBankValue = (s16)gSaveContext.roomInf[127][0];
                 gSaveContext.roomInf[127][0] =
                     (((gSaveContext.roomInf[127][0] & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) -
                      this->serviceFee) |
@@ -682,7 +682,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
             case 0x469: // "Excuse me, but let me take a look at you..."
                 func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
                 globalCtx->msgCtx.bankRupees = (gSaveContext.roomInf[127][0] & 0xFFFF);
-                if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
+                if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                     func_801518B0(globalCtx, 0x46C, &this->actor);
                     this->curTextId = 0x46C; // "Ah, yes...[Link], right?
                 } else {
