@@ -45,7 +45,7 @@ Pull Requests (PRs)
    - [ ] Any new compiler warnings that were added are required for matching. Ensure there is good reason if the warnings files have changed. `./tools/warnings_count/warnings_build_current.txt` and `./tools/warnings_count/warnings_setup_current.txt`
 - [ ] Files with NON_MATCHING functions have equivalent behaviour.
 - [ ] `code` and `boot` segment files should be documented as much as possible. Overlays with documentation should be complete.
-   - [ ] Overlays with documentation are required to have macros to define access to parameters if the parameter uses bitwise access. The params should have an enum otherwise.
+   - [ ] Overlays with documentation should have macros to define access to parameters if the parameter uses bitwise access. The params should have an enum when it makes sense.
 - [ ] `format.sh` was run.
 - [ ] Comments and variables have correct spelling.
 - [ ] The following should be declared in an Actor header file. There should be nothing else in the Actor header file.
@@ -57,6 +57,7 @@ Pull Requests (PRs)
 - [ ] New variables and functions should follow standard naming conventions.
    - [ ] Constants are converted to whichever looks best in context: hexadecimal, decimal, or float
 	  - [ ] Rotation angles should always be in hexadecimal
+	  - [ ] Colour values should always be in decimal.
    - [ ] Functions, structs, unions, enums, and typedefs are `TitleCase` (`DmRavine`)
 	  - [ ] "Methods" for objects separate the system from the verb with an underscore (`DmRavine_Init`)
    - [ ] Variable names are `camelCase` (`actionFunc`)
