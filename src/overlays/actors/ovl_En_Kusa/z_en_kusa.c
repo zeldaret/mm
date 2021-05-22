@@ -25,6 +25,9 @@ void func_809359AC(EnKusa* this, GlobalContext* globalCtx);
 void func_80935B94(EnKusa* this);
 void func_80935BBC(EnKusa* this, GlobalContext* globalCtx);
 
+void func_809358D8(EnKusa* this, GlobalContext* globalCtx);
+void func_80935988(EnKusa* this);
+
 void func_80935CE8(EnKusa* this);
 void func_80935D64(EnKusa* this, GlobalContext* globalCtx);
 void func_80936120(EnKusa* this);
@@ -34,6 +37,8 @@ void func_809361B4(EnKusa* this);
 void func_80936220(EnKusa* this, GlobalContext* globalCtx);
 void func_80936290(EnKusa* this);
 void func_809362D8(EnKusa* this, GlobalContext* globalCtx);
+void func_80936414(EnKusa* this, GlobalContext* globalCtx);
+void func_809365CC(EnKusa* this, GlobalContext* globalCtx);
 
 s16 D_809366A0 = 0;
 s16 D_809366A8 = 0;
@@ -85,6 +90,8 @@ s32 D_80936714[] = { 0x00000000, 0x3F350481, 0x3F350481, 0x3F350481, 0x3F350481,
 s32 D_80936744[] = { 0x006C0066, 0x00600054, 0x00420037, 0x002A0026 };
 
 s32 D_80936754[] = { 0xC8580190, 0xB874F380, 0xB878BD98, 0xB0FC04B0, 0xB1000064, 0x310400C8, 0x00000000 };
+
+extern s32 D_80936AD0;
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809349E0.asm")
 
@@ -198,34 +205,26 @@ void func_809358C4(EnKusa* this) {
     this->actionFunc = func_809358D8;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809358D8.asm")
-// void func_809358D8(EnKusa *this, GlobalContext *globalCtx)
-// {
-//     s32 sp20;
-
-//     if (Scene_IsObjectLoaded(&globalCtx->sceneContext, (s32) (s8) this->unk_197) != 0)
-//     {
-//         sp20 = this->actor.params & 3;
-//         if (this->unk197 != 0)
-//         {
-//             func_80936120(this);
-//         }
-//         else
-//         {
-//             func_80935988(this);
-//         }
-//         if (sp20 == 0)
-//         {
-//             this->actor.draw = &func_80936414;
-//         }
-//         else
-//         {
-//             this->actor.draw = &func_809365CC;
-//         }
-//         this->actor.flags &= ~0x10;
-//         this->actor.objBankIndex = (s8) this->unk_197;
-//     }
-// }
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809358D8.asm")
+void func_809358D8(EnKusa* this, GlobalContext* globalCtx) {
+    vu16 pad; // Uhhhh not sure about this, but it matches
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_195) != 0) {
+        s32 sp20 = this->actor.params & 3;
+        if (this->unk_197 != 0) {
+            func_80936120(this);
+        } else {
+            func_80935988(this);
+        }
+        if (sp20 == 0) {
+            this->actor.draw = func_80936414;
+        } else {
+            this->actor.draw = func_809365CC;
+        }
+        this->actor.objBankIndex = this->unk_195;
+        this->actor.flags &= ~0x10;
+    }
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935988.asm")
@@ -332,23 +331,19 @@ void func_80935CE8(EnKusa* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80935D64.asm")
 
 // Needs work
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936120.asm")
-// void func_80936120(EnKusa* this) {
-//     s32 temp_v0;
-
-//     temp_v0 = this->actor.params & 3;
-//     if (temp_v0 != 1) {
-//         if (temp_v0 != 2) {
-//             if(temp_v0 != 3){
-
-//             this->actionFunc = func_809361A4;
-//             }
-//         }
-//     } else {
-//         this->actionFunc = func_80936168;
-//     }
-//     this->timer = 0;
-// }
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936120.asm")
+void func_80936120(EnKusa* this) {
+    switch (this->actor.params & 3) {
+        case 2:
+        case 3:
+            this->actionFunc = func_809361A4;
+            break;
+        case 1:
+            this->actionFunc = func_80936168;
+            break;
+    }
+    this->timer = 0;
+}
 
 // Matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936168.asm")
@@ -411,7 +406,26 @@ void func_809362D8(EnKusa* this, GlobalContext* globalCtx) {
     }
 }
 
+// close-ish
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/EnKusa_Update.asm")
+// void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx) {
+//     EnKusa* this = THIS;
+//     DmaRequest* temp_v0;
+
+//     this->actionFunc(this, globalCtx);
+//     if (this->unk_197 != 0) {
+//         this->actor.shape.yOffset = -6.25f;
+//     } else {
+//         this->actor.shape.yOffset = 0.0f;
+//     }
+//     temp_v0 = &globalCtx->objectCtx.status[9].dmaReq;
+//     if (D_80936AD0 != temp_v0->line) {
+//         if (temp_v0->dramAddr == 0) {
+//             func_80934AB4(this, globalCtx);
+//             D_80936AD0 = temp_v0->unk14;
+//         }
+//     }
+// }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_80936414.asm")
 
