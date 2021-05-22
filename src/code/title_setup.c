@@ -45,22 +45,23 @@ void TitleSetup_GameStateResetContext(void) {
     YREG(43) = 0xB1;
 }
 
-void TitleSetup_InitImpl(GameState *gameState) {
+void TitleSetup_InitImpl(GameState* gameState) {
     func_80185908();
     func_800E9360();
     TitleSetup_GameStateResetContext();
 
     gameState->running = 0;
 
-setNextGamestate:; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
+setNextGamestate
+    :; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
     SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
 }
 
-void TitleSetup_Destroy(GameState *gameState) {
+void TitleSetup_Destroy(GameState* gameState) {
     ;
 }
 
-void TitleSetup_Init(GameState *gameState) {
+void TitleSetup_Init(GameState* gameState) {
     gameState->destroy = &TitleSetup_Destroy;
     TitleSetup_InitImpl(gameState);
 }

@@ -17,7 +17,6 @@ void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Cha_InitVars = {
     ACTOR_EN_CHA,
     ACTORCAT_PROP,
@@ -27,33 +26,34 @@ const ActorInit En_Cha_InitVars = {
     (ActorFunc)EnCha_Init,
     (ActorFunc)EnCha_Destroy,
     (ActorFunc)EnCha_Update,
-    (ActorFunc)EnCha_Draw
+    (ActorFunc)EnCha_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { 
-        COLTYPE_WOOD, 
-        AT_NONE, 
-        AC_ON | AC_HARD | AC_TYPE_PLAYER, 
-        OC1_ON | OC1_TYPE_ALL, 
-        OC2_TYPE_1, 
-        COLSHAPE_CYLINDER, 
-        },
-    { 
-        ELEMTYPE_UNK0, 
-        { 0x00000000, 0x00, 0x00 }, 
-        { 0xF7CFFFFF, 0x00, 0x00 }, 
-        TOUCH_NONE | TOUCH_SFX_NORMAL, 
-        BUMP_ON, 
-        OCELEM_ON, },
+    {
+        COLTYPE_WOOD,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 10, 40, 0, { 0, 0, 0 } },
 };
 
 extern UNK_TYPE4 D_06000710;
 extern UNK_TYPE4 D_06000958;
 
-void EnCha_Init(Actor *thisx, GlobalContext *globalCtx) {
-    EnCha *this = THIS;
+void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnCha* this = THIS;
     s32 pad;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -66,18 +66,17 @@ void EnCha_Init(Actor *thisx, GlobalContext *globalCtx) {
     gSaveContext.weekEventReg[60] &= 0xFB;
 }
 
-void EnCha_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnCha *this = THIS;
+void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnCha* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void EnCha_Ring(EnCha *this, GlobalContext *globalCtx) {
+void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
     EnCha_Idle(this, globalCtx);
     if (this->actor.cutscene == -1) {
         this->actionFunc = EnCha_Idle;
-    }
-    else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = EnCha_Idle;
     } else {
@@ -85,7 +84,7 @@ void EnCha_Ring(EnCha *this, GlobalContext *globalCtx) {
     }
 }
 
-void EnCha_Idle(EnCha *this, GlobalContext *globalCtx) {
+void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[60] & 4) {
         Audio_PlayActorSound2(&this->actor, 0x289E);
         gSaveContext.weekEventReg[60] &= 0xFB;
@@ -104,9 +103,9 @@ void EnCha_Idle(EnCha *this, GlobalContext *globalCtx) {
     this->actor.home.rot.z *= 0.96f;
 }
 
-void EnCha_Update(Actor *thisx, GlobalContext *globalCtx) {
-    EnCha *this = THIS;
-    GlobalContext *globalCtx2 = globalCtx;
+void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnCha* this = THIS;
+    GlobalContext* globalCtx2 = globalCtx;
 
     CollisionCheck_SetOC(globalCtx, &globalCtx2->colCheckCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
@@ -115,8 +114,8 @@ void EnCha_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-void EnCha_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    EnCha *this = THIS;
+void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnCha* this = THIS;
 
     func_800BDFC0(globalCtx, &D_06000710);
     SysMatrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, 1);

@@ -7,6 +7,7 @@
 [submodule "tools/decomp-permuter"]
 	path = tools/decomp-permuter
 	url = https://github.com/simonlindholm/decomp-permuter
+	branch = main
 [submodule "ZAPD"]
 	path = tools/ZAPD
 	url = https://github.com/zeldaret/ZAPD.git

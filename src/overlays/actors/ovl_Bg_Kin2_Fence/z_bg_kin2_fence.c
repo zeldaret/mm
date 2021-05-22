@@ -29,40 +29,76 @@ const ActorInit Bg_Kin2_Fence_InitVars = {
     (ActorFunc)BgKin2Fence_Init,
     (ActorFunc)BgKin2Fence_Destroy,
     (ActorFunc)BgKin2Fence_Update,
-    (ActorFunc)BgKin2Fence_Draw
+    (ActorFunc)BgKin2Fence_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00003820, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
         { 0, { { -2040, 1400, 350 }, 28 }, 100 },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00003820, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
         { 0, { { -1140, 1400, 350 }, 28 }, 100 },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00003820, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
         { 0, { { 1140, 1400, 350 }, 28 }, 100 },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00003820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00003820, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
         { 0, { { 2040, 1400, 350 }, 28 }, 100 },
     },
 };
 
 static ColliderJntSphInit sJntSphInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_JNTSPH, },
-    4, sJntSphElementsInit,
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_JNTSPH,
+    },
+    4,
+    sJntSphElementsInit,
 };
 
 Vec3f eyeSparkleSpawnPositions[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
 
-                          { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+                                        { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
 
-                          { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+                                        { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
 
-                          { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } } };
+                                        { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } } };
 
 Color_RGBA8 primColor = { 0xFF, 0xFF, 0xFF, 0x00 };
 Color_RGBA8 envColor = { 0x00, 128, 128, 0x00 };
@@ -75,7 +111,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern Gfx D_06000828[];
-extern CollisionHeader* D_06000908;
+extern CollisionHeader D_06000908;
 
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
@@ -113,13 +149,13 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
     s32 i = 0;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &sInitChain);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
     Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colliderElements);
+    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape);
+                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, 1);
 
     for (i = 0; i < 4; i++) {
@@ -173,7 +209,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
             this->cooldownTimer -= 1;
             return;
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
 

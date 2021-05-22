@@ -27,7 +27,7 @@ void guPerspectiveF(float mf[4][4], u16* perspNorm, float fovy, float aspect, fl
         if (near + far <= 2.0) {
             *perspNorm = 65535;
         } else {
-            *perspNorm = (double) (1 << 17) / (near + far);
+            *perspNorm = (double)(1 << 17) / (near + far);
             if (*perspNorm <= 0) {
                 *perspNorm = 1;
             }

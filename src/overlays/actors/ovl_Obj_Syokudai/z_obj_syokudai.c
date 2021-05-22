@@ -19,7 +19,7 @@ const ActorInit Obj_Syokudai_InitVars = {
     (ActorFunc)ObjSyokudai_Init,
     (ActorFunc)ObjSyokudai_Destroy,
     (ActorFunc)ObjSyokudai_Update,
-    (ActorFunc)ObjSyokudai_Draw
+    (ActorFunc)ObjSyokudai_Draw,
 };
 */
 

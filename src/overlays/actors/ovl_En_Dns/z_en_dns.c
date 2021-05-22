@@ -19,7 +19,7 @@ const ActorInit En_Dns_InitVars = {
     (ActorFunc)EnDns_Init,
     (ActorFunc)EnDns_Destroy,
     (ActorFunc)EnDns_Update,
-    (ActorFunc)EnDns_Draw
+    (ActorFunc)EnDns_Draw,
 };
 */
 
