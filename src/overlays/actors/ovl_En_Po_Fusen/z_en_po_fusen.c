@@ -195,9 +195,9 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen* this) {
     Actor* parent = this->actor.parent;
     EnMa4* romani;
 
-    if ((parent != 0) && (parent->id == ACTOR_EN_MA4)) {
+    if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
         romani = (EnMa4*)parent;
-        romani->unk338++;
+        romani->unk_338++;
     }
 
     this->actor.draw = NULL;
