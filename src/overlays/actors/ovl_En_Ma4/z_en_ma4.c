@@ -11,13 +11,11 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 
 
-void func_80ABDCA0(EnMa4* this); // TODO: remove
-void func_80ABDD2C(EnMa4* this, s32); // TODO: remove // not sure about s32
 void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx); // TODO: remove
-void func_80ABDE60(EnMa4* this, GlobalContext* globalCtx); // TODO: remove
+
 //void func_80ABE1C4(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABE4A4(EnMa4* this);
-//void func_80ABE560(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABE560(EnMa4* this, GlobalContext* globalCtx);
 //void func_80ABE6C8(EnMa4* this, GlobalContext* globalCtx);
 //void func_80ABEB6C(EnMa4* this, GlobalContext* globalCtx);
 //void func_80ABEF34(EnMa4* this, GlobalContext* globalCtx);
@@ -59,13 +57,103 @@ const ActorInit En_Ma4_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDCA0.asm")
 
+// UpdateEyes
+void func_80ABDCA0(EnMa4 *this) {
+    if (this->unk_32C != 0) {
+        this->unk_32E = this->unk_32C;
+    } else if (DECR(this->unk_32A) == 0) {
+        this->unk_32E++;
+        if ((s32) this->unk_32E >= 3) {
+            this->unk_32A = Rand_S16Offset(30, 30);
+            this->unk_32E = 0;
+        }
+    }
+}
+
+
+/*
+void func_80ABDD2C(EnMa4 *this, s32 arg1) {
+    void *sp28;
+    void *temp_v1;
+
+    temp_v1 = (index * 0x10) + &D_80AC010C;
+    sp28 = temp_v1;
+    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk0), (?32) temp_v1->unk8, temp_v1->unkC);
+}
+#if 0
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
+    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f, 
+        SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->common), 
+        D_80B8E1A8[index].unk_08, D_80B8E1A8[index].unk_0C);
+}
+#endif
+*/
+void func_80ABDD2C(EnMa4* this, s32 index);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDD2C.asm")
 
+
+/*
+void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
+    Actor *temp_v1;
+    AnimationHeader *temp_v0;
+    s32 phi_a3;
+
+    temp_v1 = globalCtx->actorCtx.actorList[2].first;
+    if ((s16) this->unk_1D8 == 0) {
+        temp_v0 = this->skelAnime.animCurrentSeg;
+        if ((temp_v0 == 0x6007328) || (temp_v0 == 0x6002A8C) || (temp_v0 == 0x6015B7C)) {
+            phi_a3 = 1;
+        } else {
+block_5:
+            phi_a3 = 0;
+            if (this->unk_332 == 2) {
+                phi_a3 = 0;
+                if (&func_80ABEF8C != this->actionFunc) {
+                    phi_a3 = 1;
+                }
+            }
+        }
+    } else {
+        goto block_5;
+    }
+    this->unk1F0 = (bitwise s32) temp_v1->world.pos.x;
+    this->unk1F4 = (bitwise s32) temp_v1->world.pos.y;
+    this->unk1F8 = (bitwise s32) temp_v1->world.pos.z;
+    this->unk1F4 = (f32) ((bitwise f32) this->unk1F4 - -10.0f);
+    func_800BD888(&this->unk_1D8, 0, phi_a3);
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDD9C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDE60.asm")
+
+
+void func_80ABDE60(EnMa4 *this, GlobalContext *globalCtx) {
+    Path *temp_v1;
+    Vec3f sp20;
+    //Vec3f *temp_a0_2;
+
+    temp_v1 = &globalCtx->setupPathList[(s32) (this->actor.params & 0xFF00) >> 8];
+    this->unk_200 = (Vec3s*)Lib_SegmentedToVirtual(temp_v1->points);
+    this->unk_324 = (u16)0;
+    //temp_a0_2 = &this->actor.world.pos;
+    this->unk_326 = (s16) temp_v1->count;
+
+    this->actor.home.pos.x = this->unk_200[0].x;
+    this->actor.home.pos.y = this->unk_200[0].y;
+    this->actor.home.pos.z = this->unk_200[0].z;
+    sp20.x = (f32) this->unk_200[1].x;
+    sp20.y = (f32) this->unk_200[1].y;
+    sp20.z = (f32) this->unk_200[1].z;
+
+    //*temp_a0_2 = this->actor.home.pos;
+    this->actor.world.pos = this->actor.home.pos;
+    this->actor.shape.rot.y = this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp20);
+}
+
+void func_80ABDE60(EnMa4* this, GlobalContext* globalCtx);
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDE60.asm")
+
 
 extern FlexSkeletonHeader D_06013928;
 
@@ -139,7 +227,32 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE1C4.asm")
 
+
+/*
+void func_80ABE4A4(EnMa4 *this) {
+    s16 temp_v0;
+
+    temp_v0 = this->unk_336;
+    if ((temp_v0 != 2) && (temp_v0 != 3)) {
+        if (this->unk_332 != 2) {
+            func_80ABDD2C(this, 9);
+            this->actor.speedXZ = 2.7f;
+        } else {
+            func_80ABDD2C(this, 0xF);
+            this->actor.speedXZ = 0.0f;
+        }
+    } else {
+        func_80ABDD2C(this, 1);
+        this->actor.speedXZ = 0.0f;
+    }
+    this->unk_33C = 0;
+    this->actor.gravity = -0.2f;
+    func_80ABFCD4(this);
+    this->actionFunc = func_80ABE560;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE4A4.asm")
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE560.asm")
 

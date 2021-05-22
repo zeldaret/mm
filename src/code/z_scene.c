@@ -316,7 +316,7 @@ void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupPathList = (void*)Lib_SegmentedToVirtual(cmd->pathList.segment);
+    globalCtx->setupPathList = (Path*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
 // Scene Header Command 0x0E: Transition Actor List
