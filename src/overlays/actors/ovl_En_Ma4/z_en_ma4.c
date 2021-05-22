@@ -16,14 +16,14 @@ void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx); // TODO: remove
 
 void func_80ABE4A4(EnMa4* this);
 void func_80ABE560(EnMa4* this, GlobalContext* globalCtx);
-//void func_80ABE6C8(EnMa4* this, GlobalContext* globalCtx);
-//void func_80ABEB6C(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABE6C8(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABEB6C(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABEF34(EnMa4* this);
-//void func_80ABEF8C(EnMa4* this, GlobalContext* globalCtx);
-//void func_80ABF070(EnMa4* this, GlobalContext* globalCtx);
-//void func_80ABF084(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABEF8C(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABF070(EnMa4* this);
+void func_80ABF084(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF0D8(EnMa4* this, GlobalContext* globalCtx); // TODO: remove
-//void func_80ABF160(EnMa4* this, GlobalContext* globalCtx);
+void func_80ABF160(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF198(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF218(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF254(EnMa4* this, GlobalContext* globalCtx);
@@ -110,7 +110,7 @@ block_5:
             phi_a3 = 0;
             if (this->unk_332 == 2) {
                 phi_a3 = 0;
-                if (&func_80ABEF8C != this->actionFunc) {
+                if (func_80ABEF8C != this->actionFunc) {
                     phi_a3 = 1;
                 }
             }
@@ -355,7 +355,7 @@ void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
         func_80ABEF34(this);
     } else if (this->unk_332 != 2 || ABS_ALT(sp22) < 0x4000) {
         if ((player->stateFlags1 << 8) >= 0) {
-        //if ((player->stateFlags1 & 0xFFFFFF00)) {
+        //if ((player->stateFlags1 & 0xFFFFFF00))
             func_800B8614((Actor *) this, globalCtx, 100.0f);
         }
     }
@@ -364,21 +364,397 @@ void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE560.asm")
 
 
+/*
+void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
+    u32 temp_t7;
+
+    if (func_80147624(globalCtx) != 0) {
+        temp_t7 = (u16) this->unk33E - 0x3339;
+        if (temp_t7 < 0x21U) {
+            goto **(&jtbl_D_80AC027C + (temp_t7 * 4));
+        case 0:
+            if (globalCtx->msgCtx.choiceIndex != 0) {
+                func_8019F208();
+                func_801518B0(globalCtx, 0x333BU, (Actor *) this);
+                this->unk33E = 0x333B;
+                return;
+            case 8:
+                if (globalCtx->msgCtx.choiceIndex != 0) {
+                    func_8019F230();
+                    func_80ABFCAC(this, (u16)0, (u16)1);
+                    func_801518B0(globalCtx, 0x3342U, (Actor *) this);
+                    this->unk33E = 0x3342;
+                    this->unk_336 = 0;
+                    func_80151BB4((s32) globalCtx, 5U);
+                    return;
+                case 13:
+                    if (globalCtx->msgCtx.choiceIndex != 0) {
+                        func_8019F230();
+                        func_80ABFCAC(this, (u16)0, (u16)1);
+                        func_801518B0(globalCtx, 0x3342U, (Actor *) this);
+                        this->unk33E = 0x3342;
+                        return;
+                    case 14:
+                        if (globalCtx->msgCtx.choiceIndex != 0) {
+                            func_8019F230();
+                            func_801518B0(globalCtx, 0x3348U, (Actor *) this);
+                            this->unk33E = 0x3348;
+                            func_80151BB4((s32) globalCtx, 5U);
+                            return;
+                        case 20:
+                            if (globalCtx->msgCtx.choiceIndex != 0) {
+                                func_8019F230();
+                                func_80ABFCAC(this, (u16)0, (u16)0);
+                                func_801518B0(globalCtx, 0x334CU, (Actor *) this);
+                                this->unk33E = 0x334C;
+                                return;
+                            case 27:
+                                if (globalCtx->msgCtx.choiceIndex != 0) {
+                                    func_8019F230();
+                                    func_80ABFCAC(this, (u16)1, (u16)0);
+                                    func_801518B0(globalCtx, 0x3355U, (Actor *) this);
+                                    this->unk33E = 0x3355;
+                                    func_80151BB4((s32) globalCtx, 5U);
+                                    return;
+                                case 29:
+                                    if (globalCtx->msgCtx.choiceIndex != 0) {
+                                        if (this->unk_332 != 1) {
+                                            func_8019F230();
+                                            func_80ABFCAC(this, (u16)4, (u16)2);
+                                            func_801518B0(globalCtx, 0x335BU, (Actor *) this);
+                                            this->unk33E = 0x335B;
+                                            func_80151BB4((s32) globalCtx, 5U);
+                                            return;
+                                        case 32:
+                                            if (globalCtx->msgCtx.choiceIndex != 0) {
+                                                func_8019F230();
+                                                func_80ABFCAC(this, (u16)4, (u16)2);
+                                                func_801518B0(globalCtx, 0x335AU, (Actor *) this);
+                                                this->unk33E = 0x335A;
+                                                func_80151BB4((s32) globalCtx, 5U);
+                                            default:
+                                                return;
+                                            }
+                                            func_8019F208();
+                                            func_801518B0(globalCtx, 0x3349U, (Actor *) this);
+                                            this->unk33E = 0x3349;
+                                            return;
+                                        }
+                                        func_8019F230();
+                                        func_80ABFCAC(this, (u16)3, (u16)3);
+                                        func_801518B0(globalCtx, 0x3357U, (Actor *) this);
+                                        this->unk33E = 0x3357;
+                                        func_80151BB4((s32) globalCtx, 5U);
+                                        return;
+                                        return;
+                                    }
+                                    func_8019F208();
+                                    func_801477B4(globalCtx);
+                                    func_80ABF070(this);
+                                    return;
+                                }
+                                func_8019F208();
+                                func_801518B0(globalCtx, 0x3349U, (Actor *) this);
+                                this->unk33E = 0x3349;
+                                return;
+                                return;
+                            }
+                            func_8019F208();
+                            func_801518B0(globalCtx, 0x334EU, (Actor *) this);
+                            this->unk33E = 0x334E;
+                            if ((*(gBitFlags + 0x38) & (s32) gSaveContext.perm.inv.pad4C) != 0) {
+                                func_80151BB4((s32) globalCtx, 0x1CU);
+                            }
+                            func_80151BB4((s32) globalCtx, 5U);
+                            return;
+                            return;
+                        }
+                        func_8019F208();
+                        func_801518B0(globalCtx, 0x3349U, (Actor *) this);
+                        this->unk33E = 0x3349;
+                        return;
+                        return;
+                    }
+                    func_8019F208();
+                    gSaveContext.unkF0D = (u8) (gSaveContext.unkF0D | 0x20);
+                    func_801518B0(globalCtx, 0x3343U, (Actor *) this);
+                    this->unk33E = 0x3343;
+                    return;
+                    return;
+                }
+                func_8019F208();
+                gSaveContext.unkF0D = (u8) (gSaveContext.unkF0D | 0x20);
+                func_801518B0(globalCtx, 0x3343U, (Actor *) this);
+                this->unk33E = 0x3343;
+                return;
+                return;
+            }
+            func_8019F208();
+            func_801518B0(globalCtx, 0x333AU, (Actor *) this);
+            this->unk33E = 0x333A;
+            return;
+            return;
+        }
+    }
+default:
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE6C8.asm")
 
+/*
+void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
+    Actor *sp24;
+    Actor *temp_t6;
+    GlobalContext *temp_a0;
+    GlobalContext *temp_a0_2;
+    GlobalContext *temp_a3;
+    u16 temp_v0;
+    u32 temp_t7;
+
+    temp_a3 = globalCtx;
+    temp_t6 = temp_a3->actorCtx.actorList[2].first;
+    globalCtx = temp_a3;
+    sp24 = temp_t6;
+    if (func_80147624(temp_a3) != 0) {
+        temp_v0 = (u16) this->unk33E;
+        temp_t7 = temp_v0 - 0x3335;
+        if ((s32) temp_v0 >= 0x2391) {
+            if (temp_t7 < 0x39U) {
+                goto **(&jtbl_D_80AC0300 + (temp_t7 * 4));
+block_4:
+                if (temp_v0 == 0x2390) {
+                    func_801477B4(globalCtx);
+                    func_80ABF070(this);
+                    return;
+                case 0:
+                    globalCtx = globalCtx;
+                    func_80ABFCAC(this, (u16)0, (u16)3);
+                    func_801518B0(globalCtx, 0x3336U, (Actor *) this);
+                    this->unk33E = 0x3336;
+                    func_80151BB4((s32) globalCtx, 5U);
+                    return;
+                case 3:
+                    func_801518B0(globalCtx, 0x3339U, (Actor *) this);
+                    this->unk33E = 0x3339;
+                    return;
+                case 5:
+                case 6:
+                    globalCtx = globalCtx;
+                    func_80ABFCAC(this, (u16)0, (u16)3);
+                    func_801518B0(globalCtx, 0x333CU, (Actor *) this);
+                    this->unk33E = 0x333C;
+                    return;
+                case 7:
+                    globalCtx = globalCtx;
+                    func_80ABFCAC(this, (u16)0, (u16)2);
+                    func_801518B0(globalCtx, 0x333DU, (Actor *) this);
+                    this->unk33E = 0x333D;
+                    return;
+                case 8:
+                    func_801518B0(globalCtx, 0x333EU, (Actor *) this);
+                    this->unk33E = 0x333E;
+                    return;
+                case 9:
+                    func_801477B4(globalCtx);
+                    func_80ABF760(this);
+                    return;
+                case 10:
+                    func_801518B0(globalCtx, 0x3340U, (Actor *) this);
+                    this->unk33E = 0x3340;
+                    return;
+                case 11:
+                    globalCtx = globalCtx;
+                    func_80ABFCAC(this, (u16)0, (u16)3);
+                    func_801518B0(globalCtx, 0x3341U, (Actor *) this);
+                    this->unk33E = 0x3341;
+                    return;
+                case 14:
+                    globalCtx = globalCtx;
+                    func_80ABFCAC(this, (u16)0, (u16)0);
+                    func_801518B0(globalCtx, 0x3344U, (Actor *) this);
+                    this->unk33E = 0x3344;
+                    return;
+                case 15:
+                    func_801518B0(globalCtx, 0x3345U, (Actor *) this);
+                    this->unk33E = 0x3345;
+                    return;
+                case 16:
+                    func_801518B0(globalCtx, 0x3349U, (Actor *) this);
+                    this->unk33E = 0x3349;
+                    return;
+                case 20:
+                    func_801518B0(globalCtx, 0x334AU, (Actor *) this);
+                    this->unk33E = 0x334A;
+                    return;
+                case 21:
+                    func_801477B4(globalCtx);
+                    func_80ABF070(this);
+                    return;
+                case 23:
+                    func_801518B0(globalCtx, 0x334DU, (Actor *) this);
+                    this->unk33E = 0x334D;
+                    return;
+                case 27:
+                case 28:
+                case 40:
+                case 41:
+                    if (this->unk_332 != 0) {
+                        func_801518B0(globalCtx, 0x3356U, (Actor *) this);
+                        this->unk33E = 0x3356;
+                        return;
+                    case 29:
+                    case 56:
+                        globalCtx = globalCtx;
+                        func_80ABFCAC(this, (u16)0, (u16)0);
+                        temp_a0 = globalCtx;
+                        if ((*(gBitFlags + 0x38) & (s32) gSaveContext.perm.inv.pad4C) == 0) {
+                            globalCtx = globalCtx;
+                            func_801477B4(temp_a0);
+                            sp24->unkA6C = (s32) (sp24->unkA6C | 0x20);
+                            func_80ABF494(this);
+                            func_80ABF4A8(this, globalCtx);
+                            return;
+                        case 35:
+                            temp_a0_2 = globalCtx;
+                            if ((gSaveContext.perm.unk20 != 4) || ((*(gBitFlags + 0x38) & (s32) gSaveContext.perm.inv.pad4C) == 0)) {
+
+                            } else {
+                                func_801518B0(globalCtx, 0x3359U, (Actor *) this);
+                                this->unk33E = 0x3359;
+                            default:
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                                return;
+                            }
+                            globalCtx = globalCtx;
+                            func_801518B0(temp_a0_2, 0x335CU, (Actor *) this);
+                            this->unk33E = 0x335C;
+                            func_80151BB4((s32) globalCtx, 5U);
+                            return;
+                        }
+                        func_801518B0(globalCtx, 0x334CU, (Actor *) this);
+                        this->unk33E = 0x334C;
+                        return;
+                        return;
+                    }
+                    func_801518B0(globalCtx, 0x3352U, (Actor *) this);
+                    this->unk33E = 0x3352;
+                    return;
+                    return;
+                }
+            }
+        } else {
+            goto block_4;
+        }
+    }
+default:
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABEB6C.asm")
 
+
+/*
+void func_80ABEF34(EnMa4 *this) {
+    if (this->unk_332 != 2) {
+        func_80ABDD2C(this, 1);
+    } else {
+        func_80ABDD2C(this, 0xF);
+    }
+    this->actionFunc = func_80ABEF8C;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABEF34.asm")
 
+
+/*
+void func_80ABEF8C(EnMa4 *this, GlobalContext *globalCtx) {
+    GlobalContext *temp_a0;
+    u32 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 < 7U) {
+        goto **(&jtbl_D_80AC03E4 + (temp_v0 * 4));
+    case 4:
+        func_80ABE6C8(this, globalCtx);
+        goto block_8;
+    case 5:
+        func_80ABEB6C(this, globalCtx);
+        goto block_8;
+    case 6:
+        temp_a0 = globalCtx;
+        globalCtx = globalCtx;
+        if (func_80147624(temp_a0) != 0) {
+            if ((globalCtx->unk169B9 == 0) || ((*(gBitFlags + 0x48) & *gSaveContext.perm.inv.pad4C) == 0)) {
+                func_80ABE4A4(this);
+            }
+        }
+    }
+default:
+case 0:
+block_8:
+    if (this->unk_332 != 2) {
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x7D0, 0x3E8);
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABEF8C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF070.asm")
+void func_80ABF070(EnMa4 *this) {
+    this->actionFunc = func_80ABF084;
+}
 
+/*
+void func_80ABF084(EnMa4 *this, GlobalContext *globalCtx) {
+    globalCtx->nextEntranceIndex = 0x6400;
+    gSaveContext.unk3F4A = (u16)0xFFF0;
+    globalCtx->unk18875 = 0x14;
+    globalCtx->unk1887F = 0x50;
+    gSaveContext.unk3F55 = (u8)3;
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF084.asm")
 
+
+/*
+void func_80ABF0D8(EnMa4 *this, GlobalContext *globalCtx) {
+    GlobalContext *temp_a1;
+
+    temp_a1 = globalCtx;
+    globalCtx = globalCtx;
+    if (func_800B84D0((Actor *) this, temp_a1) != 0) {
+        func_801518B0(globalCtx, 0x336EU, (Actor *) this);
+        this->actionFunc = func_80ABF160;
+        return;
+    }
+    if ((gSaveContext.extra.unk_160 == 0) && ((u32) gSaveContext.extra.unk_164 < 0x2CECU)) {
+        func_800B8614((Actor *) this, globalCtx, 100.0f);
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF0D8.asm")
 
+/*
+void func_80ABF160(EnMa4 *this, GlobalContext *globalCtx) {
+    if (func_800B867C((Actor *) this, globalCtx) != 0) {
+        this->actionFunc = func_80ABF254;
+    }
+}
+*/
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF160.asm")
+
 
 void func_80ABF198(EnMa4 *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
