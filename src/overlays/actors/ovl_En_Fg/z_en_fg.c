@@ -22,14 +22,14 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-extern u64 gDust1Tex[]; // D_0408DBE0
-extern u64 gDust2Tex[]; // D_0408DFE0
-extern u64 gDust3Tex[]; // D_0408E3E0
-extern u64 gDust4Tex[]; // D_0408E7E0
-extern u64 gDust5Tex[]; // D_0408EBE0
-extern u64 gDust6Tex[]; // D_0408EFE0
-extern u64 gDust7Tex[]; // D_0408F3E0
-extern u64 gDust8Tex[]; // D_0408F7E0
+extern u64 D_0408DBE0[]; // gDust1Tex
+extern u64 D_0408DFE0[]; // gDust2Tex
+extern u64 D_0408E3E0[]; // gDust3Tex
+extern u64 D_0408E7E0[]; // gDust4Tex
+extern u64 D_0408EBE0[]; // gDust5Tex
+extern u64 D_0408EFE0[]; // gDust6Tex
+extern u64 D_0408F3E0[]; // gDust7Tex
+extern u64 D_0408F7E0[]; // gDust8Tex
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
 extern AnimationHeader D_060007BC;
@@ -198,7 +198,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             this->actor.velocity.y = 10.0f;
             this->actor.speedXZ = 3.0f;
             this->actor.gravity = -0.8f;
-            this->knockbackCounter = 1;
+            this->bounceCounter = 1;
             this->timer = 0;
             this->actionFunc = EnFg_Knockback;
             break;
@@ -249,7 +249,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             this->actor.velocity.y = 10.0f;
             this->actor.speedXZ = 3.0f;
             this->actor.gravity = -0.8f;
-            this->knockbackCounter = 1;
+            this->bounceCounter = 1;
             this->timer = 0;
             this->actionFunc = EnFg_Knockback;
             break;
@@ -274,10 +274,10 @@ void EnFg_DoNothing(EnFg* this, GlobalContext* globalCtx) {
 
 void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx) {
     if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
-        this->knockbackCounter++;
-        if (this->knockbackCounter < 4) {
+        this->bounceCounter++;
+        if (this->bounceCounter < 4) {
             this->actor.shape.rot.x += 0x1000;
-            this->actor.velocity.y = 10.0f / this->knockbackCounter;
+            this->actor.velocity.y = 10.0f / this->bounceCounter;
         } else {
             this->actionFunc = EnFg_DoNothing;
         }
@@ -428,7 +428,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
 }
 
 u64* sDustTex[] = {
-    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
 };
 
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {

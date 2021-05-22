@@ -56,7 +56,7 @@ typedef struct EnFg {
     /* 0x1D8 */ Vec3s limbDrawTbl[24];
     /* 0x268 */ Vec3s transitionDrawTbl[24];
     /* 0x2F8 */ s16 timer;
-    /* 0x2FA */ s16 knockbackCounter;
+    /* 0x2FA */ s16 bounceCounter;
     /* 0x2FC */ EnFgEffectDust dustEffect[10];
 } EnFg; // size = 0x554
 
