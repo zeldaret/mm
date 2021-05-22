@@ -19,7 +19,7 @@ const ActorInit En_Toto_InitVars = {
     (ActorFunc)EnToto_Init,
     (ActorFunc)EnToto_Destroy,
     (ActorFunc)EnToto_Update,
-    (ActorFunc)EnToto_Draw
+    (ActorFunc)EnToto_Draw,
 };
 */
 

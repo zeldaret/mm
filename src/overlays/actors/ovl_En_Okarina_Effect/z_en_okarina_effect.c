@@ -21,10 +21,10 @@ const ActorInit En_Okarina_Effect_InitVars = {
     (ActorFunc)EnOkarinaEffect_Init,
     (ActorFunc)EnOkarinaEffect_Destroy,
     (ActorFunc)EnOkarinaEffect_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 
-void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc* actionFunc) {
+void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
@@ -37,7 +37,7 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (globalCtx->kankyoContext.unkF2[1]) {
         Actor_MarkForDeath(&this->actor);
     }
-    EnOkarinaEffect_SetupAction(&this->actor, func_8096B104);
+    EnOkarinaEffect_SetupAction(this, func_8096B104);
 }
 
 void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {

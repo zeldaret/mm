@@ -1,0 +1,38 @@
+Submodule 'ZAPD' (https://github.com/zeldaret/ZAPD.git) registered for path 'tools/ZAPD'
+Submodule 'tools/asm-differ' (https://github.com/simonlindholm/asm-differ.git) registered for path 'tools/asm-differ'
+Submodule 'tools/asm-processor' (https://github.com/simonlindholm/asm-processor.git) registered for path 'tools/asm-processor'
+Submodule 'tools/decomp-permuter' (https://github.com/simonlindholm/decomp-permuter) registered for path 'tools/decomp-permuter'
+Cloning into '/home/jenkins/workspace/MM_PR-150/tools/ZAPD'...
+Cloning into '/home/jenkins/workspace/MM_PR-150/tools/asm-processor'...
+Cloning into '/home/jenkins/workspace/MM_PR-150/tools/asm-differ'...
+Cloning into '/home/jenkins/workspace/MM_PR-150/tools/decomp-permuter'...
+From https://github.com/zeldaret/ZAPD
+ * branch            bbbbb046a54f99dcbc6cbcc765177d8b252546f0 -> FETCH_HEAD
+From https://github.com/zeldaret/ZAPD
+ * branch            bbbbb046a54f99dcbc6cbcc765177d8b252546f0 -> FETCH_HEAD
+From https://github.com/simonlindholm/asm-differ
+ * branch            9d79eb9f539e5fa58fe63c62862661c5d9ce0d27 -> FETCH_HEAD
+From https://github.com/simonlindholm/asm-processor
+ * branch            f511734d56ebb152c2b0c5aab212a0fea2588513 -> FETCH_HEAD
+From https://github.com/simonlindholm/decomp-permuter
+ * branch            cbb41c125464c3cbe799d77fe2d661615f934720 -> FETCH_HEAD
+vtxdis.c: In function ‘parse_int’:
+vtxdis.c:41:9: warning: ‘strncpy’ specified bound 20 equals destination size [-Wstringop-truncation]
+         strncpy(outnum, &num[2], 20);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ZAPD/ZRoom/Commands/SetStartPositionList.cpp: In function ‘void __static_initialization_and_destruction_0(int, int)’:
+ZAPD/ZRoom/Commands/SetStartPositionList.cpp:83:1: note: variable tracking size limit exceeded with -fvar-tracking-assignments, retrying without
+ }
+ ^
+ZAPD/ZRoom/Commands/SetActorList.cpp: In function ‘void __static_initialization_and_destruction_0(int, int)’:
+ZAPD/ZRoom/Commands/SetActorList.cpp:164:1: note: variable tracking size limit exceeded with -fvar-tracking-assignments, retrying without
+ }
+ ^
+ZAPD/ZRoom/Commands/SetObjectList.cpp: In function ‘void __static_initialization_and_destruction_0(int, int)’:
+ZAPD/ZRoom/Commands/SetObjectList.cpp:76:1: note: variable tracking size limit exceeded with -fvar-tracking-assignments, retrying without
+ }
+ ^
+ZAPD/ZRoom/Commands/SetTransitionActorList.cpp: In function ‘void __static_initialization_and_destruction_0(int, int)’:
+ZAPD/ZRoom/Commands/SetTransitionActorList.cpp:105:1: note: variable tracking size limit exceeded with -fvar-tracking-assignments, retrying without
+ }
+ ^

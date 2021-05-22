@@ -19,7 +19,7 @@ const ActorInit En_Wiz_Brock_InitVars = {
     (ActorFunc)EnWizBrock_Init,
     (ActorFunc)EnWizBrock_Destroy,
     (ActorFunc)EnWizBrock_Update,
-    (ActorFunc)EnWizBrock_Draw
+    (ActorFunc)EnWizBrock_Draw,
 };
 */
 

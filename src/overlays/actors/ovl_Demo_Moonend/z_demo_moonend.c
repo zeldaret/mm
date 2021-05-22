@@ -19,7 +19,7 @@ const ActorInit Demo_Moonend_InitVars = {
     (ActorFunc)DemoMoonend_Init,
     (ActorFunc)DemoMoonend_Destroy,
     (ActorFunc)DemoMoonend_Update,
-    (ActorFunc)DemoMoonend_Draw
+    (ActorFunc)DemoMoonend_Draw,
 };
 */
 

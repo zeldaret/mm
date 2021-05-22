@@ -31,7 +31,7 @@
     ('build/baserom/assets/textures/nes_font_static', '', 0x1000, 0),
     ('build/baserom/assets/textures/message_data_static', '', 0x1000, 0),
     ('build/baserom/assets/textures/staff_message_data_static', '', 0x1000, 0),
-    ('build/baserom/code', 'build/comp/code.yaz0', 0x1000, 0),
+    ('build/binary/code', 'build/comp/code.yaz0', 0x1000, 0),
     ('build/binary/overlays/ovl_title', 'build/comp/overlays/ovl_title.yaz0', 0x10, 0),
     ('build/binary/overlays/ovl_select', 'build/comp/overlays/ovl_select.yaz0', 0x10, 0),
     ('build/binary/overlays/ovl_opening', 'build/comp/overlays/ovl_opening.yaz0', 0x10, 0),

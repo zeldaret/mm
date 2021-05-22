@@ -19,7 +19,7 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Init,
     (ActorFunc)EnHoll_Destroy,
     (ActorFunc)EnHoll_Update,
-    (ActorFunc)EnHoll_Draw
+    (ActorFunc)EnHoll_Draw,
 };
 */
 

@@ -31,7 +31,7 @@ const ActorInit En_Jc_Mato_InitVars = {
     (ActorFunc)EnJcMato_Draw,
 };
 
-ColliderSphereInit sSphereInit = {
+static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -51,7 +51,7 @@ ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-DamageTable EnJcMatoDamageTable = {
+static DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0xF1, 0xF1, 0x01, 0x01,
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 };
@@ -100,7 +100,7 @@ void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitSphere(globalCtx, &this->collider);
     Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 0xF;
-    this->actor.colChkInfo.damageTable = &EnJcMatoDamageTable;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = 0;
     this->despawnTimer = 25;

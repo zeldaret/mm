@@ -18,7 +18,7 @@ const ActorInit Bg_Umajump_InitVars = {
     (ActorFunc)BgUmajump_Init,
     (ActorFunc)BgUmajump_Destroy,
     (ActorFunc)BgUmajump_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

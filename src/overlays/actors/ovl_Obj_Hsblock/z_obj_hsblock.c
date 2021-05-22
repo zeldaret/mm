@@ -19,7 +19,7 @@ const ActorInit Obj_Hsblock_InitVars = {
     (ActorFunc)ObjHsblock_Init,
     (ActorFunc)ObjHsblock_Destroy,
     (ActorFunc)ObjHsblock_Update,
-    (ActorFunc)ObjHsblock_Draw
+    (ActorFunc)ObjHsblock_Draw,
 };
 */
 

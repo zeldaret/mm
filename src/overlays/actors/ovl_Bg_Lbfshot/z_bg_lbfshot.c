@@ -17,10 +17,10 @@ const ActorInit Bg_Lbfshot_InitVars = {
     (ActorFunc)BgLbfshot_Init,
     (ActorFunc)BgLbfshot_Destroy,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)BgLbfshot_Draw
+    (ActorFunc)BgLbfshot_Draw,
 };
 
-static InitChainEntry D_80C18200[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -30,7 +30,7 @@ extern UNK_TYPE D_06000228;
 void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLbfshot* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80C18200);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.uncullZoneForward = 4000.0f;
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060014D8);

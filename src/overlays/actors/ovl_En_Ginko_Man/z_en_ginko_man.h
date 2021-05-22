@@ -3,9 +3,9 @@
 
 #include <global.h>
 
- typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
-
 struct EnGinkoMan;
+
+ typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
@@ -34,7 +34,7 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern SkeletonHeader object_ginko_skeleton[];
+extern FlexSkeletonHeader object_ginko_skeleton[];
 extern Gfx object_ginko_limb15_dlist[];
 
 extern AnimationHeader object_ginko_floorsmacking_anim[];
