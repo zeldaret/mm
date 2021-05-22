@@ -117,7 +117,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x44C; // would you like to make an account
         } else {
             func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
-            if ((CURRENT_DAY == 3) && (gSaveContext.isNight == true)) {
+            if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                 func_801518B0(globalCtx, 0x467, &this->actor);
                 this->curTextId = 0x467; // "What's this? You need somethin' on a day like this?
             } else {
@@ -148,9 +148,10 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
     }
 
     switch (this->curTextId - 0x44C) {
+
         case 0: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
             func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
-            if (gSaveContext.weekEventReg[10] & 8) {
+            if ((gSaveContext.weekEventReg[10] & 8) != 0) {
                 func_801518B0(globalCtx, 0x44E, &this->actor);
                 this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             } else {
@@ -242,6 +243,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
                     }
                 }
             }
+
             // bright green arrow goes here
             func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x460, &this->actor);
@@ -381,6 +383,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
     }
 
     switch (this->curTextId) {
+
         case 0x44E: // "...So, what'll it be?
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if ((gSaveContext.roomInf[127][0] & 0xFFFF) >= 0x1388) {
@@ -455,6 +458,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
         case 0x468: // Deposit OR withdrawl OR cancel screen // location: @C38
             // FAKE MATCH
             if (globalCtx->msgCtx.choiceIndex) {} // -5000 permuter score: regalloc and branch likely swapping
+
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_CANCEL) {
                 func_8019F230();
                 func_801518B0(globalCtx, 0x470, &this->actor);
@@ -601,7 +605,9 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx, ((u32)(gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) + 8, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx,
+                          ((u32)(gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) + 8, 500.0f,
+                          100.0f);
         } else {
             func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
         }
@@ -626,7 +632,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
     GlobalContext* gCtx; // = globalCtx;
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if (((gSaveContext.weekEventReg[0xA] & 8) == 0) && (this->curTextId == 0x45B)) {
+        if ((!(gSaveContext.weekEventReg[0xA] & 8)) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
             gSaveContext.weekEventReg[0xA] |= 8;
@@ -646,7 +652,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         gCtx = globalCtx;
         if ((func_80152498(&gCtx->msgCtx, globalCtx) == 6) && (func_80147624(globalCtx) != 0)) {
-            if ((gSaveContext.weekEventReg[0x3B] & 8) == 0) {
+            if (!(gSaveContext.weekEventReg[0x3B] & 8)) {
                 gSaveContext.weekEventReg[0x3B] |= 8;
             }
             EnGinkoMan_SetupIdle(this);
