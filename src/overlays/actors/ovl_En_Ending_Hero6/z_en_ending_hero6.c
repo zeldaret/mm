@@ -19,7 +19,7 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Init,
     (ActorFunc)EnEndingHero6_Destroy,
     (ActorFunc)EnEndingHero6_Update,
-    (ActorFunc)EnEndingHero6_Draw
+    (ActorFunc)EnEndingHero6_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit Demo_Getitem_InitVars = {
     (ActorFunc)DemoGetitem_Init,
     (ActorFunc)DemoGetitem_Destroy,
     (ActorFunc)DemoGetitem_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

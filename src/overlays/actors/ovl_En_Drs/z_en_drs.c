@@ -18,7 +18,7 @@ const ActorInit En_Drs_InitVars = {
     (ActorFunc)EnDrs_Init,
     (ActorFunc)EnDrs_Destroy,
     (ActorFunc)EnDrs_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

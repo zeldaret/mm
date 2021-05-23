@@ -19,7 +19,7 @@ const ActorInit En_Tab_InitVars = {
     (ActorFunc)EnTab_Init,
     (ActorFunc)EnTab_Destroy,
     (ActorFunc)EnTab_Update,
-    (ActorFunc)EnTab_Draw
+    (ActorFunc)EnTab_Draw,
 };
 */
 

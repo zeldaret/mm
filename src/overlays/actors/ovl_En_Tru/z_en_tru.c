@@ -19,7 +19,7 @@ const ActorInit En_Tru_InitVars = {
     (ActorFunc)EnTru_Init,
     (ActorFunc)EnTru_Destroy,
     (ActorFunc)EnTru_Update,
-    (ActorFunc)EnTru_Draw
+    (ActorFunc)EnTru_Draw,
 };
 */
 
