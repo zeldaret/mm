@@ -73,7 +73,34 @@ void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C39C.asm")
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C39C.asm")
+void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
+    s16 temp_v1;
+
+    temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    if (func_800B84D0(this, globalCtx)) {
+        func_80B3C29C(this);
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+        if (temp_v1 <= -0x5556 || temp_v1 >= 0x5556) {
+            func_800B863C(this, globalCtx);
+            if (player->unk14B == 1) {
+                this->actor.textId = 0xCF3;
+            } else {
+                this->actor.textId = 0xCF2;
+            }
+        }
+    }
+    if (this->unk_148 < 0.0f) {
+        if (!(gSaveContext.perm.weekEventReg[20] & 0x20) && player->unk14B == 1) {
+            func_80B3C2B0(this);
+            return;
+        }
+    }
+    player->unkA70 &= ~0x10;
+    this->unk_148 = 0.0f;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C4E0.asm")
 // void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
@@ -112,22 +139,25 @@ void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
 //     }
 // }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
-// void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
-//     ActorPlayer* player;
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
+void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
+    s32 stepTemp;
 
-//     this->actor.world.pos.z = this->actor.home.pos.z + this->unk_168;
-//     if (Math_StepToS(&this->unk_168, 0x64, 1) & 0xFF) {
-//         player->unkA70 &= ~0x10;
-//         this->unk_148 = 0.0f;
-//         func_80B3C2C4(this, globalCtx);
-//         gSaveContext.perm.weekEventReg[20] |= 0x20;
-//         func_80B3C260(this);
-//         func_8019F1C0(D_80B3C960, 0x2835U);
-//     } else {
-//         func_8019F1C0(D_80B3C960, 0x200AU);
-//     }
-// }
+    stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
+    this->actor.world.pos.z = this->actor.home.pos.z + this->unk_168;
+    if (stepTemp & 0xFF) {
+        player->unkA70 &= ~0x10;
+        this->unk_148 = 0.0f;
+        func_80B3C2C4(this, globalCtx);
+        gSaveContext.perm.weekEventReg[20] |= 0x20;
+        func_80B3C260(this);
+        func_8019F1C0(D_80B3C960, 0x2835U);
+    } else {
+        func_8019F1C0(D_80B3C960, 0x200AU);
+    }
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Init.asm")
