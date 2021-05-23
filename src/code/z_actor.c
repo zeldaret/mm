@@ -594,6 +594,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B84D0.asm")
 
+UNK_TYPE4 func_800B8500(Actor* actor, GlobalContext* ctxt, f32 fParm3, f32 fParm4, s32 param_5);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8500.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B85E0.asm")
