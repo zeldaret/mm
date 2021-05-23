@@ -355,7 +355,6 @@ void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
-
     if (func_80147624(globalCtx) != 0) {
         switch (this->unk_33E) {
             case 0x3339:
@@ -486,169 +485,134 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
 }
 
 
-/*
 void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
-    Actor *sp24;
-    Actor *temp_t6;
-    GlobalContext *temp_a0;
-    GlobalContext *temp_a0_2;
-    GlobalContext *temp_a3;
-    u16 temp_v0;
-    u32 temp_t7;
+    ActorPlayer *player = PLAYER;
+    s32 aux;
 
-    temp_a3 = globalCtx;
-    temp_t6 = temp_a3->actorCtx.actorList[2].first;
-    globalCtx = temp_a3;
-    sp24 = temp_t6;
-    if (func_80147624(temp_a3) != 0) {
-        temp_v0 = (u16) this->unk33E;
-        temp_t7 = temp_v0 - 0x3335;
-        if ((s32) temp_v0 >= 0x2391) {
-            if (temp_t7 < 0x39U) {
-                goto **(&jtbl_D_80AC0300 + (temp_t7 * 4));
-block_4:
-                if (temp_v0 == 0x2390) {
-                    func_801477B4(globalCtx);
-                    func_80ABF070(this);
-                    return;
-                case 0:
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)3);
-                    func_801518B0(globalCtx, 0x3336U, &this->actor);
-                    this->unk33E = 0x3336;
-                    func_80151BB4((s32) globalCtx, 5U);
-                    return;
-                case 3:
-                    func_801518B0(globalCtx, 0x3339U, &this->actor);
-                    this->unk33E = 0x3339;
-                    return;
-                case 5:
-                case 6:
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)3);
-                    func_801518B0(globalCtx, 0x333CU, &this->actor);
-                    this->unk33E = 0x333C;
-                    return;
-                case 7:
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)2);
-                    func_801518B0(globalCtx, 0x333DU, &this->actor);
-                    this->unk33E = 0x333D;
-                    return;
-                case 8:
-                    func_801518B0(globalCtx, 0x333EU, &this->actor);
-                    this->unk33E = 0x333E;
-                    return;
-                case 9:
-                    func_801477B4(globalCtx);
-                    func_80ABF760(this);
-                    return;
-                case 10:
-                    func_801518B0(globalCtx, 0x3340U, &this->actor);
-                    this->unk33E = 0x3340;
-                    return;
-                case 11:
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)3);
-                    func_801518B0(globalCtx, 0x3341U, &this->actor);
-                    this->unk33E = 0x3341;
-                    return;
-                case 14:
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)0);
-                    func_801518B0(globalCtx, 0x3344U, &this->actor);
-                    this->unk33E = 0x3344;
-                    return;
-                case 15:
-                    func_801518B0(globalCtx, 0x3345U, &this->actor);
-                    this->unk33E = 0x3345;
-                    return;
-                case 16:
-                    func_801518B0(globalCtx, 0x3349U, &this->actor);
-                    this->unk33E = 0x3349;
-                    return;
-                case 20:
-                    func_801518B0(globalCtx, 0x334AU, &this->actor);
-                    this->unk33E = 0x334A;
-                    return;
-                case 21:
-                    func_801477B4(globalCtx);
-                    func_80ABF070(this);
-                    return;
-                case 23:
-                    func_801518B0(globalCtx, 0x334DU, &this->actor);
-                    this->unk33E = 0x334D;
-                    return;
-                case 27:
-                case 28:
-                case 40:
-                case 41:
-                    if (this->unk_332 != 0) {
-                        func_801518B0(globalCtx, 0x3356U, &this->actor);
-                        this->unk33E = 0x3356;
-                        return;
-                    case 29:
-                    case 56:
-                        globalCtx = globalCtx;
-                        EnMa4_SetFaceExpression(this, (u16)0, (u16)0);
-                        temp_a0 = globalCtx;
-                        if ((*(gBitFlags + 0x38) & (s32) gSaveContext.perm.inv.pad4C) == 0) {
-                            globalCtx = globalCtx;
-                            func_801477B4(temp_a0);
-                            sp24->unkA6C = (s32) (sp24->unkA6C | 0x20);
-                            func_80ABF494(this);
-                            func_80ABF4A8(this, globalCtx);
-                            return;
-                        case 35:
-                            temp_a0_2 = globalCtx;
-                            if ((gSaveContext.perm.unk20 != 4) || ((*(gBitFlags + 0x38) & (s32) gSaveContext.perm.inv.pad4C) == 0)) {
+    if (func_80147624(globalCtx) != 0) {
+        switch (this->unk_33E) {
+            case 0x2390:
+                func_801477B4(globalCtx);
+                func_80ABF070(this);
+                break;
 
-                            } else {
-                                func_801518B0(globalCtx, 0x3359U, &this->actor);
-                                this->unk33E = 0x3359;
-                            default:
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                                return;
-                            }
-                            globalCtx = globalCtx;
-                            func_801518B0(temp_a0_2, 0x335CU, &this->actor);
-                            this->unk33E = 0x335C;
-                            func_80151BB4((s32) globalCtx, 5U);
-                            return;
-                        }
-                        func_801518B0(globalCtx, 0x334CU, &this->actor);
-                        this->unk33E = 0x334C;
-                        return;
-                        return;
-                    }
-                    func_801518B0(globalCtx, 0x3352U, &this->actor);
-                    this->unk33E = 0x3352;
-                    return;
-                    return;
+            case 0x3335:
+                EnMa4_SetFaceExpression(this, 0, 3);
+                func_801518B0(globalCtx, 0x3336, &this->actor);
+                this->unk_33E = 0x3336;
+                func_80151BB4(globalCtx, 5);
+                break;
+
+            case 0x3335 + 3:
+                func_801518B0(globalCtx, 0x3339, &this->actor);
+                this->unk_33E = 0x3339;
+                break;
+
+            case 0x3335 + 5:
+            case 0x3335 + 6:
+                EnMa4_SetFaceExpression(this, 0, 3);
+                func_801518B0(globalCtx, 0x333C, &this->actor);
+                this->unk_33E = 0x333C;
+                break;
+
+            case 0x3335 + 7:
+                EnMa4_SetFaceExpression(this, 0, 2);
+                func_801518B0(globalCtx, 0x333D, &this->actor);
+                this->unk_33E = 0x333D;
+                break;
+
+            case 0x3335 + 8:
+                func_801518B0(globalCtx, 0x333E, &this->actor);
+                this->unk_33E = 0x333E;
+                break;
+
+            case 0x3335 + 9:
+                func_801477B4(globalCtx);
+                func_80ABF760(this);
+                break;
+
+            case 0x3335 + 10:
+                func_801518B0(globalCtx, 0x3340, &this->actor);
+                this->unk_33E = 0x3340;
+                break;
+
+            case 0x3335 + 11:
+                EnMa4_SetFaceExpression(this, 0, 3);
+                func_801518B0(globalCtx, 0x3341, &this->actor);
+                this->unk_33E = 0x3341;
+                break;
+
+            case 0x3335 + 14:
+                EnMa4_SetFaceExpression(this, 0, 0);
+                func_801518B0(globalCtx, 0x3344, &this->actor);
+                this->unk_33E = 0x3344;
+                break;
+
+            case 0x3335 + 15:
+                func_801518B0(globalCtx, 0x3345, &this->actor);
+                this->unk_33E = 0x3345;
+                break;
+
+            case 0x3335 + 16:
+                func_801518B0(globalCtx, 0x3349, &this->actor);
+                this->unk_33E = 0x3349;
+                break;
+
+            case 0x3335 + 20:
+                func_801518B0(globalCtx, 0x334A, &this->actor);
+                this->unk_33E = 0x334A;
+                break;
+
+            case 0x3335 + 21:
+                func_801477B4(globalCtx);
+                func_80ABF070(this);
+                break;
+
+            case 0x3335 + 23:
+                func_801518B0(globalCtx, 0x334D, &this->actor);
+                this->unk_33E = 0x334D;
+                break;
+
+            case 0x3335 + 27:
+            case 0x3335 + 28:
+            case 0x3335 + 40:
+            case 0x3335 + 41:
+                if (this->unk_332 == 0) {
+                    func_801518B0(globalCtx, 0x3352, &this->actor);
+                    this->unk_33E = 0x3352;
+                } else {
+                    func_801518B0(globalCtx, 0x3356, &this->actor);
+                    this->unk_33E = 0x3356;
                 }
-            }
-        } else {
-            goto block_4;
+                break;
+
+            case 0x3335 + 29: // You two work perfectly together!
+            case 0x3335 + 56: // Too bad. Well, that's how it goes at first, Grasshopper.
+                EnMa4_SetFaceExpression(this, 0, 0);
+                if ((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE]) {
+                    func_801518B0(globalCtx, 0x334C, &this->actor);
+                    this->unk_33E = 0x334C;
+                } else {
+                    func_801477B4(globalCtx);
+                    player->stateFlags1 |= 0x20;
+                    func_80ABF494(this);
+                    func_80ABF4A8(this, globalCtx);
+                }
+                break;
+
+            case 0x3335 + 35:
+                if ((gSaveContext.perm.unk20 != 4) || !((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE])) {
+                    func_801518B0(globalCtx, 0x335C, &this->actor);
+                    this->unk_33E = 0x335C;
+                    func_80151BB4(globalCtx, 5);
+                } else {
+                    func_801518B0(globalCtx, 0x3359, &this->actor);
+                    this->unk_33E = 0x3359;
+                }
+                break;
         }
     }
-default:
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABEB6C.asm")
 
 
 
