@@ -44,7 +44,9 @@ typedef struct EnMa4 {
     /* 0x1DC */ char unk1DC[0x4];
     /* 0x1E0 */ Vec3s unk_1E0;
     /* 0x1E6 */ Vec3s unk_1E6;
-    /* 0x1EC */ char unk1EC[0x14];
+    /* 0x1EC */ char unk1EC[0x4];
+    /* 0x1F0 */ Vec3f unk_1F0;
+    /* 0x1FC */ char unk1FC[0x4];
     /* 0x200 */ Vec3s* unk_200;
     /* 0x204 */ Vec3s limbDrawTable[OBJECT_MA1_LIMB_TABLE_COUNT];
     /* 0x28E */ char unk28E[0x6];
@@ -52,18 +54,18 @@ typedef struct EnMa4 {
     /* 0x31E */ char unk31E[0x6];
     /* 0x324 */ s16 unk_324;
     /* 0x326 */ s16 unk_326; // pathPointsCount
-    /* 0x328 */ char unk_328[0x2];
+    /* 0x328 */ char unk_328[0x2]; // unused
     /* 0x32A */ s16 unk_32A; // blinkTimer
     /* 0x33C */ s16 unk_32C; // overrideEyeTexIndex
     /* 0x32E */ s16 unk_32E; // eyeTexIndex
     /* 0x330 */ s16 unk_330; // mouthTexIndex
-    /* 0x332 */ s16 unk_332;
+    /* 0x332 */ s16 unk_332; // type?
     /* 0x334 */ u16 unk_334;
     /* 0x336 */ s16 unk_336;
     /* 0x338 */ s16 unk_338; // modified by EnPoFusen
     /* 0x33A */ s16 unk_33A;
     /* 0x33C */ s16 unk_33C;
-    /* 0x33E */ char unk33E[0x2];
+    /* 0x33E */ u16 unk_33E;
 } EnMa4; // size = 0x340
 
 extern const ActorInit En_Ma4_InitVars;

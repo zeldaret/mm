@@ -370,7 +370,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) { //
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ginko_Man_0x80A644A0/EnGinkoMan_DepositDialogue.asm")
 #endif
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // NON-MATCHING: lots of regalloc
 // ROM SHIFT: a couple redundant li 0x4806 added reason unk
 // actionfunc: wait for player dialogue input
@@ -393,7 +393,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     return;
                 } else {
                     if (gSaveContext.perm.unk24.currentRupees > 0) {
-                        func_8019F208(0x4806);
+                        func_8019F208();
                         func_801518B0(globalCtx, 0x44F, &this->actor);
                         this->curTextId = 0x44F; // "All right! so..."
                     } else {
@@ -420,7 +420,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     this->curTextId = 0x459; // HEY you dont have that much
                     // return;
                 } else {
-                    func_8019F208(0x4806);
+                    func_8019F208();
                     if (globalCtx->msgCtx.bankRupeesSelected >= 100) {
                         func_801518B0(globalCtx, 0x455, &this->actor);
                         this->curTextId = 0x455; // You're really going to be give me that much? Rich little guy!
@@ -498,7 +498,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     this->curTextId = 0x475; // You can't hold that many in your wallet
                     return;
                 }
-                func_8019F208(0x4806);
+                func_8019F208();
 
                 if (globalCtx->msgCtx.bankRupeesSelected >= 100) {
                     func_801518B0(globalCtx, 0x474, &this->actor);

@@ -337,19 +337,22 @@ typedef struct {
     /* 0x088 */ UNK_TYPE1 pad88[0xAC];
     /* 0x134 */ s8 unk_134;
     /* 0x135 */ UNK_TYPE1 pad135[0x3];
-    /* 0x138 */ UNK_TYPE1 pad138[0x28];
-    /* 0x160 */ s32 unk_160;
-    /* 0x164 */ u32 unk_164;
-    /* 0x168 */ UNK_TYPE1 pad168[0x10E];
+    /* 0x138 */ UNK_TYPE1 pad138[0x8];
+    /* 0x140 */ OSTime unk_140[7];  // "event_ostime"
+    /* 0x178 */ UNK_TYPE1 pad178[0xFE];
     /* 0x276 */ u8 unk276;
     /* 0x277 */ UNK_TYPE1 pad277[0x9];
     /* 0x280 */ u16 unk280;
     /* 0x282 */ u16 unk282;
-    /* 0x284 */ UNK_TYPE1 pad284[0x28];
+    /* 0x284 */ UNK_TYPE1 pad284[0x24];
+    /* 0x2A8 */ UNK_TYPE1 pad2A8[0x2];
+    /* 0x2AA */ u16 unk_2AA;
     /* 0x2AC */ u8 cutsceneTrigger;
     /* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
     /* 0x2B2 */ u16 environmentTime;
-    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
+    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x1];
+    /* 0x2B5 */ u8 unk_2B5;
+    /* 0x2B6 */ UNK_TYPE1 pad2B6[0x2];
     /* 0x2B8 */ s16 unk2b8;
     /* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
     /* 0x2C4 */ f32 unk2C4;
@@ -361,7 +364,8 @@ typedef struct {
     /* 0x18 */ u8 masks[24];
     /* 0x30 */ u8 quantities[24];
     /* 0x48 */ s32 unk48; // some bits are wallet upgrades
-    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
+    /* 0x4C */ s32 unk_4C;
+    /* 0x50 */ UNK_TYPE1 pad50[0x38];
 } SaveContextInventory; // size = 0x88
 
 // Save Context that is only stored in an owl save
