@@ -70,8 +70,14 @@ s32 D_808A4D74[] = {
     0x060059A0,
     0x06005BA0,
 };
+
+// Frogs returned flag
 u16 D_808A4D7C[] = {
-    0x0000, 0x2040, 0x2080, 0x2101, 0x2102, 0x0000,
+    (0x00 << 8) | 0x00, 
+    (0x20 << 8) | 0x40,
+    (0x20 << 8) | 0x80,
+    (0x21 << 8) | 0x01,
+    (0x21 << 8) | 0x02,
 };
 
 s32 D_808A4D88 = false;
@@ -123,7 +129,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->frogIndex = (this->actor.params & 0xF);
     if (this->frogIndex >= 5) {
-        this->frogIndex = 0;
+        this->frogIndex = FROG_YELLOW;
     }
 
     this->actor.speedXZ = 0.0f;
@@ -133,8 +139,8 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
 
     if (((this->actor.params & 0xF0) >> 4) == 0) {
-        if ((this->frogIndex == 0) ||
-            (((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[this->frogIndex >> 8]) != 0)) {
+        if ((this->frogIndex == FROG_YELLOW) ||
+            ((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[this->frogIndex >> 8])) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->timer = 30;
@@ -143,9 +149,11 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.colChkInfo.mass = 30;
         }
     } else {
-        if (this->frogIndex == 0) {
+        if (this->frogIndex == FROG_YELLOW) {
             this->actor.textId = 0;
             this->actionFunc = func_808A4914;
+
+            // Spoken to FROG_YELLOW
             if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) {
                 this->actor.flags |= 0x10000;
             }
@@ -154,8 +162,9 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             this->frog = func_808A3930(globalCtx);
             this->actor.flags &= ~1;
-            if (((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8]) !=
-                0) {
+
+            // Frog has been returned
+            if (((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8])) {
                 this->actionFunc = func_808A410C;
             } else {
                 this->actor.draw = NULL;
@@ -237,14 +246,15 @@ void func_808A3B3C(EnMinifrog* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
+void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx);
 #ifdef NON_MATCHING
 void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx) {
     Camera* camera = ACTIVE_CAM;
     Vec3f vec1;
     Vec3f vec2;
     Vec3f vec3;
-    Vec3f vec4;
     Vec3f vec5;
+    Vec3f vec4;
     s16 pitch;
     s16 yaw;
     s32 i;
@@ -277,16 +287,8 @@ void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minifrog_0x808A3670/func_808A3B74.asm")
 #endif
 
-void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx);
-
-// Down to regalloc
-#ifdef NON_MATCHING
 void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
-    // s32 temp_t1;
-    // s8 temp_a0;
-    // u16 temp_t3;
-    u16 new_var;
-    u16 new_var2;
+    u8 flag;
 
     func_808A3B04(this);
     func_808A3A44(this);
@@ -299,42 +301,31 @@ void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD84:
             case 0xD86:
             case 0xD87:
-                // func_80151938(globalCtx, (temp_v0 + 1) & 0xFFFF);
                 func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
             case 0xD82:
-                if (gSaveContext.perm.weekEventReg[33] & 0x80) {
+                if (gSaveContext.perm.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
                     func_80151938(globalCtx, 0xD83);
                 } else {
                     func_80151938(globalCtx, 0xD86);
                 }
 
-                // PERM_RANDOMIZE(
-                // if(1) {}
-                // temp_t3 = D_808A4D7C[this->frogIndex];
-                // temp_t1 = temp_t3 >> 8;
-                new_var = D_808A4D7C[this->frogIndex];
-                new_var2 = new_var;
-                gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8] |= new_var2;
-                if (1) {}
-                // )
+                // temp variable required for matching
+                flag = gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8];
+                gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8] = flag | (u8)D_808A4D7C[this->frogIndex];
                 break;
-            // case 0xD88:
             case 0xD85:
             default:
                 func_801477B4(globalCtx);
                 func_808A3B74(this, globalCtx);
                 func_800F0568(globalCtx, &this->actor.world.pos, 30, 0x3A87);
                 if (this->actor.cutscene != -1) {
-                    // temp_a0 = this->actor.cutscene;
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);
                     }
                 }
                 Actor_MarkForDeath(&this->actor);
                 return;
-                // default:
-                //     if(1) {}
         }
     }
 
@@ -350,9 +341,6 @@ void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minifrog_0x808A3670/func_808A3DA8.asm")
-#endif
 
 void func_808A3F88(EnMinifrog* this, GlobalContext* globalCtx) {
     func_808A3A44(this);
@@ -389,7 +377,7 @@ void func_808A410C(EnMinifrog* this, GlobalContext* globalCtx) {
     if (frog1 != NULL) {
         frog2 = frog1->frog;
         if (frog1->frog != NULL) {
-            this->actor.home.rot.y = (s16)(s32)Actor_YawBetweenActors(&this->actor, &frog2->actor);
+            this->actor.home.rot.y = (s16)Actor_YawBetweenActors(&this->actor, &frog2->actor);
             func_808A3B3C(this);
         } else {
             func_808A3B04(this);
@@ -404,35 +392,32 @@ void func_808A410C(EnMinifrog* this, GlobalContext* globalCtx) {
 void func_808A41A0(EnMinifrog* this, GlobalContext* globalCtx) {
     this->actionFunc = func_808A46E8;
     if (this->frog != NULL) {
-        func_80151938(globalCtx, 0xD78U);
+        func_80151938(globalCtx, 0xD78);
     } else {
-        func_80151938(globalCtx, 0xD7CU);
+        func_80151938(globalCtx, 0xD7C);
     }
     func_808A3980(this);
     this->frog = NULL;
     this->actor.home.rot.z = 0;
 }
 
-// TODO: Should match without return's
+// Needs returns to match
 void func_808A4214(EnMinifrog* this, GlobalContext* globalCtx) {
     func_808A3A44(this);
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         func_808A41A0(this, globalCtx);
         return;
-    }
-    if (ActorCutscene_GetCanPlayNext(0x7C)) {
+    } else if (ActorCutscene_GetCanPlayNext(0x7C)) {
         ActorCutscene_Start(0x7C, NULL);
         func_808A41A0(this, globalCtx);
         return;
+    } else if (this->actor.cutscene != -1 && ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
+        ActorCutscene_Stop(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(0x7C);
+        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(0x7C);
     }
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-            ActorCutscene_Stop(this->actor.cutscene);
-            ActorCutscene_SetIntentToPlay(0x7C);
-            return;
-        }
-    }
-    ActorCutscene_SetIntentToPlay(0x7C);
 }
 
 void func_808A42D8(EnMinifrog* this, GlobalContext* globalCtx) {
@@ -557,7 +542,7 @@ void func_808A46E8(EnMinifrog* this, GlobalContext* globalCtx) {
                     case 0xD76:
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                         this->actor.flags &= ~0x10000;
-                        gSaveContext.perm.weekEventReg[34] |= 1;
+                        gSaveContext.perm.weekEventReg[34] |= 1; // Spoken to FROG_YELLOW
                         break;
                     case 0xD78:
                     case 0xD79:
@@ -570,7 +555,7 @@ void func_808A46E8(EnMinifrog* this, GlobalContext* globalCtx) {
                         globalCtx->msgCtx.unk11F10 = 0;
                         break;
                     case 0xD7C:
-                        if (gSaveContext.perm.weekEventReg[35] & 0x80) {
+                        if (gSaveContext.perm.weekEventReg[35] & 0x80) { // Obtained Heart Piece
                             func_80151938(globalCtx, 0xD7E);
                         } else {
                             func_80151938(globalCtx, 0xD7D);
@@ -602,7 +587,7 @@ void func_808A4914(EnMinifrog* this, GlobalContext* globalCtx) {
     func_808A39EC(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_808A46E8;
-        if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) {
+        if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) { // Not spoken with FROG_YELLOW
             func_801518B0(globalCtx, 0xD76U, &this->actor);
         } else {
             func_801518B0(globalCtx, 0xD7FU, &this->actor);
