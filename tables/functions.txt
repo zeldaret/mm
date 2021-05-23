@@ -5695,7 +5695,7 @@
     0x808A34B8:("EnTorch2_Draw",),
     0x808A3670:("EnMinifrog_Init",),
     0x808A38E4:("EnMinifrog_Destroy",),
-    0x808A3930:("func_808A3930",),
+    0x808A3930:("EnMinifrog_GetFrog",),
     0x808A3980:("func_808A3980",),
     0x808A39EC:("func_808A39EC",),
     0x808A3A44:("func_808A3A44",),

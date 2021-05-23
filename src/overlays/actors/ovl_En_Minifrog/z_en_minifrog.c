@@ -9,7 +9,7 @@ void EnMinifrog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMinifrog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-EnMinifrog* func_808A3930(GlobalContext* globalCtx);
+EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx);
 
 void func_808A3F88(EnMinifrog* this, GlobalContext* globalCtx);
 void func_808A4040(EnMinifrog* this, GlobalContext* globalCtx);
@@ -129,17 +129,17 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->frogIndex = (this->actor.params & 0xF);
     if (this->frogIndex >= 5) {
-        this->frogIndex = FROG_YELLOW;
+        this->frogIndex = MINIFROG_YELLOW;
     }
 
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808A4040;
-    this->unk_2B2 = 2;
+    this->jumpState = MINIFROG_STATE_GROUND;
     this->flags = 0;
     this->timer = 0;
 
     if (((this->actor.params & 0xF0) >> 4) == 0) {
-        if ((this->frogIndex == FROG_YELLOW) ||
+        if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[this->frogIndex >> 8])) {
             Actor_MarkForDeath(&this->actor);
         } else {
@@ -149,18 +149,18 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.colChkInfo.mass = 30;
         }
     } else {
-        if (this->frogIndex == FROG_YELLOW) {
+        if (this->frogIndex == MINIFROG_YELLOW) {
             this->actor.textId = 0;
             this->actionFunc = func_808A4914;
 
-            // Spoken to FROG_YELLOW
+            // Spoken to MINIFROG_YELLOW
             if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) {
                 this->actor.flags |= 0x10000;
             }
             this->actor.home.rot.x = this->actor.home.rot.z = 0;
             this->frog = NULL;
         } else {
-            this->frog = func_808A3930(globalCtx);
+            this->frog = EnMinifrog_GetFrog(globalCtx);
             this->actor.flags &= ~1;
 
             // Frog has been returned
@@ -186,11 +186,11 @@ void EnMinifrog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-EnMinifrog* func_808A3930(GlobalContext* globalCtx) {
+EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
     EnMinifrog* frog = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
     while (frog != NULL) {
-        if ((frog->actor.id != 0x22) || (frog->actor.params & 0xF)) {
+        if ((frog->actor.id != ACTOR_EN_MINIFROG) || (frog->actor.params & 0xF)) {
             frog = frog->actor.next;
         } else {
             return frog;
@@ -199,36 +199,36 @@ EnMinifrog* func_808A3930(GlobalContext* globalCtx) {
     return NULL;
 }
 
-void func_808A3980(EnMinifrog* this) {
-    if (this->unk_2B2 == 2) {
-        this->unk_2B2 = 0;
+void EnMinifrog_SetupJump(EnMinifrog* this) {
+    if (this->jumpState == MINIFROG_STATE_GROUND) {
+        this->jumpState = MINIFROG_STATE_JUMP;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
     }
 }
 
-void func_808A39EC(EnMinifrog* this) {
+void EnMinifrog_WaitForJump(EnMinifrog* this) {
     if (this->timer > 0) {
         this->timer--;
     } else {
         this->timer = 60 + (s32)Rand_ZeroFloat(40.0f);
-        func_808A3980(this);
+        EnMinifrog_SetupJump(this);
     }
 }
 
-void func_808A3A44(EnMinifrog* this) {
+void EnMinifrog_TransitionJump(EnMinifrog* this) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    switch (this->unk_2B2) {
-        case 0:
+    switch (this->jumpState) {
+        case MINIFROG_STATE_JUMP:
             if (func_801378B8(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
                 Audio_PlayActorSound2(this, 0x28B1);
-                this->unk_2B2 = 1;
+                this->jumpState = MINIFROG_STATE_AIR;
             }
             break;
-        case 1:
+        case MINIFROG_STATE_AIR:
             if (this->actor.bgCheckFlags & 1) {
-                this->unk_2B2 = 2;
+                this->jumpState = MINIFROG_STATE_GROUND;
                 SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06001534, -2.5f);
                 SkelAnime_FrameUpdateMatrix(&this->skelAnime);
             }
@@ -236,16 +236,17 @@ void func_808A3A44(EnMinifrog* this) {
     }
 }
 
-void func_808A3B04(EnMinifrog* this) {
+void EnMinifrog_TurnToPlayer(EnMinifrog* this) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x400);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
-void func_808A3B3C(EnMinifrog* this) {
+void EnMinifrog_TurnToIdle(EnMinifrog* this) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x400);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
+// EnMinifrog_SetCamera
 void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx);
 #ifdef NON_MATCHING
 void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx) {
@@ -290,10 +291,10 @@ void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx) {
 void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
     u8 flag;
 
-    func_808A3B04(this);
-    func_808A3A44(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        func_808A3980(this);
+        EnMinifrog_SetupJump(this);
 
         switch (globalCtx->msgCtx.unk11F04) {
             case 0xD81:
@@ -343,7 +344,7 @@ void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A3F88(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     if (this->timer > 0) {
         Actor_SetScale(&this->actor, (0.01f + 0.0003f * this->timer * Math_SinS(0x1000 * (this->timer & 7))));
         this->timer--;
@@ -354,9 +355,9 @@ void func_808A3F88(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A4040(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3B04(this);
-    func_808A3A44(this);
-    func_808A39EC(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
+    EnMinifrog_WaitForJump(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_808A3DA8;
         if (this->actor.cutscene != -1) {
@@ -372,18 +373,18 @@ void func_808A410C(EnMinifrog* this, GlobalContext* globalCtx) {
     struct EnMinifrog* frog1;
     struct EnMinifrog* frog2;
 
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     frog1 = this->frog;
     if (frog1 != NULL) {
         frog2 = frog1->frog;
         if (frog1->frog != NULL) {
             this->actor.home.rot.y = (s16)Actor_YawBetweenActors(&this->actor, &frog2->actor);
-            func_808A3B3C(this);
+            EnMinifrog_TurnToIdle(this);
         } else {
-            func_808A3B04(this);
+            EnMinifrog_TurnToPlayer(this);
         }
         if (this->frog->actor.home.rot.z == (this->actor.params & 0xF)) {
-            func_808A3980(this);
+            EnMinifrog_SetupJump(this);
             this->frog->actor.home.rot.z = 0;
         }
     }
@@ -396,14 +397,14 @@ void func_808A41A0(EnMinifrog* this, GlobalContext* globalCtx) {
     } else {
         func_80151938(globalCtx, 0xD7C);
     }
-    func_808A3980(this);
+    EnMinifrog_SetupJump(this);
     this->frog = NULL;
     this->actor.home.rot.z = 0;
 }
 
 // Needs returns to match
 void func_808A4214(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         func_808A41A0(this, globalCtx);
         return;
@@ -421,8 +422,8 @@ void func_808A4214(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A42D8(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3B3C(this);
-    func_808A3A44(this);
+    EnMinifrog_TurnToIdle(this);
+    EnMinifrog_TransitionJump(this);
     if (this->timer > 0) {
         this->timer--;
     } else {
@@ -431,7 +432,7 @@ void func_808A42D8(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A4328(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     if (this->timer > 0) {
         this->timer--;
     } else {
@@ -444,11 +445,11 @@ void func_808A4328(EnMinifrog* this, GlobalContext* globalCtx) {
 void func_808A43A4(EnMinifrog* this, GlobalContext* globalCtx) {
     u8 temp_v0;
 
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     temp_v0 = func_801A39F8();
     if (temp_v0 != 0xFF) {
         if (temp_v0 == 0) {
-            func_808A3980(this);
+            EnMinifrog_SetupJump(this);
         } else {
             this->actor.home.rot.z = temp_v0;
         }
@@ -474,7 +475,7 @@ void func_808A43A4(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A44BC(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3A44(this);
+    EnMinifrog_TransitionJump(this);
     if (this->actor.cutscene == -1) {
         this->actionFunc = func_808A43A4;
     } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -493,10 +494,10 @@ void func_808A44BC(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A45A8(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3B04(this);
-    func_808A3A44(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, 0xD7EU, &this->actor);
+        func_801518B0(globalCtx, 0xD7E, &this->actor);
         this->actionFunc = func_808A46E8;
     } else {
         func_800B8500(this, globalCtx, 1000.0f, 1000.0f, -1);
@@ -504,8 +505,8 @@ void func_808A45A8(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void func_808A4634(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3B04(this);
-    func_808A3A44(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_808A45A8;
@@ -516,9 +517,10 @@ void func_808A4634(EnMinifrog* this, GlobalContext* globalCtx) {
     }
 }
 
+// EnMinifrog_SetupChoir
 void func_808A46E8(EnMinifrog* this, GlobalContext* globalCtx) {
-    func_808A3B04(this);
-    func_808A3A44(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx)) {
@@ -537,12 +539,12 @@ void func_808A46E8(EnMinifrog* this, GlobalContext* globalCtx) {
             break;
         case 5:
             if (func_80147624(globalCtx)) {
-                func_808A3980(this);
+                EnMinifrog_SetupJump(this);
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0xD76:
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                         this->actor.flags &= ~0x10000;
-                        gSaveContext.perm.weekEventReg[34] |= 1; // Spoken to FROG_YELLOW
+                        gSaveContext.perm.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
                     case 0xD78:
                     case 0xD79:
@@ -579,15 +581,16 @@ void func_808A46E8(EnMinifrog* this, GlobalContext* globalCtx) {
     }
 }
 
+// EnMinifrog_TalkToYellowFrog
 void func_808A4914(EnMinifrog* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x180);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    func_808A3B04(this);
-    func_808A3A44(this);
-    func_808A39EC(this);
+    EnMinifrog_TurnToPlayer(this);
+    EnMinifrog_TransitionJump(this);
+    EnMinifrog_WaitForJump(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_808A46E8;
-        if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) { // Not spoken with FROG_YELLOW
+        if ((gSaveContext.perm.weekEventReg[34] & 1) == 0) { // Not spoken with MINIFROG_YELLOW
             func_801518B0(globalCtx, 0xD76U, &this->actor);
         } else {
             func_801518B0(globalCtx, 0xD7FU, &this->actor);
