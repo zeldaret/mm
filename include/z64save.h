@@ -50,9 +50,9 @@ typedef struct {
     /* 0x0008 */ s32 cutscene; // "day_time"
     /* 0x000C */ u16 time;     // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
-    /* 0x0010 */ u32 isNight;        // "asahiru_fg"
+    /* 0x0010 */ s32 isNight;        // "asahiru_fg"
     /* 0x0014 */ u32 unk_14;         // "change_zelda_time"
-    /* 0x0018 */ u32 day;            // "totalday"
+    /* 0x0018 */ s32 day;            // "totalday"
     /* 0x001C */ u32 daysElapsed;    // "eventday"
     /* 0x0020 */ u8 playerForm;      // "player_character"
     /* 0x0021 */ u8 snowheadCleared; // "spring_flag"
