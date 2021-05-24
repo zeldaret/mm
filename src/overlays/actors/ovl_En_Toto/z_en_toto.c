@@ -9,46 +9,37 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnToto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BA36C0(EnToto* this, GlobalContext* globalCtx, s32 index);
-void func_80BA3BFC(EnToto* this, GlobalContext* globalCtx);
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx);
+void func_80BA39C8(EnToto* this, GlobalContext* globalCtx);
+void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx);
+void func_80BA3BFC(EnToto* this, GlobalContext* globalCtx);
+void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx);
 void func_80BA3D38(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA3EC0(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA3ED4(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA3EE8(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA3F2C(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA3FB0(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA3FCC(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA402C(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA44A0(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA49A4(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA4C0C(EnToto* this, GlobalContext* globalCtx);
-
-void func_80BA39C8(EnToto* this, GlobalContext* globalCtx);
-void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx);
-void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx);
-
-void func_80BA3C88(EnToto* this);
-void func_80BA383C(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx);
-
+s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA40D4(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA3EE8(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA43F4(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA445C(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA44A0(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA4740(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA49A4(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx);
-s32 func_80BA3FCC(EnToto* this, GlobalContext* globalCtx);
 s32 func_80BA4B24(EnToto* this, GlobalContext* globalCtx);
-
-s32 func_80BA397C(EnToto* this, s16 arg1);
+s32 func_80BA4C0C(EnToto* this, GlobalContext* globalCtx);
+s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx);
 
 const ActorInit En_Toto_InitVars = {
     ACTOR_EN_TOTO,
