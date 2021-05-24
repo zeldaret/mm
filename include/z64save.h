@@ -20,8 +20,8 @@ typedef struct {
     /* 0x50 */ u8 dungeonItems[10];
     /* 0x5A */ s8 dungeonKeys[10];
     /* 0x64 */ s8 strayFairies[10]; // "orange_fairy"
-    /* 0x6E */ u8 unk_6E[8][3];     // "degnuts_memory_name"
-} Inventory;                        // size = 0x88
+    /* 0x6E */ u8 unk_6E[8][3]; // "degnuts_memory_name"
+} Inventory; // size = 0x88
 
 typedef struct {
     /* 0x00 */ s16 scene;
