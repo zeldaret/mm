@@ -395,14 +395,7 @@ s32 func_80BA3FB0(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA3FCC(EnToto* this, GlobalContext* globalCtx) {
-    s32 tmp;
-
-    if (this->unk2B1 == 0) {
-        tmp = 0;
-    } else {
-        tmp = --this->unk2B1;
-    }
-    if (tmp == 0) {
+    if (DECR(this->unk2B1) == 0) {
         func_801518B0(globalCtx, this->text->textId, NULL);
         return 1;
     }
@@ -453,7 +446,7 @@ s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             return 1;
         } else {
-            tmp = this->text->unk1 + 1; // Needed for regalloc
+            tmp = this->text->unk1 + 1; // Needed for regalloc possible FAKE MATCH
             return tmp;
         }
     }
@@ -461,21 +454,19 @@ s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
-    s32 phi_v0;
-    u16 phi_v0_2 = this->unk2B1; // Needed for regalloc
     EnTotoUnkStruct2* temp_v1_2;
+    u16 phi_v0_2;
+    s32 tmp;
 
-    if (phi_v0_2 == 0) {
-        phi_v0 = 0;
-    } else {
-        phi_v0 = --this->unk2B1;
-    }
-    if (phi_v0 == 0) {
+    if (DECR(this->unk2B1) == 0) {
         if (((gSaveContext.perm.weekEventReg[50] & 1) == 0) && ((gSaveContext.perm.weekEventReg[51] & 0x80) == 0)) {
             temp_v1_2 = &D_80BA50DC[gSaveContext.perm.unk20 - 1];
             if (this->text->unk0 == 6) {
                 phi_v0_2 = temp_v1_2->unk0;
             } else {
+                tmp = !temp_v1_2->unk4;
+                if (tmp){} //Needed for regalloc possible FAKE MATCH
+
                 phi_v0_2 = temp_v1_2->unk4;
             }
             func_801518B0(globalCtx, phi_v0_2 & 0xFFFF, NULL);
@@ -569,7 +560,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            tmp = gSaveContext.perm.unk20; // Needed for regalloc
+                            tmp = gSaveContext.perm.unk20; // Needed for regalloc possible FAKE MATCH
                             func_801518B0(globalCtx, D_80BA50DC[tmp - 1].unk2, NULL);
                         }
                     }
@@ -648,17 +639,11 @@ s32 func_80BA49A4(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
-    s32 phi_v0;
     Actor* actor;
 
-    if (this->unk2B1 == 0) {
-        phi_v0 = 0;
-    } else {
-        phi_v0 = --this->unk2B1;
-    }
-    if (phi_v0 == 0) {
+    if (DECR(this->unk2B1) == 0) {
         if (!func_801A2DE0(0x54)) {
-            actor = (Actor*)PLAYER;
+            actor = (Actor*)PLAYER; //Needed for regalloc, possible FAKE MATCH
             actor = actor->next;
             while (actor != NULL) {
                 Actor_MarkForDeath(actor);
