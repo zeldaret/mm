@@ -128,7 +128,7 @@ static void* sMouthTextures[] = { D_060127C8, D_06012BC8, D_06012FC8, D_060133C8
 
 static void* sEyeTextures[] = { D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8, };
 
-static u16 D_80B8E32C = 0x63;
+static u16 D_80B8E32C = 99;
 
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f,
@@ -198,13 +198,13 @@ s32 func_80B8D2D8(EnMaYts* this, GlobalContext* globalCtx) {
 
                 case 2:
                     if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
-                        return 0;
+                        return false;
                     }
                     break;
 
                 case 3:
                     if (gSaveContext.perm.weekEventReg[0x16] & 1) {
-                        return 0;
+                        return false;
                     }
                     break;
             }
@@ -212,23 +212,24 @@ s32 func_80B8D2D8(EnMaYts* this, GlobalContext* globalCtx) {
 
         case EN_NA_YTS_TYPE_0:
             if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
-                return 0;
+                return false;
             }
             if ((gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
-                return 0;
+                return false;
             }
             break;
 
         case EN_NA_YTS_TYPE_SLEEPING:
             if (gSaveContext.perm.weekEventReg[0x16] & 1) {
-                return 0;
+                return false;
             }
             break;
 
         case EN_NA_YTS_TYPE_BOW:
             break;
     }
-    return 1;
+
+    return true;
 }
 
 #define EN_MA_YTS_PARSE_TYPE(params) (((params)&0xF000) >> 12)
@@ -267,7 +268,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->hasBow = false;
     }
 
-    if ((1 == CURRENT_DAY) || (gSaveContext.perm.weekEventReg[0x16] & 1)) {
+    if ((CURRENT_DAY == 1) || (gSaveContext.perm.weekEventReg[0x16] & 1)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -285,8 +286,8 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         func_80B8D9E4(this);
-    } else if ((CURRENT_DAY == 2) && (1 == (s32)gSaveContext.perm.isNight) &&
-               ((gSaveContext.perm.weekEventReg[0x16] & 1))) {
+    } else if ((CURRENT_DAY == 2) && (gSaveContext.perm.isNight == 1) &&
+                (gSaveContext.perm.weekEventReg[0x16] & 1)) {
         func_80B8D6BC(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -331,7 +332,7 @@ void func_80B8D6F8(EnMaYts* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.perm.weekEventReg[0x41] & 0x40)) {
                 gSaveContext.perm.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, (u16)0, (u16)0);
-                func_801518B0(globalCtx, 0x3363U, &this->actor);
+                func_801518B0(globalCtx, 0x3363, &this->actor);
                 this->textId = 0x3363;
             } else {
                 EnMaYts_SetFaceExpression(this, (u16)4, (u16)2);
@@ -434,7 +435,7 @@ void func_80B8DA28(EnMaYts* this, GlobalContext* globalCtx) {
             EnMaYts_ChangeAnim(this, 5);
         }
     } else {
-        D_80B8E32C = 0x63;
+        D_80B8E32C = 99;
         this->hasBow = 1;
     }
 }
@@ -534,6 +535,7 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         rot->x += sp4.y;
         rot->z += sp4.x;
     }
+
     return 0;
 }
 

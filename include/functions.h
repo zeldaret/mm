@@ -2877,7 +2877,7 @@ void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
 // void func_80151DA4(void);
 // void func_80152434(void);
 // void func_80152464(void);
-// UNK_TYPE4 func_80152498(MessageContext* msgCtx);
+s32 func_80152498(MessageContext* msgCtx);
 // void func_8015268C(void);
 // void func_80152C64(void);
 // void func_80152CAC(void);
