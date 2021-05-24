@@ -29,7 +29,7 @@ typedef struct EnToto {
     /* 0x260 */ s16 unk260;
     /* 0x262 */ char unk262[0x2];
     /* 0x264 */ ColliderCylinder collider;
-    /* 0x2B0 */ u8 unk2B0;
+    /* 0x2B0 */ u8 actionFuncIndex;
     /* 0x2B1 */ u8 unk2B1;
     /* 0x2B2 */ s8 cutscene;
     /* 0x2B3 */ u8 unk2B3;
@@ -40,7 +40,7 @@ typedef struct EnToto {
     /* 0x2B8 */ EnTotoText* text;
     /* 0x2BC */ char unk2BC[0x8]; // Some z_player_lib struct size 0x8
     /* 0x2C4 */ Actor* unk2C4;
-    /* 0x2C8 */ u8 pad2C8[0x4];
+    /* 0x2C8 */ s32 pad2C8;
 } EnToto; // size = 0x2CC
 
 extern const ActorInit En_Toto_InitVars;

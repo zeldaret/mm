@@ -4,6 +4,8 @@
 
 #define THIS ((EnToto*)thisx)
 
+#define ENTOTO_WEEK_EVENT_FLAGS (gSaveContext.perm.weekEventReg[50] & 1 || gSaveContext.perm.weekEventReg[51] & 0x80)
+
 void EnToto_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnToto_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -99,7 +101,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-static EnTotoActionFunc D_80BA501C[] = { func_80BA3930, func_80BA3BFC, func_80BA3D38 };
+static EnTotoActionFunc D_80BA501C[] = {
+    func_80BA3930,
+    func_80BA3BFC,
+    func_80BA3D38,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
@@ -179,17 +185,20 @@ static EnTotoUnkFunc D_80BA5174[] = {
     func_80BA407C, func_80BA4A00, func_80BA3FCC, func_80BA407C, func_80BA4B24,
 };
 
-static EnTotoActionFunc D_80BA51B8[] = { func_80BA39C8, func_80BA3CC4, func_80BA3DBC };
+static EnTotoActionFunc D_80BA51B8[] = {
+    func_80BA39C8,
+    func_80BA3CC4,
+    func_80BA3DBC,
+};
 
 void func_80BA36C0(EnToto* this, GlobalContext* globalCtx, s32 index) {
     this->unk2B7 = 0;
-    this->unk2B0 = index;
-    D_80BA501C[this->unk2B0](this, globalCtx);
+    this->actionFuncIndex = index;
+    D_80BA501C[this->actionFuncIndex](this, globalCtx);
 }
 
 void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnToto* this = THIS;
-    AnimationHeader* animationHeader;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -199,13 +208,8 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, (ActorShadowFunc)func_800B3FC0, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
-    if (globalCtx->sceneNum == 0x12) {
-        animationHeader = &D_06003AA8;
-    } else {
-        animationHeader = &D_0600C880;
-    }
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A978, animationHeader, this->limbDrawTbl,
-                     this->transitionDrawTbl, 0x12);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A978, globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880,
+                     this->limbDrawTbl, this->transitionDrawTbl, 0x12);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
 }
@@ -217,7 +221,7 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && this->unk2B0 == 1 &&
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && this->actionFuncIndex == 1 &&
         this->skelAnime.animCurrentSeg != &D_06000C80) {
         if (globalCtx->msgCtx.unk11F04 != 0x2A98 && globalCtx->msgCtx.unk11F04 != 0x2A99) {
             if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
@@ -282,8 +286,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
                 } else {
                     this->text = D_80BA5048;
                 }
-            } else if ((gSaveContext.perm.weekEventReg[50] & 1) != 0 ||
-                       (gSaveContext.perm.weekEventReg[51] & 0x80) != 0) {
+            } else if (ENTOTO_WEEK_EVENT_FLAGS) {
                 this->text = D_80BA502C;
             } else if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
                 this->text = D_80BA5034;
@@ -323,11 +326,7 @@ void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx) {
 
 void func_80BA3D38(EnToto* this, GlobalContext* globalCtx) {
     this->cutscene = this->actor.cutscene;
-    if ((gSaveContext.perm.weekEventReg[50] & 1) != 0 || (gSaveContext.perm.weekEventReg[51] & 0x80) != 0) {
-        this->text = D_80BA50BC;
-    } else {
-        this->text = D_80BA5088;
-    }
+    this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, globalCtx);
     globalCtx->actorCtx.unk5 |= 0x20;
     this->unk260 = 0;
@@ -341,8 +340,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
         if (!func_80BA4C44(this, globalCtx)) {
             return;
         }
-        if (this->text->unk1 != 0 &&
-            ((gSaveContext.perm.weekEventReg[50] & 1) != 0 || (gSaveContext.perm.weekEventReg[51] & 0x80) != 0)) {
+        if (this->text->unk1 != 0 && ENTOTO_WEEK_EVENT_FLAGS) {
             this->unk2B7 = 1;
             return;
         }
@@ -435,41 +433,24 @@ s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
-    s32 tmp;
-
     if (func_80152498(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {
             func_8019F208();
         }
-        if (globalCtx->msgCtx.choiceIndex != 0) {
-            return 1;
-        } else {
-            tmp = this->text->unk1 + 1; // Needed for regalloc possible FAKE MATCH
-            return tmp;
-        }
+        return (globalCtx->msgCtx.choiceIndex != 0 ? 0 : this->text->unk1) + 1; //Possible msg MACRO
     }
     return 0;
 }
 
 s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
     EnTotoUnkStruct2* temp_v1_2;
-    u16 phi_v0_2;
-    s32 tmp;
 
     if (DECR(this->unk2B1) == 0) {
-        if (((gSaveContext.perm.weekEventReg[50] & 1) == 0) && ((gSaveContext.perm.weekEventReg[51] & 0x80) == 0)) {
+        if (!ENTOTO_WEEK_EVENT_FLAGS) {
             temp_v1_2 = &D_80BA50DC[gSaveContext.perm.unk20 - 1];
-            if (this->text->unk0 == 6) {
-                phi_v0_2 = temp_v1_2->unk0;
-            } else {
-                tmp = !temp_v1_2->unk4;
-                if (tmp){} //Needed for regalloc possible FAKE MATCH
-
-                phi_v0_2 = temp_v1_2->unk4;
-            }
-            func_801518B0(globalCtx, phi_v0_2 & 0xFFFF, NULL);
+            func_801518B0(globalCtx, (this->text->unk0 == 6 ? temp_v1_2->unk0 : temp_v1_2->unk4) & 0xFFFF, NULL);
         }
         return 1;
     }
@@ -479,7 +460,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
 s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     u32 phi_s0 = 0;
-    Vec3s* tmpptr = &D_80BA510C[3];
+    Vec3s* end = &D_80BA510C[3];
 
     func_80BA3FB0(this, globalCtx);
     func_800B7298(globalCtx, 0, 6);
@@ -494,7 +475,7 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
             }
         }
     }
-    func_80122744(globalCtx, this->unk2BC, phi_s0, tmpptr - phi_s0);
+    func_80122744(globalCtx, this->unk2BC, phi_s0, end - phi_s0);
     this->unk2C4 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x199, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
@@ -554,7 +535,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
             player->unkAD4 = 0;
             return func_80BA407C(this, globalCtx);
         }
-        if (((gSaveContext.perm.weekEventReg[50] & 1) == 0) && ((gSaveContext.perm.weekEventReg[51] & 0x80) == 0)) {
+        if (!ENTOTO_WEEK_EVENT_FLAGS) {
             for (i = 0; i < 4; i++) {
                 if (func_80BA44D4(&D_80BA50DC[i], player)) {
                     if (this->unk2B1 < 10) {
@@ -574,11 +555,8 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
-    u32 index;
-
     func_800B7298(globalCtx, 0, 0x44);
-    index = (gSaveContext.perm.unk20 == 4) ? 0 : gSaveContext.perm.unk20;
-    func_80152434(globalCtx, D_80BA5120[index]);
+    func_80152434(globalCtx, D_80BA5120[gSaveContext.perm.unk20 == 4 ? 0 : gSaveContext.perm.unk20]);
     return 0;
 }
 
@@ -625,7 +603,7 @@ s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx) {
         }
     }
     func_80BA402C(this, globalCtx);
-    if ((gSaveContext.perm.weekEventReg[50] & 1) || (gSaveContext.perm.weekEventReg[51] & 0x80)) {
+    if (ENTOTO_WEEK_EVENT_FLAGS) {
         func_80BA402C(this, globalCtx);
     }
     return 0;
@@ -643,7 +621,7 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
 
     if (DECR(this->unk2B1) == 0) {
         if (!func_801A2DE0(0x54)) {
-            actor = (Actor*)PLAYER; //Needed for regalloc, possible FAKE MATCH
+            actor = (Actor*)PLAYER; // Needed for regalloc, possible FAKE MATCH
             actor = actor->next;
             while (actor != NULL) {
                 Actor_MarkForDeath(actor);
@@ -698,11 +676,11 @@ s32 func_80BA4C0C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx) {
-    s32 tmp;
+    s32 ret;
 
-    tmp = D_80BA5174[this->text->unk0](this, globalCtx);
-    if (tmp != 0) {
-        this->text += tmp;
+    ret = D_80BA5174[this->text->unk0](this, globalCtx);
+    if (ret != 0) {
+        this->text += ret;
         return func_80BA4C0C(this, globalCtx);
     }
     return 0;
@@ -744,7 +722,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x20D)) {
         func_80BA4CB4(this, globalCtx);
     } else {
-        D_80BA51B8[this->unk2B0](this, globalCtx);
+        D_80BA51B8[this->actionFuncIndex](this, globalCtx);
     }
 
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
