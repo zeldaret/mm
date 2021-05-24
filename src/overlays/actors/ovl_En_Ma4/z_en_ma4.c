@@ -97,23 +97,27 @@ extern AnimationHeader D_06015B7C;
 
 /*
 void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Actor *temp_v1;
     s32 phi_a3;
 
-    if ((s16) this->unk_1D8 != 0 || (this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C)) {
-        phi_a3 = 1;
-    } else {
-        phi_a3 = 0;
-        if (this->unk_332 == 2) {
-            //phi_a3 = 0;
-            if (func_80ABEF8C != this->actionFunc) {
-                phi_a3 = 1;
+    temp_v1 = globalCtx->actorCtx.actorList[2].first;
+    if (this->unk_1D8 == 0) {
+        if ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C)) {
+            phi_a3 = 1;
+        } else {
+block_5:
+            phi_a3 = 0;
+            if (this->unk_332 == 2) {
+                if (func_80ABEF8C != this->actionFunc) {
+                    phi_a3 = 1;
+                }
             }
         }
+    } else {
+        goto block_5;
     }
-
-    this->unk_1F0 = player->base.world.pos;
-    this->unk_1F0.y -= -10.0f;
+    this->unk_1F0 = temp_v1->world.pos;
+    this->unk_1F0.y = this->unk_1F0.y - -10.0f;
     func_800BD888(&this->unk_1D8, 0, phi_a3);
 }
 */
@@ -626,38 +630,41 @@ void func_80ABEF34(EnMa4 *this) {
 }
 
 
-/*
-void func_80ABEF8C(EnMa4 *this, GlobalContext *globalCtx) {
-    GlobalContext *temp_a0;
-    u32 temp_v0;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
-    if (temp_v0 < 7U) {
-        goto **(&jtbl_D_80AC03E4 + (temp_v0 * 4));
+void func_80ABEF8C(EnMa4 *this, GlobalContext *globalCtx) {
+    s32 temp_v0;
+
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        default:
+        break;
+
     case 4:
         func_80ABE6C8(this, globalCtx);
-        goto block_8;
+        break;
+
     case 5:
         func_80ABEB6C(this, globalCtx);
-        goto block_8;
+        break;
+
     case 6:
-        temp_a0 = globalCtx;
-        globalCtx = globalCtx;
-        if (func_80147624(temp_a0) != 0) {
-            if ((globalCtx->unk169B9 == 0) || ((*(gBitFlags + 0x48) & *gSaveContext.perm.inv.pad4C) == 0)) {
+        if (func_80147624(globalCtx) != 0) {
+            if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.perm.inv.unk_4C) & *(gBitFlags + 0x48/4)) == 0)) {
                 func_80ABE4A4(this);
             }
         }
+
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+        break;
     }
-default:
-case 0:
-block_8:
+
     if (this->unk_332 != 2) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x7D0, 0x3E8);
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABEF8C.asm")
+
 
 void func_80ABF070(EnMa4 *this) {
     this->actionFunc = func_80ABF084;
@@ -711,29 +718,29 @@ void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-extern s16 D_80AC0258;
 
-/*
+#ifdef NON_MATCHING
 void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
-    s16 temp_v0_2;
+    static s16 D_80AC0258;
 
-    //temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    player->stateFlags1 = (s32) (player->stateFlags1 | 0x400);
+    player->unkA74 = (player->unkA74 | 0x400);
     func_80ABF0D8(this, globalCtx);
-    temp_v0_2 = this->unk_338;
-    if (D_80AC0258 != temp_v0_2) {
-        D_80AC0258 = temp_v0_2;
+    if (this->unk_338 != D_80AC0258) {
+        D_80AC0258 = this->unk_338;
         globalCtx->interfaceCtx.unk25C = 1;
     }
-    if ((gSaveContext.extra.unk_160 != 0) || ((u32) gSaveContext.extra.unk_164 >= 0x2EE0U) || (this->unk_338 == 0xA)) {
-        gSaveContext.extra.unk_134 = (u8)6;
+    if ((gSaveContext.extra.unk_140[4] >= 0x2EE0) || (this->unk_338 == 0xA)) {
+        gSaveContext.extra.unk_134 = 6;
         func_80ABF2FC(this, globalCtx);
-        D_80AC0258 = (u16)0;
+        D_80AC0258 = 0;
     }
 }
-*/
+#else
+extern s16 D_80AC0258;
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF254.asm")
+#endif
+
 
 void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
     gSaveContext.perm.weekEventReg[0x8] &= 0xFE;

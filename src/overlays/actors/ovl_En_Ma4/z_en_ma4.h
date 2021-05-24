@@ -39,7 +39,7 @@ typedef struct EnMa4 {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMa4ActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ u16 unk_1D8;
+    /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DA */ char unk1DA[0x2];
     /* 0x1DC */ char unk1DC[0x4];
     /* 0x1E0 */ Vec3s unk_1E0;
