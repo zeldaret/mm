@@ -56,7 +56,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-DamageTable damageTable[] = {
+static DamageTable sDamageTable = {
     0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0,
     0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
 };
@@ -93,7 +93,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
-    this->dynaActor.actor.colChkInfo.damageTable = damageTable;
+    this->dynaActor.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetIdle(this);
 }
 

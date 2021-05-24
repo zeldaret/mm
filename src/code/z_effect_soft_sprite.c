@@ -1,12 +1,12 @@
 #include <ultra64.h>
 #include <global.h>
 
-void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
+void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     u32 i;
     EffectSs* iter;
     ParticleOverlay* iter2;
 
-    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&ctxt->state.heap, numEntries * sizeof(EffectSs));
+    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
@@ -19,7 +19,7 @@ void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
     }
 }
 
-void EffectSS_Clear(GlobalContext* ctxt) {
+void EffectSS_Clear(GlobalContext* globalCtx) {
     u32 i;
     EffectSs* iter;
     ParticleOverlay* iter2;
@@ -149,9 +149,9 @@ s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
 #endif
 
-void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
+void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* a1) {
     u32 index;
-    if (func_8016A01C(ctxt) != 1) {
+    if (func_8016A01C(globalCtx) != 1) {
         if (EffectSS_FindFreeSpace(a1->priority, &index) == 0) {
             EffectSS2Info.searchIndex = index + 1;
             EffectSS2Info.data_table[index] = *a1;
@@ -160,7 +160,7 @@ void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
 }
 
 #ifdef NON_MATCHING
-void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData) {
+void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* initData) {
     u32 index;
     u32 initRet;
     u32 overlaySize;
@@ -202,7 +202,7 @@ void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData)
         EffectSS2Info.data_table[index].type = type;
         EffectSS2Info.data_table[index].priority = priority;
 
-        initRet = (*overlayInfo->init)(ctxt, index, &EffectSS2Info.data_table[index], initData);
+        initRet = (*overlayInfo->init)(globalCtx, index, &EffectSS2Info.data_table[index], initData);
 
         if (initRet == 0) {
             EffectSS_ResetEntry(&EffectSS2Info.data_table[index]);
@@ -213,7 +213,7 @@ void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData)
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSs_Spawn.asm")
 #endif
 
-void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
+void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
     EffectSs* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
@@ -225,11 +225,11 @@ void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
         particle->pos.y += particle->velocity.y;
         particle->pos.z += particle->velocity.z;
 
-        particle->update(ctxt, index, particle);
+        particle->update(globalCtx, index, particle);
     }
 }
 
-void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
+void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < EffectSS2Info.size; i++) {
@@ -242,25 +242,25 @@ void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
         }
 
         if (EffectSS2Info.data_table[i].life > -1) {
-            EffectSS_UpdateParticle(ctxt, i);
+            EffectSS_UpdateParticle(globalCtx, i);
         }
     }
 }
 
-void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
+void EffectSS_DrawParticle(GlobalContext* globalCtx, s32 index) {
     EffectSs* entry = &EffectSS2Info.data_table[index];
     if (entry->draw != 0) {
-        entry->draw(ctxt, index, entry);
+        entry->draw(globalCtx, index, entry);
     }
 }
 
-void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
+void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
     Lights* s0;
     s32 i;
 
-    s0 = LightContext_NewLights(&ctxt->lightCtx, ctxt->state.gfxCtx);
-    Lights_BindAll(s0, ctxt->lightCtx.listHead, 0, ctxt);
-    Lights_Draw(s0, ctxt->state.gfxCtx);
+    s0 = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
+    Lights_BindAll(s0, globalCtx->lightCtx.listHead, 0, globalCtx);
+    Lights_Draw(s0, globalCtx->state.gfxCtx);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
@@ -269,7 +269,7 @@ void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
                 EffectSS2Info.data_table[i].pos.z > 32000 || EffectSS2Info.data_table[i].pos.z < -32000) {
                 EffectSS_Delete(&EffectSS2Info.data_table[i]);
             } else {
-                EffectSS_DrawParticle(ctxt, i);
+                EffectSS_DrawParticle(globalCtx, i);
             }
         }
     }
