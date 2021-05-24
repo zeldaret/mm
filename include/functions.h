@@ -2194,7 +2194,7 @@ s32 func_801224E0(s32 param_1, s16 param_2, s16 param_3);
 // UNK_TYPE4 func_80122670(s32* param_1, Input* input);
 // void func_801226E0(void);
 // void func_80122744(void);
-// void func_80122760(void);
+s32 func_80122760(GlobalContext* globalCtx, UNK_PTR arg2, UNK_TYPE4 arg3);
 void func_80122868(GlobalContext* globalCtx, ActorPlayer* player);
 void func_801229A0(GlobalContext* globalCtx, ActorPlayer* player);
 // void func_801229EC(void);
