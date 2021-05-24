@@ -25,7 +25,7 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-extern SkeletonHeader D_06008C40; 
+extern FlexSkeletonHeader D_06008C40; 
 
 //Probably a struct of some pointer, float, and s16/s32. More info will come with decomp of func_8013BC6C
 static UNK_TYPE D_80C1E200[] = {0x06000990, 0x3F800000, 0x0000FFFF, 0x00000000};
@@ -42,8 +42,8 @@ s32 func_80C1DED0(DmNb *this, s32 arg1) {
 
 void func_80C1DF18(DmNb *this, GlobalContext *globalCtx) {
     s32 sp2C[] = {0, 0, 0, 0, 0};
-    u16 actorActionsUnk0;
-    u32 actorActionsIndex;
+    u16 actionUnk0;
+    u32 actionIndex;
 
     if (globalCtx->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
@@ -52,13 +52,13 @@ void func_80C1DF18(DmNb *this, GlobalContext *globalCtx) {
             this->unk1F4 = this->unk1F0;
         }
         if (func_800EE29C(globalCtx, 0x232)) {
-            actorActionsIndex = func_800EE200(globalCtx, 0x232);
-            actorActionsUnk0 = globalCtx->csCtx.actorActions[actorActionsIndex]->unk0;
-            if (this->unk1EC != (actorActionsUnk0 & 0xFF)) {
-                this->unk1EC = actorActionsUnk0;
-                func_80C1DED0(this, sp2C[actorActionsUnk0]);
+            actionIndex = func_800EE200(globalCtx, 0x232);
+            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+            if (this->unk1EC != (actionUnk0 & 0xFF)) {
+                this->unk1EC = actionUnk0;
+                func_80C1DED0(this, sp2C[actionUnk0]);
             }
-            func_800EDF24(&this->actor, globalCtx, actorActionsIndex);
+            func_800EDF24(&this->actor, globalCtx, actionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
