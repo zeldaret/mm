@@ -30,8 +30,8 @@ extern SkeletonHeader D_06008C40;
 //Probably a struct of some pointer, float, and s16/s32. More info will come with decomp of func_8013BC6C
 static UNK_TYPE D_80C1E200[] = {0x06000990, 0x3F800000, 0x0000FFFF, 0x00000000};
 
-UNK_TYPE func_80C1DED0(DmNb *this, s32 arg1) {
-    UNK_TYPE ret = 0;
+s32 func_80C1DED0(DmNb *this, s32 arg1) {
+    s32 ret = 0;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;

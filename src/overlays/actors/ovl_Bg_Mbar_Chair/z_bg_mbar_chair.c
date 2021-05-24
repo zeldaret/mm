@@ -21,7 +21,7 @@ const ActorInit Bg_Mbar_Chair_InitVars = {
     (ActorFunc)BgMbarChair_Draw,
 };
 
-static InitChainEntry bgMbarChairInitVars[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
@@ -34,7 +34,7 @@ extern UNK_TYPE D_06000288;
 void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, bgMbarChairInitVars);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
 }
