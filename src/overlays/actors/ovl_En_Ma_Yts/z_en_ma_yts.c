@@ -191,99 +191,47 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
 // ShouldSpawn?
 // IsAbleToSpawn?
 // CheckValidSpawn?
-#ifdef NON_EQUIVALENT
 s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
-    s16 temp_v0;
-    s32 temp_hi;
-
     switch (this->type) {
-        case EN_NA_YTS_TYPE_BOW:
-            break;
-
-        case EN_NA_YTS_TYPE_SITTING:
+        case 1:
             switch (CURRENT_DAY) {
-                default:
-                    break;
-
-                case 3:
-                    if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
-                        return 0;
-                    }
-                    break;
-
-                case 2:
-                    if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-                        return 0;
-                    }
-                    break;
-
                 case 1:
                     break;
 
+                case 2:
+                    if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
+                        return 0;
+                    }
+                    break;
 
-
+                case 3:
+                    if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+                        return 0;
+                    }
+                    break;
             }
             break;
 
-        case EN_NA_YTS_TYPE_0:
+        case 0:
             if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
                 return 0;
             }
-            if (((s32) gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
+            if ((gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
                 return 0;
             }
             break;
 
-        case EN_NA_YTS_TYPE_SLEEPING:
-            if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+        case 2:
+            if (gSaveContext.perm.weekEventReg[0x16] & 1) {
                 return 0;
             }
             break;
 
+        case 3:
+            break;
     }
-
-    return 1;
-
-    /*
-    temp_v0 = this->type;
-    if (temp_v0 != 0) {
-        if (temp_v0 != 1) {
-            if (temp_v0 != 2) {
-                if (temp_v0 != 3) {
-
-                }
-            } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-                return 0;
-            }
-        } else {
-            temp_hi = (s32) gSaveContext.perm.day % 5;
-            if (temp_hi != 1) {
-                if (temp_hi != 2) {
-                    if (temp_hi != 3) {
-
-                    } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-                        return 0;
-                    }
-                } else if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
-                    return 0;
-                }
-            }
-        }
-    } else {
-        if ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0) {
-            return 0;
-        }
-        if (((s32) gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
-            return 0;
-        }
-    }
-    */
     return 1;
 }
-#else
-s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8D2D8.asm")
-#endif
 
 extern ColliderCylinderInit D_80B8E170;
 extern CollisionCheckInfoInit2 D_80B8E19C;
