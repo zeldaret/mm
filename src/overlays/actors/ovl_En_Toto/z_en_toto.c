@@ -184,7 +184,7 @@ void EnToto_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == 0x15 && ((s32) gSaveContext.perm.time >= 0x4000 && (s32) gSaveContext.perm.time < 0xE555)) {
+    if (globalCtx->sceneNum == 0x15 && (gSaveContext.perm.time >= 0x4000 && gSaveContext.perm.time < 0xE555)) {
             Actor_MarkForDeath(&this->actor);
             return;
     }
@@ -252,7 +252,7 @@ void func_80BA39C8(EnToto *this, GlobalContext *globalCtx) {
         this->unk2B6 = 0;
         return;
     }
-    if ((globalCtx->sceneNum == 0x15 && !(((s32) gSaveContext.perm.time >= 0x4000) && ((s32) gSaveContext.perm.time < 0xED02))) || (globalCtx->sceneNum != 0x15 && func_80BA397C(this, 0x2000))) {
+    if ((globalCtx->sceneNum == 0x15 && !(gSaveContext.perm.time >= 0x4000 && gSaveContext.perm.time < 0xED02)) || (globalCtx->sceneNum != 0x15 && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
@@ -655,7 +655,7 @@ s32 func_80BA4A00(EnToto *this, GlobalContext *globalCtx) {
             }
             func_800B7298(globalCtx, 0, 0x45);
             if (this->unk2B3 == 0xF) {
-                if (((s32) gSaveContext.perm.day % 5) == 1) {
+                if (CURRENT_DAY == 1) {
                     gSaveContext.perm.weekEventReg[50] |= 1;
                 } else {
                     gSaveContext.perm.weekEventReg[51] |= 0x80;
