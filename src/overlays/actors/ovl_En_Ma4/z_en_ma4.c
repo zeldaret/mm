@@ -373,7 +373,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 8:
+            case 0x3341:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     gSaveContext.perm.weekEventReg[0x15] |= 0x20;
@@ -389,7 +389,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 13:
+            case 0x3346:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     gSaveContext.perm.weekEventReg[0x15] |= 0x20;
@@ -403,7 +403,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 14:
+            case 0x3347:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     func_801518B0(globalCtx, 0x3349, &this->actor);
@@ -416,8 +416,8 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 20:
-                if (globalCtx->msgCtx.choiceIndex == 0) {
+            case 0x334D: // Asks if you understood her explanation.
+                if (globalCtx->msgCtx.choiceIndex == 0) { // Yes
                     s32 aux;
 
                     func_8019F208();
@@ -427,7 +427,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                         func_80151BB4(globalCtx, 0x1C);
                     }
                     func_80151BB4(globalCtx, 5);
-                } else {
+                } else { // No.
                     func_8019F230();
                     EnMa4_SetFaceExpression(this, 0, 0);
                     func_801518B0(globalCtx, 0x334C, &this->actor);
@@ -435,7 +435,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 27:
+            case 0x3354:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     func_801518B0(globalCtx, 0x3349, &this->actor);
@@ -449,7 +449,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 29:
+            case 0x3356:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     func_801477B4(globalCtx);
@@ -471,7 +471,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3339 + 32:
+            case 0x3359:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
                     func_801518B0(globalCtx, 0x3349, &this->actor);
@@ -507,80 +507,80 @@ void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
                 func_80151BB4(globalCtx, 5);
                 break;
 
-            case 0x3335 + 3:
+            case 0x3338:
                 func_801518B0(globalCtx, 0x3339, &this->actor);
                 this->unk_33E = 0x3339;
                 break;
 
-            case 0x3335 + 5:
-            case 0x3335 + 6:
+            case 0x333A:
+            case 0x333B:
                 EnMa4_SetFaceExpression(this, 0, 3);
                 func_801518B0(globalCtx, 0x333C, &this->actor);
                 this->unk_33E = 0x333C;
                 break;
 
-            case 0x3335 + 7:
+            case 0x333C:
                 EnMa4_SetFaceExpression(this, 0, 2);
                 func_801518B0(globalCtx, 0x333D, &this->actor);
                 this->unk_33E = 0x333D;
                 break;
 
-            case 0x3335 + 8:
+            case 0x333D:
                 func_801518B0(globalCtx, 0x333E, &this->actor);
                 this->unk_33E = 0x333E;
                 break;
 
-            case 0x3335 + 9:
+            case 0x333E:
                 func_801477B4(globalCtx);
                 func_80ABF760(this);
                 break;
 
-            case 0x3335 + 10:
+            case 0x333F:
                 func_801518B0(globalCtx, 0x3340, &this->actor);
                 this->unk_33E = 0x3340;
                 break;
 
-            case 0x3335 + 11:
+            case 0x3340:
                 EnMa4_SetFaceExpression(this, 0, 3);
                 func_801518B0(globalCtx, 0x3341, &this->actor);
                 this->unk_33E = 0x3341;
                 break;
 
-            case 0x3335 + 14:
+            case 0x3343:
                 EnMa4_SetFaceExpression(this, 0, 0);
                 func_801518B0(globalCtx, 0x3344, &this->actor);
                 this->unk_33E = 0x3344;
                 break;
 
-            case 0x3335 + 15:
+            case 0x3344:
                 func_801518B0(globalCtx, 0x3345, &this->actor);
                 this->unk_33E = 0x3345;
                 break;
 
-            case 0x3335 + 16:
+            case 0x3345:
                 func_801518B0(globalCtx, 0x3349, &this->actor);
                 this->unk_33E = 0x3349;
                 break;
 
-            case 0x3335 + 20:
+            case 0x3349:
                 func_801518B0(globalCtx, 0x334A, &this->actor);
                 this->unk_33E = 0x334A;
                 break;
 
-            case 0x3335 + 21:
+            case 0x334A:
                 func_801477B4(globalCtx);
                 func_80ABF070(this);
                 break;
 
-            case 0x3335 + 23:
+            case 0x334C:
                 func_801518B0(globalCtx, 0x334D, &this->actor);
                 this->unk_33E = 0x334D;
                 break;
 
-            case 0x3335 + 27:
-            case 0x3335 + 28:
-            case 0x3335 + 40:
-            case 0x3335 + 41:
+            case 0x3350:
+            case 0x3351:
+            case 0x335D:
+            case 0x335E:
                 if (this->unk_332 == 0) {
                     func_801518B0(globalCtx, 0x3352, &this->actor);
                     this->unk_33E = 0x3352;
@@ -590,8 +590,8 @@ void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3335 + 29: // You two work perfectly together!
-            case 0x3335 + 56: // Too bad. Well, that's how it goes at first, Grasshopper.
+            case 0x3352: // Win minigame
+            case 0x336d: // Lose minigame
                 EnMa4_SetFaceExpression(this, 0, 0);
                 if ((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE]) {
                     func_801518B0(globalCtx, 0x334C, &this->actor);
@@ -604,7 +604,7 @@ void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x3335 + 35:
+            case 0x3358:
                 if ((gSaveContext.perm.unk20 != 4) || !((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE])) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->unk_33E = 0x335C;
@@ -638,26 +638,26 @@ void func_80ABEF8C(EnMa4 *this, GlobalContext *globalCtx) {
         default:
         break;
 
-    case 4:
-        func_80ABE6C8(this, globalCtx);
-        break;
+        case 4:
+            func_80ABE6C8(this, globalCtx);
+            break;
 
-    case 5:
-        func_80ABEB6C(this, globalCtx);
-        break;
+        case 5:
+            func_80ABEB6C(this, globalCtx);
+            break;
 
-    case 6:
-        if (func_80147624(globalCtx) != 0) {
-            if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.perm.inv.unk_4C) & *(gBitFlags + 0x48/4)) == 0)) {
-                func_80ABE4A4(this);
+        case 6:
+            if (func_80147624(globalCtx) != 0) {
+                if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.perm.inv.unk_4C) & gBitFlags[0x12]) == 0)) {
+                    func_80ABE4A4(this);
+                }
             }
-        }
 
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-        break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            break;
     }
 
     if (this->unk_332 != 2) {
