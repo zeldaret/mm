@@ -409,69 +409,60 @@ void func_80B8D9E4(EnMaYts *this) {
 
 // CutsceneHandler?
 extern u16 D_80B8E32C;
-#ifdef NON_MATCHING
+//#ifdef NON_MATCHING
 void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
-    //u32 sp24;
-    //s32 temp_t6;
-    //u16 temp_a1;
-    //u16 temp_v1_2;
     u32 temp_v0;
-    //void *temp_a0;
-    CsCmdActorAction *temp_v1;
+    //CsCmdActorAction *temp_v1;
 
-    if (func_800EE29C(globalCtx, 0x78U) != 0) {
+    if (func_800EE29C(globalCtx, 0x78) != 0) {
         temp_v0 = func_800EE200(globalCtx, 0x78U);
-        //temp_t6 = temp_v0 * 4;
-        //sp24 = temp_v0;
-        //temp_a0 = globalCtx + temp_t6;
-        temp_v1 = globalCtx->csCtx.actorActions[temp_v0];
-        if (globalCtx->csCtx.frames == temp_v1->startFrame) {
-            //temp_a1 = temp_v1->unk0;
-            if (temp_v1->unk0 != D_80B8E32C) {
-                D_80B8E32C = temp_v1->unk0;
+        //temp_v1 = globalCtx->csCtx.actorActions[temp_v0];
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
+            if (globalCtx->csCtx.actorActions[temp_v0]->unk0 != D_80B8E32C) {
+                D_80B8E32C = globalCtx->csCtx.actorActions[temp_v0]->unk0;
                 this->unk_334 = 0;
                 switch (globalCtx->csCtx.actorActions[temp_v0]->unk0) {
-                    case 1:
-                        this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 0);
-                        break;
 
-                    case 2:
-                        this->hasBow = false;
-                        EnMaYts_ChangeAnim(this, 2);
-                        break;
+                case 1:
+                    this->hasBow = 1;
+                    EnMaYts_ChangeAnim(this, 0);
+                    break;
 
-                    case 3:
-                        this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 0xC);
-                        break;
+                case 2:
+                    this->hasBow = 0;
+                    EnMaYts_ChangeAnim(this, 2);
+                    break;
 
-                    case 4:
-                        this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 0x14);
-                        break;
+                case 3:
+                    this->hasBow = 1;
+                    EnMaYts_ChangeAnim(this, 0xC);
+                    break;
 
-                    //default:
-                        //break;
+                case 4:
+                    this->hasBow = 1;
+                    EnMaYts_ChangeAnim(this, 0x14);
+                    break;
                 }
             }
         }
-        func_800EDF24(this, globalCtx, temp_v0, globalCtx);
-        if ((D_80B8E32C == 2) && (this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount))) {
-            this->unk_334++;
+        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        if ((D_80B8E32C == 2) && (this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
+            this->unk_334 = this->unk_334 + 1;
             EnMaYts_ChangeAnim(this, 5);
+            //return;
         }
     } else {
         D_80B8E32C = 0x63;
-        this->hasBow = true;
+        this->hasBow = 1;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
-#endif
+//#else
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
+//#endif
 
 
 // ContinueTalking?
+// ChooseNextDialogue
 // Select the following dialogue based on the current one, and an appropiate face expression
 void func_80B8DBB8(EnMaYts *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
