@@ -24,7 +24,42 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor *thisx, GlobalContext *globalCtx);
 
-/*
+
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06018948;
+extern AnimationHeader D_0601B76C;
+extern AnimationHeader D_06007328;
+extern AnimationHeader D_06014088;
+extern AnimationHeader D_06002A8C;
+extern AnimationHeader D_06015B7C;
+extern AnimationHeader D_06007D98;
+extern AnimationHeader D_0600852C;
+extern AnimationHeader D_06008F6C;
+extern AnimationHeader D_060180DC;
+
+extern u64 D_060127C8[];
+extern u64 D_06012BC8[];
+extern u64 D_06012FC8[];
+extern u64 D_060133C8[];
+
+extern u64 D_0600FFC8[];
+extern u64 D_060107C8[];
+extern u64 D_06010FC8[];
+extern u64 D_060117C8[];
+extern u64 D_06011FC8[];
+
+extern FlexSkeletonHeader D_06013928;
+
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06007D98;
+
+// Bow
+extern Gfx D_060003B0[];
+
+// Sleeping
+extern Gfx D_060043A0[];
+
+
 const ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
     ACTORCAT_NPC,
@@ -36,7 +71,7 @@ const ActorInit En_Ma_Yts_InitVars = {
     (ActorFunc)EnMaYts_Update,
     (ActorFunc)EnMaYts_Draw,
 };
-*/
+
 
 void EnMaYts_UpdateEyes(EnMaYts *this) {
     if (this->overrideEyeTexIndex != 0) {
@@ -52,26 +87,18 @@ void EnMaYts_UpdateEyes(EnMaYts *this) {
 }
 
 
-/*
-glabel D_80B8E170
-0x0A000039
-0x20010000
-0x00000000
-0x00000000
-0x00000000
-0x00000000
-0x00000000
-0x00000100
-0x0012002E
-0x00000000
-0x00000000
-*/
-/*
-glabel D_80B8E19C
-0x00000000
-0x00000000
-0xFF000000
-*/
+//static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit sCylinderInit = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 18, 46, 0, { 0, 0, 0 } },
+};
+
+static CollisionCheckInfoInit2 D_80B8E19C = {
+    0, 0,
+    0, 0,
+    0xFF
+};
 
 struct struct_80B8E1A8{
     /* 0x00 */ AnimationHeader* unk_00;
@@ -80,21 +107,7 @@ struct struct_80B8E1A8{
     /* 0x0C */ f32 unk_0C;
 };
 
-extern AnimationHeader D_06009E58;
-extern AnimationHeader D_06018948;
-extern AnimationHeader D_0601B76C;
-extern AnimationHeader D_06007328;
-extern AnimationHeader D_06014088;
-extern AnimationHeader D_06002A8C;
-extern AnimationHeader D_06015B7C;
-extern AnimationHeader D_06007D98;
-extern AnimationHeader D_0600852C;
-extern AnimationHeader D_06008F6C;
-extern AnimationHeader D_060180DC;
-
-extern struct struct_80B8E1A8 D_80B8E1A8[];
-/*
-struct struct_80B8E1A8 D_80B8E1A8[] = {
+static struct struct_80B8E1A8 D_80B8E1A8[] = {
     { &D_06009E58, 0x3F800000, 0x00, 0.0f }, { &D_06009E58, 0x3F800000, 0x00, -6.0f },
     { &D_06018948, 0x3F800000, 0x02, 0.0f }, { &D_06018948, 0x3F800000, 0x02, -6.0f },
     { &D_0601B76C, 0x3F800000, 0x00, 0.0f }, { &D_0601B76C, 0x3F800000, 0x00, -6.0f },
@@ -107,28 +120,23 @@ struct struct_80B8E1A8 D_80B8E1A8[] = {
     { &D_06008F6C, 0x3F800000, 0x00, 0.0f }, { &D_06008F6C, 0x3F800000, 0x00, -6.0f },
     { &D_060180DC, 0x3F800000, 0x02, 0.0f }, { &D_060180DC, 0x3F800000, 0x02, -6.0f },
 };
-*/
 
-/*
-glabel D_80B8E308
-0x060127C8
-0x06012BC8
-0x06012FC8
-0x060133C8
-*/
+static void* sMouthTextures[] = {
+    D_060127C8,
+    D_06012BC8,
+    D_06012FC8,
+    D_060133C8
+};
 
-/*
-glabel D_80B8E318
-0x0600FFC8
-0x060107C8
-0x06010FC8
-0x060117C8
-0x06011FC8
-*/
-/*
-glabel D_80B8E32C
-0x00630000
-*/
+static void* sEyeTextures[] = {
+    D_0600FFC8,
+    D_060107C8,
+    D_06010FC8,
+    D_060117C8,
+    D_06011FC8
+};
+
+static u16 D_80B8E32C = 0x63;
 
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f, 
@@ -193,7 +201,7 @@ void func_80B8D1E8(EnMaYts *this, GlobalContext *globalCtx) {
 // CheckValidSpawn?
 s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
     switch (this->type) {
-        case 1:
+        case EN_NA_YTS_TYPE_SITTING:
             switch (CURRENT_DAY) {
                 case 1:
                     break;
@@ -212,7 +220,7 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             }
             break;
 
-        case 0:
+        case EN_NA_YTS_TYPE_0:
             if (!(gSaveContext.perm.weekEventReg[0x16] & 1)) {
                 return 0;
             }
@@ -221,22 +229,18 @@ s32 func_80B8D2D8(EnMaYts *this, GlobalContext *globalCtx) {
             }
             break;
 
-        case 2:
+        case EN_NA_YTS_TYPE_SLEEPING:
             if (gSaveContext.perm.weekEventReg[0x16] & 1) {
                 return 0;
             }
             break;
 
-        case 3:
+        case EN_NA_YTS_TYPE_BOW:
             break;
     }
     return 1;
 }
 
-extern ColliderCylinderInit D_80B8E170;
-extern CollisionCheckInfoInit2 D_80B8E19C;
-
-extern FlexSkeletonHeader D_06013928;
 
 #define EN_MA_YTS_PARSE_TYPE(params) (((params) & 0xF000) >> 12)
 
@@ -253,7 +257,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext *globalCtx) {
     func_80B8D1E8(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B8E170);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B8E19C);
 
     if (this->type == EN_NA_YTS_TYPE_SLEEPING) {
@@ -408,15 +412,11 @@ void func_80B8D9E4(EnMaYts *this) {
 }
 
 // CutsceneHandler?
-extern u16 D_80B8E32C;
-//#ifdef NON_MATCHING
 void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
     u32 temp_v0;
-    //CsCmdActorAction *temp_v1;
 
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         temp_v0 = func_800EE200(globalCtx, 0x78U);
-        //temp_v1 = globalCtx->csCtx.actorActions[temp_v0];
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
             if (globalCtx->csCtx.actorActions[temp_v0]->unk0 != D_80B8E32C) {
                 D_80B8E32C = globalCtx->csCtx.actorActions[temp_v0]->unk0;
@@ -449,17 +449,12 @@ void func_80B8DA28(EnMaYts *this, GlobalContext *globalCtx) {
         if ((D_80B8E32C == 2) && (this->unk_334 == 0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
             this->unk_334 = this->unk_334 + 1;
             EnMaYts_ChangeAnim(this, 5);
-            //return;
         }
     } else {
         D_80B8E32C = 0x63;
         this->hasBow = 1;
     }
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yts_0x80B8D030/func_80B8DA28.asm")
-//#endif
-
 
 // ContinueTalking?
 // ChooseNextDialogue
@@ -541,9 +536,6 @@ void EnMaYts_Update(Actor* thisx, GlobalContext *globalCtx) {
     func_80B8D12C(this, globalCtx);
 }
 
-extern AnimationHeader D_06009E58;
-extern AnimationHeader D_06007D98;
-
 
 s32 EnMaYts_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
     EnMaYts* this = THIS;
@@ -563,9 +555,6 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dLis
     return 0;
 }
 
-// Bow
-extern Gfx D_060003B0[];
-
 
 void EnMaYts_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
     EnMaYts* this = THIS;
@@ -580,26 +569,20 @@ void EnMaYts_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     }
 }
 
-extern void* D_80B8E308[]; // mouthTextures
-extern void* D_80B8E318[]; // eyeTextures
-
 void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnMaYts* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80B8E308[this->mouthTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80B8E318[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-
-// Sleeping
-extern Gfx D_060043A0[];
 
 // Alternative draw function
 void EnMaYts_DrawSleeping(Actor *thisx, GlobalContext *globalCtx) {
