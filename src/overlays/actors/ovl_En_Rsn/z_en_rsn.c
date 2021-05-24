@@ -23,7 +23,7 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-extern SkeletonHeader D_06009220;
+extern FlexSkeletonHeader D_06009220;
 extern AnimationHeader D_06009120;
 extern AnimationHeader D_0600788C;
 extern Gfx D_06005458[];

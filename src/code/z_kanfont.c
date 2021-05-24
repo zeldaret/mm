@@ -1,12 +1,12 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Kanfont_Nop800F4F40(GlobalContext* ctxt, UNK_TYPE param_2, UNK_TYPE param_3) {
+void Kanfont_Nop800F4F40(GlobalContext* globalCtx, UNK_TYPE param_2, UNK_TYPE param_3) {
 }
 
-void Kanfont_LoadAsciiChar(GlobalContext* ctxt, u8 character, s32 iParm3) {
+void Kanfont_LoadAsciiChar(GlobalContext* globalCtx, u8 character, s32 iParm3) {
     // UB to convert pointer to u32
-    DmaMgr_SendRequest0((void*)((u32)&ctxt->msgCtx.font.unk0[(ctxt->msgCtx).unk11EF0] + iParm3),
+    DmaMgr_SendRequest0((void*)((u32)&globalCtx->msgCtx.font.unk0[(globalCtx->msgCtx).unk11EF0] + iParm3),
                         (u32)_nes_font_staticSegmentRomStart + character * 0x80 - 0x1000, 0x80);
 }
 
