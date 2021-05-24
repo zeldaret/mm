@@ -8,7 +8,7 @@ void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx);
 
-static ColliderCylinderInit unusedColliderInit = {
+static ColliderCylinderInit sUnusedColliderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,

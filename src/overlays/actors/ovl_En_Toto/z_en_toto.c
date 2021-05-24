@@ -78,7 +78,7 @@ extern AnimationHeader D_06002F20;
 
 extern AnimationHeader D_06003AA8;
 
-extern SkeletonHeader D_0600A978;
+extern FlexSkeletonHeader D_0600A978;
 
 extern AnimationHeader D_0600B3E0;
 

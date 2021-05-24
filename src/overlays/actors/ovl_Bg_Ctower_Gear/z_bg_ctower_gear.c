@@ -83,7 +83,7 @@ static InitChainEntry sInitChainOrgan[] = {
 
 static Gfx* D_80AD32E8[] = { D_06010828, D_06017018, D_06018118 };
 
-void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* GlobalContext) {
+void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     int i;
     s32 flags;
     Vec3f splashSpawnPos;
@@ -107,7 +107,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* GlobalContext) {
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 340);
+                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 340);
             }
         }
     }
@@ -125,7 +125,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* GlobalContext) {
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0,
+                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0,
                                           ((u32)Rand_Next() >> 25) + 280);
                 }
             }
