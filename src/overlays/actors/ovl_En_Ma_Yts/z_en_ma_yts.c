@@ -107,7 +107,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80B8E19C = { 0, 0, 0, 0, 0xFF, };
+static CollisionCheckInfoInit2 D_80B8E19C = {
+    0, 0, 0, 0, 0xFF,
+};
 
 struct struct_80B8E1A8 {
     /* 0x00 */ AnimationHeader* unk_00;
@@ -130,9 +132,16 @@ static struct struct_80B8E1A8 D_80B8E1A8[] = {
     { &D_060180DC, 0x3F800000, 0x02, 0.0f }, { &D_060180DC, 0x3F800000, 0x02, -6.0f },
 };
 
-static void* sMouthTextures[] = { D_060127C8, D_06012BC8, D_06012FC8, D_060133C8, };
+static void* sMouthTextures[] = {
+    D_060127C8,
+    D_06012BC8,
+    D_06012FC8,
+    D_060133C8,
+};
 
-static void* sEyeTextures[] = { D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8, };
+static void* sEyeTextures[] = {
+    D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
+};
 
 static u16 D_80B8E32C = 99;
 
@@ -156,7 +165,6 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
 
     func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
 }
-
 
 void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
     switch (this->type) {
@@ -292,8 +300,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.perm.isNight == 1 &&
-                (gSaveContext.perm.weekEventReg[0x16] & 1)) {
+    } else if (CURRENT_DAY == 2 && gSaveContext.perm.isNight == 1 && (gSaveContext.perm.weekEventReg[0x16] & 1)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -322,7 +329,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
-        if (!(gSaveContext.perm.unk20 == 4)) { // PLAYER_FORM != HUMAN_FORM
+        if (!(gSaveContext.perm.unk20 == 4)) {    // PLAYER_FORM != HUMAN_FORM
             if (!(gSaveContext.perm.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 gSaveContext.perm.weekEventReg[0x41] |= 0x80;
