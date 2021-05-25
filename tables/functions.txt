@@ -5003,7 +5003,7 @@
     0x808698F4:("EnBox_Draw",),
     0x80869D90:("EnPametfrog_Init",),
     0x80869F90:("EnPametfrog_Destroy",),
-    0x80869FBC:("func_80869FBC",),
+    0x80869FBC:("EnPametfrog_Vec3fNormalize",),
     0x8086A024:("func_8086A024",),
     0x8086A068:("func_8086A068",),
     0x8086A0F4:("func_8086A0F4",),
