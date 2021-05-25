@@ -53,7 +53,5 @@ typedef enum {
 
 // values to get wallet capacity
 extern u16 D_801C1E2C[]; // wallet capacities
-extern u32 D_801C1DD0; // bit mask for wallet size in savecontext
-extern u8  D_801C1E08; // bit shift on index to align
 
 #endif // Z_EN_GINKO_MAN_H
