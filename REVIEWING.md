@@ -43,7 +43,7 @@ Pull Requests (PRs)
 - [ ] Jenkins build is successful.
    - [ ] `make` builds a matching ROM.
    - [ ] Any new compiler warnings that were added are required for matching. Ensure there is good reason if the warnings files have changed. `./tools/warnings_count/warnings_build_current.txt` and `./tools/warnings_count/warnings_setup_current.txt`
-- [ ] Files with NON_MATCHING functions have equivalent behaviour.
+- [ ] Files with NON_MATCHING functions have equivalent behaviour. (This will only be reviewed once we have shiftability since equivalence testing is easiest in game)
 - [ ] `code` and `boot` segment files should be documented as much as possible. Overlays with documentation should be complete.
    - [ ] Overlays with documentation should have macros to define access to parameters if the parameter uses bitwise access. The params should have an enum when it makes sense.
 - [ ] `format.sh` was run.
