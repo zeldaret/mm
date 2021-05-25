@@ -1,4 +1,11 @@
+/*
+ * File: z_en_pametfrog.c
+ * Overlay: En_Pametfrog
+ * Description: Gekko & Snapper Miniboss: Gekko
+ */
+
 #include "z_en_pametfrog.h"
+#include "src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 
 #define FLAGS 0x00000035
 
@@ -10,11 +17,16 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8086A0F4(EnPametfrog* this, GlobalContext* globalCtx);
-
 void func_8086A964(EnPametfrog* this, GlobalContext* globalCtx);
 void func_8086AAA8(EnPametfrog* this, GlobalContext* globalCtx);
-
+void func_8086AA60(EnPametfrog* this);
+void func_8086AAA8(EnPametfrog* this, GlobalContext* globalCtx);
+void func_8086AB04(EnPametfrog* this);
 void func_8086AB68(EnPametfrog* this, GlobalContext* globalCtx);
+void func_8086AD34(EnPametfrog* this, GlobalContext* globalCtx);
+void func_8086AE48(EnPametfrog* this);
+void func_8086AEC8(EnPametfrog* this, GlobalContext* globalCtx);
+
 void func_8086BA6C(EnPametfrog* this, GlobalContext* globalCtx);
 void func_8086BDA8(EnPametfrog* this, GlobalContext* globalCtx);
 void func_8086C618(EnPametfrog* this, GlobalContext* globalCtx);
@@ -24,13 +36,16 @@ void func_8086C7C8(EnPametfrog* this);
 void func_8086C81C(EnPametfrog* this, GlobalContext* globalCtx);
 void func_8086C94C(EnPametfrog* this);
 void func_8086C99C(EnPametfrog* this, GlobalContext* globalCtx);
-
 void func_8086C5A8(EnPametfrog* this);
 
+extern AnimationHeader D_06001F20;
 extern AnimationHeader D_0600347C;
 extern AnimationHeader D_060039C4;
 extern AnimationHeader D_06003F28;
 extern AnimationHeader D_06004680;
+extern AnimationHeader D_06004894;
+extern AnimationHeader D_06004D50;
+extern AnimationHeader D_060050B8;
 extern AnimationHeader D_060052EC;
 extern AnimationHeader D_06005694;
 extern AnimationHeader D_060066B4;
@@ -133,6 +148,8 @@ InitChainEntry D_8086D9E0[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
+// gSaveContext.perm.weekEventReg[KEY] = VALUE
+// KEY | VALUE
 s32 D_8086D9F4[] = {
     (0x20 << 8) | 0x40,
     (0x20 << 8) | 0x80,
@@ -140,19 +157,11 @@ s32 D_8086D9F4[] = {
     (0x21 << 8) | 0x02,
 };
 
-s32 D_8086DA04[] = {
-    0x00000000,
-    0xBF000000,
-    0x00000000,
-};
+Vec3f D_8086DA04 = { 0.0f, -0.5f, 0.0f };
 
-s32 D_8086DA10[] = {
-    0xFAFAFAFF,
+Color_RGBA8 D_8086DA10 = { 250, 250, 250, 255 };
 
-};
-s32 D_8086DA14[] = {
-    0xB4B4B4FF,
-};
+Color_RGBA8 D_8086DA14 = { 180, 180, 180, 255 };
 
 // static ActorAnimationEntry animations[]
 AnimationHeader* D_8086DA18[] = {
@@ -162,8 +171,8 @@ AnimationHeader* D_8086DA18[] = {
     &D_0600F048,
 };
 
-s32 D_8086DA28[] = {
-    0xFFFF00FF, 0x01FF02FF, 0x03FF04FF, 0x0506FF07, 0x0809FF0A, 0xFF0BFFFF,
+s8 D_8086DA28[] = {
+    -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
 void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -177,14 +186,12 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
                      this->transitionDrawTable, 24);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_8086D9C8, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if ((gSaveContext.perm.weekEventReg[D_8086D9F4[this->actor.params - 1] >> 8] &
              (u8)D_8086D9F4[this->actor.params - 1]) == 0) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
-            return;
         }
     } else {
         for (i = 0; i < 2; i++) {
@@ -195,11 +202,10 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
                                   this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
                                   0) == 0) {
             Actor_MarkForDeath(&this->actor);
-            return;
+        } else {
+            this->actor.params = 0;
+            func_8086C6D0(this);
         }
-
-        this->actor.params = 0;
-        func_8086C6D0(this);
     }
 }
 
@@ -300,9 +306,7 @@ u8 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
     vec1.x = floorPoly->normal.x * 3.051851e-05f;
     vec1.y = floorPoly->normal.y * 3.051851e-05f;
     vec1.z = floorPoly->normal.z * 3.051851e-05f;
-
     temp_f12 = (vec1.x * this->unk_2DC.x) + (vec1.y * this->unk_2DC.y) + (vec1.z * this->unk_2DC.z);
-
     if (fabsf(temp_f12) >= 1.0f) {
         return false;
     }
@@ -320,7 +324,6 @@ u8 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
     Math3D_CrossProduct(&this->unk_2E8, &vec1, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
     Math_Vec3f_Copy(&this->unk_2DC, &vec1);
-
     return true;
 }
 #else
@@ -434,23 +437,136 @@ void func_8086A8C0(EnPametfrog* this) {
     this->actionFunc = func_8086A964;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086A964.asm")
+void func_8086A964(EnPametfrog* this, GlobalContext* globalCtx) {
+    Actor* actor;
+    Vec3f vec1;
+    s32 pad;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AA60.asm")
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+        if (Rand_ZeroOne() < 0.5f) {
+            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004D50);
+        } else {
+            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004680);
+        }
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AAA8.asm")
+    actor = func_800BC270(globalCtx, &this->actor, 60.0f, 0x138B0);
+    if (actor != NULL) {
+        vec1.x = this->actor.world.pos.x;
+        vec1.y = this->actor.world.pos.y + 10.0f;
+        vec1.z = this->actor.world.pos.z;
+        if (actor->world.rot.x < Actor_PitchToPoint(actor, &vec1)) {
+            func_8086AA60(this);
+        } else {
+            func_8086AB04(this);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AB04.asm")
+void func_8086AA60(EnPametfrog* this) {
+    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004894);
+    this->unk_2B6 = 15;
+    this->actionFunc = func_8086AAA8;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AB68.asm")
+void func_8086AAA8(EnPametfrog* this, GlobalContext* globalCtx) {
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && this->unk_2B6 > 0) {
+        this->unk_2B6--;
+        if (this->unk_2B6 == 0) {
+            func_8086A8C0(this);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AC0C.asm")
+void func_8086AB04(EnPametfrog* this) {
+    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060050B8);
+    this->unk_2B6 = 10;
+    this->actor.params = 4;
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.z = 0;
+    this->actor.shape.rot.y = this->actor.child->world.rot.y;
+    this->actionFunc = func_8086AB68;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AD34.asm")
+// TODO: Verify that this->actor.child is EnBigpamet
+void func_8086AB68(EnPametfrog* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->unk_2B6--;
+    if (this->unk_2B6 == 0) {
+        func_8086A8C0(this);
+    } else {
+        this->actor.world.pos.y =
+            Math_SinS(this->unk_2B6 * 0xCCC) * 100.0f + (((EnBigpamet*)this->actor.child)->unk_2AC + 46.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AE48.asm")
+void func_8086AC0C(EnPametfrog* this, GlobalContext* globalCtx) {
+    Vec3f eye;
+    s16 yaw;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AEC8.asm")
+    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06001F20);
+    this->actor.params = 6;
+    this->actor.speedXZ = 7.0f;
+    this->actor.velocity.y = 15.0f;
+    this->actor.world.rot.y = this->actor.child->world.rot.y + 0x8000;
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    this->actor.flags |= 1;
+    this->unk_2B6 = 30;
+    this->collider.base.ocFlags1 |= 1;
+    yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    eye.x = (Math_SinS(yaw) * 300.0f) + this->actor.focus.pos.x;
+    eye.y = this->actor.focus.pos.y + 100.0f;
+    eye.z = (Math_CosS(yaw) * 300.0f) + this->actor.focus.pos.z;
+    func_8016970C(globalCtx, this->camId, &this->actor.focus, &eye);
+    Audio_PlayActorSound2(this, 0x38D3);
+    this->actionFunc = func_8086AD34;
+}
+
+// D_8086DA54 = 1.0471976
+// D_8086DA58 = 0.16666667
+// D_8086DA5C = 0.02
+// D_8086DA60 = 0.005
+void func_8086AD34(EnPametfrog* this, GlobalContext* globalCtx) {
+    f32 sin;
+
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->actor.shape.rot.x += 0x800;
+    this->actor.shape.rot.z += 0x1000;
+    if (this->unk_2B6 != 0) {
+        this->unk_2B6--;
+    }
+
+    sin = sin_rad(this->unk_2B6 * D_8086DA54) * ((D_8086DA5C * (this->unk_2B6 * D_8086DA58)) + D_8086DA60) + 1.0f;
+    func_8086A428(this, globalCtx, 300.0f * sin, 100.0f * sin);
+    if (this->actor.bgCheckFlags & 1) {
+        func_8086A4E4(this, globalCtx);
+        func_8086AE48(this);
+    }
+}
+
+void func_8086AE48(EnPametfrog* this) {
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_060039C4, 2.0f, 0.0f, 0.0f, 0, -2.0f);
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.z = 0;
+    this->actor.bgCheckFlags &= ~8;
+    Audio_PlayActorSound2(this, 0x39A1);
+    this->actionFunc = func_8086AEC8;
+}
+
+// D_8086DA64 = 3.051851e-05
+void func_8086AEC8(EnPametfrog* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_8086A6B0(this, globalCtx);
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.bgCheckFlags & 8) && (this->actor.wallBgId == BGCHECK_SCENE) &&
+        ((this->actor.wallPoly->normal.y * D_8086DA64) < 0.5f)) {
+        func_8086AFC8(this);
+    } else if (((this->actor.bgCheckFlags & 1) == 0) ||
+               (this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f)) {
+        this->actor.speedXZ = 12.0f;
+    } else {
+        this->actor.speedXZ = 0.0f;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pametfrog_0x80869D90/func_8086AFC8.asm")
 
@@ -502,6 +618,7 @@ void func_8086C5A8(EnPametfrog* this) {
     } else {
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
     }
+
     ActorCutscene_SetIntentToPlay(this->cutscene);
     this->actionFunc = func_8086C618;
     this->actor.speedXZ = 0.0f;
@@ -549,10 +666,6 @@ void func_8086C72C(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void func_8086C7C8(EnPametfrog* this) {
-    SkelAnime* temp_a0;
-
-    temp_a0 = &this->skelAnime;
-    this = this;
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060039C4);
     this->collider.base.acFlags |= 1;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -602,7 +715,6 @@ void func_8086C99C(EnPametfrog* this, GlobalContext* globalCtx) {
         (this->skelAnime.animCurrentSeg == &D_060070C4 && func_801378B8(&this->skelAnime, 9.0f)) ||
         (this->skelAnime.animCurrentSeg == &D_06003F28 && func_801378B8(&this->skelAnime, 2.0f)) ||
         ((this->skelAnime.animCurrentSeg == &D_0600F048) && func_801378B8(&this->skelAnime, 27.0f))) {
-
         this->collider.base.atFlags |= 1;
         if (this->skelAnime.animCurrentSeg == &D_06003F28) {
             Audio_PlayActorSound2(&this->actor, 0x3966);
@@ -649,6 +761,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->collider.base.acFlags &= ~2;
     }
+
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != func_8086BA6C) && (this->actionFunc != func_8086AB68)) {
         if (this->actor.gravity < D_8086DA98) {
@@ -660,22 +773,25 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.floorHeight = this->actor.world.pos.y;
         }
     }
+
     if (this->collider.base.atFlags & 1) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
+
     if (this->collider.base.acFlags & 1) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
+
     if (this->collider.base.ocFlags1 & 1) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
+
     if (this->unk_2C4 > 0.0f) {
         if ((this->unk_2AC != 0xA) && (this->actionFunc != func_8086C618)) {
             Math_StepToF(&this->unk_2C4, 0.0f, 0.05f);
             temp_f0 = ((this->unk_2C4 + 1.0f) * 0.375f);
             this->unk_2C8 = temp_f0;
             this->unk_2C8 = (temp_f0 > 0.75f) ? 0.75f : this->unk_2C8;
-
         } else if (Math_StepToF(&this->unk_2CC, 0.75f, 0.01875f) == 0) {
             func_800B9010(&this->actor, 0x20B2);
         }

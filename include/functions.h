@@ -874,7 +874,7 @@ void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 pa
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 // void func_800BC188(void);
 // void func_800BC1B4(void);
-// void func_800BC270(void);
+Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
 // void func_800BC444(void);
 // void func_800BC4EC(void);
 // void func_800BC5B8(void);
