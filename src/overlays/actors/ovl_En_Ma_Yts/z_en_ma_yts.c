@@ -246,8 +246,6 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
     return true;
 }
 
-#define EN_MA_YTS_PARSE_TYPE(params) (((params)&0xF000) >> 12)
-
 void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYts* this = THIS;
     s32 pad;
