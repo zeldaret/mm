@@ -53,7 +53,7 @@ Pull Requests (PRs)
    - [ ] Extern'd initVar data.
    - [ ] Types used in the actor struct. Specific example would be actionFunc typedefs.
    - [ ] Param field macros and/or enums.
-   - [ ] We have proof that enum/struct/define is needed in another file.
+   - [ ] For any other additional `enum`/`struct`/`define`/`function`/`global`, there needs to be evidence it is needed in another file.
 - [ ] New variables and functions should follow standard naming conventions.
    - [ ] Constants are converted to whichever looks best in context: hexadecimal, decimal, or float
 	  - [ ] Rotation angles should always be in hexadecimal
