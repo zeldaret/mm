@@ -292,43 +292,46 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
+// CheckValidSpawn
 s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
         case 0:
-            if ((CURRENT_DAY == 3) && ((gSaveContext.perm.weekEventReg[0x16] & 1) == 0)) {
-                return 0;
+            if (CURRENT_DAY == 3 && !(gSaveContext.perm.weekEventReg[0x16] & 1)) {
+                return false;
             }
+            break;
+
         case 2:
-            if ((CURRENT_DAY != 1) && ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
-                return 0;
+            if (CURRENT_DAY != 1 && (gSaveContext.perm.weekEventReg[0x16] & 1)) {
+                return false;
             }
+            break;
+
         case 1:
-            if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
-                if (((s32)(this->actor.params & 0xF00) >> 8) != 0) {
-                    return 0;
+            if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+                if (((this->actor.params & 0xF00) >> 8) != 0) {
+                    return false;
                 }
-            } else if (((s32)(this->actor.params & 0xF00) >> 8) == 0) {
-                return 0;
+            } else if (((this->actor.params & 0xF00) >> 8) == 0) {
+                return false;
             }
-            if (((s32)gSaveContext.perm.time >= 0xD555) && (CURRENT_DAY == 3)) {
-                return 0;
+            if (gSaveContext.perm.time >= 0xD555 && CURRENT_DAY == 3) {
+                return false;
             }
+            break;
+
         case 3:
-            if (((gSaveContext.perm.weekEventReg[0x34] & 1) == 0) &&
-                ((gSaveContext.perm.weekEventReg[0x34] & 2) != 0)) {
-                return 0;
+            if ((!(gSaveContext.perm.weekEventReg[0x34] & 1) && !(gSaveContext.perm.weekEventReg[0x34] & 2)) || (gSaveContext.perm.weekEventReg[0xE] & 1)) {
+                return false;
             }
-            if ((gSaveContext.perm.weekEventReg[0xE] & 1) != 0) {
-                return 0;
-            }
+            break;
+
         case 4:
-            return 1;
+            break;
     }
+
+    return true;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E6E0.asm")
-#endif
 
 void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
@@ -345,7 +348,7 @@ void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+            if (gSaveContext.perm.weekEventReg[0x16] & 1) {
                 func_80B90C08(this, 12);
             } else {
                 func_80B90C08(this, 8);
