@@ -648,7 +648,7 @@ typedef struct {
     /* 0x0008 */ s32 cutscene;
     /* 0x000C */ u16 time;
     /* 0x000E */ UNK_TYPE1 padE[0x2];
-    /* 0x0010 */ u32 isNight;
+    /* 0x0010 */ s32 isNight;
     /* 0x0014 */ u32 unk14;
     /* 0x0018 */ s32 day;
     /* 0x001C */ u32 daysElapsed;
@@ -1128,7 +1128,7 @@ typedef struct {
 
 typedef struct FileChooseContext FileChooseContext;
 
-typedef void(*filechoose_update_func)(FileChooseContext* ctxt);
+typedef void(*filechoose_update_func)(FileChooseContext* globalCtx);
 
 typedef struct FireObj FireObj;
 
@@ -1276,17 +1276,17 @@ typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, 
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
 typedef struct {
-    /* 0x0 */ GlobalContext* ctxt;
+    /* 0x0 */ GlobalContext* globalCtx;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
 } Quake2Context; // size = 0xC
 
-typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
+typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
-typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
+typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
-typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
+typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1458,7 +1458,7 @@ struct Camera {
     /* 0x080 */ f32 unk80;
     /* 0x084 */ f32 unk84;
     /* 0x088 */ f32 unk88;
-    /* 0x08C */ GlobalContext* ctxt;
+    /* 0x08C */ GlobalContext* globalCtx;
     /* 0x090 */ ActorPlayer* player;
     /* 0x094 */ PosRot unk94;
     /* 0x0A8 */ Actor* unkA8;
@@ -1562,7 +1562,7 @@ struct TargetContext {
 }; // size = 0x98
 
 struct s800B948C {
-    /* 0x00 */ GlobalContext* ctxt;
+    /* 0x00 */ GlobalContext* globalCtx;
     /* 0x04 */ Actor* actor;
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
@@ -1598,7 +1598,7 @@ struct ActorContext {
     /* 0x1FC */ Vec3f unk1FC;
     /* 0x208 */ UNK_TYPE1 pad208[0x48];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ UNK_TYPE1 pad254[0x14];
+    /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284

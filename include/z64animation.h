@@ -24,18 +24,19 @@ typedef struct {
     /* 0x007 */ u8 nextLimbIndex;   // The parent limb's next limb index into the limb table.
     /* 0x008 */ Gfx* displayLists[1]; // Display lists for the limb. Index 0 is the normal display list, index 1 is the
                                       // far model display list.
-} SkelLimbEntry;                      // Size = 0xC or 0x10
+} StandardLimb; // Size = 0xC
 
+// Model has limbs with only rigid meshes
 typedef struct {
-    /* 0x000 */ SkelLimbEntry* limbs[1]; // One or more limbs, index 0 is the root limb.
-} Skeleton;                              // Size >= 4
-
-typedef struct {
-    /* 0x000 */ Skeleton* skeletonSeg; // Segment address of SkelLimbIndex.
+    /* 0x000 */ void** skeletonSeg; // Segment address of SkelLimbIndex.
     /* 0x004 */ u8 limbCount;          // Number of limbs in the model.
-    /* 0x005 */ char unk05[3];         // unknown, maybe padding?
+} SkeletonHeader; // size = 0x8
+
+// Model has limbs with flexible meshes
+typedef struct {
+    /* 0x000 */ SkeletonHeader sh;
     /* 0x008 */ u8 dListCount;         // Number of display lists in the model.
-} SkeletonHeader;                      // Size = 0xC
+} FlexSkeletonHeader; // size = 0xC
 
 typedef s16 AnimationRotationValue;
 
@@ -43,18 +44,18 @@ typedef struct {
     /* 0x000 */ u16 x;
     /* 0x002 */ u16 y;
     /* 0x004 */ u16 z;
-} AnimationRotationIndex; // size = 0x06
+} JointIndex; // size = 0x06
 
 typedef struct {
     /* 0x000 */ s16 frameCount;
     /* 0x002 */ s16 unk02;
-} GenericAnimationHeader; // size = 0x4
+} AnimationHeaderCommon; // size = 0x4
 
 typedef struct {
-    /* 0x000 */ GenericAnimationHeader genericHeader;
-    /* 0x004 */ u32 rotationValueSeg; // referenced as tbl
-    /* 0x008 */ u32 rotationIndexSeg; // referenced as ref_tbl
-    /* 0x00C */ u16 limit;
+    /* 0x00 */ AnimationHeaderCommon common;
+    /* 0x04 */ s16* frameData;         // referenced as tbl
+    /* 0x08 */ JointIndex* jointIndices; // referenced as ref_tbl
+    /* 0x0C */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
 
 typedef enum {
@@ -137,9 +138,9 @@ typedef struct AnimationContext {
 } AnimationContext; // size = 0xC84
 
 typedef struct {
-    /* 0x000 */ GenericAnimationHeader genericHeader;
-    /* 0x004 */ u32 animationSegAddress;
-} LinkAnimetionEntry; // size = 0x8
+    /* 0x00 */ AnimationHeaderCommon common;
+    /* 0x04 */ u32 segment;
+} LinkAnimationHeader; // size = 0x8
 
 struct SkelAnime {
     /* 0x00 */ u8 limbCount; // joint_Num
@@ -150,12 +151,12 @@ struct SkelAnime {
     /* 0x01 */ u8 mode;
     /* 0x02 */ u8 dListCount;
     /* 0x03 */ s8 unk03;
-    /* 0x04 */ Skeleton* skeleton;
+    /* 0x04 */ void** skeleton;   // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
     /* 0x08 */
     union {
         AnimationHeader* animCurrentSeg;
-        LinkAnimetionEntry* linkAnimetionSeg;
-        GenericAnimationHeader* genericSeg;
+        LinkAnimationHeader* linkAnimetionSeg;
+        AnimationHeaderCommon* genericSeg;
     };
     /* 0x0C */ f32 initialFrame;
     /* 0x10 */ f32 animFrameCount;

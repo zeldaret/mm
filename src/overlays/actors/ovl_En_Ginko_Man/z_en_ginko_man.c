@@ -651,7 +651,6 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
             case 0x469: // "Excuse me, but let me take a look at you..."
                 func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
                 globalCtx->msgCtx.bankRupees = (gSaveContext.perm.bankRupees & 0xFFFF);
-                // perm.day cast req for div vs divu
                 if ((CURRENT_DAY == 3) && (gSaveContext.perm.isNight == 1)) {
                     func_801518B0(globalCtx, 0x46C, &this->actor);
                     this->curTextId = 0x46C; // "Ah, yes...[Link], right?
