@@ -51,7 +51,7 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
 We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
-After joining the Discord, ask to be added to the Trello board so you can claim your actor and avoid duplicate work.
+After joining the Discord, ask to be added to the Trello board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
 
 Style Guide & Conventions
 -------------------------
