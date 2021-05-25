@@ -648,7 +648,7 @@ typedef struct {
     /* 0x0014 */ u32 unk14;
     /* 0x0018 */ s32 day;
     /* 0x001C */ u32 daysElapsed;
-    /* 0x0020 */ u8 unk20;
+    /* 0x0020 */ u8 unk20; // link form
     /* 0x0021 */ UNK_TYPE1 pad21[0x2];
     /* 0x0023 */ u8 owlSave;
     /* 0x0024 */ SaveContext_struct1 unk24;

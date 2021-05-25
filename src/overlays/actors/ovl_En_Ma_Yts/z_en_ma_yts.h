@@ -52,21 +52,27 @@ typedef struct EnMaYts {
     /* 0x32E */ s16 mouthTexIndex;
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
-    /* 0x334 */ s16 unk_334;
+    /* 0x334 */ s16 unk_334; // flag? Seems to be used to prevent continue re-triggering some behaviour in the endcredits cutscene.
     /* 0x336 */ s16 hasBow;
     /* 0x338 */ u16 textId;
-    /* 0x33A */ char unk_33A[0x2];
 } EnMaYts; // size = 0x33C
 
 extern const ActorInit En_Ma_Yts_InitVars;
 
 typedef enum {
-    /* 0 */ EN_NA_YTS_TYPE_0,
+    /* 0 */ EN_NA_YTS_TYPE_BARN,
     /* 1 */ EN_NA_YTS_TYPE_SITTING,
     /* 2 */ EN_NA_YTS_TYPE_SLEEPING,
-    /* 3 */ EN_NA_YTS_TYPE_BOW // EN_NA_YTS_TYPE_CUTSCENE?
+    /* 3 */ EN_NA_YTS_TYPE_ENDCREDITS
 } EnMaYtsType;
 
 #define EN_MA_YTS_PARAM(enMaYtsType) ((enMaYtsType) << 12)
+
+/**
+ * EN_NA_YTS_TYPE_BARN: In the barn, accompanying Cremia. Cremia's actor will handle her dialogue if spoken to.
+ * EN_NA_YTS_TYPE_SITTING: Having dinner or looking after the ranch.
+ * EN_NA_YTS_TYPE_SLEEPING: Sleeping. Can be seen in the second night in her house if the player failed the alien invasion.
+ * EN_NA_YTS_TYPE_ENDCREDITS: Used in the end credits sequence.
+ */
 
 #endif // Z_EN_MA_YTS_H
