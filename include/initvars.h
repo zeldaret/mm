@@ -279,6 +279,7 @@ extern ActorInit En_Invadepoh_InitVars;
 extern ActorInit En_Invadepoh_Demo_InitVars;
 extern ActorInit En_Invisible_Ruppe_InitVars;
 extern ActorInit En_Ishi_InitVars;
+extern ActorInit En_Item00_InitVars;
 extern ActorInit En_Ja_InitVars;
 extern ActorInit En_Jc_Mato_InitVars;
 extern ActorInit En_Jg_InitVars;

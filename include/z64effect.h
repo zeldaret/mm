@@ -209,7 +209,7 @@ typedef struct {
 } EffInfo; // size = 0x14
 
 typedef struct {
-    /* 0x0000 */ struct GlobalContext* ctxt;
+    /* 0x0000 */ struct GlobalContext* globalCtx;
     /* 0x0004 */ EffSpark sparks[3];
     /* 0x0E5C */ EffBlure blures[25];
     /* 0x388C */ EffShieldParticle shieldParticles[3];

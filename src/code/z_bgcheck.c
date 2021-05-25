@@ -26,13 +26,13 @@ void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, u16* head, s16* p
     *head = index;
 }
 
-void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, DynaSSNodeList* list) {
+void BgCheck_PolygonLinkedListInit(GlobalContext* globalCtx, DynaSSNodeList* list) {
     list->tbl = NULL;
     list->count = 0;
 }
 
-void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, DynaSSNodeList* list, u32 numNodes) {
-    list->tbl = (SSNode*)THA_AllocEndAlign(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
+void BgCheck_PolygonLinkedListAlloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes) {
+    list->tbl = (SSNode*)THA_AllocEndAlign(&globalCtx->state.heap, numNodes << 2, 0xfffffffe);
     list->max = numNodes;
     list->count = 0;
 }
