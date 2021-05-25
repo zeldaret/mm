@@ -12,9 +12,8 @@ void ObjHsStump_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsStump_SetupIdle(ObjHsStump* this, GlobalContext* globalCtx);
 void ObjHsStump_Idle(ObjHsStump* this, GlobalContext* globalCtx);
 void ObjHsStump_SetupAppear(ObjHsStump* this, GlobalContext* globalCtx);
-void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx);
+void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx);
 
-/*
 const ActorInit Obj_HsStump_InitVars = {
     ACTOR_OBJ_HSSTUMP,
     ACTORCAT_BG,
@@ -26,26 +25,21 @@ const ActorInit Obj_HsStump_InitVars = {
     (ActorFunc)ObjHsStump_Update,
     (ActorFunc)ObjHsStump_Draw,
 };
-*/
 
 extern Gfx D_060003B8[];
 
 extern CollisionHeader D_060011B0;
 
-extern InitChainEntry D_80BDAF80[];
-/*
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 180, ICHAIN_STOP),
 };
-*/
 
-extern Vec3f D_80BDAF84;
-// static Vec3f iceSmokeAccel = {0.0f, 0.0f, 0.0f};
+Vec3f iceSmokeAccel = {0.0f, 0.0f, 0.0f}; //Readd as static when possible
 
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80BDAF80);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); // Must be thisx to match
     BcCheck3_BgActorInit(&this->dyna, 1);
@@ -81,16 +75,15 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, GlobalContext* globalCtx) {
     this->rotAngle = 0;
     this->rotFactor = 3640.0f;
     func_8019F128(0x3A86);
-    this->actionFunc = func_80BDABCC;
+    this->actionFunc = ObjHsStump_Appear;
 }
 
 #ifdef NON_MATCHING
 // Correct instructions, but they are all out of order in the (this->framesAppeared) < 11 branch
 // Loop looks fine, it's everything before
-// void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx)
-void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
-    s32 i;
-    s32 angle;
+void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
+    s16 i;
+    f32 angle;
     s16 numDirections;
     Vec3f iceSmokePosOffset;
     Vec3f iceSmokeVelOffset;
@@ -120,7 +113,7 @@ void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
-                EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &D_80BDAF84, 100);
+                EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &iceSmokeAccel, 100);
             }
         }
     }
@@ -136,7 +129,7 @@ void func_80BDABCC(ObjHsStump* this, GlobalContext* globalCtx) {
     this->framesAppeared++;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/func_80BDABCC.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Appear.asm")
 #endif
 
 void ObjHsStump_Destroy(Actor* thisx, GlobalContext* globalCtx) {

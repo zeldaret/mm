@@ -8239,7 +8239,7 @@ SECTIONS
     ovl_Obj_HsStump : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.text)
-        build/asm/overlays/ovl_Obj_HsStump_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.data)
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.rodata)
         build/asm/overlays/ovl_Obj_HsStump_rodata.o(.rodata)
     }
