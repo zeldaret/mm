@@ -13,7 +13,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx);
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx);
 void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx);
 
-/*
+
 const ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
@@ -25,13 +25,13 @@ const ActorInit Obj_Ghaka_InitVars = {
     (ActorFunc)ObjGhaka_Update,
     (ActorFunc)ObjGhaka_Draw,
 };
-*/
 
-Vec3f D_80B3C960[] = { 0.0f, 0.0f, 0.0f };
+
+s32 D_80B3C960[] = { 0x00000000, 0x00000000, 0x00000000 };
 
 // s32 D_80B3C96C[] = { 0x801F0000, 0x3054001E, 0x00000000, 0x00000000, 0x00000000 };
 
-static InitChainEntry sInitChain[] = {
+InitChainEntry D_80B3C96C[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
@@ -44,7 +44,7 @@ extern Gfx D_06001980[];
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C260.asm")
 void func_80B3C260(ObjGhaka* this) {
     if ((gSaveContext.perm.weekEventReg[20] & 0x20) != 0) {
-        this->actor.world.pos.z = this->actor.home.pos.z + 100.0f;
+        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
     }
     this->actionFunc2 = func_80B3C39C;
 }
@@ -66,10 +66,10 @@ void func_80B3C2B0(ObjGhaka* this) {
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
     if ((gSaveContext.perm.weekEventReg[20] & 0x20) == 0) {
         Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, 0x1FE, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
-                                         this->actor.cutscene, this->actor.unk20, 0);
+                                         this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
         Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, 0x1FE, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1, -1,
-                                         this->actor.unk20, 0);
+                                         this->dyna.actor.unk20, 0);
     }
 }
 
@@ -79,65 +79,64 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     s16 temp_v1;
 
-    temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    if (func_800B84D0(this, globalCtx)) {
+    temp_v1 = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
+    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
         func_80B3C29C(this);
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+    } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (temp_v1 <= -0x5556 || temp_v1 >= 0x5556) {
-            func_800B863C(this, globalCtx);
+            func_800B863C(&this->dyna.actor, globalCtx);
             if (player->unk14B == 1) {
-                this->actor.textId = 0xCF3;
+                this->dyna.actor.textId = 0xCF3;
             } else {
-                this->actor.textId = 0xCF2;
+                this->dyna.actor.textId = 0xCF2;
             }
         }
     }
-    if (this->unk_148 < 0.0f) {
+    if (this->dyna.unk148 < 0.0f) {
         if (!(gSaveContext.perm.weekEventReg[20] & 0x20) && player->unk14B == 1) {
             func_80B3C2B0(this);
             return;
         }
     }
     player->unkA70 &= ~0x10;
-    this->unk_148 = 0.0f;
+    this->dyna.unk148 = 0.0f;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C4E0.asm")
-// void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-//     s32 temp_v0;
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C4E0.asm")
+void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
+    s32 temp_v0;
 
-//     temp_v0 = func_80152498(&globalCtx->msgCtx);
-//     if (temp_v0 == 5) {
-//         if (func_80147624(globalCtx)) {
-//             globalCtx->msgCtx.pad11F23 = 0x43;
-//             globalCtx->msgCtx.unk12023 = 4;
-//             func_80B3C260(this);
-//         }
-//     } else if (temp_v0 == 4) {
-//         if (func_80147624(globalCtx)) {
-//             switch (globalCtx->msgCtx.choiceIndex) {
-//                 case 0:
-//                     func_8019F208();
-//                     this->actor.textId = 0xCF5;
-//                     func_801518B0(globalCtx, 0xCF5U & 0xFFFF, &this->actor);
-//                     break;
-//                 case 1:
-//                     func_8019F208();
-//                     this->actor.textId = 0xCF7;
-//                     func_801518B0(globalCtx, 0xCF7U & 0xFFFF, &this->actor);
-//                     break;
-//                 case 2:
-//                     break;
-//                 default:
-//                     func_8019F230();
-//                     globalCtx->msgCtx.pad11F23 = 0x43;
-//                     globalCtx->msgCtx.unk12023 = 4;
-//                     func_80B3C260(this);
-//                     break;
-//             }
-//         }
-//     }
-// }
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if (temp_v0 == 5) {
+        if (func_80147624(globalCtx)) {
+            globalCtx->msgCtx.unk11F23 = 0x43;
+            globalCtx->msgCtx.unk12024 = 4;
+            func_80B3C260(this);
+        }
+
+    } else if ((temp_v0 & 0xFFFFFFFFu) == 4) {
+        if (func_80147624(globalCtx)) {
+            switch (globalCtx->msgCtx.choiceIndex) {
+                case 0:
+                    func_8019F208();
+                    this->dyna.actor.textId = 0xCF5;
+                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    break;
+                case 1:
+                    func_8019F208();
+                    this->dyna.actor.textId = 0xCF7;
+                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    break;
+                case 2:
+                    func_8019F230();
+                    globalCtx->msgCtx.unk11F23 = 0x43;
+                    globalCtx->msgCtx.unk12024 = 4;
+                    func_80B3C260(this);
+        
+            }
+        }
+    }
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
@@ -146,16 +145,16 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
     s32 stepTemp;
 
     stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
-    this->actor.world.pos.z = this->actor.home.pos.z + this->unk_168;
+    this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
     if (stepTemp & 0xFF) {
         player->unkA70 &= ~0x10;
-        this->unk_148 = 0.0f;
+        this->dyna.unk148 = 0.0f;
         func_80B3C2C4(this, globalCtx);
         gSaveContext.perm.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
-        func_8019F1C0(D_80B3C960, 0x2835U);
+        func_8019F1C0(&D_80B3C960, 0x2835U);
     } else {
-        func_8019F1C0(D_80B3C960, 0x200AU);
+        func_8019F1C0(&D_80B3C960, 0x200AU);
     }
 }
 
@@ -167,14 +166,14 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* sp2C;
 
     sp2C = NULL;
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, 0.1f);
-    BcCheck3_BgActorInit(&this->actor, 1);
+    Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
+    Actor_SetScale(&this->dyna.actor, 0.1f);
+    BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck_RelocateMeshHeader(D_06003CD0, &sp2C);
-    this->actionFunc = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, this, sp2C);
-    func_800B78B8(globalCtx, this, 0.0f, 0.0f, 0.0f, 4);
-    if (this->actor.floorPoly == 0) {
-        Actor_MarkForDeath(&this->actor);
+    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, sp2C);
+    func_800B78B8(globalCtx, &this->dyna, 0.0f, 0.0f, 0.0f, 4);
+    if (this->dyna.actor.floorPoly == 0) {
+        Actor_MarkForDeath(&this->dyna);
     }
     if ((gSaveContext.perm.weekEventReg[20] & 0x20) != 0) {
         func_80B3C2C4(this, globalCtx);
@@ -186,7 +185,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/ObjGhaka_Destroy.asm")
 void ObjGhaka_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjGhaka* this = THIS;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->actionFunc);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 // matches
