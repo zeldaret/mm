@@ -439,7 +439,7 @@ s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
         } else {
             func_8019F208();
         }
-        return (globalCtx->msgCtx.choiceIndex != 0 ? 0 : this->text->unk1) + 1; //Possible msg MACRO
+        return (globalCtx->msgCtx.choiceIndex != 0 ? 0 : this->text->unk1) + 1; // Possible msg MACRO
     }
     return 0;
 }
@@ -599,7 +599,8 @@ s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx) {
     for (i = 0; i < 4; i++) {
         if (gSaveContext.perm.unk20 != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0, -1);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
+                        -1);
         }
     }
     func_80BA402C(this, globalCtx);
