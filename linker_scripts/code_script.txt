@@ -5466,9 +5466,9 @@ SECTIONS
     ovl_Dm_Char07 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Char07/z_dm_char07.o(.text)
-        build/asm/overlays/ovl_Dm_Char07_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Char07/z_dm_char07.o(.data)
         build/src/overlays/actors/ovl_Dm_Char07/z_dm_char07.o(.rodata)
-        build/asm/overlays/ovl_Dm_Char07_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Char07/z_dm_char07_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
