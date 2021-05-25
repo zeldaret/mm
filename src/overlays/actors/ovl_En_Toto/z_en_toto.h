@@ -27,7 +27,6 @@ typedef struct EnToto {
     /* 0x188 */ Vec3s limbDrawTbl[18];
     /* 0x1F4 */ Vec3s transitionDrawTbl[18];
     /* 0x260 */ s16 unk260;
-    /* 0x262 */ char unk262[0x2];
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;
     /* 0x2B1 */ u8 unk2B1;
@@ -38,7 +37,7 @@ typedef struct EnToto {
     /* 0x2B6 */ u8 unk2B6;
     /* 0x2B7 */ u8 unk2B7;
     /* 0x2B8 */ EnTotoText* text;
-    /* 0x2BC */ char unk2BC[0x8]; // Some z_player_lib struct size 0x8
+    /* 0x2BC */ char unk2BC[0x8]; // Some z_player_lib struct size 0x8 more info from func_80122744 and func_80122760
     /* 0x2C4 */ Actor* unk2C4;
     /* 0x2C8 */ s32 pad2C8;
 } EnToto; // size = 0x2CC
