@@ -369,48 +369,43 @@ void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
     }
 }
 
-/*
-void func_80B8E938(void *arg0, ? arg1) {
-    u32 temp_t6;
 
-    temp_t6 = arg0->unk204;
-    if (temp_t6 < 5U) {
-        goto **(&jtbl_D_80B91628 + (temp_t6 * 4));
-    case 0:
-        func_80B8EC30();
-        return;
-    case 2:
-        arg0->unk1F = (u8)6;
-        func_80B8F074();
-        return;
-    case 1:
-        func_80B8F744();
-        return;
-    case 3:
-        arg0->unk310 = (u16)0;
-        if (gSaveContext.perm.inv.items[D_801C20B4] != 0x3C) {
-block_9:
-            func_80B8FE04(arg0);
-            return;
+void func_80B8E938(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (this->type) {
+        case 0:
+            func_80B8EC30(this);
+            break;
+
+        case 2:
+            this->actor.targetMode = 6;
+            func_80B8F074(this);
+            break;
+
+        case 1:
+            func_80B8F744(this);
+            break;
+
+        case 3:
+            this->unk_310 = 0;
+            if ((gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) && (gSaveContext.perm.weekEventReg[0x34] & 1) != 0 && ((Rand_Next() & 0x80) != 0)) {
+                func_80B902B8(this);
+            } else {
+                func_80B8FE04(this);
+            }
+            break;
+
         case 4:
-            arg0->unk4 = (s32) (arg0->unk4 | 0x10);
-            func_80B90340();
-            return;
-        }
-        if ((gSaveContext.unkF2C & 1) == 0) {
-            goto block_9;
-        }
-        if ((Rand_Next() & 0x80) == 0) {
-            goto block_9;
-        }
-        func_80B902B8(arg0);
-        return;
-        return;
+            this->actor.flags = this->actor.flags | 0x10;
+            func_80B90340(this);
+            break;
+
+        default:
+            func_80B8EC30(this);
+            break;
     }
-    func_80B8EC30();
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E938.asm")
+//*/
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E938.asm")
 
 /*
 ? func_80B8EA38(void *arg0, void *arg1) {
