@@ -15,6 +15,9 @@ void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+// gMilkBinMilkJarDL
+extern Gfx D_060004B0[];
+
 const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
     ACTORCAT_PROP,
@@ -92,9 +95,6 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
-
-// gMilkBinMilkJarDL
-extern Gfx D_060004B0[];
 
 void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
