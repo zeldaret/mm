@@ -250,7 +250,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTbl, this->transitionDrawTbl,
-                     EN_MA_YTS_LIMB_TABLE_COUNT);
+                     OBJECT_MA1_LIMB_TABLE_COUNT);
     EnMaYts_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -531,13 +531,13 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnMaYts* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == EN_MA_YTS_LIMB_HAIR_TOP) {
+    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
         sp4 = this->unk_1D8.unk_08;
         rot->x += sp4.y;
         if ((this->skelAnime.animCurrentSeg == &D_06009E58) || (this->skelAnime.animCurrentSeg == &D_06007D98)) {
             rot->z += sp4.x;
         }
-    } else if (limbIndex == EN_MA_YTS_LIMB_HEAD) {
+    } else if (limbIndex == OBJECT_MA1_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_0E;
         rot->x += sp4.y;
         rot->z += sp4.x;
@@ -549,12 +549,14 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
 
-    if (limbIndex == EN_MA_YTS_LIMB_HAIR_TOP) {
+    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
-    } else if ((limbIndex == EN_MA_YTS_LIMB_ARM_RIGHT) && (this->hasBow == true)) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, &D_060003B0);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    } else if (limbIndex == OBJECT_MA1_LIMB_ARM_RIGHT) {
+        if (this->hasBow == true) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+            gSPDisplayList(POLY_OPA_DISP++, D_060003B0);
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
     }
 }
 
