@@ -144,7 +144,7 @@ Feel free to reach out on the Discord if you have any questions about these step
 ### Pull Request Process
 
 After opening a PR, the Jenkins server will verify your changes.
-If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
+If there is an error, double-check that you can successfully `make clean && make` locally. If the build is OK, the next thing to check is that all added/modified files were `git add`-ed to your commit. The final check before posting on Discord for help is that there are no new warnings added to the code causing Jenkins to fail. You can check this by running: `tools/warnings_count/check_new_warnings.sh`.
 
 Each PR needs a review from one reviewer and the project lead.
 
