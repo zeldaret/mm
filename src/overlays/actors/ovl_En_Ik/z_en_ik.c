@@ -19,7 +19,7 @@ const ActorInit En_Ik_InitVars = {
     (ActorFunc)EnIk_Init,
     (ActorFunc)EnIk_Destroy,
     (ActorFunc)EnIk_Update,
-    (ActorFunc)EnIk_Draw
+    (ActorFunc)EnIk_Draw,
 };
 */
 

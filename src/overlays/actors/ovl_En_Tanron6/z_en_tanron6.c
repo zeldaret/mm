@@ -21,10 +21,10 @@ const ActorInit En_Tanron6_InitVars = {
     (ActorFunc)EnTanron6_Init,
     (ActorFunc)EnTanron6_Destroy,
     (ActorFunc)EnTanron6_Update,
-    (ActorFunc)EnTanron6_Draw
+    (ActorFunc)EnTanron6_Draw,
 };
 
-DamageTable D_80BE6170 = {
+static DamageTable sDamageTable = {
     0xF0, 0xF0, 0x00, 0xF1, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0x46, 0xF0, 0xF0,
     0xE1, 0xF0, 0xF0, 0x00, 0x00, 0xF0, 0xE1, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
 };
@@ -35,7 +35,7 @@ void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 19.0f);
     this->actor.colChkInfo.health = 1;
-    this->actor.colChkInfo.damageTable = &D_80BE6170;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 6;
     EnTanron6_DoNothing(this);
 }

@@ -897,8 +897,8 @@ void func_8012C240(GraphicsContext* gCtxt) {
     gSPDisplayList(gCtxt->polyXlu.p++, &sSetupDL[6 * 0x19]);
 }
 
-void func_8012C268(GlobalContext* ctxt) {
-    func_8012C28C(ctxt->state.gfxCtx);
+void func_8012C268(GlobalContext* globalCtx) {
+    func_8012C28C(globalCtx->state.gfxCtx);
 }
 
 void func_8012C28C(GraphicsContext* gCtxt) {
@@ -1256,8 +1256,7 @@ void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u
         gDPPipeSync(gfx + 1);
         gDPSetCycleType(gfx + 2, G_CYC_FILL);
         gDPSetRenderMode(gfx + 3, G_RM_NOOP, G_RM_NOOP2);
-        gDPSetFillColor(gfx + 4,
-                        (GPACK_RGBA5551(0xFF, 0xFF, 0xF0, 0) << 16) | GPACK_RGBA5551(0xFF, 0xFF, 0xF0, 0));
+        gDPSetFillColor(gfx + 4, (GPACK_RGBA5551(0xFF, 0xFF, 0xF0, 0) << 16) | GPACK_RGBA5551(0xFF, 0xFF, 0xF0, 0));
         gSPDisplayList(gfx + 5, &D_0E0002C8);
         gDPSetColorImage(gfx + 6, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, gCtxt->zbuffer);
         gSPEndDisplayList(gfx + 7);
@@ -1309,8 +1308,7 @@ void func_8012CF0C(GraphicsContext* gCtxt, s32 iParm2, s32 iParm3, u8 r, u8 g, u
 void func_8012D374(GraphicsContext* gCtxt, u8 r, u8 g, u8 b) {
     if ((R_PAUSE_MENU_MODE < 2) && (D_801F6D10 < 2)) {
         func_8012CF0C(gCtxt, 1, 1, r, g, b);
-    }
-    else {
+    } else {
         func_8012CF0C(gCtxt, 0, 0, r, g, b);
     }
 }
@@ -1326,4 +1324,3 @@ void func_8012D40C(f32* param_1, f32* param_2, s16* param_3) {
     param_2[1] = param_1[1] / (gScreenHeight / 2);
     param_2[3] = param_1[3] - param_1[1];
 }
-

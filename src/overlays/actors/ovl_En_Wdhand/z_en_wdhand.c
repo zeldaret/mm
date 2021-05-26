@@ -19,7 +19,7 @@ const ActorInit En_Wdhand_InitVars = {
     (ActorFunc)EnWdhand_Init,
     (ActorFunc)EnWdhand_Destroy,
     (ActorFunc)EnWdhand_Update,
-    (ActorFunc)EnWdhand_Draw
+    (ActorFunc)EnWdhand_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit En_Test4_InitVars = {
     (ActorFunc)EnTest4_Init,
     (ActorFunc)EnTest4_Destroy,
     (ActorFunc)EnTest4_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

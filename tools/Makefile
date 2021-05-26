@@ -7,7 +7,7 @@ all: $(PROGRAMS)
 
 clean:
 	$(RM) $(PROGRAMS)
-	$(RM) ZAPD/ZAPD.out
+	$(MAKE) -C ZAPD clean
 # Need to clean the above line later...
 
 mkldscript_SOURCES := mkldscript.c util.c

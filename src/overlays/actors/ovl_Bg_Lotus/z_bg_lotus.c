@@ -36,7 +36,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_06000A20; // Lilypad collision
-extern Gfx D_06000040[];        // Lilypad model
+extern Gfx D_06000040[];           // Lilypad model
 
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
@@ -99,7 +99,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.perm.unk20 != 3) {
+            if (gSaveContext.playerForm != 3) {
                 this->timer = 40;
                 this->dyna.actor.flags |= 0x10;
                 this->actionFunc = BgLotus_Sink;

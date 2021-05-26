@@ -18,7 +18,7 @@ const ActorInit En_Boj_05_InitVars = {
     (ActorFunc)EnBoj05_Init,
     (ActorFunc)EnBoj05_Destroy,
     (ActorFunc)EnBoj05_Update,
-    (ActorFunc)EnBoj05_Draw
+    (ActorFunc)EnBoj05_Draw,
 };
 
 void EnBoj05_Init(Actor* thisx, GlobalContext* globalCtx) {

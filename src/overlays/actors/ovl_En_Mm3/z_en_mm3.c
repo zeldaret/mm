@@ -19,7 +19,7 @@ const ActorInit En_Mm3_InitVars = {
     (ActorFunc)EnMm3_Init,
     (ActorFunc)EnMm3_Destroy,
     (ActorFunc)EnMm3_Update,
-    (ActorFunc)EnMm3_Draw
+    (ActorFunc)EnMm3_Draw,
 };
 */
 

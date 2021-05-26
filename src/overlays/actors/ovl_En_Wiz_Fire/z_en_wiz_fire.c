@@ -19,7 +19,7 @@ const ActorInit En_Wiz_Fire_InitVars = {
     (ActorFunc)EnWizFire_Init,
     (ActorFunc)EnWizFire_Destroy,
     (ActorFunc)EnWizFire_Update,
-    (ActorFunc)EnWizFire_Draw
+    (ActorFunc)EnWizFire_Draw,
 };
 */
 
