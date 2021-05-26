@@ -3916,7 +3916,7 @@ void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2F88(void);
 // void func_801A3000(void);
 // void func_801A3038(void);
-// void func_801A3098(void);
+void func_801A3098(u16 arg0);
 // void func_801A312C(void);
 // void func_801A31EC(void);
 // void func_801A3238(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);

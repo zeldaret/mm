@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ma_yto.h"
-#include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
 #define FLAGS 0x02100009
 
@@ -65,7 +64,7 @@ void func_80B9083C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90C08(EnMaYto* this, s32 index);
 void EnMaYto_Blink(EnMaYto* this);
-void func_80B90E50(EnMaYto* this, s32);
+void func_80B90E50(EnMaYto* this, s16);
 void func_80B90E84(EnMaYto* this, s16, s16);
 void EnMaYto_SetFaceExpression(EnMaYto* this, s16 arg1, s16 mouthIndex);
 void func_80B90EF0(EnMaYto* this);
@@ -251,7 +250,7 @@ glabel D_80B915F0
 extern ColliderCylinderInit D_80B91410;
 extern CollisionCheckInfoInit2 D_80B9143C;
 
-extern SkeletonHeader D_06015C28;
+extern FlexSkeletonHeader D_06015C28;
 
 void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
@@ -433,48 +432,40 @@ s32 func_80B8EA38(EnMaYto *this, GlobalContext *globalCtx) {
     return 0;
 }
 
-/*
-s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
-    s32 temp_t6;
 
-    temp_t6 = this->type;
-    if ((u32) temp_t6 < 5U) {
-        goto **(&jtbl_D_80B9163C + (temp_t6 * 4));
+s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
+    switch (this->type) {
     case 0:
         return 0;
+
     case 2:
-        if ((gSaveContext.unkF0E & 1) != 0) {
-block_6:
-            if (func_80B8EA38(this, globalCtx) == 0) {
-                return 1;
-            case 1:
-                if ((gSaveContext.unkF0E & 1) == 0) {
-                    return 0;
-                case 3:
-                    return 0;
-                case 4:
-                    return 0;
-                    return 0;
-                }
-                if (func_80B8EA38(this, globalCtx) == 0) {
-                    return 1;
-                    return 0;
-                    return 0;
-                }
+        if (!(gSaveContext.weekEventReg[0x16] & 1) && (CURRENT_DAY) == 2) {
+            return 0;
+        }
+        if (func_80B8EA38(this, globalCtx) != 0) {
+            return 2;
+        }
+        return 1;
+
+    case 1:
+        if ((gSaveContext.weekEventReg[0x16] & 1) != 0) {
+            if (func_80B8EA38(this, globalCtx) != 0) {
                 return 2;
             }
-            return 2;
             return 1;
         }
-        if (((s32) gSaveContext.day % 5) != 2) {
-            goto block_6;
-        }
+        return 0;
+        break;
+
+    case 3:
+        return 0;
+
+    case 4:
         return 0;
     }
     return 0;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EABC.asm")
+
 
 void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
@@ -878,28 +869,27 @@ void func_80B8F918(EnMaYto *this) {
     this->actionFunc = func_80B8F998;
 }
 
-
-/*
 void func_80B8F998(EnMaYto *this, GlobalContext *globalCtx) {
-    u32 temp_v0;
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 5:
+            func_80B8FA14(this, globalCtx);
+            break;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
-    if (temp_v0 < 7U) {
-        goto **(&jtbl_D_80B916C8 + (temp_v0 * 4));
-    case 5:
-        func_80B8FA14(this, globalCtx);
-        return;
-    case 6:
-        if (func_80147624(globalCtx) != 0) {
-            this->unk_31E = 0;
-            func_80B8F744(this);
-        }
+        case 6:
+            if (func_80147624(globalCtx) != 0) {
+                this->unk_31E = 0;
+                func_80B8F744(this);
+            }
+            break;
+
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            break;
     }
-default:
-case 0:
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8F998.asm")
 
 /*
 void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
@@ -1009,51 +999,45 @@ default:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FA14.asm")
 
 
-#ifdef NON_MATCHING
 void func_80B8FE04(EnMaYto *this) {
     if (gSaveContext.weekEventReg[0x34] & 1) {
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(9, (u16)3);
+        func_801A3098(9);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = func_80B8FE74;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE04.asm")
-#endif
 
-/*
+
 // problematic
 void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
     this->actor.flags = this->actor.flags | 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
-        this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-        if ((gSaveContext.weekEventReg[0x16] & 1)) {
+        this->actor.flags &= ~0x10000;
+        if ((gSaveContext.weekEventReg[0x34] & 1) != 0) {
             func_801518B0(globalCtx, 0x33C1U, (Actor *) this);
             this->textId = 0x33C1;
-            func_80B8FF80(this);
         } else {
             EnMaYto_SetFaceExpression(this, (u16)5, (u16)2);
             func_801518B0(globalCtx, 0x33C0U, (Actor *) this);
             this->textId = 0x33C0;
-            gSaveContext.weekEventReg[0xD] = (u8) (gSaveContext.weekEventReg[0xD] | 1);
+            gSaveContext.weekEventReg[0xE] = (u8) (gSaveContext.weekEventReg[0xE] | 1);
             this->unk_310 = 4;
             func_80B904D0(this);
             func_80151BB4(globalCtx, 6U);
+            return;
         }
+        func_80B8FF80(this);
     } else {
         func_800B8614(&this->actor, globalCtx, 200.0f);
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FE74.asm")
+
 
 void func_80B8FF80(EnMaYto *this) {
     this->actionFunc = func_80B8FF94;
 }
-
-
 
 void func_80B8FF94(EnMaYto *this, GlobalContext *globalCtx) {
     switch (func_80152498(&globalCtx->msgCtx)) {
@@ -1500,30 +1484,25 @@ void EnMaYto_Blink(EnMaYto *this) {
 }
 
 
-/*
-void func_80B90E50(EnMaYto *this, s32 arg1) {
+
+void func_80B90E50(EnMaYto *this, s16 arg1) {
     EnMaYts* romani;
 
     romani = (EnMaYts*)this->actor.child;
     if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
-        romani->unk_32C = (s16) arg1;
+        romani->unk_32C = arg1;
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E50.asm")
 
-/*
 void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
     EnMaYts* romani;
 
     romani = (EnMaYts*)this->actor.child;
     if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
-        romani->unk_328 = arg1;
-        romani->unk_32E = arg2;
+        romani->overrideEyeTexIndex = arg1;
+        romani->mouthTexIndex = arg2;
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90E84.asm")
 
 
 void EnMaYto_SetFaceExpression(EnMaYto *this, s16 arg1, s16 mouthIndex) {
@@ -1588,27 +1567,23 @@ s32 func_80B91014(void) {
     return 0;
 }
 
-/*
-s32 func_80B9109C(void) {
-    s32 temp_hi;
 
-    temp_hi = CURRENT_DAY;
-    if (temp_hi == 1) {
+void func_80B9109C(void) {
+    switch (CURRENT_DAY) {
+    case 1:
         gSaveContext.weekEventReg[0xD] |= 1<<2;
-        return temp_hi;
-    }
-    if (temp_hi == 2) {
+        break;
+
+    case 2:
         gSaveContext.weekEventReg[0xD] |= 1<<3;
-        return temp_hi;
+        break;
+
+    case 3:
+        gSaveContext.weekEventReg[0xD] |= 1<<4;
+        break;
     }
-    if (temp_hi != 3) {
-        return temp_hi;
-    }
-    gSaveContext.weekEventReg[0xD] |= 1<<4;
-    return temp_hi;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9109C.asm")
+
 
 void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
