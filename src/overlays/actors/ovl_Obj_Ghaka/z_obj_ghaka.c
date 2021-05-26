@@ -44,7 +44,7 @@ extern Gfx D_06001980[];
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C260.asm")
 void func_80B3C260(ObjGhaka* this) {
-    if ((gSaveContext.perm.weekEventReg[20] & 0x20) != 0) {
+    if ((gSaveContext.weekEventReg[20] & 0x20) != 0) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
     }
     this->actionFunc = func_80B3C39C;
@@ -65,7 +65,7 @@ void func_80B3C2B0(ObjGhaka* this) {
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C2C4.asm")
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.perm.weekEventReg[20] & 0x20) == 0) {
+    if ((gSaveContext.weekEventReg[20] & 0x20) == 0) {
         Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
                                          this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
@@ -94,7 +94,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
         }
     }
     if (this->dyna.unk148 < 0.0f) {
-        if (!(gSaveContext.perm.weekEventReg[20] & 0x20) && player->unk14B == 1) {
+        if (!(gSaveContext.weekEventReg[20] & 0x20) && player->unk14B == 1) {
             func_80B3C2B0(this);
             return;
         }
@@ -139,7 +139,6 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
     }
 }
 
-
 Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ghaka_0x80B3C260/func_80B3C624.asm")
@@ -153,7 +152,7 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
         player->unkA70 &= ~0x10;
         this->dyna.unk148 = 0.0f;
         func_80B3C2C4(this, globalCtx);
-        gSaveContext.perm.weekEventReg[20] |= 0x20;
+        gSaveContext.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
         func_8019F1C0(&D_80B3C960, 0x2835);
     } else {
@@ -178,7 +177,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
-    if ((gSaveContext.perm.weekEventReg[20] & 0x20) != 0) {
+    if ((gSaveContext.weekEventReg[20] & 0x20) != 0) {
         func_80B3C2C4(this, globalCtx);
     }
     func_80B3C260(this);
