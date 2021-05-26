@@ -15,7 +15,7 @@ static u8 sChestContents[] = { 0x02, 0x04, 0x05, 0x06, 0x36, 0x3A, 0x14, 0x14 };
 
 void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch* this = THIS;
-    s8 returnData = gSaveContext.extra.unk87;
+    s8 returnData = gSaveContext.respawn[3].data;
 
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
