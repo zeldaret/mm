@@ -139,7 +139,7 @@ def lookup_name(symbol, word):
     if word in [addr for _,addr in vrom_variables]:
         if word == 0: # no makerom segment start
             return "0x00000000"
-        if symbol in []: # data labels that are allowed to have vrom variables
+        if symbol in [0x801AE4A0]: # data labels that are allowed to have vrom variables
             return proper_name(word, is_symbol=False)
         else:
             return f"0x{word:08X}"
@@ -286,9 +286,9 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
         # that means no code path produces a valid symbol at he convergent code, unless the convergent code provides all the
         # new registers.
 
-        assert insn.value_forname(insn.fields[0]) is not None
+        # assert insn.value_forname(insn.fields[0]) is not None
         # print(f"insn: {insn.mnemonic}, rt: {insn.rt}, first: {insn.value_forname(insn.fields[0])}")
-        assert insn.id not in [MIPS_INS_ORI, MIPS_INS_ADDIU, *MIPS_LOAD_STORE_INSNS] or insn.rt == insn.value_forname(insn.fields[0])
+        # assert insn.id not in [MIPS_INS_ORI, MIPS_INS_ADDIU, *MIPS_LOAD_STORE_INSNS] or insn.rt == insn.value_forname(insn.fields[0])
 
         if delay_slot and delayed_insn is not None and delayed_insn.id in MIPS_BRANCH_LIKELY_INSNS:
             clobber_later.update({delayed_insn.offset : insn.value_forname(insn.fields[0])})
@@ -430,11 +430,11 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
             through a function is key to identifying symbol references
             """
             # add lui to tracker
-            if delayed_insn is None or (delay_slot and delayed_insn is not None and delayed_insn.id not in MIPS_BRANCH_LIKELY_INSNS):
-                lui_tracker.update({insn.rt : (vaddr, insn.imm)})
-            else: 
+            if delay_slot and delayed_insn is not None and delayed_insn in MIPS_BRANCH_LIKELY_INSNS:
                 # for branch likelies, the current tracker does not update but the lui is saved to be tracked at the branch target
                 save_tracker(delayed_insn.offset, {insn.rt : (vaddr, insn.imm)})
+            else:
+                lui_tracker.update({insn.rt : (vaddr, insn.imm)})
         elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
             # try match with tracked lui and mark symbol
             hi_vram, imm_value = lui_tracker.get(insn.rs if insn.id == MIPS_INS_ADDIU else insn.base, (None, None))
@@ -636,6 +636,10 @@ def find_symbols_in_rodata(data, vram, end, relocs, segment):
                 data_size = next_symbol - symbol
                 string_data = data[data_offset:data_offset+data_size]
 
+                if len(string_data) > 0 and string_data[0] == 0:
+                    # empty strings that are auto-detected are dubious
+                    continue
+
                 # charset validation
                 if strings_regex.match(string_data) != None:
                     k = 0
@@ -807,6 +811,9 @@ def disassemble_data(data, vram, end, segment):
         data_offset = symbol - vram
         data_size = next_symbol - symbol
 
+        if data_offset == len(data):
+            continue
+
         result += f"\nglabel {proper_name(symbol, True)}\n"
 
         if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
@@ -820,7 +827,6 @@ def disassemble_data(data, vram, end, segment):
                 result += "\n".join(\
                     [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
-                # TODO output pointers as symbols
                 result += "\n".join(\
                     [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 2 == 0 and data_size % 2 == 0:
@@ -874,6 +880,9 @@ def disassemble_rodata(data, vram, end, segment):
         data_offset = symbol - vram
         data_size = next_symbol - symbol
 
+        if data_offset == len(data):
+            continue
+
         force_ascii_str = symbol in [0x801D0708]
 
         result += f"\nglabel {proper_name(symbol, True)}\n"
@@ -891,7 +900,6 @@ def disassemble_rodata(data, vram, end, segment):
                 result += "\n".join(\
                     [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
-                # TODO output pointers as symbols
                 result += "\n".join(\
                     [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 2 == 0 and data_size % 2 == 0:
@@ -988,6 +996,15 @@ for var in sorted(variables_ast.keys()):
         addend = i - var
         assert addend >= 0
         vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
+    # also add to floats, doubles & strings
+    var_type = variables_ast[var][1]
+
+    if var_type == "f64":
+        doubles.add(var)
+    elif var_type == "f32":
+        floats.add(var)
+    elif var_type == "char" and variables_ast[var][2].startswith("["):
+        strings.add(var)
 
 # Read in binary and relocation data for each segment
 for segment in files_spec:
@@ -1062,7 +1079,7 @@ for segment in files_spec:
         continue
 
     for section in segment[3]:
-        if section[0] == section[1]:
+        if section[0] == section[1] or (section[2] != 'bss' and len(section[4]) == 0):
             continue
         print(f"Disassembling {segment[0]} .{section[2]}")
         if section[2] == 'text':
@@ -1096,14 +1113,61 @@ for segment in files_spec:
             with open(f"{DATA_OUT}/{segment_dirname}/{segment[0]}.reloc.s", "w") as outfile:
                 outfile.write(result)
 
-func_regex = re.compile(r'\n\nglabel \S+\n')
-
 print("Splitting text and migrating rodata")
+
+func_regex = re.compile(r'\n\nglabel \S+\n')
+rodata_symbols_regex = re.compile(r'(?<=\n)glabel .+(?=\n)')
+asm_symbols_regex = re.compile(r'%(?:lo|hi)\((.+?)\)')
+
+def is_late_rodata(block):
+    return "float" or "double" or "word L" in block
+
+def asm_syms(asm):
+    return [s.partition(")")[0] for s in re.split(asm_symbols_regex, asm)[1:]]
+
+def rodata_syms(rodata):
+    return [s.partition("\n")[0] for s in re.split(rodata_symbols_regex, rodata)[1:]]
+
+def rodata_blocks(rodata):
+    return ["glabel" + b for b in rodata.split("glabel")[1:]]
+
+def rodata_block_size(rodata):
+    """
+    Getting rodata block size is needed to know when to add .late_rodata_alignment directives
+    """
+    split = rodata.split("    .")
+    elements = split[1:len(split)]
+    size = 0
+    for e in elements:
+        element_type = e.split(" ")[0]
+        if element_type == "double":
+            size += 8 + 8*e.count(",")
+        if element_type == "float":
+            size += 4 + 4*e.count(",")
+        if element_type == "word":
+            size += 4 + 4*e.count(",")
+        if element_type == "half":
+            size += 2 + 2*e.count(",")
+        if element_type == "incbin":
+            size += int(e.rpartition(", ")[2].split("\n")[0],16)
+        if element_type == "ascii":
+            size += len(e.split("\"")[1].split("\"")[0])
+        if element_type == "asciz":
+            size += len(e.split("\"")[1].split("\"")[0])
+        if element_type == "balign":
+            size += size % int(e.split(" ")[1])
+    return size
+
+def text_size(asm):
+    return 4*(len([l for l in asm.split("\n") if l.startswith("/* ")])-1)
 
 # Split files and migrate rodata that should be migrated
 for root,dirs,files in os.walk(ASM_OUT):
     for f in [f for f in files if f.endswith(".text.s")]:
+        rodata_path = f"{DATA_OUT}/{root}"
         full_path = os.path.join(root, f)
+        rodata_path = full_path.replace(ASM_OUT + "overlays/", DATA_OUT).replace(ASM_OUT, DATA_OUT).replace(".text.s", ".rodata.s")
+
         print(full_path)
 
         contents = ""
@@ -1112,9 +1176,26 @@ for root,dirs,files in os.walk(ASM_OUT):
 
         function_labels = [s.replace("glabel","").strip() for s in func_regex.findall(contents)]
         fns = func_regex.split(contents)[1:] # remove header
+
+        rodata = ""
+        if os.path.exists(rodata_path):
+            print(rodata_path)
+            with open(rodata_path, "r") as rodata_file:
+                rodata = rodata_file.read()
+
         for label,body in zip(function_labels, fns):
             # TODO out path becomes more complicated with separation based on code/actor/effect/etc.
+
+            text_out = "glabel " + label.strip() + "\n" + body.strip() + "\n"
+
+            if rodata != "":
+                # Migrate Rodata
+                pass # TODO
+                # Done Migrate Rodata
+
+            asm_out = text_out
+
             out_path = root.replace(ASM_OUT,f"{ASM_OUT}/non_matchings/") + "/" +  ((f.replace(".text.s","") + "/") if "overlays" not in root else "")
             os.makedirs(out_path, exist_ok=True)
             with open(out_path + label + ".s", "w") as outfile:
-                outfile.write("glabel " + label.strip() + "\n" + body.strip() + "\n")
+                outfile.write(asm_out)
