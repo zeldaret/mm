@@ -913,7 +913,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.text)
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.data)
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.rodata)
-        build/asm/overlays/ovl_En_Pametfrog_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
