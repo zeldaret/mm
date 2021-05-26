@@ -11636,7 +11636,7 @@
     0x80AAE6F0:("func_80AAE6F0",),
     0x80AAE854:("DmChar06_Update",),
     0x80AAE878:("DmChar06_Draw",),
-    0x80AAE9C0:("DmChar07_Setup",),
+    0x80AAE9C0:("DmChar07_SetupAction",),
     0x80AAE9CC:("DmChar07_Init",),
     0x80AAEA84:("DmChar07_Destroy",),
     0x80AAEABC:("DmChar07_DoNothing",),

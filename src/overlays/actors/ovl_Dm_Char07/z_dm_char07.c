@@ -58,7 +58,7 @@ extern AnimatedMaterial D_060105F8;
 
 extern Gfx D_06010D68[];
 
-void DmChar07_Setup(DmChar07 *this, DmChar07ActionFunc actionFunc) {
+void DmChar07_SetupAction(DmChar07 *this, DmChar07ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
@@ -77,7 +77,7 @@ void DmChar07_Init(Actor *thisx, GlobalContext *globalCtx) {
     } else {
         Actor_SetScale(&this->dyna.actor, 1.0f);
     }
-    DmChar07_Setup(this, DmChar07_DoNothing);
+    DmChar07_SetupAction(this, DmChar07_DoNothing);
 }
 
 void DmChar07_Destroy(Actor *thisx, GlobalContext *globalCtx) {
@@ -137,8 +137,6 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
         case 3:
             gSPDisplayList(POLY_OPA_DISP++, D_06010D68);
             break;
-        default:
-            break;
     }
 
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -173,8 +171,6 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
             }
             break;
         case 3:
-            break;
-        default:
             break;
     }
 
