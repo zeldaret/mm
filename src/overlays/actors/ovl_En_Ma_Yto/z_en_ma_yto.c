@@ -404,47 +404,34 @@ void func_80B8E938(EnMaYto *this, GlobalContext *globalCtx) {
             break;
     }
 }
-//*/
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8E938.asm")
 
-/*
-? func_80B8EA38(void *arg0, void *arg1) {
-    s16 temp_v0;
-    s32 temp_a1;
-    void *temp_v1;
-    void *temp_v1_2;
-    void *phi_v1;
+#define EN_MA_YTS_PARSE_TYPE(params) (((params)&0xF000) >> 12)
 
-    temp_v1 = arg1->unk1CE4;
-    phi_v1 = temp_v1;
-    if (temp_v1 != 0) {
-loop_1:
-        if (phi_v1->unk0 == 0x21F) {
-            temp_a1 = arg0->unk204;
-            temp_v0 = (s16) ((s32) (phi_v1->unk1C & 0xF000) >> 0xC);
-            if ((temp_a1 != 2) || (temp_v0 != 1)) {
 
+// SearchRomani
+s32 func_80B8EA38(EnMaYto *this, GlobalContext *globalCtx) {
+    Actor *phi_v1;
+    s16 romaniType;
+
+    phi_v1 = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    while (phi_v1 != NULL) {
+        if (phi_v1->id == ACTOR_EN_MA_YTS) {
+            EnMaYts* romani = (EnMaYts*)phi_v1;
+
+            romaniType = EN_MA_YTS_PARSE_TYPE(romani->actor.params);
+            if (((this->type == 2) && (romaniType == 1)) || ((this->type == 1) && (romaniType == 0))) {
+                this->actor.child = &romani->actor;
+                romani->actor.parent = &this->actor;
+                return 1;
             } else {
-                arg0->unk124 = phi_v1;
-                phi_v1->unk120 = arg0;
-                return 1;
-            }
-            if ((temp_a1 == 1) && (temp_v0 == 0)) {
-                arg0->unk124 = phi_v1;
-                phi_v1->unk120 = arg0;
-                return 1;
+                phi_v1 = phi_v1->next;
+                continue;
             }
         }
-        temp_v1_2 = phi_v1->unk12C;
-        phi_v1 = temp_v1_2;
-        if (temp_v1_2 != 0) {
-            goto loop_1;
-        }
+        phi_v1 = phi_v1->next;
     }
     return 0;
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8EA38.asm")
 
 /*
 s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
@@ -458,7 +445,7 @@ s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
     case 2:
         if ((gSaveContext.unkF0E & 1) != 0) {
 block_6:
-            if (func_80B8EA38() == 0) {
+            if (func_80B8EA38(this, globalCtx) == 0) {
                 return 1;
             case 1:
                 if ((gSaveContext.unkF0E & 1) == 0) {
@@ -469,7 +456,7 @@ block_6:
                     return 0;
                     return 0;
                 }
-                if (func_80B8EA38() == 0) {
+                if (func_80B8EA38(this, globalCtx) == 0) {
                     return 1;
                     return 0;
                     return 0;
