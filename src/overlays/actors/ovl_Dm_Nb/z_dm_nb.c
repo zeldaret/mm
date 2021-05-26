@@ -15,9 +15,6 @@ void DmNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmNb_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-UNK_TYPE func_80C1DED0(DmNb* this, s32 arg1);
-void func_80C1DF18(DmNb* this, GlobalContext* globalCtx);
-void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor);
 
 const ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
