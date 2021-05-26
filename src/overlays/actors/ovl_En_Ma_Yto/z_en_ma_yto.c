@@ -263,7 +263,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_320 = 0;
     this->eyeTexIndex = 0;
 
-    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
         EnMaYto_SetFaceExpression(this, 5, 2);
@@ -296,32 +296,32 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
         case 0:
-            if (CURRENT_DAY == 3 && !(gSaveContext.perm.weekEventReg[0x16] & 1)) {
+            if (CURRENT_DAY == 3 && !(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
             }
             break;
 
         case 2:
-            if (CURRENT_DAY != 1 && (gSaveContext.perm.weekEventReg[0x16] & 1)) {
+            if (CURRENT_DAY != 1 && (gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
             }
             break;
 
         case 1:
-            if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+            if (gSaveContext.weekEventReg[0x16] & 1) {
                 if (((this->actor.params & 0xF00) >> 8) != 0) {
                     return false;
                 }
             } else if (((this->actor.params & 0xF00) >> 8) == 0) {
                 return false;
             }
-            if (gSaveContext.perm.time >= 0xD555 && CURRENT_DAY == 3) {
+            if (gSaveContext.time >= 0xD555 && CURRENT_DAY == 3) {
                 return false;
             }
             break;
 
         case 3:
-            if ((!(gSaveContext.perm.weekEventReg[0x34] & 1) && !(gSaveContext.perm.weekEventReg[0x34] & 2)) || (gSaveContext.perm.weekEventReg[0xE] & 1)) {
+            if ((!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) || (gSaveContext.weekEventReg[0xE] & 1)) {
                 return false;
             }
             break;
@@ -348,7 +348,7 @@ void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+            if (gSaveContext.weekEventReg[0x16] & 1) {
                 func_80B90C08(this, 12);
             } else {
                 func_80B90C08(this, 8);
@@ -387,7 +387,7 @@ void func_80B8E938(EnMaYto *this, GlobalContext *globalCtx) {
 
         case 3:
             this->unk_310 = 0;
-            if ((gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) && (gSaveContext.perm.weekEventReg[0x34] & 1) != 0 && ((Rand_Next() & 0x80) != 0)) {
+            if ((gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) && (gSaveContext.weekEventReg[0x34] & 1) != 0 && ((Rand_Next() & 0x80) != 0)) {
                 func_80B902B8(this);
             } else {
                 func_80B8FE04(this);
@@ -466,7 +466,7 @@ block_6:
             return 2;
             return 1;
         }
-        if (((s32) gSaveContext.perm.day % 5) != 2) {
+        if (((s32) gSaveContext.day % 5) != 2) {
             goto block_6;
         }
         return 0;
@@ -617,7 +617,7 @@ void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8F074(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
         func_80B90E50(this, 0);
         this->unk_31E = 0;
     } else {
@@ -665,7 +665,7 @@ void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
 
 
 void func_80B8F254(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -823,7 +823,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8F744(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0)) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
         func_80B90C08(this, 0xD);
         func_80B90E50(this, 0);
         this->unk_31E = 0;
@@ -857,7 +857,7 @@ void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
             }
         }
 
-        if ((!(gSaveContext.perm.weekEventReg[0x16] & 1)) || (ABS_ALT(temp_v1) < 0x2000)) {
+        if ((!(gSaveContext.weekEventReg[0x16] & 1)) || (ABS_ALT(temp_v1) < 0x2000)) {
             Actor *temp_a0_2;
 
             func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -870,7 +870,7 @@ void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8F918(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.perm.weekEventReg[0x16] & 1))) {
+    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1))) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -1011,7 +1011,7 @@ default:
 
 #ifdef NON_MATCHING
 void func_80B8FE04(EnMaYto *this) {
-    if (gSaveContext.perm.weekEventReg[0x34] & 1) {
+    if (gSaveContext.weekEventReg[0x34] & 1) {
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
         func_801A3098(9, (u16)3);
@@ -1029,7 +1029,7 @@ void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
     this->actor.flags = this->actor.flags | 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-        if ((gSaveContext.perm.weekEventReg[0x16] & 1)) {
+        if ((gSaveContext.weekEventReg[0x16] & 1)) {
             func_801518B0(globalCtx, 0x33C1U, (Actor *) this);
             this->textId = 0x33C1;
             func_80B8FF80(this);
@@ -1037,7 +1037,7 @@ void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
             EnMaYto_SetFaceExpression(this, (u16)5, (u16)2);
             func_801518B0(globalCtx, 0x33C0U, (Actor *) this);
             this->textId = 0x33C0;
-            gSaveContext.perm.weekEventReg[0xD] = (u8) (gSaveContext.perm.weekEventReg[0xD] | 1);
+            gSaveContext.weekEventReg[0xD] = (u8) (gSaveContext.weekEventReg[0xD] | 1);
             this->unk_310 = 4;
             func_80B904D0(this);
             func_80151BB4(globalCtx, 6U);
@@ -1100,7 +1100,7 @@ void func_80B900C0(EnMaYto *this, GlobalContext *globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx) != 0) {
         func_80B90170(this);
         return;
-    } else if (gSaveContext.perm.inv.items[D_801C20B4] == 0x3C) {
+    } else if (gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) {
         func_800B8A1C(&this->actor, globalCtx, 7, 500.0f, 100.0f);
         this->unk_310 = 2;
     } else {
@@ -1120,7 +1120,7 @@ void func_80B90184(EnMaYto *this, GlobalContext *globalCtx) {
             EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
             func_801518B0(globalCtx, 0x33C3U, &this->actor);
             this->textId = 0x33C3;
-            gSaveContext.perm.weekEventReg[0xE] |= 1;
+            gSaveContext.weekEventReg[0xE] |= 1;
             this->unk_310 = 3;
             func_80151BB4(globalCtx, 0x20U);
             func_80151BB4(globalCtx, 0x1FU);
@@ -1130,7 +1130,7 @@ void func_80B90184(EnMaYto *this, GlobalContext *globalCtx) {
             EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
             func_801518B0(globalCtx, 0x33D0U, &this->actor);
             this->textId = 0x33D0;
-            gSaveContext.perm.weekEventReg[0xE] |= 1;
+            gSaveContext.weekEventReg[0xE] |= 1;
             this->unk_310 = 3;
             func_80151BB4(globalCtx, 6U);
             func_80B904D0(this);
@@ -1235,10 +1235,10 @@ void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
     } else {
         globalCtx->nextEntranceIndex = 0x6480;
     }
-    gSaveContext.extra.unk2AA = (u16)0;
+    gSaveContext.unk_3F4A = (u16)0;
     globalCtx->unk18875 = 0x14;
     globalCtx->unk1887F = 0x50;
-    gSaveContext.extra.unk2B5 = (u8)3;
+    gSaveContext.nextTransition = 3;
 }
 
 /*
@@ -1246,7 +1246,7 @@ void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx) {
     s32 temp_hi;
     u32 temp_v0;
 
-    temp_hi = (s32) gSaveContext.perm.day % 5;
+    temp_hi = (s32) gSaveContext.day % 5;
     if (temp_hi == 1) {
         if (func_8012403C(globalCtx) == 0) {
 block_13:
@@ -1260,7 +1260,7 @@ block_13:
             this->textId = 0x3394;
             return;
         }
-        if (gSaveContext.perm.unk20 != 4) {
+        if (gSaveContext.unk20 != 4) {
             goto block_13;
         }
         temp_v0 = func_8012403C(globalCtx);
@@ -1314,7 +1314,7 @@ void func_80B9083C(Actor *arg0, GlobalContext *arg1) {
     u32 temp_v0;
     s16 phi_t7;
 
-    temp_hi = (s32) gSaveContext.perm.day % 5;
+    temp_hi = (s32) gSaveContext.day % 5;
     if (temp_hi != 1) {
         if (temp_hi == 2) {
             if (!func_80B91014()) {
@@ -1353,7 +1353,7 @@ block_16:
             arg0->unk322 = (u16)0x339F;
             return;
         }
-        if (gSaveContext.perm.unk20 != 4) {
+        if (gSaveContext.unk20 != 4) {
             goto block_16;
         }
         temp_v0 = func_8012403C(arg1);
@@ -1389,7 +1389,7 @@ block_16:
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
     s32 temp_hi;
 
-    if ((gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+    if ((gSaveContext.weekEventReg[0x16] & 1) != 0) {
         temp_hi = CURRENT_DAY;
         if (temp_hi == 2) {
             if (this->unk_310 == 1) {
@@ -1532,7 +1532,7 @@ void EnMaYto_SetFaceExpression(EnMaYto *this, s16 arg1, s16 mouthIndex) {
 }
 
 void func_80B90EF0(EnMaYto *this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1) != 0) {
         EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
         func_80B90E84(this, 0, 0);
     } else {
@@ -1544,19 +1544,19 @@ void func_80B90EF0(EnMaYto *this) {
 s32 func_80B90F84(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.perm.weekEventReg[0xD] & 4) {
+            if (gSaveContext.weekEventReg[0xD] & 4) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.perm.weekEventReg[0xD] & 8) {
+            if (gSaveContext.weekEventReg[0xD] & 8) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.perm.weekEventReg[0xD] & 0x10) {
+            if (gSaveContext.weekEventReg[0xD] & 0x10) {
                 return true;
             }
             break;
@@ -1571,17 +1571,17 @@ s32 func_80B91014(void) {
     // Note each case doesn't have `break`s.
     switch (CURRENT_DAY) {
     case 3:
-        if ((gSaveContext.perm.weekEventReg[0xD] & 0x10) != 0) {
+        if ((gSaveContext.weekEventReg[0xD] & 0x10) != 0) {
             return 1;
         }
 
     case 2:
-        if ((gSaveContext.perm.weekEventReg[0xD] & 8) != 0) {
+        if ((gSaveContext.weekEventReg[0xD] & 8) != 0) {
             return 1;
         }
 
     case 1:
-        if (gSaveContext.perm.weekEventReg[0xD] & 4) {
+        if (gSaveContext.weekEventReg[0xD] & 4) {
             return 1;
         }
     }
@@ -1594,17 +1594,17 @@ s32 func_80B9109C(void) {
 
     temp_hi = CURRENT_DAY;
     if (temp_hi == 1) {
-        gSaveContext.perm.weekEventReg[0xD] |= 1<<2;
+        gSaveContext.weekEventReg[0xD] |= 1<<2;
         return temp_hi;
     }
     if (temp_hi == 2) {
-        gSaveContext.perm.weekEventReg[0xD] |= 1<<3;
+        gSaveContext.weekEventReg[0xD] |= 1<<3;
         return temp_hi;
     }
     if (temp_hi != 3) {
         return temp_hi;
     }
-    gSaveContext.perm.weekEventReg[0xD] |= 1<<4;
+    gSaveContext.weekEventReg[0xD] |= 1<<4;
     return temp_hi;
 }
 */
@@ -1664,7 +1664,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->type == 1 && (gSaveContext.perm.weekEventReg[0x16] & 1) != 0) {
+    if (this->type == 1 && (gSaveContext.weekEventReg[0x16] & 1) != 0) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_06005430);
     }
