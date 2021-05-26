@@ -27,7 +27,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_0600805C;
-extern UNK_TYPE D_06003478;
+extern Gfx D_06003478[];
 
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
@@ -51,5 +51,5 @@ void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06003478);
+    func_800BDFC0(globalCtx, D_06003478);
 }

@@ -407,7 +407,7 @@ SECTIONS
         build/src/code/z_rcp.o(.text)
         . += 0x10;
         build/src/code/z_room.o(.text)
-        build/asm/code/code_0x8012EC80.o(.text)
+        build/src/code/code_0x8012EC80.o(.text)
         build/src/code/z_scene.o(.text)
         build/src/code/z_scene_proc.o(.text)
         build/src/code/z_scene_table.o(.text)
@@ -527,7 +527,7 @@ SECTIONS
         build/asm/code/code_data_0x8012A080.o(.data)
         build/src/code/z_rcp.o(.data)
         build/asm/code/code_data_z_room.o(.data)
-        build/asm/code/code_data_0x801C1D30.o(.data)
+        build/src/code/code_0x8012EC80.o(.data)
         build/src/code/z_scene.o(.data)
         build/asm/code/code_data_0x801C2730.o(.data)
         build/src/code/z_scene_proc.o(.data)
@@ -601,6 +601,7 @@ SECTIONS
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
         build/asm/code/code_rodata_0x8012A080.o(.rodata)
         build/asm/code/code_rodata_z_room.o(.rodata)
+        build/src/code/code_0x8012EC80.o(.rodata)
         build/src/code/z_scene_proc.o(.rodata)
         build/src/code/z_scene_table.o(.rodata)
         build/asm/code/code_rodata_z_skin.o(.rodata)
@@ -8876,9 +8877,9 @@ SECTIONS
     ovl_Obj_Milk_Bin : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.text)
-        build/asm/overlays/ovl_Obj_Milk_Bin_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.data)
         build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.rodata)
-        build/asm/overlays/ovl_Obj_Milk_Bin_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
