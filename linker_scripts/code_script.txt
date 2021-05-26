@@ -8877,9 +8877,9 @@ SECTIONS
     ovl_Obj_Milk_Bin : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.text)
-        build/asm/overlays/ovl_Obj_Milk_Bin_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.data)
         build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin.o(.rodata)
-        build/asm/overlays/ovl_Obj_Milk_Bin_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Milk_Bin/z_obj_milk_bin_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
