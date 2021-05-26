@@ -113,9 +113,9 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x22A0;
-    gSaveContext.extra.unk24 = globalCtx->nextEntranceIndex;
+    gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx);
-    gSaveContext.extra.unk10 = -2;
+    gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }
 
