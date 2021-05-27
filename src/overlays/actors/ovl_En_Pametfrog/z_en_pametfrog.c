@@ -151,7 +151,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.perm.weekEventReg[KEY] = VALUE
+// gSaveContext.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
     (0x20 << 8) | 0x40,
@@ -173,7 +173,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if ((gSaveContext.perm.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
              (u8)isFrogReturnedFlags[this->actor.params - 1]) == 0) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
@@ -491,7 +491,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     eye.x = (Math_SinS(yaw) * 300.0f) + this->actor.focus.pos.x;
     eye.y = this->actor.focus.pos.y + 100.0f;
     eye.z = (Math_CosS(yaw) * 300.0f) + this->actor.focus.pos.z;
-    func_8016970C(globalCtx, this->camId, &this->actor.focus, &eye);
+    func_8016970C(globalCtx, this->camId, &this->actor.focus.pos, &eye);
     Audio_PlayActorSound2(this, 0x38D3);
     this->actionFunc = EnPametfrog_FallOffSnapper;
 }
@@ -891,7 +891,7 @@ void EnPametfrog_SetupDefeatGekko(EnPametfrog* this, GlobalContext* globalCtx) {
     eye.x = this->actor.child->focus.pos.x + 150.0f * Math_SinS(yaw);
     eye.y = this->actor.child->focus.pos.y + 20.0f;
     eye.z = this->actor.child->focus.pos.z + 150.0f * Math_CosS(yaw);
-    func_8016970C(globalCtx, this->camId, &this->actor.child->focus, &eye);
+    func_8016970C(globalCtx, this->camId, &this->actor.child->focus.pos, &eye);
     this->actor.params = ENPAMETFROG_DEFEAT;
     this->timer = 38;
     this->actionFunc = EnPametfrog_DefeatGekko;
@@ -916,7 +916,7 @@ void EnPametfrog_SetupDefeatSnapper(EnPametfrog* this, GlobalContext* globalCtx)
     eye.x = this->actor.world.pos.x + Math_SinS(yaw) * 150.0f;
     eye.y = this->actor.world.pos.y + 20.0f;
     eye.z = this->actor.world.pos.z + Math_CosS(yaw) * 150.0f;
-    func_8016970C(globalCtx, this->camId, &this->actor.world, &eye);
+    func_8016970C(globalCtx, this->camId, &this->actor.world.pos, &eye);
     this->timer = 20;
     this->actionFunc = EnPametfrog_DefeatSnapper;
 }
@@ -1252,10 +1252,11 @@ void EnPametfrog_ApplyDamage(EnPametfrog* this, GlobalContext* globalCtx) {
                     func_801A2ED8();
                 }
 
-                if (this->actor.colChkInfo.damageEffect == 5) { // Nuts/Hookshot?
+                // Nuts/Hookshot/Deku Mask Spin all freeze Gekko for 40 frames
+                if (this->actor.colChkInfo.damageEffect == 5) {
                     func_8086A80C(this);
                     func_8086CC84(this);
-                } else if (this->actor.colChkInfo.damageEffect == 1) { // Nuts/Hookshot?
+                } else if (this->actor.colChkInfo.damageEffect == 1) {
                     func_8086A878(this);
                     func_8086CC84(this);
                 } else if (this->actor.colChkInfo.damageEffect == 3) { // Ice arrows?
