@@ -93,8 +93,8 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtxt, s3
             0xfffffff0;
 
         osCreateMesgQueue(&roomCtxt->loadQueue, roomCtxt->loadMsg, 1);
-        DmaMgr_SendRequestImpl(&roomCtxt->dmaRequest, roomCtxt->activeRoomVram, globalCtx->roomAddrs[index].vromStart, size,
-                               0, &roomCtxt->loadQueue, NULL);
+        DmaMgr_SendRequestImpl(&roomCtxt->dmaRequest, roomCtxt->activeRoomVram, globalCtx->roomAddrs[index].vromStart,
+                               size, 0, &roomCtxt->loadQueue, NULL);
         roomCtxt->activeMemPage ^= 1;
 
         return 1;

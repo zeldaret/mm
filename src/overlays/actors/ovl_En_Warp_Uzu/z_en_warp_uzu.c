@@ -59,7 +59,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_06000EC0;
+extern Gfx D_06000EC0[];
 
 void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarpUzu* this = THIS;
@@ -113,9 +113,9 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x22A0;
-    gSaveContext.extra.unk24 = globalCtx->nextEntranceIndex;
+    gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx);
-    gSaveContext.extra.unk10 = -2;
+    gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }
 
@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000EC0);
+    func_800BDFC0(globalCtx, D_06000EC0);
 }
