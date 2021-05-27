@@ -384,7 +384,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
-    /* 0x4 */ void** textureList;
+    /* 0x4 */ void* textureList;
     /* 0x8 */ u8* textureIndexList;
 } AnimatedMatTexCycleParams; // size = 0xC
 
