@@ -329,14 +329,10 @@ typedef struct {
 } EntranceTableEntry; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u32 tableCount : 8;
+    /* 0x0 */ u32 tableCount : 8; // unused
     /* 0x4 */ EntranceTableEntry** table;
-    /* 0x8 */ char* name;
+    /* 0x8 */ char* name; // unused
 } SceneEntranceTableEntry; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u16 scenes[27];
-} SceneIdList; // size = 0x36
 
 typedef struct {
     /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded

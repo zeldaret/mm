@@ -2657,7 +2657,7 @@ static EntranceTableEntry* sCutsceneEntranceTable[] = {
 #define SCENE_ENTRANCE_NONE() \
     { 0, NULL, NULL }
 
-/*static*/ SceneEntranceTableEntry sSceneEntranceTable[] = {
+static SceneEntranceTableEntry sSceneEntranceTable[] = {
     SCENE_ENTRANCE(sMayorsResidenceEntranceTable, "Z2_SONCHONOIE"),
     SCENE_ENTRANCE(sMajorasLairEntranceTable, "Z2_LAST_BS"),
     SCENE_ENTRANCE(sMagicHagsPotionShopEntranceTable, "Z2_WITCH_SHOP"),
