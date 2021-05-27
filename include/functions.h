@@ -1595,7 +1595,7 @@ void nop_800EDDB0(GlobalContext* globalCtx);
 // void func_800EDDBC(void);
 void func_800EDDCC(GlobalContext* globalCtx, u32 uParm2);
 void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 param_3);
-// void func_800EDF24(void);
+void func_800EDF24(Actor* actor, GlobalContext* globalCtx, s32 arg2);
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 // void func_800EE1D8(void);

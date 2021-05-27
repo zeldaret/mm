@@ -1146,52 +1146,49 @@ void func_80B90340(EnMaYto *this) {
     this->actionFunc = func_80B9037C;
 }
 
-/*
+
+extern u16 D_80B915F0;
+
+extern AnimationHeader D_06001FD0;
+
+
 void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
-    u32 sp24;
-    s32 temp_t6;
-    u16 temp_a0;
-    u32 temp_v0;
-    void *temp_v1;
-
     if (func_800EE29C(globalCtx, 0x22CU) != 0) {
-        temp_v0 = func_800EE200(globalCtx, 0x22CU);
-        temp_t6 = temp_v0 * 4;
-        sp24 = temp_v0;
-        temp_v1 = (globalCtx + temp_t6)->unk1F4C;
-        if (globalCtx->csCtx.frames == temp_v1->unk2) {
-            temp_a0 = temp_v1->unk0;
-            if (D_80B915F0 != temp_a0) {
-                D_80B915F0 = temp_a0;
-                if (temp_a0 != 1) {
-                    if (temp_a0 != 2) {
-                        if (temp_a0 != 3) {
+        u32 csActionIndex = func_800EE200(globalCtx, 0x22CU);
 
-                        } else {
-                            func_80B90C08(this, 0x16);
-block_10:
-                        }
-                    } else {
-                        gSaveContext.unkF06 = (u8) (gSaveContext.unkF06 | 1);
-                        func_80B90C08(this, 0x12);
-                        goto block_10;
-                    }
-                } else {
-                    func_80B90C08(this, 0);
-                    goto block_10;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[csActionIndex]->startFrame) {
+            u16 action = globalCtx->csCtx.actorActions[csActionIndex]->unk0;
+
+            if (1) { }
+
+            if (action != D_80B915F0) {
+                D_80B915F0 = action;
+                switch (action) {
+                    case 1:
+                        func_80B90C08(this, 0);
+                        break;
+
+                    case 2:
+                        gSaveContext.weekEventReg[0xE] |= 1;
+                        func_80B90C08(this, 18);
+                        break;
+
+                    case 3:
+                        func_80B90C08(this, 22);
+                        break;
+
                 }
             }
         }
-        func_800EDF24(this, globalCtx, sp24, globalCtx);
-        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == 0x6001FD0) && (func_801378B8(&this->skelAnime,
-(bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) { func_80B90C08(this, 0x14); return;
+
+        func_800EDF24(&this->actor, globalCtx, csActionIndex);
+        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == &D_06001FD0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
+            func_80B90C08(this, 0x14);
         }
     } else {
         D_80B915F0 = (u16)0x63;
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9037C.asm")
 
 void func_80B904D0(EnMaYto *this) {
     this->actionFunc = func_80B904E4;
@@ -1415,18 +1412,21 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
     }
 }
 
-/*
-void func_80B90C08(EnMaYto *this, s32 index) {
-    void *sp28;
-    void *temp_v1;
 
-    temp_v1 = (index * 0x10) + &D_80B91448;
-    sp28 = temp_v1;
-    SkelAnime_ChangeAnim(&this->skelAnime, temp_v1->unk0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk0),
-(?32) temp_v1->unk8, temp_v1->unkC);
+struct struct_80B91448 {
+    /* 0x00 */ AnimationHeader* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ u8 unk_08;
+    /* 0x0C */ f32 unk_0C;
+};
+
+extern struct struct_80B91448 D_80B91448[];
+
+
+void func_80B90C08(EnMaYto *this, s32 index) {
+    SkelAnime_ChangeAnim(&this->skelAnime, D_80B91448[index].unk_00, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B91448[index].unk_00->common), D_80B91448[index].unk_08, D_80B91448[index].unk_0C);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B90C08.asm")
+
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
