@@ -29,7 +29,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_060019B4;
-extern UNK_TYPE D_06000288;
+extern Gfx D_06000288[];
 
 void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
@@ -49,5 +49,5 @@ void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000288);
+    func_800BDFC0(globalCtx, D_06000288);
 }
