@@ -96,7 +96,7 @@ s32 func_80A356D8(ObjBell* this) {
     s16 new_var;
 
     this->unk_212 = this->dyna.actor.world.rot.y;
-    if ((this->unk_20C >= 0x4000) || (this->unk_20C < -0x3FFF)) {
+    if (this->unk_20C >= 0x4000 || this->unk_20C < -0x3FFF) {
         this->unk_212 -= 0x8000;
     }
     temp_f2 = Math_SinS(this->unk_20C) * this->unk_21C;
@@ -116,14 +116,12 @@ s32 func_80A356D8(ObjBell* this) {
 //     f32 temp_f0;
 //     s16 temp_v1;
 //     u8 temp_v0_2;
-//     s32 phi_v0;
 
 //     if ((this->collider1.base.ocFlags1 & 2)) {
 //         this->collider1.base.ocFlags1 &= 0xFFFD;
 //         temp_v1 = this->dyna.actor.yawTowardsPlayer - this->unk_212;
 //         temp_f0 = this->unk_21C / 18000.0f;
-//         phi_v0 = ABS_ALT(temp_v1);
-//         if (phi_v0 < 0x3FFC) {
+//         if (ABS_ALT(temp_v1) < 0x3FFC) {
 //             if (this->unk_214 == 0) {
 //                 if (temp_f0 > 0.18f) {
 //                     func_800B8D98(globalCtx, this, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer, 11.0f * temp_f0);
@@ -136,14 +134,15 @@ s32 func_80A356D8(ObjBell* this) {
 //         temp_v0_2 = this->dyna.actor.colChkInfo.damageEffect;
 //         this->collider2.base.acFlags &= 0xFFFD;
 //         this->unk_20E = 0xA;
-//         if (temp_v0_2 != 0xE && temp_v0_2 == 0xF) {
-
-//             Audio_PlayActorSound2(this, 0x28F3);
-//             func_80A35510(this, 1);
-
+//         if (temp_v0_2 != 0xE) {
+//             if (temp_v0_2 == 0xF) {
+//                 Audio_PlayActorSound2(this, 0x28F3);
+//                 func_80A35510(this, 1);
+//             }
 //         } else {
 //             Audio_PlayActorSound2(this, 0x28F3);
 //             func_80A35510(this, 2);
+//             func_80A35510(this, 0);
 //         }
 //     }
 //     return 0;
