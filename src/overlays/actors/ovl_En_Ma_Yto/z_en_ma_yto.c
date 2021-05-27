@@ -1231,64 +1231,62 @@ void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 
-#ifdef NON_EQUIVALENT
 void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
-    s32 temp_hi;
-    u32 temp_v0;
-
-    temp_hi = CURRENT_DAY;
-    if (temp_hi == 1) {
+    if (CURRENT_DAY == 1) {
         if (func_8012403C(globalCtx) != 0 && gSaveContext.playerForm == 4) {
-            temp_v0 = func_8012403C(globalCtx);
-            if (temp_v0 == 2) {
-                EnMaYto_SetFaceExpression(this, (u16)1, (u16)2);
-                func_801518B0(globalCtx, 0x235FU, &this->actor);
-                this->textId = 0x235F;
-            }
-            else if (temp_v0 == 7) {
-                func_801518B0(globalCtx, 0x235DU, &this->actor);
-                this->textId = 0x235D;
-            }
-            else if (temp_v0 == 8) {
-                EnMaYto_SetFaceExpression(this, (u16)1, (u16)3);
-                func_801518B0(globalCtx, 0x235EU, &this->actor);
-                this->textId = 0x235E;
-            }
-            else if (temp_v0 == 0xA) {
-                func_801518B0(globalCtx, 0x2360U, &this->actor);
-                this->textId = 0x2360;
-            } else {
-                func_801518B0(globalCtx, 0x2361U, &this->actor);
-                this->textId = 0x2361;
+            switch (func_8012403C(globalCtx)) {
+                case 7:
+                    func_801518B0(globalCtx, 0x235DU, (Actor *) this);
+                    this->textId = 0x235D;
+                    break;
+
+                case 8:
+                    EnMaYto_SetFaceExpression(this, (u16)1, (u16)3);
+                    func_801518B0(globalCtx, 0x235EU, (Actor *) this);
+                    this->textId = 0x235E;
+                    break;
+
+                case 2:
+                    EnMaYto_SetFaceExpression(this, (u16)1, (u16)2);
+                    func_801518B0(globalCtx, 0x235FU, (Actor *) this);
+                    this->textId = 0x235F;
+                    break;
+
+                case 0xA:
+                    func_801518B0(globalCtx, 0x2360U, (Actor *) this);
+                    this->textId = 0x2360;
+                    break;
+
+                default:
+                    func_801518B0(globalCtx, 0x2361U, (Actor *) this);
+                    this->textId = 0x2361;
+                    break;
             }
         } else {
-            if (func_80B91014() == 0) {
-                func_80B9109C();
-                func_801518B0(globalCtx, 0x3390U, &this->actor);
-                this->textId = 0x3390;
-            } else {
-                func_801518B0(globalCtx, 0x3394U, &this->actor);
+            if (func_80B91014() != 0) {
+                func_801518B0(globalCtx, 0x3394U, (Actor *) this);
                 this->textId = 0x3394;
+            } else {
+                func_80B9109C();
+                func_801518B0(globalCtx, 0x3390U, (Actor *) this);
+                this->textId = 0x3390;
             }
         }
-    } else if (temp_hi == 3) {
+    } else if (CURRENT_DAY == 3) {
         if (func_80B90F84() != 0) {
             EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x33C5U, &this->actor);
+            func_801518B0(globalCtx, 0x33C5U, (Actor *) this);
             this->textId = 0x33C5;
             func_80151BB4(globalCtx, 6U);
         } else {
             func_80B9109C();
             EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x33C4U, &this->actor);
+            func_801518B0(globalCtx, 0x33C4U, (Actor *) this);
             this->textId = 0x33C4;
             func_80151BB4(globalCtx, 6U);
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B9061C.asm")
-#endif
 
 
 
@@ -1363,11 +1361,8 @@ void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
 
 
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
-    s32 temp_hi;
-
-    if ((gSaveContext.weekEventReg[0x16] & 1) != 0) {
-        temp_hi = CURRENT_DAY;
-        if (temp_hi == 2) {
+    if (gSaveContext.weekEventReg[0x16] & 1) {
+        if (CURRENT_DAY == 2) {
             if (this->unk_310 == 1) {
                 func_801518B0(globalCtx, 0x33AEU, &this->actor);
                 this->textId = 0x33AE;
@@ -1378,7 +1373,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
                 this->textId = 0x33A9;
             }
         }
-        else if (temp_hi == 3) {
+        else if (CURRENT_DAY == 3) {
             if (this->unk_310 == 1) {
                 func_801518B0(globalCtx, 0x33CBU, &this->actor);
                 this->textId = 0x33CB;
