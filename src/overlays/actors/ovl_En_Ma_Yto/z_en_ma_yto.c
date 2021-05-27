@@ -891,112 +891,121 @@ void func_80B8F998(EnMaYto *this, GlobalContext *globalCtx) {
     }
 }
 
-/*
-void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
-    u32 temp_t7;
 
+void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
-        temp_t7 = this->textId - 0x33A9;
-        if (temp_t7 < 0x23U) {
-            goto **(&jtbl_D_80B916E4 + (temp_t7 * 4));
-        case 0:
-            func_80B90E50(this, 0);
-            func_800B86C8(this, globalCtx, this->actor.child);
-            func_80B90E84(this, (u16)0, (u16)3);
-            func_801518B0(globalCtx, 0x33AAU, &this->actor);
-            this->textId = 0x33AA;
-            return;
-        case 1:
-            func_800B86C8(this, globalCtx, this);
-            this->unk_31E = 1;
-            func_801518B0(globalCtx, 0x33ABU, &this->actor);
-            this->textId = 0x33AB;
-            return;
-        case 2:
-            func_80B90E50(this, 1);
-            func_800B86C8(this, globalCtx, this->actor.child);
-            func_80B90E84(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33ACU, &this->actor);
-            this->textId = 0x33AC;
-            return;
-        case 3:
-            this->unk_31E = 0;
-            func_800B86C8(this, globalCtx, this);
-            func_801518B0(globalCtx, 0x33ADU, &this->actor);
-            this->textId = 0x33AD;
-            func_80151BB4(globalCtx, 6U);
-            func_80151BB4(globalCtx, 5U);
-            return;
-        case 5:
-            func_80B90E50(this, 1);
-            func_800B86C8(this, globalCtx, this->actor.child);
-            func_80B90E84(this, (u16)4, (u16)2);
-            func_801518B0(globalCtx, 0x33AFU, &this->actor);
-            this->textId = 0x33AF;
-            return;
-        case 6:
-            this->unk_31E = 1;
-            func_800B86C8(this, globalCtx, this);
-            EnMaYto_SetFaceExpression(this, (u16)4, (u16)2);
-            func_801518B0(globalCtx, 0x33B0U, &this->actor);
-            this->textId = 0x33B0;
-            func_80151BB4(globalCtx, 6U);
-            func_80151BB4(globalCtx, 5U);
-            return;
-        case 8:
-            this->unk_31E = 2;
-            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
-            func_801518B0(globalCtx, 0x33B2U, &this->actor);
-            this->textId = 0x33B2;
-            func_80151BB4(globalCtx, 6U);
-            return;
-        case 29:
-            func_800B86C8(this, globalCtx, this->actor.child);
-            this->unk_31E = 0;
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33C7U, &this->actor);
-            this->textId = 0x33C7;
-            return;
-        case 30:
-            func_800B86C8(this, globalCtx, this);
-            this->unk_31E = 1;
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
-            func_801518B0(globalCtx, 0x33C8U, &this->actor);
-            this->textId = 0x33C8;
-            return;
-        case 31:
-            func_800B86C8(this, globalCtx, this->actor.child);
-            func_80B90E50(this, 1);
-            func_80B90E84(this, (u16)0, (u16)2);
-            func_801518B0(globalCtx, 0x33C9U, &this->actor);
-            this->textId = 0x33C9;
-            return;
-        case 32:
-            func_800B86C8(this, globalCtx, this);
-            this->unk_31E = 1;
-            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
-            func_801518B0(globalCtx, 0x33CAU, &this->actor);
-            this->textId = 0x33CA;
-            return;
-        case 33:
-            this->unk_31E = 1;
-            func_801518B0(globalCtx, 0x33CBU, &this->actor);
-            this->textId = 0x33CB;
-            return;
-        case 34:
-            func_800B86C8(this, globalCtx, this->actor.child);
-            func_80B90E50(this, 1);
-            func_80B90E84(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x33CCU, &this->actor);
-            this->textId = 0x33CC;
-            func_80151BB4(globalCtx, 6U);
-            func_80151BB4(globalCtx, 5U);
+        switch (this->textId) {
+            case 0x33A9:
+                func_80B90E50(this, (u16)0);
+                func_800B86C8(this, globalCtx, this->actor.child);
+                func_80B90E84(this, (u16)0, (u16)3);
+                func_801518B0(globalCtx, 0x33AAU, (Actor *) this);
+                this->textId = 0x33AA;
+                break;
+
+            case 0x33AA:
+                func_800B86C8(this, globalCtx, this);
+                this->unk_31E = 1;
+                func_801518B0(globalCtx, 0x33ABU, (Actor *) this);
+                this->textId = 0x33AB;
+                break;
+
+            case 0x33AB:
+                func_80B90E50(this, (u16)1);
+                func_800B86C8(this, globalCtx, this->actor.child);
+                func_80B90E84(this, (u16)0, (u16)1);
+                func_801518B0(globalCtx, 0x33ACU, (Actor *) this);
+                this->textId = 0x33AC;
+                break;
+
+            case 0x33AC:
+                this->unk_31E = 0;
+                func_800B86C8(this, globalCtx, this);
+                func_801518B0(globalCtx, 0x33ADU, (Actor *) this);
+                this->textId = 0x33AD;
+                func_80151BB4(globalCtx, 6U);
+                func_80151BB4(globalCtx, 5U);
+                break;
+
+            case 0x33AE:
+                func_80B90E50(this, (u16)1);
+                func_800B86C8(this, globalCtx, this->actor.child);
+                func_80B90E84(this, (u16)4, (u16)2);
+                func_801518B0(globalCtx, 0x33AFU, (Actor *) this);
+                this->textId = 0x33AF;
+                break;
+
+            case 0x33AF:
+                this->unk_31E = 1;
+                func_800B86C8(this, globalCtx, this);
+                EnMaYto_SetFaceExpression(this, (u16)4, (u16)2);
+                func_801518B0(globalCtx, 0x33B0U, (Actor *) this);
+                this->textId = 0x33B0;
+                func_80151BB4(globalCtx, 6U);
+                func_80151BB4(globalCtx, 5U);
+                break;
+
+            case 0x33B1:
+                this->unk_31E = 2;
+                EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
+                func_801518B0(globalCtx, 0x33B2U, (Actor *) this);
+                this->textId = 0x33B2;
+                func_80151BB4(globalCtx, 6U);
+                break;
+
+            case 0x33C6:
+                func_800B86C8(this, globalCtx, this->actor.child);
+                this->unk_31E = 0;
+                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+                func_801518B0(globalCtx, 0x33C7U, (Actor *) this);
+                this->textId = 0x33C7;
+                break;
+
+            case 0x33C7:
+                func_800B86C8(this, globalCtx, this);
+                this->unk_31E = 1;
+                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+                func_801518B0(globalCtx, 0x33C8U, (Actor *) this);
+                this->textId = 0x33C8;
+                break;
+
+            case 0x33C8:
+                func_800B86C8(this, globalCtx, this->actor.child);
+                func_80B90E50(this, (u16)1);
+                func_80B90E84(this, (u16)0, (u16)2);
+                func_801518B0(globalCtx, 0x33C9U, (Actor *) this);
+                this->textId = 0x33C9;
+                break;
+
+            case 0x33C9:
+                func_800B86C8(this, globalCtx, this);
+                this->unk_31E = 1;
+                EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+                func_801518B0(globalCtx, 0x33CAU, (Actor *) this);
+                this->textId = 0x33CA;
+                break;
+
+            case 0x33CA:
+                this->unk_31E = 1;
+                func_801518B0(globalCtx, 0x33CBU, (Actor *) this);
+                this->textId = 0x33CB;
+                break;
+
+            case 0x33CB:
+                func_800B86C8(this, globalCtx, this->actor.child);
+                func_80B90E50(this, (u16)1);
+                func_80B90E84(this, (u16)3, (u16)3);
+                func_801518B0(globalCtx, 0x33CCU, (Actor *) this);
+                this->textId = 0x33CC;
+                func_80151BB4(globalCtx, 6U);
+                func_80151BB4(globalCtx, 5U);
+                break;
+
+            default:
+                break;
         }
     }
-default:
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/func_80B8FA14.asm")
 
 
 void func_80B8FE04(EnMaYto *this) {
