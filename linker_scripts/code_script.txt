@@ -7353,9 +7353,9 @@ SECTIONS
     ovl_En_Ma_Yto : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.text)
-        build/asm/overlays/ovl_En_Ma_Yto_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.data)
         build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.rodata)
-        build/asm/overlays/ovl_En_Ma_Yto_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

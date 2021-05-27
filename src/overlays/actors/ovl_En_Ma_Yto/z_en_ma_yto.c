@@ -62,8 +62,8 @@ void func_80B905B0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9083C(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
-void func_80B90C08(EnMaYto* this, s32 index);
-void EnMaYto_Blink(EnMaYto* this);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void func_80B90E84(EnMaYto* this, s16, s16);
 void EnMaYto_SetFaceExpression(EnMaYto* this, s16 arg1, s16 mouthIndex);
@@ -73,7 +73,7 @@ s32  func_80B90F84();
 s32  func_80B91014(void);
 void func_80B9109C(void);
 
-/*
+
 const ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
@@ -85,145 +85,40 @@ const ActorInit En_Ma_Yto_InitVars = {
     (ActorFunc)EnMaYto_Update,
     (ActorFunc)EnMaYto_Draw,
 };
-*/
 
 
-/*
+static ColliderCylinderInit sCylinderInit = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 18, 46, 0, { 0, 0, 0 } },
+};
 
-glabel D_80B91410
-0x0A000039
-0x20010000
-0x00000000
-0x00000000
-0x00000000
-0x00000000
-0x00000000
-0x00000100
-0x0012002E
-0x00000000
-0x00000000
-*/
+static CollisionCheckInfoInit2 D_80B9143C = {
+    0, 0, 0, 0, 0xFF,
+};
 
-/*
-glabel D_80B9143C
-0x00000000
-0x00000000
-0xFF000000
-*/
 
-/*
-glabel D_80B91448
-0x0600A174
-0x3F800000
-0x00000000
-0x00000000
-0x0600A174
-0x3F800000
-0x00000000
-0xC0C00000
-0x0600AF7C
-0x3F800000
-0x02000000
-0x00000000
-0x0600AF7C
-0x3F800000
-0x02000000
-0xC0C00000
-0x06000CC0
-0x3F800000
-0x00000000
-0x00000000
-0x06000CC0
-0x3F800000
-0x00000000
-0xC0C00000
-0x06016720
-0x3F800000
-0x00000000
-0x00000000
-0x06016720
-0x3F800000
-0x00000000
-0xC1000000
-0x06005314
-0x3F800000
-0x00000000
-0x00000000
-0x06005314
-0x3F800000
-0x00000000
-0xC1000000
-0x060093E8
-0x3F800000
-0x00000000
-0x00000000
-0x060093E8
-0x3F800000
-0x00000000
-0xC1200000
-0x06007E28
-0x3F800000
-0x00000000
-0x00000000
-0x06007E28
-0x3F800000
-0x00000000
-0xC1000000
-0x060070EC
-0x3F800000
-0x00000000
-0x00000000
-0x060070EC
-0x3F800000
-0x00000000
-0xC1000000
-0x06003D54
-0x3F800000
-0x00000000
-0x00000000
-0x06003D54
-0x3F800000
-0x00000000
-0xC1000000
-0x06001FD0
-0x3F800000
-0x00000000
-0x00000000
-0x06001FD0
-0x3F800000
-0x00000000
-0xC1000000
-0x060030B4
-0x3F800000
-0x00000000
-0x00000000
-0x060030B4
-0x3F800000
-0x00000000
-0xC1000000
-0x06004370
-0x3F800000
-0x00000000
-0x00000000
-0x06004370
-0x3F800000
-0x00000000
-0xC1000000
-*/
+extern FlexSkeletonHeader D_06015C28;
 
-/*
+extern AnimationHeader D_0600A174;
+extern AnimationHeader D_0600AF7C;
+extern AnimationHeader D_06000CC0;
+extern AnimationHeader D_06016720;
+extern AnimationHeader D_06005314;
+extern AnimationHeader D_060093E8;
+extern AnimationHeader D_06007E28;
+extern AnimationHeader D_060070EC;
+extern AnimationHeader D_06003D54;
+extern AnimationHeader D_06001FD0;
+extern AnimationHeader D_060030B4;
+extern AnimationHeader D_06004370;
+
+
 extern u64 D_06014AD8[];
 extern u64 D_06014ED8[];
 extern u64 D_060152D8[];
 extern u64 D_060156D8[];
 
-// sMouthTextures
-void* D_80B915C8[] = {
-    D_06014AD8, D_06014ED8, D_060152D8, D_060156D8, 
-};
-*/
-
-/*
 extern u64 D_06011AD8[];
 extern u64 D_060122D8[];
 extern u64 D_06012AD8[];
@@ -231,26 +126,47 @@ extern u64 D_060132D8[];
 extern u64 D_06013AD8[];
 extern u64 D_060142D8[];
 
-// sEyesTextures
-void* D_80B915D8[] = {
+// gCremiaWoodenBox
+extern Gfx D_06005430[];
+
+
+struct struct_80B91448 {
+    /* 0x00 */ AnimationHeader* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ u8 unk_08;
+    /* 0x0C */ f32 unk_0C;
+}; // size = 0x10
+
+static struct struct_80B91448 D_80B91448[] = {
+    { &D_0600A174, 0x3F800000, 0x00, 0.0f }, { &D_0600A174, 0x3F800000, 0x00, -6.0f },
+    { &D_0600AF7C, 0x3F800000, 0x02, 0.0f }, { &D_0600AF7C, 0x3F800000, 0x02, -6.0f },
+    { &D_06000CC0, 0x3F800000, 0x00, 0.0f }, { &D_06000CC0, 0x3F800000, 0x00, -6.0f },
+    { &D_06016720, 0x3F800000, 0x00, 0.0f }, { &D_06016720, 0x3F800000, 0x00, -8.0f },
+    { &D_06005314, 0x3F800000, 0x00, 0.0f }, { &D_06005314, 0x3F800000, 0x00, -8.0f },
+    { &D_060093E8, 0x3F800000, 0x00, 0.0f }, { &D_060093E8, 0x3F800000, 0x00, -10.0f },
+    { &D_06007E28, 0x3F800000, 0x00, 0.0f }, { &D_06007E28, 0x3F800000, 0x00, -8.0f },
+    { &D_060070EC, 0x3F800000, 0x00, 0.0f }, { &D_060070EC, 0x3F800000, 0x00, -8.0f },
+    { &D_06003D54, 0x3F800000, 0x00, 0.0f }, { &D_06003D54, 0x3F800000, 0x00, -8.0f },
+    { &D_06001FD0, 0x3F800000, 0x00, 0.0f }, { &D_06001FD0, 0x3F800000, 0x00, -8.0f },
+    { &D_060030B4, 0x3F800000, 0x00, 0.0f }, { &D_060030B4, 0x3F800000, 0x00, -8.0f },
+    { &D_06004370, 0x3F800000, 0x00, 0.0f }, { &D_06004370, 0x3F800000, 0x00, -8.0f },
+};
+
+
+static void* sMouthTextures[] = {
+    D_06014AD8, D_06014ED8, D_060152D8, D_060156D8, 
+};
+
+
+
+static void* sEyesTextures[] = {
     D_06011AD8, D_060122D8, D_06012AD8, D_060132D8, D_06013AD8, D_060142D8,
 };
-*/
-
-/*
-static u16 D_80B915F0 = 0x63;
-glabel D_80B915F0
-0x00630000
-0x00000000
-0x00000000
-0x00000000
-*/
 
 
-extern ColliderCylinderInit D_80B91410;
-extern CollisionCheckInfoInit2 D_80B9143C;
+static u16 D_80B915F0 = 99;
 
-extern FlexSkeletonHeader D_06015C28;
+
 
 void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
@@ -281,7 +197,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B8E84C(this, globalCtx);
     temp_a1 = &this->collider;
     Collider_InitCylinder(globalCtx, temp_a1);
-    Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &D_80B91410);
+    Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B9143C);
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (func_80B8EABC(this, globalCtx) == 1) {
@@ -335,35 +251,35 @@ s32 func_80B8E6E0(EnMaYto* this, GlobalContext* globalCtx) {
 void func_80B8E84C(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
         case 0:
-            func_80B90C08(this, 10);
+            EnMaYto_ChangeAnim(this, 10);
             break;
 
         case 2:
             if (CURRENT_DAY == 1) {
-                func_80B90C08(this, 14);
+                EnMaYto_ChangeAnim(this, 14);
             } else {
-                func_80B90C08(this, 16);
+                EnMaYto_ChangeAnim(this, 16);
             }
             break;
 
         case 1:
             if (gSaveContext.weekEventReg[0x16] & 1) {
-                func_80B90C08(this, 12);
+                EnMaYto_ChangeAnim(this, 12);
             } else {
-                func_80B90C08(this, 8);
+                EnMaYto_ChangeAnim(this, 8);
             }
             break;
 
         case 3:
-            func_80B90C08(this, 0);
+            EnMaYto_ChangeAnim(this, 0);
             break;
 
         case 4:
-            func_80B90C08(this, 0);
+            EnMaYto_ChangeAnim(this, 0);
             break;
 
         default:
-            func_80B90C08(this, 0);
+            EnMaYto_ChangeAnim(this, 0);
             break;
     }
 }
@@ -488,10 +404,10 @@ void func_80B8EBF0(EnMaYto *this, GlobalContext *globalCtx) {
 void func_80B8EC30(EnMaYto *this) {
     if (this->actor.shape.rot.y == this->actor.home.rot.y) {
         this->unk_314 = 11;
-        func_80B90C08(this, 11);
+        EnMaYto_ChangeAnim(this, 11);
     } else {
         this->unk_314 = 1;
-        func_80B90C08(this, 1);
+        EnMaYto_ChangeAnim(this, 1);
     }
     func_80B90EF0(this);
     this->unk_31E = 2;
@@ -505,7 +421,7 @@ void func_80B8ECAC(EnMaYto *this, GlobalContext *globalCtx) {
     sp2C = rotY - this->actor.yawTowardsPlayer;
     if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, (u16)5, (u16)0x3000, 0x100) == 0) && (this->unk_314 == 1)) {
         this->unk_314 = 11;
-        func_80B90C08(this, 11);
+        EnMaYto_ChangeAnim(this, 11);
     }
 
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -517,12 +433,10 @@ void func_80B8ECAC(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8ED8C(EnMaYto *this) {
-    func_80B90C08(this, 1);
+    EnMaYto_ChangeAnim(this, 1);
     this->unk_31E = 2;
     this->actionFunc = func_80B8EDC8;
 }
-
-extern AnimationHeader D_0600AF7C;
 
 void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
     switch (func_80152498(&globalCtx->msgCtx)) {
@@ -555,7 +469,7 @@ void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x3000, 0x100);
     if ((this->textId == 0x3395) && (this->skelAnime.animCurrentSeg == &D_0600AF7C) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
-        func_80B90C08(this, 4);
+        EnMaYto_ChangeAnim(this, 4);
     }
 }
 
@@ -592,13 +506,13 @@ void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
             break;
 
         case 0x3394:
-            func_80B90C08(this, 2);
+            EnMaYto_ChangeAnim(this, 2);
             func_801518B0(globalCtx, 0x3395U, &this->actor);
             this->textId = 0x3395;
             break;
 
         case 0x3395:
-            func_80B90C08(this, 1);
+            EnMaYto_ChangeAnim(this, 1);
             func_801518B0(globalCtx, 0x3396U, &this->actor);
             this->textId = 0x3396;
             func_80151BB4(globalCtx, 6U);
@@ -815,12 +729,12 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 
 void func_80B8F744(EnMaYto *this) {
     if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
-        func_80B90C08(this, 0xD);
+        EnMaYto_ChangeAnim(this, 0xD);
         func_80B90E50(this, 0);
         this->unk_31E = 0;
     } else {
         this->unk_320 = 0;
-        func_80B90C08(this, 9);
+        EnMaYto_ChangeAnim(this, 9);
         func_80B90E50(this, 2);
         this->unk_31E = 2;
     }
@@ -1154,12 +1068,6 @@ void func_80B90340(EnMaYto *this) {
     this->actionFunc = func_80B9037C;
 }
 
-
-extern u16 D_80B915F0;
-
-extern AnimationHeader D_06001FD0;
-
-
 void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_800EE29C(globalCtx, 0x22CU) != 0) {
         u32 csActionIndex = func_800EE200(globalCtx, 0x22CU);
@@ -1173,16 +1081,16 @@ void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
                 D_80B915F0 = action;
                 switch (action) {
                     case 1:
-                        func_80B90C08(this, 0);
+                        EnMaYto_ChangeAnim(this, 0);
                         break;
 
                     case 2:
                         gSaveContext.weekEventReg[0xE] |= 1;
-                        func_80B90C08(this, 18);
+                        EnMaYto_ChangeAnim(this, 18);
                         break;
 
                     case 3:
-                        func_80B90C08(this, 22);
+                        EnMaYto_ChangeAnim(this, 22);
                         break;
 
                 }
@@ -1191,10 +1099,10 @@ void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
 
         func_800EDF24(&this->actor, globalCtx, csActionIndex);
         if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == &D_06001FD0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
-            func_80B90C08(this, 0x14);
+            EnMaYto_ChangeAnim(this, 0x14);
         }
     } else {
-        D_80B915F0 = (u16)0x63;
+        D_80B915F0 = 99;
     }
 }
 
@@ -1403,17 +1311,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 
-struct struct_80B91448 {
-    /* 0x00 */ AnimationHeader* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
-};
-
-extern struct struct_80B91448 D_80B91448[];
-
-
-void func_80B90C08(EnMaYto *this, s32 index) {
+void EnMaYto_ChangeAnim(EnMaYto *this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80B91448[index].unk_00, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B91448[index].unk_00->common), D_80B91448[index].unk_08, D_80B91448[index].unk_0C);
 }
 
@@ -1438,17 +1336,17 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
             this->unk_1E0.y = (u16)0;
             this->unk_1E0.x = (u16)0;
         } else {
-            func_800BD888(this, this->unk_1D8, 0xD, phi_a3);
+            func_800BD888(&this->actor, this->unk_1D8, 0xD, phi_a3);
         }
     } else {
         Math_SmoothStepToS(&this->unk_1E0.y, (u16)0, (u16)3, (u16)0x71C, 0xB6);
         Math_SmoothStepToS(&this->unk_1E0.x, (u16)0x18E3, (u16)5, (u16)0x71C, 0xB6);
     }
 
-    EnMaYto_Blink(this);
+    EnMaYto_UpdateEyes(this);
 }
 
-void func_80B90D98(EnMaYto* this, GlobalContext* globalCtx) {
+void EnMaYto_UpdateCollision(EnMaYto* this, GlobalContext* globalCtx) {
     if (this->actionFunc != func_80B9037C) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -1456,9 +1354,9 @@ void func_80B90D98(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 
-void EnMaYto_Blink(EnMaYto *this) {
-    if (this->unk_316 != 0) {
-        this->eyeTexIndex = this->unk_316;
+void EnMaYto_UpdateEyes(EnMaYto *this) {
+    if (this->overrideEyeTexIndex != 0) {
+        this->eyeTexIndex = this->overrideEyeTexIndex;
     } else if (this->blinkTimer == 0x64) {
         if (this->eyeTexIndex == 0) {
             this->blinkTimer = 0;
@@ -1476,18 +1374,16 @@ void EnMaYto_Blink(EnMaYto *this) {
 
 
 void func_80B90E50(EnMaYto *this, s16 arg1) {
-    EnMaYts* romani;
+    EnMaYts* romani = (EnMaYts*)this->actor.child;
 
-    romani = (EnMaYts*)this->actor.child;
     if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
         romani->unk_32C = arg1;
     }
 }
 
 void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
-    EnMaYts* romani;
+    EnMaYts* romani = (EnMaYts*)this->actor.child;
 
-    romani = (EnMaYts*)this->actor.child;
     if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
         romani->overrideEyeTexIndex = arg1;
         romani->mouthTexIndex = arg2;
@@ -1495,8 +1391,9 @@ void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
 }
 
 
+
 void EnMaYto_SetFaceExpression(EnMaYto *this, s16 arg1, s16 mouthIndex) {
-    this->unk_316 = arg1;
+    this->overrideEyeTexIndex = arg1;
     this->mouthTexIndex = mouthIndex;
 }
 
@@ -1579,15 +1476,9 @@ void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_80B90D98(this, globalCtx);
+    EnMaYto_UpdateCollision(this, globalCtx);
     func_80B90C78(this, globalCtx);
 }
-
-extern AnimationHeader D_06007E28;
-extern AnimationHeader D_06003D54;
-extern AnimationHeader D_0600A174;
-extern AnimationHeader D_060070EC;
-extern AnimationHeader D_06003D54;
 
 // OverrideLimbDraw
 s32 func_80B91154(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -1620,9 +1511,6 @@ void func_80B91250(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-extern Gfx D_06005430[];
-extern void* D_80B915C8[];
-extern void* D_80B915D8[];
 
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
@@ -1635,8 +1523,8 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B915C8[this->mouthTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B915D8[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyesTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      func_80B91154, func_80B91250, &this->actor);

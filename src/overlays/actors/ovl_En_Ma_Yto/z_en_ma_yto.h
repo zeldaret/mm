@@ -30,10 +30,10 @@ typedef struct EnMaYto {
     /* 0x310 */ s16 unk_310;
     /* 0x312 */ char unk_312[0x2]; // unused
     /* 0x314 */ s16 unk_314;
-    /* 0x316 */ s16 unk_316; // overrideEyeTexIndex?
+    /* 0x316 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex
     /* 0x318 */ s16 mouthTexIndex;
     /* 0x31A */ s16 eyeTexIndex;
-    /* 0x31C */ s16 blinkTimer; // blinkTimer?
+    /* 0x31C */ s16 blinkTimer;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ s16 unk_320;
     /* 0x322 */ u16 textId;
