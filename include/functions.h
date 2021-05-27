@@ -796,7 +796,7 @@ f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2);
 // void func_800B83BC(void);
 // void func_800B83F8(void);
 s32 func_800B84D0(Actor* actor, GlobalContext* globalCtx);
-UNK_TYPE4 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5);
+void func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5);
 void func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 uParm3, s32 uParm4);
 void func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 uParm3);
 void func_800B863C(Actor* actor, GlobalContext* globalCtx);
