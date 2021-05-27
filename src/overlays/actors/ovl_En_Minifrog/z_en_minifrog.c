@@ -108,7 +108,6 @@ Color_RGBA8 D_808A4D98[] = {
     { 200, 170, 0, 255 }, { 0, 170, 200, 255 }, { 210, 120, 100, 255 }, { 120, 130, 230, 255 }, { 190, 190, 190, 255 },
 };
 
-#ifdef NON_MATCHING
 void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMinifrog* this = THIS;
     int i;
@@ -120,12 +119,15 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_808A4D6C);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_808A4D40);
 
+
+
     if (D_808A4D88 == false) {
         for (i = 0; i < 2; i++) {
-            D_808A4D7C[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
+            D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
         D_808A4D88 = true;
     }
+
 
     this->frogIndex = (this->actor.params & 0xF);
     if (this->frogIndex >= 5) {
@@ -138,9 +140,10 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->flags = 0;
     this->timer = 0;
 
+    if (1) {}
     if (((this->actor.params & 0xF0) >> 4) == 0) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
-            ((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[this->frogIndex >> 8])) {
+            ((gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8] & (u8)D_808A4D7C[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->timer = 30;
@@ -164,7 +167,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
 
             // Frog has been returned
-            if (((u8)D_808A4D7C[this->frogIndex] & gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8])) {
+            if ((gSaveContext.perm.weekEventReg[D_808A4D7C[this->frogIndex] >> 8] & (u8)D_808A4D7C[this->frogIndex])) {
                 this->actionFunc = func_808A410C;
             } else {
                 this->actor.draw = NULL;
@@ -173,9 +176,6 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minifrog_0x808A3670/EnMinifrog_Init.asm")
-#endif
 
 void EnMinifrog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMinifrog* this = THIS;
@@ -247,46 +247,40 @@ void EnMinifrog_TurnToIdle(EnMinifrog* this) {
 }
 
 // EnMinifrog_SetCamera
-void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx);
-#ifdef NON_MATCHING
 void func_808A3B74(EnMinifrog* this, GlobalContext* globalCtx) {
-    Camera* camera = ACTIVE_CAM;
-    Vec3f vec1;
-    Vec3f vec2;
-    Vec3f vec3;
+    Vec3f pos;      // sp bc
     Vec3f vec5;
-    Vec3f vec4;
-    s16 pitch;
+    Vec3f vel;      // sp A4/A8/AC
+    Vec3f accel;    // sp 98/9C/A0
     s16 yaw;
+    s16 pitch;
+    Vec3f eye;      // sp 88/8C/90
     s32 i;
 
-    vec4 = camera->eye;
-    yaw = Math_Vec3f_Yaw(&vec4, &this->actor.world.pos);
-    pitch = -Math_Vec3f_Pitch(&vec4, &this->actor.world.pos);
+    eye = ACTIVE_CAM->eye;
+    yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
+    pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
 
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
     vec5.y = this->actor.world.pos.y - (5.0f * Math_SinS(pitch));
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
 
     for (i = 0; i < 5; i++) {
-        vec2.x = randPlusMinusPoint5Scaled(4.0f);
-        vec2.y = randPlusMinusPoint5Scaled(4.0f);
-        vec2.z = randPlusMinusPoint5Scaled(4.0f);
+        vel.x = randPlusMinusPoint5Scaled(4.0f);
+        vel.y = randPlusMinusPoint5Scaled(4.0f);
+        vel.z = randPlusMinusPoint5Scaled(4.0f);
 
-        vec3.x = -vec2.x * 0.1f;
-        vec3.y = -vec2.y * 0.1f;
-        vec3.z = -vec2.z * 0.1f;
+        accel.x = -vel.x * 0.1f;
+        accel.y = -vel.y * 0.1f;
+        accel.z = -vel.z * 0.1f;
 
-        vec1.x = vec5.x + vec2.x;
-        vec1.y = vec5.y + vec2.y;
-        vec1.z = vec5.z + vec2.z;
+        pos.x = vec5.x + vel.x;
+        pos.y = vec5.y + vel.y;
+        pos.z = vec5.z + vel.z;
 
-        func_800B0F80(globalCtx, &vec1, &vec2, &vec3, &D_808A4D90, &D_808A4D94, 300, 30, 10);
+        func_800B0F80(globalCtx, &pos, &vel, &accel, &D_808A4D90, &D_808A4D94, 300, 30, 10);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minifrog_0x808A3670/func_808A3B74.asm")
-#endif
 
 void func_808A3DA8(EnMinifrog* this, GlobalContext* globalCtx) {
     u8 flag;
