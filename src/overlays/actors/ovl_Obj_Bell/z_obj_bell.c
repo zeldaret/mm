@@ -111,42 +111,44 @@ s32 func_80A356D8(ObjBell* this) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A357A8.asm")
-// s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
-//     f32 temp_f0;
-//     s16 temp_v1;
-//     u8 temp_v0_2;
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A357A8.asm")
+s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
+    f32 temp_f0;
+    s16 temp_v1;
 
-//     if ((this->collider1.base.ocFlags1 & 2)) {
-//         this->collider1.base.ocFlags1 &= 0xFFFD;
-//         temp_v1 = this->dyna.actor.yawTowardsPlayer - this->unk_212;
-//         temp_f0 = this->unk_21C / 18000.0f;
-//         if (ABS_ALT(temp_v1) < 0x3FFC) {
-//             if (this->unk_214 == 0) {
-//                 if (temp_f0 > 0.18f) {
-//                     func_800B8D98(globalCtx, this, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer, 11.0f * temp_f0);
-//                     this->unk_214 = 0x1E;
-//                 }
-//             }
-//         }
-//     }
-//     if ((this->collider2.base.acFlags & 2)) {
-//         temp_v0_2 = this->dyna.actor.colChkInfo.damageEffect;
-//         this->collider2.base.acFlags &= 0xFFFD;
-//         this->unk_20E = 0xA;
-//         if (temp_v0_2 != 0xE) {
-//             if (temp_v0_2 == 0xF) {
-//                 Audio_PlayActorSound2(this, 0x28F3);
-//                 func_80A35510(this, 1);
-//             }
-//         } else {
-//             Audio_PlayActorSound2(this, 0x28F3);
-//             func_80A35510(this, 2);
-//             func_80A35510(this, 0);
-//         }
-//     }
-//     return 0;
-// }
+    if ((this->collider1.base.ocFlags1 & 2)) {
+        this->collider1.base.ocFlags1 &= 0xFFFD;
+        temp_v1 = this->dyna.actor.yawTowardsPlayer - this->unk_212;
+        temp_f0 = this->unk_21C / 18000.0f;
+        if (ABS_ALT(temp_v1) < 0x3FFC) {
+            if (this->unk_214 == 0) {
+                if (temp_f0 > 0.18f) {
+                    func_800B8D98(globalCtx, this, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer, 11.0f * temp_f0);
+                    this->unk_214 = 0x1E;
+                }
+            }
+        }
+    }
+    if ((this->collider2.base.acFlags & 2)) {
+        this->collider2.base.acFlags &= 0xFFFD;
+        this->unk_20E = 0xA;
+        switch (this->dyna.actor.colChkInfo.damageEffect) {
+            case 0xF:
+                Audio_PlayActorSound2(this, 0x28F3);
+                func_80A35510(this, 1);
+                break;
+            case 0xE:
+                Audio_PlayActorSound2(this, 0x28F3);
+                func_80A35510(this, 2);
+                break;
+            default:
+                func_80A35510(this, 0);
+                break;
+        }
+    }
+    return 0;
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A358FC.asm")
