@@ -5,9 +5,14 @@
 
 struct ObjMuPict;
 
+typedef void (*ObjMuPictActionFunc)(struct ObjMuPict*, GlobalContext*);
+
 typedef struct ObjMuPict {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC];
+    /* 0x144 */ ObjMuPictActionFunc actionFunc;
+    /* 0x148 */ s16 unk148;
+    /* 0x14A */ s16 unk14A;
+    /* 0x14C */ s16 unk14C;
 } ObjMuPict; // size = 0x150
 
 extern const ActorInit Obj_Mu_Pict_InitVars;
