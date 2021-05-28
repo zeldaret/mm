@@ -21,8 +21,10 @@ typedef struct EnWeatherTag {
 
 extern const ActorInit En_Weather_Tag_InitVars;
 
-extern s8 D_801BDBB8;
-extern s8 D_801BDBB4;
+extern u8 D_801BDBB8;
+extern u8 D_801BDBB4;
 extern u8 D_801BDBB0;
+
+extern s16 D_801F4E7A;
 
 #endif // Z_EN_WEATHER_TAG_H

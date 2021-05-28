@@ -3021,7 +3021,7 @@ void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
 // void func_801692C4(GlobalContext* globalCtx, UNK_TYPE1 uParm2);
 // void Play_SceneInit(GlobalContext* globalCtx, s32 sceneIndex, UNK_TYPE1 param_3);
-// void func_80169474(void);
+UNK_RET void func_80169474(GlobalContext* globalCtx, Vec3f* v1, Vec3f* v2);
 s32 func_801694DC(GlobalContext* globalCtx);
 s32 Play_GetActiveCameraIndex(GlobalContext* globalCtx);
 void func_80169590(GlobalContext* globalCtx, s16 param_2, s16 param_3);
