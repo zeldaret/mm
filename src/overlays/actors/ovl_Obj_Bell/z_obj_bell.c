@@ -72,11 +72,13 @@ ColliderSphereInit D_80A35EBC = {
     { 0, { { 0, 1100, 0 }, 74 }, 100 },
 };
 
-s32 D_80A35EE8[] = { 0x00000000, 0x00000000, 0xFF000000 };
+CollisionCheckInfoInit2 D_80A35EE8 = {
+    0, 0, 0, 0, MASS_IMMOVABLE,
+};
 
 // Damage Table
-s32 D_80A35EF4[] = { 0x010101E1, 0x01010101, 0xF1010101, 0x0101F101, 0x01010101, 0x01010101,
-                     0x01010101, 0x010101E1, 0x00000000, 0x00000000, 0x00000000 };
+DamageTable D_80A35EF4[] = { 0x010101E1, 0x01010101, 0xF1010101, 0x0101F101, 0x01010101, 0x01010101,
+                             0x01010101, 0x010101E1, 0x00000000, 0x00000000, 0x00000000 };
 
 extern CollisionHeader D_06001BA8;
 extern Gfx D_06000840[];
@@ -87,7 +89,56 @@ extern Gfx D_060008D0[];
 extern Gfx D_06000960[];
 extern Gfx D_060007A8[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
+s32 func_80A35510(ObjBell* this, s32 arg1) {
+    Vec3f bumperPos;
+    Vec3f newVec;
+    f32 phi_f0;
+    s32 phi_a3;
+
+    if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
+        phi_a3 = 1;
+    } else {
+        phi_a3 = 0;
+    }
+    if (arg1 != 0) {
+        if (arg1 != 1) {
+            if (arg1 != 2) {
+            } else {
+            block_19:
+                this->unk_21C += 9000.0f;
+            }
+        } else {
+            if (this->unk_21C > 3000.0f) {
+                phi_f0 = 750.0f;
+            } else {
+                phi_f0 = 3000.0f;
+            }
+            this->unk_21C += phi_f0;
+            goto block_19;
+        }
+    } else {
+        if (this->unk_21C > 1000.0f) {
+            phi_f0 = 250.0f;
+        } else {
+            phi_f0 = 1000.0f;
+        }
+        this->unk_21C += phi_f0;
+        goto block_19;
+    }
+    this->unk_20C = CLAMP(this->unk_20C, 0.0f, 18000.0f);
+    if (phi_a3 == 1) {
+        Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.info.bumper.hitPos);
+        Math_Vec3f_Copy(&newVec, &this->dyna.actor.world);
+        this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&bumperPos, &newVec);
+        if (this->unk_20C <= 0x4000 && this->unk_20C >= -0x4000) {
+            this->unk_20C -= 0x4000;
+        } else {
+            this->unk_20C += 0x4000;
+        }
+    }
+    return phi_a3;
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A356D8.asm")
