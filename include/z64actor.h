@@ -236,7 +236,9 @@ typedef struct {
     /* 0x380 */ Actor* doorActor;
     /* 0x384 */ UNK_TYPE1 unk384[0x10];
     /* 0x394 */ u8 unk394;
-    /* 0x395 */ UNK_TYPE1 pad395[0x37];
+    /* 0x395 */ UNK_TYPE1 pad395[0x2B];
+    /* 0x3C0 */ s32 unk3C0;
+    /* 0x3C4 */ UNK_TYPE1 pad3C4[0x8];
     /* 0x3CC */ s16 unk3CC;
     /* 0x3CE */ s8 unk3CE;
     /* 0x3CF */ UNK_TYPE1 pad3CF[0x361];

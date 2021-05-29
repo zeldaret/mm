@@ -2723,7 +2723,7 @@ SECTIONS
     ovl_En_Kakasi : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o(.text)
-        build/asm/overlays/ovl_En_Kakasi_data.o(.data)
+        build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o(.data)
         build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o(.rodata)
         build/asm/overlays/ovl_En_Kakasi_rodata.o(.rodata)
     }
