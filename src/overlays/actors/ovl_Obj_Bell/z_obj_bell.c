@@ -101,35 +101,36 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
     } else {
         phi_a3 = 0;
     }
-    if (arg1 != 0) {
-        if (arg1 != 1) {
-            if (arg1 != 2) {
+
+    switch (arg1) {
+        case 0:
+            if (this->unk_21C > 1000.0f) {
+                phi_f0 = 250.0f;
             } else {
-            block_19:
-                this->unk_21C += 9000.0f;
+                phi_f0 = 1000.0f;
             }
-        } else {
+            this->unk_21C += phi_f0;
+            break;
+        case 1:
             if (this->unk_21C > 3000.0f) {
                 phi_f0 = 750.0f;
             } else {
                 phi_f0 = 3000.0f;
             }
             this->unk_21C += phi_f0;
-            goto block_19;
-        }
-    } else {
-        if (this->unk_21C > 1000.0f) {
-            phi_f0 = 250.0f;
-        } else {
-            phi_f0 = 1000.0f;
-        }
-        this->unk_21C += phi_f0;
-        goto block_19;
+            break;
+        case 2:
+            break;
+
+        default:
+            break;
     }
+    this->unk_21C += 9000.0f;
+
     this->unk_20C = CLAMP(this->unk_20C, 0.0f, 18000.0f);
     if (phi_a3 == 1) {
         Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.info.bumper.hitPos);
-        Math_Vec3f_Copy(&newVec, &this->dyna.actor.world);
+        Math_Vec3f_Copy(&newVec, &this->dyna.actor.world.pos);
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&bumperPos, &newVec);
         if (this->unk_20C <= 0x4000 && this->unk_20C >= -0x4000) {
             this->unk_20C -= 0x4000;
