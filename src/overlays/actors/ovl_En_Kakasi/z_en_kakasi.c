@@ -152,7 +152,7 @@ u8  D_8097206C[] = {
 
 void EnKakasi_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnKakasi* this = THIS;
-    Collider_DestroyCylinder(globalCtx, &this->collider.base);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 #if NON_EQUIVILENT
@@ -299,21 +299,21 @@ void func_8096FA18(EnKakasi *this, GlobalContext *globalCtx) {
         player->world.pos.z = -190.0f;
     }
 
-    Math_SmoothScaleMaxMinS(&player->shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
+    Math_SmoothStepToS(&player->shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
 }
 
 // this goes off every frame of dancing the night away, and song teaching
 void func_8096FAAC(EnKakasi *this, GlobalContext* globalCtx) {
     if (this->cutsceneCamera != 0) {
-        Math_SmoothScaleMaxF(&this->unk214.x, this->unk238.x, 0.40000000596f, 4.0f);
-        Math_SmoothScaleMaxF(&this->unk214.y, this->unk238.y, 0.40000000596f, 4.0f);
-        Math_SmoothScaleMaxF(&this->unk214.z, this->unk238.z, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk214.x, this->unk238.x, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk214.y, this->unk238.y, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk214.z, this->unk238.z, 0.40000000596f, 4.0f);
 
-        Math_SmoothScaleMaxF(&this->unk220.x, this->unk244.x, 0.40000000596f, 4.0f);
-        Math_SmoothScaleMaxF(&this->unk220.y, this->unk244.y, 0.40000000596f, 4.0f);
-        Math_SmoothScaleMaxF(&this->unk220.z, this->unk244.z, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk220.x, this->unk244.x, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk220.y, this->unk244.y, 0.40000000596f, 4.0f);
+        Math_ApproachF(&this->unk220.z, this->unk244.z, 0.40000000596f, 4.0f);
         
-        Math_SmoothScaleMaxF(&this->unk20C, this->unk210, 0.3f, 10.0f);
+        Math_ApproachF(&this->unk20C, this->unk210, 0.3f, 10.0f);
         
         func_8016970C(globalCtx, this->cutsceneCamera, &this->unk220.x, &this->unk214.x);
         func_80169940(globalCtx, this->cutsceneCamera, this->unk20C);
@@ -334,7 +334,7 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
         this->unk190 = 8;
     }
     if (this->unk190 != 0) {
-        Math_SmoothScaleMaxF(&this->skelanime.animPlaybackSpeed, 1.0f, 0.1f, 0.2f);
+        Math_ApproachF(&this->skelanime.animPlaybackSpeed, 1.0f, 0.1f, 0.2f);
         this->actor.shape.rot.y = this->actor.shape.rot.y + 0x800;
     }
 }
@@ -351,12 +351,12 @@ void func_8096FC8C(EnKakasi *this) {
 void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
-    if ((gSaveContext.extra.unk10 != -4) && (gSaveContext.extra.unk10 != -8)) {
-        if ((gSaveContext.perm.time != 0x4000) && (gSaveContext.perm.time != 0xC000) 
-          && ((gSaveContext.owl.unk1 & 0x80) == 0)) {
+    if ((gSaveContext.respawnFlag != -4) && (gSaveContext.respawnFlag != -8)) {
+        if ((gSaveContext.time != 0x4000) && (gSaveContext.time != 0xC000) 
+          && ((gSaveContext.eventInf[1] & 0x80) == 0)) {
             if (this->actor.textId == 0) {
                 this->actor.textId = 0x1653;
-                gSaveContext.perm.weekEventReg[0x53] &= 0xFE;
+                gSaveContext.weekEventReg[0x53] &= 0xFE;
                 this->unk1AC = 5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= 0x10000;
@@ -386,7 +386,7 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
     s16 passedValue1;
     s16 passedValue2;
 
-    saveContextDay = gSaveContext.perm.day;
+    saveContextDay = gSaveContext.day;
     this->actor.textId = 0x1644;
     if (func_800B8718(this, globalCtx) != 0) {
         this->skelanime.animPlaybackSpeed = 1.0f;
@@ -411,7 +411,7 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
             func_8096F800(this, 1);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
-    } else if ((saveContextDay == 3) && (gSaveContext.perm.isNight != 0)) {
+    } else if ((saveContextDay == 3) && (gSaveContext.isNight != 0)) {
         this->skelanime.animPlaybackSpeed = 1.0f;
         if (this->animeIndex != 1) {
             func_8096F800(this, 1);
@@ -449,7 +449,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
     f32 currentAnimeFrame = this->skelanime.animCurrentFrame;
     u32 saveContextDay2;
 
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x7D0, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x7D0, 0);
     if ((this->actor.textId != 0x1644) && (this->animeFrameCount <= currentAnimeFrame) && (this->animeIndex == 7)) {
         func_8096F800(this, 3);
         this->unkCounter1A4 = 0;
@@ -607,9 +607,9 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
         func_80151938(globalCtx, this->actor.textId);
     }
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kakasi_0x8096F5E0/func_8097006C.asm")
-//#endif
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kakasi_0x8096F5E0/func_8097006C.asm")
+#endif
 
 // setup for.. ?
 void func_809705E4(EnKakasi* this, GlobalContext* globalCtx) {
@@ -654,7 +654,7 @@ void func_80970740(EnKakasi* this, GlobalContext* globalCtx) {
     Vec3f tempVec;
 
     func_8096FA18(this, globalCtx); // move player in front of scarecrow
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     if (this->unk1A8 == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -753,8 +753,8 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
     //u16 tempTextId; // remove and stack shrinks but adds two instructions
 
     tempAnimFrame = this->skelanime.animCurrentFrame;
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
-    Math_SmoothScaleMaxMinS(&player->base.shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&player->base.shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
 
     // this is setup, only goes off first frame
     if ((s16) this->unk190 == 0) {
@@ -867,7 +867,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
 // action func
 // goes off once at the start of dancing the night away, one frame, like a setup action func
 void func_80970F20(EnKakasi* this, GlobalContext *globalCtx) {
-    u32 currentDay = gSaveContext.perm.day;
+    u32 currentDay = gSaveContext.day;
 
     this->unk196 = 3;
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -882,7 +882,7 @@ void func_80970F20(EnKakasi* this, GlobalContext *globalCtx) {
 
     ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
     this->cutsceneCamera = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-    if ((currentDay == 3) && (gSaveContext.perm.isNight != 0)) {
+    if ((currentDay == 3) && (gSaveContext.isNight != 0)) {
         func_80971440(this); //setup for digging anime
     } else {
         func_801A2BB8(0x3E);
@@ -913,7 +913,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
 
     currentFrame = this->skelanime.animCurrentFrame;
     func_8096FA18(this, globalCtx); // move player in front of scarecrow
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     this->unk22C.y = this->actor.home.pos.y + 50.0f;
 
     this->unk238.x = D_80971E38[this->unk190].x;
@@ -998,23 +998,23 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
             }
             return;
         case 14:
-            Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
             if (this->unk204 == 0) {
                 player = PLAYER;
-                func_80169DCC(globalCtx, 0, func_80130784(0) & 0xFFFF, 
+                func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0) & 0xFFFF, 
                     player->unk3CE, 0xBFF, &player->unk3C0, player->unk3CC);
                 func_80169EFC(globalCtx);
 
                 if(0){}
-                if ((gSaveContext.perm.time >= 0xC001) || (gSaveContext.perm.time < 0x4000)) {
-                    gSaveContext.perm.time = 0x4000;
-                    gSaveContext.extra.unk10 = -4;
-                    gSaveContext.owl.unk2 = gSaveContext.owl.unk2 | 0x80;
+                if ((gSaveContext.time >= 0xC001) || (gSaveContext.time < 0x4000)) {
+                    gSaveContext.time = 0x4000;
+                    gSaveContext.respawnFlag = -4;
+                    gSaveContext.eventInf[2] |= 0x80;
                 } else {
-                    gSaveContext.perm.time = 0xC000;
-                    gSaveContext.extra.unk10 = -8;
+                    gSaveContext.time = 0xC000;
+                    gSaveContext.respawnFlag = -8;
                 }
-                gSaveContext.perm.weekEventReg[0x53] |= 1;
+                gSaveContext.weekEventReg[0x53] |= 1;
                 this->unk190 = 0;
                 this->actionFunc = func_80971430;
             }
@@ -1068,8 +1068,8 @@ void func_809714BC(EnKakasi* this, GlobalContext *globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.shape.rot.y + 0x3000;
-    Math_SmoothScaleMaxMinS(&this->unk190, 0x1F4, 5, 0x32, 0);
-    if ((globalCtx->unk18840 & 3) == 0) {
+    Math_SmoothStepToS(&this->unk190, 0x1F4, 5, 0x32, 0);
+    if ((globalCtx->gameplayFrames & 3) == 0) {
         Math_Vec3f_Copy( &tempWorldPos,  &this->actor.world.pos);
         tempWorldPos.y = this->actor.floorHeight;
         tempWorldPos.x += randPlusMinusPoint5Scaled(2.0f);
@@ -1087,9 +1087,9 @@ void func_809714BC(EnKakasi* this, GlobalContext *globalCtx) {
         }
     }
 
-    Math_SmoothScaleMaxF(&this->actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
+    Math_ApproachF(&this->actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->actor.shape.yOffset + 6000.0f) < 10.0f) {
-        gSaveContext.perm.weekEventReg[79] |= 8;
+        gSaveContext.weekEventReg[79] |= 8;
         func_800B7298(globalCtx, &this->actor, 6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->unk194 = 2;
@@ -1111,7 +1111,7 @@ void func_80971794(EnKakasi *this) {
 // resting in the ground after you he leaves having learned a song
 void func_809717D0(EnKakasi* this, GlobalContext* globalCtx) {
     //if (((*(&gSaveContext + 0xF47) & 8) != 0) && (this->actor.xzDistToPlayer < this->unk250)) {
-    if (((gSaveContext.perm.weekEventReg[79]  & 8) != 0) 
+    if (((gSaveContext.weekEventReg[79]  & 8) != 0) 
         && (this->actor.xzDistToPlayer < this->unk250)
         && ((gGameInfo->data[2401] != 0) || (globalCtx->msgCtx.unk1202A == 0xD)) ) {
             this->actor.flags &= 0xF7FFFFFF;
@@ -1153,13 +1153,13 @@ void func_8097193C(EnKakasi* this, GlobalContext *globalCtx) {
         func_8096F800(&this->actor, 1);
     }
     if (this->actor.shape.yOffset < -10.0f) {
-        if ((globalCtx->unk18840 & 7) == 0) {
+        if ((globalCtx->gameplayFrames & 7) == 0) {
             func_800BBDAC(globalCtx, &this->actor, 
                 &this->actor.world, this->actor.shape.shadowScale - 20.0f,
                 0xA, 8.0f, 500, 0xA, 1);
             Audio_PlayActorSound2(&this->actor, 0x3987U);
         }
-        Math_SmoothScaleMaxF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
+        Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
         return;
     }
     func_80971A38(&this->actor);
@@ -1174,7 +1174,7 @@ void func_80971A38(EnKakasi *this) {
 
 // action func
 void func_80971A64(EnKakasi* this, GlobalContext* globalCtx) {
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
     if (func_800B84D0(this, globalCtx) != 0) {
         this->actionFunc = func_80971AD4;
         return;
@@ -1184,7 +1184,7 @@ void func_80971A64(EnKakasi* this, GlobalContext* globalCtx) {
 
 // action func
 void func_80971AD4(EnKakasi* this, GlobalContext *globalCtx) {
-    Math_SmoothScaleMaxMinS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
     
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
         func_801477B4(globalCtx);
@@ -1227,9 +1227,9 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
     if (this->actor.draw != 0) {
-        Collider_UpdateCylinder( &this->actor, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        Collider_UpdateCylinder( &this->actor, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
     }
 }
 
