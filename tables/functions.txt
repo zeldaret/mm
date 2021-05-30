@@ -8029,7 +8029,7 @@
     0x8096F4DC:("BgF40Swlift_Draw",),
     0x8096F5E0:("EnKakasi_Destroy",),
     0x8096F60C:("EnKakasi_Init",),
-    0x8096F800:("func_8096F800",),
+    0x8096F800:("EnKakasi_SetAnimation",),
     0x8096F88C:("func_8096F88C",),
     0x8096F8D8:("func_8096F8D8",),
     0x8096FA18:("func_8096FA18",),

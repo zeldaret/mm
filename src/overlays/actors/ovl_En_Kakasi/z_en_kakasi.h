@@ -6,16 +6,17 @@
 struct EnKakasi;
 
 typedef void (*EnKakasiActionFunc)(struct EnKakasi*, GlobalContext*);
+typedef void (*EnKakasiUnkFunc)(GlobalContext*, struct EnKakasi*);
 
 typedef struct EnKakasi {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE pad144; // this ISN'T the function pointer? weird
+    /* 0x144 */ EnKakasiUnkFunc unkFunc; // used for one z_snap calling function?
     /* 0x148 */ EnKakasiActionFunc actionFunc;
     /* 0x14C */ SkelAnime skelanime;
-    /* 0x190 */ s16 unk190; // max:8, incremented in multiple places
+    /* 0x190 */ s16 unk190; // max:8, incremented in multiple places, used as index
     /* 0x192 */ s16 unk192; // 30 written to here
     /* 0x194 */ s16 unk194; // set by params, after params set to 2?
-    /* 0x196 */ s16 unk196; // some sort of state?
+    /* 0x196 */ s16 unk196; // some sort of state? 0 if just standing around
     /* 0x198 */ s16 unk198;
     /* 0x19A */ UNK_TYPE1 pad19A[0x6];
     /* 0x1A0 */ s32 animeIndex;
@@ -39,7 +40,7 @@ typedef struct EnKakasi {
     /* 0x238 */ Vec3f unk238; //copied from D_80971E38[unk190]
     /* 0x244 */ Vec3f unk244;
     /* 0x250 */ f32 unk250; // set by params, later set to 40f or 80f
-    /* 0x254 */ ColliderCylinder* collider;
+    /* 0x254 */ ColliderCylinder collider;
 
 } EnKakasi; // size = 0x2A0
 

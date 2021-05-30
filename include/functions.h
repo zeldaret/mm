@@ -2233,7 +2233,7 @@ void func_80123DA4(ActorPlayer* player);
 // void func_80123F2C(void);
 // void func_80123F48(void);
 // void func_80124020(void);
-u32 func_8012403C(GlobalContext* globalCtx);
+u32 func_8012403C(GlobalContext* globalCtx); // returns worn mask
 void func_8012404C(GlobalContext* globalCtx);
 // void func_8012405C(void);
 // void func_80124088(void);
@@ -2672,7 +2672,7 @@ void func_8013A41C(s32 flag);
 void func_8013A46C(s32 flag);
 u32 func_8013A4C4(s32 flag);
 s16 func_8013A504(s16 val);
-s32 func_8013A530(Actor* actor, GlobalContext* globalCtx, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
 // void func_8013A7C0(void);
 // void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 // void func_8013AB00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);

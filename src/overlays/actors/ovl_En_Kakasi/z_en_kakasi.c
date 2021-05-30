@@ -14,8 +14,8 @@ void func_80970A10(EnKakasi* this, GlobalContext *globalCtx);
 void func_8096FC8C(EnKakasi* this);
 void func_8096FDE8(EnKakasi* this);
 
-// lot of action functions
-void func_8096F88C(EnKakasi* this, GlobalContext* globalCtx);
+void func_8096F88C(GlobalContext *globalCtx, EnKakasi* this);
+
 void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx);
 void func_8096FE00(EnKakasi* this, GlobalContext* globalCtx);
 void func_80970658(EnKakasi* this, GlobalContext* globalCtx);
@@ -43,12 +43,12 @@ void func_80970FF8(EnKakasi *this);
 void func_80971CE0(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor);
 
 ColliderCylinderInit D_80971D80[] = { // col init
-    0x0A000939, 0x20010000, 0x00000000, 0xF7CFFFFF,
-    0x00000000, 0xF7CFFFFF, 0x00000000, 0x00050100,
-    0x00140046, 0x00000000, 0x00000000,
+    0x0A000939, 0x20010000, 0.0f, 0xF7CFFFFF,
+    0.0f, 0xF7CFFFFF, 0.0f, 0x00050100,
+    0x00140046, 0.0f, 0.0f,
 };
 // cant use this until we match init
-//static ColliderCylinderInit sCylinderInit = {
+//static ColliderCylinderInit D_80971D80 = { // sCylinderInit 
     //{ COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     //{ ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     //{ 20, 70, 0, { 0, 0, 0 } },
@@ -66,76 +66,75 @@ const ActorInit En_Kakasi_InitVars = {
     (ActorFunc)EnKakasi_Draw,
 };
 
-// todo: find a way to painlessly turn these into 0.0f notation
 Vec3f D_80971DCC[] = {
-    {0x00000000, 0x42700000, 0x42700000},
-    {0x42200000, 0x42200000, 0x42480000},
-    {0xC2200000, 0x42200000, 0x42480000},
-    {0x42200000, 0x41A00000, 0x42DC0000},
-    {0xC2200000, 0x41A00000, 0x42DC0000},
-    {0x00000000, 0x42A00000, 0x42700000},
-    {0x42480000, 0x42200000, 0xC1F00000},
-    {0xC2480000, 0x42200000, 0xC1F00000},
-    {0x00000000, 0x42480000, 0x42700000},
+    {0.0f, 60.0f, 60.0f},
+    {40.0f, 40.0f, 50.0f},
+    {-40.0f, 40.0f, 50.0f},
+    {40.0f, 20.0f, 110.0f},
+    {-40.0f, 20.0f, 110.0f},
+    {0.0f, 80.0f, 60.0f},
+    {50.0f, 40.0f, -30.0f},
+    {-50.0f, 40.0f, -30.0f},
+    {0.0f, 50.0f, 60.0f},
 };
 Vec3f D_80971E38[] = {
-    {0x00000000, 0x425C0000, 0x42700000,},
-    {0x00000000, 0x425C0000, 0x42700000,},
-    {0xC2A00000, 0x420C0000, 0x41700000,},
-    {0x42A00000, 0x42340000, 0x41700000,},
-    {0xC1200000, 0x420C0000, 0x42820000,},
-    {0x00000000, 0x42DC0000, 0x43340000,},
-    {0x00000000, 0x42700000, 0x428C0000,},
-    {0x00000000, 0x42700000, 0x428C0000,},
-    {0xC2A00000, 0x42480000, 0x42200000,},
-    {0x00000000, 0xC1200000, 0x42480000,},
-    {0x42A00000, 0x42480000, 0x42200000,},
-    {0x00000000, 0x42F00000, 0x42200000,},
-    {0x00000000, 0x41E00000, 0xC2480000,},
-    {0x00000000, 0x42700000, 0x42480000,},
-    {0x00000000, 0x42A00000, 0x43200000,},
+    {0.0f, 55.0f, 60.0f,},
+    {0.0f, 55.0f, 60.0f,},
+    {-80.0f, 350.0f, 15.0f,},
+    {80.0f, 45.0f, 15.0f,},
+    {-10.0f, 350.0f, 65.0f,},
+    {0.0f, 110.0f, 180.0f,},
+    {0.0f, 60.0f, 70.0f,},
+    {0.0f, 60.0f, 70.0f,},
+    {-80.0f, 50.0f, 40.0f,},
+    {0.0f, -10.0f, 50.0f,},
+    {80.0f, 50.0f, 40.0f,},
+    {0.0f, 120.0f, 40.0f,},
+    {0.0f, 28.0f, -50.0f,},
+    {0.0f, 60.0f, 50.0f,},
+    {0.0f, 80.0f, 160.0f,},
 };
 
 Vec3f D_80971EEC[] = {
-    {0x41400000, 0x3F800000, 0x40000000,},
-    {0x41400000, 0x3F800000, 0x40000000,},
-    {0x40000000, 0xC0C00000, 0x00000000,},
-    {0x41400000, 0xC0C00000, 0xC1200000,},
-    {0xC2B00000, 0x41600000, 0xC1200000,},
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0x00000000, 0xC1200000, 0x00000000,},
-    {0x00000000, 0xC1200000, 0x00000000,},
-    {0x00000000, 0xC1200000, 0x00000000,},
-    {0x00000000, 0xC1200000, 0x00000000,},
-    {0x00000000, 0xC1200000, 0x00000000,},
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0x00000000, 0x00000000, 0x00000000,},
+    {12.0f, 1.0f, 2.0f,},
+    {12.0f, 1.0f, 2.0f,},
+    {2.0f, -6.0f, 0.0f,},
+    {12.0f, -6.0f, -10.0f,},
+    {-88.0f, 14.0, -10.0f,},
+    {0.0f, 0.0f, 0.0f,},
+    {0.0f, 0.0f, 0.0f,},
+    {0.0f, 0.0f, 0.0f,},
+    {0.0f, -10.0f, 0.0f,},
+    {0.0f, -10.0f, 0.0f,},
+    {0.0f, -10.0f, 0.0f,},
+    {0.0f, -10.0f, 0.0f,},
+    {0.0f, -10.0f, 0.0f,},
+    {0.0f, 0.0f, 0.0f,},
+    {0.0f, 0.0f, 0.0f,},
 };
 
 Vec3f D_80971FA0[] = {
-    {0xC2480000, 0x43200000, 0xC2200000,},
-    {0xC2480000, 0x43200000, 0xC2200000,},
-    {0xC1A00000, 0x42A00000, 0x42700000,},
-    {0x42640000, 0x42700000, 0x42F00000,},
-    {0x41D80000, 0x42A00000, 0x42700000,},
-    {0xC0400000, 0x42480000, 0x428C0000,},
+    {-50.0f, 160.0f, -40.0f,},
+    {-50.0f, 160.0f, -40.0f,},
+    {-120.0f, 80.0f, 60.0f,},
+    {57.0f, 60.0f, 120.0f,},
+    {27.0f, 80.0f, 60.0f,},
+    {-3.0f, 50.0f, 70.0f,},
 };
 
 Vec3f D_80971FE8[] = {
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0x00000000, 0x00000000, 0x00000000,},
-    {0xC1200000, 0xC0A00000, 0x00000000,},
-    {0x41200000, 0xC1200000, 0x40E00000,},
-    {0x41A00000, 0x40A00000, 0x40000000,},
-    {0x41200000, 0x40A00000, 0x40000000,},
+    {0.0f, 0.0f, 0.0f,},
+    {0.0f, 0.0f, 0.0f,},
+    {-10.0f, -5.0f, 0.0f,},
+    {10.0f, -10.0f, 7.0f,},
+    {20.0f, 5.0f, 2.0f,},
+    {10.0f, 5.0f, 2.0f,},
 };
 
-Vec3f D_80972030 = { 0xC0400000, 0x42480000, 0x42B40000, };
+Vec3f D_80972030 = { -3.0f, 50.0f, 90.0f, };
 
 // offest possition used for digging action func
-Vec3f D_8097203C = { 0x41200000, 0xC1700000, 0x40000000, };
+Vec3f D_8097203C = { 10.0f, -15.0, 2.0f, };
 
 // rename: animations
 AnimationHeader* D_80972048[] = { 
@@ -155,92 +154,90 @@ void EnKakasi_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#if NON_EQUIVILENT
-// not even close
+#if NON_MATCHING
+// the cutscene loop is wrong, however with the ugly loop:
+//   its only regalloc and two instructions swapped
 void EnKakasi_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnKakasi* this = THIS;
-    //EnKakasi* thisTemp = this;
     s16 zRot;
-    s16 xRot;
-    //s16 getCutsceneReturn;
-    //s16 cutsceneTemp2;
 
-    //s16 tempCutscene;
     int tempCutscene; // permuter swears this is an int, but why
     s32 i;// = 0;
+    s16* cutscenePointer;// = this->actorCutscenes;
+    //EnKakasi* cutscenePointer;// = this->actorCutscenes;
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider.base, &this->actor, &D_80971D80);
-    SkelAnime_InitSV(globalCtx, &this->skelanime, &D_060065B0, &D_06000214, 0, 0, 0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80971D80);
+    SkelAnime_InitSV(globalCtx, &this->skelanime, D_060065B0, D_06000214, 0, 0, 0);
 
     this->unk250 = ((this->actor.params >> 8) & 0xFF) * 20.0f;
     if (this->unk250 < 40.0f) {
         this->unk250 = 40.0f;
     }
 
-    //zRot = this->actor.world.rot.z;
-    //xRot = this->actor.world.rot.x;
+    zRot = this->actor.world.rot.z; // cannot optimize out, we load it before we set to zero
     this->actor.world.rot.z = 0;
     this->actor.targetMode = 0;
-    //this->unkHeight = (((f32) zRot * 20.0f) + 60.0f);
-    this->unkHeight = ((this->actor.world.rot.z * 20.0f) + 60.0f);
-    //if (((s32) xRot > 0) && ((s32) xRot < 8)) {
+    this->unkHeight = (( zRot * 20.0f) + 60.0f);
     if ((this->actor.world.rot.x > 0) && (this->actor.world.rot.x < 8)) {
-        this->actor.targetMode = this->actor.world.rot.x--;
+        this->actor.targetMode = this->actor.world.rot.x - 1;
     }
-
-    // combined with the temp below, aligns the Actorcutscene_getadd call and gSaveContext load
-    if (!gSaveContext.perm.weekEventReg) { }  
 
     this->unk194 = (this->actor.params & 1);
     this->actor.world.rot.x = 0;
     this->actor.flags |= 0x400;
     this->actor.colChkInfo.mass = 0xFF;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetScale(thisx, 0.01f);
+    Actor_SetScale(&this->actor, 0.01f);
 
-    for(tempCutscene = this->actor.cutscene; tempCutscene != -1; ++i ){
-        //if (!thisx){}
-        this->actorCutscenes[i] = tempCutscene;
-        tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
-        //d_label: ;
-    }
-    // I'm not entirely convinced it's a for
-    //tempCutscene = this->actor.cutscene;
-    //if (tempCutscene != -1) {
-        //do{
-            //this->actorCutscenes[i++] = tempCutscene;
-            //tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
-        //} while( tempCutscene != -1);
+    //for(tempCutscene = this->actor.cutscene; tempCutscene != -1; ++i ){
+        //this->actorCutscenes[i] = tempCutscene;
+        //tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
     //}
 
-    xRot = gSaveContext.perm.weekEventReg[79];
-    if (this->unk194 != 0) {
-        this->unk194 = 2;
-        this->unk250 = 80.0f;
-        func_80971794(this); //idle after dig
-        //if ((gSaveContext.perm.weekEventReg[79] & 8) == 0) {
-        if ((xRot & 8) == 0) {
-            Actor_SetHeight(thisx, 60.0f);
-            this->actionFunc = func_8096F88C;
-            if ((gSaveContext.perm.weekEventReg[83] & 1) == 0) {
-                func_8096FDE8(this);
-                return;
-            }
-            func_8096FC8C(this);
-            return;
-        }
-        //func_80971794(this);
-        return;
+    // I'm not entirely convinced it's a for
+    //cutscenePointer = this->actorCutscenes;
+    //tempCutscene = this->actor.cutscene; // actor->cuscene : 0x38
+    //while (tempCutscene != -1 ){
+        ////*cutscenePointer = tempCutscene;
+        ////tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
+        //*cutscenePointer = ActorCutscene_GetAdditionalCutscene(cutscenePointer-1);
+        //cutscenePointer++;
+    //}
+
+    // looks like we point at actor, and offset by the array last second???
+    // BEST LOOP CANDIDATE
+    cutscenePointer = this;
+    tempCutscene = this->actor.cutscene; // actor->cuscene : 0x38
+    while (tempCutscene != -1 ){
+        ((EnKakasi*) cutscenePointer)->actorCutscenes[0] = tempCutscene;
+        tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
+        cutscenePointer++;
     }
-    func_80971794(this); //idle after dig
+
+    if (this->unk194 != 0) {
+        if ((gSaveContext.weekEventReg[79] & 8) != 0) {
+          this->unk194 = 2;
+          this->unk250 = 80.0f;
+          func_80971794(this); //idle after dig
+        } else {
+            Actor_SetHeight(thisx, 60.0f);
+            this->unkFunc = func_8096F88C;
+            if ((gSaveContext.weekEventReg[83] & 1) != 0) {
+                func_8096FC8C(this);
+            } else {
+                func_8096FDE8(this);
+            }
+        }
+    } else {
+       func_80971794(this); //idle after dig
+    }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kakasi_0x8096F5E0/EnKakasi_Init.asm")
 #endif
 
-// change dancing animation? maybe all animations?
-void func_8096F800(EnKakasi *this, s32 offset) {   
-    this->animeIndex = offset;
+void EnKakasi_SetAnimation(EnKakasi *this, s32 index) { // func_8096F800
+    this->animeIndex = index;
     this->animeFrameCount = SkelAnime_GetFrameCount(D_80972048[this->animeIndex]);
     // 1: regular playback speed, 0: starting frame
     SkelAnime_ChangeAnim(&this->skelanime, D_80972048[this->animeIndex],
@@ -248,12 +245,10 @@ void func_8096F800(EnKakasi *this, s32 offset) {
          D_8097206C[this->animeIndex], -4.0f);
 }
 
-// action func
-// does NOT go off in the shop? set by init?
-// guess the code to change it is in update? this is NOT after it leaves
-void func_8096F88C(EnKakasi* this, GlobalContext *globalCtx) {
-    func_8013A530( this, globalCtx, 0x7, 
-      &globalCtx->state.input[1].press.errno, &globalCtx->view.gfxCtx, 280.0f, 1800.0f, -1);
+// set by init, called... nowhere? left over from OOT?
+void func_8096F88C(GlobalContext *globalCtx, EnKakasi* this) {
+    func_8013A530(globalCtx, &this->actor, 0x7, 
+        &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
 }
 
 // goes off every frame of idle if draw is set
@@ -287,7 +282,7 @@ void func_8096F8D8(EnKakasi *this) {
 
 // moves the player's position relative to scarecrow during song teach, also each frame of dance the night away
 void func_8096FA18(EnKakasi *this, GlobalContext *globalCtx) {
-    Actor* player = PLAYER;
+    Actor* player = &PLAYER->base;
     s16 sceneNum;
 
     sceneNum = globalCtx->sceneNum;
@@ -320,7 +315,6 @@ void func_8096FAAC(EnKakasi *this, GlobalContext* globalCtx) {
     }
 }
 
-// only called from func_80970740
 // goes off every frame of song teach
 void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
     if ((globalCtx->msgCtx.unk12048 == 0) || (globalCtx->msgCtx.unk12048 == 1) || (globalCtx->msgCtx.unk12048 == 2) 
@@ -328,7 +322,7 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
         this->unk190++;
     }
     if ((this->unk190 != 0) && (this->animeIndex != 1)) {
-        func_8096F800(this, 1);
+        EnKakasi_SetAnimation(this, 1);
     }
     if (this->unk190 >= 9) {
         this->unk190 = 8;
@@ -341,10 +335,9 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
 
 // init extension
 void func_8096FC8C(EnKakasi *this) {
-    func_8096F800(this, 7);
+    EnKakasi_SetAnimation(this, 7);
     this->actionFunc = func_8096FCC4;
 }
-
 
 // action func
 // goes off every frame after scene reload after dancing all night action (fade from black, pause for dawn of day text, continue until he starts talking)
@@ -376,7 +369,7 @@ void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx) {
 // init extension standing
 void func_8096FDE8(EnKakasi* this) {
     this->unk196 = 0;
-    this->actionFunc = func_8096FE00;
+    this->actionFunc = func_8096FE00; // regular idle func
 }
 
 // action func
@@ -403,21 +396,21 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
         if ((this->actor.projectedPos.z > -20.0f) 
           && ((s32) passedValue1 > 0) && ((s32) passedValue1 < 0x140) 
           && ((s32) passedValue2 > 0) && ((s32) passedValue2 < 0xF0) && (this->animeIndex != 1)) {
-            func_8096F800(this, 1);
+            EnKakasi_SetAnimation(this, 1);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
-    } else if (func_8012403C(globalCtx) == 0xE) {
+    } else if (func_8012403C(globalCtx) == 0xE) { // wearing kamaro mask
         if (this->animeIndex != 1) {
-            func_8096F800(this, 1);
+            EnKakasi_SetAnimation(this, 1);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
     } else if ((saveContextDay == 3) && (gSaveContext.isNight != 0)) {
         this->skelanime.animPlaybackSpeed = 1.0f;
         if (this->animeIndex != 1) {
-            func_8096F800(this, 1);
+            EnKakasi_SetAnimation(this, 1);
         }
     } else if (this->animeIndex != 8) {
-        func_8096F800(this, 8);
+        EnKakasi_SetAnimation(this, 8);
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -428,12 +421,12 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
 // goes off once when you start talking to him from idle, but NOT from day/night transition
 void func_80970008(EnKakasi *this) {
     if (this->animeIndex != 1) {
-        func_8096F800(this, 1);
+        EnKakasi_SetAnimation(this, 1);
     }
 
     this->unk1AC = 5;
     this->unk196 = 1;
-    func_8096F800(this, 3);
+    EnKakasi_SetAnimation(this, 3);
     this->actionFunc = func_8097006C;
 }
 
@@ -445,20 +438,20 @@ void func_80970008(EnKakasi *this) {
 void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
     // prob save context var
     //SaveContext* sCtx;// = &gSaveContext;
-    u32 saveContextDay = gSaveContext.perm.day; 
+    u32 saveContextDay = gSaveContext.day; 
     f32 currentAnimeFrame = this->skelanime.animCurrentFrame;
     u32 saveContextDay2;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x7D0, 0);
     if ((this->actor.textId != 0x1644) && (this->animeFrameCount <= currentAnimeFrame) && (this->animeIndex == 7)) {
-        func_8096F800(this, 3);
+        EnKakasi_SetAnimation(this, 3);
         this->unkCounter1A4 = 0;
     }
     if ((this->actor.textId == 0x1651) || (this->actor.textId == 0x1659)) {
         if ((this->animeFrameCount <= currentAnimeFrame) && (this->animeIndex != 3)) {
             if (++this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
-                func_8096F800(this, 3);
+                EnKakasi_SetAnimation(this, 3);
             }
         }
     }
@@ -477,19 +470,19 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
 
             if (this->actor.textId == 0x1653) {
                 // this is the only way i've found to get savecontext to load twice and use the right v
-                saveContextDay2 = gSaveContext.perm.day; // I hope this is a fake match
+                saveContextDay2 = gSaveContext.day; // I hope this is a fake match
 
                 // 1A0 loads AFTER globalcontext from above in vanilla
                 // also delay slot shenanigans
                 //fake_label: ;
                 if (this->animeIndex != 1) {
-                    func_8096F800(this, 1);
+                    EnKakasi_SetAnimation(this, 1);
                 }
         
-                //if ((gSaveContext.perm.day == 3) && (gSaveContext.perm.isNight != 0)) {
-                if ((saveContextDay2 == 3) && (gSaveContext.perm.isNight != 0)) {
+                //if ((gSaveContext.day == 3) && (gSaveContext.isNight != 0)) {
+                if ((saveContextDay2 == 3) && (gSaveContext.isNight != 0)) {
                     this->actor.textId = 0x164F;
-                } else if (gSaveContext.perm.isNight != 0) {
+                } else if (gSaveContext.isNight != 0) {
                     this->actor.textId = 0x164E;
                 } else {
                     this->actor.textId = 0x1645;
@@ -522,26 +515,26 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
             } else if ((this->actor.textId == 0x1645) || (this->actor.textId == 0x164E)) {
                 this->actor.textId = 0x1650;
                 if (this->animeIndex != 1) {
-                    func_8096F800(this, 1);
+                    EnKakasi_SetAnimation(this, 1);
                 }
                 this->unk1AC = 4;
             } else if (this->actor.textId == 0x1644) {
                 if (this->animeIndex != 1) {
-                    func_8096F800(this, 1);
+                    EnKakasi_SetAnimation(this, 1);
                 }
-                if (gSaveContext.perm.isNight != 0) {
+                if (gSaveContext.isNight != 0) {
                     this->actor.textId = 0x164E;
                 } else {
                     this->actor.textId = 0x1645;
                 }
             } else if (this->actor.textId == 0x164F) {
                 if (this->animeIndex != 1) {
-                    func_8096F800(this, 1);
+                    EnKakasi_SetAnimation(this, 1);
                 }
                 this->actor.textId = 0x165A;
             } else if (this->actor.textId == 0x1651) {
                 if (this->animeIndex != 1) {
-                    func_8096F800(this, 1);
+                    EnKakasi_SetAnimation(this, 1);
                 }
                 this->actor.textId = 0x1654;
             } else if (this->actor.textId == 0x1654) {
@@ -583,12 +576,12 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0x1658;
                 } else if (this->actor.textId == 0x165C) {
                     this->actor.textId = 0x165E;
-                } else if ((saveContextDay == 3) && (gSaveContext.perm.isNight != 0)) {
+                } else if ((saveContextDay == 3) && (gSaveContext.isNight != 0)) {
                     this->actor.textId = 0x164F;
                 } else {
                     this->actor.textId = 0x1652;
                 }
-                func_8096F800(this, 2);
+                EnKakasi_SetAnimation(this, 2);
             } else {
                 func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
                 if (this->actor.textId == 0x1656) {
@@ -600,7 +593,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                 }
                 this->unkCounter1A4 = 0;
                 if (this->animeIndex != 0) {
-                    func_8096F800(this, 0);
+                    EnKakasi_SetAnimation(this, 0);
                 }
             }
         }
@@ -618,7 +611,7 @@ void func_809705E4(EnKakasi* this, GlobalContext* globalCtx) {
     this->cutsceneCamera = 0;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
-    func_8096F800(this, 4);
+    EnKakasi_SetAnimation(this, 4);
     this->unk196 = 2;
     this->actionFunc = func_80970658;
 }
@@ -697,13 +690,13 @@ void func_80970740(EnKakasi* this, GlobalContext* globalCtx) {
             this->actor.textId = 0x1647;
             this->unk1A8 = 2;
             this->unk1AC = 5;
-            func_8096F800(this, 0);
+            EnKakasi_SetAnimation(this, 0);
             this->actionFunc = func_8097006C;
 
         } else if (globalCtx->msgCtx.unk1202A == 3) {
             this->unk192 = 0x1E;
             this->skelanime.animPlaybackSpeed = 2.0f;
-            func_8096F800(this, 2);
+            EnKakasi_SetAnimation(this, 2);
             this->actionFunc = func_80970978;//post-song-teach twirl
         }
     }
@@ -720,7 +713,7 @@ void func_80970978(EnKakasi* this, GlobalContext *globalCtx) {
     temp192 = this->unk192;
     tempAnimeFrame = this->skelanime.animCurrentFrame;
     if ((temp192 == 0) && (this->animeIndex != 4)) {
-        func_8096F800(this, 4);
+        EnKakasi_SetAnimation(this, 4);
         this->skelanime.animPlaybackSpeed = 2.0f;
         temp192 = this->unk192;
     }
@@ -735,7 +728,7 @@ void func_80970A10(EnKakasi *this, GlobalContext *globalCtx) {
     globalCtx->msgCtx.unk1202A = 4;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    func_8096F800(this, 2);
+    EnKakasi_SetAnimation(this, 2);
     this->cutsceneCamera = 0;
     this->unk1AC = 5;
     this->unk1A8 = 1;
@@ -768,13 +761,13 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
     if ((this->actor.textId == 0x1648) && (this->animeIndex == 2) && (this->animeFrameCount <= tempAnimFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4>= 2) {
-            func_8096F800(this, 0); // reach this point when he finishes dancing idle
+            EnKakasi_SetAnimation(this, 0); // reach this point when he finishes dancing idle
         }
     }
     if ((this->actor.textId == 0x164B) && (this->animeIndex == 0) && (this->animeFrameCount <= tempAnimFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
-            func_8096F800(this, 3);
+            EnKakasi_SetAnimation(this, 3);
         }
     }
 
@@ -827,7 +820,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
                 func_800B7298(globalCtx, &this->actor, 7);
                 this->actor.textId = 0x1649;
                 if (this->animeIndex != 0) {
-                    func_8096F800(this, 0);
+                    EnKakasi_SetAnimation(this, 0);
                 }
 
             } else if (this->actor.textId == 0x1649) {
@@ -839,7 +832,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
 
             } else if (this->actor.textId == 0x164B) {
                 this->actor.textId = 0x164C;
-                func_8096F800(this, 4);
+                EnKakasi_SetAnimation(this, 4);
 
             } else {
                 if ((this->actor.textId == 0x164C) 
@@ -896,7 +889,7 @@ void func_80970FF8(EnKakasi *this) {
     this->unkCounter1A4 = 0;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
-    func_8096F800(this, 4);
+    EnKakasi_SetAnimation(this, 4);
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     func_8016566C(0xB4);
     this->actionFunc = func_80971064;
@@ -920,7 +913,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
     this->unk238.y = D_80971E38[this->unk190].y;
     this->unk238.z = D_80971E38[this->unk190].z;
     Math_Vec3f_Copy(&localVec3f, &this->unk238);
-    func_8010CAA0(&this->actor.home, &localVec3f, &this->unk238, 1);
+    func_8010CAA0(&this->actor.home.pos, &localVec3f, &this->unk238, 1);
 
     // we assign unk244 here but then under the next condition we set unk220->unk244?
     // bug? think this condition was supposed to important, was optimized out without knowing
@@ -947,7 +940,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
             if ((this->unk204 == 0) && (this->animeFrameCount <= currentFrame)) {
                 this->unk204 = 0x14;
                 this->unk190++;
-                func_8096F800(this, 1);
+                EnKakasi_SetAnimation(this, 1);
             }
             return;
         case 2:
@@ -1029,7 +1022,7 @@ void func_80971430(EnKakasi* this, GlobalContext* globalCtx) { }
 // setup for digging animation
 void func_80971440(EnKakasi *this){
     if (this->animeIndex != 1) {
-        func_8096F800(&this->actor, 1);
+        EnKakasi_SetAnimation(this, 1);
     }
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
@@ -1150,19 +1143,19 @@ void func_8097193C(EnKakasi* this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y += 0x3000;
 
     if (this->animeIndex != 1) {
-        func_8096F800(&this->actor, 1);
+        EnKakasi_SetAnimation(this, 1);
     }
     if (this->actor.shape.yOffset < -10.0f) {
         if ((globalCtx->gameplayFrames & 7) == 0) {
             func_800BBDAC(globalCtx, &this->actor, 
-                &this->actor.world, this->actor.shape.shadowScale - 20.0f,
+                &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
                 0xA, 8.0f, 500, 0xA, 1);
             Audio_PlayActorSound2(&this->actor, 0x3987U);
         }
         Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
         return;
     }
-    func_80971A38(&this->actor);
+    func_80971A38(this);
 }
 
 void func_80971A38(EnKakasi *this) {
@@ -1175,11 +1168,11 @@ void func_80971A38(EnKakasi *this) {
 // action func
 void func_80971A64(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
-    if (func_800B84D0(this, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actionFunc = func_80971AD4;
         return;
     }
-    func_800B8614(this, globalCtx, 70.0f);
+    func_800B8614(&this->actor, globalCtx, 70.0f);
 }
 
 // action func
@@ -1211,7 +1204,7 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((s16) this->unk196 != 5) {
         if (( this->unk1BC.x != 0.0f) || (this->unk1BC.z != 0.0f)) {
-            Math_Vec3f_Copy( &this->actor.focus,  &this->unk1BC);
+            Math_Vec3f_Copy( &this->actor.focus.pos,  &this->unk1BC);
             this->actor.focus.pos.y += 10.0f;
             if (this->cutsceneCamera == 0) {
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
@@ -1228,8 +1221,8 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
     if (this->actor.draw != 0) {
         Collider_UpdateCylinder( &this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
 }
 
@@ -1246,6 +1239,6 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext *globalCtx) {
     EnKakasi* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton,
-       this->skelanime.limbDrawTbl, (s32) this->skelanime.dListCount, NULL, func_80971CE0, this);
+       this->skelanime.limbDrawTbl, (s32) this->skelanime.dListCount, NULL, func_80971CE0, &this->actor);
 
 }
