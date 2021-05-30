@@ -27,7 +27,7 @@ const ActorInit Obj_Bell_InitVars = {
 // s32 D_80A35E90[] = { 0x09110039, 0x10040000, 0x02000000, 0x20000000, 0x00040000, 0x00000000,
 //                      0x00000000, 0x01000100, 0x00000000, 0x03C00000, 0x00460064 };
 
-static ColliderSphereInit sCylinderInit1 = {
+ColliderSphereInit sCylinderInit1 = {
     {
         COLTYPE_METAL,
         AT_ON | AT_TYPE_ENEMY,
@@ -50,7 +50,8 @@ static ColliderSphereInit sCylinderInit1 = {
 // s32 D_80A35EBC[] = { 0x09000900, 0x10040000, 0x02000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
 //                      0x00000000, 0x00010000, 0x00000000, 0x044C0000, 0x004A0064 };
 
-static ColliderSphereInit sCylinderInit2 = {
+// Could be outter Bell, since it has damage values
+ColliderSphereInit sCylinderInit2 = {
     {
         COLTYPE_METAL,
         AT_NONE,
@@ -70,12 +71,12 @@ static ColliderSphereInit sCylinderInit2 = {
     { 0, { { 0, 1100, 0 }, 74 }, 100 },
 };
 
-static CollisionCheckInfoInit2 sColChkInfoInit2 = {
+CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
 // Damage Table
-static DamageTable sDamageTable = {
+DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0xE1, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01,
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xE1,
 };
@@ -165,14 +166,14 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
                 if (temp_f0 > 0.18f) {
                     func_800B8D98(globalCtx, &this->dyna.actor, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer,
                                   11.0f * temp_f0);
-                    this->unk_214 = 0x1E;
+                    this->unk_214 = 30;
                 }
             }
         }
     }
     if ((this->collider2.base.acFlags & 2)) {
         this->collider2.base.acFlags &= 0xFFFD;
-        this->unk_20E = 0xA;
+        this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 0xF:
                 Audio_PlayActorSound2(this, 0x28F3);
@@ -304,10 +305,10 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80A35B18(thisx, globalCtx);
     func_80A35BD4(thisx, globalCtx);
     func_80A359B4(thisx, globalCtx);
-    Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.worldSphere.center);
+    Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.modelSphere.center);
     SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere.center, &sp24);
-    Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.worldSphere.center);
+    Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.modelSphere.center);
     SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp24);
 }

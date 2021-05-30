@@ -9,7 +9,7 @@ typedef struct ObjBell {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderSphere collider1;
     /* 0x1B4 */ ColliderSphere collider2;
-    /* 0x20C */ s16 unk_20C;
+    /* 0x20C */ s16 unk_20C; // Could be bell rotation angle?
     /* 0x20E */ s16 unk_20E;
     /* 0x20E */ s16 unk_20F;
     /* 0x212 */ s16 unk_212;
