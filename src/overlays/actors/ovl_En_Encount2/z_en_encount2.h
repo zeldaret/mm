@@ -38,7 +38,7 @@ extern const ActorInit En_Encount2_InitVars;
 
 extern CollisionHeader D_06002420;
 
-extern s32 D_06000A00;
-extern s32 D_06000D78;
+extern Gfx D_06000A00[];
+extern Gfx D_06000D78[];
 
 #endif // Z_EN_ENCOUNT2_H

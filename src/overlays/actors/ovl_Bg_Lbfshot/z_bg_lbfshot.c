@@ -25,7 +25,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_060014D8;
-extern UNK_TYPE D_06000228;
+extern Gfx D_06000228[];
 
 void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLbfshot* this = THIS;
@@ -41,5 +41,5 @@ void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000228);
+    func_800BDFC0(globalCtx, D_06000228);
 }
