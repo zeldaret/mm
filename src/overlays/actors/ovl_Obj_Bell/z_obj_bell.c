@@ -91,15 +91,16 @@ extern Gfx D_060007A8[];
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
 s32 func_80A35510(ObjBell* this, s32 arg1) {
-    Vec3f bumperPos;
-    Vec3f newVec;
     f32 phi_f0;
-    s32 phi_a3;
+    Vec3s bumperPos;
+    f32 new_var;
+    Vec3s newVec;
+    s32 phi_a3 = 0;
 
     if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
         phi_a3 = 1;
     } else {
-        phi_a3 = 0;
+        phi_a3 = phi_a3;
     }
 
     switch (arg1) {
@@ -120,14 +121,13 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
             this->unk_21C += phi_f0;
             break;
         case 2:
-            break;
-
-        default:
+            if (1) {} // yaaaay
+            new_var = 9000.0f;
+            this->unk_21C += new_var;
             break;
     }
-    this->unk_21C += 9000.0f;
 
-    this->unk_20C = CLAMP(this->unk_20C, 0.0f, 18000.0f);
+    this->unk_21C = CLAMP(this->unk_21C, 0.0f, 18000.0f);
     if (phi_a3 == 1) {
         Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.info.bumper.hitPos);
         Math_Vec3f_Copy(&newVec, &this->dyna.actor.world.pos);
