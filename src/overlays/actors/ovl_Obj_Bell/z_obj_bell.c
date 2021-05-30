@@ -12,7 +12,6 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx);
 s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx);
 
-/*
 const ActorInit Obj_Bell_InitVars = {
     ACTOR_OBJ_BELL,
     ACTORCAT_PROP,
@@ -24,12 +23,11 @@ const ActorInit Obj_Bell_InitVars = {
     (ActorFunc)ObjBell_Update,
     (ActorFunc)ObjBell_Draw,
 };
-*/
 
 // s32 D_80A35E90[] = { 0x09110039, 0x10040000, 0x02000000, 0x20000000, 0x00040000, 0x00000000,
 //                      0x00000000, 0x01000100, 0x00000000, 0x03C00000, 0x00460064 };
 
-ColliderSphereInit D_80A35E90 = {
+static ColliderSphereInit sCylinderInit1 = {
     {
         COLTYPE_METAL,
         AT_ON | AT_TYPE_ENEMY,
@@ -52,7 +50,7 @@ ColliderSphereInit D_80A35E90 = {
 // s32 D_80A35EBC[] = { 0x09000900, 0x10040000, 0x02000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
 //                      0x00000000, 0x00010000, 0x00000000, 0x044C0000, 0x004A0064 };
 
-ColliderSphereInit D_80A35EBC = {
+static ColliderSphereInit sCylinderInit2 = {
     {
         COLTYPE_METAL,
         AT_NONE,
@@ -72,29 +70,29 @@ ColliderSphereInit D_80A35EBC = {
     { 0, { { 0, 1100, 0 }, 74 }, 100 },
 };
 
-CollisionCheckInfoInit2 D_80A35EE8 = {
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
 // Damage Table
-DamageTable D_80A35EF4[] = { 0x010101E1, 0x01010101, 0xF1010101, 0x0101F101, 0x01010101, 0x01010101,
-                             0x01010101, 0x010101E1, 0x00000000, 0x00000000, 0x00000000 };
+static DamageTable sDamageTable = {
+    0x01, 0x01, 0x01, 0xE1, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xE1,
+};
 
 extern CollisionHeader D_06001BA8;
 extern Gfx D_06000840[];
 extern Gfx D_06000570[];
-
 extern Gfx D_06000698[];
 extern Gfx D_060008D0[];
 extern Gfx D_06000960[];
 extern Gfx D_060007A8[];
 
+// matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
 s32 func_80A35510(ObjBell* this, s32 arg1) {
-    f32 phi_f0;
-    Vec3s bumperPos;
-    f32 new_var;
-    Vec3s newVec;
+    Vec3f bumperPos;
+    Vec3f newVec;
     s32 phi_a3 = 0;
 
     if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
@@ -105,25 +103,14 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
 
     switch (arg1) {
         case 0:
-            if (this->unk_21C > 1000.0f) {
-                phi_f0 = 250.0f;
-            } else {
-                phi_f0 = 1000.0f;
-            }
-            this->unk_21C += phi_f0;
+            this->unk_21C += this->unk_21C > 1000.0f ? 250.0f : 1000.0f;
             break;
         case 1:
-            if (this->unk_21C > 3000.0f) {
-                phi_f0 = 750.0f;
-            } else {
-                phi_f0 = 3000.0f;
-            }
-            this->unk_21C += phi_f0;
+            this->unk_21C += this->unk_21C > 3000.0f ? 750.0f : 3000.0f;
             break;
         case 2:
             if (1) {} // yaaaay
-            new_var = 9000.0f;
-            this->unk_21C += new_var;
+            this->unk_21C += 9000.0f;
             break;
     }
 
@@ -176,7 +163,8 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         if (ABS_ALT(temp_v1) < 0x3FFC) {
             if (this->unk_214 == 0) {
                 if (temp_f0 > 0.18f) {
-                    func_800B8D98(globalCtx, this, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer, 11.0f * temp_f0);
+                    func_800B8D98(globalCtx, &this->dyna.actor, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer,
+                                  11.0f * temp_f0);
                     this->unk_214 = 0x1E;
                 }
             }
@@ -216,9 +204,9 @@ void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
         phi_v1 = this->unk_20E;
     }
     if (phi_v1 == 0) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider2);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider2.base);
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1.base);
 }
 
 // matches
@@ -275,12 +263,12 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BcCheck3_BgActorInit(&this->dyna.actor, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna.actor, &D_06001BA8);
-    Actor_SetScale(this, 0.08f);
-    Collider_InitAndSetSphere(globalCtx, &this->collider1, this, &D_80A35E90);
-    Collider_InitAndSetSphere(globalCtx, &this->collider2, this, &D_80A35EBC);
-    CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &D_80A35EF4, &D_80A35EE8);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
+    Actor_SetScale(&this->dyna.actor, 0.08f);
+    Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
+    Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);
+    CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
 }
 
 // matches
@@ -313,13 +301,13 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp30;
     Vec3f sp24;
 
-    func_80A35B18(this, globalCtx);
-    func_80A35BD4(this, globalCtx);
-    func_80A359B4(this, globalCtx);
-    Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim);
+    func_80A35B18(thisx, globalCtx);
+    func_80A35BD4(thisx, globalCtx);
+    func_80A359B4(thisx, globalCtx);
+    Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.worldSphere.center);
     SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
-    Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere, &sp24);
-    Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim);
+    Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere.center, &sp24);
+    Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.worldSphere.center);
     SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
-    Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere, &sp24);
+    Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp24);
 }
