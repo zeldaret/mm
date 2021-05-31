@@ -31,7 +31,7 @@ const ActorInit Obj_Bell_InitVars = {
 };
 
 // Bell Post?
-ColliderSphereInit sCylinderInit1 = {
+static ColliderSphereInit sCylinderInit1 = {
     {
         COLTYPE_METAL,
         AT_ON | AT_TYPE_ENEMY,
@@ -52,7 +52,7 @@ ColliderSphereInit sCylinderInit1 = {
 };
 
 // Bell
-ColliderSphereInit sCylinderInit2 = {
+static ColliderSphereInit sCylinderInit2 = {
     {
         COLTYPE_METAL,
         AT_NONE,
@@ -72,11 +72,11 @@ ColliderSphereInit sCylinderInit2 = {
     { 0, { { 0, 1100, 0 }, 74 }, 100 },
 };
 
-CollisionCheckInfoInit2 sColChkInfoInit2 = {
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-DamageTable sDamageTable = {
+static DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0xE1, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01,
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xE1,
 };
@@ -91,11 +91,11 @@ extern Gfx D_06000960[]; // Bell Designs
 
 s32 func_80A35510(ObjBell* this, s32 arg1) {
     Vec3f bumperPos;
-    Vec3f newVec;
-    s32 phi_a3 = 0;
+    Vec3f worldPos;
+    s32 phi_a3 = false;
 
     if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
-        phi_a3 = 1;
+        phi_a3 = true;
     } else {
         phi_a3 = phi_a3;
     }
@@ -114,10 +114,10 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
     }
 
     this->unk_21C = CLAMP(this->unk_21C, 0.0f, 18000.0f);
-    if (phi_a3 == 1) {
+    if (phi_a3 == true) {
         Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.info.bumper.hitPos);
-        Math_Vec3f_Copy(&newVec, &this->dyna.actor.world.pos);
-        this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&bumperPos, &newVec);
+        Math_Vec3f_Copy(&worldPos, &this->dyna.actor.world.pos);
+        this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&bumperPos, &worldPos);
         if (this->unk_20C <= 0x4000 && this->unk_20C >= -0x4000) {
             this->unk_20C -= 0x4000;
         } else {
@@ -128,31 +128,29 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
 }
 
 s32 func_80A356D8(ObjBell* this) {
-    f32 temp_f2;
-    s16 new_var;
+    f32 scaleProjection;
 
     this->unk_212 = this->dyna.actor.world.rot.y;
-    if (this->unk_20C >= 0x4000 || this->unk_20C < -0x3FFF) {
+    if (this->unk_20C >= 0x4000 || this->unk_20C <= -0x4000) {
         this->unk_212 -= 0x8000;
     }
-    temp_f2 = Math_SinS(this->unk_20C) * this->unk_21C;
+    scaleProjection = Math_SinS(this->unk_20C) * this->unk_21C;
     this->dyna.actor.world.rot.x = this->dyna.actor.home.rot.x;
-    new_var = temp_f2;
-    this->unk_220 = temp_f2;
-    this->dyna.actor.world.rot.x += new_var;
+    this->unk_220 = scaleProjection;
+    this->dyna.actor.world.rot.x += (s16)scaleProjection;
     Math_ApproachF(&this->unk_21C, 0.0f, 0.03f, 70.0f);
     if (this->unk_21C > 0.0f) {
         this->unk_20C -= 0x800;
     }
-    return 0;
+    return false;
 }
 
 s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s16 temp_v1;
 
-    if ((this->collider1.base.ocFlags1 & 2)) {
-        this->collider1.base.ocFlags1 &= 0xFFFD;
+    if (this->collider1.base.ocFlags1 & 2) {
+        this->collider1.base.ocFlags1 &= ~2;
         temp_v1 = this->dyna.actor.yawTowardsPlayer - this->unk_212;
         temp_f0 = this->unk_21C / 18000.0f;
         if (ABS_ALT(temp_v1) < 0x3FFC) {
@@ -165,8 +163,8 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((this->collider2.base.acFlags & 2)) {
-        this->collider2.base.acFlags &= 0xFFFD;
+    if (this->collider2.base.acFlags & 2) {
+        this->collider2.base.acFlags &= ~2;
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
@@ -182,32 +180,26 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
                 break;
         }
     }
-    return 0;
+    return false;
 }
 
 void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
-    s16 phi_v1;
-
     this->collider1.dim.worldSphere.radius = (this->collider1.dim.modelSphere.radius * this->collider1.dim.scale);
     this->collider2.dim.worldSphere.radius = (this->collider2.dim.modelSphere.radius * this->collider2.dim.scale);
-
-    // TODO: This temp could be taken out, but do we want it in for readability?...
-    phi_v1 = DECR(this->unk_20E);
-    if (phi_v1 == 0) {
+    if (DECR(this->unk_20E) == 0) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider2.base);
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1.base);
 }
 
 void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0);
-    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1U);
-    SysMatrix_InsertTranslation(0.0f, 2600.0f, 0.0f, 1);
-    Matrix_RotateY(thisx->world.rot.y, 1U);
-    SysMatrix_InsertXRotation_s(thisx->world.rot.x, 1);
-    Matrix_RotateY(-thisx->world.rot.y, 1U);
-    SysMatrix_InsertTranslation(0.0f, -2600.0f, 0.0f, 1);
-
+    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
+    SysMatrix_InsertTranslation(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateY(thisx->world.rot.y, MTXMODE_APPLY);
+    SysMatrix_InsertXRotation_s(thisx->world.rot.x, MTXMODE_APPLY);
+    Matrix_RotateY(-thisx->world.rot.y, MTXMODE_APPLY);
+    SysMatrix_InsertTranslation(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -219,10 +211,9 @@ void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, NULL);
-    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
-    Matrix_RotateY(thisx->shape.rot.y, 1);
-
+    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
+    Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -231,8 +222,8 @@ void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, 0);
-    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
+    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
