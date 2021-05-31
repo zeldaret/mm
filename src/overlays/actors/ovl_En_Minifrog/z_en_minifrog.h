@@ -8,11 +8,12 @@ struct EnMinifrog;
 typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, GlobalContext*);
 
 typedef enum {
-    /* 0x00 */ MINIFROG_YELLOW,   // Mountain Village
-    /* 0x01 */ MINIFROG_CYAN,     // Woodfall Temple
-    /* 0x02 */ MINIFROG_PINK,     // Great Bay Temple
-    /* 0x03 */ MINIFROG_BLUE,     // Southern Swamp
-    /* 0x04 */ MINIFROG_WHITE     // Laundry Pool
+    /* 0x00 */ MINIFROG_YELLOW,         // Mountain Village
+    /* 0x01 */ MINIFROG_CYAN,           // Woodfall Temple
+    /* 0x02 */ MINIFROG_PINK,           // Great Bay Temple
+    /* 0x03 */ MINIFROG_BLUE,           // Southern Swamp
+    /* 0x04 */ MINIFROG_WHITE,          // Laundry Pool
+    /* 0xFF */ MINIFROG_INVALID = 0xFF // -1
 } MinifrogType;
 
 typedef enum {

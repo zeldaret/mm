@@ -1214,7 +1214,6 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog.o(.data)
         build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog.o(.rodata)
         build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog_overlay.o(.ovl)
-
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_minifrog.c
+ * Overlay: ovl_En_Minifrog
+ * Description: Five Frogs of the Frog Choir
+ */
+
 #include "z_en_minifrog.h"
 
 #define FLAGS 0x00000019
@@ -111,7 +117,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
 
     if (1) {}
-    if (((this->actor.params & 0xF0) >> 4) == 0) { // Frogs scattered throughout the world
+    if (!((this->actor.params & 0xF0) >> 4)) { // Frogs scattered throughout the world
         if ((this->frogIndex == MINIFROG_YELLOW) || ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] & (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {
@@ -126,7 +132,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             // Not spoken to MINIFROG_YELLOW
-            if ((gSaveContext.weekEventReg[34] & 1) == 0) {
+            if (!(gSaveContext.weekEventReg[34] & 1)) {
                 this->actor.flags |= 0x10000;
             }
 
@@ -403,7 +409,7 @@ void EnMinifrog_NextFrogReturned(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actionFunc = EnMinifrog_ContinueChoirCutscene;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->unk18798(globalCtx, &D_0400DEA8, 0);
+        globalCtx->func_18798(globalCtx, &D_0400DEA8, 0);
     }
 }
 
@@ -412,13 +418,14 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, GlobalContext* globalCtx) {
 
     EnMinifrog_Jump(this);
     frogIndex = func_801A39F8();
-    if (frogIndex != 0xFF) {
-        if (frogIndex == 0) {
+    if (frogIndex != MINIFROG_INVALID) {
+        if (frogIndex == MINIFROG_YELLOW) {
             EnMinifrog_SetJumpState(this);
         } else {
-            this->actor.home.rot.z = frogIndex;
+            this->actor.home.rot.z = frogIndex; // This is strange to store the frog index in home z rotation
         }
-        if ((this->flags & (0x2 << frogIndex)) == 0) {
+
+        if (!(this->flags & (0x2 << frogIndex))) {
             this->flags |= (0x2 << frogIndex);
             this->timer--;
         }
@@ -433,7 +440,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, GlobalContext* globalCtx) {
         this->flags &= ~(0x100);
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->unk18798(globalCtx, &D_0400DEA8, 0);
+        globalCtx->func_18798(globalCtx, &D_0400DEA8, 0);
     } else if (this->timer <= 0) {
         this->actionFunc = EnMinifrog_NextFrogReturned;
         this->timer = 30;
@@ -453,7 +460,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         this->timer = 5;
         func_801A1F00(3, 0x5A);
         this->flags |= 0x100;
-        globalCtx->unk18798(globalCtx, &D_0400E2A8, 0);
+        globalCtx->func_18798(globalCtx, &D_0400E2A8, 0);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -556,7 +563,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     EnMinifrog_JumpTimer(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if ((gSaveContext.weekEventReg[34] & 1) == 0) {     // Not spoken with MINIFROG_YELLOW
+        if (!(gSaveContext.weekEventReg[34] & 1)) {         // Not spoken with MINIFROG_YELLOW
             func_801518B0(globalCtx, 0xD76, &this->actor);  // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
                                                             // looks like you've lost a little weight..."
         } else {
