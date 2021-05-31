@@ -914,7 +914,8 @@ typedef struct {
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F11 */ UNK_TYPE1 pad11F11[0xD];
     /* 0x11F22 */ u8 unk11F22;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x11F23 */ u8 unk11F23;
+    /* 0x11F24 */ UNK_TYPE1 pad11F24[0xFC];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
     /* 0x12022 */ u8 choiceIndex;
