@@ -1,3 +1,9 @@
+/*
+ * File: z_ovl_obj_bell.c
+ * Overlay: ovl_Obj_Bell
+ * Description: Stock Pot Inn Bell
+ */
+
 #include "z_obj_bell.h"
 
 #define FLAGS 0x00000030
@@ -24,9 +30,7 @@ const ActorInit Obj_Bell_InitVars = {
     (ActorFunc)ObjBell_Draw,
 };
 
-// s32 D_80A35E90[] = { 0x09110039, 0x10040000, 0x02000000, 0x20000000, 0x00040000, 0x00000000,
-//                      0x00000000, 0x01000100, 0x00000000, 0x03C00000, 0x00460064 };
-
+// Bell Post?
 ColliderSphereInit sCylinderInit1 = {
     {
         COLTYPE_METAL,
@@ -47,10 +51,7 @@ ColliderSphereInit sCylinderInit1 = {
     { 0, { { 0, 960, 0 }, 70 }, 100 },
 };
 
-// s32 D_80A35EBC[] = { 0x09000900, 0x10040000, 0x02000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
-//                      0x00000000, 0x00010000, 0x00000000, 0x044C0000, 0x004A0064 };
-
-// Could be outter Bell, since it has damage values
+// Bell
 ColliderSphereInit sCylinderInit2 = {
     {
         COLTYPE_METAL,
@@ -75,22 +76,19 @@ CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-// Damage Table
 DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0xE1, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01,
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xE1,
 };
 
 extern CollisionHeader D_06001BA8;
-extern Gfx D_06000840[];
-extern Gfx D_06000570[];
-extern Gfx D_06000698[];
-extern Gfx D_060008D0[];
-extern Gfx D_06000960[];
-extern Gfx D_060007A8[];
+extern Gfx D_06000570[]; // Bell post
+extern Gfx D_06000698[]; // Bell
+extern Gfx D_060007A8[]; // Bell Base
+extern Gfx D_06000840[]; // Bell Shadow
+extern Gfx D_060008D0[]; // Bell Hook
+extern Gfx D_06000960[]; // Bell Designs
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35510.asm")
 s32 func_80A35510(ObjBell* this, s32 arg1) {
     Vec3f bumperPos;
     Vec3f newVec;
@@ -110,7 +108,7 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
             this->unk_21C += this->unk_21C > 3000.0f ? 750.0f : 3000.0f;
             break;
         case 2:
-            if (1) {} // yaaaay
+            if (1) {}
             this->unk_21C += 9000.0f;
             break;
     }
@@ -129,8 +127,6 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
     return phi_a3;
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A356D8.asm")
 s32 func_80A356D8(ObjBell* this) {
     f32 temp_f2;
     s16 new_var;
@@ -151,8 +147,6 @@ s32 func_80A356D8(ObjBell* this) {
     return 0;
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A357A8.asm")
 s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s16 temp_v1;
@@ -175,11 +169,11 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         this->collider2.base.acFlags &= 0xFFFD;
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
-            case 0xF:
+            case 15:
                 Audio_PlayActorSound2(this, 0x28F3);
                 func_80A35510(this, 1);
                 break;
-            case 0xE:
+            case 14:
                 Audio_PlayActorSound2(this, 0x28F3);
                 func_80A35510(this, 2);
                 break;
@@ -191,27 +185,20 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A358FC.asm")
 void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
     s16 phi_v1;
 
     this->collider1.dim.worldSphere.radius = (this->collider1.dim.modelSphere.radius * this->collider1.dim.scale);
     this->collider2.dim.worldSphere.radius = (this->collider2.dim.modelSphere.radius * this->collider2.dim.scale);
-    if (this->unk_20E == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk_20E--;
-        phi_v1 = this->unk_20E;
-    }
+
+    // TODO: This temp could be taken out, but do we want it in for readability?...
+    phi_v1 = DECR(this->unk_20E);
     if (phi_v1 == 0) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider2.base);
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1.base);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A359B4.asm")
 void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
     SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1U);
@@ -231,8 +218,6 @@ void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35B18.asm")
 void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
     SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, NULL);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
@@ -245,13 +230,9 @@ void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/func_80A35BD4.asm")
 void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
-
     SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, 0);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
-
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -259,8 +240,6 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/ObjBell_Init.asm")
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
@@ -272,8 +251,6 @@ void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/ObjBell_Destroy.asm")
 void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
@@ -282,8 +259,6 @@ void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->collider2);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/ObjBell_Update.asm")
 void ObjBell_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
@@ -295,8 +270,6 @@ void ObjBell_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A358FC(this, globalCtx);
 }
 
-// matches
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bell_0x80A35510/ObjBell_Draw.asm")
 void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
     Vec3f sp30;
