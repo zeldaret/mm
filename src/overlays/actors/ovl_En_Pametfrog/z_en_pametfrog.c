@@ -173,8 +173,8 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-             (u8)isFrogReturnedFlags[this->actor.params - 1]) == 0) {
+        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+             (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }
@@ -528,7 +528,7 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
     if ((this->actor.bgCheckFlags & 1) && (this->actor.bgCheckFlags & 8) && (this->actor.wallBgId == BGCHECK_SCENE) &&
         ((this->actor.wallPoly->normal.y * (1.0f/SHT_MAX)) < 0.5f)) {
         EnPametfrog_SetupWallCrawl(this);
-    } else if (((this->actor.bgCheckFlags & 1) == 0) ||
+    } else if (!(this->actor.bgCheckFlags & 1) ||
                (this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f)) {
         this->actor.speedXZ = 12.0f;
     } else {
@@ -724,7 +724,7 @@ void EnPametfrog_RunToSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_JumpOnGround(this, globalCtx);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (((this->actor.bgCheckFlags & 1) == 0) ||
+    if (!(this->actor.bgCheckFlags & 1) ||
         ((this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
@@ -1032,7 +1032,7 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
-    if ((this->actor.bgCheckFlags & 1) == 0 ||
+    if (!(this->actor.bgCheckFlags & 1) ||
         (this->skelAnime.animCurrentFrame > 1.0f && this->skelAnime.animCurrentFrame < 12.0f)) {
         this->actor.speedXZ = 8.0f;
     } else {
@@ -1241,9 +1241,9 @@ void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* global
 void EnPametfrog_ApplyDamage(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 2) {
         this->collider.base.acFlags &= ~2;
-        if ((this->mode != 10) || ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0)) {
+        if ((this->mode != 10) || !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == ENPAMETFROG_PRE_SNAPPER) {
-                if (func_800BE22C(this) == 0) {
+                if (func_800BE22C(&this->actor) == 0) {
                     func_801A2ED8();
                 }
 
@@ -1276,7 +1276,7 @@ void EnPametfrog_ApplyDamage(EnPametfrog* this, GlobalContext* globalCtx) {
                     }
                     func_8086CB4C(this);
                 }
-            } else if (func_800BE22C(this) == 0) {
+            } else if (func_800BE22C(&this->actor) == 0) {
                 this->collider.base.acFlags &= ~1;
                 func_8086A724(this, globalCtx);
                 func_800BBA88(globalCtx, &this->actor);
@@ -1338,7 +1338,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
             unk2C4 = ((this->unk_2C4 + 1.0f) * 0.375f);
             this->unk_2C8 = unk2C4;
             this->unk_2C8 = unk2C4 > 0.75f ? 0.75f : this->unk_2C8;
-        } else if (Math_StepToF(&this->unk_2CC, 0.75f, (3.0f/160.0f)) == 0) {
+        } else if (!Math_StepToF(&this->unk_2CC, 0.75f, (3.0f/160.0f))) {
             func_800B9010(&this->actor, 0x20B2);
         }
     }

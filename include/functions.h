@@ -903,7 +903,7 @@ void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
 void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 // void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-// void func_800BE22C(void);
+u8 func_800BE22C(Actor* actor);
 // void func_800BE258(void);
 // void func_800BE2B8(void);
 // void func_800BE33C(void);
@@ -913,7 +913,7 @@ void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, UNK_TYPE1 arg2);
 // void func_800BE63C(void);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, s32 param_4, f32 param_5, f32 param_6, f32 param_7, u8 mode);
-void func_800BF7CC(GlobalContext* ctxt, Actor* actor, Vec3f* arg2, s32 arg3, s32 arg4, f32 arg5, f32 arg6);
+void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3, s32 arg4, f32 arg5, f32 arg6);
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
 void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
 void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
