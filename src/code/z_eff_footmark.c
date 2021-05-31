@@ -17,8 +17,8 @@ void EffFootmark_Init(GlobalContext* globalCtx) {
     }
 }
 
-void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red,
-                     u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
+void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size,
+                     u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay) {
     s32 i;
     EffFootmark* footmark;
     EffFootmark* destination = NULL;
