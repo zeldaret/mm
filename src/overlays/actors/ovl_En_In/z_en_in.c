@@ -15,48 +15,16 @@ void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_808F33B8(void);                                                      // Crazy XOR Stuph
-s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3); // Control Flow Issues
-void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO
-s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2);            // NIGHTMARE SWITCH
-s32 func_808F43E0(EnIn* this);                                                // TEST Macro
+s32 func_808F33B8(void);                                                      // Crazy XOR Stuph, Can be deleted
+s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3); // Control Flow Issues, Can be deleted
+void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO, Can be deleted
+s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2);            // NIGHTMARE SWITCH, Can be deleted
+s32 func_808F43E0(EnIn* this);                                                // TEST Macro, Can be deleted
 
-s32 func_808F64A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_808F67F8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_808F6334(EnIn* this, GlobalContext* globalCtx);
-
-/* MATCHED */
-u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2);
-void func_808F374C(EnIn* this, GlobalContext* globalCtx);
-void func_808F5B58(EnIn* this, GlobalContext* globalCtx);
 void func_808F5A94(EnIn* this, GlobalContext* globalCtx);
-void func_808F5C98(EnIn* this, GlobalContext* globalCtx);
-void func_808F3618(EnIn* this, GlobalContext* globalCtx);
-void func_808F395C(EnIn* this, GlobalContext* globalCtx);
 void func_808F3690(EnIn* this, GlobalContext* globalCtx);
-void func_808F3608(EnIn* this, GlobalContext* globalCtx);
 void func_808F5A34(EnIn* this, GlobalContext* globalCtx);
-void func_808F38F8(EnIn* this, GlobalContext* globalCtx);
-void func_808F3414(EnIn* this, GlobalContext* globalCtx);
-void func_808F32A0(EnIn* this, GlobalContext* globalCtx);
-s32 func_808F3178(EnIn* this, GlobalContext* globalCtx);
-void func_808F322C(EnIn* this, s32 arg1);
 s32 func_808F5994(EnIn* this, GlobalContext* globalCtx, Vec3f* arg2, s16 arg3);
-s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2);
-void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId);
-void func_808F35D8(EnIn* this, GlobalContext* globalCtx);
-void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 arg2);
-s32 func_808F4150(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext* msgCtx);
-void func_808F3BD4(EnIn* this, GlobalContext* globalCtx);
-void func_808F3AD4(EnIn* this, GlobalContext* globalCtx);
-void func_808F3CD4(EnIn* this, GlobalContext* globalCtx);
-s32 func_808F3310(EnIn* this, GlobalContext* globalCtx);
-s32 func_808F3334(EnIn* this, GlobalContext* globalCtx);
-void func_808F35AC(EnIn* this, GlobalContext* globalCtx);
-void func_808F3B40(EnIn* this, GlobalContext* globalCtx);
-void func_808F3D40(EnIn* this, GlobalContext* globalCtx);
-void func_808F3C40(EnIn* this, GlobalContext* globalCtx);
-s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext* msgCtx, s32 arg4);
 
 const ActorInit En_In_InitVars = {
     ACTOR_EN_IN,
@@ -337,7 +305,6 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F35AC(EnIn* this, GlobalContext* globalCtx) {
-    ;
     this->unk4AC |= 0x10;
     if (this->unk4A4 != NULL) {
         this->unk4A4->unk4AC |= 0x10;
