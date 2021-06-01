@@ -816,7 +816,7 @@ typedef struct {
     /* 0xE7 */ UNK_TYPE1 unkE7;
     /* 0xE8 */ UNK_TYPE1 unkE8;
     /* 0xE9 */ UNK_TYPE1 unkE9;
-    /* 0xEA */ UNK_TYPE1 unkEA;
+    /* 0xEA */ u8 unkEA;
     /* 0xEB */ UNK_TYPE1 unkEB;
     /* 0xEC */ UNK_TYPE1 unkEC;
     /* 0xED */ UNK_TYPE1 unkED;
