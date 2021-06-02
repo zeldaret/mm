@@ -15,10 +15,9 @@ void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3); // Control Flow Issues, Can be deleted
-void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO, Can be deleted
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2);            // NIGHTMARE SWITCH, Can be deleted
 s32 func_808F43E0(EnIn* this);                                                // TEST Macro, Can be deleted
+void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO, Can be deleted
 
 void func_808F5A94(EnIn* this, GlobalContext* globalCtx);
 void func_808F3690(EnIn* this, GlobalContext* globalCtx);
@@ -276,13 +275,13 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F33B8(void) {
-    s32 phi_v1;
+    s32 ret;
 
-    phi_v1 = gSaveContext.day == 1;
-    if (!(!phi_v1 || (phi_v1 = gSaveContext.time >= 0x3AAA, !phi_v1) || (phi_v1 = gSaveContext.time < 0x4001, !phi_v1)) || (phi_v1 = gSaveContext.day >= 2, phi_v1)) {
-            phi_v1 = (gSaveContext.weekEventReg[22] & 1) == 0;
+    if (((ret = gSaveContext.day == 1) && (ret = gSaveContext.time >= 0x3AAA) && (ret = gSaveContext.time < 0x4001)) ||
+        (ret = gSaveContext.day >= 2)) {
+        ret = (gSaveContext.weekEventReg[22] & 1) == 0;
     }
-    return phi_v1;
+    return ret;
 }
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
@@ -1259,14 +1258,15 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     return ret;
 }
 
-#if NON_MATCHING
-s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
+s32 func_808F5728(GlobalContext *globalCtx, EnIn *this, s32 arg2, s32 *arg3) {
     s16 temp_v1;
     s16 tmp;
     s16 tmpA;
-    u16 textId;
+    ActorPlayer* player;
 
-    if (*arg3 != 4) {
+    if (*arg3 == 4) {
+        return 0;
+    } else {
         if (*arg3 == 2) {
             func_801518B0(globalCtx, this->actor.textId, &this->actor);
             *arg3 = 1;
@@ -1275,7 +1275,6 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         if (*arg3 == 3) {
             func_80151938(globalCtx, this->actor.textId);
             *arg3 = 1;
-            // dummy_label_214456: ;
             return 0;
         }
         if (func_800B84D0(&this->actor, globalCtx)) {
@@ -1283,7 +1282,9 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
             return 1;
         }
         if (*arg3 == 1) {
-            func_808F5994(this, globalCtx, &PLAYER->base.world.pos, 0xC80);
+            player = PLAYER;
+            func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
+            dummy_label_895711:; // FAKE MATCH
         } else {
             temp_v1 = this->actor.home.rot.y - this->actor.world.rot.y;
             if (temp_v1 > 0x320) {
@@ -1299,31 +1300,29 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
             if (func_808F5674(globalCtx, this, arg2)) {
                 *arg3 = 0;
             }
-        } else if (func_800B8934(globalCtx, &this->actor)) {
+            return 0;
+        } else if (!func_800B8934(globalCtx, &this->actor)) {
+            return 0;
+        } else {
             tmp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             tmpA = ABS_ALT(tmp);
-            if (tmpA < 0x4300) {
-                if (this->actor.xyzDistToPlayerSq <= 25600.0f || this->actor.isTargeted) {
-                    if (this->actor.xyzDistToPlayerSq <= 6400.0f) {
-                        if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
-                            textId = func_808F3DD4(globalCtx, this, arg2);
-                            this->actor.textId = textId;
-                        }
-                    } else {
-                        if (func_800B863C(&this->actor, globalCtx)) {
-                            textId = func_808F3DD4(globalCtx, this, arg2);
-                            this->actor.textId = textId;
-                        }
+            if (tmpA >= 0x4300) {
+                return 0;
+            } else {
+                if ((this->actor.xyzDistToPlayerSq > 25600.0f) && !this->actor.isTargeted) {
+                    return 0;
+                } else if (this->actor.xyzDistToPlayerSq <= 6400.0f) {
+                    if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
+                        this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
                     }
+                } else if (func_800B863C(&this->actor, globalCtx)) {
+                    this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
                 }
             }
         }
     }
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_In_0x808F30B0/func_808F5728.asm")
-#endif
 
 s32 func_808F5994(EnIn* this, GlobalContext* globalCtx, Vec3f* arg2, s16 arg3) {
     s32 ret = 0;
