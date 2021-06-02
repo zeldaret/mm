@@ -32,7 +32,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     if (this->playCutscene) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
-        } else if (ActorCutscene_GetCanPlayNext(cutsceneId) != 0) {
+        } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
             ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
             gSaveContext.weekEventReg[88] |= 0x40;
             this->playCutscene = false;
