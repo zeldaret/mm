@@ -17869,7 +17869,7 @@
     0x80BDAA2C:("enPameraOverlayInfoOffset","u32","",0x4),
     0x80BDAF60:("Obj_HsStump_InitVars","UNK_TYPE1","",0x1),
     0x80BDAF80:("D_80BDAF80","UNK_TYPE1","",0x1),
-    0x80BDAF84:("D_80BDAF84","UNK_TYPE1","",0x1),
+    0x80BDAF84:("iceSmokeAccel","Vec3f","",0xc),
     0x80BDAF90:("D_80BDAF90","f32","",0x4),
     0x80BDAF94:("D_80BDAF94","f32","",0x4),
     0x80BDAF98:("D_80BDAF98","f32","",0x4),
