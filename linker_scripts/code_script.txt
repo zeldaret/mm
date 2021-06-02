@@ -9175,9 +9175,9 @@ SECTIONS
     ovl_Dm_Nb : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Dm_Nb/z_dm_nb.o(.text)
-        build/asm/overlays/ovl_Dm_Nb_data.o(.data)
+        build/src/overlays/actors/ovl_Dm_Nb/z_dm_nb.o(.data)
         build/src/overlays/actors/ovl_Dm_Nb/z_dm_nb.o(.rodata)
-        build/asm/overlays/ovl_Dm_Nb_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Dm_Nb/z_dm_nb_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
