@@ -246,9 +246,8 @@ void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx) {
-    AnimationHeader* animationHeader;
+    AnimationHeader* animationHeader = &D_0600C880;
 
-    animationHeader = &D_0600C880;
     if (globalCtx->sceneNum == 0x12) {
         animationHeader = &D_06003AA8;
     }
@@ -286,7 +285,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
             this->actor.flags |= 0x10000;
             func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, 0);
         } else {
-            this->actor.flags &= 0xFFFEFFFF;
+            this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
             if (globalCtx->sceneNum == 0x12) {
                 if (player->unk14B == 3) {
@@ -358,7 +357,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
         }
     } else {
         player = PLAYER;
-        if (((player->stateFlags1 & 0x400) != 0) && (player->unkAE7 != 0)) {
+        if (player->stateFlags1 & 0x400 && player->unkAE7 != 0) {
             func_80151BB4(globalCtx, 48);
             func_80151BB4(globalCtx, 9);
             func_80151BB4(globalCtx, 10);
@@ -368,7 +367,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
     }
     func_80BA36C0(this, globalCtx, 0);
     ActorCutscene_Stop(this->cutscene);
-    globalCtx->actorCtx.unk5 &= 0xFFDF;
+    globalCtx->actorCtx.unk5 &= ~0x20;
 }
 
 s32 func_80BA3EC0(EnToto* this, GlobalContext* globalCtx) {
@@ -494,7 +493,7 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA43F4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA3C88(this);
-    if (func_80122760(globalCtx, this->unk2BC, 0x42700000)) {
+    if (func_80122760(globalCtx, this->unk2BC, 60.0f)) {
         func_800B7298(globalCtx, 0, 0x13);
         return func_80BA4204(this, globalCtx);
     }
@@ -539,7 +538,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
         this->unk2B6 = 1;
         return this->text->unk1;
     }
-    if ((player->base.bgCheckFlags & 1) != 0) {
+    if (player->base.bgCheckFlags & 1) {
         temp_s0 = &D_80BA50DC[gSaveContext.playerForm - 1];
         if (func_80BA44D4(temp_s0, player)) {
             Math_Vec3s_ToVec3f(&player->base.world.pos, &temp_s0->unk6);
