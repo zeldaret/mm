@@ -15,7 +15,6 @@ void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-//s32 func_808F33B8(void);                                                      // Crazy XOR Stuph, Can be deleted
 s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3); // Control Flow Issues, Can be deleted
 void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO, Can be deleted
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2);            // NIGHTMARE SWITCH, Can be deleted
@@ -276,27 +275,15 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
     return 1;
 }
 
-#if NON_MATCHING
 s32 func_808F33B8(void) {
-    u16 temp_a0;
     s32 phi_v1;
 
     phi_v1 = gSaveContext.day == 1;
-    if (((!phi_v1) || (temp_a0 = gSaveContext.time, ((((s32) temp_a0 < 0x3AAA) ^ 1) == 0)) || ((s32) gSaveContext.time >= 0x4001))) {
-        phi_v1 = (gSaveContext.day < 2) ^ 1;
-        if (phi_v1) {
-block_4:
+    if (!(!phi_v1 || (phi_v1 = gSaveContext.time >= 0x3AAA, !phi_v1) || (phi_v1 = gSaveContext.time < 0x4001, !phi_v1)) || (phi_v1 = gSaveContext.day >= 2, phi_v1)) {
             phi_v1 = (gSaveContext.weekEventReg[22] & 1) == 0;
-        }
-    } else {
-        goto block_4;
     }
     return phi_v1;
 }
-
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_In_0x808F30B0/func_808F33B8.asm")
-#endif
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
