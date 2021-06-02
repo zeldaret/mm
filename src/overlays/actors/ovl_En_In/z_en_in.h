@@ -21,7 +21,7 @@ typedef struct EnIn {
     /* 0x144 */ EnInActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderJntSph colliderJntSph;
-    /* 0x1AC */ ColliderJntSphElement elements;
+    /* 0x1AC */ ColliderJntSphElement colliderJntSphElement;
     /* 0x1EC */ ColliderCylinder colliderCylinder;
     /* 0x238 */ char unk238[0x4];
     /* 0x23C */ u8 unk23C;

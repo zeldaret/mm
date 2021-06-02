@@ -15,9 +15,9 @@ void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2);            // NIGHTMARE SWITCH, Can be deleted
-s32 func_808F43E0(EnIn* this);                                                // TEST Macro, Can be deleted
-void func_808F39DC(EnIn* this, GlobalContext* globalCtx);                     // TEST MACRO, Can be deleted
+s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2); // NIGHTMARE SWITCH, Can be deleted
+s32 func_808F43E0(EnIn* this);                                     // TEST Macro, Can be deleted
+void func_808F39DC(EnIn* this, GlobalContext* globalCtx);          // TEST MACRO, Can be deleted
 
 void func_808F5A94(EnIn* this, GlobalContext* globalCtx);
 void func_808F3690(EnIn* this, GlobalContext* globalCtx);
@@ -263,9 +263,9 @@ s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
 s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
-    if ((this->colliderJntSph.base.atFlags & 2)) {
+    if (this->colliderJntSph.base.atFlags & 2) {
         this->colliderJntSph.base.atFlags &= ~2;
-        if ((this->colliderJntSph.base.atFlags & 4)) {
+        if (this->colliderJntSph.base.atFlags & 4) {
             return 0;
         }
         Audio_PlayActorSound2(&player->base, 0x83E);
@@ -379,6 +379,7 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
 void func_808F38F8(EnIn* this, GlobalContext* globalCtx) {
     this->unk4A4 = NULL;
     while (true) {
+        //! @bug: Infinite loop if there is only one ACTOR_EN_IN
         this->unk4A4 = (EnIn*)func_ActorCategoryIterateById(globalCtx, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
         if (this->unk4A4 != NULL && this->unk4A4 != this) {
             break;
@@ -547,7 +548,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
             case 3:
                 if (gSaveContext.playerForm == 3) {
                     textId = 0x3485;
-                } else if ((gSaveContext.playerForm == 2) || (gSaveContext.playerForm == 1)) {
+                } else if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
                     textId = 0x3484;
                 } else if (!(gSaveContext.weekEventReg[56] & 4)) {
                     textId = 0x346D;
@@ -556,7 +557,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
                 }
                 break;
             case 4:
-                if ((gSaveContext.playerForm == 2) || (gSaveContext.playerForm == 1)) {
+                if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
                     textId = 0x348A;
                 } else if (gSaveContext.playerForm == 3) {
                     textId = 0x348B;
@@ -578,7 +579,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
             case 7:
                 if (gSaveContext.playerForm == 3) {
                     textId = 0x34A8;
-                } else if ((gSaveContext.playerForm == 2) || (gSaveContext.playerForm == 1)) {
+                } else if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
                     textId = 0x34A7;
                 } else if (!(gSaveContext.weekEventReg[16] & 4)) {
                     textId = 0x3495;
@@ -1258,10 +1259,10 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     return ret;
 }
 
-s32 func_808F5728(GlobalContext *globalCtx, EnIn *this, s32 arg2, s32 *arg3) {
-    s16 temp_v1;
-    s16 tmp;
-    s16 tmpA;
+s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
+    s16 rotDiff;
+    s16 yawDiff;
+    s16 yawDiffA;
     ActorPlayer* player;
 
     if (*arg3 == 4) {
@@ -1284,15 +1285,15 @@ s32 func_808F5728(GlobalContext *globalCtx, EnIn *this, s32 arg2, s32 *arg3) {
     if (*arg3 == 1) {
         player = PLAYER;
         func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
-        dummy_label_895711:; // POSSIBLE FAKE MATCH
+    dummy_label_895711:; // POSSIBLE FAKE MATCH
     } else {
-        temp_v1 = this->actor.home.rot.y - this->actor.world.rot.y;
-        if (temp_v1 > 0x320) {
+        rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
+        if (rotDiff > 0x320) {
             this->actor.world.rot.y += 0x320;
-        } else if (temp_v1 < -0x320) {
+        } else if (rotDiff < -0x320) {
             this->actor.world.rot.y -= 0x320;
         } else {
-            this->actor.world.rot.y += temp_v1;
+            this->actor.world.rot.y += rotDiff;
         }
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -1301,13 +1302,13 @@ s32 func_808F5728(GlobalContext *globalCtx, EnIn *this, s32 arg2, s32 *arg3) {
             *arg3 = 0;
         }
         return 0;
-    } 
+    }
     if (!func_800B8934(globalCtx, &this->actor)) {
         return 0;
     }
-    tmp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    tmpA = ABS_ALT(tmp);
-    if (tmpA >= 0x4300) {
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    yawDiffA = ABS_ALT(yawDiff);
+    if (yawDiffA >= 0x4300) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq > 25600.0f && !this->actor.isTargeted) {
@@ -1444,7 +1445,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = func_808F374C;
     } else {
         Collider_InitJntSph(globalCtx, &this->colliderJntSph);
-        Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->elements);
+        Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
         this->unk240 = func_8013D648(globalCtx, (this->actor.params & 0x7E00) >> 9, 0x3F);
@@ -1657,7 +1658,6 @@ void func_808F67F8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnIn* this = THIS;
-    ;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
