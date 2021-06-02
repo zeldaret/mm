@@ -74,7 +74,7 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
-    gSaveContext.weekEventReg[88] &= 0xBF;
+    gSaveContext.weekEventReg[88] &= ~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.isNight;
     this->timer = 0;
