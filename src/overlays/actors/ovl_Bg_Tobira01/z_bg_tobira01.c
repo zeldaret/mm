@@ -64,7 +64,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     }
 
     if (!(player->stateFlags1 & 0x40) && (gSaveContext.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
-        gSaveContext.weekEventReg[88] &= 0xBF;
+        gSaveContext.weekEventReg[88] &= ~0x40;
     }
 }
 
