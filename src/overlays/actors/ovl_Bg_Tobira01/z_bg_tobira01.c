@@ -21,6 +21,7 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Draw,
 };
 
+extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
 void func_80B12430(BgTobira01* this, GlobalContext* globalCtx);
@@ -46,6 +47,19 @@ void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/BgTobira01_Update.asm")
+void BgTobira01_Update(Actor* thisx, GlobalContext* globalCtx) {
+    BgTobira01* this = THIS;
+    s32 pad;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/BgTobira01_Draw.asm")
+    this->actionFunc(this, globalCtx);
+}
+
+void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_06000088);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
