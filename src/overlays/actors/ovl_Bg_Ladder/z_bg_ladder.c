@@ -109,7 +109,7 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Audio_PlayActorSound2(this, 0x2997);
+        Audio_PlayActorSound2(&this->dyna.actor, 0x2997);
         this->action = BgLadder_ActionFadeIn;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
