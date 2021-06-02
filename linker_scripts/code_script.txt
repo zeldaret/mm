@@ -6477,7 +6477,7 @@ SECTIONS
         build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.text)
         build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.data)
         build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.rodata)
-        build/asm/overlays/ovl_Bg_Tobira01_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

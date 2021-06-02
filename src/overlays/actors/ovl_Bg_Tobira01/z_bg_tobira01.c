@@ -24,9 +24,7 @@ const ActorInit Bg_Tobira01_InitVars = {
 extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
-// void func_80B12430(BgTobira01* this, GlobalContext* globalCtx);
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/func_80B12430.asm")
-void func_80B12430(BgTobira01* this, GlobalContext* globalCtx) {
+void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     s16 cutsceneId = this->dyna.actor.cutscene;
     s16 prevTimer;
@@ -35,7 +33,7 @@ void func_80B12430(BgTobira01* this, GlobalContext* globalCtx) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         } else if (ActorCutscene_GetCanPlayNext(cutsceneId) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, this);
+            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
             gSaveContext.weekEventReg[88] |= 0x40;
             this->playCutscene = false;
         } else {
@@ -80,7 +78,7 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.isNight;
     this->timer = 0;
-    this->actionFunc = func_80B12430;
+    this->actionFunc = BgTobira01_Open;
 }
 
 void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
