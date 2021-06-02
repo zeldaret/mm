@@ -11,9 +11,9 @@ typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgTobira01ActionFunc actionFunc;
     /* 0x160 */ s16 timer;
-    /* 0x162 */ s16 isNight;
+    /* 0x162 */ s16 timer2;
     /* 0x164 */ f32 yOffset;
-    /* 0x168 */ s32 unk_168;
+    /* 0x168 */ s32 playCutscene;
     /* 0x16C */ s32 unk_16C;
 } BgTobira01; // size = 0x170
 

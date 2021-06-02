@@ -24,8 +24,51 @@ const ActorInit Bg_Tobira01_InitVars = {
 extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
-void func_80B12430(BgTobira01* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/func_80B12430.asm")
+// void func_80B12430(BgTobira01* this, GlobalContext* globalCtx);
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/func_80B12430.asm")
+void func_80B12430(BgTobira01* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
+    s16 cutsceneId = this->dyna.actor.cutscene;
+    s16 prevTimer;
+
+    if (this->playCutscene) {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        } else if (ActorCutscene_GetCanPlayNext(cutsceneId) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, this);
+            gSaveContext.weekEventReg[88] |= 0x40;
+            this->playCutscene = false;
+        } else {
+            ActorCutscene_SetIntentToPlay(cutsceneId);
+        }
+    } else if (!(gSaveContext.weekEventReg[88] & 0x40) && (this->timer == 0) && (globalCtx->actorCtx.unk1F5 != 0) &&
+               (globalCtx->actorCtx.unk1F4 == 0) &&
+               (func_800C99AC(&globalCtx->colCtx, player->base.floorPoly, player->base.floorBgId) == 6)) {
+        this->playCutscene = true;
+        this->unk_16C = 0; // this variable is not used anywhere else
+    }
+
+    prevTimer = this->timer;
+
+    if (gSaveContext.weekEventReg[88] & 0x40) {
+        this->timer++;
+    } else {
+        this->timer--;
+    };
+
+    this->timer = CLAMP(this->timer, 0, 60);
+
+    if (this->timer != prevTimer) {
+        if (1) {}
+        Audio_PlayActorSound2(&this->dyna.actor, 0x2143);
+        this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * 1.6666666f) + this->dyna.actor.home.pos.y);
+        this->timer2 = 180;
+    }
+
+    if (!(player->stateFlags1 & 0x40) && (gSaveContext.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
+        gSaveContext.weekEventReg[88] &= 0xBF;
+    }
+}
 
 void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgTobira01* this = THIS;
@@ -35,7 +78,7 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
     gSaveContext.weekEventReg[88] &= 0xBF;
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->isNight = gSaveContext.isNight;
+    this->timer2 = gSaveContext.isNight;
     this->timer = 0;
     this->actionFunc = func_80B12430;
 }
