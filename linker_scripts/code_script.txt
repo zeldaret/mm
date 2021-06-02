@@ -7639,9 +7639,9 @@ SECTIONS
     ovl_En_Toto : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Toto/z_en_toto.o(.text)
-        build/asm/overlays/ovl_En_Toto_data.o(.data)
+        build/src/overlays/actors/ovl_En_Toto/z_en_toto.o(.data)
         build/src/overlays/actors/ovl_En_Toto/z_en_toto.o(.rodata)
-        build/asm/overlays/ovl_En_Toto_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Toto/z_en_toto_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
