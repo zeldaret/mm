@@ -9,7 +9,6 @@ void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgTobira01_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
     ACTORCAT_PROP,
@@ -21,7 +20,6 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Update,
     (ActorFunc)BgTobira01_Draw,
 };
-*/
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Tobira01_0x80B12430/func_80B12430.asm")
 
