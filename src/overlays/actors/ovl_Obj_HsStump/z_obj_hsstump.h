@@ -3,8 +3,8 @@
 
 #include <global.h>
 
-#define OBJHSSTUMP_GET_SWITCHFLAG(this) (((ObjHsStump*)this)->dyna.actor.params & 0x7F)
-#define OBJHSSTUMP_GET_ISHIDDEN(this) ((((ObjHsStump*)this)->dyna.actor.params >> 12) & 0xF)
+#define OBJHSSTUMP_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJHSSTUMP_GET_ISHIDDEN(thisx) (((thisx)->params >> 12) & 0xF)
 
 struct ObjHsStump;
 

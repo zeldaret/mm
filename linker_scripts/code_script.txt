@@ -8241,7 +8241,11 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.text)
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.data)
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.rodata)
-        build/asm/overlays/ovl_Obj_HsStump_rodata.o(.rodata)
+        #ifdef NON_MATCHING
+            build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump_overlay.o(.ovl)
+        #else
+            build/asm/overlays/ovl_Obj_HsStump_rodata.o(.rodata)
+        #endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
