@@ -523,7 +523,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
         } else {
             textId = 0x34AF;
         }
-    dummy_label_895710:; // FAKE MATCH
+    dummy_label_895710:; // POSSIBLE FAKE MATCH
     } else {
         switch (arg2) {
             case 0:
@@ -1266,60 +1266,59 @@ s32 func_808F5728(GlobalContext *globalCtx, EnIn *this, s32 arg2, s32 *arg3) {
 
     if (*arg3 == 4) {
         return 0;
+    }
+    if (*arg3 == 2) {
+        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        *arg3 = 1;
+        return 0;
+    }
+    if (*arg3 == 3) {
+        func_80151938(globalCtx, this->actor.textId);
+        *arg3 = 1;
+        return 0;
+    }
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        *arg3 = 1;
+        return 1;
+    }
+    if (*arg3 == 1) {
+        player = PLAYER;
+        func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
+        dummy_label_895711:; // POSSIBLE FAKE MATCH
     } else {
-        if (*arg3 == 2) {
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
-            *arg3 = 1;
-            return 0;
-        }
-        if (*arg3 == 3) {
-            func_80151938(globalCtx, this->actor.textId);
-            *arg3 = 1;
-            return 0;
-        }
-        if (func_800B84D0(&this->actor, globalCtx)) {
-            *arg3 = 1;
-            return 1;
-        }
-        if (*arg3 == 1) {
-            player = PLAYER;
-            func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
-            dummy_label_895711:; // FAKE MATCH
+        temp_v1 = this->actor.home.rot.y - this->actor.world.rot.y;
+        if (temp_v1 > 0x320) {
+            this->actor.world.rot.y += 0x320;
+        } else if (temp_v1 < -0x320) {
+            this->actor.world.rot.y -= 0x320;
         } else {
-            temp_v1 = this->actor.home.rot.y - this->actor.world.rot.y;
-            if (temp_v1 > 0x320) {
-                this->actor.world.rot.y += 0x320;
-            } else if (temp_v1 < -0x320) {
-                this->actor.world.rot.y -= 0x320;
-            } else {
-                this->actor.world.rot.y += temp_v1;
-            }
-            this->actor.shape.rot.y = this->actor.world.rot.y;
+            this->actor.world.rot.y += temp_v1;
         }
-        if (*arg3 == 1) {
-            if (func_808F5674(globalCtx, this, arg2)) {
-                *arg3 = 0;
-            }
-            return 0;
-        } else if (!func_800B8934(globalCtx, &this->actor)) {
-            return 0;
-        } else {
-            tmp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-            tmpA = ABS_ALT(tmp);
-            if (tmpA >= 0x4300) {
-                return 0;
-            } else {
-                if ((this->actor.xyzDistToPlayerSq > 25600.0f) && !this->actor.isTargeted) {
-                    return 0;
-                } else if (this->actor.xyzDistToPlayerSq <= 6400.0f) {
-                    if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
-                        this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
-                    }
-                } else if (func_800B863C(&this->actor, globalCtx)) {
-                    this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
-                }
-            }
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+    if (*arg3 == 1) {
+        if (func_808F5674(globalCtx, this, arg2)) {
+            *arg3 = 0;
         }
+        return 0;
+    } 
+    if (!func_800B8934(globalCtx, &this->actor)) {
+        return 0;
+    }
+    tmp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    tmpA = ABS_ALT(tmp);
+    if (tmpA >= 0x4300) {
+        return 0;
+    }
+    if (this->actor.xyzDistToPlayerSq > 25600.0f && !this->actor.isTargeted) {
+        return 0;
+    }
+    if (this->actor.xyzDistToPlayerSq <= 6400.0f) {
+        if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
+            this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
+        }
+    } else if (func_800B863C(&this->actor, globalCtx)) {
+        this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
     }
     return 0;
 }
