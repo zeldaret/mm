@@ -59,12 +59,12 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     if (this->timer != prevTimer) {
         if (1) {}
         Audio_PlayActorSound2(&this->dyna.actor, 0x2143);
-        this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * 1.6666666f) + this->dyna.actor.home.pos.y);
+        this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->timer2 = 180;
     }
 
     if (!(player->stateFlags1 & 0x40) && (gSaveContext.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
-        gSaveContext.weekEventReg[88] &= ~0x40;
+        gSaveContext.weekEventReg[88] &= (u8)~0x40;
     }
 }
 
@@ -74,7 +74,7 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
-    gSaveContext.weekEventReg[88] &= ~0x40;
+    gSaveContext.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.isNight;
     this->timer = 0;
