@@ -132,7 +132,7 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     whichBankIndex = (this->actor.params >> 0xF) & 1;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
-    if (!whichBankIndex) {
+    if (whichBankIndex == 0) {
         this->actor.uncullZoneForward = 4000.0f;
     } else {
         this->actor.uncullZoneForward = 800.0f;
