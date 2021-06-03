@@ -140,7 +140,7 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
