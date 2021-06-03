@@ -15,7 +15,6 @@ typedef struct ObjKibako {
     /* 0x196 */ s16 bankIndex;
     /* 0x198 */ s8 unk198;
     /* 0x199 */ s8 unk199; /* room? */
-    /* 0x19A */ u8 __pad[2];
 } ObjKibako; // size = 0x19C
 
 extern const ActorInit Obj_Kibako_InitVars;

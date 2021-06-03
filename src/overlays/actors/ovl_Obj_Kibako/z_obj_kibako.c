@@ -270,20 +270,17 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(this, 0x878);
-        return;
     } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
         Actor_MarkForDeath(&this->actor);
-        return;
     } else if ((this->collider.base.acFlags & 2)) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 0x14, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
-        return;
     } else {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         func_809262BC(this);
@@ -302,7 +299,6 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 800.0f) {
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
                 func_80926318(this, globalCtx);
-                return;
             }
         } else {
             if (this->actor.xzDistToPlayer < 800.0f) {
@@ -339,12 +335,12 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
             this->actor.flags &= 0xFBFFFFFF;
         }
         func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
-        return;
+    } else {
+        pos.x = this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + 20.0f;
+        pos.z = this->actor.world.pos.z;
+        this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &pos);
     }
-    pos.x = this->actor.world.pos.x;
-    pos.y = this->actor.world.pos.y + 20.0f;
-    pos.z = this->actor.world.pos.z;
-    this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &pos);
 }
 
 void ObjKibako_SetupThrown(ObjKibako* this) {
@@ -362,17 +358,17 @@ void ObjKibako_SetupThrown(ObjKibako* this) {
 void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
     void* pad;
     void* pad2;
-    s32 at_hit;
+    s32 atHit;
 
-    at_hit = (this->collider.base.atFlags & 2) != 0;
-    if (at_hit) {
+    atHit = (this->collider.base.atFlags & 2) != 0;
+    if (atHit) {
         this->collider.base.atFlags &= ~(2);
     }
     func_80926394(this, globalCtx);
     if (this->timer > 0) {
         this->timer--;
     }
-    if ((this->actor.bgCheckFlags & 0xB) || (at_hit) || (this->timer <= 0)) {
+    if ((this->actor.bgCheckFlags & 0xB) || (atHit) || (this->timer <= 0)) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
