@@ -276,7 +276,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
         Actor_MarkForDeath(&this->actor);
-    } else if ((this->collider.base.acFlags & 2)) {
+    } else if (this->collider.base.acFlags & 2) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 0x14, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
