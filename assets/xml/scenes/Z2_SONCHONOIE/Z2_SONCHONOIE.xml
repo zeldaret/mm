@@ -1,17 +1,17 @@
 <Root>
-    <File Name="Z2_SONCHONOIE" Game="MM">
-        <Scene Name="Z2_SONCHONOIE"/>
+    <File Name="Z2_SONCHONOIE" Segment="2" Game="MM">
+        <Scene Name="Z2_SONCHONOIE" Offset="0x0"/>
     </File>
-    <File Name="Z2_SONCHONOIE_room_00" Game="MM">
-        <Room Name="Z2_SONCHONOIE_room_00"/>
+    <File Name="Z2_SONCHONOIE_room_00" Segment="3" Game="MM">
+        <Room Name="Z2_SONCHONOIE_room_00" Offset="0x0"/>
     </File>
-    <File Name="Z2_SONCHONOIE_room_01" Game="MM">
-        <Room Name="Z2_SONCHONOIE_room_01"/>
+    <File Name="Z2_SONCHONOIE_room_01" Segment="3" Game="MM">
+        <Room Name="Z2_SONCHONOIE_room_01" Offset="0x0"/>
     </File>
-    <File Name="Z2_SONCHONOIE_room_02" Game="MM">
-        <Room Name="Z2_SONCHONOIE_room_02"/>
+    <File Name="Z2_SONCHONOIE_room_02" Segment="3" Game="MM">
+        <Room Name="Z2_SONCHONOIE_room_02" Offset="0x0"/>
     </File>
-    <File Name="Z2_SONCHONOIE_room_03" Game="MM">
-        <Room Name="Z2_SONCHONOIE_room_03"/>
+    <File Name="Z2_SONCHONOIE_room_03" Segment="3" Game="MM">
+        <Room Name="Z2_SONCHONOIE_room_03" Offset="0x0"/>
     </File>
 </Root>
