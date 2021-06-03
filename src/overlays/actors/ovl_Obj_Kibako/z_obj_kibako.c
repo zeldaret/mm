@@ -292,7 +292,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
             this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
-        this->collider.base.acFlags &= ~(2);
+        this->collider.base.acFlags &= ~2;
         if ((this->actor.params >> 7) & 1) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
