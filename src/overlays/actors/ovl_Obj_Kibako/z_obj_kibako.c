@@ -270,7 +270,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(this, 0x878);
-    } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 19.0f)) {
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
