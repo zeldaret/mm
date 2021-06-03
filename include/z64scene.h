@@ -384,7 +384,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
-    /* 0x4 */ void** textureList;
+    /* 0x4 */ void* textureList;
     /* 0x8 */ u8* textureIndexList;
 } AnimatedMatTexCycleParams; // size = 0xC
 
@@ -687,7 +687,7 @@ typedef enum {
     /* 0x06 */ SCENE_CMD_ID_ENTRANCE_LIST,
     /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
     /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
-    /* 0x09 */ SCENE_CMD_ID_UNUSED_09,
+    /* 0x09 */ SCENE_CMD_ID_UNK_09,
     /* 0x0A */ SCENE_CMD_ID_MESH,
     /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
     /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
@@ -718,8 +718,8 @@ typedef enum {
 #define SCENE_CMD_ACTOR_LIST(numActors, actorList) \
     { SCENE_CMD_ID_ACTOR_LIST, numActors, CMD_PTR(actorList) }
 
-#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(camList) \
-    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, 0, CMD_PTR(camList) }
+#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(numCams, camList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, numCams, CMD_PTR(camList) }
 
 #define SCENE_CMD_COL_HEADER(colHeader) \
     { SCENE_CMD_ID_COL_HEADER, 0, CMD_PTR(colHeader) }
@@ -744,6 +744,9 @@ typedef enum {
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
 
+#define SCENE_CMD_UNK_09() \
+    { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
+
 #define SCENE_CMD_MESH(meshHeader) \
     { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
 
@@ -751,7 +754,7 @@ typedef enum {
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
 
 #define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
-    { SCENE_CMD_ID_POS_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
 
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
@@ -803,47 +806,5 @@ typedef enum {
 
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
-
-//! @TODO: Remove these! These are only here for the time being to prevent compiler errors with scenes and rooms!
-
-// ----> AnimatedMaterial
-typedef struct {
-    /* 0x0 */ s8 segment;
-    /* 0x2 */ s16 type;
-    /* 0x4 */ void* params;
-} AnimatedTexture; // size = 0x8
-
-// ----> AnimatedMatTexScrollParams
-typedef struct {
-    /* 0x0 */ s8 xStep;
-    /* 0x1 */ s8 yStep;
-    /* 0x2 */ u8 width;
-    /* 0x3 */ u8 height;
-} ScrollingTextureParams; // size = 0x4
-
-// ----> F3DPrimColor
-typedef struct {
-    /* 0x0 */ u8 red;
-    /* 0x1 */ u8 green;
-    /* 0x2 */ u8 blue;
-    /* 0x3 */ u8 alpha;
-    /* 0x4 */ u8 lodFrac;
-} FlashingTexturePrimColor; // size = 0x5
-
-// ----> AnimatedMatColorParams
-typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x2 */ u16 numKeyFrames;
-    /* 0x4 */ FlashingTexturePrimColor* primColors;
-    /* 0x8 */ Color_RGBA8* envColors;
-    /* 0xC */ u16* keyFrames;
-} FlashingTextureParams; // size = 0x10
-
-// ----> AnimatedMatTexCycleParams
-typedef struct {
-    /* 0x0 */ u16 cycleLength;
-    /* 0x4 */ Gfx** textureDls;
-    /* 0x8 */ u8* textureDlOffsets;
-} CyclingTextureParams; // size = 0xC
 
 #endif
