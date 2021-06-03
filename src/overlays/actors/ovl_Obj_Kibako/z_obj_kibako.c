@@ -7,22 +7,26 @@
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx);
-void func_80927334(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809261B0(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx);
 void func_809262BC(ObjKibako* this);
 void func_80926318(ObjKibako* this, GlobalContext* globalCtx);
-void func_8092650C(ObjKibako* this, GlobalContext* globalCtx);
-void func_809267EC(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx);
 void func_80926B40(ObjKibako* this);
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx);
-void func_80926BE0(ObjKibako* this);
-void func_80926BF4(ObjKibako* this, GlobalContext* globalCtx);
-void func_80926EF4(ObjKibako* this);
-void func_80926F08(ObjKibako* this, GlobalContext* globalCtx);
-void func_8092703C(ObjKibako* this);
-void func_809270F8(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_SetupIdle(ObjKibako* this);
+void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_SetupHeld(ObjKibako* this);
+void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx);
+void ObjKibako_SetupThrown(ObjKibako* this);
+void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx);
 
+static UNK_TYPE2 D_80927380 = 0;
+static UNK_TYPE2 D_80927384 = 0;
+static UNK_TYPE2 D_80927388 = 0;
+static UNK_TYPE2 D_8092738C = 0;
 
 const ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
@@ -36,13 +40,7 @@ const ActorInit Obj_Kibako_InitVars = {
     (ActorFunc)NULL,
 };
 
-static u16 D_80927380 = 0;
-static s16 D_80927384 = 0;
-static s16 D_80927388 = 0;
-static s16 D_8092738C = 0;
-
-//sCylinderInit
-static ColliderCylinderInit D_809273B0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_PLAYER,
@@ -62,25 +60,20 @@ static ColliderCylinderInit D_809273B0 = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
-//sObjectBankTable
-static s16 D_809273DC[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
+static s16 sObjectBankTable[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-//sParticleDisplayLists
-static Gfx* D_809273E0[] = { 0x05007980, 0x06001A70 };
+static Gfx* sParticleDisplayLists[] = { 0x05007980, 0x06001A70 };
 
-//sMainDisplayLists
-static Gfx* D_809273E8[] = { 0x05007890, 0x06001180 };
+static Gfx* sMainDisplayLists[] = { 0x05007890, 0x06001180 };
 
-//sInitChain
-static InitChainEntry D_809273F0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(minVelocityY, -18000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
 };
 
-#ifndef NON_MATCHING
-void func_809261B0(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
     s32 collectible;
 
     if (this->unk198 == 0) {
@@ -91,12 +84,8 @@ void func_809261B0(ObjKibako* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_809261B0.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80926224(ObjKibako *this) {
+void ObjKibako_SetShadow(ObjKibako *this) {
     if ((this->actor.projectedPos.z < 370.0f) && (this->actor.projectedPos.z > -10.0f)) {
         this->actor.shape.shadowDraw = func_800B4024;
         this->actor.shape.shadowScale = 1.4f;
@@ -105,11 +94,7 @@ void func_80926224(ObjKibako *this) {
         this->actor.shape.shadowDraw = NULL;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926224.asm")
-#endif
 
-#ifndef NON_MATCHING
 void func_809262BC(ObjKibako *this) {
     s16 angle = this->actor.world.rot.y;
 
@@ -118,11 +103,7 @@ void func_809262BC(ObjKibako *this) {
         (&this->actor.shape.rot)->y = this->actor.world.rot.y;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_809262BC.asm")
-#endif
 
-#ifndef NON_MATCHING
 void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
     s16 angle;
     s32 pad;
@@ -134,28 +115,20 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926318.asm")
-#endif
 
-#ifndef NON_MATCHING
 void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
     if ((this->unk198 == 0) && (globalCtx->roomContext.currRoom.num != this->unk199)) {
         this->unk198 = 1;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926394.asm")
-#endif
 
-#ifndef NON_MATCHING
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ObjKibako* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s32 whichBankIndex;
 
     whichBankIndex = (this->actor.params >> 0xF) & 1;
-    Actor_ProcessInitChain(&this->actor, D_809273F0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
     if (!whichBankIndex) {
         this->actor.uncullZoneForward = 4000.0f;
@@ -163,10 +136,10 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.uncullZoneForward = 800.0f;
     }
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809273B0);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = 0xFF;
-    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, D_809273DC[whichBankIndex]);
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectBankTable[whichBankIndex]);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -174,23 +147,15 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk199 = this->actor.room;
     func_80926B40(this);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/ObjKibako_Init.asm")
-#endif
 
-#ifndef NON_MATCHING
 void ObjKibako_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjKibako* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/ObjKibako_Destroy.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_8092650C(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
     s16 angle;
     s32 i;
     Vec3f* worldPos = &this->actor.world.pos;
@@ -223,18 +188,14 @@ void func_8092650C(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0,
                              (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60, -1,
-                             D_809273DC[(this->actor.params >> 0xF) & 1], D_809273E0[(this->actor.params >> 0xF) & 1]);
+                             sObjectBankTable[(this->actor.params >> 0xF) & 1], sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 
     func_800BBFB0(globalCtx, worldPos, 40.0f, 3, 0x32, 0x8C, 1);
     func_800BBFB0(globalCtx, worldPos, 40.0f, 2, 0x14, 0x50, 1);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_8092650C.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_809267EC(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
     s16 angle;
     s32 i;
     Vec3f* worldPos = &this->actor.world.pos;
@@ -271,67 +232,51 @@ void func_809267EC(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0,
                         (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70, -1,
-                        D_809273DC[(this->actor.params >> 0xF) & 1], D_809273E0[(this->actor.params >> 0xF) & 1]);
+                        sObjectBankTable[(this->actor.params >> 0xF) & 1], sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_809267EC.asm")
-#endif
 
-#ifndef NON_MATCHING
 void func_80926B40(ObjKibako* this) {
     this->actionFunc = func_80926B54;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926B40.asm")
-#endif
 
-#ifndef NON_MATCHING
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex) != 0) {
-        this->actor.draw = func_80927334;
+        this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
-        func_80926BE0(this);
+        ObjKibako_SetupIdle(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926B54.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80926BE0(ObjKibako* this) {
-    this->actionFunc = func_80926BF4;
+void ObjKibako_SetupIdle(ObjKibako* this) {
+    this->actionFunc = ObjKibako_Idle;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926BE0.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80926BF4(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad1;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        func_80926EF4(this);
+        ObjKibako_SetupHeld(this);
         this->actor.room = -1;
         this->actor.colChkInfo.mass = 0x78;
         if (func_800A817C(this->actor.params & 0x3F)) {
-            func_809261B0(this, globalCtx);
+            ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(this, 0x878);
         return;
     } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 19.0f)) {
-        func_809267EC(this, globalCtx);
-        func_809261B0(this, globalCtx);
+        ObjKibako_WaterBreak(this, globalCtx);
+        ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
         Actor_MarkForDeath(&this->actor);
         return;
     } else if ((this->collider.base.acFlags & 2)) {
-        func_8092650C(this, globalCtx);
-        func_809261B0(this, globalCtx);
+        ObjKibako_AirBreak(this, globalCtx);
+        ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 0x14, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
         return;
@@ -366,20 +311,12 @@ void func_80926BF4(ObjKibako* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926BF4.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80926EF4(ObjKibako* this) {
-    this->actionFunc = func_80926F08;
+void ObjKibako_SetupHeld(ObjKibako* this) {
+    this->actionFunc = ObjKibako_Held;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926EF4.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80926F08(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f pos;
     s32 sp2C;
@@ -388,12 +325,12 @@ void func_80926F08(ObjKibako* this, GlobalContext* globalCtx) {
     if (func_800B8BFC(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
-            func_80926BE0(this);
+            ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~(8);
             Audio_PlayActorSound2(&this->actor, 0x28AB); // NA_SE_EV_PUT_DOWN_WOODBOX
         } else {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-            func_8092703C(this);
+            ObjKibako_SetupThrown(this);
             this->actor.flags &= 0xFBFFFFFF;
         }
         func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
@@ -404,12 +341,8 @@ void func_80926F08(ObjKibako* this, GlobalContext* globalCtx) {
     pos.z = this->actor.world.pos.z;
     this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &pos);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80926F08.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_8092703C(ObjKibako* this) {
+void ObjKibako_SetupThrown(ObjKibako* this) {
     f32 temp;
 
     D_80927380 = 0;
@@ -418,14 +351,10 @@ void func_8092703C(ObjKibako* this) {
     D_80927384 = (Rand_ZeroOne() - 2.0f) * 1500.0f;
     D_8092738C = temp * 3.0f;
     this->timer = 80;
-    this->actionFunc = func_809270F8;
+    this->actionFunc = ObjKibako_Thrown;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_8092703C.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_809270F8(ObjKibako* this, GlobalContext* globalCtx) {
+void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
     void* pad;
     void* pad2;
     s32 at_hit;
@@ -439,15 +368,15 @@ void func_809270F8(ObjKibako* this, GlobalContext* globalCtx) {
         this->timer--;
     }
     if ((this->actor.bgCheckFlags & 0xB) || (at_hit) || (this->timer <= 0)) {
-        func_8092650C(this, globalCtx);
-        func_809261B0(this, globalCtx);
+        ObjKibako_AirBreak(this, globalCtx);
+        ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
     }
     else {
         if ((this->actor.bgCheckFlags & 0x40) != 0) {
-            func_809267EC(this, globalCtx);
-            func_809261B0(this, globalCtx);
+            ObjKibako_WaterBreak(this, globalCtx);
+            ObjKibako_SpawnCollectible(this, globalCtx);
             func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
             func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
             Actor_MarkForDeath(&this->actor);
@@ -468,25 +397,14 @@ void func_809270F8(ObjKibako* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_809270F8.asm")
-#endif
 
-#ifndef NON_MATCHING
 void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_80926224(this);
+    ObjKibako_SetShadow(this);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/ObjKibako_Update.asm")
-#endif
 
-#ifndef NON_MATCHING
-void func_80927334(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_809273E8[((thisx->params >> 0xF) & 1)]);
+void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    func_800BDFC0(globalCtx, sMainDisplayLists[((thisx->params >> 0xF) & 1)]);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kibako_0x809261B0/func_80927334.asm")
-#endif
