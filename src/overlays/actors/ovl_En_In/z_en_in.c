@@ -4,12 +4,17 @@
 
 #define THIS ((EnIn*)thisx)
 
-#define TEST                                                                       \
-    {                                                                              \
-        gSaveContext.weekEventReg[92] &= (u8)~7;                                    \
-        gSaveContext.weekEventReg[92] |= (u8)(gSaveContext.weekEventReg[92] & ~7); \
+#define TEST                                                                   \
+    {                                                                          \
+        gSaveContext.weekEventReg[92] &= (u8)~7;                               \
+        gSaveContext.weekEventReg[92] |= (gSaveContext.weekEventReg[92] & ~7); \
     }
 
+#define TEST2                                                                            \
+    {                                                                                    \
+        gSaveContext.weekEventReg[92] &= (u8)~7;                                         \
+        gSaveContext.weekEventReg[92] |= (u8)((gSaveContext.weekEventReg[92] & ~7) | 1); \
+    }
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -702,7 +707,7 @@ s32 func_808F43E0(EnIn* this) {
 #endif
 
 #if NON_MATCHING
-// Order looks right, individual cases have issues
+// Just bit operations with weekEventRegs[92] (TEST2), and one bnel instead of bne in case 5 with 0x3469
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     u16 textId = this->actor.textId;
     s32 ret = 1;
@@ -809,13 +814,13 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3466:
-                    if (globalCtx->msgCtx.choiceIndex == 0) { // Extra add 0x4980 then lw at a lower index later
+                    if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.rupees >= msgCtx->unk1206C) {
+                        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
                                 func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
-                                func_801159EC(-msgCtx->unk1206C);
+                                func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = 1;
                             } else {
                                 func_800E8EA0(globalCtx, &this->actor, 0x3469);
@@ -881,7 +886,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
-                    TEST; //Seems different, has an extra ori 0x1
+                    TEST2;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -889,7 +894,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                    if (msgCtx->choiceIndex == 0) {
                         func_808F4150(globalCtx, this, arg2, msgCtx);
                         ret = 0;
                     } else {
@@ -1045,6 +1050,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x348E:
+                case 0x34B3:
                     func_800E8EA0(globalCtx, &this->actor, 0x348F);
                     gSaveContext.weekEventReg[16] |= 2;
                     ret = 0;
@@ -1059,13 +1065,13 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3490:
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                    if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.rupees >= msgCtx->unk1206C) {
+                        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
                                 func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
-                                func_801159EC(-msgCtx->unk1206C);
+                                func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = 1;
                             } else {
                                 func_800E8EA0(globalCtx, &this->actor, 0x3469);
@@ -1074,7 +1080,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         } else {
                             play_sound(0x4806);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
-                            ret = 0; //Extra Branch
+                            ret = 0;
                         }
                     } else {
                         func_8019F230();
@@ -1086,8 +1092,6 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     this->actionFunc = func_808F5A94;
                 case 0x3491:
                     func_80151BB4(globalCtx, 0x11);
-                    break;
-                case 0x34B3:
                     break;
             }
             break;
@@ -1129,7 +1133,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3475:
-                    TEST; //Seems different, has an extra ori 0x1
+                    TEST2;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -1192,7 +1196,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x349B:
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                    if (msgCtx->choiceIndex == 0) {
                         func_808F4270(globalCtx, this, arg2, msgCtx, 1);
                         ret = 0;
                     } else {
