@@ -62,9 +62,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-static Gfx* sKakeraDisplayLists[] = { 0x05007980, 0x06001A70 };
+static Gfx* sKakeraDisplayLists[] = { D_05007980, D_06001A70 };
 
-static Gfx* sDisplayLists[] = { 0x05007890, 0x06001180 };
+static Gfx* sDisplayLists[] = { D_05007890, D_06001180 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
@@ -76,12 +76,12 @@ static InitChainEntry sInitChain[] = {
 void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
     s32 collectible;
 
-    if (this->unk198 == 0) {
+    if (this->isDropCollected == 0) {
         collectible = func_800A8150(this->actor.params & 0x3F);
         if (collectible >= 0) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                                 collectible | (((this->actor.params >> 8) & 0x7F) << 8));
-            this->unk198 = 1;
+                                 collectible | GET_KIBAKO_COLLECTIBLE_ID(this));
+            this->isDropCollected = 1;
         }
     }
 }
@@ -119,8 +119,8 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
 }
 
 void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
-    if ((this->unk198 == 0) && (globalCtx->roomContext.currRoom.num != this->unk199)) {
-        this->unk198 = 1;
+    if ((this->isDropCollected == 0) && (globalCtx->roomContext.currRoom.num != this->unk199)) {
+        this->isDropCollected = 1;
     }
 }
 
