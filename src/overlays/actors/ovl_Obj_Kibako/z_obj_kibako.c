@@ -79,23 +79,25 @@ void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
     if (this->unk198 == 0) {
         collectible = func_800A8150(this->actor.params & 0x3F);
         if (collectible >= 0) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos, collectible | (((this->actor.params >> 8) & 0x7F) << 8));
+            Item_DropCollectible(globalCtx, &this->actor.world.pos,
+                                 collectible | (((this->actor.params >> 8) & 0x7F) << 8));
             this->unk198 = 1;
         }
     }
 }
 
-void ObjKibako_SetShadow(ObjKibako *this) {
+void ObjKibako_SetShadow(ObjKibako* this) {
     if ((this->actor.projectedPos.z < 370.0f) && (this->actor.projectedPos.z > -10.0f)) {
         this->actor.shape.shadowDraw = func_800B4024;
         this->actor.shape.shadowScale = 1.4f;
-        this->actor.shape.shadowAlpha = (this->actor.projectedPos.z < 200.0f) ? 100 : (400 - ((s32)this->actor.projectedPos.z)) >> 1;
+        this->actor.shape.shadowAlpha =
+            (this->actor.projectedPos.z < 200.0f) ? 100 : (400 - ((s32)this->actor.projectedPos.z)) >> 1;
     } else {
         this->actor.shape.shadowDraw = NULL;
     }
 }
 
-void func_809262BC(ObjKibako *this) {
+void func_809262BC(ObjKibako* this) {
     s16 angle = this->actor.world.rot.y;
 
     if ((angle & 0x3FFF) != 0) {
@@ -188,7 +190,8 @@ void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0,
                              (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60, -1,
-                             sObjectBankTable[(this->actor.params >> 0xF) & 1], sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
+                             sObjectBankTable[(this->actor.params >> 0xF) & 1],
+                             sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 
     func_800BBFB0(globalCtx, worldPos, 40.0f, 3, 0x32, 0x8C, 1);
@@ -231,8 +234,9 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
         phi_s0 = (temp_rand < 0.2f) ? 0x40 : 0x20;
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0,
-                        (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70, -1,
-                        sObjectBankTable[(this->actor.params >> 0xF) & 1], sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
+                             (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70, -1,
+                             sObjectBankTable[(this->actor.params >> 0xF) & 1],
+                             sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 }
 
@@ -287,7 +291,8 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         if (!(this->collider.base.ocFlags1 & 8) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= 8;
         }
-        if ((this->actor.colChkInfo.mass != 0xFF) && (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
+        if ((this->actor.colChkInfo.mass != 0xFF) &&
+            (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
             this->actor.colChkInfo.mass = 0xFF;
         }
         this->collider.base.acFlags &= ~(2);
@@ -372,24 +377,22 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
-    }
-    else {
+    } else {
         if ((this->actor.bgCheckFlags & 0x40) != 0) {
             ObjKibako_WaterBreak(this, globalCtx);
             ObjKibako_SpawnCollectible(this, globalCtx);
             func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
             func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
             Actor_MarkForDeath(&this->actor);
-        }
-        else {
+        } else {
             if (this->actor.velocity.y < -0.05f) {
                 this->actor.gravity = -2.3f;
             }
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             Math_StepToS(&D_80927384, D_80927380, 0xA0);
             Math_StepToS(&D_8092738C, D_80927388, 0xA0);
-            this->actor.shape.rot.x = (s16) (this->actor.shape.rot.x + D_80927384);
-            this->actor.shape.rot.y = (s16) (this->actor.shape.rot.y + D_8092738C);
+            this->actor.shape.rot.x = (s16)(this->actor.shape.rot.x + D_80927384);
+            this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + D_8092738C);
             func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
