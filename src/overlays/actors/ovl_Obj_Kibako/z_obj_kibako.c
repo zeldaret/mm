@@ -327,7 +327,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
-            this->collider.base.ocFlags1 &= ~(8);
+            this->collider.base.ocFlags1 &= ~8;
             Audio_PlayActorSound2(&this->actor, 0x28AB); // NA_SE_EV_PUT_DOWN_WOODBOX
         } else {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
