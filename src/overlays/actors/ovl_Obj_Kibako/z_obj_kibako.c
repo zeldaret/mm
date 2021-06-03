@@ -374,7 +374,7 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
     } else {
-        if ((this->actor.bgCheckFlags & 0x40) != 0) {
+        if (this->actor.bgCheckFlags & 0x40) {
             ObjKibako_WaterBreak(this, globalCtx);
             ObjKibako_SpawnCollectible(this, globalCtx);
             func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
