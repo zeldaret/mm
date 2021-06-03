@@ -98,7 +98,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
-    if (isInitialized == false) {
+    if (!isInitialized) {
         for (i = 0; i < 2; i++) {
             D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
