@@ -23,10 +23,10 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx);
 void ObjKibako_SetupThrown(ObjKibako* this);
 void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx);
 
-static UNK_TYPE2 D_80927380 = 0;
-static UNK_TYPE2 D_80927384 = 0;
-static UNK_TYPE2 D_80927388 = 0;
-static UNK_TYPE2 D_8092738C = 0;
+static s16 D_80927380 = 0;
+static s16 D_80927384 = 0;
+static s16 D_80927388 = 0;
+static s16 D_8092738C = 0;
 
 const ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
@@ -60,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
-static s16 sObjectBankTable[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
+static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-static Gfx* sParticleDisplayLists[] = { 0x05007980, 0x06001A70 };
+static Gfx* sKakeraDisplayLists[] = { 0x05007980, 0x06001A70 };
 
-static Gfx* sMainDisplayLists[] = { 0x05007890, 0x06001180 };
+static Gfx* sDisplayLists[] = { 0x05007890, 0x06001180 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
@@ -102,7 +102,7 @@ void func_809262BC(ObjKibako* this) {
 
     if ((angle & 0x3FFF) != 0) {
         angle = Math_ScaledStepToS(&this->actor.world.rot.y, (s16)(angle + 0x2000) & 0xC000, 0x640);
-        (&this->actor.shape.rot)->y = this->actor.world.rot.y;
+        this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 }
 
@@ -141,7 +141,7 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = 0xFF;
-    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectBankTable[whichBankIndex]);
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -190,8 +190,8 @@ void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0,
                              (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60, -1,
-                             sObjectBankTable[(this->actor.params >> 0xF) & 1],
-                             sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
+                             sObjectIdList[(this->actor.params >> 0xF) & 1],
+                             sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 
     func_800BBFB0(globalCtx, worldPos, 40.0f, 3, 0x32, 0x8C, 1);
@@ -235,8 +235,8 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0,
                              (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70, -1,
-                             sObjectBankTable[(this->actor.params >> 0xF) & 1],
-                             sParticleDisplayLists[(this->actor.params >> 0xF) & 1]);
+                             sObjectIdList[(this->actor.params >> 0xF) & 1],
+                             sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 }
 
@@ -409,5 +409,5 @@ void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, sMainDisplayLists[((thisx->params >> 0xF) & 1)]);
+    func_800BDFC0(globalCtx, sDisplayLists[((thisx->params >> 0xF) & 1)]);
 }
