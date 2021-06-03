@@ -332,7 +332,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         } else {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= 0xFBFFFFFF;
+            this->actor.flags &= ~0x4000000;
         }
         func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     } else {
