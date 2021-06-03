@@ -6,7 +6,7 @@
 
 #define TEST                                                                       \
     {                                                                              \
-        gSaveContext.weekEventReg[92] &= 0xF8;                                     \
+        gSaveContext.weekEventReg[92] &= (u8)~7;                                    \
         gSaveContext.weekEventReg[92] |= (u8)(gSaveContext.weekEventReg[92] & ~7); \
     }
 
@@ -702,11 +702,12 @@ s32 func_808F43E0(EnIn* this) {
 #endif
 
 #if NON_MATCHING
-// Control flow from case 5 onwards is all wrong
+// Order looks right, individual cases have issues
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     u16 textId = this->actor.textId;
     s32 ret = 1;
-    MessageContext* msgCtx;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    s32 pad[2];
 
     switch (textId) {
         case 0x34AF:
@@ -808,8 +809,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3466:
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
-                        msgCtx = &globalCtx->msgCtx; // Extra add 0x4980 then lw at a lower index later
+                    if (globalCtx->msgCtx.choiceIndex == 0) { // Extra add 0x4980 then lw at a lower index later
                         func_8019F208();
                         if (gSaveContext.rupees >= msgCtx->unk1206C) {
                             if (func_80114E90()) {
@@ -833,6 +833,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     }
                     break;
                 case 0x3467:
+                case 0x3468:
+                case 0x3469:
                     func_80151BB4(globalCtx, 0x11);
                     ret = 1;
                     break;
@@ -865,21 +867,21 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3471:
-                    func_808F4150(globalCtx, this, arg2, &globalCtx->msgCtx);
+                    func_808F4150(globalCtx, this, arg2, msgCtx);
                     ret = 0;
                     break;
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.weekEventReg[56] &= ~8;
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     ret = 1;
                     break;
                 case 0x3473:
-                    gSaveContext.weekEventReg[56] &= ~8;
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
-                    TEST;
+                    TEST; //Seems different, has an extra ori 0x1
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -888,18 +890,18 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3478:
                     if (globalCtx->msgCtx.choiceIndex == 0) {
-                        func_808F4150(globalCtx, this, arg2, &globalCtx->msgCtx);
+                        func_808F4150(globalCtx, this, arg2, msgCtx);
                         ret = 0;
                     } else {
                         func_8019F230();
-                        gSaveContext.weekEventReg[56] &= ~8;
+                        gSaveContext.weekEventReg[56] &= (u8)~8;
                         func_808F4108(this, globalCtx, 0x3479);
                         ret = 0;
                     }
                     break;
                 case 0x347B:
                     func_808F4108(this, globalCtx, 0x347C);
-                    gSaveContext.weekEventReg[56] &= ~8;
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
                     ret = 0;
                     break;
             }
@@ -1039,8 +1041,6 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
         case 5:
             switch (textId) {
                 case 0x3468:
-                    func_80151BB4(globalCtx, 0x11);
-                    break;
                 case 0x3469:
                     func_80151BB4(globalCtx, 0x11);
                     break;
@@ -1049,9 +1049,17 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     gSaveContext.weekEventReg[16] |= 2;
                     ret = 0;
                     break;
+                case 0x3493:
+                    func_800E8EA0(globalCtx, &this->actor, 0x3494);
+                    ret = 0;
+                    break;
+                case 0x348F:
+                case 0x3494:
+                    func_800E8EA0(globalCtx, &this->actor, 0x3490);
+                    ret = 0;
+                    break;
                 case 0x3490:
                     if (globalCtx->msgCtx.choiceIndex == 0) {
-                        msgCtx = &globalCtx->msgCtx;
                         func_8019F208();
                         if (gSaveContext.rupees >= msgCtx->unk1206C) {
                             if (func_80114E90()) {
@@ -1066,7 +1074,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         } else {
                             play_sound(0x4806);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
-                            ret = 0;
+                            ret = 0; //Extra Branch
                         }
                     } else {
                         func_8019F230();
@@ -1074,104 +1082,59 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         ret = 0;
                     }
                     break;
+                case 0x3492:
+                    this->actionFunc = func_808F5A94;
                 case 0x3491:
                     func_80151BB4(globalCtx, 0x11);
                     break;
-                case 0x3492:
-                    this->actionFunc = func_808F5A94;
-                    func_80151BB4(globalCtx, 0x11);
-                    break;
-                case 0x3493:
-                    func_800E8EA0(globalCtx, &this->actor, 0x3494);
-                    ret = 0;
-                    break;
-                default:
-                    func_800E8EA0(globalCtx, &this->actor, 0x3490);
-                    ret = 0;
-                    break;
-            }
-            break;
-        case 6:
-            switch (textId) {
-                case 0x3471:
-                    func_808F4270(globalCtx, this, arg2, &globalCtx->msgCtx, 0);
-                    ret = 0;
-                    break;
-                case 0x3472:
-                    func_808F43E0(this);
-                    gSaveContext.weekEventReg[92] &= ~8;
-                    func_80151BB4(globalCtx, 0x11);
-                    break;
-                case 0x3496:
-                    func_808F4108(this, globalCtx, 0x3497);
-                    ret = 0;
-                    break;
-                case 0x3498:
-                    func_800E8EA0(globalCtx, &this->actor, 0x3471);
-                    ret = 0;
-                    break;
-                case 0x349E:
-                    func_808F4108(this, globalCtx, 0x3495);
-                    gSaveContext.weekEventReg[92] &= ~8;
-                    break;
-                case 0x34A6:
-                    func_800E8EA0(globalCtx, &this->actor, 0x3471);
-                    ret = 0;
+                case 0x34B3:
                     break;
             }
             break;
         case 7:
             switch (textId) {
-                case 0x3472:
-                    gSaveContext.weekEventReg[92] &= ~8;
+                case 0x34A7:
                     func_80151BB4(globalCtx, 0x11);
                     break;
-                case 0x3473:
-                    func_800E8EA0(globalCtx, &this->actor, 0x3475);
-                    ret = 0;
-                    break;
-                case 0x3475: // TODO: Figure out these bit operations with eventReg 92
-                    TEST;
-                    func_800FD750(0x40);
-                    globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
-                    gSaveContext.weekEventReg[56] |= 1;
+                case 0x34A8:
+                    func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3495:
                     func_808F4108(this, globalCtx, 0x3496);
                     gSaveContext.weekEventReg[16] |= 4;
-                    gSaveContext.weekEventReg[92] |= 8;
+                    gSaveContext.weekEventReg[56] |= 8;
                     ret = 0;
                     break;
                 case 0x3497:
                     func_808F4108(this, globalCtx, 0x3498);
                     ret = 0;
                     break;
-                case 0x3499:
-                    func_800E8EA0(globalCtx, &this->actor, 0x349A);
-                    func_808F30B0(&this->skelAnime, 1);
-                    func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    ret = 0;
-                    break;
-                case 0x349A:
-                    func_800E8EA0(globalCtx, &this->actor, 0x349B);
-                    ret = 0;
-                    break;
-                case 0x349B:
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
-                        func_808F4270(globalCtx, this, arg2, &globalCtx->msgCtx, 1);
-                        ret = 0;
-                    } else {
-                        func_8019F230();
-                        func_800E8EA0(globalCtx, &this->actor, 0x349C);
-                        ret = 0;
-                    }
-                    break;
-                case 0x349C:
+                case 0x34A4:
+                    this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_808F35D8(this, globalCtx);
                     func_80151BB4(globalCtx, 0x11);
+                    ret = 1;
+                    break;
+                case 0x34A5:
+                    func_808F4108(this, globalCtx, 0x34A6);
+                    gSaveContext.weekEventReg[56] |= 8;
+                    ret = 0;
+                    break;
+                case 0x3473:
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    func_80151BB4(globalCtx, 0x11);
+                    break;
+                case 0x3474:
+                    func_800E8EA0(globalCtx, &this->actor, 0x3475);
+                    ret = 0;
+                    break;
+                case 0x3475:
+                    TEST; //Seems different, has an extra ori 0x1
+                    func_800FD750(0x40);
+                    globalCtx->nextEntranceIndex = 0xCE50;
+                    globalCtx->unk1887F = 5;
+                    globalCtx->unk18875 = 0x14;
+                    gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
                     func_808F30B0(&this->skelAnime, 1);
@@ -1196,6 +1159,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     func_80151BB4(globalCtx, 0x2F);
                     func_808F43E0(this);
+                    ret = 1;
                     break;
                 case 0x34A1:
                     func_808F35D8(this, globalCtx);
@@ -1215,23 +1179,64 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x34A3:
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
+                    ret = 1;
                     break;
-                case 0x34A7:
-                    func_80151BB4(globalCtx, 0x11);
+                case 0x3499:
+                    func_800E8EA0(globalCtx, &this->actor, 0x349A);
+                    func_808F30B0(&this->skelAnime, 1);
+                    func_808F30B0(&this->unk4A4->skelAnime, 7);
+                    ret = 0;
                     break;
-                case 0x34A8:
-                    func_80151BB4(globalCtx, 0x11);
+                case 0x349A:
+                    func_800E8EA0(globalCtx, &this->actor, 0x349B);
+                    ret = 0;
                     break;
-                case 0x34A4:
-                    this->actionFunc = func_808F5A34;
+                case 0x349B:
+                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                        func_808F4270(globalCtx, this, arg2, msgCtx, 1);
+                        ret = 0;
+                    } else {
+                        func_8019F230();
+                        func_800E8EA0(globalCtx, &this->actor, 0x349C);
+                        ret = 0;
+                    }
+                    break;
+                case 0x349C:
                     func_808F43E0(this);
+                    func_808F35D8(this, globalCtx);
                     func_80151BB4(globalCtx, 0x11);
-                    break;
-                case 0x34A5:
-                    func_808F4108(this, globalCtx, 0x34A6);
-                    gSaveContext.weekEventReg[92] |= 8;
+                    ret = 1;
                     break;
             }
+            break;
+        case 6:
+            switch (textId) {
+                case 0x3496:
+                    func_808F4108(this, globalCtx, 0x3497);
+                    ret = 0;
+                    break;
+                case 0x3498:
+                case 0x34A6:
+                    func_800E8EA0(globalCtx, &this->actor, 0x3471);
+                    ret = 0;
+                    break;
+                case 0x3471:
+                    func_808F4270(globalCtx, this, arg2, msgCtx, 0);
+                    ret = 0;
+                    break;
+                case 0x3472:
+                    func_808F43E0(this);
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    func_80151BB4(globalCtx, 0x11);
+                    ret = 1;
+                    break;
+                case 0x349E:
+                    func_808F4108(this, globalCtx, 0x349F);
+                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    ret = 0;
+                    break;
+            }
+            break;
     }
     return ret;
 }
