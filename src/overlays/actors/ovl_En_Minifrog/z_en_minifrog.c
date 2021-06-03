@@ -75,14 +75,14 @@ static UNK_TYPE4* D_808A4D74[] = {
 // gSaveContext.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    (0x00 << 8) | 0x00, 
-    (0x20 << 8) | 0x40, 
-    (0x20 << 8) | 0x80, 
-    (0x21 << 8) | 0x01, 
-    (0x21 << 8) | 0x02,
+    (0 << 8)  | 0x00, // NULL
+    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
+    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
+    (33 << 8) | 0x01, // Southern Swamp Frog Returned
+    (33 << 8) | 0x02, // Laundry Pool Frog Returned
 };
 
-static s32 D_808A4D88 = false;
+static s32 isInitialized = false;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -800, ICHAIN_STOP),
@@ -98,11 +98,11 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
-    if (D_808A4D88 == false) {
+    if (isInitialized == false) {
         for (i = 0; i < 2; i++) {
             D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
-        D_808A4D88 = true;
+        isInitialized = true;
     }
 
     this->frogIndex = (this->actor.params & 0xF);
@@ -117,7 +117,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
 
     if (1) {}
-    if (!((this->actor.params & 0xF0) >> 4)) { // Frogs scattered throughout the world
+    if (!EN_MINIFROG_IS_RETURNED(this->actor.params)) {
         if ((this->frogIndex == MINIFROG_YELLOW) || ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] & (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {

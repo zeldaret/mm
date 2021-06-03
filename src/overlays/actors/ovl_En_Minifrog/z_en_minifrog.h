@@ -7,6 +7,8 @@ struct EnMinifrog;
 
 typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, GlobalContext*);
 
+#define EN_MINIFROG_IS_RETURNED(params) (((params)&0xF0) >> 4)
+
 typedef enum {
     /* 0x00 */ MINIFROG_YELLOW,         // Mountain Village
     /* 0x01 */ MINIFROG_CYAN,           // Woodfall Temple
@@ -21,7 +23,6 @@ typedef enum {
     /* 0x01 */ MINIFROG_STATE_AIR,
     /* 0x02 */ MINIFROG_STATE_GROUND
 } MinifrogJumpState;
-
 
 typedef struct EnMinifrog {
     /* 0x000 */ Actor actor;
