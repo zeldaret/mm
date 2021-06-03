@@ -288,9 +288,9 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         if (!(this->collider.base.ocFlags1 & 8) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= 8;
         }
-        if ((this->actor.colChkInfo.mass != 0xFF) &&
+        if ((this->actor.colChkInfo.mass != MASS_IMMOVABLE) &&
             (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
-            this->actor.colChkInfo.mass = 0xFF;
+            this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
         this->collider.base.acFlags &= ~(2);
         if ((this->actor.params >> 7) & 1) {
