@@ -53,8 +53,8 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= 9;
         func_80C0662C(this);
     } else {
-        if ((gSaveContext.perm.weekEventReg[74] & 0x40) == 0) {
-            if ((gSaveContext.perm.weekEventReg[74] & 0x80)) {
+        if ((gSaveContext.weekEventReg[74] & 0x40) == 0) {
+            if ((gSaveContext.weekEventReg[74] & 0x80)) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, -1);
             }
@@ -102,14 +102,14 @@ void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
 }
 
 void func_80C0673C(ObjMoonStone* this) {
-    if ((gSaveContext.perm.weekEventReg[74] & 0x80) == 0) {
+    if ((gSaveContext.weekEventReg[74] & 0x80) == 0) {
         this->actor.draw = NULL;
     }
     this->actionFunc = func_80C06768;
 }
 
 void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.perm.weekEventReg[74] & 0x80)) {
+    if ((gSaveContext.weekEventReg[74] & 0x80)) {
         if (this->actor.draw == 0) {
             this->actor.draw = ObjMoonStone_Draw;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -133,7 +133,7 @@ void func_80C0685C(ObjMoonStone* this) {
 
 void func_80C06870(ObjMoonStone* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        gSaveContext.perm.weekEventReg[74] |= 0x40;
+        gSaveContext.weekEventReg[74] |= 0x40;
         Actor_MarkForDeath(&this->actor);
     }
 }

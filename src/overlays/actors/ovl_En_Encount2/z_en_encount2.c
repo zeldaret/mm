@@ -169,8 +169,8 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     if (this->isPopped != 1) {
-        func_800BDFC0(globalCtx, &D_06000A00);
-        func_800BDFC0(globalCtx, &D_06000D78);
+        func_800BDFC0(globalCtx, D_06000A00);
+        func_800BDFC0(globalCtx, D_06000D78);
     }
     EnEncount2_DrawParticles(this, globalCtx);
 }
