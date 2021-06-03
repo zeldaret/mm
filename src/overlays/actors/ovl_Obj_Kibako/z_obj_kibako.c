@@ -247,7 +247,7 @@ void func_80926B40(ObjKibako* this) {
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex) != 0) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
         ObjKibako_SetupIdle(this);
