@@ -362,7 +362,7 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
 
     atHit = (this->collider.base.atFlags & 2) != 0;
     if (atHit) {
-        this->collider.base.atFlags &= ~(2);
+        this->collider.base.atFlags &= ~2;
     }
     func_80926394(this, globalCtx);
     if (this->timer > 0) {
