@@ -32,7 +32,7 @@ typedef struct EnEncount2 {
     /* 0x01D0 */ EnEncount2Particle particles[200];
 } EnEncount2; // size = 0x2A70
 
-#define GET_ENCOUNT2_SWITCH_FLAG(this)((s16) (this->dyna.actor.params & 0x7F))
+#define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))
 
 extern const ActorInit En_Encount2_InitVars;
 
