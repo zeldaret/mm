@@ -140,7 +140,7 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
@@ -247,7 +247,7 @@ void func_80926B40(ObjKibako* this) {
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex) != 0) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
         ObjKibako_SetupIdle(this);
@@ -270,13 +270,13 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(this, 0x878);
-    } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 19.0f)) {
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         func_800F0568(globalCtx, &this->actor.world.pos, 40, 0x28C5);
         Actor_MarkForDeath(&this->actor);
-    } else if ((this->collider.base.acFlags & 2)) {
+    } else if (this->collider.base.acFlags & 2) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 0x14, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
@@ -288,11 +288,11 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         if (!(this->collider.base.ocFlags1 & 8) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= 8;
         }
-        if ((this->actor.colChkInfo.mass != 0xFF) &&
+        if ((this->actor.colChkInfo.mass != MASS_IMMOVABLE) &&
             (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
-            this->actor.colChkInfo.mass = 0xFF;
+            this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
-        this->collider.base.acFlags &= ~(2);
+        this->collider.base.acFlags &= ~2;
         if ((this->actor.params >> 7) & 1) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -327,12 +327,12 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
-            this->collider.base.ocFlags1 &= ~(8);
+            this->collider.base.ocFlags1 &= ~8;
             Audio_PlayActorSound2(&this->actor, 0x28AB); // NA_SE_EV_PUT_DOWN_WOODBOX
         } else {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= 0xFBFFFFFF;
+            this->actor.flags &= ~0x4000000;
         }
         func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     } else {
@@ -362,7 +362,7 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
 
     atHit = (this->collider.base.atFlags & 2) != 0;
     if (atHit) {
-        this->collider.base.atFlags &= ~(2);
+        this->collider.base.atFlags &= ~2;
     }
     func_80926394(this, globalCtx);
     if (this->timer > 0) {
@@ -374,7 +374,7 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
         func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
         Actor_MarkForDeath(&this->actor);
     } else {
-        if ((this->actor.bgCheckFlags & 0x40) != 0) {
+        if (this->actor.bgCheckFlags & 0x40) {
             ObjKibako_WaterBreak(this, globalCtx);
             ObjKibako_SpawnCollectible(this, globalCtx);
             func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28AA); // NA_SE_EV_WOODBOX_BREAK
