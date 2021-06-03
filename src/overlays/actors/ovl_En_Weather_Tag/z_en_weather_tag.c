@@ -60,48 +60,49 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Path* path;
     s32 pathID;
 
-    this->actor.flags &= ~1;
+    // flag: targetable, left over? not set by default above
+    this->actor.flags &= ~1; 
 
     switch (WEATHER_TAG_TYPE(this->actor.params)) {
-        case 0:
+        case WEATHERTAG_TYPE_UNK0:
             this->unk154 = 0;
             this->fadeDistance = (s16) this->actor.world.rot.x;
             this->unk158 = (s16) this->actor.world.rot.y;
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
-        case 1:
+        case WEATHERTAG_TYPE_UNK1:
             // if cleared STT
             if ((gSaveContext.weekEventReg[0x34] & 0x20) != 0) {
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
-        case 2:
+        case WEATHERTAG_TYPE_WINTERFOG:
             EnWeatherTag_SetupAction(this, func_80966E0C);
             break;
-        case 3:
+        case WEATHERTAG_TYPE_UNK3:
             if (0) {} // this can move to diff locations and still match
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
-        case 4:
+        case WEATHERTAG_TYPE_UNK4:
             EnWeatherTag_SetupAction(this, func_80966FEC);
             break;
-        case 5:
+        case WEATHERTAG_TYPE_UNK5:
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 7);
             globalCtx->unk18874 = 3;
             globalCtx->kankyoContext.unk1F = 5;
             globalCtx->kankyoContext.unk20 = 5;
             D_801F4E74 = 1.0f;
-            EnWeatherTag_SetupAction(this, &func_80966BF4);
+            EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
-        case 6:
+        case WEATHERTAG_TYPE_WATERMURK:
             pathID = WEATHER_TAG_PATHID(this->actor.params);
             path = &globalCtx->setupPathList[pathID];
             this->pathPoints = Lib_SegmentedToVirtual(path->points);
             this->pathCount = path->count;
             EnWeatherTag_SetupAction(this, func_809672DC);
             break;
-        case 7:
+        case WEATHERTAG_TYPE_LOCALDAY2RAIN:
             EnWeatherTag_SetupAction(this, func_809674C8);
     }
 }
@@ -191,6 +192,7 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
+// type 0
 void func_80966A08(EnWeatherTag* this, GlobalContext* globalCtx) {
     this->unk154 += this->unk158;
     if (this->unk154 >= 0x8001) {
@@ -200,6 +202,7 @@ void func_80966A08(EnWeatherTag* this, GlobalContext* globalCtx) {
     func_8096689C(this, globalCtx);
 }
 
+// type 0_2
 void func_80966A68(EnWeatherTag* this, GlobalContext* globalCtx) {
     this->unk154 -= (this->unk158 >> 1);
     if (this->unk154 == 0) {
@@ -208,7 +211,7 @@ void func_80966A68(EnWeatherTag* this, GlobalContext* globalCtx) {
     if ((s16)this->unk154 < 0) {
         this->unk154 = 0;
         Actor_MarkForDeath(&this->actor);
-        EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
+        EnWeatherTag_SetupAction(this, EnWeatherTag_Die); // overkill
     }
     func_8096689C(this, globalCtx);
 }
@@ -219,6 +222,7 @@ void EnWeatherTag_Die(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // type 1
 // areas that use: all of ikana, swamp, termina field,stonetower temple, 
+//  poisoned swamp: placed behind the water fall from ikana
 // effect stop spawning after STT cleared
 void func_80966B08(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 0, globalCtx->kankyoContext.unk1F, 5, 100, 2) || D_801BDBB0 == 2) {
@@ -231,6 +235,8 @@ void func_80966B08(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
+// type 5 only one in ikana canyon, corner of cliff right outside of stone tower entrance
+// because it uses cutsecnes.. is this the clear ikana cutcsene?
 void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     u8 newUnk20;
     CsCmdActorAction* tmpAction;
@@ -308,7 +314,9 @@ void func_80966E84(EnWeatherTag* this, GlobalContext* globalCtx) {
 }
 
 //type 3
-// doesn't seem used?
+// unused in vanilla?
+//  just a heavy fog like the winter fog, but unused?
+// wait if you enter the scene through a room instead of fog you get a quick rain shower then nothing
 void func_80966EF0(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 1, 0, 2, 100, 4)) {
         func_800FD78C(globalCtx);
@@ -327,6 +335,9 @@ void func_80966F74(EnWeatherTag* this, GlobalContext* globalCtx) {
 }
 
 // type 4
+// no visible effect, what does it doooo??
+// used in south clock town??? romani ranch, clock tower rooftop woodfall..? stt
+// all of them have shorter distances though, like 0xA and 0x6, so their locations aree important
 void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     // weirdly, not the same as the other param lookup used in the rest of the file, which is float
     s32 distance = WEATHER_TAG_RANGE100INT(this->actor.params);
@@ -442,7 +453,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_809672DC.asm")
 #endif
 
-// type 7: rain proximity as approaching rainy scene 
+// WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene 
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
     ActorPlayer *player = PLAYER;

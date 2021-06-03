@@ -25,4 +25,15 @@ extern const ActorInit En_Weather_Tag_InitVars;
 #define WEATHER_TAG_RANGE100(x) ((u8)(((x >> 8) & 0xFF)) * 100.0f)
 #define WEATHER_TAG_RANGE100INT(x) ((u8)(((x >> 8))) * 100)
 
+typedef enum {
+    /* 0 */ WEATHERTAG_TYPE_UNK0,
+    /* 1 */ WEATHERTAG_TYPE_UNK1,
+    /* 2 */ WEATHERTAG_TYPE_WINTERFOG,
+    /* 3 */ WEATHERTAG_TYPE_UNK3,
+    /* 4 */ WEATHERTAG_TYPE_UNK4,
+    /* 5 */ WEATHERTAG_TYPE_UNK5,
+    /* 6 */ WEATHERTAG_TYPE_WATERMURK,
+    /* 7 */ WEATHERTAG_TYPE_LOCALDAY2RAIN,
+} WeatherTagType;
+
 #endif // Z_EN_WEATHER_TAG_H
