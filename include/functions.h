@@ -2709,7 +2709,7 @@ UNK_TYPE func_8013D768(Actor* actor, UNK_PTR arg1, s16 arg2);
 // void func_8013D924(void);
 Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* actorListStart, s32 actorCategory, s32 actorId);
 void func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, UNK_TYPE arg3);
-u8 func_8013DB90(GlobalContext* GlobalContext, UNK_PTR arg1, f32 arg2);
+u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
 // void func_8013DC40(void);
 // void func_8013DCE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE1 param_10);
 // void func_8013DE04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
