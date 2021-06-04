@@ -80,6 +80,20 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ s16   unk_06;
+    /* 0x08 */ Gfx*  opa;
+    /* 0x0C */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u8    type;
+    /* 0x01 */ u8    num; // number of dlist entries
+    /* 0x04 */ void* start;
+    /* 0x08 */ void* end;
+} PolygonType2; // size = 0xC
+
+typedef struct {
     /* 0x0 */ u16 floorHead;
     /* 0x2 */ u16 wallHead;
     /* 0x4 */ u16 ceilingHead;
@@ -919,9 +933,9 @@ typedef struct {
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
     /* 0x12022 */ u8 choiceIndex;
-    /* 0x12023 */ u8 unk12023;
-    /* 0x12024 */ u8 unk12024;
-    /* 0x12025 */ UNK_TYPE1 pad12025[0x19];
+    /* 0x12023 */ UNK_TYPE1 pad12023[0x7];
+    /* 0x1202A */ u16 unk1202A;
+    /* 0x1202C */ UNK_TYPE1 pad1202B[0x18];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
