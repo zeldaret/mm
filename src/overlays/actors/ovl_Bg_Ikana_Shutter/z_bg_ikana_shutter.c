@@ -48,7 +48,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_06000F28;
-extern UNK_PTR D_06000CE8;
+extern Gfx D_06000CE8[];
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
@@ -207,5 +207,5 @@ void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000CE8);
+    func_800BDFC0(globalCtx, D_06000CE8);
 }
