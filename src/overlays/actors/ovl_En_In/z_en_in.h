@@ -7,15 +7,6 @@ struct EnIn;
 
 typedef void (*EnInActionFunc)(struct EnIn*, GlobalContext*);
 
-typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} EnInAnimation; // size = 0x10
-
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnInActionFunc actionFunc;

@@ -195,7 +195,7 @@ static DamageTable sDamageTable = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static EnInAnimation sAnimations[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06001D10, 1.0f, 0, -1, 0, 0 },  { &D_06001D10, 1.0f, 0, -1, 0, -4 }, { &D_06014F8C, 1.0f, 0, -1, 0, 0 },
     { &D_06014F8C, 1.0f, 0, -1, 0, -4 }, { &D_06000CB0, 1.0f, 0, -1, 0, -4 }, { &D_060003B4, 1.0f, 0, -1, 0, -4 },
     { &D_06001BE0, 1.0f, 0, -1, 0, -4 }, { &D_06015918, 1.0f, 0, -1, 0, -4 }, { &D_0601C0B0, 1.0f, 0, -1, 0, 0 },
