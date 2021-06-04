@@ -64,27 +64,27 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx);
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx);
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06000994;
-extern AnimationHeader D_06001B08;
-extern AnimationHeader D_06001E14;
-extern AnimationHeader D_06001F20;
-extern AnimationHeader D_060030E4;
-extern AnimationHeader D_0600347C;
-extern AnimationHeader D_060039C4;
-extern AnimationHeader D_06003F28;
-extern AnimationHeader D_06004298;
-extern AnimationHeader D_06004680;
-extern AnimationHeader D_06004894;
-extern AnimationHeader D_06004D50;
-extern AnimationHeader D_060050B8;
-extern AnimationHeader D_060052EC;
-extern AnimationHeader D_06005694;
-extern AnimationHeader D_06005D54;
-extern AnimationHeader D_060066B4;
-extern AnimationHeader D_060070C4;
+extern AnimationHeader D_06000994; // Begin Rear on Snapper
+extern AnimationHeader D_06001B08; // Call Snapper
+extern AnimationHeader D_06001E14; // Crawl on Wall
+extern AnimationHeader D_06001F20; // Falling
+extern AnimationHeader D_060030E4; // Get up from Back
+extern AnimationHeader D_0600347C; // Jab Punch
+extern AnimationHeader D_060039C4; // Jump on Ground
+extern AnimationHeader D_06003F28; // Kick
+extern AnimationHeader D_06004298; // Fall on Back
+extern AnimationHeader D_06004680; // Idle
+extern AnimationHeader D_06004894; // Jump on Snapper
+extern AnimationHeader D_06004D50; // Continue Rear on Snapper
+extern AnimationHeader D_060050B8; // Squeeze Body
+extern AnimationHeader D_060052EC; // Land on Snapper
+extern AnimationHeader D_06005694; // Wiggle
+extern AnimationHeader D_06005D54; // Head Knockback
+extern AnimationHeader D_060066B4; // Look Around
+extern AnimationHeader D_060070C4; // Hook Punch
 extern FlexSkeletonHeader D_0600DF98;
-extern AnimationHeader D_0600F990;
-extern AnimationHeader D_0600F048;
+extern AnimationHeader D_0600F048; // Windup Punch
+extern AnimationHeader D_0600F990; // Melee Ready Stance
 
 const ActorInit En_Pametfrog_InitVars = {
     ACTOR_EN_PAMETFROG,
@@ -154,10 +154,10 @@ static InitChainEntry sInitChain[] = {
 // gSaveContext.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
-    (0x20 << 8) | 0x40,
-    (0x20 << 8) | 0x80,
-    (0x21 << 8) | 0x01,
-    (0x21 << 8) | 0x02,
+    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
+    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
+    (33 << 8) | 0x01, // Southern Swamp Frog Returned
+    (33 << 8) | 0x02, // Laundry Pool Frog Returned
 };
 
 void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -275,16 +275,16 @@ void func_8086A238(EnPametfrog* this) {
 }
 
 s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
-    Vec3f vec1;
+    Vec3f floorNorm;
     Vec3f vec2;
     f32 rotation;
     f32 arg0;
 
     this->actor.floorPoly = floorPoly;
-    vec1.x = floorPoly->normal.x * (1.0f/SHT_MAX);
-    vec1.y = floorPoly->normal.y * (1.0f/SHT_MAX);
-    vec1.z = floorPoly->normal.z * (1.0f/SHT_MAX);
-    arg0 = (vec1.x * this->unk_2DC.x) + (vec1.y * this->unk_2DC.y) + (vec1.z * this->unk_2DC.z);
+    floorNorm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+    floorNorm.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+    floorNorm.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+    arg0 = DOTXYZ(floorNorm, this->unk_2DC);
     if (fabsf(arg0) >= 1.0f) {
         return false;
     }
@@ -294,14 +294,14 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    Math3D_CrossProduct(&this->unk_2DC, &vec1, &vec2);
+    Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
     SysMatrix_InsertRotationAroundUnitVector_f(rotation, &vec2, 0);
     SysMatrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
-    Math3D_CrossProduct(&this->unk_2E8, &vec1, &this->unk_2D0);
+    Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
-    Math_Vec3f_Copy(&this->unk_2DC, &vec1);
+    Math_Vec3f_Copy(&this->unk_2DC, &floorNorm);
     return true;
 }
 
@@ -526,7 +526,7 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.bgCheckFlags & 8) && (this->actor.wallBgId == BGCHECK_SCENE) &&
-        ((this->actor.wallPoly->normal.y * (1.0f/SHT_MAX)) < 0.5f)) {
+        (COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y) < 0.5f)) {
         EnPametfrog_SetupWallCrawl(this);
     } else if (!(this->actor.bgCheckFlags & 1) ||
                (this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f)) {
@@ -547,9 +547,9 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->unk_2D0.y = 1.0f;
         Math_Vec3f_Copy(&this->actor.colChkInfo.displacement, &D_801D15B0);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-        this->unk_2DC.x = this->actor.wallPoly->normal.x * (1.0f/SHT_MAX);
-        this->unk_2DC.y = this->actor.wallPoly->normal.y * (1.0f/SHT_MAX);
-        this->unk_2DC.z = this->actor.wallPoly->normal.z * (1.0f/SHT_MAX);
+        this->unk_2DC.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
+        this->unk_2DC.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
+        this->unk_2DC.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         EnPametfrog_Vec3fNormalize(&this->unk_2E8);
         Math3D_CrossProduct(&this->unk_2E8, &this->unk_2DC, &this->unk_2D0);
@@ -808,7 +808,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
     if (this->camId != 0) {
-        xzDist = sqrtf(SQ(this->unk_2DC.x) + SQ(this->unk_2DC.z));
+        xzDist = sqrtf(SQXZ(this->unk_2DC));
         if (xzDist > 0.001f) {
             xzDist = 200.0f / xzDist;
         } else {

@@ -41,7 +41,7 @@ typedef struct EnPametfrog {
     /* 0x2C8 */ f32 unk_2C8;
     /* 0x2CC */ f32 unk_2CC; 
     /* 0x2D0 */ Vec3f unk_2D0; // MtxF zx/zy/zz
-    /* 0x2DC */ Vec3f unk_2DC; // MtxF yx/yy/yz
+    /* 0x2DC */ Vec3f unk_2DC; // MtxF yx/yy/yz: wallNorm/floorNorm/Base of Gekko walking???
     /* 0x2E8 */ Vec3f unk_2E8; // MtxF xx/xy/xz
     /* 0x2F4 */ Vec3f unk_2F4[12]; 
     /* 0x384 */ ColliderJntSph collider;
