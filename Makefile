@@ -215,7 +215,6 @@ distclean: assetclean clean
 
 ## Extraction step
 setup:
-	python3 -m pip install -r requirements.txt
 	$(MAKE) -C tools
 	./tools/extract_rom.py $(MM_BASEROM)
 	python3 extract_assets.py
