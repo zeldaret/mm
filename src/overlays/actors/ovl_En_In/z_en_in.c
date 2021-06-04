@@ -707,7 +707,7 @@ s32 func_808F43E0(EnIn* this) {
 #endif
 
 #if NON_MATCHING
-// Just bit operations with weekEventRegs[92] (TEST2), and one bnel instead of bne in case 5 with 0x3469
+// Regalloc with TEST2 MACRO
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     u16 textId = this->actor.textId;
     s32 ret = 1;
@@ -1047,6 +1047,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             switch (textId) {
                 case 0x3468:
                 case 0x3469:
+                case 0x3491:
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x348E:
@@ -1090,7 +1091,6 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3492:
                     this->actionFunc = func_808F5A94;
-                case 0x3491:
                     func_80151BB4(globalCtx, 0x11);
                     break;
             }
