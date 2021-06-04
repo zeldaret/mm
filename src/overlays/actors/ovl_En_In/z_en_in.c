@@ -1,28 +1,32 @@
+/*
+ * File z_en_in.c
+ * Overlay: ovl_en_in
+ * Description: Ingo/Gorman Bros
+ */
+
 #include "z_en_in.h"
 
 #define FLAGS 0x00000019
 
 #define THIS ((EnIn*)thisx)
 
-#define TEST                                                                   \
-    {                                                                          \
-        gSaveContext.weekEventReg[92] &= (u8)~7;                               \
-        gSaveContext.weekEventReg[92] |= (gSaveContext.weekEventReg[92] & ~7); \
+#define MACRO1                                                                                                    \
+    {                                                                                                             \
+        gSaveContext.weekEventReg[92] &= (u8)~7;                                                                  \
+        gSaveContext.weekEventReg[92] = gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~7); \
     }
 
-#define TEST2                                                                            \
-    {                                                                                    \
-        gSaveContext.weekEventReg[92] &= (u8)~7;                                         \
-        gSaveContext.weekEventReg[92] |= (u8)((gSaveContext.weekEventReg[92] & ~7) | 1); \
+#define MACRO2                                                                              \
+    {                                                                                       \
+        gSaveContext.weekEventReg[92] &= (u8)~7;                                            \
+        gSaveContext.weekEventReg[92] =                                                     \
+            gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~7) | 1); \
     }
+
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2); // NIGHTMARE SWITCH, Can be deleted
-s32 func_808F43E0(EnIn* this);                                     // TEST Macro, Can be deleted
-void func_808F39DC(EnIn* this, GlobalContext* globalCtx);          // TEST MACRO, Can be deleted
 
 void func_808F5A94(EnIn* this, GlobalContext* globalCtx);
 void func_808F3690(EnIn* this, GlobalContext* globalCtx);
@@ -349,7 +353,7 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->unk240, this->unk244, &sp28) && func_8013D768(this, &sp28, sp36)) {
+    if (func_8013D68C(this->unk240, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
         this->unk244++;
         if (this->unk244 >= *this->unk240) {
             this->unk244 = 0;
@@ -406,8 +410,6 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
     }
 }
 
-#if NON_MATCHING
-// Regalloc with TEST MACRO
 void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     u16 textId = 0;
 
@@ -420,7 +422,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
                 textId = 0x3476;
                 break;
         }
-        TEST;
+        MACRO1;
     } else {
         switch (gSaveContext.weekEventReg[92] & 7) {
             case 2:
@@ -430,7 +432,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
                 textId = 0x3499;
                 break;
         }
-        TEST;
+        MACRO1;
     }
     this->actor.flags |= 0x10000;
     this->actor.textId = textId;
@@ -441,9 +443,6 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, 0x687C);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_In_0x808F30B0/func_808F39DC.asm")
-#endif
 
 void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -694,20 +693,13 @@ s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
     return 0;
 }
 
-#if NON_MATCHING
-// Regalloc with TEST Macro
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    TEST;
+    MACRO1;
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_In_0x808F30B0/func_808F43E0.asm")
-#endif
 
-#if NON_MATCHING
-// Regalloc with TEST2 MACRO
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     u16 textId = this->actor.textId;
     s32 ret = 1;
@@ -886,7 +878,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
-                    TEST2;
+                    MACRO2;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -987,7 +979,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     ret = 1;
                     break;
-                case 0x347B:
+                case 0x347C:
                     this->actionFunc = func_808F3D40;
                     func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
@@ -1097,10 +1089,10 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             break;
         case 7:
             switch (textId) {
-                case 0x34A7:
+                case 0x34A8:
                     func_80151BB4(globalCtx, 0x11);
                     break;
-                case 0x34A8:
+                case 0x34A7:
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3495:
@@ -1133,7 +1125,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3475:
-                    TEST2;
+                    MACRO2;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -1244,9 +1236,6 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     }
     return ret;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_In_0x808F30B0/func_808F4414.asm")
-#endif
 
 s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     s32 pad;
