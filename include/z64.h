@@ -663,7 +663,8 @@ typedef struct {
     /* 0x272 */ char unk_272[0xD6];
 } InterfaceContext; // size = 0x348
 
-typedef struct {
+// us rev 1: 803FDB24
+typedef struct KankyoContext {
     /* 0x00 */ UNK_TYPE1 unk0;
     /* 0x01 */ UNK_TYPE1 unk1;
     /* 0x02 */ u16 unk2;
@@ -809,7 +810,7 @@ typedef struct {
     /* 0xE0 */ u8 unkE0;
     /* 0xE1 */ UNK_TYPE1 unkE1;
     /* 0xE2 */ s8 unkE2;
-    /* 0xE3 */ UNK_TYPE1 unkE3;
+    /* 0xE3 */ u8 unkE3;
     /* 0xE4 */ UNK_TYPE1 unkE4;
     /* 0xE5 */ UNK_TYPE1 unkE5;
     /* 0xE6 */ UNK_TYPE1 unkE6;
@@ -824,6 +825,7 @@ typedef struct {
     /* 0xEF */ UNK_TYPE1 unkEF;
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
+    // F2-F6 are used by weather tag
     /* 0xF2 */ u8 unkF2[0xC];
 } KankyoContext; // size = 0xFE
 
