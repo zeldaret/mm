@@ -661,7 +661,8 @@ void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 // void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6);
 // void func_800B2B44(void);
 // void func_800B2B7C(void);
-// void EffectSsEnIce_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f* velocity, Vec3f* accel,
+                         Color_RGBA8* primColor, Color_RGBA8* envColor, s32 life);
 // void EffectSsFireTail_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, Color_RGBA8* param_7, Color_RGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11);
 // void EffectSsFireTail_SpawnFlame(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 // void EffectSsFireTail_SpawnFlameOnPlayer(void);

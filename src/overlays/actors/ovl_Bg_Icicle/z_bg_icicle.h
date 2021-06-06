@@ -5,9 +5,16 @@
 
 struct BgIcicle;
 
+typedef void (*BgIcicleActionFunc)(struct BgIcicle*, GlobalContext*);
+
+
 typedef struct BgIcicle {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x6C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgIcicleActionFunc actionFunc;
+    /* 0x160 */ u8 unk_160;
+    /* 0x161 */ u8 unk_161;
+    /* 0x162 */ s16 unk_162;
+    /* 0x164 */ ColliderCylinder collider;
 } BgIcicle; // size = 0x1B0
 
 extern const ActorInit Bg_Icicle_InitVars;
