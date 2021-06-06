@@ -15,7 +15,26 @@ void func_809C9DC4(BgIcicle* this, GlobalContext* globalCtx);
 void func_809C9F28(BgIcicle* this, GlobalContext* globalCtx);
 void func_809CA06C(BgIcicle* this, GlobalContext* globalCtx);
 
-/*
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
+    { 13, 120, 0, { 0, 0, 0 } },
+};
+
 const ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
     ACTORCAT_PROP,
@@ -27,13 +46,19 @@ const ActorInit Bg_Icicle_InitVars = {
     (ActorFunc)BgIcicle_Update,
     (ActorFunc)BgIcicle_Draw,
 };
-*/
 
-extern InitChainEntry D_809CA2FC;
-extern ColliderCylinderInit D_809CA2B0;
-extern Vec3f D_809CA30C;
-extern Color_RGBA8 D_809CA318;
-extern Color_RGBA8 D_809CA31C;
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
+    ICHAIN_F32(minVelocityY, -30, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
+// extern InitChainEntry D_809CA2FC;
+// extern ColliderCylinderInit D_809CA2B0;
+// extern Vec3f D_809CA30C;
+// extern Color_RGBA8 D_809CA318;
+// extern Color_RGBA8 D_809CA31C;
 
 extern Gfx D_060000D0[];
 extern CollisionHeader D_06000294;
@@ -46,11 +71,11 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 paramsHigh;
     s32 paramsMid;
 
-    Actor_ProcessInitChain(thisx, &D_809CA2FC);
+    Actor_ProcessInitChain(thisx, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000294);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &D_809CA2B0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
 
     paramsHigh = (thisx->params >> 8) & 0xFF;
@@ -81,7 +106,10 @@ void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9B9C.asm")
-void func_809C9B9C(BgIcicle *this, GlobalContext *globalCtx, f32 arg2) {
+void func_809C9B9C(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
+    static Vec3f accel = { 0.0f, -1.0f, 0.0f };
+    static Color_RGBA8 primColor = { 170, 255, 255, 255 };
+    static Color_RGBA8 envColor = { 0, 50, 100, 255 };
     Vec3f velocity;
     Vec3f pos;
     s32 j;
@@ -98,8 +126,9 @@ void func_809C9B9C(BgIcicle *this, GlobalContext *globalCtx, f32 arg2) {
             velocity.x = randPlusMinusPoint5Scaled(7.0f);
             velocity.z = randPlusMinusPoint5Scaled(7.0f);
             velocity.y = (Rand_ZeroOne() * 4.0f) + 8.0f;
-            
-            EffectSsEnIce_Spawn(globalCtx, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &D_809CA30C, &D_809CA318, &D_809CA31C, 30);
+
+            EffectSsEnIce_Spawn(globalCtx, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor,
+                                &envColor, 30);
         }
     }
 }
@@ -187,10 +216,10 @@ void func_809CA0BC(BgIcicle* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.acFlags & 2) {
         this->collider.base.acFlags &= ~2;
-        
+
         if (this->dyna.actor.params == 0) {
             func_809C9B9C(this, globalCtx, 50.0f);
-            
+
             if (this->unk_160 != 0xFF) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
