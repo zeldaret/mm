@@ -16,6 +16,8 @@ void func_80C06C68(ObjMuPict* this, GlobalContext* globalCtx);
 void func_80C06CC4(ObjMuPict* this);
 void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx);
 void func_80C06D90(ObjMuPict* this, GlobalContext* globalCtx);
+void func_80C06DC8(ObjMuPict* this, GlobalContext* globalCtx);
+void func_80C06E88(ObjMuPict* this, GlobalContext* globalCtx);
 
 /*
 const ActorInit Obj_Mu_Pict_InitVars = {
@@ -64,7 +66,6 @@ void func_80C06B5C(ObjMuPict* this) {
 // void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
 //     s16 sp26;
 //     s16 temp_v1;
-//     s32 phi_v0;
 
 //     temp_v1 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 //     sp26 = temp_v1;
@@ -82,8 +83,7 @@ void func_80C06B5C(ObjMuPict* this) {
 //         func_80C06CC4(this);
 //         return;
 //     }
-//     phi_v0 = ABS_ALT(temp_v1);
-//     if (phi_v0 < 0x2AAA) {
+//     if (ABS_ALT(temp_v1) < 0x2AAA) {
 //         func_800B8614(this, globalCtx, 80.0f);
 //     }
 // }
@@ -104,12 +104,37 @@ void func_80C06C68(ObjMuPict* this, GlobalContext* globalCtx) {
     }
 }
 
+// matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06CC4.asm")
 void func_80C06CC4(ObjMuPict* this) {
     this->actionFunc = func_80C06CD8;
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06CD8.asm")
+// void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
+//     switch (func_80152498(&globalCtx->msgCtx)) {
+//         case 1:
+//         case 2:
+//         case 3:
+//         case 4:
+//         case 5:
+//             func_80C06E88(this, globalCtx);
+//             break;
+//         case 6:
+//             if (func_80147624(globalCtx)) {
+//                 func_80C06B5C(this);
+//                 // if (!(&this->actor.parent->world.rot)) {}
+//                 if (this->actor.cutscene >= 0) {
+//                     ActorCutscene_Stop(this->actor.cutscene);
+//                 }
+//                 // if (!this->actor.parent) {}
+//             }
+//         case 0:
+//             Math_SmoothStepToS(&this->actor.parent->world.rot.y, this->actor.parent->yawTowardsPlayer, 0xA, 0x71C,
+//                                0xB6);
+//     }
+//     this->actor.parent->shape.rot.y = this->actor.parent->world.rot.y;
+// }
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06D90.asm")
@@ -148,45 +173,42 @@ void func_80C06DC8(ObjMuPict* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06E88.asm")
-// void func_80C06E88(ObjMuPict* this, GlobalContext* globalCtx) {
-//     u32 temp_t7;
-
-//     if (func_80147624(globalCtx) != 0) {
-//         temp_t7 = (u16)this->unk14C - 0x159A;
-//         switch (temp_t7 < 0xAU) {
-//                 // goto **(&jtbl_D_80C0701C + (temp_t7 * 4));
-//             case 0:
-//                 func_801518B0(globalCtx, 0x159BU, &this->actor);
-//                 this->unk14C = 0x159B;
-//                 break;
-//             case 1:
-//                 func_801518B0(globalCtx, 0x159CU, &this->actor);
-//                 this->unk14C = 0x159C;
-//                 break;
-//             case 3:
-//                 func_801518B0(globalCtx, 0x159EU, &this->actor);
-//                 this->unk14C = 0x159E;
-//                 break;
-//             case 4:
-//                 func_801518B0(globalCtx, 0x159FU, &this->actor);
-//                 this->unk14C = 0x159F;
-//                 break;
-//             case 6:
-//                 func_801518B0(globalCtx, 0x15A1U, &this->actor);
-//                 this->unk14C = 0x15A1;
-//                 break;
-//             case 7:
-//                 func_801518B0(globalCtx, 0x15A2U, &this->actor);
-//                 this->unk14C = 0x15A2;
-//                 break;
-//             case 9:
-//                 func_801518B0(globalCtx, 0x15A4U, &this->actor);
-//                 this->unk14C = 0x15A4;
-//                 break;
-//         }
-//     }
-// }
+// matches
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/func_80C06E88.asm")
+void func_80C06E88(ObjMuPict* this, GlobalContext* globalCtx) {
+    if (func_80147624(globalCtx) != 0) {
+        switch (this->unk14C - 0x159A) {
+            case 0:
+                func_801518B0(globalCtx, 0x159BU, &this->actor);
+                this->unk14C = 0x159B;
+                break;
+            case 1:
+                func_801518B0(globalCtx, 0x159CU, &this->actor);
+                this->unk14C = 0x159C;
+                break;
+            case 3:
+                func_801518B0(globalCtx, 0x159EU, &this->actor);
+                this->unk14C = 0x159E;
+                break;
+            case 4:
+                func_801518B0(globalCtx, 0x159FU, &this->actor);
+                this->unk14C = 0x159F;
+                break;
+            case 6:
+                func_801518B0(globalCtx, 0x15A1U, &this->actor);
+                this->unk14C = 0x15A1;
+                break;
+            case 7:
+                func_801518B0(globalCtx, 0x15A2U, &this->actor);
+                this->unk14C = 0x15A2;
+                break;
+            case 9:
+                func_801518B0(globalCtx, 0x15A4U, &this->actor);
+                this->unk14C = 0x15A4;
+                break;
+        }
+    }
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mu_Pict_0x80C06AA0/ObjMuPict_Update.asm")
