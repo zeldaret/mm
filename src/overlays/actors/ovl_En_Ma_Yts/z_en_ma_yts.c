@@ -111,25 +111,18 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-struct struct_80B8E1A8 {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ u8 mode;
-    /* 0x0C */ f32 transitionRate;
-};
-
-static struct struct_80B8E1A8 D_80B8E1A8[] = {
-    { &D_06009E58, 0x3F800000, 0x00, 0.0f }, { &D_06009E58, 0x3F800000, 0x00, -6.0f },
-    { &D_06018948, 0x3F800000, 0x02, 0.0f }, { &D_06018948, 0x3F800000, 0x02, -6.0f },
-    { &D_0601B76C, 0x3F800000, 0x00, 0.0f }, { &D_0601B76C, 0x3F800000, 0x00, -6.0f },
-    { &D_06007328, 0x3F800000, 0x00, 0.0f }, { &D_06007328, 0x3F800000, 0x00, -6.0f },
-    { &D_06014088, 0x3F800000, 0x00, 0.0f }, { &D_06014088, 0x3F800000, 0x00, -6.0f },
-    { &D_06002A8C, 0x3F800000, 0x00, 0.0f }, { &D_06002A8C, 0x3F800000, 0x00, -6.0f },
-    { &D_06015B7C, 0x3F800000, 0x00, 0.0f }, { &D_06015B7C, 0x3F800000, 0x00, -6.0f },
-    { &D_06007D98, 0x3F800000, 0x00, 0.0f }, { &D_06007D98, 0x3F800000, 0x00, -6.0f },
-    { &D_0600852C, 0x3F800000, 0x00, 0.0f }, { &D_0600852C, 0x3F800000, 0x00, -6.0f },
-    { &D_06008F6C, 0x3F800000, 0x00, 0.0f }, { &D_06008F6C, 0x3F800000, 0x00, -6.0f },
-    { &D_060180DC, 0x3F800000, 0x02, 0.0f }, { &D_060180DC, 0x3F800000, 0x02, -6.0f },
+static struct_80B8E1A8 D_80B8E1A8[] = {
+    { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f },
+    { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f },
+    { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f },
+    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f },
+    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f },
+    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f },
+    { &D_06015B7C, 1.0f, 0, 0.0f }, { &D_06015B7C, 1.0f, 0, -6.0f },
+    { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f },
+    { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f },
+    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f },
+    { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f },
 };
 
 static void* sMouthTextures[] = {
@@ -146,9 +139,9 @@ static void* sEyeTextures[] = {
 static u16 D_80B8E32C = 99;
 
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].unk_00, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80B8E1A8[index].unk_00->common), D_80B8E1A8[index].unk_08,
-                         D_80B8E1A8[index].unk_0C);
+    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].animationSeg, 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&D_80B8E1A8[index].animationSeg->common), D_80B8E1A8[index].mode,
+                         D_80B8E1A8[index].transitionRate);
 }
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
@@ -261,7 +254,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B8E19C);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
 
     if (this->type == EN_NA_YTS_TYPE_SLEEPING) {
         this->collider.dim.radius = 40;
@@ -417,7 +410,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80B8E32C) {
                 D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->unk0;
-                this->unk_334 = 0;
+                this->endCreditsFlag = 0;
                 switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
                     case 1:
                         this->hasBow = true;
@@ -443,9 +436,9 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
-        if ((D_80B8E32C == 2) && (this->unk_334 == 0) &&
+        if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
             (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
-            this->unk_334++;
+            this->endCreditsFlag++;
             EnMaYts_ChangeAnim(this, 5);
         }
     } else {
