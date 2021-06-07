@@ -77,9 +77,9 @@ extern AnimationHeader D_06002F20;
 
 extern AnimationHeader D_06003AA8;
 
-extern UNK_TYPE D_06008AE8; 
+extern UNK_TYPE D_06008AE8;
 
-extern UNK_TYPE D_0600A068; 
+extern UNK_TYPE D_0600A068;
 
 extern UNK_TYPE D_0600A468;
 
