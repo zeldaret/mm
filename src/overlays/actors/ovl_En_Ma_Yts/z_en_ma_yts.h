@@ -52,7 +52,7 @@ typedef struct EnMaYts {
     /* 0x32E */ s16 mouthTexIndex;
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
-    /* 0x334 */ s16 unk_334; // flag? Seems to be used to prevent continue re-triggering some behaviour in the endcredits cutscene.
+    /* 0x334 */ s16 endCreditsFlag;
     /* 0x336 */ s16 hasBow;
     /* 0x338 */ u16 textId;
 } EnMaYts; // size = 0x33C
