@@ -66,7 +66,7 @@ typedef enum {
     /* 3 */ EN_NA_YTS_TYPE_ENDCREDITS
 } EnMaYtsType;
 
-#define EN_MA_YTS_PARSE_TYPE(params) (((params)&0xF000) >> 12)
+#define EN_MA_YTS_PARSE_TYPE(actor) (((actor->params)&0xF000) >> 12)
 #define EN_MA_YTS_PARAM(enMaYtsType) ((enMaYtsType) << 12)
 
 /**
