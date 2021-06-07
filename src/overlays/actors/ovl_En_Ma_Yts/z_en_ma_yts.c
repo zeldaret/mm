@@ -107,8 +107,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80B8E19C = {
-    0, 0, 0, 0, 0xFF,
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
+    0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
 struct struct_80B8E1A8 {
