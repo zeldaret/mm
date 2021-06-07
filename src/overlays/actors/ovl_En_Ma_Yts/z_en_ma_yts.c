@@ -112,10 +112,10 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 struct struct_80B8E1A8 {
-    /* 0x00 */ AnimationHeader* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x00 */ AnimationHeader* animationSeg;
+    /* 0x04 */ f32 playbackSpeed;
+    /* 0x08 */ u8 mode;
+    /* 0x0C */ f32 transitionRate;
 };
 
 static struct struct_80B8E1A8 D_80B8E1A8[] = {
