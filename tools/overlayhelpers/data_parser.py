@@ -74,7 +74,7 @@ def construct_extern(data):
     output = ""
 
     for label, values in data.items():
-        output += "extern " + label + ";\n"
+        output += "extern UNK_TYPE " + label + ";\n"
 
     return output
 
@@ -120,3 +120,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
