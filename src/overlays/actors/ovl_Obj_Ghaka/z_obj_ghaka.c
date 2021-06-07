@@ -44,6 +44,8 @@ static InitChainEntry D_80B3C96C[] = {
 
 extern Gfx D_06001A20[];
 extern Gfx D_06001980[];
+extern CollisionHeader D_06003CD0;
+
 
 void func_80B3C260(ObjGhaka* this) {
     if (gSaveContext.weekEventReg[20] & 0x20) {
@@ -106,7 +108,7 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
             func_80B3C260(this);
         }
         // Could be fake, but helps match
-    } else if ((temp_v0 & 0xFFFFFFFFu) == 4) {
+    } else if ((temp_v0 & 0xFFFFFFFF) == 4) {
         if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -161,7 +163,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
-    if ((gSaveContext.weekEventReg[20] & 0x20) != 0) {
+    if (gSaveContext.weekEventReg[20] & 0x20) {
         func_80B3C2C4(this, globalCtx);
     }
     func_80B3C260(this);

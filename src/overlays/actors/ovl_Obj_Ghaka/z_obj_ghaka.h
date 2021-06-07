@@ -16,6 +16,4 @@ typedef struct ObjGhaka {
 
 extern const ActorInit Obj_Ghaka_InitVars;
 
-extern CollisionHeader D_06003CD0;
-
 #endif // Z_OBJ_GHAKA_H
