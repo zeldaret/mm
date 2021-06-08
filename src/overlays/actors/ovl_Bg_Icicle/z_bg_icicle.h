@@ -13,7 +13,7 @@ typedef struct BgIcicle {
     /* 0x15C */ BgIcicleActionFunc actionFunc;
     /* 0x160 */ u8 unk_160;
     /* 0x161 */ u8 unk_161;
-    /* 0x162 */ s16 unk_162;
+    /* 0x162 */ s16 shiverTimer;
     /* 0x164 */ ColliderCylinder collider;
 } BgIcicle; // size = 0x1B0
 

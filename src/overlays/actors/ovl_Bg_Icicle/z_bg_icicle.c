@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_icicle.c
+ * Overlay: ovl_Bg_Icicle
+ * Description: Icicles
+ */
+
 #include "z_bg_icicle.h"
 
 #define FLAGS 0x00000000
@@ -9,11 +15,11 @@ void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809C9D7C(BgIcicle* this, GlobalContext* globalCtx);
-void func_809C9D8C(BgIcicle* this, GlobalContext* globalCtx);
-void func_809C9DC4(BgIcicle* this, GlobalContext* globalCtx);
-void func_809C9F28(BgIcicle* this, GlobalContext* globalCtx);
-void func_809CA06C(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_DoNothing(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx);
+void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx);
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -54,12 +60,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-// extern InitChainEntry D_809CA2FC;
-// extern ColliderCylinderInit D_809CA2B0;
-// extern Vec3f D_809CA30C;
-// extern Color_RGBA8 D_809CA318;
-// extern Color_RGBA8 D_809CA31C;
-
 extern Gfx D_060000D0[];
 extern CollisionHeader D_06000294;
 
@@ -89,11 +89,11 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             this->unk_160 = paramsMid;
         }
-        this->actionFunc = func_809C9D7C;
+        this->actionFunc = BgIcicle_DoNothing;
     } else {
         this->dyna.actor.shape.rot.x = -0x8000;
         this->dyna.actor.shape.yOffset = 1200.0f;
-        this->actionFunc = func_809C9D8C;
+        this->actionFunc = BgIcicle_Wait;
     }
 }
 
@@ -106,7 +106,7 @@ void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9B9C.asm")
-void func_809C9B9C(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
+void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 0, 50, 100, 255 };
@@ -134,36 +134,37 @@ void func_809C9B9C(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9D7C.asm")
-void func_809C9D7C(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_DoNothing(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9D8C.asm")
-void func_809C9D8C(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.xzDistToPlayer < 60.0f) {
-        this->unk_162 = 10;
-        this->actionFunc = func_809C9DC4;
+        this->shiverTimer = 10;
+        this->actionFunc = BgIcicle_Shiver;
     }
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9DC4.asm")
-void func_809C9DC4(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     s32 randSign;
     f32 rand;
 
-    if (this->unk_162 != 0) {
-        this->unk_162--;
+    if (this->shiverTimer != 0) {
+        this->shiverTimer--;
     }
 
-    if (!(this->unk_162 % 4)) {
+    if (!(this->shiverTimer % 4)) {
         Audio_PlayActorSound2(this, 0x28D4);
     }
-    if (this->unk_162 == 0) {
+
+    if (this->shiverTimer == 0) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
 
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->actionFunc = func_809C9F28;
+        this->actionFunc = BgIcicle_Fall;
     } else {
         rand = Rand_ZeroOne();
         randSign = (Rand_ZeroOne() < 0.5f ? -1 : 1);
@@ -175,7 +176,7 @@ void func_809C9DC4(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9F28.asm")
-void func_809C9F28(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     if ((this->collider.base.atFlags & 2) || (this->dyna.actor.bgCheckFlags & 1)) {
         this->collider.base.atFlags &= ~2;
         this->dyna.actor.bgCheckFlags &= ~1;
@@ -183,12 +184,13 @@ void func_809C9F28(BgIcicle* this, GlobalContext* globalCtx) {
         if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         }
-        func_809C9B9C(this, globalCtx, 40.0f);
+
+        BgIcicle_Break(this, globalCtx, 40.0f);
 
         if (this->dyna.actor.params == 2) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-            this->actionFunc = func_809CA06C;
+            this->actionFunc = BgIcicle_Regrow;
         } else {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
@@ -203,41 +205,42 @@ void func_809C9F28(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809CA06C.asm")
-void func_809CA06C(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
-        this->actionFunc = func_809C9D8C;
+        this->actionFunc = BgIcicle_Wait;
         this->dyna.actor.velocity.y = 0.0f;
     }
 }
 
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809CA0BC.asm")
-void func_809CA0BC(BgIcicle* this, GlobalContext* globalCtx) {
+void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
     s32 sp24;
 
     if (this->collider.base.acFlags & 2) {
         this->collider.base.acFlags &= ~2;
 
         if (this->dyna.actor.params == 0) {
-            func_809C9B9C(this, globalCtx, 50.0f);
+            BgIcicle_Break(this, globalCtx, 50.0f);
 
             if (this->unk_160 != 0xFF) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
         } else if (this->dyna.actor.params == 3) {
-            sp24 = func_800A8150((s32)this->unk_160);
-            func_809C9B9C(this, globalCtx, 50.0f);
+            sp24 = func_800A8150(this->unk_160);
+            BgIcicle_Break(this, globalCtx, 50.0f);
             Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | sp24);
         } else {
             if (this->dyna.actor.params == 2) {
-                func_809C9B9C(this, globalCtx, 40.0f);
+                BgIcicle_Break(this, globalCtx, 40.0f);
                 this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
                 func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                this->actionFunc = func_809CA06C;
+                this->actionFunc = BgIcicle_Regrow;
                 return;
             }
 
-            func_809C9B9C(this, globalCtx, 40.0f);
+            BgIcicle_Break(this, globalCtx, 40.0f);
         }
+
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
@@ -247,10 +250,10 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;
 
-    func_809CA0BC(this, globalCtx);
+    BgIcicle_UpdateAttacked(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
-    if (this->actionFunc != func_809CA06C) {
+    if (this->actionFunc != BgIcicle_Regrow) {
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }
