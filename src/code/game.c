@@ -67,19 +67,19 @@ void Game_Nop80173534(GameState* ctxt) {
     ;
 }
 
-void GameState_Draw(GameState* ctxt, GraphicsContext* gCtxt) {
+void GameState_Draw(GameState* ctxt, GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
     // Unused vars impact regalloc
     Gfx* temp_t2;
     u32 temp_v1;
 
-    _polyOpa = gCtxt->polyOpa.p;
-    nextDisplayList = Graph_GfxPlusOne(gCtxt->polyOpa.p);
-    gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
+    _polyOpa = gfxCtx->polyOpa.p;
+    nextDisplayList = Graph_GfxPlusOne(gfxCtx->polyOpa.p);
+    gSPDisplayList(gfxCtx->overlay.p++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
-        GameState_SetFBFilter(&nextDisplayList, (u32)gCtxt->zbuffer);
+        GameState_SetFBFilter(&nextDisplayList, (u32)gfxCtx->zbuffer);
     }
 
     if (R_ENABLE_ARENA_DBG < 0) {
@@ -88,36 +88,36 @@ void GameState_Draw(GameState* ctxt, GraphicsContext* gCtxt) {
 
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
-    gCtxt->polyOpa.p = nextDisplayList;
+    gfxCtx->polyOpa.p = nextDisplayList;
 
 lblUnk:; // Label prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    func_800E9F78(gCtxt);
+    func_800E9F78(gfxCtx);
 
     if (R_ENABLE_ARENA_DBG != 0) {
-        SpeedMeter_DrawTimeEntries(&D_801F7FF0, gCtxt);
-        SpeedMeter_DrawAllocEntries(&D_801F7FF0, gCtxt, ctxt);
+        SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
+        SpeedMeter_DrawAllocEntries(&D_801F7FF0, gfxCtx, ctxt);
     }
 }
 
-void Game_ResetSegments(GraphicsContext* gCtxt) {
-    gSPSegment(gCtxt->polyOpa.p++, 0, 0);
-    gSPSegment(gCtxt->polyOpa.p++, 0xF, gCtxt->framebuffer);
-    gSPSegment(gCtxt->polyXlu.p++, 0, 0);
-    gSPSegment(gCtxt->polyXlu.p++, 0xF, gCtxt->framebuffer);
-    gSPSegment(gCtxt->overlay.p++, 0, 0);
-    gSPSegment(gCtxt->overlay.p++, 0xF, gCtxt->framebuffer);
+void Game_ResetSegments(GraphicsContext* gfxCtx) {
+    gSPSegment(gfxCtx->polyOpa.p++, 0, 0);
+    gSPSegment(gfxCtx->polyOpa.p++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(gfxCtx->polyXlu.p++, 0, 0);
+    gSPSegment(gfxCtx->polyXlu.p++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(gfxCtx->overlay.p++, 0, 0);
+    gSPSegment(gfxCtx->overlay.p++, 0xF, gfxCtx->framebuffer);
 }
 
-void func_801736DC(GraphicsContext* gCtxt) {
+void func_801736DC(GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
 
-    nextDisplayList = Graph_GfxPlusOne(_polyOpa = gCtxt->polyOpa.p);
-    gSPDisplayList(gCtxt->overlay.p++, nextDisplayList);
+    nextDisplayList = Graph_GfxPlusOne(_polyOpa = gfxCtx->polyOpa.p);
+    gSPDisplayList(gfxCtx->overlay.p++, nextDisplayList);
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(_polyOpa, nextDisplayList);
 
-    gCtxt->polyOpa.p = nextDisplayList;
+    gfxCtx->polyOpa.p = nextDisplayList;
 }
 
 void Game_UpdateInput(GameState* ctxt) {
@@ -185,16 +185,16 @@ void Game_ResizeHeap(GameState* ctxt, u32 size) {
     }
 }
 
-void Game_StateInit(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gCtxt) {
-    ctxt->gfxCtx = gCtxt;
+void Game_StateInit(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gfxCtx) {
+    ctxt->gfxCtx = gfxCtx;
     ctxt->frames = 0U;
     ctxt->main = NULL;
     ctxt->destroy = NULL;
     ctxt->running = 1;
-    gCtxt->unk274 = D_801FBB88;
-    gCtxt->viConfigFeatures = gViConfigFeatures;
-    gCtxt->viConfigXScale = gViConfigXScale;
-    gCtxt->viConfigYScale = gViConfigYScale;
+    gfxCtx->unk274 = D_801FBB88;
+    gfxCtx->viConfigFeatures = gViConfigFeatures;
+    gfxCtx->viConfigXScale = gViConfigXScale;
+    gfxCtx->viConfigYScale = gViConfigYScale;
     ctxt->nextGameStateInit = NULL;
     ctxt->nextGameStateSize = 0U;
 
