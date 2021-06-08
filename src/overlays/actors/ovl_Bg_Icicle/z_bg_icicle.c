@@ -63,7 +63,6 @@ static InitChainEntry sInitChain[] = {
 extern Gfx D_060000D0[];
 extern CollisionHeader D_06000294;
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/BgIcicle_Init.asm")
 void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;
@@ -97,7 +96,6 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/BgIcicle_Destroy.asm")
 void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIcicle* this = THIS;
 
@@ -105,7 +103,6 @@ void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9B9C.asm")
 void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
@@ -133,11 +130,9 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9D7C.asm")
 void BgIcicle_DoNothing(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9D8C.asm")
 void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.xzDistToPlayer < 60.0f) {
         this->shiverTimer = 10;
@@ -145,7 +140,6 @@ void BgIcicle_Wait(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9DC4.asm")
 void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     s32 randSign;
     f32 rand;
@@ -175,7 +169,6 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809C9F28.asm")
 void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     if ((this->collider.base.atFlags & 2) || (this->dyna.actor.bgCheckFlags & 1)) {
         this->collider.base.atFlags &= ~2;
@@ -204,7 +197,6 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809CA06C.asm")
 void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
         this->actionFunc = BgIcicle_Wait;
@@ -212,7 +204,6 @@ void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/func_809CA0BC.asm")
 void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
     s32 sp24;
 
@@ -245,7 +236,6 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/BgIcicle_Update.asm")
 void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;
@@ -259,7 +249,6 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icicle_0x809C9A60/BgIcicle_Draw.asm")
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_060000D0);
 }
