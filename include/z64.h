@@ -32,6 +32,7 @@
 #include <z64math.h>
 #include <z64object.h>
 #include <z64scene.h>
+#include <z64save.h>
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -77,6 +78,20 @@ typedef struct {
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedMaterial; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ s16   unk_06;
+    /* 0x08 */ Gfx*  opa;
+    /* 0x0C */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u8    type;
+    /* 0x01 */ u8    num; // number of dlist entries
+    /* 0x04 */ void* start;
+    /* 0x08 */ void* end;
+} PolygonType2; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -144,13 +159,6 @@ typedef struct {
     /* 0x14 */ UNK_TYPE1 pad14[0x14];
     /* 0x28 */ CsCmdActorAction* actorActions[10];
 } CutsceneContext; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ u32 chestFlags;
-    /* 0x04 */ u32 switchFlags[2];
-    /* 0x0C */ u32 clearedRooms;
-    /* 0x10 */ u32 collectibleFlags;
-} CycleSceneFlags; // size = 0x14
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -303,10 +311,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x1C];
-} PermanentSceneFlags; // size = 0x1C
-
-typedef struct {
     /* 0x0 */ s16 unk0;
     /* 0x2 */ s16 unk2;
     /* 0x4 */ s16 unk4;
@@ -316,74 +320,6 @@ typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
-
-// Extra information in the save context that is not saved
-typedef struct {
-    /* 0x000 */ UNK_TYPE1 pad0[0x4];
-    /* 0x004 */ s16 unk04;
-    /* 0x006 */ UNK_TYPE1 pad06[0x6];
-    /* 0x00C */ s32 sceneSetupIndex;
-    /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x10];
-    /* 0x024 */ s16 unk24;
-    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x34];
-    /* 0x078 */ f32 unk78;
-    /* 0x07C */ UNK_TYPE1 pad7C[0x4];
-    /* 0x080 */ s16 unk80;
-    /* 0x082 */ UNK_TYPE1 pad82[0x5];
-    /* 0x087 */ s8 unk87;
-    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
-    /* 0x276 */ u8 unk276;
-    /* 0x277 */ UNK_TYPE1 pad277[0x9];
-    /* 0x280 */ u16 unk280;
-    /* 0x282 */ u16 unk282;
-    /* 0x284 */ UNK_TYPE1 pad284[0x28];
-    /* 0x2AC */ u8 cutsceneTrigger;
-    /* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
-    /* 0x2B2 */ u16 environmentTime;
-    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
-    /* 0x2B8 */ s16 unk2b8;
-    /* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
-    /* 0x2C4 */ f32 unk2C4;
-    /* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
-} SaveContextExtra; // size = 0xC28
-
-typedef struct {
-    /* 0x00 */ u8 items[24];
-    /* 0x18 */ u8 masks[24];
-    /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ s32 unk48; // some bits are wallet upgrades
-    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
-} SaveContextInventory; // size = 0x88
-
-// Save Context that is only stored in an owl save
-typedef struct {
-    /* 0x0000 */ UNK_TYPE1 pad0[0x1];
-    /* 0x0001 */ u8 unk1;
-    /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ u8 unk3;
-    /* 0x0004 */ u8 unk4;
-    /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
-    /* 0x0006 */ s16 unk_A00;
-} SaveContextOwl; // size = 0x2C94
-
-typedef struct {
-    /* 0x00 */ u8 zelda[6]; // Will always be "ZELDA3" for a valid save
-    /* 0x06 */ UNK_TYPE1 pad6[0xA];
-    /* 0x10 */ s16 maxLife;
-    /* 0x12 */ s16 currentLife;
-    /* 0x14 */ s8 unk14;
-    /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ s16 currentRupees;
-    /* 0x18 */ UNK_TYPE1 pad18[0x10];
-} SaveContext_struct1; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x22];
-} SaveContext_struct2; // size = 0x22
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
@@ -636,42 +572,6 @@ typedef struct {
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
 
-// Permanent save context, kept in regular save files
-typedef struct {
-    /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ UNK_TYPE1 pad4[0x3];
-    /* 0x0007 */ u8 linkAge;
-    /* 0x0008 */ s32 cutscene;
-    /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0x2];
-    /* 0x0010 */ u32 isNight;
-    /* 0x0014 */ u32 unk14;
-    /* 0x0018 */ u32 day;
-    /* 0x001C */ u32 daysElapsed;
-    /* 0x0020 */ u8 unk20;
-    /* 0x0021 */ UNK_TYPE1 pad21[0x2];
-    /* 0x0023 */ u8 owlSave;
-    /* 0x0024 */ SaveContext_struct1 unk24;
-    /* 0x004C */ SaveContext_struct2 unk4C;
-    /* 0x006E */ UNK_TYPE1 pad6E[0x2];
-    /* 0x0070 */ SaveContextInventory inv;
-    /* 0x00F8 */ PermanentSceneFlags sceneFlags[120];
-    /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ UNK_TYPE1 padE80[0x5C];
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ UNK_TYPE1 padEE0[0x18];
-    /* 0x0EF8 */ u8 weekEventReg[100];
-    /* 0x0F5C */ u32 mapsVisited;
-    /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];
-    /* 0x0FEC */ u8 lotteryCodes[9];
-    /* 0x0FF5 */ u8 spiderHouseMaskOrder[6];
-    /* 0x0FFB */ u8 bomberCode[5];
-    /* 0x1000 */ UNK_TYPE1 pad1000[0xA];
-    /* 0x100A */ u16 checksum;
-} SaveContextPerm; // size = 0x100C
-
 typedef struct {
     /* 0x00 */ Vec3f focalPointChange;
     /* 0x0C */ Vec3f eyeChange;
@@ -742,7 +642,10 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ View view;
-    /* 0x168 */ UNK_TYPE1 pad168[0xBE];
+    /* 0x168 */ char unk_168[0xB4];
+    /* 0x21C */ s16 unk_21C;
+    /* 0x21E */ s16 unk_21E;
+    /* 0x220 */ char unk_220[6];
     /* 0x226 */ s16 lifeColorChange;
     /* 0x228 */ s16 lifeColorChangeDirection;
     /* 0x22A */ s16 unk22A;
@@ -767,13 +670,12 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x256 */ char unk_256[0x06];
     /* 0x25C */ u16 unk25C;
-    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
+    /* 0x25E */ char unk_25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
-    /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} 
-InterfaceContext; // size = 0x348
+    /* 0x272 */ char unk_272[0xD6];
+} InterfaceContext; // size = 0x348
 
 typedef struct {
     /* 0x00 */ UNK_TYPE1 unk0;
@@ -1030,7 +932,9 @@ typedef struct {
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
     /* 0x12022 */ u8 choiceIndex;
-    /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
+    /* 0x12023 */ UNK_TYPE1 pad12023[0x7];
+    /* 0x1202A */ u16 unk1202A;
+    /* 0x1202C */ UNK_TYPE1 pad1202B[0x18];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
@@ -1040,13 +944,6 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
-
-// Full save context
-typedef struct {
-    /* 0x0000 */ SaveContextPerm perm;
-    /* 0x100C */ SaveContextOwl owl;
-    /* 0x3CA0 */ SaveContextExtra extra;
-} SaveContext; // size = 0x48C8
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
@@ -1120,7 +1017,7 @@ typedef struct {
 
 typedef struct FileChooseContext FileChooseContext;
 
-typedef void(*filechoose_update_func)(FileChooseContext* ctxt);
+typedef void(*filechoose_update_func)(FileChooseContext* globalCtx);
 
 typedef struct FireObj FireObj;
 
@@ -1268,17 +1165,17 @@ typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, 
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
 typedef struct {
-    /* 0x0 */ GlobalContext* ctxt;
+    /* 0x0 */ GlobalContext* globalCtx;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
 } Quake2Context; // size = 0xC
 
-typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
+typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
-typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
+typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
-typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
+typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1450,7 +1347,7 @@ struct Camera {
     /* 0x080 */ f32 unk80;
     /* 0x084 */ f32 unk84;
     /* 0x088 */ f32 unk88;
-    /* 0x08C */ GlobalContext* ctxt;
+    /* 0x08C */ GlobalContext* globalCtx;
     /* 0x090 */ ActorPlayer* player;
     /* 0x094 */ PosRot unk94;
     /* 0x0A8 */ Actor* unkA8;
@@ -1554,7 +1451,7 @@ struct TargetContext {
 }; // size = 0x98
 
 struct s800B948C {
-    /* 0x00 */ GlobalContext* ctxt;
+    /* 0x00 */ GlobalContext* globalCtx;
     /* 0x04 */ Actor* actor;
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;

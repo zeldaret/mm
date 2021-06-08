@@ -1,0 +1,45 @@
+name: Systray
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/net/cmd/systray/*'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/net/cmd/systray/*'
+
+jobs:
+
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-16.04
+            binary: permuter-systray-linux
+          - os: windows-latest
+            binary: permuter-systray.exe
+          - os: macos-latest
+            binary: permuter-systray-macos
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Install gtk3
+      if: ${{ matrix.os == 'ubuntu-16.04' }}
+      run: sudo apt-get install libgtk-3-dev libappindicator3-dev
+
+    - name: Setup Go environment
+      uses: actions/setup-go@v2.1.3
+
+    - name: Build
+      run: go build -o ${{ matrix.binary }} -ldflags "-s -w" tray.go
+      working-directory: src/net/cmd/systray/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.binary }}
+        path: src/net/cmd/systray/${{ matrix.binary }}

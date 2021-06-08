@@ -40,7 +40,7 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
     (ActorFunc)BgIkanaShutter_Draw,
 };
 
-static InitChainEntry D_80BD5D10[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
@@ -48,7 +48,7 @@ static InitChainEntry D_80BD5D10[] = {
 };
 
 extern CollisionHeader D_06000F28;
-extern UNK_PTR D_06000CE8;
+extern Gfx D_06000CE8[];
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
@@ -60,7 +60,7 @@ s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globa
 void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80BD5D10);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
@@ -207,5 +207,5 @@ void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000CE8);
+    func_800BDFC0(globalCtx, D_06000CE8);
 }

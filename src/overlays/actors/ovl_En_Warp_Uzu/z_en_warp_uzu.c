@@ -32,7 +32,7 @@ const ActorInit En_Warp_Uzu_InitVars = {
     (ActorFunc)EnWarpUzu_Draw,
 };
 
-static ColliderCylinderInit D_80A664C0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
         AT_NONE,
@@ -52,20 +52,20 @@ static ColliderCylinderInit D_80A664C0 = {
     { 25, 43, -20, { 0, 0, 0 } },
 };
 
-static InitChainEntry D_80A664EC[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_06000EC0;
+extern Gfx D_06000EC0[];
 
 void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarpUzu* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_80A664EC);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &D_80A664C0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     thisx->targetMode = 0;
     func_80A66208(this, globalCtx);
 }
@@ -89,18 +89,18 @@ void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
 }
 
 void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
-    Actor* sp24;
+    ActorPlayer* player;
     s16 temp_v0;
     s16 phi_a0;
     s16 phi_v1;
 
     do {
-        sp24 = globalCtx->actorCtx.actorList[2].first;
+        player = PLAYER;
         if (func_800B84D0(&this->actor, globalCtx)) {
             func_80A66384(this, globalCtx);
         } else {
-            phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, sp24) - this->actor.shape.rot.y));
-            temp_v0 = sp24->shape.rot.y - this->actor.shape.rot.y;
+            phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->base) - this->actor.shape.rot.y));
+            temp_v0 = player->base.shape.rot.y - this->actor.shape.rot.y;
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {
@@ -113,9 +113,9 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x22A0;
-    gSaveContext.extra.unk24 = globalCtx->nextEntranceIndex;
+    gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx);
-    gSaveContext.extra.unk10 = -2;
+    gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }
 
@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000EC0);
+    func_800BDFC0(globalCtx, D_06000EC0);
 }

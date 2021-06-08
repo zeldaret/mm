@@ -20,17 +20,17 @@ const ActorInit Bg_Lbfshot_InitVars = {
     (ActorFunc)BgLbfshot_Draw,
 };
 
-static InitChainEntry D_80C18200[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 extern CollisionHeader D_060014D8;
-extern UNK_TYPE D_06000228;
+extern Gfx D_06000228[];
 
 void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLbfshot* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80C18200);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.uncullZoneForward = 4000.0f;
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060014D8);
@@ -41,5 +41,5 @@ void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000228);
+    func_800BDFC0(globalCtx, D_06000228);
 }

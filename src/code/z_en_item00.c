@@ -16,7 +16,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx);
 void func_800A6780(EnItem00* this, GlobalContext* globalCtx);
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx);
 
-ActorInit En_Item00_InitVars = {
+const ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,
@@ -28,7 +28,7 @@ ActorInit En_Item00_InitVars = {
     (ActorFunc)EnItem00_Draw,
 };
 
-ColliderCylinderInit enItem00CylinderInit = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AT_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER },
     { ELEMTYPE_UNK0,
       { 0x00000000, 0x00, 0x00 },
@@ -39,7 +39,9 @@ ColliderCylinderInit enItem00CylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-InitChainEntry enItem00InitVars[1] = { ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP) };
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
+};
 
 void EnItem00_SetObject(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale) {
     Actor_SetObjectSegment(globalCtx, &this->actor);
@@ -76,8 +78,8 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.params = ITEM00_HEART;
     }
 
-    Actor_ProcessInitChain(&this->actor, enItem00InitVars);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &enItem00CylinderInit);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->unk150 = 1;
 
@@ -273,7 +275,7 @@ void EnItem00_WaitForHeartObject(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_800A640C(EnItem00* this, GlobalContext* ctxt) {
+void func_800A640C(EnItem00* this, GlobalContext* globalCtx) {
     if ((this->actor.params <= ITEM00_RUPEE_RED) || ((this->actor.params == ITEM00_HEART) && (this->unk152 < 0)) ||
         (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
@@ -811,22 +813,22 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 s16 func_800A7650(s16 dropId) {
-    s16 maxLife;
+    s16 healthCapacity;
 
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
-         (gSaveContext.perm.inv.items[D_801C207E] == 0xFF)) ||
+         (gSaveContext.inventory.items[gItemSlots[6]] == 0xFF)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
-         (gSaveContext.perm.inv.items[D_801C2079] == 0xFF)) ||
-        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.perm.unk24.unk14 == 0))) {
+         (gSaveContext.inventory.items[gItemSlots[1]] == 0xFF)) ||
+        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
     ;
 
     if (dropId == ITEM00_HEART) {
-        maxLife = gSaveContext.perm.unk24.maxLife;
-        if (maxLife == gSaveContext.perm.unk24.currentLife) {
+        healthCapacity = gSaveContext.healthCapacity;
+        if (healthCapacity == gSaveContext.health) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -1069,9 +1071,9 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
 
         if (dropId == ITEM00_MASK) {
             dropQuantity = 1;
-            if (gSaveContext.perm.unk20 != 1) {
-                if (gSaveContext.perm.unk20 != 2) {
-                    if (gSaveContext.perm.unk20 != 4) {
+            if (gSaveContext.playerForm != 1) {
+                if (gSaveContext.playerForm != 2) {
+                    if (gSaveContext.playerForm != 4) {
                         dropId = ITEM00_RUPEE_GREEN;
                     } else {
                         dropId = ITEM00_ARROWS_10;
@@ -1100,39 +1102,39 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         }
 
         if (dropId == ITEM00_FLEXIBLE) {
-            if (gSaveContext.perm.unk24.currentLife < 0x11) {
+            if (gSaveContext.health < 0x11) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
                 func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
                 return;
             }
 
-            if (gSaveContext.perm.unk24.currentLife < 0x31) {
+            if (gSaveContext.health < 0x31) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 3;
-            } else if (gSaveContext.perm.unk24.currentLife < 0x51) {
+            } else if (gSaveContext.health < 0x51) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.perm.unk24.unk14 != 0) && (gSaveContext.perm.unk24.currentMagic == 0)) {
+            } else if ((gSaveContext.magicLevel != 0) && (gSaveContext.magic == 0)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.perm.unk24.unk14 != 0) &&
-                       ((gSaveContext.perm.unk24.unk14 >> 1) >= gSaveContext.perm.unk24.currentMagic)) {
+            } else if ((gSaveContext.magicLevel != 0) &&
+                       ((gSaveContext.magicLevel >> 1) >= gSaveContext.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[1]] < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[6]] < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.unk24.unk14 < 11) {
+            } else if (gSaveContext.rupees < 11) {
                 params = 0xA0;
                 dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;

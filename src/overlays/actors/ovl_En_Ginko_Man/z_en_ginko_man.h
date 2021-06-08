@@ -34,7 +34,7 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern SkeletonHeader object_ginko_skeleton[];
+extern FlexSkeletonHeader object_ginko_skeleton[];
 extern Gfx object_ginko_limb15_dlist[];
 
 extern AnimationHeader object_ginko_floorsmacking_anim[];
@@ -53,7 +53,5 @@ typedef enum {
 
 // values to get wallet capacity
 extern u16 D_801C1E2C[]; // wallet capacities
-extern u32 D_801C1DD0; // bit mask for wallet size in savecontext
-extern u8  D_801C1E08; // bit shift on index to align
 
 #endif // Z_EN_GINKO_MAN_H

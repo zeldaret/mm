@@ -3,28 +3,28 @@
 
 typedef struct {
     Actor actor;
-    s32 (*pictoFunc)(GlobalContext* ctxt, Actor* actor);
+    s32 (*pictoFunc)(GlobalContext* globalCtx, Actor* actor);
 } PictoActor;
 
-s32 func_8013A240(GlobalContext* ctxt) {
+s32 func_8013A240(GlobalContext* globalCtx) {
     PictoActor* pictoActor;
     Actor* actor;
     s32 type = 0;
     s32 seen;
     s32 count = 0;
 
-    gSaveContext.perm.pictoFlags0 = 0;
-    gSaveContext.perm.pictoFlags1 = 0;
+    gSaveContext.roomInf[123][3] = 0;
+    gSaveContext.roomInf[123][4] = 0;
 
-    if (ctxt->sceneNum == SCENE_20SICHITAI) {
+    if (globalCtx->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
     }
 
     for (; type < 12; type++) {
-        for (actor = ctxt->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
-            switch (ctxt->sceneNum) {
+            switch (globalCtx->sceneNum) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
                         seen = 1;
@@ -64,7 +64,7 @@ s32 func_8013A240(GlobalContext* ctxt) {
             if (seen != 0) {
                 pictoActor = (PictoActor*)actor;
                 if (pictoActor->pictoFunc != NULL) {
-                    if ((pictoActor->pictoFunc)(ctxt, actor) == 0) {
+                    if ((pictoActor->pictoFunc)(globalCtx, actor) == 0) {
                         count++;
                     }
                 }
@@ -77,29 +77,30 @@ s32 func_8013A240(GlobalContext* ctxt) {
 
 void func_8013A41C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 |= (1 << flag);
+        gSaveContext.roomInf[123][3] |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 |= (1 << flag);
+        gSaveContext.roomInf[123][4] |= (1 << flag);
     }
 }
 
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 &= ~(1 << flag);
+        gSaveContext.roomInf[123][3] &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 &= ~(1 << flag);
+        gSaveContext.roomInf[123][4] &= ~(1 << flag);
     }
 }
 
 u32 func_8013A4C4(s32 flag) {
-    SaveContextPerm* save = &gSaveContext.perm;
+    SaveContext* saveCtx = &gSaveContext;
+    
     if (flag < 0x20) {
-        return save->pictoFlags0 & (1 << flag);
+        return saveCtx->roomInf[123][3] & (1 << flag);
     } else {
         flag &= 0x1F;
-        return save->pictoFlags1 & (1 << flag);
+        return saveCtx->roomInf[123][4] & (1 << flag);
     }
 }
 
@@ -148,7 +149,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     }
 
     actors[0] = actor;
-    actors[1] = globalCtx->actorCtx.actorList[2].first; // TODO PLAYER macro
+    actors[1] = &PLAYER->base;
     if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;

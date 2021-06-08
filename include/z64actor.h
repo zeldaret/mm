@@ -15,7 +15,7 @@ struct GlobalContext;
 struct Lights;
 struct CollisionPoly;
 
-typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* ctxt);
+typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -107,7 +107,7 @@ typedef struct {
     /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* ctxt);
+typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation

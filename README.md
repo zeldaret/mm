@@ -23,7 +23,7 @@ in an experimental and research phase and cannot currently be used traditionally
 source code base for general changes.
 ```
 
-This repo does not include all assets necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.
+**This repo does not include any assets or code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
 This is a decompilation of Legend of Zelda: Majora's Mask (US) 1.0
 
@@ -32,9 +32,9 @@ It builds the following ROM:
 
 Please refer to the following for more information:
 
-Website: https://zelda64.dev/
-
-Discord: https://discord.zelda64.dev
+- [Website](https://zelda64.dev/)
+- [Discord](https://discord.zelda64.dev/)
+- [How to Contribute](CONTRIBUTING.md)
 
 ## Installation
 
@@ -56,12 +56,19 @@ The build process has the following package requirements:
 * binutils-mips-linux-gnu
 * python3
 * pip3
+* libpng-dev
 
 Under Debian / Ubuntu (which we recommend using), you can install them with the following commands:
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip
+sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
+```
+
+To install the Python dependencies simply run in a terminal:
+
+```bash
+python3 -m pip install -r requirements.txt
 ```
 
 #### 2. Fork the repository
@@ -103,9 +110,26 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
+**Note**: to speed up the build, you can either:
+* Pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has.
+* Pass `-j` to `make setup` and `make`, to use as many threads as possible, but beware that this can use too much memory on lower-end systems.
+Both of these have the disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-j` or `-jN`).
+
+**Note**: if you rename symbols, it is recommended that you use the `tools/rename_sym.sh` to ensure that you cover all instances, including the tables which are used to generate the `asm/` directory.
+
+Usage: `tools/rename_sym.sh old_name new_name`. Example:
+
+```bash
+tools/rename_sym.sh func_808A3428 EnTorch2_UpdateIdle
+```
+
 ## Contributing
 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.
 Some tasks also don't require much knowledge to get started.
 
+Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.
+
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
+
+For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md) and our [Code Review Guidelines](REVIEWING.md) to see what code quality guidelines we follow.
