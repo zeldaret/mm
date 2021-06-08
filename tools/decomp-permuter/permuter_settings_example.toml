@@ -1,0 +1,9 @@
+# Optional configuration file for import.py. Put it in the root or in tools/
+# of the repo you are importing from.
+
+build_system = "ninja"
+
+[preserve_macros]
+"g[DS]P.*" = "void"
+"gDma.*" = "void"
+"_SHIFTL" = "unsigned int"
