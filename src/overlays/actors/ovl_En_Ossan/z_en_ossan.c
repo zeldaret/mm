@@ -130,7 +130,7 @@ extern EnOssanAnimation* D_808AC1C4[];
 
 extern Vec3f D_808AC28C[];
 
-extern UNK_PTR D_808AC2B8[][2];
+extern UNK_PTR D_808AC2B8[][3];
 
 extern Vec3f D_808AC2AC;
 
@@ -565,9 +565,8 @@ s32 func_808A90A4(EnOssan *this, GlobalContext *globalCtx) {
             func_8019F230();
             func_808A8500(globalCtx, this);
             return 1;
-        default:
-            return 0;
     }
+    return 0;
 }
 
 void func_808A91B4(EnOssan *this, GlobalContext *globalCtx) {
@@ -585,29 +584,25 @@ void func_808A91B4(EnOssan *this, GlobalContext *globalCtx) {
     } else {
         if (tmp == 4) {
             func_8011552C(globalCtx, 6);
-            if (!func_808A85FC(this, globalCtx, globalCtx->state.input)) {
-                if (!func_80147624(globalCtx) || !func_808A90A4(this, globalCtx)) {
-                    if (this->unk208 < 0) {
-                        tmp = func_808A8CC0(this, 4);
-                        if (tmp != 255) {
-                            this->unk236 = tmp;
-                            func_808A80A0(this, func_808A9400);
-                            func_8011552C(globalCtx, 6);
-                            this->unk238.isEnabled = 0;
-                            play_sound(0x4809);
-                        }
-                    } else if (this->unk208 > 0) {
-                        tmp = func_808A8CC0(this, 0);
-                        if (tmp != 255) {
-                            this->unk236 = tmp;
-                            func_808A80A0(this, func_808A94FC);
-                            func_8011552C(globalCtx, 6);
-                            this->unk270.isEnabled = 0;
-                            play_sound(0x4809);
-                        }
+            if (!func_808A85FC(this, globalCtx, globalCtx->state.input) && (!func_80147624(globalCtx) || !func_808A90A4(this, globalCtx))) {
+                if (this->unk208 < 0) {
+                    tmp = func_808A8CC0(this, 4);
+                    if (tmp != 255) {
+                        this->unk236 = tmp;
+                        func_808A80A0(this, func_808A9400);
+                        func_8011552C(globalCtx, 6);
+                        this->unk238.isEnabled = 0;
+                        play_sound(0x4809);
                     }
-                } else {
-                    return;
+                } else if (this->unk208 > 0) {
+                    tmp = func_808A8CC0(this, 0);
+                    if (tmp != 255) {
+                        this->unk236 = tmp;
+                        func_808A80A0(this, func_808A94FC);
+                        func_8011552C(globalCtx, 6);
+                        this->unk270.isEnabled = 0;
+                        play_sound(0x4809);
+                    }
                 }
             } else {
                 return;
@@ -1212,11 +1207,11 @@ void func_808AA8E8(EnOssan *this) {
     s32 i;
 
     for(i=0; i<8; i++, tmp++) {
-        if (tmp[0] != NULL) {
+        if (*tmp != NULL) {
             if (this->actionFunc != func_808AA0C8 && this->actionFunc != func_808AA1B0 && this->unk235 == 0) {
-                tmp[0]->unk1AC = 0;
+                (*tmp)->unk1AC = 0;
             } else {
-                tmp[0]->unk1AC = this->unk236 == i ? 1 : 0;
+                (*tmp)->unk1AC = this->unk236 == i ? 1 : 0;
             } 
         }
     }
