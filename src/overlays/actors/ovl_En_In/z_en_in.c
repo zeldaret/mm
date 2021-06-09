@@ -240,7 +240,7 @@ s32 func_808F33B8(void) {
 
     if (((ret = gSaveContext.day == 1) && (ret = gSaveContext.time >= 0x3AAA) && (ret = gSaveContext.time <= 0x4000)) ||
         (ret = gSaveContext.day >= 2)) {
-        ret = !(gSaveContext.weekEventReg[22] & 1);
+        ret = (gSaveContext.weekEventReg[22] & 1) == 0;
     }
     return ret;
 }
