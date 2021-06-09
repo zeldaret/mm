@@ -61,19 +61,18 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Path* path;
     s32 pathID;
 
-    // flag: targetable, left over? not set by default above
+    // flag: is targetable. Should do nothing as not set by default above
     this->actor.flags &= ~1;
 
-    switch (WEATHER_TAG_TYPE(this->actor.params)) {
+    switch (WEATHER_TAG_TYPE(this)) {
         case WEATHERTAG_TYPE_UNK0:
             this->unk154 = 0;
-            this->fadeDistance = (s16)this->actor.world.rot.x;
-            this->unk158 = (s16)this->actor.world.rot.y;
+            this->fadeDistance = this->actor.world.rot.x;
+            this->unk158 = this->actor.world.rot.y;
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            // if cleared STT
-            if ((gSaveContext.weekEventReg[0x34] & 0x20) != 0) {
+            if (gSaveContext.weekEventReg[0x34] & 0x20) { // if cleared STT
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
@@ -97,7 +96,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
         case WEATHERTAG_TYPE_WATERMURK:
-            pathID = WEATHER_TAG_PATHID(this->actor.params);
+            pathID = WEATHER_TAG_PATHID(this);
             path = &globalCtx->setupPathList[pathID];
             this->pathPoints = Lib_SegmentedToVirtual(path->points);
             this->pathCount = path->count;
@@ -109,13 +108,13 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // matches but unused params is suspicious
-// called WeatherTag_CheckEnableWeatherEffect in OOT
+// called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
 u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
                  u8 weatherMode) {
     ActorPlayer* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this->actor.params) > Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
         if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
             D_801BDBB8 = 1;
             if (!(globalCtx->kankyoContext.unk1E == 0) ||
@@ -145,7 +144,7 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
     ActorPlayer* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this->actor.params) < Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
         if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
             D_801BDBB8 = 1;
             if (!(globalCtx->kankyoContext.unk1E == 0) ||
@@ -166,6 +165,7 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
     return returnVal;
 }
 
+// modify wind?
 void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     f32 distance;
@@ -182,19 +182,19 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     // this separation is to match, can't be separate temps without regalloc
     partialResult = (1.0f - (distance / this->fadeDistance));  // strength based on distance?
-    partialResult = (this->unk154 / 32768.0f) * partialResult; // parameter strength applied earlier
+    partialResult = (this->unk154 / 32768.0f) * partialResult; // another scale applied
 
     globalCtx->kankyoContext.windClothIntensity = (this->actor.world.rot.z * partialResult) + 30.0f;
     if (partialResult > 0.01f) {
         globalCtx->kankyoContext.unkEA = 8;
         D_801F4E30 = 0x9B;
-    } else if ((u8)globalCtx->kankyoContext.unkEA == 8) {
+    } else if (globalCtx->kankyoContext.unkEA == 8) {
         D_801F4E30 = 0;
         globalCtx->kankyoContext.unkEA = 9;
     }
 }
 
-// type 0
+// WEATHERTAG_TYPE_UNK0
 void func_80966A08(EnWeatherTag* this, GlobalContext* globalCtx) {
     this->unk154 += this->unk158;
     if (this->unk154 >= 0x8001) {
@@ -204,15 +204,15 @@ void func_80966A08(EnWeatherTag* this, GlobalContext* globalCtx) {
     func_8096689C(this, globalCtx);
 }
 
-// type 0_2
+// WEATHERTAG_TYPE_UNK0 2
 void func_80966A68(EnWeatherTag* this, GlobalContext* globalCtx) {
     this->unk154 -= (this->unk158 >> 1);
     if (this->unk154 == 0) {
         this->unk154 = 1;
     }
-    if ((s16)this->unk154 < 0) {
+    if ((s16)this->unk154 < 0) { // cast req
         this->unk154 = 0;
-        // redudant kill
+        // @BUG redudant code
         Actor_MarkForDeath(&this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
     }
@@ -223,10 +223,10 @@ void EnWeatherTag_Die(EnWeatherTag* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-// type 1
+// WEATHERTAG_TYPE_UNK1
 // areas that use: all of ikana, swamp, termina field,stonetower temple,
 //  poisoned swamp: placed behind the water fall from ikana
-// effect stop spawning after STT cleared
+// this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 0, globalCtx->kankyoContext.unk1F, 5, 100, 2) || D_801BDBB0 == 2) {
         globalCtx->unk18874 = 3;
@@ -238,7 +238,7 @@ void func_80966B08(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 5 only one in ikana canyon, corner of cliff right outside of stone tower entrance
+// WEATHERTAG_TYPE_UNK5: only one in ikana canyon, corner of cliff right outside of stone tower entrance
 // because it uses cutsecnes.. is this the clear ikana cutcsene?
 void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     u8 newUnk20;
@@ -271,8 +271,9 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
+// WEATHERTAG_TYPE_UNK1 2
 void func_80966D20(EnWeatherTag* this, GlobalContext* globalCtx) {
-    u8 newUnk20; // TODO better name once I know what it actually does
+    u8 newUnk20;
 
     switch (gSaveContext.day) {
         case 0:
@@ -298,7 +299,7 @@ void func_80966D20(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 2
+// WEATHERTAG_TYPE_WINTERFOG:
 // areas affected: winter goron village, path to mountain village,
 //   path to goron village winter, winter mountain village
 void func_80966E0C(EnWeatherTag* this, GlobalContext* globalCtx) {
@@ -308,7 +309,7 @@ void func_80966E0C(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 2_2
+// WEATHERTAG_TYPE_WINTERFOG 2
 void func_80966E84(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966758(this, globalCtx, 1, 0, 2, 0, 60)) {
         globalCtx->kankyoContext.unkF2[3] = 0;
@@ -316,10 +317,9 @@ void func_80966E84(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 3
-// unused in vanilla?
+// WEATHERTAG_TYPE_UNK3: unused in vanilla?
 //  just a heavy fog like the winter fog, but unused?
-// wait if you enter the scene through a room instead of fog you get a quick rain shower then nothing
+// wait if you enter the scene through a room instead of fog you get a flash rain shower
 void func_80966EF0(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 1, 0, 2, 100, 4)) {
         func_800FD78C(globalCtx);
@@ -328,7 +328,7 @@ void func_80966EF0(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 3_2
+// WEATHERTAG_TYPE_UNK3 2
 void func_80966F74(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966758(this, globalCtx, 1, 0, 2, 0, 100)) {
         func_800FD858(globalCtx);
@@ -337,27 +337,25 @@ void func_80966F74(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 4
-// no visible effect, what does it doooo??
+// WEATHERTAG_TYPE_UNK4: no visible effect, what does it doooo??
 // used in south clock town??? romani ranch, clock tower rooftop woodfall..? stt
-// all of them have shorter distances though, like 0xA and 0x6, so their locations aree important
+// all of them have shorter distances though, like 0xA and 0x6, so their locations are important
 void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     // weirdly, not the same as the other param lookup used in the rest of the file, which is float
-    s32 distance = WEATHER_TAG_RANGE100INT(this->actor.params);
+    s32 distance = WEATHER_TAG_RANGE100INT(this);
     if (distance > 0) {
-        D_801F4E7A = (s16)distance;
+        D_801F4E7A = distance;
     }
 
-    // unique pirates fortress behavior
-    if ((globalCtx->sceneNum == SCENE_KAIZOKU) && ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+    // unique pirates fortress behavior?
+    if ((globalCtx->sceneNum == SCENE_KAIZOKU) && (globalCtx->actorCtx.unk5 & 2)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }
 
 #if NON_MATCHING
 // non-matching: two instructions are swapped
-// ca4:  lwc1    $f0,0x18(sp)    | ca4:  lui     at,0x428c
-// ca8:  lui     at,0x428c       | ca8:  lwc1    $f0,0x18(sp)
+// type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
     Vec3f vec1;
     Vec3f vec2;
@@ -369,6 +367,8 @@ void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
     func_80169474(globalCtx, &vec1, &vec2);
 
     // 0x428C0000 = 70.0f
+    // ca4:  lwc1    $f0,0x18(sp)    | ca4:  lui     at,0x428c
+    // ca8:  lui     at,0x428c       | ca8:  lwc1    $f0,0x18(sp)
     if (globalCtx->view.fovy < 25.0f && (vec2.x >= 70.0f && vec2.x < 250.0f) && (vec2.y >= 30.0f && vec2.y < 210.0f)) {
         EnWeatherTag_SetupAction(this, func_80967148);
     }
@@ -377,6 +377,7 @@ void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_80967060.asm")
 #endif
 
+// type 4_3, start cutscene then die?
 void func_80967148(EnWeatherTag* this, GlobalContext* globalCtx) {
     s16 tempCutscene;
 
@@ -414,14 +415,7 @@ void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) 
 
 #if NON_MATCHING
 // non_matching: the parameters for func_800BCCDC are correct, but out of order
-/*
-eec:  addiu   a3,s0,0x24    | eec:  lw      a0,0x150(s0)   4
-ef0:  sw      v0,0x3c(sp)   | ef0:  lbu     a1,0x14c(s0)   3
-ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
-ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
-efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
-*/
-// case 6: water murk (pinnacle rock, zora cape, zora coast)
+// WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     s32 pad;
@@ -430,10 +424,15 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     f32 strength = 0.0f;
 
     // the parameters here are correct but loaded in the wrong order
+    // eec:  addiu   a3,s0,0x24    | eec:  lw      a0,0x150(s0)   4
+    // ef0:  sw      v0,0x3c(sp)   | ef0:  lbu     a1,0x14c(s0)   3
+    // ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
+    // ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
+    // efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
     func_800BCCDC(this->pathPoints, this->pathCount, &player->base.world.pos, &this->actor.world.pos, 0);
 
     distance = Actor_XZDistanceBetweenActors(&player->base, &this->actor);
-    range = WEATHER_TAG_RANGE100(this->actor.params);
+    range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
         globalCtx->kankyoContext.unkEA = 6;
@@ -460,7 +459,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
-    if (Actor_XZDistanceBetweenActors(&player->base, &this->actor) < WEATHER_TAG_RANGE100(this->actor.params)) {
+    if (Actor_XZDistanceBetweenActors(&player->base, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if ((gSaveContext.day % 5) == 2) {
             if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) &&
                 (globalCtx->kankyoContext.unkF2[2] == 0)) {
@@ -481,11 +480,9 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-// type 7_2
+// WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this->actor.params) + 10.0f) <
-        Actor_XZDistanceBetweenActors(&PLAYER->base, &this->actor)) {
-
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->base, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
@@ -497,9 +494,8 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if (((globalCtx->actorCtx.unk5 & 2) != 0) && (globalCtx->msgCtx.unk11F23 != 0) &&
-        (globalCtx->msgCtx.unk11F04 == 0x5E6) // 1510
-        && (func_8016A01C(globalCtx) == 0) && (globalCtx->unk18875 == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
-        (globalCtx->csCtx.state == 0)) {
+        (globalCtx->msgCtx.unk11F04 == 0x5E6) && (func_8016A01C(globalCtx) == 0) && (globalCtx->unk18875 == 0) &&
+        (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
         oldTime = gSaveContext.time;
         gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
