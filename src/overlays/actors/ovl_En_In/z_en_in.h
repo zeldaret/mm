@@ -7,6 +7,17 @@ struct EnIn;
 
 typedef void (*EnInActionFunc)(struct EnIn*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ ENIN_UNK_TYPE,
+    /* 1 */ ENIN_HORSE_RIDER_YELLOW_SHIRT,
+    /* 2 */ ENIN_HORSE_RIDER_BLUE_SHIRT,
+    /* 3 */ ENIN_YELLOW_SHIRT,
+    /* 4 */ ENIN_BLUE_SHIRT
+} EnInType;
+
+#define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
+#define ENIN_GET_WALKING_FLAG(thisx) (((thisx)->params & 0x7E00) >> 9)
+
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnInActionFunc actionFunc;

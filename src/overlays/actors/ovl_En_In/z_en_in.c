@@ -1,7 +1,7 @@
 /*
  * File z_en_in.c
  * Overlay: ovl_en_in
- * Description: Ingo/Gorman Bros
+ * Description: Gorman Bros
  */
 
 #include "z_en_in.h"
@@ -46,97 +46,51 @@ const ActorInit En_In_InitVars = {
 };
 
 extern FlexSkeletonHeader D_06014EA8;
-
 extern AnimationHeader D_06015E38;
-
 extern AnimationHeader D_06016484;
-
 extern AnimationHeader D_06016A60;
-
 extern AnimationHeader D_060170DC;
-
 extern AnimationHeader D_060177AC;
-
 extern AnimationHeader D_06018240;
-
 extern AnimationHeader D_060187C8;
-
 extern AnimationHeader D_060198A8;
-
 extern Gfx D_06007A70[];
-
 extern Gfx D_06007C48[];
-
 extern Gfx D_0601C528[];
-
 extern AnimatedMaterial D_06001C30;
-
 extern UNK_TYPE D_06003520;
-
 extern UNK_TYPE D_060035E0;
-
 extern UNK_TYPE D_06004820;
-
 extern UNK_TYPE D_06004C20;
-
 extern UNK_TYPE D_060043E0;
-
 extern AnimationHeader D_06001D10;
-
 extern AnimationHeader D_06014F8C;
-
 extern AnimationHeader D_06000CB0;
-
 extern AnimationHeader D_060003B4;
-
 extern AnimationHeader D_06001BE0;
-
 extern AnimationHeader D_06015918;
-
 extern AnimationHeader D_0601C0B0;
-
 extern AnimationHeader D_0601A140;
-
 extern AnimationHeader D_0601B904;
-
 extern AnimationHeader D_0601B3C4;
-
 extern AnimationHeader D_06019EB4;
-
 extern Gfx D_060137A0[];
-
 extern Gfx D_06014420[];
-
 extern Gfx D_06014040[];
-
 extern Gfx D_06013670[];
-
 extern Gfx D_06014AE0[];
-
 extern Gfx D_06012A78[];
-
 extern Gfx D_06013DE0[];
-
 extern Gfx D_060138D0[];
-
 extern Gfx D_06013540[];
-
 extern Gfx D_06012DF8[];
-
 extern Gfx D_060145D8[];
-
 extern Gfx D_06014860[];
-
 extern Gfx D_06014710[];
-
 extern Gfx D_06013A00[];
-
 extern Gfx D_06013F10[];
-
 extern Gfx D_06014C30[];
-
 extern Gfx D_060149A8[];
-
 extern Gfx D_06013440[];
 
 static ColliderCylinderInit sCylinderInit = {
@@ -204,8 +158,9 @@ static ActorAnimationEntryS sAnimations[] = {
     { &D_0601B3C4, 0.0f, 0, -1, 2, 0 },  { &D_0601B3C4, 1.0f, 0, -1, 0, -4 }, { &D_06019EB4, 1.0f, 0, -1, 2, -4 },
 };
 
-static UNK_TYPE D_808F6C0C[] = {
-    0x0FA00004, 0x00010003, 0x17700004, 0x00010006, 0x0FA00004, 0x00010003, 0x17700004, 0x00010006,
+static s16 D_808F6C0C[] = {
+    4000, 4, 1, 3, 6000, 4, 1, 6, 
+    4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
 s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
@@ -230,13 +185,11 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
     u8 prevUnk261 = this->unk261;
     u8 tmp;
 
-    tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
-    this->unk260 = tmp;
+    this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp & 0xFF) {
         Audio_PlayActorSound2(&this->actor, 0x802);
     }
-    tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
-    this->unk261 = tmp;
+    this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp & 0xFF) {
         Audio_PlayActorSound2(&this->actor, 0x802);
     }
@@ -248,7 +201,7 @@ void func_808F322C(EnIn* this, s32 arg1) {
         this->unk482++;
         if (this->unk482 >= arg1) {
             this->unk482 = 0;
-            this->unk484 = Rand_S16Offset(0x1E, 0x1E);
+            this->unk484 = Rand_S16Offset(30, 30);
         }
     }
 }
@@ -286,9 +239,9 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
 s32 func_808F33B8(void) {
     s32 ret;
 
-    if (((ret = gSaveContext.day == 1) && (ret = gSaveContext.time >= 0x3AAA) && (ret = gSaveContext.time < 0x4001)) ||
+    if (((ret = gSaveContext.day == 1) && (ret = gSaveContext.time >= 0x3AAA) && (ret = gSaveContext.time <= 0x4000)) ||
         (ret = gSaveContext.day >= 2)) {
-        ret = (gSaveContext.weekEventReg[22] & 1) == 0;
+        ret = !(gSaveContext.weekEventReg[22] & 1);
     }
     return ret;
 }
@@ -316,7 +269,7 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, globalCtx);
-    func_8013D9C8(globalCtx, this->unk376, this->unk39E, 0x14);
+    func_8013D9C8(globalCtx, this->unk376, this->unk39E, 20);
 }
 
 void func_808F35AC(EnIn* this, GlobalContext* globalCtx) {
@@ -333,17 +286,17 @@ void func_808F35D8(EnIn* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808F3608(EnIn* this, GlobalContext* globalCtx) {
+void EnIn_DoNothing(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
-    if (((this->actor.params & 0x7E00) >> 9) != 0x3F) {
+    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
         func_808F30B0(&this->skelAnime, 9);
     }
-    if (((this->actor.params & 0x7E00) >> 9) != 0x3F) {
+    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
         this->actionFunc = func_808F3690;
     } else {
-        this->actionFunc = func_808F3608;
+        this->actionFunc = EnIn_DoNothing;
     }
 }
 
@@ -362,7 +315,7 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
-    AnimationHeader* sp40[] = { &D_06015E38, &D_06016A60, &D_060177AC, &D_06016484,
+    AnimationHeader* animations[] = { &D_06015E38, &D_06016A60, &D_060177AC, &D_06016484,
                                 &D_060170DC, &D_06018240, &D_060187C8, &D_060198A8 };
 
     if (this->skelAnime.animCurrentSeg == &D_06016484 || this->skelAnime.animCurrentSeg == &D_060170DC) {
@@ -378,10 +331,9 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, 0x6854);
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        this->unk488 %= 8;
-        this->unk486 = this->unk488;
-        SkelAnime_ChangeAnim(&this->skelAnime, sp40[this->unk488], 1.0f, 0.0f,
-                             SkelAnime_GetFrameCount(&sp40[this->unk488]->common), 2, -10.0f);
+        this->unk486 = this->unk488 %= 8;
+        SkelAnime_ChangeAnim(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
+                             SkelAnime_GetFrameCount(&animations[this->unk488]->common), 2, -10.0f);
     }
 }
 
@@ -517,9 +469,8 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
 }
 
 u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
-    u16 textId;
+    u16 textId = 0;
 
-    textId = 0;
     if (func_8012403C(globalCtx) == 8) {
         if (!(gSaveContext.weekEventReg[63] & 0x40)) {
             return 0x34A9;
@@ -601,7 +552,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
 void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
     s32 unused;
 
-    if ((textId == 0x34AE) || (textId == 0x34B0) || (textId == 0x34B2)) {
+    if (textId == 0x34AE || textId == 0x34B0 || textId == 0x34B2) {
         unused = textId;
         func_80151BB4(globalCtx, 0x11);
     }
@@ -658,9 +609,8 @@ s32 func_808F4150(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
 
 s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext* msgCtx, s32 arg4) {
     s32 pad;
-    s32 fee;
+    s32 fee = globalCtx->msgCtx.unk1206C != 0xFFFF ? globalCtx->msgCtx.unk1206C : 10;
 
-    fee = globalCtx->msgCtx.unk1206C != 0xFFFF ? globalCtx->msgCtx.unk1206C : 10;
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
         if (gSaveContext.rupees >= fee) {
@@ -944,7 +894,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x347A:
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
+                    if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x347E);
                         ret = 0;
                     } else {
@@ -1135,7 +1085,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x349D:
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
+                    if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A1);
                         ret = 0;
                     } else {
@@ -1324,9 +1274,8 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
 
 s32 func_808F5994(EnIn* this, GlobalContext* globalCtx, Vec3f* arg2, s16 arg3) {
     s32 ret = 0;
-    s16 yaw;
+    s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, arg2) - this->actor.world.rot.y;
 
-    yaw = Math_Vec3f_Yaw(&this->actor.world.pos, arg2) - this->actor.world.rot.y;
     if (yaw > arg3) {
         this->actor.world.rot.y += arg3;
     } else if (yaw < -arg3) {
@@ -1415,7 +1364,7 @@ static InitChainEntry sInitChain[] = {
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnIn* this = THIS;
     s32 pad[2];
-    s16 paramsFlag;
+    s16 type;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
@@ -1427,12 +1376,12 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk48A = 0;
     this->unk48C = 0;
     this->unk4AC = 0;
-    paramsFlag = this->actor.params & 0x1FF;
+    type = ENIN_GET_TYPE(thisx);
     this->unk4B0 = gSaveContext.weekEventReg[92] & 7;
-    if (paramsFlag == 2 || paramsFlag == 4) {
+    if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == 4) {
         this->unk4AC |= 8;
     }
-    if (paramsFlag == 1 || paramsFlag == 2) {
+    if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06016A60.common), 2,
@@ -1446,9 +1395,9 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->unk240 = func_8013D648(globalCtx, (this->actor.params & 0x7E00) >> 9, 0x3F);
+        this->unk240 = func_8013D648(globalCtx, ENIN_GET_WALKING_FLAG(&this->actor), 0x3F);
         this->unk23D = 0;
-        if (paramsFlag == 3 || paramsFlag == 4) {
+        if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if ((gSaveContext.weekEventReg[92] & 7) == 2 || (gSaveContext.weekEventReg[92] & 7) == 3) {
                 gSaveContext.weekEventReg[56] &= (u8)~8;
                 this->unk4A8 = 0;
@@ -1475,7 +1424,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                     gSaveContext.weekEventReg[56] &= (u8)~8;
                     this->unk23C = 0;
                     this->unk4AC |= 2;
-                    if (paramsFlag == 4) {
+                    if (type == ENIN_BLUE_SHIRT) {
                         if (func_808F33B8()) {
                             func_808F30B0(&this->skelAnime, 0);
                             this->actionFunc = func_808F5A94;
@@ -1543,7 +1492,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     SysMatrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (this == (EnIn*)player->unkA88 && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 < 0x201) &&
+    if (this == (EnIn*)player->unkA88 && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) &&
         newUnk4C8 == 3 && this->unk4C8 == 3) {
         if (!(globalCtx->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
@@ -1554,7 +1503,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C8 = newUnk4C8;
 }
 
-s32 func_808F64A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIn* this = THIS;
     s32 pad;
     Gfx* sp50[] = {
@@ -1615,7 +1564,7 @@ s32 func_808F64A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_808F67F8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnIn* this = THIS;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
@@ -1661,6 +1610,6 @@ void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_808F64A0, func_808F67F8, &this->actor);
+                     EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

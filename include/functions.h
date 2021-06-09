@@ -2698,7 +2698,7 @@ UNK_TYPE func_8013BC6C(SkelAnime* skelAnime, UNK_PTR arg1, s32 arg2);
 // void func_8013CD64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8013CF04(void);
 // void func_8013D0E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16 arg4, s16 arg5, UNK_PTR arg6);
+void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16* arg4, s16* arg5, s16* arg6);
 UNK_TYPE func_8013D5E8(s16 arg0, UNK_TYPE arg1, s16 arg2);
 u8* func_8013D648(GlobalContext *globalCtx, s16 arg1, s32 arg2);
 UNK_TYPE func_8013D68C(u8* arg0, s16 arg1, UNK_PTR arg2);
