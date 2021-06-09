@@ -487,7 +487,7 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
         }
     }
     func_80122744(globalCtx, this->unk2BC, phi_s0, end - phi_s0);
-    this->unk2C4 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
+    this->spotlights = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
 
@@ -532,8 +532,8 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 
     func_80BA3C88(this);
     if (player->base.world.pos.z > -270.0f) {
-        if (this->unk2C4 != NULL) {
-            Actor_MarkForDeath(this->unk2C4);
+        if (this->spotlights != NULL) {
+            Actor_MarkForDeath(this->spotlights);
         }
         this->unk2B6 = 1;
         return this->text->unk1;
@@ -639,8 +639,8 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(actor);
                 actor = actor->next;
             }
-            if (this->unk2C4 != NULL) {
-                Actor_MarkForDeath(this->unk2C4);
+            if (this->spotlights != NULL) {
+                Actor_MarkForDeath(this->spotlights);
             }
             func_800B7298(globalCtx, 0, 0x45);
             if (this->unk2B3 == 0xF) {
