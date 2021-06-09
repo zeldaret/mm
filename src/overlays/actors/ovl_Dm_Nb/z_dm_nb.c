@@ -15,7 +15,6 @@ void DmNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmNb_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-
 const ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
     ACTORCAT_NPC,
