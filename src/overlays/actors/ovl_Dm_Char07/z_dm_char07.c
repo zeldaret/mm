@@ -107,19 +107,19 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, D_060016B8);
             break;
         case SPOTLIGHTS:
-            if (DMCHAR07_STAGE_RIGHT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000240);
             }
-            if (DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000790);
             }
-            if (DMCHAR07_STAGE_CENTER_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_STAGE_CENTER_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000CC0);
             }
-            if (DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06001210);
             }
-            if (DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_060016B8);
             }
             break;
@@ -143,19 +143,19 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, D_060015E0);
             break;
         case SPOTLIGHTS:
-            if (DMCHAR07_STAGE_RIGHT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000100);
             }
-            if (DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000650);
             }
-            if (DMCHAR07_STAGE_CENTER_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_STAGE_CENTER_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_06000B80);
             }
-            if (DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_060010D0);
             }
-            if (DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT(this)) {
+            if (this->spotlightFlags & DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, D_060015E0);
             }
             break;
