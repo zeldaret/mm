@@ -63,7 +63,7 @@ void func_80B3C2B0(ObjGhaka* this) {
 }
 
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[20] & 0x20) == 0) {
+    if (!(gSaveContext.weekEventReg[20] & 0x20)) {
         Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0,
                                          0, 0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
@@ -74,9 +74,8 @@ void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
 
 void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
-    s16 distDiff;
+    s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
     if (func_800B84D0(&this->dyna.actor, globalCtx)) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
@@ -98,9 +97,8 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 temp_v0 = func_80152498(&globalCtx->msgCtx);
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
             globalCtx->msgCtx.unk11F23 = 0x43;
@@ -133,11 +131,10 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
 
 void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
-    s32 stepTemp;
+    u8 stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
 
-    stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
-    if (stepTemp & 0xFF) {
+    if (stepTemp) {
         player->unkA70 &= ~0x10;
         this->dyna.unk148 = 0.0f;
         func_80B3C2C4(this, globalCtx);
@@ -171,6 +168,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjGhaka_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjGhaka* this = THIS;
+
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
