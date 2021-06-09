@@ -8,6 +8,26 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B61AC8(EnBigpo* this);
+void func_80B61B38(EnBigpo* this);
+void func_80B61D74(EnBigpo* this);
+void func_80B61E9C(EnBigpo* this);
+void func_80B62034(EnBigpo* this);
+void func_80B62154(EnBigpo* this);
+void func_80B622E4(EnBigpo* this);
+void func_80B624F4(EnBigpo* this);
+void func_80B6275C(EnBigpo* this);
+
+void func_80B61AF8(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61B70(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61DA4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61F04(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62084(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B621CC(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B623BC(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B6259C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B627B4(EnBigpo* this, GlobalContext* globalCtx);
+
 /*
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
