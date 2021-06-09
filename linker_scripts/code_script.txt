@@ -716,8 +716,9 @@ SECTIONS
     gFramebufferHighRes1 = 0x80000500;
     gFramebufferHighRes0 = 0x80780000;
 
-    /* Unkown buffers */
+    /* Unknown buffers */
     D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
+    D_801C1E2C = 0x801C1E2C; /* Used in z_en_ginko_man.c */
     D_80780000 = 0x80780000;
     D_80784600 = 0x80784600;
 
@@ -5006,7 +5007,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.text)
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.data)
         build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man.o(.rodata)
-        build/asm/overlays/ovl_En_Ginko_Man_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ginko_Man/z_en_ginko_man_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

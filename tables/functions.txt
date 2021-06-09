@@ -10826,7 +10826,7 @@
     0x80A65988:("EnGinkoMan_SwitchAnimation",),
     0x80A65A5C:("EnGinkoMan_FacePlayer",),
     0x80A65ADC:("EnGinkoMan_Update",),
-    0x80A65B44:("EnGinkoMan_LimbDraw",),
+    0x80A65B44:("EnGinkoMan_OverrideLimbDraw",),
     0x80A65C18:("EnGinkoMan_PostLimbDraw",),
     0x80A65C30:("EnGinkoMan_Draw",),
     0x80A66180:("EnWarpUzu_Init",),
