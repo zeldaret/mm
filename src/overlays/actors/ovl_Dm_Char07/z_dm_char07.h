@@ -17,10 +17,10 @@ typedef void (*DmChar07ActionFunc)(struct DmChar07*, GlobalContext*);
 #define DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT 16
 
 typedef enum {
-    /* 0x00 */ STAGE,
-    /* 0x01 */ CREDITS_STAGE,
-    /* 0x02 */ SPOTLIGHTS,
-    /* 0x03 */ MISC_OBJECTS
+    /* 0 */ DMCHAR07_STAGE,
+    /* 1 */ DMCHAR07_CREDITS_STAGE,
+    /* 2 */ DMCHAR07_SPOTLIGHTS,
+    /* 3 */ DMCHAR07_DISHES
 } DmChar07Type;
 
 typedef struct DmChar07 {
