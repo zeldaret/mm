@@ -10,13 +10,13 @@
 
 #define THIS ((EnIn*)thisx)
 
-#define MACRO1                                                                                                    \
+#define SET_FLAGS_FINISH_RACE                                                                                     \
     {                                                                                                             \
         gSaveContext.weekEventReg[92] &= (u8)~7;                                                                  \
         gSaveContext.weekEventReg[92] = gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~7); \
     }
 
-#define MACRO2                                                                              \
+#define SET_FLAGS_START_RACE                                                                \
     {                                                                                       \
         gSaveContext.weekEventReg[92] &= (u8)~7;                                            \
         gSaveContext.weekEventReg[92] =                                                     \
@@ -159,8 +159,7 @@ static ActorAnimationEntryS sAnimations[] = {
 };
 
 static s16 D_808F6C0C[] = {
-    4000, 4, 1, 3, 6000, 4, 1, 6, 
-    4000, 4, 1, 3, 6000, 4, 1, 6,
+    4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
 s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
@@ -316,7 +315,7 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
     AnimationHeader* animations[] = { &D_06015E38, &D_06016A60, &D_060177AC, &D_06016484,
-                                &D_060170DC, &D_06018240, &D_060187C8, &D_060198A8 };
+                                      &D_060170DC, &D_06018240, &D_060187C8, &D_060198A8 };
 
     if (this->skelAnime.animCurrentSeg == &D_06016484 || this->skelAnime.animCurrentSeg == &D_060170DC) {
         if (func_801378B8(&this->skelAnime, 8.0f)) {
@@ -374,7 +373,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
                 textId = 0x3476;
                 break;
         }
-        MACRO1;
+        SET_FLAGS_FINISH_RACE;
     } else {
         switch (gSaveContext.weekEventReg[92] & 7) {
             case 2:
@@ -384,7 +383,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
                 textId = 0x3499;
                 break;
         }
-        MACRO1;
+        SET_FLAGS_FINISH_RACE;
     }
     this->actor.flags |= 0x10000;
     this->actor.textId = textId;
@@ -646,7 +645,7 @@ s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    MACRO1;
+    SET_FLAGS_FINISH_RACE;
     return 0;
 }
 
@@ -828,7 +827,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
-                    MACRO2;
+                    SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
@@ -1075,7 +1074,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = 0;
                     break;
                 case 0x3475:
-                    MACRO2;
+                    SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk1887F = 5;
