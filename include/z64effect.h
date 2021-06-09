@@ -229,8 +229,8 @@ typedef struct {
     /* 0x34 */ u8 type; // type0: start small, get big, fade away type1: start big, fade away
 } EffectDustInit; // size = 0x35
 
+typedef u32 (*EffectSsInitFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* effectSs, void* initParams);
 typedef void(*EffectSsUpdateFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
-
 typedef void(*EffectSsDrawFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
 
 typedef struct EffectSs {
@@ -257,7 +257,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ UNK_TYPE4 unk0;
-    /* 0x4 */ EffectSsDrawFunc init;
+    /* 0x4 */ EffectSsInitFunc init;
 } ParticleOverlayInfo; // size = 0x8
 
 typedef struct {

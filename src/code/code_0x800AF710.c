@@ -125,7 +125,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
     *index = 46;
     common = NULL;
 
-    if (func_8016A01C(globalCtx) != 1) {
+    if (FrameAdvance_IsEnabled(globalCtx) != true) {
         slotFound = 0;
         switch (type) {
             case 0:
