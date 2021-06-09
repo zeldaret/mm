@@ -1121,8 +1121,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.magicLevel != 0) &&
-                       ((gSaveContext.magicLevel >> 1) >= gSaveContext.magic)) {
+            } else if ((gSaveContext.magicLevel != 0) && ((gSaveContext.magicLevel >> 1) >= gSaveContext.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
