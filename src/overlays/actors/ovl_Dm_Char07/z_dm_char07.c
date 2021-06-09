@@ -4,7 +4,6 @@
  * Description: Different Milk Bar Objects (Stage, Credits Stage, Spotlights, Miscellaneous)
  */
 
-
 #include "z_dm_char07.h"
 
 #define FLAGS 0x00000030
@@ -30,47 +29,30 @@ const ActorInit Dm_Char07_InitVars = {
     (ActorFunc)DmChar07_Draw,
 };
 
-
 extern Gfx D_06000100[];
-
 extern Gfx D_06000240[];
-
 extern Gfx D_06000650[];
-
 extern Gfx D_06000790[];
-
 extern Gfx D_06000B80[];
-
 extern Gfx D_06000CC0[];
-
 extern Gfx D_060010D0[];
-
 extern Gfx D_06001210[];
-
 extern Gfx D_060015E0[];
-
 extern Gfx D_060016B8[];
-
 extern Gfx D_06002BA0[];
-
 extern Gfx D_06002CD0[];
-
 extern CollisionHeader D_06006688;
-
 extern Gfx D_060076A0[];
-
 extern Gfx D_06007918[];
-
 extern AnimatedMaterial D_060105F8;
-
 extern Gfx D_06010D68[];
 
-void DmChar07_SetupAction(DmChar07 *this, DmChar07ActionFunc actionFunc) {
+void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void DmChar07_Init(Actor *thisx, GlobalContext *globalCtx) {
-    DmChar07 *this = THIS;
+void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
+    DmChar07* this = THIS;
 
     this->isStage = 0;
     Actor_SetScale(&this->dyna.actor, 1.0f);
@@ -87,8 +69,8 @@ void DmChar07_Init(Actor *thisx, GlobalContext *globalCtx) {
     DmChar07_SetupAction(this, DmChar07_DoNothing);
 }
 
-void DmChar07_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    DmChar07 *this = THIS;
+void DmChar07_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    DmChar07* this = THIS;
     if (this->isStage) {
         BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
@@ -98,20 +80,20 @@ void DmChar07_DoNothing(DmChar07* this, GlobalContext* globalCtx) {
 }
 
 void DmChar07_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DmChar07 *this = THIS;
+    DmChar07* this = THIS;
 
     this->actionFunc(this, globalCtx);
 }
 
-void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    DmChar07 *this = THIS;
+void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    DmChar07* this = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    switch(this->dyna.actor.params) {
+    switch (this->dyna.actor.params) {
         case STAGE:
             gSPDisplayList(POLY_OPA_DISP++, D_06002CD0);
             break;
@@ -148,7 +130,7 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    switch(this->dyna.actor.params) {
+    switch (this->dyna.actor.params) {
         case STAGE:
             gSPDisplayList(POLY_XLU_DISP++, D_06002BA0);
             break;
