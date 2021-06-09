@@ -105,8 +105,7 @@ void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
 }
 
 void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
-    s32 dYaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    s32 dYawABS;
+    s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx)) { // Listen for dialogue start?
@@ -125,11 +124,8 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
             }
         }
         EnGinkoMan_SetupDialogue(this);
-    } else {
-        dYawABS = dYaw < 0 ? -dYaw : dYaw;
-        if (dYawABS < 0x1555) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
-        }
+    } else if (ABS_ALT(yaw) < 0x1555) {
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
