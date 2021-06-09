@@ -794,7 +794,7 @@ f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2);
 // void func_800B82EC(void);
 // void func_800B83BC(void);
 // void func_800B83F8(void);
-s32 func_800B84D0(Actor* actor, GlobalContext* globalCtx);
+s32 func_800B84D0(Actor* actor, GlobalContext* globalCtx); // Actor_IsTalking
 s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5);
 void func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 uParm3, s32 uParm4);
 void func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 uParm3);
@@ -892,7 +892,7 @@ void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 // void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
 // void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
-// void func_800BD888(void);
+void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is very similar to OoT's func_80034A14
 // void func_800BD9A0(void);
 // void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
 // void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
@@ -2233,7 +2233,7 @@ void func_80123DA4(ActorPlayer* player);
 // void func_80123F2C(void);
 // void func_80123F48(void);
 // void func_80124020(void);
-u32 func_8012403C(GlobalContext* globalCtx);
+u32 func_8012403C(GlobalContext* globalCtx); // Player_IsWearingAMask
 void func_8012404C(GlobalContext* globalCtx);
 // void func_8012405C(void);
 // void func_80124088(void);
@@ -2877,7 +2877,11 @@ void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
 // void func_80151DA4(void);
 void func_80152434(GlobalContext* globalCtx, u16 arg2);
 // void func_80152464(void);
+<<<<<<< HEAD
 u8 func_80152498(MessageContext* msgCtx);
+=======
+s32 func_80152498(MessageContext* msgCtx);
+>>>>>>> upstream/master
 // void func_8015268C(void);
 // void func_80152C64(void);
 // void func_80152CAC(void);
