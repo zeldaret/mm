@@ -82,12 +82,8 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_161 = (thisx->params >> 8) & 0xFF;
     thisx->params &= 3;
 
-    if (thisx->params == 0 || thisx->params == 3) {
-        if (thisx->params == 0) {
-            this->unk_160 = paramsHigh;
-        } else {
-            this->unk_160 = paramsMid;
-        }
+    if (thisx->params == ICICLE_STALAGMITE_RANDOM_DROP || thisx->params == ICICLE_STALAGMITE_FIXED_DROP) {
+        this->unk_160 = ((thisx->params == ICICLE_STALAGMITE_RANDOM_DROP) ? paramsHigh : paramsMid);
         this->actionFunc = BgIcicle_DoNothing;
     } else {
         this->dyna.actor.shape.rot.x = -0x8000;
@@ -180,7 +176,7 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
 
         BgIcicle_Break(this, globalCtx, 40.0f);
 
-        if (this->dyna.actor.params == 2) {
+        if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgIcicle_Regrow;
@@ -210,18 +206,18 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 2) {
         this->collider.base.acFlags &= ~2;
 
-        if (this->dyna.actor.params == 0) {
+        if (this->dyna.actor.params == ICICLE_STALAGMITE_RANDOM_DROP) {
             BgIcicle_Break(this, globalCtx, 50.0f);
 
             if (this->unk_160 != 0xFF) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
-        } else if (this->dyna.actor.params == 3) {
+        } else if (this->dyna.actor.params == ICICLE_STALAGMITE_FIXED_DROP) {
             sp24 = func_800A8150(this->unk_160);
             BgIcicle_Break(this, globalCtx, 50.0f);
             Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | sp24);
         } else {
-            if (this->dyna.actor.params == 2) {
+            if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
                 BgIcicle_Break(this, globalCtx, 40.0f);
                 this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
                 func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

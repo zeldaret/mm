@@ -7,6 +7,12 @@ struct BgIcicle;
 
 typedef void (*BgIcicleActionFunc)(struct BgIcicle*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ ICICLE_STALAGMITE_RANDOM_DROP,
+    /* 1 */ ICICLE_STALACTITE,
+    /* 2 */ ICICLE_STALACTITE_REGROW,
+    /* 3 */ ICICLE_STALAGMITE_FIXED_DROP
+} BgIcicleMainType;
 
 typedef struct BgIcicle {
     /* 0x000 */ DynaPolyActor dyna;
