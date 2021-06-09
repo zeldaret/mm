@@ -2877,11 +2877,7 @@ void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
 // void func_80151DA4(void);
 void func_80152434(GlobalContext* globalCtx, u16 arg2);
 // void func_80152464(void);
-<<<<<<< HEAD
 u8 func_80152498(MessageContext* msgCtx);
-=======
-s32 func_80152498(MessageContext* msgCtx);
->>>>>>> upstream/master
 // void func_8015268C(void);
 // void func_80152C64(void);
 // void func_80152CAC(void);
