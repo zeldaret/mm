@@ -3042,7 +3042,7 @@
     0x80169F78:("func_80169F78",),
     0x80169FDC:("func_80169FDC",),
     0x80169FFC:("func_80169FFC",),
-    0x8016A01C:("func_8016A01C",),
+    0x8016A01C:("FrameAdvance_IsEnabled",),
     0x8016A02C:("func_8016A02C",),
     0x8016A0AC:("func_8016A0AC",),
     0x8016A168:("func_8016A168",),
