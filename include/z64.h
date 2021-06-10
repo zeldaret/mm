@@ -1530,7 +1530,9 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ TransitionContext transitionCtx;
-    /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
+    /* 0x18768 */ UNK_TYPE1 pad18768[0x30];
+    /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
+    /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
     /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF unk187FC;
@@ -1579,6 +1581,19 @@ typedef struct {
     /* 0x0C */ s32 unkC;
     /* 0x10 */ s32 unk10;
 } struct_801C5F44; // size = 0x14
+
+// From OoT's struct_80034A14_arg1
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3s unk_08;
+    /* 0x0E */ Vec3s unk_0E;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
+    /* 0x24 */ s16 unk_24;
+} struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
     /* 0x000 */ Actor base;
