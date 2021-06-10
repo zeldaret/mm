@@ -39,7 +39,7 @@ typedef struct EnMaYts {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnMaYtsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ char unk_1D8[0x28];
+    /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ s32 unk_200; // Set, but not used
     /* 0x204 */ Vec3s limbDrawTbl[OBJECT_MA1_LIMB_TABLE_COUNT];
     /* 0x28E */ char unk_28E[0x6];
@@ -52,7 +52,7 @@ typedef struct EnMaYts {
     /* 0x32E */ s16 mouthTexIndex;
     /* 0x330 */ s16 type;
     /* 0x332 */ char unk_332[0x2];
-    /* 0x334 */ s16 unk_334; // flag? Seems to be used to prevent continue re-triggering some behaviour in the endcredits cutscene.
+    /* 0x334 */ s16 endCreditsFlag;
     /* 0x336 */ s16 hasBow;
     /* 0x338 */ u16 textId;
 } EnMaYts; // size = 0x33C
@@ -66,7 +66,7 @@ typedef enum {
     /* 3 */ EN_NA_YTS_TYPE_ENDCREDITS
 } EnMaYtsType;
 
-#define EN_MA_YTS_PARSE_TYPE(params) (((params)&0xF000) >> 12)
+#define EN_MA_YTS_PARSE_TYPE(actor) (((actor->params)&0xF000) >> 12)
 #define EN_MA_YTS_PARAM(enMaYtsType) ((enMaYtsType) << 12)
 
 /**

@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/zeldaret/ZAPD.git
+	branch = master
+	commit = ca229f19b991c613c29afade3d70b100522cece1
+	parent = 6ab539cda1870420d07e38e25db09208fd7b21a8
+	method = merge
+	cmdver = 0.4.3

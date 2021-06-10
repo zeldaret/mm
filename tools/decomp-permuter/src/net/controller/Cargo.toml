@@ -1,0 +1,19 @@
+[package]
+name = "pahserver"
+version = "0.0.1"
+edition = "2018"
+resolver = "2"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+sodiumoxide = "0.2"
+toml = "0.5"
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = "1.0"
+serde_tuple = "0.5"
+hex = "0.4"
+argh = "0.1"
+tempfile = "3"
+slotmap = "1"
+pin-project = "1"
+chrono = "*"

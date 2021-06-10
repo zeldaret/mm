@@ -17,6 +17,8 @@ Useful Links
 - [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) - We use this to track decompilation progress, not GitHub Issues.
 
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
+- [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
+
 - [Zelda 64 Reverse Engineering Website](https://zelda64.dev/) - Our homepage, with links to other resources.
 - [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - A very detailed tutorial on how to get started with decomp. For OOT, but largely applicable to MM as well.
 - The `#resources` channel on the Discord contains many more links
@@ -49,7 +51,7 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
 We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
-After joining the Discord, ask to be added to the Trello board so you can claim your actor and avoid duplicate work.
+After joining the Discord, ask to be added to the Trello board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
 
 Style Guide & Conventions
 -------------------------
@@ -144,7 +146,7 @@ Feel free to reach out on the Discord if you have any questions about these step
 ### Pull Request Process
 
 After opening a PR, the Jenkins server will verify your changes.
-If there is an error, double-check that you can successfully `make clean && make` locally and that all added/modified files were `git add`-ed to your commit.
+If there is an error, double-check that you can successfully `make clean && make` locally. If the build is OK, the next thing to check is that all added/modified files were `git add`-ed to your commit. The final check before posting on Discord for help is that there are no new warnings added to the code causing Jenkins to fail. You can check this by running: `tools/warnings_count/check_new_warnings.sh`.
 
 Each PR needs a review from one reviewer and the project lead.
 
