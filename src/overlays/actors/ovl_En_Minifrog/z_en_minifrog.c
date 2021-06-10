@@ -199,7 +199,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
             if (func_801378B8(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
-                Audio_PlayActorSound2(this, 0x28B1);
+                Audio_PlayActorSound2(this, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;

@@ -120,7 +120,7 @@ void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
 void BgCtowerRot_DoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
         if (this->dyna.actor.params == MAIN_DOOR) {
-            Audio_PlayActorSound2(&this->dyna.actor, 0x2893);
+            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;

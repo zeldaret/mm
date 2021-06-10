@@ -257,7 +257,7 @@ void func_80931004(EnTuboTrap* this, GlobalContext* globalCtx) {
                 this->targetHeight += weirdvalue;
             }
             this->originPos = this->actor.world.pos;
-            Audio_PlayActorSound2(&this->actor, 0x28C4);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POT_MOVE_START);
             this->actionFunc = func_80931138;
         }
     }
@@ -284,7 +284,7 @@ void func_809311C4(EnTuboTrap* this, GlobalContext* globalCtx) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, 0x3037);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > 57600.0f)) { // 240.0f ^ 2
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);

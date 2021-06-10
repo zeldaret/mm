@@ -168,11 +168,11 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
-                Audio_PlayActorSound2(this, 0x28F3);
+                Audio_PlayActorSound2(this, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 1);
                 break;
             case 14:
-                Audio_PlayActorSound2(this, 0x28F3);
+                Audio_PlayActorSound2(this, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 2);
                 break;
             default:
