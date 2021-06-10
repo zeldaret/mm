@@ -10,6 +10,8 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Init(EnBigpo* this, GlobalContext* globalCtx);
 //void EnBigpo_Destroy(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_Update(EnBigpo* this, GlobalContext* globalCtx);
+// draw func
+void func_80B64470(EnBigpo* this, GlobalContext* globalCtx);
 
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
@@ -49,6 +51,9 @@ extern InitChainEntry D_80B65064;
 extern DamageTable D_80B65044; 
 extern ColliderCylinderInit D_80B65010;
 extern CollisionCheckInfoInit D_80B6503C;
+
+extern u32 D_06001360[];
+
 
 /*
 // bleh these struct memes hurt
@@ -138,31 +143,106 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B619FC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61AC8.asm")
+void func_80B61AC8(EnBigpo *this) {
+    this->actor.flags &= -2;
+    this->actionFunc = func_80B61AF8;
+    this->unk214 = 200.0f;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61AF8.asm")
+void func_80B61AF8(EnBigpo *this, GlobalContext *globalCtx) {
+    if (this->actor.xzDistToPlayer < 200.0f) {
+        func_80B61B38(this);
+    }
+}
+void func_80B61B38(EnBigpo *this) {
+    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    this->actionFunc = func_80B61B70;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61B38.asm")
+void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_Start(this->actor.cutscene, (Actor *) this);
+        func_800B724C(globalCtx, &this->actor, 7);
+        this->unk20E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        if (this->actor.params == 0) {
+            func_80B61C04(this, globalCtx);
+        } else {
+            func_80B63758(this, globalCtx);
+        }
+    }else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61B70.asm")
-
+// particle
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61C04.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61CFC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61D74.asm")
+void func_80B61D74(EnBigpo *this) {
+    this->unk20A = 0x1000;
+    this->actionFunc = func_80B61DA4;
+    this->unk214 = 200.0f;
+    this->actor.velocity.y = 0.0f;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61DA4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61E9C.asm")
+// appear 
+void func_80B61E9C(EnBigpo *this) {
+    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, D_06001360);
+    this->actor.draw = func_80B64470;
+    Actor_SetScale((Actor *) this, 0.014f);
+    Audio_PlayActorSound2(this, 0x3873); // NA_SE_EN_STALKIDS_APPEAR
+    this->actionFunc = func_80B61F04;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61F04.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62034.asm")
+void func_80B62034(EnBigpo *this) {
+    this->unk206 = 0xF;
+    if (this->unk204[0] == 0) {
+        func_801A2E54(0x38, &this->actor);
+        this->unk204[0] = 1;
+    }
+    this->actionFunc = func_80B62084;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62084.asm")
+void func_80B62084(EnBigpo *this, GlobalContext *globalCtx) {
+    Actor *dampe;
+    Camera *cam;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62154.asm")
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->unk206 -= 1;
+    if (this->unk206 == 0) {
+        cam = Play_GetCamera(globalCtx, this->unk20E);
+        func_8016970C(globalCtx, 0, &cam->focalPoint, &cam->eye);
+        this->unk20E = 0;
+        if (this->actor.params == 1) {
+            dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
+            if (dampe != 0) {
+                dampe->params = this->actor.cutscene;
+            } else {
+                ActorCutscene_Stop(this->actor.cutscene);
+            }
+        } else {
+            ActorCutscene_Stop(this->actor.cutscene);
+        }
+        func_800B724C(globalCtx, &this->actor, 6);
+        func_80B624F4(this);
+    }
+}
+
+void func_80B62154(EnBigpo *this) {
+    this->collider.base.acFlags &= -2;
+    this->collider.base.ocFlags1 &= -2;
+    this->unk20A = 0x2000;
+    this->unk206 = 0x20;
+    this->actor.flags &= -2;
+    this->actor.speedXZ = 0.0f;
+    Audio_PlayActorSound2(&this->actor, 0x3874);
+    this->actionFunc = func_80B621CC;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B621CC.asm")
 
@@ -256,6 +336,7 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
 
+// draw func
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64470.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6467C.asm")

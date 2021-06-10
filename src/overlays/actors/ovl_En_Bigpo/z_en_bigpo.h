@@ -22,10 +22,12 @@ typedef struct EnBigpo {
     /* 0x188 */ Vec3s limbDrawTbl[0xA];
     /* 0x1C4 */ Vec3s transitionDrawTbl[0xA];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
-    /* 0x204 */ u8 unk204[3];
+    /* 0x204 */ u8 unk204[2];
+    /* 0x206 */ s16 unk206;
     /* 0x208 */ s16 unk208; // pad?
     /* 0x20A */ s16 unk20A;
-    /* 0x20C */ char unk20C[4];
+    /* 0x20C */ char unk20C[2];
+    /* 0x20E */ u16 unk20E;
     /* 0x210 */ s16 switchFlags;
     /* 0x214 */ f32 unk214;
     /* 0x218 */ f32 unk218;
