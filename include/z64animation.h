@@ -249,4 +249,11 @@ typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeC
 typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex,
                                   struct Actor* actor);
 
+typedef struct struct_80B8E1A8 {
+    /* 0x00 */ AnimationHeader* animationSeg;
+    /* 0x04 */ f32 playbackSpeed;
+    /* 0x08 */ u8 mode;
+    /* 0x0C */ f32 transitionRate;
+} struct_80B8E1A8; // size = 0x10
+
 #endif
