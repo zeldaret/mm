@@ -110,7 +110,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
     func_800DFAC8(globalCtx->cameraPtrs[0], 0x11);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
     if (globalCtx->csCtx.frames == 0x84) {
-        play_sound(0x4859);
+        play_sound(NA_SE_SY_SPIRAL_DASH);
     }
 }
 
@@ -125,7 +125,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
     } else if (this->dyna.actor.params == 1) {
-        func_800B9010(&this->dyna.actor, 0x201E);
+        func_800B9010(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
     }
     this->dyna.actor.world.pos.x =
         this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * this->timer);

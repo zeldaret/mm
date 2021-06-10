@@ -1141,6 +1141,13 @@
 
 // ------------ ENEMY ------------
 
+/*
+ * below is the ordering based on MM3D
+ * This does not align directly with MM
+ * Some sfx are correct
+ * Other sfx are only shifted by one
+ * And others are relocated entirely
+ 
 #define NA_SE_EN_DODO_J_WALK 0x3800
 #define NA_SE_EN_DODO_J_CRY 0x3801
 #define NA_SE_EN_DODO_J_FIRE 0x3802
@@ -1913,6 +1920,7 @@
 #define NA_SE_EN_PO_APPEAR_IDO 0x3B01
 #define NA_SE_EN_FOLLOWERS_TO_KABE 0x3B02
 #define NA_SE_EN_MUJURA_LAST_UP 0x3B03
+*/
 
 // ------------ SYSTEM ------------
 

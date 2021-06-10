@@ -185,7 +185,7 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f)) {
         func_80930B60(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2817);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -193,8 +193,8 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
     if ((this->collider.base.atFlags & AT_BOUNCED) != 0) {
         this->collider.base.atFlags &= ~AT_BOUNCED;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x1808);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -202,8 +202,8 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
     if ((this->collider.base.acFlags & AC_HIT) != 0) {
         this->collider.base.acFlags &= ~AC_HIT;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2802);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -212,16 +212,16 @@ void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_HIT;
         if (&player->base == this->collider.base.at) {
             func_809308F4(this, globalCtx);
-            func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
-            func_800F0568(globalCtx, &player2->base.world.pos, 0x28, 0x83E);
+            func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+            func_800F0568(globalCtx, &player2->base.world.pos, 40, NA_SE_PL_BODY_HIT);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
         }
     }
-    if (((this->actor.bgCheckFlags & 8) != 0) || ((this->actor.bgCheckFlags & 1) != 0)) {
+    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1)) {
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }
@@ -284,9 +284,9 @@ void func_809311C4(EnTuboTrap* this, GlobalContext* globalCtx) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
+    Audio_PlayActorSound2(&this->actor, 0x3037); // NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
 
-    if ((SQ(dX) + SQ(dY) + SQ(dZ) > 57600.0f)) { // 240.0f ^ 2
+    if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 

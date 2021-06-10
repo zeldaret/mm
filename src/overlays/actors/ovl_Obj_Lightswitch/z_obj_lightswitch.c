@@ -350,7 +350,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (this->colorAlpha < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        func_800B9010(&this->actor, 0x321F); // sfx NA_SE_EN_COMMON_EXTINCT_LEV "burn into ashes"
+        func_800B9010(&this->actor, 0x321F); // NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG "burn into ashes"
     }
 }
 
