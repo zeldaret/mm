@@ -34,7 +34,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 180, ICHAIN_STOP),
 };
 
-Vec3f iceSmokeAccel = {0.0f, 0.0f, 0.0f}; // Readd as static when possible
+Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f }; // Readd as static when possible
 
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
