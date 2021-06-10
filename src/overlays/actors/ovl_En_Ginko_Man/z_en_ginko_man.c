@@ -234,7 +234,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x464; // Hey, relax! It doesn't leave any marks
             break;
         case 0x464: // Hey, relax! It doesn't leave any marks
-            globalCtx->msgCtx.pad11F23[0] = 0x44;
+            globalCtx->msgCtx.unk11F23 = 0x44;
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"
