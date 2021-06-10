@@ -353,7 +353,7 @@ SECTIONS
         build/asm/code/z_eff_spark.o(.text)
         build/asm/code/z_eff_ss_dead.o(.text)
         build/asm/code/z_eff_tire_mark.o(.text)
-        build/src/code/code_0x800AF710.o(.text)
+        build/src/code/z_effect.o(.text)
         build/src/code/z_effect_soft_sprite.o(.text)
         build/src/code/z_effect_soft_sprite_old_init.o(.text)
         build/asm/code/flg_set.o(.text)
@@ -493,7 +493,7 @@ SECTIONS
         build/src/code/z_en_item00.o(.data)
         build/asm/code/code_data_z_eff_blure.o(.data)
         build/asm/code/code_data_z_eff_shield_particle.o(.data)
-        build/src/code/code_0x800AF710.o(.data)
+        build/src/code/z_effect.o(.data)
         build/asm/code/code_data_z_effect_soft_sprite.o(.data)
         build/asm/code/code_data_z_effect_soft_sprite_old_init.o(.data)
         build/asm/code/code_data_flg_set_table.o(.data)
@@ -571,7 +571,7 @@ SECTIONS
         build/asm/code/code_rodata_z_eff_shield_particle.o(.rodata)
         build/asm/code/code_rodata_z_eff_spark.o(.rodata)
         build/asm/code/code_rodata_z_eff_ss_dead.o(.rodata)
-        build/src/code/code_0x800AF710.o(.rodata)
+        build/src/code/z_effect.o(.rodata)
         build/asm/code/code_rodata_z_effect_soft_sprite_old_init.o(.rodata)
         build/asm/code/code_rodata_flg_set.o(.rodata)
         . += 0x10;
@@ -654,7 +654,7 @@ SECTIONS
 
     code_bss_start = .;
     . += 0x10;
-    . += 0x98F0; /* code_0x800AF710 */
+    . += 0x98F0; /* z_effect */
     . += 0x90; /* z_actor */
     . += 0x20; /* z_actor_dlftbls */
     . += 0x2A0; /* z_bgcheck */

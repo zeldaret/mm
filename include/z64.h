@@ -253,7 +253,7 @@ typedef struct {
     /* 0x04 */ UNK_TYPE1 pad4[0x40];
 } GlobalContext17D98; // size = 0x44
 
-typedef struct {
+typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
     /* 0x004 */ Gfx* polyXluBuffer;
     /* 0x008 */ UNK_TYPE1 pad8[0x8];

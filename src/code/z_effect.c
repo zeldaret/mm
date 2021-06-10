@@ -44,11 +44,11 @@ GlobalContext* Effect_GetContext(void) {
 }
 
 void* Effect_GetParams(s32 index) {
-    if (index == 46) {
+    if (index == TOTAL_EFFECT_COUNT) {
         return NULL;
     }
 
-    if (index < 3) {
+    if (index < SPARK_COUNT) {
         if (sEffTable.sparks[index].base.active == 1) {
             return &sEffTable.sparks[index].params;
         } else {
@@ -56,8 +56,8 @@ void* Effect_GetParams(s32 index) {
         }
     }
 
-    index -= 3;
-    if (index < 25) {
+    index -= SPARK_COUNT;
+    if (index < BLURE_COUNT) {
         if (sEffTable.blures[index].base.active == 1) {
             return &sEffTable.blures[index].params;
         } else {
@@ -65,8 +65,8 @@ void* Effect_GetParams(s32 index) {
         }
     }
 
-    index -= 25;
-    if (index < 3) {
+    index -= BLURE_COUNT;
+    if (index < SHIELD_PARTICLE_COUNT) {
         if (sEffTable.shieldParticles[index].base.active == 1) {
             return &sEffTable.shieldParticles[index].params;
         } else {
@@ -74,8 +74,8 @@ void* Effect_GetParams(s32 index) {
         }
     }
 
-    index -= 3;
-    if (index < 15) {
+    index -= SHIELD_PARTICLE_COUNT;
+    if (index < TIRE_MARK_COUNT) {
         if (sEffTable.tireMarks[index].base.active == 1) {
             return &sEffTable.tireMarks[index].params;
         } else {
@@ -95,20 +95,20 @@ void Effect_InitCommon(EffCommon* common) {
 void Effect_Init(GlobalContext* globalCtx) {
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SPARK_COUNT; i++) {
         Effect_InitCommon(&sEffTable.sparks[i].base);
     }
 
-    for (i = 0; i < 25; i++) {
+    for (i = 0; i < BLURE_COUNT; i++) {
         Effect_InitCommon(&sEffTable.blures[i].base);
     }
 
     //! @bug This is probably supposed to loop over shieldParticles, not blures again
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
         Effect_InitCommon(&sEffTable.blures[i].base);
     }
 
-    for (i = 0; i < 15; i++) {
+    for (i = 0; i < TIRE_MARK_COUNT; i++) {
         Effect_InitCommon(&sEffTable.tireMarks[i].base);
     }
 
@@ -122,14 +122,14 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
     EffCommon* common;
 
     params = NULL;
-    *index = 46;
+    *index = TOTAL_EFFECT_COUNT;
     common = NULL;
 
     if (func_8016A01C(globalCtx) != 1) {
         slotFound = 0;
         switch (type) {
             case 0:
-                for (i = 0; i < 3; i++) {
+                for (i = 0; i < SPARK_COUNT; i++) {
                     if (sEffTable.sparks[i].base.active == 0) {
                         slotFound = 1;
                         *index = i;
@@ -141,7 +141,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                 break;
             case 1:
             case 2:
-                for (i = 0; i < 25; i++) {
+                for (i = 0; i < BLURE_COUNT; i++) {
                     if (sEffTable.blures[i].base.active == 0) {
                         slotFound = 1;
                         *index = i + 3;
@@ -152,7 +152,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                 }
                 break;
             case 3:
-                for (i = 0; i < 3; i++) {
+                for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
                     if (sEffTable.shieldParticles[i].base.active == 0) {
                         slotFound = 1;
                         *index = i + 28;
@@ -163,7 +163,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                 }
                 break;
             case 4:
-                for (i = 0; i < 15; i++) {
+                for (i = 0; i < TIRE_MARK_COUNT; i++) {
                     if (sEffTable.tireMarks[i].base.active == 0) {
                         slotFound = 1;
                         *index = i + 31;
@@ -184,45 +184,43 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
     }
 }
 
-#ifdef NON_MATCHING
-// Contents of s2 and s3 swapped
-void Effect_DrawAll(GraphicsContext* gCtxt) {
+void Effect_DrawAll(GraphicsContext* gfxCtx) {
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SPARK_COUNT; i++) { 
+        if (1) {} // necessary to match
         if (sEffTable.sparks[i].base.active) {
-            sEffInfoTable[0].draw(&sEffTable.sparks[i].params, gCtxt);
+            sEffInfoTable[0].draw(&sEffTable.sparks[i].params, gfxCtx);
         }
     }
 
-    for (i = 0; i < 25; i++) {
-        if (sEffTable.blures[i].base.active) {
-            sEffInfoTable[1].draw(&sEffTable.blures[i].params, gCtxt);
+    for (i = 0; i < BLURE_COUNT; i++) {
+        if (1) { if (gfxCtx) {} } // necessary to match
+        if (sEffTable.blures[i].base.active) { 
+            sEffInfoTable[1].draw(&sEffTable.blures[i].params, gfxCtx);
         }
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
+        if (1) {} // necessary to match
         if (sEffTable.shieldParticles[i].base.active) {
-            sEffInfoTable[3].draw(&sEffTable.shieldParticles[i].params, gCtxt);
+            sEffInfoTable[3].draw(&sEffTable.shieldParticles[i].params, gfxCtx);
         }
     }
 
-    for (i = 0; i < 15; i++) {
+    if (1) {} // necessary to match
+    for (i = 0; i < TIRE_MARK_COUNT; i++) {
         if (sEffTable.tireMarks[i].base.active) {
-            sEffInfoTable[4].draw(&sEffTable.tireMarks[i].params, gCtxt);
+            sEffInfoTable[4].draw(&sEffTable.tireMarks[i].params, gfxCtx);
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x800AF710/Effect_DrawAll.asm")
-#endif
 
-#ifdef NON_MATCHING
-// 15 is being placed in s5 instead of at
 void Effect_UpdateAll(GlobalContext* globalCtx) {
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SPARK_COUNT; i++) {
+        if (1) {} // necessary to match
         if (sEffTable.sparks[i].base.active) {
             if (sEffInfoTable[0].update(&sEffTable.sparks[i].params) == 1) {
                 Effect_Destroy(globalCtx, i);
@@ -230,7 +228,8 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 0; i < 25; i++) {
+    for (i = 0; i < BLURE_COUNT; i++) {
+        if (1) {} // necessary to match
         if (sEffTable.blures[i].base.active) {
             if (sEffInfoTable[1].update(&sEffTable.blures[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 3);
@@ -238,7 +237,8 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
+        if (1) {} // necessary to match
         if (sEffTable.shieldParticles[i].base.active) {
             if (sEffInfoTable[3].update(&sEffTable.shieldParticles[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 28);
@@ -246,7 +246,8 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 0; i < 15; i++) {
+    for (i = 0; i < TIRE_MARK_COUNT; i++) {
+        if (1) {} // necessary to match
         if (sEffTable.tireMarks[i].base.active) {
             if (sEffInfoTable[4].update(&sEffTable.tireMarks[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 31);
@@ -254,37 +255,34 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x800AF710/Effect_UpdateAll.asm")
-#endif
 
 void Effect_Destroy(GlobalContext* globalCtx, s32 index) {
-    if (index == 46) {
+    if (index == TOTAL_EFFECT_COUNT) {
         return;
     }
 
-    if (index < 3) {
+    if (index < SPARK_COUNT) {
         sEffTable.sparks[index].base.active = 0;
         sEffInfoTable[0].destroy(&sEffTable.sparks[index].params);
         return;
     }
 
-    index -= 3;
-    if (index < 25) {
+    index -= SPARK_COUNT;
+    if (index < BLURE_COUNT) {
         sEffTable.blures[index].base.active = 0;
         sEffInfoTable[1].destroy(&sEffTable.blures[index].params);
         return;
     }
 
-    index -= 25;
-    if (index < 3) {
+    index -= BLURE_COUNT;
+    if (index < SHIELD_PARTICLE_COUNT) {
         sEffTable.shieldParticles[index].base.active = 0;
         sEffInfoTable[3].destroy(&sEffTable.shieldParticles[index].params);
         return;
     }
 
-    index -= 3;
-    if (index < 15) {
+    index -= SHIELD_PARTICLE_COUNT;
+    if (index < TIRE_MARK_COUNT) {
         sEffTable.tireMarks[index].base.active = 0;
         sEffInfoTable[4].destroy(&sEffTable.tireMarks[index].params);
         return;
@@ -294,22 +292,22 @@ void Effect_Destroy(GlobalContext* globalCtx, s32 index) {
 void Effect_DestroyAll(GlobalContext* globalCtx) {
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SPARK_COUNT; i++) {
         sEffTable.sparks[i].base.active = 0;
         sEffInfoTable[0].destroy(&sEffTable.sparks[i].params);
     }
 
-    for (i = 0; i < 25; i++) {
+    for (i = 0; i < BLURE_COUNT; i++) {
         sEffTable.blures[i].base.active = 0;
         sEffInfoTable[1].destroy(&sEffTable.blures[i].params);
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
         sEffTable.shieldParticles[i].base.active = 0;
         sEffInfoTable[3].destroy(&sEffTable.shieldParticles[i].params);
     }
 
-    for (i = 0; i < 15; i++) {
+    for (i = 0; i < TIRE_MARK_COUNT; i++) {
         sEffTable.tireMarks[i].base.active = 0;
         sEffInfoTable[4].destroy(&sEffTable.tireMarks[i].params);
     }
