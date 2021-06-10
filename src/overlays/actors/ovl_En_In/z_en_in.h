@@ -16,7 +16,7 @@ typedef enum {
 } EnInType;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_WALKING_FLAG(thisx) (((thisx)->params & 0x7E00) >> 9)
+#define ENIN_GET_WALKING_FLAG(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
