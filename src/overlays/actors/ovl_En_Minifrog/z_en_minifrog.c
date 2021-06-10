@@ -117,7 +117,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
 
     if (1) {}
-    if (!EN_MINIFROG_IS_RETURNED(this->actor.params)) {
+    if (!EN_MINIFROG_IS_RETURNED(this)) {
         if ((this->frogIndex == MINIFROG_YELLOW) || ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] & (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {
@@ -332,14 +332,14 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
         if (this->actor.cutscene != -1) {
             this->flags |= 1;
         }
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) != 0) && (func_8012403C(globalCtx) == 0xD)) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) && (func_8012403C(globalCtx) == 0xD)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
 }
 
 void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, GlobalContext* globalCtx) {
-    struct EnMinifrog* nextFrog;
-    struct EnMinifrog* missingFrog;
+    EnMinifrog* nextFrog;
+    EnMinifrog* missingFrog;
 
     EnMinifrog_Jump(this);
     nextFrog = this->frog;
@@ -372,20 +372,19 @@ void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, GlobalContext* globalCtx) {
     this->actor.home.rot.z = 0;
 }
 
-// Needs returns to match
 void EnMinifrog_ContinueChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_Jump(this);
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         EnMinifrog_CheckChoirSuccess(this, globalCtx);
-        return;
+        return; // necessary to match
     } else if (ActorCutscene_GetCanPlayNext(0x7C)) {
         ActorCutscene_Start(0x7C, NULL);
         EnMinifrog_CheckChoirSuccess(this, globalCtx);
-        return;
+        return; // necessary to match
     } else if (this->actor.cutscene != -1 && ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
         ActorCutscene_Stop(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(0x7C);
-        return;
+        return; // necessary to match
     } else {
         ActorCutscene_SetIntentToPlay(0x7C);
     }
@@ -437,7 +436,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, GlobalContext* globalCtx) {
         this->timer = 60;
         this->actor.home.rot.y = Actor_YawBetweenActors(&this->actor, &this->frog->actor);
         func_801A1F88();
-        this->flags &= ~(0x100);
+        this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
         globalCtx->func_18798(globalCtx, &D_0400DEA8, 0);
