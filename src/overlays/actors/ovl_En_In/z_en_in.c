@@ -10,17 +10,18 @@
 
 #define THIS ((EnIn*)thisx)
 
-#define SET_FLAGS_FINISH_RACE                                                                                     \
-    {                                                                                                             \
-        gSaveContext.weekEventReg[92] &= (u8)~7;                                                                  \
-        gSaveContext.weekEventReg[92] = gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~7); \
+#define SET_FLAGS_FINISH_RACE                                                                   \
+    {                                                                                           \
+        gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                     \
+        gSaveContext.weekEventReg[92] =                                                         \
+            gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)); \
     }
 
-#define SET_FLAGS_START_RACE                                                                \
-    {                                                                                       \
-        gSaveContext.weekEventReg[92] &= (u8)~7;                                            \
-        gSaveContext.weekEventReg[92] =                                                     \
-            gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~7) | 1); \
+#define SET_FLAGS_START_RACE                                                                          \
+    {                                                                                                 \
+        gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                           \
+        gSaveContext.weekEventReg[92] =                                                               \
+            gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)) | 1); \
     }
 
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
@@ -365,7 +366,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     u16 textId = 0;
 
     if (gSaveContext.day != 3) {
-        switch (gSaveContext.weekEventReg[92] & 7) {
+        switch (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) {
             case 2:
                 textId = 0x347A;
                 break;
@@ -375,7 +376,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
         }
         SET_FLAGS_FINISH_RACE;
     } else {
-        switch (gSaveContext.weekEventReg[92] & 7) {
+        switch (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) {
             case 2:
                 textId = 0x349D;
                 break;
@@ -1376,7 +1377,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = gSaveContext.weekEventReg[92] & 7;
+    this->unk4B0 = gSaveContext.weekEventReg[92] & (1 | 2 | 4);
     if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == 4) {
         this->unk4AC |= 8;
     }
@@ -1397,19 +1398,20 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk240 = func_8013D648(globalCtx, ENIN_GET_WALKING_FLAG(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if ((gSaveContext.weekEventReg[92] & 7) == 2 || (gSaveContext.weekEventReg[92] & 7) == 3) {
+            if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2 ||
+                (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 3) {
                 gSaveContext.weekEventReg[56] &= (u8)~8;
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, globalCtx);
                 this->unk23C = 0;
                 D_801BDAA0 = 0;
-                if ((gSaveContext.weekEventReg[92] & 7) == 2) {
+                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
                     func_808F30B0(&this->skelAnime, 6);
                 } else {
                     func_808F30B0(&this->skelAnime, 4);
                 }
-                if ((gSaveContext.weekEventReg[92] & 7) == 2) {
+                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
                     this->skelAnime.animCurrentFrame =
                         ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.animFrameCount;
                 }
@@ -1419,7 +1421,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if ((gSaveContext.weekEventReg[92] & 7) != 1) {
+                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) != 1) {
                     gSaveContext.weekEventReg[56] &= (u8)~8;
                     this->unk23C = 0;
                     this->unk4AC |= 2;
