@@ -1212,9 +1212,9 @@ SECTIONS
     ovl_En_Minifrog : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog.o(.text)
-        build/asm/overlays/ovl_En_Minifrog_data.o(.data)
+        build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog.o(.data)
         build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog.o(.rodata)
-        build/asm/overlays/ovl_En_Minifrog_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Minifrog/z_en_minifrog_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
