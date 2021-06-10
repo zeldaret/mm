@@ -80,6 +80,20 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ s16   unk_06;
+    /* 0x08 */ Gfx*  opa;
+    /* 0x0C */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u8    type;
+    /* 0x01 */ u8    num; // number of dlist entries
+    /* 0x04 */ void* start;
+    /* 0x08 */ void* end;
+} PolygonType2; // size = 0xC
+
+typedef struct {
     /* 0x0 */ u16 floorHead;
     /* 0x2 */ u16 wallHead;
     /* 0x4 */ u16 ceilingHead;
@@ -921,7 +935,9 @@ typedef struct {
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
     /* 0x12022 */ u8 choiceIndex;
-    /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
+    /* 0x12023 */ UNK_TYPE1 pad12023[0x7];
+    /* 0x1202A */ u16 unk1202A;
+    /* 0x1202C */ UNK_TYPE1 pad1202B[0x18];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
@@ -1566,6 +1582,19 @@ typedef struct {
     /* 0x0C */ s32 unkC;
     /* 0x10 */ s32 unk10;
 } struct_801C5F44; // size = 0x14
+
+// From OoT's struct_80034A14_arg1
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3s unk_08;
+    /* 0x0E */ Vec3s unk_0E;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
+    /* 0x24 */ s16 unk_24;
+} struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
     /* 0x000 */ Actor base;

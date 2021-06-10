@@ -5,7 +5,7 @@
 #include <unk.h>
 
 typedef struct {
-    /* 0x00 */ u16 unk0;
+    /* 0x00 */ u16 unk0; // action; // "dousa"
     /* 0x02 */ u16 startFrame;
     /* 0x04 */ u16 endFrame;
     /* 0x06 */ UNK_TYPE1 pad6[0x2A];
