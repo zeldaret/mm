@@ -162,7 +162,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E4);
+            Audio_PlayActorSound2(&this->actor, 0x28E4);
             this->skelAnime.animPlaybackSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -188,7 +188,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E3);
+            Audio_PlayActorSound2(&this->actor, 0x28E3);
             if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -204,7 +204,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Audio_PlayActorSound2(this, 0x28B1);
+                Audio_PlayActorSound2(&this->actor, 0x28B1);
                 EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
@@ -239,7 +239,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E3);
+            Audio_PlayActorSound2(&this->actor, 0x28E3);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -360,11 +360,11 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_Push();
+        SysMatrix_StatePush();
         SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_Pop();
+        SysMatrix_StatePop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
@@ -381,9 +381,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_Push();
+    SysMatrix_StatePush();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_Pop();
+    SysMatrix_StatePop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);

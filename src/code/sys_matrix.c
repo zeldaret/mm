@@ -1,19 +1,19 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Matrix_Init(GameState* state) {
+void SysMatrix_StateAlloc(GameState* state) {
     sMatrixStack = (MtxF*)THA_AllocEndAlign16(&state->heap, 0x500);
     sCurrentMatrix = sMatrixStack;
 }
 
-void Matrix_Push(void) {
+void SysMatrix_StatePush(void) {
     MtxF* prev = sCurrentMatrix;
 
     sCurrentMatrix++;
     Matrix_MtxFCopy(sCurrentMatrix, prev);
 }
 
-void Matrix_Pop(void) {
+void SysMatrix_StatePop(void) {
     sCurrentMatrix--;
 }
 
