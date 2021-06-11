@@ -471,7 +471,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        if ((globalCtx->kankyoContext.unkF2[4] != 0) && (globalCtx->state.frames & 3) == 0) {
+        if ((globalCtx->kankyoContext.unkF2[4] != 0) && !(globalCtx->state.frames & 3)) {
             globalCtx->kankyoContext.unkF2[4]--;
             if ((globalCtx->kankyoContext.unkF2[4]) == 8) {
                 func_800FD858(globalCtx);
