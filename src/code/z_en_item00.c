@@ -1125,11 +1125,11 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (AMMO(0x1) < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (AMMO(0x6) < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;

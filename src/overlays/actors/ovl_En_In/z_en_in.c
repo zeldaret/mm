@@ -894,7 +894,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x347A:
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
+                    if (INV_CONTENT(0x3B) == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x347E);
                         ret = false;
                     } else {
@@ -1085,7 +1085,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x349D:
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
+                    if (INV_CONTENT(0x3B) == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A1);
                         ret = false;
                     } else {

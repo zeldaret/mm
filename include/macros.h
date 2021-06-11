@@ -33,6 +33,7 @@
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
+#define INV_CONTENT(item) gSaveContext.inventory.items[SLOT(item)]
 
 #define VOID_ALL_EQUIP_VALUE(equip) ((((void)0,gSaveContext.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define VOID_CUR_EQUIP_VALUE(equip) ((((void)0,gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
