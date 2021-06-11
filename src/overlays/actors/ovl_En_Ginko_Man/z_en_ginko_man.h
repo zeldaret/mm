@@ -18,8 +18,8 @@ typedef struct EnGinkoMan {
     /* 0x258 */ s16 curTextId;
     /* 0x25A */ s16 serviceFee;
     /* 0x25C */ s16 choiceDepositWithdrawl;
-    /* 0x25E */ s16 newAccountFlag;
-    /* 0x260 */ s16 stampChecked;
+    /* 0x25E */ s16 isNewAccount;
+    /* 0x260 */ s16 isStampChecked;
     /* 0x262 */ s16 previousBankValue;
     /* 0x264 */ s16 animTimer;
 } EnGinkoMan; // size = 0x268
