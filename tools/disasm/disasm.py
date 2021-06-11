@@ -1047,10 +1047,10 @@ files_spec = None
 with open("tools/disasm/files.txt", "r") as infile:
     files_spec = ast.literal_eval(infile.read())
 
-with open("tables/functions.txt", "r") as infile:
+with open("tools/disasm/functions.txt", "r") as infile:
     functions_ast = ast.literal_eval(infile.read())
 
-with open("tables/variables.txt", "r") as infile:
+with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
 # Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
@@ -1136,7 +1136,7 @@ for segment in files_spec:
             dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
             while any([word != 0 for word in as_word_list(dmadata_entry)]):
                 vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-                print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
+                # print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomStart", vrom_start))
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1

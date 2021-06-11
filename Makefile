@@ -189,7 +189,7 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-#	python3 extract_assets.py
+	python3 extract_assets.py
 
 init:
 	python3 -m pip install -r requirements.txt

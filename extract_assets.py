@@ -11,12 +11,12 @@ def checkTouchedFile(inFile: str, outFile: str) -> bool:
         return True
     return os.path.getmtime(inFile) > os.path.getmtime(outFile)
 
-def ExtractFile(xmlPath, basromPath, outputPath, outputSourcePath):
+def ExtractFile(xmlPath, outputPath, outputSourcePath):
     if globalAbort.is_set():
         # Don't extract if another file wasn't extracted properly.
         return
 
-    execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b %s -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, basromPath, outputPath, outputSourcePath)
+    execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b baserom/ -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, outputPath, outputSourcePath)
     if globalUnaccounted:
         execStr += " -wu"
 
@@ -34,7 +34,6 @@ def ExtractFunc(fullPath):
     objectName = os.path.splitext(xmlName)[0]
 
     outPath = os.path.join("assets", *pathList[2:-1], objectName)
-    basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
     outSourcePath = outPath
 
     ## MM doesn't have _scene prefixed files, so this check is not necessary.
@@ -49,7 +48,7 @@ def ExtractFunc(fullPath):
         if not checkTouchedFile(fullPath, cFile) and not checkTouchedFile(fullPath, hFile):
             return
 
-    ExtractFile(fullPath, basromPath, outPath, outSourcePath)
+    ExtractFile(fullPath, outPath, outSourcePath)
 
 def initializeWorker(force: bool, abort, unaccounted: bool):
     global globalForce
