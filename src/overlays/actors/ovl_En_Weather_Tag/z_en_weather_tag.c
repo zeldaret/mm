@@ -460,7 +460,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
 
     if (Actor_XZDistanceBetweenActors(&player->base, &this->actor) < WEATHER_TAG_RANGE100(this)) {
-        if ((gSaveContext.day % 5) == 2) {
+        if (CURRENT_DAY == 2) {
             if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) &&
                 (globalCtx->kankyoContext.unkF2[2] == 0)) {
 
