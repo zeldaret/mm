@@ -641,7 +641,8 @@ void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, Color_RGBA8* pr
 // void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
 // void EffectSsDtBubble_SpawnCustomColor(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
 // void EffectSsHahen_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE4 param_9);
-// void EffectSsHahen_SpawnBurst(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
+void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
+                              s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
 // void func_800B2364(void);
 // void EffectSsStick_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
 // void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
@@ -670,7 +671,8 @@ void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 // void EffectSsExtra_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
                           s16 scale, s16 scaleStep, s32 unk);
-// void func_800B3030(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE4 param_7);
+void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
+                   s32 colorIndex);
 // void EffectSsDeadDd_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
 // void EffectSsDeadDs_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
 // void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
@@ -885,7 +887,7 @@ void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* acto
 // void func_800BC848(void);
 // void func_800BC8B8(void);
 // void func_800BCB50(void);
-// void func_800BCB70(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+UNK_RET func_800BCB70(Actor* actor, UNK_TYPE param_2, UNK_TYPE param_3, UNK_TYPE param_4, UNK_TYPE param_5);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 // void func_800BCCDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -909,7 +911,7 @@ void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 // void func_800BE2B8(void);
 // void func_800BE33C(void);
 // void func_800BE3D0(void);
-// void func_800BE504(void);
+UNK_RET func_800BE504(Actor* actor, Collider* collider); // might be ColliderCylinder
 // void func_800BE568(void);
 // void func_800BE5CC(void);
 // void func_800BE63C(void);
@@ -3911,7 +3913,7 @@ void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2C88(void);
 // void func_801A2D54(void);
 s32 func_801A2DE0(UNK_TYPE4 arg1);
-UNK_RET func_801A2E54(UNK_TYPE arg1, Actor* actor);
+UNK_RET func_801A2E54(UNK_TYPE arg1);
 // void func_801A2ED8(void);
 // void func_801A2F88(void);
 // void func_801A3000(void);

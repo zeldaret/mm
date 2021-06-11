@@ -11,7 +11,8 @@ void EnBigpo_Init(EnBigpo* this, GlobalContext* globalCtx);
 //void EnBigpo_Destroy(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_Update(EnBigpo* this, GlobalContext* globalCtx);
 // draw func
-void func_80B64470(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
+void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
@@ -19,9 +20,23 @@ void func_80B61D74(EnBigpo* this);
 void func_80B61E9C(EnBigpo* this);
 void func_80B62034(EnBigpo* this);
 void func_80B62154(EnBigpo* this);
-void func_80B622E4(EnBigpo* this);
+void func_80B622E4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B624F4(EnBigpo* this);
 void func_80B6275C(EnBigpo* this);
+
+void func_80B62814(EnBigpo* this);
+void func_80B62900(EnBigpo* this);
+void func_80B629E4(EnBigpo* this);
+void func_80B62AD4(EnBigpo* this);
+void func_80B62E38(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B631F8(EnBigpo* this);
+void func_80B632BC(EnBigpo* this);
+void func_80B633E8(EnBigpo* this);
+void func_80B63450(EnBigpo* this);
+void func_80B636D0(EnBigpo* this);
+void func_80B61B38(EnBigpo* this);
+void func_80B6383C(EnBigpo* this);
+void func_80B638AC(EnBigpo* this);
 
 void func_80B61AF8(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B61B70(EnBigpo* this, GlobalContext* globalCtx);
@@ -32,6 +47,24 @@ void func_80B621CC(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B623BC(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B6259C(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B627B4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
+
+void func_80B62830(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62A68(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62B10(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62F10(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63264(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B6330C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63410(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63474(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B636E4(EnBigpo* this, GlobalContext* globalCtx);
+
+
+void func_80B6382C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63854(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63888(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B638D4(EnBigpo* this, GlobalContext* globalCtx);
 
 /*
 const ActorInit En_Bigpo_InitVars = {
@@ -108,7 +141,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk290 = 0xFF; // color?
     this->unk291 = 0xFF;
     this->unk292 = 0xD2;
-    this->unk293 = 0;
+    this->unk290[3] = 0;
     if ((temp_a1 != 0xFF) && (Flags_GetSwitch(globalCtx, (s32) temp_a1) != 0)) {
         Actor_MarkForDeath((Actor *) this);
     }
@@ -139,6 +172,7 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61914.asm")
 
+// takes this only
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B619B4.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B619FC.asm")
@@ -201,9 +235,9 @@ void func_80B61E9C(EnBigpo *this) {
 
 void func_80B62034(EnBigpo *this) {
     this->unk206 = 0xF;
-    if (this->unk204[0] == 0) {
-        func_801A2E54(0x38, &this->actor);
-        this->unk204[0] = 1;
+    if (this->unk204 == 0) {
+        func_801A2E54(0x38);
+        this->unk204 = 1;
     }
     this->actionFunc = func_80B62084;
 }
@@ -244,59 +278,317 @@ void func_80B62154(EnBigpo *this) {
     this->actionFunc = func_80B621CC;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B621CC.asm")
+void func_80B621CC(EnBigpo *this, GlobalContext *globalCtx) {
+    DECR(this->unk206);
+    this->actor.shape.rot.y += this->unk20A;
+    if (this->unk206 < 0x10) {
+        Math_ScaledStepToS(&this->unk20A, 0, 0x200);
+    }
+    this->unk290[3] = (s8) (u32) (this->unk206 * 7.96875f);
+    if (this->unk206 == 0) {
+        this->unk290[3] = 0;
+        func_80B622E4(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B622E4.asm")
+void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
+    ActorPlayer *player = PLAYER;
+    f32 distance;
+    s16 randomYaw;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B623BC.asm")
+    distance = (this->actor.xzDistToPlayer < 200.0f) ? ( 200.0f ) : ( this->actor.xzDistToPlayer );
+    randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
+    Audio_PlayActorSound2(this, 0x3873);
+    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
+    this->unk20A = 0x2000;
+    this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->base.world.pos.x;
+    this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->base.world.pos.z;
+    this->actionFunc = func_80B623BC;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B624F4.asm")
+void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
+    this->unk206 += 1;
+    this->actor.shape.rot.y -= this->unk20A;
+    if (this->unk206 >= 0x10) {
+        Math_ScaledStepToS(&this->unk20A, 0, 0x200);
+    }
+    this->unk290[3] = (s8) (u32) (this->unk206 * 7.96875f);
+    if (this->unk206 == 0x20) {
+        this->unk290[3] = 0xFF;
+        if (this->unk204 == 0) {
+            func_801A2E54(0x38);
+            this->unk204 = 1;
+        }
+        func_80B624F4(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6259C.asm")
+extern u32 D_06000924;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6275C.asm")
+// non-matching: regallloc around 
+void func_80B624F4(EnBigpo *this) {
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
+    this->unk206 = (this->actionFunc == func_80B62920) ? 0x50 : 0;
+    this->unk212 = 0x28;
+    this->actor.velocity.y = 0.0f;
+    this->collider.base.acFlags |= 1;
+    this->collider.base.ocFlags1 |= 1;
+    this->actor.flags |= 1;
+    this->actionFunc = func_80B6259C;
+    this->unk218 = this->actor.world.pos.y;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+} //#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B624F4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B627B4.asm")
+void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
+    ActorPlayer *player = PLAYER;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62814.asm")
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    DECR(this->unk206);
+    this->unk212 = (this->unk212 == 0) ? 0x28 : (this->unk212 -1);
+    Math_StepToF(&this->unk218, player->base.world.pos.y + 100.0f, 1.5f);
+    this->actor.world.pos.y = (sin_rad((f32) this->unk212 * 0.15707964f) * 10.0f) + this->unk218;
+    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
+    func_800B9010((Actor *) this, (u16)0x3071);
+    if (Actor_XZDistanceToPoint((Actor *) this, &this->actor.home) > 300.0f) {
+        this->unk208 = Actor_YawToPoint((Actor *) this, &this->actor.home);
+    }
+    if ((Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk208, 0x200) != 0) && (Rand_ZeroOne() < 0.075f)) {
+        // casts req
+        this->unk208 += (s16)((((u32)Rand_Next() >> 0x14) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+    }
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    if (this->unk206 == 0) {
+        func_80B6275C(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62830.asm")
+void func_80B6275C(EnBigpo *this) {
+    this->collider.base.colType = 9;
+    this->collider.base.acFlags |= AC_HARD;
+    this->collider.info.bumper.dmgFlags &= ~0x8000;
+    this->collider.base.atFlags |= 0x1;
+    this->unk20A = 0x800;
+    this->actionFunc = func_80B627B4;
+    this->actor.speedXZ = 0.0f;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62900.asm")
+void func_80B627B4(EnBigpo *this, GlobalContext *globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->unk20A += 0x200;
+    func_80B619B4(this);
+    if ((s32) this->unk20A >= 0x3C00) {
+        func_80B62814(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62920.asm")
+void func_80B62814(EnBigpo *this) {
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actionFunc = func_80B62830;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B629E4.asm")
+void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
+    Actor *player = PLAYER;
+    s16 yawDiff;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62A68.asm")
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    Math_StepToF(&this->actor.speedXZ, 10.0f, 1.0f);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->world.pos.y, 0.3f, 7.5f, 1.0f);
+    func_80B619B4(this);
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    if (((this->collider.base.atFlags & AT_HIT)) 
+      || ( ((yawDiff < 0) ? -yawDiff : yawDiff) >= 0x4001) && (this->actor.xzDistToPlayer > 50.0f)) {
+        func_80B62900(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62AD4.asm")
+void func_80B62900(EnBigpo *this) {
+    this->collider.base.atFlags &= ~0x1; // todo
+    this->actionFunc = func_80B62920;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62B10.asm")
+void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
+    Actor *player = PLAYER;
 
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    if (Math_ScaledStepToS(&this->unk20A, 0, 0x200) != 0) {
+        this->collider.base.colType = 3;
+        this->collider.base.acFlags &= ~AC_HARD;
+        this->collider.info.bumper.dmgFlags |= 0x8000;
+        func_80B624F4(this);
+    }
+    func_80B619B4(this);
+}
+
+extern u32 D_06000454;
+
+void func_80B629E4(EnBigpo *this) {
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
+    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    this->collider.base.acFlags &= ~AC_ON;
+    func_800BE504(&this->actor, &this->collider);
+    this->actionFunc = func_80B62A68;
+    this->actor.speedXZ = 5.0f;
+}
+
+void func_80B62A68(EnBigpo *this, GlobalContext *globalCtx) {
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+        if (this->actor.colChkInfo.health == 0) { // death?
+            func_80B62AD4(this);
+        } else { 
+            func_80B62154(this);
+        }
+    }
+}
+
+void func_80B62AD4(EnBigpo *this) {
+    this->unk206 = 0;
+    this->actor.speedXZ = 0.0f;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actor.hintId = 0xFF; // clear?
+    this->collider.base.ocFlags1 &= 0xFFFE;
+    this->actionFunc = func_80B62B10;
+}
+
+extern Vec3f D_80B6506C;
+
+void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
+    Vec3f tempVec; 
+    f32 unkTemp2; 
+    s16 cam; 
+    s16 unkTemp; 
+    s16 modded206; 
+
+    this->unk206 += 1;
+    if ( this->unk206  < 8) {
+        cam = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x4800;
+        if ((s32) this->unk206 < 5) {
+            unkTemp = (this->unk206 << 0xC) - 0x4000;
+            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
+            unkTemp2 = Math_CosS(unkTemp) * 32.2f;
+            tempVec.x = (Math_SinS(cam) * unkTemp2) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(cam) * unkTemp2) + this->actor.world.pos.z;
+        } else {
+            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (f32) (this->unk206 - 5))) * 1.4000001f);
+            tempVec.x = (Math_SinS(cam) * 32.2f) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(cam) * 32.2f) + this->actor.world.pos.z;
+        }
+        modded206 = (s32) ((f32) ((this->unk206 * 0xA) + 0x50) * 1.4000001f);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+        tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
+        tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+        tempVec.x = this->actor.world.pos.x;
+        tempVec.z = this->actor.world.pos.z;
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+    } else if (this->unk206 >= 0x1C) {
+        func_80B62E38(this, globalCtx);
+    } else if (this->unk206 >= 0x13) {
+        this->actor.scale.x = (( (0x1C - this->unk206)) * 0.014f) * 0.1f;
+        this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
+        this->actor.world.pos.y += 5.0f;
+    }
+
+    if (this->unk206 < 0x12) {
+        func_800B9010((Actor *) this, 0x321F); // sfx
+    }
+    if (this->unk206 == 0x12) {
+        Audio_PlayActorSound2(this, 0x3877);
+    }
+}
+
+// thinks fires.unk0 is a vec3f
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62E38.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62F10.asm")
+extern Gfx D_060041A0[];
 
+void func_80B62F10(EnBigpo *this, GlobalContext *globalCtx) {
+    //s16 temp_a1;
+
+    if (((this->actor.bgCheckFlags & 1)) || (this->actor.floorHeight == -32000.0f)) {
+        //temp_a1 = this->switchFlags;
+        if (this->switchFlags != 0xFF) {
+            Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+        }
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world, 6.0f, 0, 1, 1, 0xF, 0x1F1, 0xA, &D_060041A0);
+
+        func_80B631F8(this);
+    }
+}
+
+void func_80B62FCC(EnBigpo *this, s32 arg);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62FCC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B631F8.asm")
+void func_80B631F8(EnBigpo *this) {
+    this->actor.draw = func_80B6467C;
+    this->actor.shape.yOffset = 0.0f;
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.y = 0;
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->unk290[3] = 0;
+    this->actor.scale.x = 0.0f;
+    this->actor.scale.y = 0.0f;
+    this->unk218 = this->actor.world.pos.y;
+    Audio_PlayActorSound2(&this->actor, 0x28E0);
+    this->actionFunc = func_80B63264;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63264.asm")
+void func_80B63264(EnBigpo *this, GlobalContext *globalCtx) {
+    this->unk218 += 2.0f;
+    func_80B62FCC(this, 0x14);
+    if (this->unk290[3] == 0xFF) {
+        func_80B632BC(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B632BC.asm")
+void func_80B632BC(EnBigpo *this) {
+    this->unk218 = this->actor.world.pos.y;
+    Actor_SetHeight((Actor *) this, -10.0f);
+    this->unk206 = 0x190;
+    this->actor.flags |= 1;
+    this->actionFunc = func_80B6330C;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6330C.asm")
+void func_80B6330C(EnBigpo *this, GlobalContext *globalCtx) {
+    DECR(this->unk206);
+    if (Actor_HasParent((Actor *) this, globalCtx)) {
+        Actor_MarkForDeath((Actor *) this);
+    } else if (this->unk206 == 0) {
+        Audio_PlayActorSound2(this, 0x38EC);
+        func_80B633E8(this);
+    } else {
+        func_800B8A1C((Actor *) this, globalCtx, 0xBA, 35.0f, 60.0f);
+        this->actor.world.pos.y = (sin_rad((f32) this->unk206 * 0.15707964f) * 5.0f) + this->unk218;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B633E8.asm")
+void func_80B633E8(EnBigpo *this) {
+    this->actor.flags &= ~0x10001;
+    this->actionFunc = func_80B63410;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63410.asm")
+void func_80B63410(EnBigpo *this, GlobalContext *globalCtx) {
+    func_80B62FCC(this, -0xD);
+    if (this->unk290[3] == 0) {
+        Actor_MarkForDeath((Actor *) this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63450.asm")
+void func_80B63450(EnBigpo *this) {
+    this->actor.flags &= -2; // todo
+    this->actionFunc = func_80B63474;
+}
 
+// multiple loops
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63474.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636D0.asm")
+void func_80B636D0(EnBigpo *this) {
+    this->actionFunc = func_80B636E4;
+}
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636D0.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636E4.asm")
 
@@ -339,6 +631,7 @@ void func_80B62154(EnBigpo *this) {
 // draw func
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64470.asm")
 
+// draw func
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6467C.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
