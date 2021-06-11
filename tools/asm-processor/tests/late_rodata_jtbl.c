@@ -1,5 +1,81 @@
 // COMPILE-FLAGS: -O2
+GLOBAL_ASM(
+.late_rodata
+.double 1
+.double 2
+.double 3
+.double 4
+.double 5
+.double 6
+.double 7
+.double 8
+.text
+glabel doubles1
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+)
+
 float a(void) { return 1.1f; }
+
+GLOBAL_ASM(
+.late_rodata
+.float 1
+.double 2
+.double 3
+.double 4
+.double 5
+.double 6
+.double 7
+.double 8
+.double 9
+.float 10
+.text
+glabel doubles2
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+)
 
 GLOBAL_ASM(
 glabel a2
