@@ -5,10 +5,9 @@
 beginseg
     name "makerom"
     address 0x8007F000
-    //include "build/asm/makerom/rom_header.o"
-    //include "build/asm/makerom/ipl3.o"
-    //include "build/asm/makerom/entry.o"
-    include "build/baserom/makerom.o"
+    include "build/asm/makerom/rom_header.o"
+    include "build/asm/makerom/ipl3.o"
+    include "build/asm/makerom/entry.o"
 endseg
 
 beginseg
@@ -267,17 +266,38 @@ beginseg
     include "build/data/boot/xldtob.rodata.o"
     include "build/data/boot/llcvt.rodata.o"
     include "build/data/boot/build.rodata.o"
-    include "build/data/boot/boot_80099500.bss.o" // .bss section (TODO split)
+    include "build/data/boot/boot_main.bss.o" // .bss section
+    include "build/data/boot/idle.bss.o"
+    include "build/data/boot/z_std_dma.bss.o"
+    include "build/data/boot/yaz0.bss.o"
+    include "build/data/boot/CIC6105.bss.o"
+    include "build/data/boot/fault.bss.o"
+    include "build/data/boot/fault_drawer.bss.o"
+    include "build/data/boot/boot_80086760.bss.o"
+    include "build/data/boot/system_malloc.bss.o"
+    include "build/data/boot/rand.bss.o"
+    include "build/data/boot/__osMalloc.bss.o"
+    include "build/data/boot/sptask.bss.o"
+    include "build/data/boot/boot_800896D0.bss.o"
+    include "build/data/boot/siacs.bss.o"
+    include "build/data/boot/controller.bss.o"
+    include "build/data/boot/threadsave.bss.o"
+    include "build/data/boot/initialize.bss.o"
+    include "build/data/boot/pimgr.bss.o"
+    include "build/data/boot/seteventmesg.bss.o"
+    include "build/data/boot/timerintr.bss.o"
+    include "build/data/boot/cartrominit.bss.o"
+    include "build/data/boot/vimgr.bss.o"
 endseg
 
 beginseg
     name "dmadata"
-    include "build/baserom/dmadata.o"
     include "build/asm/dmadata/dmadata.o"
 endseg
 
 beginseg
     name "Audiobank"
+    address 0x10 # fake address to avoid map lookup inaccuracies
     include "build/baserom/Audiobank.o"
 endseg
 
@@ -12476,79 +12496,79 @@ beginseg
 endseg
 
 beginseg
-    name "02EDB010_02EDB000"
+    name "anime_model_1_static"
     romalign 0x1000
-    include "build/baserom/02EDB010_02EDB000.o"
+    include "build/baserom/anime_model_1_static.o"
 endseg
 
 beginseg
-    name "02EDC010_02EDC000"
+    name "anime_model_2_static"
     romalign 0x1000
-    include "build/baserom/02EDC010_02EDC000.o"
+    include "build/baserom/anime_model_2_static.o"
 endseg
 
 beginseg
-    name "02EDD010_02EDD000"
+    name "anime_model_3_static"
     romalign 0x1000
-    include "build/baserom/02EDD010_02EDD000.o"
+    include "build/baserom/anime_model_3_static.o"
 endseg
 
 beginseg
-    name "02EDE010_02EDE000"
+    name "anime_model_4_static"
     romalign 0x1000
-    include "build/baserom/02EDE010_02EDE000.o"
+    include "build/baserom/anime_model_4_static.o"
 endseg
 
 beginseg
-    name "02EDF010_02EDF000"
+    name "anime_model_5_static"
     romalign 0x1000
-    include "build/baserom/02EDF010_02EDF000.o"
+    include "build/baserom/anime_model_5_static.o"
 endseg
 
 beginseg
-    name "02EE0010_02EE0000"
+    name "anime_model_6_static"
     romalign 0x1000
-    include "build/baserom/02EE0010_02EE0000.o"
+    include "build/baserom/anime_model_6_static.o"
 endseg
 
 beginseg
-    name "02EE1010_02EE1000"
+    name "anime_texture_1_static"
     romalign 0x1000
-    include "build/baserom/02EE1010_02EE1000.o"
+    include "build/baserom/anime_texture_1_static.o"
 endseg
 
 beginseg
-    name "02EE2010_02EE2000"
+    name "anime_texture_2_static"
     romalign 0x1000
-    include "build/baserom/02EE2010_02EE2000.o"
+    include "build/baserom/anime_texture_2_static.o"
 endseg
 
 beginseg
-    name "02EE3010_02EE3000"
+    name "anime_texture_3_static"
     romalign 0x1000
-    include "build/baserom/02EE3010_02EE3000.o"
+    include "build/baserom/anime_texture_3_static.o"
 endseg
 
 beginseg
-    name "02EE4010_02EE4000"
+    name "anime_texture_4_static"
     romalign 0x1000
-    include "build/baserom/02EE4010_02EE4000.o"
+    include "build/baserom/anime_texture_4_static.o"
 endseg
 
 beginseg
-    name "02EE5010_02EE5000"
+    name "anime_texture_5_static"
     romalign 0x1000
-    include "build/baserom/02EE5010_02EE5000.o"
+    include "build/baserom/anime_texture_5_static.o"
 endseg
 
 beginseg
-    name "02EE6010_02EE6000"
+    name "anime_texture_6_static"
     romalign 0x1000
-    include "build/baserom/02EE6010_02EE6000.o"
+    include "build/baserom/anime_texture_6_static.o"
 endseg
 
 beginseg
-    name "02EE7040_02EE7000"
+    name "softsprite_matrix_static"
     romalign 0x1000
-    include "build/baserom/02EE7040_02EE7000.o"
+    include "build/baserom/softsprite_matrix_static.o"
 endseg

@@ -1548,19 +1548,19 @@ FILE_NAMES = [
     'KAKUSIANA_room_13',
     'KAKUSIANA_room_14',
     'bump_texture_static',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
-    '[deleted]',
+    'anime_model_1_static',
+    'anime_model_2_static',
+    'anime_model_3_static',
+    'anime_model_4_static',
+    'anime_model_5_static',
+    'anime_model_6_static',
+    'anime_texture_1_static',
+    'anime_texture_2_static',
+    'anime_texture_3_static',
+    'anime_texture_4_static',
+    'anime_texture_5_static',
+    'anime_texture_6_static',
+    'softsprite_matrix_static',
 ]
 
 def read_uint32_be(offset):
@@ -1599,8 +1599,6 @@ for i in range(0, len(FILE_NAMES)):
     if physStart == 0xFFFFFFFF and physEnd == 0xFFFFFFFF: # file deleted
         if (virtEnd - virtStart) == 0:
             continue
-        if FILE_NAMES[i] == "[deleted]":
-            filename = 'baserom/' + f"{virtEnd:08X}_{virtStart:08X}"
         physStart = virtStart
         physEnd = 0
         compressed = False
@@ -1612,8 +1610,8 @@ for i in range(0, len(FILE_NAMES)):
         compressed = True
         size = physEnd - physStart
 
-    print(f"    0x{virtStart:08X}:(\"_{filename.split('/')[-1]}SegmentRomStart\",\"UNK_TYPE\",\"\",0x4),")
-    print(f"    0x{virtEnd:08X}:(\"_{filename.split('/')[-1]}SegmentRomEnd\",\"UNK_TYPE\",\"\",0x4),")
+    # print(f"    0x{virtStart:08X}:(\"_{filename.split('/')[-1]}SegmentRomStart\",\"UNK_TYPE\",\"\",0x4),")
+    # print(f"    0x{virtEnd:08X}:(\"_{filename.split('/')[-1]}SegmentRomEnd\",\"UNK_TYPE\",\"\",0x4),")
 
     #print(f"_{FILE_NAMES[i]}SegmentRomStart = {hex(virtStart)}\n_{FILE_NAMES[i]}SegmentRomEnd = {hex(virtEnd)}")
     # print('extracting ' + filename + " (0x%08X, 0x%08X)" % (virtStart, virtEnd))

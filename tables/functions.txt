@@ -1,5 +1,6 @@
 # Follows the format of Entry Point Address:(Name,)
 {
+    0x80080000:("entrypoint",),
     0x80080060:("bootproc",),
     0x80080150:("Idle_ClearMemory",),
     0x80080180:("Idle_InitFramebuffer",),

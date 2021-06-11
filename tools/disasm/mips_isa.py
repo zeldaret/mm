@@ -253,10 +253,10 @@ MIPS_INS_NOT  = 213
 MIPS_INS_INVALID   = -1
 
 # Op IDs
-MIPS_OP_RS  = 0
-MIPS_OP_RT  = 0
-MIPS_OP_RD  = 0
-MIPS_OP_IMM = 0
+# MIPS_OP_RS  = 0
+# MIPS_OP_RT  = 0
+# MIPS_OP_RD  = 0
+# MIPS_OP_IMM = 0
 
 # Register Names
 

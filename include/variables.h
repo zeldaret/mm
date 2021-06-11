@@ -947,7 +947,7 @@ extern s16 actorCutsceneReturnCamera;
 extern s16 D_801BD8C6;
 extern ColliderCylinderInit fireObjCollisionInit;
 extern FireObjLightParams D_801BD8FC[2];
-extern GameStateOverlay initialGameStateInfo;
+extern GameStateOverlay gGameStateOverlayTable;
 extern GameStateOverlay D_801BD940;
 extern GameStateOverlay titleGameStateInfo;
 extern GameStateOverlay mainGameStateInfo;

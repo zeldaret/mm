@@ -2,7 +2,8 @@
 
 import ast, math, os, re, struct
 import threading
-# from collections import defaultdict
+
+import numpy as np
 
 from mips_isa import *
 
@@ -139,10 +140,23 @@ def lookup_name(symbol, word):
     if word in [addr for _,addr in vrom_variables]:
         if word == 0: # no makerom segment start
             return "0x00000000"
-        if symbol in [0x801AE4A0]: # data labels that are allowed to have vrom variables
+        if symbol in [0x801AE4A0, # effect table
+                      0x801C2740, # object table
+                      0x801C2650, # elf_message table
+                      0x801C3CA0, # scene table
+                      0x801AEFD0, # actor table
+                      0x801D0B70, # kaleido table
+                      0x801D0BB0, # fbdemo table
+                      0x801BE4D4, # kankyo skybox table
+                      0x801BD910, # gamestate table
+                      0x801C2660  # scene textures table
+            ]: # data labels that are allowed to have vrom variables
             return proper_name(word, is_symbol=False)
         else:
             return f"0x{word:08X}"
+    # hacks for variables with references to variables with addends (i.e. gSaveContext + 0x...)
+    if symbol in [0x800980C4, 0x801AE8F0]: # __osViNext and flg_set table
+        return proper_name(word, is_symbol=True)
     return proper_name(word, is_symbol=False)
 
 def as_double(b):
@@ -150,6 +164,9 @@ def as_double(b):
 
 def as_float(b):
     return struct.unpack(">f", b)[0]
+
+def as_dword(b):
+    return struct.unpack(">Q", b)[0]
 
 def as_word(b):
     return struct.unpack(">I", b)[0]
@@ -210,40 +227,84 @@ def try_decode_string(data_bytes, output_ends = True, force_ascii = False):
 
     return (("." + directive + " \"") if output_ends else "") + result + ("\"" if output_ends else "")
 
-def format_f64(d):
-    # TODO double simplification
-    return d
+def reduce_float(flt_str, is_double=False):
+    def n_digits(str):
+        if "." not in str:
+            return 0
+        return len(str.split(".")[1].strip())
+
+    def str_round(string, precision):
+        if "." not in string or precision < 0:
+            return string
+        int_part = string.split(".")[0]        
+        frac_part = string.split(".")[1]        
+
+        while len(frac_part) > precision:
+            last_digit = int(frac_part[-1])
+            frac_part = frac_part[:-1]
+            # round up & carry
+            if last_digit >= 5:
+                while len(frac_part) != 0:
+                    last_digit = int(frac_part[-1])
+                    frac_part = frac_part[:-1]
+                    if last_digit != 9:
+                        # complete carry
+                        last_digit += 1
+                        frac_part += repr(last_digit)
+                        break
+                if len(frac_part) == 0:
+                    int_part = repr(int(int_part) + 1)
+                    frac_part = "0"
+        return int_part + "." + frac_part
+
+    def to_binary(flt_str):
+        return as_dword(struct.pack(">d", float(flt_str))) if is_double else as_word(struct.pack(">f", float(flt_str)))
+
+    exponent = ""
+    if "e" in flt_str:
+        exponent = "e" + flt_str.split("e")[1]
+        flt_str = flt_str.split("e")[0]
+
+    original_binary = to_binary(flt_str + exponent)
+    precision = n_digits(flt_str)
+
+    if precision == 0:
+        if exponent != "":
+            return flt_str + exponent
+        return flt_str + (".0" if not flt_str.endswith(".") else "0")
+
+    while precision > 1:
+        precision -= 1
+        old_str = flt_str
+        flt_str = str_round(flt_str, precision)
+
+        if to_binary(flt_str + exponent) != original_binary:
+            flt_str = old_str
+            break
+
+    if flt_str.endswith("."):
+        flt_str += "0"
+
+    return flt_str + exponent
+
+def format_f64(d_dwd):
+    d = as_double(struct.pack(">Q", d_dwd))
+    if math.isnan(d):
+        return f".long 0x{d_dwd:016X}"
+    return f".double {reduce_float(repr(d), is_double=True)}"
 
 def format_f32(f_wd):
-    # GNU AS isn't ieee compliant
+    # GNU AS isn't ieee compliant?
     if f_wd in [0xB8E4AECD, 0xB8E4C3AA, 0x38D1B718]:
         return f".word 0x{f_wd:08X}"
+
+    if f_wd == 0x7F7FFFFF: # FLT_MAX
+        return ".float 3.4028235e+38"
 
     f = as_float(struct.pack(">I", f_wd))
     if math.isnan(f):
         return f".word 0x{f_wd:08X}"
-    return f".float {f}"
-    """
-    directive = ".float "
-    f = as_float(f_wd)
-
-    if math.isnan(f):
-        return f_wd
-    elif f == 4294967296.0:
-        return directive + str(f)
-
-    float_str = str(f)
-    precision = len(float_str.split(".")[1].strip())
-    word = struct.pack(">f", f)
-    while precision != 0:
-        new_f = round(f,precision-1)
-        precision -= 1
-        if struct.pack(">f", new_f) != word:
-            return directive + str(f)
-        else:
-            f = new_f
-    return directive + str(f)
-    """
+    return f".float {reduce_float(repr(f))}"
 
 def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
     if rodata is not None:
@@ -430,7 +491,7 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
             through a function is key to identifying symbol references
             """
             # add lui to tracker
-            if delay_slot and delayed_insn is not None and delayed_insn in MIPS_BRANCH_LIKELY_INSNS:
+            if delay_slot and delayed_insn is not None and delayed_insn.id in MIPS_BRANCH_LIKELY_INSNS:
                 # for branch likelies, the current tracker does not update but the lui is saved to be tracked at the branch target
                 save_tracker(delayed_insn.offset, {insn.rt : (vaddr, insn.imm)})
             else:
@@ -818,7 +879,7 @@ def disassemble_data(data, vram, end, segment):
 
         if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
             result += "\n".join(\
-                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .double {format_f64(dbl)}" for j,dbl in enumerate(as_double_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in dwords:
             result += "\n".join(\
                 [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}" for j,dword in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
@@ -894,7 +955,7 @@ def disassemble_rodata(data, vram, end, segment):
             result += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
         elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
             result += "\n".join(\
-                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .double {format_f64(dbl)}" for j,dbl in enumerate(as_double_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
         elif symbol % 4 == 0 and data_size % 4 == 0:
             if symbol in floats:
                 result += "\n".join(\
@@ -976,7 +1037,7 @@ def get_overlay_sections(vram, overlay):
             [data_vram, rodata_vram, 'data', None, overlay[text_size:text_size+data_size], rel_data], \
             [rodata_vram, bss_vram, 'rodata', None, overlay[text_size+data_size:text_size+data_size+rodata_size], rel_rodata], \
             [bss_vram, bss_end_vram, 'bss', None, None, rel_bss], \
-            [bss_end_vram, bss_end_vram+1, 'reloc', None, overlay[header_loc:], None]]
+            [bss_end_vram, bss_end_vram, 'reloc', None, overlay[header_loc:], None]]
 
 # 
 
@@ -1033,6 +1094,14 @@ for segment in files_spec:
         continue
 
     print(f"Finding symbols in {segment[0]}")
+
+    # vram segment start
+    if segment[3][0][0] not in variables_ast:
+        variables_ast.update({segment[3][0][0] : (f"_{segment[0]}SegmentStart","u8","[]",0x1)})
+    # vram segment end
+    if segment[3][-1][1] not in variables_ast:
+        variables_ast.update({segment[3][-1][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
+
     for section in segment[3]:
         if section[2] == 'text':
             data_regions = []
@@ -1054,11 +1123,11 @@ for segment in files_spec:
         elif section[2] == 'rodata':
             find_symbols_in_rodata(section[4], section[0], section[1], section[5], segment)
         elif section[2] == 'dmadata':
-            dmadata = segment[3][0][4]
             filenames = []
             with open("tools/disasm/dma_filenames.txt","r") as infile:
                 filenames = ast.literal_eval(infile.read())
 
+            dmadata = segment[3][0][4]
             i = 0
             dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
             while any([word != 0 for word in as_word_list(dmadata_entry)]):
@@ -1072,10 +1141,120 @@ for segment in files_spec:
 # Textual disassembly for each segment
 for segment in files_spec:
     if segment[2] == 'makerom':
+        os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
+        rom_header = segment[3][0][4]
+        ipl3 = segment[3][1][4]
+        entry = segment[3][2][4]
+        
+        pi_dom1_reg, clockrate, entrypoint, revision, \
+            chksum1, chksum2, pad1, pad2, \
+                rom_name, pad3, cart, cart_id, \
+                    region, version = struct.unpack(">IIIIIIII20sII2s1sB", rom_header)
+
+        out = f"""/*
+ * The Legend of Zelda: Majora's Mask ROM header
+ */
+
+.word  0x{pi_dom1_reg:08X}             /* PI BSD Domain 1 register */
+.word  0x{clockrate:08X}             /* Clockrate setting */
+.word  0x{entrypoint:08X}             /* Entrypoint function (`entrypoint`) */
+.word  0x{revision:08X}             /* Revision */
+.word  0x{chksum1:08X}             /* Checksum 1 */
+.word  0x{chksum2:08X}             /* Checksum 2 */
+.word  0x{pad1:08X}             /* Unknown */
+.word  0x{pad2:08X}             /* Unknown */
+.ascii "{rom_name.decode('ascii')}" /* Internal ROM name */
+.word  0x{pad3:08X}             /* Unknown */
+.word  0x{cart:08X}             /* Cartridge */
+.ascii "{cart_id.decode('ascii')}"                   /* Cartridge ID */
+.ascii "{region.decode('ascii')}"                    /* Region */
+.byte  0x{version:02X}                   /* Version */
+"""
+        with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
+            outfile.write(out)
+
+        # TODO disassemble this eventually, low priority
+        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
+
+        with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
+            outfile.write(out)
+
+        # hack: add symbol relocations manually
+        entry_addr = 0x80080000
+
+        functions.add(entry_addr)
+        symbols.update({entry_addr + 0x00 : 0x80099500, 
+                        entry_addr + 0x04 : 0x80099500, 
+                        entry_addr + 0x20 : 0x80080060,
+                        entry_addr + 0x24 : 0x80099EF0,
+                        entry_addr + 0x28 : 0x80080060,
+                        entry_addr + 0x30 : 0x80099EF0})
+        branch_labels.add(entry_addr + 0xC)
+
+        disassemble_text(entry, entry_addr, [], segment)
+
+        # manually set boot bss size...
+        entry_asm = ""
+        with open(f"{ASM_OUT}/makerom/entry.reloc.s") as infile: # TODO why is this written out as .reloc.s
+            entry_asm = infile.read()
+
+        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+        with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
+            outfile.write(entry_asm)
+
+        os.remove(f"{ASM_OUT}/makerom/entry.reloc.s")
+
+        #out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x1000, 0x60\n"
+
+        #with open(ASM_OUT + "/makerom/entry.s", "w") as outfile:
+        #    outfile.write(out)
 
         continue
     elif segment[2] == 'dmadata':
+        os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
+        out = f""".include "macro.inc"
 
+.macro DMA_TABLE_ENTRY segment
+    .4byte _\segment\()SegmentRomStart
+    .4byte _\segment\()SegmentRomEnd
+    .4byte _\segment\()SegmentPRomStart
+    .4byte _\segment\()SegmentPRomEnd
+.endm
+
+.macro DMA_TABLE_ENTRY_UNSET segment
+    .4byte _\segment\()SegmentRomStart
+    .4byte _\segment\()SegmentRomEnd
+    .word 0xFFFFFFFF
+    .word 0xFFFFFFFF
+.endm
+
+glabel {variables_ast[0x8009F8B0][0]}
+"""
+        filenames = []
+        with open("tools/disasm/dma_filenames.txt","r") as infile:
+            filenames = ast.literal_eval(infile.read())
+
+        dmadata = segment[3][0][4]
+        i = 0
+        dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+        while any([word != 0 for word in as_word_list(dmadata_entry)]):
+            vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
+            if prom_start == 0xFFFFFFFF and prom_end == 0xFFFFFFFF:
+                out += f"DMA_TABLE_ENTRY_UNSET {filenames[i]}\n"
+            else:
+                out += f"DMA_TABLE_ENTRY {filenames[i]}\n"
+            i += 1
+            dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+
+        out += """
+.space 0x100
+
+.section .bss
+
+.space 0x10
+"""
+        with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
+            outfile.write(out)
         continue
 
     for section in segment[3]:
@@ -1116,86 +1295,224 @@ for segment in files_spec:
 print("Splitting text and migrating rodata")
 
 func_regex = re.compile(r'\n\nglabel \S+\n')
-rodata_symbols_regex = re.compile(r'(?<=\n)glabel .+(?=\n)')
+rodata_symbols_regex = re.compile(r'(?<=\n)glabel (.+)(?=\n)')
 asm_symbols_regex = re.compile(r'%(?:lo|hi)\((.+?)\)')
 
-def is_late_rodata(block):
-    return "float" or "double" or "word L" in block
+def rodata_block_size(block):
+    def align(x, n):
+        while (x % n != 0):
+            x += 1
+        return x
 
-def asm_syms(asm):
-    return [s.partition(")")[0] for s in re.split(asm_symbols_regex, asm)[1:]]
+    accumulator = 0
+    for part in block.split(' */ .'):
+        part = part.strip()
+        if part.startswith('# '):
+            continue
+        elif part.startswith('asciz '):
+            part = part[len('asciz '):]
+            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
+            accumulator += len(string.encode('euc-jp') + b'\x00')
+        elif part.startswith('ascii'):
+            part = part[len('ascii '):]
+            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
+            accumulator += len(string.encode('euc-jp'))
+        elif part.startswith('balign '):
+            part = part[len('balign '):]
+            accumulator = align(accumulator, int(part, 16 if part.startswith('0x') else 10))
+        elif part.startswith('double '):
+            part = part[len('double '):]
+            accumulator = align(accumulator, 8)
+            accumulator += 8 * (part.count(',') + 1)
+        elif part.startswith('float '):
+            part = part[len('float '):]
+            accumulator = align(accumulator, 4)
+            accumulator += 4 * (part.count(',') + 1)
+        elif part.startswith('word '):
+            part = part[len('word '):]
+            accumulator = align(accumulator, 4)
+            accumulator += 4 * (part.count(',') + 1)
+        elif part.startswith('half '):
+            part = part[len('half '):]
+            accumulator = align(accumulator, 2)
+            accumulator += 2 * (part.count(',') + 1)
+        elif part.startswith('byte '):
+            part = part[len('byte '):]
+            accumulator += 1 * (part.count(',') + 1)
+    return accumulator
+
+def late_rodata_size(blocks):
+    return sum([rodata_block_size(block) for block in blocks])
+
+def text_block_size(asm):
+    return 4*len([line for line in asm.split("\n") if line.startswith("/*")])
 
 def rodata_syms(rodata):
-    return [s.partition("\n")[0] for s in re.split(rodata_symbols_regex, rodata)[1:]]
+    return re.findall(rodata_symbols_regex, rodata)
 
 def rodata_blocks(rodata):
     return ["glabel" + b for b in rodata.split("glabel")[1:]]
 
-def rodata_block_size(rodata):
+def find_late_rodata_start(rodata):
     """
-    Getting rodata block size is needed to know when to add .late_rodata_alignment directives
-    """
-    split = rodata.split("    .")
-    elements = split[1:len(split)]
-    size = 0
-    for e in elements:
-        element_type = e.split(" ")[0]
-        if element_type == "double":
-            size += 8 + 8*e.count(",")
-        if element_type == "float":
-            size += 4 + 4*e.count(",")
-        if element_type == "word":
-            size += 4 + 4*e.count(",")
-        if element_type == "half":
-            size += 2 + 2*e.count(",")
-        if element_type == "incbin":
-            size += int(e.rpartition(", ")[2].split("\n")[0],16)
-        if element_type == "ascii":
-            size += len(e.split("\"")[1].split("\"")[0])
-        if element_type == "asciz":
-            size += len(e.split("\"")[1].split("\"")[0])
-        if element_type == "balign":
-            size += size % int(e.split(" ")[1])
-    return size
+    Returns the symbol that is the first late_rodata symbol, or None if there is no late_rodata
 
-def text_size(asm):
-    return 4*(len([l for l in asm.split("\n") if l.startswith("/* ")])-1)
+    Note this is approximate as const qualified floats/doubles end up in rdata and not late_rodata,
+        so there may be some overlap. This should not pose much of a problem however.
+    Also note that this method assumes the input rodata consists only of at most one block rodata and one block late_rodata,
+        that is that the file splits are correct.
+    """
+    first = None
+
+    for sym,body in rodata:
+        if sym.startswith("jtbl_") and ".word L" in body:
+            # jump tables are always late_rodata, so we can return early
+            # floats and doubles are very rarely not late_rodata, this is mostly seen in libultra, so we cannot return early for those
+            if first is not None:
+                return first
+            else:
+                return sym
+        elif (".float " in body or ".double " in body) and first is None:
+            # may be late_rodata, but we aren't sure yet
+            # it is confirmed either by reaching the end or by finding a jumptable, and it is proven wrong if something that is not late_rodata occurs after it
+            first = sym
+        elif (".asciz" in body or (".word " in body and ".float" not in body) or ".half " in body or ".byte " in body) and first is not None:
+            # reset first if something that is definitely not late_rodata is found
+            # word and not float is due to some floats needing to be output as words either due to being a specific NaN value, or GAS can't convert it properly
+            first = None
+    # May still be None at this point, that just means there is no late_rodata
+    return first
 
 # Split files and migrate rodata that should be migrated
 for root,dirs,files in os.walk(ASM_OUT):
-    for f in [f for f in files if f.endswith(".text.s")]:
-        rodata_path = f"{DATA_OUT}/{root}"
-        full_path = os.path.join(root, f)
-        rodata_path = full_path.replace(ASM_OUT + "overlays/", DATA_OUT).replace(ASM_OUT, DATA_OUT).replace(".text.s", ".rodata.s")
+    for f in files:
+        if "non_matchings" in root:
+            continue
+        asm_path = os.path.join(root,f)
+        rodata_path = asm_path.replace(ASM_OUT + "overlays/", DATA_OUT).replace(ASM_OUT, DATA_OUT).replace(".text.s", ".rodata.s")
 
-        print(full_path)
+        # print(asm_path)
 
-        contents = ""
-        with open(full_path, "r") as infile:
-            contents = infile.read()
-
-        function_labels = [s.replace("glabel","").strip() for s in func_regex.findall(contents)]
-        fns = func_regex.split(contents)[1:] # remove header
+        asm = ""
+        with open(asm_path,"r") as infile:
+            asm = infile.read()
 
         rodata = ""
         if os.path.exists(rodata_path):
-            print(rodata_path)
+            # print(rodata_path)
             with open(rodata_path, "r") as rodata_file:
                 rodata = rodata_file.read()
 
-        for label,body in zip(function_labels, fns):
-            # TODO out path becomes more complicated with separation based on code/actor/effect/etc.
+            rodata_info = list(zip(rodata_syms(rodata), rodata_blocks(rodata)))
 
-            text_out = "glabel " + label.strip() + "\n" + body.strip() + "\n"
+            # populate rdata and late_rodata lists
+            first_late_rodata = find_late_rodata_start(rodata_info)
+            rdata_info = []
+            late_rodata_info = []
+            target = rdata_info # first populate rdata
+            for sym,block in rodata_info:
+                if sym == first_late_rodata: # now populate late_rodata, if there is any
+                    target = late_rodata_info
+                target.append((sym,block))
+
+        # print([(sym,block.split("\n")[1:]) for sym,block in zip(rdata_syms,rdata_blocks)])
+
+        function_info = list(zip([s.replace("glabel","").strip() for s in func_regex.findall(asm)], func_regex.split(asm)[1:]))
+
+        rdata_map = {}
+        late_rodata_map = {}
+
+        # pass 1 to resolve rodata splits
+        if rodata != "":
+            last_fn = None
+
+            referenced_in = {} # key=rodata label , value=function label
+
+            for sym,_ in rodata_info:
+                all_refs = [label for label,body in function_info if "%lo(" + sym + ")" in body]
+                # ignore multiple refs, take only the first
+                referenced_in.update({ sym : all_refs[0] if len(all_refs) != 0 else None })
+
+            def do_splits(out_dict, info):
+                first = True
+                last_ref = None
+                cr = None
+                for sym,block in info:
+                    ref = referenced_in[sym]
+                    if first:
+                        cr = ref or sym
+
+                    if ref is not None and not first:
+                        if ref != last_ref:
+                            # existing function
+                            cr = ref
+                    elif last_ref is not None:
+                        # new GLOBAL_ASM
+                        cr = sym
+                    
+                    # add to output
+                    if cr not in out_dict.keys():
+                        out_dict.update({cr : []})
+                    out_dict[cr].append((sym,block))
+
+                    # setup next iter
+                    last_ref = ref
+                    first = False
+
+            do_splits(rdata_map, rdata_info)
+            do_splits(late_rodata_map, late_rodata_info)
+
+        # all output files, order is irrelevant at this point
+        all_output = set([label for label,_ in function_info]).union(set(rdata_map.keys()),set(late_rodata_map.keys()))
+
+        # pass 2 to output splits
+        for label in all_output:
+            fn_body = dict(function_info).get(label, None)
+
+            text_out = ""
+            rodata_out = ""
+            
+            if fn_body is not None:
+                text_out = "glabel " + label.strip() + "\n" + fn_body.strip() + "\n"
 
             if rodata != "":
-                # Migrate Rodata
-                pass # TODO
-                # Done Migrate Rodata
+                rdata = rdata_map.get(label, None)
+                late_rodata = late_rodata_map.get(label, None)
 
-            asm_out = text_out
+                # check for late_rodata_alignment
+                late_rodata_alignment = ""
+                if fn_body is not None and late_rodata is not None:
+                    ratio = late_rodata_size([block for _,block in late_rodata]) / text_block_size(fn_body)
+                    if ratio > 1./3:
+                        # print(f"{label} : {ratio}")
+                        # TODO hack: getting the address from a comment
+                        first_block_split = late_rodata[0][1].split(" */ .")
+                        vaddr = None
+                        if first_block_split[1].startswith("float") or first_block_split[1].startswith("double"):
+                            vaddr = first_block_split[0].split(" ")[-2]
+                        else:
+                            vaddr = first_block_split[0].split(" ")[-1]
+                        assert vaddr is not None
+                        vaddr = int(vaddr,16)
+                        late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
 
-            out_path = root.replace(ASM_OUT,f"{ASM_OUT}/non_matchings/") + "/" +  ((f.replace(".text.s","") + "/") if "overlays" not in root else "")
+                rdata_out = ""
+                if rdata is not None:
+                    rdata_out = ".rdata\n" + "".join([block for _,block in rdata])
+
+                late_rodata_out = ""
+                if late_rodata is not None:
+                    late_rodata_out = ".late_rodata\n" + late_rodata_alignment + "".join([block for _,block in late_rodata])
+
+                rodata_out = rdata_out + late_rodata_out + ("\n.text\n" if ((rdata is not None or late_rodata is not None) and fn_body is not None) else "")
+
+            all_out = rodata_out + text_out
+
+            # write it out
+            out_path = root.replace(ASM_OUT, f"{ASM_OUT}/non_matchings/") + "/" +  ((f.replace(".text.s","") + "/") if "overlays" not in root else "")
             os.makedirs(out_path, exist_ok=True)
             with open(out_path + label + ".s", "w") as outfile:
-                outfile.write(asm_out)
+                outfile.write(all_out.strip() + "\n")
+            
+            # remove rodata and unsplit file
+            # TODO
