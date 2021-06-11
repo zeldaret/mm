@@ -1683,7 +1683,7 @@ s16 ActorCutscene_StartAndSetUnkLinkFields(s16 index, Actor* actor);
 s16 ActorCutscene_StartAndSetFlag(s16 index, Actor* actor);
 s16 ActorCutscene_Start(s16 index, Actor* actor);
 s16 ActorCutscene_Stop(s16 index);
-s16 ActorCutscene_GetCurrentIndex();
+s16 ActorCutscene_GetCurrentIndex(void);
 ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
