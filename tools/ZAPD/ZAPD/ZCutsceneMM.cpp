@@ -2,27 +2,8 @@
 #include "BitConverter.h"
 #include "StringHelper.h"
 
-using namespace std;
-
-ZCutsceneMM::ZCutsceneMM(std::vector<uint8_t> nRawData, int rawDataIndex, int rawDataSize)
+ZCutsceneMM::ZCutsceneMM(ZFile* nParent) : ZCutsceneBase(nParent)
 {
-	rawData = std::move(nRawData);
-	segmentOffset = rawDataIndex;
-
-	numCommands = BitConverter::ToInt32BE(rawData, rawDataIndex + 0);
-	commands = vector<CutsceneCommand*>();
-
-	endFrame = BitConverter::ToInt32BE(rawData, rawDataIndex + 4);
-	uint32_t currentPtr = rawDataIndex + 8;
-	uint32_t lastData = 0;
-
-	// TODO cutscenes have an inconsistent amount of padding after them. Figure it out
-	do
-	{
-		lastData = BitConverter::ToInt32BE(rawData, currentPtr);
-		data.push_back(lastData);
-		currentPtr += 4;
-	} while (lastData != 0xFFFFFFFF);
 }
 
 ZCutsceneMM::~ZCutsceneMM()
@@ -31,33 +12,81 @@ ZCutsceneMM::~ZCutsceneMM()
 		delete cmd;
 }
 
-string ZCutsceneMM::GetSourceOutputCode(const std::string& prefix)
+std::string ZCutsceneMM::GetBodySourceCode()
 {
-	string output = "";
-	size_t size = 0;
-	int32_t curPtr = 0;
+	std::string output = "";
 
-	// output += StringHelper::Sprintf("// SIZE = 0x%04X\n", GetRawDataSize());
-	output += StringHelper::Sprintf("\tCS_BEGIN_CUTSCENE(%i, %i),\n", numCommands, endFrame);
+	output += StringHelper::Sprintf("    CS_BEGIN_CUTSCENE(%i, %i),", numCommands, endFrame);
 
 	for (size_t i = 0; i < data.size(); i++)
 	{
-		output += StringHelper::Sprintf("\t0x%08X,", data[i]);
-		if ((i % 4) == 3)
-		    output += "\n";
+		if ((i % 4) == 0)
+			output += "\n    ";
+		output += StringHelper::Sprintf("0x%08X,", data[i]);
 	}
-
-	//output += StringHelper::Sprintf("\tCS_END(),\n", commands.size(), endFrame);
 
 	return output;
 }
 
-int ZCutsceneMM::GetRawDataSize()
+std::string ZCutsceneMM::GetSourceOutputCode(const std::string& prefix)
+{
+	std::string bodyStr = GetBodySourceCode();
+
+	Declaration* decl = parent->GetDeclaration(rawDataIndex);
+
+	if (decl == nullptr)
+		DeclareVar(prefix, bodyStr);
+	else
+		decl->text = bodyStr;
+
+	return "";
+}
+
+void ZCutsceneMM::DeclareVar(const std::string& prefix, const std::string& bodyStr) const
+{
+	std::string auxName = name;
+
+	if (auxName == "")
+		auxName = StringHelper::Sprintf("%sCutsceneData0x%06X", prefix.c_str(), rawDataIndex);
+
+	parent->AddDeclarationArray(getSegmentOffset(), DeclarationAlignment::Align4, GetRawDataSize(),
+	                            "s32", auxName, 0, bodyStr);
+}
+
+size_t ZCutsceneMM::GetRawDataSize() const
 {
 	return 8 + data.size() * 4;
 }
 
-ZResourceType ZCutsceneMM::GetResourceType()
+void ZCutsceneMM::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
+{
+	ZResource::ExtractFromXML(reader, nRawDataIndex);
+	DeclareVar(parent->GetName(), "");
+}
+
+void ZCutsceneMM::ParseRawData()
+{
+	segmentOffset = rawDataIndex;
+	const auto& rawData = parent->GetRawData();
+
+	numCommands = BitConverter::ToInt32BE(rawData, rawDataIndex + 0);
+	commands = std::vector<CutsceneCommand*>();
+
+	endFrame = BitConverter::ToInt32BE(rawData, rawDataIndex + 4);
+	uint32_t currentPtr = rawDataIndex + 8;
+	uint32_t lastData = 0;
+
+	// TODO currently cutscenes aren't being parsed, so just consume words until we see an end
+	// marker.
+	do
+	{
+		lastData = BitConverter::ToInt32BE(rawData, currentPtr);
+		data.push_back(lastData);
+		currentPtr += 4;
+	} while (lastData != 0xFFFFFFFF);
+}
+
+ZResourceType ZCutsceneMM::GetResourceType() const
 {
 	return ZResourceType::Cutscene;
 }
