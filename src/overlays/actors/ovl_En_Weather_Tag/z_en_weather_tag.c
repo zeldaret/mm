@@ -494,7 +494,7 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if (((globalCtx->actorCtx.unk5 & 2) != 0) && (globalCtx->msgCtx.unk11F23 != 0) &&
-        (globalCtx->msgCtx.unk11F04 == 0x5E6) && (func_8016A01C(globalCtx) == 0) && (globalCtx->unk18875 == 0) &&
+        (globalCtx->msgCtx.unk11F04 == 0x5E6) && (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->unk18875 == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
         oldTime = gSaveContext.time;
