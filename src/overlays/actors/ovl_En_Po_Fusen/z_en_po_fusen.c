@@ -145,7 +145,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~0x2;
         return 1;
     }
-  
+
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 
@@ -205,8 +205,8 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen* this) {
 }
 
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
-                this->actor.world.pos.z, 255, 255, 200, 2);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
+                this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, 2);
     Audio_PlayActorSound2(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
     Actor_MarkForDeath(&this->actor);
 }

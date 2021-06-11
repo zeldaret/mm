@@ -49,8 +49,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 40, 0, { 0, 0, 0 } },
 };
 
-extern UNK_TYPE4 D_06000710;
-extern UNK_TYPE4 D_06000958;
+extern Gfx D_06000710[];
+extern Gfx D_06000958[];
 
 void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
@@ -63,7 +63,7 @@ void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.perm.weekEventReg[60] &= 0xFB;
+    gSaveContext.weekEventReg[60] &= 0xFB;
 }
 
 void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -85,16 +85,16 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 }
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
-    if (gSaveContext.perm.weekEventReg[60] & 4) {
+    if (gSaveContext.weekEventReg[60] & 4) {
         Audio_PlayActorSound2(&this->actor, 0x289E);
-        gSaveContext.perm.weekEventReg[60] &= 0xFB;
+        gSaveContext.weekEventReg[60] &= 0xFB;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
         Audio_PlayActorSound2(&this->actor, 0x289E);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.perm.weekEventReg[51] & 4)) {
-            gSaveContext.perm.weekEventReg[51] |= 4;
+        if (!(gSaveContext.weekEventReg[51] & 4)) {
+            gSaveContext.weekEventReg[51] |= 4;
             this->actionFunc = EnCha_Ring;
         }
     }
@@ -117,8 +117,8 @@ void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
-    func_800BDFC0(globalCtx, &D_06000710);
+    func_800BDFC0(globalCtx, D_06000710);
     SysMatrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, 1);
     SysMatrix_InsertXRotation_s(this->actor.home.rot.x, 1);
-    func_800BDFC0(globalCtx, &D_06000958);
+    func_800BDFC0(globalCtx, D_06000958);
 }

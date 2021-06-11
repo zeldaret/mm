@@ -813,22 +813,22 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 s16 func_800A7650(s16 dropId) {
-    s16 maxLife;
+    s16 healthCapacity;
 
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
-         (gSaveContext.perm.inv.items[D_801C207E] == 0xFF)) ||
+         (gSaveContext.inventory.items[gItemSlots[6]] == 0xFF)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
-         (gSaveContext.perm.inv.items[D_801C2079] == 0xFF)) ||
-        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.perm.unk24.unk14 == 0))) {
+         (gSaveContext.inventory.items[gItemSlots[1]] == 0xFF)) ||
+        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
     ;
 
     if (dropId == ITEM00_HEART) {
-        maxLife = gSaveContext.perm.unk24.maxLife;
-        if (maxLife == gSaveContext.perm.unk24.currentLife) {
+        healthCapacity = gSaveContext.healthCapacity;
+        if (healthCapacity == gSaveContext.health) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -1071,9 +1071,9 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
 
         if (dropId == ITEM00_MASK) {
             dropQuantity = 1;
-            if (gSaveContext.perm.unk20 != 1) {
-                if (gSaveContext.perm.unk20 != 2) {
-                    if (gSaveContext.perm.unk20 != 4) {
+            if (gSaveContext.playerForm != 1) {
+                if (gSaveContext.playerForm != 2) {
+                    if (gSaveContext.playerForm != 4) {
                         dropId = ITEM00_RUPEE_GREEN;
                     } else {
                         dropId = ITEM00_ARROWS_10;
@@ -1102,39 +1102,38 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         }
 
         if (dropId == ITEM00_FLEXIBLE) {
-            if (gSaveContext.perm.unk24.currentLife < 0x11) {
+            if (gSaveContext.health < 0x11) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
                 func_800F0568(globalCtx, spawnPos, 0x28, 0x28E7);
                 return;
             }
 
-            if (gSaveContext.perm.unk24.currentLife < 0x31) {
+            if (gSaveContext.health < 0x31) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 3;
-            } else if (gSaveContext.perm.unk24.currentLife < 0x51) {
+            } else if (gSaveContext.health < 0x51) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.perm.unk24.unk14 != 0) && (gSaveContext.perm.unk24.currentMagic == 0)) {
+            } else if ((gSaveContext.magicLevel != 0) && (gSaveContext.magic == 0)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.perm.unk24.unk14 != 0) &&
-                       ((gSaveContext.perm.unk24.unk14 >> 1) >= gSaveContext.perm.unk24.currentMagic)) {
+            } else if ((gSaveContext.magicLevel != 0) && ((gSaveContext.magicLevel >> 1) >= gSaveContext.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[1]] < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.inv.quantities[D_801C2078[6]] < 6) {
+            } else if (gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
-            } else if (gSaveContext.perm.unk24.unk14 < 11) {
+            } else if (gSaveContext.rupees < 11) {
                 params = 0xA0;
                 dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;
