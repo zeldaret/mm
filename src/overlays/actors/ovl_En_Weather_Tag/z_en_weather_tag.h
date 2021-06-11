@@ -14,7 +14,7 @@ typedef struct EnWeatherTag {
     /* 0x14C */ u8 pathCount;
     /* 0x150 */ Vec3s* pathPoints;
     // 154: the code avoids what would be a negative value if signed, but signed wont match
-    /* 0x154 */ u16 unk154; // treated as signed in some places, but wont match
+    /* 0x154 */ u16 unk154;
     /* 0x156 */ u16 fadeDistance;
     /* 0x158 */ u16 unk158; // increment/decrement amount for 154
 } EnWeatherTag; // size = 0x15C
