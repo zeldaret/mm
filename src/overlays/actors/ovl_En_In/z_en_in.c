@@ -320,15 +320,15 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animCurrentSeg == &D_06016484 || this->skelAnime.animCurrentSeg == &D_060170DC) {
         if (func_801378B8(&this->skelAnime, 8.0f)) {
-            func_8019F88C(&this->actor.projectedPos, 0x6856, 2);
+            func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
-                func_8019F1C0(&this->actor.projectedPos, 0x1844);
+                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
             }
-            func_8019F1C0(&this->actor.projectedPos, 0x181E);
+            func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
     if (this->skelAnime.animCurrentSeg == &D_060198A8 && func_801378B8(&this->skelAnime, 20.0f)) {
-        Audio_PlayActorSound2(&this->actor, 0x6854);
+        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
@@ -390,9 +390,9 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == 2) {
-        Audio_PlayActorSound2(&this->actor, 0x6855);
+        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Audio_PlayActorSound2(&this->actor, 0x687C);
+        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
@@ -574,10 +574,10 @@ void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
     }
 }
 
-void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 arg2) {
+void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 textId) {
     func_800B86C8(&this->actor, globalCtx, &this->unk4A4->actor);
     this->actor.textId = 0;
-    this->unk4A4->actor.textId = arg2;
+    this->unk4A4->actor.textId = textId;
     this->unk4A4->unk48C = 2;
     this->unk48C = 0;
 }
@@ -597,7 +597,7 @@ s32 func_808F4150(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
                 func_800E8EA0(globalCtx, &this->actor, 0x3475);
             }
         } else {
-            play_sound(0x4806);
+            play_sound(NA_SE_SY_ERROR);
             func_800E8EA0(globalCtx, &this->actor, 0x3473);
         }
     } else {
@@ -629,7 +629,7 @@ s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
                 }
             }
         } else {
-            play_sound(0x4806);
+            play_sound(NA_SE_SY_ERROR);
             if (arg4 != 0) {
                 func_800E8EA0(globalCtx, &this->actor, 0x3473);
             } else {
@@ -769,7 +769,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(0x4806);
+                            play_sound(NA_SE_SY_ERROR);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
                             ret = false;
                         }
@@ -1021,7 +1021,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(0x4806);
+                            play_sound(NA_SE_SY_ERROR);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
                             ret = false;
                         }
@@ -1346,9 +1346,9 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     }
     if (this->unk4A8 == 2) {
         if (this->unk4B0 == 2) {
-            Audio_PlayActorSound2(&this->actor, 0x6855);
+            Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Audio_PlayActorSound2(&this->actor, 0x687C);
+            Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {
