@@ -79,7 +79,7 @@ static DamageTable sDamageTable = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static EnFgAnimation sAnimations[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06001534, 1.0f, 0, -1, 0, 0 },
     { &D_06001534, 1.0f, 0, -1, 0, -4 },
     { &D_060011C0, 1.0f, 0, -1, 0, -4 },

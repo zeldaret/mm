@@ -31,7 +31,7 @@ extern UNK_TYPE D_06000990;
 
 extern FlexSkeletonHeader D_06008C40;
 
-// Probably the same struct as EnFgAnimation, need more info from func_8013BC6C
+// Probably the same struct as ActorAnimationEntryS, need more info from func_8013BC6C
 static UNK_TYPE D_80C1E200[] = { &D_06000990, 0x3F800000, 0x0000FFFF, 0x00000000 };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
