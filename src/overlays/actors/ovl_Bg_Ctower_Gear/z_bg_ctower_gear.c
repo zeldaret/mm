@@ -129,7 +129,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(this, 0x291B);
+        Audio_PlayActorSound2(&this->dyna.actor, 0x291B);
     }
 }
 

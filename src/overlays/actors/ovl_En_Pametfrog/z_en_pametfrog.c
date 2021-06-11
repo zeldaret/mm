@@ -491,7 +491,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     eye.y = this->actor.focus.pos.y + 100.0f;
     eye.z = (Math_CosS(yaw) * 300.0f) + this->actor.focus.pos.z;
     func_8016970C(globalCtx, this->camId, &this->actor.focus.pos, &eye);
-    Audio_PlayActorSound2(this, 0x38D3);
+    Audio_PlayActorSound2(&this->actor, 0x38D3);
     this->actionFunc = EnPametfrog_FallOffSnapper;
 }
 
@@ -518,7 +518,7 @@ void EnPametfrog_SetupJumpToWall(EnPametfrog* this) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.bgCheckFlags &= ~8;
-    Audio_PlayActorSound2(this, 0x39A1);
+    Audio_PlayActorSound2(&this->actor, 0x39A1);
     this->actionFunc = EnPametfrog_JumpToWall;
 }
 
@@ -561,7 +561,7 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->skelAnime.animPlaybackSpeed = 1.0f;
     }
 
-    Audio_PlayActorSound2(this, 0x39A9);
+    Audio_PlayActorSound2(&this->actor, 0x39A9);
     this->actor.speedXZ = 8.0f;
     this->timer = Rand_S16Offset(35, 15);
     this->actionFunc = EnPametfrog_WallCrawl;
@@ -617,11 +617,11 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
         }
 
         if (func_801378B8(&this->skelAnime, 15.0f)) {
-            Audio_PlayActorSound2(this, 0x3828);
+            Audio_PlayActorSound2(&this->actor, 0x3828);
         }
 
         if (((globalCtx->gameplayFrames % 60) == 0) && (Rand_ZeroOne() < 0.8f)) {
-            Audio_PlayActorSound2(this, 0x38D2);
+            Audio_PlayActorSound2(&this->actor, 0x38D2);
         }
 
         if ((this->timer == 0) ||
@@ -649,7 +649,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
     }
     this->timer = 15;
-    Audio_PlayActorSound2(this, 0x39AC);
+    Audio_PlayActorSound2(&this->actor, 0x39AC);
     this->actionFunc = EnPametfrog_WallPause;
 }
 
@@ -667,7 +667,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
         if (((globalCtx->gameplayFrames % 60) == 0) && (Rand_ZeroOne() < 0.8f)) {
-            Audio_PlayActorSound2(this, 0x38D2);
+            Audio_PlayActorSound2(&this->actor, 0x38D2);
         }
 
         if (this->timer == 0) {
@@ -747,7 +747,7 @@ void EnPametfrog_SetupJumpOnSnapper(EnPametfrog* this) {
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.params = ENPAMETFROG_JUMP_ON_SNAPPER;
-    Audio_PlayActorSound2(this, 0x395C);
+    Audio_PlayActorSound2(&this->actor, 0x395C);
     this->actionFunc = EnPametfrog_JumpOnSnapper;
 }
 
@@ -798,9 +798,9 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     this->collider.base.acFlags &= ~1;
     this->timer = 10;
     if (this->actor.colChkInfo.health == 0) {
-        Audio_PlayActorSound2(this, 0x38D6);
+        Audio_PlayActorSound2(&this->actor, 0x38D6);
     } else {
-        Audio_PlayActorSound2(this, 0x38D3);
+        Audio_PlayActorSound2(&this->actor, 0x38D3);
     }
 
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
@@ -856,7 +856,7 @@ void EnPametfrog_SetupFallOnGround(EnPametfrog* this, GlobalContext* globalCtx) 
     this->timer = 5;
     func_8086A068(this, globalCtx);
     EnPametfrog_JumpWaterEffects(this, globalCtx);
-    Audio_PlayActorSound2(this, 0x2902);
+    Audio_PlayActorSound2(&this->actor, 0x2902);
     this->actionFunc = EnPametfrog_FallOnGround;
 }
 
@@ -1094,7 +1094,7 @@ void func_8086CB4C(EnPametfrog* this) {
     this->collider.base.atFlags &= ~1;
     this->collider.base.acFlags &= ~1;
     this->actor.speedXZ = 10.0f;
-    Audio_PlayActorSound2(this, 0x38D3);
+    Audio_PlayActorSound2(&this->actor, 0x38D3);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->actor.shape.rot.y = this->actor.world.rot.y + 0x8000;
@@ -1147,7 +1147,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     s16 yawDiff;
 
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001B08, 3.0f);
-    Audio_PlayActorSound2(this, 0x395C);
+    Audio_PlayActorSound2(&this->actor, 0x395C);
     this->actor.flags &= ~1;
     this->actor.colChkInfo.health = 6;
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);

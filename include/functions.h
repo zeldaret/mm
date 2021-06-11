@@ -837,6 +837,7 @@ void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 param_3, s16 para
 // void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800B8E58(void);
+void Audio_PlayActorSound2(Actor* actor, s16 sfxId);
 // void func_800B8FC0(void);
 void func_800B9010(Actor* actor, s16 sfxId);
 // void func_800B9038(void);
@@ -1682,7 +1683,7 @@ s16 ActorCutscene_StartAndSetUnkLinkFields(s16 index, Actor* actor);
 s16 ActorCutscene_StartAndSetFlag(s16 index, Actor* actor);
 s16 ActorCutscene_Start(s16 index, Actor* actor);
 s16 ActorCutscene_Stop(s16 index);
-// s16 ActorCutscene_GetCurrentIndex(void);
+s16 ActorCutscene_GetCurrentIndex(void);
 ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
