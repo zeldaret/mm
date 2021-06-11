@@ -31,6 +31,21 @@
 
 #define CURRENT_DAY (gSaveContext.day % 5)
 
+#define SLOT(item) gItemSlots[item]
+#define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
+
+#define VOID_ALL_EQUIP_VALUE(equip) ((((void)0,gSaveContext.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define VOID_CUR_EQUIP_VALUE(equip) ((((void)0,gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define VOID_CUR_UPG_VALUE(upg) ((((void)0,gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+
+#define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+
+#define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
+#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+
+
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
 
