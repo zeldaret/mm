@@ -2625,9 +2625,13 @@ SECTIONS
     ovl_En_Weather_Tag : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.text)
-        build/asm/overlays/ovl_En_Weather_Tag_data.o(.data)
+        build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.data)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.rodata)
+#ifdef NON_MATCHING
+        build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag_overlay.o(.ovl)
+#else
         build/asm/overlays/ovl_En_Weather_Tag_rodata.o(.rodata)
+#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

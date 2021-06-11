@@ -899,7 +899,7 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4
 void func_800BCB70(Actor* actor, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
-// void func_800BCCDC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+UNK_RET func_800BCCDC(Vec3s* points, u8 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
 // void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
 // void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
@@ -3032,7 +3032,7 @@ void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
 // void func_801692C4(GlobalContext* globalCtx, UNK_TYPE1 uParm2);
 // void Play_SceneInit(GlobalContext* globalCtx, s32 sceneIndex, UNK_TYPE1 param_3);
-// void func_80169474(void);
+UNK_RET func_80169474(GlobalContext* globalCtx, Vec3f* v1, Vec3f* v2);
 s32 func_801694DC(GlobalContext* globalCtx);
 s32 Play_GetActiveCameraIndex(GlobalContext* globalCtx);
 void func_80169590(GlobalContext* globalCtx, s16 param_2, s16 param_3);
