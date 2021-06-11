@@ -839,8 +839,7 @@ typedef struct KankyoContext {
     /* 0xEF */ UNK_TYPE1 unkEF;
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
-    // F2-F6 are used by weather tag
-    /* 0xF2 */ u8 unkF2[0xC];
+    /* 0xF2 */ u8 unkF2[0xC]; // F2-F6 are used by weather tag
 } KankyoContext; // size = 0xFE
 
 typedef struct {
