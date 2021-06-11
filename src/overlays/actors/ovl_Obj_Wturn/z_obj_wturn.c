@@ -17,7 +17,7 @@ const ActorInit Obj_Wturn_InitVars = {
     (ActorFunc)ObjWturn_Init,
     (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjWturn_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Bg_Icefloe_InitVars = {
     (ActorFunc)BgIcefloe_Init,
     (ActorFunc)BgIcefloe_Destroy,
     (ActorFunc)BgIcefloe_Update,
-    (ActorFunc)BgIcefloe_Draw
+    (ActorFunc)BgIcefloe_Draw,
 };
 */
 

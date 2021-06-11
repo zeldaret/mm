@@ -19,7 +19,7 @@ const ActorInit En_Dai_InitVars = {
     (ActorFunc)EnDai_Init,
     (ActorFunc)EnDai_Destroy,
     (ActorFunc)EnDai_Update,
-    (ActorFunc)EnDai_Draw
+    (ActorFunc)EnDai_Draw,
 };
 */
 

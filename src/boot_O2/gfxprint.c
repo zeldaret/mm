@@ -99,15 +99,12 @@ void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
 
         gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
                             (c & 3) << 1, (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
-        
 
         gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
-    } 
-
+    }
 
     gSPTextureRectangle(this->dlist++, this->posX, this->posY, this->posX + 32, this->posY + 32, (u16)(tile & 7),
                         (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
-    
 
     this->posX += 32;
 }
@@ -133,7 +130,7 @@ void GfxPrint_PrintString(GfxPrint* this, const char* str) {
     }
 }
 
-GfxPrint* GfxPrint_Callback(GfxPrint* this, const char* str, size_t size)  {
+GfxPrint* GfxPrint_Callback(GfxPrint* this, const char* str, size_t size) {
     GfxPrint_PrintStringWithSize(this, str, sizeof(char), size);
     return this;
 }
@@ -142,7 +139,7 @@ void GfxPrint_Init(GfxPrint* this) {
     this->flag &= ~GFXPRINT_OPEN;
 
     this->callback = GfxPrint_Callback;
-    
+
     this->dlist = NULL;
     this->posX = 0;
     this->posY = 0;
@@ -156,7 +153,6 @@ void GfxPrint_Init(GfxPrint* this) {
 }
 
 void GfxPrint_Destroy(GfxPrint* this) {
-
 }
 
 void GfxPrint_Open(GfxPrint* this, Gfx* dlist) {
@@ -164,7 +160,7 @@ void GfxPrint_Open(GfxPrint* this, Gfx* dlist) {
         this->flag |= GFXPRINT_OPEN;
         this->dlist = dlist;
         GfxPrint_InitDlist(this);
-    } 
+    }
 }
 
 Gfx* GfxPrint_Close(GfxPrint* this) {

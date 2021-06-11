@@ -19,7 +19,7 @@ const ActorInit En_Kakasi_InitVars = {
     (ActorFunc)EnKakasi_Init,
     (ActorFunc)EnKakasi_Destroy,
     (ActorFunc)EnKakasi_Update,
-    (ActorFunc)EnKakasi_Draw
+    (ActorFunc)EnKakasi_Draw,
 };
 */
 

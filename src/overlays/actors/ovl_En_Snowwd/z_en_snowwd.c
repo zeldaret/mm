@@ -19,7 +19,7 @@ const ActorInit En_Snowwd_InitVars = {
     (ActorFunc)EnSnowwd_Init,
     (ActorFunc)EnSnowwd_Destroy,
     (ActorFunc)EnSnowwd_Update,
-    (ActorFunc)EnSnowwd_Draw
+    (ActorFunc)EnSnowwd_Draw,
 };
 */
 

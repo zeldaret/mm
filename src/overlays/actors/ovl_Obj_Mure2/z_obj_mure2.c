@@ -17,7 +17,7 @@ const ActorInit Obj_Mure2_InitVars = {
     (ActorFunc)ObjMure2_Init,
     (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjMure2_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

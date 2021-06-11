@@ -19,7 +19,7 @@ const ActorInit Bg_Hakugin_Switch_InitVars = {
     (ActorFunc)BgHakuginSwitch_Init,
     (ActorFunc)BgHakuginSwitch_Destroy,
     (ActorFunc)BgHakuginSwitch_Update,
-    (ActorFunc)BgHakuginSwitch_Draw
+    (ActorFunc)BgHakuginSwitch_Draw,
 };
 */
 

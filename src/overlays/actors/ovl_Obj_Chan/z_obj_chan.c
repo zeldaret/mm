@@ -19,7 +19,7 @@ const ActorInit Obj_Chan_InitVars = {
     (ActorFunc)ObjChan_Init,
     (ActorFunc)ObjChan_Destroy,
     (ActorFunc)ObjChan_Update,
-    (ActorFunc)ObjChan_Draw
+    (ActorFunc)ObjChan_Draw,
 };
 */
 

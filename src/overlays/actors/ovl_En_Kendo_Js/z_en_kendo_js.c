@@ -19,7 +19,7 @@ const ActorInit En_Kendo_Js_InitVars = {
     (ActorFunc)EnKendoJs_Init,
     (ActorFunc)EnKendoJs_Destroy,
     (ActorFunc)EnKendoJs_Update,
-    (ActorFunc)EnKendoJs_Draw
+    (ActorFunc)EnKendoJs_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     (ActorFunc)BgHakuginElvpole_Init,
     (ActorFunc)BgHakuginElvpole_Destroy,
     (ActorFunc)BgHakuginElvpole_Update,
-    (ActorFunc)BgHakuginElvpole_Draw
+    (ActorFunc)BgHakuginElvpole_Draw,
 };
 */
 

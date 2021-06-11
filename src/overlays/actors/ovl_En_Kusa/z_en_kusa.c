@@ -18,7 +18,7 @@ const ActorInit En_Kusa_InitVars = {
     (ActorFunc)EnKusa_Init,
     (ActorFunc)EnKusa_Destroy,
     (ActorFunc)EnKusa_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

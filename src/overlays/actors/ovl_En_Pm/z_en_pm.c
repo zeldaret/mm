@@ -19,7 +19,7 @@ const ActorInit En_Pm_InitVars = {
     (ActorFunc)EnPm_Init,
     (ActorFunc)EnPm_Destroy,
     (ActorFunc)EnPm_Update,
-    (ActorFunc)EnPm_Draw
+    (ActorFunc)EnPm_Draw,
 };
 */
 

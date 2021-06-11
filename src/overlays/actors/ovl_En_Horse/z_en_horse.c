@@ -19,7 +19,7 @@ const ActorInit En_Horse_InitVars = {
     (ActorFunc)EnHorse_Init,
     (ActorFunc)EnHorse_Destroy,
     (ActorFunc)EnHorse_Update,
-    (ActorFunc)EnHorse_Draw
+    (ActorFunc)EnHorse_Draw,
 };
 */
 

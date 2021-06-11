@@ -19,7 +19,7 @@ const ActorInit Obj_Tokeidai_InitVars = {
     (ActorFunc)ObjTokeidai_Init,
     (ActorFunc)ObjTokeidai_Destroy,
     (ActorFunc)ObjTokeidai_Update,
-    (ActorFunc)ObjTokeidai_Draw
+    (ActorFunc)ObjTokeidai_Draw,
 };
 */
 

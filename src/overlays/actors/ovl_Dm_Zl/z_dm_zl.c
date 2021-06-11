@@ -19,7 +19,7 @@ const ActorInit Dm_Zl_InitVars = {
     (ActorFunc)DmZl_Init,
     (ActorFunc)DmZl_Destroy,
     (ActorFunc)DmZl_Update,
-    (ActorFunc)DmZl_Draw
+    (ActorFunc)DmZl_Draw,
 };
 */
 

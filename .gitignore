@@ -30,6 +30,7 @@ tools/ido7.1_compiler/
 tools/qemu-mips
 tools/ido_recomp/* binary
 ctx.c
+graphs/
 
 # Assets
 *.png

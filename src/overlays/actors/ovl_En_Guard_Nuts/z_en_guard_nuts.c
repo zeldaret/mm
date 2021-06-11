@@ -19,7 +19,7 @@ const ActorInit En_Guard_Nuts_InitVars = {
     (ActorFunc)EnGuardNuts_Init,
     (ActorFunc)EnGuardNuts_Destroy,
     (ActorFunc)EnGuardNuts_Update,
-    (ActorFunc)EnGuardNuts_Draw
+    (ActorFunc)EnGuardNuts_Draw,
 };
 */
 

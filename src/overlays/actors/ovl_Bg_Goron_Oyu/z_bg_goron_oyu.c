@@ -19,7 +19,7 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Init,
     (ActorFunc)BgGoronOyu_Destroy,
     (ActorFunc)BgGoronOyu_Update,
-    (ActorFunc)BgGoronOyu_Draw
+    (ActorFunc)BgGoronOyu_Draw,
 };
 */
 

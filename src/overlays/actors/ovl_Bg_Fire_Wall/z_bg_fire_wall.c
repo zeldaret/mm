@@ -18,7 +18,7 @@ const ActorInit Bg_Fire_Wall_InitVars = {
     (ActorFunc)BgFireWall_Init,
     (ActorFunc)BgFireWall_Destroy,
     (ActorFunc)BgFireWall_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

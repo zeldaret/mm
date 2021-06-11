@@ -19,7 +19,7 @@ const ActorInit En_Vm_InitVars = {
     (ActorFunc)EnVm_Init,
     (ActorFunc)EnVm_Destroy,
     (ActorFunc)EnVm_Update,
-    (ActorFunc)EnVm_Draw
+    (ActorFunc)EnVm_Draw,
 };
 */
 

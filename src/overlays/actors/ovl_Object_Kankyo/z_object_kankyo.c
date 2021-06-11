@@ -19,7 +19,7 @@ const ActorInit Object_Kankyo_InitVars = {
     (ActorFunc)ObjectKankyo_Init,
     (ActorFunc)ObjectKankyo_Destroy,
     (ActorFunc)ObjectKankyo_Update,
-    (ActorFunc)ObjectKankyo_Draw
+    (ActorFunc)ObjectKankyo_Draw,
 };
 */
 

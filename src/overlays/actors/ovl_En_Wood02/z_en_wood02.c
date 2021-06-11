@@ -19,7 +19,7 @@ const ActorInit En_Wood02_InitVars = {
     (ActorFunc)EnWood02_Init,
     (ActorFunc)EnWood02_Destroy,
     (ActorFunc)EnWood02_Update,
-    (ActorFunc)EnWood02_Draw
+    (ActorFunc)EnWood02_Draw,
 };
 */
 

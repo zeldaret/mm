@@ -19,7 +19,7 @@ const ActorInit En_Door_InitVars = {
     (ActorFunc)EnDoor_Init,
     (ActorFunc)EnDoor_Destroy,
     (ActorFunc)EnDoor_Update,
-    (ActorFunc)EnDoor_Draw
+    (ActorFunc)EnDoor_Draw,
 };
 */
 

@@ -124,15 +124,15 @@ for line in map_file:
                     asm_ovl += file_size
 
         if (section == ".data"):
-            if (obj_file.startswith("build/assets/src/audio")):
+            if (obj_file.startswith("build/assets/audio")):
                 audio += file_size
-            if (obj_file.startswith("build/assets/src/misc")):
+            elif (obj_file.startswith("build/assets/misc")):
                 misc += file_size
-            if (obj_file.startswith("build/assets/src/objects")):
+            elif (obj_file.startswith("build/assets/objects")):
                 object_ += file_size
-            if (obj_file.startswith("build/assets/src/scenes")):
+            elif (obj_file.startswith("build/assets/scenes")):
                 scene += file_size
-            if (obj_file.startswith("build/assets/src/textures")):
+            elif (obj_file.startswith("build/assets/textures")):
                 texture += file_size
 
 # Add libultra to boot.

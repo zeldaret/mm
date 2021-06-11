@@ -19,7 +19,7 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Init,
     (ActorFunc)EnGiant_Destroy,
     (ActorFunc)EnGiant_Update,
-    (ActorFunc)EnGiant_Draw
+    (ActorFunc)EnGiant_Draw,
 };
 */
 

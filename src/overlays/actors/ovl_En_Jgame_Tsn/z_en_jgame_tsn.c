@@ -19,7 +19,7 @@ const ActorInit En_Jgame_Tsn_InitVars = {
     (ActorFunc)EnJgameTsn_Init,
     (ActorFunc)EnJgameTsn_Destroy,
     (ActorFunc)EnJgameTsn_Update,
-    (ActorFunc)EnJgameTsn_Draw
+    (ActorFunc)EnJgameTsn_Draw,
 };
 */
 

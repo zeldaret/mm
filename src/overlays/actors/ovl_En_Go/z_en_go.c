@@ -18,7 +18,7 @@ const ActorInit En_Go_InitVars = {
     (ActorFunc)EnGo_Init,
     (ActorFunc)EnGo_Destroy,
     (ActorFunc)EnGo_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

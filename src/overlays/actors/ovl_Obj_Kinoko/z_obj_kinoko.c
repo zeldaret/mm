@@ -19,7 +19,7 @@ const ActorInit Obj_Kinoko_InitVars = {
     (ActorFunc)ObjKinoko_Init,
     (ActorFunc)ObjKinoko_Destroy,
     (ActorFunc)ObjKinoko_Update,
-    (ActorFunc)ObjKinoko_Draw
+    (ActorFunc)ObjKinoko_Draw,
 };
 */
 

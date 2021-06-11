@@ -18,7 +18,7 @@ const ActorInit En_Col_Man_InitVars = {
     (ActorFunc)EnColMan_Init,
     (ActorFunc)EnColMan_Destroy,
     (ActorFunc)EnColMan_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

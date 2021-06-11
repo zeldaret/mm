@@ -19,7 +19,7 @@ const ActorInit Obj_Taru_InitVars = {
     (ActorFunc)ObjTaru_Init,
     (ActorFunc)ObjTaru_Destroy,
     (ActorFunc)ObjTaru_Update,
-    (ActorFunc)ObjTaru_Draw
+    (ActorFunc)ObjTaru_Draw,
 };
 */
 

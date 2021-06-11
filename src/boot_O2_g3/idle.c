@@ -8,7 +8,7 @@ u32 gViConfigFeatures = 0x42;
 f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
-void Idle_ClearMemory(const void* begin, const void* end) {
+void Idle_ClearMemory(void* begin, void* end) {
     if (begin < end) {
         bzero(begin, (s32)(int)end - (int)begin);
     }
@@ -52,7 +52,8 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)_codeSegmentRomStart, (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)_codeSegmentRomStart,
+                           (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, NULL, 1);
@@ -82,19 +83,19 @@ void Idle_InitVideo(void) {
     gViConfigYScale = 1.0;
 
     switch (osTvType) {
-    case 1:
-        D_8009B290 = 2;
-        gViConfigMode = osViModeNtscLan1;
-        break;
-    case 2:
-        D_8009B290 = 30;
-        gViConfigMode = osViModeMpalLan1;
-        break;
-    case 0:
-        D_8009B290 = 44;
-        gViConfigMode = osViModeFpalLan1;
-        gViConfigYScale = 0.833f;
-        break;
+        case 1:
+            D_8009B290 = 2;
+            gViConfigMode = osViModeNtscLan1;
+            break;
+        case 2:
+            D_8009B290 = 30;
+            gViConfigMode = osViModeMpalLan1;
+            break;
+        case 0:
+            D_8009B290 = 44;
+            gViConfigMode = osViModeFpalLan1;
+            gViConfigYScale = 0.833f;
+            break;
     }
 
     D_80096B20 = 1;
@@ -104,9 +105,12 @@ void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 1024, "main");
-    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack), Z_PRIORITY_MAIN);
+    osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack),
+                   Z_PRIORITY_MAIN);
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 
-    for(;;);
+    for (;;) {
+        ;
+    }
 }

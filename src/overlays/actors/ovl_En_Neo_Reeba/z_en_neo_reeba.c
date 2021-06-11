@@ -19,7 +19,7 @@ const ActorInit En_Neo_Reeba_InitVars = {
     (ActorFunc)EnNeoReeba_Init,
     (ActorFunc)EnNeoReeba_Destroy,
     (ActorFunc)EnNeoReeba_Update,
-    (ActorFunc)EnNeoReeba_Draw
+    (ActorFunc)EnNeoReeba_Draw,
 };
 */
 

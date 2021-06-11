@@ -19,7 +19,7 @@ const ActorInit En_M_Thunder_InitVars = {
     (ActorFunc)EnMThunder_Init,
     (ActorFunc)EnMThunder_Destroy,
     (ActorFunc)EnMThunder_Update,
-    (ActorFunc)EnMThunder_Draw
+    (ActorFunc)EnMThunder_Draw,
 };
 */
 

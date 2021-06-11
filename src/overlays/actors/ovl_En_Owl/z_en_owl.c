@@ -19,7 +19,7 @@ const ActorInit En_Owl_InitVars = {
     (ActorFunc)EnOwl_Init,
     (ActorFunc)EnOwl_Destroy,
     (ActorFunc)EnOwl_Update,
-    (ActorFunc)EnOwl_Draw
+    (ActorFunc)EnOwl_Draw,
 };
 */
 

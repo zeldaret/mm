@@ -18,7 +18,7 @@ const ActorInit En_Invadepoh_InitVars = {
     (ActorFunc)EnInvadepoh_Init,
     (ActorFunc)EnInvadepoh_Destroy,
     (ActorFunc)EnInvadepoh_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

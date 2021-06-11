@@ -19,7 +19,7 @@ const ActorInit En_Ruppecrow_InitVars = {
     (ActorFunc)EnRuppecrow_Init,
     (ActorFunc)EnRuppecrow_Destroy,
     (ActorFunc)EnRuppecrow_Update,
-    (ActorFunc)EnRuppecrow_Draw
+    (ActorFunc)EnRuppecrow_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Paper_InitVars = {
     (ActorFunc)EnPaper_Init,
     (ActorFunc)EnPaper_Destroy,
     (ActorFunc)EnPaper_Update,
-    (ActorFunc)EnPaper_Draw
+    (ActorFunc)EnPaper_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     (ActorFunc)BgIkanaRotaryroom_Init,
     (ActorFunc)BgIkanaRotaryroom_Destroy,
     (ActorFunc)BgIkanaRotaryroom_Update,
-    (ActorFunc)BgIkanaRotaryroom_Draw
+    (ActorFunc)BgIkanaRotaryroom_Draw,
 };
 */
 

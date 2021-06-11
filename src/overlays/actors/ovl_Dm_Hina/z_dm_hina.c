@@ -19,7 +19,7 @@ const ActorInit Dm_Hina_InitVars = {
     (ActorFunc)DmHina_Init,
     (ActorFunc)DmHina_Destroy,
     (ActorFunc)DmHina_Update,
-    (ActorFunc)DmHina_Draw
+    (ActorFunc)DmHina_Draw,
 };
 */
 

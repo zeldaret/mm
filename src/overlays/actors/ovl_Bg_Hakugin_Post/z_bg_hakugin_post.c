@@ -18,7 +18,7 @@ const ActorInit Bg_Hakugin_Post_InitVars = {
     (ActorFunc)BgHakuginPost_Init,
     (ActorFunc)BgHakuginPost_Destroy,
     (ActorFunc)BgHakuginPost_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

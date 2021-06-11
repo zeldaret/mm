@@ -18,7 +18,7 @@ const ActorInit Bg_Spout_Fire_InitVars = {
     (ActorFunc)BgSpoutFire_Init,
     (ActorFunc)BgSpoutFire_Destroy,
     (ActorFunc)BgSpoutFire_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

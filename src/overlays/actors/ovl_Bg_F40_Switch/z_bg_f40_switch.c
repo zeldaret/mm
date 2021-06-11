@@ -19,7 +19,7 @@ const ActorInit Bg_F40_Switch_InitVars = {
     (ActorFunc)BgF40Switch_Init,
     (ActorFunc)BgF40Switch_Destroy,
     (ActorFunc)BgF40Switch_Update,
-    (ActorFunc)BgF40Switch_Draw
+    (ActorFunc)BgF40Switch_Draw,
 };
 */
 

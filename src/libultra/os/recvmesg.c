@@ -6,10 +6,8 @@ s32 osRecvMesg(OSMesgQueue* mq, OSMesg* msg, s32 flags) {
 
     saveMask = __osDisableInt();
 
-    while (mq->validCount == 0)
-    {
-        if (flags == 0)
-        {
+    while (mq->validCount == 0) {
+        if (flags == 0) {
             __osRestoreInt(saveMask);
             return -1;
         }

@@ -19,7 +19,7 @@ const ActorInit En_Bubble_InitVars = {
     (ActorFunc)EnBubble_Init,
     (ActorFunc)EnBubble_Destroy,
     (ActorFunc)EnBubble_Update,
-    (ActorFunc)EnBubble_Draw
+    (ActorFunc)EnBubble_Draw,
 };
 */
 

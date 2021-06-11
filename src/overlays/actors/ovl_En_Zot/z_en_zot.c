@@ -19,7 +19,7 @@ const ActorInit En_Zot_InitVars = {
     (ActorFunc)EnZot_Init,
     (ActorFunc)EnZot_Destroy,
     (ActorFunc)EnZot_Update,
-    (ActorFunc)EnZot_Draw
+    (ActorFunc)EnZot_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit Obj_Bombiwa_InitVars = {
     (ActorFunc)ObjBombiwa_Init,
     (ActorFunc)ObjBombiwa_Destroy,
     (ActorFunc)ObjBombiwa_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Hamishi_InitVars = {
     (ActorFunc)ObjHamishi_Init,
     (ActorFunc)ObjHamishi_Destroy,
     (ActorFunc)ObjHamishi_Update,
-    (ActorFunc)ObjHamishi_Draw
+    (ActorFunc)ObjHamishi_Draw,
 };
 */
 

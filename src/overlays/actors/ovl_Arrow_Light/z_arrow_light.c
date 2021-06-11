@@ -19,7 +19,7 @@ const ActorInit Arrow_Light_InitVars = {
     (ActorFunc)ArrowLight_Init,
     (ActorFunc)ArrowLight_Destroy,
     (ActorFunc)ArrowLight_Update,
-    (ActorFunc)ArrowLight_Draw
+    (ActorFunc)ArrowLight_Draw,
 };
 */
 

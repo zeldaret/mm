@@ -19,7 +19,7 @@ const ActorInit En_Thiefbird_InitVars = {
     (ActorFunc)EnThiefbird_Init,
     (ActorFunc)EnThiefbird_Destroy,
     (ActorFunc)EnThiefbird_Update,
-    (ActorFunc)EnThiefbird_Draw
+    (ActorFunc)EnThiefbird_Draw,
 };
 */
 

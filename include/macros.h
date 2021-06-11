@@ -26,8 +26,10 @@
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
-//#define LINK_IS_CHILD (gSaveContext.perm.linkAge != 0)
-#define LINK_IS_ADULT (gSaveContext.perm.linkAge == 0)
+//#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
+#define LINK_IS_ADULT (gSaveContext.linkAge == 0)
+
+#define CURRENT_DAY (gSaveContext.day % 5)
 
 #define SQ(x) ((x)*(x))
 #define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
@@ -69,7 +71,7 @@ extern GraphicsContext* __gfxCtx;
 #define VTX_T(x,y,z,s,t,cr,cg,cb,a) { { x, y, z }, 0, { s, t }, { cr, cg, cb, a } }
 
 #define GRAPH_ALLOC(gfxCtx, size)         \
-    ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size)))
+    ((void *) ((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)

@@ -18,7 +18,7 @@ const ActorInit En_Kaizoku_InitVars = {
     (ActorFunc)EnKaizoku_Init,
     (ActorFunc)EnKaizoku_Destroy,
     (ActorFunc)EnKaizoku_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

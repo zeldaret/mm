@@ -89,8 +89,8 @@ endif
 #### Files ####
 
 # ROM image
-ROM := zelda_majora_us.z64
-ROMC := $(ROM:.z64=.compressed.z64)
+ROMC := mm.us.rev1.rom.z64
+ROM := $(ROMC:.rom.z64=.rom_uncompressed.z64)
 ELF := $(ROM:.z64=.elf)
 # description of ROM segments
 SPEC := spec
@@ -102,18 +102,10 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
+ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
-# Because we may not have disassembled the code files yet, there might not be any assembly files.
-# Instead, generate a list of assembly files based on what's listed in the linker script.
-S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
-C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-C_O_FILES := $(C_FILES:%.c=build/%.o)
-S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
-O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
-
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
-
+## Assets binaries (PNGs, JPGs, etc)
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
@@ -126,6 +118,7 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  #$(foreach f,$(C_FILES:.c=.o),build/$f) \
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS),build/$(dir)))
+#$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2
@@ -157,6 +150,8 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum_compressed.md5
 endif
 
+.PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
+
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
 .PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := uncompressed
@@ -172,6 +167,10 @@ $(ROMC): $(ROM)
 $(ELF): $(TEXTURE_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/z64.map -o $@
 
+
+#### Main commands ####
+
+## Cleaning ##
 clean:
 	$(RM) -r $(ROM) $(ELF) build
 
@@ -179,28 +178,36 @@ distclean:
 	$(RM) -r $(ROM) $(ROMC) $(ELF) build asm baserom data
 	$(MAKE) -C tools clean
 
+assetclean:
+	$(RM) -rf $(ASSET_BIN_DIRS)
+	$(RM) -rf build/assets
+
 disasm:
 	python3 tools/disasm/disasm.py
-
-init:
-	git submodule update --init --recursive
-	python3 -m pip install -r requirements.txt
-	$(MAKE) distclean
-	$(MAKE) setup
-	$(MAKE) disasm
 
 setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
 
+init:
+	python3 -m pip install -r requirements.txt
+	$(MAKE) distclean
+	$(MAKE) setup
+	$(MAKE) disasm
+
+diff-init: all
+	$(RM) -rf expected/
+	mkdir -p expected/
+	cp -r build expected/build
+	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
+	cp $(ROM) expected/$(ROM)
+
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
 build/binary/assets/scenes/%: build/code.elf
 	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
-
-.PHONY: all uncompressed compressed clean distclean disasm init setup
 
 #### Various Recipes ####
 
@@ -223,6 +230,9 @@ build/data/%.o: data/%.s
 # Build C files from assets
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.bin.inc.c: assets/%.bin
+	$(ZAPD) bblb -eh -i $< -o $@
 
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@

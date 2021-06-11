@@ -19,7 +19,7 @@ const ActorInit Boss_06_InitVars = {
     (ActorFunc)Boss06_Init,
     (ActorFunc)Boss06_Destroy,
     (ActorFunc)Boss06_Update,
-    (ActorFunc)Boss06_Draw
+    (ActorFunc)Boss06_Draw,
 };
 */
 

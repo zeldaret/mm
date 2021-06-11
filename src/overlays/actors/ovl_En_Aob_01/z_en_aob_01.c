@@ -19,7 +19,7 @@ const ActorInit En_Aob_01_InitVars = {
     (ActorFunc)EnAob01_Init,
     (ActorFunc)EnAob01_Destroy,
     (ActorFunc)EnAob01_Update,
-    (ActorFunc)EnAob01_Draw
+    (ActorFunc)EnAob01_Draw,
 };
 */
 

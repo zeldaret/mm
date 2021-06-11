@@ -19,7 +19,7 @@ const ActorInit En_Talk_Gibud_InitVars = {
     (ActorFunc)EnTalkGibud_Init,
     (ActorFunc)EnTalkGibud_Destroy,
     (ActorFunc)EnTalkGibud_Update,
-    (ActorFunc)EnTalkGibud_Draw
+    (ActorFunc)EnTalkGibud_Draw,
 };
 */
 

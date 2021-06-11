@@ -19,7 +19,7 @@ const ActorInit Obj_Entotu_InitVars = {
     (ActorFunc)ObjEntotu_Init,
     (ActorFunc)ObjEntotu_Destroy,
     (ActorFunc)ObjEntotu_Update,
-    (ActorFunc)ObjEntotu_Draw
+    (ActorFunc)ObjEntotu_Draw,
 };
 */
 

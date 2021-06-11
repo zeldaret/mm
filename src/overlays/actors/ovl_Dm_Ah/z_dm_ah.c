@@ -19,7 +19,7 @@ const ActorInit Dm_Ah_InitVars = {
     (ActorFunc)DmAh_Init,
     (ActorFunc)DmAh_Destroy,
     (ActorFunc)DmAh_Update,
-    (ActorFunc)DmAh_Draw
+    (ActorFunc)DmAh_Draw,
 };
 */
 

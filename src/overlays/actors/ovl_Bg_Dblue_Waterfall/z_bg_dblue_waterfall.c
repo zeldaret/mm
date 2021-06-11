@@ -19,7 +19,7 @@ const ActorInit Bg_Dblue_Waterfall_InitVars = {
     (ActorFunc)BgDblueWaterfall_Init,
     (ActorFunc)BgDblueWaterfall_Destroy,
     (ActorFunc)BgDblueWaterfall_Update,
-    (ActorFunc)BgDblueWaterfall_Draw
+    (ActorFunc)BgDblueWaterfall_Draw,
 };
 */
 

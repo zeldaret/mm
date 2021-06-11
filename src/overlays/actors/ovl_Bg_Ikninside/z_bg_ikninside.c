@@ -19,7 +19,7 @@ const ActorInit Bg_Ikninside_InitVars = {
     (ActorFunc)BgIkninside_Init,
     (ActorFunc)BgIkninside_Destroy,
     (ActorFunc)BgIkninside_Update,
-    (ActorFunc)BgIkninside_Draw
+    (ActorFunc)BgIkninside_Draw,
 };
 */
 

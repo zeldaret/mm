@@ -19,7 +19,7 @@ const ActorInit En_Snowman_InitVars = {
     (ActorFunc)EnSnowman_Init,
     (ActorFunc)EnSnowman_Destroy,
     (ActorFunc)EnSnowman_Update,
-    (ActorFunc)EnSnowman_Draw
+    (ActorFunc)EnSnowman_Draw,
 };
 */
 

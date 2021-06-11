@@ -19,7 +19,7 @@ const ActorInit En_Pr2_InitVars = {
     (ActorFunc)EnPr2_Init,
     (ActorFunc)EnPr2_Destroy,
     (ActorFunc)EnPr2_Update,
-    (ActorFunc)EnPr2_Draw
+    (ActorFunc)EnPr2_Draw,
 };
 */
 

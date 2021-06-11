@@ -19,7 +19,7 @@ const ActorInit Obj_Takaraya_Wall_InitVars = {
     (ActorFunc)ObjTakarayaWall_Init,
     (ActorFunc)ObjTakarayaWall_Destroy,
     (ActorFunc)ObjTakarayaWall_Update,
-    (ActorFunc)ObjTakarayaWall_Draw
+    (ActorFunc)ObjTakarayaWall_Draw,
 };
 */
 

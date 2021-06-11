@@ -19,7 +19,7 @@ const ActorInit Arrow_Ice_InitVars = {
     (ActorFunc)ArrowIce_Init,
     (ActorFunc)ArrowIce_Destroy,
     (ActorFunc)ArrowIce_Update,
-    (ActorFunc)ArrowIce_Draw
+    (ActorFunc)ArrowIce_Draw,
 };
 */
 

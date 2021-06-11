@@ -19,7 +19,7 @@ const ActorInit Obj_Spinyroll_InitVars = {
     (ActorFunc)ObjSpinyroll_Init,
     (ActorFunc)ObjSpinyroll_Destroy,
     (ActorFunc)ObjSpinyroll_Update,
-    (ActorFunc)ObjSpinyroll_Draw
+    (ActorFunc)ObjSpinyroll_Draw,
 };
 */
 

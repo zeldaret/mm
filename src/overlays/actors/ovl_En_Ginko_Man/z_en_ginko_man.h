@@ -3,9 +3,9 @@
 
 #include <global.h>
 
- typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
-
 struct EnGinkoMan;
+
+ typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
@@ -18,8 +18,8 @@ typedef struct EnGinkoMan {
     /* 0x258 */ s16 curTextId;
     /* 0x25A */ s16 serviceFee;
     /* 0x25C */ s16 choiceDepositWithdrawl;
-    /* 0x25E */ s16 newAccountFlag;
-    /* 0x260 */ s16 stampChecked;
+    /* 0x25E */ s16 isNewAccount;
+    /* 0x260 */ s16 isStampChecked;
     /* 0x262 */ s16 previousBankValue;
     /* 0x264 */ s16 animTimer;
 } EnGinkoMan; // size = 0x268
@@ -34,7 +34,7 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern SkeletonHeader object_ginko_skeleton[];
+extern FlexSkeletonHeader object_ginko_skeleton[];
 extern Gfx object_ginko_limb15_dlist[];
 
 extern AnimationHeader object_ginko_floorsmacking_anim[];
@@ -53,7 +53,5 @@ typedef enum {
 
 // values to get wallet capacity
 extern u16 D_801C1E2C[]; // wallet capacities
-extern u32 D_801C1DD0; // bit mask for wallet size in savecontext
-extern u8  D_801C1E08; // bit shift on index to align
 
 #endif // Z_EN_GINKO_MAN_H

@@ -19,7 +19,7 @@ const ActorInit Dm_Al_InitVars = {
     (ActorFunc)DmAl_Init,
     (ActorFunc)DmAl_Destroy,
     (ActorFunc)DmAl_Update,
-    (ActorFunc)DmAl_Draw
+    (ActorFunc)DmAl_Draw,
 };
 */
 

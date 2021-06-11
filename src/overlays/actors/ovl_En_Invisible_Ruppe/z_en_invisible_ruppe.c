@@ -18,7 +18,7 @@ const ActorInit En_Invisible_Ruppe_InitVars = {
     (ActorFunc)EnInvisibleRuppe_Init,
     (ActorFunc)EnInvisibleRuppe_Destroy,
     (ActorFunc)EnInvisibleRuppe_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

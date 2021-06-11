@@ -18,7 +18,7 @@ const ActorInit En_Hanabi_InitVars = {
     (ActorFunc)EnHanabi_Init,
     (ActorFunc)EnHanabi_Destroy,
     (ActorFunc)EnHanabi_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

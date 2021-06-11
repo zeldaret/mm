@@ -18,7 +18,7 @@ const ActorInit En_St_InitVars = {
     (ActorFunc)EnSt_Init,
     (ActorFunc)EnSt_Destroy,
     (ActorFunc)EnSt_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

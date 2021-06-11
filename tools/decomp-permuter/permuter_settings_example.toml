@@ -1,0 +1,6 @@
+# Optional configuration file for import.py. Put it in the root or in tools/
+# of the repo you are importing from.
+[preserve_macros]
+"g[DS]P.*" = "void"
+"gDma.*" = "void"
+"_SHIFTL" = "unsigned int"

@@ -19,7 +19,7 @@ const ActorInit En_Tite_InitVars = {
     (ActorFunc)EnTite_Init,
     (ActorFunc)EnTite_Destroy,
     (ActorFunc)EnTite_Update,
-    (ActorFunc)EnTite_Draw
+    (ActorFunc)EnTite_Draw,
 };
 */
 

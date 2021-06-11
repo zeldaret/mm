@@ -19,7 +19,7 @@ const ActorInit Obj_Toge_InitVars = {
     (ActorFunc)ObjToge_Init,
     (ActorFunc)ObjToge_Destroy,
     (ActorFunc)ObjToge_Update,
-    (ActorFunc)ObjToge_Draw
+    (ActorFunc)ObjToge_Draw,
 };
 */
 

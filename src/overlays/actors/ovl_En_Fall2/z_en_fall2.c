@@ -19,7 +19,7 @@ const ActorInit En_Fall2_InitVars = {
     (ActorFunc)EnFall2_Init,
     (ActorFunc)EnFall2_Destroy,
     (ActorFunc)EnFall2_Update,
-    (ActorFunc)EnFall2_Draw
+    (ActorFunc)EnFall2_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Gakufu_InitVars = {
     (ActorFunc)EnGakufu_Init,
     (ActorFunc)EnGakufu_Destroy,
     (ActorFunc)EnGakufu_Update,
-    (ActorFunc)EnGakufu_Draw
+    (ActorFunc)EnGakufu_Draw,
 };
 */
 

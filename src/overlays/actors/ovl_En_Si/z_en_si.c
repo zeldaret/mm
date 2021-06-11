@@ -19,7 +19,7 @@ const ActorInit En_Si_InitVars = {
     (ActorFunc)EnSi_Init,
     (ActorFunc)EnSi_Destroy,
     (ActorFunc)EnSi_Update,
-    (ActorFunc)EnSi_Draw
+    (ActorFunc)EnSi_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Railgibud_InitVars = {
     (ActorFunc)EnRailgibud_Init,
     (ActorFunc)EnRailgibud_Destroy,
     (ActorFunc)EnRailgibud_Update,
-    (ActorFunc)EnRailgibud_Draw
+    (ActorFunc)EnRailgibud_Draw,
 };
 */
 

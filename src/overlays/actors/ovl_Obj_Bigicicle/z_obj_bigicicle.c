@@ -19,7 +19,7 @@ const ActorInit Obj_Bigicicle_InitVars = {
     (ActorFunc)ObjBigicicle_Init,
     (ActorFunc)ObjBigicicle_Destroy,
     (ActorFunc)ObjBigicicle_Update,
-    (ActorFunc)ObjBigicicle_Draw
+    (ActorFunc)ObjBigicicle_Draw,
 };
 */
 

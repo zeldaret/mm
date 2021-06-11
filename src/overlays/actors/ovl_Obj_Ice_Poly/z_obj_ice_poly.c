@@ -19,7 +19,7 @@ const ActorInit Obj_Ice_Poly_InitVars = {
     (ActorFunc)ObjIcePoly_Init,
     (ActorFunc)ObjIcePoly_Destroy,
     (ActorFunc)ObjIcePoly_Update,
-    (ActorFunc)ObjIcePoly_Draw
+    (ActorFunc)ObjIcePoly_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Nwc_InitVars = {
     (ActorFunc)EnNwc_Init,
     (ActorFunc)EnNwc_Destroy,
     (ActorFunc)EnNwc_Update,
-    (ActorFunc)EnNwc_Draw
+    (ActorFunc)EnNwc_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Switch_InitVars = {
     (ActorFunc)ObjSwitch_Init,
     (ActorFunc)ObjSwitch_Destroy,
     (ActorFunc)ObjSwitch_Update,
-    (ActorFunc)ObjSwitch_Draw
+    (ActorFunc)ObjSwitch_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Ge2_InitVars = {
     (ActorFunc)EnGe2_Init,
     (ActorFunc)EnGe2_Destroy,
     (ActorFunc)EnGe2_Update,
-    (ActorFunc)EnGe2_Draw
+    (ActorFunc)EnGe2_Draw,
 };
 */
 

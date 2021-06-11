@@ -19,7 +19,7 @@ const ActorInit Obj_Vspinyroll_InitVars = {
     (ActorFunc)ObjVspinyroll_Init,
     (ActorFunc)ObjVspinyroll_Destroy,
     (ActorFunc)ObjVspinyroll_Update,
-    (ActorFunc)ObjVspinyroll_Draw
+    (ActorFunc)ObjVspinyroll_Draw,
 };
 */
 

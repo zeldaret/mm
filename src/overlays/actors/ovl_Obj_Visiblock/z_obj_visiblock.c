@@ -20,7 +20,7 @@ const ActorInit Obj_Visiblock_InitVars = {
     (ActorFunc)ObjVisiblock_Draw
 };
 
-static InitChainEntry D_80ADEB50[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
@@ -28,12 +28,12 @@ static InitChainEntry D_80ADEB50[] = {
 };
 
 extern CollisionHeader D_06000AD0;
-extern UNK_TYPE D_06000140;
+extern Gfx D_06000140[];
 
 void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
-    Actor_ProcessInitChain(this, D_80ADEB50);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
 }
@@ -45,5 +45,5 @@ void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, &D_06000140);
+    func_800BE03C(globalCtx, D_06000140);
 }

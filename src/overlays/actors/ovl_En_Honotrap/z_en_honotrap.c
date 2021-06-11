@@ -19,7 +19,7 @@ const ActorInit En_Honotrap_InitVars = {
     (ActorFunc)EnHonotrap_Init,
     (ActorFunc)EnHonotrap_Destroy,
     (ActorFunc)EnHonotrap_Update,
-    (ActorFunc)EnHonotrap_Draw
+    (ActorFunc)EnHonotrap_Draw,
 };
 */
 

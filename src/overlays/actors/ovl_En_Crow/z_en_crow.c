@@ -19,7 +19,7 @@ const ActorInit En_Crow_InitVars = {
     (ActorFunc)EnCrow_Init,
     (ActorFunc)EnCrow_Destroy,
     (ActorFunc)EnCrow_Update,
-    (ActorFunc)EnCrow_Draw
+    (ActorFunc)EnCrow_Draw,
 };
 */
 

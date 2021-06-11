@@ -19,7 +19,7 @@ const ActorInit En_Horse_Game_Check_InitVars = {
     (ActorFunc)EnHorseGameCheck_Init,
     (ActorFunc)EnHorseGameCheck_Destroy,
     (ActorFunc)EnHorseGameCheck_Update,
-    (ActorFunc)EnHorseGameCheck_Draw
+    (ActorFunc)EnHorseGameCheck_Draw,
 };
 */
 

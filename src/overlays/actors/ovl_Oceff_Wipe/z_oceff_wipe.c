@@ -19,7 +19,7 @@ const ActorInit Oceff_Wipe_InitVars = {
     (ActorFunc)OceffWipe_Init,
     (ActorFunc)OceffWipe_Destroy,
     (ActorFunc)OceffWipe_Update,
-    (ActorFunc)OceffWipe_Draw
+    (ActorFunc)OceffWipe_Draw,
 };
 */
 

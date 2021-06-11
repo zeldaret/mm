@@ -19,7 +19,7 @@ const ActorInit En_Dinofos_InitVars = {
     (ActorFunc)EnDinofos_Init,
     (ActorFunc)EnDinofos_Destroy,
     (ActorFunc)EnDinofos_Update,
-    (ActorFunc)EnDinofos_Draw
+    (ActorFunc)EnDinofos_Draw,
 };
 */
 

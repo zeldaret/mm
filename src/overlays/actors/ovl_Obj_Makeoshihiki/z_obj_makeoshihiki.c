@@ -17,7 +17,7 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
     (ActorFunc)ObjMakeoshihiki_Init,
     (ActorFunc)Actor_NoOp,
     (ActorFunc)ObjMakeoshihiki_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

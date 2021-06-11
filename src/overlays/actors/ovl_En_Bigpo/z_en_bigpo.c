@@ -18,7 +18,7 @@ const ActorInit En_Bigpo_InitVars = {
     (ActorFunc)EnBigpo_Init,
     (ActorFunc)EnBigpo_Destroy,
     (ActorFunc)EnBigpo_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

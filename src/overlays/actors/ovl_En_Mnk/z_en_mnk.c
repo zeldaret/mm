@@ -19,7 +19,7 @@ const ActorInit En_Mnk_InitVars = {
     (ActorFunc)EnMnk_Init,
     (ActorFunc)EnMnk_Destroy,
     (ActorFunc)EnMnk_Update,
-    (ActorFunc)EnMnk_Draw
+    (ActorFunc)EnMnk_Draw,
 };
 */
 

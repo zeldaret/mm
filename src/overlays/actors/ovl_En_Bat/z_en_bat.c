@@ -19,7 +19,7 @@ const ActorInit En_Bat_InitVars = {
     (ActorFunc)EnBat_Init,
     (ActorFunc)EnBat_Destroy,
     (ActorFunc)EnBat_Update,
-    (ActorFunc)EnBat_Draw
+    (ActorFunc)EnBat_Draw,
 };
 */
 

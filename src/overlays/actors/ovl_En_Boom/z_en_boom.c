@@ -19,7 +19,7 @@ const ActorInit En_Boom_InitVars = {
     (ActorFunc)EnBoom_Init,
     (ActorFunc)EnBoom_Destroy,
     (ActorFunc)EnBoom_Update,
-    (ActorFunc)EnBoom_Draw
+    (ActorFunc)EnBoom_Draw,
 };
 */
 

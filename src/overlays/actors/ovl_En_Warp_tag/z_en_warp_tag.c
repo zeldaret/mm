@@ -18,7 +18,7 @@ const ActorInit En_Warp_tag_InitVars = {
     (ActorFunc)EnWarptag_Init,
     (ActorFunc)EnWarptag_Destroy,
     (ActorFunc)EnWarptag_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

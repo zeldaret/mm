@@ -19,7 +19,7 @@ const ActorInit En_Bomjimb_InitVars = {
     (ActorFunc)EnBomjimb_Init,
     (ActorFunc)EnBomjimb_Destroy,
     (ActorFunc)EnBomjimb_Update,
-    (ActorFunc)EnBomjimb_Draw
+    (ActorFunc)EnBomjimb_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Bg_Crace_Movebg_InitVars = {
     (ActorFunc)BgCraceMovebg_Init,
     (ActorFunc)BgCraceMovebg_Destroy,
     (ActorFunc)BgCraceMovebg_Update,
-    (ActorFunc)BgCraceMovebg_Draw
+    (ActorFunc)BgCraceMovebg_Draw,
 };
 */
 

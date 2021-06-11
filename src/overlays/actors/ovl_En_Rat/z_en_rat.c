@@ -19,7 +19,7 @@ const ActorInit En_Rat_InitVars = {
     (ActorFunc)EnRat_Init,
     (ActorFunc)EnRat_Destroy,
     (ActorFunc)EnRat_Update,
-    (ActorFunc)EnRat_Draw
+    (ActorFunc)EnRat_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Raf_InitVars = {
     (ActorFunc)EnRaf_Init,
     (ActorFunc)EnRaf_Destroy,
     (ActorFunc)EnRaf_Update,
-    (ActorFunc)EnRaf_Draw
+    (ActorFunc)EnRaf_Draw,
 };
 */
 

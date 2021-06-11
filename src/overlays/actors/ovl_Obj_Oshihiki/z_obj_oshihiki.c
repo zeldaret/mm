@@ -19,7 +19,7 @@ const ActorInit Obj_Oshihiki_InitVars = {
     (ActorFunc)ObjOshihiki_Init,
     (ActorFunc)ObjOshihiki_Destroy,
     (ActorFunc)ObjOshihiki_Update,
-    (ActorFunc)ObjOshihiki_Draw
+    (ActorFunc)ObjOshihiki_Draw,
 };
 */
 

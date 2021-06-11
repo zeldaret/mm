@@ -19,7 +19,7 @@ const ActorInit En_Jg_InitVars = {
     (ActorFunc)EnJg_Init,
     (ActorFunc)EnJg_Destroy,
     (ActorFunc)EnJg_Update,
-    (ActorFunc)EnJg_Draw
+    (ActorFunc)EnJg_Draw,
 };
 */
 

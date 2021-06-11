@@ -19,7 +19,7 @@ const ActorInit En_Ge3_InitVars = {
     (ActorFunc)EnGe3_Init,
     (ActorFunc)EnGe3_Destroy,
     (ActorFunc)EnGe3_Update,
-    (ActorFunc)EnGe3_Draw
+    (ActorFunc)EnGe3_Draw,
 };
 */
 

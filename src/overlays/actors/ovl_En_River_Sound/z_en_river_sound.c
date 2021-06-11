@@ -18,7 +18,7 @@ const ActorInit En_River_Sound_InitVars = {
     (ActorFunc)EnRiverSound_Init,
     (ActorFunc)Actor_NoOp,
     (ActorFunc)EnRiverSound_Update,
-    (ActorFunc)EnRiverSound_Draw
+    (ActorFunc)EnRiverSound_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit En_Al_InitVars = {
     (ActorFunc)EnAl_Init,
     (ActorFunc)EnAl_Destroy,
     (ActorFunc)EnAl_Update,
-    (ActorFunc)EnAl_Draw
+    (ActorFunc)EnAl_Draw,
 };
 */
 

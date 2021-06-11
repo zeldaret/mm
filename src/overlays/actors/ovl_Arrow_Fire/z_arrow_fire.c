@@ -19,7 +19,7 @@ const ActorInit Arrow_Fire_InitVars = {
     (ActorFunc)ArrowFire_Init,
     (ActorFunc)ArrowFire_Destroy,
     (ActorFunc)ArrowFire_Update,
-    (ActorFunc)ArrowFire_Draw
+    (ActorFunc)ArrowFire_Draw,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Yasi_InitVars = {
     (ActorFunc)ObjYasi_Init,
     (ActorFunc)ObjYasi_Destroy,
     (ActorFunc)ObjYasi_Update,
-    (ActorFunc)ObjYasi_Draw
+    (ActorFunc)ObjYasi_Draw,
 };
 */
 

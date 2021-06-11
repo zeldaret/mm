@@ -19,7 +19,7 @@ const ActorInit En_Insect_InitVars = {
     (ActorFunc)EnInsect_Init,
     (ActorFunc)EnInsect_Destroy,
     (ActorFunc)EnInsect_Update,
-    (ActorFunc)EnInsect_Draw
+    (ActorFunc)EnInsect_Draw,
 };
 */
 

@@ -18,7 +18,7 @@ const ActorInit En_Minislime_InitVars = {
     (ActorFunc)EnMinislime_Init,
     (ActorFunc)EnMinislime_Destroy,
     (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

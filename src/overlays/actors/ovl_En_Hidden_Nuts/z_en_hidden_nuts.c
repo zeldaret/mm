@@ -19,7 +19,7 @@ const ActorInit En_Hidden_Nuts_InitVars = {
     (ActorFunc)EnHiddenNuts_Init,
     (ActorFunc)EnHiddenNuts_Destroy,
     (ActorFunc)EnHiddenNuts_Update,
-    (ActorFunc)EnHiddenNuts_Draw
+    (ActorFunc)EnHiddenNuts_Draw,
 };
 */
 

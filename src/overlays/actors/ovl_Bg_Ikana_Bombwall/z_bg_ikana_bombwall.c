@@ -19,7 +19,7 @@ const ActorInit Bg_Ikana_Bombwall_InitVars = {
     (ActorFunc)BgIkanaBombwall_Init,
     (ActorFunc)BgIkanaBombwall_Destroy,
     (ActorFunc)BgIkanaBombwall_Update,
-    (ActorFunc)BgIkanaBombwall_Draw
+    (ActorFunc)BgIkanaBombwall_Draw,
 };
 */
 

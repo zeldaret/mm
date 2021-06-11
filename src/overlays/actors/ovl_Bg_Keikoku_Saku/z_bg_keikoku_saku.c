@@ -19,7 +19,7 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
     (ActorFunc)BgKeikokuSaku_Init,
     (ActorFunc)BgKeikokuSaku_Destroy,
     (ActorFunc)BgKeikokuSaku_Update,
-    (ActorFunc)BgKeikokuSaku_Draw
+    (ActorFunc)BgKeikokuSaku_Draw,
 };
 */
 

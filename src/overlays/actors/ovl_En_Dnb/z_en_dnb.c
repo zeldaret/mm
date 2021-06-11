@@ -19,7 +19,7 @@ const ActorInit En_Dnb_InitVars = {
     (ActorFunc)EnDnb_Init,
     (ActorFunc)EnDnb_Destroy,
     (ActorFunc)EnDnb_Update,
-    (ActorFunc)EnDnb_Draw
+    (ActorFunc)EnDnb_Draw,
 };
 */
 

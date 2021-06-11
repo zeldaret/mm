@@ -19,7 +19,7 @@ const ActorInit Obj_Mine_InitVars = {
     (ActorFunc)ObjMine_Init,
     (ActorFunc)ObjMine_Destroy,
     (ActorFunc)ObjMine_Update,
-    (ActorFunc)ObjMine_Draw
+    (ActorFunc)ObjMine_Draw,
 };
 */
 

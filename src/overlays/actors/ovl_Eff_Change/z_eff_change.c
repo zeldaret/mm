@@ -18,7 +18,7 @@ const ActorInit Eff_Change_InitVars = {
     (ActorFunc)EffChange_Init,
     (ActorFunc)EffChange_Destroy,
     (ActorFunc)EffChange_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

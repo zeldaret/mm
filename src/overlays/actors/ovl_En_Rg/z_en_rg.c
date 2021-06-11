@@ -19,7 +19,7 @@ const ActorInit En_Rg_InitVars = {
     (ActorFunc)EnRg_Init,
     (ActorFunc)EnRg_Destroy,
     (ActorFunc)EnRg_Update,
-    (ActorFunc)EnRg_Draw
+    (ActorFunc)EnRg_Draw,
 };
 */
 

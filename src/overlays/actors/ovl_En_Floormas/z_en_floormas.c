@@ -19,7 +19,7 @@ const ActorInit En_Floormas_InitVars = {
     (ActorFunc)EnFloormas_Init,
     (ActorFunc)EnFloormas_Destroy,
     (ActorFunc)EnFloormas_Update,
-    (ActorFunc)EnFloormas_Draw
+    (ActorFunc)EnFloormas_Draw,
 };
 */
 

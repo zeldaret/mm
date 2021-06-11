@@ -19,7 +19,7 @@ const ActorInit En_Guruguru_InitVars = {
     (ActorFunc)EnGuruguru_Init,
     (ActorFunc)EnGuruguru_Destroy,
     (ActorFunc)EnGuruguru_Update,
-    (ActorFunc)EnGuruguru_Draw
+    (ActorFunc)EnGuruguru_Draw,
 };
 */
 

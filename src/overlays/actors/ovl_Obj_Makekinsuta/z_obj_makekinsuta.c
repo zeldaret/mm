@@ -18,7 +18,7 @@ const ActorInit Obj_Makekinsuta_InitVars = {
     (ActorFunc)ObjMakekinsuta_Init,
     (ActorFunc)ObjMakekinsuta_Destroy,
     (ActorFunc)ObjMakekinsuta_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

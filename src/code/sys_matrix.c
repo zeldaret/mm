@@ -2,7 +2,7 @@
 #include <global.h>
 
 void Matrix_Init(GameState* state) {
-    sMatrixStack = (MtxF *)THA_AllocEndAlign16(&state->heap, 0x500);
+    sMatrixStack = (MtxF*)THA_AllocEndAlign16(&state->heap, 0x500);
     sCurrentMatrix = sMatrixStack;
 }
 
@@ -11,7 +11,6 @@ void Matrix_Push(void) {
 
     sCurrentMatrix++;
     Matrix_MtxFCopy(sCurrentMatrix, prev);
-    
 }
 
 void Matrix_Pop(void) {

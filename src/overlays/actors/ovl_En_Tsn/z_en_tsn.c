@@ -19,7 +19,7 @@ const ActorInit En_Tsn_InitVars = {
     (ActorFunc)EnTsn_Init,
     (ActorFunc)EnTsn_Destroy,
     (ActorFunc)EnTsn_Update,
-    (ActorFunc)EnTsn_Draw
+    (ActorFunc)EnTsn_Draw,
 };
 */
 

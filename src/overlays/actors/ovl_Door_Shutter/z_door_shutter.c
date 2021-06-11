@@ -18,7 +18,7 @@ const ActorInit Door_Shutter_InitVars = {
     (ActorFunc)DoorShutter_Init,
     (ActorFunc)DoorShutter_Destroy,
     (ActorFunc)DoorShutter_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

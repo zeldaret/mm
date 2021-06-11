@@ -82,7 +82,6 @@ void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
     }
 }
 
-
 void __osMallocCleanup(Arena* arena) {
     bzero(arena, sizeof(*arena));
 }
@@ -97,11 +96,11 @@ void* __osMalloc(Arena* arena, u32 size) {
     void* alloc;
     u32 blockSize;
     alloc = NULL;
-    
+
     size = ALIGN16(size);
     ArenaImpl_Lock(arena);
     iter = arena->head;
-    
+
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {
             ArenaNode* next;
@@ -133,7 +132,6 @@ void* __osMalloc(Arena* arena, u32 size) {
 
     return alloc;
 }
-
 
 void* __osMallocR(Arena* arena, u32 size) {
     ArenaNode* iter;

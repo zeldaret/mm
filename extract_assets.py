@@ -37,9 +37,11 @@ def ExtractFunc(fullPath):
     basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
     outSourcePath = outPath
 
-    isScene = fullPath.startswith("assets/xml/scenes/")
-    if isScene:
-        objectName += "_scene"
+    ## MM doesn't have _scene prefixed files, so this check is not necessary.
+    ## This _may_ change in the future, so I wont delete this for now.
+    #isScene = fullPath.startswith("assets/xml/scenes/")
+    #if isScene:
+    #    objectName += "_scene"
 
     if not globalForce:
         cFile = os.path.join(outPath, objectName + ".c")

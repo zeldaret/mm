@@ -19,7 +19,7 @@ const ActorInit En_Sc_Ruppe_InitVars = {
     (ActorFunc)EnScRuppe_Init,
     (ActorFunc)EnScRuppe_Destroy,
     (ActorFunc)EnScRuppe_Update,
-    (ActorFunc)EnScRuppe_Draw
+    (ActorFunc)EnScRuppe_Draw,
 };
 */
 

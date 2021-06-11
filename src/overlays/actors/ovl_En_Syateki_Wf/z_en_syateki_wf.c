@@ -19,7 +19,7 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Init,
     (ActorFunc)EnSyatekiWf_Destroy,
     (ActorFunc)EnSyatekiWf_Update,
-    (ActorFunc)EnSyatekiWf_Draw
+    (ActorFunc)EnSyatekiWf_Draw,
 };
 */
 

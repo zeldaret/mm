@@ -19,7 +19,7 @@ const ActorInit Obj_Jgame_Light_InitVars = {
     (ActorFunc)ObjJgameLight_Init,
     (ActorFunc)ObjJgameLight_Destroy,
     (ActorFunc)ObjJgameLight_Update,
-    (ActorFunc)ObjJgameLight_Draw
+    (ActorFunc)ObjJgameLight_Draw,
 };
 */
 

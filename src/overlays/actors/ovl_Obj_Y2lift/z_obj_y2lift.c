@@ -19,7 +19,7 @@ const ActorInit Obj_Y2lift_InitVars = {
     (ActorFunc)ObjY2lift_Init,
     (ActorFunc)ObjY2lift_Destroy,
     (ActorFunc)ObjY2lift_Update,
-    (ActorFunc)ObjY2lift_Draw
+    (ActorFunc)ObjY2lift_Draw,
 };
 */
 

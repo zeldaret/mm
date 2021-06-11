@@ -19,7 +19,7 @@ const ActorInit En_Tanron5_InitVars = {
     (ActorFunc)EnTanron5_Init,
     (ActorFunc)EnTanron5_Destroy,
     (ActorFunc)EnTanron5_Update,
-    (ActorFunc)EnTanron5_Draw
+    (ActorFunc)EnTanron5_Draw,
 };
 */
 

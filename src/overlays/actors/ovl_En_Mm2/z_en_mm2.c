@@ -19,7 +19,7 @@ const ActorInit En_Mm2_InitVars = {
     (ActorFunc)EnMm2_Init,
     (ActorFunc)EnMm2_Destroy,
     (ActorFunc)EnMm2_Update,
-    (ActorFunc)EnMm2_Draw
+    (ActorFunc)EnMm2_Draw,
 };
 */
 

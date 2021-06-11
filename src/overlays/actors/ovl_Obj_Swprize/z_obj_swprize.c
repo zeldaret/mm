@@ -18,7 +18,7 @@ const ActorInit Obj_Swprize_InitVars = {
     (ActorFunc)ObjSwprize_Init,
     (ActorFunc)ObjSwprize_Destroy,
     (ActorFunc)ObjSwprize_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

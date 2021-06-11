@@ -19,7 +19,7 @@ const ActorInit Bg_Fu_Mizu_InitVars = {
     (ActorFunc)BgFuMizu_Init,
     (ActorFunc)BgFuMizu_Destroy,
     (ActorFunc)BgFuMizu_Update,
-    (ActorFunc)BgFuMizu_Draw
+    (ActorFunc)BgFuMizu_Draw,
 };
 */
 

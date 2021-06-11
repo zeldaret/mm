@@ -19,7 +19,7 @@ const ActorInit En_Dekunuts_InitVars = {
     (ActorFunc)EnDekunuts_Init,
     (ActorFunc)EnDekunuts_Destroy,
     (ActorFunc)EnDekunuts_Update,
-    (ActorFunc)EnDekunuts_Draw
+    (ActorFunc)EnDekunuts_Draw,
 };
 */
 

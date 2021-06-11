@@ -19,7 +19,7 @@ const ActorInit Obj_Iceblock_InitVars = {
     (ActorFunc)ObjIceblock_Init,
     (ActorFunc)ObjIceblock_Destroy,
     (ActorFunc)ObjIceblock_Update,
-    (ActorFunc)ObjIceblock_Draw
+    (ActorFunc)ObjIceblock_Draw,
 };
 */
 

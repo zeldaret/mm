@@ -19,7 +19,7 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Init,
     (ActorFunc)ObjJgGakki_Destroy,
     (ActorFunc)ObjJgGakki_Update,
-    (ActorFunc)ObjJgGakki_Draw
+    (ActorFunc)ObjJgGakki_Draw,
 };
 */
 

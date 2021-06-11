@@ -19,7 +19,7 @@ const ActorInit En_Firefly_InitVars = {
     (ActorFunc)EnFirefly_Init,
     (ActorFunc)EnFirefly_Destroy,
     (ActorFunc)EnFirefly_Update,
-    (ActorFunc)EnFirefly_Draw
+    (ActorFunc)EnFirefly_Draw,
 };
 */
 

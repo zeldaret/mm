@@ -19,7 +19,7 @@ const ActorInit Obj_Ocarinalift_InitVars = {
     (ActorFunc)ObjOcarinalift_Init,
     (ActorFunc)ObjOcarinalift_Destroy,
     (ActorFunc)ObjOcarinalift_Update,
-    (ActorFunc)ObjOcarinalift_Draw
+    (ActorFunc)ObjOcarinalift_Draw,
 };
 */
 

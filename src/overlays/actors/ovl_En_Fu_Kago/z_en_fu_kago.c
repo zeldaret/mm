@@ -19,7 +19,7 @@ const ActorInit En_Fu_Kago_InitVars = {
     (ActorFunc)EnFuKago_Init,
     (ActorFunc)EnFuKago_Destroy,
     (ActorFunc)EnFuKago_Update,
-    (ActorFunc)EnFuKago_Draw
+    (ActorFunc)EnFuKago_Draw,
 };
 */
 

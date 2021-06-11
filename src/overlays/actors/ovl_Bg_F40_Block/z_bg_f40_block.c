@@ -19,7 +19,7 @@ const ActorInit Bg_F40_Block_InitVars = {
     (ActorFunc)BgF40Block_Init,
     (ActorFunc)BgF40Block_Destroy,
     (ActorFunc)BgF40Block_Update,
-    (ActorFunc)BgF40Block_Draw
+    (ActorFunc)BgF40Block_Draw,
 };
 */
 

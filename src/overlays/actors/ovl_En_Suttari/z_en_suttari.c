@@ -19,7 +19,7 @@ const ActorInit En_Suttari_InitVars = {
     (ActorFunc)EnSuttari_Init,
     (ActorFunc)EnSuttari_Destroy,
     (ActorFunc)EnSuttari_Update,
-    (ActorFunc)EnSuttari_Draw
+    (ActorFunc)EnSuttari_Draw,
 };
 */
 

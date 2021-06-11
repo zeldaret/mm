@@ -19,7 +19,7 @@ const ActorInit En_Cow_InitVars = {
     (ActorFunc)EnCow_Init,
     (ActorFunc)EnCow_Destroy,
     (ActorFunc)EnCow_Update,
-    (ActorFunc)EnCow_Draw
+    (ActorFunc)EnCow_Draw,
 };
 */
 

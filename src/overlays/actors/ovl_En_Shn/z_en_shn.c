@@ -19,7 +19,7 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Init,
     (ActorFunc)EnShn_Destroy,
     (ActorFunc)EnShn_Update,
-    (ActorFunc)EnShn_Draw
+    (ActorFunc)EnShn_Draw,
 };
 */
 

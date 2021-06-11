@@ -19,7 +19,7 @@ const ActorInit En_Ot_InitVars = {
     (ActorFunc)EnOt_Init,
     (ActorFunc)EnOt_Destroy,
     (ActorFunc)EnOt_Update,
-    (ActorFunc)EnOt_Draw
+    (ActorFunc)EnOt_Draw,
 };
 */
 

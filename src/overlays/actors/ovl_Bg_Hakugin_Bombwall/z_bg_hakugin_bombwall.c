@@ -19,7 +19,7 @@ const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     (ActorFunc)BgHakuginBombwall_Init,
     (ActorFunc)BgHakuginBombwall_Destroy,
     (ActorFunc)BgHakuginBombwall_Update,
-    (ActorFunc)BgHakuginBombwall_Draw
+    (ActorFunc)BgHakuginBombwall_Draw,
 };
 */
 

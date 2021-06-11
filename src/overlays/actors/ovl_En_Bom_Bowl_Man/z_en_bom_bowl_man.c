@@ -19,7 +19,7 @@ const ActorInit En_Bom_Bowl_Man_InitVars = {
     (ActorFunc)EnBomBowlMan_Init,
     (ActorFunc)EnBomBowlMan_Destroy,
     (ActorFunc)EnBomBowlMan_Update,
-    (ActorFunc)EnBomBowlMan_Draw
+    (ActorFunc)EnBomBowlMan_Draw,
 };
 */
 

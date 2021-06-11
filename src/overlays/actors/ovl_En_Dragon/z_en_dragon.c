@@ -19,7 +19,7 @@ const ActorInit En_Dragon_InitVars = {
     (ActorFunc)EnDragon_Init,
     (ActorFunc)EnDragon_Destroy,
     (ActorFunc)EnDragon_Update,
-    (ActorFunc)EnDragon_Draw
+    (ActorFunc)EnDragon_Draw,
 };
 */
 
