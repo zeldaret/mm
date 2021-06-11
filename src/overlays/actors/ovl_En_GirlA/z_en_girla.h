@@ -12,12 +12,12 @@ typedef void (*EnGirlAUnkFunc2)(GlobalContext*, struct EnGirlA*);
 
 typedef struct ShopItemEntry {
     /* 0x00 */ s16 objectId;
-    /* 0x02 */ s16 giDrawId;
+    /* 0x02 */ s16 getItemDrawId;
     /* 0x04 */ EnGirlADrawFunc drawFunc;
     /* 0x08 */ s16 params;
     /* 0x0A */ u16 descriptionTextId;
     /* 0x0C */ u16 choiceTextId;
-    /* 0x10 */ s32 unk10;
+    /* 0x10 */ s32 getItemId;
     /* 0x14 */ EnGirlAUnkFunc unk14Func;
     /* 0x18 */ EnGirlAUnkFunc2 unk18Func;
     /* 0x1C */ EnGirlAUnkFunc2 unk1CFunc;
@@ -27,28 +27,23 @@ typedef struct EnGirlA {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk144[0x44];
     /* 0x188 */ EnGirlAActionFunc actionFunc;
-    /* 0x18C */ s8 unk18C;
-    /* 0x18D */ char unk18D[0x3];
+    /* 0x18C */ s8 objIndex;
     /* 0x190 */ EnGirlAActionFunc mainActionFunc;
     /* 0x194 */ s32 unk194;
-    /* 0x198 */ u16 unk198;
-    /* 0x19A */ char unk19A[0x2];
-    /* 0x19C */ s32 unk19C;
+    /* 0x198 */ u16 choiceTextId;
+    /* 0x19C */ s32 getItemId;
     /* 0x1A0 */ s16 unk1A0;
-    /* 0x1A2 */ char unk1A4[0x2];
     /* 0x1A4 */ EnGirlAUnkFunc2 unk1A4Func;
     /* 0x1A8 */ EnGirlAUnkFunc2 unk1A8Func;
     /* 0x1AC */ s16 unk1AC;
     /* 0x1AE */ s16 unk1AE;
-    /* 0x1B0 */ s16 unk1B0;
-    /* 0x1B2 */ char unk1B2[0x2];
+    /* 0x1B0 */ s16 rotY;
     /* 0x1B4 */ EnGirlAUnkFunc unk1B4Func;
     /* 0x1B8 */ EnGirlAUnkFunc2 unk1B8Func;
     /* 0x1BC */ EnGirlAUnkFunc2 unk1BCFunc;
     /* 0x1C0 */ s16 unk1C0;
-    /* 0x1C2 */ s16 unk1C2;
-    /* 0x1C4 */ s16 unk1C4;
-    /* 0x1C6 */ char unk1C6[0x2];
+    /* 0x1C2 */ s16 itemParams;
+    /* 0x1C4 */ s16 getItemDrawId;
     /* 0x1C8 */ EnGirlADrawFunc drawFunc;
 } EnGirlA; // size = 0x1CC
 
