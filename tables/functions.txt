@@ -3367,7 +3367,7 @@
     0x8018019C:("SysMatrix_StatePush",),
     0x801801CC:("SysMatrix_StatePop",),
     0x801801E8:("SysMatrix_CopyCurrentState",),
-    0x8018020C:("Matrix_Put",),
+    0x8018020C:("SysMatrix_SetCurrentState",),
     0x80180234:("SysMatrix_GetCurrentState",),
     0x80180244:("SysMatrix_InsertMatrix",),
     0x8018029C:("SysMatrix_InsertTranslation",),

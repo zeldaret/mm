@@ -19,7 +19,7 @@ void SysMatrix_StatePop(void) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_CopyCurrentState.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/Matrix_Put.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_SetCurrentState.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_GetCurrentState.asm")
 
