@@ -445,7 +445,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     this->previousBankValue = (s16)(gSaveContext.roomInf[127][0] & 0xFFFF);
                     gSaveContext.roomInf[127][0] =
                         (gSaveContext.roomInf[127][0] & 0xFFFF0000) | (((gSaveContext.roomInf[127][0] & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) - this->serviceFee);
-                    func_801159EC((s16)globalCtx->msgCtx.bankRupeesSelected, &gSaveContext);
+                    func_801159EC(globalCtx->msgCtx.bankRupeesSelected);
                 }
             } else {
                 func_8019F230();
