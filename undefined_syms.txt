@@ -127,21 +127,6 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 gFramebuffer1 = 0x80000500;
 D_80025D00 = 0x80025D00;
 
-// TODO remove dmadata is in
-
-dmadata = 0x8009F8B0;
-
-/*
-gGfxSPTaskYieldBuffer = 0x80208EA0;
-EnAObj_Init = 0x800A5AC0;
-D_801E3FA0 = 0x801E3FA0;
-main = 0x80174BF0;
-Padmgr_GetInput2 = 0x80175FD4;
-graphOSThread = 0x801F8608;
-*/
-
-
-
 // Segmented Addresses
 
 // segment 0x01
