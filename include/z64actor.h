@@ -358,6 +358,15 @@ typedef struct {
     /* 0x14 */ f32 morphFrames;
 } ActorAnimationEntry; // size = 0x18
 
+typedef struct {
+    /* 0x00 */ AnimationHeader* animationSeg;
+    /* 0x04 */ f32 playbackSpeed;
+    /* 0x08 */ s16 frame;
+    /* 0x0A */ s16 frameCount;
+    /* 0x0C */ u8 mode;
+    /* 0x0E */ s16 transitionRate;
+} ActorAnimationEntryS; // size = 0x10
+
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
     /* 0x001 */ ACTOR_EN_TEST,

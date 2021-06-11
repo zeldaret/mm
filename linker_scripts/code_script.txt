@@ -913,9 +913,9 @@ SECTIONS
     ovl_En_Pametfrog : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.text)
-        build/asm/overlays/ovl_En_Pametfrog_data.o(.data)
+        build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.data)
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.rodata)
-        build/asm/overlays/ovl_En_Pametfrog_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -1827,9 +1827,9 @@ SECTIONS
     ovl_En_In : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_In/z_en_in.o(.text)
-        build/asm/overlays/ovl_En_In_data.o(.data)
+        build/src/overlays/actors/ovl_En_In/z_en_in.o(.data)
         build/src/overlays/actors/ovl_En_In/z_en_in.o(.rodata)
-        build/asm/overlays/ovl_En_In_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_In/z_en_in_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
