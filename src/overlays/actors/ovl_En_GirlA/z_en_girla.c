@@ -496,7 +496,7 @@ void func_80864744(GlobalContext *globalCtx, EnGirlA *this) {
 }
 
 s32 func_80864760(EnGirlA *this, GlobalContext* globalCtx) {
-    return 0;
+    return false;
 }
 
 void func_80864774(EnGirlA *this, GlobalContext *globalCtx) {
@@ -509,8 +509,8 @@ void func_80864774(EnGirlA *this, GlobalContext *globalCtx) {
         this->actor.textId = enGirlAUnkStruct->descriptionTextId;
         this->unk198 = enGirlAUnkStruct->choiceTextId;
 
-        //! func_80864760 always returns 0
-        if (func_80864760(this, globalCtx) == 0) {
+        // func_80864760 always returns false
+        if (!func_80864760(this, globalCtx)) {
             func_808646F4(globalCtx, this);
         }
 
