@@ -201,8 +201,8 @@ diff-init: all
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
-	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
 	cp $(ROM) expected/$(ROM)
+	cp $(ROMC) expected/$(ROMC)
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
