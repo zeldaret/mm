@@ -49,6 +49,7 @@ void func_808644A4(GlobalContext* globalCtx, EnGirlA* this);
 void func_80864558(GlobalContext* globalCtx, EnGirlA* this);
 void func_808645A4(GlobalContext* globalCtx, EnGirlA* this);
 void func_80864658(GlobalContext* globalCtx, EnGirlA* this);
+
 void func_808646A4(GlobalContext* globalCtx, EnGirlA* this);
 
 const ActorInit En_GirlA_InitVars = {

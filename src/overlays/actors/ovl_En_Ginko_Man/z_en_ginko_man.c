@@ -424,7 +424,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
-                } else if (D_801C1E2C[CUR_UPG_VALUE(4)] < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
+                } else if (D_801C1E2C[CUR_UPG_VALUE(0x4)] < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
                     play_sound(0x4806); // NA_SE_SY_ERROR
                     func_801518B0(globalCtx, 0x475, &this->actor);
@@ -532,7 +532,7 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx, CUR_UPG_VALUE(4) + 8, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, CUR_UPG_VALUE(0x4) + 8, 500.0f, 100.0f);
         } else {
             func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
         }
