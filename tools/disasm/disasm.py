@@ -1041,6 +1041,8 @@ def get_overlay_sections(vram, overlay):
 
 # 
 
+print("Setting Up")
+
 files_spec = None
 with open("tools/disasm/files.txt", "r") as infile:
     files_spec = ast.literal_eval(infile.read())
@@ -1088,12 +1090,14 @@ for segment in files_spec:
             section.append(binary[section[0] - segment_start:section[1] - segment_start]) # section[4]
             section.append(None) # section[5]
 
+print(f"Finding Symbols")
+
 # Find symbols for each segment
 for segment in files_spec:
     if segment[2] == 'makerom':
         continue
 
-    print(f"Finding symbols in {segment[0]}")
+    # print(f"Finding symbols in {segment[0]}")
 
     # vram segment start
     if segment[3][0][0] not in variables_ast:
@@ -1137,6 +1141,8 @@ for segment in files_spec:
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+
+print("Disassembling Segments")
 
 # Textual disassembly for each segment
 for segment in files_spec:
@@ -1258,9 +1264,9 @@ glabel {variables_ast[0x8009F8B0][0]}
         continue
 
     for section in segment[3]:
-        if section[0] == section[1] or (section[2] != 'bss' and len(section[4]) == 0):
+        if (section[0] == section[1] and section[2] != 'reloc') or (section[2] != 'bss' and len(section[4]) == 0):
             continue
-        print(f"Disassembling {segment[0]} .{section[2]}")
+        # print(f"Disassembling {segment[0]} .{section[2]}")
         if section[2] == 'text':
             data_regions = []
             if section[3] is not None:

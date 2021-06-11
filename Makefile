@@ -147,7 +147,7 @@ endif
 compressed: $(ROMC)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROMC)
-	@md5sum -c checksum_compressed.md5
+	@md5sum -c checksum.md5
 endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
@@ -189,6 +189,7 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
+#	python3 extract_assets.py
 
 init:
 	python3 -m pip install -r requirements.txt
