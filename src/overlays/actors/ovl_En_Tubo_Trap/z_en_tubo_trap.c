@@ -284,7 +284,12 @@ void func_809311C4(EnTuboTrap* this, GlobalContext* globalCtx) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, 0x3037); // NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
+    //! @bug should be NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
+    // In OoT, NA_SE_EN_TUBOOCK_FLY is the value 0x3837
+    // But in MM, certain sfxIds got reordered and devs forgot to update:
+    // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
+    // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);

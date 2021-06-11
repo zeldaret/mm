@@ -117,7 +117,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 if (this->actor.params == 1) {
                     func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x38C0); // NA_SE_EN_OCTAROCK_ROCK
+                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
                 Actor_MarkForDeath(&this->actor);
             }
