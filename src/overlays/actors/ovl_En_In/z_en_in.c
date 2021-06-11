@@ -216,7 +216,7 @@ void func_808F32A0(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
-    if ((this->colliderCylinder.base.acFlags & 2)) {
+    if (this->colliderCylinder.base.acFlags & 2) {
         this->colliderCylinder.base.acFlags &= ~2;
     }
     return 0;
@@ -652,39 +652,39 @@ s32 func_808F43E0(EnIn* this) {
 
 s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     u16 textId = this->actor.textId;
-    s32 ret = 1;
+    s32 ret = true;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 pad[2];
 
     switch (textId) {
         case 0x34AF:
             func_800E8EA0(globalCtx, &this->actor, 0x34B0);
-            ret = 0;
+            ret = false;
             break;
         case 0x34A9:
             func_808F4108(this, globalCtx, 0x34AA);
             gSaveContext.weekEventReg[63] |= 0x40;
-            ret = 0;
+            ret = false;
             break;
         case 0x34AA:
             func_808F4108(this, globalCtx, 0x34AB);
-            ret = 0;
+            ret = false;
             break;
         case 0x34AB:
             func_808F4108(this, globalCtx, 0x34AC);
-            ret = 0;
+            ret = false;
             break;
         case 0x34AC:
             func_808F4108(this, globalCtx, 0x34AD);
-            ret = 0;
+            ret = false;
             break;
         case 0x34AD:
             func_800E8EA0(globalCtx, &this->actor, 0x34AE);
-            ret = 0;
+            ret = false;
             break;
         case 0x34B1:
             func_800E8EA0(globalCtx, &this->actor, 0x34B2);
-            ret = 0;
+            ret = false;
             break;
         default:
             break;
@@ -696,47 +696,47 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3458:
                     gSaveContext.weekEventReg[15] |= 8;
                     func_800E8EA0(globalCtx, &this->actor, 0x3459);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3459:
                     func_800E8EA0(globalCtx, &this->actor, 0x345A);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x345A:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x345B:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x345C:
                     func_800E8EA0(globalCtx, &this->actor, 0x345D);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x345D:
                     func_800E8EA0(globalCtx, &this->actor, 0x345E);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x345E:
                     func_800E8EA0(globalCtx, &this->actor, 0x345F);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x345F:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3460:
                     func_800E8EA0(globalCtx, &this->actor, 0x3461);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3461:
                     func_800E8EA0(globalCtx, &this->actor, 0x3462);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3462:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
             }
             break;
@@ -745,15 +745,15 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3463:
                     gSaveContext.weekEventReg[15] |= 16;
                     func_800E8EA0(globalCtx, &this->actor, 0x3464);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3464:
                     func_800E8EA0(globalCtx, &this->actor, 0x3465);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3465:
                     func_800E8EA0(globalCtx, &this->actor, 0x3466);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
@@ -763,35 +763,35 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                                 this->actionFunc = func_808F3C40;
                                 func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
-                                ret = 1;
+                                ret = true;
                             } else {
                                 func_800E8EA0(globalCtx, &this->actor, 0x3469);
-                                ret = 0;
+                                ret = false;
                             }
                         } else {
                             play_sound(0x4806);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
-                            ret = 0;
+                            ret = false;
                         }
                     } else {
                         func_8019F230();
                         func_800E8EA0(globalCtx, &this->actor, 0x3467);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x3467:
                 case 0x3468:
                 case 0x3469:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x346B:
                     func_800E8EA0(globalCtx, &this->actor, 0x346C);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x346C:
                     func_800E8EA0(globalCtx, &this->actor, 0x3466);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x346A:
                     this->actionFunc = func_808F5A94;
@@ -803,25 +803,25 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             switch (textId) {
                 case 0x346E:
                     func_808F4108(this, globalCtx, 0x346F);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3470:
                     func_800E8EA0(globalCtx, &this->actor, 0x3471);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3483:
                     func_800E8EA0(globalCtx, &this->actor, 0x3471);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3471:
                     func_808F4150(globalCtx, this, arg2, msgCtx);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3472:
                     func_808F43E0(this);
                     gSaveContext.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3473:
                     gSaveContext.weekEventReg[56] &= (u8)~8;
@@ -838,18 +838,18 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3478:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4150(globalCtx, this, arg2, msgCtx);
-                        ret = 0;
+                        ret = false;
                     } else {
                         func_8019F230();
                         gSaveContext.weekEventReg[56] &= (u8)~8;
                         func_808F4108(this, globalCtx, 0x3479);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x347B:
                     func_808F4108(this, globalCtx, 0x347C);
                     gSaveContext.weekEventReg[56] &= (u8)~8;
-                    ret = 0;
+                    ret = false;
                     break;
             }
             break;
@@ -859,16 +859,16 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F4108(this, globalCtx, 0x346E);
                     gSaveContext.weekEventReg[56] |= 4;
                     gSaveContext.weekEventReg[56] |= 8;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x346F:
                     func_808F4108(this, globalCtx, 0x3470);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3482:
                     func_808F4108(this, globalCtx, 0x3483);
                     gSaveContext.weekEventReg[56] |= 8;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3484:
                     func_80151BB4(globalCtx, 0x11);
@@ -878,29 +878,29 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3474:
                     func_808F4108(this, globalCtx, 0x3475);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3476:
                     func_800E8EA0(globalCtx, &this->actor, 0x3477);
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3477:
                     gSaveContext.weekEventReg[56] |= 8;
                     func_808F4108(this, globalCtx, 0x3478);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x347A:
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
                     if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x347E);
-                        ret = 0;
+                        ret = false;
                     } else {
                         gSaveContext.weekEventReg[56] |= 8;
                         func_808F4108(this, globalCtx, 0x347B);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x347E:
@@ -908,45 +908,45 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
                         func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
-                        ret = 1;
+                        ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x347F);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x347F:
                     func_800E8EA0(globalCtx, &this->actor, 0x3480);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3480:
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3479:
                     func_808F43E0(this);
                     func_808F35D8(this, globalCtx);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
                     func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3481:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x347D:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
                     func_80151BB4(globalCtx, 0x2F);
-                    ret = 1;
+                    ret = true;
                     break;
             }
             break;
@@ -955,15 +955,15 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3486:
                     func_800E8EA0(globalCtx, &this->actor, 0x3487);
                     gSaveContext.weekEventReg[16] |= 1;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3487:
                     func_800E8EA0(globalCtx, &this->actor, 0x3488);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3488:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3489:
                     func_80151BB4(globalCtx, 0x11);
@@ -973,15 +973,15 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x348B:
                     func_800E8EA0(globalCtx, &this->actor, 0x348C);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x348C:
                     func_800E8EA0(globalCtx, &this->actor, 0x348D);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x348D:
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
             }
             break;
@@ -996,16 +996,16 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x34B3:
                     func_800E8EA0(globalCtx, &this->actor, 0x348F);
                     gSaveContext.weekEventReg[16] |= 2;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3493:
                     func_800E8EA0(globalCtx, &this->actor, 0x3494);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x348F:
                 case 0x3494:
                     func_800E8EA0(globalCtx, &this->actor, 0x3490);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
@@ -1015,20 +1015,20 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                                 this->actionFunc = func_808F3C40;
                                 func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
-                                ret = 1;
+                                ret = true;
                             } else {
                                 func_800E8EA0(globalCtx, &this->actor, 0x3469);
-                                ret = 0;
+                                ret = false;
                             }
                         } else {
                             play_sound(0x4806);
                             func_800E8EA0(globalCtx, &this->actor, 0x3468);
-                            ret = 0;
+                            ret = false;
                         }
                     } else {
                         func_8019F230();
                         func_800E8EA0(globalCtx, &this->actor, 0x3491);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x3492:
@@ -1049,22 +1049,22 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F4108(this, globalCtx, 0x3496);
                     gSaveContext.weekEventReg[16] |= 4;
                     gSaveContext.weekEventReg[56] |= 8;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3497:
                     func_808F4108(this, globalCtx, 0x3498);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x34A4:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x34A5:
                     func_808F4108(this, globalCtx, 0x34A6);
                     gSaveContext.weekEventReg[56] |= 8;
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3473:
                     gSaveContext.weekEventReg[56] &= (u8)~8;
@@ -1072,7 +1072,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3474:
                     func_800E8EA0(globalCtx, &this->actor, 0x3475);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3475:
                     SET_FLAGS_START_RACE;
@@ -1087,71 +1087,71 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
                     if (gSaveContext.inventory.items[gItemSlots[59]] == 59) {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A1);
-                        ret = 0;
+                        ret = false;
                     } else {
                         gSaveContext.weekEventReg[56] |= 8;
                         func_808F4108(this, globalCtx, 0x349E);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
                     func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x34A0:
                     this->actionFunc = func_808F5A34;
                     func_80151BB4(globalCtx, 0x11);
                     func_80151BB4(globalCtx, 0x2F);
                     func_808F43E0(this);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x34A1:
                     func_808F35D8(this, globalCtx);
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
                         func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
-                        ret = 1;
+                        ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A2);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x34A2:
                     func_800E8EA0(globalCtx, &this->actor, 0x34A3);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x34A3:
                     func_808F43E0(this);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x3499:
                     func_800E8EA0(globalCtx, &this->actor, 0x349A);
                     func_808F30B0(&this->skelAnime, 1);
                     func_808F30B0(&this->unk4A4->skelAnime, 7);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x349A:
                     func_800E8EA0(globalCtx, &this->actor, 0x349B);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x349B:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4270(globalCtx, this, arg2, msgCtx, 1);
-                        ret = 0;
+                        ret = false;
                     } else {
                         func_8019F230();
                         func_800E8EA0(globalCtx, &this->actor, 0x349C);
-                        ret = 0;
+                        ret = false;
                     }
                     break;
                 case 0x349C:
                     func_808F43E0(this);
                     func_808F35D8(this, globalCtx);
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
             }
             break;
@@ -1159,27 +1159,27 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             switch (textId) {
                 case 0x3496:
                     func_808F4108(this, globalCtx, 0x3497);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3498:
                 case 0x34A6:
                     func_800E8EA0(globalCtx, &this->actor, 0x3471);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3471:
                     func_808F4270(globalCtx, this, arg2, msgCtx, 0);
-                    ret = 0;
+                    ret = false;
                     break;
                 case 0x3472:
                     func_808F43E0(this);
                     gSaveContext.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
-                    ret = 1;
+                    ret = true;
                     break;
                 case 0x349E:
                     func_808F4108(this, globalCtx, 0x349F);
                     gSaveContext.weekEventReg[56] &= (u8)~8;
-                    ret = 0;
+                    ret = false;
                     break;
             }
             break;
@@ -1189,18 +1189,18 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
 
 s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     s32 pad;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 2:
             func_808F4054(globalCtx, this, arg2, this->actor.textId);
-            ret = 1;
+            ret = true;
             break;
         case 4:
         case 5:
             if (func_80147624(globalCtx) && func_808F4414(globalCtx, this, arg2)) {
                 func_801477B4(globalCtx);
-                ret = 1;
+                ret = true;
             }
             break;
     }
@@ -1259,10 +1259,10 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     if (yawDiffA >= 0x4300) {
         return 0;
     }
-    if (this->actor.xyzDistToPlayerSq > 25600.0f && !this->actor.isTargeted) {
+    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isTargeted) {
         return 0;
     }
-    if (this->actor.xyzDistToPlayerSq <= 6400.0f) {
+    if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
         if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
             this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
         }
