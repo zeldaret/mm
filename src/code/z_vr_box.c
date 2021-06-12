@@ -38,7 +38,7 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
 
 #ifdef NON_MATCHING
 // Matches besides rodata, since rodata is not merged into the asm in code files yet.
-void func_801431E8(GameState* state, SkyboxContext* skyboxCtx, s16 skyType) {
+void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
     GlobalContext* globalCtx = (GlobalContext*)state;
     u32 size;
     void* offset;
@@ -139,7 +139,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
     }
 }
 
-void func_801434E4(GameState* state, SkyboxContext* skyboxCtx, s16 skyType) {
+void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
     skyboxCtx->skyboxShouldDraw = 0;
     skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
 

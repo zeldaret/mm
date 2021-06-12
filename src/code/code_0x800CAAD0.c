@@ -5,7 +5,7 @@
 // Perhaps it is called something like z_bgcheck_attach.c
 // The functions will use the BgCheck2 prefix for now.
 
-void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* actor) {
+void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 index, Actor* actor) {
     MtxF prevMatrix;
     MtxF prevMatrixInv;
     MtxF currMatrix;
@@ -40,7 +40,7 @@ void BgCheck2_UpdateActorPosition(CollisionContext* bgCtxt, s32 index, Actor* ac
     actor->world.pos = newPos;
 }
 
-void BgCheck2_UpdateActorYRotation(CollisionContext* bgCtxt, s32 index, Actor* actor) {
+void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 index, Actor* actor) {
     s16 angleChange;
 
     if (BgCheck_IsActorMeshIndexValid(index) == 0) {
@@ -57,7 +57,7 @@ void BgCheck2_UpdateActorYRotation(CollisionContext* bgCtxt, s32 index, Actor* a
     actor->world.rot.y += angleChange;
 }
 
-void BgCheck2_AttachToMesh(CollisionContext* bgCtxt, Actor* actor, s32 index) {
+void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index) {
     DynaPolyActor* meshActor;
 
     if (BgCheck_IsActorMeshIndexValid(index) == 0) {
@@ -77,7 +77,7 @@ void BgCheck2_AttachToMesh(CollisionContext* bgCtxt, Actor* actor, s32 index) {
     }
 }
 
-u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* bgCtxt, s32 index, Actor* actor) {
+u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 index, Actor* actor) {
     u32 wasUpdated = 0;
     DynaPolyActor* meshActor;
 

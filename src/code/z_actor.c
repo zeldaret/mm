@@ -147,7 +147,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5040.asm")
 
-void Actor_TargetContextInit(TargetContext* targetCtxt, Actor* actor, GlobalContext* globalCtx) {
+void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
     targetCtxt->unk90 = NULL;
     targetCtxt->unk8C = NULL;
     targetCtxt->unk3C = NULL;
@@ -235,14 +235,14 @@ void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCtxt) {
+void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
     titleCtxt->fadeOutDelay = 0;
     titleCtxt->fadeInDelay = 0;
     titleCtxt->color = 0;
     titleCtxt->alpha = 0;
 }
 
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCtxt, u32 texture, s16 param_4, s16 param_5,
+void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4, s16 param_5,
                            u8 param_6, u8 param_7) {
     titleCtxt->texture = texture;
     titleCtxt->unk4 = param_4;
@@ -255,7 +255,7 @@ void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCtxt
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Nop800B5E50.asm")
 
-void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCtxt) {
+void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
     if (DECR(titleCtxt->fadeInDelay) == 0) {
         if (DECR(titleCtxt->fadeOutDelay) == 0) {
             Math_StepToS(&titleCtxt->alpha, 0, 30);

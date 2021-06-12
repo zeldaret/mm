@@ -24,7 +24,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     return objectCtx->num - 1;
 }
 
-void Object_InitBank(GameState* state, ObjectContext* objectCtx) {
+void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
     GlobalContext* globalCtx = (GlobalContext*)state;
     s32 pad;
     u32 spaceSize;
@@ -328,7 +328,7 @@ void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
 // Init function for the transition system.
-void Transition_Init(GameState* state, TransitionContext* transitionCtx) {
+void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx) {
     transitionCtx->nbTransitionActors = 0;
 }
 

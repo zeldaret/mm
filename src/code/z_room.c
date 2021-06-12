@@ -63,7 +63,7 @@ void Room_DrawType1Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     }
 }
 
-void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtxt) {
+void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
     s32 i;
     roomCtxt->currRoom.num = -1;
     roomCtxt->currRoom.segment = NULL;
@@ -77,7 +77,7 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtxt) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_AllocateAndLoad.asm")
 
 #ifdef NON_MATCHING
-s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtxt, s32 index) {
+s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
     u32 size;
 
     // XXX: this should use a branch-likely
@@ -106,7 +106,7 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtxt, s3
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_StartRoomTransition.asm")
 #endif
 
-s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtxt) {
+s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
     if (roomCtxt->unk31 == 1) {
         if (!osRecvMesg(&roomCtxt->loadQueue, NULL, OS_MESG_NOBLOCK)) {
             roomCtxt->unk31 = 0;
@@ -144,7 +144,7 @@ void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags) {
     return;
 }
 
-void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtxt) {
+void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtx) {
     roomCtxt->prevRoom.num = -1;
     roomCtxt->prevRoom.segment = NULL;
     func_800BA798(globalCtx, &globalCtx->actorCtx);

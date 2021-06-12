@@ -63,11 +63,11 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
     *gfx = _gfx;
 }
 
-void Game_Nop80173534(GameState* ctxt) {
+void Game_Nop80173534(GameState* gamestate) {
     ;
 }
 
-void GameState_Draw(GameState* ctxt, GraphicsContext* gfxCtx) {
+void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
     Gfx* _polyOpa;
     // Unused vars impact regalloc
@@ -120,11 +120,11 @@ void func_801736DC(GraphicsContext* gfxCtx) {
     gfxCtx->polyOpa.p = nextDisplayList;
 }
 
-void Game_UpdateInput(GameState* ctxt) {
+void Game_UpdateInput(GameState* gamestate) {
     Padmgr_GetInput(ctxt->input, 1);
 }
 
-void Game_Update(GameState* ctxt) {
+void Game_Update(GameState* gamestate) {
     GraphicsContext* _gCtx;
     _gCtx = ctxt->gfxCtx;
 
@@ -138,12 +138,12 @@ void Game_Update(GameState* ctxt) {
     }
 }
 
-void Game_IncrementFrameCount(GameState* ctxt) {
+void Game_IncrementFrameCount(GameState* gamestate) {
     Game_Nop80173534(ctxt);
     ctxt->frames++;
 }
 
-void Game_InitHeap(GameState* ctxt, u32 size) {
+void Game_InitHeap(GameState* gamestate, u32 size) {
     GameState* _ctx;
     void* buf;
 
@@ -159,7 +159,7 @@ void Game_InitHeap(GameState* ctxt, u32 size) {
     assert_fail("../game.c", 0x40B);
 }
 
-void Game_ResizeHeap(GameState* ctxt, u32 size) {
+void Game_ResizeHeap(GameState* gamestate, u32 size) {
     GameAlloc* alloc;
     void* buf;
     u32 systemMaxFree;
@@ -185,7 +185,7 @@ void Game_ResizeHeap(GameState* ctxt, u32 size) {
     }
 }
 
-void Game_StateInit(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gfxCtx) {
+void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsContext* gfxCtx) {
     ctxt->gfxCtx = gfxCtx;
     ctxt->frames = 0U;
     ctxt->main = NULL;
@@ -215,7 +215,7 @@ lblUnk:;
     osSendMesg(&ctxt->gfxCtx->unk5C, NULL, 1);
 }
 
-void Game_StateFini(GameState* ctxt) {
+void Game_StateFini(GameState* gamestate) {
     func_80172BC0();
     func_8019E014();
     osRecvMesg(&ctxt->gfxCtx->unk5C, 0, 1);
@@ -234,23 +234,23 @@ void Game_StateFini(GameState* ctxt) {
     Gamealloc_FreeAll(&ctxt->alloc);
 }
 
-GameStateFunc Game_GetNextStateInit(GameState* ctxt) {
+GameStateFunc Game_GetNextStateInit(GameState* gamestate) {
     return ctxt->nextGameStateInit;
 }
 
-u32 Game_GetNextStateSize(GameState* ctxt) {
+u32 Game_GetNextStateSize(GameState* gamestate) {
     return ctxt->nextGameStateSize;
 }
 
-u32 Game_GetShouldContinue(GameState* ctxt) {
+u32 Game_GetShouldContinue(GameState* gamestate) {
     return ctxt->running;
 }
 
-s32 Game_GetHeapFreeSize(GameState* ctxt) {
+s32 Game_GetHeapFreeSize(GameState* gamestate) {
     return THA_GetSize(&ctxt->heap);
 }
 
-s32 func_80173B48(GameState* ctxt) {
+s32 func_80173B48(GameState* gamestate) {
     s32 result;
     result = OS_CYCLES_TO_NSEC(ctxt->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(D_801FBAF0);
     return result;
