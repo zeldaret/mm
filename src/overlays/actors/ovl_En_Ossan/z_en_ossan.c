@@ -575,7 +575,7 @@ void func_808A91B4(EnOssan *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
 
     if (this->unk2C2 == 0) {
-        if (ActorCutscene_GetCurrentIndex(globalCtx) == 0x7C) {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->unk2C0 = this->unk2B8;
