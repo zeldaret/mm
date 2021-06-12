@@ -35,9 +35,9 @@
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
 #define INV_CONTENT(item) gSaveContext.inventory.items[SLOT(item)]
 
-#define VOID_ALL_EQUIP_VALUE(equip) ((((void)0,gSaveContext.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define VOID_CUR_EQUIP_VALUE(equip) ((((void)0,gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define VOID_CUR_UPG_VALUE(upg) ((((void)0,gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define ALL_EQUIP_VALUE_VOID(equip) ((((void)0,gSaveContext.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_EQUIP_VALUE_VOID(equip) ((((void)0,gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_UPG_VALUE_VOID(upg) ((((void)0,gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
