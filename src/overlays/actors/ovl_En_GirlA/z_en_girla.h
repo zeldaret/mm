@@ -32,7 +32,7 @@ typedef struct EnGirlA {
     /* 0x194 */ s32 isInitialized;
     /* 0x198 */ u16 choiceTextId;
     /* 0x19C */ s32 getItemId;
-    /* 0x1A0 */ s16 isBought;
+    /* 0x1A0 */ s16 isOutOfStock;
     /* 0x1A4 */ void (*boughtFunc)(GlobalContext*, struct EnGirlA*);
     /* 0x1A8 */ void (*restockFunc)(GlobalContext*, struct EnGirlA*);
     /* 0x1AC */ s16 isSelected;

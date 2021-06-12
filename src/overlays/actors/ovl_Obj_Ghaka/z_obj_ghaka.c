@@ -105,8 +105,7 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
             globalCtx->msgCtx.unk12024 = 4;
             func_80B3C260(this);
         }
-        // Could be fake, but helps match
-    } else if ((temp_v0 & 0xFFFFFFFF) == 4) {
+    } else if (temp_v0 == 4) {
         if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:

@@ -775,16 +775,16 @@ s32 func_808A980C(GlobalContext *globalCtx, EnOssan *this, Input *input) {
         return 1;
     }
     if (func_808A80AC(globalCtx)) {
-        if (shopItem->isBought == 0) {
+        if (!shopItem->isOutOfStock) {
             this->actionFunc2 = this->actionFunc;
             func_80151938(globalCtx, this->unk1E8[this->unk236]->choiceTextId);
             this->unk238.isEnabled = 0;
             this->unk270.isEnabled = 0;
-            play_sound(0x4808);
+            play_sound(NA_SE_SY_DECIDE);
             this->unk235 = 0;
             func_808A80A0(this, func_808AA0C8);
         } else {
-            play_sound(0x4806);
+            play_sound(NA_SE_SY_ERROR);
         }
         return 1;
     }
@@ -1250,8 +1250,6 @@ void func_808AAA64(EnOssan *this) {
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AAA64.asm")
 #endif
-
-#define TEST(a0, a1, a2) (a0 + (a1 * a2))
 
 #if NON_MATCHING
 //A lot is wrong with this one

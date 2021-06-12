@@ -930,7 +930,7 @@ typedef struct {
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F11 */ UNK_TYPE1 pad11F11[0xD];
+    /* 0x11F14 */ UNK_TYPE1 pad11F14[0xD];
     /* 0x11F22 */ u8 unk11F22;
     /* 0x11F23 */ u8 unk11F23;
     /* 0x11F24 */ UNK_TYPE1 pad11F24[0xFC];
