@@ -112,7 +112,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 spawnBurstPos.x = this->actor.world.pos.x;
                 spawnBurstPos.y = this->actor.world.pos.y + 4.0f;
                 spawnBurstPos.z = this->actor.world.pos.z;
-                EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 0x40C00000, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10,
+                EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);
                 if (this->actor.params == 1) {
                     func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28F4);
