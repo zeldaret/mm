@@ -129,7 +129,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(this, 0x291B);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 
@@ -177,7 +177,7 @@ void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     } else if (type == CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
-        func_800B9010(&this->dyna.actor, 0x2085);
+        func_800B9010(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     } else if (type == WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, globalCtx);

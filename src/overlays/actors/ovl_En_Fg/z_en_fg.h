@@ -26,17 +26,6 @@ typedef enum {
     /* 0x05 */ FG_DMGEFFECT_ICEARROW,
 } FrogDamageEffect;
 
-// TODO: This is a common struct and may be moved to a more global header
-// Typically the frame/transition data is f32, not s16. 
-typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} EnFgAnimation; // size = 0x10
-
 typedef struct {
     /* 0x0000 */ u8 type;
     /* 0x0001 */ u8 timer;

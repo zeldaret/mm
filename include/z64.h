@@ -17,6 +17,7 @@
 #include <xstdio.h>
 #include <unk.h>
 
+#include <sfx.h>
 #include <color.h>
 #include <ichain.h>
 
@@ -253,7 +254,7 @@ typedef struct {
     /* 0x04 */ UNK_TYPE1 pad4[0x40];
 } GlobalContext17D98; // size = 0x44
 
-typedef struct {
+typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
     /* 0x004 */ Gfx* polyXluBuffer;
     /* 0x008 */ UNK_TYPE1 pad8[0x8];
@@ -679,7 +680,8 @@ typedef struct {
     /* 0x272 */ char unk_272[0xD6];
 } InterfaceContext; // size = 0x348
 
-typedef struct {
+// us rev 1: 803FDB24
+typedef struct KankyoContext {
     /* 0x00 */ UNK_TYPE1 unk0;
     /* 0x01 */ UNK_TYPE1 unk1;
     /* 0x02 */ u16 unk2;
@@ -825,14 +827,14 @@ typedef struct {
     /* 0xE0 */ u8 unkE0;
     /* 0xE1 */ UNK_TYPE1 unkE1;
     /* 0xE2 */ s8 unkE2;
-    /* 0xE3 */ UNK_TYPE1 unkE3;
+    /* 0xE3 */ u8 unkE3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ UNK_TYPE1 unkE4;
     /* 0xE5 */ UNK_TYPE1 unkE5;
     /* 0xE6 */ UNK_TYPE1 unkE6;
     /* 0xE7 */ UNK_TYPE1 unkE7;
     /* 0xE8 */ UNK_TYPE1 unkE8;
     /* 0xE9 */ UNK_TYPE1 unkE9;
-    /* 0xEA */ UNK_TYPE1 unkEA;
+    /* 0xEA */ u8 unkEA;
     /* 0xEB */ UNK_TYPE1 unkEB;
     /* 0xEC */ UNK_TYPE1 unkEC;
     /* 0xED */ UNK_TYPE1 unkED;
@@ -840,7 +842,7 @@ typedef struct {
     /* 0xEF */ UNK_TYPE1 unkEF;
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
-    /* 0xF2 */ u8 unkF2[0xC];
+    /* 0xF2 */ u8 unkF2[0xC]; // F2-F6 are used by weather tag
 } KankyoContext; // size = 0xFE
 
 typedef struct {
@@ -931,13 +933,13 @@ typedef struct {
     /* 0x11F11 */ UNK_TYPE1 pad11F11[0xD];
     /* 0x11F22 */ u8 unk11F22;
     /* 0x11F23 */ u8 unk11F23;
-    /* 0x11F24 */ UNK_TYPE1 pad11F25[0xFC];
+    /* 0x11F24 */ UNK_TYPE1 pad11F24[0xFC];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 unk12021;
     /* 0x12022 */ u8 choiceIndex;
-    /* 0x12023 */ UNK_TYPE1 pad12023[0x1];
-    /* 0x12024 */ u8 unk12024;
-    /* 0x12025 */ UNK_TYPE1 pad12024[0x5];
+    /* 0x12023 */ UNK_TYPE1 unk12023;
+    /* 0x12024 */ s8 unk12024;
+    /* 0x12025 */ UNK_TYPE1 unk12025[0x6];
     /* 0x1202A */ u16 unk1202A;
     /* 0x1202C */ UNK_TYPE1 pad1202B[0x18];
     /* 0x12044 */ s16 unk12044;
@@ -1535,7 +1537,9 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ TransitionContext transitionCtx;
-    /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
+    /* 0x18768 */ UNK_TYPE1 pad18768[0x30];
+    /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
+    /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
     /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF unk187FC;
@@ -1553,7 +1557,7 @@ struct GlobalContext {
     /* 0x18858 */ UNK_PTR unk18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
-    /* 0x18864 */ void* setupPathList;
+    /* 0x18864 */ Path* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
