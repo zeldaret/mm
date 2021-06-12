@@ -30,13 +30,14 @@ typedef struct EnBigpo {
     /* 0x212 */ s16 unk212;
     /* 0x214 */ f32 unk214;
     /* 0x218 */ f32 unk218;
-    /* 0x21C */ f32 unk21C; //pad?
+    /* 0x21C */ f32 unk21C;
     /* 0x220 */ f32 unk220; // possible vec3f
     // weirdly nothing here? might be a fluke
-    /* 0x224 */ char unk224[0x6C];
-    /* 0x290 */ u8 unk290[4]; // color?
+    /* 0x224 */ Vec3f unk224[0x9];
+    /* 0x290 */ u8 unk290[4]; // color? [3] is shadow alpha?
     /* 0x294 */ char unk294[0x18];
     /* 0x2AC */ ColliderCylinder collider;
+    // this is type MtfX? the fuck is that
     /* 0x2F8 */ char unk2F8[0x30];
     // somewhere here is an array of 3 0x20 items, trying to find the start because weird
     
