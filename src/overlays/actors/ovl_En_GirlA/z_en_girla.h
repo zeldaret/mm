@@ -8,7 +8,7 @@ struct EnGirlA;
 typedef void (*EnGirlAActionFunc)(struct EnGirlA*, GlobalContext*);
 typedef void (*EnGirlADrawFunc)(struct Actor*, GlobalContext*, s32);
 typedef s32 (*EnGirlACanBuyFunc)(GlobalContext*, struct EnGirlA*);
-typedef void (*EnGirlABuyFunc)(GlobalContext*, struct EnGirlA*);
+typedef void (*EnGirlAShopActionFunc)(GlobalContext*, struct EnGirlA*); // Buying/Restocking
 
 typedef struct ShopItemEntry {
     /* 0x00 */ s16 objectId;
@@ -19,8 +19,8 @@ typedef struct ShopItemEntry {
     /* 0x0C */ u16 choiceTextId;
     /* 0x10 */ s32 getItemId;
     /* 0x14 */ EnGirlACanBuyFunc canBuyFunc;
-    /* 0x18 */ EnGirlABuyFunc buyFunc;
-    /* 0x1C */ EnGirlABuyFunc buyFanfareFunc;
+    /* 0x18 */ EnGirlAShopActionFunc buyFunc;
+    /* 0x1C */ EnGirlAShopActionFunc buyFanfareFunc;
 } ShopItemEntry; // size = 0x20
 
 typedef struct EnGirlA {
@@ -33,14 +33,14 @@ typedef struct EnGirlA {
     /* 0x198 */ u16 choiceTextId;
     /* 0x19C */ s32 getItemId;
     /* 0x1A0 */ s16 isOutOfStock;
-    /* 0x1A4 */ void (*boughtFunc)(GlobalContext*, struct EnGirlA*);
-    /* 0x1A8 */ void (*restockFunc)(GlobalContext*, struct EnGirlA*);
+    /* 0x1A4 */ EnGirlAShopActionFunc boughtFunc;
+    /* 0x1A8 */ EnGirlAShopActionFunc restockFunc;
     /* 0x1AC */ s16 isSelected;
     /* 0x1AE */ s16 initialRotY;
     /* 0x1B0 */ s16 rotY;
     /* 0x1B4 */ EnGirlACanBuyFunc canBuyFunc;
-    /* 0x1B8 */ EnGirlABuyFunc buyFunc;
-    /* 0x1BC */ EnGirlABuyFunc buyFanfareFunc;
+    /* 0x1B8 */ EnGirlAShopActionFunc buyFunc;
+    /* 0x1BC */ EnGirlAShopActionFunc buyFanfareFunc;
     /* 0x1C0 */ s16 unk1C0;
     /* 0x1C2 */ s16 itemParams;
     /* 0x1C4 */ s16 getItemDrawId;
