@@ -10,9 +10,7 @@ typedef void (*EnBigPoActionFunc)(struct EnBigpo*, GlobalContext*);
 typedef struct EnBigpoFireParticle {
     ///* 0x00 */ Vec3f pos;
     /* 0x00 */ LightInfo info; // size E
-    /* 0x10 */ UNK_PTR unk10; // struct with unkC
-    /* 0x14 */ f32 unk14;
-    /* 0x18 */ f32 unk18; // pad?
+    /* 0x10 */ Vec3f unk10; // struct with unkC
     /* 0x1C */ LightNode* light;
 } EnBigpoFireParticle; // size = 0x20
 
@@ -26,7 +24,7 @@ typedef struct EnBigpo {
     /* 0x206 */ s16 unk206;
     /* 0x208 */ s16 unk208; // pad?
     /* 0x20A */ s16 unk20A;
-    /* 0x20C */ char unk20C[2];
+    /* 0x20C */ s16 unk20C;
     /* 0x20E */ u16 unk20E;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 unk212;
@@ -51,5 +49,7 @@ typedef struct EnBigpo {
 } EnBigpo; // size = 0x398
 
 extern const ActorInit En_Bigpo_InitVars;
+
+#define FIRSTENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
 
 #endif // Z_EN_BIGPO_H

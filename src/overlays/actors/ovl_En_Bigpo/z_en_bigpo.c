@@ -6,11 +6,15 @@
 
 //void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-//void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Init(EnBigpo* this, GlobalContext* globalCtx);
 //void EnBigpo_Destroy(EnBigpo* this, GlobalContext* globalCtx);
+
+// update functions
+//void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(EnBigpo* this, GlobalContext* globalCtx);
-// draw func
+void func_80B64190(Actor* thisx, GlobalContext* globalCtx);
+
+// draw funcs
 void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
 void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
 
@@ -93,7 +97,7 @@ extern u32 D_06001360[];
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
     s16 temp_a1;
-    s32 *temp_s0;
+    s32 *g;
     s32 temp_s1;
     LightInfo *phi_s3;
     s32 *phi_s0;
@@ -117,10 +121,10 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Init(globalCtx, &this->skelAnime, (void *)0x6005C18, (void *)0x6000924, this->limbDrawTbl, this->transitionDrawTbl, 0xA);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, (Actor *) this, &D_80B65010);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
-    temp_s0 = &this->fires[0].unk10;
+    g = &this->fires[0].unk10;
     phi_s3 = this->fires[1].info;
-    phi_s0 = temp_s0;
-    phi_s2 = (LightInfo *) (temp_s0 + 0x10);
+    phi_s0 = g;
+    phi_s2 = (LightInfo *) (g + 0x10);
     phi_s1 = 0;
   loop_5:
     phi_s0->unkC = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, phi_s3);
@@ -158,13 +162,13 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
     GlobalContext *gCtx2;
-    s32 i;
+    s32 fireCount;
 
     if ((this->actor.params != 2) && (this->actor.params != 3) && (this->actor.params != 4) && (this->actor.params != 5)) {
         if (1) {}
         gCtx2 = globalCtx;
-        for(i = 0; i < 3; ++i){
-          LightContext_RemoveLight(gCtx2, &gCtx2->lightCtx, this->fires[i].light);
+        for(fireCount = 0; fireCount < 3; ++fireCount){
+          LightContext_RemoveLight(gCtx2, &gCtx2->lightCtx, this->fires[fireCount].light);
         }
         Collider_DestroyCylinder(gCtx2, &this->collider);
     }
@@ -582,15 +586,80 @@ void func_80B63450(EnBigpo *this) {
     this->actionFunc = func_80B63474;
 }
 
-// multiple loops
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63474.asm")
+// think this is the code that searches for fires and handles them at the start
+void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
+    Actor *enemyPtr;
+    EnBigpo* randBigpo;
+    s32 fireIndex;
+    s32 randomIndex;
+    s32 fireCount;
+
+    fireCount = 0;
+    for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+      if ((enemyPtr->id == 0x208) &&(enemyPtr->params == 2)) {
+          fireCount++;
+      }
+    }
+
+    if (fireCount < 3) { // not enough fire poes
+        this->actor.draw = func_80B64470;
+        Actor_SetScale((Actor *) this, 0.014f);
+        func_80B622E4(this, globalCtx);
+        Math_Vec3f_Copy(&this->actor.world, &this->actor.home);
+        this->actor.world.pos.y += 100.0f;
+        return;
+    }
+
+    for (fireIndex = 0; fireIndex < 3 ; ++fireIndex, --fireCount) {
+        enemyPtr = FIRSTENEMY;
+        randomIndex = ((s32) Rand_ZeroFloat(fireCount)) % fireCount;
+
+        // cannot be for because enemyPtr must be initilized before randomIndex
+        while(enemyPtr != NULL) {
+            if ((enemyPtr->id == 0x208) && (enemyPtr->params == 2)){
+                if (randomIndex == 0) {
+                    randBigpo = (EnBigpo*) enemyPtr;
+                    randBigpo->actor.params = 3;
+                    Math_Vec3f_Copy(&this->fires[fireIndex].unk10, &randBigpo->actor.world.pos);
+                    randBigpo->actor.parent = this;
+                    randBigpo->actor.update = func_80B64190;
+                    func_800BC154(globalCtx, &globalCtx->actorCtx, &randBigpo->actor, ACTORCAT_PROP);
+                    randBigpo->unk20C = fireIndex;
+                    randBigpo->actor.flags &= -2;
+                    Actor_SetScale(&randBigpo->actor, 0);
+
+                    if (this->actor.child == 0) {
+                        this->actor.child = &randBigpo->actor;
+                    } else {
+                        randBigpo->actor.child = this->actor.child;
+                        this->actor.child = &randBigpo->actor;
+                    }
+                    break;
+                } else {
+                    randomIndex--;
+
+                }
+            }
+          enemyPtr = enemyPtr->next;
+        }
+    }
+    for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+        if ((enemyPtr->id == 0x208) && (enemyPtr->params == 2)) {
+            randBigpo = (EnBigpo* ) enemyPtr;
+            randBigpo->actionFunc = func_80B63888;
+            randBigpo->actor.update = func_80B64190;
+        }
+    }
+    func_80B636D0(this);
+}
 
 void func_80B636D0(EnBigpo *this) {
     this->actionFunc = func_80B636E4;
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636D0.asm")
 
+//looping
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636E4.asm")
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63758.asm")
 
@@ -622,6 +691,7 @@ void func_80B636D0(EnBigpo *this) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Update.asm")
 
+// alternative update func
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64190.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B641E8.asm")
