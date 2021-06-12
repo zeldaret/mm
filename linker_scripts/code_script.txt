@@ -8217,9 +8217,9 @@ SECTIONS
     ovl_Bg_Iknv_Obj : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.text)
-        build/asm/overlays/ovl_Bg_Iknv_Obj_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.data)
         build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.rodata)
-        build/asm/overlays/ovl_Bg_Iknv_Obj_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

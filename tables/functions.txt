@@ -15893,7 +15893,7 @@
     0x80BD8040:("func_80BD8040",),
     0x80BD8098:("BgIknvObj_UpdateType2",),
     0x80BD80FC:("BgIknvObj_UpdateType1",),
-    0x80BD810C:("BgIknvObj_UpdateDefault",),
+    0x80BD810C:("BgIknvObj_DoNothing",),
     0x80BD811C:("BgIknvObj_Update",),
     0x80BD8140:("BgIknvObj_Draw",),
     0x80BD82B0:("EnPamera_Init",),
