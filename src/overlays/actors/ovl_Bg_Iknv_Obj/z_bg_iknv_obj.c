@@ -10,9 +10,9 @@ void BgIknvObj_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvObj_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void BgIknvObj_DoNothing(BgIknvObj* this, GlobalContext* globalCtx);
-void BgIknvObj_UpdateType0(BgIknvObj* this, GlobalContext* globalCtx);
-void BgIknvObj_UpdateType1(BgIknvObj* this, GlobalContext* globalCtx);
-void BgIknvObj_UpdateType2(BgIknvObj* this, GlobalContext* globalCtx);
+void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx);
+void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx);
+void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx);
 
 extern CollisionHeader D_060119D4;
 extern CollisionHeader D_06012CA4;
@@ -60,25 +60,25 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->actionFunc = BgIknvObj_DoNothing;
     switch (IKNV_OBJ_TYPE(this)) {
-        case BG_IKNV_OBJ_TYPE_UNK0: {
+        case IKNV_OBJ_WATERWHEEL: {
             this->displayListPtr = D_06013058;
-            this->actionFunc = BgIknvObj_UpdateType0;
+            this->actionFunc = BgIknvObj_UpdateWaterwheel;
             this->dyna.actor.flags |= 0x100000;
             this->dyna.actor.flags |= 0x10;
             return;
         }
-        case BG_IKNV_OBJ_TYPE_UNK1: {
+        case IKNV_OBJ_RAISED_DOOR: {
             this->displayListPtr = D_06011880;
             BcCheck3_BgActorInit(&this->dyna, 0);
             BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
-            this->actionFunc = BgIknvObj_UpdateType1;
+            this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             return;
         }
-        case BG_IKNV_OBJ_TYPE_UNK2: {
+        case IKNV_OBJ_SAKON_DOOR: {
             this->displayListPtr = D_060129C8;
-            this->actionFunc = BgIknvObj_UpdateType2;
+            this->actionFunc = BgIknvObj_UpdateSakonDoor;
             BcCheck3_BgActorInit(&this->dyna, 0);
             BgCheck_RelocateMeshHeader(&D_06012CA4, &colHeader);
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
@@ -97,8 +97,8 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIknvObj* this = THIS;
 
-    if (IKNV_OBJ_TYPE(this) != BG_IKNV_OBJ_TYPE_UNK1) {
-        if (IKNV_OBJ_TYPE(this) == BG_IKNV_OBJ_TYPE_UNK2) {
+    if (IKNV_OBJ_TYPE(this) != IKNV_OBJ_RAISED_DOOR) {
+        if (IKNV_OBJ_TYPE(this) == IKNV_OBJ_SAKON_DOOR) {
             Collider_DestroyCylinder(globalCtx, &this->collider);
             gSaveContext.weekEventReg[0x33] &= 0xEF;
         } else {
@@ -126,7 +126,7 @@ s32 func_80BD7CEC(BgIknvObj* this) {
     return 0;
 }
 
-void BgIknvObj_UpdateType0(BgIknvObj* this, GlobalContext* globalCtx) {
+void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[0xE] & 4) {
         this->dyna.actor.shape.rot.z += -0x64;
         func_800B9098(&this->dyna.actor);
@@ -139,11 +139,11 @@ void BgIknvObj_UpdateType0(BgIknvObj* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BD7E0C(BgIknvObj* this, s16 homeRotation, GlobalContext* globalCtx) {
+s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx) {
     this->dyna.actor.shape.yOffset = 0.0f;
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-    if (homeRotation != this->dyna.actor.shape.rot.y) {
-        Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, homeRotation, 2, 100, 100);
+    if (targetRotation != this->dyna.actor.shape.rot.y) {
+        Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 100, 100);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         if ((globalCtx->gameplayFrames & 1) != 0) {
             this->dyna.actor.shape.yOffset = 5.0f;
@@ -157,7 +157,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 homeRotation, GlobalContext* globalCtx) {
 
 void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7E0C(this, this->dyna.actor.home.rot.y, globalCtx)) {
-        this->actionFunc = BgIknvObj_UpdateType2;
+        this->actionFunc = BgIknvObj_UpdateSakonDoor;
         gSaveContext.weekEventReg[0x33] &= 0xEF;
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -189,7 +189,7 @@ void func_80BD8040(BgIknvObj* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
-void BgIknvObj_UpdateType2(BgIknvObj* this, GlobalContext* globalCtx) {
+void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[0x3A] & 0x80) != 0) {
         this->actionFunc = func_80BD8040;
         gSaveContext.weekEventReg[0x59] |= 0x80;
@@ -197,7 +197,7 @@ void BgIknvObj_UpdateType2(BgIknvObj* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
-void BgIknvObj_UpdateType1(BgIknvObj* this, GlobalContext* globalCtx) {
+void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void BgIknvObj_DoNothing(BgIknvObj* this, GlobalContext* globalCtx) {

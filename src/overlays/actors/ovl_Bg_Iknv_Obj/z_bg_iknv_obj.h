@@ -17,9 +17,9 @@ typedef struct BgIknvObj {
 } BgIknvObj; // size = 0x1B0
 
 typedef enum {
-    /* 0 */ BG_IKNV_OBJ_TYPE_UNK0,
-    /* 1 */ BG_IKNV_OBJ_TYPE_UNK1,
-    /* 2 */ BG_IKNV_OBJ_TYPE_UNK2,
+    /* 0 */ IKNV_OBJ_WATERWHEEL,
+    /* 1 */ IKNV_OBJ_RAISED_DOOR, // defunct door covering entrance to Stone Tower
+    /* 2 */ IKNV_OBJ_SAKON_DOOR,  // door to Sakon's Hideout
 } BgIknvObjType;
 
 extern const ActorInit Bg_Iknv_Obj_InitVars;
