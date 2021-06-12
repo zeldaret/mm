@@ -517,7 +517,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
 
     if ((this->skelAnime.animCurrentSeg == object_ginko_floorsmacking_anim) &&
         func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        Audio_PlayActorSound2(this, NA_SE_EV_BANK_MAN_HAND_HIT);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -585,7 +585,7 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
         && (func_801378B8(&this->skelAnime, 10.0f))) {
-        Audio_PlayActorSound2(this, NA_SE_EV_HANKO); // "stamp"
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
     if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {

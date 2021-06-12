@@ -277,7 +277,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Audio_PlayActorSound2(this, NA_SE_EV_FOOT_SWITCH);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 

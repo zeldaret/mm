@@ -20,7 +20,7 @@ typedef struct EnEncount2Particle{
 } EnEncount2Particle; // size = 0x34
 
 typedef struct EnEncount2 {
-    /* 0x0000 */ DynaPolyActor dynaActor;
+    /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ EnEncount2ActionFunc actionFunc;
     /* 0x0160 */ s16 deathTimer;
     /* 0x0162 */ s16 isPopped;
@@ -32,7 +32,7 @@ typedef struct EnEncount2 {
     /* 0x01D0 */ EnEncount2Particle particles[200];
 } EnEncount2; // size = 0x2A70
 
-#define GET_ENCOUNT2_SWITCH_FLAG(this)((s16) (this->dynaActor.actor.params & 0x7F))
+#define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))
 
 extern const ActorInit En_Encount2_InitVars;
 
