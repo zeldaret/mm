@@ -86,20 +86,10 @@ extern GraphicsContext* __gfxCtx;
  * `a` alpha
  */
 #define VTX(x, y, z, s, t, crnx, cgny, cbnz, a) \
-    {                                           \
-        {                                       \
-            { x, y, z }, 0, { s, t }, {         \
-                crnx, cgny, cbnz, a             \
-            }                                   \
-        }                                       \
-    }
+    { { { x, y, z }, 0, { s, t }, { crnx, cgny, cbnz, a } }, }
 
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
-    {                                       \
-        { x, y, z }, 0, { s, t }, {         \
-            cr, cg, cb, a                   \
-        }                                   \
-    }
+    { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
 #define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
 
