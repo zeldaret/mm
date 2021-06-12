@@ -135,7 +135,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8F98(&player->base, 0x100B);
+    func_800B8F98(&player->base, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
