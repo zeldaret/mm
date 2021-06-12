@@ -768,16 +768,16 @@ void func_808A95F8(EnOssan* this) {
 }
 
 s32 func_808A980C(GlobalContext *globalCtx, EnOssan *this, Input *input) {
-    EnGirlA *sp24;
+    EnGirlA *shopItem;
 
-    sp24 = this->unk1E8[this->unk236];
+    shopItem = this->unk1E8[this->unk236];
     if (func_808A85FC(this, globalCtx, input)) {
         return 1;
     }
     if (func_808A80AC(globalCtx)) {
-        if (sp24->unk1A0 == 0) {
+        if (shopItem->isBought == 0) {
             this->actionFunc2 = this->actionFunc;
-            func_80151938(globalCtx, this->unk1E8[this->unk236]->unk198);
+            func_80151938(globalCtx, this->unk1E8[this->unk236]->choiceTextId);
             this->unk238.isEnabled = 0;
             this->unk270.isEnabled = 0;
             play_sound(0x4808);
@@ -935,7 +935,7 @@ void func_808A9C8C(EnOssan *this, GlobalContext *globalCtx) {
 void func_808A9D64(GlobalContext *globalCtx, EnOssan *this) {
     ActorPlayer *player = PLAYER;
 
-    func_800B8A1C(&this->actor, globalCtx, this->unk1E8[this->unk236]->unk19C, 300.0f, 300.0f);
+    func_800B8A1C(&this->actor, globalCtx, this->unk1E8[this->unk236]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F23 = 0x43;
     globalCtx->msgCtx.unk12024 = 4;
     player->unkA70 &= ~0x20000000;
@@ -1044,7 +1044,7 @@ void func_808AA224(EnOssan *this, GlobalContext *globalCtx) {
         this->unk2B4 = 0.0f;
         func_808AA79C(this);
         enGirlA = this->unk1E8[this->unk236];
-        enGirlA->unk1A8Func(globalCtx, enGirlA);
+        enGirlA->restockFunc(globalCtx, enGirlA);
         this->actionFunc = this->actionFunc2;
         func_80151938(globalCtx, this->unk1E8[this->unk236]->actor.textId);
     }
@@ -1055,7 +1055,7 @@ void func_808AA2C8(EnOssan *this, GlobalContext *globalCtx) {
         this->actor.parent = NULL;
         func_808A80A0(this, func_808AA33C);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk1E8[this->unk236]->unk19C, 300.0f, 300.0f);
+        func_800B8A1C(&this->actor, globalCtx, this->unk1E8[this->unk236]->getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1085,7 +1085,7 @@ void func_808AA404(EnOssan *this, GlobalContext *globalCtx) {
         if (func_80147624(globalCtx)) {
             func_808AA79C(this);
             enGirlA = this->unk1E8[this->unk236];
-            enGirlA->unk1A8Func(globalCtx, enGirlA);
+            enGirlA->restockFunc(globalCtx, enGirlA);
             if (!func_808A85FC(this, globalCtx, globalCtx->state.input)) {
                 switch(globalCtx->msgCtx.choiceIndex) {
                     case 0:
@@ -1107,7 +1107,7 @@ void func_808AA404(EnOssan *this, GlobalContext *globalCtx) {
     } else if (sp27 == 5 && func_80147624(globalCtx)) {
         func_808AA79C(this);
         enGirlA = this->unk1E8[this->unk236];
-        enGirlA->unk1A8Func(globalCtx,enGirlA);
+        enGirlA->restockFunc(globalCtx,enGirlA);
         player->base.shape.rot.y += 0x8000;
         player->unkA70 |= 0x20000000;
         func_801518B0(globalCtx, this->unk2C4, &this->actor);
