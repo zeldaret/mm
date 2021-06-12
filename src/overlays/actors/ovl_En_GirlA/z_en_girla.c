@@ -513,17 +513,17 @@ void EnGirlA_InitItem(GlobalContext* globalCtx, EnGirlA* this) {
     ShopItemEntry* shopItem = &sShopItemEntries[this->actor.params];
 
     this->actor.textId = shopItem->descriptionTextId;
-    this->isBought = false;
+    this->isOutOfStock = false;
     this->actor.draw = EnGirlA_Draw;
 }
 
 void EnGirlA_Bought(GlobalContext* globalCtx, EnGirlA* this) {
-    this->isBought = true;
+    this->isOutOfStock = true;
     this->actor.draw = NULL;
 }
 
 void EnGirlA_Restock(GlobalContext* globalCtx, EnGirlA* this) {
-    this->isBought = false;
+    this->isOutOfStock = false;
     this->actor.draw = EnGirlA_Draw;
 }
 
