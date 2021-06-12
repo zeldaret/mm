@@ -139,9 +139,9 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
-        func_8019F1C0(&D_80B3C960, 0x2835);
+        func_8019F1C0(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
-        func_8019F1C0(&D_80B3C960, 0x200A);
+        func_8019F1C0(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

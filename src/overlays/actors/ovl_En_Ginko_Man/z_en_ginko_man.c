@@ -340,7 +340,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
         case 0x44E: // "...So, what'll it be?
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if ((gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
-                    play_sound(0x4806); // NA_SE_SY_ERROR
+                    play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // bank full, cannot accept more
                 } else {
@@ -349,7 +349,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         func_801518B0(globalCtx, 0x44F, &this->actor);
                         this->curTextId = 0x44F; // "All right! so..."
                     } else {
-                        play_sound(0x4806); // NA_SE_SY_ERROR
+                        play_sound(NA_SE_SY_ERROR);
                         func_801518B0(globalCtx, 0x458, &this->actor);
                         this->curTextId = 0x458; // you haven't even gotten a single rup
                     }
@@ -363,7 +363,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
         case 0x452: // Really? are you really depositing rupees?
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if (gSaveContext.rupees < globalCtx->msgCtx.bankRupeesSelected) {
-                    play_sound(0x4806); // NA_SE_SY_ERROR
+                    play_sound(NA_SE_SY_ERROR);
                     func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
                     func_801518B0(globalCtx, 0x459, &this->actor);
                     this->curTextId = 0x459; // HEY you dont have that much
@@ -426,14 +426,14 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if ((s32)((gSaveContext.roomInf[127][0] & 0xFFFF)) <
                     ((s32)(globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) {
-                    play_sound(0x4806); // NA_SE_SY_ERROR
+                    play_sound(NA_SE_SY_ERROR);
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
                 } else if (D_801C1E2C[(gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]] <
                            (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
-                    play_sound(0x4806); // NA_SE_SY_ERROR
+                    play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x475, &this->actor);
                     this->curTextId = 0x475; // You can't hold that many in your wallet
                 } else {
@@ -526,7 +526,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
 
     if ((this->skelAnime.animCurrentSeg == object_ginko_floorsmacking_anim) &&
         func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        Audio_PlayActorSound2(&this->actor, 0x2992); // NA_SE_EV_BANK_MAN_HAND_HIT
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -597,7 +597,7 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
         && (func_801378B8(&this->skelAnime, 10.0f))) {
-        Audio_PlayActorSound2(&this->actor, 0x2993); // NA_SE_EV_HANKO "stamp"
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
     if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {

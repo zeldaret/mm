@@ -265,7 +265,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
 
 void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (this->colorShiftTimer == 0) {
-        Audio_PlayActorSound2(&this->actor, 0x286F); // sfx NA_SE_EV_SUN_MARK_FLASH
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
     this->colorShiftTimer++;
 
@@ -278,7 +278,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Audio_PlayActorSound2(&this->actor, 0x2815); // sfx NA_SE_EV_FOOT_SWITCH
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -336,7 +336,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightswitch_SetupIdle(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_ASLEEP;
-        Audio_PlayActorSound2(&this->actor, 0x2815); // NA_SE_EV_FOOT_SWITCH
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -351,7 +351,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (this->colorAlpha < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        func_800B9010(&this->actor, 0x321F); // sfx NA_SE_EN_COMMON_EXTINCT_LEV "burn into ashes"
+        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
     }
 }
 

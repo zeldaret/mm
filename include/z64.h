@@ -17,6 +17,7 @@
 #include <xstdio.h>
 #include <unk.h>
 
+#include <sfx.h>
 #include <color.h>
 #include <ichain.h>
 

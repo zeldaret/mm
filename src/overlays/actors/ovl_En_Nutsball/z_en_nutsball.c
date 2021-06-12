@@ -114,9 +114,9 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 spawnBurstPos.z = this->actor.world.pos.z;
                 EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x28F4);
+                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, 0x38C0);
+                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
                 Actor_MarkForDeath(&this->actor);
             }
