@@ -46,7 +46,6 @@ extern Gfx D_06001A20[];
 extern Gfx D_06001980[];
 extern CollisionHeader D_06003CD0;
 
-
 void func_80B3C260(ObjGhaka* this) {
     if (gSaveContext.weekEventReg[20] & 0x20) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;

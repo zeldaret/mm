@@ -79,8 +79,7 @@ void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
     if (this->isDropCollected == 0) {
         collectible = func_800A8150(this->actor.params & 0x3F);
         if (collectible >= 0) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                                 collectible | GET_KIBAKO_COLLECTIBLE_ID(this));
+            Item_DropCollectible(globalCtx, &this->actor.world.pos, collectible | GET_KIBAKO_COLLECTIBLE_ID(this));
             this->isDropCollected = 1;
         }
     }
@@ -188,10 +187,9 @@ void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
             phi_s0 = 0x20;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0,
-                             (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60, -1,
-                             sObjectIdList[(this->actor.params >> 0xF) & 1],
-                             sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
+        EffectSsKakera_Spawn(
+            globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0, (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60,
+            -1, sObjectIdList[(this->actor.params >> 0xF) & 1], sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 
     func_800BBFB0(globalCtx, worldPos, 40.0f, 3, 0x32, 0x8C, 1);
@@ -233,10 +231,9 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
         temp_rand = Rand_ZeroOne();
         phi_s0 = (temp_rand < 0.2f) ? 0x40 : 0x20;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0,
-                             (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70, -1,
-                             sObjectIdList[(this->actor.params >> 0xF) & 1],
-                             sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
+        EffectSsKakera_Spawn(
+            globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0, (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70,
+            -1, sObjectIdList[(this->actor.params >> 0xF) & 1], sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
     }
 }
 
