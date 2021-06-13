@@ -1256,18 +1256,13 @@ void func_808AAA64(EnOssan* this) {
 #endif
 
 #if NON_MATCHING
-// TODO: Clean this up, Matches but floats are in late rodata
+// Matches but floats are in late rodata
 void func_808AAB30(EnOssan* this) {
-    f32 arrowAnimTween;
-    float new_var3;
-    int new_var;
-    int new_var2;
-    f32 stickAnimTween;
+    f32 arrowAnimTween = this->arrowAnimTween;
+    f32 stickAnimTween = this->stickAnimTween;
+    s32 new_var2 = 255;
+    f32 new_var3;
 
-    arrowAnimTween = this->arrowAnimTween;
-    new_var = 0;
-    new_var2 = 255;
-    stickAnimTween = this->stickAnimTween;
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
         if (arrowAnimTween > 1.0f) {
@@ -1282,35 +1277,40 @@ void func_808AAB30(EnOssan* this) {
             this->arrowAnimState = 0;
         }
     }
-
     this->arrowAnimTween = arrowAnimTween;
+
     if (this->stickAnimState == 0) {
         stickAnimTween += 0.1f;
         if (stickAnimTween > 1.0f) {
             stickAnimTween = 1.0f;
             this->stickAnimState = 1;
         }
-
     } else {
         stickAnimTween = 0.0f;
-        this->stickAnimState = new_var;
+        this->stickAnimState = 0;
     }
+    
+    new_var3 = 155.0f * arrowAnimTween;
 
     this->stickAnimTween = stickAnimTween;
-    this->stickRightPrompt.arrowColor.r = (255 - ((s32)(155.0f * arrowAnimTween))) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (new_var2 - ((s32)(155.0f * arrowAnimTween))) & 0xFF;
-    new_var3 = 155.0f * arrowAnimTween;
-    this->stickRightPrompt.arrowColor.b = (0 - ((s32)((-100.0f) * arrowAnimTween))) & 0xFF;
-    this->stickRightPrompt.arrowColor.a = (200 - ((s32)(50.0f * arrowAnimTween))) & 0xFF;
+
+    this->stickRightPrompt.arrowColor.r = ColChanMix(255, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = ColChanMix(new_var2, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.b = ColChanMix(0, -100, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.a = ColChanMix(200, 50.0f, arrowAnimTween);
+
     this->stickLeftPrompt.arrowColor.r = (new_var2 - ((s32)new_var3)) & 0xFF;
     this->stickLeftPrompt.arrowColor.g = (255 - ((s32)new_var3)) & 0xFF;
-    this->stickLeftPrompt.arrowColor.b = (0 - ((s32)((-100.0f) * arrowAnimTween))) & 0xFF;
-    this->stickLeftPrompt.arrowColor.a = (200 - ((s32)(50.0f * arrowAnimTween))) & 0xFF;
+    this->stickLeftPrompt.arrowColor.b = ColChanMix(0, -100.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.a = ColChanMix(200, 50.0f, arrowAnimTween);
+
     this->stickLeftPrompt.arrowTexX = 290.0f;
     this->stickRightPrompt.arrowTexX = 33.0f;
+
     this->stickLeftPrompt.stickTexX = 274.0f;
     this->stickLeftPrompt.stickTexX = this->stickLeftPrompt.stickTexX + (8.0f * stickAnimTween);
     this->stickRightPrompt.stickTexX = 49.0f - (8.0f * stickAnimTween);
+    
     this->stickRightPrompt.arrowTexY = this->stickLeftPrompt.arrowTexY = 91.0f;
     this->stickRightPrompt.stickTexY = this->stickLeftPrompt.stickTexY = 95.0f;
 }
@@ -1319,9 +1319,8 @@ void func_808AAB30(EnOssan* this) {
 #endif
 
 void func_808AACE0(EnOssan* this) {
-    s16 decr;
+    s16 decr = this->unk1E2 - 1;
 
-    decr = this->unk1E2 - 1;
     if (decr != 0) {
         this->unk1E2 = decr;
     } else {
@@ -1330,10 +1329,9 @@ void func_808AACE0(EnOssan* this) {
 }
 
 void func_808AAD14(EnOssan* this) {
-    s16 decr;
+    s16 decr = this->unk1E2 - 1;
     s16 incr;
 
-    decr = this->unk1E2 - 1;
     if (decr != 0) {
         this->unk1E2 = decr;
         return;
