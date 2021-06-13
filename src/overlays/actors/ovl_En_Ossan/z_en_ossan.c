@@ -1,8 +1,12 @@
+/* trading post shopkeepers*/
+
 #include "z_en_ossan.h"
 
 #define FLAGS 0x00000019
 
 #define THIS ((EnOssan*)thisx)
+
+#define RODATA 0
 
 void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -92,47 +96,129 @@ const ActorInit En_Ossan_InitVars = {
 */
 
 extern UNK_TYPE D_0401F740;
-
 extern UNK_TYPE D_0401F8C0;
-
 extern UNK_TYPE D_0401F7C0;
-
 extern FlexSkeletonHeader D_06013320;
-
 extern AnimationHeader D_06012C34;
-
 extern FlexSkeletonHeader D_060028A0;
-
 extern AnimationHeader D_06009D34;
+extern AnimationHeader D_0600CB3C;
+extern AnimationHeader D_0600DE34;
+extern AnimationHeader D_0600E3EC;
+extern AnimationHeader D_0600C58C;
+extern AnimationHeader D_0600F00C;
+extern AnimationHeader D_0600B9D8;
+extern AnimationHeader D_0600C26C;
+extern AnimationHeader D_0600D354;
+extern AnimationHeader D_060131FC;
+extern AnimationHeader D_0601430C;
+extern AnimationHeader D_060138B0;
+extern AnimationHeader D_0600A460;
+extern UNK_TYPE D_06006498;
+extern UNK_TYPE D_06007140;
+extern UNK_TYPE D_06006D40;
+extern UNK_TYPE D_06005BC0;
+extern UNK_TYPE D_06006F18;
+extern UNK_TYPE D_06006B18;
+
+extern ActorAnimationEntryS D_808AC030[];
+
+extern ActorAnimationEntryS D_808AC100[];
 
 extern s16 D_808AC1C0[];
-// static s16 D_808AC1C0[] = { 0x01AB, 0x00C2 }
 
-extern InitChainEntry D_808AC288[];
-/*
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
-};
-*/
+extern ActorAnimationEntryS* D_808AC1C4[];
 
-extern EnOssanActionFunc D_808AC2A4[];
-// static EnOssanActionFunc D_808AC2A4[] = {func_808AADB4, func_808AAE1C}
+extern f32 D_808AC1CC[];
+
+extern EnOssanUnkStruct D_808AC1D4[][8];
 
 extern u16 D_808AC254[][2];
 
 extern u16 D_808AC274[][2];
 
-extern EnOssanUnkStruct D_808AC1D4[][8];
-
-extern f32 D_808AC1CC[];
-
-extern ActorAnimationEntryS* D_808AC1C4[];
+extern InitChainEntry D_808AC288[];
 
 extern Vec3f D_808AC28C[];
 
-extern UNK_PTR D_808AC2B8[][3];
+extern EnOssanActionFunc D_808AC2A4[];
 
 extern Vec3f D_808AC2AC;
+
+extern UNK_PTR D_808AC2B8[][3];
+
+/*
+static ActorAnimationEntryS D_808AC030[] = {
+    { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
+    { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
+    { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
+    { &D_0601430C, 1.0f, 0, -1, 0, 0 },  { &D_0600B9D8, 1.0f, 0, -1, 2, 0 }, { &D_0600C26C, 1.0f, 0, -1, 0, 0 },
+    { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
+};
+
+static ActorAnimationEntryS D_808AC100[] = {
+    { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 2, 0 },
+    { &D_06009D34, -1.0f, 0, -1, 2, 0 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
+    { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },   { &D_0600A460, 1.0f, 0, -1, 2, -5 },
+    { &D_0600A460, 1.0f, 0, -1, 0, -5 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
+};
+
+static s16 D_808AC1C0[] = { 0x01AB, 0x00C2 };
+
+static ActorAnimationEntryS* D_808AC1C4[] = { D_808AC030, D_808AC100 };
+
+static f32 D_808AC1CC[] = { 0.01f, 0.01f };
+
+static EnOssanUnkStruct D_808AC1D4[][8] = {
+    {
+        { 9, 50, 68, -195 },
+        { 7, 50, 92, -195 },
+        { 4, 80, 68, -195 },
+        { 8, 80, 92, -195 },
+        { 3, -50, 68, -195 },
+        { 5, -50, 92, -195 },
+        { 6, -80, 68, -195 },
+        { 10, -80, 92, -195 },
+    },
+    {
+        { 15, 50, 68, -195 },
+        { 16, 50, 92, -195 },
+        { 13, 80, 68, -195 },
+        { 12, 80, 92, -195 },
+        { 11, -50, 68, -195 },
+        { 14, -50, 92, -195 },
+        { 17, -80, 68, -195 },
+        { 18, -80, 92, -195 },
+    },
+};
+
+static u16 D_808AC254[][2] = {
+    { 0X6A4, 0X6C1 }, { 0X6AB, 0X6C8 }, { 0X6A5, 0X6C2 }, { 0X6A7, 0X6C4 },
+    { 0X6A9, 0X6C6 }, { 0X6A6, 0X6C3 }, { 0X6A8, 0X6C5 }, { 0X6AA, 0X6C7 },
+};
+
+static u16 D_808AC274[][2] = {
+    { 0X6BC, 0X6D9 }, { 0X6BD, 0X6DA }, { 0X6BE, 0X6DB }, { 0X6BF, 0X6DC }, { 0X6C0, 0X6DD },
+};
+
+static InitChainEntry D_808AC288[] = {
+    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+};
+
+static Vec3f D_808AC28C[] = {
+    { 35.0f, 68.0f, -130.0f },
+    { -35.0f, 68.0f, -130.0f },
+};
+
+static EnOssanActionFunc D_808AC2A4[] = { func_808AADB4, func_808AAE1C };
+
+static Vec3f D_808AC2AC = { 800.0f, 500.0f, 0.0f };
+
+static UNK_PTR D_808AC2B8[][3] = {
+    { &D_06005BC0, &D_06006D40, &D_06007140 },
+    { &D_06006498, &D_06006B18, &D_06006F18 },
+};
+*/
 
 void func_808A80A0(EnOssan* this, EnOssanActionFunc action) {
     this->actionFunc = action;
@@ -291,7 +377,7 @@ void func_808A86A8(GlobalContext* globalCtx, EnOssan* this, u8 arg2) {
 
 void func_808A8708(GlobalContext* globalCtx, EnOssan* this) {
     func_808A80A0(this, func_808A91B4);
-    func_80151938(globalCtx, 0x640);
+    func_80151938(globalCtx, 0x0640);
     func_8011552C(globalCtx, 6);
     this->stickLeftPrompt.isEnabled = 1;
     this->stickRightPrompt.isEnabled = 1;
@@ -330,8 +416,7 @@ void func_808A8798(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-#if NON_MATCHING
-// Matches but jumptable is in late rodata
+#if RODATA
 void func_808A890C(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
     s16 curFrame = this->skelAnime.animCurrentFrame;
@@ -495,7 +580,7 @@ u8 func_808A8DF8(EnOssan* this, u8 arg1, u8 arg2) {
 u8 func_808A8E84(EnOssan* this, u8 arg1, u8 arg2) {
     while (arg1 < arg2) {
         arg1 += 2;
-        if(arg1 < arg2 && this->shopItems[arg1] != NULL) {
+        if (arg1 < arg2 && this->shopItems[arg1] != NULL) {
             return arg1;
         }
     }
@@ -947,8 +1032,7 @@ void func_808A9E5C(GlobalContext* globalCtx, EnOssan* this, u16 arg2) {
     func_808A80A0(this, func_808AA224);
 }
 
-#if NON_MATCHING
-// Matches but jmptable is in late rodata
+#if RODATA
 void func_808A9E98(GlobalContext* globalCtx, EnOssan* this) {
     EnGirlA* shopItem;
 
@@ -1159,8 +1243,7 @@ void func_808AA79C(EnOssan* this) {
     func_808AA6D8(this);
 }
 
-#if NON_MATCHING
-// Matches but floats are in late rodata
+#if RODATA
 s32 func_808AA7C0(EnOssan* this) {
     Math_ApproachF(&this->unk2B4, 1.0f, 1.0f, 0.15f);
     if (this->unk2B4 >= 0.85f) {
@@ -1176,8 +1259,7 @@ s32 func_808AA7C0(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AA7C0.asm")
 #endif
 
-#if NON_MATCHING
-// Matches but floats are in late rodata
+#if RODATA
 s32 func_808AA85C(EnOssan* this) {
     Math_ApproachF(&this->unk2B4, 0.0f, 1.0f, 0.15f);
     if (this->unk2B4 <= 0.15f) {
@@ -1212,8 +1294,7 @@ void func_808AA8E8(EnOssan* this) {
 
 #define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
-#if NON_MATCHING
-// Matches but floats are in late rodata
+#if RODATA
 void func_808AAA64(EnOssan* this) {
     f32 t;
 
@@ -1241,8 +1322,7 @@ void func_808AAA64(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AAA64.asm")
 #endif
 
-#if NON_MATCHING
-// Matches but floats are in late rodata
+#if RODATA
 void func_808AAB30(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1408,8 +1488,7 @@ s32 func_808AAFB0(EnOssan* this, GlobalContext* globalCtx) {
     return D_808AC254[0][1];
 }
 
-#if NON_MATCHING
-// Matches but jump table is in late rodata
+#if RODATA
 void func_808AB0B0(EnOssan* this) {
     switch (this->unk2C4) {
         case 0x06A9:
