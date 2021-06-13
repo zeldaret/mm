@@ -60,23 +60,21 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->actionFunc = BgIknvObj_DoNothing;
     switch (IKNV_OBJ_TYPE(this)) {
-        case IKNV_OBJ_WATERWHEEL: {
+        case IKNV_OBJ_WATERWHEEL:
             this->displayListPtr = D_06013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
             this->dyna.actor.flags |= 0x100000;
             this->dyna.actor.flags |= 0x10;
-            return;
-        }
-        case IKNV_OBJ_RAISED_DOOR: {
+            break;
+        case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
             BcCheck3_BgActorInit(&this->dyna, 0);
             BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
-            return;
-        }
-        case IKNV_OBJ_SAKON_DOOR: {
+            break;
+        case IKNV_OBJ_SAKON_DOOR:
             this->displayListPtr = D_060129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
             BcCheck3_BgActorInit(&this->dyna, 0);
@@ -84,14 +82,13 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-            this->dyna.actor.colChkInfo.mass = 0xFF;
-            gSaveContext.weekEventReg[0x33] &= 0xEF;
+            this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
+            gSaveContext.weekEventReg[51] &= 0xEF;
             Actor_SetHeight(&this->dyna.actor, IREG(88));
-            return;
-        }
-    }
-
-    Actor_MarkForDeath(&this->dyna.actor);
+            break;
+        default:
+            Actor_MarkForDeath(&this->dyna.actor);
+    } 
 }
 
 void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -100,7 +97,7 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     if (IKNV_OBJ_TYPE(this) != IKNV_OBJ_RAISED_DOOR) {
         if (IKNV_OBJ_TYPE(this) == IKNV_OBJ_SAKON_DOOR) {
             Collider_DestroyCylinder(globalCtx, &this->collider);
-            gSaveContext.weekEventReg[0x33] &= 0xEF;
+            gSaveContext.weekEventReg[51] &= 0xEF;
         } else {
             return;
         }
@@ -110,32 +107,32 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 func_80BD7CEC(BgIknvObj* this) {
     if (this->dyna.actor.cutscene == -1) {
-        return 1;
+        return true;
     }
 
     if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
-        return 1;
+        return true;
     }
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        return 1;
+        return true;
     }
 
     ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-    return 0;
+    return false;
 }
 
 void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[0xE] & 4) {
-        this->dyna.actor.shape.rot.z += -0x64;
+    if (gSaveContext.weekEventReg[14] & 4) {
+        this->dyna.actor.shape.rot.z -= 0x64;
         func_800B9098(&this->dyna.actor);
-        func_800B9010(&this->dyna.actor, 0x21AA);
+        func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if (globalCtx->csCtx.state != 0 && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.unk12 == 4 &&
-        globalCtx->csCtx.frames == 0x5D7) {
-        func_8019F128(0x29A9);
+    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk12 == 4) &&
+        (globalCtx->csCtx.frames == 0x5D7)) {
+        func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }
 
@@ -145,29 +142,29 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx)
     if (targetRotation != this->dyna.actor.shape.rot.y) {
         Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 100, 100);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
-        if ((globalCtx->gameplayFrames & 1) != 0) {
+        if ((globalCtx->gameplayFrames % 2) != 0) {
             this->dyna.actor.shape.yOffset = 5.0f;
         }
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
-        return 0;
+        return false;
     }
     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
-    return 1;
+    return true;
 }
 
 void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7E0C(this, this->dyna.actor.home.rot.y, globalCtx)) {
         this->actionFunc = BgIknvObj_UpdateSakonDoor;
-        gSaveContext.weekEventReg[0x33] &= 0xEF;
+        gSaveContext.weekEventReg[51] &= 0xEF;
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time >= 0xD001) {
+    if (gSaveContext.time > 0xD000) {
         this->actionFunc = func_80BD7ED8;
     }
-    if (this->dyna.actor.home.rot.x == 1 && (gSaveContext.weekEventReg[0x3A] & 0x80) == 0) {
+    if ((this->dyna.actor.home.rot.x == 1) && !(gSaveContext.weekEventReg[58] & 0x80)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.home.rot.x = 0;
     }
@@ -177,7 +174,7 @@ void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
 void func_80BD7FDC(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7E0C(this, this->dyna.actor.home.rot.y + 0x4000, globalCtx)) {
         this->actionFunc = func_80BD7F4C;
-        gSaveContext.weekEventReg[0x33] |= 0x10;
+        gSaveContext.weekEventReg[51] |= 0x10;
         this->dyna.actor.home.rot.x = 1;
     }
 }
@@ -190,9 +187,9 @@ void func_80BD8040(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[0x3A] & 0x80) != 0) {
+    if ((gSaveContext.weekEventReg[58] & 0x80)) {
         this->actionFunc = func_80BD8040;
-        gSaveContext.weekEventReg[0x59] |= 0x80;
+        gSaveContext.weekEventReg[89] |= 0x80;
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
