@@ -1,9 +1,9 @@
 #include <ultra64.h>
 #include <global.h>
 
-void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 param_3) {
-    func_80151938(globalCtx, param_3);
-    actor->textId = param_3;
+void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId) {
+    func_80151938(globalCtx, textId);
+    actor->textId = textId;
 }
 
 s32 nop_800E8ED0(UNK_TYPE4 param_1) {
