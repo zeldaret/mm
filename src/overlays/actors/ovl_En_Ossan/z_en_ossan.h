@@ -2,6 +2,7 @@
 #define Z_EN_OSSAN_H
 
 #include <global.h>
+
 #include "../ovl_En_GirlA/z_en_girla.h"
 
 struct EnOssan;
@@ -55,7 +56,7 @@ typedef struct EnOssan {
     /* 0x1E0 */ s16 unk1E0;
     /* 0x1E2 */ s16 unk1E2;
     /* 0x1E4 */ EnOssanUnkFunc unkFunc;
-    /* 0x1E8 */ EnGirlA *unk1E8[8];
+    /* 0x1E8 */ EnGirlA *shopItems[8];
     /* 0x208 */ s32 unk208;
     /* 0x20C */ s32 unk20C;
     /* 0x210 */ u8 unk210;
@@ -70,12 +71,12 @@ typedef struct EnOssan {
     /* 0x235 */ u8 unk235;
     /* 0x236 */ u8 unk236;
     /* 0x237 */ char unk237[0x1];
-    /* 0x238 */ StickDirectionPrompt unk238;
-    /* 0x270 */ StickDirectionPrompt unk270;
-    /* 0x2A8 */ f32 unk2A8;
-    /* 0x2AC */ f32 unk2AC;
-    /* 0x2B0 */ u8 unk2B0;
-    /* 0x2B1 */ u8 unk2B1;
+    /* 0x238 */ StickDirectionPrompt stickRightPrompt;
+    /* 0x270 */ StickDirectionPrompt stickLeftPrompt;
+    /* 0x2A8 */ f32 arrowAnimTween;
+    /* 0x2AC */ f32 stickAnimTween;
+    /* 0x2B0 */ u8 arrowAnimState;
+    /* 0x2B1 */ u8 stickAnimState;
     /* 0x2B2 */ char unk2B2[0x2];
     /* 0x2B4 */ f32 unk2B4;
     /* 0x2B8 */ s16 unk2B8;
