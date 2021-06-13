@@ -434,6 +434,7 @@ void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this) {
+    //! @bug: Bomb Bag paramters in sShopItemEntries are 1 2 3, not 20 21 22
     switch (this->itemParams) {
         case 20:
             Item_Give(globalCtx, ITEM_BOMB_BAG_20);
