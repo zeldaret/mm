@@ -126,7 +126,7 @@ extern EnOssanUnkStruct D_808AC1D4[][8];
 
 extern f32 D_808AC1CC[];
 
-extern EnOssanAnimation* D_808AC1C4[];
+extern ActorAnimationEntryS* D_808AC1C4[];
 
 extern Vec3f D_808AC28C[];
 
@@ -333,7 +333,7 @@ void func_808A8798(EnOssan* this, GlobalContext* globalCtx) {
 #if NON_MATCHING
 // Matches but jumptable is in late rodata
 void func_808A890C(EnOssan* this, GlobalContext* globalCtx) {
-    EnOssanAnimation* animations = D_808AC1C4[this->actor.params];
+    ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
     s16 curFrame = this->skelAnime.animCurrentFrame;
     s16 frameCount;
 
@@ -514,7 +514,7 @@ u8 func_808A8E84(EnOssan* this, u8 arg1, u8 arg2) {
 #endif
 
 void func_808A8EEC(EnOssan* this, GlobalContext* globalCtx) {
-    EnOssanAnimation* animations = D_808AC1C4[this->actor.params];
+    ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
     u8 sp33 = func_80152498(&globalCtx->msgCtx);
     s32 pad;
     ActorPlayer* player = PLAYER;
@@ -549,7 +549,7 @@ void func_808A8EEC(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808A90A4(EnOssan* this, GlobalContext* globalCtx) {
-    EnOssanAnimation* animations = D_808AC1C4[this->actor.params];
+    ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
     ActorPlayer* player = PLAYER;
 
     switch (globalCtx->msgCtx.choiceIndex) {
@@ -620,7 +620,7 @@ void func_808A91B4(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void func_808A935C(EnOssan* this, GlobalContext* globalCtx) {
-    EnOssanAnimation* animations = D_808AC1C4[this->actor.params];
+    ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
 
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->unk402 == 9 && this->actor.params == 1) {
@@ -1204,25 +1204,22 @@ s32 func_808AA85C(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AA85C.asm")
 #endif
 
-#if NON_MATCHING
-// Needs to unroll to 4 not 2
 void func_808AA8E8(EnOssan* this) {
-    EnGirlA** tmp = this->shopItems;
+    EnGirlA** shopItems = this->shopItems;
+    EnGirlA* shopItem;
     s32 i;
 
-    for (i = 0; i < 8; i++, tmp++) {
-        if (*tmp != NULL) {
+    for (i = 0; i < 8; i++, shopItems++) {
+        shopItem = *shopItems;
+        if (shopItem != NULL) {
             if (this->actionFunc != func_808AA0C8 && this->actionFunc != func_808AA1B0 && this->unk235 == 0) {
-                (*tmp)->unk1AC = 0;
+                shopItem->isSelected = 0;
             } else {
-                (*tmp)->unk1AC = this->unk236 == i ? 1 : 0;
+                shopItem->isSelected = this->unk236 == i ? 1 : 0;
             }
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AA8E8.asm")
-#endif
 
 #define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
@@ -1245,10 +1242,10 @@ void func_808AAA64(EnOssan* this) {
             this->unk234 = 0;
         }
     }
-    this->unk220.r = ColChanMix(0, 0.0f, t);
-    this->unk220.g = ColChanMix(80, 80.0f, t);
-    this->unk220.b = ColChanMix(255, 0.0f, t);
-    this->unk220.a = ColChanMix(255, 0.0f, t);
+    this->unkColorR = ColChanMix(0, 0.0f, t);
+    this->unkColorG = ColChanMix(80, 80.0f, t);
+    this->unkColorB = ColChanMix(255, 0.0f, t);
+    this->unkColorA = ColChanMix(255, 0.0f, t);
     this->unk230 = t;
 }
 #else
@@ -1289,20 +1286,20 @@ void func_808AAB30(EnOssan* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-    
+
     new_var3 = 155.0f * arrowAnimTween;
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickRightPrompt.arrowColor.r = ColChanMix(255, 155.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColor.g = ColChanMix(new_var2, 155.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColor.b = ColChanMix(0, -100, arrowAnimTween);
-    this->stickRightPrompt.arrowColor.a = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorR = ColChanMix(255, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorG = ColChanMix(new_var2, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorB = ColChanMix(0, -100, arrowAnimTween);
+    this->stickRightPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
 
-    this->stickLeftPrompt.arrowColor.r = (new_var2 - ((s32)new_var3)) & 0xFF;
-    this->stickLeftPrompt.arrowColor.g = (255 - ((s32)new_var3)) & 0xFF;
-    this->stickLeftPrompt.arrowColor.b = ColChanMix(0, -100.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColor.a = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
+    this->stickLeftPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
+    this->stickLeftPrompt.arrowColorB = ColChanMix(0, -100.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
 
     this->stickLeftPrompt.arrowTexX = 290.0f;
     this->stickRightPrompt.arrowTexX = 33.0f;
@@ -1310,7 +1307,7 @@ void func_808AAB30(EnOssan* this) {
     this->stickLeftPrompt.stickTexX = 274.0f;
     this->stickLeftPrompt.stickTexX = this->stickLeftPrompt.stickTexX + (8.0f * stickAnimTween);
     this->stickRightPrompt.stickTexX = 49.0f - (8.0f * stickAnimTween);
-    
+
     this->stickRightPrompt.arrowTexY = this->stickLeftPrompt.arrowTexY = 91.0f;
     this->stickRightPrompt.stickTexY = this->stickLeftPrompt.stickTexY = 95.0f;
 }
@@ -1454,7 +1451,7 @@ void func_808AB16C(EnOssan* this, GlobalContext* globalCtx) {
     EnOssanUnkStruct* sp24;
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->unk1DE)) {
-        this->actor.flags &= -0x11;
+        this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->unk1DE;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         sp24 = D_808AC1D4[this->actor.params];
@@ -1472,43 +1469,43 @@ void func_808AB16C(EnOssan* this, GlobalContext* globalCtx) {
 
         this->unk236 = 0;
         this->unk21C = 1.5f;
-        this->unk220.r = 0;
-        this->unk220.g = 80;
-        this->unk220.b = 255;
-        this->unk220.a = 255;
+        this->unkColorR = 0;
+        this->unkColorG = 80;
+        this->unkColorB = 255;
+        this->unkColorA = 255;
         this->unk230 = 0.0f;
 
         this->unk234 = 0;
         this->unk235 = 0;
 
-        this->stickRightPrompt.stickColor.r = 200;
-        this->stickRightPrompt.stickColor.g = 200;
-        this->stickRightPrompt.stickColor.b = 200;
-        this->stickRightPrompt.stickColor.a = 180;
+        this->stickRightPrompt.stickColorR = 200;
+        this->stickRightPrompt.stickColorG = 200;
+        this->stickRightPrompt.stickColorB = 200;
+        this->stickRightPrompt.stickColorA = 180;
         this->stickRightPrompt.stickTexX = 49.0f;
         this->stickRightPrompt.stickTexY = 95.0f;
-        this->stickRightPrompt.arrowColor.r = 255;
-        this->stickRightPrompt.arrowColor.g = 255;
-        this->stickRightPrompt.arrowColor.b = 0;
-        this->stickRightPrompt.arrowColor.a = 200;
+        this->stickRightPrompt.arrowColorR = 255;
+        this->stickRightPrompt.arrowColorG = 255;
+        this->stickRightPrompt.arrowColorB = 0;
+        this->stickRightPrompt.arrowColorA = 200;
         this->stickRightPrompt.arrowTexX = 33.0f;
         this->stickRightPrompt.arrowTexY = 91.0f;
-        this->stickRightPrompt.z = 1.0f;
+        this->stickRightPrompt.texZ = 1.0f;
         this->stickRightPrompt.isEnabled = false;
 
-        this->stickLeftPrompt.stickColor.r = 200;
-        this->stickLeftPrompt.stickColor.g = 200;
-        this->stickLeftPrompt.stickColor.b = 200;
-        this->stickLeftPrompt.stickColor.a = 180;
+        this->stickLeftPrompt.stickColorR = 200;
+        this->stickLeftPrompt.stickColorG = 200;
+        this->stickLeftPrompt.stickColorB = 200;
+        this->stickLeftPrompt.stickColorA = 180;
         this->stickLeftPrompt.stickTexX = 274.0f;
         this->stickLeftPrompt.stickTexY = 95.0f;
-        this->stickLeftPrompt.arrowColor.r = 255;
-        this->stickLeftPrompt.arrowColor.g = 255;
-        this->stickLeftPrompt.arrowColor.b = 0;
-        this->stickLeftPrompt.arrowColor.a = 200;
+        this->stickLeftPrompt.arrowColorR = 255;
+        this->stickLeftPrompt.arrowColorG = 255;
+        this->stickLeftPrompt.arrowColorB = 0;
+        this->stickLeftPrompt.arrowColorA = 200;
         this->stickLeftPrompt.arrowTexX = 290.0f;
         this->stickLeftPrompt.arrowTexY = 91.0f;
-        this->stickLeftPrompt.z = 1.0f;
+        this->stickLeftPrompt.texZ = 1.0f;
         this->stickLeftPrompt.isEnabled = false;
 
         this->arrowAnimState = 0;
@@ -1561,7 +1558,7 @@ void func_808AB52C(GlobalContext* globalCtx, EnOssan* this, f32 arg2, f32 arg3, 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (arg5 != 0) {
         func_8012C654(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->unk220.r, this->unk220.g, this->unk220.b, this->unk220.a);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->unkColorR, this->unkColorG, this->unkColorB, this->unkColorA);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * arg4;
@@ -1620,16 +1617,16 @@ void func_808AB928(GlobalContext* globalCtx, EnOssan* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
-            func_808AB78C(globalCtx, this->stickRightPrompt.arrowColor.r, this->stickRightPrompt.arrowColor.g,
-                          this->stickRightPrompt.arrowColor.b, this->stickRightPrompt.arrowColor.a,
-                          this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY, this->stickRightPrompt.z,
-                          0, 0, -1.0f, 1.0f);
+            func_808AB78C(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
+                          this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+                          this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
+                          this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            func_808AB78C(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
-                          this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
-                          this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY, this->stickLeftPrompt.z, 0,
-                          0, 1.0f, 1.0f);
+            func_808AB78C(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
+                          this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+                          this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY, this->stickLeftPrompt.texZ,
+                          0, 0, 1.0f, 1.0f);
         }
         gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1641,16 +1638,16 @@ void func_808AB928(GlobalContext* globalCtx, EnOssan* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
-            func_808AB78C(globalCtx, this->stickRightPrompt.stickColor.r, this->stickRightPrompt.stickColor.g,
-                          this->stickRightPrompt.stickColor.b, this->stickRightPrompt.stickColor.a,
-                          this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY, this->stickRightPrompt.z,
-                          0, 0, -1.0f, 1.0f);
+            func_808AB78C(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
+                          this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+                          this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
+                          this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            func_808AB78C(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
-                          this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
-                          this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY, this->stickLeftPrompt.z, 0,
-                          0, 1.0f, 1.0f);
+            func_808AB78C(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
+                          this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+                          this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY, this->stickLeftPrompt.texZ,
+                          0, 0, 1.0f, 1.0f);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);

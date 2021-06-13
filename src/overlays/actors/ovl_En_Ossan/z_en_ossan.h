@@ -18,29 +18,19 @@ typedef struct EnOssanUnkStruct {
 } EnOssanUnkStruct; // size = 0x8;
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} EnOssanAnimation; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32 r;
-    /* 0x4 */ u32 g;
-    /* 0x8 */ u32 b;
-    /* 0xC */ u32 a;
-} EnvColor; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ EnvColor stickColor;
+    /* 0x00 */ u32 stickColorR;
+    /* 0x04 */ u32 stickColorG;
+    /* 0x08 */ u32 stickColorB;
+    /* 0x0C */ u32 stickColorA;
     /* 0x10 */ f32 stickTexX;
     /* 0x14 */ f32 stickTexY;
-    /* 0x18 */ EnvColor arrowColor;
+    /* 0x18 */ u32 arrowColorR;
+    /* 0x1C */ u32 arrowColorG;
+    /* 0x20 */ u32 arrowColorB;
+    /* 0x24 */ u32 arrowColorA;
     /* 0x28 */ f32 arrowTexX;
     /* 0x2C */ f32 arrowTexY;
-    /* 0x30 */ f32 z;
+    /* 0x30 */ f32 texZ; // Used for both stickTexZ and arrowTexZ
     /* 0x34 */ s32 isEnabled;
 } StickDirectionPrompt; // size = 0x38
 
@@ -65,7 +55,10 @@ typedef struct EnOssan {
     /* 0x214 */ f32 unk214;
     /* 0x218 */ f32 unk218;
     /* 0x21C */ f32 unk21C;
-    /* 0x220 */ EnvColor unk220;
+    /* 0x220 */ u32 unkColorR;
+    /* 0x224 */ u32 unkColorG;
+    /* 0x228 */ u32 unkColorB;
+    /* 0x22C */ u32 unkColorA;
     /* 0x230 */ f32 unk230;
     /* 0x234 */ u8 unk234;
     /* 0x235 */ u8 unk235;
