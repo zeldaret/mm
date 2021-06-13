@@ -480,38 +480,27 @@ u8 func_808A8CC0(EnOssan* this, u8 arg1) {
     return 0xFF;
 }
 
-#if NON_MATCHING
-// Weird for loop
 u8 func_808A8DF8(EnOssan* this, u8 arg1, u8 arg2) {
     u8 end = arg2 + 4;
-    if (arg1 >= arg2 && arg1 < end) {
-        for (arg1 -= 2; arg1 >= arg2 && arg1 < end; arg1 -= 2) {
-            if (this->shopItems[arg1] != NULL) {
-                return arg1;
-            }
-        }
-    }
-    return 0xFF;
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808A8DF8.asm")
-#endif
 
-#if NON_MATCHING
-// Weird for loop
-u8 func_808A8E84(EnOssan* this, u8 arg1, u8 arg2) {
-    if (arg1 < arg2) {
-        for (arg1 += 2; arg1 < arg2; arg1 += 2) {
-            if (arg1 < arg2 && this->shopItems[arg1] != NULL) {
-                return arg1;
-            }
+    while (arg1 >= arg2 && arg1 < end) {
+        arg1 -= 2;
+        if (arg1 >= arg2 && arg1 < end && this->shopItems[arg1] != NULL) {
+            return arg1;
         }
     }
     return 0xFF;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808A8E84.asm")
-#endif
+
+u8 func_808A8E84(EnOssan* this, u8 arg1, u8 arg2) {
+    while (arg1 < arg2) {
+        arg1 += 2;
+        if(arg1 < arg2 && this->shopItems[arg1] != NULL) {
+            return arg1;
+        }
+    }
+    return 0xFF;
+}
 
 void func_808A8EEC(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
