@@ -3,19 +3,92 @@
 
 #include "z_camera_data.c"
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_fabsf.asm")
+f32 Camera_fabsf(f32 f) {
+    return ABS(f);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_LengthVec3f.asm")
+f32 Camera_Vec3fMagnitude(Vec3f* vec) {
+    return sqrtf(SQ(vec->x) + SQ(vec->y) + SQ(vec->z));
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB270.asm")
+// ISMATCHING: Need to move rodata
+// D_801DCDC0 = 0.4f
+/**
+ * Interpolates along a curve between 0 and 1 with a period of
+ * -a <= p <= a at time `b`
+ */
+#ifdef NON_MATCHING
+f32 Camera_InterpolateCurve(f32 a, f32 b) {
+    f32 ret;
+    f32 absB;
+    f32 t  = 0.4f;
+    f32 t2;
+    f32 t3;
+    f32 t4;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Lerpf.asm")
+    absB = Camera_fabsf(b);
+    if (a < absB) {
+        ret = 1.0f;
+    } else {
+        t2 = 1.0f - t;
+        if ((a * t2) > absB) {
+            t3 = SQ(b) * (1.0f - t);
+            t4 = SQ(a * t2);
+            ret = t3 / t4;
+        } else {
+            t3 = SQ(a - absB) * t;
+            t4 = SQ(0.4f * a);
+            ret = 1.0f - (t3 / t4);
+        }
+    }
+    return ret;
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InterpolateCurve.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Lerps.asm")
+/*
+ * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
+ * `minDiff` units, The result is rounded up to `target`
+ */
+f32 Camera_LERPCeilF(f32 target, f32 cur, f32 stepScale, f32 minDiff) {
+    f32 diff = target - cur;
+    f32 step = diff * stepScale;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB42C.asm")
+    return (Camera_fabsf(diff) >= minDiff) ? cur + step : target;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_LerpVec3f.asm")
+/*
+ * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
+ * `minDiff` units, The result is rounded up to `target`
+ */
+s16 Camera_LERPCeilS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
+    s16 diff = target - cur;
+    s16 step = diff * stepScale + 0.5f;
+
+    return (ABS(diff) >= minDiff) ? cur + step : target;
+}
+
+/*
+ * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
+ * `minDiff` units, The result is rounded down to `cur`
+ */
+s16 Camera_LERPFloorS(s16 target, s16 cur, f32 stepScale, s16 minDiff) {
+    s16 diff = target - cur;
+    s16 step = diff * stepScale + 0.5f;
+
+    return (ABS(diff) >= minDiff) ? cur + step : cur;
+}
+
+/*
+ * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
+ * `minDiff` units, The result is rounded up to `target`
+ */
+void Camera_LERPCeilVec3f(Vec3f* target, Vec3f* cur, f32 xzStepScale, f32 yStepScale, f32 minDiff) {
+    cur->x = Camera_LERPCeilF(target->x, cur->x, xzStepScale, minDiff);
+    cur->y = Camera_LERPCeilF(target->y, cur->y, yStepScale, minDiff);
+    cur->z = Camera_LERPCeilF(target->z, cur->z, xzStepScale, minDiff);
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB544.asm")
 
