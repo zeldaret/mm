@@ -718,20 +718,20 @@ void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
 #ifdef NON_MATCHING
+// Waiting to import data
 void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
     static s16 D_80AC0258;
+    ActorPlayer *player = PLAYER;
 
-    player->unkA74 = (player->unkA74 | 0x400);
+    player->unkA74 |= 0x400;
     func_80ABF0D8(this, globalCtx);
     if (this->unk_338 != D_80AC0258) {
         D_80AC0258 = this->unk_338;
         globalCtx->interfaceCtx.unk25C = 1;
     }
-    if ((gSaveContext.unk_3E18[4] >= 0x2EE0) || (this->unk_338 == 0xA)) {
-        gSaveContext.unk_3DC2 = 6;
+    if ((gSaveContext.unk_3DE0[4] >= 0x2EE0U) || (this->unk_338 == 0xA)) {
+        gSaveContext.unk_3DD0[4] = 6;
         func_80ABF2FC(this, globalCtx);
         D_80AC0258 = 0;
     }
