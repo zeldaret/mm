@@ -32,7 +32,7 @@ void func_800CAE9C(DynaPolyActor* actor) {
 void func_800CAEB0(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(bgCtxt, index);
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAE9C(actor);
     }
@@ -45,7 +45,7 @@ void func_800CAEE0(DynaPolyActor* actor) {
 void func_800CAEF4(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(bgCtxt, index);
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAEE0(actor);
     }

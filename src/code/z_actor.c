@@ -148,15 +148,15 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5040.asm")
 
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
-    targetCtxt->unk90 = NULL;
-    targetCtxt->unk8C = NULL;
-    targetCtxt->unk3C = NULL;
-    targetCtxt->unk38 = NULL;
-    targetCtxt->unk4B = 0;
-    targetCtxt->unk4C = 0;
-    targetCtxt->unk40 = 0;
-    func_800B5040(targetCtxt, actor, actor->category, globalCtx);
-    func_800B4F78(targetCtxt, actor->category, globalCtx);
+    targetCtx->unk90 = NULL;
+    targetCtx->unk8C = NULL;
+    targetCtx->unk3C = NULL;
+    targetCtx->unk38 = NULL;
+    targetCtx->unk4B = 0;
+    targetCtx->unk4C = 0;
+    targetCtx->unk40 = 0;
+    func_800B5040(targetCtx, actor, actor->category, globalCtx);
+    func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B5208.asm")
@@ -236,33 +236,33 @@ void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
 }
 
 void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
-    titleCtxt->fadeOutDelay = 0;
-    titleCtxt->fadeInDelay = 0;
-    titleCtxt->color = 0;
-    titleCtxt->alpha = 0;
+    titleCardCtx->fadeOutDelay = 0;
+    titleCardCtx->fadeInDelay = 0;
+    titleCardCtx->color = 0;
+    titleCardCtx->alpha = 0;
 }
 
 void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4, s16 param_5,
                            u8 param_6, u8 param_7) {
-    titleCtxt->texture = texture;
-    titleCtxt->unk4 = param_4;
-    titleCtxt->unk6 = param_5;
-    titleCtxt->unk8 = param_6;
-    titleCtxt->unk9 = param_7;
-    titleCtxt->fadeOutDelay = 80;
-    titleCtxt->fadeInDelay = 0;
+    titleCardCtx->texture = texture;
+    titleCardCtx->unk4 = param_4;
+    titleCardCtx->unk6 = param_5;
+    titleCardCtx->unk8 = param_6;
+    titleCardCtx->unk9 = param_7;
+    titleCardCtx->fadeOutDelay = 80;
+    titleCardCtx->fadeInDelay = 0;
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Nop800B5E50.asm")
 
 void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
-    if (DECR(titleCtxt->fadeInDelay) == 0) {
-        if (DECR(titleCtxt->fadeOutDelay) == 0) {
-            Math_StepToS(&titleCtxt->alpha, 0, 30);
-            Math_StepToS(&titleCtxt->color, 0, 70);
+    if (DECR(titleCardCtx->fadeInDelay) == 0) {
+        if (DECR(titleCardCtx->fadeOutDelay) == 0) {
+            Math_StepToS(&titleCardCtx->alpha, 0, 30);
+            Math_StepToS(&titleCardCtx->color, 0, 70);
         } else {
-            Math_StepToS(&titleCtxt->alpha, 255, 10);
-            Math_StepToS(&titleCtxt->color, 255, 20);
+            Math_StepToS(&titleCardCtx->alpha, 255, 10);
+            Math_StepToS(&titleCardCtx->color, 255, 20);
         }
     }
 }

@@ -143,18 +143,18 @@ void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
     skyboxCtx->skyboxShouldDraw = 0;
     skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
 
-    func_801431E8(state, skyboxCtx, skyType);
+    func_801431E8(gamestate, skyboxCtx, skyType);
 
     if (skyType != 0) {
-        skyboxCtx->unk17C = THA_AllocEndAlign16(&state->heap, 0x3840);
+        skyboxCtx->unk17C = THA_AllocEndAlign16(&gamestate->heap, 0x3840);
 
         if (skyType == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
-            skyboxCtx->roomVtx = THA_AllocEndAlign16(&state->heap, sizeof(Vtx) * 32 * 6);
+            skyboxCtx->roomVtx = THA_AllocEndAlign16(&gamestate->heap, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);
         } else {
             // Allocate enough space for the vertices for a 5 sided skybox (bottom is missing)
-            skyboxCtx->roomVtx = THA_AllocEndAlign16(&state->heap, sizeof(Vtx) * 32 * 5);
+            skyboxCtx->roomVtx = THA_AllocEndAlign16(&gamestate->heap, sizeof(Vtx) * 32 * 5);
             func_80143148(skyboxCtx, 5);
         }
     }

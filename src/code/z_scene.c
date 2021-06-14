@@ -25,7 +25,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
 }
 
 void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+    GlobalContext* globalCtx = (GlobalContext*)gamestate;
     s32 pad;
     u32 spaceSize;
     s32 i;
@@ -50,7 +50,7 @@ void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&state->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gamestate->heap, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
