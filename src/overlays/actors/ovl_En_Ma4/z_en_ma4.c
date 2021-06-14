@@ -199,29 +199,25 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     gSaveContext.weekEventReg[0x8] &= 0xFE;
 }
 
-extern s32 D_80AC024C;
-extern s32 D_80AC0250;
-extern s16 D_80AC0254;
 
 
-/*
+#ifdef NON_MATCHING
+// Waiting to import data
 void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
+    static s32 D_80AC024C;
+    static s32 D_80AC0250;
+    static s16 D_80AC0254;
     Vec3f sp34;
+    s32 pad;
     s16 sp2E;
-    //PosRot *sp28;
-    //PosRot *temp_a0;
-    //SkelAnime *temp_a0_2;
-    //f32 *temp_a1;
-    //s16 temp_v0_2;
-    //s16 temp_v0_3;
 
-    if ((D_80AC024C != 9) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
+    if (D_80AC024C != 9 && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
         if (D_80AC024C == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
             } else {
                 D_80AC0250 = 0;
-                EnMa4_ChangeAnim(this, 13);
+                EnMa4_ChangeAnim(this, 0xD);
                 D_80AC024C = 0xD;
             }
         } else {
@@ -231,37 +227,29 @@ void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
         }
     }
 
-    if ((D_80AC024C == 0xD) && (func_801378B8(&this->skelAnime, 37.0f) != 0)) {
-        Audio_PlayActorSound2(this, 0x29BF);
+    if (D_80AC024C == 0xD && func_801378B8(&this->skelAnime, 37.0f)) {
+        Audio_PlayActorSound2(&this->actor, 0x29BF);
     }
 
-    //temp_a0 = &this->actor.world;
-    //temp_a1 = &sp34;
-    sp34.x = (f32) this->unk_200[this->unk_324].x;
-    sp34.y = (f32) this->unk_200[this->unk_324].y;
-    //sp28 = temp_a0;
-    sp34.z = (f32) this->unk_200[this->unk_324].z;
-
-    sp2E = Math_Vec3f_Yaw(&this->actor.world, &sp34);
-
-    if (Math_Vec3f_DistXZ(&this->actor.world, &sp34) > 50.0f) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp2E, (u16)0xA, (u16)0x3000, 0x100);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, (u16)5, (u16)0x3000, 0x100);
+    sp34.x = this->unk_200[this->unk_324].x;
+    sp34.y = this->unk_200[this->unk_324].y;
+    sp34.z = this->unk_200[this->unk_324].z;
+    sp2E = Math_Vec3f_Yaw(&this->actor.world.pos, &sp34);
+    if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp34) > 50.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp2E, 10, 0x3000, 0x100);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 5, 0x3000, 0x100);
     } else {
         if ((D_80AC0254 == 0) && ((Rand_Next() % 4) == 0)) {
             this->actor.speedXZ = 0.0f;
-            D_80AC0254 = (u16)2;
+            D_80AC0254 = 2;
             EnMa4_ChangeAnim(this, 3);
             D_80AC024C = 3;
         } else {
-            //D_80AC0254 = D_80AC0254;
-            if ((s32) D_80AC0254 > 0) {
-                D_80AC0254 = (s16) (D_80AC0254 - 1);
+            if (D_80AC0254 > 0) {
+                D_80AC0254--;
             }
         }
-
-        //temp_v0_3 = this->unk_324;
-        if ((s32) this->unk_324 < (this->unk_326 - 1)) {
+        if (this->unk_324 < (this->unk_326 - 1)) {
             this->unk_324++;
         } else {
             this->unk_324 = 0;
@@ -270,17 +258,19 @@ void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
 
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    //temp_a0_2 = &this->skelAnime;
     if (this->skelAnime.animCurrentSeg == &D_06007328) {
-        //sp28 = (PosRot *) temp_a0_2;
-        if ((func_801378B8(&this->skelAnime, 0.0f) != 0) || (func_801378B8(&this->skelAnime, 4.0f) != 0)) {
-            Audio_PlayActorSound2(this, 0x3ABE);
+        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
+            Audio_PlayActorSound2(&this->actor, 0x3ABE);
         }
     }
 }
-*/
+#else
+extern s32 D_80AC024C;
+extern s32 D_80AC0250;
+extern s16 D_80AC0254;
 void func_80ABE1C4(EnMa4* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE1C4.asm")
+#endif
 
 
 
