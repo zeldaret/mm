@@ -95,33 +95,20 @@ extern AnimationHeader D_06002A8C;
 extern AnimationHeader D_06015B7C;
 
 
-/*
 void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
-    Actor *temp_v1;
-    s32 phi_a3;
+    ActorPlayer* player = PLAYER;
+    s16 phi_a3;
 
-    temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    if (this->unk_1D8 == 0) {
-        if ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C)) {
-            phi_a3 = 1;
-        } else {
-block_5:
-            phi_a3 = 0;
-            if (this->unk_332 == 2) {
-                if (func_80ABEF8C != this->actionFunc) {
-                    phi_a3 = 1;
-                }
-            }
-        }
+    if (this->unk_1D8 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
+        phi_a3 = 1;
     } else {
-        goto block_5;
+        phi_a3 = (this->unk_332 == 2 && this->actionFunc != func_80ABEF8C) ? 1 : 0;
     }
-    this->unk_1F0 = temp_v1->world.pos;
-    this->unk_1F0.y = this->unk_1F0.y - -10.0f;
-    func_800BD888(&this->unk_1D8, 0, phi_a3);
+
+    this->unk_1F0 = player->base.world.pos;
+    this->unk_1F0.y -= -10.0f;
+    func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABDD9C.asm")
 
 
 // InitPath?
@@ -318,43 +305,34 @@ void func_80ABE4A4(EnMa4 *this) {
 }
 
 
-/*
-void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player;
-    s16 sp22;
-    s16 temp_v0;
-    s16 temp_v0_2;
-    s32 phi_v0;
 
-    player = PLAYER;
-    sp22 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
-    temp_v0 = this->unk_336;
-    if ((temp_v0 == 2) || (temp_v0 == 3)) {
+void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
+    ActorPlayer *player = PLAYER;
+    s16 sp22 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
+
+    if ((this->unk_336 == 2) || (this->unk_336 == 3)) {
         this->actor.flags = this->actor.flags | 0x10000;
     } else if (this->unk_332 != 2) {
         func_80ABE1C4(this, globalCtx);
-    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-        this->unk_33C = this->unk_33C + 1;
-        temp_v0_2 = this->unk_33C;
-        if (temp_v0_2 == 5) {
+    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        this->unk_33C++;
+        if (this->unk_33C == 5) {
             EnMa4_ChangeAnim(this, 17);
-        } else if (temp_v0_2 == 8) {
+        } else if (this->unk_33C == 8) {
             this->unk_33C = 0;
             EnMa4_ChangeAnim(this, 15);
         }
     }
+
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         func_80ABF7C8(this, globalCtx);
         func_80ABEF34(this);
-    } else if (this->unk_332 != 2 || ABS_ALT(sp22) < 0x4000) {
-        if ((player->stateFlags1 << 8) >= 0) {
-        //if ((player->stateFlags1 & 0xFFFFFF00))
+    } else if (!(this->unk_332 == 2) || ABS_ALT(sp22) < 0x4000) {
+        if (!(player->stateFlags1 & 0x800000)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE560.asm")
 
 
 
@@ -711,7 +689,6 @@ void func_80ABF198(EnMa4 *this, GlobalContext *globalCtx) {
 void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
 
-    //temp_v0 = globalCtx->actorCtx.actorList[2].first;
     if (globalCtx->interfaceCtx.unk_280 == 8) {
         this->actionFunc = func_80ABF254;
         player->stateFlags1 = (s32) (player->stateFlags1 & ~0x20);
