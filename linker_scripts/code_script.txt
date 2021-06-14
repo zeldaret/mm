@@ -364,7 +364,7 @@ SECTIONS
         build/src/code/code_0x800CAAD0.o(.text)
         build/src/code/code_0x800CAE10.o(.text)
         build/asm/code/code_0x800CB000.o(.text)
-        build/asm/code/z_camera.o(.text)
+        build/src/code/z_camera.o(.text)
         build/src/code/z_collision_btltbls.o(.text)
         . += 0x10;
         build/src/code/z_collision_check.o(.text)
@@ -501,7 +501,7 @@ SECTIONS
         build/asm/code/code_data_z_actor.o(.data)
         build/src/code/z_actor_dlftbls.o(.data)
         build/asm/code/code_data_z_bgcheck.o(.data)
-        build/asm/code/code_data_z_camera.o(.data)
+        build/src/code/z_camera.o(.data)
         build/src/code/z_collision_btltbls.o(.data)
         build/src/code/z_collision_check.o(.data)
         build/asm/code/code_data_z_debug_display.o(.data)
@@ -718,6 +718,7 @@ SECTIONS
 
     /* Unknown buffers */
     D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
+    D_801B9CE2 = 0x801B9CE2; /* Used in z_camera.c */
     D_801C1E2C = 0x801C1E2C; /* Used in z_en_ginko_man.c */
     D_80780000 = 0x80780000;
     D_80784600 = 0x80784600;
