@@ -6,7 +6,7 @@
 
 #define THIS ((EnOssan*)thisx)
 
-#define RODATA 0
+#define LATERODATA 0
 
 void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -81,7 +81,6 @@ void func_808A935C(EnOssan* this, GlobalContext* globalCtx);
 void func_808AAB30(EnOssan* this);
 void func_808A95F8(EnOssan* this);
 
-/*
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -93,7 +92,6 @@ const ActorInit En_Ossan_InitVars = {
     (ActorFunc)EnOssan_Update,
     (ActorFunc)NULL,
 };
-*/
 
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
@@ -121,33 +119,6 @@ extern UNK_TYPE D_06005BC0;
 extern UNK_TYPE D_06006F18;
 extern UNK_TYPE D_06006B18;
 
-extern ActorAnimationEntryS D_808AC030[];
-
-extern ActorAnimationEntryS D_808AC100[];
-
-extern s16 D_808AC1C0[];
-
-extern ActorAnimationEntryS* D_808AC1C4[];
-
-extern f32 D_808AC1CC[];
-
-extern EnOssanUnkStruct D_808AC1D4[][8];
-
-extern u16 D_808AC254[][2];
-
-extern u16 D_808AC274[][2];
-
-extern InitChainEntry D_808AC288[];
-
-extern Vec3f D_808AC28C[];
-
-extern EnOssanActionFunc D_808AC2A4[];
-
-extern Vec3f D_808AC2AC;
-
-extern UNK_PTR D_808AC2B8[][3];
-
-/*
 static ActorAnimationEntryS D_808AC030[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
@@ -218,7 +189,6 @@ static UNK_PTR D_808AC2B8[][3] = {
     { &D_06005BC0, &D_06006D40, &D_06007140 },
     { &D_06006498, &D_06006B18, &D_06006F18 },
 };
-*/
 
 void func_808A80A0(EnOssan* this, EnOssanActionFunc action) {
     this->actionFunc = action;
@@ -416,7 +386,7 @@ void func_808A8798(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-#if RODATA
+#if LATERODATA
 void func_808A890C(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = D_808AC1C4[this->actor.params];
     s16 curFrame = this->skelAnime.animCurrentFrame;
@@ -520,7 +490,6 @@ void func_808A8B74(GlobalContext* globalCtx, EnOssan* this) {
         if (temp_v1 < 0x1F && temp_v1 > -0x1F) {
             this->unk20C = 0;
         } else {
-            ;
             if ((this->unk20C * temp_v1) < 0) {
                 this->unk20C = temp_v1;
                 this->unk211 = 1;
@@ -1032,7 +1001,7 @@ void func_808A9E5C(GlobalContext* globalCtx, EnOssan* this, u16 arg2) {
     func_808A80A0(this, func_808AA224);
 }
 
-#if RODATA
+#if LATERODATA
 void func_808A9E98(GlobalContext* globalCtx, EnOssan* this) {
     EnGirlA* shopItem;
 
@@ -1243,7 +1212,7 @@ void func_808AA79C(EnOssan* this) {
     func_808AA6D8(this);
 }
 
-#if RODATA
+#if LATERODATA
 s32 func_808AA7C0(EnOssan* this) {
     Math_ApproachF(&this->unk2B4, 1.0f, 1.0f, 0.15f);
     if (this->unk2B4 >= 0.85f) {
@@ -1259,7 +1228,7 @@ s32 func_808AA7C0(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AA7C0.asm")
 #endif
 
-#if RODATA
+#if LATERODATA
 s32 func_808AA85C(EnOssan* this) {
     Math_ApproachF(&this->unk2B4, 0.0f, 1.0f, 0.15f);
     if (this->unk2B4 <= 0.15f) {
@@ -1294,7 +1263,7 @@ void func_808AA8E8(EnOssan* this) {
 
 #define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
-#if RODATA
+#if LATERODATA
 void func_808AAA64(EnOssan* this) {
     f32 t;
 
@@ -1322,7 +1291,7 @@ void func_808AAA64(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808AAA64.asm")
 #endif
 
-#if RODATA
+#if LATERODATA
 void func_808AAB30(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1488,7 +1457,7 @@ s32 func_808AAFB0(EnOssan* this, GlobalContext* globalCtx) {
     return D_808AC254[0][1];
 }
 
-#if RODATA
+#if LATERODATA
 void func_808AB0B0(EnOssan* this) {
     switch (this->unk2C4) {
         case 0x06A9:

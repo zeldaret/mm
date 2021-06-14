@@ -81,8 +81,8 @@ typedef struct EnOssan {
     /* 0x2C4 */ u16 unk2C4;
     /* 0x2C6 */ Vec3s unk2C6;
     /* 0x2CC */ Vec3s unk2CC;
-    /* 0x2D2 */ s16 unk2D2[0x13];
-    /* 0x2F8 */ s16 unk2F8[0x13];
+    /* 0x2D2 */ s16 unk2D2[19];
+    /* 0x2F8 */ s16 unk2F8[19];
     /* 0x31E */ Vec3s limbDrawTbl[19];
     /* 0x390 */ Vec3s transitionDrawTbl[19];
     /* 0x402 */ s16 unk402;
