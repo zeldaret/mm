@@ -106,7 +106,7 @@ void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, 0x218D);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {

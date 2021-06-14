@@ -199,7 +199,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
             if (func_801378B8(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
-                Audio_PlayActorSound2(this, 0x28B1);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;
@@ -286,7 +286,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             default:
                 func_801477B4(globalCtx);
                 EnMinifrog_SetCamera(this, globalCtx);
-                func_800F0568(globalCtx, &this->actor.world.pos, 30, 0x3A87);
+                func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);

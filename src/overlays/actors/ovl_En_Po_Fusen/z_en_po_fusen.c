@@ -207,7 +207,7 @@ void EnPoFusen_IncrementMalonPop(EnPoFusen* this) {
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                 this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, 2);
-    Audio_PlayActorSound2(&this->actor, 0x180E); // NA_SE_IT_BOMB_EXPLOSION sfx
+    Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_MarkForDeath(&this->actor);
 }
 

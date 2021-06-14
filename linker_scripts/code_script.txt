@@ -913,9 +913,9 @@ SECTIONS
     ovl_En_Pametfrog : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.text)
-        build/asm/overlays/ovl_En_Pametfrog_data.o(.data)
+        build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.data)
         build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.o(.rodata)
-        build/asm/overlays/ovl_En_Pametfrog_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Pametfrog/z_en_pametfrog_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -1827,9 +1827,9 @@ SECTIONS
     ovl_En_In : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_In/z_en_in.o(.text)
-        build/asm/overlays/ovl_En_In_data.o(.data)
+        build/src/overlays/actors/ovl_En_In/z_en_in.o(.data)
         build/src/overlays/actors/ovl_En_In/z_en_in.o(.rodata)
-        build/asm/overlays/ovl_En_In_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_In/z_en_in_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2625,9 +2625,13 @@ SECTIONS
     ovl_En_Weather_Tag : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.text)
-        build/asm/overlays/ovl_En_Weather_Tag_data.o(.data)
+        build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.data)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.rodata)
+#ifdef NON_MATCHING
+        build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag_overlay.o(.ovl)
+#else
         build/asm/overlays/ovl_En_Weather_Tag_rodata.o(.rodata)
+#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -6476,9 +6480,9 @@ SECTIONS
     ovl_Bg_Tobira01 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.text)
-        build/asm/overlays/ovl_Bg_Tobira01_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.data)
         build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01.o(.rodata)
-        build/asm/overlays/ovl_Bg_Tobira01_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Tobira01/z_bg_tobira01_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

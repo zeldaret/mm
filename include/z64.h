@@ -17,6 +17,7 @@
 #include <xstdio.h>
 #include <unk.h>
 
+#include <sfx.h>
 #include <color.h>
 #include <ichain.h>
 
@@ -677,7 +678,8 @@ typedef struct {
     /* 0x272 */ char unk_272[0xD6];
 } InterfaceContext; // size = 0x348
 
-typedef struct {
+// us rev 1: 803FDB24
+typedef struct KankyoContext {
     /* 0x00 */ UNK_TYPE1 unk0;
     /* 0x01 */ UNK_TYPE1 unk1;
     /* 0x02 */ u16 unk2;
@@ -823,14 +825,14 @@ typedef struct {
     /* 0xE0 */ u8 unkE0;
     /* 0xE1 */ UNK_TYPE1 unkE1;
     /* 0xE2 */ s8 unkE2;
-    /* 0xE3 */ UNK_TYPE1 unkE3;
+    /* 0xE3 */ u8 unkE3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ UNK_TYPE1 unkE4;
     /* 0xE5 */ UNK_TYPE1 unkE5;
     /* 0xE6 */ UNK_TYPE1 unkE6;
     /* 0xE7 */ UNK_TYPE1 unkE7;
     /* 0xE8 */ UNK_TYPE1 unkE8;
     /* 0xE9 */ UNK_TYPE1 unkE9;
-    /* 0xEA */ UNK_TYPE1 unkEA;
+    /* 0xEA */ u8 unkEA;
     /* 0xEB */ UNK_TYPE1 unkEB;
     /* 0xEC */ UNK_TYPE1 unkEC;
     /* 0xED */ UNK_TYPE1 unkED;
@@ -838,7 +840,7 @@ typedef struct {
     /* 0xEF */ UNK_TYPE1 unkEF;
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
-    /* 0xF2 */ u8 unkF2[0xC];
+    /* 0xF2 */ u8 unkF2[0xC]; // F2-F6 are used by weather tag
 } KankyoContext; // size = 0xFE
 
 typedef struct {
@@ -1557,7 +1559,7 @@ struct GlobalContext {
     /* 0x18858 */ UNK_PTR unk18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
-    /* 0x18864 */ void* setupPathList;
+    /* 0x18864 */ Path* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
