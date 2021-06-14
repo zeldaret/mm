@@ -716,54 +716,50 @@ void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
     func_801A89A8(0x8041);
 }
 
-/*
+//extern s32 D_80AC025C;
+#ifdef NON_MATCHING
+// waiting to import data
 void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
-    EnMa4 *temp_a2;
-    s32 temp_v1;
-    s32 phi_v1;
+    static s32 D_80AC025C;
     ActorPlayer* player = PLAYER;
 
-    temp_a2 = this;
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
-        globalCtx->unk1F18 = (u16)0x8000;
+        globalCtx->actorCtx.unk278 = (u16)0x8000;
     } else {
         globalCtx->actorCtx.unk268 = 1;
     }
-    temp_v1 = D_80AC025C;
-    if (temp_v1 == 0x19) {
-        if (temp_a2->unk_338 == 0xA) {
-            this = temp_a2;
-            func_801518B0(globalCtx, 0x334FU, (Actor *) temp_a2);
-            this->unk33E = 0x334F;
+
+    if (D_80AC025C == 0x19) {
+        if (this->unk_338 == 0xA) {
+            func_801518B0(globalCtx, 0x334FU, &this->actor);
+            this->unk_33E = 0x334F;
         } else {
-            this = temp_a2;
-            func_801518B0(globalCtx, 0x334BU, (Actor *) temp_a2);
-            this->unk33E = 0x334B;
+            func_801518B0(globalCtx, 0x334BU, &this->actor);
+            this->unk_33E = 0x334B;
         }
-        phi_v1 = D_80AC025C;
     } else {
-        phi_v1 = temp_v1;
-        if (temp_v1 == 0x32) {
+        if (D_80AC025C == 0x32) {
             globalCtx->actorCtx.unk268 = 0;
             globalCtx->nextEntranceIndex = 0x6410;
-            gSaveContext.unk3F4A = (u16)0;
+            gSaveContext.unk_3F4A = 0;
+            D_80AC025C = 0;
             globalCtx->unk18875 = 0x14;
-            if (temp_a2->unk_338 == 0xA) {
+            if (this->unk_338 == 0xA) {
                 globalCtx->unk1887F = 0x50;
-                gSaveContext.unk3F55 = (u8)3;
+                gSaveContext.nextTransition = 3;
             } else {
                 globalCtx->unk1887F = 0x40;
-                gSaveContext.unk3F55 = (u8)2;
+                gSaveContext.nextTransition = 2;
             }
-            temp_a2->unk_338 = 0;
-            phi_v1 = 0;
+            this->unk_338 = 0;
         }
     }
-    D_80AC025C = (s32) (phi_v1 + 1);
+    D_80AC025C ++;
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF354.asm")
+#endif
 
 
 void func_80ABF494(EnMa4 *this) {

@@ -1501,7 +1501,11 @@ struct ActorContext {
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
     /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
-    /* 0x269 */ UNK_TYPE1 pad269[0x1B];
+    /* 0x269 */ UNK_TYPE1 pad269[0x3];
+    /* 0x26C */ UNK_TYPE1 pad26C[0xC];
+    /* 0x278 */ u16 unk278;
+    /* 0x27A */ UNK_TYPE1 pad27A[0x2];
+    /* 0x27C */ UNK_TYPE1 pad27C[0x8];
 }; // size = 0x284
 
 struct GlobalContext {
