@@ -886,183 +886,130 @@ void func_80ABF774(EnMa4 *this, GlobalContext *globalCtx) {
 }
 
 
-/*
-void func_80ABF7C8(EnMa4 *this, GlobalContext *globalCtx) {
-    u32 sp34;
-    s32 sp30;
-    u32 sp24;
-    s32 sp20;
-    s16 temp_v0;
-    s16 temp_v0_2;
-    s16 temp_v0_3;
-    s16 temp_v0_4;
-    s32 temp_t0;
-    s32 temp_t2;
-    s32 temp_t6;
-    u32 temp_t1;
-    u32 temp_t3;
-    u32 temp_t7;
-    u8 temp_v0_5;
-    s16 phi_t4;
 
-    temp_v0 = this->unk_332;
-    if (temp_v0 != 0) {
-        if (temp_v0 != 1) {
-            if (temp_v0 != 2) {
-                func_801518B0(globalCtx, 0x3335U, &this->actor);
-                phi_t4 = (u16)0x3335;
-block_49:
-                this->unk33E = phi_t4;
+void func_80ABF7C8(EnMa4 *this, GlobalContext *globalCtx) {
+    s32 pad;
+    OSTime sp24;
+
+    switch (this->unk_332) {
+    case 0:
+        if (gSaveContext.playerForm != 4) {
+            if ((gSaveContext.weekEventReg[0x15] & 0x80) ) {
+                EnMa4_SetFaceExpression(this, 3, 3);
+                func_801518B0(globalCtx, 0x3337, &this->actor);
+                this->unk_33E = 0x3337;
+                func_80151BB4(globalCtx, 5);
             } else {
-                temp_v0_2 = this->unk_336;
-                if (temp_v0_2 == 0) {
-                    func_801518B0(globalCtx, 0x3358U, &this->actor);
-                    this->unk33E = 0x3358;
-                    return;
-                }
-                if (temp_v0_2 == 2) {
-                    temp_t0 = gSaveContext.extra.unk_160;
-                    temp_t1 = gSaveContext.extra.unk_164;
-                    sp20 = temp_t0;
-                    sp24 = temp_t1;
-                    if ((temp_t0 != 0) || (temp_t1 >= 0x2EE0U)) {
-                        func_801518B0(globalCtx, 0x3356U, &this->actor);
-                        this->unk33E = 0x3356;
-                    } else {
-                        sp34 = sp24;
-                        sp30 = sp20;
-                        if ((s32) sp24 < gSaveContext.unkEEC) {
-                            gSaveContext.unkEEC = (s32) sp24;
-                            func_801518B0(globalCtx, 0x335DU, &this->actor);
-                            this->unk33E = 0x335D;
-                        } else {
-                            func_801518B0(globalCtx, 0x335EU, &this->actor);
-                            this->unk33E = 0x335E;
-                        }
-                    }
-                    this->unk_336 = 0;
-                    this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-                    return;
-                }
+                func_801518B0(globalCtx, 0x3335, &this->actor);
+                this->unk_33E = 0x3335;
+                gSaveContext.weekEventReg[0x15] |= 0x80;
             }
-        } else {
-            if (gSaveContext.unk20 != 4) {
-                if ((gSaveContext.unkF0D & 0x80) == 0) {
-                    func_801518B0(globalCtx, 0x3335U, &this->actor);
-                    this->unk33E = 0x3335;
-                    gSaveContext.unkF0D = (u8) (gSaveContext.unkF0D | 0x80);
-                    return;
-                }
-                globalCtx = globalCtx;
-                EnMa4_SetFaceExpression(this, (u16)3, (u16)3);
-                func_801518B0(globalCtx, 0x3337U, &this->actor);
-                this->unk33E = 0x3337;
-                func_80151BB4((s32) globalCtx, 5U);
-                return;
-            }
-            temp_v0_3 = this->unk_336;
-            if (temp_v0_3 == 0) {
-                func_801518B0(globalCtx, 0x3354U, &this->actor);
-                phi_t4 = (u16)0x3354;
-                goto block_49;
-            } else if (temp_v0_3 == 2) {
-                temp_t6 = gSaveContext.extra.unk_160;
-                temp_t7 = gSaveContext.extra.unk_164;
-                sp20 = temp_t6;
-                sp24 = temp_t7;
-                if ((temp_t6 != 0) || (temp_t7 >= 0x2EE0U)) {
-                    func_801518B0(globalCtx, 0x3356U, &this->actor);
-                    this->unk33E = 0x3356;
+        } else if (this->unk_336 == 0) {
+            if ((gSaveContext.weekEventReg[0x15] & 0x40)) {
+                if (!(gSaveContext.weekEventReg[0x15] & 0x20)) {
+                    func_801518B0(globalCtx, 0x3346, &this->actor);
+                    this->unk_33E = 0x3346;
                 } else {
-                    sp34 = sp24;
-                    sp30 = sp20;
-                    if ((s32) sp24 < gSaveContext.unkEEC) {
-                        gSaveContext.unkEEC = (s32) sp24;
-                        globalCtx = globalCtx;
-                        EnMa4_SetFaceExpression(this, (u16)0, (u16)3);
-                        func_801518B0(globalCtx, 0x3350U, &this->actor);
-                        this->unk33E = 0x3350;
-                    } else {
-                        func_801518B0(globalCtx, 0x3351U, &this->actor);
-                        this->unk33E = 0x3351;
-                    }
+                    func_801518B0(globalCtx, 0x3347, &this->actor);
+                    this->unk_33E = 0x3347;
                 }
-                this->unk_336 = 0;
-                this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-                return;
-            }
-        }
-    } else {
-        if (gSaveContext.unk20 != 4) {
-            if ((gSaveContext.unkF0D & 0x80) == 0) {
-                func_801518B0(globalCtx, 0x3335U, &this->actor);
-                this->unk33E = 0x3335;
-                gSaveContext.unkF0D = (u8) (gSaveContext.unkF0D | 0x80);
-                return;
-            }
-            globalCtx = globalCtx;
-            EnMa4_SetFaceExpression(this, (u16)3, (u16)3);
-            func_801518B0(globalCtx, 0x3337U, &this->actor);
-            this->unk33E = 0x3337;
-            func_80151BB4((s32) globalCtx, 5U);
-            return;
-        }
-        temp_v0_4 = this->unk_336;
-        if (temp_v0_4 == 0) {
-            temp_v0_5 = gSaveContext.unkF0D;
-            if ((temp_v0_5 & 0x40) == 0) {
-                func_801518B0(globalCtx, 0x3338U, &this->actor);
-                this->unk33E = 0x3338;
-                gSaveContext.unkF0D = (u8) (gSaveContext.unkF0D | 0x40);
-                return;
-            }
-            if ((temp_v0_5 & 0x20) != 0) {
-                func_801518B0(globalCtx, 0x3347U, &this->actor);
-                this->unk33E = 0x3347;
-                return;
-            }
-            func_801518B0(globalCtx, 0x3346U, &this->actor);
-            this->unk33E = 0x3346;
-            return;
-        }
-        if (temp_v0_4 == 2) {
-            temp_t2 = gSaveContext.extra.unk_160;
-            temp_t3 = gSaveContext.extra.unk_164;
-            sp20 = temp_t2;
-            sp24 = temp_t3;
-            if ((temp_t2 != 0) || (temp_t3 >= 0x2EE0U)) {
-                globalCtx = globalCtx;
-                EnMa4_SetFaceExpression(this, (u16)0, (u16)0);
-                func_801518B0(globalCtx, 0x336DU, &this->actor);
-                this->unk33E = 0x336D;
             } else {
-                sp34 = sp24;
-                sp30 = sp20;
-                if ((s32) sp24 < gSaveContext.unkEEC) {
-                    gSaveContext.unkEEC = (s32) sp24;
-                    globalCtx = globalCtx;
-                    EnMa4_SetFaceExpression(this, (u16)0, (u16)3);
-                    func_801518B0(globalCtx, 0x3350U, &this->actor);
-                    this->unk33E = 0x3350;
+                func_801518B0(globalCtx, 0x3338, &this->actor);
+                this->unk_33E = 0x3338;
+                gSaveContext.weekEventReg[0x15] |= 0x40;
+            }
+        } else if (this->unk_336 == 2) {
+            if (gSaveContext.unk_3DE0[4] >= 0x2EE0) {
+                EnMa4_SetFaceExpression(this, 0, 0);
+                func_801518B0(globalCtx, 0x336D, &this->actor);
+                this->unk_33E = 0x336D;
+            } else {
+                sp24 = gSaveContext.unk_3DE0[4];
+                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
+                    gSaveContext.roomInf[127][4] = sp24;
+                    EnMa4_SetFaceExpression(this, 0, 3);
+                    func_801518B0(globalCtx, 0x3350, &this->actor);
+                    this->unk_33E = 0x3350;
                 } else {
-                    func_801518B0(globalCtx, 0x3351U, &this->actor);
-                    this->unk33E = 0x3351;
+                    func_801518B0(globalCtx, 0x3351, &this->actor);
+                    this->unk_33E = 0x3351;
                 }
             }
             this->unk_336 = 0;
-            this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-            return;
+            this->actor.flags &= ~0x10000;
+        } else if (this->unk_336 == 3) {
+            func_801518B0(globalCtx, 0x3340, &this->actor);
+            this->unk_33E = 0x3340;
+            this->actor.flags &= ~0x10000;
         }
-        if (temp_v0_4 == 3) {
-            func_801518B0(globalCtx, 0x3340U, &this->actor);
-            this->unk33E = 0x3340;
-            this->actor.flags = this->actor.flags & 0xFFFEFFFF;
-            return;
+        break;
+
+    case 1:
+        if (gSaveContext.playerForm != 4) {
+            if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
+                EnMa4_SetFaceExpression(this, 3, 3);
+                func_801518B0(globalCtx, 0x3337, &this->actor);
+                this->unk_33E = 0x3337;
+                func_80151BB4(globalCtx, 5);
+            } else {
+                func_801518B0(globalCtx, 0x3335, &this->actor);
+                this->unk_33E = 0x3335;
+                gSaveContext.weekEventReg[0x15] |= 0x80;
+            }
+        } else if (this->unk_336 == 0) {
+            func_801518B0(globalCtx, 0x3354, &this->actor);
+            this->unk_33E = 0x3354;
+        } else if (this->unk_336 == 2) {
+            if (gSaveContext.unk_3DE0[4] >= 0x2EE0) {
+                func_801518B0(globalCtx, 0x3356, &this->actor);
+                this->unk_33E = 0x3356;
+            } else {
+                sp24 = gSaveContext.unk_3DE0[4];
+                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
+                    gSaveContext.roomInf[127][4] = sp24;
+                    EnMa4_SetFaceExpression(this, 0, 3);
+                    func_801518B0(globalCtx, 0x3350, &this->actor);
+                    this->unk_33E = 0x3350;
+                } else {
+                    func_801518B0(globalCtx, 0x3351, &this->actor);
+                    this->unk_33E = 0x3351;
+                }
+            }
+            this->unk_336 = 0;
+            this->actor.flags &= ~0x10000;
         }
+        break;
+
+    case 2:
+        if (this->unk_336 == 0) {
+            func_801518B0(globalCtx, 0x3358, &this->actor);
+            this->unk_33E = 0x3358;
+        } else if (this->unk_336 == 2) {
+            if (gSaveContext.unk_3DE0[4] >= 0x2EE0) {
+                func_801518B0(globalCtx, 0x3356, &this->actor);
+                this->unk_33E = 0x3356;
+            } else {
+                sp24 = gSaveContext.unk_3DE0[4];
+                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
+                    gSaveContext.roomInf[127][4] = sp24;
+                    func_801518B0(globalCtx, 0x335D, &this->actor);
+                    this->unk_33E = 0x335D;
+                } else {
+                    func_801518B0(globalCtx, 0x335E, &this->actor);
+                    this->unk_33E = 0x335E;
+                }
+            }
+            this->unk_336 = 0;
+            this->actor.flags &= ~0x10000;
+        }
+        break;
+
+    default:
+        func_801518B0(globalCtx, 0x3335, &this->actor);
+        this->unk_33E = 0x3335;
+        break;
     }
 }
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF7C8.asm")
 
 
 void EnMa4_SetFaceExpression(EnMa4 *this, s16 arg1, s16 arg2) {
