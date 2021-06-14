@@ -75,19 +75,12 @@ void func_80ABDCA0(EnMa4 *this) {
 
 
 
-struct struct_80AC010C {
-    /* 0x00 */ AnimationHeader* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
-};
-
-extern struct struct_80AC010C D_80AC010C[];
+extern struct struct_80B8E1A8 D_80AC010C[];
 
 void EnMa4_ChangeAnim(EnMa4 *this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80AC010C[index].unk_00, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80AC010C[index].unk_00->common),
-                         D_80AC010C[index].unk_08, D_80AC010C[index].unk_0C);
+    SkelAnime_ChangeAnim(&this->skelAnime, D_80AC010C[index].animationSeg, 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&D_80AC010C[index].animationSeg->common),
+                         D_80AC010C[index].mode, D_80AC010C[index].transitionRate);
 }
 
 
@@ -143,7 +136,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnMa4* this = THIS;
     ColliderCylinder *temp_a1;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, (void (*)(struct Actor *actor, struct Lights *mapper, struct GlobalContext *globalCtx)) func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable, 0x17);
     temp_a1 = &this->collider;
     Collider_InitCylinder(globalCtx, temp_a1);
@@ -786,58 +779,49 @@ void func_80ABF51C(EnMa4 *this) {
     this->actionFunc = func_80ABF534;
 }
 
-/*
+#ifdef NON_MATCHING
 void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
-    u32 sp24;
-    Actor *temp_v0_2;
-    s32 temp_t6;
-    u16 temp_a0_2;
-    u16 temp_a1;
-    u32 temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    static u16 D_80AC0260;
 
-    if (func_800EE29C(globalCtx, 0x78U) != 0) {
-        temp_v0 = func_800EE200(globalCtx, 0x78U);
-        temp_t6 = temp_v0 * 4;
-        sp24 = temp_v0;
-        temp_v1 = globalCtx + temp_t6;
-        temp_a0 = temp_v1->unk1F4C;
-        if (globalCtx->csCtx.frames == temp_a0->unk2) {
-            temp_a1 = temp_a0->unk0;
-            if (D_80AC0260 != temp_a1) {
-                D_80AC0260 = temp_a1;
+    if (func_800EE29C(globalCtx, 0x78) != 0) {
+        u32 actionIndex = func_800EE200(globalCtx, 0x78);
+
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80AC0260) {
+                D_80AC0260 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
                 this->unk_33C = 0;
-                temp_a0_2 = temp_v1->unk1F4C->unk0;
-                if (temp_a0_2 != (u16)1) {
-                    if (temp_a0_2 != 2) {
 
-                    } else {
+                switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
+
+                    case 1:
+                        this->unk_33A = 1;
+                        EnMa4_ChangeAnim(this, 1);
+                        break;
+
+                    case 2:
                         this->unk_33A = 0;
                         EnMa4_ChangeAnim(this, 4);
-                    }
-                } else {
-                    this->unk_33A = 1;
-                    EnMa4_ChangeAnim(this, (s32) (u16)1);
+                        break;
                 }
             }
         }
-        func_800EDF24(this, globalCtx, sp24);
-        if ((D_80AC0260 == 2) && (this->unk_33C == 0) && (func_801378B8(&this->skelAnime, (bitwise f32) (bitwise s32) this->skelAnime.animFrameCount) != 0)) {
+        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        if ((D_80AC0260 == 2) && (this->unk_33C == 0) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
             EnMa4_ChangeAnim(this, 7);
-            return;
         }
     } else {
-        temp_v0_2 = globalCtx->actorCtx.actorList[2].first;
-        temp_v0_2->unkA6C = (s32) (temp_v0_2->unkA6C | 0x20);
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
-        D_80AC0260 = (u16)0x63;
+        ActorPlayer *player = PLAYER;
+
+        player->stateFlags1 |= 0x20;
+        func_800B85E0((Actor *) this, globalCtx, 200.0f, -1);
+        D_80AC0260 = 0x63;
         this->unk_33A = 1;
         func_80ABF69C(this);
     }
 }
-*/
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF534.asm")
+#endif
 
 void func_80ABF69C(EnMa4 *this) {
     this->actionFunc = func_80ABF6B0;
