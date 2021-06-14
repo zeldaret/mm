@@ -211,7 +211,7 @@ s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!(gSaveContext.weekEventReg[53] & 16)) {
+    if (!(gSaveContext.weekEventReg[53] & 0x10)) {
         return CANBUY_RESULT_SUCCESS;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -434,7 +434,7 @@ void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this) {
-    //! @bug: Bomb Bag paramters in sShopItemEntries are 1 2 3, not 20 21 22
+    //! @bug: Bomb Bag parameters in sShopItemEntries are 1 2 3, not 20 21 22
     switch (this->itemParams) {
         case 20:
             Item_Give(globalCtx, ITEM_BOMB_BAG_20);
@@ -537,7 +537,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex) != 0) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndex;
         this->actor.textId = shopItem->descriptionTextId;

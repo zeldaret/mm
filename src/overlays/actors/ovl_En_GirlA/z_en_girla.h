@@ -58,7 +58,7 @@ typedef enum {
     /* 7 */ CANBUY_RESULT_NO_ROOM_3,
     /* 8 */ CANBUY_RESULT_ALREADY_HAVE,
     /* 9 */ CANBUY_RESULT_HAVE_BETTER
-} EnGirlA_CanBuyResult;
+} EnGirlACanBuyResult;
 
 extern const ActorInit En_GirlA_InitVars;
 
