@@ -188,17 +188,17 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 2) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.perm.spiderHouseMaskOrder[this->masksHit];
+            nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
-                play_sound(0x4807);
+                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
                 BgKin2Fence_SpawnEyeSparkles(this, globalCtx, nextMask);
             } else {
-                play_sound(0x4806);
+                play_sound(NA_SE_SY_ERROR);
                 this->masksHit = 0;
             }
         }
-        this->collider.base.acFlags &= 0xFFFD;
+        this->collider.base.acFlags &= ~2;
         this->cooldownTimer = 5;
         if (this->masksHit > 5) {
             BgKin2Fence_SetupPlayOpenCutscene(this);

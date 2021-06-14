@@ -39,7 +39,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 extern CollisionHeader D_06001588;
-extern UNK_TYPE D_06001410;
+extern Gfx D_06001410[];
 
 void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
@@ -106,7 +106,7 @@ void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, 0x218D);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {
@@ -131,5 +131,5 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06001410);
+    func_800BDFC0(globalCtx, D_06001410);
 }

@@ -158,7 +158,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
         if (prevBounced && panel->numBounces < 3 && panel->startFallingTimer <= 0) {
             finalPosY = panelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Audio_PlayActorSound2(&this->dyna.actor, 0x2945);
+                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;
@@ -197,11 +197,11 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
-    if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.extra.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
+    if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (!((CURRENT_DAY != 3) || (gSaveContext.perm.time >= 0x4000)) || gSaveContext.perm.day >= 4) {
+    } else if (!((CURRENT_DAY != 3) || (gSaveContext.time >= 0x4000)) || gSaveContext.day >= 4) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);

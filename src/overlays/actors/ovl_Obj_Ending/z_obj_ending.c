@@ -57,7 +57,7 @@ void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
     Gfx* dl;
-    UNK_TYPE4 tempunk4;
+    Gfx* tempunk4;
 
     if (this->texture != NULL) {
         AnimatedMat_Draw(globalCtx, this->texture);

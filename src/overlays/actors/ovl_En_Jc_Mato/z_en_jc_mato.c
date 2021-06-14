@@ -61,8 +61,8 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.y = this->pos.y;
     this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & 2) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->collider.base.acFlags &= 0xFFFD;
-        Audio_PlayActorSound2(&this->actor, 0x4807);
+        this->collider.base.acFlags &= ~2;
+        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         globalCtx->interfaceCtx.unk25C = 1;
         this->hitFlag = 1;
         return 1;
@@ -117,7 +117,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    if (!(gSaveContext.owl.unk4 & 1)) {
+    if (!(gSaveContext.eventInf[4] & 1)) {
         EnJcMato_CheckForHit(this, globalCtx);
     }
 }

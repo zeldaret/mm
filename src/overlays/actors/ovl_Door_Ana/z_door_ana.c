@@ -111,7 +111,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     if (grottoIsOpen) {
         this->actor.params &= ~DOORANA_TYPE_BITRANGE;
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
-        play_sound(0x4802); // CORRECT_CHIME sfx
+        play_sound(NA_SE_SY_CORRECT_CHIME);
     }
 
     func_800B8C50(&this->actor, globalCtx);
@@ -142,11 +142,11 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
                 func_80169E6C(globalCtx, 3, 0x4FF);
 
-                gSaveContext.extra.unk78 = this->actor.world.pos.y;
-                gSaveContext.extra.unk80 = this->actor.home.rot.y;
+                gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
+                gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
 
                 // save the params lower byte for En_Torch to decide what item to use in the grotto chest
-                gSaveContext.extra.unk87 = GET_DOORANA_ITEMFLAGS(this);
+                gSaveContext.respawn[3].data = GET_DOORANA_ITEMFLAGS(this);
 
                 // most grottos in the game use their zrotation as their entrance index, not params
                 if (DOORANA_TYPE_ROTATION_ENTRANCE(entranceIndex)) {
