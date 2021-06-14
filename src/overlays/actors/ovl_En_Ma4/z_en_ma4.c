@@ -172,7 +172,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_33C = 0;
     if (CURRENT_DAY == (u16)1) {
         this->unk_332 = 0;
-    } else if (gSaveContext.perm.weekEventReg[0x16] & 1) {
+    } else if (gSaveContext.weekEventReg[0x16] & 1) {
         this->unk_332 = 1;
     } else {
         this->unk_332 = 2;
@@ -185,10 +185,10 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     } else {
         func_80ABDE60(this, globalCtx);
 
-        if (gSaveContext.perm.entranceIndex == 0x6410) {
+        if (gSaveContext.entranceIndex == 0x6410) {
             EnMa4_ChangeAnim(this, 0);
             this->unk_336 = 2;
-        } else if (gSaveContext.perm.entranceIndex == 0x64A0) {
+        } else if (gSaveContext.entranceIndex == 0x64A0) {
             EnMa4_ChangeAnim(this, 0);
             this->unk_336 = 3;
         } else {
@@ -209,7 +209,7 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    gSaveContext.perm.weekEventReg[0x8] &= 0xFE;
+    gSaveContext.weekEventReg[0x8] &= 0xFE;
 }
 
 extern s32 D_80AC024C;
@@ -376,7 +376,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
             case 0x3341:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.perm.weekEventReg[0x15] |= 0x20;
+                    gSaveContext.weekEventReg[0x15] |= 0x20;
                     func_801518B0(globalCtx, 0x3343, &this->actor);
                     this->unk_33E = 0x3343;
                 } else {
@@ -392,7 +392,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
             case 0x3346:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.perm.weekEventReg[0x15] |= 0x20;
+                    gSaveContext.weekEventReg[0x15] |= 0x20;
                     func_801518B0(globalCtx, 0x3343, &this->actor);
                     this->unk_33E = 0x3343;
                 } else {
@@ -423,7 +423,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                     func_8019F208();
                     func_801518B0(globalCtx, 0x334E, &this->actor);
                     this->unk_33E = 0x334E;
-                    if ((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE]) {
+                    if ((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE]) {
                         func_80151BB4(globalCtx, 0x1C);
                     }
                     func_80151BB4(globalCtx, 5);
@@ -593,7 +593,7 @@ void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
             case 0x3352: // Win minigame
             case 0x336d: // Lose minigame
                 EnMa4_SetFaceExpression(this, 0, 0);
-                if ((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE]) {
+                if ((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE]) {
                     func_801518B0(globalCtx, 0x334C, &this->actor);
                     this->unk_33E = 0x334C;
                 } else {
@@ -605,7 +605,7 @@ void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.perm.unk20 != 4) || !((aux = gSaveContext.perm.inv.unk_4C) & gBitFlags[0xE])) {
+                if ((gSaveContext.playerForm != 4) || !((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE])) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->unk_33E = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -648,7 +648,7 @@ void func_80ABEF8C(EnMa4 *this, GlobalContext *globalCtx) {
 
         case 6:
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.perm.inv.unk_4C) & gBitFlags[0x12]) == 0)) {
+                if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.inventory.questItems) & gBitFlags[0x12]) == 0)) {
                     func_80ABE4A4(this);
                 }
             }
@@ -672,10 +672,10 @@ void func_80ABF070(EnMa4 *this) {
 
 void func_80ABF084(EnMa4 *this, GlobalContext *globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.extra.unk_2AA = 0xFFF0;
+    gSaveContext.unk_3F4A = 0xFFF0;
     globalCtx->unk18875 = 0x14;
     globalCtx->unk1887F = 0x50;
-    gSaveContext.extra.unk_2B5 = 3;
+    gSaveContext.nextTransition = 3;
 }
 
 
@@ -683,7 +683,7 @@ void func_80ABF0D8(EnMa4 *this, GlobalContext *globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         func_801518B0(globalCtx, 0x336EU, &this->actor);
         this->actionFunc = func_80ABF160;
-    } else if ((gSaveContext.extra.unk_140[4] < 0x2CECU)) {
+    } else if ((gSaveContext.unk_3DE0[4] < 0x2CECU)) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
@@ -701,7 +701,7 @@ void func_80ABF198(EnMa4 *this, GlobalContext *globalCtx) {
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
-    gSaveContext.perm.weekEventReg[0x8] |= 0x01;
+    gSaveContext.weekEventReg[0x8] |= 0x01;
     func_80112AFC(globalCtx);
     player->stateFlags1 |= 0x20;
     this->actionFunc = func_80ABF218;
@@ -730,8 +730,8 @@ void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
         D_80AC0258 = this->unk_338;
         globalCtx->interfaceCtx.unk25C = 1;
     }
-    if ((gSaveContext.extra.unk_140[4] >= 0x2EE0) || (this->unk_338 == 0xA)) {
-        gSaveContext.extra.unk_134 = 6;
+    if ((gSaveContext.unk_3E18[4] >= 0x2EE0) || (this->unk_338 == 0xA)) {
+        gSaveContext.unk_3DC2 = 6;
         func_80ABF2FC(this, globalCtx);
         D_80AC0258 = 0;
     }
@@ -743,7 +743,7 @@ extern s16 D_80AC0258;
 
 
 void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
-    gSaveContext.perm.weekEventReg[0x8] &= 0xFE;
+    gSaveContext.weekEventReg[0x8] &= 0xFE;
     this->actionFunc = func_80ABF354;
     func_801A89A8(0x100000FF);
     func_801A89A8(0x8041);
@@ -902,10 +902,10 @@ void func_80ABF760(EnMa4 *this) {
 
 void func_80ABF774(EnMa4 *this, GlobalContext *globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.extra.unk_2AA = (u16)0xFFF5;
+    gSaveContext.unk_3F4A = (u16)0xFFF5;
     globalCtx->unk18875 = 0x14;
     globalCtx->unk1887F = 0x40;
-    gSaveContext.extra.unk_2B5 = (u8)2;
+    gSaveContext.nextTransition = (u8)2;
 }
 
 
@@ -969,7 +969,7 @@ block_49:
                 }
             }
         } else {
-            if (gSaveContext.perm.unk20 != 4) {
+            if (gSaveContext.unk20 != 4) {
                 if ((gSaveContext.unkF0D & 0x80) == 0) {
                     func_801518B0(globalCtx, 0x3335U, &this->actor);
                     this->unk33E = 0x3335;
@@ -1016,7 +1016,7 @@ block_49:
             }
         }
     } else {
-        if (gSaveContext.perm.unk20 != 4) {
+        if (gSaveContext.unk20 != 4) {
             if ((gSaveContext.unkF0D & 0x80) == 0) {
                 func_801518B0(globalCtx, 0x3335U, &this->actor);
                 this->unk33E = 0x3335;
