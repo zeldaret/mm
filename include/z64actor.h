@@ -120,7 +120,7 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDraw
 } ActorShape; // size = 0x30
 
-typedef struct Actor {
+typedef struct {
     /* 0x000 */ s16 id; // Actor ID
     /* 0x002 */ u8 category; // Actor category. Refer to the corresponding enum for values
     /* 0x003 */ s8 room; // Room number the actor is in. -1 denotes that the actor won't despawn on a room change

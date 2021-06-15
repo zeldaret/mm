@@ -37,21 +37,25 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
 };
 
 s32 unused = 0;
+
+/*
+ * The following two pieces of data appear to not actually be a Vec3f.
+ * Making it a Vec3f requires really strange things to match func_80C0A740
+ * as opposed to what I have now.
+ */
 f32 D_80C0B0E4 = 960.0f;
-Vec2f D_80C0B0E8 = {-320.0f, 0.0f};
-s8 D_80C0B0F0[] = {0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00};
-s8 D_80C0B0F8[] = {0x01, 0x02, 0x00, 0x01, 0x02, 0x01, 0x02, 0x00};
+Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
+s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
+s8 D_80C0B0F8[] = { 0x01, 0x02, 0x00, 0x01, 0x02, 0x01, 0x02, 0x00 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-s32 func_80C0A740(BgIkninSusceil *this, GlobalContext *globalCtx) {
+s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
     s32 pad2[2];
     Vec3f offset;
-    
-    ActorPlayer *player = PLAYER;
-    
+    ActorPlayer* player = PLAYER;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
 
@@ -117,7 +121,7 @@ void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600CBAC);
-    this->unk15C = Lib_SegmentedToVirtual(&D_0600C670);
+    this->animatedTexture = Lib_SegmentedToVirtual(&D_0600C670);
     func_80C0AC74(this);
 }
 
@@ -128,18 +132,18 @@ void BgIkninSusceil_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80C0AB14(BgIkninSusceil* this) {
-    this->unk164 = 0x6E;
+    this->timer = 110;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 365.0f;
     this->actionFunc = func_80C0AB44;
 }
 
 void func_80C0AB44(BgIkninSusceil* this, GlobalContext* globalCtx) {
-    if (this->unk164 > 0) {
-        this->unk164 -= 1;
+    if (this->timer > 0) {
+        this->timer -= 1;
         return;
     }
 
-    if (func_80C0A740(this, globalCtx) != 0) {
+    if (func_80C0A740(this, globalCtx)) {
         func_80C0AB88(this);
     }
 }
@@ -259,6 +263,6 @@ void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
-    AnimatedMat_Draw(globalCtx, this->unk15C);
+    AnimatedMat_Draw(globalCtx, this->animatedTexture);
     func_800BDFC0(globalCtx, D_0600C308);
 }
