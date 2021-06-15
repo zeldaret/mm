@@ -841,9 +841,9 @@ SECTIONS
     ovl_En_GirlA : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.text)
-        build/asm/overlays/ovl_En_GirlA_data.o(.data)
+        build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.data)
         build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.rodata)
-        build/asm/overlays/ovl_En_GirlA_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_GirlA/z_en_girla_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
