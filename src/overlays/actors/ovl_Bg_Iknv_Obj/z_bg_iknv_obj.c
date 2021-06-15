@@ -97,7 +97,7 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     if (IKNV_OBJ_TYPE(this) != IKNV_OBJ_RAISED_DOOR) {
         if (IKNV_OBJ_TYPE(this) == IKNV_OBJ_SAKON_DOOR) {
             Collider_DestroyCylinder(globalCtx, &this->collider);
-            gSaveContext.weekEventReg[51] &= 0xEF;
+            gSaveContext.weekEventReg[51] &= (u8)~0x10;
         } else {
             return;
         }
@@ -155,7 +155,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx)
 void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7E0C(this, this->dyna.actor.home.rot.y, globalCtx)) {
         this->actionFunc = BgIknvObj_UpdateSakonDoor;
-        gSaveContext.weekEventReg[51] &= 0xEF;
+        gSaveContext.weekEventReg[51] &= (u8)~0x10;
     }
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 }
