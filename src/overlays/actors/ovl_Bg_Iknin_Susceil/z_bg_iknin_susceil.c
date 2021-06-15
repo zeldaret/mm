@@ -37,12 +37,6 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
 };
 
 s32 unused = 0;
-
-/*
- * The following two pieces of data appear to not actually be a Vec3f.
- * Making it a Vec3f requires really strange things to match func_80C0A740
- * as opposed to what I have now.
- */
 f32 D_80C0B0E4 = 960.0f;
 Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
 s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
@@ -159,7 +153,7 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, globalCtx, 4, 14, 1);
-        Actor_UnsetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F);
+        Actor_UnsetSwitchFlag(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
         return;
@@ -173,7 +167,7 @@ void func_80C0AC74(BgIkninSusceil* this) {
 }
 
 void func_80C0AC90(BgIkninSusceil* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F)) {
+    if (Flags_GetSwitch(globalCtx, GET_SUSCEIL_SWITCHFLAG(this))) {
         func_80C0ACD4(this);
     }
 }
