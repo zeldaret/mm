@@ -262,7 +262,9 @@ typedef struct {
     /* 0xB08 */ f32 unkB08;
     /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
     /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x56];
+    /* 0xB2A */ UNK_TYPE1 padB2A[0x1E];
+    /* 0xB48 */ f32 unkB48;
+    /* 0xB4C */ UNK_TYPE1 padB4C[0x34];
     /* 0xB80 */ f32 unk_B80;
     /* 0xB84 */ s16 unk_B84;
     /* 0xB86 */ char unk_B86[0x16];
