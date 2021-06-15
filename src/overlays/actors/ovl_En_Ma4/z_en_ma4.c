@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ma4.c
+ * Overlay: ovl_En_Ma4
+ * Description: Romani.
+ */
+
 #include "z_en_ma4.h"
 
 #define FLAGS 0x02000039
@@ -155,14 +161,14 @@ void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
     s16 phi_a3;
 
-    if (this->unk_1D8 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
+    if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
         phi_a3 = 1;
     } else {
         phi_a3 = (this->unk_332 == 2 && this->actionFunc != func_80ABEF8C) ? 1 : 0;
     }
 
-    this->unk_1F0 = player->base.world.pos;
-    this->unk_1F0.y -= -10.0f;
+    this->unk_1D8.unk_18 = player->base.world.pos;
+    this->unk_1D8.unk_18.y -= -10.0f;
     func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
 
@@ -194,7 +200,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     ColliderCylinder *temp_a1;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable, 0x17);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable, MA1_LIMB_MAX);
     temp_a1 = &this->collider;
     Collider_InitCylinder(globalCtx, temp_a1);
     Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &sCylinderInit);
@@ -202,7 +208,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 0;
-    this->unk_1D8 = 0;
+    this->unk_1D8.unk_00 = 0;
     this->unk_334 = 0;
     this->unk_33A = 1;
     this->unk_330 = 0;
@@ -1045,13 +1051,13 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
     EnMa4* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
-        sp4 = this->unk_1E0;
+    if (limbIndex == MA1_LIMB_HEAD) {
+        sp4 = this->unk_1D8.unk_08;
         rot->x = rot->x + sp4.y;
         rot->z = rot->z + sp4.x;
     }
-    if (limbIndex == OBJECT_MA1_LIMB_HEAD) {
-        sp4 = this->unk_1E6;
+    if (limbIndex == MA1_LIMB_TORSO) {
+        sp4 = this->unk_1D8.unk_0E;
         rot->x = rot->x - sp4.y;
         rot->z = rot->z - sp4.x;
     }
@@ -1063,16 +1069,14 @@ void EnMa4_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Ve
     EnMa4* this = THIS;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
-    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
+    if (limbIndex == MA1_LIMB_HEAD) {
         SysMatrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
-    } else if ((limbIndex == OBJECT_MA1_LIMB_ARM_RIGHT) && (this->unk_33A == 1)) {
+    } else if ((limbIndex == MA1_LIMB_HAND_LEFT) && (this->unk_33A == 1)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, D_060003B0);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-
-
 
 void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
