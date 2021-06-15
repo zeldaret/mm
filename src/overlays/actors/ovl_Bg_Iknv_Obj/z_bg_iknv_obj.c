@@ -83,7 +83,7 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-            gSaveContext.weekEventReg[51] &= 0xEF;
+            gSaveContext.weekEventReg[51] &= (u8)~0x10;
             Actor_SetHeight(&this->dyna.actor, IREG(88));
             break;
         default:
