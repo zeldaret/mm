@@ -187,7 +187,7 @@ void func_80BD8040(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[58] & 0x80)) {
+    if (gSaveContext.weekEventReg[58] & 0x80) {
         this->actionFunc = func_80BD8040;
         gSaveContext.weekEventReg[89] |= 0x80;
     }
