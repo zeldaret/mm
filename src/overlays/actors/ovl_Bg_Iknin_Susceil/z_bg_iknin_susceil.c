@@ -19,9 +19,11 @@ void func_80C0ACE8(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AD44(BgIkninSusceil* this);
 void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx);
-s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx);
 
-/*
+extern CollisionHeader D_0600CBAC;
+extern AnimatedMaterial D_0600C670;
+extern Gfx D_0600C308[];
+
 const ActorInit Bg_Iknin_Susceil_InitVars = {
     ACTOR_BG_IKNIN_SUSCEIL,
     ACTORCAT_BG,
@@ -33,20 +35,28 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Update,
     (ActorFunc)BgIkninSusceil_Draw,
 };
-*/
 
-extern InitChainEntry D_80C0B100;
-extern CollisionHeader D_0600CBAC;
-extern AnimatedMaterial D_0600C670;
-extern Gfx D_0600C308[];
+s32 unused = 0;
+f32 D_80C0B0E4 = 960.0f;
+Vec2f D_80C0B0E8 = {-320.0f, 0.0f};
+s8 D_80C0B0F0[] = {0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00};
+s8 D_80C0B0F8[] = {0x01, 0x02, 0x00, 0x01, 0x02, 0x01, 0x02, 0x00};
 
-extern Vec2f D_80C0B0E8;
-extern f32 D_80C0B0E4;
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-extern s8 D_80C0B0F0[];
-extern s8 D_80C0B0F8[];
+s32 func_80C0A740(BgIkninSusceil *this, GlobalContext *globalCtx) {
+    s32 pad2[2];
+    Vec3f offset;
+    
+    ActorPlayer *player = PLAYER;
+    
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A740.asm")
+    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
+
+    return ((D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4));
+}
 
 void func_80C0A804(BgIkninSusceil* this, GlobalContext* globalCtx) {
     func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -89,7 +99,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
         temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
         temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;
         if (1) {}
-        new_var = D_80C0B0F8[i] * (-80.0f);
+        new_var = D_80C0B0F8[i] * (-80.0f); // temp seems to actually be needed for matching
         temp1 = new_var - 79.5f;
         temp2 = new_var - 0.5f;
         if ((temp1 < offset.z) && (offset.z < temp2) && (temp3 < offset.x) && (offset.x < temp4)) {
@@ -104,7 +114,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
 void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &D_80C0B100);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600CBAC);
     this->unk15C = Lib_SegmentedToVirtual(&D_0600C670);
