@@ -53,7 +53,7 @@ s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
 
-    return ((D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4));
+    return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
 }
 
 void func_80C0A804(BgIkninSusceil* this, GlobalContext* globalCtx) {
@@ -73,13 +73,9 @@ void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 y, s16 co
     Quake_SetCountdown(quake, countdown);
     if (arg4 == 1) {
         func_8013ECE0(10000.0f, 255, 20, 150);
-        return;
-    }
-    if (arg4 == 2) {
+    } else if (arg4 == 2) {
         func_8013ECE0(10000.0f, 180, 20, 100);
-        return;
-    }
-    if (arg4 == 3) {
+    } else if (arg4 == 3) {
         func_8013ECE0(10000.0f, 120, 20, 10);
     }
 }
@@ -97,7 +93,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
         temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
         temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;
         if (1) {}
-        new_var = D_80C0B0F8[i] * (-80.0f); // temp seems to actually be needed for matching
+        new_var = D_80C0B0F8[i] * -80.0f; // temp seems to actually be needed for matching
         temp1 = new_var - 79.5f;
         temp2 = new_var - 0.5f;
         if ((temp1 < offset.z) && (offset.z < temp2) && (temp3 < offset.x) && (offset.x < temp4)) {
@@ -156,9 +152,9 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
         Actor_UnsetSwitchFlag(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
-        return;
+    } else {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
-    func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
 }
 
 void func_80C0AC74(BgIkninSusceil* this) {
@@ -180,9 +176,9 @@ void func_80C0ACE8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         func_80C0AD44(this);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
 }
 
 void func_80C0AD44(BgIkninSusceil* this) {
@@ -198,9 +194,9 @@ void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx) {
         func_80C0A86C(this, globalCtx, 1, 0xE, 3);
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80C0AB14(this);
-        return;
+    } else {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
-    func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
 }
 
 void func_80C0AE3C(BgIkninSusceil* this) {
@@ -249,9 +245,9 @@ void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (this->unk166 > 0) {
         func_80C0A838(this, globalCtx);
-        return;
+    } else {
+        func_80C0A804(this, globalCtx);
     }
-    func_80C0A804(this, globalCtx);
 }
 
 void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
