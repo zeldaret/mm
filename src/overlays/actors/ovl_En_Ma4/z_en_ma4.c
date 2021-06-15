@@ -11,8 +11,6 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 
 
-void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx); // TODO: remove
-
 
 void func_80ABE4A4(EnMa4* this);
 void func_80ABE560(EnMa4* this, GlobalContext* globalCtx);
@@ -44,8 +42,33 @@ void func_80ABFCD4(EnMa4* this);
 
 extern AnimationHeader D_06007328;
 
+extern FlexSkeletonHeader D_06013928;
 
-/*
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_06002A8C;
+extern AnimationHeader D_06018948;
+extern AnimationHeader D_0601B76C;
+extern AnimationHeader D_06007328;
+extern AnimationHeader D_06014088;
+extern AnimationHeader D_06015B7C;
+extern AnimationHeader D_06007D98;
+extern AnimationHeader D_0600852C;
+extern AnimationHeader D_06008F6C;
+
+extern u64 D_0600FFC8[];
+extern u64 D_060107C8[];
+extern u64 D_06010FC8[];
+extern u64 D_060117C8[];
+extern u64 D_06011FC8[];
+
+extern u64 D_060127C8[];
+extern u64 D_06012BC8[];
+extern u64 D_06012FC8[];
+extern u64 D_060133C8[];
+
+extern Gfx D_060003B0[];
+extern Gfx D_06000A20[];
+
 const ActorInit En_Ma4_InitVars = {
     ACTOR_EN_MA4,
     ACTORCAT_NPC,
@@ -57,7 +80,52 @@ const ActorInit En_Ma4_InitVars = {
     (ActorFunc)EnMa4_Update,
     (ActorFunc)EnMa4_Draw,
 };
-*/
+
+static ColliderCylinderInit sCylinderInit = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 18, 46, 0, { 0, 0, 0 } },
+};
+
+
+static CollisionCheckInfoInit2 D_80AC00DC = {
+    0, 0, 0, 0, MASS_IMMOVABLE
+};
+
+
+// eye textures
+static void* D_80AC00E8[] = {
+D_0600FFC8,
+D_060107C8,
+D_06010FC8,
+D_060117C8,
+D_06011FC8,
+};
+
+
+// mouth textures
+static void* D_80AC00FC[] = {
+D_060127C8,
+D_06012BC8,
+D_06012FC8,
+D_060133C8,
+};
+
+
+static struct_80B8E1A8 D_80AC010C[] = {
+    { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f },
+    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f },
+    { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f },
+    { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f },
+    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f },
+    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f },
+    { &D_06015B7C, 1.0f, 2, 0.0f }, { &D_06015B7C, 1.0f, 2, -6.0f },
+    { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f },
+    { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f },
+    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f },
+};
+
+
 
 
 // UpdateEyes
@@ -75,17 +143,12 @@ void func_80ABDCA0(EnMa4 *this) {
 
 
 
-extern struct struct_80B8E1A8 D_80AC010C[];
-
 void EnMa4_ChangeAnim(EnMa4 *this, s32 index) {
     SkelAnime_ChangeAnim(&this->skelAnime, D_80AC010C[index].animationSeg, 1.0f, 0.0f,
                          SkelAnime_GetFrameCount(&D_80AC010C[index].animationSeg->common),
                          D_80AC010C[index].mode, D_80AC010C[index].transitionRate);
 }
 
-
-extern AnimationHeader D_06002A8C;
-extern AnimationHeader D_06015B7C;
 
 
 void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
@@ -126,12 +189,6 @@ void func_80ABDE60(EnMa4 *this, GlobalContext *globalCtx) {
 }
 
 
-extern FlexSkeletonHeader D_06013928;
-
-extern ColliderCylinderInit D_80AC00B0;
-extern CollisionCheckInfoInit2 D_80AC00DC;
-
-
 void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnMa4* this = THIS;
     ColliderCylinder *temp_a1;
@@ -140,7 +197,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable, 0x17);
     temp_a1 = &this->collider;
     Collider_InitCylinder(globalCtx, temp_a1);
-    Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &D_80AC00B0);
+    Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80AC00DC);
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetScale(&this->actor, 0.01f);
@@ -193,13 +250,10 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 
-
-#ifdef NON_MATCHING
-// Waiting to import data
 void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
-    static s32 D_80AC024C;
-    static s32 D_80AC0250;
-    static s16 D_80AC0254;
+    static s32 D_80AC024C = 0x00000009;
+    static s32 D_80AC0250 = 0x00000000;
+    static s16 D_80AC0254 = 0x000A;
     Vec3f sp34;
     s32 pad;
     s16 sp2E;
@@ -257,14 +311,6 @@ void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
         }
     }
 }
-#else
-extern s32 D_80AC024C;
-extern s32 D_80AC0250;
-extern s16 D_80AC0254;
-void func_80ABE1C4(EnMa4* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABE1C4.asm")
-#endif
-
 
 
 void func_80ABE4A4(EnMa4 *this) {
@@ -678,10 +724,9 @@ void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Waiting to import data
+
 void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
-    static s16 D_80AC0258;
+    static s16 D_80AC0258 = 0x0000;
     ActorPlayer *player = PLAYER;
 
     player->unkA74 |= 0x400;
@@ -696,10 +741,7 @@ void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
         D_80AC0258 = 0;
     }
 }
-#else
-extern s16 D_80AC0258;
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF254.asm")
-#endif
+
 
 
 void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
@@ -709,11 +751,9 @@ void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
     func_801A89A8(0x8041);
 }
 
-//extern s32 D_80AC025C;
-#ifdef NON_MATCHING
-// waiting to import data
+
 void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
-    static s32 D_80AC025C;
+    static s32 D_80AC025C = 0x00000000;
     ActorPlayer* player = PLAYER;
 
     if (player->stateFlags1 & 0x100000) {
@@ -750,10 +790,6 @@ void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
     }
     D_80AC025C ++;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF354.asm")
-#endif
-
 
 void func_80ABF494(EnMa4 *this) {
     this->actionFunc = func_80ABF4A8;
@@ -779,10 +815,10 @@ void func_80ABF51C(EnMa4 *this) {
     this->actionFunc = func_80ABF534;
 }
 
-#ifdef NON_MATCHING
-void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
-    static u16 D_80AC0260;
 
+static u16 D_80AC0260 = 0x0063;
+
+void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
 
@@ -819,9 +855,6 @@ void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
         func_80ABF69C(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma4_0x80ABDCA0/func_80ABF534.asm")
-#endif
 
 void func_80ABF69C(EnMa4 *this) {
     this->actionFunc = func_80ABF6B0;
@@ -849,10 +882,10 @@ void func_80ABF760(EnMa4 *this) {
 
 void func_80ABF774(EnMa4 *this, GlobalContext *globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = (u16)0xFFF5;
+    gSaveContext.unk_3F4A = 0xFFF5;
     globalCtx->unk18875 = 0x14;
     globalCtx->unk1887F = 0x40;
-    gSaveContext.nextTransition = (u8)2;
+    gSaveContext.nextTransition = 2;
 }
 
 
@@ -1023,16 +1056,12 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
         rot->z = rot->z - sp4.x;
     }
 
-    return 0;
+    return false;
 }
-
-
-extern Vec3f D_80AC0264;
-extern Gfx D_060003B0[];
 
 void EnMa4_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
     EnMa4* this = THIS;
-    Vec3f sp28 = D_80AC0264;
+    Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
     if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
         SysMatrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
@@ -1044,10 +1073,6 @@ void EnMa4_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Ve
 }
 
 
-extern void* D_80AC00E8[]; // eye textures
-extern void* D_80AC00FC[]; // mouth textures
-
-extern Gfx D_06000A20[];
 
 void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
