@@ -12,6 +12,8 @@ typedef struct BgIkninSusceil {
     /* 0x15C */ AnimatedMaterial* unk15C;
     /* 0x160 */ BgIkninSusceilActionFunc actionFunc;
     /* 0x164 */ s16 unk164;
+    /* 0x166 */ s16 unk166;
+    /* 0x168 */ s16 unk168;
 } BgIkninSusceil; // size = 0x16C
 
 extern const ActorInit Bg_Iknin_Susceil_InitVars;

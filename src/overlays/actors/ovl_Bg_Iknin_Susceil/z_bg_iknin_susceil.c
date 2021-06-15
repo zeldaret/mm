@@ -19,6 +19,7 @@ void func_80C0ACE8(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AD44(BgIkninSusceil* this);
 void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx);
+s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx);
 
 /*
 const ActorInit Bg_Iknin_Susceil_InitVars = {
@@ -39,17 +40,68 @@ extern CollisionHeader D_0600CBAC;
 extern AnimatedMaterial D_0600C670;
 extern Gfx D_0600C308[];
 
+extern Vec2f D_80C0B0E8;
+extern f32 D_80C0B0E4;
+
+extern s8 D_80C0B0F0[];
+extern s8 D_80C0B0F8[];
+
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A740.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A804.asm")
+void func_80C0A804(BgIkninSusceil* this, GlobalContext* globalCtx) {
+    func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A838.asm")
+void func_80C0A838(BgIkninSusceil* this, GlobalContext* globalCtx) {
+    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A86C.asm")
+void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 y, s16 countdown, s32 arg4) {
+    s32 pad;
+    s16 quake = Quake_Add(ACTIVE_CAM, 3);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/func_80C0A95C.asm")
+    Quake_SetSpeed(quake, 0x7B30);
+    Quake_SetQuakeValues(quake, y, 0, 0, 0);
+    Quake_SetCountdown(quake, countdown);
+    if (arg4 == 1) {
+        func_8013ECE0(10000.0f, 255, 20, 150);
+        return;
+    }
+    if (arg4 == 2) {
+        func_8013ECE0(10000.0f, 180, 20, 100);
+        return;
+    }
+    if (arg4 == 3) {
+        func_8013ECE0(10000.0f, 120, 20, 10);
+    }
+}
 
-void BgIkninSusceil_Init(Actor *thisx, GlobalContext *globalCtx) {
+s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
+    s32 phi_t0 = true;
+    s32 i;
+    f32 new_var;
+    ActorPlayer* player = PLAYER;
+    Vec3f offset;
+    f32 temp1, temp2, temp3, temp4;
+
+    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
+    for (i = 0; i < 7; i++) {
+        temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
+        temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;
+        if (1) {}
+        new_var = D_80C0B0F8[i] * (-80.0f);
+        temp1 = new_var - 79.5f;
+        temp2 = new_var - 0.5f;
+        if ((temp1 < offset.z) && (offset.z < temp2) && (temp3 < offset.x) && (offset.x < temp4)) {
+            phi_t0 = false;
+            break;
+        }
+    }
+
+    return phi_t0;
+}
+
+void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, &D_80C0B100);
@@ -59,7 +111,7 @@ void BgIkninSusceil_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80C0AC74(this);
 }
 
-void BgIkninSusceil_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void BgIkninSusceil_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -92,7 +144,7 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.93f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        func_80C0A86C(this, globalCtx, 4, 0xE, 1);
+        func_80C0A86C(this, globalCtx, 4, 14, 1);
         Actor_UnsetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F);
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
@@ -133,7 +185,8 @@ void func_80C0AD44(BgIkninSusceil* this) {
 void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y += 0.46f;
     this->dyna.actor.velocity.y *= 0.98f;
-    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f, this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
+    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f,
+                           this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
         func_80C0A86C(this, globalCtx, 1, 0xE, 3);
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80C0AB14(this);
@@ -150,19 +203,48 @@ void func_80C0AE3C(BgIkninSusceil* this) {
 void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y += -0.1f;
     this->dyna.actor.velocity.y *= 0.95f;
-    if (this->dyna.actor.velocity.y < 1.0f) {
-        this->dyna.actor.velocity.y = 1.0f;
-    } else {
-        this->dyna.actor.velocity.y = this->dyna.actor.velocity.y;
-    }
+    this->dyna.actor.velocity.y = CLAMP_MIN(this->dyna.actor.velocity.y, 1.0f);
     this->dyna.actor.world.pos.y = this->dyna.actor.world.pos.y + this->dyna.actor.velocity.y;
     if ((this->dyna.actor.home.pos.y + 365.0f) < this->dyna.actor.world.pos.y) {
-        func_80C0A86C(this, globalCtx, 3, 0xE, 2);
+        func_80C0A86C(this, globalCtx, 3, 14, 2);
         func_80C0AB14(this);
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Iknin_Susceil_0x80C0A740/BgIkninSusceil_Update.asm")
+void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    BgIkninSusceil* this = THIS;
+    ActorPlayer* player = PLAYER;
+
+    if ((this->unk168 == 0) && (this->unk166 > 0) && ((player->unkA74 & 0x100) != 0) && (player->unkB48 > 1000.0f)) {
+        this->unk168 = 2;
+        if ((func_80C0A95C(this, globalCtx) != 0) && (this->actionFunc != func_80C0AE5C)) {
+            func_800B8E58(player, 0x83E);
+            func_80C0AE3C(this);
+        }
+    }
+
+    if (this->unk168 > 0) {
+        this->unk168--;
+    }
+
+    this->actionFunc(this, globalCtx);
+
+    if ((this->dyna.actor.home.pos.y + 70.0f) < this->dyna.actor.world.pos.y) {
+        this->unk166 = 0;
+    } else if ((player->unkA74 & 0x100) != 0) {
+        this->unk166 = 3;
+    } else {
+        if (this->unk166 > 0) {
+            this->unk166--;
+        }
+    }
+    if (this->unk166 > 0) {
+        func_80C0A838(this, globalCtx);
+        return;
+    }
+    func_80C0A804(this, globalCtx);
+}
 
 void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
