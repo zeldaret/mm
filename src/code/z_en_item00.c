@@ -816,15 +816,13 @@ s16 func_800A7650(s16 dropId) {
     s16 healthCapacity;
 
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
-         (gSaveContext.inventory.items[gItemSlots[6]] == 0xFF)) ||
+         (INV_CONTENT(ITEM_BOMB) == ITEM_NONE)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
-         (gSaveContext.inventory.items[gItemSlots[1]] == 0xFF)) ||
+         (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
         (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
-
-    ;
 
     if (dropId == ITEM00_HEART) {
         healthCapacity = gSaveContext.healthCapacity;
@@ -1125,11 +1123,11 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
+            } else if (AMMO(ITEM_BOW) < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
+            } else if (AMMO(ITEM_BOMB) < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
