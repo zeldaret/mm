@@ -1,8 +1,7 @@
 #ifndef _Z64CAMERA_H_
 #define _Z64CAMERA_H_
 
-#include <ultra64.h>
-// #include "global.h"
+#include "ultra64.h"
 
 typedef struct {
     /* 0x0 */ s16 func;
@@ -18,6 +17,14 @@ typedef struct {
 // typedef struct Camera Camera;
 
 // typedef s32(*camera_update_func)(Camera* camera);
+
+typedef struct {
+    /* 0x0000 */ Vec3f pos;
+    /* 0x000C */ Vec3f norm;
+    /* 0x0018 */ CollisionPoly* poly;
+    /* 0x001C */ VecSph sphNorm;
+    /* 0x0024 */ s32 bgId;
+} CamColChk; // size = 0x28
 
 typedef struct Camera {
     /* 0x000 */ UNK_TYPE1 pad0[0x4];
@@ -38,46 +45,58 @@ typedef struct Camera {
     /* 0x050 */ Vec3f focalPoint;
     /* 0x05C */ Vec3f eye;
     /* 0x068 */ Vec3f upDir;
-    /* 0x074 */ Vec3f unk74;
-    /* 0x080 */ f32 unk80;
-    /* 0x084 */ f32 unk84;
-    /* 0x088 */ f32 unk88;
+    /* 0x074 */ Vec3f eyeNext;
+    /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
     /* 0x090 */ struct ActorPlayer* player;
-    /* 0x094 */ PosRot unk94;
-    /* 0x0A8 */ struct Actor* unkA8;
-    /* 0x0AC */ Vec3f unkAC;
-    /* 0x0B8 */ UNK_TYPE1 padB8[0x8];
-    /* 0x0C0 */ f32 unkC0;
-    /* 0x0C4 */ f32 unkC4;
-    /* 0x0C8 */ f32 unkC8;
-    /* 0x0CC */ f32 unkCC;
-    /* 0x0D0 */ f32 unkD0;
-    /* 0x0D4 */ f32 unkD4;
-    /* 0x0D8 */ UNK_TYPE1 padD8[0x4];
-    /* 0x0DC */ f32 unkDC;
-    /* 0x0E0 */ f32 unkE0;
-    /* 0x0E4 */ UNK_TYPE1 padE4[0x18];
+    /* 0x094 */ PosRot playerPosRot;
+    /* 0x0A8 */ struct Actor* target;
+    /* 0x0AC */ PosRot targetPosRot;
+    /* 0x0C0 */ f32 rUpdateRateInv;
+    /* 0x0C4 */ f32 pitchUpdateRateInv;
+    /* 0x0C8 */ f32 yawUpdateRateInv;
+    /* 0x0CC */ f32 xzOffsetUpdateRate; // May be swapped with yOffset immediately below
+    /* 0x0D0 */ f32 yOffsetUpdateRate;
+    /* 0x0D4 */ f32 fovUpdateRate;
+    /* 0x0D8 */ f32 xzSpeed;
+    /* 0x0DC */ f32 dist;
+    /* 0x0E0 */ f32 speedRatio;
+    /* 0x0E4 */ Vec3f posOffset;
+    /* 0x0F0 */ Vec3f playerPosDelta;
     /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 unk100;
-    /* 0x104 */ UNK_TYPE1 pad104[0x30];
-    /* 0x134 */ Vec3s unk134;
-    /* 0x13A */ UNK_TYPE1 pad13A[0x4];
-    /* 0x13E */ u16 unk13E;
-    /* 0x140 */ s16 unk140;
-    /* 0x142 */ s16 state;
+    /* 0x100 */ f32 atLERPStepScale;
+    /* 0x104 */ f32 playerGroundY;
+    /* 0x108 */ Vec3f floorNorm;
+    /* 0x114 */ f32 waterYPos;
+    /* 0x118 */ s32 waterPrevCamIdx;
+    /* 0x11C */ s32 waterPrevCamSetting;
+    /* 0x120 */ s32 waterQuakeId;
+    /* 0x124 */ void* data0;
+    /* 0x128 */ void* data1;
+    /* 0x12C */ s16 data2;
+    /* 0x12E */ s16 data3;
+    /* 0x130 */ s16 uid;
+    /* 0x132 */ char unk_132[2];
+    /* 0x134 */ Vec3s inputDir;
+    /* 0x13A */ Vec3s camDir;
+    /* 0x140 */ s16 status;
+    /* 0x142 */ s16 setting;
     /* 0x144 */ s16 mode;
-    /* 0x146 */ UNK_TYPE1 pad146[0x2];
+    /* 0x146 */ s16 unk146;
     /* 0x148 */ s16 unk148;
     /* 0x14A */ s16 unk14A;
     /* 0x14C */ s16 unk14C;
-    /* 0x14E */ UNK_TYPE1 pad14E[0x6];
+    /* 0x14E */ s16 unk14E;
+    /* 0x150 */ s16 unk150;
+    /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 unk154;
-    /* 0x156 */ UNK_TYPE1 pad156[0x4];
+    /* 0x156 */ s16 unk156;
+    /* 0x158 */ s16 unk158;
     /* 0x15A */ s16 unk15A;
     /* 0x15C */ s16 unk15C;
     /* 0x15E */ s16 unk15E;
-    /* 0x160 */ UNK_TYPE1 pad160[0x4];
+    /* 0x160 */ s16 unk160;
+    /* 0x162 */ s16 unk162;
     /* 0x164 */ s16 unk164;
     /* 0x166 */ s16 unk166;
     /* 0x168 */ UNK_TYPE1 pad168[0x10];

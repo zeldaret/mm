@@ -212,14 +212,15 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
-typedef struct {
+typedef struct ActorPlayer {
     /* 0x000 */ Actor base;
-    /* 0x144 */ UNK_TYPE1 unk144;
-    /* 0x145 */ UNK_TYPE1 pad145[0x2];
+    /* 0x144 */ s8 currentShield;
+    /* 0x145 */ s8 currentBoots;
+    /* 0x146 */ s8 heldItemButton;
     /* 0x147 */ s8 itemActionParam;
     /* 0x148 */ UNK_TYPE1 pad148[0x2];
     /* 0x14A */ s8 heldItemActionParam;
-    /* 0x14B */ u8 unk14B;
+    /* 0x14B */ u8 linkForm;
     /* 0x14C */ UNK_TYPE1 pad14C[0x5];
     /* 0x151 */ u8 unk151;
     /* 0x152 */ UNK_TYPE1 unk152;
@@ -252,7 +253,12 @@ typedef struct {
     /* 0xA8C */ f32 unkA8C;
     /* 0xA90 */ UNK_TYPE1 padA90[0x44];
     /* 0xAD4 */ s16 unkAD4;
-    /* 0xAD6 */ UNK_TYPE1 padAD6[0x8];
+    /* 0xAD6 */ s16 unkAD6;
+    /* 0xAD8 */ u16 unkAD8;
+    /* 0xADA */ s8 unkADA;
+    /* 0xADB */ s8 unkADB;
+    /* 0xADC */ s8 unkADC;
+    /* 0xADD */ s8 unkADD;
     /* 0xADE */ u8 unkADE;
     /* 0xADF */ UNK_TYPE1 padADF[0x4];
     /* 0xAE3 */ s8 unkAE3;
