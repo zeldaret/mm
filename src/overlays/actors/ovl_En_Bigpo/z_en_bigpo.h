@@ -7,16 +7,10 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, GlobalContext*);
 
-//typedef struct EnBigpoFireParticle {
-    ///* 0x00 */ LightInfo info; // size E
-    ///* 0x10 */ Vec3f unk10; // struct with unkC
-    ///* 0x1C */ LightNode* light;
-//} EnBigpoFireParticle; // size = 0x20
-
 typedef struct EnBigpoFireParticle {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ LightNode* light;
-    /* 0x10 */ LightInfo info; // size E
+    /* 0x10 */ LightInfo info; // size 0xE
 } EnBigpoFireParticle; // size = 0x20
 
 typedef struct EnBigpo {
@@ -28,7 +22,7 @@ typedef struct EnBigpo {
     /* 0x204 */ u8 unk204;
     /* 0x206 */ s16 unk206;
     /* 0x208 */ s16 unk208;
-    /* 0x20A */ s16 rotVelocity; // rot speed?
+    /* 0x20A */ s16 rotVelocity;
     /* 0x20C */ s16 unk20C;
     /* 0x20E */ s16 unk20E;
     /* 0x210 */ s16 switchFlags;

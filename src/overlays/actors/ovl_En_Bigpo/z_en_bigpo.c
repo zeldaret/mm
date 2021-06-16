@@ -9,22 +9,16 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 
 // update functions
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
-//void EnBigpo_Update(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B64190(Actor* thisx, GlobalContext* globalCtx);
-//void func_80B64190(EnBigpo* this, GlobalContext* globalCtx);
 
 // draw funcs
 void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
-//void func_80B64470(EnBigpo* this, GlobalContext *globalCtx);
 void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64880(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64DFC(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
 
-//void func_80B64880(EnBigpo* this, GlobalContext* globalCtx);
-//void func_80B64B08(EnBigpo* this, GlobalContext* globalCtx);
-//void func_80B64DFC(EnBigpo* this, GlobalContext* globalCtx);
 
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
@@ -81,7 +75,7 @@ void func_80B63A18(EnBigpo* this);
 void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63C28(EnBigpo* this);
 void func_80B63D0C(EnBigpo* this);
-UNK_TYPE func_80B63D88(EnBigpo* this, GlobalContext* globalCtx);
+s32 func_80B63D88(EnBigpo* this, GlobalContext* globalCtx);
 
 void func_80B63964(EnBigpo* this);
 void func_80B63980(EnBigpo* this, GlobalContext* globalCtx);
@@ -92,7 +86,21 @@ void func_80B63854(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63888(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B638D4(EnBigpo* this, GlobalContext* globalCtx);
 
-/*
+
+extern AnimationHeader D_06001360;
+extern SkeletonHeader D_06005C18;
+extern AnimationHeader D_06000924;
+extern AnimationHeader D_06000924;
+extern AnimationHeader D_06000454;
+extern Gfx D_060041A0;
+extern Gfx D_06001BB0;
+extern Gfx D_060058B8;
+extern Gfx D_801AEFA0;
+extern Gfx D_801AEF88;
+extern Gfx D_060042C8;
+extern Gfx D_060043F8;
+extern Gfx D_0407D590;
+
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,
@@ -101,20 +109,46 @@ const ActorInit En_Bigpo_InitVars = {
     sizeof(EnBigpo),
     (ActorFunc)EnBigpo_Init,
     (ActorFunc)EnBigpo_Destroy,
-    (ActorFunc)EnBigpo_Update,;
+    (ActorFunc)EnBigpo_Update,
     (ActorFunc)NULL,
 };
-*/
 
-extern InitChainEntry D_80B65064;
-extern DamageTable D_80B65044; 
-extern ColliderCylinderInit D_80B65010;
-extern CollisionCheckInfoInit D_80B6503C;
+// cannot be renamed until Init matches
+static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
+    { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    { 35, 100, 10, { 0, 0, 0 } },
+};
 
-extern AnimationHeader D_06001360;
+//static CollisionCheckInfoInit D_80B6503C = { 0x0A000023, 0x00643200};
+static u32 D_80B6503C[] = { 0x0A000023, 0x00643200};
 
-extern SkeletonHeader D_06005C18;
-extern AnimationHeader D_06000924;
+static DamageTable D_80B65044 = {
+    0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0xF0, 0x01, 0x01, 0x00, 0x01, 0x01, 0x42, 0x01, 0x01, 
+    0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
+};
+
+static InitChainEntry D_80B65064[] = { //sInitChain
+    ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
+};
+
+Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
+
+u8 D_80B65078[] = {
+    0xFF, 0x04, 0xFF, 0x00, 
+    0xFF, 0x01, 0xFF, 0x02, 
+    0x05, 0x03, 0x00, 0x00, 
+};
+
+Vec3f D_80B65084[] = {
+    { 2000.0f, 4000.0f, 0.0f,},
+    {-1000.0f, 1500.0f, -1000.0f,},
+    {-1000.0f, 1500.0f, 2000.0f,},
+};
+
+//0x00000000
+//0x00000000
 
 #ifdef NON_MATCHING
 // non-matching: some instructions out of order but looks like it should be equiv
@@ -235,7 +269,7 @@ void func_80B619B4(EnBigpo *this) {
     s16 oldYaw = this->actor.shape.rot.y;
     this->actor.shape.rot.y += this->rotVelocity;
     if ((oldYaw < 0) && ( this->actor.shape.rot.y > 0)) {
-        Audio_PlayActorSound2(&this->actor, 0x38EE);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL);
     }
 }
 
@@ -349,7 +383,7 @@ void func_80B61E9C(EnBigpo *this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->actor.draw = func_80B64470;
     Actor_SetScale(&this->actor, 0.014f);
-    Audio_PlayActorSound2(this, 0x3873); // NA_SE_EN_STALKIDS_APPEAR
+    Audio_PlayActorSound2(this, NA_SE_EN_STALKIDS_APPEAR);
     this->actionFunc = func_80B61F04;
 }
 
@@ -424,7 +458,7 @@ void func_80B62154(EnBigpo *this) {
     this->unk206 = 0x20;
     this->actor.flags &= ~1; // targetable
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, 0x3874);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = func_80B621CC;
 }
 
@@ -448,7 +482,7 @@ void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
 
     distance = (this->actor.xzDistToPlayer < 200.0f) ? ( 200.0f ) : ( this->actor.xzDistToPlayer );
     randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
-    Audio_PlayActorSound2(this, 0x3873);
+    Audio_PlayActorSound2(this, NA_SE_EN_STALKIDS_APPEAR);
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->base.world.pos.x;
@@ -473,7 +507,7 @@ void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-extern AnimationHeader D_06000924;
+
 
 void func_80B624F4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
@@ -562,7 +596,7 @@ void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
     Math_SmoothStepToF(&this->actor.world.pos.y, player->base.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200) != 0) {
-        this->collider.base.colType = 3;
+        this->collider.base.colType = COLTYPE_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
         this->collider.info.bumper.dmgFlags |= 0x8000;
         func_80B624F4(this);
@@ -570,7 +604,7 @@ void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B619B4(this);
 }
 
-extern AnimationHeader D_06000454;
+
 
 void func_80B629E4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
@@ -601,7 +635,7 @@ void func_80B62AD4(EnBigpo *this) {
     this->actionFunc = func_80B62B10;
 }
 
-extern Vec3f D_80B6506C;
+
 
 void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f tempVec; 
@@ -641,10 +675,10 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     if (this->unk206 < 0x12) {
-        func_800B9010(&this->actor, 0x321F); // sfx
+        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
     if (this->unk206 == 0x12) {
-        Audio_PlayActorSound2(this, 0x3877);
+        Audio_PlayActorSound2(this, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -667,7 +701,7 @@ void func_80B62E38(EnBigpo *this, GlobalContext *globalCtx) {
     this->actionFunc = func_80B62F10;
 }
 
-extern Gfx D_060041A0;
+
 
 void func_80B62F10(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->actor.bgCheckFlags & 1)) || (this->actor.floorHeight == -32000.0f)) {
@@ -718,7 +752,7 @@ void func_80B631F8(EnBigpo *this) {
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
     this->unk218 = this->actor.world.pos.y;
-    Audio_PlayActorSound2(&this->actor, 0x28E0);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EV_METAL_BOX_BOUND); // misnamed?
     this->actionFunc = func_80B63264;
 }
 
@@ -743,7 +777,7 @@ void func_80B6330C(EnBigpo *this, GlobalContext *globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->unk206 == 0) {
-        Audio_PlayActorSound2(this, 0x38EC);
+        Audio_PlayActorSound2(this, NA_SE_EN_PO_LAUGH);
         func_80B633E8(this);
     } else {
         func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
@@ -1027,13 +1061,13 @@ s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
   
         if (func_800BE22C(this) == 0) {
             this->actor.flags &= ~1; // targetable 
-            Audio_PlayActorSound2(this, 0x3876);
+            Audio_PlayActorSound2(this, NA_SE_EN_PO_DEAD);
             func_800BBA88(globalCtx, &this->actor);
             if (this->actor.params == 1) {
                 func_801A2ED8();
             }
         } else {
-            Audio_PlayActorSound2(this, 0x3875);
+            Audio_PlayActorSound2(this, NA_SE_EN_PO_DAMAGE);
         }
 
         if (this->actor.colChkInfo.damageEffect == 4) {
@@ -1069,7 +1103,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
             this->unk20C = 0;
         }
         if (this->unk20C == 0x28) {
-            Audio_PlayActorSound2(&this->actor, 0x38EC);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
             func_80B62154(this);
         }
     }
@@ -1138,10 +1172,10 @@ s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
     return 0;
 }
 
-extern Gfx D_06001BB0;
-extern Gfx D_060058B8;
-extern u8 D_80B65078[];
-extern Vec3f D_80B65084[];
+
+
+
+
 
 //PostLimbDraw2
 #ifdef NON_EQUIVELENT
@@ -1211,8 +1245,8 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
 #endif
 
-extern Gfx D_801AEFA0;
-extern Gfx D_801AEF88;
+
+
 
 // non-standard draw func
 #ifdef NON_EQUIVELENT
@@ -1296,8 +1330,8 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 
 }
 
-extern Gfx D_060042C8;
-extern Gfx D_060043F8;
+
+
 
 // draw func
 // non-equivelent: this is an odd draw function, diff is nowhere close
@@ -1363,7 +1397,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
 #endif
 
-extern Gfx D_0407D590;
+
 
 #ifdef NON_MATCHING
 // draw func

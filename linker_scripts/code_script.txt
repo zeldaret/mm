@@ -7019,7 +7019,7 @@ SECTIONS
     ovl_En_Bigpo : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o(.text)
-        build/asm/overlays/ovl_En_Bigpo_data.o(.data)
+        build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o(.data)
         build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o(.rodata)
         build/asm/overlays/ovl_En_Bigpo_rodata.o(.rodata)
     }
