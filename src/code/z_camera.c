@@ -855,9 +855,66 @@ s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC9C0.asm")
 #endif
 
+// OoT func_80044ADC
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CCCEC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD04C.asm")
+Vec3f *Camera_CalcUpFromPitchYawRoll(Vec3f *dest, s16 pitch, s16 yaw, s16 roll) {
+    f32 sinPitch;
+    f32 cosPitch;
+    f32 sinYaw;
+    f32 cosYaw;
+    f32 sinNegRoll;
+    f32 cosNegRoll;
+    Vec3f spA4;
+    f32 pad;
+    f32 sp54;
+    f32 sp4C;
+    f32 cosPitchCosYawSinRoll;
+    f32 negSinPitch;
+    f32 temp_f10_2;
+    f32 cosPitchcosYaw;
+    f32 temp_f14;
+    f32 negSinPitchSinYaw;
+    f32 negSinPitchCosYaw;
+    f32 cosPitchSinYaw;
+    f32 temp_f4_2;
+    f32 temp_f6;
+    f32 temp_f8;
+    f32 temp_f8_2;
+    f32 temp_f8_3;
+
+    sinPitch = Math_SinS(pitch);
+    cosPitch = Math_CosS(pitch);
+    sinYaw = Math_SinS(yaw);
+    cosYaw = Math_CosS(yaw);
+    negSinPitch = -sinPitch;
+    sinNegRoll = Math_SinS(-roll);
+    cosNegRoll = Math_CosS(-roll);
+    negSinPitchSinYaw = negSinPitch * sinYaw;
+    temp_f14 = 1.0f - cosNegRoll;
+    cosPitchSinYaw = cosPitch * sinYaw;
+    sp54 = SQ(cosPitchSinYaw);
+    sp4C = (cosPitchSinYaw * sinPitch) * temp_f14;
+    cosPitchcosYaw = cosPitch * cosYaw;
+    temp_f4_2 = ((1.0f - sp54) * cosNegRoll) + sp54;
+    cosPitchCosYawSinRoll = cosPitchcosYaw * sinNegRoll;
+    negSinPitchCosYaw = negSinPitch * cosYaw;
+    temp_f6 = (cosPitchcosYaw * cosPitchSinYaw) * temp_f14;
+    temp_f10_2 = sinPitch * sinNegRoll;
+    spA4.x = ((negSinPitchSinYaw * temp_f4_2) + (cosPitch * (sp4C - cosPitchCosYawSinRoll))) +
+             (negSinPitchCosYaw * (temp_f6 + temp_f10_2));
+    sp54 = SQ(sinPitch);
+    temp_f4_2 = (sinPitch * cosPitchcosYaw) * temp_f14;
+    temp_f8_3 = cosPitchSinYaw * sinNegRoll;
+    temp_f8 = sp4C + cosPitchCosYawSinRoll;
+    spA4.y = ((negSinPitchSinYaw * temp_f8) + (cosPitch * (((1.0f - sp54) * cosNegRoll) + sp54))) +
+             (negSinPitchCosYaw * (temp_f4_2 - temp_f8_3));
+    temp_f8_2 = temp_f6 - temp_f10_2;
+    spA4.z = ((negSinPitchSinYaw * temp_f8_2) + (cosPitch * (temp_f4_2 + temp_f8_3))) +
+             (negSinPitchCosYaw * (((1.0f - SQ(cosPitchcosYaw)) * cosNegRoll) + SQ(cosPitchcosYaw)));
+    *dest = spA4;
+    return dest;
+}
 
 // D_801DCE20 = 0.12
 // D_801DCE24 = 1.1
@@ -880,7 +937,7 @@ f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ClampLERPScale.asm")
 #endif
 
-void Camera_ResetAnim(Camera *camera, s32 arg1) {
+void Camera_ResetAnim(Camera *camera, s32 mode) {
     camera->animState = 0;
 }
 
@@ -1220,28 +1277,154 @@ s32 Camera_Special7(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DFF44.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_SetFlags.asm")
+s16 Camera_SetFlags(Camera* camera, s16 flags) {
+    camera->flags |= flags;
+    return camera->flags;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ClearFlags.asm")
+s16 Camera_ClearFlags(Camera* camera, s16 flags) {
+    camera->flags &= ~flags;
+    return camera->flags;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DFFAC.asm")
+s32 Camera_ChangeDoorCam(Camera *camera, Actor *doorActor, s16 camDataIdx, f32 arg3, s16 timer1, s16 timer2, s16 timer3) {
+    DoorParams* doorParams = (DoorParams*)camera->paramData;
+    
+    if (camera->setting == 8) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E007C.asm")
+    doorParams->doorActor = doorActor;
+    doorParams->timer1 = timer1;
+    doorParams->timer2 = timer2;
+    doorParams->timer3 = timer3;
+    doorParams->camDataIdx = camDataIdx;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E01AC.asm")
+    if (camDataIdx == -99) {
+        Camera_ResetAnim(camera, camera->mode);
+        return -99;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E01B8.asm")
+    if (camDataIdx == -1) {
+        func_800DF8EC(camera, 8, 0);
+    } else if (camDataIdx == -2) {
+        func_800DF8EC(camera, 0x10, 0);
+    } else {
+        camera->nextCamDataIdx = camDataIdx;
+        camera->unk_150 = timer1;
+        camera->timer = timer2 + timer3;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E01DC.asm")
+    Camera_ResetAnim(camera, camera->mode);
+    return -1;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E0228.asm")
+// D_801DD5B0 = 0.1f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E0238.asm")
+    dstCamera->posOffset.z = 0.0f;
+    dstCamera->posOffset.y = 0.0f;
+    dstCamera->posOffset.x = 0.0f;
+    dstCamera->atLERPStepScale = 0.1f;
+    dstCamera->focalPoint = srcCamera->focalPoint;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E02AC.asm")
+    dstCamera->eye = dstCamera->eyeNext = srcCamera->eye;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E0308.asm")
+    dstCamera->dist = CamMath_Distance(&dstCamera->focalPoint, &dstCamera->eye);
+    dstCamera->fov = srcCamera->fov;
+    dstCamera->roll = srcCamera->roll;
+    func_800CB5DC(dstCamera);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E031C.asm")
+    if (dstCamera->player != NULL) {
+        if (&dstCamera->player->base == dstCamera->globalCtx->actorCtx.actorList[2].first) {
+            func_800B8248(&dstCamera->playerPosRot, dstCamera->player);
+        } else {
+            func_800B8214(&dstCamera->playerPosRot, dstCamera->player);
+        }
+        func_800CB6C8(dstCamera, &dstCamera->playerPosRot);
+    }
+    return true;
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Copy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800E0348.asm")
+// Unused
+s32 Camera_GetDbgCamEnabled(void) {
+    return 0;
+}
+
+Vec3f* Camera_GetSkyboxOffset(Vec3f* dst, Camera* camera) {
+    *dst = camera->skyboxOffset;
+    return dst;
+}
+
+void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3) {
+    if (setDataFlags & 1) {
+        camera->data0 = data0;
+    }
+
+    if (setDataFlags & 2) {
+        camera->data1 = data1;
+    }
+
+    if (setDataFlags & 4) {
+        camera->data2 = data2;
+    }
+
+    if (setDataFlags & 8) {
+        camera->data3 = data3;
+    }
+}
+
+s32 func_800E0228(void) {
+    return D_801B9E14;
+}
+
+s16 func_800E0238(Camera* camera) {
+    Camera_SetFlags(camera, 0x8);
+    if ((camera->thisIdx == MAIN_CAM) && (camera->globalCtx->activeCamera != MAIN_CAM)) {
+        Camera_SetFlags(camera->globalCtx->cameraPtrs[camera->globalCtx->activeCamera], 0x8);
+        return camera->globalCtx->activeCamera;
+    } else {
+        return camera->thisIdx;
+    }
+
+}
+
+void func_800E02AC(Camera* camera, ActorPlayer* player) {
+    camera->player = player;
+    if (&player->base == camera->globalCtx->actorCtx.actorList[2].first) {
+        func_800B8248(&camera->playerPosRot, player);
+    } else {
+        camera = camera;
+        func_800B8214(&camera->playerPosRot, &camera->player->base);
+    }
+
+    camera->animState = 0;
+}
+
+void func_800E0308(Camera* camera, Actor* actor) {
+    camera->target = actor;
+    camera->animState = 20;
+}
+
+f32 func_800E031C(Camera* camera) {
+    if (camera->flags & 0x100) {
+        return camera->waterYPos;
+    } else {
+        return BGCHECK_Y_MIN;
+    }
+}
+
+void func_800E0348(Camera* camera) {
+    if ((camera->animState != 0) && (camera->animState != 10) && (camera->animState != 20)) {
+        camera->animState = 999;
+        Camera_SetFlags(camera, 0x400 | 0x10 | 0x4 | 0x2);
+    } else {
+        camera->animState = 666;
+    }
+}
