@@ -169,7 +169,7 @@ f32 func_800CB700(Camera* camera) {
     if (&player->base == camera->globalCtx->actorCtx.actorList[2].first) {
         ret = func_800B6FC8(player);
     } else {
-        func_800B81E0(&vec, player, camera);
+        func_800B81E0(&vec, player); // TODO: camera as arg2? functions.h
         ret = vec.y - camera->playerPosRot.pos.y;
         if (ret == 0.0f) {
             ret = 10.0f;
@@ -231,6 +231,7 @@ s32 func_800CB854(Camera* camera) {
     return 0;
 }
 
+// related to player swimming (player->stateFlags1 & 0x8000000) is player swimming
 s32 func_800CB880(Camera* camera) {
     ActorPlayer* player = camera->player;
 
@@ -322,11 +323,9 @@ s32 func_800CBA34(Camera* camera) {
     s32 ret;
 
     if (&player->base == camera->globalCtx->actorCtx.actorList[2].first) {
-        ret = (player->stateFlags1 & 0x1000);
-        ret = (!!(ret)); // needed to match
+        ret = !!(player->stateFlags1 & 0x1000);
         if (ret == 0) {
-            ret = (player->unkA74 & 0x100);
-            ret = (!!(ret)); // needed to match
+            ret = !!(player->unkA74 & 0x100);
         }
         return ret;
     }
@@ -405,10 +404,10 @@ s32 func_800CBC00(Camera* camera) {
 
 s32 func_800CBC30(Camera* camera, f32 arg1, f32 arg2) {
     if ((camera->playerGroundY != camera->waterYPos) && (camera->waterYPos < arg1) && (camera->waterYPos > arg2)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 // OoT func_80043F94
@@ -421,7 +420,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
     Vec3f toPoint;                                         // 5C-60-64
     Vec3f fromToNorm;                                      // 50-54-58
     f32 floorPolyY;
-    CollisionPoly* floorPoly; // sp38
+    CollisionPoly* floorPoly; // cosYaw
     s32 floorBgId;            // sp44
     s32 chkWall;
     s32 chkCeil;
@@ -452,7 +451,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
                 floorPolyY = to->pos.y;
             }
         } else {
-            floorPolyY = BgCheck_CameraRaycastFloor2(colCtx, &floorPoly, &floorBgId, &toNewPos);
+            floorPolyY = func_800C4488(colCtx, &floorPoly, &floorBgId, &toNewPos);
         }
 
         if ((to->pos.y - floorPolyY) > 5.0f) {
@@ -487,8 +486,8 @@ void func_800CBFA4(Camera* camera, Vec3f* arg1, Vec3f* arg2, s32 arg3) {
 }
 
 // OoT Camera_BGCheckInfo
-// ISMATCHING: Need to move rodata
 // D_801DCDE8 = 3.051851e-05
+// ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
 s32 func_800CC000(Camera* camera, Vec3f* from, CamColChk* to) {
     CollisionPoly* floorPoly;
@@ -511,6 +510,7 @@ s32 func_800CC000(Camera* camera, Vec3f* from, CamColChk* to) {
     return 0;
 }
 #else
+s32 func_800CC000(Camera* camera, Vec3f* from, CamColChk* to);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC000.asm")
 #endif
 
@@ -544,36 +544,345 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
     return false;
 }
 
-// s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, void* arg3, Actor** exclusions, s16 arg5)
+// D_801DCDEC = 0.9f
+#ifdef NON_EQUIVALENT
+s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor** exclusions, s32 numExclusions) {
+    // sp 70-98 likely all one struct
+    VecSph sp90; // 90-94-96
+    s32 sp88;
+    Vec3f sp70; // 70-74-78 (7C-80-84?)
+    Vec3f sp64; // 64-68-6C
+    ActorPlayer* player = camera->globalCtx->actorCtx.actorList[2].first;
+    // s32 phi_s3_2;
+    // s16 phi_v1;
+    s32 pitch;
+    s32 ret;
+    s32 i;
+
+    sp64 = *arg2;
+    func_800B81E0(&sp70, player); // TODO: functions.h
+    sp90.r = arg3->r;
+    sp90.pitch = arg3->pitch;
+    sp88 = 14;
+
+    for (i = 0; i < sp88;) {
+        func_8010C7B8(arg1, arg2, &sp90);
+        if (Camera_CheckOOB(camera, arg1, &sp64) || func_800CBC30(camera, arg2->y, arg1->y) ||
+            CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colCheckCtx, arg2, arg1, exclusions,
+                                       numExclusions)) {
+            sp90.yaw = D_801B9E18[i] + arg3->yaw;
+            pitch = (arg3->pitch * Rand_ZeroOne());
+            sp90.pitch = D_801B9E34[i] + pitch;
+            if (sp90.pitch >= 0x36B1) {
+                sp90.pitch += -0x3E80;
+            }
+            if (sp90.pitch < -0x36B0) {
+                sp90.pitch += 0x3A98;
+            }
+            sp90.r *= 0.9f;
+            sp64 = *arg2;
+            i++;
+        }
+    }
+
+    *arg3 = sp90;
+
+    // phi_v1 = phi_s3_2;
+    if (i == 14) {
+        ret = -1;
+    } else {
+        ret = i;
+    }
+
+    return ret;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC260.asm")
+#endif
 
+// OoT Camera_GetFloorYLayer
+// D_801DCDF0 =  = 3.051851e-05
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+f32 func_800CC488(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
+    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionPoly* floorPoly;
+    f32 floorY = func_800C40B4(colCtx, &floorPoly, bgId, pos);
+
+    if (floorY == BGCHECK_Y_MIN) {
+        norm->x = 0.0f;
+        norm->y = 1.0f;
+        norm->z = 0.0f;
+    } else {
+        norm->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        norm->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        norm->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+    }
+
+    return floorY;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC488.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC56C.asm")
+// TODO: Is this s32 or void return? It's not f32 return.
+s32 func_800CC56C(Camera* camera, Vec3f* arg1) {
+    Vec3f pos;  // 2C
+    Vec3f norm; // 20
+    s32 bgId;
 
+    pos = *arg1;
+    pos.y += 80.0f;
+    return func_800CC488(camera, &norm, &pos, &bgId); // TODO: functions.h
+}
+
+// D_801DCDF4 = 3.051851e-05
+// D_801DCDF8 = 3.051851e-05
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+f32 func_800CC5C8(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
+    CollisionPoly* floorPoly;
+    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    f32 floorY;
+
+    if (camera->player != NULL) {
+        // OoT BgCheck_EntityRaycastFloor5
+        floorY =
+            func_800C41E4(camera->globalCtx, &camera->globalCtx->colCtx, &floorPoly, bgId, &camera->player->base, pos);
+    } else {
+        floorY = func_800C4488(colCtx, &floorPoly, bgId, pos);
+    }
+
+    if ((floorY == BGCHECK_Y_MIN) ||
+        ((camera->playerGroundY < floorY) && !(COLPOLY_GET_NORMAL(floorPoly->normal.y) > 0.5f))) {
+        // no floor, or player is below the floor and floor is not considered steep
+        norm->x = 0.0f;
+        norm->y = 1.0f;
+        norm->z = 0.0f;
+        floorY = BGCHECK_Y_MIN;
+    } else {
+        norm->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        norm->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        norm->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+    }
+
+    return floorY;
+}
+#else
+f32 func_800CC5C8(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC5C8.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC740.asm")
+s16 func_800CC740(Camera* camera, u32 flags) {
+    if (flags & 0x1000) {
+        return func_800C9728(&camera->globalCtx->colCtx, flags & ~0x1000, 50); // TODO: functions.h
+    } else {
+        return func_80169C64(camera->globalCtx, flags); // TODO: functions.h
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC7A8.asm")
+s32 func_800CC7A8(Camera* camera, u32 flags) {
+    if (flags & 0x1000) {
+        return func_800C98CC(&camera->globalCtx->colCtx, flags & ~0x1000, 50); // TODO: functions.h
+    } else {
+        return func_80169C84(camera->globalCtx, flags); // TODO: functions.h
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC804.asm")
+/**
+ * Gets the scene's camera index for the poly `poly`, returns -1 if
+ * there is no camera data for that poly.
+ */
+s32 Camera_GetDataIdxForPoly(Camera* camera, s32* bgId, CollisionPoly* poly) {
+    s32 camDataIdx;
+    s32 ret;
 
+    camDataIdx = SurfaceType_GetCamDataIndex(&camera->globalCtx->colCtx, poly, *bgId);
+
+    if (func_800C9728(&camera->globalCtx->colCtx, camDataIdx, *bgId) == 0) { // == CAM_SET_NONE
+        ret = -1;
+    } else {
+        ret = camDataIdx;
+    }
+
+    return ret;
+}
+
+/**
+ * Gets the Camera information for the water box the player is in.
+ * Returns -1 if the player is not in a water box, or does not have a swimming state.
+ * Returns -2 if there is no camera index for the water box.
+ * Returns the camera data index otherwise.
+ */
+// Camera_GetWaterBoxDataIdx
+#ifdef NON_EQUIVALENT
+s32 func_800CC874(Camera* camera, f32* waterY) {
+    PosRot playerPosShape;
+    WaterBox* waterBox;
+    s32 ret;
+    s32 sp30;
+
+    // Actor_GetWorldPosShapeRot
+    func_800B8248(&playerPosShape, camera->player); // &camera->player->base
+    *waterY = playerPosShape.pos.y;
+
+    // WaterBox_GetSurface1
+    if (!func_800C9EBC(camera->globalCtx, &camera->globalCtx->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
+                       waterY, &waterBox, &sp30)) {
+        // player's position is not in a waterbox
+        *waterY = playerPosShape.pos.y;
+        return -1;
+    }
+
+    if (!func_800CB880(camera)) {
+        // player is not swimming
+        return -1;
+    }
+
+    // WaterBox_GetCamDataIndex
+    ret = func_800CA648(&camera->globalCtx->colCtx, waterBox, sp30);
+    if (ret == 0) {
+        // no camera data idx
+        return -2;
+    }
+
+    return ret;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC874.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC938.asm")
+void func_800CC938(Camera* camera) { // May be void arguments
+    func_800DDFE0(camera);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC958.asm")
+/**
+ * Calculates the angle between points `from` and `to`
+ */
+// D_801DCDFC = 57.295776
+// D_801DCE00 = 182.04167
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s16 Camera_XZAngle(Vec3f* to, Vec3f* from) {
+    // Math_FAtan2F in OoT
+    return DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_XZAngle.asm")
+#endif
 
+// D_801DCE04 = 1.2
+// D_801DCE08 = 0.8
+// D_801DCE0C = 0.19999999
+// D_801DCE10 = 57.295776
+// D_801DCE14 = 182.04167
+// D_801DCE18 = 57.295776
+// D_801DCE1C = 182.04167
+// Identical to OoT func_80044ADC
+// ISMATCHING: Need to move rodata and monkaBSS
+#ifdef NON_MATCHING
+s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2) {
+    static f32 D_801EDBF4;
+    static f32 D_801EDBF8;
+    static CamColChk D_801EDC00;
+    Vec3f playerPos; // sp64-68-6C
+    Vec3f rotatedPos; // sp58-5C-60
+    Vec3f floornorm; // sp4C
+    f32 temp_f2;
+    s16 temp_s0;
+    s16 temp_s1;
+    f32 phi_f18; // sp40
+    f32 sinYaw; // sp3C
+    f32 cosYaw; // sp38
+    s32 bgId; // sp34
+    f32 sp30;
+    f32 sp2C;
+    f32 phi_f16;
+    f32 playerHeight;
+
+    sinYaw = Math_SinS(yaw);
+    cosYaw = Math_CosS(yaw);
+    playerHeight = func_800CB700(camera); // TODO: Confirm? Or regular height
+    temp_f2 = (playerHeight * 1.2f);
+    sp2C = playerHeight * 2.5f;
+    sp30 = playerHeight;
+    playerPos.x = camera->playerPosRot.pos.x;
+    playerPos.y = camera->playerGroundY + temp_f2;
+    playerPos.z = camera->playerPosRot.pos.z;
+    rotatedPos.x = (playerHeight * sinYaw) + playerPos.x;
+    rotatedPos.y = playerPos.y;
+    rotatedPos.z = (playerHeight * cosYaw) + playerPos.z;
+
+
+    if (arg2 || ((camera->globalCtx->state.frames % 2) == 0)) {
+        D_801EDC00.pos.x = playerPos.x + (sp2C * sinYaw);
+        D_801EDC00.pos.y = playerPos.y;
+        D_801EDC00.pos.z = playerPos.z + (sp2C * cosYaw); // TODO: D_801EDC04 may be D_801EDC00 or D_801EDC04.x = D_801EDC04.y
+        func_800CC000(camera, &playerPos, &D_801EDC00);
+        if (arg2) {
+            D_801EDBF4 = D_801EDBF8 = camera->playerGroundY;
+        }
+    } else {
+        sp2C = CamMath_DistanceXZ(&playerPos, &D_801EDC00.pos);
+        D_801EDC00.pos.x += D_801EDC00.norm.x * 5.0f;
+        D_801EDC00.pos.y += D_801EDC00.norm.y * 5.0f;
+        D_801EDC00.pos.z += D_801EDC00.norm.z * 5.0f;
+        if (sp2C < sp30) {
+            sp30 = sp2C;
+            D_801EDBF4 = D_801EDBF8 = func_800CC5C8(camera, &floornorm, &D_801EDC00, &bgId);
+        } else {
+            D_801EDBF4 = func_800CC5C8(camera, &floornorm, &rotatedPos, &bgId);
+            D_801EDBF8 = func_800CC5C8(camera, &floornorm, &D_801EDC00, &bgId);
+        }
+
+        if (D_801EDBF4 == BGCHECK_Y_MIN) {
+            D_801EDBF4 = camera->playerGroundY;
+        }
+
+        if (D_801EDBF8 == BGCHECK_Y_MIN) {
+            D_801EDBF8 = D_801EDBF4;
+        }
+    }
+
+    phi_f16 = (D_801EDBF4 - camera->playerGroundY) * 0.8f;
+    phi_f18 = (D_801EDBF8 - camera->playerGroundY) * 0.19999999f;
+    temp_s0 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f16, sp30)));
+    temp_s1 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f18, sp2C)));
+    return temp_s0 + temp_s1;
+
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC9C0.asm")
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CCCEC.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD04C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD288.asm")
+// D_801DCE20 = 0.12
+// D_801DCE24 = 1.1
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale) {
+    f32 ret;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD2E0.asm")
+    if (camera->atLERPStepScale < 0.12f) {
+        ret = 0.12f;
+    } else if (camera->atLERPStepScale >= maxLERPScale) {
+        ret = maxLERPScale;
+    } else {
+        ret = 1.1f * camera->atLERPStepScale;
+    }
+
+    return ret;
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ClampLERPScale.asm")
+#endif
+
+void Camera_ResetAnim(Camera *camera, s32 arg1) {
+    camera->animState = 0;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD2F0.asm")
 
@@ -581,8 +890,20 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD44C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD634.asm")
+/**
+ * Calculates how much to adjust the camera at's y value when on a slope.
+ */
+f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adjAmt) {
+    f32 tmp;
+    VecSph floorNormSph;
 
+    func_8010C6C8(&floorNormSph, floorNorm);
+
+    tmp = Math_CosS(floorNormSph.pitch) * Math_CosS(playerYRot - floorNormSph.yaw);
+    return (Camera_fabsf(tmp) * adjAmt) * Math_CosS(playerYRot - eyeAtYaw);
+}
+
+// Used in Battle1, unkArg-> related to unk data D_801AECF0, wait for unkArg info
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD6CC.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD6F8.asm")

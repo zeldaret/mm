@@ -178,7 +178,7 @@ f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C43CC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/BgCheck_CameraRaycastFloor2.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C4488.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C44F0.asm")
 
@@ -342,7 +342,7 @@ f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C9704.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/SurfaceType_GetCamDataIndex.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C9728.asm")
 

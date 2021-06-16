@@ -94,7 +94,7 @@ typedef struct Camera {
     /* 0x158 */ s16 unk158;
     /* 0x15A */ s16 unk15A;
     /* 0x15C */ s16 unk15C;
-    /* 0x15E */ s16 unk15E;
+    /* 0x15E */ s16 animState;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 unk162;
     /* 0x164 */ s16 unk164;
