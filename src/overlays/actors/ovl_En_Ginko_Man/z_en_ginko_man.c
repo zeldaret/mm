@@ -236,7 +236,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x464; // Hey, relax! It doesn't leave any marks
             break;
         case 0x464: // Hey, relax! It doesn't leave any marks
-            globalCtx->msgCtx.unk11F23 = 0x44;
+            globalCtx->msgCtx.unk11F22 = 0x44;
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"
@@ -430,8 +430,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
-                } else if (D_801C1E2C[(gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]] <
-                           (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
+                } else if (D_801C1E2C[CUR_UPG_VALUE(UPG_WALLET)] < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
                     play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x475, &this->actor);
@@ -541,9 +540,7 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx,
-                          ((u32)(gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) + 8, 500.0f,
-                          100.0f);
+            func_800B8A1C(&this->actor, globalCtx, CUR_UPG_VALUE(UPG_WALLET) + 8, 500.0f, 100.0f);
         } else {
             func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
         }
