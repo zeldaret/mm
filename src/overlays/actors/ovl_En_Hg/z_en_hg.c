@@ -278,89 +278,89 @@ void func_80BCF93C(EnHg* this) {
     this->actionFunc = func_80BCF95C;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCF95C.asm")
-// void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-//     CsCmdActorAction* action;
-//     u32 actionIndex;
+// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCF95C.asm")
+void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
+    CsCmdActorAction* action;
+    u32 actionIndex;
 
-//     if (func_800EE29C(globalCtx, 0x1E4U)) {
-//         actionIndex = func_800EE200(globalCtx, 0x1E4U);
-//         // temp_t7 = temp_v0 * 4;
-//         // sp2C = temp_v0;
-//         // temp_v1 = globalCtx + temp_t7;
-//         // temp_a0 = *temp_v1->unk1F4C;
-//         if (this->unk310[3] != action->unk0) {
-//             this->unk310[3] = action->unk0;
-//             switch (globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-//                 case 0: // switch 1
-//                     this->unk21C = NULL;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
-//                     goto block_19;
-//                 case 1: // switch 1
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 3;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
-//                     goto block_19;
-//                 case 2: // switch 1
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 5;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
-//                     goto block_19;
-//                 case 3: // switch 1
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 7;
-//                     if ((this->unk_218 == 1) || (this->unk_218 == 3)) {
-//                         func_8019F128(0x3ABAU);
-//                     }
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
-//                     goto block_19;
-//                 case 4: // switch 1
-//                     this->unk21C = 1;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
-//                     goto block_19;
-//                 case 5: // switch 1
-//                     gSaveContext.weekEventReg[75] |= 0x20;
-//                     Actor_MarkForDeath(&this->actor);
-//             }
-//         } else {
-//             if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-//                 if (this->unk21C != 3) {
-//                     if (this->unk21C != 5) {
+    if (func_800EE29C(globalCtx, 0x1E4U) != 0) {
+        actionIndex = func_800EE200(globalCtx, 0x1E4U);
+        // temp_t7 = temp_v0 * 4;
+        // sp2C = temp_v0;
+        // temp_v1 = globalCtx + temp_t7;
+        // temp_a0 = *temp_v1->unk1F4C;
+        if (this->unk310[3] != action->unk0) {
+            this->unk310[3] = action->unk0;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
+                case 0: // switch 1
+                    this->unk21C = NULL;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
+                    goto block_19;
+                case 1: // switch 1
+                    this->unk310[2] = 0;
+                    this->unk21C = 3;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
+                    goto block_19;
+                case 2: // switch 1
+                    this->unk310[2] = 0;
+                    this->unk21C = 5;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
+                    goto block_19;
+                case 3: // switch 1
+                    this->unk310[2] = 0;
+                    this->unk21C = 7;
+                    if ((this->unk_218 == 1) || (this->unk_218 == 3)) {
+                        func_8019F128(0x3ABAU);
+                    }
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
+                    goto block_19;
+                case 4: // switch 1
+                    this->unk21C = 1;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
+                    goto block_19;
+                case 5: // switch 1
+                    gSaveContext.weekEventReg[75] |= 0x20;
+                    Actor_MarkForDeath(&this->actor);
+            }
+        } else {
+            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
+                if (this->unk21C != 3) {
+                    if (this->unk21C != 5) {
 
-//                     } else {
-//                         this->unk21C = 6;
-//                         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
-//                     }
-//                 } else {
-//                     this->unk21C = 4;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
-//                 }
-//             }
-//         }
-//     block_19:
-//         switch (this->unk21C - 3) {
-//             default:
-//             case 0:
-//                 func_800B9010(this, 0x32B7);
-//                 goto block_26;
-//             case 2: // switch 2
-//             case 3: // switch 2
-//                 func_800B9010(this, 0x32B9);
-//                 goto block_26;
-//             case 4: // switch 2
-//                 if ((this->unk_218 == 0) || (this->unk_218 == 2)) {
-//                     func_800B9010(this, 0x32B9);
-//                 }
-//         }
-//     block_26:
-//         func_800EDF24(this, globalCtx, actionIndex);
-//         return;
-//     }
-//     if (globalCtx->csCtx.state == 0) {
-//         func_80BCF354(this);
-//     }
-//     this->unk310[3] = 0x63;
-// }
+                    } else {
+                        this->unk21C = 6;
+                        func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
+                    }
+                } else {
+                    this->unk21C = 4;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
+                }
+            }
+        }
+    block_19:
+        switch (this->unk21C - 3) {
+            default:
+            case 0:
+                func_800B9010(this, 0x32B7);
+                goto block_26;
+            case 2: // switch 2
+            case 3: // switch 2
+                func_800B9010(this, 0x32B9);
+                goto block_26;
+            case 4: // switch 2
+                if ((this->unk_218 == 0) || (this->unk_218 == 2)) {
+                    func_800B9010(this, 0x32B9);
+                }
+        }
+    block_26:
+        func_800EDF24(this, globalCtx, actionIndex);
+        return;
+    }
+    if (globalCtx->csCtx.state == 0) {
+        func_80BCF354(this);
+    }
+    this->unk310[3] = 0x63;
+}
 
 // matches
 // #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCFC0C.asm")
