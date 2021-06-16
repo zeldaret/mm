@@ -91,7 +91,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->unk14B == 1) {
         func_80B3C2B0(this);
     } else {
-        player->unkA70 &= ~0x10;
+        player->unk_A70 &= ~0x10;
         this->dyna.unk148 = 0.0f;
     }
 }
@@ -135,7 +135,7 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
 
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
     if (stepTemp) {
-        player->unkA70 &= ~0x10;
+        player->unk_A70 &= ~0x10;
         this->dyna.unk148 = 0.0f;
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
