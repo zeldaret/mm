@@ -4,10 +4,8 @@
 
 #define THIS ((EnBigpo*)thisx)
 
-//void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
+void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpo_Init(EnBigpo* this, GlobalContext* globalCtx);
-//void EnBigpo_Destroy(EnBigpo* this, GlobalContext* globalCtx);
 
 // update functions
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -17,11 +15,16 @@ void func_80B64190(Actor* thisx, GlobalContext* globalCtx);
 
 // draw funcs
 void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
+//void func_80B64470(EnBigpo* this, GlobalContext *globalCtx);
 void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64880(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64DFC(Actor* thisx, GlobalContext* globalCtx);
+void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
 
+//void func_80B64880(EnBigpo* this, GlobalContext* globalCtx);
+//void func_80B64B08(EnBigpo* this, GlobalContext* globalCtx);
+//void func_80B64DFC(EnBigpo* this, GlobalContext* globalCtx);
 
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
@@ -47,7 +50,7 @@ void func_80B61B38(EnBigpo* this);
 void func_80B6383C(EnBigpo* this);
 void func_80B638AC(EnBigpo* this);
 
-
+void func_80B619FC(EnBigpo *this, GlobalContext *globalCtx);
 void func_80B61AF8(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B61B70(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B61DA4(EnBigpo* this, GlobalContext* globalCtx);
@@ -58,6 +61,9 @@ void func_80B623BC(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B6259C(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B627B4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61C04(EnBigpo *this, GlobalContext *globalCtx);
+void func_80B61CFC(EnBigpo *this, GlobalContext *globalCtx);
+
 
 void func_80B62830(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
@@ -69,6 +75,7 @@ void func_80B6330C(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63410(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63474(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B636E4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63758(EnBigpo *this, GlobalContext *globalCtx);
 
 void func_80B63A18(EnBigpo* this);
 void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
@@ -104,75 +111,71 @@ extern DamageTable D_80B65044;
 extern ColliderCylinderInit D_80B65010;
 extern CollisionCheckInfoInit D_80B6503C;
 
-extern u32 D_06001360[];
+extern AnimationHeader D_06001360;
 
+extern SkeletonHeader D_06005C18;
+extern AnimationHeader D_06000924;
 
-/*
-// bleh these struct memes hurt
-void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
-    s16 temp_a1;
-    s32 *g;
-    s32 temp_s1;
-    LightInfo *phi_s3;
-    s32 *v2ptr;
-    LightInfo *phi_s2;
-    s32 v1ptr;
+#ifdef NON_MATCHING
+// non-matching: some instructions out of order but looks like it should be equiv
+void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
+    EnBigpo* this = (EnBigpo*) thisx;
+    EnBigpoFireParticle* fires;
+    s32 i;
 
-    Actor_ProcessInitChain((Actor *) this, &D_80B65064);
-    //temp_t6 = this->actor.params;
-    //this->unk210 = ((s32) temp_t6 >> 8) & 0xFF;
-    this->unk210 = (this->actor.params >> 8) & 0xFF;
-    this->actor.params &= 0xFF;
-    if (this->actor.params == 2) {
-        if (Flags_GetSwitch(globalCtx, (s32) this->unk210) == 0) {
-            this->actor.update = func_800BDFB0;
-            func_80B6383C(this);
+    Actor_ProcessInitChain(&this->actor, &D_80B65064);
+
+    // issue:  the params look-up wants to save the params to two t registers, one modified, one not
+    // then it saves the param, and immediately re-loads it wtf
+    //parms = this->actor.params;
+    //this->actor.params &= 0xFF;
+    //this->switchFlags = (parms >> 8) & 0xFF;
+    //this->switchFlags = (s16)((this->actor.params >> 8) && 0xFF);
+    this->switchFlags = (u8)(this->actor.params >> 8);
+    //this->actor.params &= 0xFF;
+    if ((this->actor.params &= 0xFF) == 2) {
+        if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
+            Actor_MarkForDeath(&this->actor);
             return;
         }
-        Actor_MarkForDeath((Actor *) this);
+        this->actor.update = func_800BDFB0;
+        func_80B6383C(this);
         return;
     }
-    SkelAnime_Init(globalCtx, &this->skelAnime, (void *)0x6005C18, (void *)0x6000924, this->limbDrawTbl, this->transitionDrawTbl, 0xA);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, (Actor *) this, &D_80B65010);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
-    g = &this->fires[0].unk10;
-    phi_s3 = this->fires[1].info;
-    v2ptr = g;
-    phi_s2 = (LightInfo *) (g + 0x10);
-    v1ptr = 0;
-  loop_5:
-    v2ptr->unkC = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, phi_s3);
-    Lights_PointNoGlowSetInfo(phi_s2, (s16) (s32) this->actor.home.pos.x, (s16) (s32) this->actor.home.pos.y, (s16) (s32) this->actor.home.pos.z, 0xFF, 0xFF, 0xFF, 0);
-    temp_s1 = v1ptr + 0x20;
 
-    //phi_s3 += 0x20;
-    //v2ptr += 0x20;
-    //phi_s2 += 0x20;
-    //v1ptr = temp_s1;
-    if (temp_s1 != 0x60) {
-        goto loop_5;
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
+
+    for (i = 0, fires = this->fires; i < 3; i++, fires++) {
+        this->fires[i].light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &fires->info);
+        Lights_PointNoGlowSetInfo(&this->fires[i].info,
+             this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+             0xFF, 0xFF, 0xFF, 0);
     }
+
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 45.0f);
-    temp_a1 = this->unk210;
     this->actor.bgCheckFlags |= 0x400;
     this->unk218 = this->actor.home.pos.y + 100.0f;
-    this->unk290 = 0xFF; // color?
-    this->unk291 = 0xFF;
-    this->unk292 = 0xD2;
-    this->unk290[3] = 0;
-    if ((temp_a1 != 0xFF) && (Flags_GetSwitch(globalCtx, (s32) temp_a1) != 0)) {
-        Actor_MarkForDeath((Actor *) this);
+    this->unk290.r = 0xFF;
+    this->unk290.g = 0xFF;
+    this->unk290.b = 0xD2;
+    this->unk290.a = 0;
+    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
+        Actor_MarkForDeath(&this->actor);
     }
+
     if (this->actor.params == 0) {
-        this->unk204 = (u8)1;
+        this->unk204 = 1;
         this->actor.flags &= -0x11;
         func_80B61AC8(this);
     } else if (this->actor.params == 1) {
         func_80B63450(this);
     }
-} // */
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
+#endif
 
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
@@ -187,17 +190,71 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
         }
         Collider_DestroyCylinder(gCtx2, &this->collider);
     }
-} //#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Destroy.asm")
+}
 
+#if NON_EQUIVELENT
+// non-equivelent: ido wont loop properly
+// for/while want to add another branch, only goto sticks to one
+// also wont increment pointers properly
+void func_80B61914(EnBigpo *this) {
+    s32 secondi;
+    EnBigpoFireParticle *fires;
+    s32 i;
+
+    i = 0;
+    fires = this->fires;
+  loop_1:
+    fires->pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
+    fires->pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
+    this->actor.shape.rot.y += 0x5555;
+    i = secondi;
+    secondi += 0x20;
+    fires += 1;
+    if (secondi != 0x60) {
+        goto loop_1;
+    }
+
+    //s32 i;
+    //EnBigpoFireParticle* fires;// = this->fires;
+    //for (i = 0; i < 3; i++){
+    //for (fires = this->fires; fires != &this->fires[2]; fires++){
+        //this->fires[i].pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
+        //this->fires[i].pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
+        ////fires[i].pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
+        ////fires[i].pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
+        //fires->pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
+        //fires->pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
+        //this->actor.shape.rot.y += 0x5555;
+    //}
+}
+#else 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61914.asm")
+#endif
 
-// takes this only
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B619B4.asm")
+void func_80B619B4(EnBigpo *this) {
+    s16 oldYaw = this->actor.shape.rot.y;
+    this->actor.shape.rot.y += this->rotVelocity;
+    if ((oldYaw < 0) && ( this->actor.shape.rot.y > 0)) {
+        Audio_PlayActorSound2(&this->actor, 0x38EE);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B619FC.asm")
+void func_80B619FC(EnBigpo *this, GlobalContext *globalContext) {
+    Camera *cam;
+    if (this->unk20E != 0) {
+        cam = Play_GetCamera(globalContext, this->unk20E);
+        cam->eye.y -= this->actor.velocity.y;
+        if (this->actor.velocity.y > 0.0f) {
+            cam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
+            cam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
+        }
+        func_8016970C(globalContext, this->unk20E, &this->actor.focus.pos, &cam->eye);
+    }
+}
 
+// type 0
 void func_80B61AC8(EnBigpo *this) {
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1; // targetable
     this->actionFunc = func_80B61AF8;
     this->unk214 = 200.0f;
 }
@@ -214,7 +271,7 @@ void func_80B61B38(EnBigpo *this) {
 
 void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, (Actor *) this);
+        ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B724C(globalCtx, &this->actor, 7);
         this->unk20E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (this->actor.params == 0) {
@@ -227,30 +284,104 @@ void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// particle
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61C04.asm")
+void func_80B61C04(EnBigpo *this, GlobalContext *globalCtx) {
+    s32 i;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61CFC.asm")
+    this->actor.draw = func_80B64B08;
+    this->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+    func_80B61914(this);
+
+    for (i = 0; i < 3; i++) {
+        this->fires[i].pos.y = this->actor.world.pos.y;
+    }
+
+    this->actor.scale.x = 0.0f;
+    this->actor.scale.y = 0.015f;
+    this->actor.scale.z = 0.0f;
+
+    if (this->unk20E != 0) {
+        Vec3f newPos;
+        newPos.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
+        newPos.y = this->actor.world.pos.y + 150.0f;
+        newPos.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
+        func_8016970C(globalCtx, this->unk20E, &this->actor.focus.pos, &newPos);
+    }
+    this->actionFunc = func_80B61CFC;
+}
+
+void func_80B61CFC(EnBigpo *this, GlobalContext *globalCtx) {
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f) != 0) {
+        func_80B61D74(this);
+    }
+    this->actor.scale.z = this->actor.scale.x;
+    this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
+}
 
 void func_80B61D74(EnBigpo *this) {
-    this->unk20A = 0x1000;
+    this->rotVelocity = 0x1000;
     this->actionFunc = func_80B61DA4;
     this->unk214 = 200.0f;
     this->actor.velocity.y = 0.0f;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61DA4.asm")
+void func_80B61DA4(EnBigpo *this, GlobalContext *globalCtx) {
+    s32 i;
 
-// appear 
+    if (Math_StepToF(&this->unk214, 30.0f, 5.0f) != 0) {
+        this->rotVelocity += 0x80;
+        this->actor.velocity.y += 0.25f;
+    }
+    this->actor.shape.rot.y += this->rotVelocity;
+    func_80B61914(this);
+
+    for (i = 0; i < 3; i++){
+        this->fires[i].pos.y += this->actor.velocity.y;
+    }
+
+    this->actor.world.pos.y += this->actor.velocity.y;
+    func_80B619FC(this, globalCtx);
+    if (this->actor.velocity.y >= 4.0f) {
+        func_80B61E9C(this);
+    }
+}
+
 void func_80B61E9C(EnBigpo *this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, D_06001360);
+    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->actor.draw = func_80B64470;
-    Actor_SetScale((Actor *) this, 0.014f);
+    Actor_SetScale(&this->actor, 0.014f);
     Audio_PlayActorSound2(this, 0x3873); // NA_SE_EN_STALKIDS_APPEAR
     this->actionFunc = func_80B61F04;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61F04.asm")
+void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
+    s32 i;
+    s32 alphaPlus; // color alpha + 10
+
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->actor.shape.rot.y += this->rotVelocity;
+    alphaPlus = this->unk290.a + 0xA;
+    func_80B61914(this);
+    if (alphaPlus >= 0x5A) {
+        this->rotVelocity += -0x80; 
+        this->actor.velocity.y -= 0.25f;
+        if (alphaPlus >= 0xB4) {
+            Math_ScaledStepToS(&this->actor.world.rot.y, 0, 0x180);
+        }
+    }
+    this->actor.world.pos.y += this->actor.velocity.y;
+
+    for (i = 0; i < 3; i++){
+        this->fires[i].pos.y += this->actor.velocity.y;
+    }
+
+    func_80B619FC(this, globalCtx);
+    if (alphaPlus >= 0xFF) {
+        this->unk290.a = 0xFF;
+        func_80B62034(this);
+    } else {
+        this->unk290.a = alphaPlus;
+    }
+}
 
 void func_80B62034(EnBigpo *this) {
     this->unk206 = 0xF;
@@ -287,11 +418,11 @@ void func_80B62084(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 void func_80B62154(EnBigpo *this) {
-    this->collider.base.acFlags &= -2;
-    this->collider.base.ocFlags1 &= -2;
-    this->unk20A = 0x2000;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 &= ~OC1_ON;
+    this->rotVelocity = 0x2000;
     this->unk206 = 0x20;
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1; // targetable
     this->actor.speedXZ = 0.0f;
     Audio_PlayActorSound2(&this->actor, 0x3874);
     this->actionFunc = func_80B621CC;
@@ -299,13 +430,13 @@ void func_80B62154(EnBigpo *this) {
 
 void func_80B621CC(EnBigpo *this, GlobalContext *globalCtx) {
     DECR(this->unk206);
-    this->actor.shape.rot.y += this->unk20A;
+    this->actor.shape.rot.y += this->rotVelocity;
     if (this->unk206 < 0x10) {
-        Math_ScaledStepToS(&this->unk20A, 0, 0x200);
+        Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
     }
-    this->unk290[3] = (s8) (u32) (this->unk206 * 7.96875f);
+    this->unk290.a = (s8) (u32) (this->unk206 * 7.96875f);
     if (this->unk206 == 0) {
-        this->unk290[3] = 0;
+        this->unk290.a = 0;
         func_80B622E4(this, globalCtx);
     }
 }
@@ -319,7 +450,7 @@ void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
     randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
     Audio_PlayActorSound2(this, 0x3873);
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
-    this->unk20A = 0x2000;
+    this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->base.world.pos.x;
     this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->base.world.pos.z;
     this->actionFunc = func_80B623BC;
@@ -327,13 +458,13 @@ void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
 
 void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     this->unk206 += 1;
-    this->actor.shape.rot.y -= this->unk20A;
+    this->actor.shape.rot.y -= this->rotVelocity;
     if (this->unk206 >= 0x10) {
-        Math_ScaledStepToS(&this->unk20A, 0, 0x200);
+        Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
     }
-    this->unk290[3] = (s8) (u32) (this->unk206 * 7.96875f);
+    this->unk290.a = (s8) (u32) (this->unk206 * 7.96875f);
     if (this->unk206 == 0x20) {
-        this->unk290[3] = 0xFF;
+        this->unk290.a = 0xFF;
         if (this->unk204 == 0) {
             func_801A2E54(0x38);
             this->unk204 = 1;
@@ -342,21 +473,20 @@ void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-extern u32 D_06000924;
+extern AnimationHeader D_06000924;
 
-// non-matching: regallloc around 
 void func_80B624F4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
     this->unk206 = (this->actionFunc == func_80B62920) ? 0x50 : 0;
     this->unk212 = 0x28;
     this->actor.velocity.y = 0.0f;
+    this->unk218 = this->actor.world.pos.y;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= 1;
     this->collider.base.ocFlags1 |= 1;
     this->actor.flags |= 1;
     this->actionFunc = func_80B6259C;
-    this->unk218 = this->actor.world.pos.y;
-    this->actor.world.rot.y = this->actor.shape.rot.y;
-} //#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B624F4.asm")
+}
 
 void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
@@ -367,9 +497,9 @@ void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     Math_StepToF(&this->unk218, player->base.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad((f32) this->unk212 * 0.15707964f) * 10.0f) + this->unk218;
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
-    func_800B9010((Actor *) this, (u16)0x3071);
-    if (Actor_XZDistanceToPoint((Actor *) this, &this->actor.home) > 300.0f) {
-        this->unk208 = Actor_YawToPoint((Actor *) this, &this->actor.home);
+    func_800B9010(&this->actor, (u16)0x3071);
+    if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
     if ((Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk208, 0x200) != 0) && (Rand_ZeroOne() < 0.075f)) {
         // casts req
@@ -386,16 +516,16 @@ void func_80B6275C(EnBigpo *this) {
     this->collider.base.acFlags |= AC_HARD;
     this->collider.info.bumper.dmgFlags &= ~0x8000;
     this->collider.base.atFlags |= 0x1;
-    this->unk20A = 0x800;
+    this->rotVelocity = 0x800;
     this->actionFunc = func_80B627B4;
     this->actor.speedXZ = 0.0f;
 }
 
 void func_80B627B4(EnBigpo *this, GlobalContext *globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    this->unk20A += 0x200;
+    this->rotVelocity += 0x200;
     func_80B619B4(this);
-    if ((s32) this->unk20A >= 0x3C00) {
+    if ((s32) this->rotVelocity >= 0x3C00) {
         func_80B62814(this);
     }
 }
@@ -406,12 +536,12 @@ void func_80B62814(EnBigpo *this) {
 }
 
 void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
-    Actor *player = PLAYER;
+    ActorPlayer *player = PLAYER;
     s16 yawDiff;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_StepToF(&this->actor.speedXZ, 10.0f, 1.0f);
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->world.pos.y, 0.3f, 7.5f, 1.0f);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->base.world.pos.y, 0.3f, 7.5f, 1.0f);
     func_80B619B4(this);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     if (((this->collider.base.atFlags & AT_HIT)) 
@@ -421,17 +551,17 @@ void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 void func_80B62900(EnBigpo *this) {
-    this->collider.base.atFlags &= ~0x1; // todo
+    this->collider.base.atFlags &= ~0x1;
     this->actionFunc = func_80B62920;
 }
 
 void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
-    Actor *player = PLAYER;
+    ActorPlayer *player = PLAYER;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->base.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
-    if (Math_ScaledStepToS(&this->unk20A, 0, 0x200) != 0) {
+    if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200) != 0) {
         this->collider.base.colType = 3;
         this->collider.base.acFlags &= ~AC_HARD;
         this->collider.info.bumper.dmgFlags |= 0x8000;
@@ -440,13 +570,13 @@ void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B619B4(this);
 }
 
-extern u32 D_06000454;
+extern AnimationHeader D_06000454;
 
 void func_80B629E4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
     this->collider.base.acFlags &= ~AC_ON;
-    func_800BE504(&this->actor, &this->collider);
+    func_800BE504(&this->actor, &this->collider.base);
     this->actionFunc = func_80B62A68;
     this->actor.speedXZ = 5.0f;
 }
@@ -478,7 +608,7 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     f32 unkTemp2; 
     s16 cam; 
     s16 unkTemp; 
-    s16 modded206; 
+    s16 modified206; 
 
     this->unk206 += 1;
     if ( this->unk206  < 8) {
@@ -490,18 +620,18 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
             tempVec.x = (Math_SinS(cam) * unkTemp2) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(cam) * unkTemp2) + this->actor.world.pos.z;
         } else {
-            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (f32) (this->unk206 - 5))) * 1.4000001f);
+            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->unk206 - 5))) * 1.4000001f);
             tempVec.x = (Math_SinS(cam) * 32.2f) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(cam) * 32.2f) + this->actor.world.pos.z;
         }
-        modded206 = (s32) ((f32) ((this->unk206 * 0xA) + 0x50) * 1.4000001f);
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+        modified206 = (s32) ((f32) ((this->unk206 * 0xA) + 0x50) * 1.4000001f);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modified206, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modified206, 0, 2);
         tempVec.x = this->actor.world.pos.x;
         tempVec.z = this->actor.world.pos.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modded206, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modified206, 0, 2);
     } else if (this->unk206 >= 0x1C) {
         func_80B62E38(this, globalCtx);
     } else if (this->unk206 >= 0x13) {
@@ -511,34 +641,71 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     if (this->unk206 < 0x12) {
-        func_800B9010((Actor *) this, 0x321F); // sfx
+        func_800B9010(&this->actor, 0x321F); // sfx
     }
     if (this->unk206 == 0x12) {
         Audio_PlayActorSound2(this, 0x3877);
     }
 }
 
-// thinks fires.unk0 is a vec3f
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62E38.asm")
+void func_80B62E38(EnBigpo *this, GlobalContext *globalCtx) {
+    this->actor.draw = func_80B64880;
+    this->actor.shape.shadowDraw = NULL;
+    this->actor.world.pos.x = this->drawMtxF.wx;
+    this->actor.world.pos.y = this->drawMtxF.wy;
+    this->actor.world.pos.z = this->drawMtxF.wz;
 
-extern Gfx D_060041A0[];
+    Actor_SetScale(&this->actor, 0.014f);
+    this->actor.gravity = -1.0f;
+    this->actor.shape.yOffset = 1500.0f;
+    this->actor.shape.rot.x = -0x8000;
+    this->actor.velocity.y = 0.0f;
+    this->actor.world.pos.y -= 15.0f;
+    func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 8);
+    this->actor.flags &= -6;
+    this->actor.bgCheckFlags &= 0xFBFF;
+    this->actionFunc = func_80B62F10;
+}
+
+extern Gfx D_060041A0;
 
 void func_80B62F10(EnBigpo *this, GlobalContext *globalCtx) {
-    //s16 temp_a1;
-
     if (((this->actor.bgCheckFlags & 1)) || (this->actor.floorHeight == -32000.0f)) {
-        //temp_a1 = this->switchFlags;
         if (this->switchFlags != 0xFF) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlags);
         }
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world, 6.0f, 0, 1, 1, 0xF, 0x1F1, 0xA, &D_060041A0);
-
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 
+            6.0f, 0, 1, 1, 0xF, 0x1F1, 0xA, &D_060041A0);
         func_80B631F8(this);
     }
 }
 
-void func_80B62FCC(EnBigpo *this, s32 arg);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B62FCC.asm")
+void func_80B62FCC(EnBigpo *this, s32 alphaDiff) {
+    s32 newAlpha;
+    f32 lowerAlpha;
+    f32 newXYScale;
+    
+    newAlpha = this->unk290.a + alphaDiff;
+
+    this->unk290.a = (newAlpha < 0) ? (0) : ((newAlpha >= 0x100) ? 0xFF : newAlpha );
+
+    lowerAlpha = this->unk290.a * 0.003921569f;
+    if (alphaDiff < 0) {
+        newXYScale = (0.0056000003f * lowerAlpha) + 0.0014000001f;
+        this->actor.scale.x = newXYScale;
+        this->actor.scale.z = newXYScale;
+        this->actor.scale.y = (0.007f - (0.007f * lowerAlpha)) + 0.007f;
+        lowerAlpha = lowerAlpha;
+    } else {
+        Actor_SetScale(&this->actor, lowerAlpha * 0.007f);
+        this->actor.world.pos.y = this->unk218 + (lowerAlpha * 15.0f);
+        lowerAlpha = 1.0f;
+    }
+
+    this->unk290.r = (u8)(255.0f * lowerAlpha);
+    this->unk290.g = (u8)(200.0f * lowerAlpha);
+    this->unk290.b = 0;
+}
 
 void func_80B631F8(EnBigpo *this) {
     this->actor.draw = func_80B6467C;
@@ -547,7 +714,7 @@ void func_80B631F8(EnBigpo *this) {
     this->actor.shape.rot.y = 0;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
-    this->unk290[3] = 0;
+    this->unk290.a = 0;
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
     this->unk218 = this->actor.world.pos.y;
@@ -558,14 +725,14 @@ void func_80B631F8(EnBigpo *this) {
 void func_80B63264(EnBigpo *this, GlobalContext *globalCtx) {
     this->unk218 += 2.0f;
     func_80B62FCC(this, 0x14);
-    if (this->unk290[3] == 0xFF) {
+    if (this->unk290.a == 0xFF) {
         func_80B632BC(this);
     }
 }
 
 void func_80B632BC(EnBigpo *this) {
     this->unk218 = this->actor.world.pos.y;
-    Actor_SetHeight((Actor *) this, -10.0f);
+    Actor_SetHeight(&this->actor, -10.0f);
     this->unk206 = 0x190;
     this->actor.flags |= 1;
     this->actionFunc = func_80B6330C;
@@ -573,13 +740,13 @@ void func_80B632BC(EnBigpo *this) {
 
 void func_80B6330C(EnBigpo *this, GlobalContext *globalCtx) {
     DECR(this->unk206);
-    if (Actor_HasParent((Actor *) this, globalCtx)) {
-        Actor_MarkForDeath((Actor *) this);
+    if (Actor_HasParent(&this->actor, globalCtx)) {
+        Actor_MarkForDeath(&this->actor);
     } else if (this->unk206 == 0) {
         Audio_PlayActorSound2(this, 0x38EC);
         func_80B633E8(this);
     } else {
-        func_800B8A1C((Actor *) this, globalCtx, 0xBA, 35.0f, 60.0f);
+        func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad((f32) this->unk206 * 0.15707964f) * 5.0f) + this->unk218;
     }
 }
@@ -591,13 +758,14 @@ void func_80B633E8(EnBigpo *this) {
 
 void func_80B63410(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B62FCC(this, -0xD);
-    if (this->unk290[3] == 0) {
-        Actor_MarkForDeath((Actor *) this);
+    if (this->unk290.a == 0) {
+        Actor_MarkForDeath(&this->actor);
     }
 }
 
+// type 1
 void func_80B63450(EnBigpo *this) {
-    this->actor.flags &= -2; // todo
+    this->actor.flags &= ~1; // targetable
     this->actionFunc = func_80B63474;
 }
 
@@ -618,9 +786,9 @@ void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
 
     if (fireCount < 3) { // not enough fire poes
         this->actor.draw = func_80B64470;
-        Actor_SetScale((Actor *) this, 0.014f);
+        Actor_SetScale(&this->actor, 0.014f);
         func_80B622E4(this, globalCtx);
-        Math_Vec3f_Copy(&this->actor.world, &this->actor.home);
+        Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         this->actor.world.pos.y += 100.0f;
         return;
     }
@@ -631,16 +799,16 @@ void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
 
         // cannot be for because enemyPtr must be initilized before randomIndex
         while(enemyPtr != NULL) {
-            if ((enemyPtr->id == 0x208) && (enemyPtr->params == 2)){
+            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == 2)){
                 if (randomIndex == 0) {
                     randBigpo = (EnBigpo*) enemyPtr;
-                    randBigpo->actor.params = 3;
-                    Math_Vec3f_Copy(&this->fires[fireIndex].unk10, &randBigpo->actor.world.pos);
-                    randBigpo->actor.parent = this;
+                    randBigpo->actor.params = 0x0003;
+                    Math_Vec3f_Copy(&this->fires[fireIndex].pos, &randBigpo->actor.world.pos);
+                    randBigpo->actor.parent = (Actor*) this;
                     randBigpo->actor.update = func_80B64190;
                     func_800BC154(globalCtx, &globalCtx->actorCtx, &randBigpo->actor, ACTORCAT_PROP);
                     randBigpo->unk20C = fireIndex;
-                    randBigpo->actor.flags &= -2;
+                    randBigpo->actor.flags &= ~0x1; // targetable
                     Actor_SetScale(&randBigpo->actor, 0);
 
                     if (this->actor.child == 0) {
@@ -659,7 +827,7 @@ void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
         }
     }
     for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if ((enemyPtr->id == 0x208) && (enemyPtr->params == 2)) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == 2)) {
             randBigpo = (EnBigpo* ) enemyPtr;
             randBigpo->actionFunc = func_80B63888;
             randBigpo->actor.update = func_80B64190;
@@ -672,15 +840,43 @@ void func_80B636D0(EnBigpo *this) {
     this->actionFunc = func_80B636E4;
 }
 
-//looping
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B636E4.asm")
+// count number of poes of certain type
+void func_80B636E4(EnBigpo *this, GlobalContext *globalCtx) {
+    EnBigpo* childPoh;
+    s32 i;
 
-// looping
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63758.asm")
+    i = 0;
+    for (childPoh = (EnBigpo*) this->actor.child; childPoh != NULL; childPoh = (EnBigpo*)childPoh->actor.child) {
+        if ((childPoh->actor.params == 4) && (childPoh->actionFunc == func_80B63980)) {
+            i++;
+        }
+    }
+    if (i == 3) {
+        func_80B61B38(this);
+    }
+}
+
+void func_80B63758(EnBigpo *this, GlobalContext *globalCtx) {
+    EnBigpo *childPoh;
+    Vec3f sp20;
+
+    this->unk206 = 0x27;
+    for (childPoh = (EnBigpo *) this->actor.child; childPoh != NULL; childPoh = childPoh->actor.child) {
+        func_80B63A18(childPoh);
+    }
+    if (this->unk20E != 0) {
+        sp20.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
+        sp20.y = this->actor.world.pos.y + 150.0f;
+        sp20.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
+        func_8016970C(globalCtx, this->unk20E, &this->actor.focus.pos, &sp20);
+    }
+    this->actionFunc = func_80B6382C;
+}
 
 void func_80B6382C(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
+// type 2
 void func_80B6383C(EnBigpo *this) {
     this->actor.draw = NULL;
     this->actionFunc = func_80B63854;
@@ -693,7 +889,7 @@ void func_80B63854(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 void func_80B63888(EnBigpo *this, GlobalContext *globalCtx) {
-    Actor_MarkForDeath((Actor *) this);
+    Actor_MarkForDeath(&this->actor);
 }
 
 void func_80B638AC(EnBigpo *this) {
@@ -703,7 +899,7 @@ void func_80B638AC(EnBigpo *this) {
 }
 
 void func_80B638D4(EnBigpo *this, GlobalContext *globalCtx) {
-    if (Math_StepToF(&this->actor.scale, 0.01f, 0.0005f) != 0) {
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f) != 0) {
         this->unk206 += -1;
         if (this->unk206 == 0) {
             func_80B63964(this);
@@ -718,18 +914,142 @@ void func_80B63964(EnBigpo *this) {
     this->actionFunc = func_80B63980;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63980.asm")
+void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
+    if ((s32) this->unk206 > 0) {
+        if (this->unk206 == 0) {
+            // ! @ BUG: unreachable code
+            this->actor.params = 5;
+            return;
+        }
+    } else {
+        if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f) != 0) {
+            this->actor.params = 3;
+            func_80B6383C(this);
+        }
+        this->actor.scale.z = this->actor.scale.x;
+        this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63A18.asm")
+void func_80B63A18(EnBigpo *this) {
+    s16 h;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63AC4.asm")
+    this->unk206 = 0x28;
+    h = this->actor.parent->yawTowardsPlayer + this->unk20C * 0x5555;
+    this->actor.home.pos.x = Math_SinS(h) * 30.0f + this->actor.parent->world.pos.x;
+    this->actor.home.pos.y = this->actor.parent->world.pos.y;
+    this->actor.home.pos.z = Math_CosS(h) * 30.0f + this->actor.parent->world.pos.z;
+    this->actionFunc = func_80B63AC4;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63C28.asm")
+void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
+    Vec3f posDiff;
+    f32 magnitude;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63D0C.asm")
+    this->unk206 += -1; 
+    if (this->unk206 == 0) {
+        EnBigpo* parentPoh = (EnBigpo*) this->actor.parent;
+        Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+        Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
+        Actor_MarkForDeath(&this->actor);
+        if (this->unk20C == 0) {
+            parentPoh->actor.draw = func_80B64B08;
+            Actor_SetScale(&parentPoh->actor, 0.01f);
+            func_80B61D74(parentPoh);
+            parentPoh->unk214 = 30.0f;
+        }
+    } else {
+        Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.home.pos, &posDiff);
+        magnitude = Math3D_Vec3fMagnitude(&posDiff);
+        if (magnitude > 0.0001f) {
+            Math_Vec3f_Scale(&posDiff, 1.0f / magnitude);
+        }
+        magnitude = magnitude / this->unk206;
+        this->actor.world.pos.x -= magnitude * posDiff.x;
+        this->actor.world.pos.y -= magnitude * posDiff.y;
+        this->actor.world.pos.z -= magnitude * posDiff.z;
+    }
+}
+
+void func_80B63C28(EnBigpo *this) {
+    s32 bplus5;
+    s32 bminus5;
+
+    if (this->actionFunc == func_80B62A68 ) {
+        if ((this->actor.colorFilterTimer & 2)) {
+            this->unk290.r = 0;
+            this->unk290.g = 0;
+            this->unk290.b = 0;
+        } else { 
+            this->unk290.r = 0x50;
+            this->unk290.g = 0xFF;
+            this->unk290.b = 0xE1;
+        }
+    } else {
+        this->unk290.r = (this->unk290.r + 5 >= 0x100) ? (0xFF) : (this->unk290.r + 5);
+        this->unk290.g = (this->unk290.g + 5 >= 0x100) ? (0xFF) : (this->unk290.g + 5);
+
+        // this might be a triple ternary but it matches and is easier to read spread out
+        bplus5 = this->unk290.b + 5;
+        if (this->unk290.b >= 0xD3) {
+            bminus5 = this->unk290.b - 5;
+            if (bminus5 < 0xD2) {
+                this->unk290.b = 0xD2;
+            } else {
+                this->unk290.b = (u8) bminus5;
+            }
+        } else {
+             if (bplus5 >= 0xD3) {
+                this->unk290.b = 0xD2;
+            } else {
+                this->unk290.b = (u8) bplus5;
+            }
+        }
+    }
+}
+
+// randomize color?
+void func_80B63D0C(EnBigpo *this) {
+    f32 rand = Rand_ZeroOne();
+    this->unk294.r = ((s32)(rand * 30.0f)) + 0xE1;
+    this->unk294.g = ((s32)(rand * 100.0f)) + 0x9B;
+    this->unk294.b = ((s32)(rand * 160.0f)) + 0x5F;
+    this->unk294.a = ((s32)(rand * 30.0f)) + 0xDC;
+}
 
 // might be true/false
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B63D88.asm")
+s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
+    if (((this->collider.base.acFlags & AC_HIT) != 0) && ((this->collider.base.acFlags & AC_HARD) == 0)) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        if (this->actor.colChkInfo.damageEffect == 0xF) {
+          return true;
+        }
+  
+        if (func_800BE22C(this) == 0) {
+            this->actor.flags &= ~1; // targetable 
+            Audio_PlayActorSound2(this, 0x3876);
+            func_800BBA88(globalCtx, &this->actor);
+            if (this->actor.params == 1) {
+                func_801A2ED8();
+            }
+        } else {
+            Audio_PlayActorSound2(this, 0x3875);
+        }
+
+        if (this->actor.colChkInfo.damageEffect == 4) {
+            this->unk21C = 4.0f;
+            this->unk220 = 1.0f;
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, 
+                this->collider.info.bumper.hitPos.x,
+                this->collider.info.bumper.hitPos.y,
+                this->collider.info.bumper.hitPos.z,
+                 0, 0, 0, 0x0004);
+        }
+        func_80B629E4(this);
+        return true;
+    }
+    return false;
+}
 
 void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
@@ -756,24 +1076,24 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != func_80B61F04) && (this->actionFunc != func_80B61DA4)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity((Actor *) this);
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
     if (this->actionFunc == func_80B62F10) {
-        func_800B78B8(globalCtx, (Actor *) this, 0.0f, 27.0f, 60.0f, 4);
+        func_800B78B8(globalCtx, &this->actor, 0.0f, 27.0f, 60.0f, 4);
     }
 
     if (this->actor.draw == func_80B6467C) {
-        Actor_SetHeight((Actor *) this, -10.0f);
+        Actor_SetHeight(&this->actor, -10.0f);
     } else {
-        Actor_SetHeight((Actor *) this, 42.0f);
+        Actor_SetHeight(&this->actor, 42.0f);
     }
 
     func_80B63C28(this);
     func_80B63D0C(this);
 
-    this->actor.shape.shadowAlpha = this->unk290[3];
+    this->actor.shape.shadowAlpha = this->unk290.a;
     thisCollider = &this->collider;
-    Collider_UpdateCylinder((Actor *) this, thisCollider);
+    Collider_UpdateCylinder(&this->actor, thisCollider);
     if ((this->collider.base.ocFlags1 & OC1_ON)) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, thisCollider);
     }
@@ -786,9 +1106,9 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     if (this->unk21C > 0.0f) {
         Math_StepToF(&this->unk21C, 0.0f, 0.05f);
-        if (this->unk290[3] != 0xFF) {
-            if (this->unk290[3] * 0.003921569f < this->unk290[3]) {
-                this->unk21C = this->unk290[3] * 0.003921569f;
+        if (this->unk290.a != 0xFF) {
+            if (this->unk290.a * 0.003921569f < this->unk290.a) {
+                this->unk21C = this->unk290.a * 0.003921569f;
             }
         }
         this->unk220 = ((this->unk21C + 1.0f) * 0.5f);
@@ -811,20 +1131,21 @@ void func_80B64190(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
   Vec3f *pos, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
-    if ((! ((this->unk290[3] != 0) && (limbIndex != 7))) 
+    if ((! ((this->unk290.a != 0) && (limbIndex != 7))) 
       || ((this->actionFunc == func_80B62B10) && ((s32) this->unk206 >= 2))) {
         *dList = NULL;
     }
     return 0;
 }
 
+extern Gfx D_06001BB0;
 extern Gfx D_060058B8;
 extern u8 D_80B65078[];
 extern Vec3f D_80B65084[];
 
 //PostLimbDraw2
-// non-equivelent: the actual draw functions are totally busted
 #ifdef NON_EQUIVELENT
+// non-equivelent: the actual draw functions are totally busted
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
 
@@ -841,10 +1162,6 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         // this is broken
 
-        //gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-           //G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        //gSPDisplayList(POLY_OPA_DISP++, &D_060058B8);
-
         gSPMatrix(*gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx),
            G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(*gfx++, &D_060058B8);
@@ -859,7 +1176,7 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
                 Matrix_Scale(0.014f / actor->scale.x, 0.014f / actor->scale.x, 0.014f / actor->scale.x, 1);
             }
         }
-        SysMatrix_CopyCurrentState(&this->unk2F8);
+        SysMatrix_CopyCurrentState(&this->drawMtxF);
     }
 
     limbByte = D_80B65078[limbIndex];
@@ -894,68 +1211,255 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
 #endif
 
-//void func_80B64470(EnBigpo* this, GlobalContext *globalCtx);
-// draw func
-/*
+extern Gfx D_801AEFA0;
+extern Gfx D_801AEF88;
+
+// non-standard draw func
+#ifdef NON_EQUIVELENT
+// non-equiv: lots of issues, biggest issue area: SkelAnime_Draw2
 void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
-    Gfx *sp38;
-    Gfx *temp_v1;
-    Gfx *temp_v1_2;
-    GraphicsContext *temp_t0;
-    u8 temp_v0;
+    EnBigpo* this = (EnBigpo*) thisx;
+    s32 pad;
+    Gfx* dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+    if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
+        dispHead = POLY_OPA_DISP;
 
-    temp_v0 = this->unk290[3];
-    temp_t0 = globalCtx->state.gfxCtx;
-    if ((temp_v0 == 0xFF) || (temp_v0 == 0)) {
-        temp_v1_2 = temp_t0->polyOpa.p;
-        temp_v1_2->words.w1 = (u32) (sSetupDL + 0x4B0);
-        temp_v1_2->words.w0 = 0xDE000000;
+        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
 
-        temp_v1_2->unk8 = 0xDB060030;
-        temp_v1_2->unkC = &D_801AEFA0;
-        temp_v1_2->unk10 = 0xDB060020;
+        gSPSegment(dispHead + 1, 0x0C, &D_801AEFA0);
 
-        sp38 = temp_v1_2;
-        temp_v1_2->unk14 = Gfx_EnvColor(globalCtx->state.gfxCtx, 
-            (s32) this->unk290[0], (s32) this->unk290[1], (s32) this->unk290[2], (s32) this->unk290[3]);
-        temp_t0->polyOpa.p = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80B641E8, &func_80B64240, &this->actor, temp_v1_2 + 0x18);
+        gSPSegment(dispHead + 2, 0x08, 
+            Gfx_EnvColor(globalCtx->state.gfxCtx, this->unk290.r, this->unk290.g,
+                         this->unk290.b, this->unk290.a));
+
+        dispHead = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                    func_80B641E8, func_80B64240, &this->actor, dispHead + 3);
+
     } else {
+        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
 
-        temp_v1 = temp_t0->polyXlu.p;
-        temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-        temp_v1->words.w0 = 0xDE000000;
+        gSPSegment(dispHead + 1, 0x0C, &D_801AEF88);
 
-        temp_v1->unk8 = 0xDB060030;
-        temp_v1->unkC = &D_801AEF88;
-        temp_v1->unk10 = 0xDB060020;
-        sp38 = temp_v1;
-        temp_v1->unk14 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) this->unk290,
-             (s32) this->unk290[1], (s32) this->unk290[2], (s32) this->unk290[3]);
+        gSPSegment(dispHead + 2, 0x08, 
+            Gfx_EnvColor(globalCtx->state.gfxCtx, this->unk290.r, this->unk290.g,
+                         this->unk290.b, this->unk290.a));
 
-        temp_t0->polyXlu.p = SkelAnime_Draw2(globalCtx, this->unk148, this->unk164, func_80B641E8, &func_80B64240, this, temp_v1 + 0x18);
+        dispHead = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                    func_80B641E8, func_80B64240, &this->actor, dispHead + 3);
     }
-    func_800BE680(globalCtx, this, this + 0x224, 9, this->scale.x * 71.428566f * this->unk220, 0.0f, this->unk21C, 0x14);
-    Matrix_Put(this + 0x2F8);
-    func_80B64880(this, globalCtx);
-    if (func_80B61F04 == this->unk200) {
-        func_80B64B08(this, globalCtx);
+    func_800BE680(globalCtx, &this->actor, &this->unk224, 9,
+         this->actor.scale.x * 71.428566f * this->unk220, 0, this->unk21C, 0x14);
+    Matrix_Put(this->drawMtxF);
+    func_80B64880(&this->actor, globalCtx);
+    if (this->actionFunc == func_80B61F04 ) {
+        func_80B64B08(&this->actor, globalCtx);
     }
+  
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64470.asm")
+#endif
+
+
+// draw func
+void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
+    EnBigpo* this = (EnBigpo*) thisx;
+    s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-} // */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64470.asm")
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, 
+        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 
+            0, 0, 0, 0x20, 0x40, 1, 0, 
+            (globalCtx->gameplayFrames * -0xF) & 0x1FF, 0x20, 0x80));
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xAA, this->unk290.a);
+
+    gDPSetEnvColor(POLY_XLU_DISP++, this->unk290.r, this->unk290.g, this->unk290.b, 0xFF);
+
+    Lights_PointNoGlowSetInfo(&this->fires[0].info,
+         this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+         this->unk290.r, this->unk290.g, this->unk290.b, this->unk290.a * 2);
+
+    Matrix_RotateY((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 1);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPDisplayList(POLY_XLU_DISP++, &D_06001BB0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+}
+
+extern Gfx D_060042C8;
+extern Gfx D_060043F8;
 
 // draw func
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B6467C.asm")
+// non-equivelent: this is an odd draw function, diff is nowhere close
+#ifdef NON_EQUIVELENT
+void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
+    EnBigpo* this = (EnBigpo*) thisx;
 
-// draw func
+    Vec3f vec1;
+    Vec3f vec2;
+    Camera *cam;
+    f32 magnitude;
+    f32 magnitude2;
+    Gfx *MODE;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    if (cam != NULL) {
+        Math_Vec3f_Diff(&cam->eye, &cam->focalPoint, &vec1);
+        magnitude = Math3D_Vec3fMagnitude(&vec1);
+        magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
+        Math_Vec3f_Scale(&vec1, magnitude2);
+    } else {
+        Math_Vec3f_Copy(&vec1, &D_801D15B0);
+    }
+    
+    if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
+        Scene_SetRenderModeXlu(globalCtx, 0, 1);
+        MODE = POLY_OPA_DISP;
+    } else {
+        Scene_SetRenderModeXlu(globalCtx, 1, 2);
+        MODE = POLY_XLU_DISP;
+    }
+
+    gSPDisplayList(MODE, sSetupDL + 0x4B0);
+
+    gSPSegment(MODE + 1, 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xA0, 0, 0xFF, (s32) this->unk290.a));
+
+    SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+    Lights_PointGlowSetInfo(&this->fires[0].info, (s16) (vec2.x + vec1.x),
+         (s16) (vec2.y + vec1.y), (s16) (vec2.z + vec1.z),
+         (s32) this->unk294.r, (s32) this->unk294.g, (s32) this->unk294.b, (s32) this->unk294.a); // radius?
+
+    gDPSetEnvColor(MODE + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->unk290.a);
+
+    gSPMatrix(MODE + 3, Matrix_NewMtx(globalCtx->state.gfxCtx),
+       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPDisplayList(MODE + 4, &D_060042C8);
+
+    gSPDisplayList(MODE + 5, &D_060043F8);
+
+    if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
+        POLY_OPA_DISP += 6;
+    } else {
+        POLY_XLU_DISP += 6;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
+#endif
 
+extern Gfx D_0407D590;
+
+#ifdef NON_MATCHING
 // draw func
+// non-matching: instructions out of order
+void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
+    EnBigpo* this = (EnBigpo*) thisx;
+    s32 pad[3];
+    s16 sp66;
+    s32 pad2;
+    MtxF *mtfxPtr;
+    s32 i;
+    EnBigpo* this2;
+    EnBigpoFireParticle* fires;
+    EnBigpoFireParticle* fires2;
+
+    mtfxPtr = SysMatrix_GetCurrentState();
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    fires2 = this->fires;
+    Matrix_RotateY((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 0);
+    if (this->actionFunc == func_80B61F04 ) {
+        Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
+        sp66 = 0x1F4;
+    } else {
+        Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
+        sp66 = (s16)(thisx->scale.x * 500.0f * 100.0f);
+    }
+    gSPSegment(POLY_XLU_DISP++, 0x08, 
+        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0, 
+        ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->unk290.a);
+
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
+
+    fires = this->fires;
+    this2 = this;
+
+    // out of order here
+    //36fc:    lui     s8,0x408         i 36fc:    lui     s8,%hi(D_0407D590)             
+    //3700:    addiu   s8,s8,-0x2a70    r 3700:    addiu   s1,s7,0x338                    
+    //3704:    move    s3,zero          | 3704:    addiu   s8,s8,%lo(D_0407D590)          
+    //3708:    move    s0,s7            r 3708:    move    s3,zero                        
+    //370c:    addiu   s1,s7,0x338      | 370c:    move    s0,s7                          
+
+    for (i = 0; i < 3; i++, fires++) { //loop_4:
+        Lights_PointNoGlowSetInfo(&this->fires[i].info, 
+            this2->fires[i].pos.x, this2->fires[i].pos.y, this2->fires[i].pos.z, 
+            0xAA, 0xFF, 0xFF, sp66);
+        mtfxPtr->wx = fires->pos.x; // wat, mtxfpointer doesn't move???
+        mtfxPtr->wy = fires->pos.y;
+        mtfxPtr->wz = fires->pos.z;
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        
+        gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame display list?
+ 
+    // out of order here
+    //37e0:    addiu   s1,s1,0x20       r 37e0:    addiu   s4,s4,0x20
+    //37e4:    ...
+    //37e8:    addiu   s4,s4,0x20       r 37e8:    addiu   s1,s1,0x20
+    }
+    
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64B08.asm")
+#endif
 
 // draw func
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64DFC.asm")
+void func_80B64DFC(Actor *thisx, GlobalContext *globalCtx) {
+    EnBigpo* this = (EnBigpo*) thisx;
+    EnBigpo *parent = (EnBigpo*) thisx->parent;
+    s32 pad;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx,
+       0, 0, 0, 0x20, 0x40, 1, 0, ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF);
+
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
+
+    Lights_PointNoGlowSetInfo(&parent->fires[this->unk20C].info, 
+        thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z,
+        0xAA, 0xFF, 0xFF, (s32) (thisx->scale.x * 500.0f * 100.0f));
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame display list?
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

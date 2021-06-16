@@ -915,7 +915,7 @@ UNK_RET func_800BE504(Actor* actor, Collider* collider); // might be ColliderCyl
 // void func_800BE568(void);
 // void func_800BE5CC(void);
 // void func_800BE63C(void);
-// void func_800BE680(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8);
+void func_800BE680(GlobalContext* globalCtx, Actor* thisx, Vec3f* vecArr, UNK_TYPE1 param_3, f32 param_4, f32 param_5, f32 param_6, UNK_TYPE4 param_7);
 // void func_800BF7CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
 void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
@@ -3376,7 +3376,7 @@ void SysMatrix_StatePush(void);
 void SysMatrix_StatePop(void);
 void SysMatrix_CopyCurrentState(MtxF* matrix);
 void SysMatrix_SetCurrentState(MtxF* matrix);
-// MtxF* SysMatrix_GetCurrentState(void);
+MtxF* SysMatrix_GetCurrentState(void);
 void SysMatrix_InsertMatrix(MtxF* matrix, s32 appendToState);
 void SysMatrix_InsertTranslation(f32 x, f32 y, f32 z, s32 appendToState);
 void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, u8 appendToState);
@@ -3914,7 +3914,7 @@ void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2D54(void);
 s32 func_801A2DE0(UNK_TYPE4 arg1);
 UNK_RET func_801A2E54(UNK_TYPE arg1);
-// void func_801A2ED8(void);
+void func_801A2ED8(void);
 // void func_801A2F88(void);
 // void func_801A3000(void);
 // void func_801A3038(void);

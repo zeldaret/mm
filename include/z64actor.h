@@ -212,7 +212,7 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
-typedef struct {
+typedef struct ActorPlayer {
     /* 0x000 */ Actor base;
     /* 0x144 */ UNK_TYPE1 unk144;
     /* 0x145 */ UNK_TYPE1 pad145[0x2];
