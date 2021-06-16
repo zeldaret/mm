@@ -6,8 +6,6 @@
 
 #define THIS ((EnOssan*)thisx)
 
-#define LATERODATA 0
-
 #define CURSOR_INVALID 0xFF
 #define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
@@ -24,6 +22,7 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx);
+void EnOssan_SetHaveMet(EnOssan* this);
 void EnOssan_StartShopping(GlobalContext* globalCtx, EnOssan* this);
 void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx);
@@ -101,7 +100,7 @@ static ActorAnimationEntryS* sAnimations[] = { animationsCuriosityShopMan, anima
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
-static ShopItem sStores[][8] = {
+static ShopItem sShops[][8] = {
     { { 9, 50, 68, -195 },
       { 7, 50, 92, -195 },
       { 4, 80, 68, -195 },
@@ -168,20 +167,20 @@ void EnOssan_ChooseShopKeeper(EnOssan* this) {
     switch (gSaveContext.day) {
         case 1:
         case 2:
-            if (gSaveContext.time <= 0xE555 && gSaveContext.time > 0x4000) {
-                if (this->actor.params != 0) {
+            if (gSaveContext.time < 0xE556 && gSaveContext.time > 0x4000) {
+                if (this->actor.params != CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
-            } else if (this->actor.params == 0) {
+            } else if (this->actor.params == CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
         case 3:
-            if (this->actor.params == 0) {
+            if (this->actor.params == CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
             if (!(gSaveContext.time <= 0xEAAA && gSaveContext.time >= 0x4000)) {
-                if (this->actor.params != 0) {
+                if (this->actor.params != CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
             }
@@ -249,7 +248,7 @@ void EnOssan_UpdateCursorPos(GlobalContext* globalCtx, EnOssan* this) {
     s16 x;
     s16 y;
 
-    func_800B8898(globalCtx, &this->items[this->cursorIndex]->actor, &x, &y);
+    func_800B8898(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
     this->cursorX = x;
     this->cursorY = y;
 }
@@ -290,7 +289,7 @@ s32 EnOssan_TestEndInteraction(EnOssan* this, GlobalContext* globalCtx, Input* i
 s32 EnOssan_TestCancelOption(EnOssan* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
         this->actionFunc = this->tmpActionFunc;
-        func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+        func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
         return true;
     }
     return false;
@@ -330,7 +329,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->defaultCutscene;
+            this->cutscene = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
             this->cutSceneState = 1;
         }
@@ -346,7 +345,8 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but jmptable is in laterodata
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
     s16 curFrame = this->skelAnime.animCurrentFrame;
@@ -469,7 +469,7 @@ u8 EnOssan_SetCursorIndexFromNeutral(EnOssan* this, u8 shelfOffset) {
     u8 i;
 
     // if cursor is on the top shelf
-    if (this->cursorIndex & 1) {
+    if (this->cursorIdx & 1) {
         // scan top shelf
         for (i = shelfOffset + 1; i < shelfOffset + 4; i += 2) {
             if (this->items[i] != NULL) {
@@ -499,26 +499,26 @@ u8 EnOssan_SetCursorIndexFromNeutral(EnOssan* this, u8 shelfOffset) {
     return CURSOR_INVALID;
 }
 
-u8 EnOssan_CursorRight(EnOssan* this, u8 cursorIndex, u8 shelfSlotMin) {
+u8 EnOssan_CursorRight(EnOssan* this, u8 cursorIdx, u8 shelfSlotMin) {
     u8 end = shelfSlotMin + 4;
 
-    while (cursorIndex >= shelfSlotMin && cursorIndex < end) {
-        cursorIndex -= 2;
-        if (cursorIndex >= shelfSlotMin && cursorIndex < end) {
-            if (this->items[cursorIndex] != NULL) {
-                return cursorIndex;
+    while (cursorIdx >= shelfSlotMin && cursorIdx < end) {
+        cursorIdx -= 2;
+        if (cursorIdx >= shelfSlotMin && cursorIdx < end) {
+            if (this->items[cursorIdx] != NULL) {
+                return cursorIdx;
             }
         }
     }
     return CURSOR_INVALID;
 }
 
-u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIndex, u8 shelfSlotMax) {
-    while (cursorIndex < shelfSlotMax) {
-        cursorIndex += 2;
-        if (cursorIndex < shelfSlotMax) {
-            if (this->items[cursorIndex] != NULL) {
-                return cursorIndex;
+u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIdx, u8 shelfSlotMax) {
+    while (cursorIdx < shelfSlotMax) {
+        cursorIdx += 2;
+        if (cursorIdx < shelfSlotMax) {
+            if (this->items[cursorIdx] != NULL) {
+                return cursorIdx;
             }
         }
     }
@@ -574,8 +574,8 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
             func_80151938(globalCtx, sWelcomeTextIds[ENOSSAN_TALK_OPTION][this->actor.params]);
             func_8011552C(globalCtx, 6);
-            this->stickRightPrompt.isEnabled = 0;
-            this->stickLeftPrompt.isEnabled = 0;
+            this->stickRightPrompt.isEnabled = false;
+            this->stickLeftPrompt.isEnabled = false;
             return 1;
         case 1:
             func_8019F230();
@@ -589,13 +589,13 @@ void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
     ActorPlayer* player = PLAYER;
-    u8 cursorIndex;
+    u8 cursorIdx;
 
     if (this->cutSceneState == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
-        this->cutscene = this->defaultCutscene;
+        this->cutscene = this->lookForwardCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutSceneState = 1;
     } else {
@@ -604,21 +604,21 @@ void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
             if (!EnOssan_TestEndInteraction(this, globalCtx, globalCtx->state.input) &&
                 (!func_80147624(globalCtx) || !EnOssan_FacingShopkeeperDialogResult(this, globalCtx))) {
                 if (this->stickAccumX < 0) {
-                    cursorIndex = EnOssan_SetCursorIndexFromNeutral(this, 4);
-                    if (cursorIndex != CURSOR_INVALID) {
-                        this->cursorIndex = cursorIndex;
+                    cursorIdx = EnOssan_SetCursorIndexFromNeutral(this, 4);
+                    if (cursorIdx != CURSOR_INVALID) {
+                        this->cursorIdx = cursorIdx;
                         EnOssan_SetupAction(this, EnOssan_LookToLeftShelf);
                         func_8011552C(globalCtx, 6);
-                        this->stickRightPrompt.isEnabled = 0;
+                        this->stickRightPrompt.isEnabled = false;
                         play_sound(NA_SE_SY_CURSOR);
                     }
                 } else if (this->stickAccumX > 0) {
-                    cursorIndex = EnOssan_SetCursorIndexFromNeutral(this, 0);
-                    if (cursorIndex != CURSOR_INVALID) {
-                        this->cursorIndex = cursorIndex;
+                    cursorIdx = EnOssan_SetCursorIndexFromNeutral(this, 0);
+                    if (cursorIdx != CURSOR_INVALID) {
+                        this->cursorIdx = cursorIdx;
                         EnOssan_SetupAction(this, EnOssan_LookToRightShelf);
                         func_8011552C(globalCtx, 6);
-                        this->stickLeftPrompt.isEnabled = 0;
+                        this->stickLeftPrompt.isEnabled = false;
                         play_sound(NA_SE_SY_CURSOR);
                     }
                 }
@@ -626,7 +626,7 @@ void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
                 return;
             }
         }
-        if (this->actor.params == 1 && player->unk14B != 2) {
+        if (this->actor.params == PART_TIME_WORKER && player->unk14B != 2) {
             Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
         }
     }
@@ -663,7 +663,7 @@ void EnOssan_LookToLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
                 this->cutSceneState = 2;
                 EnOssan_UpdateCursorPos(globalCtx, this);
                 EnOssan_SetupAction(this, EnOssan_BrowseLeftShelf);
-                func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+                func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
             } else {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
@@ -691,7 +691,7 @@ void EnOssan_LookToRightShelf(EnOssan* this, GlobalContext* globalCtx) {
                 this->cutSceneState = 2;
                 EnOssan_UpdateCursorPos(globalCtx, this);
                 EnOssan_SetupAction(this, EnOssan_BrowseRightShelf);
-                func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+                func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
             } else {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
@@ -701,16 +701,16 @@ void EnOssan_LookToRightShelf(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_CursorUpDown(EnOssan* this) {
-    u8 curTemp = this->cursorIndex;
+    u8 curTemp = this->cursorIdx;
     u8 curScanTemp;
 
     if (this->stickAccumY < 0) {
         curTemp &= 0xFE;
         if (this->items[curTemp] != NULL) {
-            this->cursorIndex = curTemp;
+            this->cursorIdx = curTemp;
             return;
         }
-        // cursorIndex on right shelf
+        // cursorIdx on right shelf
         if (curTemp < 4) {
             curScanTemp = curTemp + 2;
             if (curScanTemp >= 4) {
@@ -718,7 +718,7 @@ void EnOssan_CursorUpDown(EnOssan* this) {
             }
             while (curScanTemp != curTemp) {
                 if (this->items[curScanTemp] != NULL) {
-                    this->cursorIndex = curScanTemp;
+                    this->cursorIdx = curScanTemp;
                     return;
                 }
                 curScanTemp += 2;
@@ -727,14 +727,14 @@ void EnOssan_CursorUpDown(EnOssan* this) {
                 }
             }
         } else {
-            // cursorIndex on left shelf
+            // cursorIdx on left shelf
             curScanTemp = curTemp + 2;
             if (curScanTemp >= 8) {
                 curScanTemp = 4;
             }
             while (curScanTemp != curTemp) {
                 if (this->items[curScanTemp] != NULL) {
-                    this->cursorIndex = curScanTemp;
+                    this->cursorIdx = curScanTemp;
                     return;
                 }
                 curScanTemp += 2;
@@ -746,10 +746,10 @@ void EnOssan_CursorUpDown(EnOssan* this) {
     } else if (this->stickAccumY > 0) {
         curTemp |= 1;
         if (this->items[curTemp] != NULL) {
-            this->cursorIndex = curTemp;
+            this->cursorIdx = curTemp;
             return;
         }
-        // cursorIndex on right shelf
+        // cursorIdx on right shelf
         if (curTemp < 4) {
             curScanTemp = curTemp + 2;
             if (curScanTemp >= 4) {
@@ -757,7 +757,7 @@ void EnOssan_CursorUpDown(EnOssan* this) {
             }
             while (curScanTemp != curTemp) {
                 if (this->items[curScanTemp] != NULL) {
-                    this->cursorIndex = curScanTemp;
+                    this->cursorIdx = curScanTemp;
                     return;
                 }
                 curScanTemp += 2;
@@ -766,14 +766,14 @@ void EnOssan_CursorUpDown(EnOssan* this) {
                 }
             }
         } else {
-            // cursorIndex on left shelf
+            // cursorIdx on left shelf
             curScanTemp = curTemp + 2;
             if (curScanTemp >= 8) {
                 curScanTemp = 5;
             }
             while (curScanTemp != curTemp) {
                 if (this->items[curScanTemp] != NULL) {
-                    this->cursorIndex = curScanTemp;
+                    this->cursorIdx = curScanTemp;
                     return;
                 }
                 curScanTemp += 2;
@@ -786,7 +786,7 @@ void EnOssan_CursorUpDown(EnOssan* this) {
 }
 
 s32 EnOssan_HasPlayerSelectedItem(GlobalContext* globalCtx, EnOssan* this, Input* input) {
-    EnGirlA* item = this->items[this->cursorIndex];
+    EnGirlA* item = this->items[this->cursorIdx];
 
     if (EnOssan_TestEndInteraction(this, globalCtx, input)) {
         return true;
@@ -794,7 +794,7 @@ s32 EnOssan_HasPlayerSelectedItem(GlobalContext* globalCtx, EnOssan* this, Input
     if (EnOssan_TestItemSelected(globalCtx)) {
         if (!item->isOutOfStock) {
             this->tmpActionFunc = this->actionFunc;
-            func_80151938(globalCtx, this->items[this->cursorIndex]->choiceTextId);
+            func_80151938(globalCtx, this->items[this->cursorIdx]->choiceTextId);
             this->stickRightPrompt.isEnabled = false;
             this->stickLeftPrompt.isEnabled = false;
             play_sound(NA_SE_SY_DECIDE);
@@ -811,8 +811,8 @@ s32 EnOssan_HasPlayerSelectedItem(GlobalContext* globalCtx, EnOssan* this, Input
 void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
-    u8 prevCursorIndex = this->cursorIndex;
-    u8 cursorIndex;
+    u8 prevCursorIndex = this->cursorIdx;
+    u8 cursorIdx;
 
     if (!EnOssan_ReturnItemToShelf(this)) {
         this->delayTimer = 3;
@@ -827,38 +827,38 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
             if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, globalCtx->state.input)) {
                 if (this->moveHorizontal) {
                     if (this->stickAccumX > 0) {
-                        cursorIndex = EnOssan_CursorRight(this, this->cursorIndex, 4);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 4);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         } else {
                             EnOssan_SetupLookToShopkeeperFromShelf(globalCtx, this);
                             return;
                         }
                     } else if (this->stickAccumX < 0) {
-                        cursorIndex = EnOssan_CursorLeft(this, this->cursorIndex, 8);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorLeft(this, this->cursorIdx, 8);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         }
                     }
                 } else {
                     if (this->stickAccumX > 0 && this->stickAccumX > 500) {
-                        cursorIndex = EnOssan_CursorRight(this, this->cursorIndex, 4);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 4);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         } else {
                             EnOssan_SetupLookToShopkeeperFromShelf(globalCtx, this);
                             return;
                         }
                     } else if (this->stickAccumX < 0 && this->stickAccumX < -500) {
-                        cursorIndex = EnOssan_CursorLeft(this, this->cursorIndex, 8);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorLeft(this, this->cursorIdx, 8);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         }
                     }
                 }
                 EnOssan_CursorUpDown(this);
-                if (this->cursorIndex != prevCursorIndex) {
-                    func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+                if (this->cursorIdx != prevCursorIndex) {
+                    func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
                     play_sound(NA_SE_SY_CURSOR);
                 }
             }
@@ -869,8 +869,8 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
-    u8 prevCursorIndex = this->cursorIndex;
-    u8 cursorIndex;
+    u8 prevCursorIndex = this->cursorIdx;
+    u8 cursorIdx;
 
     if (!EnOssan_ReturnItemToShelf(this)) {
         this->delayTimer = 3;
@@ -878,45 +878,45 @@ void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
         this->delayTimer--;
     } else {
         this->drawCursor = 0xFF;
-        this->stickRightPrompt.isEnabled = 1;
+        this->stickRightPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
             if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, globalCtx->state.input)) {
                 if (this->moveHorizontal != 0) {
                     if (this->stickAccumX < 0) {
-                        cursorIndex = EnOssan_CursorRight(this, this->cursorIndex, 0);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 0);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         } else {
                             EnOssan_SetupLookToShopkeeperFromShelf(globalCtx, this);
                             return;
                         }
                     } else if (this->stickAccumX > 0) {
-                        cursorIndex = EnOssan_CursorLeft(this, this->cursorIndex, 4);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorLeft(this, this->cursorIdx, 4);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         }
                     }
                 } else {
                     if (this->stickAccumX < 0 && this->stickAccumX <= -0x1F5) {
-                        cursorIndex = EnOssan_CursorRight(this, this->cursorIndex, 0);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 0);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         } else {
                             EnOssan_SetupLookToShopkeeperFromShelf(globalCtx, this);
                             return;
                         }
                     } else if (this->stickAccumX > 0 && this->stickAccumX >= 0x1F5) {
-                        cursorIndex = EnOssan_CursorLeft(this, this->cursorIndex, 4);
-                        if (cursorIndex != CURSOR_INVALID) {
-                            this->cursorIndex = cursorIndex;
+                        cursorIdx = EnOssan_CursorLeft(this, this->cursorIdx, 4);
+                        if (cursorIdx != CURSOR_INVALID) {
+                            this->cursorIdx = cursorIdx;
                         }
                     }
                 }
                 EnOssan_CursorUpDown(this);
-                if (this->cursorIndex != prevCursorIndex) {
-                    func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+                if (this->cursorIdx != prevCursorIndex) {
+                    func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
                     play_sound(NA_SE_SY_CURSOR);
                 }
             }
@@ -951,7 +951,7 @@ void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx) 
 void EnOssan_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnOssan* this) {
     ActorPlayer* player = PLAYER;
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->unkA70 &= ~0x20000000;
@@ -970,11 +970,12 @@ void EnOssan_SetupBuy(GlobalContext* globalCtx, EnOssan* this, u16 textId) {
     EnOssan_SetupAction(this, EnOssan_CanBuy);
 }
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but jmptable is in laterodata
 void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
     EnGirlA* item;
 
-    item = this->items[this->cursorIndex];
+    item = this->items[this->cursorIdx];
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_FANFARE:
             if (this->cutSceneState == 2) {
@@ -1036,7 +1037,7 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
                 case 1:
                     func_8019F230();
                     this->actionFunc = this->tmpActionFunc;
-                    func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+                    func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
                     break;
             }
         }
@@ -1046,7 +1047,7 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_CannotBuy(EnOssan* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
-        func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+        func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
     }
 }
 
@@ -1056,10 +1057,10 @@ void EnOssan_CanBuy(EnOssan* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnOssan_ResetItemPosition(this);
-        item = this->items[this->cursorIndex];
+        item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
         this->actionFunc = this->tmpActionFunc;
-        func_80151938(globalCtx, this->items[this->cursorIndex]->actor.textId);
+        func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
     }
 }
 
@@ -1069,7 +1070,7 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         EnOssan_SetupAction(this, EnOssan_SetupItemPurchased);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
+        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1082,7 +1083,7 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->defaultCutscene;
+            this->cutscene = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
@@ -1098,7 +1099,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         func_8011552C(globalCtx, 6);
         if (func_80147624(globalCtx)) {
             EnOssan_ResetItemPosition(this);
-            item = this->items[this->cursorIndex];
+            item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
             if (!EnOssan_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -1120,7 +1121,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 5 && func_80147624(globalCtx)) {
         EnOssan_ResetItemPosition(this);
-        item = this->items[this->cursorIndex];
+        item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
         player->base.shape.rot.y += 0x8000;
         player->unkA70 |= 0x20000000;
@@ -1143,7 +1144,7 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->defaultCutscene;
+            this->cutscene = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
@@ -1161,8 +1162,8 @@ void EnOssan_PositionSelectedItem(EnOssan* this) {
     ShopItem* shopItem;
     Vec3f worldPos;
 
-    i = this->cursorIndex;
-    shopItem = &sStores[this->actor.params][i];
+    i = this->cursorIdx;
+    shopItem = &sShops[this->actor.params][i];
     item = this->items[i];
 
     i2 = i >> 2;
@@ -1180,7 +1181,8 @@ void EnOssan_ResetItemPosition(EnOssan* this) {
     EnOssan_PositionSelectedItem(this);
 }
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but floats are in laterodata
 // returns true if animation has completed
 s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
@@ -1197,7 +1199,8 @@ s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_TakeItemOffShelf.asm")
 #endif
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but floats are in laterodata
 // returns true if animation has completed
 s32 EnOssan_ReturnItemToShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
@@ -1226,13 +1229,14 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
                 this->drawCursor == 0) {
                 item->isSelected = 0;
             } else {
-                item->isSelected = this->cursorIndex == i ? 1 : 0;
+                item->isSelected = this->cursorIdx == i ? 1 : 0;
             }
         }
     }
 }
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but floats are in laterodata
 void EnOssan_UpdateCursorAnim(EnOssan* this) {
     f32 t;
 
@@ -1260,7 +1264,8 @@ void EnOssan_UpdateCursorAnim(EnOssan* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_UpdateCursorAnim.asm")
 #endif
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but floats are in laterodata
 void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1402,7 +1407,7 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     u16 ret;
 
-    ret = func_800F1250(globalCtx, 0x36);
+    ret = func_800F1250(globalCtx, 54);
     if (ret != 0) {
         this->welcomeFlags |= 2;
         return ret;
@@ -1427,7 +1432,8 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     return sWelcomeTextIds[ENOSSAN_HUMAN_WELCOME][PART_TIME_WORKER];
 }
 
-#if LATERODATA
+#ifdef NON_MATCHING
+// Matches but jmptable is in laterodata
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
@@ -1461,7 +1467,7 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
-        shopItems = sStores[this->actor.params];
+        shopItems = sShops[this->actor.params];
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
         this->textId = sWelcomeTextIds[0][this->actor.params];
@@ -1469,12 +1475,12 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
 
         this->cursorY = this->cursorX = 100.0f;
         this->cutSceneState = 0;
-        this->cutscene = this->defaultCutscene;
+        this->cutscene = this->lookForwardCutscene;
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.colChkInfo.cylRadius = 50;
         this->stickAccumX = this->stickAccumY = 0;
 
-        this->cursorIndex = 0;
+        this->cursorIdx = 0;
         this->cursorZ = 1.5f;
         this->cursorColorR = 0;
         this->cursorColorG = 80;
@@ -1532,8 +1538,8 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_InitCutscenes(EnOssan* this, GlobalContext* globalCtx) {
-    this->defaultCutscene = this->actor.cutscene;
-    this->lookToLeftShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->defaultCutscene);
+    this->lookForwardCutscene = this->actor.cutscene;
+    this->lookToLeftShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookForwardCutscene);
     this->lookToRightShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToLeftShelfCutscene);
     this->lookToShopKeeperCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToRightShelfCutscene);
 }

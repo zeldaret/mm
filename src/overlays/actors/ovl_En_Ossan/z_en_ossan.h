@@ -60,7 +60,7 @@ typedef struct EnOssan {
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
-    /* 0x236 */ u8 cursorIndex;
+    /* 0x236 */ u8 cursorIdx;
     /* 0x238 */ StickDirectionPrompt stickRightPrompt;
     /* 0x270 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x2A8 */ f32 arrowAnimTween;
@@ -68,7 +68,7 @@ typedef struct EnOssan {
     /* 0x2B0 */ u8 arrowAnimState;
     /* 0x2B1 */ u8 stickAnimState;
     /* 0x2B4 */ f32 shopItemSelectedTween;
-    /* 0x2B8 */ s16 defaultCutscene;
+    /* 0x2B8 */ s16 lookForwardCutscene;
     /* 0x2BA */ s16 lookToLeftShelfCutscene;
     /* 0x2BC */ s16 lookToRightShelfCutscene;
     /* 0x2BE */ s16 lookToShopKeeperCutscene;
