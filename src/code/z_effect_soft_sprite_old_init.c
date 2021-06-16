@@ -794,7 +794,7 @@ void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3
     initParams.scale = scale;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x874);
+        Audio_PlayActorSound2(actor, NA_SE_PL_FREEZE_S);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_ICE, 80, &initParams);
@@ -895,7 +895,7 @@ void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -915,7 +915,7 @@ void EffectSsEnFire_SpawnVec3s(GlobalContext* globalCtx, Actor* actor, Vec3s* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);

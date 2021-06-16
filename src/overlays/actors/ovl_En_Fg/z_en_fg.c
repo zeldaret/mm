@@ -79,7 +79,7 @@ static DamageTable sDamageTable = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static EnFgAnimation sAnimations[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06001534, 1.0f, 0, -1, 0, 0 },
     { &D_06001534, 1.0f, 0, -1, 0, -4 },
     { &D_060011C0, 1.0f, 0, -1, 0, -4 },
@@ -98,8 +98,8 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
             frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->common);
         }
         SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                                sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                                sAnimations[animIndex].transitionRate);
+                             sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                             sAnimations[animIndex].transitionRate);
     }
     return ret;
 }
@@ -162,7 +162,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E4);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.animPlaybackSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -188,8 +188,8 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E3);
-            if(1) {}
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
+            if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -204,7 +204,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Audio_PlayActorSound2(this, 0x28B1);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
                 EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
@@ -239,7 +239,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(this, 0x28E3);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -388,10 +388,11 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
-    gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g, envColor[this->actor.params].b, envColor[this->actor.params].a);
+    gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
+                   envColor[this->actor.params].b, envColor[this->actor.params].a);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060059A0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_060059A0));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -450,13 +451,14 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
             }
 
             if (1) {}
-            alpha =  (255.0f / 16.0f) * dustEffect->timer;
+            alpha = (255.0f / 16.0f) * dustEffect->timer;
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             SysMatrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             index = 0.5f * dustEffect->timer;
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTex[index]));
             gSPDisplayList(POLY_XLU_DISP++, D_0600B338);
