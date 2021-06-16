@@ -4,19 +4,28 @@
 #include "ultra64.h"
 
 typedef struct {
-    /* 0x0 */ s16 func;
-    /* 0x2 */ UNK_TYPE1 pad2[0x6];
-} CameraModeParams; // size = 0x8
+    /* 0x0 */ s16 val;
+    /* 0x2 */ s16 param;
+} CameraModeValue; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ UNK_TYPE1 pad4[0x4];
-    /* 0x8 */ CameraModeParams* modes;
-} CameraStateParams; // size = 0xC
+    /* 0x0 */ s16 funcIdx;
+    /* 0x2 */ s16 valueCnt;
+    /* 0x4 */ CameraModeValue* values;
+} CameraMode; // size = 0x8
 
-// typedef struct Camera Camera;
-
-// typedef s32(*camera_update_func)(Camera* camera);
+typedef struct {
+    /* 0x0 */ union {
+        u32 unk_00;
+        struct {
+            u32 unk_bit0 : 1;
+            u32 unk_bit1 : 1;
+            u32 validModes : 30;
+        };
+    };
+    /* 0x4 */ u32 unk_04;
+    /* 0x8 */ CameraMode* cameraModes;
+} CameraSetting; // size = 0xC
 
 typedef struct {
     /* 0x0000 */ Vec3f pos;
