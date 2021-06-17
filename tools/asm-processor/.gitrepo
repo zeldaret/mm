@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/simonlindholm/asm-processor.git
+	branch = master
+	commit = 85288fcdfefd5d2644d9bac1230c8b4aa7c92024
+	parent = 492b92579d6bc30f635cbcc3852de1b17ed1bc43
+	method = merge
+	cmdver = 0.4.3
