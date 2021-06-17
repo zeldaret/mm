@@ -310,7 +310,7 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 ma
     s16 y;
     Vec3f eye;
 
-    y = func_800DFCDC(camera) + 0x8000;
+    y = Camera_GetCamDirYaw(camera) + 0x8000;
     eye.x = (Math_SinS(y) * magShakeXZ) + camera->focalPoint.x;
     eye.y = camera->focalPoint.y + magShakeY;
     eye.z = (Math_CosS(y) * magShakeXZ) + camera->focalPoint.z;
@@ -930,7 +930,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 primColor = { 250, 250, 250, 255 };
     static Color_RGBA8 envColor = { 180, 180, 180, 255 };
-    s16 yaw = func_800DFCDC(ACTIVE_CAM) + 0x8000;
+    s16 yaw = Camera_GetCamDirYaw(ACTIVE_CAM) + 0x8000;
     Vec3f vec1;
     Vec3f vel;
     s32 i;

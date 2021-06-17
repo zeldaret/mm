@@ -5,6 +5,11 @@
 
 #define MAIN_CAM 0
 
+#define SHRINKWIN_MASK (0xF000)
+#define SHRINKWINVAL_MASK (0x7000)
+#define SHRINKWIN_CURVAL (0x8000)
+#define IFACE_ALPHA_MASK (0x0F00)
+
 typedef enum {
     /* 0x00 */ CAM_FUNC_NONE,
     /* 0x01 */ CAM_FUNC_NORM0,
@@ -81,6 +86,16 @@ typedef enum {
 } CameraFuncType;
 
 typedef struct {
+    /* 0x0000 */ Vec3f collisionClosePoint;
+    /* 0x000C */ CollisionPoly* atEyePoly;
+    /* 0x0010 */ f32 swingUpdateRate;
+    /* 0x0014 */ s16 unk_14;
+    /* 0x0016 */ s16 unk_16;
+    /* 0x0018 */ s16 unk_18;
+    /* 0x001A */ s16 swingUpdateRateTimer;
+} SwingAnimation; // size = 0x1C
+
+typedef struct {
     /* 0x0 */ s16 val;
     /* 0x2 */ s16 param;
 } CameraModeValue; // size = 0x4
@@ -92,14 +107,7 @@ typedef struct {
 } CameraMode; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ union {
-        u32 unk_00;
-        struct {
-            u32 unk_bit0 : 1;
-            u32 unk_bit1 : 1;
-            u32 validModes : 30;
-        };
-    };
+    /* 0x0 */ u32 validModes;
     /* 0x4 */ u32 unk_04;
     /* 0x8 */ CameraMode* cameraModes;
 } CameraSetting; // size = 0xC
@@ -178,7 +186,7 @@ typedef struct Camera {
     /* 0x160 */ s16 unk_160;
     /* 0x162 */ s16 timer;
     /* 0x164 */ s16 thisIdx;
-    /* 0x166 */ s16 unk166;
+    /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ UNK_TYPE1 pad168[0x10];
 } Camera; // size = 0x178
 

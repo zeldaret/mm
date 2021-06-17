@@ -196,7 +196,7 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
 void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
     this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+    this->actor.shape.rot.y = Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {

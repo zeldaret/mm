@@ -718,7 +718,6 @@ SECTIONS
 
     /* Unknown buffers */
     D_80025D00 = 0x80025D00; /* Used in z_vr_box.c */
-    D_801B9CE2 = 0x801B9CE2; /* Used in z_camera.c */
     D_801C1E2C = 0x801C1E2C; /* Used in z_en_ginko_man.c */
     D_80780000 = 0x80780000;
     D_80784600 = 0x80784600;
