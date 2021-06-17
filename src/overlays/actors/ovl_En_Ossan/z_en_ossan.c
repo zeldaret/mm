@@ -101,23 +101,23 @@ static ActorAnimationEntryS* sAnimations[] = { animationsCuriosityShopMan, anima
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
 static ShopItem sShops[][8] = {
-    { { 9, 50, 68, -195 },
-      { 7, 50, 92, -195 },
-      { 4, 80, 68, -195 },
-      { 8, 80, 92, -195 },
-      { 3, -50, 68, -195 },
-      { 5, -50, 92, -195 },
-      { 6, -80, 68, -195 },
-      { 10, -80, 92, -195 } },
+    { { SI_NUTS_1, 50, 68, -195 },
+      { SI_STICK_1, 50, 92, -195 },
+      { SI_ARROWS_LARGE_1, 80, 68, -195 },
+      { SI_ARROWS_MEDIUM_1, 80, 92, -195 },
+      { SI_FAIRY_1, -50, 68, -195 },
+      { SI_POTION_GREEN_2, -50, 92, -195 },
+      { SI_SHIELD_HERO_1, -80, 68, -195 },
+      { SI_POTION_RED_2, -80, 92, -195 } },
 
-    { { 15, 50, 68, -195 },
-      { 16, 50, 92, -195 },
-      { 13, 80, 68, -195 },
-      { 12, 80, 92, -195 },
-      { 11, -50, 68, -195 },
-      { 14, -50, 92, -195 },
-      { 17, -80, 68, -195 },
-      { 18, -80, 92, -195 } },
+    { { SI_NUTS_2, 50, 68, -195 },
+      { SI_STICK_2, 50, 92, -195 },
+      { SI_ARROWS_LARGE_2, 80, 68, -195 },
+      { SI_ARROWS_MEDIUM_2, 80, 92, -195 },
+      { SI_FAIRY_2, -50, 68, -195 },
+      { SI_POTION_GREEN_3, -50, 92, -195 },
+      { SI_SHIELD_HERO_2, -80, 68, -195 },
+      { SI_POTION_RED_3, -80, 92, -195 } },
 };
 
 static u16 sWelcomeTextIds[][2] = {

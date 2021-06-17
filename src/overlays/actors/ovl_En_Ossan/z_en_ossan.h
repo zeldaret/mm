@@ -3,7 +3,7 @@
 
 #include <global.h>
 
-#include "../ovl_En_GirlA/z_en_girla.h"
+#include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
 struct EnOssan;
 
