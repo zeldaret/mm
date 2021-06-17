@@ -151,7 +151,7 @@ void EnKakasi_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // the cutscene loop is wrong, however with the ugly loop:
 //   its only regalloc and two instructions swapped
 void EnKakasi_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -604,7 +604,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
         } else {
             this->unk1AC = 5;
 
-            if (globalCtx->msgCtx.unk12022 == 1) {
+            if (globalCtx->msgCtx.choiceIndex == 1) {
                 func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
                 // "Do you want to learn it?  No Yes"
                 if (this->actor.textId == 0x1656) {
@@ -787,7 +787,6 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
     f32 tempAnimFrame; // needed to get the frame to load earlier?
     Vec3f vec3fCopy;
-    //u16 tempTextId; // remove and stack shrinks but adds two instructions
 
     tempAnimFrame = this->skelanime.animCurrentFrame;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
@@ -852,8 +851,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
 
     func_8096FAAC(this, globalCtx);
 
-    //if ((this->unk1A8 != 0) && ((func_80152498(&globalCtx->msgCtx) == (this->unk1AC)) ) 
-    if ((this->unk1A8 != 0) && ((this->unk1AC) == func_80152498(&globalCtx->msgCtx)) 
+    if ((this->unk1A8 != 0) && (func_80152498(&globalCtx->msgCtx) == this->unk1AC) 
     && (func_80147624(globalCtx) != 0)) {
         func_801477B4(globalCtx);
 
@@ -901,7 +899,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
         } else {
             this->unk1AC = 5;
             // 16929 / 4908 / (12021)
-            if (globalCtx->msgCtx.unk12022 == 1) {
+            if (globalCtx->msgCtx.choiceIndex == 1) {
                 func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
                 // "Oh, yeah!  Now listen up!  If you play that mysterious song ...
                 this->actor.textId = 0x164A;
