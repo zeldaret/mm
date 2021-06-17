@@ -841,9 +841,9 @@ SECTIONS
     ovl_En_GirlA : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.text)
-        build/asm/overlays/ovl_En_GirlA_data.o(.data)
+        build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.data)
         build/src/overlays/actors/ovl_En_GirlA/z_en_girla.o(.rodata)
-        build/asm/overlays/ovl_En_GirlA_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_GirlA/z_en_girla_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8217,9 +8217,9 @@ SECTIONS
     ovl_Bg_Iknv_Obj : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.text)
-        build/asm/overlays/ovl_Bg_Iknv_Obj_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.data)
         build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj.o(.rodata)
-        build/asm/overlays/ovl_Bg_Iknv_Obj_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Iknv_Obj/z_bg_iknv_obj_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8247,11 +8247,7 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.text)
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.data)
         build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump.o(.rodata)
-        #ifdef NON_MATCHING
-            build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump_overlay.o(.ovl)
-        #else
-            build/asm/overlays/ovl_Obj_HsStump_rodata.o(.rodata)
-        #endif
+        build/src/overlays/actors/ovl_Obj_HsStump/z_obj_hsstump_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8928,9 +8924,9 @@ SECTIONS
     ovl_Bg_Iknin_Susceil : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Iknin_Susceil/z_bg_iknin_susceil.o(.text)
-        build/asm/overlays/ovl_Bg_Iknin_Susceil_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Iknin_Susceil/z_bg_iknin_susceil.o(.data)
         build/src/overlays/actors/ovl_Bg_Iknin_Susceil/z_bg_iknin_susceil.o(.rodata)
-        build/asm/overlays/ovl_Bg_Iknin_Susceil_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Iknin_Susceil/z_bg_iknin_susceil_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

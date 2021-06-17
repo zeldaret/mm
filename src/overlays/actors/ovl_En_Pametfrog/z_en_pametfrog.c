@@ -174,7 +174,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-             (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }
@@ -469,7 +469,8 @@ void EnPametfrog_RearOnSnapperRise(EnPametfrog* this, GlobalContext* globalCtx) 
     if (this->timer == 0) {
         EnPametfrog_SetupRearOnSnapper(this);
     } else {
-        this->actor.world.pos.y = Math_SinS(this->timer * 0xCCC) * 100.0f + (((EnBigpamet*)this->actor.child)->unk_2AC + 46.0f);
+        this->actor.world.pos.y =
+            Math_SinS(this->timer * 0xCCC) * 100.0f + (((EnBigpamet*)this->actor.child)->unk_2AC + 46.0f);
     }
 }
 
@@ -505,7 +506,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI/3.0f)) * ((0.02f * (this->timer * (1.0f/6.0f))) + 0.005f) + 1.0f;
+    sin = sin_rad(this->timer * (M_PI / 3.0f)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -643,7 +644,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     this->actor.speedXZ = 0.0f;
     this->skelAnime.animPlaybackSpeed = 1.5f;
     if (this->timer != 0) {
-        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI/30.0f) : (-M_PI/30.0f);
+        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30.0f) : (-M_PI / 30.0f);
     } else {
         randFloat = Rand_ZeroFloat(0x2000);
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
@@ -959,7 +960,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI/5.0f)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (sin_rad(this->timer * (M_PI / 5.0f)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -1212,7 +1213,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) 
 void EnPametfrog_SnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
     this->timer--;
     EnPametfrog_ShakeCamera(this, globalCtx, (f32)(this->timer * 7.5f) + 200.0f,
-                            ((f32)(this->timer * 2) * (15.0f/16.0f)) + -20.0f);
+                            ((f32)(this->timer * 2) * (15.0f / 16.0f)) + -20.0f);
     if (this->timer != 0) {
         func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     } else {
@@ -1338,7 +1339,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
             unk2C4 = ((this->unk_2C4 + 1.0f) * 0.375f);
             this->unk_2C8 = unk2C4;
             this->unk_2C8 = unk2C4 > 0.75f ? 0.75f : this->unk_2C8;
-        } else if (!Math_StepToF(&this->unk_2CC, 0.75f, (3.0f/160.0f))) {
+        } else if (!Math_StepToF(&this->unk_2CC, 0.75f, (3.0f / 160.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
