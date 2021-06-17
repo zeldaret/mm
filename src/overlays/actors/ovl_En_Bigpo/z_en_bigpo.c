@@ -19,7 +19,6 @@ void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64DFC(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
 
-
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
 void func_80B61D74(EnBigpo* this);
@@ -57,8 +56,6 @@ void func_80B627B4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B61C04(EnBigpo *this, GlobalContext *globalCtx);
 void func_80B61CFC(EnBigpo *this, GlobalContext *globalCtx);
-
-
 void func_80B62830(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B62A68(EnBigpo* this, GlobalContext* globalCtx);
@@ -70,17 +67,13 @@ void func_80B63410(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63474(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B636E4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63758(EnBigpo *this, GlobalContext *globalCtx);
-
 void func_80B63A18(EnBigpo* this);
 void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63C28(EnBigpo* this);
 void func_80B63D0C(EnBigpo* this);
 s32 func_80B63D88(EnBigpo* this, GlobalContext* globalCtx);
-
 void func_80B63964(EnBigpo* this);
 void func_80B63980(EnBigpo* this, GlobalContext* globalCtx);
-
-
 void func_80B6382C(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63854(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63888(EnBigpo* this, GlobalContext* globalCtx);
@@ -368,6 +361,7 @@ void func_80B61DA4(EnBigpo *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y += this->rotVelocity;
     func_80B61914(this);
 
+    if (1) {}
     for (i = 0; i < 3; i++){
         this->fires[i].pos.y += this->actor.velocity.y;
     }
@@ -507,8 +501,6 @@ void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-
-
 void func_80B624F4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
     this->unk206 = (this->actionFunc == func_80B62920) ? 0x50 : 0;
@@ -531,7 +523,7 @@ void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     Math_StepToF(&this->unk218, player->base.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad((f32) this->unk212 * 0.15707964f) * 10.0f) + this->unk218;
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
-    func_800B9010(&this->actor, (u16)0x3071);
+    func_800B9010(&this->actor, 0x3071); // sound?
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
@@ -604,8 +596,6 @@ void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B619B4(this);
 }
 
-
-
 void func_80B629E4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
@@ -634,8 +624,6 @@ void func_80B62AD4(EnBigpo *this) {
     this->collider.base.ocFlags1 &= 0xFFFE;
     this->actionFunc = func_80B62B10;
 }
-
-
 
 void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f tempVec; 
@@ -700,8 +688,6 @@ void func_80B62E38(EnBigpo *this, GlobalContext *globalCtx) {
     this->actor.bgCheckFlags &= 0xFBFF;
     this->actionFunc = func_80B62F10;
 }
-
-
 
 void func_80B62F10(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->actor.bgCheckFlags & 1)) || (this->actor.floorHeight == -32000.0f)) {
@@ -1172,11 +1158,6 @@ s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
     return 0;
 }
 
-
-
-
-
-
 //PostLimbDraw2
 #ifdef NON_EQUIVELENT
 // non-equivelent: the actual draw functions are totally busted
@@ -1330,9 +1311,6 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 
 }
 
-
-
-
 // draw func
 // non-equivelent: this is an odd draw function, diff is nowhere close
 #ifdef NON_EQUIVELENT
@@ -1396,8 +1374,6 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
 #endif
-
-
 
 #ifdef NON_MATCHING
 // draw func
