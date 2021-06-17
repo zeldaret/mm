@@ -681,7 +681,7 @@ s16 func_800CC740(Camera* camera, u32 flags) {
     }
 }
 
-s32 func_800CC7A8(Camera* camera, u32 flags) {
+CollisionPoly* func_800CC7A8(Camera* camera, u32 flags) {
     if (flags & 0x1000) {
         return func_800C98CC(&camera->globalCtx->colCtx, flags & ~0x1000, 50); // TODO: functions.h
     } else {
@@ -1294,7 +1294,19 @@ s32 Camera_Normal2(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal3.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal4.asm")
+s32 Camera_Normal4(Camera* camera) {
+    s32 pad;
+    s16 roll;
+
+    if ((camera->animState == 0) || (camera->animState == 10) || (camera->animState == 20)) {
+        D_801EDBF0 = func_800CC7A8(camera, camera->camDataIdx)->normal.y;
+    }
+
+    roll = camera->roll;
+    Camera_Normal1(camera);
+    camera->roll = Camera_LERPCeilS(D_801EDBF0, roll, 0.05f, 5);
+    return true;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal0.asm")
 
@@ -1520,22 +1532,117 @@ s32 Camera_Special7(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE0EC.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE308.asm")
+s32 Camera_ChangeStatus(Camera* camera, s16 status) {
+    camera->status = status;
+    return camera->status;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE324.asm")
+s32 Camera_CheckWater(Camera* camera) {
+    f32 waterY;
+    s16 waterCamIdx;
+    s32 pad[2];
+    s32* waterPrevCamSetting = &camera->waterPrevCamSetting;
+    s16 prevBgId;
+
+    if (!(camera->flags & 2) || (sCameraSettings[camera->setting].unk_04 & 0x40000000)) {
+        return false;
+    }
+
+    if (camera->flags & 0x200) {
+        if (func_800CB8C8(camera) != 0) {
+            if (func_800CB8F4(camera) == 0) {
+                Camera_ChangeSettingFlags(camera, 3, 6);
+            } else {
+                Camera_ChangeSettingFlags(camera, 5, 6);
+            }
+            Camera_SetFlags(camera, -0x8000);
+        } else if (camera->flags & (s16)0x8000) {
+            Camera_ChangeSettingFlags(camera, *waterPrevCamSetting, 6); // unk11E
+            Camera_ClearFlags(camera, -0x8000);
+        }
+    }
+
+    if (!(camera->flags & (s16)0x8000)) {
+        waterCamIdx = func_800CC874(camera, &waterY);
+        if (waterCamIdx == -2) {
+            if (!(camera->flags & 0x200)) {
+                Camera_SetFlags(camera, 0x200);
+                camera->waterPrevCamIdx = camera->camDataIdx;
+                camera->waterQuakeId = -1;
+            }
+
+            if (!(Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
+                ((func_800CB880(camera) != 0) && (func_800CBB58(camera) == 0))) {
+                prevBgId = camera->bgCheckId;
+                camera->bgCheckId = 0x32;
+                waterPrevCamSetting = &camera->waterPrevCamSetting;
+                Camera_ChangeSettingFlags(camera, 2, 2);
+                *waterPrevCamSetting = camera->setting;
+                camera->bgCheckId = prevBgId;
+                camera->camDataIdx = -2;
+            }
+
+        } else if (waterCamIdx != -1) {
+            if ((camera->flags & 0x200) == 0) {
+                Camera_SetFlags(camera, 0x200);
+                camera->waterPrevCamIdx = camera->camDataIdx;
+                camera->waterQuakeId = -1;
+            }
+
+            if (!(Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
+                ((func_800CB880(camera) != 0) && (func_800CBB58(camera) == 0))) {
+                prevBgId = camera->bgCheckId;
+                camera->bgCheckId = 0x32;
+                waterPrevCamSetting = &camera->waterPrevCamSetting;
+                Camera_ChangeSettingFlags(camera, waterCamIdx, 2);
+                *waterPrevCamSetting = camera->setting;
+                camera->bgCheckId = prevBgId;
+            }
+
+        } else if (camera->flags & 0x200) {
+            Camera_ClearFlags(camera, 0x200);
+            prevBgId = camera->bgCheckId;
+            camera->bgCheckId = 0x32;
+            if (camera->waterPrevCamIdx < 0) {
+                func_800DDFE0(camera, camera->waterPrevCamIdx);
+                camera->camDataIdx = -1;
+            } else {
+                Camera_ChangeDataIdx(camera, camera->waterPrevCamIdx);
+            }
+            camera->bgCheckId = prevBgId;
+        }
+        camera->waterYPos = waterY;
+    }
+    return true;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE62C.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE840.asm")
+s32 func_800DE840(Camera* camera) {
+    Quake2_ClearType(1);
+    if (camera->globalCtx->roomContext.currRoom.unk2 == 3) {
+        Quake2_SetType(1);
+    }
+    return true;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE890.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE954.asm")
+s32 func_800DE954(Camera* camera) {
+    ActorPlayer* player = (ActorPlayer*)camera->globalCtx->actorCtx.actorList[2].first;
+
+    if ((camera->thisIdx == MAIN_CAM) && (camera->player == (ActorPlayer*)camera->globalCtx->actorCtx.actorList[2].first) && ((player)->unk153 == 20)) {
+        Camera_ChangeSettingFlags(camera, 0x4F, 2);
+        return true;
+    } else {
+        return false;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Update.asm")
 
 s32 func_800DF498(Camera* camera) {
-    Camera_SetFlags(camera, 0xC);
+    Camera_SetFlags(camera, 0x8 | 0x4); // flag 0x8 is set only immediately to be unset
     Camera_ClearFlags(camera, 0x1000 | 0x8);
     return true;
 }

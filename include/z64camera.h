@@ -158,7 +158,8 @@ typedef struct Camera {
     /* 0x114 */ f32 waterYPos;
     /* 0x118 */ s32 waterPrevCamIdx;
     /* 0x11C */ s32 waterPrevCamSetting;
-    /* 0x120 */ s32 waterQuakeId;
+    /* 0x120 */ s16 waterQuakeId;
+    /* 0x122 */ s16 unk_122;
     /* 0x124 */ void* data0;
     /* 0x128 */ void* data1;
     /* 0x12C */ s16 data2;
