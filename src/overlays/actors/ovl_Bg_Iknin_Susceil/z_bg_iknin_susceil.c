@@ -223,7 +223,7 @@ void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->unk168 == 0) && (this->unk166 > 0) && ((player->unkA74 & 0x100) != 0) && (player->unkB48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, globalCtx) != 0) && (this->actionFunc != func_80C0AE5C)) {
-            func_800B8E58(player, 0x83E);
+            func_800B8E58(&player->base, NA_SE_PL_BODY_HIT);
             func_80C0AE3C(this);
         }
     }
