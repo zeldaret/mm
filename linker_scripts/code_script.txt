@@ -8175,9 +8175,9 @@ SECTIONS
     ovl_Bg_Haka_Tomb : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.text)
-        build/asm/overlays/ovl_Bg_Haka_Tomb_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.data)
         build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.rodata)
-        build/asm/overlays/ovl_Bg_Haka_Tomb_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

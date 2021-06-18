@@ -2737,7 +2737,7 @@ u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
 // void func_8013E07C(void);
 // void func_8013E0A4(void);
 void func_8013E1C8(s32 iParm1, s32 iParm2, s32 iParm3, s32* piParm4);
-// void func_8013E2D4(void);
+s32 func_8013E2D4(Actor* actor, s16 arg1, s32 arg2, s32 arg3);
 // void func_8013E3B8(void);
 // void func_8013E4B0(void);
 // void func_8013E5CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
