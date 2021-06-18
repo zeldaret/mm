@@ -91,7 +91,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->unk14B == 1) {
         func_80B3C2B0(this);
     } else {
-        player->unk_A70 &= ~0x10;
+        player->unkA70 &= ~0x10;
         this->dyna.unk148 = 0.0f;
     }
 }
