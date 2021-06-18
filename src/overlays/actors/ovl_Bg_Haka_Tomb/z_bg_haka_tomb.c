@@ -16,7 +16,7 @@ void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06000EE8[];
+extern CollisionHeader D_06000EE8[];
 extern Gfx D_060007B0[];
 
 const ActorInit Bg_Haka_Tomb_InitVars = {
@@ -35,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-Vec3f D_80BD68A4 = { 30.0f, 90.0f, 0.0f };
+static Vec3f D_80BD68A4 = { 30.0f, 90.0f, 0.0f };
 
 void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaTomb* this = THIS;
@@ -60,18 +60,16 @@ void func_80BD6624(BgHakaTomb* this) {
 s32 func_80BD6638(s16* arg0, s16* arg1, s32 arg2) {
     s32 pad;
     s32 retVal = false;
+    s32 i;
 
     *arg0 = ActorCutscene_GetCurrentIndex();
-    if (*arg0 >= 0 && arg2 > 0) {
-        s32 i = 0;
-        do {
+    if (*arg0 >= 0) {
+        for (i = 0; i < arg2; i++) {
             if (*arg0 == arg1[i]) {
                 retVal = true;
                 break;
             }
-            i++;
-
-        } while (i != arg2);
+        }
     }
 
     return retVal;
