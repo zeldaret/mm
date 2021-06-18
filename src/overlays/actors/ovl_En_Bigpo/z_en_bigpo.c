@@ -39,7 +39,6 @@ void func_80B632BC(EnBigpo* this);
 void func_80B633E8(EnBigpo* this);
 void func_80B63450(EnBigpo* this);
 void func_80B636D0(EnBigpo* this);
-void func_80B61B38(EnBigpo* this);
 void func_80B6383C(EnBigpo* this);
 void func_80B638AC(EnBigpo* this);
 
@@ -140,10 +139,7 @@ Vec3f D_80B65084[] = {
     {-1000.0f, 1500.0f, 2000.0f,},
 };
 
-//0x00000000
-//0x00000000
-
-#ifdef NON_MATCHING
+//#ifdef NON_MATCHING
 // non-matching: some instructions out of order but looks like it should be equiv
 void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
@@ -160,7 +156,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     //this->switchFlags = (s16)((this->actor.params >> 8) && 0xFF);
     this->switchFlags = (u8)(this->actor.params >> 8);
     //this->actor.params &= 0xFF;
-    if ((this->actor.params &= 0xFF) == 2) {
+    if ((this->actor.params &= 0xFF) == 2) { // fire po
         if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -187,29 +183,34 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     this->unk290.r = 0xFF;
     this->unk290.g = 0xFF;
     this->unk290.b = 0xD2;
-    this->unk290.a = 0;
+    this->unk290.a = 0x00; // fully invible
+    
     if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
+        // has switch flag, and switch already set: already killed
         Actor_MarkForDeath(&this->actor);
     }
 
-    if (this->actor.params == 0) {
+    if (this->actor.params == 0) { // well type
+        this->actor.flags &= -0x11; // targetable OFF and unknown OFF
         this->unk204 = 1;
-        this->actor.flags &= -0x11;
         func_80B61AC8(this);
-    } else if (this->actor.params == 1) {
+    } else if (this->actor.params == 1) { // dampe type
         func_80B63450(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
-#endif
+//#else
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
+//#endif
 
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
     GlobalContext *gCtx2;
     s32 fireCount;
 
-    if ((this->actor.params != 2) && (this->actor.params != 3) && (this->actor.params != 4) && (this->actor.params != 5)) {
+    // huh? anything higher than 2 does not exist? left over from OOT?
+    if ((this->actor.params != 2) && (this->actor.params != 3) &&
+     (this->actor.params != 4) && (this->actor.params != 5)) {
+        // req for matching
         if (1) {}
         gCtx2 = globalCtx;
         for(fireCount = 0; fireCount < 3; ++fireCount){
@@ -223,6 +224,7 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 // non-equivelent: ido wont loop properly
 // for/while want to add another branch, only goto sticks to one
 // also wont increment pointers properly
+// STILL WONT MATCH why
 void func_80B61914(EnBigpo *this) {
     s32 secondi;
     EnBigpoFireParticle *fires;
@@ -279,22 +281,27 @@ void func_80B619FC(EnBigpo *this, GlobalContext *globalContext) {
     }
 }
 
-// type 0
+// type 0 well type
 void func_80B61AC8(EnBigpo *this) {
-    this->actor.flags &= ~1; // targetable
+    // ! @ BUG: redundant: targetable flag was already set by init, nothing else calls this
+    this->actor.flags &= ~1; // targetable OFF
     this->actionFunc = func_80B61AF8;
     this->unk214 = 200.0f;
 }
 
+// EnBigpo_WaitForProximity well poe?
 void func_80B61AF8(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->actor.xzDistToPlayer < 200.0f) {
         func_80B61B38(this);
     }
 }
+
+// start cutscene for well poe
 void func_80B61B38(EnBigpo *this) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = func_80B61B70;
 }
+
 
 void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
@@ -377,7 +384,7 @@ void func_80B61E9C(EnBigpo *this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->actor.draw = func_80B64470;
     Actor_SetScale(&this->actor, 0.014f);
-    Audio_PlayActorSound2(this, NA_SE_EN_STALKIDS_APPEAR);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->actionFunc = func_80B61F04;
 }
 
@@ -387,7 +394,7 @@ void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actor.shape.rot.y += this->rotVelocity;
-    alphaPlus = this->unk290.a + 0xA;
+    alphaPlus = this->unk290.a + 0xA; // decrease transparency
     func_80B61914(this);
     if (alphaPlus >= 0x5A) {
         this->rotVelocity += -0x80; 
@@ -403,7 +410,7 @@ void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     func_80B619FC(this, globalCtx);
-    if (alphaPlus >= 0xFF) {
+    if (alphaPlus >= 0xFF) { // max opacity
         this->unk290.a = 0xFF;
         func_80B62034(this);
     } else {
@@ -456,19 +463,22 @@ void func_80B62154(EnBigpo *this) {
     this->actionFunc = func_80B621CC;
 }
 
+
+// spinning fade out
 void func_80B621CC(EnBigpo *this, GlobalContext *globalCtx) {
     DECR(this->unk206);
     this->actor.shape.rot.y += this->rotVelocity;
     if (this->unk206 < 0x10) {
         Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
     }
-    this->unk290.a = (s8) (u32) (this->unk206 * 7.96875f);
-    if (this->unk206 == 0) {
-        this->unk290.a = 0;
+    this->unk290.a = (u8)(this->unk206 * 7.96875f);
+    if (this->unk206 == 0) { // rotation stopped?
+        this->unk290.a = 0; // fully invisible
         func_80B622E4(this, globalCtx);
     }
 }
 
+// setup appear behind player
 void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
     f32 distance;
@@ -484,15 +494,16 @@ void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
     this->actionFunc = func_80B623BC;
 }
 
+// action: spinning back into reality behind player?
 void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     this->unk206 += 1;
     this->actor.shape.rot.y -= this->rotVelocity;
     if (this->unk206 >= 0x10) {
         Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
     }
-    this->unk290.a = (s8) (u32) (this->unk206 * 7.96875f);
+    this->unk290.a = (u8)(this->unk206 * 7.96875f);
     if (this->unk206 == 0x20) {
-        this->unk290.a = 0xFF;
+        this->unk290.a = 0xFF; // fully visible
         if (this->unk204 == 0) {
             func_801A2E54(0x38);
             this->unk204 = 1;
@@ -501,6 +512,7 @@ void func_80B623BC(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// setup fully appeared
 void func_80B624F4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
     this->unk206 = (this->actionFunc == func_80B62920) ? 0x50 : 0;
@@ -508,12 +520,13 @@ void func_80B624F4(EnBigpo *this) {
     this->actor.velocity.y = 0.0f;
     this->unk218 = this->actor.world.pos.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->collider.base.acFlags |= 1;
-    this->collider.base.ocFlags1 |= 1;
-    this->actor.flags |= 1;
+    this->collider.base.acFlags |= AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->actor.flags |= 0x1; //targetable
     this->actionFunc = func_80B6259C;
 }
 
+// flying at player?
 void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
 
@@ -523,7 +536,7 @@ void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     Math_StepToF(&this->unk218, player->base.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad((f32) this->unk212 * 0.15707964f) * 10.0f) + this->unk218;
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
-    func_800B9010(&this->actor, 0x3071); // sound?
+    func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->unk208 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
@@ -537,16 +550,18 @@ void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// fast spinning?
 void func_80B6275C(EnBigpo *this) {
-    this->collider.base.colType = 9;
+    this->collider.base.colType = COLTYPE_METAL;
     this->collider.base.acFlags |= AC_HARD;
     this->collider.info.bumper.dmgFlags &= ~0x8000;
-    this->collider.base.atFlags |= 0x1;
+    this->collider.base.atFlags |= AT_ON;
     this->rotVelocity = 0x800;
     this->actionFunc = func_80B627B4;
     this->actor.speedXZ = 0.0f;
 }
 
+// speeding up?
 void func_80B627B4(EnBigpo *this, GlobalContext *globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->rotVelocity += 0x200;
@@ -556,10 +571,12 @@ void func_80B627B4(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// stop rotation?
 void func_80B62814(EnBigpo *this) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80B62830;
 }
+
 
 void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
     ActorPlayer *player = PLAYER;
@@ -577,7 +594,7 @@ void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 void func_80B62900(EnBigpo *this) {
-    this->collider.base.atFlags &= ~0x1;
+    this->collider.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80B62920;
 }
 
@@ -596,6 +613,7 @@ void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B619B4(this);
 }
 
+// change to stunned after hit 
 void func_80B629E4(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
@@ -605,6 +623,7 @@ void func_80B629E4(EnBigpo *this) {
     this->actor.speedXZ = 5.0f;
 }
 
+// check if hit or dead
 void func_80B62A68(EnBigpo *this, GlobalContext *globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
@@ -616,12 +635,13 @@ void func_80B62A68(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// setup death
 void func_80B62AD4(EnBigpo *this) {
     this->unk206 = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.hintId = 0xFF; // clear?
-    this->collider.base.ocFlags1 &= 0xFFFE;
+    this->collider.base.ocFlags1 &= 0xFFFE; //~0x1 what flag is this? OC_ON?
     this->actionFunc = func_80B62B10;
 }
 
@@ -633,7 +653,7 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
     s16 modified206; 
 
     this->unk206 += 1;
-    if ( this->unk206  < 8) {
+    if ( this->unk206 < 8) {
         cam = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x4800;
         if ((s32) this->unk206 < 5) {
             unkTemp = (this->unk206 << 0xC) - 0x4000;
@@ -666,10 +686,11 @@ void func_80B62B10(EnBigpo *this, GlobalContext *globalCtx) {
         func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
     if (this->unk206 == 0x12) {
-        Audio_PlayActorSound2(this, NA_SE_EN_WIZ_DISAPPEAR);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
+// no more shadow, stop moving, is this death?
 void func_80B62E38(EnBigpo *this, GlobalContext *globalCtx) {
     this->actor.draw = func_80B64880;
     this->actor.shape.shadowDraw = NULL;
@@ -685,21 +706,24 @@ void func_80B62E38(EnBigpo *this, GlobalContext *globalCtx) {
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 8);
     this->actor.flags &= -6;
-    this->actor.bgCheckFlags &= 0xFBFF;
+    this->actor.bgCheckFlags &= ~0x400;//0xFBFF;
     this->actionFunc = func_80B62F10;
 }
 
+// is this death by burning?
 void func_80B62F10(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->actor.bgCheckFlags & 1)) || (this->actor.floorHeight == -32000.0f)) {
         if (this->switchFlags != 0xFF) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlags);
         }
+        // is this the flames that burn him?
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 
             6.0f, 0, 1, 1, 0xF, 0x1F1, 0xA, &D_060041A0);
         func_80B631F8(this);
     }
 }
 
+// EnBigpo_AdjustAlpha
 void func_80B62FCC(EnBigpo *this, s32 alphaDiff) {
     s32 newAlpha;
     f32 lowerAlpha;
@@ -734,7 +758,7 @@ void func_80B631F8(EnBigpo *this) {
     this->actor.shape.rot.y = 0;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
-    this->unk290.a = 0;
+    this->unk290.a = 0; // fully invisible
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
     this->unk218 = this->actor.world.pos.y;
@@ -745,7 +769,7 @@ void func_80B631F8(EnBigpo *this) {
 void func_80B63264(EnBigpo *this, GlobalContext *globalCtx) {
     this->unk218 += 2.0f;
     func_80B62FCC(this, 0x14);
-    if (this->unk290.a == 0xFF) {
+    if (this->unk290.a == 0xFF) { // fully visible
         func_80B632BC(this);
     }
 }
@@ -763,7 +787,7 @@ void func_80B6330C(EnBigpo *this, GlobalContext *globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->unk206 == 0) {
-        Audio_PlayActorSound2(this, NA_SE_EN_PO_LAUGH);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
         func_80B633E8(this);
     } else {
         func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
@@ -778,18 +802,20 @@ void func_80B633E8(EnBigpo *this) {
 
 void func_80B63410(EnBigpo *this, GlobalContext *globalCtx) {
     func_80B62FCC(this, -0xD);
-    if (this->unk290.a == 0) {
+    if (this->unk290.a == 0) { // fully invisible
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 // type 1
 void func_80B63450(EnBigpo *this) {
-    this->actor.flags &= ~1; // targetable
+    this->actor.flags &= ~1; // targetable OFF
     this->actionFunc = func_80B63474;
 }
 
 // think this is the code that searches for fires and handles them at the start
+//first action func for dampe poe?
+// already completed when we arive in dampe room 
 void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
     Actor *enemyPtr;
     EnBigpo* randBigpo;
@@ -799,7 +825,7 @@ void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
 
     fireCount = 0;
     for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-      if ((enemyPtr->id == 0x208) &&(enemyPtr->params == 2)) {
+      if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == 2)) {
           fireCount++;
       }
     }
@@ -822,6 +848,7 @@ void func_80B63474(EnBigpo *this, GlobalContext *globalCtx) {
             if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == 2)){
                 if (randomIndex == 0) {
                     randBigpo = (EnBigpo*) enemyPtr;
+                    // set random flames to type 3? enabled for dig?
                     randBigpo->actor.params = 0x0003;
                     Math_Vec3f_Copy(&this->fires[fireIndex].pos, &randBigpo->actor.world.pos);
                     randBigpo->actor.parent = (Actor*) this;
@@ -937,7 +964,7 @@ void func_80B63964(EnBigpo *this) {
 void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
     if ((s32) this->unk206 > 0) {
         if (this->unk206 == 0) {
-            // ! @ BUG: unreachable code
+            // ! @ BUG: unreachable code?
             this->actor.params = 5;
             return;
         }
@@ -951,10 +978,11 @@ void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// todo: when does this go off?
 void func_80B63A18(EnBigpo *this) {
     s16 h;
 
-    this->unk206 = 0x28;
+    this->unk206 = 0x28; // timer
     h = this->actor.parent->yawTowardsPlayer + this->unk20C * 0x5555;
     this->actor.home.pos.x = Math_SinS(h) * 30.0f + this->actor.parent->world.pos.x;
     this->actor.home.pos.y = this->actor.parent->world.pos.y;
@@ -962,11 +990,12 @@ void func_80B63A18(EnBigpo *this) {
     this->actionFunc = func_80B63AC4;
 }
 
+// is this checking if all thee fires have been triggered?
 void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f posDiff;
-    f32 magnitude;
+    f32 magnitude; // placeholder name
 
-    this->unk206 += -1; 
+    this->unk206 += -1; // todo: can I make this -1 instead? or DECR?
     if (this->unk206 == 0) {
         EnBigpo* parentPoh = (EnBigpo*) this->actor.parent;
         Actor_SetSwitchFlag(globalCtx, this->switchFlags);
@@ -1038,24 +1067,28 @@ void func_80B63D0C(EnBigpo *this) {
 }
 
 // might be true/false
+// wasHit?
+// only called by update
 s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->collider.base.acFlags & AC_HIT) != 0) && ((this->collider.base.acFlags & AC_HARD) == 0)) {
         this->collider.base.acFlags &= ~AC_HIT;
+        
         if (this->actor.colChkInfo.damageEffect == 0xF) {
           return true;
         }
-  
-        if (func_800BE22C(this) == 0) {
-            this->actor.flags &= ~1; // targetable 
-            Audio_PlayActorSound2(this, NA_SE_EN_PO_DEAD);
+        
+        if (func_800BE22C(this) == 0) { // guess: get health == 0 ?
+            this->actor.flags &= ~1; // targetable OFF
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
             func_800BBA88(globalCtx, &this->actor);
-            if (this->actor.params == 1) {
+            if (this->actor.params == 1) { // dampe type
                 func_801A2ED8();
             }
         } else {
-            Audio_PlayActorSound2(this, NA_SE_EN_PO_DAMAGE);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DAMAGE);
         }
 
+        // think this is the light arrow effect version fo clear tag, not black smoke
         if (this->actor.colChkInfo.damageEffect == 4) {
             this->unk21C = 4.0f;
             this->unk220 = 1.0f;
@@ -1126,7 +1159,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     if (this->unk21C > 0.0f) {
         Math_StepToF(&this->unk21C, 0.0f, 0.05f);
-        if (this->unk290.a != 0xFF) {
+        if (this->unk290.a != 0xFF) { // not fully visible
             if (this->unk290.a * 0.003921569f < this->unk290.a) {
                 this->unk21C = this->unk290.a * 0.003921569f;
             }
@@ -1151,7 +1184,8 @@ void func_80B64190(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
   Vec3f *pos, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
-    if ((! ((this->unk290.a != 0) && (limbIndex != 7))) 
+    // not fully invisible
+    if ((! ((this->unk290.a != 0x00) && (limbIndex != 7))) 
       || ((this->actionFunc == func_80B62B10) && ((s32) this->unk206 >= 2))) {
         *dList = NULL;
     }
@@ -1160,7 +1194,7 @@ s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
 
 //PostLimbDraw2
 #ifdef NON_EQUIVELENT
-// non-equivelent: the actual draw functions are totally busted
+// non-equivelent: the actual draw macros arent matching
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
 
@@ -1226,18 +1260,18 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
 #endif
 
-
-
-
 // non-standard draw func
 #ifdef NON_EQUIVELENT
 // non-equiv: lots of issues, biggest issue area: SkelAnime_Draw2
+// used if enough fires, for main po?
 void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad;
     Gfx* dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+    
+    // fully visible OR fully transparent
     if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
         dispHead = POLY_OPA_DISP;
 
@@ -1336,6 +1370,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
         Math_Vec3f_Copy(&vec1, &D_801D15B0);
     }
     
+    // fully visible OR fully transparent
     if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         MODE = POLY_OPA_DISP;
@@ -1362,6 +1397,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPDisplayList(MODE + 5, &D_060043F8);
 
+    // fully transparent OR fully invisible
     if ((this->unk290.a == 0xFF) || (this->unk290.a == 0)) {
         POLY_OPA_DISP += 6;
     } else {
