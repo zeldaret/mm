@@ -520,7 +520,7 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
     s16 angle;
     s16 dist;
 
-    angle = Actor_YawBetweenActors(actor, other) + 0x8000;
+    angle = BINANG_ROT180(Actor_YawBetweenActors(actor, other));
     dist = angle - other->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
         return 1;

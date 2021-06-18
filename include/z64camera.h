@@ -3,7 +3,12 @@
 
 #include "ultra64.h"
 
+#define NUM_CAMS 4
 #define MAIN_CAM 0
+#define SUBCAM_FIRST 1
+#define SUBCAM_FREE 0
+#define SUBCAM_NONE -1
+#define SUBCAM_ACTIVE -1
 
 #define SHRINKWIN_MASK (0xF000)
 #define SHRINKWINVAL_MASK (0x7000)
@@ -188,7 +193,8 @@ typedef struct Camera {
     /* 0x162 */ s16 timer;
     /* 0x164 */ s16 thisIdx;
     /* 0x166 */ s16 prevCamDataIdx;
-    /* 0x168 */ UNK_TYPE1 pad168[0x10];
+    /* 0x168 */ s16 unk_168;
+    /* 0x16A */ UNK_TYPE1 pad16A[0xE];
 } Camera; // size = 0x178
 
 #endif

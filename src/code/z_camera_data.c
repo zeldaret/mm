@@ -5352,13 +5352,9 @@ s32 cameraUpdateFuncs[] = {
 	Camera_Special9,
 };
 
-s32 D_801B9E04[] = {
-	0x00000000,
-};
+s16 sNextUID = 0;
 
-s32 D_801B9E08[] = {
-	0x00000001,
-};
+s32 sCameraInterfaceFlags = 1;
 
 s32 sCameraInterfaceAlpha = 2;
 s32 sCameraShrinkWindowVal = 0x20;
@@ -5382,9 +5378,7 @@ s32 D_801B9E54[] = {
 	0x00000000,
 };
 
-s32 D_801B9E58[] = {
-	0x00000000,
-};
+s32 D_801B9E58 = 0;
 
 s32 D_801B9E5C = 0;
 
@@ -5442,11 +5436,4 @@ s32 D_801B9ED4[] = {
 	0xC0400000, // f32: -3.0
 };
 
-s32 D_801B9F04[] = {
-	0x0FFC07FC,
-	0x03FC01FC,
-};
-
-s32 D_801B9F0C[] = {
-	0x00000000,
-};
+GlobalContext* D_801EDC28;

@@ -3,6 +3,8 @@
 
 #include "z_camera_data.c"
 
+void func_800DDFE0(Camera* camera);
+
 f32 Camera_fabsf(f32 f) {
     return ABS(f);
 }
@@ -600,33 +602,34 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC260.asm")
 #endif
 
-// OoT Camera_GetFloorYLayer
+// OoT Camera_GetFloorYLayer (Camera_GetFloorYNorm)
 // D_801DCDF0 =  = 3.051851e-05
 // ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
-f32 func_800CC488(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
+f32 func_800CC488(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId) {
     CollisionContext* colCtx = &camera->globalCtx->colCtx;
     CollisionPoly* floorPoly;
-    f32 floorY = func_800C40B4(colCtx, &floorPoly, bgId, pos);
+    f32 floorY = func_800C40B4(colCtx, &floorPoly, bgId, chkPos);
 
     if (floorY == BGCHECK_Y_MIN) {
-        norm->x = 0.0f;
-        norm->y = 1.0f;
-        norm->z = 0.0f;
+        floorNorm->x = 0.0f;
+        floorNorm->y = 1.0f;
+        floorNorm->z = 0.0f;
     } else {
-        norm->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
-        norm->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
-        norm->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+        floorNorm->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        floorNorm->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        floorNorm->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
     }
 
     return floorY;
 }
 #else
+f32 func_800CC488(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC488.asm")
 #endif
 
 // TODO: Is this s32 or void return? It's not f32 return.
-s32 func_800CC56C(Camera* camera, Vec3f* arg1) {
+f32 func_800CC56C(Camera* camera, Vec3f* arg1) {
     Vec3f pos;  // 2C
     Vec3f norm; // 20
     s32 bgId;
@@ -1136,7 +1139,7 @@ s32 func_800CD44C(Camera *camera, VecSph *diffSph, CamColChk *eyeChk, CamColChk 
         func_8010C6C8(&atChk->sphNorm, &atChk->norm);
 
         if (atChk->sphNorm.pitch > 0x2EE0) {
-            atChk->sphNorm.yaw = diffSph->yaw + 0x8000;
+            atChk->sphNorm.yaw = BINANG_ROT180(diffSph->yaw);
         }
 
         if (atEyeBgId != eyeAtBgId) {
@@ -1520,17 +1523,200 @@ s32 Camera_Special7(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Special9.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Alloc.asm")
+Camera* Camera_Create(View *view, CollisionContext *colCtx, GlobalContext *globalCtx) {
+    Camera* newCamera = zelda_malloc(sizeof(*newCamera));
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Free.asm")
+    if (newCamera != NULL) {
+        Camera_Init(newCamera, view, colCtx, globalCtx);
+    }
+    return newCamera;
+}
 
+void Camera_Destroy(Camera* camera) {
+    if (camera != NULL) {
+        zelda_free(camera);
+    }
+}
+
+// D_801DD44C = 0.05f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalContext* globalCtx) {
+    Camera* camP;
+    s32 i;
+    s16 curUID;
+    s16 j;
+
+    func_80096880(camera, 0, sizeof(*camera));
+
+    camera->globalCtx = D_801EDC28 = globalCtx;
+    curUID = sNextUID;
+    sNextUID++;
+    while (curUID != 0) {
+        if (curUID == 0) {
+            sNextUID++;
+        }
+
+        for (j = 0; j < NUM_CAMS; j++) {
+            camP = camera->globalCtx->cameraPtrs[j];
+            if (camP != NULL && (curUID == camP->uid)) {
+                break;
+            }
+        }
+
+        if (j == 4) {
+            break;
+        }
+
+        curUID = sNextUID++;
+    }
+
+    camera->inputDir.y = 0x4000;
+    camera->uid = curUID;
+    camera->camDir = camera->inputDir;
+    camera->nextCamDataIdx = -1;
+    camera->upDir.z = camera->upDir.x = 0.0f;
+    camera->upDir.y = 1.0f;
+    camera->fov = 60.0f;
+    camera->xzOffsetUpdateRate = 0.05f;
+    camera->yOffsetUpdateRate = 0.05f;
+    camera->fovUpdateRate = 0.05f;
+    camera->rUpdateRateInv = 10.0f;
+    camera->yawUpdateRateInv = 10.0f;
+    camera->pitchUpdateRateInv = 16.0f;
+    sCameraShrinkWindowVal = 0x20;
+    sCameraInterfaceAlpha = 0;
+    camera->setting = camera->prevSetting= 10;
+    camera->camDataIdx = camera->prevCamDataIdx = -1;
+    camera->flags = 0;
+    camera->mode = 0;
+    camera->bgCheckId = 0x32;
+    camera->unk_168 = 0xF;
+    camera->unk_160 = -1;
+    camera->player = NULL;
+    camera->target = NULL;
+    Camera_SetFlags(camera, 0x4000);
+    camera->skyboxOffset.z = camera->skyboxOffset.y = camera->skyboxOffset.x = 0;
+    camera->upDir.z = camera->upDir.x = 0.0f;
+    camera->atLERPStepScale = 1;
+    camera->upDir.y = 1.0f;
+    sCameraInterfaceFlags = 0xFF00;
+    D_801B9E58 = 3;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DDFE0.asm")
+void func_800DDFE0(Camera* camera) {
+    if (camera != &camera->globalCtx->mainCamera) {
+        camera->setting = 0xA;
+        camera->prevSetting = camera->setting;
+        Camera_ClearFlags(camera, 4);
+    } else {
+        switch (camera->globalCtx->roomContext.currRoom.unk3) {
+            case 1:
+                camera->prevSetting = 0x11;
+                Camera_ChangeSettingFlags(camera, 0x11, 2);
+                break;
+            case 0:
+                camera->prevSetting = 1;
+                Camera_ChangeSettingFlags(camera, 1, 2);
+                break;
+            case 2:
+                camera->prevSetting = 0x3F;
+                Camera_ChangeSettingFlags(camera, 0x3F, 2);
+                break;
+            default:
+                camera->prevSetting = 1;
+                Camera_ChangeSettingFlags(camera, 1, 2);
+                break;
+        }
+        Camera_SetFlags(camera, 4);
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE0E0.asm")
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE0EC.asm")
+void Camera_Stub800DE0E0(Camera* camera) {
+}
+
+// D_801DD450 = 0.01f
+#ifdef NON_EQUIVALENT
+void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
+    PosRot playerPosShape;
+    VecSph eyeNextAtOffset;
+    s32 bgId;
+    Vec3f floorPos;
+    s32 upXZ;
+    f32 playerYOffset;
+    Vec3f* eye = &camera->eye;
+    Vec3f* focalPoint = &camera->focalPoint;
+    Vec3f* eyeNext = &camera->eyeNext;
+
+    func_800B8248(&playerPosShape, player);
+    camera->player = player;
+    playerYOffset = func_800CB700(camera);
+    camera->playerPosRot = playerPosShape;
+    camera->dist = eyeNextAtOffset.r = 180.0f;
+    camera->inputDir.y = playerPosShape.rot.y;
+    eyeNextAtOffset.yaw = BINANG_ROT180(camera->inputDir.y);
+    camera->inputDir.x = eyeNextAtOffset.pitch = 0x71C;
+    camera->inputDir.z = 0;
+    camera->camDir = camera->inputDir;
+    // camera->camDir.z = 0;
+    camera->xzSpeed = 0.0f;
+    camera->playerPosDelta.y = 0.0f;
+    camera->focalPoint = playerPosShape.pos;
+    camera->focalPoint.y += playerYOffset;
+
+    camera->posOffset.x = 0;
+    camera->posOffset.y = playerYOffset;
+    camera->posOffset.z = 0;
+
+    func_8010C7B8(eyeNext, focalPoint, &eyeNextAtOffset);
+    *eye = *eyeNext;
+    camera->roll = 0;
+
+    // PERM_RANDOMIZE(
+    
+    upXZ = 0;
+    camera->upDir.z = upXZ;
+    camera->upDir.y = 1.0f;
+    camera->upDir.x = upXZ;
+
+
+    if (func_800CC488(camera, &floorPos, focalPoint, &bgId) != BGCHECK_Y_MIN) {
+        camera->bgCheckId = bgId;
+    }
+
+    camera->waterPrevCamIdx = -1;
+    camera->waterPrevCamSetting = -1;
+    camera->waterQuakeId = -1;
+
+    func_800DDFE0(camera);
+
+    Camera_SetFlags(camera, 4);
+
+
+    camera->paramFlags = 0;
+    camera->nextCamDataIdx = -1;
+    camera->xzOffsetUpdateRate = 0.01f;
+    camera->yOffsetUpdateRate = 0.01f;
+    camera->fovUpdateRate = 0.01f;
+    camera->atLERPStepScale = 1.0f;
+    Camera_ResetAnim(camera, camera->mode);
+    // )
+
+    if (camera == &camera->globalCtx->mainCamera) {
+        sCameraInterfaceFlags = 0xB200;
+        func_800F15D8(camera);
+    } else {
+        sCameraInterfaceFlags = 0x3200;
+    }
+    Camera_CheckWater(camera);
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.asm")
+#endif
 
 s32 Camera_ChangeStatus(Camera* camera, s16 status) {
     camera->status = status;
@@ -1604,7 +1790,7 @@ s32 Camera_CheckWater(Camera* camera) {
             prevBgId = camera->bgCheckId;
             camera->bgCheckId = 0x32;
             if (camera->waterPrevCamIdx < 0) {
-                func_800DDFE0(camera, camera->waterPrevCamIdx);
+                func_800DDFE0(camera);
                 camera->camDataIdx = -1;
             } else {
                 Camera_ChangeDataIdx(camera, camera->waterPrevCamIdx);
@@ -1616,9 +1802,62 @@ s32 Camera_CheckWater(Camera* camera) {
     return true;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE62C.asm")
+static s16 D_801B9F04[] = {
+    0x0FFC, 0x07FC, 0x03FC, 0x01FC,
+};
+// Will match once changeZeldaTime = gSaveContext.unk_14 is (u32)
+#ifdef NON_EQUIVALENT
+void func_800DE62C(Camera* camera) {
+    static s16 D_801B9F0C = 0;
+    u16 dayTime;
+    s16 quake;
+    s32 changeZeldaTime;
+    s16 sp30[4] = D_801B9F04;
 
-s32 func_800DE840(Camera* camera) {
+    if ((CURRENT_DAY == 3) && (ActorCutscene_GetCurrentIndex() == -1)) {
+        dayTime = gSaveContext.time;
+        changeZeldaTime = gSaveContext.unk_14;
+        if (dayTime > 0) {
+            if ((dayTime < 0x4000) && ((sp30[dayTime >> 12] & dayTime) == 0)) { // TODO: Combing if-statements
+                if (Quake_NumActiveQuakes() < 2) {
+                    quake = Quake_Add(camera, 4);
+                    if (quake != 0) {
+                        Quake_SetSpeed(quake, 30000);
+                        Quake_SetQuakeValues(quake, (dayTime >> 12) + 2, 1, 5, 60);
+                        D_801B9F0C = ((dayTime >> 10) - changeZeldaTime) + 80;
+                        Quake_SetCountdown(quake, D_801B9F0C);
+                    }
+                }
+            }
+        }
+
+        if ((((dayTime + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->globalCtx->state.frames % 1024) == 0)) {
+            if (Quake_NumActiveQuakes() < 2) {
+                quake = Quake_Add(camera, 3);
+                if (quake != 0) {
+                    Quake_SetSpeed(quake, 16000);
+                    Quake_SetQuakeValues(quake, 1, 0, 0, dayTime & 0x3F); // %64
+                    D_801B9F0C = 120 - changeZeldaTime;
+                    Quake_SetCountdown(quake, D_801B9F0C);
+                }
+            }
+        }
+
+        if (D_801B9F0C != 0) {
+            D_801B9F0C--;
+            func_8019F128(NA_SE_SY_EARTHQUAKE_OUTDOOR - SFX_FLAG);
+        }
+    }
+}
+#else
+static s16 D_801B9F0C = 0;
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE62C.asm")
+#endif
+
+/**
+ * Sets the room to be hot camera quake flag
+ */
+s32 Camera_SetRoomHotFlag(Camera* camera) {
     Quake2_ClearType(1);
     if (camera->globalCtx->roomContext.currRoom.unk2 == 3) {
         Quake2_SetType(1);
@@ -1626,7 +1865,29 @@ s32 func_800DE840(Camera* camera) {
     return true;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800DE890.asm")
+s32 func_800DE890(Camera* camera) {
+    switch(func_800CBB88(camera)) {
+        case 1:
+            if (Quake2_GetType() != 0x40) {
+                Quake2_SetType(0x40);
+                Quake2_SetCountdown(12);
+            }
+            break;
+        case 2:
+            if (Quake2_GetType() != 0x80) {
+                Quake2_SetType(0x80);
+                Quake2_SetCountdown(5);
+            }
+            break;
+        case 3:
+            if (Quake2_GetType() != 0x100) {
+                Quake2_SetType(0x100);
+                Quake2_SetCountdown(15);
+            }
+            break;
+    }
+    return true;
+}
 
 s32 func_800DE954(Camera* camera) {
     ActorPlayer* player = (ActorPlayer*)camera->globalCtx->actorCtx.actorList[2].first;
@@ -1649,7 +1910,7 @@ s32 func_800DF498(Camera* camera) {
 
 // ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
-s32 Camera_ChangeModeFlags(Camera *camera, s16 mode, u8 flags) {
+s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags) {
     static s32 modeChangeFlags = 0;
 
     if (camera->setting == 0x3E) {
