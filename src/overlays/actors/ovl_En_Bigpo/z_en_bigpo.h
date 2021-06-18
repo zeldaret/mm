@@ -20,7 +20,12 @@ typedef struct EnBigpo {
     /* 0x1C4 */ Vec3s transitionDrawTbl[0xA];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
     /* 0x204 */ u8 unk204;
-    /* 0x206 */ s16 unk206; // timer, fade in? spinning?
+    // idleTimer gets reused:
+    // * when idle flying around, framecount until next attack
+    // * when spinning back into reality, counts frames from start
+    // * in death one, counts frames from death start
+    // * after scoop spawned, idle timer used to count down to actor disapear
+    /* 0x206 */ s16 idleTimer; // idle frames beteween attacks
     /* 0x208 */ s16 unk208;
     /* 0x20A */ s16 rotVelocity;
     /* 0x20C */ s16 unk20C; // incremented 
@@ -32,22 +37,24 @@ typedef struct EnBigpo {
     /* 0x21C */ f32 unk21C;
     /* 0x220 */ f32 unk220;
     /* 0x224 */ Vec3f unk224[0x9];
-    /* 0x290 */ Color_RGBA8 unk290; // main poe color I think
-    /* 0x294 */ Color_RGBA8 unk294;
-    /* 0x298 */ char unk298[0x14];
+    /* 0x290 */ Color_RGBA8 mainColor;
+    /* 0x294 */ Color_RGBA8 unk294; // only used by one draw function
+    /* 0x298 */ u8 pad298[0x14];
     /* 0x2AC */ ColliderCylinder collider;
     /* 0x2F8 */ MtxF drawMtxF;
     /* 0x338 */ EnBigpoFireParticle fires[3];
 } EnBigpo; // size = 0x398
 
-// well is regular, dampe basement is summoned
+// todo make params macro for switch flags
+
+// well ver is regular, dampe basement ver is summoned
 // on spawn, 3/possible fires are turned into chosenfire
 typedef enum EnBigpoType {
   /* 0 */ ENBIGPO_REGULAR,
   /* 1 */ ENBIGPO_SUMMONED,
   /* 2 */ ENBIGPO_POSSIBLEFIRE,
   /* 3 */ ENBIGPO_CHOSENFIRE,
-  /* 4 */ ENBIGPO_UNK4,
+  /* 4 */ ENBIGPO_REVEALEDFIRE,
   /* 5 */ ENBIGPO_UNK5,
 };
 
