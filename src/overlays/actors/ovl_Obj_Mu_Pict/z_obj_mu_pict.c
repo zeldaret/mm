@@ -33,6 +33,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 
 void ObjMuPict_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMuPict* this = THIS;
+
     if ((gSaveContext.weekEventReg[75] & 0x20) == 0) {
         if ((gSaveContext.weekEventReg[52] & 0x20) == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -55,9 +56,8 @@ void func_80C06B5C(ObjMuPict* this) {
 }
 
 void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
-    s16 sp26;
-
-    sp26 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    
     if (func_800B84D0(&this->actor, globalCtx)) {
         if (this->actor.cutscene < 0) {
             func_80C06DC8(this, globalCtx);
@@ -70,7 +70,7 @@ void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
             func_80C06DC8(this, globalCtx);
             func_80C06C54(this);
         }
-    } else if (ABS_ALT(sp26) < 0x2AAA) {
+    } else if (ABS_ALT(yawDiff) < 0x2AAA) {
         func_800B8614(&this->actor, globalCtx, 80.0f);
     }
 }
@@ -117,9 +117,9 @@ void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
 }
 
 void func_80C06D90(ObjMuPict* this, GlobalContext* globalCtx) {
-    struct Actor* actorPtr = globalCtx->actorCtx.actorList[4].first;
+    struct Actor* actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
-    while (actorPtr != 0) {
+    while (actorPtr != NULL) {
         if (actorPtr->id == ACTOR_EN_HGO) {
             this->actor.parent = actorPtr;
             return;
