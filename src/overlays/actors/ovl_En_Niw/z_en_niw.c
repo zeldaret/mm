@@ -9,13 +9,11 @@ void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-
 void func_808916B0(EnNiw* this, GlobalContext* globalCtx);
 void func_80891974(EnNiw* this);
 s16 func_808919E8(EnNiw* this, GlobalContext* globalCtx);
 void func_80891F60(EnNiw* this, GlobalContext* globalCtx);
 void func_80892414(EnNiw* this);
-
 
 void func_808920A0(EnNiw* this, GlobalContext* globalCtx);
 s16 func_80892390(EnNiw* this, GlobalContext* globalCtx);
@@ -28,7 +26,6 @@ void func_808930FC(EnNiw* this, GlobalContext* globalCtx);
 
 void func_808924B0(EnNiw* this, GlobalContext* globalCtx);
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx);
-
 
 void func_8089262C(EnNiw* this, GlobalContext* globalCtx);
 s16 func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
@@ -110,8 +107,8 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 
     if (this->paramsCopy == 2) {
-        Audio_PlayActorSound2(&this->actor, 0x2813);
-        this->sfxTimer1 = 0x1E;
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+        this->sfxTimer1 = 30;
         this->unk250 = 0x1E;
         this->actor.flags &= ~1;
         this->unk28E = 4;
@@ -324,7 +321,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     posZ  = randPlusMinusPoint5Scaled(100.0f);
     if (this->paramsCopy == 0) {
         if (Actor_HasParent( &this->actor, globalCtx) != 0) {
-            Audio_PlayActorSound2(&this->actor, 0x2813U); // chicken cry m sfx
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
             this->sfxTimer1 = 30;
             this->unk250 = 30;
             this->actor.flags &= ~1;
@@ -353,6 +350,7 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
         if (this->unk298 >= 8) {
             this->unk252 = (s32) Rand_ZeroFloat(30.0f);
             this->unk298 = (s32) Rand_ZeroFloat(3.99000000954f);
+            // todo: ternary?
             if (posY < 0.0f) {
                 posY -= 100.0f;
             } else {
@@ -424,6 +422,7 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->unk250 = (s32) (Rand_ZeroFloat(1.0f) * 10.0f) + 0xA;
     }
 
+    // casts req
     this->actor.shape.rot.x = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.x;
     this->actor.shape.rot.y = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.y;
     this->actor.shape.rot.z = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.z;
@@ -466,8 +465,8 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
         } else{
             return;
         }
-      } else {
-          if ((this->actor.bgCheckFlags & 1)) {
+    } else {
+        if ((this->actor.bgCheckFlags & 1)) {
             this->sfxTimer1 = 0;
             this->actor.velocity.y = 4.0f;
             this->unk29E = 1;
@@ -481,7 +480,7 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
         }
     }
     if (Actor_HasParent( &this->actor, globalCtx) != 0) {
-        Audio_PlayActorSound2( &this->actor, 0x2813U);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unk250 = 30;
@@ -489,12 +488,12 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
         this->unk28E = 4;
         this->actionFunc = func_80891D78;
         this->actor.speedXZ = 0.0f;
-        return;
+    } else {
+        if ((s32) this->unk252 >= 6) {
+            func_800B8BB0(&this->actor, globalCtx);
+        }
+        func_80891320(this, globalCtx, 2);
     }
-    if ((s32) this->unk252 >= 6) {
-        func_800B8BB0(&this->actor, globalCtx);
-    }
-    func_80891320(this, globalCtx, 2);
 }
 
 void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
@@ -546,6 +545,7 @@ void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, 2);
 }
 
+// todo try to find something simpler for this one
 void func_80892248(EnNiw *this, GlobalContext *globalCtx) {
     int one = 1;
     this->unk252 = 10;
@@ -568,7 +568,7 @@ void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
         this->actionFunc = func_808922D0;
     }
   
-    func_80891320( this, globalCtx, this->unk29C);
+    func_80891320(this, globalCtx, this->unk29C);
 }
 
 //action func
@@ -587,7 +587,7 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
         this->unk264[1] = 0.0f;
         this->unk264[2] = 0.0f;
         this->unk24C = 0xA;
-        Audio_PlayActorSound2(&this->actor, 0x2813U); //play actor sound 2 chicken cry m
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
     }
     if (this->unk252 == 0) {
         this->unk252 = 0xA;
@@ -599,6 +599,7 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
+// todo: this is NOT if else, or at least not without figuring out why
 s16 func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     s16 returnValue;
     s32 temp_f6;
@@ -619,12 +620,9 @@ s16 func_80892390(EnNiw *this, GlobalContext *globalCtx) {
 }
 
 void func_80892414(EnNiw *this) {
-    s32 temp_t7;
-
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, 
-          (f32) SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
-    temp_t7 = (s32) Rand_ZeroFloat(1.99000000954f);
-    this->unk29A = (s16) temp_t7;
+          SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
+    this->unk29A = Rand_ZeroFloat(1.99000000954f);
     this->unk28E = 7;
     this->actionFunc = func_808924B0;
     this->actor.speedXZ = 4.0f;
@@ -694,19 +692,18 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
 #endif
 
 void func_808925F8(EnNiw *this, GlobalContext* gCtx) {
-    if ((this->actor.bgCheckFlags & 1) != 0) {
+    if ((this->actor.bgCheckFlags & 1)) {
         func_80891974(this);
     }
 }
 
 void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
-
     if ((this->unk2A0 == 0) && (this->unk260 == 0) && (this->paramsCopy == 0)) {
         if (( this->unk28E != 7) && (90000.0f != this->unk2BC.x)) {
             this->unk260 = 0xA;
-            this->sfxTimer1 = 0x1E;
+            this->sfxTimer1 = 30;
             this->unk29E = 1;
-            Audio_PlayActorSound2(&this->actor, 0x2813);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
             this->unk254 = 0x64;
             this->unk2EC = 0;
             func_80892414(this);
@@ -714,7 +711,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
         
         if ((this->collider.base.acFlags & AC_HIT) != 0) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->actor.colChkInfo.health > 0) {
+            if (this->actor.colChkInfo.health > 0) { // not DECR
                 this->actor.colChkInfo.health--;
             }
             if ((D_80893460 == 0) && (this->actor.colChkInfo.health == 0)) {
@@ -723,7 +720,7 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
                 this->unk298 = 0;
                 this->unk2A4.x = this->unk2B0.x = this->actor.world.pos.x;
                 this->unk2A4.y = this->unk2B0.y = this->actor.world.pos.y;
-                this->sfxTimer1 = 0x2710;
+                this->sfxTimer1 = 10000;
                 this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
                 this->unk252 = this->unk250 = this->unk298;
                   
@@ -736,39 +733,36 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
                 this->actor.speedXZ = 0.0f;
-                return;
+            } else {
+                this->unk260 = 0xA;
+                this->sfxTimer1 = 30;
+                this->unk29E = 1;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
+                this->unk254 = 0x64;
+                this->unk2EC = 0;
+                func_80892414(this);
             }
-            this->unk260 = 0xA;
-            this->sfxTimer1 = 0x1E;
-            this->unk29E = 1;
-            Audio_PlayActorSound2(&this->actor, 0x2813);
-            this->unk254 = 0x64;
-            this->unk2EC = 0;
-            func_80892414(this);
         }
     }
 }
 
-# if NON-MATCHING
-// non-matching: one branch is likely instead of not-likely, and one stack offset
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*) thisx;
     s8 pad0;
     s16 i;
     ActorPlayer *player = PLAYER;
-    s16 featherCount;
     s16 pad1;
+    s16 featherCount;
     Vec3f pos;
     Vec3f spB8;
     Vec3f spAC;
-    s32 padArr[9];
+    s32 pad2[9];
     s16 temp29C;
     f32 featherScale;
-    Vec3f camera;
     f32 camResult;
     f32 floorHeight;
     f32 dist = 20.0f;
-    s8 padding[4];
+    s32 pad3;
 
     this->unk28C++;
 
@@ -811,39 +805,17 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
   
     func_808930FC(this, globalCtx);
 
-    if (this->unk24C != 0) {
-        this->unk24C--;
-    }
-    if (this->unk24E != 0) {
-        this->unk24E--;
-    }
-    if (this->unk250 != 0) {
-        this->unk250--;
-    }
-    if (this->unk252 != 0) {
-        this->unk252--;
-    }
-    if (this->unk254 != 0) {
-        this->unk254--;
-    }
-    if (this->sfxTimer1 != 0) {
-        this->sfxTimer1--;
-    }
-    if (this->sfxTimer2 != 0) {
-        this->sfxTimer2--;
-    }
-    if (this->unk25A != 0) {
-        this->unk25A--;
-    }
-    if (this->unk25C != 0) {
-        this->unk25C--;
-    }
-    if (this->unk25E != 0) {
-        this->unk25E--;
-    }
-    if (this->unk260 != 0) {
-        this->unk260--;
-    }
+    DECR(this->unk24C);
+    DECR(this->unk24E);
+    DECR(this->unk250);
+    DECR(this->unk252);
+    DECR(this->unk254);
+    DECR(this->sfxTimer1);
+    DECR(this->sfxTimer2);
+    DECR(this->unk25A);
+    DECR(this->unk25C);
+    DECR(this->unk25E);
+    DECR(this->unk260);
 
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
@@ -853,11 +825,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F); //update bgcheckinfo
     
-    // this branch wants to branch likely instead of regular branch, no other difference
-    floorHeight = this->actor.floorHeight;
-    if ((this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
-    //if (floorHeight <= -32000.0f || this->actor.floorHeight >= 32000.0f) {
-    //if (floorHeight <= -32000.0f || 32000.0f <= floorHeight) {
+    if ( (this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
+        Vec3f camera;
         camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
         camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
         camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
@@ -899,9 +868,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk2A0 = 0;
         this->actionFunc = func_808925F8;
         return;
-    }
 
-    if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != 6)) {
+    } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -911,66 +879,65 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk252 = 0;
         this->unk28E = 6;
         this->actionFunc = func_808920A0;
-        return;
-    }
+
+    } else {
   
-    // player->invincibilityTimer
-    if ((this->unk2A0 != 0) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->unkD5C == 0)) {
-        func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
-    }
-
-    func_8089262C(this, globalCtx);
-    if ((this->sfxTimer2 == 0) && (this->unk28E == 4)) {
-        this->sfxTimer2 = 7;
-        Audio_PlayActorSound2(&this->actor, 0x38FF);
-    }
-
-    if (this->sfxTimer1 == 0) {
-        if (this->unk28E != 0) {
-            this->sfxTimer1 = 30;
-            Audio_PlayActorSound2(&this->actor, 0x2812);
-        } else {
-            this->sfxTimer1 = 300;
-            Audio_PlayActorSound2(&this->actor, 0x2811);
+        // player->invincibilityTimer
+        if ((this->unk2A0 != 0) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->unkD5C == 0)) {
+            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
-    }
 
-    if (this->unk2A0 == 0) {
-        if (this->paramsCopy == 0) {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-            
-            if (globalCtx){}
+        func_8089262C(this, globalCtx);
+        if ((this->sfxTimer2 == 0) && (this->unk28E == 4)) {
+            this->sfxTimer2 = 7;
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+        }
 
-            if ((this->unk28E != 4) && (this->unk28E != 5)) {
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx,  &this->collider);
+        if (this->sfxTimer1 == 0) {
+            if (this->unk28E != 0) {
+                this->sfxTimer1 = 30;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_A);
+            } else {
+                this->sfxTimer1 = 300;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_N);
+            }
+        }
+
+        if (this->unk2A0 == 0) {
+            if (this->paramsCopy == 0) {
+                Collider_UpdateCylinder(&this->actor, &this->collider);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+                
+                if (globalCtx){}
+
+                if ((this->unk28E != 4) && (this->unk28E != 5)) {
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx,  &this->collider);
+                }
             }
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/EnNiw_Update.asm")
-#endif
 
-// override limb draw function
+// EnNiw_LimbDraw
 s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
     EnNiw* this = (EnNiw*) actor;
 
+    // float to s16 casts req
     if (limbIndex == 0xD) {
-        rot->y = rot->y + (s16) this->unk2E0;
+        rot->y += (s16) this->unk2E0;
     }
     if (limbIndex == 0xF) {
-        rot->y = rot->y + (s16) this->unk2E4;
+        rot->y += (s16) this->unk2E4;
     }
     if (limbIndex == 0xB) {
-        rot->x = rot->x + (s16) this->unk2DC;
-        rot->y = rot->y + (s16) this->unk2D8;
-        rot->z = rot->z + (s16) this->unk2D4;
+        rot->x += (s16) this->unk2DC;
+        rot->y += (s16) this->unk2D8;
+        rot->z += (s16) this->unk2D4;
     }
-    if (limbIndex == 7) {
-        rot->x = rot->x + (s16) this->unk2D0;
-        rot->y = rot->y + (s16) this->unk2CC;
-        rot->z = rot->z + (s16) this->unk2C8;
+    if (limbIndex == 0x7) {
+        rot->x += (s16) this->unk2D0;
+        rot->y += (s16) this->unk2CC;
+        rot->z += (s16) this->unk2C8;
     }
     return 0; 
 }
@@ -984,6 +951,7 @@ void EnNiw_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_808932B0(&this->actor, globalCtx);
 }
 
+// EnNiw_SpawnFeather ?
 void func_80893008(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale) {
     s16 i;
     EnNiwFeather* feather = this->feathers;
@@ -1003,7 +971,7 @@ void func_80893008(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale)
     }
 }
 
-//featherupdate in oot
+// EnNiw_FeatherUpdate
 void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
     EnNiwFeather *feather = this->feathers;
     f32 dtemp88 = 0.20000000298;
