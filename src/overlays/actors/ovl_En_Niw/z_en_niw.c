@@ -72,8 +72,8 @@ Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
 // might be another vec3f with all zeros
 s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
 
+// NO LONGER MATCHES
 void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
-
     EnNiw* this = THIS;
     Vec3f D_Temp = D_808934C4;
 
@@ -85,8 +85,9 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     this->paramsCopy = this->actor.params;
     Actor_ProcessInitChain(&this->actor, &D_808934D0);
-    this->actor.flags |= 1; // why set targetable here and not start with it?
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    this->actor.flags |= 0x1; // why set targetable here and not start with it?
+    //Actor_SetDrawParams(&this->actor.shape, 0, func_800B3FC0, 25.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
     SkelAnime_InitSV(globalCtx, &this->skelanime,  
         &D_06002530, &D_060000E8,
@@ -98,18 +99,18 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->paramsCopy == 1) {
-        Actor_SetScale(&this->actor, ((f32) gStaticContext->data[2486] / 10000.0f) + 0.00400000018999f);
+        Actor_SetScale(&this->actor, ((f32) gGameInfo->data[2486] / 10000.0f) + 0.00400000018999f);
     }
 
     // random health between 18-20?
-    this->actor.colChkInfo.health = (u8) (u32) (randZeroOneScaled(9.98999977112f) + 10.0f);
+    this->actor.colChkInfo.health = (u8) (u32) (Rand_ZeroFloat(9.98999977112f) + 10.0f);
     this->actor.colChkInfo.mass = 0xFF;
     if (this->paramsCopy == 0) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
     if (this->paramsCopy == 2) {
-        Audio_PlayActorSound2(&this->actor, 0x2813U);
+        Audio_PlayActorSound2(&this->actor, 0x2813);
         this->sfxTimer1 = 0x1E;
         this->unk250 = 0x1E;
         this->actor.flags &= ~1;
@@ -119,9 +120,9 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->unk2BC.z = 0.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
-        return;
+    } else {
+        func_80891974(&this->actor);
     }
-    func_80891974(&this->actor);
 }
 
 void EnNiw_Destroy(Actor *thisx, GlobalContext *globalCtx) {
@@ -149,7 +150,7 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
         if ((this->unk292 & 1) == 0) {
             this->unk264[0] = 0.0f;
             if (arg2 == 0) {
-                this->unk24C = randZeroOneScaled(30.0f);
+                this->unk24C = Rand_ZeroFloat(30.0f);
             }
         }
     }
@@ -209,28 +210,28 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
             
     }
     if (this->unk264[9] != this->unk2E4) {
-        Math_SmoothScaleMaxF(&this->unk2E4, this->unk264[9], 0.5f, 4000.0f);
+        Math_ApproachF(&this->unk2E4, this->unk264[9], 0.5f, 4000.0f);
     }
     if (this->unk264[0] != this->unk2E0) {
-        Math_SmoothScaleMaxF(&this->unk2E0, this->unk264[0], 0.5f, 4000.0f);
+        Math_ApproachF(&this->unk2E0, this->unk264[0], 0.5f, 4000.0f);
     }
     if (this->unk264[2] !=  this->unk2C8) {
-        Math_SmoothScaleMaxF(&this->unk2C8, this->unk264[2], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2C8, this->unk264[2], 0.8f, 7000.0f);
     }
     if (this->unk264[7] != this->unk2CC) {
-        Math_SmoothScaleMaxF(&this->unk2CC, this->unk264[7], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2CC, this->unk264[7], 0.8f, 7000.0f);
     }
     if (this->unk264[8] != this->unk2D0 ) {
-        Math_SmoothScaleMaxF(&this->unk2D0, this->unk264[8], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2D0, this->unk264[8], 0.8f, 7000.0f);
     }
     if (this->unk264[1] != this->unk2D4 ) {
-        Math_SmoothScaleMaxF(&this->unk2D4, this->unk264[1], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2D4, this->unk264[1], 0.8f, 7000.0f);
     }
     if (this->unk264[5] != this->unk2D8 ) {
-        Math_SmoothScaleMaxF(&this->unk2D8, this->unk264[5], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2D8, this->unk264[5], 0.8f, 7000.0f);
     }
     if (this->unk264[6] != this->unk2DC ) {
-        Math_SmoothScaleMaxF(&this->unk2DC, this->unk264[6], 0.8f, 7000.0f);
+        Math_ApproachF(&this->unk2DC, this->unk264[6], 0.8f, 7000.0f);
     }
 }
 
@@ -247,10 +248,10 @@ void func_808916B0(EnNiw *this, GlobalContext *globalCtx) {
             xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
             yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
             zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
-            newNiwPos.x = ((randZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
+            newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
             newNiwPos.y = randPlusMinusPoint5Scaled(0.300000011921f) 
                  + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
-            newNiwPos.z = ((randZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
+            newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
             attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx,
                   ACTOR_EN_ATTACK_NIW, newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
 
@@ -294,8 +295,8 @@ void func_808917F8(EnNiw *this, GlobalContext *globalCtx, s32 arg2) {
         }
     }
     targetRotY = this->unk2E8 + phi_f2;
-    Math_SmoothScaleMaxMinS(&this->actor.world.rot.y, targetRotY, 3, (s16) this->unk300, 0);
-    Math_SmoothScaleMaxF(&this->unk300, 3000.0f, 1.0f, 500.0f);
+    Math_SmoothStepToS(&this->actor.world.rot.y, targetRotY, 3, (s16) this->unk300, 0);
+    Math_ApproachF(&this->unk300, 3000.0f, 1.0f, 500.0f);
     func_80891320(this, globalCtx, 5);
 }
 
@@ -339,19 +340,19 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
 
     s16tmp = 0;
     if (this->unk252 != 0) {
-        if (randZeroOneScaled(3.99000000954f) < 1.0f) {
+        if (Rand_ZeroFloat(3.99000000954f) < 1.0f) {
             this->unk2EA = this->unk2EA + 1;
             this->unk2EA = this->unk2EA & 1;
         }
-        Math_SmoothScaleMaxF(&this->unk264[9], D_80893484[this->unk2EA], 0.5f, 4000.0f);
+        Math_ApproachF(&this->unk264[9], D_80893484[this->unk2EA], 0.5f, 4000.0f);
     }
 
     if ((this->unk252 == 0) && (this->unk250 == 0)) {
         this->unk298 += 1;
 
         if (this->unk298 >= 8) {
-            this->unk252 = (s32) randZeroOneScaled(30.0f);
-            this->unk298 = (s32) randZeroOneScaled(3.99000000954f);
+            this->unk252 = (s32) Rand_ZeroFloat(30.0f);
+            this->unk298 = (s32) Rand_ZeroFloat(3.99000000954f);
             if (posY < 0.0f) {
                 posY -= 100.0f;
             } else {
@@ -378,9 +379,9 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
         s16tmp = 1;
         //pad = 0.0f;
         //pad2 = 0.0f;
-        Math_SmoothScaleMaxF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
-        Math_SmoothScaleMaxF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
-        Math_SmoothScaleMaxF(&this->unk300, 3.0f, 1.0f, 0.3f);
+        Math_ApproachF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
+        Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
+        Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
 
         posX = this->unk2B0.x - this->actor.world.pos.x;
         posZ = this->unk2B0.z - this->actor.world.pos.z;
@@ -402,9 +403,9 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
             this->unk250 = 0;
             this->unk298 = 7;
         }
-        Math_SmoothScaleMaxMinS(&this->actor.world.rot.y, atans(posX, posZ),
+        Math_SmoothStepToS(&this->actor.world.rot.y, atans(posX, posZ),
            (u16)3, (s16) (s32) this->unk304, 0);
-        Math_SmoothScaleMaxF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
+        Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
     return func_80891320(this, globalCtx, s16tmp);
 }
@@ -420,7 +421,7 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
     vec3fcopy = D_808934DC;
     if (this->unk250 == 0) {
         this->unk29E = 2;
-        this->unk250 = (s32) (randZeroOneScaled(1.0f) * 10.0f) + 0xA;
+        this->unk250 = (s32) (Rand_ZeroFloat(1.0f) * 10.0f) + 0xA;
     }
 
     this->actor.shape.rot.x = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.x;
@@ -606,7 +607,7 @@ s16 func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     if (this->unk252 == 1) {
         this->actor.speedXZ = 3.0f;
         this = this;
-        temp_f6 = randZeroOneScaled(1.99000000954f);
+        temp_f6 = Rand_ZeroFloat(1.99000000954f);
         this->unk250 = 0;
         returnValue = this->unk250;
         this->unk24E = (u16) returnValue;
@@ -622,7 +623,7 @@ void func_80892414(EnNiw *this) {
 
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, 
           (f32) SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
-    temp_t7 = (s32) randZeroOneScaled(1.99000000954f);
+    temp_t7 = (s32) Rand_ZeroFloat(1.99000000954f);
     this->unk29A = (s16) temp_t7;
     this->unk28E = 7;
     this->actionFunc = func_808924B0;
@@ -788,17 +789,17 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
             pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
             pos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
             pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
-            featherScale = randZeroOneScaled(6.0f) + 6.0f;
+            featherScale = Rand_ZeroFloat(6.0f) + 6.0f;
 
             if ((this->unk29E == 2) && (this->unk308 != 0)) {
                 pos.y += 10.0f;
             }
 
             if (this->unk308 == 0) {
-                featherScale = randZeroOneScaled(2.0f) + 2.0f;
+                featherScale = Rand_ZeroFloat(2.0f) + 2.0f;
             }
             spB8.x = randPlusMinusPoint5Scaled(3.0f);
-            spB8.y = (randZeroOneScaled(2.0f) * 0.5f) + 2.0f;
+            spB8.y = (Rand_ZeroFloat(2.0f) * 0.5f) + 2.0f;
             spB8.z = randPlusMinusPoint5Scaled(3.0f);
             spAC.z = spAC.x = 0.0f;
             spAC.y = -0.15000000596f;
@@ -995,8 +996,8 @@ void func_80893008(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale)
             feather->accel = *accel;
             feather->timer = 0;
             feather->scale = scale / 1000.0f;
-            feather->life = (s16) (randZeroOneScaled(20.0f) + 40.0f);
-            feather->unk_2A = (s16) randZeroOneScaled(1000.0f);
+            feather->life = (s16) (Rand_ZeroFloat(20.0f) + 40.0f);
+            feather->unk_2A = (s16) Rand_ZeroFloat(1000.0f);
             break;
         }
     }
@@ -1019,13 +1020,13 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
             feather->vel.z += feather->accel.z;
             if (feather->type == 1) {
                 feather->unk_2A++;
-                Math_SmoothScaleMaxF(&feather->vel.x, 0.0f, 1.0f, dtemp88);
-                Math_SmoothScaleMaxF(&feather->vel.z, 0.0f, 1.0f, dtemp88);
+                Math_ApproachF(&feather->vel.x, 0.0f, 1.0f, dtemp88);
+                Math_ApproachF(&feather->vel.z, 0.0f, 1.0f, dtemp88);
                 if (feather->vel.y < -0.5f) {
                     feather->vel.y = -0.5f;
                 }
 
-                feather->unk_30 = Math_Sins( (s16) (feather->unk_2A * 0xBB8)) * 3.14159274101f * 0.20000000298f;
+                feather->unk_30 = Math_SinS( (s16) (feather->unk_2A * 0xBB8)) * 3.14159274101f * 0.20000000298f;
 
                 if (feather->life < feather->timer) {
                     feather->type = 0;
@@ -1035,9 +1036,8 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
-//xlu
-// feather draw function?
-//#if NON_EQUIVELENT
+// feather draw function
+#if NON_EQUIVELENT
 // this isnt even close
 void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     
@@ -1099,6 +1099,6 @@ void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
-//#endif
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+#endif
