@@ -50,7 +50,7 @@ void* Yaz0_NextDMA(void* curSrcPos) {
     } else {
         oldPri = osGetThreadPri(NULL);
         osSetThreadPri(NULL, 0x7F);
-        Fault_Log("圧縮展開異常\n");
+        osSyncPrintf("圧縮展開異常\n");
         osSetThreadPri(NULL, oldPri);
     }
 
@@ -131,7 +131,7 @@ void Yaz0_Decompress(u32 romStart, void* dst, u32 size) {
 
     if (sYaz0CurDataEnd != NULL) {
         while (sYaz0CurDataEnd != NULL) {
-            func_80087A1C(10);
+            Sleep_Usec(10);
         }
     }
 

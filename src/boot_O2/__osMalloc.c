@@ -28,7 +28,7 @@ void ArenaImpl_Unlock(Arena* arena) {
     osRecvMesg(&arena->lock, NULL, OS_MESG_BLOCK);
 }
 
-ArenaNode* heap_get_tail(Arena* arena) {
+ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
     ArenaNode* last;
     ArenaNode* iter;
 
@@ -69,7 +69,7 @@ void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
             firstNode->isFree = 1;
             firstNode->magic = NODE_MAGIC;
             ArenaImpl_Lock(arena);
-            lastNode = heap_get_tail(arena);
+            lastNode = ArenaImpl_GetLastBlock(arena);
             if (lastNode == NULL) {
                 arena->head = firstNode;
                 arena->start = start;
@@ -141,7 +141,7 @@ void* __osMallocR(Arena* arena, u32 size) {
 
     size = ALIGN16(size);
     ArenaImpl_Lock(arena);
-    iter = heap_get_tail(arena);
+    iter = ArenaImpl_GetLastBlock(arena);
 
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {

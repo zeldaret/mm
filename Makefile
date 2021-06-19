@@ -183,6 +183,7 @@ assetclean:
 	$(RM) -rf build/assets
 
 disasm:
+	$(RM) -rf asm data
 	python3 tools/disasm/disasm.py
 
 setup:

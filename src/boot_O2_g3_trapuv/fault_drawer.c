@@ -87,14 +87,14 @@ void FaultDrawer_UpdatePrintColor() {
     s32 idx;
 
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        Fault_Log(D_80099050);
+        osSyncPrintf(D_80099050);
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->foreColor);
         if (idx >= 0 && idx < 8) {
-            Fault_Log(D_80099054, idx);
+            osSyncPrintf(D_80099054, idx);
         }
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->backColor);
         if (idx >= 0 && idx < 8) {
-            Fault_Log(D_8009905C, idx);
+            osSyncPrintf(D_8009905C, idx);
         }
     }
 }
@@ -120,7 +120,7 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        Fault_Log(D_80099064,
+        osSyncPrintf(D_80099064,
                   (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
                   (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
     }
@@ -130,7 +130,7 @@ void FaultDrawer_SetCursor(s32 x, s32 y) {
 
 void FaultDrawer_FillScreen() {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        Fault_Log(D_80099070);
+        osSyncPrintf(D_80099070);
     }
 
     FaultDrawer_DrawRecImpl(sFaultDrawContext->xStart, sFaultDrawContext->yStart, sFaultDrawContext->xEnd,

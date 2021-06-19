@@ -4,7 +4,7 @@
 /*
  * Compare strings (strcmp).
  */
-s32 func_800968B0(const char* str1, const char* str2) {
+s32 __osMemcmp(const char* str1, const char* str2) {
     char currentCharStr1;
     char currentCharStr2;
     do {

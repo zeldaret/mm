@@ -762,6 +762,9 @@ def disassemble_text(data, vram, data_regions, segment):
             if cur_file == "":
                 cur_file = f"{segment[0]}_{vaddr:08X}"
 
+        if cur_file == "[PADDING]": # workaround for assumed linker bug
+            continue
+
         # DATA EMBEDDED IN TEXT
         in_data = False
         for region in data_regions:

@@ -38,7 +38,7 @@ end:
     osSetIntMask(mask);
 
     if (alreadyExists) {
-        Fault_Log(D_800984B4, client);
+        osSyncPrintf(D_800984B4, client);
     }
 }
 
@@ -76,7 +76,7 @@ void Fault_RemoveClient(FaultClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        Fault_Log(D_800984EC, client);
+        osSyncPrintf(D_800984EC, client);
     }
 }
 
@@ -106,7 +106,7 @@ end:
     osSetIntMask(mask);
 
     if (alreadyExists) {
-        Fault_Log(D_80098524, client);
+        osSyncPrintf(D_80098524, client);
     }
 }
 
@@ -144,7 +144,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        Fault_Log(D_8009856C, client);
+        osSyncPrintf(D_8009856C, client);
     }
 }
 
@@ -253,14 +253,14 @@ void Fault_PrintFReg(s32 idx, f32* value) {
     }
 }
 
-void Fault_LogFReg(s32 idx, f32* value) {
+void osSyncPrintfFReg(s32 idx, f32* value) {
     u32 raw = *(u32*)value;
     s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
     if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
-        Fault_Log(D_800985DC, idx, *value);
+        osSyncPrintf(D_800985DC, idx, *value);
     } else {
-        Fault_Log(D_800985EC, idx, *(u32*)value);
+        osSyncPrintf(D_800985EC, idx, *(u32*)value);
     }
 }
 
@@ -279,14 +279,14 @@ void Fault_PrintFPCR(u32 value) {
     FaultDrawer_Printf(D_80098618);
 }
 
-void Fault_LogFPCR(u32 value) {
+void osSyncPrintfFPCR(u32 value) {
     s32 i;
     u32 flag = 0x20000;
 
-    Fault_Log(D_8009861C, value);
+    osSyncPrintf(D_8009861C, value);
     for (i = 0; i < ARRAY_COUNT(sExceptionNames); i++) {
         if (value & flag) {
-            Fault_Log(D_8009862C, sExceptionNames[i]);
+            osSyncPrintf(D_8009862C, sExceptionNames[i]);
             break;
         }
         flag >>= 1;
@@ -356,7 +356,7 @@ void Fault_PrintThreadContext(OSThread* t) {
     }
 }
 
-void Fault_LogThreadContext(OSThread* t) {
+void osSyncPrintfThreadContext(OSThread* t) {
     __OSThreadContext* ctx;
     s32 causeStrIdx = (s32)((((u32)t->context.cause >> 2) & 0x1f) << 0x10) >> 0x10;
     if (causeStrIdx == 0x17) {
@@ -367,47 +367,47 @@ void Fault_LogThreadContext(OSThread* t) {
     }
 
     ctx = &t->context;
-    Fault_Log(D_800987B0);
-    Fault_Log(D_800987B4, t->id, causeStrIdx, D_80096B80[causeStrIdx]);
+    osSyncPrintf(D_800987B0);
+    osSyncPrintf(D_800987B4, t->id, causeStrIdx, D_80096B80[causeStrIdx]);
 
-    Fault_Log(D_800987CC, (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
-    Fault_Log(D_800987EC, (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
-    Fault_Log(D_8009880C, (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
-    Fault_Log(D_8009882C, (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
-    Fault_Log(D_8009884C, (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
-    Fault_Log(D_8009886C, (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
-    Fault_Log(D_8009888C, (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
-    Fault_Log(D_800988AC, (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
-    Fault_Log(D_800988CC, (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
-    Fault_Log(D_800988EC, (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
-    Fault_Log(D_8009890C, (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
-    Fault_Log(D_8009892C);
-    Fault_LogFPCR(ctx->fpcsr);
-    Fault_Log(D_80098930);
-    Fault_LogFReg(0, &ctx->fp0.f.f_even);
-    Fault_LogFReg(2, &ctx->fp2.f.f_even);
-    Fault_Log(D_80098934);
-    Fault_LogFReg(4, &ctx->fp4.f.f_even);
-    Fault_LogFReg(6, &ctx->fp6.f.f_even);
-    Fault_Log(D_80098938);
-    Fault_LogFReg(8, &ctx->fp8.f.f_even);
-    Fault_LogFReg(0xa, &ctx->fp10.f.f_even);
-    Fault_Log(D_8009893C);
-    Fault_LogFReg(0xc, &ctx->fp12.f.f_even);
-    Fault_LogFReg(0xe, &ctx->fp14.f.f_even);
-    Fault_Log(D_80098940);
-    Fault_LogFReg(0x10, &ctx->fp16.f.f_even);
-    Fault_LogFReg(0x12, &ctx->fp18.f.f_even);
-    Fault_Log(D_80098944);
-    Fault_LogFReg(0x14, &ctx->fp20.f.f_even);
-    Fault_LogFReg(0x16, &ctx->fp22.f.f_even);
-    Fault_Log(D_80098948);
-    Fault_LogFReg(0x18, &ctx->fp24.f.f_even);
-    Fault_LogFReg(0x1a, &ctx->fp26.f.f_even);
-    Fault_Log(D_8009894C);
-    Fault_LogFReg(0x1c, &ctx->fp28.f.f_even);
-    Fault_LogFReg(0x1e, &ctx->fp30.f.f_even);
-    Fault_Log(D_80098950);
+    osSyncPrintf(D_800987CC, (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
+    osSyncPrintf(D_800987EC, (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
+    osSyncPrintf(D_8009880C, (u32)ctx->a0, (u32)ctx->a1, (u32)ctx->a2);
+    osSyncPrintf(D_8009882C, (u32)ctx->a3, (u32)ctx->t0, (u32)ctx->t1);
+    osSyncPrintf(D_8009884C, (u32)ctx->t2, (u32)ctx->t3, (u32)ctx->t4);
+    osSyncPrintf(D_8009886C, (u32)ctx->t5, (u32)ctx->t6, (u32)ctx->t7);
+    osSyncPrintf(D_8009888C, (u32)ctx->s0, (u32)ctx->s1, (u32)ctx->s2);
+    osSyncPrintf(D_800988AC, (u32)ctx->s3, (u32)ctx->s4, (u32)ctx->s5);
+    osSyncPrintf(D_800988CC, (u32)ctx->s6, (u32)ctx->s7, (u32)ctx->t8);
+    osSyncPrintf(D_800988EC, (u32)ctx->t9, (u32)ctx->gp, (u32)ctx->sp);
+    osSyncPrintf(D_8009890C, (u32)ctx->s8, (u32)ctx->ra, (u32)ctx->lo);
+    osSyncPrintf(D_8009892C);
+    osSyncPrintfFPCR(ctx->fpcsr);
+    osSyncPrintf(D_80098930);
+    osSyncPrintfFReg(0, &ctx->fp0.f.f_even);
+    osSyncPrintfFReg(2, &ctx->fp2.f.f_even);
+    osSyncPrintf(D_80098934);
+    osSyncPrintfFReg(4, &ctx->fp4.f.f_even);
+    osSyncPrintfFReg(6, &ctx->fp6.f.f_even);
+    osSyncPrintf(D_80098938);
+    osSyncPrintfFReg(8, &ctx->fp8.f.f_even);
+    osSyncPrintfFReg(0xa, &ctx->fp10.f.f_even);
+    osSyncPrintf(D_8009893C);
+    osSyncPrintfFReg(0xc, &ctx->fp12.f.f_even);
+    osSyncPrintfFReg(0xe, &ctx->fp14.f.f_even);
+    osSyncPrintf(D_80098940);
+    osSyncPrintfFReg(0x10, &ctx->fp16.f.f_even);
+    osSyncPrintfFReg(0x12, &ctx->fp18.f.f_even);
+    osSyncPrintf(D_80098944);
+    osSyncPrintfFReg(0x14, &ctx->fp20.f.f_even);
+    osSyncPrintfFReg(0x16, &ctx->fp22.f.f_even);
+    osSyncPrintf(D_80098948);
+    osSyncPrintfFReg(0x18, &ctx->fp24.f.f_even);
+    osSyncPrintfFReg(0x1a, &ctx->fp26.f.f_even);
+    osSyncPrintf(D_8009894C);
+    osSyncPrintfFReg(0x1c, &ctx->fp28.f.f_even);
+    osSyncPrintfFReg(0x1e, &ctx->fp30.f.f_even);
+    osSyncPrintf(D_80098950);
 }
 
 OSThread* Fault_FindFaultedThread() {
@@ -643,7 +643,7 @@ void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     }
 }
 
-void Fault_LogStackTrace(OSThread* t, u32 flags) {
+void osSyncPrintfStackTrace(OSThread* t, u32 flags) {
     s32 y;
     u32 sp;
     u32 ra;
@@ -654,21 +654,21 @@ void Fault_LogStackTrace(OSThread* t, u32 flags) {
     ra = t->context.ra;
     pc = t->context.pc;
 
-    Fault_Log(D_800989CC);
-    Fault_Log(D_800989D8);
+    osSyncPrintf(D_800989CC);
+    osSyncPrintf(D_800989D8);
 
     for (y = 1; (y < 22) && (((ra != 0) || (sp != 0)) && (pc != (u32)__osCleanupThread)); y++) {
-        Fault_Log(D_800989F4, sp, pc);
+        osSyncPrintf(D_800989F4, sp, pc);
 
         if (flags & 1) {
             convertedPc = (u32)Fault_ConvertAddress((void*)pc);
             if (convertedPc != 0) {
-                Fault_Log(D_80098A00, convertedPc);
+                osSyncPrintf(D_80098A00, convertedPc);
             }
         } else {
-            Fault_Log(D_80098A0C);
+            osSyncPrintf(D_80098A0C);
         }
-        Fault_Log(D_80098A1C);
+        osSyncPrintf(D_80098A1C);
 
         Fault_FindNextStackCall((u32**)&sp, (u32**)&pc, (u32**)&ra);
     }
@@ -746,7 +746,7 @@ void Fault_SetOptionsFromController3(void) {
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
-            Fault_Log(D_80098A44, graphPC, graphRA, graphSP);
+            osSyncPrintf(D_80098A44, graphPC, graphRA, graphSP);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_B)) {
             FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
@@ -778,24 +778,24 @@ void Fault_ThreadEntry(void* arg) {
 
             if (msg == (OSMesg)1) {
                 sFaultContext->msgId = 1;
-                Fault_Log(D_80098A88);
+                osSyncPrintf(D_80098A88);
             } else if (msg == (OSMesg)2) {
                 sFaultContext->msgId = 2;
-                Fault_Log(D_80098AC0);
+                osSyncPrintf(D_80098AC0);
             } else if (msg == (OSMesg)3) {
                 Fault_SetOptions();
                 faultedThread = NULL;
                 continue;
             } else {
                 sFaultContext->msgId = 3;
-                Fault_Log(D_80098AF4);
+                osSyncPrintf(D_80098AF4);
             }
 
             faultedThread = __osGetCurrFaultedThread();
-            Fault_Log(D_80098B28, faultedThread);
+            osSyncPrintf(D_80098B28, faultedThread);
             if (!faultedThread) {
                 faultedThread = Fault_FindFaultedThread();
-                Fault_Log(D_80098B4C, faultedThread);
+                osSyncPrintf(D_80098B4C, faultedThread);
             }
         } while (faultedThread == NULL);
 
@@ -820,15 +820,15 @@ void Fault_ThreadEntry(void* arg) {
 
         do {
             Fault_PrintThreadContext(faultedThread);
-            Fault_LogThreadContext(faultedThread);
+            osSyncPrintfThreadContext(faultedThread);
             Fault_WaitForInput();
             Fault_DrawStackTrace(faultedThread, 0);
-            Fault_LogStackTrace(faultedThread, 0);
+            osSyncPrintfStackTrace(faultedThread, 0);
             Fault_WaitForInput();
             Fault_ProcessClients();
             Fault_DrawMemDump((u32)(faultedThread->context.pc - 0x100), (u32)faultedThread->context.sp, 0, 0);
             Fault_DrawStackTrace(faultedThread, 1);
-            Fault_LogStackTrace(faultedThread, 1);
+            osSyncPrintfStackTrace(faultedThread, 1);
             Fault_WaitForInput();
             Fault_FillScreenRed();
             FaultDrawer_DrawText(0x40, 0x50, D_80098B68);
@@ -872,9 +872,9 @@ void Fault_Start(void) {
 }
 
 void Fault_HangupFaultClient(const char* arg0, char* arg1) {
-    Fault_Log(D_80098BE0, osGetThreadId(NULL));
-    Fault_Log(D_80098BF8, arg0 ? arg0 : D_80098BFC);
-    Fault_Log(D_80098C04, arg1 ? arg1 : D_80098C08);
+    osSyncPrintf(D_80098BE0, osGetThreadId(NULL));
+    osSyncPrintf(D_80098BF8, arg0 ? arg0 : D_80098BFC);
+    osSyncPrintf(D_80098C04, arg1 ? arg1 : D_80098C08);
     FaultDrawer_Printf(D_80098C10, osGetThreadId(NULL));
     FaultDrawer_Printf(D_80098C28, arg0 ? arg0 : D_80098C2C);
     FaultDrawer_Printf(D_80098C34, arg1 ? arg1 : D_80098C38);

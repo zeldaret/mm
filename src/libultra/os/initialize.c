@@ -6,7 +6,7 @@ s32 osViClock = 0x02E6D354;
 UNK_TYPE4 __osShutdown = 0;
 UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
 
-void func_8008A660(void) {
+void __createSpeedParam(void) {
     D_8009D130.type = 7;
     D_8009D130.latency = *(u32*)0xA4600014;
     D_8009D130.pageSize = *(u32*)0xA4600018;
@@ -46,7 +46,7 @@ void osInitialize(void) {
 
     osWritebackDCache((void*)0x80000000, 400);
     osInvalICache((void*)0x80000000, 400);
-    func_8008A660();
+    __createSpeedParam();
     osUnmapTLBAll();
     osMapTLBRdb();
     D_80097E50 = (D_80097E50 * 3) / 4;
@@ -74,5 +74,5 @@ void osInitialize(void) {
     *(u32*)0xA4500014 = 15;
 }
 
-void func_8008A9A8(void) {
+void __osInitialize_autodetect(void) {
 }

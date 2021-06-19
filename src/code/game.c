@@ -156,7 +156,7 @@ void Game_InitHeap(GameState* ctxt, u32 size) {
     }
 
     THA_Ct(&ctxt->heap, NULL, 0);
-    assert_fail("../game.c", 0x40B);
+    __assert("../game.c", 0x40B);
 }
 
 void Game_ResizeHeap(GameState* ctxt, u32 size) {
@@ -181,7 +181,7 @@ void Game_ResizeHeap(GameState* ctxt, u32 size) {
         THA_Ct(&ctxt->heap, buf, size);
     } else {
         THA_Ct(&ctxt->heap, 0, 0);
-        assert_fail("../game.c", 0x432);
+        __assert("../game.c", 0x432);
     }
 }
 

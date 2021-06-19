@@ -59,7 +59,7 @@ void Room_DrawType1Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     } else if (mesh->format == 2) {
         func_8012E32C(globalCtx, room, flags);
     } else {
-        assert_fail(D_801DDFAC, 0x3c5);
+        __assert(D_801DDFAC, 0x3c5);
     }
 }
 
