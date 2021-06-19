@@ -36,7 +36,7 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Draw,
 };
 
-s32 unused = 0;
+static s32 unused = 0;
 f32 D_80C0B0E4 = 960.0f;
 Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
 s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };

@@ -35,12 +35,12 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Init,
     (ActorFunc)ObjHgdoor_Destroy,
     (ActorFunc)ObjHgdoor_Update,
-    (ActorFunc)ObjHgdoor_Draw
+    (ActorFunc)ObjHgdoor_Draw,
 };
 
 s16 D_80BD4690 = 0;
-s32 unused = 0;
-s32 unused2 = 0;
+static s32 unused = 0;
+static s32 unused2 = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
@@ -131,10 +131,10 @@ void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
     u32 actionIndex;
 
     if (func_800EE29C(globalCtx, 0x1E3)) {
-        actionIndex= func_800EE200(globalCtx, 0x1E3);
+        actionIndex = func_800EE200(globalCtx, 0x1E3);
         if (this->unk166 != globalCtx->csCtx.actorActions[actionIndex]->unk0) {
             this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
-            switch(globalCtx->csCtx.actorActions[actionIndex]->unk0){
+            switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
                 case 1:
                     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
