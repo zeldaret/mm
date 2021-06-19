@@ -48,7 +48,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
             this->dyna.actor.child = actorIterator;
-            return;
+            break;
         }
         actorIterator = actorIterator->next;
     }
@@ -60,7 +60,7 @@ void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {
             this->dyna.actor.parent = actorIterator;
-            return;
+            break;
         }
         actorIterator = actorIterator->next;
     }
@@ -73,7 +73,7 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 1);
-    if (OBJHGDOOR_IS_RIGHT_DOOR(this)) {
+    if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         BgCheck_RelocateMeshHeader(&D_06001D10, &header);
     } else {
         BgCheck_RelocateMeshHeader(&D_060018C0, &header);
@@ -98,7 +98,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDistToPlayer < 40.0f) &&
-        OBJHGDOOR_IS_RIGHT_DOOR(this)) {
+        OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, globalCtx);
         ObjHgdoor_SetParent(this, globalCtx);
         func_80BD42AC(this);
@@ -177,7 +177,7 @@ s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx) {
 
 void func_80BD4500(ObjHgdoor* this) {
     this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y;
-    if (OBJHGDOOR_IS_RIGHT_DOOR(this)) {
+    if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         this->dyna.actor.shape.rot.y += this->rotation;
     } else {
         this->dyna.actor.shape.rot.y -= this->rotation;
@@ -196,7 +196,7 @@ void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    if (OBJHGDOOR_IS_RIGHT_DOOR((ObjHgdoor*)thisx)) {
+    if (OBJHGDOOR_IS_RIGHT_DOOR(thisx)) {
         gSPDisplayList(POLY_OPA_DISP++, D_06001AB0);
         gSPDisplayList(POLY_OPA_DISP++, D_06001BA8);
     } else {

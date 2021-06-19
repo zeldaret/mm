@@ -7,8 +7,8 @@ struct ObjHgdoor;
 
 typedef void (*ObjHgdoorActionFunc)(struct ObjHgdoor*, GlobalContext*);
 
-#define OBJHGDOOR_IS_RIGHT_DOOR(this) \
-    ((this)->dyna.actor.params & 0x8000) // door on the right when looking at the cabinet
+#define OBJHGDOOR_IS_RIGHT_DOOR(thisx) \
+    ((thisx)->params & 0x8000) // door on the right when looking at the cabinet
 
 typedef struct ObjHgdoor {
     /* 0x000 */ DynaPolyActor dyna;
