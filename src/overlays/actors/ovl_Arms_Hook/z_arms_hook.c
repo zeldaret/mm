@@ -135,7 +135,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8F98(&player->base, 0x100B);
+    func_800B8F98(&player->base, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
@@ -150,7 +150,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             }
         }
         this->timer = 0;
-        func_8019F1C0(&this->actor.projectedPos, 0x1814);
+        func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
 
         return;
     }
@@ -262,10 +262,10 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                     }
                 }
                 func_808C1154(this);
-                func_8019F1C0(&this->actor.projectedPos, 0x1829);
+                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(globalCtx, &this->actor.world.pos);
-                func_8019F1C0(&this->actor.projectedPos, 0x1813);
+                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else {
             if (CHECK_BTN_ANY(globalCtx->state.input[0].press.button,

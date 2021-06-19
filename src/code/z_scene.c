@@ -24,8 +24,8 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     return objectCtx->num - 1;
 }
 
-void Object_InitBank(GameState* state, ObjectContext* objectCtx) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
+    GlobalContext* globalCtx = (GlobalContext*)gamestate;
     s32 pad;
     u32 spaceSize;
     s32 i;
@@ -50,7 +50,7 @@ void Object_InitBank(GameState* state, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&state->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gamestate->heap, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
@@ -328,7 +328,7 @@ void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
 // Init function for the transition system.
-void Transition_Init(GameState* state, TransitionContext* transitionCtx) {
+void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx) {
     transitionCtx->nbTransitionActors = 0;
 }
 

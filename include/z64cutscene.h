@@ -5,7 +5,7 @@
 #include <unk.h>
 
 typedef struct {
-    /* 0x00 */ u16 unk0;
+    /* 0x00 */ u16 unk0; // action; // "dousa"
     /* 0x02 */ u16 startFrame;
     /* 0x04 */ u16 endFrame;
     /* 0x06 */ UNK_TYPE1 pad6[0x2A];
@@ -76,5 +76,12 @@ typedef struct {
     /* 0x8 */ u8 unk8;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdUnk9B; // size = 0xC
+
+typedef union CutsceneData {
+    s32 i;
+    f32 f;
+    s16 s[2];
+    s8  b[4];
+} CutsceneData;
 
 #endif

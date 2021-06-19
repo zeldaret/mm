@@ -1108,7 +1108,7 @@ ColChkResetFunc sATResetFuncs[] = {
 s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1134,7 +1134,7 @@ s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetAT_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1168,7 +1168,7 @@ ColChkResetFunc sACResetFuncs[] = {
 s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1194,7 +1194,7 @@ s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot
  */
 s32 CollisionCheck_SetAC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1228,7 +1228,7 @@ ColChkResetFunc sOCResetFuncs[] = {
 s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1254,7 +1254,7 @@ s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1286,7 +1286,7 @@ s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* co
 s32 CollisionCheck_SetOCLine(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, OcLine* line) {
     s32 index;
 
-    if (func_8016A01C(globalCtx)) {
+    if (FrameAdvance_IsEnabled(globalCtx)) {
         return -1;
     }
 
@@ -1486,9 +1486,9 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
     if (flags == TOUCH_SFX_NORMAL && collider->colType != COLTYPE_METAL) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 0, hitPos);
         if (collider->actor == NULL) {
-            play_sound(0x1806);
+            play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, 0x1806);
+            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_NORMAL) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 3, hitPos);
@@ -1500,16 +1500,16 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
     } else if (flags == TOUCH_SFX_HARD) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 0, hitPos);
         if (collider->actor == NULL) {
-            play_sound(0x1806);
+            play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, 0x1806);
+            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_WOOD) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 1, hitPos);
         if (collider->actor == NULL) {
-            play_sound(0x1837);
+            play_sound(NA_SE_IT_REFLECTION_WOOD);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, 0x1837);
+            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_REFLECTION_WOOD);
         }
     }
 }
@@ -1520,9 +1520,9 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo) {
     if (at->actor != NULL && at->actor->category == ACTORCAT_PLAYER) {
         if (acInfo->elemType == ELEMTYPE_UNK0) {
-            func_8019F1C0(&at->actor->projectedPos, 0x1811);
+            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
         } else if (acInfo->elemType == ELEMTYPE_UNK1) {
-            func_8019F1C0(&at->actor->projectedPos, 0x1824);
+            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
         } else if (acInfo->elemType == ELEMTYPE_UNK2) {
             func_8019F1C0(&at->actor->projectedPos, 0);
         } else if (acInfo->elemType == ELEMTYPE_UNK3) {
@@ -1566,7 +1566,7 @@ void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderI
         } else if (sHitInfo[ac->colType].effect == HIT_WOOD) {
             if (at->actor == NULL) {
                 CollisionCheck_SpawnShieldParticles(globalCtx, hitPos);
-                play_sound(0x1837);
+                play_sound(NA_SE_IT_REFLECTION_WOOD);
             } else {
                 CollisionCheck_SpawnShieldParticlesWood(globalCtx, hitPos, &at->actor->projectedPos);
             }
@@ -1579,9 +1579,9 @@ void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderI
     } else {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 0, hitPos);
         if (ac->actor == NULL) {
-            play_sound(0x1806);
+            play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&ac->actor->projectedPos, 0x1806);
+            func_8019F1C0(&ac->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     }
 }
@@ -3860,7 +3860,7 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* globalCtx, Vec3f* v) {
  */
 void CollisionCheck_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v) {
     CollisionCheck_SpawnShieldParticles(globalCtx, v);
-    play_sound(0x1808);
+    play_sound(NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 /**
@@ -3868,7 +3868,7 @@ void CollisionCheck_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v
  */
 void CollisionCheck_SpawnShieldParticlesMetalSound(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos) {
     CollisionCheck_SpawnShieldParticles(globalCtx, v);
-    func_8019F1C0(pos, 0x1808);
+    func_8019F1C0(pos, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 /**
@@ -3908,7 +3908,7 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v,
     shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
     Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
-    func_8019F1C0(pos, 0x1837);
+    func_8019F1C0(pos, NA_SE_IT_REFLECTION_WOOD);
 }
 
 /**

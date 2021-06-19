@@ -111,7 +111,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     if (grottoIsOpen) {
         this->actor.params &= ~DOORANA_TYPE_BITRANGE;
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
-        play_sound(0x4802); // CORRECT_CHIME sfx
+        play_sound(NA_SE_SY_CORRECT_CHIME);
     }
 
     func_800B8C50(&this->actor, globalCtx);

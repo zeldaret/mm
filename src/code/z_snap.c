@@ -95,7 +95,7 @@ void func_8013A46C(s32 flag) {
 
 u32 func_8013A4C4(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
-    
+
     if (flag < 0x20) {
         return saveCtx->roomInf[123][3] & (1 << flag);
     } else {

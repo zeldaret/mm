@@ -29,10 +29,10 @@ void func_800CAE9C(DynaPolyActor* actor) {
     actor->unk_158 |= 2;
 }
 
-void func_800CAEB0(CollisionContext* bgCtxt, s32 index) {
+void func_800CAEB0(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(bgCtxt, index);
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAE9C(actor);
     }
@@ -42,10 +42,10 @@ void func_800CAEE0(DynaPolyActor* actor) {
     actor->unk_158 |= 4;
 }
 
-void func_800CAEF4(CollisionContext* bgCtxt, s32 index) {
+void func_800CAEF4(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(bgCtxt, index);
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAEE0(actor);
     }
