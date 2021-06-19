@@ -38,7 +38,7 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Draw,
 };
 
-s16 D_80BD4690 = 0;
+static s16 D_80BD4690 = 0;
 static s32 unused = 0;
 static s32 unused2 = 0;
 
@@ -46,7 +46,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
 
     while (actorIterator) {
-        if (actorIterator->id == ACTOR_OBJ_HGDOOR && &this->dyna.actor != actorIterator) {
+        if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
             this->dyna.actor.child = actorIterator;
             return;
         }
@@ -98,7 +98,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDistToPlayer < 40.0f) &&
-        (OBJHGDOOR_IS_RIGHT_DOOR(this))) {
+        OBJHGDOOR_IS_RIGHT_DOOR(this)) {
         ObjHgdoor_SetChild(this, globalCtx);
         ObjHgdoor_SetParent(this, globalCtx);
         func_80BD42AC(this);
@@ -114,12 +114,12 @@ void func_80BD42C0(ObjHgdoor* this, GlobalContext* globalCtx) {
         ActorCutscene_Start(this->cutscene, &this->dyna.actor);
         func_80BD433C(this);
         func_80BD433C((ObjHgdoor*)this->dyna.actor.child);
-        return;
+    } else {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        }
+        ActorCutscene_SetIntentToPlay(this->cutscene);
     }
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    }
-    ActorCutscene_SetIntentToPlay(this->cutscene);
 }
 
 void func_80BD433C(ObjHgdoor* this) {
@@ -160,7 +160,7 @@ void func_80BD4460(ObjHgdoor* this) {
 }
 
 void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx) {
-    if (this->timer++ > 0x50 && !ActorCutscene_GetCanPlayNext(this->cutscene)) {
+    if (this->timer++ > 80 && !ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Stop(this->cutscene);
     }
 }
