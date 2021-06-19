@@ -70,6 +70,12 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
     include "build/asm/boot/initialize.text.o"
+    pad_text
+    pad_text
+    pad_text
+    pad_text
+    pad_text
+    pad_text
     include "build/asm/boot/vigetnextframebuf.text.o"
     include "build/asm/boot/perspective.text.o"
     include "build/asm/boot/sprawdma.text.o"
@@ -92,10 +98,12 @@ beginseg
     include "build/asm/boot/probetlb.text.o"
     include "build/asm/boot/pimgr.text.o"
     include "build/asm/boot/piacs.text.o"
+    pad_text
     include "build/asm/boot/devmgr.text.o"
     include "build/asm/boot/pirawdma.text.o"
     include "build/asm/boot/contpfs.text.o"
     include "build/asm/boot/getcount.text.o"
+    pad_text
     include "build/asm/boot/guMtxL2F.text.o"
     include "build/asm/boot/getmemsize.text.o"
     include "build/asm/boot/pfssearchfile.text.o"
@@ -174,6 +182,7 @@ beginseg
     include "build/asm/boot/epiwrite.text.o"
     include "build/asm/boot/maptlbrdb.text.o"
     include "build/asm/boot/yieldthread.text.o"
+    pad_text
     include "build/asm/boot/guTranslate.text.o"
     include "build/asm/boot/getcause.text.o"
     include "build/asm/boot/contramwrite.text.o"
@@ -185,11 +194,13 @@ beginseg
     include "build/asm/boot/sirawwrite.text.o"
     include "build/asm/boot/spgetstat.text.o"
     include "build/asm/boot/spsetstat.text.o"
+    pad_text
     include "build/asm/boot/vimgr.text.o"
     include "build/asm/boot/vigetcurrcontext.text.o"
     include "build/asm/boot/writebackdcacheall.text.o"
     include "build/asm/boot/getcurrfaultthread.text.o"
     include "build/asm/boot/voicemaskdictionary.text.o"
+    pad_text
     include "build/asm/boot/guMtxF2L.text.o"
     include "build/asm/boot/startthread.text.o"
     include "build/asm/boot/visetyscale.text.o"
@@ -486,6 +497,7 @@ beginseg
     include "build/asm/code/code_800CB000.text.o"
     include "build/asm/code/z_camera.text.o"
     include "build/asm/code/z_collision_btltbls.text.o"
+    pad_text
     include "build/asm/code/z_collision_check.text.o"
     include "build/asm/code/code_800E8EA0.text.o"
     include "build/asm/code/z_common_data.text.o"
@@ -519,6 +531,7 @@ beginseg
     include "build/asm/code/z_msgevent.text.o"
     include "build/asm/code/z_nmi_buff.text.o"
     include "build/asm/code/z_olib.text.o"
+    pad_text
     include "build/asm/code/z_parameter.text.o"
     include "build/asm/code/z_path.text.o"
     include "build/asm/code/code_80122660.text.o"
@@ -526,8 +539,10 @@ beginseg
     include "build/asm/code/z_prenmi.text.o"
     include "build/asm/code/z_quake.text.o"
     include "build/asm/code/z_rcp.text.o"
+    pad_text
     include "build/asm/code/z_room.text.o"
     include "build/asm/code/code_8012EC80.text.o"
+    pad_text
     include "build/asm/code/z_scene.text.o"
     include "build/asm/code/z_scene_proc.text.o"
     include "build/asm/code/z_scene_table.text.o"
@@ -589,6 +604,9 @@ beginseg
     include "build/asm/code/sys_flashrom.text.o"
     include "build/asm/code/code_80185F90.text.o"
     include "build/asm/code/osFlash.text.o"
+    pad_text
+    pad_text
+    pad_text
     include "build/asm/code/code_801877D0.text.o"
     include "build/asm/code/code_8018B0F0.text.o"
     include "build/asm/code/code_8018EB60.text.o"
@@ -597,9 +615,11 @@ beginseg
     include "build/asm/code/code_80194930.text.o"
     include "build/asm/code/code_801974D0.text.o"
     include "build/asm/code/code_8019AE40.text.o"
+    pad_text
     include "build/asm/code/code_8019AEC0.text.o"
     include "build/asm/code/code_8019AF00.text.o"
     include "build/asm/code/code_801A51F0.text.o"
+    pad_text
     include "build/asm/code/code_801A5BD0.text.o"
     include "build/asm/code/code_801A7B10.text.o"
     include "build/asm/code/code_801AA020.text.o"
