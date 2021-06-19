@@ -19,7 +19,7 @@ const ActorInit Obj_Boat_InitVars = {
     (ActorFunc)ObjBoat_Init,
     (ActorFunc)ObjBoat_Destroy,
     (ActorFunc)ObjBoat_Update,
-    (ActorFunc)ObjBoat_Draw
+    (ActorFunc)ObjBoat_Draw,
 };
 */
 

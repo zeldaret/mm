@@ -1,5 +1,5 @@
-#include <ramrom.h>
-#include <osint.h>
+#include <ultra64.h>
+#include <global.h>
 
 u64 osClockRate = 0x0000000003B9ACA0;
 s32 osViClock = 0x02E6D354;
@@ -32,8 +32,12 @@ void osInitialize(void) {
     __osSetFpcCsr(0x01000800);
     __osSetWatchLo(0x04900000);
 
-    while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0);
-    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0);
+    while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0) {
+        ;
+    }
+    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0) {
+        ;
+    }
 
     *(__osExceptionVector*)0x80000000 = *((__osExceptionVector*)__osExceptionPreamble);
     *(__osExceptionVector*)0x80000080 = *((__osExceptionVector*)__osExceptionPreamble);
@@ -48,7 +52,7 @@ void osInitialize(void) {
     D_80097E50 = (D_80097E50 * 3) / 4;
 
     if (osResetType == 0) {
-        _blkclr((u8*)&D_8000031C, 64);
+        _blkclr((u8*)&osAppNmiBuffer, 64);
     }
 
     if (osTvType == 0) {
@@ -59,8 +63,10 @@ void osInitialize(void) {
         osViClock = 0x02E6D354;
     }
 
-    if((__osGetCause() & 0x1000) != 0) {
-        while(1);
+    if ((__osGetCause() & 0x1000) != 0) {
+        while (1) {
+            ;
+        }
     }
 
     *(u32*)0xA4500008 = 1;
@@ -68,4 +74,5 @@ void osInitialize(void) {
     *(u32*)0xA4500014 = 15;
 }
 
-void func_8008A9A8(void) {}
+void func_8008A9A8(void) {
+}

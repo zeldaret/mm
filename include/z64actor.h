@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <z64math.h>
+#include <z64animation.h>
 #include <z64collision_check.h>
 #include <unk.h>
 
@@ -11,10 +12,10 @@
 
 struct Actor;
 struct GlobalContext;
-struct LightMapper;
-struct BgPolygon;
+struct Lights;
+struct CollisionPoly;
 
-typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* ctxt);
+typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -106,7 +107,7 @@ typedef struct {
     /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct LightMapper* mapper, struct GlobalContext* ctxt);
+typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -128,7 +129,7 @@ typedef struct Actor {
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objBankIndex; // Object bank index of the actor's object dependency; original name: "bank"
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
-    /* 0x020 */ u16 unk20;
+    /* 0x020 */ s16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
     /* 0x039 */ s8 unk39;
@@ -140,8 +141,8 @@ typedef struct Actor {
     /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
     /* 0x078 */ f32 minVelocityY; // Sets the lower bounds cap on velocity along the Y axis
-    /* 0x07C */ struct BgPolygon* wallPoly; // Wall polygon the actor is touching
-    /* 0x080 */ struct BgPolygon* floorPoly; // Floor polygon directly below the actor
+    /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
+    /* 0x080 */ struct CollisionPoly* floorPoly; // Floor polygon directly below the actor
     /* 0x084 */ u8 wallBgId; // Bg ID of the wall polygon the actor is touching
     /* 0x085 */ u8 floorBgId; // Bg ID of the floor polygon directly below the actor
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
@@ -213,7 +214,8 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ UNK_TYPE1 pad144[0x3];
+    /* 0x144 */ UNK_TYPE1 unk144;
+    /* 0x145 */ UNK_TYPE1 pad145[0x2];
     /* 0x147 */ s8 itemActionParam;
     /* 0x148 */ UNK_TYPE1 pad148[0x2];
     /* 0x14A */ s8 heldItemActionParam;
@@ -221,12 +223,18 @@ typedef struct {
     /* 0x14C */ UNK_TYPE1 pad14C[0x5];
     /* 0x151 */ u8 unk151;
     /* 0x152 */ UNK_TYPE1 unk152;
-    /* 0x153 */ u8 unk153;
+    /* 0x153 */ u8 unk153; // isWearingAMask
     /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
     /* 0x34C */ Actor* heldActor;
     /* 0x350 */ UNK_TYPE1 pad350[0x18];
     /* 0x368 */ Vec3f unk368;
-    /* 0x374 */ UNK_TYPE1 pad374[0x20];
+    /* 0x374 */ UNK_TYPE1 pad374[0x8];
+    /* 0x37C */ s8 doorType;
+    /* 0x37D */ s8 doorDirection;
+    /* 0x37E */ s8 doorTimer;
+    /* 0x37F */ s8 unk37F;
+    /* 0x380 */ Actor* doorActor;
+    /* 0x384 */ UNK_TYPE1 unk384[0x10];
     /* 0x394 */ u8 unk394;
     /* 0x395 */ UNK_TYPE1 pad395[0x37];
     /* 0x3CC */ s16 unk3CC;
@@ -248,28 +256,80 @@ typedef struct {
     /* 0xADE */ u8 unkADE;
     /* 0xADF */ UNK_TYPE1 padADF[0x4];
     /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x44];
+    /* 0xAE4 */ UNK_TYPE1 padAE4[0x3];
+    /* 0xAE7 */ s8 unkAE7;
+    /* 0xAE8 */ UNK_TYPE1 padAE8[0x20];
+    /* 0xB08 */ f32 unkB08;
+    /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
     /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x72];
+    /* 0xB2A */ UNK_TYPE1 padB2A[0x1E];
+    /* 0xB48 */ f32 unkB48;
+    /* 0xB4C */ UNK_TYPE1 padB4C[0x34];
+    /* 0xB80 */ f32 unk_B80;
+    /* 0xB84 */ s16 unk_B84;
+    /* 0xB86 */ char unk_B86[0x16];
     /* 0xB9C */ Vec3f unkB9C;
-    /* 0xBA8 */ UNK_TYPE1 padBA8[0x1B4];
-    /* 0xBA8 */ s8 unkD5C;
-    /* 0xBA8 */ UNK_TYPE1 padD60[0x1B];
+    /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
+    /* 0xBEC */ Vec3f bodyPartsPos[18];
+    /* 0xCC4 */ MtxF mf_CC4;
+    /* 0xD04 */ MtxF unkD04;
+    /* 0xD44 */ UNK_TYPE1 padD44[0x18];
+    /* 0xD5C */ s8 unkD5C;
+    /* 0xD60 */ UNK_TYPE1 padD60[0x1B];
 } ActorPlayer; // size = 0xD78
 
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
-    /* 0x148 */ s16 collectibleFlagId;
+typedef enum {
+    /* 0x00 */ ITEM00_RUPEE_GREEN,
+    /* 0x01 */ ITEM00_RUPEE_BLUE,
+    /* 0x02 */ ITEM00_RUPEE_RED,
+    /* 0x03 */ ITEM00_HEART,
+    /* 0x04 */ ITEM00_BOMBS_A,
+    /* 0x05 */ ITEM00_ARROWS_10,
+    /* 0x06 */ ITEM00_HEART_PIECE,
+    /* 0x07 */ ITEM00_HEART_CONTAINER,
+    /* 0x08 */ ITEM00_ARROWS_30,
+    /* 0x09 */ ITEM00_ARROWS_40,
+    /* 0x0A */ ITEM00_ARROWS_50,
+    /* 0x0B */ ITEM00_BOMBS_B,
+    /* 0x0C */ ITEM00_NUTS_1,
+    /* 0x0D */ ITEM00_STICK,
+    /* 0x0E */ ITEM00_MAGIC_LARGE,
+    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x10 */ ITEM00_MASK,
+    /* 0x11 */ ITEM00_SMALL_KEY,
+    /* 0x12 */ ITEM00_FLEXIBLE,
+    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x14 */ ITEM00_RUPEE_PURPLE,
+    /* 0x15 */ ITEM00_3_HEARTS,
+    /* 0x16 */ ITEM00_SHIELD_HERO,
+    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x18 */ ITEM00_NOTHING,
+    /* 0x19 */ ITEM00_BOMBS_0,
+    /* 0x1A */ ITEM00_BIG_FAIRY,
+    /* 0x1B */ ITEM00_MAP,
+    /* 0x1C */ ITEM00_COMPASS,
+    /* 0x1D */ ITEM00_MUSHROOM_CLOUD,
+
+    /* 0xFF */ ITEM00_NO_DROP = -1
+} Item00Type;
+
+struct EnItem00;
+
+typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
+
+typedef struct EnItem00 {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnItem00ActionFunc actionFunc;
+    /* 0x148 */ s16 collectibleFlag;
     /* 0x14A */ s16 unk14A;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
     /* 0x154 */ f32 unk154;
-    /* 0x158 */ ColliderCylinder collision;
-    /* 0x1A4 */ UNK_TYPE1 pad1A4[0x4];
-} ActorEnItem00; // size = 0x1A8
+    /* 0x158 */ ColliderCylinder collider;
+    /* 0x1A4 */ s8 unk1A4;
+} EnItem00; // size = 0x1A8
 
 typedef struct {
     /* 0x000 */ Actor base;
@@ -292,6 +352,24 @@ typedef enum {
     /* 0x0A */ ACTORCAT_DOOR,
     /* 0x0B */ ACTORCAT_CHEST
 } ActorType;
+
+typedef struct {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
+    /* 0x08 */ f32 startFrame;
+    /* 0x0C */ f32 frameCount;
+    /* 0x10 */ u8 mode;
+    /* 0x14 */ f32 morphFrames;
+} ActorAnimationEntry; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ AnimationHeader* animationSeg;
+    /* 0x04 */ f32 playbackSpeed;
+    /* 0x08 */ s16 frame;
+    /* 0x0A */ s16 frameCount;
+    /* 0x0C */ u8 mode;
+    /* 0x0E */ s16 transitionRate;
+} ActorAnimationEntryS; // size = 0x10
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

@@ -3,66 +3,68 @@
 
 typedef struct {
     Actor actor;
-    s32 (*pictoFunc)(GlobalContext* ctxt, Actor* actor);
+    s32 (*pictoFunc)(GlobalContext* globalCtx, Actor* actor);
 } PictoActor;
 
-s32 func_8013A240(GlobalContext* ctxt) {
+s32 func_8013A240(GlobalContext* globalCtx) {
     PictoActor* pictoActor;
     Actor* actor;
     s32 type = 0;
     s32 seen;
     s32 count = 0;
 
-    gSaveContext.perm.pictoFlags0 = 0;
-    gSaveContext.perm.pictoFlags1 = 0;
+    gSaveContext.roomInf[123][3] = 0;
+    gSaveContext.roomInf[123][4] = 0;
 
-    if (ctxt->sceneNum == SCENE_20SICHITAI) {
+    if (globalCtx->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
     }
 
     for (; type < 12; type++) {
-        for (actor = ctxt->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
-            switch (ctxt->sceneNum) {
-            case SCENE_20SICHITAI:
-                if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
-                    seen = 1;
-                }
-                break;
-            default:
-                seen = 0;
+            switch (globalCtx->sceneNum) {
+                case SCENE_20SICHITAI:
+                    if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
+                        seen = 1;
+                    }
+                    break;
+                default:
+                    seen = 0;
             }
 
-            if (actor->id); // Needed to match
+            if (actor->id) {
+                ; // Needed to match
+            }
 
             switch (actor->id) {
-            case ACTOR_EN_KAKASI:
-                if ((actor->params & 1) == 1) {
+                case ACTOR_EN_KAKASI:
+                    if ((actor->params & 1) == 1) {
+                        seen |= 2;
+                        break; //! @bug break is inside conditional, meaning it falls through if it is false
+                    }
+                case ACTOR_EN_ZOV:
                     seen |= 2;
-                    break; //! @bug break is inside conditional, meaning it falls through if it is false
-                }
-            case ACTOR_EN_ZOV:
-                seen |= 2;
-                break;
-            case ACTOR_EN_BAL:
-                seen |= 2;
-                break;
-            case ACTOR_EN_DNQ:
-                seen |= 2;
-                break;
-            case ACTOR_EN_GE1:
-            case ACTOR_EN_GE3:
-            case ACTOR_EN_KAIZOKU:
-            case ACTOR_EN_GE2:
-                seen |= 2;
-                break;
+                    break;
+                case ACTOR_EN_BAL:
+                    seen |= 2;
+                    break;
+                case ACTOR_EN_DNQ:
+                    seen |= 2;
+                    break;
+                case ACTOR_EN_GE1:
+                case ACTOR_EN_GE3:
+                case ACTOR_EN_KAIZOKU:
+                case ACTOR_EN_GE2:
+                    seen |= 2;
+                    break;
             }
 
             if (seen != 0) {
                 pictoActor = (PictoActor*)actor;
                 if (pictoActor->pictoFunc != NULL) {
-                    if ((pictoActor->pictoFunc)(ctxt, actor) == 0) {
+                    if ((pictoActor->pictoFunc)(globalCtx, actor) == 0) {
                         count++;
                     }
                 }
@@ -75,29 +77,30 @@ s32 func_8013A240(GlobalContext* ctxt) {
 
 void func_8013A41C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 |= (1 << flag);
+        gSaveContext.roomInf[123][3] |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 |= (1 << flag);
+        gSaveContext.roomInf[123][4] |= (1 << flag);
     }
 }
 
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.perm.pictoFlags0 &= ~(1 << flag);
+        gSaveContext.roomInf[123][3] &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.perm.pictoFlags1 &= ~(1 << flag);
+        gSaveContext.roomInf[123][4] &= ~(1 << flag);
     }
 }
 
 u32 func_8013A4C4(s32 flag) {
-    SaveContextPerm* save = &gSaveContext.perm;
+    SaveContext* saveCtx = &gSaveContext;
+
     if (flag < 0x20) {
-        return save->pictoFlags0 & (1 << flag);
+        return saveCtx->roomInf[123][3] & (1 << flag);
     } else {
         flag &= 0x1F;
-        return save->pictoFlags1 & (1 << flag);
+        return saveCtx->roomInf[123][4] & (1 << flag);
     }
 }
 
@@ -105,16 +108,17 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+                  f32 distanceMax, s16 angleError) {
     Vec3f screenSpace;
     s16 x;
     s16 y;
     f32 distance;
-    UNK_TYPE unk1;
+    CollisionPoly* unk1;
     Camera* camera;
     Actor* actors[2];
     s32 ret = 0;
-    UNK_TYPE unk2;
+    u32 unk2;
 
     camera = ACTIVE_CAM;
 
@@ -145,7 +149,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     }
 
     actors[0] = actor;
-    actors[1] = globalCtx->actorCtx.actorList[2].first; // TODO PLAYER macro
+    actors[1] = &PLAYER->base;
     if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;
@@ -157,4 +161,3 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
 
     return ret;
 }
-

@@ -1,10 +1,7 @@
-#include <osint.h>
+#include <ultra64.h>
+#include <global.h>
 
-#include "io/controller.h"
-#include "siint.h"
-
-s32 osContStartQuery(OSMesgQueue* mq)
-{
+s32 osContStartQuery(OSMesgQueue* mq) {
     s32 ret;
 
     __osSiGetAccess();
@@ -12,7 +9,7 @@ s32 osContStartQuery(OSMesgQueue* mq)
     if (__osContLastCmd != 0) {
         __osPackRequestData(0);
         __osSiRawStartDma(1, &__osContPifRam);
-        osRecvMesg(mq, NULL, 1);
+        osRecvMesg(mq, NULL, OS_MESG_BLOCK);
     }
 
     ret = __osSiRawStartDma(0, &__osContPifRam);
@@ -24,8 +21,7 @@ s32 osContStartQuery(OSMesgQueue* mq)
     return ret;
 }
 
-void osContGetQuery(OSContStatus* data)
-{
+void osContGetQuery(OSContStatus* data) {
     u8 pattern;
 
     __osContGetInitData(&pattern, data);

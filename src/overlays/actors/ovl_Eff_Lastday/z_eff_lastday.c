@@ -19,7 +19,7 @@ const ActorInit Eff_Lastday_InitVars = {
     (ActorFunc)EffLastday_Init,
     (ActorFunc)EffLastday_Destroy,
     (ActorFunc)EffLastday_Update,
-    (ActorFunc)EffLastday_Draw
+    (ActorFunc)EffLastday_Draw,
 };
 */
 

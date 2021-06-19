@@ -3,6 +3,8 @@
 
 #include <PR/ultratypes.h>
 
+#define OS_YIELD_DATA_SIZE 0xC00
+
 typedef struct {
     /* 0x0 */ u32 type;
     /* 0x4 */ u32 flags;

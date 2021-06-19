@@ -23,16 +23,30 @@ const ActorInit Bg_Ikana_Ray_InitVars = {
     (ActorFunc)BgIkanaRay_Init,
     (ActorFunc)BgIkanaRay_Destroy,
     (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw
+    (ActorFunc)BgIkanaRay_Draw,
 };
 
-ColliderCylinderInit bgIkanaRayCylinderInit = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_OTHER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00200000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 90, 420, -420, { 0, 0, 0 } },
 };
 
-InitChainEntry bgIkanaRayCompInit[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
@@ -40,26 +54,27 @@ InitChainEntry bgIkanaRayCompInit[] = {
 };
 
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderCylinder* collision = &THIS->collision;
-    u32 pad;
+    BgIkanaRay* this = THIS;
+    ColliderCylinder* collision = &this->collision;
 
-    Actor_ProcessInitChain(thisx, bgIkanaRayCompInit);
-
+    Actor_ProcessInitChain(&this->base, sInitChain);
     Collider_InitCylinder(globalCtx, collision);
-    Collider_SetCylinder(globalCtx, collision, thisx, &bgIkanaRayCylinderInit);
-    Collider_UpdateCylinder(thisx, &THIS->collision);
+    Collider_SetCylinder(globalCtx, collision, &this->base, &sCylinderInit);
+    Collider_UpdateCylinder(&this->base, &this->collision);
 
-    THIS->animatedTextures = (AnimatedTexture*)Lib_PtrSegToVirt(object_ikana_obj_001228);
+    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
 
-    if (Actor_GetSwitchFlag(globalCtx, THIS->base.params & 0x7F) != 0) {
-        BgIkanaRay_SetActivated(THIS);
+    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
+        BgIkanaRay_SetActivated(this);
     } else {
-        BgIkanaRay_SetDeactivated(THIS);
+        BgIkanaRay_SetDeactivated(this);
     }
 }
 
 void BgIkanaRay_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderCylinder* collision = &THIS->collision;
+    BgIkanaRay* this = THIS;
+
+    ColliderCylinder* collision = &this->collision;
     Collider_DestroyCylinder(globalCtx, collision);
 }
 
@@ -70,14 +85,14 @@ void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Actor_GetSwitchFlag(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
         BgIkanaRay_SetActivated(this);
     }
 }
 
 void BgIkanaRay_SetActivated(BgIkanaRay* this) {
-    this->base.draw = (ActorFunc)BgIkanaRay_Draw;
-    this->base.flags &= 0xFFFFFFEF;
+    this->base.draw = BgIkanaRay_Draw;
+    this->base.flags &= ~0x10;
     this->update = BgIkanaRay_UpdateActivated;
 }
 
@@ -86,10 +101,14 @@ void BgIkanaRay_UpdateActivated(BgIkanaRay* this, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
-    THIS->update(THIS, globalCtx);
+    BgIkanaRay* this = THIS;
+
+    this->update(this, globalCtx);
 }
 
 void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    SceneProc_DrawAllSceneAnimatedTextures(globalCtx, THIS->animatedTextures);
+    BgIkanaRay* this = THIS;
+
+    AnimatedMat_Draw(globalCtx, this->animatedTextures);
     func_800BE03C(globalCtx, object_ikana_obj_001100);
 }

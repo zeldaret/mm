@@ -8,7 +8,26 @@ void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+static ColliderCylinderInit sUnusedColliderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
+    { 20, 30, 0, { 0, 0, 0 } },
+};
+
 const ActorInit En_Tag_Obj_InitVars = {
     ACTOR_EN_TAG_OBJ,
     ACTORCAT_PROP,
@@ -18,12 +37,24 @@ const ActorInit En_Tag_Obj_InitVars = {
     (ActorFunc)EnTagObj_Init,
     (ActorFunc)EnTagObj_Destroy,
     (ActorFunc)EnTagObj_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Init.asm")
+void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTagObj* this = (EnTagObj*)thisx;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Destroy.asm")
+    this->hasSpawnedSeahorse = 0;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tag_Obj_0x80B12870/EnTagObj_Update.asm")
+void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnTagObj* this = (EnTagObj*)thisx;
+
+    if (!this->hasSpawnedSeahorse) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
+                    this->actor.world.pos.z, 0, 0, 0, 0);
+        this->hasSpawnedSeahorse = 1;
+    }
+}

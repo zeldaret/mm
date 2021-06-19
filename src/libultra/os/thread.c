@@ -1,5 +1,5 @@
-#include <PR/ultratypes.h>
-#include <osint.h>
+#include <ultra64.h>
+#include <global.h>
 
 OSThread* __osThreadTail = NULL;
 UNK_TYPE D_80097E14 = -1;
@@ -8,8 +8,7 @@ OSThread* __osActiveQueue = (OSThread*)&__osThreadTail;
 OSThread* __osRunningThread = NULL;
 OSThread* __osFaultedThread = NULL;
 
-void __osDequeueThread(OSThread** queue, OSThread* t)
-{
+void __osDequeueThread(OSThread** queue, OSThread* t) {
     register OSThread* pred;
     register OSThread* succ;
 

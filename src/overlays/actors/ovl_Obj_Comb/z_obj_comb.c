@@ -19,7 +19,7 @@ const ActorInit Obj_Comb_InitVars = {
     (ActorFunc)ObjComb_Init,
     (ActorFunc)ObjComb_Destroy,
     (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw
+    (ActorFunc)ObjComb_Draw,
 };
 */
 

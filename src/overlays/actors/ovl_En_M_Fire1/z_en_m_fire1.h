@@ -7,7 +7,8 @@ struct EnMFire1;
 
 typedef struct EnMFire1 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x50];
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ f32 timer;
 } EnMFire1; // size = 0x194
 
 extern const ActorInit En_M_Fire1_InitVars;

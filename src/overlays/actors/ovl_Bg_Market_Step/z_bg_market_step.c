@@ -16,7 +16,7 @@ const ActorInit Bg_Market_Step_InitVars = {
     (ActorFunc)BgMarketStep_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)BgMarketStep_Draw
+    (ActorFunc)BgMarketStep_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

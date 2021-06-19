@@ -19,7 +19,7 @@ const ActorInit En_Lift_Nuts_InitVars = {
     (ActorFunc)EnLiftNuts_Init,
     (ActorFunc)EnLiftNuts_Destroy,
     (ActorFunc)EnLiftNuts_Update,
-    (ActorFunc)EnLiftNuts_Draw
+    (ActorFunc)EnLiftNuts_Draw,
 };
 */
 

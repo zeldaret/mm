@@ -19,7 +19,7 @@ const ActorInit En_Light_InitVars = {
     (ActorFunc)EnLight_Init,
     (ActorFunc)EnLight_Destroy,
     (ActorFunc)EnLight_Update,
-    (ActorFunc)EnLight_Draw
+    (ActorFunc)EnLight_Draw,
 };
 */
 

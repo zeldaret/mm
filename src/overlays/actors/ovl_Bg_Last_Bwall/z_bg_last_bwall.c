@@ -19,7 +19,7 @@ const ActorInit Bg_Last_Bwall_InitVars = {
     (ActorFunc)BgLastBwall_Init,
     (ActorFunc)BgLastBwall_Destroy,
     (ActorFunc)BgLastBwall_Update,
-    (ActorFunc)BgLastBwall_Draw
+    (ActorFunc)BgLastBwall_Draw,
 };
 */
 

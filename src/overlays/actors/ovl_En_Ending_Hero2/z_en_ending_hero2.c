@@ -21,10 +21,10 @@ const ActorInit En_Ending_Hero2_InitVars = {
     (ActorFunc)EnEndingHero2_Init,
     (ActorFunc)EnEndingHero2_Destroy,
     (ActorFunc)EnEndingHero2_Update,
-    (ActorFunc)EnEndingHero2_Draw
+    (ActorFunc)EnEndingHero2_Draw,
 };
 
-extern SkeletonHeader D_06007908;
+extern FlexSkeletonHeader D_06007908;
 extern AnimationHeader D_060011C0;
 
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -36,7 +36,7 @@ void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->limbDrawTable,
                      this->transitionDrawTable, 20);
-    Actor_SetDrawParams(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C232E8(this);
 }
 

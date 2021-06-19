@@ -3,11 +3,21 @@
 
 #include <global.h>
 
+#define OBJHSSTUMP_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJHSSTUMP_GET_ISHIDDEN(thisx) (((thisx)->params >> 12) & 0xF)
+
 struct ObjHsStump;
 
+typedef void (*ObjHsStumpActionFunc)(struct ObjHsStump*, GlobalContext*);
+
 typedef struct ObjHsStump {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x28];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjHsStumpActionFunc actionFunc;
+    /* 0x160 */ s16 switchFlag;
+    /* 0x162 */ u8 isHidden;
+    /* 0x164 */ s16 framesAppeared;
+    /* 0x166 */ s16 rotAngle;
+    /* 0x168 */ f32 rotFactor;
 } ObjHsStump; // size = 0x16C
 
 extern const ActorInit Obj_HsStump_InitVars;

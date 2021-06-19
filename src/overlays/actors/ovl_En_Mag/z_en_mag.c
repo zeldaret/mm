@@ -19,7 +19,7 @@ const ActorInit En_Mag_InitVars = {
     (ActorFunc)EnMag_Init,
     (ActorFunc)EnMag_Destroy,
     (ActorFunc)EnMag_Update,
-    (ActorFunc)EnMag_Draw
+    (ActorFunc)EnMag_Draw,
 };
 */
 
