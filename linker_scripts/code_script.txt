@@ -8104,9 +8104,9 @@ SECTIONS
     ovl_Obj_Hgdoor : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.text)
-        build/asm/overlays/ovl_Obj_Hgdoor_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.data)
         build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.rodata)
-        build/asm/overlays/ovl_Obj_Hgdoor_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
