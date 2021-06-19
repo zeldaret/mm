@@ -21,7 +21,7 @@ typedef struct EnBigpo {
     /* 0x200 */ EnBigPoActionFunc actionFunc;
     /* 0x204 */ u8 unk204;
     // idleTimer gets reused:
-    // * when idle flying around, framecount until next attack
+    // * when idle flying around, frames until next attack
     // * when spinning back into reality, counts frames from start
     // * in death one, counts frames from death start
     // * after scoop spawned, idle timer used to count down to actor disapear
@@ -31,11 +31,11 @@ typedef struct EnBigpo {
     /* 0x20C */ s16 unk20C; // incremented 
     /* 0x20E */ s16 unk20E;
     /* 0x210 */ s16 switchFlags;
-    /* 0x212 */ s16 unk212; // timer?
+    /* 0x212 */ s16 unk212; // seems to affect pos.y of idle flying poh
     /* 0x214 */ f32 unk214; // speed?
     /* 0x218 */ f32 unk218; // re-appear height
-    /* 0x21C */ f32 unk21C;
-    /* 0x220 */ f32 unk220;
+    /* 0x21C */ f32 unk21C; // reduced alpha?
+    /* 0x220 */ f32 unk220; // created from unk21C
     /* 0x224 */ Vec3f unk224[0x9];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 unk294; // only used by one draw function

@@ -11,13 +11,6 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 void func_80B64190(Actor* thisx, GlobalContext* globalCtx);
 
-// draw funcs
-void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
-void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
-void func_80B64880(Actor* thisx, GlobalContext* globalCtx);
-void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
-void func_80B64DFC(Actor* thisx, GlobalContext* globalCtx);
-void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
 
 void func_80B61AC8(EnBigpo* this);
 void func_80B61B38(EnBigpo* this);
@@ -77,6 +70,13 @@ void func_80B63854(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_Die(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B638D4(EnBigpo* this, GlobalContext* globalCtx);
 
+// draw funcs
+void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
+void func_80B6467C(Actor* thisx, GlobalContext* globalCtx);
+void func_80B64880(Actor* thisx, GlobalContext* globalCtx);
+void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
+void func_80B64DFC(Actor* thisx, GlobalContext* globalCtx);
+void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
 
 extern AnimationHeader D_06001360;
 extern SkeletonHeader D_06005C18;
@@ -124,23 +124,24 @@ static InitChainEntry D_80B65064[] = { //sInitChain
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
-Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
+static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
 
-u8 D_80B65078[] = {
+static u8 D_80B65078[] = {
     0xFF, 0x04, 0xFF, 0x00, 
     0xFF, 0x01, 0xFF, 0x02, 
     0x05, 0x03, 0x00, 0x00, 
 };
 
-Vec3f D_80B65084[] = {
+static Vec3f D_80B65084[] = {
     { 2000.0f, 4000.0f, 0.0f,},
     {-1000.0f, 1500.0f, -1000.0f,},
     {-1000.0f, 1500.0f, 2000.0f,},
 };
 
-//#ifdef NON_MATCHING
+#ifdef NON_MATCHING
 // non-matching: some instructions out of order but looks like it should be equiv
 void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
+    GlobalContext* gCtx = globalCtx;
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpoFireParticle* fires;
     s32 i;
@@ -154,9 +155,10 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     //this->switchFlags = (parms >> 8) & 0xFF;
     //this->switchFlags = (s16)((this->actor.params >> 8) && 0xFF);
     this->switchFlags = (u8)(this->actor.params >> 8);
-    //this->actor.params &= 0xFF;
-    if ((this->actor.params &= 0xFF) == ENBIGPO_POSSIBLEFIRE) {
-        if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
+    this->actor.params &= 0xFF;
+    //this->actor.params = (u8)this->actor.params;
+    if ((this->actor.params) == ENBIGPO_POSSIBLEFIRE) {
+        if (Flags_GetSwitch(gCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -164,13 +166,15 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
         func_80B6383C(this);
         return;
     }
-
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
+    
+    // wants to re-load global context here from s6 in vanilla, but ido doesnt see the need now
+    SkelAnime_Init(gCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
+    Collider_InitAndSetCylinder(gCtx, &this->collider, &this->actor, &D_80B65010);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
 
-    for (i = 0, fires = this->fires; i < 3; i++, fires++) {
-        this->fires[i].light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &fires->info);
+    //for (i = 0, fires = this->fires; i < 3; i++, fires++) {
+    for (i = 0, fires = this->fires; i < 3; fires++, i++) {
+        this->fires[i].light = LightContext_InsertLight(gCtx, &gCtx->lightCtx, &fires->info);
         Lights_PointNoGlowSetInfo(&this->fires[i].info,
              this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
              0xFF, 0xFF, 0xFF, 0);
@@ -184,22 +188,22 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     this->mainColor.b = 0xD2;
     this->mainColor.a = 0x00; // fully invible
     
-    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
+    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(gCtx, this->switchFlags))) {
         // has switch flag, and switch already set: already killed
         Actor_MarkForDeath(&this->actor);
     }
 
     if (this->actor.params == ENBIGPO_REGULAR) { // the well poe
-        this->actor.flags &= -0x11;
         this->unk204 = 1;
+        this->actor.flags &= -0x11;
         func_80B61AC8(this);
     } else if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
         func_80B63450(this);
     }
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
-//#endif
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
+#endif
 
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
@@ -303,15 +307,15 @@ void func_80B61B38(EnBigpo *this) {
     this->actionFunc = func_80B61B70;
 }
 
-
+// wait for cutscene queue
 void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B724C(globalCtx, &this->actor, 7);
         this->unk20E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-        if (this->actor.params == ENBIGPO_REGULAR) {
+        if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             func_80B61C04(this, globalCtx);
-        } else { // ENBIGPO_SUMMONED
+        } else { // ENBIGPO_REVEALEDFIRE
             func_80B63758(this, globalCtx);
         }
     }else {
@@ -319,6 +323,7 @@ void func_80B61B70(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
+// spawn regular poe
 void func_80B61C04(EnBigpo *this, GlobalContext *globalCtx) {
     s32 i;
 
@@ -411,16 +416,17 @@ void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     func_80B619FC(this, globalCtx);
-    if (alphaPlus >= 0xFF) { // max opacity
-        this->mainColor.a = 0xFF;
+    if (alphaPlus >= 0xFF) {
+        this->mainColor.a = 0xFF; // max opacity
         func_80B62034(this);
     } else {
         this->mainColor.a = alphaPlus;
     }
 }
 
+// setup
 void func_80B62034(EnBigpo *this) {
-    this->idleTimer = 0xF;
+    this->idleTimer = 16;
     if (this->unk204 == 0) {
         func_801A2E54(0x38);
         this->unk204 = 1;
@@ -922,33 +928,37 @@ void func_80B636D0(EnBigpo *this) {
 // count fires already found
 void func_80B636E4(EnBigpo *this, GlobalContext *globalCtx) {
     EnBigpo* childPoh;
-    s32 i;
+    s32 i = 0;
 
-    i = 0;
-    for (childPoh = (EnBigpo*) this->actor.child; childPoh ; childPoh = (EnBigpo*)childPoh->actor.child) {
+    for (childPoh = (EnBigpo*) this->actor.child; childPoh; childPoh = (EnBigpo*)childPoh->actor.child) {
         if ((childPoh->actor.params == ENBIGPO_REVEALEDFIRE) && (childPoh->actionFunc == func_80B63980)) {
             i++;
         }
     }
-    if (i == 3) {
+
+    if (i == 3) { // all fires found
         func_80B61B38(this);
     }
 }
 
+// setup: place swirling flame start positions?
 void func_80B63758(EnBigpo *this, GlobalContext *globalCtx) {
     EnBigpo *childPoh;
-    Vec3f sp20;
+    Vec3f newPos;
 
-    this->idleTimer = 0x27;
-    for (childPoh = (EnBigpo *) this->actor.child; childPoh != NULL; childPoh = childPoh->actor.child) {
+    this->idleTimer = 39;
+    for (childPoh = (EnBigpo *) this->actor.child; childPoh; childPoh = (EnBigpo*)childPoh->actor.child) {
         func_80B63A18(childPoh);
     }
+
+    // set new starting position for flames?
     if (this->unk20E != 0) {
-        sp20.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
-        sp20.y = this->actor.world.pos.y + 150.0f;
-        sp20.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        func_8016970C(globalCtx, this->unk20E, &this->actor.focus.pos, &sp20);
+        newPos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
+        newPos.y = this->actor.world.pos.y + 150.0f;
+        newPos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
+        func_8016970C(globalCtx, this->unk20E, &this->actor.focus.pos, &newPos);
     }
+
     this->actionFunc = EnBigpo_DoNothing;
 }
 
@@ -961,7 +971,7 @@ void func_80B6383C(EnBigpo *this) {
     this->actionFunc = func_80B63854;
 }
 
-
+// wait until fire is revealed by dampe, then start drawing fire
 void func_80B63854(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->actor.params == ENBIGPO_REVEALEDFIRE) {
         func_80B638AC(this);
@@ -1012,7 +1022,7 @@ void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// todo: when does this go off?
+// setup: start flame swirl cutscene for dampe poe
 void func_80B63A18(EnBigpo *this) {
     s16 h;
 
@@ -1024,7 +1034,7 @@ void func_80B63A18(EnBigpo *this) {
     this->actionFunc = func_80B63AC4;
 }
 
-// is this checking if all thee fires have been triggered?
+// every frame, swirl the flames toward big poe as summoned
 void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f posDiff;
     f32 magnitude; // placeholder name
@@ -1101,8 +1111,8 @@ void func_80B63D0C(EnBigpo *this) {
 }
 
 // might be true/false
-// wasHit?
 // only called by update
+// EnBigpo_CheckHit
 s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->collider.base.acFlags & AC_HIT) != 0) && ((this->collider.base.acFlags & AC_HARD) == 0)) {
         this->collider.base.acFlags &= ~AC_HIT;
@@ -1111,11 +1121,11 @@ s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
           return true;
         }
         
-        if (func_800BE22C(this) == 0) { // guess: get health == 0 ?
+        if (func_800BE22C(&this->actor) == 0) { // guess: get health == 0 ?
             this->actor.flags &= ~1; // targetable OFF
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
             func_800BBA88(globalCtx, &this->actor);
-            if (this->actor.params == 1) { // dampe type
+            if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
                 func_801A2ED8();
             }
         } else {
@@ -1140,8 +1150,8 @@ s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
 
 void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
-    s32 pad[1];
-    ColliderCylinder* thisCollider;
+    s32 pad;
+    Collider* thisCollider;
 
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->unk212 = 0;
@@ -1175,11 +1185,11 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetHeight(&this->actor, 42.0f);
     }
 
-    func_80B63C28(this);
-    func_80B63D0C(this);
+    func_80B63C28(this); // modifies a color
+    func_80B63D0C(this); // randomizes a second color
 
     this->actor.shape.shadowAlpha = this->mainColor.a;
-    thisCollider = &this->collider;
+    thisCollider = &this->collider.base;
     Collider_UpdateCylinder(&this->actor, thisCollider);
     if ((this->collider.base.ocFlags1 & OC1_ON)) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, thisCollider);
@@ -1208,7 +1218,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B64190(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     this->actor.shape.rot.y = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
-    this->actionFunc(thisx, globalCtx);
+    this->actionFunc(this, globalCtx);
 }
 
 //OverrideLimbDraw2 type
@@ -1388,7 +1398,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     Camera *cam;
     f32 magnitude;
     f32 magnitude2;
-    Gfx *polyHead;
+    Gfx *dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1405,29 +1415,29 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     // fully visible OR fully transparent
     if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
-        polyHead = POLY_OPA_DISP;
+        dispHead = POLY_OPA_DISP;
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 2);
-        polyHead = POLY_XLU_DISP;
+        dispHead = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(polyHead, sSetupDL + 0x4B0);
+    gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
 
-    gSPSegment(polyHead + 1, 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xA0, 0, 0xFF, (s32) this->mainColor.a));
+    gSPSegment(dispHead + 1, 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xA0, 0, 0xFF, (s32) this->mainColor.a));
 
     SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
     Lights_PointGlowSetInfo(&this->fires[0].info, (s16) (vec2.x + vec1.x),
          (s16) (vec2.y + vec1.y), (s16) (vec2.z + vec1.z),
          (s32) this->unk294.r, (s32) this->unk294.g, (s32) this->unk294.b, (s32) this->unk294.a); // radius?
 
-    gDPSetEnvColor(polyHead + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
+    gDPSetEnvColor(dispHead + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
 
-    gSPMatrix(polyHead + 3, Matrix_NewMtx(globalCtx->state.gfxCtx),
+    gSPMatrix(dispHead + 3, Matrix_NewMtx(globalCtx->state.gfxCtx),
        G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(polyHead + 4, &D_060042C8);
+    gSPDisplayList(dispHead + 4, &D_060042C8);
 
-    gSPDisplayList(polyHead + 5, &D_060043F8);
+    gSPDisplayList(dispHead + 5, &D_060043F8);
 
     // fully transparent OR fully invisible
     if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
@@ -1444,8 +1454,8 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
 #endif
 
 #ifdef NON_MATCHING
-// draw func
 // non-matching: instructions out of order
+// regular big poe draw, switched to after dampe summon
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad[3];
@@ -1474,7 +1484,6 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
         Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0, 
         ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
 
-    // flame colors are static
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
@@ -1488,11 +1497,11 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     //3708:    move    s0,s7            r 3708:    move    s3,zero                        
     //370c:    addiu   s1,s7,0x338      | 370c:    move    s0,s7                          
 
-    for (i = 0; i < 3; i++, fires++) { //loop_4:
+    for (i = 0; i < 3; i++, fires++) {
         Lights_PointNoGlowSetInfo(&this->fires[i].info, 
             this2->fires[i].pos.x, this2->fires[i].pos.y, this2->fires[i].pos.z, 
             0xAA, 0xFF, 0xFF, sp66);
-        mtfxPtr->wx = fires->pos.x; // wat, mtxfpointer doesn't move???
+        mtfxPtr->wx = fires->pos.x;
         mtfxPtr->wy = fires->pos.y;
         mtfxPtr->wz = fires->pos.z;
 
@@ -1513,7 +1522,7 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64B08.asm")
 #endif
 
-// draw func
+// draw func for the fires in dampes house
 void func_80B64DFC(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpo *parent = (EnBigpo*) thisx->parent;
