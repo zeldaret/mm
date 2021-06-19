@@ -501,7 +501,7 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
         if (REG(0xF) != 0) {
             oldTime = gSaveContext.time;
-            gSaveContext.time = (gSaveContext.unk_16) + oldTime;
+            gSaveContext.time = (u16)gSaveContext.unk_14 + oldTime;
         }
     }
 }

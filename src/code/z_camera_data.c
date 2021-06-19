@@ -2,6 +2,7 @@
 #include "global.h"
 
 CameraModeValue D_801B4710[] = {
+	/* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -15,6 +16,7 @@ CameraModeValue D_801B4710[] = {
 };
 
 CameraModeValue D_801B4738[] = {
+	/* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x015E, 1 },
 	{ 0x0032, 2 },
@@ -30,6 +32,7 @@ CameraModeValue D_801B4738[] = {
 };
 
 CameraModeValue D_801B4768[] = {
+	/* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -45,6 +48,7 @@ CameraModeValue D_801B4768[] = {
 };
 
 CameraModeValue D_801B4798[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE2, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -61,6 +65,7 @@ CameraModeValue D_801B4798[] = {
 };
 
 CameraModeValue D_801B47CC[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -73,6 +78,7 @@ CameraModeValue D_801B47CC[] = {
 };
 
 CameraModeValue D_801B47F0[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFEC, 0 },
 	{ 0x0050, 1 },
 	{ 0x0096, 2 },
@@ -89,6 +95,7 @@ CameraModeValue D_801B47F0[] = {
 };
 
 CameraModeValue D_801B4824[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -101,6 +108,7 @@ CameraModeValue D_801B4824[] = {
 };
 
 CameraModeValue D_801B4848[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 0x0032, 2 },
@@ -113,6 +121,7 @@ CameraModeValue D_801B4848[] = {
 };
 
 CameraModeValue D_801B486C[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0014, 0 },
 	{ 0x0046, 1 },
 	{ 0x0046, 2 },
@@ -125,6 +134,7 @@ CameraModeValue D_801B486C[] = {
 };
 
 CameraModeValue D_801B4890[] = {
+    /* CAM_FUNC_SPEC5 */
 	{ 0xFFEC, 0 },
 	{ 0x0050, 1 },
 	{ 0x00FA, 2 },
@@ -136,6 +146,7 @@ CameraModeValue D_801B4890[] = {
 };
 
 CameraModeValue D_801B48B0[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0005, 0 },
 	{ 0x0032, 1 },
 	{ 0x0032, 2 },
@@ -148,6 +159,7 @@ CameraModeValue D_801B48B0[] = {
 };
 
 CameraModeValue D_801B48D4[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 0x0032, 2 },
@@ -160,6 +172,7 @@ CameraModeValue D_801B48D4[] = {
 };
 
 CameraModeValue D_801B48F8[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -172,6 +185,7 @@ CameraModeValue D_801B48F8[] = {
 };
 
 CameraModeValue D_801B491C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x00F0, 1 },
 	{ 0x0154, 2 },
@@ -185,6 +199,7 @@ CameraModeValue D_801B491C[] = {
 };
 
 CameraModeValue D_801B4944[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x0140, 1 },
 	{ 0x0032, 2 },
@@ -200,6 +215,7 @@ CameraModeValue D_801B4944[] = {
 };
 
 CameraModeValue D_801B4974[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x012C, 1 },
 	{ 0x0032, 2 },
@@ -215,6 +231,7 @@ CameraModeValue D_801B4974[] = {
 };
 
 CameraModeValue D_801B49A4[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFF6, 0 },
 	{ 0x0140, 1 },
 	{ 0x0064, 2 },
@@ -230,6 +247,7 @@ CameraModeValue D_801B49A4[] = {
 };
 
 CameraModeValue D_801B49D4[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x012C, 1 },
 	{ 0xFFEC, 2 },
@@ -245,6 +263,7 @@ CameraModeValue D_801B49D4[] = {
 };
 
 CameraModeValue D_801B4A04[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x012C, 1 },
 	{ 0xFFEC, 2 },
@@ -260,6 +279,7 @@ CameraModeValue D_801B4A04[] = {
 };
 
 CameraModeValue D_801B4A34[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -273,6 +293,7 @@ CameraModeValue D_801B4A34[] = {
 };
 
 CameraModeValue D_801B4A5C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x015E, 1 },
 	{ 0x0005, 2 },
@@ -288,6 +309,7 @@ CameraModeValue D_801B4A5C[] = {
 };
 
 CameraModeValue D_801B4A8C[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFFB, 0 },
 	{ 0x00DC, 1 },
 	{ 0x00F0, 2 },
@@ -303,6 +325,7 @@ CameraModeValue D_801B4A8C[] = {
 };
 
 CameraModeValue D_801B4ABC[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -315,6 +338,7 @@ CameraModeValue D_801B4ABC[] = {
 };
 
 CameraModeValue D_801B4AE0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0032, 0 },
 	{ 0x00A0, 1 },
 	{ 0x00FF, 2 },
@@ -328,6 +352,7 @@ CameraModeValue D_801B4AE0[] = {
 };
 
 CameraModeValue D_801B4B08[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0064, 0 },
 	{ 0x012C, 1 },
 	{ 0xFFEC, 2 },
@@ -343,6 +368,7 @@ CameraModeValue D_801B4B08[] = {
 };
 
 CameraModeValue D_801B4B38[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFB0, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -356,6 +382,7 @@ CameraModeValue D_801B4B38[] = {
 };
 
 CameraModeValue D_801B4B60[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFBA, 0 },
 	{ 0x015E, 1 },
 	{ 0x000A, 2 },
@@ -371,6 +398,7 @@ CameraModeValue D_801B4B60[] = {
 };
 
 CameraModeValue D_801B4B90[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x00A0, 1 },
 	{ 0x0190, 2 },
@@ -384,6 +412,7 @@ CameraModeValue D_801B4B90[] = {
 };
 
 CameraModeValue D_801B4BB8[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0005, 0 },
 	{ 0x0064, 1 },
 	{ 0x0064, 2 },
@@ -396,6 +425,7 @@ CameraModeValue D_801B4BB8[] = {
 };
 
 CameraModeValue D_801B4BDC[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x0118, 1 },
 	{ 0x012C, 2 },
@@ -409,6 +439,7 @@ CameraModeValue D_801B4BDC[] = {
 };
 
 CameraModeValue D_801B4C04[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFCE, 0 },
 	{ 0x0118, 1 },
 	{ 0x0028, 2 },
@@ -424,6 +455,7 @@ CameraModeValue D_801B4C04[] = {
 };
 
 CameraModeValue D_801B4C34[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0x0000, 0 },
 	{ 0x0050, 1 },
 	{ 0x0064, 2 },
@@ -437,6 +469,7 @@ CameraModeValue D_801B4C34[] = {
 };
 
 CameraModeValue D_801B4C5C[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -450,6 +483,7 @@ CameraModeValue D_801B4C5C[] = {
 };
 
 CameraModeValue D_801B4C84[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -463,6 +497,7 @@ CameraModeValue D_801B4C84[] = {
 };
 
 CameraModeValue D_801B4CAC[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -476,6 +511,7 @@ CameraModeValue D_801B4CAC[] = {
 };
 
 CameraModeValue D_801B4CD4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0050, 1 },
 	{ 0x012C, 2 },
@@ -489,6 +525,7 @@ CameraModeValue D_801B4CD4[] = {
 };
 
 CameraModeValue D_801B4CFC[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -502,6 +539,7 @@ CameraModeValue D_801B4CFC[] = {
 };
 
 CameraModeValue D_801B4D24[] = {
+    /* CAM_FUNC_UNIQ2 */
 	{ 0xFFD8, 0 },
 	{ 0x003C, 1 },
 	{ 0x003C, 7 },
@@ -509,6 +547,7 @@ CameraModeValue D_801B4D24[] = {
 };
 
 CameraModeValue D_801B4D34[] = {
+    /* CAM_FUNC_UNIQ2 */
 	{ 0xFFE2, 0 },
 	{ 0x002D, 1 },
 	{ 0x0064, 7 },
@@ -516,6 +555,7 @@ CameraModeValue D_801B4D34[] = {
 };
 
 CameraModeValue D_801B4D44[] = {
+    /* CAM_FUNC_NORM3 */
 	{ 0xFFCE, 0 },
 	{ 0x00DC, 1 },
 	{ 0x00FA, 2 },
@@ -528,6 +568,7 @@ CameraModeValue D_801B4D44[] = {
 };
 
 CameraModeValue D_801B4D68[] = {
+    /* CAM_FUNC_NORM3 */
 	{ 0xFFD8, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -540,6 +581,7 @@ CameraModeValue D_801B4D68[] = {
 };
 
 CameraModeValue D_801B4D8C[] = {
+    /* CAM_FUNC_NORM3 */
 	{ 0xFFCE, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0104, 2 },
@@ -552,6 +594,7 @@ CameraModeValue D_801B4D8C[] = {
 };
 
 CameraModeValue D_801B4DB0[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 0x0064, 2 },
@@ -564,6 +607,7 @@ CameraModeValue D_801B4DB0[] = {
 };
 
 CameraModeValue D_801B4DD4[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 0x0064, 2 },
@@ -576,6 +620,7 @@ CameraModeValue D_801B4DD4[] = {
 };
 
 CameraModeValue D_801B4DF8[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
 	{ 0x00B4, 1 },
 	{ 0x0118, 2 },
@@ -592,6 +637,7 @@ CameraModeValue D_801B4DF8[] = {
 };
 
 CameraModeValue D_801B4E2C[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFC4, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00DC, 2 },
@@ -607,6 +653,7 @@ CameraModeValue D_801B4E2C[] = {
 };
 
 CameraModeValue D_801B4E5C[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFCE, 0 },
 	{ 0x008C, 1 },
 	{ 0x00C8, 2 },
@@ -623,6 +670,7 @@ CameraModeValue D_801B4E5C[] = {
 };
 
 CameraModeValue D_801B4E90[] = {
+    /* CAM_FUNC_NORM3 */
 	{ 0xFFD8, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -635,6 +683,7 @@ CameraModeValue D_801B4E90[] = {
 };
 
 CameraModeValue D_801B4EB4[] = {
+    /* CAM_FUNC_NORM3 */
 	{ 0xFFEC, 0 },
 	{ 0x00FA, 1 },
 	{ 0x00FA, 2 },
@@ -647,29 +696,35 @@ CameraModeValue D_801B4EB4[] = {
 };
 
 CameraModeValue D_801B4ED8[] = {
+    /* CAM_FUNC_FIXD3 */
 	{ 0x0000, 9 },
 };
 
 CameraModeValue D_801B4EDC[] = {
+    /* CAM_FUNC_UNIQ7 */
 	{ 0x003C, 7 },
 	{ 0x0000, 9 },
 };
 
 CameraModeValue D_801B4EE4[] = {
+    /* CAM_FUNC_SPEC9 */
 	{ 0xFFFB, 0 },
 	{ 0x003C, 7 },
 	{ 0x4202, 9 },
 };
 
 CameraModeValue D_801B4EF0[] = {
+    /* CAM_FUNC_DEMO1 */
 	{ 0x3200, 9 },
 };
 
 CameraModeValue D_801B4EF4[] = {
+    /* CAM_FUNC_UNIQ6 */
 	{ 0xFF00, 9 },
 };
 
 CameraModeValue D_801B4EF8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -683,6 +738,7 @@ CameraModeValue D_801B4EF8[] = {
 };
 
 CameraModeValue D_801B4F20[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x0190, 1 },
 	{ 0x0019, 2 },
@@ -698,6 +754,7 @@ CameraModeValue D_801B4F20[] = {
 };
 
 CameraModeValue D_801B4F50[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -711,6 +768,7 @@ CameraModeValue D_801B4F50[] = {
 };
 
 CameraModeValue D_801B4F78[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -724,6 +782,7 @@ CameraModeValue D_801B4F78[] = {
 };
 
 CameraModeValue D_801B4FA0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -737,6 +796,7 @@ CameraModeValue D_801B4FA0[] = {
 };
 
 CameraModeValue D_801B4FC8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -750,6 +810,7 @@ CameraModeValue D_801B4FC8[] = {
 };
 
 CameraModeValue D_801B4FF0[] = {
+    /* CAM_FUNC_NORM4 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -763,6 +824,7 @@ CameraModeValue D_801B4FF0[] = {
 };
 
 CameraModeValue D_801B5018[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -773,6 +835,7 @@ CameraModeValue D_801B5018[] = {
 };
 
 CameraModeValue D_801B5034[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -783,6 +846,7 @@ CameraModeValue D_801B5034[] = {
 };
 
 CameraModeValue D_801B5050[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x00C8, 2 },
@@ -793,6 +857,7 @@ CameraModeValue D_801B5050[] = {
 };
 
 CameraModeValue D_801B506C[] = {
+	/* CAM_FUNC_FIXD1 */
 	{ 0xFFD8, 0 },
 	{ 0x000A, 4 },
 	{ 0x003C, 7 },
@@ -800,6 +865,7 @@ CameraModeValue D_801B506C[] = {
 };
 
 CameraModeValue D_801B507C[] = {
+    /* CAM_FUNC_SPEC8 */
 	{ 0xFFD8, 0 },
 	{ 0x0032, 4 },
 	{ 0x0050, 5 },
@@ -809,6 +875,7 @@ CameraModeValue D_801B507C[] = {
 };
 
 CameraModeValue D_801B5094[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -822,6 +889,7 @@ CameraModeValue D_801B5094[] = {
 };
 
 CameraModeValue D_801B50BC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0019, 2 },
@@ -837,6 +905,7 @@ CameraModeValue D_801B50BC[] = {
 };
 
 CameraModeValue D_801B50EC[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFEC, 0 },
 	{ 0x0078, 1 },
 	{ 0x008C, 2 },
@@ -852,6 +921,7 @@ CameraModeValue D_801B50EC[] = {
 };
 
 CameraModeValue D_801B511C[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE2, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -868,6 +938,7 @@ CameraModeValue D_801B511C[] = {
 };
 
 CameraModeValue D_801B5150[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFFB, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -883,6 +954,7 @@ CameraModeValue D_801B5150[] = {
 };
 
 CameraModeValue D_801B5180[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -896,6 +968,7 @@ CameraModeValue D_801B5180[] = {
 };
 
 CameraModeValue D_801B51A8[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFF6, 0 },
 	{ 0x00FA, 1 },
 	{ 0x0064, 2 },
@@ -911,6 +984,7 @@ CameraModeValue D_801B51A8[] = {
 };
 
 CameraModeValue D_801B51D8[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -923,6 +997,7 @@ CameraModeValue D_801B51D8[] = {
 };
 
 CameraModeValue D_801B51FC[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x00FA, 2 },
@@ -935,6 +1010,7 @@ CameraModeValue D_801B51FC[] = {
 };
 
 CameraModeValue D_801B5220[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00FA, 1 },
 	{ 0xFFEC, 2 },
@@ -950,6 +1026,7 @@ CameraModeValue D_801B5220[] = {
 };
 
 CameraModeValue D_801B5250[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0032, 0 },
 	{ 0x00FA, 1 },
 	{ 0xFFEC, 2 },
@@ -965,6 +1042,7 @@ CameraModeValue D_801B5250[] = {
 };
 
 CameraModeValue D_801B5280[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0032, 2 },
@@ -980,6 +1058,7 @@ CameraModeValue D_801B5280[] = {
 };
 
 CameraModeValue D_801B52B0[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x00FA, 1 },
 	{ 0x0032, 2 },
@@ -995,6 +1074,7 @@ CameraModeValue D_801B52B0[] = {
 };
 
 CameraModeValue D_801B52E0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00DC, 2 },
@@ -1008,6 +1088,7 @@ CameraModeValue D_801B52E0[] = {
 };
 
 CameraModeValue D_801B5308[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00FA, 1 },
 	{ 0x0005, 2 },
@@ -1023,6 +1104,7 @@ CameraModeValue D_801B5308[] = {
 };
 
 CameraModeValue D_801B5338[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0x0005, 0 },
 	{ 0x0046, 1 },
 	{ 0x0019, 3 },
@@ -1035,6 +1117,7 @@ CameraModeValue D_801B5338[] = {
 };
 
 CameraModeValue D_801B535C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFE2, 0 },
 	{ 0x0023, 1 },
 	{ 0x0028, 3 },
@@ -1047,6 +1130,7 @@ CameraModeValue D_801B535C[] = {
 };
 
 CameraModeValue D_801B5380[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFF1, 0 },
 	{ 0x005A, 1 },
 	{ 0xFFF8, 3 },
@@ -1059,6 +1143,7 @@ CameraModeValue D_801B5380[] = {
 };
 
 CameraModeValue D_801B53A4[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0x0014, 0 },
 	{ 0x002D, 1 },
 	{ 0x0037, 3 },
@@ -1071,6 +1156,7 @@ CameraModeValue D_801B53A4[] = {
 };
 
 CameraModeValue D_801B53C8[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0x000A, 0 },
 	{ 0x0046, 1 },
 	{ 0x001E, 3 },
@@ -1083,6 +1169,7 @@ CameraModeValue D_801B53C8[] = {
 };
 
 CameraModeValue D_801B53EC[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD3, 0 },
 	{ 0x004B, 1 },
 	{ 0xFFF4, 3 },
@@ -1095,6 +1182,7 @@ CameraModeValue D_801B53EC[] = {
 };
 
 CameraModeValue D_801B5410[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD8, 0 },
 	{ 0x0046, 1 },
 	{ 0x0014, 3 },
@@ -1107,6 +1195,7 @@ CameraModeValue D_801B5410[] = {
 };
 
 CameraModeValue D_801B5434[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x0055, 1 },
 	{ 0xFFFB, 3 },
@@ -1119,6 +1208,7 @@ CameraModeValue D_801B5434[] = {
 };
 
 CameraModeValue D_801B5458[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFCE, 0 },
 	{ 0x005F, 1 },
 	{ 0xFFF1, 3 },
@@ -1131,6 +1221,7 @@ CameraModeValue D_801B5458[] = {
 };
 
 CameraModeValue D_801B547C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0046, 1 },
 	{ 0xFFF1, 3 },
@@ -1143,6 +1234,7 @@ CameraModeValue D_801B547C[] = {
 };
 
 CameraModeValue D_801B54A0[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD8, 0 },
 	{ 0x006E, 1 },
 	{ 0x0005, 3 },
@@ -1155,6 +1247,7 @@ CameraModeValue D_801B54A0[] = {
 };
 
 CameraModeValue D_801B54C4[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0082, 1 },
 	{ 0xFFF6, 3 },
@@ -1167,6 +1260,7 @@ CameraModeValue D_801B54C4[] = {
 };
 
 CameraModeValue D_801B54E8[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD8, 0 },
 	{ 0x006E, 1 },
 	{ 0x0000, 3 },
@@ -1179,6 +1273,7 @@ CameraModeValue D_801B54E8[] = {
 };
 
 CameraModeValue D_801B550C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFCE, 0 },
 	{ 0x008C, 1 },
 	{ 0xFFF6, 3 },
@@ -1191,6 +1286,7 @@ CameraModeValue D_801B550C[] = {
 };
 
 CameraModeValue D_801B5530[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0078, 1 },
 	{ 0xFFF8, 3 },
@@ -1203,6 +1299,7 @@ CameraModeValue D_801B5530[] = {
 };
 
 CameraModeValue D_801B5554[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFF1, 0 },
 	{ 0x0041, 1 },
 	{ 0x0032, 3 },
@@ -1215,6 +1312,7 @@ CameraModeValue D_801B5554[] = {
 };
 
 CameraModeValue D_801B5578[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x003C, 1 },
 	{ 0x0032, 3 },
@@ -1227,6 +1325,7 @@ CameraModeValue D_801B5578[] = {
 };
 
 CameraModeValue D_801B559C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFF1, 0 },
 	{ 0x003C, 1 },
 	{ 0x0028, 3 },
@@ -1239,6 +1338,7 @@ CameraModeValue D_801B559C[] = {
 };
 
 CameraModeValue D_801B55C0[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFE7, 0 },
 	{ 0x005F, 1 },
 	{ 0x0032, 3 },
@@ -1251,6 +1351,7 @@ CameraModeValue D_801B55C0[] = {
 };
 
 CameraModeValue D_801B55E4[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x004B, 1 },
 	{ 0x002D, 3 },
@@ -1263,6 +1364,7 @@ CameraModeValue D_801B55E4[] = {
 };
 
 CameraModeValue D_801B5608[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD3, 0 },
 	{ 0x00A5, 1 },
 	{ 0x0000, 3 },
@@ -1275,6 +1377,7 @@ CameraModeValue D_801B5608[] = {
 };
 
 CameraModeValue D_801B562C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC9, 0 },
 	{ 0x00B4, 1 },
 	{ 0x0000, 3 },
@@ -1287,6 +1390,7 @@ CameraModeValue D_801B562C[] = {
 };
 
 CameraModeValue D_801B5650[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x00AF, 1 },
 	{ 0x0000, 3 },
@@ -1299,6 +1403,7 @@ CameraModeValue D_801B5650[] = {
 };
 
 CameraModeValue D_801B5674[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFCE, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0000, 3 },
@@ -1311,6 +1416,7 @@ CameraModeValue D_801B5674[] = {
 };
 
 CameraModeValue D_801B5698[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0000, 3 },
@@ -1323,6 +1429,7 @@ CameraModeValue D_801B5698[] = {
 };
 
 CameraModeValue D_801B56BC[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x00A0, 1 },
 	{ 0x0000, 3 },
@@ -1335,6 +1442,7 @@ CameraModeValue D_801B56BC[] = {
 };
 
 CameraModeValue D_801B56E0[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x00A0, 1 },
 	{ 0x0000, 3 },
@@ -1347,6 +1455,7 @@ CameraModeValue D_801B56E0[] = {
 };
 
 CameraModeValue D_801B5704[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x0096, 1 },
 	{ 0x0000, 3 },
@@ -1359,6 +1468,7 @@ CameraModeValue D_801B5704[] = {
 };
 
 CameraModeValue D_801B5728[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x00A0, 1 },
 	{ 0x001E, 3 },
@@ -1371,6 +1481,7 @@ CameraModeValue D_801B5728[] = {
 };
 
 CameraModeValue D_801B574C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x008C, 1 },
 	{ 0x001E, 3 },
@@ -1383,12 +1494,14 @@ CameraModeValue D_801B574C[] = {
 };
 
 CameraModeValue D_801B5770[] = {
+    /* CAM_FUNC_DEMO2 */
 	{ 0x003C, 7 },
 	{ 0x001E, 8 },
 	{ 0xFF00, 9 },
 };
 
 CameraModeValue D_801B577C[] = {
+	/* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -1402,6 +1515,7 @@ CameraModeValue D_801B577C[] = {
 };
 
 CameraModeValue D_801B57A4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -1415,6 +1529,7 @@ CameraModeValue D_801B57A4[] = {
 };
 
 CameraModeValue D_801B57CC[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -1428,6 +1543,7 @@ CameraModeValue D_801B57CC[] = {
 };
 
 CameraModeValue D_801B57F4[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00FA, 1 },
 	{ 0x0005, 2 },
@@ -1443,6 +1559,7 @@ CameraModeValue D_801B57F4[] = {
 };
 
 CameraModeValue D_801B5824[] = {
+	/* CAM_FUNC_FIXD1 */
 	{ 0xFFD8, 0 },
 	{ 0x0064, 4 },
 	{ 0x003C, 7 },
@@ -1450,6 +1567,7 @@ CameraModeValue D_801B5824[] = {
 };
 
 CameraModeValue D_801B5834[] = {
+	/* CAM_FUNC_FIXD1 */
 	{ 0xFFD8, 0 },
 	{ 0x000A, 4 },
 	{ 0x003C, 7 },
@@ -1457,6 +1575,7 @@ CameraModeValue D_801B5834[] = {
 };
 
 CameraModeValue D_801B5844[] = {
+    /* CAM_FUNC_PARA2 */
 	{ 0xFFDD, 0 },
 	{ 0x00A0, 2 },
 	{ 0x0041, 1 },
@@ -1468,6 +1587,7 @@ CameraModeValue D_801B5844[] = {
 };
 
 CameraModeValue D_801B5864[] = {
+    /* CAM_FUNC_NORM2 */
 	{ 0x0014, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0320, 2 },
@@ -1479,6 +1599,7 @@ CameraModeValue D_801B5864[] = {
 };
 
 CameraModeValue D_801B5884[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1489,6 +1610,7 @@ CameraModeValue D_801B5884[] = {
 };
 
 CameraModeValue D_801B58A0[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1499,6 +1621,7 @@ CameraModeValue D_801B58A0[] = {
 };
 
 CameraModeValue D_801B58BC[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1509,6 +1632,7 @@ CameraModeValue D_801B58BC[] = {
 };
 
 CameraModeValue D_801B58D8[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1519,6 +1643,7 @@ CameraModeValue D_801B58D8[] = {
 };
 
 CameraModeValue D_801B58F4[] = {
+	/* CAM_FUNC_FIXD1 */
 	{ 0xFFD8, 0 },
 	{ 0x0064, 4 },
 	{ 0x003C, 7 },
@@ -1526,6 +1651,7 @@ CameraModeValue D_801B58F4[] = {
 };
 
 CameraModeValue D_801B5904[] = {
+	/* CAM_FUNC_NORM0 */
 	{ 0x0000, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -1538,6 +1664,7 @@ CameraModeValue D_801B5904[] = {
 };
 
 CameraModeValue D_801B5928[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0154, 1 },
 	{ 0x0190, 2 },
@@ -1551,6 +1678,7 @@ CameraModeValue D_801B5928[] = {
 };
 
 CameraModeValue D_801B5950[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -1564,6 +1692,7 @@ CameraModeValue D_801B5950[] = {
 };
 
 CameraModeValue D_801B5978[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x0014, 2 },
@@ -1579,6 +1708,7 @@ CameraModeValue D_801B5978[] = {
 };
 
 CameraModeValue D_801B59A8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x01F4, 2 },
@@ -1592,6 +1722,7 @@ CameraModeValue D_801B59A8[] = {
 };
 
 CameraModeValue D_801B59D0[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -1604,18 +1735,21 @@ CameraModeValue D_801B59D0[] = {
 };
 
 CameraModeValue D_801B59F4[] = {
+    /* CAM_FUNC_UNIQ0 */
 	{ 0x0000, 0 },
 	{ 0x0064, 4 },
 	{ 0x0001, 9 },
 };
 
 CameraModeValue D_801B5A00[] = {
+    /* CAM_FUNC_UNIQ0 */
 	{ 0x0000, 0 },
 	{ 0x001E, 4 },
 	{ 0x0011, 9 },
 };
 
 CameraModeValue D_801B5A0C[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0014, 0 },
 	{ 0x005A, 1 },
 	{ 0x0050, 2 },
@@ -1628,6 +1762,7 @@ CameraModeValue D_801B5A0C[] = {
 };
 
 CameraModeValue D_801B5A30[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x0032, 2 },
@@ -1644,6 +1779,7 @@ CameraModeValue D_801B5A30[] = {
 };
 
 CameraModeValue D_801B5A64[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x000A, 2 },
@@ -1659,6 +1795,7 @@ CameraModeValue D_801B5A64[] = {
 };
 
 CameraModeValue D_801B5A94[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x010E, 1 },
 	{ 0x012C, 2 },
@@ -1672,6 +1809,7 @@ CameraModeValue D_801B5A94[] = {
 };
 
 CameraModeValue D_801B5ABC[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFD8, 0 },
 	{ 0x00C8, 1 },
 	{ 0x00F0, 2 },
@@ -1688,6 +1826,7 @@ CameraModeValue D_801B5ABC[] = {
 };
 
 CameraModeValue D_801B5AF0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x010E, 1 },
 	{ 0x012C, 2 },
@@ -1701,6 +1840,7 @@ CameraModeValue D_801B5AF0[] = {
 };
 
 CameraModeValue D_801B5B18[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x010E, 1 },
 	{ 0x012C, 2 },
@@ -1714,6 +1854,7 @@ CameraModeValue D_801B5B18[] = {
 };
 
 CameraModeValue D_801B5B40[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0005, 2 },
@@ -1729,6 +1870,7 @@ CameraModeValue D_801B5B40[] = {
 };
 
 CameraModeValue D_801B5B70[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x00FA, 1 },
 	{ 0x015E, 2 },
@@ -1742,6 +1884,7 @@ CameraModeValue D_801B5B70[] = {
 };
 
 CameraModeValue D_801B5B98[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFCE, 0 },
 	{ 0x012C, 1 },
 	{ 0x015E, 2 },
@@ -1757,6 +1900,7 @@ CameraModeValue D_801B5B98[] = {
 };
 
 CameraModeValue D_801B5BC8[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFEC, 0 },
 	{ 0x00E6, 1 },
 	{ 0x0104, 2 },
@@ -1773,6 +1917,7 @@ CameraModeValue D_801B5BC8[] = {
 };
 
 CameraModeValue D_801B5BFC[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
 	{ 0x00C8, 1 },
 	{ 0x00DC, 2 },
@@ -1789,6 +1934,7 @@ CameraModeValue D_801B5BFC[] = {
 };
 
 CameraModeValue D_801B5C30[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x00FA, 1 },
 	{ 0x015E, 2 },
@@ -1802,6 +1948,7 @@ CameraModeValue D_801B5C30[] = {
 };
 
 CameraModeValue D_801B5C58[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x00FA, 1 },
 	{ 0x015E, 2 },
@@ -1815,6 +1962,7 @@ CameraModeValue D_801B5C58[] = {
 };
 
 CameraModeValue D_801B5C80[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0064, 0 },
 	{ 0x012C, 1 },
 	{ 0xFFEC, 2 },
@@ -1830,6 +1978,7 @@ CameraModeValue D_801B5C80[] = {
 };
 
 CameraModeValue D_801B5CB0[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x003C, 1 },
 	{ 0x3200, 2 },
@@ -1840,6 +1989,7 @@ CameraModeValue D_801B5CB0[] = {
 };
 
 CameraModeValue D_801B5CCC[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x00C8, 2 },
@@ -1850,6 +2000,7 @@ CameraModeValue D_801B5CCC[] = {
 };
 
 CameraModeValue D_801B5CE8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0118, 2 },
@@ -1863,6 +2014,7 @@ CameraModeValue D_801B5CE8[] = {
 };
 
 CameraModeValue D_801B5D10[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x00FA, 2 },
@@ -1878,6 +2030,7 @@ CameraModeValue D_801B5D10[] = {
 };
 
 CameraModeValue D_801B5D40[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE7, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00DC, 2 },
@@ -1894,6 +2047,7 @@ CameraModeValue D_801B5D40[] = {
 };
 
 CameraModeValue D_801B5D74[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0118, 2 },
@@ -1907,6 +2061,7 @@ CameraModeValue D_801B5D74[] = {
 };
 
 CameraModeValue D_801B5D9C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0118, 2 },
@@ -1920,6 +2075,7 @@ CameraModeValue D_801B5D9C[] = {
 };
 
 CameraModeValue D_801B5DC4[] = {
+	/* CAM_FUNC_FIXD1 */
 	{ 0xFFD8, 0 },
 	{ 0x000A, 4 },
 	{ 0x003C, 7 },
@@ -1927,6 +2083,7 @@ CameraModeValue D_801B5DC4[] = {
 };
 
 CameraModeValue D_801B5DD4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0050, 1 },
 	{ 0x0078, 2 },
@@ -1940,6 +2097,7 @@ CameraModeValue D_801B5DD4[] = {
 };
 
 CameraModeValue D_801B5DFC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFC4, 0 },
 	{ 0x0226, 1 },
 	{ 0x0000, 2 },
@@ -1955,6 +2113,7 @@ CameraModeValue D_801B5DFC[] = {
 };
 
 CameraModeValue D_801B5E2C[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0x0046, 0 },
 	{ 0x0032, 1 },
 	{ 0x3200, 2 },
@@ -1965,6 +2124,7 @@ CameraModeValue D_801B5E2C[] = {
 };
 
 CameraModeValue D_801B5E48[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1975,6 +2135,7 @@ CameraModeValue D_801B5E48[] = {
 };
 
 CameraModeValue D_801B5E64[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0320, 1 },
 	{ 0x0320, 2 },
@@ -1988,6 +2149,7 @@ CameraModeValue D_801B5E64[] = {
 };
 
 CameraModeValue D_801B5E8C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0320, 1 },
 	{ 0x0320, 2 },
@@ -2001,6 +2163,7 @@ CameraModeValue D_801B5E8C[] = {
 };
 
 CameraModeValue D_801B5EB4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFE2, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00FA, 2 },
@@ -2014,6 +2177,7 @@ CameraModeValue D_801B5EB4[] = {
 };
 
 CameraModeValue D_801B5EDC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFE2, 0 },
 	{ 0x00B4, 1 },
 	{ 0x0014, 2 },
@@ -2029,6 +2193,7 @@ CameraModeValue D_801B5EDC[] = {
 };
 
 CameraModeValue D_801B5F0C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFE2, 0 },
 	{ 0x00A0, 1 },
 	{ 0x00BE, 2 },
@@ -2042,6 +2207,7 @@ CameraModeValue D_801B5F0C[] = {
 };
 
 CameraModeValue D_801B5F34[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x00AA, 1 },
 	{ 0x00C8, 2 },
@@ -2055,6 +2221,7 @@ CameraModeValue D_801B5F34[] = {
 };
 
 CameraModeValue D_801B5F5C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00B4, 1 },
 	{ 0x0005, 2 },
@@ -2070,6 +2237,7 @@ CameraModeValue D_801B5F5C[] = {
 };
 
 CameraModeValue D_801B5F8C[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -2082,6 +2250,7 @@ CameraModeValue D_801B5F8C[] = {
 };
 
 CameraModeValue D_801B5FB0[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -2094,6 +2263,7 @@ CameraModeValue D_801B5FB0[] = {
 };
 
 CameraModeValue D_801B5FD4[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -2106,6 +2276,7 @@ CameraModeValue D_801B5FD4[] = {
 };
 
 CameraModeValue D_801B5FF8[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x0005, 1 },
 	{ 0x0032, 2 },
@@ -2118,6 +2289,7 @@ CameraModeValue D_801B5FF8[] = {
 };
 
 CameraModeValue D_801B601C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFDD, 0 },
 	{ 0x0064, 1 },
 	{ 0x00DC, 2 },
@@ -2131,6 +2303,7 @@ CameraModeValue D_801B601C[] = {
 };
 
 CameraModeValue D_801B6044[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFF6, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0032, 2 },
@@ -2146,6 +2319,7 @@ CameraModeValue D_801B6044[] = {
 };
 
 CameraModeValue D_801B6074[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x003C, 1 },
 	{ 0x00C8, 2 },
@@ -2161,6 +2335,7 @@ CameraModeValue D_801B6074[] = {
 };
 
 CameraModeValue D_801B60A4[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFEC, 0 },
 	{ 0x0032, 1 },
 	{ 0x0064, 2 },
@@ -2177,6 +2352,7 @@ CameraModeValue D_801B60A4[] = {
 };
 
 CameraModeValue D_801B60D8[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE7, 0 },
 	{ 0x0064, 1 },
 	{ 0x008C, 2 },
@@ -2193,6 +2369,7 @@ CameraModeValue D_801B60D8[] = {
 };
 
 CameraModeValue D_801B610C[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0064, 1 },
 	{ 0x00DC, 2 },
@@ -2205,6 +2382,7 @@ CameraModeValue D_801B610C[] = {
 };
 
 CameraModeValue D_801B6130[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0078, 1 },
 	{ 0x00F0, 2 },
@@ -2217,6 +2395,7 @@ CameraModeValue D_801B6130[] = {
 };
 
 CameraModeValue D_801B6154[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFE2, 0 },
 	{ 0x0064, 1 },
 	{ 0x00DC, 2 },
@@ -2230,6 +2409,7 @@ CameraModeValue D_801B6154[] = {
 };
 
 CameraModeValue D_801B617C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0032, 2 },
@@ -2245,6 +2425,7 @@ CameraModeValue D_801B617C[] = {
 };
 
 CameraModeValue D_801B61AC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x00F0, 1 },
 	{ 0x0032, 2 },
@@ -2260,6 +2441,7 @@ CameraModeValue D_801B61AC[] = {
 };
 
 CameraModeValue D_801B61DC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFF6, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0064, 2 },
@@ -2275,6 +2457,7 @@ CameraModeValue D_801B61DC[] = {
 };
 
 CameraModeValue D_801B620C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x00F0, 1 },
 	{ 0xFFEC, 2 },
@@ -2290,6 +2473,7 @@ CameraModeValue D_801B620C[] = {
 };
 
 CameraModeValue D_801B623C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x00F0, 1 },
 	{ 0xFFEC, 2 },
@@ -2305,6 +2489,7 @@ CameraModeValue D_801B623C[] = {
 };
 
 CameraModeValue D_801B626C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0064, 1 },
 	{ 0x00DC, 2 },
@@ -2318,6 +2503,7 @@ CameraModeValue D_801B626C[] = {
 };
 
 CameraModeValue D_801B6294[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0005, 2 },
@@ -2333,6 +2519,7 @@ CameraModeValue D_801B6294[] = {
 };
 
 CameraModeValue D_801B62C4[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFFB, 0 },
 	{ 0x0078, 1 },
 	{ 0x008C, 2 },
@@ -2348,6 +2535,7 @@ CameraModeValue D_801B62C4[] = {
 };
 
 CameraModeValue D_801B62F4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0032, 0 },
 	{ 0x008C, 1 },
 	{ 0x00DC, 2 },
@@ -2361,6 +2549,7 @@ CameraModeValue D_801B62F4[] = {
 };
 
 CameraModeValue D_801B631C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0064, 0 },
 	{ 0x00DC, 1 },
 	{ 0xFFEC, 2 },
@@ -2376,6 +2565,7 @@ CameraModeValue D_801B631C[] = {
 };
 
 CameraModeValue D_801B634C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -2389,6 +2579,7 @@ CameraModeValue D_801B634C[] = {
 };
 
 CameraModeValue D_801B6374[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFC4, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0014, 2 },
@@ -2404,6 +2595,7 @@ CameraModeValue D_801B6374[] = {
 };
 
 CameraModeValue D_801B63A4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x0078, 1 },
 	{ 0x00F0, 2 },
@@ -2417,6 +2609,7 @@ CameraModeValue D_801B63A4[] = {
 };
 
 CameraModeValue D_801B63CC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0032, 2 },
@@ -2432,6 +2625,7 @@ CameraModeValue D_801B63CC[] = {
 };
 
 CameraModeValue D_801B63FC[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFF6, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -2442,6 +2636,7 @@ CameraModeValue D_801B63FC[] = {
 };
 
 CameraModeValue D_801B6418[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -2452,6 +2647,7 @@ CameraModeValue D_801B6418[] = {
 };
 
 CameraModeValue D_801B6434[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x003C, 1 },
 	{ 0x0258, 2 },
@@ -2465,6 +2661,7 @@ CameraModeValue D_801B6434[] = {
 };
 
 CameraModeValue D_801B645C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x012C, 1 },
 	{ 0x0005, 2 },
@@ -2480,6 +2677,7 @@ CameraModeValue D_801B645C[] = {
 };
 
 CameraModeValue D_801B648C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x0140, 1 },
 	{ 0x017C, 2 },
@@ -2493,6 +2691,7 @@ CameraModeValue D_801B648C[] = {
 };
 
 CameraModeValue D_801B64B4[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2505,6 +2704,7 @@ CameraModeValue D_801B64B4[] = {
 };
 
 CameraModeValue D_801B64D8[] = {
+    /* CAM_FUNC_JUMP2 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2517,6 +2717,7 @@ CameraModeValue D_801B64D8[] = {
 };
 
 CameraModeValue D_801B64FC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x0140, 1 },
 	{ 0x0032, 2 },
@@ -2532,6 +2733,7 @@ CameraModeValue D_801B64FC[] = {
 };
 
 CameraModeValue D_801B652C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 0x012C, 1 },
 	{ 0x0032, 2 },
@@ -2547,6 +2749,7 @@ CameraModeValue D_801B652C[] = {
 };
 
 CameraModeValue D_801B655C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x0154, 1 },
 	{ 0x015E, 2 },
@@ -2560,6 +2763,7 @@ CameraModeValue D_801B655C[] = {
 };
 
 CameraModeValue D_801B6584[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0104, 1 },
 	{ 0x0118, 2 },
@@ -2573,6 +2777,7 @@ CameraModeValue D_801B6584[] = {
 };
 
 CameraModeValue D_801B65AC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x000A, 0 },
 	{ 0x0104, 1 },
 	{ 0x0032, 2 },
@@ -2588,6 +2793,7 @@ CameraModeValue D_801B65AC[] = {
 };
 
 CameraModeValue D_801B65DC[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0x000A, 0 },
 	{ 0x00C8, 1 },
 	{ 0x00DC, 2 },
@@ -2603,6 +2809,7 @@ CameraModeValue D_801B65DC[] = {
 };
 
 CameraModeValue D_801B660C[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0x000A, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -2619,6 +2826,7 @@ CameraModeValue D_801B660C[] = {
 };
 
 CameraModeValue D_801B6640[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0x000A, 0 },
 	{ 0x00DC, 1 },
 	{ 0x00DC, 2 },
@@ -2635,6 +2843,7 @@ CameraModeValue D_801B6640[] = {
 };
 
 CameraModeValue D_801B6674[] = {
+    /* CAM_FUNC_SUBJ1 */
 	{ 0x0000, 0 },
 	{ 0x000A, 1 },
 	{ 0x003C, 2 },
@@ -2647,6 +2856,7 @@ CameraModeValue D_801B6674[] = {
 };
 
 CameraModeValue D_801B6698[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0104, 1 },
 	{ 0x0118, 2 },
@@ -2660,6 +2870,7 @@ CameraModeValue D_801B6698[] = {
 };
 
 CameraModeValue D_801B66C0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0104, 1 },
 	{ 0x0118, 2 },
@@ -2673,6 +2884,7 @@ CameraModeValue D_801B66C0[] = {
 };
 
 CameraModeValue D_801B66E8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2686,6 +2898,7 @@ CameraModeValue D_801B66E8[] = {
 };
 
 CameraModeValue D_801B6710[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00F0, 1 },
 	{ 0x0104, 2 },
@@ -2701,6 +2914,7 @@ CameraModeValue D_801B6710[] = {
 };
 
 CameraModeValue D_801B6740[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -2717,6 +2931,7 @@ CameraModeValue D_801B6740[] = {
 };
 
 CameraModeValue D_801B6774[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2730,6 +2945,7 @@ CameraModeValue D_801B6774[] = {
 };
 
 CameraModeValue D_801B679C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2743,6 +2959,7 @@ CameraModeValue D_801B679C[] = {
 };
 
 CameraModeValue D_801B67C4[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0014, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -2756,6 +2973,7 @@ CameraModeValue D_801B67C4[] = {
 };
 
 CameraModeValue D_801B67EC[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x0032, 2 },
@@ -2771,6 +2989,7 @@ CameraModeValue D_801B67EC[] = {
 };
 
 CameraModeValue D_801B681C[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00FA, 1 },
 	{ 0x012C, 2 },
@@ -2786,6 +3005,7 @@ CameraModeValue D_801B681C[] = {
 };
 
 CameraModeValue D_801B684C[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0x0000, 0 },
 	{ 0x0096, 1 },
 	{ 0x00C8, 2 },
@@ -2802,6 +3022,7 @@ CameraModeValue D_801B684C[] = {
 };
 
 CameraModeValue D_801B6880[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -2815,6 +3036,7 @@ CameraModeValue D_801B6880[] = {
 };
 
 CameraModeValue D_801B68A8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2828,6 +3050,7 @@ CameraModeValue D_801B68A8[] = {
 };
 
 CameraModeValue D_801B68D0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2841,6 +3064,7 @@ CameraModeValue D_801B68D0[] = {
 };
 
 CameraModeValue D_801B68F8[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE7, 0 },
 	{ 0x00DC, 1 },
 	{ 0x00DC, 2 },
@@ -2857,6 +3081,7 @@ CameraModeValue D_801B68F8[] = {
 };
 
 CameraModeValue D_801B692C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2870,6 +3095,7 @@ CameraModeValue D_801B692C[] = {
 };
 
 CameraModeValue D_801B6954[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2883,6 +3109,7 @@ CameraModeValue D_801B6954[] = {
 };
 
 CameraModeValue D_801B697C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x003C, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0154, 2 },
@@ -2896,6 +3123,7 @@ CameraModeValue D_801B697C[] = {
 };
 
 CameraModeValue D_801B69A4[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFEC, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -2909,6 +3137,7 @@ CameraModeValue D_801B69A4[] = {
 };
 
 CameraModeValue D_801B69CC[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00C8, 1 },
 	{ 0x00F0, 2 },
@@ -2924,6 +3153,7 @@ CameraModeValue D_801B69CC[] = {
 };
 
 CameraModeValue D_801B69FC[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE2, 0 },
 	{ 0x00BE, 1 },
 	{ 0x00FA, 2 },
@@ -2940,6 +3170,7 @@ CameraModeValue D_801B69FC[] = {
 };
 
 CameraModeValue D_801B6A30[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00A0, 1 },
 	{ 0x0104, 2 },
@@ -2953,6 +3184,7 @@ CameraModeValue D_801B6A30[] = {
 };
 
 CameraModeValue D_801B6A58[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFE2, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0118, 2 },
@@ -2966,6 +3198,7 @@ CameraModeValue D_801B6A58[] = {
 };
 
 CameraModeValue D_801B6A80[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
 	{ 0x00A0, 1 },
 	{ 0x0118, 2 },
@@ -2979,6 +3212,7 @@ CameraModeValue D_801B6A80[] = {
 };
 
 CameraModeValue D_801B6AA8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0064, 1 },
 	{ 0x0140, 2 },
@@ -2992,6 +3226,7 @@ CameraModeValue D_801B6AA8[] = {
 };
 
 CameraModeValue D_801B6AD0[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x015E, 2 },
@@ -3005,6 +3240,7 @@ CameraModeValue D_801B6AD0[] = {
 };
 
 CameraModeValue D_801B6AF8[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFCE, 0 },
 	{ 0x015E, 1 },
 	{ 0x0028, 2 },
@@ -3020,6 +3256,7 @@ CameraModeValue D_801B6AF8[] = {
 };
 
 CameraModeValue D_801B6B28[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x0140, 1 },
 	{ 0x0190, 2 },
@@ -3033,6 +3270,7 @@ CameraModeValue D_801B6B28[] = {
 };
 
 CameraModeValue D_801B6B50[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x012C, 1 },
 	{ 0x015E, 2 },
@@ -3046,6 +3284,7 @@ CameraModeValue D_801B6B50[] = {
 };
 
 CameraModeValue D_801B6B78[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -3059,6 +3298,7 @@ CameraModeValue D_801B6B78[] = {
 };
 
 CameraModeValue D_801B6BA0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x015E, 2 },
@@ -3072,6 +3312,7 @@ CameraModeValue D_801B6BA0[] = {
 };
 
 CameraModeValue D_801B6BC8[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x0118, 2 },
@@ -3085,6 +3326,7 @@ CameraModeValue D_801B6BC8[] = {
 };
 
 CameraModeValue D_801B6BF0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -3098,6 +3340,7 @@ CameraModeValue D_801B6BF0[] = {
 };
 
 CameraModeValue D_801B6C18[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x015E, 1 },
 	{ 0x0050, 2 },
@@ -3113,6 +3356,7 @@ CameraModeValue D_801B6C18[] = {
 };
 
 CameraModeValue D_801B6C48[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x015E, 1 },
 	{ 0x01A4, 2 },
@@ -3126,6 +3370,7 @@ CameraModeValue D_801B6C48[] = {
 };
 
 CameraModeValue D_801B6C70[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x015E, 1 },
 	{ 0x0190, 2 },
@@ -3139,6 +3384,7 @@ CameraModeValue D_801B6C70[] = {
 };
 
 CameraModeValue D_801B6C98[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFE2, 0 },
 	{ 0x012C, 1 },
 	{ 0x0140, 2 },
@@ -3152,6 +3398,7 @@ CameraModeValue D_801B6C98[] = {
 };
 
 CameraModeValue D_801B6CC0[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -3167,6 +3414,7 @@ CameraModeValue D_801B6CC0[] = {
 };
 
 CameraModeValue D_801B6CF0[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFE2, 0 },
 	{ 0x0041, 1 },
 	{ 0x0046, 2 },
@@ -3183,6 +3431,7 @@ CameraModeValue D_801B6CF0[] = {
 };
 
 CameraModeValue D_801B6D24[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFEC, 0 },
 	{ 0x012C, 1 },
 	{ 0x0140, 2 },
@@ -3196,6 +3445,7 @@ CameraModeValue D_801B6D24[] = {
 };
 
 CameraModeValue D_801B6D4C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFE2, 0 },
 	{ 0x012C, 1 },
 	{ 0x0140, 2 },
@@ -3209,6 +3459,7 @@ CameraModeValue D_801B6D4C[] = {
 };
 
 CameraModeValue D_801B6D74[] = {
+    /* CAM_FUNC_FIXD2 */
 	{ 0xFFD8, 0 },
 	{ 0x003C, 1 },
 	{ 0x3200, 2 },
@@ -3219,6 +3470,7 @@ CameraModeValue D_801B6D74[] = {
 };
 
 CameraModeValue D_801B6D90[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFF6, 0 },
 	{ 0x0118, 1 },
 	{ 0x015E, 2 },
@@ -3232,6 +3484,7 @@ CameraModeValue D_801B6D90[] = {
 };
 
 CameraModeValue D_801B6DB8[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0x0000, 0 },
 	{ 0x00B4, 1 },
 	{ 0x012C, 2 },
@@ -3245,6 +3498,7 @@ CameraModeValue D_801B6DB8[] = {
 };
 
 CameraModeValue D_801B6DE0[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x0140, 1 },
 	{ 0x015E, 2 },
@@ -3258,6 +3512,7 @@ CameraModeValue D_801B6DE0[] = {
 };
 
 CameraModeValue D_801B6E08[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x012C, 1 },
 	{ 0x015E, 2 },
@@ -3271,6 +3526,7 @@ CameraModeValue D_801B6E08[] = {
 };
 
 CameraModeValue D_801B6E30[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -3284,6 +3540,7 @@ CameraModeValue D_801B6E30[] = {
 };
 
 CameraModeValue D_801B6E58[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00DC, 1 },
 	{ 0x0104, 2 },
@@ -3297,6 +3554,7 @@ CameraModeValue D_801B6E58[] = {
 };
 
 CameraModeValue D_801B6E80[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFBA, 0 },
 	{ 0x00FA, 1 },
 	{ 0x01F4, 2 },
@@ -3310,6 +3568,7 @@ CameraModeValue D_801B6E80[] = {
 };
 
 CameraModeValue D_801B6EA8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x01F4, 2 },
@@ -3323,6 +3582,7 @@ CameraModeValue D_801B6EA8[] = {
 };
 
 CameraModeValue D_801B6ED0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x00FA, 1 },
 	{ 0x01F4, 2 },
@@ -3336,6 +3596,7 @@ CameraModeValue D_801B6ED0[] = {
 };
 
 CameraModeValue D_801B6EF8[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x00A0, 2 },
@@ -3349,6 +3610,7 @@ CameraModeValue D_801B6EF8[] = {
 };
 
 CameraModeValue D_801B6F20[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFD8, 0 },
 	{ 0x00B4, 1 },
 	{ 0x0050, 2 },
@@ -3364,6 +3626,7 @@ CameraModeValue D_801B6F20[] = {
 };
 
 CameraModeValue D_801B6F50[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF6, 0 },
 	{ 0x0064, 1 },
 	{ 0x0096, 2 },
@@ -3377,6 +3640,7 @@ CameraModeValue D_801B6F50[] = {
 };
 
 CameraModeValue D_801B6F78[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x00A0, 2 },
@@ -3390,6 +3654,7 @@ CameraModeValue D_801B6F78[] = {
 };
 
 CameraModeValue D_801B6FA0[] = {
+    /* CAM_FUNC_UNIQ2 */
 	{ 0xFFD8, 0 },
 	{ 0x0014, 1 },
 	{ 0x003C, 7 },
@@ -3397,6 +3662,7 @@ CameraModeValue D_801B6FA0[] = {
 };
 
 CameraModeValue D_801B6FB0[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x0078, 1 },
 	{ 0x00FA, 2 },
@@ -3410,6 +3676,7 @@ CameraModeValue D_801B6FB0[] = {
 };
 
 CameraModeValue D_801B6FD8[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFEC, 0 },
 	{ 0x0064, 1 },
 	{ 0x0096, 2 },
@@ -3425,6 +3692,7 @@ CameraModeValue D_801B6FD8[] = {
 };
 
 CameraModeValue D_801B7008[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE7, 0 },
 	{ 0x0064, 1 },
 	{ 0x00B4, 2 },
@@ -3441,6 +3709,7 @@ CameraModeValue D_801B7008[] = {
 };
 
 CameraModeValue D_801B703C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x0078, 1 },
 	{ 0x00FA, 2 },
@@ -3454,6 +3723,7 @@ CameraModeValue D_801B703C[] = {
 };
 
 CameraModeValue D_801B7064[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0xFFF1, 0 },
 	{ 0x0078, 1 },
 	{ 0x00FA, 2 },
@@ -3467,6 +3737,7 @@ CameraModeValue D_801B7064[] = {
 };
 
 CameraModeValue D_801B708C[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0005, 2 },
@@ -3482,6 +3753,7 @@ CameraModeValue D_801B708C[] = {
 };
 
 CameraModeValue D_801B70BC[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFF6, 0 },
 	{ 0x010E, 1 },
 	{ 0x012C, 2 },
@@ -3495,6 +3767,7 @@ CameraModeValue D_801B70BC[] = {
 };
 
 CameraModeValue D_801B70E4[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0xFFE2, 0 },
 	{ 0x0118, 1 },
 	{ 0x0028, 2 },
@@ -3510,6 +3783,7 @@ CameraModeValue D_801B70E4[] = {
 };
 
 CameraModeValue D_801B7114[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFEC, 0 },
 	{ 0x0032, 1 },
 	{ 0x0064, 2 },
@@ -3526,6 +3800,7 @@ CameraModeValue D_801B7114[] = {
 };
 
 CameraModeValue D_801B7148[] = {
+    /* CAM_FUNC_JUMP3 */
 	{ 0xFFD8, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -3539,6 +3814,7 @@ CameraModeValue D_801B7148[] = {
 };
 
 CameraModeValue D_801B7170[] = {
+    /* CAM_FUNC_KEEP1 */
 	{ 0xFFE2, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00C8, 2 },
@@ -3554,6 +3830,7 @@ CameraModeValue D_801B7170[] = {
 };
 
 CameraModeValue D_801B71A0[] = {
+    /* CAM_FUNC_BATT1 */
 	{ 0xFFE2, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -3570,6 +3847,7 @@ CameraModeValue D_801B71A0[] = {
 };
 
 CameraModeValue D_801B71D4[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x0190, 1 },
 	{ 0x0014, 2 },
@@ -3585,12 +3863,14 @@ CameraModeValue D_801B71D4[] = {
 };
 
 CameraModeValue D_801B7204[] = {
+    /* CAM_FUNC_UNIQ0 */
 	{ 0x0000, 0 },
 	{ 0x0064, 4 },
 	{ 0x0002, 9 },
 };
 
 CameraModeValue D_801B7210[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFF6, 0 },
 	{ 0x0078, 1 },
 	{ 0x00B4, 2 },
@@ -3607,6 +3887,7 @@ CameraModeValue D_801B7210[] = {
 };
 
 CameraModeValue D_801B7244[] = {
+    /* CAM_FUNC_KEEP3 */
 	{ 0xFFEC, 0 },
 	{ 0x006E, 1 },
 	{ 0x00A0, 2 },
@@ -3623,6 +3904,7 @@ CameraModeValue D_801B7244[] = {
 };
 
 CameraModeValue D_801B7278[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD3, 0 },
 	{ 0x0096, 1 },
 	{ 0xFFF6, 3 },
@@ -3635,6 +3917,7 @@ CameraModeValue D_801B7278[] = {
 };
 
 CameraModeValue D_801B729C[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFD8, 0 },
 	{ 0x0096, 1 },
 	{ 0x0012, 3 },
@@ -3647,6 +3930,7 @@ CameraModeValue D_801B729C[] = {
 };
 
 CameraModeValue D_801B72C0[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFEC, 0 },
 	{ 0x0096, 1 },
 	{ 0xFFFE, 3 },
@@ -3659,6 +3943,7 @@ CameraModeValue D_801B72C0[] = {
 };
 
 CameraModeValue D_801B72E4[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFCE, 0 },
 	{ 0x0096, 1 },
 	{ 0xFFF4, 3 },
@@ -3671,6 +3956,7 @@ CameraModeValue D_801B72E4[] = {
 };
 
 CameraModeValue D_801B7308[] = {
+    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 0xFFF4, 3 },
@@ -3683,6 +3969,7 @@ CameraModeValue D_801B7308[] = {
 };
 
 CameraModeValue D_801B732C[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -3696,6 +3983,7 @@ CameraModeValue D_801B732C[] = {
 };
 
 CameraModeValue D_801B7354[] = {
+    /* CAM_FUNC_PARA1 */
 	{ 0x0000, 0 },
 	{ 0x00C8, 1 },
 	{ 0x0019, 2 },
@@ -3711,6 +3999,7 @@ CameraModeValue D_801B7354[] = {
 };
 
 CameraModeValue D_801B7384[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x0096, 1 },
 	{ 0x00FA, 2 },
@@ -3724,6 +4013,7 @@ CameraModeValue D_801B7384[] = {
 };
 
 CameraModeValue D_801B73AC[] = {
+    /* CAM_FUNC_NORM1 */
 	{ 0x0000, 0 },
 	{ 0x00B4, 1 },
 	{ 0x00DC, 2 },
@@ -3736,1540 +4026,1539 @@ CameraModeValue D_801B73AC[] = {
 	{ 0xF003, 9 },
 };
 
-
-CameraMode D_801B73D4[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4710 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-    { CAM_FUNC_NORM1, 10, D_801B4B90 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48B0 },
-    { CAM_FUNC_PARA1, 12, D_801B4A04 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-};
-
-CameraMode D_801B74C4[] = {
-	{ CAM_FUNC_JUMP3, 10, D_801B4BDC },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_JUMP3, 10, D_801B4CFC },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_JUMP3, 10, D_801B4C84 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4C04 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_JUMP3, 10, D_801B4CAC },
-    { CAM_FUNC_NORM1, 10, D_801B4CD4 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_JUMP3, 10, D_801B4C34 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_JUMP3, 10, D_801B4C5C },
-};
-
-CameraMode D_801B759C[] = {
-	{ CAM_FUNC_UNIQ2, 4, D_801B4D24 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_UNIQ2, 4, D_801B4D34 },
-};
-
-CameraMode D_801B75F4[] = {
-	{ CAM_FUNC_NORM3, 9, D_801B4D44 },
-    { CAM_FUNC_NORM3, 9, D_801B4D8C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP1, 12, D_801B4E2C },
-    { CAM_FUNC_NORM3, 9, D_801B4D68 },
-    { CAM_FUNC_KEEP3, 13, D_801B4E5C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4DD4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4DB0 },
-    { CAM_FUNC_BATT1, 13, D_801B4DF8 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NORM3, 9, D_801B4E90 },
-};
-
-CameraMode D_801B767C[] = {
-	{ CAM_FUNC_NORM3, 9, D_801B4EB4 },
-};
-
-CameraMode D_801B7684[] = {
-	{ CAM_FUNC_FIXD3, 1, D_801B4ED8 },
-};
-
-CameraMode D_801B768C[] = {
-	{ CAM_FUNC_UNIQ7, 2, D_801B4EDC },
-};
-
-CameraMode D_801B7694[] = {
-	{ CAM_FUNC_SPEC9, 3, D_801B4EE4 },
-};
-
-CameraMode D_801B769C[] = {
-	{ CAM_FUNC_DEMO1, 1, D_801B4EF0 },
-};
-
-CameraMode D_801B76A4[] = {
-	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B76AC[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4EF8 },
-    { CAM_FUNC_NORM1, 10, D_801B4F50 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4F20 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4F78 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_NORM1, 10, D_801B4EF8 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B777C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4FA0 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4FC8 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B784C[] = {
-	{ CAM_FUNC_NORM4, 10, D_801B4FF0 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B791C[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5018 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_FIXD2, 7, D_801B5034 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_FIXD2, 7, D_801B5050 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-};
-
-CameraMode D_801B7984[] = {
-	{ CAM_FUNC_FIXD1, 4, D_801B506C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-};
-
-CameraMode D_801B79EC[] = {
-	{ CAM_FUNC_SPEC8, 6, D_801B507C },
-};
-
-CameraMode D_801B79F4[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5094 },
-    { CAM_FUNC_NORM1, 10, D_801B5180 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B511C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B52E0 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-    { CAM_FUNC_NORM1, 10, D_801B4B90 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5250 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-};
-
-CameraMode D_801B7AE4[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B5338 },
-    { CAM_FUNC_KEEP4, 9, D_801B535C },
-    { CAM_FUNC_KEEP4, 9, D_801B53A4 },
-    { CAM_FUNC_KEEP4, 9, D_801B5380 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B53C8 },
-};
-
-CameraMode D_801B7B14[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B53EC },
-    { CAM_FUNC_KEEP4, 9, D_801B5410 },
-    { CAM_FUNC_KEEP4, 9, D_801B5458 },
-    { CAM_FUNC_KEEP4, 9, D_801B5434 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B547C },
-};
-
-CameraMode D_801B7B44[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B54A0 },
-    { CAM_FUNC_KEEP4, 9, D_801B54C4 },
-    { CAM_FUNC_KEEP4, 9, D_801B550C },
-    { CAM_FUNC_KEEP4, 9, D_801B54E8 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B5530 },
-};
-
-CameraMode D_801B7B74[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B5554 },
-    { CAM_FUNC_KEEP4, 9, D_801B5578 },
-    { CAM_FUNC_KEEP4, 9, D_801B55C0 },
-    { CAM_FUNC_KEEP4, 9, D_801B559C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B55E4 },
-};
-
-CameraMode D_801B7BA4[] = {
-	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B7BAC[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B5608 },
-    { CAM_FUNC_KEEP4, 9, D_801B562C },
-    { CAM_FUNC_KEEP4, 9, D_801B5674 },
-    { CAM_FUNC_KEEP4, 9, D_801B5650 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B5698 },
-};
-
-CameraMode D_801B7BDC[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B56BC },
-    { CAM_FUNC_KEEP4, 9, D_801B56E0 },
-    { CAM_FUNC_KEEP4, 9, D_801B56E0 },
-    { CAM_FUNC_KEEP4, 9, D_801B5704 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B56E0 },
-};
-
-CameraMode D_801B7C0C[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B5728 },
-    { CAM_FUNC_KEEP4, 9, D_801B5728 },
-    { CAM_FUNC_KEEP4, 9, D_801B5728 },
-    { CAM_FUNC_KEEP4, 9, D_801B574C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B5728 },
-};
-
-CameraMode D_801B7C3C[] = {
-	{ CAM_FUNC_DEMO2, 3, D_801B5770 },
-};
-
-CameraMode D_801B7C44[] = {
-	{ CAM_FUNC_DEMO4, 1, D_801B4EF4 },
-    { CAM_FUNC_DEMO5, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B7C54[] = {
-	{ CAM_FUNC_DEMO1, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B7C5C[] = {
-	{ CAM_FUNC_DEMO3, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B7C64[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B577C },
-    { CAM_FUNC_NORM1, 10, D_801B57A4 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B511C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B57CC },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B57F4 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B7D34[] = {
-	{ CAM_FUNC_FIXD1, 4, D_801B5824 },
-};
-
-CameraMode D_801B7D3C[] = {
-	{ CAM_FUNC_FIXD1, 4, D_801B5834 },
-};
-
-CameraMode D_801B7D44[] = {
-	{ CAM_FUNC_PARA2, 8, D_801B5844 },
-};
-
-CameraMode D_801B7D4C[] = {
-	{ CAM_FUNC_NORM2, 8, D_801B5864 },
-};
-
-CameraMode D_801B7D54[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5884 },
-};
-
-CameraMode D_801B7D5C[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B58A0 },
-};
-
-CameraMode D_801B7D64[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B58BC },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_FIXD2, 7, D_801B5034 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_FIXD2, 7, D_801B5050 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-};
-
-CameraMode D_801B7DCC[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B58D8 },
-};
-
-CameraMode D_801B7DD4[] = {
-	{ CAM_FUNC_FIXD1, 4, D_801B58F4 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-};
-
-CameraMode D_801B7E3C[] = {
-	{ CAM_FUNC_NORM0, 9, D_801B5904 },
-    { CAM_FUNC_NORM1, 10, D_801B5928 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5950 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B7F0C[] = {
-	{ CAM_FUNC_PARA1, 12, D_801B5978 },
-};
-
-CameraMode D_801B7F14[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B59A8 },
-};
-
-CameraMode D_801B7F1C[] = {
-	{ CAM_FUNC_SUBJ1, 9, D_801B59D0 },
-};
-
-CameraMode D_801B7F24[] = {
-	{ CAM_FUNC_UNIQ0, 3, D_801B59F4 },
-};
-
-CameraMode D_801B7F2C[] = {
-	{ CAM_FUNC_UNIQ0, 3, D_801B5A00 },
-};
-
-CameraMode D_801B7F34[] = {
-	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B7F3C[] = {
-	{ CAM_FUNC_SUBJ1, 9, D_801B5A0C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-};
-
-CameraMode D_801B7FAC[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4710 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_PARA1, 13, D_801B5A30 },
-    { CAM_FUNC_PARA1, 13, D_801B5A30 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B807C[] = {
-	{ CAM_FUNC_PARA1, 12, D_801B5A64 },
-};
-
-CameraMode D_801B8084[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5A94 },
-    { CAM_FUNC_NORM1, 10, D_801B5AF0 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B5ABC },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5B18 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5B40 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8154[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5B70 },
-    { CAM_FUNC_NORM1, 10, D_801B5C30 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B5B98 },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B5BC8 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B5BFC },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5C58 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_PARA1, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8224[] = {
-	{ CAM_FUNC_PARA1, 12, D_801B5C80 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_PARA1, 13, D_801B5A30 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B82F4[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5CB0 },
-};
-
-CameraMode D_801B82FC[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5CCC },
-};
-
-CameraMode D_801B8304[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5CE8 },
-    { CAM_FUNC_NORM1, 10, D_801B5D74 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B5D10 },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B5D40 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5D9C },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B83D4[] = {
-	{ CAM_FUNC_FIXD1, 4, D_801B5DC4 },
-};
-
-CameraMode D_801B83DC[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5DD4 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_PARA1, 12, D_801B5DFC },
-};
-
-CameraMode D_801B8434[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5E2C },
-};
-
-CameraMode D_801B843C[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B5E48 },
-};
-
-CameraMode D_801B8444[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5E64 },
-    { CAM_FUNC_NORM1, 10, D_801B4F50 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4F20 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5E8C },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_NORM1, 10, D_801B4EF8 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8514[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B5EB4 },
-    { CAM_FUNC_NORM1, 10, D_801B5F0C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B5EDC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B511C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B5F34 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5F5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B85E4[] = {
-	{ CAM_FUNC_SUBJ1, 9, D_801B5F8C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL }, 
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B5FD4 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B5FB0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B5FF8 },
-};
-
-CameraMode D_801B8664[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B601C },
-    { CAM_FUNC_NORM1, 10, D_801B6154 },
-    { CAM_FUNC_NORM1, 10, D_801B62F4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B634C },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B62C4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B6074 },
-    { CAM_FUNC_PARA1, 12, D_801B6044 },
-    { CAM_FUNC_KEEP3, 13, D_801B60A4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B60D8 },
-    { CAM_FUNC_PARA1, 12, D_801B631C },
-    { CAM_FUNC_NORM1, 10, D_801B626C },
-    { CAM_FUNC_PARA1, 12, D_801B620C },
-    { CAM_FUNC_JUMP2, 9, D_801B610C },
-    { CAM_FUNC_JUMP2, 9, D_801B6130 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B61DC },
-    { CAM_FUNC_PARA1, 12, D_801B617C },
-    { CAM_FUNC_PARA1, 12, D_801B61AC },
-    { CAM_FUNC_PARA1, 12, D_801B6294 },
-    { CAM_FUNC_PARA1, 12, D_801B6374 },
-    { CAM_FUNC_NORM1, 10, D_801B63A4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48B0 },
-    { CAM_FUNC_PARA1, 12, D_801B623C },
-    { CAM_FUNC_PARA1, 12, D_801B63CC },
-};
-
-CameraMode D_801B8754[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B63FC },
-};
-
-CameraMode D_801B875C[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B6418 }, 
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_FIXD2, 7, D_801B5034 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_FIXD2, 7, D_801B5050 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-};
-
-CameraMode D_801B87C4[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6434 },
-    { CAM_FUNC_NORM1, 10, D_801B648C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B645C },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B511C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B655C },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B64B4 },
-    { CAM_FUNC_JUMP2, 9, D_801B64D8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B64FC },
-    { CAM_FUNC_PARA1, 12, D_801B652C },
-    { CAM_FUNC_PARA1, 12, D_801B57F4 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8894[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6584 },
-    { CAM_FUNC_NORM1, 10, D_801B6698 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B6674 },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B65DC },
-    { CAM_FUNC_PARA1, 12, D_801B65AC },
-    { CAM_FUNC_KEEP3, 13, D_801B660C },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B6640 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B66C0 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_NORM1, 10, D_801B4EF8 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8964[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B66E8 },
-    { CAM_FUNC_NORM1, 10, D_801B6774 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B6710 },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B6740 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B679C },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_PARA1, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8A34[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B67C4 },
-    { CAM_FUNC_NORM1, 10, D_801B6880 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B681C },
-    { CAM_FUNC_PARA1, 12, D_801B67EC },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B684C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B68A8 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_PARA1, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8B04[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B68D0 },
-    { CAM_FUNC_NORM1, 10, D_801B692C },
-    { CAM_FUNC_NORM1, 10, D_801B697C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B68F8 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B6954 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_PARA1, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8BD4[] = {
-	{ CAM_FUNC_JUMP3, 10, D_801B69A4 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_JUMP3, 10, D_801B4CFC },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_JUMP3, 10, D_801B6A58 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B69CC },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B69FC },
-    { CAM_FUNC_JUMP3, 10, D_801B6A80 },
-    { CAM_FUNC_NORM1, 10, D_801B6AA8 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_JUMP3, 10, D_801B4C34 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_JUMP3, 10, D_801B6A30 },
-};
-
-CameraMode D_801B8CAC[] = {
-	{ CAM_FUNC_DEMO0, 1, D_801B4EF4 },
-};
-
-CameraMode D_801B8CB4[] = {
-	{ CAM_FUNC_JUMP3, 10, D_801B6AD0 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_JUMP3, 10, D_801B6BC8 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_JUMP3, 10, D_801B6B50 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B6AF8 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_JUMP3, 10, D_801B6B78 },
-    { CAM_FUNC_NORM1, 10, D_801B6BA0 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_JUMP3, 10, D_801B4C34 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_JUMP3, 10, D_801B6B28 },
-};
-
-CameraMode D_801B8D8C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6BF0 },
-    { CAM_FUNC_NORM1, 10, D_801B6C48 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B6C18 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B6C70 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B8E5C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6C98 },
-    { CAM_FUNC_NORM1, 10, D_801B6D24 },
-    { CAM_FUNC_NORM1, 10, D_801B62F4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B634C },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B62C4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B6CC0 },
-    { CAM_FUNC_PARA1, 12, D_801B6044 },
-    { CAM_FUNC_KEEP3, 13, D_801B6CF0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B60D8 },
-    { CAM_FUNC_PARA1, 12, D_801B631C },
-    { CAM_FUNC_NORM1, 10, D_801B6D4C },
-    { CAM_FUNC_PARA1, 12, D_801B620C },
-    { CAM_FUNC_JUMP2, 9, D_801B610C },
-    { CAM_FUNC_JUMP2, 9, D_801B6130 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B61DC },
-    { CAM_FUNC_PARA1, 12, D_801B617C },
-    { CAM_FUNC_PARA1, 12, D_801B61AC },
-    { CAM_FUNC_PARA1, 12, D_801B6294 },
-    { CAM_FUNC_PARA1, 12, D_801B6374 },
-};
-
-CameraMode D_801B8F2C[] = {
-	{ CAM_FUNC_FIXD2, 7, D_801B6D74 },
-};
-
-CameraMode D_801B8F34[] = {
-	{ CAM_FUNC_JUMP3, 10, D_801B6D90 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_JUMP3, 10, D_801B6E58 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_JUMP3, 10, D_801B6E08 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B6AF8 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_JUMP3, 10, D_801B6E30 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_JUMP3, 10, D_801B6DB8 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_JUMP3, 10, D_801B6DE0 },
-};
-
-CameraMode D_801B900C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6E80 },
-    { CAM_FUNC_NORM1, 10, D_801B6C48 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B6C18 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_NORM1, 10, D_801B6ED0 },
-    { CAM_FUNC_NORM1, 10, D_801B6EA8 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-};
-
-CameraMode D_801B90D4[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6EF8 },
-    { CAM_FUNC_NORM1, 10, D_801B6F50 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B6F20 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B6F78 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B91A4[] = {
-	{ CAM_FUNC_UNIQ2, 4, D_801B6FA0 },
-};
-
-CameraMode D_801B91AC[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6FB0 },
-    { CAM_FUNC_NORM1, 10, D_801B703C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B62C4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B6FD8 },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B60A4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B7008 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B7064 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B708C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B927C[] = {
-	{ CAM_FUNC_JUMP3, 10, D_801B70BC },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_JUMP3, 10, D_801B7148 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_JUMP3, 10, D_801B4C84 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B70E4 },
-    { CAM_FUNC_KEEP3, 13, D_801B7114 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_JUMP3, 10, D_801B4CAC },
-    { CAM_FUNC_NORM1, 10, D_801B4CD4 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_JUMP3, 10, D_801B4C34 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_JUMP3, 10, D_801B4C5C },
-};
-
-CameraMode D_801B9354[] = {
-	{ CAM_FUNC_UNIQ3, 10, D_801B6584 },
-    { CAM_FUNC_UNIQ3, 10, D_801B6698 },
-    { CAM_FUNC_UNIQ3, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_UNIQ3, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B6674 },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B65DC },
-    { CAM_FUNC_UNIQ4, 12, D_801B65AC },
-    { CAM_FUNC_KEEP3, 13, D_801B660C },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_UNIQ5, 13, D_801B6640 },
-    { CAM_FUNC_UNIQ4, 12, D_801B4B08 },
-    { CAM_FUNC_UNIQ3, 10, D_801B66C0 },
-    { CAM_FUNC_UNIQ4, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_UNIQ4, 12, D_801B49A4 },
-    { CAM_FUNC_UNIQ4, 12, D_801B4944 },
-    { CAM_FUNC_UNIQ4, 12, D_801B4974 },
-    { CAM_FUNC_UNIQ3, 10, D_801B6584 },
-    { CAM_FUNC_UNIQ4, 12, D_801B4B60 },
-};
-
-CameraMode D_801B9424[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4710 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B7170 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B71A0 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B94F4[] = {
-	{ CAM_FUNC_PARA1, 12, D_801B71D4 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B95C4[] = {
-	{ CAM_FUNC_UNIQ0, 3, D_801B7204 },
-};
-
-CameraMode D_801B95CC[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B6FB0 },
-    { CAM_FUNC_NORM1, 10, D_801B703C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B62C4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B6FD8 },
-    { CAM_FUNC_PARA1, 12, D_801B50BC },
-    { CAM_FUNC_KEEP3, 13, D_801B7210 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B7008 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B7064 },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B708C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B969C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B4710 },
-    { CAM_FUNC_NORM1, 10, D_801B491C },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B4A8C },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B4768 },
-    { CAM_FUNC_PARA1, 12, D_801B4738 },
-    { CAM_FUNC_KEEP3, 13, D_801B7244 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B4798 },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B4A34 },
-    { CAM_FUNC_PARA1, 12, D_801B49D4 },
-    { CAM_FUNC_JUMP2, 9, D_801B4824 },
-    { CAM_FUNC_JUMP2, 9, D_801B48F8 },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B49A4 },
-    { CAM_FUNC_PARA1, 12, D_801B4944 },
-    { CAM_FUNC_PARA1, 12, D_801B4974 },
-    { CAM_FUNC_PARA1, 12, D_801B4A5C },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
-};
-
-CameraMode D_801B976C[] = {
-	{ CAM_FUNC_KEEP4, 9, D_801B7278 },
-    { CAM_FUNC_KEEP4, 9, D_801B729C },
-    { CAM_FUNC_KEEP4, 9, D_801B72E4 },
-    { CAM_FUNC_KEEP4, 9, D_801B72C0 },
-    { CAM_FUNC_NONE, 0, NULL },
-    { CAM_FUNC_KEEP4, 9, D_801B7308 },
-};
-
-CameraMode D_801B979C[] = {
-	{ CAM_FUNC_NORM1, 10, D_801B732C },
-    { CAM_FUNC_NORM1, 10, D_801B7384 },
-    { CAM_FUNC_NORM1, 10, D_801B4AE0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },
-    { CAM_FUNC_SUBJ1, 9, D_801B486C },
-    { CAM_FUNC_NORM1, 10, D_801B4B38 },
-    { CAM_FUNC_SUBJ1, 9, D_801B47CC },
-    { CAM_FUNC_KEEP1, 12, D_801B5150 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },
-    { CAM_FUNC_KEEP1, 12, D_801B50EC },
-    { CAM_FUNC_PARA1, 12, D_801B7354 },
-    { CAM_FUNC_KEEP3, 13, D_801B47F0 },
-    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },
-    { CAM_FUNC_SUBJ1, 9, D_801B4848 },
-    { CAM_FUNC_BATT1, 13, D_801B511C },
-    { CAM_FUNC_PARA1, 12, D_801B4B08 },
-    { CAM_FUNC_NORM1, 10, D_801B73AC },
-    { CAM_FUNC_PARA1, 12, D_801B5220 },
-    { CAM_FUNC_JUMP2, 9, D_801B51D8 },
-    { CAM_FUNC_JUMP2, 9, D_801B51FC },
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },
-    { CAM_FUNC_PARA1, 12, D_801B51A8 },
-    { CAM_FUNC_PARA1, 12, D_801B5280 },
-    { CAM_FUNC_PARA1, 12, D_801B52B0 },
-    { CAM_FUNC_PARA1, 12, D_801B5308 },
-    { CAM_FUNC_PARA1, 12, D_801B4B60 },
+CameraMode sCamSetNorm0Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4710 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_NORM1, 10, D_801B4B90 }, // CAM_MODE_GORONJUMP
+    { CAM_FUNC_SUBJ1, 9, D_801B48B0 },  // CAM_MODE_BOOMERANG
+    { CAM_FUNC_PARA1, 12, D_801B4A04 }, // CAM_MODE_CHARGEZ
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_ZORAFINZ
+};
+
+CameraMode sCamSetNorm3Modes[] = {
+	{ CAM_FUNC_JUMP3, 10, D_801B4BDC }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_JUMP3, 10, D_801B4CFC }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_JUMP3, 10, D_801B4C84 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4C04 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_JUMP3, 10, D_801B4CAC }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4CD4 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_JUMP3, 10, D_801B4C5C }, // CAM_MODE_GORONJUMP
+};
+
+CameraMode sCamSetCirc5Modes[] = {
+	{ CAM_FUNC_UNIQ2, 4, D_801B4D24 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_UNIQ2, 4, D_801B4D34 }, 	// CAM_MODE_TARGET
+};
+
+CameraMode sCamSetHorse0Modes[] = {
+	{ CAM_FUNC_NORM3, 9, D_801B4D44 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NORM3, 9, D_801B4D8C }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4E2C }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NORM3, 9, D_801B4D68 }, 	// CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B4E5C }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B4DD4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4DB0 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4DF8 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM3, 9, D_801B4E90 }, 	// CAM_MODE_STILL
+};
+
+CameraMode sCamSetZora0Modes[] = {
+	{ CAM_FUNC_NORM3, 9, D_801B4EB4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetPreRend0Modes[] = {
+	{ CAM_FUNC_FIXD3, 1, D_801B4ED8 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetPreRend1Modes[] = {
+	{ CAM_FUNC_UNIQ7, 2, D_801B4EDC },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetDoorCModes[] = {
+	{ CAM_FUNC_SPEC9, 3, D_801B4EE4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetDemo0Modes[] = {
+	{ CAM_FUNC_DEMO1, 1, D_801B4EF0 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetFree0Modes[] = {
+	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetFukan0Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4EF8 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B4F50 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4F20 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4F78 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_NORM1, 10, D_801B4EF8 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetNorm1Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4FA0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 }, 	// CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4FC8 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetNanameModes[] = {
+	{ CAM_FUNC_NORM4, 10, D_801B4FF0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetCirc0Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5018 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 }, 	// CAM_MODE_ZORAFIN
+    { CAM_FUNC_FIXD2, 7, D_801B5034 }, 	// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_FIXD2, 7, D_801B5050 }, 	// CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+};
+
+CameraMode sCamSetFixed0Modes[] = {
+	{ CAM_FUNC_FIXD1, 4, D_801B506C },  // CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL },  		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL },  		// CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 }, 	// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+};
+
+CameraMode sCamSetSpiralModes[] = {
+	{ CAM_FUNC_SPEC8, 6, D_801B507C }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetDungeon0Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5094 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5180 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B511C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B52E0 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_NORM1, 10, D_801B4B90 }, // CAM_MODE_GORONJUMP
+    { CAM_FUNC_SUBJ1, 9, D_801B48B0 }, 	// CAM_MODE_BOOMERANG
+    { CAM_FUNC_PARA1, 12, D_801B5250 }, // CAM_MODE_CHARGEZ
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_ZORAFINZ
+};
+
+CameraMode sCamSetItem0Modes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B5338 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B535C }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B53A4 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B5380 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B53C8 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetItem1Modes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B53EC }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B5410 }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B5458 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B5434 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B547C }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetItem2Modes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B54A0 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B54C4 }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B550C }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B54E8 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B5530 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetItem3Modes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B5554 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B5578 }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B55C0 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B559C }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B55E4 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetNaviModes[] = {
+	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetWarp0Modes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B5608 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B562C }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B5674 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B5650 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B5698 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetDeathModes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B56BC }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B56E0 }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B56E0 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B5704 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B56E0 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetRebirthModes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B5728 },  // CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B5728 },  // CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B5728 },  // CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B574C },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B5728 },  // CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetTreasureModes[] = {
+	{ CAM_FUNC_DEMO2, 3, D_801B5770 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetTransformModes[] = {
+	{ CAM_FUNC_DEMO4, 1, D_801B4EF4 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_DEMO5, 1, D_801B4EF4 }, 	// CAM_MODE_JUMP
+};
+
+CameraMode sCamSetAttentionModes[] = {
+	{ CAM_FUNC_DEMO1, 1, D_801B4EF4 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetWarp1Modes[] = {
+	{ CAM_FUNC_DEMO3, 1, D_801B4EF4 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetDungeon1Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B577C }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B57A4 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B511C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B57CC }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B57F4 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetFixed1Modes[] = {
+	{ CAM_FUNC_FIXD1, 4, D_801B5824 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetFixed2Modes[] = {
+	{ CAM_FUNC_FIXD1, 4, D_801B5834 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetMazeModes[] = {
+	{ CAM_FUNC_PARA2, 8, D_801B5844 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetRemoteBombModes[] = {
+	{ CAM_FUNC_NORM2, 8, D_801B5864 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc1Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5884 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc2Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B58A0 },	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc3Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B58BC },  // CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_FIXD2, 7, D_801B5034 },  // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_FIXD2, 7, D_801B5050 },  // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+};
+
+CameraMode sCamSetCirc4Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B58D8 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetFixed3Modes[] = {
+	{ CAM_FUNC_FIXD1, 4, D_801B58F4 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 }, 	// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+};
+
+CameraMode sCamSetTower0Modes[] = {
+	{ CAM_FUNC_NORM0, 9, D_801B5904 },  // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5928 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5950 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetParallel0Modes[] = {
+	{ CAM_FUNC_PARA1, 12, D_801B5978 }, // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetNormDModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B59A8 }, // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetSubjectDModes[] = {
+	{ CAM_FUNC_SUBJ1, 9, D_801B59D0 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetStart0Modes[] = {
+	{ CAM_FUNC_UNIQ0, 3, D_801B59F4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetStart2Modes[] = {
+	{ CAM_FUNC_UNIQ0, 3, D_801B5A00 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetStop0Modes[] = {
+	{ CAM_FUNC_UNIQ6, 1, D_801B4EF4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetJCruisingModes[] = {
+	{ CAM_FUNC_SUBJ1, 9, D_801B5A0C },  // CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+};
+
+CameraMode sCamSetClimeMazeModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4710 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetSidedModes[] = {
+	{ CAM_FUNC_PARA1, 12, D_801B5A64 }, // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetDungeon2Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5A94 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5AF0 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B5ABC }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5B18 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5B40 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBossShigeModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5B70 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5C30 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B5B98 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B5BC8 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B5BFC }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5C58 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetKeepBackModes[] = {
+	{ CAM_FUNC_PARA1, 12, D_801B5C80 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetCirc6Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5CB0 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc7Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5CCC }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetChuBossModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5CE8 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5D74 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B5D10 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B5D40 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5D9C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetRFixed1Modes[] = {
+	{ CAM_FUNC_FIXD1, 4, D_801B5DC4 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetTresure1Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5DD4 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B5DFC }, // CAM_MODE_TARGET
+};
+
+CameraMode sCamSetBombBasketModes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5E2C },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc8Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B5E48 }, 	// CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetFukan1Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5E64 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B4F50 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4F20 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5E8C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_NORM1, 10, D_801B4EF8 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetDungeon3Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B5EB4 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B5F0C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 }, 	// CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B5EDC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B511C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B5F34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5F5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetTelescopeModes[] = {
+	{ CAM_FUNC_SUBJ1, 9, D_801B5F8C }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B5FD4 }, 	// CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_ZORAFIN
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_SUBJ1, 9, D_801B5FB0 }, 	// CAM_MODE_TARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROW
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BATTLE
+    { CAM_FUNC_SUBJ1, 9, D_801B5FF8 }, 	// CAM_MODE_NUTSHIDE
+};
+
+CameraMode sCamSetRoom0Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B601C }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6154 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B62F4 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B634C }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B62C4 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B6074 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6044 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B60A4 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B60D8 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B631C }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B626C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B620C }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B610C },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B6130 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B61DC }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B617C }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B61AC }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B6294 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B6374 }, // CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_NORM1, 10, D_801B63A4 }, // CAM_MODE_GORONJUMP
+    { CAM_FUNC_SUBJ1, 9, D_801B48B0 },  // CAM_MODE_BOOMERANG
+    { CAM_FUNC_PARA1, 12, D_801B623C }, // CAM_MODE_CHARGEZ
+    { CAM_FUNC_PARA1, 12, D_801B63CC }, // CAM_MODE_ZORAFINZ
+};
+
+CameraMode sCamSetRCirc0Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B63FC }, // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetCirc9Modes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B6418 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_JUMP
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C }, 	// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_FIXD2, 7, D_801B5034 },  // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_TARGET
+    { CAM_FUNC_FIXD2, 7, D_801B5050 },  // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+};
+
+CameraMode sCamSetOnThePoleModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6434 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B648C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B645C }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B511C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B655C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B64B4 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B64D8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B64FC }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B652C }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B57F4 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetInBushModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6584 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6698 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B6674 },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B65DC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B65AC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B660C }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B6640 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B66C0 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_NORM1, 10, D_801B4EF8 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBossLastModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B66E8 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6774 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B6710 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B6740 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B679C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBossIniModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B67C4 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6880 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B681C }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B67EC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B684C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B68A8 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBossHakModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B68D0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B692C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B697C }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B68F8 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6954 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBossKonModes[] = {
+	{ CAM_FUNC_JUMP3, 10, D_801B69A4 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_JUMP3, 10, D_801B4CFC }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_JUMP3, 10, D_801B6A58 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B69CC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B69FC }, // CAM_MODE_BATTLE
+    { CAM_FUNC_JUMP3, 10, D_801B6A80 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6AA8 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_JUMP3, 10, D_801B6A30 }, // CAM_MODE_GORONJUMP
+};
+
+CameraMode sCamSetConnect0Modes[] = {
+	{ CAM_FUNC_DEMO0, 1, D_801B4EF4 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetMorayModes[] = {
+	{ CAM_FUNC_JUMP3, 10, D_801B6AD0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_JUMP3, 10, D_801B6BC8 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_JUMP3, 10, D_801B6B50 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6AF8 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_JUMP3, 10, D_801B6B78 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6BA0 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_JUMP3, 10, D_801B6B28 }, // CAM_MODE_GORONJUMP
+};
+
+CameraMode sCamSetNorm2Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6BF0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6C48 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6C18 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6C70 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetBombBowlModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6C98 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6D24 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B62F4 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B634C }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B62C4 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B6CC0 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6044 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B6CF0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B60D8 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B631C }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6D4C }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B620C }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B610C },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B6130 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B61DC }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B617C }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B61AC }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B6294 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B6374 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetCircAModes[] = {
+	{ CAM_FUNC_FIXD2, 7, D_801B6D74 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetWhirlpoolModes[] = {
+	{ CAM_FUNC_JUMP3, 10, D_801B6D90 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_JUMP3, 10, D_801B6E58 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_JUMP3, 10, D_801B6E08 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6AF8 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_JUMP3, 10, D_801B6E30 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_JUMP3, 10, D_801B6DB8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_JUMP3, 10, D_801B6DE0 }, // CAM_MODE_GORONJUMP
+};
+
+CameraMode sCamSetKokkogameModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6E80 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6C48 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6C18 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_NORM1, 10, D_801B6ED0 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6EA8 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+};
+
+CameraMode sCamSetGiantModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6EF8 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B6F50 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B6F20 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B6F78 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetScene0Modes[] = {
+	{ CAM_FUNC_UNIQ2, 4, D_801B6FA0 },  // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetRoom1Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6FB0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B703C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B62C4 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B6FD8 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B60A4 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B7008 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B7064 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B708C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetWater2Modes[] = {
+	{ CAM_FUNC_JUMP3, 10, D_801B70BC }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_JUMP3, 10, D_801B7148 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_JUMP3, 10, D_801B4C84 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B70E4 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B7114 }, // CAM_MODE_TALK
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_JUMP3, 10, D_801B4CAC }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4CD4 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_NUTSFLYZ
+    { CAM_FUNC_JUMP3, 10, D_801B4C5C }, // CAM_MODE_GORONJUMP
+};
+
+CameraMode sCamSetSokonasiModes[] = {
+	{ CAM_FUNC_UNIQ3, 10, D_801B6584 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_UNIQ3, 10, D_801B6698 }, // CAM_MODE_JUMP
+    { CAM_FUNC_UNIQ3, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_UNIQ3, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B6674 },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B65DC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_UNIQ4, 12, D_801B65AC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B660C }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_UNIQ5, 13, D_801B6640 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_UNIQ4, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_UNIQ3, 10, D_801B66C0 }, // CAM_MODE_STILL
+    { CAM_FUNC_UNIQ4, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_UNIQ4, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_UNIQ4, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_UNIQ4, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_UNIQ3, 10, D_801B6584 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_UNIQ4, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetForceKeepModes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4710 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B7170 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B71A0 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetParallel1Modes[] = {
+	{ CAM_FUNC_PARA1, 12, D_801B71D4 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetStart1Modes[] = {
+	{ CAM_FUNC_UNIQ0, 3, D_801B7204 }, // CAM_MODE_NORMAL
+};
+
+CameraMode sCamSetRoom2Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B6FB0 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B703C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B62C4 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B6FD8 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B50BC }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B7210 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B7008 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B7064 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B708C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetNorm4Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B4710 }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B491C }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B4A8C }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B4768 }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B4738 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B7244 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 }, 	// CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 }, 	// CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B4798 }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B4A34 }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B4824 }, 	// CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B48F8 }, 	// CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 }, 	// CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B4A5C }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
+};
+
+CameraMode sCamSetShellModes[] = {
+	{ CAM_FUNC_KEEP4, 9, D_801B7278 }, 	// CAM_MODE_NORMAL
+    { CAM_FUNC_KEEP4, 9, D_801B729C }, 	// CAM_MODE_JUMP
+    { CAM_FUNC_KEEP4, 9, D_801B72E4 }, 	// CAM_MODE_GORONDASH
+    { CAM_FUNC_KEEP4, 9, D_801B72C0 }, 	// CAM_MODE_NUTSSHOT
+    { CAM_FUNC_NONE, 0, NULL }, 		// CAM_MODE_BOWARROWZ
+    { CAM_FUNC_KEEP4, 9, D_801B7308 }, 	// CAM_MODE_NUTSFLY
+};
+
+CameraMode sCamSetDungeon4Modes[] = {
+	{ CAM_FUNC_NORM1, 10, D_801B732C }, // CAM_MODE_NORMAL
+    { CAM_FUNC_NORM1, 10, D_801B7384 }, // CAM_MODE_JUMP
+    { CAM_FUNC_NORM1, 10, D_801B4AE0 }, // CAM_MODE_GORONDASH
+    { CAM_FUNC_SUBJ1, 9, D_801B4ABC },  // CAM_MODE_NUTSSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B486C },  // CAM_MODE_BOWARROWZ
+    { CAM_FUNC_NORM1, 10, D_801B4B38 }, // CAM_MODE_NUTSFLY
+    { CAM_FUNC_SUBJ1, 9, D_801B47CC },  // CAM_MODE_FIRSTPERSON
+    { CAM_FUNC_KEEP1, 12, D_801B5150 }, // CAM_MODE_BOOMFOLLLOW
+    { CAM_FUNC_SUBJ1, 9, D_801B4BB8 },  // CAM_MODE_ZORAFIN
+    { CAM_FUNC_KEEP1, 12, D_801B50EC }, // CAM_MODE_FOLLOWTARGET
+    { CAM_FUNC_PARA1, 12, D_801B7354 }, // CAM_MODE_TARGET
+    { CAM_FUNC_KEEP3, 13, D_801B47F0 }, // CAM_MODE_TALK
+    { CAM_FUNC_SUBJ1, 9, D_801B48D4 },  // CAM_MODE_SLINGSHOT
+    { CAM_FUNC_SUBJ1, 9, D_801B4848 },  // CAM_MODE_BOWARROW
+    { CAM_FUNC_BATT1, 13, D_801B511C }, // CAM_MODE_BATTLE
+    { CAM_FUNC_PARA1, 12, D_801B4B08 }, // CAM_MODE_NUTSHIDE
+    { CAM_FUNC_NORM1, 10, D_801B73AC }, // CAM_MODE_STILL
+    { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
+    { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
+    { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
+    { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
+    { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
+    { CAM_FUNC_PARA1, 12, D_801B5308 }, // CAM_MODE_PUSHPULL
+    { CAM_FUNC_PARA1, 12, D_801B4B60 }, // CAM_MODE_NUTSFLYZ
 };
 
 CameraSetting sCameraSettings[] = {
-	{ 0x00000000, 0x00000000, NULL },
-    { 0x3FFFFFFF, 0x00000005, D_801B73D4 },
-    { 0x05FFEFF7, 0x00000005, D_801B74C4 },
-    { 0x00000401, 0x00000005, D_801B759C },
-    { 0x00017E13, 0x80000005, D_801B75F4 },
-    { 0x00000001, 0x80000005, D_801B767C },
-    { 0x00000001, 0x8000000C, D_801B7684 },
-    { 0x00000001, 0x8000000C, D_801B768C },
-    { 0x00000001, 0xC0000007, D_801B7694 },
-    { 0x00000001, 0xC000000E, D_801B769C },
-    { 0x00000001, 0x80000005, D_801B76A4 },
-    { 0x03FFFFFF, 0x00000005, D_801B76AC },
-    { 0x03FFFFFF, 0x00000005, D_801B777C },
-    { 0x03FFFFFF, 0x80000005, D_801B784C },
-    { 0x00001BD9, 0x80000005, D_801B791C },
-    { 0x000011D9, 0x80000005, D_801B7984 },
-    { 0x00000001, 0x40000005, D_801B79EC },
-    { 0x3FFFFFFF, 0x00000005, D_801B79F4 },
-    { 0x0000002F, 0x00000005, D_801B7AE4 },
-    { 0x0000002F, 0x00000005, D_801B7B14 },
-    { 0x0000002F, 0x00000005, D_801B7B44 },
-    { 0x0000002F, 0x00000005, D_801B7B74 },
-    { 0x00000001, 0x00000005, D_801B7BA4 },
-    { 0x0000002F, 0x00000005, D_801B7BAC },
-    { 0x0000002F, 0x00000005, D_801B7BDC },
-    { 0x0000002F, 0x00000005, D_801B7C0C },
-    { 0x00000001, 0x40000005, D_801B7C3C },
-    { 0x00000003, 0x00000005, D_801B7C44 },
-    { 0x00000001, 0x00000005, D_801B7C54 },
-    { 0x00000001, 0x00000005, D_801B7C5C },
-    { 0x03FFFFFF, 0x00000005, D_801B7C64 },
-    { 0x00000001, 0x80000005, D_801B7D34 },
-    { 0x00000001, 0x80000005, D_801B7D3C },
-    { 0x00000001, 0x00000005, D_801B7D44 },
-    { 0x00000001, 0x00000005, D_801B7D4C },
-    { 0x00000001, 0x80000005, D_801B7D54 },
-    { 0x00000001, 0x80000005, D_801B7D5C },
-    { 0x00001BD9, 0x80000005, D_801B7D64 },
-    { 0x00000001, 0x80000005, D_801B7DCC },
-    { 0x000011D9, 0x80000005, D_801B7DD4 },
-    { 0x03FFFFFF, 0x80000005, D_801B7E3C },
-    { 0x00000001, 0x80000005, D_801B7F0C },
-    { 0x00000001, 0x00000005, D_801B7F14 },
-    { 0x00000001, 0x00000005, D_801B7F1C },
-    { 0x00000001, 0xC0000008, D_801B7F24 },
-    { 0x00000001, 0xC0000008, D_801B7F2C },
-    { 0x00000001, 0x00000005, D_801B7F34 },
-    { 0x00003051, 0x00000005, D_801B7F3C },
-    { 0x03FFFFFF, 0x00000005, D_801B7FAC },
-    { 0x00000001, 0x00000005, D_801B807C },
-    { 0x03FFFFFF, 0x00000005, D_801B8084 },
-    { 0x03FFFFFF, 0x00000005, D_801B8154 },
-    { 0x03FFFFFF, 0x80000005, D_801B8224 },
-    { 0x00000001, 0x80000005, D_801B82F4 },
-    { 0x00000001, 0x80000005, D_801B82FC },
-    { 0x03FFFFFF, 0x00000005, D_801B8304 },
-    { 0x00000001, 0x80000005, D_801B83D4 },
-    { 0x00000401, 0x00000005, D_801B83DC },
-    { 0x00000001, 0x80000005, D_801B8434 },
-    { 0x00000001, 0x80000005, D_801B843C },
-    { 0x03FFFFFF, 0x00000005, D_801B8444 },
-    { 0x03FFFFFF, 0x00000005, D_801B8514 },
-    { 0x00008441, 0x0000000A, D_801B85E4 },
-    { 0x3FFFFFFF, 0x00000005, D_801B8664 },
-    { 0x00000001, 0x80000005, D_801B8754 },
-    { 0x00001BD9, 0x80000005, D_801B875C },
-    { 0x03FFFFFF, 0x00000005, D_801B87C4 },
-    { 0x03FFFFFF, 0x00000005, D_801B8894 },
-    { 0x03FFFFFF, 0x00000005, D_801B8964 },
-    { 0x03FFFFFF, 0x00000005, D_801B8A34 },
-    { 0x03FFFFFF, 0x00000005, D_801B8B04 },
-    { 0x05FFEFF7, 0x00000005, D_801B8BD4 },
-    { 0x00000001, 0x00000005, D_801B8CAC },
-    { 0x05FFEFF7, 0x00000005, D_801B8CB4 },
-    { 0x03FFFFFF, 0x00000005, D_801B8D8C },
-    { 0x03FFFFFF, 0x00000005, D_801B8E5C },
-    { 0x00000001, 0x80000005, D_801B8F2C },
-    { 0x05FFEFF7, 0x00000005, D_801B8F34 },
-    { 0x01FFFFDF, 0x00000005, D_801B900C },
-    { 0x03FFFFFF, 0x00000005, D_801B90D4 },
-    { 0x00000001, 0x00000008, D_801B91A4 }, 
-    { 0x03FFFFFF, 0x00000005, D_801B91AC },
-    { 0x05FFEFF7, 0x00000005, D_801B927C },
-    { 0x03FFFFFF, 0x00000005, D_801B9354 },
-    { 0x03FFFFFF, 0x00000005, D_801B9424 },
-    { 0x03FFFFFF, 0x80000005, D_801B94F4 },
-    { 0x00000001, 0xC0000008, D_801B95C4 },
-    { 0x03FFFFFF, 0x00000005, D_801B95CC },
-    { 0x03FFFFFF, 0x00000005, D_801B969C },
-    { 0x0000002F, 0x00000005, D_801B976C },
-    { 0x03FFFFFF, 0x00000005, D_801B979C },
+	{ 0x00000000, 0x00000000, NULL }, 					// CAM_SET_NONE
+    { 0x3FFFFFFF, 0x00000005, sCamSetNorm0Modes },		// CAM_SET_NORMAL0
+    { 0x05FFEFF7, 0x00000005, sCamSetNorm3Modes }, 		// CAM_SET_NORMAL3
+    { 0x00000401, 0x00000005, sCamSetCirc5Modes }, 		// CAM_SET_CIRCLE5
+    { 0x00017E13, 0x80000005, sCamSetHorse0Modes }, 	// CAM_SET_HORSE0
+    { 0x00000001, 0x80000005, sCamSetZora0Modes }, 		// CAM_SET_ZORA0
+    { 0x00000001, 0x8000000C, sCamSetPreRend0Modes }, 	// CAM_SET_PREREND0
+    { 0x00000001, 0x8000000C, sCamSetPreRend1Modes }, 	// CAM_SET_PREREND1
+    { 0x00000001, 0xC0000007, sCamSetDoorCModes }, 		// CAM_SET_DOORC
+    { 0x00000001, 0xC000000E, sCamSetDemo0Modes }, 		// CAM_SET_DEMO0
+    { 0x00000001, 0x80000005, sCamSetFree0Modes }, 		// CAM_SET_FREE0
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes }, 	// CAM_SET_FUKAN0
+    { 0x03FFFFFF, 0x00000005, sCamSetNorm1Modes }, 		// CAM_SET_NORMAL1
+    { 0x03FFFFFF, 0x80000005, sCamSetNanameModes }, 	// CAM_SET_NANAME
+    { 0x00001BD9, 0x80000005, sCamSetCirc0Modes }, 		// CAM_SET_CIRCLE0
+    { 0x000011D9, 0x80000005, sCamSetFixed0Modes }, 	// CAM_SET_FIXED0
+    { 0x00000001, 0x40000005, sCamSetSpiralModes }, 	// CAM_SET_SPIRAL
+    { 0x3FFFFFFF, 0x00000005, sCamSetDungeon0Modes }, 	// CAM_SET_DUNGEON0
+    { 0x0000002F, 0x00000005, sCamSetItem0Modes }, 		// CAM_SET_ITEM0
+    { 0x0000002F, 0x00000005, sCamSetItem1Modes }, 		// CAM_SET_ITEM1
+    { 0x0000002F, 0x00000005, sCamSetItem2Modes }, 		// CAM_SET_ITEM2
+    { 0x0000002F, 0x00000005, sCamSetItem3Modes }, 		// CAM_SET_ITEM3
+    { 0x00000001, 0x00000005, sCamSetNaviModes }, 		// CAM_SET_NAVI
+    { 0x0000002F, 0x00000005, sCamSetWarp0Modes }, 		// CAM_SET_WARP0
+    { 0x0000002F, 0x00000005, sCamSetDeathModes }, 		// CAM_SET_DEATH
+    { 0x0000002F, 0x00000005, sCamSetRebirthModes }, 	// CAM_SET_REBIRTH
+    { 0x00000001, 0x40000005, sCamSetTreasureModes }, 	// CAM_SET_TREASURE
+    { 0x00000003, 0x00000005, sCamSetTransformModes }, 	// CAM_SET_TRANSFORM
+    { 0x00000001, 0x00000005, sCamSetAttentionModes }, 	// CAM_SET_ATTENTION
+    { 0x00000001, 0x00000005, sCamSetWarp1Modes }, 		// CAM_SET_WARP1
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon1Modes }, 	// CAM_SET_DUNGEON1
+    { 0x00000001, 0x80000005, sCamSetFixed1Modes }, 	// CAM_SET_FIXED1
+    { 0x00000001, 0x80000005, sCamSetFixed2Modes }, 	// CAM_SET_FIXED2
+    { 0x00000001, 0x00000005, sCamSetMazeModes }, 		// CAM_SET_MAZE
+    { 0x00000001, 0x00000005, sCamSetRemoteBombModes }, // CAM_SET_REMOTEBOMB
+    { 0x00000001, 0x80000005, sCamSetCirc1Modes }, 		// CAM_SET_CIRCLE1
+    { 0x00000001, 0x80000005, sCamSetCirc2Modes }, 		// CAM_SET_CIRCLE2
+    { 0x00001BD9, 0x80000005, sCamSetCirc3Modes }, 		// CAM_SET_CIRCLE3
+    { 0x00000001, 0x80000005, sCamSetCirc4Modes }, 		// CAM_SET_CIRCLE4
+    { 0x000011D9, 0x80000005, sCamSetFixed3Modes }, 	// CAM_SET_FIXED3
+    { 0x03FFFFFF, 0x80000005, sCamSetTower0Modes }, 	// CAM_SET_TOWER0
+    { 0x00000001, 0x80000005, sCamSetParallel0Modes }, 	// CAM_SET_PARALLEL0
+    { 0x00000001, 0x00000005, sCamSetNormDModes }, 		// CAM_SET_NORMALD
+    { 0x00000001, 0x00000005, sCamSetSubjectDModes }, 	// CAM_SET_SUBJECTD
+    { 0x00000001, 0xC0000008, sCamSetStart0Modes }, 	// CAM_SET_START0
+    { 0x00000001, 0xC0000008, sCamSetStart2Modes }, 	// CAM_SET_START2
+    { 0x00000001, 0x00000005, sCamSetStop0Modes }, 		// CAM_SET_STOP0
+    { 0x00003051, 0x00000005, sCamSetJCruisingModes }, 	// CAM_SET_JCRUISING
+    { 0x03FFFFFF, 0x00000005, sCamSetClimeMazeModes }, 	// CAM_SET_CLIMEMAZE
+    { 0x00000001, 0x00000005, sCamSetSidedModes }, 		// CAM_SET_SIDED
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon2Modes }, 	// CAM_SET_DUNGEON2
+    { 0x03FFFFFF, 0x00000005, sCamSetBossShigeModes }, 	// CAM_SET_BOSS_SHIGE
+    { 0x03FFFFFF, 0x80000005, sCamSetKeepBackModes }, 	// CAM_SET_KEEPBACK
+    { 0x00000001, 0x80000005, sCamSetCirc6Modes },		// CAM_SET_CIRCLE6
+    { 0x00000001, 0x80000005, sCamSetCirc7Modes },		// CAM_SET_CIRCLE7
+    { 0x03FFFFFF, 0x00000005, sCamSetChuBossModes }, 	// CAM_SET_CHUBOSS
+    { 0x00000001, 0x80000005, sCamSetRFixed1Modes }, 	// CAM_SET_RFIXED1
+    { 0x00000401, 0x00000005, sCamSetTresure1Modes }, 	// CAM_SET_TRESURE1
+    { 0x00000001, 0x80000005, sCamSetBombBasketModes }, // CAM_SET_BOMBBASKET
+    { 0x00000001, 0x80000005, sCamSetCirc8Modes }, 		// CAM_SET_CIRCLE8
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan1Modes },		// CAM_SET_FUKAN1
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon3Modes }, 	// CAM_SET_DUNGEON3
+    { 0x00008441, 0x0000000A, sCamSetTelescopeModes }, 	// CAM_SET_TELESCOPE
+    { 0x3FFFFFFF, 0x00000005, sCamSetRoom0Modes }, 		// CAM_SET_ROOM0
+    { 0x00000001, 0x80000005, sCamSetRCirc0Modes }, 	// CAM_SET_RCIRC0
+    { 0x00001BD9, 0x80000005, sCamSetCirc9Modes }, 		// CAM_SET_CIRCLE9
+    { 0x03FFFFFF, 0x00000005, sCamSetOnThePoleModes }, 	// CAM_SET_ONTHEPOLE
+    { 0x03FFFFFF, 0x00000005, sCamSetInBushModes }, 	// CAM_SET_INBUSH
+    { 0x03FFFFFF, 0x00000005, sCamSetBossLastModes }, 	// CAM_SET_BOSS_LAST
+    { 0x03FFFFFF, 0x00000005, sCamSetBossIniModes }, 	// CAM_SET_BOSS_INI
+    { 0x03FFFFFF, 0x00000005, sCamSetBossHakModes }, 	// CAM_SET_BOSS_HAK
+    { 0x05FFEFF7, 0x00000005, sCamSetBossKonModes }, 	// CAM_SET_BOSS_KON
+    { 0x00000001, 0x00000005, sCamSetConnect0Modes }, 	// CAM_SET_CONNECT0
+    { 0x05FFEFF7, 0x00000005, sCamSetMorayModes }, 		// CAM_SET_MORAY
+    { 0x03FFFFFF, 0x00000005, sCamSetNorm2Modes }, 		// CAM_SET_NORMAL2
+    { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes }, 	// CAM_SET_BOMBBOWL
+    { 0x00000001, 0x80000005, sCamSetCircAModes }, 		// CAM_SET_CIRCLEA
+    { 0x05FFEFF7, 0x00000005, sCamSetWhirlpoolModes }, 	// CAM_SET_WHIRLPOOL
+    { 0x01FFFFDF, 0x00000005, sCamSetKokkogameModes }, 	// CAM_SET_KOKKOGAME
+    { 0x03FFFFFF, 0x00000005, sCamSetGiantModes }, 		// CAM_SET_GIANT
+    { 0x00000001, 0x00000008, sCamSetScene0Modes }, 	// CAM_SET_SCENE0
+    { 0x03FFFFFF, 0x00000005, sCamSetRoom1Modes }, 		// CAM_SET_ROOM1
+    { 0x05FFEFF7, 0x00000005, sCamSetWater2Modes }, 	// CAM_SET_WATER2
+    { 0x03FFFFFF, 0x00000005, sCamSetSokonasiModes }, 	// CAM_SET_SOKONASI
+    { 0x03FFFFFF, 0x00000005, sCamSetForceKeepModes }, 	// CAM_SET_FORCEKEEP
+    { 0x03FFFFFF, 0x80000005, sCamSetParallel1Modes }, 	// CAM_SET_PARALLEL1
+    { 0x00000001, 0xC0000008, sCamSetStart1Modes }, 	// CAM_SET_START1
+    { 0x03FFFFFF, 0x00000005, sCamSetRoom2Modes }, 		// CAM_SET_ROOM2
+    { 0x03FFFFFF, 0x00000005, sCamSetNorm4Modes }, 		// CAM_SET_NORMAL4
+    { 0x0000002F, 0x00000005, sCamSetShellModes }, 		// CAM_SET_SHELL
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes }, 	// CAM_SET_DUNGEON4
 };
 
 s16 D_801B9CB0[26] = { 0x0059, 0x0031, 0x002F, 0x0000, 0x002B, 0x002A, 0x0000, 0x0000, 0x0000,
@@ -5277,6 +5566,78 @@ s16 D_801B9CB0[26] = { 0x0059, 0x0031, 0x002F, 0x0000, 0x002B, 0x002A, 0x0000, 0
                      0x0017, 0x0016, 0x0015, 0x0014, 0x0013, 0x0012, 0x002E, 0x0000 };
 
 s16* D_801B9CE4 = &D_801B9CB0[25];
+
+s32 Camera_Noop(Camera* camera);
+s32 Camera_Normal1(Camera* camera);
+s32 Camera_Normal2(Camera* camera);
+s32 Camera_Normal3(Camera* camera);
+s32 Camera_Normal4(Camera* camera);
+s32 Camera_Normal0(Camera* camera);
+s32 Camera_Parallel1(Camera* camera);
+s32 Camera_Parallel2(Camera* camera);
+s32 Camera_Parallel3(Camera* camera);
+s32 Camera_Parallel4(Camera* camera);
+s32 Camera_Parallel0(Camera* camera);
+s32 Camera_Jump1(Camera* camera);
+s32 Camera_Jump2(Camera* camera);
+s32 Camera_Jump3(Camera* camera);
+s32 Camera_Jump4(Camera* camera);
+s32 Camera_Jump0(Camera* camera);
+s32 Camera_Battle1(Camera* camera);
+s32 Camera_Battle2(Camera* camera);
+s32 Camera_Battle3(Camera* camera);
+s32 Camera_Battle4(Camera* camera);
+s32 Camera_Battle0(Camera* camera);
+s32 Camera_KeepOn1(Camera* camera);
+s32 Camera_KeepOn2(Camera* camera);
+s32 Camera_KeepOn3(Camera* camera);
+s32 Camera_KeepOn4(Camera* camera);
+s32 Camera_KeepOn0(Camera* camera);
+s32 Camera_Fixed1(Camera* camera);
+s32 Camera_Fixed2(Camera* camera);
+s32 Camera_Fixed3(Camera* camera);
+s32 Camera_Fixed4(Camera* camera);
+s32 Camera_Fixed0(Camera* camera);
+s32 Camera_Subj1(Camera* camera);
+s32 Camera_Subj2(Camera* camera);
+s32 Camera_Subj3(Camera* camera);
+s32 Camera_Subj4(Camera* camera);
+s32 Camera_Subj0(Camera* camera);
+s32 Camera_Data0(Camera* camera);
+s32 Camera_Data1(Camera* camera);
+s32 Camera_Data2(Camera* camera);
+s32 Camera_Data3(Camera* camera);
+s32 Camera_Data4(Camera* camera);
+s32 Camera_Unique1(Camera* camera);
+s32 Camera_Unique2(Camera* camera);
+s32 Camera_Unique3(Camera* camera);
+s32 Camera_Unique4(Camera* camera);
+s32 Camera_Unique5(Camera* camera);
+s32 Camera_Unique0(Camera* camera);
+s32 Camera_Unique6(Camera* camera);
+s32 Camera_Unique7(Camera* camera);
+s32 Camera_Unique8(Camera* camera);
+s32 Camera_Unique9(Camera* camera);
+s32 Camera_Demo1(Camera* camera);
+s32 Camera_Demo2(Camera* camera);
+s32 Camera_Demo3(Camera* camera);
+s32 Camera_Demo4(Camera* camera);
+s32 Camera_Demo5(Camera* camera);
+s32 Camera_Demo6(Camera* camera);
+s32 Camera_Demo7(Camera* camera);
+s32 Camera_Demo8(Camera* camera);
+s32 Camera_Demo9(Camera* camera);
+s32 Camera_Demo0(Camera* camera);
+s32 Camera_Special0(Camera* camera);
+s32 Camera_Special1(Camera* camera);
+s32 Camera_Special2(Camera* camera);
+s32 Camera_Special3(Camera* camera);
+s32 Camera_Special4(Camera* camera);
+s32 Camera_Special5(Camera* camera);
+s32 Camera_Special6(Camera* camera);
+s32 Camera_Special7(Camera* camera);
+s32 Camera_Special8(Camera* camera);
+s32 Camera_Special9(Camera* camera);
 
 s32 cameraUpdateFuncs[] = {
 	NULL,
@@ -5384,56 +5745,26 @@ s32 D_801B9E5C = 0;
 
 f32 D_801B9E60 = 0.0f;
 
-s32 D_801B9E64[] = {
-	0x42480000, // f32: 50.0
-	0xEE3AD558,
-	0x42960000, // f32: 75.0
-	0x00008008,
-	0x42A00000, // f32: 80.0
-	0xEE3A8008,
-	0x41700000, // f32: 15.0
-	0xEE3A8008,
+VecSph D_801B9E64[] = {
+    { 50.0f, 0xEE3A, 0xD558 },
+    { 75.0f, 0x0000, 0x8008 },
+    { 80.0f, 0xEE3A, 0x8008 },
+    { 15.0f, 0xEE3A, 0x8008 },
 };
 
-s32 D_801B9E84[] = {
-	0x00000000,
-	0x42200000, // f32: 40.0
-	0x41A00000, // f32: 20.0
-	0x00000000,
-	0x42200000, // f32: 40.0
-	0x00000000,
-	0x00000000,
-	0x40400000, // f32: 3.0
-	0xC0400000, // f32: -3.0
-	0x00000000,
-	0x40400000, // f32: 3.0
-	0xC0400000, // f32: -3.0
+f32 D_801B9E84[] = {
+    0.0f, 40.0f, 20.0f, 0.0f, 40.0f, 0.0f, 0.0f, 3.0f, -3.0f, 0.0f, 3.0f, -3.0f,
 };
 
-s32 D_801B9EB4[] = {
-	0x42700000, // f32: 60.0
-	0xEE3AD558,
-	0x42BE0000, // f32: 95.0
-	0x00008008,
-	0x42B40000, // f32: 90.0
-	0xEE3A8008,
-	0x41A00000, // f32: 20.0
-	0xEE3A8008,
+VecSph D_801B9EB4[] = {
+    { 60.0f, 0xEE3A, 0xD558 },
+    { 95.0f, 0x0000, 0x8008 },
+    { 90.0f, 0xEE3A, 0x8008 },
+    { 20.0f, 0xEE3A, 0x8008 },
 };
 
-s32 D_801B9ED4[] = {
-	0x00000000,
-	0x42200000, // f32: 40.0
-	0x41A00000, // f32: 20.0
-	0x00000000,
-	0x42200000, // f32: 40.0
-	0x00000000,
-	0x00000000,
-	0x40400000, // f32: 3.0
-	0xC0400000, // f32: -3.0
-	0x00000000,
-	0x40400000, // f32: 3.0
-	0xC0400000, // f32: -3.0
+f32 D_801B9ED4[] = {
+    0.0f, 40.0f, 20.0f, 0.0f, 40.0f, 0.0f, 0.0f, 3.0f, -3.0f, 0.0f, 3.0f, -3.0f,
 };
 
 GlobalContext* D_801EDC28;

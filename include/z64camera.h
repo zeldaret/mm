@@ -3,6 +3,12 @@
 
 #include "ultra64.h"
 
+#define CAM_STAT_CUT        0
+#define CAM_STAT_WAIT       1
+#define CAM_STAT_UNK3       3
+#define CAM_STAT_ACTIVE     7
+#define CAM_STAT_UNK100     0x100
+
 #define NUM_CAMS 4
 #define MAIN_CAM 0
 #define SUBCAM_FIRST 1
@@ -14,6 +20,150 @@
 #define SHRINKWINVAL_MASK (0x7000)
 #define SHRINKWIN_CURVAL (0x8000)
 #define IFACE_ALPHA_MASK (0x0F00)
+
+#define RELOAD_PARAMS \
+    (camera->animState == 0 || camera->animState == 10 || camera->animState == 20)
+
+#define PCT(x) ((x)*0.01f)
+#define NEXTSETTING ((values++)->val)
+#define NEXTPCT PCT(NEXTSETTING)
+
+#define BGCAM_POS(v) ((v)[0])
+#define BGCAM_ROT(v) ((v)[1])
+#define BGCAM_FOV(v) ((v)[2].x)
+#define BGCAM_JFIFID(v) ((v)[2].y)
+
+#define FLG_ADJSLOPE (1 << 0)
+#define FLG_OFFGROUND (1 << 7)
+
+typedef enum {
+    /* 0x00 */ CAM_SET_NONE,
+    /* 0x01 */ CAM_SET_NORMAL0,
+    /* 0x02 */ CAM_SET_NORMAL3,
+    /* 0x03 */ CAM_SET_CIRCLE5,
+    /* 0x04 */ CAM_SET_HORSE0,
+    /* 0x05 */ CAM_SET_ZORA0,
+    /* 0x06 */ CAM_SET_PREREND0,
+    /* 0x07 */ CAM_SET_PREREND1,
+    /* 0x08 */ CAM_SET_DOORC,
+    /* 0x09 */ CAM_SET_DEMO0,
+    /* 0x0A */ CAM_SET_FREE0,
+    /* 0x0B */ CAM_SET_FUKAN0,
+    /* 0x0C */ CAM_SET_NORMAL1,
+    /* 0x0D */ CAM_SET_NANAME,
+    /* 0x0E */ CAM_SET_CIRCLE0,
+    /* 0x0F */ CAM_SET_FIXED0,
+    /* 0x10 */ CAM_SET_SPIRAL,
+    /* 0x11 */ CAM_SET_DUNGEON0,
+    /* 0x12 */ CAM_SET_ITEM0,
+    /* 0x13 */ CAM_SET_ITEM1,
+    /* 0x14 */ CAM_SET_ITEM2,
+    /* 0x15 */ CAM_SET_ITEM3,
+    /* 0x16 */ CAM_SET_NAVI,
+    /* 0x17 */ CAM_SET_WARP0,
+    /* 0x18 */ CAM_SET_DEATH,
+    /* 0x19 */ CAM_SET_REBIRTH,
+    /* 0x1A */ CAM_SET_TREASURE,
+    /* 0x1B */ CAM_SET_TRANSFORM,
+    /* 0x1C */ CAM_SET_ATTENTION,
+    /* 0x1D */ CAM_SET_WARP1,
+    /* 0x1E */ CAM_SET_DUNGEON1,
+    /* 0x1F */ CAM_SET_FIXED1,
+    /* 0x20 */ CAM_SET_FIXED2,
+    /* 0x21 */ CAM_SET_MAZE,
+    /* 0x22 */ CAM_SET_REMOTEBOMB,
+    /* 0x23 */ CAM_SET_CIRCLE1,
+    /* 0x24 */ CAM_SET_CIRCLE2,
+    /* 0x25 */ CAM_SET_CIRCLE3,
+    /* 0x26 */ CAM_SET_CIRCLE4,
+    /* 0x27 */ CAM_SET_FIXED3,
+    /* 0x28 */ CAM_SET_TOWER0,
+    /* 0x29 */ CAM_SET_PARALLEL0,
+    /* 0x2A */ CAM_SET_NORMALD,
+    /* 0x2B */ CAM_SET_SUBJECTD,
+    /* 0x2C */ CAM_SET_START0,
+    /* 0x2D */ CAM_SET_START2,
+    /* 0x2E */ CAM_SET_STOP0,
+    /* 0x2F */ CAM_SET_JCRUISING,
+    /* 0x30 */ CAM_SET_CLIMEMAZE,
+    /* 0x31 */ CAM_SET_SIDED,
+    /* 0x32 */ CAM_SET_DUNGEON2,
+    /* 0x33 */ CAM_SET_BOSS_SHIGE,
+    /* 0x34 */ CAM_SET_KEEPBACK,
+    /* 0x35 */ CAM_SET_CIRCLE6,
+    /* 0x36 */ CAM_SET_CIRCLE7,
+    /* 0x37 */ CAM_SET_CHUBOSS,
+    /* 0x38 */ CAM_SET_RFIXED1,
+    /* 0x39 */ CAM_SET_TRESURE1,
+    /* 0x3A */ CAM_SET_BOMBBASKET,
+    /* 0x3B */ CAM_SET_CIRCLE8,
+    /* 0x3C */ CAM_SET_FUKAN1,
+    /* 0x3D */ CAM_SET_DUNGEON3,
+    /* 0x3E */ CAM_SET_TELESCOPE,
+    /* 0x3F */ CAM_SET_ROOM0,
+    /* 0x40 */ CAM_SET_RCIRC0,
+    /* 0x41 */ CAM_SET_CIRCLE9,
+    /* 0x42 */ CAM_SET_ONTHEPOLE,
+    /* 0x43 */ CAM_SET_INBUSH,
+    /* 0x44 */ CAM_SET_BOSS_LAST,
+    /* 0x45 */ CAM_SET_BOSS_INI,
+    /* 0x46 */ CAM_SET_BOSS_HAK,
+    /* 0x47 */ CAM_SET_BOSS_KON,
+    /* 0x48 */ CAM_SET_CONNECT0,
+    /* 0x49 */ CAM_SET_MORAY,
+    /* 0x4A */ CAM_SET_NORMAL2,
+    /* 0x4B */ CAM_SET_BOMBBOWL,
+    /* 0x4C */ CAM_SET_CIRCLEA,
+    /* 0x4D */ CAM_SET_WHIRLPOOL,
+    /* 0x4E */ CAM_SET_KOKKOGAME,
+    /* 0x4F */ CAM_SET_GIANT,
+    /* 0x50 */ CAM_SET_SCENE0,
+    /* 0x51 */ CAM_SET_ROOM1,
+    /* 0x52 */ CAM_SET_WATER2,
+    /* 0x53 */ CAM_SET_SOKONASI,
+    /* 0x54 */ CAM_SET_FORCEKEEP,
+    /* 0x55 */ CAM_SET_PARALLEL1,
+    /* 0x56 */ CAM_SET_START1,
+    /* 0x57 */ CAM_SET_ROOM2,
+    /* 0x58 */ CAM_SET_NORMAL4,
+    /* 0x59 */ CAM_SET_SHELL,
+    /* 0x5A */ CAM_SET_DUNGEON4,
+    /* 0x5B */ CAM_SET_MAX
+} CameraSettingType;
+
+typedef enum {
+    /* 0x00 */ CAM_MODE_NORMAL,
+    /* 0x01 */ CAM_MODE_JUMP,
+    /* 0x02 */ CAM_MODE_GORONDASH,
+    /* 0x03 */ CAM_MODE_NUTSSHOT,
+    /* 0x04 */ CAM_MODE_BOWARROWZ,
+    /* 0x05 */ CAM_MODE_NUTSFLY,
+    /* 0x06 */ CAM_MODE_FIRSTPERSON, // Original: CAM_MODE_SUBJECT
+    /* 0x07 */ CAM_MODE_BOOMFOLLLOW, // Original: CAM_MODE_BOOKEEPON
+    /* 0x08 */ CAM_MODE_ZORAFIN,
+    /* 0x09 */ CAM_MODE_FOLLOWTARGET, // Original: CAM_MODE_KEEPON
+    /* 0x0A */ CAM_MODE_TARGET, // Original: CAM_MODE_PARALLEL
+    /* 0x0B */ CAM_MODE_TALK, 
+    /* 0x0C */ CAM_MODE_SLINGSHOT, // Original: CAM_MODE_PACHINCO
+    /* 0x0D */ CAM_MODE_BOWARROW,
+    /* 0x0E */ CAM_MODE_BATTLE,
+    /* 0x0F */ CAM_MODE_NUTSHIDE,
+    /* 0x10 */ CAM_MODE_STILL,
+    /* 0x11 */ CAM_MODE_CHARGE,
+    /* 0x12 */ CAM_MODE_CLIMB,
+    /* 0x13 */ CAM_MODE_CLIMBZ,
+    /* 0x14 */ CAM_MODE_FOOKSHOT,
+    /* 0x15 */ CAM_MODE_FREEFALL,
+    /* 0x16 */ CAM_MODE_HANG,
+    /* 0x17 */ CAM_MODE_HANGZ,
+    /* 0x18 */ CAM_MODE_PUSHPULL,
+    /* 0x19 */ CAM_MODE_NUTSFLYZ,
+    /* 0x1A */ CAM_MODE_GORONJUMP,
+    /* 0x1B */ CAM_MODE_BOOMERANG,
+    /* 0x1C */ CAM_MODE_CHARGEZ,
+    /* 0x1D */ CAM_MODE_ZORAFINZ,
+    /* 0x1E */ CAM_MODE_MAX
+} CameraModeType;
 
 typedef enum {
     /* 0x00 */ CAM_FUNC_NONE,
@@ -124,6 +274,16 @@ typedef struct {
     /* 0x0008 */ s16 timer2;
     /* 0x000A */ s16 timer3;
 } DoorParams; // size = 0xC
+
+
+
+
+typedef struct {
+    /* 0x0000 */ s16 interfaceFlags;
+} Unique6; // size = 0x4
+
+
+
 
 typedef struct {
     /* 0x0000 */ Vec3f pos;

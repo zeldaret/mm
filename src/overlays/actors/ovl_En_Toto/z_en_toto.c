@@ -214,13 +214,13 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == 0x15 && (gSaveContext.time >= 0x4000 && gSaveContext.time < 0xE555)) {
+    if (globalCtx->sceneNum == SCENE_MILK_BAR && (gSaveContext.time >= 0x4000 && gSaveContext.time < 0xE555)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A978, globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880,
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A978, globalCtx->sceneNum == SCENE_SONCHONOIE ? &D_06003AA8 : &D_0600C880,
                      this->limbDrawTbl, this->transitionDrawTbl, 18);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
@@ -248,7 +248,7 @@ void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx) {
     AnimationHeader* animationHeader = &D_0600C880;
 
-    if (globalCtx->sceneNum == 0x12) {
+    if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
         animationHeader = &D_06003AA8;
     }
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, animationHeader, -4.0f);
@@ -270,7 +270,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         func_80BA36C0(this, globalCtx, 1);
-        if (globalCtx->sceneNum != 0x12) {
+        if (globalCtx->sceneNum != SCENE_SONCHONOIE) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
         } else if (player->linkForm == 3) {
             Actor_SetSwitchFlag(globalCtx, this->actor.home.rot.x);
@@ -278,8 +278,8 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         this->unk2B6 = 0;
         return;
     }
-    if ((globalCtx->sceneNum == 0x15 && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
-        (globalCtx->sceneNum != 0x15 && func_80BA397C(this, 0x2000))) {
+    if ((globalCtx->sceneNum == SCENE_MILK_BAR && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
+        (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
@@ -287,7 +287,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         } else {
             this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
-            if (globalCtx->sceneNum == 0x12) {
+            if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
                 if (player->linkForm == 3) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {
                         this->text = D_80BA5068;
@@ -310,7 +310,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3BFC(EnToto* this, GlobalContext* globalCtx) {
-    if (globalCtx->sceneNum == 0x12) {
+    if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000C80, -4.0f);
         this->unk2B4 = 0;
     } else {

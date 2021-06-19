@@ -138,8 +138,6 @@ typedef struct {
     /* 0x8 */ s32 unk8;
 } BgSpecialSceneMeshSubdivision; // size = 0xC
 
-
-
 typedef struct {
     /* 0x00 */ u8 cutsceneCount;
     /* 0x01 */ UNK_TYPE1 pad1[0x3];
