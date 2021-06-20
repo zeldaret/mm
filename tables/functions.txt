@@ -1164,7 +1164,7 @@
     0x800CC56C:("func_800CC56C",),
     0x800CC5C8:("func_800CC5C8",),
     0x800CC740:("func_800CC740",),
-    0x800CC7A8:("func_800CC7A8",),
+    0x800CC7A8:("Camera_GetCamBGData",),
     0x800CC804:("Camera_GetDataIdxForPoly",),
     0x800CC874:("func_800CC874",),
     0x800CC938:("func_800CC938",),

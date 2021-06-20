@@ -13,12 +13,12 @@ f32 Camera_Vec3fMagnitude(Vec3f* vec) {
     return sqrtf(SQ(vec->x) + SQ(vec->y) + SQ(vec->z));
 }
 
-// ISMATCHING: Need to move rodata
 // D_801DCDC0 = 0.4f
 /**
  * Interpolates along a curve between 0 and 1 with a period of
  * -a <= p <= a at time `b`
  */
+// ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
 f32 Camera_InterpolateCurve(f32 a, f32 b) {
     f32 ret;
@@ -46,6 +46,7 @@ f32 Camera_InterpolateCurve(f32 a, f32 b) {
     return ret;
 }
 #else
+f32 Camera_InterpolateCurve(f32 a, f32 b);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InterpolateCurve.asm")
 #endif
 
@@ -92,8 +93,8 @@ void Camera_LERPCeilVec3f(Vec3f* target, Vec3f* cur, f32 xzStepScale, f32 yStepS
     cur->z = Camera_LERPCeilF(target->z, cur->z, xzStepScale, minDiff);
 }
 
-// ISMATCHING: Need to move rodata
 // D_801DCDC4 = 0.05f
+// ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
 void func_800CB544(Camera* camera) {
     camera->yawUpdateRateInv = 100.0f;
@@ -104,12 +105,13 @@ void func_800CB544(Camera* camera) {
     camera->fovUpdateRate = 0.05f;
 }
 #else
+void func_800CB544(Camera* camera);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB544.asm")
 #endif
 
-// ISMATCHING: Need to move rodata
 // D_801DCDC8 = 0.01
 // D_801DCDCC = 0.1
+// ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
 void func_800CB584(Camera* camera) {
     camera->rUpdateRateInv = 50.0f;
@@ -123,11 +125,12 @@ void func_800CB584(Camera* camera) {
     }
 }
 #else
+void func_800CB584(Camera* camera);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB584.asm")
 #endif
 
-// ISMATCHING: Need to move rodata
 // D_801DCDD0 = 0.01
+// ISMATCHING: Need to move rodata
 #ifdef NON_MATCHING
 void func_800CB5DC(Camera* camera) {
     camera->rUpdateRateInv = 1800.0f;
@@ -138,6 +141,7 @@ void func_800CB5DC(Camera* camera) {
     camera->fovUpdateRate = 0.01;
 }
 #else
+void func_800CB5DC(Camera* camera);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB5DC.asm")
 #endif
 
@@ -277,36 +281,47 @@ s32 func_800CB924(Camera* camera) {
     return 0;
 }
 
-#ifdef NON_EQUIVALENT
+// D_801DCDD4 = -0.1f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
 s32 func_800CB950(Camera* camera) {
     ActorPlayer* player;
-    s32 phi_return;
+    s32 phi_v0;
+    s32 phi_v1;
+    f32 new_var;
 
     if (&camera->player->base == camera->globalCtx->actorCtx.actorList[2].first) {
-        if (Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) {
-            phi_return = 1;
-        } else {
-            phi_return = 0;
-        }
+        new_var = Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY);
 
-        if (phi_return == 0) {
+        phi_v0 = false;
+        if (new_var < 11.0f) {
+            phi_v0 = true;
+        } 
 
-            if (D_801DCDD4 < camera->player->base.gravity) {
-                phi_return = 1;
-            } else {
-                phi_return = 0;
-            }
-            if (phi_return == 0) {
-                phi_return = camera->player->stateFlags1 & 0x200000;
+        phi_v1 = phi_v0;
+
+        if (!phi_v1) {
+
+            phi_v1 = false;
+            if (camera->player->base.gravity > 0.1f) {
+                phi_v1 = true;
+            } 
+
+            player = camera->player;
+            if (!phi_v1) {
+                phi_v1 = player->stateFlags1 & 0x200000;
+                phi_v1 = !!phi_v1;
             }
         }
+        return phi_v1;
     } else {
-        phi_return = 1;
+        phi_v1 = 1;
     }
 
-    return phi_return;
+    return phi_v1;
 }
 #else
+s32 func_800CB950(Camera* camera);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB950.asm")
 #endif
 
@@ -415,28 +430,27 @@ s32 func_800CBC30(Camera* camera, f32 arg1, f32 arg2) {
 // OoT func_80043F94
 // D_801DCDD8 = 3.051851e-05
 // D_801DCDE4 = 3.051851e-05
-#ifdef NON_EQUIVALENT
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
 s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
     CollisionContext* colCtx = &camera->globalCtx->colCtx; // sp74
     Vec3f toNewPos;                                        // 68-6C-70
     Vec3f toPoint;                                         // 5C-60-64
     Vec3f fromToNorm;                                      // 50-54-58
     f32 floorPolyY;
-    CollisionPoly* floorPoly; // cosYaw
+    CollisionPoly** floorPoly; // cosYaw
     s32 floorBgId;            // sp44
-    s32 chkWall;
-    s32 chkCeil;
 
-    OLib_Vec3fDistNormalize(&fromToNorm.x, from, &to->pos);
+
+    OLib_Vec3fDistNormalize(&fromToNorm, from, &to->pos);
     toPoint.x = to->pos.x + fromToNorm.x;
     toPoint.y = to->pos.y + fromToNorm.y;
     toPoint.z = to->pos.z + fromToNorm.z;
-    chkWall = (arg3 & 1) ? 0 : 1;
-    chkCeil = (arg3 & 2) ? 0 : 1;
-    floorPoly = NULL;
+    floorPoly = &to->poly;
 
-    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, &to->poly, chkWall, 1, chkCeil, -1, &floorBgId)) {
+    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, floorPoly, (arg3 & 1) ? 0 : 1, 1, (arg3 & 2) ? 0 : 1, -1, &floorBgId)) {
         toNewPos = to->pos;
+        if (1) {} if (1) {} // required to match
         toNewPos.y += 5.0f;
         if ((arg3 != 0) && func_800CB7CC(camera)) {
             to->poly = camera->player->base.floorPoly;
@@ -445,15 +459,14 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
             to->norm.y = COLPOLY_GET_NORMAL(to->poly->normal.y);
             to->norm.z = COLPOLY_GET_NORMAL(to->poly->normal.z);
 
-            if (!Math3D_LineSegVsPlane(to->norm.x, to->norm.y, to->norm.z, to->poly->dist, from, &toPoint, &toNewPos,
-                                       1)) {
+            if (!Math3D_LineSegVsPlane(to->norm.x, to->norm.y, to->norm.z, to->poly->dist, from, &toPoint, &toNewPos, 1)) {
                 floorPolyY = to->pos.y - 20.0f;
             } else {
                 toNewPos.y += 5.0f;
                 floorPolyY = to->pos.y;
             }
         } else {
-            floorPolyY = func_800C4488(colCtx, &floorPoly, &floorBgId, &toNewPos);
+            floorPolyY = func_800C4488(colCtx, floorPoly, &floorBgId, &toNewPos);
         }
 
         if ((to->pos.y - floorPolyY) > 5.0f) {
@@ -474,6 +487,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
     return floorBgId + 1;
 }
 #else
+s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CBC84.asm")
 #endif
 
@@ -599,6 +613,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
     return ret;
 }
 #else
+s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor** exclusions, s32 numExclusions);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC260.asm")
 #endif
 
@@ -683,7 +698,7 @@ s16 func_800CC740(Camera* camera, u32 flags) {
     }
 }
 
-CollisionPoly* func_800CC7A8(Camera* camera, u32 flags) {
+Vec3s* Camera_GetCamBGData(Camera* camera, u32 flags) {
     if (flags & 0x1000) {
         return func_800C98CC(&camera->globalCtx->colCtx, flags & ~0x1000, 50); // TODO: functions.h
     } else {
@@ -723,6 +738,7 @@ s32 func_800CC874(Camera* camera, f32* waterY) {
     WaterBox* waterBox;
     s32 ret;
     s32 sp30;
+    GlobalContext* globalCtx;
 
     // Actor_GetWorldPosShapeRot
     func_800B8248(&playerPosShape, camera->player); // &camera->player->base
@@ -742,15 +758,21 @@ s32 func_800CC874(Camera* camera, f32* waterY) {
     }
 
     // WaterBox_GetCamDataIndex
-    ret = func_800CA648(&camera->globalCtx->colCtx, waterBox, sp30);
+    // PERM_RANDOMIZE(
+    globalCtx = camera->globalCtx;
+    ret = func_800CA648(&globalCtx->colCtx, waterBox, sp30);
     if (ret == 0) {
         // no camera data idx
         return -2;
-    }
-
+    } 
+    
     return ret;
+
+    // )
+
 }
 #else
+s32 func_800CC874(Camera* camera, f32* waterY);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC874.asm")
 #endif
 
@@ -770,6 +792,7 @@ s16 Camera_XZAngle(Vec3f* to, Vec3f* from) {
     return DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
 }
 #else
+s16 Camera_XZAngle(Vec3f* to, Vec3f* from);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_XZAngle.asm")
 #endif
 
@@ -854,6 +877,7 @@ s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2) {
 
 }
 #else
+s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC9C0.asm")
 #endif
 
@@ -948,6 +972,7 @@ f32 func_800CCCEC(Camera* camera, s16 arg1) {
     return ret;
 }
 #else
+f32 func_800CCCEC(Camera* camera, s16 arg1);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CCCEC.asm")
 #endif
 
@@ -1027,6 +1052,7 @@ f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale) {
     return ret;
 }
 #else
+f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ClampLERPScale.asm")
 #endif
 
@@ -1213,6 +1239,7 @@ s32 Camera_CalcAtDefault(Camera *camera, VecSph *eyeAtDir, f32 extraYOffset, s16
     return true;
 }
 #else
+s32 Camera_CalcAtDefault(Camera *camera, VecSph *eyeAtDir, f32 extraYOffset, s16 calcSlope);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcAtDefault.asm")
 #endif
 
@@ -1266,6 +1293,7 @@ s32 func_800CD834(Camera *camera, VecSph *eyeAtDir, f32 arg2, f32* arg3, f32 arg
     return true;
 }
 #else
+s32 func_800CD834(Camera *camera, VecSph *eyeAtDir, f32 arg2, f32* arg3, f32 arg4);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD834.asm")
 #endif
 
@@ -1302,11 +1330,12 @@ s32 Camera_Normal2(Camera* camera) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal3.asm")
 
 s32 Camera_Normal4(Camera* camera) {
-    s32 pad;
+    Vec3s* sceneCamData;
     s16 roll;
 
     if (RELOAD_PARAMS) {
-        D_801EDBF0 = func_800CC7A8(camera, camera->camDataIdx)->normal.y;
+        sceneCamData = Camera_GetCamBGData(camera, camera->camDataIdx);
+        D_801EDBF0 = BGCAM_ROT(sceneCamData).z;
     }
 
     roll = camera->roll;
@@ -1383,7 +1412,117 @@ s32 Camera_KeepOn0(Camera* camera) {
     return Camera_Noop(camera);
 }
 
+
+// D_801DD1D4 = D_801DD1D8 = D_801DD1DC = D_801DD1E0 = 0.01f
+// D_801DD1E4 = 0.2f
+#ifdef NON_EQUIVALENT
+s32 Camera_Fixed1(Camera *camera) {
+    // s32 pad1;
+    Fixed1* fixd1 = (Fixed1*)camera->paramData;
+    s32 pad3;
+    s32 yawDiff;
+    s32 pad2;
+    VecSph eyeOffset; // sp8C-90-92
+    VecSph eyeAtOffset; // sp84-88-8A
+    VecSph sp7C;
+    Vec3f adjustedPos; //sp6C-70-74
+    Vec3s* sceneCamData; // sp68
+    u32 negOne;
+    // Vec3f temp;
+    Fixed1Anim* anim = &fixd1->anim;
+    f32 playerHeight; // sp58
+    CameraModeValue* values; // sp54
+    PosRot* sp50;
+    PosRot* sp4C;
+    VecSph sp44; // sp44-48-4A
+    Vec3f* eye = &camera->eye; // sp38
+    Vec3f* focalPoint = &camera->focalPoint; // sp34
+    PosRot* playerPosRot = &camera->playerPosRot; // sp30
+
+
+    playerHeight = func_800CB700(camera);
+    func_8010C764(&sp7C, focalPoint, eye);
+
+    if (!RELOAD_PARAMS) {
+        // Pass
+    } else {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values; // sp54
+        sceneCamData = Camera_GetCamBGData(camera, camera->camDataIdx);
+        Camera_Vec3sToVec3f(&anim->eyePosRotTarget.pos, &BGCAM_POS(sceneCamData));
+
+        anim->eyePosRotTarget.rot = BGCAM_ROT(sceneCamData);
+        anim->fov = BGCAM_FOV(sceneCamData);
+        anim->player = camera->player;
+
+        fixd1->unk_00 = NEXTPCT * playerHeight;
+        fixd1->jfifId = NEXTPCT;
+        fixd1->fov = NEXTSETTING;
+        fixd1->interfaceFlags = NEXTSETTING;
+
+        if (fixd1->interfaceFlags & 0x10) {
+            if (camera->target == NULL) {
+                return false;
+            }
+
+            sp50 = &camera->target->home;
+            sp4C = &camera->target->world;
+
+            func_8010C764(&sp44, sp50, &anim->eyePosRotTarget.pos);
+            sp44.yaw = sp4C->rot.y + (s16)(sp44.yaw - sp50->rot.y);
+            func_8010C7B8(&anim->eyePosRotTarget.pos, &sp4C->pos, &sp44);
+            yawDiff = (s16)(anim->eyePosRotTarget.rot.y - sp50->rot.y);
+            anim->eyePosRotTarget.rot.y = sp4C->rot.y + yawDiff;
+        }
+    }
+
+    negOne = -1;
+
+    if (anim->player != camera->player) {
+        camera->animState = 20;
+    }
+
+    if (anim->fov == negOne) {
+        anim->fov = fixd1->fov * 100;
+    } else if (anim->fov < 361) {
+        anim->fov *= 100;
+    }
+
+    sCameraInterfaceFlags = fixd1->interfaceFlags;
+
+    if (camera->animState == 0) {
+        camera->animState++;
+        func_800CB5DC(camera);
+        if (anim->fov != negOne) {
+            fixd1->fov = PCT(anim->fov);
+        }
+
+        if (BGCAM_JFIFID(sceneCamData) != negOne) {
+            fixd1->jfifId = PCT(BGCAM_JFIFID(sceneCamData));
+        }
+    }
+
+    func_8010C764(&eyeAtOffset, eye, focalPoint);
+    Camera_LERPCeilVec3f(&anim->eyePosRotTarget.pos, eye, fixd1->jfifId, fixd1->jfifId, 0.2f);
+    adjustedPos = playerPosRot->pos;
+    adjustedPos.y += playerHeight;
+    camera->dist = CamMath_Distance(&adjustedPos, eye);
+    eyeOffset.r = camera->dist;
+    eyeOffset.pitch = Camera_LERPCeilS(anim->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, fixd1->jfifId, 5);
+    eyeOffset.yaw = Camera_LERPCeilS(anim->eyePosRotTarget.rot.y, eyeAtOffset.yaw, fixd1->jfifId, 5);
+    func_8010C7B8(focalPoint, eye, &eyeOffset);
+    camera->eyeNext = *eye;
+    func_800CC128(camera, eye, focalPoint);
+    camera->fov = Camera_LERPCeilF(fixd1->fov, camera->fov, fixd1->jfifId, 0.1f);
+    camera->roll = 0;
+    camera->atLERPStepScale = 0.0f;
+    func_800CB6C8(camera, &playerPosRot->pos);
+    camera->roll = Camera_LERPCeilS(anim->eyePosRotTarget.rot.z, camera->roll, fixd1->jfifId, 5);
+    return true;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed1.asm")
+#endif
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed2.asm")
 
@@ -1472,7 +1611,6 @@ s32 Camera_Unique5(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique0.asm")
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique6.asm")
 s32 Camera_Unique6(Camera *camera) {
     Unique6* uniq6 = (Unique6*)camera->paramData;
     CameraModeValue* values;
@@ -1527,7 +1665,91 @@ s32 Camera_Unique9(Camera* camera) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo2.asm")
 
+// D_801DD368 = 0.1
+// D_801DD36C = 0.4
+// D_801DD370 = D_801DD374 = 0.1
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s32 Camera_Demo3(Camera *camera) {
+    s32 pad2;
+    s32 pad3;
+    s32 pad4;
+    VecSph sp64;
+    CameraModeValue* values;
+    Demo3* demo3 = (Demo3*)camera->paramData;
+    Vec3f playerPos; // sp50-54-58
+    Vec3f* eye = &camera->eye; // sp34;
+    Vec3f* focalPoint = &camera->focalPoint; // sp30
+    Vec3f* eyeNext = &camera->eyeNext; // sp24
+    Demo3Anim* anim = &demo3->anim;
+    f32 temp;
+
+
+    func_8010C764(&sp64, focalPoint, eye);
+    func_800B81E0(&playerPos, camera->player);
+    playerPos.x = camera->playerPosRot.pos.x;
+    playerPos.z = camera->playerPosRot.pos.z;
+    playerPos.y -= (playerPos.y - camera->playerPosRot.pos.y) * 0.4f;
+    Camera_LERPCeilVec3f(&playerPos, focalPoint, 0.1f, 0.1f, 0.1f);
+
+    if (RELOAD_PARAMS) {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        demo3->interfaceFlags = NEXTSETTING;
+        camera->animState = 0;
+    }
+
+    sCameraInterfaceFlags = demo3->interfaceFlags;
+
+    switch (camera->animState) {
+        case 0:
+            camera->animState++;
+            anim->unk_06 = 125;
+            Quake2_SetType(8);
+            Quake2_SetCountdown(60);
+            break;
+        case 1:
+            temp =  1.0f / anim->unk_06;
+            sp64.r = Camera_LERPCeilF(140.0f, sp64.r, temp, 0.1f);
+            anim->unk_06--;
+            camera->fov = Camera_LERPCeilF(50.0f, camera->fov, 0.1f, 0.1f);
+            if (anim->unk_06 <= 0) {
+                anim->unk_06 = 20;
+                camera->animState += 1;
+                Quake2_SetType(0x10);
+                Quake2_SetCountdown(80);
+            }
+            break;
+        case 2:
+            anim->unk_06--;
+            if (anim->unk_06 <= 0) {
+                anim->unk_04 = 120;
+                anim->unk_06 = 0;
+                anim->unk_00 = (175.0f - camera->fov) / anim->unk_04;
+                camera->animState++;
+                Quake2_SetType(0x400);
+                Quake2_SetCountdown(15);
+            }
+            break;
+        case 3:
+            anim->unk_06++;
+            camera->fov += anim->unk_00 * anim->unk_06;
+            if (anim->unk_06 >= 0xF) {
+                Quake2_ClearType(0x400);
+                Quake2_ClearType(0x10);
+                Quake2_ClearType(8);
+                camera->animState += 1;
+            }
+            break;
+    }
+
+    func_8010C7B8(eyeNext, focalPoint, &sp64);
+    *eye = *eyeNext;
+    return true;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo3.asm")
+#endif
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo4.asm")
 
@@ -1666,6 +1888,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     D_801B9E58 = 3;
 }
 #else
+void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Init.asm")
 #endif
 
@@ -1702,7 +1925,8 @@ void Camera_Stub800DE0E0(Camera* camera) {
 }
 
 // D_801DD450 = 0.01f
-#ifdef NON_EQUIVALENT
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
 void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
     PosRot playerPosShape;
     VecSph eyeNextAtOffset;
@@ -1711,8 +1935,7 @@ void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
     s32 upXZ;
     f32 playerYOffset;
     Vec3f* eye = &camera->eye;
-    Vec3f* focalPoint = &camera->focalPoint;
-    Vec3f* eyeNext = &camera->eyeNext;
+    s32 pad;
 
     func_800B8248(&playerPosShape, player);
     camera->player = player;
@@ -1733,8 +1956,8 @@ void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
     camera->posOffset.y = playerYOffset;
     camera->posOffset.z = 0;
 
-    func_8010C7B8(eyeNext, focalPoint, &eyeNextAtOffset);
-    *eye = *eyeNext;
+    func_8010C7B8(&camera->eyeNext, &camera->focalPoint, &eyeNextAtOffset);
+    *eye = camera->eyeNext;
     camera->roll = 0;
 
     upXZ = 0;
@@ -1742,15 +1965,18 @@ void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
     camera->upDir.y = 1.0f;
     camera->upDir.x = upXZ;
 
-    // PERM_RANDOMIZE(
-    if (func_800CC488(camera, &floorPos, focalPoint, &bgId) != BGCHECK_Y_MIN) {
-        camera->bgCheckId = bgId;
-    } 
+    {
+        Vec3f* focalPoint = &camera->focalPoint;
+        if (func_800CC488(camera, &floorPos, focalPoint, &bgId) != BGCHECK_Y_MIN) {
+            camera->bgCheckId = bgId;
+        }
+    }
 
-    camera->waterPrevCamSetting = camera->waterPrevCamIdx = -1;
+    camera->waterPrevCamIdx = -1;
+    camera->waterPrevCamSetting = -1;
+    dummy:; // necessary to match
     camera->waterQuakeId = -1;
     func_800DDFE0(camera);
-    // )
 
     Camera_SetFlags(camera, 4);
 
@@ -1771,6 +1997,7 @@ void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player) {
     Camera_CheckWater(camera);
 }
 #else
+void Camera_InitPlayerSettings(Camera* camera, ActorPlayer* player);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.asm")
 #endif
 
@@ -2090,6 +2317,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags) {
 }
 #else
 static s32 modeChangeFlags = 0;
+s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ChangeModeFlags.asm")
 #endif
 
@@ -2292,6 +2520,7 @@ s32 Camera_SetParam(Camera* camera, s32 param, void* value) {
     return true;
 }
 #else
+s32 Camera_SetParam(Camera* camera, s32 param, void* value);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_SetParam.asm")
 #endif
 
@@ -2387,6 +2616,7 @@ s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera) {
     return true;
 }
 #else
+s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Copy.asm")
 #endif
 

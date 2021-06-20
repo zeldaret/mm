@@ -241,13 +241,13 @@ typedef enum {
 } CameraFuncType;
 
 typedef struct {
-    /* 0x0000 */ Vec3f collisionClosePoint;
-    /* 0x000C */ CollisionPoly* atEyePoly;
-    /* 0x0010 */ f32 swingUpdateRate;
-    /* 0x0014 */ s16 unk_14;
-    /* 0x0016 */ s16 unk_16;
-    /* 0x0018 */ s16 unk_18;
-    /* 0x001A */ s16 swingUpdateRateTimer;
+    /* 0x00 */ Vec3f collisionClosePoint;
+    /* 0x0C */ CollisionPoly* atEyePoly;
+    /* 0x10 */ f32 swingUpdateRate;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 swingUpdateRateTimer;
 } SwingAnimation; // size = 0x1C
 
 typedef struct {
@@ -268,29 +268,296 @@ typedef struct {
 } CameraSetting; // size = 0xC
 
 typedef struct {
-    /* 0x0000 */ struct Actor* doorActor;
-    /* 0x0004 */ s16 camDataIdx;
-    /* 0x0006 */ s16 timer1;
-    /* 0x0008 */ s16 timer2;
-    /* 0x000A */ s16 timer3;
+    /* 0x00 */ struct Actor* doorActor;
+    /* 0x04 */ s16 camDataIdx;
+    /* 0x06 */ s16 timer1;
+    /* 0x08 */ s16 timer2;
+    /* 0x0A */ s16 timer3;
 } DoorParams; // size = 0xC
 
 
 
 
+
 typedef struct {
-    /* 0x0000 */ s16 interfaceFlags;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ // Normal1Anim anim;
+} Normal1; // 10
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ // Normal3Anim anim;
+} Normal3; // 9
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ // Normal0Anim anim;
+} Normal0; // 9
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+    /* 0x30 */ // Parallel1Anim anim;
+} Parallel1; // 12
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ // Jump2Anim anim;
+} Jump2; // 9
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ // Jump3Anim anim;
+} Jump3; // 10
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+    /* 0x30 */ s32 unk_30;
+    /* 0x34 */ // Battle1Anim anim;
+} Battle1; // 13
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+    /* 0x30 */ // KeepOn1Anim anim;
+} KeepOn1; // 12
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+    /* 0x30 */ s32 unk_30;
+    /* 0x34 */ // KeepOn3Anim anim;
+} KeepOn3; // 13
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ // KeepOn4Anim anim;
+} KeepOn4; // 9
+
+typedef struct {
+    /* 0x00 */ PosRot eyePosRotTarget;
+    /* 0x14 */ s16 fov;
+    /* 0x18 */ struct ActorPlayer* player;
+} Fixed1Anim; // size = 0x1C
+
+typedef struct {
+    /* 0x0000 */ f32 unk_00;
+    /* 0x0004 */ f32 jfifId;
+    /* 0x0008 */ f32 fov;
+    /* 0x000C */ s16 interfaceFlags;
+    /* 0x0010 */ Fixed1Anim anim;
+} Fixed1; // size = 0x2C
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ // Fixed2Anim anim;
+} Fixed2; // 7
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ // Subj1Anim anim;
+} Subj1; // 9
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ // Unique2Anim anim;
+} Unique2; // 4
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ // Unique2Anim anim;
+} Unique0; // 3
+
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
 } Unique6; // size = 0x4
 
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
+    /* 0x04 */ // Demo1Anim anim;
+} Demo1; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ // Demo2Anim anim;
+} Demo2; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+} Demo3Anim; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
+    /* 0x04 */ Demo3Anim anim;
+} Demo3; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
+    /* 0x04 */ // Demo4Anim anim;
+} Demo4; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
+    /* 0x04 */ // Demo5Anim anim;
+} Demo5; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s16 interfaceFlags;
+    /* 0x04 */ // Demo0Anim anim;
+} Demo0; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ // Special5Anim anim;
+} Special5; // 8
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x1C */ // Special8Anim anim;
+} Special8; // 6
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ // Special9Anim anim;
+} Special9; // size = 0xC
+
 
 
 
 typedef struct {
-    /* 0x0000 */ Vec3f pos;
-    /* 0x000C */ Vec3f norm;
-    /* 0x0018 */ CollisionPoly* poly;
-    /* 0x001C */ VecSph sphNorm;
-    /* 0x0024 */ s32 bgId;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f norm;
+    /* 0x18 */ CollisionPoly* poly;
+    /* 0x1C */ VecSph sphNorm;
+    /* 0x24 */ s32 bgId;
 } CamColChk; // size = 0x28
 
 typedef struct Camera {
