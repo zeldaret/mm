@@ -3143,7 +3143,7 @@
     0x80173880:("GameState_Realloc",),
     0x80173950:("GameState_Init",),
     0x80173A50:("GameState_Destroy",),
-    0x80173B00:("GameState_GetInit",),
+    0x80173B00:("GameState_GetNextStateInit",),
     0x80173B0C:("Game_GetNextStateSize",),
     0x80173B18:("GameState_IsRunning",),
     0x80173B24:("GameState_GetArenaSize",),

@@ -3190,7 +3190,7 @@ void GameState_InitArena(GameState* state, size_t size);
 void GameState_Realloc(GameState* state, size_t size);
 void GameState_Init(GameState* ctxt, GameStateFunc gameStateInit, GraphicsContext* gCtxt);
 void GameState_Destroy(GameState* ctxt);
-GameStateFunc GameState_GetInit(GameState* ctxt);
+GameStateFunc GameState_GetNextStateInit(GameState* ctxt);
 size_t Game_GetNextStateSize(GameState* ctxt);
 u32 GameState_IsRunning(GameState* ctxt);
 s32 GameState_GetArenaSize(GameState* ctxt);

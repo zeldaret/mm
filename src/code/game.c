@@ -100,7 +100,6 @@ lblUnk:; // Label prevents reordering, if(1) around the above block don't seem t
 }
 
 void GameState_SetFrameBuffer(GraphicsContext *gfxCtx) {
-
     OPEN_DISPS(gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0, NULL);
@@ -153,14 +152,14 @@ void Game_IncrementFrameCount(GameState* gameState) {
 
 void GameState_InitArena(GameState* gameState, size_t size) {
     GameAlloc* alloc;
-    void* arena;
+    void* buf;
 
     alloc = &gameState->alloc;
 
-    arena = GameAlloc_Malloc(alloc, size);
+    buf = GameAlloc_Malloc(alloc, size);
 
-    if (arena != NULL) {
-        THA_Ct(&gameState->heap, arena, size);
+    if (buf) {
+        THA_Ct(&gameState->heap, buf, size);
         return;
     }
 
@@ -204,8 +203,8 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->viConfigXScale = gViConfigXScale;
     gfxCtx->viConfigYScale = gViConfigYScale;
-    gameState->init = NULL;
-    gameState->size = 0U;
+    gameState->nextGameStateInit = NULL;
+    gameState->nextGameStateSize = 0U;
 
 lblUnk:;
     GameAlloc_Init(&gameState->alloc);
@@ -243,12 +242,12 @@ void GameState_Destroy(GameState* gameState) {
     GameAlloc_Cleanup(&gameState->alloc);
 }
 
-GameStateFunc GameState_GetInit(GameState* gameState) {
-    return gameState->init;
+GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
+    return gameState->nextGameStateInit;
 }
 
 size_t Game_GetNextStateSize(GameState* gameState) {
-    return gameState->size;
+    return gameState->nextGameStateSize;
 }
 
 u32 GameState_IsRunning(GameState* gameState) {
