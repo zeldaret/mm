@@ -18,7 +18,7 @@ const ActorInit Obj_Nozoki_InitVars = {
     (ActorFunc)ObjNozoki_Init,
     (ActorFunc)ObjNozoki_Destroy,
     (ActorFunc)ObjNozoki_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

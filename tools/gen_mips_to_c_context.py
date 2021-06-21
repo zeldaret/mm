@@ -1,22 +1,34 @@
-#!/usr/bin/python3
-
-# This script is based on it's OoT decomp variant
+#!/usr/bin/env python3
 
 import os
 import sys
 import subprocess
-import re
+import argparse
 import shlex
+from pathlib import Path
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"
-build_dir = root_dir + "build/"
 src_dir = root_dir + "src/"
+
+
+def get_c_dir(dirname):
+    for root, dirs, files in os.walk(src_dir):
+        for directory in dirs:
+            if directory == dirname:
+                return os.path.join(root, directory)
+
+
+def get_c_file(directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".c") and "data" not in file:
+                return file
 
 
 def find_build_command_line(c_file):
     rel_c_file = os.path.relpath(c_file, root_dir)
-    make_cmd = ["make", "rom.z64", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
+    make_cmd = ["make", "mm.us.rev1.rom_uncompressed.z64", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
     debug_output = (
         subprocess.check_output(make_cmd, cwd=root_dir).decode("utf-8").split("\n")
     )
@@ -47,12 +59,15 @@ def find_build_command_line(c_file):
             file=sys.stderr,
         )
         sys.exit(1)
-
+    elif len(output) == 0:
+        print(f"Error: Can't find the file?", file=sys.stderr)
+        sys.exit(1)
     return output[0]
 
-
-def import_c_file(compiler, in_file):
+def import_c_file(in_file):
+    compiler = find_build_command_line(in_file)
     in_file = os.path.relpath(in_file, root_dir)
+    
     include_next = 0
     cpp_command = ["cpp", "-P"]
     compiler_split = compiler.split(" ")
@@ -84,7 +99,7 @@ def import_c_file(compiler, in_file):
         ]
     )
     cpp_command.append(in_file)
-
+    
     try:
         return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
     except subprocess.CalledProcessError:
@@ -95,32 +110,31 @@ def import_c_file(compiler, in_file):
         )
         sys.exit(1)
 
-
-def get_c_dir(dirname):
-    for root, dirs, files in os.walk(src_dir):
-        for dir in dirs:
-            if dir == dirname:
-                return os.path.join(root, dir)
-
-
-def get_c_file(dir):
-    for root, dirs, files in os.walk(dir):
-        for file in files:
-            if file.endswith(".c") and "data" not in file:
-                return file
-
-
 def main():
-    this_dir = os.getcwd().split("/")[-1]
-    c_dir_path = get_c_dir(this_dir)
-    c_file = get_c_file(c_dir_path)
-    c_file_path = os.path.join(c_dir_path, c_file)
+    parser = argparse.ArgumentParser(usage="./gen_mips_to_c_context.py --file path/to/file.c or ./gen_mips_to_c_context.py (from an actor or gamestate's asm dir)",
+                                     description="Creates a ctx.c file for mips2c. "
+                                     "Output will be saved as oot/ctx.c")
+    parser.add_argument('--file', help="path of c file to be processed", required=False)
+    args = parser.parse_args()
 
-    compiler = find_build_command_line(c_file_path)
-    output = import_c_file(compiler, c_file_path)
-    
-    with open(os.path.join(build_dir, "ctx.c"), "w") as f:
+    if args.file:
+        c_file_path = args.file
+        print("Using file: {}".format(c_file_path))
+    else:
+        this_dir = Path.cwd()
+        c_dir_path = get_c_dir(this_dir.name)
+        if c_dir_path is None:
+            sys.exit(
+                "Cannot find appropriate c file dir. In argumentless mode, run this script from the c file's corresponding asm dir.")
+        c_file = get_c_file(c_dir_path)
+        c_file_path = os.path.join(c_dir_path, c_file)
+        print("Using file: {}".format(c_file_path))
+
+    output = import_c_file(c_file_path)
+
+    with open(os.path.join(root_dir, "ctx.c"), "w", encoding="UTF-8") as f:
         f.write(output)
+
 
 if __name__ == "__main__":
     main()

@@ -18,7 +18,7 @@ if __name__ == '__main__':
                 base_path = os.path.normpath(line.split('"')[1])
                 path = os.path.split(base_path)[0]
                 asm_file = path.replace('non_matchings/', '') + '.asm ' # base .asm file
-                asm_file += path # split function .asm file
+                asm_file += path + "/dep" # split function .asm directory (sentinel file)
                 break
 
     with open(args.output, 'w') as f:

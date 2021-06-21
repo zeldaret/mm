@@ -24,7 +24,7 @@ const ActorInit En_Ending_Hero5_InitVars = {
     (ActorFunc)EnEndingHero5_Draw,
 };
 
-extern SkeletonHeader D_0600A850;
+extern FlexSkeletonHeader D_0600A850;
 extern AnimationHeader D_06002FA0;
 
 extern Gfx D_060070C0[];

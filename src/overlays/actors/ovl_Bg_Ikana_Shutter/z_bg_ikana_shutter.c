@@ -37,30 +37,30 @@ const ActorInit Bg_Ikana_Shutter_InitVars = {
     (ActorFunc)BgIkanaShutter_Init,
     (ActorFunc)BgIkanaShutter_Destroy,
     (ActorFunc)BgIkanaShutter_Update,
-    (ActorFunc)BgIkanaShutter_Draw
+    (ActorFunc)BgIkanaShutter_Draw,
 };
 
-static InitChainEntry D_80BD5D10[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000F28;
-extern UNK_PTR D_06000CE8;
+extern CollisionHeader D_06000F28;
+extern Gfx D_06000CE8[];
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    return Actor_GetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
-           Actor_GetSwitchFlag(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
+    return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 2) &&
+           Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 3);
 }
 
 void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80BD5D10);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
@@ -115,9 +115,9 @@ void func_80BD58F0(BgIkanaShutter* this) {
 }
 
 void func_80BD5910(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
-    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 220.0f, 0.5f,
-                                this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
+    Math_StepToF(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
+    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 220.0f, 0.5f,
+                           this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
         func_80BD599C(this);
     }
 }
@@ -185,9 +185,9 @@ void func_80BD5BC4(BgIkanaShutter* this) {
 }
 
 void func_80BD5BD8(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    Lib_StepTowardsCheck_f(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
-    if (Math_SmoothScaleMaxMinF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + -220.0f, 0.5f,
-                                this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
+    Math_StepToF(&this->dyna.actor.velocity.y, 4.0f, 0.5f);
+    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + -220.0f, 0.5f,
+                           this->dyna.actor.velocity.y, 1.0f) < 0.5f) {
         BgIkanaShutter_SetupDoNothing(this);
     }
 }
@@ -207,5 +207,5 @@ void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000CE8);
+    func_800BDFC0(globalCtx, D_06000CE8);
 }

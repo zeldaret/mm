@@ -18,7 +18,7 @@ const ActorInit En_Fire_Rock_InitVars = {
     (ActorFunc)EnFireRock_Init,
     (ActorFunc)EnFireRock_Destroy,
     (ActorFunc)EnFireRock_Update,
-    (ActorFunc)EnFireRock_Draw
+    (ActorFunc)EnFireRock_Draw,
 };
 
 void EnFireRock_Init(Actor* thisx, GlobalContext* globalCtx) {

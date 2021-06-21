@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -53,7 +53,7 @@ def HexParse(s):
 def main():
     parser = argparse.ArgumentParser(description='Decompiles an InitChain')
     parser.add_argument('address', help='VRAM or VROM address of an InitChain', type=HexParse)
-    parser.add_argument('--names', action="store_true", help='Retrieve variable names from the actor struct')
+    parser.add_argument('--offsets', action="store_true", help='Use offsets as variable names.')
     args = parser.parse_args()
 
     file_path, file_offset = resolve_symbol(args.address)
@@ -62,9 +62,8 @@ def main():
         filedata = f.read()
 
     print ('static InitChainEntry sInitChain[] = {')
-
-    if args.names:
-        actor_variable_names = get_actor_var_names()
+    
+    actor_variable_names = get_actor_var_names()
 
     while True:
         entry = struct.unpack('>I', filedata[file_offset:file_offset+4])[0]
@@ -79,10 +78,10 @@ def main():
 
         var_name = '{0:X}'.format(offset)
 
-        if args.names and var_name in actor_variable_names:
+        if args.offsets:
+            var_name = "unk" + var_name
+        elif var_name in actor_variable_names:
             var_name = actor_variable_names[var_name]
-        else:
-            var_name = "unk_" + var_name
         
         print('    {0}({1}, {2}, {3}),'.format(ICHAIN_MACROS[t], var_name, value, ('ICHAIN_CONTINUE' if cont == 1 else 'ICHAIN_STOP')))
         if cont == 0:

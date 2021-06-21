@@ -1,19 +1,19 @@
-#include <osint.h>
+#include <ultra64.h>
+#include <global.h>
 
-void osDestroyThread(OSThread* t)
-{
+void osDestroyThread(OSThread* t) {
     register u32 saveMask;
     register OSThread* pred;
     register OSThread* succ;
-    
+
     saveMask = __osDisableInt();
-    
+
     if (t == NULL) {
         t = __osRunningThread;
     } else if (t->state != 1) {
         __osDequeueThread(t->queue, t);
     }
-    
+
     if (__osActiveQueue == t) {
         __osActiveQueue = __osActiveQueue->tlnext;
     } else {
@@ -27,10 +27,10 @@ void osDestroyThread(OSThread* t)
             pred = succ;
         }
     }
-    
+
     if (t == __osRunningThread) {
         __osDispatchThread();
     }
-    
+
     __osRestoreInt(saveMask);
 }

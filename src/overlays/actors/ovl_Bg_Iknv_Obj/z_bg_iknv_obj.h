@@ -5,10 +5,22 @@
 
 struct BgIknvObj;
 
+typedef void (*BgIknvObjActionFunc)(struct BgIknvObj*, GlobalContext*);
+
+#define IKNV_OBJ_TYPE(x) (x->dyna.actor.params & 0xF)
+
 typedef struct BgIknvObj {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x6C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ Gfx* displayListPtr;
+    /* 0x1AC */ BgIknvObjActionFunc actionFunc;
 } BgIknvObj; // size = 0x1B0
+
+typedef enum {
+    /* 0 */ IKNV_OBJ_WATERWHEEL,
+    /* 1 */ IKNV_OBJ_RAISED_DOOR, // defunct door covering entrance to Stone Tower
+    /* 2 */ IKNV_OBJ_SAKON_DOOR,  // door to Sakon's Hideout
+} BgIknvObjType;
 
 extern const ActorInit Bg_Iknv_Obj_InitVars;
 

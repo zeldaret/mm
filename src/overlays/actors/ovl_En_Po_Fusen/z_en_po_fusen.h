@@ -27,9 +27,6 @@ typedef struct EnPoFusen {
     /* 0x270 */ s16 fuse;
 } EnPoFusen; // size = 0x274
 
-extern SkeletonHeader D_06000040;
-extern AnimationHeader D_060024F0;
-
 extern const ActorInit En_Po_Fusen_InitVars;
 
 #endif // Z_EN_PO_FUSEN_H

@@ -9,14 +9,22 @@
 
 struct GraphicsContext;
 struct GlobalContext;
+struct EffectSs;
 
 typedef void(*eff_destroy_func)(void* params);
 
-typedef void(*eff_draw_func)(void* params, struct GraphicsContext* gCtxt);
+typedef void(*eff_draw_func)(void* params, struct GraphicsContext* gfxCtx);
 
 typedef void(*eff_init_func)(void* params, void* init);
 
 typedef s32(*eff_update_func)(void* params);
+
+#define SPARK_COUNT 3
+#define BLURE_COUNT 25
+#define SHIELD_PARTICLE_COUNT 3
+#define TIRE_MARK_COUNT 15
+
+#define TOTAL_EFFECT_COUNT SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT + TIRE_MARK_COUNT
 
 /* G Effect Regs */
 
@@ -208,11 +216,11 @@ typedef struct {
 } EffInfo; // size = 0x14
 
 typedef struct {
-    /* 0x0000 */ struct GlobalContext* ctxt;
-    /* 0x0004 */ EffSpark sparks[3];
-    /* 0x0E5C */ EffBlure blures[25];
-    /* 0x388C */ EffShieldParticle shieldParticles[3];
-    /* 0x3DF0 */ EffTireMark tireMarks[15];
+    /* 0x0000 */ struct GlobalContext* globalCtx;
+    /* 0x0004 */ EffSpark sparks[SPARK_COUNT];
+    /* 0x0E5C */ EffBlure blures[BLURE_COUNT];
+    /* 0x388C */ EffShieldParticle shieldParticles[SHIELD_PARTICLE_COUNT];
+    /* 0x3DF0 */ EffTireMark tireMarks[TIRE_MARK_COUNT];
 } EffTables; // size = 0x98E0
 
 typedef struct {
@@ -228,8 +236,8 @@ typedef struct {
     /* 0x34 */ u8 type; // type0: start small, get big, fade away type1: start big, fade away
 } EffectDustInit; // size = 0x35
 
+typedef u32 (*EffectSsInitFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* effectSs, void* initParams);
 typedef void(*EffectSsUpdateFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
-
 typedef void(*EffectSsDrawFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
 
 typedef struct EffectSs {
@@ -256,7 +264,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ UNK_TYPE4 unk0;
-    /* 0x4 */ EffectSsDrawFunc init;
+    /* 0x4 */ EffectSsInitFunc init;
 } ParticleOverlayInfo; // size = 0x8
 
 typedef struct {

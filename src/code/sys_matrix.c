@@ -1,26 +1,25 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Matrix_Init(GameState* state) {
-    sMatrixStack = (MtxF *)THA_AllocEndAlign16(&state->heap, 0x500);
+void SysMatrix_StateAlloc(GameState* gamestate) {
+    sMatrixStack = (MtxF*)THA_AllocEndAlign16(&gamestate->heap, 0x500);
     sCurrentMatrix = sMatrixStack;
 }
 
-void Matrix_Push(void) {
+void SysMatrix_StatePush(void) {
     MtxF* prev = sCurrentMatrix;
 
     sCurrentMatrix++;
     Matrix_MtxFCopy(sCurrentMatrix, prev);
-    
 }
 
-void Matrix_Pop(void) {
+void SysMatrix_StatePop(void) {
     sCurrentMatrix--;
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_CopyCurrentState.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/Matrix_Put.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_SetCurrentState.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/sys_matrix/SysMatrix_GetCurrentState.asm")
 

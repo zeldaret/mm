@@ -1,0 +1,5 @@
+cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+cfe: Warning 709: assets/scenes/Z2_LAST_BS/Z2_LAST_BS.c, line 114: Incompatible pointer type assignment
+     60, 5, Z2_LAST_BSAnimatedMaterialPrimColor_0001C0, Z2_LAST_BSAnimatedMaterialEnvColors0x0001DC,
+ -------------------------------------------------------^

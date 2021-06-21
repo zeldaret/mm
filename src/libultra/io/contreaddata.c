@@ -58,7 +58,7 @@ void __osPackReadData() {
     readformat.stick_y = -1;
     for (i = 0; i < __osMaxControllers; i++) {
         *(__OSContReadFormat*)ptr = readformat;
-        ptr+=sizeof(__OSContReadFormat);
+        ptr += sizeof(__OSContReadFormat);
     }
     *ptr = 254;
 }

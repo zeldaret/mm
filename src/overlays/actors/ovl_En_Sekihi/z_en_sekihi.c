@@ -18,7 +18,7 @@ const ActorInit En_Sekihi_InitVars = {
     (ActorFunc)EnSekihi_Init,
     (ActorFunc)EnSekihi_Destroy,
     (ActorFunc)EnSekihi_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -19,7 +19,7 @@ const ActorInit Obj_Flowerpot_InitVars = {
     (ActorFunc)ObjFlowerpot_Init,
     (ActorFunc)ObjFlowerpot_Destroy,
     (ActorFunc)ObjFlowerpot_Update,
-    (ActorFunc)ObjFlowerpot_Draw
+    (ActorFunc)ObjFlowerpot_Draw,
 };
 */
 

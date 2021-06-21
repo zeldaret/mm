@@ -1,6 +1,6 @@
 /*
  * File: z_bg_lotus.c
- * Overlay: Bg_Lotus
+ * Overlay: ovl_Bg_Lotus
  * Description: Southern Swamp Lilypads
  */
 
@@ -35,8 +35,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06000A20; // Lilypad collision
-extern Gfx D_06000040[];        // Lilypad model
+extern CollisionHeader D_06000A20; // Lilypad collision
+extern Gfx D_06000040[];           // Lilypad model
 
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
@@ -99,7 +99,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.perm.unk20 != 3) {
+            if (gSaveContext.playerForm != 3) {
                 this->timer = 40;
                 this->dyna.actor.flags |= 0x10;
                 this->actionFunc = BgLotus_Sink;
@@ -135,7 +135,7 @@ void BgLotus_Sink(BgLotus* this, GlobalContext* globalCtx) {
         this->timer--;
         BgLotus_SetScaleXZ(this);
     } else {
-        if (Lib_StepTowardsCheck_f(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
             this->dyna.actor.draw = NULL;
             this->timer = 100;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

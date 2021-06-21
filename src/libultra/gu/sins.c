@@ -1,4 +1,4 @@
-#include <guint.h>
+#include <math.h>
 
 #include "sintable.h"
 

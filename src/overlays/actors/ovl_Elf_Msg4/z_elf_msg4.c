@@ -18,7 +18,7 @@ const ActorInit Elf_Msg4_InitVars = {
     (ActorFunc)ElfMsg4_Init,
     (ActorFunc)ElfMsg4_Destroy,
     (ActorFunc)ElfMsg4_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

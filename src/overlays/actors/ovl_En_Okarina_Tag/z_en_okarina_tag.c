@@ -18,7 +18,7 @@ const ActorInit En_Okarina_Tag_InitVars = {
     (ActorFunc)EnOkarinaTag_Init,
     (ActorFunc)EnOkarinaTag_Destroy,
     (ActorFunc)EnOkarinaTag_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

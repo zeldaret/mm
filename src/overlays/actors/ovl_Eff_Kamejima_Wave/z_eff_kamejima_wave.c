@@ -18,7 +18,7 @@ const ActorInit Eff_Kamejima_Wave_InitVars = {
     (ActorFunc)EffKamejimaWave_Init,
     (ActorFunc)EffKamejimaWave_Destroy,
     (ActorFunc)EffKamejimaWave_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

@@ -15,10 +15,10 @@ void SkelCurve_Clear(SkelAnimeCurve* skelCurve) {
 s32 SkelCurve_Init(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, SkelCurveLimbList* limbListSeg,
                    TransformUpdateIndex* transUpdIdx) {
     SkelCurveLimb** limbs;
-    SkelCurveLimbList* limbList = (SkelCurveLimbList *)Lib_PtrSegToVirt(limbListSeg);
+    SkelCurveLimbList* limbList = (SkelCurveLimbList *)Lib_SegmentedToVirtual(limbListSeg);
 
     skelCurve->limbCount = limbList->limbCount;
-    skelCurve->limbList = (SkelCurveLimb **)Lib_PtrSegToVirt(limbList->limbs);
+    skelCurve->limbList = (SkelCurveLimb **)Lib_SegmentedToVirtual(limbList->limbs);
 
     skelCurve->transforms = ZeldaArena_Malloc(sizeof(*skelCurve->transforms) * skelCurve->limbCount);
 
@@ -57,10 +57,10 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     f32 transformValue;
     s32 j;
 
-    transformIndex = Lib_PtrSegToVirt(skelCurve->transUpdIdx);
-    transformRefIdx = Lib_PtrSegToVirt(transformIndex->refIndex);
-    transData = Lib_PtrSegToVirt(transformIndex->transformData);
-    transformCopyValues = Lib_PtrSegToVirt(transformIndex->copyValues);
+    transformIndex = Lib_SegmentedToVirtual(skelCurve->transUpdIdx);
+    transformRefIdx = Lib_SegmentedToVirtual(transformIndex->refIndex);
+    transData = Lib_SegmentedToVirtual(transformIndex->transformData);
+    transformCopyValues = Lib_SegmentedToVirtual(transformIndex->copyValues);
     transforms = (s16*)skelCurve->transforms;
 
     skelCurve->animCurFrame += skelCurve->animSpeed * (globalCtx->state.framerateDivisor * 0.5f);
@@ -101,7 +101,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
 
 void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve* skelCurve,
                         OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, void* data) {
-    SkelCurveLimb* limb = (SkelCurveLimb *)Lib_PtrSegToVirt(skelCurve->limbList[limbIndex]);
+    SkelCurveLimb* limb = (SkelCurveLimb *)Lib_SegmentedToVirtual(skelCurve->limbList[limbIndex]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

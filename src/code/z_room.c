@@ -1,34 +1,36 @@
 #include <ultra64.h>
 #include <global.h>
 
-void Room_nop8012D510(GlobalContext* ctxt, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {}
+void Room_nop8012D510(GlobalContext* globalCtx, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {
+}
 
-void Room_DrawType3Mesh(GlobalContext* ctxt, Room* room, u32 flags) {}
+void Room_DrawType3Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
+}
 
-void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
+void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     RoomMeshType0* mesh;
     s32 i;
     RoomMeshType0Params* meshParams;
     GraphicsContext* gfxCtx;
     UNK_TYPE4 pad;
 
-    gfxCtx = ctxt->state.gfxCtx;
+    gfxCtx = globalCtx->state.gfxCtx;
     if (flags & 1) {
-        func_800BCBF4(&D_801C1D10, ctxt);
+        func_800BCBF4(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyOpa.p++, 0x03, room->segment);
-        func_8012C268(ctxt);
+        func_8012C268(globalCtx);
         gSPMatrix(gfxCtx->polyOpa.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     if (flags & 2) {
-        func_800BCC68(&D_801C1D10, ctxt);
+        func_800BCC68(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyXlu.p++, 0x03, room->segment);
-        func_8012C2DC(ctxt->state.gfxCtx);
+        func_8012C2DC(globalCtx->state.gfxCtx);
         gSPMatrix(gfxCtx->polyXlu.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     mesh = &room->mesh->type0;
-    meshParams = (RoomMeshType0Params*)Lib_PtrSegToVirt(mesh->paramsStart);
+    meshParams = (RoomMeshType0Params*)Lib_SegmentedToVirtual(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
         if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
@@ -50,48 +52,50 @@ void Room_DrawType0Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/func_8012E32C.asm")
 
-void Room_DrawType1Mesh(GlobalContext* ctxt, Room* room, u32 flags) {
+void Room_DrawType1Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     RoomMeshType1* mesh = &room->mesh->type1;
     if (mesh->format == 1) {
-        func_8012DEE8(ctxt,room,flags);
+        func_8012DEE8(globalCtx, room, flags);
     } else if (mesh->format == 2) {
-        func_8012E32C(ctxt,room,flags);
+        func_8012E32C(globalCtx, room, flags);
     } else {
-        assert_fail(D_801DDFAC,0x3c5);
+        assert_fail(D_801DDFAC, 0x3c5);
     }
 }
 
-void Room_Init(GlobalContext* ctxt, RoomContext* roomCtxt) {
+void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
     s32 i;
-    roomCtxt->currRoom.num = -1;
-    roomCtxt->currRoom.segment = NULL;
-    roomCtxt->unk78 = 1;
-    roomCtxt->unk79 = 0;
+    roomCtx->currRoom.num = -1;
+    roomCtx->currRoom.segment = NULL;
+    roomCtx->unk78 = 1;
+    roomCtx->unk79 = 0;
     for (i = 0; i < 3; i++) {
-        roomCtxt->unk7A[i] = 0;
+        roomCtx->unk7A[i] = 0;
     }
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_AllocateAndLoad.asm")
 
 #ifdef NON_MATCHING
-s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 index) {
+s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
     u32 size;
 
     // XXX: this should use a branch-likely
-    if (roomCtxt->unk31 == 0) {
-        roomCtxt->prevRoom = roomCtxt->currRoom;
-        roomCtxt->currRoom.num = index;
-        roomCtxt->currRoom.segment = NULL;
-        roomCtxt->unk31 = 1;
+    if (roomCtx->unk31 == 0) {
+        roomCtx->prevRoom = roomCtx->currRoom;
+        roomCtx->currRoom.num = index;
+        roomCtx->currRoom.segment = NULL;
+        roomCtx->unk31 = 1;
 
-        size = ctxt->roomAddrs[index].vromEnd - ctxt->roomAddrs[index].vromStart;
-        roomCtxt->activeRoomVram = (void*)((s32)roomCtxt->roomMemPages[roomCtxt->activeMemPage] - (size + 8) * roomCtxt->activeMemPage + 8) & 0xfffffff0;
+        size = globalCtx->roomAddrs[index].vromEnd - globalCtx->roomAddrs[index].vromStart;
+        roomCtx->activeRoomVram =
+            (void*)((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
+            0xfffffff0;
 
-        osCreateMesgQueue(&roomCtxt->loadQueue, roomCtxt->loadMsg, 1);
-        DmaMgr_SendRequestImpl(&roomCtxt->dmaRequest, roomCtxt->activeRoomVram, ctxt->roomAddrs[index].vromStart, size,
-                      0, &roomCtxt->loadQueue, NULL);
-        roomCtxt->activeMemPage ^= 1;
+        osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
+        DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, globalCtx->roomAddrs[index].vromStart,
+                               size, 0, &roomCtx->loadQueue, NULL);
+        roomCtx->activeMemPage ^= 1;
 
         return 1;
     }
@@ -102,27 +106,26 @@ s32 Room_StartRoomTransition(GlobalContext* ctxt, RoomContext* roomCtxt, s32 ind
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_StartRoomTransition.asm")
 #endif
 
-s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
-    if (roomCtxt->unk31 == 1)
-    {
-        if (!osRecvMesg(&roomCtxt->loadQueue, NULL, OS_MESG_NOBLOCK))
-        {
-            roomCtxt->unk31 = 0;
-            roomCtxt->currRoom.segment = roomCtxt->activeRoomVram;
+s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
+    if (roomCtx->unk31 == 1) {
+        if (!osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK)) {
+            roomCtx->unk31 = 0;
+            roomCtx->currRoom.segment = roomCtx->activeRoomVram;
             // TODO: Segment number enum
-            gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtxt->activeRoomVram);
+            gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
 
-            Scene_ProcessHeader(ctxt, (SceneCmd*)roomCtxt->currRoom.segment);
-            func_80123140(ctxt, (ActorPlayer*)ctxt->actorCtx.actorList[2].first);
-            Actor_SpawnTransitionActors(ctxt, &ctxt->actorCtx);
+            Scene_ProcessHeader(globalCtx, (SceneCmd*)roomCtx->currRoom.segment);
+            func_80123140(globalCtx, PLAYER);
+            Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
 
-            if (((ctxt->sceneNum != SCENE_IKANA) || (roomCtxt->currRoom.num != 1)) && (ctxt->sceneNum != SCENE_IKNINSIDE)) {
-                ctxt->kankyoContext.unkC3 = 0xff;
-                ctxt->kankyoContext.unkE0 = 0;
+            if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
+                (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
+                globalCtx->kankyoContext.unkC3 = 0xff;
+                globalCtx->kankyoContext.unkE0 = 0;
             }
             func_800FEAB0();
-            if (!func_800FE4B8(ctxt)) {
-                func_800FD858(ctxt);
+            if (!func_800FE4B8(globalCtx)) {
+                func_800FD858(globalCtx);
             }
         } else {
             return 0;
@@ -132,23 +135,23 @@ s32 Room_HandleLoadCallbacks(GlobalContext* ctxt, RoomContext* roomCtxt) {
     return 1;
 }
 
-void Room_Draw(GlobalContext* ctxt, Room* room, u32 flags) {
+void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
         gSegments[3] = PHYSICAL_TO_VIRTUAL(room->segment);
-        roomDrawFuncs[room->mesh->type0.type](ctxt, room, flags);
+        roomDrawFuncs[room->mesh->type0.type](globalCtx, room, flags);
     }
     return;
 }
 
-void func_8012EBF8(GlobalContext* ctxt, RoomContext* roomCtxt){
-    roomCtxt->prevRoom.num = -1;
-    roomCtxt->prevRoom.segment = NULL;
-    func_800BA798(ctxt, &ctxt->actorCtx);
-    Actor_SpawnTransitionActors(ctxt, &ctxt->actorCtx);
-    if (-1 < roomCtxt->currRoom.num) {
-        func_8010A33C(ctxt, roomCtxt->currRoom.num);
-        func_8010A2DC(ctxt);
+void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtx) {
+    roomCtx->prevRoom.num = -1;
+    roomCtx->prevRoom.segment = NULL;
+    func_800BA798(globalCtx, &globalCtx->actorCtx);
+    Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
+    if (-1 < roomCtx->currRoom.num) {
+        func_8010A33C(globalCtx, roomCtx->currRoom.num);
+        func_8010A2DC(globalCtx);
     }
-    func_801A3CD8(ctxt->roomContext.currRoom.echo);
+    func_801A3CD8(globalCtx->roomContext.currRoom.echo);
 }

@@ -777,8 +777,8 @@ void Fault_SetOptionsFromController3(void) {
         graphRA = sGraphThread.context.ra;
         graphSP = sGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->press.button, BTN_R)) {
-              faultCopyToLog = !faultCopyToLog;
-              FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
+            faultCopyToLog = !faultCopyToLog;
+            FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
               Fault_Log("GRAPH PC=%08x RA=%08x STACK=%08x\n", graphPC, graphRA, graphSP);
@@ -922,7 +922,7 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
 void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
     char padd[4];
-    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
+    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, (void*)arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 

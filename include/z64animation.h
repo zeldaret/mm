@@ -35,11 +35,13 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ Gfx* dList;
+    /* 0x06 */ u8 child;       // The first child's index into the limb table.
+    /* 0x07 */ u8 sibling;     // The parent limb's next limb index into the limb table.
+    /* 0x08 */ Gfx* dList;     // Display lists for the limb. Index 0 is the normal display list, index 1 is the
+                               // far model display list.
 } StandardLimb; // size = 0xC
 
+// Model has limbs with only rigid meshes
 typedef struct {
     /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
     /* 0x06 */ u8 child;
@@ -266,5 +268,12 @@ typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeC
                                      struct Actor* actor);
 typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex,
                                   struct Actor* actor);
+
+typedef struct struct_80B8E1A8 {
+    /* 0x00 */ AnimationHeader* animationSeg;
+    /* 0x04 */ f32 playbackSpeed;
+    /* 0x08 */ u8 mode;
+    /* 0x0C */ f32 transitionRate;
+} struct_80B8E1A8; // size = 0x10
 
 #endif

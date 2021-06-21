@@ -4,16 +4,16 @@
 void ViConfig_UpdateVi(u32 mode) {
     if (mode != 0) {
         switch (osTvType) {
-        case 2:
-            osViSetMode(&osViModeMpalLan1);
-            break;
-        case 0:
-            osViSetMode(&osViModePalLan1);
-            break;
-        case 1:
+            case 2:
+                osViSetMode(&osViModeMpalLan1);
+                break;
+            case 0:
+                osViSetMode(&osViModePalLan1);
+                break;
+            case 1:
             default:
-            osViSetMode(&osViModeNtscLan1);
-            break;
+                osViSetMode(&osViModeNtscLan1);
+                break;
         }
 
         if (gViConfigFeatures != 0) {
@@ -45,7 +45,6 @@ void ViConfig_UpdateVi(u32 mode) {
 
     gViConfigUseDefault = mode;
 }
-
 
 void ViConfig_UpdateBlack(void) {
     if (gViConfigUseDefault != 0) {

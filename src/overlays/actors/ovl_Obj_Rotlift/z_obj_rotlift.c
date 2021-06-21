@@ -19,7 +19,7 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Init,
     (ActorFunc)ObjRotlift_Destroy,
     (ActorFunc)ObjRotlift_Update,
-    (ActorFunc)ObjRotlift_Draw
+    (ActorFunc)ObjRotlift_Draw,
 };
 */
 

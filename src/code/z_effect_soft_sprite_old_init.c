@@ -10,14 +10,14 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = globalCtx->sceneContext.objects[this->rgObjBankIdx].segment;
+    void* object = globalCtx->objectCtx.status[this->rgObjBankIdx].segment;
 
     OPEN_DISPS(gfxCtx);
 
     scale = this->rgScale * D_801DC100;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
-    Matrix_MakeScale(&mfScale, scale, scale, scale);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
+    SkinMatrix_SetScale(&mfScale, scale, scale, scale);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->unk187FC, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
@@ -26,7 +26,7 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_PtrSegToVirt(texture));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
         func_8012C9BC(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rgPrimColorR, this->rgPrimColorG, this->rgPrimColorB,
                         this->rgPrimColorA);
@@ -342,7 +342,6 @@ void EffectSsGSpk_SpawnFuse(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, 
 
     EffectSsGSpk_SpawnSmall(globalCtx, actor, pos, velocity, accel, &primColor, &envColor);
 }
-
 
 extern Color_RGBA8 D_801AE3D8;
 extern Color_RGBA8 D_801AE3DC;
@@ -757,7 +756,8 @@ void EffectSsIcePiece_SpawnBurst(GlobalContext* globalCtx, Vec3f* refPos, f32 sc
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f * pos, Color_RGBA8 * prim, Color_RGBA8 * env, f32 scale) {
+void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Color_RGBA8* prim,
+                                    Color_RGBA8* env, f32 scale) {
 
     EffectSsEnIceInitParams initParams;
 
@@ -769,7 +769,7 @@ void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3
     initParams.scale = scale;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x874);
+        Audio_PlayActorSound2(actor, NA_SE_PL_FREEZE_S);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_ICE, 80, &initParams);
@@ -870,7 +870,7 @@ void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -890,7 +890,7 @@ void EffectSsEnFire_SpawnVec3s(GlobalContext* globalCtx, Actor* actor, Vec3s* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -936,7 +936,8 @@ void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 extern Color_RGBA8 D_801AE48C;
 extern Color_RGBA8 D_801AE490[4];
 
-void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s32 colorIndex) {
+void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
+                   s32 colorIndex) {
     EffectSsDeadDb_Spawn(globalCtx, pos, velocity, accel, &D_801AE48C, &D_801AE490[colorIndex], scale, scaleStep, 9);
 }
 
