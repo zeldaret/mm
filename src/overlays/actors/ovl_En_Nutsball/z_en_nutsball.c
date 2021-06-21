@@ -164,8 +164,8 @@ void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx)
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_InsertMatrix(&globalCtx->unk187FC, 1);
-    SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);
+    Matrix_InsertMatrix(&globalCtx->unk187FC, 1);
+    Matrix_InsertZRotation_s(this->actor.home.rot.z, 1);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_04058BA0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -36,7 +36,7 @@ void PreRender_SetValues(PreRenderContext* this, u32 width, u32 height, void* fb
 }
 
 void PreRender_Destroy(PreRenderContext* this) {
-    func_80174BA0(&this->alloc);
+    ListAlloc_FreeAll(&this->alloc);
 }
 
 void func_8016FDB8(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {

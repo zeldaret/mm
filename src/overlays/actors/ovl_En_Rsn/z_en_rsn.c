@@ -66,7 +66,7 @@ s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnRsn* this = THIS;
 
     if (limbIndex == 14) {
-        SysMatrix_InsertXRotation_s(this->unk1D8.y, 1);
+        Matrix_InsertXRotation_s(this->unk1D8.y, 1);
     }
     return 0;
 }
@@ -78,7 +78,7 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp18 = D_80C26028;
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
 

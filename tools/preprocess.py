@@ -6,10 +6,7 @@ import subprocess
 import tempfile
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, os.path.abspath(dir_path) + '/asm-processor')
-
-import asm_processor
-
+asm_processor = ['python3', os.path.join(dir_path, "asm-processor/asm_processor.py")]
 prelude = os.path.join(dir_path, "prelude.inc")
 
 all_args = sys.argv[1:]
@@ -30,22 +27,14 @@ del compile_args[out_ind + 1]
 del compile_args[out_ind]
 
 in_dir = os.path.split(os.path.realpath(in_file))[0]
-opt_flags = [x for x in compile_args if x in ['-g3', '-g', '-O1', '-O2', '-framepointer']]
+opt_flags = [x for x in compile_args if x in ['-g', '-O2', '-framepointer', '-g3', '-O1']]
 
-preprocessed_file = tempfile.NamedTemporaryFile(prefix='preprocessed', suffix='.c', delete=False)
+preprocessed_file = tempfile.NamedTemporaryFile(prefix='preprocessed', suffix='.c')
 
-try:
+if opt_flags != []:
     asmproc_flags = opt_flags + [in_file, '--input-enc', 'utf-8', '--output-enc', 'euc-jp']
-    compile_cmdline = compiler + compile_args + ['-I', in_dir, '-o', out_file, preprocessed_file.name]
-    functions = asm_processor.run(asmproc_flags, outfile=preprocessed_file)
-    try:
-        subprocess.check_call(compile_cmdline)
-    except subprocess.CalledProcessError as e:
-        print("Failed to compile file " + in_file + ". Command line:")
-        print()
-        print(' '.join(shlex.quote(x) for x in compile_cmdline))
-        print()
-        sys.exit(55)
-    asm_processor.run(asmproc_flags + ['--post-process', out_file, '--assembler', assembler_sh, '--asm-prelude', prelude], functions=functions)
-finally:
-    os.remove(preprocessed_file.name)
+    subprocess.check_call(asm_processor + asmproc_flags, stdout=preprocessed_file)
+    subprocess.check_call(compiler + compile_args + ['-I', in_dir, '-o', out_file, preprocessed_file.name])
+    subprocess.check_call(asm_processor + asmproc_flags + ['--post-process', out_file, '--assembler', assembler_sh, '--asm-prelude', prelude])
+else:
+    subprocess.check_call(compiler + compile_args + ['-I', in_dir, '-o', out_file, in_file])

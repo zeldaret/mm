@@ -94,8 +94,8 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->limbDrawTable,
-                     this->transitionDrawTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->jointTable,
+                     this->morphTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -183,7 +183,7 @@ EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
+        Animation_Change(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
     }
 }
 
@@ -197,10 +197,10 @@ void EnMinifrog_JumpTimer(EnMinifrog* this) {
 }
 
 void EnMinifrog_Jump(EnMinifrog* this) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     switch (this->jumpState) {
         case MINIFROG_STATE_JUMP:
-            if (func_801378B8(&this->skelAnime, 4.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
@@ -210,8 +210,8 @@ void EnMinifrog_Jump(EnMinifrog* this) {
         case MINIFROG_STATE_AIR:
             if (this->actor.bgCheckFlags & 1) {
                 this->jumpState = MINIFROG_STATE_GROUND;
-                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06001534, -2.5f);
-                SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+                Animation_MorphToLoop(&this->skelAnime, &D_06001534, -2.5f);
+                SkelAnime_Update(&this->skelAnime);
             }
             break;
     }
@@ -625,14 +625,14 @@ void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+        Matrix_NormalizeXYZ(&globalCtx->unk187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
 
@@ -650,7 +650,7 @@ void EnMinifrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
     gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, envColor->a);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -90,8 +90,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->limbDrawTbl,
-                     this->transitionDrawTbl, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->jointTable,
+                     this->morphTable, 16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -523,8 +523,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animCurrentSeg == object_ginko_floorsmacking_anim) &&
-        func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if ((this->skelAnime.animation == object_ginko_floorsmacking_anim) &&
+        Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
@@ -593,11 +593,11 @@ void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
 
 void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-        && (func_801378B8(&this->skelAnime, 10.0f))) {
+        && (Animation_OnFrame(&this->skelAnime, 10.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->curTextId) {
             case 0x464: // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
                 func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
@@ -624,12 +624,12 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 160.0f) {
         if (this->animTimer == 0) {
-            if (this->skelAnime.animCurrentSeg != object_ginko_amazed_anim) {
+            if (this->skelAnime.animation != object_ginko_amazed_anim) {
                 this->animTimer = 40;
                 func_800BDC5C(&this->skelAnime, animations, GINKO_ADVERTISING);
             }
         }
-    } else if ((this->animTimer == 0) && (this->skelAnime.animCurrentSeg != object_ginko_advertising_anim)) {
+    } else if ((this->animTimer == 0) && (this->skelAnime.animation != object_ginko_advertising_anim)) {
         this->animTimer = 40;
         func_800BDC5C(&this->skelAnime, animations, GINKO_AMAZED);
     }
@@ -638,8 +638,8 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
 }
 
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (this->skelAnime.animCurrentSeg != object_ginko_amazed_anim) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->skelAnime.animation != object_ginko_amazed_anim) {
         func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
         func_800E8F08(&this->limb15Rot, &this->limb8Rot);
@@ -664,13 +664,13 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     }
 
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
-        SysMatrix_InsertXRotation_s(this->limb15Rot.y, 1);
-        SysMatrix_InsertZRotation_s(this->limb15Rot.x, 1);
-        SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertXRotation_s(this->limb15Rot.y, 1);
+        Matrix_InsertZRotation_s(this->limb15Rot.x, 1);
+        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
     } else if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(-this->limb8Rot.y, 1);
-        SysMatrix_InsertZRotation_s(-this->limb8Rot.x, 1);
+        Matrix_InsertXRotation_s(-this->limb8Rot.y, 1);
+        Matrix_InsertZRotation_s(-this->limb8Rot.x, 1);
     }
 
     return 0;
@@ -690,7 +690,7 @@ void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 50, 80, 0, 0));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      &EnGinkoMan_OverrideLimbDraw, &EnGinkoMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

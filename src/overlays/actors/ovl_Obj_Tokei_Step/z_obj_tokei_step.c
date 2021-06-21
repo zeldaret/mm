@@ -57,7 +57,7 @@ static InitChainEntry sInitChain[] = {
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     MtxF* sysMatrix;
 
-    sysMatrix = SysMatrix_GetCurrentState();
+    sysMatrix = Matrix_GetCurrentState();
     sysMatrix->wx = panel->pos.x;
     sysMatrix->wy = panel->pos.y;
     sysMatrix->wz = panel->pos.z;
@@ -86,7 +86,7 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     dustSpawnOffset.z = -10.0f;
     for (i = 0; i < 7; i++) {
         dustSpawnOffset.x = dustSpawnXOffsets[i];
-        SysMatrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
+        Matrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
         dustSpawnPos.x += panel->pos.x;
         dustSpawnPos.y += panel->pos.y;
         dustSpawnPos.z += panel->pos.z;
@@ -101,7 +101,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     Vec3f panelOffset;
     s32 pad;
 
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
@@ -109,7 +109,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     for (i = 0; i < 7; i++) {
         panel = &this->panels[i];
         panelOffset.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
         panel->posChangeY = 0.0f;
         panel->numBounces = 0;
     }
@@ -120,7 +120,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
     ObjTokeiStepPanel* panel;
     Vec3f panelOffset;
 
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
@@ -128,7 +128,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
         panel = &this->panels[i];
         panelOffset.y = panelXOffsets[i];
         panelOffset.z = i * -20.0f;
-        SysMatrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
     }
 }
 

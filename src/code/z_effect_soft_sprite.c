@@ -184,7 +184,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
         overlayInfo = entry->overlayInfo;
     } else {
         // XXX this subtraction is done earlier
-        overlaySize = entry->vramEnd - entry->vramStart;
+        overlaySize = (u32)entry->vramEnd - (u32)entry->vramStart;
         if (entry->loadedRamAddr == 0) {
             entry->loadedRamAddr = (u32)ZeldaArena_MallocR(overlaySize);
 

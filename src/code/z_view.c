@@ -257,15 +257,15 @@ s32 View_StepQuake(View* view, Mtx* matrix) {
         view->currQuakeScale.z += ((view->quakeScale.z - view->currQuakeScale.z) * view->quakeSpeed);
     }
 
-    SysMatrix_FromRSPMatrix(matrix, &mf);
-    SysMatrix_SetCurrentState(&mf);
-    SysMatrix_RotateStateAroundXAxis(view->currQuakeRot.x);
-    SysMatrix_InsertYRotation_f(view->currQuakeRot.y, 1);
-    SysMatrix_InsertZRotation_f(view->currQuakeRot.z, 1);
+    Matrix_FromRSPMatrix(matrix, &mf);
+    Matrix_SetCurrentState(&mf);
+    Matrix_RotateStateAroundXAxis(view->currQuakeRot.x);
+    Matrix_InsertYRotation_f(view->currQuakeRot.y, 1);
+    Matrix_InsertZRotation_f(view->currQuakeRot.z, 1);
     Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, 1);
-    SysMatrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
-    SysMatrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
-    SysMatrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
+    Matrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
+    Matrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
+    Matrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
     Matrix_ToMtx(matrix);
 
     return 1;

@@ -127,11 +127,11 @@ build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/libc/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/io/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := python3 -B ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/libc/%: CC := python3 ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/io/%: CC := python3 ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := python3 ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-CC := python3 -B ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+CC := python3 ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
 .PHONY: all clean setup diff-init init assetclean distclean assembly
 # make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so

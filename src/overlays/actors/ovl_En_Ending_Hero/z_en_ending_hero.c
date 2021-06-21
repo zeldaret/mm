@@ -42,8 +42,8 @@ void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->limbDrawTable,
-                     this->transitionDrawTable, 15);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->jointTable,
+                     this->morphTable, 15);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C1E748(this);
 }

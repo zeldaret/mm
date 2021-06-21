@@ -132,6 +132,6 @@ void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000390);
-    SysMatrix_MultiplyVector3fByState(&movement, &this->pos);
+    Matrix_MultiplyVector3fByState(&movement, &this->pos);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

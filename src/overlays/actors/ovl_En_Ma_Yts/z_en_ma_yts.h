@@ -41,9 +41,9 @@ typedef struct EnMaYts {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ s32 unk_200; // Set, but not used
-    /* 0x204 */ Vec3s limbDrawTbl[OBJECT_MA1_LIMB_TABLE_COUNT];
+    /* 0x204 */ Vec3s jointTable[OBJECT_MA1_LIMB_TABLE_COUNT];
     /* 0x28E */ char unk_28E[0x6];
-    /* 0x294 */ Vec3s transitionDrawTbl[OBJECT_MA1_LIMB_TABLE_COUNT];
+    /* 0x294 */ Vec3s morphTable[OBJECT_MA1_LIMB_TABLE_COUNT];
     /* 0x31E */ char unk_31E[0x8];
     /* 0x326 */ s16 blinkTimer;
     /* 0x328 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex

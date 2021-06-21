@@ -47,10 +47,10 @@ void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-    SysMatrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
     Matrix_RotateY(this->actor.shape.rot.y, 1);
-    SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
+    Matrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
     Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);

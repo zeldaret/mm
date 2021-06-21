@@ -156,7 +156,7 @@ void ObjMoonStone_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001C60));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000D78);
-    SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+    Matrix_NormalizeXYZ(&globalCtx->unk187FC);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06000C80);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

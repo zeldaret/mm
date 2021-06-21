@@ -3654,7 +3654,7 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
             D_801EE1C0.x = collider->elements[i].dim.modelSphere.center.x;
             D_801EE1C0.y = collider->elements[i].dim.modelSphere.center.y;
             D_801EE1C0.z = collider->elements[i].dim.modelSphere.center.z;
-            SysMatrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
+            Matrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
             collider->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
             collider->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
             collider->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
@@ -3696,7 +3696,7 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
         D_801EE1E0.x = collider->dim.modelSphere.center.x;
         D_801EE1E0.y = collider->dim.modelSphere.center.y;
         D_801EE1E0.z = collider->dim.modelSphere.center.z;
-        SysMatrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
+        Matrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
         collider->dim.worldSphere.center.x = D_801EE1F0.x;
         collider->dim.worldSphere.center.y = D_801EE1F0.y;
         collider->dim.worldSphere.center.z = D_801EE1F0.z;
