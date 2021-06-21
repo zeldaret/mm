@@ -420,7 +420,7 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CA634.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CA648.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/WaterBox_GetCamDataIndex.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CA6B8.asm")
 

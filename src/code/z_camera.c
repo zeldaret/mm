@@ -1,5 +1,6 @@
 #include "ultra64.h"
 #include "global.h"
+#include "src/overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 #include "z_camera_data.c"
 
@@ -731,14 +732,11 @@ s32 Camera_GetDataIdxForPoly(Camera* camera, s32* bgId, CollisionPoly* poly) {
  * Returns -2 if there is no camera index for the water box.
  * Returns the camera data index otherwise.
  */
-// Camera_GetWaterBoxDataIdx
-#ifdef NON_EQUIVALENT
-s32 func_800CC874(Camera* camera, f32* waterY) {
+s32 Camera_GetWaterBoxDataIdx(Camera* camera, f32* waterY) {
     PosRot playerPosShape;
     WaterBox* waterBox;
-    s32 ret;
+    s32 camDataIdx;
     s32 sp30;
-    GlobalContext* globalCtx;
 
     // Actor_GetWorldPosShapeRot
     func_800B8248(&playerPosShape, camera->player); // &camera->player->base
@@ -757,26 +755,13 @@ s32 func_800CC874(Camera* camera, f32* waterY) {
         return -1;
     }
 
-    // WaterBox_GetCamDataIndex
-    // PERM_RANDOMIZE(
-    globalCtx = camera->globalCtx;
-    ret = func_800CA648(&globalCtx->colCtx, waterBox, sp30);
-    if (ret == 0) {
-        // no camera data idx
-        return -2;
-    } 
-    
-    return ret;
+    camDataIdx = WaterBox_GetCamDataIndex(&camera->globalCtx->colCtx, waterBox, sp30);
 
-    // )
-
+    // -2: no camera data idx
+    return (camDataIdx == 0) ? -2 : camDataIdx;
 }
-#else
-s32 func_800CC874(Camera* camera, f32* waterY);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC874.asm")
-#endif
 
-void func_800CC938(Camera* camera) { // May be void arguments
+void func_800CC938(Camera* camera) {
     func_800DDFE0(camera);
 }
 
@@ -1297,23 +1282,314 @@ s32 func_800CD834(Camera *camera, VecSph *eyeAtDir, f32 arg2, f32* arg3, f32 arg
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD834.asm")
 #endif
 
+// D_801DCE38 = 0.1f
+// D_801DCE3C = 0.2f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s32 func_800CDA14(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3) {
+    PosRot* temp_s1 = &camera->playerPosRot;
+    Vec3f sp50;
+    Vec3f sp44;
+    Vec3f sp38;
+    f32 temp_f0;
+    f32 sp30;
+
+    sp30 = func_800CB700(camera);
+    sp50.x = Math_SinS(temp_s1->rot.y) * arg3;
+    sp50.z = Math_CosS(temp_s1->rot.y) * arg3;
+    sp50.y = sp30 + arg2;
+    Camera_LERPCeilVec3f(&sp50, &camera->posOffset, camera->yOffsetUpdateRate, camera->xzOffsetUpdateRate, 0.1f);
+    sp44.x = temp_s1->pos.x + camera->posOffset.x;
+    sp44.y = temp_s1->pos.y + camera->posOffset.y;
+    sp44.z = temp_s1->pos.z + camera->posOffset.z;
+    sp38.x = temp_s1->pos.x;
+    sp38.y = sp44.y;
+    sp38.z = temp_s1->pos.z;
+    if (func_800CC128(camera, &sp38, &sp44) != 0) {
+        sp44.x -= camera->posOffset.x - (sp44.x - sp38.x);
+        sp44.z -= camera->posOffset.z - (sp44.z - sp38.z);
+    }
+    temp_f0 = camera->atLERPStepScale;
+    Camera_LERPCeilVec3f(&sp44, &camera->focalPoint, temp_f0, temp_f0, 0.2f);
+    return 1;
+}
+#else
+s32 func_800CDA14(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CDA14.asm")
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CDB6C.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CDE6C.asm")
 
+// D_801DCE8C = 0.01
+// D_801DCE90 = 0.1
+// D_801DCE94 = 0.4
+// D_801DCE98 = 0.017453292
+// D_801DCE9C = 0.34906584
+// D_801DCEA0 = -0.17453292
+// D_801DCEA4 = 0.1
+// D_801DCEA8 = 0.2
+#ifdef NON_EQUIVALENT
+s32 func_800CE2B8(Camera *camera, f32 arg1, s32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 *arg6, Vec2f *arg7, s16 flags) {
+    Vec3f sp78;
+    Vec3f sp6C;
+    Vec3f sp60;
+    Vec2f sp58;
+    f32 sp4C;
+    s32 sp38;
+    PosRot* temp_s1;
+
+    f32 temp_f0_3;
+    // f32 temp_f0_4;
+    f32 temp_f20;
+    f32 temp_f2;
+    f32 phi_f20;
+    f32 phi_f14;
+    temp_s1 = &camera->playerPosRot;
+
+    sp78.y = func_800CB700(camera) + arg3;
+    sp78.x = 0.0f;
+    sp78.z = 0.0f;
+    sp58 = *arg7;
+    // sp58[1] = arg7->y;
+    sp58.x = arg7->x * (arg5 * arg4);
+    sp38 = flags & 0x80;
+    if (sp38 != 0) {
+        camera->xzOffsetUpdateRate = 0.01f;
+        camera->yOffsetUpdateRate = 0.01f;
+    }
+    func_8010C530(&sp60, &sp58); // TODO: Probably not Vec2f
+    sp78.x += sp60.x;
+    sp78.y += sp60.y;
+    sp78.z += sp60.z;
+    if (func_800CB950(camera) != 0) {
+        *arg6 = Camera_LERPCeilF(temp_s1->pos.y, *arg6, 0.4f, 0.1f);
+        sp78.y -= temp_s1->pos.y - *arg6;
+        Camera_LERPCeilVec3f(&sp78, &camera->posOffset, camera->yOffsetUpdateRate, camera->xzOffsetUpdateRate, 0.1f);
+    } else {
+        sp4C = arg1;
+        temp_f20 = temp_s1->pos.y - *arg6;
+        temp_f0_3 = func_80086B30(temp_f20, sp4C);
+        if (sp38 == 0) {
+            temp_f2 = func_80086760(camera->fov * 0.4f * 0.017453292f, sp4C) * sp4C;
+            if (temp_f2 < temp_f20) {
+                *arg6 += (temp_f20 - temp_f2);
+                phi_f20 = temp_f2;
+            } else {
+                phi_f20 = temp_f20;
+                if (temp_f20 < -temp_f2) {
+                    *arg6 += (temp_f20 + temp_f2);
+                    phi_f20 = -temp_f2;
+                }
+            }
+            sp78.y -= phi_f20;
+        } else {
+            if (0.34906584f < temp_f0_3) {
+                phi_f14 = 1.0f - sin_rad(temp_f0_3 - 0.34906584f);
+            } else if (temp_f0_3 < -0.17453292f) {
+                phi_f14 = 1.0f - sin_rad(-0.17453292f - temp_f0_3);
+            } else {
+                phi_f14 = 1.0f;
+            }
+
+            sp78.y -= temp_f20 * phi_f14;
+        }
+        Camera_LERPCeilVec3f(&sp78, &camera->posOffset, 0.5f, 0.5f, 0.1f);
+        camera->yOffsetUpdateRate = 0.5f;
+        camera->xzOffsetUpdateRate = 0.5f;
+    }
+
+    sp6C.x = temp_s1->pos.x + camera->posOffset.x;
+    sp6C.y = temp_s1->pos.y + camera->posOffset.y;
+    sp6C.z = temp_s1->pos.z + camera->posOffset.z;
+    Camera_LERPCeilVec3f(&sp6C, &camera->focalPoint, camera->atLERPStepScale, camera->atLERPStepScale, 0.2f);
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE2B8.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE5E0.asm")
 
+// D_801DCEAC = 0.1f
+// D_801DCEB0 = 0.4f
+// D_801DCEB4 = 0.1f
+// D_801DCEB8 = 0.2f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope) {
+    Vec3f* focalPoint = &camera->focalPoint;
+    Vec3f posOffsetTarget;
+    Vec3f focalTarget;
+    s32 pad[2];
+    f32 playerHeight = func_800CB700(camera);
+    ActorPlayer* player = camera->player;
+    PosRot horsePosRot;
+
+    func_800B8214(&horsePosRot, player->rideActor);
+
+    if (EN_HORSE_CHECK_JUMPING((EnHorse*)player->rideActor)) {
+        horsePosRot.pos.y -= 49.0f;
+        *yPosOffset = Camera_LERPCeilF(horsePosRot.pos.y, *yPosOffset, 0.1f, 0.1f);
+        camera->atLERPStepScale = Camera_LERPCeilF(0.4f, camera->atLERPStepScale, 0.2f, 0.02f);
+    } else {
+        *yPosOffset = Camera_LERPCeilF(horsePosRot.pos.y, *yPosOffset, 0.5f, 0.1f);
+    }
+
+    posOffsetTarget.x = 0.0f;
+    posOffsetTarget.y = playerHeight + yOffset;
+    posOffsetTarget.z = 0.0f;
+
+    if (calcSlope != 0) {
+        posOffsetTarget.y -= Camera_CalcSlopeYAdj(&camera->floorNorm, camera->playerPosRot.rot.y, eyeAtDir->yaw, 25.0f);
+    }
+
+    Camera_LERPCeilVec3f(&posOffsetTarget, &camera->posOffset, camera->yOffsetUpdateRate, camera->xzOffsetUpdateRate, 0.1f);
+    focalTarget.x = camera->posOffset.x + horsePosRot.pos.x;
+    focalTarget.y = camera->posOffset.y + horsePosRot.pos.y;
+    focalTarget.z = camera->posOffset.z + horsePosRot.pos.z;
+    Camera_LERPCeilVec3f(&focalTarget, focalPoint, camera->atLERPStepScale, camera->atLERPStepScale, 0.2f);
+
+    return 1;
+}
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcAtForHorse.asm")
+#endif
+
+// D_801DCEBC = 1.2f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+f32 func_800CE79C(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer) {
+    f32 sp24;
+
+    if ((dist / maxDist) > 1.2f) {
+        // temp_f0 = 20.0f / (dist / maxDist);
+        sp24 = maxDist;
+        camera->rUpdateRateInv = 20.0f / (dist / maxDist);
+        if ((20.0f / (dist / maxDist)) < 10) {
+            camera->rUpdateRateInv = 10;
+        }
+    } else if (dist < minDist) {
+        sp24 = minDist;
+        // phi_f12 = (timer != 0) ? 10.0f : 20.0f;
+        camera->rUpdateRateInv = Camera_LERPCeilF((timer != 0) ? 10.0f : 20.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    } else if (maxDist < dist) {
+        sp24 = maxDist;
+        // phi_f12 = (timer != 0) ? 10.0f : 20.0f;
+        camera->rUpdateRateInv = Camera_LERPCeilF((timer != 0) ? 10.0f : 20.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    } else {
+        sp24 = dist;
+        // phi_f12 = (timer != 0) ? 20.0f : 1.0f;
+        camera->rUpdateRateInv = Camera_LERPCeilF((timer != 0) ? 20.0f : 1.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    }
+    
+    return Camera_LERPCeilF(sp24, camera->dist, 1.0f / camera->rUpdateRateInv, 0.1f);
+}
+#else
+f32 func_800CE79C(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE79C.asm")
+#endif
 
+
+// D_801DCEC0 = 1.2f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+f32 func_800CE930(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer) {
+    f32 phi_f20;
+
+    if (timer == 0) {
+        phi_f20 = ((maxDist * 0.25f) > 80.0f) ? maxDist * 0.25f : 80.0f;
+        camera->rUpdateRateInv = Camera_LERPCeilF(1000.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    } else if ((dist / maxDist) > 1.2f) {
+        phi_f20 = maxDist;
+        camera->rUpdateRateInv = 20.0f / (dist / maxDist);
+        if ((20.0f / (dist / maxDist)) < 10.0f) {
+            camera->rUpdateRateInv = 10.0f;
+        } 
+    } else if (dist < minDist) {
+        phi_f20 = minDist;
+        camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    } else if (maxDist < dist) {
+        phi_f20 = maxDist;
+        camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    } else {
+        phi_f20 = dist;
+        camera->rUpdateRateInv = Camera_LERPCeilF(1.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
+    }
+
+    return Camera_LERPCeilF(phi_f20, camera->dist, 1.0f / camera->rUpdateRateInv, 0.1f);
+}
+#else
+f32 func_800CE930(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer);
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE930.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CEAD8.asm")
+// D_801DCEC4 = 0.8f
+// D_801DCEC8 = 6.896552e-05f
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3) {
+    f32 pad;
+    f32 phi_a2;
+    f32 t;
+    s16 phi_v0;
+    s16 phi_v1;
+    s16 sp1C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CEC38.asm")
+    phi_v1 = ABS(arg1);
+    phi_v0 = arg3 > 0 ? (s16)(Math_CosS(arg3) * arg3) : arg3;
+    sp1C = arg2 - phi_v0;
+
+    if (ABS(sp1C) < phi_v1) {
+        phi_a2 = (1.0f / camera->pitchUpdateRateInv) * 3.0f;
+    } else {
+        t = phi_v1 * 6.896552e-05f;
+        pad = Camera_InterpolateCurve(0.8f, 1.0f - t);
+        phi_a2 = (1.0f / camera->pitchUpdateRateInv) * pad;
+    }
+    return Camera_LERPCeilS(sp1C, arg1, phi_a2, 5);
+}
+#else
+s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3);
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcDefaultPitch.asm")
+#endif
+
+// D_801DCECC = 0.001f
+// D_801DCED0 = 0.3f;
+// ISMATCHING: Need to move rodata
+#ifdef NON_MATCHING
+s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 accel) {
+    f32 velocity; // sp34
+    s16 angDelta; // sp1C
+    f32 updSpeed;
+    f32 speedT;
+    f32 velFactor;
+    f32 yawUpdRate;
+
+    if (camera->xzSpeed > 0.001f) {
+        angDelta = target - (s16)(cur + 0x8000);
+        speedT = (s16)(angDelta + 0x8000) / 32768.0f; // TODO: Macros
+    } else {
+        angDelta = target - (s16)(cur + 0x8000);
+        speedT = 0.3f;
+    }
+
+    updSpeed = Camera_InterpolateCurve(arg3, speedT);
+
+    velocity = ((1.0f - updSpeed) * accel) + updSpeed;
+
+    if (velocity < 0.0f) {
+        velocity = 0.0f;
+    }
+
+    velFactor = Camera_InterpolateCurve(0.5f, camera->speedRatio);
+    yawUpdRate = (1.0f / camera->yawUpdateRateInv);
+    return cur + (s16)(angDelta * velocity * velFactor * yawUpdRate);
+}
+#else
+s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 accel);
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcDefaultYaw.asm")
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CED90.asm")
 
@@ -1733,7 +2009,7 @@ s32 Camera_Demo3(Camera *camera) {
         case 3:
             anim->unk_06++;
             camera->fov += anim->unk_00 * anim->unk_06;
-            if (anim->unk_06 >= 0xF) {
+            if (anim->unk_06 >= 15) {
                 Quake2_ClearType(0x400);
                 Quake2_ClearType(0x10);
                 Quake2_ClearType(8);
@@ -2032,7 +2308,7 @@ s32 Camera_CheckWater(Camera* camera) {
     }
 
     if (!(camera->flags & (s16)0x8000)) {
-        waterCamIdx = func_800CC874(camera, &waterY);
+        waterCamIdx = Camera_GetWaterBoxDataIdx(camera, &waterY);
         if (waterCamIdx == -2) {
             if (!(camera->flags & 0x200)) {
                 Camera_SetFlags(camera, 0x200);
