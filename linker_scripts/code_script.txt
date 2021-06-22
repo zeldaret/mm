@@ -1043,7 +1043,11 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
+#ifdef NON_MATCHING
+        build/asm/overlays/ovl_En_Niw_rodata_overlay.o(.ovl)
+#else
         build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
+#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
