@@ -138,6 +138,7 @@ void EnNiw_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
+// what does
 void func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
     f32 temp7expr;
     f32 tempOne;
@@ -268,6 +269,8 @@ void func_808916B0(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
+
+// what do2
 void func_808917F8(EnNiw *this, GlobalContext *globalCtx, s32 arg2) {
     f32 phi_f2;
     f32 targetRotY;
@@ -305,7 +308,7 @@ void func_808917F8(EnNiw *this, GlobalContext *globalCtx, s32 arg2) {
     func_80891320(this, globalCtx, 5);
 }
 
-
+// setup regular walking?
 void func_80891974(EnNiw *this) {
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f,
          SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
@@ -313,8 +316,8 @@ void func_80891974(EnNiw *this) {
     this->actionFunc = func_808919E8;
 }
 
-// action func
-#if NON-MATCHING
+// action func: regular 1
+#ifdef NON_MATCHING
 // non-matching: stack offset and regalloc
 void func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     //f32 posX; // could be vec3f
@@ -326,16 +329,17 @@ void func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     newPos.y  = randPlusMinusPoint5Scaled(100.0f);
     newPos.z  = randPlusMinusPoint5Scaled(100.0f);
     if (this->niwType == ENNIW_TYPE_REGULAR) {
-        if (Actor_HasParent( &this->actor, globalCtx) != 0) {
+        // unkown when this is reached, its not cucco storm
+        if (Actor_HasParent( &this->actor, globalCtx) != NULL) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
             this->sfxTimer1 = 30;
             this->unk250 = 30;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~0x1; // targetable OFF
             this->unk28E = 4;
             this->actor.speedXZ = 0.0f;
             this->actionFunc = func_80891D78;
             return;
-        } // todo 
+        } // todo if else this
         func_800B8BB0( &this->actor, globalCtx);
     } else {
         this->unk252 = 0xA;
@@ -416,14 +420,16 @@ void func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
 #endif
 
-// action func
+// action func: picked up and scared
 void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
     Vec3f vec3fcopy;
     s16 rotZ;
 
+    // again with the stupid double copy
     vec3fcopy = D_808934DC;
     if (this->unk250 == 0) {
         this->unk29E = 2;
+        // todo: cast necessary?
         this->unk250 = (s32) (Rand_ZeroFloat(1.0f) * 10.0f) + 0xA;
     }
 
@@ -433,14 +439,17 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.z = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.z;
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (func_800B8BFC( &this->actor, globalCtx) != 0) {
+            // player has thrown the cucco
             this->actor.shape.rot.z = 0;
             rotZ = this->actor.shape.rot.z;
             this->unk28E = 5;
-            this->actor.flags |= 1;
+            this->actor.flags |= 0x1; // targetable ON
             this->actionFunc = func_80891F60;
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
         }
+        
+    // if not regular? when does this go off?
     } else if (this->unk2BC.z != 0.0f) {
         this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
@@ -457,33 +466,36 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->actor.flags |= 1;
         this->actionFunc = func_80891F60;
     }
-    func_80891320(this, globalCtx, (u16)2);
+    func_80891320(this, globalCtx, 2);
 }
 
+// action function: recently thrown, and hopping on the floor
 void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
+  // todo remove cast
     if ((s16) this->unk2EC == 0) {
-        if ((this->actor.bgCheckFlags & 1)) {
+        if ((this->actor.bgCheckFlags & 1)) { // about to hit the floor
             this->unk2EC = 1;
-            this->unk252 = 0x50;
+            this->unk252 = 0x50; // hop timer
             this->actor.speedXZ = 0.0f;
             this->actor.velocity.y = 4.0f;
         } else{
             return;
         }
     } else {
-        if ((this->actor.bgCheckFlags & 1)) {
+        if ((this->actor.bgCheckFlags & 1)) { // about to hit the floor
             this->sfxTimer1 = 0;
-            this->actor.velocity.y = 4.0f;
+            this->actor.velocity.y = 4.0f; // vertical hop
             this->unk29E = 1;
         }
         if (this->unk252 == 0) {
             this->unk254 = 100;
             this->unk250 = 0;
             this->unk2EC = 0;
-            func_80892414(this);
+            func_80892414(this); // start leaving
             return;
         }
     }
+    
     if (Actor_HasParent( &this->actor, globalCtx) != 0) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->sfxTimer1 = 30;
@@ -501,15 +513,17 @@ void func_80891F60(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
+// action func: swimming and flying away after swimming
 void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
     Vec3f ripplePos;
 
+    // even if hitting water, keep calling for more
     if ((s16) this->unk2A0 != 0) {
         func_808916B0(this, globalCtx); // spawn attack niw 
     }
 
     this->actor.speedXZ = 2.0f;
-    if ((this->actor.bgCheckFlags & 0x20) != 0) {
+    if ((this->actor.bgCheckFlags & 0x20)) {
         this->actor.gravity = 0.0f;
         if (this->actor.yDistToWater > 15.0f) {
             this->actor.world.pos.y = this->actor.world.pos.y + 2.0f;
@@ -519,7 +533,7 @@ void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
             Math_Vec3f_Copy(&ripplePos, &this->actor.world);
             ripplePos.y += this->actor.yDistToWater;
             
-            EffectSS_SpawnGRipple( globalCtx, &ripplePos, 100, 500, 30);
+            EffectSsGRipple_Spawn( globalCtx, &ripplePos, 100, 500, 30);
         }
         if ((this->actor.bgCheckFlags & 8) != 0) {
             this->actor.velocity.y = 10.0f;
@@ -527,14 +541,15 @@ void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
         }
     } else {
         this->actor.gravity = -2.0f;
-        if ((this->actor.bgCheckFlags & 8) != 0) {
-            this->actor.velocity.y = 10.0f;
+        if ((this->actor.bgCheckFlags & 8)) {
+            // has hit a wall
+            this->actor.velocity.y = 10.0f; // to the moon
             this->actor.speedXZ = 1.0f;
             this->actor.gravity = 0.0f;
         } else {
             this->actor.speedXZ = 4.0f;
         }
-        if ((this->actor.bgCheckFlags & 1) != 0) {
+        if ((this->actor.bgCheckFlags & 1)) {
             this->actor.gravity = -2.0f;
             this->unk254 = 100;
             this->unk250 = 0;
@@ -555,6 +570,7 @@ void func_80892248(EnNiw *this, GlobalContext *globalCtx) {
     // ! @ BUG: I believe multiple values got optimized out
     // value has to be a temp to match (v0) but there is only one value
     // explained by there being code where value got assigned with multiple conditions
+    // suspicious: in vanilla there is only one cucco variant (0xFFFF)
     s32 value;
     if (1) {
       value = 1;
@@ -580,7 +596,7 @@ void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
-// cock storm
+// cock is doing the long crow
 void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     f32 viewY;
 
@@ -608,7 +624,7 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
-// action func
+// actionfunc: endlessly spawn attack chickens
 void func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     f32 randFloat;
 
@@ -625,6 +641,7 @@ void func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     }
 }
 
+// running after hopping
 void func_80892414(EnNiw *this) {
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, 
           SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
@@ -634,54 +651,42 @@ void func_80892414(EnNiw *this) {
     this->actor.speedXZ = 4.0f;
 }
 
-//#if NON-MATCHING
+#ifdef NON_MATCHING
 // bad regalloc, center of first if block
+// actionfunc: running away from link
 void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
     ActorPlayer* player = PLAYER;
     Vec3f tempVec3f;
-    //f32 zeroTempf;
-    //s16 zeroTemp;
     s16 temp298;
     f32 dX;
     f32 dZ;
-    //wants a lot of temps
 
     // it actually wants to copy to stack... not modify, then pass to veccopy
-    // and it does it BEFORE the if block, this is just unoptimized...
+    // and it does it BEFORE the if block, this is just unoptimized.
     tempVec3f = D_808934E8;
     if (this->unk254 == 0) {
+        // the assignements in this block never want to align properly
+        // its not lineswap, as 800k permuter with only lineswap didn't find a solution
         this->unk298 = 0;
-        //temp298 = this->unk298;
-        //zeroTempf = 0;
-        //if (temp298){}
 
-        //this->unk2A4 = this->actor.world.pos; 
-        //this->unk2B0 = this->actor.world.pos;
-        this->unk2B0.x = this->actor.world.pos.x;
-        this->unk2B0.y = this->actor.world.pos.y;
-        this->unk2B0.z = this->actor.world.pos.z;
         this->unk2A4.x = this->actor.world.pos.x;
         this->unk2A4.y = this->actor.world.pos.y;
         this->unk2A4.z = this->actor.world.pos.z;
+        this->unk2B0.x = this->actor.world.pos.x;
+        this->unk2B0.y = this->actor.world.pos.y;
+        this->unk2B0.z = this->actor.world.pos.z;
 
-        //this->unk250 = zeroTemp;
-        //this->unk252 = zeroTemp;
-        this->unk250 = this->unk298;
-        this->unk252 = this->unk298;
-        //this->unk250 = temp298;
-        //this->unk252 = temp298;
-        this->unk304 = 0;
-        this->unk300 = 0;
-        this->actor.speedXZ = 0;
+        this->unk252 = this->unk250 = this->unk298 ;
         this->unk264[8] = 0;
         this->unk264[6] = 0;
         this->unk264[5] = 0;
         this->unk264[7] = 0;
+        this->unk304 = 0;
+        this->unk300 = 0;
+        this->actor.speedXZ = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
-        func_80891974(&this->actor);
+        func_80891974(&this->actor); // stop running
     } else {
-        //if (D_80893574 != temp7expr) {
-        //if ( 90000.0!= this->unk2BC.x) {
         if ( this->unk2BC.x != 90000.0f) {
             dX = this->actor.world.pos.x - this->unk2BC.x;
             dZ = this->actor.world.pos.z - this->unk2BC.z;
@@ -694,17 +699,18 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
         func_80891320(this, globalCtx, 2);
     }
 }
-//#else 
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
-//#endif
+#else 
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
+#endif
 
+// check if on the ground after running, once on the ground, start idling
 void func_808925F8(EnNiw *this, GlobalContext* gCtx) {
-    // hit the floor?
-    if ((this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.bgCheckFlags & 1)) { // hit floor
         func_80891974(this);
     }
 }
 
+// check if being attakced
 void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
     if ((this->unk2A0 == 0) && (this->unk260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
         if (( this->unk28E != 7) && (90000.0f != this->unk2BC.x)) {
@@ -886,7 +892,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         pos.y += this->actor.yDistToWater;
         this->unk250 = 30;
-        EffectSS_SpawnGSplash(globalCtx, &pos, 0, 0, 0, 400);
+        EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
         this->unk252 = 0;
         this->unk28E = 6;
         this->actionFunc = func_808920A0;
@@ -1015,7 +1021,7 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
 }
 
 // feather draw function
-#if NON_EQUIVELENT
+#ifdef NON_EQUIVELENT
 // this isnt even close
 void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     
