@@ -338,8 +338,8 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A2D348(this, globalCtx);
 }
 
-s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+    EnFg* this = (EnFg *)arg;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         *dList = NULL;
@@ -353,8 +353,8 @@ s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+    EnFg* this = (EnFg *)arg;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
 

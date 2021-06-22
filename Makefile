@@ -56,6 +56,10 @@ LD      := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
+# Check code syntax with host compiler
+CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-label -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
+
 ZAPD := tools/ZAPD/ZAPD.out
 
 OPTFLAGS := -O2 -g3
@@ -64,6 +68,14 @@ MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
 CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 624,649,838,712
+
+ifeq ($(shell getconf LONG_BIT), 32)
+  # Work around memory allocation bug in QEMU
+  export QEMU_GUEST_BASE := 1
+else
+  # Ensure that gcc treats the code as 32-bit
+  CC_CHECK += -m32
+endif
 
 #### Files ####
 
@@ -250,15 +262,20 @@ build/asm/%.o: asm/%.asm | $(C_O_FILES)
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
 	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s
 	@$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
 
 build/%.o: %.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
+build/src/%.o: %.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
+
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-
+	
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@./tools/set_o32abi_bit.py $@

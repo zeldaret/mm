@@ -1504,8 +1504,8 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C8 = newUnk4C8;
 }
 
-s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+    EnIn* this = (EnIn *)arg;
     s32 pad;
     Gfx* sp50[] = {
         NULL,       NULL,       D_060149A8, D_06014AE0, D_06014C30, D_060145D8, D_06014710,
@@ -1565,8 +1565,8 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+    EnIn* this = (EnIn *)arg;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 

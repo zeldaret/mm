@@ -5,7 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
-#include "src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 
 #define FLAGS 0x00000035
 
@@ -530,7 +530,7 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
         (COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y) < 0.5f)) {
         EnPametfrog_SetupWallCrawl(this);
     } else if (!(this->actor.bgCheckFlags & 1) ||
-               (this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f)) {
+               ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -1349,8 +1349,8 @@ static s8 D_8086DA28[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
-void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnPametfrog* this = THIS;
+void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+    EnPametfrog* this = (EnPametfrog *)arg;
     Vec3f vec;
     Vec3s* center;
     s8 index;

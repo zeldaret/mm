@@ -608,7 +608,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+                                void* arg) {
     if (limbIndex == 1) {
         pos->z -= 500.0f;
     }
@@ -620,8 +620,8 @@ s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     return 0;
 }
 
-void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMinifrog* this = THIS;
+void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+    EnMinifrog* this = (EnMinifrog *)arg;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);

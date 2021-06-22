@@ -20,7 +20,7 @@ void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               struct Actor* actor);
+                               void* arg);
 
 extern AnimationHeader D_06000040;
 extern FlexSkeletonHeader D_060024F0;
@@ -75,7 +75,7 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, &this->jointTable, &this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->jointTable, this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
@@ -235,8 +235,8 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               struct Actor* actor) {
-    EnPoFusen* this = (EnPoFusen*)actor;
+                               void* arg) {
+    EnPoFusen* this = (EnPoFusen*)arg;
     f32 zScale;
     f32 yScale;
     f32 xScale;
@@ -274,10 +274,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return 0;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
 }
 
-void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, void* arg) {
 }
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {

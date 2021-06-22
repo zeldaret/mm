@@ -329,9 +329,13 @@ typedef struct EnItem00 {
     /* 0x1A4 */ s8 unk1A4;
 } EnItem00; // size = 0x1A8
 
+struct EnAObj;
+
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+
 typedef struct {
     /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
+    /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
 } EnAObj; // size = 0x1A8

@@ -522,8 +522,8 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
-    EnMaYts* this = THIS;
+                             void* arg) {
+    EnMaYts* this = (EnMaYts *)arg;
     Vec3s sp4;
 
     if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
@@ -541,8 +541,8 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return 0;
 }
 
-void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMaYts* this = THIS;
+void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+    EnMaYts* this = (EnMaYts *)arg;
 
     if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);

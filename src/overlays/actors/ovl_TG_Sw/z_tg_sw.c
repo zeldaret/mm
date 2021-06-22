@@ -51,7 +51,7 @@ static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCt
     do {
         actorEntry =
             func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
-        if (actorIterator = (void*)!actorEntry) {
+        if ((actorIterator = (void*)!actorEntry)) {
             break;
         }
 
@@ -62,12 +62,12 @@ static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCt
             actorEntry->speedXZ = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-    } while (actorIterator = actorEntry->next);
+    } while ((actorIterator = actorEntry->next));
 
     actorIterator = NULL;
     do {
         actorEntry = func_ActorCategoryIterateById(globalCtx, actorIterator, ACTORCAT_NPC, ACTOR_EN_SW);
-        if (actorIterator = (void*)!actorEntry) {
+        if ((actorIterator = (void*)!actorEntry)) {
             break;
         }
 
@@ -76,7 +76,7 @@ static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCt
             actorEntry->speedXZ = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-    } while (actorIterator = actorEntry->next);
+    } while ((actorIterator = actorEntry->next));
 
     Actor_MarkForDeath((Actor*)this);
 }

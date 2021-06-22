@@ -311,7 +311,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
     //! @bug: This cast of `projection` is invalid
-    View_StepQuake(view, (RSPMatrix*)projection);
+    View_StepQuake(view, (Mtx*)projection);
 
     gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);

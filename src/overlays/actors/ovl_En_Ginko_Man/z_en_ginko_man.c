@@ -656,8 +656,8 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
-    EnGinkoMan* this = THIS;
+                                void* arg) {
+    EnGinkoMan* this = (EnGinkoMan *)arg;
 
     if (limbIndex == 15) {
         *dList = object_ginko_limb15_dlist;
@@ -676,7 +676,7 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     return 0;
 }
 
-void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
 }
 
 void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -691,7 +691,7 @@ void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     &EnGinkoMan_OverrideLimbDraw, &EnGinkoMan_PostLimbDraw, &this->actor);
+                     EnGinkoMan_OverrideLimbDraw, EnGinkoMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -93,7 +93,7 @@ void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800B78B8(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, void* arg) {
 }
 
 void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
