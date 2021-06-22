@@ -49,22 +49,22 @@ typedef struct EnNiw {
     /* 0x29C */ u16 unk29C; // changed by func_80892248
     /* 0x29E */ s16 unk29E; // func_80891D78 
     /* 0x2A0 */ s16 unk2A0; // func_808920A0
-    /* 0x2A2 */ s16 paramsCopy;
+    /* 0x2A2 */ s16 niwType;
     /* 0x2A4 */ Vec3f unk2A4; // this actors starting position
     /* 0x2B0 */ Vec3f unk2B0;// this actors starting position
     /* 0x2BC */ Vec3f unk2BC;
-    /* 0x2C8 */ f32 unk2C8; //func_80891320
-    /* 0x2CC */ f32 unk2CC; //func_80891320
-    /* 0x2D0 */ f32 unk2D0; //func_80891320
-    /* 0x2D4 */ f32 unk2D4; //func_80891320
-    /* 0x2D8 */ f32 unk2D8; //func_80891320
-    /* 0x2DC */ f32 unk2DC; //func_80891320
-    /* 0x2E0 */ f32 unk2E0; //func_80891320
-    /* 0x2E4 */ f32 unk2E4; //func_80891320
-    /* 0x2E8 */ s16 unk2E8;
+    /* 0x2C8 */ f32 limb7Rotx;
+    /* 0x2CC */ f32 limb7Roty;
+    /* 0x2D0 */ f32 limb7Rotz;
+    /* 0x2D4 */ f32 limbBRotx;
+    /* 0x2D8 */ f32 limbBRoty;
+    /* 0x2DC */ f32 limbBRotz;
+    /* 0x2E0 */ f32 limbDRot;
+    /* 0x2E4 */ f32 limbFRot;
+    /* 0x2E8 */ s16 yawTowardsPlayer;
     /* 0x2EA */ s16 unk2EA; // func_808919E8
     /* 0x2EC */ u16 unk2EC; // used in func_80891D78 
-    /* 0x2EE */ u8  unk2EE[0x6]; // pad
+    /* 0x2EE */ u8  pad2EE[0x6]; // pad
     /* 0x2F4 */ f32 unk2F4; // used func_808917F8
     /* 0x2F8 */ f32 unk2F8; // used func_808917F8
     /* 0x2FC */ f32 unk2FC; // used func_808917F8
@@ -76,6 +76,14 @@ typedef struct EnNiw {
     /* 0x35C */ EnNiwFeather feathers[0x14];
 
 } EnNiw; // size = 0x7BC
+
+// in init, any value below 0 becomes zero
+//  however, in vanilla, only 0xFFFF (-1) exists
+#define ENNIW_TYPE_VANILLA 0xFFFF
+#define ENNIW_TYPE_REGULAR 0
+// one of these will likely be the attack cuccos just not sure which one yet
+#define ENNIW_TYPE_UNK1 1
+#define ENNIW_TYPE_UNK2 2
 
 extern const ActorInit En_Niw_InitVars;
 

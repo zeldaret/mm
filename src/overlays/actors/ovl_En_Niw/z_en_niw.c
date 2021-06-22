@@ -2,8 +2,6 @@
 
 #define FLAGS 0x00800010
 
-#define THIS ((EnNiw*)thisx)
-
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -11,12 +9,12 @@ void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808916B0(EnNiw* this, GlobalContext* globalCtx);
 void func_80891974(EnNiw* this);
-s16 func_808919E8(EnNiw* this, GlobalContext* globalCtx);
+void func_808919E8(EnNiw* this, GlobalContext* globalCtx);
 void func_80891F60(EnNiw* this, GlobalContext* globalCtx);
 void func_80892414(EnNiw* this);
 
 void func_808920A0(EnNiw* this, GlobalContext* globalCtx);
-s16 func_80892390(EnNiw* this, GlobalContext* globalCtx);
+void func_80892390(EnNiw* this, GlobalContext* globalCtx);
 
 void func_80891D78(EnNiw* this, GlobalContext* globalCtx);
 void func_80892248(EnNiw* this, GlobalContext* globalCtx);
@@ -28,9 +26,9 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx);
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx);
 
 void func_8089262C(EnNiw* this, GlobalContext* globalCtx);
-s16 func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
+void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 
-s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor );
+s32 EnNiw_LimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor );
 void func_80893008(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 s16 D_80893460 = 0x0; 
@@ -48,42 +46,51 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Draw,
 };
 
-//D_8089348C
-f32 D_80893484[] = { 5000.0f, 0xC59C4000, 5000.0f, 0x453B8000, 0x457A0000,};
+static f32 D_80893484[] = { 5000.0f, -5000.0f, 5000.0f, 3000.0f, 4000.0f,};
 
-//u32 D_80893498[] = { // collider
 static ColliderCylinderInit sCylinderInit = {
     { 0x45, AT_NONE | AT_BOUNCED | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_NONE | AC_NO_DAMAGE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK2 | OC2_HIT_PLAYER, 0x9C, },
     { 0x45, { 0x453B8000, 0x45, 0x7A }, { 0x0500093D, 0x20, 0x01 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
     { 0, 0, 0, { 0, -2097, -1 } },
 };
 
-Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
 
-u32 D_808934D0[] = { 0x801F0006, 0xB874F830, 0x30540000, }; // huh? 0 looks like a pointer
+static InitChainEntry sInitChain[] = {
+    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+};
 
-Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
 
-Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
 
 // might be another vec3f with all zeros
-s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
+static s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
 
-// NO LONGER MATCHES
 void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
-    EnNiw* this = THIS;
+    EnNiw* this = (EnNiw*) thisx;
     Vec3f D_Temp = D_808934C4;
 
-    if ( this->actor.params < 0) { //no bit 16 I guess
-        this->actor.params = 0;
+    if ( this->actor.params < 0) { // all neg values become zero
+        this->actor.params = ENNIW_TYPE_REGULAR;
     }
 
     Math_Vec3f_Copy( &this->unk2BC, &D_Temp);
 
-    this->paramsCopy = this->actor.params;
-    Actor_ProcessInitChain(&this->actor, &D_808934D0);
-    this->actor.flags |= 0x1; // why set targetable here and not start with it?
-    //Actor_SetDrawParams(&this->actor.shape, 0, func_800B3FC0, 25.0f);
+    this->niwType = this->actor.params;
+    Actor_ProcessInitChain(&this->actor, &sInitChain);
+
+    // ! @ BUG: this is supposed to be if (ENNIW_TYPE_REGULAR)
+    // but because all cuccos in the game are type 0xFFFF -> 0, it got optimized out
+    // thats the only way this code makes sense:
+    //   if all cuccos are meant to be targetable it would be a default flag
+    // but one of the other types explicitly de-select this type
+    if (1) { //if (this->niwType == ENNIW_TYPE_REGULAR){
+        this->actor.flags |= 0x1; // targetable ON
+    }
+
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
     SkelAnime_InitSV(globalCtx, &this->skelanime,  
@@ -95,22 +102,23 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk308 = 10.0f;
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (this->paramsCopy == 1) {
-        Actor_SetScale(&this->actor, ((f32) gGameInfo->data[2486] / 10000.0f) + 0.00400000018999f);
+    if (this->niwType == ENNIW_TYPE_UNK1) {
+        Actor_SetScale(&this->actor, (gGameInfo->data[2486] / 10000.0f) + 0.00400000018999f);
     }
 
-    // random health between 18-20?
-    this->actor.colChkInfo.health = (u8) (u32) (Rand_ZeroFloat(9.98999977112f) + 10.0f);
+    // random health between 10-20
+    this->actor.colChkInfo.health = Rand_ZeroFloat(9.98999977112f) + 10.0f;
     this->actor.colChkInfo.mass = 0xFF;
-    if (this->paramsCopy == 0) {
+
+    if (this->niwType == ENNIW_TYPE_REGULAR) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
-    if (this->paramsCopy == 2) {
+    if (this->niwType == ENNIW_TYPE_UNK2) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->sfxTimer1 = 30;
-        this->unk250 = 0x1E;
-        this->actor.flags &= ~1;
+        this->unk250 = 30;
+        this->actor.flags &= ~1; // targetable OFF
         this->unk28E = 4;
         this->actionFunc = func_80891D78;
         this->actor.speedXZ = 0.0f;
@@ -123,14 +131,14 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void EnNiw_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnNiw* this = THIS;
+    EnNiw* this = (EnNiw*) thisx;
 
-    if (this->paramsCopy == 0) {
+    if (this->niwType == ENNIW_TYPE_REGULAR) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
 
-s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
+void func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
     f32 temp7expr;
     f32 tempOne;
     int temp10k;
@@ -206,29 +214,29 @@ s16 func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
             }
             
     }
-    if (this->unk264[9] != this->unk2E4) {
-        Math_ApproachF(&this->unk2E4, this->unk264[9], 0.5f, 4000.0f);
+    if (this->unk264[9] != this->limbFRot) {
+        Math_ApproachF(&this->limbFRot, this->unk264[9], 0.5f, 4000.0f);
     }
-    if (this->unk264[0] != this->unk2E0) {
-        Math_ApproachF(&this->unk2E0, this->unk264[0], 0.5f, 4000.0f);
+    if (this->unk264[0] != this->limbDRot) {
+        Math_ApproachF(&this->limbDRot, this->unk264[0], 0.5f, 4000.0f);
     }
-    if (this->unk264[2] !=  this->unk2C8) {
-        Math_ApproachF(&this->unk2C8, this->unk264[2], 0.8f, 7000.0f);
+    if (this->unk264[2] !=  this->limb7Rotz) {
+        Math_ApproachF(&this->limb7Rotz, this->unk264[2], 0.8f, 7000.0f);
     }
-    if (this->unk264[7] != this->unk2CC) {
-        Math_ApproachF(&this->unk2CC, this->unk264[7], 0.8f, 7000.0f);
+    if (this->unk264[7] != this->limb7Roty) {
+        Math_ApproachF(&this->limb7Roty, this->unk264[7], 0.8f, 7000.0f);
     }
-    if (this->unk264[8] != this->unk2D0 ) {
-        Math_ApproachF(&this->unk2D0, this->unk264[8], 0.8f, 7000.0f);
+    if (this->unk264[8] != this->limb7Rotx ) {
+        Math_ApproachF(&this->limb7Rotx, this->unk264[8], 0.8f, 7000.0f);
     }
-    if (this->unk264[1] != this->unk2D4 ) {
-        Math_ApproachF(&this->unk2D4, this->unk264[1], 0.8f, 7000.0f);
+    if (this->unk264[1] != this->limbBRotz ) {
+        Math_ApproachF(&this->limbBRotz, this->unk264[1], 0.8f, 7000.0f);
     }
-    if (this->unk264[5] != this->unk2D8 ) {
-        Math_ApproachF(&this->unk2D8, this->unk264[5], 0.8f, 7000.0f);
+    if (this->unk264[5] != this->limbBRoty ) {
+        Math_ApproachF(&this->limbBRoty, this->unk264[5], 0.8f, 7000.0f);
     }
-    if (this->unk264[6] != this->unk2DC ) {
-        Math_ApproachF(&this->unk2DC, this->unk264[6], 0.8f, 7000.0f);
+    if (this->unk264[6] != this->limbBRotx ) {
+        Math_ApproachF(&this->limbBRotx, this->unk264[6], 0.8f, 7000.0f);
     }
 }
 
@@ -287,11 +295,11 @@ void func_808917F8(EnNiw *this, GlobalContext *globalCtx, s32 arg2) {
             this->unk254 = 150;
             if (this->unk25C == 0) {
                 this->unk25C = 70;
-                this->unk2E8 = this->actor.yawTowardsPlayer;
+                this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
             }
         }
     }
-    targetRotY = this->unk2E8 + phi_f2;
+    targetRotY = this->yawTowardsPlayer + phi_f2;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetRotY, 3, (s16) this->unk300, 0);
     Math_ApproachF(&this->unk300, 3000.0f, 1.0f, 500.0f);
     func_80891320(this, globalCtx, 5);
@@ -307,19 +315,17 @@ void func_80891974(EnNiw *this) {
 
 // action func
 #if NON-MATCHING
-// regalloc: float register after posZ, also stack offset
-s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
-    s32 pad;
-    //s32 pad2;
-    f32 posY;
-    f32 posX;
-    f32 posZ;
+// non-matching: stack offset and regalloc
+void func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
+    //f32 posX; // could be vec3f
+    //f32 posY;
+    //f32 posZ;
     s16 s16tmp;
+    Vec3f newPos; // good spot?
     
-    // regalloc: f0 result from this call
-    posY  = randPlusMinusPoint5Scaled(100.0f);
-    posZ  = randPlusMinusPoint5Scaled(100.0f);
-    if (this->paramsCopy == 0) {
+    newPos.y  = randPlusMinusPoint5Scaled(100.0f);
+    newPos.z  = randPlusMinusPoint5Scaled(100.0f);
+    if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent( &this->actor, globalCtx) != 0) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
             this->sfxTimer1 = 30;
@@ -328,8 +334,8 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
             this->unk28E = 4;
             this->actor.speedXZ = 0.0f;
             this->actionFunc = func_80891D78;
-            return 0x1E;
-        }
+            return;
+        } // todo 
         func_800B8BB0( &this->actor, globalCtx);
     } else {
         this->unk252 = 0xA;
@@ -348,24 +354,29 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
         this->unk298 += 1;
 
         if (this->unk298 >= 8) {
-            this->unk252 = (s32) Rand_ZeroFloat(30.0f);
-            this->unk298 = (s32) Rand_ZeroFloat(3.99000000954f);
-            // todo: ternary?
-            if (posY < 0.0f) {
-                posY -= 100.0f;
+            this->unk252 = Rand_ZeroFloat(30.0f);
+            this->unk298 = Rand_ZeroFloat(3.99000000954f);
+            // 3.99.. is loaded into f12 for rand_zero, but f12 never released
+        // b18:    jal     Rand_ZeroFloat              b18:    jal     Rand_ZeroFloat                  
+        // b1c:    lwc1    $f12,%lo(D_80893554)(at)  i b1c:    lwc1    $f12,%lo(.rodata+0x54)(at)
+        // b20:    lwc1    $f12,0x34(sp)             r b20:    lwc1    $f2,0x2c(sp)
+
+            if (newPos.y < 0.0f) {
+                newPos.y -= 100.0f;
             } else {
-                posY += 100.0f;
+                newPos.y += 100.0f;
             }
-            if (posZ < 0.0f) {
-                posZ -= 100.0f;
+            if (newPos.z < 0.0f) {
+                newPos.z -= 100.0f;
             } else {
-                posZ += 100.0f;
+                newPos.z += 100.0f;
             }
-            this->unk2B0.x = this->unk2A4.x + posY;
-            this->unk2B0.z = this->unk2A4.z + posZ;
+
+            this->unk2B0.x = this->unk2A4.x + newPos.y;
+            this->unk2B0.z = this->unk2A4.z + newPos.z;
         } else {
             this->unk250 = 4;
-            if ((this->actor.bgCheckFlags & 1) != 0) {
+            if ((this->actor.bgCheckFlags & 1)) {
                 this->actor.speedXZ = 0.0f;
                 this->actor.velocity.y = 3.5f;
             }
@@ -373,39 +384,33 @@ s16 func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     }
 
     if (this->unk250 != 0) {
-        Math_SmoothDownscaleMaxF(&this->unk264[9], 0.5f, 4000.0f);
+        Math_ApproachZeroF(&this->unk264[9], 0.5f, 4000.0f);
         s16tmp = 1;
-        //pad = 0.0f;
-        //pad2 = 0.0f;
         Math_ApproachF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
 
-        posX = this->unk2B0.x - this->actor.world.pos.x;
-        posZ = this->unk2B0.z - this->actor.world.pos.z;
+        newPos.x = this->unk2B0.x - this->actor.world.pos.x;
+        newPos.z = this->unk2B0.z - this->actor.world.pos.z;
 
-        if (fabsf(posX) < 10.0f) {
-            //posX = pad2; 
-            //posX = 0.0f; 
-            posX = 0.0; 
-            //posX = (double) 0.0f; // double: reduces regalloc alot, but fake match?
+        if (fabsf(newPos.x) < 10.0f) {
+            newPos.x = 0.0; 
         }
-        if (fabsf(posZ) < 10.0f) {
-            //posZ = pad2;
-            //posZ = 0.0f;
-            posZ = 0.0;
+        if (fabsf(newPos.z) < 10.0f) {
+            newPos.z = 0.0;
         }
 
-        if ((posX == 0.0f) && (posZ == 0.0f)) {
-        //if ((posX == pad) && (posZ == pad)) {
+        if ((newPos.x == 0.0f) && (newPos.z == 0.0f)) {
             this->unk250 = 0;
             this->unk298 = 7;
         }
-        Math_SmoothStepToS(&this->actor.world.rot.y, atans(posX, posZ),
-           (u16)3, (s16) (s32) this->unk304, 0);
+
+        Math_SmoothStepToS(&this->actor.world.rot.y,
+           Math_Atan2S(newPos.x, newPos.z),
+           3, this->unk304, 0);
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
-    return func_80891320(this, globalCtx, s16tmp);
+    func_80891320(this, globalCtx, s16tmp);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
@@ -426,7 +431,7 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.x = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.x;
     this->actor.shape.rot.y = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.y;
     this->actor.shape.rot.z = ((s16) randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.z;
-    if (this->paramsCopy == 0) {
+    if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (func_800B8BFC( &this->actor, globalCtx) != 0) {
             this->actor.shape.rot.z = 0;
             rotZ = this->actor.shape.rot.z;
@@ -444,7 +449,7 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->actor.gravity = -2.0f;
         this->unk28E = 5;
         this->unk2EC = 0;
-        this->paramsCopy = 0;
+        this->niwType = ENNIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
@@ -545,18 +550,22 @@ void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, 2);
 }
 
-// todo try to find something simpler for this one
+// cock mad
 void func_80892248(EnNiw *this, GlobalContext *globalCtx) {
-    int one = 1;
+    // ! @ BUG: I believe multiple values got optimized out
+    // value has to be a temp to match (v0) but there is only one value
+    // explained by there being code where value got assigned with multiple conditions
+    s32 value;
+    if (1) {
+      value = 1;
+    } 
+
     this->unk252 = 10;
-    
-    if (one){}
-    this->unk29C = one;
-    this->unk28E = one;
+    this->unk28E = this->unk29C = value;
     this->actionFunc = func_80892274;
 }
 
-// action func
+// cock is growing madder
 void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
 
     this->sfxTimer1 = 100;
@@ -571,7 +580,7 @@ void func_80892274(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
-//action func
+// cock storm
 void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     f32 viewY;
 
@@ -591,7 +600,7 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     }
     if (this->unk252 == 0) {
         this->unk252 = 0xA;
-        this->unk2E8 = this->actor.yawTowardsPlayer;
+        this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
         this->actor.flags &= ~1;
         this->unk28E = 3;
         this->actionFunc = func_80892390;
@@ -599,24 +608,21 @@ void func_808922D0(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
-// todo: this is NOT if else, or at least not without figuring out why
-s16 func_80892390(EnNiw *this, GlobalContext *globalCtx) {
-    s16 returnValue;
-    s32 temp_f6;
+// action func
+void func_80892390(EnNiw *this, GlobalContext *globalCtx) {
+    f32 randFloat;
 
     func_808916B0(this, globalCtx);
     if (this->unk252 == 1) {
         this->actor.speedXZ = 3.0f;
-        this = this;
-        temp_f6 = Rand_ZeroFloat(1.99000000954f);
+        randFloat = Rand_ZeroFloat(1.99000000954f);
         this->unk250 = 0;
-        returnValue = this->unk250;
-        this->unk24E = (u16) returnValue;
-        this->unk24C = (u16) returnValue;
-        this->unk29A = (s16) temp_f6;
-        return returnValue;
+        this->unk24E = this->unk250;
+        this->unk24C = this->unk250;
+        this->unk29A = randFloat;
+    } else {
+        func_808917F8(this, globalCtx, 1);
     }
-    func_808917F8(this, globalCtx, 1);
 }
 
 void func_80892414(EnNiw *this) {
@@ -628,10 +634,10 @@ void func_80892414(EnNiw *this) {
     this->actor.speedXZ = 4.0f;
 }
 
-#if NON-MATCHING
+//#if NON-MATCHING
 // bad regalloc, center of first if block
 void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
-    Actor* player= PLAYER;
+    ActorPlayer* player = PLAYER;
     Vec3f tempVec3f;
     //f32 zeroTempf;
     //s16 zeroTemp;
@@ -640,14 +646,16 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
     f32 dZ;
     //wants a lot of temps
 
+    // it actually wants to copy to stack... not modify, then pass to veccopy
+    // and it does it BEFORE the if block, this is just unoptimized...
     tempVec3f = D_808934E8;
     if (this->unk254 == 0) {
         this->unk298 = 0;
-        temp298 = this->unk298;
+        //temp298 = this->unk298;
         //zeroTempf = 0;
         //if (temp298){}
 
-        //this->unk2A4 = this->actor.world.pos;
+        //this->unk2A4 = this->actor.world.pos; 
         //this->unk2B0 = this->actor.world.pos;
         this->unk2B0.x = this->actor.world.pos.x;
         this->unk2B0.y = this->actor.world.pos.y;
@@ -670,35 +678,35 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
         this->unk264[5] = 0;
         this->unk264[7] = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
-        //Math_Vec3f_Copy(&this->unk2BC, &D_808934E8);
         func_80891974(&this->actor);
-        return;
-    }
-    //if (D_80893574 != temp7expr) {
-    //if ( 90000.0!= this->unk2BC.x) {
-    if ( this->unk2BC.x != 90000.0f) {
-        dX = this->actor.world.pos.x - this->unk2BC.x;
-        dZ = this->actor.world.pos.z - this->unk2BC.z;
     } else {
-        dX = this->actor.world.pos.x - player->world.pos.x;
-        dZ = this->actor.world.pos.z - player->world.pos.z;
+        //if (D_80893574 != temp7expr) {
+        //if ( 90000.0!= this->unk2BC.x) {
+        if ( this->unk2BC.x != 90000.0f) {
+            dX = this->actor.world.pos.x - this->unk2BC.x;
+            dZ = this->actor.world.pos.z - this->unk2BC.z;
+        } else {
+            dX = this->actor.world.pos.x - player->base.world.pos.x;
+            dZ = this->actor.world.pos.z - player->base.world.pos.z;
+        }
+        this->yawTowardsPlayer = Math_Atan2S(dX, dZ);
+        func_808917F8(this, globalCtx, 0);
+        func_80891320(this, globalCtx, 2);
     }
-    this->unk2E8 = atans(dX, dZ);
-    func_808917F8(this, globalCtx, 0);
-    func_80891320(this, globalCtx, 2);
 }
-#else 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
-#endif
+//#else 
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
+//#endif
 
 void func_808925F8(EnNiw *this, GlobalContext* gCtx) {
+    // hit the floor?
     if ((this->actor.bgCheckFlags & 1)) {
         func_80891974(this);
     }
 }
 
 void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
-    if ((this->unk2A0 == 0) && (this->unk260 == 0) && (this->paramsCopy == 0)) {
+    if ((this->unk2A0 == 0) && (this->unk260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
         if (( this->unk28E != 7) && (90000.0f != this->unk2BC.x)) {
             this->unk260 = 0xA;
             this->sfxTimer1 = 30;
@@ -709,36 +717,39 @@ void func_8089262C(EnNiw *this, GlobalContext *globalCtx) {
             func_80892414(this);
         }
         
-        if ((this->collider.base.acFlags & AC_HIT) != 0) {
+        if ((this->collider.base.acFlags & AC_HIT)) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->actor.colChkInfo.health > 0) { // not DECR
+            // health gets used as a hit counter until cucco storm
+            if (this->actor.colChkInfo.health > 0) {
                 this->actor.colChkInfo.health--;
             }
+            // you have reached cock threshold
             if ((D_80893460 == 0) && (this->actor.colChkInfo.health == 0)) {
                 this->unk254 = 100;
                 D_80893460 = 1;
                 this->unk298 = 0;
+                this->sfxTimer1 = 10000;
                 this->unk2A4.x = this->unk2B0.x = this->actor.world.pos.x;
                 this->unk2A4.y = this->unk2B0.y = this->actor.world.pos.y;
-                this->sfxTimer1 = 10000;
                 this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
                 this->unk252 = this->unk250 = this->unk298;
                   
                 this->unk264[8] = 0.0f;
-                this->unk2A0 = 1;
                 this->unk264[6] = 0.0f;
-                this->actionFunc = func_80892248;
                 this->unk264[5] = 0.0f;
                 this->unk264[7] = 0.0f;
+                this->unk2A0 = 1;
+                this->actionFunc = func_80892248;
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
                 this->actor.speedXZ = 0.0f;
+
             } else {
                 this->unk260 = 0xA;
                 this->sfxTimer1 = 30;
                 this->unk29E = 1;
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
-                this->unk254 = 0x64;
+                this->unk254 = 100;
                 this->unk2EC = 0;
                 func_80892414(this);
             }
@@ -766,7 +777,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk28C++;
 
-    if (this->paramsCopy == 1) {
+    if (this->niwType == ENNIW_TYPE_UNK1) {
         this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.parent->shape.rot.y;
     }
 
@@ -825,12 +836,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F); //update bgcheckinfo
     
-    if ( (this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
+    if ( (this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
         Vec3f camera;
         camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
         camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
         camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
-        camResult = camera.y / sqrtf((SQ(camera.x)) + (SQ(camera.y)) + (SQ(camera.z)));
+        camResult = camera.y / sqrtf(SQXYZ(camera));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
         this->actor.world.pos.z = this->actor.home.pos.z;
@@ -850,14 +861,14 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk2FC = 0.0f;
         this->unk2F8 = 0.0f;
         this->unk2F4 = 0.0f;
-        this->unk2DC = 0.0f;
-        this->unk2D8 = 0.0f;
-        this->unk2D4 = 0.0f;
-        this->unk2D0 = 0.0f;
-        this->unk2CC = 0.0f;
-        this->unk2C8 = 0.0f;
-        this->unk2E0 = 0.0f;
-        this->unk2E4 = 0.0f;
+        this->limbBRotx = 0.0f;
+        this->limbBRoty = 0.0f;
+        this->limbBRotz = 0.0f;
+        this->limb7Rotx = 0.0f;
+        this->limb7Roty = 0.0f;
+        this->limb7Rotz = 0.0f;
+        this->limbDRot = 0.0f;
+        this->limbFRot = 0.0f;
         this->unk2A0 = this->unk28C = this->unk292 = this->unk29E = this->unk298 = this->unk29A = this->unk29C = 0; 
 
         for( i = 0; i < 0xA; ++i) {
@@ -867,7 +878,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk28E = 8;
         this->unk2A0 = 0;
         this->actionFunc = func_808925F8;
-        return;
+        return; // still required even with the else/else
 
     } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 15.0f) && (this->unk28E != 6)) {
         this->actor.velocity.y = 0.0f;
@@ -904,7 +915,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->unk2A0 == 0) {
-            if (this->paramsCopy == 0) {
+            if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
                 
@@ -918,36 +929,35 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// EnNiw_LimbDraw
-s32 func_80892E70(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
+s32 EnNiw_LimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor) {
     EnNiw* this = (EnNiw*) actor;
 
     // float to s16 casts req
     if (limbIndex == 0xD) {
-        rot->y += (s16) this->unk2E0;
+        rot->y += (s16) this->limbDRot;
     }
     if (limbIndex == 0xF) {
-        rot->y += (s16) this->unk2E4;
+        rot->y += (s16) this->limbFRot;
     }
     if (limbIndex == 0xB) {
-        rot->x += (s16) this->unk2DC;
-        rot->y += (s16) this->unk2D8;
-        rot->z += (s16) this->unk2D4;
+        rot->x += (s16) this->limbBRotx;
+        rot->y += (s16) this->limbBRoty;
+        rot->z += (s16) this->limbBRotz;
     }
     if (limbIndex == 0x7) {
-        rot->x += (s16) this->unk2D0;
-        rot->y += (s16) this->unk2CC;
-        rot->z += (s16) this->unk2C8;
+        rot->x += (s16) this->limb7Rotx;
+        rot->y += (s16) this->limb7Roty;
+        rot->z += (s16) this->limb7Rotz;
     }
     return 0; 
 }
 
 void EnNiw_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    EnNiw* this = THIS;
+    EnNiw* this = (EnNiw*) thisx;
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton, this->skelanime.limbDrawTbl,
-         this->skelanime.dListCount, func_80892E70, NULL, &this->actor);
+         this->skelanime.dListCount, EnNiw_LimbDraw, NULL, &this->actor);
     func_808932B0(&this->actor, globalCtx);
 }
 
