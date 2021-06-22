@@ -12,9 +12,10 @@ typedef struct EnKusa {
     /* 0x144 */ EnKusaActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collider; // size = 0x4C
     /* 0x194 */ u8 timer;
-    /* 0x195 */ s8 unk_195;
+    /* 0x195 */ s8 objIndex;
     /* 0x196 */ s8 unk_196;
     /* 0x197 */ u8 unk_197;
+    /* 0x198 */ u8 unk198;
 } EnKusa; // size = 0x19C
 
 extern const ActorInit En_Kusa_InitVars;
