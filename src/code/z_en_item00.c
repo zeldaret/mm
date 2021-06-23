@@ -461,7 +461,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-        func_800B78B8(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= -32000.0f) {
             Actor_MarkForDeath(&this->actor);

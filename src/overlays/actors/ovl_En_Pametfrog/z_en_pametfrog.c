@@ -1314,7 +1314,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->actor.gravity < -0.1f) {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             arg3 = this->actionFunc == EnPametfrog_FallInAir ? 3.0f : 15.0f;
-            func_800B78B8(globalCtx, &this->actor, 25.0f, arg3, 3.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, arg3, 3.0f, 0x1F);
         } else if (this->freezeTimer == 0) {
             Actor_SetVelocityAndMoveXYRotation(&this->actor);
             this->actor.floorHeight = this->actor.world.pos.y;

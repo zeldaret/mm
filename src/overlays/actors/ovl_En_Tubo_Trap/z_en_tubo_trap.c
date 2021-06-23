@@ -305,7 +305,7 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (this->actor.projectedPos.z < 811.0f) {

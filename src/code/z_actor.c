@@ -568,7 +568,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7678.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B78B8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_UpdateBgCheckInfo.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7E04.asm")
 

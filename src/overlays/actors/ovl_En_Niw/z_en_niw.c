@@ -6,27 +6,22 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
-
 void EnNiw_SetupIdle(EnNiw* this);
 void func_808919E8(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_SetupRunning(EnNiw* this);
 void func_808924B0(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx);
-
 void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Upset(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx);
-
 void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx); // draw feather
-
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-
 s32 EnNiw_LimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor );
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
@@ -57,10 +52,8 @@ extern ColliderCylinderInit D_80893498;
     //{ 0, 0, 0, { 0, -2097, -1 } },
 //};
 
-
 extern Vec3f D_808934C4;
 //static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
-
 
 extern InitChainEntry D_808934D0;
 //static InitChainEntry sInitChain[] = {
@@ -75,7 +68,6 @@ extern Vec3f D_808934DC;
 extern u32 D_808934E8;
 //static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
 
-// might be another vec3f with all zeros
 //static s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
 
 void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -427,7 +419,7 @@ void EnNiw_Held(EnNiw *this, GlobalContext *globalCtx) {
     Vec3f vec3fcopy;
     s16 rotZ;
 
-    // again with the stupid double copy?
+    // again with the double copy?
     vec3fcopy = D_808934DC;
     if (this->unkTimer250 == 0) {
         this->unk29E = 2;
@@ -521,6 +513,7 @@ void EnNiw_Swimming(EnNiw *this, GlobalContext *globalCtx) {
     Vec3f ripplePos;
 
     // even if hitting water, keep calling for reinforcements 
+    // this should just be in update
     if (this->niwStormActive) {
         EnNiw_SpawnAttackNiw(this, globalCtx); // spawn attack niw 
     }
@@ -587,7 +580,7 @@ void EnNiw_Trigger(EnNiw *this, GlobalContext *globalCtx) {
 }
 
 void EnNiw_Upset(EnNiw *this, GlobalContext *globalCtx) {
-
+    // assumption: CuccoStorm is split into smaller parts because it used to be a cutscene in OOT
     this->sfxTimer1 = 100;
     if ( this->unkTimer252 == 0) {
         this->unkTimer252 = 60;
@@ -629,16 +622,13 @@ void EnNiw_SetupCuccoStorm(EnNiw *this, GlobalContext *globalCtx) {
 }
 
 void EnNiw_CuccoStorm(EnNiw *this, GlobalContext *globalCtx) {
-    f32 randFloat;
-
     EnNiw_SpawnAttackNiw(this, globalCtx);
     if (this->unkTimer252 == 1) {
         this->actor.speedXZ = 3.0f;
-        randFloat = Rand_ZeroFloat(1.99f);
+        this->unk29A = Rand_ZeroFloat(1.99f);
         this->unkTimer250 = 0;
         this->unkTimer24E = this->unkTimer250;
         this->unkTimer24C = this->unkTimer250;
-        this->unk29A = randFloat;
     } else {
         func_808917F8(this, globalCtx, 1);
     }
@@ -687,7 +677,7 @@ void func_808924B0(EnNiw *this, GlobalContext *globalCtx) {
         this->unk300 = 0;
         this->actor.speedXZ = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
-        EnNiw_SetupIdle(&this->actor); // stop running
+        EnNiw_SetupIdle(&this->actor);
     } else {
         if ( this->unk2BC.x != 90000.0f) {
             dX = this->actor.world.pos.x - this->unk2BC.x;
@@ -783,7 +773,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 dist = 20.0f;
     s32 pad3;
 
-    this->unusedCounter28C++; // incremented here, reset to zero in one other place
+    this->unusedCounter28C++;
 
     if (this->niwType == ENNIW_TYPE_UNK1) {
         this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.parent->shape.rot.y;
@@ -817,7 +807,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
             spAC.z = spAC.x = 0.0f;
             spAC.y = -0.15000000596f;
 
-            EnNiw_SpawnFeather(this, &pos, &spB8, &spAC, featherScale); //spawn feather
+            EnNiw_SpawnFeather(this, &pos, &spB8, &spAC, featherScale);
         }
         this->unk29E = 0;
     }
@@ -842,7 +832,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(&this->actor, this->unk308);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 
-    func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F); //update bgcheckinfo
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 31);
     
     // if cucco is off the map?
     if ( (this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
@@ -973,7 +963,6 @@ void EnNiw_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_808932B0(this, globalCtx);
 }
 
-// EnNiw_SpawnFeather ?
 void EnNiw_SpawnFeather(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale) {
     s16 i;
     EnNiwFeather* feather = this->feathers;
@@ -993,7 +982,6 @@ void EnNiw_SpawnFeather(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 s
     }
 }
 
-// EnNiw_FeatherUpdate
 void EnNiw_UpdateFeather(EnNiw *this, GlobalContext *globalCtx) {
     EnNiwFeather *feather = this->feathers;
     f32 featherVelocityGoal = 0.05f;
@@ -1031,58 +1019,34 @@ void EnNiw_UpdateFeather(EnNiw *this, GlobalContext *globalCtx) {
 // this isnt even close
 void func_808932B0(EnNiw *this, GlobalContext *globalCtx) {
     
-    //EnNiwFeather *temp_s1;
     EnNiwFeather *feather = &this->feathers;
-    //f32 temp_f12;
-    //z_Matrix *temp_s0;
     u8 flag = 0;
     s16 i;
-    //GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    //func_8012C2DC(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    //feather = temp_s1;
-    //flag = 0;
-    //i = (u16)0;
-//loop_1:
-    //if ((s32) temp_s3 < 0x14) {
-        //goto loop_1;
     for(i = 0; i < 10; i++, feather++) {
         if (feather->enabled) {
-            //temp_s0 = &globalCtx->unk187FC;
             if (flag == 0) {
-                //temp_v0 = gfxCtx->polyXlu.p;
-                //gfxCtx->polyXlu.p = temp_v0 + 8;
                 //temp_v0->words.w1 = 0x60023B0;
-                //temp_v0->words.w0 = 0xDE000000;
-                //gSPDisplayList(POLY_XLU_DISP++, 0x60023B0);
                 gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);
 
-                flag++;// = (flag + 1) & 0xFF;
+                flag++;
             }
             SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, 0); // MTXMODE_NEW?
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
-            //temp_f12 = feather->scale;
-            //SysMatrix_InsertScale(temp_f12, temp_f12, 1.0f, 1);
             SysMatrix_InsertScale(feather->scale, feather->scale, 1.0f, 1);
             SysMatrix_InsertZRotation_f(feather->zRot, 1);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
 
-            //temp_v0_2 = gfxCtx->polyXlu.p;
-            //gfxCtx->polyXlu.p = temp_v0_2 + 8;
-            //temp_v0_2->words.w0 = 0xDA380003;
             //temp_v0_2->words.w1 = SysMatrix_AppendStateToPolyOpaDisp(gfxCtx);
             gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
             //gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            //temp_v0_3 = gfxCtx->polyXlu.p;
-            //gfxCtx->polyXlu.p = temp_v0_3 + 8;
             //temp_v0_3->words.w1 = 0x6002428;
-            //temp_v0_3->words.w0 = 0xDE000000;
             gSPDisplayList(POLY_XLU_DISP++, &D_06002428);
 
         }

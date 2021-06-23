@@ -799,7 +799,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
 // UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
 // UNK_TYPE4 func_800B7678(GlobalContext* globalCtx, Actor* param_2, s32 param_3, u32 param_4);
-void func_800B78B8(GlobalContext* globalCtx, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6);
+void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 uParm3, f32 uParm4, f32 param_5, u32 param_6);
 // void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gfxCtx);
 // void func_800B8018(void);

@@ -8,8 +8,8 @@ struct EnNiw;
 typedef void (*EnNiwActionFunc)(struct EnNiw*, GlobalContext*);
 
 typedef struct {
-    // in OOT this is "type" and there is one instance of an
-    //  if statement specifying `if (true) if (enabled == 1)`
+    // in OOT this is "type" and there is one instance of an if
+    //  statement specifying `if (true) if (enabled == 1)`
     //  so in beta there might have been a third value
     /* 0x0000 */ u8 enabled;
     /* 0x0004 */ Vec3f pos;
@@ -20,7 +20,7 @@ typedef struct {
     /* 0x002C */ f32 scale;
     /* 0x0030 */ f32 zRot;
     /* 0x0034 */ u8 timer;
-} EnNiwFeather; // size = 0x0038
+} EnNiwFeather; // size = 0x38
 
 #define ENNIW_LIMBCOUNT 0x10
 
@@ -49,14 +49,14 @@ typedef struct EnNiw {
     /* 0x292 */ s16 unk292; // toggle timer
     /* 0x294 */ s16 pad294;
     /* 0x296 */ s16 unk296; // toggle every other frame timer
-    /* 0x298 */ s16 unk298; // EnNiw_CheckRage 
+    /* 0x298 */ s16 unk298;
     /* 0x29C */ s16 unk29A; // toggle timer for func_808917F8
     /* 0x29C */ u16 unk29C; // changed by EnNiw_Trigger
-    /* 0x29E */ s16 unk29E; // EnNiw_Held 
+    /* 0x29E */ s16 unk29E;
     /* 0x2A0 */ s16 niwStormActive; // bool
-    /* 0x2A2 */ s16 niwType; // params copied at init time
-    /* 0x2A4 */ Vec3f unk2A4; // this actors starting position
-    /* 0x2B0 */ Vec3f unk2B0; // this actors starting position
+    /* 0x2A2 */ s16 niwType;
+    /* 0x2A4 */ Vec3f unk2A4; // this actors starting position?
+    /* 0x2B0 */ Vec3f unk2B0; // this actors starting position? again?
     /* 0x2BC */ Vec3f unk2BC;
     /* 0x2C8 */ f32 limb7Rotz;
     /* 0x2CC */ f32 limb7Roty;
@@ -89,7 +89,7 @@ typedef struct EnNiw {
 #define ENNIW_TYPE_UNK1 1
 #define ENNIW_TYPE_UNK2 2
 // the attacking cuccos are not here, they are a different actor:
-// ovl_En_Attack_Niw
+//  ovl_En_Attack_Niw
 
 extern FlexSkeletonHeader D_06002530;
 extern AnimationHeader D_060000E8;
@@ -97,6 +97,5 @@ extern AnimationHeader D_060000E8;
 // feather display list?
 extern void* D_060023B0;
 extern void* D_06002428;
-
 
 #endif // Z_EN_NIW_H

@@ -766,7 +766,7 @@
     0x800B75A0:("func_800B75A0",),
     0x800B761C:("func_800B761C",),
     0x800B7678:("func_800B7678",),
-    0x800B78B8:("func_800B78B8",),
+    0x800B78B8:("Actor_UpdateBgCheckInfo",),
     0x800B7E04:("func_800B7E04",),
     0x800B7FE0:("func_800B7FE0",),
     0x800B8018:("func_800B8018",),
