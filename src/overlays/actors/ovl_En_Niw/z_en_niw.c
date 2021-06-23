@@ -31,43 +31,53 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 s32 EnNiw_LimbDraw(GlobalContext *gCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, struct Actor *actor );
 void func_80893008(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
-s16 D_80893460 = 0x0; 
-u16 D_80893462 = 0x0; // padding?
+extern s16 D_80893460;
+//s16 D_80893460 = 0x0; 
+//u16 D_80893462 = 0x0; // padding?
 
-const ActorInit En_Niw_InitVars = {
-    ACTOR_EN_NIW,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NIW,
-    sizeof(EnNiw),
-    (ActorFunc)EnNiw_Init,
-    (ActorFunc)EnNiw_Destroy,
-    (ActorFunc)EnNiw_Update,
-    (ActorFunc)EnNiw_Draw,
-};
+extern ActorInit En_Niw_InitVars;
+//const ActorInit En_Niw_InitVars = {
+    //ACTOR_EN_NIW,
+    //ACTORCAT_PROP,
+    //FLAGS,
+    //OBJECT_NIW,
+    //sizeof(EnNiw),
+    //(ActorFunc)EnNiw_Init,
+    //(ActorFunc)EnNiw_Destroy,
+    //(ActorFunc)EnNiw_Update,
+    //(ActorFunc)EnNiw_Draw,
+//};
 
-static f32 D_80893484[] = { 5000.0f, -5000.0f, 5000.0f, 3000.0f, 4000.0f,};
+extern f32 D_80893484[];
+//static f32 D_80893484[] = { 5000.0f, -5000.0f, 5000.0f, 3000.0f, 4000.0f,};
 
-static ColliderCylinderInit sCylinderInit = {
-    { 0x45, AT_NONE | AT_BOUNCED | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_NONE | AC_NO_DAMAGE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK2 | OC2_HIT_PLAYER, 0x9C, },
-    { 0x45, { 0x453B8000, 0x45, 0x7A }, { 0x0500093D, 0x20, 0x01 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
-    { 0, 0, 0, { 0, -2097, -1 } },
-};
+extern ColliderCylinderInit D_80893498;
+//static ColliderCylinderInit sCylinderInit = {
+    //{ 0x45, AT_NONE | AT_BOUNCED | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_NONE | AC_NO_DAMAGE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK2 | OC2_HIT_PLAYER, 0x9C, },
+    //{ 0x45, { 0x453B8000, 0x45, 0x7A }, { 0x0500093D, 0x20, 0x01 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+    //{ 0, 0, 0, { 0, -2097, -1 } },
+//};
 
-static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
 
-static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
-};
+extern Vec3f D_808934C4;
+//static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
 
-static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
 
-static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
+extern InitChainEntry D_808934D0;
+//static InitChainEntry sInitChain[] = {
+    //ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    //ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    //ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+//};
+
+extern Vec3f D_808934DC;
+//static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
+
+extern u32 D_808934E8;
+//static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
 
 // might be another vec3f with all zeros
-static s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
+//static s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
 
 void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnNiw* this = (EnNiw*) thisx;
@@ -80,7 +90,8 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     Math_Vec3f_Copy( &this->unk2BC, &D_Temp);
 
     this->niwType = this->actor.params;
-    Actor_ProcessInitChain(&this->actor, &sInitChain);
+    //Actor_ProcessInitChain(&this->actor, &sInitChain);
+    Actor_ProcessInitChain(&this->actor, &D_808934D0);
 
     // ! @ BUG: this is supposed to be if (EnNiwType == value)
     //   but because all cuccos in the game are type 0xFFFF -> 0, it got optimized out
@@ -93,8 +104,7 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
-    SkelAnime_InitSV(globalCtx, &this->skelanime,  
-        &D_06002530, &D_060000E8,
+    SkelAnime_InitSV(globalCtx, &this->skelanime,  &D_06002530, &D_060000E8,
          &this->limbDrawTbl, &this->transitionDrawtable, 0x10);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
@@ -103,15 +113,16 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->niwType == ENNIW_TYPE_UNK1) {
-        Actor_SetScale(&this->actor, (gGameInfo->data[2486] / 10000.0f) + 0.00400000018999f);
+        Actor_SetScale(&this->actor, (gGameInfo->data[2486] / 10000.0f) + 0.004f);
     }
 
     // random health between 10-20
-    this->actor.colChkInfo.health = Rand_ZeroFloat(9.98999977112f) + 10.0f;
+    this->actor.colChkInfo.health = Rand_ZeroFloat(9.99f) + 10.0f;
     this->actor.colChkInfo.mass = 0xFF;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        //Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80893498);
     }
 
     if (this->niwType == ENNIW_TYPE_UNK2) {
@@ -126,7 +137,7 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
     } else {
-        func_80891974(&this->actor);
+        func_80891974(this);
     }
 }
 
@@ -311,7 +322,7 @@ void func_808917F8(EnNiw *this, GlobalContext *globalCtx, s32 arg2) {
 // EnNiw_SetupIdle
 void func_80891974(EnNiw *this) {
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f,
-         SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
+         SkelAnime_GetFrameCount(&D_060000E8.common), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = func_808919E8;
 }
@@ -429,8 +440,8 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
     vec3fcopy = D_808934DC;
     if (this->unkTimer250 == 0) {
         this->unk29E = 2;
-        // todo: cast necessary?
-        this->unkTimer250 = (s32) (Rand_ZeroFloat(1.0f) * 10.0f) + 0xA;
+        // cast req
+        this->unkTimer250 = (s32) (Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
     // casts req
@@ -461,7 +472,8 @@ void func_80891D78(EnNiw *this, GlobalContext *globalCtx) {
         this->niwType = ENNIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
+        //Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &D_80893498);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= 0x1; // targetable ON
         this->actionFunc = func_80891F60;
@@ -532,7 +544,7 @@ void func_808920A0(EnNiw *this, GlobalContext *globalCtx) {
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
-            Math_Vec3f_Copy(&ripplePos, &this->actor.world);
+            Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
             ripplePos.y += this->actor.yDistToWater;
             
             EffectSsGRipple_Spawn( globalCtx, &ripplePos, 100, 500, 30);
@@ -635,7 +647,7 @@ void func_80892390(EnNiw *this, GlobalContext *globalCtx) {
     func_808916B0(this, globalCtx);
     if (this->unkTimer252 == 1) {
         this->actor.speedXZ = 3.0f;
-        randFloat = Rand_ZeroFloat(1.99000000954f);
+        randFloat = Rand_ZeroFloat(1.99f);
         this->unkTimer250 = 0;
         this->unkTimer24E = this->unkTimer250;
         this->unkTimer24C = this->unkTimer250;
@@ -648,8 +660,8 @@ void func_80892390(EnNiw *this, GlobalContext *globalCtx) {
 // running after hopping
 void func_80892414(EnNiw *this) {
     SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, 
-          SkelAnime_GetFrameCount(&D_060000E8), 0, -10.0f);
-    this->unk29A = Rand_ZeroFloat(1.99000000954f);
+          SkelAnime_GetFrameCount(&D_060000E8.common), 0, -10.0f);
+    this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = func_808924B0;
     this->actor.speedXZ = 4.0f;
@@ -931,12 +943,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (!this->niwStormActive) {
             if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
                 
                 if (globalCtx){} // req to match
 
                 if ((this->unknownState28E != 4) && (this->unknownState28E != 5)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx,  &this->collider);
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx,  &this->collider.base);
                 }
             }
         }
@@ -972,7 +984,7 @@ void EnNiw_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton, this->skelanime.limbDrawTbl,
          this->skelanime.dListCount, EnNiw_LimbDraw, NULL, &this->actor);
-    func_808932B0(&this->actor, globalCtx);
+    func_808932B0(this, globalCtx);
 }
 
 // EnNiw_SpawnFeather ?
@@ -998,7 +1010,7 @@ void func_80893008(EnNiw *this, Vec3f *pos, Vec3f *vel, Vec3f *accel, f32 scale)
 // EnNiw_FeatherUpdate
 void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
     EnNiwFeather *feather = this->feathers;
-    f32 featherVelocityGoal = 0.20000000298;
+    f32 featherVelocityGoal = 0.05f;
     s16 i;
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
@@ -1018,7 +1030,7 @@ void func_808930FC(EnNiw *this, GlobalContext *globalCtx) {
                     feather->vel.y = -0.5f;
                 }
 
-                feather->zRot = Math_SinS( (s16) (feather->zRotStart * 0xBB8)) * 3.14159274101f * 0.20000000298f;
+                feather->zRot = Math_SinS( (s16) (feather->zRotStart * 0xBB8)) * 3.14159274101f * 0.2f;
 
                 if (feather->life < feather->timer) {
                     feather->enabled = false;

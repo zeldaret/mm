@@ -88,9 +88,9 @@ typedef struct EnNiw {
 #define ENNIW_TYPE_UNK1 1
 #define ENNIW_TYPE_UNK2 2
 
-extern const ActorInit En_Niw_InitVars;
+//extern const ActorInit En_Niw_InitVars;
 
-extern SkeletonHeader D_06002530;
+extern FlexSkeletonHeader D_06002530;
 extern AnimationHeader D_060000E8;
 
 // feather display list?

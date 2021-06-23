@@ -1041,11 +1041,11 @@ SECTIONS
     ovl_En_Niw : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
-        build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
-        build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
+        build/asm/overlays/ovl_En_Niw_data.o(.data)
 #ifdef NON_MATCHING
-        build/asm/overlays/ovl_En_Niw_rodata_overlay.o(.ovl)
+        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
 #else
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
         build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
 #endif
     }
