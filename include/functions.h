@@ -831,7 +831,7 @@ UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 iParm3, f32 
 // void func_800B8B84(void);
 void func_800B8BB0(Actor* actor, GlobalContext* gCtx);
 // void func_800B8BD0(void);
-s32 func_800B8BFC(Actor* actor, GlobalContext* globalCtx);
+s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx);
 // void func_800B8C20(void);
 void func_800B8C50(Actor* actor, GlobalContext* globalCtx);
 // void func_800B8C78(void);

@@ -320,7 +320,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
     s32 sp2C;
 
     func_80926394(this, globalCtx);
-    if (func_800B8BFC(&this->actor, globalCtx)) {
+    if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);

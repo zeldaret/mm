@@ -22,11 +22,13 @@ typedef struct {
     /* 0x0034 */ u8 timer;
 } EnNiwFeather; // size = 0x0038
 
+#define ENNIW_LIMBCOUNT 0x10
+
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelanime;
-    /* 0x188 */ Vec3s limbDrawTbl[0x10];
-    /* 0x1E8 */ Vec3s transitionDrawtable[0x10];
+    /* 0x188 */ Vec3s limbDrawTbl[ENNIW_LIMBCOUNT];
+    /* 0x1E8 */ Vec3s transitionDrawtable[ENNIW_LIMBCOUNT];
     /* 0x248 */ EnNiwActionFunc actionFunc;
     /* 0x24C */ s16 unkTimer24C;
     /* 0x24E */ s16 unkTimer24E;
@@ -47,10 +49,10 @@ typedef struct EnNiw {
     /* 0x292 */ s16 unk292; // toggle timer
     /* 0x294 */ s16 pad294;
     /* 0x296 */ s16 unk296; // toggle every other frame timer
-    /* 0x298 */ s16 unk298; // func_8089262C 
+    /* 0x298 */ s16 unk298; // EnNiw_CheckRage 
     /* 0x29C */ s16 unk29A; // toggle timer for func_808917F8
-    /* 0x29C */ u16 unk29C; // changed by func_80892248
-    /* 0x29E */ s16 unk29E; // func_80891D78 
+    /* 0x29C */ u16 unk29C; // changed by EnNiw_Trigger
+    /* 0x29E */ s16 unk29E; // EnNiw_Held 
     /* 0x2A0 */ s16 niwStormActive; // bool
     /* 0x2A2 */ s16 niwType; // params copied at init time
     /* 0x2A4 */ Vec3f unk2A4; // this actors starting position
@@ -66,7 +68,7 @@ typedef struct EnNiw {
     /* 0x2E4 */ f32 limbFRot;
     /* 0x2E8 */ s16 yawTowardsPlayer;
     /* 0x2EA */ s16 unk2EA; // toggle timer used in update
-    /* 0x2EC */ u16 unk2EC; // some state, wings up?
+    /* 0x2EC */ s16 unk2EC; // some state, wings up?
     /* 0x2EE */ UNK_TYPE1  pad2EE[0x6];
     /* 0x2F4 */ f32 unusedFloat2F4;
     /* 0x2F8 */ f32 unusedFloat2F8;
