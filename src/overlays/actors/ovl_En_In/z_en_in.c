@@ -1479,7 +1479,7 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk4AC &= ~0x40;
     }
     this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     func_808F3414(this, globalCtx);
     func_808F32A0(this, globalCtx);
 }
