@@ -1002,40 +1002,48 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_EQUIVELENT
-// this isnt even close
+// non-equiv: not even close
 // feather draw function
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
-
-    EnNiwFeather* feather = &this->feathers;
+    // vanilla wants to load this early (and other values)
+    //  but it needs to be stored in a s register not v/a
+    //EnNiwFeather* feathers = &this->feathers;
     u8 flag = 0;
-    s16 i;
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    
+    // permuter thinks this might be int which makes sense...
+    // but the end of the loop converts type, int reemoves it
+    //s16 i;
+    s32 i;
+  
+    if (globalCtx->state.gfxCtx){}
+    if (this->feathers){}
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 10; i++, feather++) {
-        if (feather->enabled) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    for (i = 0; i < 0x14; i++) {
+        if (this->feathers[i].enabled == true) {
             if (flag == 0) {
-                // temp_v0->words.w1 = 0x60023B0;
                 gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);
 
                 flag++;
             }
-            SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, 0); // MTXMODE_NEW?
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
-            SysMatrix_InsertScale(feather->scale, feather->scale, 1.0f, 1);
-            SysMatrix_InsertZRotation_f(feather->zRot, 1);
-            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
 
-            // temp_v0_2->words.w1 = SysMatrix_AppendStateToPolyOpaDisp(gfxCtx);
-            gSPMatrix(POLY_XLU_DISP++, SysMatrix_AppendStateToPolyOpaDisp(globalCtx->state.gfxCtx),
+            SysMatrix_InsertTranslation(this->feathers[i].pos.x,
+                   this->feathers[i].pos.y, this->feathers[i].pos.z, 0); 
+            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, 1);
+            SysMatrix_InsertZRotation_f(this->feathers[i].zRot, 1);
+            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
+      
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            // temp_v0_3->words.w1 = 0x6002428;
             gSPDisplayList(POLY_XLU_DISP++, &D_06002428);
         }
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
