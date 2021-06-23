@@ -387,7 +387,7 @@
     0x8008FE60:("osViSwapBuffer",),
     0x8008FEB0:("guPositionF",),
     0x80090058:("guPosition",),
-    0x800900C0:("func_800900C0",),
+    0x800900C0:("__osEPiRawStartDma",),
     0x800902A0:("osSpTaskYielded",),
     0x80090300:("memcmp",),
     0x80090420:("osGetTime",),

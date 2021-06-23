@@ -397,7 +397,7 @@ s32 __osEPiRawReadIo (OSPiHandle* handle, u32 devAddr, u32* data);
 void osViSwapBuffer(void* frameBufPtr);
 void guPositionF(float mf[4][4], f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
 void guPosition(Mtx* m, f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
-void func_800900C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, u32 cartAddr, void* dramAddr, u32 size);
 OSYieldResult osSpTaskYielded(OSTask* task);
 s32 memcmp(void* __s1, void* __s2, size_t __n);
 OSTime osGetTime(void);

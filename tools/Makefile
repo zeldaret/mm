@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -std=c99 -g -O2
+CFLAGS := -Wall -Wextra -pedantic -Wno-stringop-truncation -std=c99 -g -O2
 PROGRAMS := yaz0 makeromfs elf2rom mkldscript vtxdis
 
 all: $(PROGRAMS)
