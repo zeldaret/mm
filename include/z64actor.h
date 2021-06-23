@@ -275,7 +275,7 @@ typedef struct {
     /* 0xD04 */ MtxF unkD04;
     /* 0xD44 */ UNK_TYPE1 padD44[0x18];
     /* 0xD5C */ s8 invincibilityTimer;
-    /* 0xD60 */ UNK_TYPE1 padD60[0x1B];
+    /* 0xD60 */ UNK_TYPE1 padD60[0x18];
 } ActorPlayer; // size = 0xD78
 
 typedef enum {
