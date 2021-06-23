@@ -82,15 +82,14 @@ typedef struct EnNiw {
 
 } EnNiw; // size = 0x7BC
 
-// in init, any value below 0 becomes zero
+// in init, any value below zero becomes zero
 //  however, in vanilla, only 0xFFFF (-1) exists
 #define ENNIW_TYPE_VANILLA 0xFFFF
 #define ENNIW_TYPE_REGULAR 0
-// one of these will likely be the attack cuccos just not sure which one yet
 #define ENNIW_TYPE_UNK1 1
 #define ENNIW_TYPE_UNK2 2
-
-//extern const ActorInit En_Niw_InitVars;
+// the attacking cuccos are not here, they are a different actor:
+// ovl_En_Attack_Niw
 
 extern FlexSkeletonHeader D_06002530;
 extern AnimationHeader D_060000E8;

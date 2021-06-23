@@ -111,6 +111,7 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk308 = 10.0f;
     Actor_SetScale(&this->actor, 0.01f);
 
+    // size dependant on gamedata? beta plans to feed a cucco as a pet/quest?
     if (this->niwType == ENNIW_TYPE_UNK1) {
         Actor_SetScale(&this->actor, (gGameInfo->data[2486] / 10000.0f) + 0.004f);
     }
@@ -124,6 +125,7 @@ void EnNiw_Init(Actor *thisx, GlobalContext *globalCtx) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80893498);
     }
 
+    // never used in game, but maybe meant to be used with a cutscene or switching scenes?
     if (this->niwType == ENNIW_TYPE_UNK2) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
@@ -148,14 +150,9 @@ void EnNiw_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-// called everywhere, but does.. what?
-// controls limb rotations.. maybe this controls the animations?
 void func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
-    f32 temp7expr;
-    f32 tempOne;
-    int temp10k;
+    f32 tempOne = 1.0f;
 
-    tempOne = 1.0f;
     if (this->unkTimer24C == 0) {
         if (arg2 == 0) {
             this->unk264[0] = 0.0f;
@@ -181,9 +178,8 @@ void func_80891320(EnNiw *this, GlobalContext *globalCtx, s16 arg2) {
                 break;
             case 1:
                 this->unkTimer24E = 3;
-                temp7expr = 7000.0f * tempOne;
-                this->unk264[2] = temp7expr;
-                this->unk264[1] = temp7expr;
+                this->unk264[2] = 7000.0f * tempOne;
+                this->unk264[1] = 7000.0f * tempOne;
                 if (this->unk296 == 0) {
                     this->unk264[2] = 0.0f;
                     this->unk264[1] = 0.0f;
@@ -260,7 +256,7 @@ void EnNiw_SpawnAttackNiw(EnNiw *this, GlobalContext *globalCtx) {
     Actor* attackNiw;
 
     if (this->unkTimer252 == 0) {
-        if ((s32) this->unk290 < 7) {
+        if (this->unk290 < 7) {
             xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
             yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
             zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
@@ -331,13 +327,13 @@ void func_808919E8(EnNiw *this, GlobalContext *globalCtx) {
     //f32 posY;
     //f32 posZ;
     s16 s16tmp;
-    Vec3f newPos; // good spot?
+    Vec3f newPos;
     
-    newPos.y  = randPlusMinusPoint5Scaled(100.0f);
-    newPos.z  = randPlusMinusPoint5Scaled(100.0f);
+    newPos.y = randPlusMinusPoint5Scaled(100.0f);
+    newPos.z = randPlusMinusPoint5Scaled(100.0f);
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent( &this->actor, globalCtx)) {
-            // unkown when this is reached, its not cucco storm
+            // picked up
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->unkTimer250 = 30;
@@ -431,7 +427,7 @@ void EnNiw_Held(EnNiw *this, GlobalContext *globalCtx) {
     Vec3f vec3fcopy;
     s16 rotZ;
 
-    // again with the stupid double copy
+    // again with the stupid double copy?
     vec3fcopy = D_808934DC;
     if (this->unkTimer250 == 0) {
         this->unk29E = 2;
@@ -454,7 +450,7 @@ void EnNiw_Held(EnNiw *this, GlobalContext *globalCtx) {
             this->actor.shape.rot.x = rotZ;
         }
         
-    // if not regular? when does this go off?
+    // if not regular..? when does this go off?
     } else if (this->unk2BC.z != 0.0f) {
         this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
@@ -475,7 +471,7 @@ void EnNiw_Held(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, 2);
 }
 
-// action function: recently thrown, and hopping on the floor
+// action function: recently thrown, and also hopping on the floor
 void EnNiw_Thrown(EnNiw *this, GlobalContext *globalCtx) {
     if (this->unk2EC == 0) {
         if ((this->actor.bgCheckFlags & 1)) { // about to hit the floor
@@ -502,6 +498,7 @@ void EnNiw_Thrown(EnNiw *this, GlobalContext *globalCtx) {
     }
     
     if (Actor_HasParent( &this->actor, globalCtx)) {
+        // picked up again before could run off
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
@@ -530,6 +527,7 @@ void EnNiw_Swimming(EnNiw *this, GlobalContext *globalCtx) {
 
     this->actor.speedXZ = 2.0f;
     if ((this->actor.bgCheckFlags & 0x20)) {
+        // still touching water
         this->actor.gravity = 0.0f;
         if (this->actor.yDistToWater > 15.0f) {
             this->actor.world.pos.y = this->actor.world.pos.y + 2.0f;
@@ -555,8 +553,9 @@ void EnNiw_Swimming(EnNiw *this, GlobalContext *globalCtx) {
         } else {
             this->actor.speedXZ = 4.0f;
         }
-        // back on ground
+
         if ((this->actor.bgCheckFlags & 1)) {
+            // back on ground
             this->actor.gravity = -2.0f;
             this->unkTimer254 = 100;
             this->unkTimer250 = 0;
@@ -564,7 +563,6 @@ void EnNiw_Swimming(EnNiw *this, GlobalContext *globalCtx) {
             if ( ! this->niwStormActive) {
                 EnNiw_SetupRunning(this);
             } else {
-                // revert to attack spawning
                 this->unknownState28E = 3;
                 this->actionFunc = EnNiw_CuccoStorm;
             }
@@ -602,7 +600,7 @@ void EnNiw_Upset(EnNiw *this, GlobalContext *globalCtx) {
     func_80891320(this, globalCtx, this->unk29C);
 }
 
-// the long crow with head back before they desend
+// the long crow with head back before they descend
 void EnNiw_SetupCuccoStorm(EnNiw *this, GlobalContext *globalCtx) {
     f32 viewY;
 
@@ -651,7 +649,7 @@ void EnNiw_SetupRunning(EnNiw *this) {
           SkelAnime_GetFrameCount(&D_060000E8.common), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
-    this->actionFunc = func_808924B0;
+    this->actionFunc = func_808924B0; // running away
     this->actor.speedXZ = 4.0f;
 }
 
@@ -714,7 +712,6 @@ void EnNiw_LandBeforeIdle(EnNiw *this, GlobalContext* gCtx) {
     }
 }
 
-// EnNiw_UpdateCollider ? EnNiw_CheckHealth ?
 void EnNiw_CheckRage(EnNiw *this, GlobalContext *globalCtx) {
     if ((!this->niwStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
         if (( this->unknownState28E != 7) && (90000.0f != this->unk2BC.x)) {
@@ -786,7 +783,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 dist = 20.0f;
     s32 pad3;
 
-    this->unusedCounter28C++; // gets incremented here, reset to zero in one other place
+    this->unusedCounter28C++; // incremented here, reset to zero in one other place
 
     if (this->niwType == ENNIW_TYPE_UNK1) {
         this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.parent->shape.rot.y;
