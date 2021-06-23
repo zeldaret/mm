@@ -25,12 +25,10 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 s32 EnNiw_LimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
-extern s16 D_80893460;
-// s16 D_80893460 = 0x0;
-// u16 D_80893462 = 0x0; // padding?
+//extern s16 D_80893460;
+s16 D_80893460 = 0x0;
 
-extern ActorInit En_Niw_InitVars;
-/*
+//extern ActorInit En_Niw_InitVars;
 const ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
     ACTORCAT_PROP,
@@ -41,37 +39,30 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Destroy,
     (ActorFunc)EnNiw_Update,
     (ActorFunc)EnNiw_Draw,
-}; */
+};
 
-extern f32 D_80893484[];
-// static f32 D_80893484[] = { 5000.0f, -5000.0f, 5000.0f, 3000.0f, 4000.0f,};
+static f32 D_80893484[] = { 5000.0f, -5000.0f,};
+static f32 D_80893486[] = { 5000.0f, 3000.0f, 4000.0f,};
 
-extern ColliderCylinderInit D_80893498;
-/*
 static ColliderCylinderInit sCylinderInit = {
-    { 0x45, AT_NONE | AT_BOUNCED | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_NONE | AC_NO_DAMAGE, OC1_NONE, OC2_FIRST_ONLY |
-OC2_UNK2 | OC2_HIT_PLAYER, 0x9C, }, { 0x45, { 0x453B8000, 0x45, 0x7A }, { 0x0500093D, 0x20, 0x01 }, TOUCH_NONE |
-TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, }, { 0, 0, 0, { 0, -2097, -1 } },
-}; */
+    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 15, 25, 4, { 0, 0, 0 } },
+};
 
-extern Vec3f D_808934C4;
-// static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
 
-extern InitChainEntry D_808934D0;
-/*
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
-}; */
+};
 
-extern Vec3f D_808934DC;
-// static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
 
-extern u32 D_808934E8;
-// static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
 
-// static s32 padding3[] = {0x00000000, 0x00000000, 0x00000000, };
+static s32 pad = 0;
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
@@ -84,8 +75,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->unk2BC, &D_Temp);
 
     this->niwType = this->actor.params;
-    // Actor_ProcessInitChain(&this->actor, &sInitChain);
-    Actor_ProcessInitChain(&this->actor, &D_808934D0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
 
     // ! @ BUG: I think this is supposed to be if (EnNiwType == value)
     //   but because all cuccos in the game are type 0xFFFF -> 0, it got optimized out
@@ -116,8 +106,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = 0xFF;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
-        // Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80893498);
+         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
     // never used in game, but maybe meant to be used with a cutscene or switching scenes?
@@ -268,10 +257,11 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
+// test
 void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
     f32 phi_f2;
     f32 targetRotY;
-    f32* D_8089348CPtr = &D_80893484[2];
+    f32* D_8089348CPtr = D_80893486;
 
     if (this->unkTimer250 == 0) {
         this->unkTimer250 = 3;
@@ -316,9 +306,6 @@ void EnNiw_SetupIdle(EnNiw* this) {
 // non-matching: stack offset and regalloc
 // EnNiw_Idle
 void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
-    // f32 posX;
-    // f32 posY;
-    // f32 posZ;
     s16 s16tmp;
     Vec3f newPos;
 
@@ -455,8 +442,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->niwType = ENNIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-        // Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80893498);
+         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= 0x1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
