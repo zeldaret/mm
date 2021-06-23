@@ -640,9 +640,9 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
     if (!actor->parent) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 

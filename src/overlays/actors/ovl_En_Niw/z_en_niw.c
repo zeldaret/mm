@@ -819,7 +819,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(&this->actor, this->unk308);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 31);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
     if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
         // if cucco is off the map?
@@ -883,8 +883,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     } else {
 
-        // player->invincibilityTimer
-        if ((this->niwStormActive) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->unkD5C == 0)) {
+        if ((this->niwStormActive) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
             func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
 

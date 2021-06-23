@@ -274,7 +274,7 @@ typedef struct {
     /* 0xCC4 */ MtxF mf_CC4;
     /* 0xD04 */ MtxF unkD04;
     /* 0xD44 */ UNK_TYPE1 padD44[0x18];
-    /* 0xD5C */ s8 unkD5C;
+    /* 0xD5C */ s8 invincibilityTimer;
     /* 0xD60 */ UNK_TYPE1 padD60[0x1B];
 } ActorPlayer; // size = 0xD78
 
