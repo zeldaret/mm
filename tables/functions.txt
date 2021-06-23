@@ -1183,7 +1183,7 @@
     0x800CD834:("func_800CD834",),
     0x800CDA14:("func_800CDA14",),
     0x800CDB6C:("func_800CDB6C",),
-    0x800CDE6C:("func_800CDE6C",),
+    0x800CDE6C:("Camera_CalcAtForLockOn",),
     0x800CE2B8:("func_800CE2B8",),
     0x800CE5E0:("Camera_CalcAtForHorse",),
     0x800CE79C:("func_800CE79C",),
