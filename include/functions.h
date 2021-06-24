@@ -1976,7 +1976,7 @@ void func_8010C530(Vec3f* arg0, VecSph* arg1);
 // void func_8010C574(void);
 s32 func_8010C6C8(VecSph* arg0, Vec3f* arg1);
 // void func_8010C710(void);
-// void func_8010C764(void);
+s32 func_8010C764(VecSph* arg0, Vec3f* arg1, Vec3f* arg2);
 s32 func_8010C7B8(Vec3f* pos, Vec3f* arg1, VecSph* arg2);
 // void func_8010C838(void);
 // void func_8010C8C8(void);

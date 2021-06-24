@@ -275,22 +275,28 @@ typedef struct {
     /* 0x0A */ s16 timer3;
 } DoorParams; // size = 0xC
 
-
-
-
+typedef struct {
+    /* 0x00 */ f32 unk_00; // yPos
+    /* 0x04 */ f32 unk_04; // xzSpeed
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A; // angle
+    /* 0x0C */ s16 unk_0C; // flags (May be s32)
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ f32 unk_10; // set to float
+} Normal1Anim;
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
-    /* 0x28 */ // Normal1Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22; // interfaceFlags
+    /* 0x24 */ Normal1Anim anim;
 } Normal1; // 10
 
 typedef struct {
@@ -577,6 +583,12 @@ typedef struct {
     s16 unk_64;
     s16 unk_66;
 } UnkStruct_D801EDC30; // size = 0x68
+
+typedef struct {
+    s32 unk_00;
+    char unk_04[0x20];
+    Vec3f unk_24;
+} UnkStruct_D801ED920; // size = ??
 
 typedef struct Camera {
     /* 0x000 */ char paramData[0x50];
