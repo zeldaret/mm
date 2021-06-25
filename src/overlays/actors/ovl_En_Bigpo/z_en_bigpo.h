@@ -58,8 +58,6 @@ typedef enum EnBigpoType {
   /* 5 */ ENBIGPO_UNK5,
 };
 
-extern const ActorInit En_Bigpo_InitVars;
-
 #define FIRSTENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
 
 #endif // Z_EN_BIGPO_H

@@ -92,6 +92,9 @@ extern Gfx D_060042C8;
 extern Gfx D_060043F8;
 extern Gfx D_0407D590; // called in En_Light too, so probably the fire flame
 
+extern const ActorInit En_Bigpo_InitVars;
+
+/*
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,
@@ -102,41 +105,48 @@ const ActorInit En_Bigpo_InitVars = {
     (ActorFunc)EnBigpo_Destroy,
     (ActorFunc)EnBigpo_Update,
     (ActorFunc)NULL,
-};
+}; */
 
 // cannot be renamed until Init matches
-static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
+extern ColliderCylinderInit D_80B65010;
+/* static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 35, 100, 10, { 0, 0, 0 } },
-};
+}; */
 
+extern CollisionCheckInfoInit D_80B6503C;
 //static CollisionCheckInfoInit D_80B6503C = { 0x0A000023, 0x00643200};
-static u32 D_80B6503C[] = { 0x0A000023, 0x00643200};
+//static u32 D_80B6503C[] = { 0x0A000023, 0x00643200};
 
-static DamageTable D_80B65044 = {
+extern DamageTable D_80B65044;
+/* static DamageTable D_80B65044 = {
     0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0xF0, 0x01, 0x01, 0x00, 0x01, 0x01, 0x42, 0x01, 0x01, 
     0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
-};
+}; */
 
-static InitChainEntry D_80B65064[] = { //sInitChain
+static InitChainEntry D_80B65064;
+/* static InitChainEntry D_80B65064[] = { //sInitChain
     ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
-};
+}; */
 
-static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
+extern Vec3f D_80B6506C;
+//static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
 
-static u8 D_80B65078[] = {
+extern u8 D_80B65078;
+/* static u8 D_80B65078[] = {
     0xFF, 0x04, 0xFF, 0x00, 
     0xFF, 0x01, 0xFF, 0x02, 
     0x05, 0x03, 0x00, 0x00, 
-};
+}; */
 
-static Vec3f D_80B65084[] = {
+extern Vec3f D_80B65084;
+/* static Vec3f D_80B65084[] = {
     { 2000.0f, 4000.0f, 0.0f,},
     {-1000.0f, 1500.0f, -1000.0f,},
     {-1000.0f, 1500.0f, 2000.0f,},
-};
+}; */
 
 #ifdef NON_MATCHING
 // non-matching: some instructions out of order but looks like it should be equiv
@@ -1301,47 +1311,39 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
 #endif
 
-// non-standard draw func
-#ifdef NON_EQUIVELENT
-// non-equiv: lots of issues, biggest issue area: SkelAnime_Draw2
 // used if enough fires, for main po?
 void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
-    s32 pad;
     Gfx* dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     
-    // fully visible OR fully transparent
     if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
+        // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
-
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-
         gSPSegment(dispHead + 1, 0x0C, &D_801AEFA0);
-
         gSPSegment(dispHead + 2, 0x08, 
             Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g,
                          this->mainColor.b, this->mainColor.a));
-
-        dispHead = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+        POLY_OPA_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                     func_80B641E8, func_80B64240, &this->actor, dispHead + 3);
 
     } else {
+        dispHead = POLY_XLU_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-
         gSPSegment(dispHead + 1, 0x0C, &D_801AEF88);
-
         gSPSegment(dispHead + 2, 0x08, 
             Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g,
                          this->mainColor.b, this->mainColor.a));
-
-        dispHead = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+        POLY_XLU_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                     func_80B641E8, func_80B64240, &this->actor, dispHead + 3);
     }
+
     func_800BE680(globalCtx, &this->actor, &this->unk224, 9,
          this->actor.scale.x * 71.428566f * this->unk220, 0, this->unk21C, 0x14);
-    Matrix_Put(this->drawMtxF);
+
+    SysMatrix_SetCurrentState(&this->drawMtxF);
     func_80B64880(&this->actor, globalCtx);
     if (this->actionFunc == func_80B61F04 ) {
         func_80B64B08(&this->actor, globalCtx);
@@ -1349,10 +1351,6 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
   
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64470.asm")
-#endif
-
 
 // draw func
 void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
@@ -1378,7 +1376,8 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 
     Matrix_RotateY((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 1);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, 
+        Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_XLU_DISP++, &D_06001BB0);
 
