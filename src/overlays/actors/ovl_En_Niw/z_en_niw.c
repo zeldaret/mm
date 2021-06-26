@@ -498,7 +498,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
 
     // even if hitting water, keep calling for reinforcements
     // this should just be in update
-    if (this->niwStormActive) {
+    if (this->isStormActive) {
         EnNiw_SpawnAttackNiw(this, globalCtx); // spawn attack niw
     }
 
@@ -536,7 +536,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
             this->unkTimer254 = 100;
             this->unkTimer250 = 0;
             this->actor.velocity.y = 0.0f;
-            if (!this->niwStormActive) {
+            if (!this->isStormActive) {
                 EnNiw_SetupRunning(this);
             } else {
                 this->unknownState28E = 3;
@@ -686,7 +686,7 @@ void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
-    if ((!this->niwStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
+    if ((!this->isStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
         if ((this->unknownState28E != 7) && (90000.0f != this->unk2BC.x)) {
             this->unkTimer260 = 10;
             this->sfxTimer1 = 30;
@@ -719,7 +719,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->unk264[6] = 0.0f;
                 this->unk264[5] = 0.0f;
                 this->unk264[7] = 0.0f;
-                this->niwStormActive = true;
+                this->isStormActive = true;
                 this->actionFunc = EnNiw_Trigger;
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
@@ -853,7 +853,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->limbFRot = 0.0f;
 
         // clang-format off
-        this->niwStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->unk29A = this->unk29C = 0;
+        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->unk29A = this->unk29C = 0;
         // clang-format on
 
         for (i = 0; i < 10; i++) {
@@ -861,7 +861,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         this->unknownState28E = 8;
-        this->niwStormActive = false;
+        this->isStormActive = false;
         this->actionFunc = EnNiw_LandBeforeIdle;
         return; // still required even with the else/else
 
@@ -879,7 +879,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     } else {
 
-        if (this->niwStormActive && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
+        if (this->isStormActive && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
             func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
 
@@ -899,7 +899,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        if (!this->niwStormActive) {
+        if (!this->isStormActive) {
             if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -951,8 +951,8 @@ void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 s
     EnNiwFeather* feather = this->feathers;
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
-        if (feather->enabled == false) {
-            feather->enabled = true;
+        if (feather->isEnabled == false) {
+            feather->isEnabled = true;
             feather->pos = *pos;
             feather->vel = *vel;
             feather->accel = *accel;
@@ -971,7 +971,7 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
     s16 i;
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
-        if (feather->enabled) {
+        if (feather->isEnabled) {
             feather->timer++;
             feather->pos.x += feather->vel.x;
             feather->pos.y += feather->vel.y;
@@ -979,7 +979,7 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
             feather->vel.x += feather->accel.x;
             feather->vel.y += feather->accel.y;
             feather->vel.z += feather->accel.z;
-            if (feather->enabled == true) {
+            if (feather->isEnabled == true) {
                 feather->zRotStart++;
                 Math_ApproachF(&feather->vel.x, 0.0f, 1.0f, featherVelocityGoal);
                 Math_ApproachF(&feather->vel.z, 0.0f, 1.0f, featherVelocityGoal);
@@ -990,7 +990,7 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
                 feather->zRot = Math_SinS(feather->zRotStart * 0xBB8) * M_PI * 0.2f;
 
                 if (feather->life < feather->timer) {
-                    feather->enabled = false;
+                    feather->isEnabled = false;
                 }
             }
         }
