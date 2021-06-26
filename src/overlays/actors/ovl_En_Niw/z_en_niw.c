@@ -98,7 +98,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // size dependant on gamedata? beta plans to feed a cucco as a pet/quest?
     if (this->niwType == ENNIW_TYPE_UNK1) {
-        Actor_SetScale(&this->actor, (gGameInfo->data[2486] / 10000.0f) + 0.004f);
+        Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
     }
 
     // random health between 10-20
