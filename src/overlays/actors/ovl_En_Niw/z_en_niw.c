@@ -795,7 +795,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk29E != 0) {
-        featherCount = 20;
+        featherCount = ENNIW_FEATHERCOUNT;
         if (this->unk29E == 2) {
             featherCount = 4;
         }
@@ -1045,7 +1045,7 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->feathers); i++) {
         if (this->feathers[i].enabled == true) {
             if (flag == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);

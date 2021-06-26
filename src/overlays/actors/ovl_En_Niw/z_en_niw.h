@@ -23,6 +23,7 @@ typedef struct {
 } EnNiwFeather; // size = 0x38
 
 #define ENNIW_LIMBCOUNT 16
+#define ENNIW_FEATHERCOUNT 20
 
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
@@ -78,7 +79,7 @@ typedef struct EnNiw {
     /* 0x308 */ f32 unk308; // actor height?
     /* 0x30C */ s32 pad30C;
     /* 0x310 */ ColliderCylinder collider;
-    /* 0x35C */ EnNiwFeather feathers[0x14];
+    /* 0x35C */ EnNiwFeather feathers[ENNIW_FEATHERCOUNT];
 
 } EnNiw; // size = 0x7BC
 
