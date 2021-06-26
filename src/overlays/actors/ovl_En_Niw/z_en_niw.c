@@ -415,10 +415,9 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->unkTimer250 = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
-    // casts req
-    this->actor.shape.rot.x = ((s16)randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.x;
-    this->actor.shape.rot.y = ((s16)randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.y;
-    this->actor.shape.rot.z = ((s16)randPlusMinusPoint5Scaled(5000.0f)) + this->actor.world.rot.z;
+    this->actor.shape.rot.x = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.x;
+    this->actor.shape.rot.y = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.y;
+    this->actor.shape.rot.z = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.z;
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasNoParent(&this->actor, globalCtx)) {
             this->actor.shape.rot.z = 0;
