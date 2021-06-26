@@ -22,13 +22,13 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx); // draw feather
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-s32 EnNiw_LimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
+s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
-//extern s16 D_80893460;
-s16 D_80893460 = 0x0;
+// turned on during cucco storm, but not read by anything?
+// maybe read by En_Attack_Niw
+s16 D_80893460 = false;
 
-//extern ActorInit En_Niw_InitVars;
 const ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
     ACTORCAT_PROP,
@@ -145,7 +145,7 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2) {
         }
         this->unk292 += 1;
         this->unkTimer24C = 3;
-        if ((this->unk292 & 1) == 0) {
+        if ((this->unk292 % 2) == 0) {
             this->unk264[0] = 0.0f;
             if (arg2 == 0) {
                 this->unkTimer24C = Rand_ZeroFloat(30.0f);
@@ -238,21 +238,19 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     Vec3f newNiwPos;
     Actor* attackNiw;
 
-    if (this->unkTimer252 == 0) {
-        if (this->unk290 < 7) {
-            xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-            yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-            zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
-            newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
-            newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
-            newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
-            attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ATTACK_NIW,
-                                              newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
+    if ((this->unkTimer252 == 0) && (this->unk290 < 7)) {
+        xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
+        yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
+        zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
+        newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
+        newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
+        attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ATTACK_NIW,
+                                          newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
 
-            if (attackNiw) {
-                this->unk290++;
-                this->unkTimer252 = 10;
-            }
+        if (attackNiw) {
+            this->unk290++;
+            this->unkTimer252 = 10;
         }
     }
 }
@@ -279,13 +277,11 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
     } else {
         phi_f2 = -D_8089348CPtr[arg2];
     }
-    if (arg2 == 1) {
-        if ((this->unkTimer254 == 0) || ((this->actor.bgCheckFlags & 8))) {
-            this->unkTimer254 = 150;
-            if (this->yawTimer == 0) {
-                this->yawTimer = 70;
-                this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
-            }
+    if (arg2 == 1 && (this->unkTimer254 == 0 || (this->actor.bgCheckFlags & 8))) {
+        this->unkTimer254 = 150;
+        if (this->yawTimer == 0) {
+            this->yawTimer = 70;
+            this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
         }
     }
     targetRotY = this->yawTowardsPlayer + phi_f2;
@@ -340,7 +336,8 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
     if ((this->unkTimer252 == 0) && (this->unkTimer250 == 0)) {
         this->unk298++;
 
-        if (this->unk298 >= 8) {
+        //if (this->unk298 >= 8) {
+        if (this->unk298 > 7) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
             this->unk298 = Rand_ZeroFloat(3.99000000954f);
             // (3.99..) is loaded into f12 for rand_zero, but f12 never released
@@ -485,7 +482,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_Held;
         this->actor.speedXZ = 0.0f;
     } else {
-        if (this->unkTimer252 >= 6) {
+        if (this->unkTimer252 > 5) {
             func_800B8BB0(&this->actor, globalCtx);
         }
         func_80891320(this, globalCtx, 2);
@@ -584,9 +581,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
     if (this->unkTimer252 == 40) {
         viewY = 14000.0f;
         this->unk264[0] = 10000.0f;
-        this->unk264[7] = viewY;
-        if (0) {}
-        this->unk264[5] = viewY;
+        this->unk264[7] = this->unk264[5] = viewY;
         this->unk264[6] = 0.0f;
         this->unk264[8] = 0.0f;
         this->unk264[1] = 0.0f;
@@ -687,7 +682,8 @@ void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
 
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
     if ((!this->isStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
-        if ((this->unknownState28E != 7) && (90000.0f != this->unk2BC.x)) {
+        //if ((this->unknownState28E != 7) && (90000.0f != this->unk2BC.x)) {
+        if ((this->unknownState28E != 7) && (this->unk2BC.x != 90000.0f)) {
             this->unkTimer260 = 10;
             this->sfxTimer1 = 30;
             this->unk29E = 1;
@@ -704,10 +700,10 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->actor.colChkInfo.health--;
             }
 
-            if ((D_80893460 == 0) && (this->actor.colChkInfo.health == 0)) {
+            if ((! D_80893460) && (this->actor.colChkInfo.health == 0)) {
                 // now you've done it
                 this->unkTimer254 = 100;
-                D_80893460 = 1;
+                D_80893460 = true;
                 this->unk298 = 0;
                 this->sfxTimer1 = 10000;
                 this->unk2A4.x = this->unk2B0.x = this->actor.world.pos.x;
