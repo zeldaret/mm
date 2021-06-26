@@ -339,7 +339,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unkTimer252 == 0) && (this->unkTimer250 == 0)) {
-        this->unk298 += 1;
+        this->unk298++;
 
         if (this->unk298 >= 8) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
