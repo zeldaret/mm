@@ -508,7 +508,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
         // still touching water
         this->actor.gravity = 0.0f;
         if (this->actor.yDistToWater > 15.0f) {
-            this->actor.world.pos.y = this->actor.world.pos.y + 2.0f;
+            this->actor.world.pos.y += 2.0f;
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
