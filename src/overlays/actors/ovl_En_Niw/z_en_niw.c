@@ -153,7 +153,7 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2) {
         }
     }
     if (this->unkTimer24E == 0) {
-        this->unk296 += 1;
+        this->unk296++;
         this->unk296 &= 1;
         switch (arg2) {
             case 0:
@@ -257,7 +257,6 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-// test
 void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
     f32 phi_f2;
     f32 targetRotY;
@@ -365,7 +364,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
 
         } else {
             this->unkTimer250 = 4;
-            if ((this->actor.bgCheckFlags & 1)) {
+            if (this->actor.bgCheckFlags & 1) {
                 this->actor.speedXZ = 0.0f;
                 this->actor.velocity.y = 3.5f;
             }
@@ -441,7 +440,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->niwType = ENNIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit );
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= 0x1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
@@ -452,7 +451,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
 // action function: recently thrown, and also hopping on the floor
 void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
     if (this->unk2EC == 0) {
-        if ((this->actor.bgCheckFlags & 1)) { // about to hit the floor
+        if (this->actor.bgCheckFlags & 1) {
             this->unk2EC = 1;
             this->unkTimer252 = 80; // hop timer
             this->actor.speedXZ = 0.0f;
@@ -461,7 +460,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
             return; // wait until back on floor
         }
     } else {
-        if ((this->actor.bgCheckFlags & 1)) { // about to hit the floor
+        if (this->actor.bgCheckFlags & 1) {
             this->sfxTimer1 = 0;
             this->actor.velocity.y = 4.0f; // vertical hop
             this->unk29E = 1;
@@ -517,7 +516,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
 
             EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
         }
-        if ((this->actor.bgCheckFlags & 8) != 0) {
+        if (this->actor.bgCheckFlags & 8) {
             this->actor.velocity.y = 10.0f;
             this->actor.speedXZ = 1.0f;
         }
@@ -532,8 +531,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 4.0f;
         }
 
-        if ((this->actor.bgCheckFlags & 1)) {
-            // back on ground
+        if (this->actor.bgCheckFlags & 1) {
             this->actor.gravity = -2.0f;
             this->unkTimer254 = 100;
             this->unkTimer250 = 0;
@@ -681,8 +679,8 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
 #endif
 
 // check if on the ground after running, once on the ground, start idling
-void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* gCtx) {
-    if ((this->actor.bgCheckFlags & 1)) { // hit floor
+void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
+    if (this->actor.bgCheckFlags & 1) {
         EnNiw_SetupIdle(this);
     }
 }
@@ -699,7 +697,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
             EnNiw_SetupRunning(this);
         }
 
-        if ((this->collider.base.acFlags & AC_HIT)) {
+        if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             // health gets used as a hit counter until cucco storm
             if (this->actor.colChkInfo.health > 0) {
@@ -773,7 +771,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk29E == 2) {
             featherCount = 4;
         }
-        for (i = 0; i < featherCount; ++i) {
+        for (i = 0; i < featherCount; i++) {
             pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
             pos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
             pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
@@ -858,7 +856,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->niwStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->unk29A = this->unk29C = 0;
         // clang-format on
 
-        for (i = 0; i < 0xA; ++i) {
+        for (i = 0; i < 10; i++) {
             this->unk264[i] = 0.0f;
         }
 
@@ -867,7 +865,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_LandBeforeIdle;
         return; // still required even with the else/else
 
-    } else if (((this->actor.bgCheckFlags & 0x20)) && (this->actor.yDistToWater > 15.0f) &&
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f) &&
                (this->unknownState28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
@@ -881,7 +879,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     } else {
 
-        if ((this->niwStormActive) && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
+        if (this->niwStormActive && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
             func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
 
@@ -916,22 +914,22 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* gCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor) {
+s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     EnNiw* this = (EnNiw*)actor;
 
     // float to s16 casts req
-    if (limbIndex == 0xD) {
+    if (limbIndex == 13) {
         rot->y += (s16)this->limbDRot;
     }
-    if (limbIndex == 0xF) {
+    if (limbIndex == 15) {
         rot->y += (s16)this->limbFRot;
     }
-    if (limbIndex == 0xB) {
+    if (limbIndex == 11) {
         rot->x += (s16)this->limbBRotx;
         rot->y += (s16)this->limbBRoty;
         rot->z += (s16)this->limbBRotz;
     }
-    if (limbIndex == 0x7) {
+    if (limbIndex == 7) {
         rot->x += (s16)this->limb7Rotx;
         rot->y += (s16)this->limb7Roty;
         rot->z += (s16)this->limb7Rotz;

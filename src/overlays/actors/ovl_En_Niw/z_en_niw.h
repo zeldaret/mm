@@ -22,7 +22,7 @@ typedef struct {
     /* 0x0034 */ u8 timer;
 } EnNiwFeather; // size = 0x38
 
-#define ENNIW_LIMBCOUNT 0x10
+#define ENNIW_LIMBCOUNT 16
 
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
