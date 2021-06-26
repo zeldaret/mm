@@ -11,7 +11,7 @@ typedef struct {
     // in OOT this is "type" and there is one instance of an if
     //  statement specifying `if (true) if (enabled == 1)`
     //  so in beta there might have been a third value
-    /* 0x0000 */ u8 enabled;
+    /* 0x0000 */ u8 isEnabled;
     /* 0x0004 */ Vec3f pos;
     /* 0x0010 */ Vec3f vel;
     /* 0x001C */ Vec3f accel;
