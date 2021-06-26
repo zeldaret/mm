@@ -887,7 +887,7 @@ void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
 // void func_800BBC20(void);
-// void func_800BBCEC(void);
+// void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
 // void func_800BBDAC(GlobalContext* globalCtx, UNK_PTR param_2, UNK_PTR param_3, f32 param_4, UNK_TYPE4 param_5, f32 param_6, s16 param_7, s16 param_8, u8 param_9);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
@@ -904,7 +904,7 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4
 // void func_800BC848(void);
 // void func_800BC8B8(void);
 // void func_800BCB50(void);
-void func_800BCB70(Actor* actor, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
+void func_800BCB70(Actor* actor, s16 arg1, u8 arg2, s16 arg3, u8 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 UNK_RET func_800BCCDC(Vec3s* points, u8 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
