@@ -493,7 +493,6 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-// EnNiw_Swimming
 // action func: swimming and flying away after swimming
 void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     Vec3f ripplePos;
