@@ -504,7 +504,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     }
 
     this->actor.speedXZ = 2.0f;
-    if ((this->actor.bgCheckFlags & 0x20)) {
+    if (this->actor.bgCheckFlags & 0x20) {
         // still touching water
         this->actor.gravity = 0.0f;
         if (this->actor.yDistToWater > 15.0f) {
