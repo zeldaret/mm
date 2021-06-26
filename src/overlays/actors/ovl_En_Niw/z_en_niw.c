@@ -250,7 +250,7 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
                                               newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
 
             if (attackNiw) {
-                this->unk290 += 1;
+                this->unk290++;
                 this->unkTimer252 = 10;
             }
         }
