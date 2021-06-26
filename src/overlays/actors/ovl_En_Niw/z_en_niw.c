@@ -41,16 +41,41 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Draw,
 };
 
-static f32 D_80893484[] = { 5000.0f, -5000.0f,};
-static f32 D_80893486[] = { 5000.0f, 3000.0f, 4000.0f,};
+static f32 D_80893484[] = {
+    5000.0f,
+    -5000.0f,
+};
+static f32 D_80893486[] = {
+    5000.0f,
+    3000.0f,
+    4000.0f,
+};
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_HIT5,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 15, 25, 4, { 0, 0, 0 } },
 };
 
-static Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934C4 = {
+    90000.0f,
+    90000.0f,
+    90000.0f,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
@@ -58,21 +83,30 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
-static Vec3f D_808934DC = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934DC = {
+    90000.0f,
+    90000.0f,
+    90000.0f,
+};
 
-static Vec3f D_808934E8 = { 90000.0f, 90000.0f, 90000.0f, };
+static Vec3f D_808934E8 = {
+    90000.0f,
+    90000.0f,
+    90000.0f,
+};
 
 static s32 pad = 0;
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
-    Vec3f D_Temp = D_808934C4;
+    Vec3f dTemp = D_808934C4;
+    // static Vec3f dTemp = { 90000.0f, 90000.0f, 90000.0f, };
 
     if (this->actor.params < 0) { // all neg values become zero
         this->actor.params = ENNIW_TYPE_REGULAR;
     }
 
-    Math_Vec3f_Copy(&this->unk2BC, &D_Temp);
+    Math_Vec3f_Copy(&this->unk2BC, &dTemp);
 
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -96,7 +130,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk308 = 10.0f;
     Actor_SetScale(&this->actor, 0.01f);
 
-    // size dependant on gamedata? beta plans to feed a cucco as a pet/quest?
+    // size dependant on REG? beta plans to feed a cucco as a pet/quest?
     if (this->niwType == ENNIW_TYPE_UNK1) {
         Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
     }
@@ -106,7 +140,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
-         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
     // never used in game, but maybe meant to be used with a cutscene or switching scenes?
@@ -336,7 +370,6 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
     if ((this->unkTimer252 == 0) && (this->unkTimer250 == 0)) {
         this->unk298++;
 
-        //if (this->unk298 >= 8) {
         if (this->unk298 > 7) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
             this->unk298 = Rand_ZeroFloat(3.99000000954f);
@@ -437,7 +470,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->niwType = ENNIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor,  &sCylinderInit);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= 0x1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
@@ -519,7 +552,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
         }
     } else {
         this->actor.gravity = -2.0f;
-        if ((this->actor.bgCheckFlags & 8)) {
+        if (this->actor.bgCheckFlags & 8) {
             // has hit a wall
             this->actor.velocity.y = 10.0f; // to the moon
             this->actor.speedXZ = 1.0f;
@@ -682,7 +715,6 @@ void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
 
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
     if ((!this->isStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
-        //if ((this->unknownState28E != 7) && (90000.0f != this->unk2BC.x)) {
         if ((this->unknownState28E != 7) && (this->unk2BC.x != 90000.0f)) {
             this->unkTimer260 = 10;
             this->sfxTimer1 = 30;
@@ -700,7 +732,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->actor.colChkInfo.health--;
             }
 
-            if ((! D_80893460) && (this->actor.colChkInfo.health == 0)) {
+            if ((!D_80893460) && (this->actor.colChkInfo.health == 0)) {
                 // now you've done it
                 this->unkTimer254 = 100;
                 D_80893460 = true;
@@ -874,7 +906,6 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_Swimming;
 
     } else {
-
         if (this->isStormActive && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
             func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
@@ -999,16 +1030,16 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
     // vanilla wants to load this early (and other values)
     //  but it needs to be stored in a s register not v/a
-    //EnNiwFeather* feathers = &this->feathers;
+    // EnNiwFeather* feathers = &this->feathers;
     u8 flag = 0;
-    
+
     // permuter thinks this might be int which makes sense...
     // but the end of the loop converts type, int reemoves it
-    //s16 i;
+    // s16 i;
     s32 i;
-  
-    if (globalCtx->state.gfxCtx){}
-    if (this->feathers){}
+
+    if (globalCtx->state.gfxCtx) {}
+    if (this->feathers) {}
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
@@ -1022,13 +1053,12 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            SysMatrix_InsertTranslation(this->feathers[i].pos.x,
-                   this->feathers[i].pos.y, this->feathers[i].pos.z, 0); 
+            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, 0);
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
             Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, 1);
             SysMatrix_InsertZRotation_f(this->feathers[i].zRot, 1);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
-      
+
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
