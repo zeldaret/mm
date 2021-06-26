@@ -241,16 +241,6 @@ typedef enum {
 } CameraFuncType;
 
 typedef struct {
-    /* 0x00 */ Vec3f collisionClosePoint;
-    /* 0x0C */ CollisionPoly* atEyePoly;
-    /* 0x10 */ f32 swingUpdateRate;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 swingUpdateRateTimer;
-} SwingAnimation; // size = 0x1C
-
-typedef struct {
     /* 0x0 */ s16 val;
     /* 0x2 */ s16 param;
 } CameraModeValue; // size = 0x4
@@ -324,32 +314,58 @@ typedef struct {
 } Normal3; // 9
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ // Normal0Anim anim;
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+} Normal0Anim;
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ Normal0Anim anim;
 } Normal0; // 9
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
-    /* 0x28 */ s32 unk_28;
-    /* 0x2C */ s32 unk_2C;
-    /* 0x30 */ // Parallel1Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+} Parallel1Anim;
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+    /* 0x28 */ Parallel1Anim anim;
 } Parallel1; // 12
 
 typedef struct {
@@ -538,15 +554,20 @@ typedef struct {
 } Demo0; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ // Special5Anim anim;
+    /* 0x00 */ s16 unk_00;
+} Special5Anim; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 pad;
+    /* 0x1C */ Special5Anim anim;
 } Special5; // 8
 
 typedef struct {
@@ -576,13 +597,13 @@ typedef struct {
 } CamColChk; // size = 0x28
 
 typedef struct {
-    Vec3f unk_00;
+    Vec3f unk_00; // collisionClosePoint
     CamColChk unk_0C;
     CamColChk unk_34;
-    VecSph unk_5C;
+    VecSph unk_5C; // (Not VecSph) swingUpdateRate - yaw - pitch
     s16 unk_64;
-    s16 unk_66;
-} UnkStruct_D801EDC30; // size = 0x68
+    s16 unk_66; // startSwingTimer
+} SwingAnimation; // size = 0x68
 
 typedef struct {
     s32 unk_00;
