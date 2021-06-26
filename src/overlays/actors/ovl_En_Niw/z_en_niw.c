@@ -1022,7 +1022,7 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 0x14; i++) {
+    for (i = 0; i < 20; i++) {
         if (this->feathers[i].enabled == true) {
             if (flag == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);
