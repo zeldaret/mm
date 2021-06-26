@@ -103,7 +103,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // random health between 10-20
     this->actor.colChkInfo.health = Rand_ZeroFloat(9.99f) + 10.0f;
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
          Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
