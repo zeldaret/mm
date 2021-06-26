@@ -360,7 +360,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
 
     s16tmp = 0;
     if (this->unkTimer252 != 0) {
-        if (Rand_ZeroFloat(3.99000000954f) < 1.0f) {
+        if (Rand_ZeroFloat(3.99f) < 1.0f) {
             this->unk2EA++;
             this->unk2EA &= 1;
         }
@@ -372,7 +372,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
 
         if (this->unk298 > 7) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
-            this->unk298 = Rand_ZeroFloat(3.99000000954f);
+            this->unk298 = Rand_ZeroFloat(3.99f);
             // (3.99..) is loaded into f12 for rand_zero, but f12 never released
             // b18:    jal     Rand_ZeroFloat              b18:    jal     Rand_ZeroFloat
             // b1c:    lwc1    $f12,%lo(D_80893554)(at)  i b1c:    lwc1    $f12,%lo(.rodata+0x54)(at)
