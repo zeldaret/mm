@@ -265,7 +265,7 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 
     if (this->unkTimer250 == 0) {
         this->unkTimer250 = 3;
-        if ((this->actor.bgCheckFlags & 1)) {
+        if (this->actor.bgCheckFlags & 1) {
             // hit floor
             this->actor.velocity.y = 3.5f; // hop up?
         }
