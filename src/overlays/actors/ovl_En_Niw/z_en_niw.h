@@ -53,7 +53,7 @@ typedef struct EnNiw {
     /* 0x29C */ s16 unk29A; // toggle timer for func_808917F8
     /* 0x29C */ u16 unk29C; // changed by EnNiw_Trigger
     /* 0x29E */ s16 unk29E;
-    /* 0x2A0 */ s16 niwStormActive; // bool
+    /* 0x2A0 */ s16 isStormActive;
     /* 0x2A2 */ s16 niwType;
     /* 0x2A4 */ Vec3f unk2A4; // this actors starting position?
     /* 0x2B0 */ Vec3f unk2B0; // this actors starting position? again?
