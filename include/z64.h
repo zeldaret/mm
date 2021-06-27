@@ -554,11 +554,9 @@ typedef struct {
 } GameStateOverlay; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ u8 unk0;
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ u16 unk2;
-    /* 0x04 */ Vec3f unk4;
-    /* 0x10 */ Vec3f unk10;
+    /* 0x00 */ u16 countdown;
+    /* 0x04 */ Vec3f originPos;
+    /* 0x10 */ Vec3f relativePos;
 } SoundSource; // size = 0x1C
 
 typedef struct {
@@ -1511,7 +1509,7 @@ struct GlobalContext {
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
     /* 0x01F74 */ CutsceneEntry* cutsceneList;
-    /* 0x01F78 */ SoundSource unk1F78[16];
+    /* 0x01F78 */ SoundSource soundSources[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
     /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
@@ -1519,7 +1517,7 @@ struct GlobalContext {
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
-    /* 0x16D30 */ PauseContext unk16D30;
+    /* 0x16D30 */ PauseContext pauseCtx;
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
