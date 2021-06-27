@@ -252,7 +252,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s32 unk0;
     /* 0x04 */ UNK_TYPE1 pad4[0x40];
-} GlobalContext17D98; // size = 0x44
+} UnusedGlobalContext17D98; // size = 0x44
 
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
@@ -564,7 +564,7 @@ typedef struct {
     /* 0x02 */ u16 unk2;
     /* 0x04 */ Vec3f unk4;
     /* 0x10 */ Vec3f unk10;
-} GlobalContext1F78; // size = 0x1C
+} SoundSource; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ OSContPad cur;
@@ -639,7 +639,7 @@ typedef struct {
     /* 0x21C */ f32 unk21C;
     /* 0x220 */ f32 unk220;
     /* 0x224 */ UNK_TYPE1 pad224[0xAC];
-} GlobalContext16D30; // size = 0x2D0
+} PauseContext; // size = 0x2D0
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1516,7 +1516,7 @@ struct GlobalContext {
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
     /* 0x01F74 */ CutsceneEntry* cutsceneList;
-    /* 0x01F78 */ GlobalContext1F78 unk1F78[16];
+    /* 0x01F78 */ SoundSource unk1F78[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
     /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
@@ -1524,7 +1524,7 @@ struct GlobalContext {
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
-    /* 0x16D30 */ GlobalContext16D30 unk16D30;
+    /* 0x16D30 */ PauseContext unk16D30;
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
