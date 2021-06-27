@@ -16,7 +16,6 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnSb_SetupWaitClosed(EnSb* this);
-
 void EnSb_Idle(EnSb* this, GlobalContext* globalCtx);
 void EnSb_Open(EnSb* this, GlobalContext* globalCtx);
 void EnSb_WaitOpen(EnSb* this, GlobalContext* globalCtx);
@@ -74,14 +73,6 @@ static Vec3f sFlamePosOffsets[] = {
     { 0.0f, 0.0f, -5.0f },
 };
 
-typedef enum {
-    /* 0x00 */ SHELLBLADE_OPEN,
-    /* 0x01 */ SHELLBLADE_WAIT_CLOSED,
-    /* 0x02 */ SHELLBLADE_WAIT_OPEN,
-    /* 0x03 */ SHELLBLADE_LUNGE,
-    /* 0x04 */ SHELLBLADE_BOUNCE
-} ShellbladeState;
-
 extern FlexSkeletonHeader D_06002BF0;
 extern AnimationHeader D_06000194;
 extern AnimationHeader D_0600004C;
@@ -100,7 +91,7 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
                      this->transitionDrawTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->isDead = 0;
+    this->isDead = false;
     this->actor.colChkInfo.mass = 0x5A;
     this->actor.shape.rot.y = 0;
     this->actor.speedXZ = 0.0f;
@@ -196,7 +187,7 @@ void EnSb_Idle(EnSb* this, GlobalContext* globalCtx) {
 
 void EnSb_Open(EnSb* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.animCurrentFrame;
-    
+
     if (SkelAnime_GetFrameCount(&D_06000194.common) <= currentFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
@@ -260,11 +251,9 @@ void EnSb_Lunge(EnSb* this, GlobalContext* globalCtx) {
 
 void EnSb_Bounce(EnSb* this, GlobalContext* globalCtx) {
     s32 pad;
-    f32 currentFrame;
-    f32 frameCount;
+    f32 currentFrame = currentFrame = this->skelAnime.animCurrentFrame;
+    f32 frameCount = frameCount = SkelAnime_GetFrameCount(&D_060000B4.common);
 
-    currentFrame = this->skelAnime.animCurrentFrame;
-    frameCount = SkelAnime_GetFrameCount(&D_060000B4.common);
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (currentFrame == frameCount) {
         if (this->bounceCounter != 0) {
@@ -307,9 +296,9 @@ void EnSb_ReturnToIdle(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
     Vec3f hitPoint;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         s32 hitPlayer = 0;
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.colChkInfo.damageEffect == 0xF) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
@@ -318,12 +307,12 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
                 hitPlayer = 1;
             }
         }
-        if (hitPlayer != 0) {
+        if (hitPlayer) {
             this->unk_252 = 0;
-            if (this->actor.draw != 0 && this->unk_253 == 0) {
+            if ((this->actor.draw != NULL) && (this->unk_253 == 0)) {
                 this->unk_253 = 1;
             }
-            this->isDead = 1;
+            this->isDead = true;
             func_800BBA88(globalCtx, &this->actor);
             func_800F0568(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
@@ -334,7 +323,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
         CollisionCheck_SpawnShieldParticlesMetal2(globalCtx, &hitPoint);
         return;
     }
-    if (this->collider.base.atFlags & 2) {
+    if (this->collider.base.atFlags & AT_HIT) {
         EnSb_SetupIdle(this, 1);
     }
 }
@@ -344,7 +333,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSb* this = THIS;
     ActorPlayer* player = PLAYER;
 
-    if (this->isDead != 0) {
+    if (this->isDead) {
         if (this->actor.yDistToWater > 0.0f) {
             this->actor.params = 4;
         } else {
@@ -358,7 +347,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
         func_800B78B8(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
         EnSb_UpdateDamage(this, globalCtx);
-        if (player->stateFlags1 & 0x08000000) {
+        if (player->stateFlags1 & 0x8000000) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->vulnerableTimer == 0) {
                 CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -398,7 +387,7 @@ void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.colorFilterTimer++;
         fireDecr = this->fireCount - 1;
         if ((fireDecr & 1) == 0) {
-            offset = &sFlamePosOffsets[(fireDecr & 3)];
+            offset = &sFlamePosOffsets[fireDecr & 3];
             flamePos.x = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.x + offset->x);
             flamePos.y = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.y + offset->y);
             flamePos.z = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.z + offset->z);

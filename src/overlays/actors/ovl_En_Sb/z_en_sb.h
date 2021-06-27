@@ -7,6 +7,14 @@ struct EnSb;
 
 typedef void (*EnSbActionFunc)(struct EnSb*, GlobalContext*);
 
+typedef enum {
+    /* 0x00 */ SHELLBLADE_OPEN,
+    /* 0x01 */ SHELLBLADE_WAIT_CLOSED,
+    /* 0x02 */ SHELLBLADE_WAIT_OPEN,
+    /* 0x03 */ SHELLBLADE_LUNGE,
+    /* 0x04 */ SHELLBLADE_BOUNCE
+} ShellbladeState;
+
 typedef struct EnSb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
