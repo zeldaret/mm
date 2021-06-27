@@ -1,5 +1,11 @@
 #include "z_en_niw.h"
 
+/* 
+ * File: z_en_niw.c 
+ * Overlay: ovl_En_Niw
+ * Description: Cucco (Chicken) (Japanese: Niwatori)
+ */ 
+
 #define FLAGS 0x00800010
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
