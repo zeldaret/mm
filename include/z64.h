@@ -249,11 +249,6 @@ typedef struct {
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
 
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ UNK_TYPE1 pad4[0x40];
-} UnusedGlobalContext17D98; // size = 0x44
-
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
     /* 0x004 */ Gfx* polyXluBuffer;
