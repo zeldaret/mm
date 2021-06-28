@@ -3889,9 +3889,9 @@ SECTIONS
     ovl_Bg_Icicle : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.text)
-        build/asm/overlays/ovl_Bg_Icicle_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.data)
         build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.rodata)
-        build/asm/overlays/ovl_Bg_Icicle_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
