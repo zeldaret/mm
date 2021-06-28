@@ -1031,23 +1031,23 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++) {
-        if (this->feathers[i].enabled == true) {
+        if (this->feathers[i].isEnabled == true) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, &D_060023B0);
+                gSPDisplayList(POLY_XLU_DISP++, D_060023B0);
 
                 flag++;
             }
 
-            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, 0);
+            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
-            Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, 1);
-            SysMatrix_InsertZRotation_f(this->feathers[i].zRot, 1);
-            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
+            Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, MTXMODE_APPLY);
+            SysMatrix_InsertZRotation_f(this->feathers[i].zRot, MTXMODE_APPLY);
+            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, &D_06002428);
+            gSPDisplayList(POLY_XLU_DISP++, D_06002428);
         }
     }
 
