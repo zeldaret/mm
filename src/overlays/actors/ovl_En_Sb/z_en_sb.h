@@ -29,8 +29,8 @@ typedef struct EnSb {
     /* 0x24C */ s16 vulnerableTimer;
     /* 0x24E */ s16 yawAngle;
     /* 0x250 */ s16 bounceCounter;
-    /* 0x252 */ u8 unk_252;
-    /* 0x252 */ u8 unk_253;
+    /* 0x252 */ u8 isPlayingEffect;
+    /* 0x253 */ u8 isDrawn;
 } EnSb; // size = 0x254
 
 extern const ActorInit En_Sb_InitVars;

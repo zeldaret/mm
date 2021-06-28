@@ -97,7 +97,7 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = -0.35f;
     this->fireCount = 0;
-    this->unk_252 = 0;
+    this->isPlayingEffect = 0;
     this->actor.velocity.y = -1.0f;
     Actor_SetScale(&this->actor, 0.006f);
     EnSb_SetupWaitClosed(this);
@@ -308,9 +308,9 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
             }
         }
         if (hitPlayer) {
-            this->unk_252 = 0;
-            if ((this->actor.draw != NULL) && (this->unk_253 == 0)) {
-                this->unk_253 = 1;
+            this->isPlayingEffect = 0;
+            if ((this->actor.draw != NULL) && (this->isDrawn == false)) {
+                this->isDrawn = true;
             }
             this->isDead = true;
             func_800BBA88(globalCtx, &this->actor);
@@ -362,13 +362,13 @@ void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     s8 phi_a2;
     EnSb* this = THIS;
 
-    if (this->unk_253 != 0) {
+    if (this->isDrawn != false) {
         if (limbIndex < 7) {
             phi_a2 = (this->actor.yDistToWater > 0) ? 4 : 1;
             func_800BBCEC(thisx, globalCtx, phi_a2, dList);
         }
         if (limbIndex == 6) {
-            this->unk_253 = 0;
+            this->isDrawn = false;
             this->actor.draw = NULL;
         }
     }
@@ -386,7 +386,7 @@ void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->fireCount != 0) {
         this->actor.colorFilterTimer++;
         fireDecr = this->fireCount - 1;
-        if ((fireDecr & 1) == 0) {
+        if (!(fireDecr & 1)) {
             offset = &sFlamePosOffsets[fireDecr & 3];
             flamePos.x = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.x + offset->x);
             flamePos.y = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.y + offset->y);
