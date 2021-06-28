@@ -5,9 +5,12 @@
 
 struct BgHakaTomb;
 
+typedef void (*BgHakaTombActionFunc)(struct BgHakaTomb*, GlobalContext*);
+
 typedef struct BgHakaTomb {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgHakaTombActionFunc actionFunc;
+    /* 0x160 */ s16 unk160[2];
 } BgHakaTomb; // size = 0x164
 
 extern const ActorInit Bg_Haka_Tomb_InitVars;

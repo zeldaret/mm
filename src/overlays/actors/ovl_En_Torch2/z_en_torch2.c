@@ -77,7 +77,7 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world, this->actor.shape.rot.y);
+    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos, this->actor.shape.rot.y);
     globalCtx->actorCtx.unk254[this->actor.params] = 0;
 }
 
