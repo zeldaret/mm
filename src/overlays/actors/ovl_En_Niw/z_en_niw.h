@@ -8,9 +8,6 @@ struct EnNiw;
 typedef void (*EnNiwActionFunc)(struct EnNiw*, GlobalContext*);
 
 typedef struct {
-    // in OOT this is "type" and there is one instance of an if
-    //  statement specifying `if (true) if (enabled == 1)`
-    //  so in beta there might have been a third value
     /* 0x0000 */ u8 isEnabled;
     /* 0x0004 */ Vec3f pos;
     /* 0x0010 */ Vec3f vel;
@@ -34,30 +31,29 @@ typedef struct EnNiw {
     /* 0x24C */ s16 unkTimer24C;
     /* 0x24E */ s16 unkTimer24E;
     /* 0x250 */ s16 unkTimer250;
-    // 252 is re-used, after thrown is used as a hop timer
     /* 0x252 */ s16 unkTimer252;
-    /* 0x254 */ s16 unkTimer254; // might be a running timer
+    /* 0x254 */ s16 unkTimer254;
     /* 0x256 */ s16 sfxTimer1; 
     /* 0x258 */ s16 flutterSfxTimer;
     /* 0x25A */ s16 unusedTimer25A;
     /* 0x25C */ s16 yawTimer; // every 70 frames rechecks yawToPlayer
     /* 0x25E */ s16 unusedTimer25E;
-    /* 0x260 */ s16 unkTimer260; // iframe hit timer?
+    /* 0x260 */ s16 unkTimer260;
     /* 0x264 */ f32 unk264[10]; 
-    /* 0x28C */ s16 unusedCounter28C; // todo: view in-game and see if it gets read out of actor? 
+    /* 0x28C */ s16 unusedCounter28C;
     /* 0x28E */ s16 unknownState28E;
-    /* 0x290 */ s16 unk290; // attack niw count? never decrements though?
-    /* 0x292 */ s16 unk292; // toggle timer
+    /* 0x290 */ s16 unk290;
+    /* 0x292 */ s16 unk292;
     /* 0x294 */ s16 pad294;
-    /* 0x296 */ s16 unk296; // toggle every other frame timer
+    /* 0x296 */ s16 unk296;
     /* 0x298 */ s16 unk298;
-    /* 0x29C */ s16 unk29A; // toggle timer for func_808917F8
-    /* 0x29C */ u16 unk29C; // changed by EnNiw_Trigger
+    /* 0x29C */ s16 unk29A;
+    /* 0x29C */ u16 unk29C;
     /* 0x29E */ s16 unk29E;
     /* 0x2A0 */ s16 isStormActive;
     /* 0x2A2 */ s16 niwType;
-    /* 0x2A4 */ Vec3f unk2A4; // this actors starting position?
-    /* 0x2B0 */ Vec3f unk2B0; // this actors starting position? again?
+    /* 0x2A4 */ Vec3f unk2A4;
+    /* 0x2B0 */ Vec3f unk2B0;
     /* 0x2BC */ Vec3f unk2BC;
     /* 0x2C8 */ f32 limb7Rotz;
     /* 0x2CC */ f32 limb7Roty;
@@ -68,15 +64,15 @@ typedef struct EnNiw {
     /* 0x2E0 */ f32 limbDRot;
     /* 0x2E4 */ f32 limbFRot;
     /* 0x2E8 */ s16 yawTowardsPlayer;
-    /* 0x2EA */ s16 unk2EA; // toggle timer used in update
-    /* 0x2EC */ s16 unk2EC; // some state, wings up?
+    /* 0x2EA */ s16 unk2EA;
+    /* 0x2EC */ s16 unk2EC;
     /* 0x2EE */ UNK_TYPE1  pad2EE[0x6];
     /* 0x2F4 */ f32 unusedFloat2F4;
     /* 0x2F8 */ f32 unusedFloat2F8;
     /* 0x2FC */ f32 unusedFloat2FC;
-    /* 0x300 */ f32 unk300; // some world position modifier? 
-    /* 0x304 */ f32 unk304; // similar nature to 300
-    /* 0x308 */ f32 unk308; // actor height?
+    /* 0x300 */ f32 unk300;
+    /* 0x304 */ f32 unk304;
+    /* 0x308 */ f32 unk308;
     /* 0x30C */ s32 pad30C;
     /* 0x310 */ ColliderCylinder collider;
     /* 0x35C */ EnNiwFeather feathers[ENNIW_FEATHERCOUNT];

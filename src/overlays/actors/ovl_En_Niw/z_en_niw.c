@@ -106,7 +106,6 @@ static s32 pad = 0;
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
     Vec3f dTemp = D_808934C4;
-    // static Vec3f dTemp = { 90000.0f, 90000.0f, 90000.0f, };
 
     if (this->actor.params < 0) { // all neg values become zero
         this->actor.params = ENNIW_TYPE_REGULAR;
@@ -117,14 +116,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    // ! @ BUG: I think this is supposed to be if (EnNiwType == value)
-    //   but because all cuccos in the game are type 0xFFFF -> 0, it got optimized out
-    // thats the only way this code makes sense:
-    // if all cuccos are meant to be targetable it would be a default flag
-    //   but one of the other types explicitly de-selects this flag anyway
-    if (1) {
-        this->actor.flags |= 0x1; // targetable ON
-    }
+    this->actor.flags |= 0x1; // targetable ON
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
@@ -136,7 +128,6 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk308 = 10.0f;
     Actor_SetScale(&this->actor, 0.01f);
 
-    // size dependant on REG? beta plans to feed a cucco as a pet/quest?
     if (this->niwType == ENNIW_TYPE_UNK1) {
         Actor_SetScale(&this->actor, (BREG(86) / 10000.0f) + 0.004f);
     }
@@ -149,7 +140,6 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
-    // never used in game, but maybe meant to be used with a cutscene or switching scenes?
     if (this->niwType == ENNIW_TYPE_UNK2) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
@@ -272,7 +262,7 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2) {
 }
 
 void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
-    f32 xView; // looks like Vec3f but couldn't get stack to allign
+    f32 xView;
     f32 yView;
     f32 zView;
     Vec3f newNiwPos;
@@ -442,11 +432,9 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
     Vec3f vec3fcopy;
     s16 rotZ;
 
-    // again with the double copy?
     vec3fcopy = D_808934DC;
     if (this->unkTimer250 == 0) {
         this->unk29E = 2;
-        // cast req
         this->unkTimer250 = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
@@ -463,10 +451,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
         }
-
-    } else if (this->unk2BC.z != 0.0f) {
-        // if not regular..? when does this go off?
-        this->actor.shape.rot.z = 0;
+    } else if (this->unk2BC.z != 0.0f) { this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
         this->actor.velocity.y = 8.0f;
         this->actor.speedXZ = 4.0f;
@@ -584,10 +569,6 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
-    // ! @ BUG: I believe multiple values got optimized out
-    // value has to be a temp to match (v0) but there is only one value
-    // explained by there being code where value got assigned with multiple conditions
-    // suspicious: in vanilla there is only one cucco variant (0xFFFF)
     s32 value;
     if (1) {
         value = 1;
@@ -936,7 +917,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 
-                if (globalCtx) {} // req to match
+                if (globalCtx) {}
 
                 if ((this->unknownState28E != 4) && (this->unknownState28E != 5)) {
                     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
@@ -949,7 +930,6 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     EnNiw* this = (EnNiw*)actor;
 
-    // float to s16 casts req
     if (limbIndex == 13) {
         rot->y += (s16)this->limbDRot;
     }
