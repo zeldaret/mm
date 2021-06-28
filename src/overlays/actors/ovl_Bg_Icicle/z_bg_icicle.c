@@ -66,7 +66,6 @@ extern CollisionHeader D_06000294;
 void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;
-
     s32 paramsHigh;
     s32 paramsMid;
 
@@ -80,7 +79,7 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     paramsHigh = (thisx->params >> 8) & 0xFF;
     paramsMid = (thisx->params >> 2) & 0x3F;
     this->unk_161 = (thisx->params >> 8) & 0xFF;
-    thisx->params &= 3;
+    thisx->params = thisx->params & 3;
 
     if (thisx->params == ICICLE_STALAGMITE_RANDOM_DROP || thisx->params == ICICLE_STALAGMITE_FIXED_DROP) {
         this->unk_160 = ((thisx->params == ICICLE_STALAGMITE_RANDOM_DROP) ? paramsHigh : paramsMid);
@@ -108,7 +107,7 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    func_800F0568(globalCtx, &this->dyna.actor.world.pos, 30, 0x28CB);
+    func_800F0568(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
@@ -145,7 +144,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Audio_PlayActorSound2(this, 0x28D4);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {
