@@ -46,7 +46,6 @@ extern Gfx D_06001A20[];
 extern Gfx D_06001980[];
 extern CollisionHeader D_06003CD0;
 
-
 void func_80B3C260(ObjGhaka* this) {
     if (gSaveContext.weekEventReg[20] & 0x20) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
@@ -101,8 +100,8 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
-            globalCtx->msgCtx.unk11F23 = 0x43;
-            globalCtx->msgCtx.unk12024 = 4;
+            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.unk12023 = 4;
             func_80B3C260(this);
         }
         // Could be fake, but helps match
@@ -121,8 +120,8 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
                     break;
                 case 2:
                     func_8019F230();
-                    globalCtx->msgCtx.unk11F23 = 0x43;
-                    globalCtx->msgCtx.unk12024 = 4;
+                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.unk12023 = 4;
                     func_80B3C260(this);
             }
         }
