@@ -80,7 +80,6 @@ typedef struct EnNiw {
     /* 0x30C */ s32 pad30C;
     /* 0x310 */ ColliderCylinder collider;
     /* 0x35C */ EnNiwFeather feathers[ENNIW_FEATHERCOUNT];
-
 } EnNiw; // size = 0x7BC
 
 // in init, any value below zero becomes zero
@@ -96,7 +95,7 @@ extern FlexSkeletonHeader D_06002530;
 extern AnimationHeader D_060000E8;
 
 // feather display list?
-extern void* D_060023B0;
-extern void* D_06002428;
+extern Gfx D_060023B0[];
+extern Gfx D_06002428[];
 
 #endif // Z_EN_NIW_H

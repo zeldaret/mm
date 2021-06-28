@@ -758,7 +758,6 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->unk304 = 0.0f;
                 this->unk300 = 0.0f;
                 this->actor.speedXZ = 0.0f;
-
             } else {
                 this->unkTimer260 = 10;
                 this->sfxTimer1 = 30;
@@ -1030,7 +1029,7 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVELENT
+#ifdef NON_EQUIVALENT
 // non-equiv: not even close
 // feather draw function
 void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
