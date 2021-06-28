@@ -1026,9 +1026,9 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
     if (globalCtx->state.gfxCtx) {}
     if (this->feathers) {}
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++) {
         if (this->feathers[i].isEnabled == true) {
