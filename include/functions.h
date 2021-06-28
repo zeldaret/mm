@@ -904,7 +904,7 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4
 // void func_800BC848(void);
 // void func_800BC8B8(void);
 // void func_800BCB50(void);
-void func_800BCB70(Actor* actor, s16 arg1, u8 arg2, u8 arg3, u8 arg4);
+void func_800BCB70(Actor* actor, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 UNK_RET func_800BCCDC(Vec3s* points, u8 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
