@@ -97,7 +97,7 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = -0.35f;
     this->fireCount = 0;
-    this->isPlayingEffect = 0;
+    this->unk_252 = 0;
     this->actor.velocity.y = -1.0f;
     Actor_SetScale(&this->actor, 0.006f);
     EnSb_SetupWaitClosed(this);
@@ -308,7 +308,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
             }
         }
         if (hitPlayer) {
-            this->isPlayingEffect = 0;
+            this->unk_252 = 0;
             if ((this->actor.draw != NULL) && (this->isDrawn == false)) {
                 this->isDrawn = true;
             }
