@@ -32,6 +32,12 @@ void EnFirefly_SetupDisturbDiveAttack(EnFirefly* this);
 void EnFirefly_DisturbDiveAttack(EnFirefly* this, GlobalContext* globalCtx);
 
 typedef enum {
+    /* 0 */ KEESE_FIRE,
+    /* 3 */ KEESE_NORMAL = 3,
+    /* 4 */ KEESE_ICE
+} KeeseCurrentType;
+
+typedef enum {
     /* 0 */ KEESE_AURA_NONE,
     /* 1 */ KEESE_AURA_FIRE,
     /* 2 */ KEESE_AURA_ICE
@@ -96,21 +102,21 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if (this->actor.params & 0x8000) {
+    if (this->actor.params & KEESE_INVISIBLE) {
         this->actor.flags |= 0x80;
-        if (1) {}
-        this->actor.params &= 0x7FFF;
+        // if (1) {}
+        this->actor.params = KEESE_GET_MAIN_TYPE(thisx);
         this->invisible = true;
     }
 
-    if (this->actor.params == 0) {
+    if (this->actor.params == KEESE_FIRE_FLY) {
         this->auraType = KEESE_AURA_FIRE;
         this->timer = Rand_S16Offset(20, 60);
         this->actor.shape.rot.x = 0x1554;
         this->actor.hintId = 0x11;              // Fire Keese
         this->maxAltitude = this->actor.home.pos.y;
         this->actionFunc = EnFirefly_FlyIdle;
-    } else if (this->actor.params == 4) {
+    } else if (this->actor.params == KEESE_ICE_FLY) {
         this->auraType = KEESE_AURA_ICE;
         this->collider.info.toucher.effect = 2; // Freeze
         this->actor.hintId = 0x56;              // Ice Keese
@@ -123,7 +129,8 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_Perch;
     }
-    this->unk_18D = this->actor.params;
+
+    this->currentType = this->actor.params;
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
 }
 
@@ -142,7 +149,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, GlobalContext* globalCtx) {
 }
 
 void EnFirefly_Extinguish(EnFirefly* this) {
-    this->unk_18D = KEESE_NORMAL_PERCH;
+    this->currentType = KEESE_NORMAL;
     this->collider.info.toucher.effect = 0;     // Nothing
     this->auraType = KEESE_AURA_NONE;
     this->actor.hintId = 0x12;                  // Keese
@@ -150,7 +157,7 @@ void EnFirefly_Extinguish(EnFirefly* this) {
 
 void EnFirefly_Ignite(EnFirefly* this) {
     if (this->actor.params == KEESE_FIRE_FLY) {
-        this->unk_18D = KEESE_FIRE_FLY;
+        this->currentType = KEESE_FIRE;
         this->collider.info.toucher.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
         this->actor.hintId = 0x11;              // Fire Keese
@@ -161,7 +168,7 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     f32 distFromHome;
 
-    if (this->actor.params != 3) {
+    if (this->actor.params != KEESE_NORMAL_PERCH) {
         return false;
     }
 
@@ -198,7 +205,7 @@ s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
     closestTorch = NULL;
     currentMinDist = 35000.0f;
 
-    if ((this->actor.params != KEESE_FIRE_FLY) || (this->unk_18D != KEESE_NORMAL_PERCH)) {
+    if ((this->actor.params != KEESE_FIRE_FLY) || (this->currentType != KEESE_NORMAL)) {
         return false;
     }
 
@@ -521,9 +528,9 @@ void EnFirefly_Stunned(EnFirefly* this, GlobalContext* globalCtx) {
         }
 
         if (this->timer == 0) {
-            if (this->unk_18D == KEESE_FIRE_FLY) {
+            if (this->currentType == KEESE_FIRE) {
                 this->auraType = KEESE_AURA_FIRE;
-            } else if (this->unk_18D == KEESE_ICE_FLY) {
+            } else if (this->currentType == KEESE_ICE) {
                 this->auraType = KEESE_AURA_ICE;
             }
 
@@ -614,8 +621,8 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
 
             // Negate effects of fire on Fire Keese and Ice on Ice Keese
-            if (((this->unk_18D == KEESE_FIRE_FLY) && (this->actor.colChkInfo.damageEffect == 2)) ||
-                ((this->unk_18D == KEESE_ICE_FLY) && (this->actor.colChkInfo.damageEffect == 3))) {
+            if (((this->currentType == KEESE_FIRE) && (this->actor.colChkInfo.damageEffect == 2)) ||
+                ((this->currentType == KEESE_ICE) && (this->actor.colChkInfo.damageEffect == 3))) {
                 this->actor.colChkInfo.damageEffect = 0;
             }
 
@@ -632,7 +639,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->collider.base.atFlags &= ~AT_HIT;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_ATTACK);
 
-        if (this->unk_18D != KEESE_NORMAL_PERCH) {
+        if (this->currentType != KEESE_NORMAL) {
             EnFirefly_Extinguish(this);
         }
 
@@ -720,7 +727,7 @@ void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     s32 pad;
     EnFirefly* this = THIS;
 
-    if ((this->unk_18D != KEESE_FIRE_FLY) && (limbIndex == 27)) {
+    if ((this->currentType != KEESE_FIRE) && (limbIndex == 27)) {
         gSPDisplayList((*gfx)++, D_06001678);
     } else if ((this->unk_2F4 != globalCtx->gameplayFrames) &&
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
@@ -782,7 +789,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPDisplayList(gfx, &sSetupDL[150]);
 
-    if (this->unk_18D == KEESE_FIRE_FLY) {
+    if (this->currentType == KEESE_FIRE) {
         gDPSetEnvColor(gfx + 1, 0, 0, 0, 0);
     } else {
         gDPSetEnvColor(gfx + 1, 0, 0, 0, 255);
