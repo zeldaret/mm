@@ -1785,9 +1785,9 @@ SECTIONS
     ovl_En_Sb : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.text)
-        build/asm/overlays/ovl_En_Sb_data.o(.data)
+        build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.data)
         build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.rodata)
-        build/asm/overlays/ovl_En_Sb_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Sb/z_en_sb_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
