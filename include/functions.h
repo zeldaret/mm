@@ -681,7 +681,7 @@ void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f*
 // void EffectSsFireTail_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, Color_RGBA8* param_7, Color_RGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11);
 // void EffectSsFireTail_SpawnFlame(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 // void EffectSsFireTail_SpawnFlameOnPlayer(void);
-// void EffectSsEnFire_SpawnVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags, s16 bodyPart);
 // void EffectSsEnFire_SpawnVec3s(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsExtra_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
@@ -887,7 +887,7 @@ void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
 // void func_800BBC20(void);
-// void func_800BBCEC(void);
+void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
 // void func_800BBDAC(GlobalContext* globalCtx, UNK_PTR param_2, UNK_PTR param_3, f32 param_4, UNK_TYPE4 param_5, f32 param_6, s16 param_7, s16 param_8, u8 param_9);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
