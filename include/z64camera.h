@@ -432,19 +432,32 @@ typedef struct {
 } Battle1; // 13
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
-    /* 0x28 */ s32 unk_28;
-    /* 0x2C */ s32 unk_2C;
-    /* 0x30 */ // KeepOn1Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+} KeepOn1Anim; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+    /* 0x2E */ s16 unk_2E; // Pad?
+    /* 0x30 */ KeepOn1Anim anim;
 } KeepOn1; // 12
 
 typedef struct {
@@ -558,8 +571,18 @@ typedef struct {
 } Demo3; // size = 0x4
 
 typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+} Demo4Anim; // size = 0xC
+
+typedef struct {
     /* 0x00 */ s16 interfaceFlags;
-    /* 0x04 */ // Demo4Anim anim;
+    /* 0x04 */ Demo4Anim anim;
 } Demo4; // size = 0x4
 
 typedef struct {
@@ -590,20 +613,6 @@ typedef struct {
 } Special5; // 8
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-} Special8Anim; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x1C */ // Special8Anim anim;
-} Special8; // 6
-
-typedef struct {
     /* 0x00 */ struct Actor* doorActor;
     /* 0x04 */ s16 camDataIdx;
     /* 0x06 */ s16 timer1;
@@ -612,7 +621,34 @@ typedef struct {
 } DoorParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
+    // /* 0x00 */ s16 unk_00;
+    // /* 0x00 */ s16 unk_02;
+    // /* 0x04 */ f32 unk_04;
+    // /* 0x04 */ s16 unk_06;
+    // /* 0x08 */ s16 unk_08;
+    // /* 0x0A */ s16 unk_0A;
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ s16 unk_0E;
+} Special8Anim; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x00 */ f32 unk_08;
+    /* 0x04 */ f32 unk_0C;
+    /* 0x08 */ s16 unk_10;
+    /* 0x0A */ s16 unk_12;
+    /* 0x14 */ Special8Anim anim;
+} Special8Params;
+
+typedef struct {
+    /* 0x00 */ DoorParams doorParams;
+    /* 0x0C */ Special8Params params;
+} Special8; //
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
 } Special9Anim;
 
 typedef struct {

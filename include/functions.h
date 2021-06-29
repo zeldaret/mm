@@ -805,7 +805,7 @@ s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gfx
 // void func_800B8018(void);
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
-void func_800B81E0(Vec3f* arg0, Actor* actor);
+s8 func_800B81E0(Vec3f* arg0, Actor* actor);
 UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2);
 f32* func_800B8248(PosRot* param_1, ActorPlayer* param_2);
 // void func_800B82EC(void);
