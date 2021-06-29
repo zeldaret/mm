@@ -987,7 +987,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.text)
         build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.data)
         build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.rodata)
-        build/asm/overlays/ovl_En_Firefly_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Firefly/z_en_firefly_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

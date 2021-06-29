@@ -16,14 +16,12 @@ void EnFirefly_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808798C4(EnFirefly* this, GlobalContext* globalCtx);
 void func_80879CC0(EnFirefly* this, GlobalContext* globalCtx);
 void func_8087A110(EnFirefly* this, GlobalContext* globalCtx);
 void func_8087A1C8(EnFirefly* this);
 void func_8087A1EC(EnFirefly* this, GlobalContext* globalCtx);
 void func_8087A268(EnFirefly* this);
 void func_8087A2D8(EnFirefly* this, GlobalContext* globalCtx);
-void func_8087A50C(EnFirefly* this);
 void func_8087A548(EnFirefly* this, GlobalContext* globalCtx);
 void func_8087A5DC(EnFirefly* this);
 void func_8087A60C(EnFirefly* this, GlobalContext* globalCtx);
@@ -79,12 +77,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 4000, ICHAIN_STOP),
 };
 
-extern SkeletonHeader D_060018B8;
 extern AnimationHeader D_0600017C;
-
+extern SkeletonHeader D_060018B8;
 extern Gfx D_06001678[];
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/EnFirefly_Init.asm")
 void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFirefly* this = THIS;
 
@@ -125,14 +121,12 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/EnFirefly_Destroy.asm")
 void EnFirefly_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnFirefly* this = THIS;
 
     Collider_DestroySphere(globalCtx, &this->collider);
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_808798C4.asm")
 void func_808798C4(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->unk_18F == 0xA) {
         this->unk_18F = 0;
@@ -141,7 +135,6 @@ void func_808798C4(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879930.asm")
 void func_80879930(EnFirefly* this) {
     this->unk_18D = 3;
     this->collider.info.toucher.effect = 0;
@@ -149,7 +142,6 @@ void func_80879930(EnFirefly* this) {
     this->actor.hintId = 0x12;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879950.asm")
 void func_80879950(EnFirefly* this) {
     if (this->actor.params == 0) {
         this->unk_18D = 0;
@@ -159,7 +151,6 @@ void func_80879950(EnFirefly* this) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087997C.asm")
 s32 func_8087997C(EnFirefly* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     f32 distFromHome;
@@ -190,7 +181,6 @@ s32 func_8087997C(EnFirefly* this, GlobalContext* globalCtx) {
     return false;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879A98.asm")
 s32 func_80879A98(EnFirefly* this, GlobalContext* globalCtx) {
     ObjSyokudai* findTorch;
     ObjSyokudai* closestTorch;
@@ -224,19 +214,18 @@ s32 func_80879A98(EnFirefly* this, GlobalContext* globalCtx) {
 
         if (Actor_DistanceToPoint(&this->actor, &flamePos) < 15.0f) {
             func_80879950(this);
-            return true;
         } else {
             Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &closestTorch->actor),
                                0x300);
             Math_ScaledStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &flamePos) + 0x1554, 0x100);
-            return true;
         }
+
+        return true;
     }
 
     return false;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879C14.asm")
 void func_80879C14(EnFirefly* this) {
     this->unk_190 = Rand_S16Offset(70, 100);
     this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
@@ -246,7 +235,6 @@ void func_80879C14(EnFirefly* this) {
     this->actionFunc = func_80879CC0;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879CC0.asm")
 void func_80879CC0(EnFirefly* this, GlobalContext* globalCtx) {
     s32 skelAnimeUpdated;
     f32 rand;
@@ -255,11 +243,14 @@ void func_80879CC0(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->unk_190 != 0) {
         this->unk_190--;
     }
+
     skelAnimeUpdated = func_801378B8(&this->skelAnime, 0.0f);
     this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
+
     if (!func_8087997C(this, globalCtx) && !func_80879A98(this, globalCtx)) {
         if (skelAnimeUpdated) {
             rand = Rand_ZeroOne();
+
             if (rand < 0.5f) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos),
                                    0x300);
@@ -299,18 +290,17 @@ void func_80879CC0(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_80879F28.asm")
 void func_80879F28(EnFirefly* this, GlobalContext* globalCtx) {
     this->unk_190 = 40;
     this->actor.velocity.y = 0.0f;
     SkelAnime_ChangeAnim(&this->skelAnime, &D_0600017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
-    Audio_PlayActorSound2(&this->actor, 0x3842);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= 0x10;
 
     if (this->unk_18E != 0) {
-        func_800BCB70(&this->actor, 0x4000, 0xFF, 0x2000, 0x28);
+        func_800BCB70(&this->actor, 0x4000, 255, 0x2000, 40);
     } else {
-        func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x28);
+        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
     }
 
     if (this->actor.colChkInfo.damageEffect == 3) {
@@ -341,7 +331,6 @@ void func_80879F28(EnFirefly* this, GlobalContext* globalCtx) {
     this->actionFunc = func_8087A110;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A110.asm")
 void func_8087A110(EnFirefly* this, GlobalContext* globalCtx) {
     this->actor.colorFilterTimer = 40;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
@@ -358,14 +347,12 @@ void func_8087A110(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A1C8.asm")
 void func_8087A1C8(EnFirefly* this) {
     this->unk_190 = 15;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_8087A1EC;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A1EC.asm")
 void func_8087A1EC(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->unk_190 != 0) {
         this->unk_190--;
@@ -380,7 +367,6 @@ void func_8087A1EC(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A268.asm")
 void func_8087A268(EnFirefly* this) {
     this->unk_190 = Rand_S16Offset(70, 100);
     this->skelAnime.animPlaybackSpeed = 1.0f;
@@ -388,7 +374,6 @@ void func_8087A268(EnFirefly* this) {
     this->actionFunc = func_8087A2D8;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A2D8.asm")
 void func_8087A2D8(EnFirefly* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     Vec3f preyPos;
@@ -441,7 +426,6 @@ void func_8087A2D8(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A50C.asm")
 void func_8087A50C(EnFirefly* this) {
     this->actor.world.rot.x = 0x7000;
     this->unk_190 = 18;
@@ -450,7 +434,6 @@ void func_8087A50C(EnFirefly* this) {
     this->actionFunc = func_8087A548;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A548.asm")
 void func_8087A548(EnFirefly* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
@@ -466,7 +449,6 @@ void func_8087A548(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A5DC.asm")
 void func_8087A5DC(EnFirefly* this) {
     this->unk_190 = 150;
     this->unk_192 = 0x954;
@@ -474,7 +456,6 @@ void func_8087A5DC(EnFirefly* this) {
     this->skelAnime.animPlaybackSpeed = 1.0f;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A60C.asm")
 void func_8087A60C(EnFirefly* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 
@@ -508,12 +489,11 @@ void func_8087A60C(EnFirefly* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, this->unk_192, 0x100);
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A774.asm")
 void func_8087A774(EnFirefly* this) {
     if (this->unk_18E != 0) {
-        func_800BCB70(&this->actor, 0, 0xFF, 0x2000, this->unk_190);
+        func_800BCB70(&this->actor, 0, 255, 0x2000, this->unk_190);
     } else {
-        func_800BCB70(&this->actor, 0, 0xFF, 0, this->unk_190);
+        func_800BCB70(&this->actor, 0, 255, 0, this->unk_190);
     }
 
     if (this->actionFunc != func_8087A818) {
@@ -522,11 +502,10 @@ void func_8087A774(EnFirefly* this) {
     }
 
     this->unk_18C = 0;
-    Audio_PlayActorSound2(&this->actor, 0x389E);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_8087A818;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A818.asm")
 void func_8087A818(EnFirefly* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0x1554, 0x100);
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
@@ -552,14 +531,12 @@ void func_8087A818(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A8FC.asm")
 void func_8087A8FC(EnFirefly* this) {
     this->unk_190 = 1;
     this->actionFunc = func_8087A920;
     this->actor.speedXZ = 0.0f;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A920.asm")
 void func_8087A920(EnFirefly* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
     if (this->unk_190 != 0) {
@@ -576,7 +553,6 @@ void func_8087A920(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087A9E0.asm")
 void func_8087A9E0(EnFirefly* this) {
     this->skelAnime.animPlaybackSpeed = 3.0f;
     this->actor.shape.rot.x = 0x1554;
@@ -586,7 +562,6 @@ void func_8087A9E0(EnFirefly* this) {
     this->actionFunc = func_8087AA1C;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087AA1C.asm")
 void func_8087AA1C(EnFirefly* this, GlobalContext* globalCtx) {
     ActorPlayer* player = PLAYER;
     Vec3f preyPos;
@@ -611,17 +586,16 @@ void func_8087AA1C(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087AAF4.asm")
 void func_8087AAF4(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 2) {
         this->collider.base.acFlags &= ~2;
         func_800BE258(&this->actor, &this->collider.info);
 
         if (this->actor.colChkInfo.damageEffect == 1) {
-            this->unk_190 = 0x28;
+            this->unk_190 = 40;
             func_8087A774(this);
         } else if (this->actor.colChkInfo.damageEffect == 5) {
-            this->unk_190 = 0x28;
+            this->unk_190 = 40;
             this->unk_18F = 0x1F;
             this->unk_2E8.x = 2.0f;
             this->unk_2E8.y = 0.55f;
@@ -640,15 +614,13 @@ void func_8087AAF4(EnFirefly* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/EnFirefly_Update.asm")
 void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnFirefly* this = THIS;
-    f32 sp34;
 
     if (this->collider.base.atFlags & 2) {
         this->collider.base.atFlags &= ~2;
-        Audio_PlayActorSound2(&this->actor, 0x3840);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_ATTACK);
 
         if (this->unk_18D != 3) {
             func_80879930(this);
@@ -688,7 +660,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
 
         if (func_801378B8(&this->skelAnime, 5.0f)) {
-            Audio_PlayActorSound2(&this->actor, 0x3841);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_FLY);
         }
     }
 
@@ -698,25 +670,19 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (this->unk_18F != 0xA) {
             Math_StepToF(&this->unk_2E8.x, 0.0f, 0.05f);
             this->unk_2E8.y = (this->unk_2E8.x + 1.0f) * 0.275f;
-            // if (temp_f0 > 0.55f) {
-            //     this->unk_2E8.y = 0.55f;
-            // } else {
-            //     this->unk_2E8.y = this->unk_2E8.y;
-            // }
             this->unk_2E8.y = CLAMP_MAX(this->unk_2E8.y, 0.55f);
         } else if (!Math_StepToF(&this->unk_2E8.z, 0.55f, 0.01375f)) {
-            func_800B9010(&this->actor, 0x20B2);
+            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 
-    sp34 = Math_SinS(this->actor.shape.rot.x);
-    this->actor.focus.pos.x = (Math_SinS(this->actor.shape.rot.y) * (10.0f * sp34)) + this->actor.world.pos.x;
-    this->actor.focus.pos.y = (Math_CosS(this->actor.shape.rot.x) * 10.0f) + this->actor.world.pos.y;
-    sp34 = Math_SinS(this->actor.shape.rot.x);
-    this->actor.focus.pos.z = (Math_CosS(this->actor.shape.rot.y) * (10.0f * sp34)) + this->actor.world.pos.z;
+    this->actor.focus.pos.x =
+        10.0f * Math_SinS(this->actor.shape.rot.x) * Math_SinS(this->actor.shape.rot.y) + this->actor.world.pos.x;
+    this->actor.focus.pos.y = 10.0f * Math_CosS(this->actor.shape.rot.x) + this->actor.world.pos.y;
+    this->actor.focus.pos.z =
+        10.0f * Math_SinS(this->actor.shape.rot.x) * Math_CosS(this->actor.shape.rot.y) + this->actor.world.pos.z;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087AF48.asm")
 s32 func_8087AF48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                   Gfx** gfx) {
     EnFirefly* this = THIS;
@@ -729,7 +695,6 @@ s32 func_8087AF48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/func_8087AF98.asm")
 void func_8087AF98(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Color_RGBA8 D_8087B4D4 = { 255, 255, 100, 255 };
     static Color_RGBA8 D_8087B4D8 = { 255, 50, 0, 0 };
@@ -745,7 +710,7 @@ void func_8087AF98(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     s32 pad;
     EnFirefly* this = THIS;
 
-    if ((this->unk_18D != 0) && (limbIndex == 0x1B)) {
+    if ((this->unk_18D != 0) && (limbIndex == 27)) {
         gSPDisplayList((*gfx)++, D_06001678);
     } else if ((this->unk_2F4 != globalCtx->gameplayFrames) && ((this->unk_18C == 1) || (this->unk_18C == 2)) &&
                ((limbIndex == 15) || (limbIndex == 21))) {
@@ -780,8 +745,6 @@ void func_8087AF98(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
         func_800B0F80(globalCtx, &auraPos, &D_8087B4E4, &D_8087B4F0, auraPrimColor, auraEnvColor, 250, auraScaleStep,
                       auraLife);
-        // }
-        // }
     }
 
     if (limbIndex == 15) {
@@ -793,7 +756,6 @@ void func_8087AF98(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Firefly_0x808796F0/EnFirefly_Draw.asm")
 void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFirefly* this = THIS;
