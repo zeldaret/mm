@@ -918,7 +918,7 @@ void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is
 // void func_800BDB6C(void);
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s16 index);
 // void func_800BDCF4(void);
-void func_800BDFB0(void);
+void func_800BDFB0(Actor* thisx, GlobalContext* globalCtx);
 void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
 void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 // void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
