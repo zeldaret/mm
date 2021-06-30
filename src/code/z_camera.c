@@ -4063,8 +4063,260 @@ s32 Camera_Fixed1(Camera *camera) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed1.asm")
 #endif
 
+#ifdef NON_EQUIVALENT
+s32 Camera_Fixed2(Camera* camera) {
+    Fixed2* fixd2 = (Fixed2*)camera->paramData;
+    Fixed2Anim* anim = &fixd2->anim;
+    CameraModeValue* values;
+    Vec3f spB0;
+    Vec3f spA4;
+    Vec3f sp98;
+    Vec3s* sp88;
+    VecSph sp80;
+    PosRot* sp7C;
+    PosRot* sp78;
+    VecSph sp70;
+    f32 sp60;
+    Vec3f sp44;
+    Vec3f* sp40;
+    Vec3f* sp3C;
+    Vec3f* sp38;
+    PosRot* sp34;
 
+    f32 new_var;
+
+    f32 temp_f0_3;
+    struct ActorPlayer* player;
+    struct Actor* actor;
+    
+    sp40 = &camera->eye;
+    sp34 = &camera->playerPosRot;
+    sp3C = &camera->focalPoint;
+    sp38 = &camera->eyeNext;
+
+    sp60 = func_800CB700(camera);
+    if (!RELOAD_PARAMS) {
+    } else {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        fixd2->unk_00 = NEXTSETTING * 0.01f * sp60 * (0.8f - ((68.0f / sp60) * -0.2f));
+        fixd2->unk_04 = NEXTSETTING;
+        fixd2->unk_08 = NEXTSETTING;
+        fixd2->unk_0C = NEXTSETTING * 0.01f;
+        fixd2->unk_10 = NEXTSETTING * 0.01f;
+        fixd2->unk_14 = NEXTSETTING;
+        fixd2->unk_18 = NEXTSETTING;
+        anim->unk_1C = fixd2->unk_14 * 100.0f;
+        sp88 = Camera_GetCamBGData(camera, camera->camDataIdx);
+        if (sp88 != NULL) {
+            if ((fixd2->unk_18 & 2) == 0) {
+                Camera_Vec3sToVec3f(&anim->unk_00, &BGCAM_POS(sp88));
+            } else {
+                player = (ActorPlayer*)camera->globalCtx->actorCtx.actorList[2].first;
+                if (camera->player != player) {
+                    func_8010C764(&sp70, &player->base.focus, sp40);
+                    if (sp70.r < fixd2->unk_04) {
+                        sp70.r = fixd2->unk_04;
+                        if (sp70.pitch < 0xBB8) {
+                            sp70.pitch = 0xBB8;
+                        }
+                        func_8010C7B8(&anim->unk_00, &player->base.focus, &sp70);
+                    } else {
+                        anim->unk_00 = *sp40;
+                    }
+                } else {
+                    anim->unk_00 = camera->eye;
+                }
+            }
+
+            if (BGCAM_FOV(sp88) != -1) {
+                if ((fixd2->unk_18 & 0x80) != 0) {
+                    anim->unk_1C = (BGCAM_FOV(sp88) >> 1) + (BGCAM_FOV(sp88) >> 2);
+                    if (anim->unk_1C < 0x1E) {
+                        anim->unk_1C = 0x1E;
+                    }
+                } else {
+                    anim->unk_1C = BGCAM_FOV(sp88);
+                }
+            }
+
+            if (BGCAM_JFIFID(sp88) != -1) {
+                anim->unk_0C = BGCAM_JFIFID(sp88);
+            } else {
+                anim->unk_0C = fixd2->unk_08;
+            }
+
+            if (BGCAM_UNK(sp88) != -1) {
+                if (fixd2->unk_18 & 4) {
+                    anim->unk_14 = BGCAM_UNK(sp88) * 0.01f;
+                    anim->unk_18 = fixd2->unk_0C;
+                } else {
+                    temp_f0_3 = BGCAM_UNK(sp88) * 0.01f;
+                    anim->unk_18 = temp_f0_3;
+                    anim->unk_14 = temp_f0_3;
+                }
+            } else {
+                anim->unk_14 = fixd2->unk_10;
+                anim->unk_18 = fixd2->unk_0C;
+            }
+            if (fixd2->unk_18 & 0x10) {
+                // temp_v0_8 = camera->target;
+                sp7C = &camera->target->home;
+                if (camera->target == 0) {
+                    return 0;
+                }
+                sp78 = &camera->target->world;
+                func_8010C764(&sp70, sp7C, &anim->unk_00);
+                sp70.yaw = sp78->rot.y + (sp70.yaw - sp7C->rot.y);
+                func_8010C7B8(&anim->unk_00, sp78, &sp70);
+                
+            }
+            // goto block_32;
+        } else {
+            anim->unk_00 = camera->eye;
+            anim->unk_0C = fixd2->unk_08;
+            anim->unk_14 = fixd2->unk_10;
+            anim->unk_18 = fixd2->unk_0C;
+        }
+
+        // goto block_32;
+
+        // block_32:
+        if (anim->unk_1C < 0x169) {
+            anim->unk_1C = anim->unk_1C * 0x64;
+        }
+        if (camera->animState == 0x14) {
+            anim->unk_14 = 0.2f;
+        }
+        // phi_f2 = sp60;
+        // goto block_37;
+    }
+
+    // block_37:
+    new_var = 0.0f; // TODO: Fake temp?
+    sCameraInterfaceFlags = fixd2->unk_18;
+    // temp_v0_10 = fixd2->unk_18; // May be needed?
+    if (fixd2->unk_18 & 8) {
+        // temp_v0_11 = camera->target; // swap v0/v1
+        if (camera->target == 0) {
+            return 0;
+        }
+        spB0.x = camera->target->focus.pos.x;
+        spB0.y = camera->target->focus.pos.y;
+        spB0.z = camera->target->focus.pos.z;
+        camera->posOffset.x = spB0.x - sp34->pos.x;
+        camera->posOffset.y = spB0.y - sp34->pos.y;
+        camera->posOffset.z = spB0.z - sp34->pos.z;
+    }
+
+    actor = &camera->player->base;
+    if (fixd2->unk_18 & 0x40) {
+        sp98.x = new_var;
+        sp98.y = fixd2->unk_00 + sp60;
+        sp98.z = new_var;
+
+        if (camera->target != NULL) {
+            sp98.x = new_var + ((camera->target->focus.pos.x - actor->focus.pos.x) * 0.4f);
+            sp98.y += (camera->target->focus.pos.y - actor->focus.pos.y) * 0.4f;
+            sp98.z = new_var + ((camera->target->focus.pos.z - actor->focus.pos.z) * 0.4f);
+        }
+
+        Camera_LERPCeilVec3f(&sp98, &camera->posOffset, 0.25f, 0.25f, 0.1f);
+        spB0.x = sp34->pos.x + camera->posOffset.x;
+        spB0.y = sp34->pos.y + camera->posOffset.y;
+        spB0.z = sp34->pos.z + camera->posOffset.z;
+        // block_54:
+    } else if (fixd2->unk_18 & 0x80) {
+        sp98.x = new_var;
+        sp98.y = fixd2->unk_00 + sp60;
+        sp98.z = new_var;
+        if (camera->target != NULL) {
+            sp98.x = new_var + ((camera->target->focus.pos.x - actor->focus.pos.x) * 0.7f);
+            sp98.y += (camera->target->focus.pos.y - actor->focus.pos.y) * 0.7f;
+            sp98.z = new_var + ((camera->target->focus.pos.z - actor->focus.pos.z) * 0.7f);
+        }
+
+        Camera_LERPCeilVec3f(&sp98, &camera->posOffset, 0.25f, 0.25f, 0.1f);
+        spB0.x = sp34->pos.x + camera->posOffset.x;
+        spB0.y = sp34->pos.y + camera->posOffset.y;
+        spB0.z = sp34->pos.z + camera->posOffset.z;
+    } else {
+        sp98.x = new_var;
+        sp98.z = new_var;
+        if ((camera->player->stateFlags1 & 0x4000)|| (camera->player->stateFlags1 & 4)) {
+            sp98.y = fixd2->unk_00;
+        } else {
+            sp98.y = fixd2->unk_00 + sp60;
+        }
+
+        Camera_LERPCeilVec3f(&sp98, &camera->posOffset, anim->unk_14, anim->unk_14, 0.1f);
+        spB0.x = sp34->pos.x + camera->posOffset.x;
+        spB0.y = sp34->pos.y + camera->posOffset.y;
+        spB0.z = sp34->pos.z + camera->posOffset.z;
+        // goto block_54;
+    }
+    
+    // goto block_55;
+
+
+
+    // block_55:
+    if (camera->animState == 0) {
+        func_800CB5DC(camera);
+        if ((fixd2->unk_18 & 1) == 0) {
+            *sp3C = spB0;
+            func_8010C764(&sp80, sp3C, &anim->unk_00);
+            if ((anim->unk_0C < sp80.r) || ((fixd2->unk_18 & 0x20) != 0)) {
+                sp80.r = anim->unk_0C;
+                func_8010C7B8(&spA4, sp3C, &sp80);
+            } else {
+                if (sp80.r < fixd2->unk_04) {
+                    sp80.r = fixd2->unk_04;
+                    func_8010C7B8(&spA4, sp3C, &sp80);
+                } else {
+                    spA4 = anim->unk_00;
+                }
+            }
+            sp44 = spA4;
+            camera->eyeNext = sp44;
+            *sp40 = sp44;
+            camera->fov = anim->unk_1C * 0.01f;
+        }
+    }
+
+
+
+    Camera_LERPCeilVec3f(&spB0, sp3C, anim->unk_14, anim->unk_14, 1.0f);
+    func_8010C764(&sp80, sp3C, &anim->unk_00);
+    if ((anim->unk_0C < sp80.r) || ((fixd2->unk_18 & 0x20) != 0)) {
+        sp80.r = anim->unk_0C;
+        func_8010C7B8(&spA4, sp3C, &sp80);
+    } else {
+        if (sp80.r < fixd2->unk_04) {
+            sp80.r = fixd2->unk_04;
+            func_8010C7B8(&spA4, sp3C, &sp80);
+        } else {
+            spA4 = anim->unk_00;
+        }
+    }
+
+
+
+    Camera_LERPCeilVec3f(&spA4, sp38, anim->unk_18, anim->unk_18, 0.1f);
+    *sp40 = *sp38;
+    camera->dist = CamMath_Distance(sp3C, sp40);
+    camera->roll = 0;
+    camera->xzSpeed = new_var;
+    anim->unk_10 = anim->unk_1C * 0.01f;
+    camera->fov = Camera_LERPCeilF(anim->unk_10, camera->fov, anim->unk_14, 0.1f);
+    camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
+    func_800CB6C8(camera, sp34);
+    camera->animState = 1;
+    return 1;
+
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed2.asm")
+#endif
 
 s32 Camera_Fixed3(Camera* camera) {
     return Camera_Noop(camera);
@@ -4120,7 +4372,97 @@ s32 Camera_Unique1(Camera* camera) {
     return Camera_Noop(camera);
 }
 
+#ifdef NON_MATCHING
+s32 Camera_Unique2(Camera *camera) {
+    Vec3f* sp3C = &camera->eye;
+    Vec3f *temp_s1 = &camera->focalPoint;
+    Unique2* uniq2 = (Unique2*)camera->paramData;
+    Vec3f sp70;
+    VecSph sp68;
+    VecSph sp60;
+    f32 phi_f16;
+    s32 pad[2];
+    Vec3f* pad1[1];
+    Unique2Anim* anim = &uniq2->anim;
+    f32 sp48 = func_800CB700(camera);
+    Vec3f* sp34 = &camera->eyeNext;
+    CameraModeValue* values;
+
+    // sp48;
+    func_8010C764(&sp60, temp_s1, sp3C);
+
+    if (RELOAD_PARAMS) {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        uniq2->unk_00 = NEXTPCT * sp48 * (0.8f - ((68.0f / sp48) * -0.2f));
+        uniq2->unk_04 = NEXTSETTING;
+        uniq2->unk_08 = 0.25f;
+        uniq2->unk_0C = NEXTSETTING;
+        uniq2->unk_10 = NEXTSETTING;
+    }
+
+    sCameraInterfaceFlags = uniq2->unk_10;
+
+    if ((camera->animState == 0) || (anim->unk_04 != uniq2->unk_10)) {
+        anim->unk_04 = uniq2->unk_10;
+    }
+
+    if (camera->animState == 0) {
+        camera->animState = 1;
+        func_800CB5DC(camera);
+        anim->unk_00 = 200.0f;
+    }
+
+    if (uniq2->unk_10 & 0x10) {
+        *sp34 = *sp3C;
+        Camera_ClearFlags(camera, 4);
+    }
+
+    sp70 = camera->playerPosRot.pos;
+
+    if (uniq2->unk_10 & 1) {
+        phi_f16 = 1.0f;
+    } else {
+        phi_f16 = camera->speedRatio;
+    }
+
+    temp_s1->x += ((sp70.x - temp_s1->x) * phi_f16 * 0.3f);
+    temp_s1->y += (((sp70.y + sp48 + uniq2->unk_00) - temp_s1->y) * 0.2f);
+    temp_s1->z += ((sp70.z - temp_s1->z) * phi_f16 * 0.3f);
+
+    anim->unk_00 = anim->unk_00 + ((2.0f - anim->unk_00) * 0.05f);
+
+    if (uniq2->unk_10 & 1) {
+        func_8010C764(&sp68, temp_s1, sp34);
+        sp68.r = uniq2->unk_04;
+        func_8010C7B8(&sp70, temp_s1, &sp68);
+        Camera_LERPCeilVec3f(&sp70, sp3C, uniq2->unk_08, uniq2->unk_08, 0.2f);
+    } else if (uniq2->unk_10 & 2) {
+        if (CamMath_DistanceXZ(temp_s1, sp34) < uniq2->unk_04) {
+            func_8010C764(&sp68, temp_s1, sp34);
+            sp68.yaw = Camera_LERPCeilS(sp68.yaw, sp60.yaw, 0.1f, 5);
+            sp68.r = uniq2->unk_04;
+            sp68.pitch = 0;
+            func_8010C7B8(sp3C, temp_s1, &sp68);
+            sp3C->y = sp34->y;
+        } else {
+            Camera_LERPCeilVec3f(sp34, sp3C, uniq2->unk_08, uniq2->unk_08, 0.2f);
+        }
+    }
+
+    if ((uniq2->unk_10 & 0x20) == 0) {
+        func_800CC128(camera, temp_s1, sp3C);
+    }
+
+    camera->dist = CamMath_Distance(temp_s1, sp3C);
+    camera->roll = 0;
+    camera->fov = Camera_LERPCeilF(uniq2->unk_0C, camera->fov, 0.2f, 0.1f);
+    camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
+
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique2.asm")
+#endif
 
 s32 Camera_Unique3(Camera* camera) {
     s32 ret = Camera_Normal1(camera);
@@ -4149,7 +4491,188 @@ s32 Camera_Unique5(Camera* camera) {
     return ret;
 }
 
+#ifdef NON_MATCHING
+s32 Camera_Unique0(Camera* camera) {
+    f32 spB4;
+    PosRot* sp40 = &camera->playerPosRot;
+    PosRot sp9C;
+    struct ActorPlayer* sp98;
+    Vec3f sp8C;
+    VecSph sp84;
+    VecSph sp7C;
+    Vec3s* sp78;
+    f32 sp74;
+    s32 pad;
+    s16 temp_v1;
+    Unique0* uniq0 = (Unique0*)camera->paramData;
+    Unique0Anim* anim = &uniq0->anim;
+    CameraModeValue* values;
+    Vec3f sp54;
+
+    spB4 = func_800B6FC8(camera->player);
+    sp98 = camera->player;
+    if ((camera->animState == 0) || (camera->animState == 0xA) || (camera->animState == 0x14)) {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        uniq0->unk_00 = NEXTSETTING;
+        uniq0->unk_04 = NEXTSETTING;
+        uniq0->unk_08 = NEXTSETTING;
+    }
+
+
+    func_8010C764(&sp7C, &camera->focalPoint, &camera->eye);
+    if (sp98->rideActor != NULL) {
+        func_800B8214(&sp9C, sp98->rideActor);
+        sp8C = sp9C.pos;
+        sp8C.y += spB4 + 20.0f;
+    } else {
+        sp8C = camera->playerPosRot.pos;
+        sp8C.y += spB4;
+    }
+
+    sCameraInterfaceFlags = uniq0->unk_08;
+
+    switch (camera->animState) {
+        case 0:
+            sp78 = Camera_GetCamBGData(camera, camera->camDataIdx);
+            Camera_Vec3sToVec3f(&anim->unk_1C, &BGCAM_POS(sp78));
+            camera->eye = camera->eyeNext = anim->unk_1C;
+            anim->unk_34 = BGCAM_ROT(sp78);
+            temp_v1 = BGCAM_FOV(sp78);
+            if (temp_v1 != -1) {
+                if (temp_v1 < 0x169) {
+                    camera->fov = temp_v1;
+                } else {
+                    camera->fov = temp_v1 * 0.01f;
+                }
+            }
+            anim->unk_3C = BGCAM_JFIFID(sp78);
+            if (anim->unk_3C == -1) {
+                anim->unk_3C = 0x3C;
+            }
+
+            if (BGCAM_UNK(sp78) != -1) {
+                anim->unk_18 = BGCAM_UNK(sp78) * 0.01f;
+            } else {
+                anim->unk_18 = uniq0->unk_04 * 0.01f;
+            }
+
+            anim->unk_00 = sp40->pos;
+            if ((uniq0->unk_08 & 0x10) != 0) {
+                anim->unk_0C.x = sp40->pos.x;
+                anim->unk_0C.y = sp40->pos.y + spB4 + uniq0->unk_00;
+                anim->unk_0C.z = sp40->pos.z;
+            }
+            anim->unk_3A = camera->player->base.world.rot.y;
+            anim->unk_3E = 0;
+            camera->eye = camera->eyeNext = anim->unk_1C;
+            Camera_ClearFlags(camera, 4);
+            camera->animState += 1;
+        case 1:
+            sp84.r = CamMath_Distance(&sp8C, &camera->eye);
+            sp84.yaw = anim->unk_34.y;
+            sp84.pitch = -anim->unk_34.x;
+            func_8010C530(&anim->unk_28, &sp84);
+            func_80179A44(&anim->unk_1C, sp40, &anim->unk_0C);
+            camera->focalPoint = anim->unk_0C; 
+
+            if (sp98->stateFlags1 & 0x20000000) {
+                anim->unk_00 = sp40->pos;
+            }
+
+            if (uniq0->unk_08 & 0x10) {
+                sp54.x = sp40->pos.x;
+                sp54.y = sp40->pos.y + spB4 + uniq0->unk_00;
+                sp54.z = sp40->pos.z;
+                Camera_LERPCeilVec3f(&sp54, &camera->focalPoint, camera->yOffsetUpdateRate, camera->xzOffsetUpdateRate, 0.1f);
+                camera->xzOffsetUpdateRate = Camera_LERPCeilF(anim->unk_18, camera->xzOffsetUpdateRate, 0.1f, 0.0001f);
+                camera->yOffsetUpdateRate = Camera_LERPCeilF(anim->unk_18, camera->yOffsetUpdateRate, 0.1f, 0.0001f);
+            }
+
+            if ((camera->animState == 0x3E7) || (camera->animState == 0x29A)) {
+                anim->unk_3E = 2;
+            }
+            if (uniq0->unk_08 & 1) {
+                if (anim->unk_3C > 0) {
+                    anim->unk_3C--;
+                    anim->unk_00 = sp40->pos;
+                } else if ((!(sp98->stateFlags1 & 0x20000000)) &&
+                        ((CamMath_DistanceXZ(sp40, &anim->unk_00) >= 10.0f) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
+                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+                            (uniq0->unk_08 & 2))) {
+                                anim->unk_3E = 1;
+                        
+                }
+            } else {
+                if (anim->unk_3C > 0) {
+                    anim->unk_3C--;
+                    if (anim->unk_3C == 0) {
+                        sCameraInterfaceFlags = 0;
+                    }
+                } else {
+                    anim->unk_00 = sp40->pos;
+                }
+                if ((sp98->stateFlags1 & 0x20000000) == 0) { // TODO: Merge into 1 if-statement
+                    if ((anim->unk_3A != camera->player->base.world.rot.y) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
+                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+                        (uniq0->unk_08 & 2)) {
+                            anim->unk_3E = 1;
+                    }
+                }
+            }
+            break;
+
+        case 3:
+            sp74 = 1.0f / anim->unk_3C;
+            sp8C.y -= spB4 * 0.2f;
+            Camera_LERPCeilVec3f(&sp8C, &camera->focalPoint, sp74, sp74, 0.001f);
+            sp84.r = CamMath_Distance(&camera->focalPoint, &camera->eye);
+            sp84.pitch = sp7C.pitch;
+            sp84.yaw = sp7C.yaw;
+            sp84.r = Camera_LERPCeilF(100.0f, sp84.r, sp74, 1.0f);
+            func_8010C7B8(&sp8C, &camera->focalPoint, &sp84);
+            sp74 = (QREG(64) * 0.01f) + 0.2f;
+            Camera_LERPCeilVec3f(&sp8C, &camera->eye, sp74, sp74, 0.001f);
+            anim->unk_3C--;
+            if (anim->unk_3C == 0) {
+                anim->unk_3E = 9;
+            }
+    }
+
+    if ((anim->unk_3E == 1) || (anim->unk_3E == 2) || (anim->unk_3E == 9)) {
+        camera->dist = CamMath_Distance(&camera->focalPoint, &camera->eye);
+        camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
+        func_800CB6C8(camera, sp40);
+        camera->atLERPStepScale = 0.0f;
+        Camera_ChangeSettingFlags(camera, camera->prevSetting, 2);
+        Camera_SetFlags(camera, 4);
+        camera->yawUpdateRateInv = 1200.0f;
+        camera->pitchUpdateRateInv = 1200.0f;
+        camera->xzOffsetUpdateRate = 0.001f;
+        camera->yOffsetUpdateRate = 0.001f;
+        camera->fovUpdateRate = 0.01f;
+    }
+
+    return true;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique0.asm")
+#endif
 
 s32 Camera_Unique6(Camera *camera) {
     Unique6* uniq6 = (Unique6*)camera->paramData;
@@ -4201,7 +4724,177 @@ s32 Camera_Unique9(Camera* camera) {
     return Camera_Noop(camera);
 }
 
+#ifdef NON_EQUIVALENT
+s32 Camera_Demo1(Camera *camera) {
+    struct Actor *sp98;
+    s16 sp96;
+    s16 sp94;
+    VecSph sp88;
+    PosRot sp74;
+    PosRot sp60;
+    Vec3f sp44;
+    Vec3f *sp3C;
+    Vec3f *sp38;
+    Vec3f *sp38_2;
+
+    Vec3f *temp_s1;
+    f32 temp_f0;
+    u8 temp_a0;
+    s32 phi_v0;
+
+    Demo1* demo1 = (Demo1*)camera->paramData;
+    Demo1Anim* anim = &demo1->anim;
+
+    temp_s1 = &camera->eye;
+    sp3C = &camera->focalPoint;
+    sp38_2 = &camera->targetPosRot;
+    sp38 = &camera->eyeNext;
+
+    if (camera->animState == 0) {
+        CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        demo1->interfaceFlags = NEXTSETTING;
+    }
+
+    if (camera->animState == 0) {
+        anim->unk_1C = 0;
+        func_8010C764(&anim->unk_0C, &camera->targetPosRot, temp_s1);
+        func_8010C764(&anim->unk_14, &camera->focalPoint, temp_s1);
+        func_800B81E0(&sp60, camera->target); // TODO: figure out Vec3f vs PosRot arg
+        func_800B8214(&sp74, camera->target);
+        camera->targetPosRot.pos.x = (sp74.pos.x + sp60.pos.x) * 0.5f;
+        camera->targetPosRot.pos.y = (sp74.pos.y + sp60.pos.y) * 0.5f;
+        camera->targetPosRot.pos.z = (sp74.pos.z + sp60.pos.z) * 0.5f;
+        camera->targetPosRot.rot = sp60.rot;
+        camera->animState++;
+    }
+
+    func_800B8898(camera->globalCtx, camera->target, &sp96, &sp94);
+    
+    temp_f0 = anim->unk_0C.r;
+    // if (camera) {}
+    if ((sp96 > 20) && (sp96 < 300) && (sp94 > 40) && (sp94 < 200)) {
+        if (temp_f0 < 700.0f) {
+            phi_v0 = 0;
+        } else {
+            phi_v0 = 1;
+        }
+    } else if (temp_f0 < 50.0f) {
+        phi_v0 = 2;
+    } else if (temp_f0 < 300.0f) {
+        phi_v0 = 3;
+    } else if (temp_f0 < 700.0f) {
+        phi_v0 = 4;
+    } else {
+        phi_v0 = 5;
+    }
+
+    
+    sp98 = camera->target;
+    temp_a0 = sp98->category;
+
+    if (temp_a0 == 0xA) {
+        if ((phi_v0 > 0) && (phi_v0 < 5)) {
+            phi_v0 = 6;
+        } else {
+            dummy:;
+            if (phi_v0 >= 5) {
+                phi_v0 = 7;
+            }
+        }
+    }
+
+    if (temp_a0 == 0xB) {
+        if ((phi_v0 > 1) && (phi_v0 < 5)) {
+            phi_v0 = 8;
+        }
+    }
+
+
+    switch (phi_v0) {
+        case 1:
+            Camera_LERPCeilVec3f(&camera->targetPosRot, sp3C, 0.1f, 0.1f, 0.1f);
+            func_8010C764(&sp88, sp3C, temp_s1);
+            sp88.r = anim->unk_0C.r;
+            func_8010C7B8(sp38, sp3C, &sp88);
+            *temp_s1 = *sp38;
+            if (sp38) {}
+            func_800CC128(camera, sp3C, temp_s1);
+            break;
+        case 2:
+            Camera_LERPCeilVec3f(&camera->targetPosRot, &camera->focalPoint, 0.1f, 0.1f, 0.1f);
+            break;
+        case 3:
+            sp38 = sp38_2;
+            if (anim->unk_1C == 0) {
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_14, &sp98, 1);
+            }
+            Camera_LERPCeilVec3f(sp38, sp3C, 0.1f, 0.1f, 0.1f);
+            Camera_LERPCeilVec3f(&anim->unk_00, sp38, 0.1f, 0.1f, 0.1f);
+            *temp_s1 = *sp38;
+            func_800CC128(camera, sp3C, temp_s1);
+            break;
+        case 4:
+            if (anim->unk_1C == 0) {
+                anim->unk_14.r = anim->unk_0C.r;
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_14, &sp98, 1);
+            }
+            Camera_LERPCeilVec3f(sp38_2, sp3C, 0.1f, 0.1f, 0.1f);
+            Camera_LERPCeilVec3f(&anim->unk_00, sp38, 0.1f, 0.1f, 0.1f);
+            *temp_s1 = *sp38;
+            func_800CC128(camera, sp3C, temp_s1);
+            break;
+        case 5:
+            sp38 = sp38_2;
+            if (anim->unk_1C == 0) {
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_0C, &sp98, 1);
+            }
+            *sp3C = *sp38;
+            sp44 = anim->unk_00;
+            camera->eyeNext = sp44;
+            *temp_s1 = sp44;
+            break;
+        case 6:
+            if (anim->unk_1C == 0) {
+                anim->unk_0C.yaw = sp98->shape.rot.y;
+                sp98 = camera->target;
+                anim->unk_0C.r = anim->unk_14.r;
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_0C, &sp98, 1);
+            }
+            Camera_LERPCeilVec3f(sp38_2, sp3C, 0.1f, 0.1f, 0.1f);
+            Camera_LERPCeilVec3f(&anim->unk_00, sp38, 0.1f, 0.1f, 0.1f);
+            *temp_s1 = *sp38;
+            func_800CC128(camera, sp3C, temp_s1);
+            break;
+        case 7:
+            if (anim->unk_1C == 0) {
+                anim->unk_0C.yaw = sp98->shape.rot.y;
+                sp98 = camera->target;
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_0C, &sp98, 1);
+            }
+            *sp3C = *sp38_2;
+            sp44 = anim->unk_00;
+            camera->eyeNext = sp44;
+            *temp_s1 = sp44;
+            break;
+        case 8:
+            if (anim->unk_1C == 0) {
+                anim->unk_0C.yaw = sp98->shape.rot.y;
+                sp98 = camera->target;
+                func_800CC260(camera, &anim->unk_00, sp38_2, &anim->unk_0C, &sp98, 1);
+            }
+            Camera_LERPCeilVec3f(sp38_2, sp3C, 0.1f, 0.1f, 0.1f);
+            Camera_LERPCeilVec3f(&anim->unk_00, sp38, 0.1f, 0.1f, 0.1f);
+            *temp_s1 = *sp38;
+            func_800CC128(camera, sp3C, temp_s1);
+            break;
+    }
+
+    anim->unk_1C++;
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo1.asm")
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo2.asm")
 
@@ -4292,24 +4985,23 @@ s32 Camera_Demo4(Camera *camera) {
     Demo4* demo4 = (Demo4*)camera->paramData;
     Demo4Anim* anim = &demo4->anim;
     VecSph sp74;
-    Vec3f sp5C;
-    f32 sp58;
     Vec3f *sp38;
     Vec3f *sp34;
     PosRot *sp30;
+    Vec3f sp5C;
+    f32 pad;
+    f32 sp58;
 
-    Vec3f *temp_s0;
     // f32 temp_f0;
     f32 temp_f16;
-    f32 phi_f2;
+    // f32 phi_f2;
     f32 new_var;
     f32 new_var3;
-    f32 new_var2;
+    // f32 new_var2;
 
 
-    sp34 = &camera->focalPoint;
     sp38 = &camera->eye;
-    temp_s0 = &camera->eyeNext;
+    sp34 = &camera->focalPoint;
     sp30 = &camera->playerPosRot;
 
     func_8010C764(&sp74, sp34, sp38);
@@ -4350,7 +5042,9 @@ s32 Camera_Demo4(Camera *camera) {
             } else {
                 anim->unk_0C = 0.0f;
             }
-            sp58 = anim->unk_22 * 0.31578946f;
+            // sp58 = anim->unk_22 * 0.31578946f;
+            pad = anim->unk_22 * 0.31578946f;
+            sp58 = pad;
             anim->unk_20 = sp30->rot.y + 0x4000;
             sp5C.x = (Math_SinS(anim->unk_20) * sp58 * anim->unk_0C) + sp30->pos.x;
             sp5C.z = (Math_CosS(anim->unk_20) * sp58 * anim->unk_0C) + sp30->pos.z;
@@ -4364,7 +5058,7 @@ s32 Camera_Demo4(Camera *camera) {
             sp74.pitch = 0;
             if (anim->unk_22 >= 38) {
                 anim->unk_22 = 24;
-                camera->animState += 1;
+                camera->animState++;
                 anim->unk_0C = (32.0f - camera->fov) / 24.0f;
                 Quake2_SetType(0x800);
             }
@@ -4393,8 +5087,8 @@ s32 Camera_Demo4(Camera *camera) {
                 anim->unk_22 = 0;
                 // Issues start here
                 // sp58 = anim->unk_20;
-                sp58 = (60.0f - camera->fov) / anim->unk_20;
-                anim->unk_0C = sp58; // TODO: Fake?
+                pad = (60.0f - camera->fov) / anim->unk_20;
+                anim->unk_0C = pad; // TODO: Fake?
                 camera->animState = 3;
             }
             // )
@@ -4432,8 +5126,8 @@ s32 Camera_Demo4(Camera *camera) {
     
 
     // Duplicate return node #32. Try simplifying control flow for better match
-    func_8010C7B8(temp_s0, sp34, &sp74);
-    *sp38 = *temp_s0;
+    func_8010C7B8(&camera->eyeNext, sp34, &sp74);
+    *sp38 = camera->eyeNext;
     return 1;
 }
 #else
@@ -4665,7 +5359,7 @@ s32 Camera_Special8(Camera *camera) {
                 func_800CC938(camera);
                 Camera_SetFlags(camera, 6);
                 Camera_ClearFlags(camera, 0x400);
-            }
+        }
     }
     return 1;
 }

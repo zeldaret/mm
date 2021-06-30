@@ -32,6 +32,7 @@
 #define BGCAM_ROT(v) ((v)[1])
 #define BGCAM_FOV(v) ((v)[2].x)
 #define BGCAM_JFIFID(v) ((v)[2].y)
+#define BGCAM_UNK(v) ((v)[2].z)
 
 #define FLG_ADJSLOPE (1 << 0)
 #define FLG_OFFGROUND (1 << 7)
@@ -505,14 +506,24 @@ typedef struct {
 } Fixed1; // size = 0x2C
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ // Fixed2Anim anim;
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+} Fixed2Anim;
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A; //pad
+    /* 0x1C */ Fixed2Anim anim;
 } Fixed2; // 7
 
 typedef struct {
@@ -529,18 +540,37 @@ typedef struct {
 } Subj1; // 9
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ // Unique2Anim anim;
-} Unique2; // 4
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+} Unique2Anim; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ // Unique2Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12; // pad
+    /* 0x14 */ Unique2Anim anim;
+} Unique2; //
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ Vec3f unk_28;
+    /* 0x34 */ Vec3s unk_34;
+    /* 0x3A */ s16 unk_3A;
+    /* 0x3C */ s16 unk_3C;
+    /* 0x3E */ s16 unk_3E;
+} Unique0Anim; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0C */ Unique0Anim anim;
 } Unique0; // 3
 
 typedef struct {
@@ -548,8 +578,15 @@ typedef struct {
 } Unique6; // size = 0x4
 
 typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ VecSph unk_0C;
+    /* 0x14 */ VecSph unk_14;
+    /* 0x1C */ s16 unk_1C;
+} Demo1Anim; // size = 0xC
+
+typedef struct {
     /* 0x00 */ s16 interfaceFlags;
-    /* 0x04 */ // Demo1Anim anim;
+    /* 0x04 */ Demo1Anim anim;
 } Demo1; // size = 0x4
 
 typedef struct {

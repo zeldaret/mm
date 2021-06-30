@@ -3153,7 +3153,7 @@ f32 randPlusMinusPoint5Scaled(f32 scale);
 f32 Math3D_Normalize(Vec3f* vec);
 // UNK_TYPE4 func_80179678(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // UNK_TYPE4 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
-// void func_80179A44(void);
+void func_80179A44(Vec3f* arg0, PosRot* arg1, Vec3f* arg2);
 void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7, float* param_8, float* param_9);
 // UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vec3f* param_9);
 // void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
