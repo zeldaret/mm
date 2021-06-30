@@ -23,7 +23,7 @@ typedef struct EnFirefly {
     /* 0x188 */ EnFireflyActionFunc actionFunc;
     /* 0x18C */ u8 auraType;
     /* 0x18D */ u8 currentType;
-    /* 0x18E */ u8 invisible;
+    /* 0x18E */ u8 isInvisible;
     /* 0x18F */ u8 unk_18F;
     /* 0x190 */ s16 timer;
     /* 0x192 */ s16 targetPitch;

@@ -104,9 +104,8 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params & KEESE_INVISIBLE) {
         this->actor.flags |= 0x80;
-        // if (1) {}
         this->actor.params = KEESE_GET_MAIN_TYPE(thisx);
-        this->invisible = true;
+        this->isInvisible = true;
     }
 
     if (this->actor.params == KEESE_FIRE_FLY) {
@@ -178,7 +177,7 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
         if (distFromHome < 5.0f) {
             EnFirefly_SetupPerch(this);
             return true;
-        }
+        } //else {
 
         if (distFromHome * 0.05f < 1.0f) {
             this->actor.speedXZ *= distFromHome * 0.05f;
@@ -187,7 +186,7 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x300);
         Math_ScaledStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &this->actor.home.pos) + 0x1554,
                            0x100);
-
+        // }
         return true;
     }
 
@@ -195,15 +194,12 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
 }
 
 s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
-    ObjSyokudai* findTorch;
-    ObjSyokudai* closestTorch;
+    ObjSyokudai* findTorch = (ObjSyokudai*)globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    ObjSyokudai* closestTorch = NULL;
+    f32 currentMinDist = 35000.0f;
     f32 currentDist;
-    f32 currentMinDist;
     Vec3f flamePos;
 
-    findTorch = (ObjSyokudai*)globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
-    closestTorch = NULL;
-    currentMinDist = 35000.0f;
 
     if ((this->actor.params != KEESE_FIRE_FLY) || (this->currentType != KEESE_NORMAL)) {
         return false;
@@ -249,7 +245,7 @@ void EnFirefly_SetupFlyIdle(EnFirefly* this) {
 }
 
 void EnFirefly_FlyIdle(EnFirefly* this, GlobalContext* globalCtx) {
-    s32 skelAnimeUpdated;
+    s32 isSkelAnimeUpdated;
     f32 rand;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -257,11 +253,11 @@ void EnFirefly_FlyIdle(EnFirefly* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    skelAnimeUpdated = func_801378B8(&this->skelAnime, 0.0f);
+    isSkelAnimeUpdated = func_801378B8(&this->skelAnime, 0.0f);
     this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
 
     if (!EnFirefly_ReturnToPerch(this, globalCtx) && !EnFirefly_SeekTorch(this, globalCtx)) {
-        if (skelAnimeUpdated) {
+        if (isSkelAnimeUpdated) {
             rand = Rand_ZeroOne();
 
             if (rand < 0.5f) {
@@ -310,7 +306,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= 0x10;
 
-    if (this->invisible) {
+    if (this->isInvisible) {
         func_800BCB70(&this->actor, 0x4000, 255, 0x2000, 40);
     } else {
         func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
@@ -352,7 +348,7 @@ void EnFirefly_Fall(EnFirefly* this, GlobalContext* globalCtx) {
     if (!(this->actor.flags & 0x8000)) {
         if (this->unk_18F != 0xA) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x6800, 0x200);
-            this->actor.shape.rot.y += -0x300;
+            this->actor.shape.rot.y -= 0x300;
         }
 
         if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
@@ -507,7 +503,7 @@ void EnFirefly_FlyAway(EnFirefly* this, GlobalContext* globalCtx) {
 }
 
 void EnFirefly_SetupStunned(EnFirefly* this) {
-    if (this->invisible) {
+    if (this->isInvisible) {
         func_800BCB70(&this->actor, 0, 255, 0x2000, this->timer);
     } else {
         func_800BCB70(&this->actor, 0, 255, 0, this->timer);
@@ -707,7 +703,7 @@ s32 EnFirefly_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
                                Actor* thisx, Gfx** gfx) {
     EnFirefly* this = THIS;
 
-    if (this->invisible && (globalCtx->actorCtx.unk4 != 0x64)) {
+    if (this->isInvisible && (globalCtx->actorCtx.unk4 != 0x64)) {
         *dList = NULL;
     } else if (limbIndex == 1) {
         pos->y += 2300.0f;
@@ -784,7 +780,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->invisible) {
+    if (this->isInvisible) {
         gfx = POLY_XLU_DISP;
     } else {
         gfx = POLY_OPA_DISP;
@@ -800,7 +796,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnFirefly_OverrideLimbDraw,
                           EnFirefly_PostLimbDraw, &this->actor, gfx + 2);
-    if (this->invisible) {
+    if (this->isInvisible) {
         POLY_XLU_DISP = gfx;
     } else {
         POLY_OPA_DISP = gfx;
