@@ -344,6 +344,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     this->actionFunc = EnFirefly_Fall;
 }
 
+// Fall to the ground after being hit
 void EnFirefly_Fall(EnFirefly* this, GlobalContext* globalCtx) {
     this->actor.colorFilterTimer = 40;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
@@ -367,6 +368,7 @@ void EnFirefly_SetupDie(EnFirefly* this) {
     this->actionFunc = EnFirefly_Die;
 }
 
+// Hit the ground or burn up, spawn drops
 void EnFirefly_Die(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->timer != 0) {
         this->timer--;
@@ -448,6 +450,7 @@ void EnFirefly_SetupRebound(EnFirefly* this) {
     this->actionFunc = EnFirefly_Rebound;
 }
 
+// Knockback after hitting player
 void EnFirefly_Rebound(EnFirefly* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
