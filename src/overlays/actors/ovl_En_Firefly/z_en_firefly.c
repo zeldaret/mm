@@ -113,7 +113,7 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->auraType = KEESE_AURA_FIRE;
         this->timer = Rand_S16Offset(20, 60);
         this->actor.shape.rot.x = 0x1554;
-        this->actor.hintId = 0x11;              // Fire Keese
+        this->actor.hintId = 0x11; // Fire Keese
         this->maxAltitude = this->actor.home.pos.y;
         this->actionFunc = EnFirefly_FlyIdle;
     } else if (this->actor.params == KEESE_ICE_FLY) {
@@ -150,9 +150,9 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, GlobalContext* globalCtx) {
 
 void EnFirefly_Extinguish(EnFirefly* this) {
     this->currentType = KEESE_NORMAL;
-    this->collider.info.toucher.effect = 0;     // Nothing
+    this->collider.info.toucher.effect = 0; // Nothing
     this->auraType = KEESE_AURA_NONE;
-    this->actor.hintId = 0x12;                  // Keese
+    this->actor.hintId = 0x12; // Keese
 }
 
 void EnFirefly_Ignite(EnFirefly* this) {
@@ -160,7 +160,7 @@ void EnFirefly_Ignite(EnFirefly* this) {
         this->currentType = KEESE_FIRE;
         this->collider.info.toucher.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
-        this->actor.hintId = 0x11;              // Fire Keese
+        this->actor.hintId = 0x11; // Fire Keese
     }
 }
 
@@ -703,8 +703,8 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         10.0f * Math_SinS(this->actor.shape.rot.x) * Math_CosS(this->actor.shape.rot.y) + this->actor.world.pos.z;
 }
 
-s32 EnFirefly_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnFirefly_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx, Gfx** gfx) {
     EnFirefly* this = THIS;
 
     if (this->invisible && (globalCtx->actorCtx.unk4 != 0x64)) {
