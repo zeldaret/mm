@@ -272,7 +272,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != 0x12) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
-        } else if (player->transformation == 3) {
+        } else if (player->transformation == PLAYER_FORM_DEKU) {
             Actor_SetSwitchFlag(globalCtx, this->actor.home.rot.x);
         }
         this->unk2B6 = 0;
@@ -289,7 +289,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
             if (globalCtx->sceneNum == 0x12) {
-                if (player->transformation == 3) {
+                if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {
                         this->text = D_80BA5068;
                     } else {
@@ -668,7 +668,7 @@ s32 func_80BA4B24(EnToto* this, GlobalContext* globalCtx) {
     if (func_80BA40D4(this, globalCtx)) {
         player = PLAYER;
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060028B8, -4.0f);
-        if (player->transformation == 2) {
+        if (player->transformation == PLAYER_FORM_ZORA) {
             if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
                 Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
                 return 1;

@@ -2252,8 +2252,8 @@ void func_80123DA4(Player* player);
 // void func_80123F2C(void);
 // void func_80123F48(void);
 // void func_80124020(void);
-u32 func_8012403C(GlobalContext* globalCtx); // Player_IsWearingAMask
-void func_8012404C(GlobalContext* globalCtx);
+u32 Player_GetMask(GlobalContext* globalCtx); // Player_IsWearingAMask
+void Player_RemoveMask(GlobalContext* globalCtx);
 // void func_8012405C(void);
 // void func_80124088(void);
 s32 func_801240C8(Player* player);

@@ -7,6 +7,22 @@
 struct Player;
 
 typedef enum {
+    /* 0x00 */  PLAYER_SHIELD_NONE,
+    /* 0x01 */  PLAYER_SHIELD_HEROS_SHIELD,
+    /* 0x02 */  PLAYER_SHIELD_MIRROR_SHIELD,
+    /* 0x03 */  PLAYER_SHIELD_MAX
+} PlayerShield;
+
+typedef enum {
+    /* 0x00 */  PLAYER_FORM_FIERCE_DEITY,
+    /* 0x01 */  PLAYER_FORM_GORON,
+    /* 0x02 */  PLAYER_FORM_ZORA,
+    /* 0x03 */  PLAYER_FORM_DEKU,
+    /* 0x04 */  PLAYER_FORM_HUMAN,
+    /* 0x05 */  PLAYER_FORM_MAX
+} PlayerTransformation;
+
+typedef enum {
     /* 0x00 */  PLAYER_MASK_NONE,
     /* 0x01 */  PLAYER_MASK_MASK_OF_TRUTH,
     /* 0x02 */  PLAYER_MASK_KAFEIS_MASK,

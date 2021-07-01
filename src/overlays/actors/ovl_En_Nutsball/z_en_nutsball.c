@@ -102,7 +102,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||
             (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
             (this->collider.base.ocFlags1 & OC1_HIT)) {
-            if ((player->currentShield == 1) && (this->collider.base.atFlags & AT_HIT) &&
+            if ((player->currentShield == PLAYER_SHIELD_HEROS_SHIELD) && (this->collider.base.atFlags & AT_HIT) &&
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
                 func_8018219C(&player->shieldMf, &worldRot, 0);

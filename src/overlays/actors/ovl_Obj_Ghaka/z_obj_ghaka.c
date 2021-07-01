@@ -80,14 +80,14 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
             func_800B863C(&this->dyna.actor, globalCtx);
-            if (player->transformation == 1) {
+            if (player->transformation == PLAYER_FORM_GORON) {
                 this->dyna.actor.textId = 0xCF3;
             } else {
                 this->dyna.actor.textId = 0xCF2;
             }
         }
     }
-    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->transformation == 1) {
+    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
         player->stateFlags2 &= ~0x10;

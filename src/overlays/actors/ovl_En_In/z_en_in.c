@@ -471,7 +471,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
 u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
-    if (func_8012403C(globalCtx) == 8) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
         if (!(gSaveContext.weekEventReg[63] & 0x40)) {
             return 0x34A9;
         } else if (this->unk4AC & 8) {
@@ -1315,7 +1315,7 @@ void func_808F5A94(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
     if (func_800F41E4(globalCtx, &globalCtx->actorCtx)) {
-        if ((func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40) ||
             gSaveContext.weekEventReg[56] & 8) {
             if (gSaveContext.day == 3) {
                 func_808F5728(globalCtx, this, 6, &this->unk48C);
@@ -1323,8 +1323,8 @@ void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
                 func_808F5728(globalCtx, this, 2, &this->unk48C);
             }
         }
-    } else if (func_8012403C(globalCtx) != 8 ||
-               (func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40)) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK ||
+               (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40)) {
         if (gSaveContext.day == 3) {
             func_808F5728(globalCtx, this, 4, &this->unk48C);
         } else {
@@ -1337,7 +1337,8 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == 0) {
         this->actionFunc = func_808F5B58;
     }
-    if ((func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40) || gSaveContext.weekEventReg[56] & 8) {
+    if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40) ||
+        gSaveContext.weekEventReg[56] & 8) {
         if (gSaveContext.day != 3) {
             func_808F5728(globalCtx, this, 2, &this->unk48C);
         } else {
@@ -1473,7 +1474,7 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk4AC &= ~2;
         func_808F38F8(this, globalCtx);
     }
-    if (func_8012403C(globalCtx) == 8) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
         this->unk4AC |= 0x40;
     } else {
         this->unk4AC &= ~0x40;
@@ -1493,8 +1494,9 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     SysMatrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (this == (EnIn*)player->targetActor && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) &&
-        newUnk4C8 == 3 && this->unk4C8 == 3) {
+    if (this == (EnIn*)player->targetActor &&
+        !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) && newUnk4C8 == 3 &&
+        this->unk4C8 == 3) {
         if (!(globalCtx->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
         }

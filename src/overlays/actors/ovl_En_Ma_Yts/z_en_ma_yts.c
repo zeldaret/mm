@@ -325,13 +325,13 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x335F, &this->actor);
                 this->textId = 0x335F;
             } else {
-                // Saying to non-human Link: "Pretend you did not heard that."
+                // Saying to non-human Link: "Pretend you did not hear that."
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 func_801518B0(globalCtx, 0x3362, &this->actor);
                 this->textId = 0x3362;
                 func_80151BB4(globalCtx, 5);
             }
-        } else if (func_8012403C(globalCtx)) { // Player_IsWearingAMask
+        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x40)) {
                 gSaveContext.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);
