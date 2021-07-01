@@ -184,7 +184,8 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         {
             f32 velocity;
 
-            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->rightHandWorld.pos, &this->actor.world.pos, &bodyDistDiffVec);
+            bodyDistDiff =
+                Math_Vec3f_DistXYZAndStoreDiff(&player->rightHandWorld.pos, &this->actor.world.pos, &bodyDistDiffVec);
             if (bodyDistDiff < 30.0f) {
                 velocity = 0.0f;
                 phi_f16 = 0.0f;

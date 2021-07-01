@@ -306,7 +306,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 800.0f) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-                
+
                 if (this->actor.xzDistToPlayer < 180.0f) {
                     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
                     func_80926318(this, globalCtx);

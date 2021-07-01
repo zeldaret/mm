@@ -87,7 +87,8 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->transformation == PLAYER_FORM_GORON) {
+    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) &&
+        player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
         player->stateFlags2 &= ~0x10;
