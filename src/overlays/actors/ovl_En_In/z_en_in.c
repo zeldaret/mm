@@ -216,21 +216,21 @@ void func_808F32A0(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
-    if (this->colliderCylinder.base.acFlags & 2) {
-        this->colliderCylinder.base.acFlags &= ~2;
+    if (this->colliderCylinder.base.acFlags & AC_HIT) {
+        this->colliderCylinder.base.acFlags &= ~AC_HIT;
     }
     return 0;
 }
 
 s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if (this->colliderJntSph.base.atFlags & 2) {
-        this->colliderJntSph.base.atFlags &= ~2;
-        if (this->colliderJntSph.base.atFlags & 4) {
+    if (this->colliderJntSph.base.atFlags & AT_HIT) {
+        this->colliderJntSph.base.atFlags &= ~AT_HIT;
+        if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Audio_PlayActorSound2(&player->base, 0x83E);
+        Audio_PlayActorSound2(&player->actor, 0x83E);
         func_800B8D98(globalCtx, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -247,16 +247,16 @@ s32 func_808F33B8(void) {
 }
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f sp30;
 
     if (this->unk23D == 0) {
         this->unk494 = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
     if (func_8013D5E8(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
-        sp30.x = player->base.world.pos.x;
+        sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
-        sp30.z = player->base.world.pos.z;
+        sp30.z = player->actor.world.pos.z;
         func_8013D2E0(&sp30, &this->actor.focus, &this->actor.shape, &this->unk352, &this->unk358, &this->unk35E,
                       D_808F6C0C);
     } else {
@@ -1211,7 +1211,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
     s16 yawDiffA;
-    ActorPlayer* player;
+    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1232,7 +1232,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     }
     if (*arg3 == 1) {
         player = PLAYER;
-        func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
+        func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
     dummy_label_895711:; // POSSIBLE FAKE MATCH
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1485,7 +1485,7 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s32 newUnk4C8;
 
     newUnk4C8 = func_80152498(&globalCtx->msgCtx);
@@ -1493,7 +1493,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     SysMatrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (this == (EnIn*)player->unkA88 && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) &&
+    if (this == (EnIn*)player->targetActor && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) &&
         newUnk4C8 == 3 && this->unk4C8 == 3) {
         if (!(globalCtx->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;

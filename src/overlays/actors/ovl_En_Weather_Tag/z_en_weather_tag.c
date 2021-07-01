@@ -111,10 +111,10 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 // called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
 u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
                  u8 weatherMode) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
             D_801BDBB8 = 1;
             if (!(globalCtx->kankyoContext.unk1E == 0) ||
@@ -141,10 +141,10 @@ u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 // called WeatherTag_CheckRestoreWeather in OOT
 u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20,
                  u16 new24) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
             D_801BDBB8 = 1;
             if (!(globalCtx->kankyoContext.unk1E == 0) ||
@@ -167,11 +167,11 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 
 // modify wind?
 void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     f32 distance;
     f32 partialResult;
 
-    distance = Actor_XZDistanceBetweenActors(&player->base, &this->actor);
+    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     if (this->fadeDistance < distance) {
         distance = this->fadeDistance;
     }
@@ -260,7 +260,9 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
                     newUnk20 = 4;
                     break;
             }
+
             Math_SmoothStepToF(&D_801F4E74, 0.0f, 0.2f, 0.02f, 0.001f);
+
             if (globalCtx->kankyoContext.unk20 != newUnk20) {
                 globalCtx->kankyoContext.unk21 = 1;
                 globalCtx->kankyoContext.unk20 = newUnk20;
@@ -353,7 +355,7 @@ void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // non-matching: two instructions are swapped
 // type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
@@ -413,11 +415,11 @@ void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) 
     }
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // non_matching: the parameters for func_800BCCDC are correct, but out of order
 // WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s32 pad;
     f32 distance;
     f32 range;
@@ -429,9 +431,9 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     // ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
     // ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
     // efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
-    func_800BCCDC(this->pathPoints, this->pathCount, &player->base.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &player->actor.world.pos, &this->actor.world.pos, 0);
 
-    distance = Actor_XZDistanceBetweenActors(&player->base, &this->actor);
+    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
@@ -457,9 +459,9 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if (Actor_XZDistanceBetweenActors(&player->base, &this->actor) < WEATHER_TAG_RANGE100(this)) {
+    if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
             if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) &&
                 (globalCtx->kankyoContext.unkF2[2] == 0)) {
@@ -482,7 +484,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->base, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }

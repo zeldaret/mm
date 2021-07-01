@@ -110,7 +110,7 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->actor.xzDistToPlayer < 100.0f) {
-        angle = this->actor.yawTowardsPlayer - PLAYER->base.world.rot.y;
+        angle = this->actor.yawTowardsPlayer - PLAYER->actor.world.rot.y;
         if (ABS_ALT(angle) >= 0x5556) {
             func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
         }
@@ -273,7 +273,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         Actor_MarkForDeath(&this->actor);
-    } else if (this->collider.base.acFlags & 2) {
+    } else if (this->collider.base.acFlags & AC_HIT) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -282,17 +282,22 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         func_809262BC(this);
         func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
-        if (!(this->collider.base.ocFlags1 & 8) && (this->actor.xzDistToPlayer > 28.0f)) {
-            this->collider.base.ocFlags1 |= 8;
+
+        if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 28.0f)) {
+            this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
         }
+
         if ((this->actor.colChkInfo.mass != MASS_IMMOVABLE) &&
             (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
             this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
-        this->collider.base.acFlags &= ~2;
+
+        this->collider.base.acFlags &= ~AC_HIT;
+
         if ((this->actor.params >> 7) & 1) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+
             if (this->actor.xzDistToPlayer < 800.0f) {
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
                 func_80926318(this, globalCtx);
@@ -301,6 +306,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 800.0f) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                
                 if (this->actor.xzDistToPlayer < 180.0f) {
                     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
                     func_80926318(this, globalCtx);
@@ -324,7 +330,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
-            this->collider.base.ocFlags1 &= ~8;
+            this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -357,9 +363,9 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
     void* pad2;
     s32 atHit;
 
-    atHit = (this->collider.base.atFlags & 2) != 0;
+    atHit = (this->collider.base.atFlags & AT_HIT) != 0;
     if (atHit) {
-        this->collider.base.atFlags &= ~2;
+        this->collider.base.atFlags &= ~AT_HIT;
     }
     func_80926394(this, globalCtx);
     if (this->timer > 0) {

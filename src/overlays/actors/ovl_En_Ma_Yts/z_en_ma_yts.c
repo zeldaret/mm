@@ -142,11 +142,11 @@ void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
 }
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 flag = this->unk_32C == 2 ? true : false;
 
     if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
-        this->unk_1D8.unk_18 = player->base.world.pos;
+        this->unk_1D8.unk_18 = player->actor.world.pos;
         this->unk_1D8.unk_18.y -= -10.0f;
     } else {
         Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.parent->world.pos, 8.0f);

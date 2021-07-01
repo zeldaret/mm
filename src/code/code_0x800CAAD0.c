@@ -50,7 +50,7 @@ void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 index, Actor* a
     angleChange = colCtx->dyna.bgActors[index].curTransform.rot.y - colCtx->dyna.bgActors[index].prevTransform.rot.y;
 
     if (actor->id == 0) {
-        ((ActorPlayer*)actor)->unkAD4 += angleChange;
+        ((Player*)actor)->currentYaw += angleChange;
     }
 
     actor->shape.rot.y += angleChange;
