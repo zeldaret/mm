@@ -388,17 +388,29 @@ typedef struct {
 } Jump2; // 9
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
-    /* 0x28 */ // Jump3Anim anim;
+    /* 0x00 */ f32 unk_00; //
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08; //
+    /* 0x0A */ s16 unk_0A; //
+    /* 0x0C */ s32 unk_0C; // mode
+    /* 0x10 */ s16 unk_10; //
+    /* 0x12 */ s16 unk_12;
+    /* 0x1C */ s16 unk_1C;
+} Jump3Anim;
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ Jump3Anim anim;
 } Jump3; // 10
 
 typedef struct {
@@ -615,7 +627,7 @@ typedef struct {
     /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;
-} Demo4Anim; // size = 0xC
+} Demo4Anim;
 
 typedef struct {
     /* 0x00 */ s16 interfaceFlags;
@@ -623,8 +635,19 @@ typedef struct {
 } Demo4; // size = 0x4
 
 typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ VecSph unk_1C;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+} Demo5Anim;
+
+typedef struct {
     /* 0x00 */ s16 interfaceFlags;
-    /* 0x04 */ // Demo5Anim anim;
+    /* 0x04 */ Demo5Anim anim;
 } Demo5; // size = 0x4
 
 typedef struct {

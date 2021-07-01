@@ -1,6 +1,6 @@
 #include "ultra64.h"
 #include "global.h"
-#include "src/overlays/actors/ovl_En_Horse/z_en_horse.h"
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 #include "z_camera_data.c"
 
@@ -3198,7 +3198,253 @@ s32 Camera_Jump2(Camera *camera) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Jump2.asm")
 #endif
 
+#ifdef NON_EQUIVALENT
+s32 Camera_Jump3(Camera* camera) {
+    Vec3f* sp48 = &camera->eye;
+    Vec3f* sp44 = &camera->focalPoint;
+    Vec3f* sp40 = &camera->eyeNext;
+    PosRot* sp3C = &camera->playerPosRot;
+    Jump3* jump3 = (Jump3*)camera->paramData;
+    f32 spD0;
+    f32 spCC;
+    f32 spC0;
+    Vec3f spB4;
+    VecSph spAC;
+    CameraModeValue* values;
+    VecSph sp9C;
+    VecSph sp94;
+    f32 phi_f14;
+    f32 phi_f2;
+    f32 phi_f2_2; // combine with above?
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 phi_f0;
+    Jump3Anim* anim = &jump3->anim; // sp28
+    f32 sp78;
+    s32 pad;
+    f32 sp4C;
+    Vec3f sp64;
+    f32 sp60;
+    f32 sp5C;
+    s32 sp58;
+
+    // f32 new_var;
+
+    sp78 = func_800CB700(camera);
+    func_800B81E0(&sp64, camera->player);
+    sp60 = camera->waterYPos - sp48->y;
+
+    sp58 = false;
+
+    if (RELOAD_PARAMS) {
+        anim->unk_0A = camera->mode;
+        anim->unk_0C = 0;
+    }
+
+
+    if (camera->mode == CAM_MODE_NORMAL) {
+        if ((camera->player->base.bgCheckFlags & 0x10) || (anim->unk_0C != 0)) {
+            if (anim->unk_0A != 0xF) {
+                anim->unk_0A = 0xF;
+                sp58 = true;
+                anim->unk_0C = 0xA;
+            }
+        } else if (sp60 < 50.0f) {
+            if (anim->unk_0A != 0) {
+                anim->unk_0A = 0;
+                sp58 = true;
+            }
+        } else if (Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) {
+            if (anim->unk_0A != 5) {
+                anim->unk_0A = 5;
+                sp58 = true;
+            }
+        } else if ((sp60 > 250.0f) && (anim->unk_0A != 0x1A)) {
+            anim->unk_0A = 0x1A;
+            sp58 = true;
+        }
+    }
+
+    if (anim->unk_0C != 0) {
+        anim->unk_0C--;
+    }
+
+    func_8010C764(&sp9C, sp44, sp48);
+    func_8010C764(&sp94, sp44, sp40);
+
+
+    // Everything above is down to SP and floats
+    // PERM_RANDOMIZE(
+    
+    if (!RELOAD_PARAMS && !sp58) {
+    } else {
+        values = sCameraSettings[camera->setting].cameraModes[anim->unk_0A].values;
+        
+        sp5C = 0.8f - -0.2f * (68.0f / sp78);
+        temp_f0 = sp78 * 0.01f * sp5C;
+        
+        jump3->unk_00 = NEXTSETTING * temp_f0;
+        jump3->unk_04 = NEXTSETTING * temp_f0;
+        jump3->unk_08 = NEXTSETTING * temp_f0;
+        jump3->unk_20 = DEGF_TO_BINANG(NEXTSETTING);
+        jump3->unk_0C = NEXTSETTING;
+        jump3->unk_10 = NEXTSETTING;
+        jump3->unk_14 = NEXTSETTING * 0.01f;
+        jump3->unk_18 = NEXTSETTING;
+        jump3->unk_1C = NEXTSETTING * 0.01f;
+        jump3->unk_22 = NEXTSETTING;
+    }
+
+
+    sCameraInterfaceFlags = jump3->unk_22;
+
+
+    switch (camera->animState) {
+        case 0:
+            anim->unk_10 = 0x1000;
+        case 10:
+        case 20:
+            anim->unk_00 = camera->playerGroundY;
+            D_801EDC30[camera->thisIdx].unk_5C.yaw = D_801EDC30[camera->thisIdx].unk_5C.pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
+            anim->unk_08 = 0xA;
+            D_801EDC30[camera->thisIdx].unk_5C.r = jump3->unk_0C;
+            camera->animState++;
+            D_801EDC30[camera->thisIdx].unk_66 = 0;
+            break;
+        default:
+            if (anim->unk_08 != 0) {
+                anim->unk_08--;
+            }
+            break;
+    }
+
+    spC0 = sp64.y - sp3C->pos.y;
+    spB4 = *sp48;
+
+    // crazy things going on with temp_f0_2
+    // temp_f0_2 = camera->speedRatio; // Removing this temp fixes large chuncks of code and destorys other chuncks of code
+
+    spD0 = camera->speedRatio;
+    spD0 *=  0.5f;
+    phi_f2 = camera->speedRatio * 0.2f;
+    spCC = phi_f2;
+
+    if (D_801EDC30[camera->thisIdx].unk_64 == 1) {
+        phi_f0 = 0.5f;
+    } else {
+        phi_f0 = spD0;
+    }
+
+    if (D_801EDC30[camera->thisIdx].unk_66 != 0) {
+        // spD0 = temp_f2;
+        // spCC = camera->speedRatio * 0.2f;
+        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_5C.r + D_801EDC30[camera->thisIdx].unk_66 * 2), camera->yawUpdateRateInv, spD0, 0.1f);
+        camera->pitchUpdateRateInv = Camera_LERPCeilF((40.0f + D_801EDC30[camera->thisIdx].unk_66 * 2), camera->pitchUpdateRateInv, spCC, 0.1f);
+        D_801EDC30[camera->thisIdx].unk_66++;
+    } else {
+        // spCC = camera->speedRatio * 0.2f;
+        phi_f14 = camera->yawUpdateRateInv;
+        camera->yawUpdateRateInv = Camera_LERPCeilF(D_801EDC30[camera->thisIdx].unk_5C.r, phi_f14, phi_f0, 0.1f);
+        camera->pitchUpdateRateInv = Camera_LERPCeilF(40.0f, camera->pitchUpdateRateInv, spCC, 0.1f);
+    }
+
+
+    if (jump3->unk_22 & 0x80) {
+        camera->xzOffsetUpdateRate = Camera_LERPCeilF(0.01f, camera->xzOffsetUpdateRate, spD0, 0.0001f);
+        sp4C = sqrtf(SQXZ(camera->playerPosDelta));
+        if (1) {}
+        sp5C = sp4C / func_800CB780(camera);
+        camera->speedRatio = func_8010C36C(sp5C / func_800CB780(camera), 1.8f);
+        spCC = camera->speedRatio * 0.2f;
+    } else {
+        camera->xzOffsetUpdateRate = Camera_LERPCeilF(0.05f, camera->xzOffsetUpdateRate, spD0, 0.0001f);
+        spCC = phi_f2;
+        // spCC = camera->speedRatio * 0.2f;
+    }
+
+    dummy:;
+    
+    
+    camera->yOffsetUpdateRate = Camera_LERPCeilF(0.05f, camera->yOffsetUpdateRate, spCC, 0.0001f);
+    camera->fovUpdateRate = Camera_LERPCeilF(0.05f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
+
+    // Everything below is down to SP and floats
+    // )
+
+    if (sp60 < 50.0f) {
+        sp5C = camera->waterYPos - spC0;
+        if (sp60 < 0.0f) {
+            phi_f14 = 1.0f;
+        } else {
+            phi_f14 = 1.0f - (sp60 / 50.0f);
+        }
+        func_800CD834(camera, &sp94, jump3->unk_00, &sp5C, phi_f14 * 50.0f);
+    } else {
+        Camera_CalcAtDefault(camera, &sp94, jump3->unk_00, jump3->unk_22);
+    }
+
+    func_8010C764(&spAC, sp44, sp40);
+    spAC.r = func_800CE79C(camera, spAC.r, jump3->unk_04, jump3->unk_08, anim->unk_08);
+    camera->dist = spAC.r;
+
+    if (!(Camera_fabsf(sp3C->pos.y - camera->playerGroundY) < 10.0f) && !(Camera_fabsf(sp64.y - camera->waterYPos) < 50.f)) { // No 0?
+        camera->pitchUpdateRateInv = 100.0f;
+    }
+
+    if (jump3->unk_22 & 0x20) {
+        phi_f2 = CLAMP_MAX(camera->speedRatio * 1.3f, 0.6f);
+        spAC.pitch = Camera_LERPCeilS((spAC.pitch * phi_f2) + (jump3->unk_20 * (1.0f - phi_f2)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * phi_f2)), 5);
+    } else if (D_801EDC30[camera->thisIdx].unk_64 == 1) {
+        spAC.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.yaw, sp94.yaw, 1.0f / camera->yawUpdateRateInv, 5);
+        temp_f0 = 1.0f / camera->yawUpdateRateInv;
+        spAC.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.pitch, sp94.pitch, temp_f0, 5);
+    } else if (jump3->unk_22 & 0x88) {
+        spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, jump3->unk_14, 0.0f);
+        phi_f2_2 = CLAMP_MAX(camera->speedRatio * 1.3f, 1.0f);
+        spAC.pitch = Camera_LERPCeilS((spAC.pitch * phi_f2_2) + (jump3->unk_20 * (1.0f - phi_f2_2)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * phi_f2_2)), 5);
+    } else {
+        spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, jump3->unk_14, 0.0f);
+        spAC.pitch = Camera_CalcDefaultPitch(camera, sp94.pitch, jump3->unk_20, 0);
+    }
+    
+    if (spAC.pitch > 0x38A4) {
+        spAC.pitch = 0x38A4;
+    }
+
+    if (spAC.pitch < -0x1554) {
+        spAC.pitch = -0x1554;
+    }
+
+    func_8010C7B8(sp40, sp44, &spAC);
+    if ((camera->status == CAM_STAT_ACTIVE) && !(jump3->unk_22 & 0x40)) {
+        if (func_800CBA7C(camera) == 0) {
+            func_800CED90(camera, &spAC, &sp9C, jump3->unk_04, phi_f14 = jump3->unk_0C, &D_801EDC30[camera->thisIdx], &anim->unk_10);
+        }
+        if (jump3->unk_22 & 4) {
+            camera->inputDir.x = -sp9C.pitch;
+            camera->inputDir.y = sp9C.yaw + 0x8000;
+            camera->inputDir.z = 0;
+        } else {
+            func_8010C764(&spAC, sp48, sp44);
+            camera->inputDir.x = spAC.pitch;
+            camera->inputDir.y = spAC.yaw;
+            camera->inputDir.z = 0;
+        }
+    } else {
+        D_801EDC30[camera->thisIdx].unk_5C.r = jump3->unk_0C;
+        D_801EDC30[camera->thisIdx].unk_64 = 0;
+        sUpdateCameraDirection = 0;
+        *sp48 = *sp40;
+    }
+
+    camera->fov = Camera_LERPCeilF(jump3->unk_18, camera->fov, camera->fovUpdateRate, 0.1f);
+    camera->roll = Camera_LERPCeilS(0, camera->roll, 0.50f, 5); // TODO is extra 0 in 0.50f needed?
+    camera->atLERPStepScale = Camera_ClampLERPScale(camera, jump3->unk_1C);
+    return true;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Jump3.asm")
+#endif
 
 s32 Camera_Jump4(Camera* camera) {
     return Camera_Noop(camera);
@@ -5134,7 +5380,105 @@ s32 Camera_Demo4(Camera *camera) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo4.asm")
 #endif
 
+#ifdef NON_EQUIVALENT
+s32 Camera_Demo5(Camera* camera) {
+    s16 new_var2;
+    CameraModeValue* values;
+    Demo5* demo5 = (Demo5*)camera->paramData;
+    Demo5Anim* anim = &demo5->anim;
+    VecSph sp74;
+    Vec3f sp5C;
+    f32 sp58;
+    Vec3f* sp38 = &camera->eye;
+    Vec3f* sp34 = &camera->focalPoint;
+    PosRot* sp30 = &camera->playerPosRot;
+
+    f32 new_var;
+    f32 phi_f0;
+
+    func_8010C764(&sp74, sp34, sp38);
+
+    if ((camera->animState == 0) || (camera->animState == 0xA) || (camera->animState == 0x14)) {
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        demo5->interfaceFlags = NEXTSETTING;                
+        camera->animState = 0;
+        anim->unk_00 = *sp34;
+        anim->unk_1C = sp74;
+        anim->unk_18 = camera->fov;
+    }
+
+    func_800B81E0(&sp5C, camera->player);
+    
+    sCameraInterfaceFlags = demo5->interfaceFlags;
+
+    switch (camera->animState) {
+        case 0:
+            camera->animState++;
+            sp74.pitch = 0;
+            anim->unk_26 = 0x12;
+            anim->unk_14 = 80.0f;
+            sp74.r = 30.0f;
+            camera->fov = 80.0f;
+            anim->unk_10 = (Rand_ZeroOne() - 0.5f) * 40.0f;
+            camera->roll = 0;
+            sp5C.x = sp30->pos.x;
+            sp5C.z = sp30->pos.z;
+            *sp34 = sp5C;
+        case 1:
+            anim->unk_26--;
+            if (anim->unk_26 <= 0) {
+                anim->unk_26 = 0;
+                camera->animState = 2;
+                anim->unk_24 = camera->playerPosRot.rot.y + 0x4000;
+                anim->unk_26 = 0x2E;
+                Quake2_SetType(0x200);
+                Quake2_SetCountdown(0x2E);
+            }
+            break;
+        case 2:
+            anim->unk_0C = anim->unk_26 * 7.826087f;
+            // phi_f0 = (anim->unk_10 < 0.0f) ? -1.0f : 1.0f;
+            sp58 = anim->unk_0C * 0.017453292f;
+            new_var = sin_rad(sp58);
+            anim->unk_0C = ((anim->unk_10 < 0.0f) ? -1.0f : 1.0f) * new_var;
+            sp58 = (0x2E - anim->unk_26) * 0.10869565f;
+            sp5C.x = (Math_SinS(anim->unk_24) * sp58 * anim->unk_0C) + sp30->pos.x;
+            sp5C.z = (Math_CosS(anim->unk_24) * sp58 * anim->unk_0C) + sp30->pos.z;
+            sp5C.y -= (sp5C.y - camera->playerPosRot.pos.y) * 0.2f;
+            Camera_LERPCeilVec3f(&sp5C, sp34, 0.1f, 0.1f, 0.1f);
+            new_var = anim->unk_0C * (anim->unk_26 * 0.4347826f);
+            camera->roll = (new_var * 182.04167f) + 0.5f;
+            sp74.r = Camera_LERPCeilF(anim->unk_14, sp74.r, 1.0f / anim->unk_26, 0.1f);
+            anim->unk_26--;
+            sp74.pitch = 0;
+            if (anim->unk_26 <= 0) {
+                camera->animState = 3;
+                Quake2_ClearType(0x200);
+            }
+            break;
+        case 999:
+            func_800B81E0(&sp5C, camera->player);
+            camera->animState = 3;
+            Quake2_ClearType(0x200);
+            break;
+        case 3:
+            // sp30 = &anim->unk_1C;
+            sp5C.y -= (sp5C.y - camera->playerPosRot.pos.y) * 0.1f;
+            Camera_LERPCeilVec3f(&sp5C, sp34, 0.1f, 0.1f, 0.1f);
+            camera->roll = 0;
+            sp74 = anim->unk_1C;
+            camera->fov = anim->unk_18;
+            break;
+    }
+
+    func_8010C7B8(&camera->eyeNext, sp34, &sp74);
+    *sp38 = camera->eyeNext;
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo5.asm")
+#endif
+
 
 s32 Camera_Demo6(Camera* camera) {
     return Camera_Noop(camera);
