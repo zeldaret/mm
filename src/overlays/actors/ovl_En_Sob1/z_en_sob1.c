@@ -103,34 +103,116 @@ const ActorInit En_Sob1_InitVars = {
 */
 
 extern UNK_TYPE D_0401F740;
-
 extern UNK_TYPE D_0401F8C0;
-
 extern UNK_TYPE D_0401F7C0;
-
 extern AnimationHeader D_06009120;
-
 extern AnimationHeader D_06008268;
-
 extern FlexSkeletonHeader D_0600D208;
-
 extern AnimationHeader D_0600078C;
-
+extern AnimationHeader D_060087BC;
 extern FlexSkeletonHeader D_06011AC8;
-
 extern AnimationHeader D_060000FC;
-
 extern FlexSkeletonHeader D_06009220;
-
 extern Gfx D_06000970[];
-
 extern UNK_TYPE D_06005458;
+extern UNK_TYPE D_060050A0;
+extern UNK_TYPE D_060058A0;
+extern UNK_TYPE D_060060A0;
+extern UNK_TYPE D_06010438;
+extern UNK_TYPE D_06010C38; 
+extern UNK_TYPE D_06011038;
 
 extern ActorAnimationEntryS D_80A10860[];
+/*
+static ActorAnimationEntryS D_80A10860[] = {
+    {&D_06009120, 2.0f, 0, -1, 0, 20},
+    {&D_06008268, 1.0f, 0, -1, 2, 0},
+    {&D_060087BC, 1.0f, 0, -1, 0, 0},
+};
+*/
 
-extern UNK_PTR D_80A10A2C[];
+extern Vec3s D_80A108B0[];
+/*
+static Vec3s D_80A108B0[] = {
+    {0x00D0, 0x0283, 0x00D6},
+    {0x00A1, 0x0283, 0x00D5},
+    {0x012C, 0x0283, 0x0283},
+    {0x00A1, 0x0283, 0x00D5},
+};
+*/
 
-extern UNK_PTR D_80A10A38[];
+extern u16 D_80A108C8[];
+//static u16 D_80A108C8[] = {0x12D6, 0x0BC0, 0x0640, 0x0BC0};
+
+extern u16 D_80A108D0[];
+//static u16 D_80A108D0[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+
+extern u16 D_80A108D8[];
+//static u16 D_80A108D8[] = {0x12E6, 0x0BD6, 0x0647, 0x0BD6};
+
+extern u16 D_80A108E0[];
+//static u16 D_80A108E0[] = {0x12E1, 0x0BD2, 0x0645, 0x0BD2};
+
+extern u16 D_80A108E8[];
+//static u16 D_80A108E8[] = {0x12E5, 0x0BD5, 0x0646, 0x0BD5};
+
+extern u16 D_80A108F0[];
+//static u16 D_80A108F0[] = {0x12E4, 0x0BD4, 0x0645 0x0BD4};
+
+extern u16 D_80A108F8[];
+//static u16 D_80A108F8[] = {0x12E1, 0x0BD1, 0x0641, 0x0BD1};
+
+extern u16 D_80A10900[];
+//static u16 D_80A10900[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+
+extern f32 D_80A10908[];
+//static f32 D_80A10908[] = {0.01f, 0.01f, 0.01f, 0.01f};
+
+extern ShopItem D_80A10918[][3];
+/*
+static ShopItem D_80A10918[][3] = {
+    {
+        {SI_POTION_RED_4, 1258, 42, 325},
+        {SI_ARROWS_SMALL_1, 1240, 42, 325},
+        {SI_SHIELD_HERO_3, 1222, 42, 325},
+    },
+    {
+        {SI_POTION_RED_5, -57, 42, -62},
+        {SI_ARROWS_SMALL_2, -75, 42, -62},
+        {SI_BOMB_2, -93, 42, -62},
+    },
+    {
+        {SI_BOMB_BAG_20_2, 221, -7, 73},
+        {SI_BOMBCHU, 203, -7, 69},
+        {SI_BOMB_1, 185, -7, 65},
+    },
+    {
+        {SI_POTION_RED_6, -57, 42, -62},
+        {SI_ARROWS_SMALL_3, -75, 42, -62},
+        {SI_BOMB_3, -93, 42, -62},
+    },
+};
+*/
+
+extern EnSob1UnkStruct D_80A10978[];
+/*
+static EnSob1UnkStruct D_80A10978[] = {
+    {1170.0f, 1230.0f, 360.0f, 380.0f},
+    {-142.0f, -72.0f, -20.0f, 0.0f},
+    {138.0f, 200.0f, 72.0f, 16.0f},
+    {-142.0f, -72.0f, -20.0f, 0.0f},
+}
+*/
+
+extern Vec3f D_80A109B8[];
+/*
+static Vec3f D_80A109B8[] = {
+    {1240.0f, 45.0f, 349.0f},
+    {-75.0f, 45.0f, -38.0f},
+    {197.0f, -4.0f, 93.0f},
+    {-75.0f, 45.0f, -38.0f},
+}
+*/
 
 extern InitChainEntry D_80A109E8[];
 /*
@@ -139,35 +221,28 @@ static InitChainEntry sInitChain[] = {
 };
 */
 
-extern Vec3s D_80A108B0[];
+extern EnSob1ActionFunc D_80A109EC[];
+/*
+static EnSob1ActionFunc D_80A109EC[] = {
+    func_80A0F470, func_80A0F554, func_80A0F638, func_80A0F554,
+};
+*/
 
 extern Vec3f D_80A109FC[];
+/*
+extern Vec3f D_80A109FC[] = {
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, -4.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, -4.0f, 0.0f},
+};
+*/
 
-extern ShopItem D_80A10918[][3];
+extern UNK_PTR D_80A10A2C[];
+//static UNK_PTR D_80A10A2C[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
 
-extern EnSob1ActionFunc D_80A109EC[];
-
-extern f32 D_80A10908[];
-
-extern EnSob1UnkStruct D_80A10978[];
-
-extern u16 D_80A108C8[];
-
-extern Vec3f D_80A109B8[];
-
-extern u16 D_80A108D0[];
-
-extern u16 D_80A108D8[];
-
-extern u16 D_80A108E0[];
-
-extern u16 D_80A108E8[];
-
-extern u16 D_80A108F0[];
-
-extern u16 D_80A108F8[];
-
-extern u16 D_80A10900[];
+extern UNK_PTR D_80A10A38[];
+//static UNK_PTR D_80A10A38[] = { &D_06010438, &D_06010C38, &D_06011038 };
 
 void func_80A0C810(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
     f32 frameCount;
@@ -342,7 +417,7 @@ u16 func_80A0CC88(EnSob1* this) {
             return 0x64C;
         } else if (gSaveContext.day == 2) {
             return 0x64D;
-        } else if (gSaveContext.isNight == 0) {
+        } else if (!gSaveContext.isNight) {
             return 0x64E;
         } else {
             return 0x64F;
@@ -1427,7 +1502,7 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.world.pos.z += worldPos->z;
         shopItems = D_80A10918[this->unk3CC];
         if ((this->unk3CC == 2) && (gSaveContext.weekEventReg[33] & 8)) {
-            D_80A10918[this->unk3CC][0].shopItemId = 24;
+            D_80A10918[this->unk3CC][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
         this->cutsceneState = 0;
