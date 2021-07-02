@@ -5,9 +5,13 @@
 
 struct EnHakurock;
 
+typedef void (*EnHakurockActionFunc)(struct EnHakurock*, GlobalContext*);
+
 typedef struct EnHakurock {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x54];
+    /* 0x144 */ EnHakurockActionFunc actionFunc;
+    /* 0x148 */ s32 unk_148;
+    /* 0x14C */ ColliderCylinder collider; // size = 0x4C
 } EnHakurock; // size = 0x198
 
 extern const ActorInit En_Hakurock_InitVars;
