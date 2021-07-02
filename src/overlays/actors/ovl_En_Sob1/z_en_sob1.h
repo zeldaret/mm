@@ -2,7 +2,7 @@
 #define Z_EN_SOB1_H
 
 #include <global.h>
-#include "../ovl_En_GirlA/z_en_girla.h"
+#include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
 struct EnSob1;
 

@@ -124,9 +124,9 @@ extern FlexSkeletonHeader D_06009220;
 
 extern Gfx D_06000970[];
 
-extern ActorAnimationEntryS D_80A10860[];
-
 extern UNK_TYPE D_06005458;
+
+extern ActorAnimationEntryS D_80A10860[];
 
 extern UNK_PTR D_80A10A2C[];
 
@@ -198,7 +198,7 @@ s32 func_80A0C8B8(GlobalContext* globalCtx) {
 }
 
 u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->unk3CC == 2) {
         if (gSaveContext.day == 1 && gSaveContext.time >= 0x4000) {
@@ -209,23 +209,23 @@ u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
             return 0x64A;
         }
     } else if (this->unk3CC == 0) {
-        switch (player->unk14B) {
-            case 3:
+        switch (player->transformation) {
+            case PLAYER_FORM_DEKU:
                 return 0x12D8;
-            case 1:
+            case PLAYER_FORM_GORON:
                 return 0x12D9;
-            case 2:
+            case PLAYER_FORM_ZORA:
                 return 0x12DA;
             default:
                 return 0x12D7;
         }
     } else if (this->unk3CC == 1) {
-        if (player->unk14B != 1) {
+        if (player->transformation != PLAYER_FORM_GORON) {
             return 0xBC1;
         }
         return 0xBC2;
     } else if (this->unk3CC == 3) {
-        if (player->unk14B != 1) {
+        if (player->transformation != PLAYER_FORM_GORON) {
             return 0xBC3;
         }
         return 0xBC4;
@@ -236,7 +236,7 @@ u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // Matches but jmptable is in late rodata
 u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->unk3CC == 2) {
         switch (func_8012403C(globalCtx)) {
@@ -273,26 +273,26 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
                 return 0x68A;
         }
     } else if (this->unk3CC == 0) {
-        switch (player->unk14B) {
-            case 4:
+        switch (player->transformation) {
+            case PLAYER_FORM_HUMAN:
                 if (gSaveContext.weekEventReg[57] & 0x10) {
                     return 0x12CF;
                 }
                 gSaveContext.weekEventReg[57] |= 0x10;
                 return 0x12CE;
-            case 3:
+            case PLAYER_FORM_DEKU:
                 if (gSaveContext.weekEventReg[57] & 0x20) {
                     return 0x12D1;
                 }
                 gSaveContext.weekEventReg[57] |= 0x20;
                 return 0x12D0;
-            case 1:
+            case PLAYER_FORM_GORON:
                 if (gSaveContext.weekEventReg[57] & 0x40) {
                     return 0x12D3;
                 }
                 gSaveContext.weekEventReg[57] |= 0x40;
                 return 0x12D2;
-            case 2:
+            case PLAYER_FORM_ZORA:
                 if (gSaveContext.weekEventReg[57] & 0x80) {
                     return 0x12D5;
                 }
@@ -302,31 +302,33 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
                 return 0x12CE;
         }
     } else if (this->unk3CC == 1) {
-        if (player->unk14B != 1) {
+        if (player->transformation != PLAYER_FORM_GORON) {
             if (gSaveContext.weekEventReg[58] & 4) {
                 return 0xBB9;
             }
             gSaveContext.weekEventReg[58] |= 4;
             return 0xBB8;
+        } else {
+            if (gSaveContext.weekEventReg[58] & 8) {
+                return 0xBBB;
+            }
+            gSaveContext.weekEventReg[58] |= 8;
+            return 0xBBA;
         }
-        if (gSaveContext.weekEventReg[58] & 8) {
-            return 0xBBB;
-        }
-        gSaveContext.weekEventReg[58] |= 8;
-        return 0xBBA;
     } else if (this->unk3CC == 3) {
-        if (player->unk14B != 1) {
+        if (player->transformation != PLAYER_FORM_GORON) {
             if (gSaveContext.weekEventReg[58] & 0x10) {
                 return 0xBBD;
             }
             gSaveContext.weekEventReg[58] |= 0x10;
             return 0xBBC;
+        } else {
+            if (gSaveContext.weekEventReg[58] & 0x20) {
+                return 0xBBF;
+            }
+            gSaveContext.weekEventReg[58] |= 0x20;
+            return 0xBBE;
         }
-        if (gSaveContext.weekEventReg[58] & 0x20) {
-            return 0xBBF;
-        }
-        gSaveContext.weekEventReg[58] |= 0x20;
-        return 0xBBE;
     }
     return 0;
 }
@@ -453,7 +455,7 @@ void func_80A0D034(GlobalContext* globalCtx, EnSob1* this) {
 #endif
 
 void func_80A0D0B8(GlobalContext* globalCtx, EnSob1* this) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->unk3A0);
@@ -466,7 +468,7 @@ void func_80A0D0B8(GlobalContext* globalCtx, EnSob1* this) {
     this->drawCursor = 0;
     this->stickRightPrompt.isEnabled = false;
     this->stickLeftPrompt.isEnabled = false;
-    player->unkA70 &= ~0x20000000;
+    player->stateFlags2 &= ~0x20000000;
     globalCtx->interfaceCtx.unk222 = 0;
     globalCtx->interfaceCtx.unk224 = 0;
     func_80A0C8AC(this, func_80A0D4A0);
@@ -534,10 +536,10 @@ void func_80A0D3C4(EnSob1* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
 void func_80A0D414(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if ((player->base.world.pos.x >= 0.0f && player->base.world.pos.x <= 390.0f) &&
-        (player->base.world.pos.z >= 72.0f && player->base.world.pos.z <= 365.0)) {
+    if ((player->actor.world.pos.x >= 0.0f && player->actor.world.pos.x <= 390.0f) &&
+        (player->actor.world.pos.z >= 72.0f && player->actor.world.pos.z <= 365.0f)) {
         func_80A0C8AC(this, func_80A0DD40);
     }
 }
@@ -546,7 +548,7 @@ void func_80A0D414(EnSob1* this, GlobalContext* globalCtx) {
 #endif
 
 void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     this->unk1F0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -558,7 +560,7 @@ void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->unk3A0);
             this->cutsceneState = 1;
         }
-        player->unkA70 |= 0x20000000;
+        player->stateFlags2 |= 0x20000000;
         this->unk3B4 = func_80A0CA38(this, globalCtx);
         func_801518B0(globalCtx, this->unk3B4, &this->actor);
         if ((this->actor.params & 0x1F) == 2) {
@@ -566,8 +568,8 @@ void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx) {
         }
         func_80A0D258(globalCtx, this, 0);
     } else {
-        if ((player->base.world.pos.x >= this->unk3BC.unk0 && player->base.world.pos.x <= this->unk3BC.unk4) &&
-            (player->base.world.pos.z >= this->unk3BC.unk8 && player->base.world.pos.z <= this->unk3BC.unkC)) {
+        if ((player->actor.world.pos.x >= this->unk3BC.unk0 && player->actor.world.pos.x <= this->unk3BC.unk4) &&
+            (player->actor.world.pos.z >= this->unk3BC.unk8 && player->actor.world.pos.z <= this->unk3BC.unkC)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
         if (this->unk3BA == 1) {
@@ -799,7 +801,7 @@ void func_80A0DD40(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void func_80A0DE64(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->cutsceneState == 1) {
         if (ActorCutscene_GetCanPlayNext(this->unk3A0)) {
@@ -818,25 +820,25 @@ void func_80A0DE64(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->unk3A0);
             this->cutsceneState = 1;
         }
-        player->unkA70 |= 0x20000000;
+        player->stateFlags2 |= 0x20000000;
         this->unk3B4 = func_80A0CA38(this, globalCtx);
         func_801518B0(globalCtx, this->unk3B4, &this->actor);
         this->unk3BA = 1;
     } else {
-        if ((player->base.world.pos.x >= this->unk3BC.unk0 && player->base.world.pos.x <= this->unk3BC.unk4) &&
-            (player->base.world.pos.z >= this->unk3BC.unk8 && player->base.world.pos.z <= this->unk3BC.unkC)) {
+        if ((player->actor.world.pos.x >= this->unk3BC.unk0 && player->actor.world.pos.x <= this->unk3BC.unk4) &&
+            (player->actor.world.pos.z >= this->unk3BC.unk8 && player->actor.world.pos.z <= this->unk3BC.unkC)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
 }
 
 void func_80A0DFD0(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCanPlayNext(this->unk3A0)) {
             ActorCutscene_StartAndSetFlag(this->unk3A0, &this->actor);
-            player->unkA70 |= 0x20000000;
+            player->stateFlags2 |= 0x20000000;
             func_80A0C8AC(this, func_80A0EBC0);
             this->cutsceneState = 2;
         } else {
@@ -953,12 +955,12 @@ void func_80A0E330(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void func_80A0E420(GlobalContext* globalCtx, EnSob1* this) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
-    player->unkA70 &= ~0x20000000;
+    player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     func_80A0C8AC(this, func_80A0EA84);
@@ -1116,15 +1118,15 @@ void func_80A0EAF8(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void func_80A0EBC0(EnSob1* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     EnGirlA* item;
 
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         func_80A0ED7C(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
-        player->base.shape.rot.y += 0x8000;
-        player->unkA70 |= 0x20000000;
+        player->actor.shape.rot.y += 0x8000;
+        player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->unk3B4, &this->actor);
         func_80A0D258(globalCtx, this, 1);
         func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
@@ -1240,6 +1242,8 @@ void func_80A0EF48(EnSob1* this) {
 void func_80A0F014(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
+
+    // Possbily fake temps
     s32 new_var2 = 255;
     f32 new_var3;
 
@@ -1409,8 +1413,9 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
     EnSob1UnkStruct* unkStruct;
     Vec3f* worldPos;
 
+    // Possibly fake temps
     EnSob1* this2;
-    u32 maxColor = 255; // Possibly fake temps
+    u32 maxColor = 255;
 
     if (func_80A0F3D4(this, globalCtx)) {
         this->actor.flags &= ~0x10;
