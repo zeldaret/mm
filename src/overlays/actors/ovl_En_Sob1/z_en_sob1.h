@@ -96,10 +96,7 @@ typedef struct EnSob1 {
     /* 0x3B8 */ u16 unk3B8;
     /* 0x3BA */ u8 unk3BA;
     /* 0x3BB */ char unk3BB[0x1];
-    /* 0x3BC */ f32 unk3BC;
-    /* 0x3C0 */ f32 unk3C0;
-    /* 0x3C4 */ f32 unk3C4;
-    /* 0x3C8 */ f32 unk3C8;
+    /* 0x3BC */ EnSob1UnkStruct unk3BC;
     /* 0x3CC */ s16 unk3CC;
     /* 0x3CE */ char unk3CE[0x2];
 } EnSob1; // size = 0x3D0

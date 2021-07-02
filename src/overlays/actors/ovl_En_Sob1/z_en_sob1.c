@@ -566,8 +566,8 @@ void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx) {
         }
         func_80A0D258(globalCtx, this, 0);
     } else {
-        if ((player->base.world.pos.x >= this->unk3BC && player->base.world.pos.x <= this->unk3C0) &&
-            (player->base.world.pos.z >= this->unk3C4 && player->base.world.pos.z <= this->unk3C8)) {
+        if ((player->base.world.pos.x >= this->unk3BC.unk0 && player->base.world.pos.x <= this->unk3BC.unk4) &&
+            (player->base.world.pos.z >= this->unk3BC.unk8 && player->base.world.pos.z <= this->unk3BC.unkC)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
         if (this->unk3BA == 1) {
@@ -823,8 +823,8 @@ void func_80A0DE64(EnSob1* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, this->unk3B4, &this->actor);
         this->unk3BA = 1;
     } else {
-        if ((player->base.world.pos.x >= this->unk3BC && player->base.world.pos.x <= this->unk3C0) &&
-            (player->base.world.pos.z >= this->unk3C4 && player->base.world.pos.z <= this->unk3C8)) {
+        if ((player->base.world.pos.x >= this->unk3BC.unk0 && player->base.world.pos.x <= this->unk3BC.unk4) &&
+            (player->base.world.pos.z >= this->unk3BC.unk8 && player->base.world.pos.z <= this->unk3BC.unkC)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
@@ -1131,28 +1131,24 @@ void func_80A0EBC0(EnSob1* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80A0EC98(EnSob1* this) {
+    Vec3f selectedItemPosition = D_80A109B8[this->unk3CC];
+    u8 i = this->cursorIdx;
     EnGirlA* item;
-    u8 i;
     ShopItem* shopItem;
     Vec3f worldPos;
 
-    i = this->cursorIdx;
-    shopItem = &D_80A10918[this->unk3CC][this->cursorIdx];
-    item = this->items[this->cursorIdx];
+    shopItem = &D_80A10918[this->unk3CC][i];
+    item = this->items[i];
 
-    worldPos.x = (D_80A109B8[this->unk3CC].x - shopItem->x) * this->shopItemSelectedTween + shopItem->x;
-    worldPos.y = (D_80A109B8[this->unk3CC].y - shopItem->y) * this->shopItemSelectedTween + shopItem->y;
-    worldPos.z = (D_80A109B8[this->unk3CC].z - shopItem->z) * this->shopItemSelectedTween + shopItem->z;
+    worldPos.x = shopItem->x + (selectedItemPosition.x - shopItem->x) * this->shopItemSelectedTween;
+    worldPos.y = shopItem->y + (selectedItemPosition.y - shopItem->y) * this->shopItemSelectedTween;
+    worldPos.z = shopItem->z + (selectedItemPosition.z - shopItem->z) * this->shopItemSelectedTween;
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
     item->actor.world.pos.z = worldPos.z;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0EC98.asm")
-#endif
 
 void func_80A0ED7C(EnSob1* this) {
     this->shopItemSelectedTween = 0.0f;
@@ -1407,30 +1403,34 @@ void func_80A0F638(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-// Quite a bit wrong
+// Matches but floats are in late rodata
 void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
-    Vec3f* pos;
     ShopItem* shopItems;
     EnSob1UnkStruct* unkStruct;
+    Vec3f* worldPos;
+
+    EnSob1* this2;
+    u32 maxColor = 255; // Possibly fake temps
 
     if (func_80A0F3D4(this, globalCtx)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
-        pos = &D_80A109FC[this->unk3CC];
-        this->actor.world.pos.x = pos->x;
-        this->actor.world.pos.y = pos->y;
-        this->actor.world.pos.z = pos->z;
+        worldPos = &D_80A109FC[this->unk3CC];
+        this->actor.world.pos.x += worldPos->x;
+        this->actor.world.pos.y += worldPos->y;
+        this->actor.world.pos.z += worldPos->z;
         shopItems = D_80A10918[this->unk3CC];
-        if (this->unk3CC == 2 && gSaveContext.weekEventReg[33] & 8) {
-            shopItems[0].shopItemId = 24;
+        if ((this->unk3CC == 2) && (gSaveContext.weekEventReg[33] & 8)) {
+            D_80A10918[this->unk3CC][0].shopItemId = 24;
         }
+
         this->cutsceneState = 0;
         func_80A0F284(this);
         this->unk3A0 = this->unk3A2;
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         D_80A109EC[this->unk3CC](this, globalCtx);
-        this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+        this->actor.colChkInfo.mass = 0xFF;
         this->actor.colChkInfo.cylRadius = 50;
         this->unk3BA = 0;
         this->unk1E4 = 0;
@@ -1444,68 +1444,67 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
             func_80A0C8AC(this, func_80A0D4A0);
         }
 
-        this->cursorY = this->cursorX = 100.0f;
-        this->stickAccumX = this->stickAccumY = 0;
-
+        this->cursorY = (this->cursorX = 100.0f);
+        this->stickAccumX = (this->stickAccumY = 0);
         this->cursorIdx = 0;
-        this->cursorZ = 1.2;
+        this->cursorZ = 1.2f;
         this->cursorColorR = 0;
         this->cursorColorG = 80;
-        this->cursorColorB = 255;
-        this->cursorColorA = 255;
+        this->cursorColorB = maxColor;
+        this->cursorColorA = maxColor;
         this->cursorAnimTween = 0.0f;
-        this->drawCursor = 0;
         this->cursorAnimState = 0;
+        this->drawCursor = 0;
 
-        this->stickRightPrompt.stickColorR = 200;
-        this->stickRightPrompt.stickColorG = 200;
-        this->stickRightPrompt.stickColorB = 200;
-        this->stickRightPrompt.stickColorA = 180;
-        this->stickRightPrompt.stickTexX = 49.0f;
-        this->stickRightPrompt.stickTexY = 95.0f;
-        this->stickRightPrompt.arrowColorR = 255;
-        this->stickRightPrompt.arrowColorG = 255;
-        this->stickRightPrompt.arrowColorB = 0;
-        this->stickRightPrompt.arrowColorA = 200;
-        this->stickRightPrompt.arrowTexX = 33.0f;
-        this->stickRightPrompt.arrowTexY = 91.0f;
-        this->stickRightPrompt.texZ = 1.0f;
-        this->stickRightPrompt.isEnabled = false;
+        this2 = this;
 
-        this->stickLeftPrompt.stickColorR = 200;
-        this->stickLeftPrompt.stickColorG = 200;
-        this->stickLeftPrompt.stickColorB = 200;
-        this->stickLeftPrompt.stickColorA = 180;
-        this->stickLeftPrompt.stickTexX = 274.0f;
-        this->stickLeftPrompt.stickTexY = 95.0f;
-        this->stickLeftPrompt.arrowColorR = 255;
-        this->stickLeftPrompt.arrowColorG = 255;
-        this->stickLeftPrompt.arrowColorB = 0;
-        this->stickLeftPrompt.arrowColorA = 200;
-        this->stickLeftPrompt.arrowTexX = 290.0f;
-        this->stickLeftPrompt.arrowTexY = 91.0f;
-        this->stickLeftPrompt.texZ = 1.0f;
-        this->stickLeftPrompt.isEnabled = false;
+        this2->stickRightPrompt.stickColorR = 200;
+        this2->stickRightPrompt.stickColorG = 200;
+        this2->stickRightPrompt.stickColorB = 200;
+        this2->stickRightPrompt.stickColorA = 180;
+        this2->stickRightPrompt.stickTexX = 49.0f;
+        this2->stickRightPrompt.stickTexY = 95.0f;
+        this2->stickRightPrompt.arrowColorR = maxColor;
+        this2->stickRightPrompt.arrowColorG = maxColor;
+        this2->stickRightPrompt.arrowColorB = 0;
+        this2->stickRightPrompt.arrowColorA = 200;
+        this2->stickRightPrompt.arrowTexX = 33.0f;
+        this2->stickRightPrompt.arrowTexY = 91.0f;
+        this2->stickRightPrompt.texZ = 1.0f;
+        this2->stickRightPrompt.isEnabled = 0;
 
-        this->arrowAnimState = 0;
-        this->stickAnimState = 0;
-        this->arrowAnimTween = 0.0f;
-        this->stickAnimTween = 0.0f;
-        this->shopItemSelectedTween = 0.0f;
-        this->actor.gravity = 0.0f;
-        unkStruct = &D_80A10978[this->unk3CC];
-        this->unk3BC = unkStruct->unk0;
-        this->unk3C0 = unkStruct->unk4;
-        this->unk3C4 = unkStruct->unk8;
-        this->unk3C8 = unkStruct->unkC;
-        Actor_SetScale(&this->actor, D_80A10908[this->unk3CC]);
-        func_80A0CD48(this, globalCtx, shopItems);
-        this->unk1F0 = 0;
-        this->blinkTimer = 20;
-        this->eyeTextureIdx = 0;
+        if (1) {}
+
+        this2->stickLeftPrompt.stickColorR = 200;
+        this2->stickLeftPrompt.stickColorG = 200;
+        this2->stickLeftPrompt.stickColorB = 200;
+        this2->stickLeftPrompt.stickColorA = 180;
+        this2->stickLeftPrompt.stickTexX = 274.0f;
+        this2->stickLeftPrompt.stickTexY = 95.0f;
+        this2->stickLeftPrompt.arrowColorR = maxColor;
+        this2->stickLeftPrompt.arrowColorG = 0;
+        this2->stickLeftPrompt.arrowColorB = 0;
+        this2->stickLeftPrompt.arrowColorA = 200;
+        this2->stickLeftPrompt.arrowTexX = 290.0f;
+        this2->stickLeftPrompt.arrowTexY = 91.0f;
+        this2->stickLeftPrompt.texZ = 1.0f;
+        this2->stickLeftPrompt.isEnabled = 0;
+
+        this2->arrowAnimState = 0;
+        this2->stickAnimState = 0;
+        this2->arrowAnimTween = 0.0f;
+        this2->stickAnimTween = 0.0f;
+        this2->shopItemSelectedTween = 0.0f;
+
+        this2->actor.gravity = 0.0f;
+        this2->unk3BC = D_80A10978[this2->unk3CC];
+        Actor_SetScale(&this2->actor, D_80A10908[this2->unk3CC]);
+        func_80A0CD48(this2, globalCtx, shopItems);
+        this->unk1EE = this->unk1F0 = 0;
+        this2->blinkTimer = 20;
+        this2->eyeTextureIdx = 0;
         this->blinkFunc = func_80A0F2C8;
         this->actor.flags &= ~1;
-        this->unk1EE = this->unk1F0;
     }
 }
 #else
