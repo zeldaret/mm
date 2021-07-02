@@ -1,40 +1,41 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include "stdarg.h"
-#include "stdbool.h"
-#include "stdint.h"
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
 
-#include "PR/ultratypes.h"
-#include "PR/gbi.h"
-#include "PR/sched.h"
-#include "io/controller.h"
-#include "osint.h"
-#include "viint.h"
-#include "math.h"
-#include "os.h"
-#include "stdlib.h"
-#include "xstdio.h"
-#include "unk.h"
+#include <PR/ultratypes.h>
+#include <PR/gbi.h>
+#include <PR/sched.h>
+#include <io/controller.h>
+#include <osint.h>
+#include <viint.h>
+#include <math.h>
+#include <os.h>
+#include <stdlib.h>
+#include <xstdio.h>
+#include <unk.h>
 
-#include "sfx.h"
-#include "color.h"
-#include "ichain.h"
+#include <sfx.h>
+#include <color.h>
+#include <ichain.h>
 
-#include "z64actor.h"
-#include "z64animation.h"
-#include "z64bgcheck.h"
+#include <z64actor.h>
+#include <z64animation.h>
+#include <z64bgcheck.h>
 #include "z64camera.h"
-#include "z64collision_check.h"
-#include "z64cutscene.h"
-#include "z64dma.h"
-#include "z64effect.h"
-#include "z64item.h"
-#include "z64light.h"
-#include "z64math.h"
-#include "z64object.h"
-#include "z64scene.h"
-#include "z64save.h"
+#include <z64collision_check.h>
+#include <z64cutscene.h>
+#include <z64dma.h>
+#include <z64effect.h>
+#include <z64item.h>
+#include <z64light.h>
+#include <z64math.h>
+#include <z64object.h>
+#include "z64player.h"
+#include <z64scene.h>
+#include <z64save.h>
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -238,11 +239,6 @@ typedef struct {
     /* 0x06708 */ Gfx polyOpaBuffer[13184];
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
-
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ UNK_TYPE1 pad4[0x40];
-} GlobalContext17D98; // size = 0x44
 
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
@@ -549,12 +545,10 @@ typedef struct {
 } GameStateOverlay; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ u8 unk0;
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ u16 unk2;
-    /* 0x04 */ Vec3f unk4;
-    /* 0x10 */ Vec3f unk10;
-} GlobalContext1F78; // size = 0x1C
+    /* 0x00 */ u16 countdown;
+    /* 0x04 */ Vec3f originPos;
+    /* 0x10 */ Vec3f relativePos;
+} SoundSource; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ OSContPad cur;
@@ -629,7 +623,7 @@ typedef struct {
     /* 0x21C */ f32 unk21C;
     /* 0x220 */ f32 unk220;
     /* 0x224 */ UNK_TYPE1 pad224[0xAC];
-} GlobalContext16D30; // size = 0x2D0
+} PauseContext; // size = 0x2D0
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1380,7 +1374,7 @@ struct s800B948C {
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
-    /* 0x14 */ ActorPlayer* player;
+    /* 0x14 */ Player* player;
     /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
 }; // size = 0x1C
 
@@ -1439,7 +1433,7 @@ struct GlobalContext {
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
     /* 0x01F74 */ CutsceneEntry* cutsceneList;
-    /* 0x01F78 */ GlobalContext1F78 unk1F78[16];
+    /* 0x01F78 */ SoundSource soundSources[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
     /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
@@ -1447,7 +1441,7 @@ struct GlobalContext {
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
-    /* 0x16D30 */ GlobalContext16D30 unk16D30;
+    /* 0x16D30 */ PauseContext pauseCtx;
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
@@ -1455,7 +1449,14 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ TransitionContext transitionCtx;
-    /* 0x18768 */ UNK_TYPE1 pad18768[0x30];
+    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
+    /* 0x18770 */ UNK_TYPE1 pad18770[0x8];
+    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
+    /* 0x1877C */ s32 (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
+    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
+    /* 0x18788 */ UNK_TYPE1 pad18788[0x10];
     /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
     /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
     /* 0x187B0 */ MtxF unk187B0;

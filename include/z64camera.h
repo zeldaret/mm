@@ -506,7 +506,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ PosRot eyePosRotTarget;
     /* 0x14 */ s16 fov;
-    /* 0x18 */ struct ActorPlayer* player;
+    /* 0x18 */ struct Player* player;
 } Fixed1Anim; // size = 0x1C
 
 typedef struct {
@@ -772,7 +772,7 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct ActorPlayer* player;
+    /* 0x090 */ struct Player* player;
     /* 0x094 */ PosRot playerPosRot;
     /* 0x0A8 */ struct Actor* target;
     /* 0x0AC */ PosRot targetPosRot;

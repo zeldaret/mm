@@ -72,7 +72,7 @@ void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
     if (func_800B84D0(&this->dyna.actor, globalCtx)) {
@@ -80,17 +80,18 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
             func_800B863C(&this->dyna.actor, globalCtx);
-            if (player->linkForm == 1) {
+            if (player->transformation == PLAYER_FORM_GORON) {
                 this->dyna.actor.textId = 0xCF3;
             } else {
                 this->dyna.actor.textId = 0xCF2;
             }
         }
     }
-    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) && player->linkForm == 1) {
+    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) &&
+        player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
-        player->unkA70 &= ~0x10;
+        player->stateFlags2 &= ~0x10;
         this->dyna.unk148 = 0.0f;
     }
 }
@@ -129,12 +130,13 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
 
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
+
     if (stepTemp) {
-        player->unkA70 &= ~0x10;
+        player->stateFlags2 &= ~0x10;
         this->dyna.unk148 = 0.0f;
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
@@ -155,7 +157,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck_RelocateMeshHeader(&D_06003CD0, &colHeader);
     this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
-    func_800B78B8(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
     }

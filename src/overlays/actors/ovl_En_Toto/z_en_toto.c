@@ -265,19 +265,20 @@ s32 func_80BA397C(EnToto* this, s16 arg1) {
 }
 
 void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     func_80BA383C(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != SCENE_SONCHONOIE) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
-        } else if (player->linkForm == 3) {
+        } else if (player->transformation == PLAYER_FORM_DEKU) {
             Actor_SetSwitchFlag(globalCtx, this->actor.home.rot.x);
         }
         this->unk2B6 = 0;
         return;
     }
+
     if ((globalCtx->sceneNum == SCENE_MILK_BAR && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
         (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
@@ -288,7 +289,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
             if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
-                if (player->linkForm == 3) {
+                if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {
                         this->text = D_80BA5068;
                     } else {
@@ -305,6 +306,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
                 this->text = D_80BA5038;
             }
         }
+
         this->actor.textId = this->text->textId;
     }
 }
@@ -344,7 +346,7 @@ void func_80BA3D38(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
 
     func_80BA383C(this, globalCtx);
     if (this->unk2B7 == 0) {
@@ -357,7 +359,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
         }
     } else {
         player = PLAYER;
-        if (player->stateFlags1 & 0x400 && player->unkAE7 != 0) {
+        if (player->stateFlags1 & 0x400 && player->unk_AE7 != 0) {
             func_80151BB4(globalCtx, 48);
             func_80151BB4(globalCtx, 9);
             func_80151BB4(globalCtx, 10);
@@ -365,6 +367,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
             return;
         }
     }
+
     func_80BA36C0(this, globalCtx, 0);
     ActorCutscene_Stop(this->cutscene);
     globalCtx->actorCtx.unk5 &= ~0x20;
@@ -422,9 +425,10 @@ s32 func_80BA402C(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &PLAYER->base);
+        ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &PLAYER->actor);
         return 1;
     }
+
     ActorCutscene_SetIntentToPlay(this->cutscene);
     return 0;
 }
@@ -469,17 +473,17 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u32 phi_s0 = 0;
     Vec3s* end = &D_80BA510C[3];
 
     func_80BA3FB0(this, globalCtx);
     func_800B7298(globalCtx, 0, 6);
-    if (player->base.world.pos.z > -310.0f) {
-        if ((player->base.world.pos.x > -150.0f) || (player->base.world.pos.z > -172.0f)) {
+    if (player->actor.world.pos.z > -310.0f) {
+        if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
             phi_s0 = 3;
         } else {
-            if (player->base.world.pos.z > -232.0f) {
+            if (player->actor.world.pos.z > -232.0f) {
                 phi_s0 = 2;
             } else {
                 phi_s0 = 1;
@@ -514,36 +518,36 @@ s32 func_80BA44A0(EnToto* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-s32 func_80BA44D4(EnTotoUnkStruct2* arg0, ActorPlayer* player) {
+s32 func_80BA44D4(EnTotoUnkStruct2* arg0, Player* player) {
     Vec3f unk6;
 
     Math_Vec3s_ToVec3f(&unk6, &arg0->unk6);
-    if (Math_Vec3f_DistXZ(&player->base.world.pos, &unk6) < 10.0f) {
+    if (Math_Vec3f_DistXZ(&player->actor.world.pos, &unk6) < 10.0f) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     EnTotoUnkStruct2* temp_s0;
     s32 i;
     u16 tmp;
 
     func_80BA3C88(this);
-    if (player->base.world.pos.z > -270.0f) {
+    if (player->actor.world.pos.z > -270.0f) {
         if (this->spotlights != NULL) {
             Actor_MarkForDeath(this->spotlights);
         }
         this->unk2B6 = 1;
         return this->text->unk1;
     }
-    if (player->base.bgCheckFlags & 1) {
+    if (player->actor.bgCheckFlags & 1) {
         temp_s0 = &D_80BA50DC[gSaveContext.playerForm - 1];
         if (func_80BA44D4(temp_s0, player)) {
-            Math_Vec3s_ToVec3f(&player->base.world.pos, &temp_s0->unk6);
-            player->base.shape.rot.y = 0;
-            player->unkAD4 = 0;
+            Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);
+            player->actor.shape.rot.y = 0;
+            player->currentYaw = 0;
             return func_80BA407C(this, globalCtx);
         }
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
@@ -659,12 +663,12 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA4B24(EnToto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
 
     if (func_80BA40D4(this, globalCtx)) {
         player = PLAYER;
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060028B8, -4.0f);
-        if (player->linkForm == 2) {
+        if (player->transformation == PLAYER_FORM_ZORA) {
             if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
                 Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
                 return 1;
