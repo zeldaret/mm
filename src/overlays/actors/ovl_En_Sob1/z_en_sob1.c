@@ -77,8 +77,8 @@ void func_80A0F638(EnSob1* this, GlobalContext* globalCtx);
 void func_80A0F39C(EnSob1* this, GlobalContext* globalCtx);
 Gfx* func_80A10344(GraphicsContext* gfxCtx);
 void func_80A0FADC(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32 z, u8 drawCursor);
-void func_80A0FD4C(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t,
-                         f32 dx, f32 dy);
+void func_80A0FD4C(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
+                   f32 dy);
 void func_80A0FEE8(GlobalContext* globalCtx, EnSob1* this);
 
 s32 func_80A10290(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
@@ -171,7 +171,7 @@ extern u16 D_80A10900[];
 
 void func_80A0C810(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
     f32 frameCount;
-    
+
     animations += idx;
     if (animations->frameCount < 0) {
         frameCount = SkelAnime_GetFrameCount(&animations->animationSeg->common);
@@ -197,8 +197,8 @@ s32 func_80A0C8B8(GlobalContext* globalCtx) {
            CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_CUP);
 }
 
-u16 func_80A0C938(EnSob1 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
 
     if (this->unk3CC == 2) {
         if (gSaveContext.day == 1 && gSaveContext.time >= 0x4000) {
@@ -208,26 +208,23 @@ u16 func_80A0C938(EnSob1 *this, GlobalContext *globalCtx) {
         } else {
             return 0x64A;
         }
-    }
-    else if (this->unk3CC == 0) {
-        switch(player->unk14B) {
+    } else if (this->unk3CC == 0) {
+        switch (player->unk14B) {
             case 3:
                 return 0x12D8;
             case 1:
                 return 0x12D9;
             case 2:
                 return 0x12DA;
-            default: 
+            default:
                 return 0x12D7;
         }
-    }
-    else if (this->unk3CC == 1) {
+    } else if (this->unk3CC == 1) {
         if (player->unk14B != 1) {
             return 0xBC1;
         }
         return 0xBC2;
-    }
-    else if (this->unk3CC == 3) {
+    } else if (this->unk3CC == 3) {
         if (player->unk14B != 1) {
             return 0xBC3;
         }
@@ -337,7 +334,7 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0CA38.asm")
 #endif
 
-u16 func_80A0CC88(EnSob1 *this) {
+u16 func_80A0CC88(EnSob1* this) {
     if (this->unk3CC == 2) {
         if (gSaveContext.day == 1) {
             return 0x64C;
@@ -432,15 +429,15 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A0C8AC(this, func_80A0F6B0);
 }
 
-void EnSob1_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnSob1 *this = THIS;
+void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSob1* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-void func_80A0D034(GlobalContext *globalCtx, EnSob1 *this) {
+void func_80A0D034(GlobalContext* globalCtx, EnSob1* this) {
     s16 sp2E;
     s16 sp2C;
     f32 zero = 0.0f;
@@ -487,7 +484,7 @@ s32 func_80A0D188(EnSob1* this, GlobalContext* globalCtx, Input* input) {
     return false;
 }
 
-s32 func_80A0D1F4(EnSob1 *this, GlobalContext *globalCtx, Input *input) {
+s32 func_80A0D1F4(EnSob1* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
         this->actionFunc = this->prevActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -513,7 +510,7 @@ void func_80A0D2B8(GlobalContext* globalCtx, EnSob1* this) {
     this->stickLeftPrompt.isEnabled = true;
 }
 
-void func_80A0D320(GlobalContext *globalCtx, EnSob1 *this) {
+void func_80A0D320(GlobalContext* globalCtx, EnSob1* this) {
     func_80A0C8AC(this, func_80A0DA5C);
     this->unk3B6 = func_80A0C938(this, globalCtx);
     func_80151938(globalCtx, this->unk3B6);
@@ -522,13 +519,13 @@ void func_80A0D320(GlobalContext *globalCtx, EnSob1 *this) {
     this->stickLeftPrompt.isEnabled = false;
 }
 
-void func_80A0D388(GlobalContext *globalCtx, EnSob1 *this) {
+void func_80A0D388(GlobalContext* globalCtx, EnSob1* this) {
     play_sound(NA_SE_SY_CURSOR);
     this->drawCursor = 0;
     func_80A0C8AC(this, func_80A0DAAC);
 }
 
-void func_80A0D3C4(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0D3C4(EnSob1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         func_80A0D0B8(globalCtx, this);
     }
@@ -585,7 +582,6 @@ void func_80A0D628(GlobalContext* globalCtx, EnSob1* this) {
     s8 stickX = controller1->rel.stick_x;
     s8 stickY = controller1->rel.stick_y;
 
-
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
             this->stickAccumX = stickX;
@@ -626,7 +622,7 @@ void func_80A0D628(GlobalContext* globalCtx, EnSob1* this) {
     }
 }
 
-u8 func_80A0D74C(EnSob1 *this, u8 arg1) {
+u8 func_80A0D74C(EnSob1* this, u8 arg1) {
     if (this->items[arg1] != NULL) {
         return arg1;
     }
@@ -653,8 +649,8 @@ void func_80A0D77C(EnSob1* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80A0D850(EnSob1 *this, GlobalContext *globalCtx) {
-    switch(globalCtx->msgCtx.choiceIndex) {
+s32 func_80A0D850(EnSob1* this, GlobalContext* globalCtx) {
+    switch (globalCtx->msgCtx.choiceIndex) {
         case 0:
             func_8019F208();
             func_80A0D320(globalCtx, this);
@@ -667,7 +663,7 @@ s32 func_80A0D850(EnSob1 *this, GlobalContext *globalCtx) {
                 func_80A0D0B8(globalCtx, this);
             }
             return true;
-        }
+    }
     return false;
 }
 
@@ -712,13 +708,13 @@ void func_80A0D904(EnSob1* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A0DA5C(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0DA5C(EnSob1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         func_80A0D2B8(globalCtx, this);
     }
 }
 
-void func_80A0DAAC(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0DAAC(EnSob1* this, GlobalContext* globalCtx) {
     if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->unk3A0);
         this->cutsceneState = 0;
@@ -834,8 +830,8 @@ void func_80A0DE64(EnSob1* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A0DFD0(EnSob1 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+void func_80A0DFD0(EnSob1* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
 
     if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCanPlayNext(this->unk3A0)) {
@@ -858,7 +854,7 @@ void func_80A0DFD0(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0E0C0(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0E0C0(EnSob1* this, GlobalContext* globalCtx) {
     if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->unk3A0);
         this->cutsceneState = 0;
@@ -883,7 +879,7 @@ void func_80A0E0C0(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0E1B8(GlobalContext *globalCtx, EnSob1 *this) {
+void func_80A0E1B8(GlobalContext* globalCtx, EnSob1* this) {
     u8 curTemp = this->cursorIdx;
 
     if (this->stickAccumX < 0) {
@@ -905,9 +901,9 @@ void func_80A0E1B8(GlobalContext *globalCtx, EnSob1 *this) {
     }
 }
 
-s32 func_80A0E258(GlobalContext *globalCtx, EnSob1 *this, Input *input) {
-    EnGirlA *item = this->items[this->cursorIdx];
-    
+s32 func_80A0E258(GlobalContext* globalCtx, EnSob1* this, Input* input) {
+    EnGirlA* item = this->items[this->cursorIdx];
+
     if (func_80A0D188(this, globalCtx, input)) {
         return 1;
     }
@@ -928,7 +924,7 @@ s32 func_80A0E258(GlobalContext *globalCtx, EnSob1 *this, Input *input) {
     return 0;
 }
 
-void func_80A0E330(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0E330(EnSob1* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
     u8 prevCursorIdx = this->cursorIdx;
@@ -956,8 +952,8 @@ void func_80A0E330(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0E420(GlobalContext *globalCtx, EnSob1 *this) {
-    ActorPlayer *player = PLAYER;
+void func_80A0E420(GlobalContext* globalCtx, EnSob1* this) {
+    ActorPlayer* player = PLAYER;
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -968,23 +964,23 @@ void func_80A0E420(GlobalContext *globalCtx, EnSob1 *this) {
     func_80A0C8AC(this, func_80A0EA84);
 }
 
-void func_80A0E4DC(GlobalContext *globalCtx, EnSob1 *this, u16 textId) {
+void func_80A0E4DC(GlobalContext* globalCtx, EnSob1* this, u16 textId) {
     func_80151938(globalCtx, textId);
     func_80A0C8AC(this, func_80A0E96C);
 }
 
-void func_80A0E518(GlobalContext *globalCtx, EnSob1 *this, u16 textId) {
+void func_80A0E518(GlobalContext* globalCtx, EnSob1* this, u16 textId) {
     func_80151938(globalCtx, textId);
     func_80A0C8AC(this, func_80A0E9E0);
 }
 
 #ifdef NON_MATCHING
 // Matches but jmptable is in late rodata
-void func_80A0E554(GlobalContext *globalCtx, EnSob1 *this) {
-    EnGirlA *item = this->items[this->cursorIdx];
-    EnGirlA *item2;
+void func_80A0E554(GlobalContext* globalCtx, EnSob1* this) {
+    EnGirlA* item = this->items[this->cursorIdx];
+    EnGirlA* item2;
 
-    switch(item->canBuyFunc(globalCtx, item)) {
+    switch (item->canBuyFunc(globalCtx, item)) {
         case 0:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->unk3A0);
@@ -1046,19 +1042,19 @@ void func_80A0E554(GlobalContext *globalCtx, EnSob1 *this) {
             play_sound(NA_SE_SY_ERROR);
             func_80A0E4DC(globalCtx, this, 0x659);
             break;
-        }
+    }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0E554.asm")
 #endif
 
-void func_80A0E884(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0E884(EnSob1* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if (func_80A0EDA0(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!func_80A0D1F4(this, globalCtx, globalCtx->state.input) && func_80147624(globalCtx)) {
-            switch(globalCtx->msgCtx.choiceIndex) {
+            switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_80A0E554(globalCtx, this);
                     break;
@@ -1072,7 +1068,7 @@ void func_80A0E884(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0E96C(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0E96C(EnSob1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5) {
         if (func_80147624(globalCtx)) {
             this->actionFunc = this->prevActionFunc;
@@ -1081,8 +1077,8 @@ void func_80A0E96C(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0E9E0(EnSob1 *this, GlobalContext *globalCtx) {
-    EnGirlA *item;
+void func_80A0E9E0(EnSob1* this, GlobalContext* globalCtx) {
+    EnGirlA* item;
 
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
@@ -1094,7 +1090,7 @@ void func_80A0E9E0(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0EA84(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0EA84(EnSob1* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         func_80A0C8AC(this, func_80A0EAF8);
@@ -1103,7 +1099,7 @@ void func_80A0EA84(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0EAF8(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0EAF8(EnSob1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
@@ -1119,9 +1115,9 @@ void func_80A0EAF8(EnSob1 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A0EBC0(EnSob1 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
-    EnGirlA *item;
+void func_80A0EBC0(EnSob1* this, GlobalContext* globalCtx) {
+    ActorPlayer* player = PLAYER;
+    EnGirlA* item;
 
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         func_80A0ED7C(this);
@@ -1136,12 +1132,12 @@ void func_80A0EBC0(EnSob1 *this, GlobalContext *globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_80A0EC98(EnSob1 *this) {
+void func_80A0EC98(EnSob1* this) {
     EnGirlA* item;
     u8 i;
     ShopItem* shopItem;
     Vec3f worldPos;
-    
+
     i = this->cursorIdx;
     shopItem = &D_80A10918[this->unk3CC][this->cursorIdx];
     item = this->items[this->cursorIdx];
@@ -1158,14 +1154,14 @@ void func_80A0EC98(EnSob1 *this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0EC98.asm")
 #endif
 
-void func_80A0ED7C(EnSob1 *this) {
+void func_80A0ED7C(EnSob1* this) {
     this->shopItemSelectedTween = 0.0f;
     func_80A0EC98(this);
 }
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-s32 func_80A0EDA0(EnSob1 *this) {
+s32 func_80A0EDA0(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
         this->shopItemSelectedTween = 1.0f;
@@ -1182,7 +1178,7 @@ s32 func_80A0EDA0(EnSob1 *this) {
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-s32 func_80A0EE3C(EnSob1 *this) {
+s32 func_80A0EE3C(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
         this->shopItemSelectedTween = 0.0f;
@@ -1197,12 +1193,12 @@ s32 func_80A0EE3C(EnSob1 *this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0EE3C.asm")
 #endif
 
-void func_80A0EEC8(EnSob1 *this) {
-    EnGirlA **items = this->items;
-    EnGirlA *item;
+void func_80A0EEC8(EnSob1* this) {
+    EnGirlA** items = this->items;
+    EnGirlA* item;
     s32 i;
 
-    for(i = 0; i < 3; i++, items++) {
+    for (i = 0; i < 3; i++, items++) {
         item = *items;
         if (item != NULL) {
             if (this->actionFunc != func_80A0E884 && this->actionFunc != func_80A0E96C && this->drawCursor == 0) {
@@ -1365,7 +1361,7 @@ void func_80A0F2FC(EnSob1* this) {
     }
 }
 
-void func_80A0F39C(EnSob1 *this, GlobalContext *globalCtx) {
+void func_80A0F39C(EnSob1* this, GlobalContext* globalCtx) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
 }
 
@@ -1382,24 +1378,29 @@ s32 func_80A0F3D4(EnSob1* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-void func_80A0F470(EnSob1 *this, GlobalContext *globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->limbDrawTable, this->transitionDrawTable, 20);
+void func_80A0F470(EnSob1* this, GlobalContext* globalCtx) {
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->limbDrawTable, this->transitionDrawTable,
+                     20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600078C.common), 0, 0.0f);
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600078C.common), 0,
+                         0.0f);
     this->actor.draw = func_80A10368;
     this->actionFunc2 = func_80A0F39C;
 }
 
-void func_80A0F554(EnSob1 *this, GlobalContext *globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->limbDrawTable, this->transitionDrawTable, 18);
+void func_80A0F554(EnSob1* this, GlobalContext* globalCtx) {
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->limbDrawTable, this->transitionDrawTable,
+                     18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000FC.common), 0, 0.0f);
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000FC.common), 0,
+                         0.0f);
     this->actor.draw = func_80A104E4;
     this->actionFunc2 = func_80A0F39C;
 }
 
-void func_80A0F638(EnSob1 *this, GlobalContext *globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, this->limbDrawTable, this->transitionDrawTable, 16);
+void func_80A0F638(EnSob1* this, GlobalContext* globalCtx) {
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, this->limbDrawTable,
+                     this->transitionDrawTable, 16);
     this->actor.draw = func_80A10608;
     this->actionFunc2 = NULL;
     this->skelAnime.animPlaybackSpeed = 2.0f;
@@ -1511,9 +1512,9 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0F6B0.asm")
 #endif
 
-void EnSob1_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1ActionFunc actionFunc2;
-    EnSob1 *this = THIS;
+    EnSob1* this = THIS;
 
     if (this->actionFunc != func_80A0F6B0) {
         this->blinkFunc(this);
@@ -1558,8 +1559,8 @@ void func_80A0FADC(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32 z, 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A0FD4C(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t,
-                         f32 dx, f32 dy) {
+void func_80A0FD4C(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
+                   f32 dy) {
     f32 unk;
     s32 ulx, uly, lrx, lry;
     f32 w, h;
@@ -1604,15 +1605,15 @@ void func_80A0FEE8(GlobalContext* globalCtx, EnSob1* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
             func_80A0FD4C(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                                this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
-                                this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
-                                this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                          this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+                          this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
+                          this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             func_80A0FD4C(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                                this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
-                                this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
-                                this->stickLeftPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                          this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+                          this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY, this->stickLeftPrompt.texZ,
+                          0, 0, 1.0f, 1.0f);
         }
         gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1625,22 +1626,22 @@ void func_80A0FEE8(GlobalContext* globalCtx, EnSob1* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
             func_80A0FD4C(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                                this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
-                                this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
-                                this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                          this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+                          this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
+                          this->stickRightPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             func_80A0FD4C(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                                this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
-                                this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
-                                this->stickLeftPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                          this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+                          this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY, this->stickLeftPrompt.texZ,
+                          0, 0, 1.0f, 1.0f);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 func_80A10290(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    EnSob1 *this = THIS;
+s32 func_80A10290(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnSob1* this = THIS;
 
     if (limbIndex == 15) {
         rot->x += this->unk1EE;
@@ -1648,8 +1649,8 @@ s32 func_80A10290(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     return 0;
 }
 
-s32 func_80A102C8(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    EnSob1 *this = THIS;
+s32 func_80A102C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnSob1* this = THIS;
 
     if (limbIndex == 15) {
         SysMatrix_InsertXRotation_s(this->unk1EE, MTXMODE_APPLY);
@@ -1657,7 +1658,7 @@ s32 func_80A102C8(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     return 0;
 }
 
-void func_80A10308(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+void func_80A10308(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 11) {
         gSPDisplayList(POLY_OPA_DISP++, D_06000970);
@@ -1665,7 +1666,7 @@ void func_80A10308(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-Gfx *func_80A10344(GraphicsContext *gfxCtx) {
+Gfx* func_80A10344(GraphicsContext* gfxCtx) {
     Gfx* dList;
     Gfx* dListHead;
 
@@ -1677,8 +1678,8 @@ Gfx *func_80A10344(GraphicsContext *gfxCtx) {
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-void func_80A10368(Actor* thisx, GlobalContext *globalCtx) {
-    EnSob1 *this = THIS;
+void func_80A10368(Actor* thisx, GlobalContext* globalCtx) {
+    EnSob1* this = THIS;
     s32 pad;
     s32 i;
 
@@ -1687,8 +1688,9 @@ void func_80A10368(Actor* thisx, GlobalContext *globalCtx) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
     gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A10344(globalCtx->state.gfxCtx));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A10A2C[this->eyeTextureIdx]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_80A10290, NULL, &this->actor);
-    for(i=0; i<3; i++) {
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     func_80A10290, NULL, &this->actor);
+    for (i = 0; i < 3; i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1703,16 +1705,17 @@ void func_80A10368(Actor* thisx, GlobalContext *globalCtx) {
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-void func_80A104E4(Actor *thisx, GlobalContext *globalCtx) {
-    EnSob1 *this = THIS;
+void func_80A104E4(Actor* thisx, GlobalContext* globalCtx) {
+    EnSob1* this = THIS;
     s32 pad;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A10A38[this->eyeTextureIdx]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL, NULL, &this->actor);
-    for(i=0; i<3; i++) {
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+                     NULL, &this->actor);
+    for (i = 0; i < 3; i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1727,8 +1730,8 @@ void func_80A104E4(Actor *thisx, GlobalContext *globalCtx) {
 
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
-void func_80A10608(Actor *thisx, GlobalContext *globalCtx) {
-    EnSob1 *this = THIS;
+void func_80A10608(Actor* thisx, GlobalContext* globalCtx) {
+    EnSob1* this = THIS;
     s32 pad;
     u32 frames;
     s32 i;
@@ -1736,8 +1739,9 @@ void func_80A10608(Actor *thisx, GlobalContext *globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06005458));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_80A102C8, func_80A10308, &this->actor);
-        for(i=0; i<3; i++) {
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     func_80A102C8, func_80A10308, &this->actor);
+    for (i = 0; i < 3; i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1749,7 +1753,8 @@ void func_80A10608(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -frames * 20, 32, 128));
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -frames * 20, 32, 128));
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0x00, 0xFF);
     gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x00, 0x00, 0x00);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
