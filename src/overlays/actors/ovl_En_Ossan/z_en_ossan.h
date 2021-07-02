@@ -93,25 +93,6 @@ typedef enum {
     /* 1 */ PART_TIME_WORKER
 } EnOssanWorker;
 
-typedef enum {
-    /* 0 */ ENOSSAN_HUMAN_WELCOME,
-    /* 1 */ ENOSSAN_TALK_OPTION,
-    /* 2 */ ENOSSAN_GORON_FIRST_TIME_WELCOME,
-    /* 3 */ ENOSSAN_ZORA_FIRST_TIME_WELCOME,
-    /* 4 */ ENOSSAN_DEKU_FIRST_TIME_WELCOME,
-    /* 5 */ ENOSSAN_GORON_WELCOME,
-    /* 6 */ ENOSSAN_ZORA_WELCOME,
-    /* 7 */ ENOSSAN_DEKU_WELCOME,
-} EnOssanWelcomeText;
-
-typedef enum {
-    /* 0 */ ENOSSAN_NEED_EMPTY_BOTTLE_TEXT,
-    /* 1 */ ENOSSAN_NEED_RUPEES_TEXT,
-    /* 2 */ ENOSSAN_NO_ROOM_TEXT,
-    /* 3 */ ENOSSAN_SUCCESS_TEXT,
-    /* 4 */ ENOSSAN_CANT_GET_NOW_TEXT
-} EnOssanCanBuyResultsText;
-
 extern const ActorInit En_Ossan_InitVars;
 
 #endif // Z_EN_OSSAN_H

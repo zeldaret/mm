@@ -79,7 +79,7 @@ extern UNK_TYPE D_06005BC0;
 extern UNK_TYPE D_06006F18;
 extern UNK_TYPE D_06006B18;
 
-static ActorAnimationEntryS animationsCuriosityShopMan[] = {
+static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
     { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
@@ -87,7 +87,7 @@ static ActorAnimationEntryS animationsCuriosityShopMan[] = {
     { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
 };
 
-static ActorAnimationEntryS animationsPartTimeWorker[] = {
+static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
     { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 2, 0 },
     { &D_06009D34, -1.0f, 0, -1, 2, 0 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
     { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },   { &D_0600A460, 1.0f, 0, -1, 2, -5 },
@@ -96,7 +96,7 @@ static ActorAnimationEntryS animationsPartTimeWorker[] = {
 
 static s16 sObjectIds[] = { 0x01AB, 0x00C2 };
 
-static ActorAnimationEntryS* sAnimations[] = { animationsCuriosityShopMan, animationsPartTimeWorker };
+static ActorAnimationEntryS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimeWorker };
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
@@ -120,32 +120,34 @@ static ShopItem sShops[][8] = {
       { SI_POTION_RED_3, -80, 92, -195 } },
 };
 
-static u16 sWelcomeTextIds[][2] = {
-    { 0X06A4, 0X06C1 }, { 0X06AB, 0X06C8 }, { 0X06A5, 0X06C2 }, { 0X06A7, 0X06C4 },
-    { 0X06A9, 0X06C6 }, { 0X06A6, 0X06C3 }, { 0X06A8, 0X06C5 }, { 0X06AA, 0X06C7 },
-};
+static u16 sWelcomeHumanTextIds[] = { 0X06A4, 0X06C1 };
 
-static u16 sCanBuyTextIds[][2] = {
-    { 0X06BC, 0X06D9 }, { 0X06BD, 0X06DA }, { 0X06BE, 0X06DB }, { 0X06BF, 0X06DC }, { 0X06C0, 0X06DD },
-};
+static u16 sTalkOptionTextIds[] = { 0X06AB, 0X06C8 };
+
+static u16 sWelcomeGoronFirstTimeTextIds[] = { 0X06A5, 0X06C2 };
+
+static u16 sWelcomeZoraFirstTimeTextIds[] = { 0X06A7, 0X06C4 };
+
+static u16 sWelcomeDekuFirstTimeTextIds[] = { 0X06A9, 0X06C6 };
+
+static u16 sWelcomeGoronTextIds[] = { 0X06A6, 0X06C3 };
+
+static u16 sWelcomeZoraTextIds[] = { 0X06A8, 0X06C5 };
+
+static u16 sWelcomeDekuTextIds[] = { 0X06AA, 0X06C7 };
+
+static u16 sNeedEmptyBottleTextIds[] = { 0X06BC, 0X06D9 };
+
+static u16 sNeedRupeesTextIds[] = { 0X06BD, 0X06DA };
+
+static u16 sNoRoomTextIds[] = { 0X06BE, 0X06DB };
+
+static u16 sBuySuccessTextIds[] = { 0X06BF, 0X06DC };
+
+static u16 sCannotGetNowTextIds[] = { 0X06C0, 0X06DD };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
-};
-
-// When selecting an item to buy, this is the position the item moves to
-static Vec3f sSelectedItemPosition[] = {
-    { 35.0f, 68.0f, -130.0f },
-    { -35.0f, 68.0f, -130.0f },
-};
-
-static EnOssanActionFunc sInitFuncs[] = { EnOssan_InitCuriosityShopMan, EnOssan_InitPartTimeWorker };
-
-static Vec3f focusOffset = { 800.0f, 500.0f, 0.0f }; // Used by Part Time Worker
-
-static UNK_PTR sEyeTextures[][3] = {
-    { &D_06005BC0, &D_06006D40, &D_06007140 },
-    { &D_06006498, &D_06006B18, &D_06006F18 },
 };
 
 void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {
@@ -572,7 +574,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
                 func_8013BC6C(&this->skelAnime, animations, 9);
             }
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
-            func_80151938(globalCtx, sWelcomeTextIds[ENOSSAN_TALK_OPTION][this->actor.params]);
+            func_80151938(globalCtx, sTalkOptionTextIds[this->actor.params]);
             func_8011552C(globalCtx, 6);
             this->stickRightPrompt.isEnabled = false;
             this->stickLeftPrompt.isEnabled = false;
@@ -992,7 +994,7 @@ void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
         case CANBUY_RESULT_SUCCESS:
             func_8019F208();
             item->buyFunc(globalCtx, item);
-            EnOssan_SetupBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_SUCCESS_TEXT][this->actor.params]);
+            EnOssan_SetupBuy(globalCtx, this, sBuySuccessTextIds[this->actor.params]);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(globalCtx, item);
@@ -1000,23 +1002,23 @@ void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
         case CANBUY_RESULT_NO_ROOM:
         case CANBUY_RESULT_NO_ROOM_3:
             play_sound(NA_SE_SY_ERROR);
-            EnOssan_SetupCannotBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_NO_ROOM_TEXT][this->actor.params]);
+            EnOssan_SetupCannotBuy(globalCtx, this, sNoRoomTextIds[this->actor.params]);
             break;
         case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
             play_sound(NA_SE_SY_ERROR);
-            EnOssan_SetupCannotBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_NEED_EMPTY_BOTTLE_TEXT][this->actor.params]);
+            EnOssan_SetupCannotBuy(globalCtx, this, sNeedEmptyBottleTextIds[this->actor.params]);
             break;
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
-            EnOssan_SetupCannotBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_NEED_RUPEES_TEXT][this->actor.params]);
+            EnOssan_SetupCannotBuy(globalCtx, this, sNeedRupeesTextIds[this->actor.params]);
             break;
         case CANBUY_RESULT_CANT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
-            EnOssan_SetupCannotBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_CANT_GET_NOW_TEXT][this->actor.params]);
+            EnOssan_SetupCannotBuy(globalCtx, this, sCannotGetNowTextIds[this->actor.params]);
             break;
         case CANBUY_RESULT_NO_ROOM_2:
             play_sound(NA_SE_SY_ERROR);
-            EnOssan_SetupCannotBuy(globalCtx, this, sCanBuyTextIds[ENOSSAN_NO_ROOM_TEXT][this->actor.params]);
+            EnOssan_SetupCannotBuy(globalCtx, this, sNoRoomTextIds[this->actor.params]);
             break;
     }
 }
@@ -1156,6 +1158,12 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_PositionSelectedItem(EnOssan* this) {
+    // When selecting an item to buy, this is the position the item moves to
+    static Vec3f sSelectedItemPosition[] = {
+        { 35.0f, 68.0f, -130.0f },
+        { -35.0f, 68.0f, -130.0f },
+    };
+
     EnGirlA* item;
     u8 i;
     u8 i2;
@@ -1383,24 +1391,24 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
         case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
             if (gSaveContext.weekEventReg[18] & 16) {
-                return sWelcomeTextIds[ENOSSAN_DEKU_WELCOME][CURIOSITY_SHOP_MAN];
+                return sWelcomeDekuTextIds[CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeTextIds[ENOSSAN_DEKU_FIRST_TIME_WELCOME][CURIOSITY_SHOP_MAN];
+            return sWelcomeDekuFirstTimeTextIds[CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animationIdx = 8;
             if (gSaveContext.weekEventReg[18] & 8) {
-                return sWelcomeTextIds[ENOSSAN_ZORA_WELCOME][CURIOSITY_SHOP_MAN];
+                return sWelcomeZoraTextIds[CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeTextIds[ENOSSAN_ZORA_FIRST_TIME_WELCOME][CURIOSITY_SHOP_MAN];
+            return sWelcomeZoraFirstTimeTextIds[CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animationIdx = 6;
             if (gSaveContext.weekEventReg[18] & 4) {
-                return sWelcomeTextIds[ENOSSAN_GORON_WELCOME][CURIOSITY_SHOP_MAN];
+                return sWelcomeGoronTextIds[CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeTextIds[ENOSSAN_GORON_FIRST_TIME_WELCOME][CURIOSITY_SHOP_MAN];
+            return sWelcomeGoronFirstTimeTextIds[CURIOSITY_SHOP_MAN];
     }
     this->animationIdx = 4;
-    return sWelcomeTextIds[ENOSSAN_HUMAN_WELCOME][CURIOSITY_SHOP_MAN];
+    return sWelcomeHumanTextIds[CURIOSITY_SHOP_MAN];
 }
 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
@@ -1415,21 +1423,21 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             if (gSaveContext.weekEventReg[55] & 16) {
-                return sWelcomeTextIds[ENOSSAN_DEKU_WELCOME][PART_TIME_WORKER];
+                return sWelcomeDekuTextIds[PART_TIME_WORKER];
             }
-            return sWelcomeTextIds[ENOSSAN_DEKU_FIRST_TIME_WELCOME][PART_TIME_WORKER];
+            return sWelcomeDekuFirstTimeTextIds[PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
             if (gSaveContext.weekEventReg[55] & 8) {
-                return sWelcomeTextIds[ENOSSAN_ZORA_WELCOME][PART_TIME_WORKER];
+                return sWelcomeZoraTextIds[PART_TIME_WORKER];
             }
-            return sWelcomeTextIds[ENOSSAN_ZORA_FIRST_TIME_WELCOME][PART_TIME_WORKER];
+            return sWelcomeZoraFirstTimeTextIds[PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
             if (gSaveContext.weekEventReg[55] & 4) {
-                return sWelcomeTextIds[ENOSSAN_GORON_WELCOME][PART_TIME_WORKER];
+                return sWelcomeGoronTextIds[PART_TIME_WORKER];
             }
-            return sWelcomeTextIds[ENOSSAN_GORON_FIRST_TIME_WELCOME][PART_TIME_WORKER];
+            return sWelcomeGoronFirstTimeTextIds[PART_TIME_WORKER];
     }
-    return sWelcomeTextIds[ENOSSAN_HUMAN_WELCOME][PART_TIME_WORKER];
+    return sWelcomeHumanTextIds[PART_TIME_WORKER];
 }
 
 #ifdef NON_MATCHING
@@ -1461,6 +1469,7 @@ void EnOssan_SetHaveMet(EnOssan* this) {
 #endif
 
 void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
+    static EnOssanActionFunc sInitFuncs[] = { EnOssan_InitCuriosityShopMan, EnOssan_InitPartTimeWorker };
     ShopItem* shopItems;
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
@@ -1470,7 +1479,7 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
         shopItems = sShops[this->actor.params];
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
-        this->textId = sWelcomeTextIds[0][this->actor.params];
+        this->textId = sWelcomeHumanTextIds[this->actor.params];
         EnOssan_InitCutscenes(this, globalCtx);
 
         this->cursorY = this->cursorX = 100.0f;
@@ -1699,20 +1708,23 @@ void EnOssan_PostLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbInde
 
 void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
                                         Actor* thisx) {
+    static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&focusOffset, &this->actor.focus.pos);
+        SysMatrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
     }
 }
 
 void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
+    static void* sCuriosityShopManEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnOssan* this = THIS;
     s32 pad;
+    
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[CURIOSITY_SHOP_MAN][this->eyeTextureIdx]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sCuriosityShopManEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnOssan_OverrideLimbDrawCuriosityShopMan, EnOssan_PostLimbDrawCuriosityShopMan, &this->actor);
     EnOssan_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
@@ -1721,12 +1733,13 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
+    static void* sPartTimeWorkerEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
     EnOssan* this = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[PART_TIME_WORKER][this->eyeTextureIdx]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sPartTimeWorkerEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnOssan_OverrideLimbDrawPartTimeWorker, EnOssan_PostLimbDrawPartTimeWorker, &this->actor);
     EnOssan_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
