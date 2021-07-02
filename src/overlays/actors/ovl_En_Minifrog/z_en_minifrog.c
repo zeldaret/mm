@@ -75,7 +75,7 @@ static UNK_TYPE4* D_808A4D74[] = {
 // gSaveContext.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    (0 << 8)  | 0x00, // NULL
+    (0 << 8) | 0x00,  // NULL
     (32 << 8) | 0x40, // Woodfall Temple Frog Returned
     (32 << 8) | 0x80, // Great Bay Temple Frog Returned
     (33 << 8) | 0x01, // Southern Swamp Frog Returned
@@ -94,7 +94,8 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->limbDrawTable, this->transitionDrawTable, 24);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->limbDrawTable,
+                     this->transitionDrawTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -118,7 +119,9 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (1) {}
     if (!EN_MINIFROG_IS_RETURNED(this)) {
-        if ((this->frogIndex == MINIFROG_YELLOW) || ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] & (u8)isFrogReturnedFlags[this->frogIndex]))) {
+        if ((this->frogIndex == MINIFROG_YELLOW) ||
+            ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
+              (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->timer = 30;
@@ -143,7 +146,8 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
 
             // Frog has been returned
-            if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] & (u8)isFrogReturnedFlags[this->frogIndex])) {
+            if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
+                 (u8)isFrogReturnedFlags[this->frogIndex])) {
                 this->actionFunc = EnMinifrog_SetupNextFrogInit;
             } else {
                 this->actor.draw = NULL;
@@ -272,7 +276,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD87: // "Ah! You need not say a thing. Upon seeing that face, I understand!" ...
                 func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
-            case 0xD82:                                          // "What has brought you all this way?"
+            case 0xD82:                                     // "What has brought you all this way?"
                 if (gSaveContext.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
                     func_80151938(globalCtx, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
@@ -280,7 +284,8 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
                 }
 
                 flag = gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8];
-                gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] = flag | (u8)isFrogReturnedFlags[this->frogIndex];
+                gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
+                    flag | (u8)isFrogReturnedFlags[this->frogIndex];
                 break;
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
@@ -332,7 +337,8 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
         if (this->actor.cutscene != -1) {
             this->flags |= 1;
         }
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) && (func_8012403C(globalCtx) == 0xD)) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
+               (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
 }
@@ -346,7 +352,8 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, GlobalContext* globalCtx) {
     if (nextFrog != NULL) {
         missingFrog = nextFrog->frog;
         if (nextFrog->frog != NULL) {
-            this->actor.home.rot.y = (s16)Actor_YawBetweenActors(&this->actor, &missingFrog->actor); // Set home to missing frog
+            this->actor.home.rot.y =
+                (s16)Actor_YawBetweenActors(&this->actor, &missingFrog->actor); // Set home to missing frog
             EnMinifrog_TurnToMissingFrog(this);
         } else {
             EnMinifrog_TurnToPlayer(this);
@@ -364,7 +371,8 @@ void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, GlobalContext* globalCtx) {
     if (this->frog != NULL) {
         func_80151938(globalCtx, 0xD78); // "Unfortunately, it seems not all of our members have gathered."
     } else {
-        func_80151938(globalCtx, 0xD7C); // "The conducting was spectacular. And all of our members rose to the occasion!"
+        func_80151938(globalCtx,
+                      0xD7C); // "The conducting was spectacular. And all of our members rose to the occasion!"
     }
 
     EnMinifrog_SetJumpState(this);
@@ -562,13 +570,17 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     EnMinifrog_JumpTimer(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(gSaveContext.weekEventReg[34] & 1)) {         // Not spoken with MINIFROG_YELLOW
-            func_801518B0(globalCtx, 0xD76, &this->actor);  // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
-                                                            // looks like you've lost a little weight..."
+        if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
+            func_801518B0(globalCtx, 0xD76,
+                          &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
+                                         // looks like you've lost a little weight..."
         } else {
             func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
-    } else if ((this->actor.xzDistToPlayer < 150.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) || ((this->actor.flags & 0x10000) == 0x10000)) && func_8012403C(globalCtx) == 0xD) {
+    } else if ((this->actor.xzDistToPlayer < 150.0f) &&
+               (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) ||
+                ((this->actor.flags & 0x10000) == 0x10000)) &&
+               Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }
 }
@@ -579,7 +591,7 @@ void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
@@ -595,7 +607,8 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                Actor* thisx) {
     if (limbIndex == 1) {
         pos->z -= 500.0f;
     }
@@ -617,7 +630,7 @@ void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
-    
+
     if (limbIndex == 4) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }

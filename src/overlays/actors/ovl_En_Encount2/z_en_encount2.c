@@ -112,7 +112,7 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
     this->oscillationAngle += 1500.0f;
     this->dyna.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
-    if (((this->collider.base.acFlags & AC_HIT) != 0) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
         this->dyna.actor.colChkInfo.health = 0;
         this->isPopped = 1;
         this->actionFunc = EnEncount2_Popped;

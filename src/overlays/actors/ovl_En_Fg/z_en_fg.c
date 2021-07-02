@@ -130,7 +130,7 @@ u8 EnFg_UpdateHealth(EnFg* this) {
 s32 EnFg_GetDamageEffect(EnFg* this) {
     s32 ret = 0;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
                 ret = FG_DMGEFFECT_DEKUSTICK;
@@ -148,7 +148,7 @@ s32 EnFg_GetDamageEffect(EnFg* this) {
                 ret = FG_DMGEFFECT_EXPLOSION;
                 break;
         }
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         EnFg_UpdateHealth(this);
     }
     return ret;
@@ -329,7 +329,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, globalCtx);
-            func_800B78B8(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 5);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
         }
     }
 
@@ -360,11 +360,11 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_Push();
+        SysMatrix_StatePush();
         SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_Pop();
+        SysMatrix_StatePop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
@@ -381,9 +381,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_Push();
+    SysMatrix_StatePush();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_Pop();
+    SysMatrix_StatePop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);

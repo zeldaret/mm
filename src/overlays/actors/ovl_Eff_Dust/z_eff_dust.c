@@ -165,7 +165,7 @@ void func_80918FE4(EffDust* this, GlobalContext* globalCtx) {
 
 void func_80919230(EffDust* this, GlobalContext* globalCtx) {
     s16 theta;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Actor* parent = this->actor.parent;
     f32* distanceTraveled = this->distanceTraveled;
     s32 i;
@@ -315,7 +315,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f* initialPositions;
     s32 i;
     f32 aux;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(gfxCtx);
@@ -326,7 +326,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     distanceTraveled = this->distanceTraveled;
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-    if (player->unkB08 >= 0.85f) {
+    if (player->unk_B08[0] >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
