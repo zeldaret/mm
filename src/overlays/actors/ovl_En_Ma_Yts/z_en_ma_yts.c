@@ -257,7 +257,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = 40;
     }
 
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8.unk_00 = 0;

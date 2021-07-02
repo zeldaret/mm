@@ -186,7 +186,7 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     } else {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
-        func_800B78B8(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     }

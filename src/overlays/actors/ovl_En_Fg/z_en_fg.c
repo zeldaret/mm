@@ -329,7 +329,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, globalCtx);
-            func_800B78B8(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 5);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
         }
     }
 

@@ -243,7 +243,7 @@ void func_80926B40(ObjKibako* this) {
 
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
         this->actor.objBankIndex = this->bankIndex;
@@ -281,7 +281,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
     } else {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         func_809262BC(this);
-        func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
         if (!(this->collider.base.ocFlags1 & 8) && (this->actor.xzDistToPlayer > 28.0f)) {
             this->collider.base.ocFlags1 |= 8;
         }
@@ -320,7 +320,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
     s32 sp2C;
 
     func_80926394(this, globalCtx);
-    if (func_800B8BFC(&this->actor, globalCtx)) {
+    if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomContext.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
@@ -331,7 +331,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
             ObjKibako_SetupThrown(this);
             this->actor.flags &= ~0x4000000;
         }
-        func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     } else {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 20.0f;
@@ -386,7 +386,7 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
             Math_StepToS(&D_8092738C, D_80927388, 0xA0);
             this->actor.shape.rot.x = (s16)(this->actor.shape.rot.x + D_80927384);
             this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + D_8092738C);
-            func_800B78B8(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
             CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
