@@ -80,27 +80,11 @@ void func_80A0FADC(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32 z, 
 void func_80A0FD4C(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                    f32 dy);
 void func_80A0FEE8(GlobalContext* globalCtx, EnSob1* this);
-
 s32 func_80A10290(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 s32 func_80A102C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_80A10308(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-
 void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx);
 void func_80A0EC98(EnSob1* this);
-
-/*
-const ActorInit En_Sob1_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSob1),
-    (ActorFunc)EnSob1_Init,
-    (ActorFunc)EnSob1_Destroy,
-    (ActorFunc)EnSob1_Update,
-    (ActorFunc)NULL,
-};
-*/
 
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
@@ -122,54 +106,49 @@ extern UNK_TYPE D_06010438;
 extern UNK_TYPE D_06010C38; 
 extern UNK_TYPE D_06011038;
 
-extern ActorAnimationEntryS D_80A10860[];
-/*
 static ActorAnimationEntryS D_80A10860[] = {
     {&D_06009120, 2.0f, 0, -1, 0, 20},
     {&D_06008268, 1.0f, 0, -1, 2, 0},
     {&D_060087BC, 1.0f, 0, -1, 0, 0},
 };
-*/
 
-extern Vec3s D_80A108B0[];
-/*
+const ActorInit En_Sob1_InitVars = {
+    ACTOR_EN_OSSAN,
+    ACTORCAT_NPC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnSob1),
+    (ActorFunc)EnSob1_Init,
+    (ActorFunc)EnSob1_Destroy,
+    (ActorFunc)EnSob1_Update,
+    (ActorFunc)NULL,
+};
+
 static Vec3s D_80A108B0[] = {
     {0x00D0, 0x0283, 0x00D6},
     {0x00A1, 0x0283, 0x00D5},
     {0x012C, 0x0283, 0x0283},
     {0x00A1, 0x0283, 0x00D5},
 };
-*/
 
-extern u16 D_80A108C8[];
-//static u16 D_80A108C8[] = {0x12D6, 0x0BC0, 0x0640, 0x0BC0};
+static u16 D_80A108C8[] = {0x12D6, 0x0BC0, 0x0640, 0x0BC0};
 
-extern u16 D_80A108D0[];
-//static u16 D_80A108D0[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+static u16 D_80A108D0[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
 
-extern u16 D_80A108D8[];
-//static u16 D_80A108D8[] = {0x12E6, 0x0BD6, 0x0647, 0x0BD6};
+static u16 D_80A108D8[] = {0x12E6, 0x0BD6, 0x0647, 0x0BD6};
 
-extern u16 D_80A108E0[];
-//static u16 D_80A108E0[] = {0x12E1, 0x0BD2, 0x0645, 0x0BD2};
+static u16 D_80A108E0[] = {0x12E1, 0x0BD2, 0x0645, 0x0BD2};
 
-extern u16 D_80A108E8[];
-//static u16 D_80A108E8[] = {0x12E5, 0x0BD5, 0x0646, 0x0BD5};
+static u16 D_80A108E8[] = {0x12E5, 0x0BD5, 0x0646, 0x0BD5};
 
-extern u16 D_80A108F0[];
-//static u16 D_80A108F0[] = {0x12E4, 0x0BD4, 0x0645 0x0BD4};
+static u16 D_80A108F0[] = {0x12E4, 0x0BD4, 0x0645, 0x0BD4};
 
-extern u16 D_80A108F8[];
-//static u16 D_80A108F8[] = {0x12E1, 0x0BD1, 0x0641, 0x0BD1};
+static u16 D_80A108F8[] = {0x12E1, 0x0BD1, 0x0641, 0x0BD1};
 
-extern u16 D_80A10900[];
-//static u16 D_80A10900[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+static u16 D_80A10900[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
 
-extern f32 D_80A10908[];
-//static f32 D_80A10908[] = {0.01f, 0.01f, 0.01f, 0.01f};
+static f32 D_80A10908[] = {0.01f, 0.01f, 0.01f, 0.01f};
 
-extern ShopItem D_80A10918[][3];
-/*
 static ShopItem D_80A10918[][3] = {
     {
         {SI_POTION_RED_4, 1258, 42, 325},
@@ -192,57 +171,39 @@ static ShopItem D_80A10918[][3] = {
         {SI_BOMB_3, -93, 42, -62},
     },
 };
-*/
 
-extern EnSob1UnkStruct D_80A10978[];
-/*
 static EnSob1UnkStruct D_80A10978[] = {
     {1170.0f, 1230.0f, 360.0f, 380.0f},
     {-142.0f, -72.0f, -20.0f, 0.0f},
-    {138.0f, 200.0f, 72.0f, 16.0f},
+    {138.0f, 200.0f, 72.0f, 160.0f},
     {-142.0f, -72.0f, -20.0f, 0.0f},
-}
-*/
+};
 
-extern Vec3f D_80A109B8[];
-/*
 static Vec3f D_80A109B8[] = {
     {1240.0f, 45.0f, 349.0f},
     {-75.0f, 45.0f, -38.0f},
     {197.0f, -4.0f, 93.0f},
     {-75.0f, 45.0f, -38.0f},
-}
-*/
+};
 
-extern InitChainEntry D_80A109E8[];
-/*
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
-*/
 
-extern EnSob1ActionFunc D_80A109EC[];
-/*
 static EnSob1ActionFunc D_80A109EC[] = {
     func_80A0F470, func_80A0F554, func_80A0F638, func_80A0F554,
 };
-*/
 
-extern Vec3f D_80A109FC[];
-/*
 extern Vec3f D_80A109FC[] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, -4.0f, 0.0f},
     {0.0f, 0.0f, 0.0f},
     {0.0f, -4.0f, 0.0f},
 };
-*/
 
-extern UNK_PTR D_80A10A2C[];
-//static UNK_PTR D_80A10A2C[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
+static UNK_PTR D_80A10A2C[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
 
-extern UNK_PTR D_80A10A38[];
-//static UNK_PTR D_80A10A38[] = { &D_06010438, &D_06010C38, &D_06011038 };
+static UNK_PTR D_80A10A38[] = { &D_06010438, &D_06010C38, &D_06011038 };
 
 void func_80A0C810(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
     f32 frameCount;
@@ -502,7 +463,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    Actor_ProcessInitChain(&this->actor, D_80A109E8);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     func_80A0C8AC(this, func_80A0F6B0);
 }
 
