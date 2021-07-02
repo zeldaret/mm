@@ -258,7 +258,7 @@ s32 View_StepQuake(View* view, RSPMatrix* matrix) {
     }
 
     SysMatrix_FromRSPMatrix(matrix, &mf);
-    Matrix_Put(&mf);
+    SysMatrix_SetCurrentState(&mf);
     SysMatrix_RotateStateAroundXAxis(view->currQuakeRot.x);
     SysMatrix_InsertYRotation_f(view->currQuakeRot.y, 1);
     SysMatrix_InsertZRotation_f(view->currQuakeRot.z, 1);

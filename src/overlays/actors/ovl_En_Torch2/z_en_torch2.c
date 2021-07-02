@@ -77,7 +77,7 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world, this->actor.shape.rot.y);
+    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos, this->actor.shape.rot.y);
     globalCtx->actorCtx.unk254[this->actor.params] = 0;
 }
 
@@ -94,7 +94,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.gravity = -1.0f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;

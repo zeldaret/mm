@@ -189,10 +189,10 @@ void EnOssan_ChooseShopKeeper(EnOssan* this) {
 }
 
 void EnOssan_RotateHead(EnOssan* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->actor.params == PART_TIME_WORKER) {
-        if (player->unk14B == 2) {
+        if (player->transformation == PLAYER_FORM_ZORA) {
             Math_SmoothStepToS(&this->headRotX, this->unk2C6.y, 3, 2000, 0);
         } else if (this->welcomeFlags & 1) {
             Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
@@ -254,7 +254,7 @@ void EnOssan_UpdateCursorPos(GlobalContext* globalCtx, EnOssan* this) {
 }
 
 void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     func_800B84D0(&this->actor, globalCtx);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -263,7 +263,7 @@ void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
     this->drawCursor = 0;
     this->stickRightPrompt.isEnabled = false;
     this->stickLeftPrompt.isEnabled = false;
-    player->unkA70 &= ~0x20000000;
+    player->stateFlags2 &= ~0x20000000;
     globalCtx->interfaceCtx.unk222 = 0;
     globalCtx->interfaceCtx.unk224 = 0;
     if (this->cutSceneState == 2) {
@@ -319,11 +319,11 @@ void EnOssan_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnOssan* t
 }
 
 void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     func_8013D9C8(globalCtx, this->limbRotTableY, this->limbRotTableZ, 19);
     if (func_800B84D0(&this->actor, globalCtx)) {
-        player->unkA70 |= 0x20000000;
+        player->stateFlags2 |= 0x20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
         if (this->cutSceneState == 0) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -335,8 +335,8 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
         }
     } else {
         if (this->actor.xzDistToPlayer < 100.0f &&
-            (player->base.world.pos.x >= -40.0f && player->base.world.pos.x <= 40.0f) &&
-            (player->base.world.pos.z >= -91.0f && player->base.world.pos.z <= -60.0f)) {
+            (player->actor.world.pos.x >= -40.0f && player->actor.world.pos.x <= 40.0f) &&
+            (player->actor.world.pos.z >= -91.0f && player->actor.world.pos.z <= -60.0f)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
         if (this->actor.params == PART_TIME_WORKER) {
@@ -529,7 +529,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     EnOssan_RotateHead(this, globalCtx);
     if (talkState == 5 && func_80147624(globalCtx)) {
@@ -538,7 +538,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             func_8013BC6C(&this->skelAnime, animations, 1);
         }
         this->welcomeFlags &= ~1;
-        if (player->unk14B == 3) {
+        if (player->transformation == PLAYER_FORM_DEKU) {
             EnOssan_EndInteraction(globalCtx, this);
         } else {
             if (this->welcomeFlags & 2) {
@@ -551,7 +551,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (talkState == 10 && this->actor.params == PART_TIME_WORKER && player->unk14B == 2 && func_80147624(globalCtx)) {
+    if (talkState == 10 && this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
         this->animationIdx = 9;
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
@@ -562,12 +562,12 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
 
 s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     switch (globalCtx->msgCtx.choiceIndex) {
         case 0:
             func_8019F208();
-            if (this->actor.params == PART_TIME_WORKER && player->unk14B == 2) {
+            if (this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA) {
                 this->animationIdx = 9;
                 func_8013BC6C(&this->skelAnime, animations, 9);
             }
@@ -588,7 +588,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
 void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 cursorIdx;
 
     if (this->cutSceneState == 0) {
@@ -626,7 +626,7 @@ void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
                 return;
             }
         }
-        if (this->actor.params == PART_TIME_WORKER && player->unk14B != 2) {
+        if (this->actor.params == PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
             Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
         }
     }
@@ -949,12 +949,12 @@ void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx) 
 }
 
 void EnOssan_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnOssan* this) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
-    player->unkA70 &= ~0x20000000;
+    player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     EnOssan_SetupAction(this, EnOssan_BuyItemWithFanfare);
@@ -1092,7 +1092,7 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
 
 void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     EnGirlA* item;
 
     if (talkState == 4) {
@@ -1105,8 +1105,8 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        player->base.shape.rot.y += 0x8000;
-                        player->unkA70 |= 0x20000000;
+                        player->actor.shape.rot.y += 0x8000;
+                        player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
                         func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
@@ -1123,8 +1123,8 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
-        player->base.shape.rot.y += 0x8000;
-        player->unkA70 |= 0x20000000;
+        player->actor.shape.rot.y += 0x8000;
+        player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
         func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
@@ -1132,12 +1132,12 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->cutSceneState == 0) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            player->unkA70 |= 0x20000000;
+            player->stateFlags2 |= 0x20000000;
             EnOssan_SetupAction(this, EnOssan_ContinueShopping);
             this->cutSceneState = 2;
         } else {
@@ -1370,7 +1370,7 @@ void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u16 ret;
 
     ret = func_800F1250(globalCtx, 0x2F);
@@ -1379,20 +1379,20 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
         this->welcomeFlags |= 2;
         return ret;
     }
-    switch (player->unk14B) {
-        case 3:
+    switch (player->transformation) {
+        case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
             if (gSaveContext.weekEventReg[18] & 16) {
                 return sWelcomeTextIds[ENOSSAN_DEKU_WELCOME][CURIOSITY_SHOP_MAN];
             }
             return sWelcomeTextIds[ENOSSAN_DEKU_FIRST_TIME_WELCOME][CURIOSITY_SHOP_MAN];
-        case 2:
+        case PLAYER_FORM_ZORA:
             this->animationIdx = 8;
             if (gSaveContext.weekEventReg[18] & 8) {
                 return sWelcomeTextIds[ENOSSAN_ZORA_WELCOME][CURIOSITY_SHOP_MAN];
             }
             return sWelcomeTextIds[ENOSSAN_ZORA_FIRST_TIME_WELCOME][CURIOSITY_SHOP_MAN];
-        case 1:
+        case PLAYER_FORM_GORON:
             this->animationIdx = 6;
             if (gSaveContext.weekEventReg[18] & 4) {
                 return sWelcomeTextIds[ENOSSAN_GORON_WELCOME][CURIOSITY_SHOP_MAN];
@@ -1404,7 +1404,7 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
 }
 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u16 ret;
 
     ret = func_800F1250(globalCtx, 54);
@@ -1412,18 +1412,18 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
         this->welcomeFlags |= 2;
         return ret;
     }
-    switch (player->unk14B) {
-        case 3:
+    switch (player->transformation) {
+        case PLAYER_FORM_DEKU:
             if (gSaveContext.weekEventReg[55] & 16) {
                 return sWelcomeTextIds[ENOSSAN_DEKU_WELCOME][PART_TIME_WORKER];
             }
             return sWelcomeTextIds[ENOSSAN_DEKU_FIRST_TIME_WELCOME][PART_TIME_WORKER];
-        case 2:
+        case PLAYER_FORM_ZORA:
             if (gSaveContext.weekEventReg[55] & 8) {
                 return sWelcomeTextIds[ENOSSAN_ZORA_WELCOME][PART_TIME_WORKER];
             }
             return sWelcomeTextIds[ENOSSAN_ZORA_FIRST_TIME_WELCOME][PART_TIME_WORKER];
-        case 1:
+        case PLAYER_FORM_GORON:
             if (gSaveContext.weekEventReg[55] & 4) {
                 return sWelcomeTextIds[ENOSSAN_GORON_WELCOME][PART_TIME_WORKER];
             }

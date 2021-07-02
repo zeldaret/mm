@@ -55,7 +55,7 @@ s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4) 
 }
 
 s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 sVar3;
     Vec3f local_14;
     s16 sVar3A;
@@ -75,15 +75,16 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s*
     if (((globalCtx->csCtx).state != 0) || (D_801D0D50 != 0)) {
         local_14 = globalCtx->view.eye;
     } else {
-        local_14 = player->base.focus.pos;
+        local_14 = player->actor.focus.pos;
     }
 
     func_800E8FA4(actor, &local_14, param_3, param_4);
 
     return 1;
 }
+
 s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 sVar3;
     Vec3f local_14;
     s16 sVar3A;
@@ -102,7 +103,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s*
     if (((globalCtx->csCtx).state != 0) || (D_801D0D50 != 0)) {
         local_14 = globalCtx->view.eye;
     } else {
-        local_14 = player->base.focus.pos;
+        local_14 = player->actor.focus.pos;
     }
 
     func_800E8FA4(actor, &local_14, param_3, param_4);

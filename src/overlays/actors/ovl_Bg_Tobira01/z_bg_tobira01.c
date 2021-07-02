@@ -25,7 +25,7 @@ extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
 void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 cutsceneId = this->dyna.actor.cutscene;
     s16 prevTimer;
 
@@ -41,7 +41,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         }
     } else if (!(gSaveContext.weekEventReg[88] & 0x40) && (this->timer == 0) && (globalCtx->actorCtx.unk1F5 != 0) &&
                (globalCtx->actorCtx.unk1F4 == 0) &&
-               (func_800C99AC(&globalCtx->colCtx, player->base.floorPoly, player->base.floorBgId) == 6)) {
+               (func_800C99AC(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
         this->unk_16C = 0; // this variable is not used anywhere else
     }
