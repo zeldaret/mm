@@ -185,7 +185,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     s32 hitMask;
     s32 nextMask;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
             nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
@@ -198,7 +198,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
                 this->masksHit = 0;
             }
         }
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         this->cooldownTimer = 5;
         if (this->masksHit > 5) {
             BgKin2Fence_SetupPlayOpenCutscene(this);

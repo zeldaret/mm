@@ -1041,9 +1041,15 @@ SECTIONS
     ovl_En_Niw : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
-        build/asm/overlays/ovl_En_Niw_data.o(.data)
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
+#ifdef NON_EQUIVALENT
+        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
+#elseif NON_MATCHING
+        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
+#else
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
         build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
+#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8784,9 +8790,9 @@ SECTIONS
     ovl_Obj_Mu_Pict : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.text)
-        build/asm/overlays/ovl_Obj_Mu_Pict_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.data)
         build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.rodata)
-        build/asm/overlays/ovl_Obj_Mu_Pict_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

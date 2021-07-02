@@ -149,8 +149,8 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s16 temp_v1;
 
-    if (this->collider1.base.ocFlags1 & 2) {
-        this->collider1.base.ocFlags1 &= ~2;
+    if (this->collider1.base.ocFlags1 & OC1_HIT) {
+        this->collider1.base.ocFlags1 &= ~OC1_HIT;
         temp_v1 = this->dyna.actor.yawTowardsPlayer - this->unk_212;
         temp_f0 = this->unk_21C / 18000.0f;
         if (ABS_ALT(temp_v1) < 0x3FFC) {
@@ -163,8 +163,8 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (this->collider2.base.acFlags & 2) {
-        this->collider2.base.acFlags &= ~2;
+    if (this->collider2.base.acFlags & AC_HIT) {
+        this->collider2.base.acFlags &= ~AC_HIT;
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
