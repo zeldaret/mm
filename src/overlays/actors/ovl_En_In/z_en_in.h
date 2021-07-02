@@ -28,7 +28,7 @@ typedef struct EnIn {
     /* 0x238 */ char unk238[0x4];
     /* 0x23C */ u8 unk23C;
     /* 0x23D */ u8 unk23D;
-    /* 0x240 */ u8 *unk240;
+    /* 0x240 */ Path *path;
     /* 0x244 */ s16 unk244;
     /* 0x248 */ Vec3f unk248;
     /* 0x254 */ Vec3f unk254;
