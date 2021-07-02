@@ -602,10 +602,17 @@ typedef struct {
 } Demo1; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x14 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+} Demo2Anim; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ // Demo2Anim anim;
+    /* 0x0C */ Demo2Anim anim;
 } Demo2; // size = 0xC
 
 typedef struct {
@@ -651,8 +658,18 @@ typedef struct {
 } Demo5; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
-    /* 0x04 */ // Demo0Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ VecSph unk_04;
+    /* 0x0C */ VecSph unk_0C;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} Demo0Anim;
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x04 */ Demo0Anim anim;
 } Demo0; // size = 0x4
 
 typedef struct {
