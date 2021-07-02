@@ -141,8 +141,8 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if (((this->collider.base.acFlags & 2) != 0) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->collider.base.acFlags &= ~0x2;
+    if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
+        this->collider.base.acFlags &= ~AC_HIT;
         return 1;
     }
 

@@ -32,6 +32,7 @@
 #include <z64light.h>
 #include <z64math.h>
 #include <z64object.h>
+#include "z64player.h"
 #include <z64scene.h>
 #include <z64save.h>
 
@@ -1343,7 +1344,7 @@ struct Camera {
     /* 0x084 */ f32 unk84;
     /* 0x088 */ f32 unk88;
     /* 0x08C */ GlobalContext* globalCtx;
-    /* 0x090 */ ActorPlayer* player;
+    /* 0x090 */ Player* player;
     /* 0x094 */ PosRot unk94;
     /* 0x0A8 */ Actor* unkA8;
     /* 0x0AC */ Vec3f unkAC;
@@ -1451,7 +1452,7 @@ struct s800B948C {
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
-    /* 0x14 */ ActorPlayer* player;
+    /* 0x14 */ Player* player;
     /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
 }; // size = 0x1C
 
@@ -1525,7 +1526,14 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ TransitionContext transitionCtx;
-    /* 0x18768 */ UNK_TYPE1 pad18768[0x30];
+    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
+    /* 0x18770 */ UNK_TYPE1 pad18770[0x8];
+    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
+    /* 0x1877C */ s32 (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
+    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
+    /* 0x18788 */ UNK_TYPE1 pad18788[0x10];
     /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
     /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
     /* 0x187B0 */ MtxF unk187B0;

@@ -130,7 +130,7 @@ u8 EnFg_UpdateHealth(EnFg* this) {
 s32 EnFg_GetDamageEffect(EnFg* this) {
     s32 ret = 0;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
                 ret = FG_DMGEFFECT_DEKUSTICK;
@@ -148,7 +148,7 @@ s32 EnFg_GetDamageEffect(EnFg* this) {
                 ret = FG_DMGEFFECT_EXPLOSION;
                 break;
         }
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         EnFg_UpdateHealth(this);
     }
     return ret;

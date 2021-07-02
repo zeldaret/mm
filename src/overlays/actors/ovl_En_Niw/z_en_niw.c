@@ -1,10 +1,10 @@
-#include "z_en_niw.h"
-
 /* 
  * File: z_en_niw.c 
  * Overlay: ovl_En_Niw
  * Description: Cucco (Chicken) (Japanese: Niwatori)
  */ 
+
+#include "z_en_niw.h"
 
 #define FLAGS 0x00800010
 
@@ -645,7 +645,7 @@ void EnNiw_SetupRunning(EnNiw* this) {
 // bad regalloc, center of first if block
 // actionfunc: running away from link
 void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f tempVec3f;
     s16 temp298;
     f32 dX;
@@ -681,8 +681,8 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
             dX = this->actor.world.pos.x - this->unk2BC.x;
             dZ = this->actor.world.pos.z - this->unk2BC.z;
         } else {
-            dX = this->actor.world.pos.x - player->base.world.pos.x;
-            dZ = this->actor.world.pos.z - player->base.world.pos.z;
+            dX = this->actor.world.pos.x - player->actor.world.pos.x;
+            dZ = this->actor.world.pos.z - player->actor.world.pos.z;
         }
         this->yawTowardsPlayer = Math_Atan2S(dX, dZ);
         func_808917F8(this, globalCtx, 0);
@@ -756,7 +756,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
     s8 pad0;
     s16 i;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 pad1;
     s16 featherCount;
     Vec3f pos;
