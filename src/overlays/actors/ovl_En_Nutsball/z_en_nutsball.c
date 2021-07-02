@@ -128,7 +128,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         Actor_SetVelocityAndMoveXYRotation(&this->actor);
         Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
-        func_800B78B8(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
         if (this->actor.bgCheckFlags & 8) {
             if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {

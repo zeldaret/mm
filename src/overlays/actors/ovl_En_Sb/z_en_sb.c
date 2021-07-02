@@ -345,7 +345,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetHeight(&this->actor, 20.0f);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         this->actionFunc(this, globalCtx);
-        func_800B78B8(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
         EnSb_UpdateDamage(this, globalCtx);
         if (player->stateFlags1 & 0x8000000) {
             Collider_UpdateCylinder(&this->actor, &this->collider);

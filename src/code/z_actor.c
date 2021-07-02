@@ -568,7 +568,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7678.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B78B8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_UpdateBgCheckInfo.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7E04.asm")
 
@@ -624,9 +624,9 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     if (actor->parent != NULL) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -638,7 +638,13 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BD0.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BFC.asm")
+s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
+    if (!actor->parent) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C20.asm")
 
