@@ -142,11 +142,11 @@ void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
 }
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 flag = this->unk_32C == 2 ? true : false;
 
     if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
-        this->unk_1D8.unk_18 = player->base.world.pos;
+        this->unk_1D8.unk_18 = player->actor.world.pos;
         this->unk_1D8.unk_18.y -= -10.0f;
     } else {
         Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.parent->world.pos, 8.0f);
@@ -257,7 +257,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = 40;
     }
 
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8.unk_00 = 0;
@@ -325,13 +325,13 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x335F, &this->actor);
                 this->textId = 0x335F;
             } else {
-                // Saying to non-human Link: "Pretend you did not heard that."
+                // Saying to non-human Link: "Pretend you did not hear that."
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 func_801518B0(globalCtx, 0x3362, &this->actor);
                 this->textId = 0x3362;
                 func_80151BB4(globalCtx, 5);
             }
-        } else if (func_8012403C(globalCtx)) { // Player_IsWearingAMask
+        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x40)) {
                 gSaveContext.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);

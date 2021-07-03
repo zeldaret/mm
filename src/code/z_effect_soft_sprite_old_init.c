@@ -875,9 +875,9 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
 #endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    EffectSsFireTail_SpawnFlame(globalCtx, &player->base, &player->bodyPartsPos[bodyPart], scale, bodyPart,
+    EffectSsFireTail_SpawnFlame(globalCtx, &player->actor, &player->bodyPartsPos[bodyPart], scale, bodyPart,
                                 colorIntensity);
 }
 

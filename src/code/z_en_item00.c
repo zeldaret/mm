@@ -404,7 +404,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -420,7 +420,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
         return;
     }
 
-    this->actor.world.pos = player->base.world.pos;
+    this->actor.world.pos = player->actor.world.pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
@@ -440,8 +440,8 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    ActorPlayer* player = PLAYER;
-    s32 sp38 = player->unkA74 & 0x1000;
+    Player* player = PLAYER;
+    s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
     s32 pad2;
 
@@ -461,7 +461,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-        func_800B78B8(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= -32000.0f) {
             Actor_MarkForDeath(&this->actor);
@@ -816,15 +816,13 @@ s16 func_800A7650(s16 dropId) {
     s16 healthCapacity;
 
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
-         (gSaveContext.inventory.items[gItemSlots[6]] == 0xFF)) ||
+         (INV_CONTENT(ITEM_BOMB) == ITEM_NONE)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
-         (gSaveContext.inventory.items[gItemSlots[1]] == 0xFF)) ||
+         (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
         (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
-
-    ;
 
     if (dropId == ITEM00_HEART) {
         healthCapacity = gSaveContext.healthCapacity;
@@ -1125,11 +1123,11 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if (gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
+            } else if (AMMO(ITEM_BOW) < 6) {
                 params = 0xA0;
                 dropId = ITEM00_ARROWS_30;
                 dropQuantity = 1;
-            } else if (gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
+            } else if (AMMO(ITEM_BOMB) < 6) {
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;

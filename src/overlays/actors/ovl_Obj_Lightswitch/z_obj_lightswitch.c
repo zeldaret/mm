@@ -174,6 +174,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
     }
 }
 #else
+void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_SpawnEffects.asm")
 #endif
 
@@ -358,7 +359,7 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
     s32 pad;
 
-    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+    if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
         if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
@@ -446,6 +447,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightSwitch_DrawOpa.asm")
 #endif
 
@@ -498,6 +500,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightSwitch_DrawXlu.asm")
 #endif
 
