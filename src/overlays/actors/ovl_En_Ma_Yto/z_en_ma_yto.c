@@ -199,7 +199,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, temp_a1);
     Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B9143C);
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (func_80B8EABC(this, globalCtx) == 1) {
         func_80B8EBDC(this);
     } else {
@@ -328,7 +328,7 @@ s32 EnMaYto_SearchRomani(EnMaYto *this, GlobalContext *globalCtx) {
             EnMaYts* romani = (EnMaYts*)actor;
             s16 romaniType;
 
-            romaniType = EN_MA_YTS_PARSE_TYPE(romani->actor.params);
+            romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
             if (((this->type == EN_NA_YTO_TYPE_2) && (romaniType == EN_NA_YTS_TYPE_SITTING)) || ((this->type == EN_NA_YTO_TYPE_1) && (romaniType == EN_NA_YTS_TYPE_BARN))) {
                 this->actor.child = &romani->actor;
                 romani->actor.parent = &this->actor;
@@ -544,7 +544,7 @@ void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
 
         if (temp_a0 != NULL) {
             if (func_800B84D0(temp_a0, globalCtx)) {
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 func_80B9083C(this, globalCtx);
                 func_80B8F254(this);
                 return;
@@ -652,7 +652,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
             break;
 
         case 0x339B:
-            func_800B86C8(this, globalCtx, this->actor.child);
+            func_800B86C8(&this->actor, globalCtx, this->actor.child);
             func_80B90E50(this, 0);
             func_80B90E84(this, (u16)3, (u16)3);
             func_801518B0(globalCtx, 0x339CU, &this->actor);
@@ -661,7 +661,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 
         case 0x339C:
             this->unk_31E = 1;
-            func_800B86C8(this, globalCtx, this);
+            func_800B86C8(&this->actor, globalCtx, &this->actor);
             EnMaYto_SetFaceExpression(this, (u16)0, (u16)2);
             func_801518B0(globalCtx, 0x339DU, &this->actor);
             this->textId = 0x339D;
@@ -669,7 +669,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 
         case 0x339D:
             func_80B90E50(this, 1);
-            func_800B86C8(this, globalCtx, this->actor.child);
+            func_800B86C8(&this->actor, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)1);
             func_801518B0(globalCtx, 0x339EU, &this->actor);
             this->textId = 0x339E;
@@ -690,7 +690,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 
         case 0x33A1:
             func_80B90E50(this, 1);
-            func_800B86C8(this, globalCtx, this->actor.child);
+            func_800B86C8(&this->actor, globalCtx, this->actor.child);
             func_80B90E84(this, (u16)0, (u16)2);
             func_801518B0(globalCtx, 0x33A2U, &this->actor);
             this->textId = 0x33A2;
@@ -698,7 +698,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 
         case 0x33A2:
             this->unk_31E = 1;
-            func_800B86C8(this, globalCtx, this);
+            func_800B86C8(&this->actor, globalCtx, &this->actor);
             EnMaYto_SetFaceExpression(this, (u16)4, (u16)3);
             func_801518B0(globalCtx, 0x33A3U, &this->actor);
             this->textId = 0x33A3;
@@ -756,7 +756,7 @@ void func_80B8F7F4(EnMaYto *this, GlobalContext *globalCtx) {
         Actor *temp_a0 = this->actor.child;
         if (temp_a0 != NULL) {
             if (func_800B84D0(temp_a0, globalCtx)) {
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 func_80B90A78(this, globalCtx);
                 func_80B8F918(this);
                 return;
@@ -813,14 +813,14 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
         switch (this->textId) {
             case 0x33A9:
                 func_80B90E50(this, (u16)0);
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 func_80B90E84(this, (u16)0, (u16)3);
                 func_801518B0(globalCtx, 0x33AAU, &this->actor);
                 this->textId = 0x33AA;
                 break;
 
             case 0x33AA:
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 this->unk_31E = 1;
                 func_801518B0(globalCtx, 0x33ABU, &this->actor);
                 this->textId = 0x33AB;
@@ -828,7 +828,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
             case 0x33AB:
                 func_80B90E50(this, (u16)1);
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 func_80B90E84(this, (u16)0, (u16)1);
                 func_801518B0(globalCtx, 0x33ACU, &this->actor);
                 this->textId = 0x33AC;
@@ -836,7 +836,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
             case 0x33AC:
                 this->unk_31E = 0;
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 func_801518B0(globalCtx, 0x33ADU, &this->actor);
                 this->textId = 0x33AD;
                 func_80151BB4(globalCtx, 6U);
@@ -845,7 +845,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
             case 0x33AE:
                 func_80B90E50(this, (u16)1);
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 func_80B90E84(this, (u16)4, (u16)2);
                 func_801518B0(globalCtx, 0x33AFU, &this->actor);
                 this->textId = 0x33AF;
@@ -853,7 +853,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
             case 0x33AF:
                 this->unk_31E = 1;
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 EnMaYto_SetFaceExpression(this, (u16)4, (u16)2);
                 func_801518B0(globalCtx, 0x33B0U, &this->actor);
                 this->textId = 0x33B0;
@@ -871,7 +871,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33C6:
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 this->unk_31E = 0;
                 EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
                 func_801518B0(globalCtx, 0x33C7U, &this->actor);
@@ -879,7 +879,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33C7:
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 this->unk_31E = 1;
                 EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
                 func_801518B0(globalCtx, 0x33C8U, &this->actor);
@@ -887,7 +887,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33C8:
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 func_80B90E50(this, (u16)1);
                 func_80B90E84(this, (u16)0, (u16)2);
                 func_801518B0(globalCtx, 0x33C9U, &this->actor);
@@ -895,7 +895,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33C9:
-                func_800B86C8(this, globalCtx, this);
+                func_800B86C8(&this->actor, globalCtx, &this->actor);
                 this->unk_31E = 1;
                 EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
                 func_801518B0(globalCtx, 0x33CAU, &this->actor);
@@ -909,7 +909,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33CB:
-                func_800B86C8(this, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 func_80B90E50(this, (u16)1);
                 func_80B90E84(this, (u16)3, (u16)3);
                 func_801518B0(globalCtx, 0x33CCU, &this->actor);
@@ -1149,8 +1149,8 @@ void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
 // StartDialogue
 void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
     if (CURRENT_DAY == 1) {
-        if (func_8012403C(globalCtx) != 0 && gSaveContext.playerForm == 4) {
-            switch (func_8012403C(globalCtx)) {
+        if (Player_GetMask(globalCtx) != 0 && gSaveContext.playerForm == 4) {
+            switch (Player_GetMask(globalCtx)) {
                 case 7:
                     func_801518B0(globalCtx, 0x235DU, &this->actor);
                     this->textId = 0x235D;
@@ -1210,24 +1210,24 @@ void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
 void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
     switch (CURRENT_DAY) {
     case 1:
-        if (func_8012403C(globalCtx) != 0 && gSaveContext.playerForm == 4) {
-            switch (func_8012403C(globalCtx)) {
-                case 7:
+        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == 4) {
+            switch (Player_GetMask(globalCtx)) {
+                case PLAYER_MASK_ROMANIS_MASK:
                     func_801518B0(globalCtx, 0x235D, &this->actor);
                     this->textId = 0x235D;
                     break;
 
-                case 8:
+                case PLAYER_MASK_CIRCUS_LEADERS_MASK:
                     func_801518B0(globalCtx, 0x235E, &this->actor);
                     this->textId = 0x235E;
                     break;
 
-                case 2:
+                case PLAYER_MASK_KAFEIS_MASK:
                     func_801518B0(globalCtx, 0x235F, &this->actor);
                     this->textId = 0x235F;
                     break;
 
-                case 0xA:
+                case PLAYER_MASK_COUPLES_MASK:
                     func_801518B0(globalCtx, 0x2360, &this->actor);
                     this->textId = 0x2360;
                     break;
@@ -1326,30 +1326,30 @@ void EnMaYto_ChangeAnim(EnMaYto *this, s32 index) {
 
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 phi_a3;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     phi_a3 = this->unk_31E == 2 ? 1 : 0;
 
     if (this->unk_31E == 0) {
-        this->unk_1F0 = player->base.world.pos;
-        this->unk_1EC = 0.0f;
+        this->unk_1D8.unk_18 = player->actor.world.pos;
+        this->unk_1D8.unk_14 = 0.0f;
     } else if (this->unk_31E == 1) {
-        Math_Vec3f_StepTo(&this->unk_1F0, &this->actor.child->world.pos, 8.0f);
-        this->unk_1EC = 0.0f;
+        Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.child->world.pos, 8.0f);
+        this->unk_1D8.unk_14 = 0.0f;
     }
 
     if (this->unk_320 == 0) {
         if (this->actionFunc == func_80B9037C) {
-            this->unk_1E0.y = (u16)0;
-            this->unk_1E0.x = (u16)0;
+            this->unk_1D8.unk_08.y = (u16)0;
+            this->unk_1D8.unk_08.x = (u16)0;
         } else {
-            func_800BD888(&this->actor, this->unk_1D8, 0xD, phi_a3);
+            func_800BD888(&this->actor, &this->unk_1D8, 0xD, phi_a3);
         }
     } else {
-        Math_SmoothStepToS(&this->unk_1E0.y, (u16)0, (u16)3, (u16)0x71C, 0xB6);
-        Math_SmoothStepToS(&this->unk_1E0.x, (u16)0x18E3, (u16)5, (u16)0x71C, 0xB6);
+        Math_SmoothStepToS(&this->unk_1D8.unk_08.y, (u16)0, (u16)3, (u16)0x71C, 0xB6);
+        Math_SmoothStepToS(&this->unk_1D8.unk_08.x, (u16)0x18E3, (u16)5, (u16)0x71C, 0xB6);
     }
 
     EnMaYto_UpdateEyes(this);
@@ -1494,12 +1494,12 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     Vec3s sp4;
 
     if (limbIndex == 9) {
-        sp4 = this->unk_1E0;
+        sp4 = this->unk_1D8.unk_08;
         rot->x = rot->x + sp4.y;
         rot->z = rot->z + sp4.x;
     } else if (limbIndex == 2) {
         if ((this->skelAnime.animCurrentSeg != &D_06007E28) && (this->skelAnime.animCurrentSeg != &D_06003D54)) {
-            sp4 = this->unk_1E6;
+            sp4 = this->unk_1D8.unk_0E;
             rot->x = rot->x + sp4.y;
             if ((this->skelAnime.animCurrentSeg == &D_0600A174) || (this->skelAnime.animCurrentSeg == &D_060070EC) ||
                 (this->skelAnime.animCurrentSeg == &D_06003D54)) {
