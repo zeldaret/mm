@@ -558,21 +558,20 @@ typedef struct {
 } Input; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
+    /* 0x00 */ Vec3f focalPointOffset;
+    /* 0x0C */ Vec3f eyeOffset;
     /* 0x18 */ s16 rotZ;
     /* 0x1A */ s16 zoom;
     /* 0x1C */ UNK_TYPE1 pad1C[0x2];
 } ShakeInfo; // size = 0x1E
 
 typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 unk18;
-    /* 0x1A */ s16 unk1A;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-} UnkQuakeCalcStruct; // size = 0x24
+    /* 0x00 */ Vec3f focalPointOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 unk_18; // rotZ?
+    /* 0x1A */ s16 zoom;
+    /* 0x1C */ f32 unk_1C;
+} QuakeCamCalc; // size = 0x20
 
 typedef struct {
     /* 0x000 */ u32 magic;
@@ -600,7 +599,7 @@ typedef struct {
     /* 0x15C */ u16 normal;
     /* 0x15E */ UNK_TYPE1 pad15E[0x2];
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ UNK_TYPE4 unk164;
+    /* 0x164 */ s32 unk_164;
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);

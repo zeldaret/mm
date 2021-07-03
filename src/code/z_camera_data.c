@@ -5639,7 +5639,7 @@ s32 Camera_Special7(Camera* camera);
 s32 Camera_Special8(Camera* camera);
 s32 Camera_Special9(Camera* camera);
 
-s32 cameraUpdateFuncs[] = {
+s32 (*sCameraFunctions[])(Camera*) = {
 	NULL,
 	Camera_Normal0,
 	Camera_Normal1,
@@ -5714,9 +5714,7 @@ s32 cameraUpdateFuncs[] = {
 };
 
 s16 sNextUID = 0;
-
 s32 sCameraInterfaceFlags = 1;
-
 s32 sCameraInterfaceAlpha = 2;
 s32 sCameraShrinkWindowVal = 0x20;
 s32 D_801B9E14 = -1;
@@ -5732,11 +5730,7 @@ s16 D_801B9E34[] = {
 };
 
 s32 sUpdateCameraDirection = 0;
-
-s32 D_801B9E54[] = {
-	0x00000000,
-};
-
+s32 D_801B9E54 = 0;
 s32 D_801B9E58 = 0;
 
 // BSS

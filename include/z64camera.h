@@ -560,16 +560,24 @@ typedef struct {
 } Fixed2; // 7
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ // Subj1Anim anim;
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04; // yaw
+    /* 0x06 */ s16 unk_06; // pitch
+    /* 0x08 */ s16 unk_08;
+} Subj1Anim;
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22; // pad
+    /* 0x24 */ Subj1Anim anim;
 } Subj1; // 9
 
 typedef struct {
@@ -719,13 +727,6 @@ typedef struct {
 } DoorParams; // size = 0xC
 
 typedef struct {
-    // /* 0x00 */ s16 unk_00;
-    // /* 0x00 */ s16 unk_02;
-    // /* 0x04 */ f32 unk_04;
-    // /* 0x04 */ s16 unk_06;
-    // /* 0x08 */ s16 unk_08;
-    // /* 0x0A */ s16 unk_0A;
-    /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E;
 } Special8Anim; // size = 0x1C
@@ -846,7 +847,8 @@ typedef struct Camera {
     /* 0x164 */ s16 thisIdx;
     /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ s16 unk_168;
-    /* 0x16A */ UNK_TYPE1 pad16A[0xE];
+    /* 0x16A */ s16 unk_16A; // pad/unused
+    /* 0x16C */ Vec3f unk_16C;
 } Camera; // size = 0x178
 
 #endif
