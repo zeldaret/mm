@@ -11,9 +11,9 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx); // Draw
+void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);  // Draw
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx); // Draw
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx); // Draw
+void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);  // Draw
 
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Blink(EnSob1* this);
@@ -566,8 +566,10 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
         }
         EnSob1_SetupStartShopping(globalCtx, this, false);
     } else {
-        if ((player->actor.world.pos.x >= this->posXZRange.xMin && player->actor.world.pos.x <= this->posXZRange.xMax) &&
-            (player->actor.world.pos.z >= this->posXZRange.zMin && player->actor.world.pos.z <= this->posXZRange.zMax)) {
+        if ((player->actor.world.pos.x >= this->posXZRange.xMin &&
+             player->actor.world.pos.x <= this->posXZRange.xMax) &&
+            (player->actor.world.pos.z >= this->posXZRange.zMin &&
+             player->actor.world.pos.z <= this->posXZRange.zMax)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
         if (this->wasTalkedToWhileWalking == 1) {
@@ -640,7 +642,8 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (func_80147624(globalCtx)) && (!EnSob1_TestEndInteraction(this, globalCtx, globalCtx->state.input))) {
+    if ((talkState == 5) && (func_80147624(globalCtx)) &&
+        (!EnSob1_TestEndInteraction(this, globalCtx, globalCtx->state.input))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
@@ -745,8 +748,10 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
 
     sp2E = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
     sp2C = SkelAnime_GetFrameCount(&D_06009120.common) / (s16)this->skelAnime.animPlaybackSpeed;
-    Math_SmoothStepToS(&this->actor.world.rot.y,
-                       EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &dist), 4, 1000, 1);
+    Math_SmoothStepToS(
+        &this->actor.world.rot.y,
+        EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &dist), 4,
+        1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     if (dist < 12.0f) {
@@ -782,8 +787,10 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if (this->path != NULL) {
-        Math_SmoothStepToS(&this->actor.world.rot.y,
-                           EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &dist), 4, 1000, 1);
+        Math_SmoothStepToS(
+            &this->actor.world.rot.y,
+            EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &dist), 4,
+            1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speedXZ = 2.0f;
         if (dist < 25.0f) {
@@ -823,8 +830,10 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
         this->wasTalkedToWhileWalking = true;
     } else {
-        if ((player->actor.world.pos.x >= this->posXZRange.xMin && player->actor.world.pos.x <= this->posXZRange.xMax) &&
-            (player->actor.world.pos.z >= this->posXZRange.zMin && player->actor.world.pos.z <= this->posXZRange.zMax)) {
+        if ((player->actor.world.pos.x >= this->posXZRange.xMin &&
+             player->actor.world.pos.x <= this->posXZRange.xMax) &&
+            (player->actor.world.pos.z >= this->posXZRange.zMin &&
+             player->actor.world.pos.z <= this->posXZRange.zMax)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
@@ -1200,7 +1209,8 @@ void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
     for (i = 0; i < 3; i++, items++) {
         item = *items;
         if (item != NULL) {
-            if (this->actionFunc != EnSob1_SelectItem && this->actionFunc != EnSob1_CannotBuy && this->drawCursor == 0) {
+            if (this->actionFunc != EnSob1_SelectItem && this->actionFunc != EnSob1_CannotBuy &&
+                this->drawCursor == 0) {
                 item->isSelected = false;
             } else {
                 item->isSelected = this->cursorIdx == i ? true : false;
@@ -1565,7 +1575,7 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
 }
 
 void EnSob1_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
-                   f32 dy) {
+                        f32 dy) {
     f32 unk;
     s32 ulx, uly, lrx, lry;
     f32 w, h;
@@ -1610,15 +1620,15 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                          this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
-                          this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
-                          this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                               this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+                               this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
+                               this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                          this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
-                          this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY, this->stickRightPrompt.texZ,
-                          0, 0, 1.0f, 1.0f);
+                               this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
+                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
         gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1631,21 +1641,22 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                          this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
-                          this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
-                          this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                               this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+                               this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
+                               this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                          this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
-                          this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY, this->stickRightPrompt.texZ,
-                          0, 0, 1.0f, 1.0f);
+                               this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+                               this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
+                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                          Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
@@ -1654,7 +1665,8 @@ s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return 0;
 }
 
-s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                          Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
