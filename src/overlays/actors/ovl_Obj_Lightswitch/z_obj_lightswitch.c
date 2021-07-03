@@ -359,7 +359,7 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
     s32 pad;
 
-    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+    if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
         if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;

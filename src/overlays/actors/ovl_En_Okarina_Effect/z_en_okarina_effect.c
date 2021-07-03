@@ -51,7 +51,7 @@ void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
 
 void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     DECR(this->unk144);
-    if (!globalCtx->unk16D30.unk1EC && !globalCtx->unk17000 && !globalCtx->msgCtx.unk11F10 &&
+    if (!globalCtx->pauseCtx.unk1EC && !globalCtx->unk17000 && !globalCtx->msgCtx.unk11F10 &&
         !FrameAdvance_IsEnabled(globalCtx) && this->unk144 == 0) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
