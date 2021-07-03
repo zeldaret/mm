@@ -9,6 +9,9 @@ struct EnSob1;
 typedef void (*EnSob1ActionFunc)(struct EnSob1*, GlobalContext*);
 typedef void (*EnSob1BlinkFunc)(struct EnSob1*);
 
+#define ENSOB1_GET_SHOPTYPE(thisx) ((thisx)->params & 0x1F)
+#define ENSOB1_GET_PATH(thisx) (((thisx)->params & 0x3E0) >> 5)
+
 typedef struct ShopItem {
     /* 0x00 */ s16 shopItemId;
     /* 0x02 */ s16 x;
@@ -16,12 +19,12 @@ typedef struct ShopItem {
     /* 0x06 */ s16 z;
 } ShopItem; // size = 0x8
 
-typedef struct EnSob1UnkStruct {
-    /* 0x0 */ f32 unk0;
-    /* 0x4 */ f32 unk4;
-    /* 0x8 */ f32 unk8;
-    /* 0xC */ f32 unkC;
-} EnSob1UnkStruct; // size = 0x10
+typedef struct EnSob1XZRange {
+    /* 0x0 */ f32 xMin;
+    /* 0x4 */ f32 xMax;
+    /* 0x8 */ f32 zMin;
+    /* 0xC */ f32 zMax;
+} EnSob1XZRange; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 stickColorR;
@@ -50,17 +53,13 @@ typedef struct EnSob1 {
     /* 0x1E0 */ Path* path;
     /* 0x1E4 */ s32 unk1E4;
     /* 0x1E8 */ s16 unk1E8;
-    /* 0x1EA */ s8 objIndex;
-    /* 0x1EB */ s8 unk1EB;
-    /* 0x1EC */ s8 unk1EC;
-    /* 0x1ED */ char unk1ED[0x1];
+    /* 0x1EA */ s8 objIndicies[3];
     /* 0x1EE */ s16 unk1EE;
     /* 0x1F0 */ s16 unk1F0;
     /* 0x1F2 */ Vec3s limbDrawTable[20];
     /* 0x26A */ Vec3s transitionDrawTable[20];
     /* 0x2E2 */ s16 eyeTextureIdx;
     /* 0x2E4 */ s16 blinkTimer;
-    /* 0x2E6 */ char unk2E6[0x2];
     /* 0x2E8 */ EnSob1BlinkFunc blinkFunc;
     /* 0x2EC */ EnGirlA* items[3];
     /* 0x2F8 */ s32 stickAccumX;
@@ -76,7 +75,6 @@ typedef struct EnSob1 {
     /* 0x320 */ u8 cursorAnimState;
     /* 0x321 */ u8 drawCursor;
     /* 0x322 */ u8 cursorIdx;
-    /* 0x323 */ char unk323[0x1];
     /* 0x324 */ StickDirectionPrompt stickRightPrompt;
     /* 0x35C */ StickDirectionPrompt stickLeftPrompt;
     /* 0x394 */ f32 arrowAnimTween;
@@ -91,15 +89,20 @@ typedef struct EnSob1 {
     /* 0x3A8 */ char unk3A8[0x4];
     /* 0x3AC */ f32 shopItemSelectedTween;
     /* 0x3B0 */ char unk3B0[0x4];
-    /* 0x3B4 */ u16 unk3B4;
-    /* 0x3B6 */ u16 unk3B6;
-    /* 0x3B8 */ u16 unk3B8;
+    /* 0x3B4 */ u16 welcomeTextId;
+    /* 0x3B6 */ u16 talkOptionTextId;
+    /* 0x3B8 */ u16 goodbyeTextId;
     /* 0x3BA */ u8 unk3BA;
-    /* 0x3BB */ char unk3BB[0x1];
-    /* 0x3BC */ EnSob1UnkStruct unk3BC;
-    /* 0x3CC */ s16 unk3CC;
-    /* 0x3CE */ char unk3CE[0x2];
+    /* 0x3BC */ EnSob1XZRange posXZRange;
+    /* 0x3CC */ s16 shopType;
 } EnSob1; // size = 0x3D0
+
+typedef enum EnSob1ShopType {
+    /* 0 */ ZORA_SHOP,
+    /* 1 */ GORON_SHOP,
+    /* 2 */ BOMB_SHOP,
+    /* 3 */ GORON_SHOP_SPRING
+} EnSob1ShopType;
 
 extern const ActorInit En_Sob1_InitVars;
 

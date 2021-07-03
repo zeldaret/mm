@@ -15,7 +15,7 @@ void func_80A104E4(Actor* thisx, GlobalContext* globalCtx); // Draw
 void func_80A10608(Actor* thisx, GlobalContext* globalCtx); // Draw
 
 void func_80A0C8AC(EnSob1* this, EnSob1ActionFunc action);
-s32 func_80A0CE10(EnSob1* this, GlobalContext* globalCtx, Vec3s* arg2);
+s32 func_80A0CE10(EnSob1* this, GlobalContext* globalCtx, s16* arg2);
 void func_80A0F284(EnSob1* this);
 void func_80A0D414(EnSob1* this, GlobalContext* globalCtx);
 void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx);
@@ -103,13 +103,13 @@ extern UNK_TYPE D_060050A0;
 extern UNK_TYPE D_060058A0;
 extern UNK_TYPE D_060060A0;
 extern UNK_TYPE D_06010438;
-extern UNK_TYPE D_06010C38; 
+extern UNK_TYPE D_06010C38;
 extern UNK_TYPE D_06011038;
 
 static ActorAnimationEntryS D_80A10860[] = {
-    {&D_06009120, 2.0f, 0, -1, 0, 20},
-    {&D_06008268, 1.0f, 0, -1, 2, 0},
-    {&D_060087BC, 1.0f, 0, -1, 0, 0},
+    { &D_06009120, 2.0f, 0, -1, 0, 20 },
+    { &D_06008268, 1.0f, 0, -1, 2, 0 },
+    { &D_060087BC, 1.0f, 0, -1, 0, 0 },
 };
 
 const ActorInit En_Sob1_InitVars = {
@@ -124,66 +124,66 @@ const ActorInit En_Sob1_InitVars = {
     (ActorFunc)NULL,
 };
 
-static Vec3s D_80A108B0[] = {
-    {0x00D0, 0x0283, 0x00D6},
-    {0x00A1, 0x0283, 0x00D5},
-    {0x012C, 0x0283, 0x0283},
-    {0x00A1, 0x0283, 0x00D5},
+static s16 D_80A108B0[][3] = {
+    { 0x00D0, 0x0283, 0x00D6 },
+    { 0x00A1, 0x0283, 0x00D5 },
+    { 0x012C, 0x0283, 0x0283 },
+    { 0x00A1, 0x0283, 0x00D5 },
 };
 
-static u16 D_80A108C8[] = {0x12D6, 0x0BC0, 0x0640, 0x0BC0};
+static u16 D_80A108C8[] = { 0x12D6, 0x0BC0, 0x0640, 0x0BC0 };
 
-static u16 D_80A108D0[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+static u16 D_80A108D0[] = { 0x12E3, 0x0BD3, 0x0641, 0x0BD3 };
 
-static u16 D_80A108D8[] = {0x12E6, 0x0BD6, 0x0647, 0x0BD6};
+static u16 D_80A108D8[] = { 0x12E6, 0x0BD6, 0x0647, 0x0BD6 };
 
-static u16 D_80A108E0[] = {0x12E1, 0x0BD2, 0x0645, 0x0BD2};
+static u16 D_80A108E0[] = { 0x12E1, 0x0BD2, 0x0645, 0x0BD2 };
 
-static u16 D_80A108E8[] = {0x12E5, 0x0BD5, 0x0646, 0x0BD5};
+static u16 D_80A108E8[] = { 0x12E5, 0x0BD5, 0x0646, 0x0BD5 };
 
-static u16 D_80A108F0[] = {0x12E4, 0x0BD4, 0x0645, 0x0BD4};
+static u16 D_80A108F0[] = { 0x12E4, 0x0BD4, 0x0645, 0x0BD4 };
 
-static u16 D_80A108F8[] = {0x12E1, 0x0BD1, 0x0641, 0x0BD1};
+static u16 D_80A108F8[] = { 0x12E1, 0x0BD1, 0x0641, 0x0BD1 };
 
-static u16 D_80A10900[] = {0x12E3, 0x0BD3, 0x0641, 0x0BD3};
+static u16 D_80A10900[] = { 0x12E3, 0x0BD3, 0x0641, 0x0BD3 };
 
-static f32 D_80A10908[] = {0.01f, 0.01f, 0.01f, 0.01f};
+static f32 D_80A10908[] = { 0.01f, 0.01f, 0.01f, 0.01f };
 
 static ShopItem D_80A10918[][3] = {
     {
-        {SI_POTION_RED_4, 1258, 42, 325},
-        {SI_ARROWS_SMALL_1, 1240, 42, 325},
-        {SI_SHIELD_HERO_3, 1222, 42, 325},
+        { SI_POTION_RED_4, 1258, 42, 325 },
+        { SI_ARROWS_SMALL_1, 1240, 42, 325 },
+        { SI_SHIELD_HERO_3, 1222, 42, 325 },
     },
     {
-        {SI_POTION_RED_5, -57, 42, -62},
-        {SI_ARROWS_SMALL_2, -75, 42, -62},
-        {SI_BOMB_2, -93, 42, -62},
+        { SI_POTION_RED_5, -57, 42, -62 },
+        { SI_ARROWS_SMALL_2, -75, 42, -62 },
+        { SI_BOMB_2, -93, 42, -62 },
     },
     {
-        {SI_BOMB_BAG_20_2, 221, -7, 73},
-        {SI_BOMBCHU, 203, -7, 69},
-        {SI_BOMB_1, 185, -7, 65},
+        { SI_BOMB_BAG_20_2, 221, -7, 73 },
+        { SI_BOMBCHU, 203, -7, 69 },
+        { SI_BOMB_1, 185, -7, 65 },
     },
     {
-        {SI_POTION_RED_6, -57, 42, -62},
-        {SI_ARROWS_SMALL_3, -75, 42, -62},
-        {SI_BOMB_3, -93, 42, -62},
+        { SI_POTION_RED_6, -57, 42, -62 },
+        { SI_ARROWS_SMALL_3, -75, 42, -62 },
+        { SI_BOMB_3, -93, 42, -62 },
     },
 };
 
-static EnSob1UnkStruct D_80A10978[] = {
-    {1170.0f, 1230.0f, 360.0f, 380.0f},
-    {-142.0f, -72.0f, -20.0f, 0.0f},
-    {138.0f, 200.0f, 72.0f, 160.0f},
-    {-142.0f, -72.0f, -20.0f, 0.0f},
+static EnSob1XZRange D_80A10978[] = {
+    { 1170.0f, 1230.0f, 360.0f, 380.0f },
+    { -142.0f, -72.0f, -20.0f, 0.0f },
+    { 138.0f, 200.0f, 72.0f, 160.0f },
+    { -142.0f, -72.0f, -20.0f, 0.0f },
 };
 
 static Vec3f D_80A109B8[] = {
-    {1240.0f, 45.0f, 349.0f},
-    {-75.0f, 45.0f, -38.0f},
-    {197.0f, -4.0f, 93.0f},
-    {-75.0f, 45.0f, -38.0f},
+    { 1240.0f, 45.0f, 349.0f },
+    { -75.0f, 45.0f, -38.0f },
+    { 197.0f, -4.0f, 93.0f },
+    { -75.0f, 45.0f, -38.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -191,14 +191,17 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnSob1ActionFunc D_80A109EC[] = {
-    func_80A0F470, func_80A0F554, func_80A0F638, func_80A0F554,
+    func_80A0F470,
+    func_80A0F554,
+    func_80A0F638,
+    func_80A0F554,
 };
 
 extern Vec3f D_80A109FC[] = {
-    {0.0f, 0.0f, 0.0f},
-    {0.0f, -4.0f, 0.0f},
-    {0.0f, 0.0f, 0.0f},
-    {0.0f, -4.0f, 0.0f},
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -4.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -4.0f, 0.0f },
 };
 
 static UNK_PTR D_80A10A2C[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
@@ -236,7 +239,7 @@ s32 func_80A0C8B8(GlobalContext* globalCtx) {
 u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->unk3CC == 2) {
+    if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1 && gSaveContext.time >= 0x4000) {
             return 0x648;
         } else if (gSaveContext.weekEventReg[33] & 8) {
@@ -244,7 +247,7 @@ u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
         } else {
             return 0x64A;
         }
-    } else if (this->unk3CC == 0) {
+    } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 return 0x12D8;
@@ -255,12 +258,12 @@ u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
             default:
                 return 0x12D7;
         }
-    } else if (this->unk3CC == 1) {
+    } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
             return 0xBC1;
         }
         return 0xBC2;
-    } else if (this->unk3CC == 3) {
+    } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
             return 0xBC3;
         }
@@ -274,41 +277,41 @@ u16 func_80A0C938(EnSob1* this, GlobalContext* globalCtx) {
 u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->unk3CC == 2) {
-        switch (func_8012403C(globalCtx)) {
-            case 0:
-            case 4:
-            case 9:
+    if (this->shopType == BOMB_SHOP) {
+        switch (Player_GetMask(globalCtx)) {
+            case PLAYER_MASK_NONE:
+            case PLAYER_MASK_BUNNY_HOOD:
+            case PLAYER_MASK_POSTMANS_HAT:
                 return 0x644;
-            case 22:
-            case 23:
-            case 24:
+            case PLAYER_MASK_GORON_MASK:
+            case PLAYER_MASK_ZORA_MASK:
+            case PLAYER_MASK_DEKU_MASK:
                 return 0x64B;
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 11:
-            case 13:
-            case 14:
-            case 17:
-            case 19:
+            case PLAYER_MASK_MASK_OF_TRUTH:
+            case PLAYER_MASK_ALL_NIGHT_MASK:
+            case PLAYER_MASK_KEATON_MASK:
+            case PLAYER_MASK_ROMANIS_MASK:
+            case PLAYER_MASK_GREAT_FAIRYS_MASK:
+            case PLAYER_MASK_DON_GEROS_MASK:
+            case PLAYER_MASK_KAMAROS_MASK:
+            case PLAYER_MASK_BREMEN_MASK:
+            case PLAYER_MASK_MASK_OF_SCENTS:
                 return 0x685;
-            case 6:
-            case 8:
-            case 12:
-            case 15:
+            case PLAYER_MASK_GAROS_MASK:
+            case PLAYER_MASK_CIRCUS_LEADERS_MASK:
+            case PLAYER_MASK_GIBDO_MASK:
+            case PLAYER_MASK_CAPTAINS_HAT:
                 return 0x686;
-            case 10:
+            case PLAYER_MASK_COUPLES_MASK:
                 return 0x687;
-            case 16:
+            case PLAYER_MASK_STONE_MASK:
                 return 0x688;
-            case 18:
+            case PLAYER_MASK_BLAST_MASK:
                 return 0x689;
-            case 2:
+            case PLAYER_MASK_KAFEIS_MASK:
                 return 0x68A;
         }
-    } else if (this->unk3CC == 0) {
+    } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
                 if (gSaveContext.weekEventReg[57] & 0x10) {
@@ -337,7 +340,7 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
             default:
                 return 0x12CE;
         }
-    } else if (this->unk3CC == 1) {
+    } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
             if (gSaveContext.weekEventReg[58] & 4) {
                 return 0xBB9;
@@ -351,7 +354,7 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[58] |= 8;
             return 0xBBA;
         }
-    } else if (this->unk3CC == 3) {
+    } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
             if (gSaveContext.weekEventReg[58] & 0x10) {
                 return 0xBBD;
@@ -373,7 +376,7 @@ u16 func_80A0CA38(EnSob1* this, GlobalContext* globalCtx) {
 #endif
 
 u16 func_80A0CC88(EnSob1* this) {
-    if (this->unk3CC == 2) {
+    if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1) {
             return 0x64C;
         } else if (gSaveContext.day == 2) {
@@ -391,8 +394,8 @@ void func_80A0CCEC(EnSob1* this, GlobalContext* globalCtx) {
     this->drawCursor = 0;
     this->stickRightPrompt.isEnabled = false;
     this->stickLeftPrompt.isEnabled = false;
-    this->unk3B8 = func_80A0CC88(this);
-    func_801518B0(globalCtx, this->unk3B8, &this->actor);
+    this->goodbyeTextId = func_80A0CC88(this);
+    func_801518B0(globalCtx, this->goodbyeTextId, &this->actor);
     func_80A0C8AC(this, func_80A0D3C4);
 }
 
@@ -409,22 +412,22 @@ void func_80A0CD48(EnSob1* this, GlobalContext* globalCtx, ShopItem* shopItem) {
     }
 }
 
-s32 func_80A0CE10(EnSob1* this, GlobalContext* globalCtx, Vec3s* arg2) {
-    if (arg2->y != 0x283) {
-        this->unk1EB = Object_GetIndex(&globalCtx->objectCtx, arg2->y);
-        if (this->unk1EB < 0) {
+s32 func_80A0CE10(EnSob1* this, GlobalContext* globalCtx, s16* arg2) {
+    if (arg2[1] != 0x283) {
+        this->objIndicies[1] = Object_GetIndex(&globalCtx->objectCtx, arg2[1]);
+        if (this->objIndicies[1] < 0) {
             return false;
         }
     } else {
-        this->unk1EB = -1;
+        this->objIndicies[1] = -1;
     }
-    if (arg2->z != 0x283) {
-        this->unk1EC = Object_GetIndex(&globalCtx->objectCtx, arg2->z);
-        if (this->unk1EC < 0) {
+    if (arg2[2] != 0x283) {
+        this->objIndicies[2] = Object_GetIndex(&globalCtx->objectCtx, arg2[2]);
+        if (this->objIndicies[2] < 0) {
             return false;
         }
     } else {
-        this->unk1EC = -1;
+        this->objIndicies[2] = -1;
     }
     return true;
 }
@@ -432,30 +435,30 @@ s32 func_80A0CE10(EnSob1* this, GlobalContext* globalCtx, Vec3s* arg2) {
 void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1* this = THIS;
     s32 pad;
-    Vec3s* sp24;
+    s16* sp24;
 
-    switch (this->actor.params & 0x1F) {
-        case 0:
-            this->unk3CC = 0;
+    switch (ENSOB1_GET_SHOPTYPE(thisx)) {
+        case ZORA_SHOP:
+            this->shopType = ZORA_SHOP;
             break;
-        case 1:
+        case GORON_SHOP:
             if (gSaveContext.weekEventReg[33] & 0x80) {
-                this->unk3CC = 3;
+                this->shopType = GORON_SHOP_SPRING;
             } else {
-                this->unk3CC = 1;
+                this->shopType = GORON_SHOP;
             }
             break;
-        case 2:
-            this->unk3CC = 2;
+        case BOMB_SHOP:
+            this->shopType = BOMB_SHOP;
             break;
         default:
             Actor_MarkForDeath(&this->actor);
             return;
     }
 
-    sp24 = &D_80A108B0[this->unk3CC];
-    this->objIndex = Object_GetIndex(&globalCtx->objectCtx, sp24->x);
-    if (this->objIndex < 0) {
+    sp24 = D_80A108B0[this->shopType];
+    this->objIndicies[0] = Object_GetIndex(&globalCtx->objectCtx, sp24[0]);
+    if (this->objIndicies[0] < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -512,7 +515,7 @@ void func_80A0D0B8(GlobalContext* globalCtx, EnSob1* this) {
 
 s32 func_80A0D188(EnSob1* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
-        if (this->unk3CC == 2) {
+        if (this->shopType == BOMB_SHOP) {
             func_80A0CCEC(this, globalCtx);
         } else {
             func_80A0D0B8(globalCtx, this);
@@ -542,7 +545,7 @@ void func_80A0D258(GlobalContext* globalCtx, EnSob1* this, u8 arg2) {
 
 void func_80A0D2B8(GlobalContext* globalCtx, EnSob1* this) {
     func_80A0C8AC(this, func_80A0D904);
-    func_80151938(globalCtx, D_80A108C8[this->unk3CC]);
+    func_80151938(globalCtx, D_80A108C8[this->shopType]);
     func_8011552C(globalCtx, 6);
     this->stickRightPrompt.isEnabled = false;
     this->stickLeftPrompt.isEnabled = true;
@@ -550,8 +553,8 @@ void func_80A0D2B8(GlobalContext* globalCtx, EnSob1* this) {
 
 void func_80A0D320(GlobalContext* globalCtx, EnSob1* this) {
     func_80A0C8AC(this, func_80A0DA5C);
-    this->unk3B6 = func_80A0C938(this, globalCtx);
-    func_80151938(globalCtx, this->unk3B6);
+    this->talkOptionTextId = func_80A0C938(this, globalCtx);
+    func_80151938(globalCtx, this->talkOptionTextId);
     func_8011552C(globalCtx, 6);
     this->stickRightPrompt.isEnabled = false;
     this->stickLeftPrompt.isEnabled = false;
@@ -597,15 +600,15 @@ void func_80A0D4A0(EnSob1* this, GlobalContext* globalCtx) {
             this->cutsceneState = 1;
         }
         player->stateFlags2 |= 0x20000000;
-        this->unk3B4 = func_80A0CA38(this, globalCtx);
-        func_801518B0(globalCtx, this->unk3B4, &this->actor);
-        if ((this->actor.params & 0x1F) == 2) {
+        this->welcomeTextId = func_80A0CA38(this, globalCtx);
+        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
+        if (ENSOB1_GET_SHOPTYPE(&this->actor) == BOMB_SHOP) {
             this->unk1F0 = -0x2000;
         }
         func_80A0D258(globalCtx, this, 0);
     } else {
-        if ((player->actor.world.pos.x >= this->unk3BC.unk0 && player->actor.world.pos.x <= this->unk3BC.unk4) &&
-            (player->actor.world.pos.z >= this->unk3BC.unk8 && player->actor.world.pos.z <= this->unk3BC.unkC)) {
+        if ((player->actor.world.pos.x >= this->posXZRange.xMin && player->actor.world.pos.x <= this->posXZRange.xMax) &&
+            (player->actor.world.pos.z >= this->posXZRange.zMin && player->actor.world.pos.z <= this->posXZRange.zMax)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
         if (this->unk3BA == 1) {
@@ -679,7 +682,7 @@ void func_80A0D77C(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if ((talkState == 5) && (func_80147624(globalCtx)) && (!func_80A0D188(this, globalCtx, globalCtx->state.input))) {
-        if (this->unk3B4 == 0x68A) {
+        if (this->welcomeTextId == 0x68A) {
             func_80A0D0B8(globalCtx, this);
         } else {
             func_80A0D2B8(globalCtx, this);
@@ -695,7 +698,7 @@ s32 func_80A0D850(EnSob1* this, GlobalContext* globalCtx) {
             return true;
         case 1:
             func_8019F230();
-            if (this->unk3CC == 2) {
+            if (this->shopType == BOMB_SHOP) {
                 func_80A0CCEC(this, globalCtx);
             } else {
                 func_80A0D0B8(globalCtx, this);
@@ -857,12 +860,12 @@ void func_80A0DE64(EnSob1* this, GlobalContext* globalCtx) {
             this->cutsceneState = 1;
         }
         player->stateFlags2 |= 0x20000000;
-        this->unk3B4 = func_80A0CA38(this, globalCtx);
-        func_801518B0(globalCtx, this->unk3B4, &this->actor);
+        this->welcomeTextId = func_80A0CA38(this, globalCtx);
+        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
         this->unk3BA = 1;
     } else {
-        if ((player->actor.world.pos.x >= this->unk3BC.unk0 && player->actor.world.pos.x <= this->unk3BC.unk4) &&
-            (player->actor.world.pos.z >= this->unk3BC.unk8 && player->actor.world.pos.z <= this->unk3BC.unkC)) {
+        if ((player->actor.world.pos.x >= this->posXZRange.xMin && player->actor.world.pos.x <= this->posXZRange.xMax) &&
+            (player->actor.world.pos.z >= this->posXZRange.zMin && player->actor.world.pos.z <= this->posXZRange.zMax)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
@@ -1019,7 +1022,7 @@ void func_80A0E554(GlobalContext* globalCtx, EnSob1* this) {
     EnGirlA* item2;
 
     switch (item->canBuyFunc(globalCtx, item)) {
-        case 0:
+        case CANBUY_RESULT_SUCCESS_FANFARE:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->unk3A0);
                 this->cutsceneState = 0;
@@ -1032,51 +1035,51 @@ void func_80A0E554(GlobalContext* globalCtx, EnSob1* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(globalCtx, item);
             break;
-        case 1:
+        case CANBUY_RESULT_SUCCESS:
             func_8019F208();
             item->buyFunc(globalCtx, item);
-            if ((this->unk3CC == 1) && (item->actor.params == 0x20)) {
+            if ((this->shopType == GORON_SHOP) && (item->actor.params == SI_POTION_RED_5)) {
                 func_80A0E518(globalCtx, this, 0xBD7);
-            } else if ((this->unk3CC == 0) && (item->actor.params == 0x1D)) {
+            } else if ((this->shopType == ZORA_SHOP) && (item->actor.params == SI_POTION_RED_4)) {
                 func_80A0E518(globalCtx, this, 0x12E7);
-            } else if ((this->unk3CC == 3) && (item->actor.params == 0x23)) {
+            } else if ((this->shopType == GORON_SHOP_SPRING) && (item->actor.params == SI_POTION_RED_6)) {
                 func_80A0E518(globalCtx, this, 0xBD7);
             } else {
-                func_80A0E518(globalCtx, this, D_80A108D8[this->unk3CC]);
+                func_80A0E518(globalCtx, this, D_80A108D8[this->shopType]);
             }
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(globalCtx, item);
             break;
-        case 2:
+        case CANBUY_RESULT_NO_ROOM:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A108D0[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A108D0[this->shopType]);
             break;
-        case 3:
+        case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A108F0[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A108F0[this->shopType]);
             break;
-        case 4:
+        case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A108E8[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A108E8[this->shopType]);
             break;
-        case 5:
+        case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A108E0[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A108E0[this->shopType]);
             break;
-        case 6:
+        case CANBUY_RESULT_CANNOT_GET_NOW_2:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A108F8[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A108F8[this->shopType]);
             break;
-        case 7:
+        case CANBUY_RESULT_NO_ROOM_2:
             play_sound(NA_SE_SY_ERROR);
-            func_80A0E4DC(globalCtx, this, D_80A10900[this->unk3CC]);
+            func_80A0E4DC(globalCtx, this, D_80A10900[this->shopType]);
             break;
-        case 8:
+        case CANBUY_RESULT_ALREADY_HAVE:
             play_sound(NA_SE_SY_ERROR);
             func_80A0E4DC(globalCtx, this, 0x658);
             break;
-        case 9:
+        case CANBUY_RESULT_HAVE_BETTER:
             play_sound(NA_SE_SY_ERROR);
             func_80A0E4DC(globalCtx, this, 0x659);
             break;
@@ -1163,20 +1166,20 @@ void func_80A0EBC0(EnSob1* this, GlobalContext* globalCtx) {
         item->restockFunc(globalCtx, item);
         player->actor.shape.rot.y += 0x8000;
         player->stateFlags2 |= 0x20000000;
-        func_801518B0(globalCtx, this->unk3B4, &this->actor);
+        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
         func_80A0D258(globalCtx, this, 1);
         func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
     }
 }
 
 void func_80A0EC98(EnSob1* this) {
-    Vec3f selectedItemPosition = D_80A109B8[this->unk3CC];
+    Vec3f selectedItemPosition = D_80A109B8[this->shopType];
     u8 i = this->cursorIdx;
     EnGirlA* item;
     ShopItem* shopItem;
     Vec3f worldPos;
 
-    shopItem = &D_80A10918[this->unk3CC][i];
+    shopItem = &D_80A10918[this->shopType][i];
     item = this->items[i];
 
     worldPos.x = shopItem->x + (selectedItemPosition.x - shopItem->x) * this->shopItemSelectedTween;
@@ -1398,15 +1401,15 @@ void func_80A0F2FC(EnSob1* this) {
 }
 
 void func_80A0F39C(EnSob1* this, GlobalContext* globalCtx) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndicies[2]].segment);
 }
 
 s32 func_80A0F3D4(EnSob1* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
-        if (this->unk1EB >= 0 && !Object_IsLoaded(&globalCtx->objectCtx, this->unk1EB)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndicies[0])) {
+        if (this->objIndicies[1] >= 0 && !Object_IsLoaded(&globalCtx->objectCtx, this->objIndicies[1])) {
             return 0;
         }
-        if (this->unk1EC >= 0 && !Object_IsLoaded(&globalCtx->objectCtx, this->unk1EC)) {
+        if (this->objIndicies[2] >= 0 && !Object_IsLoaded(&globalCtx->objectCtx, this->objIndicies[2])) {
             return 0;
         }
         return 1;
@@ -1417,7 +1420,7 @@ s32 func_80A0F3D4(EnSob1* this, GlobalContext* globalCtx) {
 void func_80A0F470(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->limbDrawTable, this->transitionDrawTable,
                      20);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndicies[2]].segment);
     SkelAnime_ChangeAnim(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600078C.common), 0,
                          0.0f);
     this->actor.draw = func_80A10368;
@@ -1427,7 +1430,7 @@ void func_80A0F470(EnSob1* this, GlobalContext* globalCtx) {
 void func_80A0F554(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->limbDrawTable, this->transitionDrawTable,
                      18);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk1EC].segment);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndicies[2]].segment);
     SkelAnime_ChangeAnim(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000FC.common), 0,
                          0.0f);
     this->actor.draw = func_80A104E4;
@@ -1442,11 +1445,13 @@ void func_80A0F638(EnSob1* this, GlobalContext* globalCtx) {
     this->skelAnime.animPlaybackSpeed = 2.0f;
 }
 
+#define NON_MATCHING
+
 #ifdef NON_MATCHING
 // Matches but floats are in late rodata
 void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
     ShopItem* shopItems;
-    EnSob1UnkStruct* unkStruct;
+    EnSob1XZRange* unkStruct;
     Vec3f* worldPos;
 
     // Possibly fake temps
@@ -1455,31 +1460,31 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
 
     if (func_80A0F3D4(this, globalCtx)) {
         this->actor.flags &= ~0x10;
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objBankIndex = this->objIndicies[0];
         Actor_SetObjectSegment(globalCtx, &this->actor);
-        worldPos = &D_80A109FC[this->unk3CC];
+        worldPos = &D_80A109FC[this->shopType];
         this->actor.world.pos.x += worldPos->x;
         this->actor.world.pos.y += worldPos->y;
         this->actor.world.pos.z += worldPos->z;
-        shopItems = D_80A10918[this->unk3CC];
-        if ((this->unk3CC == 2) && (gSaveContext.weekEventReg[33] & 8)) {
-            D_80A10918[this->unk3CC][0].shopItemId = SI_BOMB_BAG_30_2;
+        shopItems = D_80A10918[this->shopType];
+        if ((this->shopType == BOMB_SHOP) && (gSaveContext.weekEventReg[33] & 8)) {
+            D_80A10918[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
         this->cutsceneState = 0;
         func_80A0F284(this);
         this->unk3A0 = this->unk3A2;
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-        D_80A109EC[this->unk3CC](this, globalCtx);
+        D_80A109EC[this->shopType](this, globalCtx);
         this->actor.colChkInfo.mass = 0xFF;
         this->actor.colChkInfo.cylRadius = 50;
         this->unk3BA = 0;
         this->unk1E4 = 0;
 
-        if (this->unk3CC == 2) {
-            this->path = func_8013D648(globalCtx, (this->actor.params & 0x3E0) >> 5, 0x1F);
+        if (this->shopType == BOMB_SHOP) {
+            this->path = func_8013D648(globalCtx, ENSOB1_GET_PATH(&this->actor), 0x1F);
         }
-        if (this->unk3CC == 2) {
+        if (this->shopType == BOMB_SHOP) {
             func_80A0C8AC(this, func_80A0D414);
         } else {
             func_80A0C8AC(this, func_80A0D4A0);
@@ -1538,8 +1543,8 @@ void func_80A0F6B0(EnSob1* this, GlobalContext* globalCtx) {
         this2->shopItemSelectedTween = 0.0f;
 
         this2->actor.gravity = 0.0f;
-        this2->unk3BC = D_80A10978[this2->unk3CC];
-        Actor_SetScale(&this2->actor, D_80A10908[this2->unk3CC]);
+        this2->posXZRange = D_80A10978[this2->shopType];
+        Actor_SetScale(&this2->actor, D_80A10908[this2->shopType]);
         func_80A0CD48(this2, globalCtx, shopItems);
         this->unk1EE = this->unk1F0 = 0;
         this2->blinkTimer = 20;

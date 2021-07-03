@@ -290,10 +290,10 @@ void EnIn_DoNothing(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         func_808F30B0(&this->skelAnime, 9);
     }
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -1396,7 +1396,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = func_8013D648(globalCtx, ENIN_GET_WALKING_FLAG(&this->actor), 0x3F);
+        this->path = func_8013D648(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2 ||
