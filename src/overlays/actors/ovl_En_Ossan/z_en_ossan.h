@@ -46,6 +46,9 @@ typedef struct EnOssan {
     /* 0x1E2 */ s16 blinkTimer;
     /* 0x1E4 */ EnOssanUnkFunc blinkFunc;
     /* 0x1E8 */ EnGirlA *items[8];
+    // Items are indexed as such:
+    /* 7 5  3 1 */
+    /* 6 4  2 0 */    
     /* 0x208 */ s32 stickAccumX;
     /* 0x20C */ s32 stickAccumY;
     /* 0x210 */ u8 moveHorizontal;

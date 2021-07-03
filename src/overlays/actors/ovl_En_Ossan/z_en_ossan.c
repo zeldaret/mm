@@ -24,7 +24,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_SetHaveMet(EnOssan* this);
 void EnOssan_StartShopping(GlobalContext* globalCtx, EnOssan* this);
-void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx);
+void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_LookToLeftShelf(EnOssan* this, GlobalContext* globalCtx);
@@ -307,7 +307,7 @@ void EnOssan_SetupStartShopping(GlobalContext* globalCtx, EnOssan* this, u8 skip
 }
 
 void EnOssan_StartShopping(GlobalContext* globalCtx, EnOssan* this) {
-    EnOssan_SetupAction(this, EnOssan_FaceShopKeeper);
+    EnOssan_SetupAction(this, EnOssan_FaceShopkeeper);
     func_80151938(globalCtx, 0x0640);
     func_8011552C(globalCtx, 6);
     this->stickRightPrompt.isEnabled = true;
@@ -587,7 +587,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
     return 0;
 }
 
-void EnOssan_FaceShopKeeper(EnOssan* this, GlobalContext* globalCtx) {
+void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     s32 pad;
     Player* player = PLAYER;
@@ -1235,9 +1235,9 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
         if (item != NULL) {
             if (this->actionFunc != EnOssan_SelectItem && this->actionFunc != EnOssan_CannotBuy &&
                 this->drawCursor == 0) {
-                item->isSelected = 0;
+                item->isSelected = false;
             } else {
-                item->isSelected = this->cursorIdx == i ? 1 : 0;
+                item->isSelected = this->cursorIdx == i ? true : false;
             }
         }
     }

@@ -5786,7 +5786,7 @@
     0x808A8E84:("EnOssan_CursorLeft",),
     0x808A8EEC:("EnOssan_Hello",),
     0x808A90A4:("EnOssan_FacingShopkeeperDialogResult",),
-    0x808A91B4:("EnOssan_FaceShopKeeper",),
+    0x808A91B4:("EnOssan_FaceShopkeeper",),
     0x808A935C:("EnOssan_TalkToShopkeeper",),
     0x808A9400:("EnOssan_LookToLeftShelf",),
     0x808A94FC:("EnOssan_LookToRightShelf",),
