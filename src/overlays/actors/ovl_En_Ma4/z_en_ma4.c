@@ -147,7 +147,7 @@ void EnMa4_ChangeAnim(EnMa4 *this, s32 index) {
 
 
 void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 phi_a3;
 
     if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
@@ -156,7 +156,7 @@ void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
         phi_a3 = (this->unk_332 == 2 && this->actionFunc != func_80ABEF8C) ? 1 : 0;
     }
 
-    this->unk_1D8.unk_18 = player->base.world.pos;
+    this->unk_1D8.unk_18 = player->actor.world.pos;
     this->unk_1D8.unk_18.y -= -10.0f;
     func_800BD888(&this->actor, &this->unk_1D8, 0, phi_a3);
 }
@@ -195,7 +195,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80AC00DC);
 
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 0;
     this->unk_1D8.unk_00 = 0;
@@ -302,7 +302,7 @@ void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
         }
     }
 
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (this->skelAnime.animCurrentSeg == &D_06007328) {
         if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
@@ -335,7 +335,7 @@ void func_80ABE4A4(EnMa4 *this) {
 
 
 void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
     s16 sp22 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->unk_336 == 2) || (this->unk_336 == 3)) {
@@ -496,7 +496,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABEB6C(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
     s32 aux;
 
     if (func_80147624(globalCtx) != 0) {
@@ -703,7 +703,7 @@ void func_80ABF160(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF198(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
@@ -715,7 +715,7 @@ void func_80ABF198(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     if (globalCtx->interfaceCtx.unk_280 == 8) {
         this->actionFunc = func_80ABF254;
@@ -726,9 +726,9 @@ void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
 
 void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
     static s16 D_80AC0258 = 0x0000;
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
-    player->unkA74 |= 0x400;
+    player->stateFlags3 |= 0x400;
     func_80ABF0D8(this, globalCtx);
     if (this->unk_338 != D_80AC0258) {
         D_80AC0258 = this->unk_338;
@@ -753,7 +753,7 @@ void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
 
 void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
     static s32 D_80AC025C = 0x00000000;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
@@ -844,7 +844,7 @@ void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
-        ActorPlayer *player = PLAYER;
+        Player *player = PLAYER;
 
         player->stateFlags1 |= 0x20;
         func_800B85E0((Actor *) this, globalCtx, 200.0f, -1);
@@ -859,7 +859,7 @@ void func_80ABF69C(EnMa4 *this) {
 }
 
 void func_80ABF6B0(EnMa4 *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     this->actor.flags |= 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
