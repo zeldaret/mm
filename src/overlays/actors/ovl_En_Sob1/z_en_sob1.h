@@ -47,7 +47,7 @@ typedef struct EnSob1 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSob1ActionFunc actionFunc;
-    /* 0x18C */ EnSob1ActionFunc tmpActionFunc;
+    /* 0x18C */ EnSob1ActionFunc tmpActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ EnSob1ActionFunc actionFunc2;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ Path* path;
