@@ -83,9 +83,9 @@ typedef struct EnSob1 {
     /* 0x39D */ u8 stickAnimState;
     /* 0x39E */ s16 cutsceneState;
     /* 0x3A0 */ s16 cutscene;
-    /* 0x3A2 */ s16 unk3A2;
-    /* 0x3A4 */ s16 unk3A4;
-    /* 0x3A6 */ s16 unk3A6;
+    /* 0x3A2 */ s16 lookFowardCutscene;
+    /* 0x3A4 */ s16 lookToShelfCutscene;
+    /* 0x3A6 */ s16 lookToShopkeeperCutscene;
     /* 0x3A8 */ char pad3A8[0x4];
     /* 0x3AC */ f32 shopItemSelectedTween;
     /* 0x3B0 */ char pad3B0[0x4];
