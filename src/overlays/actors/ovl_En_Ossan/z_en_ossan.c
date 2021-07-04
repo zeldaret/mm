@@ -1,6 +1,6 @@
 /*
  * File: z_en_ossan.c
- * Overlay: Ovl_En_Ossan
+ * Overlay: ovl_En_Ossan
  * Description: Trading Post Shop
  */
 
