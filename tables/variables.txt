@@ -1430,7 +1430,7 @@
     0x801C3C70:("D_801C3C70","Gfx","[2]",0x10),
     0x801C3C80:("D_801C3C80","Gfx*","[2]",0x8),
     0x801C3C88:("D_801C3C88","Gfx","[2]",0x10),
-    0x801C3CA0:("gSceneTable","Scene","[113]",0x710),
+    0x801C3CA0:("gSceneTable","SceneTableEntry","[113]",0x710),
     0x801C43B0:("D_801C43B0","UNK_TYPE1","",0x1),
     0x801C43B4:("D_801C43B4","UNK_TYPE1","",0x1),
     0x801C43B8:("D_801C43B8","UNK_TYPE1","",0x1),

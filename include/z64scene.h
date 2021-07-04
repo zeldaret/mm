@@ -350,7 +350,7 @@ typedef struct {
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
     /* 0xD */ char pad_D[3];
-} Scene; // size = 0x10;
+} SceneTableEntry; // size = 0x10;
 
 typedef struct {
     /* 0x0 */ u8 r;
@@ -653,7 +653,7 @@ typedef enum {
     /* 0x70 */ SCENE_ALLEY
 } SceneID;
 
-// Scene draw configs
+// SceneTableEntry draw configs
 typedef enum {
     /* 0 */ SCENE_DRAW_CFG_DEFAULT,
     /* 1 */ SCENE_DRAW_CFG_MAT_ANIM,
@@ -665,7 +665,7 @@ typedef enum {
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
-// Scene commands
+// SceneTableEntry commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
     /* 0x01 */ SCENE_CMD_ID_ACTOR_LIST,
@@ -713,8 +713,8 @@ typedef enum {
 #define SCENE_CMD_COL_HEADER(colHeader) \
     { SCENE_CMD_ID_COL_HEADER, 0, CMD_PTR(colHeader) }
 
-#define SCENE_CMD_ROOM_LIST(nbRooms, roomList) \
-    { SCENE_CMD_ID_ROOM_LIST, nbRooms, CMD_PTR(roomList) }
+#define SCENE_CMD_ROOM_LIST(numRooms, roomList) \
+    { SCENE_CMD_ID_ROOM_LIST, numRooms, CMD_PTR(roomList) }
 
 #define SCENE_CMD_WIND_SETTINGS(xDir, yDir, zDir, strength) \
     { SCENE_CMD_ID_WIND_SETTINGS, 0, CMD_BBBB(xDir, yDir, zDir, strength) }

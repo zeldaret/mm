@@ -142,7 +142,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     return (void*)addr;
 }
 
-// Scene Header Command 0x00: Spawn List
+// SceneTableEntry Header Command 0x00: Spawn List
 void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     GlobalContext* globalCtx2 = globalCtx;
     s32 loadedCount;
@@ -171,19 +171,19 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment = nextObject;
 }
 
-// Scene Header Command 0x01: Actor List
+// SceneTableEntry Header Command 0x01: Actor List
 void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->nbSetupActors = (u16)cmd->actorList.num;
+    globalCtx->numSetupActors = (u16)cmd->actorList.num;
     globalCtx->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(cmd->actorList.segment);
     globalCtx->actorCtx.unkC = (u16)0;
 }
 
-// Scene Header Command 0x02: List of cameras for actor cutscenes
+// SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->unk_18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
-// Scene Header Command 0x03: Collision Header
+// SceneTableEntry Header Command 0x03: Collision Header
 void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
     CollisionHeader* colHeaderTemp;
     CollisionHeader* colHeader;
@@ -208,18 +208,18 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
     BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
-// Scene Header Command 0x04: Room List
+// SceneTableEntry Header Command 0x04: Room List
 void Scene_HeaderCmdRoomList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->nbRooms = cmd->roomList.num;
+    globalCtx->numRooms = cmd->roomList.num;
     globalCtx->roomList = (RomFile*)Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
-// Scene Header Command 0x06: Entrance List
+// SceneTableEntry Header Command 0x06: Entrance List
 void Scene_HeaderCmdEntranceList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(cmd->entranceList.segment);
 }
 
-// Scene Header Command 0x07: Special Files
+// SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     static RomFile tatlMessageFiles[2] = {
         { (u32)_elf_message_fieldSegmentRomStart, (u32)_elf_message_fieldSegmentRomEnd },
@@ -237,7 +237,7 @@ void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-// Scene Header Command 0x08: Room Behavior
+// SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
     globalCtx->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
@@ -247,12 +247,12 @@ void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
 }
 
-// Scene Header Command 0x0A: Mesh Header
+// SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomCtx.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
-// Scene Header Command 0x0B:  Object List
+// SceneTableEntry Header Command 0x0B:  Object List
 void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i, j, k;
     ObjectStatus* firstObject;
@@ -303,7 +303,7 @@ void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->objectCtx.num = i;
 }
 
-// Scene Header Command 0x0C: Light List
+// SceneTableEntry Header Command 0x0C: Light List
 void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i;
     LightInfo* lightInfo = (LightInfo*)Lib_SegmentedToVirtual(cmd->lightList.segment);
@@ -314,12 +314,12 @@ void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-// Scene Header Command 0x0D: Path List
+// SceneTableEntry Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupPathList = (void*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
-// Scene Header Command 0x0E: Transition Actor List
+// SceneTableEntry Header Command 0x0E: Transition Actor List
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->transitionCtx.nbTransitionActors = cmd->transiActorList.num;
     globalCtx->transitionCtx.transitionActorList =
@@ -332,9 +332,9 @@ void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx) {
     transitionCtx->nbTransitionActors = 0;
 }
 
-// Scene Header Command 0x0F: Environment Light Settings List
+// SceneTableEntry Header Command 0x0F: Environment Light Settings List
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->envCtx.nbLightSettings = cmd->lightSettingList.num;
+    globalCtx->envCtx.numLightSettings = cmd->lightSettingList.num;
     globalCtx->envCtx.lightSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
@@ -365,7 +365,7 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
-// Scene Header Command 0x11: Skybox Settings
+// SceneTableEntry Header Command 0x11: Skybox Settings
 void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->skyboxId = cmd->skyboxSettings.skyboxId & 3;
     globalCtx->envCtx.unk_17 = globalCtx->envCtx.unk_18 = cmd->skyboxSettings.unk5;
@@ -373,13 +373,13 @@ void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     Scene_LoadAreaTextures(globalCtx, cmd->skyboxSettings.data1);
 }
 
-// Scene Header Command 0x12: Skybox Disables
+// SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->envCtx.unk_15 = cmd->skyboxDisables.unk4;
     globalCtx->envCtx.unk_16 = cmd->skyboxDisables.unk5;
 }
 
-// Scene Header Command 0x10: Time Settings
+// SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
@@ -424,7 +424,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-// Scene Header Command 0x05: Wind Settings
+// SceneTableEntry Header Command 0x05: Wind Settings
 void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     s8 temp1 = cmd->windSettings.west;
     s8 temp2 = cmd->windSettings.vertical;
@@ -436,16 +436,16 @@ void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 
-// Scene Header Command 0x13: Exit List
+// SceneTableEntry Header Command 0x13: Exit List
 void Scene_HeaderCmdExitList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->setupExitList = (u16*)Lib_SegmentedToVirtual(cmd->exitList.segment);
 }
 
-// Scene Header Command 0x09: Undefined
+// SceneTableEntry Header Command 0x09: Undefined
 void Scene_HeaderCmd09(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-// Scene Header Command 0x15: Sound Settings=
+// SceneTableEntry Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
     globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
@@ -455,12 +455,12 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-// Scene Header Command 0x16: Echo Setting
+// SceneTableEntry Header Command 0x16: Echo Setting
 void Scene_HeaderCmdEchoSetting(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomCtx.currRoom.echo = cmd->echoSettings.echo;
 }
 
-// Scene Header Command 0x18: Alternate Header List=
+// SceneTableEntry Header Command 0x18: Alternate Header List=
 void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
@@ -476,34 +476,34 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 }
 
-// Scene Header Command 0x17: Cutscene List
+// SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->csCtx.sceneCsCount = (u8)cmd->base.data1;
     globalCtx->csCtx.sceneCsList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
 }
 
-// Scene Header Command 0x1B: Actor Cutscene List
+// SceneTableEntry Header Command 0x1B: Actor Cutscene List
 void Scene_HeaderCmdActorCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
     ActorCutscene_Init(globalCtx, (ActorCutscene*)Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment),
                        cmd->cutsceneActorList.num);
 }
 
-// Scene Header Command 0x1C: Mini Maps
+// SceneTableEntry Header Command 0x1C: Mini Maps
 void Scene_HeaderCmdMiniMap(GlobalContext* globalCtx, SceneCmd* cmd) {
     func_80104CF4(globalCtx);
     func_8010549C(globalCtx, cmd->minimapSettings.segment);
 }
 
-// Scene Header Command 0x1D: Undefined
+// SceneTableEntry Header Command 0x1D: Undefined
 void Scene_HeaderCmd1D(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-// Scene Header Command 0x1E: Minimap Compass Icon Info
+// SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
 void Scene_HeaderCmdMiniMapCompassInfo(GlobalContext* globalCtx, SceneCmd* cmd) {
     func_8010565C(globalCtx, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// Scene Header Command 0x1A: Sets Area Visited Flag
+// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
 void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
@@ -530,7 +530,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     }
 }
 
-// Scene Header Command 0x1A: Material Animations
+// SceneTableEntry Header Command 0x1A: Material Animations
 void Scene_HeaderCmdAnimatedMaterials(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->sceneMaterialAnims = (AnimatedMaterial*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }

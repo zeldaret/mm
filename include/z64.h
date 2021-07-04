@@ -625,10 +625,10 @@ typedef struct {
 typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-} UnkAudioStruct;
+    /* 0x00 */ u8 noteIdx;
+    /* 0x01 */ u8 state;
+    /* 0x02 */ u8 pos;
+} OcarinaStaff; // size = 0x3;
 
 typedef struct {
     /* 0x000 */ View view;
@@ -649,7 +649,7 @@ typedef struct {
     /* 0x1A0 */ Vtx* unk_1A0;
     /* 0x1A4 */ Vtx* unk_1A4;
     /* 0x1A8 */ Vtx* cursorVtx;
-    /* 0x1AC */ UnkAudioStruct* unk_1AC;
+    /* 0x1AC */ OcarinaStaff* unk_1AC;
     /* 0x1B0 */ DmaRequest unk_1B0;
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
@@ -851,7 +851,7 @@ typedef struct {
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
-    /* 0xB8 */ u8 nbLightSettings;
+    /* 0xB8 */ u8 numLightSettings;
     /* 0xBC */ LightSettings* lightSettingsList;
     /* 0xC0 */ u8 unk_C0;
     /* 0xC1 */ u8 unk_C1;
@@ -1593,8 +1593,8 @@ struct GlobalContext {
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
     /* 0x18845 */ u8 unk_18845;
-    /* 0x18846 */ s16 nbSetupActors;
-    /* 0x18848 */ u8 nbRooms;
+    /* 0x18846 */ s16 numSetupActors;
+    /* 0x18848 */ u8 numRooms;
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
@@ -1622,7 +1622,7 @@ struct GlobalContext {
     /* 0x18B4A */ u8 unk_18B4A;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
-    /* 0x18E54 */ Scene* loadedScene;
+    /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ char unk_18E58[0x400];
 }; // size = 0x19258
 
