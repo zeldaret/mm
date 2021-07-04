@@ -2472,7 +2472,7 @@ void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd);
 void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd);
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd);
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd);
-void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx);
+void Transition_Init(GameState* gamestate, DoorContext* doorCtx);
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd);
 s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex);
 void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd);

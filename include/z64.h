@@ -1571,7 +1571,7 @@ struct GlobalContext {
     /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
-    /* 0x18760 */ TransitionContext transitionCtx;
+    /* 0x18760 */ DoorContext doorCtx;
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
     /* 0x18770 */ void* unk_18770; //! @TODO: Determine function prototype

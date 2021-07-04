@@ -299,9 +299,9 @@ typedef struct {
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 nbTransitionActors;
-    /* 0x04 */ TransitionActorEntry* transitionActorList;
-} TransitionContext;
+    /* 0x00 */ u8 numActors;
+    /* 0x04 */ TransitionActorEntry* actorList;
+} DoorContext;
 
 typedef struct {
     /* 0x0 */ s16 id;
@@ -748,8 +748,8 @@ typedef enum {
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
 
-#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, transitionActorList) \
-    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(transitionActorList) } 
+#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, actorList) \
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) } 
 
 #define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
     { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
