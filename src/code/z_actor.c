@@ -736,7 +736,7 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 void Actor_FreeOverlay(ActorOverlay* entry) {
     void* ramAddr;
 
-    if (entry->nbLoaded == 0) {
+    if (entry->numLoaded == 0) {
         ramAddr = entry->loadedRamAddr;
         if (ramAddr != NULL) {
             // Bit 1 - always loaded
