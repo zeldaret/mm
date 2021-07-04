@@ -1,3 +1,10 @@
+
+/*
+ * File: z_en_sob1.c
+ * Overlay: ovl_En_Sob1
+ * Description: Shops (Zora, Goron, and Bomb)
+ */
+
 #include "z_en_sob1.h"
 
 #define FLAGS 0x00000019
