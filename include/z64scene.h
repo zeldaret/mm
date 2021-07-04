@@ -469,17 +469,6 @@ typedef struct {
 } MeshHeader2;
 
 typedef struct {
-    u8 ambientClrR, ambientClrG, ambientClrB;
-    u8 diffuseClrA_R, diffuseClrA_G, diffuseClrA_B;
-    u8 diffuseDirA_X, diffuseDirA_Y, diffuseDirA_Z;
-    u8 diffuseClrB_R, diffuseClrB_G, diffuseClrB_B;
-    u8 diffuseDirB_X, diffuseDirB_Y, diffuseDirB_Z;
-    u8 fogClrR, fogClrG, fogClrB;
-    u16 unk;
-    u16 drawDistance;
-} LightSettings;
-
-typedef struct {
     /* 0x00 */ u8 count; // number of points in the path
     /* 0x01 */ s8 unk1;
     /* 0x02 */ s16 unk2;

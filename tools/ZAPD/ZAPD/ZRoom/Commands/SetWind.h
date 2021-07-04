@@ -15,8 +15,8 @@ public:
 	RoomCommand GetRoomCommand() const override;
 
 private:
-	uint8_t windWest;
-	uint8_t windVertical;
-	uint8_t windSouth;
+	uint8_t windDir.x;
+	uint8_t windDir.y;
+	uint8_t windDir.z;
 	uint8_t clothFlappingStrength;
 };

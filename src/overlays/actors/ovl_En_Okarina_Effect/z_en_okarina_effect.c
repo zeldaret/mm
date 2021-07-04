@@ -34,7 +34,7 @@ void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnOkarinaEffect* this = THIS;
 
-    if (globalCtx->envCtx.unkF2[1]) {
+    if (globalCtx->envCtx.unk_F2[1]) {
         Actor_MarkForDeath(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
@@ -42,9 +42,9 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     this->unk144 = 0x50;
-    globalCtx->envCtx.unkF2[4] = 0x3C;
+    globalCtx->envCtx.unk_F2[4] = 0x3C;
     D_801F4E70 = 501.0f;
-    globalCtx->envCtx.unkE3 = 2;
+    globalCtx->envCtx.unk_E3 = 2;
     func_800FD78C(globalCtx);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
@@ -58,10 +58,10 @@ void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
 }
 
 void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx) {
-    if (globalCtx->envCtx.unkF2[4]) {
+    if (globalCtx->envCtx.unk_F2[4]) {
         if ((globalCtx->state.frames & 3) == 0) {
-            --globalCtx->envCtx.unkF2[4];
-            if (globalCtx->envCtx.unkF2[4] == 8) {
+            --globalCtx->envCtx.unk_F2[4];
+            if (globalCtx->envCtx.unk_F2[4] == 8) {
                 func_800FD858(globalCtx);
             }
         }

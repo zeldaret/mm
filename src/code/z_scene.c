@@ -244,7 +244,7 @@ void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     globalCtx->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
     globalCtx->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
-    globalCtx->envCtx.unkE2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
+    globalCtx->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
 }
 
 // Scene Header Command 0x0A: Mesh Header
@@ -334,8 +334,8 @@ void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx) {
 
 // Scene Header Command 0x0F: Environment Light Settings List
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->envCtx.environmentSettingsCount = cmd->lightSettingList.num;
-    globalCtx->envCtx.environmentSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
+    globalCtx->envCtx.nbLightSettings = cmd->lightSettingList.num;
+    globalCtx->envCtx.lightSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
 /**
@@ -368,15 +368,15 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
 // Scene Header Command 0x11: Skybox Settings
 void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->skyboxId = cmd->skyboxSettings.skyboxId & 3;
-    globalCtx->envCtx.unk17 = globalCtx->envCtx.unk18 = cmd->skyboxSettings.unk5;
-    globalCtx->envCtx.unk1E = cmd->skyboxSettings.unk6;
+    globalCtx->envCtx.unk_17 = globalCtx->envCtx.unk_18 = cmd->skyboxSettings.unk5;
+    globalCtx->envCtx.unk_1E = cmd->skyboxSettings.unk6;
     Scene_LoadAreaTextures(globalCtx, cmd->skyboxSettings.data1);
 }
 
 // Scene Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->envCtx.unk15 = cmd->skyboxDisables.unk4;
-    globalCtx->envCtx.unk16 = cmd->skyboxDisables.unk5;
+    globalCtx->envCtx.unk_15 = cmd->skyboxDisables.unk4;
+    globalCtx->envCtx.unk_16 = cmd->skyboxDisables.unk5;
 }
 
 // Scene Header Command 0x10: Time Settings
@@ -389,27 +389,27 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     if (cmd->timeSettings.unk6 != 0xFF) {
-        globalCtx->envCtx.unk2 = cmd->timeSettings.unk6;
+        globalCtx->envCtx.unk_2 = cmd->timeSettings.unk6;
     } else {
-        globalCtx->envCtx.unk2 = 0;
+        globalCtx->envCtx.unk_2 = 0;
     }
 
-    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk2 != 0)) {
-        globalCtx->envCtx.unk2 = 5;
+    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
+        globalCtx->envCtx.unk_2 = 5;
     }
 
     if (gSaveContext.unk_3F58 == 0) {
-        REG(15) = globalCtx->envCtx.unk2;
+        REG(15) = globalCtx->envCtx.unk_2;
     }
 
     dayTime = gSaveContext.time;
-    globalCtx->envCtx.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.time;
-    globalCtx->envCtx.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.time;
-    globalCtx->envCtx.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
+    globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->envCtx.unk2 == 0 && gSaveContext.cutscene < 0xFFF0) {
+    if (globalCtx->envCtx.unk_2 == 0 && gSaveContext.cutscene < 0xFFF0) {
         gSaveContext.environmentTime = gSaveContext.time;
 
         if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
@@ -430,10 +430,10 @@ void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
 
-    globalCtx->envCtx.windWest = temp1;
-    globalCtx->envCtx.windVertical = temp2;
-    globalCtx->envCtx.windSouth = temp3;
-    globalCtx->envCtx.windClothIntensity = cmd->windSettings.clothIntensity;
+    globalCtx->envCtx.windDir.x = temp1;
+    globalCtx->envCtx.windDir.y = temp2;
+    globalCtx->envCtx.windDir.z = temp3;
+    globalCtx->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 
 // Scene Header Command 0x13: Exit List
