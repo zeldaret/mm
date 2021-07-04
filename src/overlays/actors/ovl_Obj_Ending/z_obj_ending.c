@@ -39,10 +39,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMaterial* texture;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->graphics = &sGraphics[this->actor.params];
-
-    if (1) {}
-
+    this->graphics = &sGraphics[thisx->params];
     texture = this->graphics->texture;
     if (texture != NULL) {
         this->texture = (AnimatedMaterial*)Lib_SegmentedToVirtual(texture);
