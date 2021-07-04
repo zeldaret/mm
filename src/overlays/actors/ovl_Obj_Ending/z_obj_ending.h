@@ -6,15 +6,14 @@
 struct ObjEnding;
 
 typedef struct {
-    /* 0x0 */   Gfx* dl1;
-    /* 0x4 */   Gfx* dl2;
-    /* 0x8 */   AnimatedMaterial *texture;
-} ObjEndingGraphics; // size = 0xC
+    /* 0x0 */   Gfx* dLists[2];
+    /* 0x8 */   AnimatedMaterial *animMat;
+} ObjEndingModelInfo; // size = 0xC
 
 typedef struct ObjEnding {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ObjEndingGraphics* graphics;
-    /* 0x148 */ AnimatedMaterial* texture;
+    /* 0x144 */ ObjEndingModelInfo* graphics;
+    /* 0x148 */ AnimatedMaterial* animMat;
 } ObjEnding; // size = 0x14C
 
 extern const ActorInit Obj_Ending_InitVars;
