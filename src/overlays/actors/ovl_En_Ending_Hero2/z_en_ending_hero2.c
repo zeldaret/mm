@@ -21,10 +21,10 @@ const ActorInit En_Ending_Hero2_InitVars = {
     (ActorFunc)EnEndingHero2_Init,
     (ActorFunc)EnEndingHero2_Destroy,
     (ActorFunc)EnEndingHero2_Update,
-    (ActorFunc)EnEndingHero2_Draw
+    (ActorFunc)EnEndingHero2_Draw,
 };
 
-extern SkeletonHeader D_06007908;
+extern FlexSkeletonHeader D_06007908;
 extern AnimationHeader D_060011C0;
 
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -57,7 +57,7 @@ void EnEndingHero2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
 void EnEndingHero2_Draw(Actor* thisx, GlobalContext* globalCtx) {

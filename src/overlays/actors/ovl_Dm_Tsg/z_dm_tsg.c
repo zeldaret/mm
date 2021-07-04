@@ -19,7 +19,7 @@ const ActorInit Dm_Tsg_InitVars = {
     (ActorFunc)DmTsg_Init,
     (ActorFunc)DmTsg_Destroy,
     (ActorFunc)DmTsg_Update,
-    (ActorFunc)DmTsg_Draw
+    (ActorFunc)DmTsg_Draw,
 };
 */
 

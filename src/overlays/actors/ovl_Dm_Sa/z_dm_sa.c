@@ -23,7 +23,7 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-extern SkeletonHeader D_06013328;
+extern FlexSkeletonHeader D_06013328;
 extern AnimationHeader D_0600CC94;
 
 static ActorAnimationEntry D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
@@ -33,7 +33,7 @@ void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) 
     animations += index;
 
     if (animations->frameCount < 0.0f) {
-        frameCount = SkelAnime_GetFrameCount(animations->animation);
+        frameCount = SkelAnime_GetFrameCount(&animations->animation->common);
     } else {
         frameCount = animations->frameCount;
     }
@@ -49,7 +49,7 @@ void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetArrowOffset = 3000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013328, NULL, 0, 0, 0);
-    func_80A2E960(&this->skelAnime, &D_80A2ED00, 0);
+    func_80A2E960(&this->skelAnime, D_80A2ED00, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;
 }
@@ -68,14 +68,14 @@ void DmSa_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 func_80A2EB10(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 func_80A2EB10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     return 0;
 }
 
-void func_80A2EB2C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void func_80A2EB2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
 }
 
-void func_80A2EB44(s32 arg0, s32 arg1, s32 arg2) {
+void func_80A2EB44(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
 }
 
 Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
@@ -115,7 +115,7 @@ void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                  func_80A2EB10, func_80A2EB2C, func_80A2EB44, this);
+                  func_80A2EB10, func_80A2EB2C, func_80A2EB44, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

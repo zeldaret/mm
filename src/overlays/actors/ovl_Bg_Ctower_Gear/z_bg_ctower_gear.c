@@ -27,7 +27,6 @@ void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx);
 void BgCtowerGear_DrawOrgan(Actor* thisx, GlobalContext* globalCtx);
 
-
 const ActorInit Bg_Ctower_Gear_InitVars = {
     ACTOR_BG_CTOWER_GEAR,
     ACTORCAT_PROP,
@@ -37,7 +36,7 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
     (ActorFunc)BgCtowerGear_Init,
     (ActorFunc)BgCtowerGear_Destroy,
     (ActorFunc)BgCtowerGear_Update,
-    (ActorFunc)BgCtowerGear_Draw
+    (ActorFunc)BgCtowerGear_Draw,
 };
 
 extern Gfx D_06010828[];
@@ -55,16 +54,13 @@ extern Gfx D_06018118[];
 extern CollisionHeader D_06018588;
 
 static Vec3f D_80AD3270[] = {
-    {-70.0f, -60.0f, 8.0f},
-    {-60.0f, -60.0f, -9.1f},
-    {-75.0f, -60.0f, -9.1f},
-    {-70.0f, -60.0f, -26.2f}
+    { -70.0f, -60.0f, 8.0f }, { -60.0f, -60.0f, -9.1f }, { -75.0f, -60.0f, -9.1f }, { -70.0f, -60.0f, -26.2f }
 };
 
 static Vec3f D_80AD32A0[] = {
-    {85.0f, -60.0f, 8.0f},
-    {80.0f, -60.0f, -9.1f},
-    {85.0f, -60.0f, -26.2f},
+    { 85.0f, -60.0f, 8.0f },
+    { 80.0f, -60.0f, -9.1f },
+    { 85.0f, -60.0f, -26.2f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -85,9 +81,9 @@ static InitChainEntry sInitChainOrgan[] = {
     ICHAIN_F32(uncullZoneDownward, 570, ICHAIN_STOP),
 };
 
-static Gfx* D_80AD32E8[] = {D_06010828, D_06017018, D_06018118};
+static Gfx* D_80AD32E8[] = { D_06010828, D_06017018, D_06018118 };
 
-void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
+void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     int i;
     s32 flags;
     Vec3f splashSpawnPos;
@@ -102,8 +98,8 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
         SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
         SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
-        for(i=0; i<4; i++) {
-            if ((u32) Rand_Next() >= 0x40000000) {
+        for (i = 0; i < 4; i++) {
+            if ((u32)Rand_Next() >= 0x40000000) {
                 splashOffset.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = D_80AD3270[i].y;
                 splashOffset.z = D_80AD3270[i].z;
@@ -111,7 +107,7 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 340);
+                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 340);
             }
         }
     }
@@ -120,8 +116,8 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
             Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
             SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
             SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
-            for(i=0; i<3; i++) {
-                for(j=0; j<2; j++) {
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 2; j++) {
                     splashOffset.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
                     splashOffset.y = D_80AD32A0[i].y;
                     splashOffset.z = D_80AD32A0[i].z;
@@ -129,16 +125,16 @@ void BgCtowerGear_Splash(BgCtowerGear *this, GlobalContext *GlobalContext) {
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(GlobalContext, &splashSpawnPos, NULL, NULL, 0, ((u32) Rand_Next() >> 25) + 280);
+                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 280);
                 }
             }
         }
-        Audio_PlayActorSound2(this, 0x291B);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 
-void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
-    BgCtowerGear *this = THIS;
+void BgCtowerGear_Init(Actor* thisx, GlobalContext* globalCtx) {
+    BgCtowerGear* this = THIS;
     s32 type;
 
     type = BGCTOWERGEAR_GET_TYPE(this);
@@ -162,8 +158,8 @@ void BgCtowerGear_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-void BgCtowerGear_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    BgCtowerGear *this = THIS;
+void BgCtowerGear_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgCtowerGear* this = THIS;
     s32 type;
 
     type = BGCTOWERGEAR_GET_TYPE(this);
@@ -172,26 +168,24 @@ void BgCtowerGear_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-void BgCtowerGear_Update(Actor *thisx, GlobalContext *globalCtx) {
-    BgCtowerGear *this = THIS;
+void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx) {
+    BgCtowerGear* this = THIS;
     s32 type;
 
     type = BGCTOWERGEAR_GET_TYPE(this);
     if (type == CEILING_COG) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
-    }
-    else if (type == CENTER_COG) {
+    } else if (type == CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
-        func_800B9010(&this->dyna.actor, 0x2085);
-    }
-    else if (type == WATER_WHEEL) {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+    } else if (type == WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, globalCtx);
     }
 }
 
-void BgCtowerGear_UpdateOrgan(Actor *thisx, GlobalContext *globalCtx) {
-    BgCtowerGear *this = THIS;
+void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
+    BgCtowerGear* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
         switch (globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x68)]->unk0) {
@@ -210,12 +204,12 @@ void BgCtowerGear_UpdateOrgan(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-//Using BgCtowerGear *this = THIS causes regalloc issues
-void BgCtowerGear_Draw(Actor *thisx, GlobalContext *globalCtx) {
+// Using BgCtowerGear *this = THIS causes regalloc issues
+void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_80AD32E8[BGCTOWERGEAR_GET_TYPE(thisx)]);
 }
 
-void BgCtowerGear_DrawOrgan(Actor *thisx, GlobalContext *globalCtx) {
+void BgCtowerGear_DrawOrgan(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

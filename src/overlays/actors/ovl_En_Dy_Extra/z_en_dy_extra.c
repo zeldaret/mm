@@ -76,7 +76,7 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    Audio_PlayActorSound2(&this->actor, 0xC4U);
+    Audio_PlayActorSound2(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
@@ -116,12 +116,10 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
                                 globalCtx->state.frames, globalCtx->state.frames * -8, 0x10, 0x10));
     gDPPipeSync(POLY_XLU_DISP++);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].r, D_80A61740[this->type].g,
                     D_80A61740[this->type].b, 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g,
-                   D_80A61754[this->type].b, 128);
+    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g, D_80A61754[this->type].b, 128);
     gSPDisplayList(POLY_XLU_DISP++, D_0600DEF0);
 
     CLOSE_DISPS(gfxCtx);

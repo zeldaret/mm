@@ -19,7 +19,7 @@ const ActorInit Obj_Driftice_InitVars = {
     (ActorFunc)ObjDriftice_Init,
     (ActorFunc)ObjDriftice_Destroy,
     (ActorFunc)ObjDriftice_Update,
-    (ActorFunc)ObjDriftice_Draw
+    (ActorFunc)ObjDriftice_Draw,
 };
 */
 

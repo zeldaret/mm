@@ -19,7 +19,7 @@ const ActorInit En_Slime_InitVars = {
     (ActorFunc)EnSlime_Init,
     (ActorFunc)EnSlime_Destroy,
     (ActorFunc)EnSlime_Update,
-    (ActorFunc)EnSlime_Draw
+    (ActorFunc)EnSlime_Draw,
 };
 */
 

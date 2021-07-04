@@ -19,7 +19,7 @@ const ActorInit Obj_Armos_InitVars = {
     (ActorFunc)ObjArmos_Init,
     (ActorFunc)ObjArmos_Destroy,
     (ActorFunc)ObjArmos_Update,
-    (ActorFunc)ObjArmos_Draw
+    (ActorFunc)ObjArmos_Draw,
 };
 */
 

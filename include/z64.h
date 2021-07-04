@@ -17,6 +17,7 @@
 #include <xstdio.h>
 #include <unk.h>
 
+#include <sfx.h>
 #include <color.h>
 #include <ichain.h>
 
@@ -31,7 +32,9 @@
 #include <z64light.h>
 #include <z64math.h>
 #include <z64object.h>
+#include "z64player.h"
 #include <z64scene.h>
+#include <z64save.h>
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -77,6 +80,20 @@ typedef struct {
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedMaterial; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ s16   unk_06;
+    /* 0x08 */ Gfx*  opa;
+    /* 0x0C */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u8    type;
+    /* 0x01 */ u8    num; // number of dlist entries
+    /* 0x04 */ void* start;
+    /* 0x08 */ void* end;
+} PolygonType2; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 floorHead;
@@ -144,13 +161,6 @@ typedef struct {
     /* 0x14 */ UNK_TYPE1 pad14[0x14];
     /* 0x28 */ CsCmdActorAction* actorActions[10];
 } CutsceneContext; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ u32 chestFlags;
-    /* 0x04 */ u32 switchFlags[2];
-    /* 0x0C */ u32 clearedRooms;
-    /* 0x10 */ u32 collectibleFlags;
-} CycleSceneFlags; // size = 0x14
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -240,12 +250,7 @@ typedef struct {
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
 
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ UNK_TYPE1 pad4[0x40];
-} GlobalContext17D98; // size = 0x44
-
-typedef struct {
+typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
     /* 0x004 */ Gfx* polyXluBuffer;
     /* 0x008 */ UNK_TYPE1 pad8[0x8];
@@ -303,10 +308,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x1C];
-} PermanentSceneFlags; // size = 0x1C
-
-typedef struct {
     /* 0x0 */ s16 unk0;
     /* 0x2 */ s16 unk2;
     /* 0x4 */ s16 unk4;
@@ -316,74 +317,6 @@ typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
-
-// Extra information in the save context that is not saved
-typedef struct {
-    /* 0x000 */ UNK_TYPE1 pad0[0x4];
-    /* 0x004 */ s16 unk04;
-    /* 0x006 */ UNK_TYPE1 pad06[0x6];
-    /* 0x00C */ s32 sceneSetupIndex;
-    /* 0x010 */ s32 unk10;
-    /* 0x014 */ UNK_TYPE1 pad14[0x10];
-    /* 0x024 */ s16 unk24;
-    /* 0x040 */ UNK_TYPE1 pad22[0x1C];
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x34];
-    /* 0x078 */ f32 unk78;
-    /* 0x07C */ UNK_TYPE1 pad7C[0x4];
-    /* 0x080 */ s16 unk80;
-    /* 0x082 */ UNK_TYPE1 pad82[0x5];
-    /* 0x087 */ s8 unk87;
-    /* 0x088 */ UNK_TYPE1 pad88[0x1EE];
-    /* 0x276 */ u8 unk276;
-    /* 0x277 */ UNK_TYPE1 pad277[0x9];
-    /* 0x280 */ u16 unk280;
-    /* 0x282 */ u16 unk282;
-    /* 0x284 */ UNK_TYPE1 pad284[0x28];
-    /* 0x2AC */ u8 cutsceneTrigger;
-    /* 0x2AD */ UNK_TYPE1 pad2AD[0x5];
-    /* 0x2B2 */ u16 environmentTime;
-    /* 0x2B4 */ UNK_TYPE1 pad2B4[0x4];
-    /* 0x2B8 */ s16 unk2b8;
-    /* 0x2BA */ UNK_TYPE1 pad2BA[0xA];
-    /* 0x2C4 */ f32 unk2C4;
-    /* 0x2C8 */ CycleSceneFlags cycleSceneFlags[120];
-} SaveContextExtra; // size = 0xC28
-
-typedef struct {
-    /* 0x00 */ u8 items[24];
-    /* 0x18 */ u8 masks[24];
-    /* 0x30 */ u8 quantities[24];
-    /* 0x48 */ s32 unk48; // some bits are wallet upgrades
-    /* 0x4C */ UNK_TYPE1 pad4C[0x3C];
-} SaveContextInventory; // size = 0x88
-
-// Save Context that is only stored in an owl save
-typedef struct {
-    /* 0x0000 */ UNK_TYPE1 pad0[0x1];
-    /* 0x0001 */ u8 unk1;
-    /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ u8 unk3;
-    /* 0x0004 */ u8 unk4;
-    /* 0x0005 */ u8 unk5;
-    /* 0x0006 */ UNK_TYPE1 pad6[0x2C8C];
-    /* 0x0006 */ s16 unk_A00;
-} SaveContextOwl; // size = 0x2C94
-
-typedef struct {
-    /* 0x00 */ u8 zelda[6]; // Will always be "ZELDA3" for a valid save
-    /* 0x06 */ UNK_TYPE1 pad6[0xA];
-    /* 0x10 */ s16 maxLife;
-    /* 0x12 */ s16 currentLife;
-    /* 0x14 */ s8 unk14;
-    /* 0x15 */ s8 currentMagic;
-    /* 0x16 */ s16 currentRupees;
-    /* 0x18 */ UNK_TYPE1 pad18[0x10];
-} SaveContext_struct1; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x22];
-} SaveContext_struct2; // size = 0x22
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
@@ -622,12 +555,10 @@ typedef struct {
 } GameStateOverlay; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ u8 unk0;
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ u16 unk2;
-    /* 0x04 */ Vec3f unk4;
-    /* 0x10 */ Vec3f unk10;
-} GlobalContext1F78; // size = 0x1C
+    /* 0x00 */ u16 countdown;
+    /* 0x04 */ Vec3f originPos;
+    /* 0x10 */ Vec3f relativePos;
+} SoundSource; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ OSContPad cur;
@@ -635,42 +566,6 @@ typedef struct {
     /* 0x0C */ OSContPad press; // X/Y store delta from last frame
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
-
-// Permanent save context, kept in regular save files
-typedef struct {
-    /* 0x0000 */ u32 entranceIndex; // bits 0-3 : offset; 4-8: spawn index; 9-15: scene index
-    /* 0x0004 */ UNK_TYPE1 pad4[0x3];
-    /* 0x0007 */ u8 linkAge;
-    /* 0x0008 */ s32 cutscene;
-    /* 0x000C */ u16 time;
-    /* 0x000E */ UNK_TYPE1 padE[0x2];
-    /* 0x0010 */ u32 isNight;
-    /* 0x0014 */ u32 unk14;
-    /* 0x0018 */ u32 day;
-    /* 0x001C */ u32 daysElapsed;
-    /* 0x0020 */ u8 unk20;
-    /* 0x0021 */ UNK_TYPE1 pad21[0x2];
-    /* 0x0023 */ u8 owlSave;
-    /* 0x0024 */ SaveContext_struct1 unk24;
-    /* 0x004C */ SaveContext_struct2 unk4C;
-    /* 0x006E */ UNK_TYPE1 pad6E[0x2];
-    /* 0x0070 */ SaveContextInventory inv;
-    /* 0x00F8 */ PermanentSceneFlags sceneFlags[120];
-    /* 0x0E18 */ UNK_TYPE1 padE18[0x60];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
-    /* 0x0E80 */ UNK_TYPE1 padE80[0x5C];
-    /* 0x0EDC */ u32 bankRupees;
-    /* 0x0EE0 */ UNK_TYPE1 padEE0[0x18];
-    /* 0x0EF8 */ u8 weekEventReg[100];
-    /* 0x0F5C */ u32 mapsVisited;
-    /* 0x0F60 */ UNK_TYPE1 padF60[0x8C];
-    /* 0x0FEC */ u8 lotteryCodes[9];
-    /* 0x0FF5 */ u8 spiderHouseMaskOrder[6];
-    /* 0x0FFB */ u8 bomberCode[5];
-    /* 0x1000 */ UNK_TYPE1 pad1000[0xA];
-    /* 0x100A */ u16 checksum;
-} SaveContextPerm; // size = 0x100C
 
 typedef struct {
     /* 0x00 */ Vec3f focalPointChange;
@@ -738,11 +633,14 @@ typedef struct {
     /* 0x21C */ f32 unk21C;
     /* 0x220 */ f32 unk220;
     /* 0x224 */ UNK_TYPE1 pad224[0xAC];
-} GlobalContext16D30; // size = 0x2D0
+} PauseContext; // size = 0x2D0
 
 typedef struct {
     /* 0x000 */ View view;
-    /* 0x168 */ UNK_TYPE1 pad168[0xBE];
+    /* 0x168 */ char unk_168[0xB4];
+    /* 0x21C */ s16 unk_21C;
+    /* 0x21E */ s16 unk_21E;
+    /* 0x220 */ char unk_220[6];
     /* 0x226 */ s16 lifeColorChange;
     /* 0x228 */ s16 lifeColorChangeDirection;
     /* 0x22A */ s16 unk22A;
@@ -767,15 +665,15 @@ typedef struct {
     /* 0x250 */ s16 unk250;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
-    /* 0x256 */ UNK_TYPE1 pad256[0x06];
+    /* 0x256 */ char unk_256[0x06];
     /* 0x25C */ u16 unk25C;
-    /* 0x25E */ UNK_TYPE1 pad25E[0x12];
+    /* 0x25E */ char unk_25E[0x12];
     /* 0x270 */ s16 lifeAlpha;
-    /* 0x272 */ UNK_TYPE1 pad272[0xD6];
-} 
-InterfaceContext; // size = 0x348
+    /* 0x272 */ char unk_272[0xD6];
+} InterfaceContext; // size = 0x348
 
-typedef struct {
+// us rev 1: 803FDB24
+typedef struct KankyoContext {
     /* 0x00 */ UNK_TYPE1 unk0;
     /* 0x01 */ UNK_TYPE1 unk1;
     /* 0x02 */ u16 unk2;
@@ -921,14 +819,14 @@ typedef struct {
     /* 0xE0 */ u8 unkE0;
     /* 0xE1 */ UNK_TYPE1 unkE1;
     /* 0xE2 */ s8 unkE2;
-    /* 0xE3 */ UNK_TYPE1 unkE3;
+    /* 0xE3 */ u8 unkE3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ UNK_TYPE1 unkE4;
     /* 0xE5 */ UNK_TYPE1 unkE5;
     /* 0xE6 */ UNK_TYPE1 unkE6;
     /* 0xE7 */ UNK_TYPE1 unkE7;
     /* 0xE8 */ UNK_TYPE1 unkE8;
     /* 0xE9 */ UNK_TYPE1 unkE9;
-    /* 0xEA */ UNK_TYPE1 unkEA;
+    /* 0xEA */ u8 unkEA;
     /* 0xEB */ UNK_TYPE1 unkEB;
     /* 0xEC */ UNK_TYPE1 unkEC;
     /* 0xED */ UNK_TYPE1 unkED;
@@ -936,7 +834,7 @@ typedef struct {
     /* 0xEF */ UNK_TYPE1 unkEF;
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
-    /* 0xF2 */ u8 unkF2[0xC];
+    /* 0xF2 */ u8 unkF2[0xC]; // F2-F6 are used by weather tag
 } KankyoContext; // size = 0xFE
 
 typedef struct {
@@ -1024,13 +922,15 @@ typedef struct {
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F11 */ UNK_TYPE1 pad11F11[0xD];
+    /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
     /* 0x11F22 */ u8 unk11F22;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
-    /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ u8 unk12021;
-    /* 0x12022 */ u8 choiceIndex;
-    /* 0x12023 */ UNK_TYPE1 pad12023[0x21];
+    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFE];
+    /* 0x12021 */ u8 choiceIndex;
+    /* 0x12022 */ UNK_TYPE1 unk12022;
+    /* 0x12023 */ s8 unk12023;
+    /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
+    /* 0x1202A */ u16 unk1202A;
+    /* 0x1202C */ UNK_TYPE1 pad1202C[0x18];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
@@ -1040,13 +940,6 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
 } MessageContext; // size = 0x120D8
-
-// Full save context
-typedef struct {
-    /* 0x0000 */ SaveContextPerm perm;
-    /* 0x100C */ SaveContextOwl owl;
-    /* 0x3CA0 */ SaveContextExtra extra;
-} SaveContext; // size = 0x48C8
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
@@ -1120,7 +1013,7 @@ typedef struct {
 
 typedef struct FileChooseContext FileChooseContext;
 
-typedef void(*filechoose_update_func)(FileChooseContext* ctxt);
+typedef void(*filechoose_update_func)(FileChooseContext* globalCtx);
 
 typedef struct FireObj FireObj;
 
@@ -1268,17 +1161,17 @@ typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, 
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
 typedef struct {
-    /* 0x0 */ GlobalContext* ctxt;
+    /* 0x0 */ GlobalContext* globalCtx;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
 } Quake2Context; // size = 0xC
 
-typedef void(*cutscene_update_func)(GlobalContext* ctxt, CutsceneContext* cCtxt);
+typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
-typedef void(*draw_func)(GlobalContext* ctxt, s16 index);
+typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
-typedef void(*room_draw_func)(GlobalContext* ctxt, Room* room, u32 flags);
+typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1450,8 +1343,8 @@ struct Camera {
     /* 0x080 */ f32 unk80;
     /* 0x084 */ f32 unk84;
     /* 0x088 */ f32 unk88;
-    /* 0x08C */ GlobalContext* ctxt;
-    /* 0x090 */ ActorPlayer* player;
+    /* 0x08C */ GlobalContext* globalCtx;
+    /* 0x090 */ Player* player;
     /* 0x094 */ PosRot unk94;
     /* 0x0A8 */ Actor* unkA8;
     /* 0x0AC */ Vec3f unkAC;
@@ -1554,12 +1447,12 @@ struct TargetContext {
 }; // size = 0x98
 
 struct s800B948C {
-    /* 0x00 */ GlobalContext* ctxt;
+    /* 0x00 */ GlobalContext* globalCtx;
     /* 0x04 */ Actor* actor;
     /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
-    /* 0x14 */ ActorPlayer* player;
+    /* 0x14 */ Player* player;
     /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
 }; // size = 0x1C
 
@@ -1590,7 +1483,7 @@ struct ActorContext {
     /* 0x1FC */ Vec3f unk1FC;
     /* 0x208 */ UNK_TYPE1 pad208[0x48];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ UNK_TYPE1 pad254[0x14];
+    /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284
@@ -1617,7 +1510,7 @@ struct GlobalContext {
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
     /* 0x01F74 */ CutsceneEntry* cutsceneList;
-    /* 0x01F78 */ GlobalContext1F78 unk1F78[16];
+    /* 0x01F78 */ SoundSource soundSources[16];
     /* 0x02138 */ EffFootmark footmarks[100];
     /* 0x046B8 */ SramContext sram;
     /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
@@ -1625,7 +1518,7 @@ struct GlobalContext {
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
-    /* 0x16D30 */ GlobalContext16D30 unk16D30;
+    /* 0x16D30 */ PauseContext pauseCtx;
     /* 0x17000 */ u16 unk17000;
     /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
     /* 0x17004 */ KankyoContext kankyoContext;
@@ -1633,7 +1526,16 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomContext;
     /* 0x18760 */ TransitionContext transitionCtx;
-    /* 0x18768 */ UNK_TYPE1 pad18768[0x48];
+    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
+    /* 0x18770 */ UNK_TYPE1 pad18770[0x8];
+    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
+    /* 0x1877C */ s32 (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
+    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
+    /* 0x18788 */ UNK_TYPE1 pad18788[0x10];
+    /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
+    /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
     /* 0x187B0 */ MtxF unk187B0;
     /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
     /* 0x187FC */ MtxF unk187FC;
@@ -1651,7 +1553,7 @@ struct GlobalContext {
     /* 0x18858 */ UNK_PTR unk18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
-    /* 0x18864 */ void* setupPathList;
+    /* 0x18864 */ Path* setupPathList;
     /* 0x18868 */ UNK_PTR unk18868;
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
@@ -1682,6 +1584,19 @@ typedef struct {
     /* 0x0C */ s32 unkC;
     /* 0x10 */ s32 unk10;
 } struct_801C5F44; // size = 0x14
+
+// From OoT's struct_80034A14_arg1
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3s unk_08;
+    /* 0x0E */ Vec3s unk_0E;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
+    /* 0x24 */ s16 unk_24;
+} struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
     /* 0x000 */ Actor base;

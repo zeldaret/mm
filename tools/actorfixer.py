@@ -6,6 +6,12 @@ import argparse
 # "old": "new"
 animdict ={
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
+    "atan_flip": "Math_Acot2F",
+    "atans": "Math_Atan2S",
+    "Matrix_Pop": "SysMatrix_StatePop",
+    "Matrix_Push": "SysMatrix_StatePush",
+    "Matrix_Init": "SysMatrix_StateAlloc",
+    "Matrix_Put": "SysMatrix_SetCurrentState",
 }
 
 def replace_anim(file):

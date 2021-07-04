@@ -3,6 +3,8 @@
 
 #include <global.h>
 
+struct EnEncount2;
+
 typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 
 typedef struct EnEncount2Particle{
@@ -17,10 +19,8 @@ typedef struct EnEncount2Particle{
 
 } EnEncount2Particle; // size = 0x34
 
-struct EnEncount2;
-
 typedef struct EnEncount2 {
-    /* 0x0000 */ DynaPolyActor dynaActor;
+    /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ EnEncount2ActionFunc actionFunc;
     /* 0x0160 */ s16 deathTimer;
     /* 0x0162 */ s16 isPopped;
@@ -32,13 +32,13 @@ typedef struct EnEncount2 {
     /* 0x01D0 */ EnEncount2Particle particles[200];
 } EnEncount2; // size = 0x2A70
 
-#define GET_ENCOUNT2_SWITCH_FLAG(this)((s16) (this->dynaActor.actor.params & 0x7F))
+#define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))
 
 extern const ActorInit En_Encount2_InitVars;
 
 extern CollisionHeader D_06002420;
 
-extern s32 D_06000A00;
-extern s32 D_06000D78;
+extern Gfx D_06000A00[];
+extern Gfx D_06000D78[];
 
 #endif // Z_EN_ENCOUNT2_H

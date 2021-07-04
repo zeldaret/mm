@@ -26,13 +26,13 @@ void BgCheck_PolygonLinkedListNodeInsert(DynaSSNodeList* list, u16* head, s16* p
     *head = index;
 }
 
-void BgCheck_PolygonLinkedListInit(GlobalContext* ctxt, DynaSSNodeList* list) {
+void BgCheck_PolygonLinkedListInit(GlobalContext* globalCtx, DynaSSNodeList* list) {
     list->tbl = NULL;
     list->count = 0;
 }
 
-void BgCheck_PolygonLinkedListAlloc(GlobalContext* ctxt, DynaSSNodeList* list, u32 numNodes) {
-    list->tbl = (SSNode*)THA_AllocEndAlign(&ctxt->state.heap, numNodes << 2, 0xfffffffe);
+void BgCheck_PolygonLinkedListAlloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes) {
+    list->tbl = (SSNode*)THA_AllocEndAlign(&globalCtx->state.heap, numNodes << 2, 0xfffffffe);
     list->max = numNodes;
     list->count = 0;
 }
@@ -162,8 +162,8 @@ void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C40B4.asm")
 
-f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly* arg1, s32* arg2, Actor* actor, Vec3f* pos) {
-    return func_800C3D50(0, bgCtxt, 2, arg1, arg2, pos, actor, 28, 1.0f, 0);
+f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos) {
+    return func_800C3D50(0, colCtx, 2, arg1, arg2, pos, actor, 28, 1.0f, 0);
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800C4188.asm")
@@ -431,4 +431,3 @@ f32 func_800C411C(CollisionContext* bgCtxt, CollisionPoly* arg1, s32* arg2, Acto
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CA9D0.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_bgcheck/func_800CAA14.asm")
-

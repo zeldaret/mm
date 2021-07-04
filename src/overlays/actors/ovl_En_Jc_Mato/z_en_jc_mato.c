@@ -31,7 +31,7 @@ const ActorInit En_Jc_Mato_InitVars = {
     (ActorFunc)EnJcMato_Draw,
 };
 
-ColliderSphereInit sSphereInit = {
+static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -51,7 +51,7 @@ ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-DamageTable EnJcMatoDamageTable = {
+static DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0xF1, 0xF1, 0x01, 0x01,
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 };
@@ -60,9 +60,9 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
     this->collider.dim.worldSphere.center.y = this->pos.y;
     this->collider.dim.worldSphere.center.z = this->pos.z;
-    if ((this->collider.base.acFlags & 2) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->collider.base.acFlags &= 0xFFFD;
-        Audio_PlayActorSound2(&this->actor, 0x4807);
+    if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         globalCtx->interfaceCtx.unk25C = 1;
         this->hitFlag = 1;
         return 1;
@@ -100,7 +100,7 @@ void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitSphere(globalCtx, &this->collider);
     Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 0xF;
-    this->actor.colChkInfo.damageTable = &EnJcMatoDamageTable;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = 0;
     this->despawnTimer = 25;
@@ -117,7 +117,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    if (!(gSaveContext.owl.unk4 & 1)) {
+    if (!(gSaveContext.eventInf[4] & 1)) {
         EnJcMato_CheckForHit(this, globalCtx);
     }
 }

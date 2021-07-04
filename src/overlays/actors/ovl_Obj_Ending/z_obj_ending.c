@@ -17,7 +17,7 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Init,
     (ActorFunc)func_800BDFB0,
     (ActorFunc)ObjEnding_Update,
-    (ActorFunc)ObjEnding_Draw
+    (ActorFunc)ObjEnding_Draw,
 };
 
 extern Gfx D_060003D0[];
@@ -35,9 +35,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
+void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
-    AnimatedMaterial *texture;
+    AnimatedMaterial* texture;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->graphics = &D_80C25CE0[this->actor.params];
@@ -49,7 +49,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext *globalCtx) {
     }
 }
 
-void ObjEnding_Update(Actor *thisx, GlobalContext *globalCtx) {
+void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {

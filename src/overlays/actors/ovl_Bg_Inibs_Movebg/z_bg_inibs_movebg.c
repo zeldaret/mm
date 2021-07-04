@@ -18,7 +18,7 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Init,
     (ActorFunc)BgInibsMovebg_Destroy,
     (ActorFunc)func_800BDFB0,
-    (ActorFunc)BgInibsMovebg_Draw
+    (ActorFunc)BgInibsMovebg_Draw,
 };
 */
 

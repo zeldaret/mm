@@ -18,21 +18,21 @@ const ActorInit Obj_Kepn_Koya_InitVars = {
     (ActorFunc)ObjKepnKoya_Init,
     (ActorFunc)ObjKepnKoya_Destroy,
     (ActorFunc)ObjKepnKoya_Update,
-    (ActorFunc)ObjKepnKoya_Draw
+    (ActorFunc)ObjKepnKoya_Draw,
 };
 
-static InitChainEntry D_80C07C40[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
 extern CollisionHeader D_0600805C;
-extern UNK_TYPE D_06003478;
+extern Gfx D_06003478[];
 
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, &D_80C07C40);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
@@ -51,5 +51,5 @@ void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06003478);
+    func_800BDFC0(globalCtx, D_06003478);
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -28,7 +28,7 @@ def get_c_file(directory):
 
 def find_build_command_line(c_file):
     rel_c_file = os.path.relpath(c_file, root_dir)
-    make_cmd = ["make", "rom_uncompressed.z64", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
+    make_cmd = ["make", "mm.us.rev1.rom_uncompressed.z64", "--always-make", "--dry-run", "--debug=j", "PERMUTER=1"]
     debug_output = (
         subprocess.check_output(make_cmd, cwd=root_dir).decode("utf-8").split("\n")
     )

@@ -19,7 +19,7 @@ const ActorInit En_Tk_InitVars = {
     (ActorFunc)EnTk_Init,
     (ActorFunc)EnTk_Destroy,
     (ActorFunc)EnTk_Update,
-    (ActorFunc)EnTk_Draw
+    (ActorFunc)EnTk_Draw,
 };
 */
 

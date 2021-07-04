@@ -24,7 +24,7 @@ const ActorInit En_Ending_Hero_InitVars = {
     (ActorFunc)EnEndingHero_Draw,
 };
 
-extern SkeletonHeader D_0600B0CC;
+extern FlexSkeletonHeader D_0600B0CC;
 extern AnimationHeader D_06000BE0;
 extern UNK_PTR D_06007350[];
 extern UNK_PTR D_06009590[];
@@ -72,7 +72,7 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
 static UNK_PTR D_80C1E970[] = { D_06007350, D_06009590, D_06009F90, D_0600A790, D_0600AB90 };

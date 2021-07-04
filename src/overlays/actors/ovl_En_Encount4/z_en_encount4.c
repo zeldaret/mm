@@ -18,7 +18,7 @@ const ActorInit En_Encount4_InitVars = {
     (ActorFunc)EnEncount4_Init,
     (ActorFunc)EnEncount4_Destroy,
     (ActorFunc)EnEncount4_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
 */
 

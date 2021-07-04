@@ -30,7 +30,7 @@ const ActorInit Dm_Ravine_InitVars = {
 
 void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmRavine* this = THIS;
-    u8 flag = gSaveContext.perm.weekEventReg[0];
+    u8 flag = gSaveContext.weekEventReg[0];
     if (((flag & 0x10) | cREG(0)) != 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -54,7 +54,7 @@ void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmRavine* this = THIS;
     RoomContext* roomCtx;
 
-    switch ((DmRavineState) this->state) {
+    switch ((DmRavineState)this->state) {
         case DM_RAVINE_STATE_INITIALIZED:
             return;
         case DM_RAVINE_STATE_ACTIVE:

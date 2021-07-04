@@ -1,28 +1,31 @@
 #include <ultra64.h>
 #include <global.h>
 
-void EffectSS_Init(GlobalContext* ctxt, s32 numEntries) {
+void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     u32 i;
-    EffectSs* iter;
-    ParticleOverlay* iter2;
+    EffectSs* effectsSs;
+    ParticleOverlay* overlay;
 
-    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&ctxt->state.heap, numEntries * sizeof(EffectSs));
+    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
-    for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
-        EffectSS_ResetEntry(iter);
+    for (effectsSs = &EffectSS2Info.data_table[0]; effectsSs < &EffectSS2Info.data_table[EffectSS2Info.size];
+         effectsSs++) {
+        EffectSS_ResetEntry(effectsSs);
     }
 
-    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS2_TYPE_LAST_LABEL; i++) {
-        (iter2++)->loadedRamAddr = 0;
+    overlay = &particleOverlayTable[0];
+    for (i = 0; i < EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+        overlay->loadedRamAddr = NULL;
+        overlay++;
     }
 }
 
-void EffectSS_Clear(GlobalContext* ctxt) {
+void EffectSS_Clear(GlobalContext* globalCtx) {
     u32 i;
-    EffectSs* iter;
-    ParticleOverlay* iter2;
+    EffectSs* effectsSs;
+    ParticleOverlay* overlay;
     void* addr;
 
     EffectSS2Info.data_table = NULL;
@@ -30,17 +33,20 @@ void EffectSS_Clear(GlobalContext* ctxt) {
     EffectSS2Info.size = 0;
 
     // This code is completely useless, as data_table was just set to NULL and size to 0
-    for (iter = EffectSS2Info.data_table; iter < EffectSS2Info.data_table + EffectSS2Info.size; iter++) {
-        EffectSS_Delete(iter);
+    for (effectsSs = EffectSS2Info.data_table; effectsSs < EffectSS2Info.data_table + EffectSS2Info.size; effectsSs++) {
+        EffectSS_Delete(effectsSs);
     }
 
     // Free memory from loaded particle overlays
-    for (i = 0, iter2 = particleOverlayTable; i != EFFECT_SS2_TYPE_LAST_LABEL; i++) {
-        addr = (void*)iter2->loadedRamAddr;
+    overlay = &particleOverlayTable[0];
+    for (i = 0; i < EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+        addr = overlay->loadedRamAddr;
         if (addr != NULL) {
             zelda_free(addr);
         }
-        (iter2++)->loadedRamAddr = 0;
+
+        overlay->loadedRamAddr = 0;
+        overlay++;
     }
 }
 
@@ -48,34 +54,26 @@ EffectSs* EffectSS_GetTable() {
     return EffectSS2Info.data_table;
 }
 
-void EffectSS_Delete(EffectSs* a0) {
-    if (a0->flags & 0x2) {
-        func_801A72CC((UNK_PTR)&a0->pos);
+void EffectSS_Delete(EffectSs* effectSs) {
+    if (effectSs->flags & 2) {
+        func_801A72CC(&effectSs->pos);
     }
 
-    if (a0->flags & 0x4) {
-        func_801A72CC((UNK_PTR)&a0->vec);
+    if (effectSs->flags & 4) {
+        func_801A72CC(&effectSs->vec);
     }
 
-    EffectSS_ResetEntry(a0);
+    EffectSS_ResetEntry(effectSs);
 }
 
 void EffectSS_ResetEntry(EffectSs* particle) {
     u32 i;
 
     particle->type = EFFECT_SS2_TYPE_LAST_LABEL;
-    particle->accel.z = 0;
-    particle->accel.y = 0;
-    particle->accel.x = 0;
-    particle->velocity.z = 0;
-    particle->velocity.y = 0;
-    particle->velocity.x = 0;
-    particle->vec.z = 0;
-    particle->vec.y = 0;
-    particle->vec.x = 0;
-    particle->pos.z = 0;
-    particle->pos.y = 0;
-    particle->pos.x = 0;
+    particle->accel.x = particle->accel.y = particle->accel.z = 0;
+    particle->velocity.x = particle->velocity.y = particle->velocity.z = 0;
+    particle->vec.x = particle->vec.y = particle->vec.z = 0;
+    particle->pos.x = particle->pos.y = particle->pos.z = 0;
     particle->life = -1;
     particle->flags = 0;
     particle->priority = 128;
@@ -84,134 +82,129 @@ void EffectSS_ResetEntry(EffectSs* particle) {
     particle->gfx = NULL;
     particle->actor = NULL;
 
-    for (i = 0; i != ARRAY_COUNT(particle->regs); i++) {
+    for (i = 0; i < ARRAY_COUNT(particle->regs); i++) {
         particle->regs[i] = 0;
     }
 }
 
-// XXX Some regalloc differences and instruction ordering
-#ifdef NON_MATCHING
-s32 EffectSS_FindFreeSpace(u32 priority, u32* tableEntry) {
-    s32 ret = 0;
+s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
+    s32 foundFree;
     s32 i;
 
-    if (EffectSS2Info.size <= EffectSS2Info.searchIndex) {
+    if (EffectSS2Info.searchIndex >= EffectSS2Info.size) {
         EffectSS2Info.searchIndex = 0;
     }
 
     // Search for a unused entry
-    for (i = EffectSS2Info.searchIndex;;) {
+    i = EffectSS2Info.searchIndex;
+    foundFree = false;
+    while (true) {
         if (EffectSS2Info.data_table[i].life == -1) {
-            ret = 1;
+            foundFree = true;
             break;
         }
 
-        i += 1;
+        i++;
 
-        if (EffectSS2Info.size <= i) {
-            i = 0;
+        if (i >= EffectSS2Info.size) {
+            i = 0; // Loop around the whole table
         }
 
-        if (i == EffectSS2Info.searchIndex) break;
+        // After a full loop, break out
+        if (i == EffectSS2Info.searchIndex) {
+            break;
+        }
     }
 
-    if (ret == 1) {
-        ret = 0;
-    } else {
-        // If the entire table is full, look for a lower priority entry instead
-        for (;;) {
-            if (priority <= EffectSS2Info.data_table[i].priority &&
-                (priority != EffectSS2Info.data_table[i].priority || (EffectSS2Info.data_table[i].flags & 0x1) == 0)) {
-                ret = 0;
-                break;
-            }
+    if (foundFree == true) {
+        *tableEntry = i;
+        return false;
+    }
 
-            i += 1;
-
-            if (EffectSS2Info.size <= i) {
-                i = 0;
-            }
-
-            if (i == EffectSS2Info.searchIndex) {
-                ret = 1;
-                return ret;
-            }
+    // If all slots are in use, search for a slot with a lower priority
+    // Note that a lower priority is representend by a higher value
+    i = EffectSS2Info.searchIndex;
+    while (true) {
+        // Equal priority should only be considered "lower" if flag 0 is set
+        if ((priority <= EffectSS2Info.data_table[i].priority) &&
+            !((priority == EffectSS2Info.data_table[i].priority) && (EffectSS2Info.data_table[i].flags & 1))) {
+            break;
         }
 
+        i++;
+
+        if (i >= EffectSS2Info.size) {
+            i = 0; // Loop around the whole table
+        }
+
+        // After a full loop, return 1 to indicate that we failed to find a suitable slot
+        if (i == EffectSS2Info.searchIndex) {
+            return true;
+        }
     }
 
     *tableEntry = i;
-
-    return ret;
+    return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSS_FindFreeSpace.asm")
-#endif
 
-void EffectSS_Copy(GlobalContext* ctxt, EffectSs* a1) {
-    u32 index;
-    if (func_8016A01C(ctxt) != 1) {
-        if (EffectSS_FindFreeSpace(a1->priority, &index) == 0) {
+void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
+    s32 index;
+
+    if (FrameAdvance_IsEnabled(globalCtx) != true) {
+        if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
             EffectSS2Info.searchIndex = index + 1;
-            EffectSS2Info.data_table[index] = *a1;
+            EffectSS2Info.data_table[index] = *effectsSs;
         }
     }
 }
 
-#ifdef NON_MATCHING
-void EffectSs_Spawn(GlobalContext* ctxt, s32 type, s32 priority, void* initData) {
-    u32 index;
-    u32 initRet;
+void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* initData) {
+    s32 index;
     u32 overlaySize;
-    ParticleOverlayInfo* overlayInfo;
     ParticleOverlay* entry = &particleOverlayTable[type];
+    ParticleOverlayInfo* overlayInfo;
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
+        // Abort because we couldn't find a suitable slot to add this effect in
         return;
     }
 
     EffectSS2Info.searchIndex = index + 1;
-    if (entry->vramStart == 0) {
+    overlaySize = (u32)entry->vramEnd - (u32)entry->vramStart;
+
+    if (entry->vramStart == NULL) {
         overlayInfo = entry->overlayInfo;
     } else {
-        // XXX this subtraction is done earlier
-        overlaySize = entry->vramEnd - entry->vramStart;
-        if (entry->loadedRamAddr == 0) {
-            entry->loadedRamAddr = (u32)zelda_mallocR(overlaySize);
+        if (entry->loadedRamAddr == NULL) {
+            entry->loadedRamAddr = zelda_mallocR(overlaySize);
 
-            if (entry->loadedRamAddr == 0) {
+            if (entry->loadedRamAddr == NULL) {
                 return;
             }
 
-            load_and_relocate_overlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
+            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        // XXX this should use a0, but it doesn't
-        if (entry->overlayInfo != NULL) {
-            overlayInfo = (ParticleOverlayInfo*)(-(entry->vramStart - entry->loadedRamAddr) + (u32)entry->overlayInfo);
-        } else {
-            overlayInfo = NULL;
-        }
+        overlayInfo = (void*)(u32)(
+            entry->overlayInfo != NULL
+                ? (ParticleOverlayInfo*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) + (u32)entry->overlayInfo)
+                : NULL);
     }
 
-    if (overlayInfo->init != 0) {
+    if (overlayInfo->init != NULL) {
+        // Delete the previous effect in the slot, in case the slot wasn't free
         EffectSS_Delete(&EffectSS2Info.data_table[index]);
 
         EffectSS2Info.data_table[index].type = type;
         EffectSS2Info.data_table[index].priority = priority;
 
-        initRet = (*overlayInfo->init)(ctxt, index, &EffectSS2Info.data_table[index], initData);
-
-        if (initRet == 0) {
+        if (overlayInfo->init(globalCtx, index, &EffectSS2Info.data_table[index], initData) == 0) {
             EffectSS_ResetEntry(&EffectSS2Info.data_table[index]);
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/EffectSs_Spawn.asm")
-#endif
 
-void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
+void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
     EffectSs* particle = &EffectSS2Info.data_table[index];
 
     if (particle->update != NULL) {
@@ -223,11 +216,11 @@ void EffectSS_UpdateParticle(GlobalContext* ctxt, s32 index) {
         particle->pos.y += particle->velocity.y;
         particle->pos.z += particle->velocity.z;
 
-        (*particle->update)(ctxt, index, particle);
+        particle->update(globalCtx, index, particle);
     }
 }
 
-void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
+void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < EffectSS2Info.size; i++) {
@@ -240,64 +233,48 @@ void EffectSS_UpdateAllParticles(GlobalContext* ctxt) {
         }
 
         if (EffectSS2Info.data_table[i].life > -1) {
-            EffectSS_UpdateParticle(ctxt, i);
+            EffectSS_UpdateParticle(globalCtx, i);
         }
     }
 }
 
-void EffectSS_DrawParticle(GlobalContext* ctxt, s32 index) {
+void EffectSS_DrawParticle(GlobalContext* globalCtx, s32 index) {
     EffectSs* entry = &EffectSS2Info.data_table[index];
-    if (entry->draw != 0) {
-        (*entry->draw)(ctxt, index, entry);
+
+    if (entry->draw != NULL) {
+        entry->draw(globalCtx, index, entry);
     }
 }
 
-void EffectSS_DrawAllParticles(GlobalContext* ctxt) {
-    Lights* s0;
+void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
+    Lights* lights = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
     s32 i;
 
-    s0 = LightContext_NewLights(&ctxt->lightCtx, ctxt->state.gfxCtx);
-    Lights_BindAll(s0, ctxt->lightCtx.listHead, 0, ctxt);
-    Lights_Draw(s0, ctxt->state.gfxCtx);
+    Lights_BindAll(lights, globalCtx->lightCtx.listHead, NULL, globalCtx);
+    Lights_Draw(lights, globalCtx->state.gfxCtx);
 
     for (i = 0; i < EffectSS2Info.size; i++) {
         if (EffectSS2Info.data_table[i].life > -1) {
-            if (EffectSS2Info.data_table[i].pos.x > 32000 ||
-                EffectSS2Info.data_table[i].pos.x < -32000 ||
-                EffectSS2Info.data_table[i].pos.y > 32000 ||
-                EffectSS2Info.data_table[i].pos.y < -32000 ||
-                EffectSS2Info.data_table[i].pos.z > 32000 ||
-                EffectSS2Info.data_table[i].pos.z < -32000
-            ) {
+            if ((EffectSS2Info.data_table[i].pos.x > 32000.0f) || (EffectSS2Info.data_table[i].pos.x < -32000.0f) ||
+                (EffectSS2Info.data_table[i].pos.y > 32000.0f) || (EffectSS2Info.data_table[i].pos.y < -32000.0f) ||
+                (EffectSS2Info.data_table[i].pos.z > 32000.0f) || (EffectSS2Info.data_table[i].pos.z < -32000.0f)) {
                 EffectSS_Delete(&EffectSS2Info.data_table[i]);
             } else {
-                EffectSS_DrawParticle(ctxt, i);
+                EffectSS_DrawParticle(globalCtx, i);
             }
         }
     }
 }
 
-#ifdef NON_MATCHING
-s16 func_800B096C(s16 a0, s16 a1, s32 a2) {
-    s16 ret;
-
-    if (a2 == 0) {
-        ret = a1;
-    } else {
-        // XXX result of the division is put in t0 instead of t8
-        ret = a0 + (s16)((a1 - a0) / (f32)a2);
-    }
-
+s16 func_800B096C(s16 arg0, s16 arg1, s32 arg2) {
+    s16 ret = (arg2 == 0) ? arg1 : arg0 + (s32)((arg1 - arg0) / (f32)arg2);
     return ret;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite/func_800B096C.asm")
-#endif
 
-s16 func_800B09D0(s16 a0, s16 a1, f32 a2) {
-    return a2 * (a1 - a0) + a0;
+s16 func_800B09D0(s16 arg0, s16 arg1, f32 arg2) {
+    return arg2 * (arg1 - arg0) + arg0;
 }
 
-u8 func_800B0A24(u8 a0, u8 a1, f32 a2) {
-    return a2 * ((f32)a1 - (f32)a0) + a0;
+u8 func_800B0A24(u8 arg0, u8 arg1, f32 arg2) {
+    return arg2 * ((f32)arg1 - (f32)arg0) + arg0;
 }
