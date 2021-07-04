@@ -64,8 +64,7 @@ void func_8016FF70(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
     func_8016FDB8(this, gfxp, buf, bufSave, false);
 }
 
-void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB,
-                   s32 envA) {
+void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
