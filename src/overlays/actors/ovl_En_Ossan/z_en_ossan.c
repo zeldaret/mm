@@ -1,4 +1,9 @@
-/* trading post shopkeepers*/
+/*
+ * File: z_en_ossan.c
+ * Overlay: Ovl_En_Ossan
+ * Description: Trading Post Shop
+ */
+
 
 #include "z_en_ossan.h"
 
