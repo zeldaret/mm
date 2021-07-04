@@ -375,8 +375,8 @@ void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->kankyoContext.unk15 = cmd->skyboxDisables.unk4;
-    globalCtx->kankyoContext.unk16 = cmd->skyboxDisables.unk5;
+    globalCtx->kankyoContext.skyboxDisabled = cmd->skyboxDisables.unk4;
+    globalCtx->kankyoContext.sunMoonDisabled = cmd->skyboxDisables.unk5;
 }
 
 // Scene Header Command 0x10: Time Settings

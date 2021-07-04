@@ -674,8 +674,8 @@ typedef struct KankyoContext {
     /* 0x12 */ UNK_TYPE1 unk12;
     /* 0x13 */ UNK_TYPE1 unk13;
     /* 0x14 */ UNK_TYPE1 unk14;
-    /* 0x15 */ u8 unk15;
-    /* 0x16 */ u8 unk16;
+    /* 0x15 */ u8 skyboxDisabled;
+    /* 0x16 */ u8 sunMoonDisabled;
     /* 0x17 */ u8 unk17;
     /* 0x18 */ u8 unk18;
     /* 0x19 */ UNK_TYPE1 unk19;
