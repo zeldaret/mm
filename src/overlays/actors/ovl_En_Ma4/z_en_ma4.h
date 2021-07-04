@@ -14,13 +14,13 @@ typedef struct EnMa4 {
     /* 0x188 */ EnMa4ActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
-    /* 0x200 */ Vec3s* unk_200;
+    /* 0x200 */ Vec3s* pathPoints;
     /* 0x204 */ Vec3s limbDrawTable[MA1_LIMB_MAX];
     /* 0x28E */ char unk28E[0x6];
     /* 0x294 */ Vec3s transitionDrawTable[MA1_LIMB_MAX];
     /* 0x31E */ char unk31E[0x6];
-    /* 0x324 */ s16 unk_324; // currentPath?
-    /* 0x326 */ s16 unk_326; // pathPointsCount
+    /* 0x324 */ s16 pathIndex;
+    /* 0x326 */ s16 pathPointsCount;
     /* 0x328 */ char unk_328[0x2]; // unused
     /* 0x32A */ s16 blinkTimer;
     /* 0x33C */ s16 overrideEyeTexIndex;
@@ -29,8 +29,8 @@ typedef struct EnMa4 {
     /* 0x332 */ s16 unk_332; // type?
     /* 0x334 */ u16 unk_334; // set but not used
     /* 0x336 */ s16 unk_336; // type2?
-    /* 0x338 */ s16 unk_338; // modified by EnPoFusen
-    /* 0x33A */ s16 unk_33A;
+    /* 0x338 */ s16 poppedBalloonCounter; // modified by EnPoFusen
+    /* 0x33A */ s16 hasBow;
     /* 0x33C */ s16 unk_33C;
     /* 0x33E */ u16 textId;
 } EnMa4; // size = 0x340
