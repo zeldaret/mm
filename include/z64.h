@@ -160,6 +160,7 @@ typedef struct {
     /* 0x12 */ u16 unk12;
     /* 0x14 */ UNK_TYPE1 pad14[0x14];
     /* 0x28 */ CsCmdActorAction* actorActions[10];
+    /* 0x50 */ CutsceneEntry* cutsceneList;
 } CutsceneContext; // size = 0x50
 
 typedef struct {
@@ -326,13 +327,17 @@ typedef struct {
 } ShrinkWindowContext; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x4];
-    /* 0x04 */ void* savefile;
-    /* 0x08 */ UNK_TYPE1 pad8[0x4];
-    /* 0x0C */ s16 unkC;
-    /* 0x0E */ UNK_TYPE1 padE[0xA];
-    /* 0x18 */ OSTime unk18;
-} SramContext; // size = 0x20
+    /* 0x0 */ u8* readBuff;
+    /* 0x4 */ u32* flashReadBuff;
+    /* 0x8 */ char unk_08[4];
+    /* 0xC */ s16 status;
+    /* 0x10 */ u32 curPage;
+    /* 0x14 */ u32 numPages;
+    /* 0x18 */ OSTime unk_18;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+} SramContext; // size = 0x26
 
 typedef struct {
     /* 0x00 */ UNK_TYPE4 unk0;
@@ -1076,18 +1081,17 @@ struct PreNMIContext {
 
 struct TitleContext {
     /* 0x000 */ GameState state;
-    /* 0x0A4 */ u8* nintendo_logo_data;
+    /* 0x0A4 */ u8* staticSegment;
     /* 0x0A8 */ View view;
-    /* 0x210 */ SramContext sram;
-    /* 0x230 */ UNK_TYPE1 pad230[0x8];
-    /* 0x238 */ s16 unk238;
-    /* 0x23A */ s16 logoCoverAlpha;
-    /* 0x23C */ s16 logoCoverAlphaChangePerFrame;
-    /* 0x23E */ s16 logoFullVisibilityDuration;
-    /* 0x240 */ s16 frameCounter;
-    /* 0x242 */ UNK_TYPE2 frameCounterMod0x80;
-    /* 0x244 */ u8 switchToNextGameState;
-    /* 0x245 */ UNK_TYPE1 pad245[0x3];
+    /* 0x210 */ SramContext sramCtx;
+    /* 0x238 */ s16 mode;
+    /* 0x23A */ s16 timer;
+    /* 0x23C */ s16 coverAlpha;
+    /* 0x23E */ s16 addAlpha;
+    /* 0x240 */ s16 visibleDuration;
+    /* 0x242 */ s16 ult;
+    /* 0x244 */ s16 uls;
+    /* 0x246 */ u8 exit;
 }; // size = 0x248
 
 struct DaytelopContext {
@@ -1102,13 +1106,12 @@ struct DaytelopContext {
 }; // size = 0x248
 
 struct FileChooseContext {
-    /* 0x00000 */ GameState common;
+    /* 0x00000 */ GameState state;
     /* 0x000A4 */ UNK_TYPE1 padA4[0x14];
     /* 0x000B8 */ View view;
-    /* 0x00220 */ SramContext sram;
-    /* 0x00240 */ UNK_TYPE1 pad240[0x12310];
-    /* 0x12550 */ Font unk12550;
-    /* 0x1CBD0 */ UNK_TYPE1 pad1CBD0[0x78B0];
+    /* 0x00220 */ SramContext sramCtx;
+    /* 0x00248 */ SkyboxContext skyboxCtx;
+    /* 0x00470 */ char unk_470[0x24010‬];
     /* 0x24480 */ s16 unk24480;
     /* 0x24482 */ UNK_TYPE1 pad24482[0x2];
     /* 0x24484 */ s16 unk24484;
@@ -1488,32 +1491,39 @@ struct ActorContext {
     /* 0x269 */ UNK_TYPE1 pad269[0x1B];
 }; // size = 0x284
 
+typedef struct {
+    /* 0x00 */ u8   seqIndex;
+    /* 0x01 */ u8   nightSeqIndex;
+    /* 0x02 */ u8   unk_02;
+} SoundContext; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ s32 enabled;
+    /* 0x04 */ s32 timer;
+} FrameAdvanceContext; // size = 0x8
+
 struct GlobalContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
-    /* 0x000A6 */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
-    /* 0x000A7 */ UNK_TYPE1 padA7[0x9];
-    /* 0x000B0 */ SceneCmd* currentSceneVram;
+    /* 0x000A6 */ u8 sceneConfig;
+    /* 0x000A7 */ char unk_A7[0x9];
+    /* 0x000B0 */ void* sceneSegment;
     /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
     /* 0x000B8 */ View view;
-    /* 0x00220 */ Camera activeCameras[4];
+    /* 0x00220 */ Camera mainCamera;
+    /* 0x00398 */ Camera subCameras[3];
     /* 0x00800 */ Camera* cameraPtrs[4];
     /* 0x00810 */ s16 activeCamera;
-    /* 0x00812 */ s16 unk812;
-    /* 0x00814 */ u8 unk814;
-    /* 0x00815 */ u8 unk815;
-    /* 0x00816 */ UNK_TYPE1 pad816[0x2];
+    /* 0x00812 */ s16 nextCamera;
+    /* 0x00814 */ SoundContext soundCtx;
     /* 0x00818 */ LightContext lightCtx;
-    /* 0x00828 */ u32 unk828;
-    /* 0x0082C */ UNK_TYPE1 pad82C[0x4];
+    /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
-    /* 0x01F74 */ CutsceneEntry* cutsceneList;
     /* 0x01F78 */ SoundSource soundSources[16];
-    /* 0x02138 */ EffFootmark footmarks[100];
-    /* 0x046B8 */ SramContext sram;
-    /* 0x046D8 */ UNK_TYPE1 pad46D8[0x8];
+    /* 0x02138 */ EffFootmark footprintInfo[100];
+    /* 0x046B8 */ SramContext sramCtx;
     /* 0x046E0 */ SkyboxContext skyboxCtx;
     /* 0x04908 */ MessageContext msgCtx;
     /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];

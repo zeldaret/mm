@@ -447,8 +447,8 @@ void Scene_HeaderCmd09(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->unk814 = cmd->soundSettings.musicSeq;
-    globalCtx->unk815 = cmd->soundSettings.nighttimeSFX;
+    globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
+    globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
 
     if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
         audio_setBGM(cmd->soundSettings.bgmId);
@@ -479,7 +479,7 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
 // Scene Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->csCtx.cutsceneCount = (u8)cmd->base.data1;
-    globalCtx->cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
+    globalCtx->csCtx.cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
 }
 
 // Scene Header Command 0x1B: Actor Cutscene List
