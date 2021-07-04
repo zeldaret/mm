@@ -38,7 +38,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
     AnimatedMaterial* texture;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_ProcessInitChain(thisx, sInitChain);
     this->graphics = &sGraphics[thisx->params];
     texture = this->graphics->texture;
     if (texture != NULL) {
