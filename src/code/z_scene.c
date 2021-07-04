@@ -328,7 +328,7 @@ void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
 // Init function for the transition system.
-void Transition_Init(GameState* gamestate, DoorContext* doorCtx) {
+void Door_Init(GameState* state, DoorContext* doorCtx) {
     doorCtx->numActors = 0;
 }
 
