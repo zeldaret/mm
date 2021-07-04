@@ -77,7 +77,7 @@ void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, ActorPlayer* target) {
+void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
     target->unk_B80 = 30.0f;
     target->unk_B84 = this->actor.yawTowardsPlayer;
 }
@@ -102,12 +102,12 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
     BumperCollideInfo* collideInfo;
     s32 i;
 
-    if (this->collider.base.ocFlags2 & 1) {
+    if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *num = 0;
-        return &PLAYER->base;
+        return &PLAYER->actor;
     }
 
-    if (this->collider.base.ocFlags1 & 2) {
+    if (this->collider.base.ocFlags1 & OC2_UNK1) {
         for (collideActor = this->collider.base.oc, collideInfo = &sBumperCollideInfo[1], i = 1; i < 3;
              collideInfo++, i++) {
             if (collideInfo->id == collideActor->id) {
@@ -153,7 +153,7 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         Actor_SetScale(&this->actor, 0.1f);
 
-        if (this->collider.base.acFlags & 2) {
+        if (this->collider.base.acFlags & AC_HIT) {
             this->unk_194 = 30;
             this->unk_196 = 2;
             this->unk_198 = 0.033333335f;
@@ -167,9 +167,9 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    this->collider.base.acFlags &= ~2;
-    this->collider.base.ocFlags1 &= ~2;
-    this->collider.base.ocFlags2 &= ~1;
+    this->collider.base.acFlags &= ~AC_HIT;
+    this->collider.base.ocFlags1 &= ~OC1_HIT;
+    this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
 

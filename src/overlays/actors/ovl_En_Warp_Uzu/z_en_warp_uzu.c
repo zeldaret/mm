@@ -89,7 +89,7 @@ void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
 }
 
 void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
     s16 temp_v0;
     s16 phi_a0;
     s16 phi_v1;
@@ -99,8 +99,8 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             func_80A66384(this, globalCtx);
         } else {
-            phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->base) - this->actor.shape.rot.y));
-            temp_v0 = player->base.shape.rot.y - this->actor.shape.rot.y;
+            phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.shape.rot.y));
+            temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {

@@ -338,7 +338,7 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
             this->flags |= 1;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-               (func_8012403C(globalCtx) == 0xD)) {
+               (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
 }
@@ -580,7 +580,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) ||
                 ((this->actor.flags & 0x10000) == 0x10000)) &&
-               func_8012403C(globalCtx) == 0xD) {
+               Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }
 }
@@ -591,7 +591,7 @@ void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
