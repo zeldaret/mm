@@ -1529,7 +1529,7 @@ typedef struct {
     /* 0x00 */ u8   seqIndex;
     /* 0x01 */ u8   nightSeqIndex;
     /* 0x02 */ u8   unk_02;
-} SoundContext; // size = 0x4
+} SoundContext; // size = 0x3
 
 typedef struct {
     /* 0x00 */ s32 enabled;
