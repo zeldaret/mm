@@ -7,7 +7,7 @@
 #define SCENE_ENTRY_NONE() \
     { 0, 0, 0, 0, 0 }
 
-SceneTableEntry gSceneTable[] = {
+Scene gSceneTable[] = {
     SCENE_ENTRY(Z2_20SICHITAI2, 0x0116, SCENE_DRAW_CFG_MAT_ANIM),
     SCENE_ENTRY_NONE(),
     SCENE_ENTRY_NONE(),

@@ -682,7 +682,7 @@ typedef struct {
 } InterfaceContext; // size = 0x348
 
 // us rev 1: 803FDB24
-typedef struct KankyoContext {
+typedef struct EnvironmentContext {
     /* 0x00 */ UNK_TYPE1 unk0;
     /* 0x01 */ UNK_TYPE1 unk1;
     /* 0x02 */ u16 unk2;
@@ -844,7 +844,7 @@ typedef struct KankyoContext {
     /* 0xF0 */ UNK_TYPE1 unkF0;
     /* 0xF1 */ UNK_TYPE1 unkF1;
     /* 0xF2 */ u8 unkF2[0xC]; // F2-F6 are used by weather tag
-} KankyoContext; // size = 0xFE
+} EnvironmentContext; // size = 0xFE
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -902,7 +902,7 @@ typedef struct {
     /* 0x4C */ u8 unk_4C;
     /* 0x4D */ u8 unk_4D;
     /* 0x4E */ char unk_4E[2];
-} PreRenderContext; // size = 0x50
+} PreRender; // size = 0x50
 
 typedef struct {
     /* 0x00 */ void* timg;
@@ -947,8 +947,8 @@ typedef struct {
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x58];
-} MessageContext; // size = 0x120D8
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x60];
+} MessageContext; // size = 0x120E0
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
 
@@ -1506,13 +1506,17 @@ typedef struct {
     /* 0x04 */ s32 timer;
 } FrameAdvanceContext; // size = 0x8
 
+typedef struct {
+    /* 0x00 */ u16 state;
+} GameOverContext; // size = 0x02
+
 struct GlobalContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
     /* 0x000A6 */ u8 sceneConfig;
     /* 0x000A7 */ char unk_A7[0x9];
     /* 0x000B0 */ void* sceneSegment;
-    /* 0x000B4 */ UNK_TYPE1 padB4[0x4];
+    /* 0x000B4 */ char unk_B4[0x4];
     /* 0x000B8 */ View view;
     /* 0x00220 */ Camera mainCamera;
     /* 0x00398 */ Camera subCameras[3];
@@ -1530,65 +1534,66 @@ struct GlobalContext {
     /* 0x046B8 */ SramContext sramCtx;
     /* 0x046E0 */ SkyboxContext skyboxCtx;
     /* 0x04908 */ MessageContext msgCtx;
-    /* 0x169E0 */ UNK_TYPE1 pad169E0[0x8];
     /* 0x169E8 */ InterfaceContext interfaceCtx;
     /* 0x16D30 */ PauseContext pauseCtx;
-    /* 0x17000 */ u16 unk17000;
-    /* 0x17002 */ UNK_TYPE1 pad17002[0x2];
-    /* 0x17004 */ KankyoContext kankyoContext;
+    /* 0x17000 */ GameOverContext gameOverCtx;
+    /* 0x17004 */ EnvironmentContext envCtx;
     /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ ObjectContext objectCtx;
-    /* 0x186E0 */ RoomContext roomContext;
+    /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ TransitionContext transitionCtx;
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ UNK_TYPE1 pad18770[0x8];
+    /* 0x18770 */ void* unk_18770; //! @TODO: Determine function prototype
+    /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
     /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x1877C */ s32 (*func_1877C)(struct GlobalContext* globalCtx, Player* player, s32 arg2);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
-    /* 0x18788 */ UNK_TYPE1 pad18788[0x10];
-    /* 0x18798 */ void (*func_18798)(struct GlobalContext* globalCtx, void* arg1, s32 arg2);
-    /* 0x1879C */ UNK_TYPE1 pad1879C[0x14];
-    /* 0x187B0 */ MtxF unk187B0;
-    /* 0x187F0 */ UNK_TYPE1 pad187F0[0xC];
-    /* 0x187FC */ MtxF unk187FC;
-    /* 0x1883C */ UNK_TYPE1 pad1883C[0x4];
+    /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
+    /* 0x1878C */ void* unk_1878C; //! @TODO: Determine function prototype
+    /* 0x18790 */ void* unk_18790; //! @TODO: Determine function prototype
+    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
+    /* 0x1879C */ s16 unk_1879C[10];
+    /* 0x187B0 */ MtxF projectionMatrix;
+    /* 0x187F0 */ Vec3f unk_187F0;
+    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x1883C */ Mtx* unk_1883C;
     /* 0x18840 */ u32 gameplayFrames;
-    /* 0x18844 */ u8 unk18844;
-    /* 0x18845 */ u8 unk18845;
-    /* 0x18846 */ u16 sceneNumActorsToLoad;
-    /* 0x18848 */ u8 numRooms;
-    /* 0x18849 */ UNK_TYPE1 pad18849;
-    /* 0x1884A */ s16 unk1884A;
+    /* 0x18844 */ u8 unk_18844;
+    /* 0x18845 */ u8 unk_18845;
+    /* 0x18846 */ s16 nbSetupActors;
+    /* 0x18848 */ u8 nbRooms;
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
-    /* 0x18858 */ UNK_PTR unk18858;
+    /* 0x18858 */ void* unk_18858;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ UNK_PTR unk18868;
+    /* 0x18868 */ void* unk_18868;
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
-    /* 0x18870 */ UNK_TYPE1 pad18870[0x4];
-    /* 0x18874 */ u8 unk18874;
-    /* 0x18875 */ s8 unk18875;
-    /* 0x18876 */ UNK_TYPE1 pad18876[0x4];
+    /* 0x18870 */ void* specialEffects;
+    /* 0x18874 */ u8 skyboxId;
+    /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
+    /* 0x18876 */ s16 unk_18876;
+    /* 0x18878 */ s16 unk_18878;
     /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk1887C;
-    /* 0x1887D */ UNK_TYPE1 pad1887D[0x2];
-    /* 0x1887F */ u8 unk1887F;
-    /* 0x18880 */ UNK_TYPE1 pad18880[0x4];
-    /* 0x18884 */ CollisionCheckContext colCheckCtx;
-    /* 0x18B20 */ UNK_TYPE1 pad18B20[0x28];
+    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887D */ s8 unk_1887D;
+    /* 0x1887E */ s8 unk_1887E;
+    /* 0x1887F */ u8 unk_1887F;
+    /* 0x18880 */ u8 unk_18880;
+    /* 0x18884 */ CollisionCheckContext colChkCtx;
+    /* 0x18B20 */ u16 envFlags[20];
     /* 0x18B48 */ u8 curSpawn;
-    /* 0x18B49 */ UNK_TYPE1 pad18B49[0x1];
-    /* 0x18B4A */ u8 unk18B4A;
-    /* 0x18B4B */ char pad18B4B[1];
-    /* 0x18B4C */ PreRenderContext preRenderCtx;
+    /* 0x18B49 */ u8 unk_18B49;
+    /* 0x18B4A */ u8 unk_18B4A;
+    /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
-    /* 0x18E54 */ SceneTableEntry* currentSceneTableEntry;
-    /* 0x18E58 */ UNK_TYPE1 pad18E58[0x400];
+    /* 0x18E54 */ Scene* loadedScene;
+    /* 0x18E58 */ char unk_18E58[0x400];
 }; // size = 0x19258
 
 typedef struct {

@@ -118,7 +118,7 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
 }
 
 void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
-    if ((this->isDropCollected == 0) && (globalCtx->roomContext.currRoom.num != this->unk199)) {
+    if ((this->isDropCollected == 0) && (globalCtx->roomCtx.currRoom.num != this->unk199)) {
         this->isDropCollected = 1;
     }
 }
@@ -296,19 +296,19 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
 
         if ((this->actor.params >> 7) & 1) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer < 800.0f) {
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 func_80926318(this, globalCtx);
             }
         } else {
             if (this->actor.xzDistToPlayer < 800.0f) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
                 if (this->actor.xzDistToPlayer < 180.0f) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                     func_80926318(this, globalCtx);
                 }
             }
@@ -327,7 +327,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
 
     func_80926394(this, globalCtx);
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
-        this->actor.room = globalCtx->roomContext.currRoom.num;
+        this->actor.room = globalCtx->roomCtx.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
@@ -394,8 +394,8 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + D_8092738C);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
 }

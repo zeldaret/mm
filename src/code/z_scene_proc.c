@@ -673,20 +673,20 @@ void Scene_DrawConfig5(GlobalContext* globalCtx) {
     u32 dListIndex;
     u32 alpha;
 
-    if (globalCtx->roomContext.unk7A[0] != 0) {
+    if (globalCtx->roomCtx.unk7A[0] != 0) {
         dListIndex = 1;
-        alpha = globalCtx->roomContext.unk7A[1];
+        alpha = globalCtx->roomCtx.unk7A[1];
     } else {
         dListIndex = 0;
         alpha = 255;
     }
 
     if (alpha == 0) {
-        globalCtx->roomContext.unk78 = 0;
+        globalCtx->roomCtx.unk78 = 0;
     } else {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        globalCtx->roomContext.unk78 = 1;
+        globalCtx->roomCtx.unk78 = 1;
         AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
         Scene_SetRenderModeXlu(globalCtx, dListIndex, 3);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, alpha);
@@ -702,7 +702,7 @@ void Scene_DrawConfig5(GlobalContext* globalCtx) {
  * rather than always animating like `Scene_DrawConfigMatAnim`.
  */
 void Scene_DrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
-    AnimatedMat_DrawStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomContext.unk7A[0]);
+    AnimatedMat_DrawStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomCtx.unk7A[0]);
 }
 
 /**

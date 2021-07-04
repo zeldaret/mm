@@ -13,11 +13,11 @@ SetRoomList::SetRoomList(ZFile* nParent) : ZRoomCommand(nParent)
 void SetRoomList::ParseRawData()
 {
 	ZRoomCommand::ParseRawData();
-	int numRooms = cmdArg1;
+	int nbRooms = cmdArg1;
 
 	int32_t currentPtr = segmentOffset;
 
-	for (int32_t i = 0; i < numRooms; i++)
+	for (int32_t i = 0; i < nbRooms; i++)
 	{
 		RoomEntry entry(parent->GetRawData(), currentPtr);
 		rooms.push_back(entry);
@@ -25,7 +25,7 @@ void SetRoomList::ParseRawData()
 		currentPtr += 8;
 	}
 
-	zRoom->roomCount = numRooms;
+	zRoom->roomCount = nbRooms;
 }
 
 void SetRoomList::DeclareReferences(const std::string& prefix)

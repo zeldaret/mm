@@ -95,7 +95,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
     if (skyType == 1) {
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->kankyoContext.unk10 == 0) {
+        if (globalCtx->envCtx.unk10 == 0) {
             // Send a DMA request for the clear sky texture
             size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 
@@ -112,7 +112,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
         osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->kankyoContext.unk11 == 0) {
+        if (globalCtx->envCtx.unk11 == 0) {
             // Send a DMA request for the clear sky texture
             size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 

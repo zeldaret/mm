@@ -171,10 +171,10 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if (thisx->xzDistToPlayer < 2000.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 

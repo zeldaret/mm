@@ -173,14 +173,14 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x01: Actor List
 void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->sceneNumActorsToLoad = (u16)cmd->actorList.num;
+    globalCtx->nbSetupActors = (u16)cmd->actorList.num;
     globalCtx->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(cmd->actorList.segment);
     globalCtx->actorCtx.unkC = (u16)0;
 }
 
 // Scene Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->unk18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    globalCtx->unk_18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
 // Scene Header Command 0x03: Collision Header
@@ -210,7 +210,7 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x04: Room List
 void Scene_HeaderCmdRoomList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->numRooms = cmd->roomList.num;
+    globalCtx->nbRooms = cmd->roomList.num;
     globalCtx->roomList = (RomFile*)Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
@@ -233,23 +233,23 @@ void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
-        globalCtx->unk18868 = Play_LoadScene(globalCtx, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
+        globalCtx->unk_18868 = Play_LoadScene(globalCtx, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
     }
 }
 
 // Scene Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->roomContext.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    globalCtx->roomContext.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
-    globalCtx->roomContext.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
+    globalCtx->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
+    globalCtx->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    globalCtx->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     globalCtx->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
-    globalCtx->roomContext.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
-    globalCtx->kankyoContext.unkE2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
+    globalCtx->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
+    globalCtx->envCtx.unkE2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
 }
 
 // Scene Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->roomContext.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
+    globalCtx->roomCtx.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // Scene Header Command 0x0B:  Object List
@@ -334,8 +334,8 @@ void Transition_Init(GameState* gamestate, TransitionContext* transitionCtx) {
 
 // Scene Header Command 0x0F: Environment Light Settings List
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->kankyoContext.environmentSettingsCount = cmd->lightSettingList.num;
-    globalCtx->kankyoContext.environmentSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
+    globalCtx->envCtx.environmentSettingsCount = cmd->lightSettingList.num;
+    globalCtx->envCtx.environmentSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
 /**
@@ -358,8 +358,8 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     u32 size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
-        globalCtx->roomContext.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
-        return DmaMgr_SendRequest0(globalCtx->roomContext.unk74, vromStart, size);
+        globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
+        return DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
     }
 
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
@@ -367,16 +367,16 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
 
 // Scene Header Command 0x11: Skybox Settings
 void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->unk18874 = cmd->skyboxSettings.skyboxId & 3;
-    globalCtx->kankyoContext.unk17 = globalCtx->kankyoContext.unk18 = cmd->skyboxSettings.unk5;
-    globalCtx->kankyoContext.unk1E = cmd->skyboxSettings.unk6;
+    globalCtx->skyboxId = cmd->skyboxSettings.skyboxId & 3;
+    globalCtx->envCtx.unk17 = globalCtx->envCtx.unk18 = cmd->skyboxSettings.unk5;
+    globalCtx->envCtx.unk1E = cmd->skyboxSettings.unk6;
     Scene_LoadAreaTextures(globalCtx, cmd->skyboxSettings.data1);
 }
 
 // Scene Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->kankyoContext.unk15 = cmd->skyboxDisables.unk4;
-    globalCtx->kankyoContext.unk16 = cmd->skyboxDisables.unk5;
+    globalCtx->envCtx.unk15 = cmd->skyboxDisables.unk4;
+    globalCtx->envCtx.unk16 = cmd->skyboxDisables.unk5;
 }
 
 // Scene Header Command 0x10: Time Settings
@@ -389,27 +389,27 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     if (cmd->timeSettings.unk6 != 0xFF) {
-        globalCtx->kankyoContext.unk2 = cmd->timeSettings.unk6;
+        globalCtx->envCtx.unk2 = cmd->timeSettings.unk6;
     } else {
-        globalCtx->kankyoContext.unk2 = 0;
+        globalCtx->envCtx.unk2 = 0;
     }
 
-    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->kankyoContext.unk2 != 0)) {
-        globalCtx->kankyoContext.unk2 = 5;
+    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk2 != 0)) {
+        globalCtx->envCtx.unk2 = 5;
     }
 
     if (gSaveContext.unk_3F58 == 0) {
-        REG(15) = globalCtx->kankyoContext.unk2;
+        REG(15) = globalCtx->envCtx.unk2;
     }
 
     dayTime = gSaveContext.time;
-    globalCtx->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.time;
-    globalCtx->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
     dayTime = gSaveContext.time;
-    globalCtx->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
+    globalCtx->envCtx.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->kankyoContext.unk2 == 0 && gSaveContext.cutscene < 0xFFF0) {
+    if (globalCtx->envCtx.unk2 == 0 && gSaveContext.cutscene < 0xFFF0) {
         gSaveContext.environmentTime = gSaveContext.time;
 
         if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
@@ -430,10 +430,10 @@ void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
 
-    globalCtx->kankyoContext.windWest = temp1;
-    globalCtx->kankyoContext.windVertical = temp2;
-    globalCtx->kankyoContext.windSouth = temp3;
-    globalCtx->kankyoContext.windClothIntensity = cmd->windSettings.clothIntensity;
+    globalCtx->envCtx.windWest = temp1;
+    globalCtx->envCtx.windVertical = temp2;
+    globalCtx->envCtx.windSouth = temp3;
+    globalCtx->envCtx.windClothIntensity = cmd->windSettings.clothIntensity;
 }
 
 // Scene Header Command 0x13: Exit List
@@ -457,7 +457,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x16: Echo Setting
 void Scene_HeaderCmdEchoSetting(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->roomContext.currRoom.echo = cmd->echoSettings.echo;
+    globalCtx->roomCtx.currRoom.echo = cmd->echoSettings.echo;
 }
 
 // Scene Header Command 0x18: Alternate Header List=
@@ -539,7 +539,7 @@ void Scene_HeaderCmdAnimatedMaterials(GlobalContext* globalCtx, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(GlobalContext* globalCtx) {
-    globalCtx->unk1887F = Entrance_GetTransitionFlags(globalCtx->nextEntranceIndex) & 0x7F;
+    globalCtx->unk_1887F = Entrance_GetTransitionFlags(globalCtx->nextEntranceIndex) & 0x7F;
 }
 
 /**

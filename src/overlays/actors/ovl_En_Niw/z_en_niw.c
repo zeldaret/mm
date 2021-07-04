@@ -915,12 +915,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (!this->isStormActive) {
             if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
                 if (globalCtx) {}
 
                 if ((this->unknownState28E != 4) && (this->unknownState28E != 5)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 }
             }
         }
@@ -1039,7 +1039,7 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
             }
 
             SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_f(this->feathers[i].zRot, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
