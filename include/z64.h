@@ -635,7 +635,7 @@ typedef struct {
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
     /* 0x170 */ u8* unk_170;
-    /* 0x174 */ u8* unk_174;
+    /* 0x174 */ u8* unk_174;;
     /* 0x178 */ u8* unk_178;
     /* 0x17C */ u8* unk_17C;
     /* 0x180 */ Vtx* itemPageVtx;
@@ -649,7 +649,7 @@ typedef struct {
     /* 0x1A0 */ Vtx* unk_1A0;
     /* 0x1A4 */ Vtx* unk_1A4;
     /* 0x1A8 */ Vtx* cursorVtx;
-    /* 0x1AC */ OcarinaStaff* unk_1AC;
+    /* 0x1AC */ OcarinaStaff* ocarinaStaff;
     /* 0x1B0 */ DmaRequest unk_1B0;
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
@@ -709,7 +709,7 @@ typedef struct {
     /* 0x2B9 */ u8 unk_2B9;
     /* 0x2BA */ s16 unk_2BA;
     /* 0x2BC */ s16 unk_2BC;
-    /* 0x2BE */ s16 unk_2BE;
+    /* 0x2BE */ s16 unk_2BE[5];
     /* 0x2C8 */ u16 unk_2C8;
     /* 0x2CA */ s16 unk_2CA;
 } PauseContext; // size = 0x2D0
