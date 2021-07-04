@@ -206,7 +206,7 @@ s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
 
 s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
     if (!(gSaveContext.weekEventReg[53] & 8)) {
-        return CANBUY_RESULT_CANT_GET_NOW;
+        return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
@@ -222,10 +222,10 @@ s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
 
 s32 EnGirlA_CanBuyArrows(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_QUIVER) == 0) {
-        return CANBUY_RESULT_NO_ROOM_2;
+        return CANBUY_RESULT_CANNOT_GET_NOW_2;
     }
     if (AMMO(ITEM_BOW) >= CUR_CAPACITY(UPG_QUIVER)) {
-        return CANBUY_RESULT_NO_ROOM_3;
+        return CANBUY_RESULT_NO_ROOM_2;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
@@ -278,7 +278,7 @@ s32 EnGirlA_CanBuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
 
 s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) >= 2) {
-        return CANBUY_RESULT_CANT_GET_NOW;
+        return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
@@ -314,7 +314,7 @@ s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext* globalCtx, EnGirlA* this) {
 
 s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) == 0) {
-        return CANBUY_RESULT_CANT_GET_NOW;
+        return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (AMMO(ITEM_BOMBCHU) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
@@ -330,7 +330,7 @@ s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
 
 s32 EnGirlA_CanBuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) == 0) {
-        return CANBUY_RESULT_CANT_GET_NOW;
+        return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (AMMO(ITEM_BOMB) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
