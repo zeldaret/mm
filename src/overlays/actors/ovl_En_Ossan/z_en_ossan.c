@@ -44,7 +44,7 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_ResetItemPosition(EnOssan* this);
 void EnOssan_Blink(EnOssan* this);
-void EnOssan_InitCutscenes(EnOssan* this, GlobalContext* globalCtx);
+void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
@@ -1485,7 +1485,7 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
         this->textId = sWelcomeHumanTextIds[this->actor.params];
-        EnOssan_InitCutscenes(this, globalCtx);
+        EnOssan_GetCutscenes(this, globalCtx);
 
         this->cursorY = this->cursorX = 100.0f;
         this->cutSceneState = 0;
@@ -1551,7 +1551,7 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnOssan_InitCutscenes(EnOssan* this, GlobalContext* globalCtx) {
+void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx) {
     this->lookForwardCutscene = this->actor.cutscene;
     this->lookToLeftShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookForwardCutscene);
     this->lookToRightShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToLeftShelfCutscene);

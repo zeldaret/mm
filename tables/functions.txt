@@ -5821,7 +5821,7 @@
     0x808AAFB0:("EnOssan_GetWelcomePartTimeWorker",),
     0x808AB0B0:("EnOssan_SetHaveMet",),
     0x808AB16C:("EnOssan_InitialUpdate",),
-    0x808AB404:("EnOssan_InitCutscenes",),
+    0x808AB404:("EnOssan_GetCutscenes",),
     0x808AB458:("EnOssan_Update",),
     0x808AB52C:("EnOssan_DrawCursor",),
     0x808AB78C:("EnOssan_DrawTextRec",),
