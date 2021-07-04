@@ -292,7 +292,8 @@ void EnFirefly_FlyIdle(EnFirefly* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
     }
 
-    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f) &&
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
         EnFirefly_SetupDiveAttack(this);
     }
 }
