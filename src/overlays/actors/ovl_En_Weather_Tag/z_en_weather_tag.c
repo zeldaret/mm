@@ -186,11 +186,11 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     globalCtx->envCtx.windSpeed = (this->actor.world.rot.z * partialResult) + 30.0f;
     if (partialResult > 0.01f) {
-        globalCtx->envCtx.unkEA = 8;
+        globalCtx->envCtx.unk_EA = 8;
         D_801F4E30 = 0x9B;
-    } else if (globalCtx->envCtx.unkEA == 8) {
+    } else if (globalCtx->envCtx.unk_EA == 8) {
         D_801F4E30 = 0;
-        globalCtx->envCtx.unkEA = 9;
+        globalCtx->envCtx.unk_EA = 9;
     }
 }
 
@@ -437,16 +437,16 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
-        globalCtx->envCtx.unkEA = 6;
+        globalCtx->envCtx.unk_EA = 6;
         strength = 1.0f - (distance / range);
         if (0.8f < strength) {
             strength = 1.0f;
         }
         D_801F4E30 = (200.0f * strength);
     } else {
-        if (globalCtx->envCtx.unkEA == 6) {
+        if (globalCtx->envCtx.unk_EA == 6) {
             D_801F4E30 = 0;
-            globalCtx->envCtx.unkEA = 7;
+            globalCtx->envCtx.unk_EA = 7;
         }
     }
 
