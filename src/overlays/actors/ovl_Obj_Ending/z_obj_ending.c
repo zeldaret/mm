@@ -25,11 +25,7 @@ extern Gfx D_060031A0[];
 extern Gfx D_06003440[];
 extern AnimatedMaterial D_06001FF8;
 
-
-static ObjEndingGraphics D_80C25CE0[] = {
-    {D_06003440, D_060031A0, NULL},
-    {NULL, D_060003D0, &D_06001FF8}
-};
+static ObjEndingGraphics D_80C25CE0[] = { { D_06003440, D_060031A0, NULL }, { NULL, D_060003D0, &D_06001FF8 } };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
@@ -41,9 +37,10 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->graphics = &D_80C25CE0[this->actor.params];
-    if(false){}
+
+    if (1) {}
+
     texture = this->graphics->texture;
-    
     if (texture != NULL) {
         this->texture = (AnimatedMaterial*)Lib_SegmentedToVirtual(texture);
     }
@@ -52,10 +49,10 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void ObjEnding_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    ObjEnding *this = THIS;
-    Gfx *dl1;
-    Gfx *dl2;
+void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEnding* this = THIS;
+    Gfx* dl1;
+    Gfx* dl2;
 
     if (this->texture != NULL) {
         AnimatedMat_Draw(globalCtx, this->texture);
