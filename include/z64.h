@@ -165,7 +165,7 @@ typedef struct {
     /* 0x24 */ CsCmdActorAction* linkAction;
     /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* sceneCsList;
-} CutsceneContext; // size = 0x50
+} CutsceneContext; // size = 0x54
 
 typedef struct {
     /* 0x0 */ s16 x;
