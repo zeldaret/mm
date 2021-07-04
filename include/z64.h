@@ -720,18 +720,20 @@ typedef struct {
     /* 0x308 */ s16 unk_308;
     /* 0x30A */ s16 unk_30A;
     /* 0x30C */ s16 unk_30C;
-    /* 0x30E */ u8 unk_30E;
-    /* 0x30F */ u8 unk_30F;
-    /* 0x310 */ u8 unk_310;
-    /* 0x311 */ u8 unk_311;
-    /* 0x312 */ u8 unk_312;
-    /* 0x313 */ u8 unk_313;
-    /* 0x314 */ u8 unk_314;
-    /* 0x315 */ u8 unk_315;
-    /* 0x316 */ u8 unk_316;
-    /* 0x317 */ u8 unk_317;
-    /* 0x318 */ u8 unk_318;
-    /* 0x319 */ u8 unk_319;
+    struct {
+        /* 0x30E */ u8 unk_30E; // "h_gauge"
+        /* 0x30F */ u8 bButton;
+        /* 0x310 */ u8 aButton;
+        /* 0x311 */ u8 tradeItems;
+        /* 0x312 */ u8 unk_312;
+        /* 0x313 */ u8 unk_313;
+        /* 0x314 */ u8 unk_314;
+        /* 0x315 */ u8 songOfSoaring;
+        /* 0x316 */ u8 songOfStorms;
+        /* 0x317 */ u8 unk_317;
+        /* 0x318 */ u8 pictographBox;
+        /* 0x319 */ u8 all;     // "another"; enables all item restrictions
+    } restrictions; // size = 0xC
     /* 0x31A */ u8 unk_31A;
     /* 0x31B */ u8 unk_31B;
     /* 0x31C */ u8 unk_31C;
