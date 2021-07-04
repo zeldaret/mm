@@ -674,11 +674,10 @@ typedef struct {
     /* 0x230 */ s16 beatingHeartEnv[3];
     /* 0x236 */ s16 heartsPrimR[2];
     /* 0x23A */ s16 heartsPrimG[2];
-    /* 0x22E */ s16 heartsPrimB[2];
+    /* 0x23E */ s16 heartsPrimB[2];
     /* 0x242 */ s16 heartsEnvR[2];
     /* 0x246 */ s16 heartsEnvG[2];
     /* 0x24A */ s16 heartsEnvB[2];
-    /* 0x24C */ s16 unk_24C;
     /* 0x24E */ s16 unk_24E;
     /* 0x250 */ s16 unk_250;
     /* 0x252 */ s16 unk_252;
