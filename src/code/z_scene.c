@@ -478,8 +478,8 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // Scene Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->csCtx.cutsceneCount = (u8)cmd->base.data1;
-    globalCtx->csCtx.cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
+    globalCtx->csCtx.sceneCsCount = (u8)cmd->base.data1;
+    globalCtx->csCtx.sceneCsList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
 }
 
 // Scene Header Command 0x1B: Actor Cutscene List

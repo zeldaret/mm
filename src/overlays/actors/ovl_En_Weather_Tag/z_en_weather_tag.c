@@ -245,7 +245,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     CsCmdActorAction* tmpAction;
 
     if (func_800EE29C(globalCtx, 0x237) != 0) {
-        tmpAction = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x237)];
+        tmpAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x237)];
         if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->unk0 >= 2)) {
             switch (gSaveContext.day) {
                 case 0:

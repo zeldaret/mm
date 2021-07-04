@@ -705,7 +705,7 @@ s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx) {
 void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
-    action = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x20D)];
+    action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20D)];
     if (this->unk2B5 != action->unk0) {
         this->unk2B5 = action->unk0;
         if (this->unk2B5 != 4) {

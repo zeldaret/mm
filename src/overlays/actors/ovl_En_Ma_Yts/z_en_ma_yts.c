@@ -404,11 +404,11 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         actionIndex = func_800EE200(globalCtx, 0x78);
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80B8E32C) {
-                D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.npcActions[actionIndex]->unk0 != D_80B8E32C) {
+                D_80B8E32C = globalCtx->csCtx.npcActions[actionIndex]->unk0;
                 this->endCreditsFlag = 0;
-                switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
+                switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);

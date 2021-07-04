@@ -150,17 +150,21 @@ typedef struct {
 } CameraStateParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ u8 cutsceneCount;
-    /* 0x01 */ UNK_TYPE1 pad1[0x3];
-    /* 0x04 */ u8* segment;
-    /* 0x08 */ u8 state;
-    /* 0x09 */ UNK_TYPE1 pad9[0x3];
-    /* 0x0C */ f32 unkC;
-    /* 0x10 */ u16 frames;
-    /* 0x12 */ u16 unk12;
-    /* 0x14 */ UNK_TYPE1 pad14[0x14];
-    /* 0x28 */ CsCmdActorAction* actorActions[10];
-    /* 0x50 */ CutsceneEntry* cutsceneList;
+    /* 0x00 */ u8    sceneCsCount;
+    /* 0x04 */ void* segment;
+    /* 0x08 */ u8    state;
+    /* 0x0C */ f32   unk_0C;
+    /* 0x10 */ u16   frames;
+    /* 0x12 */ u16   unk_12;
+    /* 0x14 */ s32   unk_14;
+    /* 0x18 */ u16   unk_18;
+    /* 0x1A */ u8    unk_1A;
+    /* 0x1B */ u8    unk_1B;
+    /* 0x1C */ CutsceneCameraPoint* cameraFocus;
+    /* 0x20 */ CutsceneCameraPoint* cameraPosition;
+    /* 0x24 */ CsCmdActorAction* linkAction;
+    /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
+    /* 0x50 */ CutsceneEntry* sceneCsList;
 } CutsceneContext; // size = 0x50
 
 typedef struct {
@@ -1111,7 +1115,7 @@ struct FileChooseContext {
     /* 0x000B8 */ View view;
     /* 0x00220 */ SramContext sramCtx;
     /* 0x00248 */ SkyboxContext skyboxCtx;
-    /* 0x00470 */ char unk_470[0x24010‬];
+    /* 0x00470 */ char unk_470[0x24010];
     /* 0x24480 */ s16 unk24480;
     /* 0x24482 */ UNK_TYPE1 pad24482[0x2];
     /* 0x24484 */ s16 unk24484;
