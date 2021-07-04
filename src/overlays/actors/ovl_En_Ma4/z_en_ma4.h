@@ -26,15 +26,27 @@ typedef struct EnMa4 {
     /* 0x33C */ s16 overrideEyeTexIndex;
     /* 0x32E */ s16 eyeTexIndex;
     /* 0x330 */ s16 mouthTexIndex;
-    /* 0x332 */ s16 unk_332; // type?
+    /* 0x332 */ s16 type;
     /* 0x334 */ u16 unk_334; // set but not used
     /* 0x336 */ s16 unk_336; // type2?
     /* 0x338 */ s16 poppedBalloonCounter; // modified by EnPoFusen
     /* 0x33A */ s16 hasBow;
-    /* 0x33C */ s16 unk_33C;
+    /* 0x33C */ s16 unk_33C; // multipurpose (?)
     /* 0x33E */ u16 textId;
 } EnMa4; // size = 0x340
 
 extern const ActorInit En_Ma4_InitVars;
+
+typedef enum {
+    /* 0 */ MA4_TYPE_0,
+    /* 1 */ MA4_TYPE_1,
+    /* 2 */ MA4_TYPE_SITTING,
+} EnMa4Type;
+
+/**
+ * MA4_TYPE_0: 
+ * MA4_TYPE_1: 
+ * MA4_TYPE_SITTING: 
+ */
 
 #endif // Z_EN_MA4_H

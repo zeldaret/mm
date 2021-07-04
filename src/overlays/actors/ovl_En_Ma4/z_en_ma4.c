@@ -32,10 +32,10 @@ void func_80ABF218(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF254(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF2FC(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF354(EnMa4* this, GlobalContext* globalCtx);
-void EnMa4_SetupStartCutscene(EnMa4* this);
-void EnMa4_StartCutscene(EnMa4* this, GlobalContext* globalCtx);
-void func_80ABF51C(EnMa4* this);
-void func_80ABF534(EnMa4* this, GlobalContext* globalCtx);
+void EnMa4_SetupStartActorCutscene(EnMa4* this);
+void EnMa4_StartActorCutscene(EnMa4* this, GlobalContext* globalCtx);
+void EnMa4_SetupActorCutsceneHandler(EnMa4* this);
+void EnMa4_ActorCutsceneHandler(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF69C(EnMa4* this);
 void func_80ABF6B0(EnMa4* this, GlobalContext* globalCtx);
 void func_80ABF760(EnMa4* this);
@@ -149,7 +149,7 @@ void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
     if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
         flag = 1;
     } else {
-        flag = (this->unk_332 == 2 && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
+        flag = (this->type == MA4_TYPE_SITTING && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
     }
 
     this->unk_1D8.unk_18 = player->actor.world.pos;
@@ -200,11 +200,11 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_33C = 0;
 
     if (CURRENT_DAY == 1) {
-        this->unk_332 = 0;
+        this->type = MA4_TYPE_0;
     } else if (gSaveContext.weekEventReg[0x16] & 1) {
-        this->unk_332 = 1;
+        this->type = MA4_TYPE_1;
     } else {
-        this->unk_332 = 2;
+        this->type = MA4_TYPE_SITTING;
         this->hasBow = false;
     }
 
@@ -222,8 +222,7 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
             EnMa4_ChangeAnim(this, 0);
             this->unk_336 = 3;
         } else {
-            if (this->unk_332 == 2) {
-                // Shoot arrow anim
+            if (this->type == MA4_TYPE_SITTING) {
                 EnMa4_ChangeAnim(this, 14);
                 this->actor.shape.shadowScale = 0.0f;
             } else {
@@ -312,7 +311,7 @@ void func_80ABE1C4(EnMa4 *this, GlobalContext *globalCtx) {
 
 void func_80ABE4A4(EnMa4 *this) {
     if ((this->unk_336 != 2) && (this->unk_336 != 3)) {
-        if (this->unk_332 != 2) {
+        if (this->type != MA4_TYPE_SITTING) {
             EnMa4_ChangeAnim(this, 9);
             this->actor.speedXZ = 2.7f;
         } else {
@@ -338,7 +337,7 @@ void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
 
     if ((this->unk_336 == 2) || (this->unk_336 == 3)) {
         this->actor.flags |= 0x10000;
-    } else if (this->unk_332 != 2) {
+    } else if (this->type != MA4_TYPE_SITTING) {
         func_80ABE1C4(this, globalCtx);
     } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
         this->unk_33C++;
@@ -353,7 +352,7 @@ void func_80ABE560(EnMa4 *this, GlobalContext *globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         EnMa4_StartDialogue(this, globalCtx);
         EnMa4_SetupDialogueHandler(this);
-    } else if (this->unk_332 != 2 || ABS_ALT(sp22) < 0x4000) {
+    } else if (this->type != MA4_TYPE_SITTING || ABS_ALT(sp22) < 0x4000) {
         if (!(player->stateFlags1 & 0x800000)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
@@ -459,7 +458,7 @@ void func_80ABE6C8(EnMa4 *this, GlobalContext *globalCtx) {
                     func_801477B4(globalCtx);
                     func_80ABF070(this);
                 } else {
-                    if (this->unk_332 == 1) {
+                    if (this->type == MA4_TYPE_1) {
                         func_8019F230();
                         EnMa4_SetFaceExpression(this, 3, 3);
                         func_801518B0(globalCtx, 0x3357, &this->actor);
@@ -585,7 +584,7 @@ void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
             case 0x3351:
             case 0x335D:
             case 0x335E:
-                if (this->unk_332 == 0) {
+                if (this->type == MA4_TYPE_0) {
                     func_801518B0(globalCtx, 0x3352, &this->actor);
                     this->textId = 0x3352;
                 } else {
@@ -603,8 +602,8 @@ void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
                 } else {
                     func_801477B4(globalCtx);
                     player->stateFlags1 |= 0x20;
-                    EnMa4_SetupStartCutscene(this);
-                    EnMa4_StartCutscene(this, globalCtx);
+                    EnMa4_SetupStartActorCutscene(this);
+                    EnMa4_StartActorCutscene(this, globalCtx);
                 }
                 break;
 
@@ -625,7 +624,7 @@ void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void EnMa4_SetupDialogueHandler(EnMa4 *this) {
-    if (this->unk_332 != 2) {
+    if (this->type != MA4_TYPE_SITTING) {
         EnMa4_ChangeAnim(this, 1);
     } else {
         EnMa4_ChangeAnim(this, 15);
@@ -664,7 +663,7 @@ void EnMa4_DialogueHandler(EnMa4 *this, GlobalContext *globalCtx) {
             break;
     }
 
-    if (this->unk_332 != 2) {
+    if (this->type != MA4_TYPE_SITTING) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 2000, 1000);
     }
 }
@@ -684,7 +683,7 @@ void func_80ABF084(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF0D8(EnMa4 *this, GlobalContext *globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, 0x336E, &this->actor);
         this->actionFunc = func_80ABF160;
     } else if ((gSaveContext.unk_3DE0[4] < 0x2CEC)) {
@@ -694,7 +693,7 @@ void func_80ABF0D8(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF160(EnMa4 *this, GlobalContext *globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx) != 0) {
+    if (func_800B867C(&this->actor, globalCtx)) {
         this->actionFunc = func_80ABF254;
     }
 }
@@ -723,7 +722,7 @@ void func_80ABF218(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF254(EnMa4 *this, GlobalContext *globalCtx) {
-    static s16 D_80AC0258 = 0;
+    static s16 D_80AC0258 = 0; // unused
     Player *player = PLAYER;
 
     player->stateFlags3 |= 0x400;
@@ -752,7 +751,7 @@ void func_80ABF2FC(EnMa4 *this, GlobalContext *globalCtx) {
 
 
 void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
-    static s32 D_80AC025C = 0;
+    static s32 D_80AC025C = 0; // sFrameCounter?
     Player* player = PLAYER;
 
     if (player->stateFlags1 & 0x100000) {
@@ -788,16 +787,16 @@ void func_80ABF354(EnMa4 *this, GlobalContext *globalCtx) {
     D_80AC025C++;
 }
 
-void EnMa4_SetupStartCutscene(EnMa4 *this) {
-    this->actionFunc = EnMa4_StartCutscene;
+void EnMa4_SetupStartActorCutscene(EnMa4 *this) {
+    this->actionFunc = EnMa4_StartActorCutscene;
 }
 
-void EnMa4_StartCutscene(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_StartActorCutscene(EnMa4 *this, GlobalContext *globalCtx) {
     s16 cutsceneIndex = this->actor.cutscene;
 
     if (ActorCutscene_GetCanPlayNext(cutsceneIndex) != 0) {
         ActorCutscene_Start(cutsceneIndex, &this->actor);
-        func_80ABF51C(this);
+        EnMa4_SetupActorCutsceneHandler(this);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -807,15 +806,13 @@ void EnMa4_StartCutscene(EnMa4 *this, GlobalContext *globalCtx) {
 }
 
 
-void func_80ABF51C(EnMa4 *this) {
+void EnMa4_SetupActorCutsceneHandler(EnMa4 *this) {
     this->unk_33C = 0;
-    this->actionFunc = func_80ABF534;
+    this->actionFunc = EnMa4_ActorCutsceneHandler;
 }
 
-
 static u16 D_80AC0260 = 99;
-// Cutscene handler
-void func_80ABF534(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_ActorCutsceneHandler(EnMa4 *this, GlobalContext *globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
 
@@ -888,8 +885,8 @@ void EnMa4_StartDialogue(EnMa4 *this, GlobalContext *globalCtx) {
     s32 pad;
     OSTime sp24;
 
-    switch (this->unk_332) {
-    case 0:
+    switch (this->type) {
+    case MA4_TYPE_0:
         if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
             if ((gSaveContext.weekEventReg[0x15] & 0x80) ) {
                 EnMa4_SetFaceExpression(this, 3, 3);
@@ -923,11 +920,13 @@ void EnMa4_StartDialogue(EnMa4 *this, GlobalContext *globalCtx) {
             } else {
                 sp24 = gSaveContext.unk_3DE0[4];
                 if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
+                    // [Score] New record!
                     gSaveContext.roomInf[127][4] = sp24;
                     EnMa4_SetFaceExpression(this, 0, 3);
                     func_801518B0(globalCtx, 0x3350, &this->actor);
                     this->textId = 0x3350;
                 } else {
+                    // [Score] Great.
                     func_801518B0(globalCtx, 0x3351, &this->actor);
                     this->textId = 0x3351;
                 }
@@ -941,7 +940,7 @@ void EnMa4_StartDialogue(EnMa4 *this, GlobalContext *globalCtx) {
         }
         break;
 
-    case 1:
+    case MA4_TYPE_1:
         if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
             if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
                 EnMa4_SetFaceExpression(this, 3, 3);
@@ -977,7 +976,7 @@ void EnMa4_StartDialogue(EnMa4 *this, GlobalContext *globalCtx) {
         }
         break;
 
-    case 2:
+    case MA4_TYPE_SITTING:
         if (this->unk_336 == 0) {
             func_801518B0(globalCtx, 0x3358, &this->actor);
             this->textId = 0x3358;
@@ -1016,7 +1015,7 @@ void EnMa4_SetFaceExpression(EnMa4 *this, s16 overrideEyeTexIndex, s16 mouthTexI
 }
 
 void EnMa4_InitFaceExpression(EnMa4 *this) {
-    if (this->unk_332 != 2) {
+    if (this->type != MA4_TYPE_SITTING) {
         EnMa4_SetFaceExpression(this, 0, 0);
     } else {
         EnMa4_SetFaceExpression(this, 1, 2);
@@ -1073,7 +1072,7 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->unk_332 == 2) {
+    if (this->type == MA4_TYPE_SITTING) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_06000A20);
     }
