@@ -25,7 +25,7 @@ extern Gfx D_060031A0[];
 extern Gfx D_06003440[];
 extern AnimatedMaterial D_06001FF8;
 
-static ObjEndingModelInfo sGraphics[] = {
+static ObjEndingModelInfo sModelInfo[] = {
     { { D_06003440, D_060031A0 }, NULL },
     { { NULL, D_060003D0 }, &D_06001FF8 },
 };
@@ -39,8 +39,8 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMaterial* animMat;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    this->graphics = &sGraphics[thisx->params];
-    animMat = this->graphics->animMat;
+    this->modelInfo = &sModelInfo[thisx->params];
+    animMat = this->modelInfo->animMat;
     if (animMat != NULL) {
         this->animMat = (AnimatedMaterial*)Lib_SegmentedToVirtual(animMat);
     }
@@ -57,11 +57,11 @@ void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->animMat != NULL) {
         AnimatedMat_Draw(globalCtx, this->animMat);
     }
-    dl1 = this->graphics->dLists[0];
+    dl1 = this->modelInfo->dLists[0];
     if (dl1 != NULL) {
         func_800BDFC0(globalCtx, dl1);
     }
-    dl2 = this->graphics->dLists[1];
+    dl2 = this->modelInfo->dLists[1];
     if (dl2 != NULL) {
         func_800BE03C(globalCtx, dl2);
     }

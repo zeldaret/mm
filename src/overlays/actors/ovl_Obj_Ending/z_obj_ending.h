@@ -12,7 +12,7 @@ typedef struct {
 
 typedef struct ObjEnding {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ObjEndingModelInfo* graphics;
+    /* 0x144 */ ObjEndingModelInfo* modelInfo;
     /* 0x148 */ AnimatedMaterial* animMat;
 } ObjEnding; // size = 0x14C
 
