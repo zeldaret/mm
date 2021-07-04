@@ -1544,8 +1544,7 @@ struct GlobalContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
     /* 0x000A6 */ u8 sceneConfig;
-    /* 0x000A8 */ void* unk_A8;
-    /* 0x000AC */ void* unk_AC;
+    /* 0x000A7 */ char unk_A7[0x9];
     /* 0x000B0 */ void* sceneSegment;
     /* 0x000B4 */ char unk_B4[0x4];
     /* 0x000B8 */ View view;
