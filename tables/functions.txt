@@ -888,7 +888,7 @@
     0x800BDB6C:("func_800BDB6C",),
     0x800BDC5C:("func_800BDC5C",),
     0x800BDCF4:("func_800BDCF4",),
-    0x800BDFB0:("func_800BDFB0",),
+    0x800BDFB0:("Actor_Noop",),
     0x800BDFC0:("func_800BDFC0",),
     0x800BE03C:("func_800BE03C",),
     0x800BE0B8:("func_800BE0B8",),

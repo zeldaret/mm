@@ -15,7 +15,7 @@ const ActorInit Obj_Mure2_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjMure2),
     (ActorFunc)ObjMure2_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjMure2_Update,
     (ActorFunc)NULL,
 };
