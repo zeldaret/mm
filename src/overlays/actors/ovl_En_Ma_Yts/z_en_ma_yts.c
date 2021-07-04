@@ -400,10 +400,9 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 }
 
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
-
     if (func_800EE29C(globalCtx, 0x78) != 0) {
-        actionIndex = func_800EE200(globalCtx, 0x78);
+        u32 actionIndex = func_800EE200(globalCtx, 0x78);
+
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80B8E32C) {
                 D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->unk0;
