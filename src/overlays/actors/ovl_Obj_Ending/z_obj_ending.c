@@ -25,7 +25,7 @@ extern Gfx D_060031A0[];
 extern Gfx D_06003440[];
 extern AnimatedMaterial D_06001FF8;
 
-static ObjEndingGraphics D_80C25CE0[] = {
+static ObjEndingGraphics sGraphics[] = {
     { D_06003440, D_060031A0, NULL },
     { NULL, D_060003D0, &D_06001FF8 },
 };
@@ -39,7 +39,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMaterial* texture;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->graphics = &D_80C25CE0[this->actor.params];
+    this->graphics = &sGraphics[this->actor.params];
 
     if (1) {}
 
