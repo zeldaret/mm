@@ -327,10 +327,10 @@ typedef struct {
 } ShrinkWindowContext; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u8* readBuff;
-    /* 0x4 */ u32* flashReadBuff;
-    /* 0x8 */ char unk_08[4];
-    /* 0xC */ s16 status;
+    /* 0x00 */ u8* readBuff;
+    /* 0x04 */ u32* flashReadBuff;
+    /* 0x08 */ char unk_08[4];
+    /* 0x0C */ s16 status;
     /* 0x10 */ u32 curPage;
     /* 0x14 */ u32 numPages;
     /* 0x18 */ OSTime unk_18;
