@@ -5,6 +5,27 @@
 #include <unk.h>
 
 typedef struct {
+    /* 0x00 */ s8    continueFlag;
+    /* 0x01 */ s8    cameraRoll;
+    /* 0x02 */ u16   nextPointFrame;
+    /* 0x04 */ f32   viewAngle; // in degrees
+    /* 0x08 */ Vec3s pos;
+} CutsceneCameraPoint; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3f at;
+    /* 0x0C */ Vec3f eye;
+    /* 0x18 */ s16 roll;
+    /* 0x1A */ s16 fov;
+} CutsceneCameraAngle; // size = 0x1C
+
+typedef struct {
+    /* 0x0 */ CutsceneCameraPoint* atPoints;
+    /* 0x4 */ CutsceneCameraPoint* eyePoints;
+    /* 0x8 */ s16 relativeToPlayer;
+} CutsceneCameraMove; // size = 0xC
+
+typedef struct {
     /* 0x00 */ u16 unk0; // action; // "dousa"
     /* 0x02 */ u16 startFrame;
     /* 0x04 */ u16 endFrame;
