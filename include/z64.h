@@ -874,7 +874,7 @@ typedef struct {
     /* 0xEE */ u8 unk_EE[4];
     /* 0xF2 */ u8 unk_F2[8];
     /* 0xFA */ u8 unk_FA[4];
-} EnvironmentContext; // size = 0xFE
+} EnvironmentContext; // size = 0x100
 
 typedef struct {
     /* 0x00000 */ View view;
