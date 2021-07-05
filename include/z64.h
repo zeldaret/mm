@@ -1140,7 +1140,7 @@ struct DaytelopContext {
 }; // size = 0x248
 
 struct FileChooseContext {
-    /* 0x00000 */ GameState state;
+    /* 0x00000 */ GameState gamestate;
     /* 0x000A4 */ UNK_TYPE1 padA4[0x14];
     /* 0x000B8 */ View view;
     /* 0x00220 */ SramContext sramCtx;
