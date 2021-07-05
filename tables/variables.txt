@@ -16940,7 +16940,6 @@
     0x80B8E150:("En_Ma_Yts_InitVars","UNK_TYPE1","",0x1),
     0x80B8E170:("D_80B8E170","ColliderCylinderInit","",0x2C),
     0x80B8E19C:("D_80B8E19C","CollisionCheckInfoInit2","",0xC),
-    0x80B8E1A8:("D_80B8E1A8","UNK_TYPE1","",0x1),
     0x80B8E308:("D_80B8E308","void*","",0x4),
     0x80B8E318:("D_80B8E318","UNK_TYPE1","",0x1),
     0x80B8E32C:("D_80B8E32C","UNK_TYPE2","",0x2),

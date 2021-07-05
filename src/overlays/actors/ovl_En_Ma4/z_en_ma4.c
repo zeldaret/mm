@@ -15,7 +15,6 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-
 void EnMa4_SetupWait(EnMa4* this);
 void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx);
 void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx);
@@ -39,7 +38,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx);
 void EnMa4_SetupBeginDescribeThemCs(EnMa4* this);
 void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx);
 void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx);
-void EnMa4_SetFaceExpression(EnMa4 *this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
+void EnMa4_SetFaceExpression(EnMa4* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
 void EnMa4_InitFaceExpression(EnMa4* this);
 
 typedef enum {
@@ -54,9 +53,6 @@ typedef enum {
     /* 2 */ MA4_STATE_AFTERHORSEBACKGAME,
     /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS,
 } EnMa4State;
-
-
-extern AnimationHeader D_06007328;
 
 extern FlexSkeletonHeader D_06013928;
 
@@ -100,26 +96,39 @@ const ActorInit En_Ma4_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80AC00DC = {
-    0, 0, 0, 0, MASS_IMMOVABLE
-};
-
+static CollisionCheckInfoInit2 D_80AC00DC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static void* sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
 
 static void* sMouthTextures[] = {
-    D_060127C8, D_06012BC8, D_06012FC8, D_060133C8,
+    D_060127C8,
+    D_06012BC8,
+    D_06012FC8,
+    D_060133C8,
 };
 
-
-void EnMa4_UpdateEyes(EnMa4 *this) {
+void EnMa4_UpdateEyes(EnMa4* this) {
     if (this->overrideEyeTexIndex != 0) {
         this->eyeTexIndex = this->overrideEyeTexIndex;
     } else if (DECR(this->blinkTimer) == 0) {
@@ -131,33 +140,32 @@ void EnMa4_UpdateEyes(EnMa4 *this) {
     }
 }
 
-
-static struct_80B8E1A8 D_80AC010C[] = {
+static struct_80B8E1A8 sAnimationInfo[] = {
     { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f }, // Idle anim
-    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f },
+    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f }, // Looking around anim
     { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
     { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
-    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f },
-    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f },
-    { &D_06015B7C, 1.0f, 2, 0.0f }, { &D_06015B7C, 1.0f, 2, -6.0f },
+    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f }, // Walking anim
+    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f }, //
+    { &D_06015B7C, 1.0f, 2, 0.0f }, { &D_06015B7C, 1.0f, 2, -6.0f }, // Shoot arrow anim
     { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f }, // Sitting anim
     { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
-    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f },
+    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
 };
 
-void EnMa4_ChangeAnim(EnMa4 *this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80AC010C[index].animationSeg, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80AC010C[index].animationSeg->common),
-                         D_80AC010C[index].mode, D_80AC010C[index].transitionRate);
+void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common),
+                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
 }
 
-
-
-void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
+void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 flag;
 
-    if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) || (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
+    if (this->unk_1D8.unk_00 == 0 &&
+        ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) ||
+         (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
         flag = 1;
     } else {
         flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
@@ -168,9 +176,8 @@ void func_80ABDD9C(EnMa4 *this, GlobalContext *globalCtx) {
     func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
 }
 
-
-void EnMa4_InitPath(EnMa4 *this, GlobalContext *globalCtx) {
-    Path *path;
+void EnMa4_InitPath(EnMa4* this, GlobalContext* globalCtx) {
+    Path* path;
     Vec3f sp20;
 
     path = &globalCtx->setupPathList[(this->actor.params & 0xFF00) >> 8];
@@ -189,13 +196,13 @@ void EnMa4_InitPath(EnMa4 *this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp20);
 }
 
-
-void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable, MA1_LIMB_MAX);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable,
+                     MA1_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -247,7 +254,6 @@ void EnMa4_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-
 void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
 
@@ -255,9 +261,8 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     gSaveContext.weekEventReg[0x8] &= (u8)~0x01;
 }
 
-
 // Running in circles in the ranch
-void EnMa4_RunInCircles(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     static s32 sCurrentAnim = 9;
     static s32 D_80AC0250 = 0;
     static s16 D_80AC0254 = 10;
@@ -320,8 +325,7 @@ void EnMa4_RunInCircles(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_SetupWait(EnMa4 *this) {
+void EnMa4_SetupWait(EnMa4* this) {
     if ((this->state != MA4_STATE_AFTERHORSEBACKGAME) && (this->state != MA4_STATE_AFTERDESCRIBETHEMCS)) {
         if (this->type != MA4_TYPE_ALIENS_WON) {
             EnMa4_ChangeAnim(this, 9);
@@ -341,9 +345,8 @@ void EnMa4_SetupWait(EnMa4 *this) {
     this->actionFunc = EnMa4_Wait;
 }
 
-
-void EnMa4_Wait(EnMa4 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
     s16 sp22 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->state == MA4_STATE_AFTERHORSEBACKGAME) || (this->state == MA4_STATE_AFTERDESCRIBETHEMCS)) {
@@ -370,9 +373,8 @@ void EnMa4_Wait(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
 // Chooses the next dialogue based on player's selection
-void EnMa4_HandlePlayerChoice(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
             case 0x3339:
@@ -430,7 +432,7 @@ void EnMa4_HandlePlayerChoice(EnMa4 *this, GlobalContext *globalCtx) {
                 }
                 break;
 
-            case 0x334D: // Asks if you understood her explanation.
+            case 0x334D:                                  // Asks if you understood her explanation.
                 if (globalCtx->msgCtx.choiceIndex == 0) { // Yes
                     s32 aux;
 
@@ -503,9 +505,8 @@ void EnMa4_HandlePlayerChoice(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
     s32 aux;
 
     if (func_80147624(globalCtx) != 0) {
@@ -622,7 +623,8 @@ void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) || !((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE])) {
+                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
+                    !((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE])) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -635,9 +637,7 @@ void EnMa4_ChooseNextDialogue(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-
-void EnMa4_SetupDialogueHandler(EnMa4 *this) {
+void EnMa4_SetupDialogueHandler(EnMa4* this) {
     if (this->type != MA4_TYPE_ALIENS_WON) {
         EnMa4_ChangeAnim(this, 1);
     } else {
@@ -646,14 +646,12 @@ void EnMa4_SetupDialogueHandler(EnMa4 *this) {
     this->actionFunc = EnMa4_DialogueHandler;
 }
 
-
-
-void EnMa4_DialogueHandler(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
     s32 temp_v0;
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         default:
-        break;
+            break;
 
         case 4: // Player answered a question
             EnMa4_HandlePlayerChoice(this, globalCtx);
@@ -665,7 +663,8 @@ void EnMa4_DialogueHandler(EnMa4 *this, GlobalContext *globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk_120B1 == 0) || (((temp_v0 = gSaveContext.inventory.questItems) & gBitFlags[0x12]) == 0)) {
+                if ((globalCtx->msgCtx.unk_120B1 == 0) ||
+                    (((temp_v0 = gSaveContext.inventory.questItems) & gBitFlags[0x12]) == 0)) {
                     EnMa4_SetupWait(this);
                 }
             }
@@ -682,12 +681,11 @@ void EnMa4_DialogueHandler(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_SetupBeginHorsebackGame(EnMa4 *this) {
+void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
     this->actionFunc = EnMa4_BeginHorsebackGame;
 }
 
-void EnMa4_BeginHorsebackGame(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
     gSaveContext.unk_3F4A = 0xFFF0;
     globalCtx->unk18875 = 0x14;
@@ -695,8 +693,7 @@ void EnMa4_BeginHorsebackGame(EnMa4 *this, GlobalContext *globalCtx) {
     gSaveContext.nextTransition = 3;
 }
 
-
-void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         // "You're feeling confident"
         func_801518B0(globalCtx, 0x336E, &this->actor);
@@ -706,16 +703,14 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4 *this, GlobalContext *glob
     }
 }
 
-
-void EnMa4_HorsebackGameTalking(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
     if (func_800B867C(&this->actor, globalCtx)) {
         this->actionFunc = EnMa4_HorsebackGameWait;
     }
 }
 
-
-void EnMa4_InitHorsebackGame(EnMa4 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
@@ -725,9 +720,8 @@ void EnMa4_InitHorsebackGame(EnMa4 *this, GlobalContext *globalCtx) {
     this->actionFunc = EnMa4_SetupHorsebackGameWait;
 }
 
-
-void EnMa4_SetupHorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void EnMa4_SetupHorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
     if (globalCtx->interfaceCtx.unk_280 == 8) {
         this->actionFunc = EnMa4_HorsebackGameWait;
@@ -735,10 +729,9 @@ void EnMa4_SetupHorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_HorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
     static s16 D_80AC0258 = 0;
-    Player *player = PLAYER;
+    Player* player = PLAYER;
 
     player->stateFlags3 |= 0x400;
     EnMa4_HorsebackGameCheckPlayerInteractions(this, globalCtx);
@@ -748,7 +741,7 @@ void EnMa4_HorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
         globalCtx->interfaceCtx.unk25C = 1;
     }
 
-    if ((gSaveContext.unk_3DE0[4] >= 2*60*100) // timer >= 2 minutes
+    if ((gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) // timer >= 2 minutes
         || (this->poppedBalloonCounter == 10)) {
         gSaveContext.unk_3DD0[4] = 6;
         EnMa4_SetupHorsebackGameEnd(this, globalCtx);
@@ -756,17 +749,14 @@ void EnMa4_HorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-
-void EnMa4_SetupHorsebackGameEnd(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     gSaveContext.weekEventReg[0x8] &= (u8)~0x01;
     this->actionFunc = EnMa4_HorsebackGameEnd;
     func_801A89A8(0x100000FF);
     func_801A89A8(0x8041);
 }
 
-
-void EnMa4_HorsebackGameEnd(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     static s32 sFrameCounter = 0;
     Player* player = PLAYER;
 
@@ -806,12 +796,12 @@ void EnMa4_HorsebackGameEnd(EnMa4 *this, GlobalContext *globalCtx) {
     sFrameCounter++;
 }
 
-void EnMa4_SetupBeginEponasSongCs(EnMa4 *this) {
+void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_BeginEponasSongCs;
 }
 
 // Epona's Song cutscene is an ActorCutscene
-void EnMa4_BeginEponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_BeginEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     s16 cutsceneIndex = this->actor.cutscene;
 
     if (ActorCutscene_GetCanPlayNext(cutsceneIndex) != 0) {
@@ -825,14 +815,13 @@ void EnMa4_BeginEponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_SetupEponasSongCs(EnMa4 *this) {
+void EnMa4_SetupEponasSongCs(EnMa4* this) {
     this->animTimer = 0;
     this->actionFunc = EnMa4_EponasSongCs;
 }
 
 static u16 D_80AC0260 = 99;
-void EnMa4_EponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
 
@@ -856,11 +845,12 @@ void EnMa4_EponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
-        if (D_80AC0260 == 2 && this->animTimer == 0 && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (D_80AC0260 == 2 && this->animTimer == 0 &&
+            func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
-        Player *player = PLAYER;
+        Player* player = PLAYER;
 
         player->stateFlags1 |= 0x20;
         func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
@@ -870,12 +860,12 @@ void EnMa4_EponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-void EnMa4_SetupEndEponasSongCs(EnMa4 *this) {
+void EnMa4_SetupEndEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_EndEponasSongCs;
 }
 
-void EnMa4_EndEponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
     this->actor.flags |= 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
@@ -889,12 +879,11 @@ void EnMa4_EndEponasSongCs(EnMa4 *this, GlobalContext *globalCtx) {
     }
 }
 
-
-void EnMa4_SetupBeginDescribeThemCs(EnMa4 *this) {
+void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
     this->actionFunc = EnMa4_BeginDescribeThemCs;
 }
 
-void EnMa4_BeginDescribeThemCs(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
     gSaveContext.unk_3F4A = 0xFFF5;
     globalCtx->unk18875 = 0x14;
@@ -902,147 +891,146 @@ void EnMa4_BeginDescribeThemCs(EnMa4 *this, GlobalContext *globalCtx) {
     gSaveContext.nextTransition = 2;
 }
 
-void EnMa4_StartDialogue(EnMa4 *this, GlobalContext *globalCtx) {
+void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
     s32 pad;
     OSTime sp24;
 
     switch (this->type) {
-    case MA4_TYPE_DAY1:
-        if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
-            if ((gSaveContext.weekEventReg[0x15] & 0x80) ) {
-                EnMa4_SetFaceExpression(this, 3, 3);
-                func_801518B0(globalCtx, 0x3337, &this->actor);
-                this->textId = 0x3337;
-                func_80151BB4(globalCtx, 5);
-            } else {
-                func_801518B0(globalCtx, 0x3335, &this->actor);
-                this->textId = 0x3335;
-                gSaveContext.weekEventReg[0x15] |= 0x80;
-            }
-        } else if (this->state == MA4_STATE_DEFAULT) {
-            if ((gSaveContext.weekEventReg[0x15] & 0x40)) {
-                if (!(gSaveContext.weekEventReg[0x15] & 0x20)) {
-                    func_801518B0(globalCtx, 0x3346, &this->actor);
-                    this->textId = 0x3346;
+        case MA4_TYPE_DAY1:
+            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
+                if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
+                    EnMa4_SetFaceExpression(this, 3, 3);
+                    func_801518B0(globalCtx, 0x3337, &this->actor);
+                    this->textId = 0x3337;
+                    func_80151BB4(globalCtx, 5);
                 } else {
-                    func_801518B0(globalCtx, 0x3347, &this->actor);
-                    this->textId = 0x3347;
+                    func_801518B0(globalCtx, 0x3335, &this->actor);
+                    this->textId = 0x3335;
+                    gSaveContext.weekEventReg[0x15] |= 0x80;
                 }
-            } else {
-                func_801518B0(globalCtx, 0x3338, &this->actor);
-                this->textId = 0x3338;
-                gSaveContext.weekEventReg[0x15] |= 0x40;
-            }
-        } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-            if (gSaveContext.unk_3DE0[4] >= 2*60*100) {
-                // "Too bad Grasshopper"
-                EnMa4_SetFaceExpression(this, 0, 0);
-                func_801518B0(globalCtx, 0x336D, &this->actor);
-                this->textId = 0x336D;
-            } else {
-                sp24 = gSaveContext.unk_3DE0[4];
-                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
-                    // [Score] New record!
-                    gSaveContext.roomInf[127][4] = sp24;
-                    EnMa4_SetFaceExpression(this, 0, 3);
-                    func_801518B0(globalCtx, 0x3350, &this->actor);
-                    this->textId = 0x3350;
+            } else if (this->state == MA4_STATE_DEFAULT) {
+                if ((gSaveContext.weekEventReg[0x15] & 0x40)) {
+                    if (!(gSaveContext.weekEventReg[0x15] & 0x20)) {
+                        func_801518B0(globalCtx, 0x3346, &this->actor);
+                        this->textId = 0x3346;
+                    } else {
+                        func_801518B0(globalCtx, 0x3347, &this->actor);
+                        this->textId = 0x3347;
+                    }
                 } else {
-                    // [Score] Great.
-                    func_801518B0(globalCtx, 0x3351, &this->actor);
-                    this->textId = 0x3351;
+                    func_801518B0(globalCtx, 0x3338, &this->actor);
+                    this->textId = 0x3338;
+                    gSaveContext.weekEventReg[0x15] |= 0x40;
                 }
+            } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
+                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                    // "Too bad Grasshopper"
+                    EnMa4_SetFaceExpression(this, 0, 0);
+                    func_801518B0(globalCtx, 0x336D, &this->actor);
+                    this->textId = 0x336D;
+                } else {
+                    sp24 = gSaveContext.unk_3DE0[4];
+                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
+                        // [Score] New record!
+                        gSaveContext.roomInf[127][4] = sp24;
+                        EnMa4_SetFaceExpression(this, 0, 3);
+                        func_801518B0(globalCtx, 0x3350, &this->actor);
+                        this->textId = 0x3350;
+                    } else {
+                        // [Score] Great.
+                        func_801518B0(globalCtx, 0x3351, &this->actor);
+                        this->textId = 0x3351;
+                    }
+                }
+                this->state = MA4_STATE_DEFAULT;
+                this->actor.flags &= ~0x10000;
+            } else if (this->state == MA4_STATE_AFTERDESCRIBETHEMCS) {
+                // "Cremia doesn't believe me..."
+                func_801518B0(globalCtx, 0x3340, &this->actor);
+                this->textId = 0x3340;
+                this->actor.flags &= ~0x10000;
             }
-            this->state = MA4_STATE_DEFAULT;
-            this->actor.flags &= ~0x10000;
-        } else if (this->state == MA4_STATE_AFTERDESCRIBETHEMCS) {
-            // "Cremia doesn't believe me..."
-            func_801518B0(globalCtx, 0x3340, &this->actor);
-            this->textId = 0x3340;
-            this->actor.flags &= ~0x10000;
-        }
-        break;
+            break;
 
-    case MA4_TYPE_ALIENS_DEFEATED:
-        if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
-            if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
-                EnMa4_SetFaceExpression(this, 3, 3);
-                func_801518B0(globalCtx, 0x3337, &this->actor);
-                this->textId = 0x3337;
-                func_80151BB4(globalCtx, 5);
-            } else {
-                func_801518B0(globalCtx, 0x3335, &this->actor);
-                this->textId = 0x3335;
-                gSaveContext.weekEventReg[0x15] |= 0x80;
-            }
-        } else if (this->state == MA4_STATE_DEFAULT) {
-            func_801518B0(globalCtx, 0x3354, &this->actor);
-            this->textId = 0x3354;
-        } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-            if (gSaveContext.unk_3DE0[4] >= 2*60*100) {
-                // "Try again?"
-                func_801518B0(globalCtx, 0x3356, &this->actor);
-                this->textId = 0x3356;
-            } else {
-                sp24 = gSaveContext.unk_3DE0[4];
-                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
-                    gSaveContext.roomInf[127][4] = sp24;
-                    EnMa4_SetFaceExpression(this, 0, 3);
-                    func_801518B0(globalCtx, 0x3350, &this->actor);
-                    this->textId = 0x3350;
+        case MA4_TYPE_ALIENS_DEFEATED:
+            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
+                if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
+                    EnMa4_SetFaceExpression(this, 3, 3);
+                    func_801518B0(globalCtx, 0x3337, &this->actor);
+                    this->textId = 0x3337;
+                    func_80151BB4(globalCtx, 5);
                 } else {
-                    func_801518B0(globalCtx, 0x3351, &this->actor);
-                    this->textId = 0x3351;
+                    func_801518B0(globalCtx, 0x3335, &this->actor);
+                    this->textId = 0x3335;
+                    gSaveContext.weekEventReg[0x15] |= 0x80;
                 }
-            }
-            this->state = MA4_STATE_DEFAULT;
-            this->actor.flags &= ~0x10000;
-        }
-        break;
-
-    case MA4_TYPE_ALIENS_WON:
-        if (this->state == MA4_STATE_DEFAULT) {
-            // "Huh... You?"
-            func_801518B0(globalCtx, 0x3358, &this->actor);
-            this->textId = 0x3358;
-        } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-            if (gSaveContext.unk_3DE0[4] >= 2*60*100) {
-                // "Try again?"
-                func_801518B0(globalCtx, 0x3356, &this->actor);
-                this->textId = 0x3356;
-            } else {
-                sp24 = gSaveContext.unk_3DE0[4];
-                if ((s32) sp24 < (s32) gSaveContext.roomInf[127][4]) {
-                    // New record
-                    gSaveContext.roomInf[127][4] = sp24;
-                    func_801518B0(globalCtx, 0x335D, &this->actor);
-                    this->textId = 0x335D;
+            } else if (this->state == MA4_STATE_DEFAULT) {
+                func_801518B0(globalCtx, 0x3354, &this->actor);
+                this->textId = 0x3354;
+            } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
+                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                    // "Try again?"
+                    func_801518B0(globalCtx, 0x3356, &this->actor);
+                    this->textId = 0x3356;
                 } else {
-                    // "Old record was: [record]"
-                    func_801518B0(globalCtx, 0x335E, &this->actor);
-                    this->textId = 0x335E;
+                    sp24 = gSaveContext.unk_3DE0[4];
+                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
+                        gSaveContext.roomInf[127][4] = sp24;
+                        EnMa4_SetFaceExpression(this, 0, 3);
+                        func_801518B0(globalCtx, 0x3350, &this->actor);
+                        this->textId = 0x3350;
+                    } else {
+                        func_801518B0(globalCtx, 0x3351, &this->actor);
+                        this->textId = 0x3351;
+                    }
                 }
+                this->state = MA4_STATE_DEFAULT;
+                this->actor.flags &= ~0x10000;
             }
-            this->state = MA4_STATE_DEFAULT;
-            this->actor.flags &= ~0x10000;
-        }
-        break;
+            break;
 
-    default:
-        // Dead code
-        func_801518B0(globalCtx, 0x3335, &this->actor);
-        this->textId = 0x3335;
-        break;
+        case MA4_TYPE_ALIENS_WON:
+            if (this->state == MA4_STATE_DEFAULT) {
+                // "Huh... You?"
+                func_801518B0(globalCtx, 0x3358, &this->actor);
+                this->textId = 0x3358;
+            } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
+                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                    // "Try again?"
+                    func_801518B0(globalCtx, 0x3356, &this->actor);
+                    this->textId = 0x3356;
+                } else {
+                    sp24 = gSaveContext.unk_3DE0[4];
+                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
+                        // New record
+                        gSaveContext.roomInf[127][4] = sp24;
+                        func_801518B0(globalCtx, 0x335D, &this->actor);
+                        this->textId = 0x335D;
+                    } else {
+                        // "Old record was: [record]"
+                        func_801518B0(globalCtx, 0x335E, &this->actor);
+                        this->textId = 0x335E;
+                    }
+                }
+                this->state = MA4_STATE_DEFAULT;
+                this->actor.flags &= ~0x10000;
+            }
+            break;
+
+        default:
+            // Dead code
+            func_801518B0(globalCtx, 0x3335, &this->actor);
+            this->textId = 0x3335;
+            break;
     }
 }
 
-
-void EnMa4_SetFaceExpression(EnMa4 *this, s16 overrideEyeTexIndex, s16 mouthTexIndex) {
+void EnMa4_SetFaceExpression(EnMa4* this, s16 overrideEyeTexIndex, s16 mouthTexIndex) {
     this->overrideEyeTexIndex = overrideEyeTexIndex;
     this->mouthTexIndex = mouthTexIndex;
 }
 
-void EnMa4_InitFaceExpression(EnMa4 *this) {
+void EnMa4_InitFaceExpression(EnMa4* this) {
     if (this->type != MA4_TYPE_ALIENS_WON) {
         EnMa4_SetFaceExpression(this, 0, 0);
     } else {
@@ -1062,8 +1050,7 @@ void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80ABDD9C(this, globalCtx);
 }
 
-
-s32 EnMa4_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
     Vec3s sp4;
 
@@ -1081,7 +1068,7 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
     return false;
 }
 
-void EnMa4_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
@@ -1110,7 +1097,8 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

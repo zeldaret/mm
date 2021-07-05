@@ -111,16 +111,25 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static struct_80B8E1A8 D_80B8E1A8[] = {
-    { &D_06009E58, 1.0f, 0, 0.0f },  { &D_06009E58, 1.0f, 0, -6.0f }, { &D_06018948, 1.0f, 2, 0.0f },
-    { &D_06018948, 1.0f, 2, -6.0f }, { &D_0601B76C, 1.0f, 0, 0.0f },  { &D_0601B76C, 1.0f, 0, -6.0f },
-    { &D_06007328, 1.0f, 0, 0.0f },  { &D_06007328, 1.0f, 0, -6.0f }, { &D_06014088, 1.0f, 0, 0.0f },
-    { &D_06014088, 1.0f, 0, -6.0f }, { &D_06002A8C, 1.0f, 0, 0.0f },  { &D_06002A8C, 1.0f, 0, -6.0f },
-    { &D_06015B7C, 1.0f, 0, 0.0f },  { &D_06015B7C, 1.0f, 0, -6.0f }, { &D_06007D98, 1.0f, 0, 0.0f },
-    { &D_06007D98, 1.0f, 0, -6.0f }, { &D_0600852C, 1.0f, 0, 0.0f },  { &D_0600852C, 1.0f, 0, -6.0f },
-    { &D_06008F6C, 1.0f, 0, 0.0f },  { &D_06008F6C, 1.0f, 0, -6.0f }, { &D_060180DC, 1.0f, 2, 0.0f },
-    { &D_060180DC, 1.0f, 2, -6.0f },
+static struct_80B8E1A8 sAnimationInfo[] = {
+    { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f }, // Idle anim
+    { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
+    { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
+    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f }, // Walking anim
+    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f }, //
+    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f }, // Looking around anim
+    { &D_06015B7C, 1.0f, 0, 0.0f }, { &D_06015B7C, 1.0f, 0, -6.0f }, // Shoot arrow anim
+    { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f }, // Sitting anim
+    { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
+    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
+    { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f }, // Turns around anim
 };
+
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common),
+                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
+}
 
 static void* sMouthTextures[] = {
     D_060127C8,
@@ -132,14 +141,6 @@ static void* sMouthTextures[] = {
 static void* sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
-
-static u16 D_80B8E32C = 99;
-
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].animationSeg, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80B8E1A8[index].animationSeg->common), D_80B8E1A8[index].mode,
-                         D_80B8E1A8[index].transitionRate);
-}
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -399,6 +400,7 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }
 
+static u16 D_80B8E32C = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
