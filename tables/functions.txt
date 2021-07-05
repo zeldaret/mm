@@ -11854,7 +11854,7 @@
     0x80ABDCA0:("func_80ABDCA0",),
     0x80ABDD2C:("EnMa4_ChangeAnim",),
     0x80ABDD9C:("func_80ABDD9C",),
-    0x80ABDE60:("func_80ABDE60",),
+    0x80ABDE60:("EnMa4_InitPath",),
     0x80ABDF70:("EnMa4_Init",),
     0x80ABE188:("EnMa4_Destroy",),
     0x80ABE1C4:("EnMa4_RunInCircles",),
