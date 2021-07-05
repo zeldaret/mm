@@ -5,7 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
-#include "src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 
 #define FLAGS 0x00000035
 
