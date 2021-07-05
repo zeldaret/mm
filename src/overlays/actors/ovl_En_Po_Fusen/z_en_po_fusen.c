@@ -5,7 +5,7 @@
  */
 
 #include "z_en_po_fusen.h"
-#include "../ovl_En_Ma4/z_en_ma4.h"
+#include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
 #define FLAGS 0x80100030
 
