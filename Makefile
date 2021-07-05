@@ -63,7 +63,7 @@ ASFLAGS := -march=vr4300 -32
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -I./ -Isrc -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -I./ -Isrc -Wab,-r4300_mul -woff 624,649,838,712
 
 #### Files ####
 
@@ -283,7 +283,7 @@ build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
 
 build/%.d: %.c
 	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/$*.o' >> $@
+	@$(GCC) $< -Iinclude -Isrc -I./ -MM -MT 'build/$*.o' >> $@
 
 build/dmadata_script.ld: build/dmadata_script.txt
 	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
