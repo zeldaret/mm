@@ -640,7 +640,8 @@ typedef struct {
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
-    /* 0x08 */ s32 unk_08;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A; // pad
     /* 0x0C */ Demo2Anim anim;
 } Demo2; // size = 0xC
 
