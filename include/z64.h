@@ -214,11 +214,22 @@ typedef struct {
     /* 0x7 */ u8 unk7;
 } FireObjLightParams; // size = 0x8
 
+//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
+#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2)
+
 // Font textures are loaded into here
 typedef struct {
-    /* 0x0000 */ u8 unk0[2][120][128];
-    /* 0x7800 */ u8 unk7800[93][128];
-} Font; // size = 0xA680
+    /* 0x00000 */ u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
+    /* 0x07800 */ u8 iconBuf[FONT_CHAR_TEX_SIZE];
+    /* 0x07880 */ u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
+    /* 0x11880 */ union {
+        u8 schar[640];
+        u16 wchar[640];
+    } msgBuf;
+    /* 0x11D80 */ u8* messageStart;
+    /* 0x11D84 */ u8* messageEnd;
+    /* 0x11D88 */ u8 unk_11D88;
+} Font; // size = 0x11D8C
 
 typedef struct {
     /* 0x0000 */ u8 unk0;
@@ -953,9 +964,7 @@ typedef struct {
 typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
-    /* 0x0A7E8 */ UNK_TYPE1 padA7E8[0x7708];
-    /* 0x11EF0 */ u8 unk11EF0;
-    /* 0x11EF1 */ UNK_TYPE1 pad11EF1[0x13];
+    /* 0x11EF4 */ char unk_11EF4[0x10];
     /* 0x11F04 */ u16 unk11F04;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
@@ -1141,50 +1150,95 @@ struct DaytelopContext {
 
 struct FileChooseContext {
     /* 0x00000 */ GameState state;
-    /* 0x000A4 */ UNK_TYPE1 padA4[0x14];
+    /* 0x000A8 */ u8* staticSegment;
+    /* 0x000AC */ u8* parameterSegment;
+    /* 0x000B0 */ u8* titleSegment;
     /* 0x000B8 */ View view;
     /* 0x00220 */ SramContext sramCtx;
     /* 0x00248 */ SkyboxContext skyboxCtx;
-    /* 0x00470 */ char unk_470[0x24010];
-    /* 0x24480 */ s16 unk24480;
-    /* 0x24482 */ UNK_TYPE1 pad24482[0x2];
-    /* 0x24484 */ s16 unk24484;
-    /* 0x24486 */ s16 unk24486;
-    /* 0x24488 */ UNK_TYPE1 pad24488[0x4];
-    /* 0x2448C */ s16 unk2448C;
-    /* 0x2448E */ UNK_TYPE1 pad2448E[0x1A];
-    /* 0x244A8 */ s16 unk244A8;
-    /* 0x244AA */ UNK_TYPE1 pad244AA[0x2];
-    /* 0x244AC */ s16 unk244AC;
-    /* 0x244AE */ s16 unk244AE;
-    /* 0x244B0 */ s16 unk244B0;
-    /* 0x244B2 */ s16 unk244B2;
-    /* 0x244B4 */ s16 unk244B4;
-    /* 0x244B6 */ s16 unk244B6;
-    /* 0x244B8 */ s16 unk244B8;
-    /* 0x244BA */ s16 unk244BA;
-    /* 0x244BC */ UNK_TYPE1 pad244BC[0x18];
-    /* 0x244D4 */ s16 unk244D4;
-    /* 0x244D6 */ UNK_TYPE1 pad244D6[0x4];
-    /* 0x244DA */ s16 unk244DA;
-    /* 0x244DC */ UNK_TYPE1 pad244DC[0xA];
-    /* 0x244E6 */ s16 unk244E6;
-    /* 0x244E8 */ UNK_TYPE1 pad244E8[0x8];
-    /* 0x244F0 */ s16 unk244F0;
-    /* 0x244F2 */ s16 unk244F2;
-    /* 0x244F4 */ UNK_TYPE1 pad244F4[0x6];
-    /* 0x244FA */ s16 inputXChangeCooldown;
-    /* 0x244FC */ s16 inputYChangeCooldown;
-    /* 0x244FE */ s16 inputXDir;
-    /* 0x24500 */ s16 inputYDir;
-    /* 0x24502 */ s16 inputX;
-    /* 0x24504 */ s16 inputY;
-    /* 0x24506 */ UNK_TYPE1 pad24506[0x2];
-    /* 0x24508 */ s16 unk24508;
-    /* 0x2450A */ s16 unk2450A;
-    /* 0x2450C */ UNK_TYPE1 pad2450C[0x1C];
-    /* 0x24528 */ s16 unk24528;
-    /* 0x2452A */ UNK_TYPE1 pad2452A[0x2E];
+    /* 0x00470 */ MessageContext msgCtx;
+    /* 0x12550 */ Font font;
+    /* 0x242E0 */ EnvironmentContext envCtx;
+    /* 0x243E0 */ Vtx* unk_243E0;
+    /* 0x243E4 */ Vtx* unk_243E4;
+    /* 0x243E8 */ Vtx* unk_243E8;
+    /* 0x243EC */ Vtx* unk_243EC;
+    /* 0x243F0 */ Vtx* unk_243F0;
+    /* 0x243F4 */ u8   newf[6][4];
+    /* 0x2440C */ u16  unk_2440C[4];
+    /* 0x24414 */ u8   unk_24414[8][4];
+    /* 0x24434 */ s16  healthCapacity[4];
+    /* 0x2443C */ s16  health[4];
+    /* 0x24444 */ u32  unk_24444[4];
+    /* 0x24454 */ s8   unk_24454[4];
+    /* 0x24458 */ u16  unk_24458[4];
+    /* 0x24460 */ s16  unk_24460[4];
+    /* 0x24468 */ u8   unk_24468[4];
+    /* 0x2446C */ s16  rupees[4];
+    /* 0x24474 */ u8   unk_24474[4];
+    /* 0x24478 */ u8   unk_24478[4];
+    /* 0x2447C */ u8   unk_2447C[4];
+    /* 0x24480 */ s16  unk_24480;
+    /* 0x24482 */ s16  unk_24482;
+    /* 0x24484 */ s16  unk_24484;
+    /* 0x24486 */ s16  unk_24486;
+    /* 0x24488 */ s16  unk_24488;
+    /* 0x2448A */ s16  unk_2448A;
+    /* 0x2448C */ s16  unk_2448C;
+    /* 0x2448E */ s16  unk_2448E;
+    /* 0x24490 */ s16  unk_24490;
+    /* 0x24492 */ s16  unk_24492[3];
+    /* 0x24498 */ s16  unk_24498;
+    /* 0x2449A */ s16  unk_2449A[6];
+    /* 0x244A6 */ s16  unk_244A6;
+    /* 0x244A8 */ s16  unk_244A8;
+    /* 0x244AA */ s16  unk_244AA;
+    /* 0x244AC */ s16  unk_244AC;
+    /* 0x244AE */ s16  unk_244AE;
+    /* 0x244B0 */ s16  unk_244B0[3];
+    /* 0x244B6 */ s16  unk_244B6[2];
+    /* 0x244BA */ s16  unk_244BA;
+    /* 0x244BC */ s16  unk_244BC[3];
+    /* 0x244C2 */ s16  unk_244C2[3];
+    /* 0x244C8 */ s16  unk_244C8[3];
+    /* 0x244CE */ s16  unk_244CE[3];
+    /* 0x244D4 */ s16  unk_244D4[3];
+    /* 0x244DA */ s16  unk_244DA[4];
+    /* 0x244E2 */ s16  unk_244E2;
+    /* 0x244E4 */ s16  unk_244E4;
+    /* 0x244E6 */ s16  unk_244E6;
+    /* 0x244E8 */ s16  unk_244E8;
+    /* 0x244EA */ s16  unk_244EA[4];
+    /* 0x244F2 */ s16  unk_244F2;
+    /* 0x244F4 */ s16  unk_244F4;
+    /* 0x244F6 */ s16  unk_244F6[2];
+    /* 0x244FA */ s16  unk_244FA;
+    /* 0x244FC */ s16  unk_244FC;
+    /* 0x244FE */ s16  unk_244FE;
+    /* 0x24500 */ s16  unk_24500;
+    /* 0x24502 */ s16  unk_24502;
+    /* 0x24504 */ s16  unk_24504;
+    /* 0x24506 */ s16  unk_24506;
+    /* 0x24508 */ s16  unk_24508;
+    /* 0x2450A */ s16  unk_2450A;
+    /* 0x2450C */ f32  unk_2450C;
+    /* 0x24510 */ s16  unk_24510;
+    /* 0x24512 */ s16  unk_24512;
+    /* 0x24514 */ s16  unk_24514;
+    /* 0x24516 */ s16  unk_24516;
+    /* 0x24518 */ s16  unk_24518;
+    /* 0x2451A */ s16  unk_2451A;
+    /* 0x2451C */ s16  unk_2451C;
+    /* 0x2451E */ s16  unk_2451E[5];
+    /* 0x24528 */ s16  unk_24528;
+    /* 0x2452A */ s16  unk_2452A;
+    /* 0x2452C */ s16  unk_2452C[4];
+    /* 0x24534 */ s16  unk_24534[4];
+    /* 0x2453C */ s16  unk_2453C[4];
+    /* 0x24544 */ s16  unk_24544[4];
+    /* 0x2454C */ s16  unk_2454C;
+    /* 0x2454E */ s16  unk_2454E;
+    /* 0x24550 */ s16  unk_24550;
 }; // size = 0x24558
 
 typedef struct AudioThreadStruct AudioThreadStruct;

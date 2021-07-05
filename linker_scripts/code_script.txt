@@ -514,7 +514,7 @@ SECTIONS
         build/asm/code/code_data_0x801BD910.o(.data)
         build/asm/code/code_data_z_horse.o(.data)
         build/asm/code/code_data_z_jpeg.o(.data)
-        build/asm/code/code_data_z_kanfont.o(.data)
+        build/asm/code/z_kanfont.o(.data)
         build/asm/code/code_data_z_kankyo.o(.data)
         build/src/code/z_lib.o(.data)
         build/asm/code/code_data_z_lifemeter.o(.data)
