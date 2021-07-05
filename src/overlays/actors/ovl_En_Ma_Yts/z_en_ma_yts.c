@@ -159,12 +159,12 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
 
 void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTS_TYPE_BARN:
+        case MA_YTS_TYPE_BARN:
             this->actor.targetMode = 0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
-        case EN_NA_YTS_TYPE_SITTING:
+        case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
             if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
@@ -174,13 +174,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_SLEEPING:
+        case MA_YTS_TYPE_SLEEPING:
             this->actor.targetMode = 0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
-        case EN_NA_YTS_TYPE_ENDCREDITS:
+        case MA_YTS_TYPE_ENDCREDITS:
             this->actor.targetMode = 0;
             EnMaYts_ChangeAnim(this, 0);
             break;
@@ -193,7 +193,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
 
 s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTS_TYPE_SITTING:
+        case MA_YTS_TYPE_SITTING:
             switch (CURRENT_DAY) {
                 case 1:
                     break;
@@ -214,7 +214,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_BARN:
+        case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
             if (!(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
@@ -223,14 +223,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_SLEEPING:
+        case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
             if (gSaveContext.weekEventReg[0x16] & 1) {
                 return false;
             }
             break;
 
-        case EN_NA_YTS_TYPE_ENDCREDITS:
+        case MA_YTS_TYPE_ENDCREDITS:
             break;
     }
 
@@ -254,7 +254,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
 
-    if (this->type == EN_NA_YTS_TYPE_SLEEPING) {
+    if (this->type == MA_YTS_TYPE_SLEEPING) {
         this->collider.dim.radius = 40;
     }
 
@@ -265,7 +265,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_200 = 0;
     this->blinkTimer = 0;
 
-    if (this->type == EN_NA_YTS_TYPE_ENDCREDITS) {
+    if (this->type == MA_YTS_TYPE_ENDCREDITS) {
         this->hasBow = true;
     } else {
         this->hasBow = false;
@@ -283,7 +283,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_32C = 2;
     }
 
-    if (this->type == EN_NA_YTS_TYPE_ENDCREDITS) {
+    if (this->type == MA_YTS_TYPE_ENDCREDITS) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;

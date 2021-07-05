@@ -61,20 +61,20 @@ typedef struct EnMaYts {
 extern const ActorInit En_Ma_Yts_InitVars;
 
 typedef enum {
-    /* 0 */ EN_NA_YTS_TYPE_BARN,
-    /* 1 */ EN_NA_YTS_TYPE_SITTING,
-    /* 2 */ EN_NA_YTS_TYPE_SLEEPING,
-    /* 3 */ EN_NA_YTS_TYPE_ENDCREDITS
+    /* 0 */ MA_YTS_TYPE_BARN,
+    /* 1 */ MA_YTS_TYPE_SITTING,
+    /* 2 */ MA_YTS_TYPE_SLEEPING,
+    /* 3 */ MA_YTS_TYPE_ENDCREDITS
 } EnMaYtsType;
 
-#define EN_MA_YTS_PARSE_TYPE(actor) (((actor->params)&0xF000) >> 12)
+#define EN_MA_YTS_PARSE_TYPE(actor) ((((actor)->params)&0xF000) >> 12)
 #define EN_MA_YTS_PARAM(enMaYtsType) ((enMaYtsType) << 12)
 
 /**
- * EN_NA_YTS_TYPE_BARN: In the barn, accompanying Cremia. Cremia's actor will handle her dialogue if spoken to.
- * EN_NA_YTS_TYPE_SITTING: Having dinner or looking after the ranch.
- * EN_NA_YTS_TYPE_SLEEPING: Sleeping. Can be seen in the second night in her house if the player failed the alien invasion.
- * EN_NA_YTS_TYPE_ENDCREDITS: Used in the end credits sequence.
+ * MA_YTS_TYPE_BARN: In the barn, accompanying Cremia. Cremia's actor will handle her dialogue if spoken to.
+ * MA_YTS_TYPE_SITTING: Having dinner or looking after the ranch.
+ * MA_YTS_TYPE_SLEEPING: Sleeping. Can be seen in the second night in her house if the player failed the alien invasion.
+ * MA_YTS_TYPE_ENDCREDITS: Used in the end credits sequence.
  */
 
 #endif // Z_EN_MA_YTS_H
