@@ -89,7 +89,6 @@ void func_80A8EFF8(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z, u
 void func_80A8F404(GlobalContext* globalCtx, EnTrt* this);
 void func_80A8F268(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                    f32 dy);
-
 void func_80A8E26C(EnTrt* this);
 
 extern UNK_TYPE D_0401F740;
@@ -131,18 +130,10 @@ const ActorInit En_Trt_InitVars = {
 
 static f32 D_80A8FED0 = 0.008f;
 
-static ShopItem D_80A8FED4[3] = {
+static ShopItem D_80A8FED4[] = {
     { SI_POTION_RED_1, 24, 32, -36 },
     { SI_POTION_GREEN_1, 6, 32, -36 },
     { SI_POTION_BLUE, -12, 32, -36 },
-};
-
-static f32 D_80A8FEEC = 6.0f;
-static f32 D_80A8FEF0 = 35.0f;
-static f32 D_80A8FEF4 = -12.0f;
-
-static InitChainEntry D_80A8FEF8[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
 void func_80A8B770(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
@@ -1202,9 +1193,9 @@ void func_80A8E0D0(EnTrt* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Extra lui
 void func_80A8E26C(EnTrt* this) {
+    static Vec3f D_80A8FEEC = { 6.0f, 35.0f, -12.0f };
+
     u8 i = this->cursorIdx;
     EnGirlA* item;
     ShopItem* shopItem;
@@ -1213,17 +1204,14 @@ void func_80A8E26C(EnTrt* this) {
     shopItem = &D_80A8FED4[i];
     item = this->items[i];
 
-    worldPos.x = shopItem->x + (D_80A8FEEC - shopItem->x) * this->shopItemSelectedTween;
-    worldPos.y = shopItem->y + (D_80A8FEF0 - shopItem->y) * this->shopItemSelectedTween;
-    worldPos.z = shopItem->z + (D_80A8FEF4 - shopItem->z) * this->shopItemSelectedTween;
+    worldPos.x = shopItem->x + (D_80A8FEEC.x - shopItem->x) * this->shopItemSelectedTween;
+    worldPos.y = shopItem->y + (D_80A8FEEC.y - shopItem->y) * this->shopItemSelectedTween;
+    worldPos.z = shopItem->z + (D_80A8FEEC.z - shopItem->z) * this->shopItemSelectedTween;
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
     item->actor.world.pos.z = worldPos.z;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/func_80A8E26C.asm")
-#endif
 
 void func_80A8E30C(EnTrt* this) {
     this->shopItemSelectedTween = 0.0f;
@@ -1754,6 +1742,10 @@ void func_80A8F404(GlobalContext* globalCtx, EnTrt* this) {
 }
 
 void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx) {
+    static InitChainEntry D_80A8FEF8[] = {
+        ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    };
+
     EnTrt* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, D_80A8FEF8);
@@ -1819,7 +1811,6 @@ void func_80A8FA00(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
         arg3->z = sp68.z;
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/func_80A8FA00.asm")
 
 #ifdef NON_MATCHING
 // Matched but floats are in late rodata
@@ -1859,7 +1850,6 @@ void func_80A8FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         SysMatrix_InsertZRotation_s(this->unk416.z, MTXMODE_APPLY);
     }
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/func_80A8FBB4.asm")
 
 void func_80A8FC64(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
@@ -1890,4 +1880,3 @@ void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_Draw.asm")
