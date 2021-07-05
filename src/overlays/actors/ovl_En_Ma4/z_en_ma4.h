@@ -21,7 +21,7 @@ typedef struct EnMa4 {
     /* 0x31E */ char unk31E[0x6];
     /* 0x324 */ s16 pathIndex;
     /* 0x326 */ s16 pathPointsCount;
-    /* 0x328 */ char unk_328[0x2]; // unused
+    /* 0x328 */ char unk_328[0x2];
     /* 0x32A */ s16 blinkTimer;
     /* 0x33C */ s16 overrideEyeTexIndex;
     /* 0x32E */ s16 eyeTexIndex;
@@ -31,7 +31,7 @@ typedef struct EnMa4 {
     /* 0x336 */ s16 state;
     /* 0x338 */ s16 poppedBalloonCounter; // modified by EnPoFusen
     /* 0x33A */ s16 hasBow;
-    /* 0x33C */ s16 unk_33C;
+    /* 0x33C */ s16 animTimer;
     /* 0x33E */ u16 textId;
 } EnMa4; // size = 0x340
 
