@@ -322,8 +322,7 @@ void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x0E: Transition Actor List
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->doorCtx.numActors = cmd->transiActorList.num;
-    globalCtx->doorCtx.actorList =
-        (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
+    globalCtx->doorCtx.actorList = (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
     func_80105818(globalCtx, globalCtx->doorCtx.numActors, globalCtx->doorCtx.actorList);
 }
 
