@@ -1,0 +1,7 @@
+In file included from /usr/include/string.h:519,
+                 from vtxdis.c:5:
+In function ‘strncpy’,
+    inlined from ‘parse_int’ at vtxdis.c:41:9:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: warning: ‘__builtin_strncpy’ specified bound 20 equals destination size [-Wstringop-truncation]
+  106 |   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
