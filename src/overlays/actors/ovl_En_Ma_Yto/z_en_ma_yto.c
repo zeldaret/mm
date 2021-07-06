@@ -71,7 +71,7 @@ void EnMaYto_InitFaceExpression(EnMaYto* this);
 s32  func_80B90F84();
 
 s32  func_80B91014(void);
-void func_80B9109C(void);
+void EnMaYto_SetTalkedFlag(void);
 
 
 const ActorInit En_Ma_Yto_InitVars = {
@@ -186,7 +186,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, NULL, &this->unk_208, &this->unk_28C, 0x16);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, NULL, this->limbDrawTbl, this->transitionDrawTbl, MA2_LIMB_MAX);
     EnMaYto_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -228,6 +228,7 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case EN_NA_YTO_TYPE_3:
+            // if (!(ProtectedCremia) && !(gSaveContext.weekEventReg[0x34] & 2)) || (PlayedMilkMinigame)) {
             if ((!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) || (gSaveContext.weekEventReg[0xE] & 1)) {
                 return false;
             }
@@ -446,14 +447,8 @@ void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
             break;
 
         case 0:
-            break;
-
         case 1:
-            break;
-
         case 2:
-            break;
-
         case 3:
             break;
     }
@@ -1005,9 +1000,8 @@ void func_80B900AC(EnMaYto *this) {
 
 
 void func_80B900C0(EnMaYto *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx) != 0) {
+    if (Actor_HasParent(&this->actor, globalCtx)) {
         func_80B90170(this);
-        return;
     } else if (gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) {
         func_800B8A1C(&this->actor, globalCtx, 7, 500.0f, 100.0f);
         this->unk_310 = 2;
@@ -1181,7 +1175,7 @@ void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
                 this->textId = 0x3394;
             } else {
                 // Asks the player if he came from town.
-                func_80B9109C();
+                EnMaYto_SetTalkedFlag();
                 func_801518B0(globalCtx, 0x3390, &this->actor);
                 this->textId = 0x3390;
             }
@@ -1193,7 +1187,7 @@ void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
             this->textId = 0x33C5;
             func_80151BB4(globalCtx, 6);
         } else {
-            func_80B9109C();
+            EnMaYto_SetTalkedFlag();
             EnMaYto_SetFaceExpression(this, 0, 3);
             func_801518B0(globalCtx, 0x33C4U, &this->actor);
             this->textId = 0x33C4;
@@ -1238,7 +1232,7 @@ void EnMaYto_StartDialogue(EnMaYto *this, GlobalContext *globalCtx) {
                 func_801518B0(globalCtx, 0x339F, &this->actor);
                 this->textId = 0x339F;
             } else {
-                func_80B9109C();
+                EnMaYto_SetTalkedFlag();
                 func_801518B0(globalCtx, 0x3397, &this->actor);
                 this->textId = 0x3397;
             }
@@ -1251,7 +1245,7 @@ void EnMaYto_StartDialogue(EnMaYto *this, GlobalContext *globalCtx) {
             this->textId = 0x33A6;
             func_80151BB4(globalCtx, 6U);
         } else {
-            func_80B9109C();
+            EnMaYto_SetTalkedFlag();
             func_801518B0(globalCtx, 0x33A5, &this->actor);
             this->textId = 0x33A5;
         }
@@ -1263,7 +1257,7 @@ void EnMaYto_StartDialogue(EnMaYto *this, GlobalContext *globalCtx) {
             this->textId = 0x33A8;
             func_80151BB4(globalCtx, 6U);
         } else {
-            func_80B9109C();
+            EnMaYto_SetTalkedFlag();
             func_801518B0(globalCtx, 0x33A7U, &this->actor);
             this->textId = 0x33A7U;
         }
@@ -1281,7 +1275,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
                 this->textId = 0x33AE;
             } else {
                 this->unk_310 = 1;
-                func_80B9109C();
+                EnMaYto_SetTalkedFlag();
                 func_801518B0(globalCtx, 0x33A9U, &this->actor);
                 this->textId = 0x33A9;
             }
@@ -1292,7 +1286,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
                 this->textId = 0x33CB;
             } else {
                 this->unk_310 = 1;
-                func_80B9109C();
+                EnMaYto_SetTalkedFlag();
                 EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C6U, &this->actor);
                 this->textId = 0x33C6;
@@ -1307,7 +1301,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
             func_80151BB4(globalCtx, 6U);
         }
         else {
-            func_80B9109C();
+            EnMaYto_SetTalkedFlag();
             EnMaYto_SetFaceExpression(this, 5, 3);
             func_801518B0(globalCtx, 0x33B1U, &this->actor);
             this->textId = 0x33B1;
@@ -1379,7 +1373,7 @@ void EnMaYto_UpdateEyes(EnMaYto *this) {
 }
 
 
-// EnMaYto_SetRomani...
+// EnMaYto_SetRomani... something
 void func_80B90E50(EnMaYto *this, s16 arg1) {
     EnMaYts* romani = (EnMaYts*)this->actor.child;
 
@@ -1412,7 +1406,7 @@ void EnMaYto_InitFaceExpression(EnMaYto *this) {
     }
 }
 
-// HasTalkedToCremia?
+// HasPlayerTalkedToCremia(?)
 s32 func_80B90F84(void) {
     switch (CURRENT_DAY) {
         case 1:
@@ -1437,41 +1431,41 @@ s32 func_80B90F84(void) {
     return false;
 }
 
-// HasTalkedToCremia?
+// HasPlayerTalkedToCremia(?)
 s32 func_80B91014(void) {
     // Please note each case doesn't have their respective `break`s.
     switch (CURRENT_DAY) {
-    case 3:
-        if ((gSaveContext.weekEventReg[0xD] & 0x10) != 0) {
-            return true;
-        }
+        case 3:
+            if (gSaveContext.weekEventReg[0xD] & 0x10) {
+                return true;
+            }
 
-    case 2:
-        if ((gSaveContext.weekEventReg[0xD] & 0x8) != 0) {
-            return true;
-        }
+        case 2:
+            if (gSaveContext.weekEventReg[0xD] & 0x8) {
+                return true;
+            }
 
-    case 1:
-        if (gSaveContext.weekEventReg[0xD] & 0x4) {
-            return true;
-        }
+        case 1:
+            if (gSaveContext.weekEventReg[0xD] & 0x4) {
+                return true;
+            }
     }
     return false;
 }
 
-void func_80B9109C(void) {
+void EnMaYto_SetTalkedFlag(void) {
     switch (CURRENT_DAY) {
-    case 1:
-        gSaveContext.weekEventReg[0xD] |= 0x4;
-        break;
+        case 1:
+            gSaveContext.weekEventReg[0xD] |= 0x4;
+            break;
 
-    case 2:
-        gSaveContext.weekEventReg[0xD] |= 0x8;
-        break;
+        case 2:
+            gSaveContext.weekEventReg[0xD] |= 0x8;
+            break;
 
-    case 3:
-        gSaveContext.weekEventReg[0xD] |= 0x10;
-        break;
+        case 3:
+            gSaveContext.weekEventReg[0xD] |= 0x10;
+            break;
     }
 }
 
@@ -1488,11 +1482,11 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnMaYto* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == 9) {
+    if (limbIndex == MA2_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
         rot->x = rot->x + sp4.y;
         rot->z = rot->z + sp4.x;
-    } else if (limbIndex == 2) {
+    } else if (limbIndex == MA2_LIMB_TORSO) {
         if ((this->skelAnime.animCurrentSeg != &D_06007E28) && (this->skelAnime.animCurrentSeg != &D_06003D54)) {
             sp4 = this->unk_1D8.unk_0E;
             rot->x = rot->x + sp4.y;
@@ -1508,7 +1502,7 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 void EnMaYto_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == MA2_LIMB_HEAD) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
@@ -1519,7 +1513,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->type == EN_NA_YTO_TYPE_1 && (gSaveContext.weekEventReg[0x16] & 1)) {
+    if (this->type == EN_NA_YTO_TYPE_1 && (gSaveContext.weekEventReg[0x16] & 1)) { // Alieans defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_06005430);
     }

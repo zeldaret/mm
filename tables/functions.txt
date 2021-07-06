@@ -14823,7 +14823,7 @@
     0x80B90EF0:("EnMaYto_InitFaceExpression",),
     0x80B90F84:("func_80B90F84",),
     0x80B91014:("func_80B91014",),
-    0x80B9109C:("func_80B9109C",),
+    0x80B9109C:("EnMaYto_SetTalkedFlag",),
     0x80B9110C:("EnMaYto_Update",),
     0x80B91154:("EnMaYto_OverrideLimbDraw",),
     0x80B91250:("EnMaYto_PostLimbDraw",),
