@@ -63,12 +63,12 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
         Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-        globalCtx->interfaceCtx.unk25C = 1;
+        globalCtx->interfaceCtx.unk_25C = 1;
         this->hitFlag = 1;
         return 1;
     } else {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         return 0;
     }
 }

@@ -290,7 +290,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
                                         initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
             Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, 1);
 
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -347,7 +347,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor,
                          *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);
 
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);

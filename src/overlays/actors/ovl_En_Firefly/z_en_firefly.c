@@ -667,11 +667,11 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
     if ((this->actionFunc == EnFirefly_DiveAttack) || (this->actionFunc == EnFirefly_DisturbDiveAttack)) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->actor.colChkInfo.health != 0) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         this->actor.world.rot.y = this->actor.shape.rot.y;
 
         if (func_801378B8(&this->skelAnime, 5.0f)) {
@@ -679,7 +679,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if (this->unk_2E8.x > 0.0f) {
         if (this->unk_18F != 0xA) {

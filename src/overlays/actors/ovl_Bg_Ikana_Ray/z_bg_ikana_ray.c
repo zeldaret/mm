@@ -97,7 +97,7 @@ void BgIkanaRay_SetActivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, GlobalContext* globalCtx) {
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collision.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collision.base);
 }
 
 void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {

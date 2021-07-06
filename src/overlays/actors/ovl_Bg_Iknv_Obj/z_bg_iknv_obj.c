@@ -130,7 +130,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk12 == 4) &&
+    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 4) &&
         (globalCtx->csCtx.frames == 0x5D7)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
@@ -138,7 +138,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
 
 s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx) {
     this->dyna.actor.shape.yOffset = 0.0f;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     if (targetRotation != this->dyna.actor.shape.rot.y) {
         Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 100, 100);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
@@ -157,7 +157,7 @@ void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
         this->actionFunc = BgIknvObj_UpdateSakonDoor;
         gSaveContext.weekEventReg[51] &= (u8)~0x10;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -168,7 +168,7 @@ void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.home.rot.x = 0;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80BD7FDC(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -183,7 +183,7 @@ void func_80BD8040(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7CEC(this)) {
         this->actionFunc = func_80BD7FDC;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -191,7 +191,7 @@ void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BD8040;
         gSaveContext.weekEventReg[89] |= 0x80;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx) {
