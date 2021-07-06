@@ -70,22 +70,22 @@ typedef struct EnMaYto {
 extern const ActorInit En_Ma_Yto_InitVars;
 
 typedef enum {
-    /* 0 */ EN_NA_YTO_TYPE_0, // Strokes cow
-    /* 1 */ EN_NA_YTO_TYPE_1, // Strokes cow siting
-    /* 2 */ EN_NA_YTO_TYPE_2,
-    /* 3 */ EN_NA_YTO_TYPE_3, // Cutscene
-    /* 4 */ EN_NA_YTO_TYPE_4  // Credits?
+    /* 0 */ MA_YTO_TYPE_0, // Strokes cow
+    /* 1 */ MA_YTO_TYPE_1, // Strokes cow siting
+    /* 2 */ MA_YTO_TYPE_2,
+    /* 3 */ MA_YTO_TYPE_3, // After Milk Run minigame
+    /* 4 */ MA_YTO_TYPE_4  // HugCutscene
 } EnMaYtoType;
 
 #define EN_MA_YTO_PARSE_TYPE(params) (((params)&0xF000) >> 12)
 #define EN_MA_YTO_PARAM(enMaYtsType, arg1) (((enMaYtsType) << 12) | ((arg1) << 8))
 
 /**
- * EN_NA_YTO_TYPE_0: 
- * EN_NA_YTO_TYPE_1: 
- * EN_NA_YTO_TYPE_2: 
- * EN_NA_YTO_TYPE_3: 
- * EN_NA_YTO_TYPE_4: 
+ * MA_YTO_TYPE_0: 
+ * MA_YTO_TYPE_1: 
+ * MA_YTO_TYPE_2: 
+ * MA_YTO_TYPE_3: 
+ * MA_YTO_TYPE_4: 
  */
 
 #endif // Z_EN_MA_YTO_H

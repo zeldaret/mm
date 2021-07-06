@@ -50,11 +50,11 @@ void func_80B900AC(EnMaYto* this);
 void func_80B900C0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90170(EnMaYto* this);
 void func_80B90184(EnMaYto* this, GlobalContext* globalCtx);
-void func_80B902B8(EnMaYto* this);
-void func_80B902CC(EnMaYto* this, GlobalContext* globalCtx);
-void func_80B90340(EnMaYto* this);
+void EnMaYto_SetupBeginWarmFuzzyFeelingCs(EnMaYto* this);
+void EnMaYto_BeginWarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx);
+void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto* this);
 
-void func_80B9037C(EnMaYto* this, GlobalContext* globalCtx);
+void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B904D0(EnMaYto *this);
 void func_80B904E4(EnMaYto *this, GlobalContext *globalCtx);
 void func_80B9059C(EnMaYto *this);
@@ -202,19 +202,19 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 EnMaYto_CheckValidSpawn(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTO_TYPE_0:
+        case MA_YTO_TYPE_0:
             if (CURRENT_DAY == 3 && !(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
             }
             break;
 
-        case EN_NA_YTO_TYPE_2:
+        case MA_YTO_TYPE_2:
             if (CURRENT_DAY != 1 && (gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
             }
             break;
 
-        case EN_NA_YTO_TYPE_1:
+        case MA_YTO_TYPE_1:
             if (gSaveContext.weekEventReg[0x16] & 1) {
                 if (((this->actor.params & 0xF00) >> 8) != 0) {
                     return false;
@@ -227,14 +227,14 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTO_TYPE_3:
-            // if (!(ProtectedCremia) && !(gSaveContext.weekEventReg[0x34] & 2)) || (PlayedMilkMinigame)) {
+        case MA_YTO_TYPE_3:
+            // if (!(ProtectedCremia) && !(gSaveContext.weekEventReg[0x34] & 2)) || (PlayedMilkMinigame)) 
             if ((!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) || (gSaveContext.weekEventReg[0xE] & 1)) {
                 return false;
             }
             break;
 
-        case EN_NA_YTO_TYPE_4:
+        case MA_YTO_TYPE_4:
             break;
     }
 
@@ -243,11 +243,11 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, GlobalContext* globalCtx) {
 
 void EnMaYto_InitAnimation(EnMaYto* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTO_TYPE_0:
+        case MA_YTO_TYPE_0:
             EnMaYto_ChangeAnim(this, 10);
             break;
 
-        case EN_NA_YTO_TYPE_2:
+        case MA_YTO_TYPE_2:
             if (CURRENT_DAY == 1) {
                 EnMaYto_ChangeAnim(this, 14);
             } else {
@@ -255,7 +255,7 @@ void EnMaYto_InitAnimation(EnMaYto* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTO_TYPE_1:
+        case MA_YTO_TYPE_1:
             if (gSaveContext.weekEventReg[0x16] & 1) {
                 EnMaYto_ChangeAnim(this, 12);
             } else {
@@ -263,11 +263,11 @@ void EnMaYto_InitAnimation(EnMaYto* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTO_TYPE_3:
+        case MA_YTO_TYPE_3:
             EnMaYto_ChangeAnim(this, 0);
             break;
 
-        case EN_NA_YTO_TYPE_4:
+        case MA_YTO_TYPE_4:
             EnMaYto_ChangeAnim(this, 0);
             break;
 
@@ -280,31 +280,31 @@ void EnMaYto_InitAnimation(EnMaYto* this, GlobalContext* globalCtx) {
 
 void EnMaYto_ChooseAction(EnMaYto *this, GlobalContext *globalCtx) {
     switch (this->type) {
-        case EN_NA_YTO_TYPE_0:
+        case MA_YTO_TYPE_0:
             func_80B8EC30(this);
             break;
 
-        case EN_NA_YTO_TYPE_2:
+        case MA_YTO_TYPE_2:
             this->actor.targetMode = 6;
             func_80B8F074(this);
             break;
 
-        case EN_NA_YTO_TYPE_1:
+        case MA_YTO_TYPE_1:
             func_80B8F744(this);
             break;
 
-        case EN_NA_YTO_TYPE_3:
+        case MA_YTO_TYPE_3:
             this->unk_310 = 0;
             if ((gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) && (gSaveContext.weekEventReg[0x34] & 1) && ((Rand_Next() & 0x80) != 0)) {
-                func_80B902B8(this);
+                EnMaYto_SetupBeginWarmFuzzyFeelingCs(this);
             } else {
                 func_80B8FE04(this);
             }
             break;
 
-        case EN_NA_YTO_TYPE_4:
+        case MA_YTO_TYPE_4:
             this->actor.flags |= 0x10;
-            func_80B90340(this);
+            EnMaYto_SetupWarmFuzzyFeelingCs(this);
             break;
 
         default:
@@ -323,7 +323,7 @@ s32 EnMaYto_SearchRomani(EnMaYto *this, GlobalContext *globalCtx) {
             s16 romaniType;
 
             romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
-            if (((this->type == EN_NA_YTO_TYPE_2) && (romaniType == EN_NA_YTS_TYPE_SITTING)) || ((this->type == EN_NA_YTO_TYPE_1) && (romaniType == EN_NA_YTS_TYPE_BARN))) {
+            if (((this->type == MA_YTO_TYPE_2) && (romaniType == EN_NA_YTS_TYPE_SITTING)) || ((this->type == MA_YTO_TYPE_1) && (romaniType == EN_NA_YTS_TYPE_BARN))) {
                 this->actor.child = &romani->actor;
                 romani->actor.parent = &this->actor;
                 return true;
@@ -341,10 +341,10 @@ s32 EnMaYto_SearchRomani(EnMaYto *this, GlobalContext *globalCtx) {
 // Returns 2 if Romani was found. 0 seems to be the default. 1 seems to mean "Romani not found".
 s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
     switch (this->type) {
-        case EN_NA_YTO_TYPE_0:
+        case MA_YTO_TYPE_0:
             return 0;
 
-        case EN_NA_YTO_TYPE_2:
+        case MA_YTO_TYPE_2:
             if (!(gSaveContext.weekEventReg[0x16] & 1) && CURRENT_DAY == 2) {
                 return 0;
             }
@@ -353,7 +353,7 @@ s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
             }
             return 1;
 
-        case EN_NA_YTO_TYPE_1:
+        case MA_YTO_TYPE_1:
             if ((gSaveContext.weekEventReg[0x16] & 1)) {
                 if (EnMaYto_SearchRomani(this, globalCtx)) {
                     return 2;
@@ -362,10 +362,10 @@ s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
             }
             return 0;
 
-        case EN_NA_YTO_TYPE_3:
+        case MA_YTO_TYPE_3:
             return 0;
 
-        case EN_NA_YTO_TYPE_4:
+        case MA_YTO_TYPE_4:
             return 0;
     }
 
@@ -915,7 +915,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
 
 void func_80B8FE04(EnMaYto *this) {
-    if (gSaveContext.weekEventReg[0x34] & 1) {
+    if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
         func_801A3098(9);
@@ -931,15 +931,15 @@ void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actor.flags &= ~0x10000;
 
-        if (gSaveContext.weekEventReg[0x34] & 1) {
-            func_801518B0(globalCtx, 0x33C1U, &this->actor);
+        if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
+            func_801518B0(globalCtx, 0x33C1, &this->actor);
             this->textId = 0x33C1;
         } else {
             // Fails milk minigame
             EnMaYto_SetFaceExpression(this, 5, 2);
             func_801518B0(globalCtx, 0x33C0, &this->actor);
             this->textId = 0x33C0;
-            gSaveContext.weekEventReg[0xE] = (u8) (gSaveContext.weekEventReg[0xE] | 1);
+            gSaveContext.weekEventReg[0xE] |= 1;
             this->unk_310 = 4;
             func_80B904D0(this);
             func_80151BB4(globalCtx, 6);
@@ -1045,14 +1045,14 @@ void func_80B90184(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 
-void func_80B902B8(EnMaYto *this) {
-    this->actionFunc = func_80B902CC;
+void EnMaYto_SetupBeginWarmFuzzyFeelingCs(EnMaYto *this) {
+    this->actionFunc = EnMaYto_BeginWarmFuzzyFeelingCs;
 }
 
-void func_80B902CC(EnMaYto *this, GlobalContext *globalCtx) {
+void EnMaYto_BeginWarmFuzzyFeelingCs(EnMaYto *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene) != 0) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        func_80B90340(this);
+        EnMaYto_SetupWarmFuzzyFeelingCs(this);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -1061,13 +1061,13 @@ void func_80B902CC(EnMaYto *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80B90340(EnMaYto *this) {
+void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto *this) {
     EnMaYto_SetFaceExpression(this, 0, 1);
-    this->actionFunc = func_80B9037C;
+    this->actionFunc = EnMaYto_WarmFuzzyFeelingCs;
 }
 
-void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
-    if (func_800EE29C(globalCtx, 0x22CU) != 0) {
+void EnMaYto_WarmFuzzyFeelingCs(EnMaYto *this, GlobalContext *globalCtx) {
+    if (func_800EE29C(globalCtx, 0x22C) != 0) {
         u32 csActionIndex = func_800EE200(globalCtx, 0x22C);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[csActionIndex]->startFrame) {
@@ -1096,8 +1096,8 @@ void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, csActionIndex);
-        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == &D_06001FD0) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
-            EnMaYto_ChangeAnim(this, 0x14);
+        if ((D_80B915F0 == 2) && (this->skelAnime.animCurrentSeg == &D_06001FD0) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            EnMaYto_ChangeAnim(this, 20);
         }
     } else {
         D_80B915F0 = 99;
@@ -1126,8 +1126,10 @@ void func_80B9059C(EnMaYto *this) {
 
 void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
     if (this->unk_310 == 3) {
+        // Termina Field
         globalCtx->nextEntranceIndex = 0x54D0;
     } else {
+        // Romani Ranch
         globalCtx->nextEntranceIndex = 0x6480;
     }
     gSaveContext.unk_3F4A = 0;
@@ -1333,7 +1335,7 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_320 == 0) {
-        if (this->actionFunc == func_80B9037C) {
+        if (this->actionFunc == EnMaYto_WarmFuzzyFeelingCs) {
             this->unk_1D8.unk_08.y = 0;
             this->unk_1D8.unk_08.x = 0;
         } else {
@@ -1348,7 +1350,7 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_UpdateCollision(EnMaYto* this, GlobalContext* globalCtx) {
-    if (this->actionFunc != func_80B9037C) {
+    if (this->actionFunc != EnMaYto_WarmFuzzyFeelingCs) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
@@ -1513,7 +1515,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->type == EN_NA_YTO_TYPE_1 && (gSaveContext.weekEventReg[0x16] & 1)) { // Alieans defeated
+    if (this->type == MA_YTO_TYPE_1 && (gSaveContext.weekEventReg[0x16] & 1)) { // Alieans defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_06005430);
     }
