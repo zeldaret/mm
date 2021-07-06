@@ -115,7 +115,7 @@ typedef struct EnInvadepoh {
     /* 0x309 */ s8 unk309;
     /* 0x30A */ s8 unk30A;
     /* 0x30B */ s8 unk30B;
-    /* 0x30C */ Vec3s* pathPoint;
+    /* 0x30C */ Vec3s* pathPoints;
     /* 0x310 */ f32 pathTotalDist;
     /* 0x314 */ Vec3f curPathPos;
     /* 0x320 */ f32 clockTime;

@@ -733,7 +733,7 @@ void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2);
 
 void func_80B43DD4(EnInvadepoh* this, s16 arg1, s16 arg2) {
     s32 pad;
-    Vec3s* arr = &this->pathPoint[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp30;
     Vec3f sp24;
@@ -747,7 +747,7 @@ void func_80B43DD4(EnInvadepoh* this, s16 arg1, s16 arg2) {
 
 void func_80B43E6C(EnInvadepoh* this, s16 arg1, s16 arg2, s16 arg3) {
     s32 pad;
-    Vec3s* arr = &this->pathPoint[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp38;
     Vec3f sp2C;
@@ -761,7 +761,7 @@ void func_80B43E6C(EnInvadepoh* this, s16 arg1, s16 arg2, s16 arg3) {
 
 void func_80B43F0C(EnInvadepoh* this) {
     s32 pad;
-    Vec3s* arr = &this->pathPoint[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp28;
     Vec3f sp1C;
@@ -782,7 +782,7 @@ f32 func_80B43F70(EnInvadepoh* this) {
     s32 temp_s4;
 
     temp_s4 = this->unk308 + 1;
-    temp_s0 = this->pathPoint;
+    temp_s0 = this->pathPoints;
     temp_f20 = 0.0f;
     Math_Vec3s_ToVec3f(&sp48, temp_s0);
     temp_s0++;
@@ -802,11 +802,11 @@ void func_80B44024(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     path = &globalCtx->setupPathList[(this->actor.params >> 8) & 0x7F];
     this->unk308 = path->count - 1;
-    this->pathPoint = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
 }
 
 void func_80B4407C(EnInvadepoh* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoint[arg1]);
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B440B8.asm")
@@ -823,7 +823,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
     s32 ret = 0;
     Vec3s* arr;
 
-    for (i = 0, arr = this->pathPoint; i < temp_s3; i++, arr++) {
+    for (i = 0, arr = this->pathPoints; i < temp_s3; i++, arr++) {
         Math_Vec3s_ToVec3f(&sp48, arr);
         distance = Math3D_DistanceSquared(&sp48, vec);
         if (distance < min) {
@@ -878,7 +878,7 @@ void func_80B443A0(EnInvadepoh* this) {
     f32* phi_s0;
     s32 i;
 
-    arr = this->pathPoint;
+    arr = this->pathPoints;
     temp_s5 = this->unk308;
     temp_f26 = 1.0f / this->pathTotalDist;
     Math_Vec3s_ToVec3f(&sp64, arr);
@@ -1023,7 +1023,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     sp40 = this->actor.world.pos.y;
     temp_v0 = this->unk309;
-    temp_a3 = &this->pathPoint[temp_v0];
+    temp_a3 = &this->pathPoints[temp_v0];
     if (temp_v0 <= 0) {
         sp3C = 0.0f;
     } else {
@@ -1134,7 +1134,7 @@ void func_80B44B78(EnInvadepoh* this) {
 
 s32 func_80B44B84(EnInvadepoh* this, GlobalContext* globalCtx, f32 speed, f32 arg3) {
     s32 pad;
-    Vec3s* temp_v0_2 = &this->pathPoint[this->unk309];
+    Vec3s* temp_v0_2 = &this->pathPoints[this->unk309];
     s32 temp_v0;
 
     temp_v0_2++;
@@ -1170,7 +1170,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     u32 phi_v0;
     f32 adj;
     f32 opp;
-    arr = this->pathPoint;
+    arr = this->pathPoints;
     retVal = 0;
     temp_v1 = this->unk309 + this->unk30A;
     temp_a2 = &arr[this->unk309];
@@ -3463,7 +3463,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 diff;
 
     if ((globalCtx->gameplayFrames & 0xFF) == 0) {
-        Math_Vec3s_ToVec3f(&sp44, this->pathPoint);
+        Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
         sp42 = Math_Vec3f_Yaw(&this->actor.world, &sp44);
         temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
         this->behaviorInfo.unk4C = 0;
@@ -3921,7 +3921,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 3.8f, 0.45f);
 
     if (this->unk3BC >= 0) {
-        Math_Vec3s_ToVec3f(&sp28, &this->pathPoint[this->unk3BC]);
+        Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
         temp_f0 = Math3D_DistanceSquared(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
             this->actor.speedXZ *= 0.85f;
@@ -4401,8 +4401,8 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else if (temp_v1_3) { // fake match probably
     }
 
-    Math_Vec3s_ToVec3f(&sp4C, &this->pathPoint[phi_a2]);
-    Math_Vec3s_ToVec3f(&sp40, &this->pathPoint[phi_a2 + 1]);
+    Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
+    Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 0x7D0, 0x64);
     if ((this->unk309 == 0) || (this->unk309 + 1 == this->unk308)) {
         if (this->unk378 == 0) {
