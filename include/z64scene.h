@@ -299,8 +299,8 @@ typedef struct {
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 numActors;
-    /* 0x04 */ TransitionActorEntry* actorList;
+    /* 0x00 */ u8 numTransitionActors;
+    /* 0x04 */ TransitionActorEntry* transitionActorList;
 } DoorContext;
 
 typedef struct {

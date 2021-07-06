@@ -321,14 +321,15 @@ void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->doorCtx.numActors = cmd->transiActorList.num;
-    globalCtx->doorCtx.actorList = (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
-    func_80105818(globalCtx, globalCtx->doorCtx.numActors, globalCtx->doorCtx.actorList);
+    globalCtx->doorCtx.numTransitionActors = cmd->transiActorList.num;
+    globalCtx->doorCtx.transitionActorList =
+        (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
+    func_80105818(globalCtx, globalCtx->doorCtx.numTransitionActors, globalCtx->doorCtx.transitionActorList);
 }
 
 // Init function for the transition system.
 void Door_InitContext(GameState* state, DoorContext* doorCtx) {
-    doorCtx->numActors = 0;
+    doorCtx->numTransitionActors = 0;
 }
 
 // SceneTableEntry Header Command 0x0F: Environment Light Settings List
