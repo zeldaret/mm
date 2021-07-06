@@ -1711,7 +1711,7 @@
     0x800F4C0C:("func_800F4C0C",),
     0x800F4E20:("func_800F4E20",),
     0x800F4F28:("func_800F4F28",),
-    0x800F4F40:("Kanfont_Nop800F4F40",),
+    0x800F4F40:("Font_LoadChar",),
     0x800F4F54:("Font_LoadCharNES",),
     0x800F4FC0:("Font_LoadMessageBoxEndIcon",),
     0x800F5004:("Font_LoadOrderedFont",),
