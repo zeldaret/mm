@@ -405,11 +405,11 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80B8E32C) {
-                D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.npcActions[actionIndex]->unk0 != D_80B8E32C) {
+                D_80B8E32C = globalCtx->csCtx.npcActions[actionIndex]->unk0;
                 this->endCreditsFlag = 0;
-                switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
+                switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);
@@ -516,7 +516,7 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     collider = &this->collider;
     Collider_UpdateCylinder(&this->actor, collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &collider->base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &collider->base);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnMaYts_UpdateEyes(this);
     func_80B8D12C(this, globalCtx);
