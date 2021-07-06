@@ -421,7 +421,7 @@ static unkstruct_invadepoh_2 D_80B4EA88 = {
     &D_80B4E9F4,
 };
 
-static unkstruct_invadepoh_union* D_80B4EA90[] = {
+static void* D_80B4EA90[] = {
     &D_80B4E9FC, &D_80B4EA2C, &D_80B4EA40, &D_80B4EA50, &D_80B4EA60, &D_80B4EA70, &D_80B4EA80, &D_80B4EA88,
 };
 
@@ -449,7 +449,7 @@ static unkstruct_invadepoh_2 D_80B4EAF0 = { 0, &D_80B4EAD0 };
 
 static unkstruct_invadepoh_2 D_80B4EAF8 = { 0, &D_80B4EAD8 };
 
-static unkstruct_invadepoh_union* D_80B4EB00[] = {
+static void* D_80B4EB00[] = {
     &D_80B4EAE0,
     &D_80B4EAE8,
     &D_80B4EAF0,
@@ -519,7 +519,7 @@ static unkstruct_invadepoh_3 D_80B4EBCC = {
     D_80B4EB80,
 };
 
-static unkstruct_invadepoh_union* D_80B4EBDC[] = {
+static void* D_80B4EBDC[] = {
     &D_80B4EB58, &D_80B4EB88, &D_80B4EB9C, &D_80B4EBAC, &D_80B4EBBC, &D_80B4EBCC,
 };
 
@@ -529,19 +529,21 @@ static unkstruct_invadepoh_0 D_80B4EBF8 = { D_80B4EBF4, 1 };
 
 static unkstruct_invadepoh_2 D_80B4EC00 = { 0, &D_80B4EBF8 };
 
-static unkstruct_invadepoh_union* D_80B4EC08[] = { &D_80B4EC00 };
+static void* D_80B4EC08[] = { &D_80B4EC00 };
 
-static OtherSubstructFunc D_80B4EC0C[] = {
+static void (*D_80B4EC0C[])(struct EnInvadePohStruct*, s32* arg1) = {  
     func_80B45A4C,
     func_80B45A94,
-    func_80B45B1C,
+    func_80B45B1C, 
 };
 
 static Color_RGBA8 D_80B4EC18 = { 0xFF, 0xFF, 0xC8, 0xFF };
 
 static Color_RGBA8 D_80B4EC1C = { 0xFF, 0xC8, 0x00, 0x00 };
 
-static OtherFunc D_80B4EC20[] = { func_80B46184 };
+static void (*D_80B4EC20[])(struct unkStruct_80B50350*) = {
+func_80B46184
+};
 
 static InitChainEntry D_80B4EC24[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
@@ -654,7 +656,7 @@ static Vec3f D_80B4EE30 = {
 // bss---------------------
 MtxF D_80B502A0;
 MtxF D_80B502E0;
-EnInvadepoh* D_80B50320[0x8]; // not sure if this should be Actor* or EnInvadepoh* array
+Actor* D_80B50320[0x8]; // not sure if this should be Actor* or EnInvadepoh* array
 u8 D_80B50340[0x8];
 UNK_TYPE1 D_80B50348;
 unkStruct_80B50350 D_80B50350[0xA];
@@ -1508,6 +1510,10 @@ void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     }
 }
 
+// ISMATCHING
+#ifdef NON_MATCHING
+// matching, but has a warning because I haven't decoded the data well enough
+// yet. The first temp is not the correct type. 
 void func_80B45A4C(EnInvadePohStruct* s, s32* u) {
     unkstruct_invadepoh_3* new_var = s->unk8;
     unkstruct_invadepoh_0* temp_v1 = new_var->unk4;
@@ -1517,6 +1523,9 @@ void func_80B45A4C(EnInvadePohStruct* s, s32* u) {
         s->unkF = temp_v1->unk00[s->unkE];
     }
 }
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B45A4C.asm")
+#endif
 
 void func_80B45A94(EnInvadePohStruct* s, s32* u) {
     unkstruct_invadepoh_0* temp_v1;
@@ -2054,7 +2063,7 @@ void func_80B46FA8(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else {
         func_80B457A0(this);
         for (i = 0; i < this->unk379; i++) {
-            if ((D_80B50320[i] != NULL) && (D_80B50320[i]->unk38A != 0)) {
+            if ((D_80B50320[i] != NULL) && (((EnInvadepoh*)D_80B50320[i])->unk38A != 0)) {
                 func_80B47278(this);
                 break;
             }
@@ -4046,7 +4055,7 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
     s32 temp_v0_2;
     s32 phi_v0;
 
-    D_80B5040C = func_80B458D8();
+    D_80B5040C = (Actor*)func_80B458D8();
     if (D_80B5040C == 0) {
         temp_v0_2 = (this->unk3BC < 0) ^ 1;
         this->unk3BC = -1;
