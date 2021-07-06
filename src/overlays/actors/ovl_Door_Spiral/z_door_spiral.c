@@ -119,7 +119,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomContext.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomCtx.currRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
@@ -181,7 +181,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
 
-    if (this->actor.room != globalCtx->transitionCtx.transitionActorList[transition].sides[0].room) {
+    if (this->actor.room != globalCtx->doorCtx.transitionActorList[transition].sides[0].room) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -205,7 +205,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
 
-    globalCtx->transitionCtx.transitionActorList[transition].id *= -1;
+    globalCtx->doorCtx.transitionActorList[transition].id *= -1;
 }
 
 /**
@@ -283,7 +283,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->doorNext = ((u16)globalCtx->transitionCtx.transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)globalCtx->doorCtx.transitionActorList[transition].params) >> 10;
 
         func_80122F28(player, globalCtx, &this->actor);
     }

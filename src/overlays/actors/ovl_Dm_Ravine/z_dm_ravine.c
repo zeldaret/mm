@@ -37,8 +37,8 @@ void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->isActive = false;
-    globalCtx->roomContext.unk7A[0] = 1;
-    globalCtx->roomContext.unk7A[1] = 0;
+    globalCtx->roomCtx.unk7A[0] = 1;
+    globalCtx->roomCtx.unk7A[1] = 0;
     this->state = 0;
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = DmRavine_DoNothing;
@@ -59,12 +59,12 @@ void DmRavine_Update(Actor* thisx, GlobalContext* globalCtx) {
             return;
         case DM_RAVINE_STATE_ACTIVE:
             this->isActive = true;
-            globalCtx->roomContext.unk7A[1]++;
-            if (globalCtx->roomContext.unk7A[1] > 254) {
-                globalCtx->roomContext.unk7A[1] = 254;
+            globalCtx->roomCtx.unk7A[1]++;
+            if (globalCtx->roomCtx.unk7A[1] > 254) {
+                globalCtx->roomCtx.unk7A[1] = 254;
                 if (globalCtx->csCtx.frames > 700) {
-                    globalCtx->roomContext.unk7A[1] = 255;
-                    globalCtx->roomContext.unk7A[0] = 0;
+                    globalCtx->roomCtx.unk7A[1] = 255;
+                    globalCtx->roomCtx.unk7A[0] = 0;
                     this->state++; // -> DM_RAVINE_STATE_PENDING_DEATH
                 }
             }

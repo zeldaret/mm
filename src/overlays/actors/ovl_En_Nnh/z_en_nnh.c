@@ -95,7 +95,7 @@ void EnNnh_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx) {
