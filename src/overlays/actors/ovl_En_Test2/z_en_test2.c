@@ -15,7 +15,7 @@ const ActorInit En_Test2_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(EnTest2),
     (ActorFunc)EnTest2_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)EnTest2_Update,
     (ActorFunc)NULL,
 };
