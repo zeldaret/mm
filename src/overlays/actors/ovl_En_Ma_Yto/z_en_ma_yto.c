@@ -1076,8 +1076,8 @@ void func_80B9037C(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_800EE29C(globalCtx, 0x22CU) != 0) {
         u32 csActionIndex = func_800EE200(globalCtx, 0x22C);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[csActionIndex]->startFrame) {
-            u16 action = globalCtx->csCtx.actorActions[csActionIndex]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[csActionIndex]->startFrame) {
+            u16 action = globalCtx->csCtx.npcActions[csActionIndex]->unk0;
 
             if (1) { }
 
@@ -1137,8 +1137,8 @@ void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
         globalCtx->nextEntranceIndex = 0x6480;
     }
     gSaveContext.unk_3F4A = 0;
-    globalCtx->unk18875 = 0x14;
-    globalCtx->unk1887F = 0x50;
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 0x50;
     gSaveContext.nextTransition = 3;
 }
 
@@ -1356,7 +1356,7 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
 void EnMaYto_UpdateCollision(EnMaYto* this, GlobalContext* globalCtx) {
     if (this->actionFunc != func_80B9037C) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
