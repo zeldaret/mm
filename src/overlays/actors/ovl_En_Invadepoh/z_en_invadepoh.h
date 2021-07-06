@@ -15,7 +15,7 @@ typedef struct unkStruct_80B50350{
     /* 0x000 */ s8 unk0;
     /* 0x001 */ s8 unk1;
     /* 0x002 */ u8 unk2;
-    /* 0x004 */ Vec3f unk4; //boundary 
+    /* 0x004 */ Vec3f unk4; // boundary 
 } unkStruct_80B50350; // size = 0x10;
 
 typedef struct {
@@ -75,7 +75,7 @@ typedef struct EnInvadePohStruct{
     /* 0x00F */ s8 unkF;
 } EnInvadePohStruct; // size = 0x10;
 
-typedef struct EnInvadePohStructUnk324 {
+typedef struct AlienBehaviorInfo {
     /* 0x000 */ EnInvadePohStruct unk0;
     /* 0x010 */ EnInvadePohStruct unk10;
     /* 0x020 */ Vec3s unk20;
@@ -93,23 +93,21 @@ typedef struct EnInvadePohStructUnk324 {
     /* 0x04A */ char unk4A[0x2];
     /* 0x04C */ s16 unk4C;
     /* 0x04E */ s16 unk4E;
-} EnInvadePohStructUnk324; // size = 0x50
+} AlienBehaviorInfo; // size = 0x50
 
 typedef struct EnInvadepoh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s limbDrawTable[23];
     /* 0x212 */ Vec3s transitionDrawTable[23];
-    /* 0x29C */ s8 unk29C;
-    /* 0x29D */ char unk29D[0x3];
+    /* 0x29C */ s8 animPlayFlag;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;
-    /* 0x2F0 */ s16 unk2F0;
-    /* 0x2F2 */ s16 unk2F2;
-    /* 0x2F4 */ s8 unk2F4; // object index
-    /* 0x2F5 */ char unk2F5[0x3];
+    /* 0x2F0 */ s16 actionTimer;
+    /* 0x2F2 */ s16 counter; // general counter variable
+    /* 0x2F4 */ s8 bankIndex;
     /* 0x2F8 */ f32 unk2F8;
-    /* 0x2FC */ char unk2FC[0x4];
+    /* 0x2FC */ f32 unk2FC;
     /* 0x300 */ f32 unk300;
     /* 0x304 */ s16 unk304; // angle of some sort
     /* 0x306 */ s16 unk306;
@@ -117,34 +115,32 @@ typedef struct EnInvadepoh {
     /* 0x309 */ s8 unk309;
     /* 0x30A */ s8 unk30A;
     /* 0x30B */ s8 unk30B;
-    /* 0x30C */ Vec3s* unk30C;
-    /* 0x310 */ f32 unk310;
-    /* 0x314 */ Vec3f unk314;
-    /* 0x320 */ f32 unk320;
-    /* 0x324 */ EnInvadePohStructUnk324 EnInvadePohStructUnk324;
+    /* 0x30C */ Vec3s* pathPoints;
+    /* 0x310 */ f32 pathTotalDist;
+    /* 0x314 */ Vec3f curPathPos;
+    /* 0x320 */ f32 clockTime;
+    /* 0x324 */ AlienBehaviorInfo behaviorInfo;
     /* 0x374 */ s8 unk374;
     /* 0x375 */ s8 unk375;
-    /* 0x376 */ u16 unk376;
+    /* 0x376 */ u16 textId;
     /* 0x378 */ s8 unk378;
     /* 0x379 */ s8 unk379;
-    /* 0x37A */ char unk37A[0x2];
     /* 0x37C */ f32 unk37C[3];
-    /* 0x388 */ char unk388[0x1];
-    /* 0x389 */ u8 unk389; // color
+    /* 0x388 */ s8 unk388;
+    /* 0x389 */ u8 alienAlpha;
     /* 0x38A */ s8 unk38A;
-    /* 0x38B */ s8 unk38B;
-    /* 0x38C */ s8 unk38C;
-    /* 0x38D */ u8 unk38D;
-    /* 0x390 */ Vec3f unk390; // float on boundary
+    /* 0x38B */ s8 drawAlien;
+    /* 0x38C */ s8 drawAlienDeathEffect;
+    /* 0x38D */ u8 alienBeamAlpha;
+    /* 0x390 */ Vec3f alienDeathEffectScale;
     /* 0x39C */ f32 unk39C;
     /* 0x3A0 */ f32 unk3A0;
     /* 0x3A4 */ f32 unk3A4;
     /* 0x3A8 */ s16 unk3A8;
     /* 0x3AA */ s16 unk3AA;
     /* 0x3AC */ s8 unk3AC;
-    /* 0x3AD */ char unk3AD[0xF];
+    /* 0x3B0 */ Vec3f unk3B0;
     /* 0x3BC */ s8 unk3BC;
-    /* 0x3BD */ char unk3BD[0x3];
 } EnInvadepoh; // size = 0x3C0
 
 extern const ActorInit En_Invadepoh_InitVars;

@@ -721,7 +721,7 @@ s32 func_80B43B80(EnInvadepoh* this) {
     s32 temp = this->unk308 - 1;
 
     for (i = 0; i < temp; i++) {
-        if (this->unk37C[i] > this->unk320) {
+        if (this->unk37C[i] > this->clockTime) {
             break;
         }
     }
@@ -734,7 +734,7 @@ void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2);
 
 void func_80B43DD4(EnInvadepoh* this, s16 arg1, s16 arg2) {
     s32 pad;
-    Vec3s* arr = &this->unk30C[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp30;
     Vec3f sp24;
@@ -748,7 +748,7 @@ void func_80B43DD4(EnInvadepoh* this, s16 arg1, s16 arg2) {
 
 void func_80B43E6C(EnInvadepoh* this, s16 arg1, s16 arg2, s16 arg3) {
     s32 pad;
-    Vec3s* arr = &this->unk30C[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp38;
     Vec3f sp2C;
@@ -762,7 +762,7 @@ void func_80B43E6C(EnInvadepoh* this, s16 arg1, s16 arg2, s16 arg3) {
 
 void func_80B43F0C(EnInvadepoh* this) {
     s32 pad;
-    Vec3s* arr = &this->unk30C[this->unk309];
+    Vec3s* arr = &this->pathPoints[this->unk309];
     s32 pad2;
     Vec3f sp28;
     Vec3f sp1C;
@@ -783,7 +783,7 @@ f32 func_80B43F70(EnInvadepoh* this) {
     s32 temp_s4;
 
     temp_s4 = this->unk308 + 1;
-    temp_s0 = this->unk30C;
+    temp_s0 = this->pathPoints;
     temp_f20 = 0.0f;
     Math_Vec3s_ToVec3f(&sp48, temp_s0);
     temp_s0++;
@@ -803,11 +803,11 @@ void func_80B44024(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     path = &globalCtx->setupPathList[(this->actor.params >> 8) & 0x7F];
     this->unk308 = path->count - 1;
-    this->unk30C = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
 }
 
 void func_80B4407C(EnInvadepoh* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk30C[arg1]);
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B440B8.asm")
@@ -824,7 +824,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
     s32 ret = 0;
     Vec3s* arr;
 
-    for (i = 0, arr = this->unk30C; i < temp_s3; i++, arr++) {
+    for (i = 0, arr = this->pathPoints; i < temp_s3; i++, arr++) {
         Math_Vec3s_ToVec3f(&sp48, arr);
         distance = Math3D_DistanceSquared(&sp48, vec);
         if (distance < min) {
@@ -847,14 +847,14 @@ void func_80B442E4(EnInvadepoh* this) {
     s32 temp_v1_2 = sp18 - func_80B43A24(this->actor.params & 7);
 
     if (D_80B4E940 == 1) {
-        this->unk320 = 0.0f;
+        this->clockTime = 0.0f;
     } else if (D_80B4E940 == 2) {
         if (temp_v1_2 < 0) {
-            this->unk320 = 0.0f;
+            this->clockTime = 0.0f;
         } else {
-            this->unk320 = temp_v1_2 * 0.00027777779f;
-            if (this->unk320 > 1.0f) {
-                this->unk320 = 1.0f;
+            this->clockTime = temp_v1_2 * 0.00027777779f;
+            if (this->clockTime > 1.0f) {
+                this->clockTime = 1.0f;
             }
         }
     }
@@ -879,9 +879,9 @@ void func_80B443A0(EnInvadepoh* this) {
     f32* phi_s0;
     s32 i;
 
-    arr = this->unk30C;
+    arr = this->pathPoints;
     temp_s5 = this->unk308;
-    temp_f26 = 1.0f / this->unk310;
+    temp_f26 = 1.0f / this->pathTotalDist;
     Math_Vec3s_ToVec3f(&sp64, arr);
     if (temp_s5 >= 2) {
         arr++;
@@ -903,7 +903,7 @@ void func_80B443A0(EnInvadepoh* this) {
 
 void func_80B444BC(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->unk310 = func_80B43F70(this);
+    this->pathTotalDist = func_80B43F70(this);
     func_80B443A0(this);
 }
 
@@ -920,7 +920,7 @@ void func_80B44514(EnInvadepoh* this) {
 
 void func_80B44540(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->unk310 = func_80B43F70(this);
+    this->pathTotalDist = func_80B43F70(this);
 }
 
 // ISMATCHING: Move rodata once all funcs match
@@ -929,13 +929,13 @@ void func_80B44570(EnInvadepoh* this) {
     s32 temp_v0 = gSaveContext.time;
 
     if ((temp_v0 < CLOCK_TIME(2, 0)) || (temp_v0 >= CLOCK_TIME(6, 0))) {
-        this->unk320 = 0.0f;
+        this->clockTime = 0.0f;
     } else if ((temp_v0 >= CLOCK_TIME(2, 15)) && (temp_v0 < CLOCK_TIME(6, 0))) {
-        this->unk320 = 1.0f;
+        this->clockTime = 1.0f;
     } else {
         f32 new_var = (temp_v0 - 0x1555) * 0.0014641288f;
-        this->unk320 = new_var;
-        this->unk320 = CLAMP(this->unk320, 0.0f, 1.0f);
+        this->clockTime = new_var;
+        this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }
 }
 #else
@@ -968,7 +968,7 @@ void func_80B44690(EnInvadepoh* this) {
 
 void func_80B446D0(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->unk310 = func_80B43F70(this);
+    this->pathTotalDist = func_80B43F70(this);
 }
 
 // ISMATCHING: Move rodata once all funcs match
@@ -978,13 +978,13 @@ void func_80B44700(EnInvadepoh* this) {
     s32 new_var4 = 0xFFFF2AAB;
 
     if ((currentTime < CLOCK_TIME(20, 0)) && (currentTime >= CLOCK_TIME(6, 0))) {
-        this->unk320 = 0.0f;
+        this->clockTime = 0.0f;
     } else if ((currentTime > 0xD7E0) || (currentTime < CLOCK_TIME(6, 0))) {
-        this->unk320 = 1.0f;
+        this->clockTime = 1.0f;
     } else {
         f32 new_var = 0.0014641288f;
-        this->unk320 = (currentTime + new_var4) * new_var;
-        this->unk320 = CLAMP(this->unk320, 0.0f, 1.0f);
+        this->clockTime = (currentTime + new_var4) * new_var;
+        this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }
 }
 #else
@@ -1024,7 +1024,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     sp40 = this->actor.world.pos.y;
     temp_v0 = this->unk309;
-    temp_a3 = &this->unk30C[temp_v0];
+    temp_a3 = &this->pathPoints[temp_v0];
     if (temp_v0 <= 0) {
         sp3C = 0.0f;
     } else {
@@ -1036,12 +1036,12 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
         phi_f2 = 1.0f;
     }
     temp_f18 = phi_f2 - sp3C;
-    temp_a2 = &this->unk314;
+    temp_a2 = &this->curPathPos;
     if (temp_f18 < D_80B4EE50) {
         sp24 = temp_a2;
         Math_Vec3s_ToVec3f(temp_a2, temp_a3);
     } else {
-        temp_f0 = this->unk320;
+        temp_f0 = this->clockTime;
         temp_f16 = 1.0f / temp_f18;
         sp60 = temp_a3;
         temp_f14 = phi_f2 - temp_f0;
@@ -1051,11 +1051,11 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
         sp2C = temp_f16;
         Math_Vec3s_ToVec3f(&sp50, &temp_a3[0]);
         Math_Vec3s_ToVec3f(&sp44, &temp_a3[1]);
-        this->unk314.x = ((sp50.x * temp_f14) + (sp44.x * temp_f12)) * temp_f16;
-        this->unk314.y = ((sp50.y * temp_f14) + (sp44.y * temp_f12)) * temp_f16;
-        this->unk314.z = ((sp50.z * temp_f14) + (sp44.z * temp_f12)) * temp_f16;
+        this->curPathPos.x = ((sp50.x * temp_f14) + (sp44.x * temp_f12)) * temp_f16;
+        this->curPathPos.y = ((sp50.y * temp_f14) + (sp44.y * temp_f12)) * temp_f16;
+        this->curPathPos.z = ((sp50.z * temp_f14) + (sp44.z * temp_f12)) * temp_f16;
     }
-    Math_Vec3f_Copy(&this->actor.world, &this->unk314);
+    Math_Vec3f_Copy(&this->actor.world, &this->curPathPos);
     func_800B4AEC(globalCtx, this, 0.0f);
     temp_f2 = this->actor.floorHeight;
     if (D_80B4EE54 < temp_f2) {
@@ -1135,7 +1135,7 @@ void func_80B44B78(EnInvadepoh* this) {
 
 s32 func_80B44B84(EnInvadepoh* this, GlobalContext* globalCtx, f32 speed, f32 arg3) {
     s32 pad;
-    Vec3s* temp_v0_2 = &this->unk30C[this->unk309];
+    Vec3s* temp_v0_2 = &this->pathPoints[this->unk309];
     s32 temp_v0;
 
     temp_v0_2++;
@@ -1171,7 +1171,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     u32 phi_v0;
     f32 adj;
     f32 opp;
-    arr = this->unk30C;
+    arr = this->pathPoints;
     retVal = 0;
     temp_v1 = this->unk309 + this->unk30A;
     temp_a2 = &arr[this->unk309];
@@ -1403,7 +1403,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 arg2, s32 arg
 }
 
 void func_80B4560C(EnInvadepoh* this, GlobalContext* globalCtx, u16 arg2) {
-    this->unk376 = arg2;
+    this->textId = arg2;
     func_801518B0(globalCtx, arg2 & 0xFFFF, &this->actor);
 }
 
@@ -1452,7 +1452,7 @@ void func_80B457A0(EnInvadepoh* this) {
     phi_s5 = -1;
 
     for (i = 0; i < this->unk379; i++) {
-        if ((D_80B50320[i] != NULL) && (D_80B50320[i]->unk38B != 0)) {
+        if ((D_80B50320[i] != NULL) && (D_80B50320[i]->drawAlien != 0)) {
             distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
             if (distanceSquared < phi_f20) {
                 phi_f20 = distanceSquared;
@@ -1554,7 +1554,7 @@ void func_80B45BB8(EnInvadePohStruct* s) {
 
 // cursed
 #ifdef NON_MATCHING
-void func_80B45C04(EnInvadePohStructUnk324* substruct, unkstruct_invadepoh_union* arg1, s32 arg2, unkstruct_invadepoh_union* arg3, s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
+void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_union* arg1, s32 arg2, unkstruct_invadepoh_union* arg3, s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
     unkstruct_invadepoh_4* temp_v0;
     unkstruct_invadepoh_4* temp_v0_2;
 
@@ -1587,7 +1587,7 @@ void func_80B45C04(EnInvadePohStructUnk324* substruct, unkstruct_invadepoh_union
 #endif
 
 
-void func_80B45CE0(EnInvadePohStructUnk324* substruct) {
+void func_80B45CE0(AlienBehaviorInfo* substruct) {
     Vec3f sp3C;
     Vec3s sp34;
     s16 step;
@@ -1768,8 +1768,8 @@ void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx) {
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E8B0);
         this->actor.colChkInfo.mass = 0x28;
     }
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_UCH);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_UCH);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -1779,8 +1779,8 @@ void func_80B46520(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actor.update = func_80B47FA8;
     Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
                           0x30);
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -1788,8 +1788,8 @@ void func_80B46520(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B465CC(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, D_80B4EC44);
     this->actor.update = func_80B481C4;
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -1826,8 +1826,8 @@ void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.update = func_80B4CE54;
     }
 
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA1);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA1);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
     if (temp == 5) {
@@ -1889,8 +1889,8 @@ void func_80B469C4(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E908);
     this->actor.colChkInfo.mass = 0x50;
     ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 24.0f);
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -1905,8 +1905,8 @@ void func_80B46A80(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E8DC);
     this->actor.colChkInfo.mass = 0xFE;
     ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
-    this->unk2F4 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA2);
-    if (this->unk2F4 < 0) {
+    this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA2);
+    if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
     if (!(gSaveContext.weekEventReg[0x16] & 1)) {
@@ -1999,13 +1999,13 @@ void func_80B46DC8(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B46E20(EnInvadepoh* this) {
     D_80B4E940 = 2;
-    this->unk2F0 = 2;
+    this->actionTimer = 2;
     this->actionFunc = func_80B46E44;
 }
 
 void func_80B46E44(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
         return;
     }
 
@@ -2019,7 +2019,7 @@ void func_80B46E44(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B46EC0(EnInvadepoh* this) {
     D_80B4E940 = 2;
-    this->unk2F0 = 0xA0;
+    this->actionTimer = 0xA0;
     this->actionFunc = func_80B46EE8;
 }
 
@@ -2027,13 +2027,13 @@ void func_80B46EE8(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        if (this->unk2F0 == D_80B4ED20[i]) {
+        if (this->actionTimer == D_80B4ED20[i]) {
             D_80B50340[i] |= 1;
         }
     }
 
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
         func_801A89A8(0x800D);
         func_80B46F88(this);
@@ -2078,16 +2078,16 @@ void func_80B47084(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B470E0(EnInvadepoh* this) {
     D_80B4E940 = 3;
-    this->unk2F0 = 0x6E;
+    this->actionTimer = 0x6E;
     this->actionFunc = func_80B47108;
 }
 
 void func_80B47108(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk2F0 == 0x64) {
+    if (this->actionTimer == 0x64) {
         func_801A3098(0x19);
     }
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         globalCtx->nextEntranceIndex = 0x6460;
         gSaveContext.unk_3F4A = 0;
         globalCtx->sceneLoadFlag = 0x14;
@@ -2162,11 +2162,11 @@ void func_80B47380(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 &= ~1;
     this->actor.flags &= 0x7FFFFFFF;
-    this->unk389 = 0;
+    this->alienAlpha = 0;
     this->actor.draw = NULL;
-    this->unk38B = 0;
-    this->unk38C = 0;
-    this->unk38D = 0;
+    this->drawAlien = false;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0;
     this->actionFunc = func_80B473E4;
 }
 
@@ -2187,11 +2187,11 @@ void func_80B47478(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 &= ~1;
     this->actor.flags &= 0x7FFFFFFF;
-    this->unk389 = 0;
+    this->alienAlpha = 0;
     this->actor.draw = 0;
-    this->unk38B = 0;
-    this->unk38C = 0;
-    this->unk38D = 0;
+    this->drawAlien = false;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0;
     this->actionFunc = func_80B474DC;
 }
 
@@ -2199,7 +2199,7 @@ void func_80B474DC(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B442E4(this);
     func_80B447C0(this, globalCtx);
     func_80B43DD4(this, 800, 0);
-    if (this->unk320 > 0.0f) {
+    if (this->clockTime > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
         func_80B4516C(this);
         func_80B46118(&this->actor.world.pos);
@@ -2212,11 +2212,11 @@ void func_80B47568(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~0x1;
     this->collider.base.acFlags &= ~0x1;
     this->collider.base.ocFlags1 &= ~0x1;
-    this->unk389 = 0;
+    this->alienAlpha = 0;
     this->actor.draw = func_80B4DB14;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0;
     this->actor.flags |= 0x80000000;
     this->actionFunc = func_80B47600;
 }
@@ -2228,25 +2228,25 @@ void func_80B47600(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B447C0(this, globalCtx);
     func_80B43DD4(this, 800, 0);
     func_800B9010(this, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
-    if (0.9999f <= this->unk320) {
+    if (0.9999f <= this->clockTime) {
         this->unk38A = 1;
     }
-    if (this->unk389 >= 0xF9) {
-        this->unk389 = 0xFF;
+    if (this->alienAlpha >= 0xF9) {
+        this->alienAlpha = 0xFF;
     } else {
-        this->unk389 += 6;
+        this->alienAlpha += 6;
     }
-    if (this->unk389 >= 0x81) {
+    if (this->alienAlpha >= 0x81) {
         this->collider.base.atFlags |= 1;
         this->collider.base.acFlags |= 1;
         this->collider.base.ocFlags1 |= 1;
     }
-    if (this->unk389 == 0xFF) {
-        if (this->unk38D >= 0xF5) {
-            this->unk38D = 0xFF;
+    if (this->alienAlpha == 0xFF) {
+        if (this->alienBeamAlpha >= 0xF5) {
+            this->alienBeamAlpha = 0xFF;
             func_80B4770C(this);
         } else {
-            this->unk38D += 10;
+            this->alienBeamAlpha += 10;
         }
     }
 }
@@ -2261,11 +2261,11 @@ void func_80B4770C(EnInvadepoh* this) {
     this->collider.base.atFlags |= 1;
     this->collider.base.acFlags |= 1;
     this->collider.base.ocFlags1 |= 1;
-    this->unk389 = 0xFF;
+    this->alienAlpha = 0xFF;
     this->actor.draw = func_80B4DB14;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0xFF;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0xFF;
     this->actor.flags |= 0x80000000;
     this->actionFunc = func_80B477B4;
 }
@@ -2277,7 +2277,7 @@ void func_80B477B4(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B447C0(this, globalCtx);
     func_80B43DD4(this, 0x320, 0);
     func_800B9010(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
-    if (0.9999f <= this->unk320) {
+    if (0.9999f <= this->clockTime) {
         this->unk38A = 1;
     }
 }
@@ -2291,21 +2291,21 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.ocFlags1 |= 1;
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060006C8);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
-    this->unk389 = 0xFF;
+    this->alienAlpha = 0xFF;
     this->actor.draw = func_80B4DB14;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0;
-    this->unk2F0 = 8;
-    this->unk2F2 = 0;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0;
+    this->actionTimer = 8;
+    this->counter = 0;
     this->actor.flags |= 0x80000000;
     this->actionFunc = func_80B478F4;
 }
 
 void func_80B478F4(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44A90(this, globalCtx);
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B47938(this);
     }
 }
@@ -2316,12 +2316,12 @@ void func_80B47938(EnInvadepoh* this) {
     this->collider.base.ocFlags1 &= ~1;
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06000608);
     this->actor.flags &= ~1;
-    this->unk2F0 = 0xA;
-    this->unk389 = 0xFF;
+    this->actionTimer = 0xA;
+    this->alienAlpha = 0xFF;
     this->actor.draw = func_80B4DB14;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0xFF;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0xFF;
     this->actor.flags |= 0x80000000;
     this->actionFunc = func_80B479E8;
 }
@@ -2330,47 +2330,47 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 unk2F2;
     u32 index;
     func_80B44B78(this);
-    if (this->unk2F2 < 5) {
-        if (D_80B4ED30[this->unk2F2].x > 0.0f) {
-            this->unk38B = 1;
-            this->unk38D = 0xFF;
-            Math_Vec3f_Copy(&this->actor.scale, &D_80B4ED30[this->unk2F2]);
+    if (this->counter < 5) {
+        if (D_80B4ED30[this->counter].x > 0.0f) {
+            this->drawAlien = true;
+            this->alienBeamAlpha = 0xFF;
+            Math_Vec3f_Copy(&this->actor.scale, &D_80B4ED30[this->counter]);
         } else {
-            this->unk38B = 0;
-            this->unk38D = 0;
+            this->drawAlien = false;
+            this->alienBeamAlpha = 0;
         }
 
     } else {
-        this->unk38B = 0;
-        this->unk38D = 0;
+        this->drawAlien = false;
+        this->alienBeamAlpha = 0;
     }
 
-    unk2F2 = this->unk2F2;
+    unk2F2 = this->counter;
     if ((unk2F2 >= 2) && (unk2F2 < 9)) {
         index = unk2F2 - 2;
         if (D_80B4ED6C[index].x > 0.0f) {
-            this->unk38C = 1;
-            Math_Vec3f_Copy(&this->unk390, &D_80B4ED6C[index]);
+            this->drawAlienDeathEffect = true;
+            Math_Vec3f_Copy(&this->alienDeathEffectScale, &D_80B4ED6C[index]);
         } else {
-            this->unk38C = 0;
+            this->drawAlienDeathEffect = false;
         }
 
     } else {
-        this->unk38C = 0;
+        this->drawAlienDeathEffect = false;
     }
 
-    this->unk2F2++;
-    if (this->unk2F0 == 8) {
+    this->counter++;
+    if (this->actionTimer == 8) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                     this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 3, 200);
     }
 
-    if (this->unk2F0 == 8) {
+    if (this->actionTimer == 8) {
         func_800BBA88(globalCtx, &this->actor);
     }
 
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B43AF0(this->actor.params & 7);
         func_80B43AB0();
         Item_DropCollectible(globalCtx, &this->actor.world.pos, 8);
@@ -2383,8 +2383,8 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
@@ -2399,7 +2399,7 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
         if (D_80B4E940 == 1 || gSaveContext.time < 0x1AD8) {
             func_80B47380(this);
         } else if (D_80B4E940 == 2) {
-            if (this->unk320 >= 0.0001f) {
+            if (this->clockTime >= 0.0001f) {
                 func_80B4770C(this);
             } else {
                 func_80B47568(this);
@@ -2443,7 +2443,7 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if (thisx->draw != NULL) {
-        this->unk29C = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -2470,8 +2470,8 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 pad;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
@@ -2519,8 +2519,8 @@ void func_80B481C4(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 pad;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         this->actor.update = func_80B4827C;
         this->actor.draw = func_80B4E1B0;
@@ -2542,15 +2542,15 @@ void func_80B4827C(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B482D4(EnInvadepoh* this) {
-    this->unk2F0 = 0x28;
+    this->actionTimer = 0x28;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06002A8C, -10.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80B48324;
 }
 
 void func_80B48324(EnInvadepoh* this, GlobalContext* globalCtx) {
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B4560C(this, globalCtx, 0x332F);
         this->actor.draw = func_80B4E324;
         func_80B48374(this);
@@ -2558,7 +2558,7 @@ void func_80B48324(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B48374(EnInvadepoh* this) {
-    this->unk2F0 = 60;
+    this->actionTimer = 60;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06002A8C, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B483CC;
@@ -2567,18 +2567,18 @@ void func_80B48374(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B483CC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk2F0 == 20) {
+    if (this->actionTimer == 20) {
         f32 unkFloat = 0.1f; // required to match
 
-        this->EnInvadePohStructUnk324.unk26.x = 2000;
-        this->EnInvadePohStructUnk324.unk26.y = 0;
-        this->EnInvadePohStructUnk324.unk26.z = 0;
-        this->EnInvadePohStructUnk324.unk30 = unkFloat;
-        this->EnInvadePohStructUnk324.unk2C = 1000;
+        this->behaviorInfo.unk26.x = 2000;
+        this->behaviorInfo.unk26.y = 0;
+        this->behaviorInfo.unk26.z = 0;
+        this->behaviorInfo.unk30 = unkFloat;
+        this->behaviorInfo.unk2C = 1000;
     }
 
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B4843C(this);
     }
 }
@@ -2589,15 +2589,15 @@ void func_80B483CC(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4843C(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk26.x = 3000;
-    this->EnInvadePohStructUnk324.unk26.y = 0;
-    this->EnInvadePohStructUnk324.unk26.z = 0;
-    this->EnInvadePohStructUnk324.unk30 = 0.24f;
-    this->EnInvadePohStructUnk324.unk2C = 3000;
-    this->EnInvadePohStructUnk324.unk42 = 15000;
-    this->EnInvadePohStructUnk324.unk44 = 0.1f;
-    this->EnInvadePohStructUnk324.unk48 = 2000;
-    this->unk2F0 = 50;
+    this->behaviorInfo.unk26.x = 3000;
+    this->behaviorInfo.unk26.y = 0;
+    this->behaviorInfo.unk26.z = 0;
+    this->behaviorInfo.unk30 = 0.24f;
+    this->behaviorInfo.unk2C = 3000;
+    this->behaviorInfo.unk42 = 15000;
+    this->behaviorInfo.unk44 = 0.1f;
+    this->behaviorInfo.unk48 = 2000;
+    this->actionTimer = 50;
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06007328, 2.0f, 0.0f, 0.0f, 0, -5.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B484EC;
@@ -2607,17 +2607,17 @@ void func_80B4843C(EnInvadepoh* this) {
 #endif
 
 void func_80B484EC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk2F0 == 40) {
-        this->EnInvadePohStructUnk324.unk26.y = 7000;
-    } else if (this->unk2F0 == 30) {
-        this->EnInvadePohStructUnk324.unk26.y = -7000;
-    } else if (this->unk2F0 == 20) {
-        this->EnInvadePohStructUnk324.unk26.y = 7000;
-    } else if (this->unk2F0 == 10) {
-        this->EnInvadePohStructUnk324.unk26.y = 0;
+    if (this->actionTimer == 40) {
+        this->behaviorInfo.unk26.y = 7000;
+    } else if (this->actionTimer == 30) {
+        this->behaviorInfo.unk26.y = -7000;
+    } else if (this->actionTimer == 20) {
+        this->behaviorInfo.unk26.y = 7000;
+    } else if (this->actionTimer == 10) {
+        this->behaviorInfo.unk26.y = 0;
     }
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B48588(this);
     }
 }
@@ -2625,14 +2625,14 @@ void func_80B484EC(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B48588(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk26.x = 0;
-    this->EnInvadePohStructUnk324.unk26.y = 0;
-    this->EnInvadePohStructUnk324.unk26.z = 0;
-    this->EnInvadePohStructUnk324.unk30 = 0.24f;
-    this->EnInvadePohStructUnk324.unk2C = 5000;
-    this->EnInvadePohStructUnk324.unk42 = 0;
-    this->EnInvadePohStructUnk324.unk44 = 0.28f;
-    this->EnInvadePohStructUnk324.unk48 = 7000;
+    this->behaviorInfo.unk26.x = 0;
+    this->behaviorInfo.unk26.y = 0;
+    this->behaviorInfo.unk26.z = 0;
+    this->behaviorInfo.unk30 = 0.24f;
+    this->behaviorInfo.unk2C = 5000;
+    this->behaviorInfo.unk42 = 0;
+    this->behaviorInfo.unk44 = 0.28f;
+    this->behaviorInfo.unk48 = 7000;
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06009E58, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B48610;
@@ -2650,14 +2650,14 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
     EnInvadepoh* this = THIS;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f,
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f,
                       0.12f);
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
@@ -2670,7 +2670,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4873C(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 pad;
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     if (this->actor.parent == NULL) {
         Actor_MarkForDeath(&this->actor);
@@ -2687,10 +2687,10 @@ void func_80B4873C(Actor* thisx, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B487B4(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     u32 new_var;
 
-    this->unk2F0 = Rand_S16Offset(150, 250);
+    this->actionTimer = Rand_S16Offset(150, 250);
     new_var = Rand_Next();
     substruct->unk26.x = D_80B4EDC8[new_var >> 0x1E];
     substruct->unk26.y = 0;
@@ -2710,19 +2710,19 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 1.6f, 0.1f);
     if (func_80B44B84(this, globalCtx, this->actor.speedXZ, 50.0f)) {
         func_80B44514(this);
-        this->EnInvadePohStructUnk324.unk4C = 0xC8;
+        this->behaviorInfo.unk4C = 0xC8;
         this->actor.speedXZ *= 0.25f;
     } else {
-        Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x46);
+        Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x46);
     }
-    func_80B43E6C(this, 6, this->EnInvadePohStructUnk324.unk4C, 0x46);
+    func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
     if ((this->actor.flags & 0x40) == 0x40) {
         if ((func_801378B8(&this->skelAnime, 0.0f)) || (func_801378B8(&this->skelAnime, 7.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
         return;
     }
     func_80B48948(this);
@@ -2731,10 +2731,10 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B48948(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     f32 rand = Rand_ZeroOne();
 
-    this->unk2F0 = Rand_S16Offset(150, 150);
+    this->actionTimer = Rand_S16Offset(150, 150);
     if (rand < 0.5f) {
         this->unk374 = 0;
         Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
@@ -2773,7 +2773,7 @@ void func_80B48948(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player;
     s16 new_var3;
     s16 temp_v1;
@@ -2802,8 +2802,8 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
         substruct->unk26.y = 0;
     }
 
-    if (this->unk2F0 > 0) {
-        temp_v1_3 = this->unk2F0 & 0x1F;
+    if (this->actionTimer > 0) {
+        temp_v1_3 = this->actionTimer & 0x1F;
         if ((temp_v1_3 == 0) && (Rand_ZeroOne() < 0.3f)) {
             temp_v1_3 = Rand_Next();
             temp_v1_3 = temp_v1_3 % 4;
@@ -2831,7 +2831,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             }
         }
 
-        this->unk2F0--;
+        this->actionTimer--;
     } else {
         func_80B487B4(this);
     }
@@ -2843,11 +2843,11 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B48DE4(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     this->actor.speedXZ = 0.0f;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, -10.0f);
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     substruct->unk30 = 0.05f;
     substruct->unk2C = 1200;
     this->actionFunc = func_80B48E4C;
@@ -2859,13 +2859,13 @@ void func_80B48DE4(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x32);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x32);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C,
                        0x23);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus, &player->base.focus);
     temp_v1 *= 0.85f;
@@ -2887,8 +2887,8 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B490F0;
@@ -2896,7 +2896,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x64, 0.03f, 0.3f,
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x64, 0.03f, 0.3f,
                       0.03f);
         func_80B444F4(this, globalCtx);
         func_80B4407C(this, 0);
@@ -2925,7 +2925,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (sp2C) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-        func_80B45CE0(&this->EnInvadePohStructUnk324);
+        func_80B45CE0(&this->behaviorInfo);
         if (this->actionFunc != func_80B48E4C) {
             if (!isTalking) {
                 if (this->actor.isTargeted) {
@@ -2972,7 +2972,7 @@ void func_80B49228(EnInvadepoh* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 void func_80B492FC(EnInvadepoh* this) {
     this->actor.velocity.y *= 0.1f;
-    this->unk2F0 = 20;
+    this->actionTimer = 20;
     this->unk3A0 = 0.3f;
     this->unk3A4 = 0.03f;
     this->unk3AA = 3000;
@@ -2996,8 +2996,8 @@ void func_80B4934C(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actor.velocity.y *= 0.96f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
-    this->unk2F0--;
-    if (this->unk2F0 <= 0) {
+    this->actionTimer--;
+    if (this->actionTimer <= 0) {
         func_80B49404(this);
     }
 }
@@ -3008,12 +3008,12 @@ void func_80B4934C(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B49404(EnInvadepoh* this) {
-    this->unk2F0 = 120;
+    this->actionTimer = 120;
     this->unk3A0 = 0.2f;
     this->unk3A4 = 0.01f;
     this->unk3AA = 3000;
     this->unk3AC = 0;
-    this->unk2F2 = 0;
+    this->counter = 0;
     this->actor.gravity = 33.0f;
     this->actionFunc = func_80B49454;
 }
@@ -3028,10 +3028,10 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp30;
     s32 pad2;
 
-    if (this->unk2F2 < 0x19) {
-        this->unk2F2++;
+    if (this->counter < 0x19) {
+        this->counter++;
     } else {
-        this->unk2F2 = 0;
+        this->counter = 0;
         this->unk3AC++;
         this->unk3AC = CLAMP_MAX(this->unk3AC, 4);
         this->actor.gravity = 33.0f;
@@ -3057,8 +3057,8 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actor.velocity.y *= 0.97f;
     this->actor.world.pos.y += this->actor.velocity.y;
     func_800B9010(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         func_80B49628(this);
     }
@@ -3116,7 +3116,7 @@ void func_80B497A4(EnInvadepoh* this) {
     this->unk3A0 = 0.2f;
     this->unk3A4 = 0.01f;
     this->unk3AA = 3000;
-    this->unk2F0 = 35;
+    this->actionTimer = 35;
     this->actor.gravity = -1.5f;
     this->actionFunc = func_80B497EC;
 }
@@ -3143,8 +3143,8 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     this->actor.velocity.y *= 0.97f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
         return;
     }
     func_80B49904(this);
@@ -3159,7 +3159,7 @@ void func_80B49904(EnInvadepoh* this) {
     this->unk3A0 = 0.2f;
     this->unk3A4 = 0.01f;
     this->unk3AA = 3000;
-    this->unk2F0 = 60;
+    this->actionTimer = 60;
     this->actor.gravity = 1.0f;
     this->actionFunc = func_80B4994C;
 }
@@ -3173,8 +3173,8 @@ void func_80B4994C(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -3186,7 +3186,7 @@ void func_80B4994C(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B499BC(EnInvadepoh* this) {
-    this->unk2F0 = 40;
+    this->actionTimer = 40;
     this->unk3A0 = 0.2f;
     this->unk3A4 = 0.01f;
     this->unk3AA = 3000;
@@ -3216,8 +3216,8 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         func_80B497A4(this);
     }
@@ -3248,7 +3248,7 @@ void func_80B49B1C(Actor* thisx, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B49BD0(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06014088, -10.0f);
     substruct->unk26.x = 0;
@@ -3291,7 +3291,7 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
-    if (0.9999f <= this->unk320) {
+    if (0.9999f <= this->clockTime) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -3302,9 +3302,9 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B49DA0(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 2000;
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 2000;
+    this->behaviorInfo.unk4C = 0;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, -10.0f);
     this->actionFunc = func_80B49DFC;
 }
@@ -3315,13 +3315,13 @@ void func_80B49DA0(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus, &player->base.focus) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
@@ -3349,14 +3349,14 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 sp38;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.time;
-        this->actor.objBankIndex = this->unk2F4;
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03, 0.3,
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03, 0.3,
                       0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
@@ -3417,7 +3417,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C != 0) {
         if (this->actor.update != NULL) {
             SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-            func_80B45CE0(&this->EnInvadePohStructUnk324);
+            func_80B45CE0(&this->behaviorInfo);
             if (this->actionFunc != func_80B49DFC) {
                 if (!temp_v0) {
                     if (this->actor.isTargeted) {
@@ -3434,7 +3434,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4A2C0(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, -10.0f);
     substruct->unk26.x = 0;
@@ -3442,7 +3442,7 @@ void func_80B4A2C0(EnInvadepoh* this) {
     substruct->unk26.z = 0;
     substruct->unk30 = 0.1f;
     substruct->unk2C = 1500;
-    this->unk2F0 = Rand_S16Offset(200, 200);
+    this->actionTimer = Rand_S16Offset(200, 200);
     this->unk304 = this->actor.shape.rot.y;
     this->actor.flags |= 9;
     this->actionFunc = func_80B4A350;
@@ -3457,22 +3457,22 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp44;
     s16 sp42;
     Player* player;
-    EnInvadePohStructUnk324* substruct;
+    AlienBehaviorInfo* substruct;
     s16 temp_v0;
     s16 temp_v1_2;
     s32 temp_f18;
     s16 diff;
 
     if ((globalCtx->gameplayFrames & 0xFF) == 0) {
-        Math_Vec3s_ToVec3f(&sp44, this->unk30C);
+        Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
         sp42 = Math_Vec3f_Yaw(&this->actor.world, &sp44);
         temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
-        this->EnInvadePohStructUnk324.unk4C = 0;
+        this->behaviorInfo.unk4C = 0;
         this->unk304 = temp_v0 + sp42;
     }
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x28);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->EnInvadePohStructUnk324.unk4C, 0x28);
-    substruct = &this->EnInvadePohStructUnk324;
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->behaviorInfo.unk4C, 0x28);
+    substruct = &this->behaviorInfo;
     if (this->actor.xzDistToPlayer < 300.0f) {
         player = PLAYER;
 
@@ -3492,8 +3492,8 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
         substruct->unk26.y = 0;
         substruct->unk26.z = 0;
     }
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         func_80B4A570(this);
     }
@@ -3505,7 +3505,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4A570(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06002A8C, -10.0f);
     substruct->unk26.x = 0;
@@ -3521,7 +3521,7 @@ void func_80B4A570(EnInvadepoh* this) {
 #endif
 
 void func_80B4A5E4(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk29C != 0) {
+    if (this->animPlayFlag != 0) {
         func_80B4A2C0(this);
     }
 }
@@ -3529,7 +3529,7 @@ void func_80B4A5E4(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4A614(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06014088, 0.0f);
     substruct->unk26.x = 0;
@@ -3549,12 +3549,12 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
     if (func_80B44B84(this, globalCtx, this->actor.speedXZ, 50.0f)) {
         func_80B44640(this);
-        this->EnInvadePohStructUnk324.unk4C = 0x5DC;
+        this->behaviorInfo.unk4C = 0x5DC;
         this->actor.speedXZ *= 0.5f;
     } else {
-        Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x190, 0x32);
+        Math_StepToS(&this->behaviorInfo.unk4C, 0x190, 0x32);
     }
-    func_80B43E6C(this, 6, this->EnInvadePohStructUnk324.unk4C, 0x32);
+    func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x32);
     if (this->unk309 == 0) {
         if (this->unk378 == 0) {
             this->unk378 = func_80B45550(this, globalCtx, 6400.0f, -0xF);
@@ -3577,9 +3577,9 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4A7C0(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 2000;
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 2000;
+    this->behaviorInfo.unk4C = 0;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, 0.0f);
     this->actionFunc = func_80B4A81C;
 }
@@ -3590,13 +3590,13 @@ void func_80B4A7C0(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus, &player->base.focus) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
@@ -3629,14 +3629,14 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
     s32 sp38;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.time;
-        this->actor.objBankIndex = this->unk2F4;
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f,
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f,
                       0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < 0x1800) || (sp38 >= 0x4000)) {
@@ -3693,8 +3693,8 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->actionFunc(this, globalCtx);
     if (sp2C != 0) {
-        this->unk29C = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-        func_80B45CE0(&this->EnInvadePohStructUnk324);
+        this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        func_80B45CE0(&this->behaviorInfo);
         if (this->actionFunc != func_80B4A81C) {
             if (temp_v0 == 0) {
                 if (this->actor.isTargeted) {
@@ -3739,7 +3739,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 
 void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        if (this->unk376 == 0x3331) {
+        if (this->textId == 0x3331) {
             if (gSaveContext.weekEventReg[22] & 2) {
                 func_80B4560C(this, globalCtx, 0x3334);
                 func_80151BB4(globalCtx, 0x1D);
@@ -3749,11 +3749,11 @@ void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
             func_80B4560C(this, globalCtx, 0x3333);
             return;
         }
-        if (this->unk376 == 0x3333) {
+        if (this->textId == 0x3333) {
             func_80B4AEC0(this);
             return;
         }
-        if (this->unk376 == 0x3334) {
+        if (this->textId == 0x3334) {
             func_801477B4(globalCtx);
             func_80B4B024(this);
         }
@@ -3761,14 +3761,14 @@ void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4AEC0(EnInvadepoh* this) {
-    this->unk2F0 = 2;
+    this->actionTimer = 2;
     this->actionFunc = func_80B4AEDC;
 }
 
 void func_80B4AEDC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
-        if (this->unk2F0 == 0) {
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
+        if (this->actionTimer == 0) {
             func_801477B4(globalCtx);
         }
     }
@@ -3816,19 +3816,19 @@ void func_80B4B048(EnInvadepoh* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
-    EnInvadePohStructUnk324* substruct;
+    AlienBehaviorInfo* substruct;
     s32 pad;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
         SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, 0.0f);
-        substruct = &this->EnInvadePohStructUnk324;
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x7D0, 0.08f, 0.3f,
+        substruct = &this->behaviorInfo;
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x7D0, 0.08f, 0.3f,
                       0.03f);
         substruct->unk30 = 0.08f;
         substruct->unk2C = 0x7D0;
@@ -3849,16 +3849,16 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     s16 temp_v1;
     s32 sp38;
     Player* player;
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     sp38 = (this->actor.flags & 0x40) == 0x40;
     this->actionFunc(this, globalCtx);
     if (sp38 != 0 && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         player = PLAYER;
-        Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x28);
+        Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6,
-                           this->EnInvadePohStructUnk324.unk4C, 0x28);
+                           this->behaviorInfo.unk4C, 0x28);
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->base.focus.pos) * 0.9f);
         temp_v1 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
@@ -3885,7 +3885,7 @@ void func_80B4B3DC(EnInvadepoh* this) {
 
 void func_80B4B430(EnInvadepoh* this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_060021C8, -6.0f);
-    this->unk2F0 = Rand_S16Offset(50, 80);
+    this->actionTimer = Rand_S16Offset(50, 80);
     this->actionFunc = func_80B4B484;
 }
 
@@ -3896,11 +3896,11 @@ void func_80B4B484(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     func_80B4B3DC(this);
     if (this->unk3BC >= 0) {
-        this->unk2F0 = 0;
+        this->actionTimer = 0;
     }
 
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
     } else {
         func_80B4B510(this);
     }
@@ -3908,7 +3908,7 @@ void func_80B4B484(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B4B510(EnInvadepoh* this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06001BD8, -6.0f);
-    this->unk2F0 = Rand_S16Offset(50, 200);
+    this->actionTimer = Rand_S16Offset(50, 200);
     this->actionFunc = func_80B4B564;
 }
 
@@ -3922,7 +3922,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 3.8f, 0.45f);
 
     if (this->unk3BC >= 0) {
-        Math_Vec3s_ToVec3f(&sp28, &this->unk30C[this->unk3BC]);
+        Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
         temp_f0 = Math3D_DistanceSquared(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
             this->actor.speedXZ *= 0.85f;
@@ -3932,7 +3932,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
             this->actor.speedXZ *= 0.96f;
         }
         if (this->unk309 == this->unk3BC || temp_f0 < SQ(50.0f)) {
-            this->unk2F0 = 0;
+            this->actionTimer = 0;
         }
     }
     func_80B4B3DC(this);
@@ -3940,8 +3940,8 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_80B44690(this);
     }
 
-    if (this->unk2F0 > 0) {
-        this->unk2F0--;
+    if (this->actionTimer > 0) {
+        this->actionTimer--;
         return;
     }
     if (this->unk3BC >= 0) {
@@ -3974,7 +3974,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (func_801378B8(&this->skelAnime, 13.0f) || func_801378B8(&this->skelAnime, 19.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
-    if (this->unk29C != 0) {
+    if (this->animPlayFlag != 0) {
         func_80B4B510(this);
     }
 }
@@ -3987,7 +3987,7 @@ void func_80B4B820(EnInvadepoh* this) {
 void func_80B4B864(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.5f, 1.0f);
     func_80B44E90(this, globalCtx);
-    if (this->unk29C != 0) {
+    if (this->animPlayFlag != 0) {
         func_80B4B510(this);
     }
 }
@@ -3998,17 +3998,17 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 pad;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
-        this->actor.objBankIndex = this->unk2F4;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->limbDrawTable,
                          this->transitionDrawTable, 13);
-        func_80B45C04(&this->EnInvadePohStructUnk324, 0, 0, 0, 0, &D_801D15BC, 0xBB8, 0.1f, 0.0f, 0.0f);
+        func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &D_801D15BC, 0xBB8, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         func_80B4407C(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
-        Math_Vec3f_Copy(&this->unk314, &this->actor.world.pos);
+        Math_Vec3f_Copy(&this->curPathPos, &this->actor.world.pos);
         if (D_80B4E940 == 2) {
             this->actor.update = func_80B4BA84;
             this->actor.draw = func_80B4E660;
@@ -4075,9 +4075,9 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actionFunc(this, globalCtx);
-    this->unk29C = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if ((sp34 != 0) && (this->actor.update != 0)) {
-        func_80B45CE0(&this->EnInvadePohStructUnk324);
+        func_80B45CE0(&this->behaviorInfo);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
@@ -4086,7 +4086,7 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4BBE0(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06016720, -6.0f);
     substruct->unk26.x = 0;
@@ -4095,7 +4095,7 @@ void func_80B4BBE0(EnInvadepoh* this) {
     substruct->unk30 = 0.1f;
     substruct->unk2C = 800;
 
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4BC4C;
 }
 #else
@@ -4111,7 +4111,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadepoh* temp_t6 = (EnInvadepoh*)D_80B503F4;
     s16 temp_v1_2;
     s32 temp_v1;
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     s16 temp_a0;
     s16 sp40;
 
@@ -4137,19 +4137,19 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.world.pos.z = (Math_CosS(temp_a0) * this->unk2F8) + temp_t6->actor.world.pos.z;
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
-        Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0xBB8, 0x1F5);
+        Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
         if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world), 3,
-                               this->EnInvadePohStructUnk324.unk4C, 0x1F4);
+                               this->behaviorInfo.unk4C, 0x1F4);
         }
         temp_v1 = (globalCtx->gameplayFrames + 0x14) & 0x7F;
         if ((temp_v1 & 0x40) != 0) {
             sp40 = Math_Vec3f_Yaw(&this->actor.world, &temp_t6->actor.world.pos);
             if (temp_v1 == 0x40) {
-                this->EnInvadePohStructUnk324.unk4C = 0;
+                this->behaviorInfo.unk4C = 0;
             }
-            Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x28);
-            Math_SmoothStepToS(&this->actor.shape.rot.y, sp40, 6, this->EnInvadePohStructUnk324.unk4C, 0x28);
+            Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, sp40, 6, this->behaviorInfo.unk4C, 0x28);
             temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &temp_t6->actor.focus.pos);
             temp_v1_2 *= 0.85f;
             temp_v1_2 -= this->actor.shape.rot.x;
@@ -4181,10 +4181,10 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4BFFC(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 2000;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 2000;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600A174, -6.0f);
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C058;
 }
 #else
@@ -4194,14 +4194,14 @@ void func_80B4BFFC(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player;
     s16 temp_v1;
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x9C4, 0x1C2);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x9C4, 0x1C2);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->base.focus.pos);
     temp_v1 *= 0.85f;
@@ -4225,10 +4225,10 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4C1BC(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 2000;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 2000;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600A174, -6.0f);
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C218;
 }
 #else
@@ -4238,7 +4238,7 @@ void func_80B4C1BC(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player;
     Actor* temp_v0;
     s16 temp_v1;
@@ -4246,8 +4246,8 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     player = PLAYER;
 
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0xC8);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->base.focus.pos);
     temp_v1 *= 0.85f;
@@ -4277,16 +4277,16 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         s32 pad[2];
         s32 sp38 = gSaveContext.time;
 
-        this->actor.objBankIndex = this->unk2F4;
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44FEC();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, (0, this->limbDrawTable),
                          this->transitionDrawTable, 22);
-        func_80B45C04(&this->EnInvadePohStructUnk324, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 0x64, 0.03f, 0.3f,
+        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 0x64, 0.03f, 0.3f,
                       0.03f);
         this->actor.textId = 0x33CD;
         if (sp38 < 0xD5A0) {
@@ -4342,7 +4342,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C != 0) {
         if (this->actor.update != NULL) {
             SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-            func_80B45CE0(&this->EnInvadePohStructUnk324);
+            func_80B45CE0(&this->behaviorInfo);
             if (this->actionFunc != func_80B4C058) {
                 if (!temp_v0) {
                     if (this->actor.isTargeted) {
@@ -4359,7 +4359,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4C6C8(EnInvadepoh* this) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06014088, -10.0f);
     substruct->unk26.x = 0;
@@ -4377,7 +4377,7 @@ void func_80B4C6C8(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 // kinda jank
 void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     EnInvadepoh* sp68;
     s32 phi_a2;
     s32 temp_v1_3;
@@ -4402,8 +4402,8 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else if (temp_v1_3) { // fake match probably
     }
 
-    Math_Vec3s_ToVec3f(&sp4C, &this->unk30C[phi_a2]);
-    Math_Vec3s_ToVec3f(&sp40, &this->unk30C[phi_a2 + 1]);
+    Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
+    Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 0x7D0, 0x64);
     if ((this->unk309 == 0) || (this->unk309 + 1 == this->unk308)) {
         if (this->unk378 == 0) {
@@ -4424,11 +4424,11 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     if ((temp_v1_3 & 0x40) != 0) {
         sp3A = Math_Vec3f_Yaw(&this->actor.world, &sp68->actor.world);
         if (temp_v1_3 == 0x40) {
-            this->EnInvadePohStructUnk324.unk4C = 0;
+            this->behaviorInfo.unk4C = 0;
         }
 
-        Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0x28);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, sp3A, 6, this->EnInvadePohStructUnk324.unk4C, 0x28);
+        Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, sp3A, 6, this->behaviorInfo.unk4C, 0x28);
         temp_v1_4 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp68->actor.focus.pos);
         temp_v1_4 *= 0.85f;
         temp_v1_4 -= this->actor.shape.rot.x;
@@ -4445,7 +4445,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (0.9999f <= this->unk320) {
+    if (0.9999f <= this->clockTime) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -4461,10 +4461,10 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4CAB0(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 4000;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 4000;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, -10.0f);
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CB0C;
 }
 #else
@@ -4474,14 +4474,14 @@ void func_80B4CAB0(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player;
     s16 temp_v1;
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0xBB8, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->base.focus.pos));
     temp_v1 *= 0.85f;
@@ -4502,10 +4502,10 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4CC70(EnInvadepoh* this) {
-    this->EnInvadePohStructUnk324.unk30 = 0.08f;
-    this->EnInvadePohStructUnk324.unk2C = 2000;
+    this->behaviorInfo.unk30 = 0.08f;
+    this->behaviorInfo.unk2C = 2000;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, -10.0f);
-    this->EnInvadePohStructUnk324.unk4C = 0;
+    this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CCCC;
 }
 #else
@@ -4515,14 +4515,14 @@ void func_80B4CC70(EnInvadepoh* this) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
     Player* player;
     s16 temp_v1;
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->EnInvadePohStructUnk324.unk4C, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->EnInvadePohStructUnk324.unk4C,
+    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0xC8);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C,
                        0x28);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->base.focus.pos);
     temp_v1 *= 0.85f;
@@ -4549,15 +4549,15 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 sp38;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.time;
 
-        this->actor.objBankIndex = this->unk2F4;
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->EnInvadePohStructUnk324, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x64, 0.03f, 0.3f,
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x64, 0.03f, 0.3f,
                       0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4608,7 +4608,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C != 0) {
         if (this->actor.update != NULL) {
             SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-            func_80B45CE0(&this->EnInvadePohStructUnk324);
+            func_80B45CE0(&this->behaviorInfo);
             if (this->actionFunc != func_80B4CB0C) {
                 if (!temp_v0) {
                     if (this->actor.isTargeted) {
@@ -4629,11 +4629,11 @@ void func_80B4D15C(EnInvadepoh* this) {
 
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001674);
     this->skelAnime.animCurrentFrame = ((this->actor.params & 7) * this->skelAnime.animFrameCount) * 0.25f;
-    this->unk389 = 0xFF;
+    this->alienAlpha = 0xFF;
     this->actor.draw = func_80B4DB14;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0xFF;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0xFF;
     temp_v0 = &D_80B4EE0C[temp_v1];
     this->unk300 = temp_v0->unk00;
     this->unk304 = temp_v1 * 0x5555;
@@ -4641,8 +4641,8 @@ void func_80B4D15C(EnInvadepoh* this) {
     this->actor.world.pos.y = this->actor.home.pos.y;
     this->actor.world.pos.z = this->actor.home.pos.z + (Math_CosS(this->unk304) * 80.0f);
     this->actor.shape.rot.y = this->unk304 + 0x4000;
-    this->EnInvadePohStructUnk324.unk4C = temp_v0->unk04;
-    this->EnInvadePohStructUnk324.unk4E = temp_v0->unk06;
+    this->behaviorInfo.unk4C = temp_v0->unk04;
+    this->behaviorInfo.unk4E = temp_v0->unk06;
     this->actionFunc = func_80B4D290;
     this->actor.velocity.y = 0.0f;
 }
@@ -4665,9 +4665,9 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->unk304 += 0x2BC;
     this->actor.world.pos.x = (Math_SinS(this->unk304) * 80.0f) + this->actor.home.pos.x;
     temp_f10 = Math_CosS(this->unk304) * 80.0f;
-    this->EnInvadePohStructUnk324.unk4C += this->EnInvadePohStructUnk324.unk4E;
+    this->behaviorInfo.unk4C += this->behaviorInfo.unk4E;
     temp_v1 = this->actor.child;
-    this->actor.shape.rot.y += this->EnInvadePohStructUnk324.unk4C;
+    this->actor.shape.rot.y += this->behaviorInfo.unk4C;
     this->actor.world.pos.z = this->actor.home.pos.z + ((0, temp_f10));
     if (this->actor.child != 0) {
         this->actor.child->world.pos.x = this->actor.world.pos.x;
@@ -4687,14 +4687,14 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4D3E4(EnInvadepoh* this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001674);
     this->skelAnime.animCurrentFrame = (this->actor.params & 7) * this->skelAnime.animFrameCount * 0.25f;
-    this->unk389 = 0xFF;
+    this->alienAlpha = 0xFF;
     this->actor.draw = 0;
-    this->unk38B = 1;
-    this->unk38C = 0;
-    this->unk38D = 0xFF;
+    this->drawAlien = true;
+    this->drawAlienDeathEffect = false;
+    this->alienBeamAlpha = 0xFF;
     this->unk306 = 400;
     this->unk304 = 0;
-    this->unk2F0 = 200;
+    this->actionTimer = 200;
     this->actor.velocity.y = 0.0f;
     this->actionFunc = func_80B4D480;
 }
@@ -4710,16 +4710,16 @@ void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
     float new_var2;
     s16 temp_v0_2;
     s32 phi_t0;
-    new_var = &this->unk2F0;
+    new_var = &this->actionTimer;
     phi_t0 = 0;
     if ((*new_var) > 0) {
-        this->unk2F0--;
+        this->actionTimer--;
     }
 
     if ((*new_var) >= 0xA1) {
         this->actor.draw = 0;
     } else {
-        temp_v0_2 = this->unk2F0;
+        temp_v0_2 = this->actionTimer;
         this->actor.draw = func_80B4DB14;
         if ((temp_v0_2 < 0x69) && (temp_v0_2 >= 0x64)) {
             this->actor.gravity = -1.0f;
@@ -4733,7 +4733,7 @@ void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
 
         this->actor.velocity.y += this->actor.gravity;
         this->actor.velocity.y *= 0.92f;
-        if (this->unk2F0 >= 0x51) {
+        if (this->actionTimer >= 0x51) {
             this->actor.world.pos.y += this->actor.velocity.y;
             phi_t0 = sp2C;
         } else {
@@ -4754,7 +4754,7 @@ void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk2F0 <= 0) || (phi_t0 != 0)) {
+    if ((this->actionTimer <= 0) || (phi_t0 != 0)) {
         Actor_MarkForDeath(this);
     }
 }
@@ -4767,9 +4767,9 @@ void func_80B4D670(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s32 invadepohType;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk2F4)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         invadepohType = this->actor.params & 7;
-        this->actor.objBankIndex = this->unk2F4;
+        this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
@@ -4843,14 +4843,14 @@ s32 func_80B4D9D8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnInvadepoh* this = THIS;
 
-    if ((limbIndex == 12) && (this->unk38D != 0)) {
+    if ((limbIndex == 12) && (this->alienBeamAlpha != 0)) {
         SysMatrix_StatePush();
         SysMatrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateY(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
         SysMatrix_CopyCurrentState(&D_80B502A0);
         SysMatrix_StatePop();
-    } else if ((limbIndex == 13) && (this->unk38D != 0)) {
+    } else if ((limbIndex == 13) && (this->alienBeamAlpha != 0)) {
         SysMatrix_StatePush();
         SysMatrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateY(-0x47D0, MTXMODE_APPLY);
@@ -4873,28 +4873,28 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     SysMatrix_StatePush();
-    if (this->unk38B != 0) {
-        if (this->unk389 == 0xFF) {
+    if (this->drawAlien) {
+        if (this->alienAlpha == 255) {
             func_8012C28C(globalCtx->state.gfxCtx);
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
+            gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
                                               POLY_OPA_DISP);
         } else {
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0x00, 0x00, 0x00, this->unk389);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alienAlpha);
             POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
                                               POLY_XLU_DISP);
         }
-        if (this->unk38D != 0) {
+        if (this->alienBeamAlpha != 0) {
             AnimatedMat_Draw(globalCtx, D_80B503FC);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 240, 180, 100, 60);
-            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk38D * 0.5882353f);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
             SysMatrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4905,14 +4905,14 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, D_06000080);
         }
     }
-    if (this->unk38C != 0) {
+    if (this->drawAlienDeathEffect) {
         SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
                                                  this->actor.world.pos.z, &this->actor.shape);
-        Matrix_Scale(this->unk390.x, this->unk390.y, this->unk390.z, MTXMODE_APPLY);
+        Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP, 0x06000720);
     }
-    if (this->unk38B != 0) {
+    if (this->drawAlien) {
         Gfx* dl = func_8012C868(POLY_XLU_DISP);
         gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
@@ -4929,7 +4929,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &D_04029CF0);
 
-        if ((this->unk389 >= 0x81) && func_80B456A8(globalCtx, &sp74)) {
+        if ((this->alienAlpha >= 0x81) && func_80B456A8(globalCtx, &sp74)) {
             func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp74, 10.0f,
                           9.0f, 0, 0);
         }
@@ -4968,13 +4968,13 @@ void func_80B4E1B0(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80B4E200(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 14) {
         EnInvadepoh* this = THIS; // both of these needed to match
-        rot->x += this->EnInvadePohStructUnk324.unk20.y;
-        rot->y += this->EnInvadePohStructUnk324.unk20.z;
-        rot->z += this->EnInvadePohStructUnk324.unk20.x;
+        rot->x += this->behaviorInfo.unk20.y;
+        rot->y += this->behaviorInfo.unk20.z;
+        rot->z += this->behaviorInfo.unk20.x;
     } else if (limbIndex == 13) {
         EnInvadepoh* this = THIS; // both of these needed to match
-        rot->x += (s16)(this->EnInvadePohStructUnk324.unk34 * this->EnInvadePohStructUnk324.unk20.y);
-        rot->z += this->EnInvadePohStructUnk324.unk40;
+        rot->x += (s16)(this->behaviorInfo.unk34 * this->behaviorInfo.unk20.y);
+        rot->z += this->behaviorInfo.unk40;
     }
     return 0;
 }
@@ -4996,8 +4996,8 @@ void func_80B4E324(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E958[this->EnInvadePohStructUnk324.unk10.unkF]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E944[this->EnInvadePohStructUnk324.unk0.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E958[this->behaviorInfo.unk10.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E944[this->behaviorInfo.unk0.unkF]);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      func_80B4E200, func_80B4E2AC, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -5034,9 +5034,9 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if ((limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7)) {
         EnInvadepoh* this = THIS;
-        rot->x += this->EnInvadePohStructUnk324.unk20.x;
-        rot->y += this->EnInvadePohStructUnk324.unk20.y;
-        rot->z += this->EnInvadePohStructUnk324.unk20.z;
+        rot->x += this->behaviorInfo.unk20.x;
+        rot->y += this->behaviorInfo.unk20.y;
+        rot->z += this->behaviorInfo.unk20.z;
     }
 
     return 0;
@@ -5062,12 +5062,12 @@ void func_80B4E660(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80B4E6E4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 9) {
         EnInvadepoh* this = THIS; // both of these needed to match
-        rot->x += this->EnInvadePohStructUnk324.unk20.y;
-        rot->y += this->EnInvadePohStructUnk324.unk20.z;
-        rot->z += this->EnInvadePohStructUnk324.unk20.x;
+        rot->x += this->behaviorInfo.unk20.y;
+        rot->y += this->behaviorInfo.unk20.z;
+        rot->z += this->behaviorInfo.unk20.x;
     } else if (limbIndex == 2) {
         EnInvadepoh* this = THIS; // both of these needed to match
-        rot->x += (s16)(this->EnInvadePohStructUnk324.unk34 * this->EnInvadePohStructUnk324.unk20.y);
+        rot->x += (s16)(this->behaviorInfo.unk34 * this->behaviorInfo.unk20.y);
     }
     return 0;
 }
@@ -5083,8 +5083,8 @@ void func_80B4E7BC(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E984[this->EnInvadePohStructUnk324.unk10.unkF]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E96C[this->EnInvadePohStructUnk324.unk0.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E984[this->behaviorInfo.unk10.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E96C[this->behaviorInfo.unk0.unkF]);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      func_80B4E6E4, func_80B4E784, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
