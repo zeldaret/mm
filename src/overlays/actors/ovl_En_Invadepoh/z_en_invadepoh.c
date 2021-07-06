@@ -867,41 +867,36 @@ void func_80B442E4(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B442E4.asm")
 #endif
 
-#ifdef NON_MATCHING
-// cursed
 void func_80B443A0(EnInvadepoh* this) {
+    f32 temp_f26;
+    s8 temp_s5;
+    Vec3s* phi_s1;
     Vec3f sp70;
     Vec3f sp64;
-    Vec3s* arr;
-    f32 temp_f20;
-    f32 temp_f26;
-    f32 temp_f2;
-    s8 temp_s5;
-    f32 phi_f20;
     f32* phi_s0;
+    f32 phi_f20;
     s32 i;
 
-    arr = this->pathPoints;
     temp_s5 = this->unk308;
     temp_f26 = 1.0f / this->pathTotalDist;
-    Math_Vec3s_ToVec3f(&sp64, arr);
-    if (temp_s5 >= 2) {
-        arr++;
-        phi_f20 = 0.0f;
-        phi_s0 = this->unk37C;
-        for (i = 1; i < temp_s5; i++) {
-            Math_Vec3f_Copy(&sp70, &sp64);
-            Math_Vec3s_ToVec3f(&sp64, &arr[i]);
-            temp_f20 = phi_f20 + Math3D_Distance(&sp70, &sp64);
-            temp_f2 = temp_f20 * temp_f26;
-            phi_s0[i] = CLAMP(temp_f2, 0.0f, 1.0f);
-            phi_f20 = temp_f20;
+    phi_f20 = 0.0f;
+    phi_s1 = this->pathPoints;
+    Math_Vec3s_ToVec3f(&sp64, phi_s1);
+    phi_s1++;
+    phi_s0 = this->unk37C;
+    
+    for (i = 1; i < temp_s5; i++, phi_s1++, phi_s0++) {
+        Math_Vec3f_Copy(&sp70, &sp64);
+        Math_Vec3s_ToVec3f(&sp64, phi_s1);
+        phi_f20 += Math3D_Distance(&sp70, &sp64);
+        *phi_s0 = phi_f20 * temp_f26;
+        if (*phi_s0 < 0.0f) {
+            *phi_s0 = 0.0f;
+        } else if (*phi_s0 > 1.0f) {
+            *phi_s0 = 1.0f;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B443A0.asm")
-#endif
 
 void func_80B444BC(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
@@ -993,120 +988,79 @@ void func_80B44700(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B44700.asm")
 #endif
 
+// ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
-// cursed
 void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
+    s32 pad1;
     Vec3s* sp60;
+    s32 pad2;
     Vec3f sp50;
     Vec3f sp44;
     f32 sp40;
     f32 sp3C;
+    s32 pad3;
     f32 sp34;
     f32 sp30;
     f32 sp2C;
-    Vec3f* sp24;
-    Vec3f* temp_a2;
-    Vec3s* temp_a3;
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f0_3;
-    f32 temp_f0_4;
-    f32 temp_f0_5;
-    f32 temp_f12;
-    f32 temp_f12_2;
-    f32 temp_f12_3;
-    f32 temp_f14;
-    f32 temp_f16;
-    f32 temp_f18;
-    f32 temp_f2;
-    f32 temp_f2_2;
-    f32 temp_f2_3;
-    s8 temp_v0;
     f32 phi_f2;
 
     sp40 = this->actor.world.pos.y;
-    temp_v0 = this->unk309;
-    temp_a3 = &this->pathPoints[temp_v0];
-    if (temp_v0 <= 0) {
+    sp60 = &this->pathPoints[this->unk309];
+    if (this->unk309 <= 0) {
         sp3C = 0.0f;
     } else {
-        sp3C = (this + (temp_v0 * 4))->unk378;
+        sp3C = this->unk37C[this->unk309 - 1];
     }
-    if (temp_v0 < (this->unk308 - 1)) {
-        phi_f2 = this->unk37C[temp_v0];
+    
+    if (this->unk309 < (this->unk308 - 1)) {
+        phi_f2 = this->unk37C[this->unk309];
     } else {
         phi_f2 = 1.0f;
     }
-    temp_f18 = phi_f2 - sp3C;
-    temp_a2 = &this->curPathPos;
-    if (temp_f18 < D_80B4EE50) {
-        sp24 = temp_a2;
-        Math_Vec3s_ToVec3f(temp_a2, temp_a3);
+
+    if ((phi_f2 - sp3C) < 0.001f) {
+        Math_Vec3s_ToVec3f(&this->curPathPos, sp60);
     } else {
-        temp_f0 = this->clockTime;
-        temp_f16 = 1.0f / temp_f18;
-        sp60 = temp_a3;
-        temp_f14 = phi_f2 - temp_f0;
-        temp_f12 = temp_f0 - sp3C;
-        sp30 = temp_f14;
-        sp34 = temp_f12;
-        sp2C = temp_f16;
-        Math_Vec3s_ToVec3f(&sp50, &temp_a3[0]);
-        Math_Vec3s_ToVec3f(&sp44, &temp_a3[1]);
-        this->curPathPos.x = ((sp50.x * temp_f14) + (sp44.x * temp_f12)) * temp_f16;
-        this->curPathPos.y = ((sp50.y * temp_f14) + (sp44.y * temp_f12)) * temp_f16;
-        this->curPathPos.z = ((sp50.z * temp_f14) + (sp44.z * temp_f12)) * temp_f16;
+        sp34 = this->clockTime - sp3C;
+        sp30 = phi_f2 - this->clockTime;
+        sp2C = 1.0f / (phi_f2 - sp3C);
+        Math_Vec3s_ToVec3f(&sp50, &sp60[0]);
+        Math_Vec3s_ToVec3f(&sp44, &sp60[1]);
+        this->curPathPos.x = ((sp50.x * sp30) + (sp44.x * sp34)) * sp2C;
+        this->curPathPos.y = ((sp50.y * sp30) + (sp44.y * sp34)) * sp2C;
+        this->curPathPos.z = ((sp50.z * sp30) + (sp44.z * sp34)) * sp2C;
     }
+    
     Math_Vec3f_Copy(&this->actor.world, &this->curPathPos);
     func_800B4AEC(globalCtx, this, 0.0f);
-    temp_f2 = this->actor.floorHeight;
-    if (D_80B4EE54 < temp_f2) {
-        if (sp40 < temp_f2) {
-            temp_f0_2 = this->actor.velocity.y;
-            if (temp_f0_2 < 0.0f) {
+    if (this->actor.floorHeight > -31999.0f) {
+        if (sp40 < this->actor.floorHeight) {
+            if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 0.0f;
             } else {
-                this->actor.velocity.y = temp_f0_2 + 2.0f;
-                temp_f0_3 = this->actor.velocity.y;
-                if (temp_f0_3 > 30.0f) {
-                    this->actor.velocity.y = 30.0f;
-                } else {
-                    this->actor.velocity.y = temp_f0_3;
-                }
+                this->actor.velocity.y += 2.0f;
+                this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 30.0f);
             }
-            temp_f2_2 = this->actor.floorHeight;
-            temp_f12_2 = this->actor.velocity.y + sp40;
-            this->actor.world.pos.y = temp_f12_2;
-            if (temp_f2_2 < temp_f12_2) {
-                this->actor.world.pos.y = temp_f2_2;
-                return;
+            this->actor.world.pos.y = this->actor.velocity.y + sp40;
+            if (this->actor.world.pos.y > this->actor.floorHeight) {
+                this->actor.world.pos.y = this->actor.floorHeight;
             }
-            return;
-        }
-        temp_f0_4 = this->actor.velocity.y;
-        if (temp_f0_4 > 0.0f) {
-            this->actor.velocity.y = 0.0f;
         } else {
-            this->actor.velocity.y = temp_f0_4 - 2.0f;
-        }
-        temp_f0_5 = this->actor.velocity.y;
-        temp_f2_3 = this->actor.floorHeight;
-        temp_f12_3 = temp_f0_5 + sp40;
-        this->actor.world.pos.y = temp_f12_3;
-        if (temp_f12_3 < temp_f2_3) {
-            this->actor.world.pos.y = temp_f2_3;
-            if (temp_f0_5 < -30.0f) {
-                this->actor.velocity.y = -30.0f;
-                return;
+            if (this->actor.velocity.y > 0.0f) {
+                this->actor.velocity.y = 0.0f;
+            } else {
+                this->actor.velocity.y -= 2.0f;
             }
-            this->actor.velocity.y = temp_f0_5;
-            return;
+
+            this->actor.world.pos.y = this->actor.velocity.y + sp40;
+            if (this->actor.world.pos.y < this->actor.floorHeight) {
+                this->actor.world.pos.y = this->actor.floorHeight;
+                this->actor.velocity.y = CLAMP_MIN(this->actor.velocity.y, -30.0f);
+            }
         }
-        // Duplicate return node #26. Try simplifying control flow for better match
-        return;
+    } else {
+        this->actor.world.pos.y = sp40;
     }
-    this->actor.world.pos.y = sp40;
-    // Duplicate return node #26. Try simplifying control flow for better match
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B447C0.asm")
@@ -1479,26 +1433,20 @@ void func_80B457A0(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B458D8.asm")
 EnInvadepoh* func_80B458D8(void);
 
-#ifdef NON_MATCHING
-//cursed
 s8 func_80B45980(unkstruct_invadepoh_1* arg0, s32 arg1) {
     f32 rand = Rand_ZeroOne();
     s32 i;
-    for (i = 0; i < (arg1 - 1); i++) {
-        if (!arg0) {}
-        if (arg0) {}
-        goto dummy_label_184988;
-    dummy_label_184988:;
-        if (rand <= arg0[i].unk04) {
+
+    arg1--;
+    for (i = 0; i < arg1; i++) {
+        dummy:;
+        if (arg0[i].unk04 >= rand) {
             break;
         }
     }
 
-    return arg0[i].unk00;
+    return (arg0 + i)->unk00;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B45980.asm")
-#endif
 
 void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     s->unk4 = u->unk00;

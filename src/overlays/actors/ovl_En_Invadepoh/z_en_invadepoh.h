@@ -8,14 +8,12 @@ struct EnInvadepoh;
 typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
-typedef void (*OtherFunc)(struct unkStruct_80B50350*);
-typedef void (*OtherSubstructFunc)(struct EnInvadePohStruct*, s32 arg1);
 
 typedef struct unkStruct_80B50350{
     /* 0x000 */ s8 unk0;
     /* 0x001 */ s8 unk1;
     /* 0x002 */ u8 unk2;
-    /* 0x004 */ Vec3f unk4; // boundary 
+    /* 0x004 */ Vec3f unk4;
 } unkStruct_80B50350; // size = 0x10;
 
 typedef struct {
@@ -68,8 +66,7 @@ typedef union unkstruct_invadepoh_union {
 typedef struct EnInvadePohStruct{
     /* 0x000 */ s32* unk0;
     /* 0x004 */ s8 unk4;
-    /* 0x005 */ char unk5[0x3];
-    /* 0x008 */ unkstruct_invadepoh_4* unk8; // pointer to another struct
+    /* 0x008 */ unkstruct_invadepoh_4* unk8;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ s8 unkE;
     /* 0x00F */ s8 unkF;
@@ -146,13 +143,3 @@ typedef struct EnInvadepoh {
 extern const ActorInit En_Invadepoh_InitVars;
 
 #endif // Z_EN_INVADEPOH_H
-
-//look at en_ma_yts for inspiration for improvements
-
-/* TO-DO:
--clean up jank functions
--look into structs and make sure they make sense
--make sure including en_door.h is okay as is"
--rename OtherFunc
--look into phi_s0 = D_80B50350 stuff
-*/
