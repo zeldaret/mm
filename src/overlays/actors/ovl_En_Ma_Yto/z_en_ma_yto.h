@@ -70,11 +70,11 @@ typedef struct EnMaYto {
 extern const ActorInit En_Ma_Yto_InitVars;
 
 typedef enum {
-    /* 0 */ MA_YTO_TYPE_0, // Strokes cow
-    /* 1 */ MA_YTO_TYPE_1, // Strokes cow siting
-    /* 2 */ MA_YTO_TYPE_2,
-    /* 3 */ MA_YTO_TYPE_3, // After Milk Run minigame
-    /* 4 */ MA_YTO_TYPE_4  // HugCutscene
+    /* 0 */ MA_YTO_TYPE_0, // Strokes cow on day 1
+    /* 1 */ MA_YTO_TYPE_BARN, // Strokes cow siting. At barn
+    /* 2 */ MA_YTO_TYPE_2, // Dinner, likely
+    /* 3 */ MA_YTO_TYPE_AFTERMILKRUN, // After Milk Run minigame
+    /* 4 */ MA_YTO_TYPE_4  // HugCutscene. 
 } EnMaYtoType;
 
 #define EN_MA_YTO_PARSE_TYPE(params) (((params)&0xF000) >> 12)
@@ -82,9 +82,9 @@ typedef enum {
 
 /**
  * MA_YTO_TYPE_0: 
- * MA_YTO_TYPE_1: 
+ * MA_YTO_TYPE_BARN: 
  * MA_YTO_TYPE_2: 
- * MA_YTO_TYPE_3: 
+ * MA_YTO_TYPE_AFTERMILKRUN: 
  * MA_YTO_TYPE_4: 
  */
 

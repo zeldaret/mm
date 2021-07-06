@@ -32,6 +32,7 @@ typedef enum {
     /* 0x16 */ ITEM_FAIRY,
     /* 0x38 */ ITEM_MASK_ALL_NIGHT = 0x38,
     /* 0x3B */ ITEM_MASK_GARO = 0x3B,
+    /* 0x3C */ ITEM_MASK_ROMANIS,
     /* 0x4D */ ITEM_SWORD_KOKIRI = 0x4D,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,
