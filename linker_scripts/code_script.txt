@@ -6923,7 +6923,7 @@ SECTIONS
     ovl_En_Invadepoh : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.text)
-        build/asm/overlays/ovl_En_Invadepoh_data.o(.data)
+        build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.data)
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.rodata)
         build/asm/overlays/ovl_En_Invadepoh_rodata.o(.rodata)
         ovl_En_Invadepoh_bss_start = .;
