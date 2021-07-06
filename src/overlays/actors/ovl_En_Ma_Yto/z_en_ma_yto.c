@@ -60,14 +60,14 @@ void func_80B904E4(EnMaYto *this, GlobalContext *globalCtx);
 void func_80B9059C(EnMaYto *this);
 void func_80B905B0(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B9061C(EnMaYto* this, GlobalContext* globalCtx);
-void func_80B9083C(EnMaYto* this, GlobalContext* globalCtx);
+void EnMaYto_StartDialogue(EnMaYto* this, GlobalContext* globalCtx);
 void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx);
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
-void func_80B90E84(EnMaYto* this, s16, s16);
-void EnMaYto_SetFaceExpression(EnMaYto* this, s16 arg1, s16 mouthIndex);
-void func_80B90EF0(EnMaYto* this);
+void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
+void EnMaYto_SetFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthIndex);
+void EnMaYto_InitFaceExpression(EnMaYto* this);
 s32  func_80B90F84();
 
 s32  func_80B91014(void);
@@ -130,31 +130,24 @@ extern u64 D_060142D8[];
 extern Gfx D_06005430[];
 
 
-struct struct_80B91448 {
-    /* 0x00 */ AnimationHeader* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
-}; // size = 0x10
-
-static struct struct_80B91448 D_80B91448[] = {
-    { &D_0600A174, 0x3F800000, 0x00, 0.0f }, { &D_0600A174, 0x3F800000, 0x00, -6.0f },
-    { &D_0600AF7C, 0x3F800000, 0x02, 0.0f }, { &D_0600AF7C, 0x3F800000, 0x02, -6.0f },
-    { &D_06000CC0, 0x3F800000, 0x00, 0.0f }, { &D_06000CC0, 0x3F800000, 0x00, -6.0f },
-    { &D_06016720, 0x3F800000, 0x00, 0.0f }, { &D_06016720, 0x3F800000, 0x00, -8.0f },
-    { &D_06005314, 0x3F800000, 0x00, 0.0f }, { &D_06005314, 0x3F800000, 0x00, -8.0f },
-    { &D_060093E8, 0x3F800000, 0x00, 0.0f }, { &D_060093E8, 0x3F800000, 0x00, -10.0f },
-    { &D_06007E28, 0x3F800000, 0x00, 0.0f }, { &D_06007E28, 0x3F800000, 0x00, -8.0f },
-    { &D_060070EC, 0x3F800000, 0x00, 0.0f }, { &D_060070EC, 0x3F800000, 0x00, -8.0f },
-    { &D_06003D54, 0x3F800000, 0x00, 0.0f }, { &D_06003D54, 0x3F800000, 0x00, -8.0f },
-    { &D_06001FD0, 0x3F800000, 0x00, 0.0f }, { &D_06001FD0, 0x3F800000, 0x00, -8.0f },
-    { &D_060030B4, 0x3F800000, 0x00, 0.0f }, { &D_060030B4, 0x3F800000, 0x00, -8.0f },
-    { &D_06004370, 0x3F800000, 0x00, 0.0f }, { &D_06004370, 0x3F800000, 0x00, -8.0f },
+static struct_80B8E1A8 sAnimationInfo[] = {
+    { &D_0600A174, 1.0f, 0, 0.0f }, { &D_0600A174, 1.0f, 0, -6.0f },
+    { &D_0600AF7C, 1.0f, 2, 0.0f }, { &D_0600AF7C, 1.0f, 2, -6.0f },
+    { &D_06000CC0, 1.0f, 0, 0.0f }, { &D_06000CC0, 1.0f, 0, -6.0f },
+    { &D_06016720, 1.0f, 0, 0.0f }, { &D_06016720, 1.0f, 0, -8.0f },
+    { &D_06005314, 1.0f, 0, 0.0f }, { &D_06005314, 1.0f, 0, -8.0f },
+    { &D_060093E8, 1.0f, 0, 0.0f }, { &D_060093E8, 1.0f, 0, -10.0f },
+    { &D_06007E28, 1.0f, 0, 0.0f }, { &D_06007E28, 1.0f, 0, -8.0f },
+    { &D_060070EC, 1.0f, 0, 0.0f }, { &D_060070EC, 1.0f, 0, -8.0f },
+    { &D_06003D54, 1.0f, 0, 0.0f }, { &D_06003D54, 1.0f, 0, -8.0f },
+    { &D_06001FD0, 1.0f, 0, 0.0f }, { &D_06001FD0, 1.0f, 0, -8.0f },
+    { &D_060030B4, 1.0f, 0, 0.0f }, { &D_060030B4, 1.0f, 0, -8.0f },
+    { &D_06004370, 1.0f, 0, 0.0f }, { &D_06004370, 1.0f, 0, -8.0f },
 };
 
 
 static void* sMouthTextures[] = {
-    D_06014AD8, D_06014ED8, D_060152D8, D_060156D8, 
+    D_06014AD8, D_06014ED8, D_060152D8, D_060156D8,
 };
 
 
@@ -170,7 +163,7 @@ static u16 D_80B915F0 = 99;
 
 void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMaYto* this = THIS;
-    ColliderCylinder* temp_a1;
+    s32 pad;
 
     this->actor.targetMode = 0;
     this->unk_200 = 0;
@@ -178,7 +171,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_320 = 0;
     this->eyeTexIndex = 0;
 
-    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
+    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
         EnMaYto_SetFaceExpression(this, 5, 2);
@@ -195,9 +188,9 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, NULL, &this->unk_208, &this->unk_28C, 0x16);
     EnMaYto_InitAnimation(this, globalCtx);
-    temp_a1 = &this->collider;
-    Collider_InitCylinder(globalCtx, temp_a1);
-    Collider_SetCylinder(globalCtx, temp_a1, &this->actor, &sCylinderInit);
+
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B9143C);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (func_80B8EABC(this, globalCtx) == 1) {
@@ -344,7 +337,7 @@ s32 EnMaYto_SearchRomani(EnMaYto *this, GlobalContext *globalCtx) {
     return false;
 }
 
-// Returns 2 if found Romani. 0 seems to be the default, and 1 is unknown.
+// Returns 2 if Romani was found. 0 seems to be the default. 1 seems to mean "Romani not found".
 s32 func_80B8EABC(EnMaYto *this, GlobalContext *globalCtx) {
     switch (this->type) {
         case EN_NA_YTO_TYPE_0:
@@ -405,7 +398,7 @@ void func_80B8EC30(EnMaYto *this) {
         this->unk_314 = 1;
         EnMaYto_ChangeAnim(this, 1);
     }
-    func_80B90EF0(this);
+    EnMaYto_InitFaceExpression(this);
     this->unk_31E = 2;
     this->actionFunc = func_80B8ECAC;
 }
@@ -464,7 +457,8 @@ void func_80B8EDC8(EnMaYto *this, GlobalContext *globalCtx) {
         case 3:
             break;
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x3000, 0x100);
+
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3000, 0x100);
     if ((this->textId == 0x3395) && (this->skelAnime.animCurrentSeg == &D_0600AF7C) && (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
         EnMaYto_ChangeAnim(this, 4);
     }
@@ -492,13 +486,13 @@ void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
         case 0x3391:
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            EnMaYto_SetFaceExpression(this, 0, 3);
             func_801518B0(globalCtx, 0x3392, &this->actor);
             this->textId = 0x3392;
             break;
 
         case 0x3392:
-            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+            EnMaYto_SetFaceExpression(this, 3, 1);
             func_801518B0(globalCtx, 0x3393, &this->actor);
             this->textId = 0x3393;
             func_80151BB4(globalCtx, 6);
@@ -521,14 +515,14 @@ void func_80B8EF4C(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8F074(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
+    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
         func_80B90E50(this, 0);
         this->unk_31E = 0;
     } else {
         func_80B90E50(this, 2);
         this->unk_31E = 2;
     }
-    func_80B90EF0(this);
+    EnMaYto_InitFaceExpression(this);
     this->actionFunc = func_80B8F108;
 }
 
@@ -537,7 +531,7 @@ void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
     s16 temp_v1 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_80B9083C(this, globalCtx);
+        EnMaYto_StartDialogue(this, globalCtx);
         func_80B8F254(this);
     } else {
         Actor* temp_a0 = this->actor.child;
@@ -545,7 +539,7 @@ void func_80B8F108(EnMaYto *this, GlobalContext *globalCtx) {
         if (temp_a0 != NULL) {
             if (func_800B84D0(temp_a0, globalCtx)) {
                 func_800B86C8(&this->actor, globalCtx, &this->actor);
-                func_80B9083C(this, globalCtx);
+                EnMaYto_StartDialogue(this, globalCtx);
                 func_80B8F254(this);
                 return;
             }
@@ -633,20 +627,20 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
         case 0x3398:
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            EnMaYto_SetFaceExpression(this, 0, 3);
             func_801518B0(globalCtx, 0x3399, &this->actor);
             this->textId = 0x3399;
             break;
 
         case 0x3399:
-            EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+            EnMaYto_SetFaceExpression(this, 3, 1);
             func_801518B0(globalCtx, 0x339AU, &this->actor);
             this->textId = 0x339A;
             break;
 
         case 0x339A:
             this->unk_31E = 1;
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+            EnMaYto_SetFaceExpression(this, 0, 1);
             func_801518B0(globalCtx, 0x339BU, &this->actor);
             this->textId = 0x339B;
             break;
@@ -654,7 +648,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
         case 0x339B:
             func_800B86C8(&this->actor, globalCtx, this->actor.child);
             func_80B90E50(this, 0);
-            func_80B90E84(this, (u16)3, (u16)3);
+            EnMaYto_SetRomaniFaceExpression(this, 3, 3);
             func_801518B0(globalCtx, 0x339CU, &this->actor);
             this->textId = 0x339C;
             break;
@@ -662,7 +656,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
         case 0x339C:
             this->unk_31E = 1;
             func_800B86C8(&this->actor, globalCtx, &this->actor);
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)2);
+            EnMaYto_SetFaceExpression(this, 0, 2);
             func_801518B0(globalCtx, 0x339DU, &this->actor);
             this->textId = 0x339D;
             break;
@@ -670,7 +664,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
         case 0x339D:
             func_80B90E50(this, 1);
             func_800B86C8(&this->actor, globalCtx, this->actor.child);
-            func_80B90E84(this, (u16)0, (u16)1);
+            EnMaYto_SetRomaniFaceExpression(this, 0, 1);
             func_801518B0(globalCtx, 0x339EU, &this->actor);
             this->textId = 0x339E;
             func_80151BB4(globalCtx, 6U);
@@ -691,7 +685,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
         case 0x33A1:
             func_80B90E50(this, 1);
             func_800B86C8(&this->actor, globalCtx, this->actor.child);
-            func_80B90E84(this, (u16)0, (u16)2);
+            EnMaYto_SetRomaniFaceExpression(this, 0, 2);
             func_801518B0(globalCtx, 0x33A2U, &this->actor);
             this->textId = 0x33A2;
             break;
@@ -699,14 +693,14 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
         case 0x33A2:
             this->unk_31E = 1;
             func_800B86C8(&this->actor, globalCtx, &this->actor);
-            EnMaYto_SetFaceExpression(this, (u16)4, (u16)3);
+            EnMaYto_SetFaceExpression(this, 4, 3);
             func_801518B0(globalCtx, 0x33A3U, &this->actor);
             this->textId = 0x33A3;
             break;
 
         case 0x33A3:
             this->unk_31E = 0;
-            EnMaYto_SetFaceExpression(this, (u16)3, (u16)3);
+            EnMaYto_SetFaceExpression(this, 3, 3);
             func_801518B0(globalCtx, 0x33A4U, &this->actor);
             this->textId = 0x33A4;
             func_80151BB4(globalCtx, 6U);
@@ -729,7 +723,7 @@ void func_80B8F400(EnMaYto *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8F744(EnMaYto *this) {
-    if ((CURRENT_DAY == 1) || ((gSaveContext.weekEventReg[0x16] & 1) != 0)) {
+    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
         EnMaYto_ChangeAnim(this, 0xD);
         func_80B90E50(this, 0);
         this->unk_31E = 0;
@@ -739,7 +733,7 @@ void func_80B8F744(EnMaYto *this) {
         func_80B90E50(this, 2);
         this->unk_31E = 2;
     }
-    func_80B90EF0(this);
+    EnMaYto_InitFaceExpression(this);
     this->actionFunc = func_80B8F7F4;
 }
 
@@ -812,9 +806,9 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
             case 0x33A9:
-                func_80B90E50(this, (u16)0);
+                func_80B90E50(this, 0);
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
-                func_80B90E84(this, (u16)0, (u16)3);
+                EnMaYto_SetRomaniFaceExpression(this, 0, 3);
                 func_801518B0(globalCtx, 0x33AAU, &this->actor);
                 this->textId = 0x33AA;
                 break;
@@ -827,9 +821,9 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33AB:
-                func_80B90E50(this, (u16)1);
+                func_80B90E50(this, 1);
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
-                func_80B90E84(this, (u16)0, (u16)1);
+                EnMaYto_SetRomaniFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33ACU, &this->actor);
                 this->textId = 0x33AC;
                 break;
@@ -844,9 +838,9 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
                 break;
 
             case 0x33AE:
-                func_80B90E50(this, (u16)1);
+                func_80B90E50(this, 1);
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
-                func_80B90E84(this, (u16)4, (u16)2);
+                EnMaYto_SetRomaniFaceExpression(this, 4, 2);
                 func_801518B0(globalCtx, 0x33AFU, &this->actor);
                 this->textId = 0x33AF;
                 break;
@@ -854,7 +848,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
             case 0x33AF:
                 this->unk_31E = 1;
                 func_800B86C8(&this->actor, globalCtx, &this->actor);
-                EnMaYto_SetFaceExpression(this, (u16)4, (u16)2);
+                EnMaYto_SetFaceExpression(this, 4, 2);
                 func_801518B0(globalCtx, 0x33B0U, &this->actor);
                 this->textId = 0x33B0;
                 func_80151BB4(globalCtx, 6U);
@@ -873,7 +867,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
             case 0x33C6:
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
                 this->unk_31E = 0;
-                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+                EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C7U, &this->actor);
                 this->textId = 0x33C7;
                 break;
@@ -881,15 +875,15 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
             case 0x33C7:
                 func_800B86C8(&this->actor, globalCtx, &this->actor);
                 this->unk_31E = 1;
-                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+                EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C8U, &this->actor);
                 this->textId = 0x33C8;
                 break;
 
             case 0x33C8:
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
-                func_80B90E50(this, (u16)1);
-                func_80B90E84(this, (u16)0, (u16)2);
+                func_80B90E50(this, 1);
+                EnMaYto_SetRomaniFaceExpression(this, 0, 2);
                 func_801518B0(globalCtx, 0x33C9U, &this->actor);
                 this->textId = 0x33C9;
                 break;
@@ -897,7 +891,7 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
             case 0x33C9:
                 func_800B86C8(&this->actor, globalCtx, &this->actor);
                 this->unk_31E = 1;
-                EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+                EnMaYto_SetFaceExpression(this, 3, 1);
                 func_801518B0(globalCtx, 0x33CAU, &this->actor);
                 this->textId = 0x33CA;
                 break;
@@ -910,8 +904,8 @@ void func_80B8FA14(EnMaYto *this, GlobalContext *globalCtx) {
 
             case 0x33CB:
                 func_800B86C8(&this->actor, globalCtx, this->actor.child);
-                func_80B90E50(this, (u16)1);
-                func_80B90E84(this, (u16)3, (u16)3);
+                func_80B90E50(this, 1);
+                EnMaYto_SetRomaniFaceExpression(this, 3, 3);
                 func_801518B0(globalCtx, 0x33CCU, &this->actor);
                 this->textId = 0x33CC;
                 func_80151BB4(globalCtx, 6U);
@@ -937,10 +931,12 @@ void func_80B8FE04(EnMaYto *this) {
 
 
 void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
-    this->actor.flags = this->actor.flags | 0x10000;
+    this->actor.flags |= 0x10000;
+
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actor.flags &= ~0x10000;
-        if ((gSaveContext.weekEventReg[0x34] & 1)) {
+
+        if (gSaveContext.weekEventReg[0x34] & 1) {
             func_801518B0(globalCtx, 0x33C1U, &this->actor);
             this->textId = 0x33C1;
         } else {
@@ -951,9 +947,10 @@ void func_80B8FE74(EnMaYto *this, GlobalContext *globalCtx) {
             gSaveContext.weekEventReg[0xE] = (u8) (gSaveContext.weekEventReg[0xE] | 1);
             this->unk_310 = 4;
             func_80B904D0(this);
-            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 6);
             return;
         }
+
         func_80B8FF80(this);
     } else {
         func_800B8614(&this->actor, globalCtx, 200.0f);
@@ -980,7 +977,7 @@ void func_80B8FF94(EnMaYto *this, GlobalContext *globalCtx) {
             func_80B9000C(this, globalCtx);
             break;
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, (u16)5, (u16)0x71C, 0xB6);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x71C, 0xB6);
 }
 
 
@@ -988,7 +985,7 @@ void func_80B9000C(EnMaYto *this, GlobalContext *globalCtx) {
     if (func_80147624(globalCtx) != 0) {
         switch (this->textId) {
             case 0x33C1:
-                EnMaYto_SetFaceExpression(this, (u16)3, (u16)1);
+                EnMaYto_SetFaceExpression(this, 3, 1);
                 func_801518B0(globalCtx, 0x33C2U, &this->actor);
                 this->textId = 0x33C2;
                 break;
@@ -1149,26 +1146,26 @@ void func_80B905B0(EnMaYto *this, GlobalContext *globalCtx) {
 // StartDialogue
 void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
     if (CURRENT_DAY == 1) {
-        if (Player_GetMask(globalCtx) != 0 && gSaveContext.playerForm == 4) {
+        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             switch (Player_GetMask(globalCtx)) {
-                case 7:
+                case PLAYER_MASK_ROMANIS_MASK:
                     func_801518B0(globalCtx, 0x235DU, &this->actor);
                     this->textId = 0x235D;
                     break;
 
-                case 8:
-                    EnMaYto_SetFaceExpression(this, (u16)1, (u16)3);
+                case PLAYER_MASK_CIRCUS_LEADERS_MASK:
+                    EnMaYto_SetFaceExpression(this, 1, 3);
                     func_801518B0(globalCtx, 0x235EU, &this->actor);
                     this->textId = 0x235E;
                     break;
 
-                case 2:
-                    EnMaYto_SetFaceExpression(this, (u16)1, (u16)2);
+                case PLAYER_MASK_KAFEIS_MASK:
+                    EnMaYto_SetFaceExpression(this, 1, 2);
                     func_801518B0(globalCtx, 0x235FU, &this->actor);
                     this->textId = 0x235F;
                     break;
 
-                case 0xA:
+                case PLAYER_MASK_COUPLES_MASK:
                     func_801518B0(globalCtx, 0x2360U, &this->actor);
                     this->textId = 0x2360;
                     break;
@@ -1179,7 +1176,7 @@ void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
                     break;
             }
         } else {
-            if (func_80B91014() != 0) {
+            if (func_80B91014()) {
                 func_801518B0(globalCtx, 0x3394, &this->actor);
                 this->textId = 0x3394;
             } else {
@@ -1190,27 +1187,26 @@ void func_80B9061C(EnMaYto *this, GlobalContext *globalCtx) {
             }
         }
     } else if (CURRENT_DAY == 3) {
-        if (func_80B90F84() != 0) {
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+        if (func_80B90F84()) {
+            EnMaYto_SetFaceExpression(this, 0, 3);
             func_801518B0(globalCtx, 0x33C5U, &this->actor);
             this->textId = 0x33C5;
-            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 6);
         } else {
             func_80B9109C();
-            EnMaYto_SetFaceExpression(this, (u16)0, (u16)3);
+            EnMaYto_SetFaceExpression(this, 0, 3);
             func_801518B0(globalCtx, 0x33C4U, &this->actor);
             this->textId = 0x33C4;
-            func_80151BB4(globalCtx, 6U);
+            func_80151BB4(globalCtx, 6);
         }
     }
 }
 
 
-// StartDialogue
-void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
+void EnMaYto_StartDialogue(EnMaYto *this, GlobalContext *globalCtx) {
     switch (CURRENT_DAY) {
     case 1:
-        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == 4) {
+        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             switch (Player_GetMask(globalCtx)) {
                 case PLAYER_MASK_ROMANIS_MASK:
                     func_801518B0(globalCtx, 0x235D, &this->actor);
@@ -1238,7 +1234,7 @@ void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
                     break;
             }
         } else {
-            if (func_80B91014() != 0) {
+            if (func_80B91014()) {
                 func_801518B0(globalCtx, 0x339F, &this->actor);
                 this->textId = 0x339F;
             } else {
@@ -1250,7 +1246,7 @@ void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
         break;
 
     case 2:
-        if (func_80B91014() != 0) {
+        if (func_80B91014()) {
             func_801518B0(globalCtx, 0x33A6U, &this->actor);
             this->textId = 0x33A6;
             func_80151BB4(globalCtx, 6U);
@@ -1262,14 +1258,14 @@ void func_80B9083C(EnMaYto *this, GlobalContext *globalCtx) {
         break;
 
     case 3:
-        if (func_80B91014() != 0) {
+        if (func_80B91014()) {
             func_801518B0(globalCtx, 0x33A8U, &this->actor);
             this->textId = 0x33A8;
             func_80151BB4(globalCtx, 6U);
         } else {
             func_80B9109C();
             func_801518B0(globalCtx, 0x33A7U, &this->actor);
-            this->textId = (u16)0x33A7U;
+            this->textId = 0x33A7U;
         }
         break;
     }
@@ -1297,7 +1293,7 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_310 = 1;
                 func_80B9109C();
-                EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
+                EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C6U, &this->actor);
                 this->textId = 0x33C6;
             }
@@ -1305,14 +1301,14 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
     } else {
         if (func_80B91014()) {
             this->unk_31E = 2;
-            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
+            EnMaYto_SetFaceExpression(this, 5, 3);
             func_801518B0(globalCtx, 0x33B3U, &this->actor);
             this->textId = 0x33B3;
             func_80151BB4(globalCtx, 6U);
         }
         else {
             func_80B9109C();
-            EnMaYto_SetFaceExpression(this, (u16)5, (u16)3);
+            EnMaYto_SetFaceExpression(this, 5, 3);
             func_801518B0(globalCtx, 0x33B1U, &this->actor);
             this->textId = 0x33B1;
         }
@@ -1321,7 +1317,9 @@ void func_80B90A78(EnMaYto* this, GlobalContext* globalCtx) {
 
 
 void EnMaYto_ChangeAnim(EnMaYto *this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B91448[index].unk_00, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_80B91448[index].unk_00->common), D_80B91448[index].unk_08, D_80B91448[index].unk_0C);
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f, 
+                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common), 
+                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
 }
 
 
@@ -1342,14 +1340,14 @@ void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
 
     if (this->unk_320 == 0) {
         if (this->actionFunc == func_80B9037C) {
-            this->unk_1D8.unk_08.y = (u16)0;
-            this->unk_1D8.unk_08.x = (u16)0;
+            this->unk_1D8.unk_08.y = 0;
+            this->unk_1D8.unk_08.x = 0;
         } else {
             func_800BD888(&this->actor, &this->unk_1D8, 0xD, phi_a3);
         }
     } else {
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.y, (u16)0, (u16)3, (u16)0x71C, 0xB6);
-        Math_SmoothStepToS(&this->unk_1D8.unk_08.x, (u16)0x18E3, (u16)5, (u16)0x71C, 0xB6);
+        Math_SmoothStepToS(&this->unk_1D8.unk_08.y, 0, 3, 0x71C, 0xB6);
+        Math_SmoothStepToS(&this->unk_1D8.unk_08.x, 0x18E3, 5, 0x71C, 0xB6);
     }
 
     EnMaYto_UpdateEyes(this);
@@ -1381,7 +1379,7 @@ void EnMaYto_UpdateEyes(EnMaYto *this) {
 }
 
 
-
+// EnMaYto_SetRomani...
 void func_80B90E50(EnMaYto *this, s16 arg1) {
     EnMaYts* romani = (EnMaYts*)this->actor.child;
 
@@ -1390,42 +1388,41 @@ void func_80B90E50(EnMaYto *this, s16 arg1) {
     }
 }
 
-void func_80B90E84(EnMaYto *this, s16 arg1, s16 arg2) {
+void EnMaYto_SetRomaniFaceExpression(EnMaYto *this, s16 overrideEyeTexIndex, s16 mouthTexIndex) {
     EnMaYts* romani = (EnMaYts*)this->actor.child;
 
     if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
-        romani->overrideEyeTexIndex = arg1;
-        romani->mouthTexIndex = arg2;
+        romani->overrideEyeTexIndex = overrideEyeTexIndex;
+        romani->mouthTexIndex = mouthTexIndex;
     }
 }
 
-
-
-void EnMaYto_SetFaceExpression(EnMaYto *this, s16 arg1, s16 mouthIndex) {
-    this->overrideEyeTexIndex = arg1;
+void EnMaYto_SetFaceExpression(EnMaYto *this, s16 overrideEyeTexIndex, s16 mouthIndex) {
+    this->overrideEyeTexIndex = overrideEyeTexIndex;
     this->mouthTexIndex = mouthIndex;
 }
 
-void func_80B90EF0(EnMaYto *this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1) != 0) {
-        EnMaYto_SetFaceExpression(this, (u16)0, (u16)1);
-        func_80B90E84(this, 0, 0);
+void EnMaYto_InitFaceExpression(EnMaYto *this) {
+    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
+        EnMaYto_SetFaceExpression(this, 0, 1);
+        EnMaYto_SetRomaniFaceExpression(this, 0, 0);
     } else {
-        EnMaYto_SetFaceExpression(this, (u16)5, (u16)2);
-        func_80B90E84(this, 1, 2);
+        EnMaYto_SetFaceExpression(this, 5, 2);
+        EnMaYto_SetRomaniFaceExpression(this, 1, 2);
     }
 }
 
+// HasTalkedToCremia?
 s32 func_80B90F84(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.weekEventReg[0xD] & 4) {
+            if (gSaveContext.weekEventReg[0xD] & 0x4) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[0xD] & 8) {
+            if (gSaveContext.weekEventReg[0xD] & 0x8) {
                 return true;
             }
             break;
@@ -1440,42 +1437,40 @@ s32 func_80B90F84(void) {
     return false;
 }
 
-
-
+// HasTalkedToCremia?
 s32 func_80B91014(void) {
-    // Note each case doesn't have `break`s.
+    // Please note each case doesn't have their respective `break`s.
     switch (CURRENT_DAY) {
     case 3:
         if ((gSaveContext.weekEventReg[0xD] & 0x10) != 0) {
-            return 1;
+            return true;
         }
 
     case 2:
-        if ((gSaveContext.weekEventReg[0xD] & 8) != 0) {
-            return 1;
+        if ((gSaveContext.weekEventReg[0xD] & 0x8) != 0) {
+            return true;
         }
 
     case 1:
-        if (gSaveContext.weekEventReg[0xD] & 4) {
-            return 1;
+        if (gSaveContext.weekEventReg[0xD] & 0x4) {
+            return true;
         }
     }
-    return 0;
+    return false;
 }
-
 
 void func_80B9109C(void) {
     switch (CURRENT_DAY) {
     case 1:
-        gSaveContext.weekEventReg[0xD] |= 1<<2;
+        gSaveContext.weekEventReg[0xD] |= 0x4;
         break;
 
     case 2:
-        gSaveContext.weekEventReg[0xD] |= 1<<3;
+        gSaveContext.weekEventReg[0xD] |= 0x8;
         break;
 
     case 3:
-        gSaveContext.weekEventReg[0xD] |= 1<<4;
+        gSaveContext.weekEventReg[0xD] |= 0x10;
         break;
     }
 }
