@@ -990,7 +990,7 @@ typedef struct {
     /* 0x120B0 */ UNK_TYPE1 pad120B0[0x1];
     /* 0x120B1 */ u8 unk_120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x2];
-    /* 0x120B4 */ UNK_TYPE1 pad120B4[0x24];
+    /* 0x120B4 */ UNK_TYPE1 pad120B4[0x2C];
 } MessageContext; // size = 0x120E0
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;

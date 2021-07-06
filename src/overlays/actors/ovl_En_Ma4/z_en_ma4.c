@@ -688,8 +688,8 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
     gSaveContext.unk_3F4A = 0xFFF0;
-    globalCtx->unk18875 = 0x14;
-    globalCtx->unk1887F = 0x50;
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 0x50;
     gSaveContext.nextTransition = 3;
 }
 
@@ -738,7 +738,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
 
     if (this->poppedBalloonCounter != D_80AC0258) {
         D_80AC0258 = this->poppedBalloonCounter;
-        globalCtx->interfaceCtx.unk25C = 1;
+        globalCtx->interfaceCtx.unk_25C = 1;
     }
 
     if ((gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) // timer >= 2 minutes
@@ -780,13 +780,13 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
         globalCtx->nextEntranceIndex = 0x6410;
         gSaveContext.unk_3F4A = 0;
         sFrameCounter = 0;
-        globalCtx->unk18875 = 0x14;
+        globalCtx->sceneLoadFlag = 0x14;
 
         if (this->poppedBalloonCounter == 10) {
-            globalCtx->unk1887F = 0x50;
+            globalCtx->unk_1887F = 0x50;
             gSaveContext.nextTransition = 3;
         } else {
-            globalCtx->unk1887F = 0x40;
+            globalCtx->unk_1887F = 0x40;
             gSaveContext.nextTransition = 2;
         }
 
@@ -825,12 +825,12 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
         u32 actionIndex = func_800EE200(globalCtx, 0x78);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80AC0260) {
-                D_80AC0260 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.npcActions[actionIndex]->unk0 != D_80AC0260) {
+                D_80AC0260 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
                 this->animTimer = 0;
 
-                switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
+                switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                     case 1:
                         this->hasBow = true;
                         EnMa4_ChangeAnim(this, 1);
@@ -886,8 +886,8 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
     gSaveContext.unk_3F4A = 0xFFF5;
-    globalCtx->unk18875 = 0x14;
-    globalCtx->unk1887F = 0x40;
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 0x40;
     gSaveContext.nextTransition = 2;
 }
 
@@ -1043,7 +1043,7 @@ void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnMa4_UpdateEyes(this);
     this->actionFunc(this, globalCtx);
