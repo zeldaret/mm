@@ -226,6 +226,7 @@ extern Gfx D_04023210[];
 extern Gfx D_060003B0[];
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
+extern Gfx D_06000720[];
 extern Gfx D_0402E510[];
 extern Gfx D_06000080[];
 
@@ -4821,9 +4822,9 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 #ifdef NON_EQUIVALENT
-//cursed
 void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
+    Gfx* gfx;
     Vec3f sp80;
     Vec3f sp74;
 
@@ -4836,43 +4837,43 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-            POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+            gfx = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
                                               POLY_OPA_DISP);
         } else {
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alienAlpha);
-            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+            gfx = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
                                               POLY_XLU_DISP);
         }
         if (this->alienBeamAlpha != 0) {
             AnimatedMat_Draw(globalCtx, D_80B503FC);
-            gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 240, 180, 100, 60);
-            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
+            gDPPipeSync(gfx++);
+            gDPSetPrimColor(gfx++, 0, 255, 240, 180, 100, 60);
+            gDPSetEnvColor(gfx++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
             SysMatrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+            gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000080);
+            gSPDisplayList(gfx++, D_06000080);
             SysMatrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+            gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000080);
+            gSPDisplayList(gfx++, D_06000080);
         }
     }
     if (this->drawAlienDeathEffect) {
         SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
                                                  this->actor.world.pos.z, &this->actor.shape);
         Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP, 0x06000720);
+        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, D_06000720);
     }
     if (this->drawAlien) {
-        Gfx* dl = func_8012C868(POLY_XLU_DISP);
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
-        gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
+        gfx = func_8012C868(gfx);
+        gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                           PRIMITIVE, 0);
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
         SysMatrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
@@ -4881,10 +4882,10 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         sp74.z = thisx->world.pos.z + sp80.z;
         SysMatrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
-        gSPDisplayList(POLY_XLU_DISP++, &D_04029CB0);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xF0, 0xB4, 0x64, this->unk389 * 0.39215687f);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &D_04029CF0);
+        gSPDisplayList(gfx++, D_04029CB0);
+        gDPSetPrimColor(gfx++, 0, 0, 0xF0, 0xB4, 0x64, this->alienAlpha * 0.39215687f);
+        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, D_04029CF0);
 
         if ((this->alienAlpha >= 0x81) && func_80B456A8(globalCtx, &sp74)) {
             func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp74, 10.0f,
