@@ -1111,7 +1111,7 @@ void func_80B44C24(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B4516C(this);
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 //cursed
 s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp6C;
@@ -1510,7 +1510,7 @@ void func_80B45BB8(EnInvadePohStruct* s) {
 }
 
 // cursed
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_union* arg1, s32 arg2, unkstruct_invadepoh_union* arg3, s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
     unkstruct_invadepoh_4* temp_v0;
     unkstruct_invadepoh_4* temp_v0_2;
@@ -1578,7 +1578,7 @@ void func_80B45CE0(AlienBehaviorInfo* substruct) {
 }
 
 // cursed
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 void func_80B45EC8(EnInvadepoh* this, GlobalContext* globalCtx, s32 arg2) {
     Vec3f spA8;
     Vec3f sp9C;
@@ -3408,7 +3408,7 @@ void func_80B4A2C0(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B4A2C0.asm")
 #endif
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 //cursed 
 void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp44;
@@ -4656,7 +4656,7 @@ void func_80B4D3E4(EnInvadepoh* this) {
     this->actionFunc = func_80B4D480;
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 // cursed
 void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16* new_var;
@@ -4820,7 +4820,7 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 //cursed
 void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
