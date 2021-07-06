@@ -227,6 +227,7 @@ extern Gfx D_060003B0[];
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
 extern Gfx D_0402E510[];
+extern Gfx D_06000080[];
 
 extern Vec3s D_801D15BC;
 extern s32 D_801BDA9C;
@@ -2773,7 +2774,7 @@ void func_80B48948(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player;
+    Player* player;
     s16 new_var3;
     s16 temp_v1;
     s32 temp_v1_3;
@@ -2859,7 +2860,7 @@ void func_80B48DE4(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
@@ -3315,7 +3316,7 @@ void func_80B49DA0(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
@@ -3455,7 +3456,7 @@ void func_80B4A2C0(EnInvadepoh* this) {
 void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp44;
     s16 sp42;
-    ActorPlayer* player;
+    Player* player;
     EnInvadePohStructUnk324* substruct;
     s16 temp_v0;
     s16 temp_v1_2;
@@ -3590,7 +3591,7 @@ void func_80B4A7C0(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
@@ -3847,7 +3848,7 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     s16 temp_v1;
     s32 sp38;
-    ActorPlayer* player;
+    Player* player;
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
 
     sp38 = (this->actor.flags & 0x40) == 0x40;
@@ -4194,7 +4195,7 @@ void func_80B4BFFC(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player;
+    Player* player;
     s16 temp_v1;
     s16 diff;
 
@@ -4238,7 +4239,7 @@ void func_80B4C1BC(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player;
+    Player* player;
     Actor* temp_v0;
     s16 temp_v1;
     s16 diff;
@@ -4474,7 +4475,7 @@ void func_80B4CAB0(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player;
+    Player* player;
     s16 temp_v1;
     s16 diff;
 
@@ -4515,7 +4516,7 @@ void func_80B4CC70(EnInvadepoh* this) {
 #ifdef NON_MATCHING
 void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     EnInvadePohStructUnk324* substruct = &this->EnInvadePohStructUnk324;
-    ActorPlayer* player;
+    Player* player;
     s16 temp_v1;
     s16 diff;
 
@@ -4862,8 +4863,8 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-// cursed
 #ifdef NON_MATCHING
+//cursed
 void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     Vec3f sp80;
@@ -4893,16 +4894,15 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, D_80B503FC);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 240, 180, 100, 60);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0,
-                           0x69); // 0x69 placeholder for this->unk38D * 0.5882353f & 0xFF | ~0xFF
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk38D * 0.5882353f);
             SysMatrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, 0x06000080);
+            gSPDisplayList(POLY_XLU_DISP++, D_06000080);
             SysMatrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, 0x06000080);
+            gSPDisplayList(POLY_XLU_DISP++, D_06000080);
         }
     }
     if (this->unk38C != 0) {
@@ -4924,11 +4924,8 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         sp74.z = thisx->world.pos.z + sp80.z;
         SysMatrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
-
         gSPDisplayList(POLY_XLU_DISP++, &D_04029CB0);
-
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 3); // 3 is placeholder, look at asm for more info
-
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xF0, 0xB4, 0x64, this->unk389 * 0.39215687f);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &D_04029CF0);
 

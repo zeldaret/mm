@@ -142,7 +142,7 @@ typedef struct EnInvadepoh {
     /* 0x3A8 */ s16 unk3A8;
     /* 0x3AA */ s16 unk3AA;
     /* 0x3AC */ s8 unk3AC;
-    /* 0x3AD */ char unk3AE[0xF];
+    /* 0x3AD */ char unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
     /* 0x3BD */ char unk3BD[0x3];
 } EnInvadepoh; // size = 0x3C0
