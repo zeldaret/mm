@@ -209,7 +209,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
             this->cooldownTimer -= 1;
             return;
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 

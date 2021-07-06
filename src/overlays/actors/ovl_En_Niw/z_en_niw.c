@@ -1,8 +1,8 @@
-/* 
- * File: z_en_niw.c 
+/*
+ * File: z_en_niw.c
  * Overlay: ovl_En_Niw
  * Description: Cucco (Chicken) (Japanese: Niwatori)
- */ 
+ */
 
 #include "z_en_niw.h"
 
@@ -451,7 +451,8 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
         }
-    } else if (this->unk2BC.z != 0.0f) { this->actor.shape.rot.z = 0;
+    } else if (this->unk2BC.z != 0.0f) {
+        this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
         this->actor.velocity.y = 8.0f;
         this->actor.speedXZ = 4.0f;
@@ -915,12 +916,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (!this->isStormActive) {
             if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
                 if (globalCtx) {}
 
                 if ((this->unknownState28E != 4) && (this->unknownState28E != 5)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 }
             }
         }
@@ -1038,8 +1039,9 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z,
+                                        MTXMODE_NEW);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_f(this->feathers[i].zRot, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

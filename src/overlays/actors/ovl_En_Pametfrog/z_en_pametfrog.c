@@ -5,7 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
-#include "src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 
 #define FLAGS 0x00000035
 
@@ -171,7 +171,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
                      this->transitionDrawTable, 24);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-    if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
+    if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -944,7 +944,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(globalCtx, &vec1, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 800, 50);
     func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
-    Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomContext.currRoom.num);
+    Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
 
     for (i = 0; i < 25; i++) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);
@@ -1324,15 +1324,15 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->collider.base.atFlags & AT_ON) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->collider.base.acFlags & AC_ON) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->collider.base.ocFlags1 & OC1_ON) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->unk_2C4 > 0.0f) {

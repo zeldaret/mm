@@ -391,8 +391,8 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (this->actor.update != 0) {
         this->previousACFlags = this->collider.base.acFlags;
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
