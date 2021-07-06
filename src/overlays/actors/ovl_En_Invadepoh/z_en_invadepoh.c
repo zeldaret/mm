@@ -1,3 +1,9 @@
+/*
+ * File z_en_invadepoh.c
+ * Overlay: ovl_en_invadepoh
+ * Description: Aliens event
+ */
+
 #include "z_en_invadepoh.h"
 #include "../ovl_En_Door/z_en_door.h"
 
@@ -673,7 +679,7 @@ void func_80B439B0(s32 arg0, s32 arg1) {
         arg1 = 0;
     }
 
-    if ((arg0 & 1) == 0) {
+    if (!(arg0 & 1)) {
         gSaveContext.roomInf[124][arg0 >> 1] = (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
     } else {
         gSaveContext.roomInf[124][arg0 >> 1] =
@@ -1070,7 +1076,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
 void func_80B44A90(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if ((this->actor.bgCheckFlags & 1) != 0) {
+    if (this->actor.bgCheckFlags & 1) {
         this->actor.velocity.y *= 0.3f;
         this->actor.speedXZ *= 0.8f;
     } else if ((this->actor.bgCheckFlags & 8) != 0) {
@@ -1128,6 +1134,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     u32 phi_v0;
     f32 adj;
     f32 opp;
+    
     arr = this->pathPoints;
     retVal = 0;
     temp_v1 = this->unk309 + this->unk30A;
@@ -1272,7 +1279,7 @@ void func_80B451A0(EnInvadepoh* this, GlobalContext* globalCtx) {
             D_80B4E940 = 1;
         } else if (CURRENT_DAY == 1) {
             temp_v0 = gSaveContext.time;
-            if ((temp_v0 < 0x1AAA) || (temp_v0 >= 0x4000)) {
+            if ((temp_v0 < CLOCK_TIME(2, 30)) || (temp_v0 >= CLOCK_TIME(6, 0))) {
                 D_80B4E940 = 1;
             } else if (temp_v0 < 0x3800) {
                 phi_s1_3 = 0x3800;
@@ -1688,7 +1695,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (D_80B4E940 == 1) {
         func_80B46DA8(this);
     } else if (D_80B4E940 == 2) {
-        if (gSaveContext.time < 0x1AD8) {
+        if (gSaveContext.time < CLOCK_TIME(2, 31)) {
             func_80B46DA8(this);
         } else {
             func_80B454BC(this, globalCtx);
@@ -2287,6 +2294,7 @@ void func_80B47938(EnInvadepoh* this) {
 void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 unk2F2;
     u32 index;
+
     func_80B44B78(this);
     if (this->counter < 5) {
         if (D_80B4ED30[this->counter].x > 0.0f) {
@@ -2675,15 +2683,16 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
     if ((this->actor.flags & 0x40) == 0x40) {
-        if ((func_801378B8(&this->skelAnime, 0.0f)) || (func_801378B8(&this->skelAnime, 7.0f))) {
+        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
     if (this->actionTimer > 0) {
         this->actionTimer--;
-        return;
-    }
+    } else {
     func_80B48948(this);
+    }
+
 }
 
 // ISMATCHING: Move rodata once all funcs match
@@ -3048,7 +3057,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.y = this->actor.home.pos.y + 1500.0f;
     sp30.z = this->actor.home.pos.z;
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world, &sp30), 0xA, 0xBB8, 0x64);
-    if ((globalCtx->gameplayFrames & 0x3F) < 0xE) {
+    if ((globalCtx->gameplayFrames % 64) < 14) {
         Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
     } else {
         this->actor.speedXZ *= 0.97f;
@@ -3103,9 +3112,9 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (this->actionTimer > 0) {
         this->actionTimer--;
-        return;
+    } else {
+        func_80B49904(this);
     }
-    func_80B49904(this);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B497EC.asm")
@@ -3238,7 +3247,7 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
                 this->unk378 = func_80B45550(this, globalCtx, 6400.0f, temp_v0_2);
             }
         }
-        this->actor.flags &= -0xA;
+        this->actor.flags &= ~0x9;
     } else {
         this->unk378 = 0;
         this->actor.flags |= 9;
@@ -3421,7 +3430,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 temp_f18;
     s16 diff;
 
-    if ((globalCtx->gameplayFrames & 0xFF) == 0) {
+    if ((globalCtx->gameplayFrames % 256) == 0) {
         Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
         sp42 = Math_Vec3f_Yaw(&this->actor.world, &sp44);
         temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
@@ -3517,7 +3526,7 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
         if (this->unk378 == 0) {
             this->unk378 = func_80B45550(this, globalCtx, 6400.0f, -0xF);
         }
-        this->actor.flags &= -0xA;
+        this->actor.flags &= ~0x9;
     } else {
         this->unk378 = 0;
         this->actor.flags |= 9;
@@ -4078,7 +4087,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         if (temp_v0 == 0) {
             this->unk2F8 = 40.0f;
             this->unk304 = -0x8000;
-            this->actor.flags &= -0xA;
+            this->actor.flags &= ~0x9;
 
         } else if (temp_v0 < (temp_t6->unk308 - 1)) {
             this->unk2F8 = 40.0f;
@@ -4087,7 +4096,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             Math_StepToF(&this->unk2F8, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->unk304, -0x8000, 0x12C);
-            this->actor.flags &= -0xA;
+            this->actor.flags &= ~0x9;
         }
         temp_a0 = this->unk304 + temp_t6->actor.world.rot.y;
         this->actor.world.pos.x = (Math_SinS(temp_a0) * this->unk2F8) + temp_t6->actor.world.pos.x;
@@ -4372,7 +4381,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
             }
         }
 
-        this->actor.flags &= -0xA;
+        this->actor.flags &= ~0x9;
     } else {
         this->unk378 = 0;
         this->actor.flags |= 9;

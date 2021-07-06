@@ -1769,7 +1769,8 @@ void func_800F6FF8(GlobalContext* globalCtx, EnvironmentContext* envCtx, LightCo
 // void func_800F8CD4(GlobalContext* globalCtx, EnvironmentContext* envCtx, LightContext* lightCtx, s32 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800F8D84(void);
 // void func_800F9728(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_800F9824(GlobalContext* globalCtx, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 argA, f32 argB, s8 argC, s8 argD);// void func_800FA39C(void);
+void func_800F9824(GlobalContext* globalCtx, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 argA, f32 argB, s8 argC, s8 argD);
+// void func_800FA39C(void);
 // void func_800FA3C4(void);
 // void func_800FA9FC(void);
 // void func_800FAAB4(void);
