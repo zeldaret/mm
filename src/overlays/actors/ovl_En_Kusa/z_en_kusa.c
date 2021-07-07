@@ -376,10 +376,10 @@ void func_809359AC(EnKusa* this, GlobalContext* globalCtx) {
 
         if (this->actor.xzDistToPlayer < 600.0f) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer < 400.0f) {
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if ((this->actor.params & 3) != 3) {
                         func_800B8BB0(this, globalCtx);
@@ -406,7 +406,7 @@ void func_80935BBC(EnKusa* this, GlobalContext* globalCtx) {
     s32 sp2C;
 
     if (func_800B8BFC(this, globalCtx)) {
-        this->actor.room = globalCtx->roomContext.currRoom.num;
+        this->actor.room = globalCtx->roomCtx.currRoom.num;
         func_80935CE8(this);
         this->actor.velocity.x = this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z = this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
@@ -606,7 +606,7 @@ void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.shape.yOffset = 0.0f;
     }
-    if ((D_80936AD0 != globalCtx->gameplayFrames) && (globalCtx2->roomContext.currRoom.unk3 == 0)) {
+    if ((D_80936AD0 != globalCtx->gameplayFrames) && (globalCtx2->roomCtx.currRoom.unk3 == 0)) {
         func_80934AB4();
         D_80936AD0 = globalCtx2->gameplayFrames;
     }
