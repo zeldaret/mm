@@ -1436,7 +1436,7 @@ void func_80B457A0(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B457A0.asm")
 #endif
 
-EnInvadepoh* func_80B458D8(void) {
+Actor* func_80B458D8(void) {
     s32 i;
 
     for (i = 0; i < 8; i++){
@@ -4003,7 +4003,7 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
     s32 temp_v0_2;
     s32 phi_v0;
 
-    D_80B5040C = (Actor*)func_80B458D8();
+    D_80B5040C = func_80B458D8();
     if (D_80B5040C == 0) {
         temp_v0_2 = (this->unk3BC < 0) ^ 1;
         this->unk3BC = -1;
