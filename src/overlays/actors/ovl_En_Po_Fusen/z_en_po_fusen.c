@@ -1,5 +1,5 @@
 #include "z_en_po_fusen.h"
-#include "../ovl_En_Ma4/z_en_ma4.h"
+#include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
 #define FLAGS 0x80100030
 
@@ -146,8 +146,8 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
         return 1;
     }
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     return 0;
 }

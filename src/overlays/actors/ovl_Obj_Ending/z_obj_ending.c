@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_ending.c
+ * Overlay: ovl_Obj_Ending
+ * Description: The stump and lighting at the end of the credits
+ */
+
 #include "z_obj_ending.h"
 
 #define FLAGS 0x00000030
@@ -15,7 +21,7 @@ const ActorInit Obj_Ending_InitVars = {
     OBJECT_ENDING_OBJ,
     sizeof(ObjEnding),
     (ActorFunc)ObjEnding_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjEnding_Update,
     (ActorFunc)ObjEnding_Draw,
 };

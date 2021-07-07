@@ -43,7 +43,7 @@ void EnAObj_Update2(ActorEnAObj* this, GlobalContext* globalCtx) {
 void EnAObj_Update(ActorEnAObj* this, GlobalContext* globalCtx) {
     (this->update)((Actor*)this, (GlobalContext*)globalCtx);
     Actor_SetHeight((Actor*)this, 45.0f);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, (Collider*)&this->collision);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider*)&this->collision);
 }
 
 void EnAObj_Draw(ActorEnAObj* this, GlobalContext* globalCtx) {
