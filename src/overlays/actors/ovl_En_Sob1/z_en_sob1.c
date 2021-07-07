@@ -29,7 +29,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_StartShopping(GlobalContext* globalCtx, EnSob1* this);
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_FaceShopKeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_LookToShelf(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx);
@@ -508,7 +508,7 @@ void EnSob1_SetupStartShopping(GlobalContext* globalCtx, EnSob1* this, u8 skipHe
 }
 
 void EnSob1_StartShopping(GlobalContext* globalCtx, EnSob1* this) {
-    EnSob1_SetupAction(this, EnSob1_FaceShopKeeper);
+    EnSob1_SetupAction(this, EnSob1_FaceShopkeeper);
     func_80151938(globalCtx, sFacingShopkeeperTextIds[this->shopType]);
     func_8011552C(globalCtx, 6);
     this->stickLeftPrompt.isEnabled = false;
@@ -586,9 +586,8 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_UpdateJoystickInputState(GlobalContext* globalCtx, EnSob1* this) {
-    Input* controller1 = &globalCtx->state.input[0];
-    s8 stickX = controller1->rel.stick_x;
-    s8 stickY = controller1->rel.stick_y;
+    s8 stickX = globalCtx->state.input[0].rel.stick_x;
+    s8 stickY = globalCtx->state.input[0].rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -676,7 +675,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, GlobalContext* globalCtx) 
     return false;
 }
 
-void EnSob1_FaceShopKeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad[2];
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     u8 cursorIdx;

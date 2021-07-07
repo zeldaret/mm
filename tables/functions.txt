@@ -9638,7 +9638,7 @@
     0x80A0D74C:("EnSob1_SetCursorIndexFromNeutral",),
     0x80A0D77C:("EnSob1_Hello",),
     0x80A0D850:("EnSob1_FacingShopkeeperDialogResult",),
-    0x80A0D904:("EnSob1_FaceShopKeeper",),
+    0x80A0D904:("EnSob1_FaceShopkeeper",),
     0x80A0DA5C:("EnSob1_TalkingToShopkeeper",),
     0x80A0DAAC:("EnSob1_LookToShopkeeperFromShelf",),
     0x80A0DB78:("EnSob1_EndWalk",),
