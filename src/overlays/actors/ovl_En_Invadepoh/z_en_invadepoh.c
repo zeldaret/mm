@@ -3410,55 +3410,45 @@ void func_80B4A2C0(EnInvadepoh* this) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B4A2C0.asm")
 #endif
 
-#ifdef NON_EQUIVALENT
-//stack, plus matching around uses of player doesn't make any sense even though it matches
+// ISMATCHING: Move rodata once all funcs match
+#ifdef NON_MATCHING
 void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Player* player;
-    AlienBehaviorInfo* substruct;
-    Vec3f sp44;
-    s16 sp42;
-    
-    
+    s16 temp_v0;
     s16 temp_v1_2;
     s16 diff;
-    Player* new_var;
-    s16 temp_v0;
+    Vec3f sp44;
+    s16 sp42;
+    AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     if ((globalCtx->gameplayFrames % 256) == 0) {
         Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
-        sp42 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp44);
+        sp42 = Math_Vec3f_Yaw(&this->actor.world, &sp44);
         temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
         this->unk304 = temp_v0 + sp42;
         this->behaviorInfo.unk4C = 0;
     }
-
+    
     Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->behaviorInfo.unk4C, 0x28);
-    substruct = &this->behaviorInfo;
     if (this->actor.xzDistToPlayer < 300.0f) {
-        player = PLAYER;
+        Player* player = PLAYER;
+
         temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
         temp_v1_2 *= 0.85f;
         temp_v1_2 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1_2, -0x9C4, 0x9C4);
         diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
         temp_v1_2 = diff;
-        temp_v1_2 *= .7f;
-        if (globalCtx->gameplayFrames) {}
-
+        temp_v1_2 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1_2, -0x1F40, 0x1F40);
-    
-        if ((((Player*)new_var)->unk840 & 0xFF) == 0) { // bad match
+        if ((globalCtx->gameplayFrames % 256) == 0) {
             substruct->unk26.z = Rand_S16Offset(-0x5DC, 0xBB8);
-            dummy:;
         }
-
     } else {
         substruct->unk26.x = 0;
         substruct->unk26.y = 0;
         substruct->unk26.z = 0;
     }
-
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -4656,54 +4646,50 @@ void func_80B4D3E4(EnInvadepoh* this) {
     this->actionFunc = func_80B4D480;
 }
 
-#ifdef NON_EQUIVALENT
-// cursed
+// ISMATCHING: Move rodata once all funcs match
+#ifdef NON_MATCHING
 void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
-    s16* new_var;
-    float new_var3;
+    f32 target;
+    s32 pad2;
     s32 sp2C;
-    Actor* temp_v1;
-    s32 temp_v0;
-    float new_var2;
-    s16 temp_v0_2;
-    s32 phi_t0;
-    new_var = &this->actionTimer;
-    phi_t0 = 0;
-    if ((*new_var) > 0) {
+    f32 new_var3;
+
+    sp2C = false;
+    if (this->actionTimer > 0) {
         this->actionTimer--;
     }
 
-    if ((*new_var) >= 0xA1) {
-        this->actor.draw = 0;
+    if (this->actionTimer > 160) {
+        this->actor.draw = NULL;
     } else {
-        temp_v0_2 = this->actionTimer;
         this->actor.draw = func_80B4DB14;
-        if ((temp_v0_2 < 0x69) && (temp_v0_2 >= 0x64)) {
+        if (1) {}
+        if ((this->actionTimer < 105) && (this->actionTimer >= 100)) {
             this->actor.gravity = -1.0f;
-            sp2C = 0;
             Math_SmoothStepToS(&this->actor.shape, 0x2000, 8, 0x320, 0x28);
         } else {
             this->actor.gravity = 0.7f;
-            sp2C = 0;
             Math_SmoothStepToS(&this->actor.shape, 0, 8, 0x320, 0x28);
         }
-
+        
         this->actor.velocity.y += this->actor.gravity;
         this->actor.velocity.y *= 0.92f;
-        if (this->actionTimer >= 0x51) {
+        if (this->actionTimer > 80) {
             this->actor.world.pos.y += this->actor.velocity.y;
-            phi_t0 = sp2C;
         } else {
-            phi_t0 =
-                Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, fabsf(this->actor.velocity.y));
+            target = (this->actor.home.pos.y + 850.0f);
+            sp2C =
+                Math_StepToF(&this->actor.world.pos.y, target, fabsf(this->actor.velocity.y));
         }
 
-        temp_v1 = this->actor.child;
-        new_var3 = (new_var2 = this->unk304 * (-0.06f)) + this->unk306;
-        new_var3 = new_var3 * 0.98f;
+        new_var3 = (this->unk304 * -0.06f + this->unk306);
+        new_var3 *= 0.98f;
         this->unk306 = new_var3;
         this->actor.shape.rot.y += this->unk306;
-        if (temp_v1 != 0) {
+        
+        if (this->actor.child != NULL) {
+            Actor* temp_v1 = this->actor.child;
+
             temp_v1->world.pos.x = this->actor.world.pos.x;
             temp_v1->world.pos.y = this->actor.world.pos.y - 30.0f;
             temp_v1->world.pos.z = this->actor.world.pos.z;
@@ -4711,8 +4697,8 @@ void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actionTimer <= 0) || (phi_t0 != 0)) {
-        Actor_MarkForDeath(this);
+    if ((this->actionTimer <= 0) || sp2C) {
+        Actor_MarkForDeath(&this->actor);
     }
 }
 #else

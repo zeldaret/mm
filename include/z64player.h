@@ -202,9 +202,7 @@ typedef struct Player {
     /* 0x730 */ Actor* unk_730;
     /* 0x734 */ char unk_734[8];
     /* 0x73C */ s32 blureEffectIndex[3];
-    /* 0x748 */ char unk_748[0xF8];
-    /* 0x840 */ s32 unk840;
-    /* 0x844 */ char unk841[0x224];
+    /* 0x748 */ char unk_748[0x320];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
