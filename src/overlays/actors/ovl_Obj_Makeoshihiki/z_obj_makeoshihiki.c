@@ -15,7 +15,7 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjMakeoshihiki),
     (ActorFunc)ObjMakeoshihiki_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjMakeoshihiki_Update,
     (ActorFunc)NULL,
 };

@@ -120,8 +120,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
                 (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
-                globalCtx->kankyoContext.unkC3 = 0xff;
-                globalCtx->kankyoContext.unkE0 = 0;
+                globalCtx->envCtx.unk_C3 = 0xff;
+                globalCtx->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();
             if (!func_800FE4B8(globalCtx)) {
@@ -153,5 +153,5 @@ void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtx) {
         func_8010A33C(globalCtx, roomCtx->currRoom.num);
         func_8010A2DC(globalCtx);
     }
-    func_801A3CD8(globalCtx->roomContext.currRoom.echo);
+    func_801A3CD8(globalCtx->roomCtx.currRoom.echo);
 }

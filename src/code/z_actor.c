@@ -242,8 +242,8 @@ void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titl
     titleCardCtx->alpha = 0;
 }
 
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4, s16 param_5,
-                           u8 param_6, u8 param_7) {
+void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
+                           s16 param_5, u8 param_6, u8 param_7) {
     titleCardCtx->texture = texture;
     titleCardCtx->unk4 = param_4;
     titleCardCtx->unk6 = param_5;
@@ -568,7 +568,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7678.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B78B8.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_UpdateBgCheckInfo.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B7E04.asm")
 
@@ -624,9 +624,9 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     if (actor->parent != NULL) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -638,7 +638,13 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BD0.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8BFC.asm")
+s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
+    if (!actor->parent) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800B8C20.asm")
 
@@ -730,7 +736,7 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 void Actor_FreeOverlay(ActorOverlay* entry) {
     void* ramAddr;
 
-    if (entry->nbLoaded == 0) {
+    if (entry->numLoaded == 0) {
         ramAddr = entry->loadedRamAddr;
         if (ramAddr != NULL) {
             // Bit 1 - always loaded
@@ -840,7 +846,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDCF4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDFB0.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//Actor_Noop.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/code/z_actor//func_800BDFC0.asm")
 

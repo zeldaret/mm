@@ -57,7 +57,7 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
         }
         if (func_800EE29C(globalCtx, 0x232)) {
             actionIndex = func_800EE200(globalCtx, 0x232);
-            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+            actionUnk0 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);
@@ -90,7 +90,7 @@ void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 0x4);
 }
 
 void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {

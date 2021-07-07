@@ -2,9 +2,9 @@
 #include <global.h>
 
 /**
- * Assigns the "save" values in PreRenderContext
+ * Assigns the "save" values in PreRender
  */
-void PreRender_SetValuesSave(PreRenderContext* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg) {
+void PreRender_SetValuesSave(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf, void* cvg) {
     this->widthSave = width;
     this->heightSave = height;
     this->fbufSave = fbuf;
@@ -16,15 +16,15 @@ void PreRender_SetValuesSave(PreRenderContext* this, u32 width, u32 height, void
     this->lrySave = height - 1;
 }
 
-void PreRender_Init(PreRenderContext* this) {
-    bzero(this, sizeof(PreRenderContext));
+void PreRender_Init(PreRender* this) {
+    bzero(this, sizeof(PreRender));
     func_80174AA0(&this->alloc);
 }
 
 /**
- * Assigns the current values in PreRenderContext
+ * Assigns the current values in PreRender
  */
-void PreRender_SetValues(PreRenderContext* this, u32 width, u32 height, void* fbuf, void* zbuf) {
+void PreRender_SetValues(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf) {
     this->width = width;
     this->height = height;
     this->fbuf = fbuf;
@@ -35,11 +35,11 @@ void PreRender_SetValues(PreRenderContext* this, u32 width, u32 height, void* fb
     this->lry = height - 1;
 }
 
-void PreRender_Destroy(PreRenderContext* this) {
+void PreRender_Destroy(PreRender* this) {
     func_80174BA0(&this->alloc);
 }
 
-void func_8016FDB8(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {
+void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {
     Gfx* gfx = *gfxp;
     u32 flags;
 
@@ -60,12 +60,11 @@ void func_8016FDB8(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave,
     *gfxp = gfx;
 }
 
-void func_8016FF70(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+void func_8016FF70(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
     func_8016FDB8(this, gfxp, buf, bufSave, false);
 }
 
-void func_8016FF90(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB,
-                   s32 envA) {
+void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
@@ -97,13 +96,13 @@ void func_8016FF90(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave,
     *gfxp = gfx;
 }
 
-void func_80170200(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+void func_80170200(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
     func_8016FF90(this, gfxp, buf, bufSave, 255, 255, 255, 255);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_8017023C(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave) {
+void func_8017023C(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
     Gfx* gfx = *gfxp;
     s32 x;
     s32 x2;
@@ -152,19 +151,19 @@ void func_8017023C(PreRenderContext* this, Gfx** gfxp, void* buf, void* bufSave)
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017023C.asm")
 #endif
 
-void func_8017057C(PreRenderContext* this, Gfx** gfxp) {
+void func_8017057C(PreRender* this, Gfx** gfxp) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
         func_8016FF70(this, gfxp, this->zbuf, this->zbufSave);
     }
 }
 
-void func_801705B4(PreRenderContext* this, Gfx** gfxp) {
+void func_801705B4(PreRender* this, Gfx** gfxp) {
     if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
         func_80170200(this, gfxp, this->fbuf, this->fbufSave);
     }
 }
 
-void func_801705EC(PreRenderContext* this, Gfx** gfxp) {
+void func_801705EC(PreRender* this, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
@@ -181,7 +180,7 @@ void func_801705EC(PreRenderContext* this, Gfx** gfxp) {
     *gfxp = gfx;
 }
 
-void func_80170730(PreRenderContext* this, Gfx** gfxp) {
+void func_80170730(PreRender* this, Gfx** gfxp) {
     func_801705EC(this, gfxp);
 
     if (this->cvgSave != NULL) {
@@ -189,13 +188,13 @@ void func_80170730(PreRenderContext* this, Gfx** gfxp) {
     }
 }
 
-void func_80170774(PreRenderContext* this, Gfx** gfxp) {
+void func_80170774(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
 }
 
 #ifdef NON_MATCHING
 // just regalloc
-void func_80170798(PreRenderContext* this, Gfx** gfxp) {
+void func_80170798(PreRender* this, Gfx** gfxp) {
     Gfx* gfx;
     s32 y;
     s32 y2;
@@ -253,11 +252,11 @@ void func_80170798(PreRenderContext* this, Gfx** gfxp) {
 #pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170798.asm")
 #endif
 
-void func_80170AE0(PreRenderContext* this, Gfx** gfxp, s32 alpha) {
+void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
     func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
 }
 
-void func_80170B28(PreRenderContext* this, Gfx** gfxp) {
+void func_80170B28(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->fbufSave, this->fbuf);
 }
 
@@ -269,7 +268,7 @@ void func_80170B28(PreRenderContext* this, Gfx** gfxp) {
  *   | A B C D E |
  *     ‾ ‾ ‾ ‾ ‾
  */
-void PreRender_AntiAliasAlgorithm(PreRenderContext* this, s32 x, s32 y) {
+void PreRender_AntiAliasAlgorithm(PreRender* this, s32 x, s32 y) {
     s32 i;
     s32 j;
     s32 buffA[3 * 5];
@@ -380,7 +379,7 @@ void PreRender_AntiAliasAlgorithm(PreRenderContext* this, s32 x, s32 y) {
 /**
  * Applies an anti-alias filter to the current prerender
  */
-void PreRender_ApplyAntiAliasingFilter(PreRenderContext* this) {
+void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     s32 x;
     s32 y;
     s32 cvg;
@@ -405,7 +404,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRenderContext* this) {
 /**
  * Applies filters to the framebuffer prerender to make it look smoother
  */
-void PreRender_ApplyFilters(PreRenderContext* this) {
+void PreRender_ApplyFilters(PreRender* this) {
     if (this->cvgSave == NULL || this->fbufSave == NULL) {
         this->unk_4D = 0;
     } else {
@@ -419,7 +418,7 @@ void PreRender_ApplyFilters(PreRenderContext* this) {
 /**
  * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread
  */
-void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this) {
+void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
             StackCheck_Cleanup(&slowlyStackEntry);
@@ -436,7 +435,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRenderContext* this) {
 /**
  * Destroys the "slowly" thread
  */
-void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this) {
+void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this) {
     if (D_801F6FC0) {
         StackCheck_Cleanup(&slowlyStackEntry);
         Slowly_Stop(&D_801F6E00);
@@ -445,7 +444,7 @@ void PreRender_ApplyFiltersSlowlyDestroy(PreRenderContext* this) {
 }
 
 // Unused, likely since `PreRender_ApplyFilters` already handles NULL checks
-void func_801720C4(PreRenderContext* this) {
+void func_801720C4(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         PreRender_ApplyFilters(this);
     }
