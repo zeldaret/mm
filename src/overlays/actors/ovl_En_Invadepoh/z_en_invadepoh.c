@@ -1117,54 +1117,74 @@ void func_80B44C24(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_EQUIVALENT
-// cursed
 s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp6C;
     Vec3f sp60;
+    f32 sp5C;
+    f32 sp54;
     f32 sp44;
-    s32 retVal;
-    Vec3s* arr;
+    s32 sp40;
     Vec3s* temp_a2;
+    Vec3s* temp_a3;
     Vec3s* temp_v0_2;
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 temp_f12;
+    f32 temp_f14;
+    f32 temp_f2;
+    f32 temp_f4;
+    f32 temp_f6;
     s32 temp_v1;
-    f32 new_var;
+    s8 temp_t0;
+    s8 temp_v0;
     s32 phi_v1;
-    u32 phi_v0;
-    f32 adj;
-    f32 opp;
-
-    arr = this->pathPoints;
-    retVal = 0;
-    temp_v1 = this->unk309 + this->unk30A;
-    temp_a2 = &arr[this->unk309];
-    if (temp_v1 >= this->unk308) {
+    s32 phi_v0;
+    temp_v0 = this->unk309;
+    temp_a3 = this->pathPoints;
+    sp40 = 0;
+    temp_t0 = this->unk308;
+    temp_v1 = temp_v0 + this->unk30A;
+    temp_a2 = &temp_a3[temp_v0];
+    if (temp_v1 >= temp_t0) {
         phi_v1 = 0;
     } else {
         phi_v1 = temp_v1;
+        if (this) {}
+
         if (temp_v1 < 0) {
-            phi_v1 = this->unk308 - 1;
+            phi_v1 = temp_t0 - 1;
         }
     }
 
-    temp_v0_2 = &arr[phi_v1];
-    sp6C.x = temp_v0_2->x - temp_a2->x;
+    temp_f0 = temp_a2->x;
+    temp_f2 = temp_a2->z;
+    temp_v0_2 = &temp_a3[phi_v1];
+    temp_f12 = temp_v0_2->x;
+    temp_f14 = temp_v0_2->z;
+    sp6C.x = temp_f12 - temp_f0;
     sp6C.y = 0.0f;
-    sp6C.z = temp_v0_2->z - temp_a2->z;
-    sp60.x = temp_v0_2->x - this->actor.world.pos.x;
-    new_var = this->actor.speedXZ;
+    sp6C.z = temp_f14 - temp_f2;
+    sp60.x = temp_f12 - this->actor.world.pos.x;
     sp60.y = 0.0f;
-    sp60.z = temp_v0_2->z - this->actor.world.pos.z;
-    if (new_var > 0.0f) {
+    sp60.z = temp_f14 - this->actor.world.pos.z;
+    temp_f4 = this->actor.world.pos.x;
+    temp_f6 = this->actor.world.pos.z;
+    temp_v0 = this->unk309;
+    if (this->actor.speedXZ > 0.0f) {
+        sp54 = temp_f0 - temp_f4;
+        sp5C = temp_f2 - temp_f6;
         if (Math3D_AngleBetweenVectors(&sp6C, &sp60, &sp44) != 0) {
-            retVal = 1;
+            sp40 = 1;
         } else if (sp44 <= 0.0f) {
-            retVal = 1;
+            sp40 = 1;
         }
     }
 
-    adj = ((sp60.z + (temp_a2->z - this->actor.world.pos.z)) * 0.9f) + sp6C.z;
-    opp = ((sp60.x + (temp_a2->x - this->actor.world.pos.x)) * 0.9f) + sp6C.x;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(adj, opp), 4, 0xFA0, 0x64);
+    temp_f0_2 = 0.9f;
+    Math_SmoothStepToS(&this->actor.world.rot.y,
+                       Math_FAtan2F(((sp60.z + (temp_f2 - temp_f6)) * temp_f0_2) + sp6C.z,
+                                    ((sp60.x + (temp_f0 - temp_f4)) * temp_f0_2) + sp6C.x),
+                       4, 0xFA0, 0x64);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
@@ -1174,7 +1194,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, phi_v0);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
-    return retVal;
+    return sp40;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B44C80.asm")
@@ -1439,12 +1459,12 @@ void func_80B457A0(EnInvadepoh* this) {
 Actor* func_80B458D8(void) {
     s32 i;
 
-    for (i = 0; i < 8; i++){
+    for (i = 0; i < 8; i++) {
         if ((D_80B50340[i] & 2)) {
             return D_80B50320[i];
         }
     }
-  
+
     return NULL;
 }
 
