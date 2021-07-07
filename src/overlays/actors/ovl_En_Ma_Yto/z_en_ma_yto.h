@@ -12,38 +12,28 @@ typedef void (*EnMaYtoActionFunc)(struct EnMaYto*, GlobalContext*);
 typedef enum {
     /* 00 */ MA2_LIMB_NONE,
     /* 01 */ MA2_LIMB_ROOT,
-
     /* 02 */ MA2_LIMB_TORSO,
-
     /* 03 */ MA2_LIMB_ARM_LEFT,
     /* 04 */ MA2_LIMB_FOREARM_LEFT,
     /* 05 */ MA2_LIMB_HAND_LEFT,
-
     /* 06 */ MA2_LIMB_ARM_RIGHT,
     /* 07 */ MA2_LIMB_FOREARM_RIGHT,
     /* 08 */ MA2_LIMB_HAND_RIGHT,
-
     /* 09 */ MA2_LIMB_HEAD,
     /* 10 */ MA2_LIMB_HAIR,
-
     /* 11 */ MA2_LIMB_PELVIS,
-
     /* 12 */ MA2_LIMB_TIGHT_LEFT,
     /* 13 */ MA2_LIMB_LEG_LEFT,
     /* 14 */ MA2_LIMB_FOOT_LEFT,
-
     /* 15 */ MA2_LIMB_TIGHT_RIGHT,
     /* 16 */ MA2_LIMB_LEG_RIGHT,
     /* 17 */ MA2_LIMB_FOOT_RIGHT,
-
     /* 18 */ MA2_LIMB_DRESS_0,
     /* 19 */ MA2_LIMB_DRESS_1,
     /* 20 */ MA2_LIMB_DRESS_2,
     /* 21 */ MA2_LIMB_DRESS_3,
-
     /* 22 */ MA2_LIMB_MAX
 } ObjectMa2Limbs;
-
 
 typedef struct EnMaYto {
     /* 0x000 */ Actor actor;

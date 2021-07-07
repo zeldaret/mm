@@ -217,7 +217,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             // Failing the alien invasion
             if (!(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
-            } else if ((gSaveContext.time >= 0xD555) && (CURRENT_DAY == 3)) {
+            } else if (gSaveContext.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
                 return false;
             }
             break;
