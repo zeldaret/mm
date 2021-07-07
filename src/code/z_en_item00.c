@@ -470,7 +470,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    Collision_AddAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
         (this->actor.params == ITEM00_COMPASS)) {
@@ -490,7 +490,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->unk17000 != 0) {
+    if (globalCtx->gameOverCtx.state != 0) {
         return;
     }
 

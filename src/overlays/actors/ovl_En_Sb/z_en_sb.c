@@ -350,9 +350,9 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (player->stateFlags1 & 0x8000000) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->vulnerableTimer == 0) {
-                CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             }
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }

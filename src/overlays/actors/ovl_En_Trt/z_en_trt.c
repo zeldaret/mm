@@ -152,8 +152,8 @@ void EnTrt_SpawnShopItems(EnTrt* this, GlobalContext* globalCtx, ShopItem* shopI
 
 void EnTrt_UpdateCollider(EnTrt* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 #ifdef NON_MATCHING
@@ -229,8 +229,8 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     player->stateFlags2 &= ~0x20000000;
-    globalCtx->interfaceCtx.unk222 = 0;
-    globalCtx->interfaceCtx.unk224 = 0;
+    globalCtx->interfaceCtx.unk_222 = 0;
+    globalCtx->interfaceCtx.unk_224 = 0;
     this->textId = 0x834;
     this->timer = 80;
     this->flags |= ENTRT_IS_FULLY_AWAKE;
@@ -1079,9 +1079,9 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
         } else {
             globalCtx->nextEntranceIndex = 0x8450;
         }
-        globalCtx->unk1887F = 0x40;
+        globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 0x40;
-        globalCtx->unk18875 = 0x14;
+        globalCtx->sceneLoadFlag = 0x14;
     }
 }
 
