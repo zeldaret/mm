@@ -1,4 +1,3 @@
-
 /*
  * File: z_en_sob1.c
  * Overlay: ovl_En_Sob1
@@ -473,8 +472,8 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     player->stateFlags2 &= ~0x20000000;
-    globalCtx->interfaceCtx.unk222 = 0;
-    globalCtx->interfaceCtx.unk224 = 0;
+    globalCtx->interfaceCtx.unk_222 = 0;
+    globalCtx->interfaceCtx.unk_224 = 0;
     EnSob1_SetupAction(this, EnSob1_Idle);
 }
 

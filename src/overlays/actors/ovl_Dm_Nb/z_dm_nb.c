@@ -57,7 +57,7 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
         }
         if (func_800EE29C(globalCtx, 0x232)) {
             actionIndex = func_800EE200(globalCtx, 0x232);
-            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+            actionUnk0 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);

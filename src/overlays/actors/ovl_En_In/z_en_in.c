@@ -211,7 +211,7 @@ void func_808F32A0(EnIn* this, GlobalContext* globalCtx) {
     this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
     this->colliderCylinder.dim.pos.z = this->actor.world.pos.z;
     if (this->unk23D == 0) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
     }
 }
 
@@ -831,8 +831,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -1078,8 +1078,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
