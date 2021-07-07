@@ -30,6 +30,7 @@ typedef enum {
     /* 0x14 */ ITEM_POTION_GREEN,
     /* 0x15 */ ITEM_POTION_BLUE,
     /* 0x16 */ ITEM_FAIRY,
+    /* 0x1E */ ITEM_MUSHROOM = 0x1E,
     /* 0x38 */ ITEM_MASK_ALL_NIGHT = 0x38,
     /* 0x3B */ ITEM_MASK_GARO = 0x3B,
     /* 0x4D */ ITEM_SWORD_KOKIRI = 0x4D,
@@ -67,6 +68,7 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GI_NONE,
+    /* 0x04 */ GI_RUPEE_RED = 0x4,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -85,6 +87,7 @@ typedef enum {
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
+    /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5B */ GI_POTION_RED = 0x5B,
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,

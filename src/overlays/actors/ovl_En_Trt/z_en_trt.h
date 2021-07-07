@@ -41,9 +41,9 @@ typedef struct EnTrt {
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ char unk1DC[0x154];
     /* 0x330 */ s16 delayTimer;
-    /* 0x332 */ s16 unk332;
+    /* 0x332 */ s16 sleepSoundTimer;
     /* 0x334 */ s16 cutsceneState;
-    /* 0x336 */ s16 unk336;
+    /* 0x336 */ char unk336[0x2];
     /* 0x338 */ s32 stickAccumX;
     /* 0x33C */ s32 stickAccumY;
     /* 0x340 */ EnGirlA* items[3];
@@ -64,7 +64,7 @@ typedef struct EnTrt {
     /* 0x3DA */ char unk3DA[0x2];
     /* 0x3DC */ EnTrtBlinkFunc blinkFunc;
     /* 0x3E0 */ s16 cutscene;
-    /* 0x3E2 */ s16 unk3E2;
+    /* 0x3E2 */ s16 tmpGetMushroomCutscene;
     /* 0x3E4 */ f32 cursorX;
     /* 0x3E8 */ f32 cursorY;
     /* 0x3EC */ f32 cursorZ;
@@ -74,21 +74,21 @@ typedef struct EnTrt {
     /* 0x3FC */ s32 cursorColorA;
     /* 0x400 */ u8 drawCursor;
     /* 0x401 */ char unk401[0x1];
-    /* 0x402 */ s16 unk402;
-    /* 0x404 */ s16 unk404;
-    /* 0x406 */ u16 unk406;
-    /* 0x408 */ u16 unk408;
-    /* 0x40A */ u16 unk40A;
-    /* 0x40C */ s16 unk40C;
-    /* 0x40E */ s16 unk40E;
-    /* 0x410 */ s16 unk410;
-    /* 0x412 */ s16 unk412;
+    /* 0x402 */ s16 timer;
+    /* 0x404 */ s16 animationState;
+    /* 0x406 */ u16 textId;
+    /* 0x408 */ u16 tmpTextId;
+    /* 0x40A */ u16 talkOptionTextId;
+    /* 0x40C */ s16 lookForwardCutscene;
+    /* 0x40E */ s16 lookToShelfCutscene;
+    /* 0x410 */ s16 lookToShopkeeperCutscene;
+    /* 0x412 */ s16 getMushroomCutscene;
     /* 0x414 */ char unk414[0x2];
-    /* 0x416 */ Vec3s unk416;
-    /* 0x41C */ Vec3f unk41C;
-    /* 0x428 */ s16 unk428;
-    /* 0x42A */ s16 unk42A;
-    /* 0x42C */ u16 unk42C;
+    /* 0x416 */ Vec3s headRot;
+    /* 0x41C */ Vec3f headPos;
+    /* 0x428 */ s16 headPitch;
+    /* 0x42A */ s16 headYaw;
+    /* 0x42C */ u16 flags;
     /* 0x42E */ char unk42E[0x2];
 } EnTrt; // size = 0x430
 
