@@ -145,7 +145,7 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 flag = this->unk_32C == 2 ? true : false;
 
-    if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
+    if (this->unk_32C == 0 || this->actor.parent == NULL) {
         this->unk_1D8.unk_18 = player->actor.world.pos;
         this->unk_1D8.unk_18.y -= -10.0f;
     } else {

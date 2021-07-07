@@ -68,6 +68,7 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GI_NONE,
+    /* 0x07 */ GI_RUPEE_GOLD = 0x07,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -91,6 +92,7 @@ typedef enum {
     /* 0x5D */ GI_POTION_BLUE,
     /* 0x5E */ GI_FAIRY,
     /* 0x7E */ GI_MASK_ALL_NIGHT = 0x7E,
+    /* 0x82 */ GI_MASK_ROMANIS = 0x82,
     /* 0x9B */ GI_SWORD_GREAT_FAIRY = 0x9B,
     /* 0x9C */ GI_SWORD_KOKIRI,
     /* 0x9D */ GI_SWORD_RAZOR,
