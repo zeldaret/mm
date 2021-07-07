@@ -5,7 +5,7 @@ void EffFootmark_Init(GlobalContext* globalCtx) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = globalCtx->footmarks, i = 0; i < 100; i++, footmark++) {
+    for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         footmark->actor = NULL;
         footmark->location.x = 0;
         footmark->location.y = 0;
@@ -25,7 +25,7 @@ void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor
     EffFootmark* oldest = NULL;
     s32 isNew = 1;
 
-    for (footmark = globalCtx->footmarks, i = 0; i < 100; i++, footmark++) {
+    for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (((actor == footmark->actor) && (footmark->id == id)) && ((footmark->flags & 1) == 0)) {
             if (fabsf((footmark->location).x - location->x) <= 1) {
                 if (fabsf((footmark->location).z - location->z) <= 1) {
@@ -75,7 +75,7 @@ void EffFootmark_Update(GlobalContext* globalCtx) {
     EffFootmark* footmark;
     s32 i;
 
-    for (footmark = globalCtx->footmarks, i = 0; i < 100; i++, footmark++) {
+    for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
             if ((footmark->flags & 1) == 1) {
                 if (footmark->age < 0xFFFFu) { // TODO replace with MAX_U16 or something
@@ -105,7 +105,7 @@ void EffFootmark_Draw(GlobalContext* globalCtx) {
 
     gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC240);
 
-    for (footmark = globalCtx->footmarks, i = 0; i < 100; i++, footmark++) {
+    for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
             SysMatrix_SetCurrentState(&footmark->displayMatrix);
             Matrix_Scale(footmark->size * 0.00390625f * 0.7f, 1, footmark->size * 0.00390625f, 1);

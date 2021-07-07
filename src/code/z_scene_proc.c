@@ -40,7 +40,7 @@ void Scene_ExecuteDrawConfig(GlobalContext* globalCtx) {
 }
 
 /**
- * Scene Draw Config 0:
+ * SceneTableEntry Draw Config 0:
  * Default scene draw config function. This just executes `sSceneDrawDefaultDL`.
  */
 void Scene_DrawConfigDefault(GlobalContext* globalCtx) {
@@ -501,7 +501,7 @@ void AnimatedMat_DrawAlphaStepXlu(GlobalContext* globalCtx, AnimatedMaterial* ma
 }
 
 /**
- * Scene Draw Config 1:
+ * SceneTableEntry Draw Config 1:
  * Allows the usage of the animated material system in scenes.
  */
 void Scene_DrawConfigMatAnim(GlobalContext* globalCtx) {
@@ -509,7 +509,7 @@ void Scene_DrawConfigMatAnim(GlobalContext* globalCtx) {
 }
 
 /**
- * Scene Draw Config 3:
+ * SceneTableEntry Draw Config 3:
  * This config is unused, although it is identical to the grotto scene config from Ocarina of Time.
  */
 void Scene_DrawConfig3(GlobalContext* globalCtx) {
@@ -547,7 +547,7 @@ void Scene_DrawConfig3(GlobalContext* globalCtx) {
 }
 
 /**
- * Scene Draw Config 4:
+ * SceneTableEntry Draw Config 4:
  * This config is unused and just has a single TwoTexScroll intended for two 32x32 textures (likely two water textures).
  * It is identical to the Castle Courtyard and Sacred Forest Meadow scene config from Ocarina of Time.
  */
@@ -572,7 +572,7 @@ void Scene_DrawConfig4(GlobalContext* globalCtx) {
 }
 
 /**
- * Scene Draw Config 2:
+ * SceneTableEntry Draw Config 2:
  * Has no effect, and is only used in SPOT00 (cutscene scene).
  */
 void Scene_DrawConfigDoNothing(GlobalContext* globalCtx) {
@@ -666,27 +666,27 @@ void Scene_SetCullFlag(GlobalContext* globalCtx, s32 index, u32 flags) {
 }
 
 /**
- * Scene Draw Config 5:
+ * SceneTableEntry Draw Config 5:
  * This config is unused, and its purpose is unknown.
  */
 void Scene_DrawConfig5(GlobalContext* globalCtx) {
     u32 dListIndex;
     u32 alpha;
 
-    if (globalCtx->roomContext.unk7A[0] != 0) {
+    if (globalCtx->roomCtx.unk7A[0] != 0) {
         dListIndex = 1;
-        alpha = globalCtx->roomContext.unk7A[1];
+        alpha = globalCtx->roomCtx.unk7A[1];
     } else {
         dListIndex = 0;
         alpha = 255;
     }
 
     if (alpha == 0) {
-        globalCtx->roomContext.unk78 = 0;
+        globalCtx->roomCtx.unk78 = 0;
     } else {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        globalCtx->roomContext.unk78 = 1;
+        globalCtx->roomCtx.unk78 = 1;
         AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
         Scene_SetRenderModeXlu(globalCtx, dListIndex, 3);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, alpha);
@@ -697,16 +697,16 @@ void Scene_DrawConfig5(GlobalContext* globalCtx) {
 }
 
 /**
- * Scene Draw Config 7:
+ * SceneTableEntry Draw Config 7:
  * This is a special draw config for Sakon's Hideout, as well as the Music Box House. Its step value is set manually
  * rather than always animating like `Scene_DrawConfigMatAnim`.
  */
 void Scene_DrawConfigMatAnimManualStep(GlobalContext* globalCtx) {
-    AnimatedMat_DrawStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomContext.unk7A[0]);
+    AnimatedMat_DrawStep(globalCtx, globalCtx->sceneMaterialAnims, globalCtx->roomCtx.unk7A[0]);
 }
 
 /**
- * Scene Draw Config 6:
+ * SceneTableEntry Draw Config 6:
  * This is a special draw config for Great Bay Temple, which handles both material animations as well as setting the lod
  * fraction to a certain value when certain flags are set, which are likely used for the pipes whenever they are
  * activated.

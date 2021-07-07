@@ -4,7 +4,6 @@
  * Description: Trading Post Shop
  */
 
-
 #include "z_en_ossan.h"
 
 #define FLAGS 0x00000019
@@ -271,8 +270,8 @@ void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     player->stateFlags2 &= ~0x20000000;
-    globalCtx->interfaceCtx.unk222 = 0;
-    globalCtx->interfaceCtx.unk224 = 0;
+    globalCtx->interfaceCtx.unk_222 = 0;
+    globalCtx->interfaceCtx.unk_224 = 0;
     if (this->cutSceneState == 2) {
         ActorCutscene_Stop(this->cutscene);
         this->cutSceneState = 0;

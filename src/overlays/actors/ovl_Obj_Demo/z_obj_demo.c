@@ -15,7 +15,7 @@ const ActorInit Obj_Demo_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjDemo),
     (ActorFunc)ObjDemo_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjDemo_Update,
     (ActorFunc)NULL,
 };

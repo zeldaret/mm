@@ -187,9 +187,9 @@ void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
     this->collider1.dim.worldSphere.radius = (this->collider1.dim.modelSphere.radius * this->collider1.dim.scale);
     this->collider2.dim.worldSphere.radius = (this->collider2.dim.modelSphere.radius * this->collider2.dim.scale);
     if (DECR(this->unk_20E) == 0) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider2.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider1.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
 }
 
 void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {

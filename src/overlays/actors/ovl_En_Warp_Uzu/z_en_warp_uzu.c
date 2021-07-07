@@ -129,7 +129,7 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneForward = 1000.0f;
     this->actionFunc(this, globalCtx);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
