@@ -1135,24 +1135,24 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 temp_f4;
     f32 temp_f6;
     s32 temp_v1;
-    s8 temp_t0;
-    s8 temp_v0;
+
     s32 phi_v1;
     s32 phi_v0;
-    temp_v0 = this->unk309;
+
     temp_a3 = this->pathPoints;
+    temp_a2 = &temp_a3[this->unk309];
     sp40 = 0;
-    temp_t0 = this->unk308;
-    temp_v1 = temp_v0 + this->unk30A;
-    temp_a2 = &temp_a3[temp_v0];
-    if (temp_v1 >= temp_t0) {
+    
+    temp_v1 = this->unk309 + this->unk30A;
+    
+    if (temp_v1 >= this->unk308) {
         phi_v1 = 0;
     } else {
         phi_v1 = temp_v1;
         if (this) {}
 
         if (temp_v1 < 0) {
-            phi_v1 = temp_t0 - 1;
+            phi_v1 = this->unk308 - 1;
         }
     }
 
@@ -1169,7 +1169,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp60.z = temp_f14 - this->actor.world.pos.z;
     temp_f4 = this->actor.world.pos.x;
     temp_f6 = this->actor.world.pos.z;
-    temp_v0 = this->unk309;
+
     if (this->actor.speedXZ > 0.0f) {
         sp54 = temp_f0 - temp_f4;
         sp5C = temp_f2 - temp_f6;
