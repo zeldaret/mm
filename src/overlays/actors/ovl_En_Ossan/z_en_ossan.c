@@ -421,9 +421,8 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
 #endif
 
 void EnOssan_UpdateJoystickInputState(GlobalContext* globalCtx, EnOssan* this) {
-    Input* controller1 = &globalCtx->state.input[0];
-    s8 stickX = controller1->rel.stick_x;
-    s8 stickY = controller1->rel.stick_y;
+    s8 stickX = globalCtx->state.input[0].rel.stick_x;
+    s8 stickY = globalCtx->state.input[0].rel.stick_y;
 
     this->moveHorizontal = this->moveVertical = false;
 
