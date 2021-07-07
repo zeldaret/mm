@@ -249,13 +249,13 @@ void func_80B224C0(EnHakurock* this) {
 //         }
 //     }
 //     if ((this->collider.base.ocFlags1 & 2)) {
-//         temp_v0_2 = this->collider.base.oc;
+//         // temp_v0_2 = this->collider.base.oc;
 //         new_var = this->actor.parent;
-//         if (new_var != temp_v0_2) {
-//             if ((temp_v0_2->id == 0x1EA) && (this->collider.base.oc->params == 2)) {
+//         if (this->collider.base.oc != new_var) {
+//             if ((this->collider.base.oc->id == 0x1EA) && (this->collider.base.oc->params == 2)) {
 //                 func_80B21EA4(this, 3);
 //                 func_80B21FFC(this);
-//             } else if (((new_var == temp_v0_2) && (player->stateFlags3 & 0x81000)) && (player->linearVelocity > 8.0f)) {
+//             } else if (((this->collider.base.oc == new_var) && (player->stateFlags3 & 0x81000)) && (player->linearVelocity > 8.0f)) {
 //                 temp = -5.0f;
 //                 player->linearVelocity = temp;
 //                 player->unk_B08[0] = temp;
@@ -308,14 +308,14 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80B21FFC(this);
         } else {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
         }
     } else if ((rockParams == 3) || (rockParams == 4)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
     }
 }
 
