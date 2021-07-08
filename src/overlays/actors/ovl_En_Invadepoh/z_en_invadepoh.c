@@ -1116,49 +1116,38 @@ void func_80B44C24(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B4516C(this);
 }
 
-#ifdef NON_EQUIVALENT
+// ISMATCHING: Move rodata once all funcs match
+#ifdef NON_MATCHING
 s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
+    s32 pad[6];
+    Vec3s* temp_a2;
+    f32 temp_f0;
     Vec3f sp6C;
     Vec3f sp60;
-    f32 sp5C;
-    f32 sp54;
+    f32 temp_f0_2;
+    Vec3s* temp_v0_2;
+    f32 temp_f0_3;
+    f32 temp_f12;
+    f32 temp_f2;
+    f32 temp_f14;
     f32 sp44;
     s32 sp40;
-    Vec3s* temp_a2;
-    Vec3s* temp_a3;
-    Vec3s* temp_v0_2;
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f12;
-    f32 temp_f14;
-    f32 temp_f2;
-    f32 temp_f4;
-    f32 temp_f6;
     s32 temp_v1;
-
-    s32 phi_v1;
     s32 phi_v0;
 
-    temp_a3 = this->pathPoints;
-    temp_a2 = &temp_a3[this->unk309];
+    temp_a2 = &this->pathPoints[this->unk309];
     sp40 = 0;
-    
     temp_v1 = this->unk309 + this->unk30A;
-    
     if (temp_v1 >= this->unk308) {
-        phi_v1 = 0;
-    } else {
-        phi_v1 = temp_v1;
-        if (this) {}
-
-        if (temp_v1 < 0) {
-            phi_v1 = this->unk308 - 1;
-        }
+        temp_v1 = 0;
+    } else if (temp_v1 < 0) {
+        temp_v1 = this->unk308 - 1;
     }
+
+    temp_v0_2 = &this->pathPoints[temp_v1];
 
     temp_f0 = temp_a2->x;
     temp_f2 = temp_a2->z;
-    temp_v0_2 = &temp_a3[phi_v1];
     temp_f12 = temp_v0_2->x;
     temp_f14 = temp_v0_2->z;
     sp6C.x = temp_f12 - temp_f0;
@@ -1167,12 +1156,10 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp60.x = temp_f12 - this->actor.world.pos.x;
     sp60.y = 0.0f;
     sp60.z = temp_f14 - this->actor.world.pos.z;
-    temp_f4 = this->actor.world.pos.x;
-    temp_f6 = this->actor.world.pos.z;
+    temp_f0_3 = temp_f0 - this->actor.world.pos.x;
+    temp_f0_2 = temp_f2 - this->actor.world.pos.z;
 
     if (this->actor.speedXZ > 0.0f) {
-        sp54 = temp_f0 - temp_f4;
-        sp5C = temp_f2 - temp_f6;
         if (Math3D_AngleBetweenVectors(&sp6C, &sp60, &sp44) != 0) {
             sp40 = 1;
         } else if (sp44 <= 0.0f) {
@@ -1180,11 +1167,9 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_f0_2 = 0.9f;
     Math_SmoothStepToS(&this->actor.world.rot.y,
-                       Math_FAtan2F(((sp60.z + (temp_f2 - temp_f6)) * temp_f0_2) + sp6C.z,
-                                    ((sp60.x + (temp_f0 - temp_f4)) * temp_f0_2) + sp6C.x),
-                       4, 0xFA0, 0x64);
+                       Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
+                       0xFA0, 0x64);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
