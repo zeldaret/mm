@@ -705,21 +705,21 @@ s32 func_80B43A9C(void) {
 }
 
 s32 func_80B43AB0(void) {
-    s32 ret = func_80B43A9C();
-    if (ret < 0xC) {
-        ret++;
-        func_80B43A74(ret);
+    s32 retVal = func_80B43A9C();
+    if (retVal < 0xC) {
+        retVal++;
+        func_80B43A74(retVal);
     }
-    return ret;
+    return retVal;
 }
 
 void func_80B43AF0(s32 arg0) {
     s32 currentTime = gSaveContext.time;
 
     if (((CURRENT_DAY == 1) && (currentTime >= CLOCK_TIME(2, 30))) && (currentTime < CLOCK_TIME(5, 15))) {
-        s32 new_var2 = (0xC - func_80B43A9C()) * 25.0f;
+        s32 adjustment = (0xC - func_80B43A9C()) * 25.0f;
 
-        func_80B439B0(arg0, currentTime + new_var2);
+        func_80B439B0(arg0, currentTime + adjustment);
     }
 }
 
@@ -817,8 +817,56 @@ void func_80B4407C(EnInvadepoh* this, s32 arg1) {
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
+#ifdef NON_EQUIVALENT
+s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2) {
+    Vec3s* sp48;
+    f32 sp40;
+    f32 sp3C;
+    f32 sp38;
+    f32 sp34;
+    f32 sp30;
+    f32 sp2C;
+    s16 sp1E;
+    Vec3s* temp_a2;
+    Vec3s* temp_a3;
+    f32 temp_f0;
+    f32 temp_f12;
+    f32 temp_f12_2;
+    f32 temp_f14;
+    f32 temp_f16;
+    f32 temp_f18;
+    f32 temp_f2;
+    s16 temp_v0_2;
+    s32 temp_a0;
+    s32 temp_f6;
+    s32 phi_return;
+
+    temp_a2 = &this->pathPoints[this->unk309];
+    temp_a3 = &this->pathPoints[this->unk309 + 1];
+    if (this->unk309 >= this->unk308) {
+        return 0;
+    }
+    temp_f6 = temp_a3->z - temp_a2->z;
+    temp_f14 = temp_a3->x - temp_a2->x;
+    temp_v0_2 = Math_FAtan2F(temp_f12, temp_f14);
+    sp38 = Math_CosS(temp_v0_2);
+    temp_f0 = Math_SinS(temp_v0_2);
+    temp_f18 = temp_f0;
+    temp_f2 = this->actor.world.pos.x - temp_a2->x;
+    temp_f16 = this->actor.world.pos.z - temp_a2->z;
+    if ((arg1 - arg2) < fabsf((temp_f2 * sp38) - (temp_f16 * temp_f0))) {
+        return 0;
+    }
+    temp_f12_2 = (temp_f16 * sp38) + (temp_f2 * temp_f18);
+    if ((temp_f12_2 < 0.0f) || (phi_return = 1, (Math3D_XZLength(temp_f14, temp_f6) < temp_f12_2))) {
+        phi_return = 0;
+    }
+    return phi_return;
+}
+#else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B440B8.asm")
-s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2);
+#endif
+
 
 // ISMATCHING: Move rodata once all funcs match
 #ifdef NON_MATCHING
@@ -4814,81 +4862,78 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-#ifdef NON_EQUIVALENT
+// ISMATCHING: Move rodata once all funcs match
+// JANK - fix later
+#ifdef NON_MATCHING
 void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     Gfx* gfx;
-    Vec3f sp80;
-    Vec3f sp74;
-    s32 alpha2;
-    f32 new_var2;
-    s8 new_var;
-    void** new_var3;
+    GraphicsContext* spCC;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    spCC = globalCtx->state.gfxCtx;
+    OPEN_DISPS(spCC);
+    func_8012C2DC(spCC);
     SysMatrix_StatePush();
-    // new_var = this->drawAlien;
     if (this->drawAlien) {
+        Gfx* new_var6;
+        Gfx* spBC;
+        GraphicsContext* spB8;
+
         if (this->alienAlpha == 255) {
             func_8012C28C(globalCtx->state.gfxCtx);
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            // new_var3 = this->skelAnime.skeleton;
-
-            gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-            POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                              this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
-                                              POLY_OPA_DISP);
-            // gfx = POLY_OPA_DISP;
+            gDPSetEnvColor(spCC->polyOpa.p++, 0, 0, 0, 255);
+            spCC->polyOpa.p = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                                this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
+                                                spCC->polyOpa.p);
         } else {
             AnimatedMat_Draw(globalCtx, D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alienAlpha);
-            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                              this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
-                                              POLY_XLU_DISP);
+            gDPSetEnvColor(spCC->polyXlu.p++, 0, 0, 0, this->alienAlpha);
+            spCC->polyXlu.p = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                                this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
+                                                spCC->polyXlu.p);
         }
 
         if (this->alienBeamAlpha != 0) {
             AnimatedMat_Draw(globalCtx, D_80B503FC);
-            gfx = POLY_XLU_DISP;
-            gDPPipeSync(gfx++);
-            gDPSetPrimColor(gfx++, 0, 255, 240, 180, 100, 60);
-            gDPSetEnvColor(gfx++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
+            spB8 = globalCtx->state.gfxCtx;
+            gfx = spBC = spB8->polyXlu.p;
+            gDPPipeSync(spBC++);
+            gDPSetPrimColor(spBC++, 0, 255, 240, 180, 100, 60);
+            gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
             SysMatrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
-            gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        dummy:;
-            gSPDisplayList(gfx++, D_06000080);
+            gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(spBC++, D_06000080);
             SysMatrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
-            gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, D_06000080);
-            POLY_XLU_DISP = gfx;
+            gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(spBC++, D_06000080);
+            spB8->polyXlu.p = spBC;
         }
     }
 
-    // POLY_XLU_DISP = gfx;
-    // dummy3:;
-
     if (this->drawAlienDeathEffect) {
         SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
-                                                 this->actor.world.pos.z, &this->actor.shape);
+                                                 this->actor.world.pos.z, &this->actor.shape.rot);
         Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z,
                      MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gfx = POLY_XLU_DISP;
-        gSPDisplayList(gfx++, D_06000720);
-        POLY_XLU_DISP = gfx;
+        gSPMatrix(spCC->polyXlu.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(spCC->polyXlu.p++, D_06000720);
     }
 
     if (this->drawAlien) {
-        // dummy2:;
-        gfx = POLY_XLU_DISP;
-        POLY_XLU_DISP = gfx;
+        Vec3f sp80;
+        Vec3f sp74;
+        s32 alpha2;
+        GraphicsContext* sp6C = globalCtx->state.gfxCtx;
+        u32 pad;
+
+        gfx = sp6C->polyXlu.p;
         gfx = func_8012C868(gfx);
         gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
-        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
-                          0);
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
         SysMatrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
@@ -4896,23 +4941,19 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         sp74.z = thisx->world.pos.z + sp80.z;
         SysMatrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
-        if (globalCtx) {}
         alpha2 = this->alienAlpha * 0.39215687f;
         gSPDisplayList(gfx++, D_04029CB0);
         gDPSetPrimColor(gfx++, 0, 0, 0xF0, 0xB4, 0x64, alpha2);
-        if (globalCtx) {}
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, D_04029CF0);
-        POLY_XLU_DISP = gfx;
-
+        sp6C->polyXlu.p = gfx;
         if ((this->alienAlpha > 128) && func_80B456A8(globalCtx, &sp74)) {
-            func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp74, 10.0f, 9.0f,
-                          0, 0);
+            func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp74, 10.0f, 9.0f, 0, 0);
         }
     }
 
     SysMatrix_StatePop();
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(spCC);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B4DB14.asm")
