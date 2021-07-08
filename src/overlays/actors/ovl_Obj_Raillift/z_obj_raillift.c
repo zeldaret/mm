@@ -26,7 +26,6 @@ extern Gfx D_06004BF0[];
 extern Gfx D_06000208[];
 extern Gfx D_060071B8[];
 
-
 const ActorInit Obj_Raillift_InitVars = {
     ACTOR_OBJ_RAILLIFT,
     ACTORCAT_BG,
@@ -46,10 +45,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+static CollisionHeader* D_80A1A3C0[] = { &D_06004FF8, &D_060048D0 };
 
-static CollisionHeader* D_80A1A3C0[] = { &D_06004FF8 };
-
-static CollisionHeader* D_80A1A3C4 = &D_060048D0;
 
 void func_80A19910(ObjRaillift* this, s32 idx) {
     Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->unk170[idx]);
@@ -57,7 +54,7 @@ void func_80A19910(ObjRaillift* this, s32 idx) {
 
 void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjRaillift* this = THIS;
-    CollisionHeader** colHeader;
+    s32 pad;
     Path* path;
     s32 sp48 = (thisx->params >> 0xF) & 1;
     s32 sp44 = 0;
@@ -69,22 +66,20 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
     BcCheck3_BgActorInit(&this->dyna, 1);
-    colHeader = &D_80A1A3C0[sp48];
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, *colHeader);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, D_80A1A3C0[sp48]);
     this->unk160 = thisx->home.rot.z * 0.1f;
     if (this->unk160 < 0.0f) {
         this->unk160 = -this->unk160;
         sp44 = 1;
     }
-    if (colHeader == &D_80A1A3C4) {
-        Actor_SpawnWithParent(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ETCETERA,
-                              this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                              this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                              0);
+    if (sp48 == 1) {
+        Actor_SpawnWithParent(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
+                              thisx->world.pos.y, thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y,
+                              thisx->shape.rot.z, 0);
         if (sp44 != 0) {
-            this->dyna.actor.draw = func_80A1A360;
+            thisx->draw = func_80A1A360;
         } else {
-            this->dyna.actor.draw = func_80A1A330;
+            thisx->draw = func_80A1A330;
         }
     }
     if (this->unk160 < 0.01f) {
@@ -131,7 +126,7 @@ void func_80A19BA8(ObjRaillift* this, GlobalContext* globalCtx) {
         }
 
         if ((((&this->dyna.actor)->params >> 0xF) & 1) == 1) {
-            func_800B9010(&this->dyna.actor, 0x2903 - 0x800);
+            func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
@@ -166,7 +161,7 @@ void func_80A19BA8(ObjRaillift* this, GlobalContext* globalCtx) {
             } else {
                 temp_v1_2 = &this->unk170[this->unk164];
                 this->unk168 = (this->unk16C > 0) ? (0) : (this->unk164);
-                temp_v0 = this->unk170;
+                temp_v0 = &this->unk170[0];
                 if (((temp_v0->x != temp_v1_2->x) || (temp_v0->y != temp_v1_2->y)) || (temp_v0->z != (temp_v1_2->z))) {
                     this->actionFunc = func_80A19E84;
                     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -253,7 +248,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         Math_StepToF(&this->unk17C, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->unk184) * this->unk180) + this->unk17C) * 10.0f;
-    dummy_label_653499:;
+        dummy_label_653499:;
     }
     if ((((thisx->params >> 0xF) & 1) == 1) && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {
@@ -273,8 +268,8 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
-               Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames, 0, 0x20, 0x20, 1, 0, 0,
-                                        0x20, 0x20, 0, 0, 0, 0xA0));
+               Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames, 0, 32, 32, 1, 0, 0,
+                                        32, 32, 0, 0, 0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06004BF0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
