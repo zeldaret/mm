@@ -117,7 +117,6 @@ Vec3f* OLib_VecSphGeoToVec3f(Vec3f* dest, VecSph* sph) {
  */
 VecSph* OLib_Vec3fToVecSph(VecSph* dest, Vec3f* vec) {
     VecSph sph;
-
     f32 distSquared = SQ(vec->x) + SQ(vec->z);
     f32 dist = sqrtf(distSquared);
 
