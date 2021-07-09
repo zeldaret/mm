@@ -1555,8 +1555,8 @@ void func_80B45BB8(EnInvadePohStruct* s) {
     }
 }
 
-void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_2* arg1[], s32 arg2,
-                   unkstruct_invadepoh_2* arg3[], s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
+void func_80B45C04(AlienBehaviorInfo* substruct, void* arg1[], s32 arg2,
+                   void* arg3[], s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
     unkstruct_invadepoh_4* temp_v0;
 
     Math_Vec3s_Copy(&substruct->unk26, arg5);
@@ -2603,7 +2603,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f, 0.12f);
+        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f, 0.12f);
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
     }
@@ -2793,7 +2793,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     diff = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(this, globalCtx)) {
+    if (func_800B867C(&this->actor, globalCtx)) {
         func_80B48948(this);
     }
 }
@@ -2924,8 +2924,8 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_80B45EC8(this, globalCtx, 0x14);
     }
 
-    Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home, &sp30);
-    if (Math3D_DistanceSquared(&this->actor.world, &sp30) < SQ(400.0f)) {
+    Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
+    if (Math3D_DistanceSquared(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
         this->actor.speedXZ *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speedXZ, 170.0f, 21.0f);
@@ -2965,7 +2965,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 1500.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world, &sp30), 0xA, 0xBB8, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 0xA, 0xBB8, 0x64);
     if ((globalCtx->gameplayFrames % 64) < 14) {
         Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
     } else {
@@ -2999,7 +2999,7 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x + D_80B4E934.x;
     sp30.y = this->actor.home.pos.y + D_80B4E934.y + 400.0f;
     sp30.z = this->actor.home.pos.z + D_80B4E934.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world, &sp30), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
     Math_StepToF(&this->actor.speedXZ, 70.0f, 3.0f);
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -2.0f;
@@ -3051,7 +3051,7 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 800.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world, &sp30), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
     Math_StepToF(&this->actor.speedXZ, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
     if (sp30.y < this->actor.world.pos.y) {
@@ -3266,7 +3266,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if ((globalCtx->gameplayFrames % 256) == 0) {
         Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
-        sp42 = Math_Vec3f_Yaw(&this->actor.world, &sp44);
+        sp42 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp44);
         temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
         this->unk304 = temp_v0 + sp42;
         this->behaviorInfo.unk4C = 0;
@@ -3386,7 +3386,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(this, globalCtx)) {
+    if (func_800B867C(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3460,7 +3460,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     temp_v0 = func_800B84D0(&this->actor, globalCtx);
     if (temp_v0 != 0) {
         func_80151BB4(globalCtx, 5);
-        func_80B4A7C0(&this->actor);
+        func_80B4A7C0(this);
     }
     this->actionFunc(this, globalCtx);
     if (sp2C != 0) {
@@ -3879,7 +3879,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
-        if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world)) {
+        if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos), 3,
                                this->behaviorInfo.unk4C, 0x1F4);
         }
@@ -4124,7 +4124,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     temp_v1_3 = globalCtx->gameplayFrames & 0x7F;
     if ((temp_v1_3 & 0x40) != 0) {
-        sp3A = Math_Vec3f_Yaw(&this->actor.world, &sp68->actor.world);
+        sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp68->actor.world.pos);
         if (temp_v1_3 == 0x40) {
             this->behaviorInfo.unk4C = 0;
         }
