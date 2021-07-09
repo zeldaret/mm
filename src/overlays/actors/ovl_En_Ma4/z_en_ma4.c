@@ -647,7 +647,7 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 }
 
 void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 pad;
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         default:
