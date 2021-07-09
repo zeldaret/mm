@@ -972,7 +972,8 @@ typedef struct {
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
     /* 0x11F22 */ u8 unk11F22;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFE];
+    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ UNK_TYPE1 unk12022;
     /* 0x12023 */ s8 unk12023;
@@ -986,7 +987,9 @@ typedef struct {
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x60];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
+    /* 0x120B1 */ u8 unk120B1;
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x2E];
 } MessageContext; // size = 0x120E0
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
