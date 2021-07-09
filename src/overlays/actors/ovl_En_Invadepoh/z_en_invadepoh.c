@@ -663,7 +663,7 @@ MtxF D_80B502E0;
 Actor* D_80B50320[0x8]; // not sure if this should be Actor* or EnInvadepoh* array
 u8 D_80B50340[0x8];
 UNK_TYPE1 D_80B50348;
-unkStruct_80B50350 D_80B50350[0xA];
+unkStruct_80B50350 D_80B50350[10];
 Actor* D_80B503F0;
 Actor* D_80B503F4; // possibly an EnInvadepoh* pointer but probably not since 3F0 above is def an Actor*
 Actor* D_80B503F8;
@@ -671,7 +671,7 @@ Actor* D_80B503F8;
 AnimatedMaterial* D_80B503FC;
 AnimatedMaterial* D_80B50400;
 
-UNK_TYPE2 D_80B50404[0x4];
+s16 D_80B50404[3];
 Actor* D_80B5040C;
 
 void func_80B439B0(s32 arg0, s32 arg1) {
