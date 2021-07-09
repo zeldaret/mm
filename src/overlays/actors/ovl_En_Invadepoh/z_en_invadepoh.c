@@ -737,8 +737,50 @@ s32 func_80B43B80(EnInvadepoh* this) {
     return i;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B43BC8.asm")
-void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2);
+void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2) {
+    s32 temp_s5 = this->unk308;
+    f32 temp_f22 = 1.0f / this->pathTotalDist;
+    Vec3s* phi_s0 = &this->pathPoints[1];
+    Vec3s* phi_s1 = &this->pathPoints[0];
+    f32 new_var;
+    Vec3f sp70;
+    s32 phi_s2;
+    f32 temp_f0;
+    f32 temp_f12;
+    f32 temp_f14;
+    f32 temp_f6;
+    f32 phi_f20 = 0.0f;
+    f32 phi_f24 = 0.0f;
+
+    for (phi_s2 = 0; phi_s2 < temp_s5; phi_s2++) {
+        sp70.x = phi_s0->x - phi_s1->x;
+        sp70.y = phi_s0->y - phi_s1->y;
+        sp70.z = phi_s0->z - phi_s1->z;
+        new_var = Math3D_Vec3fMagnitude(&sp70);
+        temp_f14 = phi_f20 + new_var;
+        temp_f12 = temp_f14 * temp_f22;
+
+        if (this->clockTime <= temp_f12) {
+            temp_f6 = temp_f12 - phi_f24;
+            *arg1 = phi_s2;
+            temp_f0 = (this->clockTime - phi_f24) / temp_f6;
+            arg2->x = (temp_f0 * sp70.x) + phi_s1->x;
+            arg2->y = (temp_f0 * sp70.y) + phi_s1->y;
+            arg2->z = (temp_f0 * sp70.z) + phi_s1->z;
+            return;
+        }
+
+        phi_s1 = phi_s0;
+        phi_s0++;
+        phi_f20 = temp_f14;
+        phi_f24 = temp_f12;
+    }
+
+    *arg1 = temp_s5;
+    arg2->x = this->pathPoints[temp_s5].x;
+    arg2->y = this->pathPoints[temp_s5].y;
+    arg2->z = this->pathPoints[temp_s5].z;
+}
 
 void func_80B43DD4(EnInvadepoh* this, s16 arg1, s16 arg2) {
     s32 pad;
