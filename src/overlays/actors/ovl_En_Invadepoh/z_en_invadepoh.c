@@ -1551,7 +1551,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
 
 void func_80B45BB8(EnInvadePohStruct* s) {
     if ((s->unk0 != 0) && (s->unk8 != 0)) {
-        D_80B4EC0C[s->unk4](s, s->unk0);
+        D_80B4EC0C[s->unk4](s, (unkstruct_invadepoh_4**)s->unk0);
     }
 }
 
