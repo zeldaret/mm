@@ -218,7 +218,7 @@ void EnSb_WaitOpen(EnSb* this, GlobalContext* globalCtx) {
 }
 
 void EnSb_TurnAround(EnSb* this, GlobalContext* globalCtx) {
-    s16 invertedYaw = this->yawAngle + 0x8000;
+    s16 invertedYaw = BINANG_ROT180(this->yawAngle);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, invertedYaw, 1, 0x1F40, 0xA);
     if (this->actor.shape.rot.y == invertedYaw) {
