@@ -29,8 +29,8 @@ typedef struct ObjRaillift {
     /* 0x168 */ s32 curPoint;
     /* 0x16C */ s32 direction; // +1 for forward, -1 for backward
     /* 0x170 */ Vec3s* points;
-    /* 0x174 */ s32 hasWeightOn;
-    /* 0x178 */ s32 hadWeightOn;
+    /* 0x174 */ s32 isWeightOn;
+    /* 0x178 */ s32 isWeightOnPrev;
     /* 0x17C */ f32 unk17C;
     /* 0x180 */ f32 unk180;
     /* 0x184 */ s16 unk184;

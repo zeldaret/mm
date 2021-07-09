@@ -1,7 +1,7 @@
 /*
  * File: z_obj_raillift.c
  * Overlay: Obj_Raillift
- * Description: OOT Water Temple Waterfall Platform and Moving Deku Flower Platform
+ * Description: Moving Deku Flower Platform and OOT Water Temple Waterfall Platform
  */
 
 #include "z_obj_raillift.h"
@@ -115,12 +115,12 @@ void ObjRaillift_DoNothing(ObjRaillift* this, GlobalContext* globalCtx) {
 }
 
 void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
-    s32 shouldTeleport;
+    s32 isTeleporting;
     Vec3f nextPoint;
     f32 speed;
     f32 target;
     f32 step;
-    s32 updatePos;
+    s32 isPosUpdated;
     Vec3s* initialPoint;
     Vec3s* endPoint;
     s32 pad;
@@ -157,33 +157,35 @@ void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
         this->curPoint += this->direction;
         if (1) {}
         this->dyna.actor.speedXZ *= 0.4f;
-        shouldTeleport = OBJRAILLIFT_SHOULD_TELEPORT(&this->dyna.actor);
-        updatePos = true;
+        isTeleporting = OBJRAILLIFT_SHOULD_TELEPORT(&this->dyna.actor);
+        isPosUpdated = true;
         if (((this->curPoint >= this->endPoint) && (this->direction > 0)) || ((this->curPoint <= 0) && (this->direction < 0))) {
-            if (!shouldTeleport) {
+            if (!isTeleporting) {
                 this->direction = -this->direction;
                 this->waitTimer = 10;
                 this->actionFunc = ObjRaillift_Wait;
             } else {
                 endPoint = &this->points[this->endPoint];
-                this->curPoint = (this->direction > 0) ? (0) : (this->endPoint);
+                this->curPoint = this->direction > 0 ? 0 : this->endPoint;
                 initialPoint = &this->points[0];
-                if (((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y)) || (initialPoint->z != endPoint->z)) {
+                if ((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y) || (initialPoint->z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
                     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                    updatePos = false;
+                    isPosUpdated = false;
                 }
             }
         }
 
-        if (updatePos) {
+        if (isPosUpdated) {
             ObjRaillift_UpdatePosition(this, this->curPoint);
         }
     }
 }
 
+/*
+Will teleport to what ever curpoint is set to
+*/
 void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx) {
-    // will teleport to what ever curpoint is set to
     if (!func_800CAF70(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -231,23 +233,23 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
-        this->hadWeightOn = this->hasWeightOn;
+        this->isWeightOnPrev = this->isWeightOn;
         if (func_800CAF70(&this->dyna)) {
-            this->hasWeightOn = true;
+            this->isWeightOn = true;
         } else {
-            this->hasWeightOn = false;
+            this->isWeightOn = false;
         }
-        if ((this->hasWeightOn != this->hadWeightOn) && (this->unk180 < 1.0f)) {
+        if ((this->isWeightOn != this->isWeightOnPrev) && (this->unk180 < 1.0f)) {
             this->unk184 = -0x8000;
             this->unk180 = 6.0f;
         }
         this->unk184 += 0xCE4;
         Math_StepToF(&this->unk180, 0.0f, 0.12f);
-        step = this->hasWeightOn ? Math_CosS(fabsf(this->unk17C) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
-        target = this->hasWeightOn ? -8.0f : 0.0f;
+        step = this->isWeightOn ? Math_CosS(fabsf(this->unk17C) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
+        target = this->isWeightOn ? -8.0f : 0.0f;
         Math_StepToF(&this->unk17C, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->unk184) * this->unk180) + this->unk17C) * 10.0f;
-        dummy_label_653499:;
+        dummy:;
     }
     if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {
@@ -274,11 +276,16 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+/*
+The non-colorful platforms are the ones found in Woodfall Temple
+*/
 void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_06000208);
 }
 
+/*
+The colorful platforms are the ones found in Deku Palace
+*/
 void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx) {
-    // The colorful platforms are the ones found in Deku Palace
     func_800BDFC0(globalCtx, D_060071B8);
 }
