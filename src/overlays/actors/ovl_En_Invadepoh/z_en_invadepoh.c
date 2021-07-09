@@ -1211,7 +1211,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
-                       0xFA0, 0x64);
+                       4000, 100);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
@@ -1220,14 +1220,14 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, phi_v0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 8000, 100);
     return sp40;
 }
 
 void func_80B44E90(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, 5);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 8000, 100);
 }
 
 void func_80B44EFC(EnInvadepoh* this, GlobalContext* globalCtx) {
@@ -1601,7 +1601,7 @@ void func_80B45CE0(AlienBehaviorInfo* substruct) {
         step = substruct->unk42 - substruct->unk40;
         step *= substruct->unk44;
         step = ABS(step);
-        step = CLAMP(step, 0x64, substruct->unk48);
+        step = CLAMP(step, 100, substruct->unk48);
         Math_ScaledStepToS(&substruct->unk40, substruct->unk42, step);
     }
     func_80B45BB8(&substruct->unk0);
@@ -2710,10 +2710,10 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             player = PLAYER;
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
             temp_v1 -= this->actor.shape.rot.x;
-            substruct->unk26.x = CLAMP(temp_v1, -0x9C4, 0x9C4);
+            substruct->unk26.x = CLAMP(temp_v1, -2500, 2500);
             new_var3 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
             temp_v1 = new_var3 * 0.7f;
-            substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+            substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
         }
 
     dummy_label_558449:; // fake match? Required as it is currently
@@ -2775,15 +2775,15 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x32);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 0x23);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 50);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 35);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B48948(this);
     }
@@ -2912,7 +2912,7 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->unk3AC++;
         this->unk3AC = CLAMP_MAX(this->unk3AC, 4);
         this->actor.gravity = 33.0f;
-        func_80B45EC8(this, globalCtx, 0x14);
+        func_80B45EC8(this, globalCtx, 20);
     }
 
     Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
@@ -2956,7 +2956,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 1500.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 0xA, 0xBB8, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 10, 3000, 100);
     if ((globalCtx->gameplayFrames % 64) < 14) {
         Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
     } else {
@@ -2990,7 +2990,7 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x + D_80B4E934.x;
     sp30.y = this->actor.home.pos.y + D_80B4E934.y + 400.0f;
     sp30.z = this->actor.home.pos.z + D_80B4E934.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 8000, 100);
     Math_StepToF(&this->actor.speedXZ, 70.0f, 3.0f);
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -2.0f;
@@ -3042,7 +3042,7 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 800.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 8000, 100);
     Math_StepToF(&this->actor.speedXZ, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
     if (sp30.y < this->actor.world.pos.y) {
@@ -3131,15 +3131,15 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 500);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
     if (func_800B867C(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
@@ -3258,26 +3258,26 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     if ((globalCtx->gameplayFrames % 256) == 0) {
         Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
         sp42 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp44);
-        temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
+        temp_v0 = Rand_S16Offset(-8000, 16000);
         this->unk304 = temp_v0 + sp42;
         this->behaviorInfo.unk4C = 0;
     }
 
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->behaviorInfo.unk4C, 40);
     if (this->actor.xzDistToPlayer < 300.0f) {
         Player* player = PLAYER;
 
         temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
         temp_v1_2 *= 0.85f;
         temp_v1_2 -= this->actor.shape.rot.x;
-        substruct->unk26.x = CLAMP(temp_v1_2, -0x9C4, 0x9C4);
+        substruct->unk26.x = CLAMP(temp_v1_2, -2500, 2500);
         diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
         temp_v1_2 = diff;
         temp_v1_2 *= 0.7f;
-        substruct->unk26.y = CLAMP(temp_v1_2, -0x1F40, 0x1F40);
+        substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
         if ((globalCtx->gameplayFrames % 256) == 0) {
-            substruct->unk26.z = Rand_S16Offset(-0x5DC, 0xBB8);
+            substruct->unk26.z = Rand_S16Offset(-1500, 3000);
         }
     } else {
         substruct->unk26.x = 0;
@@ -3367,15 +3367,15 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 temp_v1;
     s16 diff;
 
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 500);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
 
     if (func_800B867C(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
@@ -3610,15 +3610,15 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     if (sp38 != 0 && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         player = PLAYER;
-        Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 0x28);
+        Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f);
         temp_v1 -= this->actor.shape.rot.x;
-        substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+        substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
         diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
         temp_v1 = diff;
         temp_v1 *= 0.7f;
-        substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+        substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
         func_80B45CE0(substruct);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3872,7 +3872,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
         if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos), 3,
-                               this->behaviorInfo.unk4C, 0x1F4);
+                               this->behaviorInfo.unk4C, 500);
         }
         temp_v1 = (globalCtx->gameplayFrames + 0x14) & 0x7F;
         if ((temp_v1 & 0x40) != 0) {
@@ -3880,16 +3880,16 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
             if (temp_v1 == 0x40) {
                 this->behaviorInfo.unk4C = 0;
             }
-            Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
-            Math_SmoothStepToS(&this->actor.shape.rot.y, sp40, 6, this->behaviorInfo.unk4C, 0x28);
+            Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, sp40, 6, this->behaviorInfo.unk4C, 40);
             temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &temp_t6->actor.focus.pos);
             temp_v1_2 *= 0.85f;
             temp_v1_2 -= this->actor.shape.rot.x;
-            substruct->unk26.x = CLAMP(temp_v1_2, -0xBB8, 0xBB8);
+            substruct->unk26.x = CLAMP(temp_v1_2, -3000, 3000);
             diff = (s16)(sp40 - this->actor.shape.rot.y);
             temp_v1_2 = diff;
             temp_v1_2 *= 0.7f;
-            substruct->unk26.y = CLAMP(temp_v1_2, -0x1F40, 0x1F40);
+            substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
         }
     }
 
@@ -3922,18 +3922,18 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x9C4, 0x1C2);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2500, 450);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
 
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
 
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
 
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B4BBE0(this);
@@ -3957,16 +3957,16 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     player = PLAYER;
 
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 200);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
 
     if (D_80B503F4 == NULL) { // both checks against null seem to be required
         func_80B4BBE0(this);
@@ -4097,7 +4097,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
     Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 0x7D0, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 2000, 100);
     if ((this->unk309 == 0) || (this->unk309 + 1 == this->unk308)) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(globalCtx);
@@ -4120,21 +4120,21 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
             this->behaviorInfo.unk4C = 0;
         }
 
-        Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x28);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, sp3A, 6, this->behaviorInfo.unk4C, 0x28);
+        Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, sp3A, 6, this->behaviorInfo.unk4C, 40);
         temp_v1_4 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp68->actor.focus.pos);
         temp_v1_4 *= 0.85f;
         temp_v1_4 -= this->actor.shape.rot.x;
-        substruct->unk26.x = CLAMP(temp_v1_4, -0xBB8, 0xBB8);
+        substruct->unk26.x = CLAMP(temp_v1_4, -3000, 3000);
         diff = (s16)(sp3A - this->actor.shape.rot.y);
         temp_v1_4 = diff;
         temp_v1_4 *= 0.7f;
-        substruct->unk26.y = CLAMP(temp_v1_4, -0x1F40, 0x1F40);
+        substruct->unk26.y = CLAMP(temp_v1_4, -8000, 8000);
     }
 
     if ((this->actor.flags & 0x40) == 0x40) {
         if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, 0x3ABE);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 
@@ -4163,16 +4163,16 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 3000, 500);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos));
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B4C6C8(this);
     }
@@ -4193,16 +4193,16 @@ void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 diff;
 
     player = PLAYER;
-    Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 0x28);
+    Math_StepToS(&this->behaviorInfo.unk4C, 2000, 200);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
     diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
+    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
     if (D_80B503F8 == NULL) {
         func_80B4C6C8(this);
     } else if ((D_80B503F8 != NULL) && ((EnInvadepoh*)D_80B503F8)->actionFunc != func_80B4C058) {
