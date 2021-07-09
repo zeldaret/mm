@@ -103,7 +103,34 @@ void func_80B48948(EnInvadepoh* this);
 void func_80B49904(EnInvadepoh* this);
 void func_80B499BC(EnInvadepoh* this);
 void func_80B492FC(EnInvadepoh* this);
-
+void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46520(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B465CC(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B468B4(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B469C4(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46A80(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46BB0(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46BC0(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C08(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C34(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C7C(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46C94(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46CC0(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46CF4(EnInvadepoh* this, GlobalContext* globalCtx);
+void func_80B46D28(EnInvadepoh* this, GlobalContext* globalCtx);
 void func_80B4D670(Actor* thisx, GlobalContext* globalCtx);
 void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx);
 void func_80B47D30(Actor* thisx, GlobalContext* globalCtx);
@@ -142,42 +169,9 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4BA30(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4C568(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4CFFC(Actor* thisx, GlobalContext* globalCtx);
-
-void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46520(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B465CC(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B468B4(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B469C4(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46A80(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46644(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx);
-
-void func_80B46BB0(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46BC0(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C08(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C34(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C7C(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C50(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46C94(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46CC0(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46CF4(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46D28(EnInvadepoh* this, GlobalContext* globalCtx);
-
 void func_80B46184(unkStruct_80B50350* unkStruct);
-
 s32 func_80B450C0(f32* arg0, f32* arg1, f32 arg2, f32 arg3, f32 arg4);
 s32 func_80B4516C(EnInvadepoh* this);
-
 void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
@@ -657,20 +651,17 @@ static Vec3f D_80B4EE30 = {
     0.0f,
 };
 
-// bss---------------------
 MtxF D_80B502A0;
 MtxF D_80B502E0;
-Actor* D_80B50320[0x8]; // not sure if this should be Actor* or EnInvadepoh* array
+Actor* D_80B50320[0x8];
 u8 D_80B50340[0x8];
 UNK_TYPE1 D_80B50348;
 unkStruct_80B50350 D_80B50350[10];
 Actor* D_80B503F0;
-Actor* D_80B503F4; // possibly an EnInvadepoh* pointer but probably not since 3F0 above is def an Actor*
+Actor* D_80B503F4;
 Actor* D_80B503F8;
-
 AnimatedMaterial* D_80B503FC;
 AnimatedMaterial* D_80B50400;
-
 s16 D_80B50404[3];
 Actor* D_80B5040C;
 
@@ -824,30 +815,30 @@ void func_80B43F0C(EnInvadepoh* this) {
     this->actor.shape.rot.y = Math_Vec3f_Yaw(&sp28, &sp1C);
 }
 
-f32 func_80B43F70(EnInvadepoh* this) {
-    f32 new_var;
+f32 EnInvadepoh_GetTotalPathLength(EnInvadepoh* this) {
+    f32 distance;
     s32 pad;
     Vec3f sp54;
-    Vec3f sp48;
-    Vec3s* temp_s0;
-    f32 temp_f20;
+    Vec3f pathPointF;
+    Vec3s* pathPoint;
+    f32 totalDistance;
     s32 i;
     s32 temp_s4;
 
     temp_s4 = this->unk308 + 1;
-    temp_s0 = this->pathPoints;
-    temp_f20 = 0.0f;
-    Math_Vec3s_ToVec3f(&sp48, temp_s0);
-    temp_s0++;
+    pathPoint = this->pathPoints;
+    totalDistance = 0.0f;
+    Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
+    pathPoint++;
     for (i = 1; i < temp_s4; i++) {
-        Math_Vec3f_Copy(&sp54, &sp48);
-        Math_Vec3s_ToVec3f(&sp48, temp_s0);
-        new_var = Math3D_Distance(&sp54, &sp48);
-        temp_s0++;
-        temp_f20 += new_var;
+        Math_Vec3f_Copy(&sp54, &pathPointF);
+        Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
+        distance = Math3D_Distance(&sp54, &pathPointF);
+        pathPoint++;
+        totalDistance += distance;
     }
 
-    return temp_f20;
+    return totalDistance;
 }
 
 void func_80B44024(EnInvadepoh* this, GlobalContext* globalCtx) {
@@ -978,7 +969,7 @@ void func_80B443A0(EnInvadepoh* this) {
 
 void func_80B444BC(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->pathTotalDist = func_80B43F70(this);
+    this->pathTotalDist = EnInvadepoh_GetTotalPathLength(this);
     func_80B443A0(this);
 }
 
@@ -995,7 +986,7 @@ void func_80B44514(EnInvadepoh* this) {
 
 void func_80B44540(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->pathTotalDist = func_80B43F70(this);
+    this->pathTotalDist = EnInvadepoh_GetTotalPathLength(this);
 }
 
 void func_80B44570(EnInvadepoh* this) {
@@ -1038,7 +1029,7 @@ void func_80B44690(EnInvadepoh* this) {
 
 void func_80B446D0(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->pathTotalDist = func_80B43F70(this);
+    this->pathTotalDist = EnInvadepoh_GetTotalPathLength(this);
 }
 
 void func_80B44700(EnInvadepoh* this) {
@@ -1133,7 +1124,7 @@ void func_80B44A90(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.velocity.y *= 0.3f;
         this->actor.speedXZ *= 0.8f;
-    } else if ((this->actor.bgCheckFlags & 8) != 0) {
+    } else if ((this->actor.bgCheckFlags & 8)) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speedXZ *= 0.3f;
     } else {
@@ -1307,7 +1298,7 @@ s32 func_80B450C0(f32* x, f32* z, f32 otherX, f32 otherZ, f32 speed) {
 }
 
 s32 func_80B4516C(EnInvadepoh* this) {
-    if (this->actor.floorHeight > -31999.0f) {
+    if (this->actor.floorHeight > BGCHECK_Y_MIN + 1) {
         this->actor.world.pos.y = this->actor.floorHeight;
         return true;
     }
@@ -1847,8 +1838,8 @@ void func_80B468B4(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actor.update = func_80B49B1C;
     this->actor.draw = func_80B4E3F0;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_NPC);
-    if (D_80B4E940 == 1 || gSaveContext.time < 0x1AD8) {
-        this->actor.world.pos.x += D_80B4E934.x; // this is a vec3f, the data is just being weird
+    if (D_80B4E940 == 1 || gSaveContext.time < CLOCK_TIME(2, 31)) {
+        this->actor.world.pos.x += D_80B4E934.x;
         this->actor.world.pos.y += D_80B4E934.y + 3000.0f;
         this->actor.world.pos.z += D_80B4E934.z;
         func_80B491EC(this);
@@ -2143,7 +2134,7 @@ void func_80B47380(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~1;
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 &= ~1;
-    this->actor.flags &= 0x7FFFFFFF;
+    this->actor.flags &= ~0x80000000;
     this->alienAlpha = 0;
     this->actor.draw = NULL;
     this->drawAlien = false;
@@ -2346,7 +2337,7 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer <= 0) {
         func_80B43AF0(this->actor.params & 7);
         func_80B43AB0();
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, 8);
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_ARROWS_30);
         func_80B47478(this);
     }
 }
@@ -2743,19 +2734,19 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
                     Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
                     substruct->unk30 = 0.07f;
                 } else if (this->unk374 == 1) {
-                    substruct->unk26.x = Rand_S16Offset(0x3E8, 0x3E8);
-                    substruct->unk26.y = Rand_S16Offset(-0x3E8, 0x7D0);
-                    substruct->unk26.z = Rand_S16Offset(-0x320, 0x640);
+                    substruct->unk26.x = Rand_S16Offset(1000, 1000);
+                    substruct->unk26.y = Rand_S16Offset(-1000, 2000);
+                    substruct->unk26.z = Rand_S16Offset(-800, 1600);
                     substruct->unk30 = 0.06f;
                 } else if (this->unk374 == 2) {
-                    substruct->unk26.x = Rand_S16Offset(-0x7D0, 0x3E8);
-                    substruct->unk26.y = Rand_S16Offset(-0x3E8, 0x7D0);
-                    substruct->unk26.z = Rand_S16Offset(-0x320, 0x640);
+                    substruct->unk26.x = Rand_S16Offset(-2000, 1000);
+                    substruct->unk26.y = Rand_S16Offset(-1000, 2000);
+                    substruct->unk26.z = Rand_S16Offset(-800, 1600);
                     substruct->unk30 = 0.05f;
                 } else {
-                    substruct->unk26.x = Rand_S16Offset(-0x3E8, 0x7D0);
-                    substruct->unk26.y = Rand_S16Offset(-0x7D0, 0xFA0);
-                    substruct->unk26.z = Rand_S16Offset(-0x7D0, 0xFA0);
+                    substruct->unk26.x = Rand_S16Offset(-1000, 2000);
+                    substruct->unk26.y = Rand_S16Offset(-2000, 4000);
+                    substruct->unk26.z = Rand_S16Offset(-2000, 4000);
                     substruct->unk30 = 0.04f;
                 }
             }
@@ -3075,7 +3066,7 @@ void func_80B49B1C(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     this->unk3A8 += this->unk3AA;
     Math_StepToF(&this->unk39C, this->unk3A0, this->unk3A4);
-    temp = Math_SinS(this->unk3A8) * this->unk39C + 1.0f; // required
+    temp = Math_SinS(this->unk3A8) * this->unk39C + 1.0f;
     Actor_SetScale(&this->actor, 0.27f * temp);
     Math_StepToS(&this->unk306, 0x258, 8);
     this->actor.world.rot.y += this->unk306;
@@ -3100,7 +3091,7 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     func_80B44570(this);
     func_80B44C24(this, globalCtx);
-    func_80B43E6C(this, 6, 0x7D0, 0x64);
+    func_80B43E6C(this, 6, 2000, 100);
     if (1) {} // required to match
     if (this->unk309 == 0 || this->unk309 + 1 == this->unk308) {
         if (this->unk378 == 0) {
@@ -3314,7 +3305,7 @@ void func_80B4A570(EnInvadepoh* this) {
 }
 
 void func_80B4A5E4(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (this->animPlayFlag != 0) {
+    if (this->animPlayFlag) {
         func_80B4A2C0(this);
     }
 }
@@ -3728,7 +3719,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (func_801378B8(&this->skelAnime, 13.0f) || func_801378B8(&this->skelAnime, 19.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
-    if (this->animPlayFlag != 0) {
+    if (this->animPlayFlag) {
         func_80B4B510(this);
     }
 }
@@ -3741,7 +3732,7 @@ void func_80B4B820(EnInvadepoh* this) {
 void func_80B4B864(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.5f, 1.0f);
     func_80B44E90(this, globalCtx);
-    if (this->animPlayFlag != 0) {
+    if (this->animPlayFlag) {
         func_80B4B510(this);
     }
 }
@@ -3907,7 +3898,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
-    if (gSaveContext.time >= 0xD801) {
+    if (gSaveContext.time > 0xD800) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -4322,6 +4313,7 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 temp_f10;
     f32 sp28;
     Actor* temp_v1;
+
     if (D_80B503F0 == 0) {
         Actor_MarkForDeath(&this->actor);
         return;

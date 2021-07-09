@@ -94,21 +94,19 @@ typedef struct EnInvadepoh {
     /* 0x2F2 */ s16 counter; // general counter variable
     /* 0x2F4 */ s8 bankIndex;
     /* 0x2F8 */ f32 unk2F8;
-    /* 0x2FC */ f32 unk2FC;
+    /* 0x2FC */ UNK_TYPE unk2FC; // unused
     /* 0x300 */ f32 unk300;
     /* 0x304 */ s16 unk304; // angle of some sort
     /* 0x306 */ s16 unk306;
     /* 0x308 */ s8 unk308; // size of unk37C?
     /* 0x309 */ s8 unk309;
-    /* 0x30A */ s8 unk30A;
-    /* 0x30B */ s8 unk30B;
+    /* 0x30A */ s8 unk30A; //only ever 1 or -1
     /* 0x30C */ Vec3s* pathPoints;
     /* 0x310 */ f32 pathTotalDist;
     /* 0x314 */ Vec3f curPathPos;
     /* 0x320 */ f32 clockTime;
     /* 0x324 */ AlienBehaviorInfo behaviorInfo;
     /* 0x374 */ s8 unk374;
-    /* 0x375 */ s8 unk375;
     /* 0x376 */ u16 textId;
     /* 0x378 */ s8 unk378;
     /* 0x379 */ s8 unk379;
