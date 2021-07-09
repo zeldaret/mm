@@ -182,8 +182,6 @@ void func_80B45A4C(EnInvadePohStruct* s, s32* u);
 void func_80B45A94(EnInvadePohStruct* s, s32* u);
 void func_80B45B1C(EnInvadePohStruct* s, s32* u);
 
-extern AnimatedMaterial* D_80B503FC;
-extern AnimatedMaterial* D_80B50400;
 extern AnimatedMaterial D_06000560;
 extern AnimatedMaterial D_06000550;
 extern AnimationHeader D_06004264;
@@ -665,11 +663,15 @@ MtxF D_80B502E0;
 Actor* D_80B50320[0x8]; // not sure if this should be Actor* or EnInvadepoh* array
 u8 D_80B50340[0x8];
 UNK_TYPE1 D_80B50348;
-unkStruct_80B50350 D_80B50350[0xA];
+unkStruct_80B50350 D_80B50350[10];
 Actor* D_80B503F0;
 Actor* D_80B503F4; // possibly an EnInvadepoh* pointer but probably not since 3F0 above is def an Actor*
 Actor* D_80B503F8;
-UNK_TYPE2 D_80B50404[0x4];
+
+AnimatedMaterial* D_80B503FC;
+AnimatedMaterial* D_80B50400;
+
+s16 D_80B50404[3];
 Actor* D_80B5040C;
 
 void func_80B439B0(s32 arg0, s32 arg1) {
@@ -3389,7 +3391,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
         }
-        if (this->unk308 == this->unk309) {
+        if (this->unk309 == this->unk308) {
             func_80B4A2C0(this);
         } else {
             func_80B4A614(this);

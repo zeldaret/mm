@@ -53,16 +53,6 @@ typedef struct {
     /* 0x06 */ s16 unk06;
 } unkstruct_80B4EE0C; // size = 0x08
 
-typedef union unkstruct_invadepoh_union {
-    struct {
-        /* 0x0 */ s8 unk00;
-        /* 0x4 */ unkstruct_invadepoh_0* unk04;
-    } unkstruct_invadepoh_5;
-    unkstruct_invadepoh_2 unk_struct_2_elem;
-    unkstruct_invadepoh_3 unk_struct_3_elem;
-    unkstruct_invadepoh_4 unk_struct_4_elem;
-} unkstruct_invadepoh_union;
-
 typedef struct EnInvadePohStruct{
     /* 0x000 */ s32* unk0;
     /* 0x004 */ s8 unk4;
