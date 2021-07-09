@@ -1,7 +1,7 @@
 /*
  * File: z_obj_raillift.c
  * Overlay: Obj_Raillift
- * Description: OOT Water Temple Waterfall Platform and Deku Flower Platform
+ * Description: OOT Water Temple Waterfall Platform and Moving Deku Flower Platform
  */
 
 #include "z_obj_raillift.h"
@@ -279,5 +279,6 @@ void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx) 
 }
 
 void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx) {
+    // The colorful platforms are the ones found in Deku Palace
     func_800BDFC0(globalCtx, D_060071B8);
 }
