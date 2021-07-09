@@ -63,7 +63,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     Path* path;
     s32 type = OBJRAILLIFT_GET_TYPE(thisx);
-    s32 isColorful = 0;
+    s32 isColorful = false;
 
     Actor_ProcessInitChain(thisx, sInitChain);
 
@@ -76,7 +76,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {
         this->speed = -this->speed;
-        isColorful = 1;
+        isColorful = true;
     }
     if (type == DEKU_FLOWER_PLATFORM) {
         Actor_SpawnWithParent(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
