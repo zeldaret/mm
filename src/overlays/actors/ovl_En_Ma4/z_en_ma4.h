@@ -21,7 +21,7 @@ typedef struct EnMa4 {
     /* 0x31E */ char unk31E[0x6];
     /* 0x324 */ s16 pathIndex;
     /* 0x326 */ s16 pathPointsCount;
-    /* 0x328 */ char unk_328[0x2];
+    /* 0x328 */ UNK_TYPE1 unk_328[0x2];
     /* 0x32A */ s16 blinkTimer;
     /* 0x33C */ s16 overrideEyeTexIndex;
     /* 0x32E */ s16 eyeTexIndex;
