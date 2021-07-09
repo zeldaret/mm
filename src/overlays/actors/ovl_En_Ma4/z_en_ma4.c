@@ -893,7 +893,7 @@ void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
     s32 pad;
-    OSTime sp24;
+    OSTime time;
 
     switch (this->type) {
         case MA4_TYPE_DAY1:
