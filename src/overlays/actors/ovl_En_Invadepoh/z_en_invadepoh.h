@@ -98,7 +98,7 @@ typedef struct EnInvadepoh {
     /* 0x300 */ f32 unk300;
     /* 0x304 */ s16 unk304; // angle of some sort
     /* 0x306 */ s16 unk306;
-    /* 0x308 */ s8 unk308; // size of unk37C?
+    /* 0x308 */ s8 endPoint;
     /* 0x309 */ s8 unk309;
     /* 0x30A */ s8 unk30A; //only ever 1 or -1
     /* 0x30C */ Vec3s* pathPoints;
@@ -111,20 +111,20 @@ typedef struct EnInvadepoh {
     /* 0x378 */ s8 unk378;
     /* 0x379 */ s8 unk379;
     /* 0x37C */ f32 unk37C[3];
-    /* 0x388 */ s8 unk388;
+    /* 0x388 */ s8 unk388; // unused
     /* 0x389 */ u8 alienAlpha;
     /* 0x38A */ s8 unk38A;
     /* 0x38B */ s8 drawAlien;
     /* 0x38C */ s8 drawAlienDeathEffect;
     /* 0x38D */ u8 alienBeamAlpha;
     /* 0x390 */ Vec3f alienDeathEffectScale;
-    /* 0x39C */ f32 unk39C;
-    /* 0x3A0 */ f32 unk3A0;
-    /* 0x3A4 */ f32 unk3A4;
-    /* 0x3A8 */ s16 unk3A8;
+    /* 0x39C */ f32 scaleFactorAdj;
+    /* 0x3A0 */ f32 scaleTarget;
+    /* 0x3A4 */ f32 scaleStep;
+    /* 0x3A8 */ s16 scaleAdjAngle;
     /* 0x3AA */ s16 unk3AA;
     /* 0x3AC */ s8 unk3AC;
-    /* 0x3B0 */ Vec3f unk3B0;
+    /* 0x3AD */ char unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
 
