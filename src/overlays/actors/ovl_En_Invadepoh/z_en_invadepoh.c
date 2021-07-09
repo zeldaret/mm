@@ -178,9 +178,9 @@ void func_80B46184(unkStruct_80B50350* unkStruct);
 s32 func_80B450C0(f32* arg0, f32* arg1, f32 arg2, f32 arg3, f32 arg4);
 s32 func_80B4516C(EnInvadepoh* this);
 
-void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u);
-void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4* u);
-void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u);
+void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
+void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
+void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 
 extern AnimatedMaterial D_06000560;
 extern AnimatedMaterial D_06000550;
@@ -537,7 +537,7 @@ static unkstruct_invadepoh_2 D_80B4EC00 = { 0, &D_80B4EBF8 };
 
 static void* D_80B4EC08[] = { &D_80B4EC00 };
 
-static void (*D_80B4EC0C[])(struct EnInvadePohStruct*, unkstruct_invadepoh_4* arg1) = {
+static void (*D_80B4EC0C[])(struct EnInvadePohStruct*, unkstruct_invadepoh_4** arg1) = {
     func_80B45A4C,
     func_80B45A94,
     func_80B45B1C,
@@ -1511,7 +1511,7 @@ void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     }
 }
 
-void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
+void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
     unkstruct_invadepoh_4* new_var = s->unk8;
     unkstruct_invadepoh_0* temp_v1 = new_var->unk04;
 
@@ -1521,7 +1521,7 @@ void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     }
 }
 
-void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
+void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
     unkstruct_invadepoh_0* temp_v1;
     unkstruct_invadepoh_1* temp_a0;
 
@@ -1530,11 +1530,11 @@ void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
         s->unkE++;
         s->unkF = temp_v1->unk00[s->unkE];
     } else {
-        func_80B459E8(s, &u[func_80B45980(s->unk8->unk0C, s->unk8->unk08)]);
+        func_80B459E8(s, u[func_80B45980(s->unk8->unk0C, s->unk8->unk08)]);
     }
 }
 
-void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
+void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
     unkstruct_invadepoh_0* temp_v1;
     unkstruct_invadepoh_1* temp_a0;
 
@@ -1545,7 +1545,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     } else if (s->unkC > 0) {
         s->unkC--;
     } else {
-        func_80B459E8(s, &u[func_80B45980(s->unk8->unk0C, s->unk8->unk08)]);
+        func_80B459E8(s, u[func_80B45980(s->unk8->unk0C, s->unk8->unk08)]);
     }
 }
 
