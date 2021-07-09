@@ -6925,11 +6925,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.text)
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.data)
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.rodata)
-        #ifdef NON_MATCHING
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh_overlay.o(.ovl)
-        #else
-        build/asm/overlays/ovl_En_Invadepoh_rodata.o(.rodata)
-        #endif
         ovl_En_Invadepoh_bss_start = .;
     }
     . += 0x170;

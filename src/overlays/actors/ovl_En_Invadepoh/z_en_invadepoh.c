@@ -1509,10 +1509,6 @@ void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     }
 }
 
-// ISMATCHING
-#ifdef NON_MATCHING
-// matching, but has a warning because I haven't decoded the data well enough
-// yet. The first temp is not the correct type.
 void func_80B45A4C(EnInvadePohStruct* s, s32* u) {
     unkstruct_invadepoh_3* new_var = s->unk8;
     unkstruct_invadepoh_0* temp_v1 = new_var->unk4;
@@ -1522,9 +1518,6 @@ void func_80B45A4C(EnInvadePohStruct* s, s32* u) {
         s->unkF = temp_v1->unk00[s->unkE];
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B45A4C.asm")
-#endif
 
 void func_80B45A94(EnInvadePohStruct* s, s32* u) {
     unkstruct_invadepoh_0* temp_v1;
@@ -1560,42 +1553,34 @@ void func_80B45BB8(EnInvadePohStruct* s) {
     }
 }
 
-// cursed
-#ifdef NON_EQUIVALENT
-void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_union* arg1, s32 arg2,
-                   unkstruct_invadepoh_union* arg3, s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
+void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_2* arg1[], s32 arg2,
+                   unkstruct_invadepoh_2* arg3[], s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
     unkstruct_invadepoh_4* temp_v0;
-    unkstruct_invadepoh_4* temp_v0_2;
 
     Math_Vec3s_Copy(&substruct->unk26, arg5);
     substruct->unk2C = arg6;
     substruct->unk30 = arg7;
     substruct->unk38 = arg8;
     substruct->unk3C = arg9;
-    if (arg1 != 0) {
-        temp_v0 = &arg1[arg2].unk_struct_4_elem;
-        substruct->unk0.unk4 = temp_v0->unk00;
+    if (arg1 != NULL) {
+        temp_v0 = arg1[arg2];
         substruct->unk0.unk0 = arg1;
-        substruct->unk0.unk8 = temp_v0;
+        substruct->unk0.unk4 = temp_v0->unk00;
         substruct->unk0.unkC = 0;
         substruct->unk0.unkE = 0;
+        substruct->unk0.unk8 = temp_v0;
         substruct->unk0.unkF = *temp_v0->unk04->unk00;
     }
-    if (arg3 != 0) {
-        temp_v0_2 = &arg3[arg4].unk_struct_4_elem;
-        substruct->unk10.unk4 = temp_v0_2->unk00;
+    if (arg3 != NULL) {
+        temp_v0 = arg3[arg4];
         substruct->unk10.unk0 = arg3;
-        substruct->unk10.unk8 = temp_v0_2;
+        substruct->unk10.unk4 = temp_v0->unk00;
         substruct->unk10.unkC = 0;
         substruct->unk10.unkE = 0;
-        substruct->unk10.unkF = *temp_v0_2->unk04->unk00;
+        substruct->unk10.unk8 = temp_v0;
+        substruct->unk10.unkF = *temp_v0->unk04->unk00;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B45C04.asm")
-#endif
-void func_80B45C04(AlienBehaviorInfo* substruct, unkstruct_invadepoh_union* arg1, s32 arg2,
-                   unkstruct_invadepoh_union* arg3, s32 arg4, Vec3s* arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9);
 
 void func_80B45CE0(AlienBehaviorInfo* substruct) {
     Vec3f sp3C;
