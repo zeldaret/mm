@@ -347,7 +347,7 @@ void EnMa4_SetupWait(EnMa4* this) {
 
 void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    s16 sp22 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
+    s16 yaw = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->state == MA4_STATE_AFTERHORSEBACKGAME) || (this->state == MA4_STATE_AFTERDESCRIBETHEMCS)) {
         this->actor.flags |= 0x10000;
