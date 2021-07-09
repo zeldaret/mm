@@ -818,56 +818,46 @@ void func_80B4407C(EnInvadepoh* this, s32 arg1) {
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
-#ifdef NON_EQUIVALENT
 s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2) {
-    Vec3s* sp48;
+    Vec3s* temp_a3 = &this->pathPoints[this->unk309 + 1];
+    Vec3s* sp48 = &this->pathPoints[this->unk309];
+    f32 new_var;
     f32 sp40;
     f32 sp3C;
     f32 sp38;
     f32 sp34;
     f32 sp30;
     f32 sp2C;
-    s16 sp1E;
-    Vec3s* temp_a2;
-    Vec3s* temp_a3;
-    f32 temp_f0;
-    f32 temp_f12;
     f32 temp_f12_2;
-    f32 temp_f14;
-    f32 temp_f16;
-    f32 temp_f18;
-    f32 temp_f2;
-    s16 temp_v0_2;
-    s32 temp_a0;
-    s32 temp_f6;
-    s32 phi_return;
+    s32 pad1;
+    s32 pad2;
+    s16 sp1E;
 
-    temp_a2 = &this->pathPoints[this->unk309];
-    temp_a3 = &this->pathPoints[this->unk309 + 1];
     if (this->unk309 >= this->unk308) {
-        return 0;
+        return false;
     }
-    temp_f6 = temp_a3->z - temp_a2->z;
-    temp_f14 = temp_a3->x - temp_a2->x;
-    temp_v0_2 = Math_FAtan2F(temp_f12, temp_f14);
-    sp38 = Math_CosS(temp_v0_2);
-    temp_f0 = Math_SinS(temp_v0_2);
-    temp_f18 = temp_f0;
-    temp_f2 = this->actor.world.pos.x - temp_a2->x;
-    temp_f16 = this->actor.world.pos.z - temp_a2->z;
-    if ((arg1 - arg2) < fabsf((temp_f2 * sp38) - (temp_f16 * temp_f0))) {
-        return 0;
+
+    sp40 = temp_a3->x - sp48->x;
+    sp3C = temp_a3->z - sp48->z;
+    sp1E = Math_FAtan2F(sp3C, sp40);
+    sp38 = Math_CosS(sp1E);
+    sp34 = Math_SinS(sp1E);
+    sp30 = this->actor.world.pos.x - sp48->x;
+    sp2C = this->actor.world.pos.z - sp48->z;
+
+    if ((arg1 - arg2) < fabsf((sp30 * sp38) - (sp2C * sp34))) {
+        return false;
     }
-    temp_f12_2 = (temp_f16 * sp38) + (temp_f2 * temp_f18);
-    if ((temp_f12_2 < 0.0f) || (phi_return = 1, (Math3D_XZLength(temp_f14, temp_f6) < temp_f12_2))) {
-        phi_return = 0;
+
+    temp_f12_2 = (sp2C * sp38) + (sp30 * sp34);
+    new_var = Math3D_XZLength(sp40, sp3C);
+
+    if ((temp_f12_2 < 0.0f) || (new_var < temp_f12_2)) {
+        return false;
     }
-    return phi_return;
+
+    return true;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_0x80B439B0/func_80B440B8.asm")
-#endif
-s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2);
 
 s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
     f32 distance;
