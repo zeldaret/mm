@@ -188,12 +188,12 @@ void EnMa4_InitPath(EnMa4* this, GlobalContext* globalCtx) {
     this->actor.home.pos.x = this->pathPoints[0].x;
     this->actor.home.pos.y = this->pathPoints[0].y;
     this->actor.home.pos.z = this->pathPoints[0].z;
-    sp20.x = this->pathPoints[1].x;
-    sp20.y = this->pathPoints[1].y;
-    sp20.z = this->pathPoints[1].z;
+    nextPoint.x = this->pathPoints[1].x;
+    nextPoint.y = this->pathPoints[1].y;
+    nextPoint.z = this->pathPoints[1].z;
 
     this->actor.world.pos = this->actor.home.pos;
-    this->actor.shape.rot.y = this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp20);
+    this->actor.shape.rot.y = this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &nextPoint);
 }
 
 void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -366,7 +366,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         EnMa4_StartDialogue(this, globalCtx);
         EnMa4_SetupDialogueHandler(this);
-    } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(sp22) < 0x4000) {
+    } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
         if (!(player->stateFlags1 & 0x800000)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
@@ -647,7 +647,7 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 }
 
 void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
-    s32 pad;
+    s32 temp_v0;
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         default:
@@ -929,10 +929,10 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x336D, &this->actor);
                     this->textId = 0x336D;
                 } else {
-                    sp24 = gSaveContext.unk_3DE0[4];
-                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
+                    time = gSaveContext.unk_3DE0[4];
+                    if ((s32)time < (s32)gSaveContext.roomInf[127][4]) {
                         // [Score] New record!
-                        gSaveContext.roomInf[127][4] = sp24;
+                        gSaveContext.roomInf[127][4] = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         func_801518B0(globalCtx, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -973,9 +973,9 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    sp24 = gSaveContext.unk_3DE0[4];
-                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
-                        gSaveContext.roomInf[127][4] = sp24;
+                    time = gSaveContext.unk_3DE0[4];
+                    if ((s32)time < (s32)gSaveContext.roomInf[127][4]) {
+                        gSaveContext.roomInf[127][4] = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
                         func_801518B0(globalCtx, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -1000,10 +1000,10 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    sp24 = gSaveContext.unk_3DE0[4];
-                    if ((s32)sp24 < (s32)gSaveContext.roomInf[127][4]) {
+                    time = gSaveContext.unk_3DE0[4];
+                    if ((s32)time < (s32)gSaveContext.roomInf[127][4]) {
                         // New record
-                        gSaveContext.roomInf[127][4] = sp24;
+                        gSaveContext.roomInf[127][4] = time;
                         func_801518B0(globalCtx, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {
