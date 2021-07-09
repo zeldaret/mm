@@ -207,7 +207,7 @@ extern AnimationHeader D_06001D80;
 extern AnimationHeader D_060006C8;
 extern AnimationHeader D_06000608;
 extern AnimationHeader D_06007328;
-extern AnimationHeader D_060080F0;
+extern FlexSkeletonHeader D_060080F0;
 extern FlexSkeletonHeader D_06015C28;
 
 extern Gfx D_0600FFC8[];
@@ -1097,8 +1097,8 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->curPathPos.z = ((sp50.z * sp30) + (sp44.z * sp34)) * sp2C;
     }
 
-    Math_Vec3f_Copy(&this->actor.world, &this->curPathPos);
-    func_800B4AEC(globalCtx, this, 0.0f);
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->curPathPos);
+    func_800B4AEC(globalCtx, &this->actor, 0.0f);
     if (this->actor.floorHeight > -31999.0f) {
         if (sp40 < this->actor.floorHeight) {
             if (this->actor.velocity.y < 0.0f) {
@@ -2207,7 +2207,7 @@ void func_80B47600(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B442E4(this);
     func_80B447C0(this, globalCtx);
     func_80B43DD4(this, 800, 0);
-    func_800B9010(this, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
+    func_800B9010(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
     if (0.9999f <= this->clockTime) {
         this->unk38A = 1;
     }
@@ -2463,7 +2463,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
 
     temp = this->actor.params & 7;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Math_ScaledStepToS(&this->actor.shape.rot, D_80B4EDC0[temp], 50);
+    Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 50);
     if (this->actor.child != NULL) {
         SysMatrix_StatePush();
         SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y,
@@ -2603,7 +2603,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f, 0.12f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f, 0.12f);
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
     }
@@ -2810,7 +2810,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         func_80B4407C(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3170,7 +3170,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
         func_80B44C24(this, globalCtx);
@@ -3411,7 +3411,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < 0x1800) || (sp38 >= 0x4000)) {
             this->unk309 = 0;
@@ -3597,7 +3597,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
                          this->transitionDrawTable, 23);
         SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, 0.0f);
         substruct = &this->behaviorInfo;
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x7D0, 0.08f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 0x7D0, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
         substruct->unk2C = 0x7D0;
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3880,12 +3880,12 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
         if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world)) {
-            Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world), 3,
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos), 3,
                                this->behaviorInfo.unk4C, 0x1F4);
         }
         temp_v1 = (globalCtx->gameplayFrames + 0x14) & 0x7F;
         if ((temp_v1 & 0x40) != 0) {
-            sp40 = Math_Vec3f_Yaw(&this->actor.world, &temp_t6->actor.world.pos);
+            sp40 = Math_Vec3f_Yaw(&this->actor.world.pos, &temp_t6->actor.world.pos);
             if (temp_v1 == 0x40) {
                 this->behaviorInfo.unk4C = 0;
             }
@@ -4046,7 +4046,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     temp_v0 = func_800B84D0(&this->actor, globalCtx);
     if (temp_v0) {
         func_80151BB4(globalCtx, 6);
-        func_80B4BFFC(thisx);
+        func_80B4BFFC(this);
     }
     this->actionFunc(this, globalCtx);
     if (sp2C != 0) {
@@ -4091,7 +4091,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     s8 temp_v1;
     s16 sp3A;
     s8 temp_v0;
-    sp68 = D_80B503F8;
+    sp68 = (EnInvadepoh*)D_80B503F8;
     func_80B44700(this);
     func_80B44EFC(this, globalCtx);
     func_80B43E6C(this, 6, 0x7D0, 0x64);
@@ -4232,7 +4232,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B44700(this);
@@ -4382,10 +4382,10 @@ void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
         if (1) {}
         if ((this->actionTimer < 105) && (this->actionTimer >= 100)) {
             this->actor.gravity = -1.0f;
-            Math_SmoothStepToS(&this->actor.shape, 0x2000, 8, 0x320, 0x28);
+            Math_SmoothStepToS(&this->actor.shape.rot.x, 0x2000, 8, 0x320, 0x28);
         } else {
             this->actor.gravity = 0.7f;
-            Math_SmoothStepToS(&this->actor.shape, 0, 8, 0x320, 0x28);
+            Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 8, 0x320, 0x28);
         }
 
         this->actor.velocity.y += this->actor.gravity;
