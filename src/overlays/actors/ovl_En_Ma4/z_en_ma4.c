@@ -178,7 +178,7 @@ void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_InitPath(EnMa4* this, GlobalContext* globalCtx) {
     Path* path;
-    Vec3f sp20;
+    Vec3f nextPoint;
 
     path = &globalCtx->setupPathList[(this->actor.params & 0xFF00) >> 8];
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
