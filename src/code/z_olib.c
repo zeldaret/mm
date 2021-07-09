@@ -35,23 +35,11 @@ f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b) {
  * `min` as `val` approaches zero
  */
 f32 OLib_ClampMinDist(f32 val, f32 min) {
-    f32 phi_f2;
-
     if (val < 0.0f) {
-        if (-min < val) {
-            phi_f2 = -min;
-        } else {
-            phi_f2 = val;
-        }
-
-        return phi_f2;
-    } else if (val < min) {
-        phi_f2 = min;
+        return CLAMP_MAX(val, -min);
     } else {
-        phi_f2 = val;
+        return CLAMP_MIN(val, min);
     }
-
-    return phi_f2;
 }
 
 /**
@@ -59,22 +47,11 @@ f32 OLib_ClampMinDist(f32 val, f32 min) {
  * as `val` approaches `max`
  */
 f32 OLib_ClampMaxDist(f32 val, f32 max) {
-    f32 phi_f2;
-
     if (val < 0.0f) {
-        if (val < -max) {
-            phi_f2 = -max;
-        } else {
-            phi_f2 = val;
-        }
-        return phi_f2;
-    } else if (max < val) {
-        phi_f2 = max;
+        return CLAMP_MIN(val, -max);
     } else {
-        phi_f2 = val;
+        return CLAMP_MAX(val, max);
     }
-
-    return phi_f2;
 }
 
 /**
@@ -161,6 +138,7 @@ VecSph* OLib_Vec3fToVecSph(VecSph* dest, Vec3f* vec) {
 
     return dest;
 }
+
 /**
  * Takes the point `vec`, and converts it to a geographic coordinate
  */
