@@ -54,7 +54,7 @@ typedef struct {
 } unkstruct_80B4EE0C; // size = 0x08
 
 typedef struct EnInvadePohStruct{
-    /* 0x000 */ s32* unk0;
+    /* 0x000 */ unkstruct_invadepoh_4* unk0;
     /* 0x004 */ s8 unk4;
     /* 0x008 */ unkstruct_invadepoh_4* unk8;
     /* 0x00C */ s16 unkC;
