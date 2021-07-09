@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_raillift.c
+ * Overlay: Obj_Raillift
+ * Description: OOT Water Temple Waterfall Platform and Deku Flower Platform
+ */
+
 #include "z_obj_raillift.h"
 
 #define FLAGS 0x00000010
@@ -9,16 +15,16 @@ void ObjRaillift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A1A360(Actor* thisx, GlobalContext* globalCtx);
-void func_80A1A330(Actor* thisx, GlobalContext* globalCtx);
+void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx);
+void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A19B98(ObjRaillift* this, GlobalContext* globalCtx);
-void func_80A19F18(ObjRaillift* this, GlobalContext* globalCtx);
-void func_80A19910(ObjRaillift* this, s32 arg1);
-void func_80A19F78(ObjRaillift* this, GlobalContext* globalCtx);
-void func_80A19E84(ObjRaillift* this, GlobalContext* globalCtx);
-void func_80A19EE0(ObjRaillift* this, GlobalContext* globalCtx);
-void func_80A19BA8(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_DoNothing(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_Idle(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 arg1);
+void ObjRaillift_StartCutscene(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_Wait(ObjRaillift* this, GlobalContext* globalCtx);
+void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx);
 
 extern CollisionHeader D_06004FF8;
 extern CollisionHeader D_060048D0;
@@ -45,19 +51,19 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static CollisionHeader* D_80A1A3C0[] = { &D_06004FF8, &D_060048D0 };
+static CollisionHeader* sColHeaders[] = { &D_06004FF8, &D_060048D0 };
 
 
-void func_80A19910(ObjRaillift* this, s32 idx) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->unk170[idx]);
+void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 idx) {
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[idx]);
 }
 
 void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjRaillift* this = THIS;
     s32 pad;
     Path* path;
-    s32 sp48 = (thisx->params >> 0xF) & 1;
-    s32 sp44 = 0;
+    s32 type = OBJRAILLIFT_GET_TYPE(thisx);
+    s32 isColorful = 0;
 
     Actor_ProcessInitChain(thisx, sInitChain);
 
@@ -66,35 +72,35 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
     BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, D_80A1A3C0[sp48]);
-    this->unk160 = thisx->home.rot.z * 0.1f;
-    if (this->unk160 < 0.0f) {
-        this->unk160 = -this->unk160;
-        sp44 = 1;
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
+    this->speed = OBJRAILLIFT_GET_SPEED(thisx);
+    if (this->speed < 0.0f) {
+        this->speed = -this->speed;
+        isColorful = 1;
     }
-    if (sp48 == 1) {
+    if (type == DEKU_FLOWER_PLATFORM) {
         Actor_SpawnWithParent(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
                               thisx->world.pos.y, thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y,
                               thisx->shape.rot.z, 0);
-        if (sp44 != 0) {
-            thisx->draw = func_80A1A360;
+        if (isColorful) {
+            thisx->draw = ObjRaillift_DrawDekuFlowerPlatformColorful;
         } else {
-            thisx->draw = func_80A1A330;
+            thisx->draw = ObjRaillift_DrawDekuFlowerPlatform;
         }
     }
-    if (this->unk160 < 0.01f) {
-        this->actionFunc = func_80A19B98;
+    if (this->speed < 0.01f) {
+        this->actionFunc = ObjRaillift_DoNothing;
     } else {
-        path = &globalCtx->setupPathList[thisx->params & 0x7F];
-        this->unk168 = (thisx->params >> 7) & 0x1F;
-        this->unk164 = path->count - 1;
-        this->unk16C = 1;
-        this->unk170 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
-        func_80A19910(this, this->unk168);
-        if (((thisx->params >> 0xD) & 1) && !Flags_GetSwitch(globalCtx, thisx->home.rot.x & 0x7F)) {
-            this->actionFunc = func_80A19F18;
+        path = &globalCtx->setupPathList[OBJRAILLIFT_GET_PATH(thisx)];
+        this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
+        this->endPoint = path->count - 1;
+        this->direction = 1;
+        this->points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        ObjRaillift_UpdatePosition(this, this->curPoint);
+        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(globalCtx, OBJRAILLIFT_GET_FLAG(thisx))) {
+            this->actionFunc = ObjRaillift_Idle;
         } else {
-            this->actionFunc = func_80A19BA8;
+            this->actionFunc = ObjRaillift_Move;
         }
     }
 }
@@ -105,40 +111,40 @@ void ObjRaillift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80A19B98(ObjRaillift* this, GlobalContext* globalCtx) {
+void ObjRaillift_DoNothing(ObjRaillift* this, GlobalContext* globalCtx) {
 }
 
-void func_80A19BA8(ObjRaillift* this, GlobalContext* globalCtx) {
-    int new_var;
-    Vec3f sp48;
+void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
+    s32 shouldTeleport;
+    Vec3f nextPoint;
     f32 speed;
     f32 target;
     f32 step;
-    s32 flag;
-    Vec3s* temp_v0;
-    Vec3s* temp_v1_2;
+    s32 updatePos;
+    Vec3s* initialPoint;
+    Vec3s* endPoint;
     s32 pad;
 
-    if (((&this->dyna.actor)->params >> 0xD) & 1) {
-        if (Flags_GetSwitch(globalCtx, (&this->dyna.actor)->home.rot.x & 0x7F) == 0) {
-            this->actionFunc = func_80A19F18;
+    if (OBJRAILLIFT_HAS_FLAG(&this->dyna.actor)) {
+        if (!Flags_GetSwitch(globalCtx, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
+            this->actionFunc = ObjRaillift_Idle;
             return;
         }
 
-        if ((((&this->dyna.actor)->params >> 0xF) & 1) == 1) {
+        if (OBJRAILLIFT_GET_TYPE(&this->dyna.actor) == DEKU_FLOWER_PLATFORM) {
             func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
-    Math_Vec3s_ToVec3f(&sp48, &(&this->unk170[this->unk168])[this->unk16C]);
-    Math_Vec3f_Diff(&sp48, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
+    Math_Vec3s_ToVec3f(&nextPoint, &(&this->points[this->curPoint])[this->direction]);
+    Math_Vec3f_Diff(&nextPoint, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
     speed = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
-    if ((speed < (this->unk160 * 8.0f)) && (this->unk160 > 2.0f)) {
-        target = ((this->unk160 - 2.0f) * 0.1f) + 2.0f;
-        step = this->unk160 * 0.03f;
+    if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
+        target = ((this->speed - 2.0f) * 0.1f) + 2.0f;
+        step = this->speed * 0.03f;
     } else {
-        target = this->unk160;
-        step = this->unk160 * 0.16f;
+        target = this->speed;
+        step = this->speed * 0.16f;
     }
 
     Math_StepToF(&this->dyna.actor.speedXZ, target, step);
@@ -148,63 +154,64 @@ void func_80A19BA8(ObjRaillift* this, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
         this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
     } else {
-        this->unk168 += this->unk16C;
+        this->curPoint += this->direction;
         if (1) {}
         this->dyna.actor.speedXZ *= 0.4f;
-        new_var = (this->dyna.actor.params >> 0xC) & 1;
-        flag = 1;
-        if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (!new_var) {
-                this->unk16C = -this->unk16C;
-                this->unk186 = 10;
-                this->actionFunc = func_80A19EE0;
+        shouldTeleport = OBJRAILLIFT_SHOULD_TELEPORT(&this->dyna.actor);
+        updatePos = true;
+        if (((this->curPoint >= this->endPoint) && (this->direction > 0)) || ((this->curPoint <= 0) && (this->direction < 0))) {
+            if (!shouldTeleport) {
+                this->direction = -this->direction;
+                this->waitTimer = 10;
+                this->actionFunc = ObjRaillift_Wait;
             } else {
-                temp_v1_2 = &this->unk170[this->unk164];
-                this->unk168 = (this->unk16C > 0) ? (0) : (this->unk164);
-                temp_v0 = &this->unk170[0];
-                if (((temp_v0->x != temp_v1_2->x) || (temp_v0->y != temp_v1_2->y)) || (temp_v0->z != (temp_v1_2->z))) {
-                    this->actionFunc = func_80A19E84;
+                endPoint = &this->points[this->endPoint];
+                this->curPoint = (this->direction > 0) ? (0) : (this->endPoint);
+                initialPoint = &this->points[0];
+                if (((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y)) || (initialPoint->z != endPoint->z)) {
+                    this->actionFunc = ObjRaillift_Teleport;
                     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-                    flag = 0;
+                    updatePos = false;
                 }
             }
         }
 
-        if (flag != 0) {
-            func_80A19910(this, this->unk168);
+        if (updatePos) {
+            ObjRaillift_UpdatePosition(this, this->curPoint);
         }
     }
 }
 
-void func_80A19E84(ObjRaillift* this, GlobalContext* globalCtx) {
+void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx) {
+    // will teleport to what ever curpoint is set to
     if (!func_800CAF70(&this->dyna)) {
-        func_80A19910(this, this->unk168);
+        ObjRaillift_UpdatePosition(this, this->curPoint);
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->actionFunc = func_80A19BA8;
+        this->actionFunc = ObjRaillift_Move;
     }
 }
 
-void func_80A19EE0(ObjRaillift* this, GlobalContext* globalCtx) {
-    this->unk186--;
-    if (this->unk186 <= 0) {
-        this->actionFunc = func_80A19BA8;
+void ObjRaillift_Wait(ObjRaillift* this, GlobalContext* globalCtx) {
+    this->waitTimer--;
+    if (this->waitTimer <= 0) {
+        this->actionFunc = ObjRaillift_Move;
         this->dyna.actor.speedXZ = 0.0f;
     }
 }
 
-void func_80A19F18(ObjRaillift* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, (&this->dyna.actor)->home.rot.x & 0x7F)) {
+void ObjRaillift_Idle(ObjRaillift* this, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speedXZ = 0.0f;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-        this->actionFunc = func_80A19F78;
+        this->actionFunc = ObjRaillift_StartCutscene;
     }
 }
 
-void func_80A19F78(ObjRaillift* this, GlobalContext* globalCtx) {
+void ObjRaillift_StartCutscene(ObjRaillift* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unk188 = 0x32;
-        this->actionFunc = func_80A19BA8;
+        this->cutsceneTimer = 50;
+        this->actionFunc = ObjRaillift_Move;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -217,40 +224,32 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->dyna.actor, 10.0f);
-    if (this->unk188 > 0) {
-        this->unk188--;
-        if (this->unk188 == 0) {
+    if (this->cutsceneTimer > 0) {
+        this->cutsceneTimer--;
+        if (this->cutsceneTimer == 0) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
     }
-    if ((thisx->params >> 0xE) & 1) {
-        this->unk178 = this->unk174;
+    if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
+        this->hadWeightOn = this->hasWeightOn;
         if (func_800CAF70(&this->dyna)) {
-            this->unk174 = 1;
+            this->hasWeightOn = true;
         } else {
-            this->unk174 = 0;
+            this->hasWeightOn = false;
         }
-        if ((this->unk174 != this->unk178) && (this->unk180 < 1.0f)) {
+        if ((this->hasWeightOn != this->hadWeightOn) && (this->unk180 < 1.0f)) {
             this->unk184 = -0x8000;
             this->unk180 = 6.0f;
         }
         this->unk184 += 0xCE4;
         Math_StepToF(&this->unk180, 0.0f, 0.12f);
-        if (this->unk174 != 0) {
-            step = Math_CosS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
-        } else {
-            step = Math_SinS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
-        }
-        if (this->unk174 != 0) {
-            target = -8.0f;
-        } else {
-            target = 0.0f;
-        }
+        step = this->hasWeightOn ? Math_CosS(fabsf(this->unk17C) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
+        target = this->hasWeightOn ? -8.0f : 0.0f;
         Math_StepToF(&this->unk17C, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->unk184) * this->unk180) + this->unk17C) * 10.0f;
         dummy_label_653499:;
     }
-    if ((((thisx->params >> 0xF) & 1) == 1) && this->dyna.actor.child != NULL) {
+    if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {
             this->dyna.actor.child = NULL;
         } else {
@@ -275,10 +274,10 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A1A330(Actor* thisx, GlobalContext* globalCtx) {
+void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_06000208);
 }
 
-void func_80A1A360(Actor* thisx, GlobalContext* globalCtx) {
+void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_060071B8);
 }

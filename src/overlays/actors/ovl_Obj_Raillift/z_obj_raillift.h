@@ -7,22 +7,35 @@ struct ObjRaillift;
 
 typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, GlobalContext*);
 
+#define OBJRAILLIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
+#define OBJRAILLIFT_HAS_FLAG(thisx) (((thisx)->params >> 0xD) & 1)
+#define OBJRAILLIFT_GET_FLAG(thisx) ((thisx)->home.rot.x & 0x7F)
+#define OBJRAILLIFT_GET_PATH(thisx) ((thisx)->params & 0x7F)
+#define OBJRAILLIFT_GET_STARTING_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
+#define OBJRAILLIFT_GET_SPEED(thisx) ((thisx)->home.rot.z * 0.1f)
+#define OBJRAILLIFT_SHOULD_TELEPORT(thisx) (((thisx)->params >> 0xC) & 1)
+#define OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx) (((thisx)->params >> 0xE) & 1)
+
+typedef enum {
+    /* 0 */ OOT_WATER_TEMPLE_WATERFALL_PLATFORM,
+    /* 1 */ DEKU_FLOWER_PLATFORM
+} OBJRAILLIFT_TYPE;
+
 typedef struct ObjRaillift {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjRailliftActionFunc actionFunc;
-    /* 0x160 */ f32 unk160;
-    /* 0x164 */ s32 unk164;
-    /* 0x168 */ s32 unk168;
-    /* 0x16C */ s32 unk16C;
-    /* 0x170 */ Vec3s* unk170;
-    /* 0x174 */ s32 unk174;
-    /* 0x178 */ s32 unk178;
+    /* 0x160 */ f32 speed;
+    /* 0x164 */ s32 endPoint;
+    /* 0x168 */ s32 curPoint;
+    /* 0x16C */ s32 direction; // +1 for forward, -1 for backward
+    /* 0x170 */ Vec3s* points;
+    /* 0x174 */ s32 hasWeightOn;
+    /* 0x178 */ s32 hadWeightOn;
     /* 0x17C */ f32 unk17C;
     /* 0x180 */ f32 unk180;
     /* 0x184 */ s16 unk184;
-    /* 0x186 */ s16 unk186;
-    /* 0x188 */ s16 unk188;
-    /* 0x18A */ char unk18A[0x2];
+    /* 0x186 */ s16 waitTimer;
+    /* 0x188 */ s16 cutsceneTimer;
 } ObjRaillift; // size = 0x18C
 
 extern const ActorInit Obj_Raillift_InitVars;

@@ -11912,7 +11912,7 @@
     0x80A1990C:("objFunenOverlayInfoOffset","u32","",0x4),
     0x80A1A390:("Obj_Raillift_InitVars","UNK_TYPE1","",0x1),
     0x80A1A3B0:("D_80A1A3B0","UNK_TYPE1","",0x1),
-    0x80A1A3C0:("D_80A1A3C0","UNK_TYPE1","",0x1),
+    0x80A1A3C0:("sColHeaders","UNK_TYPE1","",0x1),
     0x80A1A3C4:("D_80A1A3C4","UNK_TYPE1","",0x1),
     0x80A1A3D0:("D_80A1A3D0","f32","",0x4),
     0x80A1A3D4:("D_80A1A3D4","f32","",0x4),
