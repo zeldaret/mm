@@ -119,7 +119,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomContext.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomCtx.currRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
@@ -181,7 +181,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
 
-    if (this->actor.room != globalCtx->transitionCtx.transitionActorList[transition].sides[0].room) {
+    if (this->actor.room != globalCtx->doorCtx.transitionActorList[transition].sides[0].room) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -205,7 +205,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
 
-    globalCtx->transitionCtx.transitionActorList[transition].id *= -1;
+    globalCtx->doorCtx.transitionActorList[transition].id *= -1;
 }
 
 /**
@@ -223,13 +223,13 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f target;
     Vec3f offset;
 
-    target.x = player->base.world.pos.x;
-    target.y = player->base.world.pos.y + yOffset;
-    target.z = player->base.world.pos.z;
+    target.x = player->actor.world.pos.x;
+    target.y = player->actor.world.pos.y + yOffset;
+    target.z = player->actor.world.pos.z;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
 
@@ -244,7 +244,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
  * Checks if the player should climb the stairs.
  */
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (!(func_801233E4(globalCtx))) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
@@ -252,7 +252,7 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
 
         if (fabsf(dist) < 64.0f) {
-            s16 angle = player->base.shape.rot.y - this->actor.shape.rot.y;
+            s16 angle = player->actor.shape.rot.y - this->actor.shape.rot.y;
 
             if (dist > 0.0f) {
                 angle = 0x8000 - angle;
@@ -271,7 +271,7 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
  * Wait for the player to interact with the stairs.
  */
 void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
     s32 transition;
 
     if (this->shouldClimb) {
@@ -283,7 +283,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->unk37F = ((u16)globalCtx->transitionCtx.transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)globalCtx->doorCtx.transitionActorList[transition].params) >> 10;
 
         func_80122F28(player, globalCtx, &this->actor);
     }
@@ -293,7 +293,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
  * Player is climbing the stairs.
  */
 void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (!(player->stateFlags1 & 0x20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
@@ -304,7 +304,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = (DoorSpiral*)thisx;
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, globalCtx);

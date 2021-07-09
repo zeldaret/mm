@@ -188,7 +188,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

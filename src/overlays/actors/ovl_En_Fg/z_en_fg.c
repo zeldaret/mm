@@ -109,8 +109,8 @@ void func_80A2D348(EnFg* this, GlobalContext* globalCtx) {
         this->collider.dim.pos.x = this->actor.world.pos.x;
         this->collider.dim.pos.y = this->actor.world.pos.y;
         this->collider.dim.pos.z = this->actor.world.pos.z;
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -130,7 +130,7 @@ u8 EnFg_UpdateHealth(EnFg* this) {
 s32 EnFg_GetDamageEffect(EnFg* this) {
     s32 ret = 0;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
                 ret = FG_DMGEFFECT_DEKUSTICK;
@@ -148,7 +148,7 @@ s32 EnFg_GetDamageEffect(EnFg* this) {
                 ret = FG_DMGEFFECT_EXPLOSION;
                 break;
         }
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         EnFg_UpdateHealth(this);
     }
     return ret;
@@ -329,7 +329,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, globalCtx);
-            func_800B78B8(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 5);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
         }
     }
 
@@ -360,11 +360,11 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_Push();
-        SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+        SysMatrix_StatePush();
+        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_Pop();
+        SysMatrix_StatePop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
@@ -381,9 +381,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_Push();
+    SysMatrix_StatePush();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_Pop();
+    SysMatrix_StatePop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -455,7 +455,7 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             SysMatrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
