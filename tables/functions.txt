@@ -13784,7 +13784,7 @@
     0x80B453F4:("func_80B453F4",),
     0x80B45460:("func_80B45460",),
     0x80B454BC:("func_80B454BC",),
-    0x80B45518:("func_80B45518",),
+    0x80B45518:("EnInvadepoh_SetSysMatrix",),
     0x80B45550:("func_80B45550",),
     0x80B4560C:("EnInvadepoh_SetTextID",),
     0x80B45648:("func_80B45648",),
