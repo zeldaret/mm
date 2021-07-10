@@ -109,9 +109,6 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
     this->actor.gravity = -1.0f;
-    if (1) {}
-    if (1) {}
-    if (1) {}
     for (i = 0; i < 4; i++) {
         if (phi_s1 == -1) {
             break;
@@ -139,7 +136,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
             (func_800EE29C(globalCtx, 0x1E3U) == 0)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk12 == 0) &&
+        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
             (globalCtx->csCtx.frames == 0x14 || globalCtx->csCtx.frames == 0x3C)) {
             Audio_PlayActorSound2(this, 0x3AB8);
         }
@@ -152,10 +149,11 @@ void func_80BCF468(EnHg* this) {
 }
 
 void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
+    s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if ((player->unkA70 * 16) >= 0) {
+    if ((s32)(player->stateFlags2 * 0x10) >= 0) {
         if (func_80152498(&globalCtx->msgCtx) == 0) {
             if (((this->skelAnime.animCurrentFrame > 9.0f) && (this->skelAnime.animCurrentFrame < 16.0f)) ||
                 (this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f)) {
@@ -164,7 +162,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
                 this->actor.world.rot.y = this->actor.shape.rot.y;
             }
             if ((Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 200.0f) &&
-                (Math_Vec3f_DistXZ(&player->base.world.pos, &this->actor.home.pos) > 200.0f)) {
+                (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) > 200.0f)) {
                 func_80BCF5F0(this);
             }
         }
@@ -177,9 +175,9 @@ void func_80BCF5F0(EnHg* this) {
 }
 
 void func_80BCF634(EnHg* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if (Math_Vec3f_DistXZ(&player->base.world.pos, &this->actor.home.pos) < 200.0f) {
+    if (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) < 200.0f) {
         func_80BCF468(this);
     }
 }
@@ -221,10 +219,10 @@ void func_80BCF7D8(EnHg* this, GlobalContext* globalCtx) {
             func_80BCF68C(this);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (this->actionFunc != func_80BCF6D0 && this->actionFunc != func_80BCF8A0 &&
             this->actionFunc != func_80BCF95C) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
 }
@@ -251,100 +249,98 @@ void func_80BCF93C(EnHg* this) {
     this->actionFunc = func_80BCF95C;
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCF95C.asm")
-void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
-    s32 temp;
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCF95C.asm")
+// void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
+//     u32 actionIndex;
+//     s32 temp;
 
-    if (func_800EE29C(globalCtx, 0x1E4U) != 0) {
-        actionIndex = func_800EE200(globalCtx, 0x1E4U);
-        if (this->unk310[3] != globalCtx->csCtx.actorActions[actionIndex]->unk0) {
-            this->unk310[3] = globalCtx->csCtx.actorActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
-                case 1:
-                    this->unk21C = NULL;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
-                    break;
-                case 2:
-                    this->unk310[2] = 0;
-                    this->unk21C = 3;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
-                    break;
-                case 3:
-                    this->unk310[2] = 0;
-                    this->unk21C = 5;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
-                    break;
-                case 4:
-                    this->unk310[2] = 0;
-                    this->unk21C = 7;
-                    if ((this->unk218 == 1) || (this->unk218 == 3)) {
-                        func_8019F128(0x3ABA);
-                    }
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
-                    break;
-                case 5:
-                    this->unk21C = 1;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
-                    break;
-                case 6:
-                    gSaveContext.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
-                    break;
-            }
-        } else {
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-                switch(this->unk21C){
-                    case 3:
-                        this->unk21C = 4;
-                        func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
-                        break;
-                    case 5:
-                        this->unk21C = 6;
-                        func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
-                        break;
+//     if (func_800EE29C(globalCtx, 0x1E4U) != 0) {
+//         actionIndex = func_800EE200(globalCtx, 0x1E4U);
+//         if (this->unk310[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+//             this->unk310[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+//             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+//                 case 1:
+//                     this->unk21C = NULL;
+//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
+//                     break;
+//                 case 2:
+//                     this->unk310[2] = 0;
+//                     this->unk21C = 3;
+//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
+//                     break;
+//                 case 3:
+//                     this->unk310[2] = 0;
+//                     this->unk21C = 5;
+//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
+//                     break;
+//                 case 4:
+//                     this->unk310[2] = 0;
+//                     this->unk21C = 7;
+//                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
+//                         func_8019F128(0x3ABA);
+//                     }
+//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
+//                     break;
+//                 case 5:
+//                     this->unk21C = 1;
+//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
+//                     break;
+//                 case 6:
+//                     gSaveContext.weekEventReg[75] |= 0x20;
+//                     Actor_MarkForDeath(&this->actor);
+//                     break;
+//             }
+//         } else {
+//             if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
+//                 switch (this->unk21C) {
+//                     case 3:
+//                         this->unk21C = 4;
+//                         func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
+//                         break;
+//                     case 5:
+//                         this->unk21C = 6;
+//                         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
+//                         break;
+//                 }
+//                 // if (this->unk21C != 3) {
+//                 //     if (this->unk21C != 5) {
 
-                }
-                // if (this->unk21C != 3) {
-                //     if (this->unk21C != 5) {
-
-                //     } else {
-                //         this->unk21C = 6;
-                //         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
-                //     }
-                // } else {
-                //     this->unk21C = 4;
-                //     func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
-                // }
-            }
-        }
-        switch (this->unk21C - 3) {
-            case 3:
-                func_800B9010(this, 0x32B7);
-                break;
-            // case 5:
-            case 6:
-                func_800B9010(this, 0x32B9);
-                break;
-            case 7:
-                if (this->unk218 == 0 || this->unk218 == 2) {
-                    func_800B9010(this, 0x32B9);
-                }
-        }
-        func_800EDF24(this, globalCtx, actionIndex);
-        return;
-    }
-    else if (globalCtx->csCtx.state == 0) {
-        func_80BCF354(this);
-    }
-    this->unk310[3] = 0x63;
-}
+//                 //     } else {
+//                 //         this->unk21C = 6;
+//                 //         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
+//                 //     }
+//                 // } else {
+//                 //     this->unk21C = 4;
+//                 //     func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
+//                 // }
+//             }
+//         }
+//         switch (this->unk21C) {
+//             case 0:
+//                 func_800B9010(this, 0x32B7);
+//                 break;
+//             // case 5:
+//             case 3:
+//                 func_800B9010(this, 0x32B9);
+//                 break;
+//             case 4:
+//                 if (this->unk218 == 0 || this->unk218 == 2) {
+//                     func_800B9010(this, 0x32B9);
+//                 }
+//         }
+//         func_800EDF24(this, globalCtx, actionIndex);
+//         return;
+//     } else if (globalCtx->csCtx.state == 0) {
+//         func_80BCF354(this);
+//     }
+//     this->unk310[3] = 0x63;
+// }
 
 void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
-        if ((player->unkA70 * 16) < 0) {
+        if (((s32)player->stateFlags2 * 0x10) < 0) {
             if (D_80BD00C8 == 0) {
                 play_sound(0x4807);
             }
@@ -387,7 +383,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_80BCF7D8(this, globalCtx);
     func_80BCFC0C(this, globalCtx);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 25.0f, 0.0f, 5U);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 0.0f, 5U);
     func_80BCF778(this, globalCtx);
 }
 
