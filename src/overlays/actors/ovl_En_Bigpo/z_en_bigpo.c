@@ -134,7 +134,7 @@ static InitChainEntry D_80B65064;
 extern Vec3f D_80B6506C;
 //static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
 
-extern u8 D_80B65078;
+extern u8 D_80B65078[];
 /* static u8 D_80B65078[] = {
     0xFF, 0x04, 0xFF, 0x00, 
     0xFF, 0x01, 0xFF, 0x02, 
@@ -151,7 +151,6 @@ extern Vec3f D_80B65084;
 #ifdef NON_MATCHING
 // non-matching: some instructions out of order but looks like it should be equiv
 void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
-    GlobalContext* gCtx = globalCtx;
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpoFireParticle* fires;
     s32 i;
@@ -160,35 +159,44 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     // issue:  the params look-up wants to save the params to two t registers, one modified, one not
     // then it saves the param, and immediately re-loads it wtf
+    // because its duping the globalcontext load instead of the params load, I can only assume its filling a void
     //parms = this->actor.params;
-    //this->actor.params &= 0xFF;
-    //this->switchFlags = (parms >> 8) & 0xFF;
-    //this->switchFlags = (s16)((this->actor.params >> 8) && 0xFF);
     this->switchFlags = (u8)(this->actor.params >> 8);
     this->actor.params &= 0xFF;
     //this->actor.params = (u8)this->actor.params;
-    if ((this->actor.params) == ENBIGPO_POSSIBLEFIRE) {
-        if (Flags_GetSwitch(gCtx, this->switchFlags)) {
+    if (this->actor.params == ENBIGPO_POSSIBLEFIRE) {
+        if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
-            return;
+        } else  {
+            this->actor.update = func_800BDFB0;
+            func_80B6383C(this);
         }
-        this->actor.update = func_800BDFB0;
-        func_80B6383C(this);
         return;
     }
     
     // wants to re-load global context here from s6 in vanilla, but ido doesnt see the need now
-    SkelAnime_Init(gCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
-    Collider_InitAndSetCylinder(gCtx, &this->collider, &this->actor, &D_80B65010);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
 
-    //for (i = 0, fires = this->fires; i < 3; i++, fires++) {
     for (i = 0, fires = this->fires; i < 3; fires++, i++) {
-        this->fires[i].light = LightContext_InsertLight(gCtx, &gCtx->lightCtx, &fires->info);
+        // wants to do use 3 light pointers, this is silly 
+        fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->fires[i].info);
+        //fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &fires->info);
+
         Lights_PointNoGlowSetInfo(&this->fires[i].info,
+        //Lights_PointNoGlowSetInfo(&fires->info,
              this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
              0xFF, 0xFF, 0xFF, 0);
     }
+
+    // not enough pointers, we need a separate pointer to 338 instead of 348
+    //for (i = 0; i < 3; i++) {
+        //this->fires[i].light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->fires[i].info);
+        //Lights_PointNoGlowSetInfo(&this->fires[i].info,
+             //this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+             //0xFF, 0xFF, 0xFF, 0);
+    //}
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 45.0f);
     this->actor.bgCheckFlags |= 0x400;
@@ -198,7 +206,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     this->mainColor.b = 0xD2;
     this->mainColor.a = 0x00; // fully invible
     
-    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(gCtx, this->switchFlags))) {
+    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
         // has switch flag, and switch already set: already killed
         Actor_MarkForDeath(&this->actor);
     }
@@ -505,7 +513,7 @@ void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
 
     distance = (this->actor.xzDistToPlayer < 200.0f) ? ( 200.0f ) : ( this->actor.xzDistToPlayer );
     randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
-    Audio_PlayActorSound2(this, NA_SE_EN_STALKIDS_APPEAR);
+    Audio_PlayActorSound2(&player->base, NA_SE_EN_STALKIDS_APPEAR);
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->base.world.pos.x;
@@ -1486,17 +1494,16 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
-    fires = this->fires;
-    this2 = this;
+    //fires = this->fires;
+    //this2 = this;
 
     // out of order here
-    //36fc:    lui     s8,0x408         i 36fc:    lui     s8,%hi(D_0407D590)             
-    //3700:    addiu   s8,s8,-0x2a70    r 3700:    addiu   s1,s7,0x338                    
-    //3704:    move    s3,zero          | 3704:    addiu   s8,s8,%lo(D_0407D590)          
+    //3704:    move    s3,zero          | 3704:    addiu   s1,s7,0x338
     //3708:    move    s0,s7            r 3708:    move    s3,zero                        
     //370c:    addiu   s1,s7,0x338      | 370c:    move    s0,s7                          
 
-    for (i = 0; i < 3; i++, fires++) {
+    //for (i = 0, fires = this->fires, this2 = this; i < 3; i++, fires++) {
+    for (this2 = this, fires = this->fires, i = 0; i < 3; i++, fires++) {
         Lights_PointNoGlowSetInfo(&this->fires[i].info, 
             this2->fires[i].pos.x, this2->fires[i].pos.y, this2->fires[i].pos.z, 
             0xAA, 0xFF, 0xFF, sp66);
