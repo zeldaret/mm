@@ -696,18 +696,17 @@ void func_80AE2F78(EnFsn* this, GlobalContext* globalCtx) {
     if (func_80AE2298() != 0) {
         func_80AE2438(this, globalCtx);
 
-        this->stickAccumY = 0;
-        this->stickAccumX = 0;
-
         this2 = this;
         this2->cursorX = 100.0f;
         this2->cursorY = 100.0f;
-        this2->cursorZ = 1.2f;
-        this2->cursorColorR = 0;
-        this2->cursorColorG = 80;
-        this2->cursorColorB = maxColor;
-        this2->cursorColorA = maxColor;
-
+        this2->stickAccumY = 0;
+        this2->stickAccumX = 0;
+        
+        this->cursorZ = 1.2f;
+        this->cursorColorR = 0;
+        this->cursorColorG = 80;
+        this->cursorColorB = maxColor;
+        this->cursorColorA = maxColor;
         this->cursorAnimState = 0;
         this->drawCursor = 0;
         this->cursorAnimTween = 0.0f;
@@ -744,8 +743,7 @@ void func_80AE2F78(EnFsn* this, GlobalContext* globalCtx) {
 
         this->arrowAnimState = 0;
         this->stickAnimState = 0;
-        this->arrowAnimTween = 0.0f;
-        this->stickAnimTween = 0.0f;
+        this->stickAnimTween = this->arrowAnimTween = 0.0f;
     }
     this->blinkTimer = 20;
     this->unk44C = 4;
