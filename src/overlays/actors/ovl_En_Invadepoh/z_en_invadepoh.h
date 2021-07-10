@@ -93,27 +93,27 @@ typedef struct EnInvadepoh {
     /* 0x2F0 */ s16 actionTimer;
     /* 0x2F2 */ s16 counter; // general counter variable
     /* 0x2F4 */ s8 bankIndex;
-    /* 0x2F8 */ f32 unk2F8;
+    /* 0x2F8 */ f32 xzPosAdjFactor;
     /* 0x2FC */ UNK_TYPE unk2FC; // unused
-    /* 0x300 */ f32 unk300;
+    /* 0x300 */ f32 velocityStep;
     /* 0x304 */ s16 unk304; // angle of some sort
     /* 0x306 */ s16 unk306;
     /* 0x308 */ s8 endPoint;
-    /* 0x309 */ s8 unk309;
-    /* 0x30A */ s8 unk30A; //only ever 1 or -1
+    /* 0x309 */ s8 pathIndex;
+    /* 0x30A */ s8 direction; //only ever 1 or -1
     /* 0x30C */ Vec3s* pathPoints;
     /* 0x310 */ f32 pathTotalDist;
     /* 0x314 */ Vec3f curPathPos;
     /* 0x320 */ f32 clockTime;
     /* 0x324 */ AlienBehaviorInfo behaviorInfo;
-    /* 0x374 */ s8 unk374;
+    /* 0x374 */ s8 rand;
     /* 0x376 */ u16 textId;
     /* 0x378 */ s8 unk378;
     /* 0x379 */ s8 unk379;
     /* 0x37C */ f32 unk37C[3];
     /* 0x388 */ s8 unk388; // unused
     /* 0x389 */ u8 alienAlpha;
-    /* 0x38A */ s8 unk38A;
+    /* 0x38A */ s8 unk38A; // bool
     /* 0x38B */ s8 drawAlien;
     /* 0x38C */ s8 drawAlienDeathEffect;
     /* 0x38D */ u8 alienBeamAlpha;
@@ -123,10 +123,15 @@ typedef struct EnInvadepoh {
     /* 0x3A4 */ f32 scaleStep;
     /* 0x3A8 */ s16 scaleAdjAngle;
     /* 0x3AA */ s16 unk3AA;
-    /* 0x3AC */ s8 unk3AC;
+    /* 0x3AC */ s8 unk3AC; //index for D_80B4EDD0
     /* 0x3AD */ char unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
+
+typedef enum {
+    /* -1 */ DIRECTION_BACKWARDS = -1,
+    /* 1  */ DIRECTION_FORWARDS = 1,
+} EnInvadepohDirection;
 
 extern const ActorInit En_Invadepoh_InitVars;
 
