@@ -3840,7 +3840,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     s16 sp40;
 
     if (temp_t6 != NULL) {
-        temp_v0 = temp_t6->unk309;
+        temp_v0 = temp_t6->pathIndex;
         if (temp_v0 == 0) {
             this->xzPosAdjFactor = 40.0f;
             this->unk304 = -0x8000;
