@@ -403,7 +403,7 @@ SECTIONS
         build/asm/code/code_0x80122660.o(.text)
         build/asm/code/z_player_lib.o(.text)
         build/src/code/z_prenmi.o(.text)
-        build/asm/code/code_0x8012A080.o(.text)
+        build/src/code/z_quake.o(.text)
         build/src/code/z_rcp.o(.text)
         . += 0x10;
         build/src/code/z_room.o(.text)
