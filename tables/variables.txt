@@ -18879,7 +18879,7 @@
     0x80C25B94:("enInvisibleRuppeOverlayRelocations","u32","[10]",0x28),
     0x80C25BBC:("enInvisibleRuppeOverlayInfoOffset","u32","",0x4),
     0x80C25CC0:("Obj_Ending_InitVars","UNK_TYPE1","",0x1),
-    0x80C25CE0:("D_80C25CE0","UNK_TYPE1","",0x1),
+    0x80C25CE0:("sModelInfo","UNK_TYPE1","",0x1),
     0x80C25CF8:("D_80C25CF8","UNK_TYPE1","",0x1),
     0x80C25D00:("objEndingOverlayInfo","OverlayRelocationSection","",0x14),
     0x80C25D14:("objEndingOverlayRelocations","u32","[7]",0x1c),

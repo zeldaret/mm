@@ -94,7 +94,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.gravity = -1.0f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;
@@ -120,7 +120,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             // Once the player has moved away, update collision and become opaque
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             targetAlpha = 255;
         }
         Math_StepToS(&this->alpha, targetAlpha, 8);

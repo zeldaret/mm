@@ -103,7 +103,7 @@ typedef struct {
     /* 0x14 */ ActorInit* initInfo;
     /* 0x18 */ char* name;
     /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
-    /* 0x1E */ s8 nbLoaded; // original name: "clients"
+    /* 0x1E */ s8 numLoaded; // original name: "clients"
     /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
@@ -211,70 +211,6 @@ typedef struct {
     /* 0x158 */ u8 unk_158;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
-
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ UNK_TYPE1 unk144;
-    /* 0x145 */ UNK_TYPE1 pad145[0x2];
-    /* 0x147 */ s8 itemActionParam;
-    /* 0x148 */ UNK_TYPE1 pad148[0x2];
-    /* 0x14A */ s8 heldItemActionParam;
-    /* 0x14B */ u8 unk14B;
-    /* 0x14C */ UNK_TYPE1 pad14C[0x5];
-    /* 0x151 */ u8 unk151;
-    /* 0x152 */ UNK_TYPE1 unk152;
-    /* 0x153 */ u8 unk153; // isWearingAMask
-    /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
-    /* 0x34C */ Actor* heldActor;
-    /* 0x350 */ UNK_TYPE1 pad350[0x18];
-    /* 0x368 */ Vec3f unk368;
-    /* 0x374 */ UNK_TYPE1 pad374[0x8];
-    /* 0x37C */ s8 doorType;
-    /* 0x37D */ s8 doorDirection;
-    /* 0x37E */ s8 doorTimer;
-    /* 0x37F */ s8 unk37F;
-    /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ UNK_TYPE1 unk384[0x10];
-    /* 0x394 */ u8 unk394;
-    /* 0x395 */ UNK_TYPE1 pad395[0x37];
-    /* 0x3CC */ s16 unk3CC;
-    /* 0x3CE */ s8 unk3CE;
-    /* 0x3CF */ UNK_TYPE1 pad3CF[0x361];
-    /* 0x730 */ Actor* unk730;
-    /* 0x734 */ UNK_TYPE1 pad734[0x338];
-    /* 0xA6C */ u32 stateFlags1;
-    /* 0xA70 */ s32 unkA70;
-    /* 0xA74 */ u32 unkA74;
-    /* 0xA78 */ UNK_TYPE1 padA78[0x8];
-    /* 0xA80 */ Actor* unkA80;
-    /* 0xA84 */ UNK_TYPE1 padA84[0x4];
-    /* 0xA88 */ Actor* unkA88;
-    /* 0xA8C */ f32 unkA8C;
-    /* 0xA90 */ UNK_TYPE1 padA90[0x44];
-    /* 0xAD4 */ s16 unkAD4;
-    /* 0xAD6 */ UNK_TYPE1 padAD6[0x8];
-    /* 0xADE */ u8 unkADE;
-    /* 0xADF */ UNK_TYPE1 padADF[0x4];
-    /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x3];
-    /* 0xAE7 */ s8 unkAE7;
-    /* 0xAE8 */ UNK_TYPE1 padAE8[0x20];
-    /* 0xB08 */ f32 unkB08;
-    /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
-    /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x1E];
-    /* 0xB48 */ f32 unkB48;
-    /* 0xB4C */ UNK_TYPE1 padB4C[0x34];
-    /* 0xB80 */ f32 unk_B80;
-    /* 0xB84 */ s16 unk_B84;
-    /* 0xB86 */ char unk_B86[0x16];
-    /* 0xB9C */ Vec3f unkB9C;
-    /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
-    /* 0xBEC */ Vec3f bodyPartsPos[18];
-    /* 0xCC4 */ MtxF mf_CC4;
-    /* 0xD04 */ MtxF unkD04;
-    /* 0xD44 */ UNK_TYPE1 padD44[0x34];
-} ActorPlayer; // size = 0xD78
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,

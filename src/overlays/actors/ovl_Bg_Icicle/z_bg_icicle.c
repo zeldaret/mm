@@ -151,7 +151,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
 
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = BgIcicle_Fall;
     } else {
@@ -165,8 +165,8 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.atFlags & 2) || (this->dyna.actor.bgCheckFlags & 1)) {
-        this->collider.base.atFlags &= ~2;
+    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & 1)) {
+        this->collider.base.atFlags &= ~AT_HIT;
         this->dyna.actor.bgCheckFlags &= ~1;
 
         if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
@@ -186,9 +186,9 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     } else {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
-        func_800B78B8(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -202,8 +202,8 @@ void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
 void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
     s32 sp24;
 
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags &= ~2;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
 
         if (this->dyna.actor.params == ICICLE_STALAGMITE_RANDOM_DROP) {
             BgIcicle_Break(this, globalCtx, 50.0f);
@@ -240,7 +240,7 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actionFunc != BgIcicle_Regrow) {
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
