@@ -153,7 +153,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if ((s32)(player->stateFlags2 * 0x10) >= 0) {
+    if (!(player->stateFlags2 & 0x08000000)) {
         if (func_80152498(&globalCtx->msgCtx) == 0) {
             if (((this->skelAnime.animCurrentFrame > 9.0f) && (this->skelAnime.animCurrentFrame < 16.0f)) ||
                 (this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f)) {
@@ -340,7 +340,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
-        if (((s32)player->stateFlags2 * 0x10) < 0) {
+        if ((player->stateFlags2 & 0x08000000)) {
             if (D_80BD00C8 == 0) {
                 play_sound(0x4807);
             }
