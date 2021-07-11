@@ -53,8 +53,10 @@ extern u32 D_80BFB2E8;
 
 extern u8 D_801C20BB; // item location for something
 
-// non-equiv: the initsv function is fucked what the fuck
-//#ifdef NON_EQUIVELENT
+// non-equiv: the initsv function is fucked
+// struct is wack, too much padding in a way that makes no sense
+// also some animation function should be decomped first
+#ifdef NON_EQUIVELENT
 void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     s16 tempCutscene;
     s32 i;
@@ -104,9 +106,9 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
         Actor_MarkForDeath((Actor *) this);
     }
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/EnYb_Init.asm")
-//#endif
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/EnYb_Init.asm")
+#endif
 
 void EnYb_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnYb* this = (EnYb*) thisx;
@@ -364,11 +366,12 @@ void func_80BFABF0(EnYb *this, GlobalContext *globalCtx) {
 // EnYb_Idle
 void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
     s32 pad;
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     func_80BFA634(this, globalCtx); // update skeleton?
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.yDistToPlayer) < 50.0f) 
-      && (globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == 4)) {
+      && (globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7) 
+      && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
         this->actionFunc = func_80BFABF0;
         this->unk41C = 0xC8;
         func_80BFA6E0(this, 0);
@@ -388,11 +391,13 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
         func_800B8614((Actor *) this, globalCtx, 120.0f);
     }
 
-    if ((this->unk410 & 1) != 0) {
-        if ((player->unkA70 * 0x10) >= 0) {
+    if (this->unk410 & 1) {
+        if (!(player->stateFlags2 & 0x08000000)) {
             this->unk410 &= ~1;
         }
-    } else if (((player->unkA70 * 0x10) < 0) && (this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.yDistToPlayer) < 50.0f)) {
+    } else if ((player->stateFlags2 & 0x08000000) && 
+      (this->actor.xzDistToPlayer < 180.0f) && 
+      (fabsf(this->actor.yDistToPlayer) < 50.0f)) {
         this->unk410 |= 1;
         Audio_PlayActorSound2((Actor *) this, NA_SE_SY_TRE_BOX_APPEAR);
     }
@@ -419,11 +424,11 @@ void EnYb_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     if ((this->actor.flags & 1) == 1) {
         Collider_UpdateCylinder((Actor *) this, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
     }
     if ((this->actor.flags & 1) == 1) {
         Actor_SetVelocityAndMoveYRotationAndGravity((Actor *) this);
-        func_800B78B8(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
     }
 
     this->actionFunc(this, globalCtx);
