@@ -72,8 +72,8 @@ static ColliderCylinderInit sCylinderInit = {
 static AnimationHeader* D_80BC79CC[] = { &D_06000B04, &D_0600057C };
 static u8 D_80BC79D4[] = { 0 };
 static f32 D_80BC79D8[] = { 1.0f, 1.0f };
-static void* D_80BC79E0[] = { D_06005F20, D_06006320 };
-static void* D_80BC79E8[] = { D_06006720, D_06006920 };
+static void* sEyeTextures[] = { D_06005F20, D_06006320 };
+static void* sMouthTextures[] = { D_06006720, D_06006920 };
 
 void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
@@ -394,8 +394,8 @@ void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BC79E0[this->textureIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BC79E8[this->textureIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->textureIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->textureIndex]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
