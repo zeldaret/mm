@@ -80,7 +80,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->limbDrawTbl, this->transitionDrawTbl,
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable,
                      16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
@@ -97,9 +97,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             Actor_MarkForDeath(&this->actor);
         }
-    }
-
-    else if (this->actor.params == 1) {
+    } else if (this->actor.params == 1) {
         func_80BC6E10(this);
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -125,23 +123,23 @@ void EnGuruguru_DoNothing(EnGuruguru* this, GlobalContext* globalCtx) {
 
 void func_80BC6E10(EnGuruguru* this) {
     EnGuruguru_ChangeAnimation(this, 0);
-    this->textIDIndex = 0;
+    this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
         if (gSaveContext.weekEventReg[38] & 0x10) {
-            this->textIDIndex = 1;
+            this->textIdIndex = 1;
         }
     } else if (gSaveContext.weekEventReg[38] & 0x40) {
-        this->textIDIndex = 2;
+        this->textIdIndex = 2;
     } else {
-        this->textIDIndex = 3;
+        this->textIdIndex = 3;
         this->unk270 = 1;
     }
     this->headZRotTarget = 0;
     this->unk268 = 1;
-    this->actor.textId = textIDs[this->textIDIndex];
-    if (((this->textIDIndex == 0) || (this->textIDIndex == 1)) && ((gSaveContext.weekEventReg[77] & 4))) {
-        if ((gSaveContext.weekEventReg[88] & 4) == 0) {
+    this->actor.textId = textIDs[this->textIdIndex];
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.weekEventReg[77] & 4)) {
+        if (!(gSaveContext.weekEventReg[88] & 4)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -159,15 +157,15 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     if (this->unk270 != 0) {
         Player* player = PLAYER;
 
-        this->textIDIndex = 3;
+        this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            this->textIDIndex = 13;
+            this->textIdIndex = 13;
             if (gSaveContext.weekEventReg[79] & 4) {
-                this->textIDIndex = 14;
+                this->textIdIndex = 14;
             }
         }
 
-        this->actor.textId = textIDs[this->textIDIndex];
+        this->actor.textId = textIDs[this->textIdIndex];
     }
 
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -175,7 +173,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_80BC701C(this, globalCtx);
-    } else if (yaw < 0x2891) {
+    } else if (yaw <= 0x2890) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
     }
 }
@@ -184,7 +182,7 @@ void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if ((this->unk268 != 0) &&
-        ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_DEKU))) {
+        (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
         this->headZRotTarget = 5000;
     }
 
@@ -219,7 +217,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         func_801477B4(globalCtx);
         this->headZRotTarget = 0;
-        if ((this->textIDIndex == 13) || (this->textIDIndex == 14)) {
+        if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(globalCtx, 0x13);
             gSaveContext.weekEventReg[79] |= 4;
             func_80BC6E10(this);
@@ -236,11 +234,11 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             func_80BC6E10(this);
             return;
         }
-        if (this->textIDIndex == 0xB) {
+        if (this->textIdIndex == 11) {
             func_80BC73F4(this);
             return;
         }
-        if (this->textIDIndex == 0xC) {
+        if (this->textIdIndex == 12) {
             gSaveContext.weekEventReg[38] |= 0x40;
             func_801A3B48(0);
             func_80151BB4(globalCtx, 0x36);
@@ -248,23 +246,23 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             func_80BC6E10(this);
             return;
         }
-        if (this->textIDIndex >= 3) {
-            if ((this->textIDIndex == 0xA) && (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN)) {
-                this->textIDIndex = 0xC;
+        if (this->textIdIndex >= 3) {
+            if ((this->textIdIndex == 0xA) && (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN)) {
+                this->textIdIndex = 0xC;
                 this->unk268 = 0;
             } else {
-                this->textIDIndex++;
+                this->textIdIndex++;
                 this->unk268++;
                 this->unk268 &= 1;
-                if (this->textIDIndex == 0xB) {
+                if (this->textIdIndex == 11) {
                     this->unk268 = 0;
                 }
             }
-            this->textureIndex = 0;
-            if (this->textIDIndex == 7) {
-                this->textureIndex = 1;
+            this->texIndex = 0;
+            if (this->textIdIndex == 7) {
+                this->texIndex = 1;
             }
-            if ((this->unk268 != 0) && (this->textIDIndex >= 7)) {
+            if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
                 this->skelAnime.animPlaybackSpeed = 2.0f;
                 func_801A29D4(3, 1.18921f, 2);
                 func_801A3B48(0);
@@ -280,7 +278,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
                 this->skelAnime.animPlaybackSpeed = 1.0f;
             }
             this->unk266 = 1;
-            func_80151938(globalCtx, textIDs[this->textIDIndex]);
+            func_80151938(globalCtx, textIDs[this->textIdIndex]);
             return;
         }
         func_801A3B48(0);
@@ -301,8 +299,8 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        this->textIDIndex++;
-        this->actor.textId = textIDs[this->textIDIndex];
+        this->textIdIndex++;
+        this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
         func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
         this->unk268 = 0;
@@ -385,7 +383,7 @@ s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
         rot->z += this->headZRot;
     }
 
-    return 0;
+    return false;
 }
 
 void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -394,8 +392,8 @@ void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->textureIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->textureIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->texIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->texIndex]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
