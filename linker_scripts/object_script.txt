@@ -286,6 +286,15 @@ object_ginko_floorsmacking_anim  = 0x060008C0;
 object_ginko_amazed_anim         = 0x06004A7C;
 object_ginko_advertising_anim    = 0x06000AC4;
 
+/* z_en_guruguru */
+D_06006C90 = 0x06006C90;
+D_06000B04 = 0x06000B04;
+D_0600057C = 0x0600057C;
+D_06005F20 = 0x06005F20;
+D_06006320 = 0x06006320;
+D_06006720 = 0x06006720;
+D_06006920 = 0x06006920;
+
 /* z_en_in */
 D_06014EA8 = 0x06014EA8;
 D_06015E38 = 0x06015E38;
