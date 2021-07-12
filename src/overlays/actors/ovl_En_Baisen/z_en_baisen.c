@@ -171,7 +171,7 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
             }
         }
         this->actor.textId = textIds[this->textIdIndex];
-        func_800B8614(this, globalCtx, 70.0f);
+        func_800B8614(&this->actor, globalCtx, 70.0f);
     }
 }
 
