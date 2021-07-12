@@ -95,8 +95,8 @@ typedef enum {
 } EnGirlAShopItemId;
 
 typedef enum {
-    /* 0 */ CANBUY_RESULT_SUCCESS_FANFARE,
-    /* 1 */ CANBUY_RESULT_SUCCESS,
+    /* 0 */ CANBUY_RESULT_SUCCESS_1,
+    /* 1 */ CANBUY_RESULT_SUCCESS_2,
     /* 2 */ CANBUY_RESULT_NO_ROOM,
     /* 3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
     /* 4 */ CANBUY_RESULT_NEED_RUPEES,
