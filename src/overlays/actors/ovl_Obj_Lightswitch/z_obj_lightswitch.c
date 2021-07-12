@@ -118,7 +118,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
     alpha = this->colorAlpha;
 
     if (alpha >= (100 << 6)) {
-        tempResult = (1.0f - (alpha * (1.0f / (255.0f * 64)))) * 400.0f; // << 6 is * 64
+        tempResult = (1.0f - (alpha * (1.0f / (255 << 6)))) * 400.0f;
         tempResult = ((CLAMP_MAX(tempResult, 60.0f) - 30.0f) + 30.0f) * Rand_ZeroOne();
         tempResultDiff = tempResult - 30.0f;
 
