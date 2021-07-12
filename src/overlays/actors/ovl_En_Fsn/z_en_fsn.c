@@ -29,7 +29,6 @@
 #define ENFSN_UNSET_GAVE_KEATONS_MASK(this) ((this)->flags &= ~4)
 #define ENFSN_UNSET_GAVE_LETTER_TO_MAMA(this) ((this)->flags &= ~8)
 
-
 void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -79,7 +78,6 @@ extern UNK_TYPE D_06006D40;
 extern UNK_TYPE D_06007140;
 extern Gfx D_0600F180[];
 extern Gfx D_0600F218[];
-
 
 const ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
@@ -231,7 +229,8 @@ void EnFsn_UpdateCollider(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
-    if (this->cutsceneState == 2 && this->lookToShopkeeperBuyingCutscene != this->cutscene && this->actor.textId == 0x29CE) {
+    if (this->cutsceneState == 2 && this->lookToShopkeeperBuyingCutscene != this->cutscene &&
+        this->actor.textId == 0x29CE) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -382,8 +381,9 @@ void EnFsn_SpawnShopItems(EnFsn* this, GlobalContext* globalCtx) {
         if (this->itemIds[i] < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, sShopItemPositions[i].x,
-                                                   sShopItemPositions[i].y, sShopItemPositions[i].z, 0, 0, 0, this->itemIds[i]);
+            this->items[i] =
+                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, sShopItemPositions[i].x,
+                                      sShopItemPositions[i].y, sShopItemPositions[i].z, 0, 0, 0, this->itemIds[i]);
         }
     }
 }
@@ -545,9 +545,12 @@ void EnFsn_PositionSelectedItem(EnFsn* this) {
     EnGirlA* item = this->items[i];
     Vec3f worldPos;
 
-    worldPos.x = sShopItemPositions[i].x + (selectedItemPosition.x - sShopItemPositions[i].x) * this->shopItemSelectedTween;
-    worldPos.y = sShopItemPositions[i].y + (selectedItemPosition.y - sShopItemPositions[i].y) * this->shopItemSelectedTween;
-    worldPos.z = sShopItemPositions[i].z + (selectedItemPosition.z - sShopItemPositions[i].z) * this->shopItemSelectedTween;
+    worldPos.x =
+        sShopItemPositions[i].x + (selectedItemPosition.x - sShopItemPositions[i].x) * this->shopItemSelectedTween;
+    worldPos.y =
+        sShopItemPositions[i].y + (selectedItemPosition.y - sShopItemPositions[i].y) * this->shopItemSelectedTween;
+    worldPos.z =
+        sShopItemPositions[i].z + (selectedItemPosition.z - sShopItemPositions[i].z) * this->shopItemSelectedTween;
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
@@ -794,7 +797,7 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
         if (this->animationIdx == 11 && func_801378B8(&this->skelAnime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
         }
-        if (ENFSN_SHOULD_CALM_DOWN(this)) { 
+        if (ENFSN_SHOULD_CALM_DOWN(this)) {
             ENFSN_UNSET_SHOULD_CALM_DOWN(this);
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
@@ -949,9 +952,10 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
         itemGiven = func_80123810(globalCtx);
         if (itemGiven > 0) {
             if (player->heldItemButton == 0) {
-                buttonItem = gSaveContext.equips
-                             .buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm]
-                                         [player->heldItemButton];
+                buttonItem =
+                    gSaveContext.equips
+                        .buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm]
+                                    [player->heldItemButton];
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];
             }
@@ -1517,8 +1521,8 @@ void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnFsn_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t,
-                         f32 dx, f32 dy) {
+void EnFsn_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
+                       f32 dy) {
     f32 unk;
     s32 ulx, uly, lrx, lry;
     f32 w, h;
@@ -1563,15 +1567,15 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                                this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
-                                this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
-                                this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                              this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+                              this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
+                              this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                                this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
-                                this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
-                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                              this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+                              this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
+                              this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
         gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1584,22 +1588,22 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                                this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
-                                this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
-                                this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
+                              this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+                              this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
+                              this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                                this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
-                                this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
-                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                              this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+                              this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
+                              this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnFsn_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    EnFsn *this = THIS;
+s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnFsn* this = THIS;
     s16 tmp;
     s32 limbRotTableIdx;
 
@@ -1607,7 +1611,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
         SysMatrix_InsertXRotation_s(this->unk274.y, 1);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
-        switch(limbIndex) {
+        switch (limbIndex) {
             case 8:
                 limbRotTableIdx = 0;
                 break;
@@ -1622,9 +1626,9 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
                 break;
         }
         if (limbRotTableIdx < 9) {
-            tmp = (s32) (Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
+            tmp = (s32)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
             rot->y += tmp;
-            tmp = (s32) (Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
+            tmp = (s32)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
             rot->z += tmp;
         }
     }
@@ -1634,8 +1638,8 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
     return 0;
 }
 
-void EnFsn_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
-    EnFsn *this = THIS;
+void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnFsn* this = THIS;
 
     if (limbIndex == 16) {
         this->actor.focus.pos.x = this->actor.world.pos.x;
