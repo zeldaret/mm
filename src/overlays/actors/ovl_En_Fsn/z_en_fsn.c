@@ -494,7 +494,7 @@ void EnFsn_UpdateJoystickInputState(EnFsn* this, GlobalContext* globalCtx) {
     } else if (stickX <= 30 && stickX >= -30) {
         this->stickAccumX = 0;
     } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
-            this->stickAccumX = stickX;
+        this->stickAccumX = stickX;
     } else {
         this->stickAccumX += stickX;
         if (this->stickAccumX > 2000) {
@@ -535,8 +535,8 @@ void EnFsn_PositionSelectedItem(EnFsn* this) {
 }
 
 /*
-*    Returns true if animation has completed
-*/
+ *    Returns true if animation has completed
+ */
 s32 EnFsn_TakeItemOffShelf(EnFsn* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -550,8 +550,8 @@ s32 EnFsn_TakeItemOffShelf(EnFsn* this) {
 }
 
 /*
-*    Returns true if animation has completed
-*/
+ *    Returns true if animation has completed
+ */
 s32 EnFsn_ReturnItemToShelf(EnFsn* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -751,9 +751,9 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
             player->actor.world.pos.z = -34.0f;
             this->actionFunc = EnFsn_BeginInteraction;
         } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
-                (player->actor.world.pos.y > 0.0f) &&
-                ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
-                func_800B8614(&this->actor, globalCtx, 400.0f);
+                   (player->actor.world.pos.y > 0.0f) &&
+                   ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
+            func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
 }
@@ -1336,7 +1336,8 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, &globalCtx->state.input[0]) &&
-            (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) && this->stickAccumX > 0) {
+            (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) &&
+            this->stickAccumX > 0) {
             cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
             if (cursorIdx != CURSOR_INVALID) {
                 this->cursorIdx = cursorIdx;
@@ -1632,7 +1633,7 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
-    
+
     for (i = 0; i < this->totalSellingItems; i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
