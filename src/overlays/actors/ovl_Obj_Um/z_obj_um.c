@@ -11,9 +11,9 @@
 #define THIS ((ObjUm*)thisx)
 
 void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_Destroy(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_Draw(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
@@ -910,17 +910,11 @@ void* func_80B78EBC(ObjUm* arg0, GlobalContext* arg1) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78EBC.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-void* func_80B78EFC(ObjUm* arg0, GlobalContext* arg1, s16 arg2) {
-    void* temp_v0;
+void func_80B78EFC(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
+    Player* player = PLAYER;
 
-    temp_v0 = arg1->actorCtx.actorList[2].first;
-    temp_v0->unk4A = (s16) (temp_v0->unk4A + arg2);
-    return temp_v0;
+    player->actor.focus.rot.y += arg2;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78EFC.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx) {
@@ -1094,44 +1088,31 @@ block_32:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Init.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-void ObjUm_Destroy(ObjUm* this, GlobalContext* globalCtx) {
-    GlobalContext* temp_a3;
-    s32 temp_s0;
-    Vec3f* phi_s1;
-    s32 phi_s0;
+void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjUm* this = THIS;
+    s32 i;
 
-    temp_a3 = globalCtx;
-    globalCtx = temp_a3;
-    BgCheck_RemoveActorMesh(temp_a3, &temp_a3->colCtx.dyna, this->dyna.bgId);
-    phi_s1 = this + 0x32C;
-    phi_s0 = 0;
-    do {
-        func_801A72CC(phi_s1);
-        temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
-        phi_s0 = temp_s0;
-    } while (temp_s0 != 0x24);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_32C); i++) {
+        func_801A72CC(&this->unk_32C[i]);
+    }
+
     Collider_DestroyCylinder(globalCtx, &this->unk_424);
     Collider_DestroyCylinder(globalCtx, &this->unk_470);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Destroy.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
-void func_80B79524(Actor* arg0) {
-    Actor* temp_a0;
+//#ifdef MIPS_2_C_OUTPUT
+void func_80B79524(ObjUm* this) {
 
-    Actor_MarkForDeath(arg0);
-    temp_a0 = arg0->unk2B8;
-    if (temp_a0 != 0) {
-        Actor_MarkForDeath(temp_a0);
+    Actor_MarkForDeath(this);
+    if (this->unk_2B8 != NULL) {
+        Actor_MarkForDeath(this->unk_2B8);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79524.asm")
-#endif
+//#else
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79524.asm")
+//#endif
 
 #ifdef MIPS_2_C_OUTPUT
 void func_80B79560(GlobalContext* arg0, ObjUm* arg1, s32 arg2, u16 arg3) {
@@ -2121,6 +2102,8 @@ It needs to be within ".section .rodata" or ".section .late_rodata".
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Update.asm")
 
+
+s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 #ifdef MIPS_2_C_OUTPUT
 s32 func_80B7B598(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Actor* arg5) {
     void* sp70;
@@ -2244,6 +2227,7 @@ void func_80B7B93C(GlobalContext* arg0, Vec3f* arg1) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B93C.asm")
 #endif
 
+void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 #ifdef MIPS_2_C_OUTPUT
 void func_80B7BABC(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3s* arg3, Actor* arg4) {
     ? spFC;
@@ -2449,20 +2433,16 @@ Mtx* func_80B7BEA4(s8* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** arg
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7BEA4.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-void ObjUm_Draw(ObjUm* this, GlobalContext* globalCtx) {
-    f32 sp3C;
-    f32 sp38;
-    f32 sp34;
+void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjUm* this = THIS;
+    Vec3f sp34;
 
-    this->unk2F4 = (s32) (this->unk2F4 | 1);
-    SkelAnime_DrawSV(globalCtx, this->unk_160.skeleton, this->unk_160.limbDrawTbl, (s32) this->unk_160.dListCount, func_80B7B598, func_80B7BABC, (Actor* ) this);
-    sp34 = D_80B7C3FC;
-    sp38 = 0.0f;
-    sp3C = D_80B7C400;
-    func_80B7BEA4(this->unk_4BC, this->dyna.actor.shape.rot.y, &sp34, 0xB4U, (GraphicsContext** ) globalCtx);
+    this->unk_2F4 |= 1;
+    SkelAnime_DrawSV(globalCtx, this->unk_160.skeleton, this->unk_160.limbDrawTbl, this->unk_160.dListCount, func_80B7B598, func_80B7BABC, &this->dyna.actor);
+    sp34.x = 0.45f;
+    sp34.y = 0.0f;
+    sp34.z = 0.7f;
+    func_80B7BEA4(&this->unk_4BC, this->dyna.actor.shape.rot.y, &sp34, 0xB4U, globalCtx);
     func_80B77770(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Draw.asm")
-#endif
