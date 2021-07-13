@@ -1340,10 +1340,10 @@ typedef struct {
 } PadmgrThreadStruct; // size = 0x480
 
 typedef struct {
-    /* 0x000 */ OSMesgQueue unk0;
-    /* 0x018 */ UNK_TYPE4 unk18[64];
-    /* 0x118 */ OSMesgQueue unk118;
-    /* 0x130 */ UNK_TYPE4 unk130[8];
+    /* 0x000 */ OSMesgQueue interruptQ;
+    /* 0x018 */ OSMesg intMsgBuf[64];
+    /* 0x118 */ OSMesgQueue cmdQ;
+    /* 0x130 */ OSMesg cmdMsgBuf[8];
     /* 0x150 */ OSThread thread;
     /* 0x300 */ UNK_TYPE4 unk300;
     /* 0x304 */ UNK_TYPE4 unk304;
@@ -1357,7 +1357,7 @@ typedef struct {
     /* 0x324 */ UNK_TYPE4 unk324;
     /* 0x328 */ UNK_TYPE1 pad328[0x7];
     /* 0x32F */ s8 unk32F;
-    /* 0x330 */ IrqMgrClient unk330;
+    /* 0x330 */ IrqMgrClient irqClient;
 } SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
@@ -1402,8 +1402,7 @@ struct ActorListEntry {
 typedef struct {
     /* 0x0000 */ OSTask task;
     /* 0x0040 */ OSMesgQueue* taskQueue;
-    /* 0x0044 */ void* unk_44; // probably a message that gets unused.
-    /* 0x0048 */ char unk_48[0x8];
+    /* 0x0044 */ char unk_44[0xC];
 } AudioTask; // size = 0x50
 
 typedef struct {
@@ -1412,9 +1411,9 @@ typedef struct {
     /* 0x008 */ OSScTask audioTask;
     /* 0x060 */ AudioTask* rspTask;
     /* 0x064 */ OSMesgQueue irqQueue;
-    /* 0x07C */ OSMesg irqBuffer[30];
+    /* 0x07C */ OSMesg irqMsgBuffer[30];
     /* 0x0F4 */ OSMesgQueue unk_F4;
-    /* 0x10C */ OSMesg unk_10C;
+    /* 0x10C */ OSMesg unk_10C[1];
     /* 0x110 */ OSMesgQueue initDoneCallback;
     /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
     /* 0x12C */ UNK_TYPE1 pad12C[0x4];
