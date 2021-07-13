@@ -1241,8 +1241,6 @@ struct FileChooseContext {
     /* 0x24550 */ s16  unk_24550;
 }; // size = 0x24558
 
-typedef struct AudioThreadStruct AudioThreadStruct;
-
 typedef struct GlobalContext GlobalContext;
 
 typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
@@ -1299,10 +1297,10 @@ typedef s32(*camera_update_func)(Camera* camera);
 
 typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
 
-typedef struct OSMesgQueueListNode_t {
-    /* 0x0 */ struct OSMesgQueueListNode_t* next;
+typedef struct IrqMgrClient_t {
+    /* 0x0 */ struct IrqMgrClient_t* next;
     /* 0x4 */ OSMesgQueue* queue;
-} OSMesgQueueListNode; // size = 0x8
+} IrqMgrClient; // size = 0x8
 
 typedef struct {
     /* 0x000 */ OSScMsg verticalRetraceMesg;
@@ -1311,7 +1309,7 @@ typedef struct {
     /* 0x060 */ OSMesgQueue irqQueue;
     /* 0x078 */ OSMesg irqBuffer[8];
     /* 0x098 */ OSThread thread;
-    /* 0x248 */ OSMesgQueueListNode* callbacks;
+    /* 0x248 */ IrqMgrClient* callbacks;
     /* 0x24C */ u8 prenmiStage;
     /* 0x250 */ OSTime lastPrenmiTime;
     /* 0x258 */ OSTimer prenmiTimer;
@@ -1328,7 +1326,7 @@ typedef struct {
     /* 0x04C */ OSMesgQueue siEventCallbackQueue;
     /* 0x064 */ OSMesgQueue lock;
     /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
-    /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
+    /* 0x094 */ IrqMgrClient irqmgrCallbackQueueNode;
     /* 0x09C */ IrqMgr* irqmgr;
     /* 0x0A0 */ OSThread thread;
     /* 0x250 */ Input input[4];
@@ -1359,23 +1357,8 @@ typedef struct {
     /* 0x324 */ UNK_TYPE4 unk324;
     /* 0x328 */ UNK_TYPE1 pad328[0x7];
     /* 0x32F */ s8 unk32F;
-    /* 0x330 */ OSMesgQueueListNode unk330;
-} SchedThreadStruct; // size = 0x338
-
-struct AudioThreadStruct {
-    /* 0x000 */ IrqMgr* irqmgr;
-    /* 0x004 */ SchedThreadStruct* sched;
-    /* 0x008 */ UNK_TYPE1 pad8[0x58];
-    /* 0x060 */ UNK_TYPE4 unk60;
-    /* 0x064 */ OSMesgQueue irqQueue;
-    /* 0x07C */ OSMesg irqBuffer[30];
-    /* 0x0F4 */ OSMesgQueue unkF4;
-    /* 0x10C */ UNK_TYPE4 unk10C;
-    /* 0x110 */ OSMesgQueue initDoneCallback;
-    /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
-    /* 0x12C */ UNK_TYPE1 pad12C[0x4];
-    /* 0x130 */ OSThread thread;
-}; // size = 0x2E0
+    /* 0x330 */ IrqMgrClient unk330;
+} SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
     /* 0x00 */ struct StackEntry_t* next;
@@ -1410,6 +1393,33 @@ struct ActorListEntry {
     /* 0x4 */ Actor* first; // pointer to first actor of this type
     /* 0x8 */ UNK_TYPE1 pad8[0x4];
 }; // size = 0xC
+
+#define OS_SC_RETRACE_MSG       1
+#define OS_SC_DONE_MSG          2
+#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_PRE_NMI_MSG       4
+
+typedef struct {
+    /* 0x0000 */ OSTask task;
+    /* 0x0040 */ OSMesgQueue* taskQueue;
+    /* 0x0044 */ void* unk_44; // probably a message that gets unused.
+    /* 0x0048 */ char unk_48[0x8];
+} AudioTask; // size = 0x50
+
+typedef struct {
+    /* 0x000 */ IrqMgr* irqMgr;
+    /* 0x004 */ SchedContext* sched;
+    /* 0x008 */ OSScTask audioTask;
+    /* 0x060 */ AudioTask* rspTask;
+    /* 0x064 */ OSMesgQueue irqQueue;
+    /* 0x07C */ OSMesg irqBuffer[30];
+    /* 0x0F4 */ OSMesgQueue unk_F4;
+    /* 0x10C */ OSMesg unk_10C;
+    /* 0x110 */ OSMesgQueue initDoneCallback;
+    /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
+    /* 0x12C */ UNK_TYPE1 pad12C[0x4];
+    /* 0x130 */ OSThread thread;
+} AudioMgr; // size = 0x2E0
 
 struct Camera {
     /* 0x000 */ UNK_TYPE1 pad0[0x4];
