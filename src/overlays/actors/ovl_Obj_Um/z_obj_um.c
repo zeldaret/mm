@@ -10,10 +10,10 @@
 
 #define THIS ((ObjUm*)thisx)
 
-void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Destroy(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Update(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Draw(ObjUm* this, GlobalContext* globalCtx);
 
 void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
@@ -51,12 +51,12 @@ const ActorInit Obj_Um_InitVars = {
 f32 func_800C3FA0(s32, ?*, void*, void*); // extern
 f32 func_800C4000(GraphicsContext**, s32, CollisionPoly**, f32*); // extern
 ? func_800F415C(void*, ?*, ?); // extern
-? func_800FE484(Actor*, u16 (*)(Actor* arg0, GlobalContext* arg1)); // extern
+? func_800FE484(ObjUm*, u16 (*)(Actor* arg0, GlobalContext* arg1)); // extern
 ? func_8017B7F8(?*, s16, f32*, f32*, f32*); // extern
 ? func_801A3098(?); // extern
 ? func_801A3F54(?); // extern
 ? func_801A89A8(?); // extern
-void func_80B77770(Actor* arg0, GlobalContext* arg1); // static
+void func_80B77770(ObjUm* arg0, GlobalContext* arg1); // static
 ? func_80B77FA4(void* arg0, GlobalContext* arg1); // static
 ? func_80B781DC(Actor* arg0, void* arg1, void* arg2, GlobalContext* arg3); // static
 ? func_80B783E0(Actor* arg0, GlobalContext* arg1, s32 arg2, void* arg3); // static
@@ -65,15 +65,15 @@ void func_80B77770(Actor* arg0, GlobalContext* arg1); // static
 ? func_80B78C18(Actor* arg0, GlobalContext* arg1); // static
 ? func_80B78D08(Actor* arg0, GlobalContext* arg1); // static
 SaveContext* func_80B78DF0(Actor* arg0, GlobalContext* arg1); // static
-void func_80B78E2C(Actor* arg0, u16 (*arg1)(Actor* arg0, GlobalContext* arg1), s32); // static
+void func_80B78E2C(ObjUm* arg0, u16 (*arg1)(Actor* arg0, GlobalContext* arg1), s32); // static
 void* func_80B78E38(Actor* arg0, GlobalContext* arg1); // static
-void* func_80B78E88(Actor* arg0, GlobalContext* arg1, s16 arg2); // static
+void* func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2); // static
 void* func_80B78EBC(Actor* arg0, GlobalContext* arg1); // static
 void* func_80B78EFC(Actor* arg0, GlobalContext* arg1, s16 arg2); // static
 void func_80B79524(Actor* arg0); // static
-void func_80B79560(GlobalContext* arg0, Actor* arg1, s32 arg2, u16 arg3); // static
-s32 func_80B795A0(GlobalContext*, Actor*, s32); // static
-s32 func_80B79734(GlobalContext* arg0, Actor* arg1, s32 arg2, s32*); // static
+void func_80B79560(GlobalContext* arg0, ObjUm* arg1, s32 arg2, u16 arg3); // static
+s32 func_80B795A0(GlobalContext*, ObjUm*, s32); // static
+s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2, s32*); // static
 u16 func_80B797EC(GlobalContext* arg0, Actor* arg1, s32 arg2); // static
 ? func_80B7984C(GlobalContext* arg0, Actor* arg1, s32 arg2, s32* arg3); // static
 s32 func_80B79A24(s32 arg0); // static
@@ -81,26 +81,26 @@ u16 func_80B79A50(Actor* arg0, GlobalContext* arg1); // static
 s32 func_80B79BA0(Actor* arg0, GlobalContext* arg1); // static
 u16 func_80B79F10(Actor* arg0, GlobalContext* arg1); // static
 void func_80B79FFC(Actor* arg0); // static
-s32 func_80B7A070(Actor* arg0, Actor* arg1); // static
+s32 func_80B7A070(ObjUm* arg0, Actor* arg1); // static
 u16 func_80B7A0E0(Actor* arg0, GlobalContext* arg1); // static
 u16 func_80B7A144(Actor* arg0, GlobalContext* arg1); // static
-u16 func_80B7A1B4(Actor* arg0, Actor* arg1); // static
-void func_80B7A240(Actor* arg0, Actor* arg1); // static
+u16 func_80B7A1B4(ObjUm* arg0, Actor* arg1); // static
+void func_80B7A240(ObjUm* arg0, Actor* arg1); // static
 u16 func_80B7A2AC(Actor* arg0, GlobalContext* arg1); // static
 void func_80B7A394(Actor* arg0, Actor* arg1); // static
 u16 func_80B7A400(Actor* arg0, GlobalContext* arg1); // static
 SaveContext* func_80B7A494(Actor* arg0, GlobalContext* arg1); // static
 void func_80B7A614(Actor* arg0, GlobalContext* arg1); // static
 void func_80B7A7AC(Actor* arg0, GlobalContext* arg1); // static
-? func_80B7A860(Actor*, Actor*); // static
-void func_80B7AB78(Actor* arg0, Actor* arg1); // static
+? func_80B7A860(ObjUm*, Actor*); // static
+void func_80B7AB78(ObjUm* arg0, Actor* arg1); // static
 u16 func_80B7ABE4(Actor* arg0, GlobalContext* arg1); // static
 u16 func_80B7AC94(Actor* arg0, GlobalContext* arg1); // static
 void func_80B7AD34(Actor* arg0, GlobalContext* arg1); // static
 u16 func_80B7AE58(Actor* arg0, GlobalContext* arg1); // static
 u16 func_80B7AEFC(Actor* arg0, GlobalContext* arg1); // static
 s32 func_80B7AF30(void* arg0, s32 arg1); // static
-void func_80B7B154(Actor* arg0, GlobalContext* arg1); // static
+void func_80B7B154(ObjUm* arg0, GlobalContext* arg1); // static
 void func_80B7B18C(Actor* arg0, GlobalContext* arg1, s32 arg2, Actor*); // static
 s32 func_80B7B598(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Actor* arg5); // static
 void func_80B7B93C(GlobalContext* arg0, Vec3f* arg1); // static
@@ -144,7 +144,7 @@ static ? D_80B7C314; // unable to generate initializer
 
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B77770(Actor* arg0, GlobalContext* arg1) {
+void func_80B77770(ObjUm* arg0, GlobalContext* arg1) {
     ? sp108;
     ? spFC;
     ? spF0;
@@ -192,11 +192,11 @@ void func_80B77770(Actor* arg0, GlobalContext* arg1) {
     void* temp_t8_2;
     void* temp_t8_6;
 
-    temp_s1 = arg0->shape.rot.y;
-    sp60.unk0 = (f32) arg0->world.pos.x;
+    temp_s1 = arg0->actor.shape.rot.y;
+    sp60.unk0 = (f32) arg0->actor.world.pos.x;
     temp_a0 = temp_s1 + 0x4000;
-    sp60.unk4 = (f32) arg0->world.pos.y;
-    sp60.unk8 = (f32) arg0->world.pos.z;
+    sp60.unk4 = (f32) arg0->actor.world.pos.y;
+    sp60.unk8 = (f32) arg0->actor.world.pos.z;
     arg0->unk414 = (f32) sp60.unk0;
     arg0->unk418 = (f32) sp60.unk4;
     temp_t8 = arg0 + 0x408;
@@ -844,7 +844,7 @@ SaveContext* func_80B78DF0(Actor* arg0, GlobalContext* arg1) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B78E2C(Actor* arg0, u16 (*arg1)(Actor* arg0, GlobalContext* arg1)) {
+void func_80B78E2C(ObjUm* arg0, u16 (*arg1)(Actor* arg0, GlobalContext* arg1)) {
     arg0->unk15C = arg1;
 }
 #else
@@ -873,12 +873,12 @@ void* func_80B78E38(Actor* arg0, GlobalContext* arg1) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void* func_80B78E88(Actor* arg0, GlobalContext* arg1, s16 arg2) {
+void* func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2) {
     s16 temp_v1;
     void* temp_v0;
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
-    temp_v1 = arg0->shape.rot.y + arg2;
+    temp_v1 = arg0->actor.shape.rot.y + arg2;
     temp_v0->unkAD4 = temp_v1;
     temp_v0->unk32 = temp_v1;
     temp_v0->unkBE = temp_v1;
@@ -922,7 +922,7 @@ void* func_80B78EFC(Actor* arg0, GlobalContext* arg1, s16 arg2) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx) {
     s32 sp54;
     ? sp48;
     SkelAnime* sp44;
@@ -931,30 +931,30 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime* temp_a1;
     f32* temp_a0;
     s16 temp_v0;
-    s32 temp_a2;
     s32 temp_v1;
+    s8* temp_a2;
     u16 temp_v0_2;
     u8 temp_v0_3;
     u8 temp_v0_4;
-    Actor* phi_v0;
+    ObjUm* phi_v0;
     f32* phi_a0;
     s32 phi_v1;
 
     sp54 = 1;
-    BcCheck3_BgActorInit((DynaPolyActor* ) thisx, 0);
-    thisx->unk350 = 0;
-    temp_a3 = &thisx->world;
-    thisx->unk2C4 = (f32) temp_a3->pos.x;
-    thisx->unk2C8 = (f32) temp_a3->pos.y;
-    thisx->unk2CC = (f32) temp_a3->pos.z;
-    thisx->unk2DC = (f32) temp_a3->pos.x;
-    thisx->unk2E0 = (f32) temp_a3->pos.y;
-    thisx->unk2E4 = (f32) temp_a3->pos.z;
-    thisx->unk308 = (f32) temp_a3->pos.x;
-    thisx->unk30C = (f32) temp_a3->pos.y;
-    thisx->unk310 = (f32) temp_a3->pos.z;
-    phi_v0 = thisx;
-    phi_a0 = thisx + 0x32C;
+    BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
+    this->unk350 = 0;
+    temp_a3 = &this->actor.world;
+    this->unk2C4 = (f32) temp_a3->pos.x;
+    this->unk2C8 = (f32) temp_a3->pos.y;
+    this->unk2CC = (f32) temp_a3->pos.z;
+    this->unk2DC = (f32) temp_a3->pos.x;
+    this->unk2E0 = (f32) temp_a3->pos.y;
+    this->unk2E4 = (f32) temp_a3->pos.z;
+    this->unk308 = (f32) temp_a3->pos.x;
+    this->unk30C = (f32) temp_a3->pos.y;
+    this->unk310 = (f32) temp_a3->pos.z;
+    phi_v0 = this;
+    phi_a0 = this + 0x32C;
     phi_v1 = 0;
     do {
         phi_v0->unk314 = 5;
@@ -968,125 +968,125 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         phi_a0 = temp_a0;
         phi_v1 = temp_v1;
     } while (temp_v1 != 3);
-    thisx->unk2B8 = NULL;
-    thisx->unk354 = 0;
-    thisx->unk420 = 0;
-    thisx->unk4BC = (f32) temp_a3->pos.x;
-    thisx->unk4C0 = (f32) temp_a3->pos.y;
-    thisx->unk4CC = 0;
-    thisx->unk4D4 = 0;
-    thisx->unk2F4 = 0;
-    thisx->gravity = -3.5f;
-    thisx->unk4C4 = (f32) temp_a3->pos.z;
-    Actor_ProcessInitChain(thisx, D_80B7C254);
-    ActorShape_Init(&thisx->shape, 0.0f, NULL, 50.0f);
-    temp_a1 = thisx + 0x160;
+    this->unk2B8 = NULL;
+    this->unk354 = 0;
+    this->unk420 = 0;
+    this->unk4BC = (f32) temp_a3->pos.x;
+    this->unk4C0 = (f32) temp_a3->pos.y;
+    this->unk4CC = 0;
+    this->unk4D4 = 0;
+    this->unk2F4 = 0;
+    this->actor.gravity = -3.5f;
+    this->unk4C4 = (f32) temp_a3->pos.z;
+    Actor_ProcessInitChain((Actor* ) this, D_80B7C254);
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 50.0f);
+    temp_a1 = this + 0x160;
     sp44 = temp_a1;
-    SkelAnime_InitSV(globalCtx, temp_a1, (FlexSkeletonHeader* )0x6011DF8, NULL, thisx + 0x1A4, thisx + 0x228, 0x16);
+    SkelAnime_InitSV(globalCtx, temp_a1, (FlexSkeletonHeader* )0x6011DF8, NULL, this + 0x1A4, this + 0x228, 0x16);
     SkelAnime_ChangeAnimDefaultRepeat(sp44, (AnimationHeader* )0x6012CC0);
-    thisx->unk2AC = 0;
-    func_80B7B154(thisx, globalCtx);
-    thisx->unk2AE = (s16) ((s32) (thisx->params & 0xFF00) >> 8);
-    thisx->unk2B0 = (s16) (thisx->params & 0xFF);
+    this->unk2AC = 0;
+    func_80B7B154(this, globalCtx);
+    this->unk2AE = (s16) ((s32) (this->actor.params & 0xFF00) >> 8);
+    this->unk2B0 = (s16) (this->actor.params & 0xFF);
     if ((gSaveContext.unkF0E & 1) == 0) {
-        Actor_MarkForDeath(thisx);
+        Actor_MarkForDeath((Actor* ) this);
         return;
     }
-    temp_v0 = thisx->unk2AE;
+    temp_v0 = this->unk2AE;
     if (temp_v0 == 0) {
-        func_80B78E2C(thisx, func_80B7AEFC);
+        func_80B78E2C(this, func_80B7AEFC);
 block_32:
         sp48.unk0 = (s32) D_801D15BC.unk0;
         sp48.unk4 = (u16) D_801D15BC.unk4;
-        thisx->unk2FE = (unaligned s32) sp48.unk0;
-        thisx->unk302 = (u16) sp48.unk4;
-        thisx->unk2F8 = (unaligned s32) sp48.unk0;
-        thisx->unk2FC = (u16) sp48.unk4;
+        this->unk2FE = (unaligned s32) sp48.unk0;
+        this->unk302 = (u16) sp48.unk4;
+        this->unk2F8 = (unaligned s32) sp48.unk0;
+        this->unk2FC = (u16) sp48.unk4;
         if (sp54 != 0) {
-            BcCheck3_BgActorInit((DynaPolyActor* ) thisx, 0);
-            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) thisx, (CollisionHeader* )0x6007E20);
+            BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
+            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, (CollisionHeader* )0x6007E20);
         } else {
-            BcCheck3_BgActorInit((DynaPolyActor* ) thisx, 3);
-            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) thisx, (CollisionHeader* )0x6007F50);
+            BcCheck3_BgActorInit((DynaPolyActor* ) this, 3);
+            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, (CollisionHeader* )0x6007F50);
         }
-        temp_a2 = thisx->unk144;
+        temp_a2 = this->unk_144;
         if (temp_a2 == 0x32) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        func_800C636C(globalCtx, &globalCtx->colCtx.dyna, temp_a2);
-        temp_v0_5 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xD, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, (s16) 0, (s16) (s32) thisx->shape.rot.y, (s16) 0, (s16) 0x8012);
-        thisx->unk2B8 = temp_v0_5;
+        func_800C636C(globalCtx, &globalCtx->colCtx.dyna, (s32) temp_a2);
+        temp_v0_5 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xD, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.shape.rot.y, (s16) 0, (s16) 0x8012);
+        this->unk2B8 = temp_v0_5;
         if (temp_v0_5 == 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        Collider_InitAndSetCylinder(globalCtx, thisx + 0x424, thisx, &D_80B7C138);
-        Collider_InitAndSetCylinder(globalCtx, thisx + 0x470, thisx, &D_80B7C138);
+        Collider_InitAndSetCylinder(globalCtx, this + 0x424, (Actor* ) this, &D_80B7C138);
+        Collider_InitAndSetCylinder(globalCtx, this + 0x470, (Actor* ) this, &D_80B7C138);
         return;
     }
     if (temp_v0 == 1) {
-        thisx->unk2BC = (s32) thisx->unk2B0;
+        this->unk2BC = (s32) this->unk2B0;
         if ((gSaveContext.unkF17 & 0x80) != 0) {
             sp54 = 0;
-            thisx->unk2F4 = (s32) (thisx->unk2F4 | 0x100);
-            func_80B78E2C(thisx, func_80B7A144);
+            this->unk2F4 = (s32) (this->unk2F4 | 0x100);
+            func_80B78E2C(this, func_80B7A144);
             func_800FE484();
             goto block_32;
         }
         if (((gSaveContext.unkF1A & 0x80) != 0) || (temp_v0_2 = gSaveContext.time, (((s32) temp_v0_2 < 0xCAAA) == 0)) || ((s32) temp_v0_2 < 0x4001) || (temp_v0_3 = gSaveContext.unkF2C, ((temp_v0_3 & 1) != 0)) || ((temp_v0_3 & 2) != 0)) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        thisx->targetMode = 6;
-        thisx->unk2B4 = 0;
-        func_80B78E2C(thisx, func_80B79A50);
+        this->actor.targetMode = 6;
+        this->unk2B4 = 0;
+        func_80B78E2C(this, func_80B79A50);
         goto block_32;
     }
     if (temp_v0 == 2) {
         if (((gSaveContext.unkF17 & 0x80) == 0) || (temp_v0_4 = gSaveContext.unkF2C, ((temp_v0_4 & 1) != 0))) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
         if ((temp_v0_4 & 2) == 0) {
-            thisx->unk2BC = (s32) thisx->unk2B0;
+            this->unk2BC = (s32) this->unk2B0;
             sp54 = 0;
-            func_800FE484(thisx, func_80B7AEFC);
-            func_80B78E2C(thisx, func_80B7A400);
-            thisx->unk354 = 0;
-            func_80B78E88(thisx, globalCtx, 0);
+            func_800FE484(this, func_80B7AEFC);
+            func_80B78E2C(this, func_80B7A400);
+            this->unk354 = 0;
+            func_80B78E88(this, globalCtx, 0);
         }
         goto block_32;
     }
     if (temp_v0 == 3) {
         if ((gSaveContext.unkF17 & 0x80) == 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        thisx->unk2BC = (s32) thisx->unk2B0;
+        this->unk2BC = (s32) this->unk2B0;
         sp54 = 0;
-        func_800FE484(thisx, func_80B7AEFC);
-        func_80B78E2C(thisx, func_80B7AC94);
-        thisx->unk354 = 0;
-        func_80B78E88(thisx, globalCtx, 0);
+        func_800FE484(this, func_80B7AEFC);
+        func_80B78E2C(this, func_80B7AC94);
+        this->unk354 = 0;
+        func_80B78E88(this, globalCtx, 0);
         goto block_32;
     }
     if (temp_v0 == 4) {
         if (((gSaveContext.unkF2C & 1) == 0) || ((gSaveContext.unkF33 & 2) != 0)) {
-            Actor_MarkForDeath(thisx);
+            Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        thisx->unk2BC = (s32) thisx->unk2B0;
+        this->unk2BC = (s32) this->unk2B0;
         sp54 = 0;
-        func_800FE484(thisx, func_80B7AEFC);
-        func_80B78E2C(thisx, func_80B7AE58);
-        thisx->unk354 = 0;
-        func_80B78E88(thisx, globalCtx, 0);
+        func_800FE484(this, func_80B7AEFC);
+        func_80B78E2C(this, func_80B7AE58);
+        this->unk354 = 0;
+        func_80B78E88(this, globalCtx, 0);
         func_801A3098(0x19);
         goto block_32;
     }
-    thisx->unk2AE = 0;
-    func_80B78E2C(thisx, func_80B7AEFC);
+    this->unk2AE = 0;
+    func_80B78E2C(this, func_80B7AEFC);
     goto block_32;
 }
 #else
@@ -1094,7 +1094,7 @@ block_32:
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Destroy(ObjUm* this, GlobalContext* globalCtx) {
     GlobalContext* temp_a3;
     s32 temp_s0;
     Vec3f* phi_s1;
@@ -1102,8 +1102,8 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     temp_a3 = globalCtx;
     globalCtx = temp_a3;
-    BgCheck_RemoveActorMesh(temp_a3, &temp_a3->colCtx.dyna, thisx->unk144);
-    phi_s1 = thisx + 0x32C;
+    BgCheck_RemoveActorMesh(temp_a3, &temp_a3->colCtx.dyna, (s32) this->unk_144);
+    phi_s1 = this + 0x32C;
     phi_s0 = 0;
     do {
         func_801A72CC(phi_s1);
@@ -1111,8 +1111,8 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         phi_s1 += 0xC;
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x24);
-    Collider_DestroyCylinder(globalCtx, thisx + 0x424);
-    Collider_DestroyCylinder(globalCtx, thisx + 0x470);
+    Collider_DestroyCylinder(globalCtx, this + 0x424);
+    Collider_DestroyCylinder(globalCtx, this + 0x470);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Destroy.asm")
@@ -1133,7 +1133,7 @@ void func_80B79524(Actor* arg0) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B79560(GlobalContext* arg0, Actor* arg1, s32 arg2, u16 arg3) {
+void func_80B79560(GlobalContext* arg0, ObjUm* arg1, s32 arg2, u16 arg3) {
     s32 temp_a3;
 
     temp_a3 = arg3 & 0xFFFF;
@@ -1158,7 +1158,7 @@ It needs to be within ".section .rodata" or ".section .late_rodata".
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B795A0.asm")
 
 #ifdef MIPS_2_C_OUTPUT
-s32 func_80B79734(GlobalContext* arg0, Actor* arg1, s32 arg2) {
+s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2) {
     s32 sp20;
     MessageContext* sp18;
     MessageContext* temp_a0;
@@ -1177,7 +1177,7 @@ s32 func_80B79734(GlobalContext* arg0, Actor* arg1, s32 arg2) {
         }
         return sp20;
     }
-    func_80B79560(arg0, arg1, arg2, arg1->textId);
+    func_80B79560(arg0, arg1, arg2, arg1->actor.textId);
     return 1;
 }
 #else
@@ -1238,7 +1238,7 @@ block_25:
     }
     if (*temp_a3 == 1) {
         arg3 = temp_a3;
-        if (func_80B79734(arg0, arg1, arg2, temp_a3) != 0) {
+        if (func_80B79734(arg0, (ObjUm* ) arg1, arg2, temp_a3) != 0) {
             *arg3 = 0;
         }
     } else {
@@ -1300,7 +1300,7 @@ u16 func_80B79A50(Actor* arg0, GlobalContext* arg1) {
         }
     } else if ((func_80B79A24(arg0->unk2B4) == 0) && ((s32) gSaveContext.time >= 0xCAAB)) {
         gSaveContext.unkF1A = (u8) (gSaveContext.unkF1A | 0x80);
-        func_80B78E2C(arg0, func_80B79F10);
+        func_80B78E2C((ObjUm* ) arg0, func_80B79F10);
     }
     temp_v0 = arg1->msgCtx.unk11F04;
     if (temp_v0 != 0x33B4) {
@@ -1492,7 +1492,7 @@ void func_80B79FFC(Actor* arg0) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
         arg0->unk4C8 = (u16) gSaveContext.time;
-        func_80B78E2C(arg0, func_80B7A0E0);
+        func_80B78E2C((ObjUm* ) arg0, func_80B7A0E0);
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
@@ -1502,7 +1502,7 @@ void func_80B79FFC(Actor* arg0) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-s32 func_80B7A070(Actor* arg0, Actor* arg1) {
+s32 func_80B7A070(ObjUm* arg0, Actor* arg1) {
     func_80B79F10(arg1);
     func_80B78E88(arg0, (GlobalContext* ) arg1, 0);
     if (arg1->unk1680C == 0x33B6) {
@@ -1523,7 +1523,7 @@ void func_80B7A0E0(Actor* arg0, GlobalContext* arg1) {
     func_80B7B18C(arg0, arg1, 2);
     if (arg0->unk4C8 != gSaveContext.time) {
         func_80B7B18C(arg0, arg1, 0);
-        func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A070);
+        func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A070);
     }
 }
 #else
@@ -1546,14 +1546,14 @@ void func_80B7A144(Actor* arg0, GlobalContext* arg1) {
     arg0->unk2F4 = temp_t9;
     temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
     func_80B7B18C(arg0, arg1, 2);
-    func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B79FFC);
+    func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B79FFC);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A144.asm")
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-u16 func_80B7A1B4(Actor* arg0, Actor* arg1) {
+u16 func_80B7A1B4(ObjUm* arg0, Actor* arg1) {
     s32 temp_t7;
     u16 temp_v0;
 
@@ -1580,11 +1580,11 @@ u16 func_80B7A1B4(Actor* arg0, Actor* arg1) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B7A240(Actor* arg0, Actor* arg1) {
-    Actor* temp_a0;
+void func_80B7A240(ObjUm* arg0, Actor* arg1) {
+    ObjUm* temp_a0;
     u16 temp_v0;
     u16 phi_v0;
-    Actor* phi_a0;
+    ObjUm* phi_a0;
 
     func_80B7B18C(arg1, (GlobalContext* )2);
     temp_a0 = arg0;
@@ -1623,12 +1623,12 @@ void func_80B7A2AC(Actor* arg0, GlobalContext* arg1) {
     temp_v0_2 = gSaveContext.time;
     phi_v0 = temp_v0_2;
     if (arg0->unk4C8 == temp_v0_2) {
-        func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A240);
+        func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A240);
         phi_v0 = gSaveContext.time;
     }
     arg0->unk4C8 = phi_v0;
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-    func_80B7A1B4(arg0, (Actor* ) arg1);
+    func_80B7A1B4((ObjUm* ) arg0, (Actor* ) arg1);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A2AC.asm")
@@ -1644,7 +1644,7 @@ void func_80B7A394(Actor* arg0, Actor* arg1) {
     if (temp_a0->unk4C8 != gSaveContext.time) {
         arg0 = temp_a0;
         func_80B7B18C(temp_a0, (GlobalContext* ) arg1, 0);
-        func_80B78E2C(arg0, func_80B7A2AC);
+        func_80B78E2C((ObjUm* ) arg0, func_80B7A2AC);
     }
 }
 #else
@@ -1664,7 +1664,7 @@ void func_80B7A400(Actor* arg0, GlobalContext* arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
         arg0->unk4C8 = (u16) gSaveContext.time;
-        func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A394);
+        func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A394);
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
@@ -1682,7 +1682,7 @@ SaveContext* func_80B7A494(Actor* arg0, GlobalContext* arg1) {
     SaveContext* phi_return;
 
     func_80B78E38(arg0, arg1);
-    func_80B78E88(arg0, arg1, 0x7FFF);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0x7FFF);
     arg0->unk2AC = (s16) (arg0->unk2AC + 0x7D0);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 0x10);
     func_80B7B18C(arg0, arg1, 1);
@@ -1736,7 +1736,7 @@ void func_80B7A614(Actor* arg0, GlobalContext* arg1) {
     s16 phi_v1_2;
 
     func_80B78E38(arg0, arg1);
-    func_80B78E88(arg0, arg1, 0x7FFF);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0x7FFF);
     temp_t9 = arg0->unk2F4 | 0x10;
     arg0->unk2F4 = temp_t9;
     arg0->unk2AC = (s16) (arg0->unk2AC + 0x7D0);
@@ -1776,7 +1776,7 @@ loop_6:
         sp20 = (s32) phi_v1_2;
         if (ActorCutscene_GetCanPlayNext(phi_v1_2) != 0) {
             ActorCutscene_StartAndSetUnkLinkFields(phi_v1_2, arg0);
-            func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A494);
+            func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A494);
             arg0->unk2F4 = (s32) (arg0->unk2F4 & ~0x80);
         } else {
             ActorCutscene_SetIntentToPlay(phi_v1_2);
@@ -1798,13 +1798,13 @@ void func_80B7A7AC(Actor* arg0, GlobalContext* arg1) {
     arg0->unk4E0 = 0;
     temp_v0->unkA6C = (s32) (temp_v0->unkA6C & ~0x20);
     func_80B78E38(arg0, arg1);
-    func_80B78E88(arg0, arg1, 0x7FFF);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0x7FFF);
     func_80B78EBC(arg0, arg1);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 0x10);
     func_80B78DF0(arg0, arg1);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 4);
     func_80B7B18C(arg0, arg1, 1);
-    func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A614);
+    func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7A614);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A7AC.asm")
@@ -1823,11 +1823,11 @@ It needs to be within ".section .rodata" or ".section .late_rodata".
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A860.asm")
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B7AB78(Actor* arg0, Actor* arg1) {
-    Actor* temp_a0;
+void func_80B7AB78(ObjUm* arg0, Actor* arg1) {
+    ObjUm* temp_a0;
     u16 temp_v0;
     u16 phi_v0;
-    Actor* phi_a0;
+    ObjUm* phi_a0;
 
     func_80B7B18C(arg1, (GlobalContext* )2);
     temp_a0 = arg0;
@@ -1861,12 +1861,12 @@ void func_80B7ABE4(Actor* arg0, GlobalContext* arg1) {
     temp_v0 = gSaveContext.time;
     phi_v0 = temp_v0;
     if (arg0->unk4C8 == temp_v0) {
-        func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7AB78);
+        func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7AB78);
         phi_v0 = gSaveContext.time;
     }
     arg0->unk4C8 = phi_v0;
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-    func_80B7A860(arg0, (Actor* ) arg1);
+    func_80B7A860((ObjUm* ) arg0, (Actor* ) arg1);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7ABE4.asm")
@@ -1879,12 +1879,12 @@ void func_80B7AC94(Actor* arg0, GlobalContext* arg1) {
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
     func_80B78E38(arg0);
-    func_80B78E88(arg0, arg1, 0);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 4);
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
         arg0->unk4C8 = (u16) gSaveContext.time;
-        func_80B78E2C(arg0, func_80B7ABE4);
+        func_80B78E2C((ObjUm* ) arg0, func_80B7ABE4);
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
@@ -1900,7 +1900,7 @@ void func_80B7AD34(Actor* arg0, GlobalContext* arg1) {
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
     func_80B78E38(arg0, arg1);
-    func_80B78E88(arg0, arg1, 0);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 4);
     arg0->unk2AC = (s16) (arg0->unk2AC + 0x3E8);
     func_80B7B18C(arg0, arg1, 0);
@@ -1928,12 +1928,12 @@ void func_80B7AE58(Actor* arg0, GlobalContext* arg1) {
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
     func_80B78E38(arg0);
-    func_80B78E88(arg0, arg1, 0);
+    func_80B78E88((ObjUm* ) arg0, arg1, 0);
     arg0->unk2F4 = (s32) (arg0->unk2F4 | 4);
     func_80B7B18C(arg0, arg1, 2);
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
-        func_80B78E2C(arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7AD34);
+        func_80B78E2C((ObjUm* ) arg0, (u16 (*)(Actor* arg0, GlobalContext* arg1)) func_80B7AD34);
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
@@ -2033,7 +2033,7 @@ s32 func_80B7AF30(void* arg0, s32 arg1) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void func_80B7B154(Actor* arg0, GlobalContext* arg1) {
+void func_80B7B154(ObjUm* arg0, GlobalContext* arg1) {
     SkelAnime_ChangeAnimDefaultStop(arg0 + 0x160, (AnimationHeader* )0x6012CC0);
     arg0->unk304 = 0;
 }
@@ -2460,18 +2460,18 @@ Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** a
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Draw(ObjUm* this, GlobalContext* globalCtx) {
     f32 sp3C;
     f32 sp38;
     f32 sp34;
 
-    thisx->unk2F4 = (s32) (thisx->unk2F4 | 1);
-    SkelAnime_DrawSV(globalCtx, thisx->unk164, thisx->unk180, (s32) thisx->unk162, func_80B7B598, func_80B7BABC, thisx);
+    this->unk2F4 = (s32) (this->unk2F4 | 1);
+    SkelAnime_DrawSV(globalCtx, this->unk164, this->unk180, (s32) this->unk162, func_80B7B598, func_80B7BABC, (Actor* ) this);
     sp34 = D_80B7C3FC;
     sp38 = 0.0f;
     sp3C = D_80B7C400;
-    func_80B7BEA4(thisx + 0x4BC, thisx->shape.rot.y, &sp34, 0xB4U, (GraphicsContext** ) globalCtx);
-    func_80B77770(thisx, globalCtx);
+    func_80B7BEA4(this + 0x4BC, this->actor.shape.rot.y, &sp34, 0xB4U, (GraphicsContext** ) globalCtx);
+    func_80B77770(this, globalCtx);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Draw.asm")
