@@ -243,7 +243,6 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80B61914(EnBigpo *this) {
-    s32 secondi;
     EnBigpoFireParticle *firePtr;
     s32 i;
 
@@ -1267,6 +1266,8 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
             return;
 
         }
+
+        // todo attempt to fix this
         v2ptr = &this->unk224[limbByte+1];
         v1ptr = &D_80B65084;
         SysMatrix_GetStateTranslationAndScaledX(-4000.0f, &this->unk224[limbByte]);
@@ -1313,7 +1314,7 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
     func_800BE680(globalCtx, &this->actor, &this->unk224, 9,
          this->actor.scale.x * 71.428566f * this->unk220, 0, this->unk21C, 0x14);
 
-    SysMatrix_SetCurrentState(&this->drawMtxF);
+    Matrix_Put(&this->drawMtxF);
     func_80B64880(&this->actor, globalCtx);
     if (this->actionFunc == func_80B61F04 ) {
         func_80B64B08(&this->actor, globalCtx);
@@ -1362,11 +1363,11 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
 
-    Vec3f vec1;
-    Vec3f vec2;
     Camera *cam;
     f32 magnitude;
     f32 magnitude2;
+    Vec3f vec1; // sp64
+    Vec3f vec2;
     Gfx *dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1375,8 +1376,9 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     if (cam != NULL) {
         Math_Vec3f_Diff(&cam->eye, &cam->focalPoint, &vec1);
         magnitude = Math3D_Vec3fMagnitude(&vec1);
-        magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
-        Math_Vec3f_Scale(&vec1, magnitude2);
+        //magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
+        //Math_Vec3f_Scale(&vec1, magnitude2);
+        Math_Vec3f_Scale(&vec1, (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f));
     } else {
         Math_Vec3f_Copy(&vec1, &D_801D15B0);
     }
@@ -1397,7 +1399,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
     Lights_PointGlowSetInfo(&this->fires[0].info, (s16) (vec2.x + vec1.x),
          (s16) (vec2.y + vec1.y), (s16) (vec2.z + vec1.z),
-         (s32) this->unk294.r, (s32) this->unk294.g, (s32) this->unk294.b, (s32) this->unk294.a); // radius?
+         this->unk294.r, this->unk294.g, this->unk294.b, this->unk294.a); // radius?
 
     gDPSetEnvColor(dispHead + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
 
@@ -1422,25 +1424,18 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
 #endif
 
-#ifdef NON_MATCHING
-// non-matching: instructions out of order
-// regular big poe draw, switched to after dampe summon
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad[3];
     s16 sp66;
-    s32 pad2;
     MtxF *mtfxPtr;
     s32 i;
-    EnBigpo* this2;
-    EnBigpoFireParticle* fires;
-    EnBigpoFireParticle* fires2;
+    EnBigpoFireParticle* firePtr;
 
     mtfxPtr = SysMatrix_GetCurrentState();
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    fires2 = this->fires;
     Matrix_RotateY((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 0);
     if (this->actionFunc == func_80B61F04 ) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
@@ -1456,39 +1451,23 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
-    //fires = this->fires;
-    //this2 = this;
-
-    // out of order here
-    //3704:    move    s3,zero          | 3704:    addiu   s1,s7,0x338
-    //3708:    move    s0,s7            r 3708:    move    s3,zero                        
-    //370c:    addiu   s1,s7,0x338      | 370c:    move    s0,s7                          
-
-    //for (i = 0, fires = this->fires, this2 = this; i < 3; i++, fires++) {
-    for (this2 = this, fires = this->fires, i = 0; i < 3; i++, fires++) {
+    for (i = 0; i < 3; i++) {
+        firePtr = &this->fires[i];
         Lights_PointNoGlowSetInfo(&this->fires[i].info, 
-            this2->fires[i].pos.x, this2->fires[i].pos.y, this2->fires[i].pos.z, 
+            this->fires[i].pos.x, this->fires[i].pos.y, this->fires[i].pos.z, 
             0xAA, 0xFF, 0xFF, sp66);
-        mtfxPtr->wx = fires->pos.x;
-        mtfxPtr->wy = fires->pos.y;
-        mtfxPtr->wz = fires->pos.z;
+        mtfxPtr->wx = firePtr->pos.x;
+        mtfxPtr->wy = firePtr->pos.y;
+        mtfxPtr->wz = firePtr->pos.z;
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
            G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         
         gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame display list?
- 
-    // out of order here
-    //37e0:    addiu   s1,s1,0x20       r 37e0:    addiu   s4,s4,0x20
-    //37e4:    ...
-    //37e8:    addiu   s4,s4,0x20       r 37e8:    addiu   s1,s1,0x20
-    }
+    } 
     
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64B08.asm")
-#endif
 
 // draw func for the fires in dampes house
 void func_80B64DFC(Actor *thisx, GlobalContext *globalCtx) {
