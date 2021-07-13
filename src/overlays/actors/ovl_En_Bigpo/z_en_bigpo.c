@@ -1225,8 +1225,6 @@ s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
 }
 
 //PostLimbDraw2
-#ifdef NON_EQUIVELENT
-// non-equivelent: the actual draw macros arent matching
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
 
@@ -1236,18 +1234,12 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     Vec3f *v2ptr;
     s32 i;
 
-    //OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if ((this->actionFunc == func_80B62B10) && (this->idleTimer >= 2) && (limbIndex == 8)) {
-
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        // this is broken
-
-        gSPMatrix(*gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+        gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx),
            G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(*gfx++, &D_060058B8);
-
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        gSPDisplayList((*gfx)++, &D_060058B8);
     }
 
     if (limbIndex == 7) {
@@ -1285,12 +1277,9 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
             v1ptr++;
         }
     }
-    //CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64240.asm")
-#endif
 
 // used if enough fires, for main po?
 void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
