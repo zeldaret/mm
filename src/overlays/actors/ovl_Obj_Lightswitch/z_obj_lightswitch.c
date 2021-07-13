@@ -145,15 +145,15 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
 void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightswitch* this = THIS;
     s32 pad;
-    u32 isGetSwitchSuccess;
+    u32 isSwitchActivated;
     s32 isTriggered;
 
-    isGetSwitchSuccess = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+    isSwitchActivated = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetHeight(&this->actor, 0.0f);
 
-    if (isGetSwitchSuccess) {
+    if (isSwitchActivated) {
         if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) {
             isTriggered = true;
         } else {
@@ -236,7 +236,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->edgeRotSpeed, -0xAA, 0xA);
     this->edgeRot += this->edgeRotSpeed;
     this->colorR = (this->colorShiftTimer * (5 << 6)) + (155 << 6);
-    this->colorG = (this->colorShiftTimer * 0x1A0) + (125 << 6); // 0x1A0 = 6 << 6
+    this->colorG = (this->colorShiftTimer * ((6 << 6) + 32)) + (125 << 6);
 
     if (this->colorShiftTimer >= 20) {
         ObjLightSwitch_SetupEnabled(this);
@@ -294,7 +294,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->edgeRotSpeed, 0, 0xA);
     this->edgeRot += this->edgeRotSpeed;
     this->colorR = (this->colorShiftTimer * (5 << 6)) + (155 << 6);
-    this->colorG = (this->colorShiftTimer * 0x1A0) + (125 << 6); // 0x1A0 = 6 << 6
+    this->colorG = (this->colorShiftTimer * ((6 << 6) + 32)) + (125 << 6);
 
     if (this->colorShiftTimer <= 0) {
         ObjLightswitch_SetupIdle(this);
