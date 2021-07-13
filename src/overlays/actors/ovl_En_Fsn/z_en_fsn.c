@@ -55,7 +55,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
-void EnFsn_CannotBuy(EnFsn* this, GlobalContext* globalCtx);
+void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
@@ -569,7 +569,7 @@ void EnFsn_UpdateItemSelectedProperty(EnFsn* this) {
     s32 i;
 
     for (items = this->items, i = 0; i < this->totalSellingItems; items++, i++) {
-        if (this->actionFunc != EnFsn_SelectItem && this->actionFunc != EnFsn_CannotBuy && this->drawCursor == 0) {
+        if (this->actionFunc != EnFsn_SelectItem && this->actionFunc != EnFsn_PlayerCannotBuy && this->drawCursor == 0) {
             (*items)->isSelected = false;
         } else {
             (*items)->isSelected = (i == this->cursorIdx) ? true : false;
@@ -1148,7 +1148,7 @@ void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnFsn_HandleCanBuyItem(EnFsn* this, GlobalContext* globalCtx) {
+void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
     EnGirlA* item = this->items[this->cursorIdx];
 
     switch (item->canBuyFunc(globalCtx, item)) {
@@ -1183,12 +1183,12 @@ void EnFsn_HandleCanBuyItem(EnFsn* this, GlobalContext* globalCtx) {
         case CANBUY_RESULT_NEED_RUPEES:
             play_sound(NA_SE_SY_ERROR);
             func_80151938(globalCtx, 0x29F0);
-            this->actionFunc = EnFsn_CannotBuy;
+            this->actionFunc = EnFsn_PlayerCannotBuy;
             break;
         case CANBUY_RESULT_CANNOT_GET_NOW:
             play_sound(NA_SE_SY_ERROR);
             func_80151938(globalCtx, 0x29DD);
-            this->actionFunc = EnFsn_CannotBuy;
+            this->actionFunc = EnFsn_PlayerCannotBuy;
             break;
     }
 }
@@ -1218,7 +1218,7 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
         if (!EnFsn_TestCancelOption(this, globalCtx, &globalCtx->state.input[0]) && func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
-                    EnFsn_HandleCanBuyItem(this, globalCtx);
+                    EnFsn_HandleCanPlayerBuyItem(this, globalCtx);
                     break;
                 case 1:
                     func_8019F230();
@@ -1229,7 +1229,7 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnFsn_CannotBuy(EnFsn* this, GlobalContext* globalCtx) {
+void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
