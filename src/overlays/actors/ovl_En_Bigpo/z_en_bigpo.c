@@ -242,45 +242,18 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-#if NON_EQUIVELENT
-// non-equivelent: ido wont loop properly
-// for/while want to add another branch, only goto sticks to one
-// also wont increment pointers properly
-// STILL WONT MATCH why
 void func_80B61914(EnBigpo *this) {
     s32 secondi;
-    EnBigpoFireParticle *fires;
+    EnBigpoFireParticle *firePtr;
     s32 i;
 
-    i = 0;
-    fires = this->fires;
-  loop_1:
-    fires->pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
-    fires->pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
-    this->actor.shape.rot.y += 0x5555;
-    i = secondi;
-    secondi += 0x20;
-    fires += 1;
-    if (secondi != 0x60) {
-        goto loop_1;
+    for (i = 0; i < 3; i++){
+        firePtr = &this->fires[i];
+        firePtr->pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
+        firePtr->pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
+        this->actor.shape.rot.y += 0x5555;
     }
-
-    //s32 i;
-    //EnBigpoFireParticle* fires;// = this->fires;
-    //for (i = 0; i < 3; i++){
-    //for (fires = this->fires; fires != &this->fires[2]; fires++){
-        //this->fires[i].pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
-        //this->fires[i].pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
-        ////fires[i].pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
-        ////fires[i].pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
-        //fires->pos.x = (Math_SinS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.x;
-        //fires->pos.z = (Math_CosS(this->actor.shape.rot.y) * this->unk214) + this->actor.world.pos.z;
-        //this->actor.shape.rot.y += 0x5555;
-    //}
 }
-#else 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B61914.asm")
-#endif
 
 // play spinning sound
 void func_80B619B4(EnBigpo *this) {
