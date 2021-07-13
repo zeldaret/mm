@@ -7692,9 +7692,9 @@ SECTIONS
     ovl_En_Suttari : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.text)
-        build/asm/overlays/ovl_En_Suttari_data.o(.data)
+        build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.data)
         build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.rodata)
-        build/asm/overlays/ovl_En_Suttari_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Suttari/z_en_suttari_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

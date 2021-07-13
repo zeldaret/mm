@@ -465,7 +465,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
     if (DECR(this->unk2B1) == 0) {
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
             temp_v1_2 = &D_80BA50DC[gSaveContext.playerForm - 1];
-            func_801518B0(globalCtx, (this->text->unk0 == 6 ? temp_v1_2->unk0 : temp_v1_2->unk4) & 0xFFFF, NULL);
+            func_801518B0(globalCtx, this->text->unk0 == 6 ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
         }
         return 1;
     }

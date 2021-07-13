@@ -7,7 +7,8 @@
 // TODO fill out these enums
 
 typedef enum {
-    /* 0x1 */ EQUIP_SHIELD = 0x1
+    /* 0x0 */ EQUIP_SWORD,
+    /* 0x1 */ EQUIP_SHIELD
 } EquipmentType;
 
 typedef enum {
