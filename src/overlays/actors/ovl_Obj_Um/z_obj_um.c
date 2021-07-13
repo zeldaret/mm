@@ -62,25 +62,21 @@ void func_80B77770(Actor* arg0, GlobalContext* arg1); // static
 ? func_80B783E0(ObjUm* arg0, GlobalContext* arg1, s32 arg2, void* arg3); // static
 ? func_80B78764(ObjUm* arg0, GlobalContext* arg1, void* arg2, void* arg3); // static
 ? func_80B78A54(ObjUm* arg0, GlobalContext* arg1, s32 arg2, void* arg3, void* arg4); // static
-? func_80B78C18(ObjUm* arg0, GlobalContext* arg1); // static
-? func_80B78D08(ObjUm* arg0, GlobalContext* arg1); // static
-? func_80B78DF0(ObjUm* arg0, GlobalContext* arg1); // static
-void* func_80B78E38(GlobalContext* arg0, GlobalContext* arg1); // static
-void* func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2); // static
-void* func_80B78EBC(GlobalContext* arg0, GlobalContext* arg1); // static
-void func_80B79560(GlobalContext* arg0, ObjUm* arg1, s32 arg2, u16 arg3); // static
+void func_80B78E38(GlobalContext* arg0, GlobalContext* arg1); // static
+void func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2); // static
+void func_80B78EBC(GlobalContext* arg0, GlobalContext* arg1); // static
 s32 func_80B795A0(GlobalContext*, ObjUm*, s32); // static
 s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2, s32*); // static
 u16 func_80B797EC(GlobalContext* arg0, Actor* arg1, s32 arg2); // static
 ? func_80B7984C(GlobalContext* arg0, Actor* arg1, s32 arg2, s32* arg3); // static
 s32 func_80B79BA0(ObjUm* arg0, GlobalContext* arg1); // static
-u16 func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1); // static
+void func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1); // static
 void func_80B7A7AC(GlobalContext* arg0, GlobalContext* arg1); // static
 ? func_80B7A860(ObjUm*, GlobalContext*); // static
-s32 func_80B7AF30(void* arg0, s32 arg1); // static
+void func_80B7AF30(void* arg0, s32 arg1); // static
 void func_80B7B18C(ObjUm* arg0, GlobalContext* arg1, s32 arg2, ObjUm*); // static
 void func_80B7B93C(GlobalContext* arg0, Vec3f* arg1); // static
-Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** arg4); // static
+void func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** arg4); // static
 extern ? D_801D15BC;
 extern f32 D_80B7C320;
 extern f32 D_80B7C324;
@@ -139,6 +135,9 @@ void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
 
+
+
+void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32);
 
 
 extern FlexSkeletonHeader D_06011DF8;
@@ -784,25 +783,26 @@ block_14:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78A54.asm")
 #endif
 
+s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx);
 #ifdef MIPS_2_C_OUTPUT
-? func_80B78C18(ObjUm* arg0, GlobalContext* arg1) {
+s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
     void* temp_s1;
     void* temp_s2;
 
-    temp_s1 = arg0->unk358;
-    temp_s2 = arg0->unk35C;
-    if ((arg0->unk_2F4 & 0x200) == 0) {
-        func_80B783E0(arg0, arg1, 0, temp_s1);
+    temp_s1 = this->unk358;
+    temp_s2 = this->unk35C;
+    if ((this->unk_2F4 & 0x200) == 0) {
+        func_80B783E0(this, globalCtx, 0, temp_s1);
     } else {
-        func_80B78764(arg0, arg1, temp_s1, temp_s2);
+        func_80B78764(this, globalCtx, temp_s1, temp_s2);
     }
-    if ((arg0->unk_2F4 & 0x400) == 0) {
-        func_80B783E0(arg0, arg1, 1, temp_s2);
+    if ((this->unk_2F4 & 0x400) == 0) {
+        func_80B783E0(this, globalCtx, 1, temp_s2);
     } else {
-        func_80B78764(arg0, arg1, temp_s2, temp_s1);
+        func_80B78764(this, globalCtx, temp_s2, temp_s1);
     }
-    func_80B78A54(arg0, arg1, 0, temp_s1, temp_s2);
-    func_80B78A54(arg0, arg1, 1, temp_s2, temp_s1);
+    func_80B78A54(this, globalCtx, 0, temp_s1, temp_s2);
+    func_80B78A54(this, globalCtx, 1, temp_s2, temp_s1);
     return 0;
 }
 #else
@@ -810,70 +810,54 @@ block_14:
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-? func_80B78D08(ObjUm* arg0, GlobalContext* arg1) {
+s32 func_80B78D08(ObjUm* this, GlobalContext* globalCtx) {
     CollisionCheckContext* sp18;
-    Collider* temp_a2;
+    ColliderCylinder* temp_a2;
     CollisionCheckContext* temp_a1;
     void* temp_v0;
     void* temp_v1;
 
-    temp_v0 = arg0->unk358;
-    temp_v1 = arg0->unk35C;
-    temp_a2 = arg0 + 0x424;
-    arg0->unk_424.dim.pos.x = (s16) (s32) temp_v0->unk24;
-    arg0->unk_424.dim.pos.y = (s16) (s32) (temp_v0->unk28 + 70.0f);
-    arg0->unk_424.dim.pos.z = (s16) (s32) temp_v0->unk2C;
-    arg0->unk_470.dim.pos.x = (s16) (s32) temp_v1->unk24;
-    arg0->unk_470.dim.pos.y = (s16) (s32) (temp_v1->unk28 + 70.0f);
-    arg0->unk_470.dim.pos.z = (s16) (s32) temp_v1->unk2C;
-    arg0 = arg0;
-    temp_a1 = arg1 + 0x18884;
+    temp_v0 = this->unk358;
+    temp_v1 = this->unk35C;
+    temp_a2 = &this->unk_424;
+    this->unk_424.dim.pos.x = (s16) (s32) temp_v0->unk24;
+    this->unk_424.dim.pos.y = (s16) (s32) (temp_v0->unk28 + 70.0f);
+    this->unk_424.dim.pos.z = (s16) (s32) temp_v0->unk2C;
+    this->unk_470.dim.pos.x = (s16) (s32) temp_v1->unk24;
+    this->unk_470.dim.pos.y = (s16) (s32) (temp_v1->unk28 + 70.0f);
+    this->unk_470.dim.pos.z = (s16) (s32) temp_v1->unk2C;
+    this = this;
+    temp_a1 = &globalCtx->colChkCtx;
     sp18 = temp_a1;
-    CollisionCheck_SetAC(arg1, temp_a1, temp_a2);
-    CollisionCheck_SetAC(arg1, temp_a1, arg0 + 0x470);
+    CollisionCheck_SetAC(globalCtx, temp_a1, (Collider* ) temp_a2);
+    CollisionCheck_SetAC(globalCtx, temp_a1, (Collider* ) &this->unk_470);
     return 0;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78D08.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-? func_80B78DF0(ObjUm* arg0, GlobalContext* arg1) {
-    func_80B78C18(arg0, arg1);
-    func_80B78D08(arg0, arg1);
+s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
+    func_80B78C18(this, globalCtx);
+    func_80B78D08(this, globalCtx);
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78DF0.asm")
-#endif
 
 void func_80B78E2C(ObjUm* this, ObjUmActionFunc arg1) {
     this->unk_15C = arg1;
 }
 
-#ifdef MIPS_2_C_OUTPUT
-void* func_80B78E38(ObjUm* arg0, GlobalContext* arg1) {
-    void* temp_v0;
-    void* temp_v1;
+void func_80B78E38(ObjUm* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
-    temp_v0 = arg1->actorCtx.actorList[2].first;
-    temp_v1 = arg0 + 0x308;
-    if ((arg0->unk_2F4 & 0x20) != 0) {
-        temp_v0->unk24 = (s32) temp_v1->unk0;
-        temp_v0->unk28 = (s32) temp_v1->unk4;
-        temp_v0->unk2C = (s32) temp_v1->unk8;
-        temp_v0->unk108 = (s32) temp_v1->unk0;
-        temp_v0->unk10C = (s32) temp_v1->unk4;
-        temp_v0->unk110 = (s32) temp_v1->unk8;
+    if (this->unk_2F4 & 0x20) {
+        player->actor.world.pos = this->unk_308;
+        player->actor.prevPos = this->unk_308;
     }
-    return temp_v0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78E38.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
-void* func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2) {
+void func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2) {
     s16 temp_v1;
     void* temp_v0;
 
@@ -882,14 +866,13 @@ void* func_80B78E88(ObjUm* arg0, GlobalContext* arg1, s16 arg2) {
     temp_v0->unkAD4 = temp_v1;
     temp_v0->unk32 = temp_v1;
     temp_v0->unkBE = temp_v1;
-    return temp_v0;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78E88.asm")
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-void* func_80B78EBC(GlobalContext* arg0, GlobalContext* arg1) {
+void func_80B78EBC(GlobalContext* arg0, GlobalContext* arg1) {
     void* temp_v0;
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
@@ -903,7 +886,6 @@ void* func_80B78EBC(GlobalContext* arg0, GlobalContext* arg1) {
     temp_v0->unkAB4 = 0;
     temp_v0->unkAB6 = 0;
     temp_v0->unkAD4 = (s16) temp_v0->unk4A;
-    return temp_v0;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78EBC.asm")
@@ -1494,30 +1476,19 @@ void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A0E0.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* sp1C;
-    Actor* temp_v0;
-    s32 temp_t7;
-    s32 temp_t9;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    sp1C = temp_v0;
-    func_80B78E38();
-    temp_t7 = this->unk_2F4 | 0x100;
-    temp_t9 = temp_t7 | 4;
-    this->unk_2F4 = temp_t7;
-    this->unk_2F4 = temp_t9;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
+    func_80B78E38(this, globalCtx);
+    this->unk_2F4 |= 0x100;
+    this->unk_2F4 |= 0x004;
+    player->stateFlags1 |= 0x20;
     func_80B7B18C(this, globalCtx, 2);
     func_80B78E2C(this, func_80B79FFC);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A144.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
-u16 func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1) {
+void func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1) {
     s32 temp_t7;
     u16 temp_v0;
 
@@ -1533,11 +1504,10 @@ u16 func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1) {
             arg0->unk4CC = 2;
         }
         arg0->unk4D4 = 0;
-        return temp_v0;
+        return;
     }
     arg0->unk4CC = 0;
     arg0->unk4D4 = 3;
-    return temp_v0;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A1B4.asm")
@@ -1615,23 +1585,21 @@ void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A394.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
+#ifdef NON_MATCHING
+// v0/v1 problems
 void func_80B7A400(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* sp24;
-    Actor* temp_v0;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    sp24 = temp_v0;
-    func_80B78E38((GlobalContext* ) this);
+    func_80B78E38(this, globalCtx);
     this->unk_2F4 |= 4;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
-    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) this->dyna.actor.cutscene, (Actor* ) this);
+    player->stateFlags1 |= 0x20;
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
         func_80B78E2C(this, func_80B7A394);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A400.asm")
@@ -1913,7 +1881,7 @@ void func_80B7AEFC(ObjUm* this, GlobalContext* globalCtx) {
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-s32 func_80B7AF30(void* arg0, s32 arg1) {
+void func_80B7AF30(void* arg0, s32 arg1) {
     ? sp44;
     f32 sp38;
     f32 sp34;
@@ -1929,21 +1897,18 @@ s32 func_80B7AF30(void* arg0, s32 arg1) {
     f32 temp_f2_2;
     f32 temp_f4;
     f32 temp_f8;
-    f32 temp_ret_2;
-    s16 temp_ret;
     s32 temp_a0;
     s32 temp_cond;
     s32 temp_v0;
     void* temp_a2;
     void* temp_a3;
-    s32 phi_return;
 
     temp_v0 = arg0->unk2F4;
     temp_a2 = arg0 + 0x2C4;
     if ((temp_v0 & 1) == 0) {
         arg0->unkBC = 0;
         arg0->unkC0 = 0;
-        return temp_v0;
+        return;
     }
     arg0->unk2F4 = (s32) (temp_v0 & ~1);
     temp_a3 = arg0 + 0x2DC;
@@ -1978,16 +1943,11 @@ s32 func_80B7AF30(void* arg0, s32 arg1) {
     arg0->unkBC = Math_Atan2S(temp_f4 - arg0->unk28, sqrtf((temp_f2 * temp_f2) + (temp_f16 * temp_f16)));
     temp_f2_2 = sp30 - arg0->unk2D0;
     temp_f16_2 = sp38 - arg0->unk2D8;
-    temp_ret = Math_Atan2S(temp_f4 - arg0->unk2D4, sqrtf((temp_f2_2 * temp_f2_2) + (temp_f16_2 * temp_f16_2)));
-    arg0->unkC0 = (s16) -temp_ret;
-    phi_return = (s32) temp_ret;
+    arg0->unkC0 = (s16) -Math_Atan2S(temp_f4 - arg0->unk2D4, sqrtf((temp_f2_2 * temp_f2_2) + (temp_f16_2 * temp_f16_2)));
     if ((arg0->unk2F4 & 2) != 0) {
         arg0->unkBC = (s16) (arg0->unkBC + (s32) ((Rand_ZeroOne() * 100.0f) - 50.0f));
-        temp_ret_2 = Rand_ZeroOne();
-        arg0->unkC0 = (s16) (arg0->unkC0 + (s32) ((temp_ret_2 * 100.0f) - 50.0f));
-        phi_return = (bitwise s32) temp_ret_2;
+        arg0->unkC0 = (s16) (arg0->unkC0 + (s32) ((Rand_ZeroOne() * 100.0f) - 50.0f));
     }
-    return phi_return;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AF30.asm")
@@ -2357,7 +2317,7 @@ block_18:
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** arg4) {
+void func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** arg4) {
     f32 sp110;
     f32 sp10C;
     f32 sp108;
@@ -2372,9 +2332,7 @@ Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** a
     Gfx* temp_v0_5;
     GraphicsContext* temp_s0;
     Mtx* temp_a2;
-    Mtx* temp_ret;
     Mtx* temp_v0;
-    Mtx* phi_return;
 
     sp108 = arg0->unk0;
     sp10C = arg0->unk4 + 1.0f;
@@ -2387,10 +2345,8 @@ Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** a
     SkinMatrix_MulYRotation((MtxF* ) &spC0, arg1);
     SkinMatrix_SetScale((MtxF* ) &sp80, arg2->unk0, 1.0f, arg2->unk8);
     SkinMatrix_MtxFMtxFMult((MtxF* ) &spC0, (MtxF* ) &sp80, (MtxF* ) &sp40);
-    temp_ret = SkinMatrix_MtxFToNewMtx(*arg4, (MtxF* ) &sp40);
-    temp_v0 = temp_ret;
+    temp_v0 = SkinMatrix_MtxFToNewMtx(*arg4, (MtxF* ) &sp40);
     temp_a2 = temp_v0;
-    phi_return = temp_ret;
     if (temp_v0 != 0) {
         temp_s0 = *arg4;
         temp_v0_2 = temp_s0->polyOpa.p;
@@ -2411,9 +2367,7 @@ Mtx* func_80B7BEA4(void* arg0, s16 arg1, f32* arg2, u8 arg3, GraphicsContext** a
         temp_s0->polyOpa.p = temp_v0_5 + 8;
         temp_v0_5->words.w1 = 0x4075A40;
         temp_v0_5->words.w0 = 0xDE000000;
-        phi_return = (Mtx* ) temp_v0_5;
     }
-    return phi_return;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7BEA4.asm")

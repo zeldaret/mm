@@ -19,13 +19,16 @@ typedef struct ObjUm {
     /* 0x2F4 */ s32 unk_2F4;
     /* 0x2BC */ char unk_2F8[0xC];
     /* 0x304 */ s32 unk_304;
-    /* 0x308 */ char unk_308[0x24];
+    /* 0x308 */ Vec3f unk_308;
+    /* 0x314 */ char unk_314[0x18];
     /* 0x32C */ Vec3f unk_32C[3];
     /* 0x350 */ char unk_350[0xD4];
     /* 0x424 */ ColliderCylinder unk_424;
     /* 0x470 */ ColliderCylinder unk_470;
     /* 0x4BC */ Vec3f unk_4BC;
-    /* 0x4C8 */ char unk_4C8[0x1C];
+    /* 0x4C8 */ u16 unk_4C8;
+    /* 0x4CA */ char unk_4CA[0x2];
+    /* 0x4CC */ char unk_4CC[0x18];
 } ObjUm; // size = 0x4E4
 
 extern const ActorInit Obj_Um_InitVars;
