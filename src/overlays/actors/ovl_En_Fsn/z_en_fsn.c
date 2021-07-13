@@ -273,10 +273,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
                     break;
                 }
             }
-        } else {
-            if (this->itemIds[cursorScan] != -1) {
-                this->cursorIdx = cursorScan;
-            }
+        } else if (this->itemIds[cursorScan] != -1) {
+            this->cursorIdx = cursorScan;
         }
     } else if (this->stickAccumX < 0) {
         if (cursorScan != 0) {
@@ -356,19 +354,19 @@ void EnFsn_GetShopItemIds(EnFsn* this) {
     itemId = EnFsn_GetThirdDayItemId();
     this->itemIds[this->totalSellingItems] = itemId;
     if (itemId != SI_NONE) {
-        this->totalSellingItems += 1;
+        this->totalSellingItems++;
     }
     itemId = EnFsn_GetStolenItemId(stolenItem1);
     this->itemIds[this->totalSellingItems] = itemId;
     if (itemId != SI_NONE) {
         this->stolenItem1 = this->totalSellingItems;
-        this->totalSellingItems += 1;
+        this->totalSellingItems++;
     }
     itemId = EnFsn_GetStolenItemId(stolenItem2);
     this->itemIds[this->totalSellingItems] = itemId;
     if (itemId != SI_NONE) {
         this->stolenItem2 = this->totalSellingItems;
-        this->totalSellingItems += 1;
+        this->totalSellingItems++;
     }
     this->numSellingItems = this->totalSellingItems;
 }
@@ -408,11 +406,7 @@ void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
 
 s32 EnFsn_TestEndInteraction(EnFsn* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        if (CURRENT_DAY == 3) {
-            this->actor.textId = 0x29DF;
-        } else {
-            this->actor.textId = 0x29D1;
-        }
+        this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
         func_801518B0(globalCtx, this->actor.textId, &this->actor);
         func_80151BB4(globalCtx, 3);
         this->actionFunc = EnFsn_SetupEndInteraction;
@@ -448,24 +442,18 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
+            } else if (gSaveContext.weekEventReg[0x21] & 4) {
+                this->actor.textId = 0x29FF;
+            } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+                this->actor.textId = 0x29D7;
             } else {
-                if (gSaveContext.weekEventReg[0x21] & 4) {
-                    this->actor.textId = 0x29FF;
-                } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
-                    this->actor.textId = 0x29D7;
-                } else {
-                    this->actor.textId = 0x29D8;
-                }
+                this->actor.textId = 0x29D8;
             }
             func_801518B0(globalCtx, this->actor.textId, &this->actor);
             return true;
         case 1:
             func_8019F230();
-            if (CURRENT_DAY == 3) {
-                this->actor.textId = 0x29DF;
-            } else {
-                this->actor.textId = 0x29D1;
-            }
+            this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
             func_801518B0(globalCtx, this->actor.textId, &this->actor);
             func_80151BB4(globalCtx, 3);
             this->actionFunc = EnFsn_SetupEndInteraction;
@@ -505,36 +493,30 @@ void EnFsn_UpdateJoystickInputState(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (stickX <= 30 && stickX >= -30) {
         this->stickAccumX = 0;
-    } else {
-        if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
+    } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
             this->stickAccumX = stickX;
-        } else {
-            this->stickAccumX += stickX;
-            if (this->stickAccumX > 2000) {
-                this->stickAccumX = 2000;
-            } else if (this->stickAccumX < -2000) {
-                this->stickAccumX = -2000;
-            }
+    } else {
+        this->stickAccumX += stickX;
+        if (this->stickAccumX > 2000) {
+            this->stickAccumX = 2000;
+        } else if (this->stickAccumX < -2000) {
+            this->stickAccumX = -2000;
         }
     }
     if (this->stickAccumY == 0) {
         if (stickY > 30 || stickY < -30) {
             this->stickAccumY = stickY;
         }
+    } else if (stickY <= 30 && stickY >= -30) {
+        this->stickAccumY = 0;
+    } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
+        this->stickAccumY = stickY;
     } else {
-        if (stickY <= 30 && stickY >= -30) {
-            this->stickAccumY = 0;
-        } else {
-            if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
-                this->stickAccumY = stickY;
-            } else {
-                this->stickAccumY += stickY;
-                if (this->stickAccumY > 2000) {
-                    this->stickAccumY = 2000;
-                } else if (this->stickAccumY < -2000) {
-                    this->stickAccumY = -2000;
-                }
-            }
+        this->stickAccumY += stickY;
+        if (this->stickAccumY > 2000) {
+            this->stickAccumY = 2000;
+        } else if (this->stickAccumY < -2000) {
+            this->stickAccumY = -2000;
         }
     }
 }
@@ -545,12 +527,7 @@ void EnFsn_PositionSelectedItem(EnFsn* this) {
     EnGirlA* item = this->items[i];
     Vec3f worldPos;
 
-    worldPos.x =
-        sShopItemPositions[i].x + (selectedItemPosition.x - sShopItemPositions[i].x) * this->shopItemSelectedTween;
-    worldPos.y =
-        sShopItemPositions[i].y + (selectedItemPosition.y - sShopItemPositions[i].y) * this->shopItemSelectedTween;
-    worldPos.z =
-        sShopItemPositions[i].z + (selectedItemPosition.z - sShopItemPositions[i].z) * this->shopItemSelectedTween;
+    VEC3F_LERPIMPDST(&worldPos, &sShopItemPositions[i], &selectedItemPosition, this->shopItemSelectedTween);
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
@@ -558,7 +535,7 @@ void EnFsn_PositionSelectedItem(EnFsn* this) {
 }
 
 /*
-    Returns true if animation has completed
+*    Returns true if animation has completed
 */
 s32 EnFsn_TakeItemOffShelf(EnFsn* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
@@ -573,7 +550,7 @@ s32 EnFsn_TakeItemOffShelf(EnFsn* this) {
 }
 
 /*
-    Returns true if animation has completed
+*    Returns true if animation has completed
 */
 s32 EnFsn_ReturnItemToShelf(EnFsn* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
@@ -595,15 +572,14 @@ void EnFsn_UpdateItemSelectedProperty(EnFsn* this) {
         if (this->actionFunc != EnFsn_SelectItem && this->actionFunc != EnFsn_CannotBuy && this->drawCursor == 0) {
             (*items)->isSelected = false;
         } else {
-            (*items)->isSelected = i == this->cursorIdx ? true : false;
+            (*items)->isSelected = (i == this->cursorIdx) ? true : false;
         }
     }
 }
 
 void EnFsn_UpdateCursorAnim(EnFsn* this) {
-    f32 t;
+    f32 t = this->cursorAnimTween;
 
-    t = this->cursorAnimTween;
     if (this->cursorAnimState == 0) {
         t += 0.05f;
         if (t >= 1.0f) {
@@ -627,8 +603,8 @@ void EnFsn_UpdateCursorAnim(EnFsn* this) {
 void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 new_var2 = 255;
-    f32 new_var3;
+    s32 maxColor = 255;
+    f32 tmp;
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -636,7 +612,6 @@ void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
             arrowAnimTween = 1.0f;
             this->arrowAnimState = 1;
         }
-
     } else {
         arrowAnimTween -= 0.05f;
         if (arrowAnimTween < 0.0f) {
@@ -657,17 +632,17 @@ void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
         this->stickAnimState = 0;
     }
 
-    new_var3 = 155.0f * arrowAnimTween;
+    tmp = 155.0f * arrowAnimTween;
 
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(new_var2, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
     this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
-    this->stickRightPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
+    this->stickRightPrompt.arrowColorR = (maxColor - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColorG = (255 - ((s32)tmp)) & 0xFF;
     this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
@@ -775,12 +750,10 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
             player->actor.world.pos.x = 1.0f;
             player->actor.world.pos.z = -34.0f;
             this->actionFunc = EnFsn_BeginInteraction;
-        } else {
-            if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
+        } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
                 (player->actor.world.pos.y > 0.0f) &&
                 ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
                 func_800B8614(&this->actor, globalCtx, 400.0f);
-            }
         }
     }
 }
@@ -954,12 +927,12 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             if (player->heldItemButton == 0) {
                 buttonItem =
                     gSaveContext.equips
-                        .buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm]
+                        .buttonItems[(gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm]
                                     [player->heldItemButton];
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];
             }
-            this->price = buttonItem < 40 ? gItemPrices[buttonItem] : 0;
+            this->price = (buttonItem < 40) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
                 player->unk_A87 = buttonItem;
@@ -1027,7 +1000,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (this->isSelling == 1 && this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT) {
+        if (this->isSelling == true && this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT) {
             func_80151BB4(globalCtx, 45);
             func_80151BB4(globalCtx, 3);
         }
@@ -1036,7 +1009,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
             func_80123D50(globalCtx, PLAYER, 18, 21);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
-    } else if (this->isSelling == 1) {
+    } else if (this->isSelling == true) {
         func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     } else {
         func_800B8A1C(&this->actor, globalCtx, this->getItemId, 300.0f, 300.0f);
@@ -1061,7 +1034,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
                 this->actor.textId = 0x29D0;
             } else {
                 this->cutscene = this->lookToShopkeeperCutscene;
-                this->actor.textId = this->numSellingItems <= 0 ? 0x29DE : 0x29D6;
+                this->actor.textId = (this->numSellingItems <= 0) ? 0x29DE : 0x29D6;
             }
             func_801518B0(globalCtx, this->actor.textId, &this->actor);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -1176,9 +1149,8 @@ void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleCanBuyItem(EnFsn* this, GlobalContext* globalCtx) {
-    EnGirlA* item;
+    EnGirlA* item = this->items[this->cursorIdx];
 
-    item = this->items[this->cursorIdx];
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
@@ -1204,7 +1176,7 @@ void EnFsn_HandleCanBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             } else if (this->stolenItem2 == this->cursorIdx) {
                 gSaveContext.roomInf[126][5] &= ~0xFF0000;
             }
-            this->numSellingItems -= 1;
+            this->numSellingItems--;
             this->itemIds[this->cursorIdx] = -1;
             this->actionFunc = EnFsn_GiveItem;
             break;
@@ -1280,7 +1252,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
         }
     }
     if (talkState == 4) {
-        if (func_80147624(globalCtx) != 0) {
+        if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1290,7 +1262,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
                     break;
                 case 1:
                     func_8019F230();
-                    this->actor.textId = CURRENT_DAY == 3 ? 0x29DF : 0x29D1;
+                    this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     func_801518B0(globalCtx, this->actor.textId, &this->actor);
                     func_80151BB4(globalCtx, 3);
                     break;
@@ -1326,7 +1298,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
         }
     }
     if (talkState == 4) {
-        if (func_80147624(globalCtx) != 0) {
+        if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1337,7 +1309,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
                     break;
                 case 1:
                     func_8019F230();
-                    this->actor.textId = CURRENT_DAY == 3 ? 0x29DF : 0x29D1;
+                    this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     func_801518B0(globalCtx, this->actor.textId, &this->actor);
                     func_80151BB4(globalCtx, 3);
                     break;
@@ -1364,16 +1336,14 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, &globalCtx->state.input[0]) &&
-            (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx))) {
-            if (this->stickAccumX > 0) {
-                cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
-                if (cursorIdx != CURSOR_INVALID) {
-                    this->cursorIdx = cursorIdx;
-                    this->actionFunc = EnFsn_LookToShelf;
-                    func_8011552C(globalCtx, 6);
-                    this->stickRightPrompt.isEnabled = false;
-                    play_sound(NA_SE_SY_CURSOR);
-                }
+            (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) && this->stickAccumX > 0) {
+            cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
+            if (cursorIdx != CURSOR_INVALID) {
+                this->cursorIdx = cursorIdx;
+                this->actionFunc = EnFsn_LookToShelf;
+                func_8011552C(globalCtx, 6);
+                this->stickRightPrompt.isEnabled = false;
+                play_sound(NA_SE_SY_CURSOR);
             }
         }
     } else if (talkState == 5 && func_80147624(globalCtx)) {
@@ -1394,10 +1364,8 @@ void EnFsn_IdleBackroom(EnFsn* this, GlobalContext* globalCtx) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, globalCtx);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else {
-        if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
-        }
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
@@ -1427,9 +1395,8 @@ void EnFsn_GetCutscenes(EnFsn* this) {
 }
 
 void EnFsn_Blink(EnFsn* this) {
-    s16 decr;
+    s16 decr = this->blinkTimer - 1;
 
-    decr = this->blinkTimer - 1;
     if (decr >= 3) {
         this->eyeTextureIdx = 0;
         this->blinkTimer = decr;
@@ -1450,7 +1417,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->limbDrawTable,
                      this->transitionDrawTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
-        this->actor.shape.rot.y += 0x8000;
+        this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, globalCtx);
@@ -1608,7 +1575,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 limbRotTableIdx;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->unk274.y, 1);
+        SysMatrix_InsertXRotation_s(this->unk274.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
@@ -1665,12 +1632,13 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
-
+    
     for (i = 0; i < this->totalSellingItems; i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
     }
+
     EnFsn_DrawCursor(this, globalCtx, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
     EnFsn_DrawStickDirectionPrompts(this, globalCtx);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

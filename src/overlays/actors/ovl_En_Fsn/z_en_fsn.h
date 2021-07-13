@@ -45,7 +45,7 @@ typedef struct {
 
 typedef struct EnFsn {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char pad144[0x4C];
+    /* 0x144 */ UNK_TYPE1 pad144[0x4C];
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnFsnActionFunc actionFunc;
     /* 0x1D8 */ EnFsnActionFunc tmpActionFunc; // Used to return to correct browsing function

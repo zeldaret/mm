@@ -88,7 +88,16 @@ typedef struct {
     /* 0x06 */ s16 yaw;     // azimuthal angle
 } VecSph; // size = 0x08
 
+#define F32_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
+#define VEC3F_LERPIMPDST(dst, v0, v1, t){ \
+    (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \
+    (dst)->y = (v0)->y + (((v1)->y - (v0)->y) * t); \
+    (dst)->z = (v0)->z + (((v1)->z - (v0)->z) * t); \
+}
+
 #define IS_ZERO(f) (fabsf(f) < 0.008f)
+
+#define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
 
 // Vector macros
 #define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))
