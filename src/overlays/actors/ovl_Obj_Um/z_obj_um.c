@@ -12,7 +12,7 @@
 
 void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Update(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
@@ -857,20 +857,11 @@ void func_80B78E38(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B78E88(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
-    Actor* temp_v0;
-    s16 temp_v1;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    temp_v1 = this->dyna.actor.shape.rot.y + arg2;
-    temp_v0->unkAD4 = temp_v1;
-    temp_v0->world.rot.y = temp_v1;
-    temp_v0->shape.rot.y = temp_v1;
+    player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + arg2;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78E88.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 void func_80B78EBC(ObjUm* arg0, GlobalContext* arg1) {
@@ -1846,14 +1837,10 @@ void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AE58.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7AEFC(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
     SkelAnime_FrameUpdateMatrix(&this->unk_160);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AEFC.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 void func_80B7AF30(void* arg0, s32 arg1) {
@@ -2011,18 +1998,83 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B18C.asm")
 #endif
 
-/*
-Failed to decompile function ObjUm_Update:
+void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjUm* this = THIS;
 
-Found jr instruction at ovl_Obj_Um_0x80B77770.asm line 4266, but the corresponding jump table is not provided.
+    this->unk_15C(this, globalCtx);
+    this->unk_350 += 1;
+    Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 
-Please include it in the input .s file(s), or in an additional file.
-It needs to be within ".section .rodata" or ".section .late_rodata".
+    if (this->unk_2B8 != 0) {
+        this->unk_2B8->world.pos.x = this->dyna.actor.world.pos.x;
+        this->unk_2B8->world.pos.y = this->dyna.actor.floorHeight;
+        this->unk_2B8->world.pos.z = this->dyna.actor.world.pos.z;
+    }
 
-(You might need to pass --goto and --no-andor flags as well, to get correct control flow for non-jtbl switch jumps.)
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Update.asm")
+    if (this->unk_2F4 & 0x10) {
+        func_80123F2C(globalCtx, 0x63);
+        this->unk_2F4 &= ~0x10;
+    }
+    else if (this->unk_2F4 & 4) {
+        func_80123F2C(globalCtx, -3);
+        this->unk_2F4 &= ~4;
+    }
 
+    if (this->unk_2F4 & 0x100) {
+        this->unk_2F4 &= ~0x100;
+        func_80B78E88(this, globalCtx, 0);
+        func_80B78EBC(this, globalCtx);
+    }
+
+    func_80B7AF30(this, globalCtx);
+    switch (this->unk_4CC) {
+        case 0:
+            switch (this->unk_4D0) {
+                case 0:
+                    if (Rand_ZeroOne() < 0.025f) {
+                        this->unk_4D0 = 1;
+                    }
+                    break;
+
+                case 1:
+                    if (Rand_ZeroOne() < 0.6f) {
+                        this->unk_4D0 = 2;
+                    }
+                    break;
+
+                case 2:
+                    if (Rand_ZeroOne() < 0.6f) {
+                        this->unk_4D0 = 0;
+                    }
+                    break;
+
+                default:
+                    this->unk_4D0 = 0;
+                    break;
+            }
+            break;
+
+        case 1:
+            this->unk_4D0 = 3;
+            break;
+        case 2:
+            this->unk_4D0 = 4;
+            break;
+        case 3:
+            this->unk_4D0 = 5;
+            break;
+        case 4:
+            this->unk_4D0 = 2;
+            break;
+        case 5:
+            this->unk_4D0 = 0;
+            break;
+        default:
+            this->unk_4CC = 0;
+            this->unk_4D0 = 0;
+            break;
+    }
+}
 
 s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 #ifdef MIPS_2_C_OUTPUT

@@ -18,13 +18,13 @@ typedef struct ObjUm {
     /* 0x2AE */ s16 unk_2AE;
     /* 0x2B0 */ s16 unk_2B0;
 
-    /* 0x2B2 */ char unk_2B2[0x2];
+    /* 0x2B2 */ char unk_2B2[0x2]; // padding probably
     /* 0x2B4 */ UNK_TYPE unk_2B4;
 
     /* 0x2B8 */ Actor* unk_2B8;
 
     /* 0x2BC */ s32 unk_2BC;
-    /* 0x2BE */ char unk_2BE[0x4];
+    /* 0x2BE */ char unk_2BE[0x4]; // Vec3s* ?
 
     /* 0x2C4 */ Vec3f unk_2C4;
 
@@ -58,10 +58,10 @@ typedef struct ObjUm {
     /* 0x470 */ ColliderCylinder unk_470;
     /* 0x4BC */ Vec3f unk_4BC;
     /* 0x4C8 */ u16 unk_4C8;
-    /* 0x4CA */ char unk_4CA[0x2];
+    /* 0x4CA */ char unk_4CA[0x2]; // padding probably
 
     /* 0x4CC */ UNK_TYPE unk_4CC;
-    /* 0x4D0 */ char unk_4D0[0x4];
+    /* 0x4D0 */ UNK_TYPE unk_4D0;
     /* 0x4D4 */ UNK_TYPE unk_4D4;
     /* 0x4D8 */ char unk_4D8[0xC];
 } ObjUm; // size = 0x4E4
