@@ -8449,9 +8449,9 @@ SECTIONS
     ovl_En_Baisen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.text)
-        build/asm/overlays/ovl_En_Baisen_data.o(.data)
+        build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.data)
         build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.rodata)
-        build/asm/overlays/ovl_En_Baisen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Baisen/z_en_baisen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
