@@ -588,8 +588,20 @@ static InitChainEntry D_80B4EC98[] = {
 };
 
 static EnInvadepohInitFunc D_80B4ECB0[] = {
-    func_80B4627C, func_80B46414, EnInvadepoh_InitParentCow, EnInvadepoh_InitChildCow, EnInvadepoh_InitRomani, EnInvadepoh_InitRomani, func_80B468B4,
-    EnInvadepoh_InitRomani, EnInvadepoh_InitRomani, EnInvadepoh_InitRomani, EnInvadepoh_InitDog, EnInvadepoh_InitCremia, EnInvadepoh_InitRomani, func_80B46414,
+    func_80B4627C,
+    func_80B46414,
+    EnInvadepoh_InitParentCow,
+    EnInvadepoh_InitChildCow,
+    EnInvadepoh_InitRomani,
+    EnInvadepoh_InitRomani,
+    func_80B468B4,
+    EnInvadepoh_InitRomani,
+    EnInvadepoh_InitRomani,
+    EnInvadepoh_InitRomani,
+    EnInvadepoh_InitDog,
+    EnInvadepoh_InitCremia,
+    EnInvadepoh_InitRomani,
+    func_80B46414,
 };
 
 static EnInvadepohDestroyFunc D_80B4ECE8[] = {
@@ -1054,7 +1066,6 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 sp2C;
     f32 phi_f2;
 
-    
     sp60 = &this->pathPoints[this->pathIndex];
     if (this->pathIndex <= 0) {
         sp3C = 0.0f;
@@ -1365,8 +1376,8 @@ void func_80B45460(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    D_80B503F0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-                             this->actor.world.pos.z, 0, 0, 0, 0x60);
+    D_80B503F0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x60);
 }
 
 void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
@@ -3885,8 +3896,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     if (gSaveContext.time > CLOCK_TIME(20, 15)) {
         Actor_MarkForDeath(&this->actor);
-    }
-    else if ((temp_t6 != NULL) && (temp_t6->actionFunc == func_80B4CB0C)) {
+    } else if ((temp_t6 != NULL) && (temp_t6->actionFunc == func_80B4CB0C)) {
         func_80B4C1BC(this);
     }
 }
@@ -3954,8 +3964,7 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (D_80B503F4 == NULL) {
         func_80B4BBE0(this);
-    }
-    else if (D_80B503F4 != NULL) {
+    } else if (D_80B503F4 != NULL) {
         if ((D_80B503F4)->actionFunc != func_80B4CB0C) {
             func_80B4BBE0(this);
         }

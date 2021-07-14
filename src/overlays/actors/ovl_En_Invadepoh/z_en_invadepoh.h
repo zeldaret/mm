@@ -9,7 +9,7 @@ typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
 
-typedef struct unkStruct_80B50350{
+typedef struct unkStruct_80B50350 {
     /* 0x000 */ s8 unk0;
     /* 0x001 */ s8 unk1;
     /* 0x002 */ u8 unk2;
@@ -53,7 +53,7 @@ typedef struct {
     /* 0x06 */ s16 unk06;
 } unkstruct_80B4EE0C; // size = 0x08
 
-typedef struct EnInvadePohStruct{
+typedef struct EnInvadePohStruct {
     /* 0x000 */ unkstruct_invadepoh_4* unk0;
     /* 0x004 */ s8 unk4;
     /* 0x008 */ unkstruct_invadepoh_4* unk8;
@@ -100,7 +100,7 @@ typedef struct EnInvadepoh {
     /* 0x306 */ s16 unk306;
     /* 0x308 */ s8 endPoint;
     /* 0x309 */ s8 pathIndex;
-    /* 0x30A */ s8 direction; //only ever 1 or -1
+    /* 0x30A */ s8 direction; // only ever 1 or -1
     /* 0x30C */ Vec3s* pathPoints;
     /* 0x310 */ f32 pathTotalDist;
     /* 0x314 */ Vec3f curPathPos;
@@ -123,7 +123,7 @@ typedef struct EnInvadepoh {
     /* 0x3A4 */ f32 scaleStep;
     /* 0x3A8 */ s16 scaleAdjAngle;
     /* 0x3AA */ s16 unk3AA;
-    /* 0x3AC */ s8 unk3AC; //index for D_80B4EDD0
+    /* 0x3AC */ s8 unk3AC; // index for D_80B4EDD0
     /* 0x3AD */ char unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
