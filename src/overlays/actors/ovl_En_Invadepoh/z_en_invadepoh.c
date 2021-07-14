@@ -170,32 +170,31 @@ void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
 
-extern AnimatedMaterial D_06000560;
 extern AnimatedMaterial D_06000550;
-extern AnimationHeader D_06004264;
-extern FlexSkeletonHeader D_06004010;
-extern FlexSkeletonHeader D_06004E50;
-extern FlexSkeletonHeader D_06004C30;
-extern FlexSkeletonHeader D_06013928;
-extern AnimationHeader D_06004E98;
-extern AnimationHeader D_06002A8C;
-extern AnimationHeader D_060021C8;
-extern AnimationHeader D_06001BD8;
+extern AnimatedMaterial D_06000560;
+
+extern AnimationHeader D_06000608;
+extern AnimationHeader D_060006C8;
 extern AnimationHeader D_06000998;
 extern AnimationHeader D_06001560;
-extern AnimationHeader D_06002A8C;
-extern AnimationHeader D_06014088;
-extern AnimationHeader D_06009E58;
-extern AnimationHeader D_06009E58;
-extern AnimationHeader D_06016720;
-extern AnimationHeader D_0600A174;
-extern AnimationHeader D_06009E58;
 extern AnimationHeader D_06001674;
+extern AnimationHeader D_06001BD8;
 extern AnimationHeader D_06001D80;
-extern AnimationHeader D_060006C8;
-extern AnimationHeader D_06000608;
+extern AnimationHeader D_060021C8;
+extern AnimationHeader D_06002A8C;
+extern AnimationHeader D_06004264;
+extern AnimationHeader D_06004E98;
 extern AnimationHeader D_06007328;
+extern AnimationHeader D_06009E58;
+extern AnimationHeader D_0600A174;
+extern AnimationHeader D_06014088;
+extern AnimationHeader D_06016720;
+
 extern FlexSkeletonHeader D_060080F0;
+extern FlexSkeletonHeader D_06004010;
+extern FlexSkeletonHeader D_06004C30;
+extern FlexSkeletonHeader D_06004E50;
+extern FlexSkeletonHeader D_06013928;
 extern FlexSkeletonHeader D_06015C28;
 
 extern Gfx D_0600FFC8[];
@@ -225,8 +224,8 @@ extern Gfx D_06000720[];
 extern Gfx D_0402E510[];
 extern Gfx D_06000080[];
 
-extern Vec3s D_801D15BC;
 extern s32 D_801BDA9C;
+extern Vec3s D_801D15BC;
 
 const ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
@@ -3988,10 +3987,10 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
             this->xzPosAdjFactor = 40.0f;
         }
 
-        if ((currentTime >= 0x4000) && (currentTime < 0xD573)) {
+        if ((currentTime >= CLOCK_TIME(6, 0)) && (currentTime < 0xD573)) {
             this->actor.update = func_80B4C568;
             this->actor.draw = 0;
-        } else if ((currentTime >= 0xD573) && (currentTime < 0xD800)) {
+        } else if ((currentTime >= 0xD573) && (currentTime < CLOCK_TIME(20, 15))) {
             this->actor.update = func_80B4C5C0;
             this->actor.draw = func_80B4E7BC;
             func_80B4BBE0(this);
