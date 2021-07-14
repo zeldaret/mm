@@ -676,7 +676,7 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
         this->unk300 = 0;
         this->actor.speedXZ = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
-        EnNiw_SetupIdle(&this->actor);
+        EnNiw_SetupIdle(this);
     } else {
         if (this->unk2BC.x != 90000.0f) {
             dX = this->actor.world.pos.x - this->unk2BC.x;

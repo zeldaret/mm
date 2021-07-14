@@ -43,7 +43,7 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, D_06000EE8);
-    func_8013E3B8(&this->dyna.actor, &this->unk160, 1);
+    func_8013E3B8(&this->dyna.actor, this->unk160, 1);
     func_80BD6624(this);
 }
 

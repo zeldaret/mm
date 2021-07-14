@@ -329,8 +329,8 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, GlobalContext* globalCtx) {
             s16 romaniType;
 
             romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
-            if ((this->type == MA_YTO_TYPE_DINNER && romaniType == EN_NA_YTS_TYPE_SITTING) ||
-                (this->type == MA_YTO_TYPE_BARN && romaniType == EN_NA_YTS_TYPE_BARN)) {
+            if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
+                (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {
                 this->actor.child = &romani->actor;
                 romani->actor.parent = &this->actor;
                 return true;
@@ -1103,7 +1103,7 @@ void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, GlobalContext* globalCtx)
         }
     }
 
-    if (func_80152498(&globalCtx->msgCtx) == 0 && globalCtx->msgCtx.unk120B1 == 0) {
+    if (func_80152498(&globalCtx->msgCtx) == 0 && globalCtx->msgCtx.unk_120B1 == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }
