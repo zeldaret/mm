@@ -104,7 +104,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80B9143C = {
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
@@ -195,7 +195,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B9143C);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (EnMaYto_TryFindRomani(this, globalCtx) == 1) {
@@ -321,11 +321,11 @@ void EnMaYto_ChooseAction(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 s32 EnMaYto_SearchRomani(EnMaYto* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* npcActor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
-    while (actor != NULL) {
-        if (actor->id == ACTOR_EN_MA_YTS) {
-            EnMaYts* romani = (EnMaYts*)actor;
+    while (npcActor != NULL) {
+        if (npcActor->id == ACTOR_EN_MA_YTS) {
+            EnMaYts* romani = (EnMaYts*)npcActor;
             s16 romaniType;
 
             romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
@@ -335,11 +335,11 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, GlobalContext* globalCtx) {
                 romani->actor.parent = &this->actor;
                 return true;
             } else {
-                actor = actor->next;
+                npcActor = npcActor->next;
                 continue;
             }
         }
-        actor = actor->next;
+        npcActor = npcActor->next;
     }
 
     return false;
