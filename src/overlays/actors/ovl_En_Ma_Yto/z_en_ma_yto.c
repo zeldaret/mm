@@ -1357,7 +1357,7 @@ void EnMaYto_UpdateEyes(EnMaYto* this) {
 void func_80B90E50(EnMaYto* this, s16 arg1) {
     EnMaYts* romani = (EnMaYts*)this->actor.child;
 
-    if ((romani != NULL) && (romani->actor.id == ACTOR_EN_MA_YTS)) {
+    if (romani != NULL && romani->actor.id == ACTOR_EN_MA_YTS) {
         romani->unk_32C = arg1;
     }
 }
@@ -1461,15 +1461,17 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (limbIndex == MA2_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
-        rot->x = rot->x + sp4.y;
-        rot->z = rot->z + sp4.x;
+
+        rot->x += sp4.y;
+        rot->z += sp4.x;
     } else if (limbIndex == MA2_LIMB_TORSO) {
-        if ((this->skelAnime.animCurrentSeg != &D_06007E28) && (this->skelAnime.animCurrentSeg != &D_06003D54)) {
+        if (this->skelAnime.animCurrentSeg != &D_06007E28 && this->skelAnime.animCurrentSeg != &D_06003D54) {
             sp4 = this->unk_1D8.unk_0E;
-            rot->x = rot->x + sp4.y;
-            if ((this->skelAnime.animCurrentSeg == &D_0600A174) || (this->skelAnime.animCurrentSeg == &D_060070EC) ||
-                (this->skelAnime.animCurrentSeg == &D_06003D54)) {
-                rot->z = rot->z + sp4.x;
+
+            rot->x += sp4.y;
+            if (this->skelAnime.animCurrentSeg == &D_0600A174 || this->skelAnime.animCurrentSeg == &D_060070EC ||
+                this->skelAnime.animCurrentSeg == &D_06003D54) {
+                rot->z += sp4.x;
             }
         }
     }
