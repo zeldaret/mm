@@ -18,6 +18,7 @@ def convert(time):
     macro_val = round((hours * 3600 + minutes * 60 + seconds) * (0x10000 / (24 * 60 * 60)))
 
     print(f"{hours},{minutes:02},{seconds:02} -> 0x{macro_val:04X}")
+    print(f"CLOCK_TIME({hours}, {minutes})")
     assert time == macro_val, "Warning: Result does not match as-is"
 
 if __name__ == "__main__":
