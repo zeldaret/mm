@@ -39,7 +39,7 @@ typedef struct {
     /* 0x04 */ s16 cylHeight;
     /* 0x06 */ s16 cylYShift;
     /* 0x08 */ u8 mass;
-} CollisionCheckInfoInit2;
+} CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
     /* 0x00 */ DamageTable* damageTable;

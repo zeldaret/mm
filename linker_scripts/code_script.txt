@@ -5618,9 +5618,9 @@ SECTIONS
     ovl_En_Ma4 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.text)
-        build/asm/overlays/ovl_En_Ma4_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.data)
         build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.rodata)
-        build/asm/overlays/ovl_En_Ma4_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ma4/z_en_ma4_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
