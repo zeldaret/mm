@@ -836,9 +836,8 @@ f32 EnInvadepoh_GetTotalPathLength(EnInvadepoh* this) {
 }
 
 void func_80B44024(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Path* path;
+    Path* path = &globalCtx->setupPathList[(this->actor.params >> 8) & 0x7F];
 
-    path = &globalCtx->setupPathList[(this->actor.params >> 8) & 0x7F];
     this->endPoint = path->count - 1;
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
 }
@@ -992,6 +991,7 @@ void func_80B44570(EnInvadepoh* this) {
         this->clockTime = 1.0f;
     } else {
         f32 new_var = (currentTime - 0x1555) * 0.0014641288f;
+
         this->clockTime = new_var;
         this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }
@@ -1047,7 +1047,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad2;
     Vec3f sp50;
     Vec3f sp44;
-    f32 sp40;
+    f32 sp40 = this->actor.world.pos.y;
     f32 sp3C;
     s32 pad3;
     f32 sp34;
@@ -1055,7 +1055,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 sp2C;
     f32 phi_f2;
 
-    sp40 = this->actor.world.pos.y;
+    
     sp60 = &this->pathPoints[this->pathIndex];
     if (this->pathIndex <= 0) {
         sp3C = 0.0f;
@@ -1462,7 +1462,7 @@ Actor* func_80B458D8(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        if ((D_80B50340[i] & 2)) {
+        if (D_80B50340[i] & 2) {
             return D_80B50320[i];
         }
     }
@@ -1971,10 +1971,7 @@ void func_80B46E20(EnInvadepoh* this) {
 void func_80B46E44(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
-        return;
-    }
-
-    if (ActorCutscene_GetCanPlayNext(D_80B50404[0])) {
+    } else if (ActorCutscene_GetCanPlayNext(D_80B50404[0])) {
         ActorCutscene_StartAndSetUnkLinkFields(D_80B50404[0], &this->actor);
         func_80B46EC0(this);
     } else {
@@ -2350,7 +2347,7 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
         func_80B447C0(this, globalCtx);
         func_80B43F0C(this);
         func_80B4516C(this);
-        if (D_80B4E940 == 1 || gSaveContext.time < 0x1AD8) {
+        if (D_80B4E940 == 1 || gSaveContext.time < CLOCK_TIME(2, 31)) {
             func_80B47380(this);
         } else if (D_80B4E940 == 2) {
             if (this->clockTime >= 0.0001f) {
@@ -3127,7 +3124,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -3169,10 +3166,10 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.textId = 0x332C;
         }
 
-        if (sp38 >= 0xC000 || sp38 < 0x1555) {
+        if (sp38 >= CLOCK_TIME(18, 0) || sp38 < CLOCK_TIME(2, 0)) {
             this->actor.update = func_80B4A168;
             this->actor.draw = 0;
-        } else if (((sp38 < 0x4000) && (sp38 >= 0x1555)) && (sp38 < 0x1800)) {
+        } else if ((sp38 < CLOCK_TIME(6, 0)) && (sp38 >= CLOCK_TIME(2, 0)) && (sp38 < CLOCK_TIME(2, 15))) {
             this->actor.update = func_80B4A1B8;
             this->actor.draw = func_80B4E324;
             func_80B49BD0(this);
@@ -3261,7 +3258,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
         temp_v1_2 *= 0.85f;
         temp_v1_2 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1_2, -2500, 2500);
-        diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+        diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1_2 = diff;
         temp_v1_2 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
@@ -3361,7 +3358,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -3393,7 +3390,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
                          this->transitionDrawTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
-        if ((sp38 < 0x1800) || (sp38 >= 0x4000)) {
+        if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
             this->pathIndex = 0;
             this->actor.update = func_80B4AB8C;
         } else {
@@ -3423,7 +3420,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4AB8C(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if ((gSaveContext.time < 0x4000) && (gSaveContext.time >= 0x1800)) {
+    if ((gSaveContext.time < CLOCK_TIME(6, 0)) && (gSaveContext.time >= CLOCK_TIME(2, 15))) {
         this->actor.update = func_80B4ABDC;
         this->actor.draw = func_80B4E324;
         func_80B4A614(this);
@@ -3604,7 +3601,7 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f);
         temp_v1 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-        diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+        diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1 = diff;
         temp_v1 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -3875,7 +3872,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1_2 *= 0.85f;
             temp_v1_2 -= this->actor.shape.rot.x;
             substruct->unk26.x = CLAMP(temp_v1_2, -3000, 3000);
-            diff = (s16)(sp40 - this->actor.shape.rot.y);
+            diff = BINANG_SUB(sp40, this->actor.shape.rot.y);
             temp_v1_2 = diff;
             temp_v1_2 *= 0.7f;
             substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
@@ -3917,7 +3914,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
 
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
 
@@ -3951,7 +3948,7 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -4007,7 +4004,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4C568(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if ((gSaveContext.time >= 0xD573) && (gSaveContext.time < 0xD800)) {
+    if ((gSaveContext.time >= 0xD573) && (gSaveContext.time < CLOCK_TIME(20, 15))) {
         this->actor.update = func_80B4C5C0;
         this->actor.draw = func_80B4E7BC;
         func_80B4BBE0(this);
@@ -4113,7 +4110,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
         temp_v1_4 *= 0.85f;
         temp_v1_4 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1_4, -3000, 3000);
-        diff = (s16)(sp3A - this->actor.shape.rot.y);
+        diff = BINANG_SUB(sp3A, this->actor.shape.rot.y);
         temp_v1_4 = diff;
         temp_v1_4 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1_4, -8000, 8000);
@@ -4156,7 +4153,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -4186,7 +4183,7 @@ void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
@@ -4218,7 +4215,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         func_80B43F0C(this);
         func_80B4516C(this);
         this->actor.textId = 0x33CE;
-        if ((sp38 >= 0x4000) && (sp38 < 0xD555)) {
+        if ((sp38 >= CLOCK_TIME(6, 0)) && (sp38 < CLOCK_TIME(20, 0))) {
             this->actor.update = func_80B4CFFC;
             this->actor.draw = NULL;
         } else if ((sp38 >= 0xD555) && (sp38 < 0xD7E1)) {
@@ -4234,7 +4231,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4CFFC(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    if ((gSaveContext.time >= 0xD555) && (gSaveContext.time < 0xD7E1)) {
+    if ((gSaveContext.time >= CLOCK_TIME(20, 0)) && (gSaveContext.time < 0xD7E1)) {
         this->actor.update = func_80B4D054;
         this->actor.draw = func_80B4E324;
         func_80B4C6C8(this);
