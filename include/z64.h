@@ -749,8 +749,8 @@ typedef struct {
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
-    /* 0x226 */ s16 unk_226;
-    /* 0x228 */ s16 unk_228;
+    /* 0x226 */ s16 lifeColorChange;
+    /* 0x228 */ s16 lifeColorChangeDirection;
     /* 0x22A */ s16 beatingHeartPrim[3];
     /* 0x230 */ s16 beatingHeartEnv[3];
     /* 0x236 */ s16 heartsPrimR[2];
@@ -761,8 +761,8 @@ typedef struct {
     /* 0x24A */ s16 heartsEnvB[2];
     /* 0x24E */ s16 unk_24E;
     /* 0x250 */ s16 unk_250;
-    /* 0x252 */ s16 unk_252;
-    /* 0x254 */ s16 beatingHeartState; // 1 means shrinking, 0 growing
+    /* 0x252 */ s16 lifeSizeChange;
+    /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ u8 numHorseBoosts;
@@ -988,7 +988,7 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
     /* 0x120B0 */ UNK_TYPE1 pad120B0[0x1];
-    /* 0x120B1 */ u8 unk120B1;
+    /* 0x120B1 */ u8 unk_120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x2];
     /* 0x120B4 */ UNK_TYPE1 pad120B4[0x2C];
 } MessageContext; // size = 0x120E0
@@ -1580,7 +1580,11 @@ struct ActorContext {
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
     /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
-    /* 0x269 */ UNK_TYPE1 pad269[0x1B];
+    /* 0x269 */ UNK_TYPE1 pad269[0x3];
+    /* 0x26C */ UNK_TYPE1 pad26C[0xC];
+    /* 0x278 */ u16 unk278;
+    /* 0x27A */ UNK_TYPE1 pad27A[0x2];
+    /* 0x27C */ UNK_TYPE1 pad27C[0x8];
 }; // size = 0x284
 
 typedef struct {
