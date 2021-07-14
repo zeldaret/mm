@@ -1337,7 +1337,17 @@ typedef struct {
     /* 0x47D */ u8 unk47D;
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
-} PadmgrThreadStruct; // size = 0x480
+} PadMgr; // size = 0x480
+
+#define OS_SC_NEEDS_RDP         0x0001
+#define OS_SC_NEEDS_RSP         0x0002
+#define OS_SC_DRAM_DLIST        0x0004
+#define OS_SC_PARALLEL_TASK     0x0010
+#define OS_SC_LAST_TASK         0x0020
+#define OS_SC_SWAPBUFFER        0x0040
+
+#define OS_SC_RCP_MASK          0x0003
+#define OS_SC_TYPE_MASK         0x0007
 
 typedef struct {
     /* 0x000 */ OSMesgQueue interruptQ;
@@ -1410,13 +1420,13 @@ typedef struct {
     /* 0x004 */ SchedContext* sched;
     /* 0x008 */ OSScTask audioTask;
     /* 0x060 */ AudioTask* rspTask;
-    /* 0x064 */ OSMesgQueue irqQueue;
-    /* 0x07C */ OSMesg irqMsgBuffer[30];
-    /* 0x0F4 */ OSMesgQueue unk_F4;
-    /* 0x10C */ OSMesg unk_10C[1];
-    /* 0x110 */ OSMesgQueue initDoneCallback;
-    /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
-    /* 0x12C */ UNK_TYPE1 pad12C[0x4];
+    /* 0x064 */ OSMesgQueue interruptMsgQ;
+    /* 0x07C */ OSMesg interruptMsgBuf[30];
+    /* 0x0F4 */ OSMesgQueue cmdQ;
+    /* 0x10C */ OSMesg cmdMsgBuf[1];
+    /* 0x110 */ OSMesgQueue lockMsgQ;
+    /* 0x128 */ OSMesg lockMsgBuf[1];
+    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
 

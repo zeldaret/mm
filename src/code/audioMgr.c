@@ -9,7 +9,7 @@ void func_80172C30(AudioMgr* audioMgr) {
 }
 
 void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
-    static s32 D_801D14F0 = 10;
+    static s32 retryCount = 10;
     AudioTask* rspTask;
     s32 timerMsgVal = 666;
     OSTimer timer;
@@ -19,17 +19,17 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
         audioMgr->rspTask = NULL;
     }
 
-    while (audioMgr->unk_F4.validCount != 0) {
-        osRecvMesg(&audioMgr->unk_F4, NULL, OS_MESG_NOBLOCK);
+    while (audioMgr->cmdQ.validCount != 0) {
+        osRecvMesg(&audioMgr->cmdQ, NULL, OS_MESG_NOBLOCK);
     }
 
     if (audioMgr->rspTask != NULL) {
         audioMgr->audioTask.next = NULL;
-        audioMgr->audioTask.flags = 2;
+        audioMgr->audioTask.flags = OS_SC_NEEDS_RSP;
         audioMgr->audioTask.framebuffer = NULL;
 
         audioMgr->audioTask.list = audioMgr->rspTask->task;
-        audioMgr->audioTask.msgQ = &audioMgr->unk_F4;
+        audioMgr->audioTask.msgQ = &audioMgr->cmdQ;
 
         audioMgr->audioTask.msg = NULL;
         osSendMesg(&audioMgr->sched->cmdQ, &audioMgr->audioTask, OS_MESG_BLOCK);
@@ -44,13 +44,13 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
 
     if (audioMgr->rspTask != NULL) {
         while (true) {
-            osSetTimer(&timer, OS_USEC_TO_CYCLES(32000), 0, &audioMgr->unk_F4, (OSMesg)timerMsgVal);
-            osRecvMesg(&audioMgr->unk_F4, (OSMesg*)&msg, OS_MESG_BLOCK);
+            osSetTimer(&timer, OS_USEC_TO_CYCLES(32000), 0, &audioMgr->cmdQ, (OSMesg)timerMsgVal);
+            osRecvMesg(&audioMgr->cmdQ, (OSMesg*)&msg, OS_MESG_BLOCK);
             osStopTimer(&timer);
             if (msg == timerMsgVal) {
                 Fault_Log("AUDIO SP TIMEOUT %08x %08x\n", audioMgr->rspTask, audioMgr->rspTask->task);
-                if (D_801D14F0 >= 0) {
-                    D_801D14F0--;
+                if (retryCount >= 0) {
+                    retryCount--;
                     func_8017703C(audioMgr->sched);
                 } else {
                     Fault_Log("audioMgr.c:もうダメ！死ぬ！\n");
@@ -72,8 +72,8 @@ void AudioMgr_HandlePRENMI(AudioMgr* audioMgr) {
     Audio_PreNMI();
 }
 
-void AudioMgr_ThreadEntry(void* _audioMgr) {
-    AudioMgr* audioMgr = (AudioMgr*)_audioMgr;
+void AudioMgr_ThreadEntry(void* arg) {
+    AudioMgr* audioMgr = (AudioMgr*)arg;
     IrqMgrClient irqClient;
     s16* msg = NULL;
     s32 exit;
@@ -81,17 +81,17 @@ void AudioMgr_ThreadEntry(void* _audioMgr) {
     func_801A4C30();
     func_80190B38(DmaMgr_DmaCallback0);
     func_801A4D00();
-    osSendMesg(&audioMgr->initDoneCallback, NULL, OS_MESG_BLOCK);
-    IrqMgr_AddClient(audioMgr->irqMgr, &irqClient, &audioMgr->irqQueue);
+    osSendMesg(&audioMgr->lockMsgQ, NULL, OS_MESG_BLOCK);
+    IrqMgr_AddClient(audioMgr->irqMgr, &irqClient, &audioMgr->interruptMsgQ);
 
     exit = false;
     while (!exit) {
-        osRecvMesg(&audioMgr->irqQueue, (OSMesg*)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&audioMgr->interruptMsgQ, (OSMesg*)&msg, OS_MESG_BLOCK);
         switch (*msg) {
             case OS_SC_RETRACE_MSG:
                 AudioMgr_HandleRetrace(audioMgr);
-                while (audioMgr->irqQueue.validCount != 0) {
-                    osRecvMesg(&audioMgr->irqQueue, (OSMesg*)&msg, OS_MESG_BLOCK);
+                while (audioMgr->interruptMsgQ.validCount != 0) {
+                    osRecvMesg(&audioMgr->interruptMsgQ, (OSMesg*)&msg, OS_MESG_BLOCK);
                     switch (*msg) {
                         case OS_SC_RETRACE_MSG:
                             break;
@@ -117,7 +117,7 @@ void AudioMgr_ThreadEntry(void* _audioMgr) {
 }
 
 void AudioMgr_Unlock(AudioMgr* audioMgr) {
-    osRecvMesg(&audioMgr->initDoneCallback, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&audioMgr->lockMsgQ, NULL, OS_MESG_BLOCK);
 }
 
 void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedContext* sched, IrqMgr* irqMgr) {
@@ -127,10 +127,9 @@ void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedCon
     audioMgr->irqMgr = irqMgr;
     audioMgr->rspTask = NULL;
 
-    osCreateMesgQueue(&audioMgr->unk_F4, audioMgr->unk_10C, ARRAY_COUNT(audioMgr->unk_10C));
-    osCreateMesgQueue(&audioMgr->irqQueue, audioMgr->irqMsgBuffer, ARRAY_COUNT(audioMgr->irqMsgBuffer));
-    osCreateMesgQueue(&audioMgr->initDoneCallback, audioMgr->initDoneCallbackMsgBuffer,
-                      ARRAY_COUNT(audioMgr->initDoneCallbackMsgBuffer));
+    osCreateMesgQueue(&audioMgr->cmdQ, audioMgr->cmdMsgBuf, ARRAY_COUNT(audioMgr->cmdMsgBuf));
+    osCreateMesgQueue(&audioMgr->interruptMsgQ, audioMgr->interruptMsgBuf, ARRAY_COUNT(audioMgr->interruptMsgBuf));
+    osCreateMesgQueue(&audioMgr->lockMsgQ, audioMgr->lockMsgBuf, ARRAY_COUNT(audioMgr->lockMsgBuf));
 
     osCreateThread(&audioMgr->thread, id, AudioMgr_ThreadEntry, audioMgr, stack, pri);
     osStartThread(&audioMgr->thread);
