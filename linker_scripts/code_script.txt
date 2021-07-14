@@ -2565,7 +2565,7 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.text)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.data)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.rodata)
-        build/asm/overlays/ovl_Obj_Lightswitch_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
