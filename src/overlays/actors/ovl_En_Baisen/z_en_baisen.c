@@ -59,7 +59,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-static u16 textIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
+static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
 static AnimationHeader* D_80BE8E4C[] = { &D_060011C0, &D_060008B4, &D_06008198 };
 
@@ -73,8 +73,8 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
-        this->unk290 = 1;
-        if (!(gSaveContext.weekEventReg[63] & 0x80) && ((gSaveContext.day != 3) || (!gSaveContext.isNight))) {
+        this->unk290 = true;
+        if (!(gSaveContext.weekEventReg[63] & 0x80) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
@@ -109,11 +109,9 @@ void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
 }
 
 void func_80BE871C(EnBaisen* this) {
-    s16 yawTemp;
-    s32 yaw;
+    s16 yawTemp = this->unk29E - this->actor.world.rot.y;
+    s32 yaw = ABS_ALT(yawTemp);
 
-    yawTemp = this->unk29E - this->actor.world.rot.y;
-    yaw = ABS_ALT(yawTemp);
     this->headRotXTarget = 0;
     if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 0x4E20)) {
         this->headRotXTarget = this->unk29E - this->actor.world.rot.y;
@@ -126,10 +124,9 @@ void func_80BE871C(EnBaisen* this) {
 }
 
 void func_80BE87B0(EnBaisen* this, GlobalContext* globalCtx) {
-    Actor* actorIterator;
+    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
-    actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
-    while (actorIterator) {
+    while (actorIterator != NULL) {
         if (actorIterator->id == ACTOR_EN_HEISHI) {
             this->heishiPointer = actorIterator;
         }
@@ -148,7 +145,7 @@ void func_80BE87FC(EnBaisen* this) {
         EnBaisen_ChangeAnimation(this, 0);
     }
 
-    this->actor.textId = textIds[this->textIdIndex];
+    this->actor.textId = sTextIds[this->textIdIndex];
     this->unk29C = 0;
     this->actionFunc = func_80BE887C;
 }
@@ -170,14 +167,14 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
                 return;
             }
         }
-        this->actor.textId = textIds[this->textIdIndex];
+        this->actor.textId = sTextIds[this->textIdIndex];
         func_800B8614(&this->actor, globalCtx, 70.0f);
     }
 }
 
 void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx) {
     if (this->unk2A4 != NULL) {
-        this->unk290 = 1;
+        this->unk290 = true;
         this->unk2AC = 1;
         func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
     }
@@ -213,7 +210,7 @@ void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
-    if (this->textIdIndex & 1) {
+    if ((this->textIdIndex % 2) != 0) {
         this->unk29E = this->actor.world.rot.y;
         if (this->animIndex == 0) {
             EnBaisen_ChangeAnimation(this, 1);
@@ -230,8 +227,8 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
         func_801477B4(globalCtx);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {
-            func_80151938(globalCtx, textIds[this->textIdIndex]);
-            if (!(this->textIdIndex & 1)) {
+            func_80151938(globalCtx, sTextIds[this->textIdIndex]);
+            if ((this->textIdIndex % 2) == 0) {
                 this->unk2A4 = this->heishiPointer;
             } else {
                 this->unk2A4 = &this->actor;
@@ -252,7 +249,7 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unusedCounter--;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && (gSaveContext.isNight)) {
+    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -260,12 +257,12 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
-    if (this->unk290 != 0) {
+    if (this->unk290) {
         func_80BE871C(this);
     }
     Actor_SetHeight(&this->actor, 60.0f);
-    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
-    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
