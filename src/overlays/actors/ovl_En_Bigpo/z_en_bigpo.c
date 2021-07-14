@@ -154,17 +154,21 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpoFireParticle* fires;
     s32 i;
+    u16 parms;
 
     Actor_ProcessInitChain(&this->actor, &D_80B65064);
 
     // issue:  the params look-up wants to save the params to two t registers, one modified, one not
     // then it saves the param, and immediately re-loads it wtf
     // because its duping the globalcontext load instead of the params load, I can only assume its filling a void
-    //parms = this->actor.params;
-    this->switchFlags = (u8)(this->actor.params >> 8);
+    this->switchFlags = this->actor.params;
+    //this->switchFlags = this->switchFlags >> 8;
+    this->switchFlags = (u8)(this->switchFlags);
     this->actor.params &= 0xFF;
+    //if (this->actor.params == 9){} // almost like it needs a a different params for a different scope
     //this->actor.params = (u8)this->actor.params;
     if (this->actor.params == ENBIGPO_POSSIBLEFIRE) {
+    //if (parms == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
         } else  {
@@ -179,24 +183,16 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
 
-    for (i = 0, fires = this->fires; i < 3; fires++, i++) {
-        // wants to do use 3 light pointers, this is silly 
-        fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->fires[i].info);
-        //fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &fires->info);
+    for (i = 0; i < 3; i++) {
+        fires = &this->fires[i];
+        //fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->fires[i].info);
+        fires->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &fires->info);
 
-        Lights_PointNoGlowSetInfo(&this->fires[i].info,
-        //Lights_PointNoGlowSetInfo(&fires->info,
+        //Lights_PointNoGlowSetInfo(&this->fires[i].info,
+        Lights_PointNoGlowSetInfo(&fires->info,
              this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
              0xFF, 0xFF, 0xFF, 0);
     }
-
-    // not enough pointers, we need a separate pointer to 338 instead of 348
-    //for (i = 0; i < 3; i++) {
-        //this->fires[i].light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->fires[i].info);
-        //Lights_PointNoGlowSetInfo(&this->fires[i].info,
-             //this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-             //0xFF, 0xFF, 0xFF, 0);
-    //}
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 45.0f);
     this->actor.bgCheckFlags |= 0x400;
@@ -211,7 +207,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    if (this->actor.params == ENBIGPO_REGULAR) { // the well poe
+    if (this->actor.params == ENBIGPO_REGULAR) { // the well poe, starts immediately
         this->unk204 = 1;
         this->actor.flags &= -0x11;
         func_80B61AC8(this);
@@ -1359,7 +1355,7 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 // draw func
 // non-equivelent: this is an odd draw function, diff is nowhere close
 // set as poe is dying
-#ifdef NON_EQUIVELENT
+//#ifdef NON_EQUIVELENT
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
 
@@ -1420,9 +1416,9 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
-#endif
+//#else
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
+//#endif
 
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
@@ -1445,7 +1441,7 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
         sp66 = (s16)(thisx->scale.x * 500.0f * 100.0f);
     }
     gSPSegment(POLY_XLU_DISP++, 0x08, 
-        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0, 
+        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, 
         ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
