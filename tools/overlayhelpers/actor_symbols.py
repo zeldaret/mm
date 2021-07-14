@@ -124,7 +124,7 @@ actor_names = [
     "",
     "",
     "",
-    "",
+    "ovl_En_Fishing",
     "ovl_Obj_Oshihiki",
     "ovl_Eff_Dust",
     "ovl_Bg_Umajump",
