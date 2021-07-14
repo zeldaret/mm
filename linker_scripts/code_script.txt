@@ -7937,9 +7937,9 @@ SECTIONS
     ovl_En_Guruguru : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.text)
-        build/asm/overlays/ovl_En_Guruguru_data.o(.data)
+        build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.data)
         build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.rodata)
-        build/asm/overlays/ovl_En_Guruguru_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
