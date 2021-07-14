@@ -397,7 +397,8 @@ SECTIONS
         build/asm/code/z_map_exp.o(.text)
         build/asm/code/z_msgevent.o(.text)
         build/asm/code/code_0x8010C0C0.o(.text)
-        build/asm/code/code_0x8010C230.o(.text)
+        build/src/code/z_olib.o(.text)
+        . += 0x10;
         build/asm/code/z_parameter.o(.text)
         build/asm/code/code_0x801224E0.o(.text)
         build/asm/code/code_0x80122660.o(.text)
@@ -514,7 +515,7 @@ SECTIONS
         build/asm/code/code_data_0x801BD910.o(.data)
         build/asm/code/code_data_z_horse.o(.data)
         build/asm/code/code_data_z_jpeg.o(.data)
-        build/asm/code/code_data_z_kanfont.o(.data)
+        build/src/code/z_kanfont.o(.data)
         build/asm/code/code_data_z_kankyo.o(.data)
         build/src/code/z_lib.o(.data)
         build/asm/code/code_data_z_lifemeter.o(.data)
@@ -596,7 +597,7 @@ SECTIONS
         build/asm/code/code_rodata_z_lifemeter.o(.rodata)
         build/src/code/z_lights.o(.rodata)
         build/asm/code/code_rodata_z_map_disp.o(.rodata)
-        build/asm/code/code_rodata_0x8010C230.o(.rodata)
+        build/src/code/z_olib.o(.rodata)
         build/asm/code/code_rodata_z_parameter.o(.rodata)
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
         build/asm/code/code_rodata_0x8012A080.o(.rodata)
@@ -985,9 +986,9 @@ SECTIONS
     ovl_En_Firefly : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.text)
-        build/asm/overlays/ovl_En_Firefly_data.o(.data)
+        build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.data)
         build/src/overlays/actors/ovl_En_Firefly/z_en_firefly.o(.rodata)
-        build/asm/overlays/ovl_En_Firefly_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Firefly/z_en_firefly_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -1041,9 +1042,15 @@ SECTIONS
     ovl_En_Niw : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
-        build/asm/overlays/ovl_En_Niw_data.o(.data)
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
+#ifdef NON_EQUIVALENT
+        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
+#elseif NON_MATCHING
+        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
+#else
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
         build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
+#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -1785,9 +1792,9 @@ SECTIONS
     ovl_En_Sb : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.text)
-        build/asm/overlays/ovl_En_Sb_data.o(.data)
+        build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.data)
         build/src/overlays/actors/ovl_En_Sb/z_en_sb.o(.rodata)
-        build/asm/overlays/ovl_En_Sb_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Sb/z_en_sb_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2558,7 +2565,7 @@ SECTIONS
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.text)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.data)
         build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch.o(.rodata)
-        build/asm/overlays/ovl_Obj_Lightswitch_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Lightswitch/z_obj_lightswitch_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -3889,9 +3896,9 @@ SECTIONS
     ovl_Bg_Icicle : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.text)
-        build/asm/overlays/ovl_Bg_Icicle_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.data)
         build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle.o(.rodata)
-        build/asm/overlays/ovl_Bg_Icicle_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Icicle/z_bg_icicle_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -5612,9 +5619,9 @@ SECTIONS
     ovl_En_Ma4 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.text)
-        build/asm/overlays/ovl_En_Ma4_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.data)
         build/src/overlays/actors/ovl_En_Ma4/z_en_ma4.o(.rodata)
-        build/asm/overlays/ovl_En_Ma4_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ma4/z_en_ma4_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -7934,9 +7941,9 @@ SECTIONS
     ovl_En_Guruguru : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.text)
-        build/asm/overlays/ovl_En_Guruguru_data.o(.data)
+        build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.data)
         build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru.o(.rodata)
-        build/asm/overlays/ovl_En_Guruguru_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Guruguru/z_en_guruguru_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8108,9 +8115,9 @@ SECTIONS
     ovl_Obj_Hgdoor : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.text)
-        build/asm/overlays/ovl_Obj_Hgdoor_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.data)
         build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor.o(.rodata)
-        build/asm/overlays/ovl_Obj_Hgdoor_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Hgdoor/z_obj_hgdoor_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8179,9 +8186,9 @@ SECTIONS
     ovl_Bg_Haka_Tomb : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.text)
-        build/asm/overlays/ovl_Bg_Haka_Tomb_data.o(.data)
+        build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.data)
         build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb.o(.rodata)
-        build/asm/overlays/ovl_Bg_Haka_Tomb_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Bg_Haka_Tomb/z_bg_haka_tomb_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8446,9 +8453,9 @@ SECTIONS
     ovl_En_Baisen : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.text)
-        build/asm/overlays/ovl_En_Baisen_data.o(.data)
+        build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.data)
         build/src/overlays/actors/ovl_En_Baisen/z_en_baisen.o(.rodata)
-        build/asm/overlays/ovl_En_Baisen_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Baisen/z_en_baisen_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8788,9 +8795,9 @@ SECTIONS
     ovl_Obj_Mu_Pict : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.text)
-        build/asm/overlays/ovl_Obj_Mu_Pict_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.data)
         build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict.o(.rodata)
-        build/asm/overlays/ovl_Obj_Mu_Pict_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Mu_Pict/z_obj_mu_pict_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -9413,9 +9420,9 @@ SECTIONS
     ovl_Obj_Ending : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.text)
-        build/asm/overlays/ovl_Obj_Ending_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.data)
         build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending.o(.rodata)
-        build/asm/overlays/ovl_Obj_Ending_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Ending/z_obj_ending_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

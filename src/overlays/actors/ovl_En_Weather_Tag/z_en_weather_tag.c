@@ -89,9 +89,9 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case WEATHERTAG_TYPE_UNK5:
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 7);
-            globalCtx->unk18874 = 3;
-            globalCtx->kankyoContext.unk1F = 5;
-            globalCtx->kankyoContext.unk20 = 5;
+            globalCtx->skyboxId = 3;
+            globalCtx->envCtx.unk_1F = 5;
+            globalCtx->envCtx.unk_20 = 5;
             D_801F4E74 = 1.0f;
             EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
@@ -111,24 +111,24 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 // called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
 u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
                  u8 weatherMode) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
-        if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
+    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+        if (globalCtx->envCtx.unk_1F == globalCtx->envCtx.unk_20) {
             D_801BDBB8 = 1;
-            if (!(globalCtx->kankyoContext.unk1E == 0) ||
-                ((globalCtx->kankyoContext.unk1F != 1) && (globalCtx->kankyoContext.unk21 == 0))) {
+            if (!(globalCtx->envCtx.unk_1E == 0) ||
+                ((globalCtx->envCtx.unk_1F != 1) && (globalCtx->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
                 if (D_801BDBB0 != weatherMode) {
                     D_801BDBB0 = weatherMode;
-                    globalCtx->kankyoContext.unk21 = 1;
-                    globalCtx->kankyoContext.unk1F = new1F;
-                    globalCtx->kankyoContext.unk20 = new20;
+                    globalCtx->envCtx.unk_21 = 1;
+                    globalCtx->envCtx.unk_1F = new1F;
+                    globalCtx->envCtx.unk_20 = new20;
                     D_801BDBB4 = new20;
-                    globalCtx->kankyoContext.unk24 = new24;
-                    globalCtx->kankyoContext.unk22 = globalCtx->kankyoContext.unk24;
+                    globalCtx->envCtx.unk_24 = new24;
+                    globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
                 }
                 returnVal = 1;
             }
@@ -141,23 +141,23 @@ u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 // called WeatherTag_CheckRestoreWeather in OOT
 u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20,
                  u16 new24) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->base, &this->actor)) {
-        if (globalCtx->kankyoContext.unk1F == globalCtx->kankyoContext.unk20) {
+    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+        if (globalCtx->envCtx.unk_1F == globalCtx->envCtx.unk_20) {
             D_801BDBB8 = 1;
-            if (!(globalCtx->kankyoContext.unk1E == 0) ||
-                ((globalCtx->kankyoContext.unk1F != 1) && (globalCtx->kankyoContext.unk21 == 0))) {
+            if (!(globalCtx->envCtx.unk_1E == 0) ||
+                ((globalCtx->envCtx.unk_1F != 1) && (globalCtx->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
                 D_801BDBB0 = 0;
-                globalCtx->kankyoContext.unk21 = 1;
-                globalCtx->kankyoContext.unk1F = new1F;
-                globalCtx->kankyoContext.unk20 = new20;
+                globalCtx->envCtx.unk_21 = 1;
+                globalCtx->envCtx.unk_1F = new1F;
+                globalCtx->envCtx.unk_20 = new20;
                 D_801BDBB4 = new20;
-                globalCtx->kankyoContext.unk24 = new24;
-                globalCtx->kankyoContext.unk22 = globalCtx->kankyoContext.unk24;
+                globalCtx->envCtx.unk_24 = new24;
+                globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
                 returnVal = 1;
             }
         }
@@ -167,11 +167,11 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 
 // modify wind?
 void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     f32 distance;
     f32 partialResult;
 
-    distance = Actor_XZDistanceBetweenActors(&player->base, &this->actor);
+    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     if (this->fadeDistance < distance) {
         distance = this->fadeDistance;
     }
@@ -184,13 +184,13 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
     partialResult = (1.0f - (distance / this->fadeDistance));  // strength based on distance?
     partialResult = (this->unk154 / 32768.0f) * partialResult; // another scale applied
 
-    globalCtx->kankyoContext.windClothIntensity = (this->actor.world.rot.z * partialResult) + 30.0f;
+    globalCtx->envCtx.windSpeed = (this->actor.world.rot.z * partialResult) + 30.0f;
     if (partialResult > 0.01f) {
-        globalCtx->kankyoContext.unkEA = 8;
+        globalCtx->envCtx.unk_EA = 8;
         D_801F4E30 = 0x9B;
-    } else if (globalCtx->kankyoContext.unkEA == 8) {
+    } else if (globalCtx->envCtx.unk_EA == 8) {
         D_801F4E30 = 0;
-        globalCtx->kankyoContext.unkEA = 9;
+        globalCtx->envCtx.unk_EA = 9;
     }
 }
 
@@ -228,11 +228,11 @@ void EnWeatherTag_Die(EnWeatherTag* this, GlobalContext* globalCtx) {
 //  poisoned swamp: placed behind the water fall from ikana
 // this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if (func_80966608(this, globalCtx, 0, 0, globalCtx->kankyoContext.unk1F, 5, 100, 2) || D_801BDBB0 == 2) {
-        globalCtx->unk18874 = 3;
+    if (func_80966608(this, globalCtx, 0, 0, globalCtx->envCtx.unk_1F, 5, 100, 2) || D_801BDBB0 == 2) {
+        globalCtx->skyboxId = 3;
         EnWeatherTag_SetupAction(this, func_80966D20);
     } else if (D_801F4E74 <= 0.01f) {
-        globalCtx->unk18874 = 1;
+        globalCtx->skyboxId = 1;
     } else {
         Math_SmoothStepToF(&D_801F4E74, 0.0f, 0.2f, 0.02f, 0.001f);
     }
@@ -245,7 +245,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     CsCmdActorAction* tmpAction;
 
     if (func_800EE29C(globalCtx, 0x237) != 0) {
-        tmpAction = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x237)];
+        tmpAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x237)];
         if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->unk0 >= 2)) {
             switch (gSaveContext.day) {
                 case 0:
@@ -260,12 +260,14 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
                     newUnk20 = 4;
                     break;
             }
+
             Math_SmoothStepToF(&D_801F4E74, 0.0f, 0.2f, 0.02f, 0.001f);
-            if (globalCtx->kankyoContext.unk20 != newUnk20) {
-                globalCtx->kankyoContext.unk21 = 1;
-                globalCtx->kankyoContext.unk20 = newUnk20;
-                globalCtx->kankyoContext.unk24 = 100;
-                globalCtx->kankyoContext.unk22 = globalCtx->kankyoContext.unk24;
+
+            if (globalCtx->envCtx.unk_20 != newUnk20) {
+                globalCtx->envCtx.unk_21 = 1;
+                globalCtx->envCtx.unk_20 = newUnk20;
+                globalCtx->envCtx.unk_24 = 100;
+                globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
             }
         }
     }
@@ -304,7 +306,7 @@ void func_80966D20(EnWeatherTag* this, GlobalContext* globalCtx) {
 //   path to goron village winter, winter mountain village
 void func_80966E0C(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 1, 0, 2, 60, 3)) {
-        globalCtx->kankyoContext.unkF2[3] = 0x80;
+        globalCtx->envCtx.unk_F2[3] = 0x80;
         EnWeatherTag_SetupAction(this, func_80966E84);
     }
 }
@@ -312,7 +314,7 @@ void func_80966E0C(EnWeatherTag* this, GlobalContext* globalCtx) {
 // WEATHERTAG_TYPE_WINTERFOG 2
 void func_80966E84(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966758(this, globalCtx, 1, 0, 2, 0, 60)) {
-        globalCtx->kankyoContext.unkF2[3] = 0;
+        globalCtx->envCtx.unk_F2[3] = 0;
         EnWeatherTag_SetupAction(this, func_80966E0C);
     }
 }
@@ -323,7 +325,7 @@ void func_80966E84(EnWeatherTag* this, GlobalContext* globalCtx) {
 void func_80966EF0(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 1, 0, 2, 100, 4)) {
         func_800FD78C(globalCtx);
-        globalCtx->kankyoContext.unkF2[0] = 60;
+        globalCtx->envCtx.unk_F2[0] = 60;
         EnWeatherTag_SetupAction(this, func_80966F74);
     }
 }
@@ -332,7 +334,7 @@ void func_80966EF0(EnWeatherTag* this, GlobalContext* globalCtx) {
 void func_80966F74(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966758(this, globalCtx, 1, 0, 2, 0, 100)) {
         func_800FD858(globalCtx);
-        globalCtx->kankyoContext.unkF2[0] = 0;
+        globalCtx->envCtx.unk_F2[0] = 0;
         EnWeatherTag_SetupAction(this, func_80966EF0);
     }
 }
@@ -353,7 +355,7 @@ void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // non-matching: two instructions are swapped
 // type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
@@ -397,8 +399,8 @@ void EnWeatherTag_DoNothing(EnWeatherTag* this, GlobalContext* globalCtx) {
 void EnWeatherTag_Unused_809671B8(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966608(this, globalCtx, 0, 1, 0, 4, 100, 5)) {
         func_800FD78C(globalCtx);
-        globalCtx->kankyoContext.unkE3 = 1;
-        globalCtx->kankyoContext.unkF2[0] = 60;
+        globalCtx->envCtx.unk_E3 = 1;
+        globalCtx->envCtx.unk_F2[0] = 60;
         EnWeatherTag_SetupAction(this, EnWeatherTag_Unused_80967250);
     }
 }
@@ -407,17 +409,17 @@ void EnWeatherTag_Unused_809671B8(EnWeatherTag* this, GlobalContext* globalCtx) 
 void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_80966758(this, globalCtx, 1, 0, 4, 0, 100)) {
         func_800FD858(globalCtx);
-        globalCtx->kankyoContext.unkE3 = 2;
-        globalCtx->kankyoContext.unkF2[0] = 0;
+        globalCtx->envCtx.unk_E3 = 2;
+        globalCtx->envCtx.unk_F2[0] = 0;
         EnWeatherTag_SetupAction(this, EnWeatherTag_Unused_809671B8);
     }
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // non_matching: the parameters for func_800BCCDC are correct, but out of order
 // WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s32 pad;
     f32 distance;
     f32 range;
@@ -429,26 +431,26 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     // ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
     // ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
     // efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
-    func_800BCCDC(this->pathPoints, this->pathCount, &player->base.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &player->actor.world.pos, &this->actor.world.pos, 0);
 
-    distance = Actor_XZDistanceBetweenActors(&player->base, &this->actor);
+    distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
-        globalCtx->kankyoContext.unkEA = 6;
+        globalCtx->envCtx.unk_EA = 6;
         strength = 1.0f - (distance / range);
         if (0.8f < strength) {
             strength = 1.0f;
         }
         D_801F4E30 = (200.0f * strength);
     } else {
-        if (globalCtx->kankyoContext.unkEA == 6) {
+        if (globalCtx->envCtx.unk_EA == 6) {
             D_801F4E30 = 0;
-            globalCtx->kankyoContext.unkEA = 7;
+            globalCtx->envCtx.unk_EA = 7;
         }
     }
 
-    Math_SmoothStepToS(&globalCtx->kankyoContext.unkA4, (s16)(-40.0f * strength), 1, 1, 1);
+    Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_809672DC.asm")
@@ -457,23 +459,22 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if (Actor_XZDistanceBetweenActors(&player->base, &this->actor) < WEATHER_TAG_RANGE100(this)) {
+    if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) &&
-                (globalCtx->kankyoContext.unkF2[2] == 0)) {
+            if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
                 func_800FD78C(globalCtx);
-                globalCtx->kankyoContext.unkF2[4] = 0x20;
+                globalCtx->envCtx.unk_F2[4] = 0x20;
                 EnWeatherTag_SetupAction(this, func_80967608);
             }
         }
     } else {
-        if ((globalCtx->kankyoContext.unkF2[4] != 0) && !(globalCtx->state.frames & 3)) {
-            globalCtx->kankyoContext.unkF2[4]--;
-            if ((globalCtx->kankyoContext.unkF2[4]) == 8) {
+        if ((globalCtx->envCtx.unk_F2[4] != 0) && !(globalCtx->state.frames & 3)) {
+            globalCtx->envCtx.unk_F2[4]--;
+            if ((globalCtx->envCtx.unk_F2[4]) == 8) {
                 func_800FD858(globalCtx);
             }
         }
@@ -482,7 +483,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->base, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
@@ -493,8 +494,8 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     u16 oldTime;
 
     this->actionFunc(this, globalCtx);
-    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) &&
-        (globalCtx->msgCtx.unk11F04 == 0x5E6) && (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->unk18875 == 0) &&
+    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
+        (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->sceneLoadFlag == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
         oldTime = gSaveContext.time;

@@ -16,7 +16,7 @@ const ActorInit Bg_Lbfshot_InitVars = {
     sizeof(BgLbfshot),
     (ActorFunc)BgLbfshot_Init,
     (ActorFunc)BgLbfshot_Destroy,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)BgLbfshot_Draw,
 };
 

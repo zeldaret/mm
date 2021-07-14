@@ -49,7 +49,7 @@ typedef struct EnBigpo {
 
 // well ver is regular, dampe basement ver is summoned
 // on spawn, 3/possible fires are turned into chosenfire
-typedef enum EnBigpoType {
+enum EnBigpoType {
   /* 0 */ ENBIGPO_REGULAR,
   /* 1 */ ENBIGPO_SUMMONED,
   /* 2 */ ENBIGPO_POSSIBLEFIRE,

@@ -412,7 +412,7 @@ void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
 
 // setup
 void func_80B62034(EnBigpo *this) {
-    this->idleTimer = 16;
+    this->idleTimer = 15;
     if (this->unk204 == 0) {
         func_801A2E54(0x38);
         this->unk204 = 1;
@@ -475,17 +475,17 @@ void func_80B621CC(EnBigpo *this, GlobalContext *globalCtx) {
 
 // setup warp behind player
 void func_80B622E4(EnBigpo *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
     f32 distance;
     s16 randomYaw;
 
     distance = (this->actor.xzDistToPlayer < 200.0f) ? ( 200.0f ) : ( this->actor.xzDistToPlayer );
     randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
-    Audio_PlayActorSound2(&player->base, NA_SE_EN_STALKIDS_APPEAR);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->rotVelocity = 0x2000;
-    this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->base.world.pos.x;
-    this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->base.world.pos.z;
+    this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
+    this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->actor.world.pos.z;
     this->actionFunc = func_80B623BC;
 }
 
@@ -526,12 +526,12 @@ void func_80B624F4(EnBigpo *this) {
 
 // idle flying around
 void func_80B6259C(EnBigpo *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     DECR(this->idleTimer);
     this->unk212 = (this->unk212 == 0) ? 0x28 : (this->unk212 - 1);
-    Math_StepToF(&this->unk218, player->base.world.pos.y + 100.0f, 1.5f);
+    Math_StepToF(&this->unk218, player->actor.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (sin_rad(this->unk212 * 0.15707964f) * 10.0f) + this->unk218;
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
@@ -581,12 +581,12 @@ void func_80B62814(EnBigpo *this) {
 
 // flying spin attack against player is active
 void func_80B62830(EnBigpo *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
     s16 yawDiff;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_StepToF(&this->actor.speedXZ, 10.0f, 1.0f);
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->base.world.pos.y, 0.3f, 7.5f, 1.0f);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y, 0.3f, 7.5f, 1.0f);
     func_80B619B4(this); // play spinning sound
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     // because acFlags AC_HARD and COLTYPE_METAL, if we hit it means we contacted as attack
@@ -605,10 +605,10 @@ void func_80B62900(EnBigpo *this) {
 
 // spin down to no spin
 void func_80B62920(EnBigpo *this, GlobalContext *globalCtx) {
-    ActorPlayer *player = PLAYER;
+    Player *player = PLAYER;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Math_SmoothStepToF(&this->actor.world.pos.y, player->base.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
+    Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200) != 0) {
         // re-allow hittable after bombing run
@@ -1162,7 +1162,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
     if (this->actionFunc == func_80B62F10) {
-        func_800B78B8(globalCtx, &this->actor, 0.0f, 27.0f, 60.0f, 4);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 27.0f, 60.0f, 4);
     }
 
     if (this->actor.draw == func_80B6467C) {
@@ -1178,13 +1178,13 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     thisCollider = &this->collider.base;
     Collider_UpdateCylinder(&this->actor, thisCollider);
     if ((this->collider.base.ocFlags1 & OC1_ON)) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, thisCollider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, thisCollider);
     }
     if ((this->collider.base.atFlags & AT_ON)) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, thisCollider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, thisCollider);
     }
     if ((this->collider.base.acFlags & AC_ON)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, thisCollider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, thisCollider);
     }
 
     if (this->unk21C > 0.0f) {
@@ -1223,10 +1223,10 @@ s32 func_80B641E8(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList,
 void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx) {
     EnBigpo* this = (EnBigpo*) actor;
 
-    Vec3f unusedVec;
     s8 limbByte;
     Vec3f *v1ptr;
     Vec3f *v2ptr;
+    Vec3f unusedVec;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1238,6 +1238,7 @@ void func_80B64240(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     }
 
     if (limbIndex == 7) {
+        // we scale it... then do nothing with it?
         SysMatrix_GetStateTranslationAndScaledY(1400.0f, &unusedVec);
         if ((this->actionFunc == func_80B62B10 ) && (this->idleTimer >= 0x13)) {
             if (actor->scale.x != 0.0f) {
@@ -1310,7 +1311,7 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
     func_800BE680(globalCtx, &this->actor, &this->unk224, 9,
          this->actor.scale.x * 71.428566f * this->unk220, 0, this->unk21C, 0x14);
 
-    Matrix_Put(&this->drawMtxF);
+    SysMatrix_SetCurrentState(&this->drawMtxF);
     func_80B64880(&this->actor, globalCtx);
     if (this->actionFunc == func_80B61F04 ) {
         func_80B64B08(&this->actor, globalCtx);
@@ -1353,9 +1354,10 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 // draw func
-// non-equivelent: this is an odd draw function, diff is nowhere close
+// non-equivelent: this is an odd draw function, 
+// diff is nowhere close
 // set as poe is dying
-//#ifdef NON_EQUIVELENT
+#ifdef NON_EQUIVELENT
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
 
@@ -1416,9 +1418,9 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }
-//#else
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
-//#endif
+#else
+#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
+#endif
 
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
