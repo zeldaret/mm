@@ -272,34 +272,37 @@ def GetItems(data, off, count, structf, fmt, size):
     }},'''.format(f_ColliderBodyInit.format(*cBody), fmt.format(*cItem))
     return result
 
-def GetJntSphElements(data, off, count):
+def GetJntSphElements(address, data, off, count):
     items = GetItems(data, off, count, sf_JntSphElement, f_JntSphElement, 0x24)
     return('''
-static ColliderJntSphElementInit sJntSphElementsInit[{0}] = {{{1}
+// static ColliderJntSphElementInit sJntSphElementsInit[{0}] = {{
+static ColliderJntSphElementInit D_{2:08X}[{0}] = {{{1}
 }};
-'''.format(count, items))
+'''.format(count, items, address))
 
-def GetJntSph(data, off, type):
+def GetJntSph(address, data, off, type):
     sBase = GetColliderStr(data, off, type)
     cJntSph = struct.unpack_from(sf_JntSph, data, off + 8)
 
     return('''
-static ColliderJntSphInit{0} sJntSphInit = {{
+// static ColliderJntSphInit{0} sJntSphInit = {{
+static ColliderJntSphInit{0} D_{3:08X} = {{
     {1},
     {2},
 }};
-'''.format(type, sBase, f_JntSph.format(*cJntSph)))
+'''.format(type, sBase, f_JntSph.format(*cJntSph), address))
 
 
-def GetTrisElements(data, off, count):
+def GetTrisElements(address, data, off, count):
     items = GetItems(data, off, count, sf_TrisElement, f_TrisElement, 0x3C)
     return('''
-static ColliderTrisElementInit sTrisElementsInit[{0}] = {{{1}
+// static ColliderTrisElementInit sTrisElementsInit[{0}] = {{
+static ColliderTrisElementInit D_{2:08X}[{0}] = {{{1}
 }};
-'''.format(count, items))
+'''.format(count, items, address))
 
 
-def GetCylinder(data, off, type):
+def GetCylinder(address, data, off, type):
     sBase = GetColliderStr(data, off, type)
     cBody = list(struct.unpack_from(sf_ColliderBodyInit, data, off + 0x08))
     cCyl16 = struct.unpack_from(sf_Cylinder16, data, off + 0x20)
@@ -314,25 +317,27 @@ def GetCylinder(data, off, type):
     cBody[9] = GetOcElemFlags(cBody[9])
 
     return('''
-static ColliderCylinderInit{0} sCylinderInit = {{
+// static ColliderCylinderInit{0} sCylinderInit = {{
+static ColliderCylinderInit{0} D_{4:08X} = {{
     {1},
     {2},
     {3},
 }};
-'''.format(type,sBase,f_ColliderBodyInit.format(*cBody),f_Cylinder16.format(*cCyl16)))
+'''.format(type,sBase,f_ColliderBodyInit.format(*cBody),f_Cylinder16.format(*cCyl16), address))
 
-def GetTris(data, off, type):
+def GetTris(address, data, off, type):
     sBase = GetColliderStr(data, off, type)
     cTris = struct.unpack_from(sf_Tris, data, off + 8)
 
     return('''
-static ColliderTrisInit{0} sTrisInit = {{
+// static ColliderTrisInit{0} sTrisInit = {{
+static ColliderTrisInit{0} D_{3:08X} = {{
     {1},
     {2},
 }};
-'''.format(type, sBase, f_Tris.format(*cTris)))
+'''.format(type, sBase, f_Tris.format(*cTris), address))
 
-def GetQuad(data, off, type):
+def GetQuad(address, data, off, type):
     sBase = GetColliderStr(data, off, type)
     cBody = list(struct.unpack_from(sf_ColliderBodyInit, data, off + 0x08))
     cQuad = struct.unpack_from(sf_Quad, data, off + 0x20)
@@ -347,14 +352,15 @@ def GetQuad(data, off, type):
     cBody[9] = GetOcElemFlags(cBody[9])
 
     return('''
-static ColliderQuadInit{0} sQuadInit = {{
+// static ColliderQuadInit{0} sQuadInit = {{
+static ColliderQuadInit{0} D_{4:08X} = {{
     {1},
     {2},
     {3},
 }};
-'''.format(type, sBase, f_ColliderBodyInit.format(*cBody), f_Quad.format(*cQuad)))
+'''.format(type, sBase, f_ColliderBodyInit.format(*cBody), f_Quad.format(*cQuad), address))
 
-def GetSphere(data, off, type):
+def GetSphere(address, data, off, type):
     sBase = GetColliderStr(data, off, type)
     cBody = list(struct.unpack_from(sf_ColliderBodyInit, data, off + 0x08))
     cSphere = struct.unpack_from(sf_Sphere, data, off + 0x20)
@@ -369,12 +375,13 @@ def GetSphere(data, off, type):
     cBody[9] = GetOcElemFlags(cBody[9])
 
     return('''
-static ColliderSphereInit{0} sSphereInit = {{
+// static ColliderSphereInit{0} sSphereInit = {{
+static ColliderSphereInit{0} D_{4:08X} = {{
     {1},
     {2},
     {3},
 }};
-'''.format(type, sBase, f_ColliderBodyInit.format(*cBody), f_Sphere.format(*cSphere)))
+'''.format(type, sBase, f_ColliderBodyInit.format(*cBody), f_Sphere.format(*cSphere), address))
 
 def GetColliderInit(address, type, num):
     TYPE_DICT = {
@@ -397,7 +404,7 @@ def GetColliderInit(address, type, num):
     if fileResult[0] is None:
         return("Invalid address")
 
-    print(hex(fileResult[1]), "in", fileResult[0].split(os.sep)[-1])
+    # print(hex(fileResult[1]), "in", fileResult[0].split(os.sep)[-1])
 
     selectedType = TYPE_DICT[type]
     arg2 = None
@@ -412,7 +419,7 @@ def GetColliderInit(address, type, num):
     ovlData = bytearray(ovlFile.read())
     ovlFile.close()
 
-    return selectedType[0](ovlData, fileResult[1], arg2)
+    return selectedType[0](address, ovlData, fileResult[1], arg2)
 
 def GetColliderInitFull(address, type, num):
     if(type.find('Element') != -1):
@@ -421,21 +428,21 @@ def GetColliderInitFull(address, type, num):
     base = GetColliderInit(address, type, 0)
 
     if(type.find('JntSph') != -1):
-        [num, address2, dummy] = base.split('\n')[3].split(',')
+        [num, address2, dummy] = base.split('\n')[4].split(',')
         hexaddress = int(address2.strip(' D_'), 16)
         if(hexaddress == 0):
             return base.replace(address2,' NULL')
         else:
             elements = GetColliderInit(hexaddress, 'ColliderJntSphElementInit', int(num))
-            return elements + base.replace(address2,' sJntSphElementsInit')
+            return elements + base.replace(address2, address2 + ', // sJntSphElementsInit')
     elif(type.find('Tris') != -1):
-        [num, address2, dummy] = base.split('\n')[3].split(',')
+        [num, address2, dummy] = base.split('\n')[4].split(',')
         hexaddress = int(address2.strip(' D_'), 16)
         if(hexaddress == 0):
             return base.replace(address2,' NULL')
         else:
             elements = GetColliderInit(hexaddress, 'ColliderTrisElementInit', int(num))
-            return elements + base.replace(address2,' sTrisElementsInit')
+            return elements + base.replace(address2, address2 + ', // sTrisElementsInit')
     else:
         return base
 
