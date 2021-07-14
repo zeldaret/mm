@@ -10,7 +10,7 @@
 
 #define THIS ((ObjUm*)thisx)
 
-void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
@@ -111,6 +111,8 @@ static ? D_80B7C2FC; // unable to generate initializer
 static ? D_80B7C308; // unable to generate initializer
 static ? D_80B7C314; // unable to generate initializer
 */
+extern ColliderCylinderInit D_80B7C138;
+extern InitChainEntry D_80B7C254[2];
 
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
@@ -136,9 +138,13 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
 
 
+void func_80B7B154(ObjUm* this, GlobalContext* globalCtx);
 
 void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32);
 
+
+// global?
+extern Vec3s D_801D15BC;
 
 extern FlexSkeletonHeader D_06011DF8;
 extern AnimationHeader D_06012CC0;
@@ -897,173 +903,147 @@ void func_80B78EFC(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
     player->actor.focus.rot.y += arg2;
 }
 
-#ifdef MIPS_2_C_OUTPUT
-void ObjUm_Init(ObjUm* this, GlobalContext* globalCtx) {
-    s32 sp54;
-    ? sp48;
-    SkelAnime* sp44;
-    Actor* temp_v0_5;
-    PosRot* temp_a3;
-    SkelAnime* temp_a1;
-    Vec3f* temp_a0;
-    s16 temp_v0;
-    s32 temp_a2;
-    s32 temp_v1;
-    u16 temp_v0_2;
-    u8 temp_v0_3;
-    u8 temp_v0_4;
-    ObjUm* phi_v0;
-    Vec3f* phi_a0;
-    s32 phi_v1;
+#ifdef NON_MATCHING
+void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjUm* this = THIS;
+    s32 sp54 = true;
+    Vec3s sp48;
+    s32 i;
 
-    sp54 = 1;
-    BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
-    this->unk_350 = NULL;
-    temp_a3 = &this->dyna.actor.world;
-    this->unk2C4 = (f32) temp_a3->pos.x;
-    this->unk2C8 = (f32) temp_a3->pos.y;
-    this->unk2CC = (f32) temp_a3->pos.z;
-    this->unk2DC = (f32) temp_a3->pos.x;
-    this->unk2E0 = (f32) temp_a3->pos.y;
-    this->unk2E4 = (f32) temp_a3->pos.z;
-    this->unk_308 = (bitwise s8* ) temp_a3->pos.x;
-    this->unk30C = (f32) temp_a3->pos.y;
-    this->unk310 = (f32) temp_a3->pos.z;
-    phi_v0 = this;
-    phi_a0 = this->unk_32C;
-    phi_v1 = 0;
-    do {
-        phi_v0->unk314 = 5;
-        phi_v0->unk320 = 0;
-        temp_v1 = phi_v1 + 1;
-        phi_a0->x = D_801D15B0.x;
-        temp_a0 = phi_a0 + 0xC;
-        temp_a0->unk-8 = (f32) D_801D15B0.y;
-        temp_a0->unk-4 = (f32) D_801D15B0.z;
-        phi_v0 += 4;
-        phi_a0 = temp_a0;
-        phi_v1 = temp_v1;
-    } while (temp_v1 != 3);
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    this->unk_350 = 0;
+
+    this->unk_2C4 = this->dyna.actor.world.pos;
+
+    this->unk_2DC = this->dyna.actor.world.pos;
+    this->unk_308 = this->dyna.actor.world.pos;
+
+    for (i = 0; i < 3; i++) {
+        this->unk_314[i] = 5;
+        this->unk_320[i] = 0;
+        this->unk_32C[i] = D_801D15B0;
+    }
+
     this->unk_2B8 = NULL;
-    this->unk354 = 0;
-    this->unk420 = 0;
-    this->unk_4BC.x = temp_a3->pos.x;
-    this->unk_4BC.y = temp_a3->pos.y;
-    this->unk4CC = 0;
-    this->unk4D4 = 0;
+    this->unk_354 = 0;
+    this->unk_420 = 0;
+    this->unk_4BC = this->dyna.actor.world.pos;
+
+    this->unk_4CC = 0;
+    this->unk_4D4 = 0;
     this->unk_2F4 = 0;
     this->dyna.actor.gravity = -3.5f;
-    this->unk_4BC.z = temp_a3->pos.z;
+
     Actor_ProcessInitChain((Actor* ) this, D_80B7C254);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    temp_a1 = &this->unk_160;
-    sp44 = temp_a1;
-    SkelAnime_InitSV(globalCtx, temp_a1, &D_06011DF8, NULL, this->unk_1A4, this->unk_228, 0x16);
-    SkelAnime_ChangeAnimDefaultRepeat(sp44, &D_06012CC0);
+    SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->unk_1A4, this->unk_228, 0x16);
+    SkelAnime_ChangeAnimDefaultRepeat(&this->unk_160, &D_06012CC0);
+
     this->unk_2AC = 0;
     func_80B7B154(this, globalCtx);
-    this->unk2AE = (s16) ((s32) (this->dyna.actor.params & 0xFF00) >> 8);
-    this->unk2B0 = (s16) (this->dyna.actor.params & 0xFF);
-    if ((gSaveContext.unkF0E & 1) == 0) {
+
+    // needs extra lh
+    this->unk_2AE = ((this->dyna.actor.params & 0xFF00) >> 8);
+    this->unk_2B0 = (this->dyna.actor.params & 0xFF);
+
+    if ((gSaveContext.weekEventReg[0x16] & 1) == 0) {
         Actor_MarkForDeath((Actor* ) this);
         return;
     }
-    temp_v0 = this->unk2AE;
-    if (temp_v0 == 0) {
+
+    if (this->unk_2AE == 0) {
         func_80B78E2C(this, func_80B7AEFC);
-block_32:
-        sp48.unk0 = (s32) D_801D15BC.unk0;
-        sp48.unk4 = (u16) D_801D15BC.unk4;
-        this->unk2FE = (unaligned s32) sp48.unk0;
-        this->unk302 = (u16) sp48.unk4;
-        this->unk_2F8 = (unaligned s32) sp48.unk0;
-        this->unk2FC = (u16) sp48.unk4;
-        if (sp54 != 0) {
-            BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
-            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007E20);
-        } else {
-            BcCheck3_BgActorInit((DynaPolyActor* ) this, 3);
-            BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007F50);
-        }
-        temp_a2 = this->dyna.bgId;
-        if (temp_a2 == 0x32) {
-            Actor_MarkForDeath((Actor* ) this);
-            return;
-        }
-        func_800C636C(globalCtx, &globalCtx->colCtx.dyna, temp_a2);
-        temp_v0_5 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xD, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, (s16) 0, (s16) (s32) this->dyna.actor.shape.rot.y, (s16) 0, (s16) 0x8012);
-        this->unk_2B8 = temp_v0_5;
-        if (temp_v0_5 == 0) {
-            Actor_MarkForDeath((Actor* ) this);
-            return;
-        }
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_424, (Actor* ) this, &D_80B7C138);
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_470, (Actor* ) this, &D_80B7C138);
-        return;
-    }
-    if (temp_v0 == 1) {
-        this->unk_2BC = (s8* ) this->unk2B0;
-        if ((gSaveContext.unkF17 & 0x80) != 0) {
-            sp54 = 0;
+    } else if (this->unk_2AE == 1) {
+        this->unk_2BC = this->unk_2B0;
+        if ((gSaveContext.weekEventReg[0x1F] & 0x80) != 0) {
+            sp54 = false;
             this->unk_2F4 |= 0x100;
             func_80B78E2C(this, func_80B7A144);
             func_800FE484();
-            goto block_32;
+        } else {
+            if (((gSaveContext.weekEventReg[0x38] & 0x80) != 0) || (s32) (gSaveContext.time) >= 0xCAAA || (s32) gSaveContext.time < 0x4001 || ((gSaveContext.weekEventReg[0x36]) & 1) != 0 || ((gSaveContext.weekEventReg[0x36] & 2) != 0)) {
+                Actor_MarkForDeath((Actor* ) this);
+                return;
+            }
+            this->dyna.actor.targetMode = 6;
+            this->unk_2B4 = 0;
+            func_80B78E2C(this, func_80B79A50);
         }
-        if (((gSaveContext.unkF1A & 0x80) != 0) || (temp_v0_2 = gSaveContext.time, (((s32) temp_v0_2 < 0xCAAA) == 0)) || ((s32) temp_v0_2 < 0x4001) || (temp_v0_3 = gSaveContext.unkF2C, ((temp_v0_3 & 1) != 0)) || ((temp_v0_3 & 2) != 0)) {
+    } else if (this->unk_2AE == 2) {
+        if ((gSaveContext.weekEventReg[0x1F] & 0x80) == 0 || (((gSaveContext.weekEventReg[0x34]) & 1) != 0)) {
             Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        this->dyna.actor.targetMode = 6;
-        this->unk2B4 = 0;
-        func_80B78E2C(this, func_80B79A50);
-        goto block_32;
-    }
-    if (temp_v0 == 2) {
-        if (((gSaveContext.unkF17 & 0x80) == 0) || (temp_v0_4 = gSaveContext.unkF2C, ((temp_v0_4 & 1) != 0))) {
-            Actor_MarkForDeath((Actor* ) this);
-            return;
-        }
-        if ((temp_v0_4 & 2) == 0) {
-            this->unk_2BC = (s8* ) this->unk2B0;
-            sp54 = 0;
-            func_800FE484(this, func_80B7AEFC);
+
+        if ((gSaveContext.weekEventReg[0x34] & 2) == 0) {
+            this->unk_2BC = this->unk_2B0;
+            sp54 = false;
+            func_800FE484();
             func_80B78E2C(this, func_80B7A400);
-            this->unk354 = 0;
+            this->unk_354 = 0;
             func_80B78E88(this, globalCtx, 0);
         }
-        goto block_32;
-    }
-    if (temp_v0 == 3) {
-        if ((gSaveContext.unkF17 & 0x80) == 0) {
+    } else if (this->unk_2AE == 3) {
+        if ((gSaveContext.weekEventReg[0x36] & 0x80) == 0) {
             Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        this->unk_2BC = (s8* ) this->unk2B0;
-        sp54 = 0;
-        func_800FE484(this, func_80B7AEFC);
+        this->unk_2BC = this->unk_2B0;
+        sp54 = false;
+        func_800FE484();
         func_80B78E2C(this, func_80B7AC94);
-        this->unk354 = 0;
+        this->unk_354 = 0;
         func_80B78E88(this, globalCtx, 0);
-        goto block_32;
-    }
-    if (temp_v0 == 4) {
-        if (((gSaveContext.unkF2C & 1) == 0) || ((gSaveContext.unkF33 & 2) != 0)) {
+    } else if (this->unk_2AE == 4) {
+        if ((gSaveContext.weekEventReg[0x34] & 1) == 0 || (gSaveContext.weekEventReg[0x3B] & 2) != 0) {
             Actor_MarkForDeath((Actor* ) this);
             return;
         }
-        this->unk_2BC = (s8* ) this->unk2B0;
-        sp54 = 0;
-        func_800FE484(this, func_80B7AEFC);
+
+        this->unk_2BC = this->unk_2B0;
+        sp54 = false;
+        func_800FE484();
         func_80B78E2C(this, func_80B7AE58);
-        this->unk354 = 0;
+        this->unk_354 = 0;
         func_80B78E88(this, globalCtx, 0);
         func_801A3098(0x19);
-        goto block_32;
+    } else {
+        this->unk_2AE = 0;
+        func_80B78E2C(this, func_80B7AEFC);
     }
-    this->unk2AE = 0;
-    func_80B78E2C(this, func_80B7AEFC);
-    goto block_32;
+
+    sp48 = D_801D15BC;
+
+    this->unk_2FE = sp48;
+    this->unk_2F8 = sp48;
+
+    if (sp54) {
+        BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
+        BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007E20);
+    } else {
+        BcCheck3_BgActorInit((DynaPolyActor* ) this, 3);
+        BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007F50);
+    }
+
+    if (this->dyna.bgId == 0x32) {
+        Actor_MarkForDeath((Actor* ) this);
+        return ;
+    }
+
+    func_800C636C(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+
+    this->unk_2B8 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xD, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, (s16) 0, (s16) (s32) this->dyna.actor.shape.rot.y, (s16) 0, 0x8012);
+
+    if (this->unk_2B8 == NULL) {
+        Actor_MarkForDeath((Actor* ) this);
+        return;
+    }
+
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424, (Actor* ) this, &D_80B7C138);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_470, (Actor* ) this, &D_80B7C138);
+
+    return;
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Init.asm")
