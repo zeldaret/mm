@@ -397,7 +397,8 @@ SECTIONS
         build/asm/code/z_map_exp.o(.text)
         build/asm/code/z_msgevent.o(.text)
         build/asm/code/code_0x8010C0C0.o(.text)
-        build/asm/code/code_0x8010C230.o(.text)
+        build/src/code/z_olib.o(.text)
+        . += 0x10;
         build/asm/code/z_parameter.o(.text)
         build/asm/code/code_0x801224E0.o(.text)
         build/asm/code/code_0x80122660.o(.text)
@@ -596,7 +597,7 @@ SECTIONS
         build/asm/code/code_rodata_z_lifemeter.o(.rodata)
         build/src/code/z_lights.o(.rodata)
         build/asm/code/code_rodata_z_map_disp.o(.rodata)
-        build/asm/code/code_rodata_0x8010C230.o(.rodata)
+        build/src/code/z_olib.o(.rodata)
         build/asm/code/code_rodata_z_parameter.o(.rodata)
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
         build/asm/code/code_rodata_0x8012A080.o(.rodata)
