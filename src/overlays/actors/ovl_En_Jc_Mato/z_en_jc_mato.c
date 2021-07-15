@@ -56,6 +56,8 @@ static DamageTable sDamageTable = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 };
 
+extern Gfx D_06000390[];
+
 s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
     this->collider.dim.worldSphere.center.y = this->pos.y;
@@ -122,8 +124,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-extern Gfx D_06000390[];
-Vec3f movement = { 0.0f, -2500.0f, 0.0f };
+static Vec3f movement = { 0.0f, -2500.0f, 0.0f };
 
 void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
