@@ -788,13 +788,13 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(gfx, &sSetupDL[150]);
 
     if (this->currentType == KEESE_FIRE) {
-        gDPSetEnvColor(gfx + 1, 0, 0, 0, 0);
+        gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);
     } else {
-        gDPSetEnvColor(gfx + 1, 0, 0, 0, 255);
+        gDPSetEnvColor(&gfx[1], 0, 0, 0, 255);
     }
 
     gfx = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnFirefly_OverrideLimbDraw,
-                          EnFirefly_PostLimbDraw, &this->actor, gfx + 2);
+                          EnFirefly_PostLimbDraw, &this->actor, &gfx[2]);
     if (this->isInvisible) {
         POLY_XLU_DISP = gfx;
     } else {

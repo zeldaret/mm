@@ -24,7 +24,7 @@ const ActorInit Arms_Hook_InitVars = {
     (ActorFunc)ArmsHook_Draw,
 };
 
-ColliderQuadInit D_808C1BC0 = {
+static ColliderQuadInit D_808C1BC0 = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_PLAYER,
@@ -43,13 +43,6 @@ ColliderQuadInit D_808C1BC0 = {
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
-Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
-Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
-Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
-Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
-Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 extern Gfx D_0601D960[];
 
@@ -284,6 +277,13 @@ void ArmsHook_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     this->unk1EC = this->unk1E0;
 }
+
+static Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
+static Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
+static Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
+static Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
+static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
