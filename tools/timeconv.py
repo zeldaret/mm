@@ -6,22 +6,19 @@
 
 import sys
 
-def convert(time):
-    seconds = round(((24 * 60 * 60) / 0x10000) * time)
+time = sys.argv[1]
+time = int(time, 16 if time.startswith("0x") else 10)
 
-    hours = int(seconds // 3600)
-    minutes = int((seconds - 3600 * hours) // 60)
-    seconds = int(seconds - (3600 * hours + 60 * minutes))
+minutes = round(((24 * 60) / 0x10000) * time)
 
-    # Since multiple values are mapped to the same clock time, check that it
-    # still matches once converted. If it doesn't match as it is, print a warning.
-    macro_val = round((hours * 3600 + minutes * 60 + seconds) * (0x10000 / (24 * 60 * 60)))
+hours = int(minutes // 60)
+minutes = round(minutes - 60 * hours)
 
-    print(f"{hours},{minutes:02},{seconds:02} -> 0x{macro_val:04X}")
-    print(f"CLOCK_TIME({hours}, {minutes})")
-    assert time == macro_val, "Warning: Result does not match as-is"
+# Since multiple values are mapped to the same clock time, check that it
+# still matches once converted. If it doesn't match as it is, print a warning.
+macro_val = int((hours * 60 + minutes) * (0x10000 / (24 * 60)))
 
-if __name__ == "__main__":
-    time = sys.argv[1]
-    time = int(time, 16 if time.startswith("0x") else 10)
-    convert(time)
+print(f"{hours},{minutes:02} -> 0x{macro_val:04X}")
+print(f"CLOCK_TIME({hours}, {minutes})")
+if time != macro_val:
+    print("Warning: Result does not match as-is")
