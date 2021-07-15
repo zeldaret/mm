@@ -129,11 +129,11 @@ s32 EnFsn_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_B) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1->press.button, BTN_CUP);
 }
 
 u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
@@ -484,8 +484,8 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, GlobalContext* globalCtx, Input* in
 }
 
 void EnFsn_UpdateJoystickInputState(EnFsn* this, GlobalContext* globalCtx) {
-    s8 stickX = globalCtx->state.input[0].rel.stick_x;
-    s8 stickY = globalCtx->state.input[0].rel.stick_y;
+    s8 stickX = CONTROLLER1->rel.stick_x;
+    s8 stickY = CONTROLLER1->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -883,7 +883,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, &globalCtx->state.input[0]) && func_80147624(globalCtx)) {
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1) && func_80147624(globalCtx)) {
             u32 trueTmp = true;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -1113,7 +1113,7 @@ void EnFsn_BrowseShelf(EnFsn* this, GlobalContext* globalCtx) {
         EnFsn_UpdateCursorPos(this, globalCtx);
         if (talkstate == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnFsn_HasPlayerSelectedItem(this, globalCtx, &globalCtx->state.input[0])) {
+            if (!EnFsn_HasPlayerSelectedItem(this, globalCtx, CONTROLLER1)) {
                 EnFsn_CursorLeftRight(this);
                 if (this->cursorIdx != prevCursorIdx) {
                     play_sound(NA_SE_SY_CURSOR);
@@ -1215,7 +1215,7 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
 
     if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestCancelOption(this, globalCtx, &globalCtx->state.input[0]) && func_80147624(globalCtx)) {
+        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1) && func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, globalCtx);
@@ -1335,7 +1335,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
 
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, &globalCtx->state.input[0]) &&
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1) &&
             (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) &&
             this->stickAccumX > 0) {
             cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);

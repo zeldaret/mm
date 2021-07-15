@@ -269,7 +269,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else {
-            if (CHECK_BTN_ANY(globalCtx->state.input[0].press.button,
+            if (CHECK_BTN_ANY(CONTROLLER1->press.button,
                               BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
                 s32 pad;
                 this->timer = 1;

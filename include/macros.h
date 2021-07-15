@@ -23,6 +23,11 @@
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct);
 
+#define CONTROLLER1 (&globalCtx->state.input[0])
+#define CONTROLLER2 (&globalCtx->state.input[1])
+#define CONTROLLER3 (&globalCtx->state.input[2])
+#define CONTROLLER4 (&globalCtx->state.input[3])
+
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
