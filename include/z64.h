@@ -1267,8 +1267,8 @@ typedef struct Camera {
     /* 0x0C0 */ f32 rUpdateRateInv;
     /* 0x0C4 */ f32 pitchUpdateRateInv;
     /* 0x0C8 */ f32 yawUpdateRateInv;
-    /* 0x0CC */ f32 xzOffsetUpdateRate; // May be swapped with yOffset immediately below
-    /* 0x0D0 */ f32 yOffsetUpdateRate;
+    /* 0x0CC */ f32 yOffsetUpdateRate;
+    /* 0x0D0 */ f32 xzOffsetUpdateRate;
     /* 0x0D4 */ f32 fovUpdateRate;
     /* 0x0D8 */ f32 xzSpeed;
     /* 0x0DC */ f32 dist;
@@ -1283,13 +1283,13 @@ typedef struct Camera {
     /* 0x118 */ s32 waterPrevCamIdx;
     /* 0x11C */ s32 waterPrevCamSetting;
     /* 0x120 */ s16 waterQuakeId;
-    /* 0x122 */ s16 unk_122;
+    /* 0x122 */ s16 unk122;
     /* 0x124 */ void* data0;
     /* 0x128 */ void* data1;
     /* 0x12C */ s16 data2;
     /* 0x12E */ s16 data3;
     /* 0x130 */ s16 uid;
-    /* 0x132 */ char unk_132[2];
+    /* 0x132 */ char pad132[2];
     /* 0x134 */ Vec3s inputDir;
     /* 0x13A */ Vec3s camDir;
     /* 0x140 */ s16 status;
@@ -1297,64 +1297,57 @@ typedef struct Camera {
     /* 0x144 */ s16 mode;
     /* 0x146 */ s16 bgCheckId;
     /* 0x148 */ s16 camDataIdx;
-    /* 0x14A */ s16 unk_14A;
-    /* 0x14C */ s16 flags;
+    /* 0x14A */ s16 flags1;
+    /* 0x14C */ s16 flags2;
     /* 0x14E */ s16 childCamIdx;
-    /* 0x150 */ s16 unk_150;
-    /* 0x152 */ s16 unk_152;
+    /* 0x150 */ s16 unk150;
+    /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 prevSetting;
     /* 0x156 */ s16 nextCamDataIdx;
     /* 0x158 */ s16 nextBGCheckId;
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 paramFlags;
     /* 0x15E */ s16 animState;
-    /* 0x160 */ s16 unk_160;
+    /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 timer;
     /* 0x164 */ s16 thisIdx;
     /* 0x166 */ s16 prevCamDataIdx;
-    /* 0x168 */ s16 unk_168;
-    /* 0x16A */ s16 unk_16A; // pad/unused
-    /* 0x16C */ Vec3f unk_16C;
+    /* 0x168 */ s16 unk168;
+    /* 0x16A */ s16 unk16A;
+    /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
 
 typedef s32(*camera_update_func)(Camera* camera);
 
 typedef struct {
-    /* 0x00 */ s16 unk00;
-    /* 0x02 */ s16 unk02;
-    /* 0x04 */ s16 unk04;
-} SubQuakeRequest14; // size = 0x6
-
-typedef struct {
     /* 0x00 */ s16 randIdx;
     /* 0x02 */ s16 countdownMax;
-    /* 0x04 */ Camera* cam;
+    /* 0x04 */ Camera* camera;
     /* 0x08 */ u32 callbackIdx;
-    /* 0x0C */ s16 y;
-    /* 0x0E */ s16 x;
+    /* 0x0C */ s16 verticalMag;
+    /* 0x0E */ s16 horizontalMag;
     /* 0x10 */ s16 zoom;
-    /* 0x12 */ s16 rotZ;
-    /* 0x14 */ SubQuakeRequest14 unk14;
+    /* 0x12 */ s16 rollOffset;
+    /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
     /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 unk1C;
+    /* 0x1C */ s16 isPerpendicularShake;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 camPtrIdx;
+    /* 0x20 */ s16 cameraPtrsIdx;
 } QuakeRequest; // size = 0x24
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
     /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rotZ;
+    /* 0x18 */ s16 rollOffset;
     /* 0x1A */ s16 zoom;
-    /* 0x1C */ UNK_TYPE1 pad1C[0x2];
-} ShakeInfo; // size = 0x1E
+} ShakeInfo; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
     /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rotZ;
+    /* 0x18 */ s16 rollOffset;
     /* 0x1A */ s16 zoom;
-    /* 0x1C */ f32 unk1C;
+    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
 } QuakeCamCalc; // size = 0x20
 
 typedef struct {

@@ -182,7 +182,7 @@ VecSph* OLib_Vec3fDiffToVecSphGeo(VecSph* dest, Vec3f* a, Vec3f* b) {
  * Takes the sum of positions `a` (x,y,z coordinates) and `sph` (geographic coordinates), result is in x,y,z position
  * Identical to Quake_AddVec from OoT
  */
-Vec3f* OLib_AddVec(Vec3f* dest, Vec3f* a, VecSph* sph) {
+Vec3f* OLib_VecSphAddToVec3f(Vec3f* dest, Vec3f* a, VecSph* sph) {
     Vec3f vec;
     Vec3f b;
 
@@ -280,7 +280,7 @@ void OLib_DbCameraVec3fSum(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode) {
         case 1:
             OLib_Vec3fToVecSphGeo(&sph, b);
             sph.yaw += a->rot.y;
-            OLib_AddVec(dest, &a->pos, &sph);
+            OLib_VecSphAddToVec3f(dest, &a->pos, &sph);
             break;
         case 2:
             dest->x = a->pos.x + b->x;

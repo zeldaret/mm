@@ -325,8 +325,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
         view->eye.z += 2.0f;
     }
 
-    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z,
-             view->up.x, view->up.y, view->up.z);
+    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x, view->up.y,
+             view->up.z);
 
     view->viewing = *viewing;
 
@@ -459,8 +459,8 @@ s32 func_8013FD74(View* view) {
         view->eye.z += 2.0f;
     }
 
-    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z,
-             view->up.x, view->up.y, view->up.z);
+    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x, view->up.y,
+             view->up.z);
 
     view->viewing = *viewing;
 
@@ -472,8 +472,8 @@ s32 func_8013FD74(View* view) {
 }
 
 s32 func_80140024(View* view) {
-    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y,
-             view->at.z, view->up.x, view->up.y, view->up.z);
+    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x,
+             view->up.y, view->up.z);
 
     view->unkE0 = *view->viewingPtr;
     view->viewingPtr = &view->unkE0;

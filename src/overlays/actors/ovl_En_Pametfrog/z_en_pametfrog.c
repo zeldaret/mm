@@ -1228,7 +1228,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
     Quake_RemoveFromIdx(this->quake);
     this->quake = Quake_Add(ACTIVE_CAM, 3);
     Quake_SetSpeed(this->quake, 20000);
-    Quake_SetQuakeValues(this->quake, 0x11, 0, 0, 0);
+    Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
     func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
