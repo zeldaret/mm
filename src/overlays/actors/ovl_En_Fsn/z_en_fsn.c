@@ -1448,7 +1448,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800E9250(globalCtx, &this->actor, &this->unk274, &this->unk27A, this->actor.focus.pos);
+    func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
     func_8013D9C8(globalCtx, this->limbRotYTable, this->limbRotZTable, 19);
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
@@ -1574,7 +1574,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 limbRotTableIdx;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->unk274.y, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
