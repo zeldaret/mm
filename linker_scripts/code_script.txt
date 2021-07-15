@@ -525,7 +525,7 @@ SECTIONS
         build/asm/code/code_data_z_msgevent.o(.data)
         build/asm/code/code_data_z_parameter.o(.data)
         build/asm/code/code_data_z_player_lib.o(.data)
-        build/asm/code/code_data_0x8012A080.o(.data)
+        build/src/code/z_quake.o(.data)
         build/src/code/z_rcp.o(.data)
         build/asm/code/code_data_z_room.o(.data)
         build/src/code/code_0x8012EC80.o(.data)

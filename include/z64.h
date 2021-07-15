@@ -324,12 +324,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ s16 unk0;
-    /* 0x2 */ s16 unk2;
-    /* 0x4 */ s16 unk4;
-} QuakeRequest14; // size = 0x6
-
-typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
@@ -586,23 +580,6 @@ typedef struct {
     /* 0x0C */ OSContPad press; // X/Y store delta from last frame
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 rotZ;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ UNK_TYPE1 pad1C[0x2];
-} ShakeInfo; // size = 0x1E
-
-typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 unk18;
-    /* 0x1A */ s16 unk1A;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-} UnkQuakeCalcStruct; // size = 0x24
 
 typedef struct {
     /* 0x000 */ u32 magic;
@@ -1283,6 +1260,12 @@ typedef struct {
 typedef struct Camera Camera;
 
 typedef struct {
+    /* 0x00 */ s16 unk00;
+    /* 0x02 */ s16 unk02;
+    /* 0x04 */ s16 unk04;
+} SubQuakeRequest14; // size = 0x6
+
+typedef struct {
     /* 0x00 */ s16 randIdx;
     /* 0x02 */ s16 countdownMax;
     /* 0x04 */ Camera* cam;
@@ -1291,13 +1274,28 @@ typedef struct {
     /* 0x0E */ s16 x;
     /* 0x10 */ s16 zoom;
     /* 0x12 */ s16 rotZ;
-    /* 0x14 */ QuakeRequest14 unk14;
+    /* 0x14 */ SubQuakeRequest14 unk14;
     /* 0x1A */ s16 speed;
     /* 0x1C */ s16 unk1C;
     /* 0x1E */ s16 countdown;
     /* 0x20 */ s16 camPtrIdx;
-    /* 0x22 */ UNK_TYPE1 pad22[0x2];
 } QuakeRequest; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ Vec3f focalPointChange; // vec1?
+    /* 0x0C */ Vec3f eyeChange; // vec2?
+    /* 0x18 */ s16 rotZ;
+    /* 0x1A */ s16 zoom;
+    /* 0x1C */ UNK_TYPE1 pad1C[0x2];
+} ShakeInfo; // size = 0x1E
+
+typedef struct {
+    /* 0x00 */ Vec3f focalPointChange;
+    /* 0x0C */ Vec3f eyeChange;
+    /* 0x18 */ s16 unk18; // rotZ?
+    /* 0x1A */ s16 zoom;
+    /* 0x1C */ f32 unk1C;
+} QuakeCamCalc; // size = 0x20
 
 typedef s32(*camera_update_func)(Camera* camera);
 
@@ -1474,7 +1472,7 @@ struct Camera {
     /* 0x15C */ s16 unk15C;
     /* 0x15E */ s16 unk15E;
     /* 0x160 */ UNK_TYPE1 pad160[0x4];
-    /* 0x164 */ s16 unk164;
+    /* 0x164 */ s16 thisIdx;
     /* 0x166 */ s16 unk166;
     /* 0x168 */ UNK_TYPE1 pad168[0x10];
 }; // size = 0x178
