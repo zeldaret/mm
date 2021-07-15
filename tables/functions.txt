@@ -13804,7 +13804,7 @@
     0x80B46184:("func_80B46184",),
     0x80B461DC:("func_80B461DC",),
     0x80B4627C:("func_80B4627C",),
-    0x80B46414:("func_80B46414",),
+    0x80B46414:("EnInvadepoh_InitAlien",),
     0x80B46520:("EnInvadepoh_InitParentCow",),
     0x80B465CC:("EnInvadepoh_InitChildCow",),
     0x80B46644:("EnInvadepoh_InitRomani",),

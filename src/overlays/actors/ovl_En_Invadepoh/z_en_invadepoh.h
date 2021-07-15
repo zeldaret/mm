@@ -9,6 +9,22 @@ typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
 
+#define INVADEPOH_TYPE(x) (x->actor.params >> 4 & 0xF)
+
+typedef enum{
+    /* 0 */ UNK0,
+    /* 1 */ UNK1,
+    /* 2 */ TYPE_PARENT_COW,
+    /* 3 */ TYPE_CHILD_COW,
+    /* 4 */ TYPE_ROMANI,
+    /* 5 */ TYPE_ROMANI,
+} EnInvadepohType;
+
+typedef enum {
+    /* -1 */ DIRECTION_BACKWARD = -1,
+    /* 1  */ DIRECTION_FORWARD = 1,
+} EnInvadepohDirection;
+
 typedef struct unkStruct80B50350 {
     /* 0x000 */ s8 unk0;
     /* 0x001 */ s8 unk1;
@@ -127,11 +143,6 @@ typedef struct EnInvadepoh {
     /* 0x3AD */ char unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
-
-typedef enum {
-    /* -1 */ DIRECTION_BACKWARD = -1,
-    /* 1  */ DIRECTION_FORWARD = 1,
-} EnInvadepohDirection;
 
 extern const ActorInit En_Invadepoh_InitVars;
 

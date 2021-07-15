@@ -104,7 +104,7 @@ void func_80B49904(EnInvadepoh* this);
 void func_80B499BC(EnInvadepoh* this);
 void func_80B492FC(EnInvadepoh* this);
 void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx);
-void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx);
+void EnInvadepoh_InitAlien(EnInvadepoh* this, GlobalContext* globalCtx);
 void EnInvadepoh_InitParentCow(EnInvadepoh* this, GlobalContext* globalCtx);
 void EnInvadepoh_InitChildCow(EnInvadepoh* this, GlobalContext* globalCtx);
 void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx);
@@ -239,7 +239,7 @@ const ActorInit En_Invadepoh_InitVars = {
     (ActorFunc)NULL,
 };
 
-static ColliderCylinderInit D_80B4E8B0 = {
+static ColliderCylinderInit sCylinderInitAlien = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -589,7 +589,7 @@ static InitChainEntry sInitChainCremia[] = {
 
 static EnInvadepohInitFunc D_80B4ECB0[] = {
     func_80B4627C,
-    func_80B46414,
+    EnInvadepoh_InitAlien,
     EnInvadepoh_InitParentCow,
     EnInvadepoh_InitChildCow,
     EnInvadepoh_InitRomani,
@@ -601,7 +601,7 @@ static EnInvadepohInitFunc D_80B4ECB0[] = {
     EnInvadepoh_InitDog,
     EnInvadepoh_InitCremia,
     EnInvadepoh_InitRomani,
-    func_80B46414,
+    EnInvadepoh_InitAlien,
 };
 
 static EnInvadepohDestroyFunc D_80B4ECE8[] = {
@@ -1720,7 +1720,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx) {
+void EnInvadepoh_InitAlien(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, D_80B4EC24);
@@ -1728,12 +1728,12 @@ void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 6800.0f, func_800B4088, 150.0f);
     this->actor.shape.shadowAlpha = 140;
     this->actor.flags = 0x80001010;
-    if (((this->actor.params >> 4) & 0xF) == 13) {
+    if (INVADEPOH_TYPE(this) == TYPE_ALIEN1) {
         this->actor.update = func_80B4D670;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;
     } else {
         this->actor.update = func_80B47BAC;
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E8B0);
+        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitAlien);
         this->actor.colChkInfo.mass = 0x28;
     }
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_UCH);
@@ -1764,7 +1764,7 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp = (this->actor.params >> 4) & 0xF;
+    s32 temp = INVADEPOH_TYPE(this);
 
     Actor_ProcessInitChain(&this->actor, sInitChainRomani);
 
@@ -1877,7 +1877,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    D_80B4ECB0[this->actor.params >> 4 & 0xF](this, globalCtx);
+    D_80B4ECB0[INVADEPOH_TYPE(this)](this, globalCtx);
 }
 
 void func_80B46BB0(EnInvadepoh* this, GlobalContext* globalCtx) {
@@ -1940,7 +1940,7 @@ void func_80B46D28(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
 
-    D_80B4ECE8[this->actor.params >> 4 & 0xF](this, globalCtx);
+    D_80B4ECE8[INVADEPOH_TYPE(this)](this, globalCtx);
 }
 
 void func_80B46DA8(EnInvadepoh* this) {
