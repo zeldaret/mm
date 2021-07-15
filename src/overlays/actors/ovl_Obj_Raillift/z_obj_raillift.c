@@ -239,16 +239,16 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             this->isWeightOn = false;
         }
-        if ((this->isWeightOn != this->isWeightOnPrev) && (this->unk180 < 1.0f)) {
-            this->unk184 = -0x8000;
-            this->unk180 = 6.0f;
+        if ((this->isWeightOn != this->isWeightOnPrev) && (this->maxHeight < 1.0f)) {
+            this->cycle = -0x8000;
+            this->maxHeight = 6.0f;
         }
-        this->unk184 += 0xCE4;
-        Math_StepToF(&this->unk180, 0.0f, 0.12f);
-        step = this->isWeightOn ? Math_CosS(fabsf(this->unk17C) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->unk17C) * 2048.0f) + 0.02f;
+        this->cycle += 0xCE4;
+        Math_StepToF(&this->maxHeight, 0.0f, 0.12f);
+        step = this->isWeightOn ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
         target = this->isWeightOn ? -8.0f : 0.0f;
-        Math_StepToF(&this->unk17C, target, step);
-        this->dyna.actor.shape.yOffset = ((Math_SinS(this->unk184) * this->unk180) + this->unk17C) * 10.0f;
+        Math_StepToF(&this->cycleSpeed, target, step);
+        this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
         dummy:;
     }
     if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {

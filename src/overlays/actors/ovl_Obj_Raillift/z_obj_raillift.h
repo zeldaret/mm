@@ -31,9 +31,9 @@ typedef struct ObjRaillift {
     /* 0x170 */ Vec3s* points;
     /* 0x174 */ s32 isWeightOn;
     /* 0x178 */ s32 isWeightOnPrev;
-    /* 0x17C */ f32 unk17C;
-    /* 0x180 */ f32 unk180;
-    /* 0x184 */ s16 unk184;
+    /* 0x17C */ f32 cycleSpeed;
+    /* 0x180 */ f32 maxHeight;
+    /* 0x184 */ s16 cycle;
     /* 0x186 */ s16 waitTimer;
     /* 0x188 */ s16 cutsceneTimer;
 } ObjRaillift; // size = 0x18C
