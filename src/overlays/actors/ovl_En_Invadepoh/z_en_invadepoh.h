@@ -9,54 +9,54 @@ typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, GlobalContext*);
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
 
-typedef struct unkStruct_80B50350 {
+typedef struct unkStruct80B50350 {
     /* 0x000 */ s8 unk0;
     /* 0x001 */ s8 unk1;
     /* 0x002 */ u8 unk2;
     /* 0x004 */ Vec3f unk4;
-} unkStruct_80B50350; // size = 0x10;
+} unkStruct80B50350; // size = 0x10;
 
 typedef struct {
     /* 0x00 */ s8* unk00;
     /* 0x04 */ s8 unk04;
-} unkstruct_invadepoh_0; // size = 0x05
+} unkstructInvadepoh0; // size = 0x08
 
 typedef struct {
     /* 0x00 */ s8 unk00;
     /* 0x04 */ f32 unk04;
-} unkstruct_invadepoh_1; // size = 0x08
+} unkstructInvadepoh1; // size = 0x08
 
 typedef struct {
     /* 0x00 */ s8 unk00;
-    /* 0x04 */ unkstruct_invadepoh_0* unk04;
-} unkstruct_invadepoh_2; // size = 0x08
+    /* 0x04 */ unkstructInvadepoh0* unk04;
+} unkstructInvadepoh2; // size = 0x08
 
 typedef struct {
     /* 0x00 */ s8 unk0;
-    /* 0x04 */ unkstruct_invadepoh_0* unk4;
+    /* 0x04 */ unkstructInvadepoh0* unk4;
     /* 0x08 */ s8 unk8;
-    /* 0x0C */ unkstruct_invadepoh_1* unkC;
-} unkstruct_invadepoh_3; // size = 0x10
+    /* 0x0C */ unkstructInvadepoh1* unkC;
+} unkstructInvadepoh3; // size = 0x10
 
 typedef struct {
     /* 0x00 */ s8 unk00;
-    /* 0x04 */ unkstruct_invadepoh_0* unk04;
+    /* 0x04 */ unkstructInvadepoh0* unk04;
     /* 0x08 */ s8 unk08;
-    /* 0x0C */ unkstruct_invadepoh_1* unk0C;
+    /* 0x0C */ unkstructInvadepoh1* unk0C;
     /* 0x10 */ s16 unk10;
     /* 0x12 */ s16 unk12;
-} unkstruct_invadepoh_4; // size = 0x14
+} unkstructInvadepoh4; // size = 0x14
 
 typedef struct {
     /* 0x00 */ f32 unk00;
     /* 0x04 */ s16 unk04;
     /* 0x06 */ s16 unk06;
-} unkstruct_80B4EE0C; // size = 0x08
+} unkstruct80B4EE0C; // size = 0x08
 
 typedef struct EnInvadePohStruct {
-    /* 0x000 */ unkstruct_invadepoh_4* unk0;
+    /* 0x000 */ unkstructInvadepoh4* unk0;
     /* 0x004 */ s8 unk4;
-    /* 0x008 */ unkstruct_invadepoh_4* unk8;
+    /* 0x008 */ unkstructInvadepoh4* unk8;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ s8 unkE;
     /* 0x00F */ s8 unkF;
@@ -129,8 +129,8 @@ typedef struct EnInvadepoh {
 } EnInvadepoh; // size = 0x3C0
 
 typedef enum {
-    /* -1 */ DIRECTION_BACKWARDS = -1,
-    /* 1  */ DIRECTION_FORWARDS = 1,
+    /* -1 */ DIRECTION_BACKWARD = -1,
+    /* 1  */ DIRECTION_FORWARD = 1,
 } EnInvadepohDirection;
 
 extern const ActorInit En_Invadepoh_InitVars;

@@ -1,7 +1,7 @@
 /*
  * File z_en_invadepoh.c
  * Overlay: ovl_en_invadepoh
- * Description: Aliens event
+ * Description: Ranch nighttime actors
  */
 
 #include "z_en_invadepoh.h"
@@ -163,12 +163,12 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4BA30(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4C568(Actor* thisx, GlobalContext* globalCtx);
 void func_80B4CFFC(Actor* thisx, GlobalContext* globalCtx);
-void func_80B46184(unkStruct_80B50350* unkStruct);
+void func_80B46184(unkStruct80B50350* unkStruct);
 s32 func_80B450C0(f32* arg0, f32* arg1, f32 arg2, f32 arg3, f32 arg4);
 s32 func_80B4516C(EnInvadepoh* this);
-void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
-void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
-void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u);
+void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
+void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u);
+void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
 extern AnimatedMaterial D_06000550;
 extern AnimatedMaterial D_06000560;
@@ -259,7 +259,7 @@ static ColliderCylinderInit D_80B4E8B0 = {
     { 40, 95, 10, { 0, 0, 0 } },
 };
 
-static ColliderCylinderInit D_80B4E8DC = {
+static ColliderCylinderInit sCylinderInitRomaniAndCremia = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -279,7 +279,7 @@ static ColliderCylinderInit D_80B4E8DC = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static ColliderCylinderInit D_80B4E908 = {
+static ColliderCylinderInit sCylinderInitDog = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -347,69 +347,69 @@ static s8 D_80B4E9BC[] = { 1 };
 
 static s8 D_80B4E9C0[] = { 3 };
 
-static unkstruct_invadepoh_0 D_80B4E9C4 = { D_80B4E99C, 1 };
+static unkstructInvadepoh0 D_80B4E9C4 = { D_80B4E99C, 1 };
 
-static unkstruct_invadepoh_0 D_80B4E9CC = { D_80B4E9A0, 4 };
+static unkstructInvadepoh0 D_80B4E9CC = { D_80B4E9A0, 4 };
 
-static unkstruct_invadepoh_0 D_80B4E9D4 = { D_80B4E9A4, 5 };
+static unkstructInvadepoh0 D_80B4E9D4 = { D_80B4E9A4, 5 };
 
-static unkstruct_invadepoh_0 D_80B4E9DC = { D_80B4E9AC, 6 };
+static unkstructInvadepoh0 D_80B4E9DC = { D_80B4E9AC, 6 };
 
-static unkstruct_invadepoh_0 D_80B4E9E4 = { D_80B4E9B4, 8 };
+static unkstructInvadepoh0 D_80B4E9E4 = { D_80B4E9B4, 8 };
 
-static unkstruct_invadepoh_0 D_80B4E9EC = { D_80B4E9BC, 1 };
+static unkstructInvadepoh0 D_80B4E9EC = { D_80B4E9BC, 1 };
 
-static unkstruct_invadepoh_0 D_80B4E9F4 = { D_80B4E9C0, 1 };
+static unkstructInvadepoh0 D_80B4E9F4 = { D_80B4E9C0, 1 };
 
-static unkstruct_invadepoh_2 D_80B4E9FC = { 0, &D_80B4E9C4 };
+static unkstructInvadepoh2 D_80B4E9FC = { 0, &D_80B4E9C4 };
 
-static unkstruct_invadepoh_1 D_80B4EA04[] = {
+static unkstructInvadepoh1 D_80B4EA04[] = {
     { 2, 0.5f },
     { 3, 0.9f },
     { 4, 0.97f },
     { 5, 1.0f },
 };
 
-static unkstruct_invadepoh_1 D_80B4EA24[] = {
+static unkstructInvadepoh1 D_80B4EA24[] = {
     { 1, 1.0f },
 };
 
-static unkstruct_invadepoh_4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3c };
+static unkstructInvadepoh4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3c };
 
-static unkstruct_invadepoh_3 D_80B4EA40 = {
+static unkstructInvadepoh3 D_80B4EA40 = {
     1,
     &D_80B4E9CC,
     1,
     D_80B4EA24,
 };
 
-static unkstruct_invadepoh_3 D_80B4EA50 = {
+static unkstructInvadepoh3 D_80B4EA50 = {
     1,
     &D_80B4E9D4,
     1,
     D_80B4EA24,
 };
 
-static unkstruct_invadepoh_3 D_80B4EA60 = {
+static unkstructInvadepoh3 D_80B4EA60 = {
     1,
     &D_80B4E9DC,
     1,
     D_80B4EA24,
 };
 
-static unkstruct_invadepoh_3 D_80B4EA70 = {
+static unkstructInvadepoh3 D_80B4EA70 = {
     1,
     &D_80B4E9E4,
     1,
     D_80B4EA24,
 };
 
-static unkstruct_invadepoh_2 D_80B4EA80 = {
+static unkstructInvadepoh2 D_80B4EA80 = {
     0,
     &D_80B4E9EC,
 };
 
-static unkstruct_invadepoh_2 D_80B4EA88 = {
+static unkstructInvadepoh2 D_80B4EA88 = {
     0,
     &D_80B4E9F4,
 };
@@ -426,21 +426,21 @@ static s8 D_80B4EAB8[] = { 2 };
 
 static s8 D_80B4EABC[] = { 3 };
 
-static unkstruct_invadepoh_0 D_80B4EAC0 = { D_80B4EAB0, 1 };
+static unkstructInvadepoh0 D_80B4EAC0 = { D_80B4EAB0, 1 };
 
-static unkstruct_invadepoh_0 D_80B4EAC8 = { D_80B4EAB4, 1 };
+static unkstructInvadepoh0 D_80B4EAC8 = { D_80B4EAB4, 1 };
 
-static unkstruct_invadepoh_0 D_80B4EAD0 = { D_80B4EAB8, 1 };
+static unkstructInvadepoh0 D_80B4EAD0 = { D_80B4EAB8, 1 };
 
-static unkstruct_invadepoh_0 D_80B4EAD8 = { D_80B4EABC, 1 };
+static unkstructInvadepoh0 D_80B4EAD8 = { D_80B4EABC, 1 };
 
-static unkstruct_invadepoh_2 D_80B4EAE0 = { 0, &D_80B4EAC0 };
+static unkstructInvadepoh2 D_80B4EAE0 = { 0, &D_80B4EAC0 };
 
-static unkstruct_invadepoh_2 D_80B4EAE8 = { 0, &D_80B4EAC8 };
+static unkstructInvadepoh2 D_80B4EAE8 = { 0, &D_80B4EAC8 };
 
-static unkstruct_invadepoh_2 D_80B4EAF0 = { 0, &D_80B4EAD0 };
+static unkstructInvadepoh2 D_80B4EAF0 = { 0, &D_80B4EAD0 };
 
-static unkstruct_invadepoh_2 D_80B4EAF8 = { 0, &D_80B4EAD8 };
+static unkstructInvadepoh2 D_80B4EAF8 = { 0, &D_80B4EAD8 };
 
 static void* D_80B4EB00[] = {
     &D_80B4EAE0,
@@ -459,53 +459,53 @@ static s8 D_80B4EB20[] = { 0, 1, 2, 2, 1, 0 };
 
 static s8 D_80B4EB28[] = { 0, 1, 2, 1, 0, 1, 2, 0 };
 
-static unkstruct_invadepoh_0 D_80B4EB30 = { D_80B4EB10, 1 };
+static unkstructInvadepoh0 D_80B4EB30 = { D_80B4EB10, 1 };
 
-static unkstruct_invadepoh_0 D_80B4EB38 = { D_80B4EB14, 4 };
+static unkstructInvadepoh0 D_80B4EB38 = { D_80B4EB14, 4 };
 
-static unkstruct_invadepoh_0 D_80B4EB40 = { D_80B4EB18, 5 };
+static unkstructInvadepoh0 D_80B4EB40 = { D_80B4EB18, 5 };
 
-static unkstruct_invadepoh_0 D_80B4EB48 = { D_80B4EB20, 6 };
+static unkstructInvadepoh0 D_80B4EB48 = { D_80B4EB20, 6 };
 
-static unkstruct_invadepoh_0 D_80B4EB50 = { D_80B4EB28, 8 };
+static unkstructInvadepoh0 D_80B4EB50 = { D_80B4EB28, 8 };
 
-static unkstruct_invadepoh_2 D_80B4EB58 = { 0, &D_80B4EB30 };
+static unkstructInvadepoh2 D_80B4EB58 = { 0, &D_80B4EB30 };
 
-static unkstruct_invadepoh_1 D_80B4EB60[] = {
+static unkstructInvadepoh1 D_80B4EB60[] = {
     { 2, 0.5f },
     { 3, 0.9f },
     { 4, 0.95f },
     { 5, 1.0f },
 };
 
-static unkstruct_invadepoh_1 D_80B4EB80[] = {
+static unkstructInvadepoh1 D_80B4EB80[] = {
     { 1, 1.0f },
 };
 
-static unkstruct_invadepoh_4 D_80B4EB88 = { 2, &D_80B4EB30, 4, D_80B4EB60, 0x28, 0x3C };
+static unkstructInvadepoh4 D_80B4EB88 = { 2, &D_80B4EB30, 4, D_80B4EB60, 0x28, 0x3C };
 
-static unkstruct_invadepoh_3 D_80B4EB9C = {
+static unkstructInvadepoh3 D_80B4EB9C = {
     1,
     &D_80B4EB38,
     1,
     D_80B4EB80,
 };
 
-static unkstruct_invadepoh_3 D_80B4EBAC = {
+static unkstructInvadepoh3 D_80B4EBAC = {
     1,
     &D_80B4EB40,
     1,
     D_80B4EB80,
 };
 
-static unkstruct_invadepoh_3 D_80B4EBBC = {
+static unkstructInvadepoh3 D_80B4EBBC = {
     1,
     &D_80B4EB48,
     1,
     D_80B4EB80,
 };
 
-static unkstruct_invadepoh_3 D_80B4EBCC = {
+static unkstructInvadepoh3 D_80B4EBCC = {
     1,
     &D_80B4EB50,
     1,
@@ -518,23 +518,23 @@ static void* D_80B4EBDC[] = {
 
 static s8 D_80B4EBF4[] = { 0 };
 
-static unkstruct_invadepoh_0 D_80B4EBF8 = { D_80B4EBF4, 1 };
+static unkstructInvadepoh0 D_80B4EBF8 = { D_80B4EBF4, 1 };
 
-static unkstruct_invadepoh_2 D_80B4EC00 = { 0, &D_80B4EBF8 };
+static unkstructInvadepoh2 D_80B4EC00 = { 0, &D_80B4EBF8 };
 
 static void* D_80B4EC08[] = { &D_80B4EC00 };
 
-static void (*D_80B4EC0C[])(struct EnInvadePohStruct*, unkstruct_invadepoh_4** arg1) = {
+static void (*D_80B4EC0C[])(struct EnInvadePohStruct*, unkstructInvadepoh4** arg1) = {
     func_80B45A4C,
     func_80B45A94,
     func_80B45B1C,
 };
 
-static Color_RGBA8 D_80B4EC18 = { 0xFF, 0xFF, 0xC8, 0xFF };
+static Color_RGBA8 D_80B4EC18 = { 255, 255, 200, 255 };
 
-static Color_RGBA8 D_80B4EC1C = { 0xFF, 0xC8, 0x00, 0x00 };
+static Color_RGBA8 D_80B4EC1C = { 255, 200, 0, 0 };
 
-static void (*D_80B4EC20[])(struct unkStruct_80B50350*) = { func_80B46184 };
+static void (*D_80B4EC20[])(struct unkStruct80B50350*) = { func_80B46184 };
 
 static InitChainEntry D_80B4EC24[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
@@ -543,21 +543,21 @@ static InitChainEntry D_80B4EC24[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-static InitChainEntry D_80B4EC34[] = {
+static InitChainEntry sInitChainParentCow[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-static InitChainEntry D_80B4EC44[] = {
+static InitChainEntry sInitChainChildCow[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-static InitChainEntry D_80B4EC54[] = {
+static InitChainEntry sInitChainRomani[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
@@ -569,7 +569,7 @@ static InitChainEntry D_80B4EC68[] = {
     ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),       ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-static InitChainEntry D_80B4EC80[] = {
+static InitChainEntry sInitChainDog[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),
@@ -578,7 +578,7 @@ static InitChainEntry D_80B4EC80[] = {
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
 };
 
-static InitChainEntry D_80B4EC98[] = {
+static InitChainEntry sInitChainCremia[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
@@ -610,7 +610,7 @@ static EnInvadepohDestroyFunc D_80B4ECE8[] = {
 };
 
 static s16 D_80B4ED20[] = {
-    0x0082, 0x007D, 0x0073, 0x0064, 0x0050, 0x004E, 0x004C, 0x004A,
+    130, 125, 115, 100, 80, 78, 76, 74,
 };
 
 static Vec3f D_80B4ED30[] = {
@@ -627,10 +627,10 @@ static Vec3f D_80B4ED6C[] = {
 static s16 D_80B4EDC0[] = { 0xE0C0, 0xE890, 0xD508 };
 
 static s16 D_80B4EDC8[] = {
-    0xF8F8,
-    0xFC18,
-    0x0000,
-    0x07D0,
+    -1800,
+    -1000,
+    0,
+    2000,
 };
 
 static Vec3f D_80B4EDD0[] = {
@@ -638,7 +638,7 @@ static Vec3f D_80B4EDD0[] = {
     { -393.0f, 396.0f, 1084.0f },  { 0.0f, 1500.0f, 0.0f },
 };
 
-static unkstruct_80B4EE0C D_80B4EE0C[] = {
+static unkstruct80B4EE0C D_80B4EE0C[] = {
     { 0.08f, 0x02BC, 0xFFF6 },
     { 0.09f, 0x012C, 0xFFFB },
     { 0.05f, 0x0190, 0x0000 },
@@ -658,17 +658,17 @@ static Vec3f D_80B4EE30 = {
 
 MtxF D_80B502A0;
 MtxF D_80B502E0;
-Actor* D_80B50320[0x8];
-u8 D_80B50340[0x8];
+EnInvadepoh* D_80B50320[8];
+u8 D_80B50340[8];
 UNK_TYPE1 D_80B50348;
-unkStruct_80B50350 D_80B50350[10];
-Actor* D_80B503F0;
+unkStruct80B50350 D_80B50350[10];
+EnInvadepoh* D_80B503F0;
 EnInvadepoh* D_80B503F4;
-Actor* D_80B503F8;
+EnInvadepoh* D_80B503F8;
 AnimatedMaterial* D_80B503FC;
 AnimatedMaterial* D_80B50400;
 s16 D_80B50404[3];
-Actor* D_80B5040C;
+EnInvadepoh* D_80B5040C;
 
 void func_80B439B0(s32 arg0, s32 arg1) {
     arg1 -= 0x1AAA;
@@ -705,6 +705,7 @@ s32 func_80B43A9C(void) {
 
 s32 func_80B43AB0(void) {
     s32 retVal = func_80B43A9C();
+
     if (retVal < 0xC) {
         retVal++;
         func_80B43A74(retVal);
@@ -737,7 +738,7 @@ s32 func_80B43B80(EnInvadepoh* this) {
 
 void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2) {
     s32 temp_s5 = this->endPoint;
-    f32 temp_f22 = 1.0f / this->pathTotalDist;
+    f32 pathTotalDistInv = 1.0f / this->pathTotalDist;
     Vec3s* phi_s0 = &this->pathPoints[1];
     Vec3s* phi_s1 = &this->pathPoints[0];
     f32 new_var;
@@ -756,7 +757,7 @@ void func_80B43BC8(EnInvadepoh* this, s8* arg1, Vec3f* arg2) {
         sp70.z = phi_s0->z - phi_s1->z;
         new_var = Math3D_Vec3fMagnitude(&sp70);
         temp_f14 = phi_f20 + new_var;
-        temp_f12 = temp_f14 * temp_f22;
+        temp_f12 = temp_f14 * pathTotalDistInv;
 
         if (this->clockTime <= temp_f12) {
             temp_f6 = temp_f12 - phi_f24;
@@ -941,7 +942,7 @@ void func_80B442E4(EnInvadepoh* this) {
 }
 
 void func_80B443A0(EnInvadepoh* this) {
-    f32 temp_f26;
+    f32 pathTotalDistInv;
     s8 temp_s5;
     Vec3s* phi_s1;
     Vec3f sp70;
@@ -951,7 +952,7 @@ void func_80B443A0(EnInvadepoh* this) {
     s32 i;
 
     temp_s5 = this->endPoint;
-    temp_f26 = 1.0f / this->pathTotalDist;
+    pathTotalDistInv = 1.0f / this->pathTotalDist;
     phi_f20 = 0.0f;
     phi_s1 = this->pathPoints;
     Math_Vec3s_ToVec3f(&sp64, phi_s1);
@@ -962,7 +963,7 @@ void func_80B443A0(EnInvadepoh* this) {
         Math_Vec3f_Copy(&sp70, &sp64);
         Math_Vec3s_ToVec3f(&sp64, phi_s1);
         phi_f20 += Math3D_Distance(&sp70, &sp64);
-        *phi_s0 = phi_f20 * temp_f26;
+        *phi_s0 = phi_f20 * pathTotalDistInv;
         if (*phi_s0 < 0.0f) {
             *phi_s0 = 0.0f;
         } else if (*phi_s0 > 1.0f) {
@@ -1020,7 +1021,7 @@ void func_80B44640(EnInvadepoh* this) {
 
 void func_80B44664(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44024(this, globalCtx);
-    this->direction = DIRECTION_FORWARDS;
+    this->direction = DIRECTION_FORWARD;
 }
 
 void func_80B44690(EnInvadepoh* this) {
@@ -1094,7 +1095,7 @@ void func_80B447C0(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->curPathPos);
     func_800B4AEC(globalCtx, &this->actor, 0.0f);
-    if (this->actor.floorHeight > -31999.0f) {
+    if (this->actor.floorHeight > BGCHECK_Y_MIN + 1) {
         if (sp40 < this->actor.floorHeight) {
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 0.0f;
@@ -1128,7 +1129,7 @@ void func_80B44A90(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.velocity.y *= 0.3f;
         this->actor.speedXZ *= 0.8f;
-    } else if ((this->actor.bgCheckFlags & 8)) {
+    } else if (this->actor.bgCheckFlags & 8) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speedXZ *= 0.3f;
     } else {
@@ -1145,9 +1146,8 @@ void func_80B44B78(EnInvadepoh* this) {
 s32 func_80B44B84(EnInvadepoh* this, GlobalContext* globalCtx, f32 speed, f32 arg3) {
     s32 pad;
     Vec3s* pathPoint = &this->pathPoints[this->pathIndex + 1];
-    s32 retVal;
+    s32 retVal = func_80B450C0(&this->actor.world.pos.x, &this->actor.world.pos.z, pathPoint->x, pathPoint->z, speed);
 
-    retVal = func_80B450C0(&this->actor.world.pos.x, &this->actor.world.pos.z, pathPoint->x, pathPoint->z, speed);
     func_800B4AEC(globalCtx, &this->actor, arg3);
     func_80B4516C(this);
     return retVal;
@@ -1165,7 +1165,7 @@ void func_80B44C24(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad[6];
-    Vec3s* temp_a2;
+    Vec3s* temp_a2 = &this->pathPoints[this->pathIndex];
     f32 temp_f0;
     Vec3f sp6C;
     Vec3f sp60;
@@ -1176,13 +1176,10 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 temp_f2;
     f32 temp_f14;
     f32 sp44;
-    s32 sp40;
-    s32 temp_v1;
+    s32 sp40 = 0;
+    s32 temp_v1 = this->pathIndex + this->direction;
     s32 phi_v0;
 
-    temp_a2 = &this->pathPoints[this->pathIndex];
-    sp40 = 0;
-    temp_v1 = this->pathIndex + this->direction;
     if (temp_v1 >= this->endPoint) {
         temp_v1 = 0;
     } else if (temp_v1 < 0) {
@@ -1214,7 +1211,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
-                       4000, 100);
+                       0xFA0, 0x64);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
@@ -1223,14 +1220,14 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, phi_v0);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 8000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
     return sp40;
 }
 
 void func_80B44E90(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, 5);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 8000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
 
 void func_80B44EFC(EnInvadepoh* this, GlobalContext* globalCtx) {
@@ -1247,8 +1244,8 @@ void func_80B44F58(void) {
     s32 i;
     Gfx** iter;
 
-    if (D_80B4E968 == 0) {
-        D_80B4E968 = 1;
+    if (!D_80B4E968) {
+        D_80B4E968 = true;
         for (i = 0, iter = D_80B4E944; i < ARRAY_COUNT(D_80B4E944); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
@@ -1263,8 +1260,8 @@ void func_80B44FEC(void) {
     s32 i;
     Gfx** iter;
 
-    if (D_80B4E994 == 0) {
-        D_80B4E994 = 1;
+    if (!D_80B4E994) {
+        D_80B4E994 = true;
         for (i = 0, iter = D_80B4E96C; i < ARRAY_COUNT(D_80B4E96C); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
@@ -1281,13 +1278,10 @@ void func_80B45080(void) {
 }
 
 s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed) {
-    f32 deltaX;
-    f32 deltaZ;
-    f32 temp_f0;
+    f32 deltaX = x2 - *x1;
+    f32 deltaZ = z2 - *z1;
+    f32 temp_f0 = Math3D_XZLength(deltaX, deltaZ);
 
-    deltaX = x2 - *x1;
-    deltaZ = z2 - *z1;
-    temp_f0 = Math3D_XZLength(deltaX, deltaZ);
     if (speed < temp_f0) {
         f32 temp_f2 = speed / temp_f0;
         *x1 += (temp_f2 * deltaX);
@@ -1349,13 +1343,11 @@ void func_80B451A0(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B452EC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    s32 phi_s2;
+    s32 phi_s2 = (this->actor.params >> 8) & 0x7F;
     s32 i;
 
-    phi_s2 = (this->actor.params >> 8) & 0x7F;
-
     for (i = 0; i < this->unk379; i++) {
-        D_80B50320[i] = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+        D_80B50320[i] = (EnInvadepoh*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
                                     (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
         if (phi_s2 != 0xFF) {
@@ -1376,7 +1368,7 @@ void func_80B45460(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    D_80B503F0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+    D_80B503F0 = (EnInvadepoh*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x60);
 }
 
@@ -1393,7 +1385,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
     s32 retVal = false;
 
-    while (actorIterator) {
+    while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
             Math3D_DistanceSquared(&actorIterator->world.pos, &this->actor.world.pos) < range) {
@@ -1441,16 +1433,13 @@ s32 func_80B456A8(GlobalContext* globalCtx, Vec3f* vec) {
 
 void func_80B457A0(EnInvadepoh* this) {
     f32 distanceSquared;
-    f32 phi_f20;
+    f32 phi_f20 = FLT_MAX;
     s32 i;
-    s32 phi_s5;
-
-    phi_f20 = FLT_MAX;
-    phi_s5 = -1;
-
+    s32 phi_s5 = -1;
+    
     for (i = 0; i < this->unk379; i++) {
-        if (((EnInvadepoh*)D_80B50320[i] != NULL) && (((EnInvadepoh*)D_80B50320[i])->drawAlien != 0)) {
-            distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->world.pos, &this->actor.world.pos);
+        if ((D_80B50320[i] != NULL) && D_80B50320[i]->drawAlien) {
+            distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
             if (distanceSquared < phi_f20) {
                 phi_f20 = distanceSquared;
                 phi_s5 = i;
@@ -1468,7 +1457,7 @@ void func_80B457A0(EnInvadepoh* this) {
     }
 }
 
-Actor* func_80B458D8(void) {
+EnInvadepoh* func_80B458D8(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -1480,7 +1469,7 @@ Actor* func_80B458D8(void) {
     return NULL;
 }
 
-s8 func_80B45980(unkstruct_invadepoh_1* arg0, s32 arg1) {
+s8 func_80B45980(unkstructInvadepoh1* arg0, s32 arg1) {
     f32 rand = Rand_ZeroOne();
     s32 i;
 
@@ -1495,7 +1484,7 @@ s8 func_80B45980(unkstruct_invadepoh_1* arg0, s32 arg1) {
     return (arg0 + i)->unk00;
 }
 
-void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
+void func_80B459E8(EnInvadePohStruct* s, unkstructInvadepoh4* u) {
     s->unk4 = u->unk00;
     s->unk8 = u;
     s->unkE = 0;
@@ -1505,9 +1494,9 @@ void func_80B459E8(EnInvadePohStruct* s, unkstruct_invadepoh_4* u) {
     }
 }
 
-void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
-    unkstruct_invadepoh_4* new_var = s->unk8;
-    unkstruct_invadepoh_0* temp_v1 = new_var->unk04;
+void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u) {
+    unkstructInvadepoh4* new_var = s->unk8;
+    unkstructInvadepoh0* temp_v1 = new_var->unk04;
 
     if (s->unkE < (temp_v1->unk04 - 1)) {
         s->unkE++;
@@ -1515,11 +1504,10 @@ void func_80B45A4C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
     }
 }
 
-void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
-    unkstruct_invadepoh_0* temp_v1;
-    unkstruct_invadepoh_1* temp_a0;
+void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u) {
+    unkstructInvadepoh0* temp_v1 = s->unk8->unk04;
+    unkstructInvadepoh1* temp_a0;
 
-    temp_v1 = s->unk8->unk04;
     if (s->unkE < (temp_v1->unk04 - 1)) {
         s->unkE++;
         s->unkF = temp_v1->unk00[s->unkE];
@@ -1528,11 +1516,10 @@ void func_80B45A94(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
     }
 }
 
-void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
-    unkstruct_invadepoh_0* temp_v1;
-    unkstruct_invadepoh_1* temp_a0;
+void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u) {
+    unkstructInvadepoh0* temp_v1 = s->unk8->unk04;
+    unkstructInvadepoh1* temp_a0;
 
-    temp_v1 = s->unk8->unk04;
     if (s->unkE < (temp_v1->unk04 - 1)) {
         s->unkE++;
         s->unkF = temp_v1->unk00[s->unkE];
@@ -1545,13 +1532,13 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstruct_invadepoh_4** u) {
 
 void func_80B45BB8(EnInvadePohStruct* s) {
     if ((s->unk0 != 0) && (s->unk8 != 0)) {
-        D_80B4EC0C[s->unk4](s, (unkstruct_invadepoh_4**)s->unk0);
+        D_80B4EC0C[s->unk4](s, (unkstructInvadepoh4**)s->unk0);
     }
 }
 
 void func_80B45C04(AlienBehaviorInfo* substruct, void* arg1[], s32 arg2, void* arg3[], s32 arg4, Vec3s* arg5, s16 arg6,
                    f32 arg7, f32 arg8, f32 arg9) {
-    unkstruct_invadepoh_4* temp_v0;
+    unkstructInvadepoh4* temp_v0;
 
     Math_Vec3s_Copy(&substruct->unk26, arg5);
     substruct->unk2C = arg6;
@@ -1560,7 +1547,7 @@ void func_80B45C04(AlienBehaviorInfo* substruct, void* arg1[], s32 arg2, void* a
     substruct->unk3C = arg9;
     if (arg1 != NULL) {
         temp_v0 = arg1[arg2];
-        substruct->unk0.unk0 = (unkstruct_invadepoh_4*)arg1;
+        substruct->unk0.unk0 = (unkstructInvadepoh4*)arg1;
         substruct->unk0.unk4 = temp_v0->unk00;
         substruct->unk0.unkC = 0;
         substruct->unk0.unkE = 0;
@@ -1569,7 +1556,7 @@ void func_80B45C04(AlienBehaviorInfo* substruct, void* arg1[], s32 arg2, void* a
     }
     if (arg3 != NULL) {
         temp_v0 = arg3[arg4];
-        substruct->unk10.unk0 = (unkstruct_invadepoh_4*)arg3;
+        substruct->unk10.unk0 = (unkstructInvadepoh4*)arg3;
         substruct->unk10.unk4 = temp_v0->unk00;
         substruct->unk10.unkC = 0;
         substruct->unk10.unkE = 0;
@@ -1643,7 +1630,7 @@ void func_80B45EC8(EnInvadepoh* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 s32 func_80B46118(Vec3f* actorPos) {
-    unkStruct_80B50350* phi_v1;
+    unkStruct80B50350* phi_v1;
     s32 i;
 
     for (phi_v1 = D_80B50350, i = 0; i < 10; phi_v1++, i++) {
@@ -1658,7 +1645,7 @@ s32 func_80B46118(Vec3f* actorPos) {
     return false;
 }
 
-void func_80B46184(unkStruct_80B50350* unkStruct) {
+void func_80B46184(unkStruct80B50350* unkStruct) {
     if (unkStruct->unk1 > 20) {
         if (unkStruct->unk2 < 125) {
             unkStruct->unk2 += 10;
@@ -1675,7 +1662,7 @@ void func_80B46184(unkStruct_80B50350* unkStruct) {
 
 s32 func_80B461DC(void) {
     s32 phi_s4 = false;
-    unkStruct_80B50350* phi_s0;
+    unkStruct80B50350* phi_s0;
     s32 i;
 
     for (phi_s0 = D_80B50350, i = 0; i < 10; phi_s0++, i++) {
@@ -1739,7 +1726,7 @@ void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, D_80B4EC24);
     Collider_InitCylinder(globalCtx, &this->collider);
     ActorShape_Init(&this->actor.shape, 6800.0f, func_800B4088, 150.0f);
-    this->actor.shape.shadowAlpha = 0x8C;
+    this->actor.shape.shadowAlpha = 140;
     this->actor.flags = 0x80001010;
     if (((this->actor.params >> 4) & 0xF) == 13) {
         this->actor.update = func_80B4D670;
@@ -1756,7 +1743,7 @@ void func_80B46414(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void EnInvadepoh_InitParentCow(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Actor_ProcessInitChain(&this->actor, D_80B4EC34);
+    Actor_ProcessInitChain(&this->actor, sInitChainParentCow);
     this->actor.update = func_80B47FA8;
     Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
                           0x30);
@@ -1767,7 +1754,7 @@ void EnInvadepoh_InitParentCow(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void EnInvadepoh_InitChildCow(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Actor_ProcessInitChain(&this->actor, D_80B4EC44);
+    Actor_ProcessInitChain(&this->actor, sInitChainChildCow);
     this->actor.update = func_80B481C4;
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
@@ -1777,11 +1764,9 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp;
+    s32 temp = (this->actor.params >> 4) & 0xF;
 
-    temp = (this->actor.params >> 4) & 0xF;
-
-    Actor_ProcessInitChain(&this->actor, D_80B4EC54);
+    Actor_ProcessInitChain(&this->actor, sInitChainRomani);
 
     this->actor.targetMode = (temp == 7 || temp == 0xC) ? 3 : 6;
 
@@ -1789,7 +1774,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     if (temp != 4) {
         ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E8DC);
+        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
     if (temp == 4) {
@@ -1849,7 +1834,6 @@ void func_80B468B4(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else if (D_80B4E940 == 2) {
         this->actor.world.pos.y += 1500.0f;
         func_80B49628(this);
-
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -1858,10 +1842,10 @@ void func_80B468B4(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_InitDog(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    Actor_ProcessInitChain(&this->actor, D_80B4EC80);
+    Actor_ProcessInitChain(&this->actor, sInitChainDog);
     this->actor.update = func_80B4B8BC;
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E908);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitDog);
     this->actor.colChkInfo.mass = 0x50;
     ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 24.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG);
@@ -1873,11 +1857,11 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    Actor_ProcessInitChain(&this->actor, D_80B4EC98);
+    Actor_ProcessInitChain(&this->actor, sInitChainCremia);
     this->actor.update = func_80B4C3A0;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B4E8DC);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
     this->actor.colChkInfo.mass = MASS_HEAVY;
     ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA2);
@@ -1887,7 +1871,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[0x16] & 1)) {
         Actor_MarkForDeath(&this->actor);
     }
-    D_80B503F8 = &this->actor;
+    D_80B503F8 = this;
 }
 
 void EnInvadepoh_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -2026,7 +2010,7 @@ void func_80B46FA8(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else {
         func_80B457A0(this);
         for (i = 0; i < this->unk379; i++) {
-            if ((D_80B50320[i] != NULL) && (((EnInvadepoh*)D_80B50320[i])->unk38A != 0)) {
+            if ((D_80B50320[i] != NULL) && (D_80B50320[i]->unk38A != 0)) {
                 func_80B47278(this);
                 break;
             }
@@ -2160,7 +2144,7 @@ void func_80B47478(EnInvadepoh* this) {
     this->collider.base.ocFlags1 &= ~1;
     this->actor.flags &= ~0x80000000;
     this->alienAlpha = 0;
-    this->actor.draw = 0;
+    this->actor.draw = NULL;
     this->drawAlien = false;
     this->drawAlienDeathEffect = false;
     this->alienBeamAlpha = 0;
@@ -2198,15 +2182,15 @@ void func_80B47600(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B447C0(this, globalCtx);
     func_80B43DD4(this, 800, 0);
     func_800B9010(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
-    if (0.9999f <= this->clockTime) {
+    if (this->clockTime >= 0.9999f) {
         this->unk38A = 1;
     }
-    if (this->alienAlpha >= 249) {
+    if (this->alienAlpha > 248) {
         this->alienAlpha = 255;
     } else {
         this->alienAlpha += 6;
     }
-    if (this->alienAlpha >= 129) {
+    if (this->alienAlpha > 128) {
         this->collider.base.atFlags |= 1;
         this->collider.base.acFlags |= 1;
         this->collider.base.ocFlags1 |= 1;
@@ -2228,7 +2212,7 @@ void func_80B4770C(EnInvadepoh* this) {
     this->collider.base.atFlags |= 1;
     this->collider.base.acFlags |= 1;
     this->collider.base.ocFlags1 |= 1;
-    this->alienAlpha = 0xFF;
+    this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
     this->drawAlienDeathEffect = false;
@@ -2240,9 +2224,9 @@ void func_80B4770C(EnInvadepoh* this) {
 void func_80B477B4(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B442E4(this);
     func_80B447C0(this, globalCtx);
-    func_80B43DD4(this, 0x320, 0);
+    func_80B43DD4(this, 800, 0);
     func_800B9010(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
-    if (0.9999f <= this->clockTime) {
+    if (this->clockTime >= 0.9999f) {
         this->unk38A = 1;
     }
 }
@@ -2252,7 +2236,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 |= 1;
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060006C8);
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
@@ -2278,12 +2262,12 @@ void func_80B47938(EnInvadepoh* this) {
     this->collider.base.ocFlags1 &= ~1;
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06000608);
     this->actor.flags &= ~1;
-    this->actionTimer = 0xA;
-    this->alienAlpha = 0xFF;
+    this->actionTimer = 10;
+    this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
     this->drawAlienDeathEffect = false;
-    this->alienBeamAlpha = 0xFF;
+    this->alienBeamAlpha = 255;
     this->actor.flags |= 0x80000000;
     this->actionFunc = func_80B479E8;
 }
@@ -2296,13 +2280,12 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->counter < 5) {
         if (D_80B4ED30[this->counter].x > 0.0f) {
             this->drawAlien = true;
-            this->alienBeamAlpha = 0xFF;
+            this->alienBeamAlpha = 255;
             Math_Vec3f_Copy(&this->actor.scale, &D_80B4ED30[this->counter]);
         } else {
             this->drawAlien = false;
             this->alienBeamAlpha = 0;
         }
-
     } else {
         this->drawAlien = false;
         this->alienBeamAlpha = 0;
@@ -2317,7 +2300,6 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             this->drawAlienDeathEffect = false;
         }
-
     } else {
         this->drawAlienDeathEffect = false;
     }
@@ -2385,7 +2367,6 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-
     } else if (this->collider.base.acFlags & 2) {
         Actor* acAttached = this->collider.base.ac;
 
@@ -2395,7 +2376,7 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
         thisx->gravity = 0.0f;
         thisx->velocity.y = acAttached->velocity.y * 0.5f;
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
-        func_800F0568(globalCtx, &thisx->world.pos, 50, 0x3A09);
+        func_800F0568(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
         func_80B47830(this);
     }
 
@@ -2453,7 +2434,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
 
     temp = this->actor.params & 7;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 50);
+    Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 0x32);
     if (this->actor.child != NULL) {
         SysMatrix_StatePush();
         SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y,
@@ -2495,7 +2476,7 @@ void func_80B4827C(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B482D4(EnInvadepoh* this) {
-    this->actionTimer = 0x28;
+    this->actionTimer = 40;
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06002A8C, -10.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80B48324;
@@ -2519,7 +2500,7 @@ void func_80B48374(EnInvadepoh* this) {
 
 void func_80B483CC(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer == 20) {
-        f32 unkFloat = 0.1f; // required to match
+        f32 unkFloat = 0.1f;
 
         this->behaviorInfo.unk26.x = 2000;
         this->behaviorInfo.unk26.y = 0;
@@ -2593,7 +2574,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 0x1388, 0.05f, 0.3f, 0.12f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 5000, 0.05f, 0.3f, 0.12f);
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
     }
@@ -2643,10 +2624,8 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
         Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x46);
     }
     func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
-    if ((this->actor.flags & 0x40) == 0x40) {
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
-        }
+    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->actionTimer > 0) {
         this->actionTimer--;
@@ -2710,9 +2689,9 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
             temp_v1 -= this->actor.shape.rot.x;
             substruct->unk26.x = CLAMP(temp_v1, -2500, 2500);
-            new_var3 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+            new_var3 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
             temp_v1 = new_var3 * 0.7f;
-            substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+            substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
         }
 
     dummy:;
@@ -2778,10 +2757,10 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
-    diff = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
+    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B48948(this);
     }
@@ -2799,7 +2778,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -2811,11 +2790,8 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
-    s32 sp2C;
-    s32 isTalking;
-
-    sp2C = (this->actor.flags & 0x40) == 0x40;
-    isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 sp2C = (this->actor.flags & 0x40) == 0x40;
+    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -2825,12 +2801,8 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
-        if (this->actionFunc != func_80B48E4C) {
-            if (!isTalking) {
-                if (this->actor.isTargeted) {
-                    func_800B8614(&this->actor, globalCtx, 100.0f);
-                }
-            }
+        if ((this->actionFunc != func_80B48E4C) && !isTalking && this->actor.isTargeted) {
+            func_800B8614(&this->actor, globalCtx, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -2856,7 +2828,7 @@ void func_80B49228(EnInvadepoh* this, GlobalContext* globalCtx) {
                                  fabsf(this->actor.velocity.y), 1.0f);
     func_800B9010(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
     if (fabsf(temp_f0) < 1.0f) {
-        func_80B45EC8(this, globalCtx, 0x32);
+        func_80B45EC8(this, globalCtx, 50);
         func_80B492FC(this);
     }
 }
@@ -2903,7 +2875,7 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp30;
     s32 pad2;
 
-    if (this->counter < 0x19) {
+    if (this->counter < 25) {
         this->counter++;
     } else {
         this->counter = 0;
@@ -2954,7 +2926,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 1500.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 10, 3000, 100);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 0xA, 0xBB8, 0x64);
     if ((globalCtx->gameplayFrames % 64) < 14) {
         Math_StepToF(&this->actor.speedXZ, 5.0f, 1.0f);
     } else {
@@ -2988,7 +2960,7 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x + D_80B4E934.x;
     sp30.y = this->actor.home.pos.y + D_80B4E934.y + 400.0f;
     sp30.z = this->actor.home.pos.z + D_80B4E934.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 8000, 100);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
     Math_StepToF(&this->actor.speedXZ, 70.0f, 3.0f);
     if (sp30.y < this->actor.world.pos.y) {
         this->actor.gravity = -2.0f;
@@ -3040,7 +3012,7 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp30.x = this->actor.home.pos.x;
     sp30.y = this->actor.home.pos.y + 800.0f;
     sp30.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 8000, 100);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 4, 0x1F40, 0x64);
     Math_StepToF(&this->actor.speedXZ, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
     if (sp30.y < this->actor.world.pos.y) {
@@ -3090,8 +3062,8 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44570(this);
     func_80B44C24(this, globalCtx);
     func_80B43E6C(this, 6, 2000, 100);
-    if (1) {} // required to match
-    if (this->pathIndex == 0 || this->pathIndex + 1 == this->endPoint) {
+    if (1) {}
+    if (this->pathIndex == 0 || (this->pathIndex + 1) == this->endPoint) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(globalCtx);
             if (temp_v0_2 > 0) {
@@ -3099,18 +3071,16 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
                 this->unk378 = func_80B45550(this, globalCtx, SQ(80.0f), temp_v0_2);
             }
         }
-        this->actor.flags &= ~0x9;
+        this->actor.flags &= ~(0x8 | 0x1);
     } else {
         this->unk378 = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (0x8 | 0x1);
     }
 
-    if ((this->actor.flags & 0x40) == 0x40) {
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
-        }
+    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
-    if (0.9999f <= this->clockTime) {
+    if (this->clockTime >= 0.9999f) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -3133,11 +3103,11 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (func_800B867C(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
@@ -3159,7 +3129,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
         func_80B44C24(this, globalCtx);
@@ -3178,7 +3148,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
 
         if (sp38 >= CLOCK_TIME(18, 0) || sp38 < CLOCK_TIME(2, 0)) {
             this->actor.update = func_80B4A168;
-            this->actor.draw = 0;
+            this->actor.draw = NULL;
         } else if ((sp38 < CLOCK_TIME(6, 0)) && (sp38 >= CLOCK_TIME(2, 0)) && (sp38 < CLOCK_TIME(2, 15))) {
             this->actor.update = func_80B4A1B8;
             this->actor.draw = func_80B4E324;
@@ -3202,11 +3172,8 @@ void func_80B4A168(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
-    s32 sp2C;
-    s32 isTalking;
-
-    sp2C = (this->actor.flags & 0x40) == 0x40;
-    isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 sp2C = (this->actor.flags & 0x40) == 0x40;
+    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3216,12 +3183,8 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
-        if (this->actionFunc != func_80B49DFC) {
-            if (!isTalking) {
-                if (this->actor.isTargeted) {
-                    func_800B8614(&this->actor, globalCtx, 350.0f);
-                }
-            }
+        if ((this->actionFunc != func_80B49DFC) && !isTalking && this->actor.isTargeted) {
+            func_800B8614(&this->actor, globalCtx, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3239,7 +3202,7 @@ void func_80B4A2C0(EnInvadepoh* this) {
     substruct->unk2C = 1500;
     this->actionTimer = Rand_S16Offset(200, 200);
     this->unk304 = this->actor.shape.rot.y;
-    this->actor.flags |= 9;
+    this->actor.flags |= (0x8 | 0x1);
     this->actionFunc = func_80B4A350;
 }
 
@@ -3254,7 +3217,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     if ((globalCtx->gameplayFrames % 256) == 0) {
         Math_Vec3s_ToVec3f(&sp44, this->pathPoints);
         sp42 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp44);
-        temp_v0 = Rand_S16Offset(-8000, 16000);
+        temp_v0 = Rand_S16Offset(-0x1F40, 0x3E80);
         this->unk304 = temp_v0 + sp42;
         this->behaviorInfo.unk4C = 0;
     }
@@ -3267,13 +3230,13 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
         temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
         temp_v1_2 *= 0.85f;
         temp_v1_2 -= this->actor.shape.rot.x;
-        substruct->unk26.x = CLAMP(temp_v1_2, -2500, 2500);
+        substruct->unk26.x = CLAMP(temp_v1_2, -0x9C4, 0x9C4);
         diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1_2 = diff;
         temp_v1_2 *= 0.7f;
-        substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
+        substruct->unk26.y = CLAMP(temp_v1_2, -0x1F40, 0x1F40);
         if ((globalCtx->gameplayFrames % 256) == 0) {
-            substruct->unk26.z = Rand_S16Offset(-1500, 3000);
+            substruct->unk26.z = Rand_S16Offset(-0x5DC, 0xBB8);
         }
     } else {
         substruct->unk26.x = 0;
@@ -3296,7 +3259,7 @@ void func_80B4A570(EnInvadepoh* this) {
     substruct->unk26.z = 0;
     substruct->unk30 = 0.1f;
     substruct->unk2C = 800;
-    this->actor.flags |= 9;
+    this->actor.flags |= (0x8 | 0x1);
     this->actionFunc = func_80B4A5E4;
 }
 
@@ -3334,15 +3297,13 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
         if (this->unk378 == 0) {
             this->unk378 = func_80B45550(this, globalCtx, SQ(80.0f), -0xF);
         }
-        this->actor.flags &= ~0x9;
+        this->actor.flags &= ~(0x8 | 0x1);
     } else {
         this->unk378 = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (0x8 | 0x1);
     }
-    if ((this->actor.flags & 0x40) == 0x40) {
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
-        }
+    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->pathIndex == this->endPoint) {
         func_80B4A2C0(this);
@@ -3367,11 +3328,11 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
     if (func_800B867C(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
@@ -3398,7 +3359,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
             this->pathIndex = 0;
@@ -3420,7 +3381,6 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 this->actor.textId = 0x332D;
             }
-
         } else {
             this->actor.textId = 0x332C;
         }
@@ -3440,25 +3400,19 @@ void func_80B4AB8C(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
-    s32 sp2C;
-    s32 isTalking;
+    s32 sp2C = (this->actor.flags & 0x40) == 0x40;
+    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
 
-    sp2C = (this->actor.flags & 0x40) == 0x40;
-    isTalking = func_800B84D0(&this->actor, globalCtx);
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
         func_80B4A7C0(this);
     }
     this->actionFunc(this, globalCtx);
-    if (sp2C != 0) {
+    if (sp2C) {
         this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
-        if (this->actionFunc != func_80B4A81C) {
-            if (!isTalking) {
-                if (this->actor.isTargeted) {
-                    func_800B8614(&this->actor, globalCtx, 100.0f);
-                }
-            }
+        if ((this->actionFunc != func_80B4A81C) && !isTalking && this->actor.isTargeted) {
+            func_800B8614(&this->actor, globalCtx, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3472,7 +3426,7 @@ void func_80B4ACDC(EnInvadepoh* this) {
 void func_80B4ACF0(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[22] & 1) {
         this->actor.draw = func_80B4E324;
-        this->actor.flags |= 9;
+        this->actor.flags |= (0x8 | 0x1);
         func_80B4AD3C(this);
     }
 }
@@ -3509,9 +3463,8 @@ void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
         if (this->textId == 0x3333) {
             func_80B4AEC0(this);
-            return;
         }
-        if (this->textId == 0x3334) {
+        else if (this->textId == 0x3334) {
             func_801477B4(globalCtx);
             func_80B4B024(this);
         }
@@ -3535,7 +3488,7 @@ void func_80B4AEDC(EnInvadepoh* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[22] |= 2;
         func_80B4AF80(this);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x60, 2000.0f, 2000.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 2000.0f, 2000.0f);
     }
 }
 
@@ -3584,7 +3537,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
                          this->transitionDrawTable, 23);
         SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, 0.0f);
         substruct = &this->behaviorInfo;
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 0x7D0, 0.08f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 2000, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
         substruct->unk2C = 0x7D0;
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3597,24 +3550,24 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     s16 diff;
     EnInvadepoh* this = THIS;
     s16 temp_v1;
-    s32 sp38;
+    s32 sp38 = (this->actor.flags & 0x40) == 0x40;
     Player* player;
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    sp38 = (this->actor.flags & 0x40) == 0x40;
+    
     this->actionFunc(this, globalCtx);
-    if (sp38 != 0 && this->actor.update != NULL) {
+    if (sp38 && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         player = PLAYER;
         Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f);
         temp_v1 -= this->actor.shape.rot.x;
-        substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+        substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
         diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1 = diff;
         temp_v1 *= 0.7f;
-        substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+        substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
         func_80B45CE0(substruct);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3686,16 +3639,11 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (this->actionTimer > 0) {
         this->actionTimer--;
-        return;
-    }
-    if (this->unk3BC >= 0) {
-        if (D_80B50348 == 0) {
-            if (Rand_ZeroOne() < 0.4f) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
-            }
+    } else if (this->unk3BC >= 0) {
+        if ((D_80B50348 == 0) && (Rand_ZeroOne() < 0.4f)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
         }
         func_80B4B724(this);
-
     } else {
         func_80B4B430(this);
     }
@@ -3710,7 +3658,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_YawBetweenActors(&this->actor, D_80B5040C), 5, 5000, 100);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_YawBetweenActors(&this->actor, &D_80B5040C->actor), 5, 0x1388, 0x64);
     func_80B44E90(this, globalCtx);
     if (func_801378B8(&this->skelAnime, 13.0f) || func_801378B8(&this->skelAnime, 19.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
@@ -3783,16 +3731,15 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
     s32 phi_v0;
 
     D_80B5040C = func_80B458D8();
-    if (D_80B5040C == 0) {
+    if (D_80B5040C == NULL) {
         temp_v0_2 = (this->unk3BC < 0) ^ 1;
         this->unk3BC = -1;
         if (temp_v0_2) {
             func_80B4B820(this);
         }
-
     } else {
         sp2C = this->unk3BC;
-        this->unk3BC = func_80B44234(this, &D_80B5040C->world.pos);
+        this->unk3BC = func_80B44234(this, &D_80B5040C->actor.world.pos);
         if (sp2C != this->unk3BC) {
             phi_v0 = this->pathIndex;
             phi_v0 = this->unk3BC - this->pathIndex;
@@ -3803,16 +3750,16 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
 
             temp_v0_3 = this->endPoint >> 1;
             if (temp_v0_3 < phi_v0) {
-                this->direction = DIRECTION_BACKWARDS;
+                this->direction = DIRECTION_BACKWARD;
             } else if (phi_v0 < temp_v0_3) {
-                this->direction = DIRECTION_FORWARDS;
+                this->direction = DIRECTION_FORWARD;
             }
         }
     }
 
     this->actionFunc(this, globalCtx);
     this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if ((sp34 != 0) && (this->actor.update != NULL)) {
+    if (sp34 && (this->actor.update != NULL)) {
         func_80B45CE0(&this->behaviorInfo);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3848,16 +3795,16 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         if (temp_v0 == 0) {
             this->xzPosAdjFactor = 40.0f;
             this->unk304 = -0x8000;
-            this->actor.flags &= ~0x9;
+            this->actor.flags &= ~(0x8 | 0x1);
 
         } else if (temp_v0 < (temp_t6->endPoint - 1)) {
             this->xzPosAdjFactor = 40.0f;
             Math_ScaledStepToS(&this->unk304, -0x4800, 0xC8);
-            this->actor.flags |= 9;
+            this->actor.flags |= (0x8 | 0x1);
         } else {
             Math_StepToF(&this->xzPosAdjFactor, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->unk304, -0x8000, 0x12C);
-            this->actor.flags &= ~0x9;
+            this->actor.flags &= ~(0x8 | 0x1);
         }
         temp_a0 = this->unk304 + temp_t6->actor.world.rot.y;
         this->actor.world.pos.x = (Math_SinS(temp_a0) * this->xzPosAdjFactor) + temp_t6->actor.world.pos.x;
@@ -3866,14 +3813,14 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
-        if (0.0001f < Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos)) {
+        if (Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
-                               3, this->behaviorInfo.unk4C, 500);
+                               3, this->behaviorInfo.unk4C, 0x1F4);
         }
-        temp_v1 = (globalCtx->gameplayFrames + 0x14) & 0x7F;
+        temp_v1 = (globalCtx->gameplayFrames + 0x14) % 128;
         if ((temp_v1 & 0x40) != 0) {
             sp40 = Math_Vec3f_Yaw(&this->actor.world.pos, &temp_t6->actor.world.pos);
-            if (temp_v1 == 0x40) {
+            if (temp_v1 == 64) {
                 this->behaviorInfo.unk4C = 0;
             }
             Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
@@ -3889,10 +3836,8 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.flags & 0x40) == 0x40) {
-        if ((func_801378B8(&this->skelAnime, 0.0f)) || (func_801378B8(&this->skelAnime, 12.0f))) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
-        }
+    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 12.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.time > CLOCK_TIME(20, 15)) {
         Actor_MarkForDeath(&this->actor);
@@ -3911,23 +3856,22 @@ void func_80B4BFFC(EnInvadepoh* this) {
 
 void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    player = PLAYER;
     Math_StepToS(&this->behaviorInfo.unk4C, 2500, 450);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
 
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
 
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B4BBE0(this);
@@ -3944,30 +3888,26 @@ void func_80B4C1BC(EnInvadepoh* this) {
 
 void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player;
+    Player* player = PLAYER;
     Actor* temp_v0;
     s16 temp_v1;
     s16 diff;
-
-    player = PLAYER;
 
     Math_StepToS(&this->behaviorInfo.unk4C, 2000, 200);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
     if (D_80B503F4 == NULL) {
         func_80B4BBE0(this);
-    } else if (D_80B503F4 != NULL) {
-        if ((D_80B503F4)->actionFunc != func_80B4CB0C) {
-            func_80B4BBE0(this);
-        }
+    } else if ((D_80B503F4 != NULL) && (D_80B503F4->actionFunc != func_80B4CB0C)) {
+        func_80B4BBE0(this);
     }
 }
 
@@ -3983,7 +3923,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44FEC();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, (0, this->limbDrawTable),
                          this->transitionDrawTable, 22);
-        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
             this->unk304 = -0x8000;
@@ -3998,7 +3938,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
 
         if ((currentTime >= CLOCK_TIME(6, 0)) && (currentTime < 0xD573)) {
             this->actor.update = func_80B4C568;
-            this->actor.draw = 0;
+            this->actor.draw = NULL;
         } else if ((currentTime >= 0xD573) && (currentTime < CLOCK_TIME(20, 15))) {
             this->actor.update = func_80B4C5C0;
             this->actor.draw = func_80B4E7BC;
@@ -4022,31 +3962,23 @@ void func_80B4C568(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
-    s32 sp2C;
-    s32 isTalking;
+    s32 sp2C = (this->actor.flags & 0x40) == 0x40;
+    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
 
-    sp2C = (this->actor.flags & 0x40) == 0x40;
-    isTalking = func_800B84D0(&this->actor, globalCtx);
     if (isTalking) {
         func_80151BB4(globalCtx, 6);
         func_80B4BFFC(this);
     }
     this->actionFunc(this, globalCtx);
-    if (sp2C != 0) {
-        if (this->actor.update != NULL) {
+    if (sp2C && (this->actor.update != NULL)) {
             SkelAnime_FrameUpdateMatrix(&this->skelAnime);
             func_80B45CE0(&this->behaviorInfo);
-            if (this->actionFunc != func_80B4C058) {
-                if (!isTalking) {
-                    if (this->actor.isTargeted) {
-                        func_800B8614(&this->actor, globalCtx, 350.0f);
-                    }
-                }
+            if ((this->actionFunc != func_80B4C058) && !isTalking && this->actor.isTargeted) {
+                func_800B8614(&this->actor, globalCtx, 350.0f);
             }
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-    }
 }
 
 void func_80B4C6C8(EnInvadepoh* this) {
@@ -4063,7 +3995,7 @@ void func_80B4C6C8(EnInvadepoh* this) {
 
 void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    EnInvadepoh* sp68;
+    EnInvadepoh* sp68 = D_80B503F8;
     s32 phi_a2;
     s32 temp_v1_3;
     s16 temp_v1_4;
@@ -4074,23 +4006,23 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     s8 temp_v1;
     s16 sp3A;
     s8 temp_v0;
-    sp68 = (EnInvadepoh*)D_80B503F8;
+    
     func_80B44700(this);
     func_80B44EFC(this, globalCtx);
     func_80B43E6C(this, 6, 2000, 100);
-    if (1) {} // required to match, also in the other function above that looks like this one
+    if (1) {}
     temp_v1 = this->pathIndex;
     temp_v0 = this->endPoint;
     phi_a2 = temp_v0 - 1;
     if (temp_v1 < temp_v0) {
         phi_a2 = temp_v1;
-    } else if (temp_v1_3) { // fake match probably
+    } else if (temp_v1_3) {
     }
 
     Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
     Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 2000, 100);
-    if ((this->pathIndex == 0) || (this->pathIndex + 1 == this->endPoint)) {
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 0x7D0, 0x64);
+    if ((this->pathIndex == 0) || ((this->pathIndex + 1) == this->endPoint)) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(globalCtx);
             if (temp_v0_2 > 0) {
@@ -4099,16 +4031,16 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
             }
         }
 
-        this->actor.flags &= ~0x9;
+        this->actor.flags &= ~(0x8 | 0x1);
     } else {
         this->unk378 = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (0x8 | 0x1);
     }
 
-    temp_v1_3 = globalCtx->gameplayFrames & 0x7F;
+    temp_v1_3 = globalCtx->gameplayFrames % 128;
     if ((temp_v1_3 & 0x40) != 0) {
         sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp68->actor.world.pos);
-        if (temp_v1_3 == 0x40) {
+        if (temp_v1_3 == 64) {
             this->behaviorInfo.unk4C = 0;
         }
 
@@ -4124,18 +4056,16 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
         substruct->unk26.y = CLAMP(temp_v1_4, -8000, 8000);
     }
 
-    if ((this->actor.flags & 0x40) == 0x40) {
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
-        }
+    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
-    if (0.9999f <= this->clockTime) {
+    if (this->clockTime >= 0.9999f) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if ((sp68 != 0) && (sp68->actionFunc == func_80B4C058)) {
+    if ((sp68 != NULL) && (sp68->actionFunc == func_80B4C058)) {
         func_80B4CC70(this);
     }
 }
@@ -4150,21 +4080,20 @@ void func_80B4CAB0(EnInvadepoh* this) {
 
 void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    player = PLAYER;
     Math_StepToS(&this->behaviorInfo.unk4C, 3000, 500);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos));
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (func_800B867C(&this->actor, globalCtx)) {
         func_80B4C6C8(this);
     }
@@ -4180,24 +4109,23 @@ void func_80B4CC70(EnInvadepoh* this) {
 
 void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player;
+    Player* player = PLAYER;
     s16 temp_v1;
     s16 diff;
 
-    player = PLAYER;
     Math_StepToS(&this->behaviorInfo.unk4C, 2000, 200);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
     temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
-    substruct->unk26.x = CLAMP(temp_v1, -3000, 3000);
+    substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
-    substruct->unk26.y = CLAMP(temp_v1, -8000, 8000);
+    substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (D_80B503F8 == NULL) {
         func_80B4C6C8(this);
-    } else if ((D_80B503F8 != NULL) && ((EnInvadepoh*)D_80B503F8)->actionFunc != func_80B4C058) {
+    } else if ((D_80B503F8 != NULL) && (D_80B503F8->actionFunc != func_80B4C058)) {
         func_80B4C6C8(this);
     }
 }
@@ -4215,7 +4143,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 0x64, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B44700(this);
@@ -4249,11 +4177,9 @@ void func_80B4CFFC(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
-    s32 sp2C;
-    s32 isTalking;
+    s32 sp2C = (this->actor.flags & 0x40) == 0x40;
+    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
 
-    sp2C = (this->actor.flags & 0x40) == 0x40;
-    isTalking = func_800B84D0(&this->actor, globalCtx);
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
         func_80B4CAB0(this);
@@ -4262,12 +4188,8 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     if (sp2C && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
-        if (this->actionFunc != func_80B4CB0C) {
-            if (!isTalking) {
-                if (this->actor.isTargeted) {
-                    func_800B8614(thisx, globalCtx, 350.0f);
-                }
-            }
+        if ((this->actionFunc != func_80B4CB0C) && !isTalking && this->actor.isTargeted) {
+            func_800B8614(thisx, globalCtx, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -4277,15 +4199,15 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4D15C(EnInvadepoh* this) {
     s32 pad;
     s32 temp_v1 = this->actor.params & 7;
-    unkstruct_80B4EE0C* temp_v0;
+    unkstruct80B4EE0C* temp_v0;
 
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001674);
     this->skelAnime.animCurrentFrame = ((this->actor.params & 7) * this->skelAnime.animFrameCount) * 0.25f;
-    this->alienAlpha = 0xFF;
+    this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
     this->drawAlienDeathEffect = false;
-    this->alienBeamAlpha = 0xFF;
+    this->alienBeamAlpha = 255;
     temp_v0 = &D_80B4EE0C[temp_v1];
     this->velocityStep = temp_v0->unk00;
     this->unk304 = temp_v1 * 0x5555;
@@ -4319,7 +4241,7 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = this->actor.child;
     this->actor.shape.rot.y += this->behaviorInfo.unk4C;
     this->actor.world.pos.z = this->actor.home.pos.z + ((0, temp_f10));
-    if (this->actor.child != 0) {
+    if (this->actor.child != NULL) {
         this->actor.child->world.pos.x = this->actor.world.pos.x;
         temp_v1->world.pos.y = this->actor.world.pos.y - 38.0f;
         temp_v1->world.pos.z = this->actor.world.pos.z;
@@ -4334,11 +4256,11 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4D3E4(EnInvadepoh* this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001674);
     this->skelAnime.animCurrentFrame = (this->actor.params & 7) * this->skelAnime.animFrameCount * 0.25f;
-    this->alienAlpha = 0xFF;
-    this->actor.draw = 0;
+    this->alienAlpha = 255;
+    this->actor.draw = NULL;
     this->drawAlien = true;
     this->drawAlienDeathEffect = false;
-    this->alienBeamAlpha = 0xFF;
+    this->alienBeamAlpha = 255;
     this->unk306 = 400;
     this->unk304 = 0;
     this->actionTimer = 200;
@@ -4349,10 +4271,9 @@ void func_80B4D3E4(EnInvadepoh* this) {
 void func_80B4D480(EnInvadepoh* this, GlobalContext* globalCtx) {
     f32 target;
     s32 pad2;
-    s32 sp2C;
+    s32 sp2C = false;
     f32 new_var3;
 
-    sp2C = false;
     if (this->actionTimer > 0) {
         this->actionTimer--;
     }
@@ -4436,7 +4357,7 @@ void func_80B4D7B8(GlobalContext* globalCtx) {
     s32 temp_v0;
     u32 temp_s5;
     u32 temp_s6;
-    unkStruct_80B50350* phi_s2;
+    unkStruct80B50350* phi_s2;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -4444,14 +4365,14 @@ void func_80B4D7B8(GlobalContext* globalCtx) {
     for (phi_s2 = D_80B50350, i = 0; i < 10; phi_s2++, i++) {
         if (phi_s2->unk1 > 0) {
             temp_v0 = globalCtx->gameplayFrames;
-            temp_s5 = (temp_v0 + ((0x10 * i) & 0xFFu)) & 0x7F; // not sure about all this
-            temp_s6 = (temp_v0 * -0xF) & 0xFF;
+            temp_s5 = (temp_v0 + ((0x10 * i) & 0xFFU)) & 0x7F;
+            temp_s6 = (u8)(temp_v0 * -0xF);
             SysMatrix_InsertTranslation(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xAA, phi_s2->unk2);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x32, 0x00, 0x00);
-            temp_v0 = globalCtx->gameplayFrames; // required ???
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, phi_s2->unk2);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
+            temp_v0 = globalCtx->gameplayFrames;
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_s5, 0, 0x20, 0x40, 1, 0, temp_s6, 0x20, 0x40));
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4497,9 +4418,8 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     EnInvadepoh* this = THIS;
     Gfx* gfx;
-    GraphicsContext* spCC;
+    GraphicsContext* spCC = globalCtx->state.gfxCtx;
 
-    spCC = globalCtx->state.gfxCtx;
     OPEN_DISPS(spCC);
     func_8012C2DC(spCC);
     SysMatrix_StatePush();
@@ -4531,7 +4451,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             gfx = spBC = spB8->polyXlu.p;
             gDPPipeSync(spBC++);
             gDPSetPrimColor(spBC++, 0, 255, 240, 180, 100, 60);
-            gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * 0.5882353f);
+            gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * (150.0f / 255.0f));
             SysMatrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(spBC++, D_06000080);
@@ -4571,9 +4491,9 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         sp74.z = thisx->world.pos.z + sp80.z;
         SysMatrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
-        alpha2 = this->alienAlpha * 0.39215687f;
+        alpha2 = this->alienAlpha * (100.0f / 255.0f);
         gSPDisplayList(gfx++, D_04029CB0);
-        gDPSetPrimColor(gfx++, 0, 0, 0xF0, 0xB4, 0x64, alpha2);
+        gDPSetPrimColor(gfx++, 0, 0, 240, 180, 100, alpha2);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, D_04029CF0);
         sp6C->polyXlu.p = gfx;
@@ -4666,8 +4586,8 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 0xFF, 0xFF, 0x00, 0xB4);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x32, 0x00, 0x00);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
     gSPDisplayList(POLY_XLU_DISP++, D_04023210);
     if (func_80B456A8(globalCtx, &sp5C)) {
         func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp5C, 20.0f, 9.0f, 0,
