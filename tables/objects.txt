@@ -562,6 +562,7 @@
     0x80816020:"ovl_daytelop_rodata",
     0x8082AED0:"ovl_kaleido_scope_data",
     0x8085B9F0:"ovl_Player_Actor_data",
+    0x8085E3B0:"ovl_Player_Actor_rodata",
     0x808637B0:"ovl_En_Test_data",
     0x808637D0:"ovl_En_Test_rodata",
     0x80864A30:"ovl_En_GirlA_data",
