@@ -17,7 +17,7 @@ void EnFishing_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
 const ActorInit En_Fishing_InitVars = {
-    0x0079,
+    ACTOR_EN_FISHING,
     ACTORCAT_NPC,
     FLAGS,
     OBJECT_FISH,

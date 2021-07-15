@@ -401,10 +401,7 @@ def GetColliderInit(address, type, num):
 
     fileResult = resolve_symbol(address)
 
-    if fileResult[0] is None:
-        return("Invalid address")
-
-    # print(hex(fileResult[1]), "in", fileResult[0].split(os.sep)[-1])
+    print(hex(fileResult[1]), "in", fileResult[0].split(os.sep)[-1])
 
     selectedType = TYPE_DICT[type]
     arg2 = None
