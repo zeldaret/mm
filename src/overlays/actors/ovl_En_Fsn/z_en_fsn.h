@@ -26,23 +26,6 @@ struct EnFsn;
 
 typedef void (*EnFsnActionFunc)(struct EnFsn*, GlobalContext*);
 
-typedef struct {
-    /* 0x00 */ u32 stickColorR;
-    /* 0x04 */ u32 stickColorG;
-    /* 0x08 */ u32 stickColorB;
-    /* 0x0C */ u32 stickColorA;
-    /* 0x10 */ f32 stickTexX;
-    /* 0x14 */ f32 stickTexY;
-    /* 0x18 */ u32 arrowColorR;
-    /* 0x1C */ u32 arrowColorG;
-    /* 0x20 */ u32 arrowColorB;
-    /* 0x24 */ u32 arrowColorA;
-    /* 0x28 */ f32 arrowTexX;
-    /* 0x2C */ f32 arrowTexY;
-    /* 0x30 */ f32 texZ; // Used for both stickTexZ and arrowTexZ
-    /* 0x34 */ s32 isEnabled;
-} StickDirectionPrompt; // size = 0x38
-
 typedef struct EnFsn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ UNK_TYPE1 pad144[0x4C];

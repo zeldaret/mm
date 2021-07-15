@@ -10,9 +10,7 @@
 
 #define THIS ((EnFsn*)thisx)
 
-#define CURSOR_INVALID 0xFF
 #define SI_NONE 0
-#define COL_CHAN_MIX(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
 #define ENFSN_SHOULD_END_CONVERSATION(this) ((this)->flags & 1)
 #define ENFSN_SHOULD_GIVE_ITEM(this) ((this)->flags & 2)
