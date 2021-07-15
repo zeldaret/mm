@@ -3382,7 +3382,7 @@ extern s32* gNMIBuffer;
 // extern UNK_TYPE1 D_801F59F4;
 // extern UNK_TYPE1 D_801F59F8;
 // extern QuakeRequest sQuakeRequest[4];
-extern Quake2Context sQuake2Context;
+// extern Quake2Context sQuake2Context;
 extern s32 sMatAnimStep;
 extern u32 sMatAnimFlags;
 extern f32 sMatAnimAlphaRatio;

@@ -1,6 +1,10 @@
 #include "global.h"
 
+// bss
 QuakeRequest sQuakeRequest[4];
+Quake2Context sQuake2Context;
+
+// data
 s16 D_801C0EC0 = 1;
 s16 sQuakeRequestCount = 0;
 
@@ -9,16 +13,16 @@ s16 (*sQuakeCallbacks[])(QuakeRequest*, ShakeInfo*) = {
 };
 
 
-s32 D_801C0EE4 = { 0x03F00000 };
-s32 D_801C0EE8 = { 0x01560000 };
-s32 D_801C0EEC = { 0x00010000 };
+s16 D_801C0EE4 = 0x03F0;
+s16 D_801C0EE8 = 0x0156;
+s16 D_801C0EEC = 0x0001;
 
 f32 Quake_Random(void) {
     return 2.0f * (Rand_ZeroOne() - 0.5f);
 }
 
 void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
-    Vec3f* unk50 = &req->cam->focalPoint;
+    Vec3f* unk50 = &req->cam->at;
     Vec3f* unk5C = &req->cam->eye;
 
     Vec3f vec;
@@ -50,8 +54,8 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
     }
 
     vec2 = vec;
-    shake->eyeChange = vec2;
-    shake->focalPointChange = vec2;
+    shake->eyeOffset = vec2;
+    shake->atOffset = vec2;
     shake->rotZ = req->rotZ * y;
     shake->zoom = req->zoom * y;
 }
@@ -167,7 +171,6 @@ QuakeRequest* Quake_GetRequest(s16 idx) {
     return req;
 }
 
-#ifdef NON_MATCHING
 u32 Quake_SetValue(s16 idx, s16 valueType, s16 value) {
     QuakeRequest* req = Quake_GetRequest(idx);
 
@@ -210,9 +213,6 @@ u32 Quake_SetValue(s16 idx, s16 valueType, s16 value) {
         return true;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake_SetValue.asm")
-#endif
 
 u32 Quake_SetSpeed(s16 idx, s16 value) {
     QuakeRequest* req = Quake_GetRequest(idx);
@@ -294,24 +294,471 @@ u32 Quake_RemoveFromIdx(s16 idx) {
     return false;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake_Calc.asm")
+s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
+    QuakeRequest* req;
+    ShakeInfo shake;
+    f32 absSpeedDiv;
+    f32 max;
+    f32 max2;
+    s32 idx;
+    s32 ret;
+    u32 eq;
+    Vec3f vec;
+    GlobalContext* globalCtx = camera->globalCtx;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_Init.asm")
+    vec.x = 0.0f;
+    vec.y = 0.0f;
+    vec.z = 0.0f;
+    camData->atOffset.x = 0.0f;
+    camData->atOffset.y = 0.0f;
+    camData->atOffset.z = 0.0f;
+    camData->eyeOffset.x = 0.0f;
+    camData->eyeOffset.y = 0.0f;
+    camData->eyeOffset.z = 0.0f;
+    camData->rotZ = 0;
+    camData->zoom = 0;
+    camData->unk1C = 0.0f;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_SetCountdown.asm")
+    if (sQuakeRequestCount == 0) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_GetCountdown.asm")
+    ret = 0;
+    for (idx = 0; idx < ARRAY_COUNT(sQuakeRequest); idx++) {
+        req = &sQuakeRequest[idx];
+        if (req->callbackIdx != 0) {
+            if (globalCtx->cameraPtrs[req->camPtrIdx] == NULL) {
+                Quake_Remove(req);
+            } else {
+                eq = (camera->thisIdx != req->cam->thisIdx);
+                absSpeedDiv = ABS(req->speed) / (f32)0x8000;
+                if (sQuakeCallbacks[req->callbackIdx](req, &shake) == 0) {
+                    Quake_Remove(req);
+                } else if (eq == 0) {
+                    if (fabsf(camData->atOffset.x) < fabsf(shake.atOffset.x)) {
+                        camData->atOffset.x = shake.atOffset.x;
+                    }
+                    if (fabsf(camData->atOffset.y) < fabsf(shake.atOffset.y)) {
+                        camData->atOffset.y = shake.atOffset.y;
+                    }
+                    if (fabsf(camData->atOffset.z) < fabsf(shake.atOffset.z)) {
+                        camData->atOffset.z = shake.atOffset.z;
+                    }
+                    if (fabsf(camData->eyeOffset.x) < fabsf(shake.eyeOffset.x)) {
+                        camData->eyeOffset.x = shake.eyeOffset.x;
+                    }
+                    if (fabsf(camData->eyeOffset.y) < fabsf(shake.eyeOffset.y)) {
+                        camData->eyeOffset.y = shake.eyeOffset.y;
+                    }
+                    if (fabsf(camData->eyeOffset.z) < fabsf(shake.eyeOffset.z)) {
+                        camData->eyeOffset.z = shake.eyeOffset.z;
+                    }
+                    if (camData->rotZ < shake.rotZ) {
+                        camData->rotZ = shake.rotZ;
+                    }
+                    if (camData->zoom < shake.zoom) {
+                        camData->zoom = shake.zoom;
+                    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_GetType.asm")
+                    max = OLib_Vec3fDist(&shake.atOffset, &vec) * absSpeedDiv;
+                    max2 = OLib_Vec3fDist(&shake.eyeOffset, &vec) * absSpeedDiv;
+                    if (max < max2) {
+                        max = max2;
+                    }
+                    max2 = (camData->rotZ * 0.0028f) * absSpeedDiv;
+                    if (max < max2) {
+                        max = max2;
+                    }
+                    max2 = (camData->zoom * 0.0028f) * absSpeedDiv;
+                    if (max < max2) {
+                        max = max2;
+                    }
+                    if (camData->unk1C < max) {
+                        camData->unk1C = max;
+                    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_SetType.asm")
+                    ret++;
+                }
+            }
+        }
+    }
+    return ret;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_ClearType.asm")
+void Quake2_Init(GlobalContext* globalCtx) {
+    sQuake2Context.globalCtx = globalCtx;
+    View_ClearQuake(&globalCtx->view);
+    sQuake2Context.type = 0;
+    sQuake2Context.countdown = 0;
+    sQuake2Context.state = 0;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_GetFloorQuake.asm")
+void Quake2_SetCountdown(s16 countdown) {
+    sQuake2Context.countdown = countdown;
+    sQuake2Context.state = 2;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake2_Update.asm")
+s16 Quake2_GetCountdown(void) {
+    return sQuake2Context.countdown;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_quake/Quake_NumActiveQuakes.asm")
+s16 Quake2_GetType(void) {
+    return sQuake2Context.type;
+}
+
+void Quake2_SetType(s32 type) {
+    if (sQuake2Context.type < type) {
+        sQuake2Context.type = type;
+    }
+}
+
+void Quake2_ClearType(s32 type) {
+    if (sQuake2Context.type == type) {
+        sQuake2Context.type = 0;
+    }
+}
+
+s32 Quake2_GetFloorQuake(Player* player) {
+    if (func_800C9D8C(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0) {
+        return func_800C9E18(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
+    }
+    return 0;
+}
+
+void Quake2_Update(void) {
+    f32 sp8C;
+    f32 sp88;
+    f32 sp84;
+    f32 temp_f12;
+    f32 phi_f2;
+    f32 sp78;
+    f32 sp74;
+    f32 sp70;
+    f32 sp6C;
+    f32 sp68;
+    f32 sp64;
+    f32 sp60;
+    f32 sp5C;
+    f32 sp58;
+    Player* player;
+    GlobalContext* globalCtx = sQuake2Context.globalCtx;
+    PosRot sp3C;
+    Camera* camera = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
+
+    if (sQuake2Context.type != 0) {
+        if (sQuake2Context.type & 0x800) {
+            sQuake2Context.countdown = 2;
+            D_801C0EE4 = 1008;
+            D_801C0EE8 = 342;
+            sp78 = 0.0f;
+            sp74 = 170.0f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.0f;
+            sp64 = -0.01f;
+            sp60 = 0.01f;
+            sp5C = 0.0f;
+            sp58 = 0.6f;
+            sp8C = sp88 = sQuake2Context.countdown / 60.0f;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x400) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 1008;
+                D_801C0EE8 = 342;
+            }
+
+            sp78 = 0.0f;
+            sp74 = 50.0f / D_801C0EEC;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.0f;
+            sp64 = 0.01f;
+            sp60 = 100.0f;
+            sp5C = 0.0f;
+            sp58 = 0.4f;
+            sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
+            sp84 = 0.5f;
+        } else if (sQuake2Context.type & 0x200) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 508;
+                D_801C0EE8 = 342;
+            }
+
+            sp78 = -5.0f;
+            sp74 = 5.0f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 2.0f;
+            sp64 = 0.3f;
+            sp60 = 0.3f;
+            sp5C = 0.0f;
+            sp58 = 0.1f;
+            sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x100) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 10000;
+                D_801C0EE8 = 1000;
+            }
+
+            sp78 = 0.0f;
+            sp74 = 150.0f;
+            sp70 = 0;
+            sp6C = 0;
+            sp68 = 0.2f;
+            sp64 = 0.025f;
+            sp60 = 0.02f;
+            sp5C = 0.01f;
+            sp58 = 1.5f;
+            if (sQuake2Context.countdown < 5) {
+                sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
+            } else {
+                sp8C = sp88 = 0.0f;
+            }
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x80) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 1200;
+                D_801C0EE8 = 2000;
+            }
+
+            sp78 = 0.0f;
+            sp74 = 150.0f;
+            sp70 = 0;
+            sp6C = 0;
+            sp68 = 0;
+            sp64 = 0.03f;
+            sp60 = 0.02f;
+            sp5C = 0.01f;
+            sp58 = 1.5f;
+
+            sp8C = sp88 = sQuake2Context.countdown / (f32)D_801C0EEC;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x40) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 2500;
+                D_801C0EE8 = 3000;
+            }
+
+            sp78 = 0.0f;
+            sp74 = 150.0f;
+            sp70 = 0;
+            sp6C = 0;
+            sp68 = 0;
+            sp64 = 0.03f;
+            sp60 = 0.03f;
+            sp5C = 0.01f;
+            sp58 = 1.3f;
+            if (sQuake2Context.countdown < 4) {
+                sp8C = sp88 = sQuake2Context.countdown / (f32)D_801C0EEC;
+            } else {
+                sp8C = sp88 = 0.0f;
+            }
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x20) {
+            sQuake2Context.countdown = 2;
+            if (sQuake2Context.state == 2) {
+                D_801C0EE4 = 2500;
+                D_801C0EE8 = 3000;
+            }
+
+            D_801C0EE4 += 0xB1;
+            D_801C0EE8 -= 0x2B;
+
+            sp78 = -107.0f;
+            sp74 = 158.0f;
+            sp70 = 0.2f;
+            sp6C = 1.7f;
+            sp68 = -2.9f;
+            sp64 = -0.6f;
+            sp60 = -0.7f;
+            sp5C = 0.6f;
+            sp58 = 0.2f;
+            sp88 = 1.0f;
+            sp8C = 1.0f;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 0x10) {
+            if (sQuake2Context.state == 2) {
+                D_801C0EEC = sQuake2Context.countdown;
+                D_801C0EE4 = 1888;
+                D_801C0EE8 = 444;
+            }
+            sp78 = 248.0f;
+            sp74 = -90.0f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.0f;
+            sp64 = -0.4f;
+            sp60 = 0.4f;
+            sp5C = 0.2f;
+            sp58 = 0.25f;
+            phi_f2 = sQuake2Context.countdown / (f32)D_801C0EEC;
+            sp88 = sp8C = phi_f2;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 8) {
+            D_801C0EE4 = 1008;
+            D_801C0EE8 = 342;
+            sQuake2Context.countdown = 2;
+            
+            player = PLAYER;
+
+            if (&player->actor != NULL) {
+                func_800B8248(&sp3C, player);
+            }
+
+            sp78 = 359.2f;
+            sp74 = -18.5f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.3f;
+
+            switch (Quake2_GetFloorQuake(player)) {
+                case 3:
+                    sp64 = -0.06f;
+                    sp60 = 0.1f;
+                    sp5C = 0.03f;
+                    sp58 = 0.33f;
+                    break;
+                case 2:
+                    sp64 = -0.06f;
+                    sp60 = 0.1f;
+                    sp5C = 0.03f;
+                    sp58 = 0.33f;
+                    break;
+                case 1:
+                    sp64 = -0.06f;
+                    sp60 = 0.1f;
+                    sp5C = 0.03f;
+                    sp58 = 0.33f;
+                    break;
+                default:
+                    sp64 = -0.06f;
+                    sp60 = 0.1f;
+                    sp5C = 0.03f;
+                    sp58 = 0.23f;
+                    break;
+            }
+
+            if (player->unk_B88 < 0) {
+                sp8C = (player->unk_B88 - (f32)(0x4000)) / (f32)(0xC000);
+            } else {
+                sp8C = (player->unk_B88 + (f32)(0x4000)) / (f32)(0xC000);
+            }
+            sp88 = -sp8C;
+            sp84 = 1.0f;
+        } else if (sQuake2Context.type & 4) {
+            D_801C0EE4 = 1008;
+            D_801C0EE8 = 342;
+            sQuake2Context.countdown = 2;
+            player = PLAYER;
+            sp78 = 359.2f;
+            sp74 = -18.5f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.0f;
+
+
+            switch (Quake2_GetFloorQuake(player)) {
+                case 3:
+                    sp64 = 0.12f;
+                    sp60 = 0.12f;
+                    sp5C = 0.08f;
+                    sp58 = 0.18f;
+                    break;
+                case 2:
+                    sp64 = 0.12f;
+                    sp60 = 0.12f;
+                    sp5C = 0.08f;
+                    sp58 = 0.12f;
+                    break;
+                case 1:
+                    sp64 = 0.12f;
+                    sp60 = 0.12f;
+                    sp5C = 0.08f;
+                    sp58 = 0.08f;
+                    break;
+                default:
+                    sp64 = 0.12f;
+                    sp60 = 0.12f;
+                    sp5C = 0.08f;
+                    sp58 = 0.05f;
+                    break;
+            }
+
+            if ((camera->waterYPos - camera->eye.y) > 2000.0f) {
+                phi_f2 = 1.0f;
+            } else {
+                phi_f2 = (camera->waterYPos - camera->eye.y) / 2000.0f;
+            }
+
+            
+            sp8C = sp84 = (phi_f2 * 0.15f) + 0.35f + (speedRatio * 0.4f);
+            sp88 = 0.9f - sp8C;
+        } else if (sQuake2Context.type & 1) {
+            D_801C0EE4 = 1008;
+            D_801C0EE8 = 342;
+            sQuake2Context.countdown = 2;
+            sp78 = 0.0f;
+            sp74 = 150.0f;
+            sp70 = 0.0f;
+            sp6C = 0.0f;
+            sp68 = 0.0f;
+            sp64 = -0.01f;
+            sp60 = 0.01f;
+            sp5C = 0.01f;
+            sp58 = 0.6f;
+            sp84 = 1.0f;
+            sp88 = 1.0f;
+            sp8C = 1.0f;
+        } else {
+            return;
+        }
+
+        D_801C0EE4 += DEGF_TO_BINANG(sp78);
+        D_801C0EE8 += DEGF_TO_BINANG(sp74);
+        View_SetQuakeRotation(&sQuake2Context.globalCtx->view, Math_CosS(D_801C0EE4) * (DEGF_TO_RADF(sp70) * sp8C),  Math_SinS(D_801C0EE4) * (DEGF_TO_RADF(sp6C) * sp8C), Math_SinS(D_801C0EE8) * (DEGF_TO_RADF(sp68) * sp88));
+        View_SetQuakeScale(&sQuake2Context.globalCtx->view, (Math_SinS(D_801C0EE8) * (sp64 * sp8C)) + 1.0f, (Math_CosS(D_801C0EE8) * (sp60 * sp8C)) + 1.0f, (Math_CosS(D_801C0EE4) * (sp5C * sp88)) + 1.0f);
+        View_SetQuakeSpeed(&sQuake2Context.globalCtx->view, sp58 * sp84);
+        sQuake2Context.state = 1;
+    } else if (sQuake2Context.state != 0) {
+        View_ClearQuake(&globalCtx->view);
+        sQuake2Context.state = 0;
+        sQuake2Context.countdown = 0;
+    }
+
+    if (sQuake2Context.countdown != 0) {
+        sQuake2Context.countdown--;
+        if (sQuake2Context.countdown == 0) {
+            sQuake2Context.type = 0;
+        }
+    }
+    
+}
+
+s32 Quake_NumActiveQuakes(void) {
+    QuakeRequest* req = sQuakeRequest;
+    s32 numActiveQuakes = 0;
+
+    if (req[0].callbackIdx != 0) {
+        numActiveQuakes++;
+    }
+    if (req[1].callbackIdx != 0) {
+        numActiveQuakes++;
+    }
+    if (req[2].callbackIdx != 0) {
+        numActiveQuakes++;
+    }
+    if (req[3].callbackIdx != 0) {
+        numActiveQuakes++;
+    }
+
+    return numActiveQuakes;
+}
 
 

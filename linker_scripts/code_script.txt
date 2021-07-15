@@ -600,7 +600,7 @@ SECTIONS
         build/src/code/z_olib.o(.rodata)
         build/asm/code/code_rodata_z_parameter.o(.rodata)
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
-        build/asm/code/code_rodata_0x8012A080.o(.rodata)
+        build/src/code/z_quake.o(.rodata)
         build/asm/code/code_rodata_z_room.o(.rodata)
         build/src/code/code_0x8012EC80.o(.rodata)
         build/src/code/z_scene_proc.o(.rodata)
@@ -675,7 +675,7 @@ SECTIONS
     . += 0x10; /* code_0x8010C0C0 */
     . += 0x60; /* z_parameter */
     . += 0x150; /* z_player_lib */
-    . += 0xA0; /* code_0x8012A080 */
+    . += 0xA0; /* z_quake */
     . += 0x10; /* z_scene_proc */
     . += 0x10; /* z_skelanime */
     . += 0xF10; /* z_skin */
