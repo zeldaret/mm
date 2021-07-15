@@ -15,7 +15,7 @@ void EnFishing_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFishing_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFishing_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/* 
+/*
 const ActorInit En_Fishing_InitVars = {
     0x0079,
     ACTORCAT_NPC,
