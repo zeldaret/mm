@@ -1390,7 +1390,7 @@ extern UNK_PTR D_801C0B0C;
 // extern UNK_TYPE1 D_801C0EA0;
 // extern UNK_TYPE1 D_801C0EAC;
 // extern UNK_TYPE1 D_801C0EB8;
-// extern UNK_TYPE2 sIsQuakeActive;
+// extern s16 sIsQuakeActive;
 // extern s16 sQuakeRequestCount;
 // extern quake_callback_func sQuakeCallbacks[7];
 // extern s16 D_801C0EE4;

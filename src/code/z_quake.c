@@ -13,7 +13,6 @@ f32 Quake_Random(void) {
 void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 verticalPertubation, f32 horizontalPertubation) {
     Vec3f* at = &req->camera->at;
     Vec3f* eye = &req->camera->eye;
-
     Vec3f atEyeOffset;
     VecSph atEyeOffsetSph2;
     VecSph eyeAtAngle;
@@ -275,8 +274,8 @@ void Quake_Init(void) {
     sQuakeRequestCount = 0;
 }
 
-s16 Quake_Add(Camera* cam, u32 callbackIdx) {
-    return Quake_AddImpl(cam, callbackIdx)->randIdx;
+s16 Quake_Add(Camera* camera, u32 callbackIdx) {
+    return Quake_AddImpl(camera, callbackIdx)->randIdx;
 }
 
 u32 Quake_RemoveFromIdx(s16 idx) {
@@ -527,17 +526,15 @@ void Quake2_Update(void) {
                 angle1 = 0x4B0;
                 angle2 = 0x7D0;
             }
+
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
-
             rotX = 0;
             rotY = 0;
             rotZ = 0;
-
             xScale = 0.03f;
             yScale = 0.02f;
             zScale = 0.01f;
-
             speed = 1.5f;
             xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
             speedScaleFactor = 1.0f;
@@ -547,17 +544,15 @@ void Quake2_Update(void) {
                 angle1 = 0x9C4;
                 angle2 = 0xBB8;
             }
+
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
-
             rotX = 0;
             rotY = 0;
             rotZ = 0;
-
             xScale = 0.03f;
             yScale = 0.03f;
             zScale = 0.01f;
-
             speed = 1.3f;
             if (sQuake2Context.countdown < 4) {
                 xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
@@ -571,19 +566,17 @@ void Quake2_Update(void) {
                 angle1 = 0x9C4;
                 angle2 = 0xBB8;
             }
+
             angle1 += 0xB1;
             angle2 -= 0x2B;
             angle1Speed = -107.0f;
             angle2Speed = 158.0f;
-
             rotX = 0.2f;
             rotY = 1.7f;
             rotZ = -2.9f;
-
             xScale = -0.6f;
             yScale = -0.7f;
             zScale = 0.6f;
-
             speed = 0.2f;
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
@@ -594,17 +587,15 @@ void Quake2_Update(void) {
                 angle1 = 0x760;
                 angle2 = 0x1BC;
             }
+
             angle1Speed = 248.0f;
             angle2Speed = -90.0f;
-
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
-
             xScale = -0.4f;
             yScale = 0.4f;
             zScale = 0.2f;
-
             speed = 0.25f;
             countdownRatio = sQuake2Context.countdown / (f32)countdownMax;
             zScaleFactor = xyScaleFactor = countdownRatio;
@@ -613,15 +604,14 @@ void Quake2_Update(void) {
             angle1 = 0x3F0;
             angle2 = 0x156;
             sQuake2Context.countdown = 2;
-
             player = PLAYER;
 
             if (&player->actor != NULL) {
                 func_800B8248(&playerPosRot, player);
             }
+
             angle1Speed = 359.2f;
             angle2Speed = -18.5f;
-
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.3f;
@@ -666,7 +656,6 @@ void Quake2_Update(void) {
             player = PLAYER;
             angle1Speed = 359.2f;
             angle2Speed = -18.5f;
-
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;

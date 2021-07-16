@@ -1238,8 +1238,6 @@ typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
 typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
-// typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
-
 typedef struct {
     /* 0x00 */ draw_func unk0;
     /* 0x04 */ u32 unk4;
