@@ -12,12 +12,20 @@ typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
 #define INVADEPOH_TYPE(x) (x->actor.params >> 4 & 0xF)
 
 typedef enum{
-    /* 0 */ UNK0,
-    /* 1 */ UNK1,
-    /* 2 */ TYPE_PARENT_COW,
-    /* 3 */ TYPE_CHILD_COW,
-    /* 4 */ TYPE_ROMANI,
-    /* 5 */ TYPE_ROMANI,
+    /*  0   */ TYPE_UNK0,
+    /*  1   */ TYPE_ALIEN,
+    /*  2   */ TYPE_PARENT_COW,
+    /*  3   */ TYPE_CHILD_COW,
+    /*  4   */ TYPE_ROMANI,
+    /*  5   */ TYPE_ROMANI1,
+    /*  6   */ TYPE_UNK6,
+    /*  7   */ TYPE_ROMANI2,
+    /*  8   */ TYPE_ROMANI3,
+    /*  9   */ TYPE_ROMANI4,
+    /*  10  */ TYPE_DOG,
+    /*  11  */ TYPE_CREMIA,
+    /*  12  */ TYPE_ROMANI5,
+    /*  13  */ TYPE_ALIEN1
 } EnInvadepohType;
 
 typedef enum {
