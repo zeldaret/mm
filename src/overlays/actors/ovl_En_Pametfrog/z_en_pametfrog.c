@@ -310,7 +310,7 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 ma
     s16 y;
     Vec3f eye;
 
-    y = func_800DFCDC(camera) + 0x8000;
+    y = BINANG_ROT180(func_800DFCDC(camera));
     eye.x = (Math_SinS(y) * magShakeXZ) + camera->focalPoint.x;
     eye.y = camera->focalPoint.y + magShakeY;
     eye.z = (Math_CosS(y) * magShakeXZ) + camera->focalPoint.z;
@@ -340,7 +340,7 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     poly = NULL;
     this->actor.child->world.pos.x = (Math_SinS(this->actor.shape.rot.y) * 300.0f) + this->actor.world.pos.x;
     this->actor.child->world.pos.z = (Math_CosS(this->actor.shape.rot.y) * 300.0f) + this->actor.world.pos.z;
-    this->actor.child->shape.rot.y = this->actor.shape.rot.y + 0x8000;
+    this->actor.child->shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
     vec2.x = this->actor.child->world.pos.x;
     vec2.y = this->actor.child->world.pos.y + 50.0f;
     vec2.z = this->actor.child->world.pos.z;
@@ -482,7 +482,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     this->actor.params = ENPAMETFROG_FALL_OFF_SNAPPER;
     this->actor.speedXZ = 7.0f;
     this->actor.velocity.y = 15.0f;
-    this->actor.world.rot.y = this->actor.child->world.rot.y + 0x8000;
+    this->actor.world.rot.y = BINANG_ROT180(this->actor.child->world.rot.y);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.flags |= 1;
     this->timer = 30;
@@ -506,7 +506,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3.0f)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -644,7 +644,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     this->actor.speedXZ = 0.0f;
     this->skelAnime.animPlaybackSpeed = 1.5f;
     if (this->timer != 0) {
-        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30.0f) : (-M_PI / 30.0f);
+        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
     } else {
         randFloat = Rand_ZeroFloat(0x2000);
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
@@ -931,7 +931,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 primColor = { 250, 250, 250, 255 };
     static Color_RGBA8 envColor = { 180, 180, 180, 255 };
-    s16 yaw = func_800DFCDC(ACTIVE_CAM) + 0x8000;
+    s16 yaw = BINANG_ROT180(func_800DFCDC(ACTIVE_CAM));
     Vec3f vec1;
     Vec3f vel;
     s32 i;
@@ -961,7 +961,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5.0f)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -1099,7 +1099,7 @@ void func_8086CB4C(EnPametfrog* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
-    this->actor.shape.rot.y = this->actor.world.rot.y + 0x8000;
+    this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = func_8086CC04;
 }
 
