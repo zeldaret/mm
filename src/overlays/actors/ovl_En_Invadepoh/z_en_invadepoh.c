@@ -3488,7 +3488,7 @@ void func_80B4AEDC(EnInvadepoh* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[22] |= 2;
         func_80B4AF80(this);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 2000.0f, 2000.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 
