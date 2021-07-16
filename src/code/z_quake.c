@@ -1,20 +1,10 @@
 #include "global.h"
 
-// bss
 QuakeRequest sQuakeRequest[4];
 Quake2Context sQuake2Context;
 
-// data
-s16 D_801C0EC0 = 1;
-s16 sQuakeRequestCount = 0;
-
-s16 (*sQuakeCallbacks[])(QuakeRequest*, ShakeInfo*) = {
-    NULL, Quake_Callback1, Quake_Callback2, Quake_Callback3, Quake_Callback4, Quake_Callback5, Quake_Callback6,
-};
-
-s16 D_801C0EE4 = 0x03F0;
-s16 D_801C0EE8 = 0x0156;
-s16 D_801C0EEC = 0x0001;
+static s16 sIsQuakeActive = true;
+static s16 sQuakeRequestCount = 0;
 
 f32 Quake_Random(void) {
     return 2.0f * (Rand_ZeroOne() - 0.5f);
@@ -281,7 +271,7 @@ void Quake_Init(void) {
         sQuakeRequest[i].callbackIdx = 0;
         sQuakeRequest[i].countdown = 0;
     }
-    D_801C0EC0 = 1;
+    sIsQuakeActive = true;
     sQuakeRequestCount = 0;
 }
 
@@ -298,6 +288,10 @@ u32 Quake_RemoveFromIdx(s16 idx) {
     }
     return false;
 }
+
+static s16 (*sQuakeCallbacks[])(QuakeRequest*, ShakeInfo*) = {
+    NULL, Quake_Callback1, Quake_Callback2, Quake_Callback3, Quake_Callback4, Quake_Callback5, Quake_Callback6,
+};
 
 s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     s32 pad;
@@ -394,12 +388,12 @@ void Quake2_Init(GlobalContext* globalCtx) {
     View_ClearQuake(&globalCtx->view);
     sQuake2Context.type = 0;
     sQuake2Context.countdown = 0;
-    sQuake2Context.state = 0;
+    sQuake2Context.state = QUAKE2_INACTIVE;
 }
 
 void Quake2_SetCountdown(s16 countdown) {
     sQuake2Context.countdown = countdown;
-    sQuake2Context.state = 2;
+    sQuake2Context.state = QUAKE2_SETUP;
 }
 
 s16 Quake2_GetCountdown(void) {
@@ -430,311 +424,320 @@ s32 Quake2_GetFloorQuake(Player* player) {
 }
 
 void Quake2_Update(void) {
-    f32 sp8C;
-    f32 sp88;
-    f32 sp84;
-    f32 temp_f12;
-    f32 phi_f2;
-    f32 sp78;
-    f32 sp74;
-    f32 sp70;
-    f32 sp6C;
-    f32 sp68;
-    f32 sp64;
-    f32 sp60;
-    f32 sp5C;
-    f32 sp58;
+    static s16 angle1 = 0x3F0;
+    static s16 angle2 = 0x156;
+    static s16 countdownMax = 1;
+    f32 xyScaleFactor;
+    f32 zScaleFactor;
+    f32 speedScaleFactor;
+    f32 countdownRatio;
+    f32 waterYScaleFactor;
+    f32 angle1Speed;
+    f32 angle2Speed;
+    f32 rotX;
+    f32 rotY;
+    f32 rotZ;
+    f32 xScale;
+    f32 yScale;
+    f32 zScale;
+    f32 speed;
     Player* player;
     GlobalContext* globalCtx = sQuake2Context.globalCtx;
-    PosRot sp3C;
+    PosRot playerPosRot;
     Camera* camera = globalCtx->cameraPtrs[globalCtx->activeCamera];
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
     if (sQuake2Context.type != 0) {
         if (sQuake2Context.type & 0x800) {
             sQuake2Context.countdown = 2;
-            D_801C0EE4 = 1008;
-            D_801C0EE8 = 342;
-            sp78 = 0.0f;
-            sp74 = 170.0f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.0f;
-            sp64 = -0.01f;
-            sp60 = 0.01f;
-            sp5C = 0.0f;
-            sp58 = 0.6f;
-            sp8C = sp88 = sQuake2Context.countdown / 60.0f;
-            sp84 = 1.0f;
+            angle1 = 0x3F0;
+            angle2 = 0x156;
+            angle1Speed = 0.0f;
+            angle2Speed = 170.0f;
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.0f;
+            xScale = -0.01f;
+            yScale = 0.01f;
+            zScale = 0.0f;
+            speed = 0.6f;
+            xyScaleFactor = zScaleFactor = sQuake2Context.countdown / 60.0f;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x400) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 1008;
-                D_801C0EE8 = 342;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x3F0;
+                angle2 = 0x156;
             }
 
-            sp78 = 0.0f;
-            sp74 = 50.0f / D_801C0EEC;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.0f;
-            sp64 = 0.01f;
-            sp60 = 100.0f;
-            sp5C = 0.0f;
-            sp58 = 0.4f;
-            sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
-            sp84 = 0.5f;
+            angle1Speed = 0.0f;
+            angle2Speed = 50.0f / countdownMax;
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.0f;
+            xScale = 0.01f;
+            yScale = 100.0f;
+            zScale = 0.0f;
+            speed = 0.4f;
+            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
+            speedScaleFactor = 0.5f;
         } else if (sQuake2Context.type & 0x200) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 508;
-                D_801C0EE8 = 342;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x1FC;
+                angle2 = 0x156;
             }
 
-            sp78 = -5.0f;
-            sp74 = 5.0f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 2.0f;
-            sp64 = 0.3f;
-            sp60 = 0.3f;
-            sp5C = 0.0f;
-            sp58 = 0.1f;
-            sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
-            sp84 = 1.0f;
+            angle1Speed = -5.0f;
+            angle2Speed = 5.0f;
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 2.0f;
+            xScale = 0.3f;
+            yScale = 0.3f;
+            zScale = 0.0f;
+            speed = 0.1f;
+            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x100) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 10000;
-                D_801C0EE8 = 1000;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x2710;
+                angle2 = 0x3E8;
             }
 
-            sp78 = 0.0f;
-            sp74 = 150.0f;
-            sp70 = 0;
-            sp6C = 0;
-            sp68 = 0.2f;
-            sp64 = 0.025f;
-            sp60 = 0.02f;
-            sp5C = 0.01f;
-            sp58 = 1.5f;
+            angle1Speed = 0.0f;
+            angle2Speed = 150.0f;
+            rotX = 0;
+            rotY = 0;
+            rotZ = 0.2f;
+            xScale = 0.025f;
+            yScale = 0.02f;
+            zScale = 0.01f;
+            speed = 1.5f;
             if (sQuake2Context.countdown < 5) {
-                sp8C = sp88 = ((f32)D_801C0EEC - sQuake2Context.countdown) / (f32)D_801C0EEC;
+                xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
             } else {
-                sp8C = sp88 = 0.0f;
+                xyScaleFactor = zScaleFactor = 0.0f;
             }
-            sp84 = 1.0f;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x80) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 1200;
-                D_801C0EE8 = 2000;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x4B0;
+                angle2 = 0x7D0;
             }
+            angle1Speed = 0.0f;
+            angle2Speed = 150.0f;
 
-            sp78 = 0.0f;
-            sp74 = 150.0f;
-            sp70 = 0;
-            sp6C = 0;
-            sp68 = 0;
-            sp64 = 0.03f;
-            sp60 = 0.02f;
-            sp5C = 0.01f;
-            sp58 = 1.5f;
+            rotX = 0;
+            rotY = 0;
+            rotZ = 0;
 
-            sp8C = sp88 = sQuake2Context.countdown / (f32)D_801C0EEC;
-            sp84 = 1.0f;
+            xScale = 0.03f;
+            yScale = 0.02f;
+            zScale = 0.01f;
+
+            speed = 1.5f;
+            xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x40) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 2500;
-                D_801C0EE8 = 3000;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x9C4;
+                angle2 = 0xBB8;
             }
+            angle1Speed = 0.0f;
+            angle2Speed = 150.0f;
 
-            sp78 = 0.0f;
-            sp74 = 150.0f;
-            sp70 = 0;
-            sp6C = 0;
-            sp68 = 0;
-            sp64 = 0.03f;
-            sp60 = 0.03f;
-            sp5C = 0.01f;
-            sp58 = 1.3f;
+            rotX = 0;
+            rotY = 0;
+            rotZ = 0;
+
+            xScale = 0.03f;
+            yScale = 0.03f;
+            zScale = 0.01f;
+
+            speed = 1.3f;
             if (sQuake2Context.countdown < 4) {
-                sp8C = sp88 = sQuake2Context.countdown / (f32)D_801C0EEC;
+                xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
             } else {
-                sp8C = sp88 = 0.0f;
+                xyScaleFactor = zScaleFactor = 0.0f;
             }
-            sp84 = 1.0f;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x20) {
             sQuake2Context.countdown = 2;
-            if (sQuake2Context.state == 2) {
-                D_801C0EE4 = 2500;
-                D_801C0EE8 = 3000;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                angle1 = 0x9C4;
+                angle2 = 0xBB8;
             }
+            angle1 += 0xB1;
+            angle2 -= 0x2B;
+            angle1Speed = -107.0f;
+            angle2Speed = 158.0f;
 
-            D_801C0EE4 += 0xB1;
-            D_801C0EE8 -= 0x2B;
+            rotX = 0.2f;
+            rotY = 1.7f;
+            rotZ = -2.9f;
 
-            sp78 = -107.0f;
-            sp74 = 158.0f;
-            sp70 = 0.2f;
-            sp6C = 1.7f;
-            sp68 = -2.9f;
-            sp64 = -0.6f;
-            sp60 = -0.7f;
-            sp5C = 0.6f;
-            sp58 = 0.2f;
-            sp88 = 1.0f;
-            sp8C = 1.0f;
-            sp84 = 1.0f;
+            xScale = -0.6f;
+            yScale = -0.7f;
+            zScale = 0.6f;
+
+            speed = 0.2f;
+            zScaleFactor = 1.0f;
+            xyScaleFactor = 1.0f;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 0x10) {
-            if (sQuake2Context.state == 2) {
-                D_801C0EEC = sQuake2Context.countdown;
-                D_801C0EE4 = 1888;
-                D_801C0EE8 = 444;
+            if (sQuake2Context.state == QUAKE2_SETUP) {
+                countdownMax = sQuake2Context.countdown;
+                angle1 = 0x760;
+                angle2 = 0x1BC;
             }
-            sp78 = 248.0f;
-            sp74 = -90.0f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.0f;
-            sp64 = -0.4f;
-            sp60 = 0.4f;
-            sp5C = 0.2f;
-            sp58 = 0.25f;
-            phi_f2 = sQuake2Context.countdown / (f32)D_801C0EEC;
-            sp88 = sp8C = phi_f2;
-            sp84 = 1.0f;
+            angle1Speed = 248.0f;
+            angle2Speed = -90.0f;
+
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.0f;
+
+            xScale = -0.4f;
+            yScale = 0.4f;
+            zScale = 0.2f;
+
+            speed = 0.25f;
+            countdownRatio = sQuake2Context.countdown / (f32)countdownMax;
+            zScaleFactor = xyScaleFactor = countdownRatio;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 8) {
-            D_801C0EE4 = 1008;
-            D_801C0EE8 = 342;
+            angle1 = 0x3F0;
+            angle2 = 0x156;
             sQuake2Context.countdown = 2;
 
             player = PLAYER;
 
             if (&player->actor != NULL) {
-                func_800B8248(&sp3C, player);
+                func_800B8248(&playerPosRot, player);
             }
+            angle1Speed = 359.2f;
+            angle2Speed = -18.5f;
 
-            sp78 = 359.2f;
-            sp74 = -18.5f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.3f;
-
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.3f;
             switch (Quake2_GetFloorQuake(player)) {
                 case 3:
-                    sp64 = -0.06f;
-                    sp60 = 0.1f;
-                    sp5C = 0.03f;
-                    sp58 = 0.33f;
+                    xScale = -0.06f;
+                    yScale = 0.1f;
+                    zScale = 0.03f;
+                    speed = 0.33f;
                     break;
                 case 2:
-                    sp64 = -0.06f;
-                    sp60 = 0.1f;
-                    sp5C = 0.03f;
-                    sp58 = 0.33f;
+                    xScale = -0.06f;
+                    yScale = 0.1f;
+                    zScale = 0.03f;
+                    speed = 0.33f;
                     break;
                 case 1:
-                    sp64 = -0.06f;
-                    sp60 = 0.1f;
-                    sp5C = 0.03f;
-                    sp58 = 0.33f;
+                    xScale = -0.06f;
+                    yScale = 0.1f;
+                    zScale = 0.03f;
+                    speed = 0.33f;
                     break;
                 default:
-                    sp64 = -0.06f;
-                    sp60 = 0.1f;
-                    sp5C = 0.03f;
-                    sp58 = 0.23f;
+                    xScale = -0.06f;
+                    yScale = 0.1f;
+                    zScale = 0.03f;
+                    speed = 0.23f;
                     break;
             }
 
             if (player->unk_B88 < 0) {
-                sp8C = (player->unk_B88 - (f32)0x4000) / (f32)0xC000;
+                xyScaleFactor = (player->unk_B88 - (f32)0x4000) / (f32)0xC000;
             } else {
-                sp8C = (player->unk_B88 + (f32)0x4000) / (f32)0xC000;
+                xyScaleFactor = (player->unk_B88 + (f32)0x4000) / (f32)0xC000;
             }
-            sp88 = -sp8C;
-            sp84 = 1.0f;
+            zScaleFactor = -xyScaleFactor;
+            speedScaleFactor = 1.0f;
         } else if (sQuake2Context.type & 4) {
-            D_801C0EE4 = 1008;
-            D_801C0EE8 = 342;
+            angle1 = 0x3F0;
+            angle2 = 0x156;
             sQuake2Context.countdown = 2;
             player = PLAYER;
-            sp78 = 359.2f;
-            sp74 = -18.5f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.0f;
+            angle1Speed = 359.2f;
+            angle2Speed = -18.5f;
 
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.0f;
             switch (Quake2_GetFloorQuake(player)) {
                 case 3:
-                    sp64 = 0.12f;
-                    sp60 = 0.12f;
-                    sp5C = 0.08f;
-                    sp58 = 0.18f;
+                    xScale = 0.12f;
+                    yScale = 0.12f;
+                    zScale = 0.08f;
+                    speed = 0.18f;
                     break;
                 case 2:
-                    sp64 = 0.12f;
-                    sp60 = 0.12f;
-                    sp5C = 0.08f;
-                    sp58 = 0.12f;
+                    xScale = 0.12f;
+                    yScale = 0.12f;
+                    zScale = 0.08f;
+                    speed = 0.12f;
                     break;
                 case 1:
-                    sp64 = 0.12f;
-                    sp60 = 0.12f;
-                    sp5C = 0.08f;
-                    sp58 = 0.08f;
+                    xScale = 0.12f;
+                    yScale = 0.12f;
+                    zScale = 0.08f;
+                    speed = 0.08f;
                     break;
                 default:
-                    sp64 = 0.12f;
-                    sp60 = 0.12f;
-                    sp5C = 0.08f;
-                    sp58 = 0.05f;
+                    xScale = 0.12f;
+                    yScale = 0.12f;
+                    zScale = 0.08f;
+                    speed = 0.05f;
                     break;
             }
-
+            
             if ((camera->waterYPos - camera->eye.y) > 2000.0f) {
-                phi_f2 = 1.0f;
+                waterYScaleFactor = 1.0f;
             } else {
-                phi_f2 = (camera->waterYPos - camera->eye.y) / 2000.0f;
+                waterYScaleFactor = (camera->waterYPos - camera->eye.y) / 2000.0f;
             }
 
-            sp8C = sp84 = (phi_f2 * 0.15f) + 0.35f + (speedRatio * 0.4f);
-            sp88 = 0.9f - sp8C;
+            xyScaleFactor = speedScaleFactor = (waterYScaleFactor * 0.15f) + 0.35f + (speedRatio * 0.4f);
+            zScaleFactor = 0.9f - xyScaleFactor;
         } else if (sQuake2Context.type & 1) {
-            D_801C0EE4 = 1008;
-            D_801C0EE8 = 342;
+            angle1 = 0x3F0;
+            angle2 = 0x156;
             sQuake2Context.countdown = 2;
-            sp78 = 0.0f;
-            sp74 = 150.0f;
-            sp70 = 0.0f;
-            sp6C = 0.0f;
-            sp68 = 0.0f;
-            sp64 = -0.01f;
-            sp60 = 0.01f;
-            sp5C = 0.01f;
-            sp58 = 0.6f;
-            sp84 = 1.0f;
-            sp88 = 1.0f;
-            sp8C = 1.0f;
+            angle1Speed = 0.0f;
+            angle2Speed = 150.0f;
+            rotX = 0.0f;
+            rotY = 0.0f;
+            rotZ = 0.0f;
+            xScale = -0.01f;
+            yScale = 0.01f;
+            zScale = 0.01f;
+            speed = 0.6f;
+            speedScaleFactor = 1.0f;
+            zScaleFactor = 1.0f;
+            xyScaleFactor = 1.0f;
         } else {
             return;
         }
 
-        D_801C0EE4 += DEGF_TO_BINANG(sp78);
-        D_801C0EE8 += DEGF_TO_BINANG(sp74);
-        View_SetQuakeRotation(&sQuake2Context.globalCtx->view, Math_CosS(D_801C0EE4) * (DEGF_TO_RADF(sp70) * sp8C),
-                              Math_SinS(D_801C0EE4) * (DEGF_TO_RADF(sp6C) * sp8C),
-                              Math_SinS(D_801C0EE8) * (DEGF_TO_RADF(sp68) * sp88));
-        View_SetQuakeScale(&sQuake2Context.globalCtx->view, (Math_SinS(D_801C0EE8) * (sp64 * sp8C)) + 1.0f,
-                           (Math_CosS(D_801C0EE8) * (sp60 * sp8C)) + 1.0f,
-                           (Math_CosS(D_801C0EE4) * (sp5C * sp88)) + 1.0f);
-        View_SetQuakeSpeed(&sQuake2Context.globalCtx->view, sp58 * sp84);
-        sQuake2Context.state = 1;
-    } else if (sQuake2Context.state != 0) {
+        angle1 += DEGF_TO_BINANG(angle1Speed);
+        angle2 += DEGF_TO_BINANG(angle2Speed);
+        View_SetQuakeRotation(&sQuake2Context.globalCtx->view, Math_CosS(angle1) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
+                              Math_SinS(angle1) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
+                              Math_SinS(angle2) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+        View_SetQuakeScale(&sQuake2Context.globalCtx->view, (Math_SinS(angle2) * (xScale * xyScaleFactor)) + 1.0f,
+                           (Math_CosS(angle2) * (yScale * xyScaleFactor)) + 1.0f,
+                           (Math_CosS(angle1) * (zScale * zScaleFactor)) + 1.0f);
+        View_SetQuakeSpeed(&sQuake2Context.globalCtx->view, speed * speedScaleFactor);
+        sQuake2Context.state = QUAKE2_ACTIVE;
+    } else if (sQuake2Context.state != QUAKE2_INACTIVE) {
         View_ClearQuake(&globalCtx->view);
-        sQuake2Context.state = 0;
+        sQuake2Context.state = QUAKE2_INACTIVE;
         sQuake2Context.countdown = 0;
     }
 

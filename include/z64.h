@@ -1354,8 +1354,14 @@ typedef struct {
     /* 0x0 */ GlobalContext* globalCtx;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
-    /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
+    /* 0xA */ s16 state;
 } Quake2Context; // size = 0xC
+
+typedef enum {
+    QUAKE2_INACTIVE,
+    QUAKE2_ACTIVE,
+    QUAKE2_SETUP,
+} Quake2State;
 
 typedef struct OSMesgQueueListNode_t {
     /* 0x0 */ struct OSMesgQueueListNode_t* next;

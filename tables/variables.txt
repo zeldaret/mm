@@ -1387,7 +1387,7 @@
     0x801C0EA0:("D_801C0EA0","UNK_TYPE1","",0x1),
     0x801C0EAC:("D_801C0EAC","UNK_TYPE1","",0x1),
     0x801C0EB8:("D_801C0EB8","UNK_TYPE1","",0x1),
-    0x801C0EC0:("D_801C0EC0","UNK_TYPE2","",0x2),
+    0x801C0EC0:("sIsQuakeActive","UNK_TYPE2","",0x2),
     0x801C0EC4:("sQuakeRequestCount","s16","",0x2),
     0x801C0EC8:("sQuakeCallbacks","quake_callback_func","[7]",0x1c),
     0x801C0EE4:("D_801C0EE4","s16","",0x2),
