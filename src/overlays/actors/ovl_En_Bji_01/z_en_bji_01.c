@@ -90,7 +90,15 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Destroy.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Destroy.asm")*/
+
+void EnBji01_Destroy(Actor* thisx, GlobalContext *globalCtx) {
+
+    EnBji01* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Update.asm")
 
