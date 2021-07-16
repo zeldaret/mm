@@ -685,7 +685,7 @@ void Quake2_Update(void) {
                     speed = 0.05f;
                     break;
             }
-            
+
             if ((camera->waterYPos - camera->eye.y) > 2000.0f) {
                 waterYScaleFactor = 1.0f;
             } else {
