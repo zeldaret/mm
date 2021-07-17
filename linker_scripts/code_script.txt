@@ -2410,7 +2410,7 @@ SECTIONS
     ovl_En_Clear_Tag : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.text)
-        build/asm/overlays/ovl_En_Clear_Tag_data.o(.data)
+        build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.data)
         build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.rodata)
         build/asm/overlays/ovl_En_Clear_Tag_rodata.o(.rodata)
     }
