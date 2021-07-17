@@ -31,7 +31,7 @@ def main():
         NameMass(info)
         output="// colChkInfoInit\nstatic CollisionCheckInfoInit D_{0:08X} = {{ ".format(args.address) + ", ".join(map(str,info)) + "};"
     else:
-        info = struct.unpack(">B3hB", filedata[file_offset:file_offset+9])
+        info = list(struct.unpack(">Bx3hB", filedata[file_offset:file_offset+9]))
         NameMass(info)
         output="// sColChkInfoInit\nstatic CollisionCheckInfoInit2 D_{0:08X} = {{ ".format(args.address) + ", ".join(map(str,info)) + "};"
 
