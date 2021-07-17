@@ -23,11 +23,6 @@
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct);
 
-#define CONTROLLER1 (&globalCtx->state.input[0])
-#define CONTROLLER2 (&globalCtx->state.input[1])
-#define CONTROLLER3 (&globalCtx->state.input[2])
-#define CONTROLLER4 (&globalCtx->state.input[3])
-
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
@@ -54,6 +49,11 @@
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+
+#define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
+#define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])
+#define CONTROLLER3(globalCtx) (&(globalCtx)->state.input[2])
+#define CONTROLLER4(globalCtx) (&(globalCtx)->state.input[3])
 
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
