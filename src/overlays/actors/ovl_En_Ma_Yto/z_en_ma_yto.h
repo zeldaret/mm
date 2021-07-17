@@ -45,7 +45,7 @@ typedef struct EnMaYto {
     /* 0x208 */ Vec3s limbDrawTbl[MA2_LIMB_MAX];
     /* 0x28C */ Vec3s transitionDrawTbl[MA2_LIMB_MAX];
     /* 0x310 */ s16 unk_310; // state?
-    /* 0x312 */ char unk_312[0x2];
+    /* 0x312 */ UNK_TYPE1 unk_312[0x2];
     /* 0x314 */ s16 currentAnim; // Used only in DefaultWait
     /* 0x316 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex
     /* 0x318 */ s16 mouthTexIndex;

@@ -417,9 +417,9 @@ void EnMaYto_SetupDefaultWait(EnMaYto* this) {
 
 void EnMaYto_DefaultWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 rotY = this->actor.home.rot.y - 0x8000;
-    s16 sp2C;
+    s16 direction;
 
-    sp2C = rotY - this->actor.yawTowardsPlayer;
+    direction = rotY - this->actor.yawTowardsPlayer;
     if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
         this->currentAnim == 1) {
         this->currentAnim = 11;
@@ -429,7 +429,7 @@ void EnMaYto_DefaultWait(EnMaYto* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         EnMaYto_DefaultStartDialogue(this, globalCtx);
         EnMaYto_SetupDefaultDialogueHandler(this);
-    } else if (ABS_ALT(sp2C) < 0x1555) {
+    } else if (ABS_ALT(direction) < 0x1555) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
@@ -534,7 +534,7 @@ void EnMaYto_SetupDinnerWait(EnMaYto* this) {
 }
 
 void EnMaYto_DinnerWait(EnMaYto* this, GlobalContext* globalCtx) {
-    s16 temp_v1 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
+    s16 direction = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         EnMaYto_DinnerStartDialogue(this, globalCtx);
@@ -546,14 +546,14 @@ void EnMaYto_DinnerWait(EnMaYto* this, GlobalContext* globalCtx) {
             func_800B86C8(&this->actor, globalCtx, &this->actor);
             EnMaYto_DinnerStartDialogue(this, globalCtx);
             EnMaYto_SetupDinnerDialogueHandler(this);
-        } else if (ABS_ALT(temp_v1) < 0x4000) {
+        } else if (ABS_ALT(direction) < 0x4000) {
             func_800B8614(&this->actor, globalCtx, 120.0f);
 
             child = this->actor.child;
             if (child != NULL && CURRENT_DAY != 2) {
-                s16 temp_v1_3 = child->shape.rot.y - child->yawTowardsPlayer;
+                s16 childDirection = child->shape.rot.y - child->yawTowardsPlayer;
 
-                if (ABS_ALT(temp_v1_3) < 0x4000) {
+                if (ABS_ALT(childDirection) < 0x4000) {
                     func_800B8614(child, globalCtx, 120.0f);
                 }
             }
@@ -728,9 +728,9 @@ void EnMaYto_SetupBarnWait(EnMaYto* this) {
 }
 
 void EnMaYto_BarnWait(EnMaYto* this, GlobalContext* globalCtx) {
-    s16 temp_v1 = this->actor.shape.rot.y + 0x471C;
+    s16 direction = this->actor.shape.rot.y + 0x471C;
 
-    temp_v1 -= this->actor.yawTowardsPlayer;
+    direction -= this->actor.yawTowardsPlayer;
     if (func_800B84D0(&this->actor, globalCtx)) {
         EnMaYto_BarnStartDialogue(this, globalCtx);
         EnMaYto_SetupBarnDialogueHandler(this);
@@ -741,7 +741,7 @@ void EnMaYto_BarnWait(EnMaYto* this, GlobalContext* globalCtx) {
             func_800B86C8(&this->actor, globalCtx, &this->actor);
             EnMaYto_BarnStartDialogue(this, globalCtx);
             EnMaYto_SetupBarnDialogueHandler(this);
-        } else if (!(gSaveContext.weekEventReg[0x16] & 1) || ABS_ALT(temp_v1) < 0x2000) {
+        } else if (!(gSaveContext.weekEventReg[0x16] & 1) || ABS_ALT(direction) < 0x2000) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
 
             child = this->actor.child;
