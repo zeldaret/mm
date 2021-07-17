@@ -12,20 +12,10 @@
 
 #define SI_NONE 0
 
-#define ENFSN_SHOULD_END_CONVERSATION(this) ((this)->flags & 1)
-#define ENFSN_SHOULD_GIVE_ITEM(this) ((this)->flags & 2)
-#define ENFSN_GAVE_KEATONS_MASK(this) ((this)->flags & 4)
-#define ENFSN_GAVE_LETTER_TO_MAMA(this) ((this)->flags & 8)
-
-#define ENFSN_SET_SHOULD_END_CONVERSATION(this) ((this)->flags |= 1)
-#define ENFSN_SET_SHOULD_GIVE_ITEM(this) ((this)->flags |= 2)
-#define ENFSN_SET_GAVE_KEATONS_MASK(this) ((this)->flags |= 4)
-#define ENFSN_SET_GAVE_LETTER_TO_MAMA(this) ((this)->flags |= 8)
-
-#define ENFSN_UNSET_SHOULD_END_CONVERSATION(this) ((this)->flags &= ~1)
-#define ENFSN_UNSET_SHOULD_GIVE_ITEM(this) ((this)->flags &= ~2)
-#define ENFSN_UNSET_GAVE_KEATONS_MASK(this) ((this)->flags &= ~4)
-#define ENFSN_UNSET_GAVE_LETTER_TO_MAMA(this) ((this)->flags &= ~8)
+#define ENFSN_END_CONVERSATION (1 << 0)
+#define ENFSN_GIVE_ITEM (1 << 1)
+#define ENFSN_GAVE_KEATONS_MASK (1 << 2)
+#define ENFSN_GAVE_LETTER_TO_MAMA (1 << 3)
 
 void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -158,13 +148,13 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
                 break;
             } else {
                 this->textId = 0x29E4;
-                ENFSN_SET_SHOULD_END_CONVERSATION(this);
+                this->flags |= ENFSN_END_CONVERSATION;
                 break;
             }
         case 0x29E0:
             if (INV_CONTENT(ITEM_MASK_KEATON) == ITEM_MASK_KEATON) {
-                ENFSN_SET_SHOULD_GIVE_ITEM(this);
-                ENFSN_SET_GAVE_LETTER_TO_MAMA(this);
+                this->flags |= ENFSN_GIVE_ITEM;
+                this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
                 gSaveContext.weekEventReg[0x50] |= 0x10;
                 this->textId = 0x29F1;
@@ -177,31 +167,31 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
             this->textId = 0x29E2;
             break;
         case 0x29E2:
-            ENFSN_SET_SHOULD_GIVE_ITEM(this);
-            ENFSN_SET_GAVE_KEATONS_MASK(this);
+            this->flags |= ENFSN_GIVE_ITEM;
+            this->flags |= ENFSN_GAVE_KEATONS_MASK;
             this->getItemId = GI_MASK_KEATON;
             this->textId = 0x29E3;
             break;
         case 0x29E3:
-            ENFSN_SET_SHOULD_GIVE_ITEM(this);
-            ENFSN_SET_GAVE_LETTER_TO_MAMA(this);
+            this->flags |= ENFSN_GIVE_ITEM;
+            this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
             gSaveContext.weekEventReg[0x50] |= 0x10;
             this->textId = 0x29F1;
             break;
         case 0x29F1:
             this->textId = 0x29E4;
-            ENFSN_SET_SHOULD_END_CONVERSATION(this);
+            this->flags |= ENFSN_END_CONVERSATION;
             break;
     }
     func_801518B0(globalCtx, this->textId, &this->actor);
-    if (ENFSN_SHOULD_END_CONVERSATION(this)) {
-        if (ENFSN_GAVE_LETTER_TO_MAMA(this)) {
-            ENFSN_UNSET_GAVE_LETTER_TO_MAMA(this);
+    if (this->flags & ENFSN_END_CONVERSATION) {
+        if (this->flags & ENFSN_GAVE_LETTER_TO_MAMA) {
+            this->flags &= ~ENFSN_GAVE_LETTER_TO_MAMA;
             func_80151BB4(globalCtx, 34);
         }
-        if (ENFSN_GAVE_KEATONS_MASK(this)) {
-            ENFSN_UNSET_GAVE_KEATONS_MASK(this);
+        if (this->flags & ENFSN_GAVE_KEATONS_MASK) {
+            this->flags &= ~ENFSN_GAVE_KEATONS_MASK;
             func_80151BB4(globalCtx, 33);
         }
         func_80151BB4(globalCtx, 3);
@@ -729,7 +719,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
         }
-    } else if (ENFSN_SHOULD_HAGGLE(this)) {
+    } else if (this->flags & ENFSN_HAGGLE) {
     dummy:;
         this->actionFunc = EnFsn_Haggle;
     } else {
@@ -760,20 +750,20 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.animCurrentFrame;
     s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animationSeg->common);
 
-    if (ENFSN_IS_ANGRY(this)) {
-        ENFSN_UNSET_IS_ANGRY(this);
+    if (this->flags & ENFSN_ANGRY) {
+        this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
         if (this->animationIdx == 11 && func_801378B8(&this->skelAnime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
         }
-        if (ENFSN_SHOULD_CALM_DOWN(this)) {
-            ENFSN_UNSET_SHOULD_CALM_DOWN(this);
+        if (this->flags & ENFSN_CALM_DOWN) {
+            this->flags &= ~ENFSN_CALM_DOWN;
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
-        } else if (ENFSN_SHOULD_OFFER_FINAL_PRICE(this)) {
-            ENFSN_UNSET_SHOULD_OFFER_FINAL_PRICE(this);
+        } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
+            this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animationIdx = 12;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
         } else {
@@ -788,7 +778,7 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
                     return;
                 }
             }
-            if (!ENFSN_SHOULD_HAGGLE(this)) {
+            if (!(this->flags & ENFSN_HAGGLE)) {
                 this->actionFunc = EnFsn_Idle;
             }
         }
@@ -1370,13 +1360,13 @@ void EnFsn_IdleBackroom(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_ConverseBackroom(EnFsn* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
-        if (ENFSN_SHOULD_END_CONVERSATION(this)) {
-            ENFSN_UNSET_SHOULD_END_CONVERSATION(this);
+        if (this->flags & ENFSN_END_CONVERSATION) {
+            this->flags &= ~ENFSN_END_CONVERSATION;
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = EnFsn_IdleBackroom;
-        } else if (ENFSN_SHOULD_GIVE_ITEM(this)) {
-            ENFSN_UNSET_SHOULD_GIVE_ITEM(this);
+        } else if (this->flags & ENFSN_GIVE_ITEM) {
+            this->flags &= ~ENFSN_GIVE_ITEM;
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = EnFsn_GiveItem;

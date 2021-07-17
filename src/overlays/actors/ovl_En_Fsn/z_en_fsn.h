@@ -7,20 +7,10 @@
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
 #define ENFSN_IS_SHOP(thisx) (!((thisx)->params & 1))
 
-#define ENFSN_SHOULD_HAGGLE(this) ((this)->flags & 0x80)
-#define ENFSN_IS_ANGRY(this) ((this)->flags & 0x100)
-#define ENFSN_SHOULD_CALM_DOWN(this) ((this)->flags & 0x200)
-#define ENFSN_SHOULD_OFFER_FINAL_PRICE(this) ((this)->flags & 0x40)
-
-#define ENFSN_SET_SHOULD_HAGGLE(this) ((this)->flags |= 0x80)
-#define ENFSN_SET_IS_ANGRY(this) ((this)->flags |= 0x100)
-#define ENFSN_SET_SHOULD_CALM_DOWN(this) ((this)->flags |= 0x200)
-#define ENFSN_SET_SHOULD_OFFER_FINAL_PRICE(this) ((this)->flags |= 0x40)
-
-#define ENFSN_UNSET_SHOULD_HAGGLE(this) ((this)->flags &= ~0x80)
-#define ENFSN_UNSET_IS_ANGRY(this) ((this)->flags &= ~0x100)
-#define ENFSN_UNSET_SHOULD_CALM_DOWN(this) ((this)->flags &= ~0x200)
-#define ENFSN_UNSET_SHOULD_OFFER_FINAL_PRICE(this) ((this)->flags &= ~0x40)
+#define ENFSN_OFFER_FINAL_PRICE (1 << 6)
+#define ENFSN_HAGGLE (1 << 7)
+#define ENFSN_ANGRY (1 << 8)
+#define ENFSN_CALM_DOWN (1 << 9)
 
 struct EnFsn;
 
