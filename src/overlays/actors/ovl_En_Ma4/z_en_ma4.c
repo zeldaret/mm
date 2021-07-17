@@ -663,7 +663,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk_120B1 == 0) ||
+                if ((globalCtx->msgCtx.unk120B1 == 0) ||
                     (((temp_v0 = gSaveContext.inventory.questItems) & gBitFlags[0x12]) == 0)) {
                     EnMa4_SetupWait(this);
                 }
