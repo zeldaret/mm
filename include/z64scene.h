@@ -470,7 +470,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 count; // number of points in the path
-    /* 0x01 */ s8 unk1;
+    /* 0x01 */ u8 unk1;
     /* 0x02 */ s16 unk2;
     /* 0x04 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8

@@ -71,7 +71,6 @@ static Gfx* sLightswitchFaceGfx[] = {
 };
 
 static Color_RGBA8 sLightswitchEffectPrimColor = { 255, 255, 160, 160 };
-
 static Color_RGBA8 sLightswitchEffectEnvColor = { 255, 0, 0, 0 };
 
 static InitChainEntry sInitChain[] = {

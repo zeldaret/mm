@@ -320,10 +320,10 @@ void func_800A640C(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-Color_RGBA8 D_801ADF10 = { 0xFF, 0xFF, 0x7F, 0x00 };
-Color_RGBA8 D_801ADF14 = { 0xFF, 0xFF, 0xFF, 0x00 };
-Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
-Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
+static Color_RGBA8 D_801ADF10 = { 255, 255, 127, 0 };
+static Color_RGBA8 D_801ADF14 = { 255, 255, 255, 0 };
+static Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
+static Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
 
 void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     u32 pad;
