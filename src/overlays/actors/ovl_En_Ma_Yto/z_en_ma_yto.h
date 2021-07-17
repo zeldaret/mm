@@ -40,19 +40,19 @@ typedef struct EnMaYto {
     /* 0x188 */ EnMaYtoActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
-    /* 0x200 */ s32 unk_200; // unused
+    /* 0x200 */ s32 unk200; // unused
     /* 0x204 */ s32 type;
     /* 0x208 */ Vec3s limbDrawTbl[MA2_LIMB_MAX];
     /* 0x28C */ Vec3s transitionDrawTbl[MA2_LIMB_MAX];
-    /* 0x310 */ s16 unk_310; // state?
+    /* 0x310 */ s16 unk310; // state?
     /* 0x312 */ UNK_TYPE1 unk_312[0x2];
     /* 0x314 */ s16 currentAnim; // Used only in DefaultWait
     /* 0x316 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex
     /* 0x318 */ s16 mouthTexIndex;
     /* 0x31A */ s16 eyeTexIndex;
     /* 0x31C */ s16 blinkTimer;
-    /* 0x31E */ s16 unk_31E;
-    /* 0x320 */ s16 unk_320;
+    /* 0x31E */ s16 unk31E;
+    /* 0x320 */ s16 unk320;
     /* 0x322 */ u16 textId;
 } EnMaYto; // size = 0x324
 
