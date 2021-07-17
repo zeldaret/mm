@@ -1347,9 +1347,9 @@ void func_80B452EC(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < this->unk379; i++) {
-        D_80B50320[i] = (EnInvadepoh*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
-                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                    (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
+        D_80B50320[i] = (EnInvadepoh*)Actor_Spawn(
+            &globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, 0, 0, (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
         if (phi_s2 != 0xFF) {
             Path* path = &globalCtx->setupPathList[phi_s2];
             phi_s2 = path->unk1;
@@ -1369,7 +1369,7 @@ void func_80B45460(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
     D_80B503F0 = (EnInvadepoh*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
-                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x60);
+                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x60);
 }
 
 void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
@@ -1436,7 +1436,7 @@ void func_80B457A0(EnInvadepoh* this) {
     f32 phi_f20 = FLT_MAX;
     s32 i;
     s32 phi_s5 = -1;
-    
+
     for (i = 0; i < this->unk379; i++) {
         if ((D_80B50320[i] != NULL) && D_80B50320[i]->drawAlien) {
             distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
@@ -2624,7 +2624,8 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
         Math_StepToS(&this->behaviorInfo.unk4C, 0x7D0, 0x46);
     }
     func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
-    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+    if (((this->actor.flags & 0x40) == 0x40) &&
+        (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->actionTimer > 0) {
@@ -3077,7 +3078,8 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.flags |= (0x8 | 0x1);
     }
 
-    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+    if (((this->actor.flags & 0x40) == 0x40) &&
+        (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
@@ -3302,7 +3304,8 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->unk378 = 0;
         this->actor.flags |= (0x8 | 0x1);
     }
-    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+    if (((this->actor.flags & 0x40) == 0x40) &&
+        (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->pathIndex == this->endPoint) {
@@ -3463,8 +3466,7 @@ void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
         if (this->textId == 0x3333) {
             func_80B4AEC0(this);
-        }
-        else if (this->textId == 0x3334) {
+        } else if (this->textId == 0x3334) {
             func_801477B4(globalCtx);
             func_80B4B024(this);
         }
@@ -3554,7 +3556,6 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     Player* player;
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    
     this->actionFunc(this, globalCtx);
     if (sp38 && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -3658,7 +3659,8 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_YawBetweenActors(&this->actor, &D_80B5040C->actor), 5, 0x1388, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_YawBetweenActors(&this->actor, &D_80B5040C->actor), 5, 0x1388,
+                       0x64);
     func_80B44E90(this, globalCtx);
     if (func_801378B8(&this->skelAnime, 13.0f) || func_801378B8(&this->skelAnime, 19.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
@@ -3836,7 +3838,8 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 12.0f))) {
+    if (((this->actor.flags & 0x40) == 0x40) &&
+        (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 12.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.time > CLOCK_TIME(20, 15)) {
@@ -3971,14 +3974,14 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->actionFunc(this, globalCtx);
     if (sp2C && (this->actor.update != NULL)) {
-            SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-            func_80B45CE0(&this->behaviorInfo);
-            if ((this->actionFunc != func_80B4C058) && !isTalking && this->actor.isTargeted) {
-                func_800B8614(&this->actor, globalCtx, 350.0f);
-            }
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        func_80B45CE0(&this->behaviorInfo);
+        if ((this->actionFunc != func_80B4C058) && !isTalking && this->actor.isTargeted) {
+            func_800B8614(&this->actor, globalCtx, 350.0f);
         }
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
 }
 
 void func_80B4C6C8(EnInvadepoh* this) {
@@ -4006,7 +4009,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     s8 temp_v1;
     s16 sp3A;
     s8 temp_v0;
-    
+
     func_80B44700(this);
     func_80B44EFC(this, globalCtx);
     func_80B43E6C(this, 6, 2000, 100);
@@ -4056,7 +4059,8 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
         substruct->unk26.y = CLAMP(temp_v1_4, -8000, 8000);
     }
 
-    if (((this->actor.flags & 0x40) == 0x40) && (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
+    if (((this->actor.flags & 0x40) == 0x40) &&
+        (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 7.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
