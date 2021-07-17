@@ -1287,7 +1287,7 @@ typedef struct Camera {
     /* 0x12C */ s16 data2;
     /* 0x12E */ s16 data3;
     /* 0x130 */ s16 uid;
-    /* 0x132 */ char pad132[2];
+    /* 0x132 */ UNK_TYPE1 pad132[2];
     /* 0x134 */ Vec3s inputDir;
     /* 0x13A */ Vec3s camDir;
     /* 0x140 */ s16 status;
@@ -1318,6 +1318,13 @@ typedef struct Camera {
 typedef s32(*camera_update_func)(Camera* camera);
 
 typedef struct {
+    /* 0x00 */ Vec3f atOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 rollOffset;
+    /* 0x1A */ s16 zoom;
+} ShakeInfo; // size = 0x1C
+
+typedef struct {
     /* 0x00 */ s16 randIdx;
     /* 0x02 */ s16 countdownMax;
     /* 0x04 */ Camera* camera;
@@ -1328,7 +1335,7 @@ typedef struct {
     /* 0x12 */ s16 rollOffset;
     /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
     /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 isPerpendicularShake;
+    /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
     /* 0x20 */ s16 cameraPtrsIdx;
 } QuakeRequest; // size = 0x24
@@ -1338,15 +1345,19 @@ typedef struct {
     /* 0x0C */ Vec3f eyeOffset;
     /* 0x18 */ s16 rollOffset;
     /* 0x1A */ s16 zoom;
-} ShakeInfo; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ Vec3f atOffset;
-    /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
     /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
 } QuakeCamCalc; // size = 0x20
+
+#define QUAKE_SPEED (1 << 0)
+#define QUAKE_VERTICAL_MAG (1 << 1)
+#define QUAKE_HORIZONTAL_MAG (1 << 2)
+#define QUAKE_ZOOM (1 << 3)
+#define QUAKE_ROLL_OFFSET (1 << 4)
+#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
+#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
+#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
+#define QUAKE_COUNTDOWN (1 << 8)
+#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
 
 typedef struct {
     /* 0x0 */ GlobalContext* globalCtx;

@@ -3,7 +3,7 @@
 QuakeRequest sQuakeRequest[4];
 Quake2Context sQuake2Context;
 
-static s16 sIsQuakeActive = true;
+static s16 sIsQuakeInitialized = true;
 static s16 sQuakeRequestCount = 0;
 
 f32 Quake_Random(void) {
@@ -17,9 +17,9 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 verticalPert
     VecSph atEyeOffsetSph2;
     VecSph eyeAtAngle;
 
-    // isPerpendicularShake is always set to 1 before reaching this conditional
+    // isShakePerpendicular is always set to 1 before reaching this conditional
     // alternative is an unused fixed vertical shake
-    if (req->isPerpendicularShake) {
+    if (req->isShakePerpendicular) {
         atEyeOffset.x = 0;
         atEyeOffset.y = 0;
         atEyeOffset.z = 0;
@@ -139,7 +139,7 @@ QuakeRequest* Quake_AddImpl(Camera* camera, u32 callbackIdx) {
     req->camera = camera;
     req->cameraPtrsIdx = camera->thisIdx;
     req->callbackIdx = callbackIdx;
-    req->isPerpendicularShake = true;
+    req->isShakePerpendicular = true;
     req->randIdx = ((s16)(Rand_ZeroOne() * (f32)0x10000) & ~3) + idx;
     sQuakeRequestCount++;
 
@@ -173,36 +173,36 @@ u32 Quake_SetValue(s16 idx, s16 valueType, s16 value) {
         return false;
     } else {
         switch (valueType) {
-            case 1:
+            case QUAKE_SPEED:
                 req->speed = value;
                 break;
-            case 2:
+            case QUAKE_VERTICAL_MAG:
                 req->verticalMag = value;
                 break;
-            case 4:
+            case QUAKE_HORIZONTAL_MAG:
                 req->horizontalMag = value;
                 break;
-            case 8:
+            case QUAKE_ZOOM:
                 req->zoom = value;
                 break;
-            case 0x10:
+            case QUAKE_ROLL_OFFSET:
                 req->rollOffset = value;
                 break;
-            case 0x20:
+            case QUAKE_SHAKE_PLANE_OFFSET_X:
                 req->shakePlaneOffset.x = value;
                 break;
-            case 0x40:
+            case QUAKE_SHAKE_PLANE_OFFSET_Y:
                 req->shakePlaneOffset.y = value;
                 break;
-            case 0x80:
+            case QUAKE_SHAKE_PLANE_OFFSET_Z:
                 req->shakePlaneOffset.z = value;
                 break;
-            case 0x100:
+            case QUAKE_COUNTDOWN:
                 req->countdown = value;
                 req->countdownMax = req->countdown;
                 break;
-            case 0x200:
-                req->isPerpendicularShake = value;
+            case QUAKE_IS_SHAKE_PERPENDICULAR:
+                req->isShakePerpendicular = value;
                 break;
         }
         return true;
@@ -252,11 +252,11 @@ u32 Quake_SetQuakeValues(s16 idx, s16 verticalMag, s16 horizontalMag, s16 zoom, 
     return false;
 }
 
-u32 Quake_SetQuakeValues2(s16 idx, s16 isPerpendicularShake, Vec3s shakePlaneOffset) {
+u32 Quake_SetQuakeValues2(s16 idx, s16 isShakePerpendicular, Vec3s shakePlaneOffset) {
     QuakeRequest* req = Quake_GetRequest(idx);
 
     if (req != NULL) {
-        req->isPerpendicularShake = isPerpendicularShake;
+        req->isShakePerpendicular = isShakePerpendicular;
         req->shakePlaneOffset = shakePlaneOffset;
         return true;
     }
@@ -270,7 +270,7 @@ void Quake_Init(void) {
         sQuakeRequest[i].callbackIdx = 0;
         sQuakeRequest[i].countdown = 0;
     }
-    sIsQuakeActive = true;
+    sIsQuakeInitialized = true;
     sQuakeRequestCount = 0;
 }
 

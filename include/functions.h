@@ -2334,7 +2334,7 @@ u32 Quake_SetSpeed(s16 idx, s16 value);
 u32 Quake_SetCountdown(s16 idx, s16 value);
 s16 Quake_GetCountdown(s16 idx);
 u32 Quake_SetQuakeValues(s16 idx, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset);
-u32 Quake_SetQuakeValues2(s16 idx, s16 isPerpendicularShake, Vec3s shakePlaneOffset);
+u32 Quake_SetQuakeValues2(s16 idx, s16 isShakePerpendicular, Vec3s shakePlaneOffset);
 void Quake_Init(void);
 s16 Quake_Add(Camera* camera, u32 callbackIdx);
 u32 Quake_RemoveFromIdx(s16 idx);
