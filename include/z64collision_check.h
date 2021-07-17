@@ -391,4 +391,41 @@ typedef enum {
 #define OCLINE_NONE 0 // Did not have an OcLine collision
 #define OCLINE_HIT (1 << 0) // Had an OcLine collision
 
+#define DMG_ENTRY(damage, effect) ((damage) | ((effect) << 4))
+
+// These flags are not to be used in code until we figure out how we want to format them. They are only here for reference 
+#define DMG_DEKU_NUT       (1 << 0x00)
+#define DMG_DEKU_STICK     (1 << 0x01)
+#define DMG_HORSE_TRAMPLE  (1 << 0x02)
+#define DMG_EXPLOSIVES     (1 << 0x03)
+#define DMG_ZORA_BOOMERANG (1 << 0x04)
+#define DMG_NORMAL_ARROW   (1 << 0x05)
+#define DMG_UNK_0x06       (1 << 0x06)
+#define DMG_HOOKSHOT       (1 << 0x07)
+#define DMG_GORON_PUNCH    (1 << 0x08)
+#define DMG_SWORD          (1 << 0x09)
+#define DMG_GORON_POUND    (1 << 0x0A)
+#define DMG_FIRE_ARROW     (1 << 0x0B)
+#define DMG_ICE_ARROW      (1 << 0x0C)
+#define DMG_LIGHT_ARROW    (1 << 0x0D)
+#define DMG_GORON_SPIKES   (1 << 0x0E)
+#define DMG_DEKU_SPIN      (1 << 0x0F)
+#define DMG_DEKU_BUBBLE    (1 << 0x10)
+#define DMG_DEKU_LAUNCH    (1 << 0x11)
+#define DMG_UNK_0x12       (1 << 0x12)
+#define DMG_ZORA_BARRIER   (1 << 0x13)
+#define DMG_NORMAL_SHIELD  (1 << 0x14)
+#define DMG_LIGHT_RAY      (1 << 0x15)
+#define DMG_THROWN_OBJECT  (1 << 0x16)
+#define DMG_ZORA_PUNCH     (1 << 0x17)
+#define DMG_SPIN_ATTACK    (1 << 0x18)
+#define DMG_SWORD_BEAM     (1 << 0x19)
+#define DMG_NORMAL_ROLL    (1 << 0x1A)
+#define DMG_UNK_0x1B       (1 << 0x1B)
+#define DMG_UNK_0x1C       (1 << 0x1C)
+#define DMG_UNBLOCKABLE    (1 << 0x1D)
+#define DMG_UNK_0x1E       (1 << 0x1E)
+#define DMG_POWDER_KEG     (1 << 0x1F)
+
+
 #endif

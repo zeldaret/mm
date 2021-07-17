@@ -98,6 +98,7 @@ typedef enum {
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,
     /* 0x5E */ GI_FAIRY,
+    /* 0x60 */ GI_MILK_BOTTLE = 0x60,
     /* 0x7E */ GI_MASK_ALL_NIGHT = 0x7E,
     /* 0x80 */ GI_MASK_KEATON = 0x80,
     /* 0x8C */ GI_MASK_BREMEN = 0x8C,

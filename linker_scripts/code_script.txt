@@ -1902,8 +1902,9 @@ SECTIONS
     _ovl_En_FishingSegmentStart = SegmentStart;
     ovl_En_Fishing : AT(RomLocation)
     {
-        build/asm/overlays/ovl_En_Fishing_0x808FC6C0.o(.text)
+        build/src/overlays/actors/ovl_En_Fishing/z_en_fishing.o(.text)
         build/asm/overlays/ovl_En_Fishing_data.o(.data)
+        build/src/overlays/actors/ovl_En_Fishing/z_en_fishing.o(.rodata)
         build/asm/overlays/ovl_En_Fishing_rodata.o(.rodata)
         ovl_En_Fishing_bss_start = .;
     }
@@ -6924,9 +6925,9 @@ SECTIONS
     ovl_En_Invadepoh : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.text)
-        build/asm/overlays/ovl_En_Invadepoh_data.o(.data)
+        build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.data)
         build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o(.rodata)
-        build/asm/overlays/ovl_En_Invadepoh_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh_overlay.o(.ovl)
         ovl_En_Invadepoh_bss_start = .;
     }
     . += 0x170;
