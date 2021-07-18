@@ -304,8 +304,8 @@ void func_80948A54(EnClearTag* this, Vec3f* pos, s16 arg2) {
 void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-#ifdef NON_EQUIVALENT
 void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad[2];
     EnClearTag* this = THIS;
     f32 temp_f20_2;
     f32 temp_f20_4;
@@ -315,39 +315,33 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp8C;
 
     this->actor.flags &= -2;
-    if (this->actor.params >= 0) {
+    if (thisx->params >= 0) {
         this->unk_2E56 = 0x46;
-        Math_Vec3f_Copy(&spA4, &this->actor.world);
-        if (this->actor.params == 0xC8) {
+        Math_Vec3f_Copy(&spA4, &this->actor.world.pos);
+        if (thisx->params == 200) {
             func_80948264(this, &spA4, this->actor.world.rot.z);
             return;
         }
-
-        switch (this->actor.params) {
-            case 0x23:
-                do {
-                    break;
-                } while (0);
-            case 3:
-            case 4:
+            
+        if (thisx->params != 35) {
+            if (thisx->params == 3 || thisx->params == 4) { 
                 for (i = 0; i < 54; i++) {
-                    temp_f20_4 = D_8094AE20[this->actor.params] + Rand_ZeroFloat(D_8094AE20[this->actor.params]);
-                    SysMatrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
-                    SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
+                    temp_f20_4 = D_8094AE20[thisx->params] + Rand_ZeroFloat(D_8094AE20[thisx->params]);
+                    SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                    SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     SysMatrix_GetStateTranslationAndScaledZ(temp_f20_4, &sp98);
                     sp8C.x = sp98.x * -0.03f;
                     sp8C.y = sp98.y * -0.03f;
                     sp8C.z = sp98.z * -0.03f;
                     func_80948788(
                         this, &spA4, &sp98, &sp8C,
-                        Rand_ZeroFloat(D_8094ADF8[this->actor.params] * 0.5f) + D_8094ADF8[this->actor.params],
-                        D_8094AE0C[this->actor.params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
+                        D_8094ADF8[thisx->params] + Rand_ZeroFloat(D_8094ADF8[thisx->params] * 0.5f),
+                        D_8094AE0C[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
                 return;
-
-            default:
+            } else {
                 if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) &&
-                      (this->actor.world.rot.z == 0))) {
+                    (this->actor.world.rot.z == 0))) {
                     this->unk_2E66 = this->actor.world.rot.x;
                     this->unk_2E67 = this->actor.world.rot.y;
                     this->unk_2E68 = this->actor.world.rot.z;
@@ -356,29 +350,28 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->unk_2E67 = 0;
                 }
 
-                Actor_UpdateBgCheckInfo(globalCtx, this, 50.0f, 30.0f, 100.0f, 4);
+                Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 30.0f, 100.0f, 4);
                 spA4 = this->actor.world.pos;
-                func_809484EC(this, &spA4, D_8094ADCC[this->actor.params], this->actor.floorHeight);
+                func_809484EC(this, &spA4, D_8094ADCC[thisx->params], this->actor.floorHeight);
                 if ((this->actor.bgCheckFlags & 0x20) == 0) {
-                    if (this->actor.params < 0xA) {
+                    if (thisx->params < 0xA) {
                         spA4.y = this->actor.world.pos.y - 40.0f;
-                        if (this->actor.params != 2) {
-                            func_809480C8(this, &spA4, D_8094ADD8[this->actor.params]);
+                        if (thisx->params != 2) {
+                            func_809480C8(this, &spA4, D_8094ADD8[thisx->params]);
                         }
                         spA4.y = this->actor.floorHeight + 3.0f;
-                        func_8094899C(this, &spA4, D_8094ADE0[this->actor.params], 0);
-                        func_8094899C(this, &spA4, D_8094ADE0[this->actor.params], 3);
-                        if (this->actor.params == 1) {
-                            func_8094899C(this, &spA4, D_8094ADE0[this->actor.params], 6);
+                        func_8094899C(this, &spA4, D_8094ADE0[thisx->params], 0);
+                        func_8094899C(this, &spA4, D_8094ADE0[thisx->params], 3);
+                        if (thisx->params == 1) {
+                            func_8094899C(this, &spA4, D_8094ADE0[thisx->params], 6);
                         }
                     }
 
-                    if (this->actor.params != 2) {
+                    if (thisx->params != 2) {
                         spA4.y = this->actor.world.pos.y;
                         for (i = 0; i < 18; i++) {
-
-                            sp98.x = __sinf(i * 0.825f) * i * 0.5f;
-                            sp98.z = __cosf(i * 0.825f) * i * 0.5f;
+                            sp98.x = __sinf(i * 0.825f) * i * .5f;
+                            sp98.z = __cosf(i * 0.825f) * i * .5f;
                             sp98.y = Rand_ZeroFloat(8.0f) + 7.0f;
                             sp98.x += randPlusMinusPoint5Scaled(0.5f);
                             sp98.z += randPlusMinusPoint5Scaled(0.5f);
@@ -386,36 +379,33 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                             sp8C.y = -1.0f;
                             sp8C.z = 0.0f;
                             func_80947F60(this, &spA4, &sp98, &sp8C,
-                                          Rand_ZeroFloat(D_8094ADEC[this->actor.params]) +
-                                              D_8094ADEC[this->actor.params],
-                                          this->actor.floorHeight);
+                                        D_8094ADEC[thisx->params] + Rand_ZeroFloat(D_8094ADEC[thisx->params]),
+                                        this->actor.floorHeight);
                         }
                     }
                 }
                 spA4 = this->actor.world.pos;
 
                 for (i = 0; i < 44; i++) {
-                    temp_f20_2 = D_8094AE20[this->actor.params] + Rand_ZeroFloat(D_8094AE20[this->actor.params]);
-                    SysMatrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
-                    SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
+                    temp_f20_2 = D_8094AE20[thisx->params] + Rand_ZeroFloat(D_8094AE20[thisx->params]);
+                    SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                    SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     SysMatrix_GetStateTranslationAndScaledZ(temp_f20_2, &sp98);
                     sp8C.x = sp98.x * -0.03f;
                     sp8C.y = sp98.y * -0.03f;
                     sp8C.z = sp98.z * -0.03f;
                     func_809485A8(this, &spA4, &sp98, &sp8C,
-                                  Rand_ZeroFloat(D_8094ADF8[this->actor.params] * 0.5f) +
-                                      D_8094ADF8[this->actor.params],
-                                  D_8094AE0C[this->actor.params], Rand_ZeroFloat(10.0f) + 20.0f);
+                                D_8094ADF8[thisx->params] + Rand_ZeroFloat(D_8094ADF8[thisx->params] * 0.5f),
+                                D_8094AE0C[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
                 }
+
+            }
         }
 
         func_80948A54(this, &spA4, 0);
         func_80948A54(this, &spA4, 2);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Clear_Tag_0x80947F60/EnClearTag_Init.asm")
-#endif
 
 // Camera
 void func_80949288(EnClearTag* this, GlobalContext* globalCtx);
@@ -573,177 +563,177 @@ void func_80949BD4(Actor* thisx, GlobalContext* globalCtx) {
     s16 j;
     Vec3f sp1A4;
     UNK_PTR sp1A0;
-    f32 sp19C;
-    MtxF sp15C;
-    GraphicsContext* temp_s4 = globalCtx->state.gfxCtx;
+    f32 posY;
+    MtxF mtxF;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     EnClearTag* this = THIS;
-    EnClearTagUnknownEffect* sp90 = this->unk_0144;
-    EnClearTagUnknownEffect* sp90_orig = this->unk_0144;
+    EnClearTagUnknownEffect* unkEffect = this->unk_0144;
+    EnClearTagUnknownEffect* unkEffectRef = this->unk_0144;
 
-    OPEN_DISPS(temp_s4);
+    OPEN_DISPS(gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 103; i++, sp90++) {
-        if (sp90->unk_00 == 1) {
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if (unkEffect->unk_00 == 1) {
             if (sp1B7 == 0) {
                 sp1B7++;
                 gSPDisplayList(POLY_OPA_DISP++, D_8094B090);
             }
-            SysMatrix_InsertTranslation(sp90->pos.x, sp90->pos.y, sp90->pos.z, MTXMODE_NEW);
-            Matrix_Scale(sp90->unk_50, sp90->unk_50, sp90->unk_50, MTXMODE_APPLY);
-            SysMatrix_InsertYRotation_f(sp90->unk_58, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(sp90->unk_5C);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
+            Matrix_Scale(unkEffect->unk_50, unkEffect->unk_50, unkEffect->unk_50, MTXMODE_APPLY);
+            SysMatrix_InsertYRotation_f(unkEffect->unk_58, MTXMODE_APPLY);
+            SysMatrix_RotateStateAroundXAxis(unkEffect->unk_5C);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_8094B110);
         }
     }
 
-    sp90 = sp90_orig;
+    unkEffect = unkEffectRef;
     if (this->actor.floorPoly != 0) {
-        for (i = 0; i < 103; i++, sp90++) {
-            if (sp90->unk_00 == 6) {
+        for (i = 0; i < 103; i++, unkEffect++) {
+            if (unkEffect->unk_00 == 6) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)sp90->unk_34);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)sp90->unk_34);
-                func_800C0094(this->actor.floorPoly, sp90->pos.x, sp90->pos.y, sp90->pos.z, &sp15C);
-                SysMatrix_SetCurrentState(&sp15C);
-                Matrix_Scale(sp90->unk_50, 1.0f, sp90->unk_50, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)unkEffect->unk_34);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)unkEffect->unk_34);
+                func_800C0094(this->actor.floorPoly, unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, &mtxF);
+                SysMatrix_SetCurrentState(&mtxF);
+                Matrix_Scale(unkEffect->unk_50, 1.0f, unkEffect->unk_50, MTXMODE_APPLY);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, D_04030100);
             }
         }
     }
 
     sp1B7 = 0;
-    sp90 = sp90_orig;
+    unkEffect = unkEffectRef;
     if (this->actor.floorPoly != 0) {
-        for (i = 0; i < 103; i++, sp90++) {
-            if (sp90->unk_00 == 4) {
+        for (i = 0; i < 103; i++, unkEffect++) {
+            if (unkEffect->unk_00 == 4) {
                 if (sp1B7 == 0) {
                     gDPPipeSync(POLY_XLU_DISP++);
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
                     sp1B7++;
                 }
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(sp90->unk_34 * 0.7f));
-                func_800C0094(this->actor.floorPoly, sp90->pos.x, this->actor.floorHeight, sp90->pos.z, &sp15C);
-                SysMatrix_SetCurrentState(&sp15C);
-                Matrix_Scale(sp90->unk_50 * 3.0f, 1.0f, sp90->unk_50 * 3.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(unkEffect->unk_34 * 0.7f));
+                func_800C0094(this->actor.floorPoly, unkEffect->pos.x, this->actor.floorHeight, unkEffect->pos.z, &mtxF);
+                SysMatrix_SetCurrentState(&mtxF);
+                Matrix_Scale(unkEffect->unk_50 * 3.0f, 1.0f, unkEffect->unk_50 * 3.0f, MTXMODE_APPLY);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, D_8094CB10);
             }
         }
     }
 
     sp1B7 = 0;
-    sp90 = sp90_orig;
-    for (i = 0; i < 103; i++, sp90++) {
-        if ((sp90->unk_00 == 3) || (sp90->unk_00 == 8)) {
+    unkEffect = unkEffectRef;
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if ((unkEffect->unk_00 == 3) || (unkEffect->unk_00 == 8)) {
             if (sp1B7 == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, D_8094B758);
                 sp1B7++;
             }
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, (s8)sp90->unk_38, (s8)sp90->unk_3C, (s8)sp90->unk_40, 128);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)sp90->unk_28, (s8)sp90->unk_2C, (s8)sp90->unk_30,
-                            (s8)sp90->unk_34);
+            gDPSetEnvColor(POLY_XLU_DISP++, (s8)unkEffect->unk_38, (s8)unkEffect->unk_3C, (s8)unkEffect->unk_40, 128);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)unkEffect->unk_28, (s8)unkEffect->unk_2C, (s8)unkEffect->unk_30,
+                            (s8)unkEffect->unk_34);
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 5 * -sp90->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-            SysMatrix_InsertTranslation(sp90->pos.x, sp90->pos.y, sp90->pos.z, MTXMODE_NEW);
+                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 5 * -unkEffect->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(sp90->unk_6C * sp90->unk_50, sp90->unk_68 * sp90->unk_50, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(unkEffect->unk_6C * unkEffect->unk_50, unkEffect->unk_68 * unkEffect->unk_50, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_8094B800);
         }
     }
 
     sp1B7 = 0;
-    sp90 = sp90_orig;
-    for (i = 0; i < 103; i++, sp90++) {
-        if (sp90->unk_00 == 2) {
+    unkEffect = unkEffectRef;
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if (unkEffect->unk_00 == 2) {
             if (sp1B7 == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, D_8094B758);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
                 sp1B7++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)sp90->unk_34);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)unkEffect->unk_34);
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 15 * -sp90->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-            SysMatrix_InsertTranslation(sp90->pos.x, sp90->pos.y, sp90->pos.z, MTXMODE_NEW);
+                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 15 * -unkEffect->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(sp90->unk_50, sp90->unk_50, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            Matrix_Scale(unkEffect->unk_50, unkEffect->unk_50, 1.0f, MTXMODE_APPLY);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_8094B800);
         }
     }
 
     sp1B7 = 0;
-    sp90 = sp90_orig;
-    for (i = 0; i < 103; i++, sp90++) {
-        if (sp90->unk_00 == 4) {
+    unkEffect = unkEffectRef;
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if (unkEffect->unk_00 == 4) {
             if (sp1B7 == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, this->unk_2E66, this->unk_2E67, this->unk_2E68, 0);
                 sp1B7++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)sp90->unk_34);
-            SysMatrix_InsertTranslation(sp90->pos.x, sp90->pos.y, sp90->pos.z, MTXMODE_NEW);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)unkEffect->unk_34);
+            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(2.0f * sp90->unk_50, 2.0f * sp90->unk_50, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            Matrix_Scale(2.0f * unkEffect->unk_50, 2.0f * unkEffect->unk_50, 1.0f, MTXMODE_APPLY);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_8094C860);
         }
     }
 
     sp1B7 = 0;
-    sp90 = sp90_orig;
-    for (i = 0; i < 103; i++, sp90++) {
-        if (sp90->unk_00 == 5) {
+    unkEffect = unkEffectRef;
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if (unkEffect->unk_00 == 5) {
             if (sp1B7 == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)sp90->unk_38, (u8)sp90->unk_3C, (u8)sp90->unk_40, 0);
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)unkEffect->unk_38, (u8)unkEffect->unk_3C, (u8)unkEffect->unk_40, 0);
                 gSPDisplayList(POLY_XLU_DISP++, D_8094DBD8);
                 sp1B7++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)sp90->unk_28, (u8)sp90->unk_2C, (u8)sp90->unk_30,
-                            (u8)sp90->unk_34);
-            SysMatrix_InsertTranslation(sp90->pos.x, sp90->pos.y, sp90->pos.z, MTXMODE_NEW);
-            SysMatrix_InsertYRotation_f(sp90->unk_58, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(sp90->unk_5C);
-            SysMatrix_InsertZRotation_f(sp90->unk_60, MTXMODE_APPLY);
-            Matrix_Scale(sp90->unk_50 * 0.5f, sp90->unk_50 * 0.5f, sp90->unk_54 * sp90->unk_50, MTXMODE_APPLY);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)unkEffect->unk_28, (u8)unkEffect->unk_2C, (u8)unkEffect->unk_30,
+                            (u8)unkEffect->unk_34);
+            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
+            SysMatrix_InsertYRotation_f(unkEffect->unk_58, MTXMODE_APPLY);
+            SysMatrix_RotateStateAroundXAxis(unkEffect->unk_5C);
+            SysMatrix_InsertZRotation_f(unkEffect->unk_60, MTXMODE_APPLY);
+            Matrix_Scale(unkEffect->unk_50 * 0.5f, unkEffect->unk_50 * 0.5f, unkEffect->unk_54 * unkEffect->unk_50, MTXMODE_APPLY);
             SysMatrix_RotateStateAroundXAxis(M_PI / 2);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_8094DC48);
         }
     }
 
-    sp90 = sp90_orig;
-    for (i = 0; i < 103; i++, sp90++) {
-        if (sp90->unk_00 == 7) {
+    unkEffect = unkEffectRef;
+    for (i = 0; i < 103; i++, unkEffect++) {
+        if (unkEffect->unk_00 == 7) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_8094AE34[sp90->unk_01]));
-            func_8012C9BC(temp_s4);
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_8094AE34[unkEffect->unk_01]));
+            func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
             sp1B7++;
             for (j = 0; j < 16; j++) {
                 SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
-                SysMatrix_GetStateTranslationAndScaledZ(sp90->unk_54, &sp1A4);
-                sp19C = sp90->pos.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, sp90->pos.x + sp1A4.x, sp90->pos.z + sp1A4.z, &sp19C,
+                SysMatrix_GetStateTranslationAndScaledZ(unkEffect->unk_54, &sp1A4);
+                posY = unkEffect->pos.y;
+                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, unkEffect->pos.x + sp1A4.x, unkEffect->pos.z + sp1A4.z, &posY,
                                   &sp1A0) != 0) {
-                    if ((sp90->pos.y - sp19C) < 200.0f) {
-                        SysMatrix_InsertTranslation(sp90->pos.x + sp1A4.x, sp19C, sp90->pos.z + sp1A4.z, MTXMODE_NEW);
+                    if ((unkEffect->pos.y - posY) < 200.0f) {
+                        SysMatrix_InsertTranslation(unkEffect->pos.x + sp1A4.x, posY, unkEffect->pos.z + sp1A4.z, MTXMODE_NEW);
                         SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
-                        SysMatrix_RotateStateAroundXAxis(sp90->unk_5C);
-                        Matrix_Scale(sp90->unk_50, sp90->unk_50, sp90->unk_50, MTXMODE_APPLY);
-                        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(temp_s4), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        SysMatrix_RotateStateAroundXAxis(unkEffect->unk_5C);
+                        Matrix_Scale(unkEffect->unk_50, unkEffect->unk_50, unkEffect->unk_50, MTXMODE_APPLY);
+                        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);
                     }
                 }
