@@ -1348,6 +1348,8 @@ typedef struct {
     /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
 } QuakeCamCalc; // size = 0x20
 
+typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
+
 #define QUAKE_SPEED (1 << 0)
 #define QUAKE_VERTICAL_MAG (1 << 1)
 #define QUAKE_HORIZONTAL_MAG (1 << 2)

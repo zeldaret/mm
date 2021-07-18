@@ -288,7 +288,7 @@ u32 Quake_RemoveFromIdx(s16 idx) {
     return false;
 }
 
-static s16 (*sQuakeCallbacks[])(QuakeRequest*, ShakeInfo*) = {
+static QuakeCallbackFunc sQuakeCallbacks[] = {
     NULL, Quake_Callback1, Quake_Callback2, Quake_Callback3, Quake_Callback4, Quake_Callback5, Quake_Callback6,
 };
 
