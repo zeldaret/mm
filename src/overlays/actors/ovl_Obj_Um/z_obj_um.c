@@ -403,7 +403,7 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     temp_v0->unk200 = 1;
     temp_v0->unk588 = (s16) arg0->unkBE;
     temp_v0_2 = Actor_Spawn(temp_a0, arg1, 0xD, (f32) sp44->unk6, (f32) sp44->unk8, (f32) sp44->unkA, (s16) 0, (s16) (s32) arg0->unkBE, (s16) 0, (s16) 0x2014);
-    arg0->unk35C = temp_v0_2;
+    arg0->unk_35C = temp_v0_2;
     temp_v0_2->unk540 = (f32) temp_v0_2->world.pos.x;
     temp_v0_2->unk54C = 0xF;
     temp_v0_2->unk550 = 8;
@@ -784,59 +784,42 @@ block_14:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78A54.asm")
 #endif
 
-s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx);
-#ifdef MIPS_2_C_OUTPUT
 s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
-    s8* temp_s1;
-    s8* temp_s2;
+    Actor* temp_s1 = this->unk_358;
+    Actor* temp_s2 = this->unk_35C;
 
-    temp_s1 = this->unk_358;
-    temp_s2 = this->unk35C;
-    if ((this->unk_2F4 & 0x200) == 0) {
+    if (!(this->unk_2F4 & 0x200)) {
         func_80B783E0(this, globalCtx, 0, temp_s1);
     } else {
         func_80B78764(this, globalCtx, temp_s1, temp_s2);
     }
-    if ((this->unk_2F4 & 0x400) == 0) {
+
+    if (!(this->unk_2F4 & 0x400)) {
         func_80B783E0(this, globalCtx, 1, temp_s2);
     } else {
         func_80B78764(this, globalCtx, temp_s2, temp_s1);
     }
+
     func_80B78A54(this, globalCtx, 0, temp_s1, temp_s2);
     func_80B78A54(this, globalCtx, 1, temp_s2, temp_s1);
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78C18.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 s32 func_80B78D08(ObjUm* this, GlobalContext* globalCtx) {
-    CollisionCheckContext* sp18;
-    ColliderCylinder* temp_a2;
-    CollisionCheckContext* temp_a1;
-    s8* temp_v0;
-    void* temp_v1;
+    s32 pad[3];
 
-    temp_v0 = this->unk_358;
-    temp_v1 = this->unk35C;
-    temp_a2 = &this->unk_424;
-    this->unk_424.dim.pos.x = (s16) (s32) temp_v0->unk24;
-    this->unk_424.dim.pos.y = (s16) (s32) (temp_v0->unk28 + 70.0f);
-    this->unk_424.dim.pos.z = (s16) (s32) temp_v0->unk2C;
-    this->unk_470.dim.pos.x = (s16) (s32) temp_v1->unk24;
-    this->unk_470.dim.pos.y = (s16) (s32) (temp_v1->unk28 + 70.0f);
-    this->unk_470.dim.pos.z = (s16) (s32) temp_v1->unk2C;
-    this = this;
-    temp_a1 = &globalCtx->colChkCtx;
-    sp18 = temp_a1;
-    CollisionCheck_SetAC(globalCtx, temp_a1, (Collider* ) temp_a2);
-    CollisionCheck_SetAC(globalCtx, temp_a1, (Collider* ) &this->unk_470);
+    this->unk_424.dim.pos.x = this->unk_358->world.pos.x;
+    this->unk_424.dim.pos.y = this->unk_358->world.pos.y + 70.0f;
+    this->unk_424.dim.pos.z = this->unk_358->world.pos.z;
+
+    this->unk_470.dim.pos.x = this->unk_35C->world.pos.x;
+    this->unk_470.dim.pos.y = this->unk_35C->world.pos.y + 70.0f;
+    this->unk_470.dim.pos.z = this->unk_35C->world.pos.z;
+
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_424.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_470.base);
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78D08.asm")
-#endif
 
 s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
     func_80B78C18(this, globalCtx);
@@ -844,8 +827,9 @@ s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-void func_80B78E2C(ObjUm* this, ObjUmActionFunc arg1) {
-    this->unk_15C = arg1;
+// ObjUm_SetupAction
+void func_80B78E2C(ObjUm* this, ObjUmActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
 }
 
 void func_80B78E38(ObjUm* this, GlobalContext* globalCtx) {
@@ -863,25 +847,23 @@ void func_80B78E88(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
     player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + arg2;
 }
 
-#ifdef MIPS_2_C_OUTPUT
-void func_80B78EBC(ObjUm* arg0, GlobalContext* arg1) {
-    void* temp_v0;
+void func_80B78EBC(ObjUm* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
-    temp_v0 = arg1->actorCtx.actorList[2].first;
-    temp_v0->unk48 = 0;
-    temp_v0->unk4C = 0;
-    temp_v0->unk4A = (s16) temp_v0->unkBE;
-    temp_v0->unkAAC = 0;
-    temp_v0->unkAAE = 0;
-    temp_v0->unkAB0 = 0;
-    temp_v0->unkAB2 = 0;
-    temp_v0->unkAB4 = 0;
-    temp_v0->unkAB6 = 0;
-    temp_v0->unkAD4 = (s16) temp_v0->unk4A;
+    player->actor.focus.rot.x = 0;
+    player->actor.focus.rot.z = 0;
+    player->actor.focus.rot.y = player->actor.shape.rot.y;
+
+    player->unk_AAC.x = 0;
+    player->unk_AAC.y = 0;
+    player->unk_AAC.z = 0;
+
+    player->unk_AB2.x = 0;
+    player->unk_AB2.y = 0;
+    player->unk_AB2.z = 0;
+
+    player->currentYaw = player->actor.focus.rot.y;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78EBC.asm")
-#endif
 
 void func_80B78EFC(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
     Player* player = PLAYER;
@@ -1101,28 +1083,25 @@ s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79734.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
+// Parameter's types are weird...
 u16 func_80B797EC(GlobalContext* arg0, Actor* arg1, s32 arg2) {
     u16 phi_v1;
-    u16 phi_v1_2;
 
-    phi_v1 = 0x33B7U;
-    if (gSaveContext.playerForm == 4) {
-        if ((gSaveContext.unkF17 & 0x40) != 0) {
-            phi_v1 = 0x33CFU;
+    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        if (gSaveContext.weekEventReg[0x1F] & 0x40) {
+            phi_v1 = 0x33CF;
         } else {
-            phi_v1 = 0x33B4U;
+            phi_v1 = 0x33B4;
         }
+    } else {
+        phi_v1 = 0x33B7;
     }
-    phi_v1_2 = phi_v1;
+
     if (phi_v1 == 0) {
-        phi_v1_2 = 1U;
+        phi_v1 = 1;
     }
-    return phi_v1_2;
+    return phi_v1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B797EC.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 ? func_80B7984C(GlobalContext* arg0, Actor* arg1, s32 arg2, s32* arg3) {
@@ -1370,77 +1349,65 @@ s32 func_80B79BA0(ObjUm* arg0, GlobalContext* arg1) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79BA0.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm* temp_a3;
     s32 temp_v0;
 
-    temp_a3 = this;
-    temp_a3->unk_2AC += 0x3E8;
-    temp_a3->unk_2F4 &= -9;
-    this = temp_a3;
-    func_80B7B18C(temp_a3, globalCtx, 0);
+    this->unk_2AC += 0x3E8;
+    this->unk_2F4 &= ~0x08;
+    func_80B7B18C(this, globalCtx, 0);
+
     temp_v0 = func_80B79BA0(this, globalCtx);
     if ((temp_v0 == 1) || (temp_v0 == 2)) {
-        if ((*(&gSaveContext + 0xF17) & 0x80) != 0) {
-            ActorCutscene_Stop((s16) this->dyna.actor.cutscene);
+        if (gSaveContext.weekEventReg[0x1F] & 0x80) {
+            ActorCutscene_Stop(this->dyna.actor.cutscene);
             globalCtx->nextEntranceIndex = 0x3E50;
             globalCtx->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 3U;
+            gSaveContext.nextTransition = 3;
             globalCtx->sceneLoadFlag = 0x14;
-            return;
+        } else {
+            func_80B79524(this);
         }
-        func_80B79524(this);
-        return;
+    } else {
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79F10.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
-    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) this->dyna.actor.cutscene, (Actor* ) this);
+
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
         func_80B78E2C(this, func_80B7A0E0);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79FFC.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
     func_80B79F10(this, globalCtx);
     func_80B78E88(this, globalCtx, 0);
-    if (globalCtx->msgCtx.unk11F04 == 0x33B6) {
-        this->unk_4CC = 1;
-        this->unk_4D4 = 1;
-        return;
-    }
-    this->unk_4CC = 0;
-    this->unk_4D4 = 0;
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A070.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
+    switch (globalCtx->msgCtx.unk11F04) {
+        case 0x33B6:
+            this->unk_4CC = 1;
+            this->unk_4D4 = 1;
+            break;
+
+        default:
+            this->unk_4CC = 0;
+            this->unk_4D4 = 0;
+            break;
+    }
+}
+
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
-    if (this->unk_4C8 != gSaveContext.time) {
+    if (gSaveContext.time != this->unk_4C8) {
         func_80B7B18C(this, globalCtx, 0);
         func_80B78E2C(this, func_80B7A070);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A0E0.asm")
-#endif
 
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -1453,103 +1420,72 @@ void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
     func_80B78E2C(this, func_80B79FFC);
 }
 
-#ifdef MIPS_2_C_OUTPUT
-void func_80B7A1B4(ObjUm* arg0, GlobalContext* arg1) {
-    s32 temp_t7;
-    u16 temp_v0;
+void func_80B7A1B4(ObjUm* this, GlobalContext* globalCtx) {
+    func_80B78E38(this, globalCtx);
+    this->unk_2F4 |= 4;
 
-    func_80B78E38(arg0, arg1);
-    temp_t7 = arg0->unk_2F4 | 4;
-    arg0->unk_2F4 = temp_t7;
-    temp_v0 = arg1->msgCtx.unk11F04;
-    if (temp_v0 != 0x33B8) {
-        if (temp_v0 != 0x33B9) {
-            arg0->unk_2F4 = temp_t7 & ~0x800;
-            arg0->unk_4CC = 0;
-        } else {
-            arg0->unk_4CC = 2;
-        }
-        arg0->unk_4D4 = 0;
-        return;
+    switch (globalCtx->msgCtx.unk11F04) {
+        case 0x33B8:
+            this->unk_4CC = 0;
+            this->unk_4D4 = 3;
+            break;
+
+        case 0x33B9:
+            this->unk_4CC = 2;
+            this->unk_4D4 = 0;
+            break;
+
+        default:
+            this->unk_2F4 &= ~0x800;
+            this->unk_4CC = 0;
+            this->unk_4D4 = 0;
+            break;
     }
-    arg0->unk_4CC = 0;
-    arg0->unk_4D4 = 3;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A1B4.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm* temp_a0;
-    u16 temp_v0;
-    u16 phi_v0;
-    ObjUm* phi_a0;
-
     func_80B7B18C(this, globalCtx, 2);
-    temp_a0 = this;
-    temp_v0 = gSaveContext.time;
-    phi_v0 = temp_v0;
-    phi_a0 = temp_a0;
-    if (temp_a0->unk_4C8 != temp_v0) {
-        this = temp_a0;
-        func_80B78E2C(temp_a0, func_80B7A2AC);
-        phi_v0 = gSaveContext.time;
-        phi_a0 = this;
+    if (gSaveContext.time != this->unk_4C8) {
+        func_80B78E2C(this, func_80B7A2AC);
     }
-    phi_a0->unk_4C8 = phi_v0;
-    func_80B7A1B4(phi_a0, globalCtx);
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A240.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
+    this->unk_4C8 = gSaveContext.time;
+    func_80B7A1B4(this, globalCtx);
+}
+
 void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
     s32 temp_v0;
-    u16 temp_v0_2;
-    u16 phi_v0;
 
     this->unk_2AC += 0x3E8;
     func_80B7B18C(this, globalCtx, 0);
+
     temp_v0 = func_80B79BA0(this, globalCtx);
-    if ((temp_v0 == 1) || (temp_v0 == 2)) {
+    if (temp_v0 == 1 || temp_v0 == 2) {
         globalCtx->nextEntranceIndex = 0xCE40;
         globalCtx->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 3U;
+        gSaveContext.nextTransition = 3;
         globalCtx->sceneLoadFlag = 0x14;
-        return;
-    }
-    temp_v0_2 = gSaveContext.time;
-    phi_v0 = temp_v0_2;
-    if (this->unk_4C8 == temp_v0_2) {
-        func_80B78E2C(this, func_80B7A240);
-        phi_v0 = gSaveContext.time;
-    }
-    this->unk_4C8 = phi_v0;
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
-    func_80B7A1B4(this, globalCtx);
-}
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A2AC.asm")
-#endif
+    } else {
+        if (gSaveContext.time == this->unk_4C8) {
+            func_80B78E2C(this, func_80B7A240);
+        }
 
-#ifdef MIPS_2_C_OUTPUT
+        this->unk_4C8 = gSaveContext.time;
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+        func_80B7A1B4(this, globalCtx);
+    }
+}
+
 void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm* temp_a0;
 
     func_80B78E38(this, globalCtx);
-    temp_a0 = this;
-    temp_a0->unk_2F4 |= 4;
-    if (temp_a0->unk_4C8 != gSaveContext.time) {
-        this = temp_a0;
-        func_80B7B18C(temp_a0, globalCtx, 0);
+    this->unk_2F4 |= 4;
+    if (gSaveContext.time != this->unk_4C8) {
+        func_80B7B18C(this, globalCtx, 0);
         func_80B78E2C(this, func_80B7A2AC);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A394.asm")
-#endif
 
 #ifdef NON_MATCHING
 // v0/v1 problems
@@ -1684,26 +1620,21 @@ loop_6:
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A614.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-void func_80B7A7AC(ObjUm* arg0, GlobalContext* arg1) {
-    void* temp_v0;
+void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
-    temp_v0 = arg1->actorCtx.actorList[2].first;
-    arg0->unk4DC = 0;
-    arg0->unk4E0 = 0;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C & ~0x20);
-    func_80B78E38(arg0, arg1);
-    func_80B78E88(arg0, arg1, 0x7FFF);
-    func_80B78EBC(arg0, arg1);
-    arg0->unk_2F4 |= 0x10;
-    func_80B78DF0(arg0, arg1);
-    arg0->unk_2F4 |= 4;
-    func_80B7B18C(arg0, arg1, 1);
-    func_80B78E2C(arg0, func_80B7A614);
+    this->unk_4DC = 0;
+    this->unk_4E0 = 0;
+    player->stateFlags1 &= ~0x20;
+    func_80B78E38(this, globalCtx);
+    func_80B78E88(this, globalCtx, 0x7FFF);
+    func_80B78EBC(this, globalCtx);
+    this->unk_2F4 |= 0x10;
+    func_80B78DF0(this, globalCtx);
+    this->unk_2F4 |= 4;
+    func_80B7B18C(this, globalCtx, 1);
+    func_80B78E2C(this, func_80B7A614);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A7AC.asm")
-#endif
 
 /*
 Failed to decompile function func_80B7A860:
@@ -1717,92 +1648,63 @@ It needs to be within ".section .rodata" or ".section .late_rodata".
 */
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A860.asm")
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm* temp_a0;
-    u16 temp_v0;
-    u16 phi_v0;
-    ObjUm* phi_a0;
-
     func_80B7B18C(this, globalCtx, 2);
-    temp_a0 = this;
-    temp_v0 = gSaveContext.time;
-    phi_v0 = temp_v0;
-    phi_a0 = temp_a0;
-    if (temp_a0->unk_4C8 != temp_v0) {
-        this = temp_a0;
-        func_80B78E2C(temp_a0, func_80B7ABE4);
-        phi_v0 = gSaveContext.time;
-        phi_a0 = this;
+    if (gSaveContext.time != this->unk_4C8) {
+        func_80B78E2C(this, func_80B7ABE4);
     }
-    phi_a0->unk_4C8 = phi_v0;
-    func_80B7A860(phi_a0, globalCtx);
+
+    this->unk_4C8 = gSaveContext.time;
+    func_80B7A860(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AB78.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
-    u16 temp_v0;
-    u16 phi_v0;
-
     this->unk_2AC += 0x3E8;
     func_80B7B18C(this, globalCtx, 0);
     if (func_80B79BA0(this, globalCtx) == 2) {
         func_80B79524(this);
         return;
     }
-    temp_v0 = gSaveContext.time;
-    phi_v0 = temp_v0;
-    if (this->unk_4C8 == temp_v0) {
+
+    if (gSaveContext.time == this->unk_4C8) {
         func_80B78E2C(this, func_80B7AB78);
-        phi_v0 = gSaveContext.time;
     }
-    this->unk_4C8 = phi_v0;
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
+    this->unk_4C8 = gSaveContext.time;
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
     func_80B7A860(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7ABE4.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7AC94(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* temp_v0;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
+    player->stateFlags1 |= 0x20;
     func_80B78E38(this, globalCtx);
     func_80B78E88(this, globalCtx, 0);
     this->unk_2F4 |= 4;
-    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) this->dyna.actor.cutscene, (Actor* ) this);
+
+    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
         func_80B78E2C(this, func_80B7ABE4);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AC94.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* temp_v0;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
+    player->stateFlags1 |= 0x20;
     func_80B78E38(this, globalCtx);
     func_80B78E88(this, globalCtx, 0);
     this->unk_2F4 |= 4;
     this->unk_2AC += 0x3E8;
     func_80B7B18C(this, globalCtx, 0);
-    if ((func_80B79BA0(this, globalCtx) == 4) && ((gSaveContext.unkF33 & 2) == 0)) {
+
+    if ((func_80B79BA0(this, globalCtx) == 4) && !(gSaveContext.weekEventReg[0x3B] & 2)) {
         ActorCutscene_Stop((s16) this->dyna.actor.cutscene);
         func_801A3F54(0);
-        gSaveContext.unkF33 = (u8) (gSaveContext.unkF33 | 2);
+        gSaveContext.weekEventReg[0x3B] |= 2;
         gSaveContext.unk_3F4A = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
         globalCtx->unk_1887F = 0x40;
@@ -1810,32 +1712,25 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
         globalCtx->sceneLoadFlag = 0x14;
         gSaveContext.time += 0xAAC;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AD34.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* temp_v0;
+    Player* player = PLAYER;
 
-    temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0->unkA6C = (s32) (temp_v0->unkA6C | 0x20);
+    player->stateFlags1 |= 0x20;
     func_80B78E38(this, globalCtx);
     func_80B78E88(this, globalCtx, 0);
     this->unk_2F4 |= 4;
     func_80B7B18C(this, globalCtx, 2);
-    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) this->dyna.actor.cutscene, (Actor* ) this);
+
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         func_80B78E2C(this, func_80B7AD34);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AE58.asm")
-#endif
 
 void func_80B7AEFC(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
@@ -2001,7 +1896,7 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjUm* this = THIS;
 
-    this->unk_15C(this, globalCtx);
+    this->actionFunc(this, globalCtx);
     this->unk_350 += 1;
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 

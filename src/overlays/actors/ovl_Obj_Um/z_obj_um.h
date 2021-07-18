@@ -9,7 +9,7 @@ typedef void (*ObjUmActionFunc)(struct ObjUm*, GlobalContext*);
 
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ ObjUmActionFunc unk_15C;
+    /* 0x15C */ ObjUmActionFunc actionFunc;
     /* 0x160 */ SkelAnime unk_160;
     /* 0x1A4 */ Vec3s unk_1A4[0x16];
     /* 0x228 */ Vec3s unk_228[0x16];
@@ -51,7 +51,10 @@ typedef struct ObjUm {
     /* 0x350 */ UNK_TYPE unk_350;
     /* 0x354 */ UNK_TYPE unk_354;
 
-    /* 0x358 */ char unk_358[0xC8];
+    /* 0x358 */ Actor* unk_358;
+    /* 0x35C */ Actor* unk_35C;
+    /* 0x360 */ char unk_360[0xC0];
+
     /* 0x420 */ UNK_TYPE unk_420;
 
     /* 0x424 */ ColliderCylinder unk_424;
@@ -63,7 +66,9 @@ typedef struct ObjUm {
     /* 0x4CC */ UNK_TYPE unk_4CC;
     /* 0x4D0 */ UNK_TYPE unk_4D0;
     /* 0x4D4 */ UNK_TYPE unk_4D4;
-    /* 0x4D8 */ char unk_4D8[0xC];
+    /* 0x4D8 */ char unk_4D8[0x4];
+    /* 0x4DC */ UNK_TYPE unk_4DC;
+    /* 0x4E0 */ UNK_TYPE unk_4E0;
 } ObjUm; // size = 0x4E4
 
 extern const ActorInit Obj_Um_InitVars;
