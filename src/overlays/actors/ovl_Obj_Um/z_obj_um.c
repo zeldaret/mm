@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_um.h"
+#include "overlays/actors/ovl_En_In/z_en_in.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -594,172 +595,114 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
     return 0;
 }
 
-#ifdef MIPS_2_C_OUTPUT
 s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse* arg3) {
-    ? sp30;
-    s32 sp28;
-    Vec3f* sp24;
-    PosRot* sp20;
-    PosRot* temp_a1;
-    Vec3f* temp_a0_2;
-    Vec3f* temp_v0;
-    s16 temp_v0_3;
-    s16 temp_v1_2;
-    s32 temp_a0;
-    s32 temp_t4;
-    s32 temp_t8;
-    s32 temp_v0_2;
-    s32 temp_v1;
-    s32 phi_v1;
-    s32 phi_a2;
-    s32 phi_v1_2;
-    s32 phi_a2_2;
-    s32 phi_v1_3;
-    s32 phi_v1_4;
+    s32 pad;
+    Vec3f sp30;
     s16 phi_v1_5;
 
-    temp_v1 = arg2->unk_55C - 1;
-    arg2->unk_55C = temp_v1;
-    phi_v1_4 = temp_v1;
-    if (temp_v1 <= 0) {
+    arg2->unk_55C--;
+    if (arg2->unk_55C <= 0) {
         arg2->unk_55C = 0;
-        if ((arg2->unk_550 == 3) && ((this->unk_2F4 & 0x2000) == 0)) {
-            phi_v1 = -1;
+
+        if ((arg2->unk_550 == 3) && !(this->unk_2F4 & 0x2000)) {
+            s32 phi_v1_2 = -1;
             if (this->unk_314[0] != 1) {
-                phi_v1 = 0;
+                phi_v1_2 = 0;
             }
-            phi_a2 = 1;
-            phi_v1_2 = phi_v1;
-            if ((this->unk_314[1] != 1) && ((phi_v1 == -1) || ((phi_a2 = 1, phi_v1_2 = phi_v1, (phi_v1 == 0)) && (sp28 = phi_v1, phi_a2 = 1, phi_v1_2 = phi_v1, (Rand_ZeroOne() < 0.3f))))) {
-                phi_a2 = 1;
-                phi_v1_2 = 1;
-            }
-            phi_a2_2 = phi_a2;
-            phi_v1_3 = phi_v1_2;
-            if ((phi_a2 != this->unk_314[2]) && ((phi_a2_2 = phi_a2, (phi_v1_2 == -1)) || ((phi_a2_2 = phi_a2, phi_v1_3 = phi_v1_2, (phi_v1_2 != -1)) && (sp28 = phi_v1_2, phi_a2_2 = 1, phi_v1_3 = phi_v1_2, phi_a2_2 = 1, (Rand_ZeroOne() < 0.3f))))) {
-                phi_v1_3 = 2;
-            }
-            temp_t8 = phi_v1_3 * 4;
-            temp_v0 = this + temp_t8;
-            temp_a0 = this->unk_314[phi_v1_3];
-            if (phi_a2_2 != temp_a0) {
-                this->unk_320[phi_v1_3] = phi_a2_2;
-                if (temp_a0 == 2) {
-                    sp24 = temp_v0;
-                    func_8019F1C0(&this->unk_32C[phi_v1_3], 0x2891U);
-                } else {
-                    sp24 = temp_v0;
-                    func_8019F1C0(&this->unk_32C[phi_v1_3], 0x297EU);
+
+            if (this->unk_314[1] != 1) {
+                if ((phi_v1_2 == -1) || (phi_v1_2 == 0 && Rand_ZeroOne() < 0.3f)) {
+                    phi_v1_2 = 1;
                 }
-                temp_t4 = (this + temp_t8)->unk314 - 1;
-                (this + temp_t8)->unk314 = temp_t4;
-                if (temp_t4 <= 0) {
-                    (this + temp_t8)->unk314 = 1;
+            }
+
+            if (this->unk_314[2] != 1) {
+                if ((phi_v1_2 == -1) || (phi_v1_2 != -1 && Rand_ZeroOne() < 0.3f)) {
+                    phi_v1_2 = 2;
+                }
+            }
+
+            if (this->unk_314[phi_v1_2] != 1) {
+                this->unk_320[phi_v1_2] = 1;
+                if (this->unk_314[phi_v1_2] == 2) {
+                    func_8019F1C0(&this->unk_32C[phi_v1_2], 0x2891);
+                } else {
+                    func_8019F1C0(&this->unk_32C[phi_v1_2], 0x297E);
+                }
+
+                this->unk_314[phi_v1_2]--;
+                if (this->unk_314[phi_v1_2] <= 0) {
+                    this->unk_314[phi_v1_2] = 1;
                 }
             }
         }
+
         func_80B781DC(this, arg2, arg3, globalCtx);
-        phi_v1_4 = arg2->unk_55C;
     }
-    Math3D_Lerp(&arg2->unk_540, this + (arg2->unk_550 * 0xC) + 0x360, 1.0f - ((f32) phi_v1_4 / (f32) arg2->unk_560), (Vec3f* ) &sp30);
-    temp_v0_2 = arg2->unk_550;
-    arg2->unk_570.x = sp30.unk0;
-    arg2->unk_570.y = sp30.unk4;
-    arg2->unk_570.z = sp30.unk8;
+
+
+    Math3D_Lerp(&arg2->unk_540, &this->unk_360[arg2->unk_550], 1.0f - ((f32) arg2->unk_55C / arg2->unk_560), &sp30);
+    arg2->unk_570 = sp30;
     arg2->unk_588 = this->dyna.actor.shape.rot.y;
-    if ((temp_v0_2 == 0xA) || (temp_a0_2 = &arg2->actor.prevPos, (temp_v0_2 == 8))) {
+
+    if ((arg2->unk_550 == 0xA) || ((arg2->unk_550 == 8))) {
+        phi_v1_5 = arg2->unk_588;
+    } else if (Math3D_Distance(&arg2->actor.prevPos, &arg2->actor.world.pos) < 10.0f) {
         phi_v1_5 = arg2->unk_588;
     } else {
-        temp_a1 = &arg2->actor.world;
-        sp20 = temp_a1;
-        sp24 = temp_a0_2;
-        if (Math3D_Distance(temp_a0_2, (Vec3f* ) temp_a1) < 10.0f) {
-            phi_v1_5 = arg2->unk_588;
-        } else {
-            phi_v1_5 = Math_Vec3f_Yaw(temp_a0_2, (Vec3f* ) temp_a1);
-        }
+        phi_v1_5 = Math_Vec3f_Yaw(&arg2->actor.prevPos, &arg2->actor.world.pos);
     }
-    temp_v0_3 = arg2->actor.shape.rot.y;
-    temp_v1_2 = phi_v1_5 - temp_v0_3;
-    if ((s32) temp_v1_2 >= 0x191) {
-        arg2->actor.shape.rot.y = temp_v0_3 + 0x190;
-    } else if ((s32) temp_v1_2 < -0x190) {
-        arg2->actor.shape.rot.y = temp_v0_3 - 0x190;
+
+    if (1) { }
+
+    phi_v1_5 -= arg2->actor.shape.rot.y;
+    if (phi_v1_5 > 0x190) {
+        arg2->actor.shape.rot.y += 0x190;
+    } else if (phi_v1_5 < -0x190) {
+        arg2->actor.shape.rot.y += -0x190;
     } else {
-        arg2->actor.shape.rot.y = temp_v0_3 + temp_v1_2;
+        arg2->actor.shape.rot.y += phi_v1_5;
     }
+
     return 0;
 }
-#else
-s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse*, EnHorse*);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78764.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
-    s16 sp36;
-    void* sp30;
-    PosRot* sp2C;
-    Actor* temp_v0;
-    Actor* temp_v0_2;
-    PosRot* temp_a1;
-    void* temp_v1;
-    s32 phi_v0;
-    s32 phi_v0_2;
-
-    temp_v1 = this + (arg2 * 0x4C);
-    if ((temp_v1->unk435 & 2) != 0) {
-        temp_a1 = &arg3->actor.world;
+    if (this->unk_424[arg2].base.acFlags & 2) {
         if (arg3->unk_550 == 3) {
-            sp30 = temp_v1;
-            sp2C = temp_a1;
-            sp36 = Math_Vec3f_Yaw((Vec3f* ) &this->dyna.actor.world, (Vec3f* ) temp_a1) - this->dyna.actor.shape.rot.y;
-            temp_v1->unk435 = (u8) (temp_v1->unk435 & 0xFFFD);
-            func_8019F1C0(&arg3->actor.projectedPos, 0x393BU);
+            s16 sp36 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
+
+            this->unk_424[arg2].base.acFlags &= ~0x02;
+            func_8019F1C0(&arg3->actor.projectedPos, 0x393B);
             arg3->unk_54C = 0xF;
+
             if (Math_SinS(sp36) > 0.0f) {
-                if (arg4->unk_550 != 0xA) {
-                    phi_v0 = 0xA;
-                } else {
-                    phi_v0 = 8;
-                }
-                arg3->unk_550 = phi_v0;
+                arg3->unk_550 = arg4->unk_550 != 0xA ? 0xA : 8;
                 arg3->unk_568 = -1.0f;
             } else {
-                if (arg4->unk_550 != 8) {
-                    phi_v0_2 = 8;
-                } else {
-                    phi_v0_2 = 0xA;
-                }
-                arg3->unk_550 = phi_v0_2;
+                arg3->unk_550 = arg4->unk_550 != 8 ? 8 : 0xA;
                 arg3->unk_568 = 1.0f;
             }
-            temp_v0 = arg3->unk38C;
-            arg3->unk_540.x = sp2C->pos.x;
-            arg3->unk_540.y = sp2C->pos.y;
+
+            arg3->unk_540 = arg3->actor.world.pos;
             arg3->unk_55C = 0x28;
             arg3->unk_560 = 0x28;
-            arg3->unk_564 = (s8* )1;
-            arg3->unk_540.z = sp2C->pos.z;
-            if (temp_v0 != 0) {
-                temp_v0->colorFilterTimer = 0x14;
-                func_800BCB70(arg3->unk38C, 0x4000, 0xFF, 0, (s16) 0x28);
+            arg3->unk_564 = 1;
+            if (arg3->rider != NULL) {
+                arg3->rider->actor.colorFilterTimer = 20;
+                func_800BCB70(arg3->rider, 0x4000, 0xFF, 0, (s16) 0x28);
             }
         } else {
-            temp_v0_2 = arg3->unk38C;
-            if (temp_v0_2 != 0) {
-                temp_v0_2->colorFilterTimer = 0x14;
-                func_800BCB70(arg3->unk38C, 0x4000, 0xFF, 0, (s16) 0x28);
+            if (arg3->rider != 0) {
+                arg3->rider->actor.colorFilterTimer = 20;
+                func_800BCB70(arg3->rider, 0x4000, 0xFF, 0, (s16) 0x28);
             }
             func_8019F1C0(&arg3->actor.projectedPos, 0x393BU);
         }
     }
+
     return 0;
 }
-#else
-s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32, EnHorse*, EnHorse*);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78A54.asm")
-#endif
 
 s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
     EnHorse* temp_s1 = this->unk_358;
@@ -785,16 +728,16 @@ s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
 s32 func_80B78D08(ObjUm* this, GlobalContext* globalCtx) {
     s32 pad[3];
 
-    this->unk_424.dim.pos.x = this->unk_358->actor.world.pos.x;
-    this->unk_424.dim.pos.y = this->unk_358->actor.world.pos.y + 70.0f;
-    this->unk_424.dim.pos.z = this->unk_358->actor.world.pos.z;
+    this->unk_424[0].dim.pos.x = this->unk_358->actor.world.pos.x;
+    this->unk_424[0].dim.pos.y = this->unk_358->actor.world.pos.y + 70.0f;
+    this->unk_424[0].dim.pos.z = this->unk_358->actor.world.pos.z;
 
-    this->unk_470.dim.pos.x = this->unk_35C->actor.world.pos.x;
-    this->unk_470.dim.pos.y = this->unk_35C->actor.world.pos.y + 70.0f;
-    this->unk_470.dim.pos.z = this->unk_35C->actor.world.pos.z;
+    this->unk_424[1].dim.pos.x = this->unk_35C->actor.world.pos.x;
+    this->unk_424[1].dim.pos.y = this->unk_35C->actor.world.pos.y + 70.0f;
+    this->unk_424[1].dim.pos.z = this->unk_35C->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_424.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_470.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_424[0].base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_424[1].base);
     return 0;
 }
 
@@ -985,8 +928,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_424, (Actor* ) this, &D_80B7C138);
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_470, (Actor* ) this, &D_80B7C138);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[0], (Actor* ) this, &D_80B7C138);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[1], (Actor* ) this, &D_80B7C138);
 
     return;
 }
@@ -1004,8 +947,8 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         func_801A72CC(&this->unk_32C[i]);
     }
 
-    Collider_DestroyCylinder(globalCtx, &this->unk_424);
-    Collider_DestroyCylinder(globalCtx, &this->unk_470);
+    Collider_DestroyCylinder(globalCtx, &this->unk_424[0]);
+    Collider_DestroyCylinder(globalCtx, &this->unk_424[1]);
 }
 
 void func_80B79524(ObjUm* this) {

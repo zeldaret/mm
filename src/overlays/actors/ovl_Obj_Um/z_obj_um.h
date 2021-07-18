@@ -54,12 +54,11 @@ typedef struct ObjUm {
 
     /* 0x358 */ EnHorse* unk_358;
     /* 0x35C */ EnHorse* unk_35C;
-    /* 0x360 */ char unk_360[0xC0];
+    /* 0x360 */ Vec3f unk_360[0x10];
 
     /* 0x420 */ UNK_TYPE unk_420;
 
-    /* 0x424 */ ColliderCylinder unk_424;
-    /* 0x470 */ ColliderCylinder unk_470;
+    /* 0x424 */ ColliderCylinder unk_424[2]; // horses
     /* 0x4BC */ Vec3f unk_4BC;
     /* 0x4C8 */ u16 unk_4C8;
     /* 0x4CA */ char unk_4CA[0x2]; // padding probably

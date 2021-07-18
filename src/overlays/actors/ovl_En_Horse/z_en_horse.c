@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse.h"
+#include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10)
