@@ -369,59 +369,61 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B77770.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-? func_80B77FA4(void* arg0, GlobalContext* arg1) {
-    void* sp44;
-    ActorContext* sp38;
-    Actor* temp_v0;
-    Actor* temp_v0_2;
-    ActorContext* temp_a0;
+#ifdef NON_MATCHING
+// regalloc
+s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    Vec3s* sp44;
+    EnHorse* temp_v0;
+    EnHorse* temp_v0_2;
 
-    sp44 = Lib_SegmentedToVirtual((arg1->setupPathList + (arg0->unk2BC * 8))->unk4);
+    sp44 = Lib_SegmentedToVirtual(globalCtx->setupPathList[this->unk_2BC].points);
     func_801A89A8(0x8003);
-    temp_a0 = arg1 + 0x1CA0;
-    sp38 = temp_a0;
-    temp_v0 = Actor_Spawn(temp_a0, arg1, 0xD, (f32) sp44->unk0, (f32) sp44->unk2, (f32) sp44->unk4, (s16) 0, (s16) (s32) arg0->unkBE, (s16) 0, (s16) 0x2013);
-    arg0->unk358 = temp_v0;
-    temp_v0->unk540 = (f32) temp_v0->world.pos.x;
-    temp_v0->unk54C = 0xF;
-    temp_v0->unk550 = 0xA;
-    temp_v0->unk544 = (f32) temp_v0->world.pos.y;
-    temp_v0->unk548 = (f32) temp_v0->world.pos.z;
-    temp_v0->unk558 = 0;
-    temp_v0->unk55C = 0x28;
-    temp_v0->unk560 = 0x28;
-    temp_v0->unk554 = (s32) arg0->unk2BC;
-    temp_v0->unk568 = 0.0f;
-    temp_v0->unk56C = 0.0f;
-    temp_v0->unk570 = (f32) D_801D15B0.x;
-    temp_v0->unk574 = (f32) D_801D15B0.y;
-    temp_v0->unk578 = (f32) D_801D15B0.z;
-    temp_v0->unk57C = (f32) D_801D15B0.x;
-    temp_v0->unk580 = (f32) D_801D15B0.y;
-    temp_v0->unk584 = (f32) D_801D15B0.z;
-    temp_v0->unk200 = 1;
-    temp_v0->unk588 = (s16) arg0->unkBE;
-    temp_v0_2 = Actor_Spawn(temp_a0, arg1, 0xD, (f32) sp44->unk6, (f32) sp44->unk8, (f32) sp44->unkA, (s16) 0, (s16) (s32) arg0->unkBE, (s16) 0, (s16) 0x2014);
-    arg0->unk_35C = temp_v0_2;
-    temp_v0_2->unk540 = (f32) temp_v0_2->world.pos.x;
-    temp_v0_2->unk54C = 0xF;
-    temp_v0_2->unk550 = 8;
-    temp_v0_2->unk544 = (f32) temp_v0_2->world.pos.y;
-    temp_v0_2->unk548 = (f32) temp_v0_2->world.pos.z;
-    temp_v0_2->unk55C = 0x28;
-    temp_v0_2->unk560 = 0x28;
-    temp_v0_2->unk554 = (s32) arg0->unk2BC;
-    temp_v0_2->unk568 = 0.0f;
-    temp_v0_2->unk56C = 0.0f;
-    temp_v0_2->unk57C = (f32) D_801D15B0.x;
-    temp_v0_2->unk580 = (f32) D_801D15B0.y;
-    temp_v0_2->unk584 = (f32) D_801D15B0.z;
-    temp_v0_2->unk200 = 2;
-    temp_v0_2->unk588 = (s16) arg0->unkBE;
-    arg0->unk314 = 4;
-    arg0->unk318 = 4;
-    arg0->unk31C = 4;
+
+    temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[0].x, sp44[0].y, sp44[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
+    this->unk_358 = temp_v0;
+
+    temp_v0->unk_540 = temp_v0->actor.world.pos;
+
+    temp_v0->unk_54C = 0xF;
+    temp_v0->unk_550 = 0xA;
+
+    temp_v0->unk_554 = this->unk_2BC;
+    temp_v0->unk_568 = 0.0f;
+    temp_v0->unk_56C = 0.0f;
+    temp_v0->unk_558 = 0;
+    temp_v0->unk_55C = 0x28;
+    temp_v0->unk_560 = 0x28;
+
+    temp_v0->unk_570 = D_801D15B0;
+    temp_v0->unk_57C = D_801D15B0;
+
+    temp_v0->unk_588 = this->dyna.actor.shape.rot.y;
+    temp_v0->curRaceWaypoint = 1;
+
+
+    temp_v0_2 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, (f32) sp44[1].x, (f32) sp44[1].y, (f32) sp44[1].z, (s16) 0, (s16) (s32) this->dyna.actor.shape.rot.y, (s16) 0, (s16) 0x2014);
+    this->unk_35C = temp_v0_2;
+
+    temp_v0_2->unk_540 = temp_v0_2->actor.world.pos;
+
+    temp_v0_2->unk_54C = 0xF;
+    temp_v0_2->unk_550 = 8;
+
+    temp_v0_2->unk_554 = (s32) this->unk_2BC;
+    temp_v0_2->unk_568 = 0.0f;
+    temp_v0_2->unk_56C = 0.0f;
+    temp_v0_2->unk_55C = 0x28;
+    temp_v0_2->unk_560 = 0x28;
+
+    temp_v0_2->unk_57C = D_801D15B0;
+
+    temp_v0_2->unk_588 = this->dyna.actor.shape.rot.y;
+    temp_v0_2->curRaceWaypoint = 2;
+
+    this->unk_314[0] = 4;
+    this->unk_314[1] = 4;
+    this->unk_314[2] = 4;
     return 0;
 }
 #else
@@ -808,13 +810,13 @@ s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
 s32 func_80B78D08(ObjUm* this, GlobalContext* globalCtx) {
     s32 pad[3];
 
-    this->unk_424.dim.pos.x = this->unk_358->world.pos.x;
-    this->unk_424.dim.pos.y = this->unk_358->world.pos.y + 70.0f;
-    this->unk_424.dim.pos.z = this->unk_358->world.pos.z;
+    this->unk_424.dim.pos.x = this->unk_358->actor.world.pos.x;
+    this->unk_424.dim.pos.y = this->unk_358->actor.world.pos.y + 70.0f;
+    this->unk_424.dim.pos.z = this->unk_358->actor.world.pos.z;
 
-    this->unk_470.dim.pos.x = this->unk_35C->world.pos.x;
-    this->unk_470.dim.pos.y = this->unk_35C->world.pos.y + 70.0f;
-    this->unk_470.dim.pos.z = this->unk_35C->world.pos.z;
+    this->unk_470.dim.pos.x = this->unk_35C->actor.world.pos.x;
+    this->unk_470.dim.pos.y = this->unk_35C->actor.world.pos.y + 70.0f;
+    this->unk_470.dim.pos.z = this->unk_35C->actor.world.pos.z;
 
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_424.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_470.base);

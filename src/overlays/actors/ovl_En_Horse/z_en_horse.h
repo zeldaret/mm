@@ -205,13 +205,19 @@ typedef struct EnHorse {
     /* 0x538 */ s32 unk_538;
     /* 0x53C */ s32 unk_53C;
     /* 0x540 */ Vec3f unk_540;
-    /* 0x54C */ UNK_TYPE1 unk54C[0x4];
+    /* 0x54C */ UNK_TYPE unk_54C;
     /* 0x550 */ s32 unk_550;
-    /* 0x554 */ UNK_TYPE1 unk554[0x18];
+    /* 0x554 */ UNK_TYPE unk_554;
+    /* 0x558 */ UNK_TYPE unk_558;
+    /* 0x55C */ UNK_TYPE unk_55C;
+    /* 0x560 */ UNK_TYPE unk_560;
+    /* 0x564 */ UNK_TYPE1 unk_564[0x4];
+    /* 0x568 */ f32 unk_568;
     /* 0x56C */ f32 unk_56C;
     /* 0x570 */ Vec3f unk_570;
     /* 0x57C */ Vec3f unk_57C;
-    /* 0x588 */ UNK_TYPE1 unk588[0x4];
+    /* 0x588 */ s16 unk_588;
+    /* 0x58A */ UNK_TYPE1 unk_58A[0x2]; // struct padding?
     /* 0x58C */ s32 unk_58C;
     /* 0x590 */ s32 unk_590;
 } EnHorse; // size = 0x594

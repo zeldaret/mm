@@ -2,6 +2,7 @@
 #define Z_OBJ_UM_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 struct ObjUm;
 
@@ -51,8 +52,8 @@ typedef struct ObjUm {
     /* 0x350 */ UNK_TYPE unk_350;
     /* 0x354 */ UNK_TYPE unk_354;
 
-    /* 0x358 */ Actor* unk_358;
-    /* 0x35C */ Actor* unk_35C;
+    /* 0x358 */ EnHorse* unk_358;
+    /* 0x35C */ EnHorse* unk_35C;
     /* 0x360 */ char unk_360[0xC0];
 
     /* 0x420 */ UNK_TYPE unk_420;
