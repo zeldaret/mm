@@ -19,5 +19,6 @@ minutes = round(minutes - 60 * hours)
 macro_val = int((hours * 60 + minutes) * (0x10000 / (24 * 60)))
 
 print(f"{hours},{minutes:02} -> 0x{macro_val:04X}")
+print(f"CLOCK_TIME({hours}, {minutes})")
 if time != macro_val:
     print("Warning: Result does not match as-is")

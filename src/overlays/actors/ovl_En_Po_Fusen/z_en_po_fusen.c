@@ -1,3 +1,9 @@
+/*
+ * File: z_en_po_fusen.c
+ * Overlay: ovl_En_Po_Fusen
+ * Description: Romani Ranch - Poe Balloon
+ */
+
 #include "z_en_po_fusen.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
@@ -58,15 +64,45 @@ static ColliderSphereInit sSphereInit = {
 };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x0),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
+    /* Light arrow    */ DMG_ENTRY(1, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(0, 0x0),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
 void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     f32 heightTemp;
 
-    this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.00700000021607;
+    this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.007f;
     this->actor.targetMode = 6;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
@@ -133,7 +169,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
 }
 
 u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
-    if ((u32)this->actionFunc == (u32)EnPoFusen_IdleFuse) {
+    if (this->actionFunc == EnPoFusen_IdleFuse) {
         return 0;
     }
 
@@ -191,13 +227,13 @@ void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = (shadowAlphaTmp > f255) ? (u8)f255 : (u8)shadowAlphaTmp;
 }
 
-void EnPoFusen_IncrementMalonPop(EnPoFusen* this) {
+void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
     Actor* parent = this->actor.parent;
     EnMa4* romani;
 
-    if ((parent != 0) && (parent->id == ACTOR_EN_MA4)) {
+    if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
         romani = (EnMa4*)parent;
-        romani->unk338++;
+        romani->poppedBalloonCounter++;
     }
 
     this->actor.draw = NULL;
@@ -222,7 +258,7 @@ void EnPoFusen_InitFuse(EnPoFusen* this) {
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx) {
     EnPoFusen_Idle(this, globalCtx);
     if (this->fuse-- == 0) {
-        EnPoFusen_IncrementMalonPop(this);
+        EnPoFusen_IncrementRomaniPop(this);
     }
 }
 
@@ -230,7 +266,7 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     this->actionFunc(this, globalCtx);
     if (EnPoFusen_CheckCollision(this, globalCtx) != 0) {
-        EnPoFusen_IncrementMalonPop(this);
+        EnPoFusen_IncrementRomaniPop(this);
     }
 }
 
@@ -246,10 +282,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     s16 xRot;
 
     if (limbIndex == 2) {
-        zScale = (Math_CosS(this->randScaleChange) * 0.0799999982119f) + 1.0f;
+        zScale = (Math_CosS(this->randScaleChange) * 0.08f) + 1.0f;
         xScale = zScale;
         if (!zScale) {}
-        yScale = (Math_SinS(this->randScaleChange) * 0.0799999982119f) + 1.0f;
+        yScale = (Math_SinS(this->randScaleChange) * 0.08f) + 1.0f;
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
