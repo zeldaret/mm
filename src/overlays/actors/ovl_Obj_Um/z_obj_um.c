@@ -1638,17 +1638,98 @@ void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
     func_80B78E2C(this, func_80B7A614);
 }
 
-/*
-Failed to decompile function func_80B7A860:
+void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
+    func_80B78E38(this, globalCtx);
+    func_80B78E88(this, globalCtx, 0);
+    this->unk_2F4 |= 4;
 
-Found jr instruction at ovl_Obj_Um_0x80B77770.asm line 3452, but the corresponding jump table is not provided.
+    if (globalCtx->csCtx.frames == 0x1C1) {
+        func_80B77FA4(this, globalCtx);
+    } else if (globalCtx->csCtx.frames >= 0x1C2) {
+        func_80B78DF0(this, globalCtx);
+    }
 
-Please include it in the input .s file(s), or in an additional file.
-It needs to be within ".section .rodata" or ".section .late_rodata".
+    if (globalCtx->csCtx.state == 0) {
+        ActorCutscene_Stop((s16) this->dyna.actor.cutscene);
+        func_80B78E2C(this, func_80B7A7AC);
+    }
 
-(You might need to pass --goto and --no-andor flags as well, to get correct control flow for non-jtbl switch jumps.)
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A860.asm")
+    switch (globalCtx->msgCtx.unk11F04) {
+        case 0x33BA:
+            this->unk_4CC = 2;
+            this->unk_4D4 = 3;
+            break;
+
+        case 0x33BB:
+            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+                this->unk_2F4 = this->unk_2F4 | 0x1000;
+                this->unk_4CC = 4;
+                this->unk_4D4 = 0;
+            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+                this->unk_4CC = 2;
+                this->unk_4D4 = 2;
+            } else {
+                this->unk_4CC = 5;
+                this->unk_4D4 = 0;
+            }
+
+            this->unk_2F4 |= 0x800;
+            break;
+
+        case 0x33BC:
+            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+                this->unk_2F4 |= 0x1000;
+                this->unk_4CC = 4;
+                this->unk_4D4 = 0;
+            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+                this->unk_4CC = 2;
+                this->unk_4D4 = 2;
+            } else {
+                this->unk_4CC = 5;
+                this->unk_4D4 = 0;
+            }
+            this->unk_2F4 |= 0x800;
+            break;
+
+        case 0x33BD:
+            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+                this->unk_2F4 |= 0x1000;
+                this->unk_4CC = 4;
+                this->unk_4D4 = 0;
+            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+                this->unk_4CC = 2;
+            } else {
+                this->unk_4CC = 5;
+            }
+            this->unk_4D4 = 0;
+            this->unk_4D8 = 0;
+            this->unk_2F4 |= 0x800;
+            break;
+
+        case 0x33BE:
+            this->unk_2F4 |= 0x800;
+            this->unk_4CC = 2;
+            this->unk_4D4 = 3;
+            break;
+
+        case 0x33BF:
+            this->unk_4D8++;
+            if (IS_ZERO(this->unk_160.transCurrentFrame) && this->unk_4D8 >= 6) {
+                this->unk_4CC = 0;
+                this->unk_4D4 = 0;
+            } else {
+                this->unk_4CC = 2;
+                this->unk_4D4 = 2;
+            }
+            this->unk_2F4 &= ~0x800;
+            break;
+
+        default:
+            this->unk_4CC = 0;
+            this->unk_4D4 = 0;
+            break;
+    }
+}
 
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);

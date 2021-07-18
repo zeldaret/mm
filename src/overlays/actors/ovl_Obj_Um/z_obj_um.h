@@ -67,7 +67,7 @@ typedef struct ObjUm {
     /* 0x4CC */ UNK_TYPE unk_4CC;
     /* 0x4D0 */ UNK_TYPE unk_4D0;
     /* 0x4D4 */ UNK_TYPE unk_4D4;
-    /* 0x4D8 */ char unk_4D8[0x4];
+    /* 0x4D8 */ UNK_TYPE unk_4D8;
     /* 0x4DC */ UNK_TYPE unk_4DC;
     /* 0x4E0 */ UNK_TYPE unk_4E0;
 } ObjUm; // size = 0x4E4
