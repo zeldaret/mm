@@ -1400,7 +1400,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
 
 void EnInvadepoh_SetTextID(EnInvadepoh* this, GlobalContext* globalCtx, u16 arg2) {
     this->textId = arg2;
-    func_801518B0(globalCtx, arg2 & 0xFFFF, &this->actor);
+    func_801518B0(globalCtx, arg2, &this->actor);
 }
 
 void func_80B45648(EnInvadepoh* this) {
