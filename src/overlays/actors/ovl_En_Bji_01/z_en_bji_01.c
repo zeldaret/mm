@@ -21,8 +21,9 @@ void func_809CDB04(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
 
 extern FlexSkeletonHeader D_0600578C;
 extern AnimationHeader D_06000FDC;
-
 extern ColliderCylinderInit D_809CDC50;
+extern Vec3f D_809CDCC8;
+
 extern struct_80B8E1A8 D_809CDC7C[4]; /*Type is unconfirmed, but likely this*/
 extern s16 D_809CDCBC[6]; /*Type is unconfirmed, but likely this*/
 extern void* D_809CDCD4[3];
@@ -207,7 +208,23 @@ s32 func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDB04.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDB04.asm")*/
+
+void func_809CDB04(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor* thisx) {
+	
+    EnBji01* this = THIS;
+
+    Vec3f sp20;
+    s32 temp_f4 = 0;
+
+    if (limbIndex == 0xF) {
+        Math_Vec3f_Copy((Vec3f *) &sp20, &D_809CDCC8);
+        sp20.x += temp_f4 * 0.1f;
+        sp20.y += temp_f4 * 0.1f;
+        sp20.z += temp_f4 * 0.1f;
+        SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus);
+    }
+}
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Draw.asm")*/
 
