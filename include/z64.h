@@ -496,20 +496,6 @@ typedef struct {
     /* 0x0 */ Vec3s pos;
 } BgVertex; // size = 0x6
 
-typedef struct {
-    /* 0x0 */ Vec3s minPos;
-    /* 0x6 */ UNK_TYPE1 xLength; // Created by retype action
-    /* 0x7 */ UNK_TYPE1 pad7[0x1];
-    /* 0x8 */ UNK_TYPE1 zLength; // Created by retype action
-    /* 0x9 */ UNK_TYPE1 pad9[0x3];
-    /* 0xC */ u32 properties;
-} BgWaterBox; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x4];
-    /* 0x4 */ BgWaterBox* boxes;
-} BgWaterboxList; // size = 0x8
-
 typedef union {
     F3DVertexColor color;
     F3DVertexNormal normal;

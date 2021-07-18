@@ -9,8 +9,8 @@ void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809495F8(EnClearTag* this, GlobalContext* globalCtx);
-void func_80949BD4(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx);
+void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
@@ -24,279 +24,282 @@ const ActorInit En_Clear_Tag_InitVars = {
     (ActorFunc)EnClearTag_Draw,
 };
 
-extern Gfx D_04030100[];
-extern Gfx D_040378F0[];
-extern Gfx D_04037DF0[];
-extern Gfx D_040382F0[];
-extern Gfx D_040387F0[];
-extern Gfx D_04038CF0[];
-extern Gfx D_040391F0[];
-extern Gfx D_040396F0[];
-extern Gfx D_04039BF0[];
-extern Gfx D_0403A0F0[];
+extern Gfx D_04030100[]; // Floor shockwave ring
+extern Gfx D_040378F0[]; // gExplosionSplashTex1
+extern Gfx D_04037DF0[]; // gExplosionSplashTex2
+extern Gfx D_040382F0[]; // gExplosionSplashTex3
+extern Gfx D_040387F0[]; // gExplosionSplashTex4
+extern Gfx D_04038CF0[]; // gExplosionSplashTex5
+extern Gfx D_040391F0[]; // gExplosionSplashTex6
+extern Gfx D_040396F0[]; // gExplosionSplashTex7
+extern Gfx D_04039BF0[]; // gExplosionSplashTex8
+extern Gfx D_0403A0F0[]; // gExplosionSplashDL
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-static Vec3f sEnvColor[] = {
+static Vec3f sLightRaysEnvColor[] = {
     { 255.0f, 255.0f, 0.0f },
     { 255.0f, 100.0f, 100.0f },
     { 100.0f, 255.0f, 100.0f },
     { 100.0f, 100.0f, 255.0f },
 };
 
-static Vec3f sPrimColor[] = {
+static Vec3f sLightRayPrimColor[] = {
     { 255.0f, 255.0f, 255.0f },
     { 255.0f, 255.0f, 255.0f },
     { 255.0f, 255.0f, 255.0f },
     { 255.0f, 255.0f, 255.0f },
 };
 
-static f32 sScaleZ1[] = {
+static f32 sOuterCloudScaleZ[] = {
     6.0f,
     12.0f,
     9.0f,
 };
 
-static f32 sScale1[] = {
+static f32 sBlackSmokeScale[] = {
     3.0f,
     6.0f,
 };
 
-static f32 sScaleZ2[] = {
+static f32 sFloorShockwaveScaleZ[] = {
     15.0f,
     30.0f,
     20.0f,
 };
 
-static f32 sScale2[] = {
+static f32 sDebrisScale[] = {
     0.03f,
     0.06f,
     0.04f,
 };
 
-static f32 sScale3[] = {
+static f32 sLightRayScale[] = {
     1000.0f, 2000.0f, 1500.0f, 800.0f, 1300.0f,
 };
 
-// sScaleZ3_Target
-static f32 sScaleZ3[] = {
+static f32 sLightRayScaleZTarget[] = {
     15.0f, 30.0f, 20.0f, 10.0f, 20.0f,
 };
 
-static f32 sScale4[] = {
+static f32 sLightRayScaleZ[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static Gfx* D_8094AE34[] = {
+static Gfx* sExplosionSplash[] = {
     D_040378F0, D_04037DF0, D_040382F0, D_040387F0, D_04038CF0, D_040391F0, D_040396F0, D_04039BF0, NULL, NULL, NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
 
-void func_80947F60(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 rotZ) {
+void EnClearTag_AddDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 rotZ) {
     f32 rotX;
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+    EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_00 = 1;
-            unkEffect->pos = *pos;
-            unkEffect->vel = *vel;
-            unkEffect->accel = *accel;
-            unkEffect->scale = scale;
-            unkEffect->rotY = Rand_ZeroFloat(2 * M_PI);
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->type = ENCLEARTAG_EXPLOSION_DEBRIS;
+            effect->pos = *pos;
+            effect->vel = *vel;
+            effect->accel = *accel;
+            effect->scale = scale;
+            effect->rotY = Rand_ZeroFloat(2 * M_PI);
             rotX = Rand_ZeroFloat(2 * M_PI);
-            unkEffect->unk_48 = 0;
-            unkEffect->rotX = rotX;
-            unkEffect->unk_4A = unkEffect->unk_48;
-            unkEffect->rotZ = rotZ;
-            unkEffect->unk_01 = Rand_ZeroFloat(10.0f);
+            effect->isDebreeActive = 0;
+            effect->rotX = rotX;
+            effect->effectsTimer = effect->isDebreeActive;
+            effect->rotZ = rotZ;
+            effect->actionTimer = Rand_ZeroFloat(10.0f);
             break;
         }
     }
 }
 
-void func_809480C8(EnClearTag* this, Vec3f* pos, f32 scale) {
+void EnClearTag_AddExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+    EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_01 = Rand_ZeroFloat(100.0f);
-            unkEffect->unk_00 = 3;
-            unkEffect->pos = *pos;
-            unkEffect->vel = sZeroVec;
-            unkEffect->accel = sZeroVec;
-            unkEffect->scale = scale;
-            unkEffect->scaleZ = 2.0f * scale;
-            unkEffect->scaleX = 1.0f;
-            unkEffect->scaleY = 1.0f;
-            unkEffect->primColorAlpha = 255.0f;
-            unkEffect->envColorR = 255.0f;
-            unkEffect->envColorB = 255.0f;
-            unkEffect->primColorR = 200.0f;
-            unkEffect->primColorG = 20.0f;
-            unkEffect->primColorB = 0.0f;
-            unkEffect->envColorG = 215.0f;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->actionTimer = Rand_ZeroFloat(100.0f);
+            effect->type = ENCLEARTAG_EXPLOSION_BLACK_SMOKE;
+            effect->pos = *pos;
+            effect->vel = sZeroVec;
+            effect->accel = sZeroVec;
+            effect->scale = scale;
+            effect->scaleZ = 2.0f * scale;
+            effect->scaleX = 1.0f;
+            effect->scaleY = 1.0f;
+            effect->primColorAlpha = 255.0f;
+            effect->envColorR = 255.0f;
+            effect->envColorB = 255.0f;
+            effect->primColorR = 200.0f;
+            effect->primColorG = 20.0f;
+            effect->primColorB = 0.0f;
+            effect->envColorG = 215.0f;
             break;
         }
     }
 }
 
-void func_80948264(EnClearTag* this, Vec3f* pos, f32 scale) {
+void EnClearTag_AddExplosionBlackSmokeInvadepohEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+    EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_01 = Rand_ZeroFloat(100.0f);
-            unkEffect->unk_00 = 8;
-            unkEffect->pos = *pos;
-            unkEffect->vel = sZeroVec;
-            unkEffect->accel = sZeroVec;
-            unkEffect->scale = scale;
-            unkEffect->scaleZ = 2.0f * scale;
-            unkEffect->scaleX = 1.0f;
-            unkEffect->scaleY = 1.0f;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->actionTimer = Rand_ZeroFloat(100.0f);
+            effect->type = ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH;
+            effect->pos = *pos;
+            effect->vel = sZeroVec;
+            effect->accel = sZeroVec;
+            effect->scale = scale;
+            effect->scaleZ = 2.0f * scale;
+            effect->scaleX = 1.0f;
+            effect->scaleY = 1.0f;
 
             if (scale <= 1.1f) {
-                unkEffect->scale = ((KREG(23) * 0.1f) + 1.0f) * scale;
-                unkEffect->primColorAlpha = KREG(16) + 150.0f;
-                unkEffect->primColorR = KREG(17);
-                unkEffect->primColorG = KREG(18);
-                unkEffect->primColorB = KREG(19);
-                unkEffect->envColorR = KREG(20);
-                unkEffect->envColorG = KREG(21);
-                unkEffect->envColorB = KREG(22);
+                effect->scale = ((KREG(23) * 0.1f) + 1.0f) * scale;
+                effect->primColorAlpha = KREG(16) + 150.0f;
+                effect->primColorR = KREG(17);
+                effect->primColorG = KREG(18);
+                effect->primColorB = KREG(19);
+                effect->envColorR = KREG(20);
+                effect->envColorG = KREG(21);
+                effect->envColorB = KREG(22);
             } else {
-                unkEffect->envColorB = 0.0f;
-                unkEffect->envColorG = 0.0f;
-                unkEffect->envColorR = 0.0f;
-                unkEffect->primColorB = 0.0f;
-                unkEffect->primColorG = 0.0f;
-                unkEffect->primColorR = 0.0f;
-                unkEffect->primColorAlpha = 255.0f;
+                effect->envColorB = 0.0f;
+                effect->envColorG = 0.0f;
+                effect->envColorR = 0.0f;
+                effect->primColorB = 0.0f;
+                effect->primColorG = 0.0f;
+                effect->primColorR = 0.0f;
+                effect->primColorAlpha = 255.0f;
             }
             break;
         }
     }
 }
 
-void func_809484EC(EnClearTag* this, Vec3f* pos, f32 scaleZ, f32 rotZ) {
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+// TODO: rotZ but floorHeight?
+void EnClearTag_AddExplosionOuterCloudEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ, f32 floorHeight) {
+    EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_00 = 4;
-            unkEffect->pos = *pos;
-            unkEffect->vel = sZeroVec;
-            unkEffect->accel = sZeroVec;
-            unkEffect->scale = 0.0f;
-            unkEffect->scaleZ = scaleZ * 3.0f;
-            unkEffect->rotZ = rotZ;
-            unkEffect->primColorAlpha = 255.0f;
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->type = ENCLEARTAG_EXPLOSION_OUTER_CLOUD;
+            effect->pos = *pos;
+            effect->vel = sZeroVec;
+            effect->accel = sZeroVec;
+            effect->scale = 0.0f;
+            effect->scaleZ = scaleZ * 3.0f;
+            // rotZ is unused for ENCLEARTAG_EXPLOSION_OUTER_CLOUD
+            effect->rotZ = floorHeight;
+            effect->primColorAlpha = 255.0f;
             break;
         }
     }
 }
 
-void func_809485A8(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 scaleZTarget, s16 arg6) {
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+void EnClearTag_AddLightRayFromExplosionEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale,
+                                               f32 scaleZTarget, s16 alphaDecrementSpeed) {
+    EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_00 = 5;
-            unkEffect->pos = *pos;
-            unkEffect->vel = *vel;
-            unkEffect->accel = *accel;
-            unkEffect->scale = scale / 1000.0f;
-            unkEffect->scaleZ = 1.0f;
-            unkEffect->scaleZTarget = scaleZTarget;
-            unkEffect->unk_4C = Rand_ZeroFloat(100.0f) + 200.0f;
-            unkEffect->unk_4E = arg6;
-            unkEffect->unk_01 = Rand_ZeroFloat(10.0f);
-            unkEffect->rotY = Math_Acot2F(unkEffect->vel.z, unkEffect->vel.x);
-            unkEffect->rotX = -Math_Acot2F(sqrtf(SQXZ(unkEffect->vel)), unkEffect->vel.y);
-            unkEffect->envColorR = 255.0f;
-            unkEffect->envColorG = 255.0f;
-            unkEffect->primColorR = 255.0f;
-            unkEffect->primColorG = 255.0f;
-            unkEffect->primColorB = 255.0f;
-            unkEffect->envColorB = 0.0f;
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->type = ENCLEARTAG_LIGHT_RAY;
+            effect->pos = *pos;
+            effect->vel = *vel;
+            effect->accel = *accel;
+            effect->scale = scale / 1000.0f;
+            effect->scaleZ = 1.0f;
+            effect->scaleZTarget = scaleZTarget;
+            effect->lightRayAlpha = Rand_ZeroFloat(100.0f) + 200.0f;
+            effect->lightRayAlphaDecrementSpeed = alphaDecrementSpeed;
+            effect->actionTimer = Rand_ZeroFloat(10.0f);
+            effect->rotY = Math_Acot2F(effect->vel.z, effect->vel.x);
+            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->vel)), effect->vel.y);
+            effect->envColorR = 255.0f;
+            effect->envColorG = 255.0f;
+            effect->primColorR = 255.0f;
+            effect->primColorG = 255.0f;
+            effect->primColorB = 255.0f;
+            effect->envColorB = 0.0f;
             break;
         }
     dummy:;
     }
 }
 
-void func_80948788(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 scaleZTarget, s16 arg6, s16 arg7) {
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+void EnClearTag_AddLightRayFromLightArrowsEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale,
+                                                 f32 scaleZTarget, s16 colorIndex, s16 alphaDecrementSpeed) {
+    EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_00 = 5;
-            unkEffect->pos = *pos;
-            unkEffect->vel = *vel;
-            unkEffect->accel = *accel;
-            unkEffect->scale = scale / 1000.0f;
-            unkEffect->scaleZ = 1.0f;
-            unkEffect->scaleZTarget = scaleZTarget;
-            unkEffect->unk_4C = Rand_ZeroFloat(100.0f) + 200.0f;
-            unkEffect->unk_4E = arg7;
-            unkEffect->unk_01 = Rand_ZeroFloat(10.0f);
-            unkEffect->rotY = Math_Acot2F(unkEffect->vel.z, unkEffect->vel.x);
-            unkEffect->rotX = -Math_Acot2F(sqrtf(SQXZ(unkEffect->vel)), unkEffect->vel.y);
-            unkEffect->envColorR = sEnvColor[arg6].x;
-            unkEffect->envColorG = sEnvColor[arg6].y;
-            unkEffect->envColorB = sEnvColor[arg6].z;
-            unkEffect->primColorR = sPrimColor[arg6].x;
-            unkEffect->primColorG = sPrimColor[arg6].y;
-            unkEffect->primColorB = sPrimColor[arg6].z;
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->type = ENCLEARTAG_LIGHT_RAY;
+            effect->pos = *pos;
+            effect->vel = *vel;
+            effect->accel = *accel;
+            effect->scale = scale / 1000.0f;
+            effect->scaleZ = 1.0f;
+            effect->scaleZTarget = scaleZTarget;
+            effect->lightRayAlpha = Rand_ZeroFloat(100.0f) + 200.0f;
+            effect->lightRayAlphaDecrementSpeed = alphaDecrementSpeed;
+            effect->actionTimer = Rand_ZeroFloat(10.0f);
+            effect->rotY = Math_Acot2F(effect->vel.z, effect->vel.x);
+            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->vel)), effect->vel.y);
+            effect->envColorR = sLightRaysEnvColor[colorIndex].x;
+            effect->envColorG = sLightRaysEnvColor[colorIndex].y;
+            effect->envColorB = sLightRaysEnvColor[colorIndex].z;
+            effect->primColorR = sLightRayPrimColor[colorIndex].x;
+            effect->primColorG = sLightRayPrimColor[colorIndex].y;
+            effect->primColorB = sLightRayPrimColor[colorIndex].z;
             break;
         }
     }
 }
 
-void func_8094899C(EnClearTag* this, Vec3f* pos, f32 scaleZ, s16 arg3) {
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+void EnClearTag_AddFloorShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ, s16 actionTimer) {
+    EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
-            unkEffect->unk_00 = 6;
-            unkEffect->pos = *pos;
-            unkEffect->vel = sZeroVec;
-            unkEffect->accel = sZeroVec;
-            unkEffect->scaleZ = scaleZ;
-            unkEffect->unk_01 = arg3;
-            unkEffect->scale = 0.0f;
-            unkEffect->primColorAlpha = 200.0f;
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
+            effect->type = ENCLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE;
+            effect->pos = *pos;
+            effect->vel = sZeroVec;
+            effect->accel = sZeroVec;
+            effect->scaleZ = scaleZ;
+            effect->actionTimer = actionTimer;
+            effect->scale = 0.0f;
+            effect->primColorAlpha = 200.0f;
             break;
         }
     }
 }
 
-void func_80948A54(EnClearTag* this, Vec3f* pos, s16 arg2) {
+void EnClearTag_AddExplosionSplashEffect(EnClearTag* this, Vec3f* pos, s16 effectsTimer) {
     s16 i;
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+    EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 102; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 0) {
+    for (i = 0; i < 102; i++, effect++) {
+        if (effect->type == ENCLEARTAG_NO_EFFECT) {
             // Immediately overwritten and generates a lot of wasted asm (f32 to u8)
-            unkEffect->unk_01 = Rand_ZeroFloat(100.0f);
-            unkEffect->unk_00 = 7;
-            unkEffect->pos = *pos;
-            unkEffect->vel = sZeroVec;
-            unkEffect->accel = sZeroVec;
-            unkEffect->scale = 0.0f;
-            unkEffect->scaleZ = 0.0f;
-            unkEffect->unk_01 = 0;
-            unkEffect->unk_4A = arg2;
-            unkEffect->rotX = 0.78f;
+            effect->actionTimer = Rand_ZeroFloat(100.0f);
+            effect->type = ENCLEARTAG_EXPLOSION_SPLASH;
+            effect->pos = *pos;
+            effect->vel = sZeroVec;
+            effect->accel = sZeroVec;
+            effect->scale = 0.0f;
+            effect->scaleZ = 0.0f;
+            effect->actionTimer = 0;
+            effect->effectsTimer = effectsTimer;
+            effect->rotX = 0.78f;
             break;
         }
     }
@@ -306,105 +309,105 @@ void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s32 pad[2];
+    s32 pad[3];
     EnClearTag* this = THIS;
-    f32 temp_f20_2;
-    f32 temp_f20_4;
+    f32 lightRayScaleZ;
     u8 i;
-    Vec3f spA4;
-    Vec3f sp98;
-    Vec3f sp8C;
+    Vec3f pos;
+    Vec3f vel;
+    Vec3f accel;
 
     this->actor.flags &= -2;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
-        Math_Vec3f_Copy(&spA4, &this->actor.world.pos);
+        Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         if (thisx->params == 200) {
-            func_80948264(this, &spA4, this->actor.world.rot.z);
+            EnClearTag_AddExplosionBlackSmokeInvadepohEffect(this, &pos, this->actor.world.rot.z);
             return;
         }
-            
+
         if (thisx->params != 35) {
-            if (thisx->params == 3 || thisx->params == 4) { 
+            if (thisx->params == 3 || thisx->params == 4) {
                 for (i = 0; i < 54; i++) {
-                    temp_f20_4 = sScale4[thisx->params] + Rand_ZeroFloat(sScale4[thisx->params]);
+                    lightRayScaleZ = sLightRayScaleZ[thisx->params] + Rand_ZeroFloat(sLightRayScaleZ[thisx->params]);
                     SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
                     SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    SysMatrix_GetStateTranslationAndScaledZ(temp_f20_4, &sp98);
-                    sp8C.x = sp98.x * -0.03f;
-                    sp8C.y = sp98.y * -0.03f;
-                    sp8C.z = sp98.z * -0.03f;
-                    func_80948788(
-                        this, &spA4, &sp98, &sp8C,
-                        sScale3[thisx->params] + Rand_ZeroFloat(sScale3[thisx->params] * 0.5f),
-                        sScaleZ3[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
+                    SysMatrix_GetStateTranslationAndScaledZ(lightRayScaleZ, &vel);
+                    accel.x = vel.x * -0.03f;
+                    accel.y = vel.y * -0.03f;
+                    accel.z = vel.z * -0.03f;
+                    EnClearTag_AddLightRayFromLightArrowsEffect(
+                        this, &pos, &vel, &accel,
+                        sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
+                        sLightRayScaleZTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
                 return;
             } else {
                 if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) &&
-                    (this->actor.world.rot.z == 0))) {
+                      (this->actor.world.rot.z == 0))) {
                     this->envColor.r = this->actor.world.rot.x;
                     this->envColor.g = this->actor.world.rot.y;
                     this->envColor.b = this->actor.world.rot.z;
                 } else {
-                    this->envColor.r = 0xFF;
+                    this->envColor.r = 255;
                     this->envColor.g = 0;
                 }
 
                 Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 30.0f, 100.0f, 4);
-                spA4 = this->actor.world.pos;
-                func_809484EC(this, &spA4, sScaleZ1[thisx->params], this->actor.floorHeight);
-                if ((this->actor.bgCheckFlags & 0x20) == 0) {
-                    if (thisx->params < 0xA) {
-                        spA4.y = this->actor.world.pos.y - 40.0f;
+                pos = this->actor.world.pos;
+                EnClearTag_AddExplosionOuterCloudEffect(this, &pos, sOuterCloudScaleZ[thisx->params],
+                                                        this->actor.floorHeight);
+                if (!(this->actor.bgCheckFlags & 0x20)) {
+                    if (thisx->params < 10) {
+                        pos.y = this->actor.world.pos.y - 40.0f;
                         if (thisx->params != 2) {
-                            func_809480C8(this, &spA4, sScale1[thisx->params]);
+                            EnClearTag_AddExplosionBlackSmokeEffect(this, &pos, sBlackSmokeScale[thisx->params]);
                         }
-                        spA4.y = this->actor.floorHeight + 3.0f;
-                        func_8094899C(this, &spA4, sScaleZ2[thisx->params], 0);
-                        func_8094899C(this, &spA4, sScaleZ2[thisx->params], 3);
+                        pos.y = this->actor.floorHeight + 3.0f;
+                        EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 0);
+                        EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 3);
                         if (thisx->params == 1) {
-                            func_8094899C(this, &spA4, sScaleZ2[thisx->params], 6);
+                            EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 6);
                         }
                     }
 
                     if (thisx->params != 2) {
-                        spA4.y = this->actor.world.pos.y;
+                        pos.y = this->actor.world.pos.y;
                         for (i = 0; i < 18; i++) {
-                            sp98.x = __sinf(i * 0.825f) * i * .5f;
-                            sp98.z = __cosf(i * 0.825f) * i * .5f;
-                            sp98.y = Rand_ZeroFloat(8.0f) + 7.0f;
-                            sp98.x += randPlusMinusPoint5Scaled(0.5f);
-                            sp98.z += randPlusMinusPoint5Scaled(0.5f);
-                            sp8C.x = 0.0f;
-                            sp8C.y = -1.0f;
-                            sp8C.z = 0.0f;
-                            func_80947F60(this, &spA4, &sp98, &sp8C,
-                                        sScale2[thisx->params] + Rand_ZeroFloat(sScale2[thisx->params]),
-                                        this->actor.floorHeight);
+                            vel.x = __sinf(i * 0.825f) * i * .5f;
+                            vel.z = __cosf(i * 0.825f) * i * .5f;
+                            vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
+                            vel.x += randPlusMinusPoint5Scaled(0.5f);
+                            vel.z += randPlusMinusPoint5Scaled(0.5f);
+                            accel.x = 0.0f;
+                            accel.y = -1.0f;
+                            accel.z = 0.0f;
+                            EnClearTag_AddDebrisEffect(this, &pos, &vel, &accel,
+                                                       sDebrisScale[thisx->params] +
+                                                           Rand_ZeroFloat(sDebrisScale[thisx->params]),
+                                                       this->actor.floorHeight);
                         }
                     }
                 }
-                spA4 = this->actor.world.pos;
 
+                pos = this->actor.world.pos;
                 for (i = 0; i < 44; i++) {
-                    temp_f20_2 = sScale4[thisx->params] + Rand_ZeroFloat(sScale4[thisx->params]);
+                    lightRayScaleZ = sLightRayScaleZ[thisx->params] + Rand_ZeroFloat(sLightRayScaleZ[thisx->params]);
                     SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
                     SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    SysMatrix_GetStateTranslationAndScaledZ(temp_f20_2, &sp98);
-                    sp8C.x = sp98.x * -0.03f;
-                    sp8C.y = sp98.y * -0.03f;
-                    sp8C.z = sp98.z * -0.03f;
-                    func_809485A8(this, &spA4, &sp98, &sp8C,
-                                sScale3[thisx->params] + Rand_ZeroFloat(sScale3[thisx->params] * 0.5f),
-                                sScaleZ3[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
+                    SysMatrix_GetStateTranslationAndScaledZ(lightRayScaleZ, &vel);
+                    accel.x = vel.x * -0.03f;
+                    accel.y = vel.y * -0.03f;
+                    accel.z = vel.z * -0.03f;
+                    EnClearTag_AddLightRayFromExplosionEffect(
+                        this, &pos, &vel, &accel,
+                        sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
+                        sLightRayScaleZTarget[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
                 }
-
             }
         }
-
-        func_80948A54(this, &spA4, 0);
-        func_80948A54(this, &spA4, 2);
+        EnClearTag_AddExplosionSplashEffect(this, &pos, 0);
+        EnClearTag_AddExplosionSplashEffect(this, &pos, 2);
     }
 }
 
@@ -413,27 +416,24 @@ void func_80949288(EnClearTag* this, GlobalContext* globalCtx) {
     Camera* camera;
     s32 pad;
 
-    switch(this->unk_2E54) {
+    switch (this->cameraState) {
         case 0:
-            if(((player->actor.world.pos.z > 0.0f) &&
-                (player->actor.world.pos.z > 290.0f) &&
-                (fabsf(player->actor.world.pos.x) < 60.0f)) ||
-                ((player->actor.world.pos.z < 0.0f) &&
-                (player->actor.world.pos.z < -950.0f) &&
-                (fabsf(player->actor.world.pos.x) < 103.0f))) {
+            if (((player->actor.world.pos.z > 0.0f) && (player->actor.world.pos.z > 290.0f) &&
+                 (fabsf(player->actor.world.pos.x) < 60.0f)) ||
+                ((player->actor.world.pos.z < 0.0f) && (player->actor.world.pos.z < -950.0f) &&
+                 (fabsf(player->actor.world.pos.x) < 103.0f))) {
 
                 if (player->actor.world.pos.z > 0.0f) {
                     player->actor.world.pos.z = 290.0f;
                 } else {
                     player->actor.world.pos.z = -950.0f;
                 }
+
                 player->actor.speedXZ = 0.0f;
                 if (this->activeTimer == 0) {
-                    this->unk_2E54 = 1;
+                    this->cameraState = 1;
                 }
             }
-
-            
             break;
         case 1:
             func_800EA0D4(globalCtx, &globalCtx->csCtx);
@@ -449,7 +449,7 @@ void func_80949288(EnClearTag* this, GlobalContext* globalCtx) {
             this->at.y = camera->focalPoint.y;
             this->at.z = camera->focalPoint.z;
             func_801518B0(globalCtx, 0xF, NULL);
-            this->unk_2E54 = 2;
+            this->cameraState = 2;
             func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
@@ -467,7 +467,7 @@ void func_80949288(EnClearTag* this, GlobalContext* globalCtx) {
                 func_80169AFC(globalCtx, this->camID, 0);
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, this, 6);
-                this->unk_2E54 = 0;
+                this->cameraState = 0;
                 this->camID = 0;
                 this->activeTimer = 20;
             }
@@ -490,7 +490,7 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (this->activeTimer != 0) {
-        func_809495F8(this, globalCtx);
+        EnClearTag_UpdateEffects(this, globalCtx);
         return;
     }
 
@@ -498,309 +498,313 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_80949BD4(thisx, globalCtx);
+    EnClearTag_DrawEffects(thisx, globalCtx);
 }
 
-void func_809495F8(EnClearTag* this, GlobalContext* globalCtx) {
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
+void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
+    EnClearTagEffects* effect = this->effects;
     s32 pad;
-    f32 sp6C;
-    Vec3f sp60;
+    f32 prevPosY;
+    Vec3f pos;
     s16 i;
 
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 != 0) {
-            unkEffect->unk_01++;
-            unkEffect->pos.x += unkEffect->vel.x;
-            sp6C = unkEffect->pos.y;
-            unkEffect->pos.y += unkEffect->vel.y;
-            unkEffect->pos.z += unkEffect->vel.z;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type != ENCLEARTAG_NO_EFFECT) {
+            effect->actionTimer++;
+            effect->pos.x += effect->vel.x;
+            prevPosY = effect->pos.y;
+            effect->pos.y += effect->vel.y;
+            effect->pos.z += effect->vel.z;
 
-            unkEffect->vel.x += unkEffect->accel.x;
-            unkEffect->vel.y += unkEffect->accel.y;
-            unkEffect->vel.z += unkEffect->accel.z;
-            if (unkEffect->unk_00 == 1) {
-                if (unkEffect->vel.y < -5.0f) {
-                    unkEffect->vel.y = -5.0f;
+            effect->vel.x += effect->accel.x;
+            effect->vel.y += effect->accel.y;
+            effect->vel.z += effect->accel.z;
+            if (effect->type == ENCLEARTAG_EXPLOSION_DEBRIS) {
+                if (effect->vel.y < -5.0f) {
+                    effect->vel.y = -5.0f;
                 }
 
-                if (unkEffect->vel.y < 0.0f) {
-                    sp60 = unkEffect->pos;
-                    sp60.y += 5.0f;
-                    if (func_800C5A20(&globalCtx->colCtx, &sp60, 11.0f) != 0) {
-                        unkEffect->pos.y = sp6C;
-                        if (unkEffect->unk_48 <= 0) {
-                            unkEffect->unk_48++;
-                            unkEffect->vel.y *= -0.5f;
-                            unkEffect->unk_4A = Rand_ZeroFloat(20.0f) + 25.0f;
+                if (effect->vel.y < 0.0f) {
+                    pos = effect->pos;
+                    pos.y += 5.0f;
+                    if (func_800C5A20(&globalCtx->colCtx, &pos, 11.0f) != 0) {
+                        effect->pos.y = prevPosY;
+                        if (effect->isDebreeActive <= 0) {
+                            effect->isDebreeActive++;
+                            effect->vel.y *= -0.5f;
+                            effect->effectsTimer = Rand_ZeroFloat(20.0f) + 25.0f;
                         } else {
-                            unkEffect->vel.y = 0.0f;
-                            unkEffect->accel.y = 0.0f;
-                            unkEffect->vel.z = 0.0f;
-                            unkEffect->vel.x = 0.0f;
+                            effect->vel.y = 0.0f;
+                            effect->accel.y = 0.0f;
+                            effect->vel.z = 0.0f;
+                            effect->vel.x = 0.0f;
                         }
                     }
                 }
 
-                if (unkEffect->accel.y != 0.0f) {
-                    unkEffect->rotY += 0.5f;
-                    unkEffect->rotX += 0.35f;
+                if (effect->accel.y != 0.0f) {
+                    effect->rotY += 0.5f;
+                    effect->rotX += 0.35f;
                 }
 
-                if (unkEffect->unk_4A == 1) {
-                    unkEffect->unk_00 = 0;
+                if (effect->effectsTimer == 1) {
+                    effect->type = ENCLEARTAG_NO_EFFECT;
                 }
-            } else if (unkEffect->unk_00 == 2) {
-                Math_ApproachZeroF(&unkEffect->primColorAlpha, 1.0f, 15.0f);
-                if (unkEffect->primColorAlpha <= 0.0f) {
-                    unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED) {
+                // effect->type never set to 2
+                Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
+                if (effect->primColorAlpha <= 0.0f) {
+                    effect->type = ENCLEARTAG_NO_EFFECT;
                 }
-            } else if (unkEffect->unk_00 == 6) {
-                if (unkEffect->unk_01 >= 4) {
-                    Math_ApproachF(&unkEffect->scale, unkEffect->scaleZ, 0.2f, unkEffect->scaleZ * 0.6666666f);
-                    Math_ApproachZeroF(&unkEffect->primColorAlpha, 1.0f, 15.0f);
-                    if (unkEffect->primColorAlpha <= 0.0f) {
-                        unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE) {
+                if (effect->actionTimer > 3) {
+                    Math_ApproachF(&effect->scale, effect->scaleZ, 0.2f, effect->scaleZ * 0.6666666f);
+                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
+                    if (effect->primColorAlpha <= 0.0f) {
+                        effect->type = ENCLEARTAG_NO_EFFECT;
                     }
                 }
-            } else if (unkEffect->unk_00 == 3) {
-                Math_ApproachZeroF(&unkEffect->primColorR, 1.0f, 20.0f);
-                Math_ApproachZeroF(&unkEffect->primColorG, 1.0f, 2.0f);
-                Math_ApproachZeroF(&unkEffect->envColorR, 1.0f, 25.5f);
-                Math_ApproachZeroF(&unkEffect->envColorG, 1.0f, 21.5f);
-                Math_ApproachZeroF(&unkEffect->envColorB, 1.0f, 25.5f);
-                Math_ApproachF(&unkEffect->scale, unkEffect->scaleZ, 0.05f, 0.1f);
-                if (unkEffect->primColorR == 0.0f) {
-                    Math_ApproachF(&unkEffect->scaleX, 3.0f, 0.1f, 0.01f);
-                    Math_ApproachF(&unkEffect->scaleY, 3.0f, 0.1f, 0.02f);
-                    Math_ApproachZeroF(&unkEffect->primColorAlpha, 1.0f, 5.f);
-                    if (unkEffect->primColorAlpha <= 0.0f) {
-                        unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE) {
+                Math_ApproachZeroF(&effect->primColorR, 1.0f, 20.0f);
+                Math_ApproachZeroF(&effect->primColorG, 1.0f, 2.0f);
+                Math_ApproachZeroF(&effect->envColorR, 1.0f, 25.5f);
+                Math_ApproachZeroF(&effect->envColorG, 1.0f, 21.5f);
+                Math_ApproachZeroF(&effect->envColorB, 1.0f, 25.5f);
+                Math_ApproachF(&effect->scale, effect->scaleZ, 0.05f, 0.1f);
+                if (effect->primColorR == 0.0f) {
+                    Math_ApproachF(&effect->scaleX, 3.0f, 0.1f, 0.01f);
+                    Math_ApproachF(&effect->scaleY, 3.0f, 0.1f, 0.02f);
+                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 5.f);
+                    if (effect->primColorAlpha <= 0.0f) {
+                        effect->type = ENCLEARTAG_NO_EFFECT;
                     }
                 }
-            } else if (unkEffect->unk_00 == 8) {
-                Math_ApproachF(&unkEffect->scale, unkEffect->scaleZ, 0.05f, 0.1f);
-                if (unkEffect->unk_01 >= 0xB) {
-                    Math_ApproachF(&unkEffect->scaleX, 3.0f, 0.1f, 0.01f);
-                    Math_ApproachF(&unkEffect->scaleY, 3.0f, 0.1f, 0.02f);
-                    Math_ApproachZeroF(&unkEffect->primColorAlpha, 1.0f, 5.f);
-                    if (unkEffect->primColorAlpha <= 0.0f) {
-                        unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH) {
+                Math_ApproachF(&effect->scale, effect->scaleZ, 0.05f, 0.1f);
+                if (effect->actionTimer > 10) {
+                    Math_ApproachF(&effect->scaleX, 3.0f, 0.1f, 0.01f);
+                    Math_ApproachF(&effect->scaleY, 3.0f, 0.1f, 0.02f);
+                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 5.f);
+                    if (effect->primColorAlpha <= 0.0f) {
+                        effect->type = ENCLEARTAG_NO_EFFECT;
                     }
                 }
-            } else if (unkEffect->unk_00 == 4) {
-                Math_ApproachF(&unkEffect->scale, unkEffect->scaleZ, 0.5f, 6.0f);
-                Math_ApproachZeroF(&unkEffect->primColorAlpha, 1.0f, 15.0f);
-                if (unkEffect->primColorAlpha <= 0.0f) {
-                    unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
+                Math_ApproachF(&effect->scale, effect->scaleZ, 0.5f, 6.0f);
+                Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
+                if (effect->primColorAlpha <= 0.0f) {
+                    effect->type = ENCLEARTAG_NO_EFFECT;
                 }
-            } else if (unkEffect->unk_00 == 5) {
-                unkEffect->rotZ += Rand_ZeroFloat(M_PI / 2) + (M_PI / 2);
-                unkEffect->unk_4C -= unkEffect->unk_4E;
-                if (unkEffect->unk_4C <= 0) {
-                    unkEffect->unk_4C = 0;
-                    unkEffect->unk_00 = 0;
+            } else if (effect->type == ENCLEARTAG_LIGHT_RAY) {
+                effect->rotZ += Rand_ZeroFloat(M_PI / 2) + (M_PI / 2);
+                effect->lightRayAlpha -= effect->lightRayAlphaDecrementSpeed;
+                if (effect->lightRayAlpha <= 0) {
+                    effect->lightRayAlpha = 0;
+                    effect->type = ENCLEARTAG_NO_EFFECT;
                 }
-                unkEffect->primColorAlpha = unkEffect->unk_4C;
-                if (unkEffect->primColorAlpha > 255.0f) {
-                    unkEffect->primColorAlpha = 255.0f;
+                effect->primColorAlpha = effect->lightRayAlpha;
+                if (effect->primColorAlpha > 255.0f) {
+                    effect->primColorAlpha = 255.0f;
                 }
-                Math_ApproachF(&unkEffect->scaleZ, unkEffect->scaleZTarget, 1.0f, (unkEffect->scaleZTarget / 15.0f) * 4.0f);
-            } else if (unkEffect->unk_00 == 7) {
-                if (unkEffect->unk_4A == 0) {
-                    unkEffect->scale = 7.0f;
-                    Math_ApproachF(&unkEffect->scaleZ, 500.0f, 1.0f, 50.0f);
-                    Math_ApproachF(&unkEffect->rotX, 1.5f, 1.0f, 0.12f);
-                    if (unkEffect->unk_01 >= 8) {
-                        unkEffect->unk_00 = 0;
+                Math_ApproachF(&effect->scaleZ, effect->scaleZTarget, 1.0f, (effect->scaleZTarget / 15.0f) * 4.0f);
+            } else if (effect->type == ENCLEARTAG_EXPLOSION_SPLASH) {
+                if (effect->effectsTimer == 0) {
+                    effect->scale = 7.0f;
+                    Math_ApproachF(&effect->scaleZ, 500.0f, 1.0f, 50.0f);
+                    Math_ApproachF(&effect->rotX, 1.5f, 1.0f, 0.12f);
+                    if (effect->actionTimer > 7) {
+                        effect->type = ENCLEARTAG_NO_EFFECT;
                     }
                 } else {
-                    unkEffect->unk_01 = 0;
+                    effect->actionTimer = 0;
                 }
             }
-            if (unkEffect->unk_4A != 0) {
-                unkEffect->unk_4A--;
+            if (effect->effectsTimer != 0) {
+                effect->effectsTimer--;
             }
         }
     }
 }
 
-void func_80949BD4(Actor* thisx, GlobalContext* globalCtx) {
-    u8 sp1B7 = 0;
+void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
+    u8 isFirst = 0;
     s16 i;
     s16 j;
-    Vec3f sp1A4;
-    UNK_PTR sp1A0;
-    f32 posY;
+    Vec3f vec;
+    WaterBox* waterBox;
+    f32 ySurface;
     MtxF mtxF;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     EnClearTag* this = THIS;
-    EnClearTagUnkEffect* unkEffect = this->unkEffect;
-    EnClearTagUnkEffect* unkEffectRef = this->unkEffect;
+    EnClearTagEffects* effect = this->effects;
+    EnClearTagEffects* effectRef = this->effects;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 1) {
-            if (sp1B7 == 0) {
-                sp1B7++;
-                gSPDisplayList(POLY_OPA_DISP++, D_8094B090);
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_EXPLOSION_DEBRIS) {
+            if (isFirst == 0) {
+                isFirst++;
+                gSPDisplayList(POLY_OPA_DISP++, sExplosionDebrisSetupDL);
             }
-            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
-            Matrix_Scale(unkEffect->scale, unkEffect->scale, unkEffect->scale, MTXMODE_APPLY);
-            SysMatrix_InsertYRotation_f(unkEffect->rotY, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(unkEffect->rotX);
+            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
+            SysMatrix_InsertYRotation_f(effect->rotY, MTXMODE_APPLY);
+            SysMatrix_RotateStateAroundXAxis(effect->rotX);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_8094B110);
+            gSPDisplayList(POLY_OPA_DISP++, sExplosionDebrisVtxDL);
         }
     }
 
-    unkEffect = unkEffectRef;
-    if (this->actor.floorPoly != 0) {
-        for (i = 0; i < 103; i++, unkEffect++) {
-            if (unkEffect->unk_00 == 6) {
+    effect = effectRef;
+    if (this->actor.floorPoly != NULL) {
+        for (i = 0; i < 103; i++, effect++) {
+            if (effect->type == ENCLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)unkEffect->primColorAlpha);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)unkEffect->primColorAlpha);
-                func_800C0094(this->actor.floorPoly, unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, &mtxF);
+                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColorAlpha);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColorAlpha);
+                func_800C0094(this->actor.floorPoly, effect->pos.x, effect->pos.y, effect->pos.z, &mtxF);
                 SysMatrix_SetCurrentState(&mtxF);
-                Matrix_Scale(unkEffect->scale, 1.0f, unkEffect->scale, MTXMODE_APPLY);
+                Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, D_04030100);
             }
         }
     }
 
-    sp1B7 = 0;
-    unkEffect = unkEffectRef;
-    if (this->actor.floorPoly != 0) {
-        for (i = 0; i < 103; i++, unkEffect++) {
-            if (unkEffect->unk_00 == 4) {
-                if (sp1B7 == 0) {
+    isFirst = 0;
+    effect = effectRef;
+    if (this->actor.floorPoly != NULL) {
+        for (i = 0; i < 103; i++, effect++) {
+            if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
+                if (isFirst == 0) {
                     gDPPipeSync(POLY_XLU_DISP++);
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
-                    sp1B7++;
+                    isFirst++;
                 }
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(unkEffect->primColorAlpha * 0.7f));
-                func_800C0094(this->actor.floorPoly, unkEffect->pos.x, this->actor.floorHeight, unkEffect->pos.z, &mtxF);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColorAlpha * 0.7f));
+                func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
                 SysMatrix_SetCurrentState(&mtxF);
-                Matrix_Scale(unkEffect->scale * 3.0f, 1.0f, unkEffect->scale * 3.0f, MTXMODE_APPLY);
+                Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_8094CB10);
+                gSPDisplayList(POLY_XLU_DISP++, sExplosionOuterCloudFloorDL);
             }
         }
     }
 
-    sp1B7 = 0;
-    unkEffect = unkEffectRef;
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if ((unkEffect->unk_00 == 3) || (unkEffect->unk_00 == 8)) {
-            if (sp1B7 == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, D_8094B758);
-                sp1B7++;
+    isFirst = 0;
+    effect = effectRef;
+    for (i = 0; i < 103; i++, effect++) {
+        if ((effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE) ||
+            (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH)) {
+            if (isFirst == 0) {
+                gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
+                isFirst++;
             }
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, (s8)unkEffect->envColorR, (s8)unkEffect->envColorG, (s8)unkEffect->envColorB, 128);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)unkEffect->primColorR, (s8)unkEffect->primColorG, (s8)unkEffect->primColorB,
-                            (s8)unkEffect->primColorAlpha);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 5 * -unkEffect->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
+            gDPSetEnvColor(POLY_XLU_DISP++, (s8)effect->envColorR, (s8)effect->envColorG, (s8)effect->envColorB, 128);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColorR, (s8)effect->primColorG,
+                            (s8)effect->primColorB, (s8)effect->primColorAlpha);
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 5 * -effect->actionTimer, 0x20, 0x40, 1, 0, 0,
+                                        0x20, 0x20));
+            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(unkEffect->scaleX * unkEffect->scale, unkEffect->scaleY * unkEffect->scale, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(effect->scaleX * effect->scale, effect->scaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_8094B800);
+            gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeVtxDL);
         }
     }
 
-    sp1B7 = 0;
-    unkEffect = unkEffectRef;
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 2) {
-            if (sp1B7 == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, D_8094B758);
+    // effect->type never set to 2
+    isFirst = 0;
+    effect = effectRef;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED) {
+            if (isFirst == 0) {
+                gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
-                sp1B7++;
+                isFirst++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)unkEffect->primColorAlpha);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 15 * -unkEffect->unk_01, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColorAlpha);
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 15 * -effect->actionTimer, 0x20, 0x40, 1, 0, 0,
+                                        0x20, 0x20));
+            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(unkEffect->scale, unkEffect->scale, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_8094B800);
+            gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeVtxDL);
         }
     }
 
-    sp1B7 = 0;
-    unkEffect = unkEffectRef;
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 4) {
-            if (sp1B7 == 0) {
+    isFirst = 0;
+    effect = effectRef;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
+            if (isFirst == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, this->envColor.r, this->envColor.g, this->envColor.b, 0);
-                sp1B7++;
+                isFirst++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)unkEffect->primColorAlpha);
-            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColorAlpha);
+            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(2.0f * unkEffect->scale, 2.0f * unkEffect->scale, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_8094C860);
+            gSPDisplayList(POLY_XLU_DISP++, sExplosionOuterCloudDL);
         }
     }
 
-    sp1B7 = 0;
-    unkEffect = unkEffectRef;
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 5) {
-            if (sp1B7 == 0) {
+    isFirst = 0;
+    effect = effectRef;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_LIGHT_RAY) {
+            if (isFirst == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)unkEffect->envColorR, (u8)unkEffect->envColorG, (u8)unkEffect->envColorB, 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_8094DBD8);
-                sp1B7++;
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)effect->envColorR, (u8)effect->envColorG, (u8)effect->envColorB, 0);
+                gSPDisplayList(POLY_XLU_DISP++, sLightRaySetupDL);
+                isFirst++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)unkEffect->primColorR, (u8)unkEffect->primColorG, (u8)unkEffect->primColorB,
-                            (u8)unkEffect->primColorAlpha);
-            SysMatrix_InsertTranslation(unkEffect->pos.x, unkEffect->pos.y, unkEffect->pos.z, MTXMODE_NEW);
-            SysMatrix_InsertYRotation_f(unkEffect->rotY, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(unkEffect->rotX);
-            SysMatrix_InsertZRotation_f(unkEffect->rotZ, MTXMODE_APPLY);
-            Matrix_Scale(unkEffect->scale * 0.5f, unkEffect->scale * 0.5f, unkEffect->scaleZ * unkEffect->scale, MTXMODE_APPLY);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColorR, (u8)effect->primColorG,
+                            (u8)effect->primColorB, (u8)effect->primColorAlpha);
+            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            SysMatrix_InsertYRotation_f(effect->rotY, MTXMODE_APPLY);
+            SysMatrix_RotateStateAroundXAxis(effect->rotX);
+            SysMatrix_InsertZRotation_f(effect->rotZ, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->scaleZ * effect->scale, MTXMODE_APPLY);
             SysMatrix_RotateStateAroundXAxis(M_PI / 2);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_8094DC48);
+            gSPDisplayList(POLY_XLU_DISP++, sLightRayVtxDL);
         }
     }
 
-    unkEffect = unkEffectRef;
-    for (i = 0; i < 103; i++, unkEffect++) {
-        if (unkEffect->unk_00 == 7) {
+    effect = effectRef;
+    for (i = 0; i < 103; i++, effect++) {
+        if (effect->type == ENCLEARTAG_EXPLOSION_SPLASH) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_8094AE34[unkEffect->unk_01]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sExplosionSplash[effect->actionTimer]));
             func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
-            sp1B7++;
+            isFirst++;
             for (j = 0; j < 16; j++) {
                 SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
-                SysMatrix_GetStateTranslationAndScaledZ(unkEffect->scaleZ, &sp1A4);
-                posY = unkEffect->pos.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, unkEffect->pos.x + sp1A4.x, unkEffect->pos.z + sp1A4.z, &posY,
-                                  &sp1A0) != 0) {
-                    if ((unkEffect->pos.y - posY) < 200.0f) {
-                        SysMatrix_InsertTranslation(unkEffect->pos.x + sp1A4.x, posY, unkEffect->pos.z + sp1A4.z, MTXMODE_NEW);
+                SysMatrix_GetStateTranslationAndScaledZ(effect->scaleZ, &vec);
+                ySurface = effect->pos.y;
+                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->pos.x + vec.x, effect->pos.z + vec.z,
+                                  &ySurface, &waterBox)) {
+                    if ((effect->pos.y - ySurface) < 200.0f) {
+                        SysMatrix_InsertTranslation(effect->pos.x + vec.x, ySurface, effect->pos.z + vec.z,
+                                                    MTXMODE_NEW);
                         SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
-                        SysMatrix_RotateStateAroundXAxis(unkEffect->rotX);
-                        Matrix_Scale(unkEffect->scale, unkEffect->scale, unkEffect->scale, MTXMODE_APPLY);
+                        SysMatrix_RotateStateAroundXAxis(effect->rotX);
+                        Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);
                     }

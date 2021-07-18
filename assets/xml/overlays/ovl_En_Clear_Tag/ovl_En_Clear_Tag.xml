@@ -1,35 +1,42 @@
 <Root>
     <File Name="ovl_En_Clear_Tag" BaseAddress="0x80947F60" RangeStart="0x2F00" RangeEnd="0x5D00" Segment="128">
 
-        <DList Name="D_8094B090" Offset="0x3130"/>
-        <DList Name="D_8094B110" Offset="0x31B0"/>
-        <DList Name="D_8094B758" Offset="0x37F8"/>
-        <DList Name="D_8094B800" Offset="0x38A0"/>
-        <DList Name="D_8094C860" Offset="0x4900"/>
-        <DList Name="D_8094CB10" Offset="0x4BB0"/>
-        <DList Name="D_8094DBD8" Offset="0x5C78"/>
-        <DList Name="D_8094DC48" Offset="0x5CE8"/>
+        <!-- Debris from explosion -->
+        <DList Name="sExplosionDebrisSetupDL" Offset="0x3130"/>
+        <Texture Name="sExplosionDebrisTex" OutName="explosion_debris" Format="rgb5a1" Width="16" Height="16" Offset="0x2F00"/>
+        <DList Name="sExplosionDebrisVtxDL" Offset="0x31B0"/>
+        <Array Name="sExplosionDebrisVtx" Count="3" Offset="0x3100">
+            <Vtx/>
+        </Array>
 
-        <Texture Name="D_8094AE60" OutName="tex_002F00" Format="rgb5a1" Width="16" Height="16" Offset="0x2F00"/>
-        <Texture Name="D_8094B128" OutName="tex_0031C8" Format="i8" Width="64" Height="16" Offset="0x31C8"/>
-        <Texture Name="D_8094B528" OutName="tex_0035C8" Format="i8" Width="16" Height="32" Offset="0x35C8"/>
-        <Texture Name="D_8094B820" OutName="tex_0038C0" Format="i8" Width="64" Height="64" Offset="0x38C0"/>
-        <Texture Name="D_8094C8E0" OutName="tex_004980" Format="i8" Width="16" Height="32" Offset="0x4980"/>
-        <Texture Name="D_8094CB98" OutName="tex_004C38" Format="i8" Width="64" Height="64" Offset="0x4C38"/>
+        <!-- Inner black smoke cloud from explosion: multi-texture -->
+        <DList Name="sExplosionBlackSmokeSetupDL" Offset="0x37F8"/>
+        <Texture Name="sExplosionBlackSmokeBulkTex" OutName="explosion_black_smoke_bulk" Format="i4" Width="32" Height="64" Offset="0x31C8"/>
+        <Texture Name="sExplosionBlackSmokeFlickerTex" OutName="explosion_black_smoke_flicker" Format="i4" Width="32" Height="32" Offset="0x35C8"/>
+        <DList Name="sExplosionBlackSmokeVtxDL" Offset="0x38A0"/>
+        <Array Name="sExplosionBlackSmokeVtx" Count="3" Offset="0x37C8">
+            <Vtx/>
+        </Array>
 
-        <Array Name="D_8094B060" Count="3" Offset="0x3100">
+        <!-- Spherical outer-most white-yellow cloud from explosions -->
+        <DList Name="sExplosionOuterCloudDL" Offset="0x4900"/>
+        <Texture Name="sExplosionOuterCloudTex" OutName="explosion_outer_cloud" Format="i8" Width="64" Height="64" Offset="0x38C0"/>
+        <Array Name="sExplosionOuterCloudVtx" Count="4" Offset="0x48C0">
             <Vtx/>
         </Array>
-        <Array Name="D_8094B728" Count="3" Offset="0x37C8">
+
+        <!-- Spherical outer-most cloud from explosions applied to floor poly -->
+        <DList Name="sExplosionOuterCloudFloorDL" Offset="0x4BB0"/>
+        <Texture Name="sExplosionOuterCloudFloorTex" OutName="explosion_outer_cloud_floor" Format="i4" Width="32" Height="32" Offset="0x4980"/>
+        <Array Name="sExplosionOuterCloudFloorVtx" Count="3" Offset="0x4B80">
             <Vtx/>
         </Array>
-        <Array Name="D_8094C820" Count="4" Offset="0x48C0">
-            <Vtx/>
-        </Array>
-        <Array Name="D_8094CAE0" Count="3" Offset="0x4B80">
-            <Vtx/>
-        </Array>
-        <Array Name="D_8094DB98" Count="4" Offset="0x5C38">
+
+        <!-- Spherical glowing light orbs squished thin into light rays -->
+        <DList Name="sLightRaySetupDL" Offset="0x5C78"/>
+        <Texture Name="sLightRayTex" OutName="light_ray" Format="i8" Width="64" Height="64" Offset="0x4C38"/>
+        <DList Name="sLightRayVtxDL" Offset="0x5CE8"/>
+        <Array Name="sLightRayVtx" Count="4" Offset="0x5C38">
             <Vtx/>
         </Array>
 
