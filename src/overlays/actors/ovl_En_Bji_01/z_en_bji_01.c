@@ -16,7 +16,7 @@ void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
-s32 func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor); 
+void func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor); 
 void func_809CDB04(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor); 
 
 extern FlexSkeletonHeader D_0600578C;
@@ -177,7 +177,32 @@ void EnBji01_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDA4C.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDA4C.asm")*/
+
+void func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor* thisx) {
+
+    EnBji01* this = THIS;
+
+    if ((limbIndex == 0) && ((globalCtx->gameplayFrames & 1) != 0)) {
+        *dList = NULL;
+    }
+    if (limbIndex == 0) {
+        rot->x = rot->x;
+        rot->y = rot->y;
+        rot->z = rot->z;
+    }
+    if (limbIndex != 8) {
+        if (limbIndex != 0xF) {
+
+        } else {
+            rot->x += this->unk_2A8;
+            rot->z += this->unk_2A6;
+        }
+    } else {
+        rot->x += this->unk_2A4;
+        rot->z += this->unk_2A2;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDB04.asm")
 
@@ -193,7 +218,7 @@ void EnBji01_Draw(Actor* thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809CDCD4[this->unk_29C]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, func_809CDA4C, func_809CDB04, &this->actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_809CDA4C, func_809CDB04, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 

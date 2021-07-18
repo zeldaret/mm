@@ -19,7 +19,11 @@ typedef struct EnBji01 {
     /* 0x29C */ s16 unk_29C;
     /* 0x29E */ s16 unk_29E;
     /* 0x2A0 */ s16 unk_2A0;
-    /* 0x2A2 */ char unk_2A2[0xA];
+    /* 0x2A2 */ s16 unk_2A2;
+    /* 0x2A4 */ s16 unk_2A4;
+    /* 0x2A6 */ s16 unk_2A6;
+    /* 0x2A8 */ s16 unk_2A8;
+    /* 0x2AA */ char unk_2AA[0x2];
     /* 0x2AC */ s32 unk_2AC; /* assumed s32 */
     /* 0x2B0 */ ObjMoonStone* moonsTear;
 
