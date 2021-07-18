@@ -14,9 +14,14 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD328(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600578C;
 extern AnimationHeader D_06000FDC;
+
+extern ColliderCylinderInit D_809CDC50;
+extern struct_80B8E1A8 D_809CDC7C[4]; /*Type is unconfirmed, but likely this*/
 
 /*
 const ActorInit En_Bji_01_InitVars = {
@@ -36,8 +41,6 @@ const ActorInit En_Bji_01_InitVars = {
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCE98.asm")*/
 
-extern struct_80B8E1A8 D_809CDC7C[]; /*Type is unconfirmed, but likely this*/
-
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) /*globalCtx likely but unconfirmed*/ {
     func_8013E1C8(&this->skelAnime, &D_809CDC7C, 0, &this->unk_298);
     this->actor.textId = 0;
@@ -45,9 +48,6 @@ void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) /*globalCtx likely b
 }
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")*/
-
-/*? func_809CD028(EnBji01 *, GlobalContext *); // extern
-? func_809CD6C0(EnBji01 *, GlobalContext *, s32); // extern*/
 
 void func_809CCEE8(EnBji01 *this, GlobalContext *globalCtx) {
 
@@ -86,15 +86,18 @@ void func_809CCEE8(EnBji01 *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD6B0.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD6C0.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD6C0.asm")*/
+
+void func_809CD6C0(EnBji01 *this, GlobalContext *globalCtx) {
+    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->unk_298);
+    this->actionFunc = func_809CD70C;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD70C.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD77C.asm")
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Init.asm")*/
-
-extern ColliderCylinderInit D_809CDC50;
 
 void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
