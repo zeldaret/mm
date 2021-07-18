@@ -30,8 +30,8 @@ typedef struct EnSuttari {
     /* 0x1EC */ Path* paths[2];
     /* 0x1F4 */ s32 unk1F4[2];
     /* 0x1FC */ UNK_TYPE1 unk_1FC[0x1A];
-    /* 0x216 */ Vec3s limbDrawTbl[16];
-    /* 0x276 */ Vec3s transitionDrawTbl[16];
+    /* 0x216 */ Vec3s jointTable[16];
+    /* 0x276 */ Vec3s morphTable[16];
     /* 0x2D6 */ s16 unk2D6;
     /* 0x2D8 */ s16 unk2D8;
     /* 0x2DA */ UNK_TYPE1 unk_2DA[0x2];

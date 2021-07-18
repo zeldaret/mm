@@ -121,7 +121,7 @@ static DamageTable D_80BAE7E0 = {
 };
 
 static s16 D_80BAE800[] = {
-    0xFA0, 4, 1, 3, 0x1770, 4, 1, 6, 0xFA0, 4, 1, 3, 0x1770, 4, 1, 6,
+    4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
 static UNK_TYPE D_80BAE820[] = {
@@ -525,7 +525,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C;
     s32 sp58;
     f32 phi_f12;
-    s32 sp50;
+    s32 ret;
     s32 pad4C;
     f32 phi_f14;
     f32 sp44;
@@ -536,7 +536,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     sp5C = Lib_SegmentedToVirtual(path->points);
     if (sp5C[arg2 - 1].x) {}
     sp58 = path->count;
-    sp50 = 0;
+    ret = false;
     Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
     if (arg2 == 0) {
         phi_f12 = sp5C[1].x - sp5C[0].x;
@@ -550,16 +550,16 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = 1;
+        ret = true;
     }
-    return sp50;
+    return ret;
 }
 
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C;
     s32 sp58;
     f32 phi_f12;
-    s32 sp50;
+    s32 ret;
     s32 pad4C;
     f32 phi_f14;
     f32 sp44;
@@ -570,7 +570,7 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     sp5C = Lib_SegmentedToVirtual(path->points);
     if (sp5C[arg2 - 1].x) {}
     sp58 = path->count;
-    sp50 = 0;
+    ret = false;
     Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
     if (arg2 == 0) {
         phi_f12 = sp5C[0].x - sp5C[1].x;
@@ -584,9 +584,9 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = 1;
+        ret = true;
     }
-    return sp50;
+    return ret;
 }
 
 void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
@@ -911,8 +911,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->limbDrawTbl, this->transitionDrawTbl,
-                     16);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
     if (globalCtx->sceneNum == 0x13) {
@@ -1470,7 +1469,8 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BAE250(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     EnSuttari* this = THIS;
 
     if (limbIndex == 15) {
@@ -1493,7 +1493,7 @@ s32 func_80BAE250(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80BAE3C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BAE950 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_80BAE95C = { 2000.0f, -1000.0f, 0.0f };
     EnSuttari* this = THIS;
@@ -1527,7 +1527,7 @@ void func_80BAE3C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80BAE524(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnSuttari_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1543,7 +1543,7 @@ void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 55, 55, 255, 0));
         gDPPipeSync(POLY_OPA_DISP++);
         func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                      func_80BAE250, func_80BAE3C4, func_80BAE524, &this->actor);
+                      EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw, EnSuttari_UnkDraw, &this->actor);
         if (this->unk1E4 & 0x80) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             sp5C = this->actor.world.pos;
