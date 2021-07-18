@@ -505,125 +505,103 @@ block_14:
     return 0;
 }
 #else
+s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B781DC.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-? func_80B783E0(ObjUm* arg0, GlobalContext* arg1, s32 arg2, EnHorse* arg3) {
-    u8* sp6C;
+s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3) {
+    Path* sp6C = &globalCtx->setupPathList[this->unk_2BC];
     s32 sp68;
-    void* sp64;
-    ? sp50;
+    Vec3s* sp64;
+    f32 phi_f12;
+    s32 phi_v1_2;
+    Vec3f sp50;
     f32 sp4C;
     f32 sp48;
     f32 sp44;
+    s32 temp_a1;
     f32 sp3C;
-    Vec3f* sp30;
-    Vec3f* temp_a0;
-    f32 temp_f2;
-    s16 temp_a0_3;
-    s16 temp_v1_3;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    u8 temp_a0_2;
-    u8* temp_v0;
-    void* temp_t0;
-    void* temp_v0_2;
-    void* temp_v0_3;
-    f32 phi_f12;
     f32 phi_f14;
-    s32 phi_v1;
-    s16 phi_v1_2;
 
-    temp_v0 = arg1->setupPathList + (arg0->unk_2BC * 8);
-    sp68 = (s32) temp_v0->unk0;
-    sp6C = temp_v0;
-    temp_t0 = Lib_SegmentedToVirtual(temp_v0->unk4);
-    temp_a0 = arg3 + 0x24;
+    sp68 = sp6C->count;
+    sp64 = Lib_SegmentedToVirtual(sp6C->points);
+
     if (sp68 == 0) {
         return 0;
     }
-    sp30 = temp_a0;
-    sp64 = temp_t0;
-    if (Math3D_Distance(temp_a0, arg0 + 0x24) < 800.0f) {
+
+    if (Math3D_Distance(&arg3->actor.world.pos, &this->dyna.actor.world.pos) < 800.0f) {
         if (arg2 == 0) {
-            arg0->unk_2F4 |= 0x200;
+            this->unk_2F4 |= 0x200;
         } else {
-            arg0->unk_2F4 |= 0x400;
+            this->unk_2F4 |= 0x400;
         }
-        arg3->unk_540.x = sp30->x;
-        arg3->unk_540.y = sp30->y;
+        arg3->unk_540 = arg3->actor.world.pos;
         arg3->unk_55C = 0x32;
         arg3->unk_560 = 0x32;
         arg3->unk_564 = 1;
-        arg3->unk_540.z = sp30->z;
     }
-    sp64 = temp_t0;
-    Math_Vec3s_ToVec3f((Vec3f* ) &sp50, (arg3->unk_200 * 6) + temp_t0);
-    temp_v1 = arg3->unk_200;
-    if (temp_v1 == 0) {
-        phi_f12 = (f32) (temp_t0->unk6 - temp_t0->unk0);
-        phi_f14 = (f32) (temp_t0->unkA - temp_t0->unk4);
+
+    Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->unk_200]);
+
+    if (arg3->unk_200 == 0) {
+        phi_f12 = (f32) (sp64[1].x - sp64[0].x);
+        phi_f14 = (f32) (sp64[1].z - sp64[0].z);
     } else {
-        temp_a0_2 = *sp6C;
-        if (temp_a0_2 == (temp_v1 + 1)) {
-            temp_v0_2 = temp_t0 + (temp_a0_2 * 6);
-            phi_f12 = (f32) (temp_v0_2->unk-6 - temp_v0_2->unk-C);
-            phi_f14 = (f32) (temp_v0_2->unk-2 - temp_v0_2->unk-8);
+        if ((arg3->unk_200 + 1) == sp6C->count) {
+            phi_f12 = (f32) (sp64[sp6C->count-1].x - sp64[sp6C->count-2].x);
+            phi_f14 = (f32) (sp64[sp6C->count-1].z - sp64[sp6C->count-2].z);
         } else {
-            temp_v0_3 = temp_t0 + (temp_v1 * 6);
-            phi_f12 = (f32) (temp_v0_3->unk6 - temp_v0_3->unk-6);
-            phi_f14 = (f32) (temp_v0_3->unkA - temp_v0_3->unk-2);
+            phi_f12 = (f32) (sp64[arg3->unk_200+1].x - sp64[arg3->unk_200-1].x);
+            phi_f14 = (f32) (sp64[arg3->unk_200+1].z - sp64[arg3->unk_200-1].z);
         }
     }
-    sp64 = temp_t0;
-    func_8017B7F8(&sp50, Math_Atan2S(phi_f12, phi_f14), &sp4C, &sp48, &sp44);
+
+    temp_a1 = Math_Atan2S(phi_f12, phi_f14);
+
+    func_8017B7F8(&sp50, (s16)temp_a1, &sp4C, &sp48, &sp44);
     if (((arg3->actor.world.pos.x * sp4C) + (sp48 * arg3->actor.world.pos.z) + sp44) > 0.0f) {
-        temp_v1_2 = arg3->unk_200 + 1;
-        arg3->unk_200 = temp_v1_2;
-        phi_v1 = temp_v1_2;
-        if (temp_v1_2 >= sp68) {
+        arg3->unk_200++;
+        if (arg3->unk_200 >= sp68) {
             arg3->unk_200 = 0;
-            phi_v1 = 0;
         }
-        Math_Vec3s_ToVec3f((Vec3f* ) &sp50, (phi_v1 * 6) + temp_t0);
+        Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->unk_200]);
     }
-    arg3->actor.world.rot.y = Math_Vec3f_Yaw(sp30, (Vec3f* ) &sp50);
+
+    arg3->actor.world.rot.y = Math_Vec3f_Yaw(&arg3->actor.world.pos, &sp50);
     arg3->actor.speedXZ = 45.0f;
+
     sp3C = Math_CosS(arg3->actor.world.rot.x) * arg3->actor.speedXZ;
     arg3->actor.velocity.x = Math_SinS(arg3->actor.world.rot.y) * sp3C;
     arg3->actor.velocity.y = Math_SinS(arg3->actor.world.rot.x) * arg3->actor.speedXZ;
-    temp_f2 = Math_CosS(arg3->actor.world.rot.y) * sp3C;
-    temp_a0_3 = arg3->actor.shape.rot.y;
-    arg3->actor.velocity.z = temp_f2;
-    temp_v1_3 = arg3->actor.world.rot.y - temp_a0_3;
+    arg3->actor.velocity.z = Math_CosS(arg3->actor.world.rot.y) * sp3C;
+
     arg3->unk_570.x = arg3->actor.world.pos.x + (arg3->actor.velocity.x * 0.5f) + arg3->actor.colChkInfo.displacement.x;
     arg3->unk_570.y = arg3->actor.world.pos.y + (arg3->actor.velocity.y * 0.5f) + arg3->actor.colChkInfo.displacement.y;
-    arg3->unk_570.z = arg3->actor.world.pos.z + (temp_f2 * 0.5f) + arg3->actor.colChkInfo.displacement.z;
-    if ((s32) temp_v1_3 >= 0x191) {
+    arg3->unk_570.z = arg3->actor.world.pos.z + (arg3->actor.velocity.z * 0.5f) + arg3->actor.colChkInfo.displacement.z;
+
+    phi_v1_2 = (s16) (arg3->actor.world.rot.y - arg3->actor.shape.rot.y);
+
+    if (phi_v1_2 > 0x190) {
         phi_v1_2 = 0x190;
     } else {
-        phi_v1_2 = temp_v1_3;
-        if ((s32) temp_v1_3 < -0x190) {
+        if (phi_v1_2 < -0x190) {
             phi_v1_2 = -0x190;
         }
     }
-    arg3->actor.shape.rot.y = temp_a0_3 + phi_v1_2;
+
+    arg3->actor.shape.rot.y = arg3->actor.shape.rot.y + phi_v1_2;
     return 0;
 }
-#else
-s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32, EnHorse*);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B783E0.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
-? func_80B78764(ObjUm* arg0, GlobalContext* arg1, EnHorse* arg2, EnHorse* arg3) {
+s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse* arg3) {
     ? sp30;
     s32 sp28;
     Vec3f* sp24;
-    Vec3f* sp20;
+    PosRot* sp20;
+    PosRot* temp_a1;
     Vec3f* temp_a0_2;
-    Vec3f* temp_a1;
     Vec3f* temp_v0;
     s16 temp_v0_3;
     s16 temp_v1_2;
@@ -645,60 +623,60 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32, EnHorse*);
     phi_v1_4 = temp_v1;
     if (temp_v1 <= 0) {
         arg2->unk_55C = 0;
-        if ((arg2->unk_550 == 3) && ((arg0->unk_2F4 & 0x2000) == 0)) {
+        if ((arg2->unk_550 == 3) && ((this->unk_2F4 & 0x2000) == 0)) {
             phi_v1 = -1;
-            if (arg0->unk_314[0] != 1) {
+            if (this->unk_314[0] != 1) {
                 phi_v1 = 0;
             }
             phi_a2 = 1;
             phi_v1_2 = phi_v1;
-            if ((arg0->unk_314[1] != 1) && ((phi_v1 == -1) || ((phi_a2 = 1, phi_v1_2 = phi_v1, (phi_v1 == 0)) && (sp28 = phi_v1, phi_a2 = 1, phi_v1_2 = phi_v1, (Rand_ZeroOne() < D_80B7C320))))) {
+            if ((this->unk_314[1] != 1) && ((phi_v1 == -1) || ((phi_a2 = 1, phi_v1_2 = phi_v1, (phi_v1 == 0)) && (sp28 = phi_v1, phi_a2 = 1, phi_v1_2 = phi_v1, (Rand_ZeroOne() < 0.3f))))) {
                 phi_a2 = 1;
                 phi_v1_2 = 1;
             }
             phi_a2_2 = phi_a2;
             phi_v1_3 = phi_v1_2;
-            if ((phi_a2 != arg0->unk_314[2]) && ((phi_a2_2 = phi_a2, (phi_v1_2 == -1)) || ((phi_a2_2 = phi_a2, phi_v1_3 = phi_v1_2, (phi_v1_2 != -1)) && (sp28 = phi_v1_2, phi_a2_2 = 1, phi_v1_3 = phi_v1_2, phi_a2_2 = 1, (Rand_ZeroOne() < D_80B7C324))))) {
+            if ((phi_a2 != this->unk_314[2]) && ((phi_a2_2 = phi_a2, (phi_v1_2 == -1)) || ((phi_a2_2 = phi_a2, phi_v1_3 = phi_v1_2, (phi_v1_2 != -1)) && (sp28 = phi_v1_2, phi_a2_2 = 1, phi_v1_3 = phi_v1_2, phi_a2_2 = 1, (Rand_ZeroOne() < 0.3f))))) {
                 phi_v1_3 = 2;
             }
             temp_t8 = phi_v1_3 * 4;
-            temp_v0 = arg0 + temp_t8;
-            temp_a0 = temp_v0->unk314;
+            temp_v0 = this + temp_t8;
+            temp_a0 = this->unk_314[phi_v1_3];
             if (phi_a2_2 != temp_a0) {
-                temp_v0->unk320 = phi_a2_2;
+                this->unk_320[phi_v1_3] = phi_a2_2;
                 if (temp_a0 == 2) {
                     sp24 = temp_v0;
-                    func_8019F1C0(arg0 + (phi_v1_3 * 0xC) + 0x32C, 0x2891U);
+                    func_8019F1C0(&this->unk_32C[phi_v1_3], 0x2891U);
                 } else {
                     sp24 = temp_v0;
-                    func_8019F1C0(arg0 + (phi_v1_3 * 0xC) + 0x32C, 0x297EU);
+                    func_8019F1C0(&this->unk_32C[phi_v1_3], 0x297EU);
                 }
-                temp_t4 = (arg0 + temp_t8)->unk314 - 1;
-                (arg0 + temp_t8)->unk314 = temp_t4;
+                temp_t4 = (this + temp_t8)->unk314 - 1;
+                (this + temp_t8)->unk314 = temp_t4;
                 if (temp_t4 <= 0) {
-                    (arg0 + temp_t8)->unk314 = 1;
+                    (this + temp_t8)->unk314 = 1;
                 }
             }
         }
-        func_80B781DC(arg0, arg2, arg3, arg1);
+        func_80B781DC(this, arg2, arg3, globalCtx);
         phi_v1_4 = arg2->unk_55C;
     }
-    Math3D_Lerp(arg2 + 0x540, arg0 + (arg2->unk_550 * 0xC) + 0x360, 1.0f - ((f32) phi_v1_4 / (f32) arg2->unk_560), (Vec3f* ) &sp30);
+    Math3D_Lerp(&arg2->unk_540, this + (arg2->unk_550 * 0xC) + 0x360, 1.0f - ((f32) phi_v1_4 / (f32) arg2->unk_560), (Vec3f* ) &sp30);
     temp_v0_2 = arg2->unk_550;
     arg2->unk_570.x = sp30.unk0;
     arg2->unk_570.y = sp30.unk4;
     arg2->unk_570.z = sp30.unk8;
-    arg2->unk_588 = arg0->dyna.actor.shape.rot.y;
-    if ((temp_v0_2 == 0xA) || (temp_a0_2 = arg2 + 0x108, (temp_v0_2 == 8))) {
+    arg2->unk_588 = this->dyna.actor.shape.rot.y;
+    if ((temp_v0_2 == 0xA) || (temp_a0_2 = &arg2->actor.prevPos, (temp_v0_2 == 8))) {
         phi_v1_5 = arg2->unk_588;
     } else {
-        temp_a1 = arg2 + 0x24;
+        temp_a1 = &arg2->actor.world;
         sp20 = temp_a1;
         sp24 = temp_a0_2;
-        if (Math3D_Distance(temp_a0_2, temp_a1) < 10.0f) {
+        if (Math3D_Distance(temp_a0_2, (Vec3f* ) temp_a1) < 10.0f) {
             phi_v1_5 = arg2->unk_588;
         } else {
-            phi_v1_5 = Math_Vec3f_Yaw(temp_a0_2, temp_a1);
+            phi_v1_5 = Math_Vec3f_Yaw(temp_a0_2, (Vec3f* ) temp_a1);
         }
     }
     temp_v0_3 = arg2->actor.shape.rot.y;
@@ -718,26 +696,26 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse*, EnHorse*);
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
-? func_80B78A54(ObjUm* arg0, GlobalContext* arg1, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
+s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
     s16 sp36;
     void* sp30;
-    Vec3f* sp2C;
+    PosRot* sp2C;
     Actor* temp_v0;
     Actor* temp_v0_2;
-    Vec3f* temp_a1;
+    PosRot* temp_a1;
     void* temp_v1;
     s32 phi_v0;
     s32 phi_v0_2;
 
-    temp_v1 = arg0 + (arg2 * 0x4C);
+    temp_v1 = this + (arg2 * 0x4C);
     if ((temp_v1->unk435 & 2) != 0) {
-        temp_a1 = arg3 + 0x24;
+        temp_a1 = &arg3->actor.world;
         if (arg3->unk_550 == 3) {
             sp30 = temp_v1;
             sp2C = temp_a1;
-            sp36 = Math_Vec3f_Yaw(arg0 + 0x24, temp_a1) - arg0->dyna.actor.shape.rot.y;
+            sp36 = Math_Vec3f_Yaw((Vec3f* ) &this->dyna.actor.world, (Vec3f* ) temp_a1) - this->dyna.actor.shape.rot.y;
             temp_v1->unk435 = (u8) (temp_v1->unk435 & 0xFFFD);
-            func_8019F1C0(arg3 + 0xEC, 0x393BU);
+            func_8019F1C0(&arg3->actor.projectedPos, 0x393BU);
             arg3->unk_54C = 0xF;
             if (Math_SinS(sp36) > 0.0f) {
                 if (arg4->unk_550 != 0xA) {
@@ -757,12 +735,12 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse*, EnHorse*);
                 arg3->unk_568 = 1.0f;
             }
             temp_v0 = arg3->unk38C;
-            arg3->unk_540.x = sp2C->x;
-            arg3->unk_540.y = sp2C->y;
+            arg3->unk_540.x = sp2C->pos.x;
+            arg3->unk_540.y = sp2C->pos.y;
             arg3->unk_55C = 0x28;
             arg3->unk_560 = 0x28;
-            arg3->unk_564 = 1;
-            arg3->unk_540.z = sp2C->z;
+            arg3->unk_564 = (s8* )1;
+            arg3->unk_540.z = sp2C->pos.z;
             if (temp_v0 != 0) {
                 temp_v0->colorFilterTimer = 0x14;
                 func_800BCB70(arg3->unk38C, 0x4000, 0xFF, 0, (s16) 0x28);
@@ -773,7 +751,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse*, EnHorse*);
                 temp_v0_2->colorFilterTimer = 0x14;
                 func_800BCB70(arg3->unk38C, 0x4000, 0xFF, 0, (s16) 0x28);
             }
-            func_8019F1C0(arg3 + 0xEC, 0x393BU);
+            func_8019F1C0(&arg3->actor.projectedPos, 0x393BU);
         }
     }
     return 0;

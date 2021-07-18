@@ -211,7 +211,7 @@ typedef struct EnHorse {
     /* 0x558 */ UNK_TYPE unk_558;
     /* 0x55C */ UNK_TYPE unk_55C;
     /* 0x560 */ UNK_TYPE unk_560;
-    /* 0x564 */ UNK_TYPE1 unk_564[0x4];
+    /* 0x564 */ UNK_TYPE unk_564;
     /* 0x568 */ f32 unk_568;
     /* 0x56C */ f32 unk_56C;
     /* 0x570 */ Vec3f unk_570;
