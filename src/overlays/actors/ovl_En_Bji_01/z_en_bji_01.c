@@ -115,20 +115,20 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
     func_8013E3B8(&this->actor, &this->unk_2AC, 1);
-    this->moonsTear = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+    this->moonsTear = (ObjMoonStone*) func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
         case 0x4C10: /* Observatory from Termina Field door */
             this->actor.params = 0;
-            func_809CCE98(&this->actor, globalCtx);
+            func_809CCE98(this, globalCtx);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= 0x10000;
             func_801A5BD0(0);
             func_801A89A8(0xE0000100);
             this->actor.params = 3;
-            func_809CCE98(&this->actor, globalCtx);
+            func_809CCE98(this, globalCtx);
             break;
         default:
             Actor_MarkForDeath(&this->actor);
@@ -151,31 +151,26 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Update.asm")*/
 
 void EnBji01_Update(Actor *thisx, GlobalContext *globalCtx) {
-    ColliderCylinder *sp28;
-    ColliderCylinder *temp_a2;
-    s16 temp_v0;
-    s16 temp_v0_2;
+
+    s32 pad; /*pad until 4 main functions take gamestate that gets promoted to globalctx*/
+    EnBji01* this = THIS;
 
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, (Actor *) this, 0.0f, 0.0f, 0.0f, 4U);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    temp_v0 = this->unk2A0;
-    this->unk2A0 = (s16) (temp_v0 - 1);
-    if ((s32) temp_v0 <= 0) {
-        this->unk29E = (s16) (this->unk29E - 1);
-        temp_v0_2 = this->unk29E;
-        if ((s32) temp_v0_2 < 0) {
-            this->unk29E = 4;
-            this->unk2A0 = (s16) (s32) ((Rand_ZeroOne() * 60.0f) + 20.0f);
+
+    if (this->unk_2A0-- <= 0) {
+        if (--this->unk_29E < 0) {
+            this->unk_29E = 4;
+            this->unk_2A0 = (Rand_ZeroOne() * 60.0f) + 20.0f;
         } else {
-            this->unk_29C = D_809CDCBC[temp_v0_2];
+            this->unk_29C = D_809CDCBC[this->unk_29E];
         }
     }
-    Actor_SetHeight((Actor *) this, 40.0f);
-    temp_a2 = &this->collider;
-    sp28 = temp_a2;
-    Collider_UpdateCylinder((Actor *) this, temp_a2);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
+
+    Actor_SetHeight(&this->actor, 40.0f);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 
