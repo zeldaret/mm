@@ -8237,9 +8237,9 @@ SECTIONS
     ovl_En_Pamera : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Pamera/z_en_pamera.o(.text)
-        build/asm/overlays/ovl_En_Pamera_data.o(.data)
+        build/src/overlays/actors/ovl_En_Pamera/z_en_pamera.o(.data)
         build/src/overlays/actors/ovl_En_Pamera/z_en_pamera.o(.rodata)
-        build/asm/overlays/ovl_En_Pamera_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Pamera/z_en_pamera_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
