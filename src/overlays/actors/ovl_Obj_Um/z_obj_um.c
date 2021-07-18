@@ -612,6 +612,7 @@ block_14:
     return 0;
 }
 #else
+s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32, EnHorse*);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B783E0.asm")
 #endif
 
@@ -712,6 +713,7 @@ block_14:
     return 0;
 }
 #else
+s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse*, EnHorse*);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78764.asm")
 #endif
 
@@ -777,12 +779,13 @@ block_14:
     return 0;
 }
 #else
+s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32, EnHorse*, EnHorse*);
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B78A54.asm")
 #endif
 
 s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* temp_s1 = this->unk_358;
-    Actor* temp_s2 = this->unk_35C;
+    EnHorse* temp_s1 = this->unk_358;
+    EnHorse* temp_s2 = this->unk_35C;
 
     if (!(this->unk_2F4 & 0x200)) {
         func_80B783E0(this, globalCtx, 0, temp_s1);
@@ -1040,47 +1043,82 @@ void func_80B79560(GlobalContext* globalCtx, ObjUm* this, s32 arg2, u16 arg3) {
     }
 }
 
-/*
-Failed to decompile function func_80B795A0:
+s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
+    s32 pad[2];
+    s32 phi_v1 = true;
+    u16 textId = this->dyna.actor.textId;
+    Player* player;
 
-Found jr instruction at ovl_Obj_Um_0x80B77770.asm line 2072, but the corresponding jump table is not provided.
-
-Please include it in the input .s file(s), or in an additional file.
-It needs to be within ".section .rodata" or ".section .late_rodata".
-
-(You might need to pass --goto and --no-andor flags as well, to get correct control flow for non-jtbl switch jumps.)
-*/
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B795A0.asm")
-
-#ifdef MIPS_2_C_OUTPUT
-s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2) {
-    s32 sp20;
-    MessageContext* sp18;
-    MessageContext* temp_a0;
-    s32 temp_v0;
-
-    sp20 = 0;
-    temp_a0 = arg0 + 0x4908;
-    sp18 = temp_a0;
-    temp_v0 = func_80152498(temp_a0);
-    if (temp_v0 != 2) {
-        if ((temp_v0 != 4) && (temp_v0 != 5)) {
-
-        } else if ((func_80147624(arg0) != 0) && (func_80B795A0(arg0, arg1, arg2) != 0)) {
-            sp18->unk11F22 = 0x43;
-            sp20 = 1;
-        }
-        return sp20;
+    switch (textId) {
+        case 0x33B4:
+        case 0x33CF:
+            gSaveContext.weekEventReg[0x1F] |= 0x40;
+            if (globalCtx->msgCtx.choiceIndex == 0) {
+                player = PLAYER;
+                func_8019F208();
+                gSaveContext.weekEventReg[0x1F] |= 0x80;
+                globalCtx->nextEntranceIndex = 0x64B0;
+                if (player->stateFlags1 & 0x800000) {
+                    D_801BDAA0 = 1;
+                }
+                globalCtx->unk_1887F = 0x40;
+                gSaveContext.nextTransition = 3;
+                globalCtx->sceneLoadFlag = 0x14;
+                phi_v1 = true;
+            } else {
+                func_800E8EA0(globalCtx, (Actor* ) this, 0x33B5U);
+                func_8019F230();
+                func_80151BB4(globalCtx, 6U);
+                phi_v1 = false;
+            }
+            break;
+        case 0x33BB:
+            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BCU);
+            phi_v1 = false;
+            break;
+        case 0x33BC:
+            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BDU);
+            phi_v1 = false;
+            break;
+        case 0x33BD:
+            if (globalCtx->msgCtx.choiceIndex == 0) {
+                func_800E8EA0(globalCtx, (Actor* ) this, 0x33BEU);
+                func_8019F230();
+            } else {
+                func_800E8EA0(globalCtx, (Actor* ) this, 0x33BFU);
+                func_8019F208();
+            }
+            phi_v1 = false;
+            break;
+        case 0x33BE:
+            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BCU);
+            phi_v1 = false;
+            break;
     }
-    func_80B79560(arg0, arg1, arg2, arg1->dyna.actor.textId);
-    return 1;
+    return phi_v1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79734.asm")
-#endif
 
-// Parameters types are weird...
-u16 func_80B797EC(GlobalContext* arg0, Actor* arg1, s32 arg2) {
+s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    s32 sp20 = false;
+
+    switch (func_80152498(msgCtx)) {
+        case 2:
+            func_80B79560(globalCtx, this, arg2, this->dyna.actor.textId);
+            return true;
+
+        case 4:
+        case 5:
+            if (func_80147624(globalCtx) && func_80B795A0(globalCtx, this, arg2)) {
+                msgCtx->unk11F22 = 0x43;
+                sp20 = true;
+            }
+            break;
+    }
+    return sp20;
+}
+
+u16 func_80B797EC(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     u16 phi_v1;
 
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
@@ -1123,7 +1161,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     }
 
     if (*arg3 == 1) {
-        if (func_80B79734(globalCtx, this, arg2, arg3) != 0) {
+        if (func_80B79734(globalCtx, this, arg2) != 0) {
             *arg3 = 0;
         }
         return 0;
@@ -1142,10 +1180,10 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
 
     if (this->dyna.actor.xyzDistToPlayerSq <= 2500.0f) {
         if (func_800B8614((Actor* ) this, globalCtx, 50.0f) != 0) {
-            this->dyna.actor.textId = func_80B797EC(globalCtx, (Actor* ) this, arg2);
+            this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
         }
     } else if (func_800B863C((Actor* ) this, globalCtx) != 0) {
-        this->dyna.actor.textId = func_80B797EC(globalCtx, (Actor* ) this, arg2);
+        this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
     }
 
     return 0;
@@ -1167,7 +1205,7 @@ void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2F4 |= 8;
     if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
         if (!(player->stateFlags1 & 0x800000)) {
-            func_80B7984C(globalCtx, (Actor* ) this, 0, &this->unk_2B4);
+            func_80B7984C(globalCtx, this, 0, &this->unk_2B4);
         }
     } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.time > CLOCK_TIME(19, 0)) {
         gSaveContext.weekEventReg[0x22] |= 0x80;
