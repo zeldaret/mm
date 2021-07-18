@@ -22,6 +22,7 @@ extern AnimationHeader D_06000FDC;
 
 extern ColliderCylinderInit D_809CDC50;
 extern struct_80B8E1A8 D_809CDC7C[4]; /*Type is unconfirmed, but likely this*/
+extern s16 D_809CDCBC[6]; /*Type is unconfirmed, but likely this*/
 
 /*
 const ActorInit En_Bji_01_InitVars = {
@@ -44,7 +45,7 @@ const ActorInit En_Bji_01_InitVars = {
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) /*globalCtx likely but unconfirmed*/ {
     func_8013E1C8(&this->skelAnime, &D_809CDC7C, 0, &this->unk_298);
     this->actor.textId = 0;
-    this->actionFunc = &func_809CCEE8;
+    this->actionFunc = func_809CCEE8;
 }
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")*/
@@ -147,7 +148,36 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Update.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Update.asm")*/
+
+void EnBji01_Update(Actor *thisx, GlobalContext *globalCtx) {
+    ColliderCylinder *sp28;
+    ColliderCylinder *temp_a2;
+    s16 temp_v0;
+    s16 temp_v0_2;
+
+    this->actionFunc(this, globalCtx);
+    Actor_UpdateBgCheckInfo(globalCtx, (Actor *) this, 0.0f, 0.0f, 0.0f, 4U);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    temp_v0 = this->unk2A0;
+    this->unk2A0 = (s16) (temp_v0 - 1);
+    if ((s32) temp_v0 <= 0) {
+        this->unk29E = (s16) (this->unk29E - 1);
+        temp_v0_2 = this->unk29E;
+        if ((s32) temp_v0_2 < 0) {
+            this->unk29E = 4;
+            this->unk2A0 = (s16) (s32) ((Rand_ZeroOne() * 60.0f) + 20.0f);
+        } else {
+            this->unk_29C = D_809CDCBC[temp_v0_2];
+        }
+    }
+    Actor_SetHeight((Actor *) this, 40.0f);
+    temp_a2 = &this->collider;
+    sp28 = temp_a2;
+    Collider_UpdateCylinder((Actor *) this, temp_a2);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
+}
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CDA4C.asm")
 
