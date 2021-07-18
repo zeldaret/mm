@@ -824,7 +824,7 @@ s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 // ObjUm_SetupAction
-void func_80B78E2C(ObjUm* this, ObjUmActionFunc actionFunc) {
+void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
@@ -917,13 +917,13 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_2AE == 0) {
-        func_80B78E2C(this, func_80B7AEFC);
+        ObjUm_SetupAction(this, func_80B7AEFC);
     } else if (this->unk_2AE == 1) {
         this->unk_2BC = this->unk_2B0;
         if ((gSaveContext.weekEventReg[0x1F] & 0x80) != 0) {
             sp54 = false;
             this->unk_2F4 |= 0x100;
-            func_80B78E2C(this, func_80B7A144);
+            ObjUm_SetupAction(this, func_80B7A144);
             func_800FE484();
         } else {
             if (((gSaveContext.weekEventReg[0x38] & 0x80) != 0) || (s32) (gSaveContext.time) >= 0xCAAA || (s32) gSaveContext.time < 0x4001 || ((gSaveContext.weekEventReg[0x36]) & 1) != 0 || ((gSaveContext.weekEventReg[0x36] & 2) != 0)) {
@@ -932,7 +932,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             this->dyna.actor.targetMode = 6;
             this->unk_2B4 = 0;
-            func_80B78E2C(this, func_80B79A50);
+            ObjUm_SetupAction(this, func_80B79A50);
         }
     } else if (this->unk_2AE == 2) {
         if ((gSaveContext.weekEventReg[0x1F] & 0x80) == 0 || (((gSaveContext.weekEventReg[0x34]) & 1) != 0)) {
@@ -944,7 +944,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2BC = this->unk_2B0;
             sp54 = false;
             func_800FE484();
-            func_80B78E2C(this, func_80B7A400);
+            ObjUm_SetupAction(this, func_80B7A400);
             this->unk_354 = 0;
             func_80B78E88(this, globalCtx, 0);
         }
@@ -956,7 +956,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2BC = this->unk_2B0;
         sp54 = false;
         func_800FE484();
-        func_80B78E2C(this, func_80B7AC94);
+        ObjUm_SetupAction(this, func_80B7AC94);
         this->unk_354 = 0;
         func_80B78E88(this, globalCtx, 0);
     } else if (this->unk_2AE == 4) {
@@ -968,13 +968,13 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2BC = this->unk_2B0;
         sp54 = false;
         func_800FE484();
-        func_80B78E2C(this, func_80B7AE58);
+        ObjUm_SetupAction(this, func_80B7AE58);
         this->unk_354 = 0;
         func_80B78E88(this, globalCtx, 0);
         func_801A3098(0x19);
     } else {
         this->unk_2AE = 0;
-        func_80B78E2C(this, func_80B7AEFC);
+        ObjUm_SetupAction(this, func_80B7AEFC);
     }
 
     sp48 = D_801D15BC;
@@ -1036,7 +1036,7 @@ void func_80B79524(ObjUm* this) {
 
 void func_80B79560(GlobalContext* globalCtx, ObjUm* this, s32 arg2, u16 arg3) {
     if (arg3 == 0x33BF) {
-        func_80B78E2C(this, func_80B7AC94);
+        ObjUm_SetupAction(this, func_80B7AC94);
     }
 }
 
@@ -1099,69 +1099,57 @@ u16 func_80B797EC(GlobalContext* arg0, Actor* arg1, s32 arg2) {
     return phi_v1;
 }
 
-#ifdef MIPS_2_C_OUTPUT
-? func_80B7984C(GlobalContext* arg0, Actor* arg1, s32 arg2, s32* arg3) {
-    f32 temp_f0;
+s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     s16 temp_v0_2;
-    s32 temp_v0;
-    s32* temp_a3;
-    s32 phi_v1;
-    u16 phi_v0;
+    s16 phi_v1;
 
-    temp_v0 = *arg3;
-    if (temp_v0 == 4) {
-        goto block_25;
+    if (*arg3 == 4) {
+        return 0;
     }
-    if (temp_v0 == 2) {
-        func_801518B0(arg0, (u32) arg1->textId, arg1);
+    if (*arg3 == 2) {
+        func_801518B0(globalCtx, this->dyna.actor.textId, (Actor* ) this);
         *arg3 = 1;
         return 0;
     }
-    if (temp_v0 == 3) {
-        func_80151938(arg0, arg1->textId);
+    if (*arg3 == 3) {
+        func_80151938(globalCtx, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
-    temp_a3 = arg3;
-    if (func_800B84D0(arg1, arg0) != 0) {
-        *temp_a3 = 1;
+
+    if (func_800B84D0((Actor* ) this, globalCtx) != 0) {
+        *arg3 = 1;
         return 1;
     }
-    if (*temp_a3 == 1) {
-        arg3 = temp_a3;
-        if (func_80B79734(arg0, (ObjUm* ) arg1, arg2, temp_a3) != 0) {
+
+    if (*arg3 == 1) {
+        if (func_80B79734(globalCtx, this, arg2, arg3) != 0) {
             *arg3 = 0;
         }
-    } else {
-        temp_v0_2 = arg1->yawTowardsPlayer - arg1->shape.rot.y;
-        phi_v1 = temp_v0_2 << 0x10;
-        if ((s32) temp_v0_2 < 0) {
-            phi_v1 = (s32) temp_v0_2 * -0x10000;
-        }
-        if ((phi_v1 >> 0x10) >= 0x4E20) {
-
-        } else {
-            temp_f0 = arg1->xyzDistToPlayerSq;
-            if ((D_80B7C398 < temp_f0) && (arg1->isTargeted == 0)) {
-
-            } else if (temp_f0 <= D_80B7C39C) {
-                if (func_800B8614(arg1, arg0, 50.0f) != 0) {
-                    phi_v0 = func_80B797EC(arg0, arg1, arg2);
-                    goto block_24;
-                }
-            } else if (func_800B863C(arg1, arg0) != 0) {
-                phi_v0 = func_80B797EC(arg0, arg1, arg2);
-block_24:
-                arg1->textId = phi_v0;
-            }
-        }
+        return 0;
     }
-block_25:
+
+    phi_v1 = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
+    temp_v0_2 = ABS_ALT((s16)phi_v1);
+
+    if (temp_v0_2 >= 0x4E20) {
+        return 0;
+    }
+
+    if ((this->dyna.actor.xyzDistToPlayerSq > 10000.0f) && (this->dyna.actor.isTargeted == 0)) {
+        return 0;
+    }
+
+    if (this->dyna.actor.xyzDistToPlayerSq <= 2500.0f) {
+        if (func_800B8614((Actor* ) this, globalCtx, 50.0f) != 0) {
+            this->dyna.actor.textId = func_80B797EC(globalCtx, (Actor* ) this, arg2);
+        }
+    } else if (func_800B863C((Actor* ) this, globalCtx) != 0) {
+        this->dyna.actor.textId = func_80B797EC(globalCtx, (Actor* ) this, arg2);
+    }
+
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7984C.asm")
-#endif
 
 s32 func_80B79A24(s32 arg0) {
     if ((arg0 == 1) || (arg0 == 2) || (arg0 == 3)) {
@@ -1170,47 +1158,40 @@ s32 func_80B79A24(s32 arg0) {
     return 0;
 }
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
-    Actor* sp24;
-    u16 temp_v0;
-    u16 temp_v0_2;
+    Player* player = PLAYER;
 
-    sp24 = globalCtx->actorCtx.actorList[2].first;
     this->dyna.actor.flags |= 1;
     SkelAnime_FrameUpdateMatrix(&this->unk_160);
     func_80B7B18C(this, globalCtx, 2);
     this->unk_2F4 |= 8;
-    temp_v0 = gSaveContext.time;
-    if (((s32) temp_v0 >= 0xC001) && ((s32) temp_v0 < 0xCAAB)) {
-        if ((sp24->unkA6C << 8) >= 0) {
+    if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
+        if (!(player->stateFlags1 & 0x800000)) {
             func_80B7984C(globalCtx, (Actor* ) this, 0, &this->unk_2B4);
         }
-    } else if ((func_80B79A24(this->unk_2B4) == 0) && ((s32) gSaveContext.time >= 0xCAAB)) {
-        gSaveContext.unkF1A = (u8) (gSaveContext.unkF1A | 0x80);
-        func_80B78E2C(this, func_80B79F10);
+    } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.time > CLOCK_TIME(19, 0)) {
+        gSaveContext.weekEventReg[0x22] |= 0x80;
+        ObjUm_SetupAction(this, func_80B79F10);
     }
-    temp_v0_2 = globalCtx->msgCtx.unk11F04;
-    if (temp_v0_2 != 0x33B4) {
-        if (temp_v0_2 != 0x33B5) {
-            if (temp_v0_2 != 0x33B7) {
-                this->unk_4CC = 0;
-                this->unk_4D4 = 0;
-                return;
-            }
-            goto block_11;
-        }
-        this->unk_4CC = 3;
-        this->unk_4D4 = 1;
-        return;
+
+    switch (globalCtx->msgCtx.unk11F04) {
+        default:
+            this->unk_4CC = 0;
+            this->unk_4D4 = 0;
+            break;
+
+        case 0x33B7:
+        case 0x33B4:
+            this->unk_4CC = 0;
+            this->unk_4D4 = 1;
+            break;
+
+        case 0x33B5:
+            this->unk_4CC = 3;
+            this->unk_4D4 = 1;
+            break;
     }
-block_11:
-    this->unk_4CC = 0;
-    this->unk_4D4 = 1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79A50.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 s32 func_80B79BA0(ObjUm* arg0, GlobalContext* arg1) {
@@ -1373,7 +1354,7 @@ void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
-        func_80B78E2C(this, func_80B7A0E0);
+        ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -1400,7 +1381,7 @@ void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
     if (gSaveContext.time != this->unk_4C8) {
         func_80B7B18C(this, globalCtx, 0);
-        func_80B78E2C(this, func_80B7A070);
+        ObjUm_SetupAction(this, func_80B7A070);
     }
 }
 
@@ -1412,7 +1393,7 @@ void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2F4 |= 0x004;
     player->stateFlags1 |= 0x20;
     func_80B7B18C(this, globalCtx, 2);
-    func_80B78E2C(this, func_80B79FFC);
+    ObjUm_SetupAction(this, func_80B79FFC);
 }
 
 void func_80B7A1B4(ObjUm* this, GlobalContext* globalCtx) {
@@ -1441,7 +1422,7 @@ void func_80B7A1B4(ObjUm* this, GlobalContext* globalCtx) {
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
     if (gSaveContext.time != this->unk_4C8) {
-        func_80B78E2C(this, func_80B7A2AC);
+        ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
     this->unk_4C8 = gSaveContext.time;
@@ -1462,7 +1443,7 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
         globalCtx->sceneLoadFlag = 0x14;
     } else {
         if (gSaveContext.time == this->unk_4C8) {
-            func_80B78E2C(this, func_80B7A240);
+            ObjUm_SetupAction(this, func_80B7A240);
         }
 
         this->unk_4C8 = gSaveContext.time;
@@ -1478,7 +1459,7 @@ void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2F4 |= 4;
     if (gSaveContext.time != this->unk_4C8) {
         func_80B7B18C(this, globalCtx, 0);
-        func_80B78E2C(this, func_80B7A2AC);
+        ObjUm_SetupAction(this, func_80B7A2AC);
     }
 }
 
@@ -1493,7 +1474,7 @@ void func_80B7A400(ObjUm* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
-        func_80B78E2C(this, func_80B7A394);
+        ObjUm_SetupAction(this, func_80B7A394);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -1602,7 +1583,7 @@ loop_6:
         sp20 = (s32) phi_v1_2;
         if (ActorCutscene_GetCanPlayNext(phi_v1_2) != 0) {
             ActorCutscene_StartAndSetUnkLinkFields(phi_v1_2, (Actor* ) this);
-            func_80B78E2C(this, func_80B7A494);
+            ObjUm_SetupAction(this, func_80B7A494);
             this->unk_2F4 &= -0x81;
         } else {
             ActorCutscene_SetIntentToPlay(phi_v1_2);
@@ -1628,7 +1609,7 @@ void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
     func_80B78DF0(this, globalCtx);
     this->unk_2F4 |= 4;
     func_80B7B18C(this, globalCtx, 1);
-    func_80B78E2C(this, func_80B7A614);
+    ObjUm_SetupAction(this, func_80B7A614);
 }
 
 void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
@@ -1644,7 +1625,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state == 0) {
         ActorCutscene_Stop((s16) this->dyna.actor.cutscene);
-        func_80B78E2C(this, func_80B7A7AC);
+        ObjUm_SetupAction(this, func_80B7A7AC);
     }
 
     switch (globalCtx->msgCtx.unk11F04) {
@@ -1727,7 +1708,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
     func_80B7B18C(this, globalCtx, 2);
     if (gSaveContext.time != this->unk_4C8) {
-        func_80B78E2C(this, func_80B7ABE4);
+        ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
     this->unk_4C8 = gSaveContext.time;
@@ -1743,7 +1724,7 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.time == this->unk_4C8) {
-        func_80B78E2C(this, func_80B7AB78);
+        ObjUm_SetupAction(this, func_80B7AB78);
     }
     this->unk_4C8 = gSaveContext.time;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
@@ -1761,7 +1742,7 @@ void func_80B7AC94(ObjUm* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk_4C8 = gSaveContext.time;
-        func_80B78E2C(this, func_80B7ABE4);
+        ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
     }
@@ -1802,7 +1783,7 @@ void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        func_80B78E2C(this, func_80B7AD34);
+        ObjUm_SetupAction(this, func_80B7AD34);
     } else {
         ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
     }
