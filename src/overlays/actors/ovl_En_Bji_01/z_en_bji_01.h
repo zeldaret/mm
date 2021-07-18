@@ -5,9 +5,11 @@
 
 struct EnBji01;
 
+typedef void (*EnBji01ActionFunc)(struct EnBji01*, GlobalContext*);
+
 typedef struct EnBji01 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ EnBji01ActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[0x10]; 

@@ -4,12 +4,14 @@
 
 #define THIS ((EnBji01*)thisx)
 
-/*void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx);*/
+void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*extern UNK_TYPE D_809CDC50;*/
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);
+void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
+
 extern FlexSkeletonHeader D_0600578C;
 extern AnimationHeader D_06000FDC;
 
@@ -29,7 +31,15 @@ const ActorInit En_Bji_01_InitVars = {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCDE0.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCE98.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCE98.asm")*/
+
+extern struct_80B8E1A8 D_809CDC7C[]; /*Type is unconfirmed, but likely this*/
+
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
+    func_8013E1C8(&this->skelAnime, &D_809CDC7C, 0, &this->unk_298);
+    this->actor.textId = 0;
+    this->actionFunc = &func_809CCEE8;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")
 
@@ -49,10 +59,6 @@ const ActorInit En_Bji_01_InitVars = {
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Init.asm")*/
 
-/*? func_8013E3B8(EnBji01 *, void *, ?); // extern
-? func_801A5BD0(?); // extern
-? func_801A89A8(?); // extern
-? func_809CCE98(EnBji01 *, GlobalContext *); // extern*/
 extern ColliderCylinderInit D_809CDC50;
 
 void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -62,29 +68,32 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable, 0x10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_809CDC50);
+
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 0;
     this->actor.child = NULL;
     this->unk_298 = -1;
+
     Actor_SetScale(&this->actor, 0.01f);
     func_8013E3B8(&this->actor, &this->unk_2AC, 1);
     this->moonsTear = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+
     switch (gSaveContext.entranceIndex) {
-	    case 0x4C00: /* Observatory from ECT */
-	    case 0x4C10: /* Observatory from Termina Field door */
-		    this->actor.params = 0;
-                    func_809CCE98(&this->actor, globalCtx);
-		    break;
-	    case 0x4C20: /* Observatory from Termina Field telescope */
-		    this->actor.flags |= 0x10000;
-                    func_801A5BD0(0);
-                    func_801A89A8(0xE0000100);
-                    this->actor.params = 3;
-                    func_809CCE98(&this->actor, globalCtx);
-		    break;
-	    default:
-                    Actor_MarkForDeath(&this->actor);
-		    break;
+        case 0x4C00: /* Observatory from ECT */
+        case 0x4C10: /* Observatory from Termina Field door */
+            this->actor.params = 0;
+            func_809CCE98(&this->actor, globalCtx);
+            break;
+        case 0x4C20: /* Observatory from Termina Field telescope */
+            this->actor.flags |= 0x10000;
+            func_801A5BD0(0);
+            func_801A89A8(0xE0000100);
+            this->actor.params = 3;
+            func_809CCE98(&this->actor, globalCtx);
+            break;
+        default:
+            Actor_MarkForDeath(&this->actor);
+            break;
     }
 
 }
