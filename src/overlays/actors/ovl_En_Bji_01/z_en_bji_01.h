@@ -2,6 +2,7 @@
 #define Z_EN_BJI_01_H
 
 #include <global.h>
+#include "../ovl_Obj_Moon_Stone/z_obj_moon_stone.h"
 
 struct EnBji01;
 
@@ -17,7 +18,7 @@ typedef struct EnBji01 {
     /* 0x298 */ s32 unk_298; /* assumed s32 */
     /* 0x29C */ char unk_29C[0x10];
     /* 0x2AC */ char unk_2AC[0x4];
-    /* 0x2B0 */ Actor* moonsTear;
+    /* 0x2B0 */ ObjMoonStone* moonsTear;
 
 } EnBji01; // size = 0x2B4
 

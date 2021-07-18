@@ -11,6 +11,9 @@ void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);
 void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD328(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600578C;
 extern AnimationHeader D_06000FDC;
@@ -35,13 +38,45 @@ const ActorInit En_Bji_01_InitVars = {
 
 extern struct_80B8E1A8 D_809CDC7C[]; /*Type is unconfirmed, but likely this*/
 
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) /*globalCtx likely but unconfirmed*/ {
     func_8013E1C8(&this->skelAnime, &D_809CDC7C, 0, &this->unk_298);
     this->actor.textId = 0;
     this->actionFunc = &func_809CCEE8;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")*/
+
+/*? func_809CD028(EnBji01 *, GlobalContext *); // extern
+? func_809CD6C0(EnBji01 *, GlobalContext *, s32); // extern*/
+
+void func_809CCEE8(EnBji01 *this, GlobalContext *globalCtx) {
+
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
+    if (this->actor.params == 0) {
+        if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer <= 10.0f)) {
+            this->actor.flags |= 0x10000;
+        } else {
+            this->actor.flags &= 0xFFFEFFFF;
+        }
+    }
+    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.unk11F10 = 0;
+        func_809CD028(this, globalCtx);
+    }
+    else {
+        if (this->moonsTear != NULL) {
+            if (this->moonsTear->actor.colChkInfo.health == 1) {
+                func_809CD6C0(this, globalCtx);
+                return;
+            }
+	} else {
+    	    this->moonsTear = (ObjMoonStone*) func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+        }
+        func_800B8500((Actor *) this, globalCtx, 60.0f, 10.0f, 0);
+    }
+}
+
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD028.asm")
 
