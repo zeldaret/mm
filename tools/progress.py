@@ -12,6 +12,9 @@ args = parser.parse_args()
 NON_MATCHING_PATTERN = r"#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\).*?#endif"
 NOT_ATTEMPTED_PATTERN = r"#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\)"
 
+# TODO: consider making this a parameter of this script
+GAME_VERSION = "mm.us.rev1"
+
 def GetFunctionsByPattern(pattern, files):
     functions = []
 
@@ -37,6 +40,11 @@ def GetFiles(path, ext):
                 files.append(os.path.join(r, file))
 
     return files
+
+def GetCsvFilelist(version, filelist):
+    path = os.path.join("tools", "filelists", version, filelist)
+    with open(path, newline='') as f:
+        return list(csv.reader(f, delimiter=','))
 
 def GetRemovableSize(functions_to_count, path):
     size = 0
@@ -72,11 +80,11 @@ if not args.matching:
     non_matching_functions = []
 
 # Get asset files
-audio_files = GetFiles("baserom/assets/audio", "")
-misc_files = GetFiles("baserom/assets/misc", "")
-object_files = GetFiles("baserom/assets/objects", "")
-scene_files = GetFiles("baserom/assets/scenes", "")
-texture_files = GetFiles("baserom/assets/textures", "")
+audio_files = GetCsvFilelist(GAME_VERSION, "audio.csv")
+misc_files = GetCsvFilelist(GAME_VERSION, "misc.csv")
+object_files = GetCsvFilelist(GAME_VERSION, "object.csv")
+scene_files = GetCsvFilelist(GAME_VERSION, "scene.csv")
+texture_files = GetCsvFilelist(GAME_VERSION, "texture.csv")
 
 # Initialize all the code values
 src = 0
@@ -172,16 +180,16 @@ misc_size = 0
 object_size = 0
 scene_size = 0
 texture_size = 0
-for f in audio_files:
-    audio_size += os.stat(f).st_size
-for f in misc_files:
-    misc_size += os.stat(f).st_size
-for f in object_files:
-    object_size += os.stat(f).st_size
-for f in scene_files:
-    scene_size += os.stat(f).st_size
-for f in texture_files:
-    texture_size += os.stat(f).st_size
+for index, f in audio_files:
+    audio_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in misc_files:
+    misc_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in object_files:
+    object_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in scene_files:
+    scene_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in texture_files:
+    texture_size += os.stat(os.path.join("baserom", f)).st_size
 
 # Calculate asm and src totals
 src = src_code + src_boot + src_ovl
