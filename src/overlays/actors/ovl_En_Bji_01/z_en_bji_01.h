@@ -15,16 +15,16 @@ typedef struct EnBji01 {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[0x10]; 
     /* 0x238 */ Vec3s morphTable[0x10];
-    /* 0x298 */ s32 unk_298; /* assumed s32 */
-    /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ s16 unk_29E;
-    /* 0x2A0 */ s16 unk_2A0;
-    /* 0x2A2 */ s16 unk_2A2;
-    /* 0x2A4 */ s16 unk_2A4;
-    /* 0x2A6 */ s16 unk_2A6;
-    /* 0x2A8 */ s16 unk_2A8;
-    /* 0x2AA */ char unk_2AA[0x2];
-    /* 0x2AC */ s32 unk_2AC; /* assumed s32 */
+    /* 0x298 */ s32 unk298; /* assumed s32 */
+    /* 0x29C */ s16 unk29C;
+    /* 0x29E */ s16 unk29E;
+    /* 0x2A0 */ s16 unk2A0;
+    /* 0x2A2 */ s16 unk2A2;
+    /* 0x2A4 */ s16 unk2A4;
+    /* 0x2A6 */ s16 unk2A6;
+    /* 0x2A8 */ s16 unk2A8;
+    /* 0x2AA */ s16 unk2AA; /* textId? */
+    /* 0x2AC */ s32 unk2AC; /* assumed s32 */
     /* 0x2B0 */ ObjMoonStone* moonsTear;
 
 } EnBji01; // size = 0x2B4
