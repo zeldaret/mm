@@ -244,4 +244,4 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/EnEncount2_DrawParticles.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount2/EnEncount2_DrawParticles.s")

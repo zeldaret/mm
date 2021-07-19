@@ -128,7 +128,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
     this->framesAppeared++;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Appear.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_HsStump/ObjHsStump_Appear.s")
 #endif
 
 void ObjHsStump_Destroy(Actor* thisx, GlobalContext* globalCtx) {

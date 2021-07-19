@@ -174,7 +174,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightswitch_SpawnEffects.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightswitch_SpawnEffects.s")
 #endif
 
 void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -446,7 +446,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightSwitch_DrawOpa.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightSwitch_DrawOpa.s")
 #endif
 
 #if NON_EQUIVELENT
@@ -498,7 +498,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightswitch_0x8095FBF0/ObjLightSwitch_DrawXlu.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightswitch/ObjLightSwitch_DrawXlu.s")
 #endif
 
 void ObjLightswitch_Draw(Actor* thisx, GlobalContext* globalCtx) {
