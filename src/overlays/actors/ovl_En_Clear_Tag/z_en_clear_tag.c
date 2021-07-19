@@ -439,7 +439,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             this->camID = func_801694DC(globalCtx);
             func_80169590(globalCtx, 0, 1);
             func_80169590(globalCtx, this->camID, 7);
-            func_800B7298(globalCtx, this, 4);
+            func_800B7298(globalCtx, &this->actor, 4);
             camera = Play_GetCamera(globalCtx, 0);
             this->eye.x = camera->eye.x;
             this->eye.y = camera->eye.y;
