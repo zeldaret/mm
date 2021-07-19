@@ -94,7 +94,6 @@ extern Gfx D_0407D590; // called in En_Light too, so probably the fire flame
 
 extern const ActorInit En_Bigpo_InitVars;
 
-/*
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,
@@ -105,52 +104,43 @@ const ActorInit En_Bigpo_InitVars = {
     (ActorFunc)EnBigpo_Destroy,
     (ActorFunc)EnBigpo_Update,
     (ActorFunc)NULL,
-}; */
+};
 
 // cannot be renamed until Init matches
-extern ColliderCylinderInit D_80B65010;
-/* static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
+static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 35, 100, 10, { 0, 0, 0 } },
-}; */
+};
 
-extern CollisionCheckInfoInit D_80B6503C;
-//static CollisionCheckInfoInit D_80B6503C = { 0x0A000023, 0x00643200};
-//static u32 D_80B6503C[] = { 0x0A000023, 0x00643200};
+static CollisionCheckInfoInit D_80B6503C = { 10, 35, 100, 50};
 
-extern DamageTable D_80B65044;
-/* static DamageTable D_80B65044 = {
+static DamageTable D_80B65044 = {
     0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0xF0, 0x01, 0x01, 0x00, 0x01, 0x01, 0x42, 0x01, 0x01, 
     0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
-}; */
+}; 
 
-static InitChainEntry D_80B65064;
-/* static InitChainEntry D_80B65064[] = { //sInitChain
+static InitChainEntry D_80B65064[] = { //sInitChain
     ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
-}; */
+}; 
 
-extern Vec3f D_80B6506C;
-//static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
+static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f};
 
-extern u8 D_80B65078[];
-/* static u8 D_80B65078[] = {
+static u8 D_80B65078[] = {
     0xFF, 0x04, 0xFF, 0x00, 
     0xFF, 0x01, 0xFF, 0x02, 
     0x05, 0x03, 0x00, 0x00, 
-}; */
+}; 
 
-extern Vec3f D_80B65084;
-/* static Vec3f D_80B65084[] = {
+static Vec3f D_80B65084[] = {
     { 2000.0f, 4000.0f, 0.0f,},
-    {-1000.0f, 1500.0f, -1000.0f,},
+    {-1000.0f, 1500.0f, -2000.0f,},
     {-1000.0f, 1500.0f, 2000.0f,},
-}; */
+}; 
 
-#ifdef NON_MATCHING
-// non-matching: some instructions out of order but looks like it should be equiv
-void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
+void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpoFireParticle* fires;
     s32 i;
@@ -158,30 +148,21 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, &D_80B65064);
 
-    // issue:  the params look-up wants to save the params to two t registers, one modified, one not
-    // then it saves the param, and immediately re-loads it wtf
-    // because its duping the globalcontext load instead of the params load, I can only assume its filling a void
-    this->switchFlags = this->actor.params;
-    //this->switchFlags = this->switchFlags >> 8;
-    this->switchFlags = (u8)(this->switchFlags);
-    this->actor.params &= 0xFF;
-    //if (this->actor.params == 9){} // almost like it needs a a different params for a different scope
-    //this->actor.params = (u8)this->actor.params;
-    if (this->actor.params == ENBIGPO_POSSIBLEFIRE) {
-    //if (parms == ENBIGPO_POSSIBLEFIRE) {
+    this->switchFlags = (u8)(thisx->params >> 8);
+    thisx->params &= 0xFF;
+    if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
         } else  {
-            this->actor.update = func_800BDFB0;
+            thisx->update = Actor_Noop;
             func_80B6383C(this);
         }
         return;
     }
     
-    // wants to re-load global context here from s6 in vanilla, but ido doesnt see the need now
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
+    CollisionCheck_SetInfo(&thisx->colChkInfo, &D_80B65044, &D_80B6503C);
 
     for (i = 0; i < 3; i++) {
         fires = &this->fires[i];
@@ -190,34 +171,31 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
 
         //Lights_PointNoGlowSetInfo(&this->fires[i].info,
         Lights_PointNoGlowSetInfo(&fires->info,
-             this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+             thisx->home.pos.x, thisx->home.pos.y, thisx->home.pos.z,
              0xFF, 0xFF, 0xFF, 0);
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 45.0f);
-    this->actor.bgCheckFlags |= 0x400;
-    this->unk218 = this->actor.home.pos.y + 100.0f;
+    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 45.0f);
+    thisx->bgCheckFlags |= 0x400;
+    this->unk218 = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 0xFF;
     this->mainColor.g = 0xFF;
     this->mainColor.b = 0xD2;
-    this->mainColor.a = 0x00; // fully invible
+    this->mainColor.a = 0x00; // fully invisible
     
     if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
         // has switch flag, and switch already set: already killed
         Actor_MarkForDeath(&this->actor);
     }
 
-    if (this->actor.params == ENBIGPO_REGULAR) { // the well poe, starts immediately
+    if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
+        thisx->flags &= ~0x10;
         this->unk204 = 1;
-        this->actor.flags &= -0x11;
         func_80B61AC8(this);
-    } else if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
+    } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
         func_80B63450(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
-#endif
 
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
@@ -1354,73 +1332,64 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 // draw func
-// non-equivelent: this is an odd draw function, 
-// diff is nowhere close
 // set as poe is dying
-#ifdef NON_EQUIVELENT
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
-
-    Camera *cam;
     f32 magnitude;
     f32 magnitude2;
-    Vec3f vec1; // sp64
+    Gfx* dispHead;
+    Vec3f vec1;
     Vec3f vec2;
-    Gfx *dispHead;
+    Camera* cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
     if (cam != NULL) {
         Math_Vec3f_Diff(&cam->eye, &cam->focalPoint, &vec1);
         magnitude = Math3D_Vec3fMagnitude(&vec1);
-        //magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
-        //Math_Vec3f_Scale(&vec1, magnitude2);
-        Math_Vec3f_Scale(&vec1, (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f));
+        magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
+        Math_Vec3f_Scale(&vec1, magnitude2);
     } else {
         Math_Vec3f_Copy(&vec1, &D_801D15B0);
     }
-    
-    // fully visible OR fully transparent
-    if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
-        Scene_SetRenderModeXlu(globalCtx, 0, 1);
-        dispHead = POLY_OPA_DISP;
-    } else {
-        Scene_SetRenderModeXlu(globalCtx, 1, 2);
-        dispHead = POLY_XLU_DISP;
+
+    {                                     
+        GraphicsContext* gfx = globalCtx->state.gfxCtx;
+
+        // fully visible OR fully transparent
+        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+            Scene_SetRenderModeXlu(globalCtx, 0, 1);
+            dispHead = gfx->polyOpa.p;
+        } else {
+            Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            dispHead = gfx->polyXlu.p;
+        }
+
+        gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
+
+        gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
+
+        SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+        Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x,
+            vec2.y + vec1.y, vec2.z + vec1.z,
+            this->unk294.r, this->unk294.g, this->unk294.b, this->unk294.a); // radius?
+
+        gDPSetEnvColor(&dispHead[2], this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
+
+        gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx),
+        G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPDisplayList(&dispHead[4], &D_060042C8);
+
+        gSPDisplayList(&dispHead[5], &D_060043F8);
+
+        // fully transparent OR fully invisible
+        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+            gfx->polyOpa.p = &dispHead[6];
+        } else {
+            gfx->polyXlu.p = &dispHead[6];
+        }
     }
-
-    gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-
-    gSPSegment(dispHead + 1, 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xA0, 0, 0xFF, (s32) this->mainColor.a));
-
-    SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
-    Lights_PointGlowSetInfo(&this->fires[0].info, (s16) (vec2.x + vec1.x),
-         (s16) (vec2.y + vec1.y), (s16) (vec2.z + vec1.z),
-         this->unk294.r, this->unk294.g, this->unk294.b, this->unk294.a); // radius?
-
-    gDPSetEnvColor(dispHead + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
-
-    gSPMatrix(dispHead + 3, Matrix_NewMtx(globalCtx->state.gfxCtx),
-       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-    gSPDisplayList(dispHead + 4, &D_060042C8);
-
-    gSPDisplayList(dispHead + 5, &D_060043F8);
-
-    // fully transparent OR fully invisible
-    if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
-        POLY_OPA_DISP += 6;
-    } else {
-        POLY_XLU_DISP += 6;
-    }
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/func_80B64880.asm")
-#endif
+
 
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
