@@ -25,7 +25,7 @@ typedef struct ObjUm {
     /* 0x2B8 */ Actor* unk_2B8;
 
     /* 0x2BC */ s32 unk_2BC;
-    /* 0x2BE */ char unk_2BE[0x4]; // Vec3s* ?
+    /* 0x2BE */ s32 unk_2BE;
 
     /* 0x2C4 */ Vec3f unk_2C4;
 

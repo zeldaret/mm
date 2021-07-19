@@ -1174,137 +1174,104 @@ void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef MIPS_2_C_OUTPUT
-s32 func_80B79BA0(ObjUm* arg0, GlobalContext* arg1) {
-    void* sp6C;
+s32 func_80B79BA0(ObjUm* this, GlobalContext* globalCtx) {
+    Path* sp6C = &globalCtx->setupPathList[this->unk_2BC];
     s32 sp68;
-    void* sp64;
-    ? sp50;
+    Vec3s* sp64;
+    f32 phi_f12;
+    f32 phi_f14;
+    Vec3f sp50;
     f32 sp4C;
     f32 sp48;
     f32 sp44;
+    s32 aux;
     s32 sp3C;
-    f32 temp_f2;
-    s16 temp_a2_2;
-    s16 temp_a2_3;
-    s16 temp_v0_3;
-    s16 temp_v1_3;
-    s32 temp_v0_4;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    u8 temp_a0;
-    u8 temp_t1;
-    void* temp_a2;
-    void* temp_t0;
-    void* temp_v0;
-    void* temp_v0_2;
-    f32 phi_f12;
-    f32 phi_f14;
-    s32 phi_v0;
-    s32 phi_v1;
     s16 phi_a2;
 
-    temp_a2 = arg1->setupPathList + (arg0->unk_2BC * 8);
-    temp_t1 = temp_a2->unk0;
-    sp6C = temp_a2;
-    sp68 = (s32) temp_t1;
-    temp_t0 = Lib_SegmentedToVirtual(temp_a2->unk4);
+    sp68 = sp6C->count;
+    sp64 = Lib_SegmentedToVirtual(sp6C->points);
     sp3C = 0;
-    if (temp_t1 == 0) {
+
+    if (sp68 == 0) {
         return 0;
     }
-    sp68 = (s32) temp_t1;
-    sp64 = temp_t0;
-    sp6C = temp_a2;
-    Math_Vec3s_ToVec3f((Vec3f* ) &sp50, (arg0->unk_2BE * 6) + temp_t0);
-    temp_v1 = arg0->unk_2BE;
-    if (temp_v1 == 0) {
-        phi_f12 = (f32) (temp_t0->unk6 - temp_t0->unk0);
-        phi_f14 = (f32) (temp_t0->unkA - temp_t0->unk4);
+
+    Math_Vec3s_ToVec3f(&sp50, &sp64[this->unk_2BE]);
+
+    if (this->unk_2BE == 0) {
+        phi_f12 = sp64[1].x - sp64[0].x;
+        phi_f14 = sp64[1].z - sp64[0].z;
+    } else if ((this->unk_2BE + 1) == sp6C->count) {
+        phi_f12 = sp64[sp6C->count-1].x - sp64[sp6C->count-2].x;
+        phi_f14 = sp64[sp6C->count-1].z - sp64[sp6C->count-2].z;
     } else {
-        temp_a0 = temp_a2->unk0;
-        if (temp_a0 == (temp_v1 + 1)) {
-            temp_v0 = temp_t0 + (temp_a0 * 6);
-            phi_f12 = (f32) (temp_v0->unk-6 - temp_v0->unk-C);
-            phi_f14 = (f32) (temp_v0->unk-2 - temp_v0->unk-8);
-        } else {
-            temp_v0_2 = temp_t0 + (temp_v1 * 6);
-            phi_f12 = (f32) (temp_v0_2->unk6 - temp_v0_2->unk-6);
-            phi_f14 = (f32) (temp_v0_2->unkA - temp_v0_2->unk-2);
-        }
+        phi_f12 = sp64[this->unk_2BE+1].x - sp64[this->unk_2BE-1].x;
+        phi_f14 = sp64[this->unk_2BE+1].z - sp64[this->unk_2BE-1].z;
     }
-    sp64 = temp_t0;
-    sp68 = (s32) temp_t1;
-    func_8017B7F8(&sp50, Math_Atan2S(phi_f12, phi_f14), &sp4C, &sp48, &sp44);
-    if (((arg0->dyna.actor.world.pos.x * sp4C) + (sp48 * arg0->dyna.actor.world.pos.z) + sp44) > 0.0f) {
-        temp_v1_2 = arg0->unk_2BE + 1;
-        arg0->unk_2BE = temp_v1_2;
-        if (temp_v1_2 >= (temp_t1 - 7)) {
+
+    aux = Math_Atan2S(phi_f12, phi_f14);
+
+    func_8017B7F8(&sp50, (s16)aux, &sp4C, &sp48, &sp44);
+    if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
+        this->unk_2BE++;
+
+        if (this->unk_2BE >= (sp68 - 7)) {
             sp3C = 3;
         }
-        phi_v0 = sp3C;
-        if (temp_v1_2 >= (temp_t1 - 3)) {
-            phi_v0 = 1;
+        if (this->unk_2BE >= (sp68 - 3)) {
+            sp3C = 1;
         }
-        if (temp_v1_2 >= (temp_t1 - 2)) {
-            phi_v0 = 4;
+        if (this->unk_2BE >= (sp68 - 2)) {
+            sp3C = 4;
         }
-        phi_v1 = temp_v1_2;
-        if (temp_v1_2 >= (s32) temp_t1) {
-            arg0->unk_2BE = 0;
-            phi_v0 = 2;
-            phi_v1 = 0;
+        if (this->unk_2BE >= sp68) {
+            this->unk_2BE = 0;
+            sp3C = 2;
         }
-        sp3C = phi_v0;
-        Math_Vec3s_ToVec3f((Vec3f* ) &sp50, (phi_v1 * 6) + temp_t0);
+
+        Math_Vec3s_ToVec3f(&sp50, &sp64[this->unk_2BE]);
     }
-    if (arg0->unk_2B8 != 0) {
-        arg0->dyna.actor.world.rot.y = Math_Vec3f_Yaw(arg0 + 0x24, (Vec3f* ) &sp50);
-        func_800F415C(arg0->unk_2B8, &sp50, 0x190);
-        temp_v1_3 = arg0->dyna.actor.shape.rot.y;
-        temp_v0_3 = arg0->unk_2B8->unkBE;
-        temp_a2_2 = temp_v0_3 - temp_v1_3;
-        temp_a2_3 = temp_a2_2;
-        temp_f2 = fabsf((f32) temp_a2_3);
-        if (temp_f2 < D_80B7C3A0) {
-            if (temp_f2 < 100.0f) {
-                arg0->dyna.actor.shape.rot.y = temp_v0_3;
-                phi_a2 = temp_a2_3;
-            } else if ((s32) temp_a2_3 > 0) {
-                arg0->dyna.actor.shape.rot.y = temp_v1_3 + 0x64;
+
+    if (this->unk_2B8 != 0) {
+        this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
+        func_800F415C(this->unk_2B8, &sp50, 0x190);
+
+        if (1) {}
+
+        phi_a2 = this->unk_2B8->shape.rot.y - this->dyna.actor.shape.rot.y;
+        if (fabsf(phi_a2) < 2730.0f) {
+            if (fabsf(phi_a2) < 100.0f) {
+                this->dyna.actor.shape.rot.y = this->unk_2B8->shape.rot.y;
+            } else if (phi_a2 > 0) {
+                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
                 phi_a2 = 0x64;
-            } else {
-                phi_a2 = temp_a2_3;
-                if ((s32) temp_a2_3 < 0) {
-                    arg0->dyna.actor.shape.rot.y = temp_v1_3 - 0x64;
-                    phi_a2 = -0x64;
-                }
+            } else if (phi_a2 < 0) {
+                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x64;
+                phi_a2 = -0x64;
             }
-        } else if ((s32) temp_a2_3 > 0) {
-            arg0->dyna.actor.shape.rot.y = temp_v1_3 + 0x190;
+        } else if (phi_a2 > 0) {
+            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
             phi_a2 = 0x190;
         } else {
-            phi_a2 = temp_a2_3;
-            if ((s32) temp_a2_3 < 0) {
-                arg0->dyna.actor.shape.rot.y = temp_v1_3 - 0x190;
+            if (phi_a2 < 0) {
+                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
                 phi_a2 = -0x190;
             }
         }
-        if ((arg0->unk_2F4 & 0x14) != 0) {
-            func_80B78EFC(arg0, arg1, phi_a2);
+
+        if (this->unk_2F4 & 0x14) {
+            func_80B78EFC(this, globalCtx, phi_a2);
         }
     }
-    temp_v0_4 = arg0->unk_304;
-    if (temp_v0_4 == 0) {
-        arg0->dyna.actor.speedXZ = 4.0f;
-    } else if (temp_v0_4 == 1) {
-        arg0->dyna.actor.speedXZ = 8.0f;
+
+    if (this->unk_304 == 0) {
+        this->dyna.actor.speedXZ = 4.0f;
+    } else if (this->unk_304 == 1) {
+        this->dyna.actor.speedXZ = 8.0f;
     }
+
     return sp3C;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B79BA0.asm")
-#endif
 
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
     s32 temp_v0;
