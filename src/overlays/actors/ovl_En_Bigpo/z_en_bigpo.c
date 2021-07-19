@@ -148,9 +148,8 @@ extern Vec3f D_80B65084;
     {-1000.0f, 1500.0f, 2000.0f,},
 }; */
 
-#ifdef NON_MATCHING
-// non-matching: some instructions out of order but looks like it should be equiv
-void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
+void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnBigpo* this = (EnBigpo*) thisx;
     EnBigpoFireParticle* fires;
     s32 i;
@@ -158,30 +157,21 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, &D_80B65064);
 
-    // issue:  the params look-up wants to save the params to two t registers, one modified, one not
-    // then it saves the param, and immediately re-loads it wtf
-    // because its duping the globalcontext load instead of the params load, I can only assume its filling a void
-    this->switchFlags = this->actor.params;
-    //this->switchFlags = this->switchFlags >> 8;
-    this->switchFlags = (u8)(this->switchFlags);
-    this->actor.params &= 0xFF;
-    //if (this->actor.params == 9){} // almost like it needs a a different params for a different scope
-    //this->actor.params = (u8)this->actor.params;
-    if (this->actor.params == ENBIGPO_POSSIBLEFIRE) {
-    //if (parms == ENBIGPO_POSSIBLEFIRE) {
+    this->switchFlags = (u8)(thisx->params >> 8);
+    thisx->params &= 0xFF;
+    if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
             Actor_MarkForDeath(&this->actor);
         } else  {
-            this->actor.update = func_800BDFB0;
+            thisx->update = Actor_Noop;
             func_80B6383C(this);
         }
         return;
     }
     
-    // wants to re-load global context here from s6 in vanilla, but ido doesnt see the need now
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B65044, &D_80B6503C);
+    CollisionCheck_SetInfo(&thisx->colChkInfo, &D_80B65044, &D_80B6503C);
 
     for (i = 0; i < 3; i++) {
         fires = &this->fires[i];
@@ -190,34 +180,31 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx) {
 
         //Lights_PointNoGlowSetInfo(&this->fires[i].info,
         Lights_PointNoGlowSetInfo(&fires->info,
-             this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+             thisx->home.pos.x, thisx->home.pos.y, thisx->home.pos.z,
              0xFF, 0xFF, 0xFF, 0);
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 45.0f);
-    this->actor.bgCheckFlags |= 0x400;
-    this->unk218 = this->actor.home.pos.y + 100.0f;
+    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 45.0f);
+    thisx->bgCheckFlags |= 0x400;
+    this->unk218 = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 0xFF;
     this->mainColor.g = 0xFF;
     this->mainColor.b = 0xD2;
-    this->mainColor.a = 0x00; // fully invible
+    this->mainColor.a = 0x00; // fully invisible
     
     if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
         // has switch flag, and switch already set: already killed
         Actor_MarkForDeath(&this->actor);
     }
 
-    if (this->actor.params == ENBIGPO_REGULAR) { // the well poe, starts immediately
+    if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
+        thisx->flags &= ~0x10;
         this->unk204 = 1;
-        this->actor.flags &= -0x11;
         func_80B61AC8(this);
-    } else if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
+    } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
         func_80B63450(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")
-#endif
 
 void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
@@ -1357,22 +1344,21 @@ void func_80B6467C(Actor *thisx, GlobalContext *globalCtx) {
 // non-equivelent: this is an odd draw function, 
 // diff is nowhere close
 // set as poe is dying
-#ifdef NON_EQUIVELENT
+#ifdef NON_MATCHING
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
-
-    Camera *cam;
+    s32 pad;
+    // Camera* cam
     f32 magnitude;
-    f32 magnitude2;
+    // f32 magnitude2;
+    Gfx* dispHead; // sp70
     Vec3f vec1; // sp64
-    Vec3f vec2;
-    Gfx *dispHead;
+    Vec3f vec2; // sp58
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
-    if (cam != NULL) {
-        Math_Vec3f_Diff(&cam->eye, &cam->focalPoint, &vec1);
+    // cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    if (globalCtx->cameraPtrs[globalCtx->activeCamera] != NULL) {
+        Math_Vec3f_Diff(&globalCtx->cameraPtrs[globalCtx->activeCamera]->eye, &globalCtx->cameraPtrs[globalCtx->activeCamera]->focalPoint, &vec1);
         magnitude = Math3D_Vec3fMagnitude(&vec1);
         //magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
         //Math_Vec3f_Scale(&vec1, magnitude2);
@@ -1381,8 +1367,15 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
         Math_Vec3f_Copy(&vec1, &D_801D15B0);
     }
     
+    /** TODO: __gfxCtx from OPEN_DISPS is suppose to be sp50, not sp54
+     * Have 1 unused var available (s32 pad)
+     * My best idea is to use this temp in a way that can reduce the stack
+     * If an alternative solution is found, best to use the temp for cam (doesn't change anything)
+     */
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
     // fully visible OR fully transparent
-    if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         dispHead = POLY_OPA_DISP;
     } else {
@@ -1390,31 +1383,31 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
         dispHead = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
+    gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
 
-    gSPSegment(dispHead + 1, 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xA0, 0, 0xFF, (s32) this->mainColor.a));
+    gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
     SysMatrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
-    Lights_PointGlowSetInfo(&this->fires[0].info, (s16) (vec2.x + vec1.x),
-         (s16) (vec2.y + vec1.y), (s16) (vec2.z + vec1.z),
+    Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x,
+         vec2.y + vec1.y, vec2.z + vec1.z,
          this->unk294.r, this->unk294.g, this->unk294.b, this->unk294.a); // radius?
 
-    gDPSetEnvColor(dispHead + 2, this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
+    gDPSetEnvColor(&dispHead[2], this->unk294.r, this->unk294.g, this->unk294.b, this->mainColor.a);
 
-    gSPMatrix(dispHead + 3, Matrix_NewMtx(globalCtx->state.gfxCtx),
+    gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx),
        G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(dispHead + 4, &D_060042C8);
+    gSPDisplayList(&dispHead[4], &D_060042C8);
 
-    gSPDisplayList(dispHead + 5, &D_060043F8);
+    gSPDisplayList(&dispHead[5], &D_060043F8);
 
     // fully transparent OR fully invisible
-    if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
-        POLY_OPA_DISP += 6;
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+        POLY_OPA_DISP = &dispHead[6];
     } else {
-        POLY_XLU_DISP += 6;
+        POLY_XLU_DISP = &dispHead[6];
     }
-
+    
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }
