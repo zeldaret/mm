@@ -44,7 +44,6 @@ void func_80BD9938(EnPamera* this);
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9A9C(EnPamera* this);
 void func_80BD9AB0(EnPamera* this, GlobalContext* globalCtx);
-
 void func_80BD9B4C(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9C70(EnPamera* this, GlobalContext* globalCtx);
 s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx);
@@ -64,6 +63,29 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx);
 void func_80BDA344(Actor* thisx, GlobalContext* globalCtx);
 
+extern FlexSkeletonHeader D_06008448;
+extern AnimationHeader D_060005BC;
+extern AnimationHeader D_06008AE0;
+extern AnimationHeader D_06008E38;
+extern AnimationHeader D_0600A844;
+extern AnimationHeader D_0600B0C4;
+extern AnimationHeader D_06009870;
+extern AnimationHeader D_06009F54;
+extern AnimationHeader D_0600B5B0;
+extern AnimationHeader D_0600BCC4;
+extern AnimationHeader D_0600D9DC;
+extern AnimationHeader D_0600E16C;
+extern AnimationHeader D_0600C9F4;
+extern AnimationHeader D_0600D0F0;
+
+extern u64 D_060074E8[];
+extern u64 D_060078E8[];
+extern u64 D_060066E8[];
+extern u64 D_06006AE8[];
+extern u64 D_06006EE8[];
+extern u64 D_060072E8[];
+extern u64 D_060073E8[];
+
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,
@@ -76,9 +98,7 @@ const ActorInit En_Pamera_InitVars = {
     (ActorFunc)EnPamera_Draw,
 };
 
-// s32 D_80BDA480[] = { 0x0A000039, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-//                      0x00000000, 0x00000100, 0x000C002E, 0x00000000, 0x00000000 };
-
+// D_80BDA480[]
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
@@ -99,35 +119,47 @@ static ColliderCylinderInit sCylinderInit = {
     { 12, 46, 0, { 0, 0, 0 } },
 };
 
+// D_80BDA4AC
 static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-ActorAnimationEntry D_80BDA4B8[] = {
-    0x060005BC, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000, 0x06008AE0, 0x3F800000, 0x00000000,
-    0x00000000, 0x00000000, 0xC0800000, 0x06008E38, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000,
-    0x0600A844, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000, 0x0600B0C4, 0x3F800000, 0x00000000,
-    0x00000000, 0x00000000, 0xC0800000, 0x06009870, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x06009F54, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0600B5B0, 0x3F800000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x0600BCC4, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x0600D9DC, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0600E16C, 0x3F800000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x0600C9F4, 0x3F800000, 0x00000000, 0x00000000, 0x02000000, 0x00000000,
-    0x0600D0F0, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+static ActorAnimationEntry D_80BDA4B8[] = {
+    { &D_060005BC, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &D_06008AE0, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &D_06008E38, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &D_0600A844, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &D_0600B0C4, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &D_06009870, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_06009F54, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_0600B5B0, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_0600BCC4, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_0600D9DC, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_0600E16C, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_0600C9F4, 1.0f, 0, 0.0f, 2, 0.0f },
+    { &D_0600D0F0, 1.0f, 0, 0.0f, 0, 0.0f },
 };
 
-s32 D_80BDA5F0[] = { 0x447A0000, 0x00000000, 0x00000000 };
+static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };
 
-s32 D_80BDA5FC[] = { 0x060074E8, 0x060078E8 };
+// s32 D_80BDA5FC[] = { 0x060074E8, 0x060078E8 };
+static void* D_80BDA5FC[] = {
+    D_060074E8,
+    D_060078E8,
+};
 
-s32 D_80BDA604[] = { 0x060066E8, 0x06006AE8, 0x06006EE8 };
+// s32 D_80BDA604[] = { 0x060066E8, 0x06006AE8, 0x06006EE8 };
+static void* D_80BDA604[] = {
+    D_060066E8,
+    D_06006AE8,
+    D_06006EE8,
+};
 
-s32 D_80BDA610[] = { 0x060072E8, 0x060073E8, 0x00000000, 0x00000000 };
-
-// object_pamera_skeleton
-extern FlexSkeletonHeader D_06008448[];
-extern AnimationHeader D_060005BC[];
-extern AnimationHeader D_06008AE0;
-extern AnimationHeader D_06008E38;
+// s32 D_80BDA610[] = { 0x060072E8, 0x060073E8, 0x00000000, 0x00000000 };
+static void* D_80BDA610[] = {
+    D_060072E8,
+    D_060073E8,
+};
 
 void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -135,7 +167,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, D_06008448, D_060005BC, this->limbDrawTbl, this->transitionDrawTbl,
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008448, &D_060005BC, this->limbDrawTbl, this->transitionDrawTbl,
                      0x17);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -553,7 +585,7 @@ s32 func_80BD9648(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 // matches -- PostLimbDraw
 void func_80BD9690(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 9) {
-        SysMatrix_MultiplyVector3fByState(D_80BDA5F0, &thisx->focus);
+        SysMatrix_MultiplyVector3fByState(&D_80BDA5F0, &thisx->focus.pos);
     }
 }
 
@@ -835,7 +867,7 @@ void func_80BDA1C8(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BDA288(EnPamera* this) {
     this->unk_31E = 1;
     func_80BD93CC(this, 0, 0);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 0xB);
+    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 11);
     this->setupFunc = func_80BDA2E0;
 }
 
@@ -843,7 +875,7 @@ void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
             this->unk_31E = 0;
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 0xC);
+            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 12);
         }
     }
 }
