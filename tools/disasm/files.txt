@@ -404,7 +404,7 @@
             0x8012BC50 : "z_rcp",
             0x8012D500 : "[PADDING]",
             0x8012D510 : "z_room",
-            0x8012EC80 : "",
+            0x8012EC80 : "code_8012EC80",
             0x8012F2D0 : "[PADDING]",
             0x8012F2E0 : "z_scene",
             0x801307C0 : "z_scene_proc",

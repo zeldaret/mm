@@ -16,5 +16,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/func_80086588.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/StartHeap_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/func_80086620.s")
