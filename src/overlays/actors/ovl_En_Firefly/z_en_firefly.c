@@ -351,7 +351,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
         this->unk_2E8.x = 4.0f;
         this->unk_2E8.y = 0.55f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 3);
+                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == 2) {
         this->unk_18F = 0;
         this->unk_2E8.x = 4.0f;

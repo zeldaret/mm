@@ -41,7 +41,7 @@ extern Gfx D_040396F0[]; // gExplosionSplashTex7
 extern Gfx D_04039BF0[]; // gExplosionSplashTex8
 extern Gfx D_0403A0F0[]; // gExplosionSplashDL
 
-static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
+static Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };
 
 static Vec3f sLightRaysEnvColor[] = {
     { 255.0f, 255.0f, 0.0f },
@@ -57,7 +57,7 @@ static Vec3f sLightRayPrimColor[] = {
     { 255.0f, 255.0f, 255.0f },
 };
 
-static f32 sOuterCloudScaleZ[] = {
+static f32 sOuterCloudMaxScale[] = {
     6.0f,
     12.0f,
     9.0f,
@@ -68,7 +68,7 @@ static f32 sBlackSmokeScale[] = {
     6.0f,
 };
 
-static f32 sFloorShockwaveScaleZ[] = {
+static f32 sFloorShockwaveMaxScale[] = {
     15.0f,
     30.0f,
     20.0f,
@@ -84,11 +84,11 @@ static f32 sLightRayScale[] = {
     1000.0f, 2000.0f, 1500.0f, 800.0f, 1300.0f,
 };
 
-static f32 sLightRayScaleZTarget[] = {
+static f32 sLightRayMaxScaleTarget[] = {
     15.0f, 30.0f, 20.0f, 10.0f, 20.0f,
 };
 
-static f32 sLightRayScaleZ[] = {
+static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
@@ -98,23 +98,31 @@ static Gfx* sExplosionSplashTex[] = {
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
 
-void EnClearTag_AddExplosionDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 rotZ) {
+/**
+ * Creates a debris effect.
+ * Debris effects are spawned by an explosion.
+ */
+void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, f32 rotZ) {
     f32 rotX;
-    EnClearTagEffects* effect = this->effects;
+    EnClearTagEffect* effect = this->effect;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
-            effect->type = CLEARTAG_EXPLOSION_DEBRIS;
-            effect->pos = *pos;
-            effect->vel = *vel;
-            effect->accel = *accel;
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            effect->type = CLEAR_TAG_EFFECT_DEBRIS;
+
+            effect->position = *position;
+            effect->velocity = *velocity;
+            effect->acceleration = *acceleration;
+
             effect->scale = scale;
-            effect->rotY = Rand_ZeroFloat(2 * M_PI);
-            rotX = Rand_ZeroFloat(2 * M_PI);
-            effect->isDebreeActive = 0;
+
+            // Set the debris effects to spawn in a circle.
+            effect->rotY = Rand_ZeroFloat(M_PI * 2);
+            rotX = Rand_ZeroFloat(M_PI * 2);
+            effect->bounces = 0;
             effect->rotX = rotX;
-            effect->effectsTimer = effect->isDebreeActive;
+            effect->effectsTimer = effect->bounces;
             effect->rotZ = rotZ;
             effect->actionTimer = Rand_ZeroFloat(10.0f);
             break;
@@ -122,117 +130,138 @@ void EnClearTag_AddExplosionDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* ve
     }
 }
 
-void EnClearTag_AddExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
+/**
+ * Creates a smoke effect.
+ * Smoke effects are spawned by an explosion.
+ */
+void EnClearTag_CreateSmokeEffect(EnClearTag* this, Vec3f* position, f32 scale) {
     s16 i;
-    EnClearTagEffects* effect = this->effects;
+    EnClearTagEffect* effect = this->effect;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->actionTimer = Rand_ZeroFloat(100.0f);
-            effect->type = CLEARTAG_EXPLOSION_BLACK_SMOKE;
-            effect->pos = *pos;
-            effect->vel = sZeroVec;
-            effect->accel = sZeroVec;
+            effect->type = CLEAR_TAG_EFFECT_SMOKE;
+
+            effect->position = *position;
+            effect->velocity = sZeroVector;
+            effect->acceleration = sZeroVector;
+
             effect->scale = scale;
-            effect->scaleZ = 2.0f * scale;
+            effect->maxScale = 2.0f * scale;
             effect->scaleX = 1.0f;
             effect->scaleY = 1.0f;
-            effect->primColorAlpha = 255.0f;
-            effect->envColorR = 255.0f;
-            effect->envColorB = 255.0f;
-            effect->primColorR = 200.0f;
-            effect->primColorG = 20.0f;
-            effect->primColorB = 0.0f;
-            effect->envColorG = 215.0f;
+
+            effect->primColor.a = 255.0f;
+            effect->envColor.r = 255.0f;
+            effect->envColor.b = 255.0f;
+            effect->primColor.r = 200.0f;
+            effect->primColor.g = 20.0f;
+            effect->primColor.b = 0.0f;
+            effect->envColor.g = 215.0f;
             break;
         }
     }
 }
 
-void EnClearTag_AddNoExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
+/**
+ * Creates an isolated smoke effect without an explosion.
+ * Smoke effects are spawned directly.
+ */
+void EnClearTag_CreateIsolatedSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
-    EnClearTagEffects* effect = this->effects;
+    EnClearTagEffect* effect = this->effect;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->actionTimer = Rand_ZeroFloat(100.0f);
-            effect->type = CLEARTAG_NO_EXPLOSION_BLACK_SMOKE;
-            effect->pos = *pos;
-            effect->vel = sZeroVec;
-            effect->accel = sZeroVec;
+            effect->type = CLEAR_TAG_EFFECT_ISOLATED_SMOKE;
+            effect->position = *pos;
+            effect->velocity = sZeroVector;
+            effect->acceleration = sZeroVector;
             effect->scale = scale;
-            effect->scaleZ = 2.0f * scale;
+            effect->maxScale = 2.0f * scale;
             effect->scaleX = 1.0f;
             effect->scaleY = 1.0f;
 
             if (scale <= 1.1f) {
                 effect->scale = ((KREG(23) * 0.1f) + 1.0f) * scale;
-                effect->primColorAlpha = KREG(16) + 150.0f;
-                effect->primColorR = KREG(17);
-                effect->primColorG = KREG(18);
-                effect->primColorB = KREG(19);
-                effect->envColorR = KREG(20);
-                effect->envColorG = KREG(21);
-                effect->envColorB = KREG(22);
+                effect->primColor.a = KREG(16) + 150.0f;
+                effect->primColor.r = KREG(17);
+                effect->primColor.g = KREG(18);
+                effect->primColor.b = KREG(19);
+                effect->envColor.r = KREG(20);
+                effect->envColor.g = KREG(21);
+                effect->envColor.b = KREG(22);
             } else {
-                effect->envColorB = 0.0f;
-                effect->envColorG = 0.0f;
-                effect->envColorR = 0.0f;
-                effect->primColorB = 0.0f;
-                effect->primColorG = 0.0f;
-                effect->primColorR = 0.0f;
-                effect->primColorAlpha = 255.0f;
+                effect->envColor.b = 0.0f;
+                effect->envColor.g = 0.0f;
+                effect->envColor.r = 0.0f;
+                effect->primColor.b = 0.0f;
+                effect->primColor.g = 0.0f;
+                effect->primColor.r = 0.0f;
+                effect->primColor.a = 255.0f;
             }
             break;
         }
     }
 }
 
-void EnClearTag_AddExplosionOuterCloudEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ, f32 floorHeight) {
-    EnClearTagEffects* effect = this->effects;
+/**
+ * Creates a flash effect.
+ * Flash effects are spawned by an explosion or a pop.
+ * Flash effects two components: 1) a billboard flash, and 2) a light effect on the ground.
+ */
+void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* position, f32 scale, f32 floorHeight) {
+    EnClearTagEffect* effect = this->effect;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
-            effect->type = CLEARTAG_EXPLOSION_OUTER_CLOUD;
-            effect->pos = *pos;
-            effect->vel = sZeroVec;
-            effect->accel = sZeroVec;
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            effect->type = CLEAR_TAG_EFFECT_FLASH;
+
+            effect->position = *position;
+            effect->velocity = sZeroVector;
+            effect->acceleration = sZeroVector;
+
             effect->scale = 0.0f;
-            effect->scaleZ = scaleZ * 3.0f;
-            // rotZ is unused for CLEARTAG_EXPLOSION_OUTER_CLOUD
+            effect->maxScale = scale * 3.0f;
+
+            // rotZ is unused for CLEAR_TAG_EFFECT_FLASH
             effect->rotZ = floorHeight;
-            effect->primColorAlpha = 255.0f;
+
+            effect->primColor.a = 255.0f;
+
             break;
         }
     }
 }
 
 void EnClearTag_AddLightRayFromExplosionEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale,
-                                               f32 scaleZTarget, s16 alphaDecrementSpeed) {
-    EnClearTagEffects* effect = this->effects;
+                                               f32 maxScaleTarget, s16 alphaDecrementSpeed) {
+    EnClearTagEffect* effect = this->effect;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
-            effect->type = CLEARTAG_LIGHT_RAY;
-            effect->pos = *pos;
-            effect->vel = *vel;
-            effect->accel = *accel;
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
+            effect->position = *pos;
+            effect->velocity = *vel;
+            effect->acceleration = *accel;
             effect->scale = scale / 1000.0f;
-            effect->scaleZ = 1.0f;
-            effect->scaleZTarget = scaleZTarget;
+            effect->maxScale = 1.0f;
+            effect->maxScaleTarget = maxScaleTarget;
             effect->lightRayAlpha = Rand_ZeroFloat(100.0f) + 200.0f;
             effect->lightRayAlphaDecrementSpeed = alphaDecrementSpeed;
             effect->actionTimer = Rand_ZeroFloat(10.0f);
-            effect->rotY = Math_Acot2F(effect->vel.z, effect->vel.x);
-            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->vel)), effect->vel.y);
-            effect->envColorR = 255.0f;
-            effect->envColorG = 255.0f;
-            effect->primColorR = 255.0f;
-            effect->primColorG = 255.0f;
-            effect->primColorB = 255.0f;
-            effect->envColorB = 0.0f;
+            effect->rotY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
+            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->envColor.r = 255.0f;
+            effect->envColor.g = 255.0f;
+            effect->primColor.r = 255.0f;
+            effect->primColor.g = 255.0f;
+            effect->primColor.b = 255.0f;
+            effect->envColor.b = 0.0f;
             break;
         }
     dummy:;
@@ -240,49 +269,49 @@ void EnClearTag_AddLightRayFromExplosionEffect(EnClearTag* this, Vec3f* pos, Vec
 }
 
 void EnClearTag_AddLightRayFromLightArrowsEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale,
-                                                 f32 scaleZTarget, s16 colorIndex, s16 alphaDecrementSpeed) {
-    EnClearTagEffects* effect = this->effects;
+                                                 f32 maxScaleTarget, s16 colorIndex, s16 alphaDecrementSpeed) {
+    EnClearTagEffect* effect = this->effect;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
-            effect->type = CLEARTAG_LIGHT_RAY;
-            effect->pos = *pos;
-            effect->vel = *vel;
-            effect->accel = *accel;
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
+            effect->position = *pos;
+            effect->velocity = *vel;
+            effect->acceleration = *accel;
             effect->scale = scale / 1000.0f;
-            effect->scaleZ = 1.0f;
-            effect->scaleZTarget = scaleZTarget;
+            effect->maxScale = 1.0f;
+            effect->maxScaleTarget = maxScaleTarget;
             effect->lightRayAlpha = Rand_ZeroFloat(100.0f) + 200.0f;
             effect->lightRayAlphaDecrementSpeed = alphaDecrementSpeed;
             effect->actionTimer = Rand_ZeroFloat(10.0f);
-            effect->rotY = Math_Acot2F(effect->vel.z, effect->vel.x);
-            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->vel)), effect->vel.y);
-            effect->envColorR = sLightRaysEnvColor[colorIndex].x;
-            effect->envColorG = sLightRaysEnvColor[colorIndex].y;
-            effect->envColorB = sLightRaysEnvColor[colorIndex].z;
-            effect->primColorR = sLightRayPrimColor[colorIndex].x;
-            effect->primColorG = sLightRayPrimColor[colorIndex].y;
-            effect->primColorB = sLightRayPrimColor[colorIndex].z;
+            effect->rotY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
+            effect->rotX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->envColor.r = sLightRaysEnvColor[colorIndex].x;
+            effect->envColor.g = sLightRaysEnvColor[colorIndex].y;
+            effect->envColor.b = sLightRaysEnvColor[colorIndex].z;
+            effect->primColor.r = sLightRayPrimColor[colorIndex].x;
+            effect->primColor.g = sLightRayPrimColor[colorIndex].y;
+            effect->primColor.b = sLightRayPrimColor[colorIndex].z;
             break;
         }
     }
 }
 
-void EnClearTag_AddFloorShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ, s16 actionTimer) {
-    EnClearTagEffects* effect = this->effects;
+void EnClearTag_CreateShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 maxScale, s16 actionTimer) {
+    EnClearTagEffect* effect = this->effect;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
-            effect->type = CLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE;
-            effect->pos = *pos;
-            effect->vel = sZeroVec;
-            effect->accel = sZeroVec;
-            effect->scaleZ = scaleZ;
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            effect->type = CLEAR_TAG_EFFECT_SHOCKWAVE;
+            effect->position = *pos;
+            effect->velocity = sZeroVector;
+            effect->acceleration = sZeroVector;
+            effect->maxScale = maxScale;
             effect->actionTimer = actionTimer;
             effect->scale = 0.0f;
-            effect->primColorAlpha = 200.0f;
+            effect->primColor.a = 200.0f;
             break;
         }
     }
@@ -290,18 +319,18 @@ void EnClearTag_AddFloorShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ
 
 void EnClearTag_AddExplosionSplashEffect(EnClearTag* this, Vec3f* pos, s16 effectsTimer) {
     s16 i;
-    EnClearTagEffects* effect = this->effects;
+    EnClearTagEffect* effect = this->effect;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
-        if (effect->type == CLEARTAG_NO_EFFECT) {
+    for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             // Immediately overwritten and generates a lot of wasted asm (f32 to u8)
             effect->actionTimer = Rand_ZeroFloat(100.0f);
-            effect->type = CLEARTAG_EXPLOSION_SPLASH;
-            effect->pos = *pos;
-            effect->vel = sZeroVec;
-            effect->accel = sZeroVec;
+            effect->type = CLEAR_TAG_EFFECT_SPLASH;
+            effect->position = *pos;
+            effect->velocity = sZeroVector;
+            effect->acceleration = sZeroVector;
             effect->scale = 0.0f;
-            effect->scaleZ = 0.0f;
+            effect->maxScale = 0.0f;
             effect->actionTimer = 0;
             effect->effectsTimer = effectsTimer;
             effect->rotX = 0.78f;
@@ -310,41 +339,49 @@ void EnClearTag_AddExplosionSplashEffect(EnClearTag* this, Vec3f* pos, s16 effec
     }
 }
 
+/**
+ * EnClear_Tag destructor.
+ * No Operation takes place.
+ */
 void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
+/**
+ * EnClear_Tag constructor.
+ * This initializes effects, and sets up ClearTag instance data.
+ */
 void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[3];
     EnClearTag* this = THIS;
-    f32 lightRayScaleZ;
+    f32 lightRayMaxScale;
     u8 i;
     Vec3f pos;
     Vec3f vel;
     Vec3f accel;
 
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        if (thisx->params == 200) {
-            EnClearTag_AddNoExplosionBlackSmokeEffect(this, &pos, this->actor.world.rot.z);
+        if (thisx->params == CLEAR_TAG_SMOKE) {
+            EnClearTag_CreateIsolatedSmokeEffect(this, &pos, this->actor.world.rot.z);
             return;
         }
 
-        if (thisx->params != 35) {
-            if (thisx->params == 3 || thisx->params == 4) {
+        if (thisx->params != CLEAR_TAG_SPLASH) {
+            if (thisx->params == CLEAR_TAG_SMALL_LIGHT_RAYS || thisx->params == CLEAR_TAG_LARGE_LIGHT_RAYS) {
                 for (i = 0; i < 54; i++) {
-                    lightRayScaleZ = sLightRayScaleZ[thisx->params] + Rand_ZeroFloat(sLightRayScaleZ[thisx->params]);
+                    lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                     SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
                     SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    SysMatrix_GetStateTranslationAndScaledZ(lightRayScaleZ, &vel);
+                    SysMatrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
                     accel.y = vel.y * -0.03f;
                     accel.z = vel.z * -0.03f;
                     EnClearTag_AddLightRayFromLightArrowsEffect(
                         this, &pos, &vel, &accel,
                         sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
-                        sLightRayScaleZTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
+                        sLightRayMaxScaleTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
                 return;
             } else {
@@ -360,23 +397,23 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                 Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 30.0f, 100.0f, 4);
                 pos = this->actor.world.pos;
-                EnClearTag_AddExplosionOuterCloudEffect(this, &pos, sOuterCloudScaleZ[thisx->params],
+                EnClearTag_CreateFlashEffect(this, &pos, sOuterCloudMaxScale[thisx->params],
                                                         this->actor.floorHeight);
                 if (!(this->actor.bgCheckFlags & 0x20)) {
                     if (thisx->params < 10) {
                         pos.y = this->actor.world.pos.y - 40.0f;
-                        if (thisx->params != 2) {
-                            EnClearTag_AddExplosionBlackSmokeEffect(this, &pos, sBlackSmokeScale[thisx->params]);
+                        if (thisx->params != CLEAR_TAG_POP) {
+                            EnClearTag_CreateSmokeEffect(this, &pos, sBlackSmokeScale[thisx->params]);
                         }
                         pos.y = this->actor.floorHeight + 3.0f;
-                        EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 0);
-                        EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 3);
-                        if (thisx->params == 1) {
-                            EnClearTag_AddFloorShockwaveEffect(this, &pos, sFloorShockwaveScaleZ[thisx->params], 6);
+                        EnClearTag_CreateShockwaveEffect(this, &pos, sFloorShockwaveMaxScale[thisx->params], 0);
+                        EnClearTag_CreateShockwaveEffect(this, &pos, sFloorShockwaveMaxScale[thisx->params], 3);
+                        if (thisx->params == CLEAR_TAG_LARGE_EXPLOSION) {
+                            EnClearTag_CreateShockwaveEffect(this, &pos, sFloorShockwaveMaxScale[thisx->params], 6);
                         }
                     }
 
-                    if (thisx->params != 2) {
+                    if (thisx->params != CLEAR_TAG_POP) {
                         pos.y = this->actor.world.pos.y;
                         for (i = 0; i < 18; i++) {
                             vel.x = __sinf(i * 0.825f) * i * .5f;
@@ -387,7 +424,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                             accel.x = 0.0f;
                             accel.y = -1.0f;
                             accel.z = 0.0f;
-                            EnClearTag_AddExplosionDebrisEffect(this, &pos, &vel, &accel,
+                            EnClearTag_CreateDebrisEffect(this, &pos, &vel, &accel,
                                                                 sDebrisScale[thisx->params] +
                                                                     Rand_ZeroFloat(sDebrisScale[thisx->params]),
                                                                 this->actor.floorHeight);
@@ -397,17 +434,17 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                 pos = this->actor.world.pos;
                 for (i = 0; i < 44; i++) {
-                    lightRayScaleZ = sLightRayScaleZ[thisx->params] + Rand_ZeroFloat(sLightRayScaleZ[thisx->params]);
+                    lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                     SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
                     SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    SysMatrix_GetStateTranslationAndScaledZ(lightRayScaleZ, &vel);
+                    SysMatrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
                     accel.y = vel.y * -0.03f;
                     accel.z = vel.z * -0.03f;
                     EnClearTag_AddLightRayFromExplosionEffect(
                         this, &pos, &vel, &accel,
                         sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
-                        sLightRayScaleZTarget[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
+                        sLightRayMaxScaleTarget[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
                 }
             }
         }
@@ -504,123 +541,147 @@ void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnClearTag_DrawEffects(thisx, globalCtx);
 }
 
+/**
+ * Updates the explosion and light effects.
+ * Performs effect physics.
+ * Moves and bounces debris effects.
+ * Fades most effects out of view. When effects are completely faded away they are removed.
+ */
 void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
-    EnClearTagEffects* effect = this->effects;
-    s32 pad;
-    f32 prevPosY;
-    Vec3f pos;
+    EnClearTagEffect* effect = this->effect;
     s16 i;
+    f32 originalYPosition;
+    Vec3f sphereCenter;
+    s32 pad;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type != CLEARTAG_NO_EFFECT) {
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type != CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->actionTimer++;
-            effect->pos.x += effect->vel.x;
-            prevPosY = effect->pos.y;
-            effect->pos.y += effect->vel.y;
-            effect->pos.z += effect->vel.z;
-            effect->vel.x += effect->accel.x;
-            effect->vel.y += effect->accel.y;
-            effect->vel.z += effect->accel.z;
-            if (effect->type == CLEARTAG_EXPLOSION_DEBRIS) {
-                if (effect->vel.y < -5.0f) {
-                    effect->vel.y = -5.0f;
+
+            // Perform effect physics.
+            effect->position.x += effect->velocity.x;
+            originalYPosition = effect->position.y;
+            effect->position.y += effect->velocity.y;
+            effect->position.z += effect->velocity.z;
+            effect->velocity.x += effect->acceleration.x;
+            effect->velocity.y += effect->acceleration.y;
+            effect->velocity.z += effect->acceleration.z;
+
+            if (effect->type == CLEAR_TAG_EFFECT_DEBRIS) {
+                // Clamp the velocity to -5.0
+                if (effect->velocity.y < -5.0f) {
+                    effect->velocity.y = -5.0f;
                 }
 
-                if (effect->vel.y < 0.0f) {
-                    pos = effect->pos;
-                    pos.y += 5.0f;
-                    if (func_800C5A20(&globalCtx->colCtx, &pos, 11.0f) != 0) {
-                        effect->pos.y = prevPosY;
-                        if (effect->isDebreeActive <= 0) {
-                            effect->isDebreeActive++;
-                            effect->vel.y *= -0.5f;
+                // While the effect is falling check if it has hit the ground.
+                if (effect->velocity.y < 0.0f) {
+                    sphereCenter = effect->position;
+                    sphereCenter.y += 5.0f;
+
+                    // Check if the debris has hit the ground.
+                    if (func_800C5A20(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
+                        effect->position.y = originalYPosition;
+
+                        // Bounce the debris effect.
+                        if (effect->bounces <= 0) {
+                            effect->bounces++;
+                            effect->velocity.y *= -0.5f;
                             effect->effectsTimer = Rand_ZeroFloat(20.0f) + 25.0f;
                         } else {
-                            effect->vel.y = 0.0f;
-                            effect->accel.y = 0.0f;
-                            effect->vel.z = 0.0f;
-                            effect->vel.x = 0.0f;
+                            // The Debris effect is done bouncing. Set its velocity and acceleration to 0.
+                            effect->velocity.x = effect->velocity.z = effect->acceleration.y = effect->velocity.y =
+                                0.0f;
                         }
                     }
                 }
 
-                if (effect->accel.y != 0.0f) {
+                // Rotate the debris effect.
+                if (effect->acceleration.y != 0.0f) {
                     effect->rotY += 0.5f;
                     effect->rotX += 0.35f;
                 }
 
                 if (effect->effectsTimer == 1) {
-                    effect->type = CLEARTAG_NO_EFFECT;
+                    effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                 }
-            } else if (effect->type == CLEARTAG_UNUSED_BLACK_SMOKE) {
-                // effect->type never set to 2
-                Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
-                if (effect->primColorAlpha <= 0.0f) {
-                    effect->type = CLEARTAG_NO_EFFECT;
+            } else if (effect->type == CLEAR_TAG_EFFECT_FIRE) {
+                // Fade the fire effect.
+                Math_ApproachZeroF(&effect->primColor.a, 1.0f, 15.0f);
+                if (effect->primColor.a <= 0.0f) {
+                    effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                 }
-            } else if (effect->type == CLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE) {
+            } else if (effect->type == CLEAR_TAG_EFFECT_SHOCKWAVE) {
                 if (effect->actionTimer > 3) {
-                    Math_ApproachF(&effect->scale, effect->scaleZ, 0.2f, effect->scaleZ * 0.6666666f);
-                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
-                    if (effect->primColorAlpha <= 0.0f) {
-                        effect->type = CLEARTAG_NO_EFFECT;
+                    Math_ApproachF(&effect->scale, effect->maxScale, 0.2f, effect->maxScale * 0.6666666f);
+                    Math_ApproachZeroF(&effect->primColor.a, 1.0f, 15.0f);
+                    if (effect->primColor.a <= 0.0f) {
+                        effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                     }
                 }
-            } else if (effect->type == CLEARTAG_EXPLOSION_BLACK_SMOKE) {
-                Math_ApproachZeroF(&effect->primColorR, 1.0f, 20.0f);
-                Math_ApproachZeroF(&effect->primColorG, 1.0f, 2.0f);
-                Math_ApproachZeroF(&effect->envColorR, 1.0f, 25.5f);
-                Math_ApproachZeroF(&effect->envColorG, 1.0f, 21.5f);
-                Math_ApproachZeroF(&effect->envColorB, 1.0f, 25.5f);
-                Math_ApproachF(&effect->scale, effect->scaleZ, 0.05f, 0.1f);
-                if (effect->primColorR == 0.0f) {
+            } else if (effect->type == CLEAR_TAG_EFFECT_SMOKE) {
+                // Fade the smoke effects.
+                Math_ApproachZeroF(&effect->primColor.r, 1.0f, 20.0f);
+                Math_ApproachZeroF(&effect->primColor.g, 1.0f, 2.0f);
+                Math_ApproachZeroF(&effect->envColor.r, 1.0f, 25.5f);
+                Math_ApproachZeroF(&effect->envColor.g, 1.0f, 21.5f);
+                Math_ApproachZeroF(&effect->envColor.b, 1.0f, 25.5f);
+
+                // Smooth scale the smoke effects.
+                Math_ApproachF(&effect->scale, effect->maxScale, 0.05f, 0.1f);
+                
+                if (effect->primColor.r == 0.0f) {
                     Math_ApproachF(&effect->scaleX, 3.0f, 0.1f, 0.01f);
                     Math_ApproachF(&effect->scaleY, 3.0f, 0.1f, 0.02f);
-                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 5.f);
-                    if (effect->primColorAlpha <= 0.0f) {
-                        effect->type = CLEARTAG_NO_EFFECT;
+
+                    // Fade the smoke effects.
+                    Math_ApproachZeroF(&effect->primColor.a, 1.0f, 5.f);
+
+                    // If the smoke effect has fully faded, unload it.
+                    if (effect->primColor.a <= 0.0f) {
+                        effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                     }
                 }
-            } else if (effect->type == CLEARTAG_NO_EXPLOSION_BLACK_SMOKE) {
-                Math_ApproachF(&effect->scale, effect->scaleZ, 0.05f, 0.1f);
+            } else if (effect->type == CLEAR_TAG_EFFECT_ISOLATED_SMOKE) {
+                Math_ApproachF(&effect->scale, effect->maxScale, 0.05f, 0.1f);
                 if (effect->actionTimer > 10) {
                     Math_ApproachF(&effect->scaleX, 3.0f, 0.1f, 0.01f);
                     Math_ApproachF(&effect->scaleY, 3.0f, 0.1f, 0.02f);
-                    Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 5.f);
-                    if (effect->primColorAlpha <= 0.0f) {
-                        effect->type = CLEARTAG_NO_EFFECT;
+                    Math_ApproachZeroF(&effect->primColor.a, 1.0f, 5.f);
+                    if (effect->primColor.a <= 0.0f) {
+                        effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                     }
                 }
-            } else if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
-                Math_ApproachF(&effect->scale, effect->scaleZ, 0.5f, 6.0f);
-                Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
-                if (effect->primColorAlpha <= 0.0f) {
-                    effect->type = CLEARTAG_NO_EFFECT;
+            } else if (effect->type == CLEAR_TAG_EFFECT_FLASH) {
+                Math_ApproachF(&effect->scale, effect->maxScale, 0.5f, 6.0f);
+                Math_ApproachZeroF(&effect->primColor.a, 1.0f, 15.0f);
+                if (effect->primColor.a <= 0.0f) {
+                    effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                 }
-            } else if (effect->type == CLEARTAG_LIGHT_RAY) {
+            } else if (effect->type == CLEAR_TAG_EFFECT_LIGHT_RAYS) {
                 effect->rotZ += Rand_ZeroFloat(M_PI / 2) + (M_PI / 2);
                 effect->lightRayAlpha -= effect->lightRayAlphaDecrementSpeed;
                 if (effect->lightRayAlpha <= 0) {
                     effect->lightRayAlpha = 0;
-                    effect->type = CLEARTAG_NO_EFFECT;
+                    effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                 }
-                effect->primColorAlpha = effect->lightRayAlpha;
-                if (effect->primColorAlpha > 255.0f) {
-                    effect->primColorAlpha = 255.0f;
+                effect->primColor.a = effect->lightRayAlpha;
+                if (effect->primColor.a > 255.0f) {
+                    effect->primColor.a = 255.0f;
                 }
-                Math_ApproachF(&effect->scaleZ, effect->scaleZTarget, 1.0f, (effect->scaleZTarget / 15.0f) * 4.0f);
-            } else if (effect->type == CLEARTAG_EXPLOSION_SPLASH) {
+                Math_ApproachF(&effect->maxScale, effect->maxScaleTarget, 1.0f, (effect->maxScaleTarget / 15.0f) * 4.0f);
+            } else if (effect->type == CLEAR_TAG_EFFECT_SPLASH) {
                 if (effect->effectsTimer == 0) {
                     effect->scale = 7.0f;
-                    Math_ApproachF(&effect->scaleZ, 500.0f, 1.0f, 50.0f);
+                    Math_ApproachF(&effect->maxScale, 500.0f, 1.0f, 50.0f);
                     Math_ApproachF(&effect->rotX, 1.5f, 1.0f, 0.12f);
                     if (effect->actionTimer > 7) {
-                        effect->type = CLEARTAG_NO_EFFECT;
+                        effect->type = CLEAR_TAG_EFFECT_AVAILABLE;
                     }
                 } else {
                     effect->actionTimer = 0;
                 }
             }
+
             if (effect->effectsTimer != 0) {
                 effect->effectsTimer--;
             }
@@ -628,8 +689,13 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Draws the explosion and light effects.
+ * Each effect type is drawn before the next. The function will apply a material that applies to all effects of that
+ * type while drawing the first effect of that type.
+ */
 void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
-    u8 isSetup = 0;
+    u8 isMaterialApplied = false;
     s16 i;
     s16 j;
     Vec3f vec;
@@ -638,37 +704,42 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     MtxF mtxF;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     EnClearTag* this = THIS;
-    EnClearTagEffects* effect = this->effects;
-    EnClearTagEffects* effectRef = this->effects;
+    EnClearTagEffect* effect = this->effect;
+    EnClearTagEffect* firstEffect = this->effect;
 
     OPEN_DISPS(gfxCtx);
-
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_EXPLOSION_DEBRIS) {
-            if (isSetup == 0) {
-                isSetup++;
-                gSPDisplayList(POLY_OPA_DISP++, sExplosionDebrisSetupDL);
+    // Draw all Debris effects.
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_DEBRIS) {
+            // Apply the debris effect material if it has not already been applied.
+            if (!isMaterialApplied) {
+                isMaterialApplied++;
+                gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectMaterialDL);
             }
-            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+
+            // Draw the debris effect.
+            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             SysMatrix_InsertYRotation_f(effect->rotY, MTXMODE_APPLY);
             SysMatrix_RotateStateAroundXAxis(effect->rotX);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, sExplosionDebrisVtxDL);
+            gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectDL);
         }
     }
 
-    effect = effectRef;
+    // Draw all Shockwave effects.
+    effect = firstEffect;
     if (this->actor.floorPoly != NULL) {
-        for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-            if (effect->type == CLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE) {
+        for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+            if (effect->type == CLEAR_TAG_EFFECT_SHOCKWAVE) {
+                // Draw the shockwave effect.
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColorAlpha);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColorAlpha);
-                func_800C0094(this->actor.floorPoly, effect->pos.x, effect->pos.y, effect->pos.z, &mtxF);
+                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColor.a);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColor.a);
+                func_800C0094(this->actor.floorPoly, effect->position.x, effect->position.y, effect->position.z, &mtxF);
                 SysMatrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -677,132 +748,160 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    isSetup = 0;
-    effect = effectRef;
+    // Draw all ground flash effects.
+    effect = firstEffect;
+    isMaterialApplied = false;
     if (this->actor.floorPoly != NULL) {
-        for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-            if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
-                if (isSetup == 0) {
+        for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+            if (effect->type == CLEAR_TAG_EFFECT_FLASH) {
+                // Apply the flash ground effect material if it has not already been applied.
+                if (!isMaterialApplied) {
                     gDPPipeSync(POLY_XLU_DISP++);
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
-                    isSetup++;
+                    isMaterialApplied++;
                 }
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColorAlpha * 0.7f));
-                func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
+
+                // Draw the ground flash effect.
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColor.a * 0.7f));
+                func_800C0094(this->actor.floorPoly, effect->position.x, this->actor.floorHeight, effect->position.z, &mtxF);
                 SysMatrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, sExplosionOuterCloudFloorDL);
+                gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectGroundDL);
             }
         }
     }
 
-    isSetup = 0;
-    effect = effectRef;
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if ((effect->type == CLEARTAG_EXPLOSION_BLACK_SMOKE) || (effect->type == CLEARTAG_NO_EXPLOSION_BLACK_SMOKE)) {
-            if (isSetup == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
-                isSetup++;
+    // Draw all smoke effects.
+    effect = firstEffect;
+    isMaterialApplied = false;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if ((effect->type == CLEAR_TAG_EFFECT_SMOKE) || (effect->type == CLEAR_TAG_EFFECT_ISOLATED_SMOKE)) {
+            // Apply the smoke effect material if it has not already been applied.
+            if (!isMaterialApplied) {
+                gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectMaterialDL);
+                isMaterialApplied++;
             }
+
+            // Draw the smoke effect.
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, (s8)effect->envColorR, (s8)effect->envColorG, (s8)effect->envColorB, 128);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColorR, (s8)effect->primColorG,
-                            (s8)effect->primColorB, (s8)effect->primColorAlpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, (s8)effect->envColor.r, (s8)effect->envColor.g, (s8)effect->envColor.b, 128);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColor.r, (s8)effect->primColor.g,
+                            (s8)effect->primColor.b, (s8)effect->primColor.a);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 0x20, 0x40, 1, 0, 0,
-                                        0x20, 0x20));
-            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0,
+                                        32, 32));
+            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(effect->scaleX * effect->scale, effect->scaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
 
-    // effect->type never set to 2
-    isSetup = 0;
-    effect = effectRef;
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_UNUSED_BLACK_SMOKE) {
-            if (isSetup == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
+    // Draw all fire effects.
+    effect = firstEffect;
+    isMaterialApplied = false;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_FIRE) {
+            // Apply the fire effect material if it has not already been applied.
+            if (!isMaterialApplied) {
+                gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
-                isSetup++;
+                isMaterialApplied++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColorAlpha);
+
+            // Draw the fire effect.
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColor.a);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 0x20, 0x40, 1, 0, 0,
-                                        0x20, 0x20));
-            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0,
+                                        32, 32));
+            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
 
-    isSetup = 0;
-    effect = effectRef;
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
-            if (isSetup == 0) {
+    // Draw all flash billboard effects.
+    effect = firstEffect;
+    isMaterialApplied = false;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_FLASH) {
+            // Apply the flash billboard effect material if it has not already been applied.
+            if (!isMaterialApplied) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, this->explosionOuterCloudEnvColor.r,
                                this->explosionOuterCloudEnvColor.g, this->explosionOuterCloudEnvColor.b, 0);
-                isSetup++;
+                isMaterialApplied++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColorAlpha);
-            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+
+            // Draw the flash billboard effect.
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
+            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, sExplosionOuterCloudDL);
+            gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
         }
     }
 
-    isSetup = 0;
-    effect = effectRef;
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_LIGHT_RAY) {
-            if (isSetup == 0) {
+    // Draw all light ray effects.
+    effect = firstEffect;
+    isMaterialApplied = false;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_LIGHT_RAYS) {
+            // Apply the light ray effect material if it has not already been applied.
+            if (!isMaterialApplied) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)effect->envColorR, (u8)effect->envColorG, (u8)effect->envColorB, 0);
-                gSPDisplayList(POLY_XLU_DISP++, sLightRaySetupDL);
-                isSetup++;
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)effect->envColor.r, (u8)effect->envColor.g, (u8)effect->envColor.b, 0);
+                gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectMaterialDL);
+                isMaterialApplied++;
             }
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColorR, (u8)effect->primColorG,
-                            (u8)effect->primColorB, (u8)effect->primColorAlpha);
-            SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+
+            // Draw the light ray effect.
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColor.r, (u8)effect->primColor.g,
+                            (u8)effect->primColor.b, (u8)effect->primColor.a);
+            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             SysMatrix_InsertYRotation_f(effect->rotY, MTXMODE_APPLY);
             SysMatrix_RotateStateAroundXAxis(effect->rotX);
             SysMatrix_InsertZRotation_f(effect->rotZ, MTXMODE_APPLY);
-            Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->scaleZ * effect->scale, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
             SysMatrix_RotateStateAroundXAxis(M_PI / 2);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, sLightRayVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
     }
 
-    effect = effectRef;
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
-        if (effect->type == CLEARTAG_EXPLOSION_SPLASH) {
+    // Draw all splash effects.
+    effect = firstEffect;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
+        if (effect->type == CLEAR_TAG_EFFECT_SPLASH) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sExplosionSplashTex[effect->actionTimer]));
             func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
-            isSetup++;
+            isMaterialApplied++;
+
+            // Apply material 16 times along a circle to give the appearance of a splash
             for (j = 0; j < 16; j++) {
                 SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
-                SysMatrix_GetStateTranslationAndScaledZ(effect->scaleZ, &vec);
-                ySurface = effect->pos.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->pos.x + vec.x, effect->pos.z + vec.z,
+                SysMatrix_GetStateTranslationAndScaledZ(effect->maxScale, &vec);
+                /**
+                 * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
+                 * returns true if point is within the xz boundaries of an active water box, else false
+                 * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
+                 */
+                ySurface = effect->position.y;
+                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
                                   &ySurface, &waterBox)) {
-                    if ((effect->pos.y - ySurface) < 200.0f) {
-                        SysMatrix_InsertTranslation(effect->pos.x + vec.x, ySurface, effect->pos.z + vec.z,
+                    if ((effect->position.y - ySurface) < 200.0f) {
+                        // Draw the splash effect.
+                        SysMatrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
                                                     MTXMODE_NEW);
                         SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
                         SysMatrix_RotateStateAroundXAxis(effect->rotX);
