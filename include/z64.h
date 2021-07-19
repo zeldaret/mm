@@ -1221,8 +1221,6 @@ struct FileChooseContext {
     /* 0x24550 */ s16  unk_24550;
 }; // size = 0x24558
 
-typedef struct AudioThreadStruct AudioThreadStruct;
-
 typedef struct GlobalContext GlobalContext;
 
 typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
@@ -1373,10 +1371,10 @@ typedef enum {
     QUAKE2_SETUP,
 } Quake2State;
 
-typedef struct OSMesgQueueListNode_t {
-    /* 0x0 */ struct OSMesgQueueListNode_t* next;
+typedef struct IrqMgrClient_t {
+    /* 0x0 */ struct IrqMgrClient_t* next;
     /* 0x4 */ OSMesgQueue* queue;
-} OSMesgQueueListNode; // size = 0x8
+} IrqMgrClient; // size = 0x8
 
 typedef struct {
     /* 0x000 */ OSScMsg verticalRetraceMesg;
@@ -1385,7 +1383,7 @@ typedef struct {
     /* 0x060 */ OSMesgQueue irqQueue;
     /* 0x078 */ OSMesg irqBuffer[8];
     /* 0x098 */ OSThread thread;
-    /* 0x248 */ OSMesgQueueListNode* callbacks;
+    /* 0x248 */ IrqMgrClient* callbacks;
     /* 0x24C */ u8 prenmiStage;
     /* 0x250 */ OSTime lastPrenmiTime;
     /* 0x258 */ OSTimer prenmiTimer;
@@ -1402,7 +1400,7 @@ typedef struct {
     /* 0x04C */ OSMesgQueue siEventCallbackQueue;
     /* 0x064 */ OSMesgQueue lock;
     /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
-    /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
+    /* 0x094 */ IrqMgrClient irqmgrCallbackQueueNode;
     /* 0x09C */ IrqMgr* irqmgr;
     /* 0x0A0 */ OSThread thread;
     /* 0x250 */ Input input[4];
@@ -1413,13 +1411,23 @@ typedef struct {
     /* 0x47D */ u8 unk47D;
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
-} PadmgrThreadStruct; // size = 0x480
+} PadMgr; // size = 0x480
+
+#define OS_SC_NEEDS_RDP         0x0001
+#define OS_SC_NEEDS_RSP         0x0002
+#define OS_SC_DRAM_DLIST        0x0004
+#define OS_SC_PARALLEL_TASK     0x0010
+#define OS_SC_LAST_TASK         0x0020
+#define OS_SC_SWAPBUFFER        0x0040
+
+#define OS_SC_RCP_MASK          0x0003
+#define OS_SC_TYPE_MASK         0x0007
 
 typedef struct {
-    /* 0x000 */ OSMesgQueue unk0;
-    /* 0x018 */ UNK_TYPE4 unk18[64];
-    /* 0x118 */ OSMesgQueue unk118;
-    /* 0x130 */ UNK_TYPE4 unk130[8];
+    /* 0x000 */ OSMesgQueue interruptQ;
+    /* 0x018 */ OSMesg intMsgBuf[64];
+    /* 0x118 */ OSMesgQueue cmdQ;
+    /* 0x130 */ OSMesg cmdMsgBuf[8];
     /* 0x150 */ OSThread thread;
     /* 0x300 */ UNK_TYPE4 unk300;
     /* 0x304 */ UNK_TYPE4 unk304;
@@ -1433,23 +1441,8 @@ typedef struct {
     /* 0x324 */ UNK_TYPE4 unk324;
     /* 0x328 */ UNK_TYPE1 pad328[0x7];
     /* 0x32F */ s8 unk32F;
-    /* 0x330 */ OSMesgQueueListNode unk330;
-} SchedThreadStruct; // size = 0x338
-
-struct AudioThreadStruct {
-    /* 0x000 */ IrqMgr* irqmgr;
-    /* 0x004 */ SchedThreadStruct* sched;
-    /* 0x008 */ UNK_TYPE1 pad8[0x58];
-    /* 0x060 */ UNK_TYPE4 unk60;
-    /* 0x064 */ OSMesgQueue irqQueue;
-    /* 0x07C */ OSMesg irqBuffer[30];
-    /* 0x0F4 */ OSMesgQueue unkF4;
-    /* 0x10C */ UNK_TYPE4 unk10C;
-    /* 0x110 */ OSMesgQueue initDoneCallback;
-    /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
-    /* 0x12C */ UNK_TYPE1 pad12C[0x4];
-    /* 0x130 */ OSThread thread;
-}; // size = 0x2E0
+    /* 0x330 */ IrqMgrClient irqClient;
+} SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
     /* 0x00 */ struct StackEntry_t* next;
@@ -1485,6 +1478,32 @@ struct ActorListEntry {
     /* 0x8 */ UNK_TYPE1 pad8[0x4];
 }; // size = 0xC
 
+#define OS_SC_RETRACE_MSG       1
+#define OS_SC_DONE_MSG          2
+#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_PRE_NMI_MSG       4
+
+typedef struct {
+    /* 0x0000 */ OSTask task;
+    /* 0x0040 */ OSMesgQueue* taskQueue;
+    /* 0x0044 */ char unk_44[0xC];
+} AudioTask; // size = 0x50
+
+typedef struct {
+    /* 0x000 */ IrqMgr* irqMgr;
+    /* 0x004 */ SchedContext* sched;
+    /* 0x008 */ OSScTask audioTask;
+    /* 0x060 */ AudioTask* rspTask;
+    /* 0x064 */ OSMesgQueue interruptMsgQ;
+    /* 0x07C */ OSMesg interruptMsgBuf[30];
+    /* 0x0F4 */ OSMesgQueue cmdQ;
+    /* 0x10C */ OSMesg cmdMsgBuf[1];
+    /* 0x110 */ OSMesgQueue lockMsgQ;
+    /* 0x128 */ OSMesg lockMsgBuf[1];
+    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
+    /* 0x130 */ OSThread thread;
+} AudioMgr; // size = 0x2E0
+ 
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
