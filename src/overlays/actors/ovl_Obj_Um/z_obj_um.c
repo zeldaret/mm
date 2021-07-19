@@ -97,10 +97,23 @@ ColliderCylinderInit D_80B7C138 = {
 };
 InitChainEntry D_80B7C254[2]; // unable to generate initializer
 */
+
+
+
 // D_80B7C110
 // D_80B7C128
 extern ColliderCylinderInit D_80B7C138;
-// D_80B7C164
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE unk_00;
+    /* 0x04 */ UNK_TYPE unk_04;
+    /* 0x08 */ UNK_TYPE unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ UNK_TYPE unk_10;
+} struct_80B7C254; // size = 0x14
+
+extern struct_80B7C254 D_80B7C164[0xC];
+
 extern InitChainEntry D_80B7C254[2];
 // D_80B7C25C
 // D_80B7C260
@@ -447,84 +460,60 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B77FA4.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-? func_80B781DC(ObjUm* arg0, EnHorse* arg1, EnHorse* arg2, GlobalContext* arg3) {
-    ?* temp_s0;
-    f32 temp_f20;
-    s32 temp_s4;
-    s32 temp_t1;
-    s32 temp_v0;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    ?* phi_s0;
+#ifdef NON_EQUIVALENT
+s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
+    struct_80B7C254* phi_s0 = D_80B7C164;
     s32 phi_s3;
     s32 phi_s2;
     s32 phi_s4;
     f32 phi_f20;
+    s32 i;
 
-    phi_s0 = &D_80B7C164;
     phi_s3 = -1;
     phi_s2 = 0;
     phi_s4 = 0;
     phi_f20 = 0.0f;
-    do {
-        temp_v1 = phi_s0->unk0;
-        if (arg1->unk_550 == temp_v1) {
-            temp_v0 = phi_s0->unk4;
-            if (arg2->unk_550 != temp_v0) {
-                if (temp_v1 != 3) {
-                    if (temp_v0 == 3) {
-                        if (Player_GetMask(arg3) != 8) {
-                            goto block_7;
-                        }
-                    } else {
-block_7:
-                        phi_s3 = phi_s0->unk4;
-                        phi_s4 = phi_s0->unk8;
-                        phi_f20 = phi_s0->unkC;
-                        goto block_14;
+    for (i = 0; i < ARRAY_COUNT(D_80B7C164); i++) {
+        if (arg2->unk_550 == phi_s0->unk_00) {
+            if (arg3->unk_550 != phi_s0->unk_04) {
+                if (phi_s0->unk_00 != 3) {
+                    if (phi_s0->unk_04 != 3 || Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK) {
+                        phi_s3 = phi_s0->unk_04;
+                        phi_s4 = phi_s0->unk_08;
+                        phi_f20 = phi_s0->unk_0C;
+                        phi_s2 = phi_s0->unk_10;
                     }
                 } else {
-                    temp_v1_2 = arg1->unk_54C;
-                    if (((temp_v1_2 != 5) || (temp_v0 != 2)) && ((temp_v1_2 != 7) || (temp_v0 != 4))) {
-                        temp_s4 = phi_s0->unk8;
-                        temp_f20 = phi_s0->unkC;
-                        phi_s3 = temp_v0;
-                        phi_s4 = temp_s4;
-                        phi_f20 = temp_f20;
+                    if (((arg2->unk_54C != 5) || (phi_s0->unk_04 != 2)) && ((arg2->unk_54C != 7) || (phi_s0->unk_04 != 4))) {
+                        phi_s3 = phi_s0->unk_04;
+                        phi_s4 = phi_s0->unk_08;
+                        phi_f20 = phi_s0->unk_0C;
                         if ((2.0f * Rand_ZeroOne()) < 1.0f) {
-                            phi_s3 = temp_v0;
-                            phi_s4 = temp_s4;
-                            phi_f20 = temp_f20 * -1.0f;
+                            phi_f20 = phi_s0->unk_0C * -1.0f;
                         }
-block_14:
-                        phi_s2 = phi_s0->unk10;
+                        phi_s2 = phi_s0->unk_10;
                     }
                 }
             }
         }
-        temp_s0 = phi_s0 + 0x14;
-        phi_s0 = temp_s0;
-    } while (temp_s0 != D_80B7C254);
-    if (phi_s3 == -1) {
+        phi_s0 = phi_s0++;
+    }
 
-    } else {
-        temp_t1 = arg1->unk_550;
-        arg1->unk_540.x = arg1->actor.world.pos.x;
-        arg1->unk_550 = phi_s3;
-        arg1->unk_55C = phi_s2;
-        arg1->unk_560 = phi_s2;
-        arg1->unk_564 = phi_s4;
-        arg1->unk_568 = phi_f20;
-        arg1->unk_540.y = arg1->actor.world.pos.y;
-        arg1->unk_54C = temp_t1;
-        arg1->unk_540.z = arg1->actor.world.pos.z;
+    if (phi_s3 != -1) {
+        arg2->unk_540 = arg2->actor.world.pos;
+        arg2->unk_550 = phi_s3;
+        arg2->unk_55C = phi_s2;
+        arg2->unk_560 = phi_s2;
+        arg2->unk_564 = phi_s4;
+        arg2->unk_568 = phi_f20;
+        arg2->unk_54C = arg2->unk_550;
         if (phi_s3 == 3) {
-            arg1->unk_558 = (s32) (Rand_ZeroOne() * 3.0f);
+            arg2->unk_558 = Rand_ZeroOne() * 3.0f;
         } else {
-            arg1->unk_558 = 0;
+            arg2->unk_558 = 0;
         }
     }
+
     return 0;
 }
 #else
@@ -1464,70 +1453,57 @@ void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
-    s32 sp20;
-    s16 temp_v0_3;
-    s32 temp_t9;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    ObjUm* phi_v1;
-    s32 phi_v0;
-    s16 phi_v1_2;
+    s32 pad;
 
     func_80B78E38(this, globalCtx);
     func_80B78E88(this, globalCtx, 0x7FFF);
-    temp_t9 = this->unk_2F4 | 0x10;
-    this->unk_2F4 = temp_t9;
     this->unk_2AC += 0x7D0;
-    this->unk_2F4 = temp_t9 | 0x80;
+    this->unk_2F4 |= 0x10;
+    this->unk_2F4 |= 0x80;
     func_80B7B18C(this, globalCtx, 1);
-    if ((func_80B79BA0(this, globalCtx) == 3) && (this->unk_4DC == 0)) {
+
+    if (func_80B79BA0(this, globalCtx) == 3 && this->unk_4DC == 0) {
         this->unk_4DC = 1;
-    } else {
-        temp_v0 = this->unk_4DC;
-        if (temp_v0 > 0) {
-            if (temp_v0 == 1) {
-                this->unk_4E0 = 1;
-                phi_v1 = this;
-                phi_v0 = 0;
-loop_6:
-                temp_v0_2 = phi_v0 + 4;
-                if (phi_v1->unk_314[0] != 1) {
+    } else if (this->unk_4DC > 0) {
+        if (this->unk_4DC == 1) {
+            s32 i;
+
+            this->unk_4E0 = 1;
+
+            for (i = 0; i != 3; i++) {
+                if (this->unk_314[i] != 1) {
                     this->unk_4E0 = 0;
-                } else {
-                    phi_v1 += 4;
-                    phi_v0 = temp_v0_2;
-                    if (temp_v0_2 != 0xC) {
-                        goto loop_6;
-                    }
+                    break;
                 }
-                this->unk_2F4 |= 0x2000;
             }
-            this->unk_4DC += 1;
+
+            this->unk_2F4 |= 0x2000;
+
+            dummy_label: ;
         }
+
+        this->unk_4DC++;
     }
-    if ((this->unk_2F4 & 0x2000) != 0) {
-        temp_v0_3 = ActorCutscene_GetAdditionalCutscene((s16) this->dyna.actor.cutscene);
-        phi_v1_2 = temp_v0_3;
+
+    if (this->unk_2F4 & 0x2000) {
+        s32 sp20 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
+
         if (this->unk_4E0 != 0) {
-            phi_v1_2 = ActorCutscene_GetAdditionalCutscene(temp_v0_3);
+            sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
         }
-        sp20 = (s32) phi_v1_2;
-        if (ActorCutscene_GetCanPlayNext(phi_v1_2) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields(phi_v1_2, (Actor* ) this);
+        if (ActorCutscene_GetCanPlayNext(sp20) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields(sp20, (Actor* ) this);
             ObjUm_SetupAction(this, func_80B7A494);
-            this->unk_2F4 &= -0x81;
+            this->unk_2F4 &= ~0x80;
         } else {
-            ActorCutscene_SetIntentToPlay(phi_v1_2);
+            ActorCutscene_SetIntentToPlay(sp20);
         }
     }
+
     Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
     func_80B78DF0(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A614.asm")
-#endif
 
 void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
