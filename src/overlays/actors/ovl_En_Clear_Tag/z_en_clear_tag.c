@@ -1,3 +1,9 @@
+/*
+ * File z_en_clear_tag.c
+ * Overlay: ovl_en_clear_tag
+ * Description: Various explosion and light effects
+ */
+
 #include "z_en_clear_tag.h"
 
 #define FLAGS 0x00000035
@@ -97,7 +103,7 @@ void EnClearTag_AddExplosionDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* ve
     EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->type = CLEARTAG_EXPLOSION_DEBRIS;
             effect->pos = *pos;
@@ -120,7 +126,7 @@ void EnClearTag_AddExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 s
     s16 i;
     EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->actionTimer = Rand_ZeroFloat(100.0f);
             effect->type = CLEARTAG_EXPLOSION_BLACK_SMOKE;
@@ -147,7 +153,7 @@ void EnClearTag_AddNoExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32
     s16 i;
     EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->actionTimer = Rand_ZeroFloat(100.0f);
             effect->type = CLEARTAG_NO_EXPLOSION_BLACK_SMOKE;
@@ -186,7 +192,7 @@ void EnClearTag_AddExplosionOuterCloudEffect(EnClearTag* this, Vec3f* pos, f32 s
     EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->type = CLEARTAG_EXPLOSION_OUTER_CLOUD;
             effect->pos = *pos;
@@ -207,7 +213,7 @@ void EnClearTag_AddLightRayFromExplosionEffect(EnClearTag* this, Vec3f* pos, Vec
     EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->type = CLEARTAG_LIGHT_RAY;
             effect->pos = *pos;
@@ -238,7 +244,7 @@ void EnClearTag_AddLightRayFromLightArrowsEffect(EnClearTag* this, Vec3f* pos, V
     EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->type = CLEARTAG_LIGHT_RAY;
             effect->pos = *pos;
@@ -267,7 +273,7 @@ void EnClearTag_AddFloorShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ
     EnClearTagEffects* effect = this->effects;
     s16 i;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             effect->type = CLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE;
             effect->pos = *pos;
@@ -286,7 +292,7 @@ void EnClearTag_AddExplosionSplashEffect(EnClearTag* this, Vec3f* pos, s16 effec
     s16 i;
     EnClearTagEffects* effect = this->effects;
 
-    for (i = 0; i < 102; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects) - 1; i++, effect++) {
         if (effect->type == CLEARTAG_NO_EFFECT) {
             // Immediately overwritten and generates a lot of wasted asm (f32 to u8)
             effect->actionTimer = Rand_ZeroFloat(100.0f);
@@ -505,7 +511,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
     Vec3f pos;
     s16 i;
 
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type != CLEARTAG_NO_EFFECT) {
             effect->actionTimer++;
             effect->pos.x += effect->vel.x;
@@ -640,7 +646,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_EXPLOSION_DEBRIS) {
             if (isSetup == 0) {
                 isSetup++;
@@ -657,7 +663,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
     effect = effectRef;
     if (this->actor.floorPoly != NULL) {
-        for (i = 0; i < 103; i++, effect++) {
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->type == CLEARTAG_EXPLOSION_FLOOR_SHOCKWAVE) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColorAlpha);
@@ -674,7 +680,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     isSetup = 0;
     effect = effectRef;
     if (this->actor.floorPoly != NULL) {
-        for (i = 0; i < 103; i++, effect++) {
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
                 if (isSetup == 0) {
                     gDPPipeSync(POLY_XLU_DISP++);
@@ -693,7 +699,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
     isSetup = 0;
     effect = effectRef;
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if ((effect->type == CLEARTAG_EXPLOSION_BLACK_SMOKE) || (effect->type == CLEARTAG_NO_EXPLOSION_BLACK_SMOKE)) {
             if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
@@ -718,7 +724,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     // effect->type never set to 2
     isSetup = 0;
     effect = effectRef;
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_UNUSED_BLACK_SMOKE) {
             if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
@@ -739,7 +745,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
     isSetup = 0;
     effect = effectRef;
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
             if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
@@ -758,7 +764,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
     isSetup = 0;
     effect = effectRef;
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_LIGHT_RAY) {
             if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
@@ -780,7 +786,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     effect = effectRef;
-    for (i = 0; i < 103; i++, effect++) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == CLEARTAG_EXPLOSION_SPLASH) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
