@@ -92,7 +92,7 @@ static Gfx* sExplosionSplash[] = {
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
 
-void EnClearTag_AddDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 rotZ) {
+void EnClearTag_AddExplosionDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale, f32 rotZ) {
     f32 rotX;
     EnClearTagEffects* effect = this->effects;
     s16 i;
@@ -150,7 +150,7 @@ void EnClearTag_AddExplosionBlackSmokeInvadepohEffect(EnClearTag* this, Vec3f* p
     for (i = 0; i < 103; i++, effect++) {
         if (effect->type == ENCLEARTAG_NO_EFFECT) {
             effect->actionTimer = Rand_ZeroFloat(100.0f);
-            effect->type = ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH;
+            effect->type = ENCLEARTAG_NO_EXPLOSION_BLACK_SMOKE;
             effect->pos = *pos;
             effect->vel = sZeroVec;
             effect->accel = sZeroVec;
@@ -182,7 +182,6 @@ void EnClearTag_AddExplosionBlackSmokeInvadepohEffect(EnClearTag* this, Vec3f* p
     }
 }
 
-// TODO: rotZ but floorHeight?
 void EnClearTag_AddExplosionOuterCloudEffect(EnClearTag* this, Vec3f* pos, f32 scaleZ, f32 floorHeight) {
     EnClearTagEffects* effect = this->effects;
     s16 i;
@@ -382,7 +381,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                             accel.x = 0.0f;
                             accel.y = -1.0f;
                             accel.z = 0.0f;
-                            EnClearTag_AddDebrisEffect(this, &pos, &vel, &accel,
+                            EnClearTag_AddExplosionDebrisEffect(this, &pos, &vel, &accel,
                                                        sDebrisScale[thisx->params] +
                                                            Rand_ZeroFloat(sDebrisScale[thisx->params]),
                                                        this->actor.floorHeight);
@@ -411,7 +410,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80949288(EnClearTag* this, GlobalContext* globalCtx) {
+void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     Camera* camera;
     s32 pad;
@@ -466,7 +465,7 @@ void func_80949288(EnClearTag* this, GlobalContext* globalCtx) {
                 camera->focalPoint = this->at;
                 func_80169AFC(globalCtx, this->camID, 0);
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
-                func_800B7298(globalCtx, this, 6);
+                func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
                 this->camID = 0;
                 this->activeTimer = 20;
@@ -485,16 +484,14 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->activeTimer != 0) {
         this->activeTimer--;
     }
-    if (this->actor.params < 0) {
-        func_80949288(this, globalCtx);
-        return;
-    }
-    if (this->activeTimer != 0) {
-        EnClearTag_UpdateEffects(this, globalCtx);
-        return;
-    }
 
-    Actor_MarkForDeath(&this->actor);
+    if (this->actor.params < 0) {
+        EnClearTag_UpdateCamera(this, globalCtx);
+    } else if (this->activeTimer != 0) {
+        EnClearTag_UpdateEffects(this, globalCtx);
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
 }
 
 void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -515,7 +512,6 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
             prevPosY = effect->pos.y;
             effect->pos.y += effect->vel.y;
             effect->pos.z += effect->vel.z;
-
             effect->vel.x += effect->accel.x;
             effect->vel.y += effect->accel.y;
             effect->vel.z += effect->accel.z;
@@ -579,7 +575,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                         effect->type = ENCLEARTAG_NO_EFFECT;
                     }
                 }
-            } else if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH) {
+            } else if (effect->type == ENCLEARTAG_NO_EXPLOSION_BLACK_SMOKE) {
                 Math_ApproachF(&effect->scale, effect->scaleZ, 0.05f, 0.1f);
                 if (effect->actionTimer > 10) {
                     Math_ApproachF(&effect->scaleX, 3.0f, 0.1f, 0.01f);
@@ -627,7 +623,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
-    u8 isFirst = 0;
+    u8 isSetup = 0;
     s16 i;
     s16 j;
     Vec3f vec;
@@ -646,8 +642,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < 103; i++, effect++) {
         if (effect->type == ENCLEARTAG_EXPLOSION_DEBRIS) {
-            if (isFirst == 0) {
-                isFirst++;
+            if (isSetup == 0) {
+                isSetup++;
                 gSPDisplayList(POLY_OPA_DISP++, sExplosionDebrisSetupDL);
             }
             SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
@@ -675,15 +671,15 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    isFirst = 0;
+    isSetup = 0;
     effect = effectRef;
     if (this->actor.floorPoly != NULL) {
         for (i = 0; i < 103; i++, effect++) {
             if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
-                if (isFirst == 0) {
+                if (isSetup == 0) {
                     gDPPipeSync(POLY_XLU_DISP++);
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
-                    isFirst++;
+                    isSetup++;
                 }
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColorAlpha * 0.7f));
                 func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
@@ -695,21 +691,21 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    isFirst = 0;
+    isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
         if ((effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE) ||
-            (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_INVADEPOH)) {
-            if (isFirst == 0) {
+            (effect->type == ENCLEARTAG_NO_EXPLOSION_BLACK_SMOKE)) {
+            if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
-                isFirst++;
+                isSetup++;
             }
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, (s8)effect->envColorR, (s8)effect->envColorG, (s8)effect->envColorB, 128);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColorR, (s8)effect->primColorG,
                             (s8)effect->primColorB, (s8)effect->primColorAlpha);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 5 * -effect->actionTimer, 0x20, 0x40, 1, 0, 0,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 0x20, 0x40, 1, 0, 0,
                                         0x20, 0x20));
             SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -721,18 +717,18 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // effect->type never set to 2
-    isFirst = 0;
+    isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
         if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED) {
-            if (isFirst == 0) {
+            if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
-                isFirst++;
+                isSetup++;
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColorAlpha);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 15 * -effect->actionTimer, 0x20, 0x40, 1, 0, 0,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 0x20, 0x40, 1, 0, 0,
                                         0x20, 0x20));
             SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -742,14 +738,14 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    isFirst = 0;
+    isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
         if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
-            if (isFirst == 0) {
+            if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, this->envColor.r, this->envColor.g, this->envColor.b, 0);
-                isFirst++;
+                isSetup++;
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColorAlpha);
             SysMatrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
@@ -760,15 +756,15 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    isFirst = 0;
+    isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
         if (effect->type == ENCLEARTAG_LIGHT_RAY) {
-            if (isFirst == 0) {
+            if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, (u8)effect->envColorR, (u8)effect->envColorG, (u8)effect->envColorB, 0);
                 gSPDisplayList(POLY_XLU_DISP++, sLightRaySetupDL);
-                isFirst++;
+                isSetup++;
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColorR, (u8)effect->primColorG,
                             (u8)effect->primColorB, (u8)effect->primColorAlpha);
@@ -792,7 +788,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sExplosionSplash[effect->actionTimer]));
             func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
-            isFirst++;
+            isSetup++;
             for (j = 0; j < 16; j++) {
                 SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
                 SysMatrix_GetStateTranslationAndScaledZ(effect->scaleZ, &vec);

@@ -787,7 +787,7 @@ float func_800B6FC8(Player* player);
 u32 func_800B7200(s32 param_1);
 // void func_800B722C(void);
 void func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 param_3);
-u32 func_800B7298(GlobalContext* globalCtx, UNK_TYPE4 param_2, u8 param_3);
+u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 param_3);
 void func_800B72E0(s32 param_1);
 void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2);
 s32 Actor_IsLinkFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx);
@@ -3054,7 +3054,7 @@ s32 func_8016970C(GlobalContext* globalCtx, s16 camId, Vec3f* focalPoint, Vec3f*
 void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 // void func_80169A50(void);
 // void func_80169AC0(void);
-void func_80169AFC(GlobalContext* globalCtx, s16 arg1, s16 arg2);
+void func_80169AFC(GlobalContext* globalCtx, s16 camID, s16 arg2);
 // void func_80169C64(void);
 // void func_80169C84(void);
 // void convert_scene_number_among_shared_scenes(void);
