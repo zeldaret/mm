@@ -143,7 +143,7 @@ void EnClearTag_AddExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 s
     }
 }
 
-void EnClearTag_AddExplosionBlackSmokeInvadepohEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
+void EnClearTag_AddNoExplosionBlackSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
     EnClearTagEffects* effect = this->effects;
 
@@ -321,7 +321,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         if (thisx->params == 200) {
-            EnClearTag_AddExplosionBlackSmokeInvadepohEffect(this, &pos, this->actor.world.rot.z);
+            EnClearTag_AddNoExplosionBlackSmokeEffect(this, &pos, this->actor.world.rot.z);
             return;
         }
 
@@ -382,9 +382,9 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                             accel.y = -1.0f;
                             accel.z = 0.0f;
                             EnClearTag_AddExplosionDebrisEffect(this, &pos, &vel, &accel,
-                                                       sDebrisScale[thisx->params] +
-                                                           Rand_ZeroFloat(sDebrisScale[thisx->params]),
-                                                       this->actor.floorHeight);
+                                                                sDebrisScale[thisx->params] +
+                                                                    Rand_ZeroFloat(sDebrisScale[thisx->params]),
+                                                                this->actor.floorHeight);
                         }
                     }
                 }
@@ -694,8 +694,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
-        if ((effect->type == CLEARTAG_EXPLOSION_BLACK_SMOKE) ||
-            (effect->type == CLEARTAG_NO_EXPLOSION_BLACK_SMOKE)) {
+        if ((effect->type == CLEARTAG_EXPLOSION_BLACK_SMOKE) || (effect->type == CLEARTAG_NO_EXPLOSION_BLACK_SMOKE)) {
             if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
                 isSetup++;
@@ -744,7 +743,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         if (effect->type == CLEARTAG_EXPLOSION_OUTER_CLOUD) {
             if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, this->explosionOuterCloudEnvColor.r, this->explosionOuterCloudEnvColor.g, this->explosionOuterCloudEnvColor.b, 0);
+                gDPSetEnvColor(POLY_XLU_DISP++, this->explosionOuterCloudEnvColor.r,
+                               this->explosionOuterCloudEnvColor.g, this->explosionOuterCloudEnvColor.b, 0);
                 isSetup++;
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColorAlpha);

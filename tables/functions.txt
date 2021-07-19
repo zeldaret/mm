@@ -7578,7 +7578,7 @@
     0x80947668:("func_80947668",),
     0x80947F60:("EnClearTag_AddExplosionDebrisEffect",),
     0x809480C8:("EnClearTag_AddExplosionBlackSmokeEffect",),
-    0x80948264:("EnClearTag_AddExplosionBlackSmokeInvadepohEffect",),
+    0x80948264:("EnClearTag_AddNoExplosionBlackSmokeEffect",),
     0x809484EC:("EnClearTag_AddExplosionOuterCloudEffect",),
     0x809485A8:("EnClearTag_AddLightRayFromExplosionEffect",),
     0x80948788:("EnClearTag_AddLightRayFromLightArrowsEffect",),
