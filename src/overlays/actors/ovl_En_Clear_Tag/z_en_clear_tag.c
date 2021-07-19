@@ -344,12 +344,12 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) &&
                       (this->actor.world.rot.z == 0))) {
-                    this->envColor.r = this->actor.world.rot.x;
-                    this->envColor.g = this->actor.world.rot.y;
-                    this->envColor.b = this->actor.world.rot.z;
+                    this->explosionOuterCloudEnvColor.r = this->actor.world.rot.x;
+                    this->explosionOuterCloudEnvColor.g = this->actor.world.rot.y;
+                    this->explosionOuterCloudEnvColor.b = this->actor.world.rot.z;
                 } else {
-                    this->envColor.r = 255;
-                    this->envColor.g = 0;
+                    this->explosionOuterCloudEnvColor.r = 255;
+                    this->explosionOuterCloudEnvColor.g = 0;
                 }
 
                 Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 30.0f, 100.0f, 4);
@@ -744,7 +744,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         if (effect->type == ENCLEARTAG_EXPLOSION_OUTER_CLOUD) {
             if (isSetup == 0) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, this->envColor.r, this->envColor.g, this->envColor.b, 0);
+                gDPSetEnvColor(POLY_XLU_DISP++, this->explosionOuterCloudEnvColor.r, this->explosionOuterCloudEnvColor.g, this->explosionOuterCloudEnvColor.b, 0);
                 isSetup++;
             }
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColorAlpha);
