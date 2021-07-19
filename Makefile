@@ -171,13 +171,13 @@ build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=
 	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
 
 build/binary/boot build/binary/code: build/code.elf
-	@$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
+	$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
 
 build/binary/assets/scenes/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 build/binary/overlays/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
+	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 
 #### ASM rules ####
@@ -249,8 +249,8 @@ build/asm/%.o: asm/%.asm | $(C_O_FILES)
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/overlay.py $@ build/src/overlays/$*_overlay.s
-	@$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
+	./tools/overlay.py $@ build/src/overlays/$*_overlay.s
+	$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
 
 build/%.o: %.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -282,17 +282,16 @@ build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
 	./tools/yaz0 $< $@
 
 build/%.d: %.c
-	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -Isrc -I./ -MM -MT 'build/$*.o' >> $@
+	./tools/depend.py $< $@
 
 build/dmadata_script.ld: build/dmadata_script.txt
-	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+	$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
 
 build/linker_scripts/%.ld: linker_scripts/%.txt
-	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+	$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
 
 build/assets/%.d: assets/%.c
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
+	$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
 
 ## Build C files from assets
 
@@ -306,8 +305,8 @@ build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 # Checks headers dependencies of each C file
-# ifneq ($(MAKECMDGOALS), clean)
-# ifneq ($(MAKECMDGOALS), distclean)
-# -include $(C_FILES:%.c=build/%.d)
-# endif
-# endif
+ifneq ($(MAKECMDGOALS), clean)
+ifneq ($(MAKECMDGOALS), distclean)
+-include $(C_FILES:%.c=build/%.d)
+endif
+endif
