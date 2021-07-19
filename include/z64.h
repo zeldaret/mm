@@ -324,12 +324,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ s16 unk0;
-    /* 0x2 */ s16 unk2;
-    /* 0x4 */ s16 unk4;
-} QuakeRequest14; // size = 0x6
-
-typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
@@ -588,23 +582,6 @@ typedef struct {
 } Input; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 rotZ;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ UNK_TYPE1 pad1C[0x2];
-} ShakeInfo; // size = 0x1E
-
-typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 unk18;
-    /* 0x1A */ s16 unk1A;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-} UnkQuakeCalcStruct; // size = 0x24
-
-typedef struct {
     /* 0x000 */ u32 magic;
     /* 0x004 */ GraphicsContext* gfxCtx;
     /* 0x008 */ Viewport viewport;
@@ -613,8 +590,8 @@ typedef struct {
     /* 0x020 */ f32 zFar;
     /* 0x024 */ f32 scale;
     /* 0x028 */ Vec3f eye;
-    /* 0x034 */ Vec3f focalPoint;
-    /* 0x040 */ Vec3f upDir;
+    /* 0x034 */ Vec3f at;
+    /* 0x040 */ Vec3f up;
     /* 0x04C */ UNK_TYPE1 pad4C[0x4];
     /* 0x050 */ Vp vp;
     /* 0x060 */ Mtx projection;
@@ -1253,13 +1230,6 @@ typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider
 typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef struct {
-    /* 0x0 */ GlobalContext* globalCtx;
-    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
-    /* 0x8 */ s16 countdown;
-    /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
-} Quake2Context; // size = 0xC
-
 typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
 typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
@@ -1278,28 +1248,129 @@ typedef struct {
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
 
-typedef struct Camera Camera;
+typedef struct Camera {
+    /* 0x000 */ char paramData[0x50];
+    /* 0x050 */ Vec3f at;
+    /* 0x05C */ Vec3f eye;
+    /* 0x068 */ Vec3f up;
+    /* 0x074 */ Vec3f eyeNext;
+    /* 0x080 */ Vec3f skyboxOffset;
+    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x090 */ struct Player* player;
+    /* 0x094 */ PosRot playerPosRot;
+    /* 0x0A8 */ struct Actor* target;
+    /* 0x0AC */ PosRot targetPosRot;
+    /* 0x0C0 */ f32 rUpdateRateInv;
+    /* 0x0C4 */ f32 pitchUpdateRateInv;
+    /* 0x0C8 */ f32 yawUpdateRateInv;
+    /* 0x0CC */ f32 yOffsetUpdateRate;
+    /* 0x0D0 */ f32 xzOffsetUpdateRate;
+    /* 0x0D4 */ f32 fovUpdateRate;
+    /* 0x0D8 */ f32 xzSpeed;
+    /* 0x0DC */ f32 dist;
+    /* 0x0E0 */ f32 speedRatio;
+    /* 0x0E4 */ Vec3f posOffset;
+    /* 0x0F0 */ Vec3f playerPosDelta;
+    /* 0x0FC */ f32 fov;
+    /* 0x100 */ f32 atLERPStepScale;
+    /* 0x104 */ f32 playerGroundY;
+    /* 0x108 */ Vec3f floorNorm;
+    /* 0x114 */ f32 waterYPos;
+    /* 0x118 */ s32 waterPrevCamIdx;
+    /* 0x11C */ s32 waterPrevCamSetting;
+    /* 0x120 */ s16 waterQuakeId;
+    /* 0x122 */ s16 unk122;
+    /* 0x124 */ void* data0;
+    /* 0x128 */ void* data1;
+    /* 0x12C */ s16 data2;
+    /* 0x12E */ s16 data3;
+    /* 0x130 */ s16 uid;
+    /* 0x132 */ UNK_TYPE1 pad132[2];
+    /* 0x134 */ Vec3s inputDir;
+    /* 0x13A */ Vec3s camDir;
+    /* 0x140 */ s16 status;
+    /* 0x142 */ s16 setting;
+    /* 0x144 */ s16 mode;
+    /* 0x146 */ s16 bgCheckId;
+    /* 0x148 */ s16 camDataIdx;
+    /* 0x14A */ s16 flags1;
+    /* 0x14C */ s16 flags2;
+    /* 0x14E */ s16 childCamIdx;
+    /* 0x150 */ s16 unk150;
+    /* 0x152 */ s16 unk152;
+    /* 0x154 */ s16 prevSetting;
+    /* 0x156 */ s16 nextCamDataIdx;
+    /* 0x158 */ s16 nextBGCheckId;
+    /* 0x15A */ s16 roll;
+    /* 0x15C */ s16 paramFlags;
+    /* 0x15E */ s16 animState;
+    /* 0x160 */ s16 unk160;
+    /* 0x162 */ s16 timer;
+    /* 0x164 */ s16 thisIdx;
+    /* 0x166 */ s16 prevCamDataIdx;
+    /* 0x168 */ s16 unk168;
+    /* 0x16A */ s16 unk16A;
+    /* 0x16C */ Vec3f meshActorPos;
+} Camera; // size = 0x178
+
+typedef s32(*camera_update_func)(Camera* camera);
+
+typedef struct {
+    /* 0x00 */ Vec3f atOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 rollOffset;
+    /* 0x1A */ s16 zoom;
+} ShakeInfo; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s16 randIdx;
     /* 0x02 */ s16 countdownMax;
-    /* 0x04 */ Camera* cam;
+    /* 0x04 */ Camera* camera;
     /* 0x08 */ u32 callbackIdx;
-    /* 0x0C */ s16 y;
-    /* 0x0E */ s16 x;
+    /* 0x0C */ s16 verticalMag;
+    /* 0x0E */ s16 horizontalMag;
     /* 0x10 */ s16 zoom;
-    /* 0x12 */ s16 rotZ;
-    /* 0x14 */ QuakeRequest14 unk14;
+    /* 0x12 */ s16 rollOffset;
+    /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
     /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 unk1C;
+    /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 camPtrIdx;
-    /* 0x22 */ UNK_TYPE1 pad22[0x2];
+    /* 0x20 */ s16 cameraPtrsIdx;
 } QuakeRequest; // size = 0x24
 
-typedef s32(*camera_update_func)(Camera* camera);
+typedef struct {
+    /* 0x00 */ Vec3f atOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 rollOffset;
+    /* 0x1A */ s16 zoom;
+    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
+} QuakeCamCalc; // size = 0x20
 
-typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
+typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
+
+#define QUAKE_SPEED (1 << 0)
+#define QUAKE_VERTICAL_MAG (1 << 1)
+#define QUAKE_HORIZONTAL_MAG (1 << 2)
+#define QUAKE_ZOOM (1 << 3)
+#define QUAKE_ROLL_OFFSET (1 << 4)
+#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
+#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
+#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
+#define QUAKE_COUNTDOWN (1 << 8)
+#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
+
+typedef struct {
+    /* 0x0 */ GlobalContext* globalCtx;
+    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
+    /* 0x8 */ s16 countdown;
+    /* 0xA */ s16 state;
+} Quake2Context; // size = 0xC
+
+typedef enum {
+    QUAKE2_INACTIVE,
+    QUAKE2_ACTIVE,
+    QUAKE2_SETUP,
+} Quake2State;
 
 typedef struct OSMesgQueueListNode_t {
     /* 0x0 */ struct OSMesgQueueListNode_t* next;
@@ -1412,70 +1483,6 @@ struct ActorListEntry {
     /* 0x4 */ Actor* first; // pointer to first actor of this type
     /* 0x8 */ UNK_TYPE1 pad8[0x4];
 }; // size = 0xC
-
-struct Camera {
-    /* 0x000 */ UNK_TYPE1 pad0[0x4];
-    /* 0x004 */ Vec3f unk4;
-    /* 0x010 */ UNK_TYPE1 pad10[0x8];
-    /* 0x018 */ f32 unk18;
-    /* 0x01C */ s16 unk1C;
-    /* 0x01E */ s16 unk1E;
-    /* 0x020 */ Vec3f unk20;
-    /* 0x02C */ UNK_TYPE1 pad2C[0x2];
-    /* 0x02E */ s16 unk2E;
-    /* 0x030 */ UNK_TYPE1 pad30[0x10];
-    /* 0x040 */ s16 unk40;
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x8];
-    /* 0x04C */ s16 unk4C;
-    /* 0x04E */ UNK_TYPE1 pad4E[0x2];
-    /* 0x050 */ Vec3f focalPoint;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f upDir;
-    /* 0x074 */ Vec3f unk74;
-    /* 0x080 */ f32 unk80;
-    /* 0x084 */ f32 unk84;
-    /* 0x088 */ f32 unk88;
-    /* 0x08C */ GlobalContext* globalCtx;
-    /* 0x090 */ Player* player;
-    /* 0x094 */ PosRot unk94;
-    /* 0x0A8 */ Actor* unkA8;
-    /* 0x0AC */ Vec3f unkAC;
-    /* 0x0B8 */ UNK_TYPE1 padB8[0x8];
-    /* 0x0C0 */ f32 unkC0;
-    /* 0x0C4 */ f32 unkC4;
-    /* 0x0C8 */ f32 unkC8;
-    /* 0x0CC */ f32 unkCC;
-    /* 0x0D0 */ f32 unkD0;
-    /* 0x0D4 */ f32 unkD4;
-    /* 0x0D8 */ UNK_TYPE1 padD8[0x4];
-    /* 0x0DC */ f32 unkDC;
-    /* 0x0E0 */ f32 unkE0;
-    /* 0x0E4 */ UNK_TYPE1 padE4[0x18];
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 unk100;
-    /* 0x104 */ UNK_TYPE1 pad104[0x30];
-    /* 0x134 */ Vec3s unk134;
-    /* 0x13A */ UNK_TYPE1 pad13A[0x4];
-    /* 0x13E */ u16 unk13E;
-    /* 0x140 */ s16 unk140;
-    /* 0x142 */ s16 state;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ UNK_TYPE1 pad146[0x2];
-    /* 0x148 */ s16 unk148;
-    /* 0x14A */ s16 unk14A;
-    /* 0x14C */ s16 unk14C;
-    /* 0x14E */ UNK_TYPE1 pad14E[0x6];
-    /* 0x154 */ s16 unk154;
-    /* 0x156 */ UNK_TYPE1 pad156[0x4];
-    /* 0x15A */ s16 unk15A;
-    /* 0x15C */ s16 unk15C;
-    /* 0x15E */ s16 unk15E;
-    /* 0x160 */ UNK_TYPE1 pad160[0x4];
-    /* 0x164 */ s16 unk164;
-    /* 0x166 */ s16 unk166;
-    /* 0x168 */ UNK_TYPE1 pad168[0x10];
-}; // size = 0x178
 
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
