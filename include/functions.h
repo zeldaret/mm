@@ -3054,7 +3054,7 @@ s32 func_8016970C(GlobalContext* globalCtx, s16 camId, Vec3f* focalPoint, Vec3f*
 void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 // void func_80169A50(void);
 // void func_80169AC0(void);
-void func_80169AFC(GlobalContext* globalCtx, s16 camID, s16 arg2);
+void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2);
 // void func_80169C64(void);
 // void func_80169C84(void);
 // void convert_scene_number_among_shared_scenes(void);
