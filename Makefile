@@ -283,16 +283,16 @@ build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
 
 build/%.d: %.c
 	@./tools/depend.py $< $@
-	@$(GCC) $< -Iinclude -Isrc -I./ -MM -MT 'build/$*.o' >> $@
+	@$(GCC) $< -Iinclude -Isrc -Iassets -Ibuild -I./ -MM -MT 'build/$*.o' >> $@
 
 build/dmadata_script.ld: build/dmadata_script.txt
-	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+	@$(GCC) -E -CC -x c -Iinclude -Iassets -Ibuild -I./ $< | grep -v '^#' > $@
 
 build/linker_scripts/%.ld: linker_scripts/%.txt
-	@$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
+	@$(GCC) -E -CC -x c -Iinclude -Iassets -Ibuild -I./ $< | grep -v '^#' > $@
 
 build/assets/%.d: assets/%.c
-	@$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
+	@$(GCC) $< -Iinclude -Iassets -Ibuild -I./ -MM -MT 'build/assets/$*.o' > $@
 
 ## Build C files from assets
 

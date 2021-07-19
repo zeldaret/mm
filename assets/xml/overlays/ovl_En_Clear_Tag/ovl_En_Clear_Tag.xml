@@ -11,8 +11,8 @@
 
         <!-- Inner black smoke cloud from explosion: multi-texture -->
         <DList Name="sExplosionBlackSmokeSetupDL" Offset="0x37F8"/>
-        <Texture Name="sExplosionBlackSmokeBulkTex" OutName="explosion_black_smoke_bulk" Format="i4" Width="32" Height="64" Offset="0x31C8"/>
-        <Texture Name="sExplosionBlackSmokeFlickerTex" OutName="explosion_black_smoke_flicker" Format="i4" Width="32" Height="32" Offset="0x35C8"/>
+        <Texture Name="sExplosionBlackSmokeFlickerTex" OutName="explosion_black_smoke_flicker" Format="i4" Width="32" Height="64" Offset="0x31C8"/>
+        <Texture Name="sExplosionBlackSmokeBulkTex" OutName="explosion_black_smoke_bulk" Format="i4" Width="32" Height="32" Offset="0x35C8"/>
         <DList Name="sExplosionBlackSmokeVtxDL" Offset="0x38A0"/>
         <Array Name="sExplosionBlackSmokeVtx" Count="3" Offset="0x37C8">
             <Vtx/>
