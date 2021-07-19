@@ -546,7 +546,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                 if (effect->effectsTimer == 1) {
                     effect->type = ENCLEARTAG_NO_EFFECT;
                 }
-            } else if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED) {
+            } else if (effect->type == ENCLEARTAG_UNUSED_BLACK_SMOKE) {
                 // effect->type never set to 2
                 Math_ApproachZeroF(&effect->primColorAlpha, 1.0f, 15.0f);
                 if (effect->primColorAlpha <= 0.0f) {
@@ -720,7 +720,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     isSetup = 0;
     effect = effectRef;
     for (i = 0; i < 103; i++, effect++) {
-        if (effect->type == ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED) {
+        if (effect->type == ENCLEARTAG_UNUSED_BLACK_SMOKE) {
             if (isSetup == 0) {
                 gSPDisplayList(POLY_XLU_DISP++, sExplosionBlackSmokeSetupDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);

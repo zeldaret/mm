@@ -8,7 +8,7 @@ struct EnClearTag;
 typedef enum {
     /* 0x00 */ ENCLEARTAG_NO_EFFECT,
     /* 0x01 */ ENCLEARTAG_EXPLOSION_DEBRIS,
-    /* 0x02 */ ENCLEARTAG_EXPLOSION_BLACK_SMOKE_UNUSED, // effect->type never set to 2
+    /* 0x02 */ ENCLEARTAG_UNUSED_BLACK_SMOKE, // effect->type never set to 2
     /* 0x03 */ ENCLEARTAG_EXPLOSION_BLACK_SMOKE,
     /* 0x04 */ ENCLEARTAG_EXPLOSION_OUTER_CLOUD,
     /* 0x05 */ ENCLEARTAG_LIGHT_RAY,
