@@ -97,8 +97,24 @@ ColliderCylinderInit D_80B7C138 = {
 };
 InitChainEntry D_80B7C254[2]; // unable to generate initializer
 */
+// D_80B7C110
+// D_80B7C128
 extern ColliderCylinderInit D_80B7C138;
+// D_80B7C164
 extern InitChainEntry D_80B7C254[2];
+// D_80B7C25C
+// D_80B7C260
+extern AnimationHeader D_80B7C274[];
+extern Vec3f D_80B7C284;
+extern Vec3f D_80B7C290;
+extern Vec3f D_80B7C29C;
+extern Gfx* D_80B7C2A8[];
+// D_80B7C2B4
+// D_80B7C2CC
+// D_80B7C2E4
+extern Vec3f D_80B7C2FC;
+extern Vec3f D_80B7C308;
+extern Vec3f D_80B7C314;
 
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
@@ -140,6 +156,12 @@ extern FlexSkeletonHeader D_06011DF8;
 extern AnimationHeader D_06012CC0;
 extern CollisionHeader D_06007E20;
 extern CollisionHeader D_06007F50;
+
+extern Gfx D_06000040[];
+extern Gfx D_06000910[];
+extern Gfx D_060011E0[];
+
+extern Gfx D_04075A40[];
 
 
 #ifdef MIPS_2_C_OUTPUT
@@ -1987,6 +2009,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+
 #ifdef MIPS_2_C_OUTPUT
 s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Actor* sp70;
@@ -2078,34 +2101,22 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B598.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
-void func_80B7B93C(GlobalContext* arg0, Vec3f* arg1) {
-    ? sp8C;
-    ? sp80;
-    f32 sp78;
-    f32 sp74;
-    f32 sp70;
-    f32* temp_s5;
-    s32 temp_s0;
-    s32 phi_s0;
+#ifdef NON_MATCHING
+// Needs to import data
+void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
+    Vec3f sp8C = {0.0f, -1.0f, 0.0f};
+    Gfx* sp80[] = {D_06000040, D_06000910, D_060011E0};
+    s32 i;
+    Vec3f sp70;
 
-    sp8C.unk0 = (s32) D_80B7C29C.unk0;
-    sp8C.unk4 = (s32) D_80B7C29C.unk4;
-    sp8C.unk8 = (s32) D_80B7C29C.unk8;
-    sp80.unk0 = (s32) D_80B7C2A8.unk0;
-    sp80.unk4 = (s32) D_80B7C2A8.unk4;
-    sp80.unk8 = (s32) D_80B7C2A8.unk8;
-    EffectSsHitMark_SpawnFixedScale(arg0, 0, arg1);
-    temp_s5 = &sp70;
-    phi_s0 = 0;
-    do {
-        sp70 = (Rand_ZeroOne() * 20.0f) - 10.0f;
-        sp74 = -((Rand_ZeroOne() * 20.0f) - 10.0f);
-        sp78 = (Rand_ZeroOne() * 20.0f) - 10.0f;
-        EffectSsHahen_Spawn(arg0, arg1, (Vec3f* ) temp_s5, (Vec3f* ) &sp8C, (s16) 1, (s16) 0x64, (s16) 0x1FC, (s16) 0xA, *(&sp80 + ((s32) (Rand_ZeroOne() * 3.0f) * 4)));
-        temp_s0 = phi_s0 + 1;
-        phi_s0 = temp_s0;
-    } while (temp_s0 != 0x14);
+    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, arg1);
+
+    for (i = 0; i < 20; i++) {
+        sp70.x = (Rand_ZeroOne() * 20.0f) - 10.0f;
+        sp70.y = -((Rand_ZeroOne() * 20.0f) - 10.0f);
+        sp70.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
+        EffectSsHahen_Spawn(globalCtx, arg1, &sp70, &sp8C, 1, 0x64, 0x1FC, 0xA, sp80[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sp80))]);
+    }
 }
 #else
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B93C.asm")
@@ -2253,57 +2264,68 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7BABC.asm")
 #endif
 
-#ifdef MIPS_2_C_OUTPUT
+#ifdef NON_EQUIVALENT
 void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx) {
-    f32 sp110;
-    f32 sp10C;
-    f32 sp108;
+    Vec3f sp108;
     CollisionPoly* sp104;
     Mtx* sp100;
-    ? spC0;
-    ? sp80;
-    ? sp40;
-    Gfx* temp_v0_2;
-    Gfx* temp_v0_3;
-    Gfx* temp_v0_4;
-    Gfx* temp_v0_5;
-    GraphicsContext* temp_s0;
-    Mtx* temp_a2;
-    Mtx* temp_v0;
+    MtxF spC0;
+    MtxF sp80;
+    MtxF sp40;
 
-    sp108 = arg0->x;
-    sp10C = arg0->y + 1.0f;
-    sp110 = arg0->z;
+    sp108.x = arg0->x;
+    sp108.y = arg0->y + 1.0f;
+    sp108.z = arg0->z;
     if (sp104 != 0) {
         func_800C0094(sp104, arg0->x, func_800C4000(globalCtx, &globalCtx->colCtx, &sp104, &sp108), arg0->z, (MtxF* ) &spC0);
     } else {
-        SkinMatrix_SetTranslate((MtxF* ) &spC0, arg0->x, arg0->y, arg0->z);
+        SkinMatrix_SetTranslate(&spC0, arg0->x, arg0->y, arg0->z);
     }
-    SkinMatrix_MulYRotation((MtxF* ) &spC0, arg1);
-    SkinMatrix_SetScale((MtxF* ) &sp80, arg2->x, 1.0f, arg2->z);
-    SkinMatrix_MtxFMtxFMult((MtxF* ) &spC0, (MtxF* ) &sp80, (MtxF* ) &sp40);
-    temp_v0 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, (MtxF* ) &sp40);
-    temp_a2 = temp_v0;
-    if (temp_v0 != 0) {
+
+    SkinMatrix_MulYRotation( &spC0, arg1);
+    SkinMatrix_SetScale(&sp80, arg2->x, 1.0f, arg2->z);
+    SkinMatrix_MtxFMtxFMult(&spC0, &sp80, &sp40);
+
+    sp100 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, &sp40);
+    if (sp100 != NULL) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        /*
         temp_s0 = globalCtx->state.gfxCtx;
         temp_v0_2 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_v0_2 + 8;
         temp_v0_2->words.w1 = (u32) &D_801D1DE0;
         temp_v0_2->words.w0 = 0xDA380003;
-        sp100 = temp_a2;
+        */
+        gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        sp100 = sp100;
+        /*
         temp_s0->polyOpa.p = Gfx_CallSetupDL(temp_s0->polyOpa.p, 0x2CU);
         temp_v0_3 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_v0_3 + 8;
         temp_v0_3->words.w0 = 0xFA000000;
+        */
+        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+
+        /*
         temp_v0_3->words.w1 = (u32) arg3;
         temp_v0_4 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_v0_4 + 8;
-        temp_v0_4->words.w1 = (u32) temp_a2;
+        temp_v0_4->words.w1 = (u32) sp100;
         temp_v0_4->words.w0 = 0xDA380003;
+        */
+        gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        /*
         temp_v0_5 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_v0_5 + 8;
-        temp_v0_5->words.w1 = 0x4075A40;
+        temp_v0_5->words.w1 = 0x04075A40;
         temp_v0_5->words.w0 = 0xDE000000;
+        */
+        gSPDisplayList(POLY_OPA_DISP++, D_04075A40);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 #else
