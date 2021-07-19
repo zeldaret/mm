@@ -305,8 +305,9 @@ build/assets/%.bin.inc.c: assets/%.bin
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
-ifneq ($(MAKECMDGOALS), clean)
-ifneq ($(MAKECMDGOALS), distclean)
--include $(C_FILES:%.c=build/%.d)
-endif
-endif
+# Checks headers dependencies of each C file
+# ifneq ($(MAKECMDGOALS), clean)
+# ifneq ($(MAKECMDGOALS), distclean)
+# -include $(C_FILES:%.c=build/%.d)
+# endif
+# endif
