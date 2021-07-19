@@ -40,3 +40,5 @@ const ActorInit Arrow_Light_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/D_809260B0.s")

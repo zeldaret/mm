@@ -173,3 +173,5 @@ const ActorInit En_Sob1_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A104E4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A10608.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/D_80A10A50.s")

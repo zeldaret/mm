@@ -157,3 +157,5 @@ const ActorInit En_Ossan_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ossan/func_808ABE58.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ossan/func_808ABF30.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ossan/D_808AC2D0.s")

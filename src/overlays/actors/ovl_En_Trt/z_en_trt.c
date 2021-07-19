@@ -186,3 +186,5 @@ const ActorInit En_Trt_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Trt/func_80A8FC64.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Trt/EnTrt_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Trt/D_80A8FF10.s")

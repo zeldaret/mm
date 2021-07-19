@@ -31,3 +31,5 @@ const ActorInit Elf_Msg5_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/func_80AFDB38.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/ElfMsg5_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/D_80AFDBE0.s")
