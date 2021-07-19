@@ -1411,8 +1411,6 @@ void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// v0/v1 problems
 void func_80B7A400(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -1427,57 +1425,44 @@ void func_80B7A400(ObjUm* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A400.asm")
-#endif
 
-#ifdef MIPS_2_C_OUTPUT
 void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
     s32 temp_v0;
-    u8 temp_t1;
-    u8 temp_t9;
-    u8 temp_v1;
 
     func_80B78E38(this, globalCtx);
     func_80B78E88(this, globalCtx, 0x7FFF);
     this->unk_2AC += 0x7D0;
     this->unk_2F4 |= 0x10;
     func_80B7B18C(this, globalCtx, 1);
+
     temp_v0 = func_80B79BA0(this, globalCtx);
-    if ((temp_v0 == 1) || (temp_v0 == 2)) {
-        temp_v1 = gSaveContext.unkF2C;
+    if (temp_v0 == 1 || temp_v0 == 2) {
         gSaveContext.seqIndex = 0xFF;
-        gSaveContext.unkF17 = (u8) (gSaveContext.unkF17 & 0x7F);
+        gSaveContext.weekEventReg[0x1F] &= (u8)~0x80;
         gSaveContext.nightSeqIndex = 0xFF;
-        if (((temp_v1 & 1) == 0) && ((temp_v1 & 2) == 0)) {
+
+        if (!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) {
             if (this->unk_4E0 == 0) {
                 globalCtx->nextEntranceIndex = 0x3E60;
                 globalCtx->unk_1887F = 0x40;
                 gSaveContext.nextTransition = 3;
                 globalCtx->sceneLoadFlag = 0x14;
-                temp_t1 = gSaveContext.unkF2C | 1;
-                gSaveContext.unkF2C = temp_t1;
-                gSaveContext.unkF2C = (u8) (temp_t1 & 0xFD);
-                return;
+                gSaveContext.weekEventReg[0x34] |= 0x01;
+                gSaveContext.weekEventReg[0x34] &= (u8)~0x2;
+            } else {
+                globalCtx->nextEntranceIndex = 0x6480;
+                globalCtx->unk_1887F = 0x40;
+                gSaveContext.nextTransition = 3;
+                globalCtx->sceneLoadFlag = 0x14;
+                gSaveContext.weekEventReg[0x34] |= 0x02;
+                gSaveContext.weekEventReg[0x34] &= (u8)~0x1;
             }
-            globalCtx->nextEntranceIndex = 0x6480;
-            globalCtx->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 3;
-            globalCtx->sceneLoadFlag = 0x14;
-            temp_t9 = gSaveContext.unkF2C | 2;
-            gSaveContext.unkF2C = temp_t9;
-            gSaveContext.unkF2C = (u8) (temp_t9 & 0xFE);
-            return;
         }
-        // Duplicate return node #8. Try simplifying control flow for better match
-        return;
+    } else {
+        Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
+        func_80B78DF0(this, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
-    func_80B78DF0(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7A494.asm")
-#endif
 
 #ifdef MIPS_2_C_OUTPUT
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
