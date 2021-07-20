@@ -440,7 +440,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) && (this->actor.world.rot.z == 0))) {
+            if ((this->actor.world.rot.x != 0) || (this->actor.world.rot.y != 0) || (this->actor.world.rot.z != 0)) {
                 this->flashEnvColor.r = this->actor.world.rot.x;
                 this->flashEnvColor.g = this->actor.world.rot.y;
                 this->flashEnvColor.b = this->actor.world.rot.z;
