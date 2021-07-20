@@ -311,10 +311,10 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 ma
     Vec3f eye;
 
     y = BINANG_ROT180(Camera_GetCamDirYaw(camera));
-    eye.x = (Math_SinS(y) * magShakeXZ) + camera->focalPoint.x;
-    eye.y = camera->focalPoint.y + magShakeY;
-    eye.z = (Math_CosS(y) * magShakeXZ) + camera->focalPoint.z;
-    func_8016970C(globalCtx, this->camId, &camera->focalPoint, &eye);
+    eye.x = (Math_SinS(y) * magShakeXZ) + camera->at.x;
+    eye.y = camera->at.y + magShakeY;
+    eye.z = (Math_CosS(y) * magShakeXZ) + camera->at.z;
+    func_8016970C(globalCtx, this->camId, &camera->at, &eye);
 }
 
 void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
@@ -322,7 +322,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if (this->camId != 0) {
         camera = Play_GetCamera(globalCtx, this->camId);
-        func_8016970C(globalCtx, 0, &camera->focalPoint, &camera->eye);
+        func_8016970C(globalCtx, 0, &camera->at, &camera->eye);
         this->camId = 0;
         ActorCutscene_Stop(this->cutscene);
         func_800B724C(globalCtx, &this->actor, 6);
