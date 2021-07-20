@@ -39,7 +39,7 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
 #ifdef NON_MATCHING
 // Matches besides rodata, since rodata is not merged into the asm in code files yet.
 void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+    GlobalContext* globalCtx = (GlobalContext*)gamestate;
     u32 size;
     void* offset;
     s32 pad;
@@ -95,7 +95,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
     if (skyType == 1) {
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->kankyoContext.unk10 == 0) {
+        if (globalCtx->envCtx.unk_10 == 0) {
             // Send a DMA request for the clear sky texture
             size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 
@@ -112,7 +112,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
         osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->kankyoContext.unk11 == 0) {
+        if (globalCtx->envCtx.unk_11 == 0) {
             // Send a DMA request for the clear sky texture
             size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 

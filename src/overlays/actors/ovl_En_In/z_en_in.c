@@ -141,13 +141,41 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-CollisionCheckInfoInit2 sColChkInfoInit2 = {
-    0, 0, 0, 0, MASS_HEAVY,
-};
+static CollisionCheckInfoInit2 sColChkInfoInit2 = { 0, 0, 0, 0, MASS_HEAVY };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x0),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0x0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0x0),
+    /* Light arrow    */ DMG_ENTRY(0, 0x0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(0, 0x0),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
 static ActorAnimationEntryS sAnimations[] = {
@@ -211,7 +239,7 @@ void func_808F32A0(EnIn* this, GlobalContext* globalCtx) {
     this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
     this->colliderCylinder.dim.pos.z = this->actor.world.pos.z;
     if (this->unk23D == 0) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
     }
 }
 
@@ -831,8 +859,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -1078,8 +1106,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:

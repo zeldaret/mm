@@ -320,10 +320,10 @@ void func_800A640C(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-Color_RGBA8 D_801ADF10 = { 0xFF, 0xFF, 0x7F, 0x00 };
-Color_RGBA8 D_801ADF14 = { 0xFF, 0xFF, 0xFF, 0x00 };
-Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
-Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
+static Color_RGBA8 D_801ADF10 = { 255, 255, 127, 0 };
+static Color_RGBA8 D_801ADF14 = { 255, 255, 255, 0 };
+static Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
+static Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
 
 void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     u32 pad;
@@ -470,7 +470,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    Collision_AddAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
         (this->actor.params == ITEM00_COMPASS)) {
@@ -490,7 +490,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->unk17000 != 0) {
+    if (globalCtx->gameOverCtx.state != 0) {
         return;
     }
 

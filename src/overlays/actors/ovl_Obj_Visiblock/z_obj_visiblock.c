@@ -16,7 +16,7 @@ const ActorInit Obj_Visiblock_InitVars = {
     sizeof(ObjVisiblock),
     (ActorFunc)ObjVisiblock_Init,
     (ActorFunc)ObjVisiblock_Destroy,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjVisiblock_Draw,
 };
 

@@ -1,8 +1,8 @@
-/* 
- * File: z_en_niw.c 
+/*
+ * File: z_en_niw.c
  * Overlay: ovl_En_Niw
  * Description: Cucco (Chicken) (Japanese: Niwatori)
- */ 
+ */
 
 #include "z_en_niw.h"
 
@@ -269,9 +269,9 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     Actor* attackNiw;
 
     if ((this->unkTimer252 == 0) && (this->unk290 < 7)) {
-        xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        xView = globalCtx->view.at.x - globalCtx->view.eye.x;
+        yView = globalCtx->view.at.y - globalCtx->view.eye.y;
+        zView = globalCtx->view.at.z - globalCtx->view.eye.z;
         newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
         newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
         newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
@@ -451,7 +451,8 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
         }
-    } else if (this->unk2BC.z != 0.0f) { this->actor.shape.rot.z = 0;
+    } else if (this->unk2BC.z != 0.0f) {
+        this->actor.shape.rot.z = 0;
         rotZ = this->actor.shape.rot.z;
         this->actor.velocity.y = 8.0f;
         this->actor.speedXZ = 4.0f;
@@ -834,9 +835,9 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
         // if cucco is off the map?
         Vec3f camera;
-        camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+        camera.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+        camera.z = globalCtx->view.at.z - globalCtx->view.eye.z;
         camResult = camera.y / sqrtf(SQXYZ(camera));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
@@ -915,12 +916,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (!this->isStormActive) {
             if (this->niwType == ENNIW_TYPE_REGULAR) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
                 if (globalCtx) {}
 
                 if ((this->unknownState28E != 4) && (this->unknownState28E != 5)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 }
             }
         }
@@ -1038,8 +1039,9 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z,
+                                        MTXMODE_NEW);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_f(this->feathers[i].zRot, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

@@ -5,7 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
-#include "src/overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 
 #define FLAGS 0x00000035
 
@@ -99,8 +99,38 @@ const ActorInit En_Pametfrog_InitVars = {
 };
 
 static DamageTable sDamageTable = {
-    0x10, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x10, 0x01, 0x01, 0x01, 0x22, 0x32, 0x42, 0x01, 0x10,
-    0x01, 0x02, 0x10, 0x50, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
+    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x1),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(1, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x1),
+    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(1, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -171,7 +201,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
                      this->transitionDrawTable, 24);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-    if (Actor_GetRoomCleared(globalCtx, globalCtx->roomContext.currRoom.num)) {
+    if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
@@ -506,7 +536,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3.0f)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -644,7 +674,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     this->actor.speedXZ = 0.0f;
     this->skelAnime.animPlaybackSpeed = 1.5f;
     if (this->timer != 0) {
-        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30.0f) : (-M_PI / 30.0f);
+        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
     } else {
         randFloat = Rand_ZeroFloat(0x2000);
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
@@ -944,7 +974,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(globalCtx, &vec1, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 800, 50);
     func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
-    Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomContext.currRoom.num);
+    Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
 
     for (i = 0; i < 25; i++) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);
@@ -961,7 +991,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5.0f)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -1146,7 +1176,7 @@ void func_8086CD04(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
-    Vec3f focalPoint;
+    Vec3f at;
     s16 yawDiff;
 
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001B08, 3.0f);
@@ -1162,15 +1192,15 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    focalPoint.x = this->actor.world.pos.x;
-    focalPoint.z = this->actor.world.pos.z;
-    focalPoint.y = this->actor.world.pos.y + 45.0f;
-    eye.x = (Math_SinS(this->actor.shape.rot.y) * 90.0f) + focalPoint.x;
-    eye.z = (Math_CosS(this->actor.shape.rot.y) * 90.0f) + focalPoint.z;
-    eye.y = focalPoint.y + 4.0f;
+    at.x = this->actor.world.pos.x;
+    at.z = this->actor.world.pos.z;
+    at.y = this->actor.world.pos.y + 45.0f;
+    eye.x = (Math_SinS(this->actor.shape.rot.y) * 90.0f) + at.x;
+    eye.z = (Math_CosS(this->actor.shape.rot.y) * 90.0f) + at.z;
+    eye.y = at.y + 4.0f;
 
     // Zooms in on Gekko
-    func_8016970C(globalCtx, this->camId, &focalPoint, &eye);
+    func_8016970C(globalCtx, this->camId, &at, &eye);
     this->timer = 0;
     this->actor.hintId = 0x5F;
     this->actionFunc = EnPametfrog_CallSnapper;
@@ -1183,26 +1213,26 @@ void EnPametfrog_CallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
-    Vec3f focalPoint;
+    Vec3f at;
     Vec3f eye;
     s16 yaw;
 
     EnPametfrog_PlaceSnapper(this, globalCtx);
-    focalPoint.x = this->actor.child->world.pos.x;
-    focalPoint.z = this->actor.child->world.pos.z;
-    focalPoint.y = this->actor.child->floorHeight + 50.0f;
+    at.x = this->actor.child->world.pos.x;
+    at.z = this->actor.child->world.pos.z;
+    at.y = this->actor.child->floorHeight + 50.0f;
     if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y) > 0) {
         yaw = this->actor.child->shape.rot.y - 0x1000;
     } else {
         yaw = this->actor.child->shape.rot.y + 0x1000;
     }
 
-    eye.x = (Math_SinS(yaw) * 500.0f) + focalPoint.x;
-    eye.y = focalPoint.y + 55.0f;
-    eye.z = (Math_CosS(yaw) * 500.0f) + focalPoint.z;
+    eye.x = (Math_SinS(yaw) * 500.0f) + at.x;
+    eye.y = at.y + 55.0f;
+    eye.z = (Math_CosS(yaw) * 500.0f) + at.z;
 
     // Zooms in on Snapper spawn point
-    func_8016970C(globalCtx, this->camId, &focalPoint, &eye);
+    func_8016970C(globalCtx, this->camId, &at, &eye);
     this->quake = Quake_Add(ACTIVE_CAM, 6);
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
@@ -1228,7 +1258,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
     Quake_RemoveFromIdx(this->quake);
     this->quake = Quake_Add(ACTIVE_CAM, 3);
     Quake_SetSpeed(this->quake, 20000);
-    Quake_SetQuakeValues(this->quake, 0x11, 0, 0, 0);
+    Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
     func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
@@ -1324,15 +1354,15 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->collider.base.atFlags & AT_ON) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->collider.base.acFlags & AC_ON) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->collider.base.ocFlags1 & OC1_ON) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->unk_2C4 > 0.0f) {

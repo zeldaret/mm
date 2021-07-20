@@ -299,9 +299,9 @@ typedef struct {
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 nbTransitionActors;
+    /* 0x00 */ u8 numTransitionActors;
     /* 0x04 */ TransitionActorEntry* transitionActorList;
-} TransitionContext;
+} DoorContext;
 
 typedef struct {
     /* 0x0 */ s16 id;
@@ -469,19 +469,8 @@ typedef struct {
 } MeshHeader2;
 
 typedef struct {
-    u8 ambientClrR, ambientClrG, ambientClrB;
-    u8 diffuseClrA_R, diffuseClrA_G, diffuseClrA_B;
-    u8 diffuseDirA_X, diffuseDirA_Y, diffuseDirA_Z;
-    u8 diffuseClrB_R, diffuseClrB_G, diffuseClrB_B;
-    u8 diffuseDirB_X, diffuseDirB_Y, diffuseDirB_Z;
-    u8 fogClrR, fogClrG, fogClrB;
-    u16 unk;
-    u16 drawDistance;
-} LightSettings;
-
-typedef struct {
     /* 0x00 */ u8 count; // number of points in the path
-    /* 0x01 */ s8 unk1;
+    /* 0x01 */ u8 unk1;
     /* 0x02 */ s16 unk2;
     /* 0x04 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
@@ -664,7 +653,7 @@ typedef enum {
     /* 0x70 */ SCENE_ALLEY
 } SceneID;
 
-// Scene draw configs
+// SceneTableEntry draw configs
 typedef enum {
     /* 0 */ SCENE_DRAW_CFG_DEFAULT,
     /* 1 */ SCENE_DRAW_CFG_MAT_ANIM,
@@ -676,7 +665,7 @@ typedef enum {
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
-// Scene commands
+// SceneTableEntry commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
     /* 0x01 */ SCENE_CMD_ID_ACTOR_LIST,
@@ -759,8 +748,8 @@ typedef enum {
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
 
-#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, transitionActorList) \
-    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(transitionActorList) } 
+#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, actorList) \
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) } 
 
 #define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
     { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
