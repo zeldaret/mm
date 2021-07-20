@@ -404,7 +404,7 @@ SECTIONS
         build/asm/code/code_0x80122660.o(.text)
         build/asm/code/z_player_lib.o(.text)
         build/src/code/z_prenmi.o(.text)
-        build/asm/code/code_0x8012A080.o(.text)
+        build/src/code/z_quake.o(.text)
         build/src/code/z_rcp.o(.text)
         . += 0x10;
         build/src/code/z_room.o(.text)
@@ -447,7 +447,7 @@ SECTIONS
         build/src/code/TwoHeadGfxArena.o(.text)
         build/src/code/TwoHeadArena.o(.text)
         build/asm/code/code_0x80172BC0.o(.text)
-        build/asm/code/code_0x80172C30.o(.text)
+        build/src/code/audioMgr.o(.text)
         build/src/code/title_setup.o(.text)
         build/src/code/game.o(.text)
         build/asm/code/gamealloc.o(.text)
@@ -525,7 +525,7 @@ SECTIONS
         build/asm/code/code_data_z_msgevent.o(.data)
         build/asm/code/code_data_z_parameter.o(.data)
         build/asm/code/code_data_z_player_lib.o(.data)
-        build/asm/code/code_data_0x8012A080.o(.data)
+        build/src/code/z_quake.o(.data)
         build/src/code/z_rcp.o(.data)
         build/asm/code/code_data_z_room.o(.data)
         build/src/code/code_0x8012EC80.o(.data)
@@ -549,7 +549,7 @@ SECTIONS
         build/asm/code/code_data_z_fbdemo_circle.o(.data)
         build/asm/code/code_data_z_play.o(.data)
         build/asm/code/code_data_z_play_hireso.o(.data)
-        build/asm/code/code_data_0x80172C30.o(.data)
+        build/src/code/audioMgr.o(.data)
         build/src/code/game.o(.data)
         build/asm/code/code_data_graph.o(.data)
         build/asm/code/code_data_padmgr.o(.data)
@@ -600,7 +600,7 @@ SECTIONS
         build/src/code/z_olib.o(.rodata)
         build/asm/code/code_rodata_z_parameter.o(.rodata)
         build/asm/code/code_rodata_z_player_lib.o(.rodata)
-        build/asm/code/code_rodata_0x8012A080.o(.rodata)
+        build/src/code/z_quake.o(.rodata)
         build/asm/code/code_rodata_z_room.o(.rodata)
         build/src/code/code_0x8012EC80.o(.rodata)
         build/src/code/z_scene_proc.o(.rodata)
@@ -623,7 +623,7 @@ SECTIONS
         build/asm/code/code_rodata_z_play_hireso.o(.rodata)
         build/asm/code/code_rodata_PreRender.o(.rodata)
         build/asm/code/code_rodata_0x80172BC0.o(.rodata)
-        build/asm/code/code_rodata_0x80172C30.o(.rodata)
+        build/src/code/audioMgr.o(.rodata)
         build/src/code/game.o(.rodata)
         build/asm/code/code_rodata_graph.o(.rodata)
         build/asm/code/code_rodata_main.o(.rodata)
@@ -675,7 +675,7 @@ SECTIONS
     . += 0x10; /* code_0x8010C0C0 */
     . += 0x60; /* z_parameter */
     . += 0x150; /* z_player_lib */
-    . += 0xA0; /* code_0x8012A080 */
+    . += 0xA0; /* z_quake */
     . += 0x10; /* z_scene_proc */
     . += 0x10; /* z_skelanime */
     . += 0xF10; /* z_skin */
@@ -6119,9 +6119,9 @@ SECTIONS
     ovl_En_Fsn : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Fsn/z_en_fsn.o(.text)
-        build/asm/overlays/ovl_En_Fsn_data.o(.data)
+        build/src/overlays/actors/ovl_En_Fsn/z_en_fsn.o(.data)
         build/src/overlays/actors/ovl_En_Fsn/z_en_fsn.o(.rodata)
-        build/asm/overlays/ovl_En_Fsn_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Fsn/z_en_fsn_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
