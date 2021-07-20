@@ -9224,2807 +9224,3208 @@ beginseg
     name "Z2_20SICHITAI2"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI2.o"
+    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_20SICHITAI2_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI2_room_00.o"
+    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_20SICHITAI2_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI2_room_01.o"
+    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_20SICHITAI2_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI2_room_02.o"
+    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_WITCH_SHOP"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_WITCH_SHOP.o"
+    include "build/assets/scenes/Z2_WITCH_SHOP/Z2_WITCH_SHOP.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_WITCH_SHOP_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_WITCH_SHOP_room_00.o"
+    include "build/assets/scenes/Z2_WITCH_SHOP/Z2_WITCH_SHOP_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_BS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_BS.o"
+    include "build/assets/scenes/Z2_LAST_BS/Z2_LAST_BS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LAST_BS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_BS_room_00.o"
+    include "build/assets/scenes/Z2_LAST_BS/Z2_LAST_BS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKASHITA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_HAKASHITA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA_room_00.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKASHITA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA_room_01.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKASHITA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA_room_02.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKASHITA_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA_room_03.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKASHITA_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKASHITA_room_04.o"
+    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_AYASHIISHOP"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_AYASHIISHOP.o"
+    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_AYASHIISHOP_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_AYASHIISHOP_room_00.o"
+    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_AYASHIISHOP_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_AYASHIISHOP_room_01.o"
+    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OMOYA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OMOYA.o"
+    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_OMOYA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OMOYA_room_00.o"
+    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OMOYA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OMOYA_room_01.o"
+    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OMOYA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OMOYA_room_02.o"
+    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BOWLING"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOWLING.o"
+    include "build/assets/scenes/Z2_BOWLING/Z2_BOWLING.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_BOWLING_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOWLING_room_00.o"
+    include "build/assets/scenes/Z2_BOWLING/Z2_BOWLING_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SONCHONOIE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SONCHONOIE.o"
+    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SONCHONOIE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SONCHONOIE_room_00.o"
+    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SONCHONOIE_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SONCHONOIE_room_01.o"
+    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SONCHONOIE_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SONCHONOIE_room_02.o"
+    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SONCHONOIE_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SONCHONOIE_room_03.o"
+    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_IKANA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA_room_00.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA_room_01.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA_room_02.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANA_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA_room_03.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANA_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANA_room_04.o"
+    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KAIZOKU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KAIZOKU.o"
+    include "build/assets/scenes/Z2_KAIZOKU/Z2_KAIZOKU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KAIZOKU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KAIZOKU_room_00.o"
+    include "build/assets/scenes/Z2_KAIZOKU/Z2_KAIZOKU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MILK_BAR"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MILK_BAR.o"
+    include "build/assets/scenes/Z2_MILK_BAR/Z2_MILK_BAR.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_MILK_BAR_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MILK_BAR_room_00.o"
+    include "build/assets/scenes/Z2_MILK_BAR/Z2_MILK_BAR_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_00.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_01.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_02.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_03.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_04.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_05.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_06.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_07.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_08.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_09.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_10.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_N_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_N_room_11.o"
+    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TAKARAYA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TAKARAYA.o"
+    include "build/assets/scenes/Z2_TAKARAYA/Z2_TAKARAYA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TAKARAYA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TAKARAYA_room_00.o"
+    include "build/assets/scenes/Z2_TAKARAYA/Z2_TAKARAYA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_00.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_01.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_02.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_03.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_04.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_05.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_06.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_07.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_08.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_09.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_10.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_R_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_R_room_11.o"
+    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OKUJOU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OKUJOU.o"
+    include "build/assets/scenes/Z2_OKUJOU/Z2_OKUJOU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_OKUJOU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OKUJOU_room_00.o"
+    include "build/assets/scenes/Z2_OKUJOU/Z2_OKUJOU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OPENINGDAN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OPENINGDAN.o"
+    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_OPENINGDAN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OPENINGDAN_room_00.o"
+    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_OPENINGDAN_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_OPENINGDAN_room_01.o"
+    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_MITURIN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_00.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_01.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_02.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_03.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_04.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_05.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_06.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_07.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_08.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_09.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_10.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_11.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_room_12.o"
+    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_13HUBUKINOMITI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_13HUBUKINOMITI.o"
+    include "build/assets/scenes/Z2_13HUBUKINOMITI/Z2_13HUBUKINOMITI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_13HUBUKINOMITI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_13HUBUKINOMITI_room_00.o"
+    include "build/assets/scenes/Z2_13HUBUKINOMITI/Z2_13HUBUKINOMITI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_CASTLE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_00.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_01.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_02.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_03.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_04.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_05.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_06.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_07.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_08.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CASTLE_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CASTLE_room_09.o"
+    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DEKUTES"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DEKUTES.o"
+    include "build/assets/scenes/Z2_DEKUTES/Z2_DEKUTES.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_DEKUTES_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DEKUTES_room_00.o"
+    include "build/assets/scenes/Z2_DEKUTES/Z2_DEKUTES_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MITURIN_BS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_BS.o"
+    include "build/assets/scenes/Z2_MITURIN_BS/Z2_MITURIN_BS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_MITURIN_BS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MITURIN_BS_room_00.o"
+    include "build/assets/scenes/Z2_MITURIN_BS/Z2_MITURIN_BS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SYATEKI_MIZU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SYATEKI_MIZU.o"
+    include "build/assets/scenes/Z2_SYATEKI_MIZU/Z2_SYATEKI_MIZU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SYATEKI_MIZU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SYATEKI_MIZU_room_00.o"
+    include "build/assets/scenes/Z2_SYATEKI_MIZU/Z2_SYATEKI_MIZU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_00.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_01.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_02.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_03.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_04.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_05.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_06.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_07.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_08.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_09.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_10.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_11.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_12.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_room_13"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_room_13.o"
+    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_13.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_ROMANYMAE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ROMANYMAE.o"
+    include "build/assets/scenes/Z2_ROMANYMAE/Z2_ROMANYMAE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_ROMANYMAE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ROMANYMAE_room_00.o"
+    include "build/assets/scenes/Z2_ROMANYMAE/Z2_ROMANYMAE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_PIRATE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_00.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_01.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_02.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_03.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_04.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_05.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_06.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_07.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_08.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_09.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_10.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_11.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_12.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_13"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_13.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_13.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_PIRATE_room_14"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_PIRATE_room_14.o"
+    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_14.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SYATEKI_MORI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SYATEKI_MORI.o"
+    include "build/assets/scenes/Z2_SYATEKI_MORI/Z2_SYATEKI_MORI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SYATEKI_MORI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SYATEKI_MORI_room_00.o"
+    include "build/assets/scenes/Z2_SYATEKI_MORI/Z2_SYATEKI_MORI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SINKAI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SINKAI.o"
+    include "build/assets/scenes/Z2_SINKAI/Z2_SINKAI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SINKAI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SINKAI_room_00.o"
+    include "build/assets/scenes/Z2_SINKAI/Z2_SINKAI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI_room_00.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI_room_01.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI_room_02.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI_room_03.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YOUSEI_IZUMI_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YOUSEI_IZUMI_room_04.o"
+    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_00.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_01.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_02.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_03.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_04.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINSTA1_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINSTA1_room_05.o"
+    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_00.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_01.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_02.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_03.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_04.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KINDAN2_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KINDAN2_room_05.o"
+    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TENMON_DAI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TENMON_DAI.o"
+    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TENMON_DAI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TENMON_DAI_room_00.o"
+    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TENMON_DAI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TENMON_DAI_room_01.o"
+    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_DEKU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_DEKU.o"
+    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LAST_DEKU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_DEKU_room_00.o"
+    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_DEKU_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_DEKU_room_01.o"
+    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_22DEKUCITY"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_22DEKUCITY.o"
+    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_22DEKUCITY_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_22DEKUCITY_room_00.o"
+    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_22DEKUCITY_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_22DEKUCITY_room_01.o"
+    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_22DEKUCITY_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_22DEKUCITY_room_02.o"
+    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KAJIYA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KAJIYA.o"
+    include "build/assets/scenes/Z2_KAJIYA/Z2_KAJIYA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KAJIYA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KAJIYA_room_00.o"
+    include "build/assets/scenes/Z2_KAJIYA/Z2_KAJIYA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_00KEIKOKU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_00KEIKOKU.o"
+    include "build/assets/scenes/Z2_00KEIKOKU/Z2_00KEIKOKU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_00KEIKOKU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_00KEIKOKU_room_00.o"
+    include "build/assets/scenes/Z2_00KEIKOKU/Z2_00KEIKOKU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_POSTHOUSE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_POSTHOUSE.o"
+    include "build/assets/scenes/Z2_POSTHOUSE/Z2_POSTHOUSE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_POSTHOUSE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_POSTHOUSE_room_00.o"
+    include "build/assets/scenes/Z2_POSTHOUSE/Z2_POSTHOUSE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LABO"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LABO.o"
+    include "build/assets/scenes/Z2_LABO/Z2_LABO.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LABO_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LABO_room_00.o"
+    include "build/assets/scenes/Z2_LABO/Z2_LABO_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI2TEST"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI2TEST.o"
+    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_DANPEI2TEST_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI2TEST_room_00.o"
+    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI2TEST_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI2TEST_room_01.o"
+    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_16GORON_HOUSE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_16GORON_HOUSE.o"
+    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_16GORON_HOUSE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_16GORON_HOUSE_room_00.o"
+    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_16GORON_HOUSE_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_16GORON_HOUSE_room_01.o"
+    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_33ZORACITY"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_33ZORACITY.o"
+    include "build/assets/scenes/Z2_33ZORACITY/Z2_33ZORACITY.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_33ZORACITY_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_33ZORACITY_room_00.o"
+    include "build/assets/scenes/Z2_33ZORACITY/Z2_33ZORACITY_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_8ITEMSHOP"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_8ITEMSHOP.o"
+    include "build/assets/scenes/Z2_8ITEMSHOP/Z2_8ITEMSHOP.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_8ITEMSHOP_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_8ITEMSHOP_room_00.o"
+    include "build/assets/scenes/Z2_8ITEMSHOP/Z2_8ITEMSHOP_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_F01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01.o"
+    include "build/assets/scenes/Z2_F01/Z2_F01.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_F01_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01_room_00.o"
+    include "build/assets/scenes/Z2_F01/Z2_F01_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INISIE_BS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_BS.o"
+    include "build/assets/scenes/Z2_INISIE_BS/Z2_INISIE_BS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_INISIE_BS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INISIE_BS_room_00.o"
+    include "build/assets/scenes/Z2_INISIE_BS/Z2_INISIE_BS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_30GYOSON"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_30GYOSON.o"
+    include "build/assets/scenes/Z2_30GYOSON/Z2_30GYOSON.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_30GYOSON_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_30GYOSON_room_00.o"
+    include "build/assets/scenes/Z2_30GYOSON/Z2_30GYOSON_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_31MISAKI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_31MISAKI.o"
+    include "build/assets/scenes/Z2_31MISAKI/Z2_31MISAKI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_31MISAKI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_31MISAKI_room_00.o"
+    include "build/assets/scenes/Z2_31MISAKI/Z2_31MISAKI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TAKARAKUJI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TAKARAKUJI.o"
+    include "build/assets/scenes/Z2_TAKARAKUJI/Z2_TAKARAKUJI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TAKARAKUJI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TAKARAKUJI_room_00.o"
+    include "build/assets/scenes/Z2_TAKARAKUJI/Z2_TAKARAKUJI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TORIDE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TORIDE.o"
+    include "build/assets/scenes/Z2_TORIDE/Z2_TORIDE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TORIDE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TORIDE_room_00.o"
+    include "build/assets/scenes/Z2_TORIDE/Z2_TORIDE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_FISHERMAN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_FISHERMAN.o"
+    include "build/assets/scenes/Z2_FISHERMAN/Z2_FISHERMAN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_FISHERMAN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_FISHERMAN_room_00.o"
+    include "build/assets/scenes/Z2_FISHERMAN/Z2_FISHERMAN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_GORONSHOP"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORONSHOP.o"
+    include "build/assets/scenes/Z2_GORONSHOP/Z2_GORONSHOP.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_GORONSHOP_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORONSHOP_room_00.o"
+    include "build/assets/scenes/Z2_GORONSHOP/Z2_GORONSHOP_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DEKU_KING"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DEKU_KING.o"
+    include "build/assets/scenes/Z2_DEKU_KING/Z2_DEKU_KING.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_DEKU_KING_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DEKU_KING_room_00.o"
+    include "build/assets/scenes/Z2_DEKU_KING/Z2_DEKU_KING_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_GORON"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_GORON.o"
+    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LAST_GORON_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_GORON_room_00.o"
+    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_GORON_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_GORON_room_01.o"
+    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_24KEMONOMITI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_24KEMONOMITI.o"
+    include "build/assets/scenes/Z2_24KEMONOMITI/Z2_24KEMONOMITI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_24KEMONOMITI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_24KEMONOMITI_room_00.o"
+    include "build/assets/scenes/Z2_24KEMONOMITI/Z2_24KEMONOMITI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_F01_B"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01_B.o"
+    include "build/assets/scenes/Z2_F01_B/Z2_F01_B.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_F01_B_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01_B_room_00.o"
+    include "build/assets/scenes/Z2_F01_B/Z2_F01_B_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_F01C"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01C.o"
+    include "build/assets/scenes/Z2_F01C/Z2_F01C.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_F01C_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F01C_room_00.o"
+    include "build/assets/scenes/Z2_F01C/Z2_F01C_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BOTI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOTI.o"
+    include "build/assets/scenes/Z2_BOTI/Z2_BOTI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_BOTI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOTI_room_00.o"
+    include "build/assets/scenes/Z2_BOTI/Z2_BOTI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BOTI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOTI_room_01.o"
+    include "build/assets/scenes/Z2_BOTI/Z2_BOTI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_HAKUGIN_BS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_BS.o"
+    include "build/assets/scenes/Z2_HAKUGIN_BS/Z2_HAKUGIN_BS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_HAKUGIN_BS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_HAKUGIN_BS_room_00.o"
+    include "build/assets/scenes/Z2_HAKUGIN_BS/Z2_HAKUGIN_BS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_20SICHITAI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI.o"
+    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_20SICHITAI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI_room_00.o"
+    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_20SICHITAI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI_room_01.o"
+    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_20SICHITAI_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_20SICHITAI_room_02.o"
+    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_21MITURINMAE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_21MITURINMAE.o"
+    include "build/assets/scenes/Z2_21MITURINMAE/Z2_21MITURINMAE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_21MITURINMAE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_21MITURINMAE_room_00.o"
+    include "build/assets/scenes/Z2_21MITURINMAE/Z2_21MITURINMAE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_ZORA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_ZORA.o"
+    include "build/assets/scenes/Z2_LAST_ZORA/Z2_LAST_ZORA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LAST_ZORA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_ZORA_room_00.o"
+    include "build/assets/scenes/Z2_LAST_ZORA/Z2_LAST_ZORA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO2"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO2.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO2_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO2_room_00.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO2_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO2_room_01.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SEA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_00.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_01.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_02.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_03.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_04.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_05.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_06.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_07.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_08.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_09.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_10.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_11.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_12.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_13"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_13.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_13.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_14"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_14.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_14.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_room_15"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_room_15.o"
+    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_15.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_35TAKI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_35TAKI.o"
+    include "build/assets/scenes/Z2_35TAKI/Z2_35TAKI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_35TAKI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_35TAKI_room_00.o"
+    include "build/assets/scenes/Z2_35TAKI/Z2_35TAKI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_REDEAD_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_00.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_01.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_02.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_03.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_04.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_05.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_06.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_07.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_08.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_09.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_10.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_11.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_12.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_REDEAD_room_13"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_REDEAD_room_13.o"
+    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_13.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BANDROOM"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_BANDROOM_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM_room_00.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BANDROOM_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM_room_01.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BANDROOM_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM_room_02.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BANDROOM_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM_room_03.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BANDROOM_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BANDROOM_room_04.o"
+    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO_room_00.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_11GORONNOSATO_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_11GORONNOSATO_room_01.o"
+    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_GORON_HAKA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORON_HAKA.o"
+    include "build/assets/scenes/Z2_GORON_HAKA/Z2_GORON_HAKA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_GORON_HAKA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORON_HAKA_room_00.o"
+    include "build/assets/scenes/Z2_GORON_HAKA/Z2_GORON_HAKA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SECOM"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SECOM.o"
+    include "build/assets/scenes/Z2_SECOM/Z2_SECOM.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SECOM_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SECOM_room_00.o"
+    include "build/assets/scenes/Z2_SECOM/Z2_SECOM_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SECOM_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SECOM_room_01.o"
+    include "build/assets/scenes/Z2_SECOM/Z2_SECOM_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_10YUKIYAMANOMURA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_10YUKIYAMANOMURA.o"
+    include "build/assets/scenes/Z2_10YUKIYAMANOMURA/Z2_10YUKIYAMANOMURA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_10YUKIYAMANOMURA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_10YUKIYAMANOMURA_room_00.o"
+    include "build/assets/scenes/Z2_10YUKIYAMANOMURA/Z2_10YUKIYAMANOMURA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TOUGITES"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TOUGITES.o"
+    include "build/assets/scenes/Z2_TOUGITES/Z2_TOUGITES.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TOUGITES_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TOUGITES_room_00.o"
+    include "build/assets/scenes/Z2_TOUGITES/Z2_TOUGITES_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_DANPEI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_00.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_01.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_02.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_03.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_04.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_05.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_06.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_07.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DANPEI_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DANPEI_room_08.o"
+    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKANAMAE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANAMAE.o"
+    include "build/assets/scenes/Z2_IKANAMAE/Z2_IKANAMAE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_IKANAMAE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKANAMAE_room_00.o"
+    include "build/assets/scenes/Z2_IKANAMAE/Z2_IKANAMAE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_DOUJOU"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DOUJOU.o"
+    include "build/assets/scenes/Z2_DOUJOU/Z2_DOUJOU.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_DOUJOU_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_DOUJOU_room_00.o"
+    include "build/assets/scenes/Z2_DOUJOU/Z2_DOUJOU_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MUSICHOUSE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MUSICHOUSE.o"
+    include "build/assets/scenes/Z2_MUSICHOUSE/Z2_MUSICHOUSE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_MUSICHOUSE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MUSICHOUSE_room_00.o"
+    include "build/assets/scenes/Z2_MUSICHOUSE/Z2_MUSICHOUSE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKNINSIDE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKNINSIDE.o"
+    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_IKNINSIDE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKNINSIDE_room_00.o"
+    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_IKNINSIDE_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_IKNINSIDE_room_01.o"
+    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_MAP_SHOP"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MAP_SHOP.o"
+    include "build/assets/scenes/Z2_MAP_SHOP/Z2_MAP_SHOP.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_MAP_SHOP_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_MAP_SHOP_room_00.o"
+    include "build/assets/scenes/Z2_MAP_SHOP/Z2_MAP_SHOP_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_F40"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F40.o"
+    include "build/assets/scenes/Z2_F40/Z2_F40.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_F40_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F40_room_00.o"
+    include "build/assets/scenes/Z2_F40/Z2_F40_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_F41"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F41.o"
+    include "build/assets/scenes/Z2_F41/Z2_F41.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_F41_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_F41_room_00.o"
+    include "build/assets/scenes/Z2_F41/Z2_F41_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_10YUKIYAMANOMURA2"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_10YUKIYAMANOMURA2.o"
+    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_10YUKIYAMANOMURA2_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_10YUKIYAMANOMURA2_room_00.o"
+    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_10YUKIYAMANOMURA2_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_10YUKIYAMANOMURA2_room_01.o"
+    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_14YUKIDAMANOMITI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_14YUKIDAMANOMITI.o"
+    include "build/assets/scenes/Z2_14YUKIDAMANOMITI/Z2_14YUKIDAMANOMITI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_14YUKIDAMANOMITI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_14YUKIDAMANOMITI_room_00.o"
+    include "build/assets/scenes/Z2_14YUKIDAMANOMITI/Z2_14YUKIDAMANOMITI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_12HAKUGINMAE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_12HAKUGINMAE.o"
+    include "build/assets/scenes/Z2_12HAKUGINMAE/Z2_12HAKUGINMAE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_12HAKUGINMAE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_12HAKUGINMAE_room_00.o"
+    include "build/assets/scenes/Z2_12HAKUGINMAE/Z2_12HAKUGINMAE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_17SETUGEN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_17SETUGEN.o"
+    include "build/assets/scenes/Z2_17SETUGEN/Z2_17SETUGEN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_17SETUGEN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_17SETUGEN_room_00.o"
+    include "build/assets/scenes/Z2_17SETUGEN/Z2_17SETUGEN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_17SETUGEN2"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_17SETUGEN2.o"
+    include "build/assets/scenes/Z2_17SETUGEN2/Z2_17SETUGEN2.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_17SETUGEN2_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_17SETUGEN2_room_00.o"
+    include "build/assets/scenes/Z2_17SETUGEN2/Z2_17SETUGEN2_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SEA_BS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_BS.o"
+    include "build/assets/scenes/Z2_SEA_BS/Z2_SEA_BS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SEA_BS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SEA_BS_room_00.o"
+    include "build/assets/scenes/Z2_SEA_BS/Z2_SEA_BS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_RANDOM_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_00.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_01.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_02.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_03.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_04.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_RANDOM_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_RANDOM_room_05.o"
+    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YADOYA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_YADOYA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA_room_00.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YADOYA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA_room_01.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YADOYA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA_room_02.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YADOYA_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA_room_03.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_YADOYA_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_YADOYA_room_04.o"
+    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KONPEKI_ENT"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KONPEKI_ENT.o"
+    include "build/assets/scenes/Z2_KONPEKI_ENT/Z2_KONPEKI_ENT.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KONPEKI_ENT_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KONPEKI_ENT_room_00.o"
+    include "build/assets/scenes/Z2_KONPEKI_ENT/Z2_KONPEKI_ENT_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INSIDETOWER"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INSIDETOWER.o"
+    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_INSIDETOWER_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INSIDETOWER_room_00.o"
+    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_INSIDETOWER_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_INSIDETOWER_room_01.o"
+    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_00.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_01.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_02.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_03.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_04.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_05.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_06.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_07.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_26SARUNOMORI_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_26SARUNOMORI_room_08.o"
+    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LOST_WOODS"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LOST_WOODS.o"
+    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LOST_WOODS_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LOST_WOODS_room_00.o"
+    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LOST_WOODS_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LOST_WOODS_room_01.o"
+    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LOST_WOODS_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LOST_WOODS_room_02.o"
+    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_00.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_01.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_02.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_03.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_04.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_05.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_06.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_LAST_LINK_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_LAST_LINK_room_07.o"
+    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_SOUGEN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SOUGEN.o"
+    include "build/assets/scenes/Z2_SOUGEN/Z2_SOUGEN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_SOUGEN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_SOUGEN_room_00.o"
+    include "build/assets/scenes/Z2_SOUGEN/Z2_SOUGEN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BOMYA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOMYA.o"
+    include "build/assets/scenes/Z2_BOMYA/Z2_BOMYA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_BOMYA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BOMYA_room_00.o"
+    include "build/assets/scenes/Z2_BOMYA/Z2_BOMYA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KYOJINNOMA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KYOJINNOMA.o"
+    include "build/assets/scenes/Z2_KYOJINNOMA/Z2_KYOJINNOMA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KYOJINNOMA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KYOJINNOMA_room_00.o"
+    include "build/assets/scenes/Z2_KYOJINNOMA/Z2_KYOJINNOMA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_KOEPONARACE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KOEPONARACE.o"
+    include "build/assets/scenes/Z2_KOEPONARACE/Z2_KOEPONARACE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_KOEPONARACE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_KOEPONARACE_room_00.o"
+    include "build/assets/scenes/Z2_KOEPONARACE/Z2_KOEPONARACE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_GORONRACE"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORONRACE.o"
+    include "build/assets/scenes/Z2_GORONRACE/Z2_GORONRACE.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_GORONRACE_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_GORONRACE_room_00.o"
+    include "build/assets/scenes/Z2_GORONRACE/Z2_GORONRACE_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_TOWN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TOWN.o"
+    include "build/assets/scenes/Z2_TOWN/Z2_TOWN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_TOWN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_TOWN_room_00.o"
+    include "build/assets/scenes/Z2_TOWN/Z2_TOWN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_ICHIBA"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ICHIBA.o"
+    include "build/assets/scenes/Z2_ICHIBA/Z2_ICHIBA.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_ICHIBA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ICHIBA_room_00.o"
+    include "build/assets/scenes/Z2_ICHIBA/Z2_ICHIBA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_BACKTOWN"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BACKTOWN.o"
+    include "build/assets/scenes/Z2_BACKTOWN/Z2_BACKTOWN.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_BACKTOWN_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_BACKTOWN_room_00.o"
+    include "build/assets/scenes/Z2_BACKTOWN/Z2_BACKTOWN_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_CLOCKTOWER"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CLOCKTOWER.o"
+    include "build/assets/scenes/Z2_CLOCKTOWER/Z2_CLOCKTOWER.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_CLOCKTOWER_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_CLOCKTOWER_room_00.o"
+    include "build/assets/scenes/Z2_CLOCKTOWER/Z2_CLOCKTOWER_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "Z2_ALLEY"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ALLEY.o"
+    include "build/assets/scenes/Z2_ALLEY/Z2_ALLEY.o"
+    number 2
 endseg
 
 beginseg
     name "Z2_ALLEY_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/Z2_ALLEY_room_00.o"
+    include "build/assets/scenes/Z2_ALLEY/Z2_ALLEY_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "SPOT00"
     compress
     romalign 0x1000
-    include "build/baserom/SPOT00.o"
+    include "build/assets/scenes/SPOT00/SPOT00.o"
+    number 2
 endseg
 
 beginseg
     name "SPOT00_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/SPOT00_room_00.o"
+    include "build/assets/scenes/SPOT00/SPOT00_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA.o"
+    number 2
 endseg
 
 beginseg
     name "KAKUSIANA_room_00"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_00.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_00.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_01"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_01.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_01.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_02"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_02.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_02.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_03"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_03.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_03.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_04"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_04.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_04.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_05"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_05.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_05.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_06"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_06.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_06.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_07"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_07.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_07.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_08"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_08.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_08.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_09"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_09.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_09.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_10"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_10.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_10.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_11"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_11.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_11.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_12"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_12.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_12.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_13"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_13.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_13.o"
+    number 3
 endseg
 
 beginseg
     name "KAKUSIANA_room_14"
     compress
     romalign 0x1000
-    include "build/baserom/KAKUSIANA_room_14.o"
+    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_14.o"
+    number 3
 endseg
 
 beginseg

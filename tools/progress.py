@@ -9,8 +9,8 @@ parser.add_argument("-m", "--matching", dest='matching', action='store_true',
                     help="Output matching progress instead of decompilation progress")
 args = parser.parse_args()
 
-NON_MATCHING_PATTERN = r"#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\).*?#endif"
-NOT_ATTEMPTED_PATTERN = r"#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\)"
+NON_MATCHING_PATTERN = r'#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*"(.*?)"\s*\).*?#endif'
+NOT_ATTEMPTED_PATTERN = r'#pragma\s+GLOBAL_ASM\s*\(\s*"(.*?)"\s*\)'
 
 # TODO: consider making this a parameter of this script
 GAME_VERSION = "mm.us.rev1"
@@ -57,7 +57,7 @@ def GetRemovableSize(functions_to_count, path):
             asm_lines = ReadAllLines(asm_file_path)
 
             for asm_line in asm_lines:
-                if (asm_line[0:2] == "/*" and asm_line[30:32] == "*/"):
+                if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
                     file_size += 4
 
         size += file_size
@@ -148,14 +148,14 @@ src_boot += src_libultra
 asm_boot += asm_libultra
 
 # Calculate Non-Matching
-non_matching_asm_ovl = GetRemovableSize(non_matching_functions, "./asm/non_matchings/overlays")
-non_matching_asm_code = GetRemovableSize(non_matching_functions, "./asm/non_matchings/code")
-non_matching_asm_boot = GetRemovableSize(non_matching_functions, "./asm/non_matchings/boot")
+non_matching_asm_ovl = GetRemovableSize(non_matching_functions, "asm/non_matchings/overlays")
+non_matching_asm_code = GetRemovableSize(non_matching_functions, "asm/non_matchings/code")
+non_matching_asm_boot = GetRemovableSize(non_matching_functions, "asm/non_matchings/boot")
 
 # Calculate Not Attempted
-not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/overlays")
-not_attempted_asm_code = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/code")
-not_attempted_asm_boot = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/boot")
+not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions, "asm/non_matchings/overlays")
+not_attempted_asm_code = GetRemovableSize(not_attempted_functions, "asm/non_matchings/code")
+not_attempted_asm_boot = GetRemovableSize(not_attempted_functions, "asm/non_matchings/boot")
 
 # All the non matching asm is the sum of non-matching code
 non_matching_asm = non_matching_asm_ovl + non_matching_asm_code + non_matching_asm_boot
