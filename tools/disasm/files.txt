@@ -446,7 +446,7 @@
             0x80172BC0 : "code_80172BC0",
             0x80172C30 : "audioMgr",
             0x80173130 : "title_setup",
-            0x80173130 : "game",
+            0x80173360 : "game",
             0x80173BF0 : "gamealloc",
             0x80173D30 : "graph",
             0x80174A40 : "code_80174A40",
@@ -562,7 +562,7 @@
             0x801D2E80 : "",
             0x801D3D90 : "",
             0x801D55B0 : "",
-            0x801D8E50 : "",
+            0x801D8E50 : "code_801A51F0",
             0x801D9090 : "",
 
             # .rodata section

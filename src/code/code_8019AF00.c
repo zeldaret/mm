@@ -1,6 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/D_801E0BD0.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF58.s")
@@ -54,6 +56,8 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C5A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C8D8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/D_801E0C14.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CD08.s")
 
@@ -424,7 +428,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A510C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A5118.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/D_801E0BD0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/D_801E0C14.s")

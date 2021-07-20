@@ -1,6 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/D_801E0EC0.s")
+
 // This function has a jumptable that's bigger than the function itself, so the assembler complains.
 // The quick and dirty solution was to comment out this function here and don't use this file in the spec,
 // so don't forget to re-add this file to the spec when decomping it.
@@ -29,5 +31,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5A10.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5A1C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/D_801E0EC0.s")

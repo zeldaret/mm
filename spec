@@ -675,7 +675,7 @@ beginseg
     include "build/data/code/z_kaleido_manager.data.o"
     include "build/data/code/z_kaleido_manager.bss.o"
 
-    include "build/asm/code/z_kaleido_scope_call.text.o"
+    include "build/src/code/z_kaleido_scope_call.o"
     include "build/data/code/z_kaleido_scope_call.bss.o"
 
     include "build/src/code/z_fbdemo_dlftbls.o"
@@ -711,9 +711,8 @@ beginseg
 
     include "build/data/code/code_801D14F0.data.o"
 
-    include "build/asm/code/game.text.o"
-    include "build/data/code/game.data.o"
-    include "build/data/code/game.rodata.o"
+    include "build/src/code/title_setup.o"
+    include "build/src/code/game.o"
     include "build/data/code/game.bss.o"
 
     include "build/src/code/gamealloc.o"
@@ -761,6 +760,8 @@ beginseg
     include "build/data/code/sys_matrix.bss.o"
 
     include "build/src/code/sys_ucode.o"
+    include "build/data/code/code_801D1E70.data.o"
+
     include "build/src/code/code_80183070.o"
 
     include "build/src/code/c_keyframe.o"
@@ -770,7 +771,7 @@ beginseg
     include "build/src/code/sys_flashrom.o"
     include "build/data/code/sys_flashrom.bss.o"
 
-    include "build/asm/code/code_80185F90.text.o"
+    include "build/asm/code/code_80185F90.text.o" // handwritten
 
     include "build/src/code/osFlash.o"
     include "build/data/code/osFlash.bss.o"
@@ -782,14 +783,15 @@ beginseg
     include "build/src/code/code_801877D0.o"
 
     include "build/src/code/code_8018B0F0.o"
+    include "build/data/code/code_801D2E80.data.o"
     include "build/data/code/code_8018B0F0.bss.o"
 
-    include "build/asm/code/code_8018EB60.text.o"
-    include "build/data/code/code_8018EB60.rodata.o"
+    include "build/data/code/code_801D3D90.data.o"
+
+    include "build/src/code/code_8018EB60.o"
     include "build/data/code/code_8018EB60.bss.o"
 
-    include "build/asm/code/code_80192BE0.text.o"
-    include "build/data/code/code_80192BE0.rodata.o"
+    include "build/src/code/code_80192BE0.o"
 
     include "build/src/code/code_80194710.o"
 
@@ -801,11 +803,13 @@ beginseg
     pad_text
     include "build/src/code/code_8019AEC0.o"
 
-    include "build/asm/code/code_8019AF00.text.o"
-    include "build/data/code/code_8019AF00.rodata.o"
+    include "build/src/code/code_8019AF00.o"
     include "build/data/code/code_8019AF00.bss.o"
 
-    include "build/asm/code/code_801A51F0.text.o"
+    include "build/data/code/code_801D55B0.data.o"
+
+    include "build/asm/code/code_801A51F0.text.o" // jumptable is too big for its own good...
+    include "build/data/code/code_801A51F0.data.o"
     include "build/data/code/code_801A51F0.rodata.o"
     include "build/data/code/code_801A51F0.bss.o"
 
@@ -824,11 +828,6 @@ beginseg
 
     include "build/src/code/z_construct.o"
 
-    include "build/data/code/code_801D1E70.data.o"
-    include "build/data/code/code_801D2E80.data.o"
-    include "build/data/code/code_801D3D90.data.o"
-    include "build/data/code/code_801D55B0.data.o"
-    include "build/data/code/code_801D8E50.data.o"
     include "build/data/code/code_801D9090.data.o"
 
     include "build/data/code/code_801E1180.rodata.o"

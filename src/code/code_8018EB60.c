@@ -5,6 +5,8 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/func_8018EC4C.s")
 
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/D_801E030C.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/func_8018EF88.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/func_8018F220.s")
@@ -158,5 +160,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/func_80192B54.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/func_80192BAC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8018EB60/D_801E030C.s")

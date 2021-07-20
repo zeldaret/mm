@@ -43,9 +43,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193D08.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193DF0.s")
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193DA4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193DF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80193E44.s")
 
