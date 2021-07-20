@@ -245,7 +245,7 @@ void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* position, f32 scale, 
 
 /**
  * Creates a light ray effect.
- * Light ray effects are spawned by an explosion.
+ * Light ray effects are spawned by an explosion or pop.
  */
 void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
                                      f32 maxScaleTarget, s16 alphaDecrementSpeed) {
@@ -287,7 +287,7 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
 }
 
 /**
- * Creates an isolated light ray effect without an explosion.
+ * Creates an isolated light ray effect without an explosion or pop.
  * Light ray effects are spawned directly.
  */
 void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration,
@@ -438,8 +438,9 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                         sLightRayMaxScaleTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
                 return;
-            } else if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) &&
-                         (this->actor.world.rot.z == 0))) {
+            }
+
+            if (!((this->actor.world.rot.x == 0) && (this->actor.world.rot.y == 0) && (this->actor.world.rot.z == 0))) {
                 this->flashEnvColor.r = this->actor.world.rot.x;
                 this->flashEnvColor.g = this->actor.world.rot.y;
                 this->flashEnvColor.b = this->actor.world.rot.z;
@@ -543,9 +544,9 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             break;
         case 1:
             func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            this->camID = func_801694DC(globalCtx);
+            this->camId = func_801694DC(globalCtx);
             func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->camID, 7);
+            func_80169590(globalCtx, this->camId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
             camera = Play_GetCamera(globalCtx, 0);
             this->eye.x = camera->eye.x;
@@ -570,18 +571,18 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
                 camera->eye = this->eye;
                 camera->eyeNext = this->eye;
                 camera->at = this->at;
-                func_80169AFC(globalCtx, this->camID, 0);
+                func_80169AFC(globalCtx, this->camId, 0);
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
-                this->camID = 0;
+                this->camId = 0;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->camID != 0) {
-        func_8016970C(globalCtx, this->camID, &this->at, &this->eye);
+    if (this->camId != 0) {
+        func_8016970C(globalCtx, this->camId, &this->at, &this->eye);
     }
 }
 
@@ -605,6 +606,10 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * EnClearTag draw function.
+ * Setups DrawEffects
+ */
 void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnClearTag_DrawEffects(thisx, globalCtx);
 }
@@ -773,8 +778,8 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
 
 /**
  * Draws all effects.
- * Each effect type is drawn before the next. The function will apply a material that applies to all effects of that
- * type while drawing the first effect of that type.
+ * Each effect type is drawn before the next. The function will apply a material that
+ * applies to all effects of that type while drawing the first effect of that type.
  */
 void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     u8 isMaterialApplied = false;
