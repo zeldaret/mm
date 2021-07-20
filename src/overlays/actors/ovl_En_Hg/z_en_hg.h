@@ -9,14 +9,14 @@ typedef void (*EnHgActionFunc)(struct EnHg*, GlobalContext*);
 
 typedef struct EnHg {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ColliderCylinder collider; // size = 0x4C
-    /* 0x190 */ SkelAnime skelAnime; // size = 0x44
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnHgActionFunc actionFunc;
     /* 0x1D8 */ MtxF unk1D8;
     /* 0x218 */ s32 unk218;
-    /* 0x21C */ s32 unk21C;
-    /* 0x220 */ Vec3s limbDrawTbl[19]; // size = 0x72
-    /* 0x292 */ Vec3s transitionDrawTbl[19]; // size = 0x72
+    /* 0x21C */ s32 currentAnimation;
+    /* 0x220 */ Vec3s limbDrawTbl[19];
+    /* 0x292 */ Vec3s transitionDrawTbl[19];
     /* 0x304 */ char pad304[0xC];
     /* 0x310 */ u16 unk310[4];
 } EnHg; // size = 0x318

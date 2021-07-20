@@ -1,5 +1,11 @@
 #include "z_en_hg.h"
 
+/*
+ * File: z_en_hg.c
+ * Overlay: En_Hg
+ * Description: Pamela's Father (Normal)
+ */
+
 #define FLAGS 0x02100019
 
 #define THIS ((EnHg*)thisx)
@@ -47,12 +53,6 @@ const ActorInit En_Hg_InitVars = {
     (ActorFunc)EnHg_Draw,
 };
 
-// ColliderCylinderInit D_80BCFFB0[] = {
-//     0x00000939, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
-//     0x00000000, 0x00010100, 0x0012002E, 0x00000000, 0x00000000,
-// };
-
-// D_80BCFFB0
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
@@ -82,15 +82,11 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static ActorAnimationEntry D_80BD0008[] = {
-    { &D_0600260C, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
-    { &D_06009D44, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
-    { &D_0600A164, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
-    { &D_06000370, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
-    { &D_06001138, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
-    { &D_060015D4, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
-    { &D_06001960, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
-    { &D_0600AE1C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
+static ActorAnimationEntry animations[] = {
+    { &D_0600260C, 1.0f, 0.0f, 0.0f, 0x00, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
+    { &D_0600A164, 1.0f, 0.0f, 0.0f, 0x00, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
+    { &D_06001138, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
+    { &D_06001960, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },  { &D_0600AE1C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
 };
 
 u32 D_80BD00C8 = 0;
@@ -130,7 +126,7 @@ void EnHg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BCF354(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, &D_80BD0008, 0);
+    func_800BDC5C(&this->skelAnime, &animations, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -148,7 +144,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF468(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
+    func_800BDC5C(&this->skelAnime, animations, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -174,7 +170,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
+    func_800BDC5C(&this->skelAnime, animations, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -187,7 +183,7 @@ void func_80BCF634(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, D_80BD0008, 2);
+    func_800BDC5C(&this->skelAnime, animations, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -218,8 +214,8 @@ void func_80BCF778(EnHg* this, GlobalContext* globalCtx) {
 
 void func_80BCF7D8(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health) {
-        if ((this->collider.base.acFlags & 2)) {
-            this->collider.base.acFlags &= ~2;
+        if ((this->collider.base.acFlags & AC_HIT)) {
+            this->collider.base.acFlags &= ~AC_HIT;
             func_80BCF68C(this);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -239,12 +235,12 @@ void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->unk310[this->unk218]) != 0) {
         ActorCutscene_Start(this->unk310[this->unk218], &this->actor);
         func_80BCF93C(this);
-        return;
+    } else {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        }
+        ActorCutscene_SetIntentToPlay(this->unk310[this->unk218]);
     }
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    }
-    ActorCutscene_SetIntentToPlay(this->unk310[this->unk218]);
 }
 
 void func_80BCF93C(EnHg* this) {
@@ -260,30 +256,30 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
             this->unk310[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
-                    this->unk21C = NULL;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
+                    this->currentAnimation = NULL;
+                    func_800BDC5C(&this->skelAnime, animations, 0);
                     break;
                 case 2:
                     this->unk310[2] = 0;
-                    this->unk21C = 3;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
+                    this->currentAnimation = 3;
+                    func_800BDC5C(&this->skelAnime, animations, 3);
                     break;
                 case 3:
                     this->unk310[2] = 0;
-                    this->unk21C = 5;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
+                    this->currentAnimation = 5;
+                    func_800BDC5C(&this->skelAnime, animations, 5);
                     break;
                 case 4:
                     this->unk310[2] = 0;
-                    this->unk21C = 7;
+                    this->currentAnimation = 7;
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(0x3ABA);
                     }
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
+                    func_800BDC5C(&this->skelAnime, animations, 7);
                     break;
                 case 5:
-                    this->unk21C = 1;
-                    func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
+                    this->currentAnimation = 1;
+                    func_800BDC5C(&this->skelAnime, animations, 1);
                     break;
                 case 6:
                     gSaveContext.weekEventReg[75] |= 0x20;
@@ -292,19 +288,19 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
             }
         } else {
             if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-                switch (this->unk21C) {
+                switch (this->currentAnimation) {
                     case 3:
-                        this->unk21C = 4;
-                        func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
+                        this->currentAnimation = 4;
+                        func_800BDC5C(&this->skelAnime, animations, 4);
                         break;
                     case 5:
-                        this->unk21C = 6;
-                        func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
+                        this->currentAnimation = 6;
+                        func_800BDC5C(&this->skelAnime, animations, 6);
                         break;
                 }
             }
         }
-        switch (this->unk21C) {
+        switch (this->currentAnimation) {
             case 3:
             case 4:
                 func_800B9010(&this->actor, 0x32B7U);
@@ -333,21 +329,20 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
         if ((player->stateFlags2 & 0x08000000)) {
             if (D_80BD00C8 == 0) {
-                play_sound(0x4807);
+                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
             D_80BD00C8 = 1;
         } else {
             D_80BD00C8 = 0;
         }
         if (globalCtx->msgCtx.unk1202A == 3) {
-            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == 4) {
-                if (gSaveContext.inventory.items[gItemSlots[0]] == 0x41) {
+            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+                if (INV_CONTENT(0x41) == 0x41) {
                     this->unk218 = 3;
                 } else {
                     this->unk218 = 1;
                 }
                 func_80BCF88C(this);
-                return;
             }
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.yDistToPlayer) < 40.0f) {
@@ -359,10 +354,10 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
                         this->unk218 = 2;
                     }
                     func_80BCF88C(this);
-                    return;
                 }
+            } else {
+                func_80BCF710(this, globalCtx);
             }
-            func_80BCF710(this, globalCtx);
         }
     }
 }
@@ -388,9 +383,7 @@ s32 func_80BCFE70(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     EnHg* this = THIS;
     if (limbIndex == 10) {
         SysMatrix_CopyCurrentState(&this->unk1D8);
-        return;
-    }
-    if (limbIndex == 11) {
+    } else if (limbIndex == 11) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
