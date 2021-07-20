@@ -324,12 +324,6 @@ typedef struct {
 } OverlayRelocationSection; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ s16 unk0;
-    /* 0x2 */ s16 unk2;
-    /* 0x4 */ s16 unk4;
-} QuakeRequest14; // size = 0x6
-
-typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
@@ -574,23 +568,6 @@ typedef struct {
 } Input; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 rotZ;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ UNK_TYPE1 pad1C[0x2];
-} ShakeInfo; // size = 0x1E
-
-typedef struct {
-    /* 0x00 */ Vec3f focalPointChange;
-    /* 0x0C */ Vec3f eyeChange;
-    /* 0x18 */ s16 unk18;
-    /* 0x1A */ s16 unk1A;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-} UnkQuakeCalcStruct; // size = 0x24
-
-typedef struct {
     /* 0x000 */ u32 magic;
     /* 0x004 */ GraphicsContext* gfxCtx;
     /* 0x008 */ Viewport viewport;
@@ -599,8 +576,8 @@ typedef struct {
     /* 0x020 */ f32 zFar;
     /* 0x024 */ f32 scale;
     /* 0x028 */ Vec3f eye;
-    /* 0x034 */ Vec3f focalPoint;
-    /* 0x040 */ Vec3f upDir;
+    /* 0x034 */ Vec3f at;
+    /* 0x040 */ Vec3f up;
     /* 0x04C */ UNK_TYPE1 pad4C[0x4];
     /* 0x050 */ Vp vp;
     /* 0x060 */ Mtx projection;
@@ -958,7 +935,8 @@ typedef struct {
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
     /* 0x11F22 */ u8 unk11F22;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFE];
+    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ UNK_TYPE1 unk12022;
     /* 0x12023 */ s8 unk12023;
@@ -1229,8 +1207,6 @@ struct FileChooseContext {
     /* 0x24550 */ s16  unk_24550;
 }; // size = 0x24558
 
-typedef struct AudioThreadStruct AudioThreadStruct;
-
 typedef struct GlobalContext GlobalContext;
 
 typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
@@ -1238,13 +1214,6 @@ typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef struct {
-    /* 0x0 */ GlobalContext* globalCtx;
-    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
-    /* 0x8 */ s16 countdown;
-    /* 0xA */ s16 state; // 0 - stopped, 1 - active, 2 - setup
-} Quake2Context; // size = 0xC
 
 typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
@@ -1264,33 +1233,134 @@ typedef struct {
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
 
-typedef struct Camera Camera;
+typedef struct Camera {
+    /* 0x000 */ char paramData[0x50];
+    /* 0x050 */ Vec3f at;
+    /* 0x05C */ Vec3f eye;
+    /* 0x068 */ Vec3f up;
+    /* 0x074 */ Vec3f eyeNext;
+    /* 0x080 */ Vec3f skyboxOffset;
+    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x090 */ struct Player* player;
+    /* 0x094 */ PosRot playerPosRot;
+    /* 0x0A8 */ struct Actor* target;
+    /* 0x0AC */ PosRot targetPosRot;
+    /* 0x0C0 */ f32 rUpdateRateInv;
+    /* 0x0C4 */ f32 pitchUpdateRateInv;
+    /* 0x0C8 */ f32 yawUpdateRateInv;
+    /* 0x0CC */ f32 yOffsetUpdateRate;
+    /* 0x0D0 */ f32 xzOffsetUpdateRate;
+    /* 0x0D4 */ f32 fovUpdateRate;
+    /* 0x0D8 */ f32 xzSpeed;
+    /* 0x0DC */ f32 dist;
+    /* 0x0E0 */ f32 speedRatio;
+    /* 0x0E4 */ Vec3f posOffset;
+    /* 0x0F0 */ Vec3f playerPosDelta;
+    /* 0x0FC */ f32 fov;
+    /* 0x100 */ f32 atLERPStepScale;
+    /* 0x104 */ f32 playerGroundY;
+    /* 0x108 */ Vec3f floorNorm;
+    /* 0x114 */ f32 waterYPos;
+    /* 0x118 */ s32 waterPrevCamIdx;
+    /* 0x11C */ s32 waterPrevCamSetting;
+    /* 0x120 */ s16 waterQuakeId;
+    /* 0x122 */ s16 unk122;
+    /* 0x124 */ void* data0;
+    /* 0x128 */ void* data1;
+    /* 0x12C */ s16 data2;
+    /* 0x12E */ s16 data3;
+    /* 0x130 */ s16 uid;
+    /* 0x132 */ UNK_TYPE1 pad132[2];
+    /* 0x134 */ Vec3s inputDir;
+    /* 0x13A */ Vec3s camDir;
+    /* 0x140 */ s16 status;
+    /* 0x142 */ s16 setting;
+    /* 0x144 */ s16 mode;
+    /* 0x146 */ s16 bgCheckId;
+    /* 0x148 */ s16 camDataIdx;
+    /* 0x14A */ s16 flags1;
+    /* 0x14C */ s16 flags2;
+    /* 0x14E */ s16 childCamIdx;
+    /* 0x150 */ s16 unk150;
+    /* 0x152 */ s16 unk152;
+    /* 0x154 */ s16 prevSetting;
+    /* 0x156 */ s16 nextCamDataIdx;
+    /* 0x158 */ s16 nextBGCheckId;
+    /* 0x15A */ s16 roll;
+    /* 0x15C */ s16 paramFlags;
+    /* 0x15E */ s16 animState;
+    /* 0x160 */ s16 unk160;
+    /* 0x162 */ s16 timer;
+    /* 0x164 */ s16 thisIdx;
+    /* 0x166 */ s16 prevCamDataIdx;
+    /* 0x168 */ s16 unk168;
+    /* 0x16A */ s16 unk16A;
+    /* 0x16C */ Vec3f meshActorPos;
+} Camera; // size = 0x178
+
+typedef s32(*camera_update_func)(Camera* camera);
+
+typedef struct {
+    /* 0x00 */ Vec3f atOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 rollOffset;
+    /* 0x1A */ s16 zoom;
+} ShakeInfo; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s16 randIdx;
     /* 0x02 */ s16 countdownMax;
-    /* 0x04 */ Camera* cam;
+    /* 0x04 */ Camera* camera;
     /* 0x08 */ u32 callbackIdx;
-    /* 0x0C */ s16 y;
-    /* 0x0E */ s16 x;
+    /* 0x0C */ s16 verticalMag;
+    /* 0x0E */ s16 horizontalMag;
     /* 0x10 */ s16 zoom;
-    /* 0x12 */ s16 rotZ;
-    /* 0x14 */ QuakeRequest14 unk14;
+    /* 0x12 */ s16 rollOffset;
+    /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
     /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 unk1C;
+    /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 camPtrIdx;
-    /* 0x22 */ UNK_TYPE1 pad22[0x2];
+    /* 0x20 */ s16 cameraPtrsIdx;
 } QuakeRequest; // size = 0x24
 
-typedef s32(*camera_update_func)(Camera* camera);
+typedef struct {
+    /* 0x00 */ Vec3f atOffset;
+    /* 0x0C */ Vec3f eyeOffset;
+    /* 0x18 */ s16 rollOffset;
+    /* 0x1A */ s16 zoom;
+    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
+} QuakeCamCalc; // size = 0x20
 
-typedef s16(*quake_callback_func)(QuakeRequest* req, ShakeInfo* shake);
+typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
 
-typedef struct OSMesgQueueListNode_t {
-    /* 0x0 */ struct OSMesgQueueListNode_t* next;
+#define QUAKE_SPEED (1 << 0)
+#define QUAKE_VERTICAL_MAG (1 << 1)
+#define QUAKE_HORIZONTAL_MAG (1 << 2)
+#define QUAKE_ZOOM (1 << 3)
+#define QUAKE_ROLL_OFFSET (1 << 4)
+#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
+#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
+#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
+#define QUAKE_COUNTDOWN (1 << 8)
+#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
+
+typedef struct {
+    /* 0x0 */ GlobalContext* globalCtx;
+    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
+    /* 0x8 */ s16 countdown;
+    /* 0xA */ s16 state;
+} Quake2Context; // size = 0xC
+
+typedef enum {
+    QUAKE2_INACTIVE,
+    QUAKE2_ACTIVE,
+    QUAKE2_SETUP,
+} Quake2State;
+
+typedef struct IrqMgrClient_t {
+    /* 0x0 */ struct IrqMgrClient_t* next;
     /* 0x4 */ OSMesgQueue* queue;
-} OSMesgQueueListNode; // size = 0x8
+} IrqMgrClient; // size = 0x8
 
 typedef struct {
     /* 0x000 */ OSScMsg verticalRetraceMesg;
@@ -1299,7 +1369,7 @@ typedef struct {
     /* 0x060 */ OSMesgQueue irqQueue;
     /* 0x078 */ OSMesg irqBuffer[8];
     /* 0x098 */ OSThread thread;
-    /* 0x248 */ OSMesgQueueListNode* callbacks;
+    /* 0x248 */ IrqMgrClient* callbacks;
     /* 0x24C */ u8 prenmiStage;
     /* 0x250 */ OSTime lastPrenmiTime;
     /* 0x258 */ OSTimer prenmiTimer;
@@ -1316,7 +1386,7 @@ typedef struct {
     /* 0x04C */ OSMesgQueue siEventCallbackQueue;
     /* 0x064 */ OSMesgQueue lock;
     /* 0x07C */ OSMesgQueue irqmgrCallbackQueue;
-    /* 0x094 */ OSMesgQueueListNode irqmgrCallbackQueueNode;
+    /* 0x094 */ IrqMgrClient irqmgrCallbackQueueNode;
     /* 0x09C */ IrqMgr* irqmgr;
     /* 0x0A0 */ OSThread thread;
     /* 0x250 */ Input input[4];
@@ -1327,13 +1397,23 @@ typedef struct {
     /* 0x47D */ u8 unk47D;
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
-} PadmgrThreadStruct; // size = 0x480
+} PadMgr; // size = 0x480
+
+#define OS_SC_NEEDS_RDP         0x0001
+#define OS_SC_NEEDS_RSP         0x0002
+#define OS_SC_DRAM_DLIST        0x0004
+#define OS_SC_PARALLEL_TASK     0x0010
+#define OS_SC_LAST_TASK         0x0020
+#define OS_SC_SWAPBUFFER        0x0040
+
+#define OS_SC_RCP_MASK          0x0003
+#define OS_SC_TYPE_MASK         0x0007
 
 typedef struct {
-    /* 0x000 */ OSMesgQueue unk0;
-    /* 0x018 */ UNK_TYPE4 unk18[64];
-    /* 0x118 */ OSMesgQueue unk118;
-    /* 0x130 */ UNK_TYPE4 unk130[8];
+    /* 0x000 */ OSMesgQueue interruptQ;
+    /* 0x018 */ OSMesg intMsgBuf[64];
+    /* 0x118 */ OSMesgQueue cmdQ;
+    /* 0x130 */ OSMesg cmdMsgBuf[8];
     /* 0x150 */ OSThread thread;
     /* 0x300 */ UNK_TYPE4 unk300;
     /* 0x304 */ UNK_TYPE4 unk304;
@@ -1347,23 +1427,8 @@ typedef struct {
     /* 0x324 */ UNK_TYPE4 unk324;
     /* 0x328 */ UNK_TYPE1 pad328[0x7];
     /* 0x32F */ s8 unk32F;
-    /* 0x330 */ OSMesgQueueListNode unk330;
-} SchedThreadStruct; // size = 0x338
-
-struct AudioThreadStruct {
-    /* 0x000 */ IrqMgr* irqmgr;
-    /* 0x004 */ SchedThreadStruct* sched;
-    /* 0x008 */ UNK_TYPE1 pad8[0x58];
-    /* 0x060 */ UNK_TYPE4 unk60;
-    /* 0x064 */ OSMesgQueue irqQueue;
-    /* 0x07C */ OSMesg irqBuffer[30];
-    /* 0x0F4 */ OSMesgQueue unkF4;
-    /* 0x10C */ UNK_TYPE4 unk10C;
-    /* 0x110 */ OSMesgQueue initDoneCallback;
-    /* 0x128 */ OSMesg initDoneCallbackMsgBuffer[1];
-    /* 0x12C */ UNK_TYPE1 pad12C[0x4];
-    /* 0x130 */ OSThread thread;
-}; // size = 0x2E0
+    /* 0x330 */ IrqMgrClient irqClient;
+} SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
     /* 0x00 */ struct StackEntry_t* next;
@@ -1399,70 +1464,32 @@ struct ActorListEntry {
     /* 0x8 */ UNK_TYPE1 pad8[0x4];
 }; // size = 0xC
 
-struct Camera {
-    /* 0x000 */ UNK_TYPE1 pad0[0x4];
-    /* 0x004 */ Vec3f unk4;
-    /* 0x010 */ UNK_TYPE1 pad10[0x8];
-    /* 0x018 */ f32 unk18;
-    /* 0x01C */ s16 unk1C;
-    /* 0x01E */ s16 unk1E;
-    /* 0x020 */ Vec3f unk20;
-    /* 0x02C */ UNK_TYPE1 pad2C[0x2];
-    /* 0x02E */ s16 unk2E;
-    /* 0x030 */ UNK_TYPE1 pad30[0x10];
-    /* 0x040 */ s16 unk40;
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ UNK_TYPE1 pad44[0x8];
-    /* 0x04C */ s16 unk4C;
-    /* 0x04E */ UNK_TYPE1 pad4E[0x2];
-    /* 0x050 */ Vec3f focalPoint;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f upDir;
-    /* 0x074 */ Vec3f unk74;
-    /* 0x080 */ f32 unk80;
-    /* 0x084 */ f32 unk84;
-    /* 0x088 */ f32 unk88;
-    /* 0x08C */ GlobalContext* globalCtx;
-    /* 0x090 */ Player* player;
-    /* 0x094 */ PosRot unk94;
-    /* 0x0A8 */ Actor* unkA8;
-    /* 0x0AC */ Vec3f unkAC;
-    /* 0x0B8 */ UNK_TYPE1 padB8[0x8];
-    /* 0x0C0 */ f32 unkC0;
-    /* 0x0C4 */ f32 unkC4;
-    /* 0x0C8 */ f32 unkC8;
-    /* 0x0CC */ f32 unkCC;
-    /* 0x0D0 */ f32 unkD0;
-    /* 0x0D4 */ f32 unkD4;
-    /* 0x0D8 */ UNK_TYPE1 padD8[0x4];
-    /* 0x0DC */ f32 unkDC;
-    /* 0x0E0 */ f32 unkE0;
-    /* 0x0E4 */ UNK_TYPE1 padE4[0x18];
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 unk100;
-    /* 0x104 */ UNK_TYPE1 pad104[0x30];
-    /* 0x134 */ Vec3s unk134;
-    /* 0x13A */ UNK_TYPE1 pad13A[0x4];
-    /* 0x13E */ u16 unk13E;
-    /* 0x140 */ s16 unk140;
-    /* 0x142 */ s16 state;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ UNK_TYPE1 pad146[0x2];
-    /* 0x148 */ s16 unk148;
-    /* 0x14A */ s16 unk14A;
-    /* 0x14C */ s16 unk14C;
-    /* 0x14E */ UNK_TYPE1 pad14E[0x6];
-    /* 0x154 */ s16 unk154;
-    /* 0x156 */ UNK_TYPE1 pad156[0x4];
-    /* 0x15A */ s16 unk15A;
-    /* 0x15C */ s16 unk15C;
-    /* 0x15E */ s16 unk15E;
-    /* 0x160 */ UNK_TYPE1 pad160[0x4];
-    /* 0x164 */ s16 unk164;
-    /* 0x166 */ s16 unk166;
-    /* 0x168 */ UNK_TYPE1 pad168[0x10];
-}; // size = 0x178
+#define OS_SC_RETRACE_MSG       1
+#define OS_SC_DONE_MSG          2
+#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_PRE_NMI_MSG       4
 
+typedef struct {
+    /* 0x0000 */ OSTask task;
+    /* 0x0040 */ OSMesgQueue* taskQueue;
+    /* 0x0044 */ char unk_44[0xC];
+} AudioTask; // size = 0x50
+
+typedef struct {
+    /* 0x000 */ IrqMgr* irqMgr;
+    /* 0x004 */ SchedContext* sched;
+    /* 0x008 */ OSScTask audioTask;
+    /* 0x060 */ AudioTask* rspTask;
+    /* 0x064 */ OSMesgQueue interruptMsgQ;
+    /* 0x07C */ OSMesg interruptMsgBuf[30];
+    /* 0x0F4 */ OSMesgQueue cmdQ;
+    /* 0x10C */ OSMesg cmdMsgBuf[1];
+    /* 0x110 */ OSMesgQueue lockMsgQ;
+    /* 0x128 */ OSMesg lockMsgBuf[1];
+    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
+    /* 0x130 */ OSThread thread;
+} AudioMgr; // size = 0x2E0
+ 
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;

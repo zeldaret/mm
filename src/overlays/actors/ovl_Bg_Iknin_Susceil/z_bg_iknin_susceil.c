@@ -64,12 +64,12 @@ void func_80C0A838(BgIkninSusceil* this, GlobalContext* globalCtx) {
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 y, s16 countdown, s32 arg4) {
+void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 verticalMag, s16 countdown, s32 arg4) {
     s32 pad;
     s16 quake = Quake_Add(ACTIVE_CAM, 3);
 
     Quake_SetSpeed(quake, 0x7B30);
-    Quake_SetQuakeValues(quake, y, 0, 0, 0);
+    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quake, countdown);
     if (arg4 == 1) {
         func_8013ECE0(10000.0f, 255, 20, 150);
@@ -191,7 +191,7 @@ void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.98f;
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
-        func_80C0A86C(this, globalCtx, 1, 0xE, 3);
+        func_80C0A86C(this, globalCtx, 1, 14, 3);
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80C0AB14(this);
     } else {

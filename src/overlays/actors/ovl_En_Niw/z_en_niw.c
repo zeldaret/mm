@@ -269,9 +269,9 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     Actor* attackNiw;
 
     if ((this->unkTimer252 == 0) && (this->unk290 < 7)) {
-        xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        xView = globalCtx->view.at.x - globalCtx->view.eye.x;
+        yView = globalCtx->view.at.y - globalCtx->view.eye.y;
+        zView = globalCtx->view.at.z - globalCtx->view.eye.z;
         newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
         newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
         newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
@@ -835,9 +835,9 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
         // if cucco is off the map?
         Vec3f camera;
-        camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+        camera.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+        camera.z = globalCtx->view.at.z - globalCtx->view.eye.z;
         camResult = camera.y / sqrtf(SQXYZ(camera));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
