@@ -367,7 +367,8 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), (0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
+    gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), (0, (u8)(this->colorB >> 6)),
+                   (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_OPA_DISP++, 0x09, &D_801AEFA0);
 
     tempPos.x = this->actor.world.pos.x;
@@ -402,7 +403,8 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), (0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), (0, (u8)(this->colorB >> 6)),
+                   (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_XLU_DISP++, 0x09, &D_801AEF88);
 
     tempPos.x = this->actor.world.pos.x;
