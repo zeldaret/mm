@@ -557,7 +557,8 @@ void EnFsn_UpdateItemSelectedProperty(EnFsn* this) {
     s32 i;
 
     for (items = this->items, i = 0; i < this->totalSellingItems; items++, i++) {
-        if (this->actionFunc != EnFsn_SelectItem && this->actionFunc != EnFsn_PlayerCannotBuy && this->drawCursor == 0) {
+        if (this->actionFunc != EnFsn_SelectItem && this->actionFunc != EnFsn_PlayerCannotBuy &&
+            this->drawCursor == 0) {
             (*items)->isSelected = false;
         } else {
             (*items)->isSelected = (i == this->cursorIdx) ? true : false;

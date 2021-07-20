@@ -29,63 +29,63 @@ const ActorInit En_Fishing_InitVars = {
 };
  */
 
-/* 
+/*
 // static ColliderJntSphElementInit sJntSphElementsInit[12] = {
 static ColliderJntSphElementInit D_8090CD58[12] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-        { 0, { { 0, 0, 0 }, 30 }, 100 },
+        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL,
+BUMP_NONE, OCELEM_ON, }, { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_8090CF08 = {
-    { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    12, D_8090CD58, // sJntSphElementsInit,
+    { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1,
+COLSHAPE_JNTSPH, }, 12, D_8090CD58, // sJntSphElementsInit,
 };
 
 
