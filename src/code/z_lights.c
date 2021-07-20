@@ -407,7 +407,6 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     }
 }
 
-#if 1
 void Lights_DrawGlow(GlobalContext* globalCtx) {
     Gfx* dl;
     LightPoint* params;
@@ -452,6 +451,3 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_lights/Lights_DrawGlow.s")
-#endif

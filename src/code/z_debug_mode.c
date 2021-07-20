@@ -12,5 +12,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_mode/func_800E9E94.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_mode/func_800E9F78.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800E8EA0/D_801DD600.s")

@@ -18,3 +18,5 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800E8EA0/func_800E9138.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800E8EA0/func_800E9250.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_800E8EA0/D_801DD600.s")

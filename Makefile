@@ -114,8 +114,8 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o)
-                 #$(foreach f,$(C_FILES:.c=.o),build/$f) \
+                 $(foreach f,$(wildcard baserom/*),build/$f.o) \
+                 $(foreach f,$(C_FILES:.c=.o),build/$f)
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS),build/$(dir)))
 #$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))

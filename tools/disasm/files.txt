@@ -489,7 +489,7 @@
             0x801AAAA0 : "z_construct",
 
             # .data section
-            0x801AAAB0 : "",
+            0x801AAAB0 : "z_en_a_keep",
             0x801ADE60 : "",
             0x801ADEC0 : "z_en_item00",
             0x801AE240 : "z_eff_blure",
@@ -503,7 +503,8 @@
             0x801AEFD0 : "z_actor_dlftbls",
             0x801B4620 : "z_bgcheck",
             0x801B4710 : "z_camera",
-            0x801B9F20 : "z_collision_check",
+            0x801B9F20 : "z_collision_btltbls",
+            0x801BA200 : "z_collision_check",
             0x801BA550 : "z_debug_display",
             0x801BB090 : "z_debug_mode",
             0x801BB170 : "z_draw",
@@ -534,7 +535,7 @@
             0x801C3CA0 : "z_scene_table",
             0x801C5C50 : "",
             0x801C5CB0 : "z_skelanime",
-            0x801C5CD0 : "",
+            0x801C5CD0 : "z_skin_matrix",
             0x801C5D10 : "z_sub_s",
             0x801C5DD0 : "z_vimode",
             0x801C5E30 : "z_vr_box",
@@ -555,7 +556,7 @@
             0x801D1540 : "speed_meter",
             0x801D1570 : "",
             0x801D15B0 : "",
-            0x801D15D0 : "",
+            0x801D15D0 : "sys_math_atan",
             0x801D1DE0 : "sys_matrix",
             0x801D1E70 : "",
             0x801D2E80 : "",
@@ -647,7 +648,7 @@
             0x801E1180 : "",
 
             # .bss section
-            0x801E3FA0 : "z_en_item00",
+            0x801E3FA0 : "code_801E3FA0",
             0x801E3FB0 : "z_effect",
             0x801ED8A0 : "z_actor",
             0x801ED930 : "z_actor_dlftbls",
