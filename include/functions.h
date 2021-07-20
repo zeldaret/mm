@@ -4002,7 +4002,7 @@ void audio_setBGM(u32 bgmID);
 // void func_801A5808(void);
 // void func_801A5A10(void);
 // void func_801A5A1C(void);
-// void func_801A5BD0(void);
+void func_801A5BD0(s32 param_1);
 // void func_801A5C28(void);
 // void func_801A5C8C(void);
 // void func_801A5CFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);

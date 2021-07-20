@@ -16,12 +16,10 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
 void func_809CD328(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
 void func_809CD634(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
+void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx); /* Level 6 */
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
-
-/* Do nothing */
-void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx);
-
+void func_809CD77C(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
 
 /* Draw helper functions */
 s32 func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor); 
@@ -291,7 +289,19 @@ void func_809CD328(EnBji01 *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD634.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD634.asm")*/
+
+void func_809CD634(EnBji01 *this, GlobalContext *globalCtx) {
+
+    func_801A5BD0(0x6F);
+    func_801A89A8(0xE0000101);
+    globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
+    gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
+    func_80169EFC(globalCtx);
+    gSaveContext.respawnFlag = -2;
+    this->actionFunc = func_809CD6B0;
+
+}
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD6B0.asm")*/
 
@@ -307,7 +317,16 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
 
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD70C.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_02_0x809CCDE0/func_809CD70C.asm")*/
+
+void func_809CD70C(EnBji01 *this, GlobalContext *globalCtx) {
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
+    func_809CCDE0(this, globalCtx);
+    if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
+        func_800B86C8(&this->moonsTear->actor, globalCtx, &this->actor);
+        this->actionFunc = func_809CD77C;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD77C.asm")
 
