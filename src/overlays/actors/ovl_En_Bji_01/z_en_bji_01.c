@@ -9,15 +9,21 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);
-void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD028(EnBji01* this, GlobalContext* globalCtx);
+/* Init helper functions */
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx); /* Level 1 */
+void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx); /* Level 2 */
+void func_809CD028(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
+void func_809CD328(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
+void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
+void func_809CD634(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
+void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
+void func_809CD70C(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
 
-void func_809CD328(EnBji01* this, GlobalContext* globalCtx);
+/* Do nothing */
 void func_809CD6B0(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
+
+
+/* Draw helper functions */
 s32 func_809CDA4C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor); 
 void func_809CDB04(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor); 
 
@@ -169,7 +175,105 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD328.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD328.asm")*/
+
+void func_809CD328(EnBji01 *this, GlobalContext *globalCtx) {
+
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 0:
+            Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
+            func_809CCDE0(this, globalCtx);
+            if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
+                func_801518B0(globalCtx, (u16) this->unk2AA, &this->actor);
+	    }
+	    break;
+	case 4:
+            if (func_80147624(globalCtx) != 0) {
+                this->actor.flags &= 0xFFFEFFFF;
+                this->actor.params = 1;
+                switch (globalCtx->msgCtx.choiceIndex) {
+                    case 0:
+                        func_8019F208();
+                        func_801477B4(globalCtx);
+                        func_809CD634(this, globalCtx);
+                        break;
+                    case 1:
+                        func_8019F230();
+                        switch (gSaveContext.playerForm) {
+                            case PLAYER_FORM_DEKU:
+                                func_80151938(globalCtx, 0x5F0U);
+                                break; 
+                            case PLAYER_FORM_HUMAN:
+                                func_80151938(globalCtx, 0x5F8U);
+                                break;
+                            case PLAYER_FORM_GORON:
+                            case PLAYER_FORM_ZORA:
+                                func_80151938(globalCtx, 0x5E1U);
+                                break;
+                        }
+			break;
+	        }
+	    }
+            break;
+	case 5:
+            if (func_80147624(globalCtx) != 0) {
+                this->actor.flags &= 0xFFFEFFFF;
+                switch (globalCtx->msgCtx.unk11F04) {
+                    case 1502:
+                        func_8013E1C8((s32) &this->skelAnime, (s32) D_809CDC7C, 3, &this->unk298);
+                        func_80151938(globalCtx, 0x5DFU);
+                        break;
+                    case 1508:
+                        func_80151938(globalCtx, 0x5E7U);
+                        break;
+                    case 1509:
+                        func_80151938(globalCtx, 0x5E0U);
+                        break;
+                    case 1511:
+                        func_80151938(globalCtx, 0x5E5U);
+                        break;
+                    case 1500:
+                    case 1501:
+                    case 1503:
+                    case 1516:
+                    case 1517:
+                    case 1518:
+                    case 1522:
+                    case 1525:
+                        func_80151938(globalCtx, (globalCtx->msgCtx.unk11F04 + 1) & 0xFFFF);
+                        break;
+                    case 1520:
+                    case 1526:
+                        func_80151938(globalCtx, 0x5EFU);
+                        break;
+                    case 1505:
+                    case 1512:
+                    case 1513:
+                    case 1514:
+                    case 1515:
+                    case 1521:
+                    case 1523:
+                    case 1524:
+                    case 1527:
+                    case 1528:
+                        func_801477B4(globalCtx);
+                        this->actor.flags &= 0xFFFEFFFF;
+                        this->actor.params = 1;
+                        func_809CCE98(this, globalCtx);
+                        break;
+                }
+            }
+	    break;
+	case 6:
+            this->actor.params = 1;
+            this->actor.flags &= 0xFFFEFFFF;
+            func_809CCE98(this, globalCtx);
+            break;
+    }
+    if ((this->unk298 == 3) && (this->skelAnime.animCurrentFrame == this->skelAnime.animFrameCount)) {
+        func_8013E1C8((s32) &this->skelAnime, (s32) D_809CDC7C, 2, &this->unk298);
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD634.asm")
 
