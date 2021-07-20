@@ -55,10 +55,18 @@ def GetRemovableSize(functions_to_count, path):
         file_size = 0
         if asm_file_path in functions_to_count:
             asm_lines = ReadAllLines(asm_file_path)
+            shouldCount = True
 
             for asm_line in asm_lines:
-                if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
-                    file_size += 4
+                if asm_line[0] == ".":
+                    if asm_line.startswith(".text") or asm_line.startswith(".section .text"):
+                        shouldCount = True
+                    elif ".rdata" in asm_line or ".late_rodata" in asm_line:
+                        shouldCount = False
+
+                if shouldCount:
+                    if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
+                        file_size += 4
 
         size += file_size
 
