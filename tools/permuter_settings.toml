@@ -1,5 +1,6 @@
 [preserve_macros]
 "g[DS]P.*" = "void"
+"gs[DS]P.*" = "void"
 "gDma.*" = "void"
 "G_IM_SIZ_.*" = "int"
 "G_[AC]C.*" = "int"
