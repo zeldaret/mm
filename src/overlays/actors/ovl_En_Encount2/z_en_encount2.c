@@ -155,7 +155,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 0xFF, 0xFF, 0xC8,
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
                 CLEAR_TAG_LARGE_EXPLOSION);
 
     for (i = 0; i != 100; ++i) {

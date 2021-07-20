@@ -31,12 +31,12 @@ typedef struct EnClearTagEffect {
     /* 0x4E */ s16 lightRayAlphaDecrementSpeed;
     /* 0x50 */ f32 scale;
     /* 0x54 */ f32 maxScale;
-    /* 0x58 */ f32 rotY;
-    /* 0x5C */ f32 rotX;
-    /* 0x60 */ f32 rotZ;
+    /* 0x58 */ f32 rotationY;
+    /* 0x5C */ f32 rotationX;
+    /* 0x60 */ f32 rotationZ;
     /* 0x64 */ f32 maxScaleTarget;
-    /* 0x68 */ f32 scaleY;
-    /* 0x6C */ f32 scaleX;
+    /* 0x68 */ f32 smokeScaleY;
+    /* 0x6C */ f32 smokeScaleX;
 } EnClearTagEffect; // size = 0x70
 
 typedef struct EnClearTag {
@@ -46,7 +46,7 @@ typedef struct EnClearTag {
     /* 0x2E56 */ s16 activeTimer; // Actor Marked for Death when timer runs out
     /* 0x2E58 */ UNK_TYPE1 unk2E58[0xC];
     /* 0x2E64 */ s16 camID;
-    /* 0x2E66 */ Color_RGBA8 explosionOuterCloudEnvColor;
+    /* 0x2E66 */ Color_RGBA8 flashEnvColor;
     /* 0x2E6C */ Vec3f eye; // Camera eye
     /* 0x2E78 */ Vec3f at; // Camera lookAt
 } EnClearTag; // size = 0x2E84
