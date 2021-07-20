@@ -10,6 +10,7 @@ void ObjHakaisi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHakaisi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
     ACTORCAT_PROP,
@@ -21,6 +22,7 @@ const ActorInit Obj_Hakaisi_InitVars = {
     (ActorFunc)ObjHakaisi_Update,
     (ActorFunc)ObjHakaisi_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hakaisi_0x80B14180/ObjHakaisi_Init.asm")

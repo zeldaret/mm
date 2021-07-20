@@ -8,6 +8,7 @@ void ObjMure2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure2_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Mure2_InitVars = {
     ACTOR_OBJ_MURE2,
     ACTORCAT_PROP,
@@ -19,6 +20,15 @@ const ActorInit Obj_Mure2_InitVars = {
     (ActorFunc)ObjMure2_Update,
     (ActorFunc)NULL,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809615F4[] = {
+    ICHAIN_F32(uncullZoneForward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 2100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mure2_0x80960CF0/func_80960CF0.asm")

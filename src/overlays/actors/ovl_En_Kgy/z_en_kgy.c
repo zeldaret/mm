@@ -10,6 +10,7 @@ void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Kgy_InitVars = {
     (ActorFunc)EnKgy_Update,
     (ActorFunc)EnKgy_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kgy_0x80B40800/EnKgy_Init.asm")

@@ -10,6 +10,7 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Obj_Boat_InitVars = {
     (ActorFunc)ObjBoat_Update,
     (ActorFunc)ObjBoat_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B9B680[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9AF50.asm")

@@ -10,6 +10,7 @@ void EnDs2n_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Ds2n_InitVars = {
     (ActorFunc)EnDs2n_Update,
     (ActorFunc)EnDs2n_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ds2n_0x80AE1650/func_80AE1650.asm")

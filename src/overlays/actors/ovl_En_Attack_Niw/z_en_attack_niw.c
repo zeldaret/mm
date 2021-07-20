@@ -10,6 +10,7 @@ void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
     ACTORCAT_ENEMY,
@@ -21,6 +22,15 @@ const ActorInit En_Attack_Niw_InitVars = {
     (ActorFunc)EnAttackNiw_Update,
     (ActorFunc)EnAttackNiw_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80959120[] = {
+    ICHAIN_U8(targetMode, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/EnAttackNiw_Init.asm")

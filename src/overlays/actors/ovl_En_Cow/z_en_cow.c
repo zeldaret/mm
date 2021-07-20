@@ -10,6 +10,7 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
     ACTORCAT_NPC,
@@ -21,6 +22,15 @@ const ActorInit En_Cow_InitVars = {
     (ActorFunc)EnCow_Update,
     (ActorFunc)EnCow_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_8099D610 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 30, 40, 0, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cow_0x8099C290/func_8099C290.asm")

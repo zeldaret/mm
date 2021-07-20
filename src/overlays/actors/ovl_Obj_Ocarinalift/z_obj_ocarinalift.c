@@ -10,6 +10,7 @@ void ObjOcarinalift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,
     ACTORCAT_BG,
@@ -21,6 +22,17 @@ const ActorInit Obj_Ocarinalift_InitVars = {
     (ActorFunc)ObjOcarinalift_Update,
     (ActorFunc)ObjOcarinalift_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AC9D70[] = {
+    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC94C0.asm")

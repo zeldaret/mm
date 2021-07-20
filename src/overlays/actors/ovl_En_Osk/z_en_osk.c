@@ -10,6 +10,7 @@ void EnOsk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Osk_InitVars = {
     (ActorFunc)EnOsk_Update,
     (ActorFunc)EnOsk_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Osk_0x80BF5C20/EnOsk_Init.asm")

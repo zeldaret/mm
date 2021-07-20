@@ -10,6 +10,7 @@ void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,
     ACTORCAT_BG,
@@ -21,6 +22,7 @@ const ActorInit Obj_Hunsui_InitVars = {
     (ActorFunc)ObjHunsui_Update,
     (ActorFunc)ObjHunsui_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hunsui_0x80B9C450/func_80B9C450.asm")

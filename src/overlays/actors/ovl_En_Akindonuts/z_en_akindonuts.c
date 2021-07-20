@@ -10,6 +10,7 @@ void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,
     ACTORCAT_NPC,
@@ -21,6 +22,22 @@ const ActorInit En_Akindonuts_InitVars = {
     (ActorFunc)EnAkindonuts_Update,
     (ActorFunc)EnAkindonuts_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80BF02F0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_HIT_PLAYER, COLSHAPE_JNTSPH, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 27, 32, 0, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80BF04B4[] = {
+    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Akindonuts_0x80BECBE0/func_80BECBE0.asm")

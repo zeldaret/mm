@@ -9,6 +9,7 @@ void DmGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmGm_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
@@ -20,6 +21,7 @@ const ActorInit Dm_Gm_InitVars = {
     (ActorFunc)DmGm_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Gm_0x80C24360/func_80C24360.asm")

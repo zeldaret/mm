@@ -9,6 +9,7 @@ void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
     ACTORCAT_NPC,
@@ -20,6 +21,15 @@ const ActorInit En_Kitan_InitVars = {
     (ActorFunc)EnKitan_Update,
     (ActorFunc)NULL,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80C09D50 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 40, 0, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kitan_0x80C090D0/EnKitan_Init.asm")

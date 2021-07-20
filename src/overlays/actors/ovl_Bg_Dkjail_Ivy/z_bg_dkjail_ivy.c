@@ -10,6 +10,7 @@ void BgDkjailIvy_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,
     ACTORCAT_BG,
@@ -21,6 +22,24 @@ const ActorInit Bg_Dkjail_Ivy_InitVars = {
     (ActorFunc)BgDkjailIvy_Update,
     (ActorFunc)BgDkjailIvy_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80ADE950 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x01000200, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 20, 80, 0, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80ADE98C[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE230.asm")

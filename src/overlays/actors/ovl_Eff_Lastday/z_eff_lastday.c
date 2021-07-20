@@ -10,6 +10,7 @@ void EffLastday_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffLastday_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit Eff_Lastday_InitVars = {
     (ActorFunc)EffLastday_Update,
     (ActorFunc)EffLastday_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Lastday_0x80BEBAC0/EffLastday_Init.asm")

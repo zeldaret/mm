@@ -10,6 +10,7 @@ void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Demo_Tre_Lgt_InitVars = {
     ACTOR_DEMO_TRE_LGT,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit Demo_Tre_Lgt_InitVars = {
     (ActorFunc)DemoTreLgt_Update,
     (ActorFunc)DemoTreLgt_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Tre_Lgt_0x808E0E40/DemoTreLgt_Init.asm")

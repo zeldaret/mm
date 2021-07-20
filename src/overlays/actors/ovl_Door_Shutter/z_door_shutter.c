@@ -9,6 +9,7 @@ void DoorShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Door_Shutter_InitVars = {
     ACTOR_DOOR_SHUTTER,
     ACTORCAT_DOOR,
@@ -20,6 +21,16 @@ const ActorInit Door_Shutter_InitVars = {
     (ActorFunc)DoorShutter_Update,
     (ActorFunc)NULL,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_808A2248[] = {
+    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Shutter_0x808A08F0/func_808A08F0.asm")

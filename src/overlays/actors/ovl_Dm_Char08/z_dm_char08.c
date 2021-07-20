@@ -10,6 +10,7 @@ void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
     ACTORCAT_BG,
@@ -21,6 +22,15 @@ const ActorInit Dm_Char08_InitVars = {
     (ActorFunc)DmChar08_Update,
     (ActorFunc)DmChar08_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AB1764[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char08_0x80AAF050/func_80AAF050.asm")

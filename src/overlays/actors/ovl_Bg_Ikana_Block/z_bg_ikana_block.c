@@ -9,6 +9,7 @@ void BgIkanaBlock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,
     ACTORCAT_BG,
@@ -20,6 +21,16 @@ const ActorInit Bg_Ikana_Block_InitVars = {
     (ActorFunc)BgIkanaBlock_Update,
     (ActorFunc)NULL,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B7F640[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Block_0x80B7EA60/func_80B7EA60.asm")

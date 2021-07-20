@@ -10,6 +10,7 @@ void EnTest7_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit En_Test7_InitVars = {
     (ActorFunc)EnTest7_Update,
     (ActorFunc)EnTest7_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test7_0x80AF0820/func_80AF0820.asm")

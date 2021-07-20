@@ -8,6 +8,7 @@ void ObjMakeoshihiki_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakeoshihiki_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Makeoshihiki_InitVars = {
     ACTOR_OBJ_MAKEOSHIHIKI,
     ACTORCAT_PROP,
@@ -19,6 +20,7 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
     (ActorFunc)ObjMakeoshihiki_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makeoshihiki_0x80972350/func_80972350.asm")

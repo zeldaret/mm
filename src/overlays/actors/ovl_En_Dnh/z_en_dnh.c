@@ -10,6 +10,7 @@ void EnDnh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Dnh_InitVars = {
     ACTOR_EN_DNH,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Dnh_InitVars = {
     (ActorFunc)EnDnh_Update,
     (ActorFunc)EnDnh_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnh_0x80A50D40/func_80A50D40.asm")

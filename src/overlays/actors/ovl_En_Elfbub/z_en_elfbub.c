@@ -10,6 +10,7 @@ void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Elfbub_InitVars = {
     ACTOR_EN_ELFBUB,
     ACTORCAT_MISC,
@@ -21,6 +22,15 @@ const ActorInit En_Elfbub_InitVars = {
     (ActorFunc)EnElfbub_Update,
     (ActorFunc)EnElfbub_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80ACE270 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 16, 32, 0, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Init.asm")

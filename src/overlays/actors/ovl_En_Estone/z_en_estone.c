@@ -10,6 +10,7 @@ void EnEstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
     ACTORCAT_PROP,
@@ -21,6 +22,15 @@ const ActorInit En_Estone_InitVars = {
     (ActorFunc)EnEstone_Update,
     (ActorFunc)EnEstone_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80A9AB70 = {
+    { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 30, 30, -10, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Init.asm")

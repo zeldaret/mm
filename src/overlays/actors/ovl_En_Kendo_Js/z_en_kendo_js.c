@@ -10,6 +10,7 @@ void EnKendoJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,
     ACTORCAT_NPC,
@@ -21,6 +22,19 @@ const ActorInit En_Kendo_Js_InitVars = {
     (ActorFunc)EnKendoJs_Update,
     (ActorFunc)EnKendoJs_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B27C30 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 18, 30, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80B27C5C = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Init.asm")

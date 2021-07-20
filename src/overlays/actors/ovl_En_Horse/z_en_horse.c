@@ -10,6 +10,7 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorse_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
     ACTORCAT_BG,
@@ -21,6 +22,49 @@ const ActorInit En_Horse_InitVars = {
     (ActorFunc)EnHorse_Update,
     (ActorFunc)EnHorse_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80888F74 = {
+    { COLTYPE_NONE, AT_NONE | AT_TYPE_PLAYER, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000004, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
+    { 20, 70, 0, { 0, 0, 0 } },
+};
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80888FA0 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 20, 70, 0, { 0, 0, 0 } },
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_80888FCC[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00013820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_ON, },
+        { 13, { { 0, 0, 0 }, 20 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_80888FF0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_JNTSPH, },
+    1, D_80888FCC, // sJntSphElementsInit,
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit D_80889000 = { 10, 35, 100, MASS_HEAVY };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80889010[] = {
+    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_0x8087B730/func_8087B730.asm")

@@ -10,6 +10,7 @@ void BgKin2Shelf_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,
@@ -21,6 +22,13 @@ const ActorInit Bg_Kin2_Shelf_InitVars = {
     (ActorFunc)BgKin2Shelf_Update,
     (ActorFunc)BgKin2Shelf_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B7077C[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Shelf_0x80B6FB30/func_80B6FB30.asm")

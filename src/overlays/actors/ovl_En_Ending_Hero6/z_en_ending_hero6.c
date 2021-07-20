@@ -10,6 +10,7 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Update,
     (ActorFunc)EnEndingHero6_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/EnEndingHero6_Init.asm")

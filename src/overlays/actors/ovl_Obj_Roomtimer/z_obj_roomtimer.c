@@ -9,6 +9,7 @@ void ObjRoomtimer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjRoomtimer_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Roomtimer_InitVars = {
     ACTOR_OBJ_ROOMTIMER,
     ACTORCAT_ENEMY,
@@ -20,6 +21,7 @@ const ActorInit Obj_Roomtimer_InitVars = {
     (ActorFunc)ObjRoomtimer_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Roomtimer_0x80973C50/ObjRoomtimer_Init.asm")

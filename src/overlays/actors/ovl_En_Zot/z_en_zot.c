@@ -10,6 +10,7 @@ void EnZot_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
     ACTORCAT_NPC,
@@ -21,6 +22,15 @@ const ActorInit En_Zot_InitVars = {
     (ActorFunc)EnZot_Update,
     (ActorFunc)EnZot_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B998E0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 30, 40, 0, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zot_0x80B965D0/func_80B965D0.asm")

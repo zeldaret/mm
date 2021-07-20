@@ -10,6 +10,7 @@ void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit En_Paper_InitVars = {
     (ActorFunc)EnPaper_Update,
     (ActorFunc)EnPaper_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Paper_0x80C1F3D0/EnPaper_Init.asm")

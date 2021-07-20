@@ -10,6 +10,7 @@ void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit En_Mm2_InitVars = {
     (ActorFunc)EnMm2_Update,
     (ActorFunc)EnMm2_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mm2_0x809A2030/EnMm2_Init.asm")

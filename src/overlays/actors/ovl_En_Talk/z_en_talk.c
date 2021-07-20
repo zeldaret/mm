@@ -9,6 +9,7 @@ void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)EnTalk_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Init.asm")

@@ -10,6 +10,7 @@ void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,13 @@ const ActorInit Arrow_Ice_InitVars = {
     (ActorFunc)ArrowIce_Update,
     (ActorFunc)ArrowIce_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809241F0[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Ice_0x80922430/func_80922430.asm")

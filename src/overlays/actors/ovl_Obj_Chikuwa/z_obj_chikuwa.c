@@ -10,6 +10,7 @@ void ObjChikuwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjChikuwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Obj_Chikuwa_InitVars = {
     (ActorFunc)ObjChikuwa_Update,
     (ActorFunc)ObjChikuwa_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809B1FC0[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1500, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/func_809B1550.asm")

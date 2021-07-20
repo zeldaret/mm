@@ -10,6 +10,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,31 @@ const ActorInit En_Mushi2_InitVars = {
     (ActorFunc)EnMushi2_Update,
     (ActorFunc)EnMushi2_Draw,
 };
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_80A6B950[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 5 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_80A6B974 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_80A6B950, // sJntSphElementsInit,
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A6BA04[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 20, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mushi2_0x80A687A0/func_80A687A0.asm")

@@ -9,6 +9,7 @@ void ElfMsg4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg4_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Elf_Msg4_InitVars = {
     ACTOR_ELF_MSG4,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,14 @@ const ActorInit Elf_Msg4_InitVars = {
     (ActorFunc)ElfMsg4_Update,
     (ActorFunc)NULL,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AFD8F0[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg4_0x80AFD380/func_80AFD380.asm")

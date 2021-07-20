@@ -10,6 +10,7 @@ void EnInvadepohDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInvadepohDemo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
     ACTORCAT_PROP,
@@ -21,6 +22,57 @@ const ActorInit En_Invadepoh_Demo_InitVars = {
     (ActorFunc)EnInvadepohDemo_Update,
     (ActorFunc)EnInvadepohDemo_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1AA74[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1AA88[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1AAA0[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1AAB0[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3S(shape, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1AAC8[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C192A0.asm")

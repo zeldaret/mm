@@ -81,14 +81,20 @@ static ColliderJntSphElementInit D_8090CD58[12] = {
         { 0, { { 0, 0, 0 }, 30 }, 100 },
     },
 };
- */
 
-/* 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_8090CF08 = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     12, D_8090CD58, // sJntSphElementsInit,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8090D4D0[] = {
+    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+};
+
  */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fishing_0x808FC6C0/func_808FC6C0.asm")

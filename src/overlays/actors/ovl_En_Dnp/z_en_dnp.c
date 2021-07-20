@@ -10,6 +10,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
@@ -21,6 +22,19 @@ const ActorInit En_Dnp_InitVars = {
     (ActorFunc)EnDnp_Update,
     (ActorFunc)EnDnp_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B3DC80 = {
+    { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 14, 38, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80B3DCAC = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnp_0x80B3CA20/func_80B3CA20.asm")

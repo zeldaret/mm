@@ -9,6 +9,7 @@ void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,14 @@ const ActorInit En_Warp_tag_InitVars = {
     (ActorFunc)EnWarptag_Update,
     (ActorFunc)NULL,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809C1008[] = {
+    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
+    ICHAIN_VEC3S(shape, 0, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/EnWarptag_Init.asm")

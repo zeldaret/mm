@@ -10,6 +10,7 @@ void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,27 @@ const ActorInit Obj_Aqua_InitVars = {
     (ActorFunc)ObjAqua_Update,
     (ActorFunc)ObjAqua_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80ACC2C0 = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+    { 6, 10, 0, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80ACC2EC[] = {
+    ICHAIN_VEC3S(shape, 0, ICHAIN_CONTINUE),
+    ICHAIN_VEC3S(30, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Aqua_0x80ACB6A0/func_80ACB6A0.asm")

@@ -7,6 +7,7 @@
 void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
     ACTORCAT_BG,
@@ -18,6 +19,7 @@ const ActorInit Obj_Grass_Unit_InitVars = {
     (ActorFunc)Actor_Noop,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABDE0.asm")

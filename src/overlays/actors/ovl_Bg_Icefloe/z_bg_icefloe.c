@@ -10,6 +10,7 @@ void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,
@@ -21,6 +22,13 @@ const ActorInit Bg_Icefloe_InitVars = {
     (ActorFunc)BgIcefloe_Update,
     (ActorFunc)BgIcefloe_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AC4F3C[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Init.asm")

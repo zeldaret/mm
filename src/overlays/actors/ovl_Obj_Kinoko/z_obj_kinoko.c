@@ -10,6 +10,7 @@ void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Kinoko_InitVars = {
     ACTOR_OBJ_KINOKO,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit Obj_Kinoko_InitVars = {
     (ActorFunc)ObjKinoko_Update,
     (ActorFunc)ObjKinoko_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Init.asm")

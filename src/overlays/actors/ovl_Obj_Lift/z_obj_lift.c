@@ -10,6 +10,7 @@ void ObjLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,
@@ -21,6 +22,17 @@ const ActorInit Obj_Lift_InitVars = {
     (ActorFunc)ObjLift_Update,
     (ActorFunc)ObjLift_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8093DD84[] = {
+    ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -15000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 350, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lift_0x8093D3C0/func_8093D3C0.asm")

@@ -9,6 +9,7 @@ void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)ObjDowsing_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/func_80B23D50.asm")

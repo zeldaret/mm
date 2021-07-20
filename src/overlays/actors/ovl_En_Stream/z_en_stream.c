@@ -10,6 +10,7 @@ void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
     ACTORCAT_BG,
@@ -21,6 +22,13 @@ const ActorInit En_Stream_InitVars = {
     (ActorFunc)EnStream_Update,
     (ActorFunc)EnStream_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80965B20[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/func_80965650.asm")

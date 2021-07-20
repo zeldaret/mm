@@ -10,6 +10,15 @@ void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80AC00B0 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 18, 46, 0, { 0, 0, 0 } },
+};
+
+
 const ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
@@ -21,6 +30,11 @@ const ActorInit En_Ma_Yto_InitVars = {
     (ActorFunc)EnMaYto_Update,
     (ActorFunc)EnMaYto_Draw,
 };
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80B9143C = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/EnMaYto_Init.asm")

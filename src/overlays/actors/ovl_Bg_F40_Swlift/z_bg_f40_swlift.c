@@ -10,6 +10,7 @@ void BgF40Swlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Swlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_F40_Swlift_InitVars = {
     ACTOR_BG_F40_SWLIFT,
     ACTORCAT_BG,
@@ -21,6 +22,15 @@ const ActorInit Bg_F40_Swlift_InitVars = {
     (ActorFunc)BgF40Swlift_Update,
     (ActorFunc)BgF40Swlift_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8096F540[] = {
+    ICHAIN_F32(uncullZoneScale, 550, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 5000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Swlift_0x8096F160/BgF40Swlift_Init.asm")

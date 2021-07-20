@@ -10,6 +10,7 @@ void EnBh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit En_Bh_InitVars = {
     (ActorFunc)EnBh_Update,
     (ActorFunc)EnBh_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bh_0x80C22D40/EnBh_Init.asm")

@@ -10,6 +10,7 @@ void EnKujiya_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
     ACTORCAT_NPC,
@@ -21,6 +22,7 @@ const ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Update,
     (ActorFunc)EnKujiya_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kujiya_0x80BB08E0/EnKujiya_Init.asm")

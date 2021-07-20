@@ -10,6 +10,7 @@ void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,14 @@ const ActorInit Oceff_Spot_InitVars = {
     (ActorFunc)OceffSpot_Update,
     (ActorFunc)OceffSpot_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80973478[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Spot_0x80972680/func_80972680.asm")

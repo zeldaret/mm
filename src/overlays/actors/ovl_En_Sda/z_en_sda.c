@@ -10,6 +10,7 @@ void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
@@ -21,6 +22,7 @@ const ActorInit En_Sda_InitVars = {
     (ActorFunc)EnSda_Update,
     (ActorFunc)EnSda_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/EnSda_Init.asm")

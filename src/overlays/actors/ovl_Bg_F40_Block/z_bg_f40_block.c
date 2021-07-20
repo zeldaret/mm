@@ -10,6 +10,7 @@ void BgF40Block_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Block_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_F40_Block_InitVars = {
     ACTOR_BG_F40_BLOCK,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Bg_F40_Block_InitVars = {
     (ActorFunc)BgF40Block_Update,
     (ActorFunc)BgF40Block_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80BC4668[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Block_0x80BC3980/func_80BC3980.asm")

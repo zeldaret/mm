@@ -10,6 +10,7 @@ void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit Eff_Zoraband_InitVars = {
     (ActorFunc)EffZoraband_Update,
     (ActorFunc)EffZoraband_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Init.asm")

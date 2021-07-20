@@ -10,6 +10,7 @@ void ObjDanpeilift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Obj_Danpeilift_InitVars = {
     (ActorFunc)ObjDanpeilift_Update,
     (ActorFunc)ObjDanpeilift_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1B540[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1ADC0.asm")

@@ -10,6 +10,7 @@ void ObjLupygamelift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLupygamelift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Lupygamelift_InitVars = {
     ACTOR_OBJ_LUPYGAMELIFT,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Obj_Lupygamelift_InitVars = {
     (ActorFunc)ObjLupygamelift_Update,
     (ActorFunc)ObjLupygamelift_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AF0740[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Init.asm")

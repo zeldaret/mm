@@ -10,6 +10,7 @@ void BgDblueMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,
@@ -21,6 +22,7 @@ const ActorInit Bg_Dblue_Movebg_InitVars = {
     (ActorFunc)BgDblueMovebg_Update,
     (ActorFunc)BgDblueMovebg_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dblue_Movebg_0x80A29A80/func_80A29A80.asm")

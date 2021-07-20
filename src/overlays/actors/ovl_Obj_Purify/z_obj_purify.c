@@ -9,6 +9,7 @@ void ObjPurify_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
@@ -20,6 +21,7 @@ const ActorInit Obj_Purify_InitVars = {
     (ActorFunc)ObjPurify_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84CD0.asm")

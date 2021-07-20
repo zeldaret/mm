@@ -9,6 +9,7 @@ void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Inibs_Movebg_InitVars = {
     ACTOR_BG_INIBS_MOVEBG,
     ACTORCAT_BG,
@@ -20,6 +21,13 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)Actor_Noop,
     (ActorFunc)BgInibsMovebg_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B96578[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg_0x80B96410/BgInibsMovebg_Init.asm")

@@ -9,6 +9,7 @@ void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFr_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Fr_InitVars = {
     ACTOR_EN_FR,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit En_Fr_InitVars = {
     (ActorFunc)EnFr_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fr_0x808FC550/EnFr_Init.asm")

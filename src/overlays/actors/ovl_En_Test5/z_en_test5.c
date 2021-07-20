@@ -9,6 +9,7 @@ void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit En_Test5_InitVars = {
     (ActorFunc)EnTest5_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/func_80A903B0.asm")

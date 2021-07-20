@@ -10,6 +10,7 @@ void EnBombers2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Bombers2_InitVars = {
     ACTOR_EN_BOMBERS2,
     ACTORCAT_NPC,
@@ -21,6 +22,15 @@ const ActorInit En_Bombers2_InitVars = {
     (ActorFunc)EnBombers2_Update,
     (ActorFunc)EnBombers2_Draw,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80C058B0 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 35, 30, 0, { 0, 0, 0 } },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombers2_0x80C04930/EnBombers2_Init.asm")

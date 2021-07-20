@@ -10,6 +10,7 @@ void DmChar05_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,
     ACTORCAT_ITEMACTION,
@@ -21,6 +22,7 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Update,
     (ActorFunc)DmChar05_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char05_0x80AAC5A0/func_80AAC5A0.asm")

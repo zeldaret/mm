@@ -10,6 +10,7 @@ void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,
@@ -21,6 +22,7 @@ const ActorInit Obj_Kzsaku_InitVars = {
     (ActorFunc)ObjKzsaku_Update,
     (ActorFunc)ObjKzsaku_Draw,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/ObjKzsaku_Init.asm")

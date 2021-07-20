@@ -10,6 +10,7 @@ void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,
     ACTORCAT_BG,
@@ -21,6 +22,15 @@ const ActorInit En_Fu_Kago_InitVars = {
     (ActorFunc)EnFuKago_Update,
     (ActorFunc)EnFuKago_Draw,
 };
+
+
+// static ColliderSphereInit sSphereInit = {
+static ColliderSphereInit D_80AD05F0 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
+    { ELEMTYPE_UNK4, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 0, { { 0, 0, 0 }, 200 }, 100 },
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Init.asm")

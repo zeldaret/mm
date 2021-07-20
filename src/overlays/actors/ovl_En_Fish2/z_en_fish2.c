@@ -10,6 +10,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
     ACTORCAT_PROP,
@@ -21,6 +22,26 @@ const ActorInit En_Fish2_InitVars = {
     (ActorFunc)EnFish2_Update,
     (ActorFunc)EnFish2_Draw,
 };
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit D_80B2B318[2] = {
+    {
+        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        { 1, { { 0, 0, 0 }, 0 }, 1 },
+    },
+    {
+        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        { 17, { { 0, 0, 0 }, 0 }, 1 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_80B2B360 = {
+    { COLTYPE_HARD, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    2, D_80B2B318, // sJntSphElementsInit,
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fish2_0x80B28370/func_80B28370.asm")

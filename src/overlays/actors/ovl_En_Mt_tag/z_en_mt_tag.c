@@ -9,6 +9,7 @@ void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,
     ACTORCAT_BG,
@@ -20,6 +21,7 @@ const ActorInit En_Mt_tag_InitVars = {
     (ActorFunc)EnMttag_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mt_tag_0x809CF350/func_809CF350.asm")

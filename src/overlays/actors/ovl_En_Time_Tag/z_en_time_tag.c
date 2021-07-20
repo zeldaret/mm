@@ -9,6 +9,7 @@ void EnTimeTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit En_Time_Tag_InitVars = {
     (ActorFunc)EnTimeTag_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Time_Tag_0x80AC9EA0/EnTimeTag_Init.asm")

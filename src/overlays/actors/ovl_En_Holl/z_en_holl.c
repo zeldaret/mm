@@ -10,6 +10,7 @@ void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
     ACTORCAT_DOOR,
@@ -21,6 +22,15 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Update,
     (ActorFunc)EnHoll_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8089A5D0[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899960.asm")

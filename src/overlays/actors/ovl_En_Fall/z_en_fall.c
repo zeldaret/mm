@@ -9,6 +9,7 @@ void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
     ACTORCAT_ITEMACTION,
@@ -20,6 +21,7 @@ const ActorInit En_Fall_InitVars = {
     (ActorFunc)EnFall_Update,
     (ActorFunc)NULL,
 };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fall_0x80A6BF90/func_80A6BF90.asm")

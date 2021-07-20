@@ -10,6 +10,7 @@ void ObjTokeiTobira_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTobira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,
@@ -21,6 +22,16 @@ const ActorInit Obj_Tokei_Tobira_InitVars = {
     (ActorFunc)ObjTokeiTobira_Update,
     (ActorFunc)ObjTokeiTobira_Draw,
 };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80ABD750[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Init.asm")

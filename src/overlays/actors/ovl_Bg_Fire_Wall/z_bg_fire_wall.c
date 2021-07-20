@@ -9,6 +9,7 @@ void BgFireWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgFireWall_Update(Actor* thisx, GlobalContext* globalCtx);
 
 /*
+
 const ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
     ACTORCAT_BG,
@@ -20,6 +21,19 @@ const ActorInit Bg_Fire_Wall_InitVars = {
     (ActorFunc)BgFireWall_Update,
     (ActorFunc)NULL,
 };
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_809ACC60 = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x20000000, 0x01, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
+    { 34, 85, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit D_809ACC8C = { 1, 80, 100, MASS_IMMOVABLE };
+
 */
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/BgFireWall_Init.asm")
