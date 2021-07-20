@@ -8,13 +8,6 @@ struct EnSuttari;
 
 typedef void (*EnSuttariActionFunc)(struct EnSuttari*, GlobalContext*);
 
-typedef struct UnkStruct {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ UNK_TYPE1 unk_1[0x3];
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
-} UnkStruct; // size = 0xC
-
 typedef struct EnSuttari {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnFsn* enFsn;

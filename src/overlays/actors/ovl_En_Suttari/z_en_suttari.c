@@ -53,7 +53,7 @@ const ActorInit En_Suttari_InitVars = {
     (ActorFunc)EnSuttari_Draw,
 };
 
-static ActorAnimationEntry D_80BAE6D0[] = {
+static ActorAnimationEntry sAnimations[] = {
     { &D_0600071C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060128F4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &D_06011F84, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06012E84, 1.0f, 0.0f, 0.0f, 0, -6.0f },
     { &D_0601139C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_0600071C, 2.0f, 0.0f, 0.0f, 0, 0.0f },
@@ -61,7 +61,7 @@ static ActorAnimationEntry D_80BAE6D0[] = {
     { &D_06010BDC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
-static ColliderCylinderInit D_80BAE7A8 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -81,11 +81,11 @@ static ColliderCylinderInit D_80BAE7A8 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80BAE7D4 = {
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 18, 64, 0, MASS_IMMOVABLE,
 };
 
-static DamageTable D_80BAE7E0 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -209,7 +209,7 @@ s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAA9B4(EnSuttari* this) {
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     switch (this->unk1E8) {
         case 0x1454:
@@ -222,13 +222,13 @@ void func_80BAA9B4(EnSuttari* this) {
         case 0x145B:
             if ((this->unk450 != 8) && (curFrame == frameCount)) {
                 this->unk450 = 8;
-                func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+                func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             }
             break;
         default:
             if ((this->unk450 != 1) && (curFrame == frameCount)) {
                 this->unk450 = 1;
-                func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+                func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             }
     }
 }
@@ -237,7 +237,7 @@ void func_80BAAA94(EnSuttari* this) {
     switch (this->unk1E8) {
         case 0x29E5:
             this->unk450 = 1;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             break;
         case 0x29E9:
             this->enFsn->flags |= ENFSN_ANGRY;
@@ -250,11 +250,11 @@ void func_80BAAA94(EnSuttari* this) {
             break;
         case 0x29EC:
             this->unk450 = 7;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             break;
         case 0x29ED:
             this->unk450 = 1;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             break;
     }
 }
@@ -376,35 +376,35 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAAF1C(EnSuttari* this) {
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     if (this->unk450 == 5) {
         this->unk450 = 3;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
     } else if ((this->unk450 == 3) && (curFrame == frameCount)) {
         this->unk450 = 6;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         this->unk1E4 &= ~0x100;
     }
 }
 
 void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDistToPlayer < 100.0f)) {
-        Vec3f D_80BAE938 = { 0.0f, 0.0f, 0.0f };
-        Vec3f sp48;
-        Vec3f sp3C;
+        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectPos;
+        Vec3f effectVel;
 
-        Math_Vec3f_Copy(&sp48, &this->actor.world.pos);
-        sp48.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
-        sp48.y += 60.0f;
-        sp48.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
+        Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
+        effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
+        effectPos.y += 60.0f;
+        effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         SysMatrix_StatePush();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        D_80BAE938.z = 20.0f;
-        SysMatrix_MultiplyVector3fByState(&D_80BAE938, &sp3C);
+        effectVelOffset.z = 20.0f;
+        SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         SysMatrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &sp48, &sp3C, &D_801D15B0, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -422,21 +422,21 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDistToPlayer < 100.0f)) {
-        Vec3f D_80BAE944 = { 0.0f, 0.0f, 0.0f };
-        Vec3f sp48;
-        Vec3f sp3C;
+        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectPos;
+        Vec3f effectVel;
 
-        Math_Vec3f_Copy(&sp48, &this->actor.world.pos);
-        sp48.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
-        sp48.y += 60.0f;
-        sp48.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
+        Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
+        effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
+        effectPos.y += 60.0f;
+        effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         SysMatrix_StatePush();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        D_80BAE944.z = 20.0f;
-        SysMatrix_MultiplyVector3fByState(&D_80BAE944, &sp3C);
+        effectVelOffset.z = 20.0f;
+        SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         SysMatrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &sp48, &sp3C, &D_801D15B0, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -524,10 +524,10 @@ s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* dist) {
 s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C;
     s32 sp58;
-    f32 phi_f12;
+    f32 sp54;
     s32 ret;
     s32 pad4C;
-    f32 phi_f14;
+    f32 sp48;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
@@ -539,16 +539,16 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     ret = false;
     Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
     if (arg2 == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
+        sp54 = sp5C[1].x - sp5C[0].x;
+        sp48 = sp5C[1].z - sp5C[0].z;
     } else if (arg2 == sp58 - 1) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        sp54 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
+        sp48 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
     } else {
-        phi_f12 = sp5C[arg2 + 1].x - sp5C[arg2 - 1].x;
-        phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
+        sp54 = sp5C[arg2 + 1].x - sp5C[arg2 - 1].x;
+        sp48 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -558,10 +558,10 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C;
     s32 sp58;
-    f32 phi_f12;
+    f32 sp54;
     s32 ret;
     s32 pad4C;
-    f32 phi_f14;
+    f32 sp48;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
@@ -573,16 +573,16 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     ret = false;
     Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
     if (arg2 == 0) {
-        phi_f12 = sp5C[0].x - sp5C[1].x;
-        phi_f14 = sp5C[0].z - sp5C[1].z;
+        sp54 = sp5C[0].x - sp5C[1].x;
+        sp48 = sp5C[0].z - sp5C[1].z;
     } else if (arg2 == sp58 - 1) {
-        phi_f12 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
-        phi_f14 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
+        sp54 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
+        sp48 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
     } else {
-        phi_f12 = sp5C[arg2 - 1].x - sp5C[arg2 + 1].x;
-        phi_f14 = sp5C[arg2 - 1].z - sp5C[arg2 + 1].z;
+        sp54 = sp5C[arg2 - 1].x - sp5C[arg2 + 1].x;
+        sp48 = sp5C[arg2 - 1].z - sp5C[arg2 + 1].z;
     }
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -639,7 +639,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     }
 }
 
-s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, UnkStruct* unkStruct) {
+s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
     u16 sp26;
     u16 pad1;
     u8 sp23;
@@ -675,7 +675,7 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, UnkStruct* unkStruc
     return 1;
 }
 
-s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, UnkStruct* unkStruct) {
+s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
     s32 pad;
     EnDoor* sp48;
     u8 sp47;
@@ -713,7 +713,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, UnkStruct* unkStruc
     return 1;
 }
 
-s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, UnkStruct* unkStruct) {
+s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
     s32 ret;
 
     switch (unkStruct->unk0) {
@@ -752,7 +752,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     Vec3f sp58;
     s32 sp54;
     s32 sp50;
-    s32 pad2;
+    s32 pad;
 
     sp54 = 0;
     sp50 = 0;
@@ -815,7 +815,7 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     switch (this->unk428) {
         case 12:
@@ -826,7 +826,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
         case 15:
             if ((this->unk450 == 1) && (curFrame == frameCount)) {
                 this->unk450 = 2;
-                func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+                func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             }
             if (!(gSaveContext.weekEventReg[0x53] & 4) && !(this->unk1E4 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->unk456[0])) {
@@ -859,7 +859,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             this->enFsn->flags &= ~ENFSN_HAGGLE;
             if (this->unk450 != 2) {
                 this->unk450 = 2;
-                func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+                func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             }
             func_80BAC220(this, globalCtx);
             break;
@@ -890,7 +890,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[0x21] & 8)) {
                 if (this->unk450 == 2 || this->unk450 == 1) {
                     this->unk450 = 5;
-                    func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+                    func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
                 }
                 this->unk1E4 |= 0x10;
                 if (this->unk1E6 & 2) {
@@ -918,7 +918,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk1E4 |= 1;
         if (gSaveContext.day == 1 || gSaveContext.day == 2) {
             this->unk450 = 2;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             this->unk1E4 |= 0x80;
             this->actionFunc = func_80BACA14;
             return;
@@ -926,7 +926,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
                    !(gSaveContext.weekEventReg[0x3D] & 8) && !(gSaveContext.weekEventReg[0x21] & 8) &&
                    (gSaveContext.weekEventReg[0x33] & 8)) {
             this->unk450 = 2;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
             this->actionFunc = func_80BACEE0;
             return;
         }
@@ -942,7 +942,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk1E4 |= 0x80;
         this->unk1E4 |= 8;
         this->unk450 = 1;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         this->actionFunc = func_80BAD004;
         return;
     } else if (globalCtx->sceneNum == 0x6D) {
@@ -951,7 +951,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         this->unk450 = 0;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         this->unk1E4 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
@@ -961,7 +961,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         this->unk450 = 0;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         this->unk456[0] = this->actor.cutscene;
         this->unk456[1] = ActorCutscene_GetAdditionalCutscene(this->unk456[0]);
         this->unk1E4 |= 4;
@@ -981,7 +981,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
 
     if (this->unk450 == 1 || this->unk450 == 8) {
         this->unk450 = 2;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
     }
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
@@ -1070,7 +1070,7 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
-    UnkStruct unkStruct;
+    struct_80133038_arg2 unkStruct;
 
     this->unk42A = REG(15) + *unk_14;
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1095,7 +1095,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
-    UnkStruct unkStruct;
+    struct_80133038_arg2 unkStruct;
 
     this->unk42A = REG(15) + *unk_14;
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1142,7 +1142,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk1E8 = 0x2A31;
         func_801518B0(globalCtx, this->unk1E8, &this->actor);
         this->unk1E4 |= 0x4000;
-        func_801A89A8(0x8003); // SFX?
+        func_801A89A8(0x8003);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->unk456[1]);
@@ -1217,13 +1217,13 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
-    UnkStruct unkStruct;
+    struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     if ((curFrame == frameCount) && (this->unk450 == 0) && (this->unk1E4 & 0x20)) {
         this->unk450 = 2;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
     }
     this->unk42A = REG(15) + *unk_14;
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1253,16 +1253,16 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
-    UnkStruct unkStruct;
+    struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     if (this->enFsn == NULL) {
         this->enFsn = (EnFsn*)func_80BAA848(globalCtx, ACTOR_EN_FSN);
     } else {
         if ((this->unk1E4 & 0x2000) && (this->unk450 == 1) && (curFrame == frameCount)) {
             this->unk450 = 2;
-            func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+            func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         }
         this->unk42A = REG(15) + *unk_14;
         if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1304,14 +1304,14 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkstate = func_80152498(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80BAE6D0[this->unk450].animation->common);
+    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->unk450].animation->common);
 
     if (this->unk1E4 & 1) {
         this->unk3F2 = this->unk2DE;
         func_80BAA9B4(this);
     } else if ((this->unk450 == 7) && (curFrame == frameCount)) {
         this->unk450 = 1;
-        func_800BDC5C(&this->skelAnime, D_80BAE6D0, this->unk450);
+        func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
     }
     if (talkstate == 5) {
         if (func_80147624(globalCtx)) {
@@ -1423,8 +1423,8 @@ void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BAE7A8);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80BAE7E0, &D_80BAE7D4);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     this->actor.flags &= ~1;
     func_80BAB490(this, globalCtx);
     Actor_SetScale(&this->actor, 0.01f);
@@ -1501,8 +1501,8 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     MtxF* sp44;
     Actor* bombBag;
 
-    if ((((this->unk1E4 & 8) && (this->unk1E4 & 0x10)) || ((this->unk1E4 & 2) && !(this->unk1E4 & 0x20)) ||
-         ((this->unk1E4 & 4) && !(this->unk1E4 & 0x20)))) {
+    if (((this->unk1E4 & 8) && (this->unk1E4 & 0x10)) || ((this->unk1E4 & 2) && !(this->unk1E4 & 0x20)) ||
+         ((this->unk1E4 & 4) && !(this->unk1E4 & 0x20))) {
         if (limbIndex == 8) {
             sp44 = SysMatrix_GetCurrentState();
             SysMatrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
