@@ -569,7 +569,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
         if (1) {}; // required to match
 
         if ((Camera_CheckOOB(camera, arg1, &sp64) || func_800CBC30(camera, arg2->y, arg1->y)) ||
-            CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colCheckCtx, arg2, arg1, exclusions,
+            CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, arg2, arg1, exclusions,
                                         numExclusions)) {
             sp90.yaw = D_801B9E18[i] + arg3->yaw;
             rand = Rand_ZeroOne();
@@ -2537,10 +2537,10 @@ s32 Camera_Normal0(Camera *camera) {
             anim->unk_1C = phi_f0;
         }
 
-        if (BGCAM_JFIFID(sp5C) == -1) {
+        if (BGCAM_UNK_1(sp5C) == -1) {
             anim->unk_2C = 0;
         } else {
-            anim->unk_2C = BGCAM_JFIFID(sp5C);
+            anim->unk_2C = BGCAM_UNK_1(sp5C);
         }
         
         anim->unk_18 = 0.0f;
@@ -2760,7 +2760,7 @@ s32 Camera_Parallel1(Camera *camera) {
                 anim->unk_20 = BGCAM_ROT(temp_v0_4).x;
                 anim->unk_1E = BGCAM_ROT(temp_v0_4).y;
                 anim->unk_08 = (BGCAM_FOV(temp_v0_4) == -1) ? para1->unk_14 : (BGCAM_FOV(temp_v0_4) > 360) ? BGCAM_FOV(temp_v0_4) * 0.01f : BGCAM_FOV(temp_v0_4);
-                anim->unk_00 = (BGCAM_JFIFID(temp_v0_4) == -1) ? para1->unk_04 : BGCAM_JFIFID(temp_v0_4) * 0.01f * sp60 * sp50;
+                anim->unk_00 = (BGCAM_UNK_1(temp_v0_4) == -1) ? para1->unk_04 : BGCAM_UNK_1(temp_v0_4) * 0.01f * sp60 * sp50;
                 dummy:; // TODO: is needed?
             } else {
                 anim->unk_08 = para1->unk_14;
@@ -4294,9 +4294,9 @@ s32 Camera_KeepOn3(Camera* camera) {
     }
 
     if ((camera->animState == 0) || (camera->animState == 0xA) || (camera->animState == 0x14)) {
-        if (camera->globalCtx->view.unk_164 == 0) {
+        if (camera->globalCtx->view.unk164 == 0) {
             Camera_SetFlags(camera, 0x20);
-            camera->globalCtx->view.unk_164 = camera->thisIdx | 0x50;
+            camera->globalCtx->view.unk164 = camera->thisIdx | 0x50;
             return 1;
         }
         Camera_ClearFlags(camera, 0x20);
@@ -4417,12 +4417,12 @@ s32 Camera_KeepOn3(Camera* camera) {
             sp78 = 14;
             OLib_VecSphAddToVec3f(&spCC, &anim->unk_10, &sp98);
             if (!(keep3->unk_2E & 0x80)) {
-                if (CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colCheckCtx, &anim->unk_10, &spCC, &spA8, 2) || func_800CC128(camera, &anim->unk_10, &spCC)) {
+                if (CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &anim->unk_10, &spCC, &spA8, 2) || func_800CC128(camera, &anim->unk_10, &spCC)) {
                     sp98.yaw = sp6A;
                     OLib_VecSphAddToVec3f(&spCC, &anim->unk_10, &sp98);
                 }
                 while (i < sp78) {
-                    if (!CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colCheckCtx, &anim->unk_10,
+                    if (!CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &anim->unk_10,
                                                     &spCC, &spA8, 2) &&
                         !func_800CC128(camera, &anim->unk_10, &spCC)) {
                         break;
@@ -4462,7 +4462,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         func_800CBFA4(camera, temp_s0, sp48, 3);
         anim->unk_1C--;
     } else {
-        Camera_SetFlags(camera, 0x410);
+        Camera_SetFlags(camera, 0x400 | 0x10);
     }
 
     func_800CB6C8(camera, sp3C);
@@ -4473,15 +4473,15 @@ s32 Camera_KeepOn3(Camera* camera) {
         camera->atLERPStepScale = 0.0f;
 
         if ((camera->xzSpeed > 0.001f) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R)
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R)
             ) {
             Camera_SetFlags(camera, 0x4);
             Camera_ClearFlags(camera, 0x8);
@@ -4534,10 +4534,10 @@ s32 Camera_KeepOn4(Camera* camera) {
     PosRot sp4C;
 
     if ((camera->animState == 0) || (camera->animState == 0xA) || (camera->animState == 0x14)) {
-        if (camera->globalCtx->view.unk_164 == 0) {
+        if (camera->globalCtx->view.unk164 == 0) {
             Camera_SetFlags(camera, 0x20);
             Camera_ClearFlags(camera, 6);
-            camera->globalCtx->view.unk_164 = camera->thisIdx | 0x50;
+            camera->globalCtx->view.unk164 = camera->thisIdx | 0x50;
             return 1;
         }
         anim->unk_18 = *sp44;
@@ -4574,7 +4574,7 @@ s32 Camera_KeepOn4(Camera* camera) {
         camera->animState = 0x14;
         Camera_SetFlags(camera, 0x20);
         Camera_ClearFlags(camera, (0x4 | 0x2));
-        camera->globalCtx->view.unk_164 = camera->thisIdx | 0x50;
+        camera->globalCtx->view.unk164 = camera->thisIdx | 0x50;
         return 1;
     }
 
@@ -4820,8 +4820,8 @@ s32 Camera_Fixed1(Camera *camera) {
             fixd1->fov = PCT(anim->fov);
         }
 
-        if (BGCAM_JFIFID(sceneCamData) != negOne) {
-            fixd1->jfifId = PCT(BGCAM_JFIFID(sceneCamData));
+        if (BGCAM_UNK_1(sceneCamData) != negOne) {
+            fixd1->jfifId = PCT(BGCAM_UNK_1(sceneCamData));
         }
     }
 
@@ -4926,18 +4926,18 @@ s32 Camera_Fixed2(Camera* camera) {
                 }
             }
 
-            if (BGCAM_JFIFID(sp88) != -1) {
-                anim->unk_0C = BGCAM_JFIFID(sp88);
+            if (BGCAM_UNK_1(sp88) != -1) {
+                anim->unk_0C = BGCAM_UNK_1(sp88);
             } else {
                 anim->unk_0C = fixd2->unk_08;
             }
 
-            if (BGCAM_UNK(sp88) != -1) {
+            if (BGCAM_UNK_2(sp88) != -1) {
                 if (fixd2->unk_18 & 4) {
-                    anim->unk_14 = BGCAM_UNK(sp88) * 0.01f;
+                    anim->unk_14 = BGCAM_UNK_2(sp88) * 0.01f;
                     anim->unk_18 = fixd2->unk_0C;
                 } else {
-                    temp_f0_3 = BGCAM_UNK(sp88) * 0.01f;
+                    temp_f0_3 = BGCAM_UNK_2(sp88) * 0.01f;
                     anim->unk_18 = temp_f0_3;
                     anim->unk_14 = temp_f0_3;
                 }
@@ -5149,8 +5149,8 @@ s32 Camera_Subj1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp74, &camera->at, sp34);
     sCameraInterfaceFlags = subj1->unk_20;
 
-    if (camera->globalCtx->view.unk_164 == 0) {
-        camera->globalCtx->view.unk_164 = camera->thisIdx | 0x50;
+    if (camera->globalCtx->view.unk164 == 0) {
+        camera->globalCtx->view.unk164 = camera->thisIdx | 0x50;
         return 1;
     }
 
@@ -5451,13 +5451,13 @@ s32 Camera_Unique0(Camera* camera) {
                     camera->fov = temp_v1 * 0.01f;
                 }
             }
-            anim->unk_3C = BGCAM_JFIFID(sp78);
+            anim->unk_3C = BGCAM_UNK_1(sp78);
             if (anim->unk_3C == -1) {
                 anim->unk_3C = 0x3C;
             }
 
-            if (BGCAM_UNK(sp78) != -1) {
-                anim->unk_18 = BGCAM_UNK(sp78) * 0.01f;
+            if (BGCAM_UNK_2(sp78) != -1) {
+                anim->unk_18 = BGCAM_UNK_2(sp78) * 0.01f;
             } else {
                 anim->unk_18 = uniq0->unk_04 * 0.01f;
             }
@@ -5503,15 +5503,15 @@ s32 Camera_Unique0(Camera* camera) {
                     anim->unk_00 = sp40->pos;
                 } else if ((!(sp98->stateFlags1 & 0x20000000)) &&
                         ((OLib_Vec3fDistXZ(sp40, &anim->unk_00) >= 10.0f) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-                            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+                            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || 
                             (uniq0->unk_08 & 2))) {
                                 anim->unk_3E = 1;
                         
@@ -5527,15 +5527,15 @@ s32 Camera_Unique0(Camera* camera) {
                 }
                 if ((sp98->stateFlags1 & 0x20000000) == 0) { // TODO: Merge into 1 if-statement
                     if ((anim->unk_3A != camera->player->actor.world.rot.y) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-                        CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || 
                         (uniq0->unk_08 & 2)) {
                             anim->unk_3E = 1;
                     }
@@ -5944,15 +5944,15 @@ s32 Camera_Demo2(Camera* camera) {
             if ( !((
                 (anim->unk_10 < 0) ||
                 (camera->xzSpeed > 0.001f) ||
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R)
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R)
             ) && (camera->flags2 & 8) 
             )) {
                 goto block_35;
@@ -6630,15 +6630,15 @@ s32 Camera_Special8(Camera *camera) {
         Camera_SetFlags(camera, 0x410);
         sCameraInterfaceFlags = 0;
         if ((camera->xzSpeed > 0.001f) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-            CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+            CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || 
             (params->unk_12 & 8)) {
                 func_800CC938(camera);
                 Camera_SetFlags(camera, 6);
@@ -6775,15 +6775,15 @@ s32 Camera_Special9(Camera *camera) {
             sCameraInterfaceFlags = 0;
 
             if ((camera->xzSpeed > 0.001f) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_A) ||
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_B) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CUP) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CDOWN) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CLEFT) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_CRIGHT) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_Z) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_L) || 
-                CHECK_BTN_ALL(camera->globalCtx->state.input[0].press.button, BTN_R) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CDOWN) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CLEFT) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) || 
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || 
                 (params->unk_08 & 8)) {
 
                 func_800CC938(camera);
@@ -7195,7 +7195,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     sUpdateCameraDirection = false;
     D_801B9E54 = 0;
 
-    if (camera->globalCtx->view.unk_164 == 0) {
+    if (camera->globalCtx->view.unk164 == 0) {
         if (camera->player != NULL) {
             if (&camera->player->actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
                 func_800B8248(&sp68, camera->player); // TODO: func.h

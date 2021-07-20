@@ -597,7 +597,7 @@ typedef struct {
     /* 0x15C */ u16 normal;
     /* 0x15E */ UNK_TYPE1 pad15E[0x2];
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ s32 unk_164;
+    /* 0x164 */ s32 unk164;
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);

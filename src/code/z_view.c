@@ -25,7 +25,7 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->viewport.rightX = 320;
     view->magic = 0x56494557; // "VIEW"
 
-    view->unk_164 = 0;
+    view->unk164 = 0;
     view->flags = 1 | 2 | 4;
 
     if (1) {

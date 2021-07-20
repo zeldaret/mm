@@ -31,8 +31,8 @@
 #define BGCAM_POS(v) ((v)[0])
 #define BGCAM_ROT(v) ((v)[1])
 #define BGCAM_FOV(v) ((v)[2].x)
-#define BGCAM_JFIFID(v) ((v)[2].y)
-#define BGCAM_UNK(v) ((v)[2].z)
+#define BGCAM_UNK_1(v) ((v)[2].y)
+#define BGCAM_UNK_2(v) ((v)[2].z)
 
 #define FLG_ADJSLOPE (1 << 0)
 #define FLG_OFFGROUND (1 << 7)
