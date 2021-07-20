@@ -1,3 +1,9 @@
+/*
+ * File: z_en_suttari.c
+ * Overlay: ovl_En_Suttari
+ * Description: Sakon
+ */
+
 #include "z_en_suttari.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
@@ -914,7 +920,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
-    if (globalCtx->sceneNum == 0x13) {
+    if (globalCtx->sceneNum == SCENE_IKANA) {
         this->unk1E4 |= 1;
         if (gSaveContext.day == 1 || gSaveContext.day == 2) {
             this->unk450 = 2;
@@ -930,7 +936,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BACEE0;
             return;
         }
-    } else if (globalCtx->sceneNum == 0x6E) {
+    } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
         if (gSaveContext.time >= CLOCK_TIME(0, 20) && gSaveContext.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -945,7 +951,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         func_800BDC5C(&this->skelAnime, sAnimations, this->unk450);
         this->actionFunc = func_80BAD004;
         return;
-    } else if (globalCtx->sceneNum == 0x6D) {
+    } else if (globalCtx->sceneNum == SCENE_ICHIBA) {
         if (gSaveContext.weekEventReg[0x21] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -955,7 +961,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk1E4 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
-    } else if (globalCtx->sceneNum == 0xD) {
+    } else if (globalCtx->sceneNum == SCENE_AYASHIISHOP) {
         if (gSaveContext.weekEventReg[0x21] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -1435,7 +1441,7 @@ void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
 
-    if ((globalCtx->sceneNum == 0x6E) && !(this->unk1E6 & 4)) {
+    if ((globalCtx->sceneNum == SCENE_BACKTOWN) && !(this->unk1E6 & 4)) {
         func_801A89A8(0x101400FF);
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -1498,20 +1504,20 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     static Vec3f D_80BAE95C = { 2000.0f, -1000.0f, 0.0f };
     EnSuttari* this = THIS;
     s32 pad;
-    MtxF* sp44;
+    MtxF* curState;
     Actor* bombBag;
 
     if (((this->unk1E4 & 8) && (this->unk1E4 & 0x10)) || ((this->unk1E4 & 2) && !(this->unk1E4 & 0x20)) ||
          ((this->unk1E4 & 4) && !(this->unk1E4 & 0x20))) {
         if (limbIndex == 8) {
-            sp44 = SysMatrix_GetCurrentState();
+            curState = SysMatrix_GetCurrentState();
             SysMatrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
             if (this->actor.child == NULL) {
                 if (this->unk1E4 & 0x100) {
                     bombBag = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_NIMOTSU,
-                                                    sp44->mf[3][0], sp44->mf[3][1], sp44->mf[3][2], 0, 0, 0, -1);
+                                                    curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
                     if (bombBag != NULL) {
-                        func_8018219C(sp44, &bombBag->shape.rot, 0);
+                        func_8018219C(curState, &bombBag->shape.rot, 0);
                     }
                 } else {
                     func_8012C28C(globalCtx->state.gfxCtx);
