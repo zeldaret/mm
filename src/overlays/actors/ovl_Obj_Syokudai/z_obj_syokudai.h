@@ -7,7 +7,8 @@ struct ObjSyokudai;
 
 typedef struct ObjSyokudai {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x98];
+    /* 0x144 */ ColliderCylinder unk_144;
+    /* 0x190 */ ColliderCylinder unk_190;
     /* 0x1DC */ s16 unk_1DC;
     /* 0x1DE */ char unk_1DE[0x16];
 } ObjSyokudai; // size = 0x1F4
