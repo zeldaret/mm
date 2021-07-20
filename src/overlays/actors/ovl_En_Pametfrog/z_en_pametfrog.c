@@ -1305,7 +1305,8 @@ void EnPametfrog_ApplyDamage(EnPametfrog* this, GlobalContext* globalCtx) {
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                     this->collider.elements[0].info.bumper.hitPos.x,
                                     this->collider.elements[0].info.bumper.hitPos.y,
-                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
                     }
                     func_8086CB4C(this);
                 }
