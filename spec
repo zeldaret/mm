@@ -778,24 +778,26 @@ beginseg
     pad_text
     pad_text
 
-    include "build/src/code/code_801877D0.o"
+    include "build/src/code/audio_synthesis.o"
 
-    include "build/src/code/code_8018B0F0.o"
+    include "build/src/code/audio_heap.o"
     include "build/data/code/code_801D2E80.data.o"
-    include "build/data/code/code_8018B0F0.bss.o"
+    include "build/data/code/audio_heap.bss.o"
 
     include "build/data/code/code_801D3D90.data.o"
 
-    include "build/src/code/code_8018EB60.o"
-    include "build/data/code/code_8018EB60.bss.o"
+    include "build/src/code/audio_load.o"
+    include "build/data/code/audio_load.bss.o"
 
     include "build/src/code/code_80192BE0.o"
 
     include "build/src/code/code_80194710.o"
 
-    include "build/src/code/code_80194930.o"
+    include "build/src/code/audio_playback.o"
 
-    include "build/src/code/code_801974D0.o"
+    include "build/src/code/audio_effects.o"
+
+    include "build/src/code/audio_seqplayer.o"
 
     include "build/src/code/code_8019AE40.o"
     pad_text
