@@ -9,7 +9,7 @@ void ObjDanpeilift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
@@ -32,7 +32,7 @@ static InitChainEntry D_80C1B540[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1ADC0.asm")
 

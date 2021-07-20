@@ -8,7 +8,7 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -74,7 +74,7 @@ static DamageTable D_80A3C324 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Baguo_0x80A3B080/EnBaguo_Init.asm")
 

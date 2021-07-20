@@ -9,7 +9,7 @@ void EnHiddenNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHiddenNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHiddenNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BDC0D0 = {
     { 30, 20, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hidden_Nuts_0x80BDB040/EnHiddenNuts_Init.asm")
 

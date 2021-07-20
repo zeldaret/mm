@@ -9,7 +9,7 @@ void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
@@ -72,7 +72,7 @@ static DamageTable D_80BAE7E0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Suttari_0x80BAA6D0/func_80BAA6D0.asm")
 

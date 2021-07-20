@@ -9,7 +9,7 @@ void EnPp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B21624 = {
@@ -98,7 +98,7 @@ static ColliderQuadInit D_80B216CC = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pp_0x80B1DEB0/EnPp_Init.asm")
 

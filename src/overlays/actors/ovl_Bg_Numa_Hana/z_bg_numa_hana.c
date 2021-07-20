@@ -9,7 +9,7 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
@@ -40,7 +40,7 @@ static InitChainEntry D_80A1B2A8[] = {
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Numa_Hana_0x80A1A500/func_80A1A500.asm")
 

@@ -9,7 +9,7 @@ void EnSsh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
@@ -58,7 +58,7 @@ static ColliderJntSphInit D_809760B8 = {
     1, D_80976094, // sJntSphElementsInit,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ssh_0x80973EF0/func_80973EF0.asm")
 

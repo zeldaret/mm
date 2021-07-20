@@ -9,7 +9,7 @@ void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
@@ -102,7 +102,7 @@ static InitChainEntry D_80B31418[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B2FB10.asm")
 

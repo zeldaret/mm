@@ -9,7 +9,7 @@ void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
@@ -23,7 +23,7 @@ const ActorInit En_Mag_InitVars = {
     (ActorFunc)EnMag_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mag_0x8096B310/EnMag_Init.asm")
 

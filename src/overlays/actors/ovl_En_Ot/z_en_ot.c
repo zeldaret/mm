@@ -9,7 +9,7 @@ void EnOt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
@@ -39,7 +39,7 @@ static InitChainEntry D_80B5E3FC[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ot_0x80B5B2E0/func_80B5B2E0.asm")
 

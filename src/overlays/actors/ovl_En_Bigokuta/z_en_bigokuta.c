@@ -9,7 +9,7 @@ void EnBigokuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
@@ -53,7 +53,7 @@ static InitChainEntry D_80AC4590[] = {
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigokuta_0x80AC26F0/EnBigokuta_Init.asm")
 

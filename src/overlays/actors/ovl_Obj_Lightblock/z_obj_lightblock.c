@@ -9,7 +9,7 @@ void ObjLightblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLightblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLightblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
@@ -39,7 +39,7 @@ static InitChainEntry D_80AF3EEC[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lightblock_0x80AF3910/func_80AF3910.asm")
 

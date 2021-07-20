@@ -9,7 +9,7 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZot_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80B998E0 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zot_0x80B965D0/func_80B965D0.asm")
 

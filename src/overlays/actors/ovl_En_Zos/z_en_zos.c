@@ -9,7 +9,7 @@ void EnZos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Zos_InitVars = {
     ACTOR_EN_ZOS,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BBC6F0 = {
     { 60, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zos_0x80BBACA0/EnZos_Init.asm")
 

@@ -9,7 +9,7 @@ void BgIkanaRotaryroom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaRotaryroom_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaRotaryroom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,
@@ -63,7 +63,7 @@ static InitChainEntry D_80B82214[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Rotaryroom_0x80B802E0/func_80B802E0.asm")
 

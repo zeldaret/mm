@@ -9,7 +9,7 @@ void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
@@ -47,7 +47,7 @@ static InitChainEntry D_80A845E8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mine_0x80A811D0/func_80A811D0.asm")
 

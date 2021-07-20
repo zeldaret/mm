@@ -9,7 +9,7 @@ void EnOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,
@@ -87,7 +87,7 @@ static InitChainEntry D_80870920[] = {
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okuta_0x8086DE20/EnOkuta_Init.asm")
 

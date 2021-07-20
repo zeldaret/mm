@@ -9,7 +9,7 @@ void EnMushi2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
@@ -47,7 +47,7 @@ static InitChainEntry D_80A6BA04[] = {
     ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mushi2_0x80A687A0/func_80A687A0.asm")
 

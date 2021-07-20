@@ -9,7 +9,7 @@ void EnTruMt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
@@ -68,7 +68,7 @@ static DamageTable D_80B7753C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tru_Mt_0x80B76030/func_80B76030.asm")
 

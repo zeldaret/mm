@@ -9,7 +9,7 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A75BC0 = {
@@ -68,7 +68,7 @@ const ActorInit En_Pr2_InitVars = {
     (ActorFunc)EnPr2_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pr2_0x80A73FA0/EnPr2_Init.asm")
 

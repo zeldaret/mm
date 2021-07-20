@@ -9,7 +9,7 @@ void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
@@ -38,7 +38,7 @@ static InitChainEntry D_8096636C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 270, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mm_0x80965BB0/func_80965BB0.asm")
 

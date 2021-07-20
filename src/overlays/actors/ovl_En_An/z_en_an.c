@@ -8,7 +8,7 @@ void EnAn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnAn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
@@ -34,7 +34,7 @@ static ColliderCylinderInit D_80B58BBC = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B58BE8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_An_0x80B53840/func_80B53840.asm")
 

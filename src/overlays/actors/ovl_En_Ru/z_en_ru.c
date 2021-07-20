@@ -9,7 +9,7 @@ void EnRu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
@@ -72,7 +72,7 @@ static DamageTable D_80A39488 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ru_0x80A389A0/func_80A389A0.asm")
 

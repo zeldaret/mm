@@ -9,7 +9,7 @@ void EnBomjima_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80C00A18 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bomjima_0x80BFE170/EnBomjima_Init.asm")
 

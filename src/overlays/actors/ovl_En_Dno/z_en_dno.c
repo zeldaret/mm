@@ -9,7 +9,7 @@ void EnDno_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
@@ -38,7 +38,7 @@ static InitChainEntry D_80A73B38[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dno_0x80A711D0/func_80A711D0.asm")
 

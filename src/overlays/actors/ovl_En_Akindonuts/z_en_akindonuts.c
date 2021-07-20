@@ -9,7 +9,7 @@ void EnAkindonuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,
@@ -38,7 +38,7 @@ static InitChainEntry D_80BF04B4[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Akindonuts_0x80BECBE0/func_80BECBE0.asm")
 

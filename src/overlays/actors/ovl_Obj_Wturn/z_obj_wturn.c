@@ -7,7 +7,7 @@
 void ObjWturn_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjWturn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,
@@ -21,7 +21,7 @@ const ActorInit Obj_Wturn_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wturn_0x808A7930/ObjWturn_Init.asm")
 

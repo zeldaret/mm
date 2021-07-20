@@ -9,7 +9,7 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
@@ -112,7 +112,7 @@ static InitChainEntry D_80899548[] = {
     ICHAIN_F32(targetArrowOffset, 700, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Init.asm")
 

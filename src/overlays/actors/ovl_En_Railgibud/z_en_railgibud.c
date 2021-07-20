@@ -9,7 +9,7 @@ void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
@@ -80,7 +80,7 @@ static InitChainEntry D_80BA82FC[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Railgibud_0x80BA5400/func_80BA5400.asm")
 

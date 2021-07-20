@@ -9,7 +9,7 @@ void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80C15BC0 = {
     { 12, 45, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jgame_Light_0x80C152F0/ObjJgameLight_Init.asm")
 

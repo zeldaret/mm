@@ -9,7 +9,7 @@ void EnNimotsu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNimotsu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNimotsu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BE1FB0 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nimotsu_0x80BE1C80/func_80BE1C80.asm")
 

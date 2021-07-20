@@ -8,7 +8,7 @@ void ElfMsg3_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg3_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Elf_Msg3_InitVars = {
     ACTOR_ELF_MSG3,
@@ -29,7 +29,7 @@ static InitChainEntry D_80A2D1E0[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg3_0x80A2CD10/func_80A2CD10.asm")
 

@@ -9,7 +9,7 @@ void BgIkanaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Ikana_Bombwall_InitVars = {
     ACTOR_BG_IKANA_BOMBWALL,
@@ -48,7 +48,7 @@ static InitChainEntry D_80BD52D0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall_0x80BD4720/func_80BD4720.asm")
 

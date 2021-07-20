@@ -9,7 +9,7 @@ void Boss07_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A07980 = {
@@ -381,7 +381,7 @@ static ColliderCylinderInit D_80A07ED0 = {
     { 40, 20, 15, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_07_0x809F4980/func_809F4980.asm")
 

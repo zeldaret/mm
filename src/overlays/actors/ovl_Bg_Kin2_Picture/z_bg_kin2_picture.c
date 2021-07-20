@@ -9,7 +9,7 @@ void BgKin2Picture_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Picture_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Picture_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
@@ -53,7 +53,7 @@ static InitChainEntry D_80B6FA24[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Kin2_Picture_0x80B6EFA0/func_80B6EFA0.asm")
 

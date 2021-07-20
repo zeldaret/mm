@@ -9,7 +9,7 @@ void BgDkjailIvy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,
@@ -40,7 +40,7 @@ static InitChainEntry D_80ADE98C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy_0x80ADE230/func_80ADE230.asm")
 

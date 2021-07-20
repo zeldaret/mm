@@ -8,7 +8,7 @@ void EnKitan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
@@ -30,7 +30,7 @@ static ColliderCylinderInit D_80C09D50 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kitan_0x80C090D0/EnKitan_Init.asm")
 

@@ -9,7 +9,7 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
@@ -78,7 +78,7 @@ static InitChainEntry D_80B25FF0[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Racedog_0x80B24630/func_80B24630.asm")
 

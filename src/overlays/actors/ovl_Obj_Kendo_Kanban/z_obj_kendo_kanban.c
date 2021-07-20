@@ -9,7 +9,7 @@ void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
@@ -91,7 +91,7 @@ static DamageTable D_80B667F0 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B66810 = { 8, 0, 0, 0, MASS_HEAVY };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Init.asm")
 

@@ -9,7 +9,7 @@ void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
@@ -68,7 +68,7 @@ static DamageTable D_80A1939C = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Raf_0x80A16D40/func_80A16D40.asm")
 

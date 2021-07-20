@@ -8,7 +8,7 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
@@ -30,7 +30,7 @@ static InitChainEntry D_808D87BC[] = {
     ICHAIN_F32(uncullZoneDownward, 1200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mure_0x808D78D0/func_808D78D0.asm")
 

@@ -9,7 +9,7 @@ void EnBox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBox_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBox_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
@@ -29,7 +29,7 @@ static InitChainEntry D_80869B50[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Box_0x80867BD0/func_80867BD0.asm")
 

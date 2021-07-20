@@ -9,7 +9,7 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -29,7 +29,7 @@ static InitChainEntry D_80A9FD30[] = {
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/func_80A9F950.asm")
 

@@ -9,7 +9,7 @@ void EnGg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Gg_InitVars = {
     ACTOR_EN_GG,
@@ -72,7 +72,7 @@ static DamageTable D_80B36C38 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gg_0x80B34F70/func_80B34F70.asm")
 

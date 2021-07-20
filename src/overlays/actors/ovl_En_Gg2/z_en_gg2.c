@@ -9,7 +9,7 @@ void EnGg2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGg2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGg2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Gg2_InitVars = {
     ACTOR_EN_GG2,
@@ -23,7 +23,7 @@ const ActorInit En_Gg2_InitVars = {
     (ActorFunc)EnGg2_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gg2_0x80B3AC50/func_80B3AC50.asm")
 

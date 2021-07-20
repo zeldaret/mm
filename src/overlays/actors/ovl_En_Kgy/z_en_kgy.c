@@ -9,7 +9,7 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
@@ -23,7 +23,7 @@ const ActorInit En_Kgy_InitVars = {
     (ActorFunc)EnKgy_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kgy_0x80B40800/EnKgy_Init.asm")
 

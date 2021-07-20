@@ -9,7 +9,7 @@ void ObjBigicicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
@@ -46,7 +46,7 @@ static InitChainEntry D_80AE9888[] = {
     ICHAIN_F32(uncullZoneForward, 5600, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bigicicle_0x80AE8B70/ObjBigicicle_Init.asm")
 

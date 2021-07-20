@@ -8,7 +8,7 @@ void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
@@ -71,7 +71,7 @@ static DamageTable D_80A521FC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A514F0.asm")
 

@@ -9,7 +9,7 @@ void EnHorseGameCheck_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGameCheck_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGameCheck_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
@@ -30,7 +30,7 @@ static InitChainEntry D_808F9BDC[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Game_Check_0x808F8AA0/func_808F8AA0.asm")
 

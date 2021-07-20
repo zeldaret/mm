@@ -9,7 +9,7 @@ void BgOpenShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
@@ -32,7 +32,7 @@ static InitChainEntry D_80ACB140[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Shutter_0x80ACAB10/func_80ACAB10.asm")
 

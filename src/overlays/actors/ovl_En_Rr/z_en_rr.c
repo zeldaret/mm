@@ -9,7 +9,7 @@ void EnRr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
@@ -90,7 +90,7 @@ static InitChainEntry D_808FC1D0[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rr_0x808F9E00/EnRr_Init.asm")
 

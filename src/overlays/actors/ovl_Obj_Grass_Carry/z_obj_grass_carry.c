@@ -8,7 +8,7 @@ void ObjGrassCarry_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
@@ -38,7 +38,7 @@ static InitChainEntry D_809ABC4C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAE60.asm")
 

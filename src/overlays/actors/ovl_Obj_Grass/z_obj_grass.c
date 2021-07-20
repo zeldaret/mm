@@ -9,7 +9,7 @@ void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrass_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrass_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Grass_InitVars = {
     ACTOR_OBJ_GRASS,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_809AAB20 = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_0x809A9110/func_809A9110.asm")
 

@@ -8,7 +8,7 @@ void EnFr_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFr_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Fr_InitVars = {
     ACTOR_EN_FR,
@@ -22,7 +22,7 @@ const ActorInit En_Fr_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fr_0x808FC550/EnFr_Init.asm")
 

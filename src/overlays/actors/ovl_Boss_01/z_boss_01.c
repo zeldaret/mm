@@ -9,7 +9,7 @@ void Boss01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss01_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809D7990 = {
@@ -225,7 +225,7 @@ const ActorInit Boss_01_InitVars = {
     (ActorFunc)Boss01_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_01_0x809D0530/func_809D0530.asm")
 

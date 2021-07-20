@@ -9,7 +9,7 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
@@ -94,7 +94,7 @@ static InitChainEntry D_808C0DD4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bbfall_0x808BF220/EnBbfall_Init.asm")
 

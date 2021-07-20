@@ -9,7 +9,7 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
@@ -68,7 +68,7 @@ static DamageTable D_80A68630 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Look_Nuts_0x80A678B0/EnLookNuts_Init.asm")
 

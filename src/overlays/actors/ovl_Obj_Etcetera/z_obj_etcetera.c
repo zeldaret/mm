@@ -8,7 +8,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
@@ -30,7 +30,7 @@ static ColliderCylinderInit D_80A7C790 = {
     { 20, 14, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Etcetera_0x80A7BC70/ObjEtcetera_Init.asm")
 

@@ -9,7 +9,7 @@ void EnVm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
@@ -106,7 +106,7 @@ static InitChainEntry D_808CD5AC[] = {
     ICHAIN_S8(hintId, 57, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Vm_0x808CC260/EnVm_Init.asm")
 

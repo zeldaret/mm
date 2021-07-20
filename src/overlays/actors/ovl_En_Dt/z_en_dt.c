@@ -9,7 +9,7 @@ void EnDt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dt_InitVars = {
     ACTOR_EN_DT,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BEB29C = {
     { 25, 70, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dt_0x80BE9B20/EnDt_Init.asm")
 

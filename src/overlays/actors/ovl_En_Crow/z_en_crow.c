@@ -9,7 +9,7 @@ void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,
@@ -88,7 +88,7 @@ static InitChainEntry D_8099C0D0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Crow_0x8099AB30/EnCrow_Init.asm")
 

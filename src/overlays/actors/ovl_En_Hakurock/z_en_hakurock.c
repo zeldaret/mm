@@ -8,7 +8,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
@@ -34,7 +34,7 @@ static ColliderCylinderInit D_80B22A80 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Init.asm")
 

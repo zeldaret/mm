@@ -9,7 +9,7 @@ void EnTab_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTab_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTab_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tab_InitVars = {
     ACTOR_EN_TAB,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BE1A98 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BE1AC4 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tab_0x80BE04E0/func_80BE04E0.asm")
 

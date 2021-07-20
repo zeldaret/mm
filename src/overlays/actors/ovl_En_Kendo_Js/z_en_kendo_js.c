@@ -9,7 +9,7 @@ void EnKendoJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80B27C30 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B27C5C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kendo_Js_0x80B262A0/EnKendoJs_Init.asm")
 

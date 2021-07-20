@@ -9,7 +9,7 @@ void DmHina_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmHina_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmHina_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
@@ -23,7 +23,7 @@ const ActorInit Dm_Hina_InitVars = {
     (ActorFunc)DmHina_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Hina_0x80A1F410/DmHina_Init.asm")
 

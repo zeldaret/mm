@@ -9,7 +9,7 @@ void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
@@ -23,7 +23,7 @@ const ActorInit En_Syateki_Man_InitVars = {
     (ActorFunc)EnSyatekiMan_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Man_0x809C64C0/func_809C64C0.asm")
 

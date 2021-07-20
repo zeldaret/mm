@@ -9,7 +9,7 @@ void DemoMoonend_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
@@ -23,7 +23,7 @@ const ActorInit Demo_Moonend_InitVars = {
     (ActorFunc)DemoMoonend_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Init.asm")
 

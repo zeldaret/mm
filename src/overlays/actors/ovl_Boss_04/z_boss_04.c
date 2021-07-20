@@ -9,7 +9,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss04_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809EE150 = {
@@ -90,7 +90,7 @@ static ColliderJntSphInit D_809EE1E8 = {
     1, D_809EE1C4, // sJntSphElementsInit,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_04_0x809EC040/func_809EC040.asm")
 

@@ -8,7 +8,7 @@ void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,
@@ -93,7 +93,7 @@ static InitChainEntry D_808CBFF4[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minideath_0x808CA0B0/EnMinideath_Init.asm")
 

@@ -9,7 +9,7 @@ void EnKusa2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,
@@ -42,7 +42,7 @@ static InitChainEntry D_80A5EB50[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa2_0x80A5B160/func_80A5B160.asm")
 

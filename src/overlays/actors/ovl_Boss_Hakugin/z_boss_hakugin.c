@@ -9,7 +9,7 @@ void BossHakugin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
@@ -191,7 +191,7 @@ static InitChainEntry D_80B0EAD8[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_Hakugin_0x80B05290/BossHakugin_Init.asm")
 

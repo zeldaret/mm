@@ -9,7 +9,7 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,
@@ -38,7 +38,7 @@ static InitChainEntry D_808F890C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bom_Chu_0x808F74B0/EnBomChu_Init.asm")
 

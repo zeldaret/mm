@@ -9,7 +9,7 @@ void ObjDora_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDora_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
@@ -99,7 +99,7 @@ static DamageTable D_80B61488 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B614A8 = { 8, 0, 0, 0, MASS_HEAVY };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dora_0x80B60AD0/ObjDora_Init.asm")
 

@@ -9,7 +9,7 @@ void EnZow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Zow_InitVars = {
     ACTOR_EN_ZOW,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BDDCF0 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zow_0x80BDC270/func_80BDC270.asm")
 

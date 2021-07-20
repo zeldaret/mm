@@ -9,7 +9,7 @@ void EnDeath_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDeath_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDeath_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
@@ -116,7 +116,7 @@ static InitChainEntry D_808C9A60[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Death_0x808C4F80/EnDeath_Init.asm")
 

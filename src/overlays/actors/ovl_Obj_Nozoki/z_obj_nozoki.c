@@ -8,7 +8,7 @@ void ObjNozoki_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Nozoki_InitVars = {
     ACTOR_OBJ_NOZOKI,
@@ -29,7 +29,7 @@ static InitChainEntry D_80BA34B0[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Nozoki_0x80BA2420/func_80BA2420.asm")
 

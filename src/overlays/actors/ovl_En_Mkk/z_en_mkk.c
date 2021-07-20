@@ -9,7 +9,7 @@ void EnMkk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
@@ -80,7 +80,7 @@ static InitChainEntry D_80A4F774[] = {
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mkk_0x80A4DED0/EnMkk_Init.asm")
 

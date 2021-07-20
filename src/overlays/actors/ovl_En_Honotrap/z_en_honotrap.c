@@ -9,7 +9,7 @@ void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
@@ -62,7 +62,7 @@ static InitChainEntry D_809304E0[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Honotrap_0x8092E510/func_8092E510.asm")
 

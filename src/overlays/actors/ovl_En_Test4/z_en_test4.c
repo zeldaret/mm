@@ -8,7 +8,7 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
@@ -22,7 +22,7 @@ const ActorInit En_Test4_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test4_0x80A41D70/func_80A41D70.asm")
 

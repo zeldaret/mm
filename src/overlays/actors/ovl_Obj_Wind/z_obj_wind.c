@@ -9,7 +9,7 @@ void ObjWind_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWind_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWind_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Wind_InitVars = {
     ACTOR_OBJ_WIND,
@@ -31,7 +31,7 @@ static InitChainEntry D_80B24480[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wind_0x80B23ED0/ObjWind_Init.asm")
 

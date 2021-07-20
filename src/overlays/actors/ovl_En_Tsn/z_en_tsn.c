@@ -9,7 +9,7 @@ void EnTsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tsn_InitVars = {
     ACTOR_EN_TSN,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80AE1190 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80ADFCA0.asm")
 

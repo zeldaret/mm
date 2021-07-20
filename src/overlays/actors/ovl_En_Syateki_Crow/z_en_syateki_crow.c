@@ -9,7 +9,7 @@ void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
@@ -47,7 +47,7 @@ static InitChainEntry D_809CB0B0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Crow_0x809CA3F0/EnSyatekiCrow_Init.asm")
 

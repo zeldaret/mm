@@ -9,7 +9,7 @@ void EnBombf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
@@ -46,7 +46,7 @@ static ColliderJntSphInit D_808AFB70 = {
     1, D_808AFB4C, // sJntSphElementsInit,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombf_0x808AE8C0/func_808AE8C0.asm")
 

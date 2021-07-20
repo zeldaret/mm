@@ -9,7 +9,7 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
@@ -23,7 +23,7 @@ const ActorInit Door_Warp1_InitVars = {
     (ActorFunc)DoorWarp1_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Door_Warp1_0x808B8490/func_808B8490.asm")
 

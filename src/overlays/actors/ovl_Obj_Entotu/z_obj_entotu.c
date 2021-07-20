@@ -9,7 +9,7 @@ void ObjEntotu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEntotu_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjEntotu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Entotu_InitVars = {
     ACTOR_OBJ_ENTOTU,
@@ -23,7 +23,7 @@ const ActorInit Obj_Entotu_InitVars = {
     (ActorFunc)ObjEntotu_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Entotu_0x80A34700/func_80A34700.asm")
 

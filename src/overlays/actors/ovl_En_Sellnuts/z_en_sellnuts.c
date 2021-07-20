@@ -9,7 +9,7 @@ void EnSellnuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSellnuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Sellnuts_InitVars = {
     ACTOR_EN_SELLNUTS,
@@ -38,7 +38,7 @@ static InitChainEntry D_80ADDB00[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sellnuts_0x80ADADD0/func_80ADADD0.asm")
 

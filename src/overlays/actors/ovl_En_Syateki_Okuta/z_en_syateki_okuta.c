@@ -9,7 +9,7 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
@@ -38,7 +38,7 @@ static InitChainEntry D_80A37B88[] = {
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/EnSyatekiOkuta_Init.asm")
 

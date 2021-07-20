@@ -9,7 +9,7 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
@@ -37,7 +37,7 @@ static InitChainEntry D_80B9324C[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92B10.asm")
 

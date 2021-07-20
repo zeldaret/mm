@@ -9,7 +9,7 @@ void EnEstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80A9AB70 = {
     { 30, 30, -10, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Estone_0x80A99EA0/EnEstone_Init.asm")
 

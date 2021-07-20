@@ -9,7 +9,7 @@ void EnRz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BFCCF4 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rz_0x80BFB480/EnRz_Init.asm")
 

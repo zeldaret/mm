@@ -9,7 +9,7 @@ void EnMaruta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,
@@ -72,7 +72,7 @@ static DamageTable D_80B38B28 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B38B48 = { 8, 0, 0, 0, MASS_HEAVY };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Maruta_0x80B37080/EnMaruta_Init.asm")
 

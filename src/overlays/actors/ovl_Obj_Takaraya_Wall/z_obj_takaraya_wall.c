@@ -9,7 +9,7 @@ void ObjTakarayaWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
@@ -37,7 +37,7 @@ static InitChainEntry D_80ADA2CC[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9240.asm")
 

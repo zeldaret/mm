@@ -9,7 +9,7 @@ void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Botihasira_InitVars = {
     ACTOR_BG_BOTIHASIRA,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80B282F0 = {
     { 27, 80, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Init.asm")
 

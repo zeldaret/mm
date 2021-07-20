@@ -9,7 +9,7 @@ void EnTanron2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,
@@ -76,7 +76,7 @@ static ColliderCylinderInit D_80BB81BC = {
     { 22, 42, -21, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron2_0x80BB67D0/EnTanron2_Init.asm")
 

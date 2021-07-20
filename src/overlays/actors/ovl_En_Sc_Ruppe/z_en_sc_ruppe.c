@@ -9,7 +9,7 @@ void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BD6E40 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sc_Ruppe_0x80BD6910/func_80BD6910.asm")
 

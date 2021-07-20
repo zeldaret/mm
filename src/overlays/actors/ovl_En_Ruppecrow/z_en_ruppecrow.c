@@ -9,7 +9,7 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
@@ -86,7 +86,7 @@ static InitChainEntry D_80BE3A0C[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ruppecrow_0x80BE2260/func_80BE2260.asm")
 

@@ -9,7 +9,7 @@ void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
@@ -23,7 +23,7 @@ const ActorInit En_Dnb_InitVars = {
     (ActorFunc)EnDnb_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnb_0x80A4FDD0/func_80A4FDD0.asm")
 

@@ -9,7 +9,7 @@ void EnRat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
@@ -80,7 +80,7 @@ static InitChainEntry D_80A58464[] = {
     ICHAIN_F32(targetArrowOffset, 5000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rat_0x80A56150/EnRat_Init.asm")
 

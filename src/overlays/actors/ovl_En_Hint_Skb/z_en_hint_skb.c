@@ -9,7 +9,7 @@ void EnHintSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Hint_Skb_InitVars = {
     ACTOR_EN_HINT_SKB,
@@ -90,7 +90,7 @@ static InitChainEntry D_80C21E3C[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hint_Skb_0x80C1FCF0/EnHintSkb_Init.asm")
 

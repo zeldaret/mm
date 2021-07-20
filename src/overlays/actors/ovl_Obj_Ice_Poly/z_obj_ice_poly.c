@@ -9,7 +9,7 @@ void ObjIcePoly_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIcePoly_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIcePoly_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Ice_Poly_InitVars = {
     ACTOR_OBJ_ICE_POLY,
@@ -39,7 +39,7 @@ static ColliderCylinderInit D_8093234C = {
     { 65, 105, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ice_Poly_0x80931560/ObjIcePoly_Init.asm")
 

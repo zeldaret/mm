@@ -9,7 +9,7 @@ void ObjChan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjChan_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
@@ -37,7 +37,7 @@ static InitChainEntry D_80BBAB5C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chan_0x80BB98E0/ObjChan_Init.asm")
 

@@ -9,7 +9,7 @@ void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80BE7900 = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Daiku2_0x80BE61D0/func_80BE61D0.asm")
 

@@ -8,7 +8,7 @@ void EnKaizoku_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B8AB3C = {
@@ -75,7 +75,7 @@ static ColliderQuadInit D_80B8ABA8 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kaizoku_0x80B85590/EnKaizoku_Init.asm")
 

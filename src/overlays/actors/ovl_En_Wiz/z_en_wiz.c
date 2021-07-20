@@ -9,7 +9,7 @@ void EnWiz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
@@ -156,7 +156,7 @@ static DamageTable D_80A48D14 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Init.asm")
 

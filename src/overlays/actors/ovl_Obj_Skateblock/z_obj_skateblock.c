@@ -9,7 +9,7 @@ void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
@@ -34,7 +34,7 @@ static InitChainEntry D_80A22AE0[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Skateblock_0x80A21150/func_80A21150.asm")
 

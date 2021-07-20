@@ -9,7 +9,7 @@ void EnJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_8096ABA0 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Js_0x809687B0/EnJs_Init.asm")
 

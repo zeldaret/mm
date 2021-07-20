@@ -9,7 +9,7 @@ void EnCow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_8099D610 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cow_0x8099C290/func_8099C290.asm")
 

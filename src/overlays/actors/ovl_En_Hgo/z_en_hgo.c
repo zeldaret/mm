@@ -9,7 +9,7 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BD0F48 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BD0F74 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hgo_0x80BD02B0/EnHgo_Init.asm")
 

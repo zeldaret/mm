@@ -8,7 +8,7 @@ void EnSt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
@@ -95,7 +95,7 @@ static DamageTable D_808A766C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_St_0x808A5050/func_808A5050.asm")
 

@@ -9,7 +9,7 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
@@ -65,7 +65,7 @@ static InitChainEntry D_808AE6B8[] = {
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Famos_0x808AC920/EnFamos_Init.asm")
 

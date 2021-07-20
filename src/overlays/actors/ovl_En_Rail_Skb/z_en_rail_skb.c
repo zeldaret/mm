@@ -9,7 +9,7 @@ void EnRailSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRailSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRailSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,
@@ -90,7 +90,7 @@ static InitChainEntry D_80B73490[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rail_Skb_0x80B708C0/func_80B708C0.asm")
 

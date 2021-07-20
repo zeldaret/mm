@@ -9,7 +9,7 @@ void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
@@ -40,7 +40,7 @@ static InitChainEntry D_8095D31C[] = {
     ICHAIN_F32(uncullZoneDownward, 2400, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Owl_0x8095A510/func_8095A510.asm")
 

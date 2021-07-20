@@ -9,7 +9,7 @@ void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Poh_InitVars = {
     ACTOR_EN_POH,
@@ -94,7 +94,7 @@ static InitChainEntry D_80B2F708[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Poh_0x80B2C6F0/EnPoh_Init.asm")
 

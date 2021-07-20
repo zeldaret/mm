@@ -9,7 +9,7 @@ void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
@@ -23,7 +23,7 @@ const ActorInit Obj_Hariko_InitVars = {
     (ActorFunc)ObjHariko_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Init.asm")
 

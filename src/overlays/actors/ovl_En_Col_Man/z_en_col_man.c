@@ -8,7 +8,7 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AFE730 = {
@@ -30,7 +30,7 @@ const ActorInit En_Col_Man_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Col_Man_0x80AFDC40/EnColMan_Init.asm")
 

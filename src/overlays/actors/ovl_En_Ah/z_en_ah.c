@@ -9,7 +9,7 @@ void EnAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BD3E34 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BD3E60 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ah_0x80BD2A30/func_80BD2A30.asm")
 

@@ -9,7 +9,7 @@ void EnPm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,
@@ -43,7 +43,7 @@ static ColliderSphereInit D_80AFB7BC = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80AFB7E8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pm_0x80AF7B40/func_80AF7B40.asm")
 

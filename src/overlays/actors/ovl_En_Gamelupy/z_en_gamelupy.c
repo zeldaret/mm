@@ -9,7 +9,7 @@ void EnGamelupy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGamelupy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGamelupy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80AF6CF0 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gamelupy_0x80AF6760/EnGamelupy_Init.asm")
 

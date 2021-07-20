@@ -9,7 +9,7 @@ void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
@@ -32,7 +32,7 @@ static InitChainEntry D_80B96178[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/func_80B95E20.asm")
 

@@ -9,7 +9,7 @@ void EnFz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
@@ -93,7 +93,7 @@ static InitChainEntry D_8093479C[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fz_0x80932490/EnFz_Init.asm")
 

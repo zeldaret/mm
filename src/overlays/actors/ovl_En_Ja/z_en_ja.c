@@ -9,7 +9,7 @@ void EnJa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BC36DC = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BC3708 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ja_0x80BC1900/func_80BC1900.asm")
 

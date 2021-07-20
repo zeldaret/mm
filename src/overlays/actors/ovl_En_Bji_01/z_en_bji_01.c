@@ -9,7 +9,7 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_809CDC50 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCDE0.asm")
 

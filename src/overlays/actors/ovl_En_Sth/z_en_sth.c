@@ -8,7 +8,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSth_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSth_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Sth_InitVars = {
     ACTOR_EN_STH,
@@ -30,7 +30,7 @@ static ColliderCylinderInit D_80B6D19C = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sth_0x80B66D30/EnSth_Init.asm")
 

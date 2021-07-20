@@ -9,7 +9,7 @@ void EnIg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ig_InitVars = {
     ACTOR_EN_IG,
@@ -43,7 +43,7 @@ static ColliderSphereInit D_80BF3444 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BF3470 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ig_0x80BF1150/func_80BF1150.asm")
 

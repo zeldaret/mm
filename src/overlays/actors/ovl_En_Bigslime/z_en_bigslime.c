@@ -9,7 +9,7 @@ void EnBigslime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigslime_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigslime_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,
@@ -81,7 +81,7 @@ static InitChainEntry D_808F0338[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigslime_0x808E4FC0/EnBigslime_Init.asm")
 

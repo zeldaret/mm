@@ -8,7 +8,7 @@ void BgOpenSpot_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Open_Spot_InitVars = {
     ACTOR_BG_OPEN_SPOT,
@@ -31,7 +31,7 @@ static InitChainEntry D_80ACB3B0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Init.asm")
 

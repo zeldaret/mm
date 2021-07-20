@@ -9,7 +9,7 @@ void EnDodongo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
@@ -169,7 +169,7 @@ static InitChainEntry D_808792FC[] = {
     ICHAIN_F32(targetArrowOffset, 1400, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/EnDodongo_Init.asm")
 

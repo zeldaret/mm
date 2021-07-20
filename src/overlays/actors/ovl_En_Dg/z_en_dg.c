@@ -9,7 +9,7 @@ void EnDg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
@@ -78,7 +78,7 @@ static InitChainEntry D_8098C45C[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dg_0x80989140/func_80989140.asm")
 

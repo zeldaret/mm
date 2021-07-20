@@ -8,7 +8,7 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
@@ -29,7 +29,7 @@ static InitChainEntry D_809C1008[] = {
     ICHAIN_VEC3S(shape, 0, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/EnWarptag_Init.asm")
 

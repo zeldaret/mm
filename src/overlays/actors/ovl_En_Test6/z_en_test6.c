@@ -9,7 +9,7 @@ void EnTest6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Test6_InitVars = {
     ACTOR_EN_TEST6,
@@ -23,7 +23,7 @@ const ActorInit En_Test6_InitVars = {
     (ActorFunc)EnTest6_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test6_0x80A90730/func_80A90730.asm")
 

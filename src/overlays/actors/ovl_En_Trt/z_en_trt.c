@@ -9,7 +9,7 @@ void EnTrt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Trt_InitVars = {
     ACTOR_EN_TRT,
@@ -29,7 +29,7 @@ static InitChainEntry D_80A8FEF8[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/func_80A8B770.asm")
 

@@ -9,7 +9,7 @@ void EnNeoReeba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNeoReeba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNeoReeba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Neo_Reeba_InitVars = {
     ACTOR_EN_NEO_REEBA,
@@ -68,7 +68,7 @@ static ColliderCylinderInit D_80B7E520 = {
     { 18, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Neo_Reeba_0x80B7C890/EnNeoReeba_Init.asm")
 

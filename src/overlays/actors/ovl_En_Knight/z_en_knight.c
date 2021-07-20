@@ -9,7 +9,7 @@ void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809BDB04 = {
@@ -177,7 +177,7 @@ const ActorInit En_Knight_InitVars = {
     (ActorFunc)EnKnight_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Knight_0x809B20F0/func_809B20F0.asm")
 

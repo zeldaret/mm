@@ -9,7 +9,7 @@ void EnPamera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPamera_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BDA480 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BDA4AC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Pamera_0x80BD82B0/EnPamera_Init.asm")
 

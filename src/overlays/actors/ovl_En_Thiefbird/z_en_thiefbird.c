@@ -9,7 +9,7 @@ void EnThiefbird_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
@@ -96,7 +96,7 @@ static InitChainEntry D_80C13670[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/EnThiefbird_Init.asm")
 

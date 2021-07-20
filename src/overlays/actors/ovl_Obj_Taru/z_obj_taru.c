@@ -9,7 +9,7 @@ void ObjTaru_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
@@ -40,7 +40,7 @@ static InitChainEntry D_80B9C36C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Taru_0x80B9B6E0/func_80B9B6E0.asm")
 

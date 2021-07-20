@@ -9,7 +9,7 @@ void EnBigpamet_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpamet_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpamet_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bigpamet_InitVars = {
     ACTOR_EN_BIGPAMET,
@@ -82,7 +82,7 @@ static InitChainEntry D_80A29764[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpamet_0x80A27520/EnBigpamet_Init.asm")
 

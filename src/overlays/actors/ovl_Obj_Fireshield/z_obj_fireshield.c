@@ -9,7 +9,7 @@ void ObjFireshield_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjFireshield_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Fireshield_InitVars = {
     ACTOR_OBJ_FIRESHIELD,
@@ -39,7 +39,7 @@ static InitChainEntry D_80A4D8A4[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Fireshield_0x80A4CA90/func_80A4CA90.asm")
 

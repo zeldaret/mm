@@ -9,7 +9,7 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
@@ -95,7 +95,7 @@ static InitChainEntry D_80B8021C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7F730.asm")
 

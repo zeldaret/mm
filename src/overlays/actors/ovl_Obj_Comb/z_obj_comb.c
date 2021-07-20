@@ -9,7 +9,7 @@ void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
@@ -47,7 +47,7 @@ static InitChainEntry D_8098E474[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Comb_0x8098CE40/func_8098CE40.asm")
 

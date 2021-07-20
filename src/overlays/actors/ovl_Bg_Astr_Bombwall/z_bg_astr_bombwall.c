@@ -9,7 +9,7 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
@@ -48,7 +48,7 @@ static InitChainEntry D_80C0A6A8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Astr_Bombwall_0x80C09ED0/func_80C09ED0.asm")
 

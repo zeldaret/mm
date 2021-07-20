@@ -9,7 +9,7 @@ void ObjSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,
@@ -84,7 +84,7 @@ static InitChainEntry D_8093CE18[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Switch_0x8093ABD0/func_8093ABD0.asm")
 

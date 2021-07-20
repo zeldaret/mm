@@ -8,7 +8,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
@@ -22,7 +22,7 @@ const ActorInit En_Elfgrp_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfgrp_0x80A396B0/func_80A396B0.asm")
 

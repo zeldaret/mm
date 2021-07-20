@@ -9,7 +9,7 @@ void BgHakuginSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
@@ -48,7 +48,7 @@ static InitChainEntry D_80B16910[] = {
     ICHAIN_F32(uncullZoneDownward, 360, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Switch_0x80B15790/func_80B15790.asm")
 

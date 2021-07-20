@@ -9,7 +9,7 @@ void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
@@ -38,7 +38,7 @@ static InitChainEntry D_8096869C[] = {
     ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ani_0x809679D0/func_809679D0.asm")
 

@@ -9,7 +9,7 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
@@ -72,7 +72,7 @@ static DamageTable D_80B9A59C = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B9A5BC = { 8, 0, 0, 0, MASS_HEAVY };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tree_0x80B9A0B0/ObjTree_Init.asm")
 

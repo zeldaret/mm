@@ -9,7 +9,7 @@ void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80BC15F0 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BC161C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Nb_0x80BBFDB0/func_80BBFDB0.asm")
 

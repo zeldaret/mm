@@ -9,7 +9,7 @@ void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
@@ -35,7 +35,7 @@ static ColliderCylinderInit D_80AEBF28 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80AEBF54 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Lift_Nuts_0x80AE9A20/func_80AE9A20.asm")
 

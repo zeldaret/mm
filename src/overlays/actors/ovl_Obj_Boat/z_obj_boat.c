@@ -9,7 +9,7 @@ void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
@@ -32,7 +32,7 @@ static InitChainEntry D_80B9B680[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9AF50.asm")
 

@@ -9,7 +9,7 @@ void Boss05_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809F1B2C[2] = {
@@ -146,7 +146,7 @@ const ActorInit Boss_05_InitVars = {
     (ActorFunc)Boss05_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_05_0x809EE4E0/func_809EE4E0.asm")
 

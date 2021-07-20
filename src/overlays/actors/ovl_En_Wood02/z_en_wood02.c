@@ -9,7 +9,7 @@ void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_808C4D00 = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C3C00.asm")
 

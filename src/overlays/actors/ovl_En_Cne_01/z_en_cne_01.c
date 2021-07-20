@@ -9,7 +9,7 @@ void EnCne01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
@@ -72,7 +72,7 @@ static DamageTable D_809CBF38 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB290.asm")
 

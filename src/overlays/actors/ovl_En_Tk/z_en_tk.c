@@ -9,7 +9,7 @@ void EnTk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80AEF830 = {
     { 30, 52, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tk_0x80AEC460/func_80AEC460.asm")
 

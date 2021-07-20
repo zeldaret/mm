@@ -9,7 +9,7 @@ void EnGe3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGe3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGe3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_809A0DA0 = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ge3_0x8099FEB0/EnGe3_Init.asm")
 

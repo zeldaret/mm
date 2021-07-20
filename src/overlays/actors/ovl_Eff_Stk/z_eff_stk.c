@@ -9,7 +9,7 @@ void EffStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
@@ -23,7 +23,7 @@ const ActorInit Eff_Stk_InitVars = {
     (ActorFunc)EffStk_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Init.asm")
 

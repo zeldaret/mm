@@ -8,7 +8,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
@@ -36,7 +36,7 @@ static InitChainEntry D_80A9D8F8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Post_0x80A9ACD0/func_80A9ACD0.asm")
 

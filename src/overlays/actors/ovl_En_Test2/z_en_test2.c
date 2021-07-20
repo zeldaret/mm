@@ -7,7 +7,7 @@
 void EnTest2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
@@ -30,7 +30,7 @@ static InitChainEntry D_80A3E74C[] = {
     ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/EnTest2_Init.asm")
 

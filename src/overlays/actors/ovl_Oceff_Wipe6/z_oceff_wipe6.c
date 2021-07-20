@@ -9,7 +9,7 @@ void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Oceff_Wipe6_InitVars = {
     ACTOR_OCEFF_WIPE6,
@@ -23,7 +23,7 @@ const ActorInit Oceff_Wipe6_InitVars = {
     (ActorFunc)OceffWipe6_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe6_0x80BCA5A0/OceffWipe6_Init.asm")
 

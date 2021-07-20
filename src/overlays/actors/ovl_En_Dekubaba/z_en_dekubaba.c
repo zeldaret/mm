@@ -9,7 +9,7 @@ void EnDekubaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
@@ -109,7 +109,7 @@ static InitChainEntry D_808B4E94[] = {
     ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dekubaba_0x808B1330/EnDekubaba_Init.asm")
 

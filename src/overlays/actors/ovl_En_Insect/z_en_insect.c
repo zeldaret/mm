@@ -9,7 +9,7 @@ void EnInsect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Insect_InitVars = {
     ACTOR_EN_INSECT,
@@ -47,7 +47,7 @@ static InitChainEntry D_8091BDBC[] = {
     ICHAIN_F32(uncullZoneDownward, 30, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Insect_0x8091A8A0/func_8091A8A0.asm")
 

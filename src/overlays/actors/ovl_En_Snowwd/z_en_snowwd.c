@@ -9,7 +9,7 @@ void EnSnowwd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowwd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowwd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,
@@ -31,7 +31,7 @@ static ColliderCylinderInit D_80AF7A90 = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowwd_0x80AF7640/EnSnowwd_Init.asm")
 

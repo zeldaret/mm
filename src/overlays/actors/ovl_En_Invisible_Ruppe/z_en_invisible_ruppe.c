@@ -8,7 +8,7 @@ void EnInvisibleRuppe_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnInvisibleRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInvisibleRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Invisible_Ruppe_InitVars = {
     ACTOR_EN_INVISIBLE_RUPPE,
@@ -30,7 +30,7 @@ static ColliderCylinderInit D_80C25B50 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invisible_Ruppe_0x80C258A0/func_80C258A0.asm")
 

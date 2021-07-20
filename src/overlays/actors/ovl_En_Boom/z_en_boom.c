@@ -9,7 +9,7 @@ void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
@@ -38,7 +38,7 @@ static InitChainEntry D_808A3060[] = {
     ICHAIN_VEC3S(shape, 0, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Boom_0x808A24D0/func_808A24D0.asm")
 

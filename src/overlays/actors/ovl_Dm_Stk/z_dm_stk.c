@@ -9,7 +9,7 @@ void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
@@ -72,7 +72,7 @@ static DamageTable D_80AA35D8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Stk_0x80A9FDB0/func_80A9FDB0.asm")
 

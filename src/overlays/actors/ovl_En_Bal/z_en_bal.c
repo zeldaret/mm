@@ -9,7 +9,7 @@ void EnBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,
@@ -79,7 +79,7 @@ static ColliderJntSphInit D_80A63D30 = {
     1, D_80A63D0C, // sJntSphElementsInit,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bal_0x80A61810/EnBal_Init.asm")
 

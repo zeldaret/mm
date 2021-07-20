@@ -7,7 +7,7 @@
 void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL,
@@ -30,7 +30,7 @@ static InitChainEntry D_808B82E0[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Breakwall_0x808B7360/func_808B7360.asm")
 

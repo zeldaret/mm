@@ -9,7 +9,7 @@ void DmTsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmTsg_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmTsg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Dm_Tsg_InitVars = {
     ACTOR_DM_TSG,
@@ -23,7 +23,7 @@ const ActorInit Dm_Tsg_InitVars = {
     (ActorFunc)DmTsg_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tsg_0x80A3AC60/DmTsg_Init.asm")
 

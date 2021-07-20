@@ -8,7 +8,7 @@ void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
@@ -31,7 +31,7 @@ static InitChainEntry D_809A4078[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Pzlblock_0x809A33E0/func_809A33E0.asm")
 

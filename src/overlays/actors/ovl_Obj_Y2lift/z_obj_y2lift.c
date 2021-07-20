@@ -9,7 +9,7 @@ void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
@@ -32,7 +32,7 @@ static InitChainEntry D_80B9A940[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Init.asm")
 

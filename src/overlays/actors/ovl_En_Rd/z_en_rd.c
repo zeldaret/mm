@@ -9,7 +9,7 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
@@ -76,7 +76,7 @@ static InitChainEntry D_808D712C[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rd_0x808D3E20/EnRd_Init.asm")
 

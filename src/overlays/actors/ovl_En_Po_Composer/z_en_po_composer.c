@@ -9,7 +9,7 @@ void EnPoComposer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
@@ -93,7 +93,7 @@ static InitChainEntry D_80BC6958[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Po_Composer_0x80BC4F30/EnPoComposer_Init.asm")
 

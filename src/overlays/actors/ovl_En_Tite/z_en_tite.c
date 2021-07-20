@@ -9,7 +9,7 @@ void EnTite_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTite_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTite_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
@@ -81,7 +81,7 @@ static InitChainEntry D_80896B50[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tite_0x808937F0/EnTite_Init.asm")
 

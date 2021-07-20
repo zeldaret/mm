@@ -9,7 +9,7 @@ void EnDinofos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
@@ -128,7 +128,7 @@ static InitChainEntry D_8089E354[] = {
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dinofos_0x8089A6E0/EnDinofos_Init.asm")
 

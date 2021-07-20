@@ -9,7 +9,7 @@ void EnEgol_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static ColliderJntSphElementInit sJntSphElementsInit[6] = {
 static ColliderJntSphElementInit D_80A80C64[6] = {
@@ -118,7 +118,7 @@ const ActorInit En_Egol_InitVars = {
     (ActorFunc)EnEgol_Draw,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Egol_0x80A7C990/func_80A7C990.asm")
 

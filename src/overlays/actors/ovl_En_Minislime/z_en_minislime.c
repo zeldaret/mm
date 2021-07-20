@@ -8,7 +8,7 @@ void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Minislime_InitVars = {
     ACTOR_EN_MINISLIME,
@@ -71,7 +71,7 @@ static DamageTable D_80985814 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/EnMinislime_Init.asm")
 

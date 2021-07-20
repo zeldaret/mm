@@ -9,7 +9,7 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
@@ -103,7 +103,7 @@ static ColliderJntSphInit D_80B60734 = {
     8, D_80B60614, // sJntSphElementsInit,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dragon_0x80B5E890/EnDragon_Init.asm")
 

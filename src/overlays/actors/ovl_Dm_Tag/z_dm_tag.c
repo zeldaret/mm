@@ -8,7 +8,7 @@ void DmTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Dm_Tag_InitVars = {
     ACTOR_DM_TAG,
@@ -22,7 +22,7 @@ const ActorInit Dm_Tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Tag_0x80C22350/func_80C22350.asm")
 

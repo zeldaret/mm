@@ -9,7 +9,7 @@ void ObjY2shutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjY2shutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjY2shutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit Obj_Y2shutter_InitVars = {
     ACTOR_OBJ_Y2SHUTTER,
@@ -32,7 +32,7 @@ static InitChainEntry D_80B9AEB0[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2shutter_0x80B9A980/ObjY2shutter_Init.asm")
 

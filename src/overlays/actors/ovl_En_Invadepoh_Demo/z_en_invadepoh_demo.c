@@ -9,7 +9,7 @@ void EnInvadepohDemo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInvadepohDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInvadepohDemo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 const ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
@@ -73,7 +73,7 @@ static InitChainEntry D_80C1AAC8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C192A0.asm")
 

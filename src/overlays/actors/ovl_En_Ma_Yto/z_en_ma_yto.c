@@ -9,7 +9,7 @@ void EnMaYto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AC00B0 = {
@@ -35,7 +35,7 @@ const ActorInit En_Ma_Yto_InitVars = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B9143C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-*/
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ma_Yto_0x80B8E520/EnMaYto_Init.asm")
 
