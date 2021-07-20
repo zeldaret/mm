@@ -7,14 +7,14 @@ void Actor_PrintLists(ActorContext* actorCtx) {
     s32 i;
 
     FaultDrawer_SetCharPad(-2, 0);
-    FaultDrawer_Printf(D_801DC9D0, gMaxActorId);
-    FaultDrawer_Printf(D_801DC9D8);
+    FaultDrawer_Printf("actor\n", gMaxActorId);
+    FaultDrawer_Printf("No. Actor   Name Part SegName\n");
 
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
         actor = actorList[i].first;
 
         while (actor != NULL) {
-            FaultDrawer_Printf(D_801DC9F8, i, actor, actor->id, actor->category, D_801DCA10);
+            FaultDrawer_Printf("%3d %08x %04x %3d %s\n", i, actor, actor->id, actor->category, "");
             actor = actor->next;
         }
     }
@@ -44,7 +44,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
                               COMBINED);
 
             dy = CLAMP(dy, 0.0f, 150.0f);
-            shadowScale = 1.0f - (dy * D_801DCA14);
+            shadowScale = 1.0f - (dy * 0.0028571428f);
 
             if (color != NULL) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, color->red, color->green, color->blue,
@@ -60,7 +60,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
             }
 
-            shadowScale = 1.0f - (dy * D_801DCA14);
+            shadowScale = 1.0f - (dy * 0.0028571428f);
             shadowScale *= actor->shape.shadowScale;
             Matrix_Scale(shadowScale * actor->scale.x, 1.0f, shadowScale * actor->scale.z, MTXMODE_APPLY);
 
@@ -113,10 +113,10 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0,
-                    (u32)(((arg3 * D_801DCA18) > 1.0f ? 1.0f : (arg3 * D_801DCA18)) * arg4) & 0xFF);
+                    (u32)(((arg3 * 1.3e-05f) > 1.0f ? 1.0f : (arg3 * 1.3e-05f)) * arg4) & 0xFF);
 
     sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
-    arg6 *= (4.5f - (light->l.dir[1] * D_801DCA1C));
+    arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
     Matrix_Put(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);

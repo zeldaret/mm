@@ -714,7 +714,7 @@ beginseg
     include "build/data/code/z_camera.rodata.o"
     include "build/data/code/z_collision_check.rodata.o"
     include "build/data/code/code_800E8EA0.rodata.o"
-    include "build/data/code/z_debug_mode.rodata.o"
+    include "build/data/code/z_demo.rodata.o"
     include "build/data/code/z_draw.rodata.o"
     include "build/data/code/z_eff_footmark.rodata.o"
     include "build/data/code/z_eventmgr.rodata.o"
