@@ -323,12 +323,18 @@ void func_809CD70C(EnBji01 *this, GlobalContext *globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
     func_809CCDE0(this, globalCtx);
     if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-        func_800B86C8(&this->moonsTear->actor, globalCtx, &this->actor);
+        func_800B86C8(&this->moonsTear->actor, globalCtx, &this->actor); /* Z-Target the Moon's Tear? */
         this->actionFunc = func_809CD77C;
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD77C.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD77C.asm")*/
+
+void func_809CD77C(EnBji01 *this, GlobalContext *globalCtx) {
+    if (this->moonsTear->actor.colChkInfo.health == 0) {
+        func_809CCE98(this, globalCtx);
+    }
+}
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/EnBji01_Init.asm")*/
 
