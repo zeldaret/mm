@@ -17,7 +17,7 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     scale = this->rgScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->unk187FC, &mfTrans11DA0);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
@@ -794,7 +794,7 @@ void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3
     initParams.scale = scale;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x874);
+        Audio_PlayActorSound2(actor, NA_SE_PL_FREEZE_S);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_ICE, 80, &initParams);
@@ -875,9 +875,9 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
 #endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    EffectSsFireTail_SpawnFlame(globalCtx, &player->base, &player->bodyPartsPos[bodyPart], scale, bodyPart,
+    EffectSsFireTail_SpawnFlame(globalCtx, &player->actor, &player->bodyPartsPos[bodyPart], scale, bodyPart,
                                 colorIntensity);
 }
 
@@ -895,7 +895,7 @@ void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -915,7 +915,7 @@ void EffectSsEnFire_SpawnVec3s(GlobalContext* globalCtx, Actor* actor, Vec3s* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);

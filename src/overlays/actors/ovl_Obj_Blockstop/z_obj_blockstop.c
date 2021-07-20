@@ -15,7 +15,7 @@ const ActorInit Obj_Blockstop_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjBlockstop),
     (ActorFunc)ObjBlockstop_Init,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjBlockstop_Update,
     (ActorFunc)NULL,
 };

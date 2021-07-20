@@ -16,7 +16,7 @@ const ActorInit En_River_Sound_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(EnRiverSound),
     (ActorFunc)EnRiverSound_Init,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)EnRiverSound_Update,
     (ActorFunc)EnRiverSound_Draw,
 };

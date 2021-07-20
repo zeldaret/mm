@@ -15,7 +15,7 @@ const ActorInit Obj_Wturn_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjWturn),
     (ActorFunc)ObjWturn_Init,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjWturn_Update,
     (ActorFunc)NULL,
 };

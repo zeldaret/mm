@@ -14,8 +14,8 @@ const ActorInit Bg_Market_Step_InitVars = {
     OBJECT_MARKET_OBJ,
     sizeof(BgMarketStep),
     (ActorFunc)BgMarketStep_Init,
-    (ActorFunc)Actor_NoOp,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)BgMarketStep_Draw
 };
 

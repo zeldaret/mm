@@ -1,6 +1,6 @@
 /*
- * File: z_en_ma_yto.c
- * Overlay: ovl_En_Ma_Yto
+ * File: z_en_ma_yts.c
+ * Overlay: ovl_En_Ma_Yts
  * Description: Romani. As oposed as EnMa4, this actor is used in conjunction of another actor, like EnMaYto.
  */
 
@@ -111,16 +111,25 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static struct_80B8E1A8 D_80B8E1A8[] = {
-    { &D_06009E58, 1.0f, 0, 0.0f },  { &D_06009E58, 1.0f, 0, -6.0f }, { &D_06018948, 1.0f, 2, 0.0f },
-    { &D_06018948, 1.0f, 2, -6.0f }, { &D_0601B76C, 1.0f, 0, 0.0f },  { &D_0601B76C, 1.0f, 0, -6.0f },
-    { &D_06007328, 1.0f, 0, 0.0f },  { &D_06007328, 1.0f, 0, -6.0f }, { &D_06014088, 1.0f, 0, 0.0f },
-    { &D_06014088, 1.0f, 0, -6.0f }, { &D_06002A8C, 1.0f, 0, 0.0f },  { &D_06002A8C, 1.0f, 0, -6.0f },
-    { &D_06015B7C, 1.0f, 0, 0.0f },  { &D_06015B7C, 1.0f, 0, -6.0f }, { &D_06007D98, 1.0f, 0, 0.0f },
-    { &D_06007D98, 1.0f, 0, -6.0f }, { &D_0600852C, 1.0f, 0, 0.0f },  { &D_0600852C, 1.0f, 0, -6.0f },
-    { &D_06008F6C, 1.0f, 0, 0.0f },  { &D_06008F6C, 1.0f, 0, -6.0f }, { &D_060180DC, 1.0f, 2, 0.0f },
-    { &D_060180DC, 1.0f, 2, -6.0f },
+static struct_80B8E1A8 sAnimationInfo[] = {
+    { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f }, // Idle anim
+    { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
+    { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
+    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f }, // Walking anim
+    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f }, //
+    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f }, // Looking around anim
+    { &D_06015B7C, 1.0f, 0, 0.0f }, { &D_06015B7C, 1.0f, 0, -6.0f }, // Shoot arrow anim
+    { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f }, // Sitting anim
+    { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
+    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
+    { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f }, // Turns around anim
 };
+
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common),
+                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
+}
 
 static void* sMouthTextures[] = {
     D_060127C8,
@@ -133,20 +142,12 @@ static void* sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
 
-static u16 D_80B8E32C = 99;
-
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B8E1A8[index].animationSeg, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80B8E1A8[index].animationSeg->common), D_80B8E1A8[index].mode,
-                         D_80B8E1A8[index].transitionRate);
-}
-
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 flag = this->unk_32C == 2 ? true : false;
 
     if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
-        this->unk_1D8.unk_18 = player->base.world.pos;
+        this->unk_1D8.unk_18 = player->actor.world.pos;
         this->unk_1D8.unk_18.y -= -10.0f;
     } else {
         Math_Vec3f_StepTo(&this->unk_1D8.unk_18, &this->actor.parent->world.pos, 8.0f);
@@ -158,12 +159,12 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
 
 void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTS_TYPE_BARN:
+        case MA_YTS_TYPE_BARN:
             this->actor.targetMode = 0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
-        case EN_NA_YTS_TYPE_SITTING:
+        case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
             if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
@@ -173,13 +174,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_SLEEPING:
+        case MA_YTS_TYPE_SLEEPING:
             this->actor.targetMode = 0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
-        case EN_NA_YTS_TYPE_ENDCREDITS:
+        case MA_YTS_TYPE_ENDCREDITS:
             this->actor.targetMode = 0;
             EnMaYts_ChangeAnim(this, 0);
             break;
@@ -192,7 +193,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
 
 s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
     switch (this->type) {
-        case EN_NA_YTS_TYPE_SITTING:
+        case MA_YTS_TYPE_SITTING:
             switch (CURRENT_DAY) {
                 case 1:
                     break;
@@ -213,7 +214,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_BARN:
+        case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
             if (!(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
@@ -222,14 +223,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case EN_NA_YTS_TYPE_SLEEPING:
+        case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
             if (gSaveContext.weekEventReg[0x16] & 1) {
                 return false;
             }
             break;
 
-        case EN_NA_YTS_TYPE_ENDCREDITS:
+        case MA_YTS_TYPE_ENDCREDITS:
             break;
     }
 
@@ -246,25 +247,25 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTbl, this->transitionDrawTbl,
-                     OBJECT_MA1_LIMB_TABLE_COUNT);
+                     MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
 
-    if (this->type == EN_NA_YTS_TYPE_SLEEPING) {
+    if (this->type == MA_YTS_TYPE_SLEEPING) {
         this->collider.dim.radius = 40;
     }
 
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8.unk_00 = 0;
     this->unk_200 = 0;
     this->blinkTimer = 0;
 
-    if (this->type == EN_NA_YTS_TYPE_ENDCREDITS) {
+    if (this->type == MA_YTS_TYPE_ENDCREDITS) {
         this->hasBow = true;
     } else {
         this->hasBow = false;
@@ -282,7 +283,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_32C = 2;
     }
 
-    if (this->type == EN_NA_YTS_TYPE_ENDCREDITS) {
+    if (this->type == MA_YTS_TYPE_ENDCREDITS) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -317,7 +318,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
-        if (!(gSaveContext.playerForm == 4)) {    // PLAYER_FORM != HUMAN_FORM
+        if (!(gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 gSaveContext.weekEventReg[0x41] |= 0x80;
@@ -325,13 +326,13 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x335F, &this->actor);
                 this->textId = 0x335F;
             } else {
-                // Saying to non-human Link: "Pretend you did not heard that."
+                // Saying to non-human Link: "Pretend you did not hear that."
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 func_801518B0(globalCtx, 0x3362, &this->actor);
                 this->textId = 0x3362;
                 func_80151BB4(globalCtx, 5);
             }
-        } else if (func_8012403C(globalCtx)) { // Player_IsWearingAMask
+        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x40)) {
                 gSaveContext.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);
@@ -399,16 +400,16 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }
 
+static u16 D_80B8E32C = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
-
     if (func_800EE29C(globalCtx, 0x78) != 0) {
-        actionIndex = func_800EE200(globalCtx, 0x78);
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.actorActions[actionIndex]->unk0 != D_80B8E32C) {
-                D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+        u32 actionIndex = func_800EE200(globalCtx, 0x78);
+
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.npcActions[actionIndex]->unk0 != D_80B8E32C) {
+                D_80B8E32C = globalCtx->csCtx.npcActions[actionIndex]->unk0;
                 this->endCreditsFlag = 0;
-                switch (globalCtx->csCtx.actorActions[actionIndex]->unk0) {
+                switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);
@@ -515,7 +516,7 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     collider = &this->collider;
     Collider_UpdateCylinder(&this->actor, collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &collider->base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &collider->base);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnMaYts_UpdateEyes(this);
     func_80B8D12C(this, globalCtx);
@@ -526,13 +527,13 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnMaYts* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
+    if (limbIndex == MA1_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
         rot->x += sp4.y;
         if ((this->skelAnime.animCurrentSeg == &D_06009E58) || (this->skelAnime.animCurrentSeg == &D_06007D98)) {
             rot->z += sp4.x;
         }
-    } else if (limbIndex == OBJECT_MA1_LIMB_HEAD) {
+    } else if (limbIndex == MA1_LIMB_TORSO) {
         sp4 = this->unk_1D8.unk_0E;
         rot->x += sp4.y;
         rot->z += sp4.x;
@@ -544,9 +545,9 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
 
-    if (limbIndex == OBJECT_MA1_LIMB_HAIR_TOP) {
+    if (limbIndex == MA1_LIMB_HEAD) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
-    } else if (limbIndex == OBJECT_MA1_LIMB_ARM_RIGHT) {
+    } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, D_060003B0);

@@ -14,9 +14,9 @@ const ActorInit Obj_Grass_Unit_InitVars = {
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassUnit),
     (ActorFunc)ObjGrassUnit_Init,
-    (ActorFunc)Actor_NoOp,
-    (ActorFunc)Actor_NoOp,
-    (ActorFunc)NULL
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)NULL,
 };
 */
 

@@ -178,60 +178,65 @@ void func_80930B60(EnTuboTrap* this, GlobalContext* globalCtx) {
 
 // EnTuboTrap_HandleImpact
 void func_80930DDC(EnTuboTrap* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
-    ActorPlayer* player2 = PLAYER;
+    Player* player = PLAYER;
+    Player* player2 = PLAYER;
 
     // in oot func_800F0568 is Audio_PlaySoundAtPosition
 
-    if (((this->actor.bgCheckFlags & 0x20) != 0) && (this->actor.yDistToWater > 15.0f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f)) {
         func_80930B60(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2817);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if ((this->collider.base.atFlags & AT_BOUNCED) != 0) {
+
+    if (this->collider.base.atFlags & AT_BOUNCED) {
         this->collider.base.atFlags &= ~AT_BOUNCED;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x1808);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+
+    if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2802);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if ((this->collider.base.atFlags & AT_HIT) != 0) {
+
+    if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        if (&player->base == this->collider.base.at) {
+
+        if (&player->actor == this->collider.base.at) {
             func_809308F4(this, globalCtx);
-            func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
-            func_800F0568(globalCtx, &player2->base.world.pos, 0x28, 0x83E);
+            func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+            func_800F0568(globalCtx, &player2->actor.world.pos, 40, NA_SE_PL_BODY_HIT);
             func_8093089C(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
         }
     }
-    if (((this->actor.bgCheckFlags & 8) != 0) || ((this->actor.bgCheckFlags & 1) != 0)) {
+
+    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1)) {
         func_809308F4(this, globalCtx);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x2887);
+        func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         func_8093089C(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-#if NON - MATCHING
+#ifdef NON_MATCHING
 // Wait For Proximity (idle)
 // NON-MATCHING: wrong register used, v instead of t for the weirdValues[] pointer
 void func_80931004(EnTuboTrap* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     f32 currentHeight;
     s8 weirdvalue;
     s16 startingRotation;
@@ -240,24 +245,22 @@ void func_80931004(EnTuboTrap* this, GlobalContext* globalCtx) {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->base.world.pos.y)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.yDistToPlayer <= ((f32)startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, this, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= 0x11; // always update and can target
 
-            // hard to know what this value is even used for without knowing what ActorPlayer::unk14B is
-            // wild guess: this is player animation state, height is modified to always point at center of link model
-            weirdvalue = D_8093146C[player->unk14B & 0xFF];
+            weirdvalue = D_8093146C[player->transformation & 0xFF];
 
-            this->targetHeight = player->base.world.pos.y + (f32)weirdvalue;
+            this->targetHeight = player->actor.world.pos.y + (f32)weirdvalue;
             if (this->targetHeight < currentHeight) {
                 this->targetHeight = currentHeight;
                 this->targetHeight += weirdvalue;
             }
             this->originPos = this->actor.world.pos;
-            Audio_PlayActorSound2(&this->actor, 0x28C4);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POT_MOVE_START);
             this->actionFunc = func_80931138;
         }
     }
@@ -284,9 +287,14 @@ void func_809311C4(EnTuboTrap* this, GlobalContext* globalCtx) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, 0x3037);
+    //! @bug should be NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
+    // In OoT, NA_SE_EN_TUBOOCK_FLY is the value 0x3837
+    // But in MM, certain sfxIds got reordered and devs forgot to update:
+    // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
+    // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
-    if ((SQ(dX) + SQ(dY) + SQ(dZ) > 57600.0f)) { // 240.0f ^ 2
+    if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
@@ -300,7 +308,7 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
     Actor_SetHeight(&this->actor, 0.0f);
 
     if (this->actor.projectedPos.z < 811.0f) {
@@ -318,8 +326,8 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx) {
