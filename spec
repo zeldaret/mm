@@ -611,9 +611,7 @@ beginseg
 
     include "build/data/code/code_801C5C50.data.o"
 
-    include "build/asm/code/z_skelanime.text.o"
-    include "build/data/code/z_skelanime.data.o"
-    include "build/data/code/z_skelanime.bss.o"
+    include "build/src/code/z_skelanime.o"
 
     include "build/src/code/z_skin.o"
     include "build/data/code/z_skin.bss.o"
