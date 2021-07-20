@@ -50,14 +50,29 @@ const ActorInit En_Bji_01_InitVars = {
 };
 */
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCDE0.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCDE0.asm")*/
+
+void func_809CCDE0(EnBji01 *this, GlobalContext *globalCtx) {
+
+    Player* player = PLAYER;
+
+    Vec3f sp58;
+    s32 pad[2];
+
+    Math_Vec3f_Copy(&sp58, &player->actor.world.pos);
+    sp58.y = player->bodyPartsPos[7].y + 3.0f;
+    func_8013E950(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y, &player->actor.world.pos, &sp58, &this->unk2A6, &this->unk2A8, &this->unk2A2, &this->unk2A4, 0x1554, 0x1FFE, 0xE38, 0x1C70);
+
+}
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCE98.asm")*/
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) /*globalCtx likely but unconfirmed*/ {
+
     func_8013E1C8(&this->skelAnime, &D_809CDC7C, 0, &this->unk298);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
+
 }
 
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CCEE8.asm")*/
@@ -172,6 +187,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
     }
     func_8013E1C8(&this->skelAnime, (s32) D_809CDC7C, 2, &this->unk298);
     this->actionFunc = func_809CD328;
+
 }
 
 
@@ -285,8 +301,10 @@ void func_809CD6B0(EnBji01 *this, GlobalContext *globalCtx) {
 /*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD6C0.asm")*/
 
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
+
     func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->unk298);
     this->actionFunc = func_809CD70C;
+
 }
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bji_01_0x809CCDE0/func_809CD70C.asm")
@@ -347,8 +365,9 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 
 void EnBji01_Update(Actor *thisx, GlobalContext *globalCtx) {
 
-    s32 pad; /*pad until 4 main functions take gamestate that gets promoted to globalctx*/
     EnBji01* this = THIS;
+
+    s32 pad; /*pad until 4 main functions take gamestate that gets promoted to globalctx*/
 
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, (Actor *) this, 0.0f, 0.0f, 0.0f, 4U);
@@ -424,13 +443,9 @@ void EnBji01_Draw(Actor* thisx, GlobalContext *globalCtx) {
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-
     func_8012C28C(globalCtx->state.gfxCtx);
-
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809CDCD4[this->unk29C]));
-
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_809CDA4C, func_809CDB04, &this->actor);
-
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }

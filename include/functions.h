@@ -2745,7 +2745,7 @@ s32 func_8013E2D4(Actor* actor, s16 arg1, s32 arg2, s32 arg3);
 // void func_8013E748(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8013E7C0(void);
 // void func_8013E8F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-// void func_8013E950(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE2 param_13);
+s32 func_8013E950(Vec3f* param_1, Vec3f* param_2, s16 param_3, Vec3f* param_4, Vec3f* param_5, s16* param_6, s16* param_7, s16* param_8, s16* param_9, u16 param_10, u16 param_11, u16 param_12, u16 param_13);
 // void func_8013EC10(void);
 // void func_8013EC44(void);
 void func_8013ECE0(f32 param_1, u8 param_2, u8 param_3, u8 param_4);
