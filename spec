@@ -477,8 +477,8 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "build/src/code/z_en_a_keep.o" // .text section
-    include "build/data/code/code_801AAAB0.data.o"
+    include "build/src/code/z_en_a_keep.o"
+    include "build/data/code/z_en_a_keep.data.o"
     include "build/data/code/code_801ADE60.data.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
