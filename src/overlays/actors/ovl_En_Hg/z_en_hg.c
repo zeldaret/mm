@@ -18,15 +18,23 @@ void func_80BCF5F0(EnHg* this);
 void func_80BCF634(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF68C(EnHg* this);
 void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx);
-
 void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
-
 s32 func_80BCFE54(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 s32 func_80BCFE70(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx);
 
-/*
+extern FlexSkeletonHeader D_06008580;
+extern AnimationHeader D_0600260C;
+extern AnimationHeader D_06009D44;
+extern AnimationHeader D_0600A164;
+extern AnimationHeader D_06000370;
+extern AnimationHeader D_06001138;
+extern AnimationHeader D_060015D4;
+extern AnimationHeader D_06001960;
+extern AnimationHeader D_0600AE1C;
+extern Gfx D_06005E28[];
+
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
@@ -38,12 +46,11 @@ const ActorInit En_Hg_InitVars = {
     (ActorFunc)EnHg_Update,
     (ActorFunc)EnHg_Draw,
 };
-*/
 
-ColliderCylinderInit D_80BCFFB0[] = {
-    0x00000939, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
-    0x00000000, 0x00010100, 0x0012002E, 0x00000000, 0x00000000,
-};
+// ColliderCylinderInit D_80BCFFB0[] = {
+//     0x00000939, 0x20010000, 0x00000000, 0x00000000, 0x00000000, 0xF7CFFFFF,
+//     0x00000000, 0x00010100, 0x0012002E, 0x00000000, 0x00000000,
+// };
 
 // D_80BCFFB0
 static ColliderCylinderInit sCylinderInit = {
@@ -66,30 +73,27 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-DamageTable D_80BCFFDC[] = {
-    0x10D100F1, 0xC3C3F210, 0xF2F1F123, 0x3341F210, 0xD1F21000, 0x0000F1F1, 0xF1020400, 0x000000F1,
+static DamageTable sDamageTable = {
+    0x10, 0xD1, 0x00, 0xF1, 0xC3, 0xC3, 0xF2, 0x10, 0xF2, 0xF1, 0xF1, 0x23, 0x33, 0x41, 0xF2, 0x10,
+    0xD1, 0xF2, 0x10, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, 0xF1,
 };
 
-CollisionCheckInfoInit2 D_80BCFFFC[] = {
-    0x00000000,
-    0x00000000,
-    0x80000000,
+static CollisionCheckInfoInit2 sColChkInfoInit2 = {
+    0, 0, 0, 0, 0x80,
 };
 
-ActorAnimationEntry D_80BD0008[] = {
-    0x0600260C, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0xC0800000, 0x06009D44, 0x3F800000,
-    0x00000000, 0x00000000, 0x00000000, 0xC0800000, 0x0600A164, 0x3F800000, 0x00000000, 0x00000000,
-    0x00000000, 0xC0800000, 0x06000370, 0x3F800000, 0x00000000, 0x00000000, 0x02000000, 0x00000000,
-    0x06001138, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x060015D4, 0x3F800000,
-    0x00000000, 0x00000000, 0x02000000, 0x00000000, 0x06001960, 0x3F800000, 0x00000000, 0x00000000,
-    0x00000000, 0x00000000, 0x0600AE1C, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+static ActorAnimationEntry D_80BD0008[] = {
+    { &D_0600260C, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
+    { &D_06009D44, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
+    { &D_0600A164, 1.0f, 0.0f, 0.0f, 0x00, -4.0f },
+    { &D_06000370, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
+    { &D_06001138, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
+    { &D_060015D4, 1.0f, 0.0f, 0.0f, 0x02, 0.0f },
+    { &D_06001960, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
+    { &D_0600AE1C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f },
 };
 
 u32 D_80BD00C8 = 0;
-
-extern FlexSkeletonHeader D_06008580;
-extern AnimationHeader D_0600260C;
-extern Gfx D_06005E28[];
 
 void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHg* this = THIS;
@@ -101,8 +105,8 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, &this->limbDrawTbl,
                      &this->transitionDrawTbl, 0x13);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, D_80BCFFB0);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, D_80BCFFDC, D_80BCFFFC);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
@@ -249,92 +253,79 @@ void func_80BCF93C(EnHg* this) {
     this->actionFunc = func_80BCF95C;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/func_80BCF95C.asm")
-// void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-//     u32 actionIndex;
-//     s32 temp;
-
-//     if (func_800EE29C(globalCtx, 0x1E4U) != 0) {
-//         actionIndex = func_800EE200(globalCtx, 0x1E4U);
-//         if (this->unk310[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-//             this->unk310[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-//             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-//                 case 1:
-//                     this->unk21C = NULL;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
-//                     break;
-//                 case 2:
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 3;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
-//                     break;
-//                 case 3:
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 5;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
-//                     break;
-//                 case 4:
-//                     this->unk310[2] = 0;
-//                     this->unk21C = 7;
-//                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
-//                         func_8019F128(0x3ABA);
-//                     }
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
-//                     break;
-//                 case 5:
-//                     this->unk21C = 1;
-//                     func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
-//                     break;
-//                 case 6:
-//                     gSaveContext.weekEventReg[75] |= 0x20;
-//                     Actor_MarkForDeath(&this->actor);
-//                     break;
-//             }
-//         } else {
-//             if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-//                 switch (this->unk21C) {
-//                     case 3:
-//                         this->unk21C = 4;
-//                         func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
-//                         break;
-//                     case 5:
-//                         this->unk21C = 6;
-//                         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
-//                         break;
-//                 }
-//                 // if (this->unk21C != 3) {
-//                 //     if (this->unk21C != 5) {
-
-//                 //     } else {
-//                 //         this->unk21C = 6;
-//                 //         func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
-//                 //     }
-//                 // } else {
-//                 //     this->unk21C = 4;
-//                 //     func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
-//                 // }
-//             }
-//         }
-//         switch (this->unk21C) {
-//             case 0:
-//                 func_800B9010(this, 0x32B7);
-//                 break;
-//             // case 5:
-//             case 3:
-//                 func_800B9010(this, 0x32B9);
-//                 break;
-//             case 4:
-//                 if (this->unk218 == 0 || this->unk218 == 2) {
-//                     func_800B9010(this, 0x32B9);
-//                 }
-//         }
-//         func_800EDF24(this, globalCtx, actionIndex);
-//         return;
-//     } else if (globalCtx->csCtx.state == 0) {
-//         func_80BCF354(this);
-//     }
-//     this->unk310[3] = 0x63;
-// }
+void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x1E4U) != 0) {
+        u32 actionIndex = func_800EE200(globalCtx, 0x1E4U);
+        if (this->unk310[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+            this->unk310[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+                case 1:
+                    this->unk21C = NULL;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 0);
+                    break;
+                case 2:
+                    this->unk310[2] = 0;
+                    this->unk21C = 3;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 3);
+                    break;
+                case 3:
+                    this->unk310[2] = 0;
+                    this->unk21C = 5;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 5);
+                    break;
+                case 4:
+                    this->unk310[2] = 0;
+                    this->unk21C = 7;
+                    if ((this->unk218 == 1) || (this->unk218 == 3)) {
+                        func_8019F128(0x3ABA);
+                    }
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 7);
+                    break;
+                case 5:
+                    this->unk21C = 1;
+                    func_800BDC5C(&this->skelAnime, D_80BD0008, 1);
+                    break;
+                case 6:
+                    gSaveContext.weekEventReg[75] |= 0x20;
+                    Actor_MarkForDeath(&this->actor);
+                    break;
+            }
+        } else {
+            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
+                switch (this->unk21C) {
+                    case 3:
+                        this->unk21C = 4;
+                        func_800BDC5C(&this->skelAnime, D_80BD0008, 4);
+                        break;
+                    case 5:
+                        this->unk21C = 6;
+                        func_800BDC5C(&this->skelAnime, D_80BD0008, 6);
+                        break;
+                }
+            }
+        }
+        switch (this->unk21C) {
+            case 3:
+            case 4:
+                func_800B9010(&this->actor, 0x32B7U);
+                break;
+            case 5:
+            case 6:
+                func_800B9010(&this->actor, 0x32B9U);
+                break;
+            case 7:
+                if ((this->unk218 == 0) || (this->unk218 == 2)) {
+                    func_800B9010(&this->actor, 0x32B9U);
+                }
+                break;
+        }
+        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        return;
+    } else if (globalCtx->csCtx.state == 0) {
+        func_80BCF354(this);
+    }
+    this->unk310[3] = 0x63;
+}
 
 void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -383,7 +374,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_80BCF7D8(this, globalCtx);
     func_80BCFC0C(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 0.0f, 5U);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 0.0f, 5);
     func_80BCF778(this, globalCtx);
 }
 
@@ -411,7 +402,7 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      func_80BCFE54, func_80BCFE70, &this->actor);
-    Matrix_Put(&this->unk1D8);
+    SysMatrix_SetCurrentState(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06005E28);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
