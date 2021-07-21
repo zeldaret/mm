@@ -9,7 +9,6 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/* Init helper functions */
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);     /* Level 1 */
 void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);     /* Level 2 */
 void func_809CD028(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
@@ -21,12 +20,10 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
 
-/* Draw helper functions */
 s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* actor);
 void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 
-/* Segmented data */
 extern AnimationHeader D_06000FDC;
 extern AnimationHeader D_06005B58;
 extern AnimationHeader D_06000AB0;
@@ -36,7 +33,6 @@ extern void* D_06004E70[];
 extern void* D_06005270[];
 extern FlexSkeletonHeader D_0600578C;
 
-/* .data */
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
     ACTORCAT_NPC,
@@ -96,16 +92,15 @@ void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
-
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
-    if (this->actor.params == 0) {
+    if (this->actor.params == ENBJI01_PARAMS_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer <= 10.0f)) {
             this->actor.flags |= 0x10000;
         } else {
             this->actor.flags &= ~0x10000;
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
@@ -124,7 +119,6 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
-
     s32 tempDay;
     f32 tempTimeBeforeMoonCrash;
 
@@ -206,7 +200,6 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
-
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
@@ -218,7 +211,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
         case 4:
             if (func_80147624(globalCtx) != 0) {
                 this->actor.flags &= ~0x10000;
-                this->actor.params = 1;
+                this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -247,53 +240,53 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
             if (func_80147624(globalCtx) != 0) {
                 this->actor.flags &= ~0x10000;
                 switch (globalCtx->msgCtx.unk11F04) {
-                    case 1502:
+                    case 0x5DE:
                         func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
                         func_80151938(globalCtx, 0x5DFU);
                         break;
-                    case 1508:
+                    case 0x5E4:
                         func_80151938(globalCtx, 0x5E7U);
                         break;
-                    case 1509:
+                    case 0x5E5:
                         func_80151938(globalCtx, 0x5E0U);
                         break;
-                    case 1511:
+                    case 0x5E7:
                         func_80151938(globalCtx, 0x5E5U);
                         break;
-                    case 1500:
-                    case 1501:
-                    case 1503:
-                    case 1516:
-                    case 1517:
-                    case 1518:
-                    case 1522:
-                    case 1525:
-                        func_80151938(globalCtx, (globalCtx->msgCtx.unk11F04 + 1) & 0xFFFF);
+                    case 0x5DC:
+                    case 0x5DD:
+                    case 0x5DF:
+                    case 0x5EC:
+                    case 0x5ED:
+                    case 0x5EE:
+                    case 0x5F2:
+                    case 0x5F5:
+                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                         break;
-                    case 1520:
-                    case 1526:
+                    case 0x5F0:
+                    case 0x5F6:
                         func_80151938(globalCtx, 0x5EF);
                         break;
-                    case 1505:
-                    case 1512:
-                    case 1513:
-                    case 1514:
-                    case 1515:
-                    case 1521:
-                    case 1523:
-                    case 1524:
-                    case 1527:
-                    case 1528:
+                    case 0x5E1:
+                    case 0x5E8:
+                    case 0x5E9:
+                    case 0x5EA:
+                    case 0x5EB:
+                    case 0x5F1:
+                    case 0x5F3:
+                    case 0x5F4:
+                    case 0x5F7:
+                    case 0x5F8:
                         func_801477B4(globalCtx);
                         this->actor.flags &= ~0x10000;;
-                        this->actor.params = 1;
+                        this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                         func_809CCE98(this, globalCtx);
                         break;
                 }
             }
             break;
         case 6:
-            this->actor.params = 1;
+            this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
             this->actor.flags &= ~0x10000;;
             func_809CCE98(this, globalCtx);
             break;
@@ -304,7 +297,6 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
-
     func_801A5BD0(0x6F);
     func_801A89A8(0xE0000101);
     globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
@@ -318,7 +310,6 @@ void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
-
     func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = func_809CD70C;
 }
@@ -339,7 +330,6 @@ void func_809CD77C(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
-
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
@@ -360,14 +350,14 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (gSaveContext.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
         case 0x4C10: /* Observatory from Termina Field door */
-            this->actor.params = 0;
+            this->actor.params = ENBJI01_PARAMS_DEFAULT;
             func_809CCE98(this, globalCtx);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= 0x10000;
             func_801A5BD0(0);
             func_801A89A8(0xE0000100);
-            this->actor.params = 3;
+            this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, globalCtx);
             break;
         default:
@@ -377,7 +367,6 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-
     EnBji01* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -408,7 +397,6 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* thisx) {
-
     EnBji01* this = THIS;
 
     if ((limbIndex == 0) && ((globalCtx->gameplayFrames % 2) != 0)) {
@@ -419,31 +407,27 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         rot->y = rot->y;
         rot->z = rot->z;
     }
-
     switch (limbIndex) {
-        case 8: /* Torso */
+        case BJI_LIMB_TORSO:
             rot->x += this->torsoXRotAdj;
             rot->z += this->torsoZRotAdj;
             break;
-        case 15: /* Head */
+        case BJI_LIMB_HEAD:
             rot->x += this->headXRotAdj;
             rot->z += this->headZRotAdj;
             break;
     }
-
-    return 0;
+    return false;
 }
 
 void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-
     static Vec3f D_809CDCC8 = { 1088.0f, 1200.0f, 0.0f };
     EnBji01* this = THIS;
-
     Vec3f sp20;
     s32 temp_f4 = 0;
 
-    if (limbIndex == 0xF) {
-        Math_Vec3f_Copy((Vec3f*)&sp20, &D_809CDCC8);
+    if (limbIndex == 15) {
+        Math_Vec3f_Copy(&sp20, &D_809CDCC8);
         sp20.x += temp_f4 * 0.1f;
         sp20.y += temp_f4 * 0.1f;
         sp20.z += temp_f4 * 0.1f;
@@ -452,7 +436,6 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-
     static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
     EnBji01* this = THIS;
 
