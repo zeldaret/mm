@@ -385,11 +385,9 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
-
-    static s16 sBlinkSequence[6] = { 0, 1, 2, 1, 0, 0 };
+    static s16 sBlinkSequence[] = { 0, 1, 2, 1, 0, 0 };
     EnBji01* this = THIS;
-
-    s32 pad; /*pad until 4 main functions take gamestate that gets promoted to globalctx*/
+    s32 pad;
 
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
