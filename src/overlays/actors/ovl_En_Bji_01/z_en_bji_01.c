@@ -242,16 +242,16 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:
                         func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
-                        func_80151938(globalCtx, 0x5DFU);
+                        func_80151938(globalCtx, 0x5DF);
                         break;
                     case 0x5E4:
-                        func_80151938(globalCtx, 0x5E7U);
+                        func_80151938(globalCtx, 0x5E7);
                         break;
                     case 0x5E5:
-                        func_80151938(globalCtx, 0x5E0U);
+                        func_80151938(globalCtx, 0x5E0);
                         break;
                     case 0x5E7:
-                        func_80151938(globalCtx, 0x5E5U);
+                        func_80151938(globalCtx, 0x5E5);
                         break;
                     case 0x5DC:
                     case 0x5DD:
