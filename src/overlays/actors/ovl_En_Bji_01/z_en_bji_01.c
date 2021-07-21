@@ -10,19 +10,20 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 /* Init helper functions */
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx); /* Level 1 */
-void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx); /* Level 2 */
-void func_809CD028(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
-void func_809CD328(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
-void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
-void func_809CD634(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);     /* Level 1 */
+void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);     /* Level 2 */
+void func_809CD028(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
+void func_809CD328(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
+void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
+void func_809CD634(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
 void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx); /* Level 6 */
-void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx); /* Level 3 */
-void func_809CD70C(EnBji01* this, GlobalContext* globalCtx); /* Level 4 */
-void func_809CD77C(EnBji01* this, GlobalContext* globalCtx); /* Level 5 */
+void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
+void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
+void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
 
 /* Draw helper functions */
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* actor);
 void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 
 /* Segmented data */
@@ -70,12 +71,11 @@ static ColliderCylinderInit sCylinderInit = {
 
 /* Animations struct */
 static struct_80B8E1A8 D_809CDC7C[4] = {
-    { &D_06000FDC, 1.0f, 0, 0.0f }, /* Looking through telescope */
+    { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
     { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
-    { &D_06000AB0, 1.0f, 0, 0.0f }, /* Talking */
+    { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */
     { &D_0600066C, 1.0f, 2, -5.0f }, /* Scratching chin? */
 };
-
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 
@@ -87,7 +87,8 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&sp58, &player->actor.world.pos);
     sp58.y = player->bodyPartsPos[7].y + 3.0f;
     func_8013E950(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y, &player->actor.world.pos,
-                  &sp58, &this->headZRotAdj, &this->headXRotAdj, &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554, 0x1FFE, 0xE38, 0x1C70);
+                  &sp58, &this->headZRotAdj, &this->headXRotAdj, &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554,
+                  0x1FFE, 0xE38, 0x1C70);
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
@@ -354,7 +355,8 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->animationIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
+    func_8013E3B8(&this->actor, this->cutscenes,
+                  ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
     this->moonsTear =
         (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
@@ -409,7 +411,8 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx) {
 
     EnBji01* this = THIS;
 
