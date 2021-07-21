@@ -2703,7 +2703,7 @@ void func_8013AF00(UNK_PTR arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 // void func_8013B010(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8013B0C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8013B350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-s32 func_8013B6B0(Path* path, UNK_PTR arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, UNK_PTR arg6, Vec3f* arg7, s16* arg8);
+s32 func_8013B6B0(Path* path, UNK_PTR arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, UNK_PTR arg6, Vec3f* arg7, s16 arg8);
 void func_8013B878(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
 Path* func_8013BB34(GlobalContext* globalCtx, u8 arg1, UNK_TYPE arg2);
 Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, s32 actorCategory, s32 actorId);

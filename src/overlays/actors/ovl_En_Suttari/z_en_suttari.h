@@ -8,6 +8,8 @@ struct EnSuttari;
 
 typedef void (*EnSuttariActionFunc)(struct EnSuttari*, GlobalContext*);
 
+#define ENSUTTARI_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
+
 typedef struct EnSuttari {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnFsn* enFsn;
@@ -16,9 +18,9 @@ typedef struct EnSuttari {
     /* 0x150 */ SkelAnime skelAnime;
     /* 0x194 */ UNK_TYPE1 unk_194[0x4];
     /* 0x198 */ ColliderCylinder collider;
-    /* 0x1E4 */ u16 unk1E4;
-    /* 0x1E6 */ u16 unk1E6;
-    /* 0x1E8 */ u16 unk1E8;
+    /* 0x1E4 */ u16 flags1;
+    /* 0x1E6 */ u16 flags2;
+    /* 0x1E8 */ u16 textId;
     /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
     /* 0x1EC */ Path* paths[2];
     /* 0x1F4 */ s32 unk1F4[2];
@@ -44,7 +46,7 @@ typedef struct EnSuttari {
     /* 0x3F8 */ Vec3f unk3F8;
     /* 0x404 */ Path* unk404;
     /* 0x408 */ Vec3f unk408;
-    /* 0x414 */ UNK_TYPE unk414;
+    /* 0x414 */ s32 unk414;
     /* 0x418 */ s32 unk418;
     /* 0x41C */ s32 unk41C;
     /* 0x420 */ s32 unk420;
@@ -58,10 +60,10 @@ typedef struct EnSuttari {
     /* 0x436 */ s16 unk436;
     /* 0x438 */ Vec3f unk438;
     /* 0x444 */ Vec3f unk444;
-    /* 0x450 */ s32 unk450; //animationIdx
+    /* 0x450 */ s32 animationIdx;
     /* 0x454 */ UNK_TYPE1 unk_454[0x2];
-    /* 0x456 */ s16 unk456[2];
-    /* 0x45A */ s16 unk45A;
+    /* 0x456 */ s16 cutscenes[2];
+    /* 0x45A */ s16 cutsceneIdx;
 } EnSuttari; // size = 0x45C
 
 extern const ActorInit En_Suttari_InitVars;
