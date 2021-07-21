@@ -24,7 +24,7 @@ typedef struct EnBji01 {
     /* 0x2A6 */ s16 headZRotAdj;
     /* 0x2A8 */ s16 headXRotAdj;
     /* 0x2AA */ u16 textId;
-    /* 0x2AC */ s16 cutscenes[1]; /* s16 alignment pad by compiler */
+    /* 0x2AC */ s16 cutscenes[1];
     /* 0x2B0 */ ObjMoonStone* moonsTear;
 
 } EnBji01; // size = 0x2B4
