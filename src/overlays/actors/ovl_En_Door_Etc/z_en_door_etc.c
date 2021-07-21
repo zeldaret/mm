@@ -35,8 +35,8 @@ static ColliderCylinderInit D_80AC25A0 = {
 static InitChainEntry D_80AC2634[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_U16(shape, 0, ICHAIN_CONTINUE),
-    ICHAIN_U16(C0, 0, ICHAIN_STOP),
+    ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
+    ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
 #endif

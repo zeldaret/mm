@@ -25,7 +25,7 @@ const ActorInit Obj_Pzlblock_InitVars = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A4078[] = {
-    ICHAIN_VEC3S(30, 0, ICHAIN_CONTINUE),
+    ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),

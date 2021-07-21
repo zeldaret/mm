@@ -35,7 +35,7 @@ static ColliderQuadInit D_808A3010 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808A3060[] = {
     ICHAIN_S8(targetMode, 5, ICHAIN_CONTINUE),
-    ICHAIN_VEC3S(shape, 0, ICHAIN_STOP),
+    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
 #endif

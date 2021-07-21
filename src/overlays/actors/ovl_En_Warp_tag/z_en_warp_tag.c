@@ -26,7 +26,7 @@ const ActorInit En_Warp_tag_InitVars = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809C1008[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_VEC3S(shape, 0, ICHAIN_STOP),
+    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
 #endif
