@@ -594,9 +594,10 @@ beginseg
     include "build/src/code/code_8012EC80.o"
 
     pad_text
-    include "build/asm/code/z_scene.text.o"
 
     include "build/data/code/code_801C2410.data.o"
+
+    include "build/src/code/z_scene.o"
 
     include "build/data/code/code_801C2730.data.o"
 

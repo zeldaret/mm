@@ -531,6 +531,7 @@
             0x801C1D10 : "z_room",
             0x801C1D30 : "code_8012EC80",
             0x801C2410 : "code_801C2410",
+            0x801C2650 : "z_scene",
             0x801C2730 : "",
             0x801C3B60 : "z_scene_proc",
             0x801C3CA0 : "z_scene_table",
