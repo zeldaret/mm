@@ -509,7 +509,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     func_8013D9C8(globalCtx, this->unk2FA, this->unk31A, 16);
 }
 
-s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* dist) {
+s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
@@ -523,7 +523,7 @@ s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* dist) {
         diffX = 0.0f;
         diffZ = 0.0f;
     }
-    *dist = SQ(diffX) + SQ(diffZ);
+    *distSQ = SQ(diffX) + SQ(diffZ);
     return Math_Acot2F(diffZ, diffX) * (0x8000 / M_PI);
 }
 
@@ -1199,7 +1199,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->flags2 |= 4;
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
             func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
