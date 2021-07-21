@@ -70,7 +70,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static struct_80B8E1A8 D_809CDC7C[4] = {
+static struct_80B8E1A8 D_809CDC7C[] = {
     { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
     { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
     { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */
@@ -90,7 +90,6 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
-
     func_8013E1C8(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
@@ -103,7 +102,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer <= 10.0f)) {
             this->actor.flags |= 0x10000;
         } else {
-            this->actor.flags &= 0xFFFEFFFF;
+            this->actor.flags &= ~0x10000;
         }
     }
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
@@ -134,8 +133,8 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
         case 1: /* Have finished a conversation with Shikashi */
             switch (gSaveContext.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if ((gSaveContext.weekEventReg[17] & 0x10) != 0) {
-                        if ((gSaveContext.weekEventReg[74] & 0x80) != 0) {
+                    if (gSaveContext.weekEventReg[17] & 0x10) {
+                        if (gSaveContext.weekEventReg[74] & 0x80) {
                             this->textId = 0x5F4;
                         } else {
                             this->textId = 0x5E2;
@@ -148,7 +147,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                 case PLAYER_FORM_HUMAN:
                     if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
-                    } else if ((gSaveContext.weekEventReg[74] & 0x10) != 0) {
+                    } else if (gSaveContext.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
                     } else {
                         this->textId = 0x5F5;
@@ -157,7 +156,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     break;
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
-                    if ((gSaveContext.weekEventReg[75] & 8) != 0) {
+                    if (gSaveContext.weekEventReg[75] & 8) {
                         this->textId = 0x5E4;
                     } else {
                         this->textId = 0x5DC;
@@ -169,7 +168,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
         case 3: /* Currently engaged in post-telescope Shikashi dialogue */
             switch (gSaveContext.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if ((gSaveContext.weekEventReg[74] & 0x80) != 0) {
+                    if (gSaveContext.weekEventReg[74] & 0x80) {
                         this->textId = 0x5F2;
                     } else {
                         this->textId = 0x5F1;
@@ -192,7 +191,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             tempDay = gSaveContext.day;
                             tempTimeBeforeMoonCrash =
                                 ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < 2730.6667f /* 1 hr */) {
+                            if (tempTimeBeforeMoonCrash < 2730.6667f) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
@@ -218,7 +217,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 4:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= 0xFFFEFFFF;
+                this->actor.flags &= ~0x10000;
                 this->actor.params = 1;
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
@@ -230,14 +229,14 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
                         func_8019F230();
                         switch (gSaveContext.playerForm) {
                             case PLAYER_FORM_DEKU:
-                                func_80151938(globalCtx, 0x5F0U);
+                                func_80151938(globalCtx, 0x5F0);
                                 break;
                             case PLAYER_FORM_HUMAN:
-                                func_80151938(globalCtx, 0x5F8U);
+                                func_80151938(globalCtx, 0x5F8);
                                 break;
                             case PLAYER_FORM_GORON:
                             case PLAYER_FORM_ZORA:
-                                func_80151938(globalCtx, 0x5E1U);
+                                func_80151938(globalCtx, 0x5E1);
                                 break;
                         }
                         break;
@@ -246,7 +245,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 5:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= 0xFFFEFFFF;
+                this->actor.flags &= ~0x10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 1502:
                         func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
@@ -273,7 +272,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
                         break;
                     case 1520:
                     case 1526:
-                        func_80151938(globalCtx, 0x5EFU);
+                        func_80151938(globalCtx, 0x5EF);
                         break;
                     case 1505:
                     case 1512:
@@ -286,7 +285,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
                     case 1527:
                     case 1528:
                         func_801477B4(globalCtx);
-                        this->actor.flags &= 0xFFFEFFFF;
+                        this->actor.flags &= ~0x10000;;
                         this->actor.params = 1;
                         func_809CCE98(this, globalCtx);
                         break;
@@ -295,7 +294,7 @@ void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 6:
             this->actor.params = 1;
-            this->actor.flags &= 0xFFFEFFFF;
+            this->actor.flags &= ~0x10000;;
             func_809CCE98(this, globalCtx);
             break;
     }
@@ -412,7 +411,7 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     EnBji01* this = THIS;
 
-    if ((limbIndex == 0) && ((globalCtx->gameplayFrames & 1) != 0)) {
+    if ((limbIndex == 0) && ((globalCtx->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
     if (limbIndex == 0) {
@@ -454,7 +453,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
-    static void* sEyeTextures[3] = { D_060049F0, D_06004E70, D_06005270 };
+    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
