@@ -39,8 +39,8 @@ typedef struct EnBji01 {
     /* 0x144 */ EnBji01ActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[16]; 
-    /* 0x238 */ Vec3s morphTable[16];
+    /* 0x1D8 */ Vec3s jointTable[BJI_LIMB_MAX]; 
+    /* 0x238 */ Vec3s morphTable[BJI_LIMB_MAX];
     /* 0x298 */ s32 animationIndex;
     /* 0x29C */ s16 eyeTexIndex;
     /* 0x29E */ s16 blinkSeqIndex;
