@@ -169,7 +169,7 @@ s32 EnOssan_TestItemSelected(GlobalContext* globalCtx) {
            CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
 }
 
-void EnOssan_ChooseShopKeeper(EnOssan* this) {
+void EnOssan_ChooseShopkeeper(EnOssan* this) {
     switch (gSaveContext.day) {
         case 1:
         case 2:
@@ -240,7 +240,7 @@ void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    EnOssan_ChooseShopKeeper(this);
+    EnOssan_ChooseShopkeeper(this);
     Actor_ProcessInitChain(&this->actor, sInitChain);
     EnOssan_SetupAction(this, EnOssan_InitialUpdate);
 }

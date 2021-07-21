@@ -5766,7 +5766,7 @@
     0x808A7FD0:("EnRiverSound_Draw",),
     0x808A80A0:("EnOssan_SetupAction",),
     0x808A80AC:("EnOssan_TestItemSelected",),
-    0x808A812C:("EnOssan_ChooseShopKeeper",),
+    0x808A812C:("EnOssan_ChooseShopkeeper",),
     0x808A8218:("EnOssan_RotateHead",),
     0x808A82F4:("EnOssan_SpawnShopItems",),
     0x808A83BC:("EnOssan_Init",),
