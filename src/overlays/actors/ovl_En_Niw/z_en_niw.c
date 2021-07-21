@@ -335,14 +335,14 @@ void EnNiw_SetupIdle(EnNiw* this) {
 }
 
 void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
-    f32 var_x2;
-    f32 var_z2;
-    f32 var_x1;
-    f32 var_z1;
+    f32 varX2;
+    f32 varZ2;
+    f32 varX1;
+    f32 varZ1;
     s16 s16tmp;
 
-    var_x1 = randPlusMinusPoint5Scaled(100.0f);
-    var_z1 = randPlusMinusPoint5Scaled(100.0f);
+    varX1 = randPlusMinusPoint5Scaled(100.0f);
+    varZ1 = randPlusMinusPoint5Scaled(100.0f);
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
@@ -378,19 +378,19 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
             this->unk298 = Rand_ZeroFloat(3.99f);
 
-            if (var_x1 < 0.0f) {
-                var_x1 -= 100.0f;
+            if (varX1 < 0.0f) {
+                varX1 -= 100.0f;
             } else {
-                var_x1 += 100.0f;
+                varX1 += 100.0f;
             }
-            if (var_z1 < 0.0f) {
-                var_z1 -= 100.0f;
+            if (varZ1 < 0.0f) {
+                varZ1 -= 100.0f;
             } else {
-                var_z1 += 100.0f;
+                varZ1 += 100.0f;
             }
 
-            this->unk2B0.x = this->unk2A4.x + var_x1;
-            this->unk2B0.z = this->unk2A4.z + var_z1;
+            this->unk2B0.x = this->unk2A4.x + varX1;
+            this->unk2B0.z = this->unk2A4.z + varZ1;
 
         } else {
             this->unkTimer250 = 4;
@@ -408,22 +408,22 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
 
-        var_x2 = this->unk2B0.x - this->actor.world.pos.x;
-        var_z2 = this->unk2B0.z - this->actor.world.pos.z;
+        varX2 = this->unk2B0.x - this->actor.world.pos.x;
+        varZ2 = this->unk2B0.z - this->actor.world.pos.z;
 
-        if (fabsf(var_x2) < 10.0f) {
-            var_x2 = 0;
+        if (fabsf(varX2) < 10.0f) {
+            varX2 = 0;
         }
-        if (fabsf(var_z2) < 10.0f) {
-            var_z2 = 0;
+        if (fabsf(varZ2) < 10.0f) {
+            varZ2 = 0;
         }
 
-        if ((var_x2 == 0.0f) && (var_z2 == 0.0f)) {
+        if ((varX2 == 0.0f) && (varZ2 == 0.0f)) {
             this->unkTimer250 = 0;
             this->unk298 = 7;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Atan2S(var_x2, var_z2), 3, this->unk304, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Atan2S(varX2, varZ2), 3, this->unk304, 0);
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
     func_80891320(this, globalCtx, s16tmp);
