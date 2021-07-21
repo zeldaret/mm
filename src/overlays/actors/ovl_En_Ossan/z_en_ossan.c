@@ -13,6 +13,9 @@
 #define CURSOR_INVALID 0xFF
 #define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
 
+#define LOOKED_AT_PLAYER 1
+#define END_INTERACTION 2
+
 void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -199,13 +202,13 @@ void EnOssan_RotateHead(EnOssan* this, GlobalContext* globalCtx) {
 
     if (this->actor.params == PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotX, this->unk2C6.y, 3, 2000, 0);
-        } else if (this->welcomeFlags & 1) {
-            Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotYPartTimeWorker, this->headRot.y, 3, 2000, 0);
+        } else if (this->flags & LOOKED_AT_PLAYER) {
+            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
         } else {
-            Math_SmoothStepToS(&this->headRotX, this->unk2C6.y, 3, 2000, 0);
-            if (ABS_ALT(this->headRotX - this->unk2C6.y) < 16) {
-                this->welcomeFlags |= 1;
+            Math_SmoothStepToS(&this->headRotYPartTimeWorker, this->headRot.y, 3, 2000, 0);
+            if (ABS_ALT(this->headRotYPartTimeWorker - this->headRot.y) < 16) {
+                this->flags |= LOOKED_AT_PLAYER;
             }
         }
     }
@@ -272,9 +275,9 @@ void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
     player->stateFlags2 &= ~0x20000000;
     globalCtx->interfaceCtx.unk_222 = 0;
     globalCtx->interfaceCtx.unk_224 = 0;
-    if (this->cutSceneState == 2) {
+    if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutSceneState = 0;
+        this->cutsceneState = 0;
     }
     if (this->actor.params == CURIOSITY_SHOP_MAN) {
         //EnOssan_BeginInteraction includes the animation of him turning around, before being set to idle
@@ -331,13 +334,13 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         player->stateFlags2 |= 0x20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
-        if (this->cutSceneState == 0) {
+        if (this->cutsceneState == 0) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->lookForwardCutscene;
+            this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutSceneState = 1;
+            this->cutsceneState = 1;
         }
     } else {
         if (this->actor.xzDistToPlayer < 100.0f &&
@@ -346,7 +349,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
         if (this->actor.params == PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
         }
     }
 }
@@ -362,10 +365,10 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     if (this->animationIdx == 3) {
         frameCount = 0;
     }
-    if (this->cutSceneState == 1) {
+    if (this->cutsceneState == 1) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutSceneState = 2;
+            this->cutsceneState = 2;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -542,12 +545,12 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             this->animationIdx = 1;
             func_8013BC6C(&this->skelAnime, animations, 1);
         }
-        this->welcomeFlags &= ~1;
+        this->flags &= ~LOOKED_AT_PLAYER;
         if (player->transformation == PLAYER_FORM_DEKU) {
             EnOssan_EndInteraction(globalCtx, this);
         } else {
-            if (this->welcomeFlags & 2) {
-                this->welcomeFlags &= ~2;
+            if (this->flags & END_INTERACTION) {
+                this->flags &= ~END_INTERACTION;
                 EnOssan_EndInteraction(globalCtx, this);
             } else if (!EnOssan_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
                 EnOssan_StartShopping(globalCtx, this);
@@ -596,13 +599,13 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     u8 cursorIdx;
 
-    if (this->cutSceneState == 0) {
+    if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
-        this->cutscene = this->lookForwardCutscene;
+        this->cutscene = this->lookToShopkeeperCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutSceneState = 1;
+        this->cutsceneState = 1;
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
@@ -632,7 +635,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
         if (this->actor.params == PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotX, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
         }
     }
 }
@@ -650,22 +653,22 @@ void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_LookToLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
-    if (this->cutSceneState == 2) {
+    if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutSceneState = 0;
+        this->cutsceneState = 0;
     }
-    if (this->cutSceneState == 0) {
+    if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToLeftShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutSceneState = 1;
+        this->cutsceneState = 1;
     } else {
-        if (this->cutSceneState == 1) {
+        if (this->cutsceneState == 1) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-                this->cutSceneState = 2;
+                this->cutsceneState = 2;
                 EnOssan_UpdateCursorPos(globalCtx, this);
                 EnOssan_SetupAction(this, EnOssan_BrowseLeftShelf);
                 func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -678,22 +681,22 @@ void EnOssan_LookToLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_LookToRightShelf(EnOssan* this, GlobalContext* globalCtx) {
-    if (this->cutSceneState == 2) {
+    if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutSceneState = 0;
+        this->cutsceneState = 0;
     }
-    if (this->cutSceneState == 0) {
+    if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToRightShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutSceneState = 1;
+        this->cutsceneState = 1;
     } else {
-        if (this->cutSceneState == 1) {
+        if (this->cutsceneState == 1) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-                this->cutSceneState = 2;
+                this->cutsceneState = 2;
                 EnOssan_UpdateCursorPos(globalCtx, this);
                 EnOssan_SetupAction(this, EnOssan_BrowseRightShelf);
                 func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -930,21 +933,21 @@ void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx) {
-    if (this->cutSceneState == 2) {
+    if (this->cutsceneState == 2) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutSceneState = 0;
+        this->cutsceneState = 0;
     }
-    if (this->cutSceneState == 0) {
+    if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
-        this->cutscene = this->lookToShopKeeperCutscene;
+        this->cutscene = this->lookToShopKeeperFromShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutSceneState = 1;
-    } else if (this->cutSceneState == 1) {
+        this->cutsceneState = 1;
+    } else if (this->cutsceneState == 1) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutSceneState = 2;
+            this->cutsceneState = 2;
             EnOssan_UpdateCursorPos(globalCtx, this);
             EnOssan_StartShopping(globalCtx, this);
         } else {
@@ -983,9 +986,9 @@ void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
     item = this->items[this->cursorIdx];
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_FANFARE:
-            if (this->cutSceneState == 2) {
+            if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutSceneState = 0;
+                this->cutsceneState = 0;
             }
             func_8019F208();
             item->buyFanfareFunc(globalCtx, item);
@@ -1070,7 +1073,6 @@ void EnOssan_CanBuy(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_BuyItemWithFanfare(EnOssan* this, GlobalContext* globalCtx) {
-    // The player sets itself as the parent actor to signal that it has obtained the give item request
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         EnOssan_SetupAction(this, EnOssan_SetupItemPurchased);
@@ -1084,11 +1086,11 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);
-        if (this->cutSceneState == 0) {
+        if (this->cutsceneState == 0) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->lookForwardCutscene;
+            this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
@@ -1139,17 +1141,17 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->cutSceneState == 0) {
+    if (this->cutsceneState == 0) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
             player->stateFlags2 |= 0x20000000;
             EnOssan_SetupAction(this, EnOssan_ContinueShopping);
-            this->cutSceneState = 2;
+            this->cutsceneState = 2;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            this->cutscene = this->lookForwardCutscene;
+            this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
@@ -1161,7 +1163,6 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_PositionSelectedItem(EnOssan* this) {
-    // When selecting an item to buy, this is the position the item moves to
     static Vec3f sSelectedItemPosition[] = {
         { 35.0f, 68.0f, -130.0f },
         { -35.0f, 68.0f, -130.0f },
@@ -1387,7 +1388,7 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
     ret = func_800F1250(globalCtx, 0x2F);
     if (ret != 0) {
         this->animationIdx = 4;
-        this->welcomeFlags |= 2;
+        this->flags |= END_INTERACTION;
         return ret;
     }
     switch (player->transformation) {
@@ -1418,9 +1419,9 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     u16 ret;
 
-    ret = func_800F1250(globalCtx, 54);
+    ret = func_800F1250(globalCtx, 0x36);
     if (ret != 0) {
-        this->welcomeFlags |= 2;
+        this->flags |= END_INTERACTION;
         return ret;
     }
     switch (player->transformation) {
@@ -1486,8 +1487,8 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_GetCutscenes(this, globalCtx);
 
         this->cursorY = this->cursorX = 100.0f;
-        this->cutSceneState = 0;
-        this->cutscene = this->lookForwardCutscene;
+        this->cutsceneState = 0;
+        this->cutscene = this->lookToShopkeeperCutscene;
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.colChkInfo.cylRadius = 50;
         this->stickAccumX = this->stickAccumY = 0;
@@ -1550,10 +1551,10 @@ void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx) {
-    this->lookForwardCutscene = this->actor.cutscene;
-    this->lookToLeftShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookForwardCutscene);
+    this->lookToShopkeeperCutscene = this->actor.cutscene;
+    this->lookToLeftShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToShopkeeperCutscene);
     this->lookToRightShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToLeftShelfCutscene);
-    this->lookToShopKeeperCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToRightShelfCutscene);
+    this->lookToShopKeeperFromShelfCutscene = ActorCutscene_GetAdditionalCutscene(this->lookToRightShelfCutscene);
 }
 
 void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -1565,7 +1566,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnOssan_UpdateItemSelectedProperty(this);
         EnOssan_UpdateStickDirectionPromptAnim(this);
         EnOssan_UpdateCursorAnim(this);
-        func_800E9250(globalCtx, &this->actor, &this->unk2C6, &this->unk2CC, this->actor.focus.pos);
+        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
         Actor_SetHeight(&this->actor, 90.0f);
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -1683,7 +1684,7 @@ s32 EnOssan_OverrideLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbI
     EnOssan* this = THIS;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->unk2C6.y, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     return 0;
 }
@@ -1693,8 +1694,8 @@ s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbInd
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_InsertXRotation_s(this->headRotX, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRotZ, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(this->headRotYPartTimeWorker, MTXMODE_APPLY);
+        SysMatrix_InsertZRotation_s(this->headRotXPartTimeWorker, MTXMODE_APPLY);
     }
     return 0;
 }

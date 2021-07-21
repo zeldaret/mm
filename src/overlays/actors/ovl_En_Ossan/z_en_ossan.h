@@ -46,9 +46,9 @@ typedef struct EnOssan {
     /* 0x1E2 */ s16 blinkTimer;
     /* 0x1E4 */ EnOssanUnkFunc blinkFunc;
     /* 0x1E8 */ EnGirlA *items[8];
-    // Items are indexed as such:
-    /* 7 5  3 1 */
-    /* 6 4  2 0 */    
+    /* Items are indexed as:
+     * 7 5  3 1
+     * 6 4  2 0 */    
     /* 0x208 */ s32 stickAccumX;
     /* 0x20C */ s32 stickAccumY;
     /* 0x210 */ u8 moveHorizontal;
@@ -71,24 +71,24 @@ typedef struct EnOssan {
     /* 0x2B0 */ u8 arrowAnimState;
     /* 0x2B1 */ u8 stickAnimState;
     /* 0x2B4 */ f32 shopItemSelectedTween;
-    /* 0x2B8 */ s16 lookForwardCutscene;
+    /* 0x2B8 */ s16 lookToShopkeeperCutscene;
     /* 0x2BA */ s16 lookToLeftShelfCutscene;
     /* 0x2BC */ s16 lookToRightShelfCutscene;
-    /* 0x2BE */ s16 lookToShopKeeperCutscene;
+    /* 0x2BE */ s16 lookToShopKeeperFromShelfCutscene;
     /* 0x2C0 */ s16 cutscene;
-    /* 0x2C2 */ s16 cutSceneState;
+    /* 0x2C2 */ s16 cutsceneState;
     /* 0x2C4 */ u16 textId;
-    /* 0x2C6 */ Vec3s unk2C6;
+    /* 0x2C6 */ Vec3s headRot;
     /* 0x2CC */ Vec3s unk2CC;
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
     /* 0x31E */ Vec3s limbDrawTbl[19];
     /* 0x390 */ Vec3s transitionDrawTbl[19];
     /* 0x402 */ s16 animationIdx;
-    /* 0x404 */ s16 headRotZ;
-    /* 0x406 */ s16 headRotX;
+    /* 0x404 */ s16 headRotXPartTimeWorker;
+    /* 0x406 */ s16 headRotYPartTimeWorker;
     /* 0x408 */ char pad408[0x2];
-    /* 0x40A */ u16 welcomeFlags;
+    /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 
 typedef enum {
