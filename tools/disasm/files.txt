@@ -49,7 +49,7 @@
             0x80081920 : "syncprintf",
             0x80081980 : "fault",
             0x80083EB0 : "fault_drawer",
-            0x80084940 : "",
+            0x80084940 : "boot_80084940",
             0x800849A0 : "loadfragment",
             0x80084DB0 : "loadfragment2",
             0x80085130 : "padutils",
