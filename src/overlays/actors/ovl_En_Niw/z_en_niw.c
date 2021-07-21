@@ -337,12 +337,9 @@ void EnNiw_SetupIdle(EnNiw* this) {
 void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
     f32 varX2;
     f32 varZ2;
-    f32 varX1;
-    f32 varZ1;
+    f32 varX1 = randPlusMinusPoint5Scaled(100.0f);
+    f32 varZ1 = randPlusMinusPoint5Scaled(100.0f);
     s16 s16tmp;
-
-    varX1 = randPlusMinusPoint5Scaled(100.0f);
-    varZ1 = randPlusMinusPoint5Scaled(100.0f);
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
