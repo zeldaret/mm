@@ -1043,14 +1043,8 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
-#ifdef NON_EQUIVALENT
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#elseif NON_MATCHING
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#else
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
-        build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
-#endif
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
