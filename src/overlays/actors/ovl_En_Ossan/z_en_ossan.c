@@ -105,23 +105,23 @@ static ActorAnimationEntryS* sAnimations[] = { sAnimationsCuriosityShopMan, sAni
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
 static ShopItem sShops[][8] = {
-    { { SI_NUTS_1, 50, 68, -195 },
-      { SI_STICK_1, 50, 92, -195 },
-      { SI_ARROWS_LARGE_1, 80, 68, -195 },
-      { SI_ARROWS_MEDIUM_1, 80, 92, -195 },
-      { SI_FAIRY_1, -50, 68, -195 },
-      { SI_POTION_GREEN_2, -50, 92, -195 },
-      { SI_SHIELD_HERO_1, -80, 68, -195 },
-      { SI_POTION_RED_2, -80, 92, -195 } },
+    { { SI_NUTS_1, { 50, 68, -195 } },
+      { SI_STICK_1, { 50, 92, -195 } },
+      { SI_ARROWS_LARGE_1, { 80, 68, -195 } },
+      { SI_ARROWS_MEDIUM_1, { 80, 92, -195 } },
+      { SI_FAIRY_1, { -50, 68, -195 } },
+      { SI_POTION_GREEN_2, { -50, 92, -195 } },
+      { SI_SHIELD_HERO_1, { -80, 68, -195 } },
+      { SI_POTION_RED_2, { -80, 92, -195 } } },
 
-    { { SI_NUTS_2, 50, 68, -195 },
-      { SI_STICK_2, 50, 92, -195 },
-      { SI_ARROWS_LARGE_2, 80, 68, -195 },
-      { SI_ARROWS_MEDIUM_2, 80, 92, -195 },
-      { SI_FAIRY_2, -50, 68, -195 },
-      { SI_POTION_GREEN_3, -50, 92, -195 },
-      { SI_SHIELD_HERO_2, -80, 68, -195 },
-      { SI_POTION_RED_3, -80, 92, -195 } },
+    { { SI_NUTS_2, { 50, 68, -195 } },
+      { SI_STICK_2, { 50, 92, -195 } },
+      { SI_ARROWS_LARGE_2, { 80, 68, -195 } },
+      { SI_ARROWS_MEDIUM_2, { 80, 92, -195 } },
+      { SI_FAIRY_2, { -50, 68, -195 } },
+      { SI_POTION_GREEN_3, { -50, 92, -195 } },
+      { SI_SHIELD_HERO_2, { -80, 68, -195 } },
+      { SI_POTION_RED_3, { -80, 92, -195 } } },
 };
 
 static u16 sWelcomeHumanTextIds[] = { 0X06A4, 0X06C1 };
@@ -173,7 +173,7 @@ void EnOssan_ChooseShopKeeper(EnOssan* this) {
     switch (gSaveContext.day) {
         case 1:
         case 2:
-            if (gSaveContext.time <= CLOCK_TIME(21,30) && gSaveContext.time > CLOCK_TIME(6,00)) {
+            if (gSaveContext.time <= CLOCK_TIME(21, 30) && gSaveContext.time > CLOCK_TIME(6, 00)) {
                 if (this->actor.params != CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
@@ -185,7 +185,7 @@ void EnOssan_ChooseShopKeeper(EnOssan* this) {
             if (this->actor.params == CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
-            if (!(gSaveContext.time <= CLOCK_TIME(22,00) && gSaveContext.time >= CLOCK_TIME(6,00))) {
+            if (!(gSaveContext.time <= CLOCK_TIME(22, 00) && gSaveContext.time >= CLOCK_TIME(6, 00))) {
                 if (this->actor.params != CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
@@ -218,8 +218,9 @@ void EnOssan_SpawnShopItems(EnOssan* this, GlobalContext* globalCtx, ShopItem* s
         if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->x, shopItem->y,
-                                                   shopItem->z, 0, 0, 0, shopItem->shopItemId);
+            this->items[i] =
+                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
+                                      shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
@@ -277,7 +278,7 @@ void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
         this->cutsceneState = 0;
     }
     if (this->actor.params == CURIOSITY_SHOP_MAN) {
-        //EnOssan_BeginInteraction includes the animation of him turning around, before being set to idle
+        // EnOssan_BeginInteraction includes the animation of him turning around, before being set to idle
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
     } else {
         EnOssan_SetupAction(this, EnOssan_Idle);
@@ -556,7 +557,8 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (talkState == 10 && this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
+    if (talkState == 10 && this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA &&
+        func_80147624(globalCtx)) {
         this->animationIdx = 9;
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
@@ -710,7 +712,7 @@ void EnOssan_CursorUpDown(EnOssan* this) {
     u8 curScanTemp;
 
     if (this->stickAccumY < 0) {
-        curTemp &= 0xFE;
+        curTemp &= (u8)~1;
         if (this->items[curTemp] != NULL) {
             this->cursorIdx = curTemp;
             return;
@@ -904,7 +906,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
                         }
                     }
                 } else {
-                    if (this->stickAccumX < 0 && this->stickAccumX <= -0x1F5) {
+                    if (this->stickAccumX < 0 && this->stickAccumX < -500) {
                         cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 0);
                         if (cursorIdx != CURSOR_INVALID) {
                             this->cursorIdx = cursorIdx;
@@ -912,7 +914,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
                             EnOssan_SetupLookToShopkeeperFromShelf(globalCtx, this);
                             return;
                         }
-                    } else if (this->stickAccumX > 0 && this->stickAccumX >= 0x1F5) {
+                    } else if (this->stickAccumX > 0 && this->stickAccumX > 500) {
                         cursorIdx = EnOssan_CursorLeft(this, this->cursorIdx, 4);
                         if (cursorIdx != CURSOR_INVALID) {
                             this->cursorIdx = cursorIdx;
@@ -1176,9 +1178,7 @@ void EnOssan_PositionSelectedItem(EnOssan* this) {
     item = this->items[i];
 
     i2 = i >> 2;
-    worldPos.x = (sSelectedItemPosition[i2].x - shopItem->x) * this->shopItemSelectedTween + shopItem->x;
-    worldPos.y = (sSelectedItemPosition[i2].y - shopItem->y) * this->shopItemSelectedTween + shopItem->y;
-    worldPos.z = (sSelectedItemPosition[i2].z - shopItem->z) * this->shopItemSelectedTween + shopItem->z;
+    VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &sSelectedItemPosition[i2], this->shopItemSelectedTween);
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
@@ -1721,7 +1721,6 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
     static void* sCuriosityShopManEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnOssan* this = THIS;
     s32 pad;
-    
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);

@@ -10,13 +10,6 @@ struct EnOssan;
 typedef void (*EnOssanActionFunc)(struct EnOssan*, GlobalContext*);
 typedef void (*EnOssanUnkFunc)(struct EnOssan*);
 
-typedef struct ShopItem {
-    /* 0x00 */ s16 shopItemId;
-    /* 0x02 */ s16 x;
-    /* 0x04 */ s16 y;
-    /* 0x06 */ s16 z;
-} ShopItem; // size = 0x8;
-
 typedef struct EnOssan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
