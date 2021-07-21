@@ -87,9 +87,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012403C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetMask.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012404C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_RemoveMask.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012405C.s")
 

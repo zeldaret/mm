@@ -376,7 +376,7 @@ void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_80967060.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Weather_Tag/func_80967060.s")
 #endif
 
 // type 4_3, start cutscene then die?
@@ -453,7 +453,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_809672DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Weather_Tag/func_809672DC.s")
 #endif
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene

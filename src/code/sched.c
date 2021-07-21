@@ -35,7 +35,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sched/func_80176F2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sched/func_80177018.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sched/Sched_SendEntryMsg.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sched/func_8017703C.s")
 

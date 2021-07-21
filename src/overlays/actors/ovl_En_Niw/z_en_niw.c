@@ -425,7 +425,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
     func_80891320(this, globalCtx, s16tmp);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808919E8.s")
 #endif
 
 void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
@@ -691,7 +691,7 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808924B0.s")
 #endif
 
 // check if on the ground after running, once on the ground, start idling
@@ -1056,5 +1056,5 @@ void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Niw/func_808932B0.s")
 #endif

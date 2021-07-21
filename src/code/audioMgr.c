@@ -48,12 +48,12 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
             osRecvMesg(&audioMgr->cmdQ, (OSMesg*)&msg, OS_MESG_BLOCK);
             osStopTimer(&timer);
             if (msg == timerMsgVal) {
-                Fault_Log("AUDIO SP TIMEOUT %08x %08x\n", audioMgr->rspTask, audioMgr->rspTask->task);
+                osSyncPrintf("AUDIO SP TIMEOUT %08x %08x\n", audioMgr->rspTask, audioMgr->rspTask->task);
                 if (retryCount >= 0) {
                     retryCount--;
                     func_8017703C(audioMgr->sched);
                 } else {
-                    Fault_Log("audioMgr.c:もうダメ！死ぬ！\n");
+                    osSyncPrintf("audioMgr.c:もうダメ！死ぬ！\n");
                     osDestroyThread(NULL);
                     break;
                 }

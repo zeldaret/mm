@@ -587,8 +587,6 @@ beginseg
     include "build/data/code/z_player_lib.bss.o"
     include "build/src/code/z_prenmi.o"
     include "build/src/code/z_quake.o"
-    include "build/data/code/z_quake.bss.o"
-    include "build/data/code/code_801C0EC0.data.o"
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
@@ -706,8 +704,6 @@ beginseg
     include "build/src/code/code_80172BC0.o"
 
     include "build/src/code/audioMgr.o"
-
-    include "build/data/code/code_801D14F0.data.o"
 
     include "build/src/code/title_setup.o"
     include "build/src/code/game.o"
@@ -1910,7 +1906,6 @@ beginseg
     name "ovl_En_Weather_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o"
-    include "build/data/ovl_En_Weather_Tag/ovl_En_Weather_Tag.data.o"
 #ifdef NON_MATCHING
     // TODO
 #else
@@ -4398,7 +4393,6 @@ beginseg
     name "ovl_En_Invadepoh"
     compress
     include "build/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o"
-    include "build/data/ovl_En_Invadepoh/ovl_En_Invadepoh.bss.o" // TODO: CHECK
     include "build/data/ovl_En_Invadepoh/ovl_En_Invadepoh.reloc.o"
 endseg
 
