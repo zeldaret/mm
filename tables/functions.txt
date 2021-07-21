@@ -15222,7 +15222,7 @@
     0x80BAB1A0:("func_80BAB1A0",),
     0x80BAB374:("func_80BAB374",),
     0x80BAB434:("func_80BAB434",),
-    0x80BAB490:("func_80BAB490",),
+    0x80BAB490:("EnSuttari_GetPaths",),
     0x80BAB4F0:("func_80BAB4F0",),
     0x80BAB698:("func_80BAB698",),
     0x80BAB758:("func_80BAB758",),

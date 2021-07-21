@@ -477,7 +477,7 @@ void func_80BAB434(EnSuttari* this) {
     this->unk3F4 += 0x400;
 }
 
-void func_80BAB490(EnSuttari* this, GlobalContext* globalCtx) {
+void EnSuttari_GetPaths(EnSuttari* this, GlobalContext* globalCtx) {
     this->paths[0] = func_8013D648(globalCtx, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
     this->paths[1] = func_8013D648(globalCtx, this->paths[0]->unk1, 0x3F);
 }
@@ -1432,7 +1432,7 @@ void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     this->actor.flags &= ~1;
-    func_80BAB490(this, globalCtx);
+    EnSuttari_GetPaths(this, globalCtx);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80BAC6E8;
     this->actor.gravity = -4.0f;
