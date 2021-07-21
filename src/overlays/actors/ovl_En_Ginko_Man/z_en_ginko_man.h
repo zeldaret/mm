@@ -51,7 +51,4 @@ typedef enum {
     /* 4 */ GINKO_ADVERTISING,
 } GinkoAnimationIndex;
 
-// values to get wallet capacity
-extern u16 D_801C1E2C[]; // wallet capacities
-
 #endif // Z_EN_GINKO_MAN_H

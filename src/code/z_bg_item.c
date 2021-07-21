@@ -1,32 +1,100 @@
 #include <ultra64.h>
 #include <global.h>
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/BcCheck3_BgActorInit.s")
+void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
+    actor->bgId = -1;
+    actor->unk148 = 0;
+    actor->unk14C = 0;
+    actor->unk154 = param_2;
+    actor->unk_158 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/BgCheck3_LoadMesh.s")
+void BgCheck3_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* actor, CollisionHeader* meshHeader) {
+    CollisionHeader* header;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/BgCheck3_ResetFlags.s")
+    header = NULL;
+    BgCheck_RelocateMeshHeader(meshHeader, &header);
+    actor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, actor, header);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAE88.s")
+void BgCheck3_ResetFlags(DynaPolyActor* actor) {
+    actor->unk_158 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAE9C.s")
+void func_800CAE88(DynaPolyActor* actor) {
+    actor->unk_158 |= 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAEB0.s")
+void func_800CAE9C(DynaPolyActor* actor) {
+    actor->unk_158 |= 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAEE0.s")
+void func_800CAEB0(CollisionContext* colCtx, s32 index) {
+    DynaPolyActor* actor;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAEF4.s")
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
+    if (actor != (DynaPolyActor*)0x0) {
+        func_800CAE9C(actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAF24.s")
+void func_800CAEE0(DynaPolyActor* actor) {
+    actor->unk_158 |= 4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAF38.s")
+void func_800CAEF4(CollisionContext* colCtx, s32 index) {
+    DynaPolyActor* actor;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAF4C.s")
+    actor = BgCheck_GetActorOfMesh(colCtx, index);
+    if (actor != (DynaPolyActor*)0x0) {
+        func_800CAEE0(actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAF70.s")
+void func_800CAF24(DynaPolyActor* actor) {
+    actor->unk_158 |= 8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAF94.s")
+void func_800CAF38(DynaPolyActor* actor) {
+    actor->unk_158 |= 0x10;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAFB8.s")
+s32 func_800CAF4C(DynaPolyActor* actor) {
+    if (actor->unk_158 & 1) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bg_item/func_800CAFDC.s")
+s32 func_800CAF70(DynaPolyActor* actor) {
+    if (actor->unk_158 & 2) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+s32 func_800CAF94(DynaPolyActor* actor) {
+    if (actor->unk_158 & 4) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+s32 func_800CAFB8(DynaPolyActor* actor) {
+    if (actor->unk_158 & 8) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+s32 func_800CAFDC(DynaPolyActor* actor) {
+    if (actor->unk_158 & 0x10) {
+        return 1;
+    } else {
+        return 0;
+    }
+}

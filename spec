@@ -592,11 +592,11 @@ beginseg
     include "build/src/code/z_room.o"
     include "build/data/code/z_room.data.o"
     include "build/src/code/code_8012EC80.o"
-    include "build/data/code/code_801C1D30.data.o"
 
     pad_text
     include "build/asm/code/z_scene.text.o"
-    include "build/data/code/z_scene.data.o"
+
+    include "build/data/code/code_801C2410.data.o"
 
     include "build/data/code/code_801C2730.data.o"
 
