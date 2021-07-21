@@ -333,7 +333,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable, 0x10);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable, BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -399,10 +399,10 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
                              Actor* thisx) {
     EnBji01* this = THIS;
 
-    if ((limbIndex == 0) && ((globalCtx->gameplayFrames % 2) != 0)) {
+    if ((limbIndex == BJI_LIMB_NONE) && ((globalCtx->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
-    if (limbIndex == 0) {
+    if (limbIndex == BJI_LIMB_NONE) {
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
@@ -426,7 +426,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     Vec3f sp20;
     s32 temp_f4 = 0;
 
-    if (limbIndex == 15) {
+    if (limbIndex == BJI_LIMB_HEAD) {
         Math_Vec3f_Copy(&sp20, &D_809CDCC8);
         sp20.x += temp_f4 * 0.1f;
         sp20.y += temp_f4 * 0.1f;
