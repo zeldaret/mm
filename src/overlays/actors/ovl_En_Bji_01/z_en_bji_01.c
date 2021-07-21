@@ -78,9 +78,7 @@ static struct_80B8E1A8 D_809CDC7C[4] = {
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
-
     Player* player = PLAYER;
-
     Vec3f sp58;
     s32 pad[2];
 
