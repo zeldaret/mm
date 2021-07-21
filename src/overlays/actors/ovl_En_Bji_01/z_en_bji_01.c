@@ -123,8 +123,8 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
     f32 tempTimeBeforeMoonCrash;
 
     switch (this->actor.params) {
-        case 0: /* Have not talked to Shikashi as of entering observatory last */
-        case 1: /* Have finished a conversation with Shikashi */
+        case ENBJI01_PARAMS_DEFAULT:
+        case ENBJI01_PARAMS_FINISHED_CONVERSATION:
             switch (gSaveContext.playerForm) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.weekEventReg[17] & 0x10) {
@@ -159,7 +159,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     break;
             }
             break;
-        case 3: /* Currently engaged in post-telescope Shikashi dialogue */
+        case ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE:
             switch (gSaveContext.playerForm) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.weekEventReg[74] & 0x80) {
